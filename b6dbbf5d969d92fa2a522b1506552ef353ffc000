@@ -16,6 +16,138 @@
       "message": "Rebasing every time the build fails for non-related reasons isn\u0027t the best way as it completely retriggers builds on all testing platforms. Rather some people like me can reschedule/continue builds for only failing platforms in Jenkins.\n\nApart from that, having this change and the changes of https://gerrit.libreoffice.org/c/core/+/129186 in different gerrit changes doesn\u0027t make sense as one doesn\u0027t do anything without the other (and the other change depends on this one). Best squash the two commits into one, keep only one of the two Change-Id lines (move it to the end of the commit message) and push to gerrit again to update, then abandon the other gerrit change.",
       "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a6aaeb9_ac797b69",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-30T23:25:20Z",
+      "side": 1,
+      "message": "The ID must be 8082 (the LanguageType value of LANGUAGE_USER_OCCITAN_ARANESE in include/i18nlangtag/lang.h), but for the new locale data best also use the Euro in currency formatting as default, so the replaceTo value should be\n\n  \"[$€-8082]\"\n\nand the LC_CURRENCY section be adjusted, see below.",
+      "range": {
+        "startLine": 54,
+        "startChar": 53,
+        "endLine": 54,
+        "endChar": 56
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3095af04_f36bc934",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-30T23:25:20Z",
+      "side": 1,
+      "message": "This LC_COLLATION is identical to en_US, it can be inherited instead.",
+      "range": {
+        "startLine": 202,
+        "startChar": 2,
+        "endLine": 207,
+        "endChar": 17
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc6ee333_eaeda4d0",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-30T23:25:20Z",
+      "side": 1,
+      "message": "I doubt this LC_INDEX inheriting from en_US. Aranese uses not only A-Z characters. Rather keep the element as in es_ES. If the Writer index order is different it can be adapted, see explanation in i18npool/source/localedata/data/locale.dtd\nAlso, the two FollowPageWord (for Writer index) elements quite certainly should not be f. and ff.",
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "505f5863_88575225",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-30T23:25:20Z",
+      "side": 1,
+      "message": "Change to true for the € currency as mentioned above for LC_FORMAT.",
+      "range": {
+        "startLine": 330,
+        "startChar": 58,
+        "endLine": 330,
+        "endChar": 63
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a545ad5_568e4ee0",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-30T23:25:20Z",
+      "side": 1,
+      "message": "Change this to false then.",
+      "range": {
+        "startLine": 337,
+        "startChar": 59,
+        "endLine": 337,
+        "endChar": 63
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f37176ac_da3f50c7",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-30T23:25:20Z",
+      "side": 1,
+      "message": "This Pts entry can be completely removed, it was necessary only for es_ES to be able to display that currency formatting in some legacy documents.",
+      "range": {
+        "startLine": 344,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 15
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
