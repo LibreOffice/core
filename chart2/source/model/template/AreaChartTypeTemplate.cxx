@@ -22,6 +22,7 @@
 #include <servicenames_charttypes.hxx>
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -191,18 +192,14 @@ void AreaChartTypeTemplate::applyStyle(
 void AreaChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     ChartTypeTemplate::resetStyles( xDiagram );
-    std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+    std::vector< rtl::Reference< ::chart::DataSeries > > aSeriesVec(
         DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {
-        Reference< beans::XPropertyState > xState(series, uno::UNO_QUERY);
-        Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
-        if( xState.is() &&
-            xProp.is() &&
-            xProp->getPropertyValue( "BorderStyle") == aLineStyleAny )
+        if( series->getPropertyValue( "BorderStyle") == aLineStyleAny )
         {
-            xState->setPropertyToDefault( "BorderStyle");
+            series->setPropertyToDefault( "BorderStyle");
         }
     }
 }

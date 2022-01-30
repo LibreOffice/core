@@ -24,6 +24,7 @@
 #include <strings.hrc>
 #include <bitmaps.hlst>
 #include <ChartModelHelper.hxx>
+#include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ControllerLockGuard.hxx>

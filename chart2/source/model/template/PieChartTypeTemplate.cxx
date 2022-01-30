@@ -25,6 +25,7 @@
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
@@ -327,8 +328,8 @@ bool PieChartTypeTemplate::matchesTemplate(
             bool bAllOffsetsEqual = true;
             sal_Int32 nOuterSeriesIndex = 0;
 
-            std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-                DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+            std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+                DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
             //tdf#108067 The outer series is the last series in OOXML-heavy environments
             if( !officecfg::Office::Compatibility::View::ReverseXAxisOrientationDoughnutChart::get() )
@@ -338,13 +339,12 @@ bool PieChartTypeTemplate::matchesTemplate(
             if( !aSeriesVec.empty() )
             {
                 //@todo in future this will depend on Orientation of the radius axis scale
-                Reference< chart2::XDataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
-                Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
-                xProp->getPropertyValue( "Offset") >>= fOffset;
+                rtl::Reference< DataSeries > xSeries( aSeriesVec[nOuterSeriesIndex] );
+                xSeries->getPropertyValue( "Offset") >>= fOffset;
 
                 //get AttributedDataPoints
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                if( xProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                 {
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                     {
@@ -352,7 +352,7 @@ bool PieChartTypeTemplate::matchesTemplate(
                         if(xPointProp.is())
                         {
                             double fPointOffset=0.0;
-                            if( xProp->getPropertyValue( "Offset") >>= fPointOffset )
+                            if( xSeries->getPropertyValue( "Offset") >>= fPointOffset )
                             {
                                 if( ! ::rtl::math::approxEqual( fPointOffset, fOffset ) )
                                 {
@@ -571,21 +571,15 @@ void PieChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >
 
     // vary colors by point,
     // line style
-    std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
     uno::Any aLineStyleAny( drawing::LineStyle_NONE );
     for (auto const& series : aSeriesVec)
     {
-        Reference< beans::XPropertyState > xState(series, uno::UNO_QUERY);
-        if( xState.is())
+        series->setPropertyToDefault( "VaryColorsByPoint");
+        if( series->getPropertyValue( "BorderStyle") == aLineStyleAny )
         {
-            xState->setPropertyToDefault( "VaryColorsByPoint");
-            Reference< beans::XPropertySet > xProp( xState, uno::UNO_QUERY );
-            if( xProp.is() &&
-                xProp->getPropertyValue( "BorderStyle") == aLineStyleAny )
-            {
-                xState->setPropertyToDefault( "BorderStyle");
-            }
+            series->setPropertyToDefault( "BorderStyle");
         }
     }
 

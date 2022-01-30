@@ -27,6 +27,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
+#include <DataSeries.hxx>
 #include <TitleHelper.hxx>
 #include <TitleItemConverter.hxx>
 #include <AxisHelper.hxx>
@@ -107,21 +108,20 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
     const uno::Reference< lang::XMultiServiceFactory > & xNamedPropertyContainerFactory )
         : MultipleItemConverter( rItemPool )
 {
-    std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
-        ::chart::ChartModelHelper::getDataSeries( xChartModel ));
+    std::vector< rtl::Reference< DataSeries > > aSeriesList =
+        ::chart::ChartModelHelper::getDataSeries( xChartModel );
 
     for (auto const& series : aSeriesList)
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties(series, uno::UNO_QUERY);
         uno::Reference< uno::XComponentContext> xContext;//do not need Context for label properties
 
-        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( xObjectProperties );
+        sal_Int32 nNumberFormat=ExplicitValueProvider::getExplicitNumberFormatKeyForDataLabel( series );
         sal_Int32 nPercentNumberFormat=ExplicitValueProvider::getExplicitPercentageNumberFormatKeyForDataLabel(
-                xObjectProperties,xChartModel);
+                series,xChartModel);
 
         m_aConverters.emplace_back(
             new ::chart::wrapper::DataPointItemConverter(
-                xChartModel, xContext, xObjectProperties, series, rItemPool, rDrawModel,
+                xChartModel, xContext, series, series, rItemPool, rDrawModel,
                 xNamedPropertyContainerFactory, GraphicObjectType::FilledDataPoint,
                 nullptr, true, false, 0, true, nNumberFormat, nPercentNumberFormat));
     }
@@ -171,14 +171,13 @@ AllSeriesStatisticsConverter::AllSeriesStatisticsConverter(
     SfxItemPool& rItemPool )
         : MultipleItemConverter( rItemPool )
 {
-    std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
-        ::chart::ChartModelHelper::getDataSeries( xChartModel ));
+    std::vector< rtl::Reference< DataSeries > > aSeriesList =
+        ::chart::ChartModelHelper::getDataSeries( xChartModel );
 
     for (auto const& series : aSeriesList)
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties(series, uno::UNO_QUERY);
         m_aConverters.emplace_back( new ::chart::wrapper::StatisticsItemConverter(
-                                     xChartModel, xObjectProperties, rItemPool ));
+                                     xChartModel, series, rItemPool ));
     }
 }
 

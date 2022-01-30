@@ -32,6 +32,7 @@
 #include <Diagram.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <DataSeries.hxx>
 
 #include <com/sun/star/chart2/data/XDataSequence.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -114,14 +115,9 @@ struct lcl_internalizeSeries
             m_bConnectToModel( bConnectToModel ),
             m_bDataInColumns( bDataInColumns )
     {}
-    void operator() ( const Reference< chart2::XDataSeries > & xSeries )
+    void operator() ( const rtl::Reference< DataSeries > & xSeries )
     {
-        Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-        Reference< chart2::data::XDataSink >   xSink(   xSeries, uno::UNO_QUERY );
-        if( !(xSource.is() && xSink.is()) )
-            return;
-
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeriesData = xSource->getDataSequences();
+        Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeriesData = xSeries->getDataSequences();
         Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeriesData( aOldSeriesData.getLength() );
         auto aNewSeriesDataRange = asNonConstRange(aNewSeriesData);
         for( sal_Int32 i=0; i<aOldSeriesData.getLength(); ++i )
@@ -172,7 +168,7 @@ struct lcl_internalizeSeries
             }
         }
         if( m_bConnectToModel )
-            xSink->setData( aNewSeriesData );
+            xSeries->setData( aNewSeriesData );
      }
 
 private:
@@ -386,7 +382,7 @@ InternalDataProvider::InternalDataProvider(
             }
 
             // data series
-            std::vector< Reference< chart2::XDataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xModel ));
+            std::vector< rtl::Reference< DataSeries > > aSeriesVector( ChartModelHelper::getDataSeries( xModel ));
             lcl_internalizeSeries ftor( m_aInternalData, *this, bConnectToModel, m_bDataInColumns );
             for( const auto& rxScreen : aSeriesVector )
                 ftor( rxScreen );

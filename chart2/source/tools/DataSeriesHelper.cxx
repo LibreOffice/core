@@ -251,8 +251,29 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
     return aSeqVec;
 }
 
+std::vector<Reference<css::chart2::data::XLabeledDataSequence> >
+getAllDataSequences( const std::vector<rtl::Reference<DataSeries> >& aSeries )
+{
+    std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
+
+    for( rtl::Reference<DataSeries> const & dataSeries : aSeries )
+    {
+        const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( dataSeries->getDataSequences());
+        aSeqVec.insert( aSeqVec.end(), aSeq.begin(), aSeq.end() );
+    }
+
+    return aSeqVec;
+}
+
 Reference< chart2::data::XDataSource >
     getDataSource( const Sequence< Reference< chart2::XDataSeries > > & aSeries )
+{
+    return Reference< chart2::data::XDataSource >(
+        new DataSource(comphelper::containerToSequence(getAllDataSequences(aSeries))));
+}
+
+Reference< chart2::data::XDataSource >
+    getDataSource( const std::vector< rtl::Reference< DataSeries > > & aSeries )
 {
     return Reference< chart2::data::XDataSource >(
         new DataSource(comphelper::containerToSequence(getAllDataSequences(aSeries))));

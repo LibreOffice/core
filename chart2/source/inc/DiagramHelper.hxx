@@ -46,6 +46,7 @@ class BaseCoordinateSystem;
 class ChartType;
 class ChartTypeManager;
 class ChartTypeTemplate;
+class DataSeries;
 class Diagram;
 
 enum DiagramPositioningMode
@@ -161,12 +162,16 @@ public:
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const rtl::Reference< ::chart::Diagram >& xDiagram );
 
+    static css::uno::Reference< css::chart2::XAxis > getAttachedAxis(
+        const rtl::Reference< ::chart::DataSeries >& xSeries,
+        const rtl::Reference< ::chart::Diagram >& xDiagram );
+
     static rtl::Reference< ChartType >
         getChartTypeOfSeries(
             const rtl::Reference< ::chart::Diagram >& xDiagram,
             const css::uno::Reference< css::chart2::XDataSeries >& xSeries );
 
-    static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    static std::vector< rtl::Reference< ::chart::DataSeries > >
         getDataSeriesFromDiagram(
             const rtl::Reference< ::chart::Diagram > & xDiagram );
 

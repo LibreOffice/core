@@ -126,6 +126,76 @@ InterpretedData DataInterpreter::interpretDataSource(
     return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
 }
 
+InterpretedData DataInterpreter::interpretDataSource(
+    const Reference< data::XDataSource >& xSource,
+    const Sequence< beans::PropertyValue >& aArguments,
+    const std::vector< rtl::Reference< DataSeries > >& aSeriesToReUse )
+{
+    if( ! xSource.is())
+        return InterpretedData();
+
+#ifdef DEBUG_CHART2_TEMPLATE
+    lcl_ShowDataSource( xSource );
+#endif
+
+    const Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
+
+    Reference< data::XLabeledDataSequence > xCategories;
+    vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
+
+    // check if we should use categories
+
+    bool bHasCategories( HasCategories( aArguments, aData ));
+
+    // parse data
+    bool bCategoriesUsed = false;
+    for( Reference< data::XLabeledDataSequence > const & labeledData : aData )
+    {
+        try
+        {
+            if( bHasCategories && ! bCategoriesUsed )
+            {
+                xCategories.set( labeledData );
+                if( xCategories.is())
+                    SetRole( xCategories->getValues(), "categories");
+                bCategoriesUsed = true;
+            }
+            else
+            {
+                aSequencesVec.push_back( labeledData );
+                if( labeledData.is())
+                    SetRole( labeledData->getValues(), "values-y");
+            }
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    // create DataSeries
+    sal_Int32 nSeriesIndex = 0;
+    vector< Reference< XDataSeries > > aSeriesVec;
+    aSeriesVec.reserve( aSequencesVec.size());
+
+    for (auto const& elem : aSequencesVec)
+    {
+        Sequence< Reference< data::XLabeledDataSequence > > aNewData( &elem, 1 );
+        rtl::Reference< DataSeries > xSeries;
+        if( nSeriesIndex < static_cast<sal_Int32>(aSeriesToReUse.size()))
+            xSeries = aSeriesToReUse[nSeriesIndex];
+        else
+            xSeries = new DataSeries;
+        assert( xSeries.is() );
+        xSeries->setData( aNewData );
+
+        aSeriesVec.push_back( xSeries );
+        ++nSeriesIndex;
+    }
+
+    return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
+}
+
 InterpretedData DataInterpreter::reinterpretDataSeries(
     const InterpretedData& aInterpretedData )
 {

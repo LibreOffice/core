@@ -405,6 +405,27 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
     fireModifyEvent();
 }
 
+void DataSeries::setData( const std::vector< Reference< chart2::data::XLabeledDataSequence > >& aData )
+{
+    tDataSequenceContainer aOldDataSequences;
+    tDataSequenceContainer aNewDataSequences;
+    Reference< util::XModifyListener > xModifyEventForwarder;
+    Reference< lang::XEventListener > xListener;
+    {
+        MutexGuard aGuard( m_aMutex );
+        xModifyEventForwarder = m_xModifyEventForwarder;
+        xListener = this;
+        std::swap( aOldDataSequences, m_aDataSequences );
+        aNewDataSequences = aData;
+        m_aDataSequences = aNewDataSequences;
+    }
+    ModifyListenerHelper::removeListenerFromAllElements( aOldDataSequences, xModifyEventForwarder );
+    EventListenerHelper::removeListenerFromAllElements( aOldDataSequences, xListener );
+    EventListenerHelper::addListenerToAllElements( aNewDataSequences, xListener );
+    ModifyListenerHelper::addListenerToAllElements( aNewDataSequences, xModifyEventForwarder );
+    fireModifyEvent();
+}
+
 // ____ XDataSource ____
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries::getDataSequences()
 {

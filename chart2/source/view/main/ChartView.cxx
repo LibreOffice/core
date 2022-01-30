@@ -822,7 +822,7 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
             bool bSeriesAttachedToThisAxis = false;
             sal_Int32 nAttachedAxisIndex = -1;
             {
-                std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+                std::vector< rtl::Reference< DataSeries > > aSeriesVector = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
                 for (auto const& series : aSeriesVector)
                 {
                     sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);

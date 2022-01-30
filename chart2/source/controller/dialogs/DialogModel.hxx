@@ -47,9 +47,10 @@ namespace com::sun::star::chart2 {
 namespace chart
 {
 
-class RangeSelectionHelper;
 class ChartType;
 class ChartTypeTemplate;
+class DataSeries;
+class RangeSelectionHelper;
 
 struct DialogModelTimeBasedInfo
 {
@@ -168,7 +169,7 @@ private:
 private:
     void applyInterpretedData(
         const css::chart2::InterpretedData & rNewData,
-        const std::vector< css::uno::Reference< css::chart2::XDataSeries > > & rSeriesToReUse );
+        const std::vector< rtl::Reference< ::chart::DataSeries > > & rSeriesToReUse );
 
     sal_Int32 countSeries() const;
 

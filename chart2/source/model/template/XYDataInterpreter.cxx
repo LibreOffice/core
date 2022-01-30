@@ -48,7 +48,7 @@ XYDataInterpreter::~XYDataInterpreter()
 chart2::InterpretedData XYDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
-    const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
+    const std::vector< rtl::Reference< DataSeries > >& aSeriesToReUse )
 {
     if( ! xSource.is())
         return InterpretedData();
@@ -118,15 +118,13 @@ chart2::InterpretedData XYDataInterpreter::interpretDataSource(
 
         aNewData.push_back(elem);
 
-        Reference< XDataSeries > xSeries;
-        if( nSeriesIndex < aSeriesToReUse.getLength())
-            xSeries.set( aSeriesToReUse[nSeriesIndex] );
+        rtl::Reference< DataSeries > xSeries;
+        if( nSeriesIndex < static_cast<sal_Int32>(aSeriesToReUse.size()))
+            xSeries = aSeriesToReUse[nSeriesIndex];
         else
-            xSeries.set( new DataSeries );
-        OSL_ASSERT( xSeries.is() );
-        Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
-        OSL_ASSERT( xSink.is() );
-        xSink->setData( comphelper::containerToSequence( aNewData ) );
+            xSeries = new DataSeries;
+        assert( xSeries.is() );
+        xSeries->setData( aNewData );
 
         aSeriesVec.push_back( xSeries );
         ++nSeriesIndex;

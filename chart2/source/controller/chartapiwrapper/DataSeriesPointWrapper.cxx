@@ -22,6 +22,7 @@
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <DiagramHelper.hxx>
+#include <DataSeries.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
 #include <CharacterProperties.hxx>
@@ -475,7 +476,11 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
     m_nPointIndex = -1;
     if( aArguments.hasElements() )
     {
-        aArguments[0] >>= m_xDataSeries;
+        uno::Reference<chart2::XDataSeries> xTmp;
+        aArguments[0] >>= xTmp;
+        auto p = dynamic_cast<DataSeries*>(xTmp.get());
+        assert(p);
+        m_xDataSeries = p;
         if( aArguments.getLength() >= 2 )
             aArguments[1] >>= m_nPointIndex;
     }
@@ -538,7 +543,7 @@ void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Sour
 
 bool DataSeriesPointWrapper::isSupportingAreaProperties()
 {
-    Reference< chart2::XDataSeries > xSeries( getDataSeries() );
+    rtl::Reference< DataSeries > xSeries( getDataSeries() );
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     rtl::Reference< ::chart::ChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram, xSeries ) );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
@@ -546,14 +551,14 @@ bool DataSeriesPointWrapper::isSupportingAreaProperties()
     return ChartTypeHelper::isSupportingAreaProperties( xChartType, nDimensionCount );
 }
 
-Reference< chart2::XDataSeries > DataSeriesPointWrapper::getDataSeries()
+rtl::Reference< DataSeries > DataSeriesPointWrapper::getDataSeries()
 {
-    Reference< chart2::XDataSeries > xSeries( m_xDataSeries );
+    rtl::Reference< DataSeries > xSeries = m_xDataSeries;
     if( !xSeries.is() )
     {
         rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
-            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        std::vector< rtl::Reference< DataSeries > > aSeriesList =
+            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
         if( m_nSeriesIndexInNewAPI >= 0 && m_nSeriesIndexInNewAPI < static_cast<sal_Int32>(aSeriesList.size()) )
             xSeries = aSeriesList[m_nSeriesIndexInNewAPI];
@@ -624,7 +629,7 @@ beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OU
         {
             if( rPropertyName == "FillColor")
             {
-                Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
+                rtl::Reference< DataSeries > xSeriesProp = getDataSeries();
                 bool bVaryColorsByPoint = false;
                 if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
                     && bVaryColorsByPoint )
@@ -685,7 +690,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rProper
         if( nHandle > 0 )
         {
             //always take the series current value as default for points
-            Reference< beans::XPropertySet > xInnerPropertySet( getDataSeries(), uno::UNO_QUERY );
+            rtl::Reference< DataSeries > xInnerPropertySet = getDataSeries();
             if( xInnerPropertySet.is() )
             {
                 const WrappedProperty* pWrappedProperty = getWrappedProperty( rPropertyName );
@@ -706,7 +711,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rProper
 Reference< beans::XPropertySet > DataSeriesPointWrapper::getInnerPropertySet()
 {
     if( m_eType == DATA_SERIES )
-        return Reference< beans::XPropertySet >( getDataSeries(), uno::UNO_QUERY );
+        return getDataSeries();
     return getDataPointProperties();
 }
 
@@ -843,7 +848,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyValue( const OUString& rProperty
     {
         if( rPropertyName == "FillColor" )
         {
-            Reference< beans::XPropertySet > xSeriesProp( getDataSeries(), uno::UNO_QUERY );
+            rtl::Reference< DataSeries > xSeriesProp = getDataSeries();
             bool bVaryColorsByPoint = false;
             if( xSeriesProp.is() && (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint)
                 && bVaryColorsByPoint )

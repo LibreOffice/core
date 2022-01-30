@@ -22,6 +22,7 @@
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
 #include <servicenames_charttypes.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
 #include <ChartType.hxx>
@@ -215,8 +216,8 @@ bool LineChartTypeTemplate::matchesTemplate(
         bool bSymbolFound = false;
         bool bLineFound = false;
 
-        std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+        std::vector< rtl::Reference< DataSeries > > aSeriesVec =
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
         for (auto const& series : aSeriesVec)
         {
@@ -224,9 +225,8 @@ bool LineChartTypeTemplate::matchesTemplate(
             {
                 chart2::Symbol aSymbProp;
                 drawing::LineStyle eLineStyle;
-                Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY_THROW);
 
-                bool bCurrentHasSymbol = (xProp->getPropertyValue( "Symbol") >>= aSymbProp) &&
+                bool bCurrentHasSymbol = (series->getPropertyValue( "Symbol") >>= aSymbProp) &&
                     (aSymbProp.Style != chart2::SymbolStyle_NONE);
 
                 if( bCurrentHasSymbol )
@@ -238,7 +238,7 @@ bool LineChartTypeTemplate::matchesTemplate(
                     break;
                 }
 
-                bool bCurrentHasLine = (xProp->getPropertyValue( "LineStyle") >>= eLineStyle) &&
+                bool bCurrentHasLine = (series->getPropertyValue( "LineStyle") >>= eLineStyle) &&
                     ( eLineStyle != drawing::LineStyle_NONE );
 
                 if( bCurrentHasLine )

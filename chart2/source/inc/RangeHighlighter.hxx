@@ -37,6 +37,7 @@ namespace com::sun::star::view { class XSelectionSupplier; }
 namespace chart
 {
 class ChartModel;
+class DataSeries;
 class Diagram;
 
 namespace impl
@@ -85,7 +86,7 @@ private:
     void fillRangesForDiagram( const rtl::Reference< ::chart::Diagram > & xDiagram );
     void fillRangesForDataSeries( const css::uno::Reference< css::chart2::XDataSeries > & xSeries );
     void fillRangesForCategories( const css::uno::Reference< css::chart2::XAxis > & xAxis );
-    void fillRangesForDataPoint( const css::uno::Reference< css::uno::XInterface > & xDataSeries, sal_Int32 nIndex );
+    void fillRangesForDataPoint( const rtl::Reference< ::chart::DataSeries > & xDataSeries, sal_Int32 nIndex );
     void fillRangesForErrorBars( const css::uno::Reference< css::beans::XPropertySet > & xErrorBar,
                                  const css::uno::Reference< css::chart2::XDataSeries > & xDataSeries );
 

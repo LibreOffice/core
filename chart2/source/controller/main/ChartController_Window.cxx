@@ -44,6 +44,7 @@
 #include <chartview/DrawModelWrapper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <StatisticsHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <AxisHelper.hxx>
 #include <LegendHelper.hxx>
@@ -1043,11 +1044,10 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 if( eObjectType == OBJECTTYPE_DATA_SERIES || eObjectType == OBJECTTYPE_DATA_POINT )
                 {
                     bool bIsPoint = ( eObjectType == OBJECTTYPE_DATA_POINT );
-                    uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
-                    uno::Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
-                    Reference< chart2::XRegressionCurve > xTrendline( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xCurveCnt ) );
+                    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
+                    Reference< XRegressionCurve > xTrendline = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xSeries );
                     bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
-                    Reference< chart2::XRegressionCurve > xMeanValue( RegressionCurveHelper::getMeanValueLine( xCurveCnt ) );
+                    Reference< XRegressionCurve > xMeanValue = RegressionCurveHelper::getMeanValueLine( xSeries );
                     bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries );
                     bool bHasXErrorBars = StatisticsHelper::hasErrorBars( xSeries, false );
                     bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );
@@ -1062,11 +1062,10 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                     bool bSelectedPointIsFormatted = false;
                     bool bHasFormattedDataPointsOtherThanSelected = false;
 
-                    Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
-                    if( xSeriesProperties.is() )
+                    if( xSeries.is() )
                     {
                         uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                        if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                        if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                         {
                             if( aAttributedDataPointIndexList.hasElements() )
                             {
