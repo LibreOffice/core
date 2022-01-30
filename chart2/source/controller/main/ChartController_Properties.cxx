@@ -438,8 +438,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
     ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
 
     const ObjectType eSelectedType = ObjectIdentifier::getObjectType( rSelectedCID );
-    uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedCID, xChartDocument );
-    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xSeries, uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedCID, xChartDocument );
 
     //legend
     if( rDispatchCommand == "Legend" || rDispatchCommand == "FormatLegend" )
@@ -550,8 +549,8 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
         else
             return ObjectIdentifier::createDataCurveCID(
                 ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ),
-                    RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
-                        RegressionCurveHelper::getMeanValueLine( xRegCurveCnt ) ), true );
+                    RegressionCurveHelper::getRegressionCurveIndex( xSeries,
+                        RegressionCurveHelper::getMeanValueLine( xSeries ) ), true );
     }
     //trend line
     else if( rDispatchCommand == "FormatTrendline" )
@@ -561,8 +560,8 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
         else
             return ObjectIdentifier::createDataCurveCID(
                 ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ),
-                    RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
-                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ), false );
+                    RegressionCurveHelper::getRegressionCurveIndex( xSeries,
+                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xSeries ) ), false );
     }
     //trend line equation
     else if( rDispatchCommand == "FormatTrendlineEquation" )
@@ -572,8 +571,8 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
         else
             return ObjectIdentifier::createDataCurveEquationCID(
                 ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID ),
-                    RegressionCurveHelper::getRegressionCurveIndex( xRegCurveCnt,
-                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ) ) );
+                    RegressionCurveHelper::getRegressionCurveIndex( xSeries,
+                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xSeries ) ) );
     }
     // y error bars
     else if( rDispatchCommand == "FormatXErrorBars" )

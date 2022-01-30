@@ -28,6 +28,7 @@
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <LegendHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
@@ -326,9 +327,9 @@ void ObjectHierarchy::createDataSeriesTree(
             for( sal_Int32 nCTIdx=0; nCTIdx<static_cast<sal_Int32>(aChartTypeSeq.size()); ++nCTIdx )
             {
                 rtl::Reference< ChartType > xChartType( aChartTypeSeq[nCTIdx] );
-                Sequence< Reference< XDataSeries > > aSeriesSeq( xChartType->getDataSeries() );
+                std::vector< rtl::Reference< DataSeries > > aSeriesSeq( xChartType->getDataSeries2() );
                 const sal_Int32 nNumberOfSeries =
-                    ChartTypeHelper::getNumberOfDisplayedSeries( xChartType, aSeriesSeq.getLength());
+                    ChartTypeHelper::getNumberOfDisplayedSeries( xChartType, aSeriesSeq.size());
 
                 for( sal_Int32 nSeriesIdx=0; nSeriesIdx<nNumberOfSeries; ++nSeriesIdx )
                 {
@@ -341,7 +342,7 @@ void ObjectHierarchy::createDataSeriesTree(
 
                     ObjectHierarchy::tChildContainer aSeriesSubContainer;
 
-                    Reference< chart2::XDataSeries > const & xSeries = aSeriesSeq[nSeriesIdx];
+                    rtl::Reference< DataSeries > const & xSeries = aSeriesSeq[nSeriesIdx];
 
                     // data labels
                     if( DataSeriesHelper::hasDataLabelsAtSeries( xSeries ) )
@@ -353,45 +354,38 @@ void ObjectHierarchy::createDataSeriesTree(
                     // Statistics
                     if( ChartTypeHelper::isSupportingStatisticProperties( xChartType, nDimensionCount ) )
                     {
-                        Reference< chart2::XRegressionCurveContainer > xCurveCnt( xSeries, uno::UNO_QUERY );
-                        if( xCurveCnt.is())
+                        Sequence< Reference< chart2::XRegressionCurve > > aCurves( xSeries->getRegressionCurves());
+                        for( sal_Int32 nCurveIdx=0; nCurveIdx<aCurves.getLength(); ++nCurveIdx )
                         {
-                            Sequence< Reference< chart2::XRegressionCurve > > aCurves( xCurveCnt->getRegressionCurves());
-                            for( sal_Int32 nCurveIdx=0; nCurveIdx<aCurves.getLength(); ++nCurveIdx )
+                            bool bIsAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[nCurveIdx] );
+                            aSeriesSubContainer.emplace_back( ObjectIdentifier::createDataCurveCID( aSeriesParticle, nCurveIdx, bIsAverageLine ) );
+                            if( RegressionCurveHelper::hasEquation( aCurves[nCurveIdx] ) )
                             {
-                                bool bIsAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[nCurveIdx] );
-                                aSeriesSubContainer.emplace_back( ObjectIdentifier::createDataCurveCID( aSeriesParticle, nCurveIdx, bIsAverageLine ) );
-                                if( RegressionCurveHelper::hasEquation( aCurves[nCurveIdx] ) )
-                                {
-                                    aSeriesSubContainer.emplace_back( ObjectIdentifier::createDataCurveEquationCID( aSeriesParticle, nCurveIdx ) );
-                                }
+                                aSeriesSubContainer.emplace_back( ObjectIdentifier::createDataCurveEquationCID( aSeriesParticle, nCurveIdx ) );
                             }
-                            Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
-                            Reference< beans::XPropertySet > xErrorBarProp;
-                            if( xSeriesProp.is() &&
-                                (xSeriesProp->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp) &&
-                                xErrorBarProp.is())
+                        }
+                        Reference< beans::XPropertySet > xErrorBarProp;
+                        if( (xSeries->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp) &&
+                            xErrorBarProp.is())
+                        {
+                            sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
+                            if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
+                                ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                             {
-                                sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
-                                if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
-                                    ( nStyle != css::chart::ErrorBarStyle::NONE ) )
-                                {
-                                    aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
-                                            OBJECTTYPE_DATA_ERRORS_Y, u"", aSeriesParticle ) );
-                                }
+                                aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
+                                        OBJECTTYPE_DATA_ERRORS_Y, u"", aSeriesParticle ) );
                             }
+                        }
 
-                            if( xSeriesProp.is() &&
-                                (xSeriesProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp) &&
-                                xErrorBarProp.is())
+                        if( (xSeries->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp) &&
+                            xErrorBarProp.is())
+                        {
+                            sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
+                            if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
+                                ( nStyle != css::chart::ErrorBarStyle::NONE ) )
                             {
-                                sal_Int32 nStyle = css::chart::ErrorBarStyle::NONE;
-                                if( ( xErrorBarProp->getPropertyValue( "ErrorBarStyle") >>= nStyle ) &&
-                                    ( nStyle != css::chart::ErrorBarStyle::NONE ) )
-                                {
-                                    aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
-                                            OBJECTTYPE_DATA_ERRORS_X, u"", aSeriesParticle ) );
-                                }
+                                aSeriesSubContainer.emplace_back( ObjectIdentifier::createClassifiedIdentifierWithParent(
+                                        OBJECTTYPE_DATA_ERRORS_X, u"", aSeriesParticle ) );
                             }
                         }
                     }
