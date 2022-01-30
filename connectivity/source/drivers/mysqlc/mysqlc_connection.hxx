@@ -24,12 +24,9 @@
 #include "mysqlc_types.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/sdbc/ColumnSearch.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
-#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
@@ -39,8 +36,6 @@
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/weakref.hxx>
-#include <rtl/string.hxx>
 #include <rtl/ref.hxx>
 
 #include <mysql.h>
@@ -59,10 +54,6 @@ class ODatabaseMetaData;
 
 namespace mysqlc
 {
-using ::com::sun::star::sdbc::SQLException;
-using ::com::sun::star::sdbc::SQLWarning;
-using ::com::sun::star::uno::RuntimeException;
-
 typedef ::cppu::WeakComponentImplHelper<css::sdbc::XConnection, css::sdbc::XWarningsSupplier,
                                         css::lang::XUnoTunnel, css::lang::XServiceInfo>
     OMetaConnection_BASE;
