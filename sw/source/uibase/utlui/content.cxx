@@ -2209,7 +2209,7 @@ void SwContentTree::Display( bool bActive )
     if (pShell)
     {
         std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
-        std::unique_ptr<weld::TreeIter> xSelEntry;
+        std::unique_ptr<weld::TreeIter> xCntTypeEntry;
         std::vector<std::unique_ptr<weld::TreeIter>> aNodesToExpand;
         // all content navigation view
         if(m_nRootType == ContentTypeId::UNKNOWN)
@@ -2233,7 +2233,8 @@ void SwContentTree::Display( bool bActive )
                 m_xTreeView->set_sensitive(*xEntry, bChOnDemand);
 
                 if (nCntType == m_nLastSelType)
-                    xSelEntry = m_xTreeView->make_iterator(xEntry.get());
+                    xCntTypeEntry = m_xTreeView->make_iterator(xEntry.get());
+
                 sal_Int32 nExpandOptions = (State::HIDDEN == m_eState)
                                             ? m_nHiddenBlock
                                             : m_nActiveBlock;
@@ -2250,57 +2251,6 @@ void SwContentTree::Display( bool bActive )
             // restore visual expanded tree state
             for (const auto& rNode : aNodesToExpand)
                 m_xTreeView->expand_row(*rNode);
-
-            // reselect the old selected entry if it is available, else select the entry that is at
-            // the position of the old selected entry
-            if (xOldSelEntry)
-            {
-                (void)m_xTreeView->get_iter_first(*xEntry);
-                for (ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>())
-                {
-                    if (nCntType == m_nLastSelType)
-                    {
-                        // nEntryRelPos == 0 means the old selected entry was a content type
-                        if (nEntryRelPos)
-                        {
-                            std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator(xEntry.get()));
-                            std::unique_ptr<weld::TreeIter> xTemp(m_xTreeView->make_iterator(xIter.get()));
-                            sal_uLong nPos = 1;
-                            while (m_xTreeView->iter_next(*xIter) &&
-                                   lcl_IsContent(*xIter, *m_xTreeView))
-                            {
-                                if (m_xTreeView->get_id(*xIter) == sOldSelEntryId ||
-                                        nPos == nEntryRelPos)
-                                {
-                                    m_xTreeView->copy_iterator(*xIter, *xSelEntry);
-                                    break;
-                                }
-                                xTemp = m_xTreeView->make_iterator(xIter.get()); // note previous entry
-                                nPos++;
-                            }
-                            if (!xSelEntry || lcl_IsContentType(*xSelEntry, *m_xTreeView))
-                                xSelEntry = std::move(xTemp);
-                        }
-                        else
-                            m_xTreeView->copy_iterator(*xEntry, *xSelEntry);
-                        break;
-                    }
-                    (void)m_xTreeView->iter_next_sibling(*xEntry);
-                }
-            }
-            // select the first entry in the tree when there is no selected entry
-            if (!xSelEntry)
-            {
-                nOldScrollPos = 0;
-                xSelEntry = m_xTreeView->make_iterator();
-                if (!m_xTreeView->get_iter_first(*xSelEntry))
-                    xSelEntry.reset();
-            }
-            if (xSelEntry)
-            {
-                m_xTreeView->set_cursor(*xSelEntry);
-                Select();
-            }
         }
         // root content navigation view
         else
@@ -2317,6 +2267,8 @@ void SwContentTree::Display( bool bActive )
             OUString sId(weld::toId(rpRootContentT.get()));
             insert(nullptr, rpRootContentT->GetName(), sId, bChOnDemand, xEntry.get());
             m_xTreeView->set_image(*xEntry, aImage);
+
+            xCntTypeEntry = m_xTreeView->make_iterator(xEntry.get());
 
             if (!bChOnDemand)
             {
@@ -2358,34 +2310,36 @@ void SwContentTree::Display( bool bActive )
             }
             else
                 m_xTreeView->expand_row(*xEntry);
+        }
 
-            // reselect the old selected entry if it is available, else select the entry that is at
-            // the position of the old selected entry
+        // Reselect the old selected entry. If it is not available, select the entry at the old
+        // selected entry position unless that entry position is now a content type or is past the
+        // end of the member list then select the entry at the previous entry position.
+        if (xOldSelEntry)
+        {
+            std::unique_ptr<weld::TreeIter> xSelEntry = m_xTreeView->make_iterator(xCntTypeEntry.get());
             if (nEntryRelPos)
             {
-                std::unique_ptr<weld::TreeIter> xChild(m_xTreeView->make_iterator(xEntry.get()));
+                std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator(xCntTypeEntry.get()));
+                std::unique_ptr<weld::TreeIter> xTemp(m_xTreeView->make_iterator(xIter.get()));
                 sal_uLong nPos = 1;
-                while (m_xTreeView->iter_next(*xChild))
+                bool bNext;
+                while ((bNext = m_xTreeView->iter_next(*xIter) && lcl_IsContent(*xIter, *m_xTreeView)))
                 {
-                    if (m_xTreeView->get_id(*xChild) == sOldSelEntryId || nPos == nEntryRelPos)
+                    if (m_xTreeView->get_id(*xIter) == sOldSelEntryId || nPos == nEntryRelPos)
                     {
-                        xSelEntry = std::move(xChild);
+                        m_xTreeView->copy_iterator(*xIter, *xSelEntry);
                         break;
                     }
+                    m_xTreeView->copy_iterator(*xIter, *xTemp); // note previous entry
                     nPos++;
                 }
-                if (xSelEntry)
-                {
-                    // set_cursor unselects all entries, makes passed entry visible, and selects it
-                    m_xTreeView->set_cursor(*xSelEntry);
-                    Select();
-                }
+                if (!bNext)
+                    xSelEntry = std::move(xTemp);
             }
-            else
-            {
-                m_xTreeView->set_cursor(*xEntry);
-                Select();
-            }
+            // set_cursor unselects all entries, makes passed entry visible, and selects it
+            m_xTreeView->set_cursor(*xSelEntry);
+            Select();
         }
     }
 
@@ -3773,6 +3727,7 @@ void SwContentTree::UpdateTracking()
         if (m_xTreeView->count_selected_rows() > 0)
         {
             m_xTreeView->unselect_all();
+            m_xTreeView->set_cursor(-1);
             Select();
         }
     }
