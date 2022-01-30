@@ -3093,8 +3093,10 @@ Public Function RemoveMenu(Optional ByVal MenuHeader As Variant) As Boolean
 End Function	&apos;	SFDocuments.SF_Calc.RemoveMenu
 
 REM -----------------------------------------------------------------------------
-Public Sub RunCommand(Optional ByVal Command As Variant)
-	[_Super].RunCommand(Command)
+Public Sub RunCommand(Optional ByVal Command As Variant _
+									, ParamArray Args As Variant _
+									)
+	[_Super].RunCommand(Command, Args)
 End Sub		  &apos;   SFDocuments.SF_Calc.RunCommand
 
 REM -----------------------------------------------------------------------------
