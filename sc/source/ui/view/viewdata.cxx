@@ -1933,8 +1933,8 @@ void ScViewData::EditGrowX()
             aArea.AdjustRight((bLayoutRTL && !bLOKActive) ? nLogicLeft : nLogicRight );
             if (bLOKPrintTwips)
             {
-                aAreaPTwips.AdjustLeft( -((bLayoutRTL && !bLOKActive) ? nLogicRightPTwips : nLogicLeftPTwips) );
-                aAreaPTwips.AdjustRight((bLayoutRTL && !bLOKActive) ? nLogicLeftPTwips : nLogicRightPTwips );
+                aAreaPTwips.AdjustLeft(-nLogicLeftPTwips);
+                aAreaPTwips.AdjustRight(nLogicRightPTwips);
             }
 
             if ( aArea.Right() > aArea.Left() + aSize.Width() - 1 )
@@ -2012,8 +2012,6 @@ void ScViewData::EditGrowX()
             if ( bLayoutRTL && !bLOKActive )
             {
                 aArea.AdjustLeft( -nLogicWidth );
-                if (bLOKPrintTwips)
-                    aAreaPTwips.AdjustLeft( -nLogicWidthPTwips );
             }
             else
             {
@@ -2027,8 +2025,6 @@ void ScViewData::EditGrowX()
                 if ( bLayoutRTL && !bLOKActive )
                 {
                     aArea.SetLeft( aArea.Right() - aSize.Width() + 1 );
-                    if (bLOKPrintTwips)
-                        aAreaPTwips.SetLeft( aAreaPTwips.Right() - aSizePTwips.Width() + 1 );
                 }
                 else
                 {
