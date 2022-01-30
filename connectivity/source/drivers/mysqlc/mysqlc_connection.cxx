@@ -29,24 +29,16 @@
 
 #include <com/sun/star/beans/NamedValue.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <comphelper/storagehelper.hxx>
-
-#include <osl/diagnose.h>
-#include <cppuhelper/supportsservice.hxx>
 
 using namespace connectivity::mysqlc;
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using ::osl::MutexGuard;
-
-#define MYSQLC_URI_PREFIX "sdbc:mysqlc:"
 
 namespace
 {
@@ -95,7 +87,7 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
     // parse url. Url has the following format:
     // external server: sdbc:mysqlc:[hostname]:[port]/[dbname]
 
-    if (url.startsWith(MYSQLC_URI_PREFIX))
+    if (url.startsWith("sdbc:mysqlc:"))
     {
         nIndex = 12;
     }
