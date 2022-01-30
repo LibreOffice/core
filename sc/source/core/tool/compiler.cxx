@@ -3889,10 +3889,18 @@ bool ScCompiler::IsColRowName( const OUString& rName )
             else
                 aAdr = aOne;
             aRef.InitAddress( aAdr );
-            if ( (aAdr.Row() != rDoc.MaxRow() && rDoc.HasStringData(
-                    aAdr.Col(), aAdr.Row() + 1, aAdr.Tab()))
-              || (aAdr.Row() != 0 && rDoc.HasStringData(
-                    aAdr.Col(), aAdr.Row() - 1, aAdr.Tab())))
+            // Prioritize on column label; row label only if the next cell
+            // above/below the found label cell is text, or if both are not and
+            // the cell below is empty and the next cell to the right is
+            // numeric.
+            if ((aAdr.Row() < rDoc.MaxRow() && rDoc.HasStringData(
+                            aAdr.Col(), aAdr.Row() + 1, aAdr.Tab()))
+                    || (aAdr.Row() > 0 && rDoc.HasStringData(
+                            aAdr.Col(), aAdr.Row() - 1, aAdr.Tab()))
+                    || (aAdr.Row() < rDoc.MaxRow() && rDoc.GetRefCellValue(
+                            ScAddress( aAdr.Col(), aAdr.Row() + 1, aAdr.Tab())).isEmpty()
+                        && aAdr.Col() < rDoc.MaxCol() && rDoc.GetRefCellValue(
+                            ScAddress( aAdr.Col() + 1, aAdr.Row(), aAdr.Tab())).hasNumeric()))
                 aRef.SetRowRel( true );     // RowName
             else
                 aRef.SetColRel( true );     // ColName
