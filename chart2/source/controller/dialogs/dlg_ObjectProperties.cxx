@@ -37,6 +37,7 @@
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ObjectNameProvider.hxx>
+#include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <NumberFormatterWrapper.hxx>
@@ -116,7 +117,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 {
     m_xChartDocument = xChartModel;
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
-    uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
+    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aObjectCID, xChartModel );
     rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
     sal_Int32 nDimensionCount = DiagramHelper::getDimension( xDiagram );
 
@@ -213,8 +214,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 
     if( m_eObjectType == OBJECTTYPE_DATA_CURVE )
     {
-        uno::Reference< data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-        Sequence< Reference< data::XLabeledDataSequence > > aDataSeqs( xSource->getDataSequences());
+        Sequence< Reference< data::XLabeledDataSequence > > aDataSeqs( xSeries->getDataSequences());
         Sequence< double > aXValues, aYValues;
         bool bXValuesFound = false, bYValuesFound = false;
         m_nNbPoints = 0;

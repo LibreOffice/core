@@ -39,6 +39,7 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class ChartType;
+class DataSeries;
 class Diagram;
 class InternalDataProvider;
 
@@ -57,13 +58,18 @@ public:
     static rtl::Reference< ::chart::BaseCoordinateSystem >
         getFirstCoordinateSystem( const rtl::Reference<::chart::ChartModel>& xModel );
 
-    static std::vector< css::uno::Reference< css::chart2::XDataSeries > >
+    static std::vector< rtl::Reference< ::chart::DataSeries > >
             getDataSeries( const rtl::Reference< ::chart::ChartModel > & xModel );
 
     static rtl::Reference< ChartType >
         getChartTypeOfSeries(
             const rtl::Reference<::chart::ChartModel>& xModel
             , const css::uno::Reference< css::chart2::XDataSeries >& xGivenDataSeries );
+
+    static rtl::Reference< ChartType >
+        getChartTypeOfSeries(
+            const rtl::Reference<::chart::ChartModel>& xModel
+            , const rtl::Reference< ::chart::DataSeries >& xGivenDataSeries );
 
     static css::awt::Size getDefaultPageSize();
 

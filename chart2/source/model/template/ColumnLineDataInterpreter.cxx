@@ -45,7 +45,7 @@ ColumnLineDataInterpreter::~ColumnLineDataInterpreter()
 InterpretedData ColumnLineDataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
-    const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
+    const std::vector< rtl::Reference< DataSeries > >& aSeriesToReUse )
 {
     InterpretedData aResult(  DataInterpreter::interpretDataSource( xSource, aArguments, aSeriesToReUse ));
 

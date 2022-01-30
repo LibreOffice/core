@@ -30,6 +30,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartController.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <StatisticsHelper.hxx>
 #include <ReferenceSizeProvider.hxx>
@@ -201,9 +202,9 @@ void ControllerState::update(
     if( aObjectType==OBJECTTYPE_DIAGRAM || aObjectType==OBJECTTYPE_DIAGRAM_WALL || aObjectType==OBJECTTYPE_DIAGRAM_FLOOR )
         bIsFormateableObjectSelected = DiagramHelper::isSupportingFloorAndWall( xDiagram );
 
-    uno::Reference< chart2::XDataSeries > xGivenDataSeries(
+    rtl::Reference< DataSeries > xGivenDataSeries =
         ObjectIdentifier::getDataSeriesForCID(
-            aSelObjCID, xModel ) );
+            aSelObjCID, xModel );
 
     bIsDeleteableObjectSelected = ChartController::isObjectDeleteable( aSelObj );
 
@@ -249,16 +250,12 @@ void ControllerState::update(
         if( (aObjectType == OBJECTTYPE_DATA_SERIES || aObjectType == OBJECTTYPE_DATA_POINT)
             && ChartTypeHelper::isSupportingRegressionProperties( xFirstChartType, nDimensionCount ))
         {
-            uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xGivenDataSeries, uno::UNO_QUERY );
-            if( xRegCurveCnt.is())
-            {
-                // Trendline
-                bMayAddTrendline = true;
+            // Trendline
+            bMayAddTrendline = true;
 
-                // Mean Value
-                bMayFormatMeanValue = bMayDeleteMeanValue = RegressionCurveHelper::hasMeanValueLine( xRegCurveCnt );
-                bMayAddMeanValue = ! bMayDeleteMeanValue;
-            }
+            // Mean Value
+            bMayFormatMeanValue = bMayDeleteMeanValue = RegressionCurveHelper::hasMeanValueLine( xGivenDataSeries );
+            bMayAddMeanValue = ! bMayDeleteMeanValue;
         }
 
         // error bars

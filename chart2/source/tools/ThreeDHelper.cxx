@@ -23,6 +23,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
 #include <BaseGFXHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <defines.hxx>
 
@@ -1295,8 +1296,8 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
 
         drawing::LineStyle aLineStyle( drawing::LineStyle_SOLID );
 
-        std::vector< uno::Reference< XDataSeries > > aSeriesList(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        std::vector< rtl::Reference< DataSeries > > aSeriesList =
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
         sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
 
         OUString aPercentDiagonalPropertyName( "PercentDiagonal" );
@@ -1304,8 +1305,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
 
         for( sal_Int32 nS = 0; nS < nSeriesCount; ++nS )
         {
-            uno::Reference< XDataSeries > xSeries( aSeriesList[nS] );
-            uno::Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
+            rtl::Reference< DataSeries > xSeries( aSeriesList[nS] );
             if(!nS)
             {
                 rnRoundedEdges = 0;
@@ -1313,7 +1313,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                 {
                     sal_Int16 nPercentDiagonal = 0;
 
-                    xProp->getPropertyValue( aPercentDiagonalPropertyName ) >>= nPercentDiagonal;
+                    xSeries->getPropertyValue( aPercentDiagonalPropertyName ) >>= nPercentDiagonal;
                     rnRoundedEdges = static_cast< sal_Int32 >( nPercentDiagonal );
 
                     if( DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
@@ -1327,7 +1327,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                 }
                 try
                 {
-                    xProp->getPropertyValue( aBorderStylePropertyName ) >>= aLineStyle;
+                    xSeries->getPropertyValue( aBorderStylePropertyName ) >>= aLineStyle;
 
                     if( DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
                         , aBorderStylePropertyName, uno::Any(aLineStyle) ) )
@@ -1344,7 +1344,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                 if( !bDifferentRoundedEdges )
                 {
                     sal_Int16 nPercentDiagonal = 0;
-                    xProp->getPropertyValue( aPercentDiagonalPropertyName ) >>= nPercentDiagonal;
+                    xSeries->getPropertyValue( aPercentDiagonalPropertyName ) >>= nPercentDiagonal;
                     sal_Int32 nCurrentRoundedEdges = static_cast< sal_Int32 >( nPercentDiagonal );
                     if(nCurrentRoundedEdges!=rnRoundedEdges
                         || DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
@@ -1357,7 +1357,7 @@ void ThreeDHelper::getRoundedEdgesAndObjectLines(
                 if( !bDifferentObjectLines )
                 {
                     drawing::LineStyle aCurrentLineStyle;
-                    xProp->getPropertyValue( aBorderStylePropertyName ) >>= aCurrentLineStyle;
+                    xSeries->getPropertyValue( aBorderStylePropertyName ) >>= aCurrentLineStyle;
                     if(aCurrentLineStyle!=aLineStyle
                         || DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries
                             , aBorderStylePropertyName, uno::Any(aLineStyle) ) )
@@ -1395,12 +1395,12 @@ void ThreeDHelper::setRoundedEdgesAndObjectLines(
     uno::Any aALineStyle( aLineStyle);
     uno::Any aARoundedEdges( static_cast< sal_Int16 >( nRoundedEdges ));
 
-    std::vector< uno::Reference< XDataSeries > > aSeriesList(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< rtl::Reference< DataSeries > > aSeriesList =
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
     sal_Int32 nSeriesCount = static_cast<sal_Int32>( aSeriesList.size() );
     for( sal_Int32 nS = 0; nS < nSeriesCount; ++nS )
     {
-        uno::Reference< XDataSeries > xSeries( aSeriesList[nS] );
+        rtl::Reference< DataSeries > xSeries( aSeriesList[nS] );
 
         if( nRoundedEdges>=0 && nRoundedEdges<=100 )
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "PercentDiagonal", aARoundedEdges );

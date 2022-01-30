@@ -28,6 +28,7 @@
 #include <NumberFormatterWrapper.hxx>
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <DataSeries.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -102,10 +103,10 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
                         //->split them in the direction of the first series
                         //detect whether the first series is a row or a column
                         bool bSeriesUsesColumns = true;
-                        std::vector< Reference< XDataSeries > > aSeries( ChartModelHelper::getDataSeries( &mrModel ) );
+                        std::vector< rtl::Reference< DataSeries > > aSeries = ChartModelHelper::getDataSeries( &mrModel );
                         if( !aSeries.empty() )
                         {
-                            uno::Reference< data::XDataSource > xSeriesSource( aSeries.front(), uno::UNO_QUERY );
+                            rtl::Reference< DataSeries > xSeriesSource = aSeries.front();
                             OUString aStringDummy;
                             bool bDummy;
                             uno::Sequence< sal_Int32 > aSeqDummy;

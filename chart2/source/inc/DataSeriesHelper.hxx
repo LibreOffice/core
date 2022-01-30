@@ -80,6 +80,10 @@ OOO_DLLPUBLIC_CHARTTOOLS
 std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >
 getAllDataSequences(
     const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& aSeries );
+OOO_DLLPUBLIC_CHARTTOOLS
+std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >
+getAllDataSequences(
+    const std::vector<rtl::Reference<::chart::DataSeries> >& aSeries );
 
 /** Retrieves all data sequences found in the given data series and puts them
     into a data source.  The order of sequences will match the order of the data
@@ -87,6 +91,8 @@ getAllDataSequences(
  */
 OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XDataSource >
     getDataSource( const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries );
+OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XDataSource >
+    getDataSource( const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries );
 
 /** Get the label of a series (e.g. for the legend)
 

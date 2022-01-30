@@ -26,10 +26,11 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-
+#include <rtl/ref.hxx>
 #include <memory>
 
 namespace com::sun::star::chart2 { class XDataSeries; }
+namespace chart { class DataSeries; }
 
 namespace chart::wrapper
 {
@@ -100,7 +101,7 @@ private:
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     //own methods
-    css::uno::Reference< css::chart2::XDataSeries > getDataSeries();
+    rtl::Reference< ::chart::DataSeries > getDataSeries();
     css::uno::Reference< css::beans::XPropertySet > getDataPointProperties();
 
     std::shared_ptr< Chart2ModelContact >         m_spChart2ModelContact;
@@ -115,7 +116,7 @@ private:
     //this should only be used, if the DataSeriesPointWrapper is initialized via the XInitialize interface
     //because a big change in the chartmodel may lead to a dataseriespointer that is not connected to the model anymore
     //with the indices instead we can always get the new dataseries
-    css::uno::Reference< css::chart2::XDataSeries >     m_xDataSeries;
+    rtl::Reference< ::chart::DataSeries >     m_xDataSeries;
 };
 
 } //  namespace chart::wrapper

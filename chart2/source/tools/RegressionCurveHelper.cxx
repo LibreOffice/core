@@ -31,6 +31,7 @@
 #include <ChartType.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <DataSeries.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
 #include <DiagramHelper.hxx>
@@ -691,18 +692,14 @@ std::vector< Reference< chart2::XRegressionCurve > >
         const rtl::Reference< Diagram > & xDiagram )
 {
     std::vector< Reference< chart2::XRegressionCurve > > aResult;
-    std::vector< Reference< chart2::XDataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    std::vector< rtl::Reference< DataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
     for (auto const& elem : aSeries)
     {
-        Reference< chart2::XRegressionCurveContainer > xContainer(elem, uno::UNO_QUERY);
-        if(xContainer.is())
+        const uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(elem->getRegressionCurves());
+        for( Reference< XRegressionCurve > const & curve : aCurves )
         {
-            const uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(xContainer->getRegressionCurves());
-            for( Reference< XRegressionCurve > const & curve : aCurves )
-            {
-                if( ! isMeanValueLine( curve ))
-                    aResult.push_back( curve );
-            }
+            if( ! isMeanValueLine( curve ))
+                aResult.push_back( curve );
         }
     }
 

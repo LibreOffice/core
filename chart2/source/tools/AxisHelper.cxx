@@ -25,6 +25,7 @@
 #include <AxisIndexDefines.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Scaling.hxx>
 #include <ChartModel.hxx>
@@ -492,7 +493,7 @@ void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, co
 {
     //axis is hidden if no data is attached anymore but data is available
     bool bOtherSeriesAttachedToThisAxis = false;
-    std::vector< Reference< chart2::XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVector = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
     for (auto const& series : aSeriesVector)
     {
         uno::Reference< chart2::XAxis > xCurrentAxis = DiagramHelper::getAttachedAxis(series, xDiagram );
@@ -1105,7 +1106,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
 rtl::Reference< ChartType > AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( const rtl::Reference< Diagram >& xDiagram, const sal_Int32 nAttachedAxisIndex )
 {
     rtl::Reference< ChartType > xChartType;
-    std::vector< Reference< XDataSeries > > aSeriesVector( DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVector = DiagramHelper::getDataSeriesFromDiagram( xDiagram );
     for (auto const& series : aSeriesVector)
     {
         sal_Int32 nCurrentIndex = DataSeriesHelper::getAttachedAxisIndex(series);

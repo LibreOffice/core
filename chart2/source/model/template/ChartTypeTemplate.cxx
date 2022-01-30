@@ -22,6 +22,7 @@
 #include <CommonConverters.hxx>
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
+#include <DataSeries.hxx>
 
 #include <AxisHelper.hxx>
 #include <Diagram.hxx>
@@ -253,9 +254,9 @@ void ChartTypeTemplate::changeDiagramData(
     try
     {
         // interpret new data and re-use existing series
-        Sequence< Reference< XDataSeries > > aFlatSeriesSeq(
-            comphelper::containerToSequence( DiagramHelper::getDataSeriesFromDiagram( xDiagram )));
-        const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.getLength();
+        std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq =
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
+        const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
         chart2::InterpretedData aData =
             xInterpreter->interpretDataSource( xDataSource, aArguments, aFlatSeriesSeq );

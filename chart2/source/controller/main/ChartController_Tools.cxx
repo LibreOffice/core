@@ -24,6 +24,7 @@
 #include <ChartType.hxx>
 #include <TitleHelper.hxx>
 #include <ThreeDHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include "UndoGuard.hxx"
 #include <ControllerLockGuard.hxx>
@@ -37,6 +38,7 @@
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
 #include <AxisHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <RegressionCurveHelper.hxx>
 #include "ShapeController.hxx"
 #include <DiagramHelper.hxx>
@@ -99,7 +101,7 @@ bool lcl_deleteDataSeries(
     const Reference< document::XUndoManager > & xUndoManager )
 {
     bool bResult = false;
-    uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rCID, xModel ));
+    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rCID, xModel );
     if( xSeries.is() && xModel.is())
     {
         rtl::Reference< ::chart::ChartType > xChartType =
@@ -221,8 +223,8 @@ void ChartController::executeDispatch_NewArrangement()
             }
 
             // regression curve equations
-            std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
-                RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram ));
+            std::vector< uno::Reference< chart2::XRegressionCurve > > aRegressionCurves =
+                RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram );
 
             // reset equation position
             for( const auto& xCurve : aRegressionCurves )

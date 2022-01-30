@@ -43,6 +43,7 @@ namespace com::sun::star::uno { class XInterface; }
 namespace chart
 {
 class BaseCoordinateSystem;
+class DataSeries;
 class Diagram;
 class Legend;
 
@@ -203,7 +204,7 @@ public:
                 , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     //return the series object that belongs to rObjectCID if any
-    static css::uno::Reference< css::chart2::XDataSeries >
+    static rtl::Reference< ::chart::DataSeries >
             getDataSeriesForCID(
                   const OUString& rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel );

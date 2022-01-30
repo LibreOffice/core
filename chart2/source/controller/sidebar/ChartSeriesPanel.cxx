@@ -34,6 +34,7 @@
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
 #include <ChartType.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -52,7 +53,7 @@ namespace {
 
 bool isDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
@@ -93,8 +94,8 @@ LabelPlacementMap const aLabelPlacementMap[] = {
 sal_Int32 getDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
-    css::uno::Reference< css::beans::XPropertySet > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return 0;
@@ -118,8 +119,8 @@ sal_Int32 getDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xMode
 void setDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, sal_Int32 nPos)
 {
-    css::uno::Reference< css::beans::XPropertySet > xSeries(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
         return;
@@ -140,8 +141,8 @@ void setDataLabelPlacement(const rtl::Reference<::chart::ChartModel>& xModel,
 bool isTrendlineVisible(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xRegressionCurveContainer =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xRegressionCurveContainer.is())
         return false;
@@ -152,8 +153,8 @@ bool isTrendlineVisible(const rtl::Reference<::chart::ChartModel>& xModel,
 void setTrendlineVisible(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID, bool bVisible)
 {
-    css::uno::Reference< css::chart2::XRegressionCurveContainer > xRegressionCurveContainer(
-        ObjectIdentifier::getDataSeriesForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< DataSeries > xRegressionCurveContainer =
+        ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xRegressionCurveContainer.is())
         return;

@@ -27,6 +27,7 @@
 #include <ChartModel.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <ChartType.hxx>
+#include <DataSeries.hxx>
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -111,10 +112,10 @@ rtl::Reference< BaseCoordinateSystem > ChartModelHelper::getFirstCoordinateSyste
     return nullptr;
 }
 
-std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
+std::vector< rtl::Reference< DataSeries > > ChartModelHelper::getDataSeries(
     const rtl::Reference<::chart::ChartModel> & xChartDoc )
 {
-    std::vector< uno::Reference< XDataSeries > > aResult;
+    std::vector< rtl::Reference< DataSeries > > aResult;
 
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartDoc );
     if( xDiagram.is())
@@ -126,6 +127,13 @@ std::vector< uno::Reference< XDataSeries > > ChartModelHelper::getDataSeries(
 rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
                                 const rtl::Reference<::chart::ChartModel>& xModel
                               , const uno::Reference< XDataSeries >&   xGivenDataSeries )
+{
+    return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
+}
+
+rtl::Reference< ChartType > ChartModelHelper::getChartTypeOfSeries(
+                                const rtl::Reference<::chart::ChartModel>& xModel
+                              , const rtl::Reference< DataSeries >&   xGivenDataSeries )
 {
     return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
 }

@@ -20,6 +20,7 @@
 #include "WrappedStockProperties.hxx"
 #include "Chart2ModelContact.hxx"
 #include <FastPropertyIdRanges.hxx>
+#include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <WrappedProperty.hxx>
@@ -135,8 +136,8 @@ css::uno::Any WrappedVolumeProperty::getPropertyValue( const css::uno::Reference
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {
-        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
@@ -204,8 +205,8 @@ css::uno::Any WrappedUpDownProperty::getPropertyValue( const css::uno::Reference
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     if( xDiagram.is() && xChartDoc.is() )
     {
-        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();

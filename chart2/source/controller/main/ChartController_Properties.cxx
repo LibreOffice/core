@@ -44,6 +44,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartModel.hxx>
 #include <ColorPerPointHelper.hxx>
+#include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <ControllerLockGuard.hxx>
@@ -175,7 +176,7 @@ wrapper::ItemConverter* createItemConverter(
                 if (pRefSizeProvider)
                     pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
 
-                uno::Reference<XDataSeries> xSeries = ObjectIdentifier::getDataSeriesForCID(aObjectCID, xChartModel);
+                rtl::Reference<DataSeries> xSeries = ObjectIdentifier::getDataSeriesForCID(aObjectCID, xChartModel);
 
                 bool bDataSeries = eObjectType == OBJECTTYPE_DATA_LABELS;
 
@@ -199,7 +200,7 @@ wrapper::ItemConverter* createItemConverter(
                 wrapper::GraphicObjectType eMapTo =
                     wrapper::GraphicObjectType::FilledDataPoint;
 
-                uno::Reference< XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
+                rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel );
                 rtl::Reference< ChartType > xChartType = ChartModelHelper::getChartTypeOfSeries( xChartModel, xSeries );
 
                 rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
@@ -216,13 +217,12 @@ wrapper::ItemConverter* createItemConverter(
                 if(!bDataSeries)
                 {
                     nPointIndex = aParticleID.toInt32();
-                    uno::Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
                     bool bVaryColorsByPoint = false;
-                    if( xSeriesProp.is() &&
-                        (xSeriesProp->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint) &&
+                    if( xSeries.is() &&
+                        (xSeries->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint) &&
                         bVaryColorsByPoint )
                     {
-                        if( !ColorPerPointHelper::hasPointOwnColor( xSeriesProp, nPointIndex, xObjectProperties ) )
+                        if( !ColorPerPointHelper::hasPointOwnColor( xSeries, nPointIndex, xObjectProperties ) )
                         {
                             bUseSpecialFillColor = true;
                             OSL_ASSERT( xDiagram.is());
@@ -262,10 +262,10 @@ wrapper::ItemConverter* createItemConverter(
 
             case OBJECTTYPE_DATA_CURVE:
                 pItemConverter =  new wrapper::RegressionCurveItemConverter(
-                    xObjectProperties, uno::Reference< chart2::XRegressionCurveContainer >(
-                        ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel ), uno::UNO_QUERY ),
-                    rDrawModel.GetItemPool(), rDrawModel,
-                    xChartModel);
+                        xObjectProperties,
+                        ObjectIdentifier::getDataSeriesForCID( aObjectCID, xChartModel ),
+                        rDrawModel.GetItemPool(), rDrawModel,
+                        xChartModel);
                 break;
             case OBJECTTYPE_DATA_CURVE_EQUATION:
             {

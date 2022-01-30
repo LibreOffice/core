@@ -46,7 +46,7 @@ StockDataInterpreter::~StockDataInterpreter()
 InterpretedData StockDataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& rArguments,
-    const Sequence< Reference< XDataSeries > >& rSeriesToReUse )
+    const std::vector< rtl::Reference< ::chart::DataSeries > >& rSeriesToReUse )
 {
     if( ! xSource.is())
         return InterpretedData();
@@ -233,14 +233,13 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         {
             try
             {
-                Reference< XDataSeries > xSeries;
-                if( nReUsedSeriesIdx < rSeriesToReUse.getLength())
-                    xSeries.set( rSeriesToReUse[nReUsedSeriesIdx] );
+                rtl::Reference< DataSeries > xSeries;
+                if( nReUsedSeriesIdx < static_cast<sal_Int32>(rSeriesToReUse.size()))
+                    xSeries = rSeriesToReUse[nReUsedSeriesIdx];
                 else
-                    xSeries.set( new DataSeries );
-                OSL_ASSERT( xSeries.is() );
-                Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY_THROW );
-                xSink->setData( aSequences[nGroupIndex][nSeriesIdx] );
+                    xSeries = new DataSeries;
+                assert( xSeries.is() );
+                xSeries->setData( aSequences[nGroupIndex][nSeriesIdx] );
                 pResultSerie[nSeriesIdx].set( xSeries );
             }
             catch( const uno::Exception & )

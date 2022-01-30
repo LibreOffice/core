@@ -37,6 +37,7 @@
 #include <map>
 
 #include "OPropertySet.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::beans { class XPropertySet; }
 
@@ -58,7 +59,7 @@ typedef ::cppu::WeakImplHelper<
     DataSeries_Base;
 }
 
-class DataSeries final :
+class OOO_DLLPUBLIC_CHARTTOOLS DataSeries final :
     public cppu::BaseMutex,
     public impl::DataSeries_Base,
     public ::property::OPropertySet
@@ -129,6 +130,8 @@ public:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+
+    void setData( const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData );
 
     typedef
         std::vector< rtl::Reference< ::chart::RegressionCurveModel > >

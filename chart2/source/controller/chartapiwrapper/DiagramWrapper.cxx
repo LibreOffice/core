@@ -30,6 +30,7 @@
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
+#include <DataSeries.hxx>
 #include <WrappedIgnoreProperty.hxx>
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include "WrappedStatisticProperties.hxx"
@@ -464,8 +465,8 @@ sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
             nNewAPIIndex -= 1;
     }
 
-    std::vector< uno::Reference< chart2::XDataSeries > > aSeriesList(
-        ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< rtl::Reference< ::chart::DataSeries > > aSeriesList =
+        ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram );
     if( nNewAPIIndex >= static_cast<sal_Int32>(aSeriesList.size()) )
         nNewAPIIndex = -1;
 
@@ -1465,8 +1466,8 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
     rtl::Reference< ChartModel > xChartDoc( m_spChart2ModelContact->getDocumentModel() );
     if( xDiagram.is() && xChartDoc.is() )
     {
-        std::vector< uno::Reference< chart2::XDataSeries > > aSeriesVector(
-            DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+            DiagramHelper::getDataSeriesFromDiagram( xDiagram );
         if( !aSeriesVector.empty() )
         {
             rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager = xChartDoc->getTypeManager();
@@ -1614,25 +1615,21 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
     if( !xDiagram )
         return;
 
-    std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
-        ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+    std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+        ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram );
     sal_Int32 i = 0;
     for (auto const& series : aSeriesVector)
     {
-        Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
-        if( xProp.is())
+        uno::Any aVal;
+        if( i < aNewValue.getLength() )
+            aVal <<= aNewValue[i];
+        else
         {
-            uno::Any aVal;
-            if( i < aNewValue.getLength() )
-                aVal <<= aNewValue[i];
-            else
-            {
-                //set empty sequence
-                uno::Sequence< sal_Int32 > aSeq;
-                aVal <<= aSeq;
-            }
-            xProp->setPropertyValue( "AttributedDataPoints", aVal );
+            //set empty sequence
+            uno::Sequence< sal_Int32 > aSeq;
+            aVal <<= aSeq;
         }
+        series->setPropertyValue( "AttributedDataPoints", aVal );
         ++i;
     }
 }
@@ -1643,23 +1640,19 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
 
     if( xDiagram )
     {
-        std::vector< Reference< chart2::XDataSeries > > aSeriesVector(
-            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram ) );
+        std::vector< rtl::Reference< DataSeries > > aSeriesVector =
+            ::chart::DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
         uno::Sequence< uno::Sequence< sal_Int32 > > aResult( aSeriesVector.size() );
         auto aResultRange = asNonConstRange(aResult);
         sal_Int32 i = 0;
         for (auto const& series : aSeriesVector)
         {
-            Reference< beans::XPropertySet > xProp(series, uno::UNO_QUERY);
-            if( xProp.is())
-            {
-                uno::Any aVal(
-                    xProp->getPropertyValue("AttributedDataPoints"));
-                uno::Sequence< sal_Int32 > aSeq;
-                if( aVal >>= aSeq )
-                    aResultRange[ i ] = aSeq;
-            }
+            uno::Any aVal(
+                series->getPropertyValue("AttributedDataPoints"));
+            uno::Sequence< sal_Int32 > aSeq;
+            if( aVal >>= aSeq )
+                aResultRange[ i ] = aSeq;
             ++i;
         }
         m_aOuterValue <<= aResult;

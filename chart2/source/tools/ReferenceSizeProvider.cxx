@@ -21,6 +21,7 @@
 #include <RelativeSizeHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
+#include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
@@ -96,33 +97,29 @@ void ReferenceSizeProvider::setValuesAtAllDataSeries()
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( m_xChartDoc ));
 
     // DataSeries/Points
-    std::vector< Reference< XDataSeries > > aSeries(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    std::vector< rtl::Reference< DataSeries > > aSeries =
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
     for (auto const& elem : aSeries)
     {
-        Reference< beans::XPropertySet > xSeriesProp(elem, uno::UNO_QUERY );
-        if( xSeriesProp.is())
+        // data points
+        Sequence< sal_Int32 > aPointIndexes;
+        try
         {
-            // data points
-            Sequence< sal_Int32 > aPointIndexes;
-            try
+            if( elem->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
             {
-                if( xSeriesProp->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
-                {
-                    for( sal_Int32 idx : std::as_const(aPointIndexes) )
-                        setValuesAtPropertySet(
-                            elem->getDataPointByIndex( idx ) );
-                }
+                for( sal_Int32 idx : std::as_const(aPointIndexes) )
+                    setValuesAtPropertySet(
+                        elem->getDataPointByIndex( idx ) );
             }
-            catch (const uno::Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2");
-            }
-
-            //it is important to correct the datapoint properties first as they do reference the series properties
-            setValuesAtPropertySet( xSeriesProp );
         }
+        catch (const uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+
+        //it is important to correct the datapoint properties first as they do reference the series properties
+        setValuesAtPropertySet( elem );
     }
 }
 
@@ -264,37 +261,33 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
     }
 
     // DataSeries/Points
-    std::vector< Reference< XDataSeries > > aSeries(
-        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    std::vector< rtl::Reference< DataSeries > > aSeries =
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram );
 
     for (auto const& elem : aSeries)
     {
-        Reference< beans::XPropertySet > xSeriesProp(elem, uno::UNO_QUERY);
-        if( xSeriesProp.is())
-        {
-            getAutoResizeFromPropSet( xSeriesProp, eResult );
-            if( eResult == AUTO_RESIZE_AMBIGUOUS )
-                return eResult;
+        getAutoResizeFromPropSet( elem, eResult );
+        if( eResult == AUTO_RESIZE_AMBIGUOUS )
+            return eResult;
 
-            // data points
-            Sequence< sal_Int32 > aPointIndexes;
-            try
+        // data points
+        Sequence< sal_Int32 > aPointIndexes;
+        try
+        {
+            if( elem->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
             {
-                if( xSeriesProp->getPropertyValue( "AttributedDataPoints") >>= aPointIndexes )
+                for( sal_Int32 idx : std::as_const(aPointIndexes) )
                 {
-                    for( sal_Int32 idx : std::as_const(aPointIndexes) )
-                    {
-                        getAutoResizeFromPropSet(
-                            elem->getDataPointByIndex( idx ), eResult );
-                        if( eResult == AUTO_RESIZE_AMBIGUOUS )
-                            return eResult;
-                    }
+                    getAutoResizeFromPropSet(
+                        elem->getDataPointByIndex( idx ), eResult );
+                    if( eResult == AUTO_RESIZE_AMBIGUOUS )
+                        return eResult;
                 }
             }
-            catch (const uno::Exception&)
-            {
-                DBG_UNHANDLED_EXCEPTION("chart2");
-            }
+        }
+        catch (const uno::Exception&)
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
         }
     }
 
