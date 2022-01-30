@@ -21,19 +21,13 @@
 #include "mysqlc_connection.hxx"
 
 #include <com/sun/star/sdbc/XDriver.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
-#include <cppuhelper/compbase2.hxx>
-#include <osl/module.h>
 
 namespace connectivity::mysqlc
 {
-using css::sdbc::SQLException;
-using css::uno::Exception;
 using css::uno::Reference;
-using css::uno::RuntimeException;
 using css::uno::Sequence;
 
 Reference<css::uno::XInterface>
@@ -53,10 +47,6 @@ protected:
     OWeakRefArray m_xConnections; // vector containing a list
         // of all the Connection objects
         // for this Driver
-#ifdef BUNDLE_MARIADB
-    oslModule m_hCConnModule;
-    bool m_bAttemptedLoadCConn;
-#endif
 public:
     explicit MysqlCDriver(const Reference<css::lang::XMultiServiceFactory>& _rxFactory);
 
