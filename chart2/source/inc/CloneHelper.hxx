@@ -19,7 +19,7 @@
 #pragma once
 
 #include <com/sun/star/util/XCloneable.hpp>
-
+#include <rtl/ref.hxx>
 #include <algorithm>
 #include <iterator>
 #include <vector>
@@ -52,6 +52,15 @@ template< class Interface >
     std::transform( rSource.begin(), rSource.end(),
                       std::back_inserter( rDestination ),
                       CreateRefClone< Interface >());
+}
+
+template< class T >
+    void CloneRefVector(
+        const std::vector< rtl::Reference< T > > & rSource,
+        std::vector< rtl::Reference< T > > & rDestination )
+{
+    for (const auto & rSourceItem : rSource)
+        rDestination.push_back(static_cast<T*>(rSourceItem->createClone().get()));
 }
 
 /// clones a UNO-sequence of UNO-References

@@ -42,6 +42,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 
 namespace chart
 {
+class RegressionCurveModel;
 
 namespace impl
 {
@@ -155,7 +156,7 @@ private:
     tDataPointAttributeContainer  m_aAttributedDataPoints;
 
     typedef
-        std::vector< css::uno::Reference< css::chart2::XRegressionCurve > >
+        std::vector< rtl::Reference< ::chart::RegressionCurveModel > >
         tRegressionCurveContainerType;
     tRegressionCurveContainerType m_aRegressionCurves;
 

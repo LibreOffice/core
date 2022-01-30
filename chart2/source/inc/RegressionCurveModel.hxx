@@ -83,6 +83,7 @@ protected:
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
 
+public:
     // ____ XRegressionCurve ____
     virtual css::uno::Reference< css::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator() override;
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getEquationProperties() override;
@@ -98,6 +99,7 @@ protected:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+protected:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;
