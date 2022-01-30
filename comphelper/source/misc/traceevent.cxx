@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <atomic>
+#include <mutex>
 #include <iostream>
 
 #include <comphelper/profilezone.hxx>
@@ -34,12 +35,12 @@ static thread_local int nProfileZoneNesting = 0; // Level of Nested Profile Zone
 namespace
 {
 std::vector<OUString> g_aRecording; // recorded data
-osl::Mutex g_aMutex;
+std::mutex g_aMutex;
 }
 
 void TraceEvent::addRecording(const OUString& sObject)
 {
-    osl::MutexGuard aGuard(g_aMutex);
+    std::lock_guard aGuard(g_aMutex);
 
     g_aRecording.emplace_back(sObject);
 
@@ -76,7 +77,7 @@ void TraceEvent::addInstantEvent(const char* sName, const std::map<OUString, OUS
 
 void TraceEvent::startRecording()
 {
-    osl::MutexGuard aGuard(g_aMutex);
+    std::lock_guard aGuard(g_aMutex);
     s_bRecording = true;
 }
 
@@ -93,7 +94,7 @@ std::vector<OUString> TraceEvent::getEventVectorAndClear()
     bool bRecording;
     std::vector<OUString> aRecording;
     {
-        osl::MutexGuard aGuard(g_aMutex);
+        std::lock_guard aGuard(g_aMutex);
         bRecording = s_bRecording;
         stopRecording();
         aRecording.swap(g_aRecording);
