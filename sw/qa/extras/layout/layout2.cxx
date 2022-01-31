@@ -20,6 +20,7 @@
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <IDocumentRedlineAccess.hxx>
 #include <frameformats.hxx>
 #include <unotextrange.hxx>
 #include <fmtanchr.hxx>
@@ -413,6 +414,37 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf145225_RedlineMovingWithBadInsertio
     // This was 2 (the tracked paragraph break joined with the moved list item,
     // setting the not changed text of the second list item to tracked insertion)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(3), pEditShell->GetRedlineCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf146964_ReappearingMovedTextInHideChangesMode)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf54819.fodt");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    // enable Record Changes
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // set Hide Changes mode
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    SwRootFrame* pLayout(pWrtShell->GetLayout());
+    CPPUNIT_ASSERT(pLayout->IsHideRedlines());
+
+    // delete and paste the deleted word again during Track Changes
+    dispatchCommand(mxComponent, ".uno:WordRightSel", {});
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(2), pEditShell->GetRedlineCount());
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // This was "Lorem Lorem ipsum" (reappearing deletion in Hide Changes mode)
+    assertXPath(pXmlDoc, "/root/page/body/txt[1]/Text", "Portion", "Lorem ipsum");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf125300)
