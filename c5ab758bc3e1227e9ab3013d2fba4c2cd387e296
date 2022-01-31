@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04dc9790_8a226235",
+        "filename": "vcl/source/control/field.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T06:25:54Z",
+      "side": 1,
+      "message": "Hi!\n\nSorry to post here, but there\u0027s no way to post things directly to e.g. https://git.libreoffice.org/core/+/ae326faf5a5f4c9c078e914cb0e3adfcc04674df.\n\nThe abovementioned commit introduced this code; and I smell some thinko here: sBuf is added, filled with \"999999999.\", and then *another* buffer - pre-existing (and clean to this point) aBuf is padded with \u00279\u0027s. Should it be maybe something like\n\n        aBuf \u003d \"999999999\";\n        sal_uInt16 nDigits \u003d rFormatter.GetDecimalDigits();\n        if (nDigits)\n        {\n            aBuf.append(\u0027.\u0027);\n            string::padToLength(aBuf, aBuf.getLength() + nDigits, \u00279\u0027);\n        }\n        aMaxTextSize \u003d rSpinField.CalcMinimumSizeForText(aBuf.makeStringAndClear());",
+      "revId": "c5ab758bc3e1227e9ab3013d2fba4c2cd387e296",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
