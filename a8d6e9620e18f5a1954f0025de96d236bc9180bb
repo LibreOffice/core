@@ -39,6 +39,30 @@
       },
       "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0196044b_267b9f07",
+        "filename": "svx/source/dialog/ctredlin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-01-31T11:47:55Z",
+      "side": 1,
+      "message": "Heiko, I attached two screenshots in the bug report to better explain why I did this. This decision is meant to handle files that have a long list of changes to show.\n\nBasically, if I use \"-1\" for height, the dialog will expand beyond the visible area in the sidebar. However, setting a fixed height solves the issue, because then the large number of items in the dialog will not cause the dialog to expand.\n\nIdeally what I would like to do is make the dialog always use all the available height in the sidebar (as the Styles sidebar does). However I could not figure out how to do it. Let me know if you have any suggestions on how to achieve this.",
+      "parentUuid": "5e9b26ac_fd065d73",
+      "range": {
+        "startLine": 367,
+        "startChar": 37,
+        "endLine": 367,
+        "endChar": 40
+      },
+      "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
