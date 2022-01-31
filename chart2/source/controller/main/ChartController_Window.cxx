@@ -43,6 +43,7 @@
 #include <RelativePositionHelper.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <StatisticsHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
@@ -1045,9 +1046,9 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                 {
                     bool bIsPoint = ( eObjectType == OBJECTTYPE_DATA_POINT );
                     rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
-                    Reference< XRegressionCurve > xTrendline = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xSeries );
+                    rtl::Reference< RegressionCurveModel > xTrendline = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xSeries );
                     bool bHasEquation = RegressionCurveHelper::hasEquation( xTrendline );
-                    Reference< XRegressionCurve > xMeanValue = RegressionCurveHelper::getMeanValueLine( xSeries );
+                    rtl::Reference< RegressionCurveModel > xMeanValue = RegressionCurveHelper::getMeanValueLine( xSeries );
                     bool bHasYErrorBars = StatisticsHelper::hasErrorBars( xSeries );
                     bool bHasXErrorBars = StatisticsHelper::hasErrorBars( xSeries, false );
                     bool bHasDataLabelsAtSeries = DataSeriesHelper::hasDataLabelsAtSeries( xSeries );

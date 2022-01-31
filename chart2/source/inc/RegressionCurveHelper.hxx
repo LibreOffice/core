@@ -33,26 +33,35 @@ namespace com::sun::star::chart2 { class XRegressionCurveContainer; }
 namespace com::sun::star::chart2::data { class XDataSource; }
 namespace com::sun::star::frame { class XModel; }
 namespace chart { class ChartModel; }
+namespace chart { class DataSeries; }
 namespace chart { class Diagram; }
+namespace chart { class RegressionCurveModel; }
 
 namespace chart::RegressionCurveHelper
 {
     /// returns a model mean-value line
-    css::uno::Reference<css::chart2::XRegressionCurve> createMeanValueLine();
+    rtl::Reference<::chart::RegressionCurveModel> createMeanValueLine();
 
     /// returns a model regression curve
-    css::uno::Reference<css::chart2::XRegressionCurve>
+    rtl::Reference<::chart::RegressionCurveModel>
         createRegressionCurveByServiceName( std::u16string_view aServiceName );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
+    OOO_DLLPUBLIC_CHARTTOOLS bool hasMeanValueLine(
+        const rtl::Reference<::chart::DataSeries> & xRegCnt );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool isMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurve> & xRegCurve );
+    OOO_DLLPUBLIC_CHARTTOOLS bool isMeanValueLine(
+        const rtl::Reference<::chart::RegressionCurveModel> & xRegCurve );
 
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         getMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer> & xRegCnt );
+    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+        getMeanValueLine(
+            const rtl::Reference<::chart::DataSeries> & xRegCnt );
 
     /** creates a mean-value line and adds it to the container.
 
@@ -62,9 +71,14 @@ namespace chart::RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS void addMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt,
         const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
+    OOO_DLLPUBLIC_CHARTTOOLS void addMeanValueLine(
+        rtl::Reference<::chart::DataSeries> const & xRegCnt,
+        const css::uno::Reference<css::beans::XPropertySet>& xSeriesProp );
 
     OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xRegCnt );
+    OOO_DLLPUBLIC_CHARTTOOLS void removeMeanValueLine(
+        rtl::Reference<::chart::DataSeries> const & xRegCnt );
 
     /** Returns the first regression curve found that is not of type
         mean-value line
@@ -72,6 +86,9 @@ namespace chart::RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         getFirstCurveNotMeanValueLine(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
+    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+        getFirstCurveNotMeanValueLine(
+            const rtl::Reference<::chart::DataSeries>& xCurveContainer );
 
     /** Returns the regression curve found at the index provided.
      */
@@ -79,12 +96,18 @@ namespace chart::RegressionCurveHelper
         getRegressionCurveAtIndex(
             const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer,
             sal_Int32 aIndex);
+    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+        getRegressionCurveAtIndex(
+            const rtl::Reference<::chart::DataSeries>& xCurveContainer,
+            sal_Int32 aIndex);
 
     /** Returns the type of the first regression curve found that is not of type
         mean-value line
      */
     OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getFirstRegressTypeNotMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
+    OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getFirstRegressTypeNotMeanValueLine(
+        const rtl::Reference<::chart::DataSeries>& xCurveContainer );
 
     OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getRegressionType(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
@@ -102,12 +125,24 @@ namespace chart::RegressionCurveHelper
                     css::uno::Reference<css::beans::XPropertySet>(),
             const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
                     css::uno::Reference<css::beans::XPropertySet>() );
+    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference<::chart::RegressionCurveModel>
+        addRegressionCurve(
+            SvxChartRegress eType,
+            rtl::Reference<::chart::DataSeries> const & xCurveContainer,
+            const css::uno::Reference<css::beans::XPropertySet >& xPropertySource =
+                    css::uno::Reference<css::beans::XPropertySet>(),
+            const css::uno::Reference<css::beans::XPropertySet>& xEquationProperties =
+                    css::uno::Reference<css::beans::XPropertySet>() );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool removeAllExceptMeanValueLine(
         css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer );
+    OOO_DLLPUBLIC_CHARTTOOLS bool removeAllExceptMeanValueLine(
+        rtl::Reference<::chart::DataSeries> const & xCurveContainer );
 
     OOO_DLLPUBLIC_CHARTTOOLS void removeEquations(
         css::uno::Reference<css::chart2::XRegressionCurveContainer> const & xCurveContainer );
+    OOO_DLLPUBLIC_CHARTTOOLS void removeEquations(
+        rtl::Reference<::chart::DataSeries> const & xCurveContainer );
 
     OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference<css::chart2::XRegressionCurve>
         changeRegressionCurveType(
@@ -161,7 +196,7 @@ namespace chart::RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS OUString getRegressionCurveSpecificName(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
-    OOO_DLLPUBLIC_CHARTTOOLS std::vector<css::uno::Reference<css::chart2::XRegressionCurve> >
+    OOO_DLLPUBLIC_CHARTTOOLS std::vector<rtl::Reference<::chart::RegressionCurveModel> >
         getAllRegressionCurvesNotMeanValueLine(
                 const rtl::Reference<::chart::Diagram>& xDiagram );
 
@@ -172,6 +207,9 @@ namespace chart::RegressionCurveHelper
     OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getRegressionCurveIndex(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xContainer,
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
+    OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getRegressionCurveIndex(
+        const rtl::Reference<::chart::DataSeries>& xContainer,
+        const rtl::Reference<::chart::RegressionCurveModel>& xCurve );
 
     OOO_DLLPUBLIC_CHARTTOOLS bool hasEquation(const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
 
