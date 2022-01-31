@@ -163,7 +163,7 @@ void OSXTransferable::initClipboardItemList()
                              static_cast<XTransferable*>(this));
   }
 
-  SAL_INFO("vcl.macos.clipboard", "Types on pasteboard: " << NSStringArrayToOUString(pboardFormats));
+  SAL_INFO("vcl.osx.clipboard", "Types on pasteboard: " << NSStringArrayToOUString(pboardFormats));
 
 
   mFlavorList = mDataFlavorMapper->typesArrayToFlavorSequence(pboardFormats);
