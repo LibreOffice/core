@@ -2446,37 +2446,22 @@ void CustomAnimationPane::onSelect()
     if( maSelectionLock.isLocked() )
         return;
 
-    bool bHadSelection = maViewSelection.hasValue();
-    bool bHasSelection = bHadSelection;
+    ScopeLockGuard aGuard( maSelectionLock );
+    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
+        FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
+    DrawView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
 
+    if( pView )
     {
-        ScopeLockGuard aGuard( maSelectionLock );
-
-        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
-            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
-        DrawView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
-
-        if (pView)
+        pView->UnmarkAllObj();
+        for( const CustomAnimationEffectPtr& pEffect : maListSelection )
         {
-            pView->UnmarkAllObj();
-            bHasSelection = false;
-            for( const CustomAnimationEffectPtr& pEffect : maListSelection )
-            {
-                Reference< XShape > xShape( pEffect->getTargetShape() );
-                SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
-                if (pObj)
-                {
-                    pView->MarkObj(pObj, pView->GetSdrPageView());
-                    bHasSelection = true;
-                }
-            }
+            Reference< XShape > xShape( pEffect->getTargetShape() );
+            SdrObject* pObj = SdrObject::getSdrObjectFromXShape(xShape);
+            if( pObj )
+                pView->MarkObj(pObj, pView->GetSdrPageView());
         }
     }
-
-    // tdf#145030 if we had something selected, but ended up unselecting everything
-    // then now while the maSelectionLock is unlocked resync with the empty selection
-    if (bHadSelection != bHasSelection)
-        onSelectionChanged();
 }
 
 // ICustomAnimationListController
