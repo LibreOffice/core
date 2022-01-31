@@ -3442,7 +3442,8 @@ void ScInterpreter::ScNumberValue()
 
 static bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
 {
-    return ( c > 0x1f && c < 0x7f ) || ( c > 0x9f );
+    return ( not u_isISOControl(c) /*not in Cc*/
+             && u_isdefined(c)     /*not in Cn*/ );
 }
 
 void ScInterpreter::ScClean()

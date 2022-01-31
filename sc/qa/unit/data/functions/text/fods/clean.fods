@@ -2132,7 +2132,7 @@
       <text:p>=CLEAN(J36)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H36])" office:value-type="string" office:string-value="7F" calcext:value-type="string">
@@ -2168,7 +2168,7 @@
       <text:p>=CLEAN(J37)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H37])" office:value-type="string" office:string-value="80" calcext:value-type="string">
@@ -2204,7 +2204,7 @@
       <text:p>=CLEAN(J38)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H38])" office:value-type="string" office:string-value="81" calcext:value-type="string">
@@ -2240,7 +2240,7 @@
       <text:p>=CLEAN(J39)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H39])" office:value-type="string" office:string-value="82" calcext:value-type="string">
@@ -2276,7 +2276,7 @@
       <text:p>=CLEAN(J40)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H40])" office:value-type="string" office:string-value="83" calcext:value-type="string">
@@ -2315,17 +2315,17 @@
       <text:p>Unicode Cn</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H41])" office:value-type="string" office:string-value="84" calcext:value-type="string">
-      <text:p>84</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H41])" office:value-type="string" office:string-value="FFFE" calcext:value-type="string">
+      <text:p>FFFE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="132" calcext:value-type="float">
-      <text:p>132</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="65534" calcext:value-type="float">
+      <text:p>65534</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H41])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
++     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H41])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I41] &amp; &quot;Test text&quot; &amp; [.I41]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I41] &amp; &quot;Test text&quot; &amp; [.I41]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2351,17 +2351,17 @@
       <text:p>Unicode Cn</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H42])" office:value-type="string" office:string-value="85" calcext:value-type="string">
-      <text:p>85</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H42])" office:value-type="string" office:string-value="FFFF" calcext:value-type="string">
+      <text:p>FFFF</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="133" calcext:value-type="float">
-      <text:p>133</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="65535" calcext:value-type="float">
+      <text:p>65535</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H42])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H42])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I42] &amp; &quot;Test text&quot; &amp; [.I42]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I42] &amp; &quot;Test text&quot; &amp; [.I42]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2371,11 +2371,11 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=CLEAN([.J43])" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=CLEAN([.J43])" office:value-type="string" office:string-value="𒓿Test text𒓿" calcext:value-type="string">
+      <text:p>𒓿Test text𒓿</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=IF([.E43]=&quot;no clean&quot;; [.$J43];&quot;Test text&quot;)" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=IF([.E43]=&quot;no clean&quot;; [.$J43];&quot;Test text&quot;)" office:value-type="string" office:string-value="𒓿Test text𒓿" calcext:value-type="string">
+      <text:p>𒓿Test text𒓿</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=[.A43]=[.B43]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2384,20 +2384,20 @@
       <text:p>=CLEAN(J43)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>no clean</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H43])" office:value-type="string" office:string-value="86" calcext:value-type="string">
-      <text:p>86</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H43])" office:value-type="string" office:string-value="124FF" calcext:value-type="string">
+      <text:p>124FF</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="134" calcext:value-type="float">
-      <text:p>134</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="75007" calcext:value-type="float">
+      <text:p>75007</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H43])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H43])" office:value-type="string" office:string-value="𒓿" calcext:value-type="string">
+      <text:p>𒓿</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I43] &amp; &quot;Test text&quot; &amp; [.I43]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I43] &amp; &quot;Test text&quot; &amp; [.I43]" office:value-type="string" office:string-value="𒓿Test text𒓿" calcext:value-type="string">
+      <text:p>𒓿Test text𒓿</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2407,11 +2407,11 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=CLEAN([.J44])" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=CLEAN([.J44])" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=IF([.E44]=&quot;no clean&quot;; [.$J44];&quot;Test text&quot;)" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=IF([.E44]=&quot;no clean&quot;; [.$J44];&quot;Test text&quot;)" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=[.A44]=[.B44]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2420,20 +2420,20 @@
       <text:p>=CLEAN(J44)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>no clean</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H44])" office:value-type="string" office:string-value="87" calcext:value-type="string">
-      <text:p>87</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H44])" office:value-type="string" office:string-value="F693" calcext:value-type="string">
+      <text:p>F693</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="135" calcext:value-type="float">
-      <text:p>135</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="63123" calcext:value-type="float">
+      <text:p>63123</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H44])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H44])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I44] &amp; &quot;Test text&quot; &amp; [.I44]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I44] &amp; &quot;Test text&quot; &amp; [.I44]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2443,11 +2443,11 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=CLEAN([.J45])" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=CLEAN([.J45])" office:value-type="string" office:string-value="UTest textU" calcext:value-type="string">
+      <text:p>UTest textU</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=IF([.E45]=&quot;no clean&quot;; [.$J45];&quot;Test text&quot;)" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=IF([.E45]=&quot;no clean&quot;; [.$J45];&quot;Test text&quot;)" office:value-type="string" office:string-value="UTest textU" calcext:value-type="string">
+      <text:p>UTest textU</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=[.A45]=[.B45]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2456,20 +2456,20 @@
       <text:p>=CLEAN(J45)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>no clean</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H45])" office:value-type="string" office:string-value="88" calcext:value-type="string">
-      <text:p>88</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H45])" office:value-type="string" office:string-value="55" calcext:value-type="string">
+      <text:p>55</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="136" calcext:value-type="float">
-      <text:p>136</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="85" calcext:value-type="float">
+      <text:p>85</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H45])" office:value-type="string" office:string-value="" calcext:value-type="string">
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H45])" office:value-type="string" office:string-value="" calcext:value-type="string">
       <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I45] &amp; &quot;Test text&quot; &amp; [.I45]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I45] &amp; &quot;Test text&quot; &amp; [.I45]" office:value-type="string" office:string-value="UTest textU" calcext:value-type="string">
+      <text:p>UTest textU</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2479,11 +2479,11 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=CLEAN([.J46])" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=CLEAN([.J46])" office:value-type="string" office:string-value="�Test text�" calcext:value-type="string">
+      <text:p>�Test text�</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=IF([.E46]=&quot;no clean&quot;; [.$J46];&quot;Test text&quot;)" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=IF([.E46]=&quot;no clean&quot;; [.$J46];&quot;Test text&quot;)" office:value-type="string" office:string-value="�Test text�" calcext:value-type="string">
+      <text:p>�Test text�</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=[.A46]=[.B46]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2492,20 +2492,20 @@
       <text:p>=CLEAN(J46)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>no clean</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H46])" office:value-type="string" office:string-value="89" calcext:value-type="string">
-      <text:p>89</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H46])" office:value-type="string" office:string-value="FFFD" calcext:value-type="string">
+      <text:p>FFFD</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="137" calcext:value-type="float">
-      <text:p>137</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="65533" calcext:value-type="float">
+      <text:p>65533</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H46])" office:value-type="string" office:string-value="" calcext:value-type="string">
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H46])" office:value-type="string" office:string-value="" calcext:value-type="string">
       <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I46] &amp; &quot;Test text&quot; &amp; [.I46]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I46] &amp; &quot;Test text&quot; &amp; [.I46]" office:value-type="string" office:string-value="�Test text�" calcext:value-type="string">
+      <text:p>�Test text�</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2515,11 +2515,11 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=CLEAN([.J47])" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=CLEAN([.J47])" office:value-type="string" office:string-value="﷏Test text﷏" calcext:value-type="string">
+      <text:p>﷏Test text﷏</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=IF([.E47]=&quot;no clean&quot;; [.$J47];&quot;Test text&quot;)" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=IF([.E47]=&quot;no clean&quot;; [.$J47];&quot;Test text&quot;)" office:value-type="string" office:string-value="﷏Test text﷏" calcext:value-type="string">
+      <text:p>﷏Test text﷏</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=[.A47]=[.B47]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2528,20 +2528,20 @@
       <text:p>=CLEAN(J47)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>no clean</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H47])" office:value-type="string" office:string-value="8A" calcext:value-type="string">
-      <text:p>8A</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H47])" office:value-type="string" office:string-value="FDCF" calcext:value-type="string">
+      <text:p>FDCF</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="138" calcext:value-type="float">
-      <text:p>138</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="64975" calcext:value-type="float">
+      <text:p>64975</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H47])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H47])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I47] &amp; &quot;Test text&quot; &amp; [.I47]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I47] &amp; &quot;Test text&quot; &amp; [.I47]" office:value-type="string" office:string-value="﷏Test text﷏" calcext:value-type="string">
+      <text:p>﷏Test text﷏</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2567,17 +2567,17 @@
       <text:p>Unicode Cn</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H48])" office:value-type="string" office:string-value="8B" calcext:value-type="string">
-      <text:p>8B</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H48])" office:value-type="string" office:string-value="FDD0" calcext:value-type="string">
+      <text:p>FDD0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="139" calcext:value-type="float">
-      <text:p>139</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="64976" calcext:value-type="float">
+      <text:p>64976</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H48])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H48])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I48] &amp; &quot;Test text&quot; &amp; [.I48]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I48] &amp; &quot;Test text&quot; &amp; [.I48]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2603,17 +2603,17 @@
       <text:p>Unicode Cn</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H49])" office:value-type="string" office:string-value="8C" calcext:value-type="string">
-      <text:p>8C</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H49])" office:value-type="string" office:string-value="FDD2" calcext:value-type="string">
+      <text:p>FDD2</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="140" calcext:value-type="float">
-      <text:p>140</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="64978" calcext:value-type="float">
+      <text:p>64978</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H49])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H49])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I49] &amp; &quot;Test text&quot; &amp; [.I49]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I49] &amp; &quot;Test text&quot; &amp; [.I49]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2639,17 +2639,17 @@
       <text:p>Unicode Cn</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H50])" office:value-type="string" office:string-value="8D" calcext:value-type="string">
-      <text:p>8D</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H50])" office:value-type="string" office:string-value="FDEF" calcext:value-type="string">
+      <text:p>FDEF</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="141" calcext:value-type="float">
-      <text:p>141</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="65007" calcext:value-type="float">
+      <text:p>65007</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H50])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H50])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I50] &amp; &quot;Test text&quot; &amp; [.I50]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I50] &amp; &quot;Test text&quot; &amp; [.I50]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
+      <text:p>Test text</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2659,11 +2659,11 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=CLEAN([.J51])" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=CLEAN([.J51])" office:value-type="string" office:string-value="ﷰTest textﷰ" calcext:value-type="string">
+      <text:p>ﷰTest textﷰ</text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=IF([.E51]=&quot;no clean&quot;; [.$J51];&quot;Test text&quot;)" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=IF([.E51]=&quot;no clean&quot;; [.$J51];&quot;Test text&quot;)" office:value-type="string" office:string-value="ﷰTest textﷰ" calcext:value-type="string">
+      <text:p>ﷰTest textﷰ</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce22" table:formula="of:=[.A51]=[.B51]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
@@ -2672,20 +2672,20 @@
       <text:p>=CLEAN(J51)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>no clean</text:p>
      </table:table-cell>
      <table:table-cell/>
-     <table:table-cell table:formula="of:=DEC2HEX([.H51])" office:value-type="string" office:string-value="8E" calcext:value-type="string">
-      <text:p>8E</text:p>
+     <table:table-cell table:formula="of:=DEC2HEX([.H51])" office:value-type="string" office:string-value="FDF0" calcext:value-type="string">
+      <text:p>FDF0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="142" calcext:value-type="float">
-      <text:p>142</text:p>
+     <table:table-cell table:style-name="ce16" office:value-type="float" office:value="65008" calcext:value-type="float">
+      <text:p>65008</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H51])" office:value-type="string" office:string-value="" calcext:value-type="string">
-      <text:p></text:p>
+     <table:table-cell table:style-name="ce28" table:formula="of:=UNICHAR([.H51])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
      </table:table-cell>
-     <table:table-cell table:formula="of:=[.I51] &amp; &quot;Test text&quot; &amp; [.I51]" office:value-type="string" office:string-value="Test text" calcext:value-type="string">
-      <text:p>Test text</text:p>
+     <table:table-cell table:formula="of:=[.I51] &amp; &quot;Test text&quot; &amp; [.I51]" office:value-type="string" office:string-value="ﷰTest textﷰ" calcext:value-type="string">
+      <text:p>ﷰTest textﷰ</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#97706</text:p>
@@ -2708,7 +2708,7 @@
       <text:p>=CLEAN(J52)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H52])" office:value-type="string" office:string-value="8F" calcext:value-type="string">
@@ -2744,7 +2744,7 @@
       <text:p>=CLEAN(J53)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H53])" office:value-type="string" office:string-value="90" calcext:value-type="string">
@@ -2780,7 +2780,7 @@
       <text:p>=CLEAN(J54)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H54])" office:value-type="string" office:string-value="91" calcext:value-type="string">
@@ -2816,7 +2816,7 @@
       <text:p>=CLEAN(J55)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H55])" office:value-type="string" office:string-value="92" calcext:value-type="string">
@@ -2852,7 +2852,7 @@
       <text:p>=CLEAN(J56)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H56])" office:value-type="string" office:string-value="93" calcext:value-type="string">
@@ -2888,7 +2888,7 @@
       <text:p>=CLEAN(J57)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H57])" office:value-type="string" office:string-value="94" calcext:value-type="string">
@@ -2924,7 +2924,7 @@
       <text:p>=CLEAN(J58)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H58])" office:value-type="string" office:string-value="95" calcext:value-type="string">
@@ -2960,7 +2960,7 @@
       <text:p>=CLEAN(J59)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H59])" office:value-type="string" office:string-value="96" calcext:value-type="string">
@@ -2996,7 +2996,7 @@
       <text:p>=CLEAN(J60)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H60])" office:value-type="string" office:string-value="97" calcext:value-type="string">
@@ -3032,7 +3032,7 @@
       <text:p>=CLEAN(J61)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H61])" office:value-type="string" office:string-value="98" calcext:value-type="string">
@@ -3068,7 +3068,7 @@
       <text:p>=CLEAN(J62)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H62])" office:value-type="string" office:string-value="99" calcext:value-type="string">
@@ -3104,7 +3104,7 @@
       <text:p>=CLEAN(J63)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H63])" office:value-type="string" office:string-value="9A" calcext:value-type="string">
@@ -3140,7 +3140,7 @@
       <text:p>=CLEAN(J64)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H64])" office:value-type="string" office:string-value="9B" calcext:value-type="string">
@@ -3176,7 +3176,7 @@
       <text:p>=CLEAN(J65)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H65])" office:value-type="string" office:string-value="9C" calcext:value-type="string">
@@ -3212,7 +3212,7 @@
       <text:p>=CLEAN(J66)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H66])" office:value-type="string" office:string-value="9D" calcext:value-type="string">
@@ -3248,7 +3248,7 @@
       <text:p>=CLEAN(J67)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H67])" office:value-type="string" office:string-value="9E" calcext:value-type="string">
@@ -3284,7 +3284,7 @@
       <text:p>=CLEAN(J68)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell/>
      <table:table-cell table:formula="of:=DEC2HEX([.H68])" office:value-type="string" office:string-value="9F" calcext:value-type="string">
@@ -3419,7 +3419,7 @@
       <text:p>{=CLEAN(J67:J70)}</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce16"/>
@@ -3446,7 +3446,7 @@
       <text:p>{=CLEAN(J67:J70)}</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
-      <text:p>Unicode Cn</text:p>
+      <text:p>Unicode Cc</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce16"/>
