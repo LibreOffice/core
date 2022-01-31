@@ -51,6 +51,23 @@
       "message": "Replied on BZ",
       "revId": "36ebea5bd7c7adbed924852dffb9d6f2d67689a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7245e60_5eae2472",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-31T11:16:36Z",
+      "side": 1,
+      "message": "Works but kind of a workaround since other dropdowns like underline have similar issues (first item is always focused). Caolan, what\u0027s your take?",
+      "revId": "36ebea5bd7c7adbed924852dffb9d6f2d67689a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
