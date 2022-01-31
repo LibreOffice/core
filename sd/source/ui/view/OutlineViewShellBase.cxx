@@ -32,7 +32,7 @@ class DrawDocShell;
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new OutlineViewShellBase object has been constructed.
 
-SfxViewFactory* OutlineViewShellBase::pFactory;
+SfxViewFactory* OutlineViewShellBase::m_pFactory;
 SfxViewShell* OutlineViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
@@ -42,7 +42,7 @@ SfxViewShell* OutlineViewShellBase::CreateInstance (
 }
 void OutlineViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
 {
-    pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Outline");
+    m_pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Outline");
     InitFactory();
 }
 void OutlineViewShellBase::InitFactory()

@@ -57,13 +57,13 @@ namespace sw::sidebar {
         SfxBindings* mpBindings;
 
         //Spacing
-        sal_uInt16 nTop;
-        sal_uInt16 nBottom;
-        sal_uInt16 nLeft;
-        sal_uInt16 nRight;
+        sal_uInt16 m_nTop;
+        sal_uInt16 m_nBottom;
+        sal_uInt16 m_nLeft;
+        sal_uInt16 m_nRight;
 
         //custom entry
-        OUString aCustomEntry;
+        OUString m_aCustomEntry;
 
         // Controller Items
         ::sfx2::sidebar::ControllerItem maSwLRSpacingControl;

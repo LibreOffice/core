@@ -88,7 +88,7 @@ private:
     std::unique_ptr<SvxPageNumberListBox> mxNumberSelectLB;
     std::unique_ptr<weld::ComboBox> mxBgFillType;
     std::unique_ptr<weld::Label> mxCustomEntry;
-    OUString aCustomEntry;
+    OUString m_aCustomEntry;
 
     void Initialize();
     void Update();

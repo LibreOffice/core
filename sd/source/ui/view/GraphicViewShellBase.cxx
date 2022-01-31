@@ -33,7 +33,7 @@ namespace sd
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new GraphicViewShellBase object has been constructed.
 
-SfxViewFactory* GraphicViewShellBase::pFactory;
+SfxViewFactory* GraphicViewShellBase::m_pFactory;
 SfxViewShell* GraphicViewShellBase::CreateInstance(SfxViewFrame* pFrame, SfxViewShell* pOldView)
 {
     GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);
@@ -42,7 +42,7 @@ SfxViewShell* GraphicViewShellBase::CreateInstance(SfxViewFrame* pFrame, SfxView
 }
 void GraphicViewShellBase::RegisterFactory(SfxInterfaceId nPrio)
 {
-    pFactory = new SfxViewFactory(&CreateInstance, nPrio, "Default");
+    m_pFactory = new SfxViewFactory(&CreateInstance, nPrio, "Default");
     InitFactory();
 }
 void GraphicViewShellBase::InitFactory() { SFX_VIEW_REGISTRATION(GraphicDocShell); }

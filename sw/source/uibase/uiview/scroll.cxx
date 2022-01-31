@@ -24,10 +24,10 @@
 SwScrollbar::SwScrollbar( vcl::Window *pWin, bool bHoriz ) :
     ScrollBar( pWin,
     WinBits( WB_3DLOOK | WB_HIDE | ( bHoriz ? WB_HSCROLL : WB_VSCROLL)  ) ),
-    bHori( bHoriz ),
-    bAuto( false ),
-    bVisible(false),
-    bSizeSet(false)
+    m_bHori( bHoriz ),
+    m_bAuto( false ),
+    m_bVisible(false),
+    m_bSizeSet(false)
 {
     // No mirroring for horizontal scrollbars
     if( bHoriz )
@@ -41,8 +41,8 @@ SwScrollbar::SwScrollbar( vcl::Window *pWin, bool bHoriz ) :
 
 void SwScrollbar::DocSzChgd( const Size &rSize )
 {
-    aDocSz = rSize;
-    SetRange( Range( 0, bHori ? rSize.Width() : rSize.Height()) );
+    m_aDocSz = rSize;
+    SetRange( Range( 0, m_bHori ? rSize.Width() : rSize.Height()) );
     const sal_uLong nVisSize = GetVisibleSize();
     SetLineSize( SCROLL_LINE_SIZE );
     SetPageSize( nVisSize * 77 / 100 );
@@ -53,7 +53,7 @@ void SwScrollbar::DocSzChgd( const Size &rSize )
 void SwScrollbar::ViewPortChgd( const tools::Rectangle &rRect )
 {
     tools::Long nThumb, nVisible;
-    if( bHori )
+    if( m_bHori )
     {
         nThumb = rRect.Left();
         nVisible = rRect.GetWidth();
@@ -65,38 +65,38 @@ void SwScrollbar::ViewPortChgd( const tools::Rectangle &rRect )
     }
 
     SetVisibleSize( nVisible );
-    DocSzChgd(aDocSz);
+    DocSzChgd(m_aDocSz);
     SetThumbPos( nThumb );
-    if(bAuto)
+    if(m_bAuto)
         AutoShow();
 }
 
 void SwScrollbar::ExtendedShow( bool bSet )
 {
-    bVisible = bSet;
-    if( (!bSet ||  !bAuto) && IsUpdateMode() && bSizeSet)
+    m_bVisible = bSet;
+    if( (!bSet ||  !m_bAuto) && IsUpdateMode() && m_bSizeSet)
         ScrollBar::Show(bSet);
 }
 
 void SwScrollbar::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
     ScrollBar::SetPosSizePixel(rNewPos, rNewSize);
-    bSizeSet = true;
-    if(bVisible)
+    m_bSizeSet = true;
+    if(m_bVisible)
         ExtendedShow();
 
 }
 
 void SwScrollbar::SetAuto(bool bSet)
 {
-    if(bAuto != bSet)
+    if(m_bAuto != bSet)
     {
-        bAuto = bSet;
+        m_bAuto = bSet;
 
         // hide automatically - then show
-        if(!bAuto && bVisible && !ScrollBar::IsVisible())
+        if(!m_bAuto && m_bVisible && !ScrollBar::IsVisible())
             ExtendedShow();
-        else if(bAuto)
+        else if(m_bAuto)
             AutoShow(); // or hide automatically
     }
 }

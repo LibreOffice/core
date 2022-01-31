@@ -22,11 +22,11 @@
 
 class SwScrollbar final : public ScrollBar
 {
-    Size    aDocSz;
-    bool    bHori       :1;     // horizontal = salTrue, otherwise vertical
-    bool    bAuto       :1;     // for scrolling mode
-    bool    bVisible    :1;     // show/hide should only set this flag
-    bool    bSizeSet    :1;     // was the size already set?
+    Size    m_aDocSz;
+    bool    m_bHori       :1;     // horizontal = salTrue, otherwise vertical
+    bool    m_bAuto       :1;     // for scrolling mode
+    bool    m_bVisible    :1;     // show/hide should only set this flag
+    bool    m_bSizeSet    :1;     // was the size already set?
 
     void    AutoShow();
 
@@ -36,17 +36,17 @@ class SwScrollbar final : public ScrollBar
 public:
     void    ExtendedShow( bool bVisible = true );
     void    SetPosSizePixel( const Point& rNewPos, const Size& rNewSize ) override;
-    bool    IsVisible(bool bReal) const { return bReal ? ScrollBar::IsVisible() : bVisible; }
+    bool    IsVisible(bool bReal) const { return bReal ? ScrollBar::IsVisible() : m_bVisible; }
 
         // changing of document size
     void    DocSzChgd(const Size &rNewSize);
         // changing of visible region
     void    ViewPortChgd(const tools::Rectangle &rRectangle);
         // what is it??
-    bool    IsHoriScroll() const { return bHori; }
+    bool    IsHoriScroll() const { return m_bHori; }
 
     void    SetAuto(bool bSet);
-    bool    IsAuto() const { return bAuto;}
+    bool    IsAuto() const { return m_bAuto;}
 
     SwScrollbar(vcl::Window *pParent, bool bHori );
     virtual ~SwScrollbar() override;

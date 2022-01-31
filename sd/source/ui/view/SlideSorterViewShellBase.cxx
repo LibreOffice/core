@@ -32,7 +32,7 @@ class DrawDocShell;
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new SlideSorterViewShellBase object has been constructed.
 
-SfxViewFactory* SlideSorterViewShellBase::pFactory;
+SfxViewFactory* SlideSorterViewShellBase::m_pFactory;
 SfxViewShell* SlideSorterViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
@@ -43,7 +43,7 @@ SfxViewShell* SlideSorterViewShellBase::CreateInstance (
 
 void SlideSorterViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
 {
-    pFactory = new SfxViewFactory(&CreateInstance,nPrio,"SlideSorter");
+    m_pFactory = new SfxViewFactory(&CreateInstance,nPrio,"SlideSorter");
     InitFactory();
 }
 
