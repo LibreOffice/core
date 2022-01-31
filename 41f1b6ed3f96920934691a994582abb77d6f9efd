@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a37336bc_26609569",
+        "filename": "include/oox/ole/vbamodule.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-31T09:00:41Z",
+      "side": 1,
+      "message": "How is this supposed to compile? :-)",
+      "revId": "41f1b6ed3f96920934691a994582abb77d6f9efd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
