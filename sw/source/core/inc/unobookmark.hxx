@@ -46,6 +46,7 @@ typedef ::cppu::ImplInheritanceHelper
 ,   css::text::XTextContent
 > SwXBookmark_Base;
 
+/// UNO API wrapper around an internal sw::mark::IMark.
 class SwXBookmark
     : public SwXBookmark_Base
 {
