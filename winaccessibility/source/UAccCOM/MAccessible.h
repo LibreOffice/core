@@ -209,7 +209,6 @@ private:
     HRESULT WINAPI SmartQI(void* pv, REFIID iid, void** ppvObject);
 
 public:
-    STDMETHOD(Get_XAccChildID)(/*[out,retval]*/ long* childID) override;
     // AccObjectManagerAgent is a management object in UNO, here keep its pointer for
     // the implementation of accNavigate when descendant manage happens for List,Tree, or Table
     // AccObjectManagerAgent and the following UNO objects XAccessible,XAccessibleSelection,

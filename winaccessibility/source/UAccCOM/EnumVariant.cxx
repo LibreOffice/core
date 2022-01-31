@@ -69,8 +69,9 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
                         &pChild);
         if(isGet)
         {
-            pvar[l2].vt = VT_I4;
-            static_cast<IMAccessible*>(pChild)->Get_XAccChildID(&pvar[l2].lVal);
+            pvar[l2].vt = VT_DISPATCH;
+            pvar[l2].pdispVal = pChild;
+            pChild->AddRef();
         }
         else if(pRXAcc.is())
         {
@@ -80,8 +81,9 @@ HRESULT STDMETHODCALLTYPE CEnumVariant::Next(ULONG cElements,VARIANT __RPC_FAR *
                             pRXAcc.get(), &pChild);
             if(isGet)
             {
-                pvar[l2].vt = VT_I4;
-                static_cast<IMAccessible*>(pChild)->Get_XAccChildID(&pvar[l2].lVal);
+                pvar[l2].vt = VT_DISPATCH;
+                pvar[l2].pdispVal = pChild;
+                pChild->AddRef();
             }
         }
     }
