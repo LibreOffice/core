@@ -54,6 +54,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00bcb57_cc8ba726",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-31T15:28:37Z",
+      "side": 1,
+      "message": "Mike,\n\nI will look into your comments.\n(At least I learned not to take over someone\u0027s almost finished patch anymore; it takes much more time than simply starting from scratch.)",
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d68cafe_f4ec87f8",
