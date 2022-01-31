@@ -16,6 +16,24 @@
       "message": "Fast change on the browser. Should we just use it in such a way?",
       "revId": "7d2442c20ab2345779a4f0501d4ab9ec6a1532af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8046215_bde9c959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T10:48:37Z",
+      "side": 1,
+      "message": "\u003e Should we just use it in such a way?\n\nI create simple changes in browser very often 😊\n\nThank you!",
+      "parentUuid": "b7420e8c_4025ba8d",
+      "revId": "7d2442c20ab2345779a4f0501d4ab9ec6a1532af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
