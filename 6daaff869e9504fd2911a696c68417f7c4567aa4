@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4df47b81_c72c7ce8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-31T13:32:36Z",
+      "side": 1,
+      "message": "My understanding is that this is useful if you want to have content on the same line, at left, center and right positions, without explicit tab stops. You can use explicit tab stops (and you have to, in Writer), but those break when you resize the page. Hopefully one day we can have the full feature in Writer as well, but till then this helps at least.",
+      "revId": "6daaff869e9504fd2911a696c68417f7c4567aa4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
