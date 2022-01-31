@@ -16,6 +16,23 @@
       "message": "This is similar area to something you did a couple of years ago in tdf#132788. The function is called surprisingly often, but almost never with a colour change.",
       "revId": "52ca63a5d50ccee5bf3bf9e78b374e22d2339a43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2311258f_f8f519d0",
+        "filename": "svtools/source/control/ruler.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-01-31T09:43:51Z",
+      "side": 1,
+      "message": "Would it be enough to just do an Invalidate() instead of Resize() here? If so, that would be a proper improvement, not a hack.",
+      "revId": "52ca63a5d50ccee5bf3bf9e78b374e22d2339a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
