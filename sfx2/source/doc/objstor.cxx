@@ -2712,7 +2712,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
     }
 
 
-    const SfxBoolItem* pCopyStreamItem = rItemSet.GetItem<SfxBoolItem>(SID_COPY_STREAM_IF_POSSIBLE, false);
+    const SfxBoolItem* pCopyStreamItem = rItemSet.GetItem(SID_COPY_STREAM_IF_POSSIBLE, false);
     if ( bSaveTo && pCopyStreamItem && pCopyStreamItem->GetValue() && !IsModified() )
     {
         if (pMedium->TryDirectTransfer(aURL.GetMainURL(INetURLObject::DecodeMechanism::NONE), rItemSet))

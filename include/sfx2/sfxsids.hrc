@@ -248,7 +248,7 @@ class SvxZoomItem;
 #define SID_APPLY_STYLE                     (SID_SFX_START + 1703)
 #define SID_MACRO_SIGNATURE                 (SID_SFX_START + 1704)
 #define SID_ATTR_WARNALIENFORMAT            (SID_SFX_START + 1705)
-#define SID_COPY_STREAM_IF_POSSIBLE         TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1706)
+#define SID_COPY_STREAM_IF_POSSIBLE         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1706)
 #define SID_MAIL_SENDDOCASFORMAT            (SID_SFX_START + 1707)
 #define SID_MAIL_SENDDOCASMS                (SID_SFX_START + 1708)
 #define SID_MAIL_SENDDOCASOOO               (SID_SFX_START + 1709)
