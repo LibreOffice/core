@@ -242,8 +242,8 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
 rtl_TextEncoding SwIoSystem::GetTextEncoding(SvStream& rStrm)
 {
     sal_Size nLen, nOrig;
-    char aBuf[DETECT_ENCODING_BUFFER_SIZE];
-    nOrig = nLen = rStrm.ReadBytes(aBuf, DETECT_ENCODING_BUFFER_SIZE);
+    char aBuf[4096];
+    nOrig = nLen = rStrm.ReadBytes(aBuf, sizeof(aBuf));
 
     rtl_TextEncoding eCharSet;
     const bool bRet = SwIoSystem::IsDetectableText(aBuf, nLen, &eCharSet, nullptr, nullptr, nullptr);
