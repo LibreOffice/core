@@ -661,6 +661,41 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf120660)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("B3");
+    lcl_AssertCurrentCursorPosition(1, 2);
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_AssertCurrentCursorPosition(3, 2);
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    ScRangeList aMarkedArea = ScDocShell::GetViewData()->GetMarkData().GetMarkedRanges();
+    OUString aMarkedAreaString;
+    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, pDoc,
+                                                   formula::FormulaGrammar::CONV_OOO);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Sheet1.D3:Sheet1.D4
+    // - Actual  : Sheet1.A2:Sheet1.D3
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.D3:Sheet1.D4"), aMarkedAreaString);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
