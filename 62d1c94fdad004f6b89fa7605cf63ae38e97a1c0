@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed85328_97d07142",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-31T16:16:14Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! Note: it was better to comment and now restore the original tests, because it simplifies the review process, thanks for it!",
+      "revId": "62d1c94fdad004f6b89fa7605cf63ae38e97a1c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
