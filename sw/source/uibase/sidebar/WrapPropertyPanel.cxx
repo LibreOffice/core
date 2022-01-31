@@ -55,12 +55,12 @@ WrapPropertyPanel::WrapPropertyPanel(
     : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui")
     , mpBindings(pBindings)
     // spacing
-    , nTop(0)
-    , nBottom(0)
-    , nLeft(0)
-    , nRight(0)
+    , m_nTop(0)
+    , m_nBottom(0)
+    , m_nLeft(0)
+    , m_nRight(0)
     // resources
-    , aCustomEntry(SwResId(STR_WRAP_PANEL_CUSTOM_STR))
+    , m_aCustomEntry(SwResId(STR_WRAP_PANEL_CUSTOM_STR))
     // controller items
     , maSwLRSpacingControl(SID_ATTR_LRSPACE, *pBindings, *this)
     , maSwULSpacingControl(SID_ATTR_ULSPACE, *pBindings, *this)
@@ -94,15 +94,15 @@ void WrapPropertyPanel::Initialize()
 
 void WrapPropertyPanel::UpdateSpacingLB()
 {
-    if( (nLeft == nRight) && (nTop == nBottom) && (nLeft == nTop) )
+    if( (m_nLeft == m_nRight) && (m_nTop == m_nBottom) && (m_nLeft == m_nTop) )
     {
         sal_Int32 nCount = mxSpacingLB->get_count();
         for (sal_Int32 i = 0; i < nCount; i++)
         {
-            if (mxSpacingLB->get_id(i).toUInt32() == nLeft)
+            if (mxSpacingLB->get_id(i).toUInt32() == m_nLeft)
             {
                 mxSpacingLB->set_active(i);
-                int nCustomEntry = mxSpacingLB->find_text(aCustomEntry);
+                int nCustomEntry = mxSpacingLB->find_text(m_aCustomEntry);
                 if (nCustomEntry != -1)
                     mxSpacingLB->remove(nCustomEntry);
                 return;
@@ -110,9 +110,9 @@ void WrapPropertyPanel::UpdateSpacingLB()
         }
     }
 
-    if (mxSpacingLB->find_text(aCustomEntry) == -1)
-        mxSpacingLB->append_text(aCustomEntry);
-    mxSpacingLB->set_active_text(aCustomEntry);
+    if (mxSpacingLB->find_text(m_aCustomEntry) == -1)
+        mxSpacingLB->append_text(m_aCustomEntry);
+    mxSpacingLB->set_active_text(m_aCustomEntry);
 }
 
 IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, weld::ComboBox&, rBox, void)
@@ -122,7 +122,7 @@ IMPL_LINK(WrapPropertyPanel, SpacingLBHdl, weld::ComboBox&, rBox, void)
     SvxLRSpaceItem aLRItem(nVal, nVal, 0, 0, RES_LR_SPACE);
     SvxULSpaceItem aULItem(nVal, nVal, RES_UL_SPACE);
 
-    nTop = nBottom = nLeft = nRight = nVal;
+    m_nTop = m_nBottom = m_nLeft = m_nRight = nVal;
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_LRSPACE,
             SfxCallMode::RECORD, { &aLRItem });
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_ULSPACE,
@@ -143,8 +143,8 @@ void WrapPropertyPanel::NotifyItemUpdate(
                 const SvxLRSpaceItem* pItem = dynamic_cast< const SvxLRSpaceItem* >(pState);
                 if(pItem)
                 {
-                    nLeft = pItem->GetLeft();
-                    nRight = pItem->GetRight();
+                    m_nLeft = pItem->GetLeft();
+                    m_nRight = pItem->GetRight();
 
                     UpdateSpacingLB();
                 }
@@ -158,8 +158,8 @@ void WrapPropertyPanel::NotifyItemUpdate(
                 const SvxULSpaceItem* pItem = dynamic_cast< const SvxULSpaceItem* >(pState);
                 if(pItem)
                 {
-                    nTop = pItem->GetUpper();
-                    nBottom = pItem->GetLower();
+                    m_nTop = pItem->GetUpper();
+                    m_nBottom = pItem->GetLower();
 
                     UpdateSpacingLB();
                 }

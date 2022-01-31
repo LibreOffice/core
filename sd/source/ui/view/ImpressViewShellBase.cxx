@@ -36,7 +36,7 @@ namespace sd {
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ImpressViewShellBase object has been constructed.
 
-SfxViewFactory* ImpressViewShellBase::pFactory;
+SfxViewFactory* ImpressViewShellBase::m_pFactory;
 SfxViewShell* ImpressViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
@@ -46,7 +46,7 @@ SfxViewShell* ImpressViewShellBase::CreateInstance (
 }
 void ImpressViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
 {
-    pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Default");
+    m_pFactory = new SfxViewFactory(&CreateInstance,nPrio,"Default");
     InitFactory();
 }
 void ImpressViewShellBase::InitFactory()

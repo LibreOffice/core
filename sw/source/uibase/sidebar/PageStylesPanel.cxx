@@ -139,7 +139,7 @@ void PageStylesPanel::Initialize()
 {
     SvxFillTypeBox::Fill(*mxBgFillType);
 
-    aCustomEntry = mxCustomEntry->get_label();
+    m_aCustomEntry = mxCustomEntry->get_label();
     mpBindings->Invalidate(SID_ATTR_PAGE_COLUMN);
     mpBindings->Invalidate(SID_ATTR_PAGE);
     mpBindings->Invalidate(SID_ATTR_PAGE_FILLSTYLE);
@@ -330,15 +330,15 @@ void PageStylesPanel::NotifyItemUpdate(
                 if(mpPageColumnItem->GetValue() <= 5)
                 {
                     mxColumnCount->set_active(mpPageColumnItem->GetValue() - 1);
-                    int nIndex = mxColumnCount->find_text(aCustomEntry);
+                    int nIndex = mxColumnCount->find_text(m_aCustomEntry);
                     if (nIndex != -1)
                         mxColumnCount->remove(nIndex);
                 }
                 else
                 {
-                    if (mxColumnCount->find_text(aCustomEntry) == -1)
-                        mxColumnCount->append_text(aCustomEntry);
-                    mxColumnCount->set_active_text(aCustomEntry);
+                    if (mxColumnCount->find_text(m_aCustomEntry) == -1)
+                        mxColumnCount->append_text(m_aCustomEntry);
+                    mxColumnCount->set_active_text(m_aCustomEntry);
                 }
             }
         }
