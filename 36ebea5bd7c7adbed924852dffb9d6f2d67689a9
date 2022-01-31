@@ -68,6 +68,23 @@
       "message": "Works but kind of a workaround since other dropdowns like underline have similar issues (first item is always focused). Caolan, what\u0027s your take?",
       "revId": "36ebea5bd7c7adbed924852dffb9d6f2d67689a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45e7101b_c5f6ca1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-01-31T11:30:33Z",
+      "side": 1,
+      "message": "With the previous patches in place, it is now possible to evaluate in grab_focus() and chose one of the matching options. I have that mostly working - I just need to tweak it and re-submit. I was planning to do that today.",
+      "revId": "36ebea5bd7c7adbed924852dffb9d6f2d67689a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
