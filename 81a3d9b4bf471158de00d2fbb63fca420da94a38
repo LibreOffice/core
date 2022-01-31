@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c162c1e9_72a276ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-01-31T19:01:43Z",
+      "side": 1,
+      "message": "\"I hope that this performance test is OK.\"  I think such tests relying on wall-clock time measurements are rather unfortunate---you invariably choose poor values (witness \u003chttps://gerrit.libreoffice.org/c/core/+/129237\u003e \"Adapt test to slow builds\").  (And even for fast builds, consider scenarios like putting a laptop to sleep to move it around, and hoping that the running `make check` will still succeed when you resume it later.)",
+      "revId": "81a3d9b4bf471158de00d2fbb63fca420da94a38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
