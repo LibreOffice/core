@@ -83,12 +83,14 @@ curl --no-progress-meter -S \
     -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/xml.dict \
     -C - -O https://raw.githubusercontent.com/rc0r/afl-fuzz/master/dictionaries/html_tags.dict
 #fuzzing corpuses
+#afl jpeg, gif, bmp, png, webp
 curl --no-progress-meter -S -C - -O https://lcamtuf.coredump.cx/afl/demo/afl_testcases.tgz
 mkdir -p afl-testcases && cd afl-testcases/ && tar xf $SRC/afl_testcases.tgz && cd .. && \
     zip -q $SRC/jpgfuzzer_seed_corpus.zip afl-testcases/jpeg*/full/images/* && \
     zip -q $SRC/giffuzzer_seed_corpus.zip afl-testcases/gif*/full/images/* && \
     zip -q $SRC/bmpfuzzer_seed_corpus.zip afl-testcases/bmp*/full/images/* && \
-    zip -q $SRC/pngfuzzer_seed_corpus.zip afl-testcases/png*/full/images/*
+    zip -q $SRC/pngfuzzer_seed_corpus.zip afl-testcases/png*/full/images/* && \
+    zip -q $SRC/webpfuzzer_seed_corpus.zip afl-testcases/webp*/full/images/*
 # using github's svn view to use svn export as a hack to just export part of the git repo
 svn export --force -q https://github.com/khaledhosny/ots/trunk/tests/fonts $SRC/sample-sft-fonts/ots
 svn export --force -q https://github.com/unicode-org/text-rendering-tests/trunk/fonts/ $SRC/sample-sft-fonts/unicode-org
