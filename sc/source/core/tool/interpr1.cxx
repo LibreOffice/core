@@ -3440,21 +3440,36 @@ void ScInterpreter::ScNumberValue()
     PushNoValue();
 }
 
-static bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
+static bool lcl_ScInterpreter_IsPrintable( sal_uInt32 nCodePoint )
 {
-    return ( c > 0x1f && c < 0x7f ) || ( c > 0x9f );
+    return ( !u_isISOControl(nCodePoint) /*not in Cc*/
+             && u_isdefined(nCodePoint)  /*not in Cn*/ );
 }
+
 
 void ScInterpreter::ScClean()
 {
     OUString aStr = GetString().getString();
-    for ( sal_Int32 i = 0; i < aStr.getLength(); i++ )
+    sal_Int32 nIdx = 0;
+    sal_Int32 nPrevIdx = 0;
+
+    OUStringBuffer aBuf;
+    while ( nIdx <  aStr.getLength() )
     {
-        if ( !lcl_ScInterpreter_IsPrintable( aStr[i] ) )
-            aStr = aStr.replaceAt(i, 1, u"");
+        aStr.iterateCodePoints( &nIdx );
+        sal_uInt32 c;
+        if ( nIdx - nPrevIdx == 1 )  // UTF-16 character
+            c = aStr[ nPrevIdx ];
+        else                         // UTF-32 character
+            c = ( aStr[ nPrevIdx ] << 10 ) + aStr[ nPrevIdx + 1 ] - 0x35FDC00;
+
+        if ( lcl_ScInterpreter_IsPrintable( c ) )
+            aBuf.appendUtf32( c );
+        nPrevIdx = nIdx;
     }
-    PushString(aStr);
+    PushString( aBuf.makeStringAndClear() );
 }
+
 
 void ScInterpreter::ScCode()
 {
