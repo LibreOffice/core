@@ -223,7 +223,7 @@ void ChartController::executeDispatch_NewArrangement()
             }
 
             // regression curve equations
-            std::vector< uno::Reference< chart2::XRegressionCurve > > aRegressionCurves =
+            std::vector< rtl::Reference< RegressionCurveModel > > aRegressionCurves =
                 RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram );
 
             // reset equation position

@@ -20,6 +20,7 @@
 #include <StatisticsItemConverter.hxx>
 #include "SchWhichPairs.hxx"
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <ErrorBar.hxx>
 #include <StatisticsHelper.hxx>
 #include <ChartModel.hxx>
@@ -118,8 +119,8 @@ uno::Reference< beans::XPropertySet > lcl_getEquationProperties(
     if( bEquationExists )
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegCnt( xSeriesPropSet, uno::UNO_QUERY );
-        uno::Reference< chart2::XRegressionCurve > xCurve(
-            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ));
+        rtl::Reference< ::chart::RegressionCurveModel > xCurve =
+            ::chart::RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt );
         if( xCurve.is())
         {
             return xCurve->getEquationProperties();

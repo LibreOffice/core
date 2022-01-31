@@ -38,6 +38,7 @@
 #include <NumberFormatterWrapper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <RegressionCurveModel.hxx>
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <vcl/settings.hxx>
@@ -559,7 +560,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl:
             if( xSeries.is())
             {
                 sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
-                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xSeries, nCurveIndex) );
+                rtl::Reference< RegressionCurveModel > xCurve = RegressionCurveHelper::getRegressionCurveAtIndex(xSeries, nCurveIndex);
                 if( xCurve.is())
                 {
                     try
@@ -575,23 +576,19 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl:
                         const OUString& aNumDecimalSep = rLocaleDataWrapper.getNumDecimalSep();
                         sal_Unicode cDecSeparator = aNumDecimalSep[0];
 
-                        uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-                        if ( xProperties.is())
+                        xCurve->getPropertyValue( "PolynomialDegree") >>= aDegree;
+                        xCurve->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
+                        xCurve->getPropertyValue( "MovingAverageType") >>= aMovingType;
+                        xCurve->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
+                        if (bForceIntercept)
+                                xCurve->getPropertyValue( "InterceptValue") >>= aInterceptValue;
+                        uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
+                        if( xEqProp.is())
                         {
-                                xProperties->getPropertyValue( "PolynomialDegree") >>= aDegree;
-                                xProperties->getPropertyValue( "MovingAveragePeriod") >>= aPeriod;
-                                xProperties->getPropertyValue( "MovingAverageType") >>= aMovingType;
-                                xProperties->getPropertyValue( "ForceIntercept") >>= bForceIntercept;
-                                if (bForceIntercept)
-                                        xProperties->getPropertyValue( "InterceptValue") >>= aInterceptValue;
-                                uno::Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties());
-                                if( xEqProp.is())
-                                {
-                                    if ( !(xEqProp->getPropertyValue( "XName") >>= aXName) )
-                                        aXName = "x";
-                                    if ( !(xEqProp->getPropertyValue( "YName") >>= aYName) )
-                                        aYName = "f(x)";
-                                }
+                            if ( !(xEqProp->getPropertyValue( "XName") >>= aXName) )
+                                aXName = "x";
+                            if ( !(xEqProp->getPropertyValue( "YName") >>= aYName) )
+                                aYName = "f(x)";
                         }
                         xCalculator->setRegressionProperties(aDegree, bForceIntercept, aInterceptValue, 2, aMovingType);
                         xCalculator->setXYNames ( aXName, aYName );

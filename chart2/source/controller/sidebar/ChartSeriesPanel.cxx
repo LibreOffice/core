@@ -39,6 +39,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <StatisticsHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
 
