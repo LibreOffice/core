@@ -1621,7 +1621,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         if ( rSet.GetItemState( SID_COPY_STREAM_IF_POSSIBLE, false, &pItem ) == SfxItemState::SET )
         {
             pValue[nActProp].Name = sCopyStreamIfPossible;
-            pValue[nActProp++].Value = static_cast<const SfxUnoAnyItem*>(pItem)->GetValue();
+            pValue[nActProp++].Value <<= static_cast<const SfxBoolItem*>(pItem)->GetValue();
         }
         if ( rSet.GetItemState( SID_NOAUTOSAVE, false, &pItem ) == SfxItemState::SET )
         {
