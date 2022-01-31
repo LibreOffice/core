@@ -16,6 +16,23 @@
       "message": "Works well for gen and gtk3. Using kf5 the size is kept but not the position. I think we should push it now. Any objection?",
       "revId": "bcba846e4f774a1c65e0fbeca989f1949ac4102f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94eb03d1_3b713dbe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-01-31T11:22:46Z",
+      "side": 1,
+      "message": "The specific qt5/kf5 issue is captured at https://gerrit.libreoffice.org/c/core/+/128981 so yeah, we seem good here now.\n\nI would still be wary about saving sizes/positions in general so I\u0027d suggest to limit it to user-resizable dialogs and not add it everywhere, but just on occasion when it\u0027s desirable.",
+      "revId": "bcba846e4f774a1c65e0fbeca989f1949ac4102f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
