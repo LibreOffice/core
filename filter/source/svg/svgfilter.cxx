@@ -90,6 +90,7 @@ SVGFilter::SVGFilter( const Reference< XComponentContext >& rxCtx ) :
     mbExportShapeSelection(false),
     maFilterData(),
     mxDefaultPage(),
+    mbIsPreview(false),
     mbWriterFilter(false),
     mbCalcFilter(false),
     mbImpressFilter(false),
@@ -119,6 +120,15 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
 
     if(mxSrcDoc.is())
     {
+        for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
+        {
+            if (rDescriptor[nInd].Name == "IsPreview")
+            {
+                rDescriptor[nInd].Value >>= mbIsPreview;
+                break;
+            }
+        }
+
         for (sal_Int32 nInd = 0; nInd < rDescriptor.getLength(); nInd++)
         {
             if (rDescriptor[nInd].Name == "FilterName")
