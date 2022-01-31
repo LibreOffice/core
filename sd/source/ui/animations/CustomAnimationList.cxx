@@ -814,6 +814,8 @@ void CustomAnimationList::update()
             } while (mxTreeView->iter_next(*xEntry));
         }
 
+        // tdf#147032 unselect what previous set_cursor may have caused to get selected as a side-effect
+        mxTreeView->unselect_all();
         for (const auto& rEntry : aNewSelection)
             mxTreeView->select(*rEntry);
 
