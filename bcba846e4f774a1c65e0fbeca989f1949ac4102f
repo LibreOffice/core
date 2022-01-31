@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2cf2dd32_59c754ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-31T11:11:35Z",
+      "side": 1,
+      "message": "Works well for gen and gtk3. Using kf5 the size is kept but not the position. I think we should push it now. Any objection?",
+      "revId": "bcba846e4f774a1c65e0fbeca989f1949ac4102f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
