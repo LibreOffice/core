@@ -995,12 +995,21 @@ public:
 };
 
 OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
-                                         const OUString& sOldName,bool bIsUpperName)
+                                         const OUString& sOldName, bool bIsUpperName)
 {
     sal_Int32 lastIndex = sOldName.lastIndexOf('_');
-    sal_Int32 nOldNumber = 0;
+    sal_Int32 nOldNumber = 1;
     if (lastIndex >= 0)
+    {
         nOldNumber = OUString(sOldName.subView(lastIndex)).toInt32();
+        if (nOldNumber == 0) // No number found, add number at the end
+        {
+            nOldNumber = 1;
+            lastIndex = sOldName.getLength() - 1;
+        }
+    }
+    else // No "_" found, add number at the end
+        lastIndex = sOldName.getLength() - 1;
     OUString sNewName;
     do
     {
