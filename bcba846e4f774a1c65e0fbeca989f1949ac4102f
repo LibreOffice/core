@@ -33,6 +33,24 @@
       "message": "The specific qt5/kf5 issue is captured at https://gerrit.libreoffice.org/c/core/+/128981 so yeah, we seem good here now.\n\nI would still be wary about saving sizes/positions in general so I\u0027d suggest to limit it to user-resizable dialogs and not add it everywhere, but just on occasion when it\u0027s desirable.",
       "revId": "bcba846e4f774a1c65e0fbeca989f1949ac4102f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c5477b5_dbb2709f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-31T11:28:49Z",
+      "side": 1,
+      "message": "I\u0027m a bit in favor of keeping the user input in general. But as a rule of thumb we could remember pos/size for non-modal dialogs with the idea that you keep it active while editing the document using the same setup repeatedly.",
+      "parentUuid": "94eb03d1_3b713dbe",
+      "revId": "bcba846e4f774a1c65e0fbeca989f1949ac4102f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
