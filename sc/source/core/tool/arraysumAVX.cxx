@@ -30,7 +30,7 @@ using namespace AVX;
   */
 static inline void sumAVX(__m256d& sum, __m256d& err, const __m256d& value)
 {
-    const __m256d ANNULATE_SIGN_BIT
+    static const __m256d ANNULATE_SIGN_BIT
         = _mm256_castsi256_pd(_mm256_set1_epi64x(0x7FFF'FFFF'FFFF'FFFF));
     // Temporal parameter
     __m256d t = _mm256_add_pd(sum, value);
