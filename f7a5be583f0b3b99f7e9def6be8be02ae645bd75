@@ -16,6 +16,23 @@
       "message": "oh I see, the issue was windows only...",
       "revId": "f7a5be583f0b3b99f7e9def6be8be02ae645bd75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a0889f37_5b99491f",
+        "filename": "sw/inc/iodetect.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T10:00:15Z",
+      "side": 1,
+      "message": "Oh - somehow missed this.\n\nThis define is completely local to where it\u0027s used; and better defined as an integer constant. I suppose it makes sense to remove this from the header file :-)",
+      "revId": "f7a5be583f0b3b99f7e9def6be8be02ae645bd75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
