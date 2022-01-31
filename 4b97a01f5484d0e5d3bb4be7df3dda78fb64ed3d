@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af1f97ec_6e44e2a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T13:55:57Z",
+      "side": 1,
+      "message": "\u003e and this change is perfect IMO.\n\nSorry, I spoke too fast: the change should also iterate code points, not code units. See e.g. ScInterpreter::ScReplace.",
+      "parentUuid": "20e9f48e_eec1a074",
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6d68cafe_f4ec87f8",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 1
@@ -55,6 +73,23 @@
         "endLine": 3445,
         "endChar": 16
       },
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "765a46a4_99cc2bc9",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3452,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T13:55:57Z",
+      "side": 1,
+      "message": "Wow, we have another huge bug here :-)\n\nThis function skips code units immediately after removed characters! The Cc and Cn characters get removed, and the next character is shifter to the old index, but i is incremented, and the shifted character is not checked.\n\n  \u003dLEN(CLEAN(REPT(CHAR(9);100)))\n\nwill give 50, instead of expected 0.",
       "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
