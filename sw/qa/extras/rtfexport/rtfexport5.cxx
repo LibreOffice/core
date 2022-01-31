@@ -403,6 +403,40 @@ DECLARE_RTFEXPORT_TEST(testFooterPara, "footer-para.rtf")
         getProperty</*style::ParagraphAdjust*/ sal_Int16>(xParagraph, "ParaAdjust"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf107413, "tdf107413.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    const double nLeftFooter
+        = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "left").toDouble();
+    const double nRightFooter
+        = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "right").toDouble();
+    const double nTopFooter
+        = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "top").toDouble();
+    const double nBottomFooter
+        = getXPath(pDump, "/root/page[1]/footer/infos/bounds", "bottom").toDouble();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '/root/page[1]/footer/txt/anchored/fly/infos/bounds' number of nodes is incorrect
+    const double nLeftFly
+        = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "left").toDouble();
+    const double nRightFly
+        = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "right").toDouble();
+    const double nTopFly
+        = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "top").toDouble();
+    const double nBottomFly
+        = getXPath(pDump, "/root/page[1]/footer/txt/anchored/fly/infos/bounds", "bottom")
+              .toDouble();
+
+    CPPUNIT_ASSERT_EQUAL(nLeftFooter, nLeftFly);
+    CPPUNIT_ASSERT_EQUAL(nRightFooter, nRightFly);
+    CPPUNIT_ASSERT_EQUAL(nBottomFooter, nBottomFly);
+    CPPUNIT_ASSERT_EQUAL(nTopFooter + 1056.0, nTopFly);
+}
+
 DECLARE_RTFEXPORT_TEST(testCp1000016, "hello.rtf")
 {
     // The single-line document had a second fake empty para on Windows.
