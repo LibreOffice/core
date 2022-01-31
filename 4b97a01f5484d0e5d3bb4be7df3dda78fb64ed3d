@@ -94,6 +94,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fda2b806_f98b7cb0",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3445,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-31T15:46:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d68cafe_f4ec87f8",
+      "range": {
+        "startLine": 3445,
+        "startChar": 13,
+        "endLine": 3445,
+        "endChar": 16
+      },
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "765a46a4_99cc2bc9",
@@ -107,6 +131,24 @@
       "writtenOn": "2022-01-31T13:55:57Z",
       "side": 1,
       "message": "Wow, we have another huge bug here :-)\n\nThis function skips code units immediately after removed characters! The Cc and Cn characters get removed, and the next character is shifter to the old index, but i is incremented, and the shifted character is not checked.\n\n  \u003dLEN(CLEAN(REPT(CHAR(9);100)))\n\nwill give 50, instead of expected 0.",
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "956dc0c6_4a9bad25",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3452,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-31T15:46:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "765a46a4_99cc2bc9",
       "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },

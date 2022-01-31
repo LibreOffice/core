@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4e603dd_0b6b8d81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-31T15:46:33Z",
+      "side": 1,
+      "message": "I have not yet resubmitted the changes; possibly iterating code points is to be added soon.\n\n(The inefficient OUString::replaceAt() will probably be a separate commit.)",
+      "revId": "4a57762c0b02671bfd706b507d6317cab3c4b00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
