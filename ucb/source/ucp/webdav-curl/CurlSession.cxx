@@ -679,18 +679,19 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     assert(rc == CURLE_OK);
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_HTTPAUTH, CURLAUTH_ANY);
     assert(rc == CURLE_OK); // ANY is always available
+    // always set CURLOPT_PROXY to suppress proxy detection in libcurl
+    OString const utf8Proxy(OUStringToOString(m_Proxy.aName, RTL_TEXTENCODING_UTF8));
+    rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY, utf8Proxy.getStr());
+    if (rc != CURLE_OK)
+    {
+        SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_PROXY failed: " << GetErrorString(rc));
+        throw DAVException(DAVException::DAV_SESSION_CREATE,
+                           ConnectionEndPointString(m_Proxy.aName, m_Proxy.nPort));
+    }
     if (!m_Proxy.aName.isEmpty())
     {
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYPORT, static_cast<long>(m_Proxy.nPort));
         assert(rc == CURLE_OK);
-        OString const utf8Proxy(OUStringToOString(m_Proxy.aName, RTL_TEXTENCODING_UTF8));
-        rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXY, utf8Proxy.getStr());
-        if (rc != CURLE_OK)
-        {
-            SAL_WARN("ucb.ucp.webdav.curl", "CURLOPT_PROXY failed: " << GetErrorString(rc));
-            throw DAVException(DAVException::DAV_SESSION_CREATE,
-                               ConnectionEndPointString(m_Proxy.aName, m_Proxy.nPort));
-        }
         // set this initially, may be overwritten during authentication
         rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_PROXYAUTH, CURLAUTH_ANY);
         assert(rc == CURLE_OK); // ANY is always available
