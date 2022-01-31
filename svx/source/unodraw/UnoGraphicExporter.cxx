@@ -178,7 +178,7 @@ namespace {
 
     /** creates a bitmap that is optionally transparent from a metafile
     */
-    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf,bool bIsSelection, const Size* pSize )
+    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, const Size* pSize )
     {
         // use new primitive conversion tooling
         basegfx::B2DRange aRange(basegfx::B2DPoint(0.0, 0.0));
@@ -204,55 +204,7 @@ namespace {
             aRange.expand(basegfx::B2DPoint(aSize100th.Width(), aSize100th.Height()));
         }
 
-        // get hairline and full bound rect to evtl. correct logic size by the
-        // equivalent of one pixel to make those visible at right and bottom
-        tools::Rectangle aHairlineRect;
-        const tools::Rectangle aRect(rMtf.GetBoundRect(*Application::GetDefaultDevice(), &aHairlineRect));
-
-        if(!aRect.IsEmpty())
-        {
-            GDIMetaFile aMtf(rMtf);
-
-            if (bIsSelection)
-            {
-                // tdf#105998 Correct the Metafile using information from it's real sizes measured
-                // using rMtf.GetBoundRect above and a copy
-                const Size aOnePixelInMtf(
-                    Application::GetDefaultDevice()->PixelToLogic(
-                        Size(1, 1),
-                        rMtf.GetPrefMapMode()));
-                const Size aHalfPixelInMtf(
-                    (aOnePixelInMtf.getWidth() + 1) / 2,
-                    (aOnePixelInMtf.getHeight() + 1) / 2);
-
-                // tdf#126319 take bounds into account individually
-                const bool bHairlineRight(!aHairlineRect.IsEmpty() && aRect.Right() == aHairlineRect.Right());
-                const bool bHairlineBottom(!aHairlineRect.IsEmpty() && aRect.Bottom() == aHairlineRect.Bottom());
-                const bool bHairlineLeft(!aHairlineRect.IsEmpty() && aRect.Left() == aHairlineRect.Left());
-                const bool bHairlineTop(!aHairlineRect.IsEmpty() && aRect.Top() == aHairlineRect.Top());
-
-                // tdf#126319 Move the content dependent on Top/Left hairline
-                aMtf.Move(
-                    (bHairlineLeft ? -aHalfPixelInMtf.getWidth() : aHalfPixelInMtf.getWidth()),
-                    (bHairlineTop ? -aHalfPixelInMtf.getHeight() : aHalfPixelInMtf.getHeight()));
-
-                // Do not Scale, but set the PrefSize. Some levels deeper the
-                // MetafilePrimitive will add a mapping to the decomposition
-                // (and possibly a clipping) to map the graphic content to
-                // a unit coordinate system.
-                // tdf#126319 Size is the previous already correct size plus one
-                // pixel if needed (dependent on Righ/Bottom hairline) and the
-                // already moved half pixel from above
-                aMtf.SetPrefSize(
-                    Size(
-                        aMtf.GetPrefSize().Width() + (bHairlineRight ? aHalfPixelInMtf.getWidth() : 0),
-                        aMtf.GetPrefSize().Height() + (bHairlineBottom ? aHalfPixelInMtf.getHeight() : 0)));
-            }
-
-            return convertMetafileToBitmapEx(aMtf, aRange, nMaximumQuadraticPixels);
-        }
-
-        return BitmapEx();
+        return convertMetafileToBitmapEx(rMtf, aRange, nMaximumQuadraticPixels);
     }
 
     Size* CalcSize( sal_Int32 nWidth, sal_Int32 nHeight, const Size& aBoundSize, Size& aOutSize )
@@ -779,7 +731,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
                 if( rSettings.mbTranslucent )
                 {
                     Size aOutSize;
-                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), false, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
+                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
                 }
             }
         }
@@ -903,16 +855,22 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             ScopedVclPtrInstance< VirtualDevice > aOut;
 
             // calculate bound rect for all shapes
-            tools::Rectangle aBound;
+            // tdf#126319 I did not convert all rendering to primities,
+            // that would be to much for this fix. But I  did so for the
+            // range calculation to get a valid high quality range.
+            // Based on that the conversion is reliable. With the BoundRect
+            // fetched from the Metafile it was just not possible to get the
+            // examples from the task handled in a way to fit all cases -
+            // due to bad-quality range data from it.
+            basegfx::B2DRange aBound;
+            const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
             {
                 for( SdrObject* pObj : aShapes )
                 {
-                    tools::Rectangle aR1(pObj->GetCurrentBoundRect());
-                    if (aBound.IsEmpty())
-                        aBound=aR1;
-                    else
-                        aBound.Union(aR1);
+                    drawinglayer::primitive2d::Primitive2DContainer aSequence;
+                    aSequence = pObj->GetViewContact().getViewIndependentPrimitive2DContainer();
+                    aBound.expand(aSequence.getB2DRange(aViewInformation2D));
                 }
             }
 
@@ -926,7 +884,20 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             aMtf.Record( aOut );
 
             MapMode aOutMap( aMap );
-            aOutMap.SetOrigin( Point( -aBound.Left(), -aBound.Top() ) );
+            const Size aOnePixelInMtf(
+                Application::GetDefaultDevice()->PixelToLogic(
+                    Size(1, 1),
+                    aMap));
+            const Size aHalfPixelInMtf(
+                (aOnePixelInMtf.getWidth() + 1) / 2,
+                (aOnePixelInMtf.getHeight() + 1) / 2);
+
+            // tdf#126319 Immediately add needed offset to create metafile,
+            // that avoids to do it later by Metafile::Move what would be expensive
+            aOutMap.SetOrigin(
+                Point(
+                    basegfx::fround(-aBound.getMinX() - aHalfPixelInMtf.getWidth()),
+                    basegfx::fround(-aBound.getMinY() - aHalfPixelInMtf.getHeight()) ) );
             aOut->SetRelativeMapMode( aOutMap );
 
             sdr::contact::DisplayInfo aDisplayInfo;
@@ -955,9 +926,10 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             aMtf.Stop();
             aMtf.WindStart();
 
-            const Size  aExtSize( aOut->PixelToLogic( Size( 0, 0  ) ) );
-            Size        aBoundSize( aBound.GetWidth() + ( aExtSize.Width() ),
-                                    aBound.GetHeight() + ( aExtSize.Height() ) );
+            // tdf#126319 Immediately add needed size to target's PrefSize
+            const Size aBoundSize(
+                basegfx::fround(aBound.getWidth() + aHalfPixelInMtf.getWidth()),
+                basegfx::fround(aBound.getHeight() + aHalfPixelInMtf.getHeight()));
 
             aMtf.SetPrefMapMode( aMap );
             aMtf.SetPrefSize( aBoundSize );
@@ -965,7 +937,7 @@ bool GraphicExporter::GetGraphic( ExportSettings const & rSettings, Graphic& aGr
             if( !bVectorType )
             {
                 Size aOutSize;
-                aGraphic = GetBitmapFromMetaFile( aMtf, true, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aBoundSize, aOutSize ) );
+                aGraphic = GetBitmapFromMetaFile( aMtf, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aBoundSize, aOutSize ) );
             }
             else
             {

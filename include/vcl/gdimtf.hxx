@@ -125,7 +125,7 @@ public:
      * - coordinates of actions will be transformed to preferred mapmode
      * - the returned rectangle is relative to the preferred mapmode of the metafile
     */
-    tools::Rectangle       GetBoundRect( OutputDevice& i_rReference, tools::Rectangle* pHairline = nullptr ) const;
+    tools::Rectangle       GetBoundRect( OutputDevice& i_rReference ) const;
 
     void            Adjust( short nLuminancePercent, short nContrastPercent,
                             short nChannelRPercent = 0,  short nChannelGPercent = 0,
