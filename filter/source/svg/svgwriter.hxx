@@ -337,6 +337,7 @@ private:
     bool                                        mbClipAttrChanged;
     bool                                        mbIsPlaceholderShape;
     const MetaBitmapActionMap*                  mpEmbeddedBitmapsMap;
+    bool                                        mbIsPreview;
 
 
     long                    ImplMap( sal_Int32 nVal ) const;
@@ -394,6 +395,7 @@ public:
                                            const GDIMetaFile* pTextEmbeddedBitmapMtf = nullptr );
 
     void                    SetEmbeddedBitmapRefs( const MetaBitmapActionMap* pEmbeddedBitmapsMap );
+    void                    SetPreviewMode(bool bState = true) { mbIsPreview = bState; }
 };
 
 
