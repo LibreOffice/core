@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b90992_d2e230c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T12:46:41Z",
+      "side": 1,
+      "message": "Great to have this support! Thanks!\n\nJust a note that currently it saves a BMP into the document, not PNG.",
+      "revId": "60eaa424c5e213f31227008e1ed66a646491a360",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
