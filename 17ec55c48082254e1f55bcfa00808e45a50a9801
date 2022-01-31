@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c0e092a_603cbe77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-01-31T11:28:23Z",
+      "side": 1,
+      "message": "Reportedly this is now causing occasional races on Win builders, e.g.\n\n* https://ci.libreoffice.org/job/gerrit_windows/118329/consoleFull\n\n* https://ci.libreoffice.org/job/gerrit_windows/118345/consoleFull",
+      "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
