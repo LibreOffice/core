@@ -2446,6 +2446,11 @@ void CustomAnimationPane::onSelect()
     if( maSelectionLock.isLocked() )
         return;
 
+    // tdf#145030 if nothing is selected in the effects list, leave the selection of
+    // objects in in the slide untouched
+    if (maListSelection.empty())
+        return;
+
     ScopeLockGuard aGuard( maSelectionLock );
     DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
         FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
