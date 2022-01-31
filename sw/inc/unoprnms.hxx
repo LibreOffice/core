@@ -161,6 +161,7 @@
 #define UNO_NAME_FILE_LINK "FileLink"
 #define UNO_NAME_GRAPHIC "Graphic"
 #define UNO_NAME_TRANSFORMED_GRAPHIC "TransformedGraphic"
+#define UNO_NAME_GRAPHIC_PREVIEW "GraphicPreview"
 #define UNO_NAME_IS_PROTECTED "IsProtected"
 #define UNO_NAME_PARA_KEEP_TOGETHER "ParaKeepTogether"
 #define UNO_NAME_KEEP_TOGETHER "KeepTogether"

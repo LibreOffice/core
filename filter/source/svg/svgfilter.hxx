@@ -209,6 +209,7 @@ private:
     Sequence< PropertyValue >           maFilterData;
     Reference< css::drawing::XDrawPage > mxDefaultPage;
     std::vector< Reference< css::drawing::XDrawPage > > mSelectedPages;
+    bool                                mbIsPreview;
 
     bool                                mbWriterFilter;
     bool                                mbCalcFilter;
