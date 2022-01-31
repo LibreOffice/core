@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b244b19_c9e2fa21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-31T11:02:04Z",
+      "side": 1,
+      "message": "With kf5 the dialog does not fill the sidebar but using 400px wont help either.",
+      "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5e9b26ac_fd065d73",
