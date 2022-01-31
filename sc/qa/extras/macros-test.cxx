@@ -66,6 +66,7 @@ public:
     void testTdf143582();
     void testTdf144085();
     void testTdf130307();
+    void testTdf146742();
     void testMacroButtonFormControlXlsxExport();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
@@ -92,6 +93,7 @@ public:
     CPPUNIT_TEST(testTdf143582);
     CPPUNIT_TEST(testTdf144085);
     CPPUNIT_TEST(testTdf130307);
+    CPPUNIT_TEST(testTdf146742);
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
 
     CPPUNIT_TEST_SUITE_END();
@@ -264,6 +266,34 @@ void ScMacrosTest::testRowColumn()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(4001), nWidth);
 
     pDocSh->DoClose();
+}
+
+void ScMacrosTest::testTdf146742()
+{
+    OUString aFileName;
+    createFileURL(u"tdf146742.ods", aFileName);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    // Export to ODS and reload the file
+    saveAndReload(xComponent, "calc8");
+    CPPUNIT_ASSERT(xComponent);
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), rDoc.GetString(ScAddress(0,0,0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2"), rDoc.GetString(ScAddress(0,1,0)));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), rDoc.GetString(ScAddress(1,0,0)));
+    // Without the fix in place, this test would have failed with
+    // - Expected: FALSE
+    // - Actual  : TRUE
+    CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), rDoc.GetString(ScAddress(1,1,0)));
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
 }
 
 void ScMacrosTest::testMacroButtonFormControlXlsxExport()
