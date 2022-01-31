@@ -829,7 +829,7 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
         {
             pRedline->SetMoved();
             pPair->SetMoved();
-            pPair->InvalidateRange(SwRangeRedline::Invalidation::Remove);
+            pPair->InvalidateRange(SwRangeRedline::Invalidation::Add);
             bRet = true;
         }
 
