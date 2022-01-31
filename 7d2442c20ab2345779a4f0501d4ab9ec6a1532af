@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7420e8c_4025ba8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-01-31T10:40:20Z",
+      "side": 1,
+      "message": "Fast change on the browser. Should we just use it in such a way?",
+      "revId": "7d2442c20ab2345779a4f0501d4ab9ec6a1532af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
