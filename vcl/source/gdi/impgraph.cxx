@@ -590,23 +590,16 @@ Bitmap ImpGraphic::getBitmap(const GraphicConversionParameters& rParameters) con
 
             if(GraphicType::GdiMetafile == getType())
             {
-                // get hairline and full bound rect
-                tools::Rectangle aHairlineRect;
-                const tools::Rectangle aRect(maMetaFile.GetBoundRect(*aVDev, &aHairlineRect));
-
-                if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
-                {
-                    // expand if needed to allow bottom and right hairlines to be added
-                    if(aRect.Right() == aHairlineRect.Right())
-                    {
-                        aPixelSize.setWidth(aPixelSize.getWidth() + 1);
-                    }
-
-                    if(aRect.Bottom() == aHairlineRect.Bottom())
-                    {
-                        aPixelSize.setHeight(aPixelSize.getHeight() + 1);
-                    }
-                }
+                // tdf#126319 Removed correction based on hairline-at-the-extremes of
+                // the metafile. The task shows that this is no longer sufficient since
+                // less hairlines get used in general - what is good, but breaks that
+                // old fix. Anyways, hairlines are a left-over from non-AA times
+                // when it was not possible to paint lines taller than one pixel.
+                // This might need to be corrected further using primitives and
+                // the possibility to get better-quality ranges for correction. For
+                // now, always add that one pixel.
+                aPixelSize.setWidth(aPixelSize.getWidth() + 1);
+                aPixelSize.setHeight(aPixelSize.getHeight() + 1);
             }
 
             if(aVDev->SetOutputSizePixel(aPixelSize))
