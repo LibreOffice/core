@@ -173,8 +173,6 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
 // if sMod is empty, only standard modules will be searched (no class, document, form modules)
 static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, OUString& sMod, const OUString& sMacro )
 {
-    bool bFound = false;
-
 #if !HAVE_FEATURE_SCRIPTING
     (void) pShell;
     (void) sLibrary;
@@ -200,18 +198,17 @@ static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, O
                     SbModule* pModule = pBasic->FindModule( sMod );
                     if ( pModule && pModule->FindMethod( sMacro, SbxClassType::Method ))
                     {
-                        bFound = true;
+                        return true;
                     }
                 }
-                else if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( sMacro, SbxClassType::Method ) ) )
+                else
                 {
-                    if( SbModule* pModule = pMethod->GetModule() )
+                    for (auto const& rModuleRef : pBasic->GetModules())
                     {
-                        // when searching for a macro without module name, do not search in class/document/form modules
-                        if( pModule->GetModuleType() == script::ModuleType::NORMAL )
+                        if (rModuleRef && rModuleRef->FindMethod(sMacro, SbxClassType::Method))
                         {
-                            sMod = pModule->GetName();
-                            bFound = true;
+                            sMod = rModuleRef->GetName();
+                            return true;
                         }
                     }
                 }
@@ -219,7 +216,7 @@ static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, O
         }
     }
 #endif
-    return bFound;
+    return false;
 }
 
 #endif
