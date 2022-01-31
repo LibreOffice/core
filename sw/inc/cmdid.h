@@ -633,6 +633,7 @@
 #define FN_UNO_VISIBLE_AREA_HEIGHT          (FN_EXTRA2 + 126)
 
 #define FN_UNO_TRANSFORMED_GRAPHIC          (FN_EXTRA2 + 127)
+#define FN_UNO_GRAPHIC_PREVIEW              (FN_EXTRA2 + 128)
 
 // Area: Help
 // Region: Traveling & Selection

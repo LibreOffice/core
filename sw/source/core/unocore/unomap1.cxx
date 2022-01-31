@@ -818,6 +818,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetGraphicPropertyMap(
         { u"" UNO_NAME_GRAPHIC, FN_UNO_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { u"" UNO_NAME_GRAPHIC_URL, FN_UNO_GRAPHIC_URL, cppu::UnoType<css::uno::Any>::get(), 0, 0 },
         { u"" UNO_NAME_TRANSFORMED_GRAPHIC, FN_UNO_TRANSFORMED_GRAPHIC, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
+        { u"" UNO_NAME_GRAPHIC_PREVIEW, FN_UNO_GRAPHIC_PREVIEW, cppu::UnoType<css::graphic::XGraphic>::get(), 0, 0 },
         { u"" UNO_NAME_ACTUAL_SIZE, FN_UNO_ACTUAL_SIZE,    cppu::UnoType<css::awt::Size>::get(),  PropertyAttribute::READONLY, CONVERT_TWIPS},
         { u"" UNO_NAME_CONTOUR_POLY_POLYGON, FN_PARAM_CONTOUR_PP, cppu::UnoType<css::drawing::PointSequenceSequence>::get(), PropertyAttribute::MAYBEVOID, 0 },
         { u"" UNO_NAME_IS_PIXEL_CONTOUR, FN_UNO_IS_PIXEL_CONTOUR, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
