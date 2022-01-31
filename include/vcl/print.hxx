@@ -468,10 +468,8 @@ public:
     VCL_DLLPRIVATE    void              setReversePrint( bool i_bReverse );
     VCL_DLLPRIVATE    void              setPapersizeFromSetup( bool i_bPapersizeFromSetup );
     VCL_DLLPRIVATE    bool              getPapersizeFromSetup() const;
-    VCL_DLLPRIVATE    Size&             getPaperSizeSetup() const;
     VCL_DLLPRIVATE    void              setPaperSizeFromUser( Size i_aUserSize );
-    VCL_DLLPRIVATE    Size&             getPaperSizeFromUser() const;
-    VCL_DLLPRIVATE    bool              isPaperSizeFromUser() const;
+    VCL_DLLPRIVATE    void              setOrientationFromUser( Orientation eOrientation, bool set );
                       void              setPrinterModified( bool i_bPapersizeFromSetup );
                       bool              getPrinterModified() const;
     VCL_DLLPRIVATE    void              pushPropertiesToPrinter();
