@@ -1277,8 +1277,7 @@ void GDIMetaFile::Rotate( Degree10 nAngle10 )
 
 static void ImplActionBounds( tools::Rectangle& o_rOutBounds,
                               const tools::Rectangle& i_rInBounds,
-                              const std::vector<tools::Rectangle>& i_rClipStack,
-                              tools::Rectangle* o_pHairline )
+                              const std::vector<tools::Rectangle>& i_rClipStack )
 {
     tools::Rectangle aBounds( i_rInBounds );
     if( ! i_rInBounds.IsEmpty() && ! i_rClipStack.empty() && ! i_rClipStack.back().IsEmpty() )
@@ -1290,17 +1289,9 @@ static void ImplActionBounds( tools::Rectangle& o_rOutBounds,
         o_rOutBounds.Union( aBounds );
     else
         o_rOutBounds = aBounds;
-
-    if(o_pHairline)
-    {
-        if( ! o_pHairline->IsEmpty() )
-            o_pHairline->Union( aBounds );
-        else
-            *o_pHairline = aBounds;
-    }
 }
 
-tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::Rectangle* pHairline ) const
+tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference ) const
 {
     ScopedVclPtrInstance< VirtualDevice > aMapVDev(  i_rReference  );
 
@@ -1311,17 +1302,12 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
     std::vector<vcl::PushFlags> aPushFlagStack;
 
     tools::Rectangle aBound;
-
-    if(pHairline)
-        *pHairline = tools::Rectangle();
-
     const sal_uLong nCount(GetActionSize());
 
     for(sal_uLong a(0); a < nCount; a++)
     {
         MetaAction* pAction = GetAction(a);
         const MetaActionType nActionType = pAction->GetType();
-        tools::Rectangle* pUseHairline = (pHairline && aMapVDev->IsLineColor()) ? pHairline : nullptr;
 
         switch( nActionType )
         {
@@ -1331,7 +1317,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             ImplActionBounds( aBound,
                               tools::Rectangle( OutputDevice::LogicToLogic( pAct->GetPoint(), aMapVDev->GetMapMode(), GetPrefMapMode() ),
                                        aMapVDev->PixelToLogic( Size( 1, 1 ), GetPrefMapMode() ) ),
-                             aClipStack, pUseHairline );
+                             aClipStack );
         }
         break;
 
@@ -1341,7 +1327,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             ImplActionBounds( aBound,
                               tools::Rectangle( OutputDevice::LogicToLogic( pAct->GetPoint(), aMapVDev->GetMapMode(), GetPrefMapMode() ),
                                        aMapVDev->PixelToLogic( Size( 1, 1 ), GetPrefMapMode() ) ),
-                             aClipStack, pUseHairline );
+                             aClipStack );
         }
         break;
 
@@ -1352,36 +1338,28 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             tools::Rectangle aRect( aP1, aP2 );
             aRect.Justify();
 
-            if(pUseHairline)
-            {
-                const LineInfo& rLineInfo = pAct->GetLineInfo();
-
-                if(0 != rLineInfo.GetWidth())
-                    pUseHairline = nullptr;
-            }
-
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
         case MetaActionType::RECT:
         {
             MetaRectAction* pAct = static_cast<MetaRectAction*>(pAction);
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
         case MetaActionType::ROUNDRECT:
         {
             MetaRoundRectAction*    pAct = static_cast<MetaRoundRectAction*>(pAction);
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
         case MetaActionType::ELLIPSE:
         {
             MetaEllipseAction*      pAct = static_cast<MetaEllipseAction*>(pAction);
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1390,7 +1368,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             MetaArcAction*  pAct = static_cast<MetaArcAction*>(pAction);
             // FIXME: this is imprecise
             // e.g. for small arcs the whole rectangle is WAY too large
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1399,7 +1377,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             MetaPieAction*  pAct = static_cast<MetaPieAction*>(pAction);
             // FIXME: this is imprecise
             // e.g. for small arcs the whole rectangle is WAY too large
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1408,7 +1386,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             MetaChordAction*    pAct = static_cast<MetaChordAction*>(pAction);
             // FIXME: this is imprecise
             // e.g. for small arcs the whole rectangle is WAY too large
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( pAct->GetRect(), aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1417,15 +1395,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             MetaPolyLineAction* pAct = static_cast<MetaPolyLineAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
 
-            if(pUseHairline)
-            {
-                const LineInfo& rLineInfo = pAct->GetLineInfo();
-
-                if(0 != rLineInfo.GetWidth())
-                    pUseHairline = nullptr;
-            }
-
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1433,7 +1403,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaPolygonAction* pAct = static_cast<MetaPolygonAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1441,7 +1411,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaPolyPolygonAction* pAct = static_cast<MetaPolyPolygonAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1453,7 +1423,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             aMapVDev->GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1466,7 +1436,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
                                        0, pAct->GetDXArray() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1479,7 +1449,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
                                        pAct->GetWidth() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1495,7 +1465,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             Point aPt( pAct->GetStartPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
             aRect.SetRight( aRect.Left() + pAct->GetWidth() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1503,7 +1473,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaBmpScaleAction* pAct = static_cast<MetaBmpScaleAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1511,7 +1481,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaBmpScalePartAction* pAct = static_cast<MetaBmpScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1519,7 +1489,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaBmpExScaleAction*   pAct = static_cast<MetaBmpExScaleAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1527,7 +1497,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaBmpExScalePartAction*   pAct = static_cast<MetaBmpExScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1535,7 +1505,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaGradientAction* pAct = static_cast<MetaGradientAction*>(pAction);
             tools::Rectangle aRect( pAct->GetRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1543,7 +1513,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaGradientExAction* pAct = static_cast<MetaGradientExAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1557,7 +1527,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaHatchAction*    pAct = static_cast<MetaHatchAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1565,7 +1535,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaTransparentAction* pAct = static_cast<MetaTransparentAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPolyPolygon().GetBoundRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1575,7 +1545,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
             // MetaFloatTransparentAction is defined limiting its content Metafile
             // to its geometry definition(Point, Size), so use these directly
             const tools::Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1583,7 +1553,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaEPSAction*  pAct = static_cast<MetaEPSAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1623,7 +1593,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaBmpAction* pAct = static_cast<MetaBmpAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1631,7 +1601,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaBmpExAction* pAct = static_cast<MetaBmpExAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmapEx().GetSizePixel() ) );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1639,7 +1609,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaMaskAction* pAct = static_cast<MetaMaskAction*>(pAction);
             tools::Rectangle aRect( pAct->GetPoint(), aMapVDev->PixelToLogic( pAct->GetBitmap().GetSizePixel() ) );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1647,7 +1617,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1655,7 +1625,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaMaskScalePartAction* pAct = static_cast<MetaMaskScalePartAction*>(pAction);
             tools::Rectangle aRect( pAct->GetDestPoint(), pAct->GetDestSize() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1663,7 +1633,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaWallpaperAction* pAct = static_cast<MetaWallpaperAction*>(pAction);
             tools::Rectangle aRect( pAct->GetRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
@@ -1671,7 +1641,7 @@ tools::Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, tools::R
         {
             MetaTextRectAction* pAct = static_cast<MetaTextRectAction*>(pAction);
             tools::Rectangle aRect( pAct->GetRect() );
-            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack, nullptr );
+            ImplActionBounds( aBound, OutputDevice::LogicToLogic( aRect, aMapVDev->GetMapMode(), GetPrefMapMode() ), aClipStack );
         }
         break;
 
