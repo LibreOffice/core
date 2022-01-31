@@ -16,6 +16,52 @@
       "message": "I have not yet resubmitted the changes; possibly iterating code points is to be added soon.\n\n(The inefficient OUString::replaceAt() will probably be a separate commit.)",
       "revId": "4a57762c0b02671bfd706b507d6317cab3c4b00f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "872e96af_91a923cb",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-31T17:41:33Z",
+      "side": 1,
+      "message": "This then should rather be sal_uInt32 for a Unicode character and obtained in ScClean() via OUString::iterateCodePoints() instead of iterating over UTF-16 code units, as Mike already mentioned.",
+      "range": {
+        "startLine": 3443,
+        "startChar": 43,
+        "endLine": 3443,
+        "endChar": 54
+      },
+      "revId": "4a57762c0b02671bfd706b507d6317cab3c4b00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4152235a_ac7a4ff4",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3445,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-31T17:41:33Z",
+      "side": 1,
+      "message": "Please don\u0027t use the verbatim boolean operators (not, and, or), use !,\u0026\u0026,|| instead.",
+      "range": {
+        "startLine": 3445,
+        "startChar": 13,
+        "endLine": 3445,
+        "endChar": 16
+      },
+      "revId": "4a57762c0b02671bfd706b507d6317cab3c4b00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
