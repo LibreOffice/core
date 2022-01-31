@@ -158,6 +158,7 @@ public:
     bool                                                        mbReversePageOrder;
     bool                                                        mbPapersizeFromSetup;
     bool                                                        mbPapersizeFromUser;
+    bool                                                        mbOrientationFromUser;
     bool                                                        mbPrinterModified;
     css::view::PrintableState                                   meJobState;
 
@@ -171,6 +172,8 @@ public:
     Size                                                        maDefaultPageSize;
     // set by user through print dialog
     Size                                                        maUserPageSize;
+    // set by user through print dialog
+    Orientation                                                 meUserOrientation;
     // set by user through printer properties subdialog of printer settings dialog
     sal_Int32                                                   mnDefaultPaperBin;
     // Set by user through printer properties subdialog of print dialog.
@@ -197,6 +200,7 @@ public:
         mbReversePageOrder( false ),
         mbPapersizeFromSetup( false ),
         mbPapersizeFromUser( false ),
+        mbOrientationFromUser( false ),
         mbPrinterModified( false ),
         meJobState( css::view::PrintableState_JOB_STARTED ),
         mnDefaultPaperBin( -1 ),
@@ -212,15 +216,27 @@ public:
         }
     }
 
-    const Size& getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
+    Size getRealPaperSize( const Size& i_rPageSize, bool bNoNUP ) const
     {
+        Size size;
         if ( mbPapersizeFromUser )
-            return maUserPageSize;
-        if( mbPapersizeFromSetup )
-            return maDefaultPageSize;
-        if( maMultiPage.nRows * maMultiPage.nColumns > 1 && ! bNoNUP )
-            return maMultiPage.aPaperSize;
-        return i_rPageSize;
+            size = maUserPageSize;
+        else if( mbPapersizeFromSetup )
+            size =  maDefaultPageSize;
+        else if( maMultiPage.nRows * maMultiPage.nColumns > 1 && ! bNoNUP )
+            size = maMultiPage.aPaperSize;
+        else
+            size = i_rPageSize;
+        if(mbOrientationFromUser)
+        {
+            if ( (meUserOrientation == Orientation::Portrait && size.Width() > size.Height()) ||
+                 (meUserOrientation == Orientation::Landscape && size.Width() < size.Height()) )
+            {
+                // coverity[swapped-arguments : FALSE] - this is in the correct order
+                size = Size( size.Height(), size.Width() );
+            }
+        }
+        return size;
     }
     PrinterController::PageSize modifyJobSetup( const css::uno::Sequence< css::beans::PropertyValue >& i_rProps );
     void resetPaperToLastConfigured();
@@ -824,6 +840,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
     }
 
     mpImplData->mbPapersizeFromUser = false;
+    mpImplData->mbOrientationFromUser = false;
     mpImplData->mxPrinter->Pop();
     mpImplData->mnFixedPaperBin = -1;
 }
@@ -1407,17 +1424,15 @@ void PrinterController::setPapersizeFromSetup( bool i_bPapersizeFromSetup )
     mpImplData->mbPapersizeFromSetup = i_bPapersizeFromSetup;
     mpImplData->mxPrinter->SetPrinterSettingsPreferred( i_bPapersizeFromSetup );
     if ( i_bPapersizeFromSetup )
-        mpImplData->mbPapersizeFromUser = !i_bPapersizeFromSetup;
+    {
+        mpImplData->mbPapersizeFromUser = false;
+        mpImplData->mbOrientationFromUser = false;
+    }
 }
 
 bool PrinterController::getPapersizeFromSetup() const
 {
     return mpImplData->mbPapersizeFromSetup;
-}
-
-Size& PrinterController::getPaperSizeSetup() const
-{
-    return mpImplData->maDefaultPageSize;
 }
 
 void PrinterController::setPaperSizeFromUser( Size i_aUserSize )
@@ -1429,14 +1444,10 @@ void PrinterController::setPaperSizeFromUser( Size i_aUserSize )
     mpImplData->maUserPageSize = i_aUserSize;
 }
 
-Size& PrinterController::getPaperSizeFromUser() const
+void PrinterController::setOrientationFromUser( Orientation eOrientation, bool set )
 {
-    return mpImplData->maUserPageSize;
-}
-
-bool PrinterController::isPaperSizeFromUser() const
-{
-    return mpImplData->mbPapersizeFromUser;
+    mpImplData->mbOrientationFromUser = set;
+    mpImplData->meUserOrientation = eOrientation;
 }
 
 void PrinterController::setPrinterModified( bool i_bPrinterModified )

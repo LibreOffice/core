@@ -231,10 +231,9 @@ namespace vcl
         void setupPaperSidesBox();
         void storeToSettings();
         void readFromSettings();
-        void setPaperOrientation( Orientation eOrientation );
+        void setPaperOrientation( Orientation eOrientation, bool fromUser );
         void updateOrientationBox( bool bAutomatic = true );
         bool hasOrientationChanged() const;
-        void checkPaperSize( Size& rPaperSize );
         void setPreviewText();
         void updatePrinterText();
         void checkControlDependencies();
