@@ -16,6 +16,64 @@
       "message": "Follow up of previous commit, which accidently did not check for Unicode category Cn.\n\nNote : testing with Excel is problematic as Excel does not handle/recognise Unicode characters belonging to category Cn and Calc export of these characters result in corrupt xlsx files (not related to function CLEAN, will file a bug report for it).",
       "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20e9f48e_eec1a074",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T13:29:20Z",
+      "side": 1,
+      "message": "Yes, we likely should not try to match Excel in this case. We have a clearly worded standard, which is sane, and this change is perfect IMO.",
+      "parentUuid": "b2089822_6b583ea4",
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d68cafe_f4ec87f8",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3445,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T13:29:20Z",
+      "side": 1,
+      "message": "The \u0027not\u0027 is alternative to !, which is idiomatic C++ 😊",
+      "range": {
+        "startLine": 3445,
+        "startChar": 13,
+        "endLine": 3445,
+        "endChar": 16
+      },
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf2cc86d_4b6f7fa4",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3455,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-01-31T13:29:20Z",
+      "side": 1,
+      "message": "Completely unrelated to this change:\n\nwe have multiple places with such pattern: OUString::replaceAt() - even two in a row! - in loop. It does insane amount of reallocations, and will simply hang in large strings with multiple replacements like long string (say, 100000 characters) of tabs (0x9) being cleaned. We might want to review such cases, and use OUStringBuffers instead.\n\nSee how SbRtl_Replace is implemented for inspiration 😊",
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
