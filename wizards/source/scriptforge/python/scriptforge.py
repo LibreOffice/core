@@ -373,7 +373,7 @@ class ScriptForge(object, metaclass = _Singleton):
     @staticmethod
     def unpack_args(kwargs):
         """
-            Convert a dictioany passed as argument to a list alternating keys and values
+            Convert a dictionary passed as argument to a list alternating keys and values
             Example:
                 dict(A = 'a', B = 2) => 'A', 'a', 'B', 2
             """
