@@ -24,6 +24,7 @@
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <vector>
 
 namespace com::sun::star {
     namespace container { class XNameAccess; }
@@ -39,6 +40,11 @@ namespace oox {
 
 namespace oox::ole {
 
+struct VbaKeyBinding
+{
+    OUString msApiKey;
+    OUString msMethodName;
+};
 
 class VbaModule
 {
@@ -67,15 +73,17 @@ public:
     void                createAndImportModule(
                             StorageBase& rVbaStrg,
                             const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
-                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
+                            const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA );
     /** Creates an empty Basic module in the passed Basic library. */
     void                createEmptyModule(
                             const css::uno::Reference< css::container::XNameContainer >& rxBasicLib,
                             const css::uno::Reference< css::container::XNameAccess >& rxDocObjectNA ) const;
 
+    void registerShortcutKeys();
+
 private:
     /** Reads and returns the VBA source code from the passed storage. */
-    OUString     readSourceCode( StorageBase& rVbaStrg ) const;
+    OUString     readSourceCode( StorageBase& rVbaStrg );
 
     /** Creates a new Basic module and inserts it into the passed Basic library. */
     void                createModule(
@@ -97,6 +105,7 @@ private:
     bool                mbReadOnly;
     bool                mbPrivate;
     bool                mbExecutable;
+    std::vector<VbaKeyBinding> maKeyBindings;
 };
 
 
