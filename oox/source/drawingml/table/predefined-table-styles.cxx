@@ -202,6 +202,21 @@ static std::map<OUString, sal_Int32> tokens = { { "", XML_dk1 },
                                                 { "Accent5", XML_accent5 },
                                                 { "Accent6", XML_accent6 } };
 
+void setBorderLineType(oox::drawingml::LinePropertiesPtr& pLineProp, sal_Int32 nToken)
+{
+    pLineProp->maLineFill.moFillType.set(nToken);
+}
+
+void insertBorderLine(TableStylePart& aTableStylePart, sal_Int32 nToken,
+                      oox::drawingml::LinePropertiesPtr pLineProp)
+{
+    if (pLineProp->maLineFill.moFillType.has())
+    {
+        aTableStylePart.getLineBorders().insert(
+            std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(nToken, pLineProp));
+    }
+}
+
 std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
 {
     createStyleIdMap();
@@ -377,69 +392,6 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     pBand2HFillProperties->moFillType.set(XML_solidFill);
     pBand2VFillProperties->moFillType.set(XML_solidFill);
 
-    pWholeTblLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pWholeTblRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pWholeTblTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pWholeTblBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pWholeTblInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pWholeTblInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pFirstRowLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstRowRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstRowTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstRowBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstRowInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstRowInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pFirstColLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstColRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstColTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstColBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstColInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pFirstColInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pLastRowLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastRowRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastRowTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastRowBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastRowInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastRowInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pLastColLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastColRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastColTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastColBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastColInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pLastColInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pBand1HLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1HRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1HTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1HBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1HInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1HInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pBand1VLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1VRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1VTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1VBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1VInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand1VInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pBand2HLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2HRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2HTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2HBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2HInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2HInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
-    pBand2VLeftBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2VRightBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2VTopBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2VBottomBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2VInsideHBorder->maLineFill.moFillType.set(XML_solidFill);
-    pBand2VInsideVBorder->maLineFill.moFillType.set(XML_solidFill);
-
     // End to set fill types.
 
     // Define common properties.
@@ -467,6 +419,31 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     {
         if (!accent_name.isEmpty())
         {
+            setBorderLineType(pWholeTblLeftBorder, XML_solidFill);
+            setBorderLineType(pWholeTblRightBorder, XML_solidFill);
+            setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+            setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+            setBorderLineType(pWholeTblInsideHBorder, XML_solidFill);
+            setBorderLineType(pWholeTblInsideVBorder, XML_solidFill);
+            setBorderLineType(pFirstRowLeftBorder, XML_solidFill);
+            setBorderLineType(pFirstRowRightBorder, XML_solidFill);
+            setBorderLineType(pFirstRowTopBorder, XML_solidFill);
+            setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
+            setBorderLineType(pLastRowLeftBorder, XML_solidFill);
+            setBorderLineType(pLastRowRightBorder, XML_solidFill);
+            setBorderLineType(pLastRowTopBorder, XML_solidFill);
+            setBorderLineType(pLastRowBottomBorder, XML_solidFill);
+            setBorderLineType(pFirstColLeftBorder, XML_solidFill);
+            setBorderLineType(pFirstColRightBorder, XML_solidFill);
+            setBorderLineType(pFirstColTopBorder, XML_solidFill);
+            setBorderLineType(pFirstColBottomBorder, XML_solidFill);
+            setBorderLineType(pFirstColInsideHBorder, XML_solidFill);
+            setBorderLineType(pLastColLeftBorder, XML_solidFill);
+            setBorderLineType(pLastColRightBorder, XML_solidFill);
+            setBorderLineType(pLastColTopBorder, XML_solidFill);
+            setBorderLineType(pLastColBottomBorder, XML_solidFill);
+            setBorderLineType(pLastColInsideHBorder, XML_solidFill);
+
             sal_Int32 accent_val = tokens[mStyleIdMap[styleId].second];
 
             wholeTblTextColor.setSchemeClr(XML_dk1);
@@ -515,10 +492,20 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Themed-Style-2")
     {
+        setBorderLineType(pWholeTblLeftBorder, XML_solidFill);
+        setBorderLineType(pWholeTblRightBorder, XML_solidFill);
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+
         sal_Int32 accent_val;
 
         if (!accent_name.isEmpty())
         {
+            setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
+            setBorderLineType(pLastRowTopBorder, XML_solidFill);
+            setBorderLineType(pFirstColRightBorder, XML_solidFill);
+            setBorderLineType(pLastColLeftBorder, XML_solidFill);
+
             wholeTblTextColor.setSchemeClr(XML_lt1);
             firstRowTextColor.setSchemeClr(XML_lt1);
 
@@ -534,6 +521,9 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
         }
         else
         {
+            setBorderLineType(pWholeTblInsideVBorder, XML_solidFill);
+            setBorderLineType(pWholeTblInsideHBorder, XML_solidFill);
+
             accent_val = XML_tx1;
 
             pWholeTblInsideVBorder->maLineFill.maFillColor.setSchemeClr(XML_tx1);
@@ -554,6 +544,11 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Light-Style-1")
     {
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+        setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_tx1);
 
         sal_Int32 accent_val;
@@ -578,6 +573,18 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Light-Style-2")
     {
+        setBorderLineType(pWholeTblLeftBorder, XML_solidFill);
+        setBorderLineType(pWholeTblRightBorder, XML_solidFill);
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+        setBorderLineType(pBand1HTopBorder, XML_solidFill);
+        setBorderLineType(pBand1HBottomBorder, XML_solidFill);
+        setBorderLineType(pBand1VLeftBorder, XML_solidFill);
+        setBorderLineType(pBand1VRightBorder, XML_solidFill);
+        setBorderLineType(pBand2VLeftBorder, XML_solidFill);
+        setBorderLineType(pBand2VRightBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_tx1);
         firstRowTextColor.setSchemeClr(XML_bg1);
 
@@ -607,6 +614,15 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Light-Style-3")
     {
+        setBorderLineType(pWholeTblLeftBorder, XML_solidFill);
+        setBorderLineType(pWholeTblRightBorder, XML_solidFill);
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+        setBorderLineType(pWholeTblInsideHBorder, XML_solidFill);
+        setBorderLineType(pWholeTblInsideVBorder, XML_solidFill);
+        setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_tx1);
 
         sal_Int32 accent_val;
@@ -634,6 +650,13 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Medium-Style-1")
     {
+        setBorderLineType(pWholeTblLeftBorder, XML_solidFill);
+        setBorderLineType(pWholeTblRightBorder, XML_solidFill);
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+        setBorderLineType(pWholeTblInsideHBorder, XML_solidFill);
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_dk1);
         firstRowTextColor.setSchemeClr(XML_lt1);
         pWholeTblFillProperties->maFillColor.setSchemeClr(XML_lt1);
@@ -663,6 +686,15 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Medium-Style-2")
     {
+        setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblLeftBorder, XML_solidFill);
+        setBorderLineType(pWholeTblRightBorder, XML_solidFill);
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+        setBorderLineType(pWholeTblInsideHBorder, XML_solidFill);
+        setBorderLineType(pWholeTblInsideVBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_dk1);
         firstRowTextColor.setSchemeClr(XML_lt1);
         lastRowTextColor.setSchemeClr(XML_lt1);
@@ -699,6 +731,11 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Medium-Style-3")
     {
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+        setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_dk1);
         firstColTextColor.setSchemeClr(XML_lt1);
         lastColTextColor.setSchemeClr(XML_lt1);
@@ -729,6 +766,13 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Medium-Style-4")
     {
+        setBorderLineType(pWholeTblLeftBorder, XML_solidFill);
+        setBorderLineType(pWholeTblRightBorder, XML_solidFill);
+        setBorderLineType(pWholeTblTopBorder, XML_solidFill);
+        setBorderLineType(pWholeTblBottomBorder, XML_solidFill);
+        setBorderLineType(pWholeTblInsideHBorder, XML_solidFill);
+        setBorderLineType(pWholeTblInsideVBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_dk1);
         pLastRowTopBorder->maLineFill.maFillColor.setSchemeClr(XML_dk1);
         pLastRowFillProperties->maFillColor.setSchemeClr(XML_dk1);
@@ -761,6 +805,11 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Dark-Style-1")
     {
+        setBorderLineType(pFirstRowBottomBorder, XML_solidFill);
+        setBorderLineType(pFirstColRightBorder, XML_solidFill);
+        setBorderLineType(pLastColLeftBorder, XML_solidFill);
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+
         sal_Int32 transform_val;
         wholeTblTextColor.setSchemeClr(XML_dk1);
         firstRowTextColor.setSchemeClr(XML_lt1);
@@ -798,6 +847,8 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     }
     else if (style_name == "Dark-Style-2")
     {
+        setBorderLineType(pLastRowTopBorder, XML_solidFill);
+
         wholeTblTextColor.setSchemeClr(XML_dk1);
         firstRowTextColor.setSchemeClr(XML_lt1);
 
@@ -855,145 +906,68 @@ std::unique_ptr<TableStyle> CreateTableStyle(const OUString& styleId)
     pTableStyle->getBand2H().getFillProperties() = pBand2HFillProperties;
     pTableStyle->getBand2V().getFillProperties() = pBand2VFillProperties;
 
-    pTableStyle->getWholeTbl().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pWholeTblLeftBorder));
-    pTableStyle->getWholeTbl().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pWholeTblRightBorder));
-    pTableStyle->getWholeTbl().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pWholeTblTopBorder));
-    pTableStyle->getWholeTbl().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,
-                                                                  pWholeTblBottomBorder));
-    pTableStyle->getWholeTbl().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pWholeTblInsideHBorder));
-    pTableStyle->getWholeTbl().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pWholeTblInsideVBorder));
+    insertBorderLine(pTableStyle->getWholeTbl(), XML_left, pWholeTblLeftBorder);
+    insertBorderLine(pTableStyle->getWholeTbl(), XML_right, pWholeTblRightBorder);
+    insertBorderLine(pTableStyle->getWholeTbl(), XML_top, pWholeTblTopBorder);
+    insertBorderLine(pTableStyle->getWholeTbl(), XML_bottom, pWholeTblBottomBorder);
+    insertBorderLine(pTableStyle->getWholeTbl(), XML_insideV, pWholeTblInsideVBorder);
+    insertBorderLine(pTableStyle->getWholeTbl(), XML_insideH, pWholeTblInsideHBorder);
 
-    pTableStyle->getFirstRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pFirstRowLeftBorder));
-    pTableStyle->getFirstRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pFirstRowRightBorder));
-    pTableStyle->getFirstRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pFirstRowTopBorder));
-    pTableStyle->getFirstRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,
-                                                                  pFirstRowBottomBorder));
-    pTableStyle->getFirstRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pFirstRowInsideHBorder));
-    pTableStyle->getFirstRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pFirstRowInsideVBorder));
+    insertBorderLine(pTableStyle->getFirstRow(), XML_left, pFirstRowLeftBorder);
+    insertBorderLine(pTableStyle->getFirstRow(), XML_right, pFirstRowRightBorder);
+    insertBorderLine(pTableStyle->getFirstRow(), XML_top, pFirstRowTopBorder);
+    insertBorderLine(pTableStyle->getFirstRow(), XML_bottom, pFirstRowBottomBorder);
+    insertBorderLine(pTableStyle->getFirstRow(), XML_insideV, pFirstRowInsideVBorder);
+    insertBorderLine(pTableStyle->getFirstRow(), XML_insideH, pFirstRowInsideHBorder);
 
-    pTableStyle->getFirstCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pFirstColLeftBorder));
-    pTableStyle->getFirstCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pFirstColRightBorder));
-    pTableStyle->getFirstCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pFirstColTopBorder));
-    pTableStyle->getFirstCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,
-                                                                  pFirstColBottomBorder));
-    pTableStyle->getFirstCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pFirstColInsideHBorder));
-    pTableStyle->getFirstCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pFirstColInsideVBorder));
+    insertBorderLine(pTableStyle->getFirstCol(), XML_left, pFirstColLeftBorder);
+    insertBorderLine(pTableStyle->getFirstCol(), XML_right, pFirstColRightBorder);
+    insertBorderLine(pTableStyle->getFirstCol(), XML_top, pFirstColTopBorder);
+    insertBorderLine(pTableStyle->getFirstCol(), XML_bottom, pFirstColBottomBorder);
+    insertBorderLine(pTableStyle->getFirstCol(), XML_insideV, pFirstColInsideVBorder);
+    insertBorderLine(pTableStyle->getFirstCol(), XML_insideH, pFirstColInsideHBorder);
 
-    pTableStyle->getLastRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pLastRowLeftBorder));
-    pTableStyle->getLastRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pLastRowRightBorder));
-    pTableStyle->getLastRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pLastRowTopBorder));
-    pTableStyle->getLastRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,
-                                                                  pLastRowBottomBorder));
-    pTableStyle->getLastRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pLastRowInsideHBorder));
-    pTableStyle->getLastRow().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pLastRowInsideVBorder));
+    insertBorderLine(pTableStyle->getLastRow(), XML_left, pLastRowLeftBorder);
+    insertBorderLine(pTableStyle->getLastRow(), XML_right, pLastRowRightBorder);
+    insertBorderLine(pTableStyle->getLastRow(), XML_top, pLastRowTopBorder);
+    insertBorderLine(pTableStyle->getLastRow(), XML_bottom, pLastRowBottomBorder);
+    insertBorderLine(pTableStyle->getLastRow(), XML_insideV, pLastRowInsideVBorder);
+    insertBorderLine(pTableStyle->getLastRow(), XML_insideH, pLastRowInsideHBorder);
 
-    pTableStyle->getLastCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pLastColLeftBorder));
-    pTableStyle->getLastCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pLastColRightBorder));
-    pTableStyle->getLastCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pLastColTopBorder));
-    pTableStyle->getLastCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom,
-                                                                  pLastColBottomBorder));
-    pTableStyle->getLastCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pLastColInsideHBorder));
-    pTableStyle->getLastCol().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pLastColInsideVBorder));
+    insertBorderLine(pTableStyle->getLastCol(), XML_left, pLastColLeftBorder);
+    insertBorderLine(pTableStyle->getLastCol(), XML_right, pLastColRightBorder);
+    insertBorderLine(pTableStyle->getLastCol(), XML_top, pLastColTopBorder);
+    insertBorderLine(pTableStyle->getLastCol(), XML_bottom, pLastColBottomBorder);
+    insertBorderLine(pTableStyle->getLastCol(), XML_insideV, pLastColInsideVBorder);
+    insertBorderLine(pTableStyle->getLastCol(), XML_insideH, pLastColInsideHBorder);
 
-    pTableStyle->getBand1H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pBand1HLeftBorder));
-    pTableStyle->getBand1H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pBand1HRightBorder));
-    pTableStyle->getBand1H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pBand1HTopBorder));
-    pTableStyle->getBand1H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom, pBand1HBottomBorder));
-    pTableStyle->getBand1H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pBand1HInsideHBorder));
-    pTableStyle->getBand1H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pBand1HInsideVBorder));
+    insertBorderLine(pTableStyle->getBand1H(), XML_left, pBand1HLeftBorder);
+    insertBorderLine(pTableStyle->getBand1H(), XML_right, pBand1HRightBorder);
+    insertBorderLine(pTableStyle->getBand1H(), XML_top, pBand1HTopBorder);
+    insertBorderLine(pTableStyle->getBand1H(), XML_bottom, pBand1HBottomBorder);
+    insertBorderLine(pTableStyle->getBand1H(), XML_insideV, pBand1HInsideVBorder);
+    insertBorderLine(pTableStyle->getBand1H(), XML_insideH, pBand1HInsideHBorder);
 
-    pTableStyle->getBand1V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pBand1VLeftBorder));
-    pTableStyle->getBand1V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pBand1VRightBorder));
-    pTableStyle->getBand1V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pBand1VTopBorder));
-    pTableStyle->getBand1V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom, pBand1VBottomBorder));
-    pTableStyle->getBand1V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pBand1VInsideHBorder));
-    pTableStyle->getBand1V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pBand1VInsideVBorder));
+    insertBorderLine(pTableStyle->getBand1V(), XML_left, pBand1VLeftBorder);
+    insertBorderLine(pTableStyle->getBand1V(), XML_right, pBand1VRightBorder);
+    insertBorderLine(pTableStyle->getBand1V(), XML_top, pBand1VTopBorder);
+    insertBorderLine(pTableStyle->getBand1V(), XML_bottom, pBand1VBottomBorder);
+    insertBorderLine(pTableStyle->getBand1V(), XML_insideV, pBand1VInsideVBorder);
+    insertBorderLine(pTableStyle->getBand1V(), XML_insideH, pBand1VInsideHBorder);
 
-    pTableStyle->getBand2H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pBand2HLeftBorder));
-    pTableStyle->getBand2H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pBand2HRightBorder));
-    pTableStyle->getBand2H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pBand2HTopBorder));
-    pTableStyle->getBand2H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom, pBand2HBottomBorder));
-    pTableStyle->getBand2H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pBand2HInsideHBorder));
-    pTableStyle->getBand2H().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pBand2HInsideVBorder));
+    insertBorderLine(pTableStyle->getBand2H(), XML_left, pBand2HLeftBorder);
+    insertBorderLine(pTableStyle->getBand2H(), XML_right, pBand2HRightBorder);
+    insertBorderLine(pTableStyle->getBand2H(), XML_top, pBand2HTopBorder);
+    insertBorderLine(pTableStyle->getBand2H(), XML_bottom, pBand2HBottomBorder);
+    insertBorderLine(pTableStyle->getBand2H(), XML_insideV, pBand2HInsideVBorder);
+    insertBorderLine(pTableStyle->getBand2H(), XML_insideH, pBand2HInsideHBorder);
 
-    pTableStyle->getBand2V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_left, pBand2VLeftBorder));
-    pTableStyle->getBand2V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_right, pBand2VRightBorder));
-    pTableStyle->getBand2V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_top, pBand2VTopBorder));
-    pTableStyle->getBand2V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_bottom, pBand2VBottomBorder));
-    pTableStyle->getBand2V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideH,
-                                                                  pBand2VInsideHBorder));
-    pTableStyle->getBand2V().getLineBorders().insert(
-        std::pair<sal_Int32, ::oox::drawingml::LinePropertiesPtr>(XML_insideV,
-                                                                  pBand2VInsideVBorder));
+    insertBorderLine(pTableStyle->getBand2V(), XML_left, pBand2VLeftBorder);
+    insertBorderLine(pTableStyle->getBand2V(), XML_right, pBand2VRightBorder);
+    insertBorderLine(pTableStyle->getBand2V(), XML_top, pBand2VTopBorder);
+    insertBorderLine(pTableStyle->getBand2V(), XML_bottom, pBand2VBottomBorder);
+    insertBorderLine(pTableStyle->getBand2V(), XML_insideV, pBand2VInsideVBorder);
+    insertBorderLine(pTableStyle->getBand2V(), XML_insideH, pBand2VInsideHBorder);
 
     return pTableStyle;
 }
