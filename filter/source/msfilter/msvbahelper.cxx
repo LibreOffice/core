@@ -200,18 +200,17 @@ static bool hasMacro( SfxObjectShell const * pShell, const OUString& sLibrary, O
                     SbModule* pModule = pBasic->FindModule( sMod );
                     if ( pModule && pModule->FindMethod( sMacro, SbxClassType::Method ))
                     {
-                        bFound = true;
+                        return true;
                     }
                 }
-                else if( SbMethod* pMethod = dynamic_cast< SbMethod* >( pBasic->Find( sMacro, SbxClassType::Method ) ) )
+                else
                 {
-                    if( SbModule* pModule = pMethod->GetModule() )
+                    for (auto const& rModuleRef : pBasic->GetModules())
                     {
-                        // when searching for a macro without module name, do not search in class/document/form modules
-                        if( pModule->GetModuleType() == script::ModuleType::NORMAL )
+                        if (rModuleRef && rModuleRef->FindMethod(sMacro, SbxClassType::Method))
                         {
-                            sMod = pModule->GetName();
-                            bFound = true;
+                            sMod = rModuleRef->GetName();
+                            return true;
                         }
                     }
                 }
