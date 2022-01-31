@@ -90,15 +90,15 @@ OUString lcl_getServiceNameForType(SvxChartRegress eType)
 namespace chart
 {
 
-Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine()
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::createMeanValueLine()
 {
-    return Reference< XRegressionCurve >( new MeanValueRegressionCurve );
+    return new MeanValueRegressionCurve;
 }
 
-Reference< XRegressionCurve > RegressionCurveHelper::createRegressionCurveByServiceName(
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::createRegressionCurveByServiceName(
     std::u16string_view aServiceName )
 {
-    Reference< XRegressionCurve > xResult;
+    rtl::Reference< RegressionCurveModel > xResult;
 
     // todo: use factory methods with service name
     if( aServiceName == u"com.sun.star.chart2.LinearRegressionCurve" )
@@ -265,6 +265,28 @@ bool RegressionCurveHelper::hasMeanValueLine(
     return false;
 }
 
+bool RegressionCurveHelper::hasMeanValueLine(
+    const rtl::Reference< DataSeries > & xRegCnt )
+{
+    if( !xRegCnt.is())
+        return false;
+
+    try
+    {
+        for( rtl::Reference< RegressionCurveModel > const & curve : xRegCnt->getRegressionCurves2() )
+        {
+            if( isMeanValueLine( curve ))
+                return true;
+        }
+    }
+    catch( const Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return false;
+}
+
 bool RegressionCurveHelper::isMeanValueLine(
     const uno::Reference< chart2::XRegressionCurve > & xRegCurve )
 {
@@ -274,7 +296,15 @@ bool RegressionCurveHelper::isMeanValueLine(
             "com.sun.star.chart2.MeanValueRegressionCurve";
 }
 
-uno::Reference< chart2::XRegressionCurve >
+bool RegressionCurveHelper::isMeanValueLine(
+    const rtl::Reference< RegressionCurveModel > & xRegCurve )
+{
+    return xRegCurve.is() &&
+        xRegCurve->getServiceName() ==
+            "com.sun.star.chart2.MeanValueRegressionCurve";
+}
+
+rtl::Reference< RegressionCurveModel >
     RegressionCurveHelper::getMeanValueLine(
         const uno::Reference< chart2::XRegressionCurveContainer > & xRegCnt )
 {
@@ -287,6 +317,29 @@ uno::Reference< chart2::XRegressionCurve >
             for( uno::Reference< XRegressionCurve > const & curve : aCurves )
             {
                 if( isMeanValueLine( curve ))
+                    return dynamic_cast<RegressionCurveModel*>(curve.get());
+            }
+        }
+        catch( const Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    return nullptr;
+}
+
+rtl::Reference< RegressionCurveModel >
+    RegressionCurveHelper::getMeanValueLine(
+        const rtl::Reference< DataSeries > & xRegCnt )
+{
+    if( xRegCnt.is())
+    {
+        try
+        {
+            for( rtl::Reference< RegressionCurveModel > const & curve : xRegCnt->getRegressionCurves2() )
+            {
+                if( isMeanValueLine( curve ))
                     return curve;
             }
         }
@@ -296,7 +349,7 @@ uno::Reference< chart2::XRegressionCurve >
         }
     }
 
-    return uno::Reference< chart2::XRegressionCurve >();
+    return nullptr;
 }
 
 void RegressionCurveHelper::addMeanValueLine(
@@ -319,6 +372,25 @@ void RegressionCurveHelper::addMeanValueLine(
             xProp->setPropertyValue( "LineColor",
                                      xSeriesProp->getPropertyValue( "Color"));
         }
+    }
+}
+
+void RegressionCurveHelper::addMeanValueLine(
+    rtl::Reference< DataSeries > const & xRegCnt,
+    const uno::Reference< XPropertySet > & xSeriesProp )
+{
+    if( !xRegCnt.is() ||
+        ::chart::RegressionCurveHelper::hasMeanValueLine( xRegCnt ) )
+        return;
+
+    // todo: use a valid context
+    rtl::Reference< RegressionCurveModel > xCurve( createMeanValueLine() );
+    xRegCnt->addRegressionCurve( xCurve );
+
+    if( xSeriesProp.is())
+    {
+        xCurve->setPropertyValue( "LineColor",
+                                 xSeriesProp->getPropertyValue( "Color"));
     }
 }
 
@@ -351,13 +423,40 @@ void RegressionCurveHelper::removeMeanValueLine(
     }
 }
 
-uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionCurve(
+void RegressionCurveHelper::removeMeanValueLine(
+    rtl::Reference< DataSeries > const & xRegCnt )
+{
+    if( !xRegCnt.is())
+        return;
+
+    try
+    {
+        for( rtl::Reference< RegressionCurveModel > const & curve : xRegCnt->getRegressionCurves2() )
+        {
+            if( isMeanValueLine( curve ))
+            {
+                xRegCnt->removeRegressionCurve( curve );
+                // attention: the iterator i has become invalid now
+
+                // note: assume that there is only one mean-value curve
+                // to remove multiple mean-value curves remove the break
+                break;
+            }
+        }
+    }
+    catch( const Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+}
+
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::addRegressionCurve(
     SvxChartRegress eType,
     uno::Reference< XRegressionCurveContainer > const & xRegressionCurveContainer,
     const uno::Reference< beans::XPropertySet >& xPropertySource,
     const uno::Reference< beans::XPropertySet >& xEquationProperties )
 {
-    uno::Reference< chart2::XRegressionCurve > xCurve;
+    rtl::Reference< RegressionCurveModel > xCurve;
 
     if( !xRegressionCurveContainer.is() )
         return xCurve;
@@ -372,25 +471,60 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionC
     if( !aServiceName.isEmpty())
     {
         // todo: use a valid context
-        xCurve.set( createRegressionCurveByServiceName( aServiceName ) );
+        xCurve = createRegressionCurveByServiceName( aServiceName );
 
         if( xEquationProperties.is())
             xCurve->setEquationProperties( xEquationProperties );
 
-        uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-        if( xProperties.is())
+        if( xPropertySource.is())
+            comphelper::copyProperties( xPropertySource, xCurve );
+        else
         {
-            if( xPropertySource.is())
-                comphelper::copyProperties( xPropertySource, xProperties );
-            else
+            uno::Reference< XPropertySet > xSeriesProp( xRegressionCurveContainer, uno::UNO_QUERY );
+            if( xSeriesProp.is())
             {
-                uno::Reference< XPropertySet > xSeriesProp( xRegressionCurveContainer, uno::UNO_QUERY );
-                if( xSeriesProp.is())
-                {
-                    xProperties->setPropertyValue( "LineColor",
-                                             xSeriesProp->getPropertyValue( "Color"));
-                }
+                xCurve->setPropertyValue( "LineColor",
+                                         xSeriesProp->getPropertyValue( "Color"));
             }
+        }
+    }
+    xRegressionCurveContainer->addRegressionCurve( xCurve );
+
+    return xCurve;
+}
+
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::addRegressionCurve(
+    SvxChartRegress eType,
+    rtl::Reference< DataSeries > const & xRegressionCurveContainer,
+    const uno::Reference< beans::XPropertySet >& xPropertySource,
+    const uno::Reference< beans::XPropertySet >& xEquationProperties )
+{
+    rtl::Reference< RegressionCurveModel > xCurve;
+
+    if( !xRegressionCurveContainer.is() )
+        return xCurve;
+
+    if( eType == SvxChartRegress::NONE )
+    {
+        OSL_FAIL("don't create a regression curve of type none");
+        return xCurve;
+    }
+
+    OUString aServiceName( lcl_getServiceNameForType( eType ));
+    if( !aServiceName.isEmpty())
+    {
+        // todo: use a valid context
+        xCurve = createRegressionCurveByServiceName( aServiceName );
+
+        if( xEquationProperties.is())
+            xCurve->setEquationProperties( xEquationProperties );
+
+        if( xPropertySource.is())
+            comphelper::copyProperties( xPropertySource, xCurve );
+        else
+        {
+            xCurve->setPropertyValue( "LineColor",
+                                     xRegressionCurveContainer->getPropertyValue( "Color"));
         }
     }
     xRegressionCurveContainer->addRegressionCurve( xCurve );
@@ -402,63 +536,55 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::addRegressionC
     and returns true, if anything was removed
  */
 bool RegressionCurveHelper::removeAllExceptMeanValueLine(
-    uno::Reference< chart2::XRegressionCurveContainer > const & xRegCnt )
+    rtl::Reference< DataSeries > const & xRegCnt )
 {
-    bool bRemovedSomething = false;
-    if( xRegCnt.is())
-    {
-        try
-        {
-            const uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-                xRegCnt->getRegressionCurves());
-            std::vector< uno::Reference< chart2::XRegressionCurve > > aCurvesToDelete;
-            for( uno::Reference< chart2::XRegressionCurve > const & curve : aCurves )
-            {
-                if( ! isMeanValueLine( curve ))
-                {
-                    aCurvesToDelete.push_back( curve );
-                }
-            }
+    if( !xRegCnt.is())
+        return false;
 
-            for (auto const& curveToDelete : aCurvesToDelete)
+    bool bRemovedSomething = false;
+    try
+    {
+        std::vector< rtl::Reference< RegressionCurveModel > > aCurvesToDelete;
+        for( rtl::Reference< RegressionCurveModel > const & curve : xRegCnt->getRegressionCurves2() )
+        {
+            if( ! isMeanValueLine( curve ))
             {
-                xRegCnt->removeRegressionCurve(curveToDelete);
-                bRemovedSomething = true;
+                aCurvesToDelete.push_back( curve );
             }
         }
-        catch( const uno::Exception & )
+
+        for (auto const& curveToDelete : aCurvesToDelete)
         {
-            DBG_UNHANDLED_EXCEPTION("chart2");
+            xRegCnt->removeRegressionCurve(curveToDelete);
+            bRemovedSomething = true;
         }
+    }
+    catch( const uno::Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
     }
     return bRemovedSomething;
 }
 
 void RegressionCurveHelper::removeEquations(
-        uno::Reference< chart2::XRegressionCurveContainer > const & xRegCnt )
+        rtl::Reference< DataSeries > const & xRegCnt )
 {
     if( !xRegCnt.is())
         return;
 
     try
     {
-        const uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
-            xRegCnt->getRegressionCurves());
-        for( uno::Reference< chart2::XRegressionCurve >  const & curve : aCurves )
+        for( rtl::Reference< RegressionCurveModel >  const & curve : xRegCnt->getRegressionCurves2() )
         {
             if( !isMeanValueLine( curve ) )
             {
-                uno::Reference< chart2::XRegressionCurve > xRegCurve( curve );
-                if( xRegCurve.is() )
+                uno::Reference< beans::XPropertySet > xEqProp( curve->getEquationProperties() ) ;
+                if( xEqProp.is())
                 {
-                    uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties() ) ;
-                    if( xEqProp.is())
-                    {
-                        xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
-                        xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
-                        xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x) ") ));
-                        xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
-                    }
+                    xEqProp->setPropertyValue( "ShowEquation", uno::Any( false ));
+                    xEqProp->setPropertyValue( "XName", uno::Any( OUString("x") ));
+                    xEqProp->setPropertyValue( "YName", uno::Any( OUString("f(x) ") ));
+                    xEqProp->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( false ));
                 }
             }
         }
@@ -469,7 +595,7 @@ void RegressionCurveHelper::removeEquations(
     }
 }
 
-uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveType(
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::changeRegressionCurveType(
     SvxChartRegress eType,
     uno::Reference< XRegressionCurveContainer > const & xRegressionCurveContainer,
     uno::Reference< XRegressionCurve > const & xRegressionCurve )
@@ -482,7 +608,7 @@ uno::Reference< XRegressionCurve > RegressionCurveHelper::changeRegressionCurveT
             xRegressionCurve->getEquationProperties());
 }
 
-uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
     const Reference< XRegressionCurveContainer > & xRegCnt )
 {
     if( !xRegCnt.is())
@@ -493,6 +619,30 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
         const uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
             xRegCnt->getRegressionCurves());
         for( uno::Reference< chart2::XRegressionCurve > const & curve : aCurves )
+        {
+            if( ! isMeanValueLine( curve ))
+            {
+                return dynamic_cast<RegressionCurveModel*>(curve.get());
+            }
+        }
+    }
+    catch( const Exception & )
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    return nullptr;
+}
+
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::getFirstCurveNotMeanValueLine(
+    const rtl::Reference< DataSeries > & xRegCnt )
+{
+    if( !xRegCnt.is())
+        return nullptr;
+
+    try
+    {
+        for( rtl::Reference< RegressionCurveModel > const & curve : xRegCnt->getRegressionCurves2() )
         {
             if( ! isMeanValueLine( curve ))
             {
@@ -508,8 +658,8 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getFirstCurveN
     return nullptr;
 }
 
-uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionCurveAtIndex(
-    const Reference< XRegressionCurveContainer >& xCurveContainer,
+rtl::Reference< RegressionCurveModel > RegressionCurveHelper::getRegressionCurveAtIndex(
+    const rtl::Reference< DataSeries >& xCurveContainer,
     sal_Int32 aIndex )
 {
     if( !xCurveContainer.is())
@@ -517,8 +667,8 @@ uno::Reference< chart2::XRegressionCurve > RegressionCurveHelper::getRegressionC
 
     try
     {
-        uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(xCurveContainer->getRegressionCurves());
-        if(0 <= aIndex && aIndex < aCurves.getLength())
+        const std::vector< rtl::Reference< RegressionCurveModel > > aCurves(xCurveContainer->getRegressionCurves2());
+        if(0 <= aIndex && aIndex < static_cast<sal_Int32>(aCurves.size()))
         {
             if(!isMeanValueLine(aCurves[aIndex]))
                 return aCurves[aIndex];
@@ -592,6 +742,28 @@ SvxChartRegress RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
         const Sequence< Reference< XRegressionCurve > > aCurves(
             xRegCnt->getRegressionCurves());
         for( Reference< XRegressionCurve > const & curve : aCurves )
+        {
+            SvxChartRegress eType = getRegressionType( curve );
+            if( eType != SvxChartRegress::MeanValue &&
+                eType != SvxChartRegress::Unknown )
+            {
+                eResult = eType;
+                break;
+            }
+        }
+    }
+
+    return eResult;
+}
+
+SvxChartRegress RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
+    const rtl::Reference< DataSeries > & xRegCnt )
+{
+    SvxChartRegress eResult = SvxChartRegress::NONE;
+
+    if( xRegCnt.is())
+    {
+        for( rtl::Reference< RegressionCurveModel > const & curve : xRegCnt->getRegressionCurves2() )
         {
             SvxChartRegress eType = getRegressionType( curve );
             if( eType != SvxChartRegress::MeanValue &&
@@ -687,16 +859,15 @@ OUString RegressionCurveHelper::getRegressionCurveName( const Reference< XRegres
     return aResult;
 }
 
-std::vector< Reference< chart2::XRegressionCurve > >
+std::vector< rtl::Reference< RegressionCurveModel > >
     RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine(
         const rtl::Reference< Diagram > & xDiagram )
 {
-    std::vector< Reference< chart2::XRegressionCurve > > aResult;
+    std::vector< rtl::Reference< RegressionCurveModel > > aResult;
     std::vector< rtl::Reference< DataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
     for (auto const& elem : aSeries)
     {
-        const uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(elem->getRegressionCurves());
-        for( Reference< XRegressionCurve > const & curve : aCurves )
+        for( rtl::Reference< RegressionCurveModel > const & curve : elem->getRegressionCurves2() )
         {
             if( ! isMeanValueLine( curve ))
                 aResult.push_back( curve );
@@ -726,15 +897,15 @@ void RegressionCurveHelper::resetEquationPosition(
 }
 
 sal_Int32 RegressionCurveHelper::getRegressionCurveIndex(
-    const Reference< chart2::XRegressionCurveContainer >& xContainer,
-    const Reference< chart2::XRegressionCurve >& xCurve )
+    const rtl::Reference< DataSeries >& xContainer,
+    const rtl::Reference< RegressionCurveModel >& xCurve )
 {
     if( xContainer.is())
     {
-        uno::Sequence< uno::Reference< XRegressionCurve > > aCurves(
-            xContainer->getRegressionCurves());
+        const std::vector< rtl::Reference< RegressionCurveModel > > & aCurves(
+            xContainer->getRegressionCurves2());
 
-        for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
+        for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aCurves.size()); ++i )
         {
             if( xCurve == aCurves[i] )
                 return i;

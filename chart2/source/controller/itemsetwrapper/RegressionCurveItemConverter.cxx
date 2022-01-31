@@ -18,6 +18,7 @@
  */
 
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <RegressionCurveItemConverter.hxx>
 #include "SchWhichPairs.hxx"
 #include <GraphicPropertyItemConverter.hxx>

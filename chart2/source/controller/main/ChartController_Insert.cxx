@@ -53,6 +53,7 @@
 #include <ObjectNameProvider.hxx>
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
+#include <RegressionCurveModel.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
@@ -361,18 +362,16 @@ void ChartController::executeDispatch_InsertTrendline()
             ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_CURVE )),
         m_xUndoManager );
 
-    uno::Reference< chart2::XRegressionCurve > xCurve =
+    rtl::Reference< RegressionCurveModel > xCurve =
         RegressionCurveHelper::addRegressionCurve(
             SvxChartRegress::Linear,
             xRegressionCurveContainer );
 
-    uno::Reference< beans::XPropertySet > xProperties( xCurve, uno::UNO_QUERY );
-
-    if( !xProperties.is())
+    if( !xCurve.is())
         return;
 
     wrapper::RegressionCurveItemConverter aItemConverter(
-        xProperties, xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
+        xCurve, xRegressionCurveContainer, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
         m_pDrawModelWrapper->getSdrModel(),
         getChartModel() );
 

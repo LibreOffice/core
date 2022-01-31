@@ -21,6 +21,7 @@
 #include "WrappedSeriesOrDiagramProperty.hxx"
 #include <FastPropertyIdRanges.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <ErrorBar.hxx>
 #include <StatisticsHelper.hxx>
 #include <unonames.hxx>
@@ -906,7 +907,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
     {
         case PROPERTY_SET_TYPE_REGRESSION:
             if( xRegCnt.is() )
-                xResult.set( RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ), uno::UNO_QUERY );
+                xResult = RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt );
             break;
         case PROPERTY_SET_TYPE_ERROR_BAR:
             if( xSeriesPropertySet.is())
@@ -914,7 +915,7 @@ Reference< beans::XPropertySet > WrappedStatisticPropertySetProperty::getValueFr
             break;
         case PROPERTY_SET_TYPE_MEAN_VALUE:
             if( xRegCnt.is() )
-                xResult.set( RegressionCurveHelper::getMeanValueLine( xRegCnt ), uno::UNO_QUERY );
+                xResult = RegressionCurveHelper::getMeanValueLine( xRegCnt );
             break;
     }
 

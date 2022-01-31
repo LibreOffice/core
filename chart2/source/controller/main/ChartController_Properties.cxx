@@ -54,6 +54,7 @@
 #include <strings.hrc>
 #include <ReferenceSizeProvider.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <RegressionCurveModel.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
