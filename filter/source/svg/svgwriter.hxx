@@ -319,6 +319,7 @@ private:
     bool                                        mbClipAttrChanged;
     bool                                        mbIsPlaceholderShape;
     const MetaBitmapActionMap*                  mpEmbeddedBitmapsMap;
+    bool                                        mbIsPreview;
 
 
     tools::Long                    ImplMap( sal_Int32 nVal ) const;
@@ -378,6 +379,7 @@ public:
     void                    SetEmbeddedBitmapRefs( const MetaBitmapActionMap* pEmbeddedBitmapsMap );
     void StartMask(const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient,
                    sal_uInt32 nWriteFlags, OUString* pTextStyle = nullptr);
+    void                    SetPreviewMode(bool bState = true) { mbIsPreview = bState; }
 };
 
 
