@@ -2109,7 +2109,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 aAny <<= pGrfNode->GetGrf().GetXGraphic();
             }
         }
-        else if( FN_UNO_TRANSFORMED_GRAPHIC == pEntry->nWID )
+        else if( FN_UNO_TRANSFORMED_GRAPHIC == pEntry->nWID
+            || FN_UNO_GRAPHIC_PREVIEW == pEntry->nWID )
         {
             const SwNodeIndex* pIdx = pFormat->GetContent().GetContentIdx();
             if(pIdx)
@@ -2133,6 +2134,19 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         awt::Size aFrameSize = getSize();
                         Size aSize100thmm(aFrameSize.Width, aFrameSize.Height);
                         Size aSize = OutputDevice::LogicToLogic(aSize100thmm, MapMode(MapUnit::Map100thMM), aGraphicObj.GetPrefMapMode());
+
+                        if (FN_UNO_GRAPHIC_PREVIEW == pEntry->nWID)
+                        {
+                            double fX = static_cast<double>(aSize.getWidth()) / 1280;
+                            double fY = static_cast<double>(aSize.getHeight()) / 720;
+                            double fFactor = fX > fY ? fX : fY;
+                            if (fFactor > 1.0)
+                            {
+                                aSize.setWidth(aSize.getWidth() / fFactor);
+                                aSize.setHeight(aSize.getHeight() / fFactor);
+                            }
+                        }
+
                         Graphic aGraphic = aGraphicObj.GetTransformedGraphic(aSize, aGraphicObj.GetPrefMapMode(), aGraphicAttr);
                         aAny <<= aGraphic.GetXGraphic();
                     }

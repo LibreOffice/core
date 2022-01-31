@@ -2942,7 +2942,27 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
         }
     }
 
-    if( !(bCached || GraphicConverter::Export( aOStm, rBmpEx, ConvertDataFormat::PNG ) == ERRCODE_NONE) )
+    const BitmapEx* pBitmap = &rBmpEx;
+    std::unique_ptr<BitmapEx> pNewBitmap;
+
+    // for preview we generate downscaled images (1280x720 max)
+    if (mbIsPreview)
+    {
+        Size aSize = rBmpEx.GetSizePixel();
+        double fX = static_cast<double>(aSize.getWidth()) / 1280;
+        double fY = static_cast<double>(aSize.getHeight()) / 720;
+        double fFactor = fX > fY ? fX : fY;
+        if (fFactor > 1.0)
+        {
+            aSize.setWidth(aSize.getWidth() / fFactor);
+            aSize.setHeight(aSize.getHeight() / fFactor);
+            pNewBitmap = std::make_unique<BitmapEx>(rBmpEx);
+            pNewBitmap->Scale(aSize);
+            pBitmap = pNewBitmap.get();
+        }
+    }
+
+    if( !(bCached || GraphicConverter::Export( aOStm, *pBitmap, ConvertDataFormat::PNG ) == ERRCODE_NONE) )
         return;
 
     Point                    aPt;

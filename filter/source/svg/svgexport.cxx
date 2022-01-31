@@ -796,7 +796,9 @@ bool SVGFilter::implExportWriterTextGraphic( const Reference< view::XSelectionSu
     const Graphic aOriginalGraphic(xOriginalGraphic);
 
     uno::Reference<graphic::XGraphic> xTransformedGraphic;
-    xPropertySet->getPropertyValue("TransformedGraphic") >>= xTransformedGraphic;
+    xPropertySet->getPropertyValue(
+        mbIsPreview ? OUString("GraphicPreview") : OUString("TransformedGraphic"))
+            >>= xTransformedGraphic;
 
     if (!xTransformedGraphic.is())
         return false;
@@ -971,6 +973,8 @@ bool SVGFilter::implExportDocument()
                 mpSVGWriter->SetEmbeddedBitmapRefs( &maBitmapActionMap );
                 implExportTiledBackground();
             }
+            if( mbIsPreview )
+                mpSVGWriter->SetPreviewMode();
 
             // #i124608# export a given object selection, so no MasterPage export at all
             if (!mbExportShapeSelection)
