@@ -172,6 +172,7 @@ public:
     void testTdf119190();
     void testTdf139612();
     void testTdf144740();
+    void testTdf146722();
     void testTdf139763ShapeAnchor();
     void testAutofilterNamedRangesXLSX();
     void testInvalidBareBiff5();
@@ -281,6 +282,7 @@ public:
     CPPUNIT_TEST(testTdf119190);
     CPPUNIT_TEST(testTdf139612);
     CPPUNIT_TEST(testTdf144740);
+    CPPUNIT_TEST(testTdf146722);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
     CPPUNIT_TEST(testInvalidBareBiff5);
@@ -2869,6 +2871,20 @@ void ScFiltersTest2::testTdf144740()
     // - Expected: 1
     // - Actual  : 2
     CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(1, 0, 0)));
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf146722()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf146722.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf146722.ods", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 3
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(1, 2, 0)));
 
     xDocSh->DoClose();
 }
