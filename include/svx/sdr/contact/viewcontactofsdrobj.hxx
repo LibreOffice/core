@@ -55,6 +55,9 @@ public:
     virtual ViewContact& GetViewContact(sal_uInt32 nIndex) const override;
     virtual ViewContact* GetParentContact() const override;
 
+    // React on changes of the object of this ViewContact
+    virtual void ActionChanged() override;
+
     /// override for accessing the SdrObject
     virtual SdrObject* TryToGetSdrObject() const override;
 

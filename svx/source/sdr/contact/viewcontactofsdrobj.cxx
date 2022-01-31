@@ -94,6 +94,20 @@ ViewContact* ViewContactOfSdrObj::GetParentContact() const
     return pRetval;
 }
 
+// React on changes of the object of this ViewContact
+void ViewContactOfSdrObj::ActionChanged()
+{
+    // look for own changes
+    if (SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(&GetSdrObject()))
+    {
+        //  tdf#146860 no idea why, but calling this makes the text boxes render properly
+        pTextObj->GetTextAniKind();
+    }
+
+    // call parent
+    ViewContact::ActionChanged();
+}
+
 // override for accessing the SdrObject
 SdrObject* ViewContactOfSdrObj::TryToGetSdrObject() const
 {
