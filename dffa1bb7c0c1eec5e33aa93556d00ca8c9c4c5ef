@@ -33,6 +33,24 @@
       "message": "Caveat! Does this change the first three numbers (1,2,3) for any of the changed numberings? If so, then it will break the persistent storage identifier used in ODF, see DefaultNumberingProvider::makeNumberingIdentifier()\n",
       "revId": "dffa1bb7c0c1eec5e33aa93556d00ca8c9c4c5ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0a5e3ec_883f29f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-01-31T17:23:11Z",
+      "side": 1,
+      "message": "And as NATNUM12 depends on an external library, the identifier string for NUMBER_LOWER_ZH should be made fixed anyway by providing the identifier in aSupportedTypes[].",
+      "parentUuid": "e534080c_0db8e9a6",
+      "revId": "dffa1bb7c0c1eec5e33aa93556d00ca8c9c4c5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
