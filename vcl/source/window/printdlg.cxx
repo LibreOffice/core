@@ -1025,35 +1025,12 @@ bool PrintDialog::hasOrientationChanged() const
         || (nOrientation == ORIENTATION_PORTRAIT && eOrientation == Orientation::Landscape);
 }
 
-// make sure paper size matches paper orientation
-void PrintDialog::checkPaperSize( Size& rPaperSize )
-{
-    Orientation eOrientation = maPController->getPrinter()->GetOrientation();
-    if ( (eOrientation == Orientation::Portrait && rPaperSize.Width() > rPaperSize.Height()) ||
-         (eOrientation == Orientation::Landscape && rPaperSize.Width() < rPaperSize.Height()) )
-    {
-        // coverity[swapped-arguments : FALSE] - this is in the correct order
-        rPaperSize = Size( rPaperSize.Height(), rPaperSize.Width() );
-    }
-}
-
 // Always use this function to set paper orientation to make sure everything behaves well
-void PrintDialog::setPaperOrientation( Orientation eOrientation )
+void PrintDialog::setPaperOrientation( Orientation eOrientation, bool fromUser )
 {
     VclPtr<Printer> aPrt( maPController->getPrinter() );
     aPrt->SetOrientation( eOrientation );
-
-    // check if it's necessary to swap width and height of paper
-    if ( maPController->isPaperSizeFromUser() )
-    {
-        Size& aPaperSize = maPController->getPaperSizeFromUser();
-        checkPaperSize( aPaperSize );
-    }
-    else if ( maPController->getPapersizeFromSetup() )
-    {
-        Size& aPaperSize = maPController->getPaperSizeSetup();
-        checkPaperSize( aPaperSize );
-    }
+    maPController->setOrientationFromUser( eOrientation, fromUser );
 }
 
 void PrintDialog::checkControlDependencies()
@@ -1174,12 +1151,12 @@ void PrintDialog::updateNup( bool i_bMayUseCache )
         if( aMultiSize.Width() > aMultiSize.Height() ) // fits better on landscape
         {
             aMPS.aPaperSize = maNupLandscapeSize;
-            setPaperOrientation( Orientation::Landscape );
+            setPaperOrientation( Orientation::Landscape, false );
         }
         else
         {
             aMPS.aPaperSize = maNupPortraitSize;
-            setPaperOrientation( Orientation::Portrait );
+            setPaperOrientation( Orientation::Portrait, false );
         }
     }
 
@@ -2000,7 +1977,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
     {
         int nOrientation = mxOrientationBox->get_active();
         if ( nOrientation != ORIENTATION_AUTOMATIC )
-            setPaperOrientation( static_cast<Orientation>( nOrientation - 1 ) );
+            setPaperOrientation( static_cast<Orientation>( nOrientation - 1 ), true );
 
         updateNup( false );
     }
@@ -2026,9 +2003,7 @@ IMPL_LINK( PrintDialog, SelectHdl, weld::ComboBox&, rBox, void )
         else
             aPrt->SetPaper( mePaper );
 
-        Size aPaperSize( aInfo.getWidth(), aInfo.getHeight() );
-        checkPaperSize( aPaperSize );
-        maPController->setPaperSizeFromUser( aPaperSize );
+        maPController->setPaperSizeFromUser( Size( aInfo.getWidth(), aInfo.getHeight() ) );
 
         maUpdatePreviewIdle.Start();
     }
