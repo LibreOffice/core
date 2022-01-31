@@ -16,6 +16,24 @@
       "message": "This looks very wrong itself. It simply disallows the strict search-and-replace function. The matching of typographical apostrophe with ASCII one fits very much with diacritic-insensitive mode, so it should had been only done in that case.",
       "revId": "d40f2d02df26e216f367b5da3f9546b73f250469",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ead77d1_c92e3ad3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-31T10:05:34Z",
+      "side": 1,
+      "message": "Hi, Mike. If I right remember, there is no easy solution for this. There is a search option for diacritic-sensivity, but that is not for apostrophes or quotation marks:\n\n\"Diacritic-sensitive\n\nSearches exact match, does not include Unicode combining marks in search. For example, searching for كتب will not match كَتَبَ or كُتُب or كتِب and so on.\"\n\n(https://help.libreoffice.org/7.4/en-US/text/shared/01/02100000.html?System\u003dUNIX\u0026DbPAR\u003dWRITER\u0026HID\u003dsvx/ui/findreplacedialog/includediacritics#bm_@@nowidget@@)\n\nLikely the best to add more options for the requirements, based on Unicode documentation and user needs. Maybe I checked that way, and that wouldn\u0027t have been so simple, but you are right, it\u0027s worth to check it again. Now if the user wants to search ASCII apostrophe, it\u0027s possible with regex search.",
+      "parentUuid": "37ba7a3a_5dadfe1c",
+      "revId": "d40f2d02df26e216f367b5da3f9546b73f250469",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
