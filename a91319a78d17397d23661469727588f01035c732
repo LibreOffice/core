@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fad51610_a13497b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-01-31T15:15:22Z",
+      "side": 1,
+      "message": "FWIW, menu bar handling was initially added in\n\ncommit 337b592a721bef2c54cbe8c4927e5cc5a68c2138\nAuthor: Jan-Marek Glogowski \u003cglogow@fbihome.de\u003e\nDate:   Fri Jun 21 04:09:02 2019 +0000\n\n    tdf#123779 Qt5 correctly fill Qt5Frame::maGeometry\n\nand extracted to the menuBarOffset() method (and another use of it introduced) in\n\ncommit ca28826a087245686d7fca3ffc8ca1f03307924d\nAuthor: Jan-Marek Glogowski \u003cglogow@fbihome.de\u003e\nDate:   Mon Dec 20 13:32:52 2021 +0100\n\n    tdf#131467 Qt set default position on first resize\n    \n    Setting the position in Show() is too late, because LO will try\n    to set the mouse pointer to the default button, if configured.\n    That obviously needs the window position.\n    And also take the menubar offset into account.\n\n",
+      "revId": "a91319a78d17397d23661469727588f01035c732",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
