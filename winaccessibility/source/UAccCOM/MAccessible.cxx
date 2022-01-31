@@ -856,8 +856,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarCh
             m_pEnumVar->Next(1,varTmp,&count);
             if(count!=1)
                 return S_FALSE;
-            pvarChildren->vt = VT_I4;
-            pvarChildren->lVal = varTmp[0].lVal;
+            pvarChildren->vt = VT_DISPATCH;
+            pvarChildren->pdispVal = varTmp[0].pdispVal;
             VariantClear(&varTmp[0]);
             m_pEnumVar->Reset();
             break;
@@ -2987,18 +2987,6 @@ void CMAccessible::ConvertAnyToVariant(const css::uno::Any &rAnyVal, VARIANT *pv
     {
         VariantClear(pvData);
     }
-}
-
-COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Get_XAccChildID(long* childID)
-{
-    // internal IMAccessible - no mutex meeded
-
-    if(childID == nullptr)
-    {
-        return E_FAIL;
-    }
-    *childID = m_dChildID;
-    return S_OK;
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RPC_FAR *states)
