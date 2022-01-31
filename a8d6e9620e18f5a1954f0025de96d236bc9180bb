@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e9b26ac_fd065d73",
+        "filename": "svx/source/dialog/ctredlin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-01-31T11:00:07Z",
+      "side": 1,
+      "message": "Don\u0027t see why we need to set a default height. Using -1 has no consequences for me (Linux, using gtk3). Using (-1,-1) allows to resize the sidebar to the buttons, so maybe the 400px width was an attempt to make the comments visible by default- wouldn\u0027t do it.",
+      "range": {
+        "startLine": 367,
+        "startChar": 37,
+        "endLine": 367,
+        "endChar": 40
+      },
+      "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
