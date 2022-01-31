@@ -69,6 +69,30 @@
       },
       "revId": "cf15b50a247bd778546020960188056210ffdb61",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a53e55a_3e155acc",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-01-31T08:54:13Z",
+      "side": 1,
+      "message": "Addressed with https://gerrit.libreoffice.org/c/core/+/129198",
+      "parentUuid": "9b71b137_a528f1e0",
+      "range": {
+        "startLine": 1005,
+        "startChar": 39,
+        "endLine": 1005,
+        "endChar": 48
+      },
+      "revId": "cf15b50a247bd778546020960188056210ffdb61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
