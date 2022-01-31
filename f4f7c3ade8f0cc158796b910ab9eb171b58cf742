@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e5242b2_40e8ba93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-01-31T15:07:01Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! I\u0027ll start its 7-3 back-port, too.",
+      "revId": "f4f7c3ade8f0cc158796b910ab9eb171b58cf742",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
