@@ -2431,6 +2431,7 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
         bool bHasBaseURL = false;
         bool bHasFilterName = false;
         bool bIsRedactMode = false;
+        bool bIsPreview = false;
         sal_Int32 nEnd = aOldArgs.getLength();
 
         for ( sal_Int32 i = 0; i < nEnd; i++ )
@@ -2446,6 +2447,13 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
                 bHasBaseURL = true;
             else if( pOldValue[i].Name == "FilterName" )
                 bHasFilterName = true;
+        }
+
+        const css::uno::Sequence<css::beans::PropertyValue>& rMediumArgs = rMedium.GetArgs();
+        for ( sal_Int32 i = 0; i < rMediumArgs.getLength(); i++ )
+        {
+            if( rMediumArgs[i].Name == "IsPreview" )
+                rMediumArgs[i].Value >>= bIsPreview;
         }
 
         // FIXME: Handle this inside TransformItems()
@@ -2486,6 +2494,13 @@ bool SfxObjectShell::ExportTo( SfxMedium& rMedium )
             aArgs.realloc( ++nEnd );
             aArgs[nEnd-1].Name = "IsRedactMode";
             aArgs[nEnd-1].Value <<= bIsRedactMode;
+        }
+
+        if (bIsPreview)
+        {
+            aArgs.realloc( ++nEnd );
+            aArgs[nEnd-1].Name = "IsPreview";
+            aArgs[nEnd-1].Value <<= bIsPreview;
         }
 
         return xFilter->filter( aArgs );

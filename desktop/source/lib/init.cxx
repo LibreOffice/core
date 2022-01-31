@@ -3839,6 +3839,7 @@ static size_t doc_renderShapeSelection(LibreOfficeKitDocument* pThis, char** pOu
         }
         aMediaDescriptor["SelectionOnly"] <<= true;
         aMediaDescriptor["OutputStream"] <<= xOut;
+        aMediaDescriptor["IsPreview"] <<= true; // will down-scale graphics
 
         xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
 
