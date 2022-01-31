@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <stdio.h>
+
 #include <interpre.hxx>
 
 #include <scitems.hxx>
@@ -3440,21 +3442,48 @@ void ScInterpreter::ScNumberValue()
     PushNoValue();
 }
 
-static bool lcl_ScInterpreter_IsPrintable( sal_Unicode c )
+static bool lcl_ScInterpreter_IsPrintable( sal_uInt32 nCodePoint )
 {
-    return ( c > 0x1f && c < 0x7f ) || ( c > 0x9f );
+    return ( !u_isISOControl(nCodePoint) /*not in Cc*/
+             && u_isdefined(nCodePoint)  /*not in Cn*/ );
 }
+
 
 void ScInterpreter::ScClean()
 {
     OUString aStr = GetString().getString();
-    for ( sal_Int32 i = 0; i < aStr.getLength(); i++ )
+    sal_Int32 nIdx = 0;
+    sal_Int32 nPrevIdx = 0;
+    sal_Int32 nCodePointSize = 0;
+    sal_Int32 nOffset = 0;
+
+    OUStringBuffer aBuf( aStr );
+    while ( nIdx <  aStr.getLength() )
     {
-        if ( !lcl_ScInterpreter_IsPrintable( aStr[i] ) )
-            aStr = aStr.replaceAt(i, 1, u"");
+        aStr.iterateCodePoints( &nIdx );
+        if ( nIdx > nPrevIdx )
+        {
+            sal_uInt32 c;
+            nCodePointSize =  nIdx - nPrevIdx;
+            if ( nCodePointSize == 1 )
+                c = aStr[ nPrevIdx ];
+            else
+            {
+                // UTF-32 character
+                c = ( aStr[ nPrevIdx ] << 10 ) + aStr[ nPrevIdx + 1 ] - 0x35FDC00;
+            }
+
+            if ( !lcl_ScInterpreter_IsPrintable( c ) )
+            {
+                aBuf.remove( nPrevIdx + nOffset, nCodePointSize );
+                nOffset -= nCodePointSize;
+            }
+            nPrevIdx = nIdx;
+        }
     }
-    PushString(aStr);
+    PushString( aBuf.makeStringAndClear() );
 }
+
 
 void ScInterpreter::ScCode()
 {
