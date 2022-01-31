@@ -736,6 +736,8 @@ void SwTiledRenderingTest::testSearchTextFrame()
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was empty: nothing was highlighted after searching for 'TextFrame'.
+
+    Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(!m_aTextSelection.isEmpty());
 }
 
