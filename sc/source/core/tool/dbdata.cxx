@@ -995,16 +995,30 @@ public:
 };
 
 OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
-                                         const OUString& sOldName,bool bIsUpperName)
+                                         const OUString& sOldName, bool bIsUpperName)
 {
-    sal_Int32 lastIndex = sOldName.lastIndexOf('_');
-    sal_Int32 nOldNumber = 0;
+    sal_Int32 lastIndex = sOldName.lastIndexOf('_') + 1;
+    sal_Int32 nOldNumber = 1;
     if (lastIndex >= 0)
-        nOldNumber = OUString(sOldName.subView(lastIndex)).toInt32();
+    {
+        OUString lastPart = OUString(sOldName.subView(lastIndex));
+        nOldNumber = OUString(lastPart).toInt32();
+
+        // When no number found, add number at the end.
+        // When there is a literal "0" at the end, keep the "lastIndex" from above
+        // (OUString::toInt32() also returns 0 on failure)
+        if (nOldNumber == 0 && lastPart != "0")
+        {
+            nOldNumber = 1;
+            lastIndex = sOldName.getLength();
+        }
+    }
+    else // No "_" found, add number at the end
+        lastIndex = sOldName.getLength();
     OUString sNewName;
     do
     {
-        sNewName = sOldName.subView(0, lastIndex + 1) + OUString::number(++nOldNumber);
+        sNewName = sOldName.subView(0, lastIndex) + OUString::number(++nOldNumber);
     } while ((bIsUpperName ? namedDBs.findByUpperName(sNewName) : namedDBs.findByName(sNewName))
              != nullptr);
     return sNewName;
