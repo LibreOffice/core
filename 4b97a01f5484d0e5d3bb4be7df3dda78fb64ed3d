@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2089822_6b583ea4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-01-31T13:13:30Z",
+      "side": 1,
+      "message": "Follow up of previous commit, which accidently did not check for Unicode category Cn.\n\nNote : testing with Excel is problematic as Excel does not handle/recognise Unicode characters belonging to category Cn and Calc export of these characters result in corrupt xlsx files (not related to function CLEAN, will file a bug report for it).",
+      "revId": "4b97a01f5484d0e5d3bb4be7df3dda78fb64ed3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
