@@ -127,10 +127,26 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
 
 void VbaModule::createAndImportModule( StorageBase& rVbaStrg,
                                        const Reference< container::XNameContainer >& rxBasicLib,
-                                       const Reference< container::XNameAccess >& rxDocObjectNA ) const
+                                       const Reference< container::XNameAccess >& rxDocObjectNA )
 {
     OUString aVBASourceCode = readSourceCode( rVbaStrg );
     createModule( aVBASourceCode, rxBasicLib, rxDocObjectNA );
+    registerShortcutKeys();
+}
+
+void VbaModule::registerShortcutKeys()
+{
+    for (VbaKeyBinding const& rKeyBinding : maKeyBindings)
+    {
+        try
+        {
+            KeyEvent aKeyEvent = ooo::vba::parseKeyEvent(rKeyBinding.msApiKey);
+            ooo::vba::applyShortCutKeyBinding(mxDocModel, aKeyEvent, rKeyBinding.msMethodName);
+        }
+        catch (const Exception&)
+        {
+        }
+    }
 }
 
 void VbaModule::createEmptyModule( const Reference< container::XNameContainer >& rxBasicLib,
@@ -139,7 +155,7 @@ void VbaModule::createEmptyModule( const Reference< container::XNameContainer >&
     createModule( OUString(), rxBasicLib, rxDocObjectNA );
 }
 
-OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
+OUString VbaModule::readSourceCode( StorageBase& rVbaStrg )
 {
     OUStringBuffer aSourceCode(512);
     static const char sUnmatchedRemovedTag[] = "Rem removed unmatched Sub/End: ";
@@ -189,14 +205,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                             // cntrl modifier is explicit ( but could be cntrl+shift ), parseKeyEvent
                             // will handle and uppercase letter appropriately
                             OUString sApiKey = "^" + sKey;
-                            try
-                            {
-                                KeyEvent aKeyEvent = ooo::vba::parseKeyEvent( sApiKey );
-                                ooo::vba::applyShortCutKeyBinding( mxDocModel, aKeyEvent, sProc );
-                            }
-                            catch (const Exception&)
-                            {
-                            }
+                            maKeyBindings.push_back({sApiKey, sProc});
                         }
                     }
                 }
