@@ -739,10 +739,15 @@ Public Sub RaiseFatal(Optional ByVal ErrorCode As Variant _
 &apos;&apos;&apos;		pvArgs: the arguments to insert in the error message
 
 Dim sLocation As String		&apos;	Common header in error messages: location of error
+Dim sService As String		&apos;	Service name having detected the error
+Dim sMethod As String		&apos;	Method name having detected the error
 Dim vLocation As Variant	&apos;	Split array (library, module, method)
 Dim sMessage As String		&apos;	Message to log and display
 Dim L10N As Object			&apos;	Alias of Interface
 Dim sAlt As String			&apos;	Alternative error messages
+Dim iButtons As Integer		&apos;	MB_OK or MB_YESNO
+Dim iMsgBox As Integer		&apos;	Return value of the message box
+
 Const cstTabSize = 4
 Const cstThisSub = &quot;Exception.RaiseFatal&quot;
 Const cstSubArgs = &quot;ErrorCode, [Arg0[, Arg1 ...]]&quot;
@@ -762,9 +767,13 @@ Try:
 	If Len(_SF_.MainFunction) &gt; 0 Then	&apos;	MainFunction = [Library.]Module.Method
 		vLocation = Split(_SF_.MainFunction, &quot;.&quot;)
 		If UBound(vLocation) &lt; 2 Then vLocation = SF_Array.Prepend(vLocation, &quot;ScriptForge&quot;)
-		sLocation = L10N.GetText(&quot;VALIDATESOURCE&quot;, vLocation(0), vLocation(1), vLocation(2)) _
+		sService = vLocation(1)
+		sMethod = vLocation(2)
+		sLocation = L10N.GetText(&quot;VALIDATESOURCE&quot;, vLocation(0), sService, sMethod) _
 					&amp; &quot;\n&quot; &amp; L10N.GetText(&quot;VALIDATEARGS&quot;, _RightCaseArgs(_SF_.MainFunctionArgs))
 	Else
+		sService = &quot;&quot;
+		sMethod = &quot;&quot;
 		sLocation = &quot;&quot;
 	End If
 
@@ -1025,9 +1034,19 @@ Try:
 	&apos;	Display fatal event, if relevant (default)
 	If _SF_.DisplayEnabled Then
 		If _SF_.StopWhenError Then sMessage = sMessage &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; L10N.GetText(&quot;STOPEXECUTION&quot;)
-		MsgBox SF_String.ExpandTabs(SF_String.Unescape(sMessage), cstTabSize) _
-				, MB_OK + MB_ICONEXCLAMATION _
-				, L10N.GetText(&quot;ERRORNUMBER&quot;, ErrorCode)
+		&apos;	Do you need more help ?
+		If Len(sMethod) &gt; 0 Then
+			sMessage = sMessage &amp; &quot;\n&quot; &amp; &quot;\n&quot; &amp; L10N.GetText(&quot;NEEDMOREHELP&quot;, sMethod)
+			iButtons = MB_YESNO + MB_DEFBUTTON2
+		Else
+			iButtons = MB_OK
+		End If
+		iMsgBox = MsgBox(SF_String.ExpandTabs(SF_String.Unescape(sMessage), cstTabSize) _
+					, iButtons + MB_ICONEXCLAMATION _
+					, L10N.GetText(&quot;ERRORNUMBER&quot;, ErrorCode) _
+					)
+		&apos;	If more help needed ...
+		If iMsgBox = IDYES Then _OpenHelpInBrowser(sService, sMethod)
 	End If
 	
 Finally:
@@ -1184,6 +1203,22 @@ Private Sub _ConsoleRefresh()
 Finally:
 	Exit Sub
 End Sub			&apos;	ScriptForge.SF_Exception._ConsoleRefresh
+
+REM -----------------------------------------------------------------------------
+Private Sub _OpenHelpInBrowser(ByVal psService As String, ByVal psMethod As String)
+&apos;&apos;&apos;	Open the help page and help anchor related to the given ScriptForge service and method
+
+Dim sUrl As String			&apos;	URL to open
+Const cstURL = &quot;https://help.libreoffice.org/latest/en-US/text/sbasic/shared/03/sf_%1.html?&amp;DbPAR=BASIC#%2&quot;
+
+	On Local Error GoTo Finally		&apos;	No reason to risk abort here
+Try:
+	sUrl = SF_String.ReplaceStr(cstURL, Array(&quot;%1&quot;, &quot;%2&quot;), Array(LCase(psService), psMethod))
+	SF_Session.OpenUrlInBrowser(sUrl)
+
+Finally:
+	Exit Sub
+End Sub			&apos;	ScriptForge.SF_Exception._OpenHelpInBrowser
 
 REM -----------------------------------------------------------------------------
 Private Function _PropertyGet(Optional ByVal psProperty As String) As Variant

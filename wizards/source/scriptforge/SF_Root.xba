@@ -300,25 +300,30 @@ Try:
 	&apos;	SF_Exception.Raise
 			.AddText(	Context := &quot;CLOSEBUTTON&quot; _
 						, MsgId := &quot;Close&quot; _
-						, Comment := &quot;Text in close buttons of progress and console dialog boxes&quot; _
+						, Comment :=	&quot;Text in close buttons of progress and console dialog boxes&quot; _
 					)
 			.AddText(	Context := &quot;ERRORNUMBER&quot; _
 						, MsgId := &quot;Error %1&quot; _
-						, Comment := &quot;Title in error message box\n&quot; _
-									&amp; &quot;%1: an error number&quot; _
+						, Comment :=	&quot;Title in error message box\n&quot; _
+									&amp;	&quot;%1: an error number&quot; _
 					)
 			.AddText(	Context := &quot;ERRORLOCATION&quot; _
 						, MsgId := &quot;Location : %1&quot; _
-						, Comment := &quot;Error message box\n&quot; _
-									&amp; &quot;%1: a line number&quot; _
+						, Comment :=	&quot;Error message box\n&quot; _
+									&amp;	&quot;%1: a line number&quot; _
 					)
 			.AddText(	Context := &quot;LONGERRORDESC&quot; _
 						, MsgId := &quot;Error %1 - Location = %2 - Description = %3&quot; _
-						, Comment := &quot;Logfile record&quot; _
+						, Comment :=	&quot;Logfile record&quot; _
 					)
 			.AddText(	Context := &quot;STOPEXECUTION&quot; _
 						, MsgId := &quot;THE EXECUTION IS CANCELLED.&quot; _
-						, Comment :=	&quot;SF_Utils._Validate error message&quot; _
+						, Comment :=	&quot;Any blocking error message&quot; _
+					)
+			.AddText(	Context := &quot;NEEDMOREHELP&quot; _
+						, MsgId := &quot;Do you want to receive more information about the &apos;%1&apos; method ?&quot; _
+						, Comment :=	&quot;Any blocking error message\n&quot; _
+									&amp;	&quot;%1: a method name&quot; _
 					)
 	&apos;	SF_Exception.RaiseAbort
 			.AddText(	Context := &quot;INTERNALERROR&quot; _
