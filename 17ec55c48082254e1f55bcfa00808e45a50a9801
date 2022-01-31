@@ -16,6 +16,24 @@
       "message": "Reportedly this is now causing occasional races on Win builders, e.g.\n\n* https://ci.libreoffice.org/job/gerrit_windows/118329/consoleFull\n\n* https://ci.libreoffice.org/job/gerrit_windows/118345/consoleFull",
       "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c622f4e_0b41468b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-01-31T14:18:18Z",
+      "side": 1,
+      "message": "so evidently the command to create workdir/ComponentTarget/binaryurp/source/binaryurp.component was run:\n\n[build CMP] binaryurp/source/binaryurp\n\nbut then the file can\u0027t be loaded: \n\nwarning: failed to load external entity \"C:/cygwin/home/tdf/jenkins/workspace/gerrit_windows/workdir/ComponentTarget/binaryurp/source/binaryurp.component\"\ncannot process C:/cygwin/home/tdf/jenkins/workspace/gerrit_windows/workdir/ComponentTarget/binaryurp/source/binaryurp.component\nerror: file C:/cygwin/home/tdf/jenkins/workspace/gerrit_windows/tempdir/gbuild.AN8kgq\nxsltRunStylesheet : run failed\nmake[1]: *** [C:/cygwin/home/tdf/jenkins/workspace/gerrit_windows/solenv/gbuild/Rdb.mk:28: C:/cygwin/home/tdf/jenkins/workspace/gerrit_windows/workdir/Rdb/ure/services.rdb] Error 11\n\nhmm i can\u0027t see how this patch introduced that problem.",
+      "parentUuid": "8c0e092a_603cbe77",
+      "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
