@@ -3558,26 +3558,44 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
         const editeng::SvxBorderLine* pRight = rBox.GetLine(SvxBoxItemLine::RIGHT);
         const editeng::SvxBorderLine* pTop = rBox.GetLine(SvxBoxItemLine::TOP);
         const editeng::SvxBorderLine* pBottom = rBox.GetLine(SvxBoxItemLine::BOTTOM);
-        if (pLeft && pRight && pTop && pBottom && *pLeft == *pRight && *pLeft == *pTop
-            && *pLeft == *pBottom)
-        {
-            const Color& rColor = pTop->GetColor();
-            // We in fact need RGB to BGR, but the transformation is symmetric.
-            m_aFlyProperties.push_back(std::make_pair<OString, OString>(
-                "lineColor", OString::number(wwUtility::RGBToBGR(rColor))));
 
-            if (pTop->GetBorderLineStyle() != SvxBorderLineStyle::NONE)
-            {
-                double const fConverted(editeng::ConvertBorderWidthToWord(
-                    pTop->GetBorderLineStyle(), pTop->GetWidth()));
-                sal_Int32 nWidth = o3tl::convert(fConverted, o3tl::Length::twip, o3tl::Length::emu);
-                m_aFlyProperties.push_back(
-                    std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
-            }
-            else
-                // No border: no line.
-                m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "0"));
+        if (!pLeft && !pRight && !pBottom && !pTop)
+        {
+            // fLine has default 'true', so need to write it out in case of no border.
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "0"));
+            return;
         }
+
+        // RTF has the flags fTopLine, fBottomLine, fLeftLine and fRightLine to disable single border
+        // lines. But Word cannot disable single border lines. So we do not use them. In case of
+        // single border lines it is better to draw all four borders than drawing none. So we look
+        // whether a border line exists, which is effectively drawn.
+        const editeng::SvxBorderLine* pBorder = nullptr;
+        if (pTop && pTop->GetBorderLineStyle() != SvxBorderLineStyle::NONE)
+            pBorder = pTop;
+        else if (pBottom && pBottom->GetBorderLineStyle() != SvxBorderLineStyle::NONE)
+            pBorder = pBottom;
+        else if (pLeft && pLeft->GetBorderLineStyle() != SvxBorderLineStyle::NONE)
+            pBorder = pLeft;
+        else if (pRight && pRight->GetBorderLineStyle() != SvxBorderLineStyle::NONE)
+            pBorder = pRight;
+
+        if (!pBorder)
+        {
+            m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "0"));
+            return;
+        }
+
+        const Color& rColor = pBorder->GetColor();
+        // We in fact need RGB to BGR, but the transformation is symmetric.
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>(
+            "lineColor", OString::number(wwUtility::RGBToBGR(rColor))));
+
+        double const fConverted(
+            editeng::ConvertBorderWidthToWord(pBorder->GetBorderLineStyle(), pBorder->GetWidth()));
+        sal_Int32 nWidth = o3tl::convert(fConverted, o3tl::Length::twip, o3tl::Length::emu);
+        m_aFlyProperties.push_back(
+            std::make_pair<OString, OString>("lineWidth", OString::number(nWidth)));
 
         return;
     }
