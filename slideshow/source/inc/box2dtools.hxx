@@ -307,7 +307,7 @@ public:
 
     /// Initiate all the shapes in the current slide in the box2DWorld as static ones
     void
-    initateAllShapesAsStaticBodies(const slideshow::internal::ShapeManagerSharedPtr& pShapeManager);
+    initiateAllShapesAsStaticBodies(const slideshow::internal::ShapeManagerSharedPtr& pShapeManager);
 
     /// @return whether the box2DWorld has a stepper or not
     bool hasWorldStepper() const;
