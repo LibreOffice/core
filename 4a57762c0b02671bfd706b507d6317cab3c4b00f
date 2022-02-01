@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02426033_81ae6bf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-01T16:21:05Z",
+      "side": 1,
+      "message": "Working on it.",
+      "revId": "4a57762c0b02671bfd706b507d6317cab3c4b00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "872e96af_91a923cb",
@@ -43,6 +60,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "266b27ce_4c89d5de",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3443,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-01T16:21:05Z",
+      "side": 1,
+      "message": "Yes, I agree. I still have some difficulties implementing that, so can\u0027t submit a new patch set yet.",
+      "parentUuid": "872e96af_91a923cb",
+      "range": {
+        "startLine": 3443,
+        "startChar": 43,
+        "endLine": 3443,
+        "endChar": 54
+      },
+      "revId": "4a57762c0b02671bfd706b507d6317cab3c4b00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4152235a_ac7a4ff4",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 2
@@ -54,6 +95,30 @@
       "writtenOn": "2022-01-31T17:41:33Z",
       "side": 1,
       "message": "Please don\u0027t use the verbatim boolean operators (not, and, or), use !,\u0026\u0026,|| instead.",
+      "range": {
+        "startLine": 3445,
+        "startChar": 13,
+        "endLine": 3445,
+        "endChar": 16
+      },
+      "revId": "4a57762c0b02671bfd706b507d6317cab3c4b00f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52344813_7c10e6b3",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3445,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-01T16:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4152235a_ac7a4ff4",
       "range": {
         "startLine": 3445,
         "startChar": 13,
