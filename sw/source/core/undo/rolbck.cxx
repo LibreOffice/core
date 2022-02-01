@@ -729,8 +729,8 @@ bool SwHistoryBookmark::IsEqualBookmark(const ::sw::mark::IMark& rBkmk)
 SwHistoryNoTextFieldmark::SwHistoryNoTextFieldmark(const ::sw::mark::IFieldmark& rFieldMark)
     : SwHistoryHint(HSTRY_NOTEXTFIELDMARK)
     , m_sType(rFieldMark.GetFieldname())
-    , m_nNode(rFieldMark.GetMarkPos().nNode.GetIndex())
-    , m_nContent(rFieldMark.GetMarkPos().nContent.GetIndex())
+    , m_nNode(rFieldMark.GetMarkStart().nNode.GetIndex())
+    , m_nContent(rFieldMark.GetMarkStart().nContent.GetIndex())
 {
 }
 
@@ -760,8 +760,8 @@ void SwHistoryNoTextFieldmark::ResetInDoc(SwDoc& rDoc)
     std::optional<SwPaM> pPam;
 
     const SwContentNode* pContentNd = rNds[m_nNode]->GetContentNode();
-    if(pContentNd)
-        pPam.emplace(*pContentNd, m_nContent-1);
+    assert(pContentNd);
+    pPam.emplace(*pContentNd, m_nContent);
 
     if (pPam)
     {
