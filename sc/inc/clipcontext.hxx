@@ -126,6 +126,13 @@ public:
     bool isTableProtected() const;
 
     bool isAsLink() const;
+
+    /**
+     * Get the flag that indicates whether the "skip empty cells" paste option
+     * is selected. When this option is selected, empty cells in the clipboard
+     * document will not overwrite the corresponding non-empty cells in the
+     * destination range.
+     */
     bool isSkipEmptyCells() const;
     bool isCloneNotes() const;
     bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
