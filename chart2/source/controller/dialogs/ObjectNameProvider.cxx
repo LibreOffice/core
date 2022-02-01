@@ -643,7 +643,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl:
             if( xSeries.is())
             {
                 sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
-                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xSeries, nCurveIndex) );
+                rtl::Reference< RegressionCurveModel > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xSeries, nCurveIndex) );
                 if( xCurve.is())
                 {
                     aRet += " (" + RegressionCurveHelper::getRegressionCurveName(xCurve) + " )";
@@ -659,7 +659,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl:
             rtl::Reference< DataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel ));
             if( xSeries.is())
             {
-                Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getMeanValueLine( xSeries ));
+                rtl::Reference< RegressionCurveModel > xCurve( RegressionCurveHelper::getMeanValueLine( xSeries ));
                 if( xCurve.is())
                 {
                     try
@@ -813,7 +813,7 @@ OUString ObjectNameProvider::getNameForCID(
                     if( xSeries.is())
                     {
                         sal_Int32 nCurveIndex = ObjectIdentifier::getIndexFromParticleOrCID( rObjectCID );
-                        Reference< chart2::XRegressionCurve > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xSeries, nCurveIndex) );
+                        rtl::Reference< RegressionCurveModel > xCurve( RegressionCurveHelper::getRegressionCurveAtIndex(xSeries, nCurveIndex) );
                         if( xCurve.is())
                         {
                            aRet += " (" + RegressionCurveHelper::getRegressionCurveName(xCurve) + ")";
