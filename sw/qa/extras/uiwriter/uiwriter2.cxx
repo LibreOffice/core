@@ -3667,6 +3667,41 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testMixedFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147006)
+{
+    SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "tdf147006.rtf");
+
+    IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getAllMarksCount());
+    CPPUNIT_ASSERT_EQUAL(std::iterator_traits<IDocumentMarkAccess::iterator>::difference_type(1),
+                         std::distance(rIDMA.getFieldmarksBegin(), rIDMA.getFieldmarksEnd()));
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    // this crashed
+    dispatchCommand(mxComponent, ".uno:Delete", {});
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rIDMA.getAllMarksCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getAllMarksCount());
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rIDMA.getAllMarksCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rIDMA.getAllMarksCount());
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_FRM));
+    CPPUNIT_ASSERT_EQUAL(size_t(0), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rIDMA.getAllMarksCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf124261)
 {
 #if !defined(_WIN32)
