@@ -223,13 +223,13 @@ void ScTabViewShell::ActivateObject(SdrOle2Obj* pObj, sal_Int32 nVerb)
                         uno::Reference < embed::XComponentSupplier > xSup( xObj, uno::UNO_QUERY_THROW );
                         uno::Reference< chart2::data::XDataReceiver > xDataReceiver(
                             xSup->getComponent(), uno::UNO_QUERY_THROW );
-                        uno::Reference< chart2::data::XRangeHighlighter > xRangeHightlighter(
+                        uno::Reference< chart2::data::XRangeHighlighter > xRangeHighlighter(
                             xDataReceiver->getRangeHighlighter());
-                        if (xRangeHightlighter.is())
+                        if (xRangeHighlighter.is())
                         {
                             uno::Reference< view::XSelectionChangeListener > xListener(
                                 new ScChartRangeSelectionListener( this ));
-                            xRangeHightlighter->addSelectionChangeListener( xListener );
+                            xRangeHighlighter->addSelectionChangeListener( xListener );
                         }
                         uno::Reference<awt::XRequestCallback> xPopupRequest(xDataReceiver->getPopupRequest());
                         if (xPopupRequest.is())
