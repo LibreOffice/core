@@ -37,24 +37,17 @@ public:
     void*                    GetValue() const { return pPtr; }
 };
 
-template <class reference_type>
-class OfaRefItem final : public SfxPoolItem
+class XColorList;
+class SVX_DLLPUBLIC OfaXColorListItem final : public SfxPoolItem
 {
  private:
-    rtl::Reference<reference_type> mxRef;
+    rtl::Reference<XColorList> mxRef;
 public:
-    OfaRefItem( sal_uInt16 _nWhich, const rtl::Reference<reference_type> &xRef )
-        : SfxPoolItem( _nWhich ), mxRef( xRef )
-    {}
-    virtual bool operator==( const SfxPoolItem& rItem ) const override
-    {
-        return SfxPoolItem::operator==(rItem)
-            && mxRef == static_cast<OfaRefItem<reference_type> const &>(rItem).mxRef;
-    }
-    virtual OfaRefItem<reference_type>* Clone( SfxItemPool* /*pPool = 0*/ ) const override
-    {
-        return new OfaRefItem( *this );
-    }
+    OfaXColorListItem( sal_uInt16 _nWhich, const rtl::Reference<XColorList> &xRef );
+
+    virtual bool operator==( const SfxPoolItem& rItem ) const override;
+
+    virtual OfaXColorListItem* Clone( SfxItemPool *pPool = nullptr  ) const override;
 };
 
 #endif
