@@ -2914,14 +2914,8 @@ void ScDocument::CopyFromClip(
         SCCOL nCol2 = rRange.aEnd.Col();
         SCROW nRow2 = rRange.aEnd.Row();
 
-        if (bSkipEmptyCells)
-        {
-            // Delete cells in the destination only if their corresponding clip cells are not empty.
-            aCxt.setDestRange(nCol1, nRow1, nCol2, nRow2);
-            DeleteBeforeCopyFromClip(aCxt, rMark, aBroadcastSpans);
-        }
-        else
-            DeleteArea(nCol1, nRow1, nCol2, nRow2, rMark, nDelFlag, false, &aBroadcastSpans);
+        aCxt.setDestRange(nCol1, nRow1, nCol2, nRow2);
+        DeleteBeforeCopyFromClip(aCxt, rMark, aBroadcastSpans);
 
         if (CopyOneCellFromClip(aCxt, nCol1, nRow1, nCol2, nRow2))
             continue;
