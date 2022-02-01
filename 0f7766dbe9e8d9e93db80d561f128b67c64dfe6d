@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d30dfe2_c4e268a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-01T10:21:55Z",
+      "side": 1,
+      "message": "@Verified by Jenkins completely in patch set 3 and near completely in patch 4 (which was only a rebase with solving #include related merge conflict).",
+      "revId": "0f7766dbe9e8d9e93db80d561f128b67c64dfe6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
