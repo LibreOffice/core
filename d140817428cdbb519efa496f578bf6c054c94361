@@ -34,6 +34,24 @@
       "parentUuid": "9623693f_42a136eb",
       "revId": "d140817428cdbb519efa496f578bf6c054c94361",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "388013a6_6e1d9b76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-01T17:51:39Z",
+      "side": 1,
+      "message": "Well yes, but non-static variable should not need any such initialization at all.\n\nAnyway, I\u0027m not opposed to the patch, if it helps then it helps, I\u0027m just noting that it\u0027s more likely just a \"random\" change that happens to work.",
+      "parentUuid": "32359674_50db35d2",
+      "revId": "d140817428cdbb519efa496f578bf6c054c94361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
