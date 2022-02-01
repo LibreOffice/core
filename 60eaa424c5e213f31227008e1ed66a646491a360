@@ -34,6 +34,24 @@
       "parentUuid": "49b90992_d2e230c6",
       "revId": "60eaa424c5e213f31227008e1ed66a646491a360",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "151d595f_26eab600",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-01T10:50:10Z",
+      "side": 1,
+      "message": "Please ignore me. It seems that I tested something different (I now tried with https://upload.wikimedia.org/wikipedia/commons/a/a1/Johnrogershousemay2020.webp, and it saved as PNG both when dragged from FF, and when saved locally and dragged from Explorer).",
+      "parentUuid": "50103262_9740c0a6",
+      "revId": "60eaa424c5e213f31227008e1ed66a646491a360",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
