@@ -16,6 +16,24 @@
       "message": "Great to have this support! Thanks!\n\nJust a note that currently it saves a BMP into the document, not PNG.",
       "revId": "60eaa424c5e213f31227008e1ed66a646491a360",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50103262_9740c0a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-01T10:28:23Z",
+      "side": 1,
+      "message": "\u003e Just a note that currently it saves a BMP into the document, not PNG.\n\nWhat are the steps to reproduce that?",
+      "parentUuid": "49b90992_d2e230c6",
+      "revId": "60eaa424c5e213f31227008e1ed66a646491a360",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
