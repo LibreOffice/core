@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fab458e_1cf60977",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-01T14:51:06Z",
+      "side": 1,
+      "message": "Hi Luboš Luňák,\nbefore we disable skia as a whole on mac, it would be great to wait and see how many user are actually affected. We can always disable it before the tagging of 7.3.1 on week 8: https://wiki.documentfoundation.org/ReleasePlan/7.3",
+      "revId": "6cf3c39d3f8a5601788f4b61c5ef4d221351d7fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
