@@ -51,7 +51,7 @@
   </node>
   <node oor:name="VCL">
     <prop oor:name="UseSkia" oor:type="xs:boolean">
-      <value install:module="macosx">true</value>
+      <value install:module="macosx">false</value>
       <value install:module="unx">false</value>
       <value install:module="wnt">true</value>
     </prop>
