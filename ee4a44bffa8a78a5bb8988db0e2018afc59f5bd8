@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf15dbd_8ab1ecd4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-01T19:46:00Z",
+      "side": 1,
+      "message": "It seems to me there could be (or maybe there already is?) some more general \u0027isDirty\u0027 flag, triggering *complete recalc* on load; that would be saner, as generated documents likely need not only row height recalc, but also formulas, etc. The row height recalc is often ~same as full recalc - so it would not be worse UX-wise, but more consistent. What do you think?",
+      "revId": "ee4a44bffa8a78a5bb8988db0e2018afc59f5bd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
