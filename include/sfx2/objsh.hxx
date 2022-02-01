@@ -329,7 +329,7 @@ public:
 
     void                        SaveChildren(bool bObjectsOnly=false);
     bool                        SaveAsChildren( SfxMedium &rMedium );
-    bool                        SwitchChildrenPersistance(
+    bool                        SwitchChildrenPersistence(
                                     const css::uno::Reference< css::embed::XStorage >& xStorage,
                                     bool bForceNonModified = false );
     bool                        SaveCompletedChildren();
