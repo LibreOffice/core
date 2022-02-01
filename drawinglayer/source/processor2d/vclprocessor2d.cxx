@@ -59,6 +59,7 @@
 
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <tools/time.hxx>
 
 using namespace com::sun::star;
 
@@ -784,6 +785,11 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
     }
 
     const basegfx::B2DRange aRange(basegfx::utils::getRange(aMask));
+sal_uInt64 nTimeA(0);
+sal_uInt64 nTimeB(0);
+
+{
+    const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
     if (!aBufferDevice.isVisible())
@@ -807,6 +813,39 @@ void VclProcessor2D::RenderMaskPrimitive2DPixel(const primitive2d::MaskPrimitive
 
     // dump buffer to outdev
     aBufferDevice.paint();
+    nTimeA = tools::Time::GetSystemTicks() - nStartTime;
+}
+{
+    const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
+    impBufferDevice2 aBufferDevice(*mpOutputDevice, aRange);
+
+    if (!aBufferDevice.isVisible())
+        return;
+
+    // remember last OutDev and set to content
+    OutputDevice* pLastOutputDevice = mpOutputDevice;
+    mpOutputDevice = &aBufferDevice.getContent();
+
+    // paint to it
+    process(rMaskCandidate.getChildren());
+
+    // back to old OutDev
+    mpOutputDevice = pLastOutputDevice;
+
+    // draw mask
+    VirtualDevice& rMask = aBufferDevice.getTransparence();
+    rMask.SetLineColor();
+    rMask.SetFillColor(COL_BLACK);
+    rMask.DrawPolyPolygon(aMask);
+
+    // dump buffer to outdev
+    aBufferDevice.paint();
+    nTimeB = tools::Time::GetSystemTicks() - nStartTime;
+}
+if(nTimeA != nTimeB && 0 != nTimeA && 0 != nTimeB)
+    fprintf(stderr, "Now: %ld Former: %ld It got %s (factor %f)\n",
+        nTimeA, nTimeB, (nTimeA > nTimeB) ? "WORSE" : "BETTER",
+        (nTimeA > nTimeB) ? (float)nTimeA / nTimeB : (float)nTimeB / nTimeA);
 }
 
 // modified color group. Force output to unified color.
@@ -838,6 +877,11 @@ void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(
         // transparence is in visible range
         basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
         aRange.transform(maCurrentTransformation);
+
+        sal_uInt64 nTimeA(0);
+        sal_uInt64 nTimeB(0);
+        {
+        const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
         impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
         if (aBufferDevice.isVisible())
@@ -855,6 +899,33 @@ void VclProcessor2D::RenderUnifiedTransparencePrimitive2D(
             // dump buffer to outdev using given transparence
             aBufferDevice.paint(rTransCandidate.getTransparence());
         }
+        nTimeA = tools::Time::GetSystemTicks() - nStartTime;
+        }
+        {
+        const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
+        impBufferDevice2 aBufferDevice(*mpOutputDevice, aRange);
+
+        if (aBufferDevice.isVisible())
+        {
+            // remember last OutDev and set to content
+            OutputDevice* pLastOutputDevice = mpOutputDevice;
+            mpOutputDevice = &aBufferDevice.getContent();
+
+            // paint content to it
+            process(rTransCandidate.getChildren());
+
+            // back to old OutDev
+            mpOutputDevice = pLastOutputDevice;
+
+            // dump buffer to outdev using given transparence
+            aBufferDevice.paint(rTransCandidate.getTransparence());
+        }
+        nTimeB = tools::Time::GetSystemTicks() - nStartTime;
+        }
+if(nTimeA != nTimeB && 0 != nTimeA && 0 != nTimeB)
+    fprintf(stderr, "Now: %ld Former: %ld It got %s (factor %f)\n",
+        nTimeA, nTimeB, (nTimeA > nTimeB) ? "WORSE" : "BETTER",
+        (nTimeA > nTimeB) ? (float)nTimeA / nTimeB : (float)nTimeB / nTimeA);
     }
 }
 
@@ -867,6 +938,10 @@ void VclProcessor2D::RenderTransparencePrimitive2D(
 
     basegfx::B2DRange aRange(rTransCandidate.getChildren().getB2DRange(getViewInformation2D()));
     aRange.transform(maCurrentTransformation);
+sal_uInt64 nTimeA(0);
+sal_uInt64 nTimeB(0);
+{
+    const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
     impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
     if (!aBufferDevice.isVisible())
@@ -897,6 +972,46 @@ void VclProcessor2D::RenderTransparencePrimitive2D(
 
     // dump buffer to outdev
     aBufferDevice.paint();
+    nTimeA = tools::Time::GetSystemTicks() - nStartTime;
+}
+{
+    const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
+    impBufferDevice2 aBufferDevice(*mpOutputDevice, aRange);
+
+    if (!aBufferDevice.isVisible())
+        return;
+
+    // remember last OutDev and set to content
+    OutputDevice* pLastOutputDevice = mpOutputDevice;
+    mpOutputDevice = &aBufferDevice.getContent();
+
+    // paint content to it
+    process(rTransCandidate.getChildren());
+
+    // set to mask
+    mpOutputDevice = &aBufferDevice.getTransparence();
+
+    // when painting transparence masks, reset the color stack
+    basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
+    maBColorModifierStack = basegfx::BColorModifierStack();
+
+    // paint mask to it (always with transparence intensities, evtl. with AA)
+    process(rTransCandidate.getTransparence());
+
+    // back to old color stack
+    maBColorModifierStack = aLastBColorModifierStack;
+
+    // back to old OutDev
+    mpOutputDevice = pLastOutputDevice;
+
+    // dump buffer to outdev
+    aBufferDevice.paint();
+    nTimeB = tools::Time::GetSystemTicks() - nStartTime;
+}
+if(nTimeA != nTimeB && 0 != nTimeA && 0 != nTimeB)
+    fprintf(stderr, "Now: %ld Former: %ld It got %s (factor %f)\n",
+        nTimeA, nTimeB, (nTimeA > nTimeB) ? "WORSE" : "BETTER",
+        (nTimeA > nTimeB) ? (float)nTimeA / nTimeB : (float)nTimeB / nTimeA);
 }
 
 // transform group.
