@@ -2515,7 +2515,7 @@ bool EscherPropertyContainer::IsDefaultObject(
 {
     switch(eShapeType)
     {
-        // if the custom shape is not default shape of ppt, return sal_Fasle;
+        // if the custom shape is not default shape of ppt, return false;
         case mso_sptTearDrop:
             return false;
 

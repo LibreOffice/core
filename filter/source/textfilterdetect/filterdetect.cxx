@@ -155,7 +155,7 @@ bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& 
     std::shared_ptr<const SfxFilter> pFilter(SfxFilterMatcher().GetFilter4Extension(rExt, nMust));
     if (!pFilter)
     {
-        // retry without PREFFERED so we can find at least something for 0-byte *.ods
+        // retry without PREFERRED so we can find at least something for 0-byte *.ods
         nMust = SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT;
         pFilter = SfxFilterMatcher().GetFilter4Extension(rExt, nMust);
 
