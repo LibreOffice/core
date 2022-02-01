@@ -1474,7 +1474,7 @@ void SdImportTest::testTableBorderLineStyle()
         xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
         xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
         xCell->getPropertyValue("TopBorder") >>= aBorderLine;
-        if (aBorderLine.LineWidth > 0) {
+        if (aBorderLine.Color != -1) {
             CPPUNIT_ASSERT_EQUAL(nObjBorderLineStyles[i], aBorderLine.LineStyle);
         }
     }

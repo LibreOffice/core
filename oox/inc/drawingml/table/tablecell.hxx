@@ -82,6 +82,8 @@ private:
     oox::drawingml::LineProperties  maLinePropertiesRight;
     oox::drawingml::LineProperties  maLinePropertiesTop;
     oox::drawingml::LineProperties  maLinePropertiesBottom;
+    oox::drawingml::LineProperties  maLinePropertiesInsideH;
+    oox::drawingml::LineProperties  maLinePropertiesInsideV;
     oox::drawingml::LineProperties  maLinePropertiesTopLeftToBottomRight;
     oox::drawingml::LineProperties  maLinePropertiesBottomLeftToTopRight;
 
