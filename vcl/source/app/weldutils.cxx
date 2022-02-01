@@ -244,6 +244,8 @@ IMPL_LINK_NOARG(EntryFormatter, ModifyHdl, weld::Entry&, void)
 IMPL_LINK_NOARG(EntryFormatter, FocusOutHdl, weld::Widget&, void)
 {
     EntryLostFocus();
+    if (m_pSpinButton)
+        m_pSpinButton->signal_value_changed();
     m_aFocusOutHdl.Call(m_rEntry);
 }
 
