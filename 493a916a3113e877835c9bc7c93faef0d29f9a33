@@ -16,6 +16,29 @@
       "message": "Greetings for everyone there!\n\nThis patch cause the assert what have Caolán written. Today i reviewed the situation and i find the following:\nThe bugdoc were made with LibreOffice 7.1A+ where this patch was missing (this have been submitted to 7.2 master and backported to 7.1.2). So when creating, -- I think -- the textbox fell apart (the drawing and the frame had different paragraph for its anchor) so the record of the track changes went wrong. (The drawing has a good node for its anchor, it is in the redline section but the frame is outside the redline part)\nIn LO 7.2 this patch were introduced. When someone tries to save the original bugdoc to odt this patch tries to sync the anchor of the textframe to the drawing, but due to the change tracking the sync fails because the assert fires. The assert have to fire because the nodes are different normal text node versus redline text node.\nTo ensure about that what i written, just turn of the change tracking during the saving and it will not assert.\nHow to solve is a good question. Maybe disabling the sync in case of different type of nodes (in this case normal vs redline) or anything else what is better and you suggest will welcome.\nSorry for the long description.",
       "revId": "493a916a3113e877835c9bc7c93faef0d29f9a33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d26a7337_f87287a3",
+        "filename": "sw/source/core/text/porfly.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-02-01T15:11:46Z",
+      "side": 1,
+      "message": "this call starts the avalanche what lead to assert. Should there i put a condition for checking the node type of the content anchors?",
+      "range": {
+        "startLine": 378,
+        "startChar": 12,
+        "endLine": 378,
+        "endChar": 52
+      },
+      "revId": "493a916a3113e877835c9bc7c93faef0d29f9a33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
