@@ -288,6 +288,23 @@ Const cstConfigUpdate	= &quot;com.sun.star.configuration.ConfigurationUpdateAcce
 End Function	&apos;	ScriptForge.SF_Utils._GetRegistryKeyContent
 
 REM -----------------------------------------------------------------------------
+Private Function _GetSetting(ByVal psPreference As String, psProperty As String) As Variant
+&apos;&apos;&apos;	Find in the configuration a specific setting based on its location in the
+&apos;&apos;&apos;	settings registry
+
+Dim oConfigProvider As Object		&apos;	com.sun.star.configuration.ConfigurationProvider
+Dim vNodePath As Variant			&apos;	Array of com.sun.star.beans.PropertyValue
+
+	&apos;	Derived from the Tools library
+	Set oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
+	vNodePath = Array(SF_Utils._MakePropertyValue(&quot;nodepath&quot;, psPreference))
+
+	_GetSetting = oConfigProvider.createInstanceWithArguments( _
+					&quot;com.sun.star.configuration.ConfigurationAccess&quot;, vNodePath()).getByName(psProperty)
+
+End Function	&apos;	ScriptForge.SF_Utils._GetSetting
+
+REM -----------------------------------------------------------------------------
 Public Function _GetUNOService(ByVal psService As String _
 									, Optional ByVal pvArg As Variant _
 									) As Object
@@ -298,9 +315,7 @@ Public Function _GetUNOService(ByVal psService As String _
 &apos;&apos;&apos;		pvArg: some services might require an argument
 
 Dim sLocale As String			&apos;	fr-BE f.i.
-Dim oConfigProvider As Object
 Dim oDefaultContext As Object
-Dim vNodePath As Variant
 
 	Set _GetUNOService = Nothing
 	With _SF_
@@ -353,6 +368,16 @@ Dim vNodePath As Variant
 					Set .FolderPicker = CreateUnoService(&quot;com.sun.star.ui.dialogs.FolderPicker&quot;)
 				End If
 				Set _GetUNOService = .FolderPicker
+			Case &quot;FormatLocale&quot;
+				If IsEmpty(.FormatLocale) Or IsNull(.FormatLocale) Then
+					.FormatLocale = CreateUnoStruct(&quot;com.sun.star.lang.Locale&quot;)
+					&apos;	1st and 2nd chance
+					sLocale = SF_Utils._GetSetting(&quot;org.openoffice.Setup/L10N&quot;, &quot;ooSetupSystemLocale&quot;)
+					If Len(sLocale) = 0 Then sLocale = SF_Utils._GetSetting(&quot;org.openoffice.System/L10N&quot;, &quot;UILocale&quot;)
+					.FormatLocale.Language = Split(sLocale, &quot;-&quot;)(0)	&apos;	Language is most often 2 chars long, but not always
+					.FormatLocale.Country = Right(sLocale, 2)
+				End If
+				Set _GetUNOService = .FormatLocale
 			Case &quot;FunctionAccess&quot;
 				If IsEmpty(.FunctionAccess) Or IsNull(.FunctionAccess) Then
 					Set .FunctionAccess = CreateUnoService(&quot;com.sun.star.sheet.FunctionAccess&quot;)
@@ -380,6 +405,16 @@ Dim vNodePath As Variant
 					End If
 				End If
 				Set _GetUNOService = .MailService
+			Case &quot;OfficeLocale&quot;
+				If IsEmpty(.OfficeLocale) Or IsNull(.OfficeLocale) Then
+					.OfficeLocale = CreateUnoStruct(&quot;com.sun.star.lang.Locale&quot;)
+					&apos;	1st and 2nd chance
+					sLocale = SF_Utils._GetSetting(&quot;org.openoffice.Setup/L10N&quot;, &quot;ooLocale&quot;)
+					If Len(sLocale) = 0 Then sLocale = SF_Utils._GetSetting(&quot;org.openoffice.System/L10N&quot;, &quot;UILocale&quot;)
+					.OfficeLocale.Language = Split(sLocale, &quot;-&quot;)(0)	&apos;	Language is most often 2 chars long, but not always
+					.OfficeLocale.Country = Right(sLocale, 2)
+				End If
+				Set _GetUNOService = .OfficeLocale
 			Case &quot;PathSettings&quot;
 				If IsEmpty(.PathSettings) Or IsNull(.PathSettings) Then
 					Set .PathSettings = CreateUnoService(&quot;com.sun.star.util.PathSettings&quot;)
@@ -417,18 +452,13 @@ Dim vNodePath As Variant
 				End If
 				Set _GetUNOService = .SearchOptions
 			Case &quot;SystemLocale&quot;, &quot;Locale&quot;
-				If IsEmpty(.Locale) Or IsNull(.Locale) Then
-					.Locale = CreateUnoStruct(&quot;com.sun.star.lang.Locale&quot;)
-					&apos;	Derived from the Tools library
-					Set oConfigProvider = createUnoService(&quot;com.sun.star.configuration.ConfigurationProvider&quot;)
-					vNodePath = Array()	:	ReDim vNodePath(0)
-					vNodePath(0) = New com.sun.star.beans.PropertyValue
-					vNodePath(0).Name = &quot;nodepath&quot;	:	vNodePath(0).Value = &quot;org.openoffice.System/L10N&quot;
-					sLocale = oConfigProvider.createInstanceWithArguments(&quot;com.sun.star.configuration.ConfigurationAccess&quot;, vNodePath()).getByName(&quot;SystemLocale&quot;)
-					.Locale.Language = Split(sLocale, &quot;-&quot;)(0)	&apos;	Language is most often 2 chars long, but not always
-					.Locale.Country = Right(sLocale, 2)
+				If IsEmpty(.SystemLocale) Or IsNull(.SystemLocale) Then
+					.SystemLocale = CreateUnoStruct(&quot;com.sun.star.lang.Locale&quot;)
+					sLocale = SF_Utils._GetSetting(&quot;org.openoffice.System/L10N&quot;, &quot;SystemLocale&quot;)
+					.SystemLocale.Language = Split(sLocale, &quot;-&quot;)(0)	&apos;	Language is most often 2 chars long, but not always
+					.SystemLocale.Country = Right(sLocale, 2)
 				End If
-				Set _GetUNOService = .Locale
+				Set _GetUNOService = .SystemLocale
 			Case &quot;SystemShellExecute&quot;
 				If IsEmpty(.SystemShellExecute) Or IsNull(.SystemShellExecute) Then
 					Set .SystemShellExecute = CreateUnoService(&quot;com.sun.star.system.SystemShellExecute&quot;)

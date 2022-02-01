@@ -83,8 +83,16 @@ Property Get Fonts() As Variant
 End Property	&apos;	ScriptForge.SF_Platform.Fonts (get)
 
 REM -----------------------------------------------------------------------------
+Property Get FormatLocale() As String
+&apos;&apos;&apos;	Returns the locale used for number and date formats, combining language-COUNTRY (la-CO)
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox platform.FormatLocale
+	FormatLocale = _PropertyGet(&quot;FormatLocale&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.FormatLocale (get)
+
+REM -----------------------------------------------------------------------------
 Property Get Locale() As String
-&apos;&apos;&apos;	Returns the locale combining language-COUNTRY (la-CO)
+&apos;&apos;&apos;	Returns the locale of the operating system, combining language-COUNTRY (la-CO)
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		MsgBox platform.Locale
 	Locale = _PropertyGet(&quot;Locale&quot;)
@@ -103,6 +111,14 @@ Property Get ObjectType As String
 &apos;&apos;&apos;	Only to enable object representation
 	ObjectType = &quot;SF_Platform&quot;
 End Property	&apos;	ScriptForge.SF_Platform.ObjectType
+
+REM -----------------------------------------------------------------------------
+Property Get OfficeLocale() As String
+&apos;&apos;&apos;	Returns the locale of the user interface, combining language-COUNTRY (la-CO)
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox platform.OfficeLocale
+	OfficeLocale = _PropertyGet(&quot;OfficeLocale&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.OfficeLocale (get)
 
 REM -----------------------------------------------------------------------------
 Property Get OfficeVersion() As String
@@ -175,6 +191,14 @@ Property Get ServiceName As String
 	ServiceName = &quot;ScriptForge.Platform&quot;
 End Property	&apos;	ScriptForge.SF_Platform.ServiceName
 
+REM -----------------------------------------------------------------------------
+Property Get SystemLocale() As String
+&apos;&apos;&apos;	Returns the locale of the operating system, combining language-COUNTRY (la-CO)
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox platform.SystemLocale
+	SystemLocale = _PropertyGet(&quot;SystemLocale&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.SystemLocale (get)
+
 REM ===================================================================== METHODS
 
 REM -----------------------------------------------------------------------------
@@ -228,8 +252,10 @@ Public Function Properties() As Variant
 					, &quot;CPUCount&quot; _
 					, &quot;CurrentUser&quot; _
 					, &quot;Fonts&quot; _
+					, &quot;FormatLocale&quot; _
 					, &quot;Locale&quot; _
 					, &quot;Machine&quot; _
+					, &quot;OfficeLocale&quot; _
 					, &quot;OfficeVersion&quot; _
 					, &quot;OSName&quot; _
 					, &quot;OSPlatform&quot; _
@@ -238,6 +264,7 @@ Public Function Properties() As Variant
 					, &quot;Printers&quot; _
 					, &quot;Processor&quot; _
 					, &quot;PythonVersion&quot; _
+					, &quot;SystemLocale&quot; _
 					)
 
 End Function	&apos;	ScriptForge.SF_Platform.Properties
@@ -350,8 +377,11 @@ Const cstSubArgs = &quot;&quot;
 			Next i
 			&apos;	Remove leading and trailing commas
 			If Len(sFonts) &gt; 1 Then _PropertyGet = Split(Mid(sFonts, 2, Len(sFonts) - 2), &quot;,&quot;) Else _PropertyGet = Array()
-		Case &quot;Locale&quot;
-			Set oLocale = SF_Utils._GetUNOService(&quot;SystemLocale&quot;)
+		Case &quot;FormatLocale&quot;
+			Set oLocale = SF_Utils._GetUNOService(&quot;FormatLocale&quot;)
+			_PropertyGet = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
+		Case &quot;OfficeLocale&quot;
+			Set oLocale = SF_Utils._GetUNOService(&quot;OfficeLocale&quot;)
 			_PropertyGet = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
 		Case &quot;OfficeVersion&quot;
 			_PropertyGet = _GetProductName()
@@ -371,6 +401,9 @@ Const cstSubArgs = &quot;&quot;
 			_PropertyGet = sOSName
 		Case &quot;Printers&quot;
 			_PropertyGet = _GetPrinters()
+		Case &quot;SystemLocale&quot;, &quot;Locale&quot;
+			Set oLocale = SF_Utils._GetUNOService(&quot;SystemLocale&quot;)
+			_PropertyGet = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
 		Case Else
 			_PropertyGet = Null
 	End Select
