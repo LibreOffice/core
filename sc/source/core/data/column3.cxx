@@ -1023,7 +1023,7 @@ void ScColumn::DeleteArea(
     if ( nDelFlag & InsertDeleteFlags::EDITATTR )
     {
         OSL_ENSURE( nContFlag == InsertDeleteFlags::NONE, "DeleteArea: Wrong Flags" );
-        RemoveEditAttribs( nStartRow, nEndRow );
+        RemoveEditAttribs(aBlockPos, nStartRow, nEndRow);
     }
 
     // Delete attributes just now
@@ -1123,7 +1123,16 @@ public:
         mpSharedStringPool(pSharedStringPool)
     {
         if (mpDestBlockPos)
+        {
+            {
+                // Re-initialize the broadcaster position hint, which may have
+                // become invalid by the time it gets here...
+                sc::ColumnBlockPosition aTempPos;
+                mrDestCol.InitBlockPosition(aTempPos);
+                mpDestBlockPos->miBroadcasterPos = aTempPos.miBroadcasterPos;
+            }
             maDestBlockPos = *mpDestBlockPos;
+        }
         else
             mrDestCol.InitBlockPosition(maDestBlockPos);
     }
@@ -1357,7 +1366,7 @@ public:
         mpDestBlockPos(rCxt.getBlockPosition(nDestTab, nDestCol))
     {
         if (mpDestBlockPos)
-            maDestBlockPos = *mpDestBlockPos;
+            maDestBlockPos.miCellTextAttrPos = mpDestBlockPos->miCellTextAttrPos;
         else
             rDestCol.InitBlockPosition(maDestBlockPos);
     }
@@ -1366,7 +1375,7 @@ public:
     {
         if (mpDestBlockPos)
             // Don't forget to save this to the context!
-            *mpDestBlockPos = maDestBlockPos;
+            mpDestBlockPos->miCellTextAttrPos = maDestBlockPos.miCellTextAttrPos;
     }
 
     void operator() ( const sc::CellTextAttrStoreType::value_type& aNode, size_t nOffset, size_t nDataSize )
