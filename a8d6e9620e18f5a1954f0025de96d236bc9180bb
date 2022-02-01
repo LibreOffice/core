@@ -87,6 +87,30 @@
       },
       "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f83f9a63_5dc1d08c",
+        "filename": "svx/source/dialog/ctredlin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-02-01T13:33:46Z",
+      "side": 1,
+      "message": "Thanks for figuring that out. I tested it here and it worked fine both with kf5 and gen. The sidebar looks really nice now \u003d)\n\nBTW, I was reading the API doc for LayoutSize and it seems that \"-1\" is only accepted for the \"maximum\". For \"minimum\" it must be 0 or greater, which might explain the unexpected behavior with \"-1\". See:\n\nhttps://api.libreoffice.org/docs/idl/ref/structcom_1_1sun_1_1star_1_1ui_1_1LayoutSize.html",
+      "parentUuid": "76b2f2fc_eaba1b04",
+      "range": {
+        "startLine": 367,
+        "startChar": 37,
+        "endLine": 367,
+        "endChar": 40
+      },
+      "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
