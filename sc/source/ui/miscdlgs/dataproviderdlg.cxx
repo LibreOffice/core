@@ -54,9 +54,7 @@ SCCOL ScDataTransformationBaseControl::getLastCol(const ScDocument& rDoc)
 {
     for (SCCOL nCol = 1; nCol <= rDoc.MaxCol(); ++nCol)
     {
-        CellType eType;
-        rDoc.GetCellType(nCol, 0, 0, eType);
-        if (eType == CELLTYPE_NONE)
+        if (rDoc.GetCellType(nCol, 0, 0) == CELLTYPE_NONE)
         {
             return static_cast<SCCOL>(nCol - 1 );
         }
