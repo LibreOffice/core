@@ -508,7 +508,7 @@ void asyncUpdateEditMode(FrameworkHelper* const pHelper, const EditMode eEMode)
 }
 
 void FrameworkHelper::HandleModeChangeSlot (
-    sal_uLong nSlotId,
+    sal_uInt16 nSlotId,
     SfxRequest const & rRequest)
 {
     if ( ! mxConfigurationController.is())
