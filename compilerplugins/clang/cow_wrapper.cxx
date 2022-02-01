@@ -21,7 +21,7 @@
 
 /*
 Look for places where we are using cow_wrapper, but we are calling a const method on the impl object
-with a non-const pointer, which means we will unnnecessarily trigger a copy.
+with a non-const pointer, which means we will unnecessarily trigger a copy.
 */
 
 namespace
