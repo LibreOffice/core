@@ -53,11 +53,12 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdopath.hxx>
+#include <svx/unoprov.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
 #include <sal/log.hxx>
-
+#include <svx/svdcrtv.hxx>
 #include <algorithm>
 
 using namespace ::com::sun::star;
@@ -1107,36 +1108,39 @@ rtl::Reference<Svx3DExtrudeObject>
     return xShape;
 }
 
-SdrPathObj*
+rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
-                    , bool bSetZOrderToZero )
+                    , bool /*bSetZOrderToZero*/ )
 {
     if( !xTarget.is() )
         return nullptr;
 
     //create shape
-    SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), SdrObjKind::Polygon);
-    if (bSetZOrderToZero)
-        // insert at ZOrder 0, an area should always be behind other shapes
-        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
-    else
-        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath);
+    rtl::Reference<SvxShapePolyPolygon> xShape = new SvxShapePolyPolygon(nullptr);
+    xShape->setShapeKind(SdrObjKind::Polygon); //OBJ_POLY);
+    xTarget->add(uno::Reference<drawing::XShape>(xShape));
 
     //set properties
     try
     {
-        // Polygon
-        basegfx::B2DPolyPolygon aNewPolyPolygon( PolyToB2DPolyPolygon(rPolyPolygon) );
-        // tdf#117145 metric of SdrModel is app-specific, metric of UNO API is 100thmm
-        pPath->ForceMetricToItemPoolMetric(aNewPolyPolygon);
-        pPath->SetPathPoly(aNewPolyPolygon);
+        //UNO_NAME_POLYGON "Polygon" drawing::PointSequence*
+        drawing::PointSequenceSequence aPoints( PolyToPointSequence(rPolyPolygon) );
+
+        //Polygon
+        xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
+            , uno::Any( aPoints ) );
+
+        //ZOrder
+        //an area should always be behind other shapes
+        xShape->SvxShape::setPropertyValue( UNO_NAME_MISC_OBJ_ZORDER
+            , uno::Any( sal_Int32(0) ) );
     }
     catch( const uno::Exception& )
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
-    return pPath;
+    return xShape;
 }
 
 static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D& rPos
@@ -2466,14 +2470,6 @@ void ShapeFactory::makeShapeInvisible( const rtl::Reference< SvxShape >& xShape 
 }
 
 // set a name/CID at a shape (is used for selection handling)
-
-void ShapeFactory::setShapeName( SdrPathObj* pShape
-                               , const OUString& rName )
-{
-    if(!pShape)
-        return;
-    pShape->SetName(rName);
-}
 
 void ShapeFactory::setShapeName( const rtl::Reference< SvxShape >& xShape
                                , const OUString& rName )
