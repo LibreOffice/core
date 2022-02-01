@@ -675,7 +675,7 @@ bool CairoCommon::drawPolyLine(cairo_t* cr, basegfx::B2DRange* pExtents, const C
     }
 
     // convert miter minimum angle to miter limit
-    double fMiterLimit = 1.0 / sin(std::min(fMiterMinimumAngle, 0.01 * M_PI) / 2.0);
+    double fMiterLimit = 1.0 / sin(std::max(fMiterMinimumAngle, 0.01 * M_PI) / 2.0);
 
     // setup cap attribute
     cairo_line_cap_t eCairoLineCap(CAIRO_LINE_CAP_BUTT);
