@@ -1218,9 +1218,10 @@ class SFScriptForge:
         servicename = 'ScriptForge.Platform'
         servicesynonyms = ('platform', 'scriptforge.platform')
         serviceproperties = dict(Architecture = False, ComputerName = False, CPUCount = False, CurrentUser = False,
-                                 Fonts = False, Locale = False, Machine = False, OfficeVersion = False, OSName = False,
-                                 OSPlatform = False, OSRelease = False, OSVersion = False, Printers = False,
-                                 Processor = False, PythonVersion = False)
+                                 Fonts = False, FormatLocale = False, Locale = False, Machine = False,
+                                 OfficeLocale = False, OfficeVersion = False, OSName = False, OSPlatform = False,
+                                 OSRelease = False, OSVersion = False, Printers = False, Processor = False,
+                                 PythonVersion = False, SystemLocale = False)
         # Python helper functions
         py = ScriptForge.pythonhelpermodule + '$' + '_SF_Platform'
 
