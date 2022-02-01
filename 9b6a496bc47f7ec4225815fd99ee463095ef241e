@@ -97,6 +97,30 @@
       },
       "revId": "9b6a496bc47f7ec4225815fd99ee463095ef241e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a72e79d9_874a3ed4",
+        "filename": "sw/source/core/docnode/ndtbl1.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-01T12:45:05Z",
+      "side": 1,
+      "message": "no contrary opinions expressed.",
+      "parentUuid": "057ac1ba_456f059e",
+      "range": {
+        "startLine": 935,
+        "startChar": 4,
+        "endLine": 935,
+        "endChar": 30
+      },
+      "revId": "9b6a496bc47f7ec4225815fd99ee463095ef241e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
