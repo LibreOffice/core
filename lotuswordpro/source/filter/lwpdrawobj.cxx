@@ -1375,20 +1375,19 @@ void LwpDrawBitmap::Read()
     m_pStream->ReadUInt16( m_aBmpRec.nTranslation );
     m_pStream->ReadUInt16( m_aBmpRec.nRotation );
 
+    // 20 == length of draw-specific fields.
     if (m_aObjHeader.nRecLen < 20)
         throw BadRead();
 
-    // 20 == length of draw-specific fields.
-    // 14 == length of bmp file header.
-    m_aBmpRec.nFileSize = m_aObjHeader.nRecLen - 20 + 14;
+    sal_uInt64 nBmpPos = m_pStream->Tell();
+    sal_uInt64 nBmpLen =
+        std::min<sal_uInt64>(m_aObjHeader.nRecLen - 20, m_pStream->remainingSize());
 
     BmpInfoHeader2 aInfoHeader2;
     m_pStream->ReadUInt32( aInfoHeader2.nHeaderLen );
 
-    if (!m_pStream->good())
+    if (!m_pStream->good() || nBmpLen < aInfoHeader2.nHeaderLen)
         throw BadRead();
-
-    m_pImageData.reset( new sal_uInt8 [m_aBmpRec.nFileSize] );
 
     sal_uInt32 N;
     sal_uInt32 rgbTableSize;
@@ -1413,7 +1412,7 @@ void LwpDrawBitmap::Read()
             rgbTableSize = 3 * (1 << N);
         }
     }
-    else
+    else if (aInfoHeader2.nHeaderLen >= sizeof(BmpInfoHeader2))
     {
         m_pStream->ReadUInt32( aInfoHeader2.nWidth );
         m_pStream->ReadUInt32( aInfoHeader2.nHeight );
@@ -1432,8 +1431,14 @@ void LwpDrawBitmap::Read()
         {
             rgbTableSize = 4 * (1 << N);
         }
-
     }
+    else
+    {
+        throw BadRead();
+    }
+
+    m_aBmpRec.nFileSize = static_cast<sal_uInt32>(nBmpLen + 14);
+    m_pImageData.reset( new sal_uInt8 [m_aBmpRec.nFileSize] );
 
     sal_uInt32 nOffBits = 14 + aInfoHeader2.nHeaderLen + rgbTableSize;
     m_pImageData[0] = 'B';
@@ -1451,50 +1456,10 @@ void LwpDrawBitmap::Read()
     m_pImageData[12] = static_cast<sal_uInt8>(nOffBits >> 16);
     m_pImageData[13] = static_cast<sal_uInt8>(nOffBits >> 24);
 
-    sal_uInt32 nDIBRemaining;
     sal_uInt8* pPicData = m_pImageData.get();
-    if (aInfoHeader2.nHeaderLen== sizeof(BmpInfoHeader))
-    {
-        m_pImageData[14] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen);
-        m_pImageData[15] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 8);
-        m_pImageData[16] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 16);
-        m_pImageData[17] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 24);
-        m_pImageData[18] = static_cast<sal_uInt8>(aInfoHeader2.nWidth);
-        m_pImageData[19] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 8);
-        m_pImageData[20] = static_cast<sal_uInt8>(aInfoHeader2.nHeight);
-        m_pImageData[21] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 8);
-        m_pImageData[22] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes);
-        m_pImageData[23] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes >> 8);
-        m_pImageData[24] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount);
-        m_pImageData[25] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount >> 8);
 
-        nDIBRemaining = m_aBmpRec.nFileSize - 26;
-        pPicData += 26*sizeof(sal_uInt8);
-    }
-    else
-    {
-        m_pImageData[14] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen);
-        m_pImageData[15] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 8);
-        m_pImageData[16] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 16);
-        m_pImageData[17] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 24);
-        m_pImageData[18] = static_cast<sal_uInt8>(aInfoHeader2.nWidth);
-        m_pImageData[19] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 8);
-        m_pImageData[20] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 16);
-        m_pImageData[21] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 24);
-        m_pImageData[22] = static_cast<sal_uInt8>(aInfoHeader2.nHeight);
-        m_pImageData[23] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 8);
-        m_pImageData[24] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 16);
-        m_pImageData[25] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 24);
-        m_pImageData[26] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes);
-        m_pImageData[27] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes >> 8);
-        m_pImageData[28] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount);
-        m_pImageData[29] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount >> 8);
-
-        nDIBRemaining = m_aBmpRec.nFileSize - 30;
-        pPicData += 30*sizeof(sal_uInt8);
-    }
-
-    if (nDIBRemaining != m_pStream->ReadBytes(pPicData, nDIBRemaining))
+    m_pStream->Seek(nBmpPos);
+    if (nBmpLen != m_pStream->ReadBytes(pPicData + 14, nBmpLen))
         throw BadRead();
 }
 
