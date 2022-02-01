@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9623693f_42a136eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-01T10:48:49Z",
+      "side": 1,
+      "message": "Hmm, this is strange, I would expect rather this new version to cause static initialization, I don\u0027t see why a compiler would do that with a plain const variable. This is probably more a random band-aid that just happens to change what the compiler does.\n\n",
+      "revId": "d140817428cdbb519efa496f578bf6c054c94361",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
