@@ -123,7 +123,7 @@ InterpretedData DataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
+    return { { comphelper::containerToSequence( aSeriesVec ) }, xCategories };
 }
 
 InterpretedData DataInterpreter::interpretDataSource(
@@ -193,7 +193,7 @@ InterpretedData DataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    return InterpretedData( { comphelper::containerToSequence( aSeriesVec ) }, xCategories );
+    return { { comphelper::containerToSequence( aSeriesVec ) }, xCategories };
 }
 
 InterpretedData DataInterpreter::reinterpretDataSeries(
@@ -252,7 +252,7 @@ InterpretedData DataInterpreter::reinterpretDataSeries(
 
 // criterion: all series must have exactly one data::XLabeledDataSequence
 bool DataInterpreter::isDataCompatible(
-    const chart2::InterpretedData& aInterpretedData )
+    const InterpretedData& aInterpretedData )
 {
     const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
     for( Reference< XDataSeries > const & i : aSeries )

@@ -152,7 +152,7 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource(
 
         // modify diagram
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
-        chart2::InterpretedData aData(
+        InterpretedData aData(
             xInterpreter->interpretDataSource(
                 xDataSource, aArguments, Sequence< Reference< XDataSeries > >() ));
 
@@ -192,7 +192,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
 
         // chart-type specific interpretation of existing data series
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
-        chart2::InterpretedData aData;
+        InterpretedData aData;
         aData.Series = aSeriesSeq;
         aData.Categories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
 
@@ -258,7 +258,7 @@ void ChartTypeTemplate::changeDiagramData(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram );
         const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
-        chart2::InterpretedData aData =
+        InterpretedData aData =
             xInterpreter->interpretDataSource( xDataSource, aArguments, aFlatSeriesSeq );
 
         // data series
