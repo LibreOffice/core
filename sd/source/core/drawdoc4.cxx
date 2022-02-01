@@ -695,6 +695,8 @@ void SdDrawDocument::CreateDefaultCellStyles()
     aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::BOTTOM );
     aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::LEFT );
     aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::RIGHT );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::INSIDEH );
+    aBoxItem.SetLine( &aBorderLine, SvxBoxItemLine::INSIDEV );
 
     rISet.Put( aBoxItem );
 
