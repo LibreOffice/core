@@ -27,6 +27,8 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/salgtype.hxx>
 
+#include <test/GraphicsRenderTests.hxx>
+
 #include <premac.h>
 #include <SkRegion.h>
 #include <SkSurface.h>
@@ -133,10 +135,14 @@ inline bool isUnitTestRunning(const char* name = nullptr)
     if (name == nullptr)
     {
         static const char* const testname = getenv("LO_TESTNAME");
-        return testname != nullptr;
+        if (testname != nullptr)
+            return true;
+        return !vcl::test::activeGraphicsRenderTest().isEmpty();
     }
     const char* const testname = getenv("LO_TESTNAME");
-    return testname != nullptr && std::string_view(name) == testname;
+    if (testname != nullptr && std::string_view(name) == testname)
+        return true;
+    return vcl::test::activeGraphicsRenderTest().equalsAscii(name);
 }
 
 // Scaling done on the GPU is fast, but bicubic done in raster mode can be slow
