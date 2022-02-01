@@ -1107,21 +1107,16 @@ rtl::Reference<Svx3DExtrudeObject>
     return xShape;
 }
 
-SdrPathObj*
+rtl::Reference<SvxShapePolyPolygon>
         ShapeFactory::createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
-                    , bool bSetZOrderToZero )
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon )
 {
     if( !xTarget.is() )
         return nullptr;
 
     //create shape
     SdrPathObj* pPath = new SdrPathObj(xTarget->GetSdrObject()->getSdrModelFromSdrObject(), SdrObjKind::Polygon);
-    if (bSetZOrderToZero)
-        // insert at ZOrder 0, an area should always be behind other shapes
-        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath, 0);
-    else
-        xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath);
+    xTarget->GetSdrObject()->GetSubList()->InsertObject(pPath);
 
     //set properties
     try
@@ -1136,7 +1131,7 @@ SdrPathObj*
     {
         TOOLS_WARN_EXCEPTION("chart2", "" );
     }
-    return pPath;
+    return static_cast<SvxShapePolyPolygon*>(pPath->getUnoShape().get());
 }
 
 static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D& rPos
@@ -2466,14 +2461,6 @@ void ShapeFactory::makeShapeInvisible( const rtl::Reference< SvxShape >& xShape 
 }
 
 // set a name/CID at a shape (is used for selection handling)
-
-void ShapeFactory::setShapeName( SdrPathObj* pShape
-                               , const OUString& rName )
-{
-    if(!pShape)
-        return;
-    pShape->SetName(rName);
-}
 
 void ShapeFactory::setShapeName( const rtl::Reference< SvxShape >& xShape
                                , const OUString& rName )
