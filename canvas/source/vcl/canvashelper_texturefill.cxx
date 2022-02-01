@@ -154,6 +154,12 @@ namespace vclcanvas
             // 2 colors and 2 stops (at 0 and 1) is a linear gradient:
             if( rColors.size() == 2 && rValues.maStops.size() == 2 && rValues.maStops[0] == 0 && rValues.maStops[1] == 1)
             {
+                // tdf#144073: Note that the code below adjusts the gradient area this way.
+                // No, I have no idea why.
+                aLeftTop -= 2.0*nDiagonalLength*aDirection;
+                aLeftBottom -= 2.0*nDiagonalLength*aDirection;
+                aRightTop += 2.0*nDiagonalLength*aDirection;
+                aRightBottom += 2.0*nDiagonalLength*aDirection;
                 Gradient vclGradient( GradientStyle::Linear, rColors[ 0 ], rColors[ 1 ] );
                 ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
                 aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
@@ -173,6 +179,12 @@ namespace vclcanvas
                 && rValues.maStops.size() == 3 && rValues.maStops[0] == 0
                 && rValues.maStops[1] == 0.5 && rValues.maStops[2] == 1)
             {
+                // tdf#144073: Note that the code below adjusts the gradient area this way.
+                // No, I have no idea why.
+                aLeftTop -= 2.0*nDiagonalLength*aDirection;
+                aLeftBottom -= 2.0*nDiagonalLength*aDirection;
+                aRightTop += 2.0*nDiagonalLength*aDirection;
+                aRightBottom += 2.0*nDiagonalLength*aDirection;
                 Gradient vclGradient( GradientStyle::Axial, rColors[ 1 ], rColors[ 0 ] );
                 ::tools::Polygon aTempPoly( static_cast<sal_uInt16>(5) );
                 aTempPoly[0] = ::Point( ::basegfx::fround( aLeftTop.getX() ),
