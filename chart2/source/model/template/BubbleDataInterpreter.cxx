@@ -44,7 +44,7 @@ BubbleDataInterpreter::~BubbleDataInterpreter()
 }
 
 // ____ XDataInterpreter ____
-chart2::InterpretedData BubbleDataInterpreter::interpretDataSource(
+InterpretedData BubbleDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const std::vector< rtl::Reference< DataSeries > >& aSeriesToReUse )
@@ -146,11 +146,11 @@ chart2::InterpretedData BubbleDataInterpreter::interpretDataSource(
         aSeriesVec.push_back( xSeries );
     }
 
-    return InterpretedData( { comphelper::containerToSequence(aSeriesVec) }, xCategories );
+    return { { comphelper::containerToSequence(aSeriesVec) }, xCategories };
 }
 
-chart2::InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
-    const chart2::InterpretedData& aInterpretedData )
+InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
+    const InterpretedData& aInterpretedData )
 {
     InterpretedData aResult( aInterpretedData );
 
@@ -253,7 +253,7 @@ chart2::InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
 }
 
 bool BubbleDataInterpreter::isDataCompatible(
-    const chart2::InterpretedData& aInterpretedData )
+    const InterpretedData& aInterpretedData )
 {
     const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
     for( Reference< XDataSeries >  const & dataSeries : aSeries )

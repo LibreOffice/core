@@ -30,7 +30,7 @@ public:
 
 protected:
     // ____ DataInterpreter ____
-    virtual css::chart2::InterpretedData interpretDataSource(
+    virtual InterpretedData interpretDataSource(
         const css::uno::Reference<css::chart2::data::XDataSource>& xSource,
         const css::uno::Sequence<css::beans::PropertyValue>& aArguments,
         const std::vector<rtl::Reference<::chart::DataSeries>>& aSeriesToReUse) override;

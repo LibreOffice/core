@@ -21,7 +21,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/chart2/InterpretedData.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include "charttoolsdllapi.hxx"
@@ -31,6 +30,15 @@
 namespace chart
 {
 class DataSeries;
+
+/** offers tooling to interpret different data sources in a structural
+     and chart-type-dependent way.
+  */
+struct InterpretedData
+{
+    css::uno::Sequence< css::uno::Sequence< css::uno::Reference<css::chart2::XDataSeries> > > Series;
+    css::uno::Reference<css::chart2::data::XLabeledDataSequence> Categories;
+};
 
 /** offers tooling to interpret different data sources in a structural
     and chart-type-dependent way.
@@ -84,12 +92,12 @@ public:
             use all the data series given here for the result before
             creating new ones.
      */
-    css::chart2::InterpretedData interpretDataSource(
+    InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
         const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse );
 
-    virtual css::chart2::InterpretedData interpretDataSource(
+    virtual InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
         const std::vector< rtl::Reference< ::chart::DataSeries > >& aSeriesToReUse );
@@ -97,8 +105,8 @@ public:
     /** Re-interprets the data given in <code>aInterpretedData</code>
         while keeping the number of data series and the categories.
      */
-    virtual css::chart2::InterpretedData reinterpretDataSeries(
-        const css::chart2::InterpretedData& aInterpretedData );
+    virtual InterpretedData reinterpretDataSeries(
+        const InterpretedData& aInterpretedData );
 
     /** parses the given data and states, if a
         reinterpretDataSeries() call can be done
@@ -110,7 +118,7 @@ public:
             the one required is used as output of the data interpreter.
      */
     virtual bool isDataCompatible(
-        const css::chart2::InterpretedData& aInterpretedData );
+        const InterpretedData& aInterpretedData );
 
     /** Try to reverse the operation done in
         interpretDataSource().
@@ -120,7 +128,7 @@ public:
         the result of this method should be <code>xSource</code>.</p>
      */
     virtual css::uno::Reference< css::chart2::data::XDataSource > mergeInterpretedData(
-        const css::chart2::InterpretedData& aInterpretedData );
+        const InterpretedData& aInterpretedData );
 
     /** Get chart information that is specific to a particular chart
         type, by key.
