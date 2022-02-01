@@ -47,6 +47,72 @@ void SdPNGExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
+{
+    mxComponent
+        = loadFromDesktop(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf105998.odp"));
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG"))
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xShape);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+
+    // make sure only the shape is exported
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(192, 192), aSize);
+
+    // Check all borders are red
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+        {
+            const Color aColorTop = pReadAccess->GetColor(nX, 0);
+            const Color aColorBottom = pReadAccess->GetColor(nX, aSize.Height() - 1);
+
+            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorTop);
+
+            // Without the fix in place, this test would have failed with
+            // - Expected: Color: R:255 G:0 B:0 A:0
+            // - Actual  : Color: R:9 G:9 B:9 A:0
+            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorBottom);
+        }
+
+        for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
+        {
+            const Color aColorLeft = pReadAccess->GetColor(0, nY);
+            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorLeft);
+
+#if !defined(MACOSX)
+            // FIXME: Jenkins fails on mac with
+            // - Expected: Color: R:255 G:0 B:0 A:0
+            // - Actual  : Color: R:255 G:2 B:2 A:0
+
+            const Color aColorRight = pReadAccess->GetColor(aSize.Width() - 1, nY);
+            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorRight);
+#endif
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
 {
     mxComponent
