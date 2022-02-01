@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12928357_3e696aff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-01T14:21:40Z",
+      "side": 1,
+      "message": "Hi Miklos,\nI also have a patch for it: https://gerrit.libreoffice.org/c/core/+/129291",
+      "revId": "d8b577fe1447548b6ddfd9b852c93becb7b7dd84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
