@@ -25,6 +25,7 @@
 #include <svl/typedwhich.hxx>
 
 class OfaPtrItem;
+class OfaXColorListItem;
 class SdrAngleItem;
 class SfxBoolItem;
 class SfxInt32Item;
@@ -517,7 +518,7 @@ class XFillGradientItem;
 #define SID_SM_EDITOPTIONS                              ( SID_SVX_START + 436 )
 #define SID_SCH_EDITOPTIONS                             TypedWhichId<SvxChartColorTableItem>( SID_SVX_START + 437 )
 #define SID_SW_ONLINEOPTIONS                            ( SID_SVX_START + 439 )
-#define SID_GET_COLORLIST                               ( SID_SVX_START + 441 )
+#define SID_GET_COLORLIST                               TypedWhichId<OfaXColorListItem>( SID_SVX_START + 441 )
 #define SID_OUTLINE_TO_IMPRESS                          ( SID_SVX_START + 443 )
 #define SID_SPELLCHECKER_CHANGED                        ( SID_SVX_START + 446 )
 #define SID_SD_GRAPHIC_OPTIONS                          ( SID_SVX_START + 447 )
