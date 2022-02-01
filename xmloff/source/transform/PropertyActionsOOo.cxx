@@ -276,7 +276,7 @@ XMLTransformerActionInit const aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_WRAP, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_TRESHOLD, XML_ATACTION_COPY,
+//  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_THRESHOLD, XML_ATACTION_COPY,
 //      NO_PARAMS }, /* new attribute */
     { XML_NAMESPACE_STYLE, XML_NUMBER_WRAPPED_PARAGRAPHS, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
