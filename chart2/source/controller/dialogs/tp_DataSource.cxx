@@ -25,6 +25,7 @@
 #include <ChartTypeTemplate.hxx>
 #include <ChartModel.hxx>
 #include <RangeSelectionHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <DataSourceHelper.hxx>

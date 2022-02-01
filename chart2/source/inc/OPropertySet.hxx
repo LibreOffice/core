@@ -33,7 +33,7 @@
 namespace property
 {
 
-class SAL_DLLPUBLIC_RTTI OPropertySet :
+class OOO_DLLPUBLIC_CHARTTOOLS OPropertySet :
     public ::cppu::OBroadcastHelper,
     // includes beans::XPropertySet, XMultiPropertySet and XFastPropertySet
     public ::cppu::OPropertySetHelper,
@@ -161,7 +161,6 @@ public:
         getPropertyState( const OUString& PropertyName ) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
         getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
-    OOO_DLLPUBLIC_CHARTTOOLS
     virtual void SAL_CALL
         setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL

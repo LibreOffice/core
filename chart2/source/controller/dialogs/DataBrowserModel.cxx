@@ -24,6 +24,7 @@
 #include <ChartTypeManager.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <StatisticsHelper.hxx>
@@ -333,63 +334,57 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
     // only share "values-x" sequences. (TODO: simplify this logic).
     lcl_tSharedSeqVec aSharedSequences = lcl_getSharedSequences( xChartType->getDataSeries());
 
-    Reference<chart2::XDataSeries> xNewSeries =
+    rtl::Reference<::chart::DataSeries> xNewSeries =
         m_apDialogModel->insertSeriesAfter(xSeries, xChartType, true);
 
     if (!xNewSeries.is())
         // Failed to insert new data series to the model. Bail out.
         return;
 
-    Reference< chart2::data::XDataSource > xSource( xNewSeries, uno::UNO_QUERY );
-    if (xSource.is())
+    Sequence<Reference<chart2::data::XLabeledDataSequence> > aLSequences = xNewSeries->getDataSequences();
+    sal_Int32 nSeqIdx = 0;
+    sal_Int32 nSeqSize = aLSequences.getLength();
+    for (sal_Int32 nIndex = nStartCol; nSeqIdx < nSeqSize; ++nSeqIdx)
     {
-        Sequence<Reference<chart2::data::XLabeledDataSequence> > aLSequences = xSource->getDataSequences();
-        sal_Int32 nSeqIdx = 0;
-        sal_Int32 nSeqSize = aLSequences.getLength();
-        for (sal_Int32 nIndex = nStartCol; nSeqIdx < nSeqSize; ++nSeqIdx)
+        lcl_tSharedSeqVec::const_iterator aSharedIt(
+            std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
+                            lcl_RolesOfLSeqMatch( aLSequences[nSeqIdx] )));
+
+        if( aSharedIt != aSharedSequences.end())
         {
-            lcl_tSharedSeqVec::const_iterator aSharedIt(
-                std::find_if( aSharedSequences.begin(), aSharedSequences.end(),
-                                lcl_RolesOfLSeqMatch( aLSequences[nSeqIdx] )));
+            // Shared sequence. Most likely "values-x" sequence.  Copy it from existing sequence.
+            aLSequences[nSeqIdx]->setValues( (*aSharedIt)->getValues());
+            aLSequences[nSeqIdx]->setLabel( (*aSharedIt)->getLabel());
+        }
+        else
+        {
+            // Insert a new column in the internal data for the new sequence.
+            xDataProvider->insertSequence( nIndex - 1 );
 
-            if( aSharedIt != aSharedSequences.end())
-            {
-                // Shared sequence. Most likely "values-x" sequence.  Copy it from existing sequence.
-                aLSequences[nSeqIdx]->setValues( (*aSharedIt)->getValues());
-                aLSequences[nSeqIdx]->setLabel( (*aSharedIt)->getLabel());
-            }
-            else
-            {
-                // Insert a new column in the internal data for the new sequence.
-                xDataProvider->insertSequence( nIndex - 1 );
+            // values
+            Reference< chart2::data::XDataSequence > xNewSeq(
+                xDataProvider->createDataSequenceByRangeRepresentation(
+                    OUString::number( nIndex )));
+            lcl_copyDataSequenceProperties(
+                aLSequences[nSeqIdx]->getValues(), xNewSeq );
+            aLSequences[nSeqIdx]->setValues( xNewSeq );
 
-                // values
-                Reference< chart2::data::XDataSequence > xNewSeq(
-                    xDataProvider->createDataSequenceByRangeRepresentation(
-                        OUString::number( nIndex )));
-                lcl_copyDataSequenceProperties(
-                    aLSequences[nSeqIdx]->getValues(), xNewSeq );
-                aLSequences[nSeqIdx]->setValues( xNewSeq );
-
-                // labels
-                Reference< chart2::data::XDataSequence > xNewLabelSeq(
-                    xDataProvider->createDataSequenceByRangeRepresentation(
-                        "label " +
-                        OUString::number( nIndex )));
-                lcl_copyDataSequenceProperties(
-                    aLSequences[nSeqIdx]->getLabel(), xNewLabelSeq );
-                aLSequences[nSeqIdx]->setLabel( xNewLabelSeq );
-                ++nIndex;
-            }
+            // labels
+            Reference< chart2::data::XDataSequence > xNewLabelSeq(
+                xDataProvider->createDataSequenceByRangeRepresentation(
+                    "label " +
+                    OUString::number( nIndex )));
+            lcl_copyDataSequenceProperties(
+                aLSequences[nSeqIdx]->getLabel(), xNewLabelSeq );
+            aLSequences[nSeqIdx]->setLabel( xNewLabelSeq );
+            ++nIndex;
         }
     }
 
     if( nSeriesNumberFormat != 0 )
     {
         //give the new series the same number format as the former series especially for bubble charts thus the bubble size values can be edited with same format immediately
-        Reference< beans::XPropertySet > xNewSeriesProps( xNewSeries, uno::UNO_QUERY );
-        if( xNewSeriesProps.is() )
-            xNewSeriesProps->setPropertyValue(CHART_UNONAME_NUMFMT , uno::Any(nSeriesNumberFormat));
+        xNewSeries->setPropertyValue(CHART_UNONAME_NUMFMT , uno::Any(nSeriesNumberFormat));
     }
 
     updateFromModel();
