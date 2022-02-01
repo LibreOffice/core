@@ -196,7 +196,7 @@ item INT32                  SdrAngleItem; // derived from SfxInt32Item
 item INT16                  SdrTextFitToSizeTypeItem;  // enum
 item String                 SfxStringListItem;  // serialized into one concatenated string
 item double                 SvxDoubleItem;
-item String                 OfaRefItem;
+item String                 OfaXColorListItem;
 item String                 SvxDashListItem;
 item String                 SvxLineEndListItem;
 item String                 SvxColorListItem;
