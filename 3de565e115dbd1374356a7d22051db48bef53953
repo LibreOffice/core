@@ -34,6 +34,24 @@
       "parentUuid": "0bb97974_ca0f0d71",
       "revId": "3de565e115dbd1374356a7d22051db48bef53953",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7d114b6_837f5262",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-02-01T12:01:24Z",
+      "side": 1,
+      "message": "It is indeed very unlikely, that someone will enhance the text behavior. And in that case a new kind of UI would be needed anyway. So removing it totally is fine for me, although the original report is only about hiding the button.",
+      "parentUuid": "1197dfac_e6407ada",
+      "revId": "3de565e115dbd1374356a7d22051db48bef53953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
