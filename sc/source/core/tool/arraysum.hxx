@@ -14,7 +14,7 @@
 
 namespace sc::op
 {
-// Code must not be shared between different CPU instrinsics flags (e.g. in debug mode the compiler would not
+// Code must not be shared between different CPU intrinsics flags (e.g. in debug mode the compiler would not
 // inline them, and merge the copies, keeping only the one with the most demanding CPU set that's not available otherwise).
 // Put everything in a different namespace and additionally try to force inlining.
 namespace LO_ARRAYSUM_SPACE
