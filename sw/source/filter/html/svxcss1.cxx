@@ -539,6 +539,8 @@ SvxCSS1BorderInfo *SvxCSS1PropertyInfo::GetBorderInfo( SvxBoxItemLine nLine, boo
     case SvxBoxItemLine::BOTTOM:   nPos = 1;   break;
     case SvxBoxItemLine::LEFT:     nPos = 2;   break;
     case SvxBoxItemLine::RIGHT:    nPos = 3;   break;
+    case SvxBoxItemLine::INSIDEH:  nPos = 4;   break;
+    case SvxBoxItemLine::INSIDEV:  nPos = 5;   break;
     }
 
     if( !m_aBorderInfos[nPos] && bCreate )
@@ -2446,6 +2448,8 @@ static bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
         case SvxBoxItemLine::BOTTOM:   rPropInfo.m_nBottomBorderDistance = nDist;break;
         case SvxBoxItemLine::LEFT:     rPropInfo.m_nLeftBorderDistance = nDist;  break;
         case SvxBoxItemLine::RIGHT:    rPropInfo.m_nRightBorderDistance = nDist; break;
+        case SvxBoxItemLine::INSIDEH:  break;
+        case SvxBoxItemLine::INSIDEV:  break;
         }
     }
 

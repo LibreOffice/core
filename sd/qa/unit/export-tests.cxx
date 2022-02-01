@@ -585,7 +585,7 @@ void SdExportTest::testBnc480256()
     xCell.set(xTable->getCellByPosition(0, 1), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0xc6ddff), nColor);
-    xCell->getPropertyValue("TopBorder") >>= aBorderLine;
+    xCell->getPropertyValue("InsideHBorder") >>= aBorderLine;
     CPPUNIT_ASSERT_EQUAL(Color(0x5597d3), Color(ColorTransparency, aBorderLine.Color));
 
     pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(1));
@@ -604,7 +604,7 @@ void SdExportTest::testBnc480256()
 
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(ColorTransparency, aBorderLine.Color));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000000), Color(ColorTransparency, aBorderLine.Color));
 
     xDocShRef->DoClose();
 }

@@ -267,6 +267,8 @@ ImagePosition
 IncludeHiddenCells
 InputMessage
 InputTitle
+InsideHBorder
+InsideVBorder
 InterceptValue
 IsActive
 IsAdjustHeightEnabled
