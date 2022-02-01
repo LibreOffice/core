@@ -9690,37 +9690,36 @@ void ScInterpreter::ScSubstitute()
     }
     else
         nCnt = 0;
-    OUString sNewStr = GetString().getString();
-    OUString sOldStr = GetString().getString();
-    OUString sStr    = GetString().getString();
-    sal_Int32 nPos = 0;
+    const OUString sNewStr = GetString().getString();
+    const OUString sOldStr = GetString().getString();
+    const OUString sStr    = GetString().getString();
+    sal_Int32 nStartPos = 0, nEndPos = 0;
     sal_Int32 nCount = 0;
-    sal_Int32 nNewLen = sNewStr.getLength();
-    sal_Int32 nOldLen = sOldStr.getLength();
-    while( true )
+    OUStringBuffer sResult(sStr.getLength()
+                           + std::max(sNewStr.getLength() - sOldStr.getLength(), sal_Int32(0)));
+    while (nEndPos < sStr.getLength())
     {
-        nPos = sStr.indexOf( sOldStr, nPos );
-        if (nPos != -1)
+        nEndPos = sStr.indexOf(sOldStr, nEndPos);
+        if (nEndPos < 0)
+            nEndPos = sStr.getLength();
+
+        if (nCnt == 0 || ++nCount == nCnt || nEndPos == sStr.getLength())
         {
-            nCount++;
-            if( !nCnt || nCount == nCnt )
+            sResult.append(sStr.subView(nStartPos, nEndPos - nStartPos));
+            if (nEndPos < sStr.getLength())
             {
-                sStr = sStr.replaceAt(nPos,nOldLen, u"");
-                if ( CheckStringResultLen( sStr, sNewStr ) )
+                sResult.append(sNewStr);
+                nEndPos += sOldStr.getLength();
+                if (nCnt > 0 && nCount == nCnt)
                 {
-                    sStr = sStr.replaceAt(nPos, 0, sNewStr);
-                    nPos = sal::static_int_cast<sal_Int32>( nPos + nNewLen );
+                    sResult.append(sStr.subView(nEndPos, sStr.getLength() - nEndPos));
+                    nEndPos = sStr.getLength();
                 }
-                else
-                    break;
+                nStartPos = nEndPos;
             }
-            else
-                nPos++;
         }
-        else
-            break;
     }
-    PushString( sStr );
+    PushString(sResult.makeStringAndClear());
 }
 
 void ScInterpreter::ScRept()
