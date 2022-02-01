@@ -508,7 +508,7 @@ void asyncUpdateEditMode(FrameworkHelper* const pHelper, const EditMode eEMode)
 }
 
 void FrameworkHelper::HandleModeChangeSlot (
-    sal_uLong nSlotId,
+    sal_uInt16 nSlotId,
     SfxRequest const & rRequest)
 {
     if ( ! mxConfigurationController.is())
@@ -522,7 +522,7 @@ void FrameworkHelper::HandleModeChangeSlot (
         const SfxItemSet* pRequestArguments = rRequest.GetArgs();
         if (pRequestArguments)
         {
-            const SfxBoolItem* pIsActive = rRequest.GetArg<SfxBoolItem>(static_cast<sal_uInt16>(nSlotId));
+            const SfxBoolItem* pIsActive = rRequest.GetArg<SfxBoolItem>(nSlotId);
             if (!pIsActive->GetValue ())
             {
                 if (nSlotId == SID_NOTES_MASTER_MODE)
