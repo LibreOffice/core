@@ -1394,8 +1394,12 @@ void LwpDrawBitmap::Read()
 
     if (aInfoHeader2.nHeaderLen == sizeof(BmpInfoHeader))
     {
-        m_pStream->ReadUInt32( aInfoHeader2.nWidth );
-        m_pStream->ReadUInt32( aInfoHeader2.nHeight );
+        sal_uInt16 nTmp;
+
+        m_pStream->ReadUInt16( nTmp );
+        aInfoHeader2.nWidth = nTmp;
+        m_pStream->ReadUInt16( nTmp );
+        aInfoHeader2.nHeight = nTmp;
         m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
         m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
 
