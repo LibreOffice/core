@@ -502,7 +502,11 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     if (!pSelectionRectangles)
     {
         SfxLokHelper::notifyUpdate(GetShell()->GetSfxViewShell(),LOK_CALLBACK_TEXT_SELECTION);
-        SfxLokHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
+        // TODO FIX THIS:
+        // This is a temporary solution and we should use
+        // SfxLokHelper::notifyOtherViewsUpdatePerViewId(GetShell()->GetSfxViewShell(), LOK_CALLBACK_TEXT_VIEW_SELECTION);
+        // instead of this
+        GetShell()->GetSfxViewShell()->NotifyOtherViews(LOK_CALLBACK_TEXT_VIEW_SELECTION, "selection", sRect);
     }
     else
         pSelectionRectangles->push_back(sRect);
