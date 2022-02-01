@@ -1997,24 +1997,60 @@ void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& r
     }
 }
 
+static void lcl_assignUsed( BorderLine2& aLineOrig, BorderLine2 aLine)
+{
+    if(aLineOrig.Color == 0 && aLine.Color > 0)
+        aLineOrig.Color = aLine.Color;
+    if(aLineOrig.InnerLineWidth == 0 && aLine.InnerLineWidth > 0)
+        aLineOrig.InnerLineWidth = aLine.InnerLineWidth;
+    if(aLineOrig.OuterLineWidth == 0 && aLine.OuterLineWidth > 0)
+        aLineOrig.OuterLineWidth = aLine.OuterLineWidth;
+    if(aLineOrig.LineDistance == 0 && aLine.LineDistance > 0)
+        aLineOrig.LineDistance = aLine.LineDistance;
+    if(aLineOrig.LineStyle == 0 && aLine.LineStyle > 0)
+        aLineOrig.LineStyle = aLine.LineStyle;
+    if(aLineOrig.LineWidth== 0 && aLine.LineWidth > 0)
+        aLineOrig.LineWidth = aLine.LineWidth;
+}
+
 void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPropSet)
 {
-    BorderLine2 aBorderLine;
+    BorderLine2 aBorderLine, aInsideHBorderLine, aInsideVBorderLine;
 
 // lnL - Left Border Line Properties of table cell
     xCellPropSet->getPropertyValue("LeftBorder") >>= aBorderLine;
+    if(xCellPropSet->getPropertySetInfo()->hasPropertyByName("InsideVBorder"))
+    {
+        xCellPropSet->getPropertyValue("InsideVBorder") >>= aInsideVBorderLine;
+        lcl_assignUsed(aBorderLine, aInsideVBorderLine);
+    }
     WriteBorderLine( XML_lnL, aBorderLine );
 
 // lnR - Right Border Line Properties of table cell
     xCellPropSet->getPropertyValue("RightBorder") >>= aBorderLine;
+    if(xCellPropSet->getPropertySetInfo()->hasPropertyByName("InsideVBorder"))
+    {
+        xCellPropSet->getPropertyValue("InsideVBorder") >>= aInsideVBorderLine;
+        lcl_assignUsed(aBorderLine, aInsideVBorderLine);
+    }
     WriteBorderLine( XML_lnR, aBorderLine );
 
 // lnT - Top Border Line Properties of table cell
     xCellPropSet->getPropertyValue("TopBorder") >>= aBorderLine;
+    if(xCellPropSet->getPropertySetInfo()->hasPropertyByName("InsideHBorder"))
+    {
+        xCellPropSet->getPropertyValue("InsideHBorder") >>= aInsideHBorderLine;
+        lcl_assignUsed(aBorderLine, aInsideHBorderLine);
+    }
     WriteBorderLine( XML_lnT, aBorderLine );
 
 // lnB - Bottom Border Line Properties of table cell
     xCellPropSet->getPropertyValue("BottomBorder") >>= aBorderLine;
+    if(xCellPropSet->getPropertySetInfo()->hasPropertyByName("InsideHBorder"))
+    {
+        xCellPropSet->getPropertyValue("InsideHBorder") >>= aInsideHBorderLine;
+        lcl_assignUsed(aBorderLine, aInsideHBorderLine);
+    }
     WriteBorderLine( XML_lnB, aBorderLine );
 }
 

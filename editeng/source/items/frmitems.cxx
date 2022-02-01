@@ -1289,6 +1289,8 @@ SvxBoxItem::SvxBoxItem( const SvxBoxItem& rCpy ) :
     pBottom     ( rCpy.pBottom  ? new SvxBorderLine( *rCpy.pBottom ) : nullptr ),
     pLeft       ( rCpy.pLeft    ? new SvxBorderLine( *rCpy.pLeft )   : nullptr ),
     pRight      ( rCpy.pRight   ? new SvxBorderLine( *rCpy.pRight )  : nullptr ),
+    pInsideH    ( rCpy.pInsideH ? new SvxBorderLine( *rCpy.pInsideH ): nullptr ),
+    pInsideV    ( rCpy.pInsideV ? new SvxBorderLine( *rCpy.pInsideV ): nullptr ),
     nTopDist    ( rCpy.nTopDist ),
     nBottomDist ( rCpy.nBottomDist ),
     nLeftDist   ( rCpy.nLeftDist ),
@@ -1323,6 +1325,8 @@ boost::property_tree::ptree SvxBoxItem::dumpAsJSON() const
     aState.put("bottom", GetBottom() && !GetBottom()->isEmpty());
     aState.put("left", GetLeft() && !GetLeft()->isEmpty());
     aState.put("right", GetRight() && !GetRight()->isEmpty());
+    aState.put("insideH", GetInsideH() && !GetInsideH()->isEmpty());
+    aState.put("insideV", GetInsideV() && !GetInsideV()->isEmpty());
 
     aTree.push_back(std::make_pair("state", aState));
     aTree.put("commandName", ".uno:BorderOuter");
@@ -1355,7 +1359,9 @@ bool SvxBoxItem::operator==( const SfxPoolItem& rAttr ) const
         CmpBrdLn( pTop, rBoxItem.GetTop() )           &&
         CmpBrdLn( pBottom, rBoxItem.GetBottom() )     &&
         CmpBrdLn( pLeft, rBoxItem.GetLeft() )         &&
-        CmpBrdLn( pRight, rBoxItem.GetRight() ) );
+        CmpBrdLn( pRight, rBoxItem.GetRight() )       &&
+        CmpBrdLn( pInsideH, rBoxItem.GetInsideH() )   &&
+        CmpBrdLn( pInsideV, rBoxItem.GetInsideV() ) );
 }
 
 
@@ -1417,6 +1423,12 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         case MID_TOP_BORDER:
         case TOP_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
+            break;
+        case INSIDEH_BORDER:
+            aRetLine = SvxBoxItem::SvxLineToLine(GetInsideH(), bConvert);
+            break;
+        case INSIDEV_BORDER:
+            aRetLine = SvxBoxItem::SvxLineToLine(GetInsideV(), bConvert);
             break;
         case BORDER_DISTANCE:
             nDist = GetSmallestDistance();
@@ -1616,6 +1628,12 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case TOP_BORDER:
         case MID_TOP_BORDER:
             nLine = SvxBoxItemLine::TOP;
+            break;
+        case INSIDEH_BORDER:
+            nLine = SvxBoxItemLine::INSIDEH;
+            break;
+        case INSIDEV_BORDER:
+            nLine = SvxBoxItemLine::INSIDEV;
             break;
         case LINE_STYLE:
             {
@@ -1914,6 +1932,12 @@ const SvxBorderLine *SvxBoxItem::GetLine( SvxBoxItemLine nLine ) const
         case SvxBoxItemLine::RIGHT:
             pRet = pRight.get();
             break;
+        case SvxBoxItemLine::INSIDEH:
+            pRet = pInsideH.get();
+            break;
+        case SvxBoxItemLine::INSIDEV:
+            pRet = pInsideV.get();
+            break;
         default:
             OSL_FAIL( "wrong line" );
             break;
@@ -1940,6 +1964,12 @@ void SvxBoxItem::SetLine( const SvxBorderLine* pNew, SvxBoxItemLine nLine )
             break;
         case SvxBoxItemLine::RIGHT:
             pRight = std::move( pTmp );
+            break;
+        case SvxBoxItemLine::INSIDEH:
+            pInsideH = std::move( pTmp );
+            break;
+        case SvxBoxItemLine::INSIDEV:
+            pInsideV = std::move( pTmp );
             break;
         default:
             OSL_FAIL( "wrong line" );
