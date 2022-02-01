@@ -18,7 +18,7 @@
  */
 
 #include "bessel.hxx"
-
+#include <cmath>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -28,12 +28,6 @@ using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::sheet::NoConvergenceException;
 
 namespace sca::analysis {
-
-const double f_PI       = 3.1415926535897932385;
-const double f_PI_DIV_2 = f_PI / 2.0;
-const double f_PI_DIV_4 = f_PI / 4.0;
-const double f_2_DIV_PI = 2.0 / f_PI;
-
 
 // BESSEL J
 
@@ -77,7 +71,7 @@ double BesselJ( double x, sal_Int32 N )
     {
         if (!bAsymptoticPossible)
             throw NoConvergenceException();
-        return fSign * sqrt(f_2_DIV_PI/fX)* cos(fX-N*f_PI_DIV_2-f_PI_DIV_4);
+        return fSign * sqrt(M_2_PI/fX)* cos(fX-N*M_PI_2-M_PI_4);
     }
 
     double const epsilon = 1.0e-15; // relative error
@@ -330,7 +324,7 @@ static double Bessely0( double fX )
         throw IllegalArgumentException();
     const double fMaxIteration = 9000000.0; // should not be reached
     if (fX > 5.0e+6) // iteration is not considerable better then approximation
-        return sqrt(1/f_PI/fX)
+        return sqrt(1/M_PI/fX)
                 *(std::sin(fX)-std::cos(fX));
     const double epsilon = 1.0e-15;
     const double EulerGamma = 0.57721566490153286060;
@@ -370,7 +364,7 @@ static double Bessely0( double fX )
     while (!bHasFound && k<fMaxIteration);
     if (!bHasFound)
         throw NoConvergenceException(); // not likely to happen
-    return u*f_2_DIV_PI;
+    return u*M_2_PI;
 }
 
 // See #i31656# for a commented version of this implementation, attachment #desc6
@@ -384,7 +378,7 @@ static double Bessely1( double fX )
         throw IllegalArgumentException();
     const double fMaxIteration = 9000000.0; // should not be reached
     if (fX > 5.0e+6) // iteration is not considerable better then approximation
-        return - sqrt(1/f_PI/fX)
+        return - sqrt(1/M_PI/fX)
                 *(std::sin(fX)+std::cos(fX));
     const double epsilon = 1.0e-15;
     const double EulerGamma = 0.57721566490153286060;
@@ -426,7 +420,7 @@ static double Bessely1( double fX )
     while (!bHasFound && k<fMaxIteration);
     if (!bHasFound)
         throw NoConvergenceException();
-    return -u*2.0/f_PI;
+    return -u*2.0/M_PI;
 }
 
 double BesselY( double fNum, sal_Int32 nOrder )
