@@ -109,8 +109,8 @@ public:
                      MoveDirection eDirection );
 
     /// @return the newly inserted series
-    css::uno::Reference<
-            css::chart2::XDataSeries > insertSeriesAfter(
+    rtl::Reference<
+            ::chart::DataSeries > insertSeriesAfter(
                 const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
                 const rtl::Reference< ::chart::ChartType > & xChartType,
                 bool bCreateDataCachedSequences = false );
