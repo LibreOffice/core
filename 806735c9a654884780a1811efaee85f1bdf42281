@@ -16,6 +16,40 @@
       "message": "This can be pushed now.",
       "revId": "806735c9a654884780a1811efaee85f1bdf42281",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0d3641b_3b216485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-01T10:24:42Z",
+      "side": 1,
+      "message": "Looks good, see the inline comment for a nitpick.",
+      "revId": "806735c9a654884780a1811efaee85f1bdf42281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fe7b37f_23bbb9b1",
+        "filename": "include/oox/ole/vbamodule.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-01T10:24:42Z",
+      "side": 1,
+      "message": "Could you please add a one-liner comment on master to explain what is this? I would naively expect that a key binding is something that maps from a keyboard shortcut to some function. In fact we have an api key and a method name, so this feels like a good opportunity to document the struct. :-)",
+      "revId": "806735c9a654884780a1811efaee85f1bdf42281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
