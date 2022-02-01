@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4662ba9_d6b37fc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-01T10:44:05Z",
+      "side": 1,
+      "message": "Sorry, I was sick.\n\nThis code can be hot, so if exceptions add a cost this could be noticeable. I don\u0027t know how much, it\u0027d need profiling a document with a lot of text.\n",
+      "revId": "bc1b2b03718b596506db2acedd6dad10f489d9fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
