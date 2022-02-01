@@ -16,6 +16,23 @@
       "message": "Marco: Ping?\n",
       "revId": "fafd93980679033428cd4fdd49a80bfd4c8f740f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8c7f51a_83f6a168",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2022-02-01T20:44:12Z",
+      "side": 1,
+      "message": "Thanks, nice improvement!",
+      "revId": "fafd93980679033428cd4fdd49a80bfd4c8f740f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
