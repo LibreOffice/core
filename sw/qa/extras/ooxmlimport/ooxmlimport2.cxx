@@ -761,7 +761,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126114)
     load(mpTestDocumentPath, "tdf126114.docx");
     // The problem was that after the drop-down form field, also the placeholder string
     // was imported as text. Beside the duplication of the field, it also caused a crash.
-    CPPUNIT_ASSERT_EQUAL(7, getLength());
+    // the word is from replacement of the drop-down field in ModelToViewHelper
+    CPPUNIT_ASSERT_EQUAL(OUString("gehuwd\n"), getBodyText());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf127825)

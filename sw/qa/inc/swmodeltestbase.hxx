@@ -213,8 +213,10 @@ protected:
 
     void calcLayout();
 
-    /// Get the length of the whole document.
+    /// Get the length of the whole document. @deprecated why use this?
     int getLength() const;
+    /// Get the body text of the whole document.
+    OUString getBodyText() const;
 
     /// Get a family of styles, see com.sun.star.style.StyleFamilies for possible values.
     css::uno::Reference<css::container::XNameAccess> getStyles(const OUString& aFamily);
