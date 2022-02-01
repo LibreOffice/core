@@ -46,6 +46,26 @@ public:
     VirtualDevice& getContent();
     VirtualDevice& getTransparence();
 };
+
+class impBufferDevice2
+{
+    OutputDevice&                       mrOutDev;
+    VclPtr<VirtualDevice>               mpContent;
+    VclPtr<VirtualDevice>               mpMask;
+    VclPtr<VirtualDevice>               mpAlpha;
+    ::tools::Rectangle                  maDestPixel;
+
+public:
+    impBufferDevice2(
+        OutputDevice& rOutDev,
+        const basegfx::B2DRange& rRange);
+    ~impBufferDevice2();
+
+    void paint(double fTrans = 0.0);
+    bool isVisible() const { return !maDestPixel.IsEmpty(); }
+    VirtualDevice& getContent();
+    VirtualDevice& getTransparence();
+};
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

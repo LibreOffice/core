@@ -438,6 +438,126 @@ VirtualDevice& impBufferDevice::getTransparence()
 
     return *mpAlpha;
 }
+
+
+
+
+
+impBufferDevice2::impBufferDevice2(
+    OutputDevice& rOutDev,
+    const basegfx::B2DRange& rRange)
+:   mrOutDev(rOutDev),
+    mpContent(nullptr),
+    mpAlpha(nullptr)
+{
+    basegfx::B2DRange aRangePixel(rRange);
+    aRangePixel.transform(mrOutDev.GetViewTransformation());
+    const ::tools::Rectangle aRectPixel(
+        static_cast<sal_Int32>(floor(aRangePixel.getMinX())), static_cast<sal_Int32>(floor(aRangePixel.getMinY())),
+        static_cast<sal_Int32>(ceil(aRangePixel.getMaxX())), static_cast<sal_Int32>(ceil(aRangePixel.getMaxY())));
+    const Point aEmptyPoint;
+    maDestPixel = ::tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
+    maDestPixel.Intersection(aRectPixel);
+
+    if(isVisible())
+    {
+        mpContent = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), true);
+
+        // #i93485# assert when copying from window to VDev is used
+        const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
+        mrOutDev.EnableMapMode(false);
+        mpContent->DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), mrOutDev);
+        mrOutDev.EnableMapMode(bWasEnabledSrc);
+
+        MapMode aNewMapMode(mrOutDev.GetMapMode());
+
+        const Point aLogicTopLeft(mrOutDev.PixelToLogic(maDestPixel.TopLeft()));
+        aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
+
+        mpContent->SetMapMode(aNewMapMode);
+
+        // copy AA flag for new target
+        mpContent->SetAntialiasing(mrOutDev.GetAntialiasing());
+
+        // copy RasterOp (e.g. may be RasterOp::Xor on destination)
+        mpContent->SetRasterOp(mrOutDev.GetRasterOp());
+    }
+}
+
+impBufferDevice2::~impBufferDevice2()
+{
+    if(mpContent)
+    {
+        getVDevBuffer().free(*mpContent);
+    }
+
+    if(mpAlpha)
+    {
+        getVDevBuffer().free(*mpAlpha);
+    }
+}
+
+void impBufferDevice2::paint(double fTrans)
+{
+    if(isVisible())
+    {
+        const Point aEmptyPoint;
+        const Size aSizePixel(maDestPixel.GetSize());
+        const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
+
+        mrOutDev.EnableMapMode(false);
+        mpContent->EnableMapMode(false);
+
+        // during painting the buffer, disable evtl. set RasterOp (may be RasterOp::Xor)
+        const RasterOp aOrigRasterOp(mrOutDev.GetRasterOp());
+        mrOutDev.SetRasterOp(RasterOp::OverPaint);
+
+        if(mpAlpha)
+        {
+            mpAlpha->EnableMapMode(false);
+            const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
+
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+        }
+        else if(0.0 != fTrans)
+        {
+            sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
+            const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+        }
+        else
+        {
+            mrOutDev.DrawOutDev(maDestPixel.TopLeft(), aSizePixel,
+                                aEmptyPoint, aSizePixel,
+                                *mpContent);
+        }
+
+        mrOutDev.SetRasterOp(aOrigRasterOp);
+        mrOutDev.EnableMapMode(bWasEnabledDst);
+    }
+}
+
+VirtualDevice& impBufferDevice2::getContent()
+{
+    assert(mpContent && "impBufferDevice2: No content, check isVisible() before accessing (!)");
+    return *mpContent;
+}
+
+VirtualDevice& impBufferDevice2::getTransparence()
+{
+    if(!mpAlpha)
+    {
+        mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false);
+        mpAlpha->SetMapMode(mpContent->GetMapMode());
+
+        // copy AA flag for new target; masking needs to be smooth
+        mpAlpha->SetAntialiasing(mpContent->GetAntialiasing());
+    }
+
+    return *mpAlpha;
+}
 } // end of namespace drawinglayer
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
