@@ -317,6 +317,25 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
     xDocShRef->DoClose();
 }
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843_insideH.pptx"), PPTX);
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the fix, the test fails with:
+    //- Expected: 34
+    //- Actual  : 36
+    // We shouldn't see two vertical borders inside the table on ui.
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push", 34);
+    xDocShRef->DoClose();
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
