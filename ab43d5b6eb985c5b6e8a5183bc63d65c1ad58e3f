@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50c43487_2d7d7905",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-01T07:28:02Z",
+      "side": 1,
+      "message": "Mike: could you please review this? Thanks.\n\nAll 3 changes are just meant to expose the various PDF export parameters we already made public to extensions to be also accessible via the LOK API / cmdline convert-to. Once these are in, we could update https://www.collaboraoffice.com/document-conversion/ to advertise this tiny feature.\n\nSee https://github.com/CollaboraOnline/online/commit/4d6ca688f98d217866b9ea49113a356134dfba3a for the online side.\n\n(Originally I just did this for myself to help debugging a partial export bug, but it\u0027s a nice win for end-users as well, it seems to me.)",
+      "revId": "ab43d5b6eb985c5b6e8a5183bc63d65c1ad58e3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
