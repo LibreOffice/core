@@ -91,10 +91,7 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
     RadioBtnHdl(*mxRadioRestore);
 
     // Set URL for help button (module=safemode)
-    OUString lang = Application::GetSettings().GetUILanguageTag().getLanguage();
-    OUString sURL("https://libreoffice.cib.de");
-    sURL = sURL.replaceFirst("%1", lang);
-    mxBugLink->set_uri(sURL);
+    mxBugLink->set_uri("https://libreoffice.cib.de");
 
     mxUserProfileLink->set_uri(comphelper::BackupFileHelper::getUserProfileURL());
 }
