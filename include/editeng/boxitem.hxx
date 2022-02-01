@@ -38,7 +38,7 @@ namespace editeng { class SvxBorderLine; }
 */
 enum class SvxBoxItemLine
 {
-    TOP, BOTTOM, LEFT, RIGHT, LAST = RIGHT
+    TOP, BOTTOM, LEFT, RIGHT, INSIDEH, INSIDEV, LAST = INSIDEV
 };
 
 /**
@@ -58,7 +58,9 @@ class EDITENG_DLLPUBLIC SvxBoxItem final : public SfxPoolItem
                     pTop,
                     pBottom,
                     pLeft,
-                    pRight;
+                    pRight,
+                    pInsideH,
+                    pInsideV;
     sal_uInt16      nTopDist,
                     nBottomDist,
                     nLeftDist,
@@ -91,6 +93,8 @@ public:
     const   editeng::SvxBorderLine* GetBottom() const { return pBottom.get(); }
     const   editeng::SvxBorderLine* GetLeft()   const { return pLeft.get(); }
     const   editeng::SvxBorderLine* GetRight()  const { return pRight.get(); }
+    const   editeng::SvxBorderLine* GetInsideH() const { return pInsideH.get(); }
+    const   editeng::SvxBorderLine* GetInsideV() const { return pInsideV.get(); }
 
     const   editeng::SvxBorderLine* GetLine( SvxBoxItemLine nLine ) const;
 

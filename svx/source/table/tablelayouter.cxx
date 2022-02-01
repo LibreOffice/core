@@ -1105,6 +1105,7 @@ void TableLayouter::UpdateBorderLayout()
                 continue;
 
             const SvxBoxItem* pThisAttr = xCell->GetItemSet().GetItem<SvxBoxItem>( SDRATTR_TABLE_BORDER );
+
             OSL_ENSURE(pThisAttr,"sdr::table::TableLayouter::UpdateBorderLayout(), no border attribute?");
 
             if( !pThisAttr )
@@ -1124,6 +1125,11 @@ void TableLayouter::UpdateBorderLayout()
                 SetBorder( nCol, aPos.mnRow, true, pThisAttr->GetTop() );
                 SetBorder( nCol, nLastRow, true, pThisAttr->GetBottom() );
             }
+
+            if(aPos.mnRow != 0)
+                SetBorder(aPos.mnCol, aPos.mnRow, true, pThisAttr->GetInsideH());
+            if(aPos.mnCol != 0)
+                SetBorder(aPos.mnCol, aPos.mnRow, false, pThisAttr->GetInsideV());
         }
     }
 }

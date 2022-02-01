@@ -304,16 +304,34 @@ CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf146731)
     xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
 
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push", 6);
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/polyline", 0);
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[2]/polyline", 0);
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[3]/polyline[1]", "width", "187");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[4]/polyline[1]", "width", "187");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]", "width", "187");
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[6]/polyline[1]", "width", "187");
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: 30
-    // - Actual  : 187
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[6]/polyline[1]", "width", "30");
-    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[7]/polyline[1]", "width", "187");
+    xDocShRef->DoClose();
+}
 
+CPPUNIT_TEST_FIXTURE(SdLayoutTest, testTdf135843_InsideHBorders)
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf135843_insideH.pptx"), PPTX);
+
+    std::shared_ptr<GDIMetaFile> xMetaFile = xDocShRef->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = XmlTestTools::dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+    // Without the fix, the test fails with:
+    //- Expected: 34
+    //- Actual  : 36
+    // We shouldn't see two vertical borders inside the table on ui.
+
+    assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push", 34);
     xDocShRef->DoClose();
 }
 

@@ -92,6 +92,8 @@ static const SvxItemPropertySet* ImplGetSvxCellPropertySet()
         { u"BottomBorder",                 SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, BOTTOM_BORDER },
         { u"LeftBorder",                   SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, LEFT_BORDER },
         { u"RightBorder",                  SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, RIGHT_BORDER },
+        { u"InsideHBorder",                SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, INSIDEH_BORDER },
+        { u"InsideVBorder",                SDRATTR_TABLE_BORDER,           cppu::UnoType<BorderLine>::get(), 0, INSIDEV_BORDER },
         { u"RotateAngle",                  SDRATTR_TABLE_TEXT_ROTATION,    cppu::UnoType<sal_Int32>::get(), 0, 0 },
 
         SVX_UNOEDIT_OUTLINER_PROPERTIES,
