@@ -37,7 +37,6 @@ namespace com::sun::star::chart2 {
     class XDataSeriesContainer;
     class XDataSeries;
     class XChartType;
-    struct InterpretedData;
     namespace data {
         class XDataProvider;
         class XLabeledDataSequence;
@@ -46,10 +45,10 @@ namespace com::sun::star::chart2 {
 
 namespace chart
 {
-
 class ChartType;
 class ChartTypeTemplate;
 class DataSeries;
+struct InterpretedData;
 class RangeSelectionHelper;
 
 struct DialogModelTimeBasedInfo
@@ -168,7 +167,7 @@ private:
 
 private:
     void applyInterpretedData(
-        const css::chart2::InterpretedData & rNewData,
+        const InterpretedData & rNewData,
         const std::vector< rtl::Reference< ::chart::DataSeries > > & rSeriesToReUse );
 
     sal_Int32 countSeries() const;
