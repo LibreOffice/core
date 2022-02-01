@@ -2009,7 +2009,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/chart2,\
 	DataPointLabel \
 	FillBitmap \
 	IncrementData \
-	InterpretedData \
 	LegendPosition \
 	LightSource \
 	PieChartOffsetMode \
