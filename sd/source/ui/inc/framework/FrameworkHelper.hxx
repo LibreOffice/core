@@ -191,7 +191,7 @@ public:
     /** Process a slot call that requests a view shell change.
     */
     void HandleModeChangeSlot (
-        sal_uLong nSlotId,
+        sal_uInt16 nSlotId,
         SfxRequest const & rRequest);
 
     /** Run the given callback when the specified event is notified by the
