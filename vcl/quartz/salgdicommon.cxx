@@ -597,7 +597,7 @@ bool AquaSalGraphics::drawPolyLine(
     case basegfx::B2DLineJoin::Round: aCGLineJoin = kCGLineJoinRound; break;
     }
     // convert miter minimum angle to miter limit
-    CGFloat fCGMiterLimit = 1.0 / sin(std::min(fMiterMinimumAngle, 0.01 * M_PI) / 2.0);
+    CGFloat fCGMiterLimit = 1.0 / sin(std::max(fMiterMinimumAngle, 0.01 * M_PI) / 2.0);
     // setup cap attribute
     CGLineCap aCGLineCap(kCGLineCapButt);
 
