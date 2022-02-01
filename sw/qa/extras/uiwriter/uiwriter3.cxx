@@ -2077,7 +2077,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140731)
     Scheduler::ProcessEventsToIdle();
 
     SwEditShell* const pEditShell(pDoc->GetEditShell());
-    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(118),
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(120),
                          pEditShell->GetRedlineCount());
 
     //Removing all the redlines.
