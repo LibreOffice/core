@@ -50,6 +50,7 @@
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/graphicmimetype.hxx>
@@ -128,6 +129,7 @@ public:
     void testTdf103347();
     void testHyperlinksOnShapes();
     void testTdf112209();
+    void testBnc480256();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -192,6 +194,7 @@ public:
     CPPUNIT_TEST(testTdf103347);
     CPPUNIT_TEST(testHyperlinksOnShapes);
     CPPUNIT_TEST(testTdf112209);
+    CPPUNIT_TEST(testBnc480256);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1886,6 +1889,29 @@ void SdImportTest2::testTdf112209()
     // - Actual  : Color: R:21 G:170 B:236 A:0
     // i.e. the image color was blue instead of grey.
     CPPUNIT_ASSERT_EQUAL(Color(0x848484), aBitmap.GetPixelColor(0, 0));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testBnc480256()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/bnc480256-2.pptx"), PPTX);
+
+    const SdrPage* pPage = GetPage(1, xDocShRef);
+
+    sdr::table::SdrTableObj* pTableObj;
+    uno::Reference<table::XCellRange> xTable;
+    uno::Reference<beans::XPropertySet> xCell;
+    table::BorderLine2 aBorderLine;
+
+    pTableObj = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTableObj);
+    xTable.set(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+
+    xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
+    xCell->getPropertyValue("RightBorder") >>= aBorderLine;
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(ColorTransparency, aBorderLine.Color));
 
     xDocShRef->DoClose();
 }

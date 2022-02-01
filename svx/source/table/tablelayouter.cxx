@@ -1110,6 +1110,12 @@ void TableLayouter::UpdateBorderLayout()
             if( !pThisAttr )
                 continue;
 
+            if(aPos.mnRow != 0)
+                SetBorder(aPos.mnCol, aPos.mnRow, true, pThisAttr->GetInsideH());
+
+            if(aPos.mnCol != 0)
+                SetBorder(aPos.mnCol, aPos.mnRow, false, pThisAttr->GetInsideV());
+
             const sal_Int32 nLastRow = xCell->getRowSpan() + aPos.mnRow;
             const sal_Int32 nLastCol = xCell->getColumnSpan() + aPos.mnCol;
 
@@ -1124,6 +1130,7 @@ void TableLayouter::UpdateBorderLayout()
                 SetBorder( nCol, aPos.mnRow, true, pThisAttr->GetTop() );
                 SetBorder( nCol, nLastRow, true, pThisAttr->GetBottom() );
             }
+
         }
     }
 }
