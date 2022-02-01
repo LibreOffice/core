@@ -16,6 +16,24 @@
       "message": "This hides the button while my suggestion was to remove it from the UI and sources. It works like this but leaves codes that will never be used. Makes only sense if we are going to enable it later, IMO. Regina, what do you think?",
       "revId": "3de565e115dbd1374356a7d22051db48bef53953",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1197dfac_e6407ada",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-02-01T08:11:22Z",
+      "side": 1,
+      "message": "From what I understood, it was meant to be a temporary fix until a decision was made on it.",
+      "parentUuid": "0bb97974_ca0f0d71",
+      "revId": "3de565e115dbd1374356a7d22051db48bef53953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
