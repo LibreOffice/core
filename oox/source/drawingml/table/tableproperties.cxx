@@ -141,7 +141,8 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
     {
         sal_Int32 nColumn = 0;
         sal_Int32 nColumnSize = tableRow.getTableCells().size();
-        sal_Int32 nRemovedColumn = 0; //
+        sal_Int32 nRemovedColumn = 0;
+        sal_Int32 nRemovedRow = 0;
 
         for (sal_Int32 nColIndex = 0; nColIndex < nColumnSize; nColIndex++)
         {
@@ -167,6 +168,9 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
                         // props with pushToXCell.
                         bMerged = true;
                     }
+
+                    if (rTableCell.getRowSpan() > 1)
+                        nRemovedRow = (rTableCell.getRowSpan() - 1);
                 }
 
                 Reference<XCellRange> xCellRange(xTable, UNO_QUERY_THROW);
@@ -188,11 +192,17 @@ void TableProperties::pushToPropSet(const ::oox::core::XmlFilterBase& rFilterBas
                 else
                     xCell = xCellRange->getCellByPosition(nColumn, nRow);
 
+
+                sal_Int32 nMaxCol = tableRow.getTableCells().size() - nRemovedColumn - 1;
+                sal_Int32 nMaxRow =  mvTableRows.size() - nRemovedRow - 1;
+
                 rTableCell.pushToXCell(rFilterBase, pMasterTextListStyle, xCell, *this, rTableStyle,
-                                       nColumn, tableRow.getTableCells().size() - 1, nRow,
-                                       mvTableRows.size() - 1);
+                                       nColumn, nMaxCol, nRow, nMaxRow);
+
                 if (bMerged)
                     nColumn += nRemovedColumn;
+
+                nRemovedRow = 0;
             }
             ++nColumn;
         }

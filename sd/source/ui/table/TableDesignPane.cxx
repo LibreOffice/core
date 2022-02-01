@@ -688,6 +688,8 @@ static BitmapEx CreateDesignPreview( const Reference< XIndexAccess >& xTableStyl
                     case SvxBoxItemLine::BOTTOM: pVirDev->DrawLine( aPntBL, aPntBR ); break;
                     case SvxBoxItemLine::LEFT: pVirDev->DrawLine( aPntTL, aPntBL ); break;
                     case SvxBoxItemLine::RIGHT: pVirDev->DrawLine( aPntTR, aPntBR ); break;
+                    case SvxBoxItemLine::INSIDEH: break;
+                    case SvxBoxItemLine::INSIDEV: break;
                     }
                 }
             }
