@@ -301,6 +301,10 @@ namespace sw::mark {
         };
 
         /// Fieldmark representing a date form field.
+        /// TODO: this was an SDT in DOCX, which is modelled suboptimally here
+        /// as a fieldmark; as it cannot contain paragraph breaks, must be
+        /// well-formed XML element, and does not have field separator, it
+        /// should be a nesting text attribute similar to SwTextMeta.
         class DateFieldmark final
             : virtual public IDateFieldmark
             , public FieldmarkWithDropDownButton
