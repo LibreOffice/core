@@ -40,7 +40,6 @@ namespace com::sun::star::drawing { struct Position3D; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 namespace com::sun::star::drawing { struct Direction3D; }
-class SdrPathObj;
 
 namespace chart
 {
@@ -148,10 +147,9 @@ public:
                     , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
                     , double fDepth);
 
-    static SdrPathObj*
+    static rtl::Reference<SvxShapePolyPolygon>
         createArea2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon
-                    , bool bSetZOrderToZero = true);
+                    , const std::vector<std::vector<css::drawing::Position3D>>& rPolyPolygon);
 
     static rtl::Reference<SvxShapePolyPolygon>
         createSymbol2D( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
@@ -248,8 +246,6 @@ public:
     static void makeShapeInvisible( const rtl::Reference< SvxShape >& rShape );
 
     static void setShapeName( const rtl::Reference< SvxShape >& xShape
-            , const OUString& rName );
-    static void setShapeName( SdrPathObj* pPath
             , const OUString& rName );
 
     static OUString getShapeName( const css::uno::Reference< css::drawing::XShape >& xShape );

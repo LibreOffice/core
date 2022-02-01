@@ -22,33 +22,12 @@
 
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/BitmapMode.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/drawing/RectanglePoint.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
-#include <svx/svdopath.hxx>
-#include <svx/xfillit0.hxx>
-#include <svx/xflbckit.hxx>
-#include <svx/xflbmpit.hxx>
-#include <svx/xflbmsli.hxx>
-#include <svx/xflbmsxy.hxx>
-#include <svx/xflbmtit.hxx>
-#include <svx/xflboxy.hxx>
-#include <svx/xflbstit.hxx>
-#include <svx/xflbtoxy.hxx>
-#include <svx/xflclit.hxx>
-#include <svx/xfltrit.hxx>
-#include <svx/xlineit0.hxx>
-#include <svx/xlncapit.hxx>
-#include <svx/xlnclit.hxx>
-#include <svx/xlntrit.hxx>
-#include <svx/xlnwtit.hxx>
 
 namespace chart
 {
@@ -494,110 +473,6 @@ const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesPropert
         {"LineWidth",                    "BorderWidth"},
         {"LineCap",                      "LineCap"}};
     return s_aShapePropertyMapForFilledSeriesProperties;
-}
-
-void PropertyMapper::setPropertyNameMapForFilledSeriesProperties(SdrPathObj* pShape
-        , const uno::Reference< beans::XPropertySet >& xSource
-        , std::optional<sal_Int32> xFillColor)
-{
-    //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForFilledSeriesProperties{
-        {"FillBackground",               "FillBackground"},
-        {"FillBitmapName",               "FillBitmapName"},
-        {"FillColor",                    "Color"},
-        {"FillGradientName",             "GradientName"},
-        {"FillGradientStepCount",        "GradientStepCount"},
-        {"FillHatchName",                "HatchName"},
-        {"FillStyle",                    "FillStyle"},
-        {"FillTransparence",             "Transparency"},
-        {"FillTransparenceGradientName", "TransparencyGradientName"},
-        //bitmap properties
-        {"FillBitmapMode",               "FillBitmapMode"},
-        {"FillBitmapSizeX",              "FillBitmapSizeX"},
-        {"FillBitmapSizeY",              "FillBitmapSizeY"},
-        {"FillBitmapLogicalSize",        "FillBitmapLogicalSize"},
-        {"FillBitmapOffsetX",            "FillBitmapOffsetX"},
-        {"FillBitmapOffsetY",            "FillBitmapOffsetY"},
-        {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
-        {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
-        {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"},
-        //line properties
-        {"LineColor",                    "BorderColor"},
-        {"LineDashName",                 "BorderDashName"},
-        {"LineStyle",                    "BorderStyle"},
-        {"LineTransparence",             "BorderTransparency"},
-        {"LineWidth",                    "BorderWidth"},
-        {"LineCap",                      "LineCap"}};
-    std::optional<SfxItemSet> xOptionSet;
-    for (auto const& elem : s_aShapePropertyMapForFilledSeriesProperties)
-    {
-        const OUString & rSource = elem.second;
-        try
-        {
-            uno::Any aAny( xSource->getPropertyValue(rSource) );
-            //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
-            if( !aAny.hasValue() )
-                continue;
-            if (!xOptionSet)
-                xOptionSet.emplace(pShape->GetObjectItemPool());
-            if (rSource == "FillBackground")
-                xOptionSet->Put(XFillBackgroundItem(aAny.get<bool>()));
-            else if (rSource == "Color")
-                xOptionSet->Put(XFillColorItem(OUString(), Color(ColorTransparency, aAny.get<sal_Int32>())));
-            else if (rSource == "FillStyle")
-                xOptionSet->Put(XFillStyleItem(aAny.get<css::drawing::FillStyle>()));
-            else if (rSource == "Transparency")
-                xOptionSet->Put(XFillTransparenceItem(aAny.get<sal_uInt16>()));
-            else if (rSource == "FillBitmapMode")
-            {
-                drawing::BitmapMode aMode;
-                aAny >>= aMode;
-                xOptionSet->Put( XFillBmpTileItem( aMode == drawing::BitmapMode_REPEAT ) );
-                xOptionSet->Put( XFillBmpStretchItem( aMode == drawing::BitmapMode_STRETCH ) );
-            }
-            else if (rSource == "FillBitmapSizeX")
-                xOptionSet->Put(XFillBmpSizeXItem(aAny.get<sal_Int32>()));
-            else if (rSource == "FillBitmapSizeY")
-                xOptionSet->Put(XFillBmpSizeYItem(aAny.get<sal_Int32>()));
-            else if (rSource == "FillBitmapLogicalSize")
-                xOptionSet->Put(XFillBmpSizeLogItem(aAny.get<bool>()));
-            else if (rSource == "FillBitmapPositionOffsetX")
-                xOptionSet->Put(XFillBmpPosOffsetXItem(aAny.get<sal_Int32>()));
-            else if (rSource == "FillBitmapPositionOffsetY")
-                xOptionSet->Put(XFillBmpPosOffsetYItem(aAny.get<sal_Int32>()));
-            else if (rSource == "FillBitmapRectanglePoint")
-                xOptionSet->Put(XFillBmpPosItem(static_cast<RectPoint>(aAny.get<css::drawing::RectanglePoint>())));
-            else if (rSource == "FillBitmapOffsetX")
-                xOptionSet->Put(XFillBmpTileOffsetXItem(aAny.get<sal_Int32>()));
-            else if (rSource == "FillBitmapOffsetY")
-                xOptionSet->Put(XFillBmpTileOffsetYItem(aAny.get<sal_Int32>()));
-            else if (rSource == "BorderColor")
-                xOptionSet->Put(XLineColorItem(OUString(), Color(ColorTransparency, aAny.get<sal_Int32>())));
-            else if (rSource == "BorderStyle")
-                xOptionSet->Put(XLineStyleItem(aAny.get<css::drawing::LineStyle>()));
-            else if (rSource == "BorderTransparency")
-                xOptionSet->Put(XLineTransparenceItem(aAny.get<sal_uInt16>()));
-            else if (rSource == "BorderWidth")
-                xOptionSet->Put(XLineWidthItem(aAny.get<sal_Int32>()));
-            else if (rSource == "LineCap")
-                xOptionSet->Put(XLineCapItem(aAny.get<css::drawing::LineCap>()));
-            else
-                SAL_WARN("chart2", "forgot this one " << rSource);
-        }
-        catch( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION("chart2", "" );
-        }
-    }
-    if (xFillColor)
-    {
-        if (!xOptionSet)
-            xOptionSet.emplace(pShape->GetObjectItemPool());
-        xOptionSet->Put(XFillColorItem(OUString(), Color(ColorTransparency, *xFillColor)));
-    }
-    if (xOptionSet)
-        pShape->GetProperties().SetObjectItemSet(*xOptionSet);
-
 }
 
 void PropertyMapper::setMultiProperties(
