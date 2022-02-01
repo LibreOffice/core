@@ -1372,7 +1372,8 @@ std::shared_ptr<SalBitmap> SkiaSalGraphicsImpl::getBitmap(tools::Long nX, tools:
             // Some tests require exact pixel values and would be confused by smooth-scaling.
             // And some draw something smooth and not smooth-scaling there would break the checks.
             if (isUnitTestRunning("BackendTest__testDrawHaflEllipseAAWithPolyLineB2D_")
-                || isUnitTestRunning("BackendTest__testDrawRectAAWithLine_"))
+                || isUnitTestRunning("BackendTest__testDrawRectAAWithLine_")
+                || isUnitTestRunning("GraphicsRenderTest__testDrawRectAAWithLine"))
             {
                 bitmap->Scale(1.0 / mScaling, 1.0 / mScaling, goodScalingQuality());
             }
