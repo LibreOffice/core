@@ -10,6 +10,7 @@
 #include <swmodeltestbase.hxx>
 
 #include <svx/svdpage.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
@@ -17,6 +18,10 @@
 #include <wrtsh.hxx>
 #include <frameformats.hxx>
 #include <textboxhelper.hxx>
+
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/table/BorderLine2.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/draw/data/";
 
@@ -96,6 +101,44 @@ CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTextboxUndoOrdNum)
         // i.e. the fly format was behind the draw format, not visible.
         CPPUNIT_ASSERT_EQUAL(nDrawOrdNum + 1, nFlyOrdNum);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDrawTest, testTdf107727FrameBorder)
+{
+    // Load a document with a textframe without border, one with only left border
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf107727_FrameBorder.odt";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
+
+    // Export to RTF and reload
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("Rich Text Format");
+    xStorable->storeToURL(aTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+    mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument", {});
+
+    // Get frame without border and inspect it.
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrame0(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    auto aBorder = getProperty<table::BorderLine2>(xFrame0, "LeftBorder");
+    // fo:border="none" is not available via API, and aBorder.LineWidth has wrong value (why?).
+    sal_uInt32 nBorderWidth
+        = aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance;
+    // Without patch it failed with Expected 0, Actual 26
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(0), nBorderWidth);
+
+    // Get frame with left border and inspect it.
+    uno::Reference<beans::XPropertySet> xFrame1(xIndexAccess->getByIndex(1), uno::UNO_QUERY);
+    aBorder = getProperty<table::BorderLine2>(xFrame1, "LeftBorder");
+    // Without patch it failed with Expected 127, Actual 26. Default border width was used.
+    nBorderWidth = aBorder.OuterLineWidth + aBorder.InnerLineWidth + aBorder.LineDistance;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(127), nBorderWidth);
+    // Without patch it failed with Expected Color: R:0 G:0 B:255 A:0, Actual Color: R:0 G:0 B:0 A:0.
+    // Default border color was used.
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), Color(ColorTransparency, aBorder.Color));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
