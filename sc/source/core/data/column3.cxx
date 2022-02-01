@@ -1023,7 +1023,7 @@ void ScColumn::DeleteArea(
     if ( nDelFlag & InsertDeleteFlags::EDITATTR )
     {
         OSL_ENSURE( nContFlag == InsertDeleteFlags::NONE, "DeleteArea: Wrong Flags" );
-        RemoveEditAttribs( nStartRow, nEndRow );
+        RemoveEditAttribs(aBlockPos, nStartRow, nEndRow);
     }
 
     // Delete attributes just now
