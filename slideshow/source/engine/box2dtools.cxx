@@ -387,7 +387,7 @@ void box2DWorld::processUpdateQueue(const double fPassedTime)
     }
 }
 
-void box2DWorld::initateAllShapesAsStaticBodies(
+void box2DWorld::initiateAllShapesAsStaticBodies(
     const slideshow::internal::ShapeManagerSharedPtr& pShapeManager)
 {
     assert(mpBox2DWorld);
@@ -592,7 +592,7 @@ void box2DWorld::alertPhysicsAnimationStart(
         initiateWorld(rSlideSize);
 
     if (!mbShapesInitialized)
-        initateAllShapesAsStaticBodies(pShapeManager);
+        initiateAllShapesAsStaticBodies(pShapeManager);
 
     mnPhysicsAnimationCounter++;
 }
