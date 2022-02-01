@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56a60e15_0ae87067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-01T10:36:01Z",
+      "side": 1,
+      "message": "@Xisco: I\u0027m sorry, you were faster, than me, and I didn\u0027t notice your back-port. :) Thanks for it!",
+      "revId": "f7dbd265f7cbe5333268140aada296ff38efdbf2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
