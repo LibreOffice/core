@@ -80,6 +80,30 @@
       },
       "revId": "493a916a3113e877835c9bc7c93faef0d29f9a33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51897d72_8bbe490b",
+        "filename": "sw/source/core/text/porfly.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-01T16:09:13Z",
+      "side": 1,
+      "message": "I appreciate you looking into this, thanks.",
+      "parentUuid": "16884477_c8b04651",
+      "range": {
+        "startLine": 378,
+        "startChar": 12,
+        "endLine": 378,
+        "endChar": 52
+      },
+      "revId": "493a916a3113e877835c9bc7c93faef0d29f9a33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
