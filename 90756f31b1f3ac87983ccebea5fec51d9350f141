@@ -16,6 +16,24 @@
       "message": "This cast is not needed. Please remove it.",
       "revId": "90756f31b1f3ac87983ccebea5fec51d9350f141",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73e78da4_b40c0d3d",
+        "filename": "chart2/qa/extras/chart2export.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 935,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-01T16:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e8969ab_0a3a7c54",
+      "revId": "90756f31b1f3ac87983ccebea5fec51d9350f141",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
