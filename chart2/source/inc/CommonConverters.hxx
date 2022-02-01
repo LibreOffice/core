@@ -29,7 +29,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/vector/b3dvector.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::awt { struct Rectangle; }
