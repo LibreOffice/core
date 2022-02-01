@@ -5358,14 +5358,14 @@ void SwFrame::PaintSwFrameShadowAndBorder(
             pBottomBorder = aAccess.Get()->GetBox().GetBottom();
         }
 
-        bool bWordTableCell = false;
+        bool bWordBorder = false;
         SwViewShell* pShell = getRootFrame()->GetCurrShell();
         if (pShell)
         {
             const IDocumentSettingAccess& rIDSA = pShell->GetDoc()->getIDocumentSettingAccess();
-            bWordTableCell = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
+            bWordBorder = rIDSA.get(DocumentSettingId::TABLE_ROW_KEEP);
         }
-        bool bInWordTableCell = IsContentFrame() && GetUpper()->IsCellFrame() && bWordTableCell;
+        bool bInWordTableCell = IsContentFrame() && GetUpper()->IsCellFrame() && bWordBorder;
         if (bInWordTableCell)
         {
             // Compat mode: don't paint bottom border if we know the bottom of the content was cut
@@ -5385,8 +5385,21 @@ void SwFrame::PaintSwFrameShadowAndBorder(
                     aRect.Width(), aRect.Height(),
                     aRect.Left(), aRect.Top()));
             const svx::frame::Style aStyleTop(pTopBorder, 1.0);
-            const svx::frame::Style aStyleRight(pRightBorder, 1.0);
-            const svx::frame::Style aStyleBottom(pBottomBorder, 1.0);
+            svx::frame::Style aStyleRight(pRightBorder, 1.0);
+
+            // Right/bottom page borders are always mirrored in Word.
+            if (IsPageFrame() && bWordBorder)
+            {
+                aStyleRight.MirrorSelf();
+            }
+
+            svx::frame::Style aStyleBottom(pBottomBorder, 1.0);
+
+            if (IsPageFrame() && bWordBorder)
+            {
+                aStyleBottom.MirrorSelf();
+            }
+
             const svx::frame::Style aStyleLeft(pLeftBorder, 1.0);
             drawinglayer::primitive2d::Primitive2DContainer aBorderLineTarget;
 
