@@ -549,10 +549,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SEND_FEEDBACK:
         {
-            OUString lang = Application::GetSettings().GetUILanguageTag().getLanguage();
-            OUString sURL("https://libreoffice.cib.de/support_%1.html");
-            sURL = sURL.replaceFirst("%1", lang);
-            sfx2::openUriExternally(sURL, false);
+            sfx2::openUriExternally("https://libreoffice.cib.de", false);
             break;
         }
         case SID_DOCUMENTATION:

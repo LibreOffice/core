@@ -92,7 +92,7 @@ SafeModeDialog::SafeModeDialog(weld::Window* pParent)
 
     // Set URL for help button (module=safemode)
     OUString lang = Application::GetSettings().GetUILanguageTag().getLanguage();
-    OUString sURL("https://libreoffice.cib.de/support_%1.html&LOmodule=safemode");
+    OUString sURL("https://libreoffice.cib.de");
     sURL = sURL.replaceFirst("%1", lang);
     mxBugLink->set_uri(sURL);
 
