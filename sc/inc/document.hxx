@@ -557,6 +557,7 @@ private:
     bool mbEmbedFontScriptLatin : 1;
     bool mbEmbedFontScriptAsian : 1;
     bool mbEmbedFontScriptComplex : 1;
+    bool mbForceRowHeightRecalc : 1;
 
     sal_Int32 mnImagePreferredDPI;
 
@@ -578,12 +579,14 @@ public:
     bool IsEmbedFontScriptLatin() const { return mbEmbedFontScriptLatin; }
     bool IsEmbedFontScriptAsian() const { return mbEmbedFontScriptAsian; }
     bool IsEmbedFontScriptComplex() const { return mbEmbedFontScriptComplex; }
+    bool IsForceRowHeightRecalc() const { return mbForceRowHeightRecalc; }
 
     void SetEmbedFonts(bool bUse) { mbEmbedFonts = bUse; }
     void SetEmbedUsedFontsOnly(bool bUse) { mbEmbedUsedFontsOnly = bUse; }
     void SetEmbedFontScriptLatin(bool bUse) { mbEmbedFontScriptLatin = bUse; }
     void SetEmbedFontScriptAsian(bool bUse) { mbEmbedFontScriptAsian = bUse; }
     void SetEmbedFontScriptComplex(bool bUse) { mbEmbedFontScriptComplex = bUse; }
+    void SetForceRowHeightRecalc(bool bUse) { mbForceRowHeightRecalc = bUse; }
 
     void SetImagePreferredDPI(sal_Int32 nValue) { mnImagePreferredDPI = nValue; }
     sal_Int32 GetImagePreferredDPI() { return mnImagePreferredDPI; }

@@ -91,6 +91,7 @@ static const SfxItemPropertyMapEntry* lcl_GetConfigPropertyMap()
         { SC_UNO_EMBED_FONT_SCRIPT_COMPLEX, 0,  cppu::UnoType<bool>::get(), 0, 0},
         { SC_UNO_IMAGE_PREFERRED_DPI,       0,  cppu::UnoType<sal_Int32>::get(), 0, 0},
         { SC_UNO_SYNTAXSTRINGREF, 0,  cppu::UnoType<sal_Int16>::get(),     0, 0},
+        { SC_UNO_FORCEROWHEIGHTRECALC,      0,  cppu::UnoType<bool>::get(), 0, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aConfigPropertyMap_Impl;
@@ -404,6 +405,11 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             rDoc.SetImagePreferredDPI(aValue.get<sal_Int32>());
         }
     }
+    else if (aPropertyName == SC_UNO_FORCEROWHEIGHTRECALC)
+    {
+        bool bVal = aValue.has<bool>() && aValue.get<bool>();
+        rDoc.SetForceRowHeightRecalc(bVal);
+    }
     else
     {
         ScGridOptions aGridOpt(aViewOpt.GetGridOptions());
@@ -610,6 +616,8 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
     {
         aRet <<= rDoc.GetImagePreferredDPI();
     }
+    else if (aPropertyName == SC_UNO_FORCEROWHEIGHTRECALC)
+        aRet <<= rDoc.IsForceRowHeightRecalc();
     else
     {
         const ScGridOptions& aGridOpt = aViewOpt.GetGridOptions();

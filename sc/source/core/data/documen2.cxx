@@ -177,6 +177,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbEmbedFontScriptLatin(true),
         mbEmbedFontScriptAsian(true),
         mbEmbedFontScriptComplex(true),
+        mbForceRowHeightRecalc(false),
         mnImagePreferredDPI(0),
         mbTrackFormulasPending(false),
         mbFinalTrackFormulas(false),

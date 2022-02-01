@@ -528,7 +528,7 @@ inline constexpr OUStringLiteral SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER = 
 #define SC_UNO_RECORDCHANGES            "RecordChanges"
 #define SC_UNO_ISRECORDCHANGESPROTECTED "IsRecordChangesProtected"
 #define SC_UNO_SYNTAXSTRINGREF          "SyntaxStringRef"
-
+#define SC_UNO_FORCEROWHEIGHTRECALC     "ForceRowHeightRecalc"
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"

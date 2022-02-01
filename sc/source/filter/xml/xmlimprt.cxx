@@ -1421,7 +1421,7 @@ void SAL_CALL ScXMLImport::endDocument()
         }
 
         // There are rows with optimal height which need to be updated
-        if (pDoc && !maRecalcRowRanges.empty())
+        if (pDoc && pDoc->IsForceRowHeightRecalc() && !maRecalcRowRanges.empty())
         {
             bool bLockHeight = pDoc->IsAdjustHeightLocked();
             if (bLockHeight)
@@ -1437,6 +1437,8 @@ void SAL_CALL ScXMLImport::endDocument()
             {
                 pDoc->LockAdjustHeight();
             }
+            // TODO: since row height is recalculated, we can disable this flag?
+            pDoc->SetForceRowHeightRecalc(false);
         }
 
         // Initialize and set position and size of objects
