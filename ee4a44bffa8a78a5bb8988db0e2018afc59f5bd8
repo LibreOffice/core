@@ -16,6 +16,23 @@
       "message": "It seems to me there could be (or maybe there already is?) some more general \u0027isDirty\u0027 flag, triggering *complete recalc* on load; that would be saner, as generated documents likely need not only row height recalc, but also formulas, etc. The row height recalc is often ~same as full recalc - so it would not be worse UX-wise, but more consistent. What do you think?",
       "revId": "ee4a44bffa8a78a5bb8988db0e2018afc59f5bd8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0ad8bb6_22b6b5f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-01T21:12:49Z",
+      "side": 1,
+      "message": "Isn\u0027t the underlying problem that too many rows need height calculation? Why are all rows flagged such recalculated at once? Why not on reaching their view?\n\nIf whether formula cells are recalculated or not is part of the problem, make sure that not the entire document is recalculated.\n\nFor a general approach see also sc/source/filter/oox/workbookfragment.cxx WorkbookFragment::recalcFormulaCells() where getDocImport().broadcastRecalcAfterImport() is called for partial recalculation and where that ends up when actually calculating. The row height when necessary should be part of that as to calculate it formulas when dirty need to be calculated.\n",
+      "revId": "ee4a44bffa8a78a5bb8988db0e2018afc59f5bd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
