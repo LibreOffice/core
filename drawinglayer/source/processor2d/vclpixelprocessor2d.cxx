@@ -67,6 +67,7 @@
 
 #include <svtools/optionsdrawinglayer.hxx>
 #include <vcl/gradient.hxx>
+#include <tools/time.hxx>
 
 using namespace com::sun::star;
 
@@ -1271,6 +1272,11 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
         return;
     }
 
+
+sal_uInt64 nTimeA(0);
+sal_uInt64 nTimeB(0);
+{
+    const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
     impBufferDevice aBufferDevice(*mpOutputDevice, aMaskRange);
 
     if (!aBufferDevice.isVisible())
@@ -1302,6 +1308,44 @@ void VclPixelProcessor2D::processPatternFillPrimitive2D(
 
     // dump buffer to outdev
     aBufferDevice.paint();
+    nTimeA = tools::Time::GetSystemTicks() - nStartTime;
+}
+{
+    const sal_uInt64 nStartTime(tools::Time::GetSystemTicks());
+    impBufferDevice2 aBufferDevice(*mpOutputDevice, aMaskRange);
+
+    if (!aBufferDevice.isVisible())
+        return;
+
+    // remember last OutDev and set to content
+    OutputDevice* pLastOutputDevice = mpOutputDevice;
+    mpOutputDevice = &aBufferDevice.getContent();
+
+    // if the tile is a single pixel big, just flood fill with that pixel color
+    if (nTileWidth == 1 && nTileHeight == 1)
+    {
+        Color col = aTileImage.GetPixelColor(0, 0);
+        mpOutputDevice->SetLineColor(col);
+        mpOutputDevice->SetFillColor(col);
+        mpOutputDevice->DrawRect(aMaskRect);
+    }
+    else
+        mpOutputDevice->DrawWallpaper(aMaskRect, Wallpaper(aTileImage));
+
+    // back to old OutDev
+    mpOutputDevice = pLastOutputDevice;
+
+    // draw mask
+    VirtualDevice& rMask = aBufferDevice.getTransparence();
+    rMask.SetLineColor();
+    rMask.SetFillColor(COL_BLACK);
+    rMask.DrawPolyPolygon(aMask);
+
+    // dump buffer to outdev
+    aBufferDevice.paint();
+    nTimeB = tools::Time::GetSystemTicks() - nStartTime;
+}
+SAL_WARN("drawinglayer", "Now: " << nTimeA << " Former: " << nTimeB << " It got " << ((nTimeA > nTimeB) ? "WORSE" : "BETTER"));
 }
 
 } // end of namespace

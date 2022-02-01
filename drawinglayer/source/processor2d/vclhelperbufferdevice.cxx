@@ -276,6 +276,248 @@ void VDevBuffer::Invoke()
         maFreeBuffers.pop_back();
     }
 }
+
+
+
+
+
+
+
+class VDevBuffer2 : public Timer, protected cppu::BaseMutex
+{
+private:
+    struct Entry
+    {
+        VclPtr<VirtualDevice> buf;
+        bool isTransparent = false;
+        Entry(const VclPtr<VirtualDevice>& vdev, bool bTransparent)
+            : buf(vdev)
+            , isTransparent(bTransparent)
+        {
+        }
+    };
+
+    // available buffers
+    std::vector<Entry> maFreeBuffers;
+
+    // allocated/used buffers (remembered to allow deleting them in destructor)
+    std::vector<Entry> maUsedBuffers;
+
+    // remember what outputdevice was the template passed to VirtualDevice::Create
+    // so we can test if that OutputDevice was disposed before reusing a
+    // virtualdevice because that isn't safe to do at least for Gtk2
+    std::map<VclPtr<VirtualDevice>, VclPtr<OutputDevice>> maDeviceTemplates;
+
+    static bool isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size& size);
+
+public:
+    VDevBuffer2();
+    virtual ~VDevBuffer2() override;
+
+    VclPtr<VirtualDevice> alloc(OutputDevice& rOutDev, const Size& rSizePixel, bool bTransparent);
+    void free(VirtualDevice& rDevice);
+
+    // Timer virtuals
+    virtual void Invoke() override;
+};
+
+VDevBuffer2::VDevBuffer2()
+    : Timer("drawinglayer::VDevBuffer2 via Invoke()")
+{
+    SetTimeout(10L * 1000L); // ten seconds
+}
+
+VDevBuffer2::~VDevBuffer2()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    Stop();
+
+    while (!maFreeBuffers.empty())
+    {
+        maFreeBuffers.back().buf.disposeAndClear();
+        maFreeBuffers.pop_back();
+    }
+
+    while (!maUsedBuffers.empty())
+    {
+        maUsedBuffers.back().buf.disposeAndClear();
+        maUsedBuffers.pop_back();
+    }
+}
+
+bool VDevBuffer2::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size& rSizePixel)
+{
+    if (device->GetOutputWidthPixel() >= rSizePixel.getWidth()
+        && device->GetOutputHeightPixel() >= rSizePixel.getHeight())
+    {
+        bool requireSmall = false;
+#if defined(UNX)
+        // HACK: See the small size handling in SvpSalVirtualDevice::CreateSurface().
+        // Make sure to not reuse a larger device when a small one should be preferred.
+        if (device->GetRenderBackendName() == "svp")
+            requireSmall = true;
+#endif
+        // The same for Skia, see renderMethodToUseForSize().
+        if (SkiaHelper::isVCLSkiaEnabled())
+            requireSmall = true;
+        if (requireSmall)
+        {
+            if (rSizePixel.getWidth() <= 32 && rSizePixel.getHeight() <= 32
+                && (device->GetOutputWidthPixel() > 32 || device->GetOutputHeightPixel() > 32))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+VclPtr<VirtualDevice> VDevBuffer2::alloc(OutputDevice& rOutDev, const Size& rSizePixel,
+                                        bool bTransparent)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    VclPtr<VirtualDevice> pRetval;
+
+    sal_Int32 nBits = rOutDev.GetBitCount();
+
+    bool bOkay(false);
+    if (!maFreeBuffers.empty())
+    {
+        auto aFound(maFreeBuffers.end());
+
+        for (auto a = maFreeBuffers.begin(); a != maFreeBuffers.end(); ++a)
+        {
+            assert(a->buf && "Empty pointer in VDevBuffer2 (!)");
+
+            if (nBits == a->buf->GetBitCount() && bTransparent == a->isTransparent)
+            {
+                // candidate is valid due to bit depth
+                if (aFound != maFreeBuffers.end())
+                {
+                    // already found
+                    if (bOkay)
+                    {
+                        // found is valid
+                        const bool bCandidateOkay = isSizeSuitable(a->buf, rSizePixel);
+
+                        if (bCandidateOkay)
+                        {
+                            // found and candidate are valid
+                            const sal_uLong aSquare(aFound->buf->GetOutputWidthPixel()
+                                                    * aFound->buf->GetOutputHeightPixel());
+                            const sal_uLong aCandidateSquare(a->buf->GetOutputWidthPixel()
+                                                             * a->buf->GetOutputHeightPixel());
+
+                            if (aCandidateSquare < aSquare)
+                            {
+                                // candidate is valid and smaller, use it
+                                aFound = a;
+                            }
+                        }
+                        else
+                        {
+                            // found is valid, candidate is not. Keep found
+                        }
+                    }
+                    else
+                    {
+                        // found is invalid, use candidate
+                        aFound = a;
+                        bOkay = isSizeSuitable(aFound->buf, rSizePixel);
+                    }
+                }
+                else
+                {
+                    // none yet, use candidate
+                    aFound = a;
+                    bOkay = isSizeSuitable(aFound->buf, rSizePixel);
+                }
+            }
+        }
+
+        if (aFound != maFreeBuffers.end())
+        {
+            pRetval = aFound->buf;
+            maFreeBuffers.erase(aFound);
+        }
+    }
+
+    if (pRetval)
+    {
+        // found a suitable cached virtual device, but the
+        // outputdevice it was based on has been disposed,
+        // drop it and create a new one instead as reusing
+        // such devices is unsafe under at least Gtk2
+        if (maDeviceTemplates[pRetval]->isDisposed())
+        {
+            maDeviceTemplates.erase(pRetval);
+            pRetval.disposeAndClear();
+        }
+        else
+        {
+            if (bOkay)
+            {
+                pRetval->Erase(pRetval->PixelToLogic(
+                    tools::Rectangle(0, 0, rSizePixel.getWidth(), rSizePixel.getHeight())));
+            }
+            else
+            {
+                pRetval->SetOutputSizePixel(rSizePixel, true);
+            }
+        }
+    }
+
+    // no success yet, create new buffer
+    if (!pRetval)
+    {
+        pRetval = VclPtr<VirtualDevice>::Create(rOutDev, DeviceFormat::DEFAULT);
+        maDeviceTemplates[pRetval] = &rOutDev;
+        pRetval->SetOutputSizePixel(rSizePixel, true);
+    }
+    else
+    {
+        // reused, reset some values
+        pRetval->SetMapMode();
+        pRetval->SetRasterOp(RasterOp::OverPaint);
+    }
+
+    // remember allocated buffer
+    maUsedBuffers.emplace_back(pRetval, bTransparent);
+
+    return pRetval;
+}
+
+void VDevBuffer2::free(VirtualDevice& rDevice)
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    const auto aUsedFound
+        = std::find_if(maUsedBuffers.begin(), maUsedBuffers.end(),
+                       [&rDevice](const Entry& el) { return el.buf == &rDevice; });
+    SAL_WARN_IF(aUsedFound == maUsedBuffers.end(), "drawinglayer",
+                "OOps, non-registered buffer freed (!)");
+    if (aUsedFound != maUsedBuffers.end())
+    {
+        maFreeBuffers.emplace_back(*aUsedFound);
+        maUsedBuffers.erase(aUsedFound);
+        SAL_WARN_IF(maFreeBuffers.size() > 1000, "drawinglayer",
+                    "excessive cached buffers, " << maFreeBuffers.size() << " entries!");
+    }
+    Start();
+}
+
+void VDevBuffer2::Invoke()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+
+    while (!maFreeBuffers.empty())
+    {
+        auto aLastOne = maFreeBuffers.back();
+        maDeviceTemplates.erase(aLastOne.buf);
+        aLastOne.buf.disposeAndClear();
+        maFreeBuffers.pop_back();
+    }
+}
 }
 
 // support for rendering Bitmap and BitmapEx contents
@@ -290,6 +532,14 @@ VDevBuffer& getVDevBuffer()
     // Vcl's deinit
     static vcl::DeleteOnDeinit<VDevBuffer> aVDevBuffer{};
     return *aVDevBuffer.get();
+}
+VDevBuffer2& getVDevBuffer2()
+{
+    // secure global instance with Vcl's safe destroyer of external (seen by
+    // library base) stuff, the remembered VDevs need to be deleted before
+    // Vcl's deinit
+    static vcl::DeleteOnDeinit<VDevBuffer2> aVDevBuffer2{};
+    return *aVDevBuffer2.get();
 }
 
 impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
@@ -430,6 +680,126 @@ VirtualDevice& impBufferDevice::getTransparence()
     if (!mpAlpha)
     {
         mpAlpha = getVDevBuffer().alloc(mrOutDev, maDestPixel.GetSize(), false);
+        mpAlpha->SetMapMode(mpContent->GetMapMode());
+
+        // copy AA flag for new target; masking needs to be smooth
+        mpAlpha->SetAntialiasing(mpContent->GetAntialiasing());
+    }
+
+    return *mpAlpha;
+}
+
+
+
+
+
+impBufferDevice2::impBufferDevice2(
+    OutputDevice& rOutDev,
+    const basegfx::B2DRange& rRange)
+:   mrOutDev(rOutDev),
+    mpContent(nullptr),
+    mpAlpha(nullptr)
+{
+    basegfx::B2DRange aRangePixel(rRange);
+    aRangePixel.transform(mrOutDev.GetViewTransformation());
+    const ::tools::Rectangle aRectPixel(
+        static_cast<sal_Int32>(floor(aRangePixel.getMinX())), static_cast<sal_Int32>(floor(aRangePixel.getMinY())),
+        static_cast<sal_Int32>(ceil(aRangePixel.getMaxX())), static_cast<sal_Int32>(ceil(aRangePixel.getMaxY())));
+    const Point aEmptyPoint;
+    maDestPixel = ::tools::Rectangle(aEmptyPoint, mrOutDev.GetOutputSizePixel());
+    maDestPixel.Intersection(aRectPixel);
+
+    if(isVisible())
+    {
+        mpContent = getVDevBuffer2().alloc(mrOutDev, maDestPixel.GetSize(), true);
+
+        // #i93485# assert when copying from window to VDev is used
+        const bool bWasEnabledSrc(mrOutDev.IsMapModeEnabled());
+        mrOutDev.EnableMapMode(false);
+        mpContent->DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), mrOutDev);
+        mrOutDev.EnableMapMode(bWasEnabledSrc);
+
+        MapMode aNewMapMode(mrOutDev.GetMapMode());
+
+        const Point aLogicTopLeft(mrOutDev.PixelToLogic(maDestPixel.TopLeft()));
+        aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
+
+        mpContent->SetMapMode(aNewMapMode);
+
+        // copy AA flag for new target
+        mpContent->SetAntialiasing(mrOutDev.GetAntialiasing());
+
+        // copy RasterOp (e.g. may be RasterOp::Xor on destination)
+        mpContent->SetRasterOp(mrOutDev.GetRasterOp());
+    }
+}
+
+impBufferDevice2::~impBufferDevice2()
+{
+    if(mpContent)
+    {
+        getVDevBuffer2().free(*mpContent);
+    }
+
+    if(mpAlpha)
+    {
+        getVDevBuffer2().free(*mpAlpha);
+    }
+}
+
+void impBufferDevice2::paint(double fTrans)
+{
+    if(isVisible())
+    {
+        const Point aEmptyPoint;
+        const Size aSizePixel(maDestPixel.GetSize());
+        const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
+
+        mrOutDev.EnableMapMode(false);
+        mpContent->EnableMapMode(false);
+
+        // during painting the buffer, disable evtl. set RasterOp (may be RasterOp::Xor)
+        const RasterOp aOrigRasterOp(mrOutDev.GetRasterOp());
+        mrOutDev.SetRasterOp(RasterOp::OverPaint);
+
+        if(mpAlpha)
+        {
+            mpAlpha->EnableMapMode(false);
+            const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
+
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+        }
+        else if(0.0 != fTrans)
+        {
+            sal_uInt8 nMaskValue(static_cast<sal_uInt8>(basegfx::fround(fTrans * 255.0)));
+            const AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
+            Bitmap aContent(mpContent->GetBitmap(aEmptyPoint, aSizePixel));
+            mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
+        }
+        else
+        {
+            mrOutDev.DrawOutDev(maDestPixel.TopLeft(), aSizePixel,
+                                aEmptyPoint, aSizePixel,
+                                *mpContent);
+        }
+
+        mrOutDev.SetRasterOp(aOrigRasterOp);
+        mrOutDev.EnableMapMode(bWasEnabledDst);
+    }
+}
+
+VirtualDevice& impBufferDevice2::getContent()
+{
+    assert(mpContent && "impBufferDevice2: No content, check isVisible() before accessing (!)");
+    return *mpContent;
+}
+
+VirtualDevice& impBufferDevice2::getTransparence()
+{
+    if(!mpAlpha)
+    {
+        mpAlpha = getVDevBuffer2().alloc(mrOutDev, maDestPixel.GetSize(), false);
         mpAlpha->SetMapMode(mpContent->GetMapMode());
 
         // copy AA flag for new target; masking needs to be smooth
