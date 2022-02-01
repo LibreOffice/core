@@ -50,4 +50,8 @@ class Tdf137637(UITestCase):
             # AssertionError: '0' != '1'
             self.assertEqual('0', get_state_as_dict(xAnimationList)['Children'])
 
+            # tdf#145030: Without the fix in place, this test would have failed with
+            # AttributeError: 'NoneType' object has no attribute 'getImplementationName'
+            self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
