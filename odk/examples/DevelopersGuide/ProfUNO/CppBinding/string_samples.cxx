@@ -34,7 +34,7 @@
  *************************************************************************/
 
 #include <stdio.h>
-
+#include <cmath>
 #include <sal/main.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -49,7 +49,6 @@ SAL_IMPLEMENT_MAIN()
     // string concatenation
 
     sal_Int32 n = 42;
-    double pi = 3.14159;
 
     // give it an initial size, should be a good guess.
     // stringbuffer extends if necessary
@@ -59,7 +58,7 @@ SAL_IMPLEMENT_MAIN()
     buf.append("pi ( here ");
 
     // numbers can be simply appended
-    buf.append(pi);
+    buf.append(M_PI);
 
     // lets the compiler count the stringlength, so this is more efficient than
     // the above appendAscii call, where length of the string must be calculated at
@@ -67,7 +66,7 @@ SAL_IMPLEMENT_MAIN()
     buf.append(" ) multiplied with ");
     buf.append(n);
     buf.append(" gives ");
-    buf.append((double)(n * pi));
+    buf.append((double)(n * M_PI));
     buf.append(".");
 
     // now transfer the buffer into the string.

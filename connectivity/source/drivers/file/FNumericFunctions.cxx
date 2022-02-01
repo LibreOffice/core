@@ -19,13 +19,12 @@
 
 
 #include <cmath>
+#include <basegfx/numeric/ftools.hxx>
 #include <file/FNumericFunctions.hxx>
 #include <rtl/math.hxx>
 
 using namespace connectivity;
 using namespace connectivity::file;
-
-const double fPi = 3.14159265358979323846;
 
 ORowSetValue OOp_Abs::operate(const ORowSetValue& lhs) const
 {
@@ -162,7 +161,7 @@ ORowSetValue OOp_Sqrt::operate(const ORowSetValue& lhs) const
 
 ORowSetValue OOp_Pi::operate(const std::vector<ORowSetValue>& /*lhs*/) const
 {
-    return fPi;
+    return M_PI;
 }
 
 ORowSetValue OOp_Cos::operate(const ORowSetValue& lhs) const
@@ -227,7 +226,7 @@ ORowSetValue OOp_Degrees::operate(const ORowSetValue& lhs) const
         return lhs;
 
     double nLhs = lhs.getDouble();
-    return nLhs*180*(1.0/fPi);
+    return basegfx::rad2deg(nLhs);
 }
 
 ORowSetValue OOp_Radians::operate(const ORowSetValue& lhs) const
@@ -236,7 +235,7 @@ ORowSetValue OOp_Radians::operate(const ORowSetValue& lhs) const
         return lhs;
 
     double nLhs = lhs.getDouble();
-    return nLhs*fPi*(1.0/180.0);
+    return basegfx::deg2rad(nLhs);
 }
 
 
