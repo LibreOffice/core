@@ -5680,7 +5680,8 @@ IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, UpDownHdl, SpinField&, void)
 
 IMPL_LINK_NOARG(SalInstanceFormattedSpinButton, LoseFocusHdl, Control&, void)
 {
-    signal_value_changed();
+    if (!m_pFormatter)
+        signal_value_changed();
     m_aLoseFocusHdl.Call(*this);
 }
 }
