@@ -606,6 +606,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     m_pMember->insert(std::move(pCnt));
                 }
             }
+            m_nMemberCount = m_pMember->size();
         }
         break;
         case ContentTypeId::TEXTFIELD:
