@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6d37d94_38d28572",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-01T12:23:16Z",
+      "side": 1,
+      "message": "Since Gülşah isn\u0027t replying, I\u0027ll increase my ranking to +2",
+      "revId": "b9fb6662bb5df29405107e14a09df2e52b1a61c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
