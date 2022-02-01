@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "192abd8a_4ca6f39f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-01T20:07:10Z",
+      "side": 1,
+      "message": "I also don\u0027t like the idea of disabling it in libreoffice-7-3 and not in master...",
+      "revId": "290957ad1383565c97201360defdeae9ae5ef502",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
