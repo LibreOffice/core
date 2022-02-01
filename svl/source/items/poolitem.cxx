@@ -362,7 +362,7 @@
 // class SvxHyperlinkItem : public SfxPoolItem
 // class SvxNumberInfoItem : public SfxPoolItem
 // class OfaPtrItem : public SfxPoolItem
-// class OfaRefItem : public SfxPoolItem
+// class OfaXColorListItem : public SfxPoolItem
 // class SvxGridItem : public SvxOptionsGrid, public SfxPoolItem
 //     class SdOptionsGridItem : public SvxGridItem
 // class SvxPageItem: public SfxPoolItem

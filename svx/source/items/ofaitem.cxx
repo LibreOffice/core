@@ -19,6 +19,7 @@
 
 
 #include <svx/ofaitem.hxx>
+#include <svx/xtable.hxx>
 
 OfaPtrItem::OfaPtrItem( sal_uInt16 _nWhich, void *_pPtr )
     : SfxPoolItem( _nWhich ), pPtr( _pPtr )
@@ -35,6 +36,21 @@ bool OfaPtrItem::operator==( const SfxPoolItem& rItem) const
 OfaPtrItem* OfaPtrItem::Clone( SfxItemPool * ) const
 {
     return new OfaPtrItem( *this );
+}
+
+OfaXColorListItem::OfaXColorListItem( sal_uInt16 _nWhich, const rtl::Reference<XColorList> &xRef )
+    : SfxPoolItem( _nWhich ), mxRef( xRef )
+{}
+
+bool OfaXColorListItem::operator==( const SfxPoolItem& rItem ) const
+{
+    return SfxPoolItem::operator==(rItem)
+        && mxRef == static_cast<OfaXColorListItem const &>(rItem).mxRef;
+}
+
+OfaXColorListItem* OfaXColorListItem::Clone( SfxItemPool* /*pPool = 0*/ ) const
+{
+    return new OfaXColorListItem( *this );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
