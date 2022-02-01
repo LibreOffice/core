@@ -410,7 +410,6 @@ namespace sw::mark
             io_rDoc.GetIDocumentUndoRedo().AppendUndo(
                     std::make_unique<SwUndoInsBookmark>(*this));
         }
-        io_rDoc.getIDocumentState().SetModified();
         InvalidateFrames();
     }
 

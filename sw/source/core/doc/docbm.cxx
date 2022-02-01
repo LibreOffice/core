@@ -668,6 +668,9 @@ namespace sw::mark
         switch(eType)
         {
             case IDocumentMarkAccess::MarkType::BOOKMARK:
+                lcl_InsertMarkSorted(m_vBookmarks, pMark.get());
+                m_rDoc.getIDocumentState().SetModified();
+                break;
             case IDocumentMarkAccess::MarkType::CROSSREF_NUMITEM_BOOKMARK:
             case IDocumentMarkAccess::MarkType::CROSSREF_HEADING_BOOKMARK:
                 lcl_InsertMarkSorted(m_vBookmarks, pMark.get());
