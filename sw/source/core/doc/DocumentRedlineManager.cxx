@@ -246,7 +246,8 @@ void UpdateFramesForAddDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 
 void UpdateFramesForRemoveDeleteRedline(SwDoc & rDoc, SwPaM const& rPam)
 {
-    if (rDoc.IsClipBoard())
+    // tdf#147006 fieldmark command may be empty => do not call AppendAllObjs()
+    if (rDoc.IsClipBoard() || *rPam.GetPoint() == *rPam.GetMark())
     {
         return;
     }
