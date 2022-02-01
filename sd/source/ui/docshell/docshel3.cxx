@@ -245,7 +245,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             const SvxColorListItem* pColItem = GetItem( SID_COLOR_TABLE );
             const XColorListRef& pList = pColItem->GetColorList();
-            rReq.SetReturnValue( OfaRefItem<XColorList>( SID_GET_COLORLIST, pList ) );
+            rReq.SetReturnValue( OfaXColorListItem( SID_GET_COLORLIST, pList ) );
         }
         break;
 
