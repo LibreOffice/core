@@ -63,6 +63,30 @@
       },
       "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76b2f2fc_eaba1b04",
+        "filename": "svx/source/dialog/ctredlin.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-01T10:01:51Z",
+      "side": 1,
+      "message": "Weird that LayoutSize::LayoutSize(const ::sal_Int32\u0026 Minimum_, ... does not take -1 as ignore but 0. But this works for me with kf5. Howver, after submitting I see it scrolls nicely but is not expanded properly on gen. Could be solved by checking the expand horizontal/vertical option for the managechangespanel GtkGrid under Common.",
+      "parentUuid": "0196044b_267b9f07",
+      "range": {
+        "startLine": 367,
+        "startChar": 37,
+        "endLine": 367,
+        "endChar": 40
+      },
+      "revId": "a8d6e9620e18f5a1954f0025de96d236bc9180bb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
