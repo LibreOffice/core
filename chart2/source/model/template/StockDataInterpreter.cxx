@@ -249,7 +249,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         }
     }
 
-    return InterpretedData( aResultSeries, xCategories );
+    return { aResultSeries, xCategories };
 }
 
 // criterion: there must be two groups for stock-charts with volume and all
@@ -279,9 +279,9 @@ bool StockDataInterpreter::isDataCompatible(
     if( bHasVolume )
     {
         if( ! DataInterpreter::isDataCompatible(
-                InterpretedData( Sequence< Sequence< Reference< XDataSeries > > >(
+                { Sequence< Sequence< Reference< XDataSeries > > >(
                                      aInterpretedData.Series.getConstArray(), 1 ),
-                                 aInterpretedData.Categories )))
+                  aInterpretedData.Categories }))
             return false;
     }
 
