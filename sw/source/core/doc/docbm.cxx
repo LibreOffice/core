@@ -1419,8 +1419,7 @@ namespace sw::mark
     void MarkManager::deleteFieldmarkAt(const SwPosition& rPos)
     {
         auto const pFieldmark = dynamic_cast<Fieldmark*>(getFieldmarkAt(rPos));
-        if (!pFieldmark)
-            return;
+        assert(pFieldmark); // currently all callers require it to be there
 
         deleteMark(lcl_FindMark(m_vAllMarks, pFieldmark));
     }
@@ -1455,12 +1454,11 @@ namespace sw::mark
 
         // Store attributes needed to create the new fieldmark
         OUString sName = pFieldmark->GetName();
-        SwPaM aPaM(pFieldmark->GetMarkPos());
+        SwPaM const aPaM(pFieldmark->GetMarkStart());
 
         // Remove the old fieldmark and create a new one with the new type
-        if(aPaM.GetPoint()->nContent > 0 && (rNewType == ODF_FORMDROPDOWN || rNewType == ODF_FORMCHECKBOX))
+        if (rNewType == ODF_FORMDROPDOWN || rNewType == ODF_FORMCHECKBOX)
         {
-            --aPaM.GetPoint()->nContent;
             SwPosition aNewPos (aPaM.GetPoint()->nNode, aPaM.GetPoint()->nContent);
             deleteFieldmarkAt(aNewPos);
             return makeNoTextFieldBookmark(aPaM, sName, rNewType);
