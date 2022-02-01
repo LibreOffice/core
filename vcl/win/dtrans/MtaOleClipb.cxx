@@ -482,7 +482,7 @@ HRESULT CMtaOleClipboard::onGetClipboard( LPSTREAM* ppStream )
     if ( SUCCEEDED( hr ) )
     {
         hr = MarshalIDataObjectInStream(pIDataObject.get(), ppStream);
-        OSL_ENSURE(SUCCEEDED(hr), "marshalling cliboard data object failed");
+        OSL_ENSURE(SUCCEEDED(hr), "marshalling clipboard data object failed");
     }
     return hr;
 }
