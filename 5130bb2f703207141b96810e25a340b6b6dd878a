@@ -50,6 +50,24 @@
       "message": "Guess we can abandon this patch now.",
       "revId": "5130bb2f703207141b96810e25a340b6b6dd878a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73602f45_e231099d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-01T02:37:10Z",
+      "side": 1,
+      "message": "I think now we just need the check made in childwin.cxx that will set aInfo to be the last position the Navigator is at when it is closed instead of the factory position which will reopen the Navigator at the last position it was at when the module is closed. Same as is done to make the find \u0026 replace dialog reopen at the last position it is closed.",
+      "parentUuid": "5ade4d1f_252ce466",
+      "revId": "5130bb2f703207141b96810e25a340b6b6dd878a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
