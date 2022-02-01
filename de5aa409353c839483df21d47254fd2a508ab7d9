@@ -51,6 +51,24 @@
       "message": "If there is interest in merging this in, then I can rebase it on master and update the review. ",
       "revId": "de5aa409353c839483df21d47254fd2a508ab7d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d006e21_d489bde5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-01T14:49:58Z",
+      "side": 1,
+      "message": "The hope is that https://gerrit.libreoffice.org/c/core/+/129291 can sort this out without a revert, let\u0027s see.",
+      "parentUuid": "47e798c4_2c24020f",
+      "revId": "de5aa409353c839483df21d47254fd2a508ab7d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
