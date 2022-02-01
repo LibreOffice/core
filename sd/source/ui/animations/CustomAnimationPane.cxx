@@ -2459,7 +2459,7 @@ void CustomAnimationPane::onSelect()
         return;
 
     // tdf#145030 if nothing is selected in the effects list, leave the selection of
-    // objects in in the slide untouched
+    // objects in the slide untouched
     if (maListSelection.empty())
         return;
 
