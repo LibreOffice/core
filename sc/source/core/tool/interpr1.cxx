@@ -9696,32 +9696,27 @@ void ScInterpreter::ScSubstitute()
     OUString sStr    = GetString().getString();
     sal_Int32 nPos = 0;
     sal_Int32 nCount = 0;
-    sal_Int32 nNewLen = sNewStr.getLength();
-    sal_Int32 nOldLen = sOldStr.getLength();
-    while( true )
+    std::optional<OUStringBuffer> oResult;
+    for (sal_Int32 nEnd = sStr.indexOf(sOldStr); nEnd >= 0; nEnd = sStr.indexOf(sOldStr, nEnd))
     {
-        nPos = sStr.indexOf( sOldStr, nPos );
-        if (nPos != -1)
+        if (nCnt == 0 || ++nCount == nCnt) // Found a replacement cite
         {
-            nCount++;
-            if( !nCnt || nCount == nCnt )
-            {
-                sStr = sStr.replaceAt(nPos,nOldLen, u"");
-                if ( CheckStringResultLen( sStr, sNewStr ) )
-                {
-                    sStr = sStr.replaceAt(nPos, 0, sNewStr);
-                    nPos = sal::static_int_cast<sal_Int32>( nPos + nNewLen );
-                }
-                else
-                    break;
-            }
-            else
-                nPos++;
+            if (!oResult) // Only allocate buffer when needed
+                oResult.emplace(sStr.getLength() + sNewStr.getLength() - sOldStr.getLength());
+
+            oResult->append(sStr.subView(nPos, nEnd - nPos)); // Copy leading unchanged text
+            if (!CheckStringResultLen(*oResult, sNewStr))
+                return PushError(GetError());
+            oResult->append(sNewStr); // Copy  the replacement
+            nPos = nEnd + sOldStr.getLength();
+            if (nCnt > 0) // Found the single replacement site - end the loop
+                break;
         }
-        else
-            break;
+        nEnd += sOldStr.getLength();
     }
-    PushString( sStr );
+    if (oResult) // If there were prior replacements, copy the rest, otherwise use original
+        oResult->append(sStr.subView(nPos, sStr.getLength() - nPos));
+    PushString(oResult ? oResult->makeStringAndClear() : sStr);
 }
 
 void ScInterpreter::ScRept()
