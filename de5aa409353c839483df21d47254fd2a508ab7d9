@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d3fb1a7_4412a4bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-01T14:15:32Z",
+      "side": 1,
+      "message": "Hi Heiko,\nYou should not push the patches without rebasing first.\nThis patch broke the builds: https://gerrit.libreoffice.org/c/core/+/129291\ncdd0a141094c9ceb690a702bb0 also broke it. See 8e4624b9b9fa1322592b73fe0dd6cb03be6fd57f\n",
+      "revId": "de5aa409353c839483df21d47254fd2a508ab7d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
