@@ -127,7 +127,7 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
 
     private final class CommandEnvironment implements XCommandEnvironment {
         private final XInteractionHandler m_InteractionHandler
-            = new InteractionHadler();
+            = new InteractionHandler();
 
         public XInteractionHandler getInteractionHandler() {
             return m_InteractionHandler;
@@ -139,7 +139,7 @@ public final class GlobalTransfer_Test extends ComplexTestCase {
         }
     }
 
-    private final class InteractionHadler implements XInteractionHandler {
+    private final class InteractionHandler implements XInteractionHandler {
         public void handle( /*IN*/XInteractionRequest Request ) {
 
             log.println( "Interaction Handler called." );
