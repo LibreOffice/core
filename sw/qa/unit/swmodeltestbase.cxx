@@ -172,7 +172,9 @@ void SwModelTestBase::calcLayout()
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
-int SwModelTestBase::getLength() const
+int SwModelTestBase::getLength() const { return getBodyText().getLength(); }
+
+OUString SwModelTestBase::getBodyText() const
 {
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
@@ -190,7 +192,7 @@ int SwModelTestBase::getLength() const
             aBuf.append(xRange->getString());
         }
     }
-    return aBuf.getLength();
+    return aBuf.makeStringAndClear();
 }
 
 uno::Reference<container::XNameAccess> SwModelTestBase::getStyles(const OUString& aFamily)
