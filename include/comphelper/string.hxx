@@ -22,6 +22,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <vector>
 #include <comphelper/comphelperdllapi.h>
 #include <sal/types.h>
@@ -159,7 +160,7 @@ namespace detail
     template<typename B> B& truncateToLength(B& rBuffer, sal_Int32 nLen)
     {
         if (nLen < rBuffer.getLength())
-            rBuffer.remove(nLen, rBuffer.getLength()-nLen);
+            rBuffer.setLength(nLen);
         return rBuffer;
     }
 }
@@ -184,16 +185,11 @@ inline OUStringBuffer& truncateToLength(
 
 namespace detail
 {
-    template<typename B, typename U> B& padToLength(B& rBuffer, sal_Int32 nLen,
-        U cFill = '\0')
+    template<typename B, typename U> B& padToLength(B& rBuffer, sal_Int32 nLen, U cFill)
     {
-        sal_Int32 nOrigLen = rBuffer.getLength();
-        if (nLen > nOrigLen)
-        {
-            rBuffer.setLength(nLen);
-            for (sal_Int32 i = nOrigLen; i < nLen; ++i)
-                rBuffer[i] = cFill;
-        }
+        const sal_Int32 nPadLen = nLen - rBuffer.getLength();
+        if (nPadLen > 0)
+            std::fill_n(rBuffer.appendUninitialized(nPadLen), nPadLen, cFill);
         return rBuffer;
     }
 }
