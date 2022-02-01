@@ -1415,8 +1415,8 @@ vcl::Window *HandleGestureEventBase::Dispatch(vcl::Window* pMouseWindow)
                              pMouseWindow->AbsoluteScreenToOutputPixel(
                               m_pWindow->OutputToAbsoluteScreenPixel(
                                m_pWindow->ScreenToOutputPixel( m_aMousePos ) ) ) ) );
-        bool bPropogate = CallCommand(pMouseWindow, aRelMousePos);
-        if (!bPropogate)
+        bool bPropagate = CallCommand(pMouseWindow, aRelMousePos);
+        if (!bPropagate)
             pDispatchedTo = pMouseWindow;
     }
 
@@ -1435,8 +1435,8 @@ vcl::Window *HandleGestureEventBase::Dispatch(vcl::Window* pMouseWindow)
                                      pFocusWindow->AbsoluteScreenToOutputPixel(
                                       m_pWindow->OutputToAbsoluteScreenPixel(
                                        m_pWindow->ScreenToOutputPixel( m_aMousePos ) ) ) ) );
-                bool bPropogate = CallCommand(pFocusWindow, aRelMousePos);
-                if (!bPropogate)
+                bool bPropagate = CallCommand(pFocusWindow, aRelMousePos);
+                if (!bPropagate)
                     pDispatchedTo = pMouseWindow;
             }
         }
