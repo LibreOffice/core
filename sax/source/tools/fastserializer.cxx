@@ -25,8 +25,11 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 
+#include <cassert>
+#include <optional>
 #include <string.h>
 #include <string_view>
+#include <utility>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <iostream>
@@ -104,19 +107,33 @@ namespace sax_fastparser {
     /** Characters not allowed in XML 1.0
         XML 1.1 would exclude only U+0000
      */
-    static bool invalidChar( char c )
+    template<typename Int> static std::optional<std::pair<unsigned, Int>> invalidChar(
+        char const * string, Int length, Int index )
     {
-        if (static_cast<unsigned char>(c) >= 0x20)
-            return false;
+        assert(index < length);
+        auto const c = string[index];
+
+        if (static_cast<unsigned char>(c) >= 0x20 && c != '\xEF')
+            return {};
 
         switch (c)
         {
             case 0x09:
             case 0x0a:
             case 0x0d:
-                return false;
+                return {};
+            case '\xEF': // U+FFFE, U+FFFF:
+                if (length - index >= 3 && string[index + 1] == '\xBF') {
+                    switch (string[index + 2]) {
+                    case '\xBE':
+                        return std::pair(0xFFFE, 3);
+                    case '\xBF':
+                        return std::pair(0xFFFF, 3);
+                    }
+                }
+                return {};
         }
-        return true;
+        return std::pair(static_cast<unsigned char>(c), 1);
     }
 
     static bool isHexDigit( char c )
@@ -139,7 +156,7 @@ namespace sax_fastparser {
         const sal_Int32 kXescapeLen = 7;
         char bufXescape[kXescapeLen+1];
         sal_Int32 nNextXescape = 0;
-        for (sal_Int32 i = 0; i < nLen; ++i)
+        for (sal_Int32 i = 0; i < nLen;)
         {
             char c = pStr[ i ];
             switch( c )
@@ -250,24 +267,19 @@ namespace sax_fastparser {
                                         break;
                                     }
                                 }
-                                if (invalidChar(c))
+                                if (auto const inv = invalidChar(pStr, nLen, i))
                                 {
                                     snprintf( bufXescape, kXescapeLen+1, "_x%04x_",
-                                            static_cast<unsigned int>(static_cast<unsigned char>(c)));
+                                            inv->first);
                                     writeBytes( bufXescape, kXescapeLen);
-                                    break;
+                                    i += inv->second;
+                                    continue;
                                 }
-                                /* TODO: also U+FFFE and U+FFFF are not allowed
-                                 * in XML 1.0, assuming we're writing UTF-8
-                                 * those should be escaped as well to be
-                                 * conformant. Likely that would involve
-                                 * scanning for both encoded sequences and
-                                 * write as _xHHHH_? */
                             }
 #if OSL_DEBUG_LEVEL > 0
                             else
                             {
-                                if (bGood && invalidChar(pStr[i]))
+                                if (bGood && invalidChar(pStr, nLen, i))
                                 {
                                     bGood = false;
                                     // The SAL_WARN() for the single character is
@@ -279,6 +291,7 @@ namespace sax_fastparser {
                             writeBytes( &c, 1 );
                 break;
             }
+            ++i;
         }
         SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
     }
@@ -671,14 +684,17 @@ namespace sax_fastparser {
 #if OSL_DEBUG_LEVEL > 0
         {
             bool bGood = true;
-            for (size_t i=0; i < nLen; ++i)
+            for (size_t i=0; i < nLen;)
             {
-                if (invalidChar(pStr[i]))
+                if (auto const inv = invalidChar(pStr, nLen, i))
                 {
                     bGood = false;
                     SAL_WARN("sax", "FastSaxSerializer::writeBytes - illegal XML character 0x" <<
-                            std::hex << int(static_cast<unsigned char>(pStr[i])));
+                            std::hex << inv->first);
+                    i += inv->second;
+                    continue;
                 }
+                ++i;
             }
             SAL_WARN_IF( !bGood && nLen > 1, "sax", "in '" << OString(pStr,std::min<sal_Int32>(nLen,42)) << "'");
         }
