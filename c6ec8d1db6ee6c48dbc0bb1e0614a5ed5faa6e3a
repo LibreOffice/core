@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3213b45f_1187b0ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-02-01T14:40:07Z",
+      "side": 1,
+      "message": "Looks sensible to me - thanks Szymon \u003d) worth checking the scaling cost.",
+      "revId": "c6ec8d1db6ee6c48dbc0bb1e0614a5ed5faa6e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62752c2c_6337715a",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2885,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-02-01T14:40:07Z",
+      "side": 1,
+      "message": "This can of course be quite expensive in itself \u003d) I wonder if this re-uses the cairo image scaling cache we have inside VCL ? perhaps worth checking - I suspect we re-generate the preview quite often.",
+      "revId": "c6ec8d1db6ee6c48dbc0bb1e0614a5ed5faa6e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
