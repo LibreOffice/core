@@ -229,8 +229,7 @@ Sequence< OUString > lcl_CopyExcludingValuesFirst(
     return aOutput;
 }
 
-Reference< XDataSeries > lcl_CreateNewSeries(
-    const Reference< uno::XComponentContext > & xContext,
+rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
     const rtl::Reference< ::chart::ChartType > & xChartType,
     sal_Int32 nNewSeriesIndex,
     sal_Int32 nTotalNumberOfSeriesInCTGroup,
@@ -239,21 +238,14 @@ Reference< XDataSeries > lcl_CreateNewSeries(
     bool bCreateDataCachedSequences )
 {
     // create plain series
-    Reference< XDataSeries > xResult(
-        xContext->getServiceManager()->createInstanceWithContext(
-            "com.sun.star.chart2.DataSeries" ,
-            xContext ), uno::UNO_QUERY );
+    rtl::Reference< ::chart::DataSeries > xResult = new ::chart::DataSeries();
     if( xTemplate.is())
     {
-        Reference< beans::XPropertySet > xResultProp( xResult, uno::UNO_QUERY );
-        if( xResultProp.is())
-        {
-            // @deprecated: correct default color should be found by view
-            // without setting it as hard attribute
-            Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
-            if( xColorScheme.is())
-                xResultProp->setPropertyValue( "Color" , uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
-        }
+        // @deprecated: correct default color should be found by view
+        // without setting it as hard attribute
+        Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
+        if( xColorScheme.is())
+            xResult->setPropertyValue( "Color" , uno::Any( xColorScheme->getColorByIndex( nNewSeriesIndex )));
         sal_Int32 nGroupIndex=0;
         if( xChartType.is())
         {
@@ -271,8 +263,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
     if( bCreateDataCachedSequences )
     {
         // set chart type specific roles
-        Reference< data::XDataSink > xSink( xResult, uno::UNO_QUERY );
-        if( xChartType.is() && xSink.is())
+        if( xChartType.is() )
         {
             std::vector< Reference< data::XLabeledDataSequence > > aNewSequences;
             const OUString aRoleOfSeqForSeriesLabel = xChartType->getRoleOfSequenceForSeriesLabel();
@@ -327,7 +318,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
                 aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
-            xSink->setData( comphelper::containerToSequence( aNewSequences ));
+            xResult->setData( comphelper::containerToSequence( aNewSequences ));
         }
     }
 
@@ -550,14 +541,14 @@ void DialogModel::moveSeries(
     DiagramHelper::moveSeries( xDiagram, xSeries, eDirection==MoveDirection::Down );
 }
 
-Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
+rtl::Reference< ::chart::DataSeries > DialogModel::insertSeriesAfter(
     const Reference< XDataSeries > & xSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType,
     bool bCreateDataCachedSequences /* = false */ )
 {
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
-    Reference< XDataSeries > xNewSeries;
+    rtl::Reference< ::chart::DataSeries > xNewSeries;
 
     try
     {
@@ -572,15 +563,14 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
         }
 
         // create new series
-        xNewSeries.set(
+        xNewSeries =
             lcl_CreateNewSeries(
-                m_xContext,
                 xChartType,
                 nTotalSeries, // new series' index
                 nSeriesInChartType,
                 xDiagram,
                 m_xTemplate,
-                bCreateDataCachedSequences ));
+                bCreateDataCachedSequences );
 
         // add new series to container
         if( xNewSeries.is())
