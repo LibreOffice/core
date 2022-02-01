@@ -264,8 +264,8 @@ std::unique_ptr<XFDateStyle> LwpTools::GetSystemDateStyle(bool bLongFormat)
         return nullptr;
     // 3 parse pattern string,per icu date/time format syntax, there are 20 letters reserved
     // as pattern letter,each represent an element in date/time and its repeat numbers represent
-    // different format: for example: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
-    // letter other than these letters is regard as text in the format, for example ','in 'Jan,2005'
+    // different format: for example: M produces '1', MM produces '01', MMM produces 'Jan', MMMM produces 'January'
+    // letter other than these letters is regard as text in the format, for example ',' in 'Jan,2005'
     // we parse pattern string letter by letter and get the time format.
     UChar cSymbol;
     UChar cTmp;
