@@ -3589,6 +3589,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testCheckboxFormFieldInsertion)
     pFieldmark = dynamic_cast<::sw::mark::IFieldmark*>(*aIter);
     CPPUNIT_ASSERT(pFieldmark);
     CPPUNIT_ASSERT_EQUAL(OUString(ODF_FORMCHECKBOX), pFieldmark->GetFieldname());
+
+    // tdf#147008 this would crash
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->StartOfSection(false);
+    pWrtShell->SplitNode();
+    CPPUNIT_ASSERT_EQUAL(pFieldmark->GetMarkPos().nNode, pFieldmark->GetOtherMarkPos().nNode);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(pFieldmark->GetMarkPos().nContent.GetIndex() + 1),
+                         pFieldmark->GetOtherMarkPos().nContent.GetIndex());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testDropDownFormFieldInsertion)

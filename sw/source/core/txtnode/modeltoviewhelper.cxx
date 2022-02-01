@@ -294,7 +294,7 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
 
             for (sw::mark::IFieldmark *const pMark : aNoTextFieldmarks)
             {
-                const sal_Int32 nDummyCharPos = pMark->GetMarkPos().nContent.GetIndex()-1;
+                const sal_Int32 nDummyCharPos = pMark->GetMarkStart().nContent.GetIndex();
                 if (aHiddenMulti.IsSelected(nDummyCharPos))
                     continue;
                 std::vector<block>::iterator aFind = std::find_if(aBlocks.begin(), aBlocks.end(),

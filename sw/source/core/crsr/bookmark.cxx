@@ -154,6 +154,10 @@ namespace
             SwPosition const sepPos(sw::mark::FindFieldSep(rField));
             assert(sepPos.nNode.GetNode().GetTextNode()->GetText()[sepPos.nContent.GetIndex()] == CH_TXT_ATR_FIELDSEP); (void) sepPos;
         }
+        else
+        {   // must be m_pPos1 < m_pPos2 because of asymmetric SplitNode update
+            assert(rField.GetMarkPos().nContent.GetIndex() + 1 == rField.GetOtherMarkPos().nContent.GetIndex());
+        }
         SwPosition const& rEnd(rField.GetMarkEnd());
         assert(rEnd.nNode.GetNode().GetTextNode()->GetText()[rEnd.nContent.GetIndex() - 1] == aEndMark); (void) rEnd;
     }
@@ -207,7 +211,14 @@ namespace
         {
             SwPaM aEndPaM(rEnd);
             io_rDoc.getIDocumentContentOperations().InsertString(aEndPaM, OUString(aEndMark));
-            ++rEnd.nContent;
+            if (aEndMark != CH_TXT_ATR_FORMELEMENT)
+            {
+                ++rEnd.nContent; // InsertString didn't move non-empty mark
+            }
+            else
+            {   // InsertString moved the mark's end, not its start
+                assert(rField.GetMarkPos().nContent.GetIndex() + 1 == rField.GetOtherMarkPos().nContent.GetIndex());
+            }
         }
         lcl_AssertFieldMarksSet(rField, aStartMark, aEndMark);
 
@@ -590,12 +601,6 @@ namespace sw::mark
         if (eMode == sw::mark::InsertMode::New)
         {
             lcl_SetFieldMarks(*this, io_rDoc, CH_TXT_ATR_FIELDSTART, CH_TXT_ATR_FORMELEMENT, pSepPos);
-
-            // For some reason the end mark is moved from 1 by the Insert:
-            // we don't want this for checkboxes
-            SwPosition aNewEndPos = GetMarkEnd();
-            aNewEndPos.nContent--;
-            SetMarkEndPos( aNewEndPos );
         }
         else
         {
