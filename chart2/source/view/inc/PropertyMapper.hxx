@@ -20,7 +20,6 @@
 
 #include <sal/config.h>
 
-#include <optional>
 #include <unordered_map>
 
 #include <com/sun/star/uno/Sequence.h>
@@ -28,7 +27,6 @@
 
 namespace com::sun::star::beans { class XPropertySet; }
 class SvxShape;
-class SdrPathObj;
 
 namespace chart
 {
@@ -102,9 +100,6 @@ public:
     static const tPropertyNameMap& getPropertyNameMapForTextShapeProperties();
 
     static const tPropertyNameMap& getPropertyNameMapForFilledSeriesProperties();
-    static void setPropertyNameMapForFilledSeriesProperties(SdrPathObj* pShape,
-                    const css::uno::Reference< css::beans::XPropertySet >& xSource,
-                    std::optional<sal_Int32> xFillColor = {});
     static const tPropertyNameMap& getPropertyNameMapForLineSeriesProperties();
     static const tPropertyNameMap& getPropertyNameMapForTextLabelProperties();
 
