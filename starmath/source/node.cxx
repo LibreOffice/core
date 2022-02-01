@@ -22,7 +22,7 @@
 #include <smmod.hxx>
 #include "tmpdevice.hxx"
 #include <visitors.hxx>
-
+#include <cmath>
 #include <vcl/metric.hxx>
 #include <osl/diagnose.h>
 
@@ -988,7 +988,7 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
                         const Point &rDiagPoint, double fAngleDeg) const
 
 {
-    static const double  fPi   = 3.1415926535897932384626433;
+    static const double  fPi   = M_PI;
     double  fAngleRad   = fAngleDeg / 180.0 * fPi;
     tools::Long    nRectLeft   = GetItalicLeft(),
             nRectRight  = GetItalicRight(),

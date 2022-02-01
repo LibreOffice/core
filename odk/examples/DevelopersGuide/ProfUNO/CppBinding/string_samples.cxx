@@ -34,7 +34,7 @@
  *************************************************************************/
 
 #include <stdio.h>
-
+#include <cmath>
 #include <sal/main.h>
 
 #include <rtl/ustrbuf.hxx>
@@ -49,7 +49,7 @@ SAL_IMPLEMENT_MAIN()
     // string concatenation
 
     sal_Int32 n = 42;
-    double pi = 3.14159;
+    double pi = M_PI;
 
     // give it an initial size, should be a good guess.
     // stringbuffer extends if necessary

@@ -25,7 +25,7 @@
 using namespace connectivity;
 using namespace connectivity::file;
 
-const double fPi = 3.14159265358979323846;
+const double fPi = M_PI;
 
 ORowSetValue OOp_Abs::operate(const ORowSetValue& lhs) const
 {

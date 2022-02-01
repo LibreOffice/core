@@ -18,7 +18,7 @@
  */
 
 #include "bessel.hxx"
-
+#include <cmath>
 #include <rtl/math.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -29,10 +29,10 @@ using ::com::sun::star::sheet::NoConvergenceException;
 
 namespace sca::analysis {
 
-const double f_PI       = 3.1415926535897932385;
-const double f_PI_DIV_2 = f_PI / 2.0;
-const double f_PI_DIV_4 = f_PI / 4.0;
-const double f_2_DIV_PI = 2.0 / f_PI;
+const double f_PI       = M_PI;
+const double f_PI_DIV_2 = M_PI_2;
+const double f_PI_DIV_4 = M_PI_4;
+const double f_2_DIV_PI = M_2_PI;
 
 
 // BESSEL J
