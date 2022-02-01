@@ -22,9 +22,9 @@
 #include <smmod.hxx>
 #include "tmpdevice.hxx"
 #include <visitors.hxx>
-
 #include <vcl/metric.hxx>
 #include <osl/diagnose.h>
+#include <basegfx/numeric/ftools.hxx>
 
 namespace {
 
@@ -988,8 +988,7 @@ void SmBinDiagonalNode::GetOperPosSize(Point &rPos, Size &rSize,
                         const Point &rDiagPoint, double fAngleDeg) const
 
 {
-    static const double  fPi   = 3.1415926535897932384626433;
-    double  fAngleRad   = fAngleDeg / 180.0 * fPi;
+    double  fAngleRad   = basegfx::deg2rad(fAngleDeg);
     tools::Long    nRectLeft   = GetItalicLeft(),
             nRectRight  = GetItalicRight(),
             nRectTop    = GetTop(),
