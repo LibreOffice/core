@@ -23,6 +23,9 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XPrintAreas.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
+#include <com/sun/star/awt/KeyModifier.hpp>
 
 using namespace css;
 
@@ -55,6 +58,7 @@ public:
     void testRangeSelect();
     void testWindowState();
     void testScroll();
+    void testMacroKeyBinding();
 
     void testVba();
     void testTdf107885();
@@ -71,6 +75,7 @@ public:
     CPPUNIT_TEST(testRangeSelect);
     CPPUNIT_TEST(testWindowState);
     CPPUNIT_TEST(testScroll);
+    CPPUNIT_TEST(testMacroKeyBinding);
 
     CPPUNIT_TEST(testVba);
     CPPUNIT_TEST(testTdf107885);
@@ -418,6 +423,44 @@ void VBAMacroTest::testScroll()
     CPPUNIT_ASSERT_EQUAL(ScSplitPos::SC_SPLIT_BOTTOMLEFT, rViewData.GetActivePart());
     CPPUNIT_ASSERT_EQUAL(SCCOL(29), rViewData.GetPosX(ScHSplitPos::SC_SPLIT_LEFT));
     CPPUNIT_ASSERT_EQUAL(SCROW(99), rViewData.GetPosY(ScVSplitPos::SC_SPLIT_BOTTOM));
+}
+
+void VBAMacroTest::testMacroKeyBinding()
+{
+    // key_U() -> CTRL+U
+    // key_T() -> CTRL+T
+
+    OUString aFileName;
+    createFileURL(u"KeyShortcut.xlsm", aFileName);
+    mxComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xModel.is());
+
+    uno::Reference<ui::XUIConfigurationManagerSupplier> xConfigSupplier(xModel, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xConfigSupplier.is());
+    uno::Reference<ui::XUIConfigurationManager> xConfigManager
+        = xConfigSupplier->getUIConfigurationManager();
+    uno::Reference<ui::XAcceleratorConfiguration> xAccelerator
+        = xConfigManager->getShortCutManager();
+
+    awt::KeyEvent aCtrlU;
+    aCtrlU.KeyCode = css::awt::Key::U;
+    aCtrlU.Modifiers = css::awt::KeyModifier::MOD1;
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(
+            "vnd.sun.star.script:VBAProject.ThisWorkbook.key_U?language=Basic&location=document"),
+        xAccelerator->getCommandByKeyEvent(aCtrlU));
+
+    awt::KeyEvent aCtrlT;
+    aCtrlT.KeyCode = css::awt::Key::T;
+    aCtrlT.Modifiers = css::awt::KeyModifier::MOD1;
+
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(
+            "vnd.sun.star.script:VBAProject.ThisWorkbook.key_T?language=Basic&location=document"),
+        xAccelerator->getCommandByKeyEvent(aCtrlT));
 }
 
 void VBAMacroTest::testVba()
