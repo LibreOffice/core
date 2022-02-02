@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14931449_6f1dd3cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-02T09:43:08Z",
+      "side": 1,
+      "message": "Meanwhile \"sal_False\" was replaced by \"false\" in code, that\u0027s why I changed the comment.",
+      "revId": "072d034c8b0100a0a850ecb31f123af76e6bff2b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
