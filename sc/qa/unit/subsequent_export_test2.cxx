@@ -156,6 +156,7 @@ public:
     void testTdf138741_externalLinkSkipUnusedsCrash();
     void testTdf138824_linkToParentDirectory();
     void testTdf129969();
+    void testTdf147088();
     void testTdf84874();
     void testTdf136721_paper_size();
     void testTdf139258_rotated_image();
@@ -272,6 +273,7 @@ public:
     CPPUNIT_TEST(testTdf138741_externalLinkSkipUnusedsCrash);
     CPPUNIT_TEST(testTdf138824_linkToParentDirectory);
     CPPUNIT_TEST(testTdf129969);
+    CPPUNIT_TEST(testTdf147088);
     CPPUNIT_TEST(testTdf84874);
     CPPUNIT_TEST(testTdf136721_paper_size);
     CPPUNIT_TEST(testTdf139258_rotated_image);
@@ -2490,6 +2492,25 @@ void ScExportTest2::testTdf129969()
     const SvxFieldData* pData = pEditText->GetFieldData(0, 0, text::textfield::Type::URL);
     const SvxURLField* pURLData = static_cast<const SvxURLField*>(pData);
     CPPUNIT_ASSERT(pURLData->GetURL().endsWith("/%23folder/test.ods#Sheet2.B10"));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf147088()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf147088.", FORMAT_FODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(xShell.get(), FORMAT_XLSX);
+    xShell->DoClose();
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: _xffff_
+    // - Actual  :
+    CPPUNIT_ASSERT_EQUAL(OUString("_xffff_"), rDoc.GetString(0, 0, 0));
 
     xDocSh->DoClose();
 }
