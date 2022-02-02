@@ -66,7 +66,8 @@ public:
     {
     }
 
-    vcl::Window* GetWindow();
+    vcl::Window* GetGraphicWindow();
+    vcl::Window* GetWidgetWindow();
 
     bool postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons, int nModifier,
                         double fScaleX = 1.0, double fScaleY = 1.0);
@@ -77,7 +78,8 @@ private:
 
     SfxViewShell* mpViewShell;
     css::uno::Reference<css::frame::XController> mxController;
-    VclPtr<vcl::Window> mpWindow;
+    VclPtr<vcl::Window> mpGraphicWindow;
+    VclPtr<vcl::Window> mpWidgetWindow;
 };
 
 #endif

@@ -83,28 +83,31 @@ vcl::Window* FindChildSmGraphicWidgetWindow(vcl::Window* pWin)
     }
     return nullptr;
 }
-
-vcl::Window* FindSmGraphicWidgetWindow(vcl::Window* pWin)
-{
-    return FindChildSmGraphicWidgetWindow(FindSmGraphicWindow(pWin));
-}
 }
 
-vcl::Window* LokStarMathHelper::GetWindow()
+vcl::Window* LokStarMathHelper::GetGraphicWindow()
 {
-    if (!mpWindow)
+    if (!mpGraphicWindow)
     {
         if (const css::uno::Reference<css::frame::XController>& xController = GetXController())
         {
             if (const css::uno::Reference<css::frame::XFrame> xFrame = xController->getFrame())
             {
                 css::uno::Reference<css::awt::XWindow> xDockerWin = xFrame->getContainerWindow();
-                mpWindow.set(FindSmGraphicWidgetWindow(VCLUnoHelper::GetWindow(xDockerWin)));
+                mpGraphicWindow.set(FindSmGraphicWindow(VCLUnoHelper::GetWindow(xDockerWin)));
             }
         }
     }
 
-    return mpWindow.get();
+    return mpGraphicWindow.get();
+}
+
+vcl::Window* LokStarMathHelper::GetWidgetWindow()
+{
+    if (!mpWidgetWindow)
+        mpWidgetWindow.set(FindChildSmGraphicWidgetWindow(GetGraphicWindow()));
+
+    return mpWidgetWindow.get();
 }
 
 tools::Rectangle LokStarMathHelper::GetBoundingBox()
@@ -115,7 +118,7 @@ tools::Rectangle LokStarMathHelper::GetBoundingBox()
         {
             if (vcl::Window* pRootWin = pIPClient->GetEditWin())
             {
-                if (vcl::Window* pWindow = GetWindow())
+                if (vcl::Window* pWindow = GetWidgetWindow())
                 {
                     // In all cases, the following code fragment
                     // returns the bounding box in twips.
@@ -143,7 +146,7 @@ tools::Rectangle LokStarMathHelper::GetBoundingBox()
 bool LokStarMathHelper::postMouseEvent(int nType, int nX, int nY, int nCount, int nButtons,
                                        int nModifier, double fScaleX, double fScaleY)
 {
-    if (vcl::Window* pWindow = GetWindow())
+    if (vcl::Window* pWindow = GetWidgetWindow())
     {
         Point aMousePos(nX, nY);
         tools::Rectangle rBBox = GetBoundingBox();

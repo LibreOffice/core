@@ -3399,7 +3399,7 @@ VclPtr<vcl::Window> SwXTextDocument::getDocWindow()
 
     if (VclPtr<vcl::Window> pWindow = LokChartHelper(pView).GetWindow())
         return pWindow;
-    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pView).GetWindow())
+    if (VclPtr<vcl::Window> pWindow = LokStarMathHelper(pView).GetWidgetWindow())
         return pWindow;
 
     if (pView)
