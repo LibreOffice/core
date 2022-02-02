@@ -167,6 +167,24 @@ SfxItemPool::SfxItemPool
 
     if ( pDefaults )
         SetDefaults(pDefaults);
+
+#ifdef DBG_UTIL
+    if (pItemInfos)
+    {
+        auto p = pItemInfos;
+        auto nWhich = nStartWhich;
+        while (nWhich <= nEndWhich)
+        {
+            if (p->_nSID == nWhich)
+            {
+                SAL_WARN("svl.items", "No point mapping a SID to itself, just put a 0 here in the SfxItemInfo array, at index " << (p - pItemInfos));
+                assert(false);
+            }
+            ++p;
+            ++nWhich;
+        }
+    }
+#endif
 }
 
 
