@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7fe0345_f65e2fce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-02-02T09:00:47Z",
+      "side": 1,
+      "message": "Looks good :-) Did not (yet) check optically, but 60 degrees is not too much...?",
+      "revId": "6186dfee2bfa9686dcd24ee432816b940fee7a9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
