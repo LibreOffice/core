@@ -1291,9 +1291,17 @@ collapsedLevelsAreSubtotals
 colon
 color
 color2
+colorAxis
 colorFilter
+colorFirst
+colorHigh
 colorId
+colorLast
+colorLow
+colorMarkers
+colorNegative
 colorScale
+colorSeries
 colorTemp
 colorTemperature
 colormenu
@@ -1662,6 +1670,7 @@ datastoreItem
 date
 date1904
 dateAx
+dateAxis
 dateBetween
 dateCompatibility
 dateEqual
@@ -1825,12 +1834,15 @@ dispUnitsLbl
 displacedByCustomXml
 display
 displayBackgroundShape
+displayEmptyCellsAs
 displayFolder
 displayHangulFixedWidth
+displayHidden
 displayHorizontalDrawingGridEvery
 displayName
 displayText
 displayVerticalDrawingGridEvery
+displayXAxis
 displayed
 dissolve
 dist
@@ -3136,6 +3148,7 @@ lineMarker
 linePitch
 lineRule
 lineTo
+lineWeight
 lineWrapLikeWord6
 linear
 linen
@@ -3283,6 +3296,8 @@ manifestLocation
 manual
 manualBreakCount
 manualLayout
+manualMax
+manualMin
 map
 mapId
 mapPins
@@ -3303,6 +3318,7 @@ marTop
 marW
 margin
 marker
+markers
 markup
 maroon
 marquee
@@ -3325,6 +3341,7 @@ mathPr
 matrix
 matte
 max
+maxAxisType
 maxAng
 maxDate
 maxDepth
@@ -3402,6 +3419,7 @@ middleDot
 midnightBlue
 millions
 min
+minAxisType
 minAng
 minDate
 minLength
@@ -3505,6 +3523,7 @@ nc
 nd
 ndxf
 neCell
+negative
 negativeBarColorSameAsPositive
 negativeFillColor
 negativeInteger
@@ -4868,6 +4887,10 @@ span
 spanAng
 spans
 sparkle
+sparklineGroups
+sparklineGroup
+sparklines
+sparkline
 spc
 spcAft
 spcBef
@@ -5488,6 +5511,7 @@ ui8
 uiCompat97To2003
 uiExpand
 uiPriority
+uid
 uint
 ulTrailSpace
 un
