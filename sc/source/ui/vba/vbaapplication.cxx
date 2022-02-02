@@ -358,7 +358,7 @@ uno::Any SAL_CALL
 ScVbaApplication::GetOpenFilename(const uno::Any& /*aFileFilter*/, const uno::Any& /*aFilterIndex*/, const uno::Any& aTitle, const uno::Any& /*aButtonText*/, const uno::Any& aMultiSelect)
 {
     // TODO - take all parameters into account
-    auto xDialog = uno::Reference<excel::XFileDialog> (new ScVbaFileDialog( this, mxContext, office::MsoFileDialogType::msoFileDialogFilePicker));
+    uno::Reference<excel::XFileDialog> xDialog(new ScVbaFileDialog(this, mxContext, office::MsoFileDialogType::msoFileDialogFilePicker));
     xDialog->setTitle(aTitle);
     xDialog->setAllowMultiSelect(aMultiSelect);
 
@@ -373,6 +373,11 @@ ScVbaApplication::GetOpenFilename(const uno::Any& /*aFileFilter*/, const uno::An
 
     uno::Reference<excel::XFileDialogSelectedItems> xItems = xDialog->getSelectedItems();
     auto* pItems = dynamic_cast<ScVbaFileDialogSelectedItems*>(xItems.get());
+
+    // Check, if the implementation of XFileDialogSelectedItems is what we expect
+    if (!pItems)
+        throw uno::RuntimeException("Unexpected XFileDialogSelectedItems implementation");
+
     auto const & rItemVector = pItems->getItems();
 
     if (!bMultiSelect) // only 1 selection allowed - return path

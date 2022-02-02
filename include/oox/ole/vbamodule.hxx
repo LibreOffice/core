@@ -40,9 +40,14 @@ namespace oox {
 
 namespace oox::ole {
 
-struct VbaKeyBinding
+/** Stores, which key shortcut maps to which VBA macro method. */
+struct VbaMacroKeyAndMethodBinding
 {
+    // This describes a key combinaton in "raw" VBA Macro form, that
+    // still needs translated to a key event that can be used in
+    // LibreOffice.
     OUString msApiKey;
+    // The name of the macro method
     OUString msMethodName;
 };
 
@@ -105,7 +110,9 @@ private:
     bool                mbReadOnly;
     bool                mbPrivate;
     bool                mbExecutable;
-    std::vector<VbaKeyBinding> maKeyBindings;
+
+    /** Keys and VBA macro method bindings */
+    std::vector<VbaMacroKeyAndMethodBinding> maKeyBindings;
 };
 
 
