@@ -17,6 +17,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/event.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -455,6 +456,78 @@ void DateFormatter::SetExtDateFormat(ExtDateFieldFormat eFormat)
 }
 
 DateFormatter::~DateFormatter() = default;
+
+MetricFormatter::MetricFormatter(weld::Entry& rEntry, FieldUnit eUnit)
+    : EntryFormatter(rEntry)
+    , m_eUnit(eUnit)
+{
+    Init();
+}
+
+MetricFormatter::MetricFormatter(weld::FormattedSpinButton& rSpinButton, FieldUnit eUnit)
+    : EntryFormatter(rSpinButton)
+    , m_eUnit(eUnit)
+{
+    Init();
+}
+
+void MetricFormatter::Init()
+{
+    SetOutputHdl(LINK(this, MetricFormatter, FormatOutputHdl));
+    SetInputHdl(LINK(this, MetricFormatter, ParseInputHdl));
+}
+
+double MetricFormatter::GetMetricValue(FieldUnit eOutUnit)
+{
+    return vcl::ConvertDoubleValue(GetValue(), 0, GetDecimalDigits(), m_eUnit, eOutUnit);
+}
+
+void MetricFormatter::SetMetricValue(double nNewValue, FieldUnit eInUnit)
+{
+    SetValue(vcl::ConvertDoubleValue(nNewValue, 0, GetDecimalDigits(), eInUnit, m_eUnit));
+}
+
+void MetricFormatter::GetRange(double& rMin, double& rMax, FieldUnit eOutUnit) const
+{
+    rMin = vcl::ConvertDoubleValue(GetMinValue(), 0, GetDecimalDigits(), m_eUnit, eOutUnit);
+    rMax = vcl::ConvertDoubleValue(GetMaxValue(), 0, GetDecimalDigits(), m_eUnit, eOutUnit);
+}
+
+void MetricFormatter::SetRange(double nMin, double nMax, FieldUnit eInUnit)
+{
+    SetMinValue(vcl::ConvertDoubleValue(nMin, 0, GetDecimalDigits(), eInUnit, m_eUnit));
+    SetMaxValue(vcl::ConvertDoubleValue(nMax, 0, GetDecimalDigits(), eInUnit, m_eUnit));
+}
+
+void MetricFormatter::SetSpinIncrement(double dStep, FieldUnit eInUnit)
+{
+    SetSpinSize(vcl::ConvertDoubleValue(dStep, 0, GetDecimalDigits(), eInUnit, m_eUnit));
+}
+
+double MetricFormatter::GetSpinIncrement(FieldUnit eOutUnit) const
+{
+    return vcl::ConvertDoubleValue(GetSpinSize(), 0, GetDecimalDigits(), m_eUnit, eOutUnit);
+}
+
+void MetricFormatter::SetUnit(FieldUnit eUnit)
+{
+    if (eUnit != m_eUnit)
+    {
+        FieldUnit eOrigUnit = m_eUnit;
+        double fMin, fMax;
+        GetRange(fMin, fMax, eOrigUnit);
+        double fValue = GetMetricValue(eOrigUnit);
+        double fSpin = GetSpinIncrement(eOrigUnit);
+
+        m_eUnit = eUnit;
+
+        SetRange(fMin, fMax, eOrigUnit);
+        SetMetricValue(fValue, eOrigUnit);
+        SetSpinIncrement(fSpin, eOrigUnit);
+    }
+}
+
+MetricFormatter::~MetricFormatter() = default;
 
 PatternFormatter::PatternFormatter(weld::Entry& rEntry)
     : m_rEntry(rEntry)

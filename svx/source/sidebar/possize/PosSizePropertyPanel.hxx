@@ -31,6 +31,7 @@
 #include <vcl/EnumContext.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 class SdrView;
 
@@ -80,15 +81,19 @@ public:
 private:
     //Position
     std::unique_ptr<weld::Label> mxFtPosX;
-    std::unique_ptr<weld::MetricSpinButton> mxMtrPosX;
+    std::unique_ptr<weld::FormattedSpinButton> mxMtrPosX;
+    std::unique_ptr<weld::MetricFormatter> mxFormatterPosX;
     std::unique_ptr<weld::Label> mxFtPosY;
-    std::unique_ptr<weld::MetricSpinButton> mxMtrPosY;
+    std::unique_ptr<weld::FormattedSpinButton> mxMtrPosY;
+    std::unique_ptr<weld::MetricFormatter> mxFormatterPosY;
 
     // size
     std::unique_ptr<weld::Label> mxFtWidth;
-    std::unique_ptr<weld::MetricSpinButton> mxMtrWidth;
+    std::unique_ptr<weld::FormattedSpinButton> mxMtrWidth;
+    std::unique_ptr<weld::MetricFormatter> mxFormatterWidth;
     std::unique_ptr<weld::Label> mxFtHeight;
-    std::unique_ptr<weld::MetricSpinButton> mxMtrHeight;
+    std::unique_ptr<weld::FormattedSpinButton> mxMtrHeight;
+    std::unique_ptr<weld::MetricFormatter> mxFormatterHeight;
     std::unique_ptr<weld::CheckButton> mxCbxScale;
 
     //rotation
@@ -121,8 +126,8 @@ private:
     basegfx::B2DRange                       maRect;
     basegfx::B2DRange                       maWorkArea;
     const SdrView*                          mpView;
-    sal_uInt32                              mlOldWidth;
-    sal_uInt32                              mlOldHeight;
+    double                                  mnOldWidth;
+    double                                  mnOldHeight;
     tools::Long                                    mlRotX;
     tools::Long                                    mlRotY;
     Fraction                                maUIScale;
@@ -155,10 +160,10 @@ private:
 
     css::uno::Reference<css::ui::XSidebar> mxSidebar;
 
-    DECL_LINK( ChangePosXHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ChangePosYHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ChangeWidthHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ChangePosXHdl, weld::FormattedSpinButton&, void );
+    DECL_LINK( ChangePosYHdl, weld::FormattedSpinButton&, void );
+    DECL_LINK( ChangeWidthHdl, weld::FormattedSpinButton&, void );
+    DECL_LINK( ChangeHeightHdl, weld::FormattedSpinButton&, void );
     DECL_LINK( ClickAutoHdl, weld::Toggleable&, void );
     DECL_LINK( RotationHdl, svx::DialControl&, void );
     DECL_STATIC_LINK( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void );
