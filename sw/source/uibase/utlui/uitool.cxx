@@ -347,8 +347,7 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             ::FillHdFt(pHeaderFormat, rHeaderSet);
 
             rPageDesc.ChgHeaderShare(rHeaderSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
-            rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
-                            rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
+            rPageDesc.ChgFirstShare(rHeaderSet.Get(SID_ATTR_PAGE_SHARED_FIRST).GetValue());
             bFirstShare = true;
         }
         else
@@ -385,8 +384,8 @@ void ItemSetToPageDesc( const SfxItemSet& rSet, SwPageDesc& rPageDesc )
             rPageDesc.ChgFooterShare(rFooterSet.Get(SID_ATTR_PAGE_SHARED).GetValue());
             if (!bFirstShare)
             {
-                rPageDesc.ChgFirstShare(static_cast<const SfxBoolItem&>(
-                            rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST)).GetValue());
+                rPageDesc.ChgFirstShare(
+                            rFooterSet.Get(SID_ATTR_PAGE_SHARED_FIRST).GetValue());
             }
         }
         else
