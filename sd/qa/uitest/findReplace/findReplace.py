@@ -85,8 +85,8 @@ class findReplace(UITestCase):
 
                 self.assertEqual("Replace first first", impress_doc.DrawPages[0].getByIndex(1).String)
                 self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
-                # FIXME: tdf#145868
-                self.assertEqual("Replace", impress_doc.DrawPages[2].getByIndex(1).String)
+                # tdf#145868 - Third was search for earlier, but never should have been replaced
+                self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
                 self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
 
                 replaceterm = xDialog.getChild("replaceterm")
@@ -102,8 +102,7 @@ class findReplace(UITestCase):
             # AssertionError: 'Replace aaa aaa' != 'Replace first first'
             self.assertEqual("Replace aaa aaa", impress_doc.DrawPages[0].getByIndex(1).String)
             self.assertEqual("second", impress_doc.DrawPages[1].getByIndex(1).String)
-            # FIXME: tdf#145868
-            self.assertEqual("Replace", impress_doc.DrawPages[2].getByIndex(1).String)
+            self.assertEqual("Third", impress_doc.DrawPages[2].getByIndex(1).String)
             self.assertEqual("Text size 16", impress_doc.DrawPages[3].getByIndex(1).String)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

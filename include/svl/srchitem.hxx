@@ -108,6 +108,9 @@ public:
     // ConfigItem
     virtual void            Notify( const css::uno::Sequence< OUString > &rPropertyNames ) override;
 
+    bool equalsIgnoring(const SvxSearchItem& rSItem, bool bIgnoreReplace,
+                        bool bIgnoreCommand) const;
+
             SvxSearchCmd    GetCommand() const { return m_nCommand; }
             void            SetCommand(SvxSearchCmd nNewCommand) { m_nCommand = nNewCommand; }
 
