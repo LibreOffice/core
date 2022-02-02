@@ -345,12 +345,17 @@ namespace weld
     {
         if (eUnit != m_eSrcUnit)
         {
+            FieldUnit eOrigUnit = m_eSrcUnit;
+
             int step, page;
-            get_increments(step, page, m_eSrcUnit);
-            int value = get_value(m_eSrcUnit);
+            get_increments(step, page, eOrigUnit);
+            int value = get_value(eOrigUnit);
+
             m_eSrcUnit = eUnit;
-            set_increments(step, page, m_eSrcUnit);
-            set_value(value, m_eSrcUnit);
+
+            set_increments(step, page, eOrigUnit);
+            set_value(value, eOrigUnit);
+
             spin_button_output(*m_xSpinButton);
             update_width_chars();
         }
