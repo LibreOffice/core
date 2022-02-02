@@ -34,7 +34,7 @@ class tdf57465(UITestCase):
 
                 select_pos(xTabs, "0")
 
-                self.assertEqual("Row 1", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])
+                self.assertEqual("1", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])
 
 
             self.assertEqual("a", get_cell_by_position(calc_doc, 0, 1, 1).getString())
