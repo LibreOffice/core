@@ -193,11 +193,6 @@ void OKeySet::findTableColumnsMatching_throw(   const Any& i_aTable,
     ::dbaccess::getColumnPositions(i_xQueryColumns,xTblColumns->getElementNames(),sUpdateTableName,(*m_pColumnNames),true);
     ::dbaccess::getColumnPositions(i_xQueryColumns,aParameterColumns,sUpdateTableName,(*m_pParameterNames),true);
 
-    if ( o_pKeyColumnNames->empty() )
-    {
-        ::dbtools::throwGenericSQLException("Could not find any key column.", *this );
-    }
-
     for (auto const& keyColumn : *o_pKeyColumnNames)
     {
         if ( !xTblColumns->hasByName( keyColumn.second.sRealName ) )
@@ -459,7 +454,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
     std::vector< Reference<XNameAccess> > aAllIndexColumns;
     lcl_fillIndexColumns(xIndexes,aAllIndexColumns);
 
-    OUStringBuffer sKeyCondition,sIndexCondition;
+    OUStringBuffer sKeyCondition,sIndexCondition,sAllCondition;
     std::vector<sal_Int32> aIndexColumnPositions;
 
     const sal_Int32 nOldLength = aSql.getLength();
@@ -476,7 +471,7 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
                 sKeyCondition.append(sParam);
             sKeyCondition.append(aAnd);
         }
-        else
+        else if (!aAllIndexColumns.empty())
         {
             for (auto const& indexColumn : aAllIndexColumns)
             {
@@ -494,6 +489,19 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
                     break;
                 }
             }
+        }
+        // no primary key, no index => let's add all the fields in the conditions
+        else
+        {
+            sAllCondition.append(::dbtools::quoteName( aQuote,columnName.second.sRealName));
+            if((*_rOriginalRow)[columnName.second.nPosition].isNull())
+                sAllCondition.append(sIsNull);
+            else
+            {
+                sAllCondition.append(sParam);
+                aIndexColumnPositions.push_back(columnName.second.nPosition);
+            }
+            sAllCondition.append(aAnd);
         }
         if((*_rInsertRow)[columnName.second.nPosition].isModified())
         {
@@ -527,7 +535,11 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         aSql.setLength(aSql.getLength()-5); // remove the last AND
     }
     else
-        ::dbtools::throwSQLException( DBA_RES( RID_STR_NO_CONDITION_FOR_PK ), StandardSQLState::GENERAL_ERROR, m_xConnection );
+    {
+        aSql.append(" WHERE ");
+        aSql.append(sAllCondition.makeStringAndClear());
+        aSql.setLength(aSql.getLength()-5); // remove the last AND
+    }
 
     // now create end execute the prepared statement
     executeUpdate(_rInsertRow ,_rOriginalRow,aSql.makeStringAndClear(),u"",aIndexColumnPositions);

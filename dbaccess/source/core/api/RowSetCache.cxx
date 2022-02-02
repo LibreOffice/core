@@ -252,6 +252,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     {
         // need to check if we could handle this select clause
         bAllKeysFound = bAllKeysFound && (nTablesCount == 1 || checkJoin(xConnection,_xAnalyzer,aUpdateTableName));
+        // TODO : should we just remove bAllKeysFound test in this if/else?
+        bAllKeysFound = true;
 
         if(!bAllKeysFound )
         {
