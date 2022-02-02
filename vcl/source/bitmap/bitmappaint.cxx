@@ -294,45 +294,41 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
                     const double fSinAngle = sin(nAngle10.get() * F_PI1800);
                     const double fXMin = aNewBound.Left();
                     const double fYMin = aNewBound.Top();
-                    const tools::Long nWidth = aSizePix.Width();
-                    const tools::Long nHeight = aSizePix.Height();
-                    const tools::Long nNewWidth = aNewSizePix.Width();
-                    const tools::Long nNewHeight = aNewSizePix.Height();
-                    tools::Long nX;
-                    tools::Long nY;
-                    tools::Long nRotX;
-                    tools::Long nRotY;
-                    std::unique_ptr<long[]> pCosX(new long[nNewWidth]);
-                    std::unique_ptr<long[]> pSinX(new long[nNewWidth]);
-                    std::unique_ptr<long[]> pCosY(new long[nNewHeight]);
-                    std::unique_ptr<long[]> pSinY(new long[nNewHeight]);
+                    const sal_Int32 nWidth = aSizePix.Width();
+                    const sal_Int32 nHeight = aSizePix.Height();
+                    const sal_Int32 nNewWidth = aNewSizePix.Width();
+                    const sal_Int32 nNewHeight = aNewSizePix.Height();
+                    // we store alternating values of cos/sin. We do this instead of
+                    // separate arrays to improve cache hit.
+                    std::unique_ptr<sal_Int32[]> pCosSinX(new sal_Int32[nNewWidth * 2]);
+                    std::unique_ptr<sal_Int32[]> pCosSinY(new sal_Int32[nNewHeight * 2]);
 
-                    for (nX = 0; nX < nNewWidth; nX++)
+                    for (sal_Int32 nIdx = 0, nX = 0; nX < nNewWidth; nX++)
                     {
-                        const double fTmp = (fXMin + nX) * 64.;
+                        const float fTmp = (fXMin + nX) * 64;
 
-                        pCosX[nX] = FRound(fCosAngle * fTmp);
-                        pSinX[nX] = FRound(fSinAngle * fTmp);
+                        pCosSinX[nIdx++] = std::round(fCosAngle * fTmp);
+                        pCosSinX[nIdx++] = std::round(fSinAngle * fTmp);
                     }
 
-                    for (nY = 0; nY < nNewHeight; nY++)
+                    for (sal_Int32 nIdx = 0, nY = 0; nY < nNewHeight; nY++)
                     {
-                        const double fTmp = (fYMin + nY) * 64.;
+                        const float fTmp = (fYMin + nY) * 64;
 
-                        pCosY[nY] = FRound(fCosAngle * fTmp);
-                        pSinY[nY] = FRound(fSinAngle * fTmp);
+                        pCosSinY[nIdx++] = std::round(fCosAngle * fTmp);
+                        pCosSinY[nIdx++] = std::round(fSinAngle * fTmp);
                     }
 
-                    for (nY = 0; nY < nNewHeight; nY++)
+                    for (sal_Int32 nCosSinYIdx = 0, nY = 0; nY < nNewHeight; nY++)
                     {
-                        tools::Long nSinY = pSinY[nY];
-                        tools::Long nCosY = pCosY[nY];
+                        sal_Int32 nSinY = pCosSinY[nCosSinYIdx++];
+                        sal_Int32 nCosY = pCosSinY[nCosSinYIdx++];
                         Scanline pScanline = pWriteAcc->GetScanline(nY);
 
-                        for (nX = 0; nX < nNewWidth; nX++)
+                        for (sal_Int32 nCosSinXIdx = 0, nX = 0; nX < nNewWidth; nX++)
                         {
-                            nRotX = (pCosX[nX] - nSinY) >> 6;
-                            nRotY = (pSinX[nX] + nCosY) >> 6;
+                            sal_Int32 nRotX = (pCosSinX[nCosSinXIdx++] - nSinY) >> 6;
+                            sal_Int32 nRotY = (pCosSinX[nCosSinXIdx++] + nCosY) >> 6;
 
                             if ((nRotX > -1) && (nRotX < nWidth) && (nRotY > -1)
                                 && (nRotY < nHeight))
