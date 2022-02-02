@@ -285,28 +285,30 @@ namespace weld
             return (nValue - nHalf) / nFactor;
         return (nValue + nHalf) / nFactor;
     }
+}
 
-    OUString MetricSpinButton::format_number(int nValue) const
+namespace
+{
+    OUString format_metric_value(sal_Int64 nValue, unsigned int nDecimalDigits, FieldUnit eSrcUnit)
     {
         OUString aStr;
 
         const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
 
-        unsigned int nDecimalDigits = m_xSpinButton->get_digits();
         //pawn percent off to icu to decide whether percent is separated from its number for this locale
-        if (m_eSrcUnit == FieldUnit::PERCENT)
+        if (eSrcUnit == FieldUnit::PERCENT)
         {
             double fValue = nValue;
-            fValue /= SpinButton::Power10(nDecimalDigits);
+            fValue /= weld::SpinButton::Power10(nDecimalDigits);
             aStr = unicode::formatPercent(fValue, rLocaleData.getLanguageTag());
         }
         else
         {
             aStr = rLocaleData.getNum(nValue, nDecimalDigits, true, true);
-            OUString aSuffix = MetricToString(m_eSrcUnit);
-            if (m_eSrcUnit != FieldUnit::NONE && m_eSrcUnit != FieldUnit::DEGREE && m_eSrcUnit != FieldUnit::INCH && m_eSrcUnit != FieldUnit::FOOT)
+            OUString aSuffix = weld::MetricSpinButton::MetricToString(eSrcUnit);
+            if (eSrcUnit != FieldUnit::NONE && eSrcUnit != FieldUnit::DEGREE && eSrcUnit != FieldUnit::INCH && eSrcUnit != FieldUnit::FOOT)
                 aStr += " ";
-            if (m_eSrcUnit == FieldUnit::INCH)
+            if (eSrcUnit == FieldUnit::INCH)
             {
                 OUString sDoublePrime = u"\u2033";
                 if (aSuffix != "\"" && aSuffix != sDoublePrime)
@@ -314,7 +316,7 @@ namespace weld
                 else
                     aSuffix = sDoublePrime;
             }
-            else if (m_eSrcUnit == FieldUnit::FOOT)
+            else if (eSrcUnit == FieldUnit::FOOT)
             {
                 OUString sPrime = u"\u2032";
                 if (aSuffix != "'" && aSuffix != sPrime)
@@ -323,11 +325,27 @@ namespace weld
                     aSuffix = sPrime;
             }
 
-            assert(m_eSrcUnit != FieldUnit::PERCENT);
+            assert(eSrcUnit != FieldUnit::PERCENT);
             aStr += aSuffix;
         }
 
         return aStr;
+    }
+}
+
+namespace weld
+{
+    IMPL_LINK_NOARG(MetricFormatter, FormatOutputHdl, LinkParamNone*, bool)
+    {
+        double fValue = Formatter::GetValue() * weld::SpinButton::Power10(GetDecimalDigits());
+        OUString sText = format_metric_value(fValue, GetDecimalDigits(), m_eUnit);
+        ImplSetTextImpl(sText, nullptr);
+        return true;
+    }
+
+    OUString MetricSpinButton::format_number(int nValue) const
+    {
+        return format_metric_value(nValue, m_xSpinButton->get_digits(), m_eSrcUnit);
     }
 
     void MetricSpinButton::set_digits(unsigned int digits)
