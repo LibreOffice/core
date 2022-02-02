@@ -135,6 +135,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testTabOverMarginSection)
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(5000), nWidth);
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testEmptyNumberingPageSplit)
+{
+    // Given a document with 2 pages: the only para on page 1 is a numbering without a number
+    // portion:
+    createSwDoc(DATA_DIRECTORY, "empty-numbering-page-split.fodt");
+
+    // When inserting an image that doesn't fit the body frame:
+    // Then make sure that the layout update after insertion finishes:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FileName",
+                                      m_directories.getURLFromSrc(DATA_DIRECTORY) + "image.png"),
+    };
+    // Without the accompanying fix in place, this never finished.
+    dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
