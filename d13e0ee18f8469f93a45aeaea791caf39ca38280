@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "902f405f_77eb9d95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-02-02T11:28:52Z",
+      "side": 1,
+      "message": "Looks good to me; I\u0027d love to get rid of the killer Android performance impact of the unique_ptr and the sal_Int32[] though \u003d)",
+      "revId": "d13e0ee18f8469f93a45aeaea791caf39ca38280",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
