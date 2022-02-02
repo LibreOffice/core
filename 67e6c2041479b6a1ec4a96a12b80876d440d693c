@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef699179_3451f641",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T16:26:44Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix!  Nice to test the result, tanks for using a minimized/randomized picture!\n\n(Note: the export was already correct.)",
+      "revId": "67e6c2041479b6a1ec4a96a12b80876d440d693c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
