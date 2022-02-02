@@ -219,12 +219,12 @@ public:
     SAL_DLLPRIVATE virtual void FieldModified() override;
 
     // public Formatter overrides, drives optional SpinButton settings
-    SAL_DLLPRIVATE virtual void ClearMinValue() override;
-    SAL_DLLPRIVATE virtual void SetMinValue(double dMin) override;
-    SAL_DLLPRIVATE virtual void ClearMaxValue() override;
-    SAL_DLLPRIVATE virtual void SetMaxValue(double dMin) override;
+    virtual void ClearMinValue() override;
+    virtual void SetMinValue(double dMin) override;
+    virtual void ClearMaxValue() override;
+    virtual void SetMaxValue(double dMin) override;
 
-    SAL_DLLPRIVATE virtual void SetSpinSize(double dStep) override;
+    virtual void SetSpinSize(double dStep) override;
 
     void SetEntrySelectionOptions(SelectionOptions eOptions) { m_eOptions = eOptions; }
 
@@ -356,6 +356,35 @@ private:
 
     ExtDateFieldFormat m_eFormat;
     mutable std::unique_ptr<CalendarWrapper> m_xCalendarWrapper;
+};
+
+class VCL_DLLPUBLIC MetricFormatter final : public EntryFormatter
+{
+public:
+    MetricFormatter(weld::Entry& rEntry, FieldUnit eUnit);
+    MetricFormatter(weld::FormattedSpinButton& rSpinButton, FieldUnit eUnit);
+
+    void SetUnit(FieldUnit eUnit);
+    FieldUnit GetUnit() const { return m_eUnit; }
+
+    double GetMetricValue(FieldUnit eOutUnit);
+    void SetMetricValue(double fVal, FieldUnit eOutUnit);
+
+    void GetRange(double& min, double& max, FieldUnit eOutUnit) const;
+    void SetRange(double min, double max, FieldUnit eInUnit);
+
+    void SetSpinIncrement(double dStep, FieldUnit eInUnit);
+    double GetSpinIncrement(FieldUnit eOutUnit) const;
+
+    virtual ~MetricFormatter() override;
+
+private:
+    DECL_DLLPRIVATE_LINK(FormatOutputHdl, LinkParamNone*, bool);
+    DECL_DLLPRIVATE_LINK(ParseInputHdl, sal_Int64*, TriState);
+
+    SAL_DLLPRIVATE void Init();
+
+    FieldUnit m_eUnit;
 };
 
 class VCL_DLLPUBLIC PatternFormatter final

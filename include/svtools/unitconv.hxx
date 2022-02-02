@@ -24,6 +24,7 @@
 #include <tools/long.hxx>
 
 namespace weld { class MetricSpinButton; }
+namespace weld { class MetricFormatter; }
 
 // macro -----------------------------------------------------------------
 
@@ -34,6 +35,7 @@ typedef tools::Long (*FUNC_CONVERT)(tools::Long);
 // Functions -------------------------------------------------------------
 
 SVT_DLLPUBLIC void      SetFieldUnit(weld::MetricSpinButton& rCtrl, FieldUnit eUnit, bool bAll = false);
+SVT_DLLPUBLIC void      SetFieldUnit(weld::MetricFormatter& rCtrl, FieldUnit eUnit, bool bAll = false);
 
 SVT_DLLPUBLIC tools::Long      CalcToUnit( float nIn, MapUnit eUnit );
 SVT_DLLPUBLIC tools::Long      CalcToPoint( tools::Long nIn, MapUnit eUnit, sal_uInt16 nFactor );
@@ -44,7 +46,10 @@ SVT_DLLPUBLIC tools::Long      ControlToItem( tools::Long nIn, FieldUnit eCtrl, 
 SVT_DLLPUBLIC FieldUnit MapToFieldUnit( const MapUnit eUnit );
 
 SVT_DLLPUBLIC void      SetMetricValue(weld::MetricSpinButton& rField, int lCoreValue, MapUnit eUnit);
+SVT_DLLPUBLIC void      SetMetricValue(weld::MetricFormatter& rField, double lCoreValue, MapUnit eUnit);
+
 SVT_DLLPUBLIC int       GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit);
+SVT_DLLPUBLIC double    GetCoreValue(weld::MetricFormatter& rField, MapUnit eUnit);
 
 SVT_DLLPUBLIC tools::Long  TransformMetric( tools::Long nVal, FieldUnit aOld, FieldUnit aNew );
 

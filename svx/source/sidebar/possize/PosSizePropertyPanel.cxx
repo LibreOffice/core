@@ -62,13 +62,17 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     const css::uno::Reference<css::ui::XSidebar>& rxSidebar)
 :   PanelLayout(pParent, "PosSizePropertyPanel", "svx/ui/sidebarpossize.ui"),
     mxFtPosX(m_xBuilder->weld_label("horizontallabel")),
-    mxMtrPosX(m_xBuilder->weld_metric_spin_button("horizontalpos", FieldUnit::CM)),
+    mxMtrPosX(m_xBuilder->weld_formatted_spin_button("horizontalpos")),
+    mxFormatterPosX(new weld::MetricFormatter(*mxMtrPosX, FieldUnit::CM)),
     mxFtPosY(m_xBuilder->weld_label("verticallabel")),
-    mxMtrPosY(m_xBuilder->weld_metric_spin_button("verticalpos", FieldUnit::CM)),
+    mxMtrPosY(m_xBuilder->weld_formatted_spin_button("verticalpos")),
+    mxFormatterPosY(new weld::MetricFormatter(*mxMtrPosY, FieldUnit::CM)),
     mxFtWidth(m_xBuilder->weld_label("widthlabel")),
-    mxMtrWidth(m_xBuilder->weld_metric_spin_button("selectwidth", FieldUnit::CM)),
+    mxMtrWidth(m_xBuilder->weld_formatted_spin_button("selectwidth")),
+    mxFormatterWidth(new weld::MetricFormatter(*mxMtrWidth, FieldUnit::CM)),
     mxFtHeight(m_xBuilder->weld_label("heightlabel")),
-    mxMtrHeight(m_xBuilder->weld_metric_spin_button("selectheight", FieldUnit::CM)),
+    mxMtrHeight(m_xBuilder->weld_formatted_spin_button("selectheight")),
+    mxFormatterHeight(new weld::MetricFormatter(*mxMtrHeight, FieldUnit::CM)),
     mxCbxScale(m_xBuilder->weld_check_button("ratio")),
     mxFtAngle(m_xBuilder->weld_label("rotationlabel")),
     mxMtrAngle(m_xBuilder->weld_metric_spin_button("rotation", FieldUnit::DEGREE)),
@@ -87,8 +91,8 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxAlignDispatch2(new ToolbarUnoDispatcher(*mxAlignTbx2, *m_xBuilder, rxFrame)),
     mxBtnEditChart(m_xBuilder->weld_button("btnEditChart")),
     mpView(nullptr),
-    mlOldWidth(1),
-    mlOldHeight(1),
+    mnOldWidth(1.0),
+    mnOldHeight(1.0),
     mlRotX(0),
     mlRotY(0),
     mePoolUnit(),
@@ -134,12 +138,16 @@ PosSizePropertyPanel::PosSizePropertyPanel(
 PosSizePropertyPanel::~PosSizePropertyPanel()
 {
     mxFtPosX.reset();
+    mxFormatterPosX.reset();
     mxMtrPosX.reset();
     mxFtPosY.reset();
+    mxFormatterPosY.reset();
     mxMtrPosY.reset();
     mxFtWidth.reset();
+    mxFormatterWidth.reset();
     mxMtrWidth.reset();
     mxFtHeight.reset();
+    mxFormatterHeight.reset();
     mxMtrHeight.reset();
     mxCbxScale.reset();
     mxFtAngle.reset();
@@ -349,76 +357,72 @@ void PosSizePropertyPanel::HandleContextChange(
 }
 
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, weld::MetricSpinButton&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeWidthHdl, weld::FormattedSpinButton&, void )
 {
-    if( mxCbxScale->get_active() &&
-        mxCbxScale->get_sensitive() )
+    if (mxCbxScale->get_active() && mxCbxScale->get_sensitive())
     {
-        tools::Long nHeight = static_cast<tools::Long>( (static_cast<double>(mlOldHeight) * static_cast<double>(mxMtrWidth->get_value(FieldUnit::NONE))) / static_cast<double>(mlOldWidth) );
-        if( nHeight <= mxMtrHeight->get_max( FieldUnit::NONE ) )
+        double nHeight = (mnOldHeight * mxFormatterWidth->GetValue()) / mnOldWidth;
+        if (nHeight <= mxFormatterHeight->GetMaxValue())
         {
-            mxMtrHeight->set_value( nHeight, FieldUnit::NONE );
+            mxFormatterHeight->SetValue(nHeight);
         }
         else
         {
-            nHeight = static_cast<tools::Long>(mxMtrHeight->get_max( FieldUnit::NONE ));
-            mxMtrHeight->set_value(nHeight, FieldUnit::NONE);
-            const tools::Long nWidth = static_cast<tools::Long>( (static_cast<double>(mlOldWidth) * static_cast<double>(nHeight)) / static_cast<double>(mlOldHeight) );
-            mxMtrWidth->set_value( nWidth, FieldUnit::NONE );
+            nHeight = mxFormatterHeight->GetMaxValue();
+            mxFormatterHeight->SetValue(nHeight);
+            const double nWidth = (mnOldWidth * nHeight) / mnOldHeight;
+            mxFormatterWidth->SetValue(nWidth);
         }
     }
     executeSize();
 }
 
-
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, weld::MetricSpinButton&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangeHeightHdl, weld::FormattedSpinButton&, void )
 {
-    if( mxCbxScale->get_active() &&
-        mxCbxScale->get_sensitive() )
+    if (mxCbxScale->get_active() && mxCbxScale->get_sensitive())
     {
-        tools::Long nWidth = static_cast<tools::Long>( (static_cast<double>(mlOldWidth) * static_cast<double>(mxMtrHeight->get_value(FieldUnit::NONE))) / static_cast<double>(mlOldHeight) );
-        if( nWidth <= mxMtrWidth->get_max( FieldUnit::NONE ) )
+        double nWidth = (mnOldWidth * mxFormatterHeight->GetValue()) / mnOldHeight;
+        if (nWidth <= mxFormatterWidth->GetMaxValue())
         {
-            mxMtrWidth->set_value( nWidth, FieldUnit::NONE );
+            mxFormatterWidth->SetValue(nWidth);
         }
         else
         {
-            nWidth = static_cast<tools::Long>(mxMtrWidth->get_max( FieldUnit::NONE ));
-            mxMtrWidth->set_value( nWidth, FieldUnit::NONE );
-            const tools::Long nHeight = static_cast<tools::Long>( (static_cast<double>(mlOldHeight) * static_cast<double>(nWidth)) / static_cast<double>(mlOldWidth) );
-            mxMtrHeight->set_value( nHeight, FieldUnit::NONE );
+            nWidth = mxFormatterWidth->GetMaxValue();
+            mxFormatterWidth->SetValue(nWidth);
+            const double nHeight = (mnOldHeight * nWidth) / mnOldWidth;
+            mxFormatterHeight->SetValue(nHeight);
         }
     }
     executeSize();
 }
 
-
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::MetricSpinButton&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, weld::FormattedSpinButton&, void )
 {
-    if ( mxMtrPosX->get_value_changed_from_saved())
+    if (mxMtrPosX->get_value_changed_from_saved())
     {
-        tools::Long lX = GetCoreValue( *mxMtrPosX, mePoolUnit );
+        double fX = GetCoreValue(*mxFormatterPosX, mePoolUnit);
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lX = tools::Long( lX * aUIScale );
+        sal_Int32 nX(fX * aUIScale);
 
-        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,static_cast<sal_uInt32>(lX));
+        SfxInt32Item aPosXItem(SID_ATTR_TRANSFORM_POS_X, nX);
 
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
     }
 }
 
-IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::MetricSpinButton&, void )
+IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, weld::FormattedSpinButton&, void )
 {
     if ( mxMtrPosY->get_value_changed_from_saved() )
     {
-        tools::Long lY = GetCoreValue( *mxMtrPosY, mePoolUnit );
+        double fY = GetCoreValue(*mxFormatterPosY, mePoolUnit);
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lY = tools::Long( lY * aUIScale );
+        sal_Int32 nY(fY * aUIScale);
 
-        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,static_cast<sal_uInt32>(lY));
+        SfxInt32Item aPosYItem(SID_ATTR_TRANSFORM_POS_Y, nY);
 
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosYItem });
@@ -429,8 +433,8 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::Toggleable&, void )
 {
     if ( mxCbxScale->get_active() )
     {
-        mlOldWidth  = std::max(GetCoreValue(*mxMtrWidth,  mePoolUnit), 1);
-        mlOldHeight = std::max(GetCoreValue(*mxMtrHeight, mePoolUnit), 1);
+        mnOldWidth  = std::max(GetCoreValue(*mxFormatterWidth,  mePoolUnit), 1.0);
+        mnOldHeight = std::max(GetCoreValue(*mxFormatterHeight, mePoolUnit), 1.0);
     }
 
     // mxCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
@@ -463,13 +467,12 @@ IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, 
 
 namespace
 {
-    void limitWidth(weld::MetricSpinButton& rMetricSpinButton)
+    void limitWidth(weld::FormattedSpinButton& rFormattedSpinButton)
     {
-        // space is limited in the sidebar, so limit MetricSpinButtons to a width of 7 digits
+        // space is limited in the sidebar, so limit FormattedSpinButton to a width of 7 digits
         const int nMaxDigits = 7;
 
-        weld::SpinButton& rSpinButton = rMetricSpinButton.get_widget();
-        rSpinButton.set_width_chars(std::min(rSpinButton.get_width_chars(), nMaxDigits));
+        rFormattedSpinButton.set_width_chars(std::min(rFormattedSpinButton.get_width_chars(), nMaxDigits));
     }
 }
 
@@ -511,11 +514,11 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pWidthItem)
                 {
-                    tools::Long lOldWidth1 = tools::Long( pWidthItem->GetValue() / maUIScale );
-                    SetFieldUnit( *mxMtrWidth, meDlgUnit, true );
-                    SetMetricValue( *mxMtrWidth, lOldWidth1, mePoolUnit );
+                    double fTmp(pWidthItem->GetValue() / maUIScale);
+                    SetFieldUnit(*mxFormatterWidth, meDlgUnit, true);
+                    SetMetricValue(*mxFormatterWidth, fTmp, mePoolUnit);
                     limitWidth(*mxMtrWidth);
-                    mlOldWidth = lOldWidth1;
+                    mnOldWidth = fTmp;
                     mxMtrWidth->save_value();
                     break;
                 }
@@ -531,11 +534,11 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pHeightItem)
                 {
-                    tools::Long nTmp = tools::Long( pHeightItem->GetValue() / maUIScale);
-                    SetFieldUnit( *mxMtrHeight, meDlgUnit, true );
-                    SetMetricValue( *mxMtrHeight, nTmp, mePoolUnit );
+                    double fTmp(pHeightItem->GetValue() / maUIScale);
+                    SetFieldUnit(*mxFormatterHeight, meDlgUnit, true);
+                    SetMetricValue(*mxFormatterHeight, fTmp, mePoolUnit);
                     limitWidth(*mxMtrHeight);
-                    mlOldHeight = nTmp;
+                    mnOldHeight = fTmp;
                     mxMtrHeight->save_value();
                     break;
                 }
@@ -551,9 +554,9 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    tools::Long nTmp = tools::Long(pItem->GetValue() / maUIScale);
-                    SetFieldUnit( *mxMtrPosX, meDlgUnit, true );
-                    SetMetricValue( *mxMtrPosX, nTmp, mePoolUnit );
+                    double fTmp(pItem->GetValue() / maUIScale);
+                    SetFieldUnit(*mxFormatterPosX, meDlgUnit, true );
+                    SetMetricValue(*mxFormatterPosX, fTmp, mePoolUnit);
                     limitWidth(*mxMtrPosX);
                     mxMtrPosX->save_value();
                     break;
@@ -570,9 +573,9 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
                 if(pItem)
                 {
-                    tools::Long nTmp = tools::Long(pItem->GetValue() / maUIScale);
-                    SetFieldUnit( *mxMtrPosY, meDlgUnit, true );
-                    SetMetricValue( *mxMtrPosY, nTmp, mePoolUnit );
+                    double fTmp(pItem->GetValue() / maUIScale);
+                    SetFieldUnit(*mxFormatterPosY, meDlgUnit, true);
+                    SetMetricValue(*mxFormatterPosY, fTmp, mePoolUnit);
                     limitWidth(*mxMtrPosY);
                     mxMtrPosY->save_value();
                     break;
@@ -773,27 +776,34 @@ void PosSizePropertyPanel::NotifyItemUpdate(
 
 void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::property_tree::ptree& rState)
 {
-    weld::MetricSpinButton* pControl = nullptr;
+    weld::FormattedSpinButton* pControl = nullptr;
+    weld::MetricFormatter* pFormatter = nullptr;
     switch (nSID)
     {
         case SID_ATTR_TRANSFORM_POS_X:
             pControl = mxMtrPosX.get();
+            pFormatter = mxFormatterPosX.get();
             break;
         case SID_ATTR_TRANSFORM_POS_Y:
             pControl = mxMtrPosY.get();
+            pFormatter = mxFormatterPosY.get();
             break;
         case SID_ATTR_TRANSFORM_WIDTH:
             pControl = mxMtrWidth.get();
+            pFormatter = mxFormatterWidth.get();
             break;
         case SID_ATTR_TRANSFORM_HEIGHT:
             pControl = mxMtrHeight.get();
+            pFormatter = mxFormatterHeight.get();
             break;
     }
 
     if (pControl && !pControl->get_text().isEmpty())
     {
+        const int nDecimalDigits = pFormatter->GetDecimalDigits();
+        double fValue = pFormatter->GetMetricValue(pFormatter->GetUnit()) * weld::SpinButton::Power10(nDecimalDigits);
         OUString sValue = Application::GetSettings().GetNeutralLocaleDataWrapper().
-            getNum(pControl->get_value(pControl->get_unit()), pControl->get_digits(), false, false);
+            getNum(fValue, nDecimalDigits, false, false);
         rState.put(pControl->get_buildable_name().getStr(), sValue.toUtf8().getStr());
     }
 }
@@ -806,16 +816,14 @@ void PosSizePropertyPanel::executeSize()
     Fraction aUIScale = mpView->GetModel()->GetUIScale();
 
     // get Width
-    double nWidth = static_cast<double>(mxMtrWidth->get_value(FieldUnit::MM_100TH));
+    double nWidth = mxFormatterWidth->GetMetricValue(FieldUnit::MM_100TH);
     tools::Long lWidth = tools::Long(nWidth * static_cast<double>(aUIScale));
     lWidth = OutputDevice::LogicToLogic( lWidth, MapUnit::Map100thMM, mePoolUnit );
-    lWidth = static_cast<tools::Long>(mxMtrWidth->denormalize( lWidth ));
 
     // get Height
-    double nHeight = static_cast<double>(mxMtrHeight->get_value(FieldUnit::MM_100TH));
+    double nHeight = mxFormatterHeight->GetMetricValue(FieldUnit::MM_100TH);
     tools::Long lHeight = tools::Long(nHeight * static_cast<double>(aUIScale));
     lHeight = OutputDevice::LogicToLogic( lHeight, MapUnit::Map100thMM, mePoolUnit );
-    lHeight = static_cast<tools::Long>(mxMtrHeight->denormalize( lHeight ));
 
     // put Width & Height to itemset
     SfxUInt32Item aWidthItem( SID_ATTR_TRANSFORM_WIDTH, static_cast<sal_uInt32>(lWidth));
@@ -867,30 +875,29 @@ void PosSizePropertyPanel::MetricState( SfxItemState eState, const SfxPoolItem* 
 
     if (mxMtrPosX->get_text().isEmpty())
         bPosXBlank = true;
-    SetFieldUnit( *mxMtrPosX, meDlgUnit, true );
+    SetFieldUnit(*mxFormatterPosX, meDlgUnit, true);
     if(bPosXBlank)
         mxMtrPosX->set_text(OUString());
 
     if (mxMtrPosY->get_text().isEmpty())
         bPosYBlank = true;
-    SetFieldUnit( *mxMtrPosY, meDlgUnit, true );
+    SetFieldUnit(*mxFormatterPosY, meDlgUnit, true);
     if(bPosYBlank)
         mxMtrPosY->set_text(OUString());
     SetPosSizeMinMax();
 
     if (mxMtrWidth->get_text().isEmpty())
         bWidthBlank = true;
-    SetFieldUnit( *mxMtrWidth, meDlgUnit, true );
+    SetFieldUnit(*mxFormatterWidth, meDlgUnit, true);
     if(bWidthBlank)
         mxMtrWidth->set_text(OUString());
 
     if (mxMtrHeight->get_text().isEmpty())
         bHeightBlank = true;
-    SetFieldUnit( *mxMtrHeight, meDlgUnit, true );
+    SetFieldUnit(*mxFormatterHeight, meDlgUnit, true);
     if(bHeightBlank)
         mxMtrHeight->set_text(OUString());
 }
-
 
 FieldUnit PosSizePropertyPanel::GetCurrentUnit( SfxItemState eState, const SfxPoolItem* pState )
 {
@@ -1021,7 +1028,7 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     TransfrmHelper::ScaleRect( maWorkArea, aUIScale );
     TransfrmHelper::ScaleRect( maRect, aUIScale );
 
-    const sal_uInt16 nDigits(mxMtrPosX->get_digits());
+    const sal_uInt16 nDigits(mxFormatterPosX->GetDecimalDigits());
     TransfrmHelper::ConvertRect( maWorkArea, nDigits, mePoolUnit, meDlgUnit );
     TransfrmHelper::ConvertRect( maRect, nDigits, mePoolUnit, meDlgUnit );
 
@@ -1041,16 +1048,18 @@ void PosSizePropertyPanel::SetPosSizeMinMax()
     fTop = std::clamp(fTop, - fMaxLong, fMaxLong);
     fBottom = std::clamp(fBottom, -fMaxLong, fMaxLong);
 
-    mxMtrPosX->set_range(basegfx::fround64(fLeft), basegfx::fround64(fRight), FieldUnit::NONE);
+    mxFormatterPosX->SetMinValue(fLeft);
+    mxFormatterPosX->SetMaxValue(fRight);
     limitWidth(*mxMtrPosX);
-    mxMtrPosY->set_range(basegfx::fround64(fTop), basegfx::fround64(fBottom), FieldUnit::NONE);
+    mxFormatterPosY->SetMinValue(fTop);
+    mxFormatterPosY->SetMaxValue(fBottom);
     limitWidth(*mxMtrPosY);
 
     double fMaxWidth = maWorkArea.getWidth() - (maRect.getWidth() - fLeft);
     double fMaxHeight = maWorkArea.getHeight() - (maRect.getHeight() - fTop);
-    mxMtrWidth->set_max(std::min<sal_Int64>(INT_MAX, basegfx::fround64(fMaxWidth*100)), FieldUnit::NONE);
+    mxFormatterWidth->SetMaxValue(std::min<sal_Int64>(INT_MAX, basegfx::fround64(fMaxWidth*100)));
     limitWidth(*mxMtrWidth);
-    mxMtrHeight->set_max(std::min<sal_Int64>(INT_MAX, basegfx::fround64(fMaxHeight*100)), FieldUnit::NONE);
+    mxFormatterHeight->SetMaxValue(std::min<sal_Int64>(INT_MAX, basegfx::fround64(fMaxHeight*100)));
     limitWidth(*mxMtrHeight);
 }
 

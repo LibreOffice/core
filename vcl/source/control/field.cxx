@@ -36,6 +36,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/uitest/metricfielduiobject.hxx>
+#include <vcl/weldutils.hxx>
 
 #include <svdata.hxx>
 
@@ -1395,6 +1396,21 @@ sal_Int64 MetricFormatter::GetCorrectedValue( FieldUnit eOutUnit ) const
     // convert to requested units
     return vcl::ConvertValue(0/*nCorrectedValue*/, 0, GetDecimalDigits(),
                              meUnit, eOutUnit);
+}
+
+namespace weld
+{
+    IMPL_LINK(MetricFormatter, ParseInputHdl, sal_Int64*, result, TriState)
+    {
+        const LocaleDataWrapper& rLocaleData = Application::GetSettings().GetLocaleDataWrapper();
+
+        double fResult(0.0);
+        bool bRet = vcl::TextToValue(GetEntryText(), fResult, 0, GetDecimalDigits(), rLocaleData, m_eUnit);
+        if (bRet)
+            *result = fResult;
+
+        return bRet ? TRISTATE_TRUE : TRISTATE_FALSE;
+    }
 }
 
 MetricField::MetricField(vcl::Window* pParent, WinBits nWinStyle)

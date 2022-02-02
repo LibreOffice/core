@@ -23,6 +23,7 @@
 #include <tools/UnitConversion.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/weld.hxx>
+#include <vcl/weldutils.hxx>
 
 void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 {
@@ -86,11 +87,77 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
     rField.set_value(rField.normalize(nValue), FieldUnit::TWIP);
 }
 
+void SetFieldUnit(weld::MetricFormatter& rField, FieldUnit eUnit, bool bAll)
+{
+    double nMin, nMax;
+    rField.GetRange(nMin, nMax, FieldUnit::TWIP);
+    double nValue = rField.GetMetricValue(FieldUnit::TWIP);
+
+    if (!bAll)
+    {
+        switch (eUnit)
+        {
+            case FieldUnit::M:
+            case FieldUnit::KM:
+                eUnit = FieldUnit::CM;
+                break;
+            case FieldUnit::FOOT:
+            case FieldUnit::MILE:
+                eUnit = FieldUnit::INCH;
+                break;
+            default: //prevent warning
+                break;
+        }
+    }
+
+    rField.SetUnit(eUnit);
+
+    if (FieldUnit::POINT == eUnit)
+    {
+        if (rField.GetDecimalDigits() > 1)
+            rField.SetDecimalDigits(1);
+    }
+    else
+        rField.SetDecimalDigits(2);
+
+    switch (eUnit)
+    {
+        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FieldUnit::MM
+        case FieldUnit::CHAR:
+        case FieldUnit::LINE:
+        case FieldUnit::MM:
+            rField.SetSpinIncrement(50, eUnit);
+            break;
+        case FieldUnit::INCH:
+            rField.SetSpinIncrement(2, eUnit);
+            break;
+        default:
+            rField.SetSpinIncrement(10, eUnit);
+            break;
+    }
+
+    if (!bAll)
+    {
+        rField.SetRange(nMin, nMax, FieldUnit::TWIP);
+    }
+
+    rField.SetMetricValue(nValue, FieldUnit::TWIP);
+}
+
 void SetMetricValue(weld::MetricSpinButton& rField, int nCoreValue, MapUnit eUnit)
 {
     auto nVal = OutputDevice::LogicToLogic(nCoreValue, eUnit, MapUnit::Map100thMM);
     nVal = rField.normalize(nVal);
     rField.set_value(nVal, FieldUnit::MM_100TH);
+}
+
+void SetMetricValue(weld::MetricFormatter& rField, double nCoreValue, MapUnit eUnit)
+{
+    const auto eFrom = MapToO3tlLength(eUnit);
+    assert(eFrom != o3tl::Length::invalid);
+
+    auto nVal = o3tl::convert(nCoreValue, eFrom, o3tl::Length::mm100);
+    rField.SetMetricValue(nVal, FieldUnit::MM_100TH);
 }
 
 int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
@@ -115,6 +182,16 @@ int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
     if (!bRoundBefore)
         nUnitVal = rField.denormalize(nUnitVal);
     return nUnitVal;
+}
+
+double GetCoreValue(weld::MetricFormatter& rField, MapUnit eUnit)
+{
+    double nVal = rField.GetMetricValue(FieldUnit::MM_100TH);
+
+    const auto eTo = MapToO3tlLength(eUnit);
+    assert(eTo != o3tl::Length::invalid);
+
+    return o3tl::convert(nVal, o3tl::Length::mm100, eTo);
 }
 
 tools::Long CalcToUnit( float nIn, MapUnit eUnit )
