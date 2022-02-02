@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0d7df9a_e5124d4a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T13:20:37Z",
+      "side": 1,
+      "message": "(Last patch set fixed only the typo:\n\n\u003c +    // Every textbox shall be visble.\n---\n\u003e +    // Every textbox shall be visible.)\n",
+      "revId": "daf2e67c9f276c3e0166aeec7630be4760167029",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
