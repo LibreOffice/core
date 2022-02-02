@@ -16,6 +16,23 @@
       "message": "Lionel: I don\u0027t know if what I did is ok or not but there are at least 2 things to deal with:\n- bAllKeysFound management in ORowSetCache ctr\n- the cache pb I described in the comment.\n\nIf you\u0027re interested and have got some hints it would certainly help but if it\u0027s not the case, I probably abandon it but no big deal since I think all tables should have a PK anyway. Indeed even quick table tests, when one\u0027s doesn\u0027t know what to use as a PK, just create a technical autoincrement integer field as a PK.",
       "revId": "675e8509d8e90b1472adb207c87a2ca8dae7c6ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d65ce8fc_443fa700",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-02T20:44:34Z",
+      "side": 1,
+      "message": "Windows Jenkins failing again for no related reason with the patch...",
+      "revId": "675e8509d8e90b1472adb207c87a2ca8dae7c6ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
