@@ -136,7 +136,7 @@ void VbaModule::createAndImportModule( StorageBase& rVbaStrg,
 
 void VbaModule::registerShortcutKeys()
 {
-    for (VbaKeyBinding const& rKeyBinding : maKeyBindings)
+    for (VbaMacroKeyAndMethodBinding const& rKeyBinding : maKeyBindings)
     {
         try
         {
