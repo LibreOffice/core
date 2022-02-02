@@ -17,6 +17,7 @@ ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
     , m_xLbSort(m_xBuilder->weld_combo_box("sortlb"))
     , m_xBtnUp(m_xBuilder->weld_radio_button("up"))
     , m_xBtnDown(m_xBuilder->weld_radio_button("down"))
+    , m_xLabel(m_xBuilder->weld_label("lbColRow"))
     , m_pParent(pParent)
 {
     // tdf#136155 let the other elements in the dialog determine the width of the

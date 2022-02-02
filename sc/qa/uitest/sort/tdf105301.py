@@ -23,15 +23,15 @@ class tdf105301(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
-                self.assertEqual("Column B", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])
-                self.assertEqual("Column C", get_state_as_dict(xDialog.getChild("sortlb2"))['DisplayText'])
-                self.assertEqual("Column D", get_state_as_dict(xDialog.getChild("sortlb3"))['DisplayText'])
+                self.assertEqual("B", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])
+                self.assertEqual("C", get_state_as_dict(xDialog.getChild("sortlb2"))['DisplayText'])
+                self.assertEqual("D", get_state_as_dict(xDialog.getChild("sortlb3"))['DisplayText'])
 
                 # Without the fix in place, this test would have failed with
-                # AssertionError: 'Column E' != '- undefined -'
-                self.assertEqual("Column E", get_state_as_dict(xDialog.getChild("sortlb4"))['DisplayText'])
-                self.assertEqual("Column F", get_state_as_dict(xDialog.getChild("sortlb5"))['DisplayText'])
-                self.assertEqual("Column G", get_state_as_dict(xDialog.getChild("sortlb6"))['DisplayText'])
+                # AssertionError: 'E' != '- undefined -'
+                self.assertEqual("E", get_state_as_dict(xDialog.getChild("sortlb4"))['DisplayText'])
+                self.assertEqual("F", get_state_as_dict(xDialog.getChild("sortlb5"))['DisplayText'])
+                self.assertEqual("G", get_state_as_dict(xDialog.getChild("sortlb6"))['DisplayText'])
 
                 # tdf#51828: Without the fix in place, this test would have failed here
                 self.assertEqual("- undefined -", get_state_as_dict(xDialog.getChild("sortlb7"))['DisplayText'])
