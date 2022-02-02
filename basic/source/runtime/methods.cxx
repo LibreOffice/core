@@ -3423,42 +3423,34 @@ void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
         fVal = fabs(fVal); // Always work with non-negatives, to easily handle leading zero
 
     static const sal_Unicode decSep = localeData.getNumDecimalSep().toChar();
-    OUString aResult = rtl::math::doubleToUString(
+    OUStringBuffer aResult;
+    rtl::math::doubleToUStringBuffer(aResult,
         fVal, rtl_math_StringFormat_F, nNumDigitsAfterDecimal, decSep,
         bGroupDigits ? localeData.getDigitGrouping().getConstArray() : nullptr,
         localeData.getNumThousandSep().toChar());
 
-    if (!bIncludeLeadingDigit && aResult.getLength() > 1 && aResult.startsWith("0"))
-        aResult = aResult.copy(1);
+    if (!bIncludeLeadingDigit && aResult.getLength() > 1)
+        aResult.stripStart('0');
 
     if (nNumDigitsAfterDecimal > 0)
     {
-        sal_Int32 nActualDigits;
         const sal_Int32 nSepPos = aResult.indexOf(decSep);
-        if (nSepPos == -1)
-            nActualDigits = 0;
-        else
-            nActualDigits = aResult.getLength() - nSepPos - 1;
 
         // VBA allows up to 255 digits; rtl::math::doubleToUString outputs up to 15 digits
         // for ~small numbers, so pad them as appropriate.
-        if (nActualDigits < nNumDigitsAfterDecimal)
-        {
-            OUStringBuffer sBuf;
-            comphelper::string::padToLength(sBuf, nNumDigitsAfterDecimal - nActualDigits, '0');
-            aResult += sBuf;
-        }
+        if (nSepPos >= 0)
+            comphelper::string::padToLength(aResult, nSepPos + nNumDigitsAfterDecimal + 1, '0');
     }
 
     if (bNegative)
     {
         if (bUseParensForNegativeNumbers)
-            aResult = "(" + aResult + ")";
+            aResult.insert(0, '(').append(')');
         else
-            aResult = "-" + aResult;
+            aResult.insert(0, '-');
     }
 
-    rPar.Get(0)->PutString(aResult);
+    rPar.Get(0)->PutString(aResult.makeStringAndClear());
 }
 
 namespace {
