@@ -69,6 +69,46 @@
       "parentUuid": "4305d313_95160549",
       "revId": "18eb256af6f65e2ee279f5a2386deb927fc55546",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb221990_d0dc93f4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-02T04:57:41Z",
+      "side": 1,
+      "message": "Please do write a unit test for this as well. Pretty much all DOCX fixes provide a unit test, so there are tons of examples in sw/qa/extras/ooxmlexport.",
+      "revId": "18eb256af6f65e2ee279f5a2386deb927fc55546",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33e220f1_3774f736",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-02T04:57:41Z",
+      "side": 1,
+      "message": "This is not correct. The whole point of the grab-bag is to keep properties that LO doesn\u0027t handle natively. So if the default was false, we want to keep that value and re-export.\n\nSo only the part of m_sDefaultParaStyleName needs to ensure \"true\".",
+      "range": {
+        "startLine": 471,
+        "startChar": 20,
+        "endLine": 471,
+        "endChar": 48
+      },
+      "revId": "18eb256af6f65e2ee279f5a2386deb927fc55546",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
