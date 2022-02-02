@@ -41,6 +41,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <uno/current_context.hxx>
+#include <vcl/svapp.hxx>
 
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -172,14 +173,20 @@ void initQApp(std::map<OUString, css::beans::Optional<css::uno::Any>>& rSettings
         unsetenv("SESSION_MANAGER");
     }
 
-    std::unique_ptr<QApplication> app(new QApplication(nFakeArgc, pFakeArgv));
-    QObject::connect(app.get(), &QObject::destroyed, app.get(), [nFakeArgc, pFakeArgv]() {
-        for (int i = 0; i < nFakeArgc; ++i)
-            free(pFakeArgv[i]);
-        delete[] pFakeArgv;
-    });
+    {
+        // rhbz#2047319 drop the SolarMutex during the execution of QApplication::init()
+        // https://invent.kde.org/qt/qt/qtwayland/-/merge_requests/24#note_383915
+        SolarMutexReleaser aReleaser; // rhbz#2047319 drop the SolarMutex during the execution
 
-    readKDESettings(rSettings);
+        std::unique_ptr<QApplication> app(new QApplication(nFakeArgc, pFakeArgv));
+        QObject::connect(app.get(), &QObject::destroyed, app.get(), [nFakeArgc, pFakeArgv]() {
+            for (int i = 0; i < nFakeArgc; ++i)
+                free(pFakeArgv[i]);
+            delete[] pFakeArgv;
+        });
+
+        readKDESettings(rSettings);
+    }
 
     if (session_manager != nullptr)
     {
