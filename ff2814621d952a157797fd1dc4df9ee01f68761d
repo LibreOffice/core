@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dbd3e73_d18da41b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-02T10:58:53Z",
+      "side": 1,
+      "message": "Pushing. gerrit_linux_clang_dbgutil and gerrit_linux_gcc_release passed here and gerrit_mac in the succesor commit https://ci.libreoffice.org/job/gerrit_master/107188/",
+      "revId": "ff2814621d952a157797fd1dc4df9ee01f68761d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
