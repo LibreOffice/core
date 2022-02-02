@@ -34,6 +34,24 @@
       "parentUuid": "63aa70fe_fc420a8f",
       "revId": "556363e1e654c1e6584e2aafeb15d0bf05d5d013",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27cf1ffb_f424783d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003531
+      },
+      "writtenOn": "2022-02-02T23:42:28Z",
+      "side": 1,
+      "message": "\u003e Where exactly do you get it? The -flto\u003dthin option should be used only for Clang, and AFAICT is properly guarded by if.\n\nHi Luboš,\n\nI get the same on Arch Linux when trying to build LibreOffice 7.3.0.3 -- it fails with the above error when compiling skia unless clang is added as a build-time dependency (not selected as the default compiler, just installed to the build chroot).\n\nThe -flto\u003dthin option is passed to gcc via gb_CLANG_LTOFLAGS when gb_LinkTarget_use_clang is used. This appears to affect code that will opportunistically use clang if found, even though gcc is the default compiler.\n\nThe committed change addresses the case where gcc is the default compiler and clang is present on the system but breaks when clang is missing. In the latter case, -flto\u003dthin is passed to gcc which throws an \"unrecognized argument\" error during skia\u0027s build.\n\nPerhaps a possible fix might be to set gb_CLANG_LTOFLAGS to \"-flto\" so it works regardless of clang\u0027s presence on the system? (I have tested this and it does seem to work as expected.)",
+      "parentUuid": "89e57044_08949d7e",
+      "revId": "556363e1e654c1e6584e2aafeb15d0bf05d5d013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
