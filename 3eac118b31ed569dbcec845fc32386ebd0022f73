@@ -52,6 +52,24 @@
       "parentUuid": "3109de9a_a285b1eb",
       "revId": "3eac118b31ed569dbcec845fc32386ebd0022f73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a586d75_577afed2",
+        "filename": "sw/source/core/inc/bookmark.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-02T10:10:12Z",
+      "side": 1,
+      "message": "Aha, the above mapping of the 4 types make sense. Thanks!",
+      "parentUuid": "9c700aca_f5bac60b",
+      "revId": "3eac118b31ed569dbcec845fc32386ebd0022f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
