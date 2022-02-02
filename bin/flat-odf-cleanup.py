@@ -225,10 +225,14 @@ def remove_unused(root):
             root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}font-face-decls").remove(font)
 
     # remove office:settings
-    root.remove(root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}settings"))
+    settings = root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}settings")
+    if settings:
+        root.remove(settings)
 
     # scripts are almost never needed
-    root.remove(root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}scripts"))
+    scripts = root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}scripts")
+    if scripts:
+        root.remove(scripts)
 
     # TODO: remove rsid attributes
     # TODO: replace embedded image with some tiny one
