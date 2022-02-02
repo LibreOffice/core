@@ -232,7 +232,7 @@ public:
             if ( (meUserOrientation == Orientation::Portrait && size.Width() > size.Height()) ||
                  (meUserOrientation == Orientation::Landscape && size.Width() < size.Height()) )
             {
-                // coverity[swapped-arguments : FALSE] - this is in the correct order
+                // coverity[swapped_arguments : FALSE] - this is in the correct order
                 size = Size( size.Height(), size.Width() );
             }
         }
