@@ -34,10 +34,10 @@ class PoolItemTest : public CppUnit::TestFixture
 void PoolItemTest::testPool()
 {
     SfxItemInfo const aItems[] =
-        { { 1, true },
-          { 2, false /* not poolable */ },
-          { 3, false },
-          { 4, false /* not poolable */}
+        { { 4, true },
+          { 3, false /* not poolable */ },
+          { 2, false },
+          { 1, false /* not poolable */}
         };
 
     rtl::Reference<SfxItemPool> pPool = new SfxItemPool("testpool", 1, 4, aItems);

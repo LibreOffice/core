@@ -33,12 +33,12 @@
 const WhichRangesContainer ScTablePage::pPageTableRanges(
     svl::Items<ATTR_PAGE_NOTES, ATTR_PAGE_FIRSTPAGENO>);
 
-static bool lcl_PutVObjModeItem(sal_uInt16  nWhich,
+static bool lcl_PutVObjModeItem(TypedWhichId<ScViewObjectModeItem>  nWhich,
                           SfxItemSet&       rCoreSet,
                           const SfxItemSet& rOldSet,
                           const weld::Toggleable& rBtn);
 
-static bool lcl_PutScaleItem( sal_uInt16    nWhich,
+static bool lcl_PutScaleItem( TypedWhichId<SfxUInt16Item>    nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const weld::ComboBox& rListBox,
@@ -46,7 +46,7 @@ static bool lcl_PutScaleItem( sal_uInt16    nWhich,
                        const weld::MetricSpinButton& rEd,
                        sal_uInt16           nValue );
 
-static bool lcl_PutScaleItem2( sal_uInt16   nWhich,
+static bool lcl_PutScaleItem2( TypedWhichId<ScPageScaleToItem>   nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const weld::ComboBox& rListBox,
@@ -56,7 +56,7 @@ static bool lcl_PutScaleItem2( sal_uInt16   nWhich,
                        const weld::SpinButton& rEd2,
                        sal_uInt16           nOrigScalePageHeight );
 
-static bool lcl_PutScaleItem3( sal_uInt16    nWhich,
+static bool lcl_PutScaleItem3( TypedWhichId<SfxUInt16Item>    nWhich,
                        SfxItemSet&          rCoreSet,
                        const SfxItemSet&    rOldSet,
                        const weld::ComboBox& rListBox,
@@ -64,7 +64,7 @@ static bool lcl_PutScaleItem3( sal_uInt16    nWhich,
                        const weld::SpinButton& rEd,
                        sal_uInt16           nValue );
 
-static bool lcl_PutBoolItem( sal_uInt16 nWhich,
+static bool lcl_PutBoolItem( TypedWhichId<SfxBoolItem> nWhich,
                       SfxItemSet&       rCoreSet,
                       const SfxItemSet& rOldSet,
                       bool              bIsChecked,
@@ -77,10 +77,6 @@ bool WAS_DEFAULT(sal_uInt16 w, SfxItemSet const & s)
 
 }
 
-#define GET_BOOL(sid,set)   static_cast<const SfxBoolItem&>((set).Get(GetWhich((sid)))).GetValue()
-#define GET_USHORT(sid,set) static_cast<const SfxUInt16Item&>((set).Get(GetWhich((sid)))).GetValue()
-#define GET_SHOW(sid,set)   ( static_cast<const ScViewObjectModeItem&>((set).Get(GetWhich((sid)))).GetValue() \
-                              == VOBJ_MODE_SHOW )
 // List box entries "Scaling mode"
 #define SC_TPTABLE_SCALE_PERCENT    0
 #define SC_TPTABLE_SCALE_TO         1
@@ -141,43 +137,42 @@ std::unique_ptr<SfxTabPage> ScTablePage::Create(weld::Container* pPage, weld::Di
 
 void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 {
-    bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, *rCoreSet );
-    sal_uInt16  nWhich   = 0;
+    bool    bTopDown = rCoreSet->Get(SID_SCATTR_PAGE_TOPDOWN).GetValue();
 
     // sal_Bool flags
-    m_xBtnNotes->set_active( GET_BOOL(SID_SCATTR_PAGE_NOTES,*rCoreSet) );
-    m_xBtnGrid->set_active( GET_BOOL(SID_SCATTR_PAGE_GRID,*rCoreSet) );
-    m_xBtnHeaders->set_active( GET_BOOL(SID_SCATTR_PAGE_HEADERS,*rCoreSet) );
-    m_xBtnFormulas->set_active( GET_BOOL(SID_SCATTR_PAGE_FORMULAS,*rCoreSet) );
-    m_xBtnNullVals->set_active( GET_BOOL(SID_SCATTR_PAGE_NULLVALS,*rCoreSet) );
+    m_xBtnNotes->set_active( rCoreSet->Get(SID_SCATTR_PAGE_NOTES).GetValue() );
+    m_xBtnGrid->set_active( rCoreSet->Get(SID_SCATTR_PAGE_GRID).GetValue() );
+    m_xBtnHeaders->set_active( rCoreSet->Get(SID_SCATTR_PAGE_HEADERS).GetValue() );
+    m_xBtnFormulas->set_active( rCoreSet->Get(SID_SCATTR_PAGE_FORMULAS).GetValue() );
+    m_xBtnNullVals->set_active( rCoreSet->Get(SID_SCATTR_PAGE_NULLVALS).GetValue() );
     m_xBtnTopDown->set_active( bTopDown );
     m_xBtnLeftRight->set_active( !bTopDown );
 
     // first printed page:
-    sal_uInt16 nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,*rCoreSet);
+    sal_uInt16 nPage = rCoreSet->Get(SID_SCATTR_PAGE_FIRSTPAGENO).GetValue();
     m_xBtnPageNo->set_active( nPage != 0 );
     m_xEdPageNo->set_value( (nPage != 0) ? nPage : 1 );
     PageNoHdl(nullptr);
 
     // object representation:
-    m_xBtnCharts->set_active( GET_SHOW( SID_SCATTR_PAGE_CHARTS, *rCoreSet ) );
-    m_xBtnObjects->set_active( GET_SHOW( SID_SCATTR_PAGE_OBJECTS, *rCoreSet ) );
-    m_xBtnDrawings->set_active( GET_SHOW( SID_SCATTR_PAGE_DRAWINGS, *rCoreSet ) );
+    m_xBtnCharts->set_active( rCoreSet->Get(SID_SCATTR_PAGE_CHARTS).GetValue() == VOBJ_MODE_SHOW );
+    m_xBtnObjects->set_active( rCoreSet->Get(SID_SCATTR_PAGE_OBJECTS).GetValue() == VOBJ_MODE_SHOW );
+    m_xBtnDrawings->set_active( rCoreSet->Get(SID_SCATTR_PAGE_DRAWINGS).GetValue() == VOBJ_MODE_SHOW );
 
     // scaling:
-    nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
-    if ( rCoreSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
+    constexpr auto nWhichPageScale = SID_SCATTR_PAGE_SCALE;
+    if ( rCoreSet->GetItemState( nWhichPageScale ) >= SfxItemState::DEFAULT )
     {
-        sal_uInt16 nScale = static_cast<const SfxUInt16Item&>(rCoreSet->Get(nWhich)).GetValue();
+        sal_uInt16 nScale = rCoreSet->Get(nWhichPageScale).GetValue();
         if( nScale > 0 )
             m_xLbScaleMode->set_active(SC_TPTABLE_SCALE_PERCENT);
         m_xEdScaleAll->set_value((nScale > 0) ? nScale : 100, FieldUnit::PERCENT);
     }
 
-    nWhich = GetWhich(SID_SCATTR_PAGE_SCALETO);
-    if ( rCoreSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
+    constexpr auto nWhichScaleTo = SID_SCATTR_PAGE_SCALETO;
+    if ( rCoreSet->GetItemState( nWhichScaleTo ) >= SfxItemState::DEFAULT )
     {
-        const ScPageScaleToItem& rItem = static_cast< const ScPageScaleToItem& >( rCoreSet->Get( nWhich ) );
+        const ScPageScaleToItem& rItem = rCoreSet->Get( nWhichScaleTo );
         sal_uInt16 nWidth = rItem.GetWidth();
         sal_uInt16 nHeight = rItem.GetHeight();
 
@@ -205,10 +200,10 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
         m_xCbScalePageHeight->set_active(nHeight != 0);
     }
 
-    nWhich = GetWhich(SID_SCATTR_PAGE_SCALETOPAGES);
-    if ( rCoreSet->GetItemState( nWhich ) >= SfxItemState::DEFAULT )
+    constexpr auto nWhichScale = SID_SCATTR_PAGE_SCALETOPAGES;
+    if ( rCoreSet->GetItemState( nWhichScale ) >= SfxItemState::DEFAULT )
     {
-        sal_uInt16 nPages = static_cast<const SfxUInt16Item&>(rCoreSet->Get(nWhich)).GetValue();
+        sal_uInt16 nPages = rCoreSet->Get(nWhichScale).GetValue();
         if( nPages > 0 )
             m_xLbScaleMode->set_active(SC_TPTABLE_SCALE_TO_PAGES);
         m_xEdScalePageNum->set_value( (nPages > 0) ? nPages : 1 );
@@ -248,36 +243,36 @@ void ScTablePage::Reset( const SfxItemSet* rCoreSet )
 bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
 {
     const SfxItemSet&   rOldSet      = GetItemSet();
-    sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
+    constexpr sal_uInt16 nWhichPageNo = SID_SCATTR_PAGE_FIRSTPAGENO;
     bool                bDataChanged = false;
 
     // sal_Bool flags
-    bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
+    bDataChanged |= lcl_PutBoolItem( SID_SCATTR_PAGE_NOTES,
                                      *rCoreSet, rOldSet,
                                      m_xBtnNotes->get_active(),
                                      m_xBtnNotes->get_saved_state() != TRISTATE_FALSE );
 
-    bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_GRID),
+    bDataChanged |= lcl_PutBoolItem( SID_SCATTR_PAGE_GRID,
                                      *rCoreSet, rOldSet,
                                      m_xBtnGrid->get_active(),
                                      m_xBtnGrid->get_saved_state() != TRISTATE_FALSE );
 
-    bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_HEADERS),
+    bDataChanged |= lcl_PutBoolItem( SID_SCATTR_PAGE_HEADERS,
                                      *rCoreSet, rOldSet,
                                      m_xBtnHeaders->get_active(),
                                      m_xBtnHeaders->get_saved_state() != TRISTATE_FALSE );
 
-    bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_TOPDOWN),
+    bDataChanged |= lcl_PutBoolItem( SID_SCATTR_PAGE_TOPDOWN,
                                      *rCoreSet, rOldSet,
                                      m_xBtnTopDown->get_active(),
                                      m_xBtnTopDown->get_saved_state() != TRISTATE_FALSE );
 
-    bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_FORMULAS),
+    bDataChanged |= lcl_PutBoolItem( SID_SCATTR_PAGE_FORMULAS,
                                      *rCoreSet, rOldSet,
                                      m_xBtnFormulas->get_active(),
                                      m_xBtnFormulas->get_saved_state() != TRISTATE_FALSE );
 
-    bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NULLVALS),
+    bDataChanged |= lcl_PutBoolItem( SID_SCATTR_PAGE_NULLVALS,
                                      *rCoreSet, rOldSet,
                                      m_xBtnNullVals->get_active(),
                                      m_xBtnNullVals->get_saved_state() != TRISTATE_FALSE );
@@ -303,13 +298,13 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
     }
 
     // object representation:
-    bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_CHARTS),
+    bDataChanged |= lcl_PutVObjModeItem( SID_SCATTR_PAGE_CHARTS,
                                          *rCoreSet, rOldSet, *m_xBtnCharts );
 
-    bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_OBJECTS),
+    bDataChanged |= lcl_PutVObjModeItem( SID_SCATTR_PAGE_OBJECTS,
                                          *rCoreSet, rOldSet, *m_xBtnObjects );
 
-    bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_DRAWINGS),
+    bDataChanged |= lcl_PutVObjModeItem( SID_SCATTR_PAGE_DRAWINGS,
                                          *rCoreSet, rOldSet, *m_xBtnDrawings );
 
     // scaling:
@@ -319,18 +314,18 @@ bool ScTablePage::FillItemSet( SfxItemSet* rCoreSet )
         m_xEdScaleAll->set_value(100, FieldUnit::PERCENT);
     }
 
-    bDataChanged |= lcl_PutScaleItem( GetWhich(SID_SCATTR_PAGE_SCALE),
+    bDataChanged |= lcl_PutScaleItem( SID_SCATTR_PAGE_SCALE,
                                       *rCoreSet, rOldSet,
                                       *m_xLbScaleMode, SC_TPTABLE_SCALE_PERCENT,
                                       *m_xEdScaleAll, static_cast<sal_uInt16>(m_xEdScaleAll->get_value(FieldUnit::PERCENT)) );
 
-    bDataChanged |= lcl_PutScaleItem2( GetWhich(SID_SCATTR_PAGE_SCALETO),
+    bDataChanged |= lcl_PutScaleItem2( SID_SCATTR_PAGE_SCALETO,
                                       *rCoreSet, rOldSet,
                                       *m_xLbScaleMode, SC_TPTABLE_SCALE_TO,
                                       *m_xEdScalePageWidth, m_nOrigScalePageWidth,
                                       *m_xEdScalePageHeight, m_nOrigScalePageHeight );
 
-    bDataChanged |= lcl_PutScaleItem3( GetWhich(SID_SCATTR_PAGE_SCALETOPAGES),
+    bDataChanged |= lcl_PutScaleItem3( SID_SCATTR_PAGE_SCALETOPAGES,
                                       *rCoreSet, rOldSet,
                                       *m_xLbScaleMode, SC_TPTABLE_SCALE_TO_PAGES,
                                       *m_xEdScalePageNum, static_cast<sal_uInt16>(m_xEdScalePageNum->get_value()) );
@@ -414,7 +409,7 @@ IMPL_LINK(ScTablePage, ToggleHdl, weld::Toggleable&, rBox, void)
 
 // Helper functions for FillItemSet:
 
-static bool lcl_PutBoolItem( sal_uInt16            nWhich,
+static bool lcl_PutBoolItem( TypedWhichId<SfxBoolItem>  nWhich,
                      SfxItemSet&        rCoreSet,
                      const SfxItemSet&  rOldSet,
                      bool               bIsChecked,
@@ -431,7 +426,7 @@ static bool lcl_PutBoolItem( sal_uInt16            nWhich,
     return bDataChanged;
 }
 
-static bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
+static bool lcl_PutVObjModeItem( TypedWhichId<ScViewObjectModeItem>  nWhich,
                          SfxItemSet&        rCoreSet,
                          const SfxItemSet&  rOldSet,
                          const weld::Toggleable&    rBtn )
@@ -450,7 +445,7 @@ static bool lcl_PutVObjModeItem( sal_uInt16            nWhich,
     return bDataChanged;
 }
 
-static bool lcl_PutScaleItem( sal_uInt16    nWhich,
+static bool lcl_PutScaleItem( TypedWhichId<SfxUInt16Item> nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const weld::ComboBox& rListBox,
@@ -471,7 +466,7 @@ static bool lcl_PutScaleItem( sal_uInt16    nWhich,
     return bDataChanged;
 }
 
-static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
+static bool lcl_PutScaleItem2( TypedWhichId<ScPageScaleToItem> nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const weld::ComboBox& rListBox,
@@ -502,7 +497,7 @@ static bool lcl_PutScaleItem2( sal_uInt16               nWhich,
     return bDataChanged;
 }
 
-static bool lcl_PutScaleItem3( sal_uInt16    nWhich,
+static bool lcl_PutScaleItem3( TypedWhichId<SfxUInt16Item> nWhich,
                       SfxItemSet&           rCoreSet,
                       const SfxItemSet&     rOldSet,
                       const weld::ComboBox& rListBox,
