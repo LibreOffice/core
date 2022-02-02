@@ -712,9 +712,9 @@ class XFillGradientItem;
 #define SID_ATTR_GRAF_GREEN                             ( SID_SVX_START + 866 )
 #define SID_ATTR_GRAF_BLUE                              ( SID_SVX_START + 867 )
 #define SID_ATTR_GRAF_GAMMA                             ( SID_SVX_START + 868 )
-#define SID_ATTR_GRAF_TRANSPARENCE                      ( SID_SVX_START + 869 )
+#define SID_ATTR_GRAF_TRANSPARENCE                      TypedWhichId<SfxUInt16Item>( SID_SVX_START + 869 )
 #define SID_ATTR_GRAF_INVERT                            ( SID_SVX_START + 870 )
-#define SID_ATTR_GRAF_MODE                              ( SID_SVX_START + 871 )
+#define SID_ATTR_GRAF_MODE                              TypedWhichId<SfxUInt16Item>( SID_SVX_START + 871 )
 
 // CAUTION! Range <877 .. 877> used by EditEngine (!)
 
