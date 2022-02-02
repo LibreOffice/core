@@ -235,12 +235,13 @@ SvxSearchItem* SvxSearchItem::Clone( SfxItemPool *) const
 }
 
 //! used below
-static bool equalsWithoutLocale( const i18nutil::SearchOptions2& rItem1, const i18nutil::SearchOptions2& rItem2 )
+static bool equalsWithoutLocaleOrReplace(const i18nutil::SearchOptions2& rItem1,
+                                         const i18nutil::SearchOptions2& rItem2)
 {
     return rItem1.algorithmType         == rItem2.algorithmType &&
            rItem1.searchFlag            == rItem2.searchFlag    &&
            rItem1.searchString          == rItem2.searchString  &&
-           rItem1.replaceString         == rItem2.replaceString &&
+           //rItem1.replaceString       == rItem2.replaceString &&
            //rItem1.Locale              == rItem2.Locale        &&
            rItem1.changedChars          == rItem2.changedChars  &&
            rItem1.deletedChars          == rItem2.deletedChars  &&
@@ -255,8 +256,18 @@ bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
 {
     assert(SfxPoolItem::operator==(rItem));
     const SvxSearchItem &rSItem = static_cast<const SvxSearchItem &>(rItem);
-    return ( m_nCommand       == rSItem.m_nCommand )        &&
-           ( m_bBackward      == rSItem.m_bBackward )       &&
+    return equalsIgnoring(rSItem, /*bIgnoreReplace=*/false, /*bIgnoreCommand=*/false);
+}
+
+bool SvxSearchItem::equalsIgnoring(const SvxSearchItem& rSItem, bool bIgnoreReplace,
+                                   bool bIgnoreCommand) const
+{
+    if (!bIgnoreReplace && m_aSearchOpt.replaceString != rSItem.m_aSearchOpt.replaceString)
+        return false;
+    if (!bIgnoreCommand && m_nCommand != rSItem.m_nCommand)
+        return false;
+
+    return ( m_bBackward      == rSItem.m_bBackward )       &&
            ( m_bPattern       == rSItem.m_bPattern )        &&
            ( m_bContent       == rSItem.m_bContent )        &&
            ( m_eFamily        == rSItem.m_eFamily )         &&
@@ -267,7 +278,7 @@ bool SvxSearchItem::operator==( const SfxPoolItem& rItem ) const
            ( m_nCellType      == rSItem.m_nCellType )       &&
            ( m_nAppFlag       == rSItem.m_nAppFlag )        &&
            ( m_bAsianOptions  == rSItem.m_bAsianOptions )   &&
-           ( equalsWithoutLocale(m_aSearchOpt,rSItem.m_aSearchOpt )) &&
+           ( equalsWithoutLocaleOrReplace(m_aSearchOpt, rSItem.m_aSearchOpt )) &&
            ( m_bNotes         == rSItem.m_bNotes );
 }
 

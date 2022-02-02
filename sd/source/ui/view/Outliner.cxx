@@ -425,6 +425,18 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
 
     mpDrawDocument->GetDocSh()->SetWaitCursor( true );
+
+    // Since REPLACE is really a replaceAndSearchNext instead of a searchAndReplace,
+    // make sure that the search portion has not changed since the last FIND.
+    if (!mbPrepareSpellingPending && mpSearchItem
+        && pSearchItem->GetCommand() == SvxSearchCmd::REPLACE
+        && !mpSearchItem->equalsIgnoring(*pSearchItem, /*bIgnoreReplace=*/true,
+            /*bIgnoreCommand=*/true))
+    {
+        EndSpelling();
+        mbPrepareSpellingPending = true;
+    }
+
     if (mbPrepareSpellingPending)
         PrepareSpelling();
     sd::ViewShellBase* pBase = getViewShellBase();
