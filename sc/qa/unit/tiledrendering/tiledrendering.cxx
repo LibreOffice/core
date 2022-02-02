@@ -1569,8 +1569,7 @@ void ScTiledRenderingTest::testDisableUndoRepair()
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));
         CPPUNIT_ASSERT(dynamic_cast< const SfxStringItem* >(aSet1.GetItem(SID_UNDO)));
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));
-        CPPUNIT_ASSERT(dynamic_cast< const SfxUInt32Item* >(aSet2.GetItem(SID_UNDO)));
-        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aSet2.GetItem(SID_UNDO));
+        const SfxUInt32Item* pUInt32Item = aSet2.GetItem(SID_UNDO);
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }
@@ -1589,7 +1588,7 @@ void ScTiledRenderingTest::testDisableUndoRepair()
         pView1->GetSlotState(SID_UNDO, nullptr, &aSet1);
         pView2->GetSlotState(SID_UNDO, nullptr, &aSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet1.GetItemState(SID_UNDO));
-        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aSet1.GetItem(SID_UNDO));
+        const SfxUInt32Item* pUInt32Item = aSet1.GetItem(SID_UNDO);
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast< sal_uInt32 >(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aSet2.GetItemState(SID_UNDO));

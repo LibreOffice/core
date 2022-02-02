@@ -416,7 +416,7 @@ void SvxTransparenceTabPage::ChangesApplied()
 
 void SvxTransparenceTabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    const CntUInt16Item* pPageTypeItem = rSet.GetItem<CntUInt16Item>(SID_PAGE_TYPE, false);
+    const CntUInt16Item* pPageTypeItem = rSet.GetItem(SID_PAGE_TYPE, false);
     if (pPageTypeItem)
         SetPageType(static_cast<PageType>(pPageTypeItem->GetValue()));
 

@@ -449,7 +449,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     if( rAttrs->GetItemState( nWhich2 ) >= SfxItemState::DEFAULT )
     {
         MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich2 );
-        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich2 ));
+        const SfxUInt16Item& rItem = rAttrs->Get( nWhich2 );
         SetMetricValue( *m_xMtrFldTabstop, rItem.GetValue(), eUnit );
     }
     m_xLbMetric->save_value();
