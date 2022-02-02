@@ -255,8 +255,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest const & rReq )
     {
         case SID_BMPMASK_PIPETTE :
         {
-            mbPipette = static_cast<const SfxBoolItem&>( rReq.GetArgs()->
-                       Get( SID_BMPMASK_PIPETTE ) ).GetValue();
+            mbPipette = rReq.GetArgs()->Get( SID_BMPMASK_PIPETTE ).GetValue();
         }
         break;
 

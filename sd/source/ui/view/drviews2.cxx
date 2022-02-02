@@ -3236,8 +3236,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if ( rReq.GetArgs() )
             {
                 GetViewFrame()->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
-                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                                        Get(SID_FONTWORK)).GetValue());
+                                        rReq.GetArgs()->Get(SID_FONTWORK).GetValue());
             }
             else
             {
@@ -3254,8 +3253,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow(SvxColorChildWindow::GetChildWindowId(),
-                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                                        Get(SID_COLOR_CONTROL)).GetValue());
+                                        rReq.GetArgs()->Get(SID_COLOR_CONTROL).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow(SvxColorChildWindow::GetChildWindowId() );
 
@@ -3316,8 +3314,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow(SID_NAVIGATOR,
-                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                                        Get(SID_NAVIGATOR)).GetValue());
+                                        rReq.GetArgs()->Get(SID_NAVIGATOR).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow( SID_NAVIGATOR );
 
@@ -3375,8 +3372,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if ( rReq.GetArgs() )
                 GetViewFrame()->SetChildWindow( Svx3DChildWindow::GetChildWindowId(),
-                                        static_cast<const SfxBoolItem&>(rReq.GetArgs()->
-                                        Get( SID_3D_WIN )).GetValue());
+                                        rReq.GetArgs()->Get( SID_3D_WIN ).GetValue());
             else
                 GetViewFrame()->ToggleChildWindow( Svx3DChildWindow::GetChildWindowId() );
 
