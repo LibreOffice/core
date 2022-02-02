@@ -48,6 +48,7 @@ class ChartTypeManager;
 class ChartTypeTemplate;
 class DataSeries;
 class Diagram;
+class LabeledDataSequence;
 
 enum DiagramPositioningMode
 {
@@ -191,8 +192,13 @@ public:
             const rtl::Reference< ::chart::Diagram >& xDiagram,
             bool bSetAxisType = false, // when this flag is true ...
             bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
+    static void setCategoriesToDiagram(
+            const rtl::Reference< LabeledDataSequence >& xCategories,
+            const rtl::Reference< ::chart::Diagram >& xDiagram,
+            bool bSetAxisType = false, // when this flag is true ...
+            bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
 
-    static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    static rtl::Reference< LabeledDataSequence >
         getCategoriesFromDiagram(
             const rtl::Reference< ::chart::Diagram > & xDiagram );
 

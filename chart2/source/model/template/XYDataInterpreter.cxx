@@ -21,6 +21,7 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
+#include <LabeledDataSequence.hxx>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <tools/diagnose_ex.h>
@@ -53,25 +54,25 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-    const Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
+    std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
     Reference< data::XLabeledDataSequence > xValuesX;
     vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
 
-    Reference< data::XLabeledDataSequence > xCategories;
+    rtl::Reference< LabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
     bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
     // parse data
     bool bCategoriesUsed = false;
-    bool bSetXValues = aData.getLength()>1;
-    for( Reference< data::XLabeledDataSequence > const & labelData : aData )
+    bool bSetXValues = aData.size()>1;
+    for( rtl::Reference< LabeledDataSequence > const & labelData : aData )
     {
         try
         {
             if( bHasCategories && ! bCategoriesUsed )
             {
-                xCategories.set( labelData );
+                xCategories = labelData;
                 if( xCategories.is())
                 {
                     SetRole( xCategories->getValues(), "categories");

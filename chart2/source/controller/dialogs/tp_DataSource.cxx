@@ -29,6 +29,7 @@
 #include <DataSeriesHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <DataSourceHelper.hxx>
+#include <LabeledDataSequence.hxx>
 #include "DialogModel.hxx"
 #include <o3tl/safeint.hxx>
 #include <TabPageNotifiable.hxx>
@@ -752,7 +753,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
 
     if (bAll || (pField == m_xEDT_CATEGORIES.get()))
     {
-        Reference< data::XLabeledDataSequence > xLabeledSeq( m_rDialogModel.getCategories() );
+        rtl::Reference< LabeledDataSequence > xLabeledSeq( m_rDialogModel.getCategories() );
         if( xDataProvider.is())
         {
             OUString aRange(m_xEDT_CATEGORIES->get_text());
@@ -761,7 +762,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
                 // create or change categories
                 if( !xLabeledSeq.is())
                 {
-                    xLabeledSeq.set( DataSourceHelper::createLabeledDataSequence() );
+                    xLabeledSeq = DataSourceHelper::createLabeledDataSequence();
                     m_rDialogModel.setCategories( xLabeledSeq );
                 }
                 try
