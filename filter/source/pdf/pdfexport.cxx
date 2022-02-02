@@ -60,6 +60,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/security/XCertificate.hpp>
 #include <com/sun/star/beans/XMaterialHolder.hpp>
+#include <com/sun/star/xml/crypto/SEInitializer.hpp>
 
 #include <memory>
 
@@ -398,6 +399,25 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
     return aDocMimetype;
 }
 
+uno::Reference<security::XCertificate>
+PDFExport::GetCertificateFromSubjectName(const std::u16string_view& rSubjectName) const
+{
+    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
+        = xml::crypto::SEInitializer::create(mxContext);
+    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
+        = xSEInitializer->createSecurityContext(OUString());
+    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
+        = xSecurityContext->getSecurityEnvironment();
+    for (const auto& xCertificate : xSecurityEnvironment->getPersonalCertificates())
+    {
+        if (xCertificate->getSubjectName() == rSubjectName)
+        {
+            return xCertificate;
+        }
+    }
+
+    return {};
+}
 
 bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData )
 {
@@ -465,6 +485,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 utl::ConfigManager::getProductVersion();
             aContext.DocumentInfo.Creator = aCreator;
 
+            OUString aSignCertificateSubjectName;
             for ( const beans::PropertyValue& rProp : rFilterData )
             {
                 if ( rProp.Name == "PageRange" )
@@ -584,6 +605,8 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                     rProp.Value >>= msSignPassword;
                 else if ( rProp.Name == "SignatureCertificate" )
                     rProp.Value >>= maSignCertificate;
+                else if (rProp.Name == "SignCertificateSubjectName")
+                    rProp.Value >>= aSignCertificateSubjectName;
                 else if ( rProp.Name == "SignatureTSA" )
                     rProp.Value >>= msSignTSA;
                 else if ( rProp.Name == "ExportPlaceholders" )
@@ -593,6 +616,11 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 // Redaction & bitmap related stuff
                 else if ( rProp.Name == "IsRedactMode" )
                     rProp.Value >>= mbIsRedactMode;
+            }
+
+            if (!maSignCertificate.is() && !aSignCertificateSubjectName.isEmpty())
+            {
+                maSignCertificate = GetCertificateFromSubjectName(aSignCertificateSubjectName);
             }
 
             aContext.URL        = aURL.GetMainURL(INetURLObject::DecodeMechanism::ToIUri);
