@@ -30,6 +30,8 @@
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <vcl/outdev.hxx>
+#include <vcl/pdfread.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/svdpagv.hxx>
@@ -197,6 +199,10 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         }
 
         sal_Int32 nPreferredDPI = mrDoc.getImagePreferredDPI();
+
+        if (rGraphic.GetGfxLink().GetType() == GfxLinkType::NativePdf && nPreferredDPI == 0 && vcl::PDF_INSERT_MAGIC_SCALE_FACTOR > 1)
+            nPreferredDPI = Application::GetDefaultDevice()->GetDPIX() * vcl::PDF_INSERT_MAGIC_SCALE_FACTOR;
+
         if (nPreferredDPI > 0)
         {
             auto nWidth = o3tl::convert(aSizePixel.Width() / double(nPreferredDPI), o3tl::Length::in, o3tl::Length::mm100);
