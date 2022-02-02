@@ -49,6 +49,7 @@ class ChartType;
 class ChartTypeTemplate;
 class DataSeries;
 struct InterpretedData;
+class LabeledDataSequence;
 class RangeSelectionHelper;
 
 struct DialogModelTimeBasedInfo
@@ -119,7 +120,7 @@ public:
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
         const rtl::Reference< ::chart::ChartType > & xChartType );
 
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+    rtl::Reference< ::chart::LabeledDataSequence >
         getCategories() const;
 
     void setCategories( const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );

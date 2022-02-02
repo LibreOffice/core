@@ -24,6 +24,7 @@
 #include <com/sun/star/chart2/data/XLabeledDataSequence2.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include "ModifyListenerHelper.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::chart2::data { class XDataSequence; }
 namespace com::sun::star::util { class XCloneable; }
@@ -40,7 +41,7 @@ typedef cppu::WeakImplHelper<
     LabeledDataSequence_Base;
 }
 
-class LabeledDataSequence final :
+class OOO_DLLPUBLIC_CHARTTOOLS LabeledDataSequence final :
         public cppu::BaseMutex,
         public impl::LabeledDataSequence_Base
 {
@@ -59,7 +60,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-protected:
     // ____ XLabeledDataSequence ____
     virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getValues() override;
     virtual void SAL_CALL setValues(

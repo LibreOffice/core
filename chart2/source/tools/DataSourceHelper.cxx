@@ -134,20 +134,20 @@ Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSeque
     return new ::chart::CachedDataSequence( rSingleText );
 }
 
-Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+rtl::Reference< LabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
         const Reference< chart2::data::XDataSequence >& xValues ,
         const Reference< chart2::data::XDataSequence >& xLabels )
 {
     return new ::chart::LabeledDataSequence( xValues, xLabels );
 }
 
-Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
+rtl::Reference< LabeledDataSequence > DataSourceHelper::createLabeledDataSequence(
         const Reference< chart2::data::XDataSequence >& xValues )
 {
     return new ::chart::LabeledDataSequence( xValues );
 }
 
-Reference< chart2::data::XLabeledDataSequence > DataSourceHelper::createLabeledDataSequence()
+rtl::Reference< LabeledDataSequence > DataSourceHelper::createLabeledDataSequence()
 {
     return new ::chart::LabeledDataSequence;
 }

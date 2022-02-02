@@ -30,6 +30,7 @@
 namespace chart
 {
 class DataSeries;
+class LabeledDataSequence;
 
 /** offers tooling to interpret different data sources in a structural
      and chart-type-dependent way.
@@ -37,7 +38,7 @@ class DataSeries;
 struct InterpretedData
 {
     css::uno::Sequence< css::uno::Sequence< css::uno::Reference<css::chart2::XDataSeries> > > Series;
-    css::uno::Reference<css::chart2::data::XLabeledDataSequence> Categories;
+    rtl::Reference<::chart::LabeledDataSequence> Categories;
 };
 
 /** offers tooling to interpret different data sources in a structural
@@ -69,9 +70,15 @@ public:
     static bool HasCategories(
         const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
         const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
+    static bool HasCategories(
+        const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
+        const std::vector< rtl::Reference< LabeledDataSequence > > & rData );
 
     static bool UseCategoriesAsX(
         const css::uno::Sequence< css::beans::PropertyValue > & rArguments );
+
+    static std::vector<rtl::Reference<LabeledDataSequence>> getDataSequences(
+        const css::uno::Reference< css::chart2::data::XDataSource >& xSource);
 
     // ____ DataInterpreter ____
     /** Interprets the given data.
