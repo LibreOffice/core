@@ -33,6 +33,23 @@
       "message": "Isn\u0027t the underlying problem that too many rows need height calculation? Why are all rows flagged such recalculated at once? Why not on reaching their view?\n\nIf whether formula cells are recalculated or not is part of the problem, make sure that not the entire document is recalculated.\n\nFor a general approach see also sc/source/filter/oox/workbookfragment.cxx WorkbookFragment::recalcFormulaCells() where getDocImport().broadcastRecalcAfterImport() is called for partial recalculation and where that ends up when actually calculating. The row height when necessary should be part of that as to calculate it formulas when dirty need to be calculated.\n",
       "revId": "ee4a44bffa8a78a5bb8988db0e2018afc59f5bd8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c57cec24_61233800",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-02-02T23:57:43Z",
+      "side": 1,
+      "message": "If I were to implement this, I\u0027d move all this logic to the end of ScDocShell::LoadXML(), which is the \"entry point\" function for loading an ODS document. That function already contains some logic with row height recalculation (or disabling thereof) during and after the document load, so it would be natural to add additional logic there after the \n\nm_aDocument.UnlockAdjustHeight();\n\nline.\n\nIf you compare the function I mentioned above with the function Eike mentioned, the two have similar blocks of code, so that\u0027s further proof that this suggestion is not far off. 😋\n\nAlso, it would be great NOT to use ScDocument to store additional configuration flags that are only used during file load.  The existing code that imports ODS uses it, which is unfortunate.  Instead, we can probably use the generic configuration settings similar to how the ODFRecalcMode setting is stored.  ScDocument already contains too many flags that really should be moved elsewhere...\n\nLastly, ScDocument already has method named UpdateAllRowHeights() and ScDocShell has the same-name method, so unconditionally updating all rows after the load (depending on the config setting) is good enough, then you can probably call that.  If course, the performance may not be great with larger documents, but as long as it defaults to off, it may be acceptable.",
+      "revId": "ee4a44bffa8a78a5bb8988db0e2018afc59f5bd8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
