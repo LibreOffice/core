@@ -1092,6 +1092,14 @@
 		BEDCC93E2460830C00FB02BD /* optjava.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = optjava.hxx; path = ../cui/source/options/optjava.hxx; sourceTree = "<group>"; };
 		BEDCC93F2460830C00FB02BD /* optbasic.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = optbasic.cxx; path = ../cui/source/options/optbasic.cxx; sourceTree = "<group>"; };
 		BEDCC9402460830D00FB02BD /* doclinkdialog.hxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = doclinkdialog.hxx; path = ../cui/source/options/doclinkdialog.hxx; sourceTree = "<group>"; };
+		BEE3519127A98CEF00F6B5CB /* DummyPDFiumLibrary.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = DummyPDFiumLibrary.cxx; path = ../vcl/source/pdf/DummyPDFiumLibrary.cxx; sourceTree = "<group>"; };
+		BEE3519227A98CEF00F6B5CB /* XmpMetadata.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = XmpMetadata.cxx; path = ../vcl/source/pdf/XmpMetadata.cxx; sourceTree = "<group>"; };
+		BEE3519327A98CEF00F6B5CB /* PdfConfig.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PdfConfig.cxx; path = ../vcl/source/pdf/PdfConfig.cxx; sourceTree = "<group>"; };
+		BEE3519427A98CEF00F6B5CB /* PDFiumTools.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PDFiumTools.cxx; path = ../vcl/source/pdf/PDFiumTools.cxx; sourceTree = "<group>"; };
+		BEE3519527A98CEF00F6B5CB /* Matrix3.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Matrix3.cxx; path = ../vcl/source/pdf/Matrix3.cxx; sourceTree = "<group>"; };
+		BEE3519627A98CEF00F6B5CB /* PDFiumLibrary.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PDFiumLibrary.cxx; path = ../vcl/source/pdf/PDFiumLibrary.cxx; sourceTree = "<group>"; };
+		BEE3519727A98CEF00F6B5CB /* ExternalPDFStreams.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ExternalPDFStreams.cxx; path = ../vcl/source/pdf/ExternalPDFStreams.cxx; sourceTree = "<group>"; };
+		BEE3519827A98CEF00F6B5CB /* ResourceDict.cxx */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ResourceDict.cxx; path = ../vcl/source/pdf/ResourceDict.cxx; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -1860,6 +1868,7 @@
 				BEB0730D27A1A25E00F75C00 /* filter */,
 				BE82C3C818C86D8B0050EB79 /* gdi */,
 				BE60B5761DB7D76C00D3E1E4 /* osx */,
+				BEE3519027A98CC900F6B5CB /* pdf */,
 				BE2DAD29182FABD200A4D2F7 /* quartz */,
 				BE0264A923797594008D3E52 /* treelist */,
 				BE2DACF9182FAB3800A4D2F7 /* window */,
@@ -2744,6 +2753,21 @@
 				BEDCC9062460830800FB02BD /* webconninfo.hxx */,
 			);
 			name = options;
+			sourceTree = "<group>";
+		};
+		BEE3519027A98CC900F6B5CB /* pdf */ = {
+			isa = PBXGroup;
+			children = (
+				BEE3519127A98CEF00F6B5CB /* DummyPDFiumLibrary.cxx */,
+				BEE3519727A98CEF00F6B5CB /* ExternalPDFStreams.cxx */,
+				BEE3519527A98CEF00F6B5CB /* Matrix3.cxx */,
+				BEE3519327A98CEF00F6B5CB /* PdfConfig.cxx */,
+				BEE3519627A98CEF00F6B5CB /* PDFiumLibrary.cxx */,
+				BEE3519427A98CEF00F6B5CB /* PDFiumTools.cxx */,
+				BEE3519827A98CEF00F6B5CB /* ResourceDict.cxx */,
+				BEE3519227A98CEF00F6B5CB /* XmpMetadata.cxx */,
+			);
+			name = pdf;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
