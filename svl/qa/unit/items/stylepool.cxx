@@ -26,7 +26,7 @@ CPPUNIT_TEST_FIXTURE(StylePoolTest, testIterationOrder)
     // Set up a style pool with multiple parents.
     SfxStringItem aDefault1(1);
     std::vector<SfxPoolItem*> aDefaults{ &aDefault1 };
-    SfxItemInfo const aItems[] = { { 1, false } };
+    SfxItemInfo const aItems[] = { { 2, false } };
 
     rtl::Reference<SfxItemPool> pPool = new SfxItemPool("test", 1, 1, aItems);
     pPool->SetDefaults(&aDefaults);
