@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb9719f1_89cc3dc7",
+        "filename": "sw/source/core/inc/bookmark.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-02T08:52:04Z",
+      "side": 1,
+      "message": "Hmm, would you model all SDT with SwTextMeta? I think the intention from Zolnai was that SDT has several types, and e.g. the Rich Text Content Control can contain paragraph breaks, and also multiple text portions. So in general, SDT seems to map to the bookmark concept rather well. There is also some benefit to map all SDT types to the same Writer concept, not some as fieldmarks and others as non-fieldmarks.\n\nThe reason I\u0027m asking is that I still hope that we (Collabora) can get to implement support for much more SDT types in the near future, and it would be natural to follow the date SDT as a reference. So if something is broken there, it\u0027s good if we can fix that before the same breakage gets copied over to 10 other types. :-)\n\nThanks.",
+      "revId": "3eac118b31ed569dbcec845fc32386ebd0022f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
