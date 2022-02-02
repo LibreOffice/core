@@ -290,7 +290,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             if (pArgs)
             {
                 pVFrame->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
-                    static_cast<const SfxBoolItem&>((pArgs->Get(SID_FONTWORK))).GetValue());
+                    pArgs->Get(SID_FONTWORK).GetValue());
             }
             else
                 pVFrame->ToggleChildWindow( SvxFontWorkChildWindow::GetChildWindowId() );
