@@ -104,6 +104,30 @@
       },
       "revId": "493a916a3113e877835c9bc7c93faef0d29f9a33",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e60e8c53_c0a5f6eb",
+        "filename": "sw/source/core/text/porfly.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-02-02T11:54:50Z",
+      "side": 1,
+      "message": "Unfortunately my suggestion is not enough to fix that. When the assert fires, the fly frame (text box) and the drawing is in the normal node section, but in different para, the redline section is used only if the change tracking is hidden (and no assert). So that condition will not be false that case when the assert fires.\nWhen i written that suggestion that was only tested on a branch where there were more other modification, if i test it with the master, the problem still present. That branch where i tried, soon will be uploaded but that cannot be merged because there is an other assert, what fires with an other document. If you want me i can cc you or put as reviewer for that patch, just write back. Thanks.",
+      "parentUuid": "51897d72_8bbe490b",
+      "range": {
+        "startLine": 378,
+        "startChar": 12,
+        "endLine": 378,
+        "endChar": 52
+      },
+      "revId": "493a916a3113e877835c9bc7c93faef0d29f9a33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
