@@ -16,6 +16,24 @@
       "message": "Hmm, would you model all SDT with SwTextMeta? I think the intention from Zolnai was that SDT has several types, and e.g. the Rich Text Content Control can contain paragraph breaks, and also multiple text portions. So in general, SDT seems to map to the bookmark concept rather well. There is also some benefit to map all SDT types to the same Writer concept, not some as fieldmarks and others as non-fieldmarks.\n\nThe reason I\u0027m asking is that I still hope that we (Collabora) can get to implement support for much more SDT types in the near future, and it would be natural to follow the date SDT as a reference. So if something is broken there, it\u0027s good if we can fix that before the same breakage gets copied over to 10 other types. :-)\n\nThanks.",
       "revId": "3eac118b31ed569dbcec845fc32386ebd0022f73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3109de9a_a285b1eb",
+        "filename": "sw/source/core/inc/bookmark.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-02T09:19:39Z",
+      "side": 1,
+      "message": "not all of them, there are 4 different kinds:\n\n* 17.5.2.31 sdt (Inline-Level Structured Document Tag)\n  \u003d\u003e meta-like textattr\n\n* 17.5.2.29 sdt (Block-Level Structured Document Tag)\n  \u003d\u003e section with SDT properties\n    (we can already have linked section so a \"generated section\" doesn\u0027t seem much of a stretch)\n\n* 17.5.2.30 sdt (Row-Level Structured Document Tag)\n  this is hard to do in any other way than properties on the table row\n\n* 17.5.2.32 sdt (Cell-Level Structured Document Tag)\n  this can be done by table cell properties or artificial section in the table cell\n\nwell i don\u0027t see a single Writer concept covering all these cases :)\n\nit\u0027s particularly interesting that SDT can be nested inside another SDT (at least the inline/block level ones) and these choices would support that.\n\nthe only problem with the meta-like textattr is that it only has a dummy-char at the start, not at the end, because the code to move that when splitting the node in the middle doesn\u0027t exist yet - but inline SDT must be inside one paragraph AFAICT so with fieldmarks there\u0027s the problem of how do you export it to SDT if it contains a paragraph break.\n\ni tried to insert a \"Rich-Text-Inhaltssteuerelement\" in Word and it doesn\u0027t allow to insert paragraph breaks, only line breaks - but my experience with Word is extremely limited so you might want to double check that.",
+      "parentUuid": "bb9719f1_89cc3dc7",
+      "revId": "3eac118b31ed569dbcec845fc32386ebd0022f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
