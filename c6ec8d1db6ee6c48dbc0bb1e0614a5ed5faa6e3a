@@ -33,6 +33,24 @@
       "message": "This can of course be quite expensive in itself \u003d) I wonder if this re-uses the cairo image scaling cache we have inside VCL ? perhaps worth checking - I suspect we re-generate the preview quite often.",
       "revId": "c6ec8d1db6ee6c48dbc0bb1e0614a5ed5faa6e3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47097496_3e9ba535",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2885,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-02-02T14:22:42Z",
+      "side": 1,
+      "message": "As I see in the flamegraph for optimized build - Scale takes 0.655% while deflate takes 35%",
+      "parentUuid": "62752c2c_6337715a",
+      "revId": "c6ec8d1db6ee6c48dbc0bb1e0614a5ed5faa6e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
