@@ -167,6 +167,59 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
+{
+    mxComponent
+        = loadFromDesktop(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/tdf147119.odg"));
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("PixelWidth", sal_Int32(100)),
+        comphelper::makePropertyValue("PixelHeight", sal_Int32(100)),
+        comphelper::makePropertyValue("Translucent", true),
+    };
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG")),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                           uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xPage);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
+    AlphaMask aAlpha = aBMPEx.GetAlpha();
+    {
+        AlphaMask::ScopedReadAccess pReadAccess(aAlpha);
+        for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+        {
+            for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
+            {
+                // Without the fix in place, this test would have failed with
+                // - Expected: Color: R:255 G:255 B:255 A:0
+                // - Actual  : Color: R:0 G:0 B:0 A:0
+                const Color aColor = pReadAccess->GetColor(nX, nY);
+                CPPUNIT_ASSERT_EQUAL(COL_WHITE, aColor);
+            }
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
 {
     mxComponent
