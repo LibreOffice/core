@@ -34,6 +34,24 @@
       "parentUuid": "bb9719f1_89cc3dc7",
       "revId": "3eac118b31ed569dbcec845fc32386ebd0022f73",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c700aca_f5bac60b",
+        "filename": "sw/source/core/inc/bookmark.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-02T09:49:42Z",
+      "side": 1,
+      "message": "... apparently  \"Rich-Text-Inhaltssteuerelement\" inserts a inline-level SDT into a non-empty paragraph and a block-level one into empty paragraph.",
+      "parentUuid": "3109de9a_a285b1eb",
+      "revId": "3eac118b31ed569dbcec845fc32386ebd0022f73",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
