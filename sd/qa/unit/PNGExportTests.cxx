@@ -99,16 +99,13 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
         {
             const Color aColorLeft = pReadAccess->GetColor(0, nY);
+            const Color aColorRight = pReadAccess->GetColor(aSize.Width() - 1, nY);
+
             CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorLeft);
 
-#if !defined(MACOSX)
-            // FIXME: Jenkins fails on mac with
-            // - Expected: Color: R:255 G:0 B:0 A:0
-            // - Actual  : Color: R:255 G:2 B:2 A:0
-
-            const Color aColorRight = pReadAccess->GetColor(aSize.Width() - 1, nY);
-            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorRight);
-#endif
+            // On mac, the right border is R:255 G:2 B:2 A:0 in some pixels
+            CPPUNIT_ASSERT_MESSAGE(aColorRight.AsRGBHexString().toUtf8().getStr(),
+                                   sal_uInt16(4) >= aColorRight.GetColorError(COL_LIGHTRED));
         }
     }
 }
