@@ -960,7 +960,7 @@ static OUString ImplMetricToString( FieldUnit rUnit )
     return OUString();
 }
 
-namespace vcl
+namespace
 {
     FieldUnit StringToMetric(const OUString &rMetricString)
     {
@@ -979,7 +979,7 @@ namespace vcl
 static FieldUnit ImplMetricGetUnit(const OUString& rStr)
 {
     OUString aStr = ImplMetricGetUnitText(rStr);
-    return vcl::StringToMetric(aStr);
+    return StringToMetric(aStr);
 }
 
 static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, tools::Long& nDecDigits )
