@@ -154,7 +154,6 @@ SdOutliner::SdOutliner( SdDrawDocument* pDoc, OutlinerMode nMode )
       meStartEditMode(EditMode::Page),
       mnStartPageIndex(sal_uInt16(-1)),
       mpStartEditedObject(nullptr),
-      mpSearchItem(nullptr),
       mbPrepareSpellingPending(true)
 {
     SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mpDrawDocument->GetStyleSheetPool() ));
@@ -464,7 +463,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     if ( ! bAbort)
     {
         meMode = SEARCH;
-        mpSearchItem = pSearchItem;
+        mpSearchItem = std::unique_ptr<SvxSearchItem>(pSearchItem->Clone());
 
         mbFoundObject = false;
 
