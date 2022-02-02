@@ -464,7 +464,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     if ( ! bAbort)
     {
         meMode = SEARCH;
-        mpSearchItem = pSearchItem;
+        mpSearchItem = std::unique_ptr<SvxSearchItem>(pSearchItem->Clone());
 
         mbFoundObject = false;
 
