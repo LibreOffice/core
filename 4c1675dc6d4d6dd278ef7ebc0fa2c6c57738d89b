@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cf92081_c2f1da50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-02T05:59:11Z",
+      "side": 1,
+      "message": "Actually, I had the same thought while working with these for loops. I can make the changes if it\u0027s acceptable.",
+      "parentUuid": "ad8535c1_a859eaea",
+      "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e894c6e2_768f418a",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb8e05bf_911b9cfb",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1810,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-02T05:59:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e894c6e2_768f418a",
+      "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5442369_2087ef15",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-02-01T18:01:49Z",
       "side": 1,
       "message": "This could be rewritten using std::any_of.",
+      "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "840de76d_4f102e3d",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-02T05:59:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b5442369_2087ef15",
       "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
