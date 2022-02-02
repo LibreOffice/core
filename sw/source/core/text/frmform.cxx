@@ -1126,13 +1126,21 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
         }
         else
         {
+            const SwTextNode* pTextNode = GetTextNodeForParaProps();
+            bool bHasVisibleNumRule = nStrLen == TextFrameIndex(0) && pTextNode->GetNumRule();
+
+            if (!pTextNode->HasVisibleNumberingOrBullet())
+            {
+                bHasVisibleNumRule = false;
+            }
+
             // Only split frame, if the frame contains
             // content or contains no content, but has a numbering.
             // i#84870 - No split, if text frame only contains one
             // as-character anchored object.
             if ( !bOnlyContainsAsCharAnchoredObj &&
                  (nStrLen > TextFrameIndex(0) ||
-                   (nStrLen == TextFrameIndex(0) && GetTextNodeForParaProps()->GetNumRule()))
+                   bHasVisibleNumRule )
                )
             {
                 SplitFrame( nEnd );
