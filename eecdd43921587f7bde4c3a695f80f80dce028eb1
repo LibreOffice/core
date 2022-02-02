@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88689c93_aa1f89c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-02T07:38:08Z",
+      "side": 1,
+      "message": "This looks good to me, thanks!\n\nNext time feel free to add the test to one of the CppunitTest_sw_rtfexport suites (that\u0027s where RTF export tests usually live), but it\u0027s already good to have a test for this, it\u0027s not important to move it there, I would say.",
+      "revId": "eecdd43921587f7bde4c3a695f80f80dce028eb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80c09e48_bd7170ac",
+        "filename": "sw/qa/core/draw/draw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-02T07:38:08Z",
+      "side": 1,
+      "message": "fo:border is not available at an UNO API as the Writer text frame model is a set of 4 borders. The ODF filter knows how to map fo:border to individual borders, but a single border (to be used for all borders) doesn\u0027t exist in memory.",
+      "revId": "eecdd43921587f7bde4c3a695f80f80dce028eb1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
