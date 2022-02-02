@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92777980_8cedc0b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-02-02T12:16:52Z",
+      "side": 1,
+      "message": "Patch was already +2 but I rebased by mistake, I will push to avoid unnecessary CI work next time...",
+      "revId": "889a094fe28c066ad0514dc1d188e4a2c4d29e05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
