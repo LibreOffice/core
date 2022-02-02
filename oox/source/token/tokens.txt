@@ -4868,6 +4868,10 @@ span
 spanAng
 spans
 sparkle
+sparklineGroups
+sparklineGroup
+sparklines
+sparkline
 spc
 spcAft
 spcBef
