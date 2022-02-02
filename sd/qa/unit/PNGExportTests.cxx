@@ -77,7 +77,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 
     // make sure only the shape is exported
     Size aSize = aBMPEx.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(Size(192, 192), aSize);
+    CPPUNIT_ASSERT_EQUAL(Size(193, 193), aSize);
 
     // Check all borders are red
     Bitmap aBMP = aBMPEx.GetBitmap();
