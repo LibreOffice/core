@@ -23,6 +23,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
 #include <DataSeries.hxx>
+#include <DataSource.hxx>
 
 #include <AxisHelper.hxx>
 #include <Diagram.hxx>
@@ -203,7 +204,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         }
         else
         {
-            Reference< data::XDataSource > xSource( xInterpreter->mergeInterpretedData( aData ));
+            rtl::Reference< DataSource > xSource( xInterpreter->mergeInterpretedData( aData ));
             // todo: get a "range-union" from the data provider by calling
             // OUString aRange = getRangeRepresentationByData( xSource );
             // xSource.set( getDataByRangeRepresentation( aRange, aParam ));
