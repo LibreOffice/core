@@ -359,6 +359,11 @@ DECLARE_OOXMLEXPORT_TEST(testDefaultStyle, "defaultStyle.docx")
     CPPUNIT_ASSERT_EQUAL(2, getPages());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf147115_defaultStyle, "tdf147115_defaultStyle.docx")
+{
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Default Style", OUString("Standard"), getProperty<OUString>(getParagraph(1), "ParaStyleName") );
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf117988, "tdf117988.docx")
 {
     CPPUNIT_ASSERT_EQUAL(1, getPages());
