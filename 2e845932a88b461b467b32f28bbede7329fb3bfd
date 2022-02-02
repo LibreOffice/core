@@ -18,6 +18,46 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de8d31d4_14f7da58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T12:38:13Z",
+      "side": 1,
+      "message": "@Attila: thanks for handling the tests! It\u0027s suggested to remove the obsolete code parts.\n\nNote: the DOCX export and reload still hides the text content of the unit test document: only changing the anchor will show the text again.",
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23cecd18_927bb81d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T12:38:13Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 1110,
+        "startChar": 77,
+        "endLine": 1110,
+        "endChar": 86
+      },
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9525d13e_669ff76b",
@@ -31,6 +71,30 @@
       "writtenOn": "2022-01-07T09:17:49Z",
       "side": 1,
       "message": "Should this one to be deleted?",
+      "range": {
+        "startLine": 1110,
+        "startChar": 4,
+        "endLine": 1132,
+        "endChar": 165
+      },
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c04adf92_1bb39c43",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T12:38:13Z",
+      "side": 1,
+      "message": "Yes, if it it\u0027s replaced with the previous lines.",
+      "parentUuid": "9525d13e_669ff76b",
       "range": {
         "startLine": 1110,
         "startChar": 4,
