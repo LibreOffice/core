@@ -47,14 +47,14 @@ void SdPNGExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-static void assertColorsAreSimilar(const BitmapColor& expected, const BitmapColor& actual,
-                                   int nDelta)
+static void assertColorsAreSimilar(const std::string& message, const BitmapColor& expected,
+                                   const BitmapColor& actual, int nDelta)
 {
     // Check that the two colors match or are reasonably similar.
     if (expected.GetColorError(actual) <= nDelta)
         return;
 
-    CPPUNIT_ASSERT_EQUAL(expected, actual);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(message, expected, actual);
 }
 
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
@@ -99,12 +99,12 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
             const Color aColorTop = pReadAccess->GetColor(0, nX);
             const Color aColorBottom = pReadAccess->GetColor(aSize.Height() - 1, nX);
 
-            assertColorsAreSimilar(COL_LIGHTRED, aColorTop, 5);
+            assertColorsAreSimilar("Incorrect top border", COL_LIGHTRED, aColorTop, 5);
 
             // Without the fix in place, this test would have failed with
             // - Expected: Color: R:255 G:0 B:0 A:0
             // - Actual  : Color: R:9 G:9 B:9 A:0
-            assertColorsAreSimilar(COL_LIGHTRED, aColorBottom, 5);
+            assertColorsAreSimilar("Incorrect bottom border", COL_LIGHTRED, aColorBottom, 5);
         }
 
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
@@ -112,8 +112,74 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
             const Color aColorLeft = pReadAccess->GetColor(nY, 0);
             const Color aColorRight = pReadAccess->GetColor(nY, aSize.Width() - 1);
 
-            assertColorsAreSimilar(COL_LIGHTRED, aColorLeft, 5);
-            assertColorsAreSimilar(COL_LIGHTRED, aColorRight, 5);
+            assertColorsAreSimilar("Incorrect left border", COL_LIGHTRED, aColorLeft, 5);
+            assertColorsAreSimilar("Incorrect right border", COL_LIGHTRED, aColorRight, 5);
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
+{
+    mxComponent
+        = loadFromDesktop(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/tdf126319.odg"));
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG"))
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xShape);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+
+    // make sure only the shape is exported
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(295, 134), aSize);
+
+#if defined(_WIN32) // FIXME
+    const sal_Int32 nDiff = 1;
+#else
+    const sal_Int32 nDiff = 2;
+#endif
+
+    // Check all borders are red or similar
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+        {
+            const Color aColorTop = pReadAccess->GetColor(0, nX);
+            const Color aColorBottom = pReadAccess->GetColor(aSize.Height() - 1, nX);
+
+            assertColorsAreSimilar("Incorrect top border", COL_LIGHTRED, aColorTop, 5);
+
+            // Without the fix in place, this test would have failed with
+            // - Expected: Color: R:255 G:0 B:0 A:0
+            // - Actual  : Color: R:77 G:0 B:0 A:0
+            assertColorsAreSimilar("Incorrect bottom border", COL_LIGHTRED, aColorBottom, 5);
+        }
+
+        for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
+        {
+            const Color aColorLeft = pReadAccess->GetColor(nY, 0);
+            const Color aColorRight = pReadAccess->GetColor(nY, aSize.Width() - nDiff);
+
+            assertColorsAreSimilar("Incorrect left border", COL_LIGHTRED, aColorLeft, 5);
+            assertColorsAreSimilar("Incorrect right border", COL_LIGHTRED, aColorRight, 5);
         }
     }
 }
