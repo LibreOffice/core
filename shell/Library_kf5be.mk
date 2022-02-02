@@ -20,6 +20,7 @@ $(eval $(call gb_Library_use_libraries,kf5be1,\
 	cppu \
 	cppuhelper \
 	sal \
+	vcl \
 ))
 
 $(eval $(call gb_Library_set_componentfile,kf5be1,shell/source/backends/kf5be/kf5be1,services))
