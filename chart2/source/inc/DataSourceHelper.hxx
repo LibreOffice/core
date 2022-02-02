@@ -36,6 +36,7 @@ namespace com::sun::star::frame { class XModel; }
 namespace chart
 {
 class Diagram;
+class LabeledDataSequence;
 
 class OOO_DLLPUBLIC_CHARTTOOLS DataSourceHelper
 {
@@ -50,16 +51,16 @@ public:
         static css::uno::Reference< css::chart2::data::XDataSequence >
             createCachedDataSequence( const OUString & rSingleText );
 
-        static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+        static rtl::Reference< LabeledDataSequence >
             createLabeledDataSequence(
                 const css::uno::Reference< css::chart2::data::XDataSequence >& xValues ,
                 const css::uno::Reference< css::chart2::data::XDataSequence >& xLabels );
 
-        static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+        static rtl::Reference< LabeledDataSequence >
             createLabeledDataSequence(
                 const css::uno::Reference< css::chart2::data::XDataSequence >& xValues );
 
-        static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+        static rtl::Reference< LabeledDataSequence >
             createLabeledDataSequence();
 
         static css::uno::Sequence< css::beans::PropertyValue >

@@ -21,6 +21,7 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
+#include <LabeledDataSequence.hxx>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <tools/diagnose_ex.h>
@@ -52,17 +53,17 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-    Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
+    std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
     Reference< data::XLabeledDataSequence > xValuesX;
     vector< Reference< data::XLabeledDataSequence > > aYValuesVector;
     vector< Reference< data::XLabeledDataSequence > > aSizeValuesVector;
 
-    Reference< data::XLabeledDataSequence > xCategories;
+    rtl::Reference< LabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
     bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
-    sal_Int32 nDataSeqCount = aData.getLength();
+    sal_Int32 nDataSeqCount = aData.size();
 
     bool bSetXValues = bHasCategories ? ( (nDataSeqCount-1) > 2 && (nDataSeqCount-1) % 2 != 0 )
                                  :( nDataSeqCount > 2 && nDataSeqCount % 2 != 0 );
@@ -75,7 +76,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
         {
             if( bHasCategories && !bCategoriesUsed )
             {
-                xCategories.set( aData[nDataIdx] );
+                xCategories = aData[nDataIdx];
                 if( xCategories.is())
                 {
                     SetRole( xCategories->getValues(), "categories");

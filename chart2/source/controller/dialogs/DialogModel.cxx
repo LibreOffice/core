@@ -34,6 +34,7 @@
 #include <ThreeDHelper.hxx>
 #include <ChartModel.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -595,15 +596,15 @@ void DialogModel::deleteSeries(
     DataSeriesHelper::deleteSeries( xSeries, xChartType );
 }
 
-Reference< data::XLabeledDataSequence > DialogModel::getCategories() const
+rtl::Reference< LabeledDataSequence > DialogModel::getCategories() const
 {
-    Reference< data::XLabeledDataSequence > xResult;
+    rtl::Reference< LabeledDataSequence > xResult;
     try
     {
         if( m_xChartDocument.is())
         {
             rtl::Reference< Diagram > xDiagram( m_xChartDocument->getFirstChartDiagram());
-            xResult.set( DiagramHelper::getCategoriesFromDiagram( xDiagram ));
+            xResult = DiagramHelper::getCategoriesFromDiagram( xDiagram );
         }
     }
     catch( const uno::Exception & )
@@ -636,7 +637,7 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
 
 OUString DialogModel::getCategoriesRange() const
 {
-    Reference< data::XLabeledDataSequence > xLSeq( getCategories());
+    rtl::Reference< LabeledDataSequence > xLSeq( getCategories());
     OUString aRange;
     if( xLSeq.is())
     {

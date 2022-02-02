@@ -22,6 +22,7 @@
 #include <DataSourceHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
+#include <LabeledDataSequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/supportsservice.hxx>
@@ -66,9 +67,9 @@ InterpretedData DataInterpreter::interpretDataSource(
     lcl_ShowDataSource( xSource );
 #endif
 
-    const Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
+    std::vector< rtl::Reference< LabeledDataSequence > > aData = getDataSequences(xSource);
 
-    Reference< data::XLabeledDataSequence > xCategories;
+    rtl::Reference< LabeledDataSequence > xCategories;
     vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
 
     // check if we should use categories
@@ -77,13 +78,13 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     // parse data
     bool bCategoriesUsed = false;
-    for( Reference< data::XLabeledDataSequence > const & labeledData : aData )
+    for( rtl::Reference< LabeledDataSequence > const & labeledData : aData )
     {
         try
         {
             if( bHasCategories && ! bCategoriesUsed )
             {
-                xCategories.set( labeledData );
+                xCategories = labeledData;
                 if( xCategories.is())
                     SetRole( xCategories->getValues(), "categories");
                 bCategoriesUsed = true;
@@ -138,9 +139,9 @@ InterpretedData DataInterpreter::interpretDataSource(
     lcl_ShowDataSource( xSource );
 #endif
 
-    const Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
+    std::vector< rtl::Reference< LabeledDataSequence > > aData = getDataSequences(xSource);
 
-    Reference< data::XLabeledDataSequence > xCategories;
+    rtl::Reference< LabeledDataSequence > xCategories;
     vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
 
     // check if we should use categories
@@ -149,13 +150,13 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     // parse data
     bool bCategoriesUsed = false;
-    for( Reference< data::XLabeledDataSequence > const & labeledData : aData )
+    for( rtl::Reference< LabeledDataSequence > const & labeledData : aData )
     {
         try
         {
             if( bHasCategories && ! bCategoriesUsed )
             {
-                xCategories.set( labeledData );
+                xCategories = labeledData;
                 if( xCategories.is())
                     SetRole( xCategories->getValues(), "categories");
                 bCategoriesUsed = true;
@@ -433,6 +434,21 @@ bool DataInterpreter::HasCategories(
     return bHasCategories;
 }
 
+bool DataInterpreter::HasCategories(
+    const Sequence< beans::PropertyValue > & rArguments,
+    const std::vector< rtl::Reference< LabeledDataSequence > > & rData )
+{
+    bool bHasCategories = false;
+
+    if( rArguments.hasElements() )
+        GetProperty( rArguments, u"HasCategories" ) >>= bHasCategories;
+
+    for( sal_Int32 nLSeqIdx=0; ! bHasCategories && nLSeqIdx<static_cast<sal_Int32>(rData.size()); ++nLSeqIdx )
+        bHasCategories = ( rData[nLSeqIdx].is() && GetRole( rData[nLSeqIdx]->getValues() ) == "categories");
+
+    return bHasCategories;
+}
+
 bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > & rArguments )
 {
     bool bUseCategoriesAsX = true;
@@ -454,6 +470,19 @@ sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName
 css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
 {
     return { "com.sun.star.chart2.DataInterpreter" };
+}
+
+std::vector< rtl::Reference< LabeledDataSequence > > DataInterpreter::getDataSequences(
+        const css::uno::Reference< css::chart2::data::XDataSource >& xSource)
+{
+    std::vector< rtl::Reference< LabeledDataSequence > > aData;
+    for (const Reference< data::XLabeledDataSequence > & rLDS : xSource->getDataSequences() )
+    {
+        auto pLDS = dynamic_cast<LabeledDataSequence*>(rLDS.get());
+        assert(pLDS);
+        aData.push_back(pLDS);
+    }
+    return aData;
 }
 
 } // namespace chart

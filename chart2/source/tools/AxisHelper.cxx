@@ -23,6 +23,7 @@
 #include <ChartTypeHelper.hxx>
 #include <ChartType.hxx>
 #include <AxisIndexDefines.hxx>
+#include <LabeledDataSequence.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
 #include <DataSeries.hxx>
@@ -197,7 +198,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                             DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), "values-x" ) );
                         if( aXValues.empty() )
                         {
-                            Reference< data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+                            rtl::Reference< LabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
                             if( xCategories.is() )
                             {
                                 Reference< data::XDataSequence > xSeq( xCategories->getValues());

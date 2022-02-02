@@ -41,6 +41,7 @@ class BaseCoordinateSystem;
 class ChartType;
 class Diagram;
 class DataInterpreter;
+class LabeledDataSequence;
 
 /** For creating diagrams and modifying existing diagrams.  A base class that
     implements XChartTypeTemplate and offers some tooling for classes that
@@ -249,8 +250,8 @@ private:
                           css::uno::Sequence<
                               css::uno::Reference<
                                   css::chart2::XDataSeries > > > & aSeriesSeq,
-                      const css::uno::Reference<
-                          css::chart2::data::XLabeledDataSequence >& xCategories,
+                      const rtl::Reference<
+                          LabeledDataSequence >& xCategories,
                       const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq);
 };
 

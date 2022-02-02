@@ -20,6 +20,7 @@
 #include "StockDataInterpreter.hxx"
 #include "StockChartTypeTemplate.hxx"
 #include <DataSeries.hxx>
+#include <LabeledDataSequence.hxx>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <tools/diagnose_ex.h>
 
@@ -51,9 +52,9 @@ InterpretedData StockDataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-    Reference< data::XLabeledDataSequence > xCategories;
-    Sequence< Reference< data::XLabeledDataSequence > > aData( xSource->getDataSequences() );
-    const sal_Int32 nDataCount( aData.getLength());
+    rtl::Reference< LabeledDataSequence > xCategories;
+    std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
+    const sal_Int32 nDataCount( aData.size());
 
     // sub-type properties
     const StockChartTypeTemplate::StockVariant eVar( GetStockVariant());
@@ -114,7 +115,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
     // 1. categories
     if( bHasCategories )
     {
-        xCategories.set( aData[nSourceIndex] );
+        xCategories = aData[nSourceIndex];
         ++nSourceIndex;
     }
 

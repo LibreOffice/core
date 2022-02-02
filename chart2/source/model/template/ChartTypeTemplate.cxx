@@ -30,6 +30,7 @@
 #include <AxisIndexDefines.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <unonames.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -716,7 +717,7 @@ sal_Int32 ChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
 void ChartTypeTemplate::FillDiagram(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
     const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
-    const Reference< data::XLabeledDataSequence >& xCategories,
+    const rtl::Reference< LabeledDataSequence >& xCategories,
     const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
     adaptDiagram( xDiagram );
