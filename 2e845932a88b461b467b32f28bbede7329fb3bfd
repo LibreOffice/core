@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32364c9b_cd959e99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-02-02T12:44:48Z",
+      "side": 1,
+      "message": "Done. The mentioned problem will be fixed in: https://gerrit.libreoffice.org/c/core/+/128279 what is ready for review too. :)",
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23cecd18_927bb81d",
