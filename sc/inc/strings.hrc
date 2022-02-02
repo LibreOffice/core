@@ -47,10 +47,8 @@
 #define SCSTR_FILTER_AUTOMATIC_COLOR                NC_("SCSTR_FILTER_AUTOMATIC_COLOR", "Automatic")
 #define SCSTR_NONAME                                NC_("SCSTR_NONAME", "unnamed")
 #define SCSTR_INSERT_RTL                            NC_("SCSTR_INSERT_RTL", "Shift cells left")
-// "%1 is replaced to column letter, such as 'Column A'"
-#define SCSTR_COLUMN                                NC_("SCSTR_COLUMN", "Column %1")
-// "%1 is replaced to row number, such as 'Row 1'"
-#define SCSTR_ROW                                   NC_("SCSTR_ROW", "Row %1")
+#define SCSTR_COLUMN                                NC_("SCSTR_COLUMN", "Column")
+#define SCSTR_ROW                                   NC_("SCSTR_ROW", "Row")
 #define SCSTR_TABLE                                 NC_("SCSTR_TABLE", "Sheet")
 #define SCSTR_NAME                                  NC_("SCSTR_NAME", "Name")
 #define SCSTR_APDTABLE                              NC_("SCSTR_APDTABLE", "Append Sheet")

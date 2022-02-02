@@ -9,7 +9,7 @@
     <property name="label-xalign">0</property>
     <property name="shadow-type">none</property>
     <child>
-      <!-- n-columns=2 n-rows=2 -->
+      <!-- n-columns=3 n-rows=2 -->
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -31,7 +31,7 @@
             </child>
           </object>
           <packing>
-            <property name="left-attach">0</property>
+            <property name="left-attach">1</property>
             <property name="top-attach">0</property>
             <property name="height">2</property>
           </packing>
@@ -52,7 +52,7 @@
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
+            <property name="left-attach">2</property>
             <property name="top-attach">0</property>
           </packing>
         </child>
@@ -72,8 +72,20 @@
             </child>
           </object>
           <packing>
-            <property name="left-attach">1</property>
+            <property name="left-attach">2</property>
             <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lbColRow">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="no">Column/Row:</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+            <property name="height">2</property>
           </packing>
         </child>
       </object>
