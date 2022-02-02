@@ -896,11 +896,14 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
             case SID_HYPERLINK_GETLINK:
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                OUString sHyperLink = pObj->getHyperlink();
-                SvxHyperlinkItem aHLinkItem;
-                aHLinkItem.SetURL(sHyperLink);
-                rSet.Put(aHLinkItem);
+                if (rMarkList.GetMark(0) != nullptr)
+                {
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+                    OUString sHyperLink = pObj->getHyperlink();
+                    SvxHyperlinkItem aHLinkItem;
+                    aHLinkItem.SetURL(sHyperLink);
+                    rSet.Put(aHLinkItem);
+                }
             }
             break;
         }
