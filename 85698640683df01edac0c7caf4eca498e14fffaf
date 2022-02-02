@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b711c616_5fa505b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-02T09:53:47Z",
+      "side": 1,
+      "message": "Noel: do you think we could remove the line instead of just fixing the comment?\nI mean, it\u0027s been like this since commit 54045ebff19c83b2dec8458d88ea94308e111fc6 in 2004",
+      "revId": "85698640683df01edac0c7caf4eca498e14fffaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
