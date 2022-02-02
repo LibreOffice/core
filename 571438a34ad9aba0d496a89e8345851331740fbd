@@ -16,6 +16,24 @@
       "message": "This will trigger warnings from static analyzers about dereferencing nullptr from dynamic_cast",
       "revId": "571438a34ad9aba0d496a89e8345851331740fbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dec331e_5477f102",
+        "filename": "sc/source/ui/vba/vbaapplication.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-02-02T06:19:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23ff2d8f_4ca3d9d0",
+      "revId": "571438a34ad9aba0d496a89e8345851331740fbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
