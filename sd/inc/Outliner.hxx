@@ -316,7 +316,7 @@ private:
         search.  It is set every time the
         <member>SearchAndReplaceAll</member> method is called.
     */
-    const SvxSearchItem* mpSearchItem;
+    std::unique_ptr<const SvxSearchItem> mpSearchItem;
 
     /// The actual object iterator.
     ::sd::outliner::Iterator maObjectIterator;
