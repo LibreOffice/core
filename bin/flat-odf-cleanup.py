@@ -262,7 +262,7 @@ if __name__ == "__main__":
     -> cell
     draw:style-name
     -> graphic
-    -> drawing-page (only draw:page, presentation:notes, style:handout-master, syle:master-page)
+    -> drawing-page (only draw:page, presentation:notes, style:handout-master, style:master-page)
     presentation:style-name
     -> presentation
     style:data-style-name
