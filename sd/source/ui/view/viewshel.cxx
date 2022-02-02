@@ -1197,7 +1197,7 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
 
     if(pReqArgs)
     {
-        const SfxUInt16Item* pUIntItem = static_cast<const SfxUInt16Item*>(&pReqArgs->Get(SID_UNDO));
+        const SfxUInt32Item* pUIntItem = &pReqArgs->Get(SID_UNDO);
         nNumber = pUIntItem->GetValue();
 
         // Repair mode: allow undo/redo of all undo actions, even if access would
@@ -1266,7 +1266,7 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
 
     if(pReqArgs)
     {
-        const SfxUInt16Item* pUIntItem = static_cast<const SfxUInt16Item*>(&pReqArgs->Get(SID_REDO));
+        const SfxUInt32Item* pUIntItem = &pReqArgs->Get(SID_REDO);
         nNumber = pUIntItem->GetValue();
         // Repair mode: allow undo/redo of all undo actions, even if access would
         // be limited based on the view shell ID.
