@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e524f2e_03a98c21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-02T11:57:14Z",
+      "side": 1,
+      "message": "Let\u0027s rebase to include https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003debcf824de8101fbbda01ee91010698977041f031",
+      "revId": "ed17e76f710ffbf4d2747cfc8740f9bd8434d239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
