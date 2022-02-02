@@ -1422,22 +1422,9 @@ void SbRtl_Space(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        OUStringBuffer aBuf;
-        string::padToLength(aBuf, rPar.Get(1)->GetLong(), ' ');
-        rPar.Get(0)->PutString(aBuf.makeStringAndClear());
-    }
-}
-
-void SbRtl_Spc(StarBASIC *, SbxArray & rPar, bool)
-{
-    if (rPar.Count() < 2)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-    }
-    else
-    {
-        OUStringBuffer aBuf;
-        string::padToLength(aBuf, rPar.Get(1)->GetLong(), ' ');
+        const sal_Int32 nCount = rPar.Get(1)->GetLong();
+        OUStringBuffer aBuf(nCount);
+        string::padToLength(aBuf, nCount, ' ');
         rPar.Get(0)->PutString(aBuf.makeStringAndClear());
     }
 }
