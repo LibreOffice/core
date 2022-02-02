@@ -179,8 +179,7 @@ void SwDrawTextShell::ExecFontWork(SfxRequest const & rReq)
     if ( rReq.GetArgs() )
     {
         pVFrame->SetChildWindow(SvxFontWorkChildWindow::GetChildWindowId(),
-                                static_cast<const SfxBoolItem&>( (rReq.GetArgs()->
-                                Get(SID_FONTWORK))).GetValue());
+                                rReq.GetArgs()->Get(SID_FONTWORK).GetValue());
     }
     else
         pVFrame->ToggleChildWindow(SvxFontWorkChildWindow::GetChildWindowId());
