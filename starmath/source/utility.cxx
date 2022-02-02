@@ -23,6 +23,9 @@
 #include <dialog.hxx>
 #include <view.hxx>
 
+#include <comphelper/lok.hxx>
+#include <sfx2/lokcomponenthelpers.hxx>
+
 // return pointer to active SmViewShell, if this is not possible
 // return 0 instead.
 //!! Since this method is based on the current focus it is somewhat
@@ -30,7 +33,14 @@
 SmViewShell * SmGetActiveView()
 {
     SfxViewShell *pView = SfxViewShell::Current();
-    return  dynamic_cast<SmViewShell*>( pView);
+    SmViewShell* pSmView = dynamic_cast<SmViewShell*>(pView);
+    if (!pSmView && comphelper::LibreOfficeKit::isActive())
+    {
+        auto* pWindow = static_cast<SmGraphicWindow*>(LokStarMathHelper(pView).GetGraphicWindow());
+        if (pWindow)
+            pSmView = &pWindow->GetGraphicWidget().GetView();
+    }
+    return pSmView;
 }
 
 
