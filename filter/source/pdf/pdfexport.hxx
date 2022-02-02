@@ -120,6 +120,7 @@ private:
 
     void                ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
     void                ImplWriteTiledWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
+    css::uno::Reference<css::security::XCertificate> GetCertificateFromSubjectName(const std::u16string_view& rSubjectName) const;
 
 
 public:
