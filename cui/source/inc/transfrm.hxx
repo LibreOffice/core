@@ -22,6 +22,7 @@
 #include <svx/dialcontrol.hxx>
 #include <svx/anchorid.hxx>
 #include <basegfx/range/b2drange.hxx>
+#include <vcl/weldutils.hxx>
 
 // predefines
 class SdrView;
@@ -93,16 +94,20 @@ private:
 
     // position
     std::unique_ptr<weld::Widget> m_xFlPosition;
-    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosX;
-    std::unique_ptr<weld::MetricSpinButton> m_xMtrPosY;
+    std::unique_ptr<weld::FormattedSpinButton> m_xMtrPosX;
+    std::unique_ptr<weld::MetricFormatter> m_xFormatterPosX;
+    std::unique_ptr<weld::FormattedSpinButton> m_xMtrPosY;
+    std::unique_ptr<weld::MetricFormatter> m_xFormatterPosY;
     std::unique_ptr<weld::CustomWeld> m_xCtlPos;
 
     // size
     std::unique_ptr<weld::Widget> m_xFlSize;
     std::unique_ptr<weld::Label> m_xFtWidth;
-    std::unique_ptr<weld::MetricSpinButton> m_xMtrWidth;
+    std::unique_ptr<weld::FormattedSpinButton> m_xMtrWidth;
+    std::unique_ptr<weld::MetricFormatter> m_xFormatterWidth;
     std::unique_ptr<weld::Label> m_xFtHeight;
-    std::unique_ptr<weld::MetricSpinButton> m_xMtrHeight;
+    std::unique_ptr<weld::FormattedSpinButton> m_xMtrHeight;
+    std::unique_ptr<weld::MetricFormatter> m_xFormatterHeight;
     std::unique_ptr<weld::CheckButton> m_xCbxScale;
     std::unique_ptr<weld::CustomWeld> m_xCtlSize;
 
@@ -122,8 +127,8 @@ private:
     void SetMinMaxPosition();
     void GetTopLeftPosition(double& rfX, double& rfY, const basegfx::B2DRange& rRange);
 
-    DECL_LINK( ChangeWidthHdl, weld::MetricSpinButton&, void );
-    DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
+    DECL_LINK( ChangeWidthHdl, weld::FormattedSpinButton&, void );
+    DECL_LINK( ChangeHeightHdl, weld::FormattedSpinButton&, void );
     DECL_LINK( ClickSizeProtectHdl, weld::Toggleable&, void );
     DECL_LINK( ClickAutoHdl, weld::Toggleable&, void );
 
