@@ -55,28 +55,17 @@ bool checkBitmapColor(Bitmap const& rBitmap, Color const& rExpectedColor)
     return bResult;
 }
 
-void assertColorsAreSimilar(int maxDifference, const std::string& message,
-                            const BitmapColor& expected, const BitmapColor& actual)
-{
-    // Check that the two colors match or are reasonably similar.
-    if (expected == actual)
-        return;
-    if (abs(expected.GetRed() - actual.GetRed()) <= maxDifference
-        && abs(expected.GetGreen() - actual.GetGreen()) <= maxDifference
-        && abs(expected.GetBlue() - actual.GetBlue()) <= maxDifference
-        && abs(expected.GetAlpha() - actual.GetAlpha()) <= maxDifference)
-    {
-        return;
-    }
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(message, expected, actual);
-}
-
 void assertColorsAreSimilar(int maxDifference, int line, const BitmapColor& expected,
                             const BitmapColor& actual)
 {
+    // Check that the two colors match or are reasonably similar.
+    if (expected.GetColorError(actual) <= maxDifference)
+        return;
+
     std::stringstream stream;
     stream << "Line: " << line;
-    assertColorsAreSimilar(maxDifference, stream.str(), expected, actual);
+
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(stream.str(), expected, actual);
 }
 
 void BitmapScaleTest::testScale()
