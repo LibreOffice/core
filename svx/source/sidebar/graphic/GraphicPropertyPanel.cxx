@@ -108,7 +108,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyContrastHdl, weld::MetricSpinButton
 IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, weld::MetricSpinButton&, void )
 {
     const sal_Int16 nTrans = mxMtrTrans->get_value(FieldUnit::PERCENT);
-    const SfxInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
+    const SfxUInt16Item aTransItem( SID_ATTR_GRAF_TRANSPARENCE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_TRANSPARENCE,
             SfxCallMode::RECORD, { &aTransItem });
 }
@@ -117,7 +117,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ModifyTransHdl, weld::MetricSpinButton&, 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl, weld::ComboBox&, void )
 {
     const sal_Int16 nTrans = mxLBColorMode->get_active();
-    const SfxInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
+    const SfxUInt16Item aTransItem( SID_ATTR_GRAF_MODE, nTrans );
     GetBindings()->GetDispatcher()->ExecuteList(SID_ATTR_GRAF_MODE,
             SfxCallMode::RECORD, { &aTransItem });
 }
@@ -218,11 +218,10 @@ void GraphicPropertyPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 mxLBColorMode->set_sensitive(true);
-                const SfxUInt16Item* pItem = dynamic_cast< const SfxUInt16Item* >(pState);
 
-                if(pItem)
+                if(pState)
                 {
-                    const sal_Int64 nTrans = pItem->GetValue();
+                    const sal_uInt16 nTrans = static_cast< const SfxUInt16Item* >(pState)->GetValue();
                     mxLBColorMode->set_active(nTrans);
                 }
             }
