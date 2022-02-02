@@ -85,8 +85,8 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
         Bitmap::ScopedReadAccess pReadAccess(aBMP);
         for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
         {
-            const Color aColorTop = pReadAccess->GetColor(nX, 0);
-            const Color aColorBottom = pReadAccess->GetColor(nX, aSize.Height() - 1);
+            const Color aColorTop = pReadAccess->GetColor(0, nX);
+            const Color aColorBottom = pReadAccess->GetColor(aSize.Height() - 1, nX);
 
             CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorTop);
 
@@ -98,7 +98,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
         {
-            const Color aColorLeft = pReadAccess->GetColor(0, nY);
+            const Color aColorLeft = pReadAccess->GetColor(nY, 0);
             CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorLeft);
 
 #if !defined(MACOSX)
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
             // - Expected: Color: R:255 G:0 B:0 A:0
             // - Actual  : Color: R:255 G:2 B:2 A:0
 
-            const Color aColorRight = pReadAccess->GetColor(aSize.Width() - 1, nY);
+            const Color aColorRight = pReadAccess->GetColor(nY, aSize.Width() - 1);
             CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorRight);
 #endif
         }
@@ -160,7 +160,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
                 // Without the fix in place, this test would have failed with
                 // - Expected: 0
                 // - Actual  : 16777215
-                const Color aColor = pReadAccess->GetColor(nX, nY);
+                const Color aColor = pReadAccess->GetColor(nY, nX);
                 CPPUNIT_ASSERT_EQUAL(COL_BLACK, aColor);
             }
         }
@@ -215,7 +215,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf123973)
                 // Without the fix in place, this test would have failed with
                 // - Expected: Color: R:0 G:0 B:0 A:0
                 // - Actual  : Color: R:255 G:255 B:255 A:0
-                const Color aColor = pReadAccess->GetColor(nX, nY);
+                const Color aColor = pReadAccess->GetColor(nY, nX);
                 CPPUNIT_ASSERT_EQUAL(COL_BLACK, aColor);
             }
         }
