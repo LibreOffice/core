@@ -16,6 +16,24 @@
       "message": "Looks good :-) Did not (yet) check optically, but 60 degrees is not too much...?",
       "revId": "6186dfee2bfa9686dcd24ee432816b940fee7a9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a489d1a_8baefd5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-02-02T22:58:22Z",
+      "side": 1,
+      "message": "I have tried with 45°, 75° and 90° too, but I found 60° to be nearest to the way MSO renders it. In case someone finds a better combination of angle and lights intensity it is easy to change it. Because of the \u0027metal\u0027 problem the patch will be in WIP state for a longer time.",
+      "parentUuid": "b7fe0345_f65e2fce",
+      "revId": "6186dfee2bfa9686dcd24ee432816b940fee7a9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
