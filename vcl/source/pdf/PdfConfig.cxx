@@ -11,6 +11,9 @@
 #include <pdf/PdfConfig.hxx>
 #include <cstdlib>
 
+#include <vcl/svapp.hxx>
+#include <vcl/outdev.hxx>
+
 namespace vcl::pdf
 {
 /// Get the default PDF rendering resolution in DPI.
@@ -26,7 +29,7 @@ double getDefaultPdfResolutionDpi()
     }
 
     // Fallback to a sensible default.
-    return 96.;
+    return Application::GetDefaultDevice()->GetDPIX();
 }
 }
 

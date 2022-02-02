@@ -7,6 +7,8 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/pdfread.hxx>
 
 #include <tools/UnitConversion.hxx>
@@ -156,8 +158,11 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
         }
 
         // Returned unit is points, convert that to pixel.
-        const size_t nPageWidth = pointToPixel(nPageWidthPoints, fResolutionDPI);
-        const size_t nPageHeight = pointToPixel(nPageHeightPoints, fResolutionDPI);
+
+        const size_t nPageWidth
+            = pointToPixel(nPageWidthPoints, fResolutionDPI) * PDF_INSERT_MAGIC_SCALE_FACTOR;
+        const size_t nPageHeight
+            = pointToPixel(nPageHeightPoints, fResolutionDPI) * PDF_INSERT_MAGIC_SCALE_FACTOR;
         std::unique_ptr<vcl::pdf::PDFiumBitmap> pPdfBitmap
             = pPdfium->createBitmap(nPageWidth, nPageHeight, /*nAlpha=*/1);
         if (!pPdfBitmap)
