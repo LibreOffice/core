@@ -16,6 +16,24 @@
       "message": "I also don\u0027t like the idea of disabling it in libreoffice-7-3 and not in master...",
       "revId": "290957ad1383565c97201360defdeae9ae5ef502",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42fdeaa2_18133e89",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-02T09:25:18Z",
+      "side": 1,
+      "message": "\u003e I also don\u0027t like the idea of disabling it in libreoffice-7-3 and not in master...\n\nMy logic is that 7.3 is a release and so it should work, and I can\u0027t currently fix the problem because of the difficulty of reproducing it. On the other hand, I don\u0027t want to repeatedly flip the default on master, first because it\u0027d be somewhat annoying to have it changing repeatedly, and secondly disabling it on master might mean that the problem won\u0027t be fixed in a long time, while with it enabled maybe somebody who can reproduce the problem may actually debug and/or fix it.",
+      "parentUuid": "192abd8a_4ca6f39f",
+      "revId": "290957ad1383565c97201360defdeae9ae5ef502",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
