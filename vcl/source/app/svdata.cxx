@@ -29,6 +29,7 @@
 #include <vcl/QueueInfo.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/dockwin.hxx>
+#include <vcl/fieldvalues.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/print.hxx>
 #include <vcl/settings.hxx>
@@ -274,6 +275,20 @@ const FieldUnitStringList& ImplGetFieldUnits()
         }
     }
     return pSVData->maCtrlData.maFieldUnitStrings;
+}
+
+namespace vcl
+{
+    FieldUnit EnglishStringToMetric(const OUString& rEnglishMetricString)
+    {
+        sal_uInt32 nUnits = SAL_N_ELEMENTS(SV_FUNIT_STRINGS);
+        for (sal_uInt32 i = 0; i < nUnits; ++i)
+        {
+            if (rEnglishMetricString.equalsAscii(SV_FUNIT_STRINGS[i].first.mpId))
+                return SV_FUNIT_STRINGS[i].second;
+        }
+        return FieldUnit::NONE;
+    }
 }
 
 const FieldUnitStringList& ImplGetCleanedFieldUnits()
