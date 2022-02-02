@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "852df41a_caad2a2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-02T09:57:31Z",
+      "side": 1,
+      "message": "[Andrea, please don\u0027t group unrelated changes into a relation chain.  Submitting a single change from the middle of the chain always runs the risk of unintentionally breaking master, so I\u0027m never happy to do that.]",
+      "revId": "b13579fd2a811e32b06f34ebf932469cabe5fd27",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
