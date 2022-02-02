@@ -51,6 +51,24 @@
       "parentUuid": "62752c2c_6337715a",
       "revId": "c6ec8d1db6ee6c48dbc0bb1e0614a5ed5faa6e3a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48980b9b_d6405dc5",
+        "filename": "filter/source/svg/svgwriter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2885,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-02-02T19:14:36Z",
+      "side": 1,
+      "message": "Heh - makes sense \u003d)",
+      "parentUuid": "47097496_3e9ba535",
+      "revId": "c6ec8d1db6ee6c48dbc0bb1e0614a5ed5faa6e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
