@@ -33,6 +33,29 @@
       "message": "it seems to me it can be submitted",
       "revId": "e5425809894664f4cd6b384275da890e3319ce49",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e50a7100_2de813e2",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T17:11:05Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 154,
+        "startChar": 15,
+        "endLine": 154,
+        "endChar": 26
+      },
+      "revId": "e5425809894664f4cd6b384275da890e3319ce49",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

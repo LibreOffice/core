@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5724573e_8fafc180",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T17:11:05Z",
+      "side": 1,
+      "message": "@Attila: thanks, I\u0027m glad, that it works now. I\u0027ve fixed a typo and will merge it tomorrow.",
+      "revId": "d6d8afed1e15449a10708c68705be716fece3ae1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
