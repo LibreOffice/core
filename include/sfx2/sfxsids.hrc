@@ -28,11 +28,13 @@ class SfxDocumentInfoItem;
 class SfxEventNamesItem;
 class SfxFlagItem;
 class SfxHyphenRegionItem;
+class SfxInt16Item;
 class SfxMacroInfoItem;
 class SfxScriptOrganizerItem;
 class SfxStringItem;
 class SfxStringListItem;
 class SfxUInt16Item;
+class SfxUInt32Item;
 class SfxUnoAnyItem;
 class SfxUnoFrameItem;
 class SvxClipboardFormatItem;
@@ -62,7 +64,7 @@ class SvxZoomItem;
 #define SID_SETUPPRINTER                    (SID_SFX_START + 302)
 #define SID_SAFE_MODE                       (SID_SFX_START + 303)
 
-#define SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW (SID_SFX_START + 306)
+#define SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW TypedWhichId<SfxBoolItem>(SID_SFX_START + 306)
 #define SID_INSPECT_SELECTED_OBJECT          (SID_SFX_START + 307)
 
 #define SID_CONTEXT                         (SID_SFX_START + 310)
@@ -74,7 +76,7 @@ class SvxZoomItem;
 #define SID_PRINTER_NOTFOUND_WARN           TypedWhichId<SfxBoolItem>(SID_SFX_START + 320)
 #define SID_PRINTER_NAME                    (SID_SFX_START + 322)
 #define SID_PRINTER_CHANGESTODOC            TypedWhichId<SfxFlagItem>(SID_SFX_START + 324)
-#define SID_PRINTPREVIEW                    (SID_SFX_START + 325)
+#define SID_PRINTPREVIEW                    TypedWhichId<SfxBoolItem>(SID_SFX_START + 325)
 
 #define SID_MAIL_SUBJECT                    (SID_SFX_START + 328)
 #define SID_MAIL_SENDDOC                    (SID_SFX_START + 331)
@@ -88,7 +90,7 @@ class SvxZoomItem;
 
 #define SID_MAIL_EXPORT_FINISHED            (SID_SFX_START + 388)
 #define SID_WEBHTML                         (SID_SFX_START + 393)
-#define SID_MAIL_SCROLLBODY_PAGEDOWN        (SID_SFX_START + 1588)
+#define SID_MAIL_SCROLLBODY_PAGEDOWN        TypedWhichId<SfxBoolItem>(SID_SFX_START + 1588)
 
 #define SID_PROGRESS_STATUSBAR_CONTROL      TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1597)
 
@@ -99,8 +101,8 @@ class SvxZoomItem;
 // default-ids for help
 #define SID_HELPINDEX                       (SID_SFX_START + 401)
 #define SID_EXTENDEDHELP                    (SID_SFX_START + 402)
-#define SID_HELPBALLOONS                    (SID_SFX_START + 403)
-#define SID_HELPTIPS                        (SID_SFX_START + 404)
+#define SID_HELPBALLOONS                    TypedWhichId<SfxBoolItem>(SID_SFX_START + 403)
+#define SID_HELPTIPS                        TypedWhichId<SfxBoolItem>(SID_SFX_START + 404)
 #define SID_EMOJI_CONTROL                   (SID_SFX_START + 405)
 #define SID_CHARMAP_CONTROL                 (SID_SFX_START + 406)
 #define SID_TIPOFTHEDAY                     (SID_SFX_START + 407)
@@ -127,27 +129,27 @@ class SvxZoomItem;
 #define SID_SAVEASDOC                       (SID_SFX_START + 502)
 #define SID_SAVEASREMOTE                    (SID_SFX_START + 516)
 #define SID_SAVESIMPLE                      (SID_SFX_START + 518)
-#define SID_SIGNPDF                         (SID_SFX_START + 519)
+#define SID_SIGNPDF                         TypedWhichId<SfxBoolItem>(SID_SFX_START + 519)
 #define SID_SAVEACOPY                       (SID_SFX_START + 999)
-#define SID_SAVEACOPYITEM                   (SID_SFX_START + 998)
+#define SID_SAVEACOPYITEM                   TypedWhichId<SfxBoolItem>(SID_SFX_START + 998)
 #define SID_CONVERT_IMAGES                  TypedWhichId<SfxStringItem>(SID_SFX_START + 997)
-#define SID_CLOSING                         (SID_SFX_START +1539)
+#define SID_CLOSING                         TypedWhichId<SfxBoolItem>(SID_SFX_START +1539)
 #define SID_CLOSEDOC                        (SID_SFX_START + 503)
 #define SID_CLOSEDOCS                       (SID_SFX_START + 595)
 #define SID_CLOSEDOC_SAVE                   (SID_SFX_START +   1)
 #define SID_CLOSEDOC_FILENAME               (SID_SFX_START +   2)
 #define SID_PRINTDOC                        (SID_SFX_START + 504)
-#define SID_PRINT_COPIES                    (SID_SFX_START +   3)
+#define SID_PRINT_COPIES                    TypedWhichId<SfxInt16Item>(SID_SFX_START +   3)
 #define SID_PRINT_PAGES                     (SID_SFX_START +1589)
-#define SID_PRINT_COLLATE                   (SID_SFX_START +1590)
+#define SID_PRINT_COLLATE                   TypedWhichId<SfxBoolItem>(SID_SFX_START +1590)
 #define SID_PRINT_SORT                      (SID_SFX_START +1591)
 #define SID_SAVEDOC                         (SID_SFX_START + 505)
 #define SID_FILE_NAME                       (SID_SFX_START + 507)
 #define SID_DOCINFO_TITLE                   TypedWhichId<SfxStringItem>(SID_SFX_START + 557)
 #define SID_FILE_FILTEROPTIONS              (SID_SFX_START + 527)
-#define SID_RELOAD                          (SID_SFX_START + 508)
+#define SID_RELOAD                          TypedWhichId<SfxBoolItem>(SID_SFX_START + 508)
 #define SID_PRINTDOCDIRECT                  (SID_SFX_START + 509)
-#define SID_DOC_REPAIR                      (SID_SFX_START + 510)
+#define SID_DOC_REPAIR                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 510)
 #define SID_DOC_SERVICE                     TypedWhichId<SfxStringItem>(SID_SFX_START + 511)
 #define SID_PLUGIN_MODE                     TypedWhichId<SfxUInt16Item>(SID_SFX_START + 827)
 #define SID_EXPORTDOC                       (SID_SFX_START + 829)
@@ -163,9 +165,9 @@ class SvxZoomItem;
 #define SID_CHECKIN                         (SID_SFX_START + 514)
 #define SID_FILTER_PROVIDER                 TypedWhichId<SfxStringItem>(SID_SFX_START + 515)
 
-#define SID_FORCERELOAD                     (SID_SFX_START + 1502)
+#define SID_FORCERELOAD                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 1502)
 #define SID_FILE_DIALOG                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 304)
-#define SID_REMOTE_DIALOG                   (SID_SFX_START + 305)
+#define SID_REMOTE_DIALOG                   TypedWhichId<SfxBoolItem>(SID_SFX_START + 305)
 #define SID_PATH                            TypedWhichId<SfxStringItem>(SID_SFX_START + 308)
 #define SID_SAVEDOCS                        (SID_SFX_START + 309)
 #define SID_STANDARD_DIR                    TypedWhichId<SfxStringItem>(SID_SFX_START + 450)
@@ -176,9 +178,9 @@ class SvxZoomItem;
 #define SID_BROWSE_BACKWARD                 (SID_SFX_START + 1301)
 #define SID_CREATELINK                      (SID_SFX_START + 1309)
 #define SID_EDITDOC                         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1312)
-#define SID_BROWSER_MODE                    (SID_SFX_START + 1313)
-#define SID_READONLYDOC                     (SID_SFX_START + 1314)
-#define SID_BROWSER                         (SID_SFX_START + 1318)
+#define SID_BROWSER_MODE                    TypedWhichId<SfxBoolItem>(SID_SFX_START + 1313)
+#define SID_READONLYDOC                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 1314)
+#define SID_BROWSER                         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1318)
 #define SID_MACROEXECMODE                   TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1319)
 
 #define SID_FILTER_DATA                     TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1375)
@@ -191,7 +193,7 @@ class SvxZoomItem;
 #define SID_EXPLORER_PROPS_START            TypedWhichId<SfxStringItem>(SID_SFX_START + 1410)
 //      SID_EXPLORER_PROPS_END              (SID_SFX_START + 1499)
 
-#define SID_AUTOLOAD                        (SID_SFX_START + 1509)
+#define SID_AUTOLOAD                        TypedWhichId<SfxBoolItem>(SID_SFX_START + 1509)
 #define SID_FILLFRAME                       TypedWhichId<SfxUnoFrameItem>(SID_SFX_START + 1516)
 #define SID_BASEURL                         (SID_SFX_START + 1518)
 #define SID_TEMPLATE                        TypedWhichId<SfxBoolItem>(SID_SFX_START + 1519)
@@ -200,7 +202,7 @@ class SvxZoomItem;
 
 #define SID_SAVETO                          TypedWhichId<SfxBoolItem>(SID_SFX_START + 1546)
 
-#define SID_VERSION                         (SID_SFX_START + 1583)
+#define SID_VERSION                         TypedWhichId<SfxInt16Item>(SID_SFX_START + 1583)
 
 #define SID_DOCUMENT_COMPARE                (SID_SFX_START + 1586)
 #define SID_DOCUMENT_MERGE                  (SID_SFX_START + 1587)
@@ -215,10 +217,10 @@ class SvxZoomItem;
 #define SID_INPUTSTREAM                     TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1648)
 #define SID_LOGOUT                          (SID_SFX_START + 1652)
 #define SID_JUMPMARK                        TypedWhichId<SfxStringItem>(SID_SFX_START + 1654)
-#define SID_BROWSE                          (SID_SFX_START + 1658)
+#define SID_BROWSE                          TypedWhichId<SfxBoolItem>(SID_SFX_START + 1658)
     // FREE (was: SID_BACKTOWEBTOP)
-#define SID_VIEW_DATA_SOURCE_BROWSER        (SID_SFX_START + 1660)
-#define SID_UNPACK                          (SID_SFX_START + 1662)
+#define SID_VIEW_DATA_SOURCE_BROWSER        TypedWhichId<SfxBoolItem>(SID_SFX_START + 1660)
+#define SID_UNPACK                          TypedWhichId<SfxBoolItem>(SID_SFX_START + 1662)
 // (SID_SFX_START + 1663) used further down
     // FREE
 #define SID_OUTPUTSTREAM                    TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1666)
@@ -237,7 +239,7 @@ class SvxZoomItem;
 #define SID_MACROORGANIZER                  TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1691)
 #define SID_RUNMACRO                        (SID_SFX_START + 1692)
 #define SID_AVMEDIA_TOOLBOX                 TypedWhichId<::avmedia::MediaItem>(SID_SFX_START + 1693)
-#define SID_AVMEDIA_PLAYER                  (SID_SFX_START + 1694)
+#define SID_AVMEDIA_PLAYER                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 1694)
 #define SID_INSERT_AVMEDIA                  (SID_SFX_START + 1696)
 #define SID_RECENTFILELIST                  (SID_SFX_START + 1697)
 #define SID_AVAILABLE_TOOLBARS              (SID_SFX_START + 1698)
@@ -246,26 +248,26 @@ class SvxZoomItem;
 #define SID_DOC_HIERARCHICALNAME            TypedWhichId<SfxStringItem>(SID_SFX_START + 1701)
 #define SID_TERMINATE_INPLACEACTIVATION     (SID_SFX_START + 1702)
 #define SID_APPLY_STYLE                     (SID_SFX_START + 1703)
-#define SID_MACRO_SIGNATURE                 (SID_SFX_START + 1704)
-#define SID_ATTR_WARNALIENFORMAT            (SID_SFX_START + 1705)
+#define SID_MACRO_SIGNATURE                 TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1704)
+#define SID_ATTR_WARNALIENFORMAT            TypedWhichId<SfxBoolItem>(SID_SFX_START + 1705)
 #define SID_COPY_STREAM_IF_POSSIBLE         TypedWhichId<SfxBoolItem>(SID_SFX_START + 1706)
 #define SID_MAIL_SENDDOCASFORMAT            (SID_SFX_START + 1707)
 #define SID_MAIL_SENDDOCASMS                (SID_SFX_START + 1708)
 #define SID_MAIL_SENDDOCASOOO               (SID_SFX_START + 1709)
 #define SID_NO_ACCEPT_DIALOG                (SID_SFX_START + 1710)
 #define SID_NOAUTOSAVE                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 1711)
-#define SID_PRINT_SELECTEDSHEET             (SID_SFX_START + 1712)
+#define SID_PRINT_SELECTEDSHEET             TypedWhichId<SfxBoolItem>(SID_SFX_START + 1712)
 #define SID_OPTIONS_PAGEURL                 (SID_SFX_START + 1713)
 #define SID_MORE_DICTIONARIES               (SID_SFX_START + 1714)
 #define SID_ACTIVATE_STYLE_APPLY            (SID_SFX_START + 1715)
 #define SID_FONT_NAME                       (SID_SFX_START + 1716)
 #define SID_DEFAULTFILENAME                 (SID_SFX_START + 1717)
 #define SID_MODIFYPASSWORDINFO              TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1718)
-#define SID_RECOMMENDREADONLY               (SID_SFX_START + 1719)
+#define SID_RECOMMENDREADONLY               TypedWhichId<SfxBoolItem>(SID_SFX_START + 1719)
 #define SID_SUGGESTEDSAVEASDIR              TypedWhichId<SfxStringItem>(SID_SFX_START + 1720)
 #define SID_SUGGESTEDSAVEASNAME             TypedWhichId<SfxStringItem>(SID_SFX_START + 1721)
 #define SID_ENCRYPTIONDATA                  TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1722)
-#define SID_PASSWORDINTERACTION             (SID_SFX_START + 1723)
+#define SID_PASSWORDINTERACTION             TypedWhichId<SfxBoolItem>(SID_SFX_START + 1723)
 #define SID_GOTOLINE                        (SID_SFX_START + 1724)
 #define SID_SHOWLINES                       (SID_SFX_START + 1725)
 #define SID_BLUETOOTH_SENDDOC               (SID_SFX_START + 1726)
@@ -288,7 +290,7 @@ class SvxZoomItem;
 #define SID_ADDITIONS_DIALOG                (SID_SFX_START + 1740)
 #define SID_ADDITIONS_TAG                   (SID_SFX_START + 1741)
 #define SID_TOOLBAR_MODE_UI                 (SID_SFX_START + 1742)
-#define SID_TOOLBAR_LOCK                    (SID_SFX_START + 1743)
+#define SID_TOOLBAR_LOCK                    TypedWhichId<SfxBoolItem>(SID_SFX_START + 1743)
 
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 
@@ -305,7 +307,7 @@ class SvxZoomItem;
 #define SID_FOCUSURLBOX                     (SID_SFX_START + 1406)
 
 #define SID_ACTIVATE                        (SID_SFX_START + 525)
-#define SID_PRINTOUT                        (SID_SFX_START + 526)
+#define SID_PRINTOUT                        TypedWhichId<SfxBoolItem>(SID_SFX_START + 526)
 
 #define SID_FILTER_NAME                     TypedWhichId<SfxStringItem>(SID_SFX_START + 530)
 #define SID_DOC_SALVAGE                     TypedWhichId<SfxStringItem>(SID_SFX_START + 531)
@@ -313,10 +315,10 @@ class SvxZoomItem;
 #define SID_TYPE_NAME                       (SID_SFX_START + 533)
 
 #define SID_DOC_READONLY                    TypedWhichId<SfxBoolItem>(SID_SFX_START + 590)
-#define SID_DOC_MODIFIED                    (SID_SFX_START + 584)
-#define SID_DOC_LOADING                     (SID_SFX_START + 585)
-#define SID_IMG_LOADING                     (SID_SFX_START + 586)
-#define SID_DOC_SAVED                       (SID_SFX_START + 599)
+#define SID_DOC_MODIFIED                    TypedWhichId<SfxBoolItem>(SID_SFX_START + 584)
+#define SID_DOC_LOADING                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 585)
+#define SID_IMG_LOADING                     TypedWhichId<SfxBoolItem>(SID_SFX_START + 586)
+#define SID_DOC_SAVED                       TypedWhichId<SfxBoolItem>(SID_SFX_START + 599)
 #define SID_DOCINFO                         TypedWhichId<SfxDocumentInfoItem>(SID_SFX_START + 535)
 #define SID_DOCINFO_KEYWORDS                (SID_SFX_START + 591)
 #define SID_DOCINFO_COMMENTS                (SID_SFX_START + 592)
@@ -328,10 +330,10 @@ class SvxZoomItem;
 #define SID_POSTDATA                        TypedWhichId<SfxUnoAnyItem>(SID_SFX_START + 1536)
 #define SID_DONELINK                        (SID_SFX_START + 646)
 #define SID_REFERER                         (SID_SFX_START + 654)
-#define SID_PAGE_NUMBER                     (SID_SFX_START + 655)
+#define SID_PAGE_NUMBER                     TypedWhichId<SfxInt32Item>(SID_SFX_START + 655)
 #define SID_MODIFIER                        (SID_SFX_START + 669)
 #define SID_SETOPTIONS                      (SID_SFX_START + 670)
-#define SID_SOURCEVIEW                      (SID_SFX_START + 675)
+#define SID_SOURCEVIEW                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 675)
 #define SID_DOC_STARTPRESENTATION           TypedWhichId<SfxBoolItem>(SID_SFX_START + 695)
 #define SID_DDE_RECONNECT_ONLOAD            TypedWhichId<SfxBoolItem>(SID_SFX_START + 696)
 
@@ -362,11 +364,11 @@ class SvxZoomItem;
 #define SID_STYLE_APPLY                     (SID_SFX_START + 552)
 #define SID_STYLE_FAMILY                    TypedWhichId<SfxUInt16Item>(SID_SFX_START + 553)
 #define SID_STYLE_FAMILYNAME                TypedWhichId<SfxStringItem>(SID_SFX_START + 566)
-#define SID_STYLE_WATERCAN                  (SID_SFX_START + 554)
+#define SID_STYLE_WATERCAN                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 554)
 #define SID_STYLE_NEW_BY_EXAMPLE            (SID_SFX_START + 555)
 #define SID_STYLE_UPDATE_BY_EXAMPLE         (SID_SFX_START + 556)
 #define SID_STYLE_DRAGHIERARCHIE            (SID_SFX_START + 565)
-#define SID_STYLE_MASK                      (SID_SFX_START + 562)
+#define SID_STYLE_MASK                      TypedWhichId<SfxUInt16Item>(SID_SFX_START + 562)
 #define SID_STYLE_PREVIEW                   (SID_SFX_START + 567)
 #define SID_STYLE_END_PREVIEW               (SID_SFX_START + 568)
 #define SID_STYLE_HIDE                      (SID_SFX_START + 1603)
@@ -376,7 +378,7 @@ class SvxZoomItem;
 
 #define SID_TEMPLATE_NAME                   TypedWhichId<SfxStringItem>(SID_SFX_START + 660)
 #define SID_TEMPLATE_REGIONNAME             TypedWhichId<SfxStringItem>(SID_SFX_START + 662)
-#define SID_TEMPLATE_LOAD                   (SID_SFX_START + 663)
+#define SID_TEMPLATE_LOAD                   TypedWhichId<SfxInt32Item>(SID_SFX_START + 663)
 
 #define SID_INSERT_OBJECT                   (SID_SFX_START + 561)
 #define SID_INSERT_FLOATINGFRAME            (SID_SFX_START + 563)
@@ -387,10 +389,10 @@ class SvxZoomItem;
 #define SID_WATERMARK_COLOR                 (SID_SFX_START + 806)
 #define SID_WATERMARK_ANGLE                 (SID_SFX_START + 807)
 
-#define SID_HYPERLINK_DIALOG                (SID_SFX_START + 678)
+#define SID_HYPERLINK_DIALOG                TypedWhichId<SfxBoolItem>(SID_SFX_START + 678)
 
 #define SID_DEFAULTFILEPATH                 (SID_SFX_START + 571)
-#define SID_OBJECT                          (SID_SFX_START + 575)
+#define SID_OBJECT                          TypedWhichId<SfxInt16Item>(SID_SFX_START + 575)
 
 // Doc-Properties
 #define SID_DOCFULLNAME                     (SID_SFX_START + 581)
@@ -405,20 +407,20 @@ class SvxZoomItem;
 #define SID_NEWWINDOW                       (SID_SFX_START + 620)
 #define SID_CLOSEWIN                        (SID_SFX_START + 621)
 #define SID_VIEWSHELL                       TypedWhichId<SfxUInt16Item>(SID_SFX_START + 623)
-#define SID_WIN_FULLSCREEN                  (SID_SFX_START + 627)
+#define SID_WIN_FULLSCREEN                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 627)
 
-#define SID_VIEWSHELL0                      (SID_SFX_START + 630)
-#define SID_VIEWSHELL1                      (SID_SFX_START + 631)
-#define SID_VIEWSHELL2                      (SID_SFX_START + 632)
-#define SID_VIEWSHELL3                      (SID_SFX_START + 633)
-#define SID_VIEWSHELL4                      (SID_SFX_START + 634)
+#define SID_VIEWSHELL0                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 630)
+#define SID_VIEWSHELL1                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 631)
+#define SID_VIEWSHELL2                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 632)
+#define SID_VIEWSHELL3                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 633)
+#define SID_VIEWSHELL4                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 634)
 
 // id for thesaurus entry in context menu
 #define SID_THES                            (SID_SFX_START + 698)
 
 // default-ids for editing, cursor travelling and selection
-#define SID_REDO                            (SID_SFX_START + 700)
-#define SID_UNDO                            (SID_SFX_START + 701)
+#define SID_REDO                            TypedWhichId<SfxUInt32Item>(SID_SFX_START + 700)
+#define SID_UNDO                            TypedWhichId<SfxUInt32Item>(SID_SFX_START + 701)
 #define SID_REPEAT                          (SID_SFX_START + 702)
 #define SID_CLEARHISTORY                    (SID_SFX_START + 703)
 #define SID_CUT                             (SID_SFX_START + 710)
@@ -461,14 +463,14 @@ class SvxZoomItem;
     // FREE: SID_SFX_START + 809
 #define SID_GRAPHIC_SIZE_CHECK              (SID_SFX_START + 809)
 #define SID_ACCESSIBILITY_CHECK             (SID_SFX_START + 810)
-#define SID_ASYNCHRON                       (SID_SFX_START + 811)
+#define SID_ASYNCHRON                       TypedWhichId<SfxBoolItem>(SID_SFX_START + 811)
 
 // default-ids for configuration
 #define SID_CONFIG                          (SID_SFX_START + 904)
 #define SID_TOOLBOXOPTIONS                  (SID_SFX_START + 907)
 #define SID_TOGGLEFUNCTIONBAR               (SID_SFX_START + 910)
 #define SID_MACROINFO                       TypedWhichId<SfxMacroInfoItem>(SID_SFX_START + 919)
-#define SID_TOGGLESTATUSBAR                 (SID_SFX_START + 920)
+#define SID_TOGGLESTATUSBAR                 TypedWhichId<SfxBoolItem>(SID_SFX_START + 920)
 #define SID_CONFIGSTATUSBAR                 (SID_SFX_START + 921)
 #define SID_CONFIGMENU                      (SID_SFX_START + 924)
 #define SID_CONFIGACCEL                     (SID_SFX_START + 925)
@@ -504,26 +506,26 @@ class SvxZoomItem;
 #define SID_VERB_START                      (SID_SFX_START + 1100)
 #define SID_VERB_END                        (SID_SFX_START + 1121)
 
-#define SID_SIGNATURE                       (SID_SFX_START + 1643)
+#define SID_SIGNATURE                       TypedWhichId<SfxUInt16Item>(SID_SFX_START + 1643)
 
 // SaveTabPage
-#define SID_ATTR_DOCINFO                (SID_OPTIONS_START +  0)
-#define SID_ATTR_BACKUP                 (SID_OPTIONS_START +  1)
-#define SID_ATTR_AUTOSAVE               (SID_OPTIONS_START +  2)
-#define SID_ATTR_AUTOSAVEPROMPT         (SID_OPTIONS_START +  3)
-#define SID_ATTR_USERAUTOSAVE           (SID_OPTIONS_START +  4)
-#define SID_ATTR_AUTOSAVEMINUTE         (SID_OPTIONS_START +  5)
-#define SID_ATTR_WORKINGSET             (SID_OPTIONS_START + 13)
-#define SID_ATTR_UNDO_COUNT             (SID_OPTIONS_START + 16)
+#define SID_ATTR_DOCINFO                TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  0)
+#define SID_ATTR_BACKUP                 TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  1)
+#define SID_ATTR_AUTOSAVE               TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  2)
+#define SID_ATTR_AUTOSAVEPROMPT         TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  3)
+#define SID_ATTR_USERAUTOSAVE           TypedWhichId<SfxBoolItem>(SID_OPTIONS_START +  4)
+#define SID_ATTR_AUTOSAVEMINUTE         TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START +  5)
+#define SID_ATTR_WORKINGSET             TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 13)
+#define SID_ATTR_UNDO_COUNT             TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START + 16)
     // unused
-#define SID_ATTR_SAVEDOCVIEW            (SID_OPTIONS_START + 18)
+#define SID_ATTR_SAVEDOCVIEW            TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 18)
 
 // GeneralTabPage
 
 #define SID_ATTR_METRIC                 TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START +  8)
-#define SID_ATTR_DEFTABSTOP             (SID_OPTIONS_START + 14)
-#define SID_ATTR_BUTTON_BIGSIZE         (SID_OPTIONS_START + 63)
-#define SID_ATTR_QUICKLAUNCHER          (SID_OPTIONS_START + 74)
+#define SID_ATTR_DEFTABSTOP             TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START + 14)
+#define SID_ATTR_BUTTON_BIGSIZE         TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 63)
+#define SID_ATTR_QUICKLAUNCHER          TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 74)
 #define SID_ATTR_YEAR2000               TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START + 87)
 #define SID_ATTR_APPLYCHARUNIT          TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 88)
 
@@ -533,23 +535,23 @@ class SvxZoomItem;
 // LinguTabPage
 #define SID_ATTR_LANGUAGE               TypedWhichId<SvxLanguageItem>(SID_OPTIONS_START +  7)
 #define SID_ATTR_HYPHENREGION           TypedWhichId<SfxHyphenRegionItem>(SID_OPTIONS_START + 12)
-#define SID_AUTOSPELL_CHECK             (SID_OPTIONS_START + 21)
+#define SID_AUTOSPELL_CHECK             TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 21)
 
 // InetTabPage
 
-#define SID_INET_PROXY_TYPE             (SID_OPTIONS_START + 23)
+#define SID_INET_PROXY_TYPE             TypedWhichId<SfxUInt16Item>(SID_OPTIONS_START + 23)
 
-#define SID_SAVEREL_INET                (SID_OPTIONS_START + 30)
-#define SID_SAVEREL_FSYS                (SID_OPTIONS_START + 31)
+#define SID_SAVEREL_INET                TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 30)
+#define SID_SAVEREL_FSYS                TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 31)
 
 #define SID_PASSWORD                    TypedWhichId<SfxStringItem>(SID_OPTIONS_START + 36)
 
 #define SID_INET_NOPROXY                TypedWhichId<SfxStringItem>(SID_OPTIONS_START + 37)
 
 #define SID_INET_HTTP_PROXY_NAME        (SID_OPTIONS_START + 38)
-#define SID_INET_HTTP_PROXY_PORT        (SID_OPTIONS_START + 39)
+#define SID_INET_HTTP_PROXY_PORT        TypedWhichId<SfxInt32Item>(SID_OPTIONS_START + 39)
 #define SID_INET_FTP_PROXY_NAME         (SID_OPTIONS_START + 40)
-#define SID_INET_FTP_PROXY_PORT         (SID_OPTIONS_START + 41)
+#define SID_INET_FTP_PROXY_PORT         TypedWhichId<SfxInt32Item>(SID_OPTIONS_START + 41)
 
 // Automatic update of Styles - manage TabPage
 #define SID_ATTR_AUTO_STYLE_UPDATE      TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 65)
@@ -557,9 +559,9 @@ class SvxZoomItem;
 #define SID_SECURE_URL                  TypedWhichId<SfxStringListItem>(SID_OPTIONS_START + 66)
 
 // configured locale changed
-#define SID_OPT_LOCALE_CHANGED              (SID_OPTIONS_START + 94)
+#define SID_OPT_LOCALE_CHANGED              TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 94)
 //middle mouse button
-#define SID_ATTR_PRETTYPRINTING             (SID_OPTIONS_START + 98)
+#define SID_ATTR_PRETTYPRINTING             TypedWhichId<SfxBoolItem>(SID_OPTIONS_START + 98)
 #define SID_HELP_STYLESHEET                 (SID_OPTIONS_START + 99)
 
 // slot IDs from SVX (svxids.hrc) ---------------------------------------------
@@ -574,19 +576,19 @@ class SvxZoomItem;
 #define SID_SIZE_REAL                       (SID_SVX_START +  99)
 #define SID_SIZE_PAGE                       (SID_SVX_START + 100)
 #define SID_GALLERY_BG_BRUSH                (SID_SVX_START + 279)
-#define SID_SEARCH_OPTIONS                  (SID_SVX_START + 281)
+#define SID_SEARCH_OPTIONS                  TypedWhichId<SfxUInt16Item>(SID_SVX_START + 281)
 #define SID_SEARCH_ITEM                     TypedWhichId<SvxSearchItem>(SID_SVX_START + 291)
-#define SID_SIDEBAR                         (SID_SVX_START + 336)
-#define SID_NOTEBOOKBAR                     (SID_SVX_START + 338)
-#define SID_MENUBAR                         (SID_SVX_START + 339)
+#define SID_SIDEBAR                         TypedWhichId<SfxBoolItem>(SID_SVX_START + 336)
+#define SID_NOTEBOOKBAR                     TypedWhichId<SfxBoolItem>(SID_SVX_START + 338)
+#define SID_MENUBAR                         TypedWhichId<SfxBoolItem>(SID_SVX_START + 339)
 #define SID_HYPERLINK_GETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 361)
 #define SID_HYPERLINK_SETLINK               TypedWhichId<SvxHyperlinkItem>(SID_SVX_START + 362)
 #define SID_INFOBAR                         (SID_SVX_START + 365)
-#define SID_NAVIGATOR                       (SID_SVX_START + 366)
+#define SID_NAVIGATOR                       TypedWhichId<SfxBoolItem>(SID_SVX_START + 366)
 #define SID_ZOOM_NEXT                       (SID_SVX_START + 402)
 #define SID_ZOOM_PREV                       (SID_SVX_START + 403)
 #define SID_INET_DLG                        (SID_SVX_START + 416)
-#define SID_AUTO_CORRECT_DLG                (SID_SVX_START + 424)
+#define SID_AUTO_CORRECT_DLG                TypedWhichId<SfxBoolItem>(SID_SVX_START + 424)
 #define SID_ATTR_CHAR_COLOR_EXT             (SID_SVX_START + 488)
 #define SID_ATTR_CHAR_COLOR_BACKGROUND      (SID_SVX_START + 489)
 #define SID_ATTR_CHAR_COLOR_BACKGROUND_EXT  (SID_SVX_START + 490)
@@ -726,8 +728,8 @@ class SvxZoomItem;
 #ifndef SC_VIEW_START
 #define SC_VIEW_START           (SID_SC_START)
 #endif
-#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
-#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+#define FID_CHG_RECORD          TypedWhichId<SfxBoolItem>(EDIT_MENU_START + 18)
+#define SID_CHG_PROTECT         TypedWhichId<SfxBoolItem>(SC_VIEW_START + 84)
 
 #endif  // #ifndef INCLUDED_SFX2_SFXSIDS_HRC
 

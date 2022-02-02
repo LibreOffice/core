@@ -139,9 +139,7 @@ void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 
                 if ( rReq.GetArgs() )
                     pViewFrm->SetChildWindow( nId,
-                                               static_cast<const SfxBoolItem&>(
-                                                (rReq.GetArgs()->Get(SID_FONTWORK))).
-                                                    GetValue() );
+                                              rReq.GetArgs()->Get(SID_FONTWORK).GetValue() );
                 else
                     pViewFrm->ToggleChildWindow( nId );
 

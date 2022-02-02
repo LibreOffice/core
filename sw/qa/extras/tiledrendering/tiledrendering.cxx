@@ -2084,12 +2084,12 @@ namespace {
         // first view, undo enabled
         pView1->GetState(aItemSet1);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
-        const SfxUInt32Item *pUnsetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
+        const SfxUInt32Item *pUnsetItem = aItemSet1.GetItem(SID_UNDO);
         CPPUNIT_ASSERT(!pUnsetItem);
         // second view, undo conflict
         pView2->GetState(aItemSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
-        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
+        const SfxUInt32Item* pUInt32Item = aItemSet2.GetItem(SID_UNDO);
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     };
@@ -2137,12 +2137,12 @@ void SwTiledRenderingTest::testDisableUndoRepair()
         // second view, undo enabled
         pView2->GetState(aItemSet2);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet2.GetItemState(SID_UNDO));
-        const SfxUInt32Item *pUnsetItem = dynamic_cast<const SfxUInt32Item*>(aItemSet2.GetItem(SID_UNDO));
+        const SfxUInt32Item *pUnsetItem = aItemSet2.GetItem(SID_UNDO);
         CPPUNIT_ASSERT(!pUnsetItem);
         // first view, undo conflict
         pView1->GetState(aItemSet1);
         CPPUNIT_ASSERT_EQUAL(SfxItemState::SET, aItemSet1.GetItemState(SID_UNDO));
-        const SfxUInt32Item* pUInt32Item = dynamic_cast<const SfxUInt32Item*>(aItemSet1.GetItem(SID_UNDO));
+        const SfxUInt32Item* pUInt32Item = aItemSet1.GetItem(SID_UNDO);
         CPPUNIT_ASSERT(pUInt32Item);
         CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt32>(SID_REPAIRPACKAGE), pUInt32Item->GetValue());
     }
