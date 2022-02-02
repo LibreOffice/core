@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2de787d2_ef06043f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T15:58:37Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! I am going to rebase it, fixing a typo, too.\n\nNote: it\u0027s interesting, that Word 2016 supports the transparent hatching, but it\u0027s not possible to set it on the UI. Am I right?",
+      "revId": "978a8b11171c597abb02892c36b23e25960a3437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1099f0a4_aa6b8205",
+        "filename": "sw/qa/extras/uiwriter/uiwriter4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4047,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T15:58:37Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4047,
+        "startChar": 26,
+        "endLine": 4047,
+        "endChar": 30
+      },
+      "revId": "978a8b11171c597abb02892c36b23e25960a3437",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
