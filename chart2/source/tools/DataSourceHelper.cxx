@@ -118,7 +118,7 @@ void lcl_addErrorBarRanges(
 
 } // anonymous namespace
 
-Reference< chart2::data::XDataSource > DataSourceHelper::createDataSource(
+rtl::Reference< ::chart::DataSource > DataSourceHelper::createDataSource(
         const Sequence< Reference< chart2::data::XLabeledDataSequence > >& rSequences )
 {
     return new DataSource(rSequences);

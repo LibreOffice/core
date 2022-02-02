@@ -35,13 +35,14 @@ namespace com::sun::star::frame { class XModel; }
 
 namespace chart
 {
+class DataSource;
 class Diagram;
 class LabeledDataSequence;
 
 class OOO_DLLPUBLIC_CHARTTOOLS DataSourceHelper
 {
 public:
-        static css::uno::Reference< css::chart2::data::XDataSource >
+        static rtl::Reference< ::chart::DataSource >
             createDataSource( const css::uno::Sequence<
                 css::uno::Reference<  css::chart2::data::XLabeledDataSequence > > & rSequences );
 

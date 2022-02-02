@@ -19,6 +19,7 @@
 
 #include <DataInterpreter.hxx>
 #include <DataSeries.hxx>
+#include <DataSource.hxx>
 #include <DataSourceHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
@@ -327,7 +328,7 @@ private:
 
 } // anonymous namespace
 
-Reference< data::XDataSource > DataInterpreter::mergeInterpretedData(
+rtl::Reference< DataSource > DataInterpreter::mergeInterpretedData(
     const InterpretedData& aInterpretedData )
 {
     vector< Reference< data::XLabeledDataSequence > > aResultVec;

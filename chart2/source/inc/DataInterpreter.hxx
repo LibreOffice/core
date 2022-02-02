@@ -30,6 +30,7 @@
 namespace chart
 {
 class DataSeries;
+class DataSource;
 class LabeledDataSequence;
 
 /** offers tooling to interpret different data sources in a structural
@@ -134,7 +135,7 @@ public:
         interpretDataSource()( <code>xSource</code> ),
         the result of this method should be <code>xSource</code>.</p>
      */
-    virtual css::uno::Reference< css::chart2::data::XDataSource > mergeInterpretedData(
+    virtual rtl::Reference< ::chart::DataSource > mergeInterpretedData(
         const InterpretedData& aInterpretedData );
 
     /** Get chart information that is specific to a particular chart
