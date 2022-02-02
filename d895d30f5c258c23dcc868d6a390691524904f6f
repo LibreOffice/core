@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b15718a_8c2a814e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T16:58:36Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! I\u0027ve found only a few typos.",
+      "revId": "d895d30f5c258c23dcc868d6a390691524904f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31f8ee31_82818e2f",
+        "filename": "include/oox/shape/ShapeContextHandler.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T16:58:36Z",
+      "side": 1,
+      "message": "has",
+      "range": {
+        "startLine": 116,
+        "startChar": 34,
+        "endLine": 116,
+        "endChar": 38
+      },
+      "revId": "d895d30f5c258c23dcc868d6a390691524904f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b9ed41a_5a23f6e3",
+        "filename": "include/oox/shape/ShapeContextHandler.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T16:58:36Z",
+      "side": 1,
+      "message": "embedded",
+      "range": {
+        "startLine": 117,
+        "startChar": 36,
+        "endLine": 117,
+        "endChar": 41
+      },
+      "revId": "d895d30f5c258c23dcc868d6a390691524904f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fab18146_4e37bd8d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T16:58:36Z",
+      "side": 1,
+      "message": "embedded",
+      "range": {
+        "startLine": 64,
+        "startChar": 61,
+        "endLine": 64,
+        "endChar": 66
+      },
+      "revId": "d895d30f5c258c23dcc868d6a390691524904f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "254dfc6f_47bac24e",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport17.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-02T16:58:36Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 66,
+        "startChar": 67,
+        "endLine": 66,
+        "endChar": 74
+      },
+      "revId": "d895d30f5c258c23dcc868d6a390691524904f6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
