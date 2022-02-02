@@ -118,6 +118,66 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
+{
+    mxComponent
+        = loadFromDesktop(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odg/tdf126319.odg"));
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG"))
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xShape);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+
+    // make sure only the shape is exported
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(295, 134), aSize);
+
+    // Check all borders are red or similar
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+        {
+            const Color aColorTop = pReadAccess->GetColor(0, nX);
+            const Color aColorBottom = pReadAccess->GetColor(aSize.Height() - 2, nX);
+
+            assertColorsAreSimilar(COL_LIGHTRED, aColorTop, 5);
+
+            // Without the fix in place, this test would have failed with
+            // - Expected: Color: R:255 G:0 B:0 A:0
+            // - Actual  : Color: R:77 G:0 B:0 A:0
+            assertColorsAreSimilar(COL_LIGHTRED, aColorBottom, 5);
+        }
+
+        for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
+        {
+            const Color aColorLeft = pReadAccess->GetColor(nY, 0);
+            const Color aColorRight = pReadAccess->GetColor(nY, aSize.Width() - 2);
+
+            assertColorsAreSimilar(COL_LIGHTRED, aColorLeft, 5);
+            assertColorsAreSimilar(COL_LIGHTRED, aColorRight, 5);
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
 {
     mxComponent
