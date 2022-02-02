@@ -464,7 +464,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     if ( ! bAbort)
     {
         meMode = SEARCH;
-        mpSearchItem = pSearchItem;
+        mpSearchItem = pSearchItem->Clone();
 
         mbFoundObject = false;
 
