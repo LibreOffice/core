@@ -763,10 +763,10 @@ constexpr Method aMethods[] = {
     arg(u"Period",  SbxDOUBLE),
 
 { u"Space",                         SbxSTRING,    1 | FUNCTION_,       SbRtl_Space                },
-    arg(u"string", SbxLONG),
+    arg(u"Number", SbxLONG),
 
-{ u"Spc",                           SbxSTRING,    1 | FUNCTION_,       SbRtl_Spc                  },
-    arg(u"Count", SbxLONG),
+{ u"Spc",                           SbxSTRING,    1 | FUNCTION_,       SbRtl_Space                },
+    arg(u"Number", SbxLONG),
 
 { u"Split",                         SbxOBJECT,    3 | FUNCTION_,       SbRtl_Split                },
     arg(u"expression", SbxSTRING),

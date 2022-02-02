@@ -201,7 +201,6 @@ extern void SbRtl_Tan(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_UCase(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Val(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_Len(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
-extern void SbRtl_Spc(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_DateSerial(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_TimeSerial(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
 extern void SbRtl_DateValue(StarBASIC * pBasic, SbxArray & rPar, bool bWrite);
