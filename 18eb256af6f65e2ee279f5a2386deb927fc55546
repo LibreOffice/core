@@ -126,6 +126,30 @@
       },
       "revId": "18eb256af6f65e2ee279f5a2386deb927fc55546",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf80a45a_4e0faca8",
+        "filename": "writerfilter/source/dmapper/StyleSheetTable.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1003519
+      },
+      "writtenOn": "2022-02-02T09:31:02Z",
+      "side": 1,
+      "message": "The default property in styles is per default false and in my opinion there is no benefit to store this value, this is the reason that my code change leaved out the whole code in case of default false. I dont have mind to discuss this, I think the best is I remove my gerrit commit and just leave behind the bug.",
+      "parentUuid": "33e220f1_3774f736",
+      "range": {
+        "startLine": 471,
+        "startChar": 20,
+        "endLine": 471,
+        "endChar": 48
+      },
+      "revId": "18eb256af6f65e2ee279f5a2386deb927fc55546",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
