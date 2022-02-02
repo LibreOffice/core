@@ -464,8 +464,12 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
             if (m_pImpl->m_pCurrentEntry->nStyleTypeCode != STYLE_TYPE_UNKNOWN)
             {
                 // "If this attribute is specified by multiple styles, then the last instance shall be used."
-                if ( m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA && !m_pImpl->m_pCurrentEntry->sStyleIdentifierD.isEmpty() )
+                if (m_pImpl->m_pCurrentEntry->bIsDefaultStyle
+                    && m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA
+                    && !m_pImpl->m_pCurrentEntry->sStyleIdentifierD.isEmpty())
+                {
                     m_pImpl->m_sDefaultParaStyleName = m_pImpl->m_pCurrentEntry->sStyleIdentifierD;
+                }
 
                 beans::PropertyValue aValue;
                 aValue.Name = "default";
