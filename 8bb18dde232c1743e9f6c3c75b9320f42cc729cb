@@ -33,6 +33,24 @@
       "message": "Just a nitpick: wouldn\u0027t range-based for be cleaner here?\n\n        for (const auto\u0026 [id, unit] : SV_FUNIT_STRINGS)\n            if (rEnglishMetricString.equalsAscii(id.mpId))\n                return unit;",
       "revId": "8bb18dde232c1743e9f6c3c75b9320f42cc729cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ccc2add_4ad64a03",
+        "filename": "vcl/source/app/svdata.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 290,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-02T17:32:22Z",
+      "side": 1,
+      "message": "probably, in the trunk version anyway",
+      "parentUuid": "0cddd80f_ce932eed",
+      "revId": "8bb18dde232c1743e9f6c3c75b9320f42cc729cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
