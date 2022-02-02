@@ -202,6 +202,7 @@ $(eval $(call gb_Library_add_exception_objects,scfilt,\
 	sc/source/filter/oox/sharedstringsfragment \
 	sc/source/filter/oox/sheetdatabuffer \
 	sc/source/filter/oox/sheetdatacontext \
+	sc/source/filter/oox/SparklineFragment \
 	sc/source/filter/oox/stylesbuffer \
 	sc/source/filter/oox/stylesfragment \
 	sc/source/filter/oox/tablebuffer \
