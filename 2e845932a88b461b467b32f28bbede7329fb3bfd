@@ -93,6 +93,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64bde3d1_81c7637b",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-02-02T13:36:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "23cecd18_927bb81d",
+      "range": {
+        "startLine": 1110,
+        "startChar": 77,
+        "endLine": 1110,
+        "endChar": 86
+      },
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9525d13e_669ff76b",
@@ -130,6 +154,30 @@
       "side": 1,
       "message": "Yes, if it it\u0027s replaced with the previous lines.",
       "parentUuid": "9525d13e_669ff76b",
+      "range": {
+        "startLine": 1110,
+        "startChar": 4,
+        "endLine": 1132,
+        "endChar": 165
+      },
+      "revId": "2e845932a88b461b467b32f28bbede7329fb3bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec4af4c4_c06c857a",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1132,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-02-02T13:36:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c04adf92_1bb39c43",
       "range": {
         "startLine": 1110,
         "startChar": 4,
