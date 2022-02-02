@@ -322,6 +322,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
 
     for (sal_uInt16 j = nStartField; j < nSortKeyCount; ++j)
     {
+        m_aSortWin.m_aSortKeyItems[j]->m_xLabel->set_label(aSortData.bByRow ? aStrColumn : aStrRow);
         m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->clear();
         m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->freeze();
         m_aSortWin.m_aSortKeyItems[j]->m_xLbSort->append_text(aStrUndefined);
@@ -344,9 +345,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
         {
             aFieldName = rDoc.GetString(col, nFirstSortRow, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )
-            {
-                aFieldName = ScGlobal::ReplaceOrAppend( aStrColumn, u"%1", ScColToAlpha( col ));
-            }
+                aFieldName = ScColToAlpha( col );
             nFieldArr.push_back( col );
 
             for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )
@@ -365,9 +364,7 @@ void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
         {
             aFieldName = rDoc.GetString(nFirstSortCol, row, nTab);
             if ( !bHasHeader || aFieldName.isEmpty() )
-            {
-                aFieldName = ScGlobal::ReplaceOrAppend( aStrRow, u"%1", OUString::number( row+1));
-            }
+                aFieldName = OUString::number( row+1);
             nFieldArr.push_back( row );
 
             for ( sal_uInt16 j=nStartField; j<nSortKeyCount; j++ )

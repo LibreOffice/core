@@ -41,7 +41,7 @@ class tdf49531(UITestCase):
                 select_pos(xTabs, "0")
                 xSortKey1 = xDialog.getChild("sortlb")
                 xAsc = xDialog.getChild("up")
-                select_by_text(xSortKey1, "Column B")
+                select_by_text(xSortKey1, "B")
                 xAsc.executeAction("CLICK", tuple())
             #Verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "x")
