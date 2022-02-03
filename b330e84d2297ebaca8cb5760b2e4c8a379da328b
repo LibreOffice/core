@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c135fd5b_f1df17a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-03T12:37:39Z",
+      "side": 1,
+      "message": "All Jenkins ok except Windows, very reliable as usual...",
+      "revId": "b330e84d2297ebaca8cb5760b2e4c8a379da328b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
