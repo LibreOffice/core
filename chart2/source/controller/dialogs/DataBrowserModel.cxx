@@ -33,7 +33,7 @@
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <BaseCoordinateSystem.hxx>
-
+#include <LabeledDataSequence.hxx>
 #include <ChartModel.hxx>
 #include <unonames.hxx>
 
@@ -129,7 +129,7 @@ bool lcl_SequenceOfSeriesIsShared(
     return bResult;
 }
 
-typedef std::vector< Reference< chart2::data::XLabeledDataSequence > > lcl_tSharedSeqVec;
+typedef std::vector< rtl::Reference< ::chart::LabeledDataSequence > > lcl_tSharedSeqVec;
 
 lcl_tSharedSeqVec lcl_getSharedSequences( const Sequence< Reference< chart2::XDataSeries > > & rSeries )
 {
@@ -153,7 +153,7 @@ lcl_tSharedSeqVec lcl_getSharedSequences( const Sequence< Reference< chart2::XDa
                 break;
         }
         if( bShared )
-            aResult.push_back( labeledDataSeq );
+            aResult.push_back( dynamic_cast<LabeledDataSequence*>(labeledDataSeq.get()) );
     }
 
     return aResult;
@@ -195,10 +195,10 @@ private:
 
 struct lcl_RolesOfLSeqMatch
 {
-    explicit lcl_RolesOfLSeqMatch( const Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
+    explicit lcl_RolesOfLSeqMatch( const rtl::Reference< LabeledDataSequence > & xLSeq ) :
         m_aRole(DataSeriesHelper::getRole(xLSeq)) {}
 
-    bool operator() ( const Reference< chart2::data::XLabeledDataSequence > & xLSeq )
+    bool operator() ( const rtl::Reference< LabeledDataSequence > & xLSeq )
     {
         return DataSeriesHelper::getRole(xLSeq) == m_aRole;
     }
@@ -341,9 +341,9 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         // Failed to insert new data series to the model. Bail out.
         return;
 
-    Sequence<Reference<chart2::data::XLabeledDataSequence> > aLSequences = xNewSeries->getDataSequences();
+    const std::vector<rtl::Reference<LabeledDataSequence> > & aLSequences = xNewSeries->getDataSequences2();
     sal_Int32 nSeqIdx = 0;
-    sal_Int32 nSeqSize = aLSequences.getLength();
+    sal_Int32 nSeqSize = aLSequences.size();
     for (sal_Int32 nIndex = nStartCol; nSeqIdx < nSeqSize; ++nSeqIdx)
     {
         lcl_tSharedSeqVec::const_iterator aSharedIt(

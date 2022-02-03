@@ -266,7 +266,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
         // set chart type specific roles
         if( xChartType.is() )
         {
-            std::vector< Reference< data::XLabeledDataSequence > > aNewSequences;
+            std::vector< rtl::Reference< ::chart::LabeledDataSequence > > aNewSequences;
             const OUString aRoleOfSeqForSeriesLabel = xChartType->getRoleOfSequenceForSeriesLabel();
             const OUString aLabel(::chart::SchResId(STR_DATA_UNNAMED_SERIES));
             Sequence< OUString > aPossibleRoles( xChartType->getSupportedMandatoryRoles());
@@ -319,7 +319,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
                 aNewSequences.push_back( ::chart::DataSourceHelper::createLabeledDataSequence( xSeq ));
             }
 
-            xResult->setData( comphelper::containerToSequence( aNewSequences ));
+            xResult->setData( aNewSequences );
         }
     }
 
