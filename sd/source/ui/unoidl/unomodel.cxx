@@ -45,6 +45,7 @@
 #include <unomodel.hxx>
 #include "unopool.hxx"
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -125,6 +126,8 @@
 #include <tools/diagnose_ex.h>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
+
+#include <app.hrc>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -2331,10 +2334,11 @@ void SdXImpressDocument::setPart( int nPart, bool bAllowChangeFocus )
 
 int SdXImpressDocument::getParts()
 {
-    // TODO: master pages?
-    // Read: drviews1.cxx
     if (!mpDoc)
         return 0;
+
+    if (isMasterViewMode())
+        return mpDoc->GetMasterSdPageCount(PageKind::Standard);
 
     return mpDoc->GetSdPageCount(PageKind::Standard);
 }
@@ -2348,9 +2352,14 @@ int SdXImpressDocument::getPart()
     return pViewSh->GetViewShellBase().getPart();
 }
 
-OUString SdXImpressDocument::getPartName( int nPart )
+OUString SdXImpressDocument::getPartName(int nPart)
 {
-    SdPage* pPage = mpDoc->GetSdPage( nPart, PageKind::Standard );
+    SdPage* pPage;
+    if (isMasterViewMode())
+        pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Standard);
+    else
+        pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+
     if (!pPage)
     {
         SAL_WARN("sd", "DrawViewShell not available!");
@@ -2360,9 +2369,14 @@ OUString SdXImpressDocument::getPartName( int nPart )
     return pPage->GetName();
 }
 
-OUString SdXImpressDocument::getPartHash( int nPart )
+OUString SdXImpressDocument::getPartHash(int nPart)
 {
-    SdPage* pPage = mpDoc->GetSdPage( nPart, PageKind::Standard );
+    SdPage* pPage;
+    if (isMasterViewMode())
+        pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Standard);
+    else
+        pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+
     if (!pPage)
     {
         SAL_WARN("sd", "DrawViewShell not available!");
@@ -2370,6 +2384,23 @@ OUString SdXImpressDocument::getPartHash( int nPart )
     }
 
     return OUString::number(pPage->GetHashCode());
+}
+
+bool SdXImpressDocument::isMasterViewMode()
+{
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return false;
+
+    if (pViewSh->GetDispatcher())
+    {
+        const SfxPoolItem* xItem = nullptr;
+        pViewSh->GetDispatcher()->QueryState(SID_SLIDE_MASTER_MODE, xItem);
+        const SfxBoolItem* isMasterViewMode = dynamic_cast<const SfxBoolItem*>(xItem);
+        if (isMasterViewMode && isMasterViewMode->GetValue())
+            return true;
+    }
+    return false;
 }
 
 VclPtr<vcl::Window> SdXImpressDocument::getDocWindow()
