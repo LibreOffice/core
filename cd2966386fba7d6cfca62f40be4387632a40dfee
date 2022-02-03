@@ -67,6 +67,24 @@
       "message": "And this 😊\n\nIt\u0027s idiomatic to LO code to have more than one variant of doing the same thing, and as always, I\u0027m unsure which is the proper one 😊",
       "revId": "cd2966386fba7d6cfca62f40be4387632a40dfee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15bc7576_04d1f731",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-03T07:15:29Z",
+      "side": 1,
+      "message": "Indeed, so I just used the way it was in a method which used \"saveAndReload\"",
+      "parentUuid": "7be6fe4c_34e90170",
+      "revId": "cd2966386fba7d6cfca62f40be4387632a40dfee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
