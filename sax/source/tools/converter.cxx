@@ -30,7 +30,6 @@
 #include <rtl/math.hxx>
 #include <rtl/character.hxx>
 #include <sal/log.hxx>
-#include <o3tl/typed_flags_set.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <tools/long.hxx>

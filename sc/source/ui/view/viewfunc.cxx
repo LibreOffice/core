@@ -32,7 +32,6 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/virdev.hxx>
 #include <stdlib.h>
@@ -48,7 +47,6 @@
 #include <patattr.hxx>
 #include <docpool.hxx>
 #include <sc.hrc>
-#include <strings.hrc>
 #include <undocell.hxx>
 #include <undoblk.hxx>
 #include <refundo.hxx>

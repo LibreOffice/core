@@ -34,13 +34,13 @@
 #include <strings.hrc>
 
 #include <filtdlg.hxx>
+#include <svx/colorwindow.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
 #include <svl/numformat.hxx>
 #include <svl/sharedstringpool.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 
 #include <limits>
 

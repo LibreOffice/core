@@ -39,7 +39,7 @@
 #include <limits>
 
 #include <mdds/multi_type_matrix.hpp>
-#include <mdds/multi_type_vector_types.hpp>
+#include <mdds/multi_type_vector/types.hpp>
 
 #if DEBUG_MATRIX
 #include <iostream>

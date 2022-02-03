@@ -26,7 +26,6 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svl/stritem.hxx>
-#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <globstr.hrc>

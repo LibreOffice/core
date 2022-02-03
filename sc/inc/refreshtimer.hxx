@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 
-#include <tools/solar.h>
 #include <vcl/timer.hxx>
 #include "scdllapi.h"
 #include <memory>

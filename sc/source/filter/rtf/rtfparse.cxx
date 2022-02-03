@@ -24,7 +24,6 @@
 #include <editeng/editids.hrc>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/svxrtf.hxx>
-#include <vcl/outdev.hxx>
 #include <svtools/rtftoken.h>
 #include <osl/diagnose.h>
 #include <svl/itempool.hxx>

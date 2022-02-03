@@ -20,7 +20,6 @@
 
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 
 #include <mutex>
 

@@ -51,7 +51,6 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/ui/dialogs/XAsynchronousExecutableDialog.hpp>
-#include <com/sun/star/ui/dialogs/XDialogClosedListener.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>

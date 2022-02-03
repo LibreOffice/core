@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <comphelper/processfactory.hxx>
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 #include <com/sun/star/sheet/DataImportMode.hpp>
