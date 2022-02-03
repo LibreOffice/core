@@ -254,7 +254,7 @@ namespace weld
 
     void MetricSpinButton::update_width_chars()
     {
-        int min, max;
+        sal_Int64 min, max;
         m_xSpinButton->get_range(min, max);
         auto width = std::max(m_xSpinButton->get_pixel_size(format_number(min)).Width(),
                               m_xSpinButton->get_pixel_size(format_number(max)).Width());
@@ -270,11 +270,12 @@ namespace weld
         return nValue;
     }
 
-    int SpinButton::denormalize(int nValue) const
+    sal_Int64 SpinButton::denormalize(sal_Int64 nValue) const
     {
         const int nFactor = Power10(get_digits());
 
-        if ((nValue < (SAL_MIN_INT32 + nFactor)) || (nValue > (SAL_MAX_INT32 - nFactor)))
+        if ((nValue < (std::numeric_limits<sal_Int64>::min() + nFactor)) ||
+            (nValue > (std::numeric_limits<sal_Int64>::max() - nFactor)))
         {
             return nValue / nFactor;
         }
@@ -286,7 +287,7 @@ namespace weld
         return (nValue + nHalf) / nFactor;
     }
 
-    OUString MetricSpinButton::format_number(int nValue) const
+    OUString MetricSpinButton::format_number(sal_Int64 nValue) const
     {
         OUString aStr;
 
@@ -334,7 +335,7 @@ namespace weld
     {
         int step, page;
         get_increments(step, page, m_eSrcUnit);
-        int value = get_value(m_eSrcUnit);
+        sal_Int64 value = get_value(m_eSrcUnit);
         m_xSpinButton->set_digits(digits);
         set_increments(step, page, m_eSrcUnit);
         set_value(value, m_eSrcUnit);
@@ -347,7 +348,7 @@ namespace weld
         {
             int step, page;
             get_increments(step, page, m_eSrcUnit);
-            int value = get_value(m_eSrcUnit);
+            sal_Int64 value = get_value(m_eSrcUnit);
             m_eSrcUnit = eUnit;
             set_increments(step, page, m_eSrcUnit);
             set_value(value, m_eSrcUnit);
@@ -356,14 +357,9 @@ namespace weld
         }
     }
 
-    int MetricSpinButton::ConvertValue(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
+    sal_Int64 MetricSpinButton::ConvertValue(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const
     {
-        auto nRet = vcl::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
-        if (nRet > SAL_MAX_INT32)
-            nRet = SAL_MAX_INT32;
-        else if (nRet < SAL_MIN_INT32)
-            nRet = SAL_MIN_INT32;
-        return nRet;
+        return vcl::ConvertValue(nValue, 0, m_xSpinButton->get_digits(), eInUnit, eOutUnit);
     }
 
     IMPL_LINK(MetricSpinButton, spin_button_input, int*, result, bool)

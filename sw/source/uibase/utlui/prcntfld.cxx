@@ -30,15 +30,15 @@ SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
     , eOldUnit(FieldUnit::NONE)
     , bLockAutoCalculation(false)
 {
-    int nMin, nMax;
+    sal_Int64 nMin, nMax;
     m_pField->get_range(nMin, nMax, FieldUnit::TWIP);
     nRefValue = DenormalizePercent(nMax);
     m_pField->get_increments(nOldSpinSize, nOldPageSize, FieldUnit::NONE);
 }
 
-void SwPercentField::SetRefValue(int nValue)
+void SwPercentField::SetRefValue(sal_Int64 nValue)
 {
-    int nRealValue = GetRealValue(eOldUnit);
+    sal_Int64 nRealValue = GetRealValue(eOldUnit);
 
     nRefValue = nValue;
 
@@ -52,7 +52,7 @@ void SwPercentField::ShowPercent(bool bPercent)
         || (!bPercent && m_pField->get_unit() != FieldUnit::PERCENT))
         return;
 
-    int nOldValue;
+    sal_Int64 nOldValue;
 
     if (bPercent)
     {
@@ -65,7 +65,8 @@ void SwPercentField::ShowPercent(bool bPercent)
         m_pField->set_unit(FieldUnit::PERCENT);
         m_pField->set_digits(0);
 
-        int nCurrentWidth = vcl::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
+        sal_Int64 nCurrentWidth
+            = vcl::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
         // round to 0.5 percent
         int nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
 
@@ -84,7 +85,7 @@ void SwPercentField::ShowPercent(bool bPercent)
     }
     else
     {
-        int nOldPercent = get_value(FieldUnit::PERCENT);
+        sal_Int64 nOldPercent = get_value(FieldUnit::PERCENT);
 
         nOldValue = Convert(get_value(), m_pField->get_unit(), eOldUnit);
 
@@ -104,14 +105,14 @@ void SwPercentField::ShowPercent(bool bPercent)
     }
 }
 
-void SwPercentField::set_value(int nNewValue, FieldUnit eInUnit)
+void SwPercentField::set_value(sal_Int64 nNewValue, FieldUnit eInUnit)
 {
     if (m_pField->get_unit() != FieldUnit::PERCENT || eInUnit == FieldUnit::PERCENT)
         m_pField->set_value(Convert(nNewValue, eInUnit, m_pField->get_unit()), FieldUnit::NONE);
     else
     {
         // Overwrite output value, do not restore later
-        int nPercent, nCurrentWidth;
+        sal_Int64 nPercent, nCurrentWidth;
         if (eInUnit == FieldUnit::TWIP)
         {
             nCurrentWidth
@@ -119,7 +120,7 @@ void SwPercentField::set_value(int nNewValue, FieldUnit eInUnit)
         }
         else
         {
-            int nValue = Convert(nNewValue, eInUnit, eOldUnit);
+            sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
             nCurrentWidth = vcl::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
         }
         nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
@@ -127,12 +128,12 @@ void SwPercentField::set_value(int nNewValue, FieldUnit eInUnit)
     }
 }
 
-int SwPercentField::get_value(FieldUnit eOutUnit)
+sal_Int64 SwPercentField::get_value(FieldUnit eOutUnit)
 {
     return Convert(m_pField->get_value(FieldUnit::NONE), m_pField->get_unit(), eOutUnit);
 }
 
-void SwPercentField::set_min(int nNewMin, FieldUnit eInUnit)
+void SwPercentField::set_min(sal_Int64 nNewMin, FieldUnit eInUnit)
 {
     if (m_pField->get_unit() != FieldUnit::PERCENT)
         m_pField->set_min(nNewMin, eInUnit);
@@ -147,13 +148,13 @@ void SwPercentField::set_min(int nNewMin, FieldUnit eInUnit)
     }
 }
 
-void SwPercentField::set_max(int nNewMax, FieldUnit eInUnit)
+void SwPercentField::set_max(sal_Int64 nNewMax, FieldUnit eInUnit)
 {
     if (m_pField->get_unit() != FieldUnit::PERCENT)
         m_pField->set_max(nNewMax, eInUnit);
 }
 
-int SwPercentField::NormalizePercent(int nValue)
+sal_Int64 SwPercentField::NormalizePercent(sal_Int64 nValue)
 {
     if (m_pField->get_unit() != FieldUnit::PERCENT)
         nValue = m_pField->normalize(nValue);
@@ -162,7 +163,7 @@ int SwPercentField::NormalizePercent(int nValue)
     return nValue;
 }
 
-int SwPercentField::DenormalizePercent(int nValue)
+sal_Int64 SwPercentField::DenormalizePercent(sal_Int64 nValue)
 {
     if (m_pField->get_unit() != FieldUnit::PERCENT)
         nValue = m_pField->denormalize(nValue);
@@ -184,7 +185,7 @@ int SwPercentField::ImpPower10(sal_uInt16 n)
     return nValue;
 }
 
-int SwPercentField::GetRealValue(FieldUnit eOutUnit)
+sal_Int64 SwPercentField::GetRealValue(FieldUnit eOutUnit)
 {
     if (m_pField->get_unit() != FieldUnit::PERCENT)
         return get_value(eOutUnit);
@@ -192,7 +193,7 @@ int SwPercentField::GetRealValue(FieldUnit eOutUnit)
         return Convert(get_value(), m_pField->get_unit(), eOutUnit);
 }
 
-int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
+sal_Int64 SwPercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
 {
     if (eInUnit == eOutUnit || (eInUnit == FieldUnit::NONE && eOutUnit == m_pField->get_unit())
         || (eOutUnit == FieldUnit::NONE && eInUnit == m_pField->get_unit()))
@@ -201,7 +202,7 @@ int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
     if (eInUnit == FieldUnit::PERCENT)
     {
         // Convert to metric
-        int nTwipValue = (nRefValue * nValue + 50) / 100;
+        sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
 
         if (eOutUnit == FieldUnit::TWIP) // Only convert if necessary
             return NormalizePercent(nTwipValue);
@@ -213,7 +214,7 @@ int SwPercentField::Convert(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit)
     if (eOutUnit == FieldUnit::PERCENT)
     {
         // Convert to percent
-        int nCurrentWidth;
+        sal_Int64 nCurrentWidth;
         nValue = DenormalizePercent(nValue);
 
         if (eInUnit == FieldUnit::TWIP) // Only convert if necessary

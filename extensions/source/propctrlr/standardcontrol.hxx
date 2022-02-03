@@ -246,12 +246,12 @@ namespace pcr
 
             The conversion respects our decimal digits as well as our value factor (<member>m_nFieldToUNOValueFactor</member>).
         */
-        int    impl_apiValueToFieldValue_nothrow( double nApiValue ) const;
+        sal_Int64 impl_apiValueToFieldValue_nothrow( double nApiValue ) const;
 
         /** converts a control value, as obtained from our Numeric field, into a value which can passed
             to outer callers via our UNO API.
         */
-        double  impl_fieldValueToApiValue_nothrow( int nFieldValue ) const;
+        double impl_fieldValueToApiValue_nothrow(sal_Int64 nFieldValue) const;
     };
 
     //= OColorControl

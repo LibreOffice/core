@@ -625,21 +625,21 @@ private:
     DECL_LINK(InputHdl, sal_Int64*, TriState);
     DECL_LINK(ActivateHdl, Edit&, bool);
 
-    double toField(int nValue) const;
+    double toField(sal_Int64 nValue) const;
 
-    int fromField(double fValue) const;
+    sal_Int64 fromField(double fValue) const;
 
 public:
     SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
                           bool bTakeOwnership);
 
-    virtual int get_value() const override;
+    virtual sal_Int64 get_value() const override;
 
-    virtual void set_value(int value) override;
+    virtual void set_value(sal_Int64 value) override;
 
-    virtual void set_range(int min, int max) override;
+    virtual void set_range(sal_Int64 min, sal_Int64 max) override;
 
-    virtual void get_range(int& min, int& max) const override;
+    virtual void get_range(sal_Int64& min, sal_Int64& max) const override;
 
     virtual void set_increments(int step, int /*page*/) override;
 

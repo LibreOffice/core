@@ -43,7 +43,7 @@ ScMetricInputDlg::ScMetricInputDlg( weld::Window*         pParent,
     m_xEdValue->set_range(m_xEdValue->normalize(nMinimum),
                           m_xEdValue->normalize(nMaximum), FieldUnit::TWIP);
 
-    int nMin(0), nMax(0);
+    sal_Int64 nMin(0), nMax(0);
     m_xEdValue->get_range(nMin, nMax, FieldUnit::TWIP);
 
     auto nIncrement = m_xEdValue->normalize(1);
