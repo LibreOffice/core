@@ -22,6 +22,10 @@
 #include <scdll.hxx>
 
 #include <sfx2/docfile.hxx>
+#include <test/bootstrapfixture.hxx>
+
+#include <memory>
+#include <string_view>
 
 class TestSharedFormula : public test::BootstrapFixture
 {

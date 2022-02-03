@@ -12,7 +12,6 @@
 
 #include <arraysumfunctor.hxx>
 
-#include <tools/simd.hxx>
 #include <tools/simdsupport.hxx>
 
 #include <stdlib.h>

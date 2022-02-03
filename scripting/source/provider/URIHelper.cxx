@@ -23,7 +23,6 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include "URIHelper.hxx"
 

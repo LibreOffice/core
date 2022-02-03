@@ -25,7 +25,6 @@
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
-#include <global.hxx>
 #include <document.hxx>
 #include <tabvwsh.hxx>
 #include <viewdata.hxx>

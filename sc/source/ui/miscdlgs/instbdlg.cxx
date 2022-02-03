@@ -27,7 +27,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 
-#include <global.hxx>
 #include <docsh.hxx>
 #include <viewdata.hxx>
 #include <globstr.hrc>

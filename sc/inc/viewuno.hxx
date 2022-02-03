@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/lstner.hxx>

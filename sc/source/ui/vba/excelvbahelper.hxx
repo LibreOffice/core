@@ -22,7 +22,6 @@
 
 #include <comphelper/servicehelper.hxx>
 
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <vector>
 #include <global.hxx>
 

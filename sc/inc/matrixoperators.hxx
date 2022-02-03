@@ -12,7 +12,7 @@
 
 #include <functional>
 #include <vector>
-#include "math.hxx"
+#include "kahan.hxx"
 
 namespace sc::op {
 

@@ -80,9 +80,7 @@
 #include <attrib.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
-#include <xlconst.hxx>
 #include <documentimport.hxx>
-#include <numformat.hxx>
 #include <patattr.hxx>
 #include <stlsheet.hxx>
 #include <biffhelper.hxx>

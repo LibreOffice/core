@@ -48,7 +48,6 @@
 #include <rtl/math.hxx>
 #include <rtl/ustring.hxx>
 #include <stdlib.h>
-#include <math.h>
 #include <rangenam.hxx>
 #include <dbdata.hxx>
 #include <document.hxx>

@@ -23,8 +23,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <sal/macros.h>
 #include <editeng/brushitem.hxx>
-#include <global.hxx>
-#include <xlconst.hxx>
 
 namespace{
 

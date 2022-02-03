@@ -21,7 +21,6 @@
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
 #include <svx/svdobj.hxx>
-#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 

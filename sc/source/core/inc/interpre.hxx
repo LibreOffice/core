@@ -29,6 +29,7 @@
 #include <calcconfig.hxx>
 #include <token.hxx>
 #include <math.hxx>
+#include <kahan.hxx>
 #include "parclass.hxx"
 
 #include <map>
