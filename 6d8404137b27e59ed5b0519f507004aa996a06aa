@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d3bd072_f60a8c72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-03T14:33:16Z",
+      "side": 1,
+      "message": "Eh, sorry, I resumed the build without noticing it was already resumed...",
+      "revId": "6d8404137b27e59ed5b0519f507004aa996a06aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
