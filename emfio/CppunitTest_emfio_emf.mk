@@ -40,6 +40,8 @@ $(eval $(call gb_CppunitTest_use_vcl,emfio_emf))
 
 $(eval $(call gb_CppunitTest_use_rdb,emfio_emf,services))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,emfio_emf))
+
 $(eval $(call gb_CppunitTest_use_configuration,emfio_emf))
 
 # vim: set noet sw=4 ts=4:

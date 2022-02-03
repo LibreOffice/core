@@ -117,14 +117,10 @@ void WmfTest::testTdf88163NonPlaceableWmf()
 
     // These values come from the fix for tdf#88163
 
-    // Font 'Roman' and its height can vary according to the platform
     // Fails without the fix
-    // Linux:   With fix: 3136, without fix: ~ 8000
-    // Mac:     With fix: 3230, without fix: ~ 8000
-    // Windows: With fix: 3303, without fix: ~ 8000
+    // With fix: 3272, without fix: ~ 8000
     auto x = getXPath(pDoc, "/metafile/push[2]/font[1]", "height");
-    CPPUNIT_ASSERT_MESSAGE(fileName.toUtf8().getStr(), x.toInt32() > 3000);
-    CPPUNIT_ASSERT_MESSAGE(fileName.toUtf8().getStr(), x.toInt32() < 3500);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3272), x.toInt32());
 
     // Fails without the fix: Expected: 7359, Actual: 7336
     assertXPath(pDoc, "/metafile/push[2]/textarray[1]", "x", "7359");
@@ -157,12 +153,9 @@ void WmfTest::testTdf88163PlaceableWmf()
 
     // These values come from the fix for tdf#88163
 
-    // Font 'Roman' and its height can vary according to the platform
     // The fix does not affect the font size
-    // Linux: 300 - Mac: 309 - Windows: 316
     auto x = getXPath(pDoc, "/metafile/push[2]/font[1]", "height");
-    CPPUNIT_ASSERT_MESSAGE(fileName.toUtf8().getStr(), x.toInt32() > 290);
-    CPPUNIT_ASSERT_MESSAGE(fileName.toUtf8().getStr(), x.toInt32() < 320);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(313), x.toInt32());
 
     // Fails without the fix: Expected: 1900, Actual: 19818
     assertXPath(pDoc, "/metafile", "height", "1900");
