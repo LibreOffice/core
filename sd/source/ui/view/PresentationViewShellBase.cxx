@@ -39,7 +39,7 @@ class DrawDocShell;
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new PresentationViewShellBase object has been constructed.
 
-SfxViewFactory* PresentationViewShellBase::m_pFactory;
+SfxViewFactory* PresentationViewShellBase::s_pFactory;
 SfxViewShell* PresentationViewShellBase::CreateInstance (
     SfxViewFrame *_pFrame, SfxViewShell *pOldView)
 {
@@ -50,7 +50,7 @@ SfxViewShell* PresentationViewShellBase::CreateInstance (
 }
 void PresentationViewShellBase::RegisterFactory( SfxInterfaceId nPrio )
 {
-    m_pFactory = new SfxViewFactory(
+    s_pFactory = new SfxViewFactory(
         &CreateInstance,nPrio,"FullScreenPresentation");
     InitFactory();
 }
