@@ -16,6 +16,24 @@
       "message": "use the more idiomatic std::call_once?",
       "revId": "fdf84b42a09fa2eed03dccfaeec98dba720e6557",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b657c869_0b102167",
+        "filename": "sal/osl/w32/backtrace.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-03T10:35:04Z",
+      "side": 1,
+      "message": "Hmm, I feel call_once may have overhead, having a helper object and specified behavior on throw ... and also maybe there\u0027s a sense to check bInitialized below, like \"if !bInitialized return;\"?\n\n(Basically, I simply express some personal dislike of call_once 😊)",
+      "parentUuid": "e27d17a6_f75d11f4",
+      "revId": "fdf84b42a09fa2eed03dccfaeec98dba720e6557",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
