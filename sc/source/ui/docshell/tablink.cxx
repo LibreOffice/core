@@ -63,9 +63,9 @@ struct TableLink_Impl
 
 ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
                             const OUString& rFilter, const OUString& rOpt,
-                            sal_uLong nRefresh ):
+                            sal_Int32 nRefreshDelaySeconds ):
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
-    ScRefreshTimer( nRefresh ),
+    ScRefreshTimer( nRefreshDelaySeconds ),
     pImpl( new TableLink_Impl ),
     aFileName(rFile),
     aFilterName(rFilter),
@@ -79,9 +79,9 @@ ScTableLink::ScTableLink(ScDocShell* pDocSh, const OUString& rFile,
 
 ScTableLink::ScTableLink(SfxObjectShell* pShell, const OUString& rFile,
                             const OUString& rFilter, const OUString& rOpt,
-                            sal_uLong nRefresh ):
+                            sal_Int32 nRefreshDelaySeconds ):
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
-    ScRefreshTimer( nRefresh ),
+    ScRefreshTimer( nRefreshDelaySeconds ),
     pImpl( new TableLink_Impl ),
     aFileName(rFile),
     aFilterName(rFilter),
@@ -129,7 +129,7 @@ void ScTableLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& rEnd
         ScDocumentLoader::RemoveAppPrefix( aFilter );
 
         if (!bInCreate)
-            Refresh( aFile, aFilter, nullptr, GetRefreshDelay() ); // don't load twice
+            Refresh( aFile, aFilter, nullptr, GetRefreshDelaySeconds() ); // don't load twice
     }
     return SUCCESS;
 }
@@ -159,7 +159,7 @@ bool ScTableLink::IsUsed() const
 }
 
 bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
-                            const OUString* pNewOptions, sal_uLong nNewRefresh )
+                            const OUString* pNewOptions, sal_Int32 nNewRefreshDelaySeconds )
 {
     //  load document
 
@@ -244,7 +244,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
                 rDoc.CopyToDocument(aRange, InsertDeleteFlags::ALL, false, *pUndoDoc);
                 pUndoDoc->TransferDrawPage( rDoc, nTab, nTab );
                 pUndoDoc->SetLink( nTab, nMode, aFileName, aFilterName,
-                                   aOptions, aTabName, GetRefreshDelay() );
+                                   aOptions, aTabName, GetRefreshDelaySeconds() );
                 pUndoDoc->SetTabBgColor( nTab, rDoc.GetTabBgColor(nTab) );
             }
 
@@ -359,9 +359,9 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
             if ( bNewUrlName || aFilterName != rNewFilter ||
                     aOptions != aNewOpt || pNewOptions ||
-                    nNewRefresh != GetRefreshDelay() )
+                    nNewRefreshDelaySeconds != GetRefreshDelaySeconds() )
                 rDoc.SetLink( nTab, nMode, aNewUrl, rNewFilter, aNewOpt,
-                    aTabName, nNewRefresh );
+                    aTabName, nNewRefreshDelaySeconds );
         }
     }
 
@@ -408,7 +408,7 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
 
 IMPL_LINK_NOARG(ScTableLink, RefreshHdl, Timer *, void)
 {
-    Refresh( aFileName, aFilterName, nullptr, GetRefreshDelay() );
+    Refresh( aFileName, aFilterName, nullptr, GetRefreshDelaySeconds() );
 }
 
 IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink&, rLink, void )

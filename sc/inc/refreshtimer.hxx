@@ -45,7 +45,7 @@ class ScRefreshTimer : public AutoTimer
 
 public:
     ScRefreshTimer();
-    ScRefreshTimer( sal_uLong nSeconds );
+    ScRefreshTimer( sal_Int32 nSeconds );
     ScRefreshTimer( const ScRefreshTimer& r );
     virtual ~ScRefreshTimer() override;
 
@@ -55,10 +55,10 @@ public:
 
     void SetRefreshControl( std::unique_ptr<ScRefreshTimerControl> const * pp );
     void SetRefreshHandler( const Link<Timer *, void>& rLink );
-    sal_uLong GetRefreshDelay() const;
+    sal_Int32 GetRefreshDelaySeconds() const;
     void StopRefreshTimer();
 
-    void SetRefreshDelay( sal_uLong nSeconds );
+    void SetRefreshDelay( sal_Int32 nSeconds );
     SC_DLLPUBLIC virtual void Invoke() override;
 
 private:

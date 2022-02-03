@@ -137,7 +137,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
 
 void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,
-                                        sal_uLong nRefresh )
+                                        sal_Int32 nRefreshDelaySeconds )
 {
     LoadDocument( rFile, rFilter, rOptions );
     if (m_pSourceShell)
@@ -160,10 +160,10 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
         while (nIdx>0);
     }
 
-    bool bDoRefresh = (nRefresh != 0);
+    bool bDoRefresh = (nRefreshDelaySeconds != 0);
     m_xBtnReload->set_active(bDoRefresh);
     if (bDoRefresh)
-        m_xNfDelay->set_value(nRefresh);
+        m_xNfDelay->set_value(nRefreshDelaySeconds);
 
     UpdateEnable();
 }
@@ -325,10 +325,10 @@ OUString ScLinkedAreaDlg::GetSource() const
     return aBuf.makeStringAndClear();
 }
 
-sal_uLong ScLinkedAreaDlg::GetRefresh() const
+sal_Int32 ScLinkedAreaDlg::GetRefreshDelaySeconds() const
 {
     if (m_xBtnReload->get_active())
-        return sal::static_int_cast<sal_uLong>(m_xNfDelay->get_value());
+        return m_xNfDelay->get_value();
     else
         return 0;   // disabled
 }

@@ -215,7 +215,7 @@ public:
 
     void            InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                                             const OUString& rOptions, const OUString& rSource,
-                                            const ScRange& rDestRange, sal_uLong nRefresh,
+                                            const ScRange& rDestRange, sal_Int32 nRefreshDelaySeconds,
                                             bool bFitBlock, bool bApi );
 
     /**

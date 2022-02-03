@@ -36,7 +36,7 @@ private:
     OUString aOptions;
     OUString aSourceArea;
     ScRange aDestArea;
-    sal_uLong nRefresh;
+    sal_Int32 nRefreshDelaySeconds;
 
 public:
     ScAreaLinkSaver( const ScAreaLink& rSource );

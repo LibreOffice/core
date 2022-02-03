@@ -51,9 +51,9 @@ ScRefreshTimer::ScRefreshTimer() : AutoTimer("ScRefreshTimer"), ppControl(nullpt
     SetTimeout( 0 );
 }
 
-ScRefreshTimer::ScRefreshTimer( sal_uLong nSeconds ) : AutoTimer("ScRefreshTimer"), ppControl(nullptr)
+ScRefreshTimer::ScRefreshTimer( sal_Int32 nRefreshDelaySeconds ) : AutoTimer("ScRefreshTimer"), ppControl(nullptr)
 {
-    SetTimeout( nSeconds * 1000 );
+    SetTimeout( nRefreshDelaySeconds * 1000 );
     Launch();
 }
 
@@ -97,7 +97,7 @@ void ScRefreshTimer::SetRefreshHandler( const Link<Timer *, void>& rLink )
     SetInvokeHandler( rLink );
 }
 
-sal_uLong ScRefreshTimer::GetRefreshDelay() const
+sal_Int32 ScRefreshTimer::GetRefreshDelaySeconds() const
 {
     return GetTimeout() / 1000;
 }
@@ -107,7 +107,7 @@ void ScRefreshTimer::StopRefreshTimer()
     Stop();
 }
 
-void ScRefreshTimer::SetRefreshDelay( sal_uLong nSeconds )
+void ScRefreshTimer::SetRefreshDelay( sal_Int32 nSeconds )
 {
     bool bActive = IsActive();
     if ( bActive && !nSeconds )

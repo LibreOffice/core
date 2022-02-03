@@ -5507,7 +5507,7 @@ void ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
 void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                                 const OUString& rOptions, const OUString& rSource,
-                                const ScRange& rDestRange, sal_uLong nRefresh,
+                                const ScRange& rDestRange, sal_Int32 nRefreshDelaySeconds,
                                 bool bFitBlock, bool bApi )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
@@ -5544,7 +5544,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
                 rDocShell.GetUndoManager()->AddUndoAction(
                     std::make_unique<ScUndoRemoveAreaLink>( &rDocShell,
                         pOldArea->GetFile(), pOldArea->GetFilter(), pOldArea->GetOptions(),
-                        pOldArea->GetSource(), pOldArea->GetDestArea(), pOldArea->GetRefreshDelay() ) );
+                        pOldArea->GetSource(), pOldArea->GetDestArea(), pOldArea->GetRefreshDelaySeconds() ) );
             }
             pLinkManager->Remove( pBase );
             nLinkCount = pLinkManager->GetLinks().size();
@@ -5564,7 +5564,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     ScDocumentLoader::RemoveAppPrefix( aFilterName );
 
     ScAreaLink* pLink = new ScAreaLink( &rDocShell, rFile, aFilterName,
-                                        aNewOptions, rSource, rDestRange, nRefresh );
+                                        aNewOptions, rSource, rDestRange, nRefreshDelaySeconds );
     OUString aTmp = aFilterName;
     pLinkManager->InsertFileLink( *pLink, sfx2::SvBaseLinkObjectType::ClientFile, rFile, &aTmp, &rSource );
 
@@ -5574,7 +5574,7 @@ void ScDocFunc::InsertAreaLink( const OUString& rFile, const OUString& rFilter,
     {
         rDocShell.GetUndoManager()->AddUndoAction( std::make_unique<ScUndoInsertAreaLink>( &rDocShell,
                                                     rFile, aFilterName, aNewOptions,
-                                                    rSource, rDestRange, nRefresh ) );
+                                                    rSource, rDestRange, nRefreshDelaySeconds ) );
         if ( nRemoved )
             rDocShell.GetUndoManager()->LeaveListAction();  // undo for link update is still separate
     }

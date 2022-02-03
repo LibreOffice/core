@@ -44,7 +44,7 @@ private:
 public:
     ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                     const OUString& rFilter, const OUString& rOpt,
-                    const OUString& rArea, const ScRange& rDest, sal_uLong nRefresh );
+                    const OUString& rArea, const ScRange& rDest, sal_Int32 nRefreshDelaySeconds );
     virtual ~ScAreaLink() override;
 
     virtual void Closed() override;
@@ -54,7 +54,7 @@ public:
     virtual void    Edit(weld::Window*, const Link<SvBaseLink&,void>& rEndEditHdl) override;
 
     bool    Refresh( const OUString& rNewFile, const OUString& rNewFilter,
-                    const OUString& rNewArea, sal_uLong nNewRefresh );
+                    const OUString& rNewArea, sal_Int32 nRefreshDelaySeconds );
 
     void    SetInCreate(bool bSet)                  { bInCreate = bSet; }
     void    SetDoInsert(bool bSet)                  { bDoInsert = bSet; }

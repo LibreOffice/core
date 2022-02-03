@@ -49,9 +49,9 @@
 ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const OUString& rFile,
                         const OUString& rFilter, const OUString& rOpt,
                         const OUString& rArea, const ScRange& rDest,
-                        sal_uLong nRefresh ) :
+                        sal_Int32 nRefreshDelaySeconds ) :
     ::sfx2::SvBaseLink(SfxLinkUpdateMode::ONCALL,SotClipboardFormatId::SIMPLE_FILE),
-    ScRefreshTimer  ( nRefresh ),
+    ScRefreshTimer  ( nRefreshDelaySeconds ),
     m_pDocSh(static_cast<ScDocShell*>(pShell)),
     aFileName       (rFile),
     aFilterName     (rFilter),
@@ -78,12 +78,12 @@ void ScAreaLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& /* rE
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
 
     ScopedVclPtr<AbstractScLinkedAreaDlg> pDlg(pFact->CreateScLinkedAreaDlg(pParent));
-    pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
+    pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelaySeconds() );
     if ( pDlg->Execute() == RET_OK )
     {
         aOptions = pDlg->GetOptions();
         Refresh( pDlg->GetURL(), pDlg->GetFilter(),
-                 pDlg->GetSource(), pDlg->GetRefresh() );
+                 pDlg->GetSource(), pDlg->GetRefreshDelaySeconds() );
 
         //  copy source data from members (set in Refresh) into link name for dialog
         OUString aNewLinkName;
@@ -125,7 +125,7 @@ void ScAreaLink::Edit(weld::Window* pParent, const Link<SvBaseLink&,void>& /* rE
         }
 
         tools::SvRef<sfx2::SvBaseLink> const xThis(this); // keep yourself alive
-        Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
+        Refresh( aFile, aFilter, aArea, GetRefreshDelaySeconds() );
     }
 
     return SUCCESS;
@@ -141,7 +141,7 @@ void ScAreaLink::Closed()
     {
         m_pDocSh->GetUndoManager()->AddUndoAction( std::make_unique<ScUndoRemoveAreaLink>( m_pDocSh,
                                                         aFileName, aFilterName, aOptions,
-                                                        aSourceArea, aDestArea, GetRefreshDelay() ) );
+                                                        aSourceArea, aDestArea, GetRefreshDelaySeconds() ) );
 
         bAddUndo = false;   // only once
     }
@@ -219,7 +219,7 @@ bool ScAreaLink::FindExtRange( ScRange& rRange, const ScDocument& rSrcDoc, const
 //  execute:
 
 bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
-                            const OUString& rNewArea, sal_uLong nNewRefresh )
+                            const OUString& rNewArea, sal_Int32 nNewRefreshDelaySeconds )
 {
     //  load document - like TabLink
 
@@ -421,9 +421,9 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
             m_pDocSh->GetUndoManager()->AddUndoAction(
                 std::make_unique<ScUndoUpdateAreaLink>( m_pDocSh,
                                             aFileName, aFilterName, aOptions,
-                                            aSourceArea, aOldRange, GetRefreshDelay(),
+                                            aSourceArea, aOldRange, GetRefreshDelaySeconds(),
                                             aNewUrl, rNewFilter, aNewOpt,
-                                            rNewArea, aNewRange, nNewRefresh,
+                                            rNewArea, aNewRange, nNewRefreshDelaySeconds,
                                             std::move(pUndoDoc), std::move(pRedoDoc), bDoInsert ) );
         }
 
@@ -441,8 +441,8 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
         if ( aNewRange != aDestArea )
             aDestArea = aNewRange;
 
-        if ( nNewRefresh != GetRefreshDelay() )
-            SetRefreshDelay( nNewRefresh );
+        if ( nNewRefreshDelaySeconds != GetRefreshDelaySeconds() )
+            SetRefreshDelay( nNewRefreshDelaySeconds );
 
         SCCOL nPaintEndX = std::max( aOldRange.aEnd.Col(), aNewRange.aEnd.Col() );
         SCROW nPaintEndY = std::max( aOldRange.aEnd.Row(), aNewRange.aEnd.Row() );
@@ -492,7 +492,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
 
 IMPL_LINK_NOARG(ScAreaLink, RefreshHdl, Timer *, void)
 {
-    Refresh( aFileName, aFilterName, aSourceArea, GetRefreshDelay() );
+    Refresh( aFileName, aFilterName, aSourceArea, GetRefreshDelaySeconds() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -693,7 +693,7 @@ void ScXMLExport::GetAreaLinks( ScMyAreaLinksContainer& rAreaLinks )
                 aAreaLink.sFilter = pLink->GetFilter();
                 aAreaLink.sFilterOptions = pLink->GetOptions();
                 aAreaLink.sURL = pLink->GetFile();
-                aAreaLink.nRefresh = pLink->GetRefreshDelay();
+                aAreaLink.nRefreshDelaySeconds = pLink->GetRefreshDelaySeconds();
                 rAreaLinks.AddNewAreaLink( aAreaLink );
             }
         }
@@ -3643,11 +3643,11 @@ void ScXMLExport::WriteAreaLink( const ScMyCell& rMyCell )
         AddAttribute( XML_NAMESPACE_TABLE, XML_FILTER_OPTIONS, rAreaLink.sFilterOptions );
     AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_COLUMN_SPANNED, OUString::number(rAreaLink.GetColCount()) );
     AddAttribute( XML_NAMESPACE_TABLE, XML_LAST_ROW_SPANNED, OUString::number(rAreaLink.GetRowCount()) );
-    if( rAreaLink.nRefresh )
+    if( rAreaLink.nRefreshDelaySeconds )
     {
         OUStringBuffer sValue;
         ::sax::Converter::convertDuration( sValue,
-                static_cast<double>(rAreaLink.nRefresh) / 86400 );
+                static_cast<double>(rAreaLink.nRefreshDelaySeconds) / 86400 );
         AddAttribute( XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, sValue.makeStringAndClear() );
     }
     SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE, XML_CELL_RANGE_SOURCE, true, true );

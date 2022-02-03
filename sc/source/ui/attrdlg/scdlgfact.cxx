@@ -639,9 +639,9 @@ OUString AbstractScSelEntryDlg_Impl::GetSelectedEntry() const
 
 void AbstractScLinkedAreaDlg_Impl::InitFromOldLink( const OUString& rFile, const OUString& rFilter,
                                         const OUString& rOptions, const OUString& rSource,
-                                        sal_uLong nRefresh )
+                                        sal_Int32 nRefreshDelaySeconds )
 {
-    m_xDlg->InitFromOldLink( rFile, rFilter, rOptions, rSource, nRefresh);
+    m_xDlg->InitFromOldLink( rFile, rFilter, rOptions, rSource, nRefreshDelaySeconds);
 }
 
 OUString  AbstractScLinkedAreaDlg_Impl::GetURL()
@@ -664,9 +664,9 @@ OUString  AbstractScLinkedAreaDlg_Impl::GetSource()
     return m_xDlg->GetSource();
 }
 
-sal_uLong AbstractScLinkedAreaDlg_Impl::GetRefresh()
+sal_Int32 AbstractScLinkedAreaDlg_Impl::GetRefreshDelaySeconds()
 {
-    return m_xDlg->GetRefresh();
+    return m_xDlg->GetRefreshDelaySeconds();
 }
 
 std::unique_ptr<ScConditionalFormatList> AbstractScCondFormatManagerDlg_Impl::GetConditionalFormatList()
