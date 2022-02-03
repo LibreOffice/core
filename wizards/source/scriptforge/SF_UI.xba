@@ -625,6 +625,7 @@ Public Function Methods() As Variant
 					, &quot;OpenBaseDocument&quot; _
 					, &quot;OpenDocument&quot; _
 					, &quot;Resize&quot; _
+					, &quot;RunCommand&quot; _
 					, &quot;SetStatusbar&quot; _
 					, &quot;ShowProgressBar&quot; _
 					, &quot;WindowExists&quot; _
@@ -881,6 +882,66 @@ Finally:
 Catch:
 	GoTo Finally
 End Sub		    &apos;   ScriptForge.SF_UI.Resize
+
+REM -----------------------------------------------------------------------------
+Public Sub RunCommand(Optional ByVal Command As Variant _
+									, ParamArray Args As Variant _
+									)
+&apos;&apos;&apos; Run on the current window the given menu command. The command is executed with or without arguments
+&apos;&apos;&apos;	A few typical commands:
+&apos;&apos;&apos;		About, Delete, Edit, Undo, Copy, Paste, ...
+&apos;&apos;&apos;	Dozens can be found on next page: https://wiki.documentfoundation.org/Development/DispatchCommands
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Command: Case-sensitive. The command itself is not checked.
+&apos;&apos;&apos;			If the command does not contain the &quot;.uno:&quot; prefix, it is added.
+&apos;&apos;&apos;			If nothing happens, then the command is probably wrong
+&apos;&apos;&apos;		Args: Pairs of arguments name (string), value (any)	
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		ui.RunCommand(&quot;BasicIDEAppear&quot;, _
+&apos;&apos;&apos;					&quot;Document&quot;, &quot;LibreOffice Macros &amp; Dialogs&quot;, _
+&apos;&apos;&apos;					&quot;LibName&quot;, &quot;ScriptForge&quot;, _
+&apos;&apos;&apos;					&quot;Name&quot;, &quot;SF_Session&quot;, _
+&apos;&apos;&apos;					&quot;Line&quot;, 600)
+
+Dim oDispatch				&apos;	com.sun.star.frame.DispatchHelper
+Dim vProps As Variant		&apos;	Array of PropertyValues
+Dim vValue As Variant		&apos;	A single value argument
+Dim sCommand As String		&apos;	Alias of Command
+Dim i As Long
+Const cstPrefix = &quot;.uno:&quot;
+
+Const cstThisSub = &quot;UI.RunCommand&quot;
+Const cstSubArgs = &quot;Command, [arg0Name, arg0Value], [arg1Name, arg1Value], ...&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+
+Check:
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(Command, &quot;Command&quot;, V_STRING) Then GoTo Finally
+		If Not SF_Utils._ValidateArray(Args, &quot;Args&quot;, 1) Then GoTo Finally
+		For i = 0 To UBound(Args) - 1 Step 2
+			If Not SF_Utils._Validate(Args(i), &quot;Arg&quot; &amp; CStr(i/2) &amp; &quot;Name&quot;, V_STRING) Then GoTo Finally
+		Next i
+	End If
+
+Try:
+	&apos;	Build array of property values
+	vProps = Array()
+	For i = 0 To UBound(Args) - 1 Step 2
+		If IsEmpty(Args(i + 1)) Then vValue = Null Else vValue = Args(i + 1)
+		vProps = SF_Array.Append(vProps, SF_Utils._MakePropertyValue(Args(i), vValue))
+	Next i
+	Set oDispatch = SF_Utils._GetUNOService(&quot;DispatchHelper&quot;)
+	If SF_String.StartsWith(Command, cstPrefix) Then sCommand = Command Else sCommand = cstPrefix &amp; Command
+	oDispatch.executeDispatch(StarDesktop.ActiveFrame, sCommand, &quot;&quot;, 0, vProps)
+
+Finally:
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Sub
+Catch:
+	GoTo Finally
+End Sub			&apos;	ScriptForge.SF_UI.RunCommand
 
 REM -----------------------------------------------------------------------------
 Public Function SetProperty(Optional ByVal PropertyName As Variant _
