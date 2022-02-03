@@ -453,35 +453,28 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
     {
         case ContentTypeId::OUTLINE   :
         {
-            const size_t nOutlineCount = m_nMemberCount =
+            const size_t nOutlineCount =
                 m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
 
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
                 const sal_uInt8 nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
-                if(nLevel >= m_nOutlineLevel )
-                    m_nMemberCount--;
-                else
-                {
-                    if (!m_pWrtShell->getIDocumentOutlineNodesAccess()->isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
-                    {
-                        --m_nMemberCount;
-                        continue; // don't hide it, just skip it
-                    }
-                    tools::Long nYPos = getYPos(
-                                *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
-                    OUString aEntry(comphelper::string::stripStart(
-                        m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
-                                            i, m_pWrtShell->GetLayout(), true, false, false), ' '));
-                    aEntry = SwNavigationPI::CleanEntry(aEntry);
-                    auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
+                if (nLevel >= m_nOutlineLevel || !m_pWrtShell->getIDocumentOutlineNodesAccess()->
+                        isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
+                    continue;
+                tools::Long nYPos = getYPos(
+                            *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
+                OUString aEntry(comphelper::string::stripStart(
+                                    m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
+                                        i, m_pWrtShell->GetLayout(), true, false, false), ' '));
+                aEntry = SwNavigationPI::CleanEntry(aEntry);
+                auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable( i ), nYPos));
-                    m_pMember->insert(std::move(pCnt));
-                }
+                m_pMember->insert(std::move(pCnt));
             }
 
-            // need to check level (and equal entry number) after
-            // creation due to a sorted list being used here
+            // need to check level and equal entry number after creation due to possible outline
+            // nodes in frames, headers, footers
             if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
             {
                 if (pOldMember->size() != m_pMember->size())
@@ -504,11 +497,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         case ContentTypeId::TABLE     :
         {
             const size_t nCount = m_pWrtShell->GetTableFrameFormatCount(true);
-            OSL_ENSURE(m_nMemberCount == nCount, "MemberCount differs");
-            m_nMemberCount = nCount;
             const SwFrameFormats* pFrameFormats = m_pWrtShell->GetDoc()->GetTableFrameFormats();
             SwAutoFormatGetDocNode aGetHt(&m_pWrtShell->GetNodes());
-            for(size_t n = 0, i = 0; i < m_nMemberCount + n; ++i)
+            for(size_t n = 0, i = 0; i < nCount + n; ++i)
             {
                 const SwTableFormat& rTableFormat =
                         *static_cast<SwTableFormat*>(pFrameFormats->GetFormat(i));
@@ -549,11 +540,11 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
             else if(m_nContentType == ContentTypeId::GRAPHIC)
                 eType = FLYCNTTYPE_GRF;
             Point aNullPt;
-            m_nMemberCount = m_pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
+            size_t nCount = m_pWrtShell->GetFlyCount(eType, /*bIgnoreTextBoxes=*/true);
             std::vector<SwFrameFormat const*> formats(m_pWrtShell->GetFlyFrameFormats(eType, /*bIgnoreTextBoxes=*/true));
-            SAL_WARN_IF(m_nMemberCount != formats.size(), "sw.ui", "MemberCount differs");
-            m_nMemberCount = formats.size();
-            for (size_t i = 0; i < m_nMemberCount; ++i)
+            SAL_WARN_IF(nCount != formats.size(), "sw.ui", "Count differs");
+            nCount = formats.size();
+            for (size_t i = 0; i < nCount; ++i)
             {
                 SwFrameFormat const*const pFrameFormat = formats[i];
                 const OUString sFrameName = pFrameFormat->GetName();
@@ -606,7 +597,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     m_pMember->insert(std::move(pCnt));
                 }
             }
-            m_nMemberCount = m_pMember->size();
         }
         break;
         case ContentTypeId::TEXTFIELD:
@@ -687,7 +677,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     }
                 }
             }
-            m_nMemberCount = m_pMember->size();
         }
         break;
         case ContentTypeId::FOOTNOTE:
@@ -725,13 +714,12 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
             }
-            m_nMemberCount = m_pMember->size();
         }
         break;
         case ContentTypeId::REGION    :
         {
-            m_nMemberCount = m_pWrtShell->GetSectionFormatCount();
-            for(size_t i = 0; i < m_nMemberCount; ++i)
+            size_t nCount = m_pWrtShell->GetSectionFormatCount();
+            for (size_t i = 0; i < nCount; ++i)
             {
                 const SwSectionFormat* pFormat = &m_pWrtShell->GetSectionFormat(i);
                 if (!pFormat->IsInNodesArr())
@@ -772,13 +760,12 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         *m_pMember);
                 }
             }
-            m_nMemberCount = m_pMember->size();
         }
         break;
         case ContentTypeId::REFERENCE:
         {
             std::vector<OUString> aRefMarks;
-            m_nMemberCount = m_pWrtShell->GetRefMarks( &aRefMarks );
+            m_pWrtShell->GetRefMarks( &aRefMarks );
 
             for (const auto& rRefMark : aRefMarks)
             {
@@ -788,13 +775,12 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         }
         break;
         case ContentTypeId::URLFIELD:
-            m_nMemberCount = lcl_InsertURLFieldContent(m_pMember.get(), m_pWrtShell, this);
+            lcl_InsertURLFieldContent(m_pMember.get(), m_pWrtShell, this);
         break;
         case ContentTypeId::INDEX:
         {
-
             const sal_uInt16 nCount = m_pWrtShell->GetTOXCount();
-            m_nMemberCount = nCount;
+
             for ( sal_uInt16 nTox = 0; nTox < nCount; nTox++ )
             {
                 const SwTOXBase* pBase = m_pWrtShell->GetTOX( nTox );
@@ -817,11 +803,10 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         case ContentTypeId::POSTIT:
         {
-            m_nMemberCount = 0;
-            m_pMember->clear();
             SwPostItMgr* aMgr = m_pWrtShell->GetView().GetPostItMgr();
             if (aMgr)
             {
+                tools::Long nYPos = 0;
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
                     if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadcaster())) // SwPostit
@@ -835,9 +820,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                                                 this,
                                                 sEntry,
                                                 pFormatField,
-                                                m_nMemberCount));
+                                                nYPos));
                             m_pMember->insert(std::move(pCnt));
-                            m_nMemberCount++;
+                            nYPos++;
                         }
                     }
                 }
@@ -846,9 +831,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         case ContentTypeId::DRAWOBJECT:
         {
-            m_nMemberCount = 0;
-            m_pMember->clear();
-
             IDocumentDrawModelAccess& rIDDMA = m_pWrtShell->getIDocumentDrawModelAccess();
             SwDrawModel* pModel = rIDDMA.GetDrawModel();
             if(pModel)
@@ -869,7 +851,6 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                         if (!bIsVisible)
                             pCnt->SetInvisible();
                         m_pMember->insert(std::move(pCnt));
-                        m_nMemberCount++;
                     }
                 }
 
@@ -888,6 +869,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         break;
         default: break;
     }
+    m_nMemberCount = m_pMember->size();
+
     m_bDataValid = true;
 }
 
