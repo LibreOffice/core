@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c52e445d_919d18af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T11:33:25Z",
+      "side": 1,
+      "message": "OK now I understand. To make sure the old documents created without this patch, the numbering symbol is saved in the ODF file. For NUMBER_LOWER_ZH, it was \"一, 二, 三, ...\" previously. Thus for this change, we should make sure it is still the same, otherwise when open the old ODF document with the new LO version those numbering would be broken and become \"1,2,3,....\".",
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
