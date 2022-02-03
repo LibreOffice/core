@@ -352,9 +352,26 @@ excludelist:
     sc/inc/unitconv.hxx:
     # base class has to be a complete type
     - map
+    sc/qa/unit/uicalc/uicalc.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sc/qa/unit/ucalc.cxx:
+    # Needed for namespace shortcuts
+    - helper/debughelper.hxx
+    sc/qa/unit/ucalc_copypaste.cxx:
+    # Needed for namespace shortcuts
+    - helper/debughelper.hxx
     sc/qa/unit/ucalc_formula.cxx:
     # Needed in template
     - docpool.hxx
+    # Needed for namespace shortcuts
+    - helper/debughelper.hxx
+    sc/qa/unit/ucalc_sharedformula.cxx:
+    # Needed for namespace shortcuts
+    - helper/debughelper.hxx
+    sc/qa/unit/ucalc_sort.cxx:
+    # Needed for namespace shortcuts
+    - helper/debughelper.hxx
     sc/qa/unit/functions_test.hxx:
     # Needed for css shortcut
     - sal/types.h
@@ -364,11 +381,17 @@ excludelist:
     sc/qa/unit/subsequent_filters-test.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
-    sc/qa/unit/subsequent_export-test.cxx:
+    sc/qa/unit/subsequent_export_test.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
     # Needed for namespace shortcuts
     - helper/debughelper.hxx
+    sc/qa/unit/subsequent_export_test2.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    sc/qa/unit/subsequent_filters_test2.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
     sc/source/core/inc/addinlis.hxx:
     # base class has to be a complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -716,6 +739,12 @@ excludelist:
     sc/source/core/tool/addincol.cxx:
     # Needed for template
     - com/sun/star/frame/XModel.hpp
+    sc/source/core/tool/arraysumAVX.cxx:
+    # Needed for macro LO_AVX_AVAILABLE
+    - tools/simdsupport.hxx
+    sc/source/core/tool/arraysumAVX512.cxx:
+    # Needed for macro LO_AVX512F_AVAILABLE
+    - tools/simdsupport.hxx
     sc/source/core/tool/autoform.cxx:
     # Don't propose hxx -> h in URE headers
     - osl/thread.hxx
@@ -855,6 +884,8 @@ excludelist:
     - tokenarray.hxx
     # Needed for direct member access
     - com/sun/star/task/XStatusIndicator.hpp
+    # Don't propose hxx -> h in URE headers
+    - osl/thread.hxx
     sc/source/filter/orcus/xmlcontext.cxx:
     # Needed for implicit dtor
     - tokenarray.hxx
@@ -995,6 +1026,9 @@ excludelist:
     sc/source/ui/dataprovider/htmldataprovider.cxx:
     # Needed for unique_ptr type
     - tools/stream.hxx
+    sc/source/ui/dbgui/csvgrid.cxx:
+    # Needed for implicit dtor
+    - svl/itempool.hxx
     sc/source/ui/docshell/docfunc.cxx:
     # Needed for direct member access
     - svx/svdocapt.hxx
@@ -1008,8 +1042,6 @@ excludelist:
     - impex.hxx
     - rangeseq.hxx
     sc/source/ui/docshell/impex.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     # Needed for unique_ptr type
     - tokenarray.hxx
     - refundo.hxx
@@ -1039,6 +1071,9 @@ excludelist:
     sc/source/ui/unoobj/confuno.cxx:
     # Used with function template
     - docpool.hxx
+    sc/source/ui/unoobj/docuno.cxx:
+    # Needed for implicit dtor
+    - transobj.hxx
     sc/source/ui/unoobj/notesuno.cxx:
     # Needed for macro defines
     - editeng/unoprnms.hxx
@@ -1051,6 +1086,12 @@ excludelist:
     sc/source/ui/view/tabview.cxx:
     # Needed for direct member access
     - pagedata.hxx
+    sc/source/ui/view/tabview5.cxx:
+    # Needed for implicit dtor
+    - olinewin.hxx
+    sc/source/ui/unoobj/viewuno.cxx:
+    # Needed for implicit dtor
+    - transobj.hxx
     sc/source/ui/vba/vbaformatconditions.cxx:
     # Needed for template
     - ooo/vba/excel/XRange.hpp

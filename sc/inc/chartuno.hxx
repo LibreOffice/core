@@ -20,6 +20,7 @@
 #pragma once
 
 #include "rangelst.hxx"
+#include <rtl/ref.hxx>
 #include <svl/lstner.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <comphelper/propertycontainer.hxx>

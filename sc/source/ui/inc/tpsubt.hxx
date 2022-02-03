@@ -21,7 +21,6 @@
 
 #include <sfx2/tabdlg.hxx>
 #include <global.hxx>
-#include <sheetlimits.hxx>
 
 class ScViewData;
 class ScDocument;

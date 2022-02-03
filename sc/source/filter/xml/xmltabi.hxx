@@ -21,7 +21,6 @@
 #include <externalrefmgr.hxx>
 #include "importcontext.hxx"
 
-#include <xmloff/xmlictxt.hxx>
 #include <memory>
 
 namespace sax_fastparser { class FastAttributeList; }

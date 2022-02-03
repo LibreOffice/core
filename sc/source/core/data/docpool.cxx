@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <utility>
-
 #include <scitems.hxx>
 
 #include <comphelper/string.hxx>

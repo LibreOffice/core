@@ -25,7 +25,7 @@
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <conditio.hxx>
-#include <dbfunc.hxx>
+#include <dbdata.hxx>
 #include <document.hxx>
 #include <docuno.hxx>
 #include <docsh.hxx>

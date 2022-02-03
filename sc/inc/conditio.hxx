@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include "global.hxx"
 #include <tools/solar.h>
 #include <tools/color.hxx>
 #include "address.hxx"

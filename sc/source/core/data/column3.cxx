@@ -46,7 +46,6 @@
 #include <filterentries.hxx>
 #include <conditio.hxx>
 #include <colorscale.hxx>
-#include <stlpool.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/colritem.hxx>
 

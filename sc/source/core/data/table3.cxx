@@ -19,7 +19,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/random.hxx>
-#include <unotools/textsearch.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
@@ -45,7 +44,6 @@
 #include <rangelst.hxx>
 #include <userlist.hxx>
 #include <progress.hxx>
-#include <cellform.hxx>
 #include <queryparam.hxx>
 #include <queryentry.hxx>
 #include <subtotalparam.hxx>
@@ -63,7 +61,6 @@
 #include <bcaslot.hxx>
 #include <reordermap.hxx>
 #include <drwlayer.hxx>
-#include <conditio.hxx>
 #include <queryevaluator.hxx>
 
 #include <svl/sharedstringpool.hxx>

@@ -20,7 +20,6 @@
 #include <datamapper.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 using namespace css;

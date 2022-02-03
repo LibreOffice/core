@@ -28,7 +28,6 @@
 #include <columnspanset.hxx>
 #include <fstalgorithm.hxx>
 #include <unordered_map>
-#include <tabview.hxx>
 
 #include <osl/diagnose.h>
 

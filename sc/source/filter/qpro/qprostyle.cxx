@@ -31,7 +31,6 @@
 #include <editeng/justifyitem.hxx>
 
 #include <attrib.hxx>
-#include <global.hxx>
 #include <docpool.hxx>
 #include <patattr.hxx>
 #include <document.hxx>

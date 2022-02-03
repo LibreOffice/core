@@ -19,6 +19,7 @@
 #include <scitems.hxx>
 #include <reffind.hxx>
 #include <clipparam.hxx>
+#include <undoblk.hxx>
 #include <undotab.hxx>
 #include <attrib.hxx>
 #include <dbdata.hxx>
@@ -43,6 +44,8 @@
 #include <editable.hxx>
 #include <tabprotection.hxx>
 
+#include <formula/IFunctionDescription.hxx>
+
 #include <editeng/borderline.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/eeitem.hxx>
@@ -56,6 +59,7 @@
 #include <svx/svdocapt.hxx>
 #include <svl/numformat.hxx>
 #include <svl/srchitem.hxx>
+#include <svl/sharedstringpool.hxx>
 #include <unotools/collatorwrapper.hxx>
 
 #include <sfx2/sfxsids.hrc>

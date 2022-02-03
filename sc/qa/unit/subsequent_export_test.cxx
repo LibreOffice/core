@@ -11,6 +11,9 @@
 #include <config_fonts.h>
 
 #include "helper/debughelper.hxx"
+#include <sfx2/sfxmodelfactory.hxx>
+
+#include "helper/qahelper.hxx"
 #include "helper/xpath.hxx"
 #include "helper/shared_test_impl.hxx"
 
@@ -42,6 +45,7 @@
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
 #include <unotools/useroptions.hxx>
+#include <tools/datetime.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>

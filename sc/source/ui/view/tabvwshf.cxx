@@ -26,7 +26,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sberrors.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>

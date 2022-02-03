@@ -24,7 +24,6 @@
 #include <sfx2/navigat.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
-#include <uiobject.hxx>
 
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>

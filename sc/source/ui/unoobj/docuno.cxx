@@ -25,6 +25,7 @@
 #include <comphelper/sequence.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/memberids.h>
 #include <editeng/outliner.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
@@ -32,7 +33,6 @@
 #include <svx/svditer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svxids.hrc>
-#include <svx/unoshape.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/propertysequence.hxx>
@@ -52,7 +52,6 @@
 #include <tools/multisel.hxx>
 #include <tools/UnitConversion.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
-#include <unotools/saveopt.hxx>
 
 #include <float.h>
 
