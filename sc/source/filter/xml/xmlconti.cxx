@@ -20,7 +20,6 @@
 #include "xmlconti.hxx"
 #include "xmlimprt.hxx"
 
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 

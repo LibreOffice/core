@@ -27,7 +27,6 @@
 #include <svx/ImageMapInfo.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/event.hxx>
-#include <svx/unoshape.hxx>
 #include <editeng/unofield.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <cppuhelper/implbase.hxx>

@@ -32,8 +32,6 @@
 #include <tabvwsh.hxx>
 #include <userdat.hxx>
 
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 #include <sc.hrc> // defines of slot-IDs
 
 using namespace css;

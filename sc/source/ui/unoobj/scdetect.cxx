@@ -29,7 +29,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
-#include <tools/solar.h>
 
 using namespace ::com::sun::star;
 using utl::MediaDescriptor;

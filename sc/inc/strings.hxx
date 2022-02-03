@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral SCSTR_FIELDSEP = u",\t44\t;\t59\t:\t58\t{%TAB}\t9\t{%SPACE}\t32 ";
 inline constexpr OUStringLiteral SCSTR_TEXTSEP = u"\"\t34\t'\t39";
 inline constexpr OUStringLiteral STR_ACC_DOC_DESCR = u"";

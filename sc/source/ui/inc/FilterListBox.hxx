@@ -21,9 +21,11 @@
 
 #include <types.hxx>
 
+#include <tools/solar.h>
 #include <vcl/weld.hxx>
 
 class ScGridWindow;
+struct ImplSVEvent;
 
 enum class ScFilterBoxMode
 {

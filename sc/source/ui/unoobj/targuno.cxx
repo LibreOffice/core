@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/hint.hxx>

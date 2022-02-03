@@ -23,7 +23,6 @@
 #include <filter/msfilter/countryid.hxx>
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <sal/log.hxx>
 #include <sax/fastattribs.hxx>
 

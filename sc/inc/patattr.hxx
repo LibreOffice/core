@@ -26,7 +26,6 @@
 #include <editeng/svxenum.hxx>
 #include "scdllapi.h"
 #include "fonthelper.hxx"
-#include <memory>
 
 namespace vcl { class Font; }
 class OutputDevice;

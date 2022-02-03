@@ -27,7 +27,6 @@
 #include <matrixoperators.hxx>
 #include <scmatrix.hxx>
 
-#include <math.h>
 #include <cassert>
 #include <memory>
 #include <set>
@@ -36,7 +35,6 @@
 #include <comphelper/random.hxx>
 #include <o3tl/float_int_conversion.hxx>
 #include <osl/diagnose.h>
-#include <basegfx/numeric/ftools.hxx>
 
 using ::std::vector;
 using namespace formula;

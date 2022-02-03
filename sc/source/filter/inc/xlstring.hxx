@@ -20,6 +20,7 @@
 #pragma once
 
 #include <vector>
+#include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
 // Constants and enumerations =================================================

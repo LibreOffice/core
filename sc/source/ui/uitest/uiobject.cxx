@@ -18,7 +18,6 @@
 #include <dbfunc.hxx>
 #include <tabvwsh.hxx>
 #include <drwlayer.hxx>
-#include <navipi.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>

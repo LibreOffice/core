@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include <rtl/ustring.hxx>
 #include <memory>
+#include <string_view>
 
 class SfxObjectShell;
 namespace weld { class Window; }

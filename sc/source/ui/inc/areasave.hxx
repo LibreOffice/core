@@ -20,7 +20,6 @@
 #pragma once
 
 #include <address.hxx>
-#include <tools/solar.h>
 
 #include <memory>
 #include <vector>

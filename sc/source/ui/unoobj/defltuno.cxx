@@ -20,7 +20,6 @@
 #include <editeng/memberids.h>
 #include <svl/hint.hxx>
 #include <svl/itemprop.hxx>
-#include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
