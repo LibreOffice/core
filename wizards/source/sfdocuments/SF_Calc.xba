@@ -3533,6 +3533,7 @@ Private Function _ParseAddress(ByVal psAddress As String) As Object
 &apos;&apos;&apos;		CALCADDRESSERROR		&apos;	Address could not be parsed to a valid address
 
 Dim oAddress As Object				&apos;	Return value
+Dim sAddress As String				&apos;	Alias of psAddress
 Dim lStart As Long					&apos;	Position of found regex
 Dim sSheet As String				&apos;	Sheet component
 Dim sRange As String				&apos;	Range component
@@ -3565,20 +3566,22 @@ Dim oSelect As Object				&apos;	Current selection
 		.RawAddress = psAddress
 		Set .XSpreadSheet = Nothing	:	Set .XCellRange = Nothing
 		
+		&apos;	Remove leading &apos;$&apos;
+		If Left(psAddress, 1) = &quot;$&quot; Then sAddress = Mid(psAddress, 2) Else sAddress = psAddress
 		&apos;	Split in sheet and range components - Check presence of surrounding single quotes or dot
-		If Left(psAddress, 1) = &quot;&apos;&quot; Then
+		If Left(sAddress, 1) = &quot;&apos;&quot; Then
 			lStart = 1
-			sSheet = ScriptForge.SF_String.FindRegex(psAddress, &quot;^&apos;[^\[\]*?:\/\\]+&apos;&quot;)
+			sSheet = ScriptForge.SF_String.FindRegex(sAddress, &quot;^&apos;[^\[\]*?:\/\\]+&apos;&quot;)
 			If lStart = 0 Then GoTo CatchAddress	&apos;	Invalid sheet name
-			If Len(psAddress) &gt; Len(sSheet) + 1 Then
-				If Mid(psAddress, Len(sSheet) + 1, 1) = &quot;.&quot; then sRange = Mid(psAddress, Len(sSheet) + 2)
+			If Len(sAddress) &gt; Len(sSheet) + 1 Then
+				If Mid(sAddress, Len(sSheet) + 1, 1) = &quot;.&quot; then sRange = Mid(sAddress, Len(sSheet) + 2)
 			End If
 			sSheet = Replace(Replace(sSheet, &quot;$&quot;, &quot;&quot;), &quot;&apos;&quot;, &quot;&quot;)
-		ElseIf InStr(psAddress, &quot;.&quot;) &gt; 0 Then
-			sSheet = Replace(Split(psAddress, &quot;.&quot;)(0), &quot;$&quot;, &quot;&quot;)
-			sRange = Replace(Split(psAddress, &quot;.&quot;)(1), &quot;$&quot;, &quot;&quot;)
+		ElseIf InStr(sAddress, &quot;.&quot;) &gt; 0 Then
+			sSheet = Replace(Split(sAddress, &quot;.&quot;)(0), &quot;$&quot;, &quot;&quot;)
+			sRange = Replace(Split(sAddress, &quot;.&quot;)(1), &quot;$&quot;, &quot;&quot;)
 		Else
-			sSheet = psAddress
+			sSheet = sAddress
 		End If
 
 		&apos;	Resolve sheet part: either a document named range, or the active sheet or a real sheet
