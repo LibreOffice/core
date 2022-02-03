@@ -112,7 +112,7 @@ DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassw
     uno::Sequence<beans::PropertyValue> aResult;
 
     uno::Sequence<sal_Int8> aSalt = GenerateRandomByteSequence(16);
-    OUStringBuffer aBuffer;
+    OUStringBuffer aBuffer(22);
     comphelper::Base64::encode(aBuffer, aSalt);
     OUString sSalt = aBuffer.makeStringAndClear();
 
