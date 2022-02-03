@@ -299,11 +299,11 @@ void VclProcessor2D::RenderTextSimpleOrDecoratedPortionPrimitive2D(
 
                 tools::Long nWidth = mpOutputDevice->GetTextArray(rTextCandidate.getText(),
                                                                   &aTransformedDXArray, 0, 1);
-                tools::Long nChars = 2;
+                sal_Int32 nChars = 2;
                 if (nWidth)
                     nChars = nWidthToFill / nWidth;
 
-                OUStringBuffer aFilled;
+                OUStringBuffer aFilled(nChars);
                 comphelper::string::padToLength(aFilled, nChars, aText[0]);
                 aText = aFilled.makeStringAndClear();
                 nPos = 0;
