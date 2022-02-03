@@ -429,8 +429,8 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::Toggleable&, void )
 {
     if ( mxCbxScale->get_active() )
     {
-        mlOldWidth  = std::max(GetCoreValue(*mxMtrWidth,  mePoolUnit), 1);
-        mlOldHeight = std::max(GetCoreValue(*mxMtrHeight, mePoolUnit), 1);
+        mlOldWidth  = std::max(GetCoreValue(*mxMtrWidth,  mePoolUnit), SAL_CONST_INT64(1));
+        mlOldHeight = std::max(GetCoreValue(*mxMtrHeight, mePoolUnit), SAL_CONST_INT64(1));
     }
 
     // mxCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog

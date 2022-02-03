@@ -1716,31 +1716,31 @@ protected:
     }
 
 public:
-    virtual void set_value(int value) = 0;
-    virtual int get_value() const = 0;
-    virtual void set_range(int min, int max) = 0;
-    virtual void get_range(int& min, int& max) const = 0;
-    void set_min(int min)
+    virtual void set_value(sal_Int64 value) = 0;
+    virtual sal_Int64 get_value() const = 0;
+    virtual void set_range(sal_Int64 min, sal_Int64 max) = 0;
+    virtual void get_range(sal_Int64& min, sal_Int64& max) const = 0;
+    void set_min(sal_Int64 min)
     {
-        int dummy, max;
+        sal_Int64 dummy, max;
         get_range(dummy, max);
         set_range(min, max);
     }
-    void set_max(int max)
+    void set_max(sal_Int64 max)
     {
-        int min, dummy;
+        sal_Int64 min, dummy;
         get_range(min, dummy);
         set_range(min, max);
     }
-    int get_min() const
+    sal_Int64 get_min() const
     {
-        int min, dummy;
+        sal_Int64 min, dummy;
         get_range(min, dummy);
         return min;
     }
-    int get_max() const
+    sal_Int64 get_max() const
     {
-        int dummy, max;
+        sal_Int64 dummy, max;
         get_range(dummy, max);
         return max;
     }
@@ -1754,9 +1754,9 @@ public:
     void connect_output(const Link<SpinButton&, void>& rLink) { m_aOutputHdl = rLink; }
     void connect_input(const Link<int*, bool>& rLink) { m_aInputHdl = rLink; }
 
-    int normalize(int nValue) const { return (nValue * Power10(get_digits())); }
+    sal_Int64 normalize(sal_Int64 nValue) const { return (nValue * Power10(get_digits())); }
 
-    int denormalize(int nValue) const;
+    sal_Int64 denormalize(sal_Int64 nValue) const;
 
     static unsigned int Power10(unsigned int n);
 };
@@ -1925,8 +1925,8 @@ class VCL_DLLPUBLIC MetricSpinButton final
 
     void signal_value_changed() { m_aValueChangedHdl.Call(*this); }
 
-    int ConvertValue(int nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const;
-    OUString format_number(int nValue) const;
+    sal_Int64 ConvertValue(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit eOutUnit) const;
+    OUString format_number(sal_Int64 nValue) const;
     void update_width_chars();
 
 public:
@@ -1948,22 +1948,22 @@ public:
 
     void set_unit(FieldUnit eUnit);
 
-    int convert_value_to(int nValue, FieldUnit eValueUnit) const
+    sal_Int64 convert_value_to(sal_Int64 nValue, FieldUnit eValueUnit) const
     {
         return ConvertValue(nValue, m_eSrcUnit, eValueUnit);
     }
 
-    int convert_value_from(int nValue, FieldUnit eValueUnit) const
+    sal_Int64 convert_value_from(sal_Int64 nValue, FieldUnit eValueUnit) const
     {
         return ConvertValue(nValue, eValueUnit, m_eSrcUnit);
     }
 
-    void set_value(int nValue, FieldUnit eValueUnit)
+    void set_value(sal_Int64 nValue, FieldUnit eValueUnit)
     {
         m_xSpinButton->set_value(convert_value_from(nValue, eValueUnit));
     }
 
-    int get_value(FieldUnit eDestUnit) const
+    sal_Int64 get_value(FieldUnit eDestUnit) const
     {
         return convert_value_to(m_xSpinButton->get_value(), eDestUnit);
     }
@@ -1973,7 +1973,7 @@ public:
     // formatted value and now you want to show it as formatted again
     void reformat() { spin_button_output(*m_xSpinButton); }
 
-    void set_range(int min, int max, FieldUnit eValueUnit)
+    void set_range(sal_Int64 min, sal_Int64 max, FieldUnit eValueUnit)
     {
         min = convert_value_from(min, eValueUnit);
         max = convert_value_from(max, eValueUnit);
@@ -1981,37 +1981,37 @@ public:
         update_width_chars();
     }
 
-    void get_range(int& min, int& max, FieldUnit eDestUnit) const
+    void get_range(sal_Int64& min, sal_Int64& max, FieldUnit eDestUnit) const
     {
         m_xSpinButton->get_range(min, max);
         min = convert_value_to(min, eDestUnit);
         max = convert_value_to(max, eDestUnit);
     }
 
-    void set_min(int min, FieldUnit eValueUnit)
+    void set_min(sal_Int64 min, FieldUnit eValueUnit)
     {
-        int dummy, max;
+        sal_Int64 dummy, max;
         get_range(dummy, max, eValueUnit);
         set_range(min, max, eValueUnit);
     }
 
-    void set_max(int max, FieldUnit eValueUnit)
+    void set_max(sal_Int64 max, FieldUnit eValueUnit)
     {
-        int min, dummy;
+        sal_Int64 min, dummy;
         get_range(min, dummy, eValueUnit);
         set_range(min, max, eValueUnit);
     }
 
-    int get_min(FieldUnit eValueUnit) const
+    sal_Int64 get_min(FieldUnit eValueUnit) const
     {
-        int min, dummy;
+        sal_Int64 min, dummy;
         get_range(min, dummy, eValueUnit);
         return min;
     }
 
-    int get_max(FieldUnit eValueUnit) const
+    sal_Int64 get_max(FieldUnit eValueUnit) const
     {
-        int dummy, max;
+        sal_Int64 dummy, max;
         get_range(dummy, max, eValueUnit);
         return max;
     }
@@ -2035,8 +2035,8 @@ public:
         m_aValueChangedHdl = rLink;
     }
 
-    int normalize(int nValue) const { return m_xSpinButton->normalize(nValue); }
-    int denormalize(int nValue) const { return m_xSpinButton->denormalize(nValue); }
+    sal_Int64 normalize(sal_Int64 nValue) const { return m_xSpinButton->normalize(nValue); }
+    sal_Int64 denormalize(sal_Int64 nValue) const { return m_xSpinButton->denormalize(nValue); }
     void set_sensitive(bool sensitive) { m_xSpinButton->set_sensitive(sensitive); }
     bool get_sensitive() const { return m_xSpinButton->get_sensitive(); }
     bool get_visible() const { return m_xSpinButton->get_visible(); }

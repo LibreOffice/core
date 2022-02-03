@@ -26,9 +26,9 @@
 
 void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
 {
-    int nMin, nMax;
+    sal_Int64 nMin, nMax;
     rField.get_range(nMin, nMax, FieldUnit::TWIP);
-    int nValue = rField.get_value(FieldUnit::TWIP);
+    sal_Int64 nValue = rField.get_value(FieldUnit::TWIP);
     nMin = rField.denormalize(nMin);
     nMax = rField.denormalize(nMax);
     nValue = rField.denormalize(nValue);
@@ -86,18 +86,18 @@ void SetFieldUnit(weld::MetricSpinButton& rField, FieldUnit eUnit, bool bAll)
     rField.set_value(rField.normalize(nValue), FieldUnit::TWIP);
 }
 
-void SetMetricValue(weld::MetricSpinButton& rField, int nCoreValue, MapUnit eUnit)
+void SetMetricValue(weld::MetricSpinButton& rField, sal_Int64 nCoreValue, MapUnit eUnit)
 {
-    auto nVal = OutputDevice::LogicToLogic(nCoreValue, eUnit, MapUnit::Map100thMM);
+    sal_Int64 nVal = OutputDevice::LogicToLogic(nCoreValue, eUnit, MapUnit::Map100thMM);
     nVal = rField.normalize(nVal);
     rField.set_value(nVal, FieldUnit::MM_100TH);
 }
 
-int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
+sal_Int64 GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
 {
-    int nVal = rField.get_value(FieldUnit::MM_100TH);
+    sal_Int64 nVal = rField.get_value(FieldUnit::MM_100TH);
     // avoid rounding issues
-    const int nSizeMask = 0xff000000;
+    const sal_Int64 nSizeMask = 0xffffffffff000000LL;
     bool bRoundBefore = true;
     if( nVal >= 0 )
     {
@@ -111,7 +111,7 @@ int GetCoreValue(const weld::MetricSpinButton& rField, MapUnit eUnit)
     }
     if( bRoundBefore )
         nVal = rField.denormalize( nVal );
-    auto nUnitVal = OutputDevice::LogicToLogic(nVal, MapUnit::Map100thMM, eUnit);
+    sal_Int64 nUnitVal = OutputDevice::LogicToLogic(nVal, MapUnit::Map100thMM, eUnit);
     if (!bRoundBefore)
         nUnitVal = rField.denormalize(nUnitVal);
     return nUnitVal;

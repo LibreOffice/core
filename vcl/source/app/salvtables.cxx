@@ -5486,14 +5486,14 @@ IMPL_LINK(SalInstanceIconView, CommandHdl, const CommandEvent&, rEvent, bool)
     return m_aCommandHdl.Call(rEvent);
 }
 
-double SalInstanceSpinButton::toField(int nValue) const
+double SalInstanceSpinButton::toField(sal_Int64 nValue) const
 {
     return static_cast<double>(nValue) / Power10(get_digits());
 }
 
-int SalInstanceSpinButton::fromField(double fValue) const
+sal_Int64 SalInstanceSpinButton::fromField(double fValue) const
 {
-    return FRound(fValue * Power10(get_digits()));
+    return std::round(fValue * Power10(get_digits()));
 }
 
 SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
@@ -5514,17 +5514,17 @@ SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanc
         m_xButton->SetActivateHdl(LINK(this, SalInstanceSpinButton, ActivateHdl));
 }
 
-int SalInstanceSpinButton::get_value() const { return fromField(m_rFormatter.GetValue()); }
+sal_Int64 SalInstanceSpinButton::get_value() const { return fromField(m_rFormatter.GetValue()); }
 
-void SalInstanceSpinButton::set_value(int value) { m_rFormatter.SetValue(toField(value)); }
+void SalInstanceSpinButton::set_value(sal_Int64 value) { m_rFormatter.SetValue(toField(value)); }
 
-void SalInstanceSpinButton::set_range(int min, int max)
+void SalInstanceSpinButton::set_range(sal_Int64 min, sal_Int64 max)
 {
     m_rFormatter.SetMinValue(toField(min));
     m_rFormatter.SetMaxValue(toField(max));
 }
 
-void SalInstanceSpinButton::get_range(int& min, int& max) const
+void SalInstanceSpinButton::get_range(sal_Int64& min, sal_Int64& max) const
 {
     min = fromField(m_rFormatter.GetMinValue());
     max = fromField(m_rFormatter.GetMaxValue());

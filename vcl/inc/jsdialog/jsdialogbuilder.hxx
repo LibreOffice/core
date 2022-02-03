@@ -529,7 +529,7 @@ public:
     JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership);
 
-    virtual void set_value(int value) override;
+    virtual void set_value(sal_Int64 value) override;
 };
 
 class JSMessageDialog final : public JSWidget<SalInstanceMessageDialog, ::MessageDialog>

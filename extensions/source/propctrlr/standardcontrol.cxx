@@ -229,16 +229,16 @@ namespace pcr
             notifyModifiedValue();
     }
 
-    static int ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
+    static sal_Int64 ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
             n *= 10;
 
-        return o3tl::saturating_cast<int>(n);
+        return o3tl::saturating_cast<sal_Int64>(n);
     }
 
-    static double ImplCalcDoubleValue( int nValue, sal_uInt16 nDigits )
+    static double ImplCalcDoubleValue(sal_Int64 nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
         for ( sal_uInt16 d = 0; d < nDigits; ++d )
@@ -376,7 +376,7 @@ namespace pcr
     void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 decimaldigits )
     {
         weld::MetricSpinButton* pControlWindow = getTypedControlWindow();
-        int min, max;
+        sal_Int64 min, max;
         pControlWindow->get_range(min, max, FieldUnit::NONE);
         pControlWindow->set_digits(decimaldigits);
         pControlWindow->set_range(min, max, FieldUnit::NONE);
@@ -386,8 +386,8 @@ namespace pcr
     {
         Optional< double > aReturn( true, 0 );
 
-        int minValue = getTypedControlWindow()->get_min(FieldUnit::NONE);
-        if ( minValue == std::numeric_limits<int>::min() )
+        sal_Int64 minValue = getTypedControlWindow()->get_min(FieldUnit::NONE);
+        if ( minValue == std::numeric_limits<sal_Int64>::min() )
             aReturn.IsPresent = false;
         else
             aReturn.Value = static_cast<double>(minValue);
@@ -398,7 +398,7 @@ namespace pcr
     void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue )
     {
         if ( !_minvalue.IsPresent )
-            getTypedControlWindow()->set_min( std::numeric_limits<int>::min(), FieldUnit::NONE );
+            getTypedControlWindow()->set_min( std::numeric_limits<sal_Int64>::min(), FieldUnit::NONE );
         else
             getTypedControlWindow()->set_min( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) , m_eValueUnit);
     }
@@ -407,8 +407,8 @@ namespace pcr
     {
         Optional< double > aReturn( true, 0 );
 
-        int maxValue = getTypedControlWindow()->get_max(FieldUnit::NONE);
-        if ( maxValue == std::numeric_limits<int>::max() )
+        sal_Int64 maxValue = getTypedControlWindow()->get_max(FieldUnit::NONE);
+        if ( maxValue == std::numeric_limits<sal_Int64>::max() )
             aReturn.IsPresent = false;
         else
             aReturn.Value = static_cast<double>(maxValue);
@@ -419,7 +419,7 @@ namespace pcr
     void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue )
     {
         if ( !_maxvalue.IsPresent )
-            getTypedControlWindow()->set_max( std::numeric_limits<int>::max(), FieldUnit::NONE );
+            getTypedControlWindow()->set_max( std::numeric_limits<sal_Int64>::max(), FieldUnit::NONE );
         else
             getTypedControlWindow()->set_max( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ), m_eValueUnit );
     }
@@ -478,14 +478,14 @@ namespace pcr
         }
     }
 
-    int ONumericControl::impl_apiValueToFieldValue_nothrow( double _nApiValue ) const
+    sal_Int64 ONumericControl::impl_apiValueToFieldValue_nothrow( double _nApiValue ) const
     {
-        int nControlValue = ImplCalcLongValue( _nApiValue, getTypedControlWindow()->get_digits() );
+        sal_Int64 nControlValue = ImplCalcLongValue( _nApiValue, getTypedControlWindow()->get_digits() );
         nControlValue /= m_nFieldToUNOValueFactor;
         return nControlValue;
     }
 
-    double ONumericControl::impl_fieldValueToApiValue_nothrow( int nFieldValue ) const
+    double ONumericControl::impl_fieldValueToApiValue_nothrow(sal_Int64 nFieldValue) const
     {
         double nApiValue = ImplCalcDoubleValue( nFieldValue, getTypedControlWindow()->get_digits() );
         nApiValue *= m_nFieldToUNOValueFactor;
