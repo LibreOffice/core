@@ -1841,6 +1841,15 @@ void SdrPage::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SdrPage"));
     SdrObjList::dumpAsXml(pWriter);
 
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("width"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%s",
+                                            BAD_CAST(OString::number(mnWidth).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("height"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("value"), "%s",
+                                            BAD_CAST(OString::number(mnHeight).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+
     if (mpSdrPageProperties)
     {
         mpSdrPageProperties->dumpAsXml(pWriter);
