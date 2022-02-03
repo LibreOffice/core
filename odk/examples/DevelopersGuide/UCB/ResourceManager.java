@@ -151,7 +151,7 @@ public class ResourceManager {
     }
 
     /**
-     * Get trasfering Operation.
+     * Get transferring Operation.
      *
      *@return String    That contains the trasfering Operation
      */

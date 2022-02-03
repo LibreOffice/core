@@ -118,7 +118,7 @@ private:
     std::stack<sal_uInt32> mnStartTokenStack;
 
     css::awt::Point maPosition;
-    bool m_bFullWPGSUpport; // Is this DrawingML shape supposed to be proccessed as WPG?
+    bool m_bFullWPGSUpport; // Is this DrawingML shape supposed to be processed as WPG?
 
     drawingml::ShapePtr mpShape;
     std::shared_ptr< vml::Drawing > mpDrawing;
