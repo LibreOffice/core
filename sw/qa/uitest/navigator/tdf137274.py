@@ -52,6 +52,10 @@ class tdf137274(UITestCase):
             # wait until the second comment is available
             self.ui_test.wait_until_child_is_available('Comment2')
 
+            # xComments needs reassigned after content tree change
+            xComments = xContentTree.getChild('10')
+            self.assertEqual('Comments', get_state_as_dict(xComments)['Text'])
+
             xComments.executeAction("EXPAND", tuple())
 
             # Without the fix in place, this test would have failed with AssertionError: 2 != 0

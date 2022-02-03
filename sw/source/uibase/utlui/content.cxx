@@ -433,17 +433,17 @@ void SwContentType::Invalidate()
     m_bDataValid = false;
 }
 
-void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
+void SwContentType::FillMemberList(bool* pbContentChanged)
 {
     std::unique_ptr<SwContentArr> pOldMember;
     size_t nOldMemberCount = 0;
     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
-    if(m_pMember && pbLevelOrVisibilityChanged)
+    if(m_pMember && pbContentChanged)
     {
         pOldMember = std::move(m_pMember);
         nOldMemberCount = pOldMember->size();
         m_pMember.reset( new SwContentArr );
-        *pbLevelOrVisibilityChanged = false;
+        *pbContentChanged = false;
     }
     else if(!m_pMember)
         m_pMember.reset( new SwContentArr );
@@ -475,11 +475,11 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
             // need to check level and equal entry number after creation due to possible outline
             // nodes in frames, headers, footers
-            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
+            if (pOldMember)
             {
                 if (pOldMember->size() != m_pMember->size())
                 {
-                    *pbLevelOrVisibilityChanged = true;
+                    *pbContentChanged = true;
                     break;
                 }
                 for (size_t i = 0; i < pOldMember->size(); i++)
@@ -487,7 +487,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     if (static_cast<SwOutlineContent*>((*pOldMember)[i].get())->GetOutlineLevel() !=
                             static_cast<SwOutlineContent*>((*m_pMember)[i].get())->GetOutlineLevel())
                     {
-                        *pbLevelOrVisibilityChanged = true;
+                        *pbContentChanged = true;
                         break;
                     }
                 }
@@ -518,13 +518,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 m_pMember->insert(std::move(pCnt));
             }
 
-            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
+            if (pOldMember)
             {
                 // need to check visibility (and equal entry number) after
                 // creation due to a sorted list being used here (before,
                 // entries with same index were compared already at creation
                 // time what worked before a sorted list was used)
-                *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                *pbContentChanged = checkVisibilityChanged(
                     *pOldMember,
                     *m_pMember);
             }
@@ -570,13 +570,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                 m_pMember->insert(std::unique_ptr<SwContent>(pCnt));
             }
 
-            if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
+            if (pOldMember)
             {
                 // need to check visibility (and equal entry number) after
                 // creation due to a sorted list being used here (before,
                 // entries with same index were compared already at creation
                 // time what worked before a sorted list was used)
-                *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                *pbContentChanged = checkVisibilityChanged(
                     *pOldMember,
                     *m_pMember);
             }
@@ -749,13 +749,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     m_pMember->insert(std::move(pCnt));
                 }
 
-                if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
+                if (pOldMember)
                 {
                     // need to check visibility (and equal entry number) after
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
                     // time what worked before a sorted list was used)
-                    *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                    *pbContentChanged = checkVisibilityChanged(
                         *pOldMember,
                         *m_pMember);
                 }
@@ -794,10 +794,9 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
 
                 m_pMember->insert( std::unique_ptr<SwContent>(pCnt) );
                 const size_t nPos = m_pMember->size() - 1;
-                if(nOldMemberCount > nPos &&
-                    (*pOldMember)[nPos]->IsInvisible()
-                            != pCnt->IsInvisible())
-                        *pbLevelOrVisibilityChanged = true;
+                if (pOldMember && !*pbContentChanged && nOldMemberCount > nPos &&
+                        (*pOldMember)[nPos]->IsInvisible() != pCnt->IsInvisible())
+                    *pbContentChanged = true;
             }
         }
         break;
@@ -854,13 +853,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
                     }
                 }
 
-                if (pOldMember && nullptr != pbLevelOrVisibilityChanged)
+                if (pOldMember)
                 {
                     // need to check visibility (and equal entry number) after
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
                     // time what worked before a sorted list was used)
-                    *pbLevelOrVisibilityChanged = checkVisibilityChanged(
+                    *pbContentChanged = checkVisibilityChanged(
                         *pOldMember,
                         *m_pMember);
                 }
@@ -870,6 +869,8 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         default: break;
     }
     m_nMemberCount = m_pMember->size();
+    if (pOldMember && !*pbContentChanged && pOldMember->size() != m_nMemberCount)
+        *pbContentChanged = true;
 
     m_bDataValid = true;
 }
