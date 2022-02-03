@@ -45,6 +45,7 @@
 #include <unomodel.hxx>
 #include "unopool.hxx"
 #include <sfx2/lokhelper.hxx>
+#include <sfx2/dispatch.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -125,6 +126,8 @@
 #include <tools/diagnose_ex.h>
 #include <tools/json_writer.hxx>
 #include <tools/UnitConversion.hxx>
+
+#include <app.hrc>
 
 #define TWIPS_PER_PIXEL 15
 
@@ -2331,10 +2334,19 @@ void SdXImpressDocument::setPart( int nPart, bool bAllowChangeFocus )
 
 int SdXImpressDocument::getParts()
 {
-    // TODO: master pages?
-    // Read: drviews1.cxx
     if (!mpDoc)
         return 0;
+
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return 0;
+
+    const SfxPoolItem* xItem;
+    pViewSh->GetDispatcher()->QueryState(SID_SLIDE_MASTER_MODE, xItem);
+
+    const SfxBoolItem* isMasterViewMode = dynamic_cast<const SfxBoolItem*>(xItem);
+    if (isMasterViewMode->GetValue())
+        return mpDoc->GetMasterSdPageCount(PageKind::Standard);
 
     return mpDoc->GetSdPageCount(PageKind::Standard);
 }
@@ -2350,7 +2362,21 @@ int SdXImpressDocument::getPart()
 
 OUString SdXImpressDocument::getPartName( int nPart )
 {
-    SdPage* pPage = mpDoc->GetSdPage( nPart, PageKind::Standard );
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return OUString();
+
+    const SfxPoolItem* xItem;
+    pViewSh->GetDispatcher()->QueryState(SID_SLIDE_MASTER_MODE, xItem);
+
+    const SfxBoolItem* isMasterViewMode = dynamic_cast<const SfxBoolItem*>(xItem);
+
+    SdPage* pPage;
+    if (isMasterViewMode->GetValue())
+        pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Standard);
+    else
+        pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+
     if (!pPage)
     {
         SAL_WARN("sd", "DrawViewShell not available!");
@@ -2362,7 +2388,21 @@ OUString SdXImpressDocument::getPartName( int nPart )
 
 OUString SdXImpressDocument::getPartHash( int nPart )
 {
-    SdPage* pPage = mpDoc->GetSdPage( nPart, PageKind::Standard );
+    DrawViewShell* pViewSh = GetViewShell();
+    if (!pViewSh)
+        return OUString();
+
+    const SfxPoolItem* xItem;
+    pViewSh->GetDispatcher()->QueryState(SID_SLIDE_MASTER_MODE, xItem);
+
+    const SfxBoolItem* isMasterViewMode = dynamic_cast<const SfxBoolItem*>(xItem);
+
+    SdPage* pPage;
+    if (isMasterViewMode->GetValue())
+        pPage = mpDoc->GetMasterSdPage(nPart, PageKind::Standard);
+    else
+        pPage = mpDoc->GetSdPage(nPart, PageKind::Standard);
+
     if (!pPage)
     {
         SAL_WARN("sd", "DrawViewShell not available!");
