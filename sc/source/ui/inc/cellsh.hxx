@@ -57,7 +57,7 @@ private:
     bool        HasClipboardFormat( SotClipboardFormatId nFormatId );
     void        ExecuteExternalSource(
                     const OUString& _rFile, const OUString& _rFilter, const OUString& _rOptions,
-                    const OUString& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest );
+                    const OUString& _rSource, sal_Int32 _nRefreshDelaySeconds, SfxRequest& _rRequest );
 
     void ExecuteDataPilotDialog();
     void ExecuteXMLSourceDialog();

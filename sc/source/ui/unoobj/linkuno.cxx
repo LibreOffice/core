@@ -146,7 +146,7 @@ void SAL_CALL ScSheetLinkObj::refresh()
     SolarMutexGuard aGuard;
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
-        pLink->Refresh( pLink->GetFileName(), pLink->GetFilterName(), nullptr, pLink->GetRefreshDelay() );
+        pLink->Refresh( pLink->GetFileName(), pLink->GetFilterName(), nullptr, pLink->GetRefreshDelaySeconds() );
 }
 
 void SAL_CALL ScSheetLinkObj::addRefreshListener(
@@ -316,7 +316,7 @@ void ScSheetLinkObj::setFilter(const OUString& rFilter)
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
     {
-        pLink->Refresh( aFileName, rFilter, nullptr, pLink->GetRefreshDelay() );
+        pLink->Refresh( aFileName, rFilter, nullptr, pLink->GetRefreshDelaySeconds() );
     }
 }
 
@@ -337,7 +337,7 @@ void ScSheetLinkObj::setFilterOptions(const OUString& FilterOptions)
     if (pLink)
     {
         OUString aOptStr(FilterOptions);
-        pLink->Refresh( aFileName, pLink->GetFilterName(), &aOptStr, pLink->GetRefreshDelay() );
+        pLink->Refresh( aFileName, pLink->GetFilterName(), &aOptStr, pLink->GetRefreshDelaySeconds() );
     }
 }
 
@@ -347,7 +347,7 @@ sal_Int32 ScSheetLinkObj::getRefreshDelay() const
     sal_Int32 nRet = 0;
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
-        nRet = static_cast<sal_Int32>(pLink->GetRefreshDelay());
+        nRet = pLink->GetRefreshDelaySeconds();
     return nRet;
 }
 
@@ -623,7 +623,7 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
     OUString aOptions (pLink->GetOptions());
     OUString aSource  (pLink->GetSource());
     ScRange aDest   (pLink->GetDestArea());
-    sal_uLong nRefresh  = pLink->GetRefreshDelay();
+    sal_Int32 nRefreshDelaySeconds  = pLink->GetRefreshDelaySeconds();
 
     //! Undo delete
     //! Undo merge
@@ -649,14 +649,14 @@ void ScAreaLinkObj::Modify_Impl( const OUString* pNewFile, const OUString* pNewF
         bFitBlock = false;  // new range was specified -> do not move the content
     }
     pDocShell->GetDocFunc().InsertAreaLink( aFile, aFilter, aOptions, aSource,
-                                            aDest, nRefresh, bFitBlock, true );
+                                            aDest, nRefreshDelaySeconds, bFitBlock, true );
 }
 
-void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefresh )
+void ScAreaLinkObj::ModifyRefreshDelay_Impl( sal_Int32 nRefreshDelaySeconds )
 {
     ScAreaLink* pLink = lcl_GetAreaLink( pDocShell, nPos );
     if( pLink )
-        pLink->SetRefreshDelay( static_cast<sal_uLong>(nRefresh) );
+        pLink->SetRefreshDelay( nRefreshDelaySeconds );
 }
 
 // XRefreshable
@@ -666,7 +666,7 @@ void SAL_CALL ScAreaLinkObj::refresh()
     SolarMutexGuard aGuard;
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
-        pLink->Refresh( pLink->GetFile(), pLink->GetFilter(), pLink->GetSource(), pLink->GetRefreshDelay() );
+        pLink->Refresh( pLink->GetFile(), pLink->GetFilter(), pLink->GetSource(), pLink->GetRefreshDelaySeconds() );
 }
 
 void SAL_CALL ScAreaLinkObj::addRefreshListener(
@@ -828,7 +828,7 @@ sal_Int32 ScAreaLinkObj::getRefreshDelay() const
     sal_Int32 nRet = 0;
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
-        nRet = static_cast<sal_Int32>(pLink->GetRefreshDelay());
+        nRet = pLink->GetRefreshDelaySeconds();
     return nRet;
 }
 
@@ -921,7 +921,7 @@ void SAL_CALL ScAreaLinksObj::insertAtPosition( const table::CellAddress& aDestP
         aFileStr = ScGlobal::GetAbsDocName( aFileStr, pDocShell );  //! in InsertAreaLink ???
         pDocShell->GetDocFunc().InsertAreaLink( aFileStr, aFilter, aFilterOptions,
                                                 aSourceArea, ScRange(aDestAddr),
-                                                0, false, true ); // don't move contents
+                                                /*nRefreshDelaySeconds*/0, false, true ); // don't move contents
     }
 }
 

@@ -153,10 +153,10 @@ struct ScMyAreaLink
     OUString             sFilterOptions;
     OUString             sURL;
     OUString             sSourceStr;
-    ScRange                     aDestRange;
-    sal_Int32                   nRefresh;
+    ScRange              aDestRange;
+    sal_Int32            nRefreshDelaySeconds;
 
-    ScMyAreaLink() : nRefresh( 0 ) {}
+    ScMyAreaLink() : nRefreshDelaySeconds( 0 ) {}
 
     sal_Int32            GetColCount() const { return aDestRange.aEnd.Col() - aDestRange.aStart.Col() + 1; }
     sal_Int32            GetRowCount() const { return aDestRange.aEnd.Row() - aDestRange.aStart.Row() + 1; }

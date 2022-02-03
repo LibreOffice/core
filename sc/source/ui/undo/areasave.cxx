@@ -30,7 +30,7 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
     aOptions    ( rSource.GetOptions() ),
     aSourceArea ( rSource.GetSource() ),
     aDestArea   ( rSource.GetDestArea() ),
-    nRefresh    ( rSource.GetRefreshDelay() )       // seconds
+    nRefreshDelaySeconds ( rSource.GetRefreshDelaySeconds() )       // seconds
 {
 }
 
@@ -40,7 +40,7 @@ bool ScAreaLinkSaver::IsEqualSource( const ScAreaLink& rCompare ) const
              aFilterName == rCompare.GetFilter() &&
              aOptions == rCompare.GetOptions() &&
              aSourceArea == rCompare.GetSource() &&
-             nRefresh == rCompare.GetRefreshDelay() );
+             nRefreshDelaySeconds == rCompare.GetRefreshDelaySeconds() );
 }
 
 bool ScAreaLinkSaver::IsEqual( const ScAreaLink& rCompare ) const
@@ -64,7 +64,7 @@ void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
     if ( pLinkManager && pObjSh )
     {
         ScAreaLink* pLink = new ScAreaLink( pObjSh, aFileName, aFilterName, aOptions,
-                                            aSourceArea, aDestArea.aStart, nRefresh );
+                                            aSourceArea, aDestArea.aStart, nRefreshDelaySeconds );
         pLink->SetInCreate( true );
         pLink->SetDestArea( aDestArea );
         OUString aTmp1(aFilterName), aTmp2(aSourceArea);

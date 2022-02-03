@@ -2697,7 +2697,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     OUString aFilter;
                     OUString aOptions;
                     OUString aSource;
-                    sal_uLong nRefresh=0;
+                    sal_Int32 nRefreshDelaySeconds=0;
 
                     aFile = pFile->GetValue();
                     aSource = pSource->GetValue();
@@ -2709,9 +2709,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         aOptions = pOptions->GetValue();
                     const SfxUInt32Item* pRefresh = rReq.GetArg<SfxUInt32Item>(FN_PARAM_2);
                     if ( pRefresh )
-                        nRefresh = pRefresh->GetValue();
+                        nRefreshDelaySeconds = pRefresh->GetValue();
 
-                    ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefresh, rReq );
+                    ExecuteExternalSource( aFile, aFilter, aOptions, aSource, nRefreshDelaySeconds, rReq );
                 }
                 else
                 {
@@ -2723,14 +2723,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     delete pImpl->m_pRequest;
                     pImpl->m_pRequest = new SfxRequest( rReq );
                     OUString sFile, sFilter, sOptions, sSource;
-                    sal_uLong nRefresh = 0;
+                    sal_Int32 nRefreshDelaySeconds = 0;
                     if (pImpl->m_pLinkedDlg->Execute() == RET_OK)
                     {
                         sFile = pImpl->m_pLinkedDlg->GetURL();
                         sFilter = pImpl->m_pLinkedDlg->GetFilter();
                         sOptions = pImpl->m_pLinkedDlg->GetOptions();
                         sSource = pImpl->m_pLinkedDlg->GetSource();
-                        nRefresh = pImpl->m_pLinkedDlg->GetRefresh();
+                        nRefreshDelaySeconds = pImpl->m_pLinkedDlg->GetRefreshDelaySeconds();
                         if ( !sFile.isEmpty() )
                             pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_NAME, sFile ) );
                         if ( !sFilter.isEmpty() )
@@ -2739,11 +2739,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pImpl->m_pRequest->AppendItem( SfxStringItem( SID_FILE_FILTEROPTIONS, sOptions ) );
                         if ( !sSource.isEmpty() )
                             pImpl->m_pRequest->AppendItem( SfxStringItem( FN_PARAM_1, sSource ) );
-                        if ( nRefresh )
-                            pImpl->m_pRequest->AppendItem( SfxUInt32Item( FN_PARAM_2, nRefresh ) );
+                        if ( nRefreshDelaySeconds )
+                            pImpl->m_pRequest->AppendItem( SfxUInt32Item( FN_PARAM_2, nRefreshDelaySeconds ) );
                     }
 
-                    ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
+                    ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefreshDelaySeconds, *(pImpl->m_pRequest) );
                 }
             }
             break;
@@ -2945,7 +2945,7 @@ void ScCellShell::ExecuteRotateTrans( const SfxRequest& rReq )
 
 void ScCellShell::ExecuteExternalSource(
     const OUString& _rFile, const OUString& _rFilter, const OUString& _rOptions,
-    const OUString& _rSource, sal_uLong _nRefresh, SfxRequest& _rRequest )
+    const OUString& _rSource, sal_Int32 _nRefreshDelaySeconds, SfxRequest& _rRequest )
 {
     if ( !_rFile.isEmpty() && !_rSource.isEmpty() )         // filter may be empty
     {
@@ -2964,7 +2964,7 @@ void ScCellShell::ExecuteExternalSource(
             aLinkRange = ScRange( rData.GetCurX(), rData.GetCurY(), rData.GetTabNo() );
 
         rData.GetDocFunc().InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
-                                            aLinkRange, _nRefresh, bMove, false );
+                                            aLinkRange, _nRefreshDelaySeconds, bMove, false );
         _rRequest.Done();
     }
     else

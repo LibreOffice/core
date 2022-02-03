@@ -2082,7 +2082,7 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const OUString& aPropert
         }
         else if (aPropertyName == SC_UNONAME_REFPERIOD )
         {
-            sal_Int32 nRefresh(GetDBData_Impl()->GetRefreshDelay());
+            sal_Int32 nRefresh(GetDBData_Impl()->GetRefreshDelaySeconds());
             aRet <<= nRefresh;
         }
         else if (aPropertyName == SC_UNONAME_CONRES )

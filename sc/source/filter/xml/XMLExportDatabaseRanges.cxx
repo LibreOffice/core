@@ -256,12 +256,12 @@ private:
         if (!aSortParam.bByRow)
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_ORIENTATION, XML_COLUMN);
 
-        sal_Int32 nRefresh = rData.GetRefreshDelay();
-        if (nRefresh)
+        sal_Int32 nRefreshDelaySeconds = rData.GetRefreshDelaySeconds();
+        if (nRefreshDelaySeconds)
         {
             OUStringBuffer aBuf;
             ::sax::Converter::convertDuration(aBuf,
-                static_cast<double>(nRefresh) / 86400.0);
+                static_cast<double>(nRefreshDelaySeconds) / 86400.0);
             mrExport.AddAttribute(XML_NAMESPACE_TABLE, XML_REFRESH_DELAY, aBuf.makeStringAndClear());
         }
 
