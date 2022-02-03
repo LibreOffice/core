@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c02622dd_270d1778",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-03T06:52:13Z",
+      "side": 1,
+      "message": "Hi Lubos,\nI feel that https://gerrit.libreoffice.org/c/core/+/89626 forgot to set needsInit to false after initializing, so it likely had been a no-change after all. Or maybe I overlook something - could you please check this change? Thanks!",
+      "revId": "cd1572917837ec7f3a5e11a7e31984df49e4127a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
