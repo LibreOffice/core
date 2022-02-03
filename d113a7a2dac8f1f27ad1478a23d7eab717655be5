@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "cde711d5_776edc2c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T16:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0afa836_761b59ec",
+      "range": {
+        "startLine": 9,
+        "startChar": 37,
+        "endLine": 9,
+        "endChar": 43
+      },
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "c52e445d_919d18af",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -76,6 +100,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "266473e8_6fbdb20c",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T16:00:18Z",
+      "side": 1,
+      "message": "Yes, exactly. They are both \"壹, 贰, 叁, ...\".",
+      "parentUuid": "46ec83b2_ac813b9a",
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95be1c24_f7793fe4",
@@ -89,6 +131,24 @@
       "writtenOn": "2022-02-03T15:02:47Z",
       "side": 1,
       "message": "A short code comment why this is literally defined here (all other CJK entries don\u0027t) would be nice for follow-up coders.. something like \"Defined here to maintain compatibility with older releases.\" or some such.",
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bb7c601_7e6e6661",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T16:00:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95be1c24_f7793fe4",
       "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
