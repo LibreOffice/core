@@ -916,13 +916,10 @@ void drawIconSets(vcl::RenderContext& rRenderContext, const ScIconSetInfo* pOldI
 
     if (pOldIconSetInfo->mnHeight)
     {
-        if (bWorksInPixels)
+        if (bWorksInPixels && comphelper::LibreOfficeKit::isActive()) //FIXME
         {
             aHeight = rRenderContext.LogicToPixel(Size(0, pOldIconSetInfo->mnHeight), MapMode(MapUnit::MapTwip)).Height();
-            if (comphelper::LibreOfficeKit::isActive())
-            {
-                aHeight *= comphelper::LibreOfficeKit::getDPIScale();
-            }
+            aHeight *= comphelper::LibreOfficeKit::getDPIScale();
         }
         else
             aHeight = convertTwipToMm100(pOldIconSetInfo->mnHeight);
