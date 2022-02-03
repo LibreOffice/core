@@ -10,7 +10,6 @@
 #pragma once
 
 #include <svl/hint.hxx>
-#include <memory>
 
 class ScDocument;
 

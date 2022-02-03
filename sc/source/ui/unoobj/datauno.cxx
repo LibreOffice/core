@@ -21,7 +21,6 @@
 
 #include <svl/hint.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/charclass.hxx>

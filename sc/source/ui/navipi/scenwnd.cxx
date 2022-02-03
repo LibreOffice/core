@@ -31,7 +31,6 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <helpids.h>
-#include <global.hxx>
 
 // class ScScenarioWindow ------------------------------------------------
 

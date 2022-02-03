@@ -25,7 +25,6 @@
 #include "scdllapi.h"
 
 #include <memory>
-#include <optional>
 #include <string_view>
 
 class EditTextObject;

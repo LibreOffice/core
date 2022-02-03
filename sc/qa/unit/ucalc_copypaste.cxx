@@ -20,6 +20,8 @@
 #include <editeng/brushitem.hxx>
 #include <editutil.hxx>
 #include <formulacell.hxx>
+#include <iostream>
+#include <patattr.hxx>
 #include <postit.hxx>
 #include <queryparam.hxx>
 #include <refundo.hxx>
@@ -27,7 +29,10 @@
 #include <scitems.hxx>
 #include <scopetools.hxx>
 
+#include <test/bootstrapfixture.hxx>
 #include <sfx2/docfile.hxx>
+
+#include <memory>
 
 class TestCopyPaste : public test::BootstrapFixture
 {

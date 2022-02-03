@@ -31,7 +31,6 @@
 #include <unotools/useroptions.hxx>
 
 #include <editutil.hxx>
-#include <global.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
 

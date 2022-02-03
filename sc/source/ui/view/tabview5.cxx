@@ -53,7 +53,6 @@
 
 #include <comphelper/lok.hxx>
 #include <officecfg/Office/Calc.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 using namespace com::sun::star;
 

@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 
 #include <globstr.hrc>
 #include <scresid.hxx>
