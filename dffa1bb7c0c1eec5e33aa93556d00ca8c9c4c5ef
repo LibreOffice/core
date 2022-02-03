@@ -51,6 +51,42 @@
       "parentUuid": "e534080c_0db8e9a6",
       "revId": "dffa1bb7c0c1eec5e33aa93556d00ca8c9c4c5ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc4f7c1b_c59b665a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T10:14:04Z",
+      "side": 1,
+      "message": "No, the first three numbers (1,2,3) are the same before and after this change.",
+      "parentUuid": "f0a5e3ec_883f29f8",
+      "revId": "dffa1bb7c0c1eec5e33aa93556d00ca8c9c4c5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fd8830b_483f180c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T10:14:04Z",
+      "side": 1,
+      "message": "I wonder whether it is really needed. We already have the following in line 754:\n          case NUMBER_LOWER_ZH:\n                natNum \u003d NativeNumberMode::NATNUM12;\n                locale.Language \u003d \"zh\";\n                break;\n\nThus it is always fixed to \"一,二,三\" no matter what the system locale or the current libreoffice locale is set. But anyway, I will change the pSymbol of NUMBER_LOWER_ZH to \"一,二,三\" per your suggestion.",
+      "parentUuid": "f0a5e3ec_883f29f8",
+      "revId": "dffa1bb7c0c1eec5e33aa93556d00ca8c9c4c5ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
