@@ -16,6 +16,23 @@
       "message": "By comparing with other tests, I noticed these 2 missing lines at the end of the test added:\ncss::uno::Reference\u003ccss::util::XCloseable\u003e xCloseable(xComponent, css::uno::UNO_QUERY_THROW);\nxCloseable-\u003eclose(true);\n",
       "revId": "cd2966386fba7d6cfca62f40be4387632a40dfee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82df1e1a_358e0082",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-03T05:13:27Z",
+      "side": 1,
+      "message": "Great!\n\nSorry for late reply. Thank you Julien! Looks great now.",
+      "revId": "cd2966386fba7d6cfca62f40be4387632a40dfee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
