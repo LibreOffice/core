@@ -16,6 +16,24 @@
       "message": "It looks like this comes from void SvxSearchDialog::Construct_Impl()\n    const SfxPoolItem* ppArgs[] \u003d { pSearchItem.get(), nullptr };\n\nSo it spent at least a part of its life as a unique_ptr. But I wouldn\u0027t want to try to fudge this into a shared_ptr - not that I even know how to do that.",
       "revId": "b6f9d62441a79ab0219b9b0b6bde88aa87758e6d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5a94c01_a5368cc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-03T10:39:10Z",
+      "side": 1,
+      "message": "I think Clone() is fine, but then I assume mpSearchItem then needs to become a std::unique_ptr\u003cSvxSearchItem\u003e to avoid a leak",
+      "parentUuid": "291b2bef_3fdbc737",
+      "revId": "b6f9d62441a79ab0219b9b0b6bde88aa87758e6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
