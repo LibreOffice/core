@@ -26,8 +26,6 @@
 #include <osl/diagnose.h>
 #include <svl/itemset.hxx>
 
-#include <global.hxx>
-
 void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
 {
     sal_uInt8   nIntIndex = nIndex & 0x07;

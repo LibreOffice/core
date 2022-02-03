@@ -51,7 +51,6 @@
 #include <sot/formats.hxx>
 #include <comphelper/classids.hxx>
 
-#include <svx/drawitem.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>

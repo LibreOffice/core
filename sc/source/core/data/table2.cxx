@@ -50,7 +50,6 @@
 #include <rowheightcontext.hxx>
 #include <listenercontext.hxx>
 #include <compressedarray.hxx>
-#include <brdcst.hxx>
 #include <refdata.hxx>
 #include <docsh.hxx>
 

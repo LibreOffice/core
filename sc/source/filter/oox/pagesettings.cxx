@@ -46,7 +46,6 @@
 #include <oox/core/filterbase.hxx>
 #include <oox/core/relations.hxx>
 #include <stylesbuffer.hxx>
-#include <unitconverter.hxx>
 #include <document.hxx>
 #include <biffhelper.hxx>
 #include <filter/msfilter/util.hxx>

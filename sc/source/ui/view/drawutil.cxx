@@ -24,7 +24,6 @@
 
 #include <drawutil.hxx>
 #include <document.hxx>
-#include <global.hxx>
 #include <viewdata.hxx>
 
 void ScDrawUtil::CalcScale( const ScDocument& rDoc, SCTAB nTab,

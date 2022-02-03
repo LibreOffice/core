@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 /* Resource file for the function wizard / autopilot.

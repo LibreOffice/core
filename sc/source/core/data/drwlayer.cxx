@@ -73,7 +73,6 @@
 #include <table.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 
-#include <vcl/fieldvalues.hxx>
 #include <memory>
 #include <algorithm>
 #include <cstdlib>

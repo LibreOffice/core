@@ -29,7 +29,6 @@
 #include <unotools/fontdefs.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <xestream.hxx>
-#include <global.hxx>
 #include <formula/errorcodes.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>

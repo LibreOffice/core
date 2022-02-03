@@ -22,9 +22,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/whiter.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
-#include <svl/ctloptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <tools/UnitConversion.hxx>
 

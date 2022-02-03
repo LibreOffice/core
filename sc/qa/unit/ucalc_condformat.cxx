@@ -9,6 +9,9 @@
 
 #include "helper/qahelper.hxx"
 
+#include <conditio.hxx>
+#include <colorscale.hxx>
+
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <docfunc.hxx>
