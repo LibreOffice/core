@@ -89,6 +89,8 @@ static bool readWebp(SvStream& stream, Graphic& graphic)
     }
 
     BitmapScopedWriteAccess access(bitmap);
+    if (!access)
+        return false;
     // If data cannot be read directly into the bitmap, read data first to this buffer and then convert.
     std::vector<uint8_t> tmpRgbaData;
     enum class PixelMode
