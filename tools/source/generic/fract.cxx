@@ -182,6 +182,9 @@ namespace
         sal_Int32 gcd1 = std::gcd(i.numerator(), den);
         sal_Int32 gcd2 = std::gcd(num, i.denominator());
 
+        if (!gcd1 || !gcd2)
+            return true;
+
         bool fail = false;
         fail |= o3tl::checked_multiply(i.numerator() / gcd1, num / gcd2, num);
         fail |= o3tl::checked_multiply(i.denominator() / gcd2, den / gcd1, den);
