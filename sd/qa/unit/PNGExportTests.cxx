@@ -47,6 +47,16 @@ void SdPNGExportTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+static void assertColorsAreSimilar(const BitmapColor& expected, const BitmapColor& actual,
+                                   int nDelta)
+{
+    // Check that the two colors match or are reasonably similar.
+    if (expected.GetColorError(actual) <= nDelta)
+        return;
+
+    CPPUNIT_ASSERT_EQUAL(expected, actual);
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 {
     mxComponent
@@ -80,6 +90,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
     CPPUNIT_ASSERT_EQUAL(Size(193, 193), aSize);
 
     // Check all borders are red
+    // use assertColorsAreSimilar since the color might differ a little bit on mac
     Bitmap aBMP = aBMPEx.GetBitmap();
     {
         Bitmap::ScopedReadAccess pReadAccess(aBMP);
@@ -88,27 +99,21 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
             const Color aColorTop = pReadAccess->GetColor(nX, 0);
             const Color aColorBottom = pReadAccess->GetColor(nX, aSize.Height() - 1);
 
-            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorTop);
+            assertColorsAreSimilar(COL_LIGHTRED, aColorTop, 5);
 
             // Without the fix in place, this test would have failed with
             // - Expected: Color: R:255 G:0 B:0 A:0
             // - Actual  : Color: R:9 G:9 B:9 A:0
-            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorBottom);
+            assertColorsAreSimilar(COL_LIGHTRED, aColorBottom, 5);
         }
 
         for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
         {
             const Color aColorLeft = pReadAccess->GetColor(0, nY);
-            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorLeft);
-
-#if !defined(MACOSX)
-            // FIXME: Jenkins fails on mac with
-            // - Expected: Color: R:255 G:0 B:0 A:0
-            // - Actual  : Color: R:255 G:2 B:2 A:0
-
             const Color aColorRight = pReadAccess->GetColor(aSize.Width() - 1, nY);
-            CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColorRight);
-#endif
+
+            assertColorsAreSimilar(COL_LIGHTRED, aColorLeft, 5);
+            assertColorsAreSimilar(COL_LIGHTRED, aColorRight, 5);
         }
     }
 }
