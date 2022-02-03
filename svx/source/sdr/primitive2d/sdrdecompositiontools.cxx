@@ -72,10 +72,8 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
     // means to use the text distance values here
     // If the margin is larger than the entire width of the text area, then limit the
     // margin.
-    const double fTextLeftDistance
-        = std::min(static_cast<double>(rText.getTextLeftDistance()), fWidthForText);
-    const double nTextRightDistance
-        = std::min(static_cast<double>(rText.getTextRightDistance()), fWidthForText);
+    const double fTextLeftDistance = fWidthForText ? rText.getTextLeftDistance() : 0;
+    const double nTextRightDistance = fWidthForText ? rText.getTextRightDistance() : 0;
     double fDistanceForTextL, fDistanceForTextT, fDistanceForTextR, fDistanceForTextB;
     if (!bVerticalWriting)
     {
