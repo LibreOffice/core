@@ -22,8 +22,6 @@
 #include "xmlconti.hxx"
 #include "XMLTableShapeImportHelper.hxx"
 
-#include <xmloff/xmltkmap.hxx>
-#include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
 

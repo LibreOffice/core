@@ -29,6 +29,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <formula/errorcodes.hxx>
 #include <vcl/stdtext.hxx>
+#include <vcl/syswin.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>

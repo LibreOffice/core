@@ -18,7 +18,6 @@
  */
 
 #include <algorithm>
-#include <memory>
 #include <detdata.hxx>
 #include <refupdat.hxx>
 

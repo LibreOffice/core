@@ -24,7 +24,6 @@
 #include "queryentry.hxx"
 #include "types.hxx"
 
-#include <memory>
 #include <vector>
 #include <ostream>
 
