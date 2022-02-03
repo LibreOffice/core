@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e458b87_fd486138",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-03T16:47:28Z",
+      "side": 1,
+      "message": "@Hossein is this patch ready to be merged?",
+      "revId": "f487c23aa5eec65437e15bd97ad4768061eb2836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
