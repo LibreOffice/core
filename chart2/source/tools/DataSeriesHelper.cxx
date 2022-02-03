@@ -24,6 +24,7 @@
 #include <unonames.hxx>
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -200,6 +201,18 @@ OUString getRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xL
     return aRet;
 }
 
+OUString getRole( const rtl::Reference< ::chart::LabeledDataSequence >& xLabeledDataSequence )
+{
+    OUString aRet;
+    if( xLabeledDataSequence.is() )
+    {
+        Reference< beans::XPropertySet > xProp( xLabeledDataSequence->getValues(), uno::UNO_QUERY );
+        if( xProp.is() )
+            xProp->getPropertyValue( "Role" ) >>= aRet;
+    }
+    return aRet;
+}
+
 Reference< chart2::data::XLabeledDataSequence >
     getDataSequenceByRole(
         const Reference< chart2::data::XDataSource > & xSource,
@@ -233,6 +246,17 @@ std::vector< Reference< chart2::data::XLabeledDataSequence > >
     return aResultVec;
 }
 
+std::vector< rtl::Reference< LabeledDataSequence > >
+    getAllDataSequencesByRole( const std::vector< rtl::Reference< LabeledDataSequence > > & aDataSequences,
+                               const OUString& aRole )
+{
+    std::vector< rtl::Reference< LabeledDataSequence > > aResultVec;
+    std::copy_if( aDataSequences.begin(), aDataSequences.end(),
+                           std::back_inserter( aResultVec ),
+                           lcl_MatchesRole(aRole, /*bMatchPrefix*/true) );
+    return aResultVec;
+}
+
 std::vector<Reference<css::chart2::data::XLabeledDataSequence> >
 getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& aSeries )
 {
@@ -251,32 +275,30 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
     return aSeqVec;
 }
 
-std::vector<Reference<css::chart2::data::XLabeledDataSequence> >
+std::vector<rtl::Reference<::chart::LabeledDataSequence> >
 getAllDataSequences( const std::vector<rtl::Reference<DataSeries> >& aSeries )
 {
-    std::vector< Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
+    std::vector< rtl::Reference< LabeledDataSequence > > aSeqVec;
 
     for( rtl::Reference<DataSeries> const & dataSeries : aSeries )
     {
-        const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( dataSeries->getDataSequences());
+        const std::vector< rtl::Reference< LabeledDataSequence > > & aSeq( dataSeries->getDataSequences2());
         aSeqVec.insert( aSeqVec.end(), aSeq.begin(), aSeq.end() );
     }
 
     return aSeqVec;
 }
 
-Reference< chart2::data::XDataSource >
+rtl::Reference< ::chart::DataSource >
     getDataSource( const Sequence< Reference< chart2::XDataSeries > > & aSeries )
 {
-    return Reference< chart2::data::XDataSource >(
-        new DataSource(comphelper::containerToSequence(getAllDataSequences(aSeries))));
+    return new DataSource(comphelper::containerToSequence(getAllDataSequences(aSeries)));
 }
 
-Reference< chart2::data::XDataSource >
+rtl::Reference< DataSource >
     getDataSource( const std::vector< rtl::Reference< DataSeries > > & aSeries )
 {
-    return Reference< chart2::data::XDataSource >(
-        new DataSource(comphelper::containerToSequence(getAllDataSequences(aSeries))));
+    return new DataSource(getAllDataSequences(aSeries));
 }
 
 namespace

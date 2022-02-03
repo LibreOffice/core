@@ -47,6 +47,7 @@ class OOO_DLLPUBLIC_CHARTTOOLS LabeledDataSequence final :
 {
 public:
     explicit LabeledDataSequence();
+    explicit LabeledDataSequence(const LabeledDataSequence &);
     explicit LabeledDataSequence(
         const css::uno::Reference< css::chart2::data::XDataSequence > & rValues );
     explicit LabeledDataSequence(

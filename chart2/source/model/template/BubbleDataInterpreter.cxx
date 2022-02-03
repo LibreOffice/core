@@ -55,9 +55,9 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
 
     std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
-    Reference< data::XLabeledDataSequence > xValuesX;
-    vector< Reference< data::XLabeledDataSequence > > aYValuesVector;
-    vector< Reference< data::XLabeledDataSequence > > aSizeValuesVector;
+    rtl::Reference< LabeledDataSequence > xValuesX;
+    vector< rtl::Reference< LabeledDataSequence > > aYValuesVector;
+    vector< rtl::Reference< LabeledDataSequence > > aSizeValuesVector;
 
     rtl::Reference< LabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
@@ -90,7 +90,7 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
             }
             else if( !xValuesX.is() && bSetXValues )
             {
-                xValuesX.set( aData[nDataIdx] );
+                xValuesX = aData[nDataIdx];
                 if( xValuesX.is())
                     SetRole( xValuesX->getValues(), "values-x");
             }
@@ -120,16 +120,15 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
     vector< Reference< XDataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSizeValuesVector.size());
 
-    Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
-    Reference< util::XCloneable > xCloneableX( xValuesX, uno::UNO_QUERY );
+    rtl::Reference< LabeledDataSequence > xClonedXValues = xValuesX;
 
     for( size_t nN = 0; nN < aSizeValuesVector.size(); ++nN, ++nSeriesIndex )
     {
-        vector< Reference< data::XLabeledDataSequence > > aNewData;
+        vector< rtl::Reference< LabeledDataSequence > > aNewData;
         if( xValuesX.is() )
         {
-            if( nN > 0 && xCloneableX.is() )
-                xClonedXValues.set( xCloneableX->createClone(), uno::UNO_QUERY );
+            if( nN > 0  )
+                xClonedXValues = new LabeledDataSequence(*xValuesX);
             aNewData.push_back( xClonedXValues );
         }
         if( aYValuesVector.size() > nN )

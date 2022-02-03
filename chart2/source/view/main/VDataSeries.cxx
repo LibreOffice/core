@@ -28,6 +28,7 @@
 #include <ChartTypeHelper.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <unonames.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -163,14 +164,11 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
 {
     m_xDataSeriesProps = m_xDataSeries;
 
-    uno::Sequence< uno::Reference<
-        chart2::data::XLabeledDataSequence > > aDataSequences =
-            m_xDataSeries->getDataSequences();
+    const std::vector< rtl::Reference< LabeledDataSequence > > & aDataSequences =
+            m_xDataSeries->getDataSequences2();
 
-    for(sal_Int32 nN = aDataSequences.getLength();nN--;)
+    for(sal_Int32 nN = aDataSequences.size();nN--;)
     {
-        if(!aDataSequences[nN].is())
-            continue;
         uno::Reference<data::XDataSequence>  xDataSequence( aDataSequences[nN]->getValues());
         uno::Reference<beans::XPropertySet> xProp(xDataSequence, uno::UNO_QUERY );
         if( xProp.is())

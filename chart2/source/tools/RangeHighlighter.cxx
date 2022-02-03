@@ -26,6 +26,7 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Diagram.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/chart2/ScaleData.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -271,8 +272,8 @@ void RangeHighlighter::fillRangesForDataPoint( const rtl::Reference< DataSeries 
 
     Color nPreferredColor = defaultPreferredColor;
     std::vector< chart2::data::HighlightedRange > aHilightedRanges;
-    const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLSeqSeq( xDataSeries->getDataSequences());
-    for( Reference< chart2::data::XLabeledDataSequence > const & labelDataSeq : aLSeqSeq )
+    const std::vector< rtl::Reference< LabeledDataSequence > > & aLSeqSeq( xDataSeries->getDataSequences2());
+    for( rtl::Reference< LabeledDataSequence > const & labelDataSeq : aLSeqSeq )
     {
         Reference< chart2::data::XDataSequence > xLabel( labelDataSeq->getLabel());
         Reference< chart2::data::XDataSequence > xValues( labelDataSeq->getValues());

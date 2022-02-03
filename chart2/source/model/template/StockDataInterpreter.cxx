@@ -88,16 +88,15 @@ InterpretedData StockDataInterpreter::interpretDataSource(
 
     sal_Int32 nNumberOfGroups( bHasVolume ? 2 : 1 );
     // sequences of data::XLabeledDataSequence per series per group
-    Sequence< Sequence< Sequence< Reference< data::XLabeledDataSequence > > > > aSequences( nNumberOfGroups );
-    auto pSequences = aSequences.getArray();
+    std::vector< std::vector< std::vector< rtl::Reference< LabeledDataSequence > > > > aSequences( nNumberOfGroups );
     const sal_Int32 nBarGroupIndex( 0 );
     const sal_Int32 nCandleStickGroupIndex( nNumberOfGroups - 1 );
 
     // allocate space for labeled sequences
     if( nRemaining > 0  )
         ++nCandleStickSeries;
-    pSequences[nCandleStickGroupIndex].realloc( nCandleStickSeries );
-    auto pCandleStickGroup = pSequences[nCandleStickGroupIndex].getArray();
+    aSequences[nCandleStickGroupIndex].resize( nCandleStickSeries );
+    auto & pCandleStickGroup = aSequences[nCandleStickGroupIndex];
     if( bHasVolume )
     {
         // if there are remaining sequences, the first one is taken for
@@ -105,9 +104,9 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         // is used
         if( nRemaining > 1 )
             ++nVolumeSeries;
-        pSequences[nBarGroupIndex].realloc( nVolumeSeries );
+        aSequences[nBarGroupIndex].resize( nVolumeSeries );
     }
-    auto pBarGroup = pSequences[nBarGroupIndex].getArray();
+    auto & pBarGroup = aSequences[nBarGroupIndex];
 
     // create data
     sal_Int32 nSourceIndex = 0;   // index into aData sequence
@@ -125,8 +124,8 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         // bar
         if( bHasVolume )
         {
-            pBarGroup[nLabeledSeqIdx].realloc( 1 );
-            pBarGroup[nLabeledSeqIdx].getArray()[0].set( aData[nSourceIndex] );
+            pBarGroup[nLabeledSeqIdx].resize( 1 );
+            pBarGroup[nLabeledSeqIdx][0] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-y");
             ++nSourceIndex;
@@ -135,30 +134,30 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         sal_Int32 nSeqIdx = 0;
         if( bHasOpenValues )
         {
-            pCandleStickGroup[nLabeledSeqIdx].realloc( 4 );
-            pCandleStickGroup[nLabeledSeqIdx].getArray()[nSeqIdx].set( aData[nSourceIndex] );
+            pCandleStickGroup[nLabeledSeqIdx].resize( 4 );
+            pCandleStickGroup[nLabeledSeqIdx][nSeqIdx] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-first");
             ++nSourceIndex;
             ++nSeqIdx;
         }
         else
-            pCandleStickGroup[nLabeledSeqIdx].realloc( 3 );
-        auto pLabeledSeq = pCandleStickGroup[nLabeledSeqIdx].getArray();
+            pCandleStickGroup[nLabeledSeqIdx].resize( 3 );
+        auto & pLabeledSeq = pCandleStickGroup[nLabeledSeqIdx];
 
-        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-min");
         ++nSourceIndex;
         ++nSeqIdx;
 
-        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-max");
         ++nSourceIndex;
         ++nSeqIdx;
 
-        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-last");
         ++nSourceIndex;
@@ -169,11 +168,11 @@ InterpretedData StockDataInterpreter::interpretDataSource(
     if( bHasVolume && nRemaining > 1 )
     {
         OSL_ASSERT( nVolumeSeries > nNumOfFullSeries );
-        pBarGroup[nVolumeSeries - 1].realloc( 1 );
+        pBarGroup[nVolumeSeries - 1].resize( 1 );
         OSL_ASSERT( nDataCount > nSourceIndex );
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-y");
-        pBarGroup[nVolumeSeries - 1].getArray()[0].set( aData[nSourceIndex] );
+        pBarGroup[nVolumeSeries - 1][0] = aData[nSourceIndex];
         ++nSourceIndex;
         --nRemaining;
         OSL_ENSURE( nRemaining, "additional bar should only be used if there is at least one more sequence for a candle stick" );
@@ -184,13 +183,13 @@ InterpretedData StockDataInterpreter::interpretDataSource(
     {
         OSL_ASSERT( nCandleStickSeries > nNumOfFullSeries );
         const sal_Int32 nSeriesIndex = nCandleStickSeries - 1;
-        pCandleStickGroup[nSeriesIndex].realloc( nRemaining );
-        auto pLabeledSeq = pCandleStickGroup[nSeriesIndex].getArray();
+        pCandleStickGroup[nSeriesIndex].resize( nRemaining );
+        auto & pLabeledSeq = pCandleStickGroup[nSeriesIndex];
         OSL_ASSERT( nDataCount > nSourceIndex );
 
         // 1. low
         sal_Int32 nSeqIdx( 0 );
-        pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
+        pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
         if( aData[nSourceIndex].is())
             SetRole( aData[nSourceIndex]->getValues(), "values-min");
         ++nSourceIndex;
@@ -199,7 +198,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         // 2. high
         if( nSeqIdx < nRemaining )
         {
-            pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
+            pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-max");
             ++nSourceIndex;
@@ -210,7 +209,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
         OSL_ENSURE( bHasOpenValues || nSeqIdx >= nRemaining, "could have created full series" );
         if( nSeqIdx < nRemaining )
         {
-            pLabeledSeq[nSeqIdx].set( aData[nSourceIndex] );
+            pLabeledSeq[nSeqIdx] = aData[nSourceIndex];
             if( aData[nSourceIndex].is())
                 SetRole( aData[nSourceIndex]->getValues(), "values-last");
             ++nSourceIndex;
@@ -227,7 +226,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
     sal_Int32 nGroupIndex, nReUsedSeriesIdx = 0;
     for( nGroupIndex=0; nGroupIndex<nNumberOfGroups; ++nGroupIndex )
     {
-        const sal_Int32 nNumSeriesData = aSequences[nGroupIndex].getLength();
+        const sal_Int32 nNumSeriesData = aSequences[nGroupIndex].size();
         pResultSeries[nGroupIndex].realloc( nNumSeriesData );
         auto pResultSerie = pResultSeries[nGroupIndex].getArray();
         for( sal_Int32 nSeriesIdx = 0; nSeriesIdx < nNumSeriesData; ++nSeriesIdx, ++nReUsedSeriesIdx )

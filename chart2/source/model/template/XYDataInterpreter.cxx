@@ -56,8 +56,8 @@ InterpretedData XYDataInterpreter::interpretDataSource(
 
     std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
-    Reference< data::XLabeledDataSequence > xValuesX;
-    vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
+    rtl::Reference< LabeledDataSequence > xValuesX;
+    vector< rtl::Reference< LabeledDataSequence > > aSequencesVec;
 
     rtl::Reference< LabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
@@ -83,7 +83,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
             }
             else if( !xValuesX.is() && bSetXValues )
             {
-                xValuesX.set( labelData );
+                xValuesX = labelData;
                 if( xValuesX.is())
                     SetRole( xValuesX->getValues(), "values-x");
             }
@@ -104,16 +104,15 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     vector< Reference< XDataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
-    Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
-    Reference< util::XCloneable > xCloneable( xValuesX, uno::UNO_QUERY );
+    rtl::Reference< LabeledDataSequence > xClonedXValues = xValuesX;
 
     sal_Int32 nSeriesIndex = 0;
     for (auto const& elem : aSequencesVec)
     {
-        vector< Reference< data::XLabeledDataSequence > > aNewData;
+        vector< rtl::Reference< LabeledDataSequence > > aNewData;
 
-        if( nSeriesIndex && xCloneable.is() )
-            xClonedXValues.set( xCloneable->createClone(), uno::UNO_QUERY );
+        if( nSeriesIndex )
+            xClonedXValues = new LabeledDataSequence(*xValuesX);
         if( xValuesX.is() )
             aNewData.push_back( xClonedXValues );
 

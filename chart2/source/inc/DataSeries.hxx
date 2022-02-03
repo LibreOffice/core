@@ -43,6 +43,7 @@ namespace com::sun::star::beans { class XPropertySet; }
 
 namespace chart
 {
+class LabeledDataSequence;
 class RegressionCurveModel;
 
 namespace impl
@@ -87,6 +88,7 @@ public:
     virtual void SAL_CALL resetDataPoint( sal_Int32 nIndex ) override;
     virtual void SAL_CALL resetAllDataPoints() override;
 
+private:
     // ____ XDataSink ____
     /// @see css::chart2::data::XDataSink
     virtual void SAL_CALL setData( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData ) override;
@@ -94,6 +96,7 @@ public:
     // ____ XDataSource ____
     /// @see css::chart2::data::XDataSource
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences() override;
+public:
 
     // ____ OPropertySet ____
     virtual void GetDefaultValue( sal_Int32 nHandle, css::uno::Any& rAny ) const override;
@@ -131,7 +134,10 @@ public:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
-    void setData( const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >& aData );
+    typedef std::vector< rtl::Reference< LabeledDataSequence > > tDataSequenceContainer;
+
+    void setData( const tDataSequenceContainer& aData );
+    const tDataSequenceContainer & getDataSequences2() const { return m_aDataSequences; }
 
     typedef
         std::vector< rtl::Reference< ::chart::RegressionCurveModel > >
@@ -158,7 +164,6 @@ private:
 
     void fireModifyEvent();
 
-    typedef std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
     tDataSequenceContainer        m_aDataSequences;
 
     typedef std::map< sal_Int32,

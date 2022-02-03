@@ -47,6 +47,7 @@
 #include <CommonConverters.hxx>
 #include <RegressionCalculationHelper.hxx>
 #include <BaseCoordinateSystem.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -214,13 +215,13 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 
     if( m_eObjectType == OBJECTTYPE_DATA_CURVE )
     {
-        Sequence< Reference< data::XLabeledDataSequence > > aDataSeqs( xSeries->getDataSequences());
+        const std::vector< rtl::Reference< LabeledDataSequence > > & aDataSeqs( xSeries->getDataSequences2());
         Sequence< double > aXValues, aYValues;
         bool bXValuesFound = false, bYValuesFound = false;
         m_nNbPoints = 0;
         sal_Int32 i = 0;
         for( i=0;
-             ! (bXValuesFound && bYValuesFound) && i<aDataSeqs.getLength();
+             ! (bXValuesFound && bYValuesFound) && i<static_cast<sal_Int32>(aDataSeqs.size());
              ++i )
         {
             try

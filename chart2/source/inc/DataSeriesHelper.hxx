@@ -38,14 +38,18 @@ namespace com::sun::star::uno { class Any; }
 namespace com::sun::star::uno { template <class E> class Sequence; }
 namespace chart { class BaseCoordinateSystem; }
 namespace chart { class ChartType; }
+namespace chart { class DataSource; }
 namespace chart { class Diagram; }
 namespace chart { class DataSeries; }
+namespace chart { class LabeledDataSequence; }
 
 namespace chart::DataSeriesHelper
 {
 
 OOO_DLLPUBLIC_CHARTTOOLS OUString
     getRole( const css::uno::Reference<css::chart2::data::XLabeledDataSequence>& xLabeledDataSequence );
+OOO_DLLPUBLIC_CHARTTOOLS OUString
+    getRole( const rtl::Reference<::chart::LabeledDataSequence>& xLabeledDataSequence );
 
 /** Retrieves the data sequence in the given data source that matches the
     given role.  If more than one sequences match the role, the first match
@@ -75,13 +79,17 @@ OOO_DLLPUBLIC_CHARTTOOLS std::vector<
   css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole );
+OOO_DLLPUBLIC_CHARTTOOLS std::vector<
+  rtl::Reference< ::chart::LabeledDataSequence > >
+    getAllDataSequencesByRole( const std::vector< rtl::Reference< ::chart::LabeledDataSequence > > & aDataSequences,
+                               const OUString& aRole );
 
 OOO_DLLPUBLIC_CHARTTOOLS
 std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >
 getAllDataSequences(
     const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& aSeries );
 OOO_DLLPUBLIC_CHARTTOOLS
-std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >
+std::vector<rtl::Reference<::chart::LabeledDataSequence> >
 getAllDataSequences(
     const std::vector<rtl::Reference<::chart::DataSeries> >& aSeries );
 
@@ -89,9 +97,9 @@ getAllDataSequences(
     into a data source.  The order of sequences will match the order of the data
     series.
  */
-OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XDataSource >
+OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::DataSource >
     getDataSource( const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries );
-OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XDataSource >
+OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::DataSource >
     getDataSource( const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries );
 
 /** Get the label of a series (e.g. for the legend)
