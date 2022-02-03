@@ -24,6 +24,7 @@
 #include <UserDefinedProperties.hxx>
 #include "DataPoint.hxx"
 #include <DataSeriesHelper.hxx>
+#include <LabeledDataSequence.hxx>
 #include <CloneHelper.hxx>
 #include <RegressionCurveModel.hxx>
 #include <ModifyListenerHelper.hxx>
@@ -140,8 +141,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
 {
     if( ! rOther.m_aDataSequences.empty())
     {
-        CloneHelper::CloneRefVector<css::chart2::data::XLabeledDataSequence>(
-            rOther.m_aDataSequences, m_aDataSequences );
+        CloneHelper::CloneRefVector(rOther.m_aDataSequences, m_aDataSequences );
         ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
     }
 
@@ -166,9 +166,6 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
 // late initialization to call after copy-constructing
 void DataSeries::Init( const DataSeries & rOther )
 {
-    if( ! rOther.m_aDataSequences.empty())
-        EventListenerHelper::addListenerToAllElements( m_aDataSequences, this );
-
     Reference< uno::XInterface > xThisInterface( static_cast< ::cppu::OWeakObject * >( this ));
     if( ! rOther.m_aAttributedDataPoints.empty())
     {
@@ -301,13 +298,13 @@ Reference< beans::XPropertySet >
 {
     Reference< beans::XPropertySet > xResult;
 
-    Sequence< Reference< chart2::data::XLabeledDataSequence > > aSequences;
+    std::vector< rtl::Reference< LabeledDataSequence > > aSequences;
     {
         MutexGuard aGuard( m_aMutex );
-        aSequences = comphelper::containerToSequence( m_aDataSequences );
+        aSequences = m_aDataSequences;
     }
 
-    std::vector< Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
+    std::vector< rtl::Reference< LabeledDataSequence > > aValuesSeries(
         DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values" ) );
 
     if (aValuesSeries.empty())
@@ -389,39 +386,36 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
     tDataSequenceContainer aOldDataSequences;
     tDataSequenceContainer aNewDataSequences;
     Reference< util::XModifyListener > xModifyEventForwarder;
-    Reference< lang::XEventListener > xListener;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
-        xListener = this;
         std::swap( aOldDataSequences, m_aDataSequences );
-        aNewDataSequences = comphelper::sequenceToContainer<tDataSequenceContainer>( aData );
+        for (const auto & i : aData)
+        {
+            auto p = dynamic_cast<LabeledDataSequence*>(i.get());
+            assert(p);
+            aNewDataSequences.push_back(p);
+        }
         m_aDataSequences = aNewDataSequences;
     }
     ModifyListenerHelper::removeListenerFromAllElements( aOldDataSequences, xModifyEventForwarder );
-    EventListenerHelper::removeListenerFromAllElements( aOldDataSequences, xListener );
-    EventListenerHelper::addListenerToAllElements( aNewDataSequences, xListener );
     ModifyListenerHelper::addListenerToAllElements( aNewDataSequences, xModifyEventForwarder );
     fireModifyEvent();
 }
 
-void DataSeries::setData( const std::vector< Reference< chart2::data::XLabeledDataSequence > >& aData )
+void DataSeries::setData( const std::vector< rtl::Reference< LabeledDataSequence > >& aData )
 {
     tDataSequenceContainer aOldDataSequences;
     tDataSequenceContainer aNewDataSequences;
     Reference< util::XModifyListener > xModifyEventForwarder;
-    Reference< lang::XEventListener > xListener;
     {
         MutexGuard aGuard( m_aMutex );
         xModifyEventForwarder = m_xModifyEventForwarder;
-        xListener = this;
         std::swap( aOldDataSequences, m_aDataSequences );
         aNewDataSequences = aData;
         m_aDataSequences = aNewDataSequences;
     }
     ModifyListenerHelper::removeListenerFromAllElements( aOldDataSequences, xModifyEventForwarder );
-    EventListenerHelper::removeListenerFromAllElements( aOldDataSequences, xListener );
-    EventListenerHelper::addListenerToAllElements( aNewDataSequences, xListener );
     ModifyListenerHelper::addListenerToAllElements( aNewDataSequences, xModifyEventForwarder );
     fireModifyEvent();
 }
@@ -430,7 +424,7 @@ void DataSeries::setData( const std::vector< Reference< chart2::data::XLabeledDa
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries::getDataSequences()
 {
     MutexGuard aGuard( m_aMutex );
-    return comphelper::containerToSequence( m_aDataSequences );
+    return comphelper::containerToSequence<Reference< chart2::data::XLabeledDataSequence >>( m_aDataSequences );
 }
 
 // ____ XRegressionCurveContainer ____
@@ -524,13 +518,8 @@ void SAL_CALL DataSeries::modified( const lang::EventObject& aEvent )
 }
 
 // ____ XEventListener (base of XModifyListener) ____
-void SAL_CALL DataSeries::disposing( const lang::EventObject& rEventObject )
+void SAL_CALL DataSeries::disposing( const lang::EventObject& )
 {
-    // forget disposed data sequences
-    tDataSequenceContainer::iterator aIt(
-        std::find( m_aDataSequences.begin(), m_aDataSequences.end(), rEventObject.Source ));
-    if( aIt != m_aDataSequences.end())
-        m_aDataSequences.erase( aIt );
 }
 
 // ____ OPropertySet ____

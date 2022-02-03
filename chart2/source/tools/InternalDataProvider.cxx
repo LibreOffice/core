@@ -117,10 +117,9 @@ struct lcl_internalizeSeries
     {}
     void operator() ( const rtl::Reference< DataSeries > & xSeries )
     {
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aOldSeriesData = xSeries->getDataSequences();
-        Sequence< Reference< chart2::data::XLabeledDataSequence > > aNewSeriesData( aOldSeriesData.getLength() );
-        auto aNewSeriesDataRange = asNonConstRange(aNewSeriesData);
-        for( sal_Int32 i=0; i<aOldSeriesData.getLength(); ++i )
+        const std::vector< rtl::Reference< LabeledDataSequence > > & aOldSeriesData = xSeries->getDataSequences2();
+        std::vector< rtl::Reference< LabeledDataSequence > > aNewSeriesData( aOldSeriesData.size() );
+        for( sal_Int32 i=0; i<static_cast<sal_Int32>(aOldSeriesData.size()); ++i )
         {
             sal_Int32 nNewIndex( m_bDataInColumns ? m_rInternalData.appendColumn() : m_rInternalData.appendRow() );
             OUString aIdentifier( OUString::number( nNewIndex ));
@@ -158,13 +157,13 @@ struct lcl_internalizeSeries
                     comphelper::copyProperties(
                         Reference< beans::XPropertySet >( xLabel, uno::UNO_QUERY ),
                         Reference< beans::XPropertySet >( xNewLabel, uno::UNO_QUERY ));
-                    aNewSeriesDataRange[i].set( new LabeledDataSequence( xNewValues, xNewLabel ) );
+                    aNewSeriesData[i].set( new LabeledDataSequence( xNewValues, xNewLabel ) );
                 }
             }
             else
             {
                 if( m_bConnectToModel )
-                    aNewSeriesDataRange[i].set( new LabeledDataSequence( xNewValues ) );
+                    aNewSeriesData[i].set( new LabeledDataSequence( xNewValues ) );
             }
         }
         if( m_bConnectToModel )
