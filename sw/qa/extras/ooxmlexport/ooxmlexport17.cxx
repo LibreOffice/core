@@ -12,7 +12,6 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <com/sun/star/drawing/XShapes.hpp>
 
 #include <queue>
 #include <swmodeltestbase.hxx>
