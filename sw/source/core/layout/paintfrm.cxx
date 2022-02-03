@@ -6554,7 +6554,7 @@ void SwFrame::PaintSwFrameBackground( const SwRect &rRect, const SwPageFrame *pP
 
                 // #i125189# We are also done when the new DrawingLayer FillAttributes are used
                 // or the FillStyle is set (different from drawing::FillStyle_NONE)
-                if(pOut && aFillAttributes)
+                if (aFillAttributes)
                 {
                     if(aFillAttributes->isUsed())
                     {
