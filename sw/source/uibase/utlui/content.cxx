@@ -178,39 +178,6 @@ namespace
     {
         return IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
-
-    size_t lcl_InsertURLFieldContent(
-        SwContentArr *pMember,
-        SwWrtShell* pWrtShell,
-        const SwContentType *pCntType)
-    {
-        SwGetINetAttrs aArr;
-        pWrtShell->GetINetAttrs( aArr );
-
-        // use stable sort array to list hyperlinks in document order
-        std::vector<SwGetINetAttr*> aStableSortINetAttrsArray;
-        for (SwGetINetAttr& r : aArr)
-            aStableSortINetAttrsArray.emplace_back(&r);
-        std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
-                         [](const SwGetINetAttr* a, const SwGetINetAttr* b){
-            SwPosition aSwPos(const_cast<SwTextNode&>(a->rINetAttr.GetTextNode()),
-                              a->rINetAttr.GetStart());
-            SwPosition bSwPos(const_cast<SwTextNode&>(b->rINetAttr.GetTextNode()),
-                              b->rINetAttr.GetStart());
-            return aSwPos < bSwPos;});
-
-        SwGetINetAttrs::size_type n = 0;
-        for (auto p : aStableSortINetAttrsArray)
-        {
-            auto pCnt = make_unique<SwURLFieldContent>(
-                        pCntType, p->sText,
-                        INetURLObject::decode(p->rINetAttr.GetINetFormat().GetValue(),
-                                              INetURLObject::DecodeMechanism::Unambiguous),
-                        &p->rINetAttr, ++n);
-            pMember->insert(std::move(pCnt));
-        }
-        return pMember->size();
-    }
 }
 
 // Content, contains names and reference at the content type.
@@ -775,7 +742,32 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         }
         break;
         case ContentTypeId::URLFIELD:
-            lcl_InsertURLFieldContent(m_pMember.get(), m_pWrtShell, this);
+        {
+            SwGetINetAttrs aArr;
+            m_pWrtShell->GetINetAttrs(aArr);
+
+            // use stable sort array to list hyperlinks in document order
+            std::vector<SwGetINetAttr*> aStableSortINetAttrsArray;
+            for (SwGetINetAttr& r : aArr)
+                aStableSortINetAttrsArray.emplace_back(&r);
+            std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
+                             [](const SwGetINetAttr* a, const SwGetINetAttr* b){
+                SwPosition aSwPos(const_cast<SwTextNode&>(a->rINetAttr.GetTextNode()),
+                                  a->rINetAttr.GetStart());
+                SwPosition bSwPos(const_cast<SwTextNode&>(b->rINetAttr.GetTextNode()),
+                                  b->rINetAttr.GetStart());
+                return aSwPos < bSwPos;});
+
+            SwGetINetAttrs::size_type n = 0;
+            for (auto p : aStableSortINetAttrsArray)
+            {
+                auto pCnt = make_unique<SwURLFieldContent>(this, p->sText,
+                            INetURLObject::decode(p->rINetAttr.GetINetFormat().GetValue(),
+                                                  INetURLObject::DecodeMechanism::Unambiguous),
+                            &p->rINetAttr, ++n);
+                m_pMember->insert(std::move(pCnt));
+            }
+        }
         break;
         case ContentTypeId::INDEX:
         {
