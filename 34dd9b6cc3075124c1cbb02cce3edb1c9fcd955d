@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e97bae11_d6d6f471",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-02-03T09:06:11Z",
+      "side": 1,
+      "message": "it is a chery-pick from distro/collabora/cp-6.4 already reviewed",
+      "revId": "34dd9b6cc3075124c1cbb02cce3edb1c9fcd955d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
