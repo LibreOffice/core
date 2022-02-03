@@ -176,11 +176,12 @@ void SerfLockStore::addLock( const OUString& rURI,
                              sal_Int32 nLastChanceToSendRefreshRequest )
 {
     assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
+    {
+        std::unique_lock aGuard( m_aMutex );
 
-    std::unique_lock aGuard( m_aMutex );
-
-    m_aLockInfoMap[ rURI ]
-        = LockInfo(sToken, rLock, xSession, nLastChanceToSendRefreshRequest);
+        m_aLockInfoMap[ rURI ]
+            = LockInfo(sToken, rLock, xSession, nLastChanceToSendRefreshRequest);
+    }
 
     startTicker();
 }
