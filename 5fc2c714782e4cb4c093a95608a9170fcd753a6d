@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbb6aa0f_a72b37b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-03T13:19:55Z",
+      "side": 1,
+      "message": "please either rebase or modify, doing both leads to garbage like\n  similarity index 69%\n  copy from desktop/Rdb_crashextension_platform.mk\n  copy to external/libwebp/Module_libwebp.mk",
+      "revId": "5fc2c714782e4cb4c093a95608a9170fcd753a6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5b93d5c_8bbe3c4c",
+        "filename": "desktop/README.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-03T13:19:55Z",
+      "side": 1,
+      "message": "if you feel like documenting Extension_test-passive here, you should probably also document its sibling Extension_test-active",
+      "revId": "5fc2c714782e4cb4c093a95608a9170fcd753a6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53b351a1_4cea2c98",
+        "filename": "desktop/test/deployment/crashextension/ToolbarMerge.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-03T13:19:55Z",
+      "side": 1,
+      "message": "no newline at end of file",
+      "revId": "5fc2c714782e4cb4c093a95608a9170fcd753a6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
