@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1c988af_7745f652",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-03T21:19:07Z",
+      "side": 1,
+      "message": "Thank you for your feedback, I did the straightforward part.\nAbout hiding ugly thing, I prefer exposing it so it may encourage people to find a way to redesign it so it\u0027s not (or less) ugly.",
+      "revId": "3e010313671be35e52b46f4306f0ff94659ad9bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
