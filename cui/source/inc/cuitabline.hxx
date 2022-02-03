@@ -96,7 +96,7 @@ private:
     bool                m_bNewSize;
     /// a graphic to be displayed in the preview in case that an automatic symbol is chosen
     Graphic             m_aAutoSymbolGraphic;
-    tools::Long                m_nSymbolType;
+    sal_Int32           m_nSymbolType;
     /// attributes for the shown symbols; only necessary if not equal to line properties
     std::unique_ptr<SfxItemSet> m_xSymbolAttr;
 
