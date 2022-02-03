@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ff68034_967bba49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-03T08:11:28Z",
+      "side": 1,
+      "message": "@Attila: I\u0027ve fixed the typos to speed up merging.",
+      "revId": "890d176e77569b197697ac6c1d7f5020ec6b8d77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
