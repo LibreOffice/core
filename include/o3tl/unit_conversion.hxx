@@ -107,14 +107,21 @@ constexpr sal_Int64 MulDivSaturate(I n, sal_Int64 m, sal_Int64 d)
     return MulDiv(n, m, d);
 }
 
+template <class M, class N> constexpr std::common_type_t<M, N> asserting_gcd(M m, N n)
+{
+    auto ret = std::gcd(m, n);
+    assert(ret != 0);
+    return ret;
+}
+
 // Packs integral multiplier and divisor for conversion from one unit to another
 struct m_and_d
 {
     sal_Int64 m; // multiplier
     sal_Int64 d; // divisor
     constexpr m_and_d(sal_Int64 _m, sal_Int64 _d)
-        : m(_m / std::gcd(_m, _d)) // make sure to use smallest quotients here because
-        , d(_d / std::gcd(_m, _d)) // they will be multiplied when building final table
+        : m(_m / asserting_gcd(_m, _d)) // make sure to use smallest quotients here because
+        , d(_d / asserting_gcd(_m, _d)) // they will be multiplied when building final table
     {
         assert(_m > 0 && _d > 0);
     }
@@ -134,8 +141,7 @@ template <int N> constexpr auto prepareMDArray(const m_and_d (&mdBase)[N])
             assert(mdBase[i].m < SAL_MAX_INT64 / mdBase[j].d);
             assert(mdBase[i].d < SAL_MAX_INT64 / mdBase[j].m);
             const sal_Int64 m = mdBase[i].m * mdBase[j].d, d = mdBase[i].d * mdBase[j].m;
-            const sal_Int64 g = std::gcd(m, d);
-            assert(g != 0);
+            const sal_Int64 g = asserting_gcd(m, d);
             a[i][j] = m / g;
             a[j][i] = d / g;
         }
