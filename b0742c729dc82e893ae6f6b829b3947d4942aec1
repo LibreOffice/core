@@ -325,6 +325,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c71c937e_bf293bbc",
+        "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-03T13:28:02Z",
+      "side": 1,
+      "message": "instead of trying to context_-\u003egetValueByName(\"org.libreoffice.test.desktop.deployment.crashextension\") a non-existing singleton above, just return this",
+      "parentUuid": "945d980c_534b5db4",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff132e01_a79f4b69",
         "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
         "patchSetId": 5
