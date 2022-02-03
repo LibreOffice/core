@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "197d3df0_21b6ead7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-03T08:28:39Z",
+      "side": 1,
+      "message": "@Attila: thanks for the fix! Note: the text of the inner text boxes are still not visible, only after moving the grouped shape.\n\nNote: Verified by Jenkins in the last two patch set (the last but one patch set was only rebased with fixing a typo in a comment).",
+      "revId": "89db3b7899cca4aa0b8037c6c80bdacda3930f9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
