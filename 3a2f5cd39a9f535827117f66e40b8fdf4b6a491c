@@ -16,6 +16,24 @@
       "message": "Holding it back until early February, after the LO 7.3.0 release.",
       "revId": "3a2f5cd39a9f535827117f66e40b8fdf4b6a491c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f326bf2f_d38839e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-03T10:19:27Z",
+      "side": 1,
+      "message": "\u003e Holding it back until early February, after the LO 7.3.0 release.\n\nCloph, can you please rebase this (so Jenkins gets re-run) once you have updated Xcode accordingly on all relevant Jenkins machines?",
+      "parentUuid": "d859e2d6_408280b6",
+      "revId": "3a2f5cd39a9f535827117f66e40b8fdf4b6a491c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
