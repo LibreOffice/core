@@ -33,6 +33,24 @@
       "message": "i\u0027m afraid this isn\u0027t possible, poppler is GPL licensed, this is why it\u0027s only used from Executable_xpdfimport currently, not from the Library_pdfimport.",
       "revId": "63fd69407edf5627da730a739f318b38d4fbbebb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa614578_17853abb",
+        "filename": "sdext/Library_pdfimport.mk",
+        "patchSetId": 16
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T11:59:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8036ec31_600312f1",
+      "revId": "63fd69407edf5627da730a739f318b38d4fbbebb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

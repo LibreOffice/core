@@ -16,6 +16,24 @@
       "message": "Could someone help me, what\u0027s wrong with these compiling errors on Windows:\nhttps://ci.libreoffice.org/job/gerrit_windows/111317/consoleFull#353932829cbd6b0d4-2729-45f4-a019-828721d0af3e",
       "revId": "fc2a1ca0c084fc8d881bdc0c95a4182678c2c870",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d7ec76f_a7f8c31d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-03T11:59:24Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41819de5_532aa757",
+      "revId": "fc2a1ca0c084fc8d881bdc0c95a4182678c2c870",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
