@@ -40,6 +40,7 @@ $(eval $(call gb_CppunitTest_use_components,emfio_wmf,\
     unotools/util/utl \
 ))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_configuration,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_ure,emfio_wmf))
