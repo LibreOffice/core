@@ -1542,7 +1542,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
 
             if ( pUndoManager )
             {
-                sal_uInt16 nCount = pUndoManager->GetUndoActionCount();
+                size_t nCount = pUndoManager->GetUndoActionCount();
                 sal_uInt16 nSteps = nCnt;
                 if ( nCount < nCnt )
                 {
@@ -1573,7 +1573,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
 
             if ( pUndoManager )
             {
-                sal_uInt16 nCount = pUndoManager->GetRedoActionCount();
+                size_t nCount = pUndoManager->GetRedoActionCount();
                 sal_uInt16 nSteps = nCnt;
                 if ( nCount < nCnt )
                 {
@@ -1619,7 +1619,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
         {
         case SID_UNDO:
             {
-                sal_uInt16 nCount = pUndoManager ? pUndoManager->GetUndoActionCount() : 0;
+                size_t nCount = pUndoManager ? pUndoManager->GetUndoActionCount() : 0;
                 if ( nCount )
                     pSfxViewFrame->GetSlotState( nWhich, pSfxViewFrame->GetInterface(), &rSet );
                 else if (rSh.GetLastUndoInfo(nullptr, &nUndoId))
@@ -1636,7 +1636,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
             }
         case SID_REDO:
             {
-                sal_uInt16 nCount = pUndoManager ? pUndoManager->GetRedoActionCount() : 0;
+                size_t nCount = pUndoManager ? pUndoManager->GetRedoActionCount() : 0;
                 if ( nCount )
                     pSfxViewFrame->GetSlotState( nWhich, pSfxViewFrame->GetInterface(), &rSet );
                 else if (rSh.GetFirstRedoInfo(nullptr, &nUndoId))
@@ -1658,7 +1658,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                 {
                     OUString (SfxUndoManager::*fnGetComment)( size_t, bool const ) const;
 
-                    sal_uInt16 nCount;
+                    size_t nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
                     {
                         nCount = pUndoManager->GetUndoActionCount();
@@ -1673,7 +1673,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                     OUStringBuffer sList;
                     if( nCount )
                     {
-                        for( sal_uInt16 n = 0; n < nCount; ++n )
+                        for( size_t n = 0; n < nCount; ++n )
                             sList.append( (pUndoManager->*fnGetComment)( n, SfxUndoManager::TopLevel ) + "\n");
                     }
 
