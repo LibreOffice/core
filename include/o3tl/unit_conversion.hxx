@@ -135,6 +135,7 @@ template <int N> constexpr auto prepareMDArray(const m_and_d (&mdBase)[N])
             assert(mdBase[i].d < SAL_MAX_INT64 / mdBase[j].m);
             const sal_Int64 m = mdBase[i].m * mdBase[j].d, d = mdBase[i].d * mdBase[j].m;
             const sal_Int64 g = std::gcd(m, d);
+            assert(g != 0);
             a[i][j] = m / g;
             a[j][i] = d / g;
         }
