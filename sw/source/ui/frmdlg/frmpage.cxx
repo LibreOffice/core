@@ -90,8 +90,8 @@ struct StringIdPair_Impl
 
 }
 
-#define MAX_PERCENT_WIDTH   254
-#define MAX_PERCENT_HEIGHT  254
+#define MAX_PERCENT_WIDTH   SAL_CONST_INT64(254)
+#define MAX_PERCENT_HEIGHT  SAL_CONST_INT64(254)
 
 namespace {
 

@@ -16433,12 +16433,12 @@ private:
         GtkInstanceEditable::signal_activate();
     }
 
-    double toGtk(int nValue) const
+    double toGtk(sal_Int64 nValue) const
     {
         return static_cast<double>(nValue) / Power10(get_digits());
     }
 
-    int fromGtk(double fValue) const
+    sal_Int64 fromGtk(double fValue) const
     {
         return FRound(fValue * Power10(get_digits()));
     }
@@ -16459,12 +16459,12 @@ public:
 #endif
     }
 
-    virtual int get_value() const override
+    virtual sal_Int64 get_value() const override
     {
         return fromGtk(gtk_spin_button_get_value(m_pButton));
     }
 
-    virtual void set_value(int value) override
+    virtual void set_value(sal_Int64 value) override
     {
         disable_notify_events();
         m_bBlank = false;
@@ -16507,14 +16507,14 @@ public:
         enable_notify_events();
     }
 
-    virtual void set_range(int min, int max) override
+    virtual void set_range(sal_Int64 min, sal_Int64 max) override
     {
         disable_notify_events();
         gtk_spin_button_set_range(m_pButton, toGtk(min), toGtk(max));
         enable_notify_events();
     }
 
-    virtual void get_range(int& min, int& max) const override
+    virtual void get_range(sal_Int64& min, sal_Int64& max) const override
     {
         double gtkmin, gtkmax;
         gtk_spin_button_get_range(m_pButton, &gtkmin, &gtkmax);

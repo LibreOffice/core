@@ -1302,7 +1302,7 @@ JSSpinButton::JSSpinButton(JSDialogSender* pSender, ::FormattedField* pSpin,
 {
 }
 
-void JSSpinButton::set_value(int value)
+void JSSpinButton::set_value(sal_Int64 value)
 {
     SalInstanceSpinButton::set_value(value);
     sendUpdate(true); // if input is limited we can receive the same JSON

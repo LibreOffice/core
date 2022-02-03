@@ -25,14 +25,14 @@
 #include <svx/dlgutil.hxx>
 
 // local functions
-static void lcl_GetMinMax(weld::MetricSpinButton const& rField, int& nMin, int& nMax)
+static void lcl_GetMinMax(weld::MetricSpinButton const& rField, sal_Int64& nMin, sal_Int64& nMax)
 {
     rField.get_range(nMin, nMax, FieldUnit::TWIP);
     nMin = rField.denormalize(nMin);
     nMax = rField.denormalize(nMax);
 }
 
-static void lcl_SetMinMax(weld::MetricSpinButton& rField, int nMin, int nMax)
+static void lcl_SetMinMax(weld::MetricSpinButton& rField, sal_Int64 nMin, sal_Int64 nMax)
 {
     rField.set_range(rField.normalize(nMin), rField.normalize(nMax), FieldUnit::TWIP);
 }
@@ -114,7 +114,7 @@ SvxGridTabPage::SvxGridTabPage(weld::Container* pPage, weld::DialogController* p
 
     // Set Metrics
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreSet );
-    int nMin, nMax;
+    sal_Int64 nMin, nMax;
 
     lcl_GetMinMax(*m_xMtrFldDrawX, nMin, nMax);
     SetFieldUnit( *m_xMtrFldDrawX, eFUnit, true );
@@ -223,7 +223,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
         return;
 
     // Set Metrics
-    int nMin, nMax;
+    sal_Int64 nMin, nMax;
     int nVal = m_xMtrFldDrawX->denormalize(m_xMtrFldDrawX->get_value(FieldUnit::TWIP));
 
     lcl_GetMinMax(*m_xMtrFldDrawX, nMin, nMax);

@@ -1044,7 +1044,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         double fTmpWidth((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldWidth), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
         if (m_xMtrWidth->get_digits())
             fTmpWidth *= pow(10.0, m_xMtrWidth->get_digits());
-        m_xMtrWidth->set_value(static_cast<int>(fTmpWidth), FieldUnit::MM_100TH);
+        m_xMtrWidth->set_value(fTmpWidth, FieldUnit::MM_100TH);
     }
 
     { // #i75273# set height
@@ -1053,7 +1053,7 @@ void SvxPositionSizeTabPage::Reset( const SfxItemSet*  )
         double fTmpHeight((OutputDevice::LogicToLogic(static_cast<sal_Int32>(mfOldHeight), mePoolUnit, MapUnit::Map100thMM)) / fUIScale);
         if (m_xMtrHeight->get_digits())
             fTmpHeight *= pow(10.0, m_xMtrHeight->get_digits());
-        m_xMtrHeight->set_value(static_cast<int>(fTmpHeight), FieldUnit::MM_100TH);
+        m_xMtrHeight->set_value(fTmpHeight, FieldUnit::MM_100TH);
     }
 
     pItem = GetItem( mrOutAttrs, SID_ATTR_TRANSFORM_PROTECT_SIZE );
@@ -1271,7 +1271,7 @@ void SvxPositionSizeTabPage::SetMinMaxPosition()
         }
     }
 
-    const double fMaxLong(static_cast<double>(vcl::ConvertValue( LONG_MAX, 0, MapUnit::Map100thMM, meDlgUnit ) - 1));
+    const double fMaxLong(vcl::ConvertValue(std::numeric_limits<sal_Int64>::max(), 0, MapUnit::Map100thMM, meDlgUnit) - 1);
     fLeft = std::clamp(fLeft, -fMaxLong, fMaxLong);
     fRight = std::clamp(fRight, -fMaxLong, fMaxLong);
     fTop = std::clamp(fTop, - fMaxLong, fMaxLong);
@@ -1503,7 +1503,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeWidthHdl, weld::MetricSpinButton&,
         return;
 
     sal_Int64 nHeight(basegfx::fround64((mfOldHeight * static_cast<double>(m_xMtrWidth->get_value(FieldUnit::NONE))) / mfOldWidth));
-    int nMin, nMax;
+    sal_Int64 nMin, nMax;
     m_xMtrHeight->get_range(nMin, nMax, FieldUnit::NONE);
 
     if (nHeight <= nMax)
@@ -1526,7 +1526,7 @@ IMPL_LINK_NOARG(SvxPositionSizeTabPage, ChangeHeightHdl, weld::MetricSpinButton&
         return;
 
     sal_Int64 nWidth(basegfx::fround64((mfOldWidth * static_cast<double>(m_xMtrHeight->get_value(FieldUnit::NONE))) / mfOldHeight));
-    int nMin, nMax;
+    sal_Int64 nMin, nMax;
     m_xMtrWidth->get_range(nMin, nMax, FieldUnit::NONE);
 
     if (nWidth <= nMax)
