@@ -49,19 +49,19 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::datatransfer::clipboard;
 
 SwView_Impl::SwView_Impl(SwView* pShell)
-    : pView(pShell)
-    , eShellMode(ShellMode::Text)
+    : m_pView(pShell)
+    , m_eShellMode(ShellMode::Text)
     , m_nParam(0)
     , m_bSelectObject(false)
     , m_bEditingPositionSet(false)
 {
-    mxXTextView = new SwXTextView(pView);
-    xDisProvInterceptor = new SwXDispatchProviderInterceptor(*pView);
+    mxXTextView = new SwXTextView(m_pView);
+    m_xDispatchProviderInterceptor = new SwXDispatchProviderInterceptor(*m_pView);
 }
 
 SwView_Impl::~SwView_Impl()
 {
-    auto pInterceptor = comphelper::getFromUnoTunnel<SwXDispatchProviderInterceptor>(xDisProvInterceptor);
+    auto pInterceptor = comphelper::getFromUnoTunnel<SwXDispatchProviderInterceptor>(m_xDispatchProviderInterceptor);
     if(pInterceptor)
         pInterceptor->Invalidate();
     view::XSelectionSupplier* pTextView = mxXTextView.get();
@@ -75,7 +75,7 @@ SwView_Impl::~SwView_Impl()
         mxClipEvtLstnr->ViewDestroyed();
     }
 #if HAVE_FEATURE_DBCONNECTIVITY && !ENABLE_FUZZERS
-    xConfigItem.reset();
+    m_xConfigItem.reset();
 #endif
     m_pDocInserter.reset();
     m_pRequest.reset();
@@ -83,7 +83,7 @@ SwView_Impl::~SwView_Impl()
 
 void SwView_Impl::SetShellMode(ShellMode eSet)
 {
-    eShellMode = eSet;
+    m_eShellMode = eSet;
 }
 
 view::XSelectionSupplier*   SwView_Impl::GetUNOObject()
@@ -182,7 +182,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
             else
             {
                 rReq.Done();
-                SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
+                SfxBindings& rBind = m_pView->GetViewFrame()->GetBindings();
                 rBind.Invalidate( SID_TWAIN_SELECT );
                 rBind.Invalidate( SID_TWAIN_TRANSFER );
             }
@@ -194,7 +194,7 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 SwScannerEventListener& SwView_Impl::GetScannerEventListener()
 {
     if(!mxScanEvtLstnr.is())
-        mxScanEvtLstnr = new SwScannerEventListener(*pView);
+        mxScanEvtLstnr = new SwScannerEventListener(*m_pView);
     return *mxScanEvtLstnr;
 }
 
@@ -202,7 +202,7 @@ void SwView_Impl::AddClipboardListener()
 {
     if(!mxClipEvtLstnr.is())
     {
-        mxClipEvtLstnr = new SwClipboardChangeListener( *pView );
+        mxClipEvtLstnr = new SwClipboardChangeListener( *m_pView );
         mxClipEvtLstnr->AddRemoveListener( true );
     }
 }
@@ -254,7 +254,7 @@ void SwView_Impl::StartDocumentInserter(
             break;
     }
 
-    m_pDocInserter.reset(new ::sfx2::DocumentInserter(pView->GetFrameWeld(), rFactory, mode));
+    m_pDocInserter.reset(new ::sfx2::DocumentInserter(m_pView->GetFrameWeld(), rFactory, mode));
     m_pDocInserter->StartExecuteModal( rEndDialogHdl );
 }
 
@@ -276,8 +276,8 @@ void SAL_CALL SwScannerEventListener::disposing( const EventObject& /*rEventObje
 {
 #if defined(_WIN32) || defined UNX
     SolarMutexGuard aGuard;
-    if( pView )
-        pView->ScannerEventHdl();
+    if( m_pView )
+        m_pView->ScannerEventHdl();
 #endif
 }
 
@@ -288,29 +288,29 @@ SwClipboardChangeListener::~SwClipboardChangeListener()
 void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventObject*/ )
 {
     SolarMutexGuard aGuard;
-    pView = nullptr; // so we don't touch the view if changedContents somehow fires afterwards
+    m_pView = nullptr; // so we don't touch the view if changedContents somehow fires afterwards
 }
 
 void SAL_CALL SwClipboardChangeListener::changedContents( const css::datatransfer::clipboard::ClipboardEvent& rEventObject )
 
 {
     const SolarMutexGuard aGuard;
-    if( !pView )
+    if( !m_pView )
         return;
 
     {
         TransferableDataHelper aDataHelper( rEventObject.Contents );
-        SwWrtShell& rSh = pView->GetWrtShell();
+        SwWrtShell& rSh = m_pView->GetWrtShell();
 
-        pView->m_nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
-        pView->m_bPasteState = aDataHelper.GetXTransferable().is() &&
+        m_pView->m_nLastPasteDestination = SwTransferable::GetSotDestination( rSh );
+        m_pView->m_bPasteState = aDataHelper.GetXTransferable().is() &&
                         SwTransferable::IsPaste( rSh, aDataHelper );
 
-        pView->m_bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
+        m_pView->m_bPasteSpecialState = aDataHelper.GetXTransferable().is() &&
                     SwTransferable::IsPasteSpecial( rSh, aDataHelper );
     }
 
-    SfxBindings& rBind = pView->GetViewFrame()->GetBindings();
+    SfxBindings& rBind = m_pView->GetViewFrame()->GetBindings();
     rBind.Invalidate( SID_PASTE );
     rBind.Invalidate( SID_PASTE_SPECIAL );
     rBind.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
@@ -318,7 +318,7 @@ void SAL_CALL SwClipboardChangeListener::changedContents( const css::datatransfe
 
 void SwClipboardChangeListener::AddRemoveListener( bool bAdd )
 {
-    pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
+    m_pView->AddRemoveClipboardListener( Reference< XClipboardListener >( this ), bAdd );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

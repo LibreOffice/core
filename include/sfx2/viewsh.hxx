@@ -122,20 +122,20 @@ enum class LOKDeviceFormFactor
 class SfxViewFactory;
 #define SFX_DECL_VIEWFACTORY(Class) \
 private: \
-    static SfxViewFactory *m_pFactory; \
+    static SfxViewFactory *s_pFactory; \
 public: \
     static SfxViewShell  *CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView); \
     static void           RegisterFactory( SfxInterfaceId nPrio ); \
-    static SfxViewFactory*Factory() { return m_pFactory; } \
+    static SfxViewFactory*Factory() { return s_pFactory; } \
     static void           InitFactory()
 
 #define SFX_IMPL_NAMED_VIEWFACTORY(Class, AsciiViewName) \
-    SfxViewFactory* Class::m_pFactory; \
+    SfxViewFactory* Class::s_pFactory; \
     SfxViewShell* Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \
     { return new Class(pFrame, pOldView); } \
     void Class::RegisterFactory( SfxInterfaceId nPrio ) \
     { \
-        m_pFactory = new SfxViewFactory(&CreateInstance,nPrio,AsciiViewName);\
+        s_pFactory = new SfxViewFactory(&CreateInstance,nPrio,AsciiViewName);\
         InitFactory(); \
     } \
     void Class::InitFactory()
