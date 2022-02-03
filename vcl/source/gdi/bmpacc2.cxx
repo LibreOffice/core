@@ -19,6 +19,7 @@
 
 #include <vcl/bitmapaccess.hxx>
 #include <vcl/BitmapTools.hxx>
+#include <comphelper/lok.hxx>
 
 BitmapColor BitmapReadAccess::GetPixelForN1BitMsbPal(ConstScanline pScanline, tools::Long nX, const ColorMask&)
 {
@@ -162,8 +163,7 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcXbgr(ConstScanline pScanline, t
 {
     BitmapColor aBitmapColor;
 
-    pScanline = pScanline + ( nX << 2 );
-    aBitmapColor.SetAlpha( 0xFF - *pScanline++ );
+    pScanline = pScanline + ( nX << 2 ) + 1;
     aBitmapColor.SetBlue( *pScanline++ );
     aBitmapColor.SetGreen( *pScanline++ );
     aBitmapColor.SetRed( *pScanline );
@@ -185,7 +185,7 @@ void BitmapReadAccess::SetPixelForN32BitTcAbgr(Scanline pScanline, tools::Long n
 void BitmapReadAccess::SetPixelForN32BitTcXbgr(Scanline pScanline, tools::Long nX, const BitmapColor& rBitmapColor, const ColorMask&)
 {
     pScanline = pScanline + ( nX << 2 );
-    *pScanline++ = 0xFF - rBitmapColor.GetAlpha();;
+    *pScanline++ = 0xFF;
     *pScanline++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline = rBitmapColor.GetRed();
@@ -211,8 +211,7 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcXrgb(ConstScanline pScanline, t
 {
     BitmapColor aBitmapColor;
 
-    pScanline = pScanline + ( nX << 2 );
-    aBitmapColor.SetAlpha( 0xFF - *pScanline++ );
+    pScanline = pScanline + ( nX << 2 ) + 1;
     aBitmapColor.SetRed( *pScanline++ );
     aBitmapColor.SetGreen( *pScanline++ );
     aBitmapColor.SetBlue( *pScanline );
@@ -234,7 +233,7 @@ void BitmapReadAccess::SetPixelForN32BitTcArgb(Scanline pScanline, tools::Long n
 void BitmapReadAccess::SetPixelForN32BitTcXrgb(Scanline pScanline, tools::Long nX, const BitmapColor& rBitmapColor, const ColorMask&)
 {
     pScanline = pScanline + ( nX << 2 );
-    *pScanline++ = 0xFF - rBitmapColor.GetAlpha();
+    *pScanline++ = 0xFF;
     *pScanline++ = rBitmapColor.GetRed();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline = rBitmapColor.GetBlue();
@@ -263,8 +262,9 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcBgrx(ConstScanline pScanline, t
     pScanline = pScanline + ( nX << 2 );
     aBitmapColor.SetBlue( *pScanline++ );
     aBitmapColor.SetGreen( *pScanline++ );
-    aBitmapColor.SetRed( *pScanline++ );
-    aBitmapColor.SetAlpha( 0xFF - *pScanline );
+    aBitmapColor.SetRed( *pScanline );
+    if (comphelper::LibreOfficeKit::isActive())
+        aBitmapColor.SetAlpha(0xFF - *(++pScanline));
 
     return aBitmapColor;
 }
@@ -286,7 +286,7 @@ void BitmapReadAccess::SetPixelForN32BitTcBgrx(Scanline pScanline, tools::Long n
     *pScanline++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline++ = rBitmapColor.GetRed();
-    *pScanline = 0xFF - rBitmapColor.GetAlpha();
+    *pScanline = (comphelper::LibreOfficeKit::isActive()) ? 0xFF - rBitmapColor.GetAlpha() : 0xFF;
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcRgba(ConstScanline pScanline, tools::Long nX, const ColorMask&)
@@ -312,8 +312,7 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcRgbx(ConstScanline pScanline, t
     pScanline = pScanline + ( nX << 2 );
     aBitmapColor.SetRed( *pScanline++ );
     aBitmapColor.SetGreen( *pScanline++ );
-    aBitmapColor.SetBlue( *pScanline++ );
-    aBitmapColor.SetAlpha( 0xFF - *pScanline );
+    aBitmapColor.SetBlue( *pScanline );
 
     return aBitmapColor;
 }
@@ -335,7 +334,7 @@ void BitmapReadAccess::SetPixelForN32BitTcRgbx(Scanline pScanline, tools::Long n
     *pScanline++ = rBitmapColor.GetRed();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline++ = rBitmapColor.GetBlue();
-    *pScanline = 0xFF - rBitmapColor.GetAlpha();
+    *pScanline = 0xFF;
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcMask(ConstScanline pScanline, tools::Long nX, const ColorMask& rMask)
