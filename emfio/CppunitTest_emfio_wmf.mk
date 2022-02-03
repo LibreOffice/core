@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,emfio_wmf,\
     vcl \
 ))
 
+$(eval $(call gb_CppunitTest_use_more_fonts,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_configuration,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_sdk_api,emfio_wmf))
 $(eval $(call gb_CppunitTest_use_ure,emfio_wmf))
