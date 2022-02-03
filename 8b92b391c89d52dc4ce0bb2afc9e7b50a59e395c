@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7eb9c1c5_9fcadae6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-03T13:43:51Z",
+      "side": 1,
+      "message": "I think this is an improvement, even if it would be ideal to understand the reason why PDF_INSERT_MAGIC_SCALE_FACTOR is needed.",
+      "revId": "8b92b391c89d52dc4ce0bb2afc9e7b50a59e395c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
