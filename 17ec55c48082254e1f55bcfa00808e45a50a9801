@@ -68,6 +68,24 @@
       "message": "what\u0027s the point of the diff call (should it be conditionalized for verbose make?)\n(also not using line continuation means that for each line make will use a new subshell to execute the recipe)",
       "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa39d57f_95af25fb",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-03T15:26:11Z",
+      "side": 1,
+      "message": "this had me puzzled too, but i think it\u0027s because diff will return 0 if the files are the same and non-0 otherwise, so that means when it fails (and this file is only created for checking, nothing uses it iirc) you also get to see why it fails.",
+      "parentUuid": "ef2deba9_d27fda4c",
+      "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
