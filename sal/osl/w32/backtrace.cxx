@@ -61,13 +61,9 @@ OUString sal::backtrace_to_string(BacktraceState* backtraceState)
 {
     HANDLE hProcess = GetCurrentProcess();
     // https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/nf-dbghelp-syminitialize
-    // says to not initialize more than once. This still leaks for some
-    // reason if called often enough.
-    static bool needsInit = true;
-    if( needsInit )
-        SymInitialize( hProcess, nullptr, true );
-    else
-        SymRefreshModuleList( hProcess );
+    // says to not initialize more than once.
+    [[maybe_unused]] static bool bInitialized = SymInitialize(hProcess, nullptr, false);
+    SymRefreshModuleList(hProcess);
     SYMBOL_INFO  * pSymbol;
     pSymbol = static_cast<SYMBOL_INFO *>(calloc( sizeof( SYMBOL_INFO ) + 1024 * sizeof( char ), 1 ));
     assert(pSymbol);
