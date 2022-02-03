@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "291b2bef_3fdbc737",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-03T04:58:09Z",
+      "side": 1,
+      "message": "It looks like this comes from void SvxSearchDialog::Construct_Impl()\n    const SfxPoolItem* ppArgs[] \u003d { pSearchItem.get(), nullptr };\n\nSo it spent at least a part of its life as a unique_ptr. But I wouldn\u0027t want to try to fudge this into a shared_ptr - not that I even know how to do that.",
+      "revId": "b6f9d62441a79ab0219b9b0b6bde88aa87758e6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
