@@ -107,9 +107,78 @@ cat $DEBUGSRC | awk '
 
  rpmbuild -bb --define "_unpackaged_files_terminate_build  0" --define "_binary_payload w1T.xzdio" ${DEBUGSRC}-debugsource --target $build_cpu --buildroot=$buildroot
 
+###################################################################
+echo create rpm debug info packages by processing logged spec files
+###################################################################
+
+for i in $BUILD_PATH/workdir/installation/CollaboraOffice/rpm/logging/*/*.spec.log
+do
+
+ # repackage only rpm packages with non-stripped so files
+
+ if grep -q '^%attr.*[.]\(so\|bin\)\([.].*\)\?\"' $i
+ then
+	echo ================ $i ================
+	pack=$(cat $i | awk '/^Name/{print$2}')
+	buildroot=$(cat $i | awk '/^BuildRoot/{print$2}')
+	topdir=$(dirname $(dirname $buildroot))
+	rpmdir=$(echo $topdir | sed 's/_inprogress$//')
+
+	# create empty buildroot directory
+
+	rm -rf $buildroot
+	mkdir -p $buildroot $topdir/RPMS/BUILD $topdir/RPMS/RPMS
+	cd $buildroot
+
+	echo REBUILD: $rpmdir/RPMS/${pack}-[0-9]*.rpm
+
+	# extract rpm package
+
+	rpm2cpio $rpmdir/RPMS/${pack}-[0-9]*.rpm | cpio -idmv
+
+	# create stripped libraries and linked debug info files
+
+	for j in $(cat $i | awk '/^%attr.*libpython.*[.]so.*-gdb[.]py.*?"$/{next} /^%attr.*[.](so|bin)([.].*)?"$/{print$2}')
+	do
+		so=$(echo $j | tr -d '"')
+		cd ./$(dirname $so)
+		so=$(basename $so)
+		objcopy --only-keep-debug $so $so.dbg
+		objcopy --strip-debug $so
+		objcopy --add-gnu-debuglink=$so.dbg $so
+		cd $buildroot
+	done
+
+	# copy files for double package generation (using hard links)
+
+	cp -rl $buildroot $buildroot.copy
+
+	# stripped package
+
+	rpmbuild -bb --define "_unpackaged_files_terminate_build  0" --define "_binary_payload w1T.xzdio" $i --target $build_cpu --buildroot=$buildroot
+	rm -rf $buildroot
+	mv $buildroot.copy $buildroot
+	mkdir -p $topdir/RPMS/BUILD $topdir/RPMS/RPMS
+
+	# create spec file for the debug info package
+
+	cat $i | awk '
+		/^Name:/ { print "Summary: Debug information for package "$2; print $0"-debuginfo";next }
+		/^Group:/ { print $1" Development/Debug";next }
+		/^%attr.*libpython.*[.]so.*-gdb[.]py.*?"$/ { next }
+		/^%attr.*[.](so|bin)([.].*)?"$/ { print substr($0, 1, length($0) - 1)".dbg\""; next }
+		/^%attr/ || /^Summary:/ { next }
+		{print}
+	' > ${i}-debuginfo
+
+	# create debug info package
+
+	rpmbuild -bb --define "_unpackaged_files_terminate_build  0" --define "_binary_payload w1T.xzdio" ${i}-debuginfo --target $build_cpu --buildroot=$buildroot
+ fi
+done
 
 echo Update RPM download tar.gz
-rpmdir=$(echo $topdir | sed 's/_inprogress$//')
+
 mv $topdir/RPMS/RPMS/*/*.rpm $rpmdir/RPMS/
 cd $rpmdir/..
 TARGET_RPM=$(ls *_download/*.tar.gz)
@@ -168,6 +237,87 @@ cat $DEBUGSRC | awk '
  # debug build source package
 
  $BUILD_PATH/workdir/UnpackedTarball/epm/epm -f deb -g ${INSTALLDIRNAME}-debugsource ${DEBUGSRC}-debugsource --output-dir DEBS -v
+
+######################################################################
+echo create DEB debug info packages by processing logged EPM lst files
+######################################################################
+
+for i in $BUILD_PATH/workdir/installation/CollaboraOffice/deb/listfile/en-US/*.lst
+do
+
+ # repackage only deb packages with non-stripped so files
+
+ if grep -q '^f .*[.]\(so\|bin\)\([.].*\)\?$' $i
+ then
+	echo ================ $i ================
+	TARGET_NAME=$INSTALLDIRNAME"$(echo $(basename $i) | awk '
+	/epm_gid_Module_Optional_Firebird.lst/{print"basis-firebird"}
+	/epm_gid_Module_Optional_Gnome.lst/{print"basis-gnome-integration"}
+	/epm_gid_Module_Optional_Grfflt.lst/{print"basis-graphicfilter"}
+	/epm_gid_Module_Optional_Kde.lst/{print"basis-kde-integration"}
+	/epm_gid_Module_Optional_OGLTrans.lst/{print"basis-ogltrans"}
+	/epm_gid_Module_Optional_PostgresqlSdbc.lst/{print"basis-postgresql-sdbc"}
+	/epm_gid_Module_Pdfimport.lst/{print"basis-extension-pdf-import"}
+	/epm_gid_Module_Prg_Base_Bin.lst/{print"basis-base"}
+	/epm_gid_Module_Prg_Calc_Bin.lst/{print"basis-calc"}
+	/epm_gid_Module_Prg_Impress_Bin.lst/{print"basis-impress"}
+	/epm_gid_Module_Prg_Math_Bin.lst/{print"basis-math"}
+	/epm_gid_Module_Prg_Wrt_Bin.lst/{print"basis-writer"}
+	/epm_gid_Module_Pyuno.lst/{print"basis-pyuno"}
+	/epm_gid_Module_Reportbuilder.lst/{print"basis-extension-report-builder"}
+	/epm_gid_Module_Root_Brand.lst/{print""}
+	/epm_gid_Module_Root.lst/{print"basis-core"}
+	/epm_gid_Module_Root_Ure_Hidden.lst/{print"-ure"}
+	')"
+	echo TARGET NAME: $TARGET_NAME
+
+	# create stripped libraries and linked debug info files
+
+	for j in $(cat $i | awk '/^f .*libpython.*[.]so.*-gdb[.]py.*$/{next} /^f .*[.](so|bin)([.].*)?$/{print$6}')
+	do
+		cd $(dirname $j)
+		so=$(basename $j)
+		# remove old temporary files
+		rm -f $so.copy $so.dbg
+		# keep original file
+		cp $so $so.copy
+		objcopy --only-keep-debug $so $so.dbg
+		objcopy --strip-debug $so
+		objcopy --add-gnu-debuglink=$so.dbg $so
+		cd $BUILD_PATH
+	done
+
+	# create stripped package
+
+	$BUILD_PATH/workdir/UnpackedTarball/epm/epm -f deb -g $TARGET_NAME $i --output-dir DEBS -v
+
+	# create spec file for the debug info package
+
+	cat $i | awk '
+		/^%product/ { print gensub("%product", "%product Debug info package of", "", $0);next }
+		/^%description/ { print gensub("%description", "%description Debug info package of", "", $0);next }
+		/^f .*libpython.*[.]so.*-gdb[.]py.*$/ { next }
+		/^f .*[.](so|bin)([.].*)?$/ { print $1,$2,$3,$4,$5".dbg",$6".dbg"; next }
+		/^[cf] / { next }
+		{print}
+	' > ${i}-debuginfo
+
+	# create debug info package
+	$BUILD_PATH/workdir/UnpackedTarball/epm/epm -f deb -g ${TARGET_NAME}-debuginfo $i-debuginfo --output-dir DEBS -v
+
+	# restore original non stripped library files
+
+	for j in $(cat $i | awk '/^f .*libpython.*[.]so.*-gdb[.]py.*$/{next} /^f .*[.](so|bin)([.].*)?$/{print$6}')
+	do
+		cd $(dirname $j)
+		so=$(basename $j)
+		rm $so.dbg
+		# restore original file
+		mv -f $so.copy $so
+		cd $BUILD_PATH
+	done
+ fi
+done
 
 echo Update DEB download tar.gz
 
