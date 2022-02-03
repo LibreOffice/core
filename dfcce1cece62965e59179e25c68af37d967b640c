@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e284db8_e3330a56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-03T20:01:39Z",
+      "side": 1,
+      "message": "When debugging in gdb, I sometimes use \"catch throw\" and there are so much \"expected throws\", let\u0027s remove a useless one.",
+      "revId": "dfcce1cece62965e59179e25c68af37d967b640c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
