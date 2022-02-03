@@ -236,6 +236,7 @@ public:
     virtual OUString getPartName( int nPart ) override;
     virtual OUString getPartHash( int nPart ) override;
     virtual VclPtr<vcl::Window> getDocWindow() override;
+    bool isMasterViewMode();
 
     virtual void setPartMode( int nPartMode ) override;
 
