@@ -106,6 +106,17 @@ namespace sax_fastparser {
 
     /** Characters not allowed in XML 1.0
         XML 1.1 would exclude only U+0000
+
+        This assumes that `string` is UTF-8, but which appears to generally be the case:  The only
+        user of this FastSaxSerializer code is FastSerializerHelper, and when its constructor
+        (sax/source/tools/fshelper.cxx) is called with bWriteHeader being true, it calls
+        FastSaxSerializer::startDocument, which writes sXmlHeader claiming encoding="UTF-8".  The
+        only place that appears to construct FastSerializerHelper appears to be
+        XmlFilterBase::openFragmentStreamWithSerializer (oox/source/core/xmlfilterbase.cxx), and it
+        only passes false for bWriteHeader when the given rMediaType contains "vml" but not "+xml"
+        (see <https://git.libreoffice.org/core/+/6a11add2c4ea975356cfb7bab02301788c79c904%5E!/>
+        "XLSX VML Export fixes", stating "Don't write xml headers for vml files").  But lets assume
+        that even such Vector Markup Language files are written as UTF-8.
      */
     template<typename Int> static std::optional<std::pair<unsigned, Int>> invalidChar(
         char const * string, Int length, Int index )
