@@ -18,7 +18,6 @@
  */
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <o3tl/float_int_conversion.hxx>
 #include <osl/diagnose.h>

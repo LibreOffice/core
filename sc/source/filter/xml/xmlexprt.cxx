@@ -112,16 +112,12 @@
 #include <rtl/math.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
-#include <svx/unoshape.hxx>
 #include <comphelper/base64.hxx>
 #include <comphelper/extract.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
 #include <vcl/svapp.hxx>
-#include <svx/unoapi.hxx>
-#include <basegfx/polygon/b2dpolypolygon.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>

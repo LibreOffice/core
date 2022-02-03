@@ -51,7 +51,6 @@
 #include <externalrefmgr.hxx>
 
 #include <xmloff/maptype.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -82,7 +81,6 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/langitem.hxx>
-#include <svx/unoapi.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sax/tools/converter.hxx>
 #include <sax/fastattribs.hxx>

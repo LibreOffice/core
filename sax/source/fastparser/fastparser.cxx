@@ -49,7 +49,6 @@
 #include <cassert>
 #include <cstring>
 #include <libxml/parser.h>
-#include <cstdint>
 
 // Inverse of libxml's BAD_CAST.
 #define XML_CAST( str ) reinterpret_cast< const char* >( str )

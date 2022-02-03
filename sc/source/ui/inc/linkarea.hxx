@@ -20,7 +20,6 @@
 #pragma once
 
 #include <sfx2/objsh.hxx>
-#include <tools/solar.h>
 #include <vcl/weld.hxx>
 
 namespace sfx2 { class DocumentInserter; }

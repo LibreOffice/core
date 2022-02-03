@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 // (0x009B, 0x009D, 0x009E) AUTOFILTER ========================================
 

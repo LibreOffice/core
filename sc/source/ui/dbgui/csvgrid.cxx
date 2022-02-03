@@ -46,6 +46,7 @@
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/langitem.hxx>
+#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <editutil.hxx>
 // *** edit engine ***

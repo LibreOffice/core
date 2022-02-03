@@ -29,7 +29,6 @@
 #include <svtools/sfxecode.hxx>
 
 #include <linkarea.hxx>
-#include <rangeutl.hxx>
 #include <docsh.hxx>
 #include <tablink.hxx>
 #include <scresid.hxx>

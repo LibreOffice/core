@@ -33,12 +33,9 @@
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <tools/json_writer.hxx>
-#include <sfx2/viewsh.hxx>
 #include <svl/numformat.hxx>
-#include <vcl/jsdialog/executor.hxx>
 
 #include <document.hxx>
-#include <docsh.hxx>
 #include <viewdata.hxx>
 
 using namespace com::sun::star;

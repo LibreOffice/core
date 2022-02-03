@@ -7,7 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "helper/debughelper.hxx"
+#include <test/bootstrapfixture.hxx>
+#include <memory>
+#include <string_view>
 #include "helper/qahelper.hxx"
 #include <editutil.hxx>
 #include <formulacell.hxx>

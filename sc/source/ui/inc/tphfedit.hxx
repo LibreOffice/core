@@ -21,7 +21,6 @@
 
 #include <scdllapi.h>
 #include <editutil.hxx>
-#include <cppuhelper/weakref.hxx>
 #include <svx/weldeditview.hxx>
 #include <editeng/svxenum.hxx>
 #include <unotools/weakref.hxx>

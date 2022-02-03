@@ -23,7 +23,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/urlobj.hxx>

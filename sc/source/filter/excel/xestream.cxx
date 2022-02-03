@@ -23,6 +23,7 @@
 
 #include <filter/msfilter/util.hxx>
 #include <o3tl/safeint.hxx>
+#include <osl/diagnose.h>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/random.h>
@@ -40,7 +41,8 @@
 #include <xlstring.hxx>
 #include <xltools.hxx>
 #include <xeroot.hxx>
-#include <xcl97rec.hxx>
+#include <xestring.hxx>
+#include <xlstyle.hxx>
 #include <rangelst.hxx>
 #include <compiler.hxx>
 #include <formulacell.hxx>
@@ -58,6 +60,7 @@
 
 #include <oox/token/tokens.hxx>
 #include <oox/token/relationship.hxx>
+#include <oox/export/drawingml.hxx>
 #include <oox/export/utils.hxx>
 #include <formula/grammar.hxx>
 #include <oox/ole/vbaexport.hxx>

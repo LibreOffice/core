@@ -44,7 +44,6 @@
 #include <docsh.hxx>
 #include <undotab.hxx>
 #include <drwlayer.hxx>
-#include <userdat.hxx>
 #include <drtxtob.hxx>
 #include <memory>
 

@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <rtl/ustring.hxx>
 #include <memory>
 
 class SfxObjectShell;

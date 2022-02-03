@@ -37,7 +37,6 @@
 
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <sfx2/objsh.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/datetime.hxx>

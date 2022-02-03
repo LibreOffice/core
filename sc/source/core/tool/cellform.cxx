@@ -20,7 +20,6 @@
 #include <cellform.hxx>
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/sharedstring.hxx>
 
 #include <formulacell.hxx>

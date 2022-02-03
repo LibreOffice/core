@@ -24,7 +24,6 @@
 
 #include <scitems.hxx>
 
-#include <svtools/htmlcfg.hxx>
 #include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editeng.hxx>

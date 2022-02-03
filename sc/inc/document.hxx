@@ -28,6 +28,7 @@
 #include "interpretercontext.hxx"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
+#include "recursionhelper.hxx"
 #include "tabopparams.hxx"
 #include "types.hxx"
 #include <formula/grammar.hxx>

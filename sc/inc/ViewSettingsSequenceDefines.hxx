@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 // this are the defines for the position of the settings in the
 // ViewSettingsSequence
 

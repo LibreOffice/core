@@ -26,6 +26,7 @@
 #include "checklistmenu.hxx"
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <o3tl/deleter.hxx>
+#include <vcl/window.hxx>
 
 #include <memory>
 #include <vector>

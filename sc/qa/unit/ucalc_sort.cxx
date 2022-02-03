@@ -8,7 +8,6 @@
  */
 
 #include "helper/sorthelper.hxx"
-#include "helper/debughelper.hxx"
 #include "helper/qahelper.hxx"
 
 #include <scdll.hxx>
@@ -22,6 +21,7 @@
 #include <docfunc.hxx>
 #include <scitems.hxx>
 #include <editutil.hxx>
+#include <drwlayer.hxx>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>

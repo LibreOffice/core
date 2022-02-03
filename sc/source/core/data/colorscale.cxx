@@ -24,7 +24,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <string_view>
 
 ScFormulaListener::ScFormulaListener(ScFormulaCell* pCell):
     mbDirty(false),

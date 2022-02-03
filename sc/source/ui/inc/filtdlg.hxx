@@ -25,8 +25,6 @@
 #include <filterentries.hxx>
 #include <queryentry.hxx>
 
-#include <svx/colorbox.hxx>
-
 #include <memory>
 #include <deque>
 #include <vector>

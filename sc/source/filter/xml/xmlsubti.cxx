@@ -38,8 +38,6 @@
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 
-#include <memory>
-
 using namespace com::sun::star;
 
 ScXMLTabProtectionData::ScXMLTabProtectionData() :

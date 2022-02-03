@@ -18,8 +18,6 @@
  */
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
-#include <tools/UnitConversion.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/uno/Any.hxx>

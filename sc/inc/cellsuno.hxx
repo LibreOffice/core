@@ -88,7 +88,6 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/weakref.hxx>
 
 #include <memory>
 #include <optional>

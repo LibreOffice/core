@@ -44,7 +44,6 @@
 #include <svl/stritem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
-#include <vcl/virdev.hxx>
 #include <unotools/charclass.hxx>
 
 #include <inputwin.hxx>

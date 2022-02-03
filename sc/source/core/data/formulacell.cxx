@@ -51,7 +51,6 @@
 
 #include <comphelper/threadpool.hxx>
 #include <editeng/editobj.hxx>
-#include <tools/cpuid.hxx>
 #include <formula/errorcodes.hxx>
 #include <svl/intitem.hxx>
 #include <svl/numformat.hxx>

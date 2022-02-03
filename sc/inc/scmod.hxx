@@ -23,7 +23,6 @@
 #include <o3tl/deleter.hxx>
 #include <vcl/timer.hxx>
 #include <svl/lstner.hxx>
-#include <svl/itempool.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include "global.hxx"

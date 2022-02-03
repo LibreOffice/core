@@ -27,7 +27,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdpage.hxx>
-#include <svtools/htmlcfg.hxx>
 #include <sfx2/sfxhtml.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>

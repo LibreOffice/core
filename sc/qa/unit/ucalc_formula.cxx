@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "helper/debughelper.hxx"
+#include <test/bootstrapfixture.hxx>
 #include "helper/qahelper.hxx"
 #include <clipparam.hxx>
 #include <scopetools.hxx>
@@ -21,6 +21,7 @@
 #include <validat.hxx>
 #include <scitems.hxx>
 #include <docpool.hxx>
+#include <docoptio.hxx>
 #include <externalrefmgr.hxx>
 #include <scdll.hxx>
 #include <scmod.hxx>
@@ -30,7 +31,14 @@
 #include <svl/intitem.hxx>
 #include <sfx2/docfile.hxx>
 
+#include <memory>
+#include <functional>
+#include <set>
+#include <algorithm>
+#include <vector>
+
 using namespace formula;
+using namespace std;
 
 namespace {
 

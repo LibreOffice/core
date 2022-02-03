@@ -21,7 +21,6 @@
 
 #include "global.hxx"
 
-#include <memory>
 #include <vector>
 
 enum ScDetOpType

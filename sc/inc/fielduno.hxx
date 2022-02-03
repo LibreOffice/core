@@ -34,7 +34,6 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <cppuhelper/component.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/compbase.hxx>
 #include <osl/mutex.hxx>

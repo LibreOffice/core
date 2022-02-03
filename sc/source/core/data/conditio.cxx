@@ -19,7 +19,6 @@
 
 #include <scitems.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <unotools/collatorwrapper.hxx>

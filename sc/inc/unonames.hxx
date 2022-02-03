@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 // service names
 inline constexpr OUStringLiteral SC_SERVICENAME_VALBIND = u"com.sun.star.table.CellValueBinding";
 inline constexpr OUStringLiteral SC_SERVICENAME_LISTCELLBIND = u"com.sun.star.table.ListPositionCellBinding";

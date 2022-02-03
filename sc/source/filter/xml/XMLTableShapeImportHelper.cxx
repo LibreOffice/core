@@ -25,11 +25,10 @@
 #include <userdat.hxx>
 #include <docuno.hxx>
 #include <sheetdata.hxx>
-#include <xmloff/namespacemap.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <svx/unoshape.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 

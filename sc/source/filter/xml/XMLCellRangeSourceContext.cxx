@@ -23,7 +23,7 @@
 
 #include "xmlimprt.hxx"
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
+#include <xmloff/xmltoken.hxx>
 
 using namespace ::com::sun::star;
 using namespace xmloff::token;

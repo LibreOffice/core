@@ -22,7 +22,6 @@
 #include <osl/diagnose.h>
 
 #include <printopt.hxx>
-#include <miscuno.hxx>
 #include <sc.hrc>
 
 using namespace utl;

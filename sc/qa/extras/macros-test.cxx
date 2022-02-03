@@ -9,19 +9,14 @@
 
 #include <sal/config.h>
 #include <test/unoapi_test.hxx>
-#include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <unotools/tempfile.hxx>
-#include <vcl/svapp.hxx>
-#include <editeng/borderline.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
-#include <attrib.hxx>
-#include <scitems.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 

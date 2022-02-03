@@ -28,7 +28,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <svl/itemset.hxx>
 #include <tools/multisel.hxx>
 #include <vcl/commandevent.hxx>

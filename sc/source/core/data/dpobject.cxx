@@ -70,7 +70,6 @@
 #include <comphelper/types.hxx>
 #include <sal/macros.h>
 #include <svl/numformat.hxx>
-#include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
 #include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>

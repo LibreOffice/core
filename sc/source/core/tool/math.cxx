@@ -13,6 +13,7 @@
 #include <cfenv>
 
 #include <o3tl/float_int_conversion.hxx>
+#include <rtl/math.hxx>
 
 namespace sc
 {

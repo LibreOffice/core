@@ -24,6 +24,8 @@
 #include <address.hxx>
 #include <tools/stream.hxx>
 
+#include <com/sun/star/uno/Any.hxx>
+
 class ScDocShell;
 class ScDocument;
 class ScAsciiOptions;

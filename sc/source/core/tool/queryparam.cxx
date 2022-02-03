@@ -24,7 +24,6 @@
 
 #include <svl/sharedstringpool.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>

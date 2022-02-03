@@ -10,6 +10,8 @@
 
 #include <officecfg/Office/Common.hxx>
 
+#include <sfx2/sfxmodelfactory.hxx>
+
 #include "helper/qahelper.hxx"
 #include "helper/xpath.hxx"
 
@@ -20,6 +22,8 @@
 #include <stlpool.hxx>
 #include <formulacell.hxx>
 #include <validat.hxx>
+#include <global.hxx>
+#include <dpcache.hxx>
 #include <dpobject.hxx>
 #include <clipparam.hxx>
 #include <viewopti.hxx>
@@ -33,12 +37,17 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <unotools/syslocaleoptions.hxx>
+#include <formula/grammar.hxx>
+#include <tools/fldunit.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>

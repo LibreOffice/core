@@ -21,6 +21,7 @@
 #include <svx/algitem.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/editobj.hxx>
+#include <svl/itempool.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/langitem.hxx>
 #include <o3tl/unit_conversion.hxx>

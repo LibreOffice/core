@@ -10,7 +10,7 @@
 #pragma once
 
 #include <cstdlib>
-#include <mdds/multi_type_vector_types.hpp>
+#include <mdds/multi_type_vector/types.hpp>
 
 namespace sc {
 

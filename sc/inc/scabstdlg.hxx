@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <tools/solar.h>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <sfx2/tabdlg.hxx>
 #include <tools/fldunit.hxx>

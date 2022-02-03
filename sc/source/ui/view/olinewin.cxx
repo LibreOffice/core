@@ -19,11 +19,10 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <vcl/image.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/settings.hxx>
+#include <vcl/syswin.hxx>
 #include <osl/diagnose.h>
 
 #include <olinewin.hxx>

@@ -19,7 +19,6 @@
 
 #include <biffhelper.hxx>
 
-#include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <oox/helper/binaryinputstream.hxx>
 

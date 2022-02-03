@@ -34,6 +34,9 @@
 #include <userdat.hxx>
 #include <stlsheet.hxx>
 #include <docfunc.hxx>
+#include <markdata.hxx>
+#include <colorscale.hxx>
+#include <patattr.hxx>
 #include <scitems.hxx>
 #include <editutil.hxx>
 #include <attrib.hxx>
@@ -41,6 +44,7 @@
 #include <scopetools.hxx>
 #include <stlpool.hxx>
 #include <detfunc.hxx>
+#include <cellmergeoption.hxx>
 #include <sortparam.hxx>
 
 #include <orcusfilters.hxx>
@@ -49,6 +53,11 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/text/textfield/Type.hpp>
+
+#include "helper/qahelper.hxx"
 #include "helper/shared_test_impl.hxx"
 
 using namespace ::com::sun::star;
