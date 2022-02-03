@@ -1332,14 +1332,6 @@ class SFScriptForge:
         def RunApplication(self, command, parameters):
             return self.ExecMethod(self.vbMethod, 'RunApplication', command, parameters)
 
-        def RunCommand(self, command, *args, **kwargs):
-            params = tuple(list(args) + ScriptForge.unpack_args(kwargs))
-            if len(params) == 0:
-                params = (command,) + (None,)
-            else:
-                params = (command,) + params
-            return self.SIMPLEEXEC('@SF_Session.RunCommand', params)
-
         def SendMail(self, recipient, cc = '', bcc = '', subject = '', body = '', filenames = '', editmessage = True):
             return self.ExecMethod(self.vbMethod, 'SendMail', recipient, cc, bcc, subject, body, filenames, editmessage)
 
@@ -1547,6 +1539,14 @@ class SFScriptForge:
 
         def Resize(self, left = -1, top = -1, width = -1, height = -1):
             return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
+
+        def RunCommand(self, command, *args, **kwargs):
+            params = tuple(list(args) + ScriptForge.unpack_args(kwargs))
+            if len(params) == 0:
+                params = (command,) + (None,)
+            else:
+                params = (command,) + params
+            return self.SIMPLEEXEC('@SF_UI.RunCommand', params)
 
         def SetStatusbar(self, text = '', percentage = -1):
             return self.ExecMethod(self.vbMethod, 'SetStatusbar', text, percentage)
