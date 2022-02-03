@@ -8,7 +8,6 @@
  */
 
 #include "gridwin.hxx"
-#include "navipi.hxx"
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
 

@@ -20,7 +20,6 @@
 #include <test/xmltesttools.hxx>
 #include <comphelper/processfactory.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <unotest/macros_test.hxx>
 
 using namespace css::uno;

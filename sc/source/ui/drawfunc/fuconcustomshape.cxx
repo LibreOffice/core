@@ -33,8 +33,6 @@
 #include <drawview.hxx>
 #include <editeng/adjustitem.hxx>
 
-#include <math.h>
-
 using namespace com::sun::star;
 
 FuConstCustomShape::FuConstCustomShape(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawView* pViewP, SdrModel* pDoc, const SfxRequest& rReq )

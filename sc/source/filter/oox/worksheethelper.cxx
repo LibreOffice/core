@@ -75,7 +75,6 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <tools/UnitConversion.hxx>
 
 namespace oox::xls {
 

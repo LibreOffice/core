@@ -22,11 +22,9 @@
 #include <osl/diagnose.h>
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <sfx2/objsh.hxx>

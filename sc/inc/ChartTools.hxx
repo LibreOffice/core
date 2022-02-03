@@ -10,13 +10,12 @@
 
 #pragma once
 
+#include <string_view>
 #include <memory>
 #include <vector>
 
 #include <svx/svditer.hxx>
-#include <rtl/ustring.hxx>
 #include <tools/long.hxx>
-
 #include "types.hxx"
 
 class ScDocShell;

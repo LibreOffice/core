@@ -20,7 +20,6 @@
 #undef SC_DLLIMPLEMENTATION
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 

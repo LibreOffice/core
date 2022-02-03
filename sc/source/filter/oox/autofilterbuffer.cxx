@@ -30,12 +30,10 @@
 #include <com/sun/star/table/CellAddress.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <editeng/colritem.hxx>
 #include <editeng/brushitem.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
-#include <oox/helper/containerhelper.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/token/namespaces.hxx>

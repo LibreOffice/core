@@ -11,7 +11,7 @@
 
 #include <stddef.h>
 #include "address.hxx"
-#include <mdds/multi_type_vector_types.hpp>
+#include <mdds/multi_type_vector/types.hpp>
 #include "mtvelements.hxx"
 #include <sal/types.h>
 #include "types.hxx"

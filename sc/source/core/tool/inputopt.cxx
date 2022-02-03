@@ -23,7 +23,6 @@
 
 #include <inputopt.hxx>
 #include <global.hxx>
-#include <miscuno.hxx>
 
 using namespace utl;
 using namespace com::sun::star::uno;

@@ -40,7 +40,6 @@
 #include <chgtrack.hxx>
 #include <chgviset.hxx>
 #include <dbfunc.hxx>
-#include <userdat.hxx>
 #include <postit.hxx>
 #include <global.hxx>
 

@@ -27,7 +27,6 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <algorithm>

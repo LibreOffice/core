@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <vcl/dockwin.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/weld.hxx>
@@ -22,6 +21,7 @@
 class ScCheckListMenuControl;
 class ScViewData;
 struct ScCheckListMember;
+struct ImplSVEvent;
 
 struct ScCheckListMember
 {

@@ -59,7 +59,6 @@
 #include <stlsheet.hxx>
 #include <stlpool.hxx>
 #include <document.hxx>
-#include <global.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <validat.hxx>

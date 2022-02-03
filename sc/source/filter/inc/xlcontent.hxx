@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
 
 // Constants ==================================================================
 

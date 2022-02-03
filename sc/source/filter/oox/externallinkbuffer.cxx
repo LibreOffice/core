@@ -19,8 +19,8 @@
 
 #include <externallinkbuffer.hxx>
 #include <externalrefmgr.hxx>
+#include <compiler.hxx>
 #include <tokenarray.hxx>
-#include <tokenstringcontext.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sheet/DDELinkInfo.hpp>
