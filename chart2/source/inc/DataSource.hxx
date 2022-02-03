@@ -22,9 +22,12 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
+#include <vector>
 
 namespace chart
 {
+class LabeledDataSequence;
 
 class DataSource final : public
     ::cppu::WeakImplHelper<
@@ -36,6 +39,8 @@ public:
     explicit DataSource();
     explicit DataSource(
         const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
+    explicit DataSource(
+        const std::vector< rtl::Reference< ::chart::LabeledDataSequence > > & rSequences );
 
     virtual ~DataSource() override;
 

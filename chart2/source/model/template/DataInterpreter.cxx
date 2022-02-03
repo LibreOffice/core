@@ -143,7 +143,7 @@ InterpretedData DataInterpreter::interpretDataSource(
     std::vector< rtl::Reference< LabeledDataSequence > > aData = getDataSequences(xSource);
 
     rtl::Reference< LabeledDataSequence > xCategories;
-    vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
+    vector< rtl::Reference< LabeledDataSequence > > aSequencesVec;
 
     // check if we should use categories
 
@@ -182,7 +182,7 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     for (auto const& elem : aSequencesVec)
     {
-        Sequence< Reference< data::XLabeledDataSequence > > aNewData( &elem, 1 );
+        std::vector< rtl::Reference< LabeledDataSequence > > aNewData { elem };
         rtl::Reference< DataSeries > xSeries;
         if( nSeriesIndex < static_cast<sal_Int32>(aSeriesToReUse.size()))
             xSeries = aSeriesToReUse[nSeriesIndex];
