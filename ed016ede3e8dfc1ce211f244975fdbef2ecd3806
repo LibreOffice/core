@@ -16,6 +16,23 @@
       "message": "this at least seems to make it startup",
       "revId": "ed016ede3e8dfc1ce211f244975fdbef2ecd3806",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed28edfc_7e846f02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-02-03T07:36:12Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "ed016ede3e8dfc1ce211f244975fdbef2ecd3806",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
