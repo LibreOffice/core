@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0afa836_761b59ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-03T15:02:47Z",
+      "side": 1,
+      "message": "Should be NATNUM8 instead of NATNUM.",
+      "range": {
+        "startLine": 9,
+        "startChar": 37,
+        "endLine": 9,
+        "endChar": 43
+      },
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "c52e445d_919d18af",
@@ -14,6 +37,58 @@
       "writtenOn": "2022-02-03T11:33:25Z",
       "side": 1,
       "message": "OK now I understand. To make sure the old documents created without this patch, the numbering symbol is saved in the ODF file. For NUMBER_LOWER_ZH, it was \"一, 二, 三, ...\" previously. Thus for this change, we should make sure it is still the same, otherwise when open the old ODF document with the new LO version those numbering would be broken and become \"1,2,3,....\".",
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21ea26a_905da83b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-03T15:02:47Z",
+      "side": 1,
+      "message": "Yes, exactly (and vice versa, older version loading document created by new version). Sorry for not having been clear on this.",
+      "parentUuid": "c52e445d_919d18af",
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46ec83b2_ac813b9a",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-03T15:02:47Z",
+      "side": 1,
+      "message": "Are the first three numberings of NATNUM5 identical to NATNUM8?",
+      "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95be1c24_f7793fe4",
+        "filename": "i18npool/source/defaultnumberingprovider/defaultnumberingprovider.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1057,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-03T15:02:47Z",
+      "side": 1,
+      "message": "A short code comment why this is literally defined here (all other CJK entries don\u0027t) would be nice for follow-up coders.. something like \"Defined here to maintain compatibility with older releases.\" or some such.",
       "revId": "d113a7a2dac8f1f27ad1478a23d7eab717655be5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
