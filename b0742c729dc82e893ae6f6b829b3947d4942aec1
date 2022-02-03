@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01249152_7fc1adef",
+        "filename": "desktop/Extension_test-crashextension.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "568bf7e0_56955fc8",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d28a55d7_2cf3e594",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-01-27T10:45:12Z",
       "side": 1,
       "message": "is that really needed, or is it cargo cult?",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44156e2d_ccc4ba7e",
+        "filename": "desktop/Library_crashextension.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "d28a55d7_2cf3e594",
       "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -52,6 +88,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4730bf5_0eaa40ec",
+        "filename": "desktop/Module_desktop.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "a1c902b5_c36abbc0",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eabd8304_35797104",
@@ -69,6 +123,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "25081592_9204a699",
+        "filename": "desktop/Rdb_crashextension_platform.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eabd8304_35797104",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c58825c_9dbf1b62",
@@ -82,6 +154,30 @@
       "writtenOn": "2022-01-27T10:45:12Z",
       "side": 1,
       "message": "here and elsewhere, better use libreoffice?",
+      "range": {
+        "startLine": 24,
+        "startChar": 26,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a4059b8_16ee8aa6",
+        "filename": "desktop/test/deployment/crashextension/Addons.xcu",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c58825c_9dbf1b62",
       "range": {
         "startLine": 24,
         "startChar": 26,
@@ -115,6 +211,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b531d38_3b98192b",
+        "filename": "desktop/test/deployment/crashextension/crashextension.component",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "def98f89_7deaf049",
+      "range": {
+        "startLine": 22,
+        "startChar": 24,
+        "endLine": 22,
+        "endChar": 36
+      },
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c788808_35311ff2",
@@ -128,6 +248,24 @@
       "writtenOn": "2022-01-27T10:45:12Z",
       "side": 1,
       "message": "are all of these includes actually needed?",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a77313e_9ff04325",
+        "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Removed unused includes.",
+      "parentUuid": "4c788808_35311ff2",
       "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -151,6 +289,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "945d980c_534b5db4",
+        "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "I tried to do this with patch set 7, but the extension button doesn\u0027t work anymore. Any idea what\u0027s wrong?",
+      "parentUuid": "9680759a_f45d7997",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ff132e01_a79f4b69",
         "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
         "patchSetId": 5
@@ -162,6 +318,24 @@
       "writtenOn": "2022-01-27T10:45:12Z",
       "side": 1,
       "message": "it\u0027s odd to use NULL here and nullptr below (hint: for this gb_Library_set_external_code, I\u0027d stick to pre-C++11 NULL throughout, and include \u003ccstddef\u003e)",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d69ba4a3_96958696",
+        "filename": "desktop/test/deployment/crashextension/crashextension.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ff132e01_a79f4b69",
       "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -179,6 +353,24 @@
       "writtenOn": "2022-01-27T10:45:12Z",
       "side": 1,
       "message": "is this file added in error?",
+      "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a87ccd6c_45cd652c",
+        "filename": "desktop/test/deployment/passive/img/bomb.png",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-03T12:59:53Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "4c782a26_998ac0c1",
       "revId": "b0742c729dc82e893ae6f6b829b3947d4942aec1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
