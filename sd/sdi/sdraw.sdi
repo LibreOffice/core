@@ -3612,7 +3612,7 @@ SfxBoolItem MasterSlidesPanel SID_MASTER_SLIDES_PANEL
     GroupId = SfxGroupId::Modify;
 ]
 
-SfxVoidItem SlideMasterPage SID_SLIDE_MASTER_MODE
+SfxBoolItem SlideMasterPage SID_SLIDE_MASTER_MODE
 ()
 [
     AutoUpdate = FALSE,
