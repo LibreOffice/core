@@ -33,6 +33,40 @@
       "message": "Great!\n\nSorry for late reply. Thank you Julien! Looks great now.",
       "revId": "cd2966386fba7d6cfca62f40be4387632a40dfee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3126d5c_f8c23e8f",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-03T05:52:32Z",
+      "side": 1,
+      "message": "There\u0027s also this variant of cleanup 😊",
+      "revId": "cd2966386fba7d6cfca62f40be4387632a40dfee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7be6fe4c_34e90170",
+        "filename": "sc/qa/extras/macros-test.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-03T05:52:32Z",
+      "side": 1,
+      "message": "And this 😊\n\nIt\u0027s idiomatic to LO code to have more than one variant of doing the same thing, and as always, I\u0027m unsure which is the proper one 😊",
+      "revId": "cd2966386fba7d6cfca62f40be4387632a40dfee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
