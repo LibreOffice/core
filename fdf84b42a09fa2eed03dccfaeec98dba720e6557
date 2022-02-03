@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27d17a6_f75d11f4",
+        "filename": "sal/osl/w32/backtrace.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-03T10:14:17Z",
+      "side": 1,
+      "message": "use the more idiomatic std::call_once?",
+      "revId": "fdf84b42a09fa2eed03dccfaeec98dba720e6557",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
