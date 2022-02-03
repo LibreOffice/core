@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be84d0b2_da2aa414",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-03T07:16:30Z",
+      "side": 1,
+      "message": "Jenkins ok except Windows as usual.\nSince it\u0027s a comment, let\u0027s just push this one.",
+      "revId": "4ca8e6722913c703a523584d5d84504e0548e166",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
