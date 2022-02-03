@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral HID_INSWIN_POS = "SC_HID_INSWIN_POS";
 inline constexpr OStringLiteral HID_INSWIN_CALC = "SC_HID_INSWIN_CALC";
 inline constexpr OStringLiteral HID_INSWIN_CANCEL = "SC_HID_INSWIN_CANCEL";

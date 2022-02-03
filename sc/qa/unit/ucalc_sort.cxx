@@ -22,6 +22,7 @@
 #include <docfunc.hxx>
 #include <scitems.hxx>
 #include <editutil.hxx>
+#include <drwlayer.hxx>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>

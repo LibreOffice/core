@@ -21,7 +21,6 @@
 
 #include <vector>
 #include <map>
-#include <set>
 #include <o3tl/sorted_vector.hxx>
 
 #include "richstring.hxx"

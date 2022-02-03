@@ -15,7 +15,6 @@
 #include <reffact.hxx>
 #include <tabvwsh.hxx>
 
-#include <unotools/pathoptions.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/objsh.hxx>

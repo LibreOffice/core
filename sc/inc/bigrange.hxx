@@ -20,7 +20,6 @@
 #pragma once
 
 #include "address.hxx"
-#include <algorithm>
 
 const sal_Int32 nInt32Min = 0x80000000;
 const sal_Int32 nInt32Max = 0x7fffffff;

@@ -9,7 +9,13 @@
 
 #include <unotest/filters-test.hxx>
 
-#include <vcl/svapp.hxx>
+#include <sal/config.h>
+
+#include <memory>
+
+#include <test/bootstrapfixture.hxx>
+
+#include <osl/thread.h>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
 #include <svx/svdograf.hxx>
@@ -30,6 +36,8 @@
 #include <validat.hxx>
 #include <formulacell.hxx>
 #include <docfunc.hxx>
+#include <userdat.hxx>
+#include <markdata.hxx>
 #include <olinetab.hxx>
 #include <postit.hxx>
 #include <scitems.hxx>
@@ -45,6 +53,8 @@
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <tools/UnitConversion.hxx>

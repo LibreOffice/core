@@ -55,7 +55,6 @@
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include <svx/unoshape.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/svapp.hxx>
@@ -69,7 +68,6 @@
 
 #include <algorithm>
 
-#include <svx/unoapi.hxx>
 #include <scmod.hxx>
 
 #ifdef indices

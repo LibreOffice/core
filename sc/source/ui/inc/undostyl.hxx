@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include <optional>
 #include <svl/style.hxx>
 #include <svl/itemset.hxx>

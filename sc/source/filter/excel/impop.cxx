@@ -28,7 +28,6 @@
 #include <sfx2/docfile.hxx>
 #include <svx/svxids.hrc>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
 

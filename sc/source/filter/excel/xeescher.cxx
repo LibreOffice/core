@@ -20,7 +20,6 @@
 #include <xeescher.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
@@ -57,7 +56,6 @@
 #include <userdat.hxx>
 #include <drwlayer.hxx>
 #include <svl/itemset.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/sdtaitm.hxx>
 #include <document.hxx>
 #include <svx/xfillit0.hxx>

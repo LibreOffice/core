@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <xmloff/xmlictxt.hxx>
 #include "importcontext.hxx"
 
 class ScXMLImport;

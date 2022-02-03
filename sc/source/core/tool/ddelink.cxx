@@ -24,7 +24,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/bindings.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 
 #include <ddelink.hxx>

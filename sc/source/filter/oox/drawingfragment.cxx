@@ -22,7 +22,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <comphelper/propertyvalue.hxx>
 
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
@@ -35,7 +34,6 @@
 #include <rtl/strbuf.hxx>
 #include <svx/svdobj.hxx>
 #include <drwlayer.hxx>
-#include <userdat.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
@@ -50,7 +48,6 @@
 #include <formulaparser.hxx>
 #include <stylesbuffer.hxx>
 #include <themebuffer.hxx>
-#include <unitconverter.hxx>
 #include <worksheetbuffer.hxx>
 namespace oox::xls {
 
