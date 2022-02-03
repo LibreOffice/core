@@ -1113,13 +1113,13 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
     if(!pUndoManager)
         return;
 
-    sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+    size_t nCount(pUndoManager->GetUndoActionCount());
     if(nCount)
     {
         // prepare list
         std::vector<OUString> aStringList;
         aStringList.reserve(nCount);
-        for (sal_uInt16 a = 0; a < nCount; ++a)
+        for (size_t a = 0; a < nCount; ++a)
         {
             // generate one String in list per undo step
             aStringList.push_back( pUndoManager->GetUndoActionComment(a) );
@@ -1140,7 +1140,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
     if(!pUndoManager)
         return;
 
-    sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+    size_t nCount(pUndoManager->GetRedoActionCount());
     if(nCount)
     {
         // prepare list
@@ -1209,7 +1209,7 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
 
     if(nNumber && pUndoManager)
     {
-        sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
+        size_t nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
             if (comphelper::LibreOfficeKit::isActive() && !bRepair)
@@ -1277,7 +1277,7 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
 
     if(nNumber && pUndoManager)
     {
-        sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
+        size_t nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
             if (comphelper::LibreOfficeKit::isActive() && !bRepair)
