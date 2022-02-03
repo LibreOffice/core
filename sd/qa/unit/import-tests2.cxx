@@ -128,6 +128,7 @@ public:
     void testTdf103347();
     void testHyperlinksOnShapes();
     void testTdf112209();
+    void testTdf128596();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -192,6 +193,7 @@ public:
     CPPUNIT_TEST(testTdf103347);
     CPPUNIT_TEST(testHyperlinksOnShapes);
     CPPUNIT_TEST(testTdf112209);
+    CPPUNIT_TEST(testTdf128596);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1886,6 +1888,21 @@ void SdImportTest2::testTdf112209()
     // - Actual  : Color: R:21 G:170 B:236 A:0
     // i.e. the image color was blue instead of grey.
     CPPUNIT_ASSERT_EQUAL(Color(0x848484), aBitmap.GetPixelColor(0, 0));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf128596()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf128596.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef),
+                                               uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xShape.is());
+
+    css::drawing::BitmapMode bitmapmode;
+    xShape->getPropertyValue("FillBitmapMode") >>= bitmapmode;
+    CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_REPEAT, bitmapmode);
 
     xDocShRef->DoClose();
 }

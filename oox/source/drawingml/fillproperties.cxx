@@ -221,7 +221,9 @@ BitmapMode lclGetBitmapMode( sal_Int32 nToken )
         case XML_tile:      return BitmapMode_REPEAT;
         case XML_stretch:   return BitmapMode_STRETCH;
     }
-    return BitmapMode_NO_REPEAT;
+
+    // tdf#128596 Default value is XML_tile for MSO.
+    return BitmapMode_REPEAT;
 }
 
 RectanglePoint lclGetRectanglePoint( sal_Int32 nToken )
