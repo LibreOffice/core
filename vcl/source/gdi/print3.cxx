@@ -203,6 +203,7 @@ public:
         mbOrientationFromUser( false ),
         mbPrinterModified( false ),
         meJobState( css::view::PrintableState_JOB_STARTED ),
+        meUserOrientation( Orientation::Portrait ),
         mnDefaultPaperBin( -1 ),
         mnFixedPaperBin( -1 )
     {}
