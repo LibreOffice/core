@@ -55,6 +55,28 @@ LabeledDataSequence::LabeledDataSequence(
     ModifyListenerHelper::addListener( m_xLabel, m_xModifyEventForwarder );
 }
 
+LabeledDataSequence::LabeledDataSequence( const LabeledDataSequence& rSource ) :
+    impl::LabeledDataSequence_Base(),
+    m_xModifyEventForwarder( new ModifyEventForwarder() )
+{
+    uno::Reference< chart2::data::XDataSequence > xNewValues( rSource.m_xData );
+    uno::Reference< chart2::data::XDataSequence > xNewLabel( rSource.m_xLabel );
+
+    uno::Reference< util::XCloneable > xLabelCloneable( rSource.m_xLabel, uno::UNO_QUERY );
+    if( xLabelCloneable.is())
+        xNewLabel.set( xLabelCloneable->createClone(), uno::UNO_QUERY );
+
+    uno::Reference< util::XCloneable > xValuesCloneable( rSource.m_xData, uno::UNO_QUERY );
+    if( xValuesCloneable.is())
+        xNewValues.set( xValuesCloneable->createClone(), uno::UNO_QUERY );
+
+    m_xData = xNewValues;
+    m_xLabel = xNewLabel;
+
+    ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
+    ModifyListenerHelper::addListener( m_xLabel, m_xModifyEventForwarder );
+}
+
 LabeledDataSequence::~LabeledDataSequence()
 {
     if( m_xModifyEventForwarder.is())

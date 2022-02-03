@@ -19,6 +19,8 @@
 
 #include <DataSource.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <comphelper/sequence.hxx>
+#include <LabeledDataSequence.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -38,6 +40,12 @@ DataSource::DataSource(
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > & rSequences ) :
         m_aDataSeq( rSequences )
 {}
+
+DataSource::DataSource(
+    const std::vector< rtl::Reference< ::chart::LabeledDataSequence > > & rSequences )
+{
+    m_aDataSeq = comphelper::containerToSequence< Reference< chart2::data::XLabeledDataSequence > >(rSequences);
+}
 
 DataSource::~DataSource()
 {}
