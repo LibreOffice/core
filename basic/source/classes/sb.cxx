@@ -1682,11 +1682,6 @@ bool StarBASIC::RTError( ErrCode code, const OUString& rMsg, sal_Int32 l, sal_In
     }
 }
 
-void StarBASIC::Error( ErrCode n )
-{
-    Error( n, OUString() );
-}
-
 void StarBASIC::Error( ErrCode n, const OUString& rMsg )
 {
     if( GetSbData()->pInst )

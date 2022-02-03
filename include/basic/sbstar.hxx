@@ -87,8 +87,7 @@ public:
     SbModule*       MakeModule( const OUString& rName, const OUString& rSrc );
     SbModule*       MakeModule( const OUString& rName, const css::script::ModuleInfo& mInfo, const OUString& rSrc );
     static void     Stop();
-    static void     Error( ErrCode );
-    static void     Error( ErrCode, const OUString& rMsg );
+    static void     Error( ErrCode, const OUString& rMsg = {} );
     static void     FatalError( ErrCode );
     static void     FatalError( ErrCode, const OUString& rMsg );
     static bool     IsRunning();
