@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d3ae518_95b93466",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-03T17:02:22Z",
+      "side": 1,
+      "message": "Miklos: I\u0027m going to walk away at this point because math and shapes don\u0027t agree with me. I came up with this while trying to figure out your regression. this might give you a head-start on getting a head-start. I got to it by randomly trying things until I didn\u0027t get any unit test failures.",
+      "revId": "67a5f11b6582b7654f404f3263b055aa5837d3e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
