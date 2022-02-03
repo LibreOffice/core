@@ -189,7 +189,7 @@ public:
         virtual ~SwContentType() override;
 
         /** Fill the List of contents */
-        void                FillMemberList(bool* pbLevelChanged = nullptr);
+        void                FillMemberList(bool* pbContentChanged = nullptr);
         size_t              GetMemberCount() const
                                 {return m_nMemberCount;};
         ContentTypeId       GetType() const {return m_nContentType;}
