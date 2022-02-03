@@ -2108,16 +2108,15 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
         m_xModuleManager.set( ModuleManager::create(m_pImpl->m_aContext) );
 
     OUString sModuleId;
-    try
+    uno::Reference< frame::XUntitledNumbers > xNumberedControllers;
+    TNumberedController::const_iterator aFind = m_aNumberedControllers.end();
+
+    if (_xComponent.is())
     {
         sModuleId = m_xModuleManager->identify( _xComponent );
+        aFind = m_aNumberedControllers.find(sModuleId);
     }
-    catch(const uno::Exception&)
-    {
-    }
-    uno::Reference< frame::XUntitledNumbers > xNumberedControllers;
 
-    TNumberedController::const_iterator aFind = m_aNumberedControllers.find(sModuleId);
     if ( aFind == m_aNumberedControllers.end() )
     {
         rtl::Reference<::comphelper::NumberedCollection> pHelper = new ::comphelper::NumberedCollection();
