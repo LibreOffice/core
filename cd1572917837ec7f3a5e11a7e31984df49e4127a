@@ -33,6 +33,23 @@
       "message": "+1 from Jenkins",
       "revId": "cd1572917837ec7f3a5e11a7e31984df49e4127a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad6800d3_57f467a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-03T09:39:31Z",
+      "side": 1,
+      "message": "I don\u0027t remember, but the original code indeed looks wrong.\n",
+      "revId": "cd1572917837ec7f3a5e11a7e31984df49e4127a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
