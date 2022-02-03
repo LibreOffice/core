@@ -34,6 +34,40 @@
       "parentUuid": "8c0e092a_603cbe77",
       "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68285829_268f0b0b",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-02-03T14:29:24Z",
+      "side": 1,
+      "message": "why is PRECIOUS used here and above?\nMy reading is that make won\u0027t consider files intermediate if they are mentioned as a target itself, but even then flagging it as secondary to not delete it after the target requiring it would be more straightforward than telling make to ignore make being interrupted or killed.I might be missing something here…",
+      "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2deba9_d27fda4c",
+        "filename": "solenv/gbuild/ComponentTarget.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-02-03T14:29:24Z",
+      "side": 1,
+      "message": "what\u0027s the point of the diff call (should it be conditionalized for verbose make?)\n(also not using line continuation means that for each line make will use a new subshell to execute the recipe)",
+      "revId": "17ec55c48082254e1f55bcfa00808e45a50a9801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
