@@ -3189,7 +3189,7 @@
                     <property name="can_focus">False</property>
                     <property name="valign">center</property>
                     <child>
-                      <object class="VclOptionalBox" id="Home-Section-Cliboard">
+                      <object class="VclOptionalBox" id="Home-Section-Clipboard">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
