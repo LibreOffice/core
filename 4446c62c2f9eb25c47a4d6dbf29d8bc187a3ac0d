@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86adee0f_1c87a0b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-03T14:34:17Z",
+      "side": 1,
+      "message": "All UI tests that select or test \"Column x\" or \"Row y\" need to be adapted.\nsc/qa/uitest/sort/*.py\n",
+      "revId": "4446c62c2f9eb25c47a4d6dbf29d8bc187a3ac0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
