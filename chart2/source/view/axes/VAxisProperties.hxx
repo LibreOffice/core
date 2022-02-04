@@ -58,17 +58,17 @@ struct AxisLabelProperties final
     css::awt::Size         m_aFontReferenceSize;//reference size to calculate the font height
     css::awt::Rectangle    m_aMaximumSpaceForLabels;//Labels need to be clipped in order to fit into this rectangle
 
-    sal_Int32            nNumberFormatKey;
+    sal_Int32            m_nNumberFormatKey;
 
-    AxisLabelStaggering  eStaggering;
+    AxisLabelStaggering  m_eStaggering;
 
-    bool                 bLineBreakAllowed;
-    bool                 bOverlapAllowed;
+    bool                 m_bLineBreakAllowed;
+    bool                 m_bOverlapAllowed;
 
-    bool                 bStackCharacters;
-    double               fRotationAngleDegree;
+    bool                 m_bStackCharacters;
+    double               m_fRotationAngleDegree;
 
-    sal_Int32   nRhythm; //show only each nth label with n==nRhythm
+    sal_Int32   m_nRhythm; //show only each nth label with n==nRhythm
 
     //methods:
     void init( const css::uno::Reference< css::chart2::XAxis >&  xAxisModel );
