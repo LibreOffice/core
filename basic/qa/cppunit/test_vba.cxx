@@ -157,7 +157,7 @@ void VBATest::testMiscVBAFunctions()
     SvtSysLocaleOptions aLocalOptions;
     aLocalOptions.SetLocaleConfigString( aLocale.getBcp47() );
 
-    for ( size_t  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
+    for ( size_t  i=0; i<std::size( macroSource ); ++i )
     {
         OUString sMacroURL = sMacroPathURL
                            + OUString::createFromAscii( macroSource[ i ] );
@@ -238,7 +238,7 @@ void VBATest::testMiscOLEStuff()
         uno::makeAny(OUString(o3tl::toU(pODBCDriverName)))
     };
 
-    for ( sal_uInt32  i=0; i<SAL_N_ELEMENTS( macroSource ); ++i )
+    for ( sal_uInt32  i=0; i<std::size( macroSource ); ++i )
     {
         OUString sMacroURL = sMacroPathURL
                            + OUString::createFromAscii( macroSource[ i ] );

@@ -3734,7 +3734,7 @@ OUString getBasicTypeName( SbxDataType eType )
     };
 
     size_t nPos = static_cast<size_t>(eType) & 0x0FFF;
-    const size_t nTypeNameCount = SAL_N_ELEMENTS( pTypeNames );
+    const size_t nTypeNameCount = std::size( pTypeNames );
     if ( nPos >= nTypeNameCount )
     {
         nPos = nTypeNameCount - 1;
