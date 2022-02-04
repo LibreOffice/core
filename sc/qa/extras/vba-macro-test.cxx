@@ -11,6 +11,7 @@
 #include <test/unoapi_test.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <viewdata.hxx>
 #include <tabvwsh.hxx>
@@ -564,10 +565,10 @@ void VBAMacroTest::testVba()
         uno::Reference<css::lang::XComponent> xComponent
             = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
-        // process all events such as OnLoad events etc.
-        // otherwise they tend to arrive later at a random
-        // time - while processing other StarBasic methods.
-        Application::Reschedule(true);
+        // process all events such as OnLoad events etc.  otherwise they tend
+        // to arrive later at a random time - while processing other StarBasic
+        // methods.
+        Scheduler::ProcessEventsToIdle();
 
         uno::Any aRet;
         uno::Sequence<sal_Int16> aOutParamIndex;
