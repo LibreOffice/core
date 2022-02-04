@@ -479,11 +479,6 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
     SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
     const sal_uInt16 nTypeId = m_xTypeLB->get_id(GetTypeSel()).toUInt32();
 
-    if (!pRefField)
-    {
-        return;
-    }
-
     OUString sOldSel;
     // #i83479#
     if ( m_xSelectionLB->get_visible() )
@@ -492,7 +487,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
         if (nSelectionSel != -1)
             sOldSel = m_xSelectionLB->get_text(nSelectionSel);
     }
-    if (IsFieldEdit() && sOldSel.isEmpty())
+    if (IsFieldEdit() && pRefField && sOldSel.isEmpty())
         sOldSel = OUString::number( pRefField->GetSeqNo() + 1 );
 
     m_xSelectionLB->freeze();
@@ -541,7 +536,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     }
                 }
             }
-            if (IsFieldEdit())
+            if (IsFieldEdit() && pRefField)
                 sOldSel = pRefField->GetSetRefName();
         }
         else if (nTypeId == REFFLDFLAG_FOOTNOTE)
@@ -556,7 +551,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 {
                     m_xSelectionLB->append_text( aArr[ n ].sDlgEntry );
                 }
-                if (IsFieldEdit() && pRefField->GetSeqNo() == aArr[ n ].nSeqNo)
+                if (IsFieldEdit() && pRefField && pRefField->GetSeqNo() == aArr[ n ].nSeqNo)
                     sOldSel = aArr[n].sDlgEntry;
             }
         }
@@ -572,7 +567,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                 {
                     m_xSelectionLB->append_text( aArr[ n ].sDlgEntry );
                 }
-                if (IsFieldEdit() && pRefField->GetSeqNo() == aArr[ n ].nSeqNo)
+                if (IsFieldEdit() && pRefField && pRefField->GetSeqNo() == aArr[ n ].nSeqNo)
                     sOldSel = aArr[n].sDlgEntry;
             }
         }
@@ -596,9 +591,9 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     OUString sId(OUString::number(nOutlIdx));
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getOutlineText(nOutlIdx, pSh->GetLayout(), true, true, false));
-                    if ( ( IsFieldEdit() &&
-                       pRefField->GetReferencedTextNode() == maOutlineNodes[nOutlIdx] ) ||
-                        mpSavedSelectedTextNode == maOutlineNodes[nOutlIdx] )
+                    if ((IsFieldEdit() && pRefField
+                            && pRefField->GetReferencedTextNode() == maOutlineNodes[nOutlIdx])
+                        || mpSavedSelectedTextNode == maOutlineNodes[nOutlIdx])
                     {
                         m_sSelectionToolTipLBId = sId;
                         sOldSel.clear();
@@ -631,9 +626,9 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     OUString sId(OUString::number(nNumItemIdx));
                     m_xSelectionToolTipLB->append(sId,
                         pIDoc->getListItemText(*maNumItems[nNumItemIdx], *pSh->GetLayout()));
-                    if ( ( IsFieldEdit() &&
-                           pRefField->GetReferencedTextNode() == maNumItems[nNumItemIdx]->GetTextNode() ) ||
-                        mpSavedSelectedTextNode == maNumItems[nNumItemIdx]->GetTextNode() )
+                    if ((IsFieldEdit() && pRefField
+                            && pRefField->GetReferencedTextNode() == maNumItems[nNumItemIdx]->GetTextNode())
+                        || mpSavedSelectedTextNode == maNumItems[nNumItemIdx]->GetTextNode())
                     {
                         m_sSelectionToolTipLBId = sId;
                         sOldSel.clear();
@@ -668,12 +663,12 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
                     {
                         m_xSelectionLB->append_text( aArr[ n ].sDlgEntry );
                     }
-                    if (IsFieldEdit() && sOldSel.isEmpty() &&
+                    if (IsFieldEdit() && pRefField && sOldSel.isEmpty() &&
                         aArr[ n ].nSeqNo == pRefField->GetSeqNo())
                         sOldSel = aArr[ n ].sDlgEntry;
                 }
 
-                if (IsFieldEdit() && sOldSel.isEmpty())
+                if (IsFieldEdit() && pRefField && sOldSel.isEmpty())
                     sOldSel = OUString::number( pRefField->GetSeqNo() + 1);
             }
         }
@@ -691,7 +686,7 @@ void SwFieldRefPage::UpdateSubType(const OUString& filterString)
             }
         }
 
-        if (IsFieldEdit())
+        if (IsFieldEdit() && pRefField)
             sOldSel = pRefField->GetSetRefName();
     }
 
@@ -968,10 +963,6 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
     }
 
     SwGetRefField const*const pRefField(dynamic_cast<SwGetRefField*>(GetCurField()));
-    if (!pRefField)
-    {
-        return false;
-    }
 
     if (REFFLDFLAG & nTypeId)
     {
@@ -1001,10 +992,10 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
             {
                 aVal = OUString::number( aArr[nPos].nSeqNo );
 
-                if (IsFieldEdit() && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
+                if (IsFieldEdit() && pRefField && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
                     bModified = true; // can happen with fields of which the references were deleted
             }
-            else if (IsFieldEdit())
+            else if (IsFieldEdit() && pRefField)
                 aVal = OUString::number( pRefField->GetSeqNo() );
         }
         else if (REFFLDFLAG_ENDNOTE == nTypeId)         // endnotes
@@ -1022,10 +1013,10 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
             {
                 aVal = OUString::number( aArr[nPos].nSeqNo );
 
-                if (IsFieldEdit() && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
+                if (IsFieldEdit() && pRefField && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
                     bModified = true; // can happen with fields of which the reference was deleted
             }
-            else if (IsFieldEdit())
+            else if (IsFieldEdit() && pRefField)
                 aVal = OUString::number( pRefField->GetSeqNo() );
         }
         // #i83479#
@@ -1090,10 +1081,10 @@ bool SwFieldRefPage::FillItemSet(SfxItemSet* )
                 {
                     aVal = OUString::number( aArr[nPos].nSeqNo );
 
-                    if (IsFieldEdit() && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
+                    if (IsFieldEdit() && pRefField && aArr[nPos].nSeqNo == pRefField->GetSeqNo())
                         bModified = true; // can happen with fields of which the reference was deleted
                 }
-                else if (IsFieldEdit())
+                else if (IsFieldEdit() && pRefField)
                     aVal = OUString::number( pRefField->GetSeqNo() );
             }
         }
