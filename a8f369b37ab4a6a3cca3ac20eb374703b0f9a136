@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aac1038_8e7d6a48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-02-04T13:23:27Z",
+      "side": 1,
+      "message": "Build failure not related to this commit",
+      "revId": "a8f369b37ab4a6a3cca3ac20eb374703b0f9a136",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
