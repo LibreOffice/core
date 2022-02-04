@@ -164,18 +164,18 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
             Reference< data::XDataSource > xSeriesSource( aSeries[i], uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
-            Reference< data::XLabeledDataSequence > xValuesSize(
+            rtl::Reference< LabeledDataSequence > xValuesSize(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-size" ));
-            Reference< data::XLabeledDataSequence > xValuesY(
+            rtl::Reference< LabeledDataSequence > xValuesY(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
-            Reference< data::XLabeledDataSequence > xValuesX(
+            rtl::Reference< LabeledDataSequence > xValuesX(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ));
 
             if( ! xValuesX.is() ||
                 ! xValuesY.is() ||
                 ! xValuesSize.is() )
             {
-                vector< Reference< data::XLabeledDataSequence > > aValueSeqVec(
+                vector< rtl::Reference< LabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
                         xSeriesSource->getDataSequences(), "values" ));
                 if( xValuesX.is())
@@ -190,7 +190,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 if( ! xValuesSize.is() &&
                     aValueSeqVec.size() > nIndex )
                 {
-                    xValuesSize.set( aValueSeqVec[nIndex++] );
+                    xValuesSize = aValueSeqVec[nIndex++];
                     if( xValuesSize.is())
                         SetRole( xValuesSize->getValues(), "values-size");
                 }
@@ -198,7 +198,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 if( ! xValuesY.is() &&
                     aValueSeqVec.size() > nIndex )
                 {
-                    xValuesY.set( aValueSeqVec[nIndex++] );
+                    xValuesY = aValueSeqVec[nIndex++];
                     if( xValuesY.is())
                         SetRole( xValuesY->getValues(), "values-y");
                 }
@@ -206,7 +206,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
                 if( ! xValuesX.is() &&
                     aValueSeqVec.size() > nIndex )
                 {
-                    xValuesX.set( aValueSeqVec[nIndex++] );
+                    xValuesX = aValueSeqVec[nIndex++];
                     if( xValuesX.is())
                         SetRole( xValuesY->getValues(), "values-x");
                 }
@@ -236,7 +236,8 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
                 for( auto const & j : aSeqs )
                 {
-                    assert( (j == xValuesY || j == xValuesX || j == xValuesSize) && "All sequences should be used" );
+                    rtl::Reference< ::chart::LabeledDataSequence > j2 = dynamic_cast<LabeledDataSequence*>(j.get());
+                    assert( (j2 == xValuesY || j2 == xValuesX || j2 == xValuesSize) && "All sequences should be used" );
                 }
 #endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );

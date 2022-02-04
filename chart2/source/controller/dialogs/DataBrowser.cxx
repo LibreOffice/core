@@ -32,6 +32,7 @@
 #include <helpids.h>
 #include <ChartModel.hxx>
 #include <ChartType.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -1372,8 +1373,8 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, voi
         m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
     if( xChartType.is())
     {
-        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-            DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel()));
+        rtl::Reference< LabeledDataSequence > xLabeledSeq =
+            DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel());
         if( xLabeledSeq.is())
         {
             Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
