@@ -104,6 +104,24 @@
       "parentUuid": "b5442369_2087ef15",
       "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c29b583a_43c95ffe",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-04T06:30:26Z",
+      "side": 1,
+      "message": "I am having problems while writing the predicate, can you please help me with it?\nI was trying:\n    static auto const pred \u003d [name](char const * aName) {\n        if (name.equalsAscii(aName)) {\n            return true;\n        }\n        return false;\n    };\n\n    return std::any_of(names, names + std::size(names), pred);\n\nBut getting the error:\ninvalid use of incomplete type ‘class com::sun::star::uno::RuntimeException’\n   70 |         catch (RuntimeException \u0026)",
+      "parentUuid": "840de76d_4f102e3d",
+      "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
