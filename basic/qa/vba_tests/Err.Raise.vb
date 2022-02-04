@@ -45,7 +45,7 @@ catch:
     TestUtil.Assert(Err.Source = CurErrSource, "Err.Source failure", "Err.Source = " & Err.Source)
     TestUtil.Assert(Err.Description = CurErrDescription, "Err.Description failure", "Err.Description = " & Err.Description)
 
-    TestUtil.Assert(Erl = 32, "line# failure", "Erl = " & Erl ' WATCH OUT for HARDCODED LINE # HERE !)
+    TestUtil.Assert(Erl = 32, "line# failure", "Erl = " & Erl ) ' WATCH OUT for HARDCODED LINE # HERE
     TestUtil.Assert(Err = CurErrNo, "Err# failure", "Err = " & Err)
     TestUtil.Assert(Error = CurErrDescription, "Error description failure", "Error$ = " & Error$)
 
