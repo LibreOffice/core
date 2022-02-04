@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbe0684c_ed7b03ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-04T04:47:51Z",
+      "side": 1,
+      "message": "Hi Xisco, I\u0027ve made a change to tdf137274.py. Apparently, previous to this patch, both comments are added to content tree before content change is detected, that shouldn\u0027t happen in this case and with this patch does not.",
+      "revId": "4ab8af483cddac8210624da0bcd8a0dd32bf3974",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e0374af_30e0e00c",
+        "filename": "sw/qa/uitest/navigator/tdf137274.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-04T04:47:51Z",
+      "side": 1,
+      "message": "This makes a reply to Comment1 and appends \"C2\" to the \"Reply to...\" text. If we want to create a separate comment we could do the following before this insert.    \n    xChild \u003d xMainWindow.getChild(\"Comment1\")\n    xChild.executeAction(\"LEAVE\", mkPropertyValues({}))",
+      "revId": "4ab8af483cddac8210624da0bcd8a0dd32bf3974",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
