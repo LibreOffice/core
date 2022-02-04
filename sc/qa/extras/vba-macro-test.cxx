@@ -565,7 +565,7 @@ void VBAMacroTest::testVba()
             = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
 
         // process all events such as OnLoad events etc.
-        // otherwise the tend to arrive later at a random
+        // otherwise they tend to arrive later at a random
         // time - while processing other StarBasic methods.
         Application::Reschedule(true);
 
