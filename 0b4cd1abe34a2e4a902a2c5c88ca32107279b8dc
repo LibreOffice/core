@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccb13fec_b35311df",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-04T11:04:28Z",
+      "side": 1,
+      "message": "Can you clarify how this should be used?  After `git clone https://git.libreoffice.org/core \u0026\u0026 cd core \u0026\u0026 ./autogen.sh --with-lang\u003dALL \u0026\u0026 make get-submodules` has cloned shallow translations, neither `git submodule update --no-recommend-shallow` nor e.g. `git submodule update --depth 10` pulls in more of its history.",
+      "revId": "0b4cd1abe34a2e4a902a2c5c88ca32107279b8dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "653ec94a_e360561c",
