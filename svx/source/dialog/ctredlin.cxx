@@ -135,8 +135,8 @@ int SvxRedlinTable::ColCompare(const weld::TreeIter& rLeft, const weld::TreeIter
 
     if (pTreeView == xWriterTreeView.get() && nSortCol == 0)
     {
-        RedlinData *pLeftData = reinterpret_cast<RedlinData*>(pTreeView->get_id(rLeft).toInt64());
-        RedlinData *pRightData = reinterpret_cast<RedlinData*>(pTreeView->get_id(rRight).toInt64());
+        RedlinData *pLeftData = weld::fromId<RedlinData*>(pTreeView->get_id(rLeft));
+        RedlinData *pRightData = weld::fromId<RedlinData*>(pTreeView->get_id(rRight));
 
         if (pLeftData && pRightData)
         {
@@ -150,8 +150,8 @@ int SvxRedlinTable::ColCompare(const weld::TreeIter& rLeft, const weld::TreeIter
 
     if (nSortCol == nDatePos)
     {
-        RedlinData *pLeftData = reinterpret_cast<RedlinData*>(pTreeView->get_id(rLeft).toInt64());
-        RedlinData *pRightData = reinterpret_cast<RedlinData*>(pTreeView->get_id(rRight).toInt64());
+        RedlinData *pLeftData = weld::fromId<RedlinData*>(pTreeView->get_id(rLeft));
+        RedlinData *pRightData = weld::fromId<RedlinData*>(pTreeView->get_id(rRight));
 
         if (pLeftData && pRightData)
         {

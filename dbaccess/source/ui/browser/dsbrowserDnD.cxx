@@ -232,7 +232,7 @@ namespace dbaui
         weld::TreeView& rTreeView = m_pTreeView->GetWidget();
         rTreeView.all_foreach([this, &rTreeView](weld::TreeIter& rEntryLoop){
             // clear the user data of the tree model
-            DBTreeListUserData* pData = reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(rEntryLoop).toUInt64());
+            DBTreeListUserData* pData = weld::fromId<DBTreeListUserData*>(rTreeView.get_id(rEntryLoop));
             if (pData)
             {
                 rTreeView.set_id(rEntryLoop, OUString());

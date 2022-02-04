@@ -56,7 +56,7 @@ OUString SbaTableQueryBrowser::GetEntryText(const weld::TreeIter& rEntry) const
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getEntryType(const weld::TreeIter& rEntry) const
 {
     const weld::TreeView& rTreeView = m_pTreeView->GetWidget();
-    DBTreeListUserData* pEntryData = reinterpret_cast<DBTreeListUserData*>(rTreeView.get_id(rEntry).toUInt64());
+    DBTreeListUserData* pEntryData = weld::fromId<DBTreeListUserData*>(rTreeView.get_id(rEntry));
     return pEntryData ? pEntryData->eType : etUnknown;
 }
 

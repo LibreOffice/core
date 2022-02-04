@@ -156,7 +156,7 @@ SbxVariable* SbTreeListBox::FindVariable(const weld::TreeIter* pEntry)
     do
     {
         sal_uInt16 nDepth = m_xControl->get_iter_depth(*xIter);
-        Entry* pBE = reinterpret_cast<Entry*>(m_xControl->get_id(*xIter).toInt64());
+        Entry* pBE = weld::fromId<Entry*>(m_xControl->get_id(*xIter));
         switch (nDepth)
         {
             case 4:
@@ -257,7 +257,7 @@ EntryDescriptor SbTreeListBox::GetEntryDescriptor(const weld::TreeIter* pEntry)
     do
     {
         sal_uInt16 nDepth = m_xControl->get_iter_depth(*xIter);
-        Entry* pBE = reinterpret_cast<Entry*>(m_xControl->get_id(*xIter).toInt64());
+        Entry* pBE = weld::fromId<Entry*>(m_xControl->get_id(*xIter));
         switch (nDepth)
         {
             case 4:
@@ -421,7 +421,7 @@ bool SbTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocat
     bool bValidIter = m_xControl->get_iter_first(rIter);
     while (bValidIter)
     {
-        DocumentEntry* pBDEntry = reinterpret_cast<DocumentEntry*>(m_xControl->get_id(rIter).toInt64());
+        DocumentEntry* pBDEntry = weld::fromId<DocumentEntry*>(m_xControl->get_id(rIter));
         if (pBDEntry && pBDEntry->GetDocument() == rDocument && pBDEntry->GetLocation() == eLocation)
             return true;
         bValidIter = m_xControl->iter_next_sibling(rIter);

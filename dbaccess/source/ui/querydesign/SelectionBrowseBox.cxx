@@ -1556,7 +1556,7 @@ OTableFieldDescRef OSelectionBrowseBox::InsertField(const OJoinExchangeData& jxd
     weld::TreeView& rTreeView = jxdSource.pListBox->get_widget();
     OUString aFieldName = rTreeView.get_text(jxdSource.nEntry);
     sal_uInt32 nFieldIndex = jxdSource.nEntry;
-    OTableFieldInfo* pInf = reinterpret_cast<OTableFieldInfo*>(rTreeView.get_id(jxdSource.nEntry).toUInt64());
+    OTableFieldInfo* pInf = weld::fromId<OTableFieldInfo*>(rTreeView.get_id(jxdSource.nEntry));
 
     // construct DragInfo, such that I use the other InsertField
     OTableFieldDescRef aInfo = new OTableFieldDesc(pSourceWin->GetTableName(),aFieldName);

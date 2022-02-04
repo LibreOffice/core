@@ -274,7 +274,7 @@ IMPL_LINK(SwGlossaryDlg, GrpSelect, weld::TreeView&, rBox, void)
     }
     else
         pParent = xEntry.get();
-    GroupUserData* pGroupData = reinterpret_cast<GroupUserData*>(rBox.get_id(*pParent).toInt64());
+    GroupUserData* pGroupData = weld::fromId<GroupUserData*>(rBox.get_id(*pParent));
     ::SetCurrGlosGroup(pGroupData->sGroupName
         + OUStringChar(GLOS_DELIM)
         + OUString::number(pGroupData->nPathIdx));
@@ -654,7 +654,7 @@ IMPL_LINK_NOARG(SwGlossaryDlg, BibHdl, weld::Button&, void)
                 {
                     if (!m_xCategoryBox->get_iter_depth(*xEntry))
                     {
-                        GroupUserData* pGroupData = reinterpret_cast<GroupUserData*>(m_xCategoryBox->get_id(*xEntry).toInt64());
+                        GroupUserData* pGroupData = weld::fromId<GroupUserData*>(m_xCategoryBox->get_id(*xEntry));
                         const OUString sGroup = pGroupData->sGroupName
                             + OUStringChar(GLOS_DELIM)
                             + OUString::number(pGroupData->nPathIdx);
@@ -750,7 +750,7 @@ void SwGlossaryDlg::Init()
             {
                 if (!m_xCategoryBox->get_iter_depth(*xSearch))
                 {
-                    GroupUserData* pData = reinterpret_cast<GroupUserData*>(m_xCategoryBox->get_id(*xSearch).toInt64());
+                    GroupUserData* pData = weld::fromId<GroupUserData*>(m_xCategoryBox->get_id(*xSearch));
                     if (!pData->bReadonly)
                     {
                         xSelEntry = std::move(xSearch);
@@ -850,7 +850,7 @@ OUString SwGlossaryDlg::GetCurrGrpName() const
     {
         if (m_xCategoryBox->get_iter_depth(*xEntry))
             m_xCategoryBox->iter_parent(*xEntry);
-        GroupUserData* pGroupData = reinterpret_cast<GroupUserData*>(m_xCategoryBox->get_id(*xEntry).toInt64());
+        GroupUserData* pGroupData = weld::fromId<GroupUserData*>(m_xCategoryBox->get_id(*xEntry));
         return pGroupData->sGroupName + OUStringChar(GLOS_DELIM) + OUString::number(pGroupData->nPathIdx);
     }
     return OUString();

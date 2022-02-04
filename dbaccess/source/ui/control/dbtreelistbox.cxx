@@ -193,7 +193,7 @@ std::unique_ptr<weld::TreeIter> TreeListBox::GetEntryPosByName(std::u16string_vi
     {
         if (m_xTreeView->get_text(*xEntry) == aName)
         {
-            if (!_pFilter || _pFilter->includeEntry(reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toUInt64())))
+            if (!_pFilter || _pFilter->includeEntry(weld::fromId<void*>(m_xTreeView->get_id(*xEntry))))
             {
                 // found
                 return xEntry;
@@ -285,7 +285,7 @@ IMPL_LINK(TreeListBox, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
 {
     OUString sQuickHelpText;
     if (m_pActionListener &&
-        m_pActionListener->requestQuickHelp(reinterpret_cast<void*>(m_xTreeView->get_id(rIter).toUInt64()), sQuickHelpText))
+        m_pActionListener->requestQuickHelp(weld::fromId<void*>(m_xTreeView->get_id(rIter)), sQuickHelpText))
     {
         return sQuickHelpText;
     }
