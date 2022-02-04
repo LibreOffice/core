@@ -2879,7 +2879,7 @@ void SwTiledRenderingTest::testHighlightNumbering()
 
     // Yellow highlighting over numbering
     Color aColor(pAccess->GetPixel(103, 148));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFF, 0xFF, 0xFF, 0x00), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, aColor);
 }
 
 void SwTiledRenderingTest::testHighlightNumbering_shd()
@@ -2904,7 +2904,7 @@ void SwTiledRenderingTest::testHighlightNumbering_shd()
 
     // No highlighting over numbering - w:shd does not apply to numbering.
     Color aColor(pAccess->GetPixel(103, 148));
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0xFF, 0xFF, 0xFF, 0xFF), aColor);
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, aColor);
 }
 
 void SwTiledRenderingTest::testPilcrowRedlining()
