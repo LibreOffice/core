@@ -16,6 +16,24 @@
       "message": "I don\u0027t think this is a good idea. Reading from a PNG should always produce exact values as it is a lossless format. If it doesn\u0027t it\u0027s a bug and before this change it was very clear it was a bug on macOS when reading the test.\n \nWith allowing for small change in the colors with assertColorsAreSimilar you pretty much said that small changes are fine, but they are not. This makes this test useless for certain types of bugs.\n\nIf we were reading a JPEG image this would be fine, because a lossy format usually doesn\u0027t specify strictly how to decode the stream, so different implementations have different rounding errors and the values can differ.",
       "revId": "41acfefe1ee1ba28ae38ad0cd3d9760e1e4d1765",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8852c5e4_05345860",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-04T12:29:48Z",
+      "side": 1,
+      "message": "Hi Tomaž,\nthanks for the clarification. I\u0027ll report a bug for it then so we can get rid of assertColorsAreSimilar if it gets fixed",
+      "parentUuid": "fb55dbd7_40ea3123",
+      "revId": "41acfefe1ee1ba28ae38ad0cd3d9760e1e4d1765",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
