@@ -34,6 +34,24 @@
       "parentUuid": "948339fb_6d258ca0",
       "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68211fa7_e9e37e42",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-04T16:47:24Z",
+      "side": 0,
+      "message": "BCA_SLOT_COLS is verified by the \"bad BCA_SLOTS_COL value\" static_assert that\u0027s still there. This is about rows, and rows are no longer handled linearly.",
+      "parentUuid": "948339fb_6d258ca0",
+      "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
