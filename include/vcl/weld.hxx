@@ -644,7 +644,7 @@ public:
 
 inline OUString toId(const void* pValue)
 {
-    return OUString::number(reinterpret_cast<const sal_uInt64>(pValue));
+    return OUString::number(reinterpret_cast<sal_uInt64>(pValue));
 }
 
 template <typename T> T fromId(const OUString& rValue)
