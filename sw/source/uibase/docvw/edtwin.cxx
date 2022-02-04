@@ -5588,7 +5588,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
                 break;
 
             SotExchangeDest nDropDestination = GetDropDestination( rCEvt.GetMousePosPixel() );
-            if( !bool(nDropDestination) )
+            if( nDropDestination == SotExchangeDest::NONE )
                 break;
             SotClipboardFormatId nDropFormat;
             sal_uInt8 nEventAction, nDropAction;
