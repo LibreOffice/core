@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "948339fb_6d258ca0",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-04T16:37:00Z",
+      "side": 0,
+      "message": "I think this is verifying the assertion that BCA_SLOT_COLS must be an integer divisor of MaxRowCount, so presumably we need to verify that somewhere else?",
+      "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
