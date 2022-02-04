@@ -143,12 +143,13 @@ bool isBootstrapType(OUString const & name)
         "com.sun.star.uno.XWeak",
         "com.sun.star.util.XMacroExpander" };
         // cf. cppuhelper/unotypes/Makefile UNOTYPES (plus missing dependencies)
-    for (std::size_t i = 0; i < SAL_N_ELEMENTS(names); ++i) {
-        if (name.equalsAscii(names[i])) {
-            return true;
-        }
-    }
-    return false;
+    auto const pred = [&name](const char* aName) {
+            if (name.equalsAscii(aName)) {
+                    return true;
+            }
+            return false;
+    };
+    return std::any_of(names, names + std::size(names), pred);
 }
 
 class CppuType

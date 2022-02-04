@@ -1807,13 +1807,16 @@ static IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
         { INTERVAL_N,    "n",    1.0 /  1440.0, true  }, // Minute
         { INTERVAL_S,    "s",    1.0 / 86400.0, true  }  // Second
     };
-    for( std::size_t i = 0; i != SAL_N_ELEMENTS(aIntervalTable); ++i )
-    {
-        if( rStringCode.equalsIgnoreAsciiCaseAscii(
-                aIntervalTable[i].mStringCode ) )
-        {
-            return &aIntervalTable[i];
-        }
+    auto const pred = [&rStringCode](const IntervalInfo aInterval) {
+            if( rStringCode.equalsIgnoreAsciiCaseAscii(aInterval.mStringCode ) ) {
+                    return true;
+            }
+            return false;
+    };
+
+    auto intervalIter = std::find_if(aIntervalTable, aIntervalTable + std::size(aIntervalTable), pred);
+    if(static_cast<long unsigned int>(intervalIter - aIntervalTable) != std::size(aIntervalTable)) {
+            return &*intervalIter;
     }
     return nullptr;
 }
