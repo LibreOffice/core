@@ -34,6 +34,24 @@
       "parentUuid": "291b2bef_3fdbc737",
       "revId": "b6f9d62441a79ab0219b9b0b6bde88aa87758e6d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f5779fb_394eadab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-04T08:25:38Z",
+      "side": 1,
+      "message": "Ah, yes. That\u0027s why I\u0027m scared of dealing with pointers. It isn\u0027t that hard, but I never get it right.",
+      "parentUuid": "d5a94c01_a5368cc4",
+      "revId": "b6f9d62441a79ab0219b9b0b6bde88aa87758e6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

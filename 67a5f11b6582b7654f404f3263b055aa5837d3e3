@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9eca12fb_7606dea2",
+        "filename": "sd/inc/Outliner.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-04T08:25:38Z",
+      "side": 0,
+      "message": "I\u0027ve thrown out this const, but now I see where I can add it in again. Let me do that first.",
+      "range": {
+        "startLine": 319,
+        "startChar": 4,
+        "endLine": 319,
+        "endChar": 9
+      },
+      "revId": "67a5f11b6582b7654f404f3263b055aa5837d3e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
