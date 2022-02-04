@@ -52,6 +52,24 @@
       "parentUuid": "89e57044_08949d7e",
       "revId": "556363e1e654c1e6584e2aafeb15d0bf05d5d013",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdfb636b_47813856",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-04T14:14:33Z",
+      "side": 1,
+      "message": "Building Skia using anything else than Clang is not really supported. You can either build with Clang, or use --disable-skia, or otherwise it\u0027s up to you to support that case if you care about it.\n\nI think using plain -flto even for Clang is not a good solution, Clang\u0027s ThinLTO is used intentionally because it required less resources during building.",
+      "parentUuid": "27cf1ffb_f424783d",
+      "revId": "556363e1e654c1e6584e2aafeb15d0bf05d5d013",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
