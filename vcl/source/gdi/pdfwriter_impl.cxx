@@ -8568,9 +8568,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
 
     aLine.append(">> >>");
     aLine.append(" /Matrix [ ");
-    appendDouble(fScaleX, aLine);
+    appendDouble(fScaleX, aLine, /*nPrecision=*/10);
     aLine.append(" 0 0 ");
-    appendDouble(fScaleY, aLine);
+    appendDouble(fScaleY, aLine, /*nPrecision=*/10);
     aLine.append(" 0 0 ]");
     aLine.append(" /BBox [ 0 0 ");
     aLine.append(aSize.Width());
