@@ -16,6 +16,23 @@
       "message": "Miklos: I\u0027m going to walk away at this point because math and shapes don\u0027t agree with me. I came up with this while trying to figure out your regression. this might give you a head-start on getting a head-start. I got to it by randomly trying things until I didn\u0027t get any unit test failures.",
       "revId": "67a5f11b6582b7654f404f3263b055aa5837d3e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67ee97fe_fca43d25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-04T07:54:24Z",
+      "side": 1,
+      "message": "Thanks! My understanding is that your change makes the rendering/layout of margins conditional: if there is no text, then ignore margins, but if there is, then have them.\n\nThis behavior looks reasonable to me. I plan to cover this with a test before submitting, though.",
+      "revId": "67a5f11b6582b7654f404f3263b055aa5837d3e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
