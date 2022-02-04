@@ -54,7 +54,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
                      , double fLogicZ )
 {
     FixedNumberFormatter aFixedNumberFormatter(
-        m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
+        m_xNumberFormatsSupplier, rAxisLabelProperties.m_nNumberFormatKey );
 
     //prepare text properties for multipropertyset-interface of shape
     tNameSequence aPropNames;
@@ -80,7 +80,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
         ; pTickInfo = rTickIter.nextInfo(), nTick++ )
     {
         //don't create labels which does not fit into the rhythm
-        if( nTick%rAxisLabelProperties.nRhythm != 0)
+        if( nTick%rAxisLabelProperties.m_nRhythm != 0)
             continue;
 
         //don't create labels for invisible ticks
@@ -120,10 +120,10 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
             LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, eLabelAlignment );
 
             // #i78696# use mathematically correct rotation now
-            const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.fRotationAngleDegree));
+            const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.m_fRotationAngleDegree));
 
             uno::Any aATransformation = ShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
-            OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.bStackCharacters );
+            OUString aStackedLabel = ShapeFactory::getStackedString( aLabel, rAxisLabelProperties.m_bStackCharacters );
 
             pTickInfo->xTextShape = ShapeFactory::createText( xTarget, aStackedLabel, aPropNames, aPropValues, aATransformation );
         }
@@ -170,7 +170,7 @@ void VPolarAngleAxis::createLabels()
     removeTextShapesFromTicks();
 
     AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
-    aAxisLabelProperties.bOverlapAllowed = true;
+    aAxisLabelProperties.m_bOverlapAllowed = true;
     double const fLogicZ = 1.0;//as defined
     createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
                     , aAxisLabelProperties

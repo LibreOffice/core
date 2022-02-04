@@ -330,13 +330,13 @@ void AxisProperties::init( bool bCartesian )
 AxisLabelProperties::AxisLabelProperties()
                         : m_aFontReferenceSize( ChartModelHelper::getDefaultPageSize() )
                         , m_aMaximumSpaceForLabels( 0 , 0, m_aFontReferenceSize.Width, m_aFontReferenceSize.Height )
-                        , nNumberFormatKey(0)
-                        , eStaggering( AxisLabelStaggering::SideBySide )
-                        , bLineBreakAllowed( false )
-                        , bOverlapAllowed( false )
-                        , bStackCharacters( false )
-                        , fRotationAngleDegree( 0.0 )
-                        , nRhythm( 1 )
+                        , m_nNumberFormatKey(0)
+                        , m_eStaggering( AxisLabelStaggering::SideBySide )
+                        , m_bLineBreakAllowed( false )
+                        , m_bOverlapAllowed( false )
+                        , m_bStackCharacters( false )
+                        , m_fRotationAngleDegree( 0.0 )
+                        , m_nRhythm( 1 )
 {
 
 }
@@ -350,26 +350,26 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
 
     try
     {
-        xProp->getPropertyValue( "TextBreak" ) >>= bLineBreakAllowed;
-        xProp->getPropertyValue( "TextOverlap" ) >>= bOverlapAllowed;
-        xProp->getPropertyValue( "StackCharacters" ) >>= bStackCharacters;
-        xProp->getPropertyValue( "TextRotation" ) >>= fRotationAngleDegree;
+        xProp->getPropertyValue( "TextBreak" ) >>= m_bLineBreakAllowed;
+        xProp->getPropertyValue( "TextOverlap" ) >>= m_bOverlapAllowed;
+        xProp->getPropertyValue( "StackCharacters" ) >>= m_bStackCharacters;
+        xProp->getPropertyValue( "TextRotation" ) >>= m_fRotationAngleDegree;
 
         css::chart::ChartAxisArrangeOrderType eArrangeOrder;
         xProp->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
         switch(eArrangeOrder)
         {
             case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
-                eStaggering = AxisLabelStaggering::SideBySide;
+                m_eStaggering = AxisLabelStaggering::SideBySide;
                 break;
             case css::chart::ChartAxisArrangeOrderType_STAGGER_EVEN:
-                eStaggering = AxisLabelStaggering::StaggerEven;
+                m_eStaggering = AxisLabelStaggering::StaggerEven;
                 break;
             case css::chart::ChartAxisArrangeOrderType_STAGGER_ODD:
-                eStaggering = AxisLabelStaggering::StaggerOdd;
+                m_eStaggering = AxisLabelStaggering::StaggerOdd;
                 break;
             default:
-                eStaggering = AxisLabelStaggering::StaggerAuto;
+                m_eStaggering = AxisLabelStaggering::StaggerAuto;
                 break;
         }
     }
@@ -381,14 +381,14 @@ void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
 
 bool AxisLabelProperties::isStaggered() const
 {
-    return ( eStaggering == AxisLabelStaggering::StaggerOdd || eStaggering == AxisLabelStaggering::StaggerEven );
+    return ( m_eStaggering == AxisLabelStaggering::StaggerOdd || m_eStaggering == AxisLabelStaggering::StaggerEven );
 }
 
 void AxisLabelProperties::autoRotate45()
 {
-    fRotationAngleDegree = 45;
-    bLineBreakAllowed = false;
-    eStaggering = AxisLabelStaggering::SideBySide;
+    m_fRotationAngleDegree = 45;
+    m_bLineBreakAllowed = false;
+    m_eStaggering = AxisLabelStaggering::SideBySide;
 }
 
 } //namespace chart

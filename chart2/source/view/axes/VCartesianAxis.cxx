@@ -87,8 +87,8 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
 
     sal_Int32 nMaxLabelsSize = bIsHorizontalAxis ? rAxisLabelProperties.m_aMaximumSpaceForLabels.Height : rAxisLabelProperties.m_aMaximumSpaceForLabels.Width;
     const sal_Int32 nAvgCharWidth = rShape2DText.getSize().Width / rLabel.getLength();
-    const sal_Int32 nTextSize = bIsHorizontalAxis ? ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.fRotationAngleDegree).Height :
-                                                    ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.fRotationAngleDegree).Width;
+    const sal_Int32 nTextSize = bIsHorizontalAxis ? ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.m_fRotationAngleDegree).Height :
+                                                    ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.m_fRotationAngleDegree).Width;
 
     if( !nAvgCharWidth )
         return;
@@ -127,9 +127,9 @@ static rtl::Reference<SvxShapeText> createSingleLabel(
         return nullptr;
 
     // #i78696# use mathematically correct rotation now
-    const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.fRotationAngleDegree));
+    const double fRotationAnglePi(-basegfx::deg2rad(rAxisLabelProperties.m_fRotationAngleDegree));
     uno::Any aATransformation = ShapeFactory::makeTransformation( rAnchorScreenPosition2D, fRotationAnglePi );
-    OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.bStackCharacters );
+    OUString aLabel = ShapeFactory::getStackedString( rLabel, rAxisLabelProperties.m_bStackCharacters );
 
     rtl::Reference<SvxShapeText> xShape2DText =
                     ShapeFactory::createText( xTarget, aLabel, rPropNames, rPropValues, aATransformation );
@@ -138,7 +138,7 @@ static rtl::Reference<SvxShapeText> createSingleLabel(
         lcl_ResizeTextShapeToFitAvailableSpace(*xShape2DText, rAxisLabelProperties, aLabel, rPropNames, rPropValues, bIsHorizontalAxis);
 
     LabelPositionHelper::correctPositionForRotation( xShape2DText
-        , rAxisProperties.maLabelAlignment.meAlignment, rAxisLabelProperties.fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
+        , rAxisProperties.maLabelAlignment.meAlignment, rAxisLabelProperties.m_fRotationAngleDegree, rAxisProperties.m_bComplexCategories );
 
     return xShape2DText;
 }
@@ -507,16 +507,16 @@ bool VCartesianAxis::isBreakOfLabelsAllowed(
 {
     if( m_aTextLabels.getLength() > 100 )
         return false;
-    if( !rAxisLabelProperties.bLineBreakAllowed )
+    if( !rAxisLabelProperties.m_bLineBreakAllowed )
         return false;
-    if( rAxisLabelProperties.bStackCharacters )
+    if( rAxisLabelProperties.m_bStackCharacters )
         return false;
     //no break for value axis
     if( !m_bUseTextLabels )
         return false;
-    if( !( rAxisLabelProperties.fRotationAngleDegree == 0.0 ||
-           rAxisLabelProperties.fRotationAngleDegree == 90.0 ||
-           rAxisLabelProperties.fRotationAngleDegree == 270.0 ) )
+    if( !( rAxisLabelProperties.m_fRotationAngleDegree == 0.0 ||
+           rAxisLabelProperties.m_fRotationAngleDegree == 90.0 ||
+           rAxisLabelProperties.m_fRotationAngleDegree == 270.0 ) )
         return false;
     //no break for complex vertical category axis
     if( !m_aAxisProperties.m_bSwapXAndY )
@@ -532,26 +532,26 @@ bool canAutoAdjustLabelPlacement(
     const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis)
 {
     // joined prerequisite checks for auto rotate and auto stagger
-    if( rAxisLabelProperties.bOverlapAllowed )
+    if( rAxisLabelProperties.m_bOverlapAllowed )
         return false;
-    if( rAxisLabelProperties.bLineBreakAllowed ) // auto line break may conflict with...
+    if( rAxisLabelProperties.m_bLineBreakAllowed ) // auto line break may conflict with...
         return false;
-    if( rAxisLabelProperties.fRotationAngleDegree != 0.0 )
+    if( rAxisLabelProperties.m_fRotationAngleDegree != 0.0 )
         return false;
     // automatic adjusting labels only works for
     // horizontal axis with horizontal text
     // or vertical axis with vertical text
     if( bIsHorizontalAxis )
-        return !rAxisLabelProperties.bStackCharacters;
+        return !rAxisLabelProperties.m_bStackCharacters;
     if( bIsVerticalAxis )
-        return rAxisLabelProperties.bStackCharacters;
+        return rAxisLabelProperties.m_bStackCharacters;
     return false;
 }
 
 bool isAutoStaggeringOfLabelsAllowed(
     const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis, bool bIsVerticalAxis )
 {
-    if( rAxisLabelProperties.eStaggering != AxisLabelStaggering::StaggerAuto )
+    if( rAxisLabelProperties.m_eStaggering != AxisLabelStaggering::StaggerAuto )
         return false;
     return canAutoAdjustLabelPlacement(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis);
 }
@@ -721,7 +721,7 @@ bool VCartesianAxis::createTextShapes(
         return createTextShapesSimple(xTarget, rTickIter, rAxisLabelProperties, pTickFactory);
 
     FixedNumberFormatter aFixedNumberFormatter(
-                m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
+                m_xNumberFormatsSupplier, rAxisLabelProperties.m_nNumberFormatKey );
 
     bool bIsStaggered = rAxisLabelProperties.isStaggered();
     B2DVector aTextToTickDistance = pTickFactory->getDistanceAxisTickToText(m_aAxisProperties, true);
@@ -742,14 +742,14 @@ bool VCartesianAxis::createTextShapes(
         }
 
         // recalculate the nLimitedSpaceForText in case of 90 and 270 degree if the text break is true
-        if ( rAxisLabelProperties.fRotationAngleDegree == 90.0 || rAxisLabelProperties.fRotationAngleDegree == 270.0 )
+        if ( rAxisLabelProperties.m_fRotationAngleDegree == 90.0 || rAxisLabelProperties.m_fRotationAngleDegree == 270.0 )
         {
             nLimitedSpaceForText = rAxisLabelProperties.m_aMaximumSpaceForLabels.Height;
             m_aAxisProperties.m_bLimitSpaceForLabels = false;
         }
 
         // recalculate the nLimitedSpaceForText in case of vertical category axis if the text break is true
-        if ( m_aAxisProperties.m_bSwapXAndY && bIsVerticalAxis && rAxisLabelProperties.fRotationAngleDegree == 0.0 )
+        if ( m_aAxisProperties.m_bSwapXAndY && bIsVerticalAxis && rAxisLabelProperties.m_fRotationAngleDegree == 0.0 )
         {
             nLimitedSpaceForText = pTickFactory->getXaxisStartPos().getX();
             m_aAxisProperties.m_bLimitSpaceForLabels = false;
@@ -790,21 +790,21 @@ bool VCartesianAxis::createTextShapes(
                     pPREPreviousVisibleTickInfo : pPreviousVisibleTickInfo;
 
         //don't create labels which does not fit into the rhythm
-        if( nTick%rAxisLabelProperties.nRhythm != 0 )
+        if( nTick%rAxisLabelProperties.m_nRhythm != 0 )
             continue;
 
         //don't create labels for invisible ticks
         if( !pTickInfo->bPaintIt )
             continue;
 
-        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
+        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.m_bOverlapAllowed )
         {
             // Overlapping is not allowed.  If the label overlaps with its
             // neighboring label, try increasing the tick interval (or rhythm
             // as it's called) and start over.
 
             if( lcl_doesShapeOverlapWithTickmark( *pLastVisibleNeighbourTickInfo->xTextShape
-                       , rAxisLabelProperties.fRotationAngleDegree
+                       , rAxisLabelProperties.m_fRotationAngleDegree
                        , pTickInfo->aTickScreenPosition ) )
             {
                 // This tick overlaps with its neighbor.  Try to stagger (if
@@ -814,11 +814,11 @@ bool VCartesianAxis::createTextShapes(
                 if( !bIsStaggered && isAutoStaggeringOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
                 {
                     bIsStaggered = true;
-                    rAxisLabelProperties.eStaggering = AxisLabelStaggering::StaggerEven;
+                    rAxisLabelProperties.m_eStaggering = AxisLabelStaggering::StaggerEven;
                     pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
                     if( !pLastVisibleNeighbourTickInfo ||
                         !lcl_doesShapeOverlapWithTickmark( *pLastVisibleNeighbourTickInfo->xTextShape
-                                , rAxisLabelProperties.fRotationAngleDegree
+                                , rAxisLabelProperties.m_fRotationAngleDegree
                                 , pTickInfo->aTickScreenPosition ) )
                         bOverlapsAfterAutoStagger = false;
                 }
@@ -829,8 +829,8 @@ bool VCartesianAxis::createTextShapes(
                     // Increment the visible tick intervals (if that's
                     // allowed) and start over.
 
-                    rAxisLabelProperties.nRhythm++;
-                    removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
+                    rAxisLabelProperties.m_nRhythm++;
+                    removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.m_nRhythm, nTick, xTarget );
                     return false;
                 }
             }
@@ -863,30 +863,30 @@ bool VCartesianAxis::createTextShapes(
         if(!pTickInfo->xTextShape.is())
             continue;
 
-        recordMaximumTextSize( *pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
+        recordMaximumTextSize( *pTickInfo->xTextShape, rAxisLabelProperties.m_fRotationAngleDegree );
 
         // Label has multiple lines and the words are broken
-        if( nLimitedSpaceForText>0 && !rAxisLabelProperties.bOverlapAllowed
-                && rAxisLabelProperties.fRotationAngleDegree == 0.0
+        if( nLimitedSpaceForText>0 && !rAxisLabelProperties.m_bOverlapAllowed
+                && rAxisLabelProperties.m_fRotationAngleDegree == 0.0
                 && lcl_hasWordBreak( pTickInfo->xTextShape ) )
         {
             // Label has multiple lines and belongs to a complex category
             // axis. Rotate 90 degrees to try to avoid overlaps.
             if ( m_aAxisProperties.m_bComplexCategories )
             {
-                rAxisLabelProperties.fRotationAngleDegree = 90;
+                rAxisLabelProperties.m_fRotationAngleDegree = 90;
             }
-            rAxisLabelProperties.bLineBreakAllowed = false;
-            m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree;
+            rAxisLabelProperties.m_bLineBreakAllowed = false;
+            m_aAxisLabelProperties.m_fRotationAngleDegree = rAxisLabelProperties.m_fRotationAngleDegree;
             removeTextShapesFromTicks();
             return false;
         }
 
         //if NO OVERLAP -> remove overlapping shapes
-        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
+        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.m_bOverlapAllowed )
         {
             // Check if the label still overlaps with its neighbor.
-            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
+            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.m_fRotationAngleDegree ) )
             {
                 // It overlaps.  Check if staggering helps.
                 bool bOverlapsAfterAutoStagger = true;
@@ -898,11 +898,11 @@ bool VCartesianAxis::createTextShapes(
                         || m_aAxisProperties.m_bTryStaggeringFirst )
                     {
                         bIsStaggered = true;
-                        rAxisLabelProperties.eStaggering = AxisLabelStaggering::StaggerEven;
+                        rAxisLabelProperties.m_eStaggering = AxisLabelStaggering::StaggerEven;
                         pLastVisibleNeighbourTickInfo = pPREPreviousVisibleTickInfo;
                         if( !pLastVisibleNeighbourTickInfo ||
                             !lcl_doesShapeOverlapWithTickmark( *pLastVisibleNeighbourTickInfo->xTextShape
-                                , rAxisLabelProperties.fRotationAngleDegree
+                                , rAxisLabelProperties.m_fRotationAngleDegree
                                 , pTickInfo->aTickScreenPosition ) )
                             bOverlapsAfterAutoStagger = false;
                     }
@@ -919,15 +919,15 @@ bool VCartesianAxis::createTextShapes(
                         // The nRhythm parameter is reset to 1 since the layout
                         // used for text labels is changed.
                         rAxisLabelProperties.autoRotate45();
-                        m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree; // Store it for future runs.
+                        m_aAxisLabelProperties.m_fRotationAngleDegree = rAxisLabelProperties.m_fRotationAngleDegree; // Store it for future runs.
                         removeTextShapesFromTicks();
-                        rAxisLabelProperties.nRhythm = 1;
+                        rAxisLabelProperties.m_nRhythm = 1;
                         return false;
                     }
 
                     // Try incrementing the tick interval and start over.
-                    rAxisLabelProperties.nRhythm++;
-                    removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
+                    rAxisLabelProperties.m_nRhythm++;
+                    removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.m_nRhythm, nTick, xTarget );
                     return false;
                 }
             }
@@ -944,7 +944,7 @@ bool VCartesianAxis::createTextShapesSimple(
     AxisLabelProperties& rAxisLabelProperties, TickFactory2D const * pTickFactory )
 {
     FixedNumberFormatter aFixedNumberFormatter(
-                m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
+                m_xNumberFormatsSupplier, rAxisLabelProperties.m_nNumberFormatKey );
 
     const bool bIsHorizontalAxis = pTickFactory->isHorizontalAxis();
     const bool bIsVerticalAxis = pTickFactory->isVerticalAxis();
@@ -979,28 +979,28 @@ bool VCartesianAxis::createTextShapesSimple(
         const TickInfo* pLastVisibleNeighbourTickInfo = pPreviousVisibleTickInfo;
 
         //don't create labels which does not fit into the rhythm
-        if( nTick%rAxisLabelProperties.nRhythm != 0 )
+        if( nTick%rAxisLabelProperties.m_nRhythm != 0 )
             continue;
 
         //don't create labels for invisible ticks
         if( !pTickInfo->bPaintIt )
             continue;
 
-        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
+        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.m_bOverlapAllowed )
         {
             // Overlapping is not allowed.  If the label overlaps with its
             // neighboring label, try increasing the tick interval (or rhythm
             // as it's called) and start over.
 
             if( lcl_doesShapeOverlapWithTickmark( *pLastVisibleNeighbourTickInfo->xTextShape
-                       , rAxisLabelProperties.fRotationAngleDegree
+                       , rAxisLabelProperties.m_fRotationAngleDegree
                        , pTickInfo->aTickScreenPosition ) )
             {
                 // This tick overlaps with its neighbor. Increment the visible
                 // tick intervals (if that's allowed) and start over.
 
-                rAxisLabelProperties.nRhythm++;
-                removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
+                rAxisLabelProperties.m_nRhythm++;
+                removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.m_nRhythm, nTick, xTarget );
                 return false;
             }
         }
@@ -1032,13 +1032,13 @@ bool VCartesianAxis::createTextShapesSimple(
         if(!pTickInfo->xTextShape.is())
             continue;
 
-        recordMaximumTextSize( *pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree );
+        recordMaximumTextSize( *pTickInfo->xTextShape, rAxisLabelProperties.m_fRotationAngleDegree );
 
         //if NO OVERLAP -> remove overlapping shapes
-        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.bOverlapAllowed )
+        if( pLastVisibleNeighbourTickInfo && !rAxisLabelProperties.m_bOverlapAllowed )
         {
             // Check if the label still overlaps with its neighbor.
-            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.fRotationAngleDegree ) )
+            if( doesOverlap( pLastVisibleNeighbourTickInfo->xTextShape, pTickInfo->xTextShape, rAxisLabelProperties.m_fRotationAngleDegree ) )
             {
                 // It overlaps.
                 if( isAutoRotatingOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) )
@@ -1049,15 +1049,15 @@ bool VCartesianAxis::createTextShapesSimple(
                     // The nRhythm parameter is reset to 1 since the layout
                     // used for text labels is changed.
                     rAxisLabelProperties.autoRotate45();
-                    m_aAxisLabelProperties.fRotationAngleDegree = rAxisLabelProperties.fRotationAngleDegree; // Store it for future runs.
+                    m_aAxisLabelProperties.m_fRotationAngleDegree = rAxisLabelProperties.m_fRotationAngleDegree; // Store it for future runs.
                     removeTextShapesFromTicks();
-                    rAxisLabelProperties.nRhythm = 1;
+                    rAxisLabelProperties.m_nRhythm = 1;
                     return false;
                 }
 
                 // Try incrementing the tick interval and start over.
-                rAxisLabelProperties.nRhythm++;
-                removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.nRhythm, nTick, xTarget );
+                rAxisLabelProperties.m_nRhythm++;
+                removeShapesAtWrongRhythm( rTickIter, rAxisLabelProperties.m_nRhythm, nTick, xTarget );
                 return false;
             }
         }
@@ -1556,7 +1556,7 @@ sal_Int32 VCartesianAxis::estimateMaximumAutoMainIncrementCount()
     // tdf#48041: do not duplicate the value labels because of rounding
     if (m_aAxisProperties.m_nAxisType != css::chart2::AxisType::DATE)
     {
-        FixedNumberFormatter aFixedNumberFormatterTest(m_xNumberFormatsSupplier, m_aAxisLabelProperties.nNumberFormatKey);
+        FixedNumberFormatter aFixedNumberFormatterTest(m_xNumberFormatsSupplier, m_aAxisLabelProperties.m_nNumberFormatKey);
         OUString sPreviousValueLabel;
         sal_Int32 nSameLabel = 0;
         for (sal_Int32 nLabel = 0; nLabel < static_cast<sal_Int32>(m_aAllTickInfos[0].size()); ++nLabel)
@@ -1610,7 +1610,7 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
             std::unique_ptr<TickIter> apTickIter(createLabelTickIterator(nTextLevel));
             if (apTickIter)
             {
-                double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                double fRotationAngleDegree = m_aAxisLabelProperties.m_fRotationAngleDegree;
                 if( nTextLevel>0 )
                 {
                     lcl_shiftLabels(*apTickIter, aCumulatedLabelsDistance);
@@ -1630,8 +1630,8 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
     {
         if( !m_aAllTickInfos.empty() )
         {
-            LabelIterator aInnerIter( m_aAllTickInfos[0], rAxisLabelProperties.eStaggering, true );
-            LabelIterator aOuterIter( m_aAllTickInfos[0], rAxisLabelProperties.eStaggering, false );
+            LabelIterator aInnerIter( m_aAllTickInfos[0], rAxisLabelProperties.m_eStaggering, true );
+            LabelIterator aOuterIter( m_aAllTickInfos[0], rAxisLabelProperties.m_eStaggering, false );
 
             lcl_shiftLabels( aOuterIter
                 , lcl_getLabelsDistance( aInnerIter
@@ -1677,15 +1677,15 @@ void VCartesianAxis::createLabels()
             AxisLabelProperties aComplexProps(m_aAxisLabelProperties);
             if( m_aAxisProperties.m_bComplexCategories )
             {
-                aComplexProps.bLineBreakAllowed = true;
-                aComplexProps.bOverlapAllowed = aComplexProps.fRotationAngleDegree != 0.0;
+                aComplexProps.m_bLineBreakAllowed = true;
+                aComplexProps.m_bOverlapAllowed = aComplexProps.m_fRotationAngleDegree != 0.0;
                 if( nTextLevel > 0 )
                 {
                     //multilevel labels: 0 or 90 by default
                     if( m_aAxisProperties.m_bSwapXAndY )
-                        aComplexProps.fRotationAngleDegree = 90.0;
+                        aComplexProps.m_fRotationAngleDegree = 90.0;
                     else
-                        aComplexProps.fRotationAngleDegree = 0.0;
+                        aComplexProps.m_fRotationAngleDegree = 0.0;
                 }
             }
             AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
@@ -1720,10 +1720,10 @@ void VCartesianAxis::createMaximumLabels()
 
     AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
     if( isAutoStaggeringOfLabelsAllowed( aAxisLabelProperties, pTickFactory2D->isHorizontalAxis(), pTickFactory2D->isVerticalAxis() ) )
-        aAxisLabelProperties.eStaggering = AxisLabelStaggering::StaggerEven;
+        aAxisLabelProperties.m_eStaggering = AxisLabelStaggering::StaggerEven;
 
-    aAxisLabelProperties.bOverlapAllowed = true;
-    aAxisLabelProperties.bLineBreakAllowed = false;
+    aAxisLabelProperties.m_bOverlapAllowed = true;
+    aAxisLabelProperties.m_bLineBreakAllowed = false;
     sal_Int32 nTextLevelCount = getTextLevelCount();
     for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
     {
@@ -1766,7 +1766,7 @@ void VCartesianAxis::updatePositions()
                     static_cast<sal_Int32>(aTickScreenPos2D.getX())
                     ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
 
-                double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                double fRotationAngleDegree = m_aAxisLabelProperties.m_fRotationAngleDegree;
                 if( nDepth > 0 )
                 {
                     //multilevel labels: 0 or 90 by default
@@ -1858,7 +1858,7 @@ void VCartesianAxis::createShapes()
                 std::unique_ptr< TickIter > apTickIter(createLabelTickIterator( nTextLevel ));
                 if( apTickIter )
                 {
-                    double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    double fRotationAngleDegree = m_aAxisLabelProperties.m_fRotationAngleDegree;
                     if( nTextLevel > 0 )
                     {
                         //Multi-level Labels: default to 0 or 90
