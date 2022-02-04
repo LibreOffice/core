@@ -16,6 +16,24 @@
       "message": "It was easier (and closer to the original code) to only replace try block with if block, thus keeping the declaration and definition of aFind together.\n\n    if (_xComponent)\n        sModuleId \u003d m_xModuleManager-\u003eidentify( _xComponent );\n\n    uno::Reference\u003c frame::XUntitledNumbers \u003e xNumberedControllers;\n    TNumberedConrtoller::const_iterator aFind \u003d m_aNumberedControllers.find(sModuleId);",
       "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "749e9b70_a445f4df",
+        "filename": "dbaccess/source/core/dataaccess/databasedocument.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-04T08:16:55Z",
+      "side": 0,
+      "message": "It was to avoid searching an empty string (sModuleId) in m_aNumberedControllers",
+      "parentUuid": "cbb26e76_82ac46fa",
+      "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
