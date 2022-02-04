@@ -272,7 +272,7 @@ void SdOutliner::StartSpelling()
 {
     meMode = SPELL;
     mbDirectionIsForward = true;
-    mpSearchItem = nullptr;
+    mpSearchItem.reset();
 }
 
 /** Free all resources acquired during the search/spell check.  After a
@@ -475,7 +475,7 @@ bool SdOutliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
     if ( ! bAbort)
     {
         meMode = SEARCH;
-        mpSearchItem = std::unique_ptr<SvxSearchItem>(pSearchItem->Clone());
+        mpSearchItem.reset(pSearchItem->Clone());
 
         mbFoundObject = false;
 
@@ -1699,7 +1699,7 @@ bool SdOutliner::HandleFailedSearch()
     bool bContinueSearch = false;
 
     OutlinerView* pOutlinerView = getOutlinerView();
-    if (pOutlinerView != nullptr && mpSearchItem != nullptr)
+    if (pOutlinerView && mpSearchItem)
     {
         // Detect whether there is/may be a prior match.  If there is then
         // ask the user whether to wrap around.  Otherwise tell the user
@@ -1789,7 +1789,7 @@ void SdOutliner::StartConversion( LanguageType nSourceLanguage,  LanguageType nT
 
     meMode = TEXT_CONVERSION;
     mbDirectionIsForward = true;
-    mpSearchItem = nullptr;
+    mpSearchItem.reset();
     mnConversionLanguage = nSourceLanguage;
 
     BeginConversion();
