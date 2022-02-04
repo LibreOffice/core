@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcdfa607_86fa950f",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1811,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-04T17:40:27Z",
+      "side": 1,
+      "message": "This comparison could be avoided by\nreturn rStringCode.equalsIgnoreAsciiCaseAscii(aInterval.mStringCode );\n\nSame in std::any_of\u0027s pred.",
+      "revId": "d8b230c7192999bfd13d31497d9e515a074821d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "841ad3c0_a24f7948",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1817,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-04T17:40:27Z",
+      "side": 1,
+      "message": "I\u0027d use std::end(aIntervalTable) to reduce copypaste.",
+      "revId": "d8b230c7192999bfd13d31497d9e515a074821d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a19cb3d_f4f9ae2a",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1818,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-04T17:40:27Z",
+      "side": 1,
+      "message": "intervalIter !\u003d std::end(aIntervalTable) is more readable.",
+      "revId": "d8b230c7192999bfd13d31497d9e515a074821d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "890e87ab_907dcc36",
+        "filename": "basic/source/runtime/methods1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1819,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-04T17:40:27Z",
+      "side": 1,
+      "message": "intervalIter is already a pointer, no need to use \u0026*.",
+      "revId": "d8b230c7192999bfd13d31497d9e515a074821d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
