@@ -33,6 +33,24 @@
       "message": "Thanks! My understanding is that your change makes the rendering/layout of margins conditional: if there is no text, then ignore margins, but if there is, then have them.\n\nThis behavior looks reasonable to me. I plan to cover this with a test before submitting, though.",
       "revId": "67a5f11b6582b7654f404f3263b055aa5837d3e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56ee60f2_8ce261e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-04T08:05:01Z",
+      "side": 1,
+      "message": "No - I don\u0027t think so. There is text there, but there hasn\u0027t been ANY space allocated for it.\nThe situation should be the same as \"tdf#134288 svx: fix rendering of text on a zero-width shape\".  Your implementation was \"chose the lowest value\" instead of this patches \"only do this if size is zero\".",
+      "parentUuid": "67ee97fe_fca43d25",
+      "revId": "67a5f11b6582b7654f404f3263b055aa5837d3e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
