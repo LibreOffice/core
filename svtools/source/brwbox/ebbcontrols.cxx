@@ -362,8 +362,8 @@ namespace svt
         m_pEntry = pEntry;
         m_pEntry->show();
         m_pEntry->set_width_chars(1); // so a smaller than default width can be used
-        m_pEntry->connect_key_press(LINK(this, ControlBase, KeyInputHdl));
-        m_pEntry->connect_focus_in(LINK(this, ControlBase, FocusInHdl));
+        connect_key_press(LINK(this, ControlBase, KeyInputHdl));
+        connect_focus_in(LINK(this, ControlBase, FocusInHdl));
         connect_focus_out(LINK(this, ControlBase, FocusOutHdl));
         m_pEntry->connect_mouse_press(LINK(this, ControlBase, MousePressHdl));
         m_pEntry->connect_mouse_release(LINK(this, ControlBase, MouseReleaseHdl));
@@ -447,9 +447,19 @@ namespace svt
         get_formatter().connect_changed(rLink);
     }
 
+    void FormattedControlBase::connect_focus_in(const Link<weld::Widget&, void>& rLink)
+    {
+        get_widget().connect_focus_in(rLink);
+    }
+
     void FormattedControlBase::connect_focus_out(const Link<weld::Widget&, void>& rLink)
     {
         get_formatter().connect_focus_out(rLink);
+    }
+
+    void FormattedControlBase::connect_key_press(const Link<const KeyEvent&, bool>& rLink)
+    {
+        get_widget().connect_key_press(rLink);
     }
 
     weld::EntryFormatter& FormattedControlBase::get_formatter()
@@ -578,11 +588,11 @@ namespace svt
     }
 
     PatternControl::PatternControl(BrowserDataWin* pParent)
-        : EditControl(pParent)
+        : EditControlBase(pParent)
+        , m_xWidget(m_xBuilder->weld_entry("entry"))
     {
-        m_xWidget->connect_key_press(Link<const KeyEvent&, bool>()); // 1) acknowledge we first remove the old one
         m_xEntryFormatter.reset(new weld::PatternFormatter(*m_xWidget));
-        m_xEntryFormatter->connect_key_press(LINK(this, ControlBase, KeyInputHdl)); // 2) and here we reattach via the formatter
+        InitEditControlBase(m_xWidget.get());
     }
 
     void PatternControl::connect_changed(const Link<weld::Entry&, void>& rLink)
@@ -590,15 +600,26 @@ namespace svt
         m_xEntryFormatter->connect_changed(rLink);
     }
 
+    void PatternControl::connect_focus_in(const Link<weld::Widget&, void>& rLink)
+    {
+        m_xEntryFormatter->connect_focus_in(rLink);
+    }
+
     void PatternControl::connect_focus_out(const Link<weld::Widget&, void>& rLink)
     {
         m_xEntryFormatter->connect_focus_out(rLink);
     }
 
+    void PatternControl::connect_key_press(const Link<const KeyEvent&, bool>& rLink)
+    {
+        m_xEntryFormatter->connect_key_press(rLink);
+    }
+
     void PatternControl::dispose()
     {
         m_xEntryFormatter.reset();
-        EditControl::dispose();
+        m_xWidget.reset();
+        EditControlBase::dispose();
     }
 
     EditCellController::EditCellController(EditControlBase* pEdit)

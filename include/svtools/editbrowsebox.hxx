@@ -237,7 +237,9 @@ namespace svt
         weld::Entry& get_widget() { return *m_pEntry; }
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) = 0;
+        virtual void connect_focus_in(const Link<weld::Widget&, void>& rLink) = 0;
         virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) = 0;
+        virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) = 0;
 
     protected:
         void InitEditControlBase(weld::Entry* pEntry);
@@ -258,9 +260,19 @@ namespace svt
             m_xWidget->connect_changed(rLink);
         }
 
+        virtual void connect_focus_in(const Link<weld::Widget&, void>& rLink) override
+        {
+            m_xWidget->connect_focus_in(rLink);
+        }
+
         virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override
         {
             m_xWidget->connect_focus_out(rLink);
+        }
+
+        virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override
+        {
+            m_xWidget->connect_key_press(rLink);
         }
 
     protected:
@@ -758,7 +770,9 @@ namespace svt
         virtual void dispose() override;
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
+        virtual void connect_focus_in(const Link<weld::Widget&, void>& rLink) override;
         virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override;
+        virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override;
 
         weld::EntryFormatter& get_formatter();
 
@@ -817,7 +831,7 @@ namespace svt
         DECL_DLLPRIVATE_LINK(ImplClickHdl, weld::Button&, void);
     };
 
-    class SVT_DLLPUBLIC PatternControl final : public EditControl
+    class SVT_DLLPUBLIC PatternControl final : public EditControlBase
     {
     public:
         PatternControl(BrowserDataWin* pParent);
@@ -825,10 +839,13 @@ namespace svt
         weld::PatternFormatter& get_formatter() { return *m_xEntryFormatter; }
 
         virtual void connect_changed(const Link<weld::Entry&, void>& rLink) override;
+        virtual void connect_focus_in(const Link<weld::Widget&, void>& rLink) override;
         virtual void connect_focus_out(const Link<weld::Widget&, void>& rLink) override;
+        virtual void connect_key_press(const Link<const KeyEvent&, bool>& rLink) override;
 
         virtual void dispose() override;
     private:
+        std::unique_ptr<weld::Entry> m_xWidget;
         std::unique_ptr<weld::PatternFormatter> m_xEntryFormatter;
     };
 
