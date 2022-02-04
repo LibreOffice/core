@@ -53,7 +53,7 @@ server idiosyncrasies:
 To a first approximation, there are 3 parts involved in the UCP:
 
 * The upper layer implements the UNO API which is called by LibreOffice, and
-  translates the calls from generic sequence-of-any strongly typed abstractness
+  translates the calls from generic sequence-of-any stringly typed abstractness
   into HTTP or WebDAV protocol calls, and does some high level protocol
   handling to figure out what the server supports and so on. This is
   independent of the low-level library.
