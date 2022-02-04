@@ -1168,7 +1168,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage(weld::Container* pPage, weld::DialogCon
         aStr_ = ApplyLreOrRleEmbedding( aStr_ ) +
                 aTwoSpace +
                 ApplyLreOrRleEmbedding( SvtLanguageTable::GetLanguageString( v->GetLanguage() ) );
-        m_xCurrencyLB->append(OUString::number(reinterpret_cast<sal_Int64>(v)), aStr_);
+        m_xCurrencyLB->append(weld::toId(v), aStr_);
     }
 
     m_xCurrencyLB->set_active(0);
@@ -1336,7 +1336,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
     // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     OUString sId = m_xCurrencyLB->get_active_id();
-    const NfCurrencyEntry* pCurr = sId == "default" ? nullptr : reinterpret_cast<const NfCurrencyEntry*>(sId.toInt64());
+    const NfCurrencyEntry* pCurr = sId == "default" ? nullptr : weld::fromId<const NfCurrencyEntry*>(sId);
     OUString sNewCurr;
     if ( pCurr )
         sNewCurr = SvtSysLocaleOptions::CreateCurrencyConfigString(
@@ -1496,7 +1496,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
     // if pCurr==nullptr the SYSTEM entry is selected
-    OUString sId = !pCurr ? OUString("default") : OUString::number(reinterpret_cast<sal_Int64>(pCurr));
+    OUString sId = !pCurr ? OUString("default") : weld::toId(pCurr);
     m_xCurrencyLB->set_active_id(sId);
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::EOption::Currency);
     m_xCurrencyLB->set_sensitive(!bReadonly);

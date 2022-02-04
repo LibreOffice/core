@@ -54,7 +54,7 @@ FuncPage::FuncPage(weld::Container* pParent, const IFunctionManager* _pFunctionM
     for (sal_uInt32 j = 0; j < nCategoryCount; ++j)
     {
         const IFunctionCategory* pCategory = m_pFunctionManager->getCategory(j);
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCategory)));
+        OUString sId(weld::toId(pCategory));
         m_xLbCategory->append(sId, pCategory->getName());
     }
 
@@ -83,7 +83,7 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
         TFunctionDesc pDesc(_pCategory->getFunction(i));
         if (!pDesc->isHidden())
         {
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pDesc)));
+            OUString sId(weld::toId(pDesc));
             m_xLbFunction->append(sId, pDesc->getFunctionName());
         }
     }
@@ -100,7 +100,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
     if (aStr.isEmpty() || nSelPos == 0)
     {
         const IFunctionCategory* pCategory
-            = reinterpret_cast<const IFunctionCategory*>(m_xLbCategory->get_id(nSelPos).toInt64());
+            = weld::fromId<const IFunctionCategory*>(m_xLbCategory->get_id(nSelPos));
 
         if (nSelPos > 0)
         {
@@ -123,7 +123,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
             {
                 if (elem) // may be null if a function is no longer available
                 {
-                    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(elem)));
+                    OUString sId(weld::toId(elem));
                     m_xLbFunction->append(sId, elem->getFunctionName());
                 }
             }
@@ -163,7 +163,7 @@ void FuncPage::UpdateFunctionList(const OUString& aStr)
                 {
                     if (!pDesc->isHidden())
                     {
-                        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pDesc)));
+                        OUString sId(weld::toId(pDesc));
                         m_xLbFunction->append(sId, pDesc->getFunctionName());
                     }
                 }
@@ -221,7 +221,7 @@ void FuncPage::SetCategory(sal_Int32 nCat)
 
 sal_Int32 FuncPage::GetFuncPos(const IFunctionDescription* _pDesc)
 {
-    return m_xLbFunction->find_id(OUString::number(reinterpret_cast<sal_Int64>(_pDesc)));
+    return m_xLbFunction->find_id(weld::toId(_pDesc));
 }
 
 void FuncPage::SetFunction(sal_Int32 nFunc)
@@ -249,7 +249,7 @@ const IFunctionDescription* FuncPage::GetFuncDesc(sal_Int32 nPos) const
     if (nPos == -1)
         return nullptr;
     // not pretty, but hopefully rare
-    return reinterpret_cast<const IFunctionDescription*>(m_xLbFunction->get_id(nPos).toInt64());
+    return weld::fromId<const IFunctionDescription*>(m_xLbFunction->get_id(nPos));
 }
 
 } // formula

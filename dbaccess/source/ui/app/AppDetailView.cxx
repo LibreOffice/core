@@ -63,7 +63,7 @@ void OTasksWindow::updateHelpText()
     TranslateId pHelpTextId;
     int nCurEntry = m_xTreeView->get_selected_index();
     if (nCurEntry != -1)
-        pHelpTextId = reinterpret_cast<TaskEntry*>(m_xTreeView->get_id(nCurEntry).toUInt64())->pHelpID;
+        pHelpTextId = weld::fromId<TaskEntry*>(m_xTreeView->get_id(nCurEntry))->pHelpID;
     setHelpText(pHelpTextId);
 }
 
@@ -73,7 +73,7 @@ IMPL_LINK(OTasksWindow, onSelected, weld::TreeView&, rTreeView, bool)
     if (m_nCursorIndex != -1)
     {
         URL aCommand;
-        aCommand.Complete = reinterpret_cast<TaskEntry*>(rTreeView.get_id(m_nCursorIndex).toUInt64())->sUNOCommand;
+        aCommand.Complete = weld::fromId<TaskEntry*>(rTreeView.get_id(m_nCursorIndex))->sUNOCommand;
         getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );
     }
     return true;
@@ -175,7 +175,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
         size_t nIndex = 0;
         for (auto const& task : _rList)
         {
-            OUString sId = OUString::number(reinterpret_cast<sal_uInt64>(new TaskEntry(task)));
+            OUString sId = weld::toId(new TaskEntry(task));
             m_xTreeView->append(sId, task.sTitle);
             m_xTreeView->set_image(nIndex++, *pImages++);
         }
@@ -192,7 +192,7 @@ void OTasksWindow::fillTaskEntryList( const TaskEntryList& _rList )
 void OTasksWindow::Clear()
 {
     m_xTreeView->all_foreach([this](weld::TreeIter& rEntry){
-        TaskEntry* pUserData = reinterpret_cast<TaskEntry*>(m_xTreeView->get_id(rEntry).toUInt64());
+        TaskEntry* pUserData = weld::fromId<TaskEntry*>(m_xTreeView->get_id(rEntry));
         delete pUserData;
         return false;
     });

@@ -183,7 +183,7 @@ void XMLFilterSettingsDialog::updateStates()
     bool bIsDefault = false;
     if (bHasSelection)
     {
-        filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(aRows[0]).toInt64());
+        filter_info_impl* pInfo = weld::fromId<filter_info_impl*>(m_xFilterListBox->get_id(aRows[0]));
         bIsReadonly = pInfo->mbReadonly;
 
         for( auto nFact : o3tl::enumrange<SvtModuleOptions::EFactory>())
@@ -232,7 +232,7 @@ void XMLFilterSettingsDialog::onNew()
 void XMLFilterSettingsDialog::onEdit()
 {
     // get selected filter info
-    filter_info_impl* pOldInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_selected_id().toInt64());
+    filter_info_impl* pOldInfo = weld::fromId<filter_info_impl*>(m_xFilterListBox->get_selected_id());
     if (!pOldInfo)
         return;
 
@@ -713,7 +713,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 void XMLFilterSettingsDialog::onTest()
 {
     // get the first selected filter
-    filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_selected_id().toInt64());
+    filter_info_impl* pInfo = weld::fromId<filter_info_impl*>(m_xFilterListBox->get_selected_id());
     if (pInfo)
     {
         XMLFilterTestDialog aDlg(m_xDialog.get(), mxContext);
@@ -726,7 +726,7 @@ void XMLFilterSettingsDialog::onDelete()
     int nIndex = m_xFilterListBox->get_selected_index();
     if (nIndex == -1)
         return;
-    filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(nIndex).toInt64());
+    filter_info_impl* pInfo = weld::fromId<filter_info_impl*>(m_xFilterListBox->get_id(nIndex));
     if (pInfo)
     {
         OUString aMessage(XsltResId(STR_WARN_DELETE));
@@ -821,7 +821,7 @@ void XMLFilterSettingsDialog::onSave()
     int nFilters = 0;
 
     m_xFilterListBox->selected_foreach([&](weld::TreeIter& rEntry){
-        filter_info_impl* pInfo = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(rEntry).toInt64());
+        filter_info_impl* pInfo = weld::fromId<filter_info_impl*>(m_xFilterListBox->get_id(rEntry));
         aFilters.push_back(pInfo);
         ++nFilters;
         return false;
@@ -1209,7 +1209,7 @@ OUString getApplicationUIName( std::u16string_view rServiceName )
 void XMLFilterSettingsDialog::addFilterEntry( const filter_info_impl* pInfo )
 {
     int nRow = m_xFilterListBox->n_children();
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pInfo)));
+    OUString sId(weld::toId(pInfo));
     m_xFilterListBox->append(sId, pInfo->maFilterName);
     m_xFilterListBox->set_text(nRow, getEntryString(pInfo), 1);
 }
@@ -1219,7 +1219,7 @@ void XMLFilterSettingsDialog::changeEntry( const filter_info_impl* pInfo )
     const int nCount = m_xFilterListBox->n_children();
     for(int nPos = 0; nPos < nCount; ++nPos)
     {
-        filter_info_impl* pEntry = reinterpret_cast<filter_info_impl*>(m_xFilterListBox->get_id(nPos).toInt64());
+        filter_info_impl* pEntry = weld::fromId<filter_info_impl*>(m_xFilterListBox->get_id(nPos));
         if (pEntry == pInfo)
         {
             m_xFilterListBox->set_text(nPos, pInfo->maFilterName, 0);

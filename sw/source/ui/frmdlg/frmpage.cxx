@@ -1244,7 +1244,7 @@ void SwFramePage::InitPos(RndStdIds eId,
 
         nPos = m_xVertRelationLB->get_active();
         if (nPos != -1)
-            m_nOldVRel = reinterpret_cast<RelationMap*>(m_xVertRelationLB->get_id(nPos).toInt64())->nRelation;
+            m_nOldVRel = weld::fromId<RelationMap*>(m_xVertRelationLB->get_id(nPos))->nRelation;
     }
 
     nPos = m_xHorizontalDLB->get_active();
@@ -1254,7 +1254,7 @@ void SwFramePage::InitPos(RndStdIds eId,
 
         nPos = m_xHoriRelationLB->get_active();
         if (nPos != -1)
-            m_nOldHRel = reinterpret_cast<RelationMap*>(m_xHoriRelationLB->get_id(nPos).toInt64())->nRelation;
+            m_nOldHRel = weld::fromId<RelationMap*>(m_xHoriRelationLB->get_id(nPos))->nRelation;
     }
 
     bool bEnable = true;
@@ -1445,7 +1445,7 @@ void SwFramePage::FillRelLB(const FrameMap* _pMap,
                                                                 m_bIsVerticalL2R,
                                                                 m_bIsInRightToLeft);
                             const OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
-                            _rLB.append(OUString::number(reinterpret_cast<sal_Int64>(&rCharMap)), sEntry);
+                            _rLB.append(weld::toId(&rCharMap), sEntry);
                             if (_pMap[nMapPos].nAlign == _nAlign)
                                 sSelEntry = sEntry;
                             break;
@@ -1463,7 +1463,7 @@ void SwFramePage::FillRelLB(const FrameMap* _pMap,
                 {
                     for (int i = 0; i < _rLB.get_count(); i++)
                     {
-                        RelationMap *pEntry = reinterpret_cast<RelationMap*>(_rLB.get_id(i).toInt64());
+                        RelationMap *pEntry = weld::fromId<RelationMap*>(_rLB.get_id(i));
                         if (pEntry->nLBRelation == LB::RelChar) // default
                         {
                             _rLB.set_active(i);
@@ -1507,7 +1507,7 @@ void SwFramePage::FillRelLB(const FrameMap* _pMap,
                                                                 m_bIsVerticalL2R,
                                                                 m_bIsInRightToLeft);
                             const OUString sEntry = SvxSwFramePosString::GetString(eStrId1);
-                            _rLB.append(OUString::number(reinterpret_cast<sal_Int64>(&rMap)), sEntry);
+                            _rLB.append(weld::toId(&rMap), sEntry);
                             if (sSelEntry.isEmpty() && rMap.nRelation == _nRel)
                                 sSelEntry = sEntry;
                         }
@@ -1550,7 +1550,7 @@ void SwFramePage::FillRelLB(const FrameMap* _pMap,
                     default:
                         if (_rLB.get_active() != -1)
                         {
-                            RelationMap *pEntry = reinterpret_cast<RelationMap*>(_rLB.get_id(_rLB.get_count() - 1).toInt64());
+                            RelationMap *pEntry = weld::fromId<RelationMap*>(_rLB.get_id(_rLB.get_count() - 1));
                             nSimRel = pEntry->nRelation;
                         }
                         break;
@@ -1558,7 +1558,7 @@ void SwFramePage::FillRelLB(const FrameMap* _pMap,
 
                 for (int i = 0; i < _rLB.get_count(); i++)
                 {
-                    RelationMap *pEntry = reinterpret_cast<RelationMap*>(_rLB.get_id(i).toInt64());
+                    RelationMap *pEntry = weld::fromId<RelationMap*>(_rLB.get_id(i));
                     if (pEntry->nRelation == nSimRel)
                     {
                         _rLB.set_active(i);
@@ -1585,7 +1585,7 @@ sal_Int16 SwFramePage::GetRelation(const weld::ComboBox& rRelationLB)
     const auto nPos = rRelationLB.get_active();
     if (nPos != -1)
     {
-        RelationMap *pEntry = reinterpret_cast<RelationMap *>(rRelationLB.get_id(nPos).toInt64());
+        RelationMap *pEntry = weld::fromId<RelationMap *>(rRelationLB.get_id(nPos));
         return pEntry->nRelation;
     }
 
@@ -1611,8 +1611,8 @@ sal_Int16 SwFramePage::GetAlignment(FrameMap const *pMap, sal_Int32 nMapPos,
     if (rRelationLB.get_active() == -1)
         return 0;
 
-    const RelationMap *const pRelationMap = reinterpret_cast<const RelationMap *>(
-        rRelationLB.get_active_id().toInt64());
+    const RelationMap *const pRelationMap = weld::fromId<const RelationMap*>(
+        rRelationLB.get_active_id());
     const LB nRel = pRelationMap->nLBRelation;
     const SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1930,7 +1930,7 @@ IMPL_LINK( SwFramePage, PosHdl, weld::ComboBox&, rLB, void )
     if (rLB.get_active() != -1)
     {
         if (pRelLB->get_active() != -1)
-            nRel = reinterpret_cast<RelationMap*>(pRelLB->get_active_id().toInt64())->nRelation;
+            nRel = weld::fromId<RelationMap*>(pRelLB->get_active_id())->nRelation;
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }
     else

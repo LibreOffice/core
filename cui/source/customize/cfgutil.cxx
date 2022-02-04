@@ -242,7 +242,7 @@ std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyles(const OUString& s
 
 OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 {
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
     if (pData)
     {
         if ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
@@ -262,7 +262,7 @@ OUString CuiConfigFunctionListBox::GetHelpText( bool bConsiderParent )
 
 OUString CuiConfigFunctionListBox::GetCurCommand() const
 {
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
     if (!pData)
         return OUString();
     return pData->sCommand;
@@ -270,7 +270,7 @@ OUString CuiConfigFunctionListBox::GetCurCommand() const
 
 OUString CuiConfigFunctionListBox::GetCurLabel() const
 {
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
     if (!pData)
         return OUString();
     if (!pData->sLabel.isEmpty())
@@ -294,7 +294,7 @@ CuiConfigFunctionListBox::~CuiConfigFunctionListBox()
 
 IMPL_LINK(CuiConfigFunctionListBox, QueryTooltip, const weld::TreeIter&, rIter, OUString)
 {
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter).toInt64());
+    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter));
     if (!pData)
         return OUString();
     OUString aLabel = CuiResId(RID_CUISTR_COMMANDLABEL) + ": ";
@@ -336,7 +336,7 @@ void CuiConfigFunctionListBox::ClearAll()
 
 OUString CuiConfigFunctionListBox::GetSelectedScriptURI() const
 {
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(get_selected_id().toInt64());
+    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(get_selected_id());
     if (pData && pData->nKind == SfxCfgKind::FUNCTION_SCRIPT)
         return *static_cast<OUString*>(pData->pObject);
     return OUString();
@@ -480,8 +480,7 @@ void CuiConfigGroupListBox::InitModule()
         {
             // Add All Commands category
             aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
-            m_xTreeView->append(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())),
-                                CuiResId(RID_CUISTR_ALLFUNCTIONS));
+            m_xTreeView->append(weld::toId(aArr.back().get()), CuiResId(RID_CUISTR_ALLFUNCTIONS));
         }
 
         for (i1=0; i1<c1; ++i1)
@@ -500,8 +499,7 @@ void CuiConfigGroupListBox::InitModule()
                 { continue; }
 
             aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_FUNCTION, nGroupID ) );
-            m_xTreeView->append(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())),
-                                sGroupName);
+            m_xTreeView->append(weld::toId(aArr.back().get()), sGroupName);
         }
     }
     catch(const css::uno::RuntimeException&)
@@ -594,7 +592,7 @@ void CuiConfigGroupListBox::FillScriptList(const css::uno::Reference< css::scrip
                     aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER,
                             0, static_cast<void *>( theChild.get())));
 
-                    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
+                    OUString sId(weld::toId(aArr.back().get()));
                     m_xTreeView->insert(pParentEntry, -1, &uiName, &sId, nullptr, nullptr, bChildOnDemand, m_xScratchIter.get());
                     m_xTreeView->set_image(*m_xScratchIter, aImage);
                 }
@@ -619,7 +617,7 @@ void CuiConfigGroupListBox::FillFunctionsList(const css::uno::Sequence<DispatchI
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel   = sUIName;
         pGrpInfo->sTooltip = vcl::CommandInfoProvider::GetTooltipForCommand(rInfo.Command, aProperties, m_xFrame);
-        m_pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(pGrpInfo)), sUIName);
+        m_pFunctionListBox->append(weld::toId(pGrpInfo), sUIName);
     }
     m_pFunctionListBox->thaw();
 }
@@ -670,7 +668,7 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
             aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
                     static_cast<void *>(rootNode.get())));
             OUString aTitle(xImp->m_sDlgMacros);
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
+            OUString sId(weld::toId(aArr.back().get()));
             m_xTreeView->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, true, nullptr);
         }
         else
@@ -686,12 +684,12 @@ void CuiConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     {
         aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
         OUString sStyle(xImp->m_aStrGroupStyles);
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
+        OUString sId(weld::toId(aArr.back().get()));
         m_xTreeView->insert(nullptr, -1, &sStyle, &sId, nullptr, nullptr, true, nullptr);
 
         aArr.push_back( std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SIDEBARDECKS, 0));
         OUString sSidebarDecks(xImp->m_aStrGroupSidebarDecks);
-        sId = OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get()));
+        sId = weld::toId(aArr.back().get());
         m_xTreeView->insert(nullptr, -1, &sSidebarDecks, &sId, nullptr, nullptr, false, nullptr);
     }
 
@@ -826,7 +824,7 @@ void CuiConfigGroupListBox::GroupSelected()
     if (!m_xTreeView->get_selected(xIter.get()))
         return;
 
-    SfxGroupInfo_Impl *pInfo = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter).toInt64());
+    SfxGroupInfo_Impl *pInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter));
     m_pFunctionListBox->freeze();
     m_pFunctionListBox->ClearAll();
 
@@ -838,7 +836,7 @@ void CuiConfigGroupListBox::GroupSelected()
             bool bValidIter = m_xTreeView->get_iter_first(*xIter);
             while (bValidIter)
             {
-                SfxGroupInfo_Impl *pCurrentInfo = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter).toInt64());
+                SfxGroupInfo_Impl *pCurrentInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(*xIter));
                 if (pCurrentInfo->nKind == SfxCfgKind::GROUP_FUNCTION)
                 {
                     css::uno::Sequence< css::frame::DispatchInformation > lCommands;
@@ -911,7 +909,7 @@ void CuiConfigGroupListBox::GroupSelected()
                                 m_pFunctionListBox->aArr.back()->sLabel = childNode->getName();
                                 m_pFunctionListBox->aArr.back()->sHelpText = description;
 
-                                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_pFunctionListBox->aArr.back().get())));
+                                OUString sId(weld::toId(m_pFunctionListBox->aArr.back().get()));
                                 m_pFunctionListBox->append(sId, childNode->getName(), aImage);
                             }
                         }
@@ -936,7 +934,7 @@ void CuiConfigGroupListBox::GroupSelected()
                     m_pFunctionListBox->aArr.push_back(std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, pStyle));
                     m_pFunctionListBox->aArr.back()->sCommand = pStyle->sCommand;
                     m_pFunctionListBox->aArr.back()->sLabel = pStyle->sLabel;
-                    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_pFunctionListBox->aArr.back().get())));
+                    OUString sId(weld::toId(m_pFunctionListBox->aArr.back().get()));
                     m_pFunctionListBox->append(sId, pStyle->sLabel);
                 }
             }
@@ -960,8 +958,7 @@ void CuiConfigGroupListBox::GroupSelected()
                 m_pFunctionListBox->aArr.back()->sLabel = rDeck.msId;
                 m_pFunctionListBox->aArr.back()->sTooltip =
                         vcl::CommandInfoProvider::GetCommandShortcut(sCommand, m_xFrame);
-                m_pFunctionListBox->append(OUString::number(reinterpret_cast<sal_Int64>(
-                                                 m_pFunctionListBox->aArr.back().get())),
+                m_pFunctionListBox->append(weld::toId(m_pFunctionListBox->aArr.back().get()),
                                            rDeck.msId);
             }
 
@@ -985,7 +982,7 @@ void CuiConfigGroupListBox::GroupSelected()
 */
 IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 {
-    SfxGroupInfo_Impl *pInfo = reinterpret_cast<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter).toInt64());
+    SfxGroupInfo_Impl *pInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xTreeView->get_id(rIter));
     switch ( pInfo->nKind )
     {
         case SfxCfgKind::GROUP_SCRIPTCONTAINER:
@@ -1008,7 +1005,7 @@ IMPL_LINK(CuiConfigGroupListBox, ExpandingHdl, const weld::TreeIter&, rIter, boo
                 {
                     SfxStyleInfo_Impl* pFamily = new SfxStyleInfo_Impl(lStyleFamily);
                     aArr.push_back( std::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, pFamily ));
-                    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aArr.back().get())));
+                    OUString sId(weld::toId(aArr.back().get()));
                     m_xTreeView->insert(&rIter, -1, &pFamily->sLabel, &sId, nullptr, nullptr, false, nullptr);
                 }
             }
@@ -1255,7 +1252,7 @@ SvxScriptSelectorDialog::GetScriptURL() const
     std::unique_ptr<weld::TreeIter> xIter = m_xCommands->make_iterator();
     if (m_xCommands->get_selected(xIter.get()))
     {
-        SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter).toInt64());
+        SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xCommands->get_id(*xIter));
         if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT )
             ||  ( pData->nKind == SfxCfgKind::FUNCTION_SCRIPT )
             ||  ( pData->nKind == SfxCfgKind::GROUP_STYLES )

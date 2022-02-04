@@ -176,7 +176,7 @@ SbTreeListBox::~SbTreeListBox()
     bool bValidIter = m_xControl->get_iter_first(*m_xScratchIter);
     while (bValidIter)
     {
-        Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(*m_xScratchIter).toInt64());
+        Entry* pBasicEntry = weld::fromId<Entry*>(m_xControl->get_id(*m_xScratchIter));
         delete pBasicEntry;
         bValidIter = m_xControl->iter_next(*m_xScratchIter);
     }
@@ -577,7 +577,7 @@ void SbTreeListBox::RemoveEntry(const weld::TreeIter& rIter)
     }
 
     // removing the associated user data
-    Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(rIter).toInt64());
+    Entry* pBasicEntry = weld::fromId<Entry*>(m_xControl->get_id(rIter));
     delete pBasicEntry;
     // removing the entry
     m_xControl->remove(rIter);
@@ -604,7 +604,7 @@ bool SbTreeListBox::FindEntry(std::u16string_view rText, EntryType eType, weld::
     bool bValidIter = m_xControl->iter_children(rIter);
     while (bValidIter)
     {
-        Entry* pBasicEntry = reinterpret_cast<Entry*>(m_xControl->get_id(rIter).toInt64());
+        Entry* pBasicEntry = weld::fromId<Entry*>(m_xControl->get_id(rIter));
         assert(pBasicEntry && "FindEntry: no Entry ?!");
         if (pBasicEntry->GetType() == eType && rText == m_xControl->get_text(rIter))
             return true;
@@ -654,7 +654,7 @@ void SbTreeListBox::AddEntry(
     std::unique_ptr<weld::TreeIter> xScratch = pRet ? nullptr : m_xControl->make_iterator();
     if (!pRet)
         pRet = xScratch.get();
-    OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(rUserData.release())));
+    OUString sId(weld::toId(rUserData.release()));
     m_xControl->insert(pParent, -1, &rText, &sId, nullptr, nullptr, bChildrenOnDemand, pRet);
     m_xControl->set_image(*pRet, rImage);
 }

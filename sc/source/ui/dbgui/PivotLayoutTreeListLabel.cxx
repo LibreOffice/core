@@ -42,7 +42,7 @@ void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVect
 
         if (pLabelData->mnOriginalDim < 0 && !pLabelData->mbDataLayout)
         {
-            mxControl->append(OUString::number(reinterpret_cast<sal_Int64>(pValue)), pLabelData->maName);
+            mxControl->append(weld::toId(pValue), pLabelData->maName);
         }
     }
 }

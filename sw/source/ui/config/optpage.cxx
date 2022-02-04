@@ -1550,7 +1550,7 @@ namespace
         for (size_t i = 0; i != nAttrMapSize; ++i)
         {
             CharAttr const & rAttr(aRedlineAttr[pAttrMap[i]]);
-            rLB.set_id(i, OUString::number(reinterpret_cast<sal_Int64>(&rAttr)));
+            rLB.set_id(i, weld::toId(&rAttr));
             if (rAttr.nItemId == rAttrToSelect.m_nItemId &&
                 rAttr.nAttr == rAttrToSelect.m_nAttr)
                 rLB.set_active(i);
@@ -1661,7 +1661,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     sal_Int32 nPos = m_xInsertLB->get_active();
     if (nPos != -1)
     {
-        pAttr = reinterpret_cast<CharAttr*>(m_xInsertLB->get_id(nPos).toInt64());
+        pAttr = weld::fromId<CharAttr*>(m_xInsertLB->get_id(nPos));
         aInsertedAttr.m_nItemId = pAttr->nItemId;
         aInsertedAttr.m_nAttr = pAttr->nAttr;
         aInsertedAttr.m_nColor = m_xInsertColorLB->GetSelectEntryColor();
@@ -1671,7 +1671,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     nPos = m_xDeletedLB->get_active();
     if (nPos != -1)
     {
-        pAttr = reinterpret_cast<CharAttr*>(m_xDeletedLB->get_id(nPos).toInt64());
+        pAttr = weld::fromId<CharAttr*>(m_xDeletedLB->get_id(nPos));
         aDeletedAttr.m_nItemId = pAttr->nItemId;
         aDeletedAttr.m_nAttr = pAttr->nAttr;
         aDeletedAttr.m_nColor = m_xDeletedColorLB->GetSelectEntryColor();
@@ -1681,7 +1681,7 @@ bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet* )
     nPos = m_xChangedLB->get_active();
     if (nPos != -1)
     {
-        pAttr = reinterpret_cast<CharAttr*>(m_xChangedLB->get_id(nPos).toInt64());
+        pAttr = weld::fromId<CharAttr*>(m_xChangedLB->get_id(nPos));
         aChangedAttr.m_nItemId = pAttr->nItemId;
         aChangedAttr.m_nAttr = pAttr->nAttr;
         aChangedAttr.m_nColor = m_xChangedColorLB->GetSelectEntryColor();
@@ -1830,7 +1830,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, weld::ComboBox&, rLB, void )
     if( nPos == -1)
         nPos = 0;
 
-    CharAttr* pAttr = reinterpret_cast<CharAttr*>(rLB.get_id(nPos).toInt64());
+    CharAttr* pAttr = weld::fromId<CharAttr*>(rLB.get_id(nPos));
     //switch off preview background color
     pPrev->ResetColor();
     switch (pAttr->nItemId)
@@ -1904,7 +1904,7 @@ IMPL_LINK(SwRedlineOptionsTabPage, ColorHdl, ColorListBox&, rListBox, void)
     if( nPos == -1)
         nPos = 0;
 
-    CharAttr* pAttr = reinterpret_cast<CharAttr*>(pLB->get_id(nPos).toInt64());
+    CharAttr* pAttr = weld::fromId<CharAttr*>(pLB->get_id(nPos));
 
     if( pAttr->nItemId == SID_ATTR_BRUSH )
     {

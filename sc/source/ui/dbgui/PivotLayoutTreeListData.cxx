@@ -84,7 +84,7 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeListData, DoubleClickHdl, weld::TreeView&, bool
     if (nEntry == -1)
         return true;
 
-    ScItemValue* pCurrentItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
+    ScItemValue* pCurrentItemValue = weld::fromId<ScItemValue*>(mxControl->get_id(nEntry));
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
 
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
@@ -151,7 +151,7 @@ void ScPivotLayoutTreeListData::FillDataField(ScPivotFieldVector& rDataFields)
                                                        pItemValue->maFunctionData.mnDupCount);
 
         maDataItemValues.push_back(std::unique_ptr<ScItemValue>(pItemValue));
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
+        OUString sId(weld::toId(pItemValue));
         mxControl->append(sId, sDataItemName);
     }
 }
@@ -164,7 +164,7 @@ void ScPivotLayoutTreeListData::PushDataFieldNames(std::vector<ScDPName>& rDataF
 
     do
     {
-        ScItemValue* pEachItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(*xLoopEntry).toInt64());
+        ScItemValue* pEachItemValue = weld::fromId<ScItemValue*>(mxControl->get_id(*xLoopEntry));
         SCCOL nColumn = pEachItemValue->maFunctionData.mnCol;
 
         ScDPLabelData& rLabelData = mpParent->GetLabelData(nColumn);
@@ -190,7 +190,7 @@ void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(weld::TreeView& rSour
     if (rSource.count_selected_rows() <=0)
         return;
 
-    ScItemValue* pItemValue = reinterpret_cast<ScItemValue*>(rSource.get_selected_id().toInt64());
+    ScItemValue* pItemValue = weld::fromId<ScItemValue*>(rSource.get_selected_id());
 
     if (mpParent->IsDataElement(pItemValue->maFunctionData.mnCol))
         return;
@@ -198,7 +198,7 @@ void ScPivotLayoutTreeListData::InsertEntryForSourceTarget(weld::TreeView& rSour
     if (&rSource == mxControl.get())
     {
         OUString sText = mxControl->get_selected_text();
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
+        OUString sId(weld::toId(pItemValue));
         mxControl->remove_id(sId);
         mxControl->insert(nullptr, nTarget, &sText, &sId, nullptr, nullptr, false, nullptr);
     }
@@ -229,7 +229,7 @@ void ScPivotLayoutTreeListData::InsertEntryForItem(ScItemValue* pItemValue, int 
                             pDataItemValue->maName,
                             rFunctionData.mnDupCount);
 
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pDataItemValue)));
+    OUString sId(weld::toId(pDataItemValue));
     mxControl->insert(nullptr, nPosition, &sDataName, &sId, nullptr, nullptr, false, nullptr);
 }
 
@@ -247,7 +247,7 @@ void ScPivotLayoutTreeListData::AdjustDuplicateCount(ScItemValue* pInputItemValu
         return;
     do
     {
-        ScItemValue* pItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(*xEachEntry).toInt64());
+        ScItemValue* pItemValue = weld::fromId<ScItemValue*>(mxControl->get_id(*xEachEntry));
         if (pItemValue == pInputItemValue)
             continue;
 

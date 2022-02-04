@@ -1668,7 +1668,7 @@ void WatchWindow::dispose()
 
     // Destroy user data
     m_xTreeListBox->all_foreach([this](weld::TreeIter& rEntry){
-        WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rEntry).toInt64());
+        WatchItem* pItem = weld::fromId<WatchItem*>(m_xTreeListBox->get_id(rEntry));
         delete pItem;
         return false;
     });
@@ -1729,7 +1729,7 @@ void WatchWindow::AddWatch( const OUString& rVName )
     lcl_SeparateNameAndIndex( rVName, aVar, aIndex );
     WatchItem* pWatchItem = new WatchItem(aVar);
 
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pWatchItem)));
+    OUString sId(weld::toId(pWatchItem));
     std::unique_ptr<weld::TreeIter> xRet = m_xTreeListBox->make_iterator();
     m_xTreeListBox->insert(nullptr, -1, &aVar, &sId, nullptr, nullptr, false, xRet.get());
     m_xTreeListBox->set_text(*xRet, "", 1);
@@ -1752,7 +1752,7 @@ void WatchWindow::RemoveSelectedWatch()
         m_xTreeListBox->remove(*xEntry);
         bEntry = m_xTreeListBox->get_cursor(xEntry.get());
         if (bEntry)
-            m_xEdit->set_text(reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(*xEntry).toInt64())->maName);
+            m_xEdit->set_text(weld::fromId<WatchItem*>(m_xTreeListBox->get_id(*xEntry))->maName);
         else
             m_xEdit->set_text(OUString());
         if ( !m_xTreeListBox->n_children() )
@@ -1772,7 +1772,7 @@ IMPL_LINK_NOARG(WatchWindow, TreeListHdl, weld::TreeView&, void)
     bool bCurEntry = m_xTreeListBox->get_cursor(xCurEntry.get());
     if (!bCurEntry)
         return;
-    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(*xCurEntry).toInt64());
+    WatchItem* pItem = weld::fromId<WatchItem*>(m_xTreeListBox->get_id(*xCurEntry));
     if (!pItem)
         return;
     m_xEdit->set_text(pItem->maName);
@@ -2069,7 +2069,7 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
     if (m_xTreeListBox->iter_has_child(rParent))
         return true;
 
-    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rParent).toInt64());
+    WatchItem* pItem = weld::fromId<WatchItem*>(m_xTreeListBox->get_id(rParent));
     std::unique_ptr<weld::TreeIter> xRet = m_xTreeListBox->make_iterator();
 
     SbxDimArray* pArray = pItem->mpArray.get();
@@ -2097,7 +2097,7 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
             OUString const& rName = pItem->maMemberList.back();
 
             WatchItem* pWatchItem = new WatchItem(rName);
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pWatchItem)));
+            OUString sId(weld::toId(pWatchItem));
 
             m_xTreeListBox->insert(&rParent, -1, &rName, &sId, nullptr, nullptr, false, xRet.get());
             m_xTreeListBox->set_text(*xRet, "", 1);
@@ -2148,7 +2148,7 @@ IMPL_LINK(WatchWindow, RequestingChildrenHdl, const weld::TreeIter&, rParent, bo
                 aDisplayName += aIndexStr;
                 pChildItem->maDisplayName = aDisplayName;
 
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pChildItem)));
+                OUString sId(weld::toId(pChildItem));
 
                 m_xTreeListBox->insert(&rParent, -1, &aDisplayName, &sId, nullptr, nullptr, false,
                                        xRet.get());
@@ -2178,12 +2178,12 @@ SbxBase* WatchWindow::ImplGetSBXForEntry(const weld::TreeIter& rEntry, bool& rbA
     SbxBase* pSBX = nullptr;
     rbArrayElement = false;
 
-    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rEntry).toInt64());
+    WatchItem* pItem = weld::fromId<WatchItem*>(m_xTreeListBox->get_id(rEntry));
     OUString aVName( pItem->maName );
 
     std::unique_ptr<weld::TreeIter> xParentEntry = m_xTreeListBox->make_iterator(&rEntry);
     bool bParentEntry = m_xTreeListBox->iter_parent(*xParentEntry);
-    WatchItem* pParentItem = bParentEntry ? reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(*xParentEntry).toInt64()) : nullptr;
+    WatchItem* pParentItem = bParentEntry ? weld::fromId<WatchItem*>(m_xTreeListBox->get_id(*xParentEntry)) : nullptr;
     if( pParentItem )
     {
         SbxObject* pObj = pParentItem->mpObject.get();
@@ -2216,7 +2216,7 @@ SbxBase* WatchWindow::ImplGetSBXForEntry(const weld::TreeIter& rEntry, bool& rbA
 
 IMPL_LINK(WatchWindow, EditingEntryHdl, const weld::TreeIter&, rIter, bool)
 {
-    WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rIter).toInt64());
+    WatchItem* pItem = weld::fromId<WatchItem*>(m_xTreeListBox->get_id(rIter));
 
     bool bEdit = false;
     if (StarBASIC::IsRunning() && StarBASIC::GetActiveMethod() && !SbxBase::IsError())
@@ -2293,7 +2293,7 @@ void implCollapseModifiedObjectEntry(const weld::TreeIter& rParent, weld::TreeVi
     {
         implCollapseModifiedObjectEntry(*xDeleteEntry, rTree);
 
-        WatchItem* pItem = reinterpret_cast<WatchItem*>(rTree.get_id(*xDeleteEntry).toInt64());
+        WatchItem* pItem = weld::fromId<WatchItem*>(rTree.get_id(*xDeleteEntry));
         delete pItem;
         rTree.remove(*xDeleteEntry);
         rTree.copy_iterator(rParent, *xDeleteEntry);
@@ -2352,7 +2352,7 @@ void WatchWindow::UpdateWatches(bool bBasicStopped)
     setBasicWatchMode( true );
 
     m_xTreeListBox->all_foreach([this, pCurMethod, bBasicStopped](weld::TreeIter& rEntry){
-        WatchItem* pItem = reinterpret_cast<WatchItem*>(m_xTreeListBox->get_id(rEntry).toInt64());
+        WatchItem* pItem = weld::fromId<WatchItem*>(m_xTreeListBox->get_id(rEntry));
         DBG_ASSERT( !pItem->maName.isEmpty(), "Var? - Must not be empty!" );
         OUString aWatchStr;
         OUString aTypeStr;

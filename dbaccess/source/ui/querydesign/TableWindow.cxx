@@ -192,7 +192,7 @@ void OTableWindow::FillListBox()
 
     if (GetData()->IsShowAll())
     {
-        rTreeView.append(OUString::number(reinterpret_cast<sal_uInt64>(createUserData(nullptr,false))), OUString("*"));
+        rTreeView.append(weld::toId(createUserData(nullptr,false)), OUString("*"));
     }
 
     Reference<XNameAccess> xPKeyColumns;
@@ -220,7 +220,7 @@ void OTableWindow::FillListBox()
                 OUString sId;
                 Reference<XPropertySet> xColumn(xColumns->getByName(*pIter),UNO_QUERY);
                 if (xColumn.is())
-                    sId = OUString::number(reinterpret_cast<sal_uInt64>(createUserData(xColumn, bPrimaryKeyColumn)));
+                    sId = weld::toId(createUserData(xColumn, bPrimaryKeyColumn));
 
                 rTreeView.append(sId, *pIter);
 
@@ -255,7 +255,7 @@ void OTableWindow::clearListBox()
 
     weld::TreeView& rTreeView = m_xListBox->get_widget();
     rTreeView.all_foreach([this, &rTreeView](weld::TreeIter& rEntry){
-        void* pUserData = reinterpret_cast<void*>(rTreeView.get_id(rEntry).toUInt64());
+        void* pUserData = weld::fromId<void*>(rTreeView.get_id(rEntry));
         deleteUserData(pUserData);
         return false;
     });

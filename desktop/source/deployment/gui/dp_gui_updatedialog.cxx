@@ -489,7 +489,7 @@ short UpdateDialog::run() {
 IMPL_LINK(UpdateDialog, entryToggled, const weld::TreeView::iter_col&, rRowCol, void)
 {
     // error's can't be enabled
-    const UpdateDialog::Index* p = reinterpret_cast<UpdateDialog::Index const *>(m_xUpdates->get_id(rRowCol.first).toInt64());
+    const UpdateDialog::Index* p = weld::fromId<UpdateDialog::Index const *>(m_xUpdates->get_id(rRowCol.first));
     if (p->m_eKind == SPECIFIC_ERROR)
         m_xUpdates->set_toggle(rRowCol.first, TRISTATE_FALSE);
 
@@ -502,7 +502,7 @@ void UpdateDialog::insertItem(UpdateDialog::Index *pEntry, bool bEnabledCheckBox
     m_xUpdates->append();
     m_xUpdates->set_toggle(nEntry, bEnabledCheckBox ? TRISTATE_TRUE : TRISTATE_FALSE);
     m_xUpdates->set_text(nEntry, pEntry->m_aName, 0);
-    m_xUpdates->set_id(nEntry, OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    m_xUpdates->set_id(nEntry, weld::toId(pEntry));
 }
 
 void UpdateDialog::addAdditional(UpdateDialog::Index * index, bool bEnabledCheckBox)
@@ -658,7 +658,7 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
         for (sal_uInt16 i = 0, nItemCount = m_xUpdates->n_children(); i < nItemCount; ++i)
         {
 
-            UpdateDialog::Index const * p = reinterpret_cast< UpdateDialog::Index const * >(m_xUpdates->get_id(i).toInt64());
+            UpdateDialog::Index const * p = weld::fromId<UpdateDialog::Index const*>(m_xUpdates->get_id(i));
 
             if ( p->m_eKind == ENABLED_UPDATE )
             {
@@ -829,7 +829,7 @@ IMPL_LINK_NOARG(UpdateDialog, selectionHandler, weld::TreeView&, void)
 
     const UpdateDialog::Index* p = nullptr;
     if (nSelectedPos != -1)
-        p = reinterpret_cast<UpdateDialog::Index const *>(m_xUpdates->get_id(nSelectedPos).toInt64());
+        p = weld::fromId<UpdateDialog::Index const*>(m_xUpdates->get_id(nSelectedPos));
     if (p != nullptr)
     {
         sal_uInt16 pos = p->m_nIndex;
@@ -941,7 +941,7 @@ IMPL_LINK_NOARG(UpdateDialog, allHandler, weld::Toggleable&, void)
         for (sal_uInt16 i = m_xUpdates->n_children(); i != 0 ;)
         {
             i -= 1;
-            UpdateDialog::Index const * p = reinterpret_cast< UpdateDialog::Index const * >( m_xUpdates->get_id(i).toInt64() );
+            UpdateDialog::Index const * p = weld::fromId<UpdateDialog::Index const*>(m_xUpdates->get_id(i));
             if ( p->m_bIgnored || ( p->m_eKind != ENABLED_UPDATE ) )
             {
                 m_xUpdates->remove(i);
@@ -976,8 +976,7 @@ IMPL_LINK_NOARG(UpdateDialog, okHandler, weld::Button&, void)
     for (sal_uInt16 i = 0, nCount = m_xUpdates->n_children(); i < nCount; ++i)
     {
         UpdateDialog::Index const * p =
-            reinterpret_cast< UpdateDialog::Index const * >(
-                m_xUpdates->get_id(i).toInt64());
+            weld::fromId<UpdateDialog::Index const*>(m_xUpdates->get_id(i));
         if (p->m_eKind == ENABLED_UPDATE && m_xUpdates->get_toggle(i) == TRISTATE_TRUE) {
             m_updateData.push_back( m_enabledUpdates[ p->m_nIndex ] );
         }

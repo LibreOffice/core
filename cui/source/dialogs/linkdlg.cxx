@@ -149,7 +149,7 @@ void SvBaseLinksDlg::LinksSelectHdl(weld::TreeView* pSvTabListBox)
     {
         // possibly deselect old entries in case of multi-selection
         int nSelEntry = pSvTabListBox->get_selected_index();
-        SvBaseLink* pLink = reinterpret_cast<SvBaseLink*>(pSvTabListBox->get_id(nSelEntry).toInt64());
+        SvBaseLink* pLink = weld::fromId<SvBaseLink*>(pSvTabListBox->get_id(nSelEntry));
         SvBaseLinkObjectType nObjectType = pLink->GetObjType();
         if(!isClientFileType(nObjectType))
         {
@@ -161,7 +161,7 @@ void SvBaseLinksDlg::LinksSelectHdl(weld::TreeView* pSvTabListBox)
             std::vector<int> aRows = pSvTabListBox->get_selected_rows();
             for (auto nEntry : aRows)
             {
-                pLink = reinterpret_cast<SvBaseLink*>(pSvTabListBox->get_id(nEntry).toInt64());
+                pLink = weld::fromId<SvBaseLink*>(pSvTabListBox->get_id(nEntry));
                 DBG_ASSERT(pLink, "Where is the Link?");
                 if (!pLink)
                     continue;
@@ -255,7 +255,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl, weld::Button&, void)
     std::vector<int> aRows = m_xTbLinks->get_selected_rows();
     for (int nFndPos : aRows)
     {
-        aLnkArr.push_back( reinterpret_cast<SvBaseLink*>( m_xTbLinks->get_id(nFndPos).toInt64() ) );
+        aLnkArr.push_back( weld::fromId<SvBaseLink*>( m_xTbLinks->get_id(nFndPos) ) );
         aPosArr.push_back( nFndPos );
     }
 
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl, weld::Button&, void)
     SetManager( pNewMgr );
 
 
-    OUString sId = OUString::number(reinterpret_cast<sal_Int64>(aLnkArr[0]));
+    OUString sId = weld::toId(aLnkArr[0]);
     int nE = m_xTbLinks->find_id(sId);
     if (nE == -1)
         nE = m_xTbLinks->get_selected_index();
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, ChangeSourceClickHdl, weld::Button&, void)
 
             OUString sType, sFile, sLinkName;
             OUString sFilter;
-            SvBaseLink* pLink = reinterpret_cast<SvBaseLink*>(m_xTbLinks->get_id(aRows[0]).toInt64());
+            SvBaseLink* pLink = weld::fromId<SvBaseLink*>(m_xTbLinks->get_id(aRows[0]));
             sfx2::LinkManager::GetDisplayNames( pLink, &sType, &sFile );
             INetURLObject aUrl(sFile);
             if(aUrl.GetProtocol() == INetProtocol::File)
@@ -322,7 +322,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, ChangeSourceClickHdl, weld::Button&, void)
 
                 for (auto nRow : aRows)
                 {
-                    pLink = reinterpret_cast<SvBaseLink*>(m_xTbLinks->get_id(nRow).toInt64());
+                    pLink = weld::fromId<SvBaseLink*>(m_xTbLinks->get_id(nRow));
                     DBG_ASSERT(pLink,"Where is the link?");
                     if (!pLink)
                         continue;
@@ -409,7 +409,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, weld::Button&, void )
             SvBaseLinkMemberList aLinkList;
             for (auto nRow : aRows)
             {
-                SvBaseLink* pLink = reinterpret_cast<SvBaseLink*>(m_xTbLinks->get_id(nRow).toInt64());
+                SvBaseLink* pLink = weld::fromId<SvBaseLink*>(m_xTbLinks->get_id(nRow));
                 if (pLink)
                     aLinkList.push_back(pLink);
             }
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, void )
     m_xTbLinks->freeze();
     for (int nPos = m_xTbLinks->n_children(); nPos; --nPos)
     {
-        tools::SvRef<SvBaseLink> xLink( reinterpret_cast<SvBaseLink*>(m_xTbLinks->get_id(nPos).toInt64()) );
+        tools::SvRef<SvBaseLink> xLink( weld::fromId<SvBaseLink*>(m_xTbLinks->get_id(nPos)) );
         if( xLink.is() )
         {
             OUString sCur( ImplGetStateStr( *xLink ) ),
@@ -583,7 +583,7 @@ void SvBaseLinksDlg::InsertEntry(const SvBaseLink& rLink, int nPos, bool bSelect
         nPos = m_xTbLinks->n_children();
     m_xTbLinks->insert(nPos);
     m_xTbLinks->set_text(nPos, aTxt, 0);
-    m_xTbLinks->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(&rLink)));
+    m_xTbLinks->set_id(nPos, weld::toId(&rLink));
     if( SvBaseLinkObjectType::ClientGraphic == rLink.GetObjType() )
         m_xTbLinks->set_text(nPos, sFilter, 1);
     else
@@ -601,7 +601,7 @@ SvBaseLink* SvBaseLinksDlg::GetSelEntry(int* pPos)
     {
         if (pPos)
             *pPos = nPos;
-        return reinterpret_cast<SvBaseLink*>(m_xTbLinks->get_id(nPos).toInt64());
+        return weld::fromId<SvBaseLink*>(m_xTbLinks->get_id(nPos));
     }
     return nullptr;
 }

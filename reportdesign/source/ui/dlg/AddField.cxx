@@ -151,7 +151,7 @@ void OAddFieldWindow::addToList(const uno::Sequence< OUString >& rEntries)
     for (const OUString& rEntry : rEntries)
     {
         m_aListBoxData.emplace_back(new ColumnInfo(rEntry));
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_aListBoxData.back().get())));
+        OUString sId(weld::toId(m_aListBoxData.back().get()));
         m_xListBox->append(sId, rEntry);
     }
 }
@@ -166,7 +166,7 @@ void OAddFieldWindow::addToList(const uno::Reference< container::XNameAccess>& i
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
             xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
         m_aListBoxData.emplace_back(new ColumnInfo(rEntry, sLabel));
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_aListBoxData.back().get())));
+        OUString sId(weld::toId(m_aListBoxData.back().get()));
         if ( !sLabel.isEmpty() )
             m_xListBox->append(sId, sLabel);
         else
@@ -272,7 +272,7 @@ void OAddFieldWindow::fillDescriptor(const weld::TreeIter& rSelected, svx::OData
     rDescriptor[ svx::DataAccessDescriptorProperty::EscapeProcessing ]   <<= m_bEscapeProcessing;
     rDescriptor[ svx::DataAccessDescriptorProperty::Connection ]         <<= getConnection();
 
-    ColumnInfo* pInfo = reinterpret_cast<ColumnInfo*>(m_xListBox->get_id(rSelected).toInt64());
+    ColumnInfo* pInfo = weld::fromId<ColumnInfo*>(m_xListBox->get_id(rSelected));
     rDescriptor[ svx::DataAccessDescriptorProperty::ColumnName ]         <<= pInfo->sColumnName;
     if ( m_xColumns->hasByName( pInfo->sColumnName ) )
         rDescriptor[ svx::DataAccessDescriptorProperty::ColumnObject ] = m_xColumns->getByName(pInfo->sColumnName);
@@ -289,7 +289,7 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
     if ( xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_LABEL) )
         xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
     m_aListBoxData.emplace_back(new ColumnInfo(sName, sLabel));
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_aListBoxData.back().get())));
+    OUString sId(weld::toId(m_aListBoxData.back().get()));
     if (!sLabel.isEmpty())
         m_xListBox->append(sId, sLabel);
     else

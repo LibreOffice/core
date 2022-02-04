@@ -481,7 +481,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
     rTreeView.selected_foreach([&rTreeView, &aActions](weld::TreeIter& rEntry){
         if (rTreeView.get_iter_depth(rEntry))
         {
-            RedlinData* pUserData = reinterpret_cast<RedlinData*>(rTreeView.get_id(rEntry).toInt64());
+            RedlinData* pUserData = weld::fromId<RedlinData*>(rTreeView.get_id(rEntry));
             if  (pUserData)
             {
                 ScChangeAction* pAction = static_cast< ScChangeAction* >( pUserData->pData );
@@ -511,7 +511,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
 void ScConflictsDlg::SetConflictAction(const weld::TreeIter& rRootEntry, ScConflictAction eConflictAction)
 {
     weld::TreeView& rTreeView = m_xLbConflicts->GetWidget();
-    RedlinData* pUserData = reinterpret_cast<RedlinData*>(rTreeView.get_id(rRootEntry).toInt64());
+    RedlinData* pUserData = weld::fromId<RedlinData*>(rTreeView.get_id(rRootEntry));
     ScConflictsListEntry* pConflictEntry = static_cast< ScConflictsListEntry* >( pUserData ? pUserData->pData : nullptr );
     if ( pConflictEntry )
     {
@@ -595,7 +595,7 @@ void ScConflictsDlg::UpdateView()
             std::unique_ptr<RedlinData> pRootUserData(new RedlinData());
             pRootUserData->pData = static_cast<void*>(&rConflictEntry);
             OUString sString(GetConflictString(rConflictEntry));
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pRootUserData.release())));
+            OUString sId(weld::toId(pRootUserData.release()));
             std::unique_ptr<weld::TreeIter> xRootEntry(rTreeView.make_iterator());
             std::unique_ptr<weld::TreeIter> xEntry(rTreeView.make_iterator());
             rTreeView.insert(nullptr, -1, &sString, &sId, nullptr, nullptr, false, xRootEntry.get());
@@ -637,7 +637,7 @@ void ScConflictsDlg::UpdateView()
 
                     std::unique_ptr<RedlinData> pUserData(new RedlinData());
                     pUserData->pData = static_cast< void* >( pAction );
-                    OUString aId(OUString::number(reinterpret_cast<sal_Int64>(pUserData.release())));
+                    OUString aId(weld::toId(pUserData.release()));
                     rTreeView.insert(xRootEntry.get(), -1, nullptr, &aId, nullptr, nullptr, false, xEntry.get());
                     SetActionString(pAction, mpOwnDoc, *xEntry);
                 }

@@ -598,10 +598,10 @@ void CustomAnimationPane::updateControls()
         sal_Int32 nAnimationPos = mxLBAnimation->n_children();
         while( nAnimationPos-- )
         {
-            auto nEntryData = mxLBAnimation->get_id(nAnimationPos).toInt64();
-            if (nEntryData)
+            auto pEntryData = weld::fromId<CustomAnimationPresetPtr*>(mxLBAnimation->get_id(nAnimationPos));
+            if (pEntryData)
             {
-                CustomAnimationPresetPtr& pPtr = *reinterpret_cast<CustomAnimationPresetPtr*>(nEntryData);
+                CustomAnimationPresetPtr& pPtr = *pEntryData;
                 if( pPtr && pPtr->getPresetId() == rsPresetId )
                 {
                     mxLBAnimation->select( nAnimationPos );
@@ -1797,9 +1797,9 @@ void CustomAnimationPane::onAdd()
         mnLastSelectedAnimation = nFirstEffect;
     }
 
-    auto nEntryData = mxLBAnimation->get_selected_id().toInt64();
-    if (nEntryData)
-        pDescriptor = *reinterpret_cast<CustomAnimationPresetPtr*>(nEntryData);
+    auto pEntryData = weld::fromId<CustomAnimationPresetPtr*>(mxLBAnimation->get_selected_id());
+    if (pEntryData)
+        pDescriptor = *pEntryData;
 
     if( pDescriptor )
     {
@@ -2097,7 +2097,7 @@ IMPL_LINK_NOARG(CustomAnimationPane, SelectionHandler, Timer*, void)
 
     mnLastSelectedAnimation = nSelected;
 
-    CustomAnimationPresetPtr* pPreset = reinterpret_cast<CustomAnimationPresetPtr*>(mxLBAnimation->get_id(nSelected).toInt64());
+    CustomAnimationPresetPtr* pPreset = weld::fromId<CustomAnimationPresetPtr*>(mxLBAnimation->get_id(nSelected));
     PathKind ePathKind = getCreatePathKind();
 
     if ( ePathKind != PathKind::NONE )
@@ -2237,7 +2237,7 @@ sal_Int32 CustomAnimationPane::fillAnimationLB( bool bHasText )
                 if( pDescriptor && ( !pDescriptor->isTextOnly() || bHasText ) )
                 {
                     auto pCustomPtr = new CustomAnimationPresetPtr(pDescriptor);
-                    OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pCustomPtr));
+                    OUString sId = weld::toId(pCustomPtr);
                     mxLBAnimation->append(sId, pDescriptor->getLabel());
                     mxLBAnimation->set_text_emphasis(nPos, false, 0);
 

@@ -642,6 +642,16 @@ public:
     void connect_jump_page(const Link<const OString&, bool>& rLink) { m_aJumpPageHdl = rLink; }
 };
 
+inline OUString toId(const void* pValue)
+{
+    return OUString::number(reinterpret_cast<const sal_uInt64>(pValue));
+}
+
+template <typename T> T fromId(const OUString& rValue)
+{
+    return reinterpret_cast<T>(rValue.toUInt64());
+}
+
 struct VCL_DLLPUBLIC ComboBoxEntry
 {
     OUString sString;

@@ -77,7 +77,7 @@ void FmFieldWin::addToList(const uno::Reference< container::XNameAccess>& i_xCol
         if ( xColumn->getPropertySetInfo()->hasPropertyByName(FM_PROP_LABEL) )
             xColumn->getPropertyValue(FM_PROP_LABEL) >>= sLabel;
         m_aListBoxData.emplace_back(new ColumnInfo(rEntry));
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_aListBoxData.back().get())));
+        OUString sId(weld::toId(m_aListBoxData.back().get()));
         if ( !sLabel.isEmpty() )
             m_xListBox->append(sId, sLabel);
         else
@@ -89,7 +89,7 @@ IMPL_LINK(FmFieldWin, DragBeginHdl, bool&, rUnsetDragIcon, bool)
 {
     rUnsetDragIcon = false;
 
-    ColumnInfo* pSelected = reinterpret_cast<ColumnInfo*>(m_xListBox->get_selected_id().toInt64());
+    ColumnInfo* pSelected = weld::fromId<ColumnInfo*>(m_xListBox->get_selected_id());
     if (!pSelected)
     {
         // no drag without a field
@@ -147,7 +147,7 @@ IMPL_LINK_NOARG(FmFieldWin, RowActivatedHdl, weld::TreeView&, bool)
 
 bool FmFieldWin::createSelectionControls()
 {
-    ColumnInfo* pSelected = reinterpret_cast<ColumnInfo*>(m_xListBox->get_selected_id().toInt64());
+    ColumnInfo* pSelected = weld::fromId<ColumnInfo*>(m_xListBox->get_selected_id());
     if (pSelected)
     {
         // build a descriptor for the currently selected field

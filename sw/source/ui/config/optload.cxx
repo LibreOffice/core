@@ -551,7 +551,7 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
     {
         if (m_xCheckLB->get_toggle(i) == TRISTATE_TRUE)
             ++nCheckCount;
-        InsCaptionOpt* pData = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(i).toInt64());
+        InsCaptionOpt* pData = weld::fromId<InsCaptionOpt*>(m_xCheckLB->get_id(i));
         bRet |= pModOpt->SetCapOption(bHTMLMode, pData);
     }
 
@@ -629,13 +629,13 @@ void SwCaptionOptPage::SetOptions(const sal_uLong nPos,
     if (pOpt)
     {
         InsCaptionOpt* pIns = new InsCaptionOpt(*pOpt);
-        m_xCheckLB->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(pIns)));
+        m_xCheckLB->set_id(nPos, weld::toId(pIns));
         m_xCheckLB->set_toggle(nPos, pOpt->UseCaption() ? TRISTATE_TRUE : TRISTATE_FALSE);
     }
     else
     {
         InsCaptionOpt* pIns = new InsCaptionOpt(eObjType, pOleId);
-        m_xCheckLB->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(pIns)));
+        m_xCheckLB->set_id(nPos, weld::toId(pIns));
     }
 }
 
@@ -643,7 +643,7 @@ void SwCaptionOptPage::DelUserData()
 {
     for (int i = 0, nCount = m_xCheckLB->n_children(); i < nCount; ++i)
     {
-        delete reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(i).toInt64());
+        delete weld::fromId<InsCaptionOpt*>(m_xCheckLB->get_id(i));
         m_xCheckLB->set_id(i, "0");
     }
 }
@@ -665,7 +665,7 @@ void SwCaptionOptPage::UpdateEntry(int nSelEntry)
 
         SwWrtShell *pSh = ::GetActiveWrtShell();
 
-        InsCaptionOpt* pOpt = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(nSelEntry).toInt64());
+        InsCaptionOpt* pOpt = weld::fromId<InsCaptionOpt*>(m_xCheckLB->get_id(nSelEntry));
 
         m_xCategoryBox->clear();
         m_xCategoryBox->append_text(m_sNone);
@@ -773,7 +773,7 @@ void SwCaptionOptPage::SaveEntry(int nEntry)
     if (nEntry == -1)
         return;
 
-    InsCaptionOpt* pOpt = reinterpret_cast<InsCaptionOpt*>(m_xCheckLB->get_id(nEntry).toInt64());
+    InsCaptionOpt* pOpt = weld::fromId<InsCaptionOpt*>(m_xCheckLB->get_id(nEntry));
 
     pOpt->UseCaption() = m_xCheckLB->get_toggle(nEntry) == TRISTATE_TRUE;
     const OUString aName(m_xCategoryBox->get_active_text());

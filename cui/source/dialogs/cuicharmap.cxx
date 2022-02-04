@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FontSelectHdl, weld::ComboBox&, void)
         // update subset listbox for new font's unicode subsets
         for (auto const& subset : pSubsetMap->GetSubsetMap())
         {
-            m_xSubsetLB->append(OUString::number(reinterpret_cast<sal_uInt64>(&subset)), subset.GetName());
+            m_xSubsetLB->append(weld::toId(&subset), subset.GetName());
             // NOTE: subset must live at least as long as the selected font
         }
 
@@ -748,7 +748,7 @@ void SvxCharacterMap::setCharName(sal_UCS4 nDecimalValue)
 IMPL_LINK_NOARG(SvxCharacterMap, SubsetSelectHdl, weld::ComboBox&, void)
 {
     const sal_Int32 nPos = m_xSubsetLB->get_active();
-    const Subset* pSubset = reinterpret_cast<const Subset*>(m_xSubsetLB->get_active_id().toUInt64());
+    const Subset* pSubset = weld::fromId<const Subset*>(m_xSubsetLB->get_active_id());
 
     if( pSubset && !isSearchMode)
     {

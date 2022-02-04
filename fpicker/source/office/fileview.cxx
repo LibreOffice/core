@@ -509,8 +509,8 @@ IMPL_LINK(ViewTabListBox_Impl, CommandHdl, const CommandEvent&, rCEvt, bool)
         ::ucbhelper::Content aCnt;
         try
         {
-            OUString aURL(reinterpret_cast<SvtContentEntry*>(
-                mxTreeView->get_id(rEntry).toInt64())->maURL);
+            OUString aURL(weld::fromId<SvtContentEntry*>(
+                mxTreeView->get_id(rEntry))->maURL);
             aCnt = ::ucbhelper::Content( aURL, mxCmdEnv, comphelper::getProcessComponentContext() );
         }
         catch( Exception const & )
@@ -602,7 +602,7 @@ void ViewTabListBox_Impl::DeleteEntries()
     mxTreeView->selected_foreach([this, &eResult](weld::TreeIter& rCurEntry){
         OUString aURL;
         if (!mxTreeView->get_id(rCurEntry).isEmpty())
-            aURL = reinterpret_cast<SvtContentEntry*>(mxTreeView->get_id(rCurEntry).toInt64())->maURL;
+            aURL = weld::fromId<SvtContentEntry*>(mxTreeView->get_id(rCurEntry))->maURL;
         if (aURL.isEmpty())
         {
             mxTreeView->unselect(rCurEntry);
@@ -677,7 +677,7 @@ IMPL_LINK(ViewTabListBox_Impl, EditedEntryHdl, const IterString&, rIterString, b
     bool bRet = false;
 
     OUString aURL;
-    SvtContentEntry* pData = reinterpret_cast<SvtContentEntry*>(mxTreeView->get_id(rEntry).toInt64());
+    SvtContentEntry* pData = weld::fromId<SvtContentEntry*>(mxTreeView->get_id(rEntry));
 
     if ( pData )
         aURL = pData->maURL;
@@ -719,7 +719,7 @@ IMPL_LINK(ViewTabListBox_Impl, EditedEntryHdl, const IterString&, rIterString, b
             if (pData)
                 pData->maURL = aURL;
 
-            mxTreeView->set_id(rEntry, OUString::number(reinterpret_cast<sal_Int64>(pData)));
+            mxTreeView->set_id(rEntry, weld::toId(pData));
 
             bRet = true;
         }
@@ -831,9 +831,9 @@ OUString SvtFileView::GetURL(const weld::TreeIter& rEntry) const
 {
     SvtContentEntry* pEntry;
     if (mpImpl->mxView->get_visible())
-        pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxView->get_id(rEntry).toInt64());
+        pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxView->get_id(rEntry));
     else
-        pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxIconView->get_id(rEntry).toInt64());
+        pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxIconView->get_id(rEntry));
     if (pEntry)
         return pEntry->maURL;
     return OUString();
@@ -847,13 +847,13 @@ OUString SvtFileView::GetCurrentURL() const
     {
         std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
         if (mpImpl->mxView->get_selected(xEntry.get()))
-            pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry).toInt64());
+            pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry));
     }
     else
     {
         std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
         if (mpImpl->mxIconView->get_selected(xEntry.get()))
-            pEntry = reinterpret_cast<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry).toInt64());
+            pEntry = weld::fromId<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry));
     }
     if (pEntry)
         aURL = pEntry->maURL;
@@ -865,7 +865,7 @@ void SvtFileView::CreatedFolder( const OUString& rUrl, const OUString& rNewFolde
     const SortingData_Impl& rEntry = mpImpl->FolderInserted( rUrl, rNewFolder );
 
     mpImpl->maEntries.emplace_back(std::make_unique<SvtContentEntry>(rUrl, true));
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(mpImpl->maEntries.back().get())));
+    OUString sId(weld::toId(mpImpl->maEntries.back().get()));
 
     std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
     mpImpl->mxView->insert(rEntry.maDisplayName, sId, mpImpl->maFolderImage, *xEntry);
@@ -1006,14 +1006,14 @@ SvtContentEntry* SvtFileView::FirstSelected() const
         SvtContentEntry* pRet = nullptr;
         std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxView->make_iterator();
         if (mpImpl->mxView->get_selected(xEntry.get()))
-            pRet = reinterpret_cast<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry).toInt64());
+            pRet = weld::fromId<SvtContentEntry*>(mpImpl->mxView->get_id(*xEntry));
         return pRet;
     }
 
     SvtContentEntry* pRet = nullptr;
     std::unique_ptr<weld::TreeIter> xEntry = mpImpl->mxIconView->make_iterator();
     if (mpImpl->mxIconView->get_selected(xEntry.get()))
-        pRet = reinterpret_cast<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry).toInt64());
+        pRet = weld::fromId<SvtContentEntry*>(mpImpl->mxIconView->get_id(*xEntry));
     return pRet;
 }
 
@@ -1369,7 +1369,7 @@ void SvtFileView_Impl::OpenFolder_Impl()
 
         // insert entry and set user data
         maEntries.emplace_back(std::make_unique<SvtContentEntry>(elem->maTargetURL, elem->mbIsFolder));
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(maEntries.back().get())));
+        OUString sId(weld::toId(maEntries.back().get()));
         mxView->append(sId, elem->maDisplayName, elem->maType, elem->maDisplaySize, elem->maDisplayDate, elem->maImage);
         mxIconView->append(sId, elem->maDisplayName, elem->maImage);
     }
@@ -1553,7 +1553,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, bool bAscending )
 
     OUString aEntryURL;
     if (bEntry && !mxView->get_id(*xEntry).isEmpty())
-        aEntryURL = reinterpret_cast<SvtContentEntry*>(mxView->get_id(*xEntry).toInt64())->maURL;
+        aEntryURL = weld::fromId<SvtContentEntry*>(mxView->get_id(*xEntry))->maURL;
 
     mnSortColumn = nColumn;
     mbAscending = bAscending;

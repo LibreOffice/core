@@ -29,8 +29,7 @@ int TargetsTable::GetRowByTargetName(std::u16string_view sName)
 {
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
-        RedactionTarget* pTarget
-            = reinterpret_cast<RedactionTarget*>(m_xControl->get_id(i).toInt64());
+        RedactionTarget* pTarget = weld::fromId<RedactionTarget*>(m_xControl->get_id(i));
         if (pTarget->sName == sName)
         {
             return i;
@@ -122,7 +121,7 @@ void TargetsTable::InsertTarget(RedactionTarget* pTarget)
 
     // Add to the end
     int nRow = m_xControl->n_children();
-    m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(pTarget)), pTarget->sName);
+    m_xControl->append(weld::toId(pTarget), pTarget->sName);
     m_xControl->set_text(nRow, getTypeName(pTarget->sType), 1);
     m_xControl->set_text(nRow, sContent, 2);
     m_xControl->set_text(
@@ -138,7 +137,7 @@ RedactionTarget* TargetsTable::GetTargetByName(std::u16string_view sName)
     if (nEntry == -1)
         return nullptr;
 
-    return reinterpret_cast<RedactionTarget*>(m_xControl->get_id(nEntry).toInt64());
+    return weld::fromId<RedactionTarget*>(m_xControl->get_id(nEntry));
 }
 
 OUString TargetsTable::GetNameProposal() const
@@ -147,8 +146,7 @@ OUString TargetsTable::GetNameProposal() const
     sal_Int32 nHighestTargetId = 0;
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
-        RedactionTarget* pTarget
-            = reinterpret_cast<RedactionTarget*>(m_xControl->get_id(i).toInt64());
+        RedactionTarget* pTarget = weld::fromId<RedactionTarget*>(m_xControl->get_id(i));
         const OUString& sName = pTarget->sName;
         sal_Int32 nIndex = 0;
         if (sName.getToken(0, ' ', nIndex) == sDefaultTargetName)
@@ -269,8 +267,7 @@ IMPL_LINK_NOARG(SfxAutoRedactDialog, EditHdl, weld::Button&, void)
     }
 
     // Get the redaction target to be edited
-    RedactionTarget* pTarget
-        = reinterpret_cast<RedactionTarget*>(m_xTargetsBox->get_id(nSelectedRow).toInt64());
+    RedactionTarget* pTarget = weld::fromId<RedactionTarget*>(m_xTargetsBox->get_id(nSelectedRow));
 
     // Construct and run the edit target dialog
     SfxAddTargetDialog aEditTargetDialog(getDialog(), pTarget->sName, pTarget->sType,

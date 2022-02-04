@@ -334,7 +334,7 @@ int SvxHlinkDlgMarkWnd::FillTree( const uno::Reference< container::XNameAccess >
 
                 // create userdata
                 TargetData *pData = new TargetData ( aLink, bIsTarget );
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
+                OUString sId(weld::toId(pData));
 
                 std::unique_ptr<weld::TreeIter> xEntry(mxLbTree->make_iterator());
                 if (pParentEntry)
@@ -420,7 +420,7 @@ void SvxHlinkDlgMarkWnd::ClearTree()
 
     while (bEntry)
     {
-        TargetData* pUserData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
+        TargetData* pUserData = weld::fromId<TargetData*>(mxLbTree->get_id(*xEntry));
         delete pUserData;
 
         bEntry = mxLbTree->iter_next(*xEntry);
@@ -438,7 +438,7 @@ std::unique_ptr<weld::TreeIter> SvxHlinkDlgMarkWnd::FindEntry (std::u16string_vi
 
     while (bEntry && !bFound)
     {
-        TargetData* pUserData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
+        TargetData* pUserData = weld::fromId<TargetData*>(mxLbTree->get_id(*xEntry));
         if (aStrName == pUserData->aUStrLinkname)
             bFound = true;
         else
@@ -475,7 +475,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, weld::Button&, void)
     bool bEntry = mxLbTree->get_cursor(xEntry.get());
     if (bEntry)
     {
-        TargetData* pData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
+        TargetData* pData = weld::fromId<TargetData*>(mxLbTree->get_id(*xEntry));
         if (pData->bIsTarget)
         {
             mpParent->SetMarkStr(pData->aUStrLinkname);
@@ -490,7 +490,7 @@ IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, weld::Button&, void)
     bool bEntry = mxLbTree->get_cursor(xEntry.get());
     if (bEntry)
     {
-        TargetData* pUserData = reinterpret_cast<TargetData*>(mxLbTree->get_id(*xEntry).toInt64());
+        TargetData* pUserData = weld::fromId<TargetData*>(mxLbTree->get_id(*xEntry));
         OUString sLastSelectedMark = pUserData->aUStrLinkname;
 
         std::deque<OUString> aLastSelectedPath;

@@ -86,7 +86,7 @@ void OWizTypeSelectControl::CellModified(sal_Int32 nRow, sal_uInt16 nColId )
     OFieldDescription* pCurFieldDescr = getCurrentFieldDescData();
 
     const sal_Int32 nPos = pListBox->find_text(pCurFieldDescr->GetName());
-    pCurFieldDescr = reinterpret_cast< OFieldDescription* >( pListBox->get_id(nPos).toInt64() );
+    pCurFieldDescr = weld::fromId<OFieldDescription*>(pListBox->get_id(nPos));
     OSL_ENSURE( pCurFieldDescr, "OWizTypeSelectControl::CellModified: Columnname/type not found in the listbox!" );
     if ( !pCurFieldDescr )
         return;
@@ -153,7 +153,7 @@ void OWizTypeSelectControl::CellModified(sal_Int32 nRow, sal_uInt16 nColId )
 
                 pListBox->remove(nPos);
                 pListBox->insert_text(nPos, pCurFieldDescr->GetName());
-                pListBox->set_id(nPos, OUString::number(reinterpret_cast<sal_Int64>(pCurFieldDescr)));
+                pListBox->set_id(nPos, weld::toId(pCurFieldDescr));
 
                 pWiz->replaceColumn(nPos,pCurFieldDescr,sOldName);
             }
@@ -248,7 +248,7 @@ OUString OWizTypeSelect::GetTitle() const
 
 IMPL_LINK_NOARG(OWizTypeSelect, ColumnSelectHdl, weld::TreeView&, void)
 {
-    OFieldDescription* pField = reinterpret_cast<OFieldDescription*>(m_xColumnNames->get_selected_id().toInt64());
+    OFieldDescription* pField = weld::fromId<OFieldDescription*>(m_xColumnNames->get_selected_id());
     if (pField)
         m_xTypeControl->DisplayData(pField);
 
@@ -265,7 +265,7 @@ void OWizTypeSelect::Reset()
     const ODatabaseExport::TColumnVector& rDestColumns = m_pParent->getDestVector();
     for (auto const& column : rDestColumns)
     {
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(column->second)));
+        OUString sId(weld::toId(column->second));
         m_xColumnNames->append(sId, column->first);
         if (column->second->IsPrimaryKey())
             m_xColumnNames->set_image(nCount, BMP_PRIMARY_KEY);
@@ -288,7 +288,7 @@ void OWizTypeSelect::Activate( )
 bool OWizTypeSelect::LeavePage()
 {
     bool bDuplicateName = false;
-    OFieldDescription* pField = reinterpret_cast<OFieldDescription*>(m_xColumnNames->get_selected_id().toInt64());
+    OFieldDescription* pField = weld::fromId<OFieldDescription*>(m_xColumnNames->get_selected_id());
     if ( pField )
     {
         m_xTypeControl->SaveData(pField);
@@ -339,7 +339,7 @@ bool OWizTypeSelectList::IsPrimaryKeyAllowed() const
 
     for( sal_Int32 j = 0; m_bPKey && j < nCount; ++j )
     {
-        OFieldDescription* pField = reinterpret_cast<OFieldDescription*>(m_xControl->get_id(aRows[j]).toInt64());
+        OFieldDescription* pField = weld::fromId<OFieldDescription*>(m_xControl->get_id(aRows[j]));
         if(!pField || pField->getTypeInfo()->nSearchType == ColumnSearch::NONE)
             return false;
     }
@@ -374,7 +374,7 @@ IMPL_LINK(OWizTypeSelectList, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bCheckOk = false;
     for(sal_Int32 j = 0 ; j < nCount ; ++j)
     {
-        OFieldDescription* pFieldDescr = reinterpret_cast<OFieldDescription*>(m_xControl->get_id(j).toInt64());
+        OFieldDescription* pFieldDescr = weld::fromId<OFieldDescription*>(m_xControl->get_id(j));
         // if at least one of the fields is selected but not in the primary key,
         // or is in the primary key but not selected, then don't check the
         // primary key checkbox.
@@ -396,7 +396,7 @@ IMPL_LINK(OWizTypeSelectList, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     for (sal_Int32 j = 0 ; j < nCount; ++j)
     {
-        OFieldDescription* pFieldDescr = reinterpret_cast<OFieldDescription*>(m_xControl->get_id(j).toInt64());
+        OFieldDescription* pFieldDescr = weld::fromId<OFieldDescription*>(m_xControl->get_id(j));
         if (pFieldDescr)
         {
             if(!bCheckOk && m_xControl->is_selected(j))

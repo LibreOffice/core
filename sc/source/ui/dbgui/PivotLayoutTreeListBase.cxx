@@ -69,7 +69,7 @@ void ScPivotLayoutTreeListBase::PushEntriesToPivotFieldVector(ScPivotFieldVector
         return;
     do
     {
-        ScItemValue* pItemValue = reinterpret_cast<ScItemValue*>(mxControl->get_id(*xEachEntry).toInt64());
+        ScItemValue* pItemValue = weld::fromId<ScItemValue*>(mxControl->get_id(*xEachEntry));
         ScPivotFuncData& rFunctionData = pItemValue->maFunctionData;
 
         ScPivotField aField;
@@ -88,7 +88,7 @@ void ScPivotLayoutTreeListBase::InsertEntryForSourceTarget(weld::TreeView& /*pSo
 
 void ScPivotLayoutTreeListBase::RemoveEntryForItem(const ScItemValue* pItemValue)
 {
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
+    OUString sId(weld::toId(pItemValue));
     int nPos = mxControl->find_id(sId);
     if (nPos == -1)
         return;

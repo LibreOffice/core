@@ -222,7 +222,7 @@ void LibBox::FillBox()
     // create list box entries
     LibEntry* pEntry = new LibEntry(ScriptDocument::getApplicationScriptDocument(),
                                     LIBRARY_LOCATION_UNKNOWN, OUString());
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    OUString sId(weld::toId(pEntry));
     m_xWidget->append(sId, IDEResId(RID_STR_ALL));
 
     InsertEntries(ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER);
@@ -261,7 +261,7 @@ void LibBox::InsertEntries(const ScriptDocument& rDocument, LibraryLocation eLoc
             OUString aName(rDocument.getTitle(eLocation));
             OUString aEntryText(CreateMgrAndLibStr(aName, aLibName));
             LibEntry* pEntry = new LibEntry(rDocument, eLocation, aLibName);
-            m_xWidget->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)), aEntryText);
+            m_xWidget->append(weld::toId(pEntry), aEntryText);
         }
     }
 }
@@ -320,7 +320,7 @@ void LibBox::Select()
 
 void LibBox::NotifyIDE()
 {
-    LibEntry* pEntry = reinterpret_cast<LibEntry*>(m_xWidget->get_active_id().toInt64());
+    LibEntry* pEntry = weld::fromId<LibEntry*>(m_xWidget->get_active_id());
     if (pEntry)
     {
         const ScriptDocument& aDocument(pEntry->GetDocument());
@@ -340,7 +340,7 @@ void LibBox::ClearBox()
     sal_Int32 nCount = m_xWidget->get_count();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        LibEntry* pEntry = reinterpret_cast<LibEntry*>(m_xWidget->get_id(i).toInt64());
+        LibEntry* pEntry = weld::fromId<LibEntry*>(m_xWidget->get_id(i));
         delete pEntry;
     }
     m_xWidget->clear();
@@ -440,7 +440,7 @@ void LanguageBox::FillBox()
                 sLanguage += " " + msDefaultLanguageStr;
             }
             LanguageEntry* pEntry = new LanguageEntry(pLocale[i], bIsDefault);
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+            OUString sId(weld::toId(pEntry));
             m_xWidget->append(sId, sLanguage);
 
             if (bIsCurrent)
@@ -467,7 +467,7 @@ void LanguageBox::ClearBox()
     sal_Int32 nCount = m_xWidget->get_count();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        LanguageEntry* pEntry = reinterpret_cast<LanguageEntry*>(m_xWidget->get_id(i).toInt64());
+        LanguageEntry* pEntry = weld::fromId<LanguageEntry*>(m_xWidget->get_id(i));
         delete pEntry;
     }
     m_xWidget->clear();
@@ -475,7 +475,7 @@ void LanguageBox::ClearBox()
 
 void LanguageBox::SetLanguage()
 {
-    LanguageEntry* pEntry = reinterpret_cast<LanguageEntry*>(m_xWidget->get_active_id().toInt64());
+    LanguageEntry* pEntry = weld::fromId<LanguageEntry*>(m_xWidget->get_active_id());
     if (pEntry)
         GetShell()->GetCurLocalizationMgr()->handleSetCurrentLocale(pEntry->m_aLocale);
 }

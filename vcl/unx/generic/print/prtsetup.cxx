@@ -40,7 +40,7 @@ void RTSDialog::insertAllPPDValues(weld::ComboBox& rBox, const PPDParser* pParse
             continue;
         aOptionText = pParser->translateOption( pKey->getKey(), pValue->m_aOption) ;
 
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pValue)));
+        OUString sId(weld::toId(pValue));
         int nCurrentPos = rBox.find_id(sId);
         if( m_aJobData.m_aContext.checkConstraints( pKey, pValue ) )
         {
@@ -56,7 +56,7 @@ void RTSDialog::insertAllPPDValues(weld::ComboBox& rBox, const PPDParser* pParse
     pValue = m_aJobData.m_aContext.getValue( pKey );
     if (pValue && !pValue->m_bCustomOption)
     {
-        OUString sId(OUString::number(reinterpret_cast<sal_IntPtr>(pValue)));
+        OUString sId(weld::toId(pValue));
         int nPos = rBox.find_id(sId);
         if (nPos != -1)
             rBox.set_active(nPos);
@@ -241,7 +241,7 @@ IMPL_LINK( RTSPaperPage, SelectHdl, weld::ComboBox&, rBox, void )
     }
     if( pKey )
     {
-        PPDValue* pValue = reinterpret_cast<PPDValue*>(rBox.get_active_id().toInt64());
+        PPDValue* pValue = weld::fromId<PPDValue*>(rBox.get_active_id());
         m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
         update();
     }
@@ -360,7 +360,7 @@ RTSDevicePage::RTSDevicePage(weld::Widget* pPage, RTSDialog* pParent)
             pKey->getGroup() != "InstallableOptions")
         {
             OUString aEntry( m_pParent->m_aJobData.m_pParser->translateKey( pKey->getKey() ) );
-            m_xPPDKeyBox->append(OUString::number(reinterpret_cast<sal_Int64>(pKey)), aEntry);
+            m_xPPDKeyBox->append(weld::toId(pKey), aEntry);
         }
     }
 }
@@ -425,13 +425,13 @@ IMPL_LINK( RTSDevicePage, SelectHdl, weld::TreeView&, rBox, void )
 {
     if (&rBox == m_xPPDKeyBox.get())
     {
-        const PPDKey* pKey = reinterpret_cast<PPDKey*>(m_xPPDKeyBox->get_selected_id().toInt64());
+        const PPDKey* pKey = weld::fromId<PPDKey*>(m_xPPDKeyBox->get_selected_id());
         FillValueBox( pKey );
     }
     else if (&rBox == m_xPPDValueBox.get())
     {
-        const PPDKey* pKey = reinterpret_cast<PPDKey*>(m_xPPDKeyBox->get_selected_id().toInt64());
-        const PPDValue* pValue = reinterpret_cast<PPDValue*>(m_xPPDValueBox->get_selected_id().toInt64());
+        const PPDKey* pKey = weld::fromId<PPDKey*>(m_xPPDKeyBox->get_selected_id());
+        const PPDValue* pValue = weld::fromId<PPDValue*>(m_xPPDValueBox->get_selected_id());
         if (pKey && pValue)
         {
             m_pParent->m_aJobData.m_aContext.setValue( pKey, pValue );
@@ -466,11 +466,11 @@ void RTSDevicePage::FillValueBox( const PPDKey* pKey )
                 aEntry = VclResId(SV_PRINT_CUSTOM_TXT);
             else
                 aEntry = m_pParent->m_aJobData.m_pParser->translateOption( pKey->getKey(), pValue->m_aOption);
-            m_xPPDValueBox->append(OUString::number(reinterpret_cast<sal_Int64>(pValue)), aEntry);
+            m_xPPDValueBox->append(weld::toId(pValue), aEntry);
         }
     }
     pValue = m_pParent->m_aJobData.m_aContext.getValue( pKey );
-    m_xPPDValueBox->select_id(OUString::number(reinterpret_cast<sal_Int64>(pValue)));
+    m_xPPDValueBox->select_id(weld::toId(pValue));
 
     ValueBoxChanged(pKey);
 }

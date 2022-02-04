@@ -343,7 +343,7 @@ namespace
         if (!bSourceHasParent || rTreeView.get_iter_depth(*xSourceParent))
             return false;
 
-        SdrObject* pSourceObject = reinterpret_cast<SdrObject*>(rTreeView.get_id(*xSource).toInt64());
+        SdrObject* pSourceObject = weld::fromId<SdrObject*>(rTreeView.get_id(*xSource));
         if (pSourceObject == reinterpret_cast<SdrObject*>(1))
             pSourceObject = nullptr;
 
@@ -493,8 +493,8 @@ sal_Int8 SdPageObjsTLVDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
         return DND_ACTION_NONE;
     int nTargetPos = m_rTreeView.get_iter_index_in_parent(*xTarget) + 1;
 
-    SdrObject* pTargetObject = reinterpret_cast<SdrObject*>(m_rTreeView.get_id(*xTarget).toInt64());
-    SdrObject* pSourceObject = reinterpret_cast<SdrObject*>(m_rTreeView.get_id(*xSource).toInt64());
+    SdrObject* pTargetObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xTarget));
+    SdrObject* pSourceObject = weld::fromId<SdrObject*>(m_rTreeView.get_id(*xSource));
     if (pSourceObject == reinterpret_cast<SdrObject*>(1))
         pSourceObject = nullptr;
 
@@ -1022,7 +1022,7 @@ void SdPageObjsTLV::AddShapeList (
 
     OUString aUserData("1");
     if (pShape != nullptr)
-        aUserData = OUString::number(reinterpret_cast<sal_Int64>(pShape));
+        aUserData = weld::toId(pShape);
 
     std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
     InsertEntry(pParentEntry, aUserData, rsName, aIcon, xEntry.get());
@@ -1039,7 +1039,7 @@ void SdPageObjsTLV::AddShapeList (
 
         // Get the shape name.
         OUString aStr (GetObjectName( pObj ) );
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pObj)));
+        OUString sId(weld::toId(pObj));
 
         if( !aStr.isEmpty() )
         {

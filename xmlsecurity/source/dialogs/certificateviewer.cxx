@@ -151,7 +151,7 @@ void CertificateViewerDetailsTP::InsertElement(const OUString& rField, const OUS
                                                const OUString& rDetails, bool bFixedWidthFont)
 {
     m_aUserData.emplace_back(std::make_unique<Details_UserDatat>(rDetails, bFixedWidthFont));
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_aUserData.back().get())));
+    OUString sId(weld::toId(m_aUserData.back().get()));
     m_xElementsLB->append(sId, rField);
     m_xElementsLB->set_text(m_xElementsLB->n_children() -1, rValue, 1);
 }
@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl, weld::TreeView&, v
     bool bFixedWidthFont;
     if (nEntry != -1)
     {
-        const Details_UserDatat* p = reinterpret_cast<Details_UserDatat*>(m_xElementsLB->get_id(nEntry).toInt64());
+        const Details_UserDatat* p = weld::fromId<Details_UserDatat*>(m_xElementsLB->get_id(nEntry));
         aElementText = p->maTxt;
         bFixedWidthFont = p->mbFixedWidthFont;
     }
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl, weld::Button&, void)
         if (mxCertificateViewer)
             mxCertificateViewer->response(RET_OK);
 
-        CertPath_UserData* pData = reinterpret_cast<CertPath_UserData*>(mxCertPathLB->get_id(*xIter).toInt64());
+        CertPath_UserData* pData = weld::fromId<CertPath_UserData*>(mxCertPathLB->get_id(*xIter));
         mxCertificateViewer = std::make_shared<CertificateViewer>(mpDlg->getDialog(), mpDlg->mxSecurityEnvironment,
                 pData->mxCert, false, nullptr);
         weld::DialogController::runAsync(mxCertificateViewer, [this] (sal_Int32) { mxCertificateViewer = nullptr; });
@@ -346,7 +346,7 @@ IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl, weld::TreeView&, voi
     bool bEntry = mxCertPathLB->get_selected(xIter.get());
     if (bEntry)
     {
-        CertPath_UserData* pData = reinterpret_cast<CertPath_UserData*>(mxCertPathLB->get_id(*xIter).toInt64());
+        CertPath_UserData* pData = weld::fromId<CertPath_UserData*>(mxCertPathLB->get_id(*xIter));
         if (pData)
             sStatus = pData->mbValid ? mxCertOK->get_label() : mxCertNotValidated->get_label();
     }
@@ -369,7 +369,7 @@ void CertificateViewerCertPathTP::InsertCert(const weld::TreeIter* pParent, cons
 {
     auto const sImage = bValid ? std::u16string_view(u"" BMP_CERT_OK) : std::u16string_view(u"" BMP_CERT_NOT_OK);
     maUserData.emplace_back(std::make_unique<CertPath_UserData>(rxCert, bValid));
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(maUserData.back().get())));
+    OUString sId(weld::toId(maUserData.back().get()));
     mxCertPathLB->insert(pParent, -1, &rName, &sId, nullptr, nullptr, false, mxScratchIter.get());
     mxCertPathLB->set_image(*mxScratchIter, OUString(sImage));
 }

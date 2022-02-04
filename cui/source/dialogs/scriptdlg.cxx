@@ -63,7 +63,7 @@ using namespace css::document;
 
 void SvxScriptOrgDialog::delUserData(const weld::TreeIter& rIter)
 {
-    SFEntry* pUserData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rIter).toInt64());
+    SFEntry* pUserData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(rIter));
     if (pUserData)
     {
         delete pUserData;
@@ -313,7 +313,7 @@ void SvxScriptOrgDialog::insertEntry(
     const OUString& rText, const OUString& rBitmap, const weld::TreeIter* pParent,
     bool bChildrenOnDemand, std::unique_ptr<SFEntry> && aUserData, bool bSelect)
 {
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aUserData.release()))); // XXX possible leak
+    OUString sId(weld::toId(aUserData.release())); // XXX possible leak
     m_xScriptsBox->insert(pParent, -1, &rText, &sId, nullptr, nullptr,
                           bChildrenOnDemand, m_xScratchIter.get());
     m_xScriptsBox->set_image(*m_xScratchIter, rBitmap);
@@ -326,7 +326,7 @@ void SvxScriptOrgDialog::insertEntry(
 
 IMPL_LINK(SvxScriptOrgDialog, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 {
-    SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rIter).toInt64());
+    SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(rIter));
 
     Reference< browse::XBrowseNode > node;
     Reference< XModel > model;
@@ -530,7 +530,7 @@ IMPL_LINK_NOARG(SvxScriptOrgDialog, ScriptSelectHdl, weld::TreeView&, void)
     if (!m_xScriptsBox->get_selected(xIter.get()))
         return;
 
-    SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(*xIter).toInt64());
+    SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(*xIter));
 
     Reference< browse::XBrowseNode > node;
     if (userData)
@@ -558,7 +558,7 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
     std::unique_ptr<weld::TreeIter> xIter = m_xScriptsBox->make_iterator();
     if (!m_xScriptsBox->get_selected(xIter.get()))
         return;
-    SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(*xIter).toInt64());
+    SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(*xIter));
     if (!userData)
         return;
 
@@ -602,7 +602,7 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
         bool bParent = m_xScriptsBox->iter_parent(*xParentIter);
         while (bParent && !mspNode.is() )
         {
-            SFEntry* mspUserData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(*xParentIter).toInt64());
+            SFEntry* mspUserData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(*xParentIter));
             mspNode.set( mspUserData->GetNode() , UNO_QUERY );
             bParent = m_xScriptsBox->iter_parent(*xParentIter);
         }
@@ -679,7 +679,7 @@ IMPL_LINK(SvxScriptOrgDialog, ButtonHdl, weld::Button&, rButton, void)
 Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode(const weld::TreeIter& rEntry)
 {
     Reference< browse::XBrowseNode > node;
-    SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rEntry).toInt64());
+    SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(rEntry));
     if (userData)
     {
         node = userData->GetNode();
@@ -690,7 +690,7 @@ Reference< browse::XBrowseNode > SvxScriptOrgDialog::getBrowseNode(const weld::T
 Reference< XModel > SvxScriptOrgDialog::getModel(const weld::TreeIter& rEntry)
 {
     Reference< XModel > model;
-    SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rEntry).toInt64());
+    SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(rEntry));
     if ( userData )
     {
         model = userData->GetModel();
@@ -852,7 +852,7 @@ void SvxScriptOrgDialog::createEntry(const weld::TreeIter& rEntry)
             // loaded, this will prevent RequestingChildren ( called
             // from vcl via RequestingChildren ) from
             // creating new ( duplicate ) children
-            SFEntry* userData = reinterpret_cast<SFEntry*>(m_xScriptsBox->get_id(rEntry).toInt64());
+            SFEntry* userData = weld::fromId<SFEntry*>(m_xScriptsBox->get_id(rEntry));
             if ( userData &&  !userData->isLoaded() )
             {
                 userData->setLoaded();

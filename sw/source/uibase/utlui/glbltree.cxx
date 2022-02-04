@@ -180,7 +180,7 @@ sal_Int8 SwGlobalTreeDropTarget::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
         OUString sFileName;
         const SwGlblDocContent* pCnt = xDropEntry ?
-                    reinterpret_cast<const SwGlblDocContent*>(rWidget.get_id(*xDropEntry).toInt64()) :
+                    weld::fromId<const SwGlblDocContent*>(rWidget.get_id(*xDropEntry)) :
                             nullptr;
         if( aData.HasFormat( SotClipboardFormatId::FILE_LIST ))
         {
@@ -330,10 +330,10 @@ MenuEnableFlags SwGlobalTree::GetEnableFlags() const
     if(nSelCount == 1)
     {
         nRet |= MenuEnableFlags::Edit;
-        if (bEntry && reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetType() != GLBLDOC_UNKNOWN &&
-                    (!bPrevEntry || reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(*xPrevEntry).toInt64())->GetType() != GLBLDOC_UNKNOWN))
+        if (bEntry && weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry))->GetType() != GLBLDOC_UNKNOWN &&
+                    (!bPrevEntry || weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xPrevEntry))->GetType() != GLBLDOC_UNKNOWN))
             nRet |= MenuEnableFlags::InsertText;
-        if (bEntry && GLBLDOC_SECTION == reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetType())
+        if (bEntry && GLBLDOC_SECTION == weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(*xEntry))->GetType())
             nRet |= MenuEnableFlags::EditLink;
     }
     else if(!nEntryCount)
@@ -351,7 +351,7 @@ IMPL_LINK(SwGlobalTree, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
 {
     OUString sEntry;
 
-    const SwGlblDocContent* pCont = reinterpret_cast<const SwGlblDocContent*>(m_xTreeView->get_id(rIter).toInt64());
+    const SwGlblDocContent* pCont = weld::fromId<const SwGlblDocContent*>(m_xTreeView->get_id(rIter));
     if (pCont && GLBLDOC_SECTION == pCont->GetType())
     {
         const SwSection* pSect = pCont->GetSection();
@@ -434,7 +434,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
         for (size_t i = 0; i < nCount && bEntry; i++)
         {
             const SwGlblDocContent* pCont = (*m_pSwGlblDocContents)[i].get();
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCont)));
+            OUString sId(weld::toId(pCont));
             m_xTreeView->set_id(*xEntry, sId);
             if (pCont->GetType() == GLBLDOC_SECTION && !pCont->GetSection()->IsConnectFlag())
                 m_xTreeView->set_font_color(*xEntry, COL_LIGHTRED);
@@ -464,7 +464,7 @@ void SwGlobalTree::Display(bool bOnlyUpdateUserData)
         {
             const SwGlblDocContent* pCont = (*m_pSwGlblDocContents)[i].get();
 
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCont)));
+            OUString sId(weld::toId(pCont));
             OUString sEntry;
             OUString aImage;
             switch (pCont->GetType())
@@ -569,7 +569,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
     bool bUpdateHard = false;
 
     int nEntry = m_xTreeView->get_selected_index();
-    SwGlblDocContent* pCont = nEntry != -1 ? reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(nEntry).toInt64()) : nullptr;
+    SwGlblDocContent* pCont = nEntry != -1 ? weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(nEntry)) : nullptr;
     // If a RequestHelp is called during the dialogue,
     // then the content gets lost. Because of that a copy
     // is created in which only the DocPos is set correctly.
@@ -582,7 +582,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
     {
         // Two passes: first update the areas, then the directories.
         m_xTreeView->selected_foreach([this](weld::TreeIter& rSelEntry){
-            SwGlblDocContent* pContent = reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(rSelEntry).toInt64());
+            SwGlblDocContent* pContent = weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(rSelEntry));
             if (GLBLDOC_SECTION == pContent->GetType() &&
                 pContent->GetSection()->IsConnected())
             {
@@ -591,7 +591,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
             return false;
         });
         m_xTreeView->selected_foreach([this](weld::TreeIter& rSelEntry){
-            SwGlblDocContent* pContent = reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(rSelEntry).toInt64());
+            SwGlblDocContent* pContent = weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(rSelEntry));
             if (GLBLDOC_TOXBASE == pContent->GetType())
                 m_pActiveShell->UpdateTableOf(*pContent->GetTOX());
             return false;
@@ -727,7 +727,7 @@ void SwGlobalTree::ExecuteContextMenuAction(std::string_view rSelectedPopupEntry
                     m_xTreeView->select(nEntry);
                     Select();
                     nEntry = m_xTreeView->get_selected_index();
-                    pCont = nEntry != -1 ? reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(nEntry).toInt64()) : nullptr;
+                    pCont = nEntry != -1 ? weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(nEntry)) : nullptr;
                 }
                 else
                 {
@@ -841,8 +841,8 @@ void SwGlobalTree::ExecCommand(std::string_view rCmd)
         return;
     if (rCmd == "edit")
     {
-        const SwGlblDocContent* pCont = reinterpret_cast<const SwGlblDocContent*>(
-                                                m_xTreeView->get_id(nEntry).toInt64());
+        const SwGlblDocContent* pCont = weld::fromId<const SwGlblDocContent*>(
+                                                m_xTreeView->get_id(nEntry));
         EditContent(pCont);
     }
     else
@@ -979,7 +979,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
 IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl, weld::TreeView&, bool)
 {
     int nEntry = m_xTreeView->get_cursor_index();
-    SwGlblDocContent* pCont = reinterpret_cast<SwGlblDocContent*>(m_xTreeView->get_id(nEntry).toInt64());
+    SwGlblDocContent* pCont = weld::fromId<SwGlblDocContent*>(m_xTreeView->get_id(nEntry));
     if (pCont->GetType() == GLBLDOC_SECTION)
         OpenDoc(pCont);
     else

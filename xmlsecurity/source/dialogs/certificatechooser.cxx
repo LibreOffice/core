@@ -215,7 +215,7 @@ void CertificateChooser::ImplInitialize()
             m_xCertLB->set_text(nRow, xmlsec::GetCertificateKind(xCert->getCertificateKind()), 2);
             m_xCertLB->set_text(nRow, utl::GetDateString(xCert->getNotValidAfter()), 3);
             m_xCertLB->set_text(nRow, UsageInClearText(xCert->getCertificateUsage()), 4);
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(userData.get())));
+            OUString sId(weld::toId(userData.get()));
             m_xCertLB->set_id(nRow, sId);
 
 #if HAVE_FEATURE_GPGME
@@ -246,7 +246,7 @@ uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser
     {
         // for encryption, multiselection is enabled
         m_xCertLB->selected_foreach([this, &aRet](weld::TreeIter& rEntry){
-            UserData* userData = reinterpret_cast<UserData*>(m_xCertLB->get_id(rEntry).toInt64());
+            UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(rEntry));
             aRet.push_back( userData->xCertificate );
             return false;
         });
@@ -257,7 +257,7 @@ uno::Sequence<uno::Reference< css::security::XCertificate > > CertificateChooser
         int nSel = m_xCertLB->get_selected_index();
         if (nSel != -1)
         {
-            UserData* userData = reinterpret_cast<UserData*>(m_xCertLB->get_id(nSel).toInt64());
+            UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(nSel));
             xCert = userData->xCertificate;
         }
         aRet.push_back( xCert );
@@ -277,7 +277,7 @@ uno::Reference<xml::crypto::XXMLSecurityContext> CertificateChooser::GetSelected
     if (nSel == -1)
         return uno::Reference<xml::crypto::XXMLSecurityContext>();
 
-    UserData* userData = reinterpret_cast<UserData*>(m_xCertLB->get_id(nSel).toInt64());
+    UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(nSel));
     uno::Reference<xml::crypto::XXMLSecurityContext> xCert = userData->xSecurityContext;
     return xCert;
 }
@@ -320,7 +320,7 @@ void CertificateChooser::ImplShowCertificateDetails()
     if (nSel == -1)
         return;
 
-    UserData* userData = reinterpret_cast<UserData*>(m_xCertLB->get_id(nSel).toInt64());
+    UserData* userData = weld::fromId<UserData*>(m_xCertLB->get_id(nSel));
 
     if (!userData->xSecurityEnvironment.is() || !userData->xCertificate.is())
         return;

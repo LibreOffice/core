@@ -44,8 +44,7 @@ IMPL_LINK_NOARG(ScPivotLayoutTreeList, DoubleClickHdl, weld::TreeView&, bool)
     if (nEntry == -1)
         return true;
 
-    ScItemValue* pCurrentItemValue
-        = reinterpret_cast<ScItemValue*>(mxControl->get_id(nEntry).toInt64());
+    ScItemValue* pCurrentItemValue = weld::fromId<ScItemValue*>(mxControl->get_id(nEntry));
     ScPivotFuncData& rCurrentFunctionData = pCurrentItemValue->maFunctionData;
     SCCOL nCurrentColumn = rCurrentFunctionData.mnCol;
 
@@ -86,14 +85,14 @@ void ScPivotLayoutTreeList::FillFields(ScPivotFieldVector& rFieldVector)
         OUString aLabel = mpParent->GetItem(rField.nCol)->maName;
         ScItemValue* pItemValue = new ScItemValue(aLabel, rField.nCol, rField.nFuncMask);
         maItemValues.push_back(std::unique_ptr<ScItemValue>(pItemValue));
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pItemValue)));
+        OUString sId(weld::toId(pItemValue));
         mxControl->append(sId, pItemValue->maName);
     }
 }
 
 void ScPivotLayoutTreeList::InsertEntryForSourceTarget(weld::TreeView& rSource, int nTarget)
 {
-    ScItemValue* pItemValue = reinterpret_cast<ScItemValue*>(rSource.get_selected_id().toInt64());
+    ScItemValue* pItemValue = weld::fromId<ScItemValue*>(rSource.get_selected_id());
     ScItemValue* pOriginalItemValue = pItemValue->mpOriginalItemValue;
 
     // Don't allow to add "Data" element to page fields
@@ -110,7 +109,7 @@ void ScPivotLayoutTreeList::InsertEntryForItem(const ScItemValue* pItemValue, in
     ScItemValue* pListItemValue = new ScItemValue(pItemValue);
     maItemValues.push_back(std::unique_ptr<ScItemValue>(pListItemValue));
     OUString sName = pListItemValue->maName;
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pListItemValue)));
+    OUString sId(weld::toId(pListItemValue));
     mxControl->insert(nullptr, nPosition, &sName, &sId, nullptr, nullptr, false, nullptr);
 }
 
