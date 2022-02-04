@@ -621,7 +621,7 @@ public:
 /***********************************************************************
 *                                                                      *
 ***********************************************************************/
-class SvxShapePolyPolygon final : public SvxShapeText
+class SAL_DLLPUBLIC_RTTI SvxShapePolyPolygon final : public SvxShapeText
 {
     using SvxUnoTextRangeBase::setPropertyValue;
     using SvxUnoTextRangeBase::getPropertyValue;
