@@ -685,7 +685,7 @@ IMPL_LINK(ObjectPage, ButtonHdl, weld::Button&, rButton, void)
             std::unique_ptr<weld::TreeIter> xParentEntry(m_xBasicBox->make_iterator(xCurEntry.get()));
             if (m_xBasicBox->iter_parent(*xParentEntry))
             {
-                DocumentEntry* pDocumentEntry = reinterpret_cast<DocumentEntry*>(m_xBasicBox->get_id(*xParentEntry).toInt64());
+                DocumentEntry* pDocumentEntry = weld::fromId<DocumentEntry*>(m_xBasicBox->get_id(*xParentEntry));
                 if (pDocumentEntry)
                     aDocument = pDocumentEntry->GetDocument();
             }

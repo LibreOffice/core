@@ -21,7 +21,7 @@ ScOrcusXMLTreeParam::EntryData::EntryData(EntryType eType)
 
 ScOrcusXMLTreeParam::EntryData* ScOrcusXMLTreeParam::getUserData(const weld::TreeView& rControl, const weld::TreeIter& rEntry)
 {
-    return reinterpret_cast<ScOrcusXMLTreeParam::EntryData*>(rControl.get_id(rEntry).toInt64());
+    return weld::fromId<ScOrcusXMLTreeParam::EntryData*>(rControl.get_id(rEntry));
 }
 
 ScOrcusImportXMLParam::CellLink::CellLink(const ScAddress& rPos, const OString& rPath) :

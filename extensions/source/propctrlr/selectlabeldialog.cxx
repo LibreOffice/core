@@ -232,7 +232,7 @@ namespace pcr
         bool bSelected = m_xControlTree->get_selected(xIter.get());
         OUString sData = bSelected ? m_xControlTree->get_id(*xIter) : OUString();
         if (!sData.isEmpty())
-            m_xSelectedControl.set(*reinterpret_cast<Reference<XPropertySet>*>(sData.toInt64()));
+            m_xSelectedControl.set(*weld::fromId<Reference<XPropertySet>*>(sData));
         m_xNoAssignment->set_active(sData.isEmpty());
     }
 

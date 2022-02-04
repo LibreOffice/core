@@ -679,7 +679,7 @@ RecoveryDialog::RecoveryDialog(weld::Window* pParent, RecoveryCore* pCore)
     {
         const TURLInfo& rInfo = rURLList[i];
         m_xFileListLB->append();
-        m_xFileListLB->set_id(i, OUString::number(reinterpret_cast<sal_IntPtr>(&rInfo)));
+        m_xFileListLB->set_id(i, weld::toId(&rInfo));
         m_xFileListLB->set_image(i, rInfo.StandardImageId, 0);
         m_xFileListLB->set_text(i, rInfo.DisplayName, 1);
         m_xFileListLB->set_image(i, impl_getStatusImage(rInfo), 2);
@@ -871,7 +871,7 @@ void RecoveryDialog::updateItems()
     int c = m_xFileListLB->n_children();
     for (int i = 0; i < c; ++i)
     {
-        TURLInfo* pInfo = reinterpret_cast<TURLInfo*>(m_xFileListLB->get_id(i).toInt64());
+        TURLInfo* pInfo = weld::fromId<TURLInfo*>(m_xFileListLB->get_id(i));
         if ( !pInfo )
             continue;
 
@@ -887,7 +887,7 @@ void RecoveryDialog::stepNext(TURLInfo* pItem)
     int c = m_xFileListLB->n_children();
     for (int i=0; i < c; ++i)
     {
-        TURLInfo* pInfo = reinterpret_cast<TURLInfo*>(m_xFileListLB->get_id(i).toInt64());
+        TURLInfo* pInfo = weld::fromId<TURLInfo*>(m_xFileListLB->get_id(i));
         if (pInfo->ID != pItem->ID)
             continue;
 
@@ -1044,7 +1044,7 @@ void BrokenRecoveryDialog::impl_refresh()
 
         m_bExecutionNeeded = true;
 
-        m_xFileListLB->append(OUString::number(reinterpret_cast<sal_IntPtr>(&rInfo)), rInfo.DisplayName, rInfo.StandardImageId);
+        m_xFileListLB->append(weld::toId(&rInfo), rInfo.DisplayName, rInfo.StandardImageId);
     }
     m_sSavePath.clear();
     m_xOkBtn->grab_focus();

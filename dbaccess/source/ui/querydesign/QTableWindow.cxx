@@ -110,7 +110,7 @@ void OQueryTableWindow::OnEntryDoubleClicked(weld::TreeIter& rEntry)
         return;
 
     weld::TreeView& rTreeView = m_xListBox->get_widget();
-    OTableFieldInfo* pInf = reinterpret_cast<OTableFieldInfo*>(rTreeView.get_id(rEntry).toUInt64());
+    OTableFieldInfo* pInf = weld::fromId<OTableFieldInfo*>(rTreeView.get_id(rEntry));
     OSL_ENSURE(pInf != nullptr, "OQueryTableWindow::OnEntryDoubleClicked : field doesn't have FieldInfo !");
 
     // build up DragInfo
@@ -144,7 +144,7 @@ bool OQueryTableWindow::ExistsField(const OUString& strFieldName, OTableFieldDes
             {
                 if (bCase(strFieldName, rTreeView.get_text(*xEntry)))
                 {
-                    OTableFieldInfo* pInf = reinterpret_cast<OTableFieldInfo*>(rTreeView.get_id(*xEntry).toUInt64());
+                    OTableFieldInfo* pInf = weld::fromId<OTableFieldInfo*>(rTreeView.get_id(*xEntry));
                     assert(pInf && "OQueryTableWindow::ExistsField : field doesn't have FieldInfo !");
 
                     rInfo->SetTabWindow(this);

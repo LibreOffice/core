@@ -496,7 +496,7 @@ public:
 
     SvxConfigEntry* GetTopLevelSelection()
     {
-        return reinterpret_cast<SvxConfigEntry*>(m_xTopLevelListBox->get_active_id().toInt64());
+        return weld::fromId<SvxConfigEntry*>(m_xTopLevelListBox->get_active_id());
     }
 
     /** identifies the module in the given frame. If the frame is <NULL/>, a default
