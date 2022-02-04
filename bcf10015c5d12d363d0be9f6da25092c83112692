@@ -34,6 +34,24 @@
       "parentUuid": "cbb26e76_82ac46fa",
       "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a3ec34_ca5cf1a8",
+        "filename": "dbaccess/source/core/dataaccess/databasedocument.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-04T08:40:30Z",
+      "side": 0,
+      "message": "But that is not correct :-)\n\nNote what happens when aFind \u003d\u003d m_aNumberedControllers.end(): it adds an item to m_aNumberedControllers, so next time when you search for that id, you get the entry. That way, even empty id gets an entry there; and next time, you don\u0027t need to create it anew (and destroy it after use, since emplace would not replace existing entry)... no idea if using an instance absent in the m_aNumberedControllers is OK.",
+      "parentUuid": "749e9b70_a445f4df",
+      "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
