@@ -16,6 +16,24 @@
       "message": "Hi Kevin,\nWould it be possible to have a unittest for this issue ?",
       "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83588e20_040c89a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-04T14:21:06Z",
+      "side": 1,
+      "message": "Yes, I can write a follow-up test for the font-weight. However, at this moment it is useless for a test for the font names, due to bug 143095 (i.e. the font names are displayed the PS-like names as embeded in pdf, rather than the real font names).",
+      "parentUuid": "0567663c_aed23dfc",
+      "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
