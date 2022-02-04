@@ -70,6 +70,24 @@
       "parentUuid": "68211fa7_e9e37e42",
       "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b53f9447_28b422a1",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-04T17:11:18Z",
+      "side": 0,
+      "message": "Although it\u0027s a good point that this may indeed happen, and it does with jumbo sheets, because the max row value is not a power of 2. Is there a reason why MAXROW_JUMBO is based on 16000000 and not 16777216?",
+      "parentUuid": "a3f9679c_b31c5c06",
+      "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
