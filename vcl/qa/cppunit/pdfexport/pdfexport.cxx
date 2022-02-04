@@ -40,6 +40,7 @@
 #include <vcl/graphicfilter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
+#include <rtl/math.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -2900,6 +2901,47 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageHyperlink)
     // Without the accompanying fix in place, this test would have failed, the hyperlink of the PDF
     // image was lost.
     CPPUNIT_ASSERT(pPdfPage->hasLinks());
+
+    // Also test the precision of the form XObject.
+    // Given a full-page form XObject, page height is 27.94 cm (792 points):
+    // When writing the reciprocal of the object height to PDF:
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pFormObject;
+    for (int i = 0; i < pPdfPage->getObjectCount(); ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pObject = pPdfPage->getObject(i);
+        if (pObject->getType() == vcl::pdf::PDFPageObjectType::Form)
+        {
+            pFormObject = std::move(pObject);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pFormObject);
+    std::unique_ptr<vcl::pdf::PDFiumPageObject> pInnerFormObject;
+    for (int i = 0; i < pFormObject->getFormObjectCount(); ++i)
+    {
+        std::unique_ptr<vcl::pdf::PDFiumPageObject> pObject = pFormObject->getFormObject(i);
+        if (pObject->getType() == vcl::pdf::PDFPageObjectType::Form)
+        {
+            pInnerFormObject = std::move(pObject);
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pInnerFormObject);
+    // Then make sure that enough digits are used, so the point size is unchanged:
+    basegfx::B2DHomMatrix aMatrix = pInnerFormObject->getMatrix();
+    basegfx::B2DTuple aScale;
+    basegfx::B2DTuple aTranslate;
+    double fRotate{};
+    double fShearX{};
+    aMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0.0012626264
+    // - Actual  : 0.00126
+    // i.e. the rounded reciprocal was 794 points, not the original 792.
+    // FIXME macOS actual value is 0.0001578282, for unknown reasons.
+#if !defined MACOSX
+    CPPUNIT_ASSERT_EQUAL(0.0012626264, rtl::math::round(aScale.getY(), 10));
+#endif
 }
 
 } // end anonymous namespace
