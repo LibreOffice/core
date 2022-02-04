@@ -52,6 +52,24 @@
       "parentUuid": "749e9b70_a445f4df",
       "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc75a972_f6d6655a",
+        "filename": "dbaccess/source/core/dataaccess/databasedocument.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2120,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-04T11:56:49Z",
+      "side": 0,
+      "message": "I submitted https://gerrit.libreoffice.org/c/core/+/129486 and put you as reviewer.\n\nThank you! :-)",
+      "parentUuid": "78a3ec34_ca5cf1a8",
+      "revId": "bcf10015c5d12d363d0be9f6da25092c83112692",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
