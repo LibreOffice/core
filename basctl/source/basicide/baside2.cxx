@@ -1584,7 +1584,7 @@ void ModulWindowLayout::SyntaxColors::NewConfig (bool bFirst)
     }
 
     bool bChanged = false;
-    for (unsigned i = 0; i != SAL_N_ELEMENTS(vIds); ++i)
+    for (unsigned i = 0; i != std::size(vIds); ++i)
     {
         Color const aColor = aConfig.GetColorValue(vIds[i].eEntry).nColor;
         Color& rMyColor = aColors[vIds[i].eTokenType];
