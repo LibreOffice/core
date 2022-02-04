@@ -39,24 +39,7 @@
 // must be integer divisors of MAXCOLCOUNT respectively MAXROWCOUNT
 constexpr SCCOL BCA_SLOTS_COL  = MAXCOLCOUNT / 16;
 constexpr SCCOL BCA_SLOT_COLS  = MAXCOLCOUNT / BCA_SLOTS_COL;
-#if !defined NDEBUG
-constexpr SCROW BCA_SLICE = 128;
-static SCROW BCA_SLOTS_ROW(const ScSheetLimits& rLimits)  { return rLimits.GetMaxRowCount() / BCA_SLICE; }
-static SCROW BCA_SLOT_ROWS(const ScSheetLimits& rLimits)
-{
-    auto nMaxRowCount = rLimits.GetMaxRowCount();
-    auto nSlotsRow = BCA_SLOTS_ROW(rLimits);
-    assert((nMaxRowCount / nSlotsRow * nSlotsRow) == nMaxRowCount && "bad BCA_SLOTS_ROW value");
-    return nMaxRowCount / nSlotsRow;
-}
-#endif
-// multiple?
 static_assert((BCA_SLOT_COLS * BCA_SLOTS_COL) == MAXCOLCOUNT, "bad BCA_SLOTS_COL value");
-
-// size of slot array if linear
-#if !defined NDEBUG
-static int BCA_SLOTS(const ScSheetLimits& rLimits)  { return BCA_SLOTS_COL * BCA_SLOTS_ROW(rLimits); }
-#endif
 
 ScBroadcastArea::ScBroadcastArea( const ScRange& rRange ) :
     pUpdateChainNext(nullptr),
@@ -592,13 +575,6 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     nInBulkBroadcast( 0 )
 {
     const ScSheetLimits& rSheetLimits = pDoc->GetSheetLimits();
-
-    assert((BCA_SLOT_ROWS(rSheetLimits) * BCA_SLOTS_ROW(rSheetLimits)) == pDoc->GetSheetLimits().GetMaxRowCount() && "bad BCA_SLOTS_ROW value");
-    // Arbitrary 2**31/8, assuming size_t can hold at least 2^31 values and
-    // sizeof_ptr is at most 8 bytes. You'd probably doom your machine's memory
-    // anyway, once you reached these values...
-    assert(BCA_SLOTS(rSheetLimits) <= 268435456 && "DOOMed");
-
     // initSlotDistribution ---------
     // Logarithmic or any other distribution.
     // Upper sheet part usually is more populated and referenced and gets fine
