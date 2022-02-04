@@ -110,7 +110,7 @@ void ScFiltersTest::testTdf133033()
     ScViewData& rViewData = pViewShell->GetViewData();
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), rViewData.GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(15999999), rViewData.GetCurY());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), rViewData.GetCurY());
 }
 
 ScFiltersTest::ScFiltersTest()

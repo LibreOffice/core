@@ -69,7 +69,7 @@ const SCROW       MAXROW         = MAXROWCOUNT - 1;
 const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
-const SCROW       MAXROW_JUMBO   = 16 * 1000 * 1000 - 1;
+const SCROW       MAXROW_JUMBO   = 16 * 1024 * 1024 - 1;
 const SCCOL       MAXCOL_JUMBO   = 16384 - 1;
 // Maximum tiled rendering values
 const SCROW       MAXTILEDROW    = 500000;
