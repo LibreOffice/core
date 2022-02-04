@@ -122,6 +122,24 @@
       "parentUuid": "840de76d_4f102e3d",
       "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7866efff_c3de8da5",
+        "filename": "codemaker/source/cppumaker/cpputype.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-04T06:57:24Z",
+      "side": 1,
+      "message": "Never mind, I found the mistake. Just removed static and used \u0026name instead of name.",
+      "parentUuid": "c29b583a_43c95ffe",
+      "revId": "4c1675dc6d4d6dd278ef7ebc0fa2c6c57738d89b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
