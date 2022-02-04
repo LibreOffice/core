@@ -93,7 +93,7 @@ public:
 void lclAppendToParentEntry(const std::unique_ptr<weld::TreeView>& rTree,
                             weld::TreeIter const& rParent, DocumentModelTreeEntry* pEntry)
 {
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    OUString sId(weld::toId(pEntry));
     OUString const& rString = pEntry->getString();
     rTree->insert(&rParent, -1, &rString, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
                   nullptr);
@@ -102,7 +102,7 @@ void lclAppendToParentEntry(const std::unique_ptr<weld::TreeView>& rTree,
 // append a root entry to a input TreeView
 OUString lclAppend(const std::unique_ptr<weld::TreeView>& rTree, DocumentModelTreeEntry* pEntry)
 {
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    OUString sId(weld::toId(pEntry));
     OUString const& rString = pEntry->getString();
     rTree->insert(nullptr, -1, &rString, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
                   nullptr);
@@ -714,7 +714,7 @@ uno::Reference<uno::XInterface> DocumentModelTreeHandler::getObjectByID(OUString
     uno::Reference<uno::XInterface> xObject;
     if (rID.isEmpty())
         return xObject;
-    auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(rID.toInt64());
+    auto* pEntry = weld::fromId<DocumentModelTreeEntry*>(rID);
     return pEntry->getMainObject();
 }
 
@@ -723,7 +723,7 @@ void DocumentModelTreeHandler::clearAll()
     // destroy all DocumentModelTreeEntries from the tree
     mpDocumentModelTree->all_foreach([this](weld::TreeIter& rEntry) {
         OUString sID = mpDocumentModelTree->get_id(rEntry);
-        auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
+        auto* pEntry = weld::fromId<DocumentModelTreeEntry*>(sID);
         delete pEntry;
         return false;
     });
@@ -744,7 +744,7 @@ void DocumentModelTreeHandler::clearChildren(weld::TreeIter const& rParent)
             {
                 clearChildren(*pChild);
                 OUString sID = mpDocumentModelTree->get_id(*pChild);
-                auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
+                auto* pEntry = weld::fromId<DocumentModelTreeEntry*>(sID);
                 delete pEntry;
                 mpDocumentModelTree->remove(*pChild);
             }
@@ -756,7 +756,7 @@ void DocumentModelTreeHandler::dispose()
 {
     mpDocumentModelTree->all_foreach([this](weld::TreeIter& rEntry) {
         OUString sID = mpDocumentModelTree->get_id(rEntry);
-        auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
+        auto* pEntry = weld::fromId<DocumentModelTreeEntry*>(sID);
         delete pEntry;
         return false;
     });
@@ -769,7 +769,7 @@ IMPL_LINK(DocumentModelTreeHandler, ExpandingHandler, weld::TreeIter const&, rPa
         return true;
 
     clearChildren(rParent);
-    auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
+    auto* pEntry = weld::fromId<DocumentModelTreeEntry*>(sID);
     pEntry->fill(mpDocumentModelTree, rParent);
 
     return true;
@@ -782,7 +782,7 @@ void DocumentModelTreeHandler::selectObject(
 
     mpDocumentModelTree->all_foreach([this, xInterface](weld::TreeIter& rEntry) {
         OUString sID = mpDocumentModelTree->get_id(rEntry);
-        auto* pEntry = reinterpret_cast<DocumentModelTreeEntry*>(sID.toInt64());
+        auto* pEntry = weld::fromId<DocumentModelTreeEntry*>(sID);
         if (xInterface == pEntry->getMainObject())
         {
             mpDocumentModelTree->select(rEntry);

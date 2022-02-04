@@ -528,7 +528,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
         // if Child (has parent), then OptionsPageInfo
         if (xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsPageInfo *pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
+            OptionsPageInfo *pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xEntry));
             if(pPageInfo->m_xPage)
             {
                 pPageInfo->m_xPage->FillUserData();
@@ -564,7 +564,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
     {
         if (!xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xEntry).toInt64());
+            OptionsGroupInfo* pGroupInfo = weld::fromId<OptionsGroupInfo*>(xTreeLB->get_id(*xEntry));
             delete pGroupInfo;
         }
         bEntry = xTreeLB->iter_next(*xEntry);
@@ -581,7 +581,7 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     xTreeLB->iter_nth_sibling(*xParent, nGroup);
 
     OptionsPageInfo* pPageInfo = new OptionsPageInfo( nId );
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pPageInfo)));
+    OUString sId(weld::toId(pPageInfo));
     xTreeLB->insert(xParent.get(), -1, &rPageName, &sId, nullptr, nullptr, false, nullptr);
     return pPageInfo;
 }
@@ -594,7 +594,7 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
 {
     OptionsGroupInfo* pInfo =
         new OptionsGroupInfo( pCreateShell, pCreateModule, nDialogId );
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pInfo)));
+    OUString sId(weld::toId(pInfo));
     xTreeLB->append(sId, rGroupName);
 
     sal_uInt16 nRet = 0;
@@ -619,13 +619,13 @@ void OfaTreeOptionsDialog::ResetCurrentPageFromConfig()
     if (!(xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry)))
         return;
 
-    OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
+    OptionsPageInfo* pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry));
     if (pPageInfo->m_xPage)
     {
         std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
         xTreeLB->iter_parent(*xParent);
         OptionsGroupInfo* pGroupInfo =
-            reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
+            weld::fromId<OptionsGroupInfo*>(xTreeLB->get_id(*xParent));
         pPageInfo->m_xPage->Reset( &*pGroupInfo->m_pInItemSet );
     }
     else if ( pPageInfo->m_xExtPage )
@@ -645,13 +645,13 @@ void OfaTreeOptionsDialog::ApplyOptions()
     {
         if (xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
+            OptionsPageInfo* pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xEntry));
             if ( pPageInfo->m_xPage && !pPageInfo->m_xPage->HasExchangeSupport() )
             {
                 std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xEntry.get());
                 xTreeLB->iter_parent(*xParent);
                 OptionsGroupInfo* pGroupInfo =
-                    reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
+                    weld::fromId<OptionsGroupInfo*>(xTreeLB->get_id(*xParent));
                 pPageInfo->m_xPage->FillItemSet(pGroupInfo->m_pOutItemSet.get());
             }
 
@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, HelpHdl_Impl, weld::Widget&, bool)
     Help* pHelp = Application::GetHelp();
     if (pHelp && xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
-        OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
+        OptionsPageInfo* pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry));
         if (pPageInfo->m_xPage)
         {
             OString sHelpId(pPageInfo->m_xPage->GetHelpId());
@@ -694,13 +694,13 @@ IMPL_LINK(OfaTreeOptionsDialog, ApplyHdl_Impl, weld::Button&, rButton, void)
 
     if (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
     {
-        OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64());
+        OptionsPageInfo* pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry));
         if ( pPageInfo->m_xPage )
         {
             std::unique_ptr<weld::TreeIter> xParent = xTreeLB->make_iterator(xCurrentPageEntry.get());
             xTreeLB->iter_parent(*xParent);
 
-            pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
+            pGroupInfo = weld::fromId<OptionsGroupInfo*>(xTreeLB->get_id(*xParent));
             if ( RID_SVXPAGE_COLOR != pPageInfo->m_nPageId
                 && pPageInfo->m_xPage->HasExchangeSupport() )
             {
@@ -772,7 +772,7 @@ void OfaTreeOptionsDialog::ApplyItemSets()
     {
         if (!xTreeLB->get_iter_depth(*xEntry))
         {
-            OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xEntry).toInt64());
+            OptionsGroupInfo* pGroupInfo = weld::fromId<OptionsGroupInfo*>(xTreeLB->get_id(*xEntry));
             if(pGroupInfo->m_pOutItemSet)
             {
                 if(pGroupInfo->m_pShell)
@@ -848,7 +848,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
             // restore only selection of a leaf
             if (xTreeLB->get_iter_depth(*xTemp) && xTreeLB->get_id(*xTemp).toInt64())
             {
-                OptionsPageInfo* pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xTemp).toInt64());
+                OptionsPageInfo* pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xTemp));
                 OUString sPageURL = pPageInfo->m_sPageURL;
                 if ( bMustExpand )
                 {
@@ -921,14 +921,14 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
     BuilderPage* pNewPage = nullptr;
     OptionsPageInfo* pOptPageInfo = (xCurrentPageEntry && xTreeLB->get_iter_depth(*xCurrentPageEntry))
-        ? reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry).toInt64()) : nullptr;
+        ? weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xCurrentPageEntry)) : nullptr;
 
     if (pOptPageInfo && pOptPageInfo->m_xPage && pOptPageInfo->m_xPage->IsVisible())
     {
         std::unique_ptr<weld::TreeIter> xCurParent(xTreeLB->make_iterator(xCurrentPageEntry.get()));
         xTreeLB->iter_parent(*xCurParent);
 
-        OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xCurParent).toInt64());
+        OptionsGroupInfo* pGroupInfo = weld::fromId<OptionsGroupInfo*>(xTreeLB->get_id(*xCurParent));
         DeactivateRC nLeave = DeactivateRC::LeavePage;
         if ( RID_SVXPAGE_COLOR != pOptPageInfo->m_nPageId && pOptPageInfo->m_xPage->HasExchangeSupport() )
            nLeave = pOptPageInfo->m_xPage->DeactivatePage( pGroupInfo->m_pOutItemSet.get() );
@@ -949,8 +949,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         pOptPageInfo->m_xExtPage->DeactivatePage();
     }
 
-    OptionsPageInfo *pPageInfo = reinterpret_cast<OptionsPageInfo*>(xTreeLB->get_id(*xEntry).toInt64());
-    OptionsGroupInfo* pGroupInfo = reinterpret_cast<OptionsGroupInfo*>(xTreeLB->get_id(*xParent).toInt64());
+    OptionsPageInfo *pPageInfo = weld::fromId<OptionsPageInfo*>(xTreeLB->get_id(*xEntry));
+    OptionsGroupInfo* pGroupInfo = weld::fromId<OptionsGroupInfo*>(xTreeLB->get_id(*xParent));
     if(!pPageInfo->m_xPage && pPageInfo->m_nPageId > 0)
     {
         InitItemSets(*pGroupInfo);

@@ -234,7 +234,7 @@ NavigatorTree::NavigatorTree(std::unique_ptr<weld::TreeView> xTreeView, OReportC
 NavigatorTree::~NavigatorTree()
 {
     m_xTreeView->all_foreach([this](weld::TreeIter& rIter) {
-        UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_id(rIter).toInt64());
+        UserData* pData = weld::fromId<UserData*>(m_xTreeView->get_id(rIter));
         delete pData;
         return false;
     });
@@ -268,7 +268,7 @@ IMPL_LINK(NavigatorTree, CommandHdl, const CommandEvent&, rEvt, bool)
     {
     case CommandEventId::ContextMenu:
         {
-            UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_selected_id().toInt64());
+            UserData* pData = weld::fromId<UserData*>(m_xTreeView->get_selected_id());
             if (!pData)
                 break;
 
@@ -337,7 +337,7 @@ IMPL_LINK_NOARG(NavigatorTree, OnEntrySelDesel, weld::TreeView&, void)
         bool bEntry = m_xTreeView->get_cursor(xEntry.get());
         uno::Any aSelection;
         if (bEntry && m_xTreeView->is_selected(*xEntry))
-            aSelection <<= reinterpret_cast<UserData*>(m_xTreeView->get_id(*xEntry).toInt64())->getContent();
+            aSelection <<= weld::fromId<UserData*>(m_xTreeView->get_id(*xEntry))->getContent();
         m_rController.select(aSelection);
         m_pSelectionListener->unlock();
     }
@@ -381,7 +381,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
 void NavigatorTree::insertEntry(const OUString& rName, const weld::TreeIter* pParent, const OUString& rImageId,
                                 int nPosition, UserData* pData, weld::TreeIter& rRet)
 {
-    OUString sId = pData ? OUString::number(reinterpret_cast<sal_Int64>(pData)) : OUString();
+    OUString sId = pData ? weld::toId(pData) : OUString();
     m_xTreeView->insert(pParent, nPosition, &rName, &sId, nullptr, nullptr, false, &rRet);
     if (!rImageId.isEmpty())
         m_xTreeView->set_image(rRet, rImageId);
@@ -430,7 +430,7 @@ bool NavigatorTree::find(const uno::Reference<uno::XInterface>& xContent, weld::
     if (xContent.is())
     {
         m_xTreeView->all_foreach([this, &xContent, &bRet, &rRet](weld::TreeIter& rIter) {
-            UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_id(rIter).toInt64());
+            UserData* pData = weld::fromId<UserData*>(m_xTreeView->get_id(rIter));
             if (pData->getContent() == xContent)
             {
                 m_xTreeView->copy_iterator(rIter, rRet);
@@ -647,7 +647,7 @@ void NavigatorTree::_elementReplaced( const container::ContainerEvent& _rEvent )
     bool bEntry = find(xProp, *xEntry);
     if (bEntry)
     {
-        UserData* pData = reinterpret_cast<UserData*>(m_xTreeView->get_id(*xEntry).toInt64());
+        UserData* pData = weld::fromId<UserData*>(m_xTreeView->get_id(*xEntry));
         xProp.set(_rEvent.Element,uno::UNO_QUERY);
         pData->setContent(xProp);
         OUString sName;
@@ -672,7 +672,7 @@ void NavigatorTree::removeEntry(const weld::TreeIter& rEntry, bool bRemove)
         removeEntry(*xChild, false);
         bChild = m_xTreeView->iter_next_sibling(*xChild);
     }
-    delete reinterpret_cast<UserData*>(m_xTreeView->get_id(rEntry).toInt64());
+    delete weld::fromId<UserData*>(m_xTreeView->get_id(rEntry));
     if (bRemove)
         m_xTreeView->remove(rEntry);
 }

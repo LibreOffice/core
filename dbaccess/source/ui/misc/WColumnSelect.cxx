@@ -73,7 +73,7 @@ OWizColumnSelect::~OWizColumnSelect()
 {
     while (m_xNewColumnNames->n_children())
     {
-        delete reinterpret_cast<OFieldDescription*>(m_xNewColumnNames->get_id(0).toInt64());
+        delete weld::fromId<OFieldDescription*>(m_xNewColumnNames->get_id(0));
         m_xNewColumnNames->remove(0);
     }
 }
@@ -90,7 +90,7 @@ void OWizColumnSelect::Reset()
 
     for (auto const& column : rSrcColumns)
     {
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(column->second)));
+        OUString sId(weld::toId(column->second));
         m_xOrgColumnNames->append(sId, column->first);
     }
 
@@ -121,7 +121,7 @@ void OWizColumnSelect::Activate( )
     {
         if (rSrcColumns.find(column->first) != rSrcColumns.end())
         {
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(new OFieldDescription(*(column->second)))));
+            OUString sId(weld::toId(new OFieldDescription(*(column->second))));
             m_xNewColumnNames->append(sId, column->first);
             int nRemove = m_xOrgColumnNames->find_text(column->first);
             if (nRemove != -1)
@@ -140,7 +140,7 @@ bool OWizColumnSelect::LeavePage()
 
     for(sal_Int32 i=0 ; i< m_xNewColumnNames->n_children();++i)
     {
-        OFieldDescription* pField = reinterpret_cast<OFieldDescription*>(m_xNewColumnNames->get_id(i).toInt64());
+        OFieldDescription* pField = weld::fromId<OFieldDescription*>(m_xNewColumnNames->get_id(i));
         OSL_ENSURE(pField,"The field information can not be null!");
         m_pParent->insertColumn(i,pField);
     }
@@ -290,7 +290,7 @@ void OWizColumnSelect::createNewColumn( weld::TreeView* _pListbox,
     if ( !m_pParent->supportsPrimaryKey() )
         pNewField->SetPrimaryKey(false);
 
-    _pListbox->append(OUString::number(reinterpret_cast<sal_Int64>(pNewField)), sConvertedName);
+    _pListbox->append(weld::toId(pNewField), sConvertedName);
     _rRightColumns.push_back(sConvertedName);
 
     if ( !bNotConvert )
@@ -308,7 +308,7 @@ void OWizColumnSelect::moveColumn(  weld::TreeView* _pRight,
     if(_pRight == m_xNewColumnNames.get())
     {
         // we copy the column into the new format for the dest
-        OFieldDescription* pSrcField = reinterpret_cast<OFieldDescription*>(_pLeft->get_id(_pLeft->find_text(_sColumnName)).toInt64());
+        OFieldDescription* pSrcField = weld::fromId<OFieldDescription*>(_pLeft->get_id(_pLeft->find_text(_sColumnName)));
         createNewColumn(_pRight,pSrcField,_rRightColumns,_sColumnName,_sExtraChars,_nMaxNameLen,_aCase);
     }
     else
@@ -332,7 +332,7 @@ void OWizColumnSelect::moveColumn(  weld::TreeView* _pRight,
             OSL_ENSURE( aPos != rSrcVector.end(),"Invalid position for the iterator here!");
             ODatabaseExport::TColumnVector::size_type nPos = (aPos - rSrcVector.begin()) - adjustColumnPosition(_pLeft, _sColumnName, (aPos - rSrcVector.begin()), _aCase);
 
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(aSrcIter->second)));
+            OUString sId(weld::toId(aSrcIter->second));
             const OUString& rStr = (*aIter).first;
             _pRight->insert(nullptr, nPos, &rStr, &sId, nullptr, nullptr, false, nullptr);
             _rRightColumns.push_back(rStr);

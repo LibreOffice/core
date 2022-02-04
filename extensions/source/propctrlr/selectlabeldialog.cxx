@@ -208,7 +208,7 @@ namespace pcr
 
             // all requirements met -> insert
             m_xUserData.emplace_back(new Reference<XPropertySet>(xAsSet));
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_xUserData.back().get())));
+            OUString sId(weld::toId(m_xUserData.back().get()));
             m_xControlTree->insert(&rContainerEntry, -1, &sDisplayName, &sId, nullptr, nullptr, false, m_xScratchIter.get());
             m_xControlTree->set_image(*m_xScratchIter, m_aRequiredControlImage);
 

@@ -1268,7 +1268,7 @@ IMPL_LINK(SvxSwPosSizeTabPage, PosHdl, weld::ComboBox&, rLB, void)
     if (rLB.get_active() != -1)
     {
         if (pRelLB->get_active() != -1)
-            nRel = reinterpret_cast<RelationMap*>(pRelLB->get_active_id().toUInt64())->nRelation;
+            nRel = weld::fromId<RelationMap*>(pRelLB->get_active_id())->nRelation;
 
         FillRelLB(pMap, nMapPos, nAlign, nRel, *pRelLB, *pRelFT);
     }
@@ -1371,7 +1371,7 @@ short SvxSwPosSizeTabPage::GetRelation(const weld::ComboBox& rRelationLB)
     int nPos = rRelationLB.get_active();
     if (nPos != -1)
     {
-        RelationMap *pEntry = reinterpret_cast<RelationMap*>(rRelationLB.get_id(nPos).toUInt64());
+        RelationMap *pEntry = weld::fromId<RelationMap*>(rRelationLB.get_id(nPos));
         nRel = pEntry->nRelation;
     }
 
@@ -1389,7 +1389,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap const *pMap, sal_uInt16 nMapPos, 
     {
         if (rRelationLB.get_active() != -1)
         {
-            LB  nRel = reinterpret_cast<RelationMap*>(rRelationLB.get_active_id().toUInt64())->nLBRelation;
+            LB  nRel = weld::fromId<RelationMap*>(rRelationLB.get_active_id())->nLBRelation;
             std::size_t nMapCount = ::lcl_GetFrmMapCount(pMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
@@ -1459,7 +1459,7 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
         m_nOldV    = m_pVMap[nPos].nAlign;
         nPos = m_xVertToLB->get_active();
         if (nPos != -1)
-            m_nOldVRel = reinterpret_cast<RelationMap*>(m_xVertToLB->get_id(nPos).toUInt64())->nRelation;
+            m_nOldVRel = weld::fromId<RelationMap*>(m_xVertToLB->get_id(nPos))->nRelation;
     }
 
     nPos = m_xHoriLB->get_active();
@@ -1469,7 +1469,7 @@ void SvxSwPosSizeTabPage::InitPos(RndStdIds nAnchor,
 
         nPos = m_xHoriToLB->get_active();
         if (nPos != -1)
-            m_nOldHRel = reinterpret_cast<RelationMap*>(m_xHoriToLB->get_id(nPos).toUInt64())->nRelation;
+            m_nOldHRel = weld::fromId<RelationMap*>(m_xHoriToLB->get_id(nPos))->nRelation;
     }
 
     bool bEnable = true;
@@ -1652,7 +1652,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
 
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
                             OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
-                            rLB.append(OUString::number(reinterpret_cast<sal_uInt64>(&aAsCharRelationMap[nRelPos])), sEntry);
+                            rLB.append(weld::toId(&aAsCharRelationMap[nRelPos]), sEntry);
                             if (pMap[_nMapPos].nAlign == nAlign)
                                 sSelEntry = sEntry;
                             break;
@@ -1669,7 +1669,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                 {
                     for (int i = 0; i < rLB.get_count(); i++)
                     {
-                        RelationMap *pEntry = reinterpret_cast<RelationMap*>(rLB.get_id(i).toUInt64());
+                        RelationMap *pEntry = weld::fromId<RelationMap*>(rLB.get_id(i));
                         if (pEntry->nLBRelation == LB::RelChar) // Default
                         {
                             rLB.set_active(i);
@@ -1707,7 +1707,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                             SvxSwFramePosString::StringId sStrId1 = m_xHoriMirrorCB->get_active() ? aRelationMap[nRelPos].eMirrorStrId : aRelationMap[nRelPos].eStrId;
                             sStrId1 = lcl_ChangeResIdToVerticalOrRTL(sStrId1, m_bIsVerticalFrame, m_bIsInRightToLeft);
                             OUString sEntry = SvxSwFramePosString::GetString(sStrId1);
-                            rLB.append(OUString::number(reinterpret_cast<sal_uInt64>(&aRelationMap[nRelPos])), sEntry);
+                            rLB.append(weld::toId(&aRelationMap[nRelPos]), sEntry);
                             if (sSelEntry.isEmpty() && aRelationMap[nRelPos].nRelation == nRel)
                                 sSelEntry = sEntry;
                         }
@@ -1733,7 +1733,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
                     default:
                         if (rLB.get_count())
                         {
-                            RelationMap *pEntry = reinterpret_cast<RelationMap*>(rLB.get_id(rLB.get_count() - 1).toUInt64());
+                            RelationMap *pEntry = weld::fromId<RelationMap*>(rLB.get_id(rLB.get_count() - 1));
                             nRel = pEntry->nRelation;
                         }
                         break;
@@ -1741,7 +1741,7 @@ void SvxSwPosSizeTabPage::FillRelLB(FrmMap const *pMap, sal_uInt16 nMapPos, sal_
 
                 for (int i = 0; i < rLB.get_count(); ++i)
                 {
-                    RelationMap *pEntry = reinterpret_cast<RelationMap*>(rLB.get_id(i).toUInt64());
+                    RelationMap *pEntry = weld::fromId<RelationMap*>(rLB.get_id(i));
                     if (pEntry->nRelation == nRel)
                     {
                         rLB.set_active(i);

@@ -1612,7 +1612,7 @@ void ScListSubMenuControl::addItem(ScCheckListMenuControl::Action* pAction)
 void ScListSubMenuControl::addMenuItem(const OUString& rText, ScCheckListMenuControl::Action* pAction)
 {
     addItem(pAction);
-    mxMenu->append(OUString::number(reinterpret_cast<sal_Int64>(pAction)), rText);
+    mxMenu->append(weld::toId(pAction), rText);
 }
 
 void ScListSubMenuControl::addMenuColorItem(const OUString& rText, bool bActive, VirtualDevice& rImage,
@@ -1623,7 +1623,7 @@ void ScListSubMenuControl::addMenuColorItem(const OUString& rText, bool bActive,
     weld::TreeView& rColorMenu = nMenu == 0 ? *mxBackColorMenu : *mxTextColorMenu;
     rColorMenu.show();
 
-    OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pAction));
+    OUString sId = weld::toId(pAction);
     rColorMenu.insert(nullptr, -1, &rText, &sId, nullptr, nullptr, false, mxScratchIter.get());
     rColorMenu.set_toggle(*mxScratchIter, bActive ? TRISTATE_TRUE : TRISTATE_FALSE);
     rColorMenu.set_image(*mxScratchIter, rImage);
@@ -1731,7 +1731,7 @@ IMPL_LINK(ScListSubMenuControl, ColorSelChangedHdl, weld::TreeView&, rMenu, void
 
 IMPL_LINK(ScListSubMenuControl, RowActivatedHdl, weld::TreeView&, rMenu, bool)
 {
-    executeMenuItem(reinterpret_cast<ScCheckListMenuControl::Action*>(rMenu.get_selected_id().toInt64()));
+    executeMenuItem(weld::fromId<ScCheckListMenuControl::Action*>(rMenu.get_selected_id()));
     return true;
 }
 

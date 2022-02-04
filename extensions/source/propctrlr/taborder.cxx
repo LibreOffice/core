@@ -180,7 +180,7 @@ namespace pcr
                         aName = ::comphelper::getString( xControl->getPropertyValue( PROPERTY_NAME ) );
                             // TODO: do Basic controls have a name?
                         aImage = GetImage( xControl );
-                        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(xControl.get())));
+                        OUString sId(weld::toId(xControl.get()));
                         m_xLB_Controls->append(sId, aName, aImage);
                     }
                 }
@@ -243,7 +243,7 @@ namespace pcr
 
         for (int i = 0; i < nEntryCount; ++i)
         {
-            XPropertySet* pEntry = reinterpret_cast<XPropertySet*>(m_xLB_Controls->get_id(i).toInt64());
+            XPropertySet* pEntry = weld::fromId<XPropertySet*>(m_xLB_Controls->get_id(i));
             for( auto const& rControlModel : aControlModels )
             {
                 Reference< XPropertySet >  xSet(rControlModel, UNO_QUERY);

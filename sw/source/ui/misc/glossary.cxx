@@ -722,7 +722,7 @@ void SwGlossaryDlg::Init()
         pData->bReadonly = m_pGlossaryHdl->IsReadOnly(&sGroupName);
         m_xGroupData.emplace_back(pData);
 
-        m_xCategoryBox->set_id(*xEntry, OUString::number(reinterpret_cast<sal_Int64>(pData)));
+        m_xCategoryBox->set_id(*xEntry, weld::toId(pData));
         if (sSelStr == pData->sGroupName && nSelPath == nPath)
             xSelEntry = m_xCategoryBox->make_iterator(xEntry.get());
 

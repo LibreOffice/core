@@ -62,7 +62,7 @@ void lcl_UpdateCurrentRange(weld::TreeView& rOutListBox, const OUString & rRole,
     {
         rOutListBox.set_text(nEntry, ::chart::DialogModel::ConvertRoleFromInternalToUI(rRole), 0);
         rOutListBox.set_text(nEntry, rRange, 1);
-        ::chart::SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(rOutListBox.get_id(nEntry).toInt64());
+        ::chart::SeriesEntry* pEntry = weld::fromId<::chart::SeriesEntry*>(rOutListBox.get_id(nEntry));
         pEntry->m_sRole = rRole;
     }
 }
@@ -74,7 +74,7 @@ bool lcl_UpdateCurrentSeriesName(weld::TreeView& rOutListBox)
         return false;
 
     bool bResult = false;
-    ::chart::SeriesEntry * pEntry = reinterpret_cast<::chart::SeriesEntry*>(rOutListBox.get_id(nEntry).toInt64());
+    ::chart::SeriesEntry * pEntry = weld::fromId<::chart::SeriesEntry*>(rOutListBox.get_id(nEntry));
     if (pEntry->m_xDataSeries.is() && pEntry->m_xChartType.is())
     {
         OUString aLabel(::chart::DataSeriesHelper::getDataSeriesLabel(
@@ -96,7 +96,7 @@ OUString lcl_GetSelectedRole(const weld::TreeView& rRoleListBox, bool bUITransla
     {
         if (bUITranslated)
             return rRoleListBox.get_text(nEntry);
-        ::chart::SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(rRoleListBox.get_id(nEntry).toInt64());
+        ::chart::SeriesEntry* pEntry = weld::fromId<::chart::SeriesEntry*>(rRoleListBox.get_id(nEntry));
         return pEntry->m_sRole;
     }
     return OUString();
@@ -236,7 +236,7 @@ void DataSourceTabPage::InsertRoleLBEntry(const OUString& rRole, const OUString&
     m_aEntries.emplace_back(new SeriesEntry);
     SeriesEntry* pEntry = m_aEntries.back().get();
     pEntry->m_sRole = rRole;
-    m_xLB_ROLE->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)),
+    m_xLB_ROLE->append(weld::toId(pEntry),
                        ::chart::DialogModel::ConvertRoleFromInternalToUI(rRole));
     m_xLB_ROLE->set_text(m_xLB_ROLE->n_children() - 1, rRange, 1);
 }
@@ -335,7 +335,7 @@ void DataSourceTabPage::fillSeriesListBox()
     int nEntry = m_xLB_SERIES->get_selected_index();
     if (nEntry != -1)
     {
-        pEntry = reinterpret_cast<SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
+        pEntry = weld::fromId<SeriesEntry*>(m_xLB_SERIES->get_id(nEntry));
         xSelected.set(pEntry->m_xDataSeries);
     }
 
@@ -377,7 +377,7 @@ void DataSourceTabPage::fillSeriesListBox()
         pEntry = m_aEntries.back().get();
         pEntry->m_xDataSeries.set(series.second.first);
         pEntry->m_xChartType = series.second.second;
-        m_xLB_SERIES->append(OUString::number(reinterpret_cast<sal_Int64>(pEntry)), aLabel);
+        m_xLB_SERIES->append(weld::toId(pEntry), aLabel);
         if (bHasSelectedEntry && series.second.first == xSelected)
             nSelectedEntry = nEntry;
         ++nEntry;
@@ -394,7 +394,7 @@ void DataSourceTabPage::fillRoleListBox()
     int nSeriesEntry = m_xLB_SERIES->get_selected_index();
     SeriesEntry* pSeriesEntry = nullptr;
     if (nSeriesEntry != -1)
-        pSeriesEntry = reinterpret_cast<SeriesEntry*>(m_xLB_SERIES->get_id(nSeriesEntry).toInt64());
+        pSeriesEntry = weld::fromId<SeriesEntry*>(m_xLB_SERIES->get_id(nSeriesEntry));
     bool bHasSelectedEntry = (pSeriesEntry != nullptr);
 
     int nRoleIndex = m_xLB_ROLE->get_selected_index();
@@ -569,7 +569,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, AddButtonClickedHdl, weld::Button&, void)
 
     if (nEntry != -1)
     {
-        ::chart::SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
+        ::chart::SeriesEntry* pEntry = weld::fromId<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry));
         xSeriesToInsertAfter.set(pEntry->m_xDataSeries);
         xChartTypeForNewSeries = pEntry->m_xChartType;
     }
@@ -605,13 +605,13 @@ IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl, weld::Button&, void)
     if (nEntry == -1)
         return;
 
-    SeriesEntry* pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
+    SeriesEntry* pEntry = weld::fromId<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry));
     Reference< XDataSeries > xNewSelSeries;
     SeriesEntry * pNewSelEntry = nullptr;
     if (nEntry + 1 < m_xLB_SERIES->n_children())
-        pNewSelEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry + 1).toInt64());
+        pNewSelEntry = weld::fromId<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry + 1));
     else if (nEntry > 0)
-        pNewSelEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry - 1).toInt64());
+        pNewSelEntry = weld::fromId<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(nEntry - 1));
     if (pNewSelEntry)
         xNewSelSeries.set(pNewSelEntry->m_xDataSeries);
 
@@ -626,7 +626,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, RemoveButtonClickedHdl, weld::Button&, void)
     {
         for (int i = 0; i < m_xLB_SERIES->n_children(); ++i)
         {
-            pEntry = reinterpret_cast<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(i).toInt64());
+            pEntry = weld::fromId<::chart::SeriesEntry*>(m_xLB_SERIES->get_id(i));
             if (pEntry->m_xDataSeries == xNewSelSeries)
             {
                 m_xLB_SERIES->select(i);
@@ -644,7 +644,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, UpButtonClickedHdl, weld::Button&, void)
     int nEntry = m_xLB_SERIES->get_selected_index();
     SeriesEntry* pEntry = nullptr;
     if (nEntry != -1)
-        pEntry = reinterpret_cast<SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
+        pEntry = weld::fromId<SeriesEntry*>(m_xLB_SERIES->get_id(nEntry));
 
     bool bHasSelectedEntry = (pEntry != nullptr);
 
@@ -664,7 +664,7 @@ IMPL_LINK_NOARG(DataSourceTabPage, DownButtonClickedHdl, weld::Button&, void)
     int nEntry = m_xLB_SERIES->get_selected_index();
     SeriesEntry* pEntry = nullptr;
     if (nEntry != -1)
-        pEntry = reinterpret_cast<SeriesEntry*>(m_xLB_SERIES->get_id(nEntry).toInt64());
+        pEntry = weld::fromId<SeriesEntry*>(m_xLB_SERIES->get_id(nEntry));
 
     bool bHasSelectedEntry = (pEntry != nullptr);
 
@@ -787,7 +787,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
     int nSeriesEntry = m_xLB_SERIES->get_selected_index();
     SeriesEntry* pSeriesEntry = nullptr;
     if (nSeriesEntry != -1)
-        pSeriesEntry = reinterpret_cast<SeriesEntry*>(m_xLB_SERIES->get_id(nSeriesEntry).toInt64());
+        pSeriesEntry = weld::fromId<SeriesEntry*>(m_xLB_SERIES->get_id(nSeriesEntry));
     bool bHasSelectedEntry = (pSeriesEntry != nullptr);
 
     if( bHasSelectedEntry )

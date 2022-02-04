@@ -179,7 +179,7 @@ namespace svxform
     void XFormsPage::DeleteAndClearTree()
     {
         m_xItemList->all_foreach([this](weld::TreeIter& rEntry) {
-            delete reinterpret_cast<ItemNode*>(m_xItemList->get_id(rEntry).toInt64());
+            delete weld::fromId<ItemNode*>(m_xItemList->get_id(rEntry));
             return false;
         });
         m_xItemList->clear();
@@ -272,7 +272,7 @@ namespace svxform
         if(!xDataTypes.is())
             return;
 
-        ItemNode *pItemNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*m_xScratchIter).toInt64());
+        ItemNode *pItemNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*m_xScratchIter));
         if (!pItemNode)
         {
             // the only known (and allowed?) case where this happens are sub-entries of a submission
@@ -282,7 +282,7 @@ namespace svxform
             DBG_ASSERT(bSelected && !m_xItemList->get_iter_depth(*m_xScratchIter), "DataTreeListBox::StartDrag: what kind of entry *is* this?");
                 // on the submission page, we have only top-level entries (the submission themself)
                 // plus direct children of those (facets of a submission)
-            pItemNode = bSelected ? reinterpret_cast<ItemNode*>(m_xItemList->get_id(*m_xScratchIter).toInt64()) : nullptr;
+            pItemNode = bSelected ? weld::fromId<ItemNode*>(m_xItemList->get_id(*m_xScratchIter)) : nullptr;
             if (!pItemNode)
                 return;
         }
@@ -339,7 +339,7 @@ namespace svxform
                     if ( !sName.isEmpty() )
                     {
                         ItemNode* pNode = new ItemNode( xChild );
-                        OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                        OUString sId(weld::toId(pNode));
                         std::unique_ptr<weld::TreeIter> xEntry = m_xItemList->make_iterator();
                         m_xItemList->insert(_pParent, -1, &sName, &sId, nullptr, nullptr, false, xEntry.get());
                         m_xItemList->set_image(*xEntry, aExpImg);
@@ -355,7 +355,7 @@ namespace svxform
                                 {
                                     Reference< css::xml::dom::XNode > xAttr = xMap->item(j);
                                     pNode = new ItemNode( xAttr );
-                                    OUString sSubId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                                    OUString sSubId(weld::toId(pNode));
                                     OUString sAttrName = m_xUIHelper->getNodeDisplayName( xAttr, bShowDetails );
                                     m_xItemList->insert(xEntry.get(), -1, &sAttrName, &sSubId, nullptr, nullptr, false, m_xScratchIter.get());
                                     m_xItemList->set_image(*m_xScratchIter, aExpImg);
@@ -427,7 +427,7 @@ namespace svxform
                     }
 
                     DBG_ASSERT( bEntry, "XFormsPage::DoToolBoxAction(): no entry" );
-                    ItemNode* pParentNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
+                    ItemNode* pParentNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
                     DBG_ASSERT( pParentNode, "XFormsPage::DoToolBoxAction(): no parent node" );
                     xParentNode = pParentNode->m_xNode;
                     Reference< css::xml::dom::XNode > xNewNode;
@@ -573,7 +573,7 @@ namespace svxform
                 {
                     m_xItemList->iter_parent(*xEntry);
                 }
-                ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
+                ItemNode* pNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
                 if ( DGTInstance == m_eGroup || DGTBinding == m_eGroup )
                 {
                     if ( DGTInstance == m_eGroup && !m_sInstanceURL.isEmpty() )
@@ -699,7 +699,7 @@ namespace svxform
         {
             DBG_UNHANDLED_EXCEPTION("svx");
         }
-        OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(_pNewNode.release())));
+        OUString sId(weld::toId(_pNewNode.release()));
         m_xItemList->insert(xParent.get(), -1, &sName, &sId, nullptr, nullptr, false, pRet);
         m_xItemList->set_image(*pRet, aImage);
         if (xParent && !m_xItemList->get_row_expanded(*xParent) && m_xItemList->iter_has_child(*xParent))
@@ -722,7 +722,7 @@ namespace svxform
             {
                 // ID
                 _rEntry->getPropertyValue( PN_SUBMISSION_ID ) >>= sTemp;
-                OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                OUString sId(weld::toId(pNode));
                 m_xItemList->insert(nullptr, -1, &sTemp, &sId, nullptr, nullptr, false, pRet);
                 m_xItemList->set_image(*pRet, aImage);
                 std::unique_ptr<weld::TreeIter> xRes(m_xItemList->make_iterator());
@@ -769,7 +769,7 @@ namespace svxform
                 _rEntry->getPropertyValue( PN_BINDING_EXPR ) >>= sTemp;
                 sName += sTemp;
 
-                OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                OUString sId(weld::toId(pNode));
                 m_xItemList->insert(nullptr, -1, &sName, &sId, nullptr, nullptr, false, pRet);
                 m_xItemList->set_image(*pRet, aImage);
             }
@@ -863,7 +863,7 @@ namespace svxform
         {
             Reference< css::xforms::XModel > xModel( m_xUIHelper, UNO_QUERY );
             DBG_ASSERT( xModel.is(), "XFormsPage::RemoveEntry(): no model" );
-            ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
+            ItemNode* pNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
             DBG_ASSERT( pNode, "XFormsPage::RemoveEntry(): no node" );
 
             if ( DGTInstance == m_eGroup )
@@ -887,7 +887,7 @@ namespace svxform
                         std::unique_ptr<weld::TreeIter> xParent(m_xItemList->make_iterator(xEntry.get()));
                         bool bParent = m_xItemList->iter_parent(*xParent); (void)bParent;
                         assert(bParent && "XFormsPage::RemoveEntry(): no parent entry");
-                        ItemNode* pParentNode = reinterpret_cast<ItemNode*>((m_xItemList->get_id(*xParent).toInt64()));
+                        ItemNode* pParentNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xParent));
                         DBG_ASSERT( pParentNode && pParentNode->m_xNode.is(), "XFormsPage::RemoveEntry(): no parent XNode" );
 
                         Reference< css::xml::dom::XNode > xPNode;
@@ -1084,7 +1084,7 @@ namespace svxform
 
                                     ItemNode* pNode = new ItemNode( xPropSet );
 
-                                    OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(pNode)));
+                                    OUString sId(weld::toId(pNode));
                                     m_xItemList->insert(nullptr, -1, &sEntry, &sId, nullptr, nullptr, false, xRes.get());
                                     m_xItemList->set_image(*xRes, aImage);
                                 }
@@ -1178,7 +1178,7 @@ namespace svxform
                 m_xItemList->iter_parent(*xEntry);
                 bSubmitChild = true;
             }
-            ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
+            ItemNode* pNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
             if ( pNode && ( pNode->m_xNode.is() || pNode->m_xPropSet.is() ) )
             {
                 bEnableEdit = true;
@@ -1227,7 +1227,7 @@ namespace svxform
         TranslateId pResId2 = RID_STR_DATANAV_REMOVE_ELEMENT;
         if (bEntry)
         {
-            ItemNode* pNode = reinterpret_cast<ItemNode*>(m_xItemList->get_id(*xEntry).toInt64());
+            ItemNode* pNode = weld::fromId<ItemNode*>(m_xItemList->get_id(*xEntry));
             if ( pNode && pNode->m_xNode.is() )
             {
                 try

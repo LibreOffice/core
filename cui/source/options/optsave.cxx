@@ -564,7 +564,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, weld::ComboBox&, rBox, void )
             {
                 OUString sId;
                 if (pImpl->aODFArr[nData][i])
-                    sId = OUString::number(reinterpret_cast<sal_Int64>(pImpl.get()));
+                    sId = weld::toId(pImpl.get());
                 m_xSaveAsLB->append(sId, rUIFilters[i]);
                 if (rFilters[i] == pImpl->aDefaultArr[nData])
                     sSelect = rUIFilters[i];

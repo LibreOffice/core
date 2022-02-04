@@ -345,7 +345,7 @@ LibPage::~LibPage()
         const sal_Int32 nCount = m_xBasicsBox->get_count();
         for (sal_Int32 i = 0; i < nCount; ++i)
         {
-            DocumentEntry* pEntry = reinterpret_cast<DocumentEntry*>(m_xBasicsBox->get_id(i).toInt64());
+            DocumentEntry* pEntry = weld::fromId<DocumentEntry*>(m_xBasicsBox->get_id(i));
             delete pEntry;
         }
     }
@@ -1184,13 +1184,13 @@ void LibPage::FillListBox()
 void LibPage::InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     OUString aEntryText(rDocument.getTitle(eLocation));
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(new DocumentEntry(rDocument, eLocation))));
+    OUString sId(weld::toId(new DocumentEntry(rDocument, eLocation)));
     m_xBasicsBox->append(sId,  aEntryText);
 }
 
 void LibPage::SetCurLib()
 {
-    DocumentEntry* pEntry = reinterpret_cast<DocumentEntry*>(m_xBasicsBox->get_active_id().toInt64());
+    DocumentEntry* pEntry = weld::fromId<DocumentEntry*>(m_xBasicsBox->get_active_id());
     if (!pEntry)
         return;
 

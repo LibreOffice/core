@@ -1561,7 +1561,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, SubsetChangeHdl, weld::ComboBox&, void)
     int nPos = m_xFontsSubsetLB->get_active();
     if (nPos != -1)
     {
-        const Subset* pSubset = reinterpret_cast<const Subset*>(m_xFontsSubsetLB->get_active_id().toUInt64());
+        const Subset* pSubset = weld::fromId<const Subset*>(m_xFontsSubsetLB->get_active_id());
         if (pSubset)
         {
             m_xCharsetDisplay->SelectCharacter( pSubset->GetRangeMin() );
@@ -1975,7 +1975,7 @@ void SmSymDefineDialog::SetFont(const OUString &rFontName, std::u16string_view r
     bool bFirst = true;
     for (auto & subset : m_xSubsetMap->GetSubsetMap())
     {
-        m_xFontsSubsetLB->append(OUString::number(reinterpret_cast<sal_uInt64>(&subset)), subset.GetName());
+        m_xFontsSubsetLB->append(weld::toId(&subset), subset.GetName());
         // subset must live at least as long as the selected font !!!
         if (bFirst)
             m_xFontsSubsetLB->set_active(0);

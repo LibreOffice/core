@@ -126,7 +126,7 @@ namespace
 
         for (int i = 0; i < rVersionBox.n_children(); ++i)
         {
-            aAuthors.insert(reinterpret_cast<SfxVersionInfo*>(rVersionBox.get_id(i).toInt64())->aAuthor);
+            aAuthors.insert(weld::fromId<SfxVersionInfo*>(rVersionBox.get_id(i))->aAuthor);
         }
 
         int nMaxAuthorWidth = nRest/4;
@@ -218,7 +218,7 @@ void SfxVersionDialog::Init_Impl()
     {
         SfxVersionInfo *pInfo = m_pTable->at( n );
         OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
-        m_xVersionBox->append(OUString::number(reinterpret_cast<sal_Int64>(pInfo)), aEntry);
+        m_xVersionBox->append(weld::toId(pInfo), aEntry);
         auto nLastRow = m_xVersionBox->n_children() - 1;
         m_xVersionBox->set_text(nLastRow, pInfo->aAuthor, 1);
         m_xVersionBox->set_text(nLastRow, ConvertWhiteSpaces_Impl(pInfo->aComment), 2);
@@ -331,7 +331,7 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xDeleteButton.get() && nEntry != -1)
     {
-        SfxVersionInfo* pInfo = reinterpret_cast<SfxVersionInfo*>(m_xVersionBox->get_id(nEntry).toInt64());
+        SfxVersionInfo* pInfo = weld::fromId<SfxVersionInfo*>(m_xVersionBox->get_id(nEntry));
         pObjShell->GetMedium()->RemoveVersion_Impl(pInfo->aName);
         pObjShell->SetModified();
         m_xVersionBox->freeze();
@@ -345,7 +345,7 @@ IMPL_LINK(SfxVersionDialog, ButtonHdl_Impl, weld::Button&, rButton, void)
     }
     else if (&rButton == m_xViewButton.get() && nEntry != -1)
     {
-        SfxVersionInfo* pInfo = reinterpret_cast<SfxVersionInfo*>(m_xVersionBox->get_id(nEntry).toInt64());
+        SfxVersionInfo* pInfo = weld::fromId<SfxVersionInfo*>(m_xVersionBox->get_id(nEntry));
         SfxViewVersionDialog_Impl aDlg(m_xDialog.get(), *pInfo, false);
         aDlg.run();
     }
@@ -460,7 +460,7 @@ void SfxCmisVersionsDialog::LoadVersions()
     {
         SfxVersionInfo *pInfo = m_pTable->at( n );
         OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
-        m_xVersionBox->append(OUString::number(reinterpret_cast<sal_Int64>(pInfo)), aEntry);
+        m_xVersionBox->append(weld::toId(pInfo), aEntry);
         auto nLastRow = m_xVersionBox->n_children() - 1;
         m_xVersionBox->set_text(nLastRow, pInfo->aAuthor, 1);
         m_xVersionBox->set_text(nLastRow, ConvertWhiteSpaces_Impl(pInfo->aComment), 2);

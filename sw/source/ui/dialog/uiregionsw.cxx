@@ -405,7 +405,7 @@ bool SwEditRegionDlg::CheckPasswd(weld::Toggleable* pBox)
     bool bRet = true;
 
     m_xTree->selected_foreach([this, &bRet](weld::TreeIter& rEntry){
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         if (!pRepr->GetTempPasswd().hasElements()
             && pRepr->GetSectionData().GetPassword().hasElements())
         {
@@ -463,7 +463,7 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
 
                 OUString sText(pSect->GetSectionName());
                 OUString sImage(BuildBitmap(pSect->IsProtect(),pSect->IsHidden()));
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pSectRepr)));
+                OUString sId(weld::toId(pSectRepr));
                 m_xTree->insert(nullptr, -1, &sText, &sId, nullptr, nullptr, false, xIter.get());
                 m_xTree->set_image(*xIter, sImage);
 
@@ -496,7 +496,7 @@ void SwEditRegionDlg::RecurseList(const SwSectionFormat* pFormat, const weld::Tr
 
                 OUString sText(pSect->GetSectionName());
                 OUString sImage = BuildBitmap(pSect->IsProtect(), pSect->IsHidden());
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pSectRepr)));
+                OUString sId(weld::toId(pSectRepr));
                 m_xTree->insert(pEntry, -1, &sText, &sId, nullptr, nullptr, false, xIter.get());
                 m_xTree->set_image(*xIter, sImage);
 
@@ -532,7 +532,7 @@ SwEditRegionDlg::~SwEditRegionDlg( )
     {
         do
         {
-            delete reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+            delete weld::fromId<SectRepr*>(m_xTree->get_id(*xIter));
         } while (m_xTree->iter_next(*xIter));
     }
 }
@@ -545,7 +545,7 @@ void SwEditRegionDlg::SelectSection(std::u16string_view rSectionName)
 
     do
     {
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(*xIter));
         if (pRepr->GetSectionData().GetSectionName() == rSectionName)
         {
             m_xTree->unselect_all();
@@ -595,7 +595,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
         bool bPasswdValid       = true;
 
         m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
-            SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+            SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
             SwSectionData const& rData( pRepr->GetSectionData() );
             if(bFirst)
             {
@@ -667,7 +667,7 @@ IMPL_LINK(SwEditRegionDlg, GetFirstEntryHdl, weld::TreeView&, rBox, void)
     {
         m_xCurName->set_sensitive(true);
         m_xOptionsPB->set_sensitive(true);
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(*xIter));
         SwSectionData const& rData( pRepr->GetSectionData() );
         m_xConditionED->set_text(rData.GetCondition());
         m_xHideCB->set_sensitive(true);
@@ -741,7 +741,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
     {
         do
         {
-            SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+            SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(*xIter));
             SwSectionFormat* pFormat = aOrigArray[ pRepr->GetArrPos() ];
             if (!pRepr->GetSectionData().IsProtectFlag())
             {
@@ -805,7 +805,7 @@ IMPL_LINK(SwEditRegionDlg, ChangeProtectHdl, weld::Toggleable&, rButton, void)
         return;
     bool bCheck = TRISTATE_TRUE == rButton.get_state();
     m_xTree->selected_foreach([this, bCheck](weld::TreeIter& rEntry){
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         pRepr->GetSectionData().SetProtectFlag(bCheck);
         OUString aImage = BuildBitmap(bCheck, TRISTATE_TRUE == m_xHideCB->get_state());
         m_xTree->set_image(rEntry, aImage);
@@ -821,7 +821,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeHideHdl, weld::Toggleable&, rButton, void)
     if (!CheckPasswd(&rButton))
         return;
     m_xTree->selected_foreach([this, &rButton](weld::TreeIter& rEntry){
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         pRepr->GetSectionData().SetHidden(TRISTATE_TRUE == rButton.get_state());
         OUString aImage = BuildBitmap(TRISTATE_TRUE == m_xProtectCB->get_state(),
                                       TRISTATE_TRUE == rButton.get_state());
@@ -839,7 +839,7 @@ IMPL_LINK(SwEditRegionDlg, ChangeEditInReadonlyHdl, weld::Toggleable&, rButton, 
     if (!CheckPasswd(&rButton))
         return;
     m_xTree->selected_foreach([this, &rButton](weld::TreeIter& rEntry){
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         pRepr->GetSectionData().SetEditInReadonlyFlag(
                 TRISTATE_TRUE == rButton.get_state());
         return false;
@@ -853,7 +853,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, weld::Button&, void)
         return;
     // at first mark all selected
     m_xTree->selected_foreach([this](weld::TreeIter& rEntry){
-        SectRepr* const pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* const pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         pSectRepr->SetSelected();
         return false;
     });
@@ -863,7 +863,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl, weld::Button&, void)
     // then delete
     while (bEntry)
     {
-        SectRepr* const pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xEntry).toInt64());
+        SectRepr* const pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_id(*xEntry));
         std::unique_ptr<weld::TreeIter> xRemove;
         bool bRestart = false;
         if (pSectRepr->IsSelected())
@@ -929,7 +929,7 @@ IMPL_LINK(SwEditRegionDlg, UseFileHdl, weld::Toggleable&, rButton, void)
     if (m_xTree->get_selected(nullptr))
     {
         m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
-            SectRepr* const pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+            SectRepr* const pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
             bool bContent = pSectRepr->IsContent();
             if( rButton.get_active() && bContent && rSh.HasSelection() )
             {
@@ -987,7 +987,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
 {
     if(!CheckPasswd())
         return;
-    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    SectRepr* pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_selected_id());
     if (!pSectRepr)
         return;
 
@@ -1056,7 +1056,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl, weld::Button&, void)
         return;
 
     m_xTree->selected_foreach([&](weld::TreeIter& rEntry){
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         if( SfxItemState::SET == eColState )
             pRepr->GetCol() = *static_cast<const SwFormatCol*>(pColItem);
         if( SfxItemState::SET == eBrushState )
@@ -1082,7 +1082,7 @@ IMPL_LINK(SwEditRegionDlg, FileNameComboBoxHdl, weld::ComboBox&, rEdit, void)
     if (!CheckPasswd())
         return;
     rEdit.select_entry_region(nStartPos, nEndPos);
-    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    SectRepr* pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_selected_id());
     pSectRepr->SetSubRegion( rEdit.get_active_text() );
 }
 
@@ -1094,7 +1094,7 @@ IMPL_LINK(SwEditRegionDlg, FileNameEntryHdl, weld::Entry&, rEdit, void)
     if (!CheckPasswd())
         return;
     rEdit.select_region(nStartPos, nEndPos);
-    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    SectRepr* pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_selected_id());
     m_xSubRegionED->clear();
     m_xSubRegionED->append_text(""); // put in a dummy entry, which is replaced when m_bSubRegionsFilled is set
     m_bSubRegionsFilled = false;
@@ -1132,7 +1132,7 @@ IMPL_LINK(SwEditRegionDlg, DDEHdl, weld::Toggleable&, rButton, void)
 {
     if (!CheckPasswd(&rButton))
         return;
-    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    SectRepr* pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_selected_id());
     if (!pSectRepr)
         return;
 
@@ -1187,7 +1187,7 @@ void SwEditRegionDlg::ChangePasswd(bool bChange)
     bool bSet = bChange ? bChange : m_xPasswdCB->get_active();
 
     m_xTree->selected_foreach([this, bChange, bSet](weld::TreeIter& rEntry){
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         if(bSet)
         {
             if(!pRepr->GetTempPasswd().hasElements() || bChange)
@@ -1249,7 +1249,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl, weld::Entry&, void)
     {
         const OUString aName = m_xCurName->get_text();
         m_xTree->set_text(*xIter, aName);
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(*xIter).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(*xIter));
         pRepr->GetSectionData().SetSectionName(aName);
 
         m_xOK->set_sensitive(!aName.isEmpty());
@@ -1265,7 +1265,7 @@ IMPL_LINK( SwEditRegionDlg, ConditionEditHdl, weld::Entry&, rEdit, void )
     rEdit.select_region(nStartPos, nEndPos);
 
     m_xTree->selected_foreach([this, &rEdit](weld::TreeIter& rEntry){
-        SectRepr* pRepr = reinterpret_cast<SectRepr*>(m_xTree->get_id(rEntry).toInt64());
+        SectRepr* pRepr = weld::fromId<SectRepr*>(m_xTree->get_id(rEntry));
         pRepr->GetSectionData().SetCondition(rEdit.get_text());
         return false;
     });
@@ -1288,7 +1288,7 @@ IMPL_LINK( SwEditRegionDlg, DlgClosedHdl, sfx2::FileDialogHelper *, _pFileDlg, v
         }
     }
 
-    SectRepr* pSectRepr = reinterpret_cast<SectRepr*>(m_xTree->get_selected_id().toInt64());
+    SectRepr* pSectRepr = weld::fromId<SectRepr*>(m_xTree->get_selected_id());
     if (pSectRepr)
     {
         pSectRepr->SetFile( sFileName );

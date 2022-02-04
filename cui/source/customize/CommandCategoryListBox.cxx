@@ -134,9 +134,8 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
             // Add the category of "All commands"
             m_aGroupInfo.push_back(
                 std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_ALLFUNCTIONS, 0));
-            m_xControl->append(
-                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                CuiResId(RID_CUISTR_ALLFUNCTIONS));
+            m_xControl->append(weld::toId(m_aGroupInfo.back().get()),
+                               CuiResId(RID_CUISTR_ALLFUNCTIONS));
         }
 
         // Separate the "All commands"category from the actual categories
@@ -181,9 +180,7 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
             sal_Int16 nGroupID = a.second;
             m_aGroupInfo.push_back(
                 std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_FUNCTION, nGroupID));
-            m_xControl->append(
-                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                rGroupName);
+            m_xControl->append(weld::toId(m_aGroupInfo.back().get()), rGroupName);
         }
 
         // Separate regular commands from styles and macros
@@ -192,14 +189,13 @@ void CommandCategoryListBox::Init(const css::uno::Reference<css::uno::XComponent
         // Add macros category
         m_aGroupInfo.push_back(
             std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, nullptr));
-        m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                           CuiResId(RID_CUISTR_MACROS));
+        m_xControl->append(weld::toId(m_aGroupInfo.back().get()), CuiResId(RID_CUISTR_MACROS));
 
         // Add styles category
         //TODO: last param should contain user data?
         m_aGroupInfo.push_back(
             std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0, nullptr));
-        m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
+        m_xControl->append(weld::toId(m_aGroupInfo.back().get()),
                            CuiResId(RID_CUISTR_GROUP_STYLES));
     }
     catch (const css::uno::RuntimeException&)
@@ -260,9 +256,7 @@ void CommandCategoryListBox::FillFunctionsList(
         pGrpInfo->sCommand = rInfo.Command;
         pGrpInfo->sLabel = sUIName;
         pGrpInfo->sTooltip = sTooltipLabel;
-        pFunctionListBox->append(
-            OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName,
-            xImage);
+        pFunctionListBox->append(weld::toId(m_aGroupInfo.back().get()), sUIName, xImage);
     }
 }
 
@@ -301,8 +295,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                                               const OUString& filterTerm,
                                               SaveInData* pCurrentSaveInData)
 {
-    SfxGroupInfo_Impl* pInfo
-        = reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_active_id().toInt64());
+    SfxGroupInfo_Impl* pInfo = weld::fromId<SfxGroupInfo_Impl*>(m_xControl->get_active_id());
     std::vector<std::unique_ptr<weld::TreeIter>> aNodesToExpand;
     pFunctionListBox->freeze();
     pFunctionListBox->ClearAll();
@@ -318,7 +311,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
             for (sal_Int32 nCurPos = 0; nCurPos < nEntryCount; ++nCurPos)
             {
                 SfxGroupInfo_Impl* pCurrentInfo
-                    = reinterpret_cast<SfxGroupInfo_Impl*>(m_xControl->get_id(nCurPos).toInt64());
+                    = weld::fromId<SfxGroupInfo_Impl*>(m_xControl->get_id(nCurPos));
 
                 if (!pCurrentInfo) //separator
                     continue;
@@ -411,9 +404,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                         m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
                             SfxCfgKind::GROUP_SCRIPTCONTAINER, 0));
                         std::unique_ptr<weld::TreeIter> xMacroGroup(pFunctionListBox->tree_append(
-                            OUString::number(
-                                reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                            sUIName));
+                            weld::toId(m_aGroupInfo.back().get()), sUIName));
 
                         {
                             // tdf#128010: Do not nag user asking to enable JRE: if it's disabled,
@@ -455,8 +446,7 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                     std::make_unique<SfxGroupInfo_Impl>(SfxCfgKind::GROUP_STYLES, 0));
                 // pIt.sLabel is Name of the style family
                 std::unique_ptr<weld::TreeIter> xFuncEntry(pFunctionListBox->tree_append(
-                    OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                    pIt.sLabel));
+                    weld::toId(m_aGroupInfo.back().get()), pIt.sLabel));
 
                 const std::vector<SfxStyleInfo_Impl> lStyles = pStylesInfo->getStyles(pIt.sFamily);
 
@@ -486,9 +476,8 @@ void CommandCategoryListBox::categorySelected(CuiConfigFunctionListBox* pFunctio
                     m_aGroupInfo.back()->sCommand = pStyle->sCommand;
                     m_aGroupInfo.back()->sLabel = pStyle->sLabel;
 
-                    pFunctionListBox->append(
-                        OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())),
-                        sUIName, xFuncEntry.get());
+                    pFunctionListBox->append(weld::toId(m_aGroupInfo.back().get()), sUIName,
+                                             xFuncEntry.get());
                 }
 
                 // Remove the style group from the list if no children
@@ -547,8 +536,7 @@ void CommandCategoryListBox::addChildren(
             m_aGroupInfo.push_back(std::make_unique<SfxGroupInfo_Impl>(
                 SfxCfgKind::GROUP_SCRIPTCONTAINER, 0, static_cast<void*>(child.get())));
             std::unique_ptr<weld::TreeIter> xNewEntry(pFunctionListBox->tree_append(
-                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName,
-                parentEntry));
+                weld::toId(m_aGroupInfo.back().get()), sUIName, parentEntry));
 
             addChildren(xNewEntry.get(), child, pFunctionListBox, filterTerm, pCurrentSaveInData,
                         rNodesToExpand);
@@ -610,9 +598,8 @@ void CommandCategoryListBox::addChildren(
             m_aGroupInfo.back()->sCommand = uri;
             m_aGroupInfo.back()->sLabel = sUIName;
             m_aGroupInfo.back()->sHelpText = description;
-            pFunctionListBox->append(
-                OUString::number(reinterpret_cast<sal_Int64>(m_aGroupInfo.back().get())), sUIName,
-                xImage, parentEntry);
+            pFunctionListBox->append(weld::toId(m_aGroupInfo.back().get()), sUIName, xImage,
+                                     parentEntry);
         }
     }
 }

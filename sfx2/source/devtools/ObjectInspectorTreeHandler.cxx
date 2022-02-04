@@ -351,7 +351,7 @@ OUString lclAppendNode(const std::unique_ptr<weld::TreeView>& pTree,
                        ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    OUString sId(weld::toId(pEntry));
     std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
     pTree->insert(nullptr, -1, &sName, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
                   pCurrent.get());
@@ -370,7 +370,7 @@ OUString lclAppendNodeToParent(const std::unique_ptr<weld::TreeView>& pTree,
                                const weld::TreeIter* pParent, ObjectInspectorNodeInterface* pEntry)
 {
     OUString sName = pEntry->getObjectName();
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    OUString sId(weld::toId(pEntry));
     std::unique_ptr<weld::TreeIter> pCurrent = pTree->make_iterator();
     pTree->insert(pParent, -1, &sName, &sId, nullptr, nullptr, pEntry->shouldShowExpander(),
                   pCurrent.get());
@@ -902,7 +902,7 @@ ObjectInspectorNodeInterface* getSelectedNode(weld::TreeView const& rTreeView)
     if (sID.isEmpty())
         return nullptr;
 
-    if (auto* pNode = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64()))
+    if (auto* pNode = weld::fromId<ObjectInspectorNodeInterface*>(sID))
         return pNode;
 
     return nullptr;
@@ -1000,7 +1000,7 @@ void ObjectInspectorTreeHandler::handleExpanding(std::unique_ptr<weld::TreeView>
         return;
 
     clearObjectInspectorChildren(pTreeView, rParent);
-    auto* pNode = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
+    auto* pNode = weld::fromId<ObjectInspectorNodeInterface*>(sID);
     pNode->fillChildren(pTreeView, &rParent);
 }
 
@@ -1206,7 +1206,7 @@ void ObjectInspectorTreeHandler::clearObjectInspectorChildren(
             {
                 clearObjectInspectorChildren(pTreeView, *pChild);
                 OUString sID = pTreeView->get_id(*pChild);
-                auto* pEntry = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
+                auto* pEntry = weld::fromId<ObjectInspectorNodeInterface*>(sID);
                 delete pEntry;
                 pTreeView->remove(*pChild);
             }
@@ -1220,7 +1220,7 @@ void ObjectInspectorTreeHandler::clearAll(std::unique_ptr<weld::TreeView>& pTree
     // destroy all ObjectInspectorNodes from the tree
     pTreeView->all_foreach([&pTreeView](weld::TreeIter& rEntry) {
         OUString sID = pTreeView->get_id(rEntry);
-        auto* pEntry = reinterpret_cast<ObjectInspectorNodeInterface*>(sID.toInt64());
+        auto* pEntry = weld::fromId<ObjectInspectorNodeInterface*>(sID);
         delete pEntry;
         return false;
     });

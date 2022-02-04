@@ -42,7 +42,7 @@ ScOrcusXMLTreeParam::EntryData& setUserDataToEntry(weld::TreeView& rControl,
     const weld::TreeIter& rEntry, ScOrcusXMLTreeParam::UserDataStoreType& rStore, ScOrcusXMLTreeParam::EntryType eType)
 {
     rStore.push_back(std::make_unique<ScOrcusXMLTreeParam::EntryData>(eType));
-    rControl.set_id(rEntry, OUString::number(reinterpret_cast<sal_Int64>(rStore.back().get())));
+    rControl.set_id(rEntry, weld::toId(rStore.back().get()));
     return *rStore.back();
 }
 

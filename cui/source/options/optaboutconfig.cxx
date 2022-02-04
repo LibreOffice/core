@@ -207,7 +207,7 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rPropertyPath, const OUS
     m_vectorUserData.push_back(std::make_unique<UserData>(rPropertyPath));
     if (bInsertToPrefBox)
     {
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_vectorUserData.back().get())));
+        OUString sId(weld::toId(m_vectorUserData.back().get()));
         m_xPrefBox->insert(pParentEntry, -1, &rProp, &sId, nullptr, nullptr, false, m_xScratchIter.get());
         m_xPrefBox->set_text(*m_xScratchIter, rStatus, 1);
         m_xPrefBox->set_text(*m_xScratchIter, rType, 2);
@@ -289,7 +289,7 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
             {
                 // not leaf node
                 m_vectorUserData.push_back(std::make_unique<UserData>(xNextNameAccess, lineage + 1));
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(m_vectorUserData.back().get())));
+                OUString sId(weld::toId(m_vectorUserData.back().get()));
 
                 m_xPrefBox->insert(pParentEntry, -1, &item, &sId, nullptr, nullptr, true, m_xScratchIter.get());
                 // Necessary, without this the selection line will be truncated.
@@ -573,7 +573,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
     if (!m_xPrefBox->get_selected(m_xScratchIter.get()))
         return;
 
-    UserData *pUserData = reinterpret_cast<UserData*>(m_xPrefBox->get_id(*m_xScratchIter).toInt64());
+    UserData *pUserData = weld::fromId<UserData*>(m_xPrefBox->get_id(*m_xScratchIter));
     if (!(pUserData && pUserData->bIsPropertyPath))
         return;
 
@@ -856,7 +856,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
         // deal with no parent case (tdf#107811)
         if (index < 0)
         {
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rEntry.pUserData)));
+            OUString sId(weld::toId(rEntry.pUserData));
             m_xPrefBox->insert(nullptr, -1, &rEntry.sProp, &sId, nullptr, nullptr, false, m_xScratchIter.get());
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sStatus, 1);
             m_xPrefBox->set_text(*m_xScratchIter, rEntry.sType, 2);
@@ -900,7 +900,7 @@ void CuiAboutConfigTabPage::InsertEntry(const prefBoxEntry& rEntry)
         xGrandParentEntry = m_xPrefBox->make_iterator(xParentEntry.get());
     } while(index < sPath.getLength() - 1);
 
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rEntry.pUserData)));
+    OUString sId(weld::toId(rEntry.pUserData));
     m_xPrefBox->insert(xParentEntry.get(), -1, &rEntry.sProp, &sId, nullptr, nullptr, false, m_xScratchIter.get());
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sStatus, 1);
     m_xPrefBox->set_text(*m_xScratchIter, rEntry.sType, 2);
@@ -911,7 +911,7 @@ IMPL_LINK(CuiAboutConfigTabPage, ExpandingHdl_Impl, const weld::TreeIter&, rEntr
 {
     if (m_xPrefBox->iter_has_child(rEntry))
         return true;
-    UserData *pUserData = reinterpret_cast<UserData*>(m_xPrefBox->get_id(rEntry).toInt64());
+    UserData *pUserData = weld::fromId<UserData*>(m_xPrefBox->get_id(rEntry));
     if (pUserData && !pUserData->bIsPropertyPath)
     {
         assert(pUserData->aXNameAccess.is());

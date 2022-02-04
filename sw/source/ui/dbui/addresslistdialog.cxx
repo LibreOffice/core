@@ -179,7 +179,7 @@ SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent)
         m_xListLB->set_text(*m_xIter, rName, 0);
         m_aUserData.emplace_back(new AddressUserData_Impl);
         AddressUserData_Impl* pUserData = m_aUserData.back().get();
-        m_xListLB->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
+        m_xListLB->set_id(*m_xIter, weld::toId(pUserData));
         if (rName == rCurrentData.sDataSource)
         {
             m_xListLB->select(*m_xIter);
@@ -236,7 +236,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, weld::Button&, void)
     if (sCommand.isEmpty())
         return;
 
-    AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+    AddressUserData_Impl* pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
     if (!pUserData->xConnection.is() )
         return;
 
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl, weld::Button&, void)
         m_xListLB->set_text(*m_xIter, sNewSource, 0);
         m_aUserData.emplace_back(new AddressUserData_Impl);
         AddressUserData_Impl* pUserData = m_aUserData.back().get();
-        m_xListLB->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
+        m_xListLB->set_id(*m_xIter, weld::toId(pUserData));
         m_xListLB->select(*m_xIter);
         ListBoxSelectHdl_Impl(*m_xListLB);
         m_xRemovePB->set_sensitive(true);
@@ -386,7 +386,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
         m_xListLB->set_text(*m_xIter, aFilters[0], 1);
         m_aUserData.emplace_back(new AddressUserData_Impl);
         AddressUserData_Impl* pUserData = m_aUserData.back().get();
-        m_xListLB->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pUserData)));
+        m_xListLB->set_id(*m_xIter, weld::toId(pUserData));
         m_xListLB->select(*m_xIter);
         ListBoxSelectHdl_Impl(*m_xListLB);
         m_xCreateListPB->set_sensitive(false);
@@ -400,7 +400,7 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
 IMPL_LINK_NOARG(SwAddressListDialog, EditHdl_Impl, weld::Button&, void)
 {
     int nEntry = m_xListLB->get_selected_index();
-    AddressUserData_Impl* pUserData = nEntry != -1 ? reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nEntry).toInt64()) : nullptr;
+    AddressUserData_Impl* pUserData = nEntry != -1 ? weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nEntry)) : nullptr;
     if (!pUserData || pUserData->sURL.isEmpty())
         return;
 
@@ -446,7 +446,7 @@ IMPL_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, void*, p, void)
             m_xListLB->set_text(nSelect, m_sConnecting, 1);
         }
 
-        pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+        pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
         if(pUserData->nTableAndQueryCount > 1 || pUserData->nTableAndQueryCount == -1)
         {
             DetectTablesAndQueries(nSelect, sTable.isEmpty());
@@ -476,7 +476,7 @@ void SwAddressListDialog::DetectTablesAndQueries(
 {
     try
     {
-        AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+        AddressUserData_Impl* pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
         uno::Reference<XCompletedConnection> xComplConnection;
         if(!pUserData->xConnection.is())
         {
@@ -577,7 +577,7 @@ void SwAddressListDialog::TableSelectHdl(const weld::Button* pButton)
     int nSelect = m_xListLB->get_selected_index();
     if (nSelect != -1)
     {
-        AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+        AddressUserData_Impl* pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
         //only call the table select dialog if tables have not been searched for or there
         //are more than 1
         const OUString sTable = m_xListLB->get_text(nSelect, 1);
@@ -599,7 +599,7 @@ uno::Reference< XDataSource>  SwAddressListDialog::GetSource() const
     int nSelect = m_xListLB->get_selected_index();
     if (nSelect != -1)
     {
-        AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+        AddressUserData_Impl* pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
         xRet = pUserData->xSource;
     }
     return xRet;
@@ -612,7 +612,7 @@ SharedConnection    SwAddressListDialog::GetConnection() const
     int nSelect = m_xListLB->get_selected_index();
     if (nSelect != -1)
     {
-        AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+        AddressUserData_Impl* pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
         xRet = pUserData->xConnection;
     }
     return xRet;
@@ -624,7 +624,7 @@ uno::Reference< XColumnsSupplier> SwAddressListDialog::GetColumnsSupplier() cons
     int nSelect = m_xListLB->get_selected_index();
     if (nSelect != -1)
     {
-        AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+        AddressUserData_Impl* pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
         xRet = pUserData->xColumnsSupplier;
     }
     return xRet;
@@ -635,7 +635,7 @@ OUString SwAddressListDialog::GetFilter() const
     int nSelect = m_xListLB->get_selected_index();
     if (nSelect != -1)
     {
-        AddressUserData_Impl* pUserData = reinterpret_cast<AddressUserData_Impl*>(m_xListLB->get_id(nSelect).toInt64());
+        AddressUserData_Impl* pUserData = weld::fromId<AddressUserData_Impl*>(m_xListLB->get_id(nSelect));
         return pUserData->sFilter;
     }
     return OUString();

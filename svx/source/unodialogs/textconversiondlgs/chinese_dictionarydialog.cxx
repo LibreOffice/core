@@ -147,7 +147,7 @@ void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
         m_xControl->set_text(*m_xIter, pEntry->m_aTerm, 0);
         m_xControl->set_text(*m_xIter, pEntry->m_aMapping, 1);
         m_xControl->set_text(*m_xIter, getPropertyTypeName(pEntry->m_nConversionPropertyType), 2);
-        m_xControl->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+        m_xControl->set_id(*m_xIter, weld::toId(pEntry));
     }
 }
 
@@ -163,7 +163,7 @@ DictionaryEntry* DictionaryList::getFirstSelectedEntry() const
 DictionaryEntry* DictionaryList::getEntryOnPos(sal_Int32 nPos) const
 {
     OUString sLBEntry = m_xControl->get_id(nPos);
-    return reinterpret_cast<DictionaryEntry*>(sLBEntry.toInt64());
+    return weld::fromId<DictionaryEntry*>(sLBEntry);
 }
 
 DictionaryEntry* DictionaryList::getTermEntry( std::u16string_view rTerm ) const
@@ -194,7 +194,7 @@ void DictionaryList::addEntry(const OUString& rTerm, const OUString& rMapping,
     m_xControl->set_text(*m_xIter, pEntry->m_aTerm, 0);
     m_xControl->set_text(*m_xIter, pEntry->m_aMapping, 1);
     m_xControl->set_text(*m_xIter, getPropertyTypeName(pEntry->m_nConversionPropertyType), 2);
-    m_xControl->set_id(*m_xIter, OUString::number(reinterpret_cast<sal_Int64>(pEntry)));
+    m_xControl->set_id(*m_xIter, weld::toId(pEntry));
     m_xControl->select(*m_xIter);
 }
 

@@ -120,7 +120,7 @@ DbRegistrationOptionsPage::DbRegistrationOptionsPage(weld::Container* pPage, wel
 DbRegistrationOptionsPage::~DbRegistrationOptionsPage()
 {
     for (int i = 0, nCount = m_xPathBox->n_children(); i < nCount; ++i )
-        delete reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(i).toInt64());
+        delete weld::fromId<DatabaseRegistration*>(m_xPathBox->get_id(i));
 }
 
 std::unique_ptr<SfxTabPage> DbRegistrationOptionsPage::Create( weld::Container* pPage, weld::DialogController* pController,
@@ -137,7 +137,7 @@ bool DbRegistrationOptionsPage::FillItemSet( SfxItemSet* rCoreSet )
     int nCount = m_xPathBox->n_children();
     for (int i = 0; i < nCount; ++i)
     {
-        DatabaseRegistration* pRegistration = reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(i).toInt64());
+        DatabaseRegistration* pRegistration = weld::fromId<DatabaseRegistration*>(m_xPathBox->get_id(i));
         if ( pRegistration && !pRegistration->sLocation.isEmpty() )
         {
             OUString sName(m_xPathBox->get_text(i, 0));
@@ -225,7 +225,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, EditHdl, weld::Button&, void)
     if (nEntry == -1)
         return;
 
-    DatabaseRegistration* pOldRegistration = reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(nEntry).toInt64());
+    DatabaseRegistration* pOldRegistration = weld::fromId<DatabaseRegistration*>(m_xPathBox->get_id(nEntry));
     if (!pOldRegistration || pOldRegistration->bReadOnly)
         return;
 
@@ -250,7 +250,7 @@ IMPL_LINK( DbRegistrationOptionsPage, HeaderSelect_Impl, int, nCol, void )
 
 IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl, weld::TreeView&, void)
 {
-    DatabaseRegistration* pRegistration = reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_selected_id().toInt64());
+    DatabaseRegistration* pRegistration = weld::fromId<DatabaseRegistration*>(m_xPathBox->get_selected_id());
 
     bool bReadOnly = true;
     if (pRegistration)
@@ -264,7 +264,7 @@ IMPL_LINK_NOARG(DbRegistrationOptionsPage, PathSelect_Impl, weld::TreeView&, voi
 
 void DbRegistrationOptionsPage::insertNewEntry(const OUString& _sName,const OUString& _sLocation, const bool _bReadOnly)
 {
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(new DatabaseRegistration(_sLocation, _bReadOnly))));
+    OUString sId(weld::toId(new DatabaseRegistration(_sLocation, _bReadOnly)));
     m_xPathBox->insert(nullptr, -1, &_sName, &sId, nullptr, nullptr, false, m_xIter.get());
 
     if (_bReadOnly)
@@ -289,7 +289,7 @@ void DbRegistrationOptionsPage::openLinkDialog(const OUString& sOldName, const O
     {
         if (nEntry != -1)
         {
-            delete reinterpret_cast<DatabaseRegistration*>(m_xPathBox->get_id(nEntry).toInt64());
+            delete weld::fromId<DatabaseRegistration*>(m_xPathBox->get_id(nEntry));
             m_xPathBox->remove(nEntry);
         }
         insertNewEntry( sNewName, sNewLocation, false );

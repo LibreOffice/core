@@ -225,7 +225,7 @@ void ContentTabPage_Impl::InitRoot()
         bool bIsFolder = ( '1' == cFolder );
         OUString sId;
         if (bIsFolder)
-            sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aURL, true)));
+            sId = weld::toId(new ContentEntry_Impl(aURL, true));
         m_xContentBox->insert(nullptr, -1, &aTitle, &sId, nullptr, nullptr, true, m_xScratchIter.get());
         m_xContentBox->set_image(*m_xScratchIter, aClosedBookImage);
     }
@@ -238,7 +238,7 @@ void ContentTabPage_Impl::ClearChildren(const weld::TreeIter* pParent)
     while (bEntry)
     {
         ClearChildren(xEntry.get());
-        delete reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(*xEntry).toInt64());
+        delete weld::fromId<ContentEntry_Impl*>(m_xContentBox->get_id(*xEntry));
         bEntry = m_xContentBox->iter_next_sibling(*xEntry);
     }
 
@@ -246,7 +246,7 @@ void ContentTabPage_Impl::ClearChildren(const weld::TreeIter* pParent)
 
 IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 {
-    ContentEntry_Impl* pContentEntry = reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(rIter).toInt64());
+    ContentEntry_Impl* pContentEntry = weld::fromId<ContentEntry_Impl*>(m_xContentBox->get_id(rIter));
     if (!m_xContentBox->iter_has_child(rIter))
     {
         try
@@ -264,7 +264,7 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
                     bool bIsFolder = ( '1' == cFolder );
                     if ( bIsFolder )
                     {
-                        OUString sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aURL, true)));
+                        OUString sId = weld::toId(new ContentEntry_Impl(aURL, true));
                         m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, true, m_xScratchIter.get());
                         m_xContentBox->set_image(*m_xScratchIter, aClosedBookImage);
                     }
@@ -274,7 +274,7 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
                         OUString sId;
                         OUString aTargetURL;
                         if ( aAny >>= aTargetURL )
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new ContentEntry_Impl(aTargetURL, false)));
+                            sId = weld::toId(new ContentEntry_Impl(aTargetURL, false));
                         m_xContentBox->insert(&rIter, -1, &aTitle, &sId, nullptr, nullptr, false, m_xScratchIter.get());
                         m_xContentBox->set_image(*m_xScratchIter, aDocumentImage);
                     }
@@ -295,7 +295,7 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
 
 IMPL_LINK(ContentTabPage_Impl, CollapsingHdl, const weld::TreeIter&, rIter, bool)
 {
-    ContentEntry_Impl* pContentEntry = reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(rIter).toInt64());
+    ContentEntry_Impl* pContentEntry = weld::fromId<ContentEntry_Impl*>(m_xContentBox->get_id(rIter));
     if (!pContentEntry || pContentEntry->bIsFolder)
         m_xContentBox->set_image(rIter, aClosedBookImage);
 
@@ -305,7 +305,7 @@ IMPL_LINK(ContentTabPage_Impl, CollapsingHdl, const weld::TreeIter&, rIter, bool
 OUString ContentTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
-    ContentEntry_Impl* pEntry = reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_selected_id().toInt64());
+    ContentEntry_Impl* pEntry = weld::fromId<ContentEntry_Impl*>(m_xContentBox->get_selected_id());
     if (pEntry && !pEntry->bIsFolder)
         aRet = pEntry->aURL;
     return aRet;
@@ -360,7 +360,7 @@ ContentTabPage_Impl::~ContentTabPage_Impl()
     while (bEntry)
     {
         ClearChildren(xEntry.get());
-        delete reinterpret_cast<ContentEntry_Impl*>(m_xContentBox->get_id(*xEntry).toInt64());
+        delete weld::fromId<ContentEntry_Impl*>(m_xContentBox->get_id(*xEntry));
         bEntry = m_xContentBox->iter_next_sibling(*xEntry);
     }
 }
@@ -373,11 +373,11 @@ void IndexTabPage_Impl::SelectExecutableEntry()
 
     sal_Int32 nOldPos = nPos;
     OUString aEntryText;
-    IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(m_xIndexList->get_id(nPos).toInt64());
+    IndexEntry_Impl* pEntry = weld::fromId<IndexEntry_Impl*>(m_xIndexList->get_id(nPos));
     sal_Int32 nCount = m_xIndexList->n_children();
     while ( nPos < nCount && ( !pEntry || pEntry->m_aURL.isEmpty() ) )
     {
-        pEntry = reinterpret_cast<IndexEntry_Impl*>(m_xIndexList->get_id(++nPos).toInt64());
+        pEntry = weld::fromId<IndexEntry_Impl*>(m_xIndexList->get_id(++nPos));
         aEntryText = m_xIndexList->get_text(nPos);
     }
 
@@ -445,7 +445,7 @@ IMPL_LINK(IndexTabPage_Impl, CustomRenderHdl, weld::TreeView::render_args, aPayl
     int nIndex = m_xIndexList->find_id(rId);
     OUString aEntry(m_xIndexList->get_text(nIndex));
 
-    IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(rId.toInt64());
+    IndexEntry_Impl* pEntry = weld::fromId<IndexEntry_Impl*>(rId);
     if (pEntry && pEntry->m_bSubEntry)
     {
         // indent sub entries
@@ -609,7 +609,7 @@ void IndexTabPage_Impl::InitializeIndex()
                         {
                             aIndex = aTempString;
                             it = aInfo.emplace(aTempString, 0).first;
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(OUString(), false)));
+                            sId = weld::toId(new IndexEntry_Impl(OUString(), false));
                             if ( (tmp = it->second++) != 0)
                                 m_xIndexList->append(
                                     sId, aTempString + std::u16string_view(append, tmp));
@@ -630,10 +630,10 @@ void IndexTabPage_Impl::InitializeIndex()
                         if ( aAnchorList[0].getLength() > 0 )
                         {
                             aData.append( aRefList[0] ).append( '#' ).append( aAnchorList[0] );
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData.makeStringAndClear(), insert)));
+                            sId = weld::toId(new IndexEntry_Impl(aData.makeStringAndClear(), insert));
                         }
                         else
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aRefList[0], insert)));
+                            sId = weld::toId(new IndexEntry_Impl(aRefList[0], insert));
                     }
 
                     // Assume the token is trimmed
@@ -657,10 +657,10 @@ void IndexTabPage_Impl::InitializeIndex()
                         if ( aAnchorList[j].getLength() > 0 )
                         {
                             aData.append( aRefList[j] ).append( '#' ).append( aAnchorList[j] );
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aData.makeStringAndClear(), insert)));
+                            sId = weld::toId(new IndexEntry_Impl(aData.makeStringAndClear(), insert));
                         }
                         else
-                            sId = OUString::number(reinterpret_cast<sal_Int64>(new IndexEntry_Impl(aRefList[j], insert)));
+                            sId = weld::toId(new IndexEntry_Impl(aRefList[j], insert));
 
                         it = aInfo.emplace(aTempString, 0).first;
                         if ( (tmp = it->second++) != 0 )
@@ -688,7 +688,7 @@ void IndexTabPage_Impl::ClearIndex()
 {
     const sal_Int32 nCount = m_xIndexList->n_children();
     for ( sal_Int32 i = 0; i < nCount; ++i )
-        delete reinterpret_cast<IndexEntry_Impl*>(m_xIndexList->get_id(i).toInt64());
+        delete weld::fromId<IndexEntry_Impl*>(m_xIndexList->get_id(i));
     m_xIndexList->clear();
 }
 
@@ -821,7 +821,7 @@ void IndexTabPage_Impl::SetFactory( const OUString& rFactory )
 OUString IndexTabPage_Impl::GetSelectedEntry() const
 {
     OUString aRet;
-    IndexEntry_Impl* pEntry = reinterpret_cast<IndexEntry_Impl*>(m_xIndexList->get_id(m_xIndexList->find_text(m_xIndexEntry->get_text())).toInt64());
+    IndexEntry_Impl* pEntry = weld::fromId<IndexEntry_Impl*>(m_xIndexList->get_id(m_xIndexList->find_text(m_xIndexEntry->get_text())));
     if (pEntry)
         aRet = pEntry->m_aURL;
     return aRet;

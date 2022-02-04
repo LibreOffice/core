@@ -1021,7 +1021,7 @@ SvxConfigPage::~SvxConfigPage()
     int cnt = m_xSaveInListBox->get_count();
     for(int i=0; i < cnt; ++i)
     {
-        SaveInData *pData = reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
+        SaveInData *pData = weld::fromId<SaveInData*>(m_xSaveInListBox->get_id(i));
         delete pData;
     }
 }
@@ -1073,7 +1073,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
 
         if ( pModuleData != nullptr )
         {
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pModuleData)));
+            OUString sId(weld::toId(pModuleData));
             m_xSaveInListBox->append(sId, utl::ConfigManager::getProductName() + " " + aModuleName);
         }
 
@@ -1104,7 +1104,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
 
             if ( !pDocData->IsReadOnly() )
             {
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pDocData)));
+                OUString sId(weld::toId(pDocData));
                 m_xSaveInListBox->append(sId, aTitle);
             }
         }
@@ -1213,7 +1213,7 @@ void SvxConfigPage::Reset( const SfxItemSet* )
 
                             if ( pData && !pData->IsReadOnly() )
                             {
-                                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
+                                OUString sId(weld::toId(pData));
                                 m_xSaveInListBox->append(sId, aTitle2);
                             }
                         }
@@ -1283,7 +1283,7 @@ OUString SvxConfigPage::GetScriptURL() const
 {
     OUString result;
 
-    SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xFunctions->get_selected_id().toInt64());
+    SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xFunctions->get_selected_id());
     if (pData)
     {
         if  (   ( pData->nKind == SfxCfgKind::FUNCTION_SLOT ) ||
@@ -1311,7 +1311,7 @@ bool SvxConfigPage::FillItemSet( SfxItemSet* )
         OUString sId = m_xSaveInListBox->get_id(i);
         if (sId != notebookbarTabScope)
         {
-            SaveInData* pData = reinterpret_cast<SaveInData*>(sId.toInt64());
+            SaveInData* pData = weld::fromId<SaveInData*>(sId);
             result = pData->Apply();
         }
     }
@@ -1322,7 +1322,7 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectSaveInLocation, weld::ComboBox&, void)
 {
     OUString sId = m_xSaveInListBox->get_active_id();
     if (sId != notebookbarTabScope)
-        pCurrentSaveInData = reinterpret_cast<SaveInData*>(sId.toInt64());
+        pCurrentSaveInData = weld::fromId<SaveInData*>(sId);
     Init();
 }
 
@@ -1335,7 +1335,7 @@ void SvxConfigPage::ReloadTopLevelListBox( SvxConfigEntry const * pToSelect )
     {
         for (auto const& entryData : *GetSaveInData()->GetEntries())
         {
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entryData)));
+            OUString sId(weld::toId(entryData));
             m_xTopLevelListBox->append(sId, SvxConfigPageHelper::stripHotKey(entryData->GetName()));
 
             if (entryData == pToSelect)
@@ -1369,7 +1369,7 @@ void SvxConfigPage::AddSubMenusToUI(
         {
             OUString subMenuTitle = OUString::Concat(rBaseTitle) + aMenuSeparatorStr + SvxConfigPageHelper::stripHotKey(entryData->GetName());
 
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entryData)));
+            OUString sId(weld::toId(entryData));
             m_xTopLevelListBox->append(sId, subMenuTitle);
 
             AddSubMenusToUI( subMenuTitle, entryData );
@@ -1494,7 +1494,7 @@ int SvxConfigPage::AppendEntry(
     int nCurEntry =
         nTarget != -1 ? nTarget : m_xContentsListBox->get_selected_index();
 
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewEntryData)));
+    OUString sId(weld::toId(pNewEntryData));
 
     if (nCurEntry == -1 || nCurEntry == m_xContentsListBox->n_children() - 1)
     {
@@ -1505,7 +1505,7 @@ int SvxConfigPage::AppendEntry(
     else
     {
         SvxConfigEntry* pEntryData =
-            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nCurEntry).toInt64());
+            weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nCurEntry));
 
         SvxEntries::iterator iter = pEntries->begin();
         SvxEntries::const_iterator end = pEntries->end();
@@ -1547,7 +1547,7 @@ namespace
     template<typename itertype> void TmplInsertEntryIntoUI(SvxConfigEntry* pNewEntryData, weld::TreeView& rTreeView, itertype& rIter, SaveInData* pSaveInData,
                                                            VirtualDevice& rDropDown, bool bMenu)
     {
-        OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pNewEntryData)));
+        OUString sId(weld::toId(pNewEntryData));
 
         rTreeView.set_id(rIter, sId);
 
@@ -1617,7 +1617,7 @@ IMPL_LINK_NOARG(SvxConfigPage, SelectFunctionHdl, weld::TreeView&, void)
         }
         else
         {
-            SfxGroupInfo_Impl *pData = reinterpret_cast<SfxGroupInfo_Impl*>(m_xFunctions->get_selected_id().toInt64());
+            SfxGroupInfo_Impl *pData = weld::fromId<SfxGroupInfo_Impl*>(m_xFunctions->get_selected_id());
             if (pData)
             {
                 bool bIsExperimental
@@ -1715,10 +1715,10 @@ bool SvxConfigPage::MoveEntryData(int nSourceEntry, int nTargetEntry)
     SvxEntries* pEntries = GetTopLevelSelection()->GetEntries();
 
     SvxConfigEntry* pSourceData =
-        reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nSourceEntry).toInt64());
+        weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nSourceEntry));
 
     SvxConfigEntry* pTargetData =
-        reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nTargetEntry).toInt64());
+        weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nTargetEntry));
 
     if ( pSourceData == nullptr || pTargetData == nullptr )
         return false;
@@ -1759,7 +1759,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         mpEntries.reset( new SvxEntries );
         for (auto const& entry : *entries)
         {
-            m_xMenuListBox->append(OUString::number(reinterpret_cast<sal_uInt64>(entry)),
+            m_xMenuListBox->append(weld::toId(entry),
                                    SvxConfigPageHelper::stripHotKey(entry->GetName()));
             mpEntries->push_back(entry);
             if (entry == selection)
@@ -1783,7 +1783,7 @@ SvxMainMenuOrganizerDialog::SvxMainMenuOrganizerDialog(
         pNewEntryData->SetUserDefined();
         pNewEntryData->SetMain();
 
-        m_sNewMenuEntryId = OUString::number(reinterpret_cast<sal_uInt64>(pNewEntryData));
+        m_sNewMenuEntryId = weld::toId(pNewEntryData);
         m_xMenuListBox->append(m_sNewMenuEntryId,
                                SvxConfigPageHelper::stripHotKey(pNewEntryData->GetName()));
         m_xMenuListBox->select(m_xMenuListBox->n_children() - 1);
@@ -1822,7 +1822,7 @@ IMPL_LINK_NOARG(SvxMainMenuOrganizerDialog, ModifyHdl, weld::Entry&, void)
         return;
     }
 
-    SvxConfigEntry* pNewEntryData = reinterpret_cast<SvxConfigEntry*>(m_sNewMenuEntryId.toUInt64());
+    SvxConfigEntry* pNewEntryData = weld::fromId<SvxConfigEntry*>(m_sNewMenuEntryId);
     pNewEntryData->SetName(m_xMenuNameEdit->get_text());
 
     const int nNewMenuPos = m_xMenuListBox->find_id(m_sNewMenuEntryId);
@@ -1879,7 +1879,7 @@ SvxConfigEntry* SvxMainMenuOrganizerDialog::GetSelectedEntry()
     const int nSelected(m_xMenuListBox->get_selected_index());
     if (nSelected == -1)
         return nullptr;
-    return reinterpret_cast<SvxConfigEntry*>(m_xMenuListBox->get_id(nSelected).toUInt64());
+    return weld::fromId<SvxConfigEntry*>(m_xMenuListBox->get_id(nSelected));
 }
 
 SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,

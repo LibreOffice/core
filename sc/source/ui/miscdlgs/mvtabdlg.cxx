@@ -177,7 +177,7 @@ void ScMoveTableDlg::CheckNewTabName()
 
 ScDocument* ScMoveTableDlg::GetSelectedDoc()
 {
-    return reinterpret_cast<ScDocument*>(m_xLbDoc->get_active_id().toUInt64());
+    return weld::fromId<ScDocument*>(m_xLbDoc->get_active_id());
 }
 
 void ScMoveTableDlg::Init()
@@ -223,7 +223,7 @@ void ScMoveTableDlg::InitDocListBox()
                 aEntryName += " " + msCurrentDoc;
             }
 
-            OUString sId(OUString::number(reinterpret_cast<sal_uInt64>(&pScSh->GetDocument())));
+            OUString sId(weld::toId(&pScSh->GetDocument()));
             m_xLbDoc->insert(i, aEntryName, &sId, nullptr, nullptr);
 
             i++;

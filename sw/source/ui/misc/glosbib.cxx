@@ -103,7 +103,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
         else
             pData->sGroupTitle = sTitle;
         pData->sPath = m_xPathLB->get_text(sGroup.getToken(1, GLOS_DELIM).toInt32());
-        const OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
+        const OUString sId(weld::toId(pData));
         m_xGroupTLB->append(sId, pData->sGroupTitle);
         int nEntry = m_xGroupTLB->find_id(sId);
         m_xGroupTLB->set_text(nEntry, pData->sPath, 1);
@@ -117,7 +117,7 @@ SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
     int nCount = m_xGroupTLB->n_children();
     for (int i = 0; i < nCount; ++i)
     {
-        GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(i).toInt64());
+        GlosBibUserData* pUserData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(i));
         delete pUserData;
     }
 }
@@ -146,7 +146,7 @@ void SwGlossaryGroupDlg::Apply()
             //when the current group is deleted, the current group has to be relocated
             if (m_xGroupTLB->n_children())
             {
-                GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(0).toInt64());
+                GlosBibUserData* pUserData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(0));
                 pGlosHdl->SetCurGroup(pUserData->sGroupName);
             }
         }
@@ -193,14 +193,14 @@ IMPL_LINK_NOARG( SwGlossaryGroupDlg, SelectHdl, weld::TreeView&, void )
     if (nFirstEntry == -1)
         return;
 
-    GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nFirstEntry).toInt64());
+    GlosBibUserData* pUserData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(nFirstEntry));
     const OUString sEntry(pUserData->sGroupName);
     const OUString sName(m_xNameED->get_text());
     bool bExists = false;
     int nPos = m_xGroupTLB->find_text(sName);
     if (nPos != -1)
     {
-        GlosBibUserData* pFoundData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nPos).toInt64());
+        GlosBibUserData* pFoundData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(nPos));
         fprintf(stderr, "comparing %s and %s\n",
                 OUStringToOString(pFoundData->sGroupName, RTL_TEXTENCODING_UTF8).getStr(),
                 OUStringToOString(sEntry, RTL_TEXTENCODING_UTF8).getStr());
@@ -223,7 +223,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, NewHdl, weld::Button&, void)
     pData->sPath = m_xPathLB->get_active_text();
     pData->sGroupName = sGroup;
     pData->sGroupTitle = m_xNameED->get_text();
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
+    OUString sId(weld::toId(pData));
     m_xGroupTLB->append(sId, m_xNameED->get_text());
     int nEntry = m_xGroupTLB->find_id(sId);
     m_xGroupTLB->set_text(nEntry, pData->sPath, 1);
@@ -251,7 +251,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, weld::Button&, rButton, void )
         rButton.set_sensitive(false);
         return;
     }
-    GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nEntry).toInt64());
+    GlosBibUserData* pUserData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(nEntry));
     OUString const sEntry(pUserData->sGroupName);
     // if the name to be deleted is among the new ones - get rid of it
     bool bDelete = true;
@@ -288,7 +288,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, weld::Button&, rButton, void )
 IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, weld::Button&, void)
 {
     int nEntry = m_xGroupTLB->get_selected_index();
-    GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nEntry).toInt64());
+    GlosBibUserData* pUserData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(nEntry));
     OUString sEntry(pUserData->sGroupName);
 
     const OUString sNewTitle(m_xNameED->get_text());
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, RenameHdl, weld::Button&, void)
     pData->sGroupName = sNewName;
     pData->sGroupTitle = sNewTitle;
 
-    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pData)));
+    OUString sId(weld::toId(pData));
     m_xGroupTLB->append(sId, m_xNameED->get_text());
     nEntry = m_xGroupTLB->find_id(sId);
     m_xGroupTLB->set_text(nEntry, m_xPathLB->get_active_text(), 1);
@@ -375,7 +375,7 @@ IMPL_LINK_NOARG(SwGlossaryGroupDlg, ModifyHdl, weld::Entry&, void)
     int nEntry = m_xGroupTLB->get_selected_index();
     if (nEntry != -1)
     {
-        GlosBibUserData* pUserData = reinterpret_cast<GlosBibUserData*>(m_xGroupTLB->get_id(nEntry).toInt64());
+        GlosBibUserData* pUserData = weld::fromId<GlosBibUserData*>(m_xGroupTLB->get_id(nEntry));
         bEnableDel = IsDeleteAllowed(pUserData->sGroupName);
     }
 

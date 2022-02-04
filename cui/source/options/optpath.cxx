@@ -211,7 +211,7 @@ IMPL_LINK(SvxPathTabPage, HeaderBarClick, int, nColumn, void)
 SvxPathTabPage::~SvxPathTabPage()
 {
     for (int i = 0, nEntryCount = m_xPathBox->n_children(); i < nEntryCount; ++i)
-        delete reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(i).toInt64());
+        delete weld::fromId<PathUserData_Impl*>(m_xPathBox->get_id(i));
 }
 
 std::unique_ptr<SfxTabPage> SvxPathTabPage::Create( weld::Container* pPage, weld::DialogController* pController,
@@ -224,7 +224,7 @@ bool SvxPathTabPage::FillItemSet( SfxItemSet* )
 {
     for (int i = 0, nEntryCount = m_xPathBox->n_children(); i < nEntryCount; ++i)
     {
-        PathUserData_Impl* pPathImpl = reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(i).toInt64());
+        PathUserData_Impl* pPathImpl = weld::fromId<PathUserData_Impl*>(m_xPathBox->get_id(i));
         SvtPathOptions::Paths nRealId = pPathImpl->nRealId;
         if (pPathImpl->bItemStateSet )
             SetPathList( nRealId, pPathImpl->sUserPath, pPathImpl->sWritablePath );
@@ -322,7 +322,7 @@ void SvxPathTabPage::Reset( const SfxItemSet* )
             pPathImpl->sWritablePath = sWritable;
             pPathImpl->bReadOnly = bReadOnly;
 
-            OUString sId = OUString::number(reinterpret_cast<sal_Int64>(pPathImpl));
+            OUString sId = weld::toId(pPathImpl);
             m_xPathBox->set_id(*xIter, sId);
         }
     }
@@ -338,7 +338,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl, weld::TreeView&, void)
     int nEntry = m_xPathBox->get_selected_index();
     if (nEntry != -1)
     {
-        PathUserData_Impl* pPathImpl = reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(nEntry).toInt64());
+        PathUserData_Impl* pPathImpl = weld::fromId<PathUserData_Impl*>(m_xPathBox->get_id(nEntry));
         bEnable = !pPathImpl->bReadOnly;
     }
     sal_uInt16 nSelCount = m_xPathBox->count_selected_rows();
@@ -349,7 +349,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl, weld::TreeView&, void)
 IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
 {
     m_xPathBox->selected_foreach([this](weld::TreeIter& rEntry){
-        PathUserData_Impl* pPathImpl = reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(rEntry).toInt64());
+        PathUserData_Impl* pPathImpl = weld::fromId<PathUserData_Impl*>(m_xPathBox->get_id(rEntry));
         OUString aOldPath = SvtDefaultOptions::GetDefaultPath( pPathImpl->nRealId );
 
         if ( !aOldPath.isEmpty() )
@@ -420,7 +420,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     }
 
     OUString sInternal, sUser, sWritable;
-    PathUserData_Impl* pPathImpl = reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(nEntry).toInt64());
+    PathUserData_Impl* pPathImpl = weld::fromId<PathUserData_Impl*>(m_xPathBox->get_id(nEntry));
     bool bReadOnly = false;
     GetPathList( pPathImpl->nRealId, sInternal, sUser, sWritable, bReadOnly );
     sUser = pPathImpl->sUserPath;
@@ -470,7 +470,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, DoubleClickPathHdl_Impl, weld::TreeView&, bool)
 IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
 {
     int nEntry = m_xPathBox->get_cursor_index();
-    PathUserData_Impl* pPathImpl = nEntry != -1 ? reinterpret_cast<PathUserData_Impl*>(m_xPathBox->get_id(nEntry).toInt64()) : nullptr;
+    PathUserData_Impl* pPathImpl = nEntry != -1 ? weld::fromId<PathUserData_Impl*>(m_xPathBox->get_id(nEntry)) : nullptr;
     if (!pPathImpl || pPathImpl->bReadOnly)
         return;
 

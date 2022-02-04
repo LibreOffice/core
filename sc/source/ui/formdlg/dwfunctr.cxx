@@ -164,7 +164,7 @@ void ScFunctionWin::SetDescription()
 {
     xFiFuncDesc->set_label(OUString());
     const ScFuncDesc* pDesc =
-             reinterpret_cast<const ScFuncDesc*>(xFuncList->get_selected_id().toInt64());
+             weld::fromId<const ScFuncDesc*>(xFuncList->get_selected_id());
     if (pDesc)
     {
         pDesc->initArgumentInfo();      // full argument info is needed
@@ -209,7 +209,7 @@ void ScFunctionWin::UpdateFunctionList()
         const ScFuncDesc* pDesc = pFuncMgr->First( nCategory );
         while ( pDesc )
         {
-            xFuncList->append(OUString::number(reinterpret_cast<sal_Int64>(pDesc)), *(pDesc->mxFuncName));
+            xFuncList->append(weld::toId(pDesc), *(pDesc->mxFuncName));
             pDesc = pFuncMgr->Next();
         }
     }
@@ -219,7 +219,7 @@ void ScFunctionWin::UpdateFunctionList()
         {
             if (pDesc)
             {
-                xFuncList->append(OUString::number(reinterpret_cast<sal_Int64>(pDesc)), pDesc->getFunctionName());
+                xFuncList->append(weld::toId(pDesc), pDesc->getFunctionName());
             }
         }
     }
@@ -277,7 +277,7 @@ void ScFunctionWin::DoEnter()
                 pHdl->ClearText();
         }
         const ScFuncDesc* pDesc =
-             reinterpret_cast<const ScFuncDesc*>(xFuncList->get_selected_id().toInt64());
+             weld::fromId<const ScFuncDesc*>(xFuncList->get_selected_id());
         if (pDesc)
         {
             pFuncDesc=pDesc;

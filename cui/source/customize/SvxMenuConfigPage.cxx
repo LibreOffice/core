@@ -100,8 +100,7 @@ void SvxMenuConfigPage::ListModified()
     pEntries->clear();
 
     for (int i = 0; i < m_xContentsListBox->n_children(); ++i)
-        pEntries->push_back(
-            reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(i).toInt64()));
+        pEntries->push_back(weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(i)));
 
     GetSaveInData()->SetModified();
     GetTopLevelSelection()->SetModified();
@@ -123,7 +122,7 @@ IMPL_LINK(SvxMenuConfigPage, MenuEntriesSizeAllocHdl, const Size&, rSize, void)
 SvxMenuConfigPage::~SvxMenuConfigPage()
 {
     for (int i = 0, nCount = m_xSaveInListBox->get_count(); i < nCount; ++i)
-        delete reinterpret_cast<SaveInData*>(m_xSaveInListBox->get_id(i).toInt64());
+        delete weld::fromId<SaveInData*>(m_xSaveInListBox->get_id(i));
     m_xSaveInListBox->clear();
 }
 
@@ -154,8 +153,7 @@ void SvxMenuConfigPage::UpdateButtonStates()
 
     bool bIsSeparator
         = selection != -1
-          && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(selection).toInt64())
-                 ->IsSeparator();
+          && weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(selection))->IsSeparator();
     bool bIsValidSelection = (m_xContentsListBox->n_children() != 0 && selection != -1);
 
     m_xMoveUpButton->set_sensitive(bIsValidSelection && selection != 0);
@@ -217,7 +215,7 @@ void SvxMenuConfigPage::DeleteSelectedContent()
 
     // get currently selected menu entry
     SvxConfigEntry* pMenuEntry
-        = reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
+        = weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry));
 
     // get currently selected menu
     SvxConfigEntry* pMenu = GetTopLevelSelection();
@@ -268,7 +266,7 @@ void SvxMenuConfigPage::SelectElement()
         rTreeView.bulk_insert_for_each(
             pEntries->size(), [this, &rTreeView, pEntries](weld::TreeIter& rIter, int nIdx) {
                 auto const& entry = (*pEntries)[nIdx];
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(entry)));
+                OUString sId(weld::toId(entry));
                 rTreeView.set_id(rIter, sId);
                 InsertEntryIntoUI(entry, rTreeView, rIter, true);
             });
@@ -360,7 +358,7 @@ IMPL_LINK_NOARG(SvxMenuConfigPage, AddCommandHdl, weld::Button&, void)
     if (nPos == -1)
         return;
     weld::TreeView& rTreeView = m_xContentsListBox->get_widget();
-    SvxConfigEntry* pEntry = reinterpret_cast<SvxConfigEntry*>(rTreeView.get_id(nPos).toInt64());
+    SvxConfigEntry* pEntry = weld::fromId<SvxConfigEntry*>(rTreeView.get_id(nPos));
     InsertEntryIntoUI(pEntry, rTreeView, nPos, true);
 }
 
@@ -431,7 +429,7 @@ IMPL_LINK(SvxMenuConfigPage, ModifyItemHdl, const OString&, rIdent, void)
     {
         int nActEntry = m_xContentsListBox->get_selected_index();
         SvxConfigEntry* pEntry
-            = reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry).toInt64());
+            = weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nActEntry));
 
         OUString aNewName(SvxConfigPageHelper::stripHotKey(pEntry->GetName()));
         OUString aDesc = CuiResId(RID_CUISTR_LABEL_NEW_NAME);
@@ -531,8 +529,7 @@ IMPL_LINK(SvxMenuConfigPage, ContentContextMenuHdl, const CommandEvent&, rCEvt, 
 
     bool bIsSeparator
         = nSelectIndex != -1
-          && reinterpret_cast<SvxConfigEntry*>(m_xContentsListBox->get_id(nSelectIndex).toInt64())
-                 ->IsSeparator();
+          && weld::fromId<SvxConfigEntry*>(m_xContentsListBox->get_id(nSelectIndex))->IsSeparator();
     bool bIsValidSelection = (m_xContentsListBox->n_children() != 0 && nSelectIndex != -1);
 
     std::unique_ptr<weld::Builder> xBuilder(

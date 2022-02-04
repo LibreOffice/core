@@ -101,7 +101,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl, weld::Button&, void)
     m_xBookmarksBox->selected_foreach([this, &nSelectedRows](weld::TreeIter& rEntry) {
         // remove from model
         sw::mark::IMark* pBookmark
-            = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry).toInt64());
+            = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry));
         OUString sRemoved = pBookmark->GetName();
         IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
         pMarkAccess->deleteMark(pMarkAccess->findMark(sRemoved));
@@ -153,7 +153,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, SelectionChangedHdl, weld::TreeView&, void)
     m_xBookmarksBox->selected_foreach(
         [this, &sEditBoxText, &nSelectedRows](weld::TreeIter& rEntry) {
             sw::mark::IMark* pBookmark
-                = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry).toInt64());
+                = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(rEntry));
             const OUString& sEntryName = pBookmark->GetName();
             if (!sEditBoxText.isEmpty())
                 sEditBoxText.append(";");
@@ -187,7 +187,7 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, RenameHdl, weld::Button&, void)
         return;
 
     sw::mark::IMark* pBookmark
-        = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected).toInt64());
+        = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected));
     uno::Reference<frame::XModel> xModel = rSh.GetView().GetDocShell()->GetBaseModel();
     uno::Reference<text::XBookmarksSupplier> xBkms(xModel, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xNameAccess = xBkms->getBookmarks();
@@ -239,7 +239,7 @@ void SwInsertBookmarkDlg::GotoSelectedBookmark()
         return;
 
     sw::mark::IMark* pBookmark
-        = reinterpret_cast<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected).toInt64());
+        = weld::fromId<sw::mark::IMark*>(m_xBookmarksBox->get_id(*xSelected));
 
     rSh.EnterStdMode();
     rSh.GotoMark(pBookmark);
@@ -453,7 +453,7 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
         sHidden = SwResId(STR_BOOKMARK_YES);
     OUString sPageNum = OUString::number(SwPaM(pMark->GetMarkStart()).GetPageNum());
     int nRow = m_xControl->n_children();
-    m_xControl->append(OUString::number(reinterpret_cast<sal_Int64>(pMark)), sPageNum);
+    m_xControl->append(weld::toId(pMark), sPageNum);
     m_xControl->set_text(nRow, pBookmark->GetName(), 1);
     m_xControl->set_text(nRow, sBookmarkNodeText, 2);
     m_xControl->set_text(nRow, sHidden, 3);
@@ -464,8 +464,7 @@ std::unique_ptr<weld::TreeIter> BookmarkTable::GetRowByBookmarkName(const OUStri
 {
     std::unique_ptr<weld::TreeIter> xRet;
     m_xControl->all_foreach([this, &sName, &xRet](weld::TreeIter& rEntry) {
-        sw::mark::IMark* pBookmark
-            = reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(rEntry).toInt64());
+        sw::mark::IMark* pBookmark = weld::fromId<sw::mark::IMark*>(m_xControl->get_id(rEntry));
         if (pBookmark->GetName() == sName)
         {
             xRet = m_xControl->make_iterator(&rEntry);
@@ -482,7 +481,7 @@ sw::mark::IMark* BookmarkTable::GetBookmarkByName(const OUString& sName)
     if (!xEntry)
         return nullptr;
 
-    return reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(*xEntry).toInt64());
+    return weld::fromId<sw::mark::IMark*>(m_xControl->get_id(*xEntry));
 }
 
 void BookmarkTable::SelectByName(const OUString& sName)
@@ -499,8 +498,7 @@ OUString BookmarkTable::GetNameProposal() const
     sal_Int32 nHighestBookmarkId = 0;
     for (int i = 0, nCount = m_xControl->n_children(); i < nCount; ++i)
     {
-        sw::mark::IMark* pBookmark
-            = reinterpret_cast<sw::mark::IMark*>(m_xControl->get_id(i).toInt64());
+        sw::mark::IMark* pBookmark = weld::fromId<sw::mark::IMark*>(m_xControl->get_id(i));
         const OUString& sName = pBookmark->GetName();
         sal_Int32 nIndex = 0;
         if (sName.getToken(0, ' ', nIndex) == sDefaultBookmarkName)

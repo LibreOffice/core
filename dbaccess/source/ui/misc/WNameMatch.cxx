@@ -119,7 +119,7 @@ bool OWizNameMatching::LeavePage()
     bool bRightEntry = m_xCTRL_RIGHT->get_iter_first(*xRightEntry);
     while (bLeftEntry && bRightEntry)
     {
-        OFieldDescription* pSrcField = reinterpret_cast<OFieldDescription*>(m_xCTRL_LEFT->get_id(*xLeftEntry).toInt64());
+        OFieldDescription* pSrcField = weld::fromId<OFieldDescription*>(m_xCTRL_LEFT->get_id(*xLeftEntry));
         OSL_ENSURE(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
         sal_Int32 nPos = 0;
@@ -132,7 +132,7 @@ bool OWizNameMatching::LeavePage()
 
         if (m_xCTRL_LEFT->get_toggle(*xLeftEntry) == TRISTATE_TRUE)
         {
-            OFieldDescription* pDestField = reinterpret_cast<OFieldDescription*>(m_xCTRL_RIGHT->get_id(*xRightEntry).toInt64());
+            OFieldDescription* pDestField = weld::fromId<OFieldDescription*>(m_xCTRL_RIGHT->get_id(*xRightEntry));
             OSL_ENSURE(pDestField,"OWizNameMatching: OColumn can not be null!");
             const ODatabaseExport::TColumnVector& rDestColumns          = m_pParent->getDestVector();
             sal_Int32 nPosDest = 1;
@@ -268,7 +268,7 @@ IMPL_LINK_NOARG( OWizNameMatching, TableListRightSelectHdl, weld::TreeView&, voi
     if (nPos == -1)
         return;
 
-    OFieldDescription* pColumn = reinterpret_cast<OFieldDescription*>(m_xCTRL_RIGHT->get_id(nPos).toInt64());
+    OFieldDescription* pColumn = weld::fromId<OFieldDescription*>(m_xCTRL_RIGHT->get_id(nPos));
     if (pColumn->IsAutoIncrement())
     {
         m_xCTRL_RIGHT->unselect(nPos);
@@ -319,7 +319,7 @@ void OWizNameMatching::FillListBox(weld::TreeView& rTreeView, const ODatabaseExp
             rTreeView.set_toggle(nRow, bChecked ? TRISTATE_TRUE : TRISTATE_FALSE);
         }
         rTreeView.set_text(nRow, elem->first, 0);
-        rTreeView.set_id(nRow, OUString::number(reinterpret_cast<sal_Int64>(elem->second)));
+        rTreeView.set_id(nRow, weld::toId(elem->second));
         ++nRow;
     }
 

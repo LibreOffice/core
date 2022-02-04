@@ -92,7 +92,7 @@ bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUStri
         {
             sal_Int32 nPos = m_xLbDocTypes->get_selected_index();
             if (nPos != -1)
-                aURLObject.SetExtension(reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos).toInt64())->aStrExt);
+                aURLObject.SetExtension(weld::fromId<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos))->aStrExt);
         }
 
     }
@@ -136,7 +136,7 @@ SvxHyperlinkNewDocTp::~SvxHyperlinkNewDocTp ()
     if (m_xLbDocTypes)
     {
         for (sal_Int32 n = 0, nEntryCount = m_xLbDocTypes->n_children(); n < nEntryCount; ++n)
-            delete reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(n).toInt64());
+            delete weld::fromId<DocumentTypeData*>(m_xLbDocTypes->get_id(n));
         m_xLbDocTypes = nullptr;
     }
 }
@@ -184,7 +184,7 @@ void SvxHyperlinkNewDocTp::FillDocumentList()
 
                 OUString aStrDefExt(pFilter->GetDefaultExtension());
                 DocumentTypeData *pTypeData = new DocumentTypeData(aDocumentUrl, aStrDefExt.copy(2));
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pTypeData)));
+                OUString sId(weld::toId(pTypeData));
                 m_xLbDocTypes->append(sId, aTitleName);
             }
         }
@@ -367,7 +367,7 @@ void SvxHyperlinkNewDocTp::DoApply()
     if (nPos == -1)
         nPos = 0;
     pExecuteInfo->aURL = aURL;
-    pExecuteInfo->aStrDocName = reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos).toInt64())->aStrURL;
+    pExecuteInfo->aStrDocName = weld::fromId<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos))->aStrURL;
 
     // current document
     pExecuteInfo->xFrame = GetDispatcher()->GetFrame()->GetFrame().GetFrameInterface();
@@ -431,7 +431,7 @@ IMPL_LINK_NOARG(SvxHyperlinkNewDocTp, ClickNewHdl_Impl, weld::Button&, void)
     {
         // get private-url
         const sal_Int32 nPos = m_xLbDocTypes->get_selected_index();
-        aNewURL.setExtension(reinterpret_cast<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos).toInt64())->aStrExt);
+        aNewURL.setExtension(weld::fromId<DocumentTypeData*>(m_xLbDocTypes->get_id(nPos))->aStrExt);
     }
 
     if( aNewURL.GetProtocol() == INetProtocol::File )

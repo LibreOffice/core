@@ -145,17 +145,17 @@ namespace
 {
     bool lcl_IsContent(const weld::TreeIter& rEntry, const weld::TreeView& rTreeView)
     {
-        return reinterpret_cast<const SwTypeNumber*>(rTreeView.get_id(rEntry).toInt64())->GetTypeId() == CTYPE_CNT;
+        return weld::fromId<const SwTypeNumber*>(rTreeView.get_id(rEntry))->GetTypeId() == CTYPE_CNT;
     }
 
     bool lcl_IsContentType(const weld::TreeIter& rEntry, const weld::TreeView& rTreeView)
     {
-        return reinterpret_cast<const SwTypeNumber*>(rTreeView.get_id(rEntry).toInt64())->GetTypeId() == CTYPE_CTT;
+        return weld::fromId<const SwTypeNumber*>(rTreeView.get_id(rEntry))->GetTypeId() == CTYPE_CTT;
     }
 
     bool lcl_IsLowerOutlineContent(const weld::TreeIter& rEntry, const weld::TreeView& rTreeView, sal_uInt8 nLevel)
     {
-        return reinterpret_cast<const SwOutlineContent*>(rTreeView.get_id(rEntry).toInt64())->GetOutlineLevel() < nLevel;
+        return weld::fromId<const SwOutlineContent*>(rTreeView.get_id(rEntry))->GetOutlineLevel() < nLevel;
     }
 
     bool lcl_FindShell(SwWrtShell const * pShell)
@@ -1117,8 +1117,8 @@ sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
     {
         if (xDropEntry && lcl_IsContent(*xDropEntry, *m_xTreeView))
         {
-            assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xDropEntry).toInt64())));
-            SwOutlineContent* pOutlineContent = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xDropEntry).toInt64());
+            assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xDropEntry))));
+            SwOutlineContent* pOutlineContent = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xDropEntry));
             assert(pOutlineContent);
 
             void* key = lcl_GetOutlineKey(*this, pOutlineContent);
@@ -1151,8 +1151,8 @@ sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
         }
         else
         {
-            assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xDropEntry).toInt64())));
-            nTargetPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xDropEntry).toInt64())->GetOutlinePos();
+            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xDropEntry))));
+            nTargetPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xDropEntry))->GetOutlinePos();
         }
 
         if( MAXLEVEL > m_nOutlineLevel && // Not all layers are displayed.
@@ -1162,8 +1162,8 @@ sal_Int8 SwContentTree::ExecuteDrop(const ExecuteDropEvent& rEvt)
             bool bNext = m_xTreeView->iter_next(*xNext);
             if (bNext)
             {
-                assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xNext).toInt64())));
-                nTargetPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xNext).toInt64())->GetOutlinePos() - 1;
+                assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xNext))));
+                nTargetPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xNext))->GetOutlinePos() - 1;
             }
             else
                 nTargetPos = GetWrtShell()->getIDocumentOutlineNodesAccess()->getOutlineNodesCount() - 1;
@@ -1433,7 +1433,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     bool bRemoveGotoEntry = false;
     if (State::HIDDEN == m_eState || !xEntry || !lcl_IsContent(*xEntry, *m_xTreeView) ||
-            reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsInvisible())
+            weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->IsInvisible())
         bRemoveGotoEntry = true;
 
     bool bRemovePostItEntries = true;
@@ -1465,10 +1465,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     {
         const SwContentType* pType;
         if (lcl_IsContentType(*xEntry, *m_xTreeView))
-            pType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
+            pType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry));
         else
-            pType = reinterpret_cast<SwContent*>(
-                        m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
+            pType = weld::fromId<SwContent*>(
+                        m_xTreeView->get_id(*xEntry))->GetParent();
         const ContentTypeId nContentType = pType->GetType();
         switch (nContentType)
         {
@@ -1532,8 +1532,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 && lcl_IsContent(*xEntry, *m_xTreeView))
         {
             const bool bReadonly = m_pActiveShell->GetView().GetDocShell()->IsReadOnly();
-            const bool bVisible = !reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsInvisible();
-            const bool bProtected = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->IsProtect();
+            const bool bVisible = !weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->IsInvisible();
+            const bool bProtected = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->IsProtect();
             const bool bProtectBM = (ContentTypeId::BOOKMARK == nContentType)
                     && m_pActiveShell->getIDocumentSettingAccess().get(DocumentSettingId::PROTECT_BOOKMARKS);
             const bool bEditable = pType->IsEditable() &&
@@ -1552,7 +1552,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
             if (ContentTypeId::FOOTNOTE == nContentType)
             {
-                void* pUserData = reinterpret_cast<void*>(m_xTreeView->get_id(*xEntry).toInt64());
+                void* pUserData = weld::fromId<void*>(m_xTreeView->get_id(*xEntry));
                 const SwTextFootnote* pFootnote =
                         static_cast<const SwTextFootnoteContent*>(pUserData)->GetTextFootnote();
                 if (!pFootnote)
@@ -1575,7 +1575,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 {
                     bRemoveIndexEntries = false;
 
-                    const SwTOXBase* pBase = reinterpret_cast<SwTOXBaseContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetTOXBase();
+                    const SwTOXBase* pBase = weld::fromId<SwTOXBaseContent*>(m_xTreeView->get_id(*xEntry))->GetTOXBase();
                     if (!pBase->IsTOXBaseInReadonly())
                         bRemoveEditEntry = false;
 
@@ -1588,7 +1588,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     bRemoveEditEntry = false;
                     bRemoveUnprotectEntry = false;
                     bool bFull = false;
-                    OUString sTableName = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetName();
+                    OUString sTableName = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetName();
                     bool bProt = m_pActiveShell->HasTableAnyProtection( &sTableName, &bFull );
                     xPop->set_sensitive(OString::number(403), !bFull);
                     xPop->set_sensitive(OString::number(404), bProt);
@@ -1625,10 +1625,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         else
         {
             if (lcl_IsContentType(*xEntry, *m_xTreeView))
-                pType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
+                pType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry));
             else
-                pType = reinterpret_cast<SwContent*>(
-                            m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
+                pType = weld::fromId<SwContent*>(
+                            m_xTreeView->get_id(*xEntry))->GetParent();
             if (pType)
             {
                 if (ContentTypeId::OUTLINE == nContentType)
@@ -1814,8 +1814,8 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
     {
         std::unique_ptr<weld::TreeIter> xChild = m_xTreeView->make_iterator();
 
-        assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(rParent).toInt64())));
-        SwContentType* pCntType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(rParent).toInt64());
+        assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+        SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent));
 
         const size_t nCount = pCntType->GetMemberCount();
         // Add for outline plus/minus
@@ -1831,7 +1831,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                     OUString sEntry = pCnt->GetName();
                     if(sEntry.isEmpty())
                         sEntry = m_sSpace;
-                    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+                    OUString sId(weld::toId(pCnt));
 
                     auto lamba = [nLevel, this](const std::unique_ptr<weld::TreeIter>& entry)
                     {
@@ -1870,7 +1870,7 @@ bool SwContentTree::RequestingChildren(const weld::TreeIter& rParent)
                     OUString sEntry = pCnt->GetName();
                     if (sEntry.isEmpty())
                         sEntry = m_sSpace;
-                    OUString sId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+                    OUString sId(weld::toId(pCnt));
                     insert(&rParent, sEntry, sId, false, xChild.get());
                     m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
                     if (bRegion)
@@ -1923,12 +1923,12 @@ void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::uniqu
 
     if (!m_bIsRoot
         || (lcl_IsContentType(rParent, *m_xTreeView) &&
-            reinterpret_cast<SwContentType*>(m_xTreeView->get_id(rParent).toInt64())->GetType() == ContentTypeId::OUTLINE)
+            weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent))->GetType() == ContentTypeId::OUTLINE)
         || (m_nRootType == ContentTypeId::OUTLINE))
     {
         if (lcl_IsContentType(rParent, *m_xTreeView))
         {
-            SwContentType* pCntType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(rParent).toInt64());
+            SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent));
             const sal_Int32 nOr = 1 << static_cast<int>(pCntType->GetType()); //linear -> Bitposition
             if (State::HIDDEN != m_eState)
             {
@@ -1953,8 +1953,8 @@ void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::uniqu
                     {
                         if (m_xTreeView->iter_has_child(*xChild))
                         {
-                            assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xChild).toInt64())));
-                            auto const nPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xChild).toInt64())->GetOutlinePos();
+                            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xChild))));
+                            auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xChild))->GetOutlinePos();
                             void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
                             aCurrOutLineNodeMap.emplace( key, false );
                             std::map<void*, bool>::iterator iter = mOutLineNodeMap.find( key );
@@ -1980,8 +1980,8 @@ void SwContentTree::Expand(const weld::TreeIter& rParent, std::vector<std::uniqu
             {
                 SwWrtShell* pShell = GetWrtShell();
                 // paranoid assert now that outline type is checked
-                assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(rParent).toInt64())));
-                auto const nPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rParent).toInt64())->GetOutlinePos();
+                assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+                auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rParent))->GetOutlinePos();
                 void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
                 mOutLineNodeMap[key] = true;
             }
@@ -2020,7 +2020,7 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
             }
             return false; // return false to notify caller not to do collapse
         }
-        SwContentType* pCntType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(rParent).toInt64());
+        SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(rParent));
         const sal_Int32 nAnd = ~(1 << static_cast<int>(pCntType->GetType()));
         if (State::HIDDEN != m_eState)
         {
@@ -2033,8 +2033,8 @@ IMPL_LINK(SwContentTree, CollapseHdl, const weld::TreeIter&, rParent, bool)
     else if (lcl_IsContent(rParent, *m_xTreeView))
     {
         SwWrtShell* pShell = GetWrtShell();
-        assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(rParent).toInt64())));
-        auto const nPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rParent).toInt64())->GetOutlinePos();
+        assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(rParent))));
+        auto const nPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rParent))->GetOutlinePos();
         void* key = static_cast<void*>(pShell->getIDocumentOutlineNodesAccess()->getOutlineNode( nPos ));
         mOutLineNodeMap[key] = false;
     }
@@ -2060,8 +2060,8 @@ IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl, weld::TreeView&, bool)
         }
         else if (!lcl_IsContentType(*xEntry, *m_xTreeView) && (State::HIDDEN != m_eState))
         {
-            assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-            SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64());
+            assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+            SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
             assert(pCnt && "no UserData");
             if (pCnt && !pCnt->IsInvisible())
             {
@@ -2250,7 +2250,7 @@ void SwContentTree::Display( bool bActive )
 
                 OUString aImage(GetImageIdForContentTypeId(nCntType));
                 bool bChOnDemand = 0 != rpContentT->GetMemberCount();
-                OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rpContentT.get())));
+                OUString sId(weld::toId(rpContentT.get()));
                 insert(nullptr, rpContentT->GetName(), sId, bChOnDemand, xEntry.get());
                 m_xTreeView->set_image(*xEntry, aImage);
 
@@ -2338,7 +2338,7 @@ void SwContentTree::Display( bool bActive )
                 rpRootContentT.reset(new SwContentType(pShell, m_nRootType, m_nOutlineLevel ));
             OUString aImage(GetImageIdForContentTypeId(m_nRootType));
             bool bChOnDemand = m_nRootType == ContentTypeId::OUTLINE;
-            OUString sId(OUString::number(reinterpret_cast<sal_Int64>(rpRootContentT.get())));
+            OUString sId(weld::toId(rpRootContentT.get()));
             insert(nullptr, rpRootContentT->GetName(), sId, bChOnDemand, xEntry.get());
             m_xTreeView->set_image(*xEntry, aImage);
 
@@ -2355,7 +2355,7 @@ void SwContentTree::Display( bool bActive )
                         OUString sEntry = pCnt->GetName();
                         if(sEntry.isEmpty())
                             sEntry = m_sSpace;
-                        OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+                        OUString sSubId(weld::toId(pCnt));
                         insert(xEntry.get(), sEntry, sSubId, false, xChild.get());
                         m_xTreeView->set_sensitive(*xChild, !pCnt->IsInvisible());
                         if (bRegion)
@@ -2439,8 +2439,8 @@ bool SwContentTree::FillTransferData( TransferDataContainer& rTransfer,
     if (!bEntry || lcl_IsContentType(*xEntry, *m_xTreeView) || !pWrtShell)
         return false;
     OUString sEntry;
-    assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-    SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64());
+    assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+    SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry));
 
     const ContentTypeId nActType = pCnt->GetParent()->GetType();
     OUString sUrl;
@@ -2577,13 +2577,13 @@ void SwContentTree::ToggleToRoot()
             const SwContentType* pCntType;
             if (lcl_IsContentType(*xEntry, *m_xTreeView))
             {
-                assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-                pCntType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
+                assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+                pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry));
             }
             else
             {
-                assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-                pCntType = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetParent();
+                assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+                pCntType = weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetParent();
             }
             m_nRootType = pCntType->GetType();
             m_bIsRoot = true;
@@ -2650,10 +2650,10 @@ bool SwContentTree::HasContentChanged()
         if (!m_xTreeView->get_iter_first(*xRootEntry))
             return true;
 
-        assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xRootEntry).toInt64())));
-        const ContentTypeId nType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xRootEntry).toInt64())->GetType();
+        assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xRootEntry))));
+        const ContentTypeId nType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xRootEntry))->GetType();
         SwContentType* pArrType = m_aActiveContentArr[nType].get();
-        assert(OUString::number(reinterpret_cast<sal_Int64>(pArrType)) == m_xTreeView->get_id(*xRootEntry));
+        assert(weld::toId(pArrType) == m_xTreeView->get_id(*xRootEntry));
         if (!pArrType)
             return true;
 
@@ -2681,7 +2681,7 @@ bool SwContentTree::HasContentChanged()
             // the member data in the array. The Display function will clear and recreate the
             // treeview from the content type member arrays if content change is detected.
             const SwContent* pCnt = pArrType->GetMember(j);
-            OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+            OUString sSubId(weld::toId(pCnt));
             m_xTreeView->set_id(*xEntry, sSubId);
 
             OUString sEntryText = m_xTreeView->get_text(*xEntry);
@@ -2711,12 +2711,12 @@ bool SwContentTree::HasContentChanged()
         for (bool bEntry = m_xTreeView->get_iter_first(*xEntry); bEntry;
              bEntry = lcl_nextContentTypeEntry())
         {
-            assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-            SwContentType* pCntType = reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xEntry).toInt64());
+            assert(dynamic_cast<SwContentType*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+            SwContentType* pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xEntry));
             const size_t nCntCount = pCntType->GetMemberCount();
             const ContentTypeId nType = pCntType->GetType();
             SwContentType* pArrType = m_aActiveContentArr[nType].get();
-            assert(OUString::number(reinterpret_cast<sal_Int64>(pArrType)) == m_xTreeView->get_id(*xEntry));
+            assert(weld::toId(pArrType) == m_xTreeView->get_id(*xEntry));
 
             if (!pArrType)
             {
@@ -2757,7 +2757,7 @@ bool SwContentTree::HasContentChanged()
                     }
 
                     const SwContent* pCnt = pArrType->GetMember(j);
-                    OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+                    OUString sSubId(weld::toId(pCnt));
                     m_xTreeView->set_id(*xEntry, sSubId);
 
                     OUString sEntryText = m_xTreeView->get_text(*xEntry);
@@ -2786,7 +2786,7 @@ bool SwContentTree::HasContentChanged()
                     for (size_t j = 0; j < nOldChildCount; ++j)
                     {
                         const SwContent* pCnt = pArrType->GetMember(j);
-                        OUString sSubId(OUString::number(reinterpret_cast<sal_Int64>(pCnt)));
+                        OUString sSubId(weld::toId(pCnt));
                         m_xTreeView->set_id(*xChild, sSubId);
                         OUString sEntryText = m_xTreeView->get_text(*xChild);
                         if( sEntryText != pCnt->GetName() &&
@@ -2827,11 +2827,11 @@ void SwContentTree::UpdateLastSelType()
     {
         while (m_xTreeView->get_iter_depth(*xEntry))
             m_xTreeView->iter_parent(*xEntry);
-        sal_Int64 nId = m_xTreeView->get_id(*xEntry).toInt64();
-        if (nId && lcl_IsContentType(*xEntry, *m_xTreeView))
+        void* pId = weld::fromId<void*>(m_xTreeView->get_id(*xEntry));
+        if (pId && lcl_IsContentType(*xEntry, *m_xTreeView))
         {
-            assert(dynamic_cast<SwContentType*>(reinterpret_cast<SwTypeNumber*>(nId)));
-            m_nLastSelType = reinterpret_cast<SwContentType*>(nId)->GetType();
+            assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pId)));
+            m_nLastSelType = static_cast<SwContentType*>(pId)->GetType();
         }
     }
 }
@@ -3048,12 +3048,12 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         assert(pCurrentEntry && lcl_IsContent(*pCurrentEntry, *m_xTreeView));
         if (lcl_IsContent(*pCurrentEntry, *m_xTreeView))
         {
-            assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*pCurrentEntry).toInt64())));
+            assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*pCurrentEntry))));
             if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
-                reinterpret_cast<SwContent*>(m_xTreeView->get_id(*pCurrentEntry).toInt64())->GetParent()->GetType()
+                weld::fromId<SwContent*>(m_xTreeView->get_id(*pCurrentEntry))->GetParent()->GetType()
                                             ==  ContentTypeId::OUTLINE)
             {
-                nActPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*pCurrentEntry).toInt64())->GetOutlinePos();
+                nActPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*pCurrentEntry))->GetOutlinePos();
             }
         }
         if (nActPos == SwOutlineNodes::npos || (bUpDown && !pShell->IsOutlineMovable(nActPos)))
@@ -3085,16 +3085,16 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
             {
                 SwOutlineNodes::size_type nActEndPos = nActPos;
                 std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator(pCurrentEntry.get()));
-                assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*pCurrentEntry).toInt64())));
-                const auto nActLevel = reinterpret_cast<SwOutlineContent*>(
-                        m_xTreeView->get_id(*pCurrentEntry).toInt64())->GetOutlineLevel();
+                assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*pCurrentEntry))));
+                const auto nActLevel = weld::fromId<SwOutlineContent*>(
+                        m_xTreeView->get_id(*pCurrentEntry))->GetOutlineLevel();
                 bool bEntry = m_xTreeView->iter_next(*xEntry);
                 while (bEntry && lcl_IsContent(*xEntry, *m_xTreeView))
                 {
-                    assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-                    if (nActLevel >= reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetOutlineLevel())
+                    assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+                    if (nActLevel >= weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlineLevel())
                         break;
-                    nActEndPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetOutlinePos();
+                    nActEndPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
                     bEntry = m_xTreeView->iter_next(*xEntry);
                 }
                 if (nDir == 1) // move down
@@ -3109,37 +3109,37 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
                     {
                         // xEntry now points to the entry following the last
                         // selected entry.
-                        SwOutlineNodes::size_type nDest = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetOutlinePos();
+                        SwOutlineNodes::size_type nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
                         // here needs to found the next entry after next.
                         // The selection must be inserted in front of that.
                         while (bEntry)
                         {
                             bEntry = m_xTreeView->iter_next(*xEntry);
                             assert(!bEntry || !lcl_IsContent(*xEntry, *m_xTreeView)||
-                                   dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
+                                   dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
                             // nDest++ may only executed if bEntry
                             if (bEntry)
                             {
                                 if (!lcl_IsContent(*xEntry, *m_xTreeView))
                                     break;
-                                else if (nActLevel >= reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetOutlineLevel())
+                                else if (nActLevel >= weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlineLevel())
                                 {
                                     // nDest needs adjusted if there are selected entries (including ancestral lineage)
                                     // immediately before the current moved entry.
                                     std::unique_ptr<weld::TreeIter> xTmp(m_xTreeView->make_iterator(xEntry.get()));
                                     bool bTmp = m_xTreeView->iter_previous(*xTmp);
                                     while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) &&
-                                           nActLevel < reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlineLevel())
+                                           nActLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel())
                                     {
                                         while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) && !m_xTreeView->is_selected(*xTmp) &&
-                                               nActLevel < reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlineLevel())
+                                               nActLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel())
                                         {
                                             bTmp = m_xTreeView->iter_parent(*xTmp);
                                         }
                                         if (!bTmp || !m_xTreeView->is_selected(*xTmp))
                                             break;
                                         bTmp = m_xTreeView->iter_previous(*xTmp);
-                                        nDest = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlinePos();
+                                        nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlinePos();
                                     }
                                     std::unique_ptr<weld::TreeIter> xPrevSibling(m_xTreeView->make_iterator(xEntry.get()));
                                     if (!m_xTreeView->iter_previous_sibling(*xPrevSibling) || !m_xTreeView->is_selected(*xPrevSibling))
@@ -3147,7 +3147,7 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
                                 }
                                 else
                                 {
-                                    nDest = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetOutlinePos();
+                                    nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
                                 }
                             }
                         }
@@ -3173,10 +3173,10 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
                         {
                             bEntry = m_xTreeView->iter_previous(*xEntry);
                             assert(!bEntry || !lcl_IsContent(*xEntry, *m_xTreeView) ||
-                                   dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
+                                   dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
                             if (bEntry && lcl_IsContent(*xEntry, *m_xTreeView))
                             {
-                                nDest = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetOutlinePos();
+                                nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlinePos();
                             }
                             else
                             {
@@ -3186,24 +3186,24 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
                             {
                                 if (!lcl_IsContent(*xEntry, *m_xTreeView))
                                     break;
-                                else if (nActLevel >= reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetOutlineLevel())
+                                else if (nActLevel >= weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xEntry))->GetOutlineLevel())
                                 {
                                     // nDest needs adjusted if there are selected entries immediately
                                     // after the level change.
                                     std::unique_ptr<weld::TreeIter> xTmp(m_xTreeView->make_iterator(xEntry.get()));
                                     bool bTmp = m_xTreeView->iter_next(*xTmp);
                                     while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) &&
-                                           nActLevel < reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlineLevel() &&
+                                           nActLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel() &&
                                            m_xTreeView->is_selected(*xTmp))
                                     {
-                                        nDest = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlinePos();
-                                        const auto nLevel = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlineLevel();
+                                        nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlinePos();
+                                        const auto nLevel = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel();
                                         // account for selected entries' descendent lineage
                                         bTmp = m_xTreeView->iter_next(*xTmp);
                                         while (bTmp && lcl_IsContent(*xTmp, *m_xTreeView) &&
-                                               nLevel < reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlineLevel())
+                                               nLevel < weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlineLevel())
                                         {
-                                            nDest = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xTmp).toInt64())->GetOutlinePos();
+                                            nDest = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xTmp))->GetOutlinePos();
                                             bTmp = m_xTreeView->iter_next(*xTmp);
                                         }
                                     }
@@ -3249,8 +3249,8 @@ void SwContentTree::ExecCommand(std::string_view rCmd, bool bOutlineWithChildren
         bool bListEntry = m_xTreeView->get_iter_first(*xListEntry);
         while ((bListEntry = m_xTreeView->iter_next(*xListEntry)) && lcl_IsContent(*xListEntry, *m_xTreeView))
         {
-            assert(dynamic_cast<SwOutlineContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xListEntry).toInt64())));
-            if (reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xListEntry).toInt64())->GetOutlinePos() == nCurrPos)
+            assert(dynamic_cast<SwOutlineContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xListEntry))));
+            if (weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xListEntry))->GetOutlinePos() == nCurrPos)
             {
                 std::unique_ptr<weld::TreeIter> xParent(m_xTreeView->make_iterator(xListEntry.get()));
                 if (m_xTreeView->iter_parent(*xParent) && !m_xTreeView->get_row_expanded(*xParent))
@@ -3309,7 +3309,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
     bool bFoundEntry = rContentTree.get_iter_first(*xIter);
     while (bFoundEntry)
     {
-        void* pUserData = reinterpret_cast<void*>(rContentTree.get_id(*xIter).toInt64());
+        void* pUserData = weld::fromId<void*>(rContentTree.get_id(*xIter));
         assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pUserData)));
         if (nType == static_cast<SwContentType*>(pUserData)->GetType())
             break;
@@ -3326,7 +3326,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
     const void* p = nullptr;
     while (rContentTree.iter_next(*xIter) && lcl_IsContent(*xIter, rContentTree))
     {
-        void* pUserData = reinterpret_cast<void*>(rContentTree.get_id(*xIter).toInt64());
+        void* pUserData = weld::fromId<void*>(rContentTree.get_id(*xIter));
         switch( nType )
         {
             case ContentTypeId::FOOTNOTE:
@@ -3346,7 +3346,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
             case ContentTypeId::TEXTFIELD:
             {
                 assert(dynamic_cast<SwTextFieldContent*>(static_cast<SwTypeNumber*>(pUserData)));
-                SwTextFieldContent* pCnt = static_cast/*reinterpret_cast*/<SwTextFieldContent*>(pUserData);
+                SwTextFieldContent* pCnt = static_cast<SwTextFieldContent*>(pUserData);
                 p = pCnt->GetFormatField()->GetField();
                 break;
             }
@@ -3737,12 +3737,12 @@ void SwContentTree::UpdateTracking()
 
         m_xTreeView->all_foreach([this, nActPos](weld::TreeIter& rEntry){
             bool bRet = false;
-            if (lcl_IsContent(rEntry, *m_xTreeView) && reinterpret_cast<SwContent*>(
-                        m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() ==
+            if (lcl_IsContent(rEntry, *m_xTreeView) && weld::fromId<SwContent*>(
+                        m_xTreeView->get_id(rEntry))->GetParent()->GetType() ==
                     ContentTypeId::OUTLINE)
             {
-                if (reinterpret_cast<SwOutlineContent*>(
-                            m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() == nActPos)
+                if (weld::fromId<SwOutlineContent*>(
+                            m_xTreeView->get_id(rEntry))->GetOutlinePos() == nActPos)
                 {
                     std::unique_ptr<weld::TreeIter> xFirstSelected(
                                 m_xTreeView->make_iterator());
@@ -3762,8 +3762,8 @@ void SwContentTree::UpdateTracking()
                             {
                                 do
                                 {
-                                    if (reinterpret_cast<SwContent*>(
-                                                m_xTreeView->get_id(*xChildEntry).toInt64())->
+                                    if (weld::fromId<SwContent*>(
+                                                m_xTreeView->get_id(*xChildEntry))->
                                             GetParent()->GetType() == ContentTypeId::OUTLINE)
                                         m_xTreeView->collapse_row(*xChildEntry);
                                     else
@@ -3783,8 +3783,8 @@ void SwContentTree::UpdateTracking()
             {
                 // use of this break assumes outline content type is first in tree
                 if (lcl_IsContentType(rEntry, *m_xTreeView) &&
-                        reinterpret_cast<SwContentType*>(
-                            m_xTreeView->get_id(rEntry).toInt64())->GetType() !=
+                        weld::fromId<SwContentType*>(
+                            m_xTreeView->get_id(rEntry))->GetType() !=
                         ContentTypeId::OUTLINE)
                     bRet = true;
             }
@@ -3832,12 +3832,12 @@ void SwContentTree::SelectOutlinesWithSelection()
     {
         m_xTreeView->all_foreach([this, nOutlinePosition](const weld::TreeIter& rEntry){
             if (lcl_IsContent(rEntry, *m_xTreeView) &&
-                    reinterpret_cast<SwContent*>(
-                    m_xTreeView->get_id(rEntry).toInt64())->GetParent()->GetType() ==
+                    weld::fromId<SwContent*>(
+                    m_xTreeView->get_id(rEntry))->GetParent()->GetType() ==
                     ContentTypeId::OUTLINE)
             {
-                if (reinterpret_cast<SwOutlineContent*>(
-                        m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos() ==
+                if (weld::fromId<SwOutlineContent*>(
+                        m_xTreeView->get_id(rEntry))->GetOutlinePos() ==
                         nOutlinePosition)
                 {
                     std::unique_ptr<weld::TreeIter> xParent =
@@ -3871,7 +3871,7 @@ void SwContentTree::MoveOutline(SwOutlineNodes::size_type nTargetPos)
 
     for (const auto& source : m_aDndOutlinesSelected)
     {
-        SwOutlineNodes::size_type nSourcePos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*source).toInt64())->GetOutlinePos();
+        SwOutlineNodes::size_type nSourcePos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*source))->GetOutlinePos();
 
         // Done on the first selection move
         if (bFirstMove) // only do once
@@ -3985,8 +3985,8 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         if (m_xTreeView->get_selected(xEntry.get()) && lcl_IsContent(*xEntry, *m_xTreeView))
         {
-            assert(dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64())));
-            if (reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xEntry).toInt64())->GetParent()->IsDeletable() &&
+            assert(dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry))));
+            if (weld::fromId<SwContent*>(m_xTreeView->get_id(*xEntry))->GetParent()->IsDeletable() &&
                     !m_pActiveShell->GetView().GetDocShell()->IsReadOnly())
             {
                 EditEntry(*xEntry, EditEntryMode::DELETE);
@@ -4007,7 +4007,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                     m_pActiveShell->GetView().GetViewFrame()->GetWindow().ToTop();
                 }
 
-                SwContent* pCnt = dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64()));
+                SwContent* pCnt = dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry)));
 
                 if (pCnt && pCnt->GetParent()->GetType() == ContentTypeId::DRAWOBJECT)
                 {
@@ -4089,7 +4089,7 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
         std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
         if (m_xTreeView->get_cursor(xEntry.get()))
         {
-            SwContent* pCnt = dynamic_cast<SwContent*>(reinterpret_cast<SwTypeNumber*>(m_xTreeView->get_id(*xEntry).toInt64()));
+            SwContent* pCnt = dynamic_cast<SwContent*>(weld::fromId<SwTypeNumber*>(m_xTreeView->get_id(*xEntry)));
             if (pCnt && pCnt->GetParent()->GetType() == ContentTypeId::OUTLINE)
             {
                 if (m_bIsRoot && aCode.GetCode() == KEY_LEFT && aCode.GetModifier() == 0)
@@ -4126,7 +4126,7 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 {
     ContentTypeId nType;
     bool bContent = false;
-    void* pUserData = reinterpret_cast<void*>(m_xTreeView->get_id(rEntry).toInt64());
+    void* pUserData = weld::fromId<void*>(m_xTreeView->get_id(rEntry));
     if (lcl_IsContentType(rEntry, *m_xTreeView))
     {
         assert(dynamic_cast<SwContentType*>(static_cast<SwTypeNumber*>(pUserData)));
@@ -4325,7 +4325,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         {
             m_pActiveShell->EnterStdMode();
             m_bIgnoreDocChange = true;
-            SwOutlineContent* pCntFirst = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(*xFirst).toInt64());
+            SwOutlineContent* pCntFirst = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(*xFirst));
 
             // toggle the outline node outline content visible attribute
             if (nSelectedPopupEntry == TOGGLE_OUTLINE_CONTENT_VISIBILITY)
@@ -4404,7 +4404,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         break;
         case 405 :
         {
-            const SwTOXBase* pBase = reinterpret_cast<SwTOXBaseContent*>(m_xTreeView->get_id(*xFirst).toInt64())
+            const SwTOXBase* pBase = weld::fromId<SwTOXBaseContent*>(m_xTreeView->get_id(*xFirst))
                                                                 ->GetTOXBase();
             m_pActiveShell->SetTOXBaseReadonly(*pBase, !SwEditShell::IsTOXBaseReadonly(*pBase));
         }
@@ -4454,16 +4454,16 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             m_pActiveShell->KillPams();
             m_pActiveShell->ClearMark();
             m_pActiveShell->EnterAddMode();
-            SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xFirst).toInt64());
+            SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xFirst));
             const ContentTypeId eTypeId = pCnt->GetParent()->GetType();
             if (eTypeId == ContentTypeId::OUTLINE)
             {
-                SwOutlineNodes::size_type nActPos = reinterpret_cast<SwOutlineContent*>(
-                            m_xTreeView->get_id(*xFirst).toInt64())->GetOutlinePos();
+                SwOutlineNodes::size_type nActPos = weld::fromId<SwOutlineContent*>(
+                            m_xTreeView->get_id(*xFirst))->GetOutlinePos();
                 m_pActiveShell->GotoOutline(nActPos);
                 m_xTreeView->selected_foreach([this](weld::TreeIter& rEntry){
-                    SwOutlineNodes::size_type nPos = reinterpret_cast<SwOutlineContent*>(
-                                m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos();
+                    SwOutlineNodes::size_type nPos = weld::fromId<SwOutlineContent*>(
+                                m_xTreeView->get_id(rEntry))->GetOutlinePos();
                     m_pActiveShell->SttSelect();
                     // select children if not expanded and don't kill PaMs
                     m_pActiveShell->MakeOutlineSel(nPos, nPos,
@@ -4496,7 +4496,7 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             break;
         case 900:
         {
-            SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(*xFirst).toInt64());
+            SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(*xFirst));
             GotoContent(pCnt);
         }
         break;
@@ -4541,7 +4541,7 @@ void SwContentTree::DeleteOutlineSelections()
         {
             nChapters += m_xTreeView->iter_n_children(rEntry);
         }
-        SwOutlineNodes::size_type nActPos = reinterpret_cast<SwOutlineContent*>(m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos();
+        SwOutlineNodes::size_type nActPos = weld::fromId<SwOutlineContent*>(m_xTreeView->get_id(rEntry))->GetOutlinePos();
         m_pActiveShell->SttSelect();
         m_pActiveShell->MakeOutlineSel(nActPos, nActPos, !m_xTreeView->get_row_expanded(rEntry), false); // select children if not expanded
         // The outline selection may already be to the start of the following outline paragraph
@@ -4709,7 +4709,7 @@ void SwContentTree::Select()
         {
             if ((m_bIsRoot && m_nRootType == ContentTypeId::OUTLINE) ||
                 (lcl_IsContent(*xEntry, *m_xTreeView) &&
-                    reinterpret_cast<SwContentType*>(m_xTreeView->get_id(*xParentEntry).toInt64())->GetType() == ContentTypeId::OUTLINE))
+                    weld::fromId<SwContentType*>(m_xTreeView->get_id(*xParentEntry))->GetType() == ContentTypeId::OUTLINE))
             {
                 bEnable = true;
             }
@@ -4745,7 +4745,7 @@ OUString SwContentType::RemoveNewline(const OUString& rEntry)
 
 void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
 {
-    SwContent* pCnt = reinterpret_cast<SwContent*>(m_xTreeView->get_id(rEntry).toInt64());
+    SwContent* pCnt = weld::fromId<SwContent*>(m_xTreeView->get_id(rEntry));
     GotoContent(pCnt);
     const ContentTypeId nType = pCnt->GetParent()->GetType();
     sal_uInt16 nSlot = 0;
