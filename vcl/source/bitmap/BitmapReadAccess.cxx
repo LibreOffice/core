@@ -19,7 +19,6 @@
 
 #include <vcl/BitmapReadAccess.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <comphelper/lok.hxx>
 
 #include <salbmp.hxx>
 #include <svdata.hxx>
@@ -458,8 +457,6 @@ BitmapColor BitmapReadAccess::GetPixelForN32BitTcBgrx(ConstScanline pScanline, t
     aBitmapColor.SetBlue(*pScanline++);
     aBitmapColor.SetGreen(*pScanline++);
     aBitmapColor.SetRed(*pScanline);
-    if (comphelper::LibreOfficeKit::isActive())
-        aBitmapColor.SetAlpha(0xFF - *(++pScanline));
 
     return aBitmapColor;
 }
@@ -483,7 +480,7 @@ void BitmapReadAccess::SetPixelForN32BitTcBgrx(Scanline pScanline, tools::Long n
     *pScanline++ = rBitmapColor.GetBlue();
     *pScanline++ = rBitmapColor.GetGreen();
     *pScanline++ = rBitmapColor.GetRed();
-    *pScanline = (comphelper::LibreOfficeKit::isActive()) ? 0xFF - rBitmapColor.GetAlpha() : 0xFF;
+    *pScanline = 0xFF;
 }
 
 BitmapColor BitmapReadAccess::GetPixelForN32BitTcRgba(ConstScanline pScanline, tools::Long nX,
