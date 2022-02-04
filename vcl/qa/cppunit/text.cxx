@@ -690,7 +690,8 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
     ScopedVclPtrInstance<VirtualDevice> pVirDev;
     pVirDev->SetFont(aFont);
 
-    const OUString sTestString = "The quick\n jumped over";
+    const OString sUTF8String(u8"Тхе яуицк\n ыумпед овер");
+    const OUString sTestString(OUString::fromUtf8(sUTF8String));
     std::unique_ptr<SalLayout> pLayout
         = pVirDev->ImplLayout(sTestString, 0, sTestString.getLength(), Point(0, 0), 0, {},
                               SalLayoutFlags::GlyphItemsOnly);
@@ -698,7 +699,8 @@ void VclTextTest::testImplLayoutArgs_PrepareFallback_precalculatedglyphs()
     SalLayoutGlyphsImpl* pGlyphsImpl = aGlyphs.Impl(1);
 
     vcl::text::ImplLayoutArgs aArgs(sTestString, 0, sTestString.getLength(),
-                                    SalLayoutFlags::BiDiRtl, LanguageTag(LANGUAGE_LATIN), nullptr);
+                                    SalLayoutFlags::BiDiRtl, LanguageTag(LANGUAGE_RUSSIAN),
+                                    nullptr);
 
     aArgs.PrepareFallback(pGlyphsImpl);
 
