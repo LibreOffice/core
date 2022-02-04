@@ -123,7 +123,6 @@ namespace vcl
 size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& rBitmaps,
                         const size_t nFirstPage, int nPages, const basegfx::B2DTuple* pSizeHint)
 {
-    static const double fResolutionDPI = vcl::pdf::getDefaultPdfResolutionDpi();
     auto pPdfium = vcl::pdf::PDFiumLibrary::get();
     if (!pPdfium)
     {
@@ -134,6 +133,8 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
     std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = pPdfium->openDocument(pBuffer, nSize);
     if (!pPdfDocument)
         return 0;
+
+    static const double fResolutionDPI = vcl::pdf::getDefaultPdfResolutionDpi();
 
     const int nPageCount = pPdfDocument->getPageCount();
     if (nPages <= 0)
