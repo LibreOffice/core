@@ -172,13 +172,11 @@ static void testCachedGlyphs( const OUString& aText, const OUString& aFontName =
     std::unique_ptr<SalLayout> pLayout1 = pOutputDevice->ImplLayout(
         aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
     SalLayoutGlyphs aGlyphs1 = pLayout1->GetGlyphs();
-    CPPUNIT_ASSERT_MESSAGE(message, aGlyphs1.IsValid());
-    CPPUNIT_ASSERT_MESSAGE(message, aGlyphs1.Impl(0) != nullptr);
     // Reuse the cached glyphs to get glyphs again.
     std::unique_ptr<SalLayout> pLayout2 = pOutputDevice->ImplLayout(
         aText, 0, aText.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly, nullptr, &aGlyphs1);
     SalLayoutGlyphs aGlyphs2 = pLayout2->GetGlyphs();
-    CPPUNIT_ASSERT_MESSAGE(message, aGlyphs2.IsValid());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(message, aGlyphs1.IsValid(), aGlyphs2.IsValid());
     // And check it's the same.
     for( int level = 0; level < MAX_FALLBACK; ++level )
     {
