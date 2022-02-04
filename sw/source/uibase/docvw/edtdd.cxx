@@ -374,7 +374,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     SdrObject *pObj = nullptr;
     m_nDropDestination = GetDropDestination( aPixPt, &pObj );
-    if( !bool(m_nDropDestination) )
+    if( m_nDropDestination == SotExchangeDest::NONE )
         return DND_ACTION_NONE;
 
     sal_uInt8 nEventAction;
