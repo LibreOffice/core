@@ -469,7 +469,7 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
 
     // Collect all the remaining data sequences in the same chart type. The
     // deleted data series is already gone by this point.
-    std::vector<Reference<chart2::data::XLabeledDataSequence> > aAllDataSeqs =
+    std::vector<rtl::Reference<LabeledDataSequence> > aAllDataSeqs =
         DataSeriesHelper::getAllDataSequences(xSeriesCnt->getDataSeries());
 
     // Check if the sequences to be deleted are still referenced by any of

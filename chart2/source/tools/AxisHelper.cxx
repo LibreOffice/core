@@ -194,7 +194,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( *xChartDoc ) );
                     if( xSource.is() )
                     {
-                        std::vector< Reference< chart2::data::XLabeledDataSequence > > aXValues(
+                        std::vector< rtl::Reference< LabeledDataSequence > > aXValues(
                             DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), "values-x" ) );
                         if( aXValues.empty() )
                         {

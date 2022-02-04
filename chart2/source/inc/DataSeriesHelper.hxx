@@ -61,7 +61,7 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString
     @param aRole
         The role that is to be filtered out.
 */
-OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XLabeledDataSequence >
+OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::LabeledDataSequence >
     getDataSequenceByRole( const css::uno::Reference< css::chart2::data::XDataSource > & xSource,
                            const OUString& aRole,
                            bool bMatchPrefix = false );
@@ -76,7 +76,7 @@ OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XLabeledDataSeq
         The role that is to be filtered out.
 */
 OOO_DLLPUBLIC_CHARTTOOLS std::vector<
-  css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+  rtl::Reference< ::chart::LabeledDataSequence > >
     getAllDataSequencesByRole( const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole );
 OOO_DLLPUBLIC_CHARTTOOLS std::vector<
@@ -85,7 +85,7 @@ OOO_DLLPUBLIC_CHARTTOOLS std::vector<
                                const OUString& aRole );
 
 OOO_DLLPUBLIC_CHARTTOOLS
-std::vector<css::uno::Reference<css::chart2::data::XLabeledDataSequence> >
+std::vector<rtl::Reference< ::chart::LabeledDataSequence > >
 getAllDataSequences(
     const css::uno::Sequence<css::uno::Reference<css::chart2::XDataSeries> >& aSeries );
 OOO_DLLPUBLIC_CHARTTOOLS

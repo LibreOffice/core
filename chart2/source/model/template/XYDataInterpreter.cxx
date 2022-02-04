@@ -149,15 +149,15 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
             // values-y
-            Reference< data::XLabeledDataSequence > xValuesY(
+            rtl::Reference< LabeledDataSequence > xValuesY(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
-            Reference< data::XLabeledDataSequence > xValuesX(
+            rtl::Reference< LabeledDataSequence > xValuesX(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ));
             // re-use values-... as values-x/values-y
             if( ! xValuesX.is() ||
                 ! xValuesY.is())
             {
-                vector< Reference< data::XLabeledDataSequence > > aValueSeqVec(
+                vector< rtl::Reference< LabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
                         xSeriesSource->getDataSequences(), "values" ));
                 if( xValuesX.is())
@@ -169,7 +169,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                 if( ! xValuesY.is() &&
                     aValueSeqVec.size() > nIndex )
                 {
-                    xValuesY.set( aValueSeqVec[nIndex++] );
+                    xValuesY = aValueSeqVec[nIndex++];
                     if( xValuesY.is())
                         SetRole( xValuesY->getValues(), "values-y");
                 }
@@ -177,7 +177,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                 if( ! xValuesX.is() &&
                     aValueSeqVec.size() > nIndex )
                 {
-                    xValuesX.set( aValueSeqVec[nIndex++] );
+                    xValuesX = aValueSeqVec[nIndex++];
                     if( xValuesX.is())
                         SetRole( xValuesY->getValues(), "values-x");
                 }
@@ -200,7 +200,8 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
 #ifdef DBG_UTIL
                 for( auto const & j : aSeqs )
                 {
-                    SAL_WARN_IF((j == xValuesY || j == xValuesX), "chart2.template", "All sequences should be used" );
+                    rtl::Reference< ::chart::LabeledDataSequence > j2 = dynamic_cast<LabeledDataSequence*>(j.get());
+                    SAL_WARN_IF((j2 == xValuesY || j2 == xValuesX), "chart2.template", "All sequences should be used" );
                 }
 #endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );

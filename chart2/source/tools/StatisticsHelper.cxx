@@ -21,6 +21,7 @@
 #include <DataSeriesHelper.hxx>
 #include <ErrorBar.hxx>
 #include <unonames.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
@@ -69,7 +70,7 @@ double lcl_getVariance( const Sequence< double > & rData, sal_Int32 & rOutValidC
     return (fQuadSum - fSum*fSum/fN) / fN;
 }
 
-Reference< chart2::data::XLabeledDataSequence > lcl_getErrorBarLabeledSequence(
+rtl::Reference< ::chart::LabeledDataSequence > lcl_getErrorBarLabeledSequence(
     const Reference< chart2::data::XDataSource > & xDataSource,
     bool bPositiveValue, bool bYError,
     OUString & rOutRoleNameUsed )
@@ -90,14 +91,14 @@ Reference< chart2::data::XLabeledDataSequence > lcl_getErrorBarLabeledSequence(
         aRole.append( "negative" );
 
     OUString aLongRole = aRole.makeStringAndClear();
-    Reference< chart2::data::XLabeledDataSequence > xLSeq(
-        ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aLongRole ));
+    rtl::Reference< ::chart::LabeledDataSequence > xLSeq =
+        ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aLongRole );
     // try role without "-negative" or "-positive" postfix
     if( xLSeq.is())
         rOutRoleNameUsed = aLongRole;
     else
     {
-        xLSeq.set( ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aPlainRole ));
+        xLSeq = ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aPlainRole );
         if( xLSeq.is())
             rOutRoleNameUsed = aPlainRole;
         else
@@ -188,20 +189,20 @@ double StatisticsHelper::getStandardError( const Sequence< double > & rData )
     return sqrt( fVar ) / sqrt( double(nValCount) );
 }
 
-Reference< chart2::data::XLabeledDataSequence > StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
+rtl::Reference< LabeledDataSequence > StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
     const Reference< chart2::data::XDataSource > & xDataSource,
     bool bPositiveValue,
     bool bYError /* = true */ )
 {
-    Reference< chart2::data::XLabeledDataSequence > xResult;
+    rtl::Reference< LabeledDataSequence > xResult;
     if( !xDataSource.is())
         return xResult;
 
     OUString aRole;
-    Reference< chart2::data::XLabeledDataSequence > xLSeq(
-        lcl_getErrorBarLabeledSequence( xDataSource, bPositiveValue, bYError, aRole ));
+    rtl::Reference< LabeledDataSequence > xLSeq =
+        lcl_getErrorBarLabeledSequence( xDataSource, bPositiveValue, bYError, aRole );
     if( xLSeq.is())
-        xResult.set( xLSeq );
+        xResult = xLSeq;
 
     return xResult;
 }
@@ -211,10 +212,10 @@ Reference< chart2::data::XDataSequence > StatisticsHelper::getErrorDataSequenceF
     bool bPositiveValue,
     bool bYError /* = true */ )
 {
-    Reference< chart2::data::XLabeledDataSequence > xLSeq(
+    rtl::Reference< LabeledDataSequence > xLSeq =
         StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
             xDataSource, bPositiveValue,
-            bYError ));
+            bYError );
     if( !xLSeq.is())
         return Reference< chart2::data::XDataSequence >();
 
