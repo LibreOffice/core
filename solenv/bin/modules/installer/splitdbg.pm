@@ -33,7 +33,7 @@ sub _need_to_splitdbg
     my $fileoutput = <FILE>;
     close (FILE);
 
-    if (( $fileoutput =~ /with debug_info/i ) && ( $fileoutput =~ /\bELF\b/ )) { $splitdbg = 1; }
+    if (( $fileoutput =~ /not stripped/i ) && ( $fileoutput =~ /\bELF\b/ )) { $splitdbg = 1; }
 
     return $splitdbg;
 }
