@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "653ec94a_e360561c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-02-04T10:11:07Z",
+      "side": 1,
+      "message": "for a more seamless experience, the ./g script should also be updated to fetch only the head of a branch to switch to, otherwise you\u0027ll trigger a full clone...\n\nsomething along the lines of \n   cd \u003csubmodule\u003e; git fetch --depth 1 origin githashthatcorewantsfromthemodule\" before the git submodule update in core",
+      "revId": "0b4cd1abe34a2e4a902a2c5c88ca32107279b8dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
