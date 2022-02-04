@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4611a86_ebfb9de3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-04T07:21:57Z",
+      "side": 1,
+      "message": "Let\u0027s wait here a bit until I767e88ba9ca7595913b6ddc57d152febd595f504 works on all OS/DE.",
+      "revId": "c21600559c9d756ae7d7ba77a81c61741349534a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
