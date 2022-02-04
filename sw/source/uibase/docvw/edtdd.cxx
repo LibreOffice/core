@@ -311,7 +311,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
         default: OSL_ENSURE( false, "new ObjectType?" );
         }
     }
-    if ( !bool(nDropDestination) )
+    if ( nDropDestination == SotExchangeDest::NONE )
     {
         if( dynamic_cast< const SwWebDocShell *>( rSh.GetView().GetDocShell() ) != nullptr  )
             nDropDestination = SotExchangeDest::SWDOC_FREE_AREA_WEB;
@@ -374,7 +374,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     SdrObject *pObj = nullptr;
     m_nDropDestination = GetDropDestination( aPixPt, &pObj );
-    if( !bool(m_nDropDestination) )
+    if( m_nDropDestination == SotExchangeDest::NONE )
         return DND_ACTION_NONE;
 
     sal_uInt8 nEventAction;
