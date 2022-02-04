@@ -16,6 +16,23 @@
       "message": "ready for submission",
       "revId": "502beb122e896508d87e37b57fa927645500f850",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c6456c2_b9ac2a66",
+        "filename": "sd/source/ui/view/Outliner.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 466,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-04T20:40:07Z",
+      "side": 1,
+      "message": "I\u0027d just do mpSearchItem.reset(pSearchItem-\u003eClone()); but seeing as ci is so terrible these days it seems a bad idea to throw away a rare +1 from jenkins over it",
+      "revId": "502beb122e896508d87e37b57fa927645500f850",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
