@@ -188,7 +188,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
 
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
     {
-        double nAngle1, nAngle2;
+        double nAngle1(0.0), nAngle2(0.0);
         uno::Reference<drawing::XShape> xShape(getShape(1, nPageIndex));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         uno::Reference<drawing::XShape> xShape2(getShape(2, nPageIndex));
