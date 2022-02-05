@@ -69,7 +69,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
     getComponent().set(
         loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
 
-    // When exporting to PDF, and referring to a certficicate using a subject name:
+    // When exporting to PDF, and referring to a certificate using a subject name:
     uno::Reference<css::lang::XMultiServiceFactory> xFactory = getMultiServiceFactory();
     uno::Reference<document::XFilter> xFilter(
         xFactory->createInstance("com.sun.star.document.PDFFilter"), uno::UNO_QUERY);
