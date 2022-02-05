@@ -35,6 +35,7 @@ interface TableSelection
     SID_DETECTIVE_DEL_ALL   [ ExecMethod = Execute; StateMethod = GetState; ]
     FID_TABLE_VISIBLE   [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_MOVE        [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
+    FID_TAB_DUPLICATE        [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_DELETE_TABLE    [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_RENAME      [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]
     FID_TAB_RTL         [ ExecMethod = ExecuteTable; StateMethod = GetStateTable; ]

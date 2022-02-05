@@ -596,6 +596,49 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             }
             break;
 
+        case FID_TAB_DUPLICATE:
+            {
+                if ( rDoc.GetChangeTrack() != nullptr )
+                    // If ChangeTracking is active, then no DuplicateSheet
+                    break;
+
+                // Get info about current document and selected tab
+                SCTAB nTab = rViewData.GetTabNo();
+                OUString aTabName = rDoc.GetAllTableNames()[nTab];
+                OUString aDocName = GetViewData().GetDocShell()->GetTitle();
+                sal_uInt16 nDoc = 0;
+                bool bCpy = true;
+
+                SfxObjectShell* pSh = SfxObjectShell::GetFirst();
+                ScDocShell* pScSh = nullptr;
+                sal_uInt16 i = 0;
+
+                while ( pSh )
+                {
+                    pScSh = dynamic_cast<ScDocShell*>( pSh );
+
+                    if( pScSh )
+                    {
+                        pScSh->GetTitle();
+
+                        if (aDocName == pScSh->GetTitle())
+                        {
+                            nDoc = i;
+                            break;
+                        }
+                        // Only count ScDocShell
+                        i++;
+                    }
+                    pSh = SfxObjectShell::GetNext( *pSh );
+                }
+
+                // Create a valid name for the new tab
+                rDoc.CreateValidTabName(aTabName);
+
+                MoveTable( nDoc, nTab + 1, bCpy, &aTabName );
+            }
+            break;
+
         case FID_DELETE_TABLE:
             {
                 bool bHasIndex = (pReqArgs != nullptr);
@@ -944,6 +987,13 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                 break;
 
             case FID_TAB_MOVE:
+                if (   !rDoc.IsDocEditable()
+                    || rDoc.GetChangeTrack() != nullptr
+                    || nTabCount > MAXTAB)
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_TAB_DUPLICATE:
                 if (   !rDoc.IsDocEditable()
                     || rDoc.GetChangeTrack() != nullptr
                     || nTabCount > MAXTAB)

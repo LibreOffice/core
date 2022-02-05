@@ -300,6 +300,7 @@ void ScTabControl::Select()
     rBind.Invalidate( FID_INS_TABLE );
     rBind.Invalidate( FID_TAB_APPEND );
     rBind.Invalidate( FID_TAB_MOVE );
+    rBind.Invalidate( FID_TAB_DUPLICATE );
     rBind.Invalidate( FID_TAB_RENAME );
     rBind.Invalidate( FID_DELETE_TABLE );
     rBind.Invalidate( FID_TABLE_SHOW );

@@ -3428,6 +3428,23 @@ SfxVoidItem Move FID_TAB_MOVE
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem DuplicateSheet FID_TAB_DUPLICATE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = FALSE,
+    GroupId = SfxGroupId::Edit;
+]
+
 
 SfxVoidItem Name FID_TAB_RENAME
 (SfxStringItem Name FID_TAB_RENAME,SfxUInt16Item Index FN_PARAM_1)

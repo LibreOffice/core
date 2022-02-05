@@ -383,6 +383,7 @@ class SvxZoomSliderItem;
 #define FID_TAB_MENU_SET_TAB_BG_COLOR (TAB_POPUP_START + 8)
 #define FID_TAB_SET_TAB_BG_COLOR      (TAB_POPUP_START + 9)
 #define FID_TAB_EVENTS          (TAB_POPUP_START+10)
+#define FID_TAB_DUPLICATE       (TAB_POPUP_START+11)
 
 #define TAB_POPUP_END           (TAB_POPUP_START + 20)
 

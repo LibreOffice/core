@@ -11,6 +11,7 @@
   <menu:menuitem menu:id=".uno:Insert"/>
   <menu:menuitem menu:id=".uno:Remove"/>
   <menu:menuitem menu:id=".uno:RenameTable"/>
+  <menu:menuitem menu:id=".uno:DuplicateSheet"/>
   <menu:menuitem menu:id=".uno:Move"/>
   <menu:menuitem menu:id=".uno:TableSelectAll"/>
   <menu:menuitem menu:id=".uno:TableDeselectAll"/>
