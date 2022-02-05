@@ -577,6 +577,7 @@
       <menu:menuitem menu:id=".uno:Show" menu:style="text"/>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:Move"/>
+      <menu:menuitem menu:id=".uno:DuplicateSheet"/>
       <menu:menu menu:id=".uno:NavigateMenu">
         <menu:menupopup>
           <menu:menuitem menu:id=".uno:JumpToPrevTable"/>
