@@ -664,7 +664,15 @@ void Qt5Widget::inputMethodEvent(QInputMethodEvent* pEvent)
                         if (aCharFormat.fontStrikeOut())
                             aETIP |= ExtTextInputAttr::RedText;
                         for (int j = rAttr.start; j < rAttr.start + rAttr.length; j++)
+                        {
+                            SAL_WARN_IF(j >= static_cast<int>(aTextAttrs.size()), "vcl.qt5",
+                                        "QInputMethodEvent::Attribute out of range. Broken range: "
+                                            << rAttr.start << "," << rAttr.start + rAttr.length
+                                            << " Legal range: 0," << aTextAttrs.size());
+                            if (j >= static_cast<int>(aTextAttrs.size()))
+                                break;
                             aTextAttrs[j] = aETIP;
+                        }
                     }
                     break;
                 }
