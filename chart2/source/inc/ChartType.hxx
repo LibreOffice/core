@@ -35,6 +35,7 @@
 
 namespace chart
 {
+class BaseCoordinateSystem;
 class DataSeries;
 class ModifyEventForwarder;
 
@@ -101,6 +102,9 @@ public:
     void setDataSeries(
         const std::vector< rtl::Reference< ::chart::DataSeries > >& aDataSeries );
     const std::vector< rtl::Reference< ::chart::DataSeries > > & getDataSeries2() const { return m_aDataSeries; }
+
+    static rtl::Reference< ::chart::BaseCoordinateSystem >
+        createCoordinateSystem2( ::sal_Int32 DimensionCount );
 
 protected:
 

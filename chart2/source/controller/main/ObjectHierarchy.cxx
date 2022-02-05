@@ -23,6 +23,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <RegressionCurveHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ChartType.hxx>
@@ -94,12 +95,11 @@ void lcl_getChildOIDs(
     }
 }
 
-void lcl_addAxisTitle( const Reference< XAxis >& xAxis, ::chart::ObjectHierarchy::tChildContainer& rContainer, const rtl::Reference<::chart::ChartModel>& xChartModel )
+void lcl_addAxisTitle( const rtl::Reference< ::chart::Axis >& xAxis, ::chart::ObjectHierarchy::tChildContainer& rContainer, const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
-    Reference< XTitled > xAxisTitled( xAxis, uno::UNO_QUERY );
-    if( xAxisTitled.is())
+    if( xAxis.is())
     {
-        Reference< XTitle > xAxisTitle( xAxisTitled->getTitleObject());
+        Reference< XTitle > xAxisTitle( xAxis->getTitleObject());
         if( xAxisTitle.is())
             rContainer.emplace_back( ::chart::ObjectIdentifier::createClassifiedIdentifierForObject( xAxisTitle, xChartModel ) );
     }
@@ -153,8 +153,8 @@ void ObjectHierarchy::createTree( const rtl::Reference<::chart::ChartModel>& xCh
         if( !m_bOrderingForElementSelector )
         {
             // Axis Titles. Note: These are interpreted of being top level
-            const Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-            for( Reference< XAxis > const & axis : aAxes )
+            const std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
+            for( rtl::Reference< Axis > const & axis : aAxes )
                 lcl_addAxisTitle( axis, aTopLevelContainer, xChartDocument );
 
             // Diagram
@@ -223,7 +223,7 @@ void ObjectHierarchy::createAxesTree(
     if( !bSupportsAxesGrids )
         return;
 
-    Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true ) );
+    std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram, /* bOnlyVisible = */ true );
     if( !m_bOrderingForElementSelector )
     {
         for (const auto & rAxis : std::as_const(aAxes))
@@ -233,7 +233,7 @@ void ObjectHierarchy::createAxesTree(
     // get all axes, also invisible ones
     aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
     // Grids
-    for( Reference< XAxis > const & xAxis : std::as_const(aAxes) )
+    for( rtl::Reference< Axis > const & xAxis : aAxes )
     {
         if(!xAxis.is())
             continue;

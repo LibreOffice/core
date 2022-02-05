@@ -47,6 +47,7 @@
 #include <StatisticsHelper.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <LegendHelper.hxx>
 #include <servicenames_charttypes.hxx>
@@ -1195,7 +1196,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
 
                 else if( eObjectType  == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_GRID || eObjectType == OBJECTTYPE_SUBGRID )
                 {
-                    Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+                    rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
                     if( xAxis.is() && xDiagram.is() )
                     {
                         sal_Int32 nDimensionIndex = -1;
@@ -1206,10 +1207,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         bool bIsAxisVisible = AxisHelper::isAxisVisible( xAxis );
                         bool bIsMajorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, true /*bMainGrid*/, xDiagram );
                         bool bIsMinorGridVisible = AxisHelper::isGridShown( nDimensionIndex, nCooSysIndex, false /*bMainGrid*/, xDiagram );
-                        bool bHasTitle = false;
-                        uno::Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
-                        if( xTitled.is())
-                            bHasTitle = !TitleHelper::getCompleteString( xTitled->getTitleObject() ).isEmpty();
+                        bool bHasTitle = !TitleHelper::getCompleteString( xAxis->getTitleObject() ).isEmpty();
 
                         if( eObjectType  != OBJECTTYPE_AXIS && bIsAxisVisible )
                             lcl_insertMenuCommand( xPopupMenu, nUniqueId++, ".uno:FormatAxis" );

@@ -26,6 +26,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <DiagramHelper.hxx>
@@ -383,6 +384,34 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
         if( xLegend.is() )
         {
             return createClassifiedIdentifierForParticle( createParticleForLegend( xChartModel ) );
+        }
+    }
+    catch(const uno::Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION("chart2");
+    }
+
+    OSL_FAIL("give object could not be identified in createClassifiedIdentifierForObject");
+
+    return OUString();
+}
+
+OUString ObjectIdentifier::createClassifiedIdentifierForObject(
+          const rtl::Reference<::chart::Axis>& xAxis
+        , const rtl::Reference<::chart::ChartModel>& xChartModel )
+{
+    try
+    {
+        //axis
+        if( xAxis.is() )
+        {
+            rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, ChartModelHelper::findDiagram( xChartModel ) ) );
+            OUString aCooSysParticle( createParticleForCoordinateSystem( xCooSys, xChartModel ) );
+            sal_Int32 nDimensionIndex=-1;
+            sal_Int32 nAxisIndex=-1;
+            AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex );
+            OUString aAxisParticle( createParticleForAxis( nDimensionIndex, nAxisIndex ) );
+            return createClassifiedIdentifierForParticles( aCooSysParticle, aAxisParticle );
         }
     }
     catch(const uno::Exception&)
@@ -1108,10 +1137,10 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     sal_Int32 nAxisIndex = -1;
                     lcl_parseAxisIndices( nDimensionIndex, nAxisIndex, rObjectCID );
 
-                    Reference< chart2::XAxis > xAxis(
-                        AxisHelper::getAxis( nDimensionIndex, nAxisIndex, xCooSys ) );
+                    rtl::Reference< Axis > xAxis =
+                        AxisHelper::getAxis( nDimensionIndex, nAxisIndex, xCooSys );
                     if( xAxis.is() )
-                        xObjectProperties.set( xAxis, uno::UNO_QUERY );
+                        xObjectProperties = xAxis;
                 }
                 break;
             case OBJECTTYPE_AXIS_UNITLABEL:
@@ -1226,7 +1255,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
     return xObjectProperties;
 }
 
-Reference< XAxis > ObjectIdentifier::getAxisForCID(
+rtl::Reference< Axis > ObjectIdentifier::getAxisForCID(
                 const OUString& rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {

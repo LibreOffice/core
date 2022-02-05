@@ -38,6 +38,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace chart
 {
+class Axis;
 class BaseCoordinateSystem;
 class ChartType;
 class Diagram;
@@ -56,21 +57,26 @@ public:
 
     static void checkDateAxis( css::chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis );
     static css::chart2::ScaleData getDateCheckedScale( const css::uno::Reference< css::chart2::XAxis >& xAxis, ChartModel& rModel );
+    static css::chart2::ScaleData getDateCheckedScale( const rtl::Reference< ::chart::Axis >& xAxis, ChartModel& rModel );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
                   const css::uno::Reference< css::chart2::XAxis >& xAxis
                 , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCorrespondingCoordinateSystem
                 , const rtl::Reference< ::chart::ChartModel>& xChartDoc
                 , bool bSearchForParallelAxisIfNothingIsFound );
+    static sal_Int32 getExplicitNumberFormatKeyForAxis(
+                  const rtl::Reference< ::chart::Axis >& xAxis
+                , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCorrespondingCoordinateSystem
+                , const rtl::Reference< ::chart::ChartModel>& xChartDoc
+                , bool bSearchForParallelAxisIfNothingIsFound );
 
-    static css::uno::Reference<
-           css::chart2::XAxis >
+    static rtl::Reference< ::chart::Axis >
         createAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< ::chart::Diagram >& xDiagram
                 , const css::uno::Reference< css::uno::XComponentContext >& xContext
                 , ReferenceSizeProvider * pRefSizeProvider = nullptr );
 
-    static css::uno::Reference< css::chart2::XAxis >
+    static rtl::Reference< ::chart::Axis >
         createAxis(
             sal_Int32 nDimensionIndex
             , sal_Int32 nAxisIndex // 0==main or 1==secondary axis
@@ -97,12 +103,16 @@ public:
                 , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static void makeAxisVisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
+    static void makeAxisVisible( const rtl::Reference< ::chart::Axis >& xAxis );
     static void makeGridVisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
     static void makeAxisInvisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
+    static void makeAxisInvisible( const rtl::Reference< ::chart::Axis >& xAxis );
     static void makeGridInvisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
     static void hideAxisIfNoDataIsAttached( const css::uno::Reference< css::chart2::XAxis >& xAxis
+                                          , const rtl::Reference< ::chart::Diagram >& xDiagram);
+    static void hideAxisIfNoDataIsAttached( const rtl::Reference< ::chart::Axis >& xAxis
                                           , const rtl::Reference< ::chart::Diagram >& xDiagram);
 
     SAL_DLLPRIVATE static bool areAxisLabelsVisible( const css::uno::Reference< css::beans::XPropertySet >& xAxisProperties );
@@ -118,20 +128,30 @@ public:
         getCoordinateSystemOfAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
+    static rtl::Reference< ::chart::BaseCoordinateSystem >
+        getCoordinateSystemOfAxis(
+              const rtl::Reference< ::chart::Axis >& xAxis
+            , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    static css::uno::Reference< css::chart2::XAxis >
+    static rtl::Reference< ::chart::Axis >
         getAxis( sal_Int32 nDimensionIndex, bool bMainAxis
                 , const rtl::Reference< ::chart::Diagram >& xDiagram );
-    static css::uno::Reference< css::chart2::XAxis >
+    static rtl::Reference< ::chart::Axis >
         getAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
 
-    static css::uno::Reference< css::chart2::XAxis >
+    static rtl::Reference< ::chart::Axis >
         getCrossingMainAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
+    static rtl::Reference< ::chart::Axis >
+        getCrossingMainAxis( const rtl::Reference< ::chart::Axis >& xAxis
+            , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
 
-    static css::uno::Reference< css::chart2::XAxis >
+    static rtl::Reference< ::chart::Axis >
         getParallelAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis
+            , const rtl::Reference< ::chart::Diagram >& xDiagram );
+    static rtl::Reference< ::chart::Axis >
+        getParallelAxis( const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static css::uno::Reference< css::beans::XPropertySet >
@@ -144,9 +164,16 @@ public:
     static sal_Int32 getDimensionIndexOfAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
+    static sal_Int32 getDimensionIndexOfAxis(
+              const rtl::Reference< ::chart::Axis >& xAxis
+            , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static bool getIndicesForAxis(
               const css::uno::Reference< css::chart2::XAxis >& xAxis
+            , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
+            , sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
+    static bool getIndicesForAxis(
+              const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
             , sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
 
@@ -154,18 +181,22 @@ public:
               const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram
             , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
+    static bool getIndicesForAxis(
+              const rtl::Reference< ::chart::Axis >& xAxis
+            , const rtl::Reference< ::chart::Diagram >& xDiagram
+            , sal_Int32& rOutCooSysIndex, sal_Int32& rOutDimensionIndex, sal_Int32& rOutAxisIndex );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
                </sal_True> are returned
      */
-    static css::uno::Sequence< css::uno::Reference< css::chart2::XAxis > >
+    static std::vector< rtl::Reference< ::chart::Axis > >
             getAllAxesOfDiagram( const rtl::Reference< ::chart::Diagram >& xDiagram
             , bool bOnlyVisible = false );
 
     /** @param bOnlyVisible if </TRUE>, only axes with property "Show" set to
                </sal_True> are returned
      */
-    SAL_DLLPRIVATE static std::vector< css::uno::Reference< css::chart2::XAxis > >
+    SAL_DLLPRIVATE static std::vector< rtl::Reference< ::chart::Axis > >
             getAllAxesOfCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
             , bool bOnlyVisible = false );
 
@@ -189,6 +220,8 @@ public:
                         , ReferenceSizeProvider * pRefSizeProvider );
 
     static bool shouldAxisBeDisplayed( const css::uno::Reference< css::chart2::XAxis >& xAxis
+                                       , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
+    static bool shouldAxisBeDisplayed( const rtl::Reference< ::chart::Axis >& xAxis
                                        , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
     static bool isSecondaryYAxisNeeded( const rtl::Reference<
                     ::chart::BaseCoordinateSystem >& xCooSys );

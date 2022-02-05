@@ -26,6 +26,7 @@
 #include <ObjectIdentifier.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ObjectNameProvider.hxx>
 #include <DataSeries.hxx>
@@ -76,10 +77,9 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
     ExplicitValueProvider* pExplicitValueProvider( comphelper::getFromUnoTunnel<ExplicitValueProvider>(xChartView) );
     if( pExplicitValueProvider )
     {
-        Reference< XAxis > xAxis;
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rSelectedObjectCID, xChartModel );
-        xAxis = DiagramHelper::getAttachedAxis( xSeries, xDiagram );
+        rtl::Reference< Axis > xAxis = DiagramHelper::getAttachedAxis( xSeries, xDiagram );
         if(!xAxis.is())
             xAxis = AxisHelper::getAxis( 1/*nDimensionIndex*/, true/*bMainAxis*/, xDiagram );
         if(xAxis.is())

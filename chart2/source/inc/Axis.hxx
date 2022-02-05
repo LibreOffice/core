@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <OPropertySet.hxx>
+#include "OPropertySet.hxx"
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/uno3.hxx>
@@ -27,7 +27,8 @@
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <ModifyListenerHelper.hxx>
+#include "ModifyListenerHelper.hxx"
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
@@ -44,7 +45,7 @@ typedef ::cppu::WeakImplHelper<
     Axis_Base;
 }
 
-class Axis final :
+class OOO_DLLPUBLIC_CHARTTOOLS Axis final :
     public cppu::BaseMutex,
     public impl::Axis_Base,
     public ::property::OPropertySet
@@ -75,6 +76,7 @@ private:
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
+public:
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo() override;
@@ -101,6 +103,7 @@ private:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
+private:
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
         const css::lang::EventObject& aEvent ) override;

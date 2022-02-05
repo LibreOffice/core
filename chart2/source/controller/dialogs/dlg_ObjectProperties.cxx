@@ -41,6 +41,7 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <NumberFormatterWrapper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <ChartModel.hxx>
@@ -157,7 +158,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 
         if( m_bHasScaleProperties )
         {
-            uno::Reference< XAxis > xAxis( ObjectIdentifier::getAxisForCID( m_aObjectCID, xChartModel ) );
+            rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aObjectCID, xChartModel );
             if( xAxis.is() )
             {
                 //no scale page for series axis

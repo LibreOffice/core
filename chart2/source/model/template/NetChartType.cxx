@@ -22,6 +22,7 @@
 #include <servicenames_charttypes.hxx>
 #include <AxisIndexDefines.hxx>
 #include <AxisHelper.hxx>
+#include <Axis.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -58,7 +59,7 @@ Reference< XCoordinateSystem > SAL_CALL
     rtl::Reference< PolarCoordinateSystem > xResult =
         new PolarCoordinateSystem( DimensionCount );
 
-    Reference< XAxis > xAxis( xResult->getAxisByDimension( 0, MAIN_AXIS_INDEX ) );
+    rtl::Reference< Axis > xAxis = xResult->getAxisByDimension2( 0, MAIN_AXIS_INDEX );
     if( xAxis.is() )
     {
         ScaleData aScaleData = xAxis->getScaleData();
@@ -68,7 +69,7 @@ Reference< XCoordinateSystem > SAL_CALL
         xAxis->setScaleData( aScaleData );
     }
 
-    xAxis = xResult->getAxisByDimension( 1, MAIN_AXIS_INDEX );
+    xAxis = xResult->getAxisByDimension2( 1, MAIN_AXIS_INDEX );
     if( xAxis.is() )
     {
         ScaleData aScaleData = xAxis->getScaleData();

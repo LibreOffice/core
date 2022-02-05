@@ -21,6 +21,7 @@
 #include <PropertyHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include <CartesianCoordinateSystem.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <AxisIndexDefines.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
@@ -123,7 +124,7 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 
     for( sal_Int32 i=0; i<DimensionCount; ++i )
     {
-        Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
+        rtl::Reference< Axis > xAxis = xResult->getAxisByDimension2( i, MAIN_AXIS_INDEX );
         if( !xAxis.is() )
         {
             OSL_FAIL("a created coordinate system should have an axis for each dimension");

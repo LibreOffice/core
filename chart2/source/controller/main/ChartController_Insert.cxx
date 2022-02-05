@@ -29,6 +29,7 @@
 
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include <DataSeries.hxx>
@@ -707,7 +708,7 @@ void ChartController::executeDispatch_InsertAxisTitle()
                 ActionDescriptionProvider::ActionType::Insert, SchResId( STR_OBJECT_TITLE )),
             m_xUndoManager );
 
-            Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+            rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
             sal_Int32 nDimensionIndex = -1;
             sal_Int32 nCooSysIndex = -1;
             sal_Int32 nAxisIndex = -1;

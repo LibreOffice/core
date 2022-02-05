@@ -21,6 +21,7 @@
 #include <Diagram.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
@@ -145,7 +146,7 @@ void DiagramHelper::setVertical(
                 const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
                 for (sal_Int32 nI = 0; nI <= nMaximumScaleIndex; ++nI)
                 {
-                    Reference<chart2::XAxis> xAxis = xCooSys->getAxisByDimension(nDimIndex,nI);
+                    rtl::Reference<Axis> xAxis = xCooSys->getAxisByDimension2(nDimIndex,nI);
                     if (!xAxis.is())
                         continue;
 
@@ -153,11 +154,7 @@ void DiagramHelper::setVertical(
                     if (!bChanged)
                         continue;
 
-                    Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
-                    if (!xTitled.is())
-                        continue;
-
-                    Reference< beans::XPropertySet > xTitleProps( xTitled->getTitleObject(), uno::UNO_QUERY );
+                    Reference< beans::XPropertySet > xTitleProps( xAxis->getTitleObject(), uno::UNO_QUERY );
                     if (!xTitleProps.is())
                         continue;
 
@@ -247,7 +244,7 @@ void DiagramHelper::setStackMode(
             const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(1);
             for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
             {
-                Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( 1,nI ));
+                rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( 1,nI );
                 if( xAxis.is())
                 {
                     chart2::ScaleData aScaleData = xAxis->getScaleData();
@@ -379,8 +376,8 @@ StackMode DiagramHelper::getStackModeFromChartType(
                         if( nSeriesCount )
                             nAxisIndex = DataSeriesHelper::getAttachedAxisIndex(aSeries[0]);
 
-                        Reference< chart2::XAxis > xAxis(
-                            xCorrespondingCoordinateSystem->getAxisByDimension( 1,nAxisIndex ));
+                        rtl::Reference< Axis > xAxis =
+                            xCorrespondingCoordinateSystem->getAxisByDimension2( 1,nAxisIndex );
                         if( xAxis.is())
                         {
                             chart2::ScaleData aScaleData = xAxis->getScaleData();
@@ -547,7 +544,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     if( bChanged && xDiagram.is() )
     {
-        uno::Reference< XAxis > xAxis( AxisHelper::getAxis( 1, bAttachToMainAxis, xDiagram ) );
+        rtl::Reference< Axis > xAxis = AxisHelper::getAxis( 1, bAttachToMainAxis, xDiagram );
         if(!xAxis.is()) //create an axis if necessary
             xAxis = AxisHelper::createAxis( 1, bAttachToMainAxis, xDiagram, xContext );
         if( bAdaptAxes )
@@ -560,14 +557,14 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
     return bChanged;
 }
 
-uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
+rtl::Reference< Axis > DiagramHelper::getAttachedAxis(
         const uno::Reference< XDataSeries >& xSeries,
         const rtl::Reference< Diagram >& xDiagram )
 {
     return AxisHelper::getAxis( 1, DiagramHelper::isSeriesAttachedToMainAxis( xSeries ), xDiagram );
 }
 
-uno::Reference< XAxis > DiagramHelper::getAttachedAxis(
+rtl::Reference< Axis > DiagramHelper::getAttachedAxis(
         const rtl::Reference< DataSeries >& xSeries,
         const rtl::Reference< Diagram >& xDiagram )
 {
@@ -697,7 +694,7 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
                 const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
                 for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
                 {
-                    Reference< XAxis > xAxis = xCooSys->getAxisByDimension( nN,nI );
+                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( nN,nI );
                     OSL_ASSERT( xAxis.is());
                     if( xAxis.is())
                     {
@@ -738,7 +735,7 @@ bool DiagramHelper::isCategoryDiagram(
                 const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(nN);
                 for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
                 {
-                    Reference< XAxis > xAxis = xCooSys->getAxisByDimension( nN,nI );
+                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( nN,nI );
                     OSL_ASSERT( xAxis.is());
                     if( xAxis.is())
                     {
@@ -1009,10 +1006,10 @@ void DiagramHelper::switchToDateCategories( const rtl::Reference<::chart::ChartM
     {
         ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
 
-        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartDoc ) );
+        rtl::Reference< BaseCoordinateSystem > xCooSys = ChartModelHelper::getFirstCoordinateSystem( xChartDoc );
         if( xCooSys.is() )
         {
-            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2(0,0);
             lcl_switchToDateCategories( xChartDoc, xAxis );
         }
     }
@@ -1024,10 +1021,10 @@ void DiagramHelper::switchToTextCategories( const rtl::Reference<::chart::ChartM
     {
         ControllerLockGuardUNO aCtrlLockGuard( xChartDoc );
 
-        Reference< chart2::XCoordinateSystem > xCooSys( ChartModelHelper::getFirstCoordinateSystem( xChartDoc ) );
+        rtl::Reference< BaseCoordinateSystem > xCooSys = ChartModelHelper::getFirstCoordinateSystem( xChartDoc );
         if( xCooSys.is() )
         {
-            Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,0) );
+            rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2(0,0);
             lcl_switchToTextCategories( xChartDoc, xAxis );
         }
     }
