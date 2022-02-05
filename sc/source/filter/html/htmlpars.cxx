@@ -762,6 +762,16 @@ void ScHTMLLayoutParser::SetWidths()
         sal_uInt16 nMax = static_cast<sal_uInt16>(pLocalColOffset->back());
         if ( aPageSize.Width() < nMax )
             aPageSize.setWidth( nMax );
+        if (nTableLevel == 0)
+        {
+            // Local table is very outer table, create missing offsets.
+            for (auto it = pLocalColOffset->begin(); it != pLocalColOffset->end(); ++it)
+            {
+                // Only exact offsets, do not use MakeColNoRef().
+                if (maColOffset.find(*it) == maColOffset.end())
+                    maColOffset.insert(*it);
+            }
+        }
     }
     for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
     {
