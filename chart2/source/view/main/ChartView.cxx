@@ -45,6 +45,7 @@
 #include <DiagramHelper.hxx>
 #include <RelativePositionHelper.hxx>
 #include <servicenames.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <AxisIndexDefines.hxx>
 #include <BaseGFXHelper.hxx>
@@ -343,7 +344,7 @@ private:
     /** A map whose key is a `XAxis` interface and the related value is
      *  an object of `AxisUsage` type.
      */
-    std::map< uno::Reference< XAxis >, AxisUsage > m_aAxisUsageList;
+    std::map< rtl::Reference< Axis >, AxisUsage > m_aAxisUsageList;
 
     /**
      * Max axis index of all dimensions.  Currently this can be either 0 or 1
@@ -485,7 +486,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
         {
             if (xCooSys->getMaximumAxisIndexByDimension(1) > 0)
             {
-                Reference< beans::XPropertySet > xAxisProp(xCooSys->getAxisByDimension(1, 1), uno::UNO_QUERY);
+                rtl::Reference< Axis > xAxisProp = xCooSys->getAxisByDimension2(1, 1);
                 xAxisProp->getPropertyValue("Show") >>= bSecondaryYaxisVisible;
             }
         }
@@ -647,7 +648,7 @@ void SeriesPlotterContainer::initAxisUsageList(const Date& rNullDate)
             const sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimIndex);
             for (sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; ++nAxisIndex)
             {
-                uno::Reference<XAxis> xAxis = xCooSys->getAxisByDimension(nDimIndex, nAxisIndex);
+                rtl::Reference<Axis> xAxis = xCooSys->getAxisByDimension2(nDimIndex, nAxisIndex);
 
                 if (!xAxis.is())
                     continue;
@@ -719,7 +720,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
         if(pVCooSys)
         {
             AxesNumberFormats aAxesNumberFormats;
-            const uno::Reference< XCoordinateSystem >& xCooSys = pVCooSys->getModel();
+            const rtl::Reference< BaseCoordinateSystem >& xCooSys = pVCooSys->getModel();
             sal_Int32 nDimensionCount = xCooSys->getDimension();
             for(sal_Int32 nDimensionIndex=0; nDimensionIndex<nDimensionCount; ++nDimensionIndex)
             {
@@ -728,7 +729,7 @@ void SeriesPlotterContainer::setNumberFormatsFromAxes()
                 {
                     try
                     {
-                        Reference< beans::XPropertySet > xAxisProp( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ), uno::UNO_QUERY );
+                        rtl::Reference< Axis > xAxisProp = xCooSys->getAxisByDimension2( nDimensionIndex, nAxisIndex );
                         if( xAxisProp.is())
                         {
                             sal_Int32 nNumberFormatKey(0);
@@ -915,8 +916,8 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries( ChartModel&
             ExplicitIncrementData aExplicitIncrement( aVCooSysList[nC]->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
 
             rtl::Reference< BaseCoordinateSystem > xCooSys( aVCooSysList[nC]->getModel() );
-            Reference< XAxis > xAxis( xCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
-            Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ), uno::UNO_QUERY );
+            rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( nDimensionIndex, nAxisIndex );
+            rtl::Reference< Axis > xCrossingMainAxis = AxisHelper::getCrossingMainAxis( xAxis, xCooSys );
 
             if( xCrossingMainAxis.is() )
             {

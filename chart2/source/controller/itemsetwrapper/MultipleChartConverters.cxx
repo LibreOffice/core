@@ -30,6 +30,7 @@
 #include <DataSeries.hxx>
 #include <TitleHelper.hxx>
 #include <TitleItemConverter.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -53,10 +54,10 @@ AllAxisItemConverter::AllAxisItemConverter(
         : MultipleItemConverter( rItemPool )
 {
     rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xChartModel ) );
-    const Sequence< Reference< XAxis > > aElementList( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-    for( Reference< XAxis > const & axis : aElementList )
+    const std::vector< rtl::Reference< Axis > > aElementList = AxisHelper::getAllAxesOfDiagram( xDiagram );
+    for( rtl::Reference< Axis > const & axis : aElementList )
     {
-        uno::Reference< beans::XPropertySet > xObjectProperties(axis, uno::UNO_QUERY);
+        uno::Reference< beans::XPropertySet > xObjectProperties(axis);
         m_aConverters.emplace_back( new ::chart::wrapper::AxisItemConverter(
             xObjectProperties, rItemPool, rDrawModel,
             xChartModel, nullptr, nullptr,

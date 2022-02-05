@@ -25,6 +25,7 @@
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <LabeledDataSequence.hxx>
+#include <Axis.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
@@ -503,8 +504,8 @@ void setStackModeAtSeries(
 
     for (auto const& axisIndex : aAxisIndexSet)
     {
-        Reference< chart2::XAxis > xAxis(
-            xCorrespondingCoordinateSystem->getAxisByDimension(1, axisIndex));
+        rtl::Reference< Axis > xAxis =
+            xCorrespondingCoordinateSystem->getAxisByDimension2(1, axisIndex);
         if( xAxis.is())
         {
             bool bPercent = (eStackMode == StackMode::YStackedPercent);
@@ -551,8 +552,8 @@ sal_Int32 getNumberFormatKeyFromAxis(
         nAxisIndex = getAttachedAxisIndex( xSeries );
     try
     {
-        Reference< beans::XPropertySet > xAxisProp(
-            xCorrespondingCoordinateSystem->getAxisByDimension( nDimensionIndex, nAxisIndex ), uno::UNO_QUERY );
+        rtl::Reference< Axis > xAxisProp =
+            xCorrespondingCoordinateSystem->getAxisByDimension2( nDimensionIndex, nAxisIndex );
         if( xAxisProp.is())
             xAxisProp->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nResult;
     }

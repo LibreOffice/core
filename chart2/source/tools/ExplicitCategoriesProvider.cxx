@@ -21,6 +21,7 @@
 #include <DiagramHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
@@ -61,7 +62,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
         if( xCooSysModel.is() )
         {
             // TODO: handle different category names on the primary and secondary category axis.
-            uno::Reference< XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
+            rtl::Reference< Axis > xAxis = xCooSysModel->getAxisByDimension2(0,0);
             if( xAxis.is() )
             {
                 ScaleData aScale( xAxis->getScaleData() );
@@ -180,7 +181,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< OUStr
     rtl::Reference< BaseCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
     if( xCooSysModel.is() )
     {
-        Reference< chart2::XAxis > xAxis( xCooSysModel->getAxisByDimension(0,0) );
+        rtl::Reference< Axis > xAxis = xCooSysModel->getAxisByDimension2(0,0);
         nAxisNumberFormat = AxisHelper::getExplicitNumberFormatKeyForAxis(
             xAxis, xCooSysModel, &rModel, false );
     }
@@ -408,13 +409,13 @@ static bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >&
         bool bOwnData = false;
         bool bOwnDataAnddAxisHasAnyFormat = false;
         bool bOwnDataAnddAxisHasDateFormat = false;
-        Reference< XCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
+        rtl::Reference< BaseCoordinateSystem > xCooSysModel( ChartModelHelper::getFirstCoordinateSystem( &rModel ) );
         if( xCooSysModel.is() )
         {
             if( rModel.hasInternalDataProvider() )
             {
                 bOwnData = true;
-                Reference< beans::XPropertySet > xAxisProps( xCooSysModel->getAxisByDimension(0,0), uno::UNO_QUERY );
+                rtl::Reference< Axis > xAxisProps = xCooSysModel->getAxisByDimension2(0,0);
                 sal_Int32 nAxisNumberFormat = 0;
                 if (xAxisProps.is() && (xAxisProps->getPropertyValue(CHART_UNONAME_NUMFMT) >>= nAxisNumberFormat))
                 {

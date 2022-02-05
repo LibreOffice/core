@@ -20,6 +20,7 @@
 #include <TitleHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -65,23 +66,23 @@ uno::Reference< XTitled > lcl_getTitleParentFromDiagram(
             break;
         case TitleHelper::X_AXIS_TITLE:
             if( xDiagram.is())
-                xResult.set( AxisHelper::getAxis( 0, true, xDiagram ), uno::UNO_QUERY );
+                xResult = AxisHelper::getAxis( 0, true, xDiagram );
             break;
         case TitleHelper::Y_AXIS_TITLE:
             if( xDiagram.is())
-                xResult.set( AxisHelper::getAxis( 1, true, xDiagram ), uno::UNO_QUERY );
+                xResult = AxisHelper::getAxis( 1, true, xDiagram );
             break;
         case TitleHelper::Z_AXIS_TITLE:
             if( xDiagram.is())
-                xResult.set( AxisHelper::getAxis( 2, true, xDiagram ), uno::UNO_QUERY );
+                xResult = AxisHelper::getAxis( 2, true, xDiagram );
             break;
         case TitleHelper::SECONDARY_X_AXIS_TITLE:
             if( xDiagram.is())
-                xResult.set( AxisHelper::getAxis( 0, false, xDiagram ), uno::UNO_QUERY );
+                xResult = AxisHelper::getAxis( 0, false, xDiagram );
             break;
         case TitleHelper::SECONDARY_Y_AXIS_TITLE:
             if( xDiagram.is())
-                xResult.set( AxisHelper::getAxis( 1, false, xDiagram ), uno::UNO_QUERY );
+                xResult = AxisHelper::getAxis( 1, false, xDiagram );
             break;
 
         case TitleHelper::MAIN_TITLE:
@@ -203,7 +204,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
     if( !xTitled.is() )
     {
         rtl::Reference< Diagram > xDiagram( ChartModelHelper::findDiagram( xModel ) );
-        uno::Reference< chart2::XAxis > xAxis;
+        rtl::Reference< Axis > xAxis;
         switch( eTitleType )
         {
             case TitleHelper::SECONDARY_X_AXIS_TITLE:
@@ -215,10 +216,9 @@ uno::Reference< XTitle > TitleHelper::createTitle(
             default:
                break;
         }
-        uno::Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
-        if( xProps.is() )
+        if( xAxis.is() )
         {
-            xProps->setPropertyValue( "Show", uno::Any( false ) );
+            xAxis->setPropertyValue( "Show", uno::Any( false ) );
             xTitled = lcl_getTitleParent( eTitleType, xModel );
         }
     }

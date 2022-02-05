@@ -524,6 +524,28 @@ void SAL_CALL Diagram::setCoordinateSystems(
     fireModifyEvent();
 }
 
+void SAL_CALL Diagram::setCoordinateSystems(
+    const std::vector< rtl::Reference< BaseCoordinateSystem > >& aCoordinateSystems )
+{
+    tCoordinateSystemContainerType aNew;
+    tCoordinateSystemContainerType aOld;
+    if( !aCoordinateSystems.empty() )
+    {
+        OSL_ENSURE( aCoordinateSystems.size()<=1, "more than one coordinatesystem is not supported yet by the fileformat" );
+        aNew.push_back( aCoordinateSystems[0] );
+    }
+    {
+        MutexGuard aGuard( m_aMutex );
+        std::swap( aOld, m_aCoordSystems );
+        m_aCoordSystems = aNew;
+    }
+    for (auto & xSystem : aOld)
+        xSystem->removeModifyListener(m_xModifyEventForwarder);
+    for (auto & xSystem : aNew)
+        xSystem->addModifyListener(m_xModifyEventForwarder);
+    fireModifyEvent();
+}
+
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL Diagram::createClone()
 {

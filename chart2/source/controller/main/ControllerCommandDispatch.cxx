@@ -22,6 +22,7 @@
 #include <ChartModel.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include <LegendHelper.hxx>

@@ -27,6 +27,7 @@
 #include "SchWhichPairs.hxx"
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <CommonConverters.hxx>
 #include <ChartType.hxx>
@@ -358,7 +359,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             rtl::Reference< BaseCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                 m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
-            Reference< chart2::XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ) );
+            rtl::Reference< Axis > xCrossingMainAxis = AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys );
 
             sal_Int32 nFormatKey = ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                 xCrossingMainAxis, xCooSys, m_xChartDoc);
@@ -723,7 +724,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                         sal_Int32 nAxisIndex=0;
                         if( AxisHelper::getIndicesForAxis( m_xAxis, xCooSys, nDimensionIndex, nAxisIndex ) && nAxisIndex==0 )
                         {
-                            Reference< beans::XPropertySet > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys ), uno::UNO_QUERY );
+                            rtl::Reference< Axis > xCrossingMainAxis = AxisHelper::getCrossingMainAxis( m_xAxis, xCooSys );
                             if( xCrossingMainAxis.is() )
                             {
                                 double fValue = 0.0;
@@ -758,7 +759,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 //move the parallel axes to the other side if necessary
                 if( eAxisPos==css::chart::ChartAxisPosition_START || eAxisPos==css::chart::ChartAxisPosition_END )
                 {
-                    Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
+                    rtl::Reference< Axis > xParallelAxis = AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) );
                     if( xParallelAxis.is() )
                     {
                         css::chart::ChartAxisPosition eOtherPos;
@@ -841,7 +842,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 //move the parallel axes to the other side if necessary
                 if( ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_START || ePos==css::chart::ChartAxisLabelPosition_OUTSIDE_END )
                 {
-                    Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
+                    rtl::Reference< Axis > xParallelAxis = AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) );
                     if( xParallelAxis.is() )
                     {
                         css::chart::ChartAxisLabelPosition eOtherPos;

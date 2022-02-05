@@ -22,7 +22,7 @@
 #include <UserDefinedProperties.hxx>
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
-#include "Axis.hxx"
+#include <Axis.hxx>
 #include <ChartType.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -125,7 +125,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     for( sal_Int32 nN=0; nN<m_nDimensionCount; nN++ )
     {
         m_aAllAxis[nN].resize( 1 );
-        Reference< chart2::XAxis > xAxis( new Axis );
+        rtl::Reference< Axis > xAxis( new Axis );
         m_aAllAxis[nN][0] = xAxis;
 
         ModifyListenerHelper::addListenerToAllElements( m_aAllAxis[nN], m_xModifyEventForwarder );
@@ -159,7 +159,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     m_aAllAxis.resize(rSource.m_aAllAxis.size());
     tAxisVecVecType::size_type nN=0;
     for( nN=0; nN<m_aAllAxis.size(); nN++ )
-        CloneHelper::CloneRefVector<chart2::XAxis>( rSource.m_aAllAxis[nN], m_aAllAxis[nN] );
+        CloneHelper::CloneRefVector( rSource.m_aAllAxis[nN], m_aAllAxis[nN] );
     for (const auto & rxChartType : rSource.m_aChartTypes)
         m_aChartTypes.push_back(rxChartType->cloneChartType());
 
@@ -207,7 +207,33 @@ void SAL_CALL BaseCoordinateSystem::setAxisByDimension(
         m_aAllAxis[ nDimensionIndex ][nIndex] = nullptr;
     }
 
-    Reference< chart2::XAxis > xOldAxis( m_aAllAxis[ nDimensionIndex ][nIndex] );
+    rtl::Reference< Axis > xOldAxis( m_aAllAxis[ nDimensionIndex ][nIndex] );
+    if( xOldAxis.is())
+        ModifyListenerHelper::removeListener( xOldAxis, m_xModifyEventForwarder );
+    m_aAllAxis[ nDimensionIndex ][nIndex] = dynamic_cast<Axis*>(xAxis.get());
+    if( xAxis.is())
+        ModifyListenerHelper::addListener( xAxis, m_xModifyEventForwarder );
+    fireModifyEvent();
+}
+
+void BaseCoordinateSystem::setAxisByDimension(
+    sal_Int32 nDimensionIndex,
+    const rtl::Reference< Axis >& xAxis,
+    sal_Int32 nIndex )
+{
+    if( nDimensionIndex < 0 || nDimensionIndex >= getDimension() )
+        throw lang::IndexOutOfBoundsException();
+
+    if( nIndex < 0 )
+        throw lang::IndexOutOfBoundsException();
+
+    if( m_aAllAxis[ nDimensionIndex ].size() < o3tl::make_unsigned( nIndex+1 ))
+    {
+        m_aAllAxis[ nDimensionIndex ].resize( nIndex+1 );
+        m_aAllAxis[ nDimensionIndex ][nIndex] = nullptr;
+    }
+
+    rtl::Reference< Axis > xOldAxis( m_aAllAxis[ nDimensionIndex ][nIndex] );
     if( xOldAxis.is())
         ModifyListenerHelper::removeListener( xOldAxis, m_xModifyEventForwarder );
     m_aAllAxis[ nDimensionIndex ][nIndex] = xAxis;
@@ -225,6 +251,20 @@ Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
     OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( getDimension()));
 
     if( nAxisIndex < 0 || nAxisIndex > getMaximumAxisIndexByDimension(nDimensionIndex) )
+        throw lang::IndexOutOfBoundsException();
+
+    return m_aAllAxis[ nDimensionIndex ][nAxisIndex];
+}
+
+rtl::Reference< Axis > BaseCoordinateSystem::getAxisByDimension2(
+            sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const
+{
+    if( nDimensionIndex < 0 || nDimensionIndex >= m_nDimensionCount )
+        throw lang::IndexOutOfBoundsException();
+
+    OSL_ASSERT( m_aAllAxis.size() == static_cast< size_t >( m_nDimensionCount));
+
+    if( nAxisIndex < 0 || nAxisIndex > static_cast<sal_Int32>(m_aAllAxis[ nDimensionIndex ].size()) )
         throw lang::IndexOutOfBoundsException();
 
     return m_aAllAxis[ nDimensionIndex ][nAxisIndex];

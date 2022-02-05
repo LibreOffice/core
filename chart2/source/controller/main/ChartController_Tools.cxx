@@ -37,6 +37,7 @@
 #include <DrawViewWrapper.hxx>
 #include <Legend.hxx>
 #include <LegendHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <RegressionCurveModel.hxx>
 #include <RegressionCurveHelper.hxx>
@@ -114,7 +115,7 @@ bool lcl_deleteDataSeries(
                 xUndoManager );
 
             rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xModel );
-            uno::Reference< chart2::XAxis > xAxis( DiagramHelper::getAttachedAxis( xSeries, xDiagram ) );
+            rtl::Reference< Axis > xAxis = DiagramHelper::getAttachedAxis( xSeries, xDiagram );
 
             DataSeriesHelper::deleteSeries( xSeries, xChartType );
 
