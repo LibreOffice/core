@@ -16,6 +16,24 @@
       "message": "Good catch!\n\nI also noticed these:\nsw/inc/cmdid.h:615:#define FN_NAVIGATION_BACK                  (FN_EXTRA2 + 115)\nsw/inc/cmdid.h:620:#define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 115)\n\nand\nsw/inc/cmdid.h:616:#define FN_NAVIGATION_FORWARD               (FN_EXTRA2 + 116)\nsw/inc/cmdid.h:622:#define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 116)\n\nCan we consider this a bug too?",
       "revId": "ad674edf394bd1c9b56410b5f53587c303693fcc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cbe7202_0fcdd025",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-02-05T11:19:23Z",
+      "side": 1,
+      "message": "Yes, I think so. Probably changes were introduced at different time / cherry-picked between branches and someone missed duplicated ids... Will you push the patch?",
+      "parentUuid": "110a0e1a_1da5ef7d",
+      "revId": "ad674edf394bd1c9b56410b5f53587c303693fcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
