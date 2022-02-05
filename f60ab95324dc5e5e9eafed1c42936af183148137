@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a84562ce_1772b22e",
+        "filename": "connectivity/source/drivers/file/FNumericFunctions.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-05T11:17:00Z",
+      "side": 1,
+      "message": "Do we still need this and other pi variables? M_PI could be used instead of them.",
+      "revId": "f60ab95324dc5e5e9eafed1c42936af183148137",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
