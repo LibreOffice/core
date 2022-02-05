@@ -66,7 +66,7 @@ StackMode NetChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) 
 }
 
 void NetChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
@@ -75,11 +75,9 @@ void NetChartTypeTemplate::applyStyle(
 
     try
     {
-        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
-
-        DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
-        DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
-        DataSeriesHelper::makeLinesThickOrThin( xProp, true );
+        DataSeriesHelper::switchSymbolsOnOrOff( xSeries, m_bHasSymbols, nSeriesIndex );
+        DataSeriesHelper::switchLinesOnOrOff( xSeries, m_bHasLines );
+        DataSeriesHelper::makeLinesThickOrThin( xSeries, true );
     }
     catch( const uno::Exception & )
     {

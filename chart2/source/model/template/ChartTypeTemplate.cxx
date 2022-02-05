@@ -157,11 +157,10 @@ rtl::Reference< Diagram > ChartTypeTemplate::createDiagramByDataSource(
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
         InterpretedData aData(
             xInterpreter->interpretDataSource(
-                xDataSource, aArguments, Sequence< Reference< XDataSeries > >() ));
+                xDataSource, aArguments, {} ));
 
-        const Sequence< Sequence< Reference< XDataSeries > > > aSeries( aData.Series );
         sal_Int32 nCount = 0;
-        for( auto const & i : aSeries )
+        for( auto const & i : aData.Series )
             for( auto const & j : i )
                 lcl_applyDefaultStyle( j, nCount++, xDia );
 
@@ -188,10 +187,10 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
 
     try
     {
-        Sequence< Sequence< Reference< XDataSeries > > > aSeriesSeq(
-            DiagramHelper::getDataSeriesGroups( xDiagram ));
-        Sequence< Reference< XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
-        const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.getLength();
+        std::vector< std::vector< rtl::Reference< DataSeries > > > aSeriesSeq =
+            DiagramHelper::getDataSeriesGroups( xDiagram );
+        std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
+        const sal_Int32 nFormerSeriesCount = aFlatSeriesSeq.size();
 
         // chart-type specific interpretation of existing data series
         rtl::Reference< DataInterpreter > xInterpreter( getDataInterpreter());
@@ -265,16 +264,14 @@ void ChartTypeTemplate::changeDiagramData(
             xInterpreter->interpretDataSource( xDataSource, aArguments, aFlatSeriesSeq );
 
         // data series
-        Sequence< Sequence< Reference< XDataSeries > > > aSeriesSeq( aData.Series );
-
         sal_Int32 i, j, nIndex = 0;
-        for( i=0; i<aSeriesSeq.getLength(); ++i )
-            for( j=0; j<aSeriesSeq[i].getLength(); ++j, ++nIndex )
+        for( i=0; i<static_cast<sal_Int32>(aData.Series.size()); ++i )
+            for( j=0; j<static_cast<sal_Int32>(aData.Series[i].size()); ++j, ++nIndex )
             {
                 if( nIndex >= nFormerSeriesCount )
                 {
-                    lcl_applyDefaultStyle( aSeriesSeq[i][j], nIndex, xDiagram );
-                    applyStyle( aSeriesSeq[i][j], i, j, aSeriesSeq[i].getLength() );
+                    lcl_applyDefaultStyle( aData.Series[i][j], nIndex, xDiagram );
+                    applyStyle( aData.Series[i][j], i, j, aData.Series[i].size() );
                 }
             }
 
@@ -283,10 +280,10 @@ void ChartTypeTemplate::changeDiagramData(
 
         std::vector< rtl::Reference< ChartType > > aChartTypes =
             DiagramHelper::getChartTypesFromDiagram( xDiagram );
-        sal_Int32 nMax = std::min( static_cast<sal_Int32>(aChartTypes.size()), aSeriesSeq.getLength());
+        sal_Int32 nMax = std::min( aChartTypes.size(), aData.Series.size());
         for( i=0; i<nMax; ++i )
         {
-            aChartTypes[i]->setDataSeries( aSeriesSeq[i] );
+            aChartTypes[i]->setDataSeries( aData.Series[i] );
         }
     }
     catch( const uno::Exception & )
@@ -359,14 +356,13 @@ rtl::Reference< DataInterpreter > ChartTypeTemplate::getDataInterpreter()
 }
 
 void ChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 /* nSeriesIndex */,
     ::sal_Int32 /* nSeriesCount */ )
 {
     // sset stacking mode
-    Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
-    if( !xSeriesProp.is())
+    if( !xSeries.is())
         return;
 
     try
@@ -379,16 +375,16 @@ void ChartTypeTemplate::applyStyle(
             : (eStackMode == StackMode::ZStacked )
             ? chart2::StackingDirection_Z_STACKING
             : chart2::StackingDirection_NO_STACKING );
-        xSeriesProp->setPropertyValue( "StackingDirection", aPropValue );
+        xSeries->setPropertyValue( "StackingDirection", aPropValue );
 
         //ensure valid label placement
         {
             uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                         getChartTypeForIndex( nChartTypeIndex ), isSwapXAndY(), xSeries ) );
-            lcl_ensureCorrectLabelPlacement( xSeriesProp, aAvailablePlacements );
+            lcl_ensureCorrectLabelPlacement( xSeries, aAvailablePlacements );
 
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+            if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                 for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                     lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
         }
@@ -402,11 +398,11 @@ void ChartTypeTemplate::applyStyle(
 void ChartTypeTemplate::applyStyles( const rtl::Reference< ::chart::Diagram >& xDiagram )
 {
     // apply chart-type specific styles, like "symbols on" for example
-    Sequence< Sequence< Reference< XDataSeries > > > aNewSeriesSeq(
+    std::vector< std::vector< rtl::Reference< DataSeries > > > aNewSeriesSeq(
         DiagramHelper::getDataSeriesGroups( xDiagram ));
-    for( sal_Int32 i=0; i<aNewSeriesSeq.getLength(); ++i )
+    for( sal_Int32 i=0; i<static_cast<sal_Int32>(aNewSeriesSeq.size()); ++i )
     {
-        const sal_Int32 nNumSeries = aNewSeriesSeq[i].getLength();
+        const sal_Int32 nNumSeries = aNewSeriesSeq[i].size();
         for( sal_Int32 j=0; j<nNumSeries; ++j )
             applyStyle( aNewSeriesSeq[i][j], i, j, nNumSeries );
     }
@@ -714,7 +710,7 @@ sal_Int32 ChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension )
 
 void ChartTypeTemplate::FillDiagram(
     const rtl::Reference< ::chart::Diagram >& xDiagram,
-    const Sequence< Sequence< Reference< XDataSeries > > >& aSeriesSeq,
+    const std::vector< std::vector< rtl::Reference< DataSeries > > >& aSeriesSeq,
     const uno::Reference< chart2::data::XLabeledDataSequence >& xCategories,
     const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
@@ -740,7 +736,7 @@ void ChartTypeTemplate::FillDiagram(
 }
 
 void ChartTypeTemplate::createChartTypes(
-    const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
+    const std::vector< std::vector< rtl::Reference< DataSeries > > > & aSeriesSeq,
     const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
     const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
@@ -751,7 +747,7 @@ void ChartTypeTemplate::createChartTypes(
     {
         sal_Int32 nCooSysIdx=0;
         rtl::Reference< ChartType > xCT;
-        if( !aSeriesSeq.hasElements() )
+        if( aSeriesSeq.empty() )
         {
             // we need a new chart type
             xCT = getChartTypeForNewSeries( aOldChartTypesSeq );
@@ -759,7 +755,7 @@ void ChartTypeTemplate::createChartTypes(
         }
         else
         {
-            for( sal_Int32 nSeriesIdx=0; nSeriesIdx<aSeriesSeq.getLength(); ++nSeriesIdx )
+            for( sal_Int32 nSeriesIdx=0; nSeriesIdx<static_cast<sal_Int32>(aSeriesSeq.size()); ++nSeriesIdx )
             {
                 if( nSeriesIdx == nCooSysIdx )
                 {
@@ -780,12 +776,12 @@ void ChartTypeTemplate::createChartTypes(
                 {
                     // reuse existing chart type
                     OSL_ASSERT( xCT.is());
-                    Sequence< Reference< XDataSeries > > aNewSeriesSeq( xCT->getDataSeries());
-                    sal_Int32 nNewStartIndex = aNewSeriesSeq.getLength();
-                    aNewSeriesSeq.realloc( nNewStartIndex + aSeriesSeq[nSeriesIdx].getLength() );
+                    std::vector< rtl::Reference< DataSeries > > aNewSeriesSeq = xCT->getDataSeries2();
+                    sal_Int32 nNewStartIndex = aNewSeriesSeq.size();
+                    aNewSeriesSeq.resize( nNewStartIndex + aSeriesSeq[nSeriesIdx].size() );
                     std::copy( aSeriesSeq[nSeriesIdx].begin(),
                                  aSeriesSeq[nSeriesIdx].end(),
-                                 aNewSeriesSeq.getArray() + nNewStartIndex );
+                                 aNewSeriesSeq.begin() + nNewStartIndex );
                     xCT->setDataSeries( aNewSeriesSeq );
                 }
 

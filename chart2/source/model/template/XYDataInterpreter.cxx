@@ -101,7 +101,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     }
 
     // create DataSeries
-    vector< Reference< XDataSeries > > aSeriesVec;
+    vector< rtl::Reference< DataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
     Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
@@ -131,7 +131,7 @@ InterpretedData XYDataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    return { { comphelper::containerToSequence( aSeriesVec ) }, xCategories };
+    return { { aSeriesVec }, xCategories };
 }
 
 InterpretedData XYDataInterpreter::reinterpretDataSeries(
@@ -140,27 +140,26 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
     InterpretedData aResult( aInterpretedData );
 
     sal_Int32 i=0;
-    Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    const sal_Int32 nCount = aSeries.getLength();
+    std::vector< rtl::Reference< DataSeries > > aSeries = FlattenSequence( aInterpretedData.Series );
+    const sal_Int32 nCount = aSeries.size();
     for( ; i<nCount; ++i )
     {
         try
         {
-            Reference< data::XDataSource > xSeriesSource( aSeries[i], uno::UNO_QUERY_THROW );
-            Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
+            std::vector< uno::Reference< data::XLabeledDataSequence > > aNewSequences;
 
             // values-y
             uno::Reference< chart2::data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-y" ));
             uno::Reference< chart2::data::XLabeledDataSequence > xValuesX(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ));
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-x" ));
             // re-use values-... as values-x/values-y
             if( ! xValuesX.is() ||
                 ! xValuesY.is())
             {
                 vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
-                        xSeriesSource->getDataSequences(), "values" ));
+                        aSeries[i]->getDataSequences2(), "values" ));
                 if( xValuesX.is())
                     aValueSeqVec.erase( find( aValueSeqVec.begin(), aValueSeqVec.end(), xValuesX ));
                 if( xValuesY.is())
@@ -195,8 +194,8 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                 }
             }
 
-            const Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
-            if( aSeqs.getLength() != aNewSequences.getLength() )
+            const std::vector< uno::Reference< data::XLabeledDataSequence > > & aSeqs = aSeries[i]->getDataSequences2();
+            if( aSeqs.size() != aNewSequences.size() )
             {
 #ifdef DBG_UTIL
                 for( auto const & j : aSeqs )
@@ -204,8 +203,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
                     SAL_WARN_IF((j == xValuesY || j == xValuesX), "chart2.template", "All sequences should be used" );
                 }
 #endif
-                Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );
-                xSink->setData( aNewSequences );
+                aSeries[i]->setData( aNewSequences );
             }
         }
         catch( const uno::Exception & )
@@ -221,14 +219,12 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
 bool XYDataInterpreter::isDataCompatible(
     const InterpretedData& aInterpretedData )
 {
-    const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    for( Reference< XDataSeries > const & dataSeries : aSeries )
+    const std::vector< rtl::Reference< DataSeries > > aSeries = FlattenSequence( aInterpretedData.Series );
+    for( rtl::Reference< DataSeries > const & dataSeries : aSeries )
     {
         try
         {
-            Reference< data::XDataSource > xSrc( dataSeries, uno::UNO_QUERY_THROW );
-            Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
-            if( aSeq.getLength() != 2 )
+            if( dataSeries->getDataSequences2().size() != 2 )
                 return false;
         }
         catch( const uno::Exception & )

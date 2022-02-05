@@ -279,7 +279,7 @@ void PieChartTypeTemplate::adaptScales(
 }
 
 void PieChartTypeTemplate::createChartTypes(
-    const Sequence< Sequence< Reference< chart2::XDataSeries > > > & aSeriesSeq,
+    const std::vector< std::vector< rtl::Reference< DataSeries > > > & aSeriesSeq,
     const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
     const std::vector< rtl::Reference< ChartType > >& /* aOldChartTypesSeq */ )
 {
@@ -293,9 +293,9 @@ void PieChartTypeTemplate::createChartTypes(
             "UseRings", getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
         rCoordSys[0]->setChartTypes( std::vector{xCT} );
 
-        if( aSeriesSeq.hasElements() )
+        if( !aSeriesSeq.empty() )
         {
-            Sequence< Reference< chart2::XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
+            std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq = FlattenSequence( aSeriesSeq );
             xCT->setDataSeries( aFlatSeriesSeq );
 
             DataSeriesHelper::setStackModeAtSeries(
@@ -437,7 +437,7 @@ rtl::Reference< ChartType > PieChartTypeTemplate::getChartTypeForNewSeries(
 }
 
 void PieChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
@@ -446,8 +446,6 @@ void PieChartTypeTemplate::applyStyle(
 
     try
     {
-        uno::Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
-
         bool bTemplateUsesRings = false;
         sal_Int32 nOuterSeriesIndex = 0;
         getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ) >>= bTemplateUsesRings;
@@ -469,7 +467,7 @@ void PieChartTypeTemplate::applyStyle(
             double fOffsetToSet = fDefaultOffset;
 
             uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-            xProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList;
+            xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList;
 
             // determine whether to set the new offset
             bool bSetOffset = ( ePieOffsetMode == chart2::PieChartOffsetMode_ALL_EXPLODED );
@@ -479,7 +477,7 @@ void PieChartTypeTemplate::applyStyle(
                 // set offset to 0 if the offset was exactly "all exploded"
                 // before (individual offsets are kept)
                 double fOffset = 0.0;
-                if( (xProp->getPropertyValue( aOffsetPropName ) >>= fOffset) &&
+                if( (xSeries->getPropertyValue( aOffsetPropName ) >>= fOffset) &&
                     ::rtl::math::approxEqual( fOffset, fDefaultOffset ))
                 {
                     fOffsetToSet = 0.0;
@@ -506,7 +504,7 @@ void PieChartTypeTemplate::applyStyle(
             if( bSetOffset )
             {
                 // set the offset to the series and to the attributed data points
-                xProp->setPropertyValue( aOffsetPropName, uno::Any( fOffsetToSet ));
+                xSeries->setPropertyValue( aOffsetPropName, uno::Any( fOffsetToSet ));
 
                 // remove hard attributes from data points
                 for( auto const & pointIndex : std::as_const(aAttributedDataPointIndexList) )
@@ -523,7 +521,7 @@ void PieChartTypeTemplate::applyStyle(
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
 
         // vary colors by point
-        xProp->setPropertyValue( "VaryColorsByPoint", uno::Any( true ));
+        xSeries->setPropertyValue( "VaryColorsByPoint", uno::Any( true ));
     }
     catch( const uno::Exception & )
     {
