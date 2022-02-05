@@ -381,7 +381,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
 
                     for (sal_Int32 nIdx = 0, nX = 0; nX < nNewWidth; nX++)
                     {
-                        const float fTmp = (fXMin + nX) * 64;
+                        const double fTmp = (fXMin + nX) * 64;
 
                         pCosSinX[nIdx++] = std::round(fCosAngle * fTmp);
                         pCosSinX[nIdx++] = std::round(fSinAngle * fTmp);
@@ -389,7 +389,7 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
 
                     for (sal_Int32 nIdx = 0, nY = 0; nY < nNewHeight; nY++)
                     {
-                        const float fTmp = (fYMin + nY) * 64;
+                        const double fTmp = (fYMin + nY) * 64;
 
                         pCosSinY[nIdx++] = std::round(fCosAngle * fTmp);
                         pCosSinY[nIdx++] = std::round(fSinAngle * fTmp);
@@ -397,8 +397,8 @@ bool Bitmap::Rotate(Degree10 nAngle10, const Color& rFillColor)
 
                     for (sal_Int32 nCosSinYIdx = 0, nY = 0; nY < nNewHeight; nY++)
                     {
-                        sal_Int32 nSinY = pCosSinY[nCosSinYIdx++];
                         sal_Int32 nCosY = pCosSinY[nCosSinYIdx++];
+                        sal_Int32 nSinY = pCosSinY[nCosSinYIdx++];
                         Scanline pScanline = pWriteAcc->GetScanline(nY);
 
                         for (sal_Int32 nCosSinXIdx = 0, nX = 0; nX < nNewWidth; nX++)
