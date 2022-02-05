@@ -923,9 +923,12 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
     }
     else if( dType == SQL_TEXT )
     {
+            if (pVar->sqllen < xBytes.getLength())
+                dbtools::throwSQLException("Data too big for this field",
+                                           dbtools::StandardSQLState::INVALID_SQL_DATA_TYPE, *this);
             setParameterNull(nParameterIndex, false);
             memcpy(pVar->sqldata, xBytes.getConstArray(), xBytes.getLength() );
-            // Fill remainder with spaces
+            // Fill remainder with zeroes
             memset(pVar->sqldata + xBytes.getLength(), 0, pVar->sqllen - xBytes.getLength());
     }
     else
