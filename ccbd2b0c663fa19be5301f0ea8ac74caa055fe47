@@ -88,6 +88,24 @@
       "parentUuid": "a3f9679c_b31c5c06",
       "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91c6b7bd_2ceeae2d",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-05T05:31:12Z",
+      "side": 0,
+      "message": "MAXROW_JUMBO is only 16000000 because mmeeks wanted us to be able to hit 16 million rows. It should indeed be a power of 2",
+      "parentUuid": "b53f9447_28b422a1",
+      "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
