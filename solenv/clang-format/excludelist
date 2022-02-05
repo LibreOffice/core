@@ -1007,6 +1007,7 @@ chart2/source/controller/sidebar/ChartSeriesPanel.cxx
 chart2/source/controller/sidebar/ChartSeriesPanel.hxx
 chart2/source/controller/sidebar/ChartSidebarSelectionListener.cxx
 chart2/source/controller/uitest/uiobject.cxx
+chart2/source/inc/Axis.hxx
 chart2/source/inc/AxisHelper.hxx
 chart2/source/inc/BaseGFXHelper.hxx
 chart2/source/inc/BaseCoordinateSystem.hxx
@@ -1084,7 +1085,6 @@ chart2/source/model/filter/XMLFilter.cxx
 chart2/source/model/inc/StockBar.hxx
 chart2/source/model/inc/XMLFilter.hxx
 chart2/source/model/main/Axis.cxx
-chart2/source/model/main/Axis.hxx
 chart2/source/model/main/BaseCoordinateSystem.cxx
 chart2/source/model/main/CartesianCoordinateSystem.cxx
 chart2/source/model/main/ChartModel.cxx

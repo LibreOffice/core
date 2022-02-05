@@ -25,6 +25,7 @@
 #include <DataSeries.hxx>
 #include <DataSource.hxx>
 
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
@@ -420,18 +421,14 @@ void ChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& x
     bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
     if( bPercent )
     {
-        const Sequence< Reference< chart2::XAxis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-        for( Reference< chart2::XAxis > const & axis : aAxisSeq )
+        const std::vector< rtl::Reference< Axis > > aAxisSeq( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
+        for( rtl::Reference< Axis > const & axis : aAxisSeq )
         {
             if( AxisHelper::getDimensionIndexOfAxis( axis, xDiagram )== 1 )
             {
-                Reference< beans::XPropertySet > xAxisProp( axis, uno::UNO_QUERY );
-                if( xAxisProp.is())
-                {
-                    // set number format to source format
-                    xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
-                    xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
-                }
+                // set number format to source format
+                axis->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
+                axis->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
             }
         }
     }
@@ -499,7 +496,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     rtl::Reference< ChartType > xChartType( getChartTypeForNewSeries(aFormerlyUsedChartTypes));
     if( ! xChartType.is())
         return;
-    Reference< XCoordinateSystem > xCooSys( xChartType->createCoordinateSystem( getDimension()));
+    rtl::Reference< BaseCoordinateSystem > xCooSys = ChartType::createCoordinateSystem2( getDimension());
     if( ! xCooSys.is())
     {
         // chart type wants no coordinate systems
@@ -514,13 +511,13 @@ void ChartTypeTemplate::createCoordinateSystems(
             AxisHelper::makeGridVisible( xAxis->getGridProperties() );
     }
 
-    Sequence< Reference< XCoordinateSystem > > aCoordinateSystems(
-        xDiagram->getCoordinateSystems());
+    std::vector< rtl::Reference< BaseCoordinateSystem > > aCoordinateSystems(
+        xDiagram->getBaseCoordinateSystems());
 
-    if( aCoordinateSystems.hasElements())
+    if( !aCoordinateSystems.empty() )
     {
         bool bOk = true;
-        for( sal_Int32 i=0; bOk && i<aCoordinateSystems.getLength(); ++i )
+        for( sal_Int32 i=0; bOk && i<static_cast<sal_Int32>(aCoordinateSystems.size()); ++i )
             bOk = bOk && ( xCooSys->getCoordinateSystemType() == aCoordinateSystems[i]->getCoordinateSystemType() &&
                            (xCooSys->getDimension() == aCoordinateSystems[i]->getDimension()) );
         // coordinate systems are ok
@@ -530,9 +527,9 @@ void ChartTypeTemplate::createCoordinateSystems(
     }
 
     //copy as much info from former coordinate system as possible:
-    if( aCoordinateSystems.hasElements() )
+    if( !aCoordinateSystems.empty() )
     {
-        Reference< XCoordinateSystem > xOldCooSys( aCoordinateSystems[0] );
+        rtl::Reference< BaseCoordinateSystem > xOldCooSys( aCoordinateSystems[0] );
         sal_Int32 nMaxDimensionCount = std::min( xCooSys->getDimension(), xOldCooSys->getDimension() );
 
         for(sal_Int32 nDimensionIndex=0; nDimensionIndex<nMaxDimensionCount; nDimensionIndex++)
@@ -540,7 +537,7 @@ void ChartTypeTemplate::createCoordinateSystems(
             const sal_Int32 nMaximumAxisIndex = xOldCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
             for(sal_Int32 nAxisIndex=0; nAxisIndex<=nMaximumAxisIndex; ++nAxisIndex)
             {
-                uno::Reference< XAxis > xAxis( xOldCooSys->getAxisByDimension( nDimensionIndex, nAxisIndex ) );
+                rtl::Reference< Axis > xAxis = xOldCooSys->getAxisByDimension2( nDimensionIndex, nAxisIndex );
                 if( xAxis.is())
                 {
                     xCooSys->setAxisByDimension( nDimensionIndex, xAxis, nAxisIndex );
@@ -573,7 +570,7 @@ void ChartTypeTemplate::adaptScales(
                 const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionX);
                 for(sal_Int32 nI=0; nI<=nMaxIndex; ++nI)
                 {
-                    Reference< XAxis > xAxis( xCooSys->getAxisByDimension(nDimensionX,nI) );
+                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2(nDimensionX,nI);
                     if( xAxis.is())
                     {
                         ScaleData aData( xAxis->getScaleData() );
@@ -606,7 +603,7 @@ void ChartTypeTemplate::adaptScales(
                 const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(1);
                 for(sal_Int32 nI=0; nI<=nMaxIndex; ++nI)
                 {
-                    Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( 1,nI ));
+                    rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( 1,nI );
                     if( xAxis.is())
                     {
                         bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);

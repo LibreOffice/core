@@ -38,6 +38,7 @@
 #include <RegressionEquationItemConverter.hxx>
 #include <ErrorBarItemConverter.hxx>
 #include <ChartModelHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include <ChartType.hxx>
@@ -378,7 +379,7 @@ OUString lcl_getAxisCIDForCommand( std::string_view rDispatchCommand, const rtl:
     }
 
     rtl::Reference< Diagram > xDiagram = ChartModelHelper::findDiagram( xChartModel );
-    uno::Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
+    rtl::Reference< Axis > xAxis = AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram );
     return ObjectIdentifier::createClassifiedIdentifierForObject( xAxis, xChartModel );
 }
 
@@ -419,7 +420,7 @@ OUString lcl_getGridCIDForCommand( std::string_view rDispatchCommand, const rtl:
         nDimensionIndex=2; bMainGrid=false;
     }
 
-    uno::Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, true/*bMainAxis*/, xDiagram ) );
+    rtl::Reference< Axis > xAxis = AxisHelper::getAxis( nDimensionIndex, true/*bMainAxis*/, xDiagram );
 
     sal_Int32   nSubGridIndex= bMainGrid ? -1 : 0;
     OUString aCID( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGridIndex ) );
@@ -592,7 +593,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
             return rSelectedCID;
         else
         {
-            Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartDocument );
+            rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartDocument );
             return ObjectIdentifier::createClassifiedIdentifierForObject( xAxis , xChartDocument );
         }
     }
@@ -603,7 +604,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
             return rSelectedCID;
         else
         {
-            Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartDocument );
+            rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartDocument );
             return ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartDocument );
         }
 
@@ -615,7 +616,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
             return rSelectedCID;
         else
         {
-            Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartDocument );
+            rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( rSelectedCID, xChartDocument );
             return ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartDocument, 0 /*sub grid index*/ );
         }
     }

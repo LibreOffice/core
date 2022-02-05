@@ -27,6 +27,7 @@
 #include <servicenames_charttypes.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <PropertyHelper.hxx>
@@ -238,8 +239,8 @@ void PieChartTypeTemplate::adaptScales(
     {
         try
         {
-            Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1 /*nDimensionIndex*/,0 /*nAxisIndex*/
-                    , coords ) );
+            rtl::Reference< Axis > xAxis = AxisHelper::getAxis( 1 /*nDimensionIndex*/,0 /*nAxisIndex*/
+                    , coords );
             if( xAxis.is() )
             {
                 chart2::ScaleData aScaleData( xAxis->getScaleData() );

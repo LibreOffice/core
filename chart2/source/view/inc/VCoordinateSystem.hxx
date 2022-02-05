@@ -45,8 +45,8 @@ namespace com::sun::star::lang { class XMultiServiceFactory; }
 
 namespace chart
 {
+class Axis;
 class BaseCoordinateSystem;
-
 class VAxisBase;
 
 class VCoordinateSystem
@@ -141,7 +141,7 @@ public:
 protected: //methods
     VCoordinateSystem( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
 
-    css::uno::Reference< css::chart2::XAxis >
+    rtl::Reference< ::chart::Axis >
         getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex  ) const;
     static css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >
         getGridListFromAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis );

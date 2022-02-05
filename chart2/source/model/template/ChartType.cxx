@@ -19,6 +19,7 @@
 
 #include <ChartType.hxx>
 #include <CartesianCoordinateSystem.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <CloneHelper.hxx>
 #include <AxisIndexDefines.hxx>
@@ -68,12 +69,18 @@ ChartType::~ChartType()
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
 {
+    return createCoordinateSystem2(DimensionCount);
+}
+
+rtl::Reference< BaseCoordinateSystem >
+    ChartType::createCoordinateSystem2( ::sal_Int32 DimensionCount )
+{
     rtl::Reference< CartesianCoordinateSystem > xResult =
         new CartesianCoordinateSystem( DimensionCount );
 
     for( sal_Int32 i=0; i<DimensionCount; ++i )
     {
-        Reference< chart2::XAxis > xAxis( xResult->getAxisByDimension( i, MAIN_AXIS_INDEX ) );
+        rtl::Reference< Axis > xAxis = xResult->getAxisByDimension2( i, MAIN_AXIS_INDEX );
         if( !xAxis.is() )
         {
             OSL_FAIL("a created coordinate system should have an axis for each dimension");

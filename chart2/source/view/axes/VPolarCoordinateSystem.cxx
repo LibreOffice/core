@@ -22,6 +22,7 @@
 #include "VPolarAxis.hxx"
 #include <BaseCoordinateSystem.hxx>
 #include <AxisIndexDefines.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ChartModel.hxx>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
@@ -87,7 +88,7 @@ void VPolarCoordinateSystem::createVAxisList(
         sal_Int32 nMaxAxisIndex = m_xCooSysModel->getMaximumAxisIndexByDimension(nDimensionIndex);
         for( sal_Int32 nAxisIndex = 0; nAxisIndex <= nMaxAxisIndex; nAxisIndex++ )
         {
-            Reference< XAxis > xAxis( getAxisByDimension(nDimensionIndex,nAxisIndex) );
+            rtl::Reference< Axis > xAxis = getAxisByDimension(nDimensionIndex,nAxisIndex);
             if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
                 continue;
             AxisProperties aAxisProperties(xAxis,getExplicitCategoriesProvider());
@@ -170,7 +171,7 @@ void VPolarCoordinateSystem::createGridShapes()
     {
         sal_Int32 nAxisIndex = MAIN_AXIS_INDEX;
 
-        Reference< XAxis > xAxis( AxisHelper::getAxis( nDimensionIndex, nAxisIndex, m_xCooSysModel ) );
+        rtl::Reference< Axis > xAxis = AxisHelper::getAxis( nDimensionIndex, nAxisIndex, m_xCooSysModel );
         if(!xAxis.is() || !AxisHelper::shouldAxisBeDisplayed( xAxis, m_xCooSysModel ))
             continue;
 

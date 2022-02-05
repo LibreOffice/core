@@ -29,6 +29,7 @@
 #include "ChartAxisPanel.hxx"
 #include <ChartController.hxx>
 #include <ChartModel.hxx>
+#include <Axis.hxx>
 
 using namespace css;
 using namespace css::uno;
@@ -40,8 +41,7 @@ namespace {
 bool isLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
-    css::uno::Reference< css::beans::XPropertySet > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return false;
@@ -58,8 +58,7 @@ bool isLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
 void setLabelShown(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, bool bVisible)
 {
-    css::uno::Reference< css::beans::XPropertySet > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return;
@@ -83,8 +82,7 @@ AxisLabelPosMap const aLabelPosMap[] = {
 sal_Int32 getLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
-    css::uno::Reference< css::beans::XPropertySet > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return 0;
@@ -107,8 +105,7 @@ sal_Int32 getLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
 void setLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, sal_Int32 nPos)
 {
-    css::uno::Reference< css::beans::XPropertySet > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Axis > xAxis = ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return;
@@ -178,8 +175,8 @@ OUString getCID(const css::uno::Reference<css::frame::XModel>& xModel)
 void setAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, double nVal)
 {
-    css::uno::Reference< css::beans::XPropertySet > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Axis > xAxis =
+        ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return;
@@ -190,8 +187,8 @@ void setAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
 double getAxisRotation(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
-    css::uno::Reference< css::beans::XPropertySet > xAxis(
-        ObjectIdentifier::getAxisForCID(rCID, xModel), uno::UNO_QUERY );
+    rtl::Reference< ::chart::Axis > xAxis =
+        ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
         return 0;

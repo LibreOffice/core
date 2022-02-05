@@ -18,6 +18,7 @@
  */
 
 #include "AxisWrapper.hxx"
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
 #include "Chart2ModelContact.hxx"
@@ -574,7 +575,7 @@ awt::Size AxisWrapper::getCurrentSizeForReference()
 
 Reference< chart2::XAxis > AxisWrapper::getAxis()
 {
-    Reference< chart2::XAxis > xAxis;
+    rtl::Reference< Axis > xAxis;
     try
     {
         sal_Int32 nDimensionIndex = 0;
@@ -586,9 +587,8 @@ Reference< chart2::XAxis > AxisWrapper::getAxis()
         if( !xAxis.is() )
         {
             xAxis = AxisHelper::createAxis( nDimensionIndex, bMainAxis, xDiagram, m_spChart2ModelContact->m_xContext );
-            Reference< beans::XPropertySet > xProp( xAxis, uno::UNO_QUERY );
-            if( xProp.is() )
-                xProp->setPropertyValue("Show", uno::Any( false ) );
+            if( xAxis.is() )
+                xAxis->setPropertyValue("Show", uno::Any( false ) );
         }
     }
     catch( const uno::Exception & )

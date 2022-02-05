@@ -29,6 +29,7 @@
 #include <servicenames_coosystems.hxx>
 #include <ObjectIdentifier.hxx>
 #include <ExplicitCategoriesProvider.hxx>
+#include <Axis.hxx>
 #include "VAxisBase.hxx"
 #include <defines.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
@@ -185,10 +186,10 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     return aResolution;
 }
 
-Reference< XAxis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const
+rtl::Reference< Axis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const
 {
     if( m_xCooSysModel.is() )
-        return m_xCooSysModel->getAxisByDimension( nDimensionIndex, nAxisIndex );
+        return m_xCooSysModel->getAxisByDimension2( nDimensionIndex, nAxisIndex );
     return nullptr;
 }
 

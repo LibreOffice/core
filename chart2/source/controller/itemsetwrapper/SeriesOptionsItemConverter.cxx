@@ -22,6 +22,7 @@
 
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -80,7 +81,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
         m_xCooSys = DataSeriesHelper::getCoordinateSystemOfSeries( xDataSeries, xDiagram );
         if( m_xCooSys.is() )
         {
-            uno::Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1, 0, m_xCooSys ) );
+            rtl::Reference< Axis > xAxis = AxisHelper::getAxis( 1, 0, m_xCooSys );
             chart2::ScaleData aScale( xAxis->getScaleData() );
             m_bClockwise = (aScale.Orientation == chart2::AxisOrientation_REVERSE);
         }

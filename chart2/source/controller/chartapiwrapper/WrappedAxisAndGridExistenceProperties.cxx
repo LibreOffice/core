@@ -25,6 +25,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <WrappedProperty.hxx>
 #include "Chart2ModelContact.hxx"
@@ -372,11 +373,11 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
         return;
 
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    Reference< beans::XPropertySet > xProp( AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram ), uno::UNO_QUERY );
+    rtl::Reference< Axis > xProp = AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram );
     if( !xProp.is() && bNewValue )
     {
         //create axis if needed
-        xProp.set( AxisHelper::createAxis( m_nDimensionIndex, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext ), uno::UNO_QUERY );
+        xProp = AxisHelper::createAxis( m_nDimensionIndex, m_bMain, xDiagram, m_spChart2ModelContact->m_xContext );
         if( xProp.is() )
             xProp->setPropertyValue( "Show", uno::Any( false ) );
     }
@@ -388,7 +389,7 @@ Any WrappedAxisLabelExistenceProperty::getPropertyValue( const Reference< beans:
 {
     Any aRet;
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
-    Reference< beans::XPropertySet > xProp( AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram ), uno::UNO_QUERY );
+    rtl::Reference< Axis > xProp = AxisHelper::getAxis( m_nDimensionIndex, m_bMain, xDiagram );
     if( xProp.is() )
         aRet = xProp->getPropertyValue( "DisplayLabels" );
     else

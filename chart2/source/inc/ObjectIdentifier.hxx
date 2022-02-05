@@ -42,6 +42,7 @@ namespace com::sun::star::uno { class XInterface; }
 
 namespace chart
 {
+class Axis;
 class BaseCoordinateSystem;
 class DataSeries;
 class Diagram;
@@ -111,6 +112,9 @@ public:
         , const rtl::Reference<::chart::ChartModel>& xChartModel );
     static OUString createClassifiedIdentifierForObject(
           const rtl::Reference< ::chart::Legend >& xObject
+        , const rtl::Reference<::chart::ChartModel>& xChartModel );
+    static OUString createClassifiedIdentifierForObject(
+          const rtl::Reference< ::chart::Axis >& xObject
         , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString createClassifiedIdentifierForParticle(
@@ -198,7 +202,7 @@ public:
                 , const rtl::Reference< ::chart::ChartModel >& xChartDocument );
 
     //return the axis object that belongs to rObjectCID if any
-    static css::uno::Reference< css::chart2::XAxis >
+    static rtl::Reference< ::chart::Axis >
             getAxisForCID(
                   const OUString& rObjectCID
                 , const rtl::Reference<::chart::ChartModel>& xChartModel );

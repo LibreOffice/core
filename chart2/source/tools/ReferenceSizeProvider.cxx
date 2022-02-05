@@ -24,6 +24,7 @@
 #include <DataSeries.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -245,19 +246,13 @@ ReferenceSizeProvider::AutoResizeState ReferenceSizeProvider::getAutoResizeState
         return eResult;
 
     // Axes (incl. Axis Titles)
-    const Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-    for( Reference< XAxis > const & axis : aAxes )
+    const std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
+    for( rtl::Reference< Axis > const & axis : aAxes )
     {
-        Reference< beans::XPropertySet > xProp( axis, uno::UNO_QUERY );
-        if( xProp.is())
-            getAutoResizeFromPropSet( xProp, eResult );
-        Reference< XTitled > xTitled( axis, uno::UNO_QUERY );
-        if( xTitled.is())
-        {
-            impl_getAutoResizeFromTitled( xTitled, eResult );
-            if( eResult == AUTO_RESIZE_AMBIGUOUS )
-                return eResult;
-        }
+        getAutoResizeFromPropSet( axis, eResult );
+        impl_getAutoResizeFromTitled( axis, eResult );
+        if( eResult == AUTO_RESIZE_AMBIGUOUS )
+            return eResult;
     }
 
     // DataSeries/Points
@@ -323,13 +318,11 @@ void ReferenceSizeProvider::setAutoResizeState( ReferenceSizeProvider::AutoResiz
         setValuesAtPropertySet( xLegendProp );
 
     // Axes (incl. Axis Titles)
-    const Sequence< Reference< XAxis > > aAxes( AxisHelper::getAllAxesOfDiagram( xDiagram ) );
-    for( Reference< XAxis > const & axis : aAxes )
+    const std::vector< rtl::Reference< Axis > > aAxes = AxisHelper::getAllAxesOfDiagram( xDiagram );
+    for( rtl::Reference< Axis > const & axis : aAxes )
     {
-        Reference< beans::XPropertySet > xProp( axis, uno::UNO_QUERY );
-        if( xProp.is())
-            setValuesAtPropertySet( xProp );
-        impl_setValuesAtTitled( Reference< XTitled >( axis, uno::UNO_QUERY ));
+        setValuesAtPropertySet( axis );
+        impl_setValuesAtTitled( axis );
     }
 
     // DataSeries/Points

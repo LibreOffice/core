@@ -144,6 +144,8 @@ public:
         tCoordinateSystemContainerType;
 
     const tCoordinateSystemContainerType & getBaseCoordinateSystems() { return m_aCoordSystems; }
+    void setCoordinateSystems(
+        const std::vector< rtl::Reference< ::chart::BaseCoordinateSystem > >& aCoordinateSystems );
 
     const rtl::Reference< ::chart::Legend > & getLegend2() const { return m_xLegend; }
     void setLegend(const rtl::Reference< ::chart::Legend > &);

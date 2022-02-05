@@ -24,6 +24,7 @@
 #include <ObjectNameProvider.hxx>
 #include <ResId.hxx>
 #include <strings.hrc>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
@@ -425,7 +426,7 @@ OUString ObjectNameProvider::getGridName( const OUString& rObjectCID
     sal_Int32 nCooSysIndex = -1;
     sal_Int32 nDimensionIndex = -1;
     sal_Int32 nAxisIndex = -1;
-    Reference< XAxis > xAxis( ObjectIdentifier::getAxisForCID( rObjectCID , xChartModel ) );
+    rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( rObjectCID , xChartModel );
     AxisHelper::getIndicesForAxis( xAxis, ChartModelHelper::findDiagram( xChartModel )
               , nCooSysIndex , nDimensionIndex, nAxisIndex );
 

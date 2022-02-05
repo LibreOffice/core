@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "Axis.hxx"
+#include <Axis.hxx>
 #include "GridProperties.hxx"
 #include <CharacterProperties.hxx>
 #include <LinePropertiesHelper.hxx>

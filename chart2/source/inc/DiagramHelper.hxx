@@ -42,6 +42,7 @@ namespace com::sun::star::util { class XNumberFormatsSupplier; }
 
 namespace chart
 {
+class Axis;
 class BaseCoordinateSystem;
 class ChartType;
 class ChartTypeManager;
@@ -159,11 +160,11 @@ public:
         const css::uno::Reference< css::uno::XComponentContext > & xContext,
         bool bAdaptAxes=true );
 
-    static css::uno::Reference< css::chart2::XAxis > getAttachedAxis(
+    static rtl::Reference< ::chart::Axis > getAttachedAxis(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    static css::uno::Reference< css::chart2::XAxis > getAttachedAxis(
+    static rtl::Reference< ::chart::Axis > getAttachedAxis(
         const rtl::Reference< ::chart::DataSeries >& xSeries,
         const rtl::Reference< ::chart::Diagram >& xDiagram );
 
