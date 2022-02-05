@@ -595,6 +595,42 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             }
             break;
 
+        case FID_TAB_DUPLICATE:
+            {
+                // Get info about current document and selected tab
+                SCTAB nTab = rViewData.GetTabNo();
+                OUString aDocName = GetViewData().GetDocShell()->GetTitle();
+                sal_uInt16 nDoc = 0;
+                bool bCpy = true;
+
+                SfxObjectShell* pSh = SfxObjectShell::GetFirst();
+                ScDocShell* pScSh = nullptr;
+                sal_uInt16 i = 0;
+
+                // Determine the index of the current document
+                while ( pSh )
+                {
+                    pScSh = dynamic_cast<ScDocShell*>( pSh );
+
+                    if( pScSh )
+                    {
+                        pScSh->GetTitle();
+
+                        if (aDocName == pScSh->GetTitle())
+                        {
+                            nDoc = i;
+                            break;
+                        }
+                        // Only count ScDocShell
+                        i++;
+                    }
+                    pSh = SfxObjectShell::GetNext( *pSh );
+                }
+
+                MoveTable( nDoc, nTab + 1, bCpy );
+            }
+            break;
+
         case FID_DELETE_TABLE:
             {
                 bool bHasIndex = (pReqArgs != nullptr);
@@ -950,6 +986,13 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
                 break;
 
             case FID_TAB_MOVE:
+                if (   !rDoc.IsDocEditable()
+                    || rDoc.GetChangeTrack() != nullptr
+                    || nTabCount > MAXTAB)
+                    rSet.DisableItem( nWhich );
+                break;
+
+            case FID_TAB_DUPLICATE:
                 if (   !rDoc.IsDocEditable()
                     || rDoc.GetChangeTrack() != nullptr
                     || nTabCount > MAXTAB)
