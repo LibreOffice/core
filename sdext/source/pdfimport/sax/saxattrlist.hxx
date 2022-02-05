@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_SAX_SAXATTRLIST_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_SAX_SAXATTRLIST_HXX
+#pragma once
 
 #include <rtl/ustring.hxx>
 #include <unordered_map>
@@ -61,7 +59,5 @@ namespace pdfi
         virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

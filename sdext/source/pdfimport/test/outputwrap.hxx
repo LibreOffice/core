@@ -16,10 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TEST_OUTPUTWRAP_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TEST_OUTPUTWRAP_HXX
+#pragma once
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -87,7 +84,5 @@ typedef ::cppu::WeakComponentImplHelper<
         }
     };
 }
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

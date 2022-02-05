@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_STYLE_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_TREE_STYLE_HXX
+#pragma once
 
 #include <pdfihelper.hxx>
 #include <numeric>
@@ -160,7 +158,5 @@ namespace pdfi
         OUString getStyleName( sal_Int32 nStyle ) const;
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

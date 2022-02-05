@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
+#pragma once
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -175,7 +173,5 @@ namespace pdfi
 
     typedef std::shared_ptr<ContentSink> ContentSinkSharedPtr;
 }
-
-#endif // INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_CONTENTSINK_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

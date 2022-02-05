@@ -16,9 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-
-#ifndef INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_IMAGECONTAINER_HXX
-#define INCLUDED_SDEXT_SOURCE_PDFIMPORT_INC_IMAGECONTAINER_HXX
+#pragma once
 
 #include "pdfihelper.hxx"
 
@@ -44,7 +42,5 @@ namespace pdfi
         void writeBase64EncodedStream( ImageId nImageId, EmitContext& rContext );
     };
 }
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
