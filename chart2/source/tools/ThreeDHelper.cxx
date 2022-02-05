@@ -641,10 +641,8 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
                 //siny == 0 && cosx == 0 && cosz != 0 && sinz != 0
                 //element 11 && 13
                 double f13 = sin(x)*sin(z);
-                R = atan( f13/f11 );
-
-                if(f11<0)
-                    R+=M_PI;
+                //atan2 takes care of the quadrant tests
+                R = atan2( f13,f11 );
 
                 //element 23
                 double f23 = cos(z)*sin(x);
@@ -682,7 +680,8 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
             double f22 = cos(x)*cos(z);
             double f23 = cos(z)*sin(x);
             E = atan( f23/(f22*cos(R)) );
-            if( (f22*cos(E))<0 )
+            //cosine of E is always above zero redundant test
+            if( f22<0 )
                 E+=M_PI;
         }
         else if( lcl_isCosZero(z) )
@@ -706,16 +705,16 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //sinY == 0 && all other !=0
             double f13 = sin(x)*sin(z);
-            R = atan( f13/f11 );
-            if( (f11*cos(R))<0.0 )
-                R+=M_PI;
+            //cosine of R is always above zero no need to test atan2 takes care of f11 sign
+            R = atan2( f13,f11 );
 
             double f22 = cos(x)*cos(z);
             if( !lcl_isCosZero(R) )
                 E = atan( cos(z)*sin(x) /( f22*cos(R) ) );
             else
                 E = atan( cos(y)*sin(z) /( f22*sin(R) ) );
-            if( (f22*cos(E))<0 )
+            //cosine of E is always above zero redundant test
+            if( f22<0 )
                 E+=M_PI;
         }
     }
@@ -742,10 +741,9 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 sinX=0 sinZ=0
             double f13 = cos(x)*cos(z)*sin(y);
-            R = atan( f13/f11 );
+            //atan2 takes care of the quadrant tests
+            R = atan2( f13,f11 );
             //R = asin(f13);
-            if( f11<0 )
-                R+=M_PI;
 
             double f22 = cos(x)*cos(z);
             if( f22>0 )
@@ -770,16 +768,14 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         {
             //cosY!=0 sinY!=0 sinX=0 sinZ!=0 cosZ!=0
             double f13 = cos(x)*cos(z)*sin(y);
-            R = atan( f13/f11 );
-
-            if( f11<0 )
-                R+=M_PI;
+            //atan2 takes care of the quadrant tests
+            R = atan2( f13,f11 );
 
             double f21 = cos(y)*sin(z);
             double f22 = cos(x)*cos(z);
             E = atan(f21/(f22*sin(R)) );
-
-            if( (f22*cos(E))<0.0 )
+            //cosine of E is always above zero redundant test
+            if( f22<0.0 )
                 E+=M_PI;
         }
     }
@@ -861,9 +857,9 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
         //cosY!=0 sinY!=0 sinX!=0 cosX!=0 sinZ!=0 cosZ!=0
         //13/11:
         double f13 = sin(x)*sin(z)+cos(x)*cos(z)*sin(y);
-        R = atan( f13/ f11 );
-        if(f11<0.0)
-            R+=M_PI;
+        //atan2 takes care of the quadrant test
+        R = atan2( f13,f11 );
+    
         double f22 = cos(x)*cos(z)+sin(x)*sin(y)*sin(z);
         double f23 = cos(x)*sin(y)*sin(z)-cos(z)*sin(x);
         //23/22:
