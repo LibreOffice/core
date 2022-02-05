@@ -34,6 +34,23 @@
       "parentUuid": "110a0e1a_1da5ef7d",
       "revId": "ad674edf394bd1c9b56410b5f53587c303693fcc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d31f45b6_de33b0a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-05T11:31:43Z",
+      "side": 1,
+      "message": "Done here:\nhttps://gerrit.libreoffice.org/c/core/+/129520\nI put you as reviewer",
+      "revId": "ad674edf394bd1c9b56410b5f53587c303693fcc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
