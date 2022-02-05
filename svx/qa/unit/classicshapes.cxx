@@ -198,7 +198,7 @@ CPPUNIT_TEST_FIXTURE(ClassicshapesTest, testTdf130076Flip)
 
     for (sal_uInt8 nPageIndex = 0; nPageIndex < 2; ++nPageIndex)
     {
-        sal_Int32 angle1, angle2;
+        sal_Int32 angle1(0), angle2(0);
         const sal_Int32 goodAngle1 = 26000;
         const sal_Int32 goodAngle2 = 26000;
         uno::Reference<drawing::XShape> xShape(getShape(1, nPageIndex));
