@@ -324,7 +324,7 @@
                   <object class="GtkLabel" id="text_delay_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes" context="customanimationeffecttab|text_delay_label">delay between characters</property>
+                    <property name="label" translatable="yes" context="customanimationeffecttab|text_delay_label">Delay between characters</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">text_delay</property>
                   </object>
