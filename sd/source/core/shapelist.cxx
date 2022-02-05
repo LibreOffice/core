@@ -80,7 +80,7 @@ void ShapeList::clear()
     for( auto& rpShape : aShapeList )
         rpShape->RemoveObjectUser(*this);
 
-    maIter = aShapeList.end();
+    maIter = maShapeList.end();
 }
 
 /** returns true if this list is empty */
