@@ -523,6 +523,69 @@ void setStackModeAtSeries(
     }
 }
 
+void setStackModeAtSeries(
+    const std::vector< rtl::Reference< DataSeries > > & aSeries,
+    const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
+    StackMode eStackMode )
+{
+    const uno::Any aPropValue(
+        ( (eStackMode == StackMode::YStacked) ||
+          (eStackMode == StackMode::YStackedPercent) )
+        ? chart2::StackingDirection_Y_STACKING
+        : (eStackMode == StackMode::ZStacked )
+        ? chart2::StackingDirection_Z_STACKING
+        : chart2::StackingDirection_NO_STACKING );
+
+    std::set< sal_Int32 > aAxisIndexSet;
+    for( rtl::Reference< DataSeries > const & dataSeries : aSeries )
+    {
+        try
+        {
+            if( dataSeries.is() )
+            {
+                dataSeries->setPropertyValue( "StackingDirection", aPropValue );
+
+                sal_Int32 nAxisIndex;
+                dataSeries->getPropertyValue( "AttachedAxisIndex" ) >>= nAxisIndex;
+                aAxisIndexSet.insert(nAxisIndex);
+            }
+        }
+        catch( const uno::Exception & )
+        {
+            DBG_UNHANDLED_EXCEPTION("chart2");
+        }
+    }
+
+    if( !(xCorrespondingCoordinateSystem.is() &&
+        1 < xCorrespondingCoordinateSystem->getDimension()) )
+        return;
+
+    if( aAxisIndexSet.empty() )
+    {
+        aAxisIndexSet.insert(0);
+    }
+
+    for (auto const& axisIndex : aAxisIndexSet)
+    {
+        rtl::Reference< Axis > xAxis =
+            xCorrespondingCoordinateSystem->getAxisByDimension2(1, axisIndex);
+        if( xAxis.is())
+        {
+            bool bPercent = (eStackMode == StackMode::YStackedPercent);
+            chart2::ScaleData aScaleData = xAxis->getScaleData();
+
+            if( bPercent != (aScaleData.AxisType==chart2::AxisType::PERCENT) )
+            {
+                if( bPercent )
+                    aScaleData.AxisType = chart2::AxisType::PERCENT;
+                else
+                    aScaleData.AxisType = chart2::AxisType::REALNUMBER;
+                xAxis->setScaleData( aScaleData );
+            }
+        }
+    }
+}
+
 sal_Int32 getAttachedAxisIndex( const Reference< chart2::XDataSeries > & xSeries )
 {
     sal_Int32 nRet = 0;
@@ -667,13 +730,20 @@ void makeLinesThickOrThin( const Reference< beans::XPropertySet > & xSeriesPrope
 void setPropertyAlsoToAllAttributedDataPoints( const Reference< chart2::XDataSeries >& xSeries,
                                               const OUString& rPropertyName, const uno::Any& rPropertyValue )
 {
-    Reference< beans::XPropertySet > xSeriesProperties( xSeries, uno::UNO_QUERY );
-    if( !xSeriesProperties.is() )
+    rtl::Reference<DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
+    assert(!xSeries || pSeries);
+    setPropertyAlsoToAllAttributedDataPoints(pSeries, rPropertyName, rPropertyValue);
+}
+
+void setPropertyAlsoToAllAttributedDataPoints( const rtl::Reference< ::chart::DataSeries >& xSeries,
+                                              const OUString& rPropertyName, const uno::Any& rPropertyValue )
+{
+    if( !xSeries.is() )
         return;
 
-    xSeriesProperties->setPropertyValue( rPropertyName, rPropertyValue );
+    xSeries->setPropertyValue( rPropertyName, rPropertyValue );
     uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-    if( xSeriesProperties->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+    if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
     {
         for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
         {

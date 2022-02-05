@@ -781,27 +781,24 @@ void DialogModel::applyInterpretedData(
         sal_Int32 nGroup = 0;
         sal_Int32 nSeriesCounter = 0;
         sal_Int32 nNewSeriesIndex = static_cast< sal_Int32 >( rSeriesToReUse.size());
-        const sal_Int32 nOuterSize=rNewData.Series.getLength();
+        const sal_Int32 nOuterSize=rNewData.Series.size();
 
         for(; nGroup < nOuterSize; ++nGroup)
         {
-            Sequence< Reference< XDataSeries > > aSeries( rNewData.Series[ nGroup ] );
-            const sal_Int32 nSeriesInGroup = aSeries.getLength();
+            const std::vector< rtl::Reference< DataSeries > > & aSeries( rNewData.Series[ nGroup ] );
+            const sal_Int32 nSeriesInGroup = aSeries.size();
             for( sal_Int32 nSeries=0; nSeries<nSeriesInGroup; ++nSeries, ++nSeriesCounter )
             {
-                auto pSeries = dynamic_cast<DataSeries*>(aSeries[nSeries].get());
-                assert(pSeries);
-                if( std::find( rSeriesToReUse.begin(), rSeriesToReUse.end(), pSeries )
+                if( std::find( rSeriesToReUse.begin(), rSeriesToReUse.end(), aSeries[nSeries] )
                     == rSeriesToReUse.end())
                 {
-                    Reference< beans::XPropertySet > xSeriesProp( aSeries[nSeries], uno::UNO_QUERY );
-                    if( xSeriesProp.is())
+                    if( aSeries[nSeries].is())
                     {
                         // @deprecated: correct default color should be found by view
                         // without setting it as hard attribute
                         Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
                         if( xColorScheme.is())
-                            xSeriesProp->setPropertyValue( "Color" ,
+                            aSeries[nSeries]->setPropertyValue( "Color" ,
                                 uno::Any( xColorScheme->getColorByIndex( nSeriesCounter )));
                     }
                     m_xTemplate->applyStyle( aSeries[nSeries], nGroup, nNewSeriesIndex++, nSeriesInGroup );
@@ -811,15 +808,13 @@ void DialogModel::applyInterpretedData(
     }
 
     // data series
-    std::vector< rtl::Reference< ChartType > > aSeriesCnt( getAllDataSeriesContainers());
-    auto aNewSeries(
-        comphelper::sequenceToContainer<std::vector< Sequence< Reference< XDataSeries > > >>( rNewData.Series ));
+    std::vector< rtl::Reference< ChartType > > aSeriesCnt = getAllDataSeriesContainers();
 
-    OSL_ASSERT( aSeriesCnt.size() == aNewSeries.size());
+    OSL_ASSERT( aSeriesCnt.size() == rNewData.Series.size());
 
-    std::vector< Sequence< Reference< XDataSeries > > >::const_iterator aSrcIt( aNewSeries.begin());
-    std::vector< rtl::Reference< ChartType > >::iterator aDestIt( aSeriesCnt.begin());
-    for(; aSrcIt != aNewSeries.end() && aDestIt != aSeriesCnt.end();
+    auto aSrcIt = rNewData.Series.begin();
+    auto aDestIt = aSeriesCnt.begin();
+    for(; aSrcIt != rNewData.Series.end() && aDestIt != aSeriesCnt.end();
         ++aSrcIt, ++aDestIt )
     {
         try

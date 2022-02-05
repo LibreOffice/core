@@ -78,7 +78,7 @@ protected:
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) override;
     virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter() override;
     virtual void applyStyle(
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const rtl::Reference< ::chart::DataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount ) override;
@@ -90,10 +90,10 @@ protected:
 
     // ____ ChartTypeTemplate ____
     virtual void createChartTypes(
-            const css::uno::Sequence<
-                 css::uno::Sequence<
-                    css::uno::Reference<
-                        css::chart2::XDataSeries > > >& aSeriesSeq,
+            const std::vector<
+                 std::vector<
+                    rtl::Reference<
+                        ::chart::DataSeries > > >& aSeriesSeq,
             const std::vector<
                 rtl::Reference<
                     ::chart::BaseCoordinateSystem > > & rCoordSys,

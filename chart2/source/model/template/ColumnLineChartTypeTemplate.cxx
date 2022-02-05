@@ -24,6 +24,7 @@
 #include <BaseCoordinateSystem.hxx>
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <servicenames_charttypes.hxx>
 #include "ColumnLineDataInterpreter.hxx"
@@ -163,7 +164,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::
 }
 
 void ColumnLineChartTypeTemplate::createChartTypes(
-    const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
+    const std::vector< std::vector< rtl::Reference< DataSeries > > > & aSeriesSeq,
     const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
     const std::vector< rtl::Reference< ChartType > >& aOldChartTypesSeq )
 {
@@ -172,8 +173,8 @@ void ColumnLineChartTypeTemplate::createChartTypes(
 
     try
     {
-        const Sequence< Reference< XDataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
-        sal_Int32 nNumberOfSeries = aFlatSeriesSeq.getLength();
+        const std::vector< rtl::Reference< DataSeries > > aFlatSeriesSeq( FlattenSequence( aSeriesSeq ));
+        sal_Int32 nNumberOfSeries = aFlatSeriesSeq.size();
         sal_Int32 nNumberOfLines = 0;
         sal_Int32 nNumberOfColumns = 0;
 
@@ -233,7 +234,7 @@ void ColumnLineChartTypeTemplate::createChartTypes(
 }
 
 void ColumnLineChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
@@ -246,13 +247,9 @@ void ColumnLineChartTypeTemplate::applyStyle(
     }
     else if( nChartTypeIndex==1 ) // lines
     {
-        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
-        if( xProp.is() )
-        {
-            DataSeriesHelper::switchLinesOnOrOff( xProp, true );
-            DataSeriesHelper::switchSymbolsOnOrOff( xProp, false, nSeriesIndex );
-            DataSeriesHelper::makeLinesThickOrThin( xProp, true );
-        }
+        DataSeriesHelper::switchLinesOnOrOff( xSeries, true );
+        DataSeriesHelper::switchSymbolsOnOrOff( xSeries, false, nSeriesIndex );
+        DataSeriesHelper::makeLinesThickOrThin( xSeries, true );
     }
 }
 

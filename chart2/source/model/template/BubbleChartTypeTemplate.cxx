@@ -21,6 +21,7 @@
 #include "BubbleChartType.hxx"
 #include "BubbleDataInterpreter.hxx"
 #include <servicenames_charttypes.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -142,7 +143,7 @@ StackMode BubbleChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */
 }
 
 void BubbleChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )

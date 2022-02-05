@@ -202,6 +202,26 @@ css::uno::Sequence< T >
     return aResult;
 }
 
+template< typename T >
+std::vector< T >
+    FlattenSequence( const std::vector< std::vector< T > > & aSeqSeq )
+{
+    sal_Int32 nOuter, nInner, nCount = 0,
+        nResultSize = 0;
+    const sal_Int32 nOuterSize = aSeqSeq.size();
+    for( nOuter=0; nOuter<nOuterSize; ++nOuter )
+        nResultSize += aSeqSeq[nOuter].size();
+    std::vector< T > aResult( nResultSize );
+
+    for( nOuter=0; nOuter<nOuterSize; ++nOuter )
+    {
+        const sal_Int32 nInnerSize = aSeqSeq[nOuter].size();
+        for( nInner=0; nInner<nInnerSize; ++nInner, ++nCount )
+            aResult[nCount] = aSeqSeq[nOuter][nInner];
+    }
+    return aResult;
+}
+
 OOO_DLLPUBLIC_CHARTTOOLS
 bool hasDoubleValue( const css::uno::Any& rAny );
 

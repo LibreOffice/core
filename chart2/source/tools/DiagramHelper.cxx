@@ -630,13 +630,13 @@ std::vector< rtl::Reference< ::chart::DataSeries > >
     return aResult;
 }
 
-Sequence< Sequence< Reference< XDataSeries > > >
+std::vector< std::vector< rtl::Reference< DataSeries > > >
         DiagramHelper::getDataSeriesGroups( const rtl::Reference< Diagram > & xDiagram )
 {
     if (!xDiagram)
         return {};
 
-    vector< Sequence< Reference< XDataSeries > > > aResult;
+    vector< std::vector< rtl::Reference< DataSeries > > > aResult;
 
     //iterate through all coordinate systems
     for( rtl::Reference< BaseCoordinateSystem > const & coords : xDiagram->getBaseCoordinateSystems() )
@@ -644,10 +644,10 @@ Sequence< Sequence< Reference< XDataSeries > > >
         //iterate through all chart types in the current coordinate system
         for( rtl::Reference< ChartType >  const & chartType : coords->getChartTypes2() )
         {
-            aResult.push_back( chartType->getDataSeries() );
+            aResult.push_back( chartType->getDataSeries2() );
         }
     }
-    return comphelper::containerToSequence( aResult );
+    return aResult;
 }
 
 rtl::Reference< ChartType >
