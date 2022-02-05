@@ -26,38 +26,36 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
-namespace pdfi
+namespace pdfi {
+
+class SaxAttrList : public ::cppu::WeakImplHelper<css::xml::sax::XAttributeList, css::util::XCloneable>
 {
-    class SaxAttrList : public ::cppu::WeakImplHelper<
-            css::xml::sax::XAttributeList,
-            css::util::XCloneable
-            >
+    struct AttrEntry
     {
-        struct AttrEntry
-        {
-            OUString m_aName;
-            OUString m_aValue;
+        OUString m_aName;
+        OUString m_aValue;
 
-            AttrEntry( const OUString& i_rName, const OUString& i_rValue )
-            : m_aName( i_rName ), m_aValue( i_rValue ) {}
-        };
-        std::vector< AttrEntry >                                    m_aAttributes;
-        std::unordered_map< OUString, size_t >   m_aIndexMap;
-
-    public:
-        explicit SaxAttrList( const std::unordered_map< OUString, OUString >& );
-
-        // css::xml::sax::XAttributeList
-        virtual sal_Int16 SAL_CALL getLength() override;
-        virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) override;
-        virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) override;
-        virtual OUString SAL_CALL getTypeByName(const OUString& aName) override;
-        virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override;
-        virtual OUString SAL_CALL getValueByName(const OUString& aName) override;
-
-        // css::util::XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+        AttrEntry( const OUString& i_rName, const OUString& i_rValue )
+        : m_aName( i_rName ), m_aValue( i_rValue ) {}
     };
-}
+    std::vector< AttrEntry >                                    m_aAttributes;
+    std::unordered_map< OUString, size_t >   m_aIndexMap;
+
+public:
+    explicit SaxAttrList( const std::unordered_map< OUString, OUString >& );
+
+    // css::xml::sax::XAttributeList
+    virtual sal_Int16 SAL_CALL getLength() override;
+    virtual OUString SAL_CALL getNameByIndex(sal_Int16 i) override;
+    virtual OUString SAL_CALL getTypeByIndex(sal_Int16 i) override;
+    virtual OUString SAL_CALL getTypeByName(const OUString& aName) override;
+    virtual OUString SAL_CALL getValueByIndex(sal_Int16 i) override;
+    virtual OUString SAL_CALL getValueByName(const OUString& aName) override;
+
+    // css::util::XCloneable
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
+};
+
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

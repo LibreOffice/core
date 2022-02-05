@@ -21,29 +21,30 @@
 #include "pdfihelper.hxx"
 #include <memory>
 
-namespace pdfi
+namespace pdfi {
+
+/** Output interface to ODF
+
+    Should be easy to implement using either SAX events or plain ODF
+ */
+class XmlEmitter
 {
-    /** Output interface to ODF
+public:
+    virtual ~XmlEmitter() {}
 
-        Should be easy to implement using either SAX events or plain ODF
+    /** Open up a tag with the given properties
      */
-    class XmlEmitter
-    {
-    public:
-        virtual ~XmlEmitter() {}
+    virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) = 0;
+    /** Write PCTEXT as-is to output
+     */
+    virtual void write( const OUString& rString ) = 0;
+    /** Close previously opened tag
+     */
+    virtual void endTag( const char* pTag ) = 0;
+};
 
-        /** Open up a tag with the given properties
-         */
-        virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) = 0;
-        /** Write PCTEXT as-is to output
-         */
-        virtual void write( const OUString& rString ) = 0;
-        /** Close previously opened tag
-         */
-        virtual void endTag( const char* pTag ) = 0;
-    };
+typedef std::shared_ptr<XmlEmitter> XmlEmitterSharedPtr;
 
-    typedef std::shared_ptr<XmlEmitter> XmlEmitterSharedPtr;
-}
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

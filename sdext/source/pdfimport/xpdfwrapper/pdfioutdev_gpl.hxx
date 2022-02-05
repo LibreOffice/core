@@ -59,230 +59,231 @@ class PDFDoc;
    (POPPLER_VERSION_MAJOR == (major) && POPPLER_VERSION_MINOR > (minor)) || \
    (POPPLER_VERSION_MAJOR == (major) && POPPLER_VERSION_MINOR == (minor) && POPPLER_VERSION_MICRO >= (micro)))
 
-namespace pdfi
+namespace pdfi {
+
+struct FontAttributes
 {
-    struct FontAttributes
+    FontAttributes() :
+        familyName(),
+        isEmbedded(false),
+        maFontWeight(GfxFont::W400),
+        isItalic(false),
+        isUnderline(false),
+        size(0.0)
+    {}
+
+    // xpdf goo stuff is so totally borked...
+    // ...need to hand-code assignment
+    FontAttributes( const FontAttributes& rSrc ) :
+        familyName(),
+        isEmbedded(rSrc.isEmbedded),
+        maFontWeight(rSrc.maFontWeight),
+        isItalic(rSrc.isItalic),
+        isUnderline(rSrc.isUnderline),
+        size(rSrc.size)
     {
-        FontAttributes() :
-            familyName(),
-            isEmbedded(false),
-            maFontWeight(GfxFont::W400),
-            isItalic(false),
-            isUnderline(false),
-            size(0.0)
-        {}
+        familyName.append(&rSrc.getFamilyName());
+    }
 
-        // xpdf goo stuff is so totally borked...
-        // ...need to hand-code assignment
-        FontAttributes( const FontAttributes& rSrc ) :
-            familyName(),
-            isEmbedded(rSrc.isEmbedded),
-            maFontWeight(rSrc.maFontWeight),
-            isItalic(rSrc.isItalic),
-            isUnderline(rSrc.isUnderline),
-            size(rSrc.size)
-        {
-            familyName.append(&rSrc.getFamilyName());
-        }
+    FontAttributes& operator=( const FontAttributes& rSrc )
+    {
+        familyName.clear();
+        familyName.append(&rSrc.getFamilyName());
 
-        FontAttributes& operator=( const FontAttributes& rSrc )
-        {
-            familyName.clear();
-            familyName.append(&rSrc.getFamilyName());
+        isEmbedded  = rSrc.isEmbedded;
+        maFontWeight= rSrc.maFontWeight;
+        isItalic    = rSrc.isItalic;
+        isUnderline = rSrc.isUnderline;
+        size        = rSrc.size;
 
-            isEmbedded  = rSrc.isEmbedded;
-            maFontWeight= rSrc.maFontWeight;
-            isItalic    = rSrc.isItalic;
-            isUnderline = rSrc.isUnderline;
-            size        = rSrc.size;
+        return *this;
+    }
 
-            return *this;
-        }
+    bool operator==(const FontAttributes& rFont) const
+    {
+        return getFamilyName().cmp(&rFont.getFamilyName())==0 &&
+            isEmbedded == rFont.isEmbedded &&
+            maFontWeight == rFont.maFontWeight &&
+            isItalic == rFont.isItalic &&
+            isUnderline == rFont.isUnderline &&
+            size == rFont.size;
+    }
 
-        bool operator==(const FontAttributes& rFont) const
-        {
-            return getFamilyName().cmp(&rFont.getFamilyName())==0 &&
-                isEmbedded == rFont.isEmbedded &&
-                maFontWeight == rFont.maFontWeight &&
-                isItalic == rFont.isItalic &&
-                isUnderline == rFont.isUnderline &&
-                size == rFont.size;
-        }
+    GooString   familyName;
+    bool        isEmbedded;
+    GfxFont::Weight maFontWeight;
+    bool        isItalic;
+    bool        isUnderline;
+    double      size;
 
-        GooString   familyName;
-        bool        isEmbedded;
-        GfxFont::Weight maFontWeight;
-        bool        isItalic;
-        bool        isUnderline;
-        double      size;
+private:
+    // Work around const-ness issues in the GooString API:
+    GooString & getFamilyName() const
+    { return const_cast<GooString &>(familyName); }
+};
 
-    private:
-        // Work around const-ness issues in the GooString API:
-        GooString & getFamilyName() const
-        { return const_cast<GooString &>(familyName); }
-    };
-
-    // Versions before 0.15 defined GBool as int; 0.15 redefined it as bool; 0.71 dropped GBool
+// Versions before 0.15 defined GBool as int; 0.15 redefined it as bool; 0.71 dropped GBool
 #if POPPLER_VERSION_MAJOR == 0 && POPPLER_VERSION_MINOR < 71
-    typedef GBool poppler_bool;
+typedef GBool poppler_bool;
 #else
-    typedef bool poppler_bool;
+typedef bool poppler_bool;
 #endif
 
-    class PDFOutDev : public OutputDev
-    {
-        // not owned by this class
-        PDFDoc*                                 m_pDoc;
-        mutable std::unordered_map< long long,
-                               FontAttributes > m_aFontMap;
-        std::unique_ptr<UnicodeMap>             m_pUtf8Map;
-        bool                                    m_bSkipImages;
+class PDFOutDev : public OutputDev
+{
+    // not owned by this class
+    PDFDoc*                                 m_pDoc;
+    mutable std::unordered_map< long long,
+                           FontAttributes > m_aFontMap;
+    std::unique_ptr<UnicodeMap>             m_pUtf8Map;
+    bool                                    m_bSkipImages;
 
-        int  parseFont( long long nNewId, GfxFont* pFont, const GfxState* state ) const;
-        void writeFontFile( GfxFont* gfxFont ) const;
+    int  parseFont( long long nNewId, GfxFont* pFont, const GfxState* state ) const;
+    void writeFontFile( GfxFont* gfxFont ) const;
 #if POPPLER_CHECK_VERSION(0, 83, 0)
-        static void printPath( const GfxPath* pPath );
+    static void printPath( const GfxPath* pPath );
 #else
-        static void printPath( GfxPath* pPath );
+    static void printPath( GfxPath* pPath );
 #endif
 
-    public:
-        explicit PDFOutDev( PDFDoc* pDoc );
-        virtual ~PDFOutDev() override;
+public:
+    explicit PDFOutDev( PDFDoc* pDoc );
+    virtual ~PDFOutDev() override;
 
-        //----- get info about output device
+    //----- get info about output device
 
-        // Does this device use upside-down coordinates?
-        // (Upside-down means (0,0) is the top left corner of the page.)
-        virtual poppler_bool upsideDown() override { return true; }
+    // Does this device use upside-down coordinates?
+    // (Upside-down means (0,0) is the top left corner of the page.)
+    virtual poppler_bool upsideDown() override { return true; }
 
-        // Does this device use drawChar() or drawString()?
-        virtual poppler_bool useDrawChar() override { return true; }
+    // Does this device use drawChar() or drawString()?
+    virtual poppler_bool useDrawChar() override { return true; }
 
-        // Does this device use beginType3Char/endType3Char?  Otherwise,
-        // text in Type 3 fonts will be drawn with drawChar/drawString.
-        virtual poppler_bool interpretType3Chars() override { return false; }
+    // Does this device use beginType3Char/endType3Char?  Otherwise,
+    // text in Type 3 fonts will be drawn with drawChar/drawString.
+    virtual poppler_bool interpretType3Chars() override { return false; }
 
-        // Does this device need non-text content?
-        virtual poppler_bool needNonText() override { return true; }
+    // Does this device need non-text content?
+    virtual poppler_bool needNonText() override { return true; }
 
-        //----- initialization and control
+    //----- initialization and control
 
-        // Set default transform matrix.
+    // Set default transform matrix.
 #if POPPLER_CHECK_VERSION(0, 71, 0)
-        virtual void setDefaultCTM(const double *ctm) override;
+    virtual void setDefaultCTM(const double *ctm) override;
 #else
-        virtual void setDefaultCTM(double *ctm) override;
+    virtual void setDefaultCTM(double *ctm) override;
 #endif
 
-        // Start a page.
-        virtual void startPage(int pageNum, GfxState *state
+    // Start a page.
+    virtual void startPage(int pageNum, GfxState *state
 #if POPPLER_CHECK_VERSION(0, 23, 0) || POPPLER_CHECK_VERSION(0, 24, 0)
-                               , XRef *xref
+                           , XRef *xref
 #endif
-        ) override;
+    ) override;
 
-        // End a page.
-        virtual void endPage() override;
+    // End a page.
+    virtual void endPage() override;
 
-        //----- link borders
-    #if POPPLER_CHECK_VERSION(0, 19, 0)
-        virtual void processLink(AnnotLink *link) override;
-    #elif POPPLER_CHECK_VERSION(0, 17, 0)
-        virtual void processLink(AnnotLink *link, Catalog *catalog) override;
-    #else
-        virtual void processLink(Link *link, Catalog *catalog) override;
-    #endif
-
-        //----- save/restore graphics state
-        virtual void saveState(GfxState *state) override;
-        virtual void restoreState(GfxState *state) override;
-
-        //----- update graphics state
-        virtual void updateCTM(GfxState *state, double m11, double m12,
-                               double m21, double m22, double m31, double m32) override;
-        virtual void updateLineDash(GfxState *state) override;
-        virtual void updateFlatness(GfxState *state) override;
-        virtual void updateLineJoin(GfxState *state) override;
-        virtual void updateLineCap(GfxState *state) override;
-        virtual void updateMiterLimit(GfxState *state) override;
-        virtual void updateLineWidth(GfxState *state) override;
-        virtual void updateFillColor(GfxState *state) override;
-        virtual void updateStrokeColor(GfxState *state) override;
-        virtual void updateFillOpacity(GfxState *state) override;
-        virtual void updateStrokeOpacity(GfxState *state) override;
-        virtual void updateBlendMode(GfxState *state) override;
-
-        //----- update text state
-        virtual void updateFont(GfxState *state) override;
-        virtual void updateRender(GfxState *state) override;
-
-        //----- path painting
-        virtual void stroke(GfxState *state) override;
-        virtual void fill(GfxState *state) override;
-        virtual void eoFill(GfxState *state) override;
-
-        //----- path clipping
-        virtual void clip(GfxState *state) override;
-        virtual void eoClip(GfxState *state) override;
-
-        //----- text drawing
-#if POPPLER_CHECK_VERSION(0, 82, 0)
-        virtual void drawChar(GfxState *state, double x, double y,
-                              double dx, double dy,
-                              double originX, double originY,
-                              CharCode code, int nBytes, const Unicode *u, int uLen) override;
+    //----- link borders
+#if POPPLER_CHECK_VERSION(0, 19, 0)
+    virtual void processLink(AnnotLink *link) override;
+#elif POPPLER_CHECK_VERSION(0, 17, 0)
+    virtual void processLink(AnnotLink *link, Catalog *catalog) override;
 #else
-        virtual void drawChar(GfxState *state, double x, double y,
-                              double dx, double dy,
-                              double originX, double originY,
-                              CharCode code, int nBytes, Unicode *u, int uLen) override;
+    virtual void processLink(Link *link, Catalog *catalog) override;
+#endif
+
+    //----- save/restore graphics state
+    virtual void saveState(GfxState *state) override;
+    virtual void restoreState(GfxState *state) override;
+
+    //----- update graphics state
+    virtual void updateCTM(GfxState *state, double m11, double m12,
+                           double m21, double m22, double m31, double m32) override;
+    virtual void updateLineDash(GfxState *state) override;
+    virtual void updateFlatness(GfxState *state) override;
+    virtual void updateLineJoin(GfxState *state) override;
+    virtual void updateLineCap(GfxState *state) override;
+    virtual void updateMiterLimit(GfxState *state) override;
+    virtual void updateLineWidth(GfxState *state) override;
+    virtual void updateFillColor(GfxState *state) override;
+    virtual void updateStrokeColor(GfxState *state) override;
+    virtual void updateFillOpacity(GfxState *state) override;
+    virtual void updateStrokeOpacity(GfxState *state) override;
+    virtual void updateBlendMode(GfxState *state) override;
+
+    //----- update text state
+    virtual void updateFont(GfxState *state) override;
+    virtual void updateRender(GfxState *state) override;
+
+    //----- path painting
+    virtual void stroke(GfxState *state) override;
+    virtual void fill(GfxState *state) override;
+    virtual void eoFill(GfxState *state) override;
+
+    //----- path clipping
+    virtual void clip(GfxState *state) override;
+    virtual void eoClip(GfxState *state) override;
+
+    //----- text drawing
+#if POPPLER_CHECK_VERSION(0, 82, 0)
+    virtual void drawChar(GfxState *state, double x, double y,
+                          double dx, double dy,
+                          double originX, double originY,
+                          CharCode code, int nBytes, const Unicode *u, int uLen) override;
+#else
+    virtual void drawChar(GfxState *state, double x, double y,
+                          double dx, double dy,
+                          double originX, double originY,
+                          CharCode code, int nBytes, Unicode *u, int uLen) override;
 #endif
 #if POPPLER_CHECK_VERSION(0, 64, 0)
-        virtual void drawString(GfxState *state, const GooString *s) override;
+    virtual void drawString(GfxState *state, const GooString *s) override;
 #else
-        virtual void drawString(GfxState *state, GooString *s) override;
+    virtual void drawString(GfxState *state, GooString *s) override;
 #endif
-        virtual void endTextObject(GfxState *state) override;
+    virtual void endTextObject(GfxState *state) override;
 
-        //----- image drawing
-        virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
-                                   int width, int height, poppler_bool invert,
-                                   poppler_bool interpolate,
-                                   poppler_bool inlineImg) override;
-#if POPPLER_CHECK_VERSION(0, 82, 0)
-        virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-                               int width, int height, GfxImageColorMap *colorMap,
+    //----- image drawing
+    virtual void drawImageMask(GfxState *state, Object *ref, Stream *str,
+                               int width, int height, poppler_bool invert,
                                poppler_bool interpolate,
-                               const int* maskColors, poppler_bool inlineImg) override;
+                               poppler_bool inlineImg) override;
+#if POPPLER_CHECK_VERSION(0, 82, 0)
+    virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+                           int width, int height, GfxImageColorMap *colorMap,
+                           poppler_bool interpolate,
+                           const int* maskColors, poppler_bool inlineImg) override;
 #else
-        virtual void drawImage(GfxState *state, Object *ref, Stream *str,
-                       int width, int height, GfxImageColorMap *colorMap,
-                       poppler_bool interpolate,
-                       int* maskColors, poppler_bool inlineImg) override;
+    virtual void drawImage(GfxState *state, Object *ref, Stream *str,
+                   int width, int height, GfxImageColorMap *colorMap,
+                   poppler_bool interpolate,
+                   int* maskColors, poppler_bool inlineImg) override;
 #endif
-        virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
+    virtual void drawMaskedImage(GfxState *state, Object *ref, Stream *str,
+                                 int width, int height,
+                                 GfxImageColorMap *colorMap,
+                                 poppler_bool interpolate,
+                                 Stream *maskStr, int maskWidth, int maskHeight,
+                                 poppler_bool maskInvert,
+                                 poppler_bool maskInterpolate
+                                ) override;
+    virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
                                      int width, int height,
                                      GfxImageColorMap *colorMap,
                                      poppler_bool interpolate,
-                                     Stream *maskStr, int maskWidth, int maskHeight,
-                                     poppler_bool maskInvert,
-                                     poppler_bool maskInterpolate
+                                     Stream *maskStr,
+                                     int maskWidth, int maskHeight,
+                                     GfxImageColorMap *maskColorMap
+                                     , poppler_bool maskInterpolate
                                     ) override;
-        virtual void drawSoftMaskedImage(GfxState *state, Object *ref, Stream *str,
-                                         int width, int height,
-                                         GfxImageColorMap *colorMap,
-                                         poppler_bool interpolate,
-                                         Stream *maskStr,
-                                         int maskWidth, int maskHeight,
-                                         GfxImageColorMap *maskColorMap
-                                         , poppler_bool maskInterpolate
-                                        ) override;
 
-        static void setPageNum( int nNumPages );
-        void setSkipImages ( bool bSkipImages );
-    };
-}
+    static void setPageNum( int nNumPages );
+    void setSkipImages ( bool bSkipImages );
+};
+
+} // namespace pdfi
 
 extern FILE* g_binary_out;
 

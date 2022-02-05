@@ -20,36 +20,37 @@
 
 #include <memory>
 
-namespace pdfi
+namespace pdfi {
+
+struct ElementTreeVisitor;
+struct EmitContext;
+class PDFIProcessor;
+class StyleContainer;
+
+/** Tree manipulation factory
+
+    Creates visitor objects performing various operations on the
+    pdf parse tree
+ */
+struct TreeVisitorFactory
 {
-    struct ElementTreeVisitor;
-    struct EmitContext;
-    class PDFIProcessor;
-    class StyleContainer;
+    virtual ~TreeVisitorFactory() {}
 
-    /** Tree manipulation factory
+    /// Create visitor that combines tree nodes
+    virtual std::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor&) const = 0;
+    /// Create visitor that prepares style info
+    virtual std::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
+        StyleContainer&, PDFIProcessor&) const = 0;
+    /// Create visitor that emits tree to an output target
+    virtual std::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext&) const = 0;
+};
 
-        Creates visitor objects performing various operations on the
-        pdf parse tree
-     */
-    struct TreeVisitorFactory
-    {
-        virtual ~TreeVisitorFactory() {}
+typedef std::shared_ptr<TreeVisitorFactory> TreeVisitorFactorySharedPtr;
 
-        /// Create visitor that combines tree nodes
-        virtual std::shared_ptr<ElementTreeVisitor> createOptimizingVisitor(PDFIProcessor&) const = 0;
-        /// Create visitor that prepares style info
-        virtual std::shared_ptr<ElementTreeVisitor> createStyleCollectingVisitor(
-            StyleContainer&, PDFIProcessor&) const = 0;
-        /// Create visitor that emits tree to an output target
-        virtual std::shared_ptr<ElementTreeVisitor> createEmittingVisitor(EmitContext&) const = 0;
-    };
+TreeVisitorFactorySharedPtr createWriterTreeVisitorFactory();
+TreeVisitorFactorySharedPtr createImpressTreeVisitorFactory();
+TreeVisitorFactorySharedPtr createDrawTreeVisitorFactory();
 
-    typedef std::shared_ptr<TreeVisitorFactory> TreeVisitorFactorySharedPtr;
-
-    TreeVisitorFactorySharedPtr createWriterTreeVisitorFactory();
-    TreeVisitorFactorySharedPtr createImpressTreeVisitorFactory();
-    TreeVisitorFactorySharedPtr createDrawTreeVisitorFactory();
-}
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

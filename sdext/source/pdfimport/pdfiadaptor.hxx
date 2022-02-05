@@ -37,104 +37,105 @@
 #include <cppuhelper/basemutex.hxx>
 
 
-namespace pdfi
+namespace pdfi {
+
+typedef ::cppu::WeakComponentImplHelper<
+    css::document::XFilter,
+    css::document::XImporter,
+    css::lang::XServiceInfo> PDFIHybridAdaptorBase;
+
+class PDFIHybridAdaptor : private cppu::BaseMutex,
+                          public PDFIHybridAdaptorBase
 {
-    typedef ::cppu::WeakComponentImplHelper<
-        css::document::XFilter,
-        css::document::XImporter,
-        css::lang::XServiceInfo> PDFIHybridAdaptorBase;
+private:
+    css::uno::Reference<
+        css::uno::XComponentContext >  m_xContext;
+    css::uno::Reference<
+        css::frame::XModel >           m_xModel;
 
-    class PDFIHybridAdaptor : private cppu::BaseMutex,
-                              public PDFIHybridAdaptorBase
-    {
-    private:
-        css::uno::Reference<
-            css::uno::XComponentContext >  m_xContext;
-        css::uno::Reference<
-            css::frame::XModel >           m_xModel;
+public:
+    explicit PDFIHybridAdaptor( const css::uno::Reference<
+                                      css::uno::XComponentContext >& xContext );
 
-    public:
-        explicit PDFIHybridAdaptor( const css::uno::Reference<
-                                          css::uno::XComponentContext >& xContext );
+    // XFilter
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
+    virtual void SAL_CALL cancel() override;
 
-        // XFilter
-        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
-        virtual void SAL_CALL cancel() override;
+    // XImporter
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
 
-        // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
+    OUString SAL_CALL getImplementationName() override;
 
-        OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-        sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+};
 
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    };
+typedef ::cppu::WeakComponentImplHelper<
+    css::xml::XImportFilter,
+    css::document::XImporter,
+    css::lang::XServiceInfo> PDFIAdaptorBase;
 
-    typedef ::cppu::WeakComponentImplHelper<
-        css::xml::XImportFilter,
-        css::document::XImporter,
-        css::lang::XServiceInfo> PDFIAdaptorBase;
+/** Adapts raw pdf import to XImportFilter interface
+ */
+class PDFIRawAdaptor : private cppu::BaseMutex,
+                       public PDFIAdaptorBase
+{
+private:
+    OUString const m_implementationName;
+    css::uno::Reference<
+        css::uno::XComponentContext >  m_xContext;
+    css::uno::Reference<
+        css::frame::XModel >           m_xModel;
+    TreeVisitorFactorySharedPtr                   m_pVisitorFactory;
 
-    /** Adapts raw pdf import to XImportFilter interface
+    bool parse( const css::uno::Reference<css::io::XInputStream>&       xInput,
+                const css::uno::Reference<css::task::XInteractionHandler>& xIHdl,
+                const OUString&                                                          rPwd,
+                const css::uno::Reference<css::task::XStatusIndicator>& xStatus,
+                const XmlEmitterSharedPtr&                                                    rEmitter,
+                const OUString&                                                          rURL,
+                const OUString&                                         rFilterOptions);
+
+public:
+    explicit PDFIRawAdaptor( OUString const & implementationName,
+                             const css::uno::Reference<
+                                   css::uno::XComponentContext >& xContext );
+
+    /** Set factory object used to create the tree visitors
+
+        Used for customizing the tree to the specific output
+        format (writer, draw, etc)
      */
-    class PDFIRawAdaptor : private cppu::BaseMutex,
-                           public PDFIAdaptorBase
-    {
-    private:
-        OUString const m_implementationName;
-        css::uno::Reference<
-            css::uno::XComponentContext >  m_xContext;
-        css::uno::Reference<
-            css::frame::XModel >           m_xModel;
-        TreeVisitorFactorySharedPtr                   m_pVisitorFactory;
+    void setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rVisitorFactory);
 
-        bool parse( const css::uno::Reference<css::io::XInputStream>&       xInput,
-                    const css::uno::Reference<css::task::XInteractionHandler>& xIHdl,
-                    const OUString&                                                          rPwd,
-                    const css::uno::Reference<css::task::XStatusIndicator>& xStatus,
-                    const XmlEmitterSharedPtr&                                                    rEmitter,
-                    const OUString&                                                          rURL,
-                    const OUString&                                         rFilterOptions);
+    /** Export pdf document to ODG
 
-    public:
-        explicit PDFIRawAdaptor( OUString const & implementationName,
-                                 const css::uno::Reference<
-                                       css::uno::XComponentContext >& xContext );
+        @param xOutput
+        Stream to write the flat xml file to
 
-        /** Set factory object used to create the tree visitors
+        @param xStatus
+        Optional status indicator
+     */
+    bool odfConvert( const OUString&                                                          rURL,
+                     const css::uno::Reference<css::io::XOutputStream>&      xOutput,
+                     const css::uno::Reference<css::task::XStatusIndicator>& xStatus );
 
-            Used for customizing the tree to the specific output
-            format (writer, draw, etc)
-         */
-        void setTreeVisitorFactory(const TreeVisitorFactorySharedPtr& rVisitorFactory);
+    // XImportFilter
+    virtual sal_Bool SAL_CALL importer( const css::uno::Sequence< css::beans::PropertyValue >& rSourceData,
+                                        const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHdl,
+                                        const css::uno::Sequence< OUString >& rUserData ) override;
 
-        /** Export pdf document to ODG
+    // XImporter
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
 
-            @param xOutput
-            Stream to write the flat xml file to
+    OUString SAL_CALL getImplementationName() override;
 
-            @param xStatus
-            Optional status indicator
-         */
-        bool odfConvert( const OUString&                                                          rURL,
-                         const css::uno::Reference<css::io::XOutputStream>&      xOutput,
-                         const css::uno::Reference<css::task::XStatusIndicator>& xStatus );
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-        // XImportFilter
-        virtual sal_Bool SAL_CALL importer( const css::uno::Sequence< css::beans::PropertyValue >& rSourceData,
-                                            const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHdl,
-                                            const css::uno::Sequence< OUString >& rUserData ) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
+};
 
-        // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
-
-        OUString SAL_CALL getImplementationName() override;
-
-        sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
-
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
-    };
-}
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

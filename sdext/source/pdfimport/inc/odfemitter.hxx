@@ -23,10 +23,10 @@
 
 namespace com::sun::star::io { class XOutputStream; }
 
-namespace pdfi
-{
-    XmlEmitterSharedPtr createOdfEmitter( const css::uno::Reference<
-                                                css::io::XOutputStream>& xOut );
-}
+namespace pdfi {
+
+XmlEmitterSharedPtr createOdfEmitter( const css::uno::Reference<css::io::XOutputStream>& xOut );
+
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

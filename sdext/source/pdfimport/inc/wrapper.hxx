@@ -31,60 +31,61 @@ namespace com::sun::star {
     }
 }
 
-namespace pdfi
-{
-    bool xpdf_ImportFromFile( const OUString&                               rURL,
-                              const ContentSinkSharedPtr&                        rSink,
-                              const css::uno::Reference<
-                                    css::task::XInteractionHandler >& xIHdl,
-                              const OUString&                               rPwd,
-                              const css::uno::Reference<
-                                    css::uno::XComponentContext >&    xContext,
-                              const OUString&        rFilterOptions);
-    bool xpdf_ImportFromStream( const css::uno::Reference<
-                                      css::io::XInputStream >&          xInput,
-                                const ContentSinkSharedPtr&                        rSink,
-                                const css::uno::Reference<
-                                      css::task::XInteractionHandler >& xIHdl,
-                                const OUString&                               rPwd,
-                                const css::uno::Reference<
-                                      css::uno::XComponentContext >&    xContext,
-                                const OUString&        rFilterOptions );
+namespace pdfi {
 
-    const OUString fontAttributesSuffixes[] = {
-        // Note: for performance consideration, each one listed here is evaluated once,
-        // and they are checked from the suffix, thus the order matters.
-        // e.g. for "TimesNewRomanPS-BoldItalic", to get "TimesNewRoman", you should
-        //      first have "Italic", and then "Bold", then "-", and then "PS".
-        "-VKana",
-        "MT",
-        "PS",
-        "PSMT",
-        "Regular",
-        "Normal",
-        "Book",
-        "Medium",
-        "ExtraBold",
-        "UltraBold",
-        "ExtraLight",
-        "UltraLight",
-        "Bold",
-        "Heavy",
-        "Black",
-        "Italic",
-        "Oblique",
-        "Bold", //BoldItalic, BoldOblique
-        "Light",
-        "Thin",
-        "Semibold",
-        "-Roman",
-        "Reg",
-        "VKana",
-        "-",
-        ",",
-        ";",
-        "PS", // e.g. TimesNewRomanPS-BoldMT
-    };
-}
+bool xpdf_ImportFromFile( const OUString&                               rURL,
+                          const ContentSinkSharedPtr&                        rSink,
+                          const css::uno::Reference<
+                                css::task::XInteractionHandler >& xIHdl,
+                          const OUString&                               rPwd,
+                          const css::uno::Reference<
+                                css::uno::XComponentContext >&    xContext,
+                          const OUString&        rFilterOptions);
+bool xpdf_ImportFromStream( const css::uno::Reference<
+                                  css::io::XInputStream >&          xInput,
+                            const ContentSinkSharedPtr&                        rSink,
+                            const css::uno::Reference<
+                                  css::task::XInteractionHandler >& xIHdl,
+                            const OUString&                               rPwd,
+                            const css::uno::Reference<
+                                  css::uno::XComponentContext >&    xContext,
+                            const OUString&        rFilterOptions );
+
+const OUString fontAttributesSuffixes[] = {
+    // Note: for performance consideration, each one listed here is evaluated once,
+    // and they are checked from the suffix, thus the order matters.
+    // e.g. for "TimesNewRomanPS-BoldItalic", to get "TimesNewRoman", you should
+    //      first have "Italic", and then "Bold", then "-", and then "PS".
+    "-VKana",
+    "MT",
+    "PS",
+    "PSMT",
+    "Regular",
+    "Normal",
+    "Book",
+    "Medium",
+    "ExtraBold",
+    "UltraBold",
+    "ExtraLight",
+    "UltraLight",
+    "Bold",
+    "Heavy",
+    "Black",
+    "Italic",
+    "Oblique",
+    "Bold", //BoldItalic, BoldOblique
+    "Light",
+    "Thin",
+    "Semibold",
+    "-Roman",
+    "Reg",
+    "VKana",
+    "-",
+    ",",
+    ";",
+    "PS", // e.g. TimesNewRomanPS-BoldMT
+};
+
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

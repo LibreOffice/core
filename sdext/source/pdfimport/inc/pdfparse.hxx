@@ -27,8 +27,7 @@
 #include <vector>
 #include <memory>
 
-namespace pdfparse
-{
+namespace pdfparse {
 
 struct EmitImplData;
 struct PDFContainer;
@@ -295,6 +294,6 @@ struct PDFReader
 #endif
 };
 
-} // namespace
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

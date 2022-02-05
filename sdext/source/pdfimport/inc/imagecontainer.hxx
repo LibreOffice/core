@@ -24,23 +24,24 @@
 
 #include <vector>
 
-namespace pdfi
+namespace pdfi {
+
+struct EmitContext;
+
+class ImageContainer
 {
-    struct EmitContext;
+private:
+    std::vector< css::uno::Sequence<
+                 css::beans::PropertyValue> > m_aImages;
 
-    class ImageContainer
-    {
-    private:
-        std::vector< css::uno::Sequence<
-                     css::beans::PropertyValue> > m_aImages;
+public:
+    ImageContainer();
 
-    public:
-        ImageContainer();
+    ImageId addImage( const css::uno::Sequence<
+                            css::beans::PropertyValue>& xBitmap );
+    void writeBase64EncodedStream( ImageId nImageId, EmitContext& rContext );
+};
 
-        ImageId addImage( const css::uno::Sequence<
-                                css::beans::PropertyValue>& xBitmap );
-        void writeBase64EncodedStream( ImageId nImageId, EmitContext& rContext );
-    };
-}
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

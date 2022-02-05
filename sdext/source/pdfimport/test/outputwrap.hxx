@@ -24,65 +24,64 @@
 #include <osl/file.hxx>
 #include <rtl/strbuf.hxx>
 
-namespace pdfi
+namespace pdfi {
+
+typedef ::cppu::WeakComponentImplHelper<css::io::XOutputStream> OutputWrapBase;
+
+class OutputWrap : private cppu::BaseMutex, public OutputWrapBase
 {
+    osl::File maFile;
 
-typedef ::cppu::WeakComponentImplHelper<
-        css::io::XOutputStream > OutputWrapBase;
+public:
 
-    class OutputWrap : private cppu::BaseMutex, public OutputWrapBase
+    explicit OutputWrap( const OUString& rURL ) : OutputWrapBase(m_aMutex), maFile(rURL)
     {
-        osl::File maFile;
+        maFile.open(osl_File_OpenFlag_Create|osl_File_OpenFlag_Write);
+    }
 
-    public:
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) override
 
-        explicit OutputWrap( const OUString& rURL ) : OutputWrapBase(m_aMutex), maFile(rURL)
-        {
-            maFile.open(osl_File_OpenFlag_Create|osl_File_OpenFlag_Write);
-        }
-
-        virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) override
-
-        {
-            sal_uInt64 nBytesWritten(0);
-            maFile.write(aData.getConstArray(),aData.getLength(),nBytesWritten);
-        }
-
-        virtual void SAL_CALL flush() override
-        {
-        }
-
-        virtual void SAL_CALL closeOutput() override
-        {
-            maFile.close();
-        }
-    };
-
-    class OutputWrapString : private cppu::BaseMutex, public OutputWrapBase
     {
-        OString& mrString;
-        OStringBuffer maBuffer;
+        sal_uInt64 nBytesWritten(0);
+        maFile.write(aData.getConstArray(),aData.getLength(),nBytesWritten);
+    }
 
-    public:
+    virtual void SAL_CALL flush() override
+    {
+    }
 
-        explicit OutputWrapString(OString& rString) : OutputWrapBase(m_aMutex), mrString(rString), maBuffer(rString)
-        {
-        }
+    virtual void SAL_CALL closeOutput() override
+    {
+        maFile.close();
+    }
+};
 
-        virtual void SAL_CALL writeBytes(const css::uno::Sequence< ::sal_Int8 >& aData) override
-        {
-            maBuffer.append(reinterpret_cast<const char *>(aData.getConstArray()), aData.getLength());
-        }
+class OutputWrapString : private cppu::BaseMutex, public OutputWrapBase
+{
+    OString& mrString;
+    OStringBuffer maBuffer;
 
-        virtual void SAL_CALL flush() override
-        {
-        }
+public:
 
-        virtual void SAL_CALL closeOutput() override
-        {
-            mrString = maBuffer.makeStringAndClear();
-        }
-    };
-}
+    explicit OutputWrapString(OString& rString) : OutputWrapBase(m_aMutex), mrString(rString), maBuffer(rString)
+    {
+    }
+
+    virtual void SAL_CALL writeBytes(const css::uno::Sequence< ::sal_Int8 >& aData) override
+    {
+        maBuffer.append(reinterpret_cast<const char *>(aData.getConstArray()), aData.getLength());
+    }
+
+    virtual void SAL_CALL flush() override
+    {
+    }
+
+    virtual void SAL_CALL closeOutput() override
+    {
+        mrString = maBuffer.makeStringAndClear();
+    }
+};
+
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

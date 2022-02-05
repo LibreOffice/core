@@ -23,10 +23,10 @@
 
 namespace com::sun::star::xml::sax { class XDocumentHandler; }
 
-namespace pdfi
-{
-    XmlEmitterSharedPtr createSaxEmitter( const css::uno::Reference<
-                                                css::xml::sax::XDocumentHandler >& xDocHdl );
+namespace pdfi {
+
+XmlEmitterSharedPtr createSaxEmitter( const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocHdl );
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

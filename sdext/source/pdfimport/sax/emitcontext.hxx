@@ -24,24 +24,24 @@
 
 #include <rtl/ustring.hxx>
 
+namespace pdfi {
 
-namespace pdfi
+class SaxEmitter : public XmlEmitter
 {
-    class SaxEmitter : public XmlEmitter
-    {
-    private:
-        css::uno::Reference<
-            css::xml::sax::XDocumentHandler > m_xDocHdl;
+private:
+    css::uno::Reference<
+        css::xml::sax::XDocumentHandler > m_xDocHdl;
 
-    public:
-        explicit SaxEmitter( const css::uno::Reference<
-                                    css::xml::sax::XDocumentHandler >& xDocHdl );
-        virtual ~SaxEmitter() override;
+public:
+    explicit SaxEmitter( const css::uno::Reference<
+                                css::xml::sax::XDocumentHandler >& xDocHdl );
+    virtual ~SaxEmitter() override;
 
-        virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) override;
-        virtual void write( const OUString& rString ) override;
-        virtual void endTag( const char* pTag ) override;
-    };
-}
+    virtual void beginTag( const char* pTag, const PropertyMap& rProperties ) override;
+    virtual void write( const OUString& rString ) override;
+    virtual void endTag( const char* pTag ) override;
+};
+
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

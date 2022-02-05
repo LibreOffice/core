@@ -25,89 +25,90 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-namespace pdfi
+namespace pdfi {
+
+struct DrawElement;
+
+class DrawXmlOptimizer : public ElementTreeVisitor
 {
-    struct DrawElement;
+private:
+    PDFIProcessor& m_rProcessor;
+    css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
 
-    class DrawXmlOptimizer : public ElementTreeVisitor
-    {
-    private:
-        PDFIProcessor& m_rProcessor;
-        css::uno::Reference< css::i18n::XBreakIterator > mxBreakIter;
+    void optimizeTextElements(Element& rParent);
 
-        void optimizeTextElements(Element& rParent);
+public:
+    const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
+    explicit DrawXmlOptimizer(PDFIProcessor& rProcessor) :
+        m_rProcessor(rProcessor)
+    {}
 
-    public:
-        const css::uno::Reference< css::i18n::XBreakIterator >& GetBreakIterator();
-        explicit DrawXmlOptimizer(PDFIProcessor& rProcessor) :
-            m_rProcessor(rProcessor)
-        {}
+    virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
+    virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+};
 
-        virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
-        virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-    };
+class DrawXmlFinalizer : public ElementTreeVisitor
+{
+private:
+    StyleContainer& m_rStyleContainer;
+    PDFIProcessor&  m_rProcessor;
 
-    class DrawXmlFinalizer : public ElementTreeVisitor
-    {
-    private:
-        StyleContainer& m_rStyleContainer;
-        PDFIProcessor&  m_rProcessor;
+public:
+    explicit DrawXmlFinalizer(StyleContainer& rStyleContainer,
+                              PDFIProcessor&  rProcessor) :
+        m_rStyleContainer(rStyleContainer),
+        m_rProcessor(rProcessor)
+    {}
 
-    public:
-        explicit DrawXmlFinalizer(StyleContainer& rStyleContainer,
-                                  PDFIProcessor&  rProcessor) :
-            m_rStyleContainer(rStyleContainer),
-            m_rProcessor(rProcessor)
-        {}
+    virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
+    virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+};
 
-        virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
-        virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-    };
+class DrawXmlEmitter : public ElementTreeVisitor
+{
+private:
+    css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
 
-    class DrawXmlEmitter : public ElementTreeVisitor
-    {
-    private:
-        css::uno::Reference< css::i18n::XCharacterClassification > mxCharClass;
+    EmitContext& m_rEmitContext ;
+    /// writes Impress doc when false
+    const bool   m_bWriteDrawDocument;
 
-        EmitContext& m_rEmitContext ;
-        /// writes Impress doc when false
-        const bool   m_bWriteDrawDocument;
+    static void fillFrameProps( DrawElement&       rElem,
+                         PropertyMap&       rProps,
+                         const EmitContext& rEmitContext,
+                         bool               bWasTransformed
+                         );
 
-        static void fillFrameProps( DrawElement&       rElem,
-                             PropertyMap&       rProps,
-                             const EmitContext& rEmitContext,
-                             bool               bWasTransformed
-                             );
+public:
+    const css::uno::Reference< css::i18n::XCharacterClassification >& GetCharacterClassification();
+    enum DocType{ DRAW_DOC, IMPRESS_DOC };
+    explicit DrawXmlEmitter(EmitContext& rEmitContext, DocType eDocType) :
+        m_rEmitContext(rEmitContext),
+        m_bWriteDrawDocument(eDocType==DRAW_DOC)
+    {}
 
-    public:
-        const css::uno::Reference< css::i18n::XCharacterClassification >& GetCharacterClassification();
-        enum DocType{ DRAW_DOC, IMPRESS_DOC };
-        explicit DrawXmlEmitter(EmitContext& rEmitContext, DocType eDocType) :
-            m_rEmitContext(rEmitContext),
-            m_bWriteDrawDocument(eDocType==DRAW_DOC)
-        {}
+    virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
+    virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+    virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
+};
 
-        virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) override;
-        virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-        virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) override;
-    };
-}
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -22,37 +22,38 @@
 #include <list>
 #include <memory>
 
-namespace pdfi
+namespace pdfi {
+
+struct HyperlinkElement;
+struct TextElement;
+struct ParagraphElement;
+struct FrameElement;
+struct PolyPolyElement;
+struct ImageElement;
+struct PageElement;
+struct DocumentElement;
+struct Element;
+
+/** To be visited by all tree element types
+
+    Visitor interface from the "visitor pattern". Implementor gets
+    called with actual tree node instances.
+ */
+struct ElementTreeVisitor
 {
-    struct HyperlinkElement;
-    struct TextElement;
-    struct ParagraphElement;
-    struct FrameElement;
-    struct PolyPolyElement;
-    struct ImageElement;
-    struct PageElement;
-    struct DocumentElement;
-    struct Element;
+    virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) = 0;
+    virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+    virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+    virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+    virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+    virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+    virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+    virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
+    virtual ~ElementTreeVisitor() {}
+};
 
-    /** To be visited by all tree element types
+typedef std::shared_ptr<ElementTreeVisitor> ElementTreeVisitorSharedPtr;
 
-        Visitor interface from the "visitor pattern". Implementor gets
-        called with actual tree node instances.
-     */
-    struct ElementTreeVisitor
-    {
-        virtual void visit( HyperlinkElement&, const std::list< std::unique_ptr<Element> >::const_iterator& ) = 0;
-        virtual void visit( TextElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
-        virtual void visit( ParagraphElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
-        virtual void visit( FrameElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
-        virtual void visit( PolyPolyElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
-        virtual void visit( ImageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
-        virtual void visit( PageElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
-        virtual void visit( DocumentElement&, const std::list< std::unique_ptr<Element> >::const_iterator&  ) = 0;
-        virtual ~ElementTreeVisitor() {}
-    };
-    typedef std::shared_ptr<ElementTreeVisitor> ElementTreeVisitorSharedPtr;
-
-}
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

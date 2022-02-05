@@ -42,136 +42,137 @@ namespace com::sun::star {
     }
 }
 
-namespace pdfi
+namespace pdfi {
+
+struct FontAttributes
 {
-    struct FontAttributes
+    FontAttributes( const OUString&      familyName_,
+                    const OUString&      sFontWeight,
+                    bool                 isItalic_,
+                    bool                 isUnderline_,
+                    double               size_,
+                    double               ascent_) :
+        familyName(familyName_),
+        fontWeight(sFontWeight),
+        isItalic(isItalic_),
+        isUnderline(isUnderline_),
+        isOutline(false),
+        size(size_),
+        ascent(ascent_)
+    {}
+
+    FontAttributes() :
+        familyName(),
+        fontWeight(u"normal"),
+        isItalic(false),
+        isUnderline(false),
+        isOutline(false),
+        size(0.0),
+        ascent(1.0)
+    {}
+
+    OUString            familyName;
+    OUString            fontWeight;
+    bool                isItalic;
+    bool                isUnderline;
+    bool                isOutline;
+    double              size; // device pixel
+    double              ascent;
+
+    bool operator==(const FontAttributes& rFont) const
     {
-        FontAttributes( const OUString&      familyName_,
-                        const OUString&      sFontWeight,
-                        bool                 isItalic_,
-                        bool                 isUnderline_,
-                        double               size_,
-                        double               ascent_) :
-            familyName(familyName_),
-            fontWeight(sFontWeight),
-            isItalic(isItalic_),
-            isUnderline(isUnderline_),
-            isOutline(false),
-            size(size_),
-            ascent(ascent_)
-        {}
+        return familyName == rFont.familyName &&
+            fontWeight == rFont.fontWeight &&
+            !isItalic == !rFont.isItalic &&
+            !isUnderline == !rFont.isUnderline &&
+            !isOutline == !rFont.isOutline &&
+            size == rFont.size &&
+            ascent == rFont.ascent;
+    }
+};
 
-        FontAttributes() :
-            familyName(),
-            fontWeight(u"normal"),
-            isItalic(false),
-            isUnderline(false),
-            isOutline(false),
-            size(0.0),
-            ascent(1.0)
-        {}
+/** (preliminary) API wrapper around xpdf
 
-        OUString            familyName;
-        OUString            fontWeight;
-        bool                isItalic;
-        bool                isUnderline;
-        bool                isOutline;
-        double              size; // device pixel
-        double              ascent;
+    Wraps the functionality currently used from xpdf's OutputDev
+    interface. Subject to change.
+ */
+struct ContentSink
+{
+    virtual ~ContentSink() {}
 
-        bool operator==(const FontAttributes& rFont) const
-        {
-            return familyName == rFont.familyName &&
-                fontWeight == rFont.fontWeight &&
-                !isItalic == !rFont.isItalic &&
-                !isUnderline == !rFont.isUnderline &&
-                !isOutline == !rFont.isOutline &&
-                size == rFont.size &&
-                ascent == rFont.ascent;
-        }
-    };
+    /// Total number of pages for upcoming document
+    virtual void setPageNum( sal_Int32 nNumPages ) = 0;
+    virtual void startPage( const css::geometry::RealSize2D& rSize ) = 0;
+    virtual void endPage() = 0;
 
-    /** (preliminary) API wrapper around xpdf
+    virtual void hyperLink( const css::geometry::RealRectangle2D& rBounds,
+                            const OUString&                             rURI ) = 0;
 
-        Wraps the functionality currently used from xpdf's OutputDev
-        interface. Subject to change.
+    virtual void pushState() = 0;
+    virtual void popState() = 0;
+
+    virtual void setFlatness( double ) = 0;
+    virtual void setTransformation( const css::geometry::AffineMatrix2D& rMatrix ) = 0;
+    virtual void setLineDash( const css::uno::Sequence<double>& dashes,
+                              double                                         start ) = 0;
+    virtual void setLineJoin( sal_Int8 lineJoin ) = 0;
+    virtual void setLineCap( sal_Int8 lineCap ) = 0;
+    virtual void setMiterLimit(double) = 0;
+    virtual void setLineWidth(double) = 0;
+    virtual void setFillColor( const css::rendering::ARGBColor& rColor ) = 0;
+    virtual void setStrokeColor( const css::rendering::ARGBColor& rColor ) = 0;
+    virtual void setFont( const FontAttributes& rFont ) = 0;
+    virtual void setTextRenderMode( sal_Int32 ) = 0;
+
+
+    virtual void strokePath( const css::uno::Reference<
+                                   css::rendering::XPolyPolygon2D >& rPath ) = 0;
+    virtual void fillPath( const css::uno::Reference<
+                                 css::rendering::XPolyPolygon2D >& rPath ) = 0;
+    virtual void eoFillPath( const css::uno::Reference<
+                                   css::rendering::XPolyPolygon2D >& rPath ) = 0;
+
+    virtual void intersectClip(const css::uno::Reference<
+                                     css::rendering::XPolyPolygon2D >& rPath) = 0;
+    virtual void intersectEoClip(const css::uno::Reference<
+                                       css::rendering::XPolyPolygon2D >& rPath) = 0;
+
+    virtual void drawGlyphs( const OUString& rGlyphs,
+                             const css::geometry::RealRectangle2D& rRect,
+                             const css::geometry::Matrix2D&        rFontMatrix,
+                             double fontSize) = 0;
+
+    /// issued when a sequence of associated glyphs is drawn
+    virtual void endText() = 0;
+
+    /// draws given bitmap as a mask (using current fill color)
+    virtual void drawMask(const css::uno::Sequence<
+                                css::beans::PropertyValue>& xBitmap,
+                          bool                                           bInvert ) = 0;
+    /// Given image must already be color-mapped and normalized to sRGB.
+    virtual void drawImage(const css::uno::Sequence<
+                                 css::beans::PropertyValue>& xBitmap ) = 0;
+    /** Given image must already be color-mapped and normalized to sRGB.
+
+        maskColors must contain two sequences of color components
      */
-    struct ContentSink
-    {
-        virtual ~ContentSink() {}
+    virtual void drawColorMaskedImage(const css::uno::Sequence<
+                                            css::beans::PropertyValue>& xBitmap,
+                                      const css::uno::Sequence<
+                                            css::uno::Any>&             xMaskColors ) = 0;
+    virtual void drawMaskedImage(const css::uno::Sequence<
+                                       css::beans::PropertyValue>& xBitmap,
+                                 const css::uno::Sequence<
+                                       css::beans::PropertyValue>& xMask,
+                                 bool                                             bInvertMask) = 0;
+    virtual void drawAlphaMaskedImage(const css::uno::Sequence<
+                                            css::beans::PropertyValue>& xImage,
+                                      const css::uno::Sequence<
+                                            css::beans::PropertyValue>& xMask) = 0;
+};
 
-        /// Total number of pages for upcoming document
-        virtual void setPageNum( sal_Int32 nNumPages ) = 0;
-        virtual void startPage( const css::geometry::RealSize2D& rSize ) = 0;
-        virtual void endPage() = 0;
+typedef std::shared_ptr<ContentSink> ContentSinkSharedPtr;
 
-        virtual void hyperLink( const css::geometry::RealRectangle2D& rBounds,
-                                const OUString&                             rURI ) = 0;
-
-        virtual void pushState() = 0;
-        virtual void popState() = 0;
-
-        virtual void setFlatness( double ) = 0;
-        virtual void setTransformation( const css::geometry::AffineMatrix2D& rMatrix ) = 0;
-        virtual void setLineDash( const css::uno::Sequence<double>& dashes,
-                                  double                                         start ) = 0;
-        virtual void setLineJoin( sal_Int8 lineJoin ) = 0;
-        virtual void setLineCap( sal_Int8 lineCap ) = 0;
-        virtual void setMiterLimit(double) = 0;
-        virtual void setLineWidth(double) = 0;
-        virtual void setFillColor( const css::rendering::ARGBColor& rColor ) = 0;
-        virtual void setStrokeColor( const css::rendering::ARGBColor& rColor ) = 0;
-        virtual void setFont( const FontAttributes& rFont ) = 0;
-        virtual void setTextRenderMode( sal_Int32 ) = 0;
-
-
-        virtual void strokePath( const css::uno::Reference<
-                                       css::rendering::XPolyPolygon2D >& rPath ) = 0;
-        virtual void fillPath( const css::uno::Reference<
-                                     css::rendering::XPolyPolygon2D >& rPath ) = 0;
-        virtual void eoFillPath( const css::uno::Reference<
-                                       css::rendering::XPolyPolygon2D >& rPath ) = 0;
-
-        virtual void intersectClip(const css::uno::Reference<
-                                         css::rendering::XPolyPolygon2D >& rPath) = 0;
-        virtual void intersectEoClip(const css::uno::Reference<
-                                           css::rendering::XPolyPolygon2D >& rPath) = 0;
-
-        virtual void drawGlyphs( const OUString& rGlyphs,
-                                 const css::geometry::RealRectangle2D& rRect,
-                                 const css::geometry::Matrix2D&        rFontMatrix,
-                                 double fontSize) = 0;
-
-        /// issued when a sequence of associated glyphs is drawn
-        virtual void endText() = 0;
-
-        /// draws given bitmap as a mask (using current fill color)
-        virtual void drawMask(const css::uno::Sequence<
-                                    css::beans::PropertyValue>& xBitmap,
-                              bool                                           bInvert ) = 0;
-        /// Given image must already be color-mapped and normalized to sRGB.
-        virtual void drawImage(const css::uno::Sequence<
-                                     css::beans::PropertyValue>& xBitmap ) = 0;
-        /** Given image must already be color-mapped and normalized to sRGB.
-
-            maskColors must contain two sequences of color components
-         */
-        virtual void drawColorMaskedImage(const css::uno::Sequence<
-                                                css::beans::PropertyValue>& xBitmap,
-                                          const css::uno::Sequence<
-                                                css::uno::Any>&             xMaskColors ) = 0;
-        virtual void drawMaskedImage(const css::uno::Sequence<
-                                           css::beans::PropertyValue>& xBitmap,
-                                     const css::uno::Sequence<
-                                           css::beans::PropertyValue>& xMask,
-                                     bool                                             bInvertMask) = 0;
-        virtual void drawAlphaMaskedImage(const css::uno::Sequence<
-                                                css::beans::PropertyValue>& xImage,
-                                          const css::uno::Sequence<
-                                                css::beans::PropertyValue>& xMask) = 0;
-    };
-
-    typedef std::shared_ptr<ContentSink> ContentSinkSharedPtr;
-}
+} // namespace pdfi
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
