@@ -602,8 +602,8 @@ void ScDrawStringsVars::RepeatToFill( tools::Long nColWidth )
     if ( nSpaceToFill <= nCharWidth )
         return;
 
-    tools::Long nCharsToInsert = nSpaceToFill / nCharWidth;
-    OUStringBuffer aFill;
+    sal_Int32 nCharsToInsert = nSpaceToFill / nCharWidth;
+    OUStringBuffer aFill(nCharsToInsert);
     comphelper::string::padToLength(aFill, nCharsToInsert, nRepeatChar);
     aString = aString.replaceAt( nRepeatPos, 0, aFill.makeStringAndClear() );
     TextChanged();
