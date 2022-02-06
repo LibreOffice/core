@@ -1843,33 +1843,21 @@ void lcl_ScDocShell_GetFixedWidthString( OUString& rStr, const ScDocument& rDoc,
     {
         if ( bValue && eHorJust == SvxCellHorJustify::Standard )
             eHorJust = SvxCellHorJustify::Right;
-        sal_Int32 nBlanks = nLen - aString.getLength();
+        OUStringBuffer aTmp(nLen);
         switch ( eHorJust )
         {
             case SvxCellHorJustify::Right:
-            {
-                OUStringBuffer aTmp;
-                comphelper::string::padToLength( aTmp, nBlanks, ' ' );
-                aString = aTmp.append(aString).makeStringAndClear();
-            }
-            break;
+                comphelper::string::padToLength( aTmp, nLen - aString.getLength(), ' ' );
+                aString = aTmp.append(aString);
+                break;
             case SvxCellHorJustify::Center:
-            {
-                sal_Int32 nLeftPad = nBlanks / 2;
-                OUStringBuffer aTmp;
-                comphelper::string::padToLength( aTmp, nLeftPad, ' ' );
+                comphelper::string::padToLength( aTmp, (nLen - aString.getLength()) / 2, ' ' );
+                [[fallthrough]];
+            default:
                 aTmp.append(aString);
                 comphelper::string::padToLength( aTmp, nLen, ' ' );
-                aString = aTmp.makeStringAndClear();
-            }
-            break;
-            default:
-            {
-                OUStringBuffer aTmp(aString);
-                comphelper::string::padToLength( aTmp, nLen, ' ' );
-                aString = aTmp.makeStringAndClear();
-            }
         }
+        aString = aTmp.makeStringAndClear();
     }
     rStr = aString;
 }
