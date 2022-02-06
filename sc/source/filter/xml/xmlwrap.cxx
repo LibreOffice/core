@@ -418,9 +418,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
     ErrCode nMetaRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Metadata)
     {
-        uno::Sequence<uno::Any> aMetaArgs(1);
-        uno::Any* pMetaArgs = aMetaArgs.getArray();
-        pMetaArgs[0] <<= xInfoSet;
+        uno::Sequence<uno::Any> aMetaArgs { makeAny(xInfoSet) };
 
         SAL_INFO( "sc.filter", "meta import start" );
 
@@ -447,12 +445,13 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         xObjectHelper = SvXMLEmbeddedObjectHelper::Create(xStorage, mrDocShell, SvXMLEmbeddedObjectHelperMode::Read);
         xObjectResolver = xObjectHelper.get();
     }
-    uno::Sequence<uno::Any> aStylesArgs(4);
-    uno::Any* pStylesArgs = aStylesArgs.getArray();
-    pStylesArgs[0] <<= xInfoSet;
-    pStylesArgs[1] <<= xGraphicStorageHandler;
-    pStylesArgs[2] <<= xStatusIndicator;
-    pStylesArgs[3] <<= xObjectResolver;
+    uno::Sequence<uno::Any> aStylesArgs
+    {
+        makeAny(xInfoSet),
+        makeAny(xGraphicStorageHandler),
+        makeAny(xStatusIndicator),
+        makeAny(xObjectResolver)
+    };
 
     ErrCode nSettingsRetval(ERRCODE_NONE);
     if (nMode & ImportFlags::Settings)
@@ -460,9 +459,7 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
         //  Settings must be loaded first because of the printer setting,
         //  which is needed in the page styles (paper tray).
 
-        uno::Sequence<uno::Any> aSettingsArgs(1);
-        uno::Any* pSettingsArgs = aSettingsArgs.getArray();
-        pSettingsArgs[0] <<= xInfoSet;
+        uno::Sequence<uno::Any> aSettingsArgs { makeAny(xInfoSet) };
 
         SAL_INFO( "sc.filter", "settings import start" );
 
@@ -496,12 +493,13 @@ bool ScXMLImportWrapper::Import( ImportFlags nMode, ErrCode& rError )
             // We only need to import content for external link cache document.
             xInfoSet->setPropertyValue(SC_UNO_ODS_IMPORT_STYLES, uno::makeAny(false));
 
-        uno::Sequence<uno::Any> aDocArgs(4);
-        uno::Any* pDocArgs = aDocArgs.getArray();
-        pDocArgs[0] <<= xInfoSet;
-        pDocArgs[1] <<= xGraphicStorageHandler;
-        pDocArgs[2] <<= xStatusIndicator;
-        pDocArgs[3] <<= xObjectResolver;
+        uno::Sequence<uno::Any> aDocArgs
+        {
+            makeAny(xInfoSet),
+            makeAny(xGraphicStorageHandler),
+            makeAny(xStatusIndicator),
+            makeAny(xObjectResolver)
+        };
 
         SAL_INFO( "sc.filter", "content import start" );
 
@@ -876,11 +874,12 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         // meta export
         if (!bStylesOnly && !bMetaRet)
         {
-            uno::Sequence<uno::Any> aMetaArgs(3);
-            uno::Any* pMetaArgs = aMetaArgs.getArray();
-            pMetaArgs[0] <<= xInfoSet;
-            pMetaArgs[1] <<= xWriter;
-            pMetaArgs[2] <<= xStatusIndicator;
+            uno::Sequence<uno::Any> aMetaArgs
+            {
+                makeAny(xInfoSet),
+                makeAny(xWriter),
+                makeAny(xStatusIndicator)
+            };
 
             SAL_INFO( "sc.filter", "meta export start" );
 
@@ -910,13 +909,14 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         // styles export
 
         {
-            uno::Sequence<uno::Any> aStylesArgs(5);
-            uno::Any* pStylesArgs = aStylesArgs.getArray();
-            pStylesArgs[0] <<= xInfoSet;
-            pStylesArgs[1] <<= xGraphicStorageHandler;
-            pStylesArgs[2] <<= xStatusIndicator;
-            pStylesArgs[3] <<= xWriter;
-            pStylesArgs[4] <<= xObjectResolver;
+            uno::Sequence<uno::Any> aStylesArgs
+            {
+                makeAny(xInfoSet),
+                makeAny(xGraphicStorageHandler),
+                makeAny(xStatusIndicator),
+                makeAny(xWriter),
+                makeAny(xObjectResolver)
+            };
 
             SAL_INFO( "sc.filter", "styles export start" );
 
@@ -934,13 +934,14 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if (!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aDocArgs(5);
-            uno::Any* pDocArgs = aDocArgs.getArray();
-            pDocArgs[0] <<= xInfoSet;
-            pDocArgs[1] <<= xGraphicStorageHandler;
-            pDocArgs[2] <<= xStatusIndicator;
-            pDocArgs[3] <<= xWriter;
-            pDocArgs[4] <<= xObjectResolver;
+            uno::Sequence<uno::Any> aDocArgs
+            {
+                makeAny(xInfoSet),
+                makeAny(xGraphicStorageHandler),
+                makeAny(xStatusIndicator),
+                makeAny(xWriter),
+                makeAny(xObjectResolver)
+            };
 
             SAL_INFO( "sc.filter", "content export start" );
 
@@ -966,11 +967,12 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         if (!bStylesOnly)
         {
-            uno::Sequence<uno::Any> aSettingsArgs(3);
-            uno::Any* pSettingsArgs = aSettingsArgs.getArray();
-            pSettingsArgs[0] <<= xInfoSet;
-            pSettingsArgs[1] <<= xWriter;
-            pSettingsArgs[2] <<= xStatusIndicator;
+            uno::Sequence<uno::Any> aSettingsArgs
+            {
+                makeAny(xInfoSet),
+                makeAny(xWriter),
+                makeAny(xStatusIndicator)
+            };
 
             SAL_INFO( "sc.filter", "settings export start" );
 
