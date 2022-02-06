@@ -73,6 +73,7 @@ Private BrowseNodeFactory	As Object	&apos; com.sun.star.script.browse.BrowseNode
 Private DatabaseContext		As Object	&apos; com.sun.star.sdb.DatabaseContext
 Private ConfigurationProvider _
 							As Object	&apos; com.sun.star.configuration.ConfigurationProvider
+Private PackageProvider		As Object	&apos; com.sun.star.comp.deployment.PackageInformationProvider
 Private MailService			As Object	&apos; com.sun.star.system.SimpleCommandMail or com.sun.star.system.SimpleSystemMail
 Private GraphicExportFilter	As Object	&apos; com.sun.star.drawing.GraphicExportFilter
 Private Toolkit				As Object	&apos; com.sun.star.awt.Toolkit
@@ -138,6 +139,7 @@ Private Sub Class_Initialize()
 	Set BrowseNodeFactory = Nothing
 	Set DatabaseContext = Nothing
 	Set ConfigurationProvider = Nothing
+	Set PackageProvider = Nothing
 	Set MailService = Nothing
 	Set GraphicExportFilter = Nothing
 	Set Toolkit = Nothing
