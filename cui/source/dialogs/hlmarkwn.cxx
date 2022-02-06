@@ -19,6 +19,7 @@
 
 #include <dialmgr.hxx>
 #include <o3tl/any.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/graph.hxx>
 
@@ -239,9 +240,7 @@ bool SvxHlinkDlgMarkWnd::RefreshFromDoc(const OUString& aURL)
         {
             try
             {
-                uno::Sequence< beans::PropertyValue > aArg(1);
-                aArg.getArray()[0].Name = "Hidden";
-                aArg.getArray()[0].Value <<= true;
+                uno::Sequence< beans::PropertyValue > aArg { comphelper::makePropertyValue("Hidden", true) };
                 xComp = xDesktop->loadComponentFromURL( aURL, "_blank", 0, aArg );
             }
             catch( const io::IOException& )

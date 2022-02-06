@@ -34,6 +34,7 @@
 #include <svl/srchitem.hxx>
 
 #include "impedit.hxx"
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
@@ -1017,10 +1018,7 @@ void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     // than returning e.g. 16 suggestions and using only the
     // first 7. Thus we hand down the value to use to that
     // implementation here by providing an additional parameter.
-    Sequence< PropertyValue > aPropVals(1);
-    PropertyValue &rVal = aPropVals.getArray()[0];
-    rVal.Name = UPN_MAX_NUMBER_OF_SUGGESTIONS;
-    rVal.Value <<= sal_Int16(7);
+    Sequence< PropertyValue > aPropVals { comphelper::makePropertyValue(UPN_MAX_NUMBER_OF_SUGGESTIONS, sal_Int16(7)) };
 
     // Are there any replace suggestions?
     Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
