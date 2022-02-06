@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73de8b34_2303698d",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 9706,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-06T19:30:27Z",
+      "side": 1,
+      "message": "Not related to your patch: I could be wrong, but I think this is the only call site that is doing the right thing - I think all the other call sites should look like this. What do you think?",
+      "revId": "379dd54a1ce79f32a9076b351bdfba7a1cf465c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
