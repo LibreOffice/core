@@ -18,6 +18,7 @@
  */
 
 #include <swtypes.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include "addresslistdialog.hxx"
 #include "selectdbtabledialog.hxx"
 #include "createaddresslistdialog.hxx"
@@ -355,16 +356,13 @@ IMPL_LINK_NOARG(SwAddressListDialog, CreateHdl_Impl, weld::Button&, void)
         uno::Sequence<OUString> aFilters { sNewName };
         xDataProperties->setPropertyValue("TableFilter", Any(aFilters));
 
-        uno::Sequence<PropertyValue> aInfo(4);
-        PropertyValue* pInfo = aInfo.getArray();
-        pInfo[0].Name = "FieldDelimiter";
-        pInfo[0].Value <<= OUString('\t');
-        pInfo[1].Name = "StringDelimiter";
-        pInfo[1].Value <<= OUString('"');
-        pInfo[2].Name = "Extension";
-        pInfo[2].Value <<= aURL.getExtension();//"csv";
-        pInfo[3].Name = "CharSet";
-        pInfo[3].Value <<= OUString("UTF-8");
+        uno::Sequence<PropertyValue> aInfo
+        {
+            comphelper::makePropertyValue("FieldDelimiter", OUString('\t')),
+            comphelper::makePropertyValue("StringDelimiter", OUString('"')),
+            comphelper::makePropertyValue("Extension", aURL.getExtension()), //"csv
+            comphelper::makePropertyValue("CharSet", OUString("UTF-8"))
+        };
         xDataProperties->setPropertyValue("Info", Any(aInfo));
 
         uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, UNO_QUERY_THROW);
