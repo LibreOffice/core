@@ -16,6 +16,24 @@
       "message": "I tried to simplify Sequence\u003c PropertyValue \u003e but didn\u0027t find the way to do it.\neg :\nsource/core/edit/edlingu.cxx:948:  Sequence\u003c PropertyValue \u003e aPropVals(1);",
       "revId": "f8b51d3aaccb4fac1d545bf30a753b36642c9bc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df3ea9e0_879db3a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T11:01:00Z",
+      "side": 1,
+      "message": "comphelper::makePropertyValue in \u003ccomphelper/propertyvalue.hxx\u003e",
+      "parentUuid": "5b37279c_44d2ab92",
+      "revId": "f8b51d3aaccb4fac1d545bf30a753b36642c9bc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
