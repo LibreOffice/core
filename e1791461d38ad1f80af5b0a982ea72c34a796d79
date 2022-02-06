@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88bdd967_9f21020f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-06T23:09:00Z",
+      "side": 1,
+      "message": "Looks good to me.\nHeiko, what do you think?",
+      "revId": "e1791461d38ad1f80af5b0a982ea72c34a796d79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
