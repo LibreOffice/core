@@ -809,15 +809,12 @@ IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, RecentClearAllClickHdl, SvxCharView*, void)
 {
-    css::uno::Sequence< OUString > aRecentCharList(0);
-    css::uno::Sequence< OUString > aRecentCharFontList(0);
-
     maRecentCharList.clear();
     maRecentCharFontList.clear();
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
-    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
-    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
+    officecfg::Office::Common::RecentCharacters::RecentCharacterList::set({ }, batch);
+    officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set({ }, batch);
     batch->commit();
 
     updateRecentCharControl();
@@ -831,15 +828,12 @@ IMPL_LINK(SvxCharacterMap, FavClearClickHdl, SvxCharView*, rView, void)
 
 IMPL_LINK_NOARG(SvxCharacterMap, FavClearAllClickHdl, SvxCharView*, void)
 {
-    css::uno::Sequence< OUString > aFavCharList(0);
-    css::uno::Sequence< OUString > aFavCharFontList(0);
-
     maFavCharList.clear();
     maFavCharFontList.clear();
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
-    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
+    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set({ }, batch);
+    officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set({ }, batch);
     batch->commit();
 
     updateFavCharControl();
