@@ -170,6 +170,7 @@ class SwContentTree final : public SfxListener
     void            ExecuteContextMenuAction(const OString& rSelectedPopupEntry);
 
     void DeleteOutlineSelections();
+    void CopyOutlineSelections();
 
     size_t GetEntryCount() const;
 
