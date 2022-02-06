@@ -70,6 +70,24 @@
       "parentUuid": "d7d114b6_837f5262",
       "revId": "3de565e115dbd1374356a7d22051db48bef53953",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0bc031d_7ed0a99e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-06T07:26:03Z",
+      "side": 1,
+      "message": "Please remove the function completely including the part in the ui file as well as what reads it in the c++ file. The code pointer on BZ is still valid.",
+      "parentUuid": "fa88afaf_a4e6c537",
+      "revId": "3de565e115dbd1374356a7d22051db48bef53953",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
