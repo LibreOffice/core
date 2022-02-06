@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <limits>
 #include <stdio.h>
 #include <string>
 
@@ -1012,14 +1013,21 @@ void LocaleDataWrapper::ImplAddFormatNum( OUStringBuffer& rBuf,
     sal_uInt16  nNumLen;
 
     // negative number
+    sal_uInt64 abs;
     if ( nNumber < 0 )
     {
-        nNumber *= -1;
+        // Avoid overflow, map -2^63 -> 2^63 explicitly:
+        abs = nNumber == std::numeric_limits<sal_Int64>::min()
+            ? static_cast<sal_uInt64>(std::numeric_limits<sal_Int64>::min()) : nNumber * -1;
         rBuf.append('-');
+    }
+    else
+    {
+        abs = nNumber;
     }
 
     // convert number
-    ImplAddUNum( aNumBuf, static_cast<sal_uInt64>(nNumber) );
+    ImplAddUNum( aNumBuf, abs );
     nNumLen = static_cast<sal_uInt16>(aNumBuf.getLength());
 
     if ( nNumLen <= nDecimals )
