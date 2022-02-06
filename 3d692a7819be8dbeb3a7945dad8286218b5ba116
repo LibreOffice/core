@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a38bcc88_d176ee8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-06T08:11:48Z",
+      "side": 1,
+      "message": "You need to amend your patch and add tdf#145630 to the beginning of the commit message. Also, this is touching the same file as another patch (see \"Merge conflicts\"), so I think it would be better to pick another file.",
+      "revId": "3d692a7819be8dbeb3a7945dad8286218b5ba116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
