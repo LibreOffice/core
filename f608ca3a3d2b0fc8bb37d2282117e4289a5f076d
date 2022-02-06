@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f454d131_42b74960",
+        "filename": "vcl/source/bitmap/bitmappaint.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-06T08:10:39Z",
+      "side": 0,
+      "message": "could you try just converting this",
+      "revId": "f608ca3a3d2b0fc8bb37d2282117e4289a5f076d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e5575f_53ef68d5",
+        "filename": "vcl/source/bitmap/bitmappaint.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-06T08:10:39Z",
+      "side": 0,
+      "message": "and this, from float back to double?",
+      "revId": "f608ca3a3d2b0fc8bb37d2282117e4289a5f076d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
