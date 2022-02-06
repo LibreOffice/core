@@ -3033,10 +3033,8 @@ void ScInterpreter::ScRoman()
                 sal_Int32 nPad = nDigit % 5;
                 if (nPad)
                 {
-                    OUStringBuffer aBuf(aRoman);
-                    comphelper::string::padToLength(aBuf, aBuf.getLength() + nPad,
+                    comphelper::string::padToLength(aRoman, aRoman.getLength() + nPad,
                         pChars[nIndex]);
-                    aRoman = aBuf.makeStringAndClear();
                 }
                 nVal %= pValues[ nIndex ];
             }

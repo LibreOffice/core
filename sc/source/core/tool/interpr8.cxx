@@ -1396,7 +1396,7 @@ void ScInterpreter::ScConcat_MS()
             case svDouble:
                 {
                     const OUString& rStr = GetString().getString();
-                    if (CheckStringResultLen( aResBuf, rStr))
+                    if (CheckStringResultLen(aResBuf, rStr.getLength()))
                         aResBuf.append( rStr);
                 }
                 break;
@@ -1412,7 +1412,7 @@ void ScInterpreter::ScConcat_MS()
                     svl::SharedString aSS;
                     GetCellString( aSS, aCell);
                     const OUString& rStr = aSS.getString();
-                    if (CheckStringResultLen( aResBuf, rStr))
+                    if (CheckStringResultLen(aResBuf, rStr.getLength()))
                         aResBuf.append( rStr);
                 }
             }
@@ -1452,7 +1452,7 @@ void ScInterpreter::ScConcat_MS()
                             svl::SharedString aSS;
                             GetCellString( aSS, aCell);
                             const OUString& rStr = aSS.getString();
-                            if (CheckStringResultLen( aResBuf, rStr))
+                            if (CheckStringResultLen(aResBuf, rStr.getLength()))
                                 aResBuf.append( rStr);
                         }
                     }
@@ -1479,7 +1479,7 @@ void ScInterpreter::ScConcat_MS()
                                 if ( pMat->IsStringOrEmpty( j, k ) )
                                 {
                                     const OUString& rStr = pMat->GetString( j, k ).getString();
-                                    if (CheckStringResultLen( aResBuf, rStr))
+                                    if (CheckStringResultLen(aResBuf, rStr.getLength()))
                                         aResBuf.append( rStr);
                                 }
                                 else
@@ -1487,7 +1487,7 @@ void ScInterpreter::ScConcat_MS()
                                     if ( pMat->IsValue( j, k ) )
                                     {
                                         const OUString& rStr = pMat->GetString( *pFormatter, j, k ).getString();
-                                        if (CheckStringResultLen( aResBuf, rStr))
+                                        if (CheckStringResultLen(aResBuf, rStr.getLength()))
                                             aResBuf.append( rStr);
                                     }
                                 }
@@ -1658,7 +1658,7 @@ void ScInterpreter::ScTextJoin_MS()
                     }
                     else
                         bFirst = false;
-                    if (CheckStringResultLen( aResBuf, aStr))
+                    if (CheckStringResultLen(aResBuf, aStr.getLength()))
                         aResBuf.append( aStr );
                 }
             }
@@ -1690,7 +1690,7 @@ void ScInterpreter::ScTextJoin_MS()
                     }
                     else
                         bFirst = false;
-                    if (CheckStringResultLen( aResBuf, aStr))
+                    if (CheckStringResultLen(aResBuf, aStr.getLength()))
                         aResBuf.append( aStr );
                 }
             }
@@ -1747,7 +1747,7 @@ void ScInterpreter::ScTextJoin_MS()
                             }
                             else
                                 bFirst = false;
-                            if (CheckStringResultLen( aResBuf, aStr))
+                            if (CheckStringResultLen(aResBuf, aStr.getLength()))
                                 aResBuf.append( aStr );
                         }
                     }
@@ -1796,7 +1796,7 @@ void ScInterpreter::ScTextJoin_MS()
                                     }
                                     else
                                         bFirst = false;
-                                    if (CheckStringResultLen( aResBuf, aStr))
+                                    if (CheckStringResultLen(aResBuf, aStr.getLength()))
                                         aResBuf.append( aStr );
                                 }
                             }
