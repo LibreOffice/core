@@ -2220,9 +2220,15 @@ void SvmTest::checkComment(const GDIMetaFile& rMetafile)
         {"datasize", "48"}
     });
 
+#ifdef OSL_LITENDIAN
     assertXPathAttrs(pDoc, "/metafile/comment[2]", {
         {"data", "540068006500730065002000610072006500200073006f006d0065002000740065007300740020006400610074006100"}
     });
+#else
+    assertXPathAttrs(pDoc, "/metafile/comment[2]", {
+        {"data", "00540068006500730065002000610072006500200073006f006d00650020007400650073007400200064006100740061"}
+    });
+#endif
 
     assertXPathAttrs(pDoc, "/metafile/comment[2]", {
         {"value", "4"}
