@@ -33,7 +33,7 @@ published constants EmbedVerbs
      */
     const long MS_OLEVERB_PRIMARY = 0;
 
-    /** lets the object open itself for editing of viewing.
+    /** lets the object open itself for editing or viewing.
      */
     const long MS_OLEVERB_SHOW = -1;
 
