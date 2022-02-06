@@ -431,7 +431,7 @@ OUString Edit::ImplGetText() const
             cEchoChar = mcEchoChar;
         else
             cEchoChar = u'\x2022';
-        OUStringBuffer aText;
+        OUStringBuffer aText(maText.getLength());
         comphelper::string::padToLength(aText, maText.getLength(), cEchoChar);
         return aText.makeStringAndClear();
     }

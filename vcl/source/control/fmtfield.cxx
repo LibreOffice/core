@@ -1100,10 +1100,7 @@ void DoubleCurrencyField::UpdateCurrencyFormat()
     if (nDigits)
     {
         sNewFormat.append(aLocaleInfo.getNumDecimalSep());
-
-        OUStringBuffer sTemp;
-        comphelper::string::padToLength(sTemp, nDigits, '0');
-        sNewFormat.append(sTemp);
+        comphelper::string::padToLength(sNewFormat, sNewFormat.getLength() + nDigits, '0');
     }
 
     if (getPrependCurrSym())

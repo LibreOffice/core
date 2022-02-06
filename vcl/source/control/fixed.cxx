@@ -331,7 +331,7 @@ Size FixedText::GetOptimalSize() const
     sal_Int32 nMaxAvailWidth = 0x7fffffff;
     if (m_nMaxWidthChars != -1)
     {
-        OUStringBuffer aBuf;
+        OUStringBuffer aBuf(m_nMaxWidthChars);
         comphelper::string::padToLength(aBuf, m_nMaxWidthChars, 'x');
         nMaxAvailWidth = getTextDimensions(this,
             aBuf.makeStringAndClear(), 0x7fffffff).Width();
@@ -339,7 +339,7 @@ Size FixedText::GetOptimalSize() const
     Size aRet = CalcMinimumSize(nMaxAvailWidth);
     if (m_nMinWidthChars != -1)
     {
-        OUStringBuffer aBuf;
+        OUStringBuffer aBuf(m_nMinWidthChars);
         comphelper::string::padToLength(aBuf, m_nMinWidthChars, 'x');
         Size aMinAllowed = getTextDimensions(this,
             aBuf.makeStringAndClear(), 0x7fffffff);

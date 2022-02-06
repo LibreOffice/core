@@ -798,7 +798,7 @@ namespace
         {
             OUStringBuffer aBuf(rLiteralMask);
             if (rEditMask.getLength() < aBuf.getLength())
-                aBuf.remove(rEditMask.getLength(), aBuf.getLength() - rEditMask.getLength());
+                aBuf.setLength(rEditMask.getLength());
             else
                 comphelper::string::padToLength(aBuf, rEditMask.getLength(), ' ');
             rLiteralMask = aBuf.makeStringAndClear();
