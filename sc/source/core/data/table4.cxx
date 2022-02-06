@@ -124,9 +124,9 @@ OUString lcl_ValueString( sal_Int32 nValue, sal_uInt16 nMinDigits )
         OUString aStr = OUString::number( std::abs( nValue ) );
         if ( aStr.getLength() < nMinDigits )
         {
-            OUStringBuffer aZero;
+            OUStringBuffer aZero(nMinDigits);
             comphelper::string::padToLength(aZero, nMinDigits - aStr.getLength(), '0');
-            aStr = aZero.makeStringAndClear() + aStr;
+            aStr = aZero.append(aStr).makeStringAndClear();
         }
         //  nMinDigits doesn't include the '-' sign -> add after inserting zeros
         if ( nValue < 0 )

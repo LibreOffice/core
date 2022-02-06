@@ -302,7 +302,7 @@ SbxArray* StringToByteArray(const OUString& rStr)
 OUString ByteArrayToString(SbxArray* pArr)
 {
     sal_uInt32 nCount = pArr->Count();
-    OUStringBuffer aStrBuf;
+    OUStringBuffer aStrBuf((nCount + 1) / 2);
     sal_Unicode aChar = 0;
     for( sal_uInt32 i = 0 ; i < nCount ; i++ )
     {

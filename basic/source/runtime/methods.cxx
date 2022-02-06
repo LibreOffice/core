@@ -1610,8 +1610,9 @@ void SbRtl_Tab(StarBASIC *, SbxArray & rPar, bool)
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
     else
     {
-        OUStringBuffer aStr;
-        comphelper::string::padToLength(aStr, rPar.Get(1)->GetLong(), '\t');
+        const sal_Int32 nCount = std::max(rPar.Get(1)->GetLong(), sal_Int32(0));
+        OUStringBuffer aStr(nCount);
+        comphelper::string::padToLength(aStr, nCount, '\t');
         rPar.Get(0)->PutString(aStr.makeStringAndClear());
     }
 }
