@@ -481,11 +481,11 @@ private:
 
     // Check for String overflow of rResult+rAdd and set error and erase rResult
     // if so. Return true if ok, false if overflow
-    inline bool CheckStringResultLen( OUString& rResult, const OUString& rAdd );
+    inline bool CheckStringResultLen( OUString& rResult, sal_Int32 nIncrease );
 
     // Check for String overflow of rResult+rAdd and set error and erase rResult
     // if so. Return true if ok, false if overflow
-    inline bool CheckStringResultLen( OUStringBuffer& rResult, const OUString& rAdd );
+    inline bool CheckStringResultLen( OUStringBuffer& rResult, sal_Int32 nIncrease );
 
     // Set error according to rVal, and set rVal to 0.0 if there was an error.
     inline void TreatDoubleError( double& rVal );
@@ -1113,9 +1113,9 @@ inline sal_Int32 ScInterpreter::GetStringPositionArgument()
     return static_cast<sal_Int32>(fVal);
 }
 
-inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUString& rAdd )
+inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, sal_Int32 nIncrease )
 {
-    if (rAdd.getLength() > kScInterpreterMaxStrLen - rResult.getLength())
+    if (nIncrease > kScInterpreterMaxStrLen - rResult.getLength())
     {
         SetError( FormulaError::StringOverflow );
         rResult.clear();
@@ -1124,12 +1124,12 @@ inline bool ScInterpreter::CheckStringResultLen( OUString& rResult, const OUStri
     return true;
 }
 
-inline bool ScInterpreter::CheckStringResultLen( OUStringBuffer& rResult, const OUString& rAdd )
+inline bool ScInterpreter::CheckStringResultLen( OUStringBuffer& rResult, sal_Int32 nIncrease )
 {
-    if (rAdd.getLength() > kScInterpreterMaxStrLen - rResult.getLength())
+    if (nIncrease > kScInterpreterMaxStrLen - rResult.getLength())
     {
         SetError( FormulaError::StringOverflow );
-        rResult = OUStringBuffer();
+        rResult.setLength(0);
         return false;
     }
     return true;

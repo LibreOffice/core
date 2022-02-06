@@ -8865,9 +8865,8 @@ void ScInterpreter::ScReplace()
             aOldStr.iterateCodePoints( &nIdx );
             ++nCnt;
         }
-        aOldStr = aOldStr.replaceAt( nStart, nIdx - nStart, u"" );
-        if ( CheckStringResultLen( aOldStr, aNewStr ) )
-            aOldStr = aOldStr.replaceAt( nStart, 0, aNewStr );
+        if ( CheckStringResultLen( aOldStr, aNewStr.getLength() - (nIdx - nStart) ) )
+            aOldStr = aOldStr.replaceAt( nStart, nIdx - nStart, aNewStr );
         PushString( aOldStr );
     }
 }
@@ -9704,7 +9703,7 @@ void ScInterpreter::ScSubstitute()
                 oResult.emplace(sStr.getLength() + sNewStr.getLength() - sOldStr.getLength());
 
             oResult->append(sStr.subView(nPos, nEnd - nPos)); // Copy leading unchanged text
-            if (!CheckStringResultLen(*oResult, sNewStr))
+            if (!CheckStringResultLen(*oResult, sNewStr.getLength()))
                 return PushError(GetError());
             oResult->append(sNewStr); // Copy  the replacement
             nPos = nEnd + sOldStr.getLength();
@@ -9750,7 +9749,7 @@ void ScInterpreter::ScConcat()
     while( nParamCount-- > 0)
     {
         OUString aStr = GetString().getString();
-        if (CheckStringResultLen( aRes, aStr))
+        if (CheckStringResultLen(aRes, aStr.getLength()))
             aRes = aStr + aRes;
         else
             break;

@@ -1489,7 +1489,7 @@ void ScInterpreter::ScAmpersand()
     }
     else
     {
-        if ( CheckStringResultLen( sStr1, sStr2 ) )
+        if ( CheckStringResultLen( sStr1, sStr2.getLength() ) )
             sStr1 += sStr2;
         PushString(sStr1);
     }
