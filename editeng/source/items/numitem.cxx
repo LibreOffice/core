@@ -24,6 +24,7 @@
 #include <editeng/numitem.hxx>
 
 #include <com/sun/star/text/VertOrientation.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <editeng/brushitem.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/font.hxx>
@@ -132,12 +133,11 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
                         return OUString('0');
                     else
                     {
-                        Sequence< PropertyValue > aProperties(2);
-                        PropertyValue* pValues = aProperties.getArray();
-                        pValues[0].Name = "NumberingType";
-                        pValues[0].Value <<= static_cast<sal_uInt16>(nNumType);
-                        pValues[1].Name = "Value";
-                        pValues[1].Value <<= nNo;
+                        Sequence< PropertyValue > aProperties
+                        {
+                            comphelper::makePropertyValue("NumberingType", static_cast<sal_uInt16>(nNumType)),
+                            comphelper::makePropertyValue("Value", nNo)
+                        };
 
                         try
                         {

@@ -24,6 +24,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <o3tl/any.hxx>
 
 using namespace ::com::sun::star::uno;
@@ -235,14 +236,11 @@ void    BibConfig::ImplCommit()
             !pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName.isEmpty())
         {
             OUString sSubPrefix = sPrefix + "/_" + OUString::number(nFieldAssignment);
-            Sequence< PropertyValue > aAssignmentValues(2);
-            PropertyValue* pAssignmentValues = aAssignmentValues.getArray();
-            pAssignmentValues[0].Name   = sSubPrefix;
-            pAssignmentValues[0].Name   += sFieldName;
-            pAssignmentValues[0].Value <<= pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName;
-            pAssignmentValues[1].Name   = sSubPrefix;
-            pAssignmentValues[1].Name   += sDatabaseFieldName;
-            pAssignmentValues[1].Value <<= pMapping->aColumnPairs[nFieldAssignment].sRealColumnName;
+            Sequence< PropertyValue > aAssignmentValues
+            {
+                comphelper::makePropertyValue(sSubPrefix + sFieldName, pMapping->aColumnPairs[nFieldAssignment].sLogicalColumnName),
+                comphelper::makePropertyValue(sSubPrefix + sDatabaseFieldName, pMapping->aColumnPairs[nFieldAssignment].sRealColumnName)
+            };
             SetSetProperties( sPrefix, aAssignmentValues );
             nFieldAssignment++;
         }

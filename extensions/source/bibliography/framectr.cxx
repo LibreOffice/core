@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/types.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include "framectr.hxx"
 #include "datman.hxx"
@@ -393,10 +394,11 @@ void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequen
         {
             try
             {
-                uno::Sequence< beans::PropertyValue > aNewDataSource(2);
-                beans::PropertyValue* pProps = aNewDataSource.getArray();
-                pProps[0].Value <<= OUString();
-                pProps[1].Value <<= aURL;
+                uno::Sequence< beans::PropertyValue > aNewDataSource
+                {
+                    comphelper::makePropertyValue( {}, OUString() ),
+                    comphelper::makePropertyValue( {}, aURL )
+                };
                 ChangeDataSource(aNewDataSource);
             }
             catch(const Exception&)
