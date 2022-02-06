@@ -58,6 +58,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4556279_82d938b8",
+        "filename": "sw/source/core/unocore/unoredline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-06T13:58:52Z",
+      "side": 1,
+      "message": "I used a return statement.",
+      "parentUuid": "2a1cb148_bbdca3cc",
+      "range": {
+        "startLine": 182,
+        "startChar": 8,
+        "endLine": 191,
+        "endChar": 23
+      },
+      "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14787e51_1204cadc",
