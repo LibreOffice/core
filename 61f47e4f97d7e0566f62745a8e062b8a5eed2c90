@@ -177,6 +177,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "137143d5_705d6aaa",
+        "filename": "sw/source/core/unocore/unoredline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-06T14:23:24Z",
+      "side": 1,
+      "message": "You\u0027re right, done! :-)",
+      "parentUuid": "f69d53dc_a15c9aaf",
+      "range": {
+        "startLine": 193,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 19
+      },
+      "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a0fee053_ff9a5bc3",
