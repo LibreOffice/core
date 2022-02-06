@@ -16,6 +16,40 @@
       "message": "You need to amend your patch and add tdf#145630 to the beginning of the commit message. Also, this is touching the same file as another patch (see \"Merge conflicts\"), so I think it would be better to pick another file.",
       "revId": "3d692a7819be8dbeb3a7945dad8286218b5ba116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "335a13f6_ddd0cf38",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 683,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T10:42:30Z",
+      "side": 1,
+      "message": "1. Please do not leave comments about something that *was* here prior to your change. The comment needs to clarify the *current* code to the reader, not confuse someone with text that discusses something that is not here anymore.\n\n2. The idea of the test is exactly to fix the atan problem; so instead, just replace the atan at line 682 above, which this easy hack is about 😊",
+      "revId": "3d692a7819be8dbeb3a7945dad8286218b5ba116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c53dcdc5_f9c90b93",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 862,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T10:42:30Z",
+      "side": 1,
+      "message": "Please do not keep trailing whitespace",
+      "revId": "3d692a7819be8dbeb3a7945dad8286218b5ba116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
