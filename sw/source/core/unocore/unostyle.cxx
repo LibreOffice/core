@@ -4276,8 +4276,7 @@ void SwXAutoStyle::setPropertiesToDefault(
 uno::Sequence< uno::Any > SwXAutoStyle::getPropertyDefaults(
         const uno::Sequence< OUString >& /*aPropertyNames*/ )
 {
-    uno::Sequence< uno::Any > aRet(0);
-    return aRet;
+    return { };
 }
 
 uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties()
