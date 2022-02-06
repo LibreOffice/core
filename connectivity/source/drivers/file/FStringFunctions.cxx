@@ -18,6 +18,8 @@
  */
 
 #include <file/FStringFunctions.hxx>
+
+#include <comphelper/string.hxx>
 #include <rtl/ustrbuf.hxx>
 
 using namespace connectivity;
@@ -61,7 +63,7 @@ ORowSetValue OOp_Char::operate(const std::vector<ORowSetValue>& lhs) const
     if (lhs.empty())
         return ORowSetValue();
 
-    OUStringBuffer sRet;
+    OUStringBuffer sRet(static_cast<sal_Int32>(lhs.size()));
     std::vector<ORowSetValue>::const_reverse_iterator aIter = lhs.rbegin();
     std::vector<ORowSetValue>::const_reverse_iterator aEnd = lhs.rend();
     for (; aIter != aEnd; ++aIter)
@@ -151,13 +153,9 @@ ORowSetValue OOp_Space::operate(const ORowSetValue& lhs) const
     if (lhs.isNull())
         return lhs;
 
-    const char c = ' ';
-    OUStringBuffer sRet;
-    sal_Int32 nCount = lhs.getInt32();
-    for (sal_Int32 i = 0; i < nCount; ++i)
-    {
-        sRet.appendAscii(&c, 1);
-    }
+    sal_Int32 nCount = std::max(lhs.getInt32(), sal_Int32(0));
+    OUStringBuffer sRet(nCount);
+    comphelper::string::padToLength(sRet, nCount, ' ');
     return sRet.makeStringAndClear();
 }
 
@@ -184,11 +182,12 @@ ORowSetValue OOp_Repeat::operate(const ORowSetValue& lhs, const ORowSetValue& rh
     if (lhs.isNull() || rhs.isNull())
         return lhs;
 
-    OUStringBuffer sRet;
-    sal_Int32 nCount = rhs.getInt32();
+    const OUString s = lhs.getString();
+    const sal_Int32 nCount = std::max(rhs.getInt32(), sal_Int32(0));
+    OUStringBuffer sRet(s.getLength() * nCount);
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        sRet.append(lhs.getString());
+        sRet.append(s);
     }
     return sRet.makeStringAndClear();
 }

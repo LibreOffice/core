@@ -4585,7 +4585,7 @@ void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt3
     if( bFixedString )
     {
         sal_uInt16 nCount = static_cast<sal_uInt16>( nOp2 >> 17 );      // len = all bits above 0x10000
-        OUStringBuffer aBuf;
+        OUStringBuffer aBuf(nCount);
         comphelper::string::padToLength(aBuf, nCount);
         pVar->PutString(aBuf.makeStringAndClear());
     }

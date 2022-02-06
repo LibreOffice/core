@@ -3595,7 +3595,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                 aTmpFont.SetEscapement( 0 );
                                                 aTmpFont.SetPropr( 100 );
                                                 aTmpFont.SetPhysFont(rOutDev);
-                                                OUStringBuffer aBlanks;
+                                                OUStringBuffer aBlanks(nTextLen);
                                                 comphelper::string::padToLength( aBlanks, nTextLen, ' ' );
                                                 Point aUnderlinePos( aOutPos );
                                                 if ( nOrientation )
@@ -3726,7 +3726,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     else if ( nChars == 2 )
                                         nChars = 3; // looks better
 
-                                    OUStringBuffer aBuf;
+                                    OUStringBuffer aBuf(nChars);
                                     comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
                                     aTmpFont.QuickDrawText( &rOutDev, aTmpPos, aText, 0, aText.getLength() );
