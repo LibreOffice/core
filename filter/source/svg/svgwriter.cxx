@@ -1808,7 +1808,8 @@ SVGActionWriter::SVGActionWriter( SVGExport& rExport, SVGFontExport& rFontExport
     mpVDev(VclPtr<VirtualDevice>::Create()),
     mbClipAttrChanged( false ),
     mbIsPlaceholderShape( false ),
-    mpEmbeddedBitmapsMap( nullptr )
+    mpEmbeddedBitmapsMap( nullptr ),
+    mbIsPreview( false )
 {
     mpVDev->EnableOutput( false );
     maTargetMapMode = MapMode(MapUnit::Map100thMM);
