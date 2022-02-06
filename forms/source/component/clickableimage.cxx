@@ -301,10 +301,7 @@ namespace frm
                             FrameSearchFlag::SELF | FrameSearchFlag::PARENT |
                             FrameSearchFlag::SIBLINGS | FrameSearchFlag::CREATE );
 
-                    Sequence<PropertyValue> aArgs(1);
-                    PropertyValue& rProp = aArgs.getArray()[0];
-                    rProp.Name = "Referer";
-                    rProp.Value <<= xModel->getURL();
+                    Sequence<PropertyValue> aArgs { comphelper::makePropertyValue("Referer", xModel->getURL()) };
 
                     if (xDisp.is())
                         xDisp->dispatch( aURL, aArgs );
