@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d42b9ed_a869176b",
+        "filename": "dbaccess/qa/extras/rowsetclones.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T17:02:47Z",
+      "side": 0,
+      "message": "This is not completely correct.\nEven though xComponent is guaranteed to be valid after loadFromDesktop, xDocument is obtained using another call, namely Reference ctor taking UNO_QUERY. That may return empty reference, when the passed object is not a XOfficeDatabaseDocument.\n\nIn this case, the CPPUNIT_ASSERT is still not reasonable - instead, it\u0027s better to use another, throwing ctor, that takes UNO_QUERY_THROW in place of UNO_QUERY. But if you do not do that, you should not remove the assert.",
+      "revId": "6ed0ffe9177ff6851e1b1e338dd92f81e7987f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b193388c_fc2ec1f3",
+        "filename": "dbaccess/qa/unit/dbtest_base.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T17:02:47Z",
+      "side": 0,
+      "message": "Same here.",
+      "revId": "6ed0ffe9177ff6851e1b1e338dd92f81e7987f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
