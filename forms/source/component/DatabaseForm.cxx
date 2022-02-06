@@ -29,6 +29,7 @@
 #include "GroupManager.hxx"
 #include <property.hxx>
 #include <services.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -2103,9 +2104,6 @@ static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLT
     if (!xDisp.is())
         return;
 
-    Sequence<PropertyValue> aArgs(2);
-    aArgs.getArray()[0].Name = "Referer";
-    aArgs.getArray()[0].Value <<= aReferer;
 
     // build a sequence from the to-be-submitted string
     OString a8BitData(OUStringToOString(aData, _eEncoding));
@@ -2113,8 +2111,11 @@ static void lcl_dispatch(const Reference< XFrame >& xFrame,const Reference<XURLT
     Sequence< sal_Int8 > aPostData(reinterpret_cast<const sal_Int8*>(a8BitData.getStr()), a8BitData.getLength());
     Reference< XInputStream > xPostData = new SequenceInputStream(aPostData);
 
-    aArgs.getArray()[1].Name = "PostData";
-    aArgs.getArray()[1].Value <<= xPostData;
+    Sequence<PropertyValue> aArgs
+    {
+        comphelper::makePropertyValue("Referer", aReferer),
+        comphelper::makePropertyValue("PostData", xPostData)
+    };
 
     xDisp->dispatch(aURL, aArgs);
 }
@@ -2193,9 +2194,7 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
 
             if (xDisp.is())
             {
-                Sequence<PropertyValue> aArgs(1);
-                aArgs.getArray()->Name = "Referer";
-                aArgs.getArray()->Value <<= aReferer;
+                Sequence<PropertyValue> aArgs { comphelper::makePropertyValue("Referer", aReferer) };
                 xDisp->dispatch(aURL, aArgs);
             }
         }
@@ -2226,17 +2225,15 @@ void ODatabaseForm::submit_impl(const Reference<XControl>& Control, const css::a
             if (!aData.hasElements())
                 return;
 
-            Sequence<PropertyValue> aArgs(3);
-            aArgs.getArray()[0].Name = "Referer";
-            aArgs.getArray()[0].Value <<= aReferer;
-            aArgs.getArray()[1].Name = "ContentType";
-            aArgs.getArray()[1].Value <<= aContentType;
-
             // build a sequence from the to-be-submitted string
             Reference< XInputStream > xPostData = new SequenceInputStream(aData);
 
-            aArgs.getArray()[2].Name = "PostData";
-            aArgs.getArray()[2].Value <<= xPostData;
+            Sequence<PropertyValue> aArgs
+            {
+                comphelper::makePropertyValue("Referer", aReferer),
+                comphelper::makePropertyValue("ContentType", aContentType),
+                comphelper::makePropertyValue("PostData", xPostData)
+            };
 
             xDisp->dispatch(aURL, aArgs);
         }
