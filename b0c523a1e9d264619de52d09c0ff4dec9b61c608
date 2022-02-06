@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13c349df_0b452ffd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-06T11:31:25Z",
+      "side": 1,
+      "message": "All Jenkins ok except Windows, let\u0027s push this one.",
+      "revId": "b0c523a1e9d264619de52d09c0ff4dec9b61c608",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
