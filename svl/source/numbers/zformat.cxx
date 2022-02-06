@@ -5615,10 +5615,8 @@ void SvNumberformat::impTransliterateImpl(OUStringBuffer& rStr,
 {
     css::lang::Locale aLocale( LanguageTag( rNum.GetLang() ).getLocale() );
 
-    OUString sTemp(rStr.toString());
-    sTemp = GetFormatter().GetNatNum()->getNativeNumberStringParams(
-        sTemp, aLocale, rNum.GetNatNum(), rNum.GetParams());
-    rStr = sTemp;
+    rStr = GetFormatter().GetNatNum()->getNativeNumberStringParams(
+        OUString::unacquired(rStr), aLocale, rNum.GetNatNum(), rNum.GetParams());
 }
 
 OUString SvNumberformat::impTransliterateImpl(const OUString& rStr,
