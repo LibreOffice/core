@@ -20,6 +20,7 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <vcl/svapp.hxx>
 
@@ -175,23 +176,21 @@ SwXRedlinePortion::~SwXRedlinePortion()
 
 static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRangeRedline& rRedline)
 {
-    uno::Sequence<beans::PropertyValue> aValues(4);
-
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
     if(pNext)
     {
-        beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = UNO_NAME_REDLINE_AUTHOR;
-        // GetAuthorString(n) walks the SwRedlineData* chain;
-        // here we always need element 1
-        pValues[0].Value <<= rRedline.GetAuthorString(1);
-        pValues[1].Name = UNO_NAME_REDLINE_DATE_TIME;
-        pValues[1].Value <<= pNext->GetTimeStamp().GetUNODateTime();
-        pValues[2].Name = UNO_NAME_REDLINE_COMMENT;
-        pValues[2].Value <<= pNext->GetComment();
-        pValues[3].Name = UNO_NAME_REDLINE_TYPE;
-        pValues[3].Value <<= SwRedlineTypeToOUString(pNext->GetType());
+        uno::Sequence<beans::PropertyValue> aValues
+        {
+            // GetAuthorString(n) walks the SwRedlineData* chain;
+            // here we always need element 1
+            comphelper::makePropertyValue(UNO_NAME_REDLINE_AUTHOR, rRedline.GetAuthorString(1)),
+            comphelper::makePropertyValue(UNO_NAME_REDLINE_DATE_TIME, pNext->GetTimeStamp().GetUNODateTime()),
+            comphelper::makePropertyValue(UNO_NAME_REDLINE_COMMENT, pNext->GetComment()),
+            comphelper::makePropertyValue(UNO_NAME_REDLINE_TYPE, SwRedlineTypeToOUString(pNext->GetType()))
+        };
+        return aValues;
     }
+    uno::Sequence<beans::PropertyValue> aValues(4);
     return aValues;
 }
 

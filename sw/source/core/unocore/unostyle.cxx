@@ -21,6 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/hint.hxx>
@@ -598,14 +599,14 @@ void SwXStyleFamilies::loadStylesFromURL(const OUString& rURL,
 uno::Sequence< beans::PropertyValue > SwXStyleFamilies::getStyleLoaderOptions()
 {
     SolarMutexGuard aGuard;
-    uno::Sequence< beans::PropertyValue > aSeq(5);
-    beans::PropertyValue* pArray = aSeq.getArray();
     const uno::Any aVal(true);
-    pArray[0] = beans::PropertyValue(UNO_NAME_LOAD_TEXT_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    pArray[1] = beans::PropertyValue(UNO_NAME_LOAD_FRAME_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    pArray[2] = beans::PropertyValue(UNO_NAME_LOAD_PAGE_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    pArray[3] = beans::PropertyValue(UNO_NAME_LOAD_NUMBERING_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
-    pArray[4] = beans::PropertyValue(UNO_NAME_OVERWRITE_STYLES, -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    uno::Sequence< beans::PropertyValue > aSeq(comphelper::InitPropertySequence({
+        { UNO_NAME_LOAD_TEXT_STYLES, aVal },
+        { UNO_NAME_LOAD_FRAME_STYLES, aVal },
+        { UNO_NAME_LOAD_PAGE_STYLES, aVal },
+        { UNO_NAME_LOAD_NUMBERING_STYLES, aVal },
+        { UNO_NAME_OVERWRITE_STYLES, aVal }
+    }));
     return aSeq;
 }
 

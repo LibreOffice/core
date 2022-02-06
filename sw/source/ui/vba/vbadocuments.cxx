@@ -122,9 +122,7 @@ SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConvers
     else
         osl::FileBase::getFileURLFromSystemPath( Filename, aURL );
 
-    uno::Sequence< beans::PropertyValue > sProps(0);
-
-    uno::Reference <text::XTextDocument> xSpreadDoc( openDocument( Filename, ReadOnly, sProps ), uno::UNO_QUERY_THROW );
+    uno::Reference <text::XTextDocument> xSpreadDoc( openDocument( Filename, ReadOnly, {}), uno::UNO_QUERY_THROW );
     uno::Any aRet = getDocument( mxContext, xSpreadDoc, Application() );
     uno::Reference< word::XDocument > xDocument( aRet, uno::UNO_QUERY );
     if ( xDocument.is() )
