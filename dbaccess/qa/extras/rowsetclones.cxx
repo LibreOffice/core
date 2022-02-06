@@ -52,7 +52,6 @@ void RowSetClones::test()
 
     uno::Reference< lang::XComponent > xComponent (loadFromDesktop(sFilePath));
     uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY);
-    CPPUNIT_ASSERT(xDocument.is());
 
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
