@@ -16,6 +16,29 @@
       "message": "I fixed the typos, managed to extract UTF32 unicode characters from the string and now use OUStringBuffer to remove unicode characters when in category Cc or Cn.\nAnd I added lines to the unit test document to test more use cases.",
       "revId": "c937ef1ef19b2ae61f616715f1ecd5f45767bdd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13d1513a_708e9eca",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3482,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T14:19:01Z",
+      "side": 1,
+      "message": "This looks over-complicated - maybe you overlooked that you may use OUStringBuffer\u0027s appendUtf32 method?",
+      "range": {
+        "startLine": 3455,
+        "startChar": 4,
+        "endLine": 3482,
+        "endChar": 9
+      },
+      "revId": "c937ef1ef19b2ae61f616715f1ecd5f45767bdd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
