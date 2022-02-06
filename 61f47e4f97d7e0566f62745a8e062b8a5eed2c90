@@ -107,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "24f02c7e_f72236e5",
+        "filename": "sw/source/core/unocore/unoredline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T14:01:54Z",
+      "side": 1,
+      "message": "Hmm, this one looks skipped 😊",
+      "parentUuid": "14787e51_1204cadc",
+      "range": {
+        "startLine": 193,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 19
+      },
+      "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0fee053_ff9a5bc3",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 1
@@ -118,6 +142,24 @@
       "writtenOn": "2022-02-06T13:47:44Z",
       "side": 1,
       "message": "And here",
+      "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d078e5a1_6dabb34a",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T14:01:54Z",
+      "side": 1,
+      "message": "And here I am confused - had you mistakenly reverted your change here, instead of making a \u0027return ...\u0027 change?",
+      "parentUuid": "a0fee053_ff9a5bc3",
       "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
