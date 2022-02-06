@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ce7e431_21700887",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T19:07:58Z",
+      "side": 1,
+      "message": "Not for this change: you may consider a follow-up change, that would convert all the char*s here into constexpr static arrays of u16string_view, additionally making sure that they are not function-local, to avoid runtime initialization. That would allow to have string length known, and thus would speed up all those comparisons.",
+      "revId": "e04d06f0b78e8e1c51a487d6fc907535ebcc5cfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
