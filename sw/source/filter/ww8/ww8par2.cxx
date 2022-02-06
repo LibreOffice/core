@@ -635,8 +635,8 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV con
     const WW8_FFN* pF = m_xFonts->GetFont(SVBT16ToUInt16(rAV.ftc)); // FontInfo
     bool bListSymbol = pF && ( pF->aFFNBase.chs == 2 );      // Symbol/WingDings/...
 
-    OUStringBuffer sText;
     sal_uInt32 nLen = rAV.cbTextBefore + rAV.cbTextAfter;
+    OUStringBuffer sText(nLen);
     if (m_bVer67)
     {
         if (nLen > nElements)
@@ -676,10 +676,9 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV con
             if( bListSymbol )
             {
                 // use cBulletChar for correct mapping on MAC
-                OUStringBuffer aBuf;
-                comphelper::string::padToLength(aBuf, rAV.cbTextBefore
+                sText.setLength(0);
+                comphelper::string::padToLength(sText, rAV.cbTextBefore
                     + rAV.cbTextAfter, cBulletChar);
-                sText = aBuf;
             }
         }
     }

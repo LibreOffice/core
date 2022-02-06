@@ -620,7 +620,7 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
         {
             // Always with kerning, also on printer!
             sal_uInt16 nChar = Width() / nCharWidth;
-            OUStringBuffer aBuf;
+            OUStringBuffer aBuf(nChar);
             comphelper::string::padToLength(aBuf, nChar, ' ');
             rInf.DrawText(aBuf.makeStringAndClear(), *this, TextFrameIndex(0),
                             TextFrameIndex(nChar), true);
@@ -642,7 +642,7 @@ void SwTabPortion::Paint( const SwTextPaintInfo &rInf ) const
         sal_uInt16 nChar = Width() / nCharWidth;
         if ( m_cFill == '_' )
             ++nChar; // to avoid gaps
-        OUStringBuffer aBuf;
+        OUStringBuffer aBuf(nChar);
         comphelper::string::padToLength(aBuf, nChar, m_cFill);
         rInf.DrawText(aBuf.makeStringAndClear(), *this, TextFrameIndex(0),
                         TextFrameIndex(nChar), true);
