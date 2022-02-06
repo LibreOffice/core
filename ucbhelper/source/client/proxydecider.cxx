@@ -903,7 +903,7 @@ void InternetProxyDecider_Impl::setNoProxyList(
             }
 
             m_aNoProxyList.emplace_back( WildCard( aToken ),
-                                  WildCard( aFullyQualifiedHost.makeStringAndClear() ) );
+                                  WildCard( aFullyQualifiedHost ) );
         }
 
         if ( nEnd != nLen )
