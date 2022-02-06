@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10683aca_b6aafdcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-02-06T15:00:51Z",
+      "side": 1,
+      "message": "Sadly, I have no more time for any of this. I have paid work. Thank you for your reviews so far!",
+      "revId": "ae8bfc0d5861ab6ac8c73240f4870c5105f3335d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
