@@ -1438,6 +1438,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
 
     bool bRemovePostItEntries = true;
     bool bRemoveIndexEntries = true;
+    bool bRemoveCopyEntry = true;
     bool bRemoveEditEntry = true;
     bool bRemoveUnprotectEntry = true;
     bool bRemoveDeleteEntry = true;
@@ -1568,6 +1569,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                     bRemoveSelectEntry = false;
                     bRemoveChapterEntries = false;
                 }
+                bRemoveCopyEntry = false;
             }
             else if (!bReadonly && (bEditable || bDeletable))
             {
@@ -1703,7 +1705,11 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             bRemoveSendOutlineEntry)
         xPop->remove("separator1");
 
+    if (bRemoveCopyEntry)
+        xPop->remove("copy");
+
     if (bRemoveGotoEntry &&
+            bRemoveCopyEntry &&
             bRemoveSelectEntry &&
             bRemoveDeleteEntry &&
             bRemoveChapterEntries &&
@@ -4107,6 +4113,8 @@ IMPL_LINK(SwContentTree, KeyInputHdl, const KeyEvent&, rEvent, bool)
                         ExecCommand("chapterup", !aCode.IsShift());
                     else if (aCode.GetCode() == KEY_DOWN)
                         ExecCommand("chapterdown", !aCode.IsShift());
+                    else if (aCode.GetCode() == KEY_C)
+                        CopyOutlineSelections();
                     else
                         bConsumed = false;
                 }
@@ -4222,6 +4230,11 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
 
 void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
 {
+    if (rSelectedPopupEntry == "copy")
+    {
+        CopyOutlineSelections();
+        return;
+    }
     if (rSelectedPopupEntry == "collapseallcategories")
     {
         std::unique_ptr<weld::TreeIter> xEntry = m_xTreeView->make_iterator();
@@ -5022,6 +5035,32 @@ static void lcl_AssureStdModeAtShell(SwWrtShell* pWrtShell)
     }
     else
         pWrtShell->EnterStdMode();
+}
+
+void SwContentTree::CopyOutlineSelections()
+{
+    m_pActiveShell->LockView(true);
+    {
+        MakeAllOutlineContentTemporarilyVisible a(m_pActiveShell->GetDoc());
+        lcl_AssureStdModeAtShell(m_pActiveShell);
+        m_pActiveShell->EnterAddMode();
+        size_t nCount = m_xTreeView->get_selected_rows().size();
+        m_xTreeView->selected_foreach([this, &nCount](weld::TreeIter& rEntry){
+            SwOutlineNodes::size_type nOutlinePos = reinterpret_cast<SwOutlineContent*>(
+                        m_xTreeView->get_id(rEntry).toInt64())->GetOutlinePos();
+            m_pActiveShell->SttSelect();
+            m_pActiveShell->MakeOutlineSel(nOutlinePos, nOutlinePos,
+                                           !m_xTreeView->get_row_expanded(rEntry), false);
+            // don't move if this is the last selected outline or the cursor is at start of para
+            if (--nCount && !m_pActiveShell->IsSttPara())
+                m_pActiveShell->Right(CRSR_SKIP_CHARS, true, 1, false);
+            m_pActiveShell->EndSelect();
+            return false;
+        });
+        m_pActiveShell->LeaveAddMode();
+        m_pActiveShell->GetView().GetViewFrame()->GetBindings().Execute(SID_COPY);
+    }
+    m_pActiveShell->LockView(false);
 }
 
 void SwContentTree::GotoContent(const SwContent* pCnt)
