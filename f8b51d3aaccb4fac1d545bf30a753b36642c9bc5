@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b37279c_44d2ab92",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-06T09:34:58Z",
+      "side": 1,
+      "message": "I tried to simplify Sequence\u003c PropertyValue \u003e but didn\u0027t find the way to do it.\neg :\nsource/core/edit/edlingu.cxx:948:  Sequence\u003c PropertyValue \u003e aPropVals(1);",
+      "revId": "f8b51d3aaccb4fac1d545bf30a753b36642c9bc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
