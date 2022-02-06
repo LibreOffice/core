@@ -1517,10 +1517,16 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 
     try
     {
-        Sequence< NumberedSortingInfo >     aSortingInfo(1);
-        aSortingInfo.getArray()->ColumnIndex = 1;
-        aSortingInfo.getArray()->Ascending = true;
-        xResultSet = rTemplRoot.createSortedCursor( aProps, aSortingInfo, m_rCompareFactory, INCLUDE_FOLDERS_ONLY );
+        xResultSet = rTemplRoot.createSortedCursor(
+                         aProps,
+                         { // Sequence
+                              { // NumberedSortingInfo
+                                  /* ColumnIndex */ 1, /* Ascending */ true
+                              }
+                         },
+                         m_rCompareFactory,
+                         INCLUDE_FOLDERS_ONLY
+                     );
     }
     catch ( Exception& ) {}
 
