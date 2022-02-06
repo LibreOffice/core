@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8dc0acf_d469d29b",
+        "filename": "chart2/source/model/template/DataInterpreter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-06T15:06:06Z",
+      "side": 1,
+      "message": "this assert fires on loading https://bz.apache.org/ooo/attachment.cgi?id\u003d20372\n\nhttps://dev-builds.libreoffice.org/crashtest/583185235389b55d6cfffac3067c0e1ccb2852b1/backtraces/task399-core.backtrace.txt",
+      "revId": "fc03ef1e02da261073994e7478b08fa57b3ea962",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
