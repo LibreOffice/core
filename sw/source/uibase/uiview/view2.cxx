@@ -31,6 +31,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
 #include <com/sun/star/linguistic2/XDictionary.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <SwCapObjType.hxx>
 #include <SwStyleNameMapper.hxx>
@@ -1310,14 +1311,12 @@ void SwView::Execute(SfxRequest &rReq)
                     rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
                     AttrChangedNotify(nullptr);
 
-                    Sequence<PropertyValue> aProperties(3);
-                    PropertyValue* pValues = aProperties.getArray();
-                    pValues[0].Name = "DataSourceName";
-                    pValues[1].Name = "Command";
-                    pValues[2].Name = "CommandType";
-                    pValues[0].Value <<= aData.sDataSource;
-                    pValues[1].Value <<= aData.sCommand;
-                    pValues[2].Value <<= aData.nCommandType;
+                    Sequence<PropertyValue> aProperties
+                    {
+                        comphelper::makePropertyValue("DataSourceName", aData.sDataSource),
+                        comphelper::makePropertyValue("Command", aData.sCommand),
+                        comphelper::makePropertyValue("CommandType", aData.nCommandType)
+                    };
                     pDBManager->ExecuteFormLetter(rSh, aProperties);
                 }
             }
@@ -2714,14 +2713,12 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
 
         if (pDBManager)
         {
-            Sequence<PropertyValue> aProperties(3);
-            PropertyValue* pValues = aProperties.getArray();
-            pValues[0].Name = "DataSourceName";
-            pValues[1].Name = "Command";
-            pValues[2].Name = "CommandType";
-            pValues[0].Value <<= aData.sDataSource;
-            pValues[1].Value <<= aData.sCommand;
-            pValues[2].Value <<= aData.nCommandType;
+            Sequence<PropertyValue> aProperties
+            {
+                comphelper::makePropertyValue("DataSourceName", aData.sDataSource),
+                comphelper::makePropertyValue("Command", aData.sCommand),
+                comphelper::makePropertyValue("CommandType", aData.nCommandType),
+            };
             pDBManager->ExecuteFormLetter(GetWrtShell(), aProperties);
         }
     }

@@ -19,6 +19,7 @@
 
 
 #include <mmconfigitem.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <vector>
 #include <swtypes.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -559,21 +560,13 @@ void  SwMailMergeConfigItem_Impl::ImplCommit()
             OUString sSlash = "/";
             OUString sNodePath = cAddressDataAssignments + sSlash + sNewNode + sSlash;
             //only one new entry is written
-            Sequence< PropertyValue > aNewValues(4);
-            PropertyValue* pNewValues = aNewValues.getArray();
-            pNewValues[0].Name = sNodePath;
-            pNewValues[0].Name += cDataSourceName;
-            pNewValues[0].Value <<= rAssignment.aDBData.sDataSource;
-            pNewValues[1].Name = sNodePath;
-            pNewValues[1].Name += cDataTableName;
-            pNewValues[1].Value <<= rAssignment.aDBData.sCommand;
-            pNewValues[2].Name = sNodePath;
-            pNewValues[2].Name += cDataCommandType;
-            pNewValues[2].Value <<= rAssignment.aDBData.nCommandType;
-            pNewValues[3].Name = sNodePath;
-            pNewValues[3].Name += cDBColumnAssignments;
-            pNewValues[3].Value <<= rAssignment.aDBColumnAssignments;
-
+            Sequence< PropertyValue > aNewValues
+            {
+                comphelper::makePropertyValue(sNodePath + cDataSourceName, rAssignment.aDBData.sDataSource),
+                comphelper::makePropertyValue(sNodePath + cDataTableName, rAssignment.aDBData.sCommand),
+                comphelper::makePropertyValue(sNodePath + cDataCommandType, rAssignment.aDBData.nCommandType),
+                comphelper::makePropertyValue(sNodePath + cDBColumnAssignments, rAssignment.aDBColumnAssignments)
+            };
             SetSetProperties(cAddressDataAssignments, aNewValues);
         }
     }

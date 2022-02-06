@@ -583,10 +583,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
 
     if (m_xSaveAsOneRB->get_active())
     {
-        uno::Sequence< beans::PropertyValue > aValues(1);
-        beans::PropertyValue* pValues = aValues.getArray();
-        pValues[0].Name = "FilterName";
-        pValues[0].Value <<= sFilter;
+        uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue("FilterName", sFilter) };
 
         uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
         ErrCode nErrorCode = ERRCODE_NONE;
@@ -1082,10 +1079,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
             FILTER_XML,
             SwDocShell::Factory().GetFilterContainer() );
 
-    uno::Sequence< beans::PropertyValue > aValues(1);
-    beans::PropertyValue* pValues = aValues.getArray();
-    pValues[0].Name = "FilterName";
-    pValues[0].Value <<= pTargetSfxFlt->GetFilterName();
+    uno::Sequence< beans::PropertyValue > aValues { comphelper::makePropertyValue("FilterName", pTargetSfxFlt->GetFilterName()) };
 
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( sTargetTempURL, aValues   );
