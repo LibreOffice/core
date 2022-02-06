@@ -45,6 +45,15 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="copy">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_COPY_ENTRY">_Copy</property>
+        <property name="use-underline">True</property>
+        <accelerator key="C" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+      </object>
+    </child>
+    <child>
       <object class="GtkMenuItem" id="806">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
