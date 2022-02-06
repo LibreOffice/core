@@ -34,8 +34,7 @@ constexpr OUStringLiteral CFGPATH_ADDINS = u"Office.CalcAddIns/AddInInfo";
 ScAddInCfg::ScAddInCfg()
     : ConfigItem(CFGPATH_ADDINS)
 {
-    uno::Sequence<OUString> aNames(1); // one entry: empty string
-    EnableNotification(aNames);
+    EnableNotification({ {} });
 }
 
 void ScAddInCfg::ImplCommit() { SAL_WARN("sc", "ScAddInCfg shouldn't be modified"); }
