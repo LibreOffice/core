@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c333dc50_f334e098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-06T14:02:39Z",
+      "side": 1,
+      "message": "I fixed the typos, managed to extract UTF32 unicode characters from the string and now use OUStringBuffer to remove unicode characters when in category Cc or Cn.\nAnd I added lines to the unit test document to test more use cases.",
+      "revId": "c937ef1ef19b2ae61f616715f1ecd5f45767bdd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
