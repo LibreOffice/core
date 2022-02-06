@@ -131,6 +131,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d13d5797_95b9a3a0",
+        "filename": "sw/source/core/unocore/unoredline.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-06T14:10:18Z",
+      "side": 1,
+      "message": "For this one, I don\u0027t know what to do.\nIf I do return {}, it returns an empty Sequence (and I suppose it\u0027s not what we want but rather a Sequence of 4 items)\n\ntrying return { {}, {}, {}, {} }; doesn\u0027t work",
+      "parentUuid": "24f02c7e_f72236e5",
+      "range": {
+        "startLine": 193,
+        "startChar": 4,
+        "endLine": 194,
+        "endChar": 19
+      },
+      "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a0fee053_ff9a5bc3",
         "filename": "sw/source/core/unocore/unostyle.cxx",
         "patchSetId": 1
@@ -160,6 +184,24 @@
       "side": 1,
       "message": "And here I am confused - had you mistakenly reverted your change here, instead of making a \u0027return ...\u0027 change?",
       "parentUuid": "a0fee053_ff9a5bc3",
+      "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4502a6bd_ae3c6030",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 610,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-06T14:10:18Z",
+      "side": 1,
+      "message": "Indeed! I revert-reverted and simplified with a direct return :-)",
+      "parentUuid": "d078e5a1_6dabb34a",
       "revId": "61f47e4f97d7e0566f62745a8e062b8a5eed2c90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
