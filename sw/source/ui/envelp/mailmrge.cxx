@@ -19,6 +19,7 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
@@ -191,14 +192,12 @@ SwMailMergeDlg::SwMailMergeDlg(weld::Window* pParent, SwWrtShell& rShell,
                                            "",
                                            0x0C);
             if(xD.is()) {
-                Sequence<PropertyValue> aProperties(3);
-                PropertyValue* pProperties = aProperties.getArray();
-                pProperties[0].Name = "DataSourceName";
-                pProperties[0].Value <<= rSourceName;
-                pProperties[1].Name = "Command";
-                pProperties[1].Value <<= rTableName;
-                pProperties[2].Name = "CommandType";
-                pProperties[2].Value <<= nCommandType;
+                Sequence<PropertyValue> aProperties
+                {
+                    comphelper::makePropertyValue("DataSourceName", rSourceName),
+                    comphelper::makePropertyValue("Command", rTableName),
+                    comphelper::makePropertyValue("CommandType", nCommandType),
+                };
                 xD->dispatch(aURL, aProperties);
                 m_xBeamerWin->show();
             }

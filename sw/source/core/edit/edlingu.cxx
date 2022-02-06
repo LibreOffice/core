@@ -55,6 +55,7 @@
 #include <docsh.hxx>
 #include <txatbase.hxx>
 #include <txtfrm.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -945,10 +946,7 @@ uno::Reference< XSpellAlternatives >
                     // than returning e.g. 16 suggestions and using only the
                     // first 7. Thus we hand down the value to use to that
                     // implementation here by providing an additional parameter.
-                    Sequence< PropertyValue > aPropVals(1);
-                    PropertyValue &rVal = aPropVals.getArray()[0];
-                    rVal.Name = UPN_MAX_NUMBER_OF_SUGGESTIONS;
-                    rVal.Value <<= sal_Int16(7);
+                    Sequence< PropertyValue > aPropVals ( { comphelper::makePropertyValue( UPN_MAX_NUMBER_OF_SUGGESTIONS, sal_Int16(7)) } );
 
                     xSpellAlt = xSpell->spell( aWord, static_cast<sal_uInt16>(eActLang), aPropVals );
                 }
