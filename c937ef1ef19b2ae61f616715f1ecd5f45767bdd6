@@ -39,6 +39,30 @@
       },
       "revId": "c937ef1ef19b2ae61f616715f1ecd5f45767bdd6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "102a9f28_5b260300",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3482,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-06T15:09:28Z",
+      "side": 1,
+      "message": "I have to check if the codepoint is utf16 or utf32 (hence nIdx, nPrevIdx and nCodePointSize) and as I have to work from start to end with iterateCodePoints() I need to maintain an offset.\nMy method is to remove when needed.\nYour suggestions seems to be to append all codepoints except those that are to be \u0027cleaned\u0027 from the string. I think that most codepoints in strings are printable, so that removing some codepoints from a string will take less time then appending most codepoints to a string.\nI haven\u0027t done any performance tests, though.",
+      "parentUuid": "13d1513a_708e9eca",
+      "range": {
+        "startLine": 3455,
+        "startChar": 4,
+        "endLine": 3482,
+        "endChar": 9
+      },
+      "revId": "c937ef1ef19b2ae61f616715f1ecd5f45767bdd6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
