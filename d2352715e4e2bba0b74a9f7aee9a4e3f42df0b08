@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40629e5d_9ae1b4ea",
+        "filename": "sw/source/core/unocore/unostyle.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 4280,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T14:25:13Z",
+      "side": 1,
+      "message": "Oh, this looks odd?",
+      "revId": "d2352715e4e2bba0b74a9f7aee9a4e3f42df0b08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
