@@ -16,6 +16,23 @@
       "message": "Unfortunately, I have no more time for any of this. Feel free to use this as a seperate patch, but I have paid work I need to do so I can provide for my family. I\u0027m not convinced that any of this is any use for LO devs.\n\nI wish the LO project all the best. ",
       "revId": "fd2748b77b773878e9f3b9482fc41537c55fb849",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e4dec49_6ee4818e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-02-06T15:03:57Z",
+      "side": 1,
+      "message": "Unfortunately, I have no more time for any of this. Feel free to use this as a seperate patch, but I have paid work I need to do so I can provide for my family. I\u0027m not convinced that any of this is any use for LO devs.\n\nI wish the LO project all the best. ",
+      "revId": "fd2748b77b773878e9f3b9482fc41537c55fb849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
