@@ -54,7 +54,7 @@ bool SwGluePortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) co
     if( GetLen() && rInf.OnWin() &&
         rInf.GetOpt().IsBlank() && rInf.IsNoSymbol() )
     {
-        OUStringBuffer aBuf;
+        OUStringBuffer aBuf(GetLen().get());
         comphelper::string::padToLength(aBuf, sal_Int32(GetLen()), CH_BULLET);
         rText = aBuf.makeStringAndClear();
         return true;
@@ -69,8 +69,9 @@ void SwGluePortion::Paint( const SwTextPaintInfo &rInf ) const
 
     if( rInf.GetFont()->IsPaintBlank() )
     {
-        OUStringBuffer aBuf;
-        comphelper::string::padToLength(aBuf, GetFixWidth() / sal_Int32(GetLen()), ' ');
+        const sal_Int32 nCount = GetFixWidth() / sal_Int32(GetLen());
+        OUStringBuffer aBuf(nCount);
+        comphelper::string::padToLength(aBuf, nCount, ' ');
         OUString aText(aBuf.makeStringAndClear());
         SwTextPaintInfo aInf( rInf, &aText );
         aInf.DrawText(*this, TextFrameIndex(aText.getLength()), true);

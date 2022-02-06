@@ -736,7 +736,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
     if(!(rAny >>= aParam))
         return false;
 
-    OUStringBuffer sBuf;
+    OUStringBuffer sBuf(AUTH_FIELD_LOCAL_URL);
     comphelper::string::padToLength(sBuf, AUTH_FIELD_LOCAL_URL, TOX_STYLE_DELIMITER);
     OUString sToSet(sBuf.makeStringAndClear());
     for(const PropertyValue& rParam : std::as_const(aParam))
