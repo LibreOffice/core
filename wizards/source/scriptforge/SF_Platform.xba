@@ -74,6 +74,15 @@ Property Get CurrentUser() As String
 End Property	&apos;	ScriptForge.SF_Platform.CurrentUser (get)
 
 REM -----------------------------------------------------------------------------
+Property Get Extensions() As Variant
+&apos;&apos;&apos;	Returns the list of availableeExtensions as an unsorted array of unique strings
+&apos;&apos;&apos;	To get the list sorted, use SF_Array.Sort()
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myExtensionsList = platform.Extensions
+	Extensions = _PropertyGet(&quot;Extensions&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.Extensions (get)
+
+REM -----------------------------------------------------------------------------
 Property Get Fonts() As Variant
 &apos;&apos;&apos;	Returns the list of available fonts as an unsorted array of unique strings
 &apos;&apos;&apos;	To get the list sorted, use SF_Array.Sort()
@@ -251,6 +260,7 @@ Public Function Properties() As Variant
 					, &quot;ComputerName&quot; _
 					, &quot;CPUCount&quot; _
 					, &quot;CurrentUser&quot; _
+					, &quot;Extensions&quot; _
 					, &quot;Fonts&quot; _
 					, &quot;FormatLocale&quot; _
 					, &quot;Locale&quot; _
@@ -350,6 +360,9 @@ Dim oDevice As Object			&apos;	com.sun.star.awt.XDevice
 Dim oFontDescriptors As Variant	&apos;	Array of com.sun.star.awt.FontDescriptor
 Dim sFonts As String			&apos;	Comma-separated list of fonts
 Dim sFont As String				&apos;	A single font name
+Dim vExtensionsList As Variant	&apos;	Array of extension descriptors
+Dim sExtensions As String		&apos;	Comma separated list of extensions
+Dim sExtension As String		&apos;	A single extension name
 Dim i As Long
 
 Const cstPyHelper = &quot;$&quot; &amp; &quot;_SF_Platform&quot;
@@ -365,6 +378,13 @@ Const cstSubArgs = &quot;&quot;
 			With ScriptForge.SF_Session
 				_PropertyGet = .ExecutePythonScript(.SCRIPTISSHARED, _SF_.PythonHelper &amp; cstPyHelper, psProperty)
 			End With
+		Case &quot;Extensions&quot;
+			Set vExtensionsList = SF_Utils._GetUnoService(&quot;PackageInformationProvider&quot;).ExtensionList
+			sExtensions = &quot;&quot;
+			For i = 0 To UBound(vExtensionsList)
+				sExtensions = sExtensions &amp; &quot;,&quot; &amp; vExtensionsList(i)(0)
+			Next i
+			If Len(sExtensions) &gt; 0 Then _PropertyGet = Split(Mid(sExtensions, 2), &quot;,&quot;) Else _PropertyGet = Array()
 		Case &quot;Fonts&quot;
 			Set oToolkit = SF_Utils._GetUnoService(&quot;Toolkit&quot;)
 			Set oDevice = oToolkit.createScreenCompatibleDevice(0, 0)

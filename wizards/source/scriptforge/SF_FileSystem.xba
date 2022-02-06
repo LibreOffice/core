@@ -86,7 +86,7 @@ End Property	&apos;	ScriptForge.SF_FileSystem.ConfigFolder
 
 REM -----------------------------------------------------------------------------
 Property Get ExtensionsFolder() As String
-&apos;&apos;&apos;	Return the folder containing the installed extensions
+&apos;&apos;&apos;	Return the folder containing the extensions installed for the current user
 
 Dim oMacro As Object		&apos;	/singletons/com.sun.star.util.theMacroExpander
 Const cstThisSub = &quot;FileSystem.getExtensionsFolder&quot;
@@ -649,6 +649,45 @@ Finally:
 Catch:
 	GoTo Finally
 End Function    &apos;   ScriptForge.SF_FileSystem.DeleteFolder
+
+REM -----------------------------------------------------------------------------
+Public Function ExtensionFolder(Optional ByVal Extension As Variant) As String
+&apos;&apos;&apos;	Return the folder where the given extension is installed. The argument must
+&apos;&apos;&apos;	be in the list of extensions provided by the SF_Platform.Extensions property
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Extension: a valid extension name
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		The requested folder using the FileNaming notation
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		MsgBox FSO.ExtensionFolder(&quot;apso.python.script.organizer&quot;)
+
+Dim sFolder As String			&apos;	Return value
+Static vExtensions As Variant	&apos;	Cached list of existing extension names
+Dim oPackage As Object			&apos;	/singletons/com.sun.star.deployment.PackageInformationProvider
+Const cstThisSub = &quot;FileSystem.ExtensionFolder&quot;
+Const cstSubArgs = &quot;Extension&quot;
+
+	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sFolder = &quot;&quot;
+
+Check:
+	If IsEmpty(vExtensions) Then vExtensions = SF_Platform.Extensions
+	If SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not SF_Utils._Validate(Extension, &quot;Extension&quot;, V_STRING, vExtensions) Then GoTo Finally
+	End If
+
+Try:
+	&apos;	Search an individual folder
+	Set oPackage = SF_Utils._GetUnoService(&quot;PackageInformationProvider&quot;)
+	sFolder = oPackage.getPackageLocation(Extension)
+ 
+Finally:
+	ExtensionFolder = SF_FileSystem._ConvertFromUrl(sFolder)
+	SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	ScritForge.SF_FileSystem.ExtensionFolder
 
 REM -----------------------------------------------------------------------------
 Public Function FileExists(Optional ByVal FileName As Variant) As Boolean
@@ -1215,6 +1254,7 @@ Public Function Methods() As Variant
 					, &quot;CreateTextFile&quot; _
 					, &quot;DeleteFile&quot; _
 					, &quot;DeleteFolder&quot; _
+					, &quot;ExtensionFolder&quot; _
 					, &quot;FileExists&quot; _
 					, &quot;Files&quot; _
 					, &quot;FolderExists&quot; _
