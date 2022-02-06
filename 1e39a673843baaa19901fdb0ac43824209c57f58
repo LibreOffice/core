@@ -68,6 +68,24 @@
       "parentUuid": "89c35673_ad177afa",
       "revId": "1e39a673843baaa19901fdb0ac43824209c57f58",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cfc7bc0_2a96803b",
+        "filename": "vcl/osx/salinst.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 895,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-02-06T14:56:53Z",
+      "side": 1,
+      "message": "Unfortunately, not sure how to get the right string out of Mac M1 architecture as I don\u0027t own one.",
+      "parentUuid": "b7d6d827_1f23dec2",
+      "revId": "1e39a673843baaa19901fdb0ac43824209c57f58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
