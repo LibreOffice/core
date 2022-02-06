@@ -1432,11 +1432,10 @@ bool ImpSvNumberInputScan::IsAcceptedDatePattern( sal_uInt16 nStartPatternAt )
                         // Expand again in case of pattern "M. D. " and
                         // input "M. D.  ", maybe fetched far, but...
                         padToLength(aBuf, rPat.getLength() - nPat, ' ');
-                        OUString aStr = aBuf.makeStringAndClear();
-                        bOk = (rPat.indexOf( aStr, nPat) == nPat);
+                        bOk = (rPat.indexOf( aBuf, nPat) == nPat);
                         if (bOk)
                         {
-                            nPat += aStr.getLength() - 1;
+                            nPat += aBuf.getLength() - 1;
                         }
                     }
                 }
@@ -1551,7 +1550,7 @@ bool ImpSvNumberInputScan::SkipDatePatternSeparator( sal_uInt16 nParticle, sal_I
                     OUStringBuffer aBuf(sStrArray[nNext]);
                     aBuf.stripEnd();
                     padToLength(aBuf, rPat.getLength() - nPat, ' ');
-                    bOk = (rPat.indexOf( aBuf.makeStringAndClear(), nPat) == nPat);
+                    bOk = (rPat.indexOf(aBuf, nPat) == nPat);
                 }
                 if (bOk)
                 {
