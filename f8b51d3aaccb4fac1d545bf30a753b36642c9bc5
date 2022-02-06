@@ -34,6 +34,24 @@
       "parentUuid": "5b37279c_44d2ab92",
       "revId": "f8b51d3aaccb4fac1d545bf30a753b36642c9bc5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5de6480_2a52fd22",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-06T11:02:50Z",
+      "side": 1,
+      "message": "Note that there\u0027s also InitPropertySequence in \u003ccomphelper/propertysequence.hxx\u003e, but that sets PropertyValue\u0027s Handle to -1, unlike its default ctor that sets it to 0; I have no idea how important that difference is, but I prefer to consider that difference.",
+      "parentUuid": "df3ea9e0_879db3a8",
+      "revId": "f8b51d3aaccb4fac1d545bf30a753b36642c9bc5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
