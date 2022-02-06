@@ -51,8 +51,7 @@ void RowSetClones::test()
     const OUString sFilePath(m_directories.getURLFromWorkdir(u"CppunitTest/RowSetClones.odb"));
 
     uno::Reference< lang::XComponent > xComponent (loadFromDesktop(sFilePath));
-    uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY);
-    CPPUNIT_ASSERT(xDocument.is());
+    uno::Reference< XOfficeDatabaseDocument > xDocument(xComponent, UNO_QUERY_THROW);
 
     uno::Reference< XDataSource > xDataSource = xDocument->getDataSource();
     CPPUNIT_ASSERT(xDataSource.is());
