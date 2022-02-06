@@ -357,10 +357,7 @@ SwXParagraph::setPropertyValue(const OUString& rPropertyName,
         const uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
-    uno::Sequence<OUString> aPropertyNames { rPropertyName };
-    uno::Sequence<uno::Any> aValues(1);
-    aValues.getArray()[0] = rValue;
-    m_pImpl->SetPropertyValues_Impl( aPropertyNames, aValues );
+    m_pImpl->SetPropertyValues_Impl( { rPropertyName }, { rValue } );
 }
 
 uno::Any
