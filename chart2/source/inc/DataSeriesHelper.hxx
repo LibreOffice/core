@@ -124,6 +124,10 @@ OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
     const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries,
     const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
     StackMode eStackMode );
+OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
+    const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries,
+    const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
+    StackMode eStackMode );
 
 OOO_DLLPUBLIC_CHARTTOOLS sal_Int32 getAttachedAxisIndex(
     const css::uno::Reference< css::chart2::XDataSeries > & xSeries );
@@ -166,6 +170,11 @@ OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         const OUString& rPropertyName,
         const css::uno::Any& rPropertyValue );
+OOO_DLLPUBLIC_CHARTTOOLS void setPropertyAlsoToAllAttributedDataPoints(
+        const rtl::Reference< ::chart::DataSeries >& xSeries,
+        const OUString& rPropertyName,
+        const css::uno::Any& rPropertyValue );
+
 
 OOO_DLLPUBLIC_CHARTTOOLS bool hasAttributedDataPointDifferentValue(
     const css::uno::Reference< css::chart2::XDataSeries >& xSeries,

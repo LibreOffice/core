@@ -39,8 +39,9 @@ namespace chart
 {
 class BaseCoordinateSystem;
 class ChartType;
-class Diagram;
 class DataInterpreter;
+class DataSeries;
+class Diagram;
 class LabeledDataSequence;
 
 /** For creating diagrams and modifying existing diagrams.  A base class that
@@ -108,7 +109,7 @@ public:
             rtl::Reference< ::chart::ChartType > >& aFormerlyUsedChartTypes ) = 0;
     virtual rtl::Reference< ::chart::DataInterpreter > getDataInterpreter();
     virtual void applyStyle(
-        const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
+        const rtl::Reference< ::chart::DataSeries >& xSeries,
         ::sal_Int32 nChartTypeIndex,
         ::sal_Int32 nSeriesIndex,
         ::sal_Int32 nSeriesCount );
@@ -197,10 +198,10 @@ public:
         empty.</p>
      */
     virtual void createChartTypes(
-            const css::uno::Sequence<
-                css::uno::Sequence<
-                    css::uno::Reference<
-                        css::chart2::XDataSeries > > > & aSeriesSeq,
+            const std::vector<
+                std::vector<
+                    rtl::Reference<
+                        ::chart::DataSeries > > > & aSeriesSeq,
             const std::vector<
                 rtl::Reference<
                     ::chart::BaseCoordinateSystem > > & rCoordSys,
@@ -246,10 +247,10 @@ private:
     /** modifies the given diagram
      */
     void FillDiagram( const rtl::Reference< ::chart::Diagram >& xDiagram,
-                      const css::uno::Sequence<
-                          css::uno::Sequence<
-                              css::uno::Reference<
-                                  css::chart2::XDataSeries > > > & aSeriesSeq,
+                      const std::vector<
+                          std::vector<
+                              rtl::Reference<
+                                  ::chart::DataSeries > > > & aSeriesSeq,
                       const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
                       const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq);
 };
