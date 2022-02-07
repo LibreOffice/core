@@ -111,23 +111,26 @@ DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassw
 {
     uno::Sequence<beans::PropertyValue> aResult;
 
-    uno::Sequence<sal_Int8> aSalt = GenerateRandomByteSequence(16);
-    OUStringBuffer aBuffer(22);
-    comphelper::Base64::encode(aBuffer, aSalt);
-    OUString sSalt = aBuffer.makeStringAndClear();
-
-    sal_Int32 const nIterationCount = 100000;
-    OUString sAlgorithm("SHA-512");
-
-    const OUString sHash(GetOoxHashAsBase64(OUString(aPassword), sSalt, nIterationCount,
-                                            comphelper::Hash::IterCount::APPEND, sAlgorithm));
-
-    if (!sHash.isEmpty())
+    if (!aPassword.empty())
     {
-        aResult = { comphelper::makePropertyValue("algorithm-name", sAlgorithm),
-                    comphelper::makePropertyValue("salt", sSalt),
-                    comphelper::makePropertyValue("iteration-count", nIterationCount),
-                    comphelper::makePropertyValue("hash", sHash) };
+        uno::Sequence<sal_Int8> aSalt = GenerateRandomByteSequence(16);
+        OUStringBuffer aBuffer(22);
+        comphelper::Base64::encode(aBuffer, aSalt);
+        OUString sSalt = aBuffer.makeStringAndClear();
+
+        sal_Int32 const nIterationCount = 100000;
+        OUString sAlgorithm("SHA-512");
+
+        const OUString sHash(GetOoxHashAsBase64(OUString(aPassword), sSalt, nIterationCount,
+                                                comphelper::Hash::IterCount::APPEND, sAlgorithm));
+
+        if (!sHash.isEmpty())
+        {
+            aResult = { comphelper::makePropertyValue("algorithm-name", sAlgorithm),
+                        comphelper::makePropertyValue("salt", sSalt),
+                        comphelper::makePropertyValue("iteration-count", nIterationCount),
+                        comphelper::makePropertyValue("hash", sHash) };
+        }
     }
 
     return aResult;
