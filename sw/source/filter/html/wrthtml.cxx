@@ -1048,8 +1048,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
         SwNode *pNd = m_pDoc->GetNodes()[ nNodeIdx ];
         if( pNd->IsContentNode() )
         {
-            pPageDesc = static_cast<const SwFormatPageDesc &>(pNd->GetContentNode()
-                ->GetAttr(RES_PAGEDESC)).GetPageDesc();
+            pPageDesc = pNd->GetContentNode()->GetAttr(RES_PAGEDESC).GetPageDesc();
             break;
         }
         else if( pNd->IsTableNode() )

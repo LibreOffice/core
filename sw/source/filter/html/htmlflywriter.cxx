@@ -326,7 +326,7 @@ void SwHTMLWriter::CollectFlyFrames()
                 (pACNd = pAPos->nNode.GetNode().GetContentNode()) != nullptr )
             {
                 const SvxLRSpaceItem& rLRItem =
-                    static_cast<const SvxLRSpaceItem&>(pACNd->GetAttr(RES_LR_SPACE));
+                    pACNd->GetAttr(RES_LR_SPACE);
                 if( rLRItem.GetTextLeft() || rLRItem.GetRight() )
                 {
                     nMode = aHTMLOutFrameParaFrameTable[eType][m_nExportMode];

@@ -1363,7 +1363,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                             continue;
 
                         SwContentNode* pNd = static_cast<SwContentNode*>(pNode);
-                        SvxLRSpaceItem aOldLR = static_cast<const SvxLRSpaceItem&>(pNd->GetAttr(RES_LR_SPACE));
+                        SvxLRSpaceItem aOldLR = pNd->GetAttr(RES_LR_SPACE);
 
                         SwTextNode *pTextNode = static_cast<SwTextNode*>(pNode);
 
