@@ -1070,7 +1070,7 @@ void SwFEShell::SelectionToTop( bool bTop )
             if (auto pFormat = FindFrameFormat(pObj))
             {
                 // If it has not textframe skip...
-                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat))
+                if (!SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT, pObj))
                     continue;
                 // If it has a textframe so it is a textbox, get its page
                 if (auto pDrwModel
@@ -1100,7 +1100,7 @@ void SwFEShell::SelectionToTop( bool bTop )
                             // If this object is a textbox, two level increasing needed
                             // (one for the shape and one for the frame)
                             if (auto pNextFormat = FindFrameFormat(pNextObj))
-                                if (SwTextBoxHelper::isTextBox(pNextFormat, RES_DRAWFRMFMT)
+                                if (SwTextBoxHelper::isTextBox(pNextFormat, RES_DRAWFRMFMT, pNextObj)
                                     || SwTextBoxHelper::isTextBox(pNextFormat, RES_FLYFRMFMT))
                                     nShift++;
                         }
@@ -1139,7 +1139,7 @@ void SwFEShell::SelectionToBottom( bool bBottom )
             if (auto pFormat = FindFrameFormat(pObj))
             {
                 // If the shape has not textframes skip.
-                if (!SwTextBoxHelper::isTextBoxShapeHasValidTextFrame(pFormat))
+                if (!SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT, pObj))
                     continue;
                 // If has, move the shape to correct level with...
                 if (auto pDrwModel
@@ -1152,7 +1152,7 @@ void SwFEShell::SelectionToBottom( bool bBottom )
                         {
                             // If the lower has no textframe, just do nothing, else move by one lower
                             if (auto pNextFormat = FindFrameFormat(pNextObj))
-                                if (SwTextBoxHelper::isTextBox(pNextFormat, RES_DRAWFRMFMT)
+                                if (SwTextBoxHelper::isTextBox(pNextFormat, RES_DRAWFRMFMT, pNextObj)
                                     || SwTextBoxHelper::isTextBox(pNextFormat, RES_FLYFRMFMT))
                                     pPage->SetObjectOrdNum(pObj->GetOrdNum(), pObj->GetOrdNum() - 1);
                         }
