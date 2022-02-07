@@ -120,6 +120,138 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
     CPPUNIT_ASSERT_EQUAL(3, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf147126.docx");
+    CPPUNIT_ASSERT(mxComponent);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+
+    const auto pLayoutXML1 = parseLayoutDump();
+
+    for (auto nFly = 1; nFly < 8; ++nFly)
+    {
+        const auto nFlyLeft = getXPath(pLayoutXML1,
+                                       OString::Concat("/root/page/body/txt[2]/anchored/fly[")
+                                           + OString::Concat(OString::number(nFly))
+                                           + OString::Concat("]/infos/bounds"),
+                                       "left")
+                                  .toInt64();
+        const auto nFlyRight = getXPath(pLayoutXML1,
+                                        OString::Concat("/root/page/body/txt[2]/anchored/fly[")
+                                            + OString::Concat(OString::number(nFly))
+                                            + OString::Concat("]/infos/bounds"),
+                                        "width")
+                                   .toInt64();
+        const auto nFlyTop = getXPath(pLayoutXML1,
+                                      OString::Concat("/root/page/body/txt[2]/anchored/fly[")
+                                          + OString::Concat(OString::number(nFly))
+                                          + OString::Concat("]/infos/bounds"),
+                                      "top")
+                                 .toInt64();
+        const auto nFlyBottom = getXPath(pLayoutXML1,
+                                         OString::Concat("/root/page/body/txt[2]/anchored/fly[")
+                                             + OString::Concat(OString::number(nFly))
+                                             + OString::Concat("]/infos/bounds"),
+                                         "height")
+                                    .toInt64();
+
+        const auto sDrawRect = getXPath(
+            pLayoutXML1,
+            OString::Concat("/root/page/body/txt[2]/anchored/SwAnchoredDrawObject/SdrObjGroup/"
+                            "SdrObjList/SdrObject[")
+                + OString::Concat(OString::number(nFly)) + OString::Concat("]"),
+            "aOutRect");
+
+        const auto nComaPos1 = sDrawRect.indexOf(',', 0);
+        const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
+        const auto nComaPos3 = sDrawRect.indexOf(',', nComaPos2 + 1);
+
+        const auto nDraw1 = OUString(sDrawRect.subView(0, nComaPos1).data()).toInt64();
+        const auto nDraw2
+            = OUString(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1).data()).toInt64();
+        const auto nDraw3
+            = OUString(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2).data()).toInt64();
+        const auto nDraw4
+            = OUString(
+                  sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1).data())
+                  .toInt64();
+
+        CPPUNIT_ASSERT_GREATER(nDraw1, nFlyLeft);
+        CPPUNIT_ASSERT_GREATER(nDraw2, nFlyTop);
+        CPPUNIT_ASSERT_LESS(nDraw3, nFlyRight);
+        CPPUNIT_ASSERT_LESS(nDraw4, nFlyBottom);
+    }
+
+    for (auto nLineBreakCount = 0; nLineBreakCount < 4; ++nLineBreakCount)
+    {
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
+    for (auto nSpaceCount = 0; nSpaceCount < 10; ++nSpaceCount)
+    {
+        pTextDoc->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SPACE);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    dumpLayout(mxComponent);
+    const auto pLayoutXML2 = parseLayoutDump();
+
+    for (auto nFly = 1; nFly < 8; ++nFly)
+    {
+        const auto nFlyLeft = getXPath(pLayoutXML2,
+                                       OString::Concat("/root/page/body/txt[6]/anchored/fly[")
+                                           + OString::Concat(OString::number(nFly))
+                                           + OString::Concat("]/infos/bounds"),
+                                       "left")
+                                  .toInt64();
+        const auto nFlyRight = getXPath(pLayoutXML2,
+                                        OString::Concat("/root/page/body/txt[6]/anchored/fly[")
+                                            + OString::Concat(OString::number(nFly))
+                                            + OString::Concat("]/infos/bounds"),
+                                        "width")
+                                   .toInt64();
+        const auto nFlyTop = getXPath(pLayoutXML2,
+                                      OString::Concat("/root/page/body/txt[6]/anchored/fly[")
+                                          + OString::Concat(OString::number(nFly))
+                                          + OString::Concat("]/infos/bounds"),
+                                      "top")
+                                 .toInt64();
+        const auto nFlyBottom = getXPath(pLayoutXML2,
+                                         OString::Concat("/root/page/body/txt[6]/anchored/fly[")
+                                             + OString::Concat(OString::number(nFly))
+                                             + OString::Concat("]/infos/bounds"),
+                                         "height")
+                                    .toInt64();
+
+        const auto sDrawRect = getXPath(
+            pLayoutXML2,
+            OString::Concat("/root/page/body/txt[6]/anchored/SwAnchoredDrawObject/SdrObjGroup/"
+                            "SdrObjList/SdrObject[")
+                + OString::Concat(OString::number(nFly)) + OString::Concat("]"),
+            "aOutRect");
+
+        const auto nComaPos1 = sDrawRect.indexOf(',', 0);
+        const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
+        const auto nComaPos3 = sDrawRect.indexOf(',', nComaPos2 + 1);
+
+        const auto nDraw1 = OUString(sDrawRect.subView(0, nComaPos1).data()).toInt64();
+        const auto nDraw2
+            = OUString(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1).data()).toInt64();
+        const auto nDraw3
+            = OUString(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2).data()).toInt64();
+        const auto nDraw4
+            = OUString(
+                  sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1).data())
+                  .toInt64();
+
+        CPPUNIT_ASSERT_GREATER(nDraw1, nFlyLeft);
+        CPPUNIT_ASSERT_GREATER(nDraw2, nFlyTop);
+        CPPUNIT_ASSERT_LESS(nDraw3, nFlyRight);
+        CPPUNIT_ASSERT_LESS(nDraw4, nFlyBottom);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf129382.docx");
