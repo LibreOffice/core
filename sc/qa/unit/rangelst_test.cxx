@@ -145,7 +145,7 @@ void Test::testDeleteArea_3Ranges()
         }
     }
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(28), aList.GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(28), aList.GetCellCount());
 }
 
 void Test::testDeleteArea_3Ranges_Case2()
@@ -263,7 +263,7 @@ void Test::testDeleteArea_2Ranges_Case2()
         else
             CPPUNIT_ASSERT(aList.Contains(ScRange(1,nRow,0)));
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), aList.GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(4), aList.GetCellCount());
 }
 
 void Test::testDeleteArea_2Ranges_Case3()
@@ -391,7 +391,7 @@ void Test::testDeleteArea_1Range()
     {
         CPPUNIT_ASSERT(aList.Contains(ScRange(3,nRow,0)));
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(3), aList.GetCellCount());
 }
 
 void Test::testDeleteArea_0Ranges()
@@ -515,7 +515,7 @@ void Test::testUpdateReference_DeleteRow()
         }
         CPPUNIT_ASSERT(!aList.Contains(ScRange(nCol, 4, 0)));
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), aList.GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(12), aList.GetCellCount());
 
     ScRangeList aList2(ScRange(2,2,0,2,2,0));
     aList2.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,MAXCOL,MAXROW,0), 0, -1, 0);
@@ -557,7 +557,7 @@ void Test::testUpdateReference_DeleteCol()
         }
         CPPUNIT_ASSERT(!aList.Contains(ScRange(4, nRow, 0)));
     }
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(12), aList.GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(12), aList.GetCellCount());
 }
 
 void Test::testGetIntersectedRange()

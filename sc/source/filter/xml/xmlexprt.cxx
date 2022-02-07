@@ -631,7 +631,7 @@ void ScXMLExport::CollectShapesAutoStyles(SCTAB nTableCount)
 
 void ScXMLExport::ExportMeta_()
 {
-    sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
+    sal_Int64 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
     SCTAB nTableCount(0);
     sal_Int32 nShapesCount(0);
     GetAutoStylePool()->ClearEntries();
