@@ -43,7 +43,7 @@ namespace oox::ole {
 /** Stores, which key shortcut maps to which VBA macro method. */
 struct VbaMacroKeyAndMethodBinding
 {
-    // This describes a key combinaton in "raw" VBA Macro form, that
+    // This describes a key combination in "raw" VBA Macro form, that
     // still needs translated to a key event that can be used in
     // LibreOffice.
     OUString msApiKey;
