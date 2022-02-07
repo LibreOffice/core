@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6df75d32_a1c248a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-07T20:03:44Z",
+      "side": 1,
+      "message": "Just my 2 cents, so it\u0027s rather an upgrade to \"3.3.2\" according to the content of download.lst than \"3.2.2\" as indicated in the comment :-)",
+      "revId": "6fa736d1baac1114c042c8c8333c77cf5846439f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
