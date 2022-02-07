@@ -175,7 +175,7 @@ sal_Int32 PDFDocument::WriteSignatureObject(const OUString& rDescription, bool b
     }
 
     aSigBuffer.append(" >>\nendobj\n\n");
-    m_aEditBuffer.WriteOString(aSigBuffer.toString());
+    m_aEditBuffer.WriteOString(aSigBuffer);
 
     return nSignatureId;
 }
@@ -809,7 +809,7 @@ void PDFDocument::WriteXRef(sal_uInt64 nXRefOffset, PDFReferenceElement const* p
                 aBuffer.append(" 65535 f \n");
             else
                 aBuffer.append(" 00000 n \n");
-            m_aEditBuffer.WriteOString(aBuffer.toString());
+            m_aEditBuffer.WriteOString(aBuffer);
         }
 
         // Write the trailer.
@@ -955,7 +955,7 @@ bool PDFDocument::Sign(const uno::Reference<security::XCertificate>& xCertificat
     assert(aCMSHexBuffer.getLength() <= MAX_SIGNATURE_CONTENT_LENGTH);
 
     m_aEditBuffer.Seek(nSignatureContentOffset);
-    m_aEditBuffer.WriteOString(aCMSHexBuffer.toString());
+    m_aEditBuffer.WriteOString(aCMSHexBuffer);
 
     return true;
 }

@@ -268,19 +268,29 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
 
 void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
 {
-    auto const dc = loplugin::DeclCheck(expr->getMethodDecl()).Function("copy");
-    if (!dc)
+    auto const dc1 = loplugin::DeclCheck(expr->getMethodDecl());
+    if (auto const dc2 = dc1.Function("copy"))
     {
+        if (dc2.Class("OString").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUString").Namespace("rtl").GlobalNamespace())
+        {
+            report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
+                   expr->getExprLoc())
+                << expr->getSourceRange();
+        }
         return;
     }
-    if (!(dc.Class("OString").Namespace("rtl").GlobalNamespace()
-          || dc.Class("OUString").Namespace("rtl").GlobalNamespace()))
+    if (auto const dc2 = dc1.Function("toString"))
     {
+        if (dc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace())
+        {
+            report(DiagnosticsEngine::Warning, "rather than call toString, pass with a view",
+                   expr->getExprLoc())
+                << expr->getSourceRange();
+        }
         return;
     }
-    report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
-           expr->getExprLoc())
-        << expr->getSourceRange();
 }
 
 /** check for calls to O[U]StringBuffer::append that could be passed as a

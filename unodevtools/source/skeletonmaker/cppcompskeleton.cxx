@@ -661,7 +661,7 @@ static OString generateClassDefinition(std::ostream& o,
             "css::uno::RuntimeException);\n";
 
         OStringBuffer buffer(256);
-        buffer.append(parentname.toString());
+        buffer.append(parentname);
         buffer.append("< ");
         std::set< OUString >::const_iterator iter = interfaces.begin();
         while (iter != interfaces.end())

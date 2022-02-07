@@ -843,7 +843,7 @@ void Components::parseXcsXcuIniLayer(
         }
     }
     prefix.append(':');
-    OUString urls(prefix.toString() + "SCHEMA}");
+    OUString urls(prefix + "SCHEMA}");
     rtl::Bootstrap::expandMacros(urls);
     if (!urls.isEmpty()) {
         parseFileList(layer, &parseXcsFile, urls, false);

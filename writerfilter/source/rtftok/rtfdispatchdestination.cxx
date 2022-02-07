@@ -87,7 +87,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                         bFoundCode = true;
                 }
 
-                if (aBuf.toString() == "INCLUDEPICTURE")
+                if (std::string_view(aBuf) == "INCLUDEPICTURE")
                 {
                     // Extract the field argument of INCLUDEPICTURE: we handle that
                     // at a tokenizer level, as DOCX has no such field.
@@ -99,8 +99,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                             break;
                         aBuf.append(ch);
                     }
-                    OUString aFieldCommand
-                        = OStringToOUString(aBuf.toString(), RTL_TEXTENCODING_UTF8);
+                    OUString aFieldCommand = OStringToOUString(aBuf, RTL_TEXTENCODING_UTF8);
                     std::tuple<OUString, std::vector<OUString>, std::vector<OUString>> aResult
                         = writerfilter::dmapper::splitFieldCommand(aFieldCommand);
                     m_aPicturePath

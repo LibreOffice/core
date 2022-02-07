@@ -3640,7 +3640,7 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
         if (m_aStates.top().getDestination() == Destination::FONTENTRY
             && m_aStates.top().getCurrentEncoding() == RTL_TEXTENCODING_SYMBOL)
             nEncoding = RTL_TEXTENCODING_MS_1252;
-        OUString aString = OStringToOUString(m_aHexBuffer.toString(), nEncoding);
+        OUString aString = OStringToOUString(m_aHexBuffer, nEncoding);
         m_aHexBuffer.setLength(0);
         aString = FilterControlChars(m_aStates.top().getDestination(), aString);
         text(aString);
