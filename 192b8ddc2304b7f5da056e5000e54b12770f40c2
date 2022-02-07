@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb924d6_4fb31713",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-02-07T09:04:04Z",
+      "side": 1,
+      "message": "Makes sense.. sd::Outliner is way more complex for what it actually does.  ",
+      "revId": "192b8ddc2304b7f5da056e5000e54b12770f40c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
