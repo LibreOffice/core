@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ec0cd2_374c2625",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-02-07T08:17:28Z",
+      "side": 1,
+      "message": "I wonder if we shouldn\u0027t change the default for all appendDouble calls. It\u0027s not like we get much smaller documents if we use a more limited precision do we?",
+      "revId": "50682cea4196819980c8e2d4018f80384097ce6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
