@@ -268,6 +268,9 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         return ERRCODE_BASIC_CONVERSION;
     }
 #endif
+    // tdf#146672 - skip whitespaces and tabs at the end of the scanned string
+    while (*p == ' ' || *p == '\t')
+        p++;
     if( pLen )
         *pLen = static_cast<sal_uInt16>( p - pStart );
     if( !bRes )
