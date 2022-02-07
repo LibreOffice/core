@@ -56,7 +56,6 @@ inline constexpr OUStringLiteral SFX_THUMBNAIL_BASE_256 = u"res/base_thumbnail_2
 inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE = u"res/recentdoc_remove.png";
 inline constexpr OUStringLiteral BMP_RECENTDOC_REMOVE_HIGHLIGHTED = u"res/recentdoc_remove_highlighted.png";
 inline constexpr OUStringLiteral BMP_DEFAULT = u"res/templatestar.png";
-inline constexpr OUStringLiteral BMP_ACTION_REFRESH = u"res/reload.png";
 
 inline constexpr OUStringLiteral BMP_128X128_CALC_DOC = u"sfx2/res/128x128_calc_doc-p.png";
 inline constexpr OUStringLiteral BMP_128X128_DRAW_DOC = u"sfx2/res/128x128_draw_doc-p.png";

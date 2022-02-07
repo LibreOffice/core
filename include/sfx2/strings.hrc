@@ -58,7 +58,6 @@
 #define STR_QRYTEMPL_MESSAGE                    NC_("STR_QRYTEMPL_MESSAGE", "The template '$(ARG1)' on which this document is based, has been modified. Do you want to update the styles of the current document, using the modified template?")
 #define STR_QRYTEMPL_UPDATE_BTN                 NC_("STR_QRYTEMPL_UPDATE_BTN", "~Update Styles")
 #define STR_QRYTEMPL_KEEP_BTN                   NC_("STR_QRYTEMPL_KEEP_BTN", "~Keep Old Styles")
-#define STR_ACTION_REFRESH                      NC_("STR_ACTION_REFRESH", "~Refresh")
 #define STR_CATEGORY_NEW                        NC_("STR_CATEGORY_NEW", "~New Category")
 #define STR_CATEGORY_DELETE                     NC_("STR_CATEGORY_DELETE", "~Delete Category")
 #define STR_MSG_EXPORT_SUCCESS                  NC_("STR_MSG_EXPORT_SUCCESS", "$1 templates successfully exported.")
