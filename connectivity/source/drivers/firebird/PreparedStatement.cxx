@@ -207,7 +207,8 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 nParameterIndex,
         {
             str = str.copy(0, max_varchar_len);
         }
-        const auto nLength = str.getLength();
+        const sal_uInt16 nLength = str.getLength();
+        static_assert(sizeof(nLength) == 2, "must match dest memcpy len");
         memcpy(pVar->sqldata, &nLength, 2);
         // Actual data
         memcpy(pVar->sqldata + 2, str.getStr(), str.getLength());
@@ -908,7 +909,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
             {
                 xBytesCopy.realloc( nMaxSize );
             }
-            const auto nSize = xBytesCopy.getLength();
+            const sal_uInt16 nSize = xBytesCopy.getLength();
             // 8000 corresponds to value from lcl_addDefaultParameters
             // in dbaccess/source/filter/hsqldb/createparser.cxx
             if (nSize > 8000)
@@ -916,6 +917,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 nParameterIndex,
                 free(pVar->sqldata);
                 pVar->sqldata = static_cast<char *>(malloc(sizeof(char) * nSize + 2));
             }
+            static_assert(sizeof(nSize) == 2, "must match dest memcpy len");
             // First 2 bytes indicate string size
             memcpy(pVar->sqldata, &nSize, 2);
             // Actual data
