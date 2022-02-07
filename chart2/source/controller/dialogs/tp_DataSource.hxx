@@ -31,6 +31,7 @@ namespace chart
 {
 class ChartType;
 class ChartTypeTemplateProvider;
+class DataSeries;
 class DialogModel;
 
 class SeriesEntry
@@ -39,7 +40,7 @@ public:
     OUString m_sRole;
 
     /// the corresponding data series
-    css::uno::Reference< css::chart2::XDataSeries > m_xDataSeries;
+    rtl::Reference< ::chart::DataSeries > m_xDataSeries;
 
     /// the chart type that contains the series (via XDataSeriesContainer)
     rtl::Reference< ::chart::ChartType > m_xChartType;

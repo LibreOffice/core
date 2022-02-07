@@ -65,7 +65,7 @@ bool isDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const
 
 void setDataLabelVisible(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID, bool bVisible)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
@@ -175,7 +175,7 @@ void setTrendlineVisible(const rtl::Reference<::chart::ChartModel>&
 bool isErrorBarVisible(const rtl::Reference<::chart::ChartModel>& xModel,
                        const OUString& rCID, bool bYError)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
@@ -187,7 +187,7 @@ bool isErrorBarVisible(const rtl::Reference<::chart::ChartModel>& xModel,
 void setErrorBarVisible(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID, bool bYError, bool bVisible)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
@@ -208,7 +208,7 @@ void setErrorBarVisible(const rtl::Reference<::chart::ChartModel>&
 bool isPrimaryAxis(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())
@@ -220,7 +220,7 @@ bool isPrimaryAxis(const rtl::Reference<::chart::ChartModel>&
 void setAttachedAxisType(const rtl::Reference<::chart::ChartModel>&
         xModel, const OUString& rCID, bool bPrimary)
 {
-    const uno::Reference<chart2::XDataSeries>& xDataSeries = ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
+    const rtl::Reference<DataSeries> xDataSeries = ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xDataSeries.is())
         return;
@@ -239,7 +239,7 @@ rtl::Reference<ChartType> getChartType(
 
 OUString getSeriesLabel(const rtl::Reference<::chart::ChartModel>& xModel, const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID(rCID, xModel);
 
     if (!xSeries.is())

@@ -2307,7 +2307,7 @@ uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
             if (!rSeriesGroup.m_aSeriesVector.empty())
             {
                 VDataSeries const * pSeries = rSeriesGroup.m_aSeriesVector[0].get();
-                uno::Reference< XDataSeries > xSeries( pSeries ? pSeries->getModel() : nullptr );
+                rtl::Reference< DataSeries > xSeries( pSeries ? pSeries->getModel() : nullptr );
                 if( xSeries.is() )
                 {
                     OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( xSeries, aRole ) );

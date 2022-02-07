@@ -25,6 +25,7 @@
 #include <CharacterPropertyItemConverter.hxx>
 #include <StatisticsItemConverter.hxx>
 #include <SeriesOptionsItemConverter.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -204,7 +205,7 @@ DataPointItemConverter::DataPointItemConverter(
     const rtl::Reference<::chart::ChartModel> & xChartModel,
     const uno::Reference< uno::XComponentContext > & xContext,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
-    const uno::Reference< XDataSeries > & xSeries,
+    const rtl::Reference< DataSeries > & xSeries,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     const uno::Reference<lang::XMultiServiceFactory>& xNamedPropertyContainerFactory,
@@ -250,9 +251,8 @@ DataPointItemConverter::DataPointItemConverter(
     if (bDataSeries)
         return;
 
-    uno::Reference<beans::XPropertySet> xSeriesProp(xSeries, uno::UNO_QUERY);
     uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
-    xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+    xSeries->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
     for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
     {
         if (nPointIndex == deletedLegendEntry)
@@ -573,8 +573,7 @@ bool DataPointItemConverter::ApplySpecialItem(
             if (bHideLegendEntry != m_bHideLegendEntry)
             {
                 uno::Sequence<sal_Int32> deletedLegendEntriesSeq;
-                Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
-                xSeriesProp->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
+                m_xSeries->getPropertyValue("DeletedLegendEntries") >>= deletedLegendEntriesSeq;
                 std::vector<sal_Int32> deletedLegendEntries;
                 for (const auto& deletedLegendEntry : std::as_const(deletedLegendEntriesSeq))
                 {
@@ -583,7 +582,7 @@ bool DataPointItemConverter::ApplySpecialItem(
                 }
                 if (bHideLegendEntry)
                     deletedLegendEntries.push_back(m_nPointIndex);
-                xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(comphelper::containerToSequence(deletedLegendEntries)));
+                m_xSeries->setPropertyValue("DeletedLegendEntries", uno::makeAny(comphelper::containerToSequence(deletedLegendEntries)));
             }
         }
         break;
@@ -594,10 +593,9 @@ bool DataPointItemConverter::ApplySpecialItem(
             {
                 bool bNew = static_cast<const SfxBoolItem&>(rItemSet.Get(nWhichId)).GetValue();
                 bool bOld = true;
-                Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
-                if( (xSeriesProp->getPropertyValue("ShowCustomLeaderLines") >>= bOld) && bOld != bNew )
+                if( (m_xSeries->getPropertyValue("ShowCustomLeaderLines") >>= bOld) && bOld != bNew )
                 {
-                    xSeriesProp->setPropertyValue("ShowCustomLeaderLines", uno::Any(bNew));
+                    m_xSeries->setPropertyValue("ShowCustomLeaderLines", uno::Any(bNew));
                     bChanged = true;
                 }
             }
@@ -761,8 +759,7 @@ void DataPointItemConverter::FillSpecialItem(
             try
             {
                 bool bValue = true;
-                Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
-                if( xSeriesProp->getPropertyValue( "ShowCustomLeaderLines" ) >>= bValue )
+                if( m_xSeries->getPropertyValue( "ShowCustomLeaderLines" ) >>= bValue )
                     rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
             }
             catch (const uno::Exception&)

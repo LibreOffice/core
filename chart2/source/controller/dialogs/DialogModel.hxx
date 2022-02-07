@@ -71,7 +71,7 @@ public:
 
     typedef std::pair<
                 OUString,
-                std::pair< css::uno::Reference< css::chart2::XDataSeries >,
+                std::pair< rtl::Reference< ::chart::DataSeries >,
                              rtl::Reference< ::chart::ChartType > > >
         tSeriesWithChartTypeByName;
 

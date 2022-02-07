@@ -1864,8 +1864,8 @@ bool ChartController::impl_DragDataPoint( const OUString & rCID, double fAdditio
         return bResult;
 
     sal_Int32 nDataPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( rCID );
-    uno::Reference< chart2::XDataSeries > xSeries(
-        ObjectIdentifier::getDataSeriesForCID( rCID, getChartModel() ));
+    rtl::Reference< DataSeries > xSeries =
+        ObjectIdentifier::getDataSeriesForCID( rCID, getChartModel() );
     if( xSeries.is())
     {
         try

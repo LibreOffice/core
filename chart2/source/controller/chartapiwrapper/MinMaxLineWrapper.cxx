@@ -28,7 +28,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/drawing/LineJoint.hpp>
 #include <comphelper/sequence.hxx>
-
+#include <DataSeries.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <UserDefinedProperties.hxx>
 #include <tools/diagnose_ex.h>
@@ -155,8 +155,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL MinMaxLineWrapper::getPropert
 
 void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName, const uno::Any& rValue )
 {
-    Reference< beans::XPropertySet > xPropSet;
-
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     const std::vector< rtl::Reference< ChartType > > & aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
@@ -164,20 +162,19 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValue( const OUString& rPropertyName
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xType->getDataSeries() );
-            if(aSeriesSeq.hasElements())
+            const std::vector< rtl::Reference< DataSeries > > & aSeriesSeq( xType->getDataSeries2() );
+            if(!aSeriesSeq.empty())
             {
-                xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
-                if(xPropSet.is())
+                if(aSeriesSeq[0].is())
                 {
                     if( rPropertyName == "LineColor" )
-                        xPropSet->setPropertyValue( "Color", rValue );
+                        aSeriesSeq[0]->setPropertyValue( "Color", rValue );
                     else if( rPropertyName == "LineTransparence" )
-                        xPropSet->setPropertyValue( "Transparency", rValue );
+                        aSeriesSeq[0]->setPropertyValue( "Transparency", rValue );
                     else if( rPropertyName == m_aWrappedLineJointProperty.getOuterName() )
-                        m_aWrappedLineJointProperty.setPropertyValue( rValue, xPropSet );
+                        m_aWrappedLineJointProperty.setPropertyValue( rValue, aSeriesSeq[0] );
                     else
-                        xPropSet->setPropertyValue( rPropertyName, rValue );
+                        aSeriesSeq[0]->setPropertyValue( rPropertyName, rValue );
                     return;
                 }
             }
@@ -188,7 +185,7 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
 {
     Any aRet;
 
-    Reference< beans::XPropertySet > xPropSet;
+    rtl::Reference< DataSeries > xPropSet;
 
     rtl::Reference< ::chart::Diagram > xDiagram( m_spChart2ModelContact->getDiagram() );
     const std::vector< rtl::Reference< ChartType > > aTypes(
@@ -197,10 +194,10 @@ uno::Any SAL_CALL MinMaxLineWrapper::getPropertyValue( const OUString& rProperty
     {
         if( xType->getChartType() == CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK )
         {
-            Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xType->getDataSeries() );
-            if(aSeriesSeq.hasElements())
+            const std::vector< rtl::Reference< DataSeries > > & aSeriesSeq( xType->getDataSeries2() );
+            if(!aSeriesSeq.empty())
             {
-                xPropSet.set(aSeriesSeq[0],uno::UNO_QUERY);
+                xPropSet = aSeriesSeq[0];
                 break;
             }
         }
