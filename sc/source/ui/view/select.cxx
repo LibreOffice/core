@@ -520,7 +520,7 @@ bool ScViewFunctionSet::SetCursorAtCell( SCCOL nPosX, SCROW nPosY, bool bScroll 
             tools::Long nSizeX = 0;
             for (SCCOL i=nPosX+1; i<=nEndX; i++)
                 nSizeX += rDoc.GetColWidth( i, nTab );
-            tools::Long nSizeY = static_cast<tools::Long>(rDoc.GetRowHeight( nPosY+1, nEndY, nTab ));
+            tools::Long nSizeY = rDoc.GetRowHeight( nPosY+1, nEndY, nTab );
 
             SCCOL nDelStartX = nStartX;
             SCROW nDelStartY = nStartY;

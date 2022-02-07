@@ -2638,7 +2638,7 @@ void ScExportTest2::testTdf144642_RowHeightRounding()
     ScDocument& rDoc = xShell->GetDocument();
     // 10mm == 567 twips == 28.35pt
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(567), rDoc.GetRowHeight(0, 0));
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(567 * 26), rDoc.GetRowHeight(0, 25, 0, true));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(567 * 26), rDoc.GetRowHeight(0, 25, 0, true));
     xShell->DoClose();
 
     xShell = loadDoc(u"tdf144642_RowHeight_28.35pt_SavedByExcel.", FORMAT_XLSX);
@@ -2646,7 +2646,7 @@ void ScExportTest2::testTdf144642_RowHeightRounding()
     ScDocument& rDoc2 = xShell->GetDocument();
     // 555twips == 27.75pt == 9.79mm
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(555), rDoc2.GetRowHeight(0, 0));
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(555 * 26), rDoc2.GetRowHeight(0, 25, 0, true));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(555 * 26), rDoc2.GetRowHeight(0, 25, 0, true));
     xShell->DoClose();
 }
 
@@ -2661,7 +2661,7 @@ void ScExportTest2::testTdf145129_DefaultRowHeightRounding()
     ScDocument& rDoc = xShell->GetDocument();
     // 555twips == 27.75pt == 9.79mm
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(555), rDoc.GetRowHeight(0, 0));
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(555 * 52), rDoc.GetRowHeight(0, 51, 0, true));
+    CPPUNIT_ASSERT_EQUAL(tools::Long(555 * 52), rDoc.GetRowHeight(0, 51, 0, true));
     xShell->DoClose();
 }
 

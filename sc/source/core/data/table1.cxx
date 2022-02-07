@@ -109,7 +109,7 @@ void GetOptimalHeightsInColumn(
 
     const SCROW nMinStart = nPos;
 
-    sal_uLong nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
+    sal_uInt64 nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
     const SCCOL maxCol = rCol.size() - 1; // last col done already above
     for (SCCOL nCol=0; nCol<maxCol; nCol++)
     {
