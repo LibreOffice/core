@@ -145,9 +145,6 @@ class SW_DLLPUBLIC SwTransferable final : public TransferableHelper
                                 SwWrtShell& rSh, bool bLink,
                                 const Point* pPt, bool bMsg );
 
-    bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
-                        bool bIsXSelection );
-
     bool PrivatePaste( SwWrtShell& rShell, SwPasteContext* pContext = nullptr, PasteTableType ePasteTable = PasteTableType::PASTE_DEFAULT );
 
     void SetDataForDragAndDrop( const Point& rSttPos );
@@ -225,6 +222,10 @@ public:
 
     SwWrtShell* GetShell()              { return m_pWrtShell; }
     void SetCleanUp( bool bFlag )       { m_bCleanUp = bFlag; }
+
+    // public only for testing
+    bool PrivateDrop( SwWrtShell& rSh, const Point& rDragPt, bool bMove,
+                        bool bIsXSelection );
 
     // Interfaces for Selection
     /* #96392# Added pCreator to distinguish SwFrameShell from SwWrtShell. */
