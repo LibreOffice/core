@@ -2203,7 +2203,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
     if (pTextNode)
     {
         const SvxULSpaceItem& rULSpace =
-            static_cast<const SvxULSpaceItem&>(pTextNode->SwContentNode::GetAttr( RES_UL_SPACE ));
+            pTextNode->SwContentNode::GetAttr( RES_UL_SPACE );
 
         bool bChange = AM_NOSPACE==eMode ? rULSpace.GetLower() > 0
                                          : rULSpace.GetLower() == 0;
@@ -2504,7 +2504,7 @@ void SwHTMLParser::AddParSpace()
         return;
 
     SvxULSpaceItem rULSpace =
-        static_cast<const SvxULSpaceItem&>(pTextNode->SwContentNode::GetAttr( RES_UL_SPACE ));
+        pTextNode->SwContentNode::GetAttr( RES_UL_SPACE );
     if( rULSpace.GetLower() )
         return;
 
@@ -5006,8 +5006,7 @@ void SwHTMLParser::InsertSpacer()
 
             if( pTextNode )
             {
-                SvxULSpaceItem aULSpace( static_cast<const SvxULSpaceItem&>(pTextNode
-                    ->SwContentNode::GetAttr( RES_UL_SPACE )) );
+                SvxULSpaceItem aULSpace( pTextNode->SwContentNode::GetAttr( RES_UL_SPACE ) );
                 aULSpace.SetLower( aULSpace.GetLower() + o3tl::narrowing<sal_uInt16>(nSize) );
                 pTextNode->SetAttr( aULSpace );
             }

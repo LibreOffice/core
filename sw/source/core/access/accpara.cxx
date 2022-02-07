@@ -75,6 +75,8 @@
 #include <wrong.hxx>
 #include <editeng/brushitem.hxx>
 #include <editeng/unoprnms.hxx>
+#include <editeng/lrspitem.hxx>
+#include <editeng/ulspitem.hxx>
 #include <swatrset.hxx>
 #include <unosett.hxx>
 #include <unomap.hxx>

@@ -3158,7 +3158,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
         SfxItemSetFixed<RES_CHRATR_BEGIN, RES_TXTATR_END> aParagraphMarkerProperties(m_rDoc.GetAttrPool());
         bool bCharFormatOnly = true;
 
-        SwFormatAutoFormat const& rListAutoFormat(static_cast<SwFormatAutoFormat const&>(rNode.GetAttr(RES_PARATR_LIST_AUTOFMT)));
+        SwFormatAutoFormat const& rListAutoFormat(rNode.GetAttr(RES_PARATR_LIST_AUTOFMT));
         if (std::shared_ptr<SfxItemSet> const& pSet = rListAutoFormat.GetStyleHandle())
         {
             aParagraphMarkerProperties.Put(*pSet);

@@ -434,6 +434,9 @@ public:
 
     /// If bInParent is FALSE search for attribute only in this node.
     const SfxPoolItem& GetAttr( sal_uInt16 nWhich, bool bInParent=true ) const;
+    template<class T>
+    const T& GetAttr( TypedWhichId<T> nWhich, bool bInParent=true ) const
+    { return static_cast<const T&>(GetAttr(sal_uInt16(nWhich), bInParent)); }
     bool GetAttr( SfxItemSet& rSet ) const;
     /// made virtual
     virtual bool SetAttr( const SfxPoolItem& );
@@ -444,6 +447,9 @@ public:
 
     /// Obtains attribute that is not delivered via conditional style!
     const SfxPoolItem* GetNoCondAttr( sal_uInt16 nWhich, bool bInParents ) const;
+    template<class T>
+    const T* GetNoCondAttr( TypedWhichId<T> nWhich, bool bInParents ) const
+    { return static_cast<const T*>(GetNoCondAttr(sal_uInt16(nWhich), bInParents)); }
 
     /** Does node has already its own auto-attributes?
      Access to SwAttrSet. */

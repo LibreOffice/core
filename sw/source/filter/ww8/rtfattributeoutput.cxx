@@ -4070,7 +4070,7 @@ void RtfAttributeOutput::FlyFrameOLEReplacement(const SwFlyFrameFormat* pFlyFram
     aRendered.setHeight(rSize.Height());
     const Graphic* pGraphic = rOLENode.GetGraphic();
     Size aMapped(pGraphic->GetPrefSize());
-    auto& rCr = static_cast<const SwCropGrf&>(rOLENode.GetAttr(RES_GRFATR_CROPGRF));
+    auto& rCr = rOLENode.GetAttr(RES_GRFATR_CROPGRF);
     const char* pBLIPType = OOO_STRING_SVTOOLS_RTF_PNGBLIP;
     const sal_uInt8* pGraphicAry = nullptr;
     SvMemoryStream aStream;
@@ -4213,7 +4213,7 @@ void RtfAttributeOutput::FlyFrameGraphic(const SwFlyFrameFormat* pFlyFrameFormat
     Size aMapped(eGraphicType == GraphicType::Bitmap ? rGraphic.GetSizePixel()
                                                      : rGraphic.GetPrefSize());
 
-    auto& rCr = static_cast<const SwCropGrf&>(pGrfNode->GetAttr(RES_GRFATR_CROPGRF));
+    auto& rCr = pGrfNode->GetAttr(RES_GRFATR_CROPGRF);
 
     //Get original size in twips
     Size aSize(pGrfNode->GetTwipSize());
