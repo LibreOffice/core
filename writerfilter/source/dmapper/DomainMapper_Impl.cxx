@@ -7042,7 +7042,14 @@ void DomainMapper_Impl::PopFieldContext()
                         }
                         else if (!pContext->GetHyperlinkURL().isEmpty() && xCrsr.is())
                         {
-                            xCrsr->gotoEnd( true );
+                            if (m_aTextAppendStack.top().xInsertPosition.is())
+                            {
+                                xCrsr->gotoRange(m_aTextAppendStack.top().xInsertPosition, true);
+                            }
+                            else
+                            {
+                                xCrsr->gotoEnd(true);
+                            }
 
                             // Draw components (like comments) need hyperlinks set differently
                             SvxUnoTextRangeBase* pDrawText = dynamic_cast<SvxUnoTextRangeBase*>(xCrsr.get());
