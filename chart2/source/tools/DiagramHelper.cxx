@@ -266,12 +266,9 @@ void DiagramHelper::setStackMode(
             rtl::Reference< ChartType > xChartType( aChartTypeList[0] );
 
             //iterate through all series in this chart type
-            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
-            for( uno::Reference< XDataSeries > const & dataSeries : aSeriesList )
+            for( rtl::Reference< DataSeries > const & dataSeries : xChartType->getDataSeries2() )
             {
-                Reference< beans::XPropertySet > xProp( dataSeries, uno::UNO_QUERY );
-                if(xProp.is())
-                    xProp->setPropertyValue( "StackingDirection", aNewDirection );
+                dataSeries->setPropertyValue( "StackingDirection", aNewDirection );
             }
         }
     }
@@ -327,22 +324,21 @@ StackMode DiagramHelper::getStackModeFromChartType(
 
     try
     {
-        Sequence< Reference< chart2::XDataSeries > > aSeries( xChartType->getDataSeries());
+        const std::vector< rtl::Reference< DataSeries > > & aSeries = xChartType->getDataSeries2();
 
         chart2::StackingDirection eCommonDirection = chart2::StackingDirection_NO_STACKING;
         bool bDirectionInitialized = false;
 
         // first series is irrelevant for stacking, start with second, unless
         // there is only one series
-        const sal_Int32 nSeriesCount = aSeries.getLength();
+        const sal_Int32 nSeriesCount = aSeries.size();
         sal_Int32 i = (nSeriesCount == 1) ? 0: 1;
         for( ; i<nSeriesCount; ++i )
         {
             rbFound = true;
-            Reference< beans::XPropertySet > xProp( aSeries[i], uno::UNO_QUERY_THROW );
             chart2::StackingDirection eCurrentDirection = eCommonDirection;
             // property is not MAYBEVOID
-            bool bSuccess = ( xProp->getPropertyValue( "StackingDirection" ) >>= eCurrentDirection );
+            bool bSuccess = ( aSeries[i]->getPropertyValue( "StackingDirection" ) >>= eCurrentDirection );
             OSL_ASSERT( bSuccess );
             if( ! bDirectionInitialized )
             {
@@ -579,6 +575,8 @@ rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
         return nullptr;
     if(!xDiagram.is())
         return nullptr;
+    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
+    assert(pGivenDataSeries);
 
     //iterate through the model to find the given xSeries
     //the found parent indicates the charttype
@@ -592,10 +590,9 @@ rtl::Reference< ChartType > DiagramHelper::getChartTypeOfSeries(
         for( rtl::Reference< ChartType > const & xChartType : aChartTypeList )
         {
             //iterate through all series in this chart type
-            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
-            for( uno::Reference< XDataSeries > const & dataSeries : aSeriesList )
+            for( rtl::Reference< DataSeries > const & dataSeries : xChartType->getDataSeries2() )
             {
-                if( xGivenDataSeries==dataSeries )
+                if( pGivenDataSeries==dataSeries )
                     return xChartType;
             }
         }
@@ -834,14 +831,11 @@ static void lcl_generateAutomaticCategoriesFromChartType(
         return;
     OUString aMainSeq( xChartType->getRoleOfSequenceForSeriesLabel() );
 
-    const Sequence< Reference< XDataSeries > > aSeriesSeq( xChartType->getDataSeries() );
-    for( Reference< XDataSeries > const & dataSeries : aSeriesSeq )
+    const std::vector< rtl::Reference< DataSeries > > & aSeriesSeq = xChartType->getDataSeries2();
+    for( rtl::Reference< DataSeries > const & dataSeries : aSeriesSeq )
     {
-        Reference< data::XDataSource > xDataSource( dataSeries, uno::UNO_QUERY );
-        if( !xDataSource.is() )
-            continue;
-        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-            ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aMainSeq ));
+        uno::Reference< data::XLabeledDataSequence > xLabeledSeq =
+            ::chart::DataSeriesHelper::getDataSequenceByRole( dataSeries, aMainSeq );
         if( !xLabeledSeq.is() )
             continue;
         Reference< chart2::data::XDataSequence > xValueSeq( xLabeledSeq->getValues() );
@@ -1173,7 +1167,7 @@ namespace
 
 bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
     const rtl::Reference< Diagram >& xDiagram,
-    const Reference< XDataSeries >& xGivenDataSeries,
+    const rtl::Reference< DataSeries >& xGivenDataSeries,
     bool bForward,
     bool bDoMove )
 {
@@ -1201,10 +1195,9 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 
                     //iterate through all series in this chart type
 
-                    uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xCurrentChartType->getDataSeries() );
-                    auto aSeriesListRange = asNonConstRange(aSeriesList);
+                    std::vector< rtl::Reference< DataSeries > > aSeriesList = xCurrentChartType->getDataSeries2();
 
-                    for( sal_Int32 nS = 0; !bFound && nS < aSeriesList.getLength(); ++nS )
+                    for( sal_Int32 nS = 0; !bFound && nS < static_cast<sal_Int32>(aSeriesList.size()); ++nS )
                     {
 
                         // We found the series we are interested in!
@@ -1223,14 +1216,14 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                 else
                                     nNewSeriesIndex++;
 
-                                if( nNewSeriesIndex >= 0 && nNewSeriesIndex < aSeriesList.getLength() )
+                                if( nNewSeriesIndex >= 0 && nNewSeriesIndex < static_cast<sal_Int32>(aSeriesList.size()) )
                                 {
                                     //move series in the same charttype
                                     bMovedOrMoveAllowed = true;
                                     if( bDoMove )
                                     {
-                                        aSeriesListRange[ nOldSeriesIndex ] = aSeriesList[ nNewSeriesIndex ];
-                                        aSeriesListRange[ nNewSeriesIndex ] = xGivenDataSeries;
+                                        aSeriesList[ nOldSeriesIndex ] = aSeriesList[ nNewSeriesIndex ];
+                                        aSeriesList[ nNewSeriesIndex ] = xGivenDataSeries;
                                         xCurrentChartType->setDataSeries( aSeriesList );
                                     }
                                 }
@@ -1242,15 +1235,15 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                         bMovedOrMoveAllowed = true;
                                         if( bDoMove )
                                         {
-                                            uno::Sequence< uno::Reference< XDataSeries > > aOtherSeriesList( xFormerChartType->getDataSeries() );
-                                            sal_Int32 nOtherSeriesIndex = aOtherSeriesList.getLength()-1;
-                                            if( nOtherSeriesIndex >= 0 && nOtherSeriesIndex < aOtherSeriesList.getLength() )
+                                            std::vector< rtl::Reference< DataSeries > > aOtherSeriesList = xFormerChartType->getDataSeries2();
+                                            sal_Int32 nOtherSeriesIndex = aOtherSeriesList.size()-1;
+                                            if( nOtherSeriesIndex >= 0 && nOtherSeriesIndex < static_cast<sal_Int32>(aOtherSeriesList.size()) )
                                             {
-                                                uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[nOtherSeriesIndex] );
-                                                aOtherSeriesList.getArray()[nOtherSeriesIndex] = xGivenDataSeries;
+                                                rtl::Reference< DataSeries > xExchangeSeries( aOtherSeriesList[nOtherSeriesIndex] );
+                                                aOtherSeriesList[nOtherSeriesIndex] = xGivenDataSeries;
                                                 xFormerChartType->setDataSeries(aOtherSeriesList);
 
-                                                aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
+                                                aSeriesList[nOldSeriesIndex]=xExchangeSeries;
                                                 xCurrentChartType->setDataSeries(aSeriesList);
                                             }
                                         }
@@ -1265,14 +1258,14 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                         bMovedOrMoveAllowed = true;
                                         if( bDoMove )
                                         {
-                                            uno::Sequence< uno::Reference< XDataSeries > > aOtherSeriesList( xOtherChartType->getDataSeries() );
-                                            if( aOtherSeriesList.hasElements() )
+                                            std::vector< rtl::Reference< DataSeries > > aOtherSeriesList = xOtherChartType->getDataSeries2();
+                                            if( !aOtherSeriesList.empty() )
                                             {
-                                                uno::Reference< XDataSeries > xExchangeSeries( aOtherSeriesList[0] );
-                                                aOtherSeriesList.getArray()[0] = xGivenDataSeries;
+                                                rtl::Reference< DataSeries > xExchangeSeries( aOtherSeriesList[0] );
+                                                aOtherSeriesList[0] = xGivenDataSeries;
                                                 xOtherChartType->setDataSeries(aOtherSeriesList);
 
-                                                aSeriesListRange[nOldSeriesIndex]=xExchangeSeries;
+                                                aSeriesList[nOldSeriesIndex]=xExchangeSeries;
                                                 xCurrentChartType->setDataSeries(aSeriesList);
                                             }
                                         }
@@ -1309,8 +1302,11 @@ bool DiagramHelper::isSeriesMoveable(
 {
     const bool bDoMove = false;
 
+    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
+    assert(pGivenDataSeries || !xGivenDataSeries);
+
     bool bIsMoveable = lcl_moveSeriesOrCheckIfMoveIsAllowed(
-        xDiagram, xGivenDataSeries, bForward, bDoMove );
+        xDiagram, pGivenDataSeries, bForward, bDoMove );
 
     return bIsMoveable;
 }
@@ -1319,8 +1315,11 @@ bool DiagramHelper::moveSeries( const rtl::Reference< Diagram >& xDiagram, const
 {
     const bool bDoMove = true;
 
+    rtl::Reference pGivenDataSeries = dynamic_cast<DataSeries*>(xGivenDataSeries.get());
+    assert(pGivenDataSeries || !xGivenDataSeries);
+
     bool bMoved = lcl_moveSeriesOrCheckIfMoveIsAllowed(
-        xDiagram, xGivenDataSeries, bForward, bDoMove );
+        xDiagram, pGivenDataSeries, bForward, bDoMove );
 
     return bMoved;
 }

@@ -30,6 +30,7 @@
 #include <unonames.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <DataSeries.hxx>
+#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -47,6 +48,17 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using std::vector;
+
+static std::vector< rtl::Reference< LabeledDataSequence> > lcl_toLabeledDataSequence(const Sequence< Reference< data::XLabeledDataSequence> > & rSeq)
+{
+    std::vector<rtl::Reference< LabeledDataSequence>> aRes(rSeq.getLength());
+    for (sal_Int32 i=0; i<rSeq.getLength(); ++i)
+    {
+        aRes[i] = dynamic_cast<LabeledDataSequence*>(rSeq[i].get());
+        assert(aRes[i]);
+    }
+    return aRes;
+}
 
 ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< BaseCoordinateSystem >& xCooSysModel
                                                        , ChartModel& rModel )
@@ -66,7 +78,8 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
             if( xAxis.is() )
             {
                 ScaleData aScale( xAxis->getScaleData() );
-                m_xOriginalCategories = aScale.Categories;
+                m_xOriginalCategories = dynamic_cast<LabeledDataSequence*>(aScale.Categories.get());
+                assert(m_xOriginalCategories || !aScale.Categories);
                 m_bIsAutoDate = (aScale.AutoDateAxis && aScale.AxisType==chart2::AxisType::CATEGORY);
                 m_bIsDateAxis = (aScale.AxisType == chart2::AxisType::DATE || m_bIsAutoDate);
             }
@@ -115,13 +128,13 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
                                     aStringDummy, aSeqDummy, bSeriesUsesColumns, bDummy, bDummy );
                         }
                         if( bSeriesUsesColumns )
-                            m_aSplitCategoriesList=aColumns;
+                            m_aSplitCategoriesList = lcl_toLabeledDataSequence(aColumns);
                         else
-                            m_aSplitCategoriesList=aRows;
+                            m_aSplitCategoriesList = lcl_toLabeledDataSequence(aRows);
                     }
                 }
             }
-            if( !m_aSplitCategoriesList.hasElements() )
+            if( m_aSplitCategoriesList.empty() )
             {
                 m_aSplitCategoriesList = { m_xOriginalCategories };
             }
@@ -146,12 +159,12 @@ Reference< chart2::data::XDataSequence > ExplicitCategoriesProvider::getOriginal
 
 bool ExplicitCategoriesProvider::hasComplexCategories() const
 {
-    return m_aSplitCategoriesList.getLength() > 1;
+    return m_aSplitCategoriesList.size() > 1;
 }
 
 sal_Int32 ExplicitCategoriesProvider::getCategoryLevelCount() const
 {
-    sal_Int32 nCount = m_aSplitCategoriesList.getLength();
+    sal_Int32 nCount = m_aSplitCategoriesList.size();
     if(!nCount)
         nCount = 1;
     return nCount;
@@ -224,8 +237,8 @@ class SplitCategoriesProvider_ForLabeledDataSequences : public SplitCategoriesPr
 public:
 
     explicit SplitCategoriesProvider_ForLabeledDataSequences(
-        const css::uno::Sequence<
-            css::uno::Reference< css::chart2::data::XLabeledDataSequence> >& rSplitCategoriesList
+        const std::vector<
+            rtl::Reference< LabeledDataSequence> >& rSplitCategoriesList
         , ChartModel& rModel )
         : m_rSplitCategoriesList( rSplitCategoriesList )
         , mrModel( rModel )
@@ -235,8 +248,7 @@ public:
     virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
 
 private:
-    const css::uno::Sequence< css::uno::Reference<
-        css::chart2::data::XLabeledDataSequence> >& m_rSplitCategoriesList;
+    const std::vector< rtl::Reference< LabeledDataSequence> >& m_rSplitCategoriesList;
 
     ChartModel& mrModel;
 };
@@ -245,7 +257,7 @@ private:
 
 sal_Int32 SplitCategoriesProvider_ForLabeledDataSequences::getLevelCount() const
 {
-    return m_rSplitCategoriesList.getLength();
+    return m_rSplitCategoriesList.size();
 }
 uno::Sequence< OUString > SplitCategoriesProvider_ForLabeledDataSequences::getStringsForLevel( sal_Int32 nLevel ) const
 {

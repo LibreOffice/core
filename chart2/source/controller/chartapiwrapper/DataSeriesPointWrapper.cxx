@@ -571,7 +571,7 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties(
 {
     Reference< beans::XPropertySet > xPointProp;
 
-    Reference< chart2::XDataSeries > xSeries( getDataSeries() );
+    rtl::Reference< DataSeries > xSeries( getDataSeries() );
 
     // may throw an IllegalArgumentException
     if( xSeries.is() )

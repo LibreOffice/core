@@ -23,6 +23,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartType.hxx>
 #include <ChartTypeHelper.hxx>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
@@ -199,7 +200,7 @@ bool useSourceFormatFromItemToPropertySet(
 TextLabelItemConverter::TextLabelItemConverter(
     const rtl::Reference<::chart::ChartModel>& xChartModel,
     const uno::Reference<beans::XPropertySet>& rPropertySet,
-    const uno::Reference<XDataSeries>& xSeries,
+    const rtl::Reference<DataSeries>& xSeries,
     SfxItemPool& rItemPool, const awt::Size* pRefSize,
     bool bDataSeries, sal_Int32 nNumberFormat, sal_Int32 nPercentNumberFormat ) :
     ItemConverter(rPropertySet, rItemPool),
@@ -513,10 +514,9 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
             {
                 bool bNew = static_cast<const SfxBoolItem&>(rItemSet.Get(nWhichId)).GetValue();
                 bool bOld = true;
-                Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
-                if( (xSeriesProp->getPropertyValue("ShowCustomLeaderLines") >>= bOld) && bOld != bNew )
+                if( (m_xSeries->getPropertyValue("ShowCustomLeaderLines") >>= bOld) && bOld != bNew )
                 {
-                    xSeriesProp->setPropertyValue("ShowCustomLeaderLines", uno::Any(bNew));
+                    m_xSeries->setPropertyValue("ShowCustomLeaderLines", uno::Any(bNew));
                     bChanged = true;
                 }
             }
@@ -670,8 +670,7 @@ void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& r
             try
             {
                 bool bValue = true;
-                Reference<beans::XPropertySet> xSeriesProp(m_xSeries, uno::UNO_QUERY);
-                if( xSeriesProp->getPropertyValue( "ShowCustomLeaderLines" ) >>= bValue )
+                if( m_xSeries->getPropertyValue( "ShowCustomLeaderLines" ) >>= bValue )
                     rOutItemSet.Put(SfxBoolItem(nWhichId, bValue));
             }
             catch (const uno::Exception&)

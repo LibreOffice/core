@@ -759,7 +759,7 @@ bool ChartController::executeDispatch_Delete()
                     aLabel.ShowSeriesName = false;
                     if( aObjectType == OBJECTTYPE_DATA_LABELS )
                     {
-                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, getChartModel() ));
+                        rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( aCID, getChartModel() );
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_LABEL, uno::Any(aLabel) );
                         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, CHART_UNONAME_CUSTOM_LABEL_FIELDS, uno::Any() );
                     }

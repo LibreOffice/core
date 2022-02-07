@@ -112,7 +112,7 @@ Reference< chart2::data::XLabeledDataSequence > lcl_findLSequenceWithOnlyLabel(
 }
 
 void lcl_getCooSysAndChartTypeOfSeries(
-    const Reference< chart2::XDataSeries > & xSeries,
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     const Reference< chart2::XDiagram > & xDiagram,
     rtl::Reference< ::chart::BaseCoordinateSystem > & xOutCooSys,
     rtl::Reference< ::chart::ChartType > & xOutChartType )
@@ -125,8 +125,7 @@ void lcl_getCooSysAndChartTypeOfSeries(
     {
         for( rtl::Reference< ::chart::ChartType > const & chartType : coords->getChartTypes2() )
         {
-            const Sequence< Reference< chart2::XDataSeries > > aSeries( chartType->getDataSeries());
-            for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
+            for( rtl::Reference< ::chart::DataSeries > const & dataSeries : chartType->getDataSeries2() )
             {
                 if( dataSeries == xSeries )
                 {
@@ -628,7 +627,9 @@ rtl::Reference< ::chart::BaseCoordinateSystem > getCoordinateSystemOfSeries(
 {
     rtl::Reference< ::chart::BaseCoordinateSystem > xResult;
     rtl::Reference< ::chart::ChartType > xDummy;
-    lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xResult, xDummy );
+    rtl::Reference< DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
+    assert(pSeries);
+    lcl_getCooSysAndChartTypeOfSeries( pSeries, xDiagram, xResult, xDummy );
 
     return xResult;
 }
@@ -639,7 +640,9 @@ rtl::Reference< ::chart::ChartType > getChartTypeOfSeries(
 {
     rtl::Reference< ::chart::ChartType > xResult;
     rtl::Reference< ::chart::BaseCoordinateSystem > xDummy;
-    lcl_getCooSysAndChartTypeOfSeries( xSeries, xDiagram, xDummy, xResult );
+    rtl::Reference< DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
+    assert(pSeries);
+    lcl_getCooSysAndChartTypeOfSeries( pSeries, xDiagram, xDummy, xResult );
 
     return xResult;
 }
@@ -650,14 +653,14 @@ void deleteSeries(
 {
     try
     {
-        auto aSeries(
-            comphelper::sequenceToContainer<std::vector< Reference< chart2::XDataSeries > > >( xChartType->getDataSeries()));
-        std::vector< Reference< chart2::XDataSeries > >::iterator aIt =
-              std::find( aSeries.begin(), aSeries.end(), xSeries );
+        rtl::Reference<DataSeries> pSeries = dynamic_cast<DataSeries*>(xSeries.get());
+        assert(pSeries);
+        std::vector< rtl::Reference< DataSeries > > aSeries = xChartType->getDataSeries2();
+        auto aIt = std::find( aSeries.begin(), aSeries.end(), pSeries );
         if( aIt != aSeries.end())
         {
             aSeries.erase( aIt );
-            xChartType->setDataSeries( comphelper::containerToSequence( aSeries ));
+            xChartType->setDataSeries( aSeries );
         }
     }
     catch( const uno::Exception & )

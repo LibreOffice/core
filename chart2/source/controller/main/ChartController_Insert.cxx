@@ -341,7 +341,7 @@ void ChartController::executeDispatch_InsertMenu_Trendlines()
 {
     OUString aCID = m_aSelection.getSelectedCID();
 
-    uno::Reference< chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID( aCID, getChartModel() );
 
     if( !xSeries.is() )
@@ -410,7 +410,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
     ObjectType objType = bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
     //if a series is selected insert error bars for that series only:
-    uno::Reference< chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
 
     if( xSeries.is())
@@ -614,8 +614,8 @@ void ChartController::executeDispatch_DeleteTrendlineEquation()
 
 void ChartController::executeDispatch_DeleteErrorBars( bool bYError )
 {
-    uno::Reference< chart2::XDataSeries > xDataSeries(
-        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() ));
+    rtl::Reference< DataSeries > xDataSeries =
+        ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xDataSeries.is())
     {
         UndoGuard aUndoGuard(
@@ -629,7 +629,7 @@ void ChartController::executeDispatch_DeleteErrorBars( bool bYError )
 
 void ChartController::executeDispatch_InsertDataLabels()
 {
-    uno::Reference< chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xSeries.is() )
     {
@@ -652,7 +652,7 @@ void ChartController::executeDispatch_InsertDataLabel()
 
 void ChartController::executeDispatch_DeleteDataLabels()
 {
-    uno::Reference< chart2::XDataSeries > xSeries =
+    rtl::Reference< DataSeries > xSeries =
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xSeries.is() )
     {
@@ -678,7 +678,7 @@ void ChartController::executeDispatch_ResetAllDataPoints()
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Format,
         SchResId( STR_OBJECT_DATAPOINTS )),
         m_xUndoManager );
-    uno::Reference< chart2::XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
+    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xSeries.is() )
         xSeries->resetAllDataPoints();
     aUndoGuard.commit();
@@ -688,7 +688,7 @@ void ChartController::executeDispatch_ResetDataPoint()
     UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription( ActionDescriptionProvider::ActionType::Format,
         SchResId( STR_OBJECT_DATAPOINT )),
         m_xUndoManager );
-    uno::Reference< chart2::XDataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
+    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getChartModel() );
     if( xSeries.is() )
     {
         sal_Int32 nPointIndex = ObjectIdentifier::getIndexFromParticleOrCID( m_aSelection.getSelectedCID() );

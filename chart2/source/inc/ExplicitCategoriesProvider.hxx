@@ -34,6 +34,7 @@ namespace com::sun::star::uno { class Any; }
 namespace chart
 {
 class BaseCoordinateSystem;
+class LabeledDataSequence;
 
 struct OOO_DLLPUBLIC_CHARTTOOLS ComplexCategory
 {
@@ -83,8 +84,8 @@ public:
     bool hasComplexCategories() const;
     sal_Int32 getCategoryLevelCount() const;
 
-    const css::uno::Sequence< css::uno::Reference<
-        css::chart2::data::XLabeledDataSequence> >& getSplitCategoriesList() const { return m_aSplitCategoriesList;}
+    const std::vector< rtl::Reference<
+        ::chart::LabeledDataSequence> >& getSplitCategoriesList() const { return m_aSplitCategoriesList;}
 
     bool isDateAxis();
     const std::vector< double >&  getDateCategories();
@@ -96,13 +97,12 @@ private:
     bool volatile m_bDirty;
     unotools::WeakReference< ::chart::BaseCoordinateSystem >   m_xCooSysModel;
     ChartModel& mrModel;
-    css::uno::Reference< css::chart2::data::XLabeledDataSequence> m_xOriginalCategories;
+    rtl::Reference< ::chart::LabeledDataSequence> m_xOriginalCategories;
 
     bool m_bIsExplicitCategoriesInited;
     css::uno::Sequence< OUString >  m_aExplicitCategories;
     std::vector< std::vector< ComplexCategory > >   m_aComplexCats;
-    css::uno::Sequence< css::uno::Reference<
-        css::chart2::data::XLabeledDataSequence> > m_aSplitCategoriesList;
+    std::vector< rtl::Reference< ::chart::LabeledDataSequence> > m_aSplitCategoriesList;
 
     bool m_bIsDateAxis;
     bool m_bIsAutoDate;

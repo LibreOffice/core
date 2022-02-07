@@ -76,16 +76,15 @@ void lcl_addDataSourceRanges(
 
 void lcl_addErrorBarRanges(
     std::vector< OUString > & rOutResult,
-    const uno::Reference< XDataSeries > & xDataSeries )
+    const rtl::Reference< DataSeries > & xDataSeries )
 {
-    uno::Reference< beans::XPropertySet > xSeriesProp( xDataSeries, uno::UNO_QUERY );
-    if( !xSeriesProp.is())
+    if( !xDataSeries.is())
         return;
 
     try
     {
         uno::Reference< beans::XPropertySet > xErrorBarProp;
-        if( ( xSeriesProp->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp ) &&
+        if( ( xDataSeries->getPropertyValue( CHART_UNONAME_ERRORBAR_Y) >>= xErrorBarProp ) &&
             xErrorBarProp.is())
         {
             sal_Int32 eStyle = css::chart::ErrorBarStyle::NONE;
@@ -98,7 +97,7 @@ void lcl_addErrorBarRanges(
             }
         }
 
-        if( ( xSeriesProp->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp ) && xErrorBarProp.is())
+        if( ( xDataSeries->getPropertyValue(CHART_UNONAME_ERRORBAR_X) >>= xErrorBarProp ) && xErrorBarProp.is())
         {
             sal_Int32 eStyle = css::chart::ErrorBarStyle::NONE;
             if( ( xErrorBarProp->getPropertyValue("ErrorBarStyle") >>= eStyle ) &&

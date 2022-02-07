@@ -38,6 +38,7 @@ namespace chart
 class DialogModel;
 class ChartModel;
 class ChartType;
+class DataSeries;
 
 class DataBrowserModel final
 {
@@ -99,7 +100,7 @@ public:
 
     struct tDataHeader
     {
-        css::uno::Reference< css::chart2::XDataSeries > m_xDataSeries;
+        rtl::Reference< ::chart::DataSeries > m_xDataSeries;
         rtl::Reference< ::chart::ChartType >  m_xChartType;
         bool                                            m_bSwapXAndYAxis;
         sal_Int32                                       m_nStartColumn;
@@ -113,7 +114,7 @@ public:
         {}
         // "full" CTOR
         tDataHeader(
-            css::uno::Reference< css::chart2::XDataSeries > const & xDataSeries,
+            rtl::Reference< ::chart::DataSeries > const & xDataSeries,
             rtl::Reference< ::chart::ChartType > const &xChartType,
             bool                                        bSwapXAndYAxis,
             sal_Int32                                   nStartColumn,
@@ -133,7 +134,7 @@ public:
     tDataHeader getHeaderForSeries(
         const css::uno::Reference< css::chart2::XDataSeries > &xSeries ) const;
 
-    css::uno::Reference< css::chart2::XDataSeries >
+    rtl::Reference< ::chart::DataSeries >
         getDataSeriesByColumn( sal_Int32 nColumn ) const;
 
 private:

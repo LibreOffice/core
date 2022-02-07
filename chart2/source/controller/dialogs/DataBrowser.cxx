@@ -22,6 +22,7 @@
 #include "DataBrowser.hxx"
 #include "DataBrowserModel.hxx"
 #include <strings.hrc>
+#include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <CommonConverters.hxx>
@@ -647,11 +648,10 @@ void DataBrowser::RenewTable()
     for (auto const& elemHeader : aHeaders)
     {
         auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
-        Reference< beans::XPropertySet > xSeriesProp( elemHeader.m_xDataSeries, uno::UNO_QUERY );
         Color nColor;
         // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
-        if( xSeriesProp.is() &&
-            ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
+        if( elemHeader.m_xDataSeries.is() &&
+            ( elemHeader.m_xDataSeries->getPropertyValue( "Color" ) >>= nColor ))
             spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
@@ -1275,10 +1275,9 @@ void DataBrowser::RenewSeriesHeaders()
     for (auto const& elemHeader : aHeaders)
     {
         auto spHeader = std::make_shared<impl::SeriesHeader>( m_pColumnsWin, m_pColorsWin );
-        Reference< beans::XPropertySet > xSeriesProp(elemHeader.m_xDataSeries, uno::UNO_QUERY);
         Color nColor;
-        if( xSeriesProp.is() &&
-            ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
+        if( elemHeader.m_xDataSeries.is() &&
+            ( elemHeader.m_xDataSeries->getPropertyValue( "Color" ) >>= nColor ))
             spHeader->SetColor( nColor );
         spHeader->SetChartType( elemHeader.m_xChartType, elemHeader.m_bSwapXAndYAxis );
         spHeader->SetSeriesName(
@@ -1363,10 +1362,9 @@ IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit&, rEdit, vo
 
 IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, void )
 {
-    Reference< chart2::XDataSeries > xSeries(
-        m_apDataBrowserModel->getDataSeriesByColumn( rEdit.getStartColumn() - 1 ));
-    Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-    if( !xSource.is())
+    rtl::Reference< DataSeries > xSeries =
+        m_apDataBrowserModel->getDataSeriesByColumn( rEdit.getStartColumn() - 1 );
+    if( !xSeries.is())
         return;
 
     rtl::Reference< ChartType > xChartType(
@@ -1374,7 +1372,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, voi
     if( xChartType.is())
     {
         uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSeq =
-            DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel());
+            DataSeriesHelper::getDataSequenceByRole( xSeries, xChartType->getRoleOfSequenceForSeriesLabel());
         if( xLabeledSeq.is())
         {
             Reference< container::XIndexReplace > xIndexReplace( xLabeledSeq->getLabel(), uno::UNO_QUERY );
