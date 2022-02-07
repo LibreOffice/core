@@ -35,19 +35,14 @@ class Size;
 
 namespace vcl { class PDFWriter; }
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-
 class PDFExport
 {
 private:
 
-    Reference< XComponent > mxSrcDoc;
-    Reference< uno::XComponentContext > mxContext;
-    Reference< task::XStatusIndicator > mxStatusIndicator;
-    Reference< task::XInteractionHandler > mxIH;
+    css::uno::Reference< css::lang::XComponent > mxSrcDoc;
+    css::uno::Reference< css::uno::XComponentContext > mxContext;
+    css::uno::Reference< css::task::XStatusIndicator > mxStatusIndicator;
+    css::uno::Reference< css::task::XInteractionHandler > mxIH;
 
     bool                mbUseTaggedPDF;
     sal_Int32           mnPDFTypeSelection;
@@ -115,7 +110,7 @@ private:
     OUString            msSignContact;
     OUString            msSignReason;
     OUString            msSignPassword;
-    Reference< security::XCertificate > maSignCertificate;
+    css::uno::Reference< css::security::XCertificate > maSignCertificate;
     OUString            msSignTSA;
 
     void                ImplWriteWatermark( vcl::PDFWriter& rWriter, const Size& rPageSize );
@@ -125,20 +120,20 @@ private:
 
 public:
 
-                        PDFExport(  const Reference< XComponent >& rxSrcDoc,
-                                    const Reference< task::XStatusIndicator >& xStatusIndicator,
-                                    const Reference< task::XInteractionHandler >& xIH,
-                                    const Reference< uno::XComponentContext >& xFact );
+                        PDFExport(  const css::uno::Reference< css::lang::XComponent >& rxSrcDoc,
+                                    const css::uno::Reference< css::task::XStatusIndicator >& xStatusIndicator,
+                                    const css::uno::Reference< css::task::XInteractionHandler >& xIH,
+                                    const css::uno::Reference< css::uno::XComponentContext >& xFact );
                         ~PDFExport();
 
     bool                ExportSelection( vcl::PDFWriter& rPDFWriter,
-                                    Reference< css::view::XRenderable > const & rRenderable,
-                                    const Any& rSelection,
+                                    css::uno::Reference< css::view::XRenderable > const & rRenderable,
+                                    const css::uno::Any& rSelection,
                                     const StringRangeEnumerator& rRangeEnum,
-                                    Sequence< PropertyValue >& rRenderOptions,
+                                    css::uno::Sequence< css::beans::PropertyValue >& rRenderOptions,
                                     sal_Int32 nPageCount );
 
-    bool                Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData );
+    bool                Export( const OUString& rFile, const css::uno::Sequence< css::beans::PropertyValue >& rFilterData );
 
     void                showErrors( const std::set<vcl::PDFWriter::ErrorCode>& );
 };
