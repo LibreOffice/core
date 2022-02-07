@@ -288,16 +288,28 @@ private:
 private:
     struct ScSlotData
     {
-        SCROW  nStartRow;   // first row of this segment
-        SCROW  nStopRow;    // first row of next segment
-        SCSIZE nSlice;      // slice size in this segment
-        SCSIZE nCumulated;  // cumulated slots of previous segments
+        SCROW  nStartRow;     // first row of this segment
+        SCROW  nStopRow;      // first row of next segment
+        SCSIZE nSliceRow;     // row slice size in this segment
+        SCSIZE nCumulatedRow; // cumulated slots of previous segments (previous rows)
+        SCROW  nStartCol;     // first column of this segment
+        SCROW  nStopCol;      // first column of next segment
+        SCSIZE nSliceCol;     // column slice size in this segment
+        SCSIZE nCumulatedCol; // cumulated slots of previous segments (previous columns)
 
-        ScSlotData( SCROW r1, SCROW r2, SCSIZE s, SCSIZE c ) : nStartRow(r1), nStopRow(r2), nSlice(s), nCumulated(c) {}
+        ScSlotData( SCROW r1, SCROW r2, SCSIZE sr, SCSIZE cr, SCCOL c1, SCCOL c2, SCSIZE sc, SCSIZE cc )
+        : nStartRow(r1)
+        , nStopRow(r2)
+        , nSliceRow(sr)
+        , nCumulatedRow(cr)
+        , nStartCol(c1)
+        , nStopCol(c2)
+        , nSliceCol(sc)
+        , nCumulatedCol(cc) {}
     };
     typedef ::std::vector< ScSlotData > ScSlotDistribution;
     ScSlotDistribution maSlotDistribution;
-    SCSIZE mnBcaSlotsRow;
+    SCSIZE mnBcaSlotsCol;
     SCSIZE mnBcaSlots;
     ScBroadcastAreasBulk  aBulkBroadcastAreas;
     BulkGroupAreasType m_BulkGroupAreas;
@@ -313,6 +325,9 @@ private:
     void                 ComputeAreaPoints( const ScRange& rRange,
                                             SCSIZE& nStart, SCSIZE& nEnd,
                                             SCSIZE& nRowBreak ) const;
+#ifdef DBG_UTIL
+    void                 DoChecks();
+#endif
 
 public:
                         ScBroadcastAreaSlotMachine( ScDocument* pDoc );
