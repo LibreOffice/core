@@ -25,9 +25,9 @@
 #include <map>
 
 // map of row number to ScAddress*
-typedef std::map<sal_uLong, std::unique_ptr<ScAddress>> RowMap;
+typedef std::map<SCROW, std::unique_ptr<ScAddress>> RowMap;
 // map of column number to RowMap
-typedef std::map<sal_uLong, RowMap>    ColumnMap;
+typedef std::map<SCCOL, RowMap>    ColumnMap;
 
 class ScChartPositionMap
 {
