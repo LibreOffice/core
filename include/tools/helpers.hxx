@@ -12,6 +12,7 @@
 #include <sal/types.h>
 #include <tools/long.hxx>
 #include <cassert>
+#include <limits>
 #include <type_traits>
 
 template<typename T>
@@ -72,7 +73,10 @@ inline sal_uInt32 AlignedWidth4Bytes(sal_uInt32 nWidthBits)
 
 inline tools::Long FRound( double fVal )
 {
-    return fVal > 0.0 ? static_cast<tools::Long>( fVal + 0.5 ) : -static_cast<tools::Long>( -fVal + 0.5 );
+    return fVal > 0.0
+        ? fVal == double(std::numeric_limits<tools::Long>::max())
+            ? std::numeric_limits<tools::Long>::max() : static_cast<tools::Long>( fVal + 0.5 )
+        :  static_cast<tools::Long>( fVal - 0.5 );
 }
 
 //valid range:  (-180,180]
