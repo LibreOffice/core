@@ -365,7 +365,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
     SwFrameFormat* pShape = FindFrameFormat(pSdrObj);
     const SwFormatAnchor& rAnchor(pShape->GetAnchor());
-    if (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+    if (0 && rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
     {
         // This is an inline draw shape, see if it has a textbox.
         SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
