@@ -2451,6 +2451,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                         tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
                         nScrPosX += nSizeXPix;
                     }
+                    else
+                    {   // If the width is zero, the column is possibly hidden, skips groups of such columns.
+                        SCCOL lastHidden = -1;
+                        if(mrDoc.ColHidden(nX, nForTab, nullptr, &lastHidden) && lastHidden > nX)
+                            nX = lastHidden - 1;
+                    }
                 }
             }
         }
@@ -2464,6 +2470,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 {
                     tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
                     nScrPosX -= nSizeXPix;
+                }
+                else
+                {   // If the width is zero, the column is possibly hidden, skips groups of such columns.
+                    SCCOL firstHidden = -1;
+                    if(mrDoc.ColHidden(nX, nForTab, &firstHidden, nullptr) && firstHidden >= 0)
+                        nX = firstHidden;
                 }
             }
         }
@@ -2514,6 +2526,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 {
                     tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
                     nScrPosY -= nSizeYPix;
+                }
+                else
+                {   // If the height is zero, the row is possibly hidden, skips groups of such rows.
+                    SCROW firstHidden = -1;
+                    if(mrDoc.RowHidden(nY, nForTab, &firstHidden, nullptr) && firstHidden >= 0)
+                        nY = firstHidden;
                 }
             }
         }
