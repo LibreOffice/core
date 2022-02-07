@@ -193,13 +193,8 @@ public:
             const rtl::Reference< ::chart::Diagram >& xDiagram,
             bool bSetAxisType = false, // when this flag is true ...
             bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
-    static void setCategoriesToDiagram(
-            const rtl::Reference< LabeledDataSequence >& xCategories,
-            const rtl::Reference< ::chart::Diagram >& xDiagram,
-            bool bSetAxisType = false, // when this flag is true ...
-            bool bCategoryAxis = true);// set the AxisType to CATEGORY or back to REALNUMBER
 
-    static rtl::Reference< LabeledDataSequence >
+    static css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategoriesFromDiagram(
             const rtl::Reference< ::chart::Diagram > & xDiagram );
 

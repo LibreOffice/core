@@ -1373,7 +1373,7 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit&, rEdit, voi
         m_apDataBrowserModel->getHeaderForSeries( xSeries ).m_xChartType );
     if( xChartType.is())
     {
-        rtl::Reference< LabeledDataSequence > xLabeledSeq =
+        uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSeq =
             DataSeriesHelper::getDataSequenceByRole( xSource, xChartType->getRoleOfSequenceForSeriesLabel());
         if( xLabeledSeq.is())
         {

@@ -53,13 +53,13 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-    std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
-    rtl::Reference< LabeledDataSequence > xValuesX;
-    vector< rtl::Reference< LabeledDataSequence > > aYValuesVector;
-    vector< rtl::Reference< LabeledDataSequence > > aSizeValuesVector;
+    uno::Reference< chart2::data::XLabeledDataSequence > xValuesX;
+    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aYValuesVector;
+    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSizeValuesVector;
 
-    rtl::Reference< LabeledDataSequence > xCategories;
+    uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
     bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
@@ -120,15 +120,16 @@ InterpretedData BubbleDataInterpreter::interpretDataSource(
     vector< Reference< XDataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSizeValuesVector.size());
 
-    rtl::Reference< LabeledDataSequence > xClonedXValues = xValuesX;
+    Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
+    Reference< util::XCloneable > xCloneableX( xValuesX, uno::UNO_QUERY );
 
     for( size_t nN = 0; nN < aSizeValuesVector.size(); ++nN, ++nSeriesIndex )
     {
-        vector< rtl::Reference< LabeledDataSequence > > aNewData;
+        vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData;
         if( xValuesX.is() )
         {
-            if( nN > 0  )
-                xClonedXValues = new LabeledDataSequence(*xValuesX);
+            if( nN > 0 && xCloneableX.is() )
+                xClonedXValues.set( xCloneableX->createClone(), uno::UNO_QUERY );
             aNewData.push_back( xClonedXValues );
         }
         if( aYValuesVector.size() > nN )
@@ -164,18 +165,18 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
             Reference< data::XDataSource > xSeriesSource( aSeries[i], uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
-            rtl::Reference< LabeledDataSequence > xValuesSize(
+            uno::Reference< chart2::data::XLabeledDataSequence > xValuesSize(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-size" ));
-            rtl::Reference< LabeledDataSequence > xValuesY(
+            uno::Reference< chart2::data::XLabeledDataSequence > xValuesY(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
-            rtl::Reference< LabeledDataSequence > xValuesX(
+            uno::Reference< chart2::data::XLabeledDataSequence > xValuesX(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ));
 
             if( ! xValuesX.is() ||
                 ! xValuesY.is() ||
                 ! xValuesSize.is() )
             {
-                vector< rtl::Reference< LabeledDataSequence > > aValueSeqVec(
+                vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
                         xSeriesSource->getDataSequences(), "values" ));
                 if( xValuesX.is())
@@ -236,8 +237,7 @@ InterpretedData BubbleDataInterpreter::reinterpretDataSeries(
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
                 for( auto const & j : aSeqs )
                 {
-                    rtl::Reference< ::chart::LabeledDataSequence > j2 = dynamic_cast<LabeledDataSequence*>(j.get());
-                    assert( (j2 == xValuesY || j2 == xValuesX || j2 == xValuesSize) && "All sequences should be used" );
+                    assert( (j == xValuesY || j == xValuesX || j == xValuesSize) && "All sequences should be used" );
                 }
 #endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );

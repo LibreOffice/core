@@ -753,7 +753,7 @@ bool DataSourceTabPage::updateModelFromControl(const weld::Entry* pField)
 
     if (bAll || (pField == m_xEDT_CATEGORIES.get()))
     {
-        rtl::Reference< LabeledDataSequence > xLabeledSeq( m_rDialogModel.getCategories() );
+        uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSeq( m_rDialogModel.getCategories() );
         if( xDataProvider.is())
         {
             OUString aRange(m_xEDT_CATEGORIES->get_text());

@@ -298,13 +298,13 @@ Reference< beans::XPropertySet >
 {
     Reference< beans::XPropertySet > xResult;
 
-    std::vector< rtl::Reference< LabeledDataSequence > > aSequences;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences;
     {
         MutexGuard aGuard( m_aMutex );
         aSequences = m_aDataSequences;
     }
 
-    std::vector< rtl::Reference< LabeledDataSequence > > aValuesSeries(
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValuesSeries(
         DataSeriesHelper::getAllDataSequencesByRole( aSequences , "values" ) );
 
     if (aValuesSeries.empty())
@@ -392,9 +392,7 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
         std::swap( aOldDataSequences, m_aDataSequences );
         for (const auto & i : aData)
         {
-            auto p = dynamic_cast<LabeledDataSequence*>(i.get());
-            assert(p);
-            aNewDataSequences.push_back(p);
+            aNewDataSequences.push_back(i);
         }
         m_aDataSequences = aNewDataSequences;
     }
@@ -403,7 +401,7 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
     fireModifyEvent();
 }
 
-void DataSeries::setData( const std::vector< rtl::Reference< LabeledDataSequence > >& aData )
+void DataSeries::setData( const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
 {
     tDataSequenceContainer aOldDataSequences;
     tDataSequenceContainer aNewDataSequences;

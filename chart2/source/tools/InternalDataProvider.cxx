@@ -117,8 +117,8 @@ struct lcl_internalizeSeries
     {}
     void operator() ( const rtl::Reference< DataSeries > & xSeries )
     {
-        const std::vector< rtl::Reference< LabeledDataSequence > > & aOldSeriesData = xSeries->getDataSequences2();
-        std::vector< rtl::Reference< LabeledDataSequence > > aNewSeriesData( aOldSeriesData.size() );
+        const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aOldSeriesData = xSeries->getDataSequences2();
+        std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewSeriesData( aOldSeriesData.size() );
         for( sal_Int32 i=0; i<static_cast<sal_Int32>(aOldSeriesData.size()); ++i )
         {
             sal_Int32 nNewIndex( m_bDataInColumns ? m_rInternalData.appendColumn() : m_rInternalData.appendRow() );

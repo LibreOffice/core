@@ -272,8 +272,8 @@ void RangeHighlighter::fillRangesForDataPoint( const rtl::Reference< DataSeries 
 
     Color nPreferredColor = defaultPreferredColor;
     std::vector< chart2::data::HighlightedRange > aHilightedRanges;
-    const std::vector< rtl::Reference< LabeledDataSequence > > & aLSeqSeq( xDataSeries->getDataSequences2());
-    for( rtl::Reference< LabeledDataSequence > const & labelDataSeq : aLSeqSeq )
+    const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aLSeqSeq( xDataSeries->getDataSequences2());
+    for( uno::Reference< chart2::data::XLabeledDataSequence > const & labelDataSeq : aLSeqSeq )
     {
         Reference< chart2::data::XDataSequence > xLabel( labelDataSeq->getLabel());
         Reference< chart2::data::XDataSequence > xValues( labelDataSeq->getValues());

@@ -70,7 +70,7 @@ double lcl_getVariance( const Sequence< double > & rData, sal_Int32 & rOutValidC
     return (fQuadSum - fSum*fSum/fN) / fN;
 }
 
-rtl::Reference< ::chart::LabeledDataSequence > lcl_getErrorBarLabeledSequence(
+uno::Reference< chart2::data::XLabeledDataSequence > lcl_getErrorBarLabeledSequence(
     const Reference< chart2::data::XDataSource > & xDataSource,
     bool bPositiveValue, bool bYError,
     OUString & rOutRoleNameUsed )
@@ -91,7 +91,7 @@ rtl::Reference< ::chart::LabeledDataSequence > lcl_getErrorBarLabeledSequence(
         aRole.append( "negative" );
 
     OUString aLongRole = aRole.makeStringAndClear();
-    rtl::Reference< ::chart::LabeledDataSequence > xLSeq =
+    uno::Reference< chart2::data::XLabeledDataSequence > xLSeq =
         ::chart::DataSeriesHelper::getDataSequenceByRole( xDataSource, aLongRole );
     // try role without "-negative" or "-positive" postfix
     if( xLSeq.is())
@@ -189,17 +189,17 @@ double StatisticsHelper::getStandardError( const Sequence< double > & rData )
     return sqrt( fVar ) / sqrt( double(nValCount) );
 }
 
-rtl::Reference< LabeledDataSequence > StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
+uno::Reference< chart2::data::XLabeledDataSequence > StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
     const Reference< chart2::data::XDataSource > & xDataSource,
     bool bPositiveValue,
     bool bYError /* = true */ )
 {
-    rtl::Reference< LabeledDataSequence > xResult;
+    uno::Reference< chart2::data::XLabeledDataSequence > xResult;
     if( !xDataSource.is())
         return xResult;
 
     OUString aRole;
-    rtl::Reference< LabeledDataSequence > xLSeq =
+    uno::Reference< chart2::data::XLabeledDataSequence > xLSeq =
         lcl_getErrorBarLabeledSequence( xDataSource, bPositiveValue, bYError, aRole );
     if( xLSeq.is())
         xResult = xLSeq;
@@ -212,7 +212,7 @@ Reference< chart2::data::XDataSequence > StatisticsHelper::getErrorDataSequenceF
     bool bPositiveValue,
     bool bYError /* = true */ )
 {
-    rtl::Reference< LabeledDataSequence > xLSeq =
+    uno::Reference< chart2::data::XLabeledDataSequence > xLSeq =
         StatisticsHelper::getErrorLabeledDataSequenceFromDataSource(
             xDataSource, bPositiveValue,
             bYError );

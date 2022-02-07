@@ -214,57 +214,53 @@ OUString getRole( const rtl::Reference< ::chart::LabeledDataSequence >& xLabeled
     return aRet;
 }
 
-rtl::Reference< ::chart::LabeledDataSequence >
+uno::Reference< chart2::data::XLabeledDataSequence >
     getDataSequenceByRole(
         const Reference< chart2::data::XDataSource > & xSource,
         const OUString& aRole,
         bool bMatchPrefix /* = false */ )
 {
-    rtl::Reference< LabeledDataSequence > aNoResult;
+    uno::Reference< chart2::data::XLabeledDataSequence > aNoResult;
     if( ! xSource.is())
         return aNoResult;
     const Sequence< Reference< chart2::data::XLabeledDataSequence > > aLabeledSeq( xSource->getDataSequences());
     for (auto const & i : aLabeledSeq)
     {
-        auto p = dynamic_cast<LabeledDataSequence*>(i.get());
-        assert(p);
-        if (lcl_MatchesRole(aRole, bMatchPrefix)(p))
-            return p;
+        if (lcl_MatchesRole(aRole, bMatchPrefix)(i))
+            return i;
     }
 
     return aNoResult;
 }
 
-std::vector< rtl::Reference< LabeledDataSequence > >
+std::vector< uno::Reference< chart2::data::XLabeledDataSequence > >
     getAllDataSequencesByRole( const Sequence< Reference< chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole )
 {
-    std::vector< rtl::Reference< LabeledDataSequence > > aResultVec;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResultVec;
     for (const auto & i : aDataSequences)
     {
-        auto p = dynamic_cast<LabeledDataSequence*>(i.get());
-        assert(p);
-        if (lcl_MatchesRole(aRole, /*bMatchPrefix*/true)(p))
-            aResultVec.push_back(p);
+        if (lcl_MatchesRole(aRole, /*bMatchPrefix*/true)(i))
+            aResultVec.push_back(i);
     }
     return aResultVec;
 }
 
-std::vector< rtl::Reference< LabeledDataSequence > >
-    getAllDataSequencesByRole( const std::vector< rtl::Reference< LabeledDataSequence > > & aDataSequences,
+std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > >
+    getAllDataSequencesByRole( const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSequences,
                                const OUString& aRole )
 {
-    std::vector< rtl::Reference< LabeledDataSequence > > aResultVec;
+    std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > aResultVec;
     std::copy_if( aDataSequences.begin(), aDataSequences.end(),
                            std::back_inserter( aResultVec ),
                            lcl_MatchesRole(aRole, /*bMatchPrefix*/true) );
     return aResultVec;
 }
 
-std::vector<rtl::Reference<LabeledDataSequence> >
+std::vector<uno::Reference<chart2::data::XLabeledDataSequence> >
 getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& aSeries )
 {
-    std::vector< rtl::Reference< LabeledDataSequence > > aSeqVec;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
 
     for( uno::Reference<chart2::XDataSeries> const & dataSeries : aSeries )
     {
@@ -274,9 +270,7 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
             const Sequence< Reference< chart2::data::XLabeledDataSequence > > aSeq( xSource->getDataSequences());
             for (const auto & i : aSeq)
             {
-                auto p = dynamic_cast<LabeledDataSequence*>(i.get());
-                assert(p);
-                aSeqVec.push_back(p);
+                aSeqVec.push_back(i);
             }
         }
     }
@@ -284,14 +278,14 @@ getAllDataSequences( const uno::Sequence<uno::Reference<chart2::XDataSeries> >& 
     return aSeqVec;
 }
 
-std::vector<rtl::Reference<::chart::LabeledDataSequence> >
+std::vector<uno::Reference<chart2::data::XLabeledDataSequence> >
 getAllDataSequences( const std::vector<rtl::Reference<DataSeries> >& aSeries )
 {
-    std::vector< rtl::Reference< LabeledDataSequence > > aSeqVec;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqVec;
 
     for( rtl::Reference<DataSeries> const & dataSeries : aSeries )
     {
-        const std::vector< rtl::Reference< LabeledDataSequence > > & aSeq( dataSeries->getDataSequences2());
+        const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aSeq( dataSeries->getDataSequences2());
         aSeqVec.insert( aSeqVec.end(), aSeq.begin(), aSeq.end() );
     }
 

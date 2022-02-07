@@ -164,7 +164,7 @@ VDataSeries::VDataSeries( const rtl::Reference< DataSeries >& xDataSeries )
 {
     m_xDataSeriesProps = m_xDataSeries;
 
-    const std::vector< rtl::Reference< LabeledDataSequence > > & aDataSequences =
+    const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSequences =
             m_xDataSeries->getDataSequences2();
 
     for(sal_Int32 nN = aDataSequences.size();nN--;)

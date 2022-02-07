@@ -129,7 +129,7 @@ bool lcl_SequenceOfSeriesIsShared(
     return bResult;
 }
 
-typedef std::vector< rtl::Reference< ::chart::LabeledDataSequence > > lcl_tSharedSeqVec;
+typedef std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > lcl_tSharedSeqVec;
 
 lcl_tSharedSeqVec lcl_getSharedSequences( const Sequence< Reference< chart2::XDataSeries > > & rSeries )
 {
@@ -153,7 +153,7 @@ lcl_tSharedSeqVec lcl_getSharedSequences( const Sequence< Reference< chart2::XDa
                 break;
         }
         if( bShared )
-            aResult.push_back( dynamic_cast<LabeledDataSequence*>(labeledDataSeq.get()) );
+            aResult.push_back( labeledDataSeq );
     }
 
     return aResult;
@@ -195,10 +195,10 @@ private:
 
 struct lcl_RolesOfLSeqMatch
 {
-    explicit lcl_RolesOfLSeqMatch( const rtl::Reference< LabeledDataSequence > & xLSeq ) :
+    explicit lcl_RolesOfLSeqMatch( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq ) :
         m_aRole(DataSeriesHelper::getRole(xLSeq)) {}
 
-    bool operator() ( const rtl::Reference< LabeledDataSequence > & xLSeq )
+    bool operator() ( const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq )
     {
         return DataSeriesHelper::getRole(xLSeq) == m_aRole;
     }
@@ -341,7 +341,7 @@ void DataBrowserModel::insertDataSeries( sal_Int32 nAfterColumnIndex )
         // Failed to insert new data series to the model. Bail out.
         return;
 
-    const std::vector<rtl::Reference<LabeledDataSequence> > & aLSequences = xNewSeries->getDataSequences2();
+    const std::vector<uno::Reference<chart2::data::XLabeledDataSequence> > & aLSequences = xNewSeries->getDataSequences2();
     sal_Int32 nSeqIdx = 0;
     sal_Int32 nSeqSize = aLSequences.size();
     for (sal_Int32 nIndex = nStartCol; nSeqIdx < nSeqSize; ++nSeqIdx)
@@ -469,7 +469,7 @@ void DataBrowserModel::removeDataSeriesOrComplexCategoryLevel( sal_Int32 nAtColu
 
     // Collect all the remaining data sequences in the same chart type. The
     // deleted data series is already gone by this point.
-    std::vector<rtl::Reference<LabeledDataSequence> > aAllDataSeqs =
+    std::vector<uno::Reference<chart2::data::XLabeledDataSequence> > aAllDataSeqs =
         DataSeriesHelper::getAllDataSequences(xSeriesCnt->getDataSeries());
 
     // Check if the sequences to be deleted are still referenced by any of

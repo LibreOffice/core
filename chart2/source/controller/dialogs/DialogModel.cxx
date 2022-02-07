@@ -266,7 +266,7 @@ rtl::Reference< ::chart::DataSeries > lcl_CreateNewSeries(
         // set chart type specific roles
         if( xChartType.is() )
         {
-            std::vector< rtl::Reference< ::chart::LabeledDataSequence > > aNewSequences;
+            std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewSequences;
             const OUString aRoleOfSeqForSeriesLabel = xChartType->getRoleOfSequenceForSeriesLabel();
             const OUString aLabel(::chart::SchResId(STR_DATA_UNNAMED_SERIES));
             Sequence< OUString > aPossibleRoles( xChartType->getSupportedMandatoryRoles());
@@ -596,9 +596,9 @@ void DialogModel::deleteSeries(
     DataSeriesHelper::deleteSeries( xSeries, xChartType );
 }
 
-rtl::Reference< LabeledDataSequence > DialogModel::getCategories() const
+uno::Reference< chart2::data::XLabeledDataSequence > DialogModel::getCategories() const
 {
-    rtl::Reference< LabeledDataSequence > xResult;
+    uno::Reference< chart2::data::XLabeledDataSequence > xResult;
     try
     {
         if( m_xChartDocument.is())
@@ -637,7 +637,7 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
 
 OUString DialogModel::getCategoriesRange() const
 {
-    rtl::Reference< LabeledDataSequence > xLSeq( getCategories());
+    uno::Reference< chart2::data::XLabeledDataSequence > xLSeq( getCategories());
     OUString aRange;
     if( xLSeq.is())
     {

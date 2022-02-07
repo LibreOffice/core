@@ -46,7 +46,7 @@ namespace chart::StatisticsHelper
     // also called "Standard deviation of the mean (SDOM)"
     OOO_DLLPUBLIC_CHARTTOOLS double getStandardError( const css::uno::Sequence< double > & rData );
 
-    OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::LabeledDataSequence >
+    OOO_DLLPUBLIC_CHARTTOOLS css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getErrorLabeledDataSequenceFromDataSource(
             const css::uno::Reference< css::chart2::data::XDataSource > & xDataSource,
             bool bPositiveValue,

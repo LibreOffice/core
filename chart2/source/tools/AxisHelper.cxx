@@ -212,11 +212,11 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                     Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( *xChartDoc ) );
                     if( xSource.is() )
                     {
-                        std::vector< rtl::Reference< LabeledDataSequence > > aXValues(
+                        std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aXValues(
                             DataSeriesHelper::getAllDataSequencesByRole( xSource->getDataSequences(), "values-x" ) );
                         if( aXValues.empty() )
                         {
-                            rtl::Reference< LabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+                            uno::Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
                             if( xCategories.is() )
                             {
                                 Reference< data::XDataSequence > xSeq( xCategories->getValues());

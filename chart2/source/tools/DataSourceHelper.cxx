@@ -291,17 +291,17 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
 uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
     ChartModel& rModel )
 {
-    std::vector< rtl::Reference< LabeledDataSequence > > aResult;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;
 
     rtl::Reference< Diagram > xDiagram =  rModel.getFirstChartDiagram();
-    rtl::Reference< LabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
+    uno::Reference< chart2::data::XLabeledDataSequence > xCategories( DiagramHelper::getCategoriesFromDiagram( xDiagram ) );
     if( xCategories.is() )
         aResult.push_back( xCategories );
 
     std::vector< rtl::Reference< DataSeries > > aSeriesVector = ChartModelHelper::getDataSeries( &rModel );
     for (auto const& series : aSeriesVector)
     {
-        const std::vector< rtl::Reference< LabeledDataSequence > > & aDataSequences( series->getDataSequences2() );
+        const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSequences( series->getDataSequences2() );
         aResult.insert( aResult.end(), aDataSequences.begin(), aDataSequences.end() );
     }
 
