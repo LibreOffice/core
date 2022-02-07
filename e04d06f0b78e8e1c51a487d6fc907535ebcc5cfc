@@ -34,6 +34,24 @@
       "parentUuid": "7ce7e431_21700887",
       "revId": "e04d06f0b78e8e1c51a487d6fc907535ebcc5cfc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f84b9a5f_a84fec8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-07T10:43:42Z",
+      "side": 1,
+      "message": "I was going to start working on the follow-up patch, to use u16string_view the names[] array must be defined somewhere outside the function: isBootstrapType(OUString const \u0026 name). If I define names[] in the namespace itself, would that be fine?",
+      "parentUuid": "547b0592_59073d02",
+      "revId": "e04d06f0b78e8e1c51a487d6fc907535ebcc5cfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
