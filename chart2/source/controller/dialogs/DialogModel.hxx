@@ -120,7 +120,7 @@ public:
         const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
         const rtl::Reference< ::chart::ChartType > & xChartType );
 
-    rtl::Reference< ::chart::LabeledDataSequence >
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence >
         getCategories() const;
 
     void setCategories( const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xCategories );

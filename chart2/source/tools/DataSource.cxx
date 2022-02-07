@@ -42,7 +42,7 @@ DataSource::DataSource(
 {}
 
 DataSource::DataSource(
-    const std::vector< rtl::Reference< ::chart::LabeledDataSequence > > & rSequences )
+    const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & rSequences )
 {
     m_aDataSeq = comphelper::containerToSequence< Reference< chart2::data::XLabeledDataSequence > >(rSequences);
 }

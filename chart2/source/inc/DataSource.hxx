@@ -40,7 +40,7 @@ public:
     explicit DataSource(
         const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rSequences );
     explicit DataSource(
-        const std::vector< rtl::Reference< ::chart::LabeledDataSequence > > & rSequences );
+        const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence >  > & rSequences );
 
     virtual ~DataSource() override;
 

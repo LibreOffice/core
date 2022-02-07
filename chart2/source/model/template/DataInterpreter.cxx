@@ -68,9 +68,9 @@ InterpretedData DataInterpreter::interpretDataSource(
     lcl_ShowDataSource( xSource );
 #endif
 
-    std::vector< rtl::Reference< LabeledDataSequence > > aData = getDataSequences(xSource);
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = getDataSequences(xSource);
 
-    rtl::Reference< LabeledDataSequence > xCategories;
+    uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
     vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
 
     // check if we should use categories
@@ -79,7 +79,7 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     // parse data
     bool bCategoriesUsed = false;
-    for( rtl::Reference< LabeledDataSequence > const & labeledData : aData )
+    for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aData )
     {
         try
         {
@@ -140,10 +140,10 @@ InterpretedData DataInterpreter::interpretDataSource(
     lcl_ShowDataSource( xSource );
 #endif
 
-    std::vector< rtl::Reference< LabeledDataSequence > > aData = getDataSequences(xSource);
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = getDataSequences(xSource);
 
-    rtl::Reference< LabeledDataSequence > xCategories;
-    vector< rtl::Reference< LabeledDataSequence > > aSequencesVec;
+    uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
+    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSequencesVec;
 
     // check if we should use categories
 
@@ -151,7 +151,7 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     // parse data
     bool bCategoriesUsed = false;
-    for( rtl::Reference< LabeledDataSequence > const & labeledData : aData )
+    for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aData )
     {
         try
         {
@@ -182,7 +182,7 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     for (auto const& elem : aSequencesVec)
     {
-        std::vector< rtl::Reference< LabeledDataSequence > > aNewData { elem };
+        std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData { elem };
         rtl::Reference< DataSeries > xSeries;
         if( nSeriesIndex < static_cast<sal_Int32>(aSeriesToReUse.size()))
             xSeries = aSeriesToReUse[nSeriesIndex];
@@ -437,7 +437,7 @@ bool DataInterpreter::HasCategories(
 
 bool DataInterpreter::HasCategories(
     const Sequence< beans::PropertyValue > & rArguments,
-    const std::vector< rtl::Reference< LabeledDataSequence > > & rData )
+    const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & rData )
 {
     bool bHasCategories = false;
 
@@ -473,15 +473,13 @@ css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceName
     return { "com.sun.star.chart2.DataInterpreter" };
 }
 
-std::vector< rtl::Reference< LabeledDataSequence > > DataInterpreter::getDataSequences(
+std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > DataInterpreter::getDataSequences(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource)
 {
-    std::vector< rtl::Reference< LabeledDataSequence > > aData;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData;
     for (const Reference< data::XLabeledDataSequence > & rLDS : xSource->getDataSequences() )
     {
-        auto pLDS = dynamic_cast<LabeledDataSequence*>(rLDS.get());
-        assert(pLDS);
-        aData.push_back(pLDS);
+        aData.push_back(rLDS);
     }
     return aData;
 }

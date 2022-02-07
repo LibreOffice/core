@@ -490,7 +490,7 @@ void DiagramHelper::replaceCoordinateSystem(
 
     try
     {
-        rtl::Reference< LabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
+        uno::Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
 
         // move chart types of xCooSysToReplace to xReplacement
         xReplacement->setChartTypes( xCooSysToReplace->getChartTypes());
@@ -756,7 +756,7 @@ bool DiagramHelper::isCategoryDiagram(
 }
 
 void DiagramHelper::setCategoriesToDiagram(
-    const Reference< chart2::data::XLabeledDataSequence >& xCategories,
+    const uno::Reference< chart2::data::XLabeledDataSequence >& xCategories,
     const rtl::Reference< Diagram >& xDiagram,
     bool bSetAxisType  /* = false */,
     bool bCategoryAxis /* = true */ )
@@ -782,38 +782,11 @@ void DiagramHelper::setCategoriesToDiagram(
     }
 }
 
-void DiagramHelper::setCategoriesToDiagram(
-    const rtl::Reference< LabeledDataSequence >& xCategories,
-    const rtl::Reference< Diagram >& xDiagram,
-    bool bSetAxisType  /* = false */,
-    bool bCategoryAxis /* = true */ )
-{
-    std::vector< Reference< chart2::XAxis > > aCatAxes(
-        lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
-
-    for (const Reference< chart2::XAxis >& xCatAxis : aCatAxes)
-    {
-        if( xCatAxis.is())
-        {
-            ScaleData aScaleData( xCatAxis->getScaleData());
-            aScaleData.Categories = xCategories;
-            if( bSetAxisType )
-            {
-                if( bCategoryAxis )
-                    aScaleData.AxisType = AxisType::CATEGORY;
-                else if( aScaleData.AxisType == AxisType::CATEGORY || aScaleData.AxisType == AxisType::DATE )
-                    aScaleData.AxisType = AxisType::REALNUMBER;
-            }
-            xCatAxis->setScaleData( aScaleData );
-        }
-    }
-}
-
-rtl::Reference< LabeledDataSequence >
+uno::Reference< chart2::data::XLabeledDataSequence >
     DiagramHelper::getCategoriesFromDiagram(
         const rtl::Reference< Diagram > & xDiagram )
 {
-    rtl::Reference< LabeledDataSequence > xResult;
+    uno::Reference< chart2::data::XLabeledDataSequence > xResult;
 
     try
     {
@@ -828,8 +801,7 @@ rtl::Reference< LabeledDataSequence >
                 ScaleData aScaleData( xCatAxis->getScaleData());
                 if( aScaleData.Categories.is() )
                 {
-                    xResult = dynamic_cast<LabeledDataSequence*>(aScaleData.Categories.get());
-                    assert(!aScaleData.Categories || xResult);
+                    xResult = aScaleData.Categories;
                     uno::Reference<beans::XPropertySet> xProp(xResult->getValues(), uno::UNO_QUERY );
                     if( xProp.is() )
                     {

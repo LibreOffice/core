@@ -54,19 +54,19 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-    std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
 
-    rtl::Reference< LabeledDataSequence > xValuesX;
-    vector< rtl::Reference< LabeledDataSequence > > aSequencesVec;
+    uno::Reference< chart2::data::XLabeledDataSequence > xValuesX;
+    vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSequencesVec;
 
-    rtl::Reference< LabeledDataSequence > xCategories;
+    uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
     bool bHasCategories = HasCategories( aArguments, aData );
     bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
     // parse data
     bool bCategoriesUsed = false;
     bool bSetXValues = aData.size()>1;
-    for( rtl::Reference< LabeledDataSequence > const & labelData : aData )
+    for( uno::Reference< chart2::data::XLabeledDataSequence > const & labelData : aData )
     {
         try
         {
@@ -104,15 +104,16 @@ InterpretedData XYDataInterpreter::interpretDataSource(
     vector< Reference< XDataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
-    rtl::Reference< LabeledDataSequence > xClonedXValues = xValuesX;
+    Reference< data::XLabeledDataSequence > xClonedXValues = xValuesX;
+    Reference< util::XCloneable > xCloneable( xValuesX, uno::UNO_QUERY );
 
     sal_Int32 nSeriesIndex = 0;
     for (auto const& elem : aSequencesVec)
     {
-        vector< rtl::Reference< LabeledDataSequence > > aNewData;
+        vector< uno::Reference< chart2::data::XLabeledDataSequence > > aNewData;
 
-        if( nSeriesIndex )
-            xClonedXValues = new LabeledDataSequence(*xValuesX);
+        if( nSeriesIndex && xCloneable.is() )
+            xClonedXValues.set( xCloneable->createClone(), uno::UNO_QUERY );
         if( xValuesX.is() )
             aNewData.push_back( xClonedXValues );
 
@@ -149,15 +150,15 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
             // values-y
-            rtl::Reference< LabeledDataSequence > xValuesY(
+            uno::Reference< chart2::data::XLabeledDataSequence > xValuesY(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
-            rtl::Reference< LabeledDataSequence > xValuesX(
+            uno::Reference< chart2::data::XLabeledDataSequence > xValuesX(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ));
             // re-use values-... as values-x/values-y
             if( ! xValuesX.is() ||
                 ! xValuesY.is())
             {
-                vector< rtl::Reference< LabeledDataSequence > > aValueSeqVec(
+                vector< uno::Reference< chart2::data::XLabeledDataSequence > > aValueSeqVec(
                     DataSeriesHelper::getAllDataSequencesByRole(
                         xSeriesSource->getDataSequences(), "values" ));
                 if( xValuesX.is())
@@ -200,8 +201,7 @@ InterpretedData XYDataInterpreter::reinterpretDataSeries(
 #ifdef DBG_UTIL
                 for( auto const & j : aSeqs )
                 {
-                    rtl::Reference< ::chart::LabeledDataSequence > j2 = dynamic_cast<LabeledDataSequence*>(j.get());
-                    SAL_WARN_IF((j2 == xValuesY || j2 == xValuesX), "chart2.template", "All sequences should be used" );
+                    SAL_WARN_IF((j == xValuesY || j == xValuesX), "chart2.template", "All sequences should be used" );
                 }
 #endif
                 Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );

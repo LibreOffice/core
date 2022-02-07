@@ -52,8 +52,8 @@ InterpretedData StockDataInterpreter::interpretDataSource(
     if( ! xSource.is())
         return InterpretedData();
 
-    rtl::Reference< LabeledDataSequence > xCategories;
-    std::vector< rtl::Reference< LabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
+    uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
+    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = DataInterpreter::getDataSequences(xSource);
     const sal_Int32 nDataCount( aData.size());
 
     // sub-type properties
@@ -88,7 +88,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
 
     sal_Int32 nNumberOfGroups( bHasVolume ? 2 : 1 );
     // sequences of data::XLabeledDataSequence per series per group
-    std::vector< std::vector< std::vector< rtl::Reference< LabeledDataSequence > > > > aSequences( nNumberOfGroups );
+    std::vector< std::vector< std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > > > aSequences( nNumberOfGroups );
     const sal_Int32 nBarGroupIndex( 0 );
     const sal_Int32 nCandleStickGroupIndex( nNumberOfGroups - 1 );
 

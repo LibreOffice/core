@@ -134,7 +134,7 @@ public:
     virtual void SAL_CALL removeModifyListener(
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
-    typedef std::vector< rtl::Reference< LabeledDataSequence > > tDataSequenceContainer;
+    typedef std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > tDataSequenceContainer;
 
     void setData( const tDataSequenceContainer& aData );
     const tDataSequenceContainer & getDataSequences2() const { return m_aDataSequences; }

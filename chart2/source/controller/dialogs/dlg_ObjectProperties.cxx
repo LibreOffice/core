@@ -216,7 +216,7 @@ void ObjectPropertiesDialogParameter::init( const rtl::Reference<::chart::ChartM
 
     if( m_eObjectType == OBJECTTYPE_DATA_CURVE )
     {
-        const std::vector< rtl::Reference< LabeledDataSequence > > & aDataSeqs( xSeries->getDataSequences2());
+        const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSeqs( xSeries->getDataSequences2());
         Sequence< double > aXValues, aYValues;
         bool bXValuesFound = false, bYValuesFound = false;
         m_nNbPoints = 0;

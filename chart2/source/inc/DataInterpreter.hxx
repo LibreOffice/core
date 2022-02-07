@@ -39,7 +39,7 @@ class LabeledDataSequence;
 struct InterpretedData
 {
     css::uno::Sequence< css::uno::Sequence< css::uno::Reference<css::chart2::XDataSeries> > > Series;
-    rtl::Reference<::chart::LabeledDataSequence> Categories;
+    css::uno::Reference< css::chart2::data::XLabeledDataSequence > Categories;
 };
 
 /** offers tooling to interpret different data sources in a structural
@@ -74,11 +74,14 @@ public:
     static bool HasCategories(
         const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
         const std::vector< rtl::Reference< LabeledDataSequence > > & rData );
+    static bool HasCategories(
+        const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
+        const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
 
     static bool UseCategoriesAsX(
         const css::uno::Sequence< css::beans::PropertyValue > & rArguments );
 
-    static std::vector<rtl::Reference<LabeledDataSequence>> getDataSequences(
+    static std::vector<css::uno::Reference< css::chart2::data::XLabeledDataSequence >> getDataSequences(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource);
 
     // ____ DataInterpreter ____

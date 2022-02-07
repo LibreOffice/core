@@ -250,8 +250,7 @@ private:
                           css::uno::Sequence<
                               css::uno::Reference<
                                   css::chart2::XDataSeries > > > & aSeriesSeq,
-                      const rtl::Reference<
-                          LabeledDataSequence >& xCategories,
+                      const css::uno::Reference< css::chart2::data::XLabeledDataSequence >& xCategories,
                       const std::vector< rtl::Reference< ChartType > > & aOldChartTypesSeq);
 };
 
