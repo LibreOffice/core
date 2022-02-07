@@ -16,6 +16,23 @@
       "message": "Looks good to me.\nHeiko, what do you think?",
       "revId": "e1791461d38ad1f80af5b0a982ea72c34a796d79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69f07b0d_1c3663f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-07T10:51:18Z",
+      "side": 1,
+      "message": "* In case multiple tabs are selected, the command remains enabled but nothing happens (the dialog copies all selected sheets). Would just _disable_ the command.\n* Stumbled over this by reading the source comments. And in fact no sheet operations are possible when track changes is active. Totally wrong from usability POV is to _hide_ temporarily unavailable commands. And that happens also for the duplicate menu item. Please fix it, if possible.\n* Minor issue last: A sheet named \"A\" becomes \"A_2_2\" while copying per dialog makes it \"A_2\".\n",
+      "revId": "e1791461d38ad1f80af5b0a982ea72c34a796d79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
