@@ -106,6 +106,24 @@
       "parentUuid": "b53f9447_28b422a1",
       "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "907442a5_d4440cc6",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-07T09:41:17Z",
+      "side": 0,
+      "message": "\u003e MAXROW_JUMBO is only 16000000 because mmeeks wanted us to be able to hit 16 million rows. It should indeed be a power of 2\n\nOk, https://gerrit.libreoffice.org/c/core/+/129588 changes that.\n\nAs for checking that all rows/column have a slot, I\u0027ve started working on fixing \u003e1024 columns support, so I\u0027ll need to fix ScBroadcastAreaSlotMachine for that case, and I\u0027ll add checks as a part of that.",
+      "parentUuid": "91c6b7bd_2ceeae2d",
+      "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
