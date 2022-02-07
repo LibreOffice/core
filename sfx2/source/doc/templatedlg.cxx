@@ -63,7 +63,6 @@ constexpr OUStringLiteral TM_SETTING_VIEWMODE = u"ViewMode";
 #define MNI_ACTION_NEW_FOLDER "new"
 #define MNI_ACTION_RENAME_FOLDER "rename"
 #define MNI_ACTION_DELETE_FOLDER "delete"
-#define MNI_ACTION_REFRESH   "refresh"
 #define MNI_ACTION_DEFAULT   "default"
 #define MNI_ACTION_DEFAULT_WRITER   "default_writer"
 #define MNI_ACTION_DEFAULT_CALC   "default_calc"
@@ -178,7 +177,6 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(weld::Window *pParent)
     mxActionBar->append_item(MNI_ACTION_RENAME_FOLDER, SfxResId(STR_CATEGORY_RENAME), BMP_ACTION_RENAME);
     mxActionBar->append_item(MNI_ACTION_DELETE_FOLDER, SfxResId(STR_CATEGORY_DELETE), BMP_ACTION_DELETE_CATEGORY);
     mxActionBar->append_separator("separator");
-    mxActionBar->append_item(MNI_ACTION_REFRESH, SfxResId(STR_ACTION_REFRESH), BMP_ACTION_REFRESH);
     mxActionBar->append_item(MNI_ACTION_DEFAULT, SfxResId(STR_ACTION_RESET_ALL_DEFAULT_TEMPLATES));
     mxActionBar->append_item(MNI_ACTION_DEFAULT_WRITER, SfxResId(STR_ACTION_RESET_WRITER_TEMPLATE), BMP_ACTION_DEFAULT_WRITER);
     mxActionBar->append_item(MNI_ACTION_DEFAULT_CALC, SfxResId(STR_ACTION_RESET_CALC_TEMPLATE), BMP_ACTION_DEFAULT_CALC);
@@ -517,11 +515,6 @@ IMPL_LINK(SfxTemplateManagerDlg, MenuSelectHdl, const OString&, rIdent, void)
         OnCategoryRename();
     else if (rIdent == MNI_ACTION_DELETE_FOLDER)
         OnCategoryDelete();
-    else if (rIdent == MNI_ACTION_REFRESH)
-    {
-        mxLocalView->reload();
-        SearchUpdate();
-    }
     else if (rIdent == MNI_ACTION_DEFAULT)
     {
         DefaultTemplateMenuSelectHdl(MNI_ACTION_DEFAULT_WRITER);
