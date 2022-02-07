@@ -687,7 +687,7 @@ Finally:
 	Exit Function
 Catch:
 	GoTo Finally
-End Function	&apos;	ScritForge.SF_FileSystem.ExtensionFolder
+End Function	&apos;	ScriptForge.SF_FileSystem.ExtensionFolder
 
 REM -----------------------------------------------------------------------------
 Public Function FileExists(Optional ByVal FileName As Variant) As Boolean
