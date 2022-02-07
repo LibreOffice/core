@@ -165,9 +165,8 @@ OUString HsqlRowInputStream::readUTF(sal_Int32 nUTFLen)
     sal_Int32 nStrLen = 0;
     while (nCount < nUTFLen)
     {
-        unsigned char cIn = 0;
-        m_pStream->ReadUChar(cIn);
-        sal_uInt8 c = reinterpret_cast<sal_uInt8&>(cIn);
+        sal_uInt8 c = 0;
+        m_pStream->ReadUChar(c);
         sal_uInt8 char2, char3;
         switch (c >> 4)
         {
@@ -193,8 +192,7 @@ OUString HsqlRowInputStream::readUTF(sal_Int32 nUTFLen)
                     throw WrongFormatException();
                 }
 
-                m_pStream->ReadUChar(cIn);
-                char2 = reinterpret_cast<sal_uInt8&>(cIn);
+                m_pStream->ReadUChar(char2);
                 if ((char2 & 0xC0) != 0x80)
                 {
                     throw WrongFormatException();
@@ -211,10 +209,8 @@ OUString HsqlRowInputStream::readUTF(sal_Int32 nUTFLen)
                     throw WrongFormatException();
                 }
 
-                m_pStream->ReadUChar(cIn);
-                char2 = reinterpret_cast<sal_uInt8&>(cIn);
-                m_pStream->ReadUChar(cIn);
-                char3 = reinterpret_cast<sal_uInt8&>(cIn);
+                m_pStream->ReadUChar(char2);
+                m_pStream->ReadUChar(char3);
 
                 if (((char2 & 0xC0) != 0x80) || ((char3 & 0xC0) != 0x80))
                 {
@@ -234,9 +230,8 @@ OUString HsqlRowInputStream::readUTF(sal_Int32 nUTFLen)
 
 bool HsqlRowInputStream::checkNull()
 {
-    unsigned char cIn = 0;
-    m_pStream->ReadUChar(cIn);
-    sal_uInt8 nNull = reinterpret_cast<sal_uInt8&>(cIn);
+    sal_uInt8 nNull = 0;
+    m_pStream->ReadUChar(nNull);
     return nNull == 0;
 }
 
