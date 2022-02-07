@@ -37,6 +37,7 @@
 #include <svx/svdpage.hxx>
 #include <ndtxt.hxx>
 #include <txtfld.hxx>
+#include <toxmgr.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
@@ -633,6 +634,70 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
     // Without the fix in place, this test would have crashed here
     dispatchCommand(mxComponent, ".uno:Undo", {});
     Scheduler::ProcessEventsToIdle();
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // insert empty paragraph and heading text
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("abc");
+    pWrtShell->SplitNode();
+
+    // set one to heading so there will be an entry in the tox
+    pWrtShell->Up(false, 1);
+    uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
+        { "Style", uno::makeAny(OUString("Heading 1")) },
+        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+    });
+    dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
+
+    pWrtShell->EndOfSection(false);
+
+    // insert table of contents
+    SwTOXMgr mgr(pWrtShell);
+    SwTOXDescription desc{ TOX_CONTENT };
+    mgr.UpdateOrInsertTOX(desc, nullptr, nullptr);
+
+    // get url of heading cross reference mark
+    IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
+    auto const headingMark
+        = std::find_if(rIDMA.getAllMarksBegin(), rIDMA.getAllMarksEnd(), [](auto const* const it) {
+              return it->GetName().startsWith(
+                  IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
+          });
+    CPPUNIT_ASSERT(headingMark != rIDMA.getAllMarksEnd());
+    OUString const headingLink("#" + (*headingMark)->GetName());
+
+    // select tox entry
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->Up(false, 1);
+    pWrtShell->EndPara(true);
+
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->Copy();
+
+    pWrtShell->SttEndDoc(true);
+
+    // Paste special as RTF
+    TransferableDataHelper helper(xTransfer);
+    SwTransferable::PasteFormat(*pWrtShell, helper, SotClipboardFormatId::RTF);
+    Scheduler::ProcessEventsToIdle();
+
+    // check hyperlinkering
+    CPPUNIT_ASSERT_EQUAL(
+        headingLink, getProperty<OUString>(getRun(getParagraph(1), 1, "abc\t1"), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(), getProperty<OUString>(getRun(getParagraph(2), 1, OUString()), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(),
+        getProperty<OUString>(getRun(getParagraph(3), 1, "Table of Contents"), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(
+        headingLink, getProperty<OUString>(getRun(getParagraph(4), 1, "abc\t1"), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(
+        OUString(), getProperty<OUString>(getRun(getParagraph(5), 1, OUString()), "HyperLinkURL"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
