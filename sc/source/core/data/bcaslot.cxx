@@ -35,12 +35,6 @@
 #include <grouparealistener.hxx>
 #endif
 
-// Number of slots per dimension
-// must be integer divisors of MAXCOLCOUNT respectively MAXROWCOUNT
-constexpr SCCOL BCA_SLOTS_COL  = MAXCOLCOUNT / 16;
-constexpr SCCOL BCA_SLOT_COLS  = MAXCOLCOUNT / BCA_SLOTS_COL;
-static_assert((BCA_SLOT_COLS * BCA_SLOTS_COL) == MAXCOLCOUNT, "bad BCA_SLOTS_COL value");
-
 ScBroadcastArea::ScBroadcastArea( const ScRange& rRange ) :
     pUpdateChainNext(nullptr),
     aRange(rRange),
@@ -577,25 +571,50 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     const ScSheetLimits& rSheetLimits = pDoc->GetSheetLimits();
     // initSlotDistribution ---------
     // Logarithmic or any other distribution.
-    // Upper sheet part usually is more populated and referenced and gets fine
+    // Upper and leftmost sheet part usually is more populated and referenced and gets fine
     // grained resolution, larger data in larger hunks.
-    // Could be further enhanced by also applying a different distribution of
-    // column slots.
+    // Just like with cells, slots are organized in columns. Slot 0 is for first nSliceRow x nSliceCol
+    // cells, slot 1 is for next nSliceRow x nSliceCel cells below, etc. After a while the size of row
+    // slice doubles (making more cells share the same slot), this distribution data is stored
+    // in ScSlotData including ranges of cells. This is repeated for another column of nSliceCol cells,
+    // again with the column slice doubling after some time.
+    // Functions ComputeSlotOffset(), ComputeArePoints() and ComputeNextSlot() do the necessary
+    // calculations.
     SCSIZE nSlots = 0;
-    SCROW nRow1 = 0;
-    SCROW nRow2 = 32*1024;
-    SCSIZE nSlice = 128;
-    // Must be sorted by row1,row2!
-    while (nRow2 <= rSheetLimits.GetMaxRowCount())
+    // This should be SCCOL, but that's only 16bit and would overflow when doubling 16k columns.
+    sal_Int32 nCol1 = 0;
+    sal_Int32 nCol2 = 1024;
+    SCSIZE nSliceCol = 16;
+    while (nCol2 <= rSheetLimits.GetMaxColCount())
     {
-        maSlotDistribution.emplace_back( nRow1, nRow2, nSlice, nSlots);
-        nSlots += (nRow2 - nRow1) / nSlice;
-        nRow1 = nRow2;
-        nRow2 *= 2;
-        nSlice *= 2;
+        SCROW nRow1 = 0;
+        SCROW nRow2 = 32*1024;
+        SCSIZE nSliceRow = 128;
+        SCSIZE nSlotsCol = 0;
+        SCSIZE nSlotsStartCol = nSlots;
+        // Must be sorted by row1,row2!
+        while (nRow2 <= rSheetLimits.GetMaxRowCount())
+        {
+            maSlotDistribution.emplace_back(nRow1, nRow2, nSliceRow, nSlotsCol, nCol1, nCol2, nSliceCol, nSlotsStartCol);
+            nSlotsCol += (nRow2 - nRow1) / nSliceRow;
+            nRow1 = nRow2;
+            nRow2 *= 2;
+            nSliceRow *= 2;
+        }
+        // Store the number of slots in a column in mnBcaSlotsCol, so that finding a slot
+        // to the right can be computed quickly in ComputeNextSlot().
+        if(nCol1 == 0)
+            mnBcaSlotsCol = nSlotsCol;
+        assert(nSlotsCol == mnBcaSlotsCol);
+        nSlots += (nCol2 - nCol1) / nSliceCol * nSlotsCol;
+        nCol1 = nCol2;
+        nCol2 *= 2;
+        nSliceCol *= 2;
     }
-    mnBcaSlotsRow = nSlots;
-    mnBcaSlots = mnBcaSlotsRow * BCA_SLOTS_COL;
+    mnBcaSlots = nSlots;
+#ifdef DBG_UTIL
+    DoChecks();
+#endif
 }
 
 ScBroadcastAreaSlotMachine::~ScBroadcastAreaSlotMachine()
@@ -617,14 +636,16 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
         OSL_FAIL( "Row/Col invalid, using first slot!" );
         return 0;
     }
-    for (const ScSlotData & i : maSlotDistribution)
+    for (const ScSlotData& rSD : maSlotDistribution)
     {
-        if (nRow < i.nStopRow)
+        if (nRow < rSD.nStopRow && nCol < rSD.nStopCol)
         {
-            const ScSlotData& rSD = i;
-            return rSD.nCumulated +
-                static_cast<SCSIZE>(nRow - rSD.nStartRow) / rSD.nSlice +
-                static_cast<SCSIZE>(nCol) / BCA_SLOT_COLS * mnBcaSlotsRow;
+            SCSIZE slot = rSD.nCumulatedRow
+                + static_cast<SCSIZE>(nRow - rSD.nStartRow) / rSD.nSliceRow
+                + rSD.nCumulatedCol
+                + static_cast<SCSIZE>(nCol - rSD.nStartCol) / rSD.nSliceCol * mnBcaSlotsCol;
+            assert(slot >= 0 && slot < mnBcaSlots);
+            return slot;
         }
     }
     OSL_FAIL( "No slot found, using last!" );
@@ -642,7 +663,7 @@ void ScBroadcastAreaSlotMachine::ComputeAreaPoints( const ScRange& rRange,
 }
 
 static void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot** & pp,
-        SCSIZE & nStart, ScBroadcastAreaSlot** const & ppSlots, SCSIZE nRowBreak, SCSIZE nBcaSlotsRow )
+        SCSIZE & nStart, ScBroadcastAreaSlot** const & ppSlots, SCSIZE nRowBreak, SCSIZE nBcaSlotsCol )
 {
     if ( nOff < nBreak )
     {
@@ -651,12 +672,98 @@ static void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot
     }
     else
     {
-        nStart += nBcaSlotsRow;
+        nStart += nBcaSlotsCol;
         nOff = nStart;
         pp = ppSlots + nOff;
         nBreak = nOff + nRowBreak;
     }
 }
+
+#ifdef DBG_UTIL
+static void compare(SCSIZE value1, SCSIZE value2, int line)
+{
+    if(value1!=value2)
+        SAL_WARN("sc", "V1:" << value1 << " V2:" << value2 << " (" << line << ")");
+    assert(value1 == value2);
+}
+
+// Basic checks that the calculations work correctly.
+void ScBroadcastAreaSlotMachine::DoChecks()
+{
+    const ScSheetLimits& rSheetLimits = pDoc->GetSheetLimits();
+    // Copy&paste from the ctor.
+    constexpr SCSIZE nSliceRow = 128;
+    constexpr SCSIZE nSliceCol = 16;
+    // First and second column are in the same slice and so get the same slot.
+    compare( ComputeSlotOffset( ScAddress( 0, 0, 0 )), ComputeSlotOffset( ScAddress( 1, 0, 0 )), __LINE__);
+    // Each nSliceRow rows are offset by one slot (at the start of the logarithmic distribution).
+    compare( ComputeSlotOffset( ScAddress( 0, 0, 0 )),
+             ComputeSlotOffset( ScAddress( 0, nSliceRow, 0 )) - 1, __LINE__ );
+    compare( ComputeSlotOffset( ScAddress( nSliceCol - 1, 0, 0 )),
+             ComputeSlotOffset( ScAddress( nSliceCol, 0, 0 )) - mnBcaSlotsCol, __LINE__ );
+    // Check that last cell is the last slot.
+    compare( ComputeSlotOffset( ScAddress( rSheetLimits.GetMaxColCount() - 1, rSheetLimits.GetMaxRowCount() - 1, 0 )),
+             mnBcaSlots - 1, __LINE__ );
+    // Check that adjacent rows in the same column but in different distribution areas differ by one slot.
+    for( size_t i = 0; i < maSlotDistribution.size() - 1; ++i )
+    {
+        const ScSlotData& s1 = maSlotDistribution[ i ];
+        const ScSlotData& s2 = maSlotDistribution[ i + 1 ];
+        if( s1.nStartCol == s2.nStartCol )
+        {
+            assert( s1.nStopRow == s2.nStartRow );
+            compare( ComputeSlotOffset( ScAddress( s1.nStartCol, s1.nStopRow - 1, 0 )),
+                     ComputeSlotOffset( ScAddress( s1.nStartCol, s1.nStopRow, 0 )) - 1, __LINE__ );
+        }
+    }
+    // Check that adjacent columns in the same row but in different distribution areas differ by mnBcaSlotsCol.
+    for( size_t i = 0; i < maSlotDistribution.size() - 1; ++i )
+    {
+        const ScSlotData& s1 = maSlotDistribution[ i ];
+        for( size_t j = i + 1; j < maSlotDistribution.size(); ++j )
+        {
+            const ScSlotData& s2 = maSlotDistribution[ i + 1 ];
+            if( s1.nStartRow == s2.nStartRow && s1.nStopCol == s2.nStartCol )
+            {
+                assert( s1.nStopRow == s2.nStartRow );
+                compare( ComputeSlotOffset( ScAddress( s1.nStopCol - 1, s1.nStartRow, 0 )),
+                         ComputeSlotOffset( ScAddress( s1.nStopCol, s1.nStartRow, 0 )) - mnBcaSlotsCol, __LINE__ );
+            }
+        }
+    }
+    // Iterate all slots.
+    ScRange range( ScAddress( 0, 0, 0 ), ScAddress( rSheetLimits.GetMaxColCount() - 1, rSheetLimits.GetMaxRowCount() - 1, 0 ));
+    SCSIZE nStart, nEnd, nRowBreak;
+    ComputeAreaPoints( range, nStart, nEnd, nRowBreak );
+    assert( nStart == 0 );
+    assert( nEnd == mnBcaSlots - 1 );
+    SCSIZE nOff = nStart;
+    SCSIZE nBreak = nOff + nRowBreak;
+    // Do not access the ScBroadcastAreaSlot pointers, just use bogus values.
+    ScBroadcastAreaSlot** ppSlots = nullptr;
+    ScBroadcastAreaSlot** pp = nullptr;
+    while ( nOff <= nEnd )
+    {
+        SCSIZE previous = nOff;
+        ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
+        compare( nOff, previous + 1, __LINE__ );
+    }
+    // Iterate slots in the last row (each will differ by mnBcaSlotsCol).
+    range = ScRange( ScAddress( 0, rSheetLimits.GetMaxRowCount() - 1, 0 ),
+                     ScAddress( rSheetLimits.GetMaxColCount() - 1, rSheetLimits.GetMaxRowCount() - 1, 0 ));
+    ComputeAreaPoints( range, nStart, nEnd, nRowBreak );
+    assert( nStart == mnBcaSlotsCol - 1 );
+    assert( nEnd == mnBcaSlots - 1 );
+    nOff = nStart;
+    nBreak = nOff + nRowBreak;
+    while ( nOff <= nEnd )
+    {
+        SCSIZE previous = nOff;
+        ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
+        compare( nOff, previous + mnBcaSlotsCol, __LINE__ );
+    }
+}
+#endif
 
 void ScBroadcastAreaSlotMachine::StartListeningArea(
     const ScRange& rRange, bool bGroupListening, SvtListener* pListener )
@@ -702,7 +809,7 @@ void ScBroadcastAreaSlotMachine::StartListeningArea(
                 }
                 else
                     (*pp)->InsertListeningArea( pArea);
-                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
             }
         }
     }
@@ -752,7 +859,7 @@ void ScBroadcastAreaSlotMachine::EndListeningArea(
                 {
                     if ( *pp )
                         (*pp)->EndListeningArea( rRange, bGroupListening, pListener, pArea);
-                    ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+                    ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
                 }
             }
         }
@@ -776,7 +883,7 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScRange& rRange, SfxHintId
         {
             if ( *pp )
                 bBroadcasted |= (*pp)->AreaBroadcast( rRange, nHint );
-            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
         }
     }
     return bBroadcasted;
@@ -851,7 +958,7 @@ void ScBroadcastAreaSlotMachine::DelBroadcastAreasInRange(
             {
                 if ( *pp )
                     (*pp)->DelBroadcastAreasInRange( rRange );
-                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
             }
         }
     }
@@ -890,7 +997,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             {
                 if ( *pp )
                     (*pp)->UpdateRemove( eUpdateRefMode, rRange, nDx, nDy, nDz );
-                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
             }
         }
     }
@@ -922,7 +1029,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
             {
                 if (*pp)
                     (*pp)->UpdateRemoveArea( pArea);
-                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
             }
         }
 
@@ -1015,7 +1122,7 @@ void ScBroadcastAreaSlotMachine::UpdateBroadcastAreas(
                 if (!*pp)
                     *pp = new ScBroadcastAreaSlot( pDoc, this );
                 (*pp)->UpdateInsert( pArea );
-                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+                ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
             }
         }
 
@@ -1159,7 +1266,7 @@ std::vector<sc::AreaListener> ScBroadcastAreaSlotMachine::GetAllListeners(
             ScBroadcastAreaSlot* p = *pp;
             if (p)
                 p->GetAllListeners(rRange, aRet, eType, eGroup);
-            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsRow);
+            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
         }
     }
 
