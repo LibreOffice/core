@@ -3281,12 +3281,12 @@ sal_uInt16 ScTable::GetColWidth( SCCOL nCol, bool bHiddenAsZero ) const
         return sal_uInt16(STD_COL_WIDTH);
 }
 
-sal_uLong ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const
+tools::Long ScTable::GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const
 {
     if (!ValidCol(nStartCol) || !ValidCol(nEndCol) || nStartCol > nEndCol)
         return 0;
 
-    sal_uLong nW = 0;
+    tools::Long nW = 0;
     bool bHidden = false;
     SCCOL nLastHiddenCol = -1;
     auto colWidthIt = mpColWidth->begin() + nStartCol;
@@ -3406,13 +3406,13 @@ sal_uInt16 ScTable::GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, 
     }
 }
 
-sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero ) const
+tools::Long ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero ) const
 {
     OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"wrong row number");
 
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
     {
-        sal_uLong nHeight = 0;
+        tools::Long nHeight = 0;
         SCROW nRow = nStartRow;
         while (nRow <= nEndRow)
         {
@@ -3428,16 +3428,16 @@ sal_uLong ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZ
         return nHeight;
     }
     else
-        return (nEndRow - nStartRow + 1) * static_cast<sal_uLong>(ScGlobal::nStdRowHeight);
+        return (nEndRow - nStartRow + 1) * static_cast<tools::Long>(ScGlobal::nStdRowHeight);
 }
 
-sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale, const sal_uLong* pnMaxHeight ) const
+tools::Long ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale, const tools::Long* pnMaxHeight ) const
 {
     OSL_ENSURE(ValidRow(nStartRow) && ValidRow(nEndRow),"wrong row number");
 
     if (ValidRow(nStartRow) && ValidRow(nEndRow) && mpRowHeights)
     {
-        sal_uLong nHeight = 0;
+        tools::Long nHeight = 0;
         SCROW nRow = nStartRow;
         while (nRow <= nEndRow)
         {
@@ -3458,7 +3458,7 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
                     SCROW nSegmentEnd = std::min( nLastRow, aSegmentIter.getLastPos() );
 
                     // round-down a single height value, multiply resulting (pixel) values
-                    const sal_uLong nOneHeight = static_cast<sal_uLong>( nRowVal * fScale );
+                    const tools::Long nOneHeight = static_cast<tools::Long>( nRowVal * fScale );
                     // sometimes scaling results in zero height
                     if (nOneHeight)
                     {
@@ -3483,7 +3483,7 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
     }
     else
     {
-        const sal_uLong nOneHeight = static_cast<sal_uLong>(ScGlobal::nStdRowHeight * fScale);
+        const tools::Long nOneHeight = static_cast<tools::Long>(ScGlobal::nStdRowHeight * fScale);
         SCROW nRowsInSegment = nEndRow - nStartRow + 1;
         if (pnMaxHeight)
         {
@@ -3491,7 +3491,7 @@ sal_uLong ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fS
             return nOneHeight * nRowsInSegment;
         }
         else
-            return static_cast<sal_uLong>(nRowsInSegment * nOneHeight);
+            return static_cast<tools::Long>(nRowsInSegment * nOneHeight);
     }
 }
 
@@ -4097,9 +4097,9 @@ ScRangeName* ScTable::GetRangeName() const
     return mpRangeName.get();
 }
 
-sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
+tools::Long ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 {
-    sal_uLong n = 0;
+    tools::Long n = 0;
     if ( mpHiddenRows && mpRowHeights )
     {
         if (nRow == 0)
@@ -4109,7 +4109,7 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
 
         n = GetTotalRowHeight(0, nRow-1, bHiddenAsZero);
 #if OSL_DEBUG_LEVEL > 0
-        if (n == ::std::numeric_limits<tools::ULong>::max())
+        if (n == ::std::numeric_limits<tools::Long>::max())
             OSL_FAIL("ScTable::GetRowOffset: row heights overflow");
 #endif
     }
@@ -4120,9 +4120,9 @@ sal_uLong ScTable::GetRowOffset( SCROW nRow, bool bHiddenAsZero ) const
     return n;
 }
 
-SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
+SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
 {
-    sal_uLong nSum = 0;
+    tools::Long nSum = 0;
 
     ScFlatBoolRowSegments::RangeData aData;
 
@@ -4156,8 +4156,8 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
         SCROW nCommon = nLastCommon - nRow + 1;
 
         // how much further to go ?
-        sal_uLong nPixelsLeft = nHeight - nSum;
-        sal_uLong nCommonPixels = static_cast<sal_uLong>(aRowHeightRange.mnValue) * nCommon;
+        tools::Long nPixelsLeft = nHeight - nSum;
+        tools::Long nCommonPixels = static_cast<tools::Long>(aRowHeightRange.mnValue) * nCommon;
 
         // are we in the zone ?
         if (nCommonPixels > nPixelsLeft)
@@ -4187,9 +4187,9 @@ SCROW ScTable::GetRowForHeight(sal_uLong nHeight) const
     return -1;
 }
 
-sal_uLong ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
+tools::Long ScTable::GetColOffset( SCCOL nCol, bool bHiddenAsZero ) const
 {
-    sal_uLong n = 0;
+    tools::Long n = 0;
     if ( mpColWidth )
     {
         auto colWidthIt = mpColWidth->begin();

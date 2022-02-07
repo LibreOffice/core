@@ -1593,9 +1593,9 @@ SfxDocumentMetaData::getDocumentStatistics()
         if (text.isEmpty()) continue;
         css::beans::NamedValue stat;
         stat.Name = OUString::createFromAscii(s_stdStats[i]);
-        sal_Int32 val;
+        sal_Int64 val;
         css::uno::Any any;
-        if (!::sax::Converter::convertNumber(val, text, 0) || (val < 0)) {
+        if (!::sax::Converter::convertNumber64(val, text, 0) || (val < 0)) {
             val = 0;
             SAL_WARN("sfx.doc", "Invalid number: " << text);
         }

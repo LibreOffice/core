@@ -256,7 +256,7 @@ void SvXMLMetaExport::MExport_()
 
     for ( const auto& rDocStat : aDocStatistic )
     {
-        sal_Int32 nValue = 0;
+        sal_Int64 nValue = 0;
         if ( rDocStat.Value >>= nValue )
         {
             OUString aValue = OUString::number( nValue );
