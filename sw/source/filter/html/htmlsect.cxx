@@ -451,8 +451,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     if( pTextNode )
     {
         const SvxULSpaceItem& rULSpace =
-            static_cast<const SvxULSpaceItem&>(pTextNode
-                ->SwContentNode::GetAttr( RES_UL_SPACE ));
+            pTextNode->SwContentNode::GetAttr( RES_UL_SPACE );
 
         // The bottom paragraph padding becomes the padding
         // to header or footer
@@ -483,8 +482,7 @@ void SwHTMLParser::FixHeaderFooterDistance( bool bHeader,
     if( pTextNode )
     {
         const SvxULSpaceItem& rULSpace =
-            static_cast<const SvxULSpaceItem&>(pTextNode
-                ->SwContentNode::GetAttr( RES_UL_SPACE ));
+            pTextNode->SwContentNode::GetAttr( RES_UL_SPACE );
 
         // The top paragraph padding becomes the padding
         // to headline or footer if it is greater than the

@@ -5042,12 +5042,8 @@ namespace {
             // #i105562#
             else
             {
-                assert(!mrTextNode.GetpSwAttrSet()
-                       || dynamic_cast<const SfxUInt16Item*>(
-                              &mrTextNode.GetAttr(RES_PARATR_OUTLINELEVEL, false)));
                 if (mrTextNode.GetpSwAttrSet()
-                    && static_cast<const SfxUInt16Item&>(
-                           mrTextNode.GetAttr(RES_PARATR_OUTLINELEVEL, false)).GetValue() > 0)
+                    && mrTextNode.GetAttr(RES_PARATR_OUTLINELEVEL, false).GetValue() > 0)
                 {
                     mrTextNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
                 }

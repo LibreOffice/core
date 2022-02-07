@@ -106,7 +106,7 @@ DefaultToxTabStopTokenHandler::CalculatePageMarginFromPageDescription(const SwTe
 DefaultToxTabStopTokenHandler::CanUseLayoutRectangle(const SwTextNode& targetNode, const SwRootFrame *currentLayout)
 {
     const SwPageDesc* pageDescription =
-            static_cast<const SwFormatPageDesc&>( targetNode.SwContentNode::GetAttr(RES_PAGEDESC)).GetPageDesc();
+            targetNode.SwContentNode::GetAttr(RES_PAGEDESC).GetPageDesc();
 
     if (!pageDescription) {
         return false;
