@@ -4651,6 +4651,7 @@ OString OSQLParser::TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pCont
 
 	if (aStr.isEmpty())
 	{
+		// coverity[unsigned_compare : SUPPRESS] - YYTRANSLATE is out of our control
 		aStr = yytname[YYTRANSLATE(nTokenID)];
 		if(aStr.startsWith("SQL_TOKEN_"))
 			aStr = aStr.copy(10);
