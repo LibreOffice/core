@@ -484,7 +484,7 @@ void ScXMLImport::SetStatistics(const uno::Sequence<beans::NamedValue> & i_rStat
 
     SvXMLImport::SetStatistics(i_rStats);
 
-    sal_uInt32 nCount(0);
+    sal_uInt64 nCount(0);
     for (const auto& rStat : i_rStats) {
         for (const char** pStat = s_stats; *pStat != nullptr; ++pStat) {
             if (rStat.Name.equalsAscii(*pStat)) {

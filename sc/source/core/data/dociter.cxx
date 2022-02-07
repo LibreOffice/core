@@ -2695,7 +2695,7 @@ void ScDocRowHeightUpdater::update()
         return;
     }
 
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
     for (const auto& rTabRanges : *mpTabRangesArray)
     {
         const SCTAB nTab = rTabRanges.mnTab;
@@ -2716,7 +2716,7 @@ void ScDocRowHeightUpdater::update()
     ScProgress aProgress(mrDoc.GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true);
 
     Fraction aZoom(1, 1);
-    sal_uLong nProgressStart = 0;
+    sal_uInt64 nProgressStart = 0;
     for (const auto& rTabRanges : *mpTabRangesArray)
     {
         const SCTAB nTab = rTabRanges.mnTab;
@@ -2741,7 +2741,7 @@ void ScDocRowHeightUpdater::update()
 
 void ScDocRowHeightUpdater::updateAll()
 {
-    sal_uInt32 nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
     for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
     {
         if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
@@ -2754,7 +2754,7 @@ void ScDocRowHeightUpdater::updateAll()
 
     Fraction aZoom(1, 1);
     sc::RowHeightContext aCxt(mrDoc.MaxRow(), mfPPTX, mfPPTY, aZoom, aZoom, mpOutDev);
-    sal_uLong nProgressStart = 0;
+    sal_uInt64 nProgressStart = 0;
     for (SCTAB nTab = 0; nTab < mrDoc.GetTableCount(); ++nTab)
     {
         if (!ValidTab(nTab) || !mrDoc.maTabs[nTab])
