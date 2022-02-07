@@ -23,6 +23,9 @@ Sub verify_testCdbl()
     TestUtil.AssertEqual(CDbl(0.005 * 0.01),      0.00005,         "CDbl(0.005 * 0.01)")
     TestUtil.AssertEqual(CDbl("20"),             20,               "CDbl(""20"")")
 
+    ' tdf#146672 - skip spaces and tabs at the end of the scanned string
+    TestUtil.AssertEqual(CDbl("28.8 "),          28.8,             "CDbl(""28.8 "")")
+
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("verify_testCdbl", Err, Error$, Erl)
