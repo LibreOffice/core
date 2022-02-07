@@ -1431,9 +1431,11 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
 
     SvStream& rSt = rEx.GetStream();
     //The last argument denotes the number of sub properties in this atom
+    int nSubProps = mnGroupShapeBooleanProperties ? 1 : 0;
     if (mbInline)
     {
-        rEx.AddAtom(18, DFF_msofbtUDefProp, 3, 3); //Prop id is 0xF122
+        nSubProps += 3;
+        rEx.AddAtom(6 * nSubProps, DFF_msofbtUDefProp, 3, nSubProps); // Prop id is 0xF122
         rSt.WriteUInt16( 0x0390 ).WriteUInt32( 3 );
         rSt.WriteUInt16( 0x0392 ).WriteUInt32( 3 );
         //This sub property is required to be in the dummy inline frame as
@@ -1442,12 +1444,15 @@ void WinwordAnchoring::WriteData( EscherEx& rEx ) const
     }
     else
     {
-        rEx.AddAtom(24, DFF_msofbtUDefProp, 3, 4 ); //Prop id is 0xF122
+        nSubProps += 4;
+        rEx.AddAtom(6 * nSubProps, DFF_msofbtUDefProp, 3, nSubProps); // Prop id is 0xF122
         rSt.WriteUInt16( 0x038F ).WriteUInt32( mnXAlign );
         rSt.WriteUInt16( 0x0390 ).WriteUInt32( mnXRelTo );
         rSt.WriteUInt16( 0x0391 ).WriteUInt32( mnYAlign );
         rSt.WriteUInt16( 0x0392 ).WriteUInt32( mnYRelTo );
     }
+    if (mnGroupShapeBooleanProperties)
+        rSt.WriteUInt16(0x03BF).WriteUInt32(mnGroupShapeBooleanProperties);
 }
 
 void WW8Export::CreateEscher()
@@ -2594,6 +2599,13 @@ void WinwordAnchoring::SetAnchoring(const SwFrameFormat& rFormat)
 {
     const RndStdIds eAnchor = rFormat.GetAnchor().GetAnchorId();
     mbInline = (eAnchor == RndStdIds::FLY_AS_CHAR);
+
+    mnGroupShapeBooleanProperties = 0;
+    if (!rFormat.GetFollowTextFlow().GetValue())
+    {
+        // bit32: fUseLayoutInCell, bit16: fLayoutInCell
+        mnGroupShapeBooleanProperties |= 0x80000000;
+    }
 
     SwFormatHoriOrient rHoriOri = rFormat.GetHoriOrient();
     SwFormatVertOrient rVertOri = rFormat.GetVertOrient();
