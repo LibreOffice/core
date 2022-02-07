@@ -33,6 +33,23 @@
       "message": "Only Windows Jenkins fails and for an unrelated reason.",
       "revId": "59f6a56d6e9d42b2300639d25e673b4058324446",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c8f3c3_0589ddb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-07T08:30:25Z",
+      "side": 1,
+      "message": "No objection",
+      "revId": "59f6a56d6e9d42b2300639d25e673b4058324446",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
