@@ -20,6 +20,7 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/document/XDocumentInsertable.hpp>
 
 #include <vcl/scheduler.hxx>
 
@@ -255,6 +256,33 @@ CPPUNIT_TEST_FIXTURE(Test, testPTab)
     // i.e. the layout height of the footer text was incorrect, the page number field was not
     // visually inside the background shape.
     CPPUNIT_ASSERT_EQUAL(OUString(" \n1" SAL_NEWLINE_STRING), xFooter->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
+{
+    // Given an empty document:
+    getComponent() = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    // When pasting RTF into that document:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<document::XDocumentInsertable> xCursor(
+        xText->createTextCursorByRange(xText->getStart()), uno::UNO_QUERY);
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paste-ole.rtf";
+    xCursor->insertDocumentFromURL(aURL, {});
+
+    // Then make sure that all the 3 paragraphs of the paste data (empty para, OLE obj, text) are
+    // inserted to the document:
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    // Without the accompanying fix in place, this test would have failed, as the paste result was a
+    // single paragaph, containing the OLE object, and the content after the OLE object was lost.
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+    xParaEnum->nextElement();
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("hello"), xPara->getString());
 }
 }
 
