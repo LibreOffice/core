@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf988686_4a6c3a0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-07T14:34:28Z",
+      "side": 1,
+      "message": "This commit should be reversed ASAP as it causes regression, see the simple steps in bug 147255.\nJust play with the selection, copying, pasting in a real working calc document to see the side affects of this change.",
+      "revId": "c82634d5a222120b3a95cff1b950a7f7a1f5ded1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
