@@ -202,7 +202,7 @@ StackMode ScatterChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex *
 }
 
 void ScatterChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
@@ -211,11 +211,9 @@ void ScatterChartTypeTemplate::applyStyle(
 
     try
     {
-        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY_THROW );
-
-        DataSeriesHelper::switchSymbolsOnOrOff( xProp, m_bHasSymbols, nSeriesIndex );
-        DataSeriesHelper::switchLinesOnOrOff( xProp, m_bHasLines );
-        DataSeriesHelper::makeLinesThickOrThin( xProp, m_nDim==2 );
+        DataSeriesHelper::switchSymbolsOnOrOff( xSeries, m_bHasSymbols, nSeriesIndex );
+        DataSeriesHelper::switchLinesOnOrOff( xSeries, m_bHasLines );
+        DataSeriesHelper::makeLinesThickOrThin( xSeries, m_nDim==2 );
         if( m_nDim==3 )
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::Any( drawing::LineStyle_NONE ) );
     }

@@ -239,7 +239,7 @@ Reference< beans::XPropertySetInfo > SAL_CALL BarChartTypeTemplate::getPropertyS
 }
 
 void BarChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )

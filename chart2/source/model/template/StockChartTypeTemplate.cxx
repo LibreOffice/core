@@ -191,7 +191,7 @@ sal_Int32 StockChartTypeTemplate::getAxisCountByDimension( sal_Int32 nDimension 
 }
 
 void StockChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )
@@ -206,9 +206,7 @@ void StockChartTypeTemplate::applyStyle(
         if( bHasVolume && nChartTypeIndex != 0 )
             nNewAxisIndex = 1;
 
-        Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
-        if( xProp.is() )
-            xProp->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
+        xSeries->setPropertyValue( "AttachedAxisIndex", uno::Any( nNewAxisIndex ) );
 
         if( bHasVolume && nChartTypeIndex==0 )
         {
@@ -218,13 +216,10 @@ void StockChartTypeTemplate::applyStyle(
         else
         {
             //ensure that lines are on
-            if( xProp.is() )
-            {
-                drawing::LineStyle eStyle = drawing::LineStyle_NONE;
-                xProp->getPropertyValue( "LineStyle" ) >>= eStyle;
-                if( eStyle == drawing::LineStyle_NONE )
-                    xProp->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ));
-            }
+            drawing::LineStyle eStyle = drawing::LineStyle_NONE;
+            xSeries->getPropertyValue( "LineStyle" ) >>= eStyle;
+            if( eStyle == drawing::LineStyle_NONE )
+                xSeries->setPropertyValue( "LineStyle", uno::Any( drawing::LineStyle_SOLID ));
         }
 
     }
@@ -276,7 +271,7 @@ rtl::Reference< ChartType > StockChartTypeTemplate::getChartTypeForIndex( sal_In
 }
 
 void StockChartTypeTemplate::createChartTypes(
-    const Sequence< Sequence< Reference< XDataSeries > > > & aSeriesSeq,
+    const std::vector< std::vector< rtl::Reference< DataSeries > > > & aSeriesSeq,
     const std::vector< rtl::Reference< BaseCoordinateSystem > > & rCoordSys,
     const std::vector< rtl::Reference< ChartType > >& /* aOldChartTypesSeq */ )
 {
@@ -305,8 +300,8 @@ void StockChartTypeTemplate::createChartTypes(
             rtl::Reference< ChartType > xCT = new ColumnChartType();
             aChartTypeVec.push_back( xCT );
 
-            if( aSeriesSeq.getLength() > nSeriesIndex &&
-                aSeriesSeq[nSeriesIndex].hasElements() )
+            if( static_cast<sal_Int32>(aSeriesSeq.size()) > nSeriesIndex &&
+               !aSeriesSeq[nSeriesIndex].empty() )
             {
                 xCT->setDataSeries( aSeriesSeq[ nSeriesIndex ] );
             }
@@ -320,16 +315,16 @@ void StockChartTypeTemplate::createChartTypes(
         xCT->setPropertyValue( "ShowFirst", uno::Any( bShowFirst ));
         xCT->setPropertyValue( "ShowHighLow", uno::Any( bShowHighLow ));
 
-        if( aSeriesSeq.getLength() > nSeriesIndex &&
-            aSeriesSeq[ nSeriesIndex ].hasElements() )
+        if( static_cast<sal_Int32>(aSeriesSeq.size()) > nSeriesIndex &&
+            !aSeriesSeq[ nSeriesIndex ].empty() )
         {
             xCT->setDataSeries( aSeriesSeq[ nSeriesIndex ] );
         }
         ++nSeriesIndex;
 
         // Lines (remaining series)
-        if( aSeriesSeq.getLength() > nSeriesIndex &&
-            aSeriesSeq[ nSeriesIndex ].hasElements() )
+        if( static_cast<sal_Int32>(aSeriesSeq.size()) > nSeriesIndex &&
+            !aSeriesSeq[ nSeriesIndex ].empty() )
         {
             xCT = new LineChartType();
             aChartTypeVec.push_back( xCT );

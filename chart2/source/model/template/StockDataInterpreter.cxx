@@ -221,14 +221,13 @@ InterpretedData StockDataInterpreter::interpretDataSource(
     }
 
     // create DataSeries
-    Sequence< Sequence< Reference< XDataSeries > > > aResultSeries( nNumberOfGroups );
-    auto pResultSeries = aResultSeries.getArray();
+    std::vector< std::vector< rtl::Reference< DataSeries > > > aResultSeries( nNumberOfGroups );
     sal_Int32 nGroupIndex, nReUsedSeriesIdx = 0;
     for( nGroupIndex=0; nGroupIndex<nNumberOfGroups; ++nGroupIndex )
     {
         const sal_Int32 nNumSeriesData = aSequences[nGroupIndex].size();
-        pResultSeries[nGroupIndex].realloc( nNumSeriesData );
-        auto pResultSerie = pResultSeries[nGroupIndex].getArray();
+        aResultSeries[nGroupIndex].resize( nNumSeriesData );
+        auto & pResultSerie = aResultSeries[nGroupIndex];
         for( sal_Int32 nSeriesIdx = 0; nSeriesIdx < nNumSeriesData; ++nSeriesIdx, ++nReUsedSeriesIdx )
         {
             try
@@ -240,7 +239,7 @@ InterpretedData StockDataInterpreter::interpretDataSource(
                     xSeries = new DataSeries;
                 assert( xSeries.is() );
                 xSeries->setData( aSequences[nGroupIndex][nSeriesIdx] );
-                pResultSerie[nSeriesIdx].set( xSeries );
+                pResultSerie[nSeriesIdx] = xSeries;
             }
             catch( const uno::Exception & )
             {
@@ -272,32 +271,30 @@ bool StockDataInterpreter::isDataCompatible(
                        ( eVar == StockChartTypeTemplate::StockVariant::VolumeOpen ));
 
     // 1. correct number of sub-types
-    if( aInterpretedData.Series.getLength() < (bHasVolume ? 2 : 1 ))
+    if( aInterpretedData.Series.size() < (bHasVolume ? 2 : 1 ))
         return false;
 
     // 2. a. volume -- use default check
     if( bHasVolume )
     {
         if( ! DataInterpreter::isDataCompatible(
-                { Sequence< Sequence< Reference< XDataSeries > > >(
-                                     aInterpretedData.Series.getConstArray(), 1 ),
+                { std::vector< std::vector< rtl::Reference< DataSeries > > >{
+                                     aInterpretedData.Series[0] },
                   aInterpretedData.Categories }))
             return false;
     }
 
     // 2. b. candlestick
     {
-        OSL_ASSERT( aInterpretedData.Series.getLength() > (bHasVolume ? 1 : 0));
-        const Sequence< Reference< XDataSeries > > aSeries( aInterpretedData.Series[(bHasVolume ? 1 : 0)] );
-        if(!aSeries.hasElements())
+        OSL_ASSERT( aInterpretedData.Series.size() > (bHasVolume ? 1 : 0));
+        const std::vector< rtl::Reference< DataSeries > > & aSeries = aInterpretedData.Series[(bHasVolume ? 1 : 0)];
+        if(aSeries.empty())
             return false;
-        for( Reference< XDataSeries > const & dataSeries : aSeries )
+        for( rtl::Reference< DataSeries > const & dataSeries : aSeries )
         {
             try
             {
-                Reference< data::XDataSource > xSrc( dataSeries, uno::UNO_QUERY_THROW );
-                Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
-                if( aSeq.getLength() != nNumberOfNecessarySequences )
+                if( static_cast<sal_Int32>(dataSeries->getDataSequences2().size()) != nNumberOfNecessarySequences )
                     return false;
             }
             catch( const uno::Exception & )
