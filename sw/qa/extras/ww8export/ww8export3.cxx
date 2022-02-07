@@ -987,6 +987,14 @@ DECLARE_WW8EXPORT_TEST(testTdf136814, "tdf136814.odt")
     CPPUNIT_ASSERT_EQUAL(nBorderDistance, getProperty<sal_Int32>(xStyle, "LeftBorderDistance"));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf79186_noLayoutInCell, "tdf79186_noLayoutInCell.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
+}
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

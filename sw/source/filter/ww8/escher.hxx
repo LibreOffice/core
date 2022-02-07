@@ -68,6 +68,7 @@ public:
 
 private:
     bool mbInline;
+    sal_uInt32 mnGroupShapeBooleanProperties;
     sal_uInt32 mnXAlign;
     sal_uInt32 mnYAlign;
     sal_uInt32 mnXRelTo;
