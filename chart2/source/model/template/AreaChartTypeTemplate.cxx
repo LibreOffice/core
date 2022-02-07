@@ -180,7 +180,7 @@ StackMode AreaChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
 
 // ____ ChartTypeTemplate ____
 void AreaChartTypeTemplate::applyStyle(
-    const Reference< chart2::XDataSeries >& xSeries,
+    const rtl::Reference< DataSeries >& xSeries,
     ::sal_Int32 nChartTypeIndex,
     ::sal_Int32 nSeriesIndex,
     ::sal_Int32 nSeriesCount )

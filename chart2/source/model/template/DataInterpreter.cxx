@@ -59,78 +59,6 @@ DataInterpreter::~DataInterpreter()
 InterpretedData DataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
-    const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
-{
-    if( ! xSource.is())
-        return InterpretedData();
-
-#ifdef DEBUG_CHART2_TEMPLATE
-    lcl_ShowDataSource( xSource );
-#endif
-
-    std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aData = getDataSequences(xSource);
-
-    uno::Reference< chart2::data::XLabeledDataSequence > xCategories;
-    vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
-
-    // check if we should use categories
-
-    bool bHasCategories( HasCategories( aArguments, aData ));
-
-    // parse data
-    bool bCategoriesUsed = false;
-    for( uno::Reference< chart2::data::XLabeledDataSequence > const & labeledData : aData )
-    {
-        try
-        {
-            if( bHasCategories && ! bCategoriesUsed )
-            {
-                xCategories = labeledData;
-                if( xCategories.is())
-                    SetRole( xCategories->getValues(), "categories");
-                bCategoriesUsed = true;
-            }
-            else
-            {
-                aSequencesVec.push_back( labeledData );
-                if( labeledData.is())
-                    SetRole( labeledData->getValues(), "values-y");
-            }
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-    }
-
-    // create DataSeries
-    sal_Int32 nSeriesIndex = 0;
-    vector< Reference< XDataSeries > > aSeriesVec;
-    aSeriesVec.reserve( aSequencesVec.size());
-
-    for (auto const& elem : aSequencesVec)
-    {
-        Sequence< Reference< data::XLabeledDataSequence > > aNewData( &elem, 1 );
-        Reference< XDataSeries > xSeries;
-        if( nSeriesIndex < aSeriesToReUse.getLength())
-            xSeries.set( aSeriesToReUse[nSeriesIndex] );
-        else
-            xSeries.set( new DataSeries );
-        OSL_ASSERT( xSeries.is() );
-        Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
-        OSL_ASSERT( xSink.is() );
-        xSink->setData( aNewData );
-
-        aSeriesVec.push_back( xSeries );
-        ++nSeriesIndex;
-    }
-
-    return { { comphelper::containerToSequence( aSeriesVec ) }, xCategories };
-}
-
-InterpretedData DataInterpreter::interpretDataSource(
-    const Reference< data::XDataSource >& xSource,
-    const Sequence< beans::PropertyValue >& aArguments,
     const std::vector< rtl::Reference< DataSeries > >& aSeriesToReUse )
 {
     if( ! xSource.is())
@@ -177,7 +105,7 @@ InterpretedData DataInterpreter::interpretDataSource(
 
     // create DataSeries
     sal_Int32 nSeriesIndex = 0;
-    vector< Reference< XDataSeries > > aSeriesVec;
+    vector< rtl::Reference< DataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSequencesVec.size());
 
     for (auto const& elem : aSequencesVec)
@@ -195,7 +123,7 @@ InterpretedData DataInterpreter::interpretDataSource(
         ++nSeriesIndex;
     }
 
-    return { { comphelper::containerToSequence( aSeriesVec ) }, xCategories };
+    return { { aSeriesVec }, xCategories };
 }
 
 InterpretedData DataInterpreter::reinterpretDataSeries(
@@ -204,23 +132,22 @@ InterpretedData DataInterpreter::reinterpretDataSeries(
     InterpretedData aResult( aInterpretedData );
 
     sal_Int32 i=0;
-    Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    const sal_Int32 nCount = aSeries.getLength();
+    std::vector< rtl::Reference< DataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
+    const sal_Int32 nCount = aSeries.size();
     for( ; i<nCount; ++i )
     {
         try
         {
-            Reference< data::XDataSource > xSeriesSource( aSeries[i], uno::UNO_QUERY_THROW );
-            Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
+            std::vector< uno::Reference< data::XLabeledDataSequence > > aNewSequences;
 
             // values-y
-            Reference< data::XLabeledDataSequence > xValuesY(
-                DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y" ));
+            uno::Reference< data::XLabeledDataSequence > xValuesY =
+                DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values-y" );
             // re-use values-... as values-y
             if( ! xValuesY.is())
             {
-                xValuesY.set(
-                    DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values", true ));
+                xValuesY =
+                    DataSeriesHelper::getDataSequenceByRole( aSeries[i], "values", true );
                 if( xValuesY.is())
                     SetRole( xValuesY->getValues(), "values-y");
             }
@@ -229,8 +156,8 @@ InterpretedData DataInterpreter::reinterpretDataSeries(
                 aNewSequences = { xValuesY };
             }
 
-            Sequence< Reference< data::XLabeledDataSequence > > aSeqs( xSeriesSource->getDataSequences());
-            if( aSeqs.getLength() != aNewSequences.getLength() )
+            const std::vector< uno::Reference< data::XLabeledDataSequence > > & aSeqs = aSeries[i]->getDataSequences2();
+            if( aSeqs.size() != aNewSequences.size() )
             {
 #ifdef DEBUG_CHART2_TEMPLATE
                 sal_Int32 j=0;
@@ -239,8 +166,7 @@ InterpretedData DataInterpreter::reinterpretDataSeries(
                     assert( aSeqs[j] == xValuesY && "All sequences should be used" );
                 }
 #endif
-                Reference< data::XDataSink > xSink( xSeriesSource, uno::UNO_QUERY_THROW );
-                xSink->setData( aNewSequences );
+                aSeries[i]->setData( aNewSequences );
             }
         }
         catch( const uno::Exception & )
@@ -256,14 +182,12 @@ InterpretedData DataInterpreter::reinterpretDataSeries(
 bool DataInterpreter::isDataCompatible(
     const InterpretedData& aInterpretedData )
 {
-    const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    for( Reference< XDataSeries > const & i : aSeries )
+    const std::vector< rtl::Reference< DataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
+    for( rtl::Reference< DataSeries > const & i : aSeries )
     {
         try
         {
-            Reference< data::XDataSource > xSrc( i, uno::UNO_QUERY_THROW );
-            Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
-            if( aSeq.getLength() != 1 )
+            if( i->getDataSequences2().size() != 1 )
                 return false;
         }
         catch( const uno::Exception & )
@@ -332,23 +256,20 @@ rtl::Reference< DataSource > DataInterpreter::mergeInterpretedData(
     const InterpretedData& aInterpretedData )
 {
     vector< Reference< data::XLabeledDataSequence > > aResultVec;
-    aResultVec.reserve( aInterpretedData.Series.getLength() +
+    aResultVec.reserve( aInterpretedData.Series.size() +
                         1 // categories
         );
 
     if( aInterpretedData.Categories.is())
         aResultVec.push_back( aInterpretedData.Categories );
 
-    const Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
-    for( Reference< XDataSeries > const & dataSeries : aSeries )
+    const std::vector< rtl::Reference< DataSeries > > aSeries = FlattenSequence( aInterpretedData.Series );
+    for( rtl::Reference< DataSeries > const & dataSeries : aSeries )
     {
         try
         {
-            Reference< data::XDataSource > xSrc( dataSeries, uno::UNO_QUERY_THROW );
-            const Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
-
             // add all sequences of data series
-            for( Reference< data::XLabeledDataSequence > const & xAdd : aSeq )
+            for( uno::Reference< data::XLabeledDataSequence > const & xAdd : dataSeries->getDataSequences2() )
             {
                 // only add if sequence is not yet in the result
                 if( none_of( aResultVec.begin(), aResultVec.end(),

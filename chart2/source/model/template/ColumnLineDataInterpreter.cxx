@@ -19,6 +19,7 @@
 
 #include "ColumnLineDataInterpreter.hxx"
 #include <LabeledDataSequence.hxx>
+#include <DataSeries.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -51,25 +52,24 @@ InterpretedData ColumnLineDataInterpreter::interpretDataSource(
     InterpretedData aResult(  DataInterpreter::interpretDataSource( xSource, aArguments, aSeriesToReUse ));
 
     // the base class should return one group
-    OSL_ASSERT( aResult.Series.getLength() == 1 );
-    if( aResult.Series.getLength() == 1 )
+    OSL_ASSERT( aResult.Series.size() == 1 );
+    if( aResult.Series.size() == 1 )
     {
-        sal_Int32 nNumberOfSeries = aResult.Series[0].getLength();
+        sal_Int32 nNumberOfSeries = aResult.Series[0].size();
 
         // if we have more than one series put the last nNumOfLines ones into a new group
         if( nNumberOfSeries > 1 && m_nNumberOfLines > 0 )
         {
             sal_Int32 nNumOfLines = std::min( m_nNumberOfLines, nNumberOfSeries - 1 );
-            aResult.Series.realloc(2);
-            auto pSeries = aResult.Series.getArray();
+            aResult.Series.resize(2);
 
-            Sequence< Reference< XDataSeries > > & rColumnDataSeries = pSeries[0];
-            Sequence< Reference< XDataSeries > > & rLineDataSeries   = pSeries[1];
-            rLineDataSeries.realloc( nNumOfLines );
+            std::vector< rtl::Reference< DataSeries > > & rColumnDataSeries = aResult.Series[0];
+            std::vector< rtl::Reference< DataSeries > > & rLineDataSeries   = aResult.Series[1];
+            rLineDataSeries.resize( nNumOfLines );
             std::copy( std::cbegin(rColumnDataSeries) + nNumberOfSeries - nNumOfLines,
                          std::cbegin(rColumnDataSeries) + nNumberOfSeries,
-                         rLineDataSeries.getArray() );
-            rColumnDataSeries.realloc( nNumberOfSeries - nNumOfLines );
+                         rLineDataSeries.begin() );
+            rColumnDataSeries.resize( nNumberOfSeries - nNumOfLines );
         }
     }
 

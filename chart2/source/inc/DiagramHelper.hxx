@@ -179,9 +179,9 @@ public:
 
     /** return all data series in this diagram grouped by chart-types
      */
-    static css::uno::Sequence<
-               css::uno::Sequence<
-                   css::uno::Reference< css::chart2::XDataSeries > > >
+    static std::vector<
+               std::vector<
+                   rtl::Reference< ::chart::DataSeries > > >
         getDataSeriesGroups(
             const rtl::Reference< ::chart::Diagram > & xDiagram );
 

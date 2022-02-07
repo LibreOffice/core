@@ -38,7 +38,7 @@ class LabeledDataSequence;
   */
 struct InterpretedData
 {
-    css::uno::Sequence< css::uno::Sequence< css::uno::Reference<css::chart2::XDataSeries> > > Series;
+    std::vector< std::vector< rtl::Reference<::chart::DataSeries> > > Series;
     css::uno::Reference< css::chart2::data::XLabeledDataSequence > Categories;
 };
 
@@ -103,11 +103,6 @@ public:
             use all the data series given here for the result before
             creating new ones.
      */
-    InterpretedData interpretDataSource(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse );
-
     virtual InterpretedData interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
