@@ -16,6 +16,24 @@
       "message": "I wonder if we shouldn\u0027t change the default for all appendDouble calls. It\u0027s not like we get much smaller documents if we use a more limited precision do we?",
       "revId": "50682cea4196819980c8e2d4018f80384097ce6f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c0a3301_1b2ce1ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-07T12:29:12Z",
+      "side": 1,
+      "message": "Sure, why not, let\u0027s see if https://gerrit.libreoffice.org/c/core/+/129599 finds any problems with that.",
+      "parentUuid": "b8ec0cd2_374c2625",
+      "revId": "50682cea4196819980c8e2d4018f80384097ce6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
