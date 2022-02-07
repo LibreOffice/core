@@ -787,7 +787,7 @@ void ScTable::FillFormula(
 }
 
 void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        sal_uLong nFillCount, FillDir eFillDir, ScProgress* pProgress )
+                        sal_uInt64 nFillCount, FillDir eFillDir, ScProgress* pProgress )
 {
     if ( (nFillCount == 0) || !ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2) )
         return;
@@ -851,8 +851,8 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             aFillRange = ScRange(nCol1 - 1, nRow1, 0, nCol1 - nFillCount, nRow2, 0);
         }
     }
-    sal_uLong nIMin = nIStart;
-    sal_uLong nIMax = nIEnd;
+    sal_uInt64 nIMin = nIStart;
+    sal_uInt64 nIMax = nIEnd;
     PutInOrder(nIMin,nIMax);
     bool bHasFiltered = IsDataFiltered(aFillRange);
 
@@ -864,7 +864,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, InsertDeleteFlags::AUTOFILL);
     }
 
-    sal_uLong nProgress = 0;
+    sal_uInt64 nProgress = 0;
     if (pProgress)
         nProgress = pProgress->GetState();
 
@@ -889,10 +889,10 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
     //  execute
 
-    sal_uLong nActFormCnt = 0;
+    sal_uInt64 nActFormCnt = 0;
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
     {
-        sal_uLong nMaxFormCnt = 0;                      // for formulas
+        sal_uInt64 nMaxFormCnt = 0;                      // for formulas
 
         //  transfer attributes
 
@@ -1218,7 +1218,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
     SCROW nRow2 = rSource.aEnd.Row();
     bool bOk = true;
     tools::Long nIndex = 0;
-    sal_uLong nSrcCount = 0;
+    sal_uInt64 nSrcCount = 0;
     FillDir eFillDir = FILL_TO_BOTTOM;
     if ( nEndX == nCol2 && nEndY == nRow2 )     // empty
         bOk = false;
@@ -1268,10 +1268,10 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
             sal_uInt16 nListCount = pListData->GetSubCount();
             if ( nListCount )
             {
-                sal_uLong nSub = nSrcCount - 1; //  nListIndex is from last source entry
+                sal_uInt64 nSub = nSrcCount - 1; //  nListIndex is from last source entry
                 while ( nIndex < sal::static_int_cast<tools::Long>(nSub) )
                     nIndex += nListCount;
-                sal_uLong nPos = ( nListIndex + nIndex - nSub ) % nListCount;
+                sal_uInt64 nPos = ( nListIndex + nIndex - nSub ) % nListCount;
                 aValue = pListData->GetSubStr(sal::static_int_cast<sal_uInt16>(nPos));
             }
         }
@@ -1304,7 +1304,7 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
             tools::Long nPosIndex = nIndex;
             while ( nPosIndex < 0 )
                 nPosIndex += nSrcCount;
-            sal_uLong nPos = nPosIndex % nSrcCount;
+            sal_uInt64 nPos = nPosIndex % nSrcCount;
             SCCOL nSrcX = nCol1;
             SCROW nSrcY = nRow1;
             if ( eFillDir == FILL_TO_TOP || eFillDir == FILL_TO_BOTTOM )
@@ -1614,7 +1614,7 @@ bool HiddenRowColumn(const ScTable* pTable, SCCOLROW nRowColumn, bool bVertical,
 void ScTable::FillFormulaVertical(
     const ScFormulaCell& rSrcCell,
     SCCOLROW& rInner, SCCOL nCol, SCROW nRow1, SCROW nRow2,
-    ScProgress* pProgress, sal_uLong& rProgress )
+    ScProgress* pProgress, sal_uInt64& rProgress )
 {
     // rInner is the row position when filling vertically.  Also, when filling
     // across hidden regions, it may create multiple dis-jointed spans of
@@ -1678,7 +1678,7 @@ void ScTable::FillFormulaVertical(
 
 void ScTable::FillSeriesSimple(
     const ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
-    const SCCOLROW& rCol, const SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress )
+    const SCCOLROW& rCol, const SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uInt64& rProgress )
 {
     bool bHidden = false;
     SCCOLROW nHiddenLast = -1;
@@ -1758,9 +1758,9 @@ void ScTable::FillSeriesSimple(
 
 void ScTable::FillAutoSimple(
     SCCOLROW nISrcStart, SCCOLROW nISrcEnd, SCCOLROW nIStart, SCCOLROW nIEnd,
-    SCCOLROW& rInner, const SCCOLROW& rCol, const SCCOLROW& rRow, sal_uLong nActFormCnt,
-    sal_uLong nMaxFormCnt, bool bHasFiltered, bool bVertical, bool bPositive,
-    ScProgress* pProgress, sal_uLong& rProgress )
+    SCCOLROW& rInner, const SCCOLROW& rCol, const SCCOLROW& rRow, sal_uInt64 nActFormCnt,
+    sal_uInt64 nMaxFormCnt, bool bHasFiltered, bool bVertical, bool bPositive,
+    ScProgress* pProgress, sal_uInt64& rProgress )
 {
     SCCOLROW nSource = nISrcStart;
     double nDelta;
@@ -1770,7 +1770,7 @@ void ScTable::FillAutoSimple(
         nDelta = 1.0;
     else
         nDelta = -1.0;
-    sal_uLong nFormulaCounter = nActFormCnt;
+    sal_uInt64 nFormulaCounter = nActFormCnt;
     bool bGetCell = true;
     bool bBooleanCell = false;
     bool bPercentCell = false;
@@ -2039,7 +2039,7 @@ inline bool isOverflow( const double& rVal, const double& rMax, const double& rS
 }
 
 void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
+                    sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                     double nStepValue, double nMaxValue, sal_uInt16 nArgMinDigits,
                     bool bAttribs, ScProgress* pProgress,
                     bool bSkipOverlappedCells, std::vector<sal_Int32>* pNonOverlappedCellIdx )
@@ -2067,7 +2067,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCCOLROW nIEnd;
     SCCOLROW nISource;
     ScRange aFillRange;
-    sal_uLong nFillerCount;
+    sal_uInt64 nFillerCount;
     std::vector<bool> aIsNonEmptyCell;
 
     if (bVertical)
@@ -2179,14 +2179,14 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             DeleteArea(static_cast<SCCOL>(nIMin), nRow1, static_cast<SCCOL>(nIMax), nRow2, nDel);
     }
 
-    sal_uLong nProgress = 0;
+    sal_uInt64 nProgress = 0;
     if (pProgress)
         nProgress = pProgress->GetState();
 
     // Perform the fill once per each 'outer' position i.e. one per column
     // when filling vertically.
 
-    sal_uLong nActFormCnt = 0;
+    sal_uInt64 nActFormCnt = 0;
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
     {
         rInner = nISource;
@@ -2485,7 +2485,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 }
 
 void ScTable::Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                    sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
+                    sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                     double nStepValue, double nMaxValue, ScProgress* pProgress)
 {
     if (eFillCmd == FILL_AUTO)

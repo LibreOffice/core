@@ -2536,9 +2536,9 @@ void ScOutputData::DrawClipMarks()
                         const ScMergeAttr* pMerge = mpDoc->GetAttr( nOverX, nOverY, nTab, ATTR_MERGE );
                         SCCOL nCountX = pMerge->GetColMerge();
                         for (SCCOL i=1; i<nCountX; i++)
-                            nOutWidth += static_cast<tools::Long>( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
+                            nOutWidth += mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX;
                         SCROW nCountY = pMerge->GetRowMerge();
-                        nOutHeight += static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY));
+                        nOutHeight += mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
 
                         if ( bLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
@@ -2557,9 +2557,9 @@ void ScOutputData::DrawClipMarks()
                                     &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
                             SCCOL nCountX = pMerge->GetColMerge();
                             for (SCCOL i=1; i<nCountX; i++)
-                                nOutWidth += static_cast<tools::Long>( mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX );
+                                nOutWidth += mpDoc->GetColWidth(nOverX+i,nTab) * mnPPTX;
                             SCROW nCountY = pMerge->GetRowMerge();
-                            nOutHeight += static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY));
+                            nOutHeight += mpDoc->GetScaledRowHeight( nOverY+1, nOverY+nCountY-1, nTab, mnPPTY);
                         }
 
                         tools::Long nStartPosX = nPosX;
