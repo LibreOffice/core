@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd96bb52_f2d50e9f",
+        "filename": "sc/inc/strings.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-07T18:17:15Z",
+      "side": 0,
+      "message": "SCSTR_COLUMN is used in more places (i.e. sc/source/ui/dbgui/filtdlg.cxx and sc/source/ui/dbgui/pfiltdlg.cxx and sc/source/ui/dbgui/tpsubt.cxx) so can\u0027t be changed for this one case. So either inspect all those cases whether handling should be changed as well (it\u0027s used as field name though so implications aren\u0027t obvious from a short glance) or restrict change to this very case.\n\nI suggest to rename all occurrences of SCSTR_COLUMN to SCSTR_COLUMN_NAME and introduce a new SCSTR_COLUMN.",
+      "revId": "ea771e85b2302829394df545bb82c02bff2750c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
