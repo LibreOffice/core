@@ -264,8 +264,7 @@ void ScSelectionTransferObj::CreateCellData()
         {
             ScDocShell* pDocSh = rViewData.GetDocShell();
 
-            ScRange aSelRange;
-            aNewMark.GetMarkArea( aSelRange );
+            const ScRange& aSelRange = aNewMark.GetMarkArea();
             ScDocShellRef aDragShellRef;
             if ( pDocSh->GetDocument().HasOLEObjectsInArea( aSelRange, &aNewMark ) )
             {

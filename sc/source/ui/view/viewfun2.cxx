@@ -926,8 +926,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
     if ( pItem )
     {   // set number format if incompatible
         // MarkData was already MarkToSimple'ed in PasteFromClip
-        ScRange aRange;
-        rMark.GetMarkArea( aRange );
+        const ScRange& aRange = rMark.GetMarkArea();
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( *pItem );
         SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType( pItem->GetValue() );
@@ -1007,7 +1006,7 @@ void ScViewFunc::AdjustPrintZoom()
 {
     ScRange aRange;
     if ( GetViewData().GetSimpleArea( aRange ) != SC_MARK_SIMPLE )
-        GetViewData().GetMarkData().GetMultiMarkArea( aRange );
+        aRange = GetViewData().GetMarkData().GetMultiMarkArea();
     GetViewData().GetDocShell()->AdjustPrintZoom( aRange );
 }
 
@@ -1159,8 +1158,7 @@ bool ScViewFunc::MergeCells( bool bApi, bool& rDoContents, bool bCenter )
     ScDocShell* pDocSh = GetViewData().GetDocShell();
     ScDocument& rDoc = pDocSh->GetDocument();
 
-    ScRange aMarkRange;
-    rMark.GetMarkArea( aMarkRange );
+    const ScRange& aMarkRange = rMark.GetMarkArea();
     SCCOL nStartCol = aMarkRange.aStart.Col();
     SCROW nStartRow = aMarkRange.aStart.Row();
     SCTAB nStartTab = aMarkRange.aStart.Tab();
@@ -1655,9 +1653,9 @@ void ScViewFunc::FillTab( InsertDeleteFlags nFlags, ScPasteFunc nFunction, bool 
     rMark.MarkToSimple();
     bool bMulti = rMark.IsMultiMarked();
     if (bMulti)
-        rMark.GetMultiMarkArea( aMarkRange );
+        aMarkRange = rMark.GetMultiMarkArea();
     else if (rMark.IsMarked())
-        rMark.GetMarkArea( aMarkRange );
+        aMarkRange = rMark.GetMarkArea();
     else
         aMarkRange = ScRange( GetViewData().GetCurX(), GetViewData().GetCurY(), nTab );
 
@@ -3394,8 +3392,7 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         rDoc.ApplySelectionLineStyle( aFuncMark, pLine, bColorOnly );
     }
 
-    ScRange aMarkRange;
-    aFuncMark.GetMultiMarkArea( aMarkRange );
+    const ScRange& aMarkRange = aFuncMark.GetMultiMarkArea();
     SCCOL nStartCol = aMarkRange.aStart.Col();
     SCROW nStartRow = aMarkRange.aStart.Row();
     SCTAB nStartTab = aMarkRange.aStart.Tab();

@@ -466,8 +466,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     ScMarkData& rMark = aViewData.GetMarkData();
     OSL_ENSURE(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
-    ScRange aMarkRange;
-    rMark.GetMarkArea(aMarkRange);
+    const ScRange& aMarkRange = rMark.GetMarkArea();
     if (( aMarkRange.aStart.Col() != nBlockStartX && aMarkRange.aEnd.Col() != nBlockStartX ) ||
         ( aMarkRange.aStart.Row() != nBlockStartY && aMarkRange.aEnd.Row() != nBlockStartY ) ||
         ( meBlockMode == Own ))
@@ -740,7 +739,8 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 
     bool bSkipCell = false;
     bool bHFlip = false;
-    auto nMaxCol = rDoc.ClampToAllocatedColumns(nTab, rDoc.MaxCol());
+    // search also the first unallocated column (all unallocated columns share a set of attrs)
+    SCCOL nMaxCol = std::min<SCCOL>( rDoc.GetAllocatedColumnsCount(nTab) + 1, rDoc.MaxCol());
     do
     {
         bSkipCell = rDoc.ColHidden(rCurX, nTab) || rDoc.IsHorOverlapped(rCurX, rCurY, nTab);
@@ -800,14 +800,41 @@ void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCRO
 
     bool bSkipCell = false;
     bool bVFlip = false;
+    // Avoid repeated calls to RowHidden(), IsVerOverlapped() and HasAttrib().
+    SCROW nFirstSameHiddenRow = -1;
+    SCROW nLastSameHiddenRow = -1;
+    bool bRowHidden = false;
+    SCROW nFirstSameIsVerOverlapped = -1;
+    SCROW nLastSameIsVerOverlapped = -1;
+    bool bIsVerOverlapped = false;
+    SCROW nFirstSameHasAttribRow = -1;
+    SCROW nLastSameHasAttribRow = -1;
+    bool bHasAttribProtected = false;
     do
     {
-        SCROW nLastRow = -1;
-        bSkipCell = rDoc.RowHidden(rCurY, nTab, nullptr, &nLastRow) || rDoc.IsVerOverlapped( rCurX, rCurY, nTab );
+        if( rCurY < nFirstSameHiddenRow || rCurY > nLastSameHiddenRow )
+            bRowHidden = rDoc.RowHidden(rCurY, nTab, &nFirstSameHiddenRow, &nLastSameHiddenRow);
+        bSkipCell = bRowHidden;
+        if( !bSkipCell )
+        {
+            if( rCurY < nFirstSameIsVerOverlapped || rCurY > nLastSameIsVerOverlapped )
+                bIsVerOverlapped = rDoc.IsVerOverlapped(rCurX, rCurY, nTab, &nFirstSameIsVerOverlapped, &nLastSameIsVerOverlapped);
+            bSkipCell = bIsVerOverlapped;
+        }
         if (bSkipProtected && !bSkipCell)
-            bSkipCell = rDoc.HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
+        {
+            if( rCurY < nFirstSameHasAttribRow || rCurY > nLastSameHasAttribRow )
+                bHasAttribProtected = rDoc.HasAttrib(rCurX, rCurY, nTab, HasAttrFlags::Protected,
+                                                     &nFirstSameHasAttribRow, &nLastSameHasAttribRow);
+            bSkipCell = bHasAttribProtected;
+        }
         if (bSkipUnprotected && !bSkipCell)
-            bSkipCell = !rDoc.HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
+        {
+            if( rCurY < nFirstSameHasAttribRow || rCurY > nLastSameHasAttribRow )
+                bHasAttribProtected = rDoc.HasAttrib(rCurX, rCurY, nTab, HasAttrFlags::Protected,
+                                                     &nFirstSameHasAttribRow, &nLastSameHasAttribRow);
+            bSkipCell = !bHasAttribProtected;
+        }
 
         if (bSkipCell)
         {
@@ -1023,12 +1050,12 @@ void ScTabView::PaintBlock( bool bReset )
         bool bFlag = rMark.GetMarkingFlag();
         rMark.SetMarking(false);
         rMark.MarkToMulti();
-        rMark.GetMultiMarkArea(aMarkRange);
+        aMarkRange = rMark.GetMultiMarkArea();
         rMark.MarkToSimple();
         rMark.SetMarking(bFlag);
     }
     else
-        rMark.GetMarkArea(aMarkRange);
+        aMarkRange = rMark.GetMarkArea();
 
     nBlockStartX = aMarkRange.aStart.Col();
     nBlockStartY = aMarkRange.aStart.Row();
@@ -1069,9 +1096,7 @@ void ScTabView::SelectAll( bool bContinue )
 
     if (rMark.IsMarked())
     {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        if ( aMarkRange == ScRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab ) )
+        if ( rMark.GetMarkArea() == ScRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab ) )
             return;
     }
 
@@ -1200,7 +1225,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                     SCTAB   nTab = aViewData.GetTabNo();
                     ScRange aMarkRange;
                     if ( aViewData.GetSimpleArea( aMarkRange ) != SC_MARK_SIMPLE )
-                        rMark.GetMultiMarkArea( aMarkRange );
+                        aMarkRange = rMark.GetMultiMarkArea();
 
                     SCCOL   nStartCol = aMarkRange.aStart.Col();
                     SCROW   nStartRow = aMarkRange.aStart.Row();

@@ -1397,7 +1397,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
     sc::RefUpdateContext aCxt(*this);
-    const bool bLastRowIncluded = (static_cast<SCROW>(nStartRow + nSize) == GetSheetLimits().GetMaxRowCount() && ValidRow(nStartRow));
+    const bool bLastRowIncluded = (static_cast<SCROW>(nStartRow + nSize) == GetMaxRowCount() && ValidRow(nStartRow));
     if ( ValidRow(nStartRow+nSize) || bLastRowIncluded )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
@@ -1406,7 +1406,7 @@ void ScDocument::DeleteRow( SCCOL nStartCol, SCTAB nStartTab,
         if (bLastRowIncluded)
         {
             // Last row is included, shift a virtually non-existent row in.
-            aCxt.maRange = ScRange( nStartCol, GetSheetLimits().GetMaxRowCount(), nTabRangeStart, nEndCol, GetSheetLimits().GetMaxRowCount(), nTabRangeEnd);
+            aCxt.maRange = ScRange( nStartCol, GetMaxRowCount(), nTabRangeStart, nEndCol, GetMaxRowCount(), nTabRangeEnd);
         }
         else
         {
@@ -1618,7 +1618,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     while ( lcl_GetNextTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) ) );
 
     sc::RefUpdateContext aCxt(*this);
-    const bool bLastColIncluded = (nStartCol + nSize == MAXCOLCOUNT && ValidCol(nStartCol));
+    const bool bLastColIncluded = (static_cast<SCCOL>(nStartCol + nSize) == GetMaxColCount() && ValidCol(nStartCol));
     if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) || bLastColIncluded )
     {
         lcl_GetFirstTabRange( nTabRangeStart, nTabRangeEnd, pTabMark, static_cast<SCTAB>(maTabs.size()) );
@@ -1627,7 +1627,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         if (bLastColIncluded)
         {
             // Last column is included, shift a virtually non-existent column in.
-            aCxt.maRange = ScRange( MAXCOLCOUNT, nStartRow, nTabRangeStart, MAXCOLCOUNT, nEndRow, nTabRangeEnd);
+            aCxt.maRange = ScRange( GetMaxColCount(), nStartRow, nTabRangeStart, GetMaxColCount(), nEndRow, nTabRangeEnd);
         }
         else
         {
@@ -3046,8 +3046,7 @@ void ScDocument::CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkD
     sc::AutoCalcSwitch aACSwitch(*this, false); // turn of auto calc temporarily.
     NumFmtMergeHandler aNumFmtMergeHdl(*this, *pClipDoc);
 
-    ScRange aDestRange;
-    rMark.GetMarkArea(aDestRange);
+    const ScRange& aDestRange = rMark.GetMarkArea();
 
     bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert
 
@@ -3339,8 +3338,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
         bool bOldAutoCalc = GetAutoCalc();
         SetAutoCalc( false );                   // avoid multiple calculations
 
-        ScRange aArea;
-        rMark.GetMultiMarkArea( aArea );
+        const ScRange& aArea = rMark.GetMultiMarkArea();
         SCCOL nStartCol = aArea.aStart.Col();
         SCROW nStartRow = aArea.aStart.Row();
         SCCOL nEndCol = aArea.aEnd.Col();
@@ -4138,7 +4136,7 @@ sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
     return 0;
 }
 
-sal_uLong ScDocument::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const
+tools::Long ScDocument::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
@@ -4179,15 +4177,15 @@ sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero 
     return 0;
 }
 
-sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow ) const
+sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetRowHeight( nRow, pStartRow, pEndRow );
+        return maTabs[nTab]->GetRowHeight( nRow, pStartRow, pEndRow, bHiddenAsZero );
     OSL_FAIL("Wrong sheet number");
     return 0;
 }
 
-sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
+tools::Long ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if (nStartRow == nEndRow)
         return GetRowHeight( nStartRow, nTab, bHiddenAsZero );  // faster for a single row
@@ -4203,17 +4201,17 @@ sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, 
     return 0;
 }
 
-SCROW ScDocument::GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const
+SCROW ScDocument::GetRowForHeight( SCTAB nTab, tools::Long nHeight ) const
 {
     return maTabs[nTab]->GetRowForHeight(nHeight);
 }
 
-sal_uLong ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
-        SCTAB nTab, double fScale, const sal_uLong* pnMaxHeight ) const
+tools::Long ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
+        SCTAB nTab, double fScale, const tools::Long* pnMaxHeight ) const
 {
     // faster for a single row
     if (nStartRow == nEndRow)
-        return static_cast<sal_uLong>(GetRowHeight( nStartRow, nTab) * fScale);
+        return static_cast<tools::Long>(GetRowHeight( nStartRow, nTab) * fScale);
 
     // check bounds because this method replaces former for(i=start;i<=end;++i) loops
     if (nStartRow > nEndRow)
@@ -4234,7 +4232,7 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
     return 0;
 }
 
-sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
+tools::Long ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetColOffset( nCol, bHiddenAsZero );
@@ -4242,7 +4240,7 @@ sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
     return 0;
 }
 
-sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
+tools::Long ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetRowOffset( nRow, bHiddenAsZero );
@@ -4289,14 +4287,14 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
 {
     // one progress across all (selected) sheets
 
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
             nCellCount += maTabs[nTab]->GetWeightedCount();
 
     ScProgress aProgress( GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true );
 
-    sal_uLong nProgressStart = 0;
+    sal_uInt64 nProgressStart = 0;
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
@@ -4726,10 +4724,24 @@ void ScDocument::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2, S
 
 const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich ) const
 {
-    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] &&
-         nCol < maTabs[nTab]->GetAllocatedColumnsCount())
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
         const SfxPoolItem* pTemp = maTabs[nTab]->GetAttr( nCol, nRow, nWhich );
+        if (pTemp)
+            return pTemp;
+        else
+        {
+            OSL_FAIL( "Attribute Null" );
+        }
+    }
+    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+}
+
+const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
+{
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    {
+        const SfxPoolItem* pTemp = maTabs[nTab]->GetAttr( nCol, nRow, nWhich, nStartRow, nEndRow );
         if (pTemp)
             return pTemp;
         else
@@ -4874,8 +4886,7 @@ void ScDocument::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkDat
     // ApplySelectionStyle needs multi mark
     if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea( aRange );
+        const ScRange& aRange = rMark.GetMarkArea();
         ApplyStyleArea( aRange.aStart.Col(), aRange.aStart.Row(),
                           aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rStyle );
     }
@@ -4946,8 +4957,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
     }
     if ( rMark.IsMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea( aRange );
+        const ScRange& aRange = rMark.GetMarkArea();
         for (SCTAB i=aRange.aStart.Tab(); i<=aRange.aEnd.Tab() && bEqual && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i] && rMark.GetTableSelect(i))
             {
@@ -5078,8 +5088,7 @@ std::unique_ptr<ScPatternAttr> ScDocument::CreateSelectionPattern( const ScMarkD
     }
     if ( rMark.IsMarked() )                                     // single selection
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
+        const ScRange& aRange = rMark.GetMarkArea();
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
         for (const auto& rTab : rMark)
         {
@@ -5157,8 +5166,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     }
     else if( rMark.IsMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
+        const ScRange& aRange = rMark.GetMarkArea();
         rLineInner.EnableHor( aRange.aStart.Row() != aRange.aEnd.Row() );
         rLineInner.EnableVer( aRange.aStart.Col() != aRange.aEnd.Col() );
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
@@ -5184,15 +5192,12 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     rLineInner.SetValid( SvxBoxInfoItemValidFlags::VERT,   ( aFlags.nVert != SC_LINE_DONTCARE ) );
 }
 
-bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const
+static HasAttrFlags OptimizeHasAttrib( HasAttrFlags nMask, ScDocumentPool* pPool )
 {
     if ( nMask & HasAttrFlags::Rotate )
     {
         //  Is attribute used in document?
         //  (as in fillinfo)
-
-        ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
         bool bAnyItem = false;
         for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_ROTATE_VALUE))
@@ -5209,12 +5214,18 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         if (!bAnyItem)
             nMask &= ~HasAttrFlags::Rotate;
     }
+    return nMask;
+}
+
+bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const
+{
+    nMask = OptimizeHasAttrib( nMask, mxPoolHelper->GetDocPool());
 
     if (nMask == HasAttrFlags::NONE)
         return false;
 
-    bool bFound = false;
-    for (SCTAB i=nTab1; i<=nTab2 && !bFound && i < static_cast<SCTAB>(maTabs.size()); i++)
+    for (SCTAB i=nTab1; i<=nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
         {
             if ( nMask & HasAttrFlags::RightOrCenter )
@@ -5224,14 +5235,46 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                 //  That way, ScAttrArray::HasAttrib doesn't have to handle RTL sheets.
 
                 if ( IsLayoutRTL(i) )
-                    bFound = true;
+                    return true;
             }
 
-            if ( !bFound )
-                bFound = maTabs[i]->HasAttrib( nCol1, nRow1, nCol2, nRow2, nMask );
+            if( maTabs[i]->HasAttrib( nCol1, nRow1, nCol2, nRow2, nMask ))
+                return true;
         }
 
-    return bFound;
+    return false;
+}
+
+bool ScDocument::HasAttrib( SCCOL nCol, SCROW nRow, SCTAB nTab, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
+{
+    nMask = OptimizeHasAttrib( nMask, mxPoolHelper->GetDocPool());
+
+    if (nMask == HasAttrFlags::NONE || nTab >= static_cast<SCTAB>(maTabs.size()))
+    {
+        if( nStartRow )
+            *nStartRow = 0;
+        if( nEndRow )
+            *nEndRow = MaxRow();
+        return false;
+    }
+
+    if ( nMask & HasAttrFlags::RightOrCenter )
+    {
+        //  On a RTL sheet, don't start to look for the default left value
+        //  (which is then logically right), instead always assume true.
+        //  That way, ScAttrArray::HasAttrib doesn't have to handle RTL sheets.
+
+        if ( IsLayoutRTL(nTab) )
+        {
+            if( nStartRow )
+                *nStartRow = 0;
+            if( nEndRow )
+                *nEndRow = MaxRow();
+            return true;
+        }
+    }
+
+    return maTabs[nTab]->HasAttrib( nCol, nRow, nMask, nStartRow, nEndRow );
 }
 
 bool ScDocument::HasAttrib( const ScRange& rRange, HasAttrFlags nMask ) const
@@ -5367,8 +5410,7 @@ bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
         return false;
     }
 
-    ScRange aRange;
-    rMark.GetMarkArea(aRange);
+    const ScRange& aRange = rMark.GetMarkArea();
 
     bool bOk = true;
     bool bMatrix = ( pOnlyNotBecauseOfMatrix != nullptr );
@@ -5746,9 +5788,11 @@ bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     }
 }
 
-bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab, SCROW* nStartRow, SCROW* nEndRow ) const
 {
-    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
+    SCROW dummy;
+    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG,
+                                            nStartRow ? *nStartRow : dummy, nEndRow ? *nEndRow : dummy );
     if (pAttr)
         return pAttr->IsVerOverlapped();
     else
@@ -5894,8 +5938,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
     // ApplySelectionCache needs multi mark
     if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea( aRange );
+        const ScRange& aRange = rMark.GetMarkArea();
         ApplyPatternArea( aRange.aStart.Col(), aRange.aStart.Row(),
                           aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rAttr, pDataArray, pIsChanged );
     }
@@ -6140,9 +6183,9 @@ void ScDocument::StylesToNames()
     const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
 }
 
-sal_uLong ScDocument::GetCellCount() const
+sal_uInt64 ScDocument::GetCellCount() const
 {
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
 
     for (const auto& a : maTabs)
     {
@@ -6153,9 +6196,9 @@ sal_uLong ScDocument::GetCellCount() const
     return nCellCount;
 }
 
-sal_uLong ScDocument::GetFormulaGroupCount() const
+sal_uInt64 ScDocument::GetFormulaGroupCount() const
 {
-    sal_uLong nFormulaGroupCount = 0;
+    sal_uInt64 nFormulaGroupCount = 0;
 
     ScFormulaGroupIterator aIter( *const_cast<ScDocument*>(this) );
     for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())
@@ -6166,9 +6209,9 @@ sal_uLong ScDocument::GetFormulaGroupCount() const
     return nFormulaGroupCount;
 }
 
-sal_uLong ScDocument::GetCodeCount() const
+sal_uInt64 ScDocument::GetCodeCount() const
 {
-    sal_uLong nCodeCount = 0;
+    sal_uInt64 nCodeCount = 0;
 
     for (const auto& a : maTabs)
     {

@@ -699,12 +699,12 @@ void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& 
 }
 
 ScDocShellRef ScBootstrapFixture::saveAndReload(
-    ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword)
+    ScDocShell& rShell, const OUString &rFilter,
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType,
+    std::shared_ptr<utl::TempFile>* pTempFileOut,  const OUString* pPassword, bool bClose)
 {
-
-    utl::TempFile aTempFile;
-    SfxMedium aStoreMedium( aTempFile.GetURL(), StreamMode::STD_WRITE );
+    auto pTempFile = std::make_shared<utl::TempFile>();
+    SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
@@ -724,47 +724,61 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
         uno::Reference< embed::XStorage > xMedStorage = aStoreMedium.GetStorage();
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
     }
-    pShell->DoSaveAs( aStoreMedium );
-    pShell->DoClose();
+    rShell.DoSaveAs( aStoreMedium );
+    if (bClose)
+        rShell.DoClose();
 
-    //std::cout << "File: " << aTempFile.GetURL() << std::endl;
+    //std::cout << "File: " << pTempFile->GetURL() << std::endl;
 
     SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nFormat = SotClipboardFormatId::STARCALC_8;
 
-    ScDocShellRef xDocSh = load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, pPassword );
+    ScDocShellRef xDocSh = load(pTempFile->GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, pPassword );
     if(nFormatType == XLSX_FORMAT_TYPE)
-        validate(aTempFile.GetFileName(), test::OOXML);
+        validate(pTempFile->GetFileName(), test::OOXML);
     else if (nFormatType == ODS_FORMAT_TYPE)
-        validate(aTempFile.GetFileName(), test::ODF);
-    aTempFile.EnableKillingFile();
+        validate(pTempFile->GetFileName(), test::ODF);
+    pTempFile->EnableKillingFile();
+    if(pTempFileOut)
+        *pTempFileOut = pTempFile;
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell* pShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell* pShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     OUString aPass("test");
 
-    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, &aPass);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile, &aPass);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
-std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell* pShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
+{
+    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile, nullptr, false);
+
+    CPPUNIT_ASSERT(xDocSh.is());
+    return xDocSh;
+}
+
+std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell& rShell, sal_Int32 nFormat )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
@@ -782,15 +796,15 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell* pShell, s
         OUString(), "private:factory/scalc*" );
     pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
-    pShell->DoSaveAs( aStoreMedium );
+    rShell.DoSaveAs( aStoreMedium );
 
     return pTempFile;
 }
 
-std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell, sal_Int32 nFormat )
+std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat )
 {
-    std::shared_ptr<utl::TempFile> pTempFile = saveAs(pShell, nFormat);
-    pShell->DoClose();
+    std::shared_ptr<utl::TempFile> pTempFile = saveAs(rShell, nFormat);
+    rShell.DoClose();
 
     SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
     if(nFormatType == XLSX_FORMAT_TYPE)
@@ -813,7 +827,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
         CPPUNIT_ASSERT(xShell.is());
 
         if ( nExportType != -1 )
-            xShell = saveAndReload(&(*xShell), nExportType );
+            xShell = saveAndReload(*xShell, nExportType );
 
         CPPUNIT_ASSERT(xShell.is());
 
@@ -1095,7 +1109,7 @@ void clearRange(ScDocument* pDoc, const ScRange& rRange)
 
 void clearSheet(ScDocument* pDoc, SCTAB nTab)
 {
-    ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
+    ScRange aRange(0,0,nTab,pDoc->MaxCol(),pDoc->MaxRow(),nTab);
     clearRange(pDoc, aRange);
 }
 

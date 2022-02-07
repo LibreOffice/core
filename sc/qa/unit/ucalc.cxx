@@ -678,8 +678,8 @@ void Test::testColumnIterator() // tdf#118620
                             m_pDoc->InsertTab (0, "foo"));
 
     m_pDoc->SetString(0, 0, 0, "'10.5");
-    m_pDoc->SetString(0, MAXROW-5, 0, "42.0");
-    std::optional<sc::ColumnIterator> it = m_pDoc->GetColumnIterator(0, 0, MAXROW - 10, MAXROW);
+    m_pDoc->SetString(0, m_pDoc->MaxRow()-5, 0, "42.0");
+    std::optional<sc::ColumnIterator> it = m_pDoc->GetColumnIterator(0, 0, m_pDoc->MaxRow() - 10, m_pDoc->MaxRow());
     while (it->hasCell())
     {
         it->getCell();
@@ -760,25 +760,25 @@ void Test::testDocStatistics()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to increment sheet count.",
                                static_cast<SCTAB>(nStartTabs+2), m_pDoc->GetTableCount());
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), m_pDoc->GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(0), m_pDoc->GetCellCount());
     m_pDoc->SetValue(ScAddress(0,0,0), 2.0);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(1), m_pDoc->GetCellCount());
     m_pDoc->SetValue(ScAddress(2,2,0), 2.5);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), m_pDoc->GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(2), m_pDoc->GetCellCount());
     m_pDoc->SetString(ScAddress(1,1,1), "Test");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(3), m_pDoc->GetCellCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(3), m_pDoc->GetCellCount());
 
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(0), m_pDoc->GetFormulaGroupCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(0), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,0,1), "=A1");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetFormulaGroupCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(1), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,1,1), "=A2");
     m_pDoc->SetString(ScAddress(3,2,1), "=A3");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(1), m_pDoc->GetFormulaGroupCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(1), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,3,1), "=A5");
     m_pDoc->SetString(ScAddress(3,4,1), "=A6");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(2), m_pDoc->GetFormulaGroupCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(2), m_pDoc->GetFormulaGroupCount());
     m_pDoc->SetString(ScAddress(3,1,1), "=A3");
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uLong>(4), m_pDoc->GetFormulaGroupCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(4), m_pDoc->GetFormulaGroupCount());
 
     m_pDoc->DeleteTab(1);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to decrement sheet count.",
@@ -799,7 +799,7 @@ void Test::testRowForHeight()
 
     struct Check
     {
-        sal_uLong nHeight;
+        tools::Long nHeight;
         SCROW nRow;
     };
 
@@ -845,7 +845,7 @@ void Test::testDataEntries()
     CPPUNIT_ASSERT_MESSAGE("The entries should have ended here.", bool(it == aEntries.end()));
 
     aEntries.clear();
-    m_pDoc->GetDataEntries(0, MAXROW, 0, aEntries); // Try at the very bottom.
+    m_pDoc->GetDataEntries(0, m_pDoc->MaxRow(), 0, aEntries); // Try at the very bottom.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aEntries.size());
 
     // Make sure we get the same set of suggestions.
@@ -1662,7 +1662,7 @@ void Test::testCellBroadcaster()
     CPPUNIT_ASSERT_EQUAL(3.5, m_pDoc->GetValue(2,0,0));
 
     // Insert a column at column B.
-    m_pDoc->InsertCol(ScRange(1,0,0,1,MAXROW,0));
+    m_pDoc->InsertCol(ScRange(1,0,0,1,m_pDoc->MaxRow(),0));
     pBC = m_pDoc->GetBroadcaster(ScAddress(0,0,0));
     CPPUNIT_ASSERT_MESSAGE("Broadcaster should exist here.", pBC);
     pBC = m_pDoc->GetBroadcaster(ScAddress(2,0,0));
@@ -2326,7 +2326,7 @@ void Test::testSheetCopy()
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", m_pDoc->MaxRow(), nRow2);
 
     // insert a note
     ScAddress aAdrA1 (0,2,0); // empty cell content.
@@ -2341,7 +2341,7 @@ void Test::testSheetCopy()
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", m_pDoc->MaxRow(), nRow2);
     CPPUNIT_ASSERT_MESSAGE("There should be note on A3 in new sheet", m_pDoc->HasNote(ScAddress(0,2,1)));
     CPPUNIT_ASSERT_EQUAL(OUString("copy me"), m_pDoc->GetString(ScAddress(0,0,1)));
 
@@ -2370,7 +2370,7 @@ void Test::testSheetCopy()
     bHidden = m_pDoc->RowHidden(11, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", m_pDoc->MaxRow(), nRow2);
 
     // Copy the sheet once again.
     m_pDoc->CopyTab(0, 1);
@@ -2387,7 +2387,7 @@ void Test::testSheetCopy()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", m_pDoc->MaxRow(), nRow2);
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
 }
@@ -2400,7 +2400,7 @@ void Test::testSheetMove()
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", m_pDoc->MaxRow(), nRow2);
 
     //test if inserting before another sheet works
     m_pDoc->InsertTab(0, "TestTab2");
@@ -2408,7 +2408,7 @@ void Test::testSheetMove()
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", m_pDoc->MaxRow(), nRow2);
 
     // Move and test the result.
     m_pDoc->MoveTab(0, 1);
@@ -2416,7 +2416,7 @@ void Test::testSheetMove()
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("copied sheet should also have all rows visible as the original.", m_pDoc->MaxRow(), nRow2);
     OUString aName;
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "sheets should have changed places", OUString("TestTab1"), aName);
@@ -2433,7 +2433,7 @@ void Test::testSheetMove()
     bHidden = m_pDoc->RowHidden(11, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", m_pDoc->MaxRow(), nRow2);
 
     // Move the sheet once again.
     m_pDoc->MoveTab(1, 0);
@@ -2449,7 +2449,7 @@ void Test::testSheetMove()
     bHidden = m_pDoc->RowHidden(11, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 11 - maxrow should be visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(11), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", SCROW(MAXROW), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 11 - maxrow should be visible", m_pDoc->MaxRow(), nRow2);
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "sheets should have changed places", OUString("TestTab2"), aName);
     m_pDoc->DeleteTab(1);
@@ -2539,7 +2539,7 @@ void Test::testStreamValid()
 
     // Now, insert a new row at row 2 position on Sheet1.  This will move cell
     // A2 downward but cell A1 remains unmoved.
-    m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 2);
+    m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 1, 2);
     test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Cell A1 should not have moved.", test, a1);
     test = m_pDoc->GetString(0, 3, 0);
@@ -3053,7 +3053,7 @@ void Test::testGraphicsInGroup()
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(MAXROW), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", m_pDoc->MaxRow(), nRow2);
 
     m_pDoc->InitDrawLayer();
     ScDrawLayer *pDrawLayer = m_pDoc->GetDrawLayer();
@@ -3114,7 +3114,7 @@ void Test::testGraphicsInGroup()
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         // Insert 2 rows at the top.  This should push the circle object down.
-        m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
         m_pDoc->SetDrawPageSize(0);
 
         // Make sure the size of the circle is still identical.
@@ -3122,7 +3122,7 @@ void Test::testGraphicsInGroup()
                                aOrigRect.GetSize(), rNewRect.GetSize());
 
         // Delete 2 rows at the top.  This should bring the circle object to its original position.
-        m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Failed to move back to its original position.",
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
@@ -3147,8 +3147,8 @@ void Test::testGraphicsInGroup()
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
 
         // Insert 2 rows at the top and delete them immediately.
-        m_pDoc->InsertRow(0, 0, MAXCOL, 0, 0, 2);
-        m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 2);
+        m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
+        m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 0, 2);
         m_pDoc->SetDrawPageSize(0);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("Size of a line object changed after row insertion and removal.",
                                const_cast<const tools::Rectangle &>(aOrigRect), rNewRect);
@@ -3447,7 +3447,7 @@ void Test::testAutofilter()
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("All rows should be shown.", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(MAXROW), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", m_pDoc->MaxRow(), nRow2);
 
     // Filter for non-empty cells by column C.
     rEntry.bDoQuery = true;
@@ -3467,7 +3467,7 @@ void Test::testAutofilter()
     bHidden = m_pDoc->RowHidden(3, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("row 4 and down should be visible.", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("row 4 and down should be visible.", SCROW(3), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 4 and down should be visible.", SCROW(MAXROW), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("row 4 and down should be visible.", m_pDoc->MaxRow(), nRow2);
 
     // Now, filter for empty cells by column C.
     rEntry.SetQueryByEmpty();
@@ -3493,7 +3493,7 @@ void Test::testAutofilter()
     bHidden = m_pDoc->RowHidden(5, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 6 and down should be all visible.", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 6 and down should be all visible.", SCROW(5), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 6 and down should be all visible.", SCROW(MAXROW), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows 6 and down should be all visible.", m_pDoc->MaxRow(), nRow2);
 
     m_pDoc->DeleteTab(0);
 }
@@ -3646,7 +3646,7 @@ void Test::testAutofilterOptimizations()
     m_pDoc->Query(0, aParam, true);
     CPPUNIT_ASSERT_MESSAGE("All rows should be shown.", !m_pDoc->RowHidden(0, 0, &nRow1, &nRow2));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", SCROW(MAXROW), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("All rows should be shown.", m_pDoc->MaxRow(), nRow2);
 
     m_pDoc->DeleteTab(0);
 }
@@ -4003,7 +4003,7 @@ void Test::testMergedCells()
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("did not merge cells", SCCOL(3), nEndCol);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("did not merge cells", SCROW(3), nEndRow);
-    ScRange aRange(0,2,0,MAXCOL,2,0);
+    ScRange aRange(0,2,0,m_pDoc->MaxCol(),2,0);
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SetMarkArea(aRange);
     m_xDocShell->GetDocFunc().InsertCells(aRange, &aMark, INS_INSROWS_BEFORE, true, true);
@@ -4165,10 +4165,10 @@ void Test::testUpdateReference()
     m_pDoc->SetString(0,0,1, "=MATCH(\"s1\";Sheet1.A:A;0)");
     aValue = m_pDoc->GetValue(0,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected MATCH result", 2, aValue);
-    m_pDoc->InsertRow(0,0,MAXCOL,0,0,1);    // insert 1 row before row 1 in Sheet1
+    m_pDoc->InsertRow(0,0,m_pDoc->MaxCol(),0,0,1);    // insert 1 row before row 1 in Sheet1
     aValue = m_pDoc->GetValue(0,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected MATCH result", 3, aValue);
-    m_pDoc->DeleteRow(0,0,MAXCOL,0,0,1);    // delete row 1 in Sheet1
+    m_pDoc->DeleteRow(0,0,m_pDoc->MaxCol(),0,0,1);    // delete row 1 in Sheet1
     aValue = m_pDoc->GetValue(0,0,1);
     ASSERT_DOUBLES_EQUAL_MESSAGE("unexpected MATCH result", 2, aValue);
     m_pDoc->DeleteTab(1);
@@ -4420,8 +4420,8 @@ void Test::testAutoFill()
     }
 
     // Clear column A for a new test.
-    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
-    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
     // Fill A1:A6 with 1,2,3,4,5,6.
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
@@ -4469,8 +4469,8 @@ void Test::testAutoFill()
     }
 
     // Clear column A for a new test.
-    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
-    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
     m_pDoc->SetString( 0, 100, 0, "2012-10-31" );
     m_pDoc->SetString( 0, 101, 0, "2012-10-31" );
@@ -4484,8 +4484,8 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("2012-10-31"), m_pDoc->GetString( 0, 104, 0 ) );
 
     // Clear column A for a new test.
-    clearRange(m_pDoc, ScRange(0, 0, 0, 0, MAXROW, 0));
-    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, m_pDoc->MaxRow(), 0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
     m_pDoc->SetString(0, 100, 0, "2019-10-31");
     m_pDoc->SetString(0, 101, 0, "2019-11-30");
@@ -4500,8 +4500,8 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL(OUString("2020-03-31"), m_pDoc->GetString(0, 105, 0));
 
     // Clear column A for a new test.
-    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
-    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
     m_pDoc->SetString( 0, 50, 0, "1.0" );
     m_pDoc->SetString( 0, 51, 0, "1.1" );
@@ -4527,8 +4527,8 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("4.6"), m_pDoc->GetString( 0, 66, 0 ) );
 
     // Clear column A for a new test.
-    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
-    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
     m_pDoc->SetString( 0, 70, 0, "001-001-001" );
     m_pDoc->Fill( 0, 70, 0, 70, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
@@ -4541,8 +4541,8 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("001-001-004"), m_pDoc->GetString( 0, 73, 0 ) );
 
     // Clear column A for a new test.
-    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
-    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
     m_pDoc->SetString( 0, 80, 0, "1%" );
     m_pDoc->Fill( 0, 80, 0, 80, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
@@ -4555,8 +4555,8 @@ void Test::testAutoFill()
     CPPUNIT_ASSERT_EQUAL( OUString("4.00%"), m_pDoc->GetString( 0, 83, 0 ) );
 
     // Clear column A for a new test.
-    clearRange(m_pDoc, ScRange(0,0,0,0,MAXROW,0));
-    m_pDoc->SetRowHidden(0, MAXROW, 0, false); // Show all rows.
+    clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
     m_pDoc->SetString( 0, 0, 0, "1" );
     m_pDoc->SetString( 0, 1, 0, "1.1" );
@@ -4646,7 +4646,7 @@ void Test::testFindAreaPosVertical()
 
     m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_DOWN);
 
-    CPPUNIT_ASSERT_EQUAL(MAXROW, nRow);
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->MaxRow(), nRow);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), nCol);
 
     nCol = 1;
@@ -4713,7 +4713,7 @@ void Test::testFindAreaPosColRight()
     m_pDoc->FindAreaPos(nCol, nRow, 0, SC_MOVE_RIGHT);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(0), nRow);
-    CPPUNIT_ASSERT_EQUAL(MAXCOL, nCol);
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->MaxCol(), nCol);
 
     nCol = 2;
     nRow = 1;
@@ -4797,7 +4797,7 @@ void Test::testNoteBasic()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("note should be itself", pNote, pGetNote);
 
     // Insert one row at row 1.
-    bool bInsertRow = m_pDoc->InsertRow(0, 0, MAXCOL, 0, 1, 1);
+    bool bInsertRow = m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert row", bInsertRow );
 
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", !m_pDoc->GetNote(aAddr));
@@ -4805,7 +4805,7 @@ void Test::testNoteBasic()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("note not there", pNote, m_pDoc->GetNote(aAddr));
 
     // Insert column at column A.
-    bool bInsertCol = m_pDoc->InsertCol(0, 0, MAXROW, 0, 1, 1);
+    bool bInsertCol = m_pDoc->InsertCol(0, 0, m_pDoc->MaxRow(), 0, 1, 1);
     CPPUNIT_ASSERT_MESSAGE("failed to insert column", bInsertCol );
 
     CPPUNIT_ASSERT_MESSAGE("note hasn't moved", !m_pDoc->GetNote(aAddr));
@@ -4837,7 +4837,7 @@ void Test::testNoteBasic()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Note at D4 should have shifted up to D3.", pNote, m_pDoc->GetNote(aAddr));
 
     // Delete column C. This should shift the note one cell left.
-    m_pDoc->DeleteCol(0, 0, MAXROW, 0, 2, 1);
+    m_pDoc->DeleteCol(0, 0, m_pDoc->MaxRow(), 0, 2, 1);
     aAddr.IncCol(-1); // cell C3
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Note at D3 should have shifted left to C3.", pNote, m_pDoc->GetNote(aAddr));
 
@@ -4845,7 +4845,7 @@ void Test::testNoteBasic()
     m_pDoc->SetString(aAddr, "Note is here.");
 
     // Delete row 1. This should shift the note from C3 to C2.
-    m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 0, 1);
+    m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 0, 1);
     aAddr.IncRow(-1); // C2
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Note at C3 should have shifted up to C2.", pNote, m_pDoc->GetNote(aAddr));
 
@@ -4872,7 +4872,7 @@ void Test::testNoteDeleteRow()
     bIgnoreNotes = false;
     CPPUNIT_ASSERT_MESSAGE("The Block should NOT be detected as empty", !m_pDoc->IsBlockEmpty(0, 0, 0, 100, 100, bIgnoreNotes));
 
-    m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 1, 1);
+    m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 1, 1);
 
     CPPUNIT_ASSERT_MESSAGE("there should be no more note", !m_pDoc->HasNote(1, 1, 0));
 
@@ -4889,7 +4889,7 @@ void Test::testNoteDeleteRow()
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    rDocFunc.DeleteCells(ScRange(0,1,0,MAXCOL,1,0), &aMark, DelCellCmd::CellsUp, true);
+    rDocFunc.DeleteCells(ScRange(0,1,0,m_pDoc->MaxCol(),1,0), &aMark, DelCellCmd::CellsUp, true);
 
     // Check to make sure the notes have shifted upward.
     pNote = m_pDoc->GetNote(ScAddress(1,1,0));
@@ -4918,7 +4918,7 @@ void Test::testNoteDeleteRow()
     CPPUNIT_ASSERT_EQUAL(OUString("Second Note"), pNote->GetText());
 
     // Delete row 3.
-    rDocFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DelCellCmd::CellsUp, true);
+    rDocFunc.DeleteCells(ScRange(0,2,0,m_pDoc->MaxCol(),2,0), &aMark, DelCellCmd::CellsUp, true);
 
     pNote = m_pDoc->GetNote(ScAddress(1,2,0));
     CPPUNIT_ASSERT_MESSAGE("B3 should have a note.", pNote);
@@ -4952,7 +4952,7 @@ void Test::testNoteDeleteCol()
 
     CPPUNIT_ASSERT_MESSAGE("there should be a note", m_pDoc->HasNote(1, 1, 0));
 
-    m_pDoc->DeleteCol(0, 0, MAXROW, 0, 1, 1);
+    m_pDoc->DeleteCol(0, 0, m_pDoc->MaxRow(), 0, 1, 1);
 
     CPPUNIT_ASSERT_MESSAGE("there should be no more note", !m_pDoc->HasNote(1, 1, 0));
 
@@ -5297,16 +5297,16 @@ void Test::testAnchoredRotatedShape()
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(0), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", SCROW(MAXROW), nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("new sheet should have all rows visible", m_pDoc->MaxRow(), nRow2);
 
     m_pDoc->InitDrawLayer();
     ScDrawLayer *pDrawLayer = m_pDoc->GetDrawLayer();
     CPPUNIT_ASSERT_MESSAGE("must have a draw layer", pDrawLayer != nullptr);
     SdrPage* pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("must have a draw page", pPage != nullptr);
-    m_pDoc->SetRowHeightRange(0, MAXROW, 0, o3tl::toTwips(1000, o3tl::Length::mm100));
+    m_pDoc->SetRowHeightRange(0, m_pDoc->MaxRow(), 0, o3tl::toTwips(1000, o3tl::Length::mm100));
     constexpr tools::Long TOLERANCE = 30; //30 hmm
-    for ( SCCOL nCol = 0; nCol < MAXCOL; ++nCol )
+    for ( SCCOL nCol = 0; nCol < m_pDoc->MaxCol(); ++nCol )
         m_pDoc->SetColWidth(nCol, 0, o3tl::toTwips(1000, o3tl::Length::mm100));
     {
         //Add a rect
@@ -5370,12 +5370,12 @@ void Test::testCellTextWidth()
     ScAddress aTopCell(0, 0, 0);
 
     // Sheet is empty.
-    std::unique_ptr<ScColumnTextWidthIterator> pIter(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+    std::unique_ptr<ScColumnTextWidthIterator> pIter(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
     CPPUNIT_ASSERT_MESSAGE("Column should have no text widths stored.", !pIter->hasCell());
 
     // Sheet only has one cell.
     m_pDoc->SetString(0, 0, 0, "Only one cell");
-    pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+    pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
     CPPUNIT_ASSERT_MESSAGE("Column should have a cell.", pIter->hasCell());
     CPPUNIT_ASSERT_EQUAL(SCROW(0), pIter->getPos());
 
@@ -5394,7 +5394,7 @@ void Test::testCellTextWidth()
 
     {
         // Full range.
-        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
         SCROW aRows[] = { 0, 2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 17, 18 };
         for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
         {
@@ -5423,7 +5423,7 @@ void Test::testCellTextWidth()
 
     {
         // Full range again.
-        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
         SCROW aRows[] = { 0, 2, 18 };
         for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
         {
@@ -5435,10 +5435,10 @@ void Test::testCellTextWidth()
 
     // Delete row 2 which shifts all cells below row 2 upward. After this, we
     // should only have cells at rows 0 and 17.
-    m_pDoc->DeleteRow(0, 0, MAXCOL, MAXTAB, 2, 1);
+    m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), MAXTAB, 2, 1);
     {
         // Full range again.
-        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, MAXROW));
+        pIter.reset(new ScColumnTextWidthIterator(*m_pDoc, aTopCell, m_pDoc->MaxRow()));
         SCROW aRows[] = { 0, 17 };
         for (size_t i = 0; i < SAL_N_ELEMENTS(aRows); ++i, pIter->next())
         {
@@ -5916,7 +5916,7 @@ void Test::testColumnFindEditCells()
 
     // Test the basics with real edit cells, using Column A.
 
-    SCROW nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,MAXROW,0));
+    SCROW nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no edit cells.", SCROW(-1), nResRow);
     nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,0,0));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no edit cells.", SCROW(-1), nResRow);
@@ -5944,7 +5944,7 @@ void Test::testColumnFindEditCells()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be an edit cell in specified range.", SCROW(-1), nResRow);
 
     aRange.aStart.SetRow(0);
-    aRange.aEnd.SetRow(MAXROW);
+    aRange.aEnd.SetRow(m_pDoc->MaxRow());
     nResRow = m_pDoc->GetFirstEditTextRow(aRange);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be an edit cell in specified range.", SCROW(0), nResRow);
 
@@ -6230,7 +6230,7 @@ void Test::testUndoDataAnchor()
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, MAXCOL, aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true);
+    rFunc.InsertCells(ScRange( 0, aOldStart.Row() - 1, 0, m_pDoc->MaxCol(), aOldStart.Row(), 0 ), &aMark, INS_INSROWS_BEFORE, true, true);
 
     pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve user data for this object.", pData);
@@ -6297,9 +6297,9 @@ void Test::testUndoDataAnchor()
 
 void Test::testEmptyCalcDocDefaults()
 {
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetCellCount() );
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetFormulaGroupCount() );
-    CPPUNIT_ASSERT_EQUAL( sal_uLong(0), m_pDoc->GetCodeCount() );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt64(0), m_pDoc->GetCellCount() );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt64(0), m_pDoc->GetFormulaGroupCount() );
+    CPPUNIT_ASSERT_EQUAL( sal_uInt64(0), m_pDoc->GetCodeCount() );
     CPPUNIT_ASSERT_EQUAL( int(CharCompressType::NONE), static_cast<int>(m_pDoc->GetAsianCompression()) );
 
     CPPUNIT_ASSERT_EQUAL( false, m_pDoc->HasPrintRange() );
@@ -6537,7 +6537,7 @@ void Test::testProtectedSheetEditByRow()
         // Remove protected flags from rows 2-5.
         ScPatternAttr aAttr(m_pDoc->GetPool());
         aAttr.GetItemSet().Put(ScProtectionAttr(false));
-        m_pDoc->ApplyPatternAreaTab(0, 1, MAXCOL, 4, 0, aAttr);
+        m_pDoc->ApplyPatternAreaTab(0, 1, m_pDoc->MaxCol(), 4, 0, aAttr);
 
         // Protect the sheet without any options.
         ScTableProtection aProtect;
@@ -6545,7 +6545,7 @@ void Test::testProtectedSheetEditByRow()
         m_pDoc->SetTabProtection(0, &aProtect);
 
         // Try to delete row 3.  It should fail.
-        ScRange aRow3(0,2,0,MAXCOL,2,0);
+        ScRange aRow3(0,2,0,m_pDoc->MaxCol(),2,0);
         ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(0);
         bool bDeleted = rDocFunc.DeleteCells(aRow3, &aMark, DelCellCmd::Rows, true);
@@ -6560,7 +6560,7 @@ void Test::testProtectedSheetEditByRow()
         CPPUNIT_ASSERT_MESSAGE("deletion of row 3 should succeed.", bDeleted);
 
         // But, row deletion should still fail on a protected row.
-        ScRange aRow10(0,9,0,MAXCOL,9,0);
+        ScRange aRow10(0,9,0,m_pDoc->MaxCol(),9,0);
         bDeleted = rDocFunc.DeleteCells(aRow10, &aMark, DelCellCmd::Rows, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of row 10 should not be allowed.", !bDeleted);
 
@@ -6595,7 +6595,7 @@ void Test::testProtectedSheetEditByRow()
 
         // Try to insert a row at row 3.  It should fail because of matrix's presence.
 
-        ScRange aRow3(0,2,1,MAXCOL,2,1);
+        ScRange aRow3(0,2,1,m_pDoc->MaxCol(),2,1);
         bool bInserted = rDocFunc.InsertCells(aRow3, &aMark, INS_INSROWS_BEFORE, true, true);
         CPPUNIT_ASSERT_MESSAGE("row insertion at row 3 should fail.", !bInserted);
     }
@@ -6613,7 +6613,7 @@ void Test::testProtectedSheetEditByColumn()
         // Remove protected flags from columns B to E.
         ScPatternAttr aAttr(m_pDoc->GetPool());
         aAttr.GetItemSet().Put(ScProtectionAttr(false));
-        m_pDoc->ApplyPatternAreaTab(1, 0, 4, MAXROW, 0, aAttr);
+        m_pDoc->ApplyPatternAreaTab(1, 0, 4, m_pDoc->MaxRow(), 0, aAttr);
 
         // Protect the sheet without any options.
         ScTableProtection aProtect;
@@ -6621,7 +6621,7 @@ void Test::testProtectedSheetEditByColumn()
         m_pDoc->SetTabProtection(0, &aProtect);
 
         // Try to delete column C.  It should fail.
-        ScRange aCol3(2,0,0,2,MAXROW,0);
+        ScRange aCol3(2,0,0,2,m_pDoc->MaxRow(),0);
         ScMarkData aMark(m_pDoc->GetSheetLimits());
         aMark.SelectOneTable(0);
         bool bDeleted = rDocFunc.DeleteCells(aCol3, &aMark, DelCellCmd::Cols, true);
@@ -6636,7 +6636,7 @@ void Test::testProtectedSheetEditByColumn()
         CPPUNIT_ASSERT_MESSAGE("deletion of column 3 should succeed.", bDeleted);
 
         // But, column deletion should still fail on a protected column.
-        ScRange aCol10(9,0,0,9,MAXROW,0);
+        ScRange aCol10(9,0,0,9,m_pDoc->MaxRow(),0);
         bDeleted = rDocFunc.DeleteCells(aCol10, &aMark, DelCellCmd::Cols, true);
         CPPUNIT_ASSERT_MESSAGE("deletion of column 10 should not be allowed.", !bDeleted);
 
@@ -6671,7 +6671,7 @@ void Test::testProtectedSheetEditByColumn()
 
         // Try to insert a column at column C.  It should fail because of matrix's presence.
 
-        ScRange aCol3(2,0,1,2,MAXROW,1);
+        ScRange aCol3(2,0,1,2,m_pDoc->MaxRow(),1);
         bool bInserted = rDocFunc.InsertCells(aCol3, &aMark, INS_INSCOLS_BEFORE, true, true);
         CPPUNIT_ASSERT_MESSAGE("column insertion at column C should fail.", !bInserted);
     }
@@ -6703,7 +6703,7 @@ void Test::testInsertColumnsWithFormulaCells()
     CPPUNIT_ASSERT_MESSAGE("Columns 2, 4 and 6 should contain formula cells.", equals(aExpected, aCols));
 
     // Insert 2 columns at column A to shift everything to right by 2.
-    m_pDoc->InsertCol(0, 0, MAXROW, 0, 0, 2);
+    m_pDoc->InsertCol(0, 0, m_pDoc->MaxRow(), 0, 0, 2);
 
     aExpected = { 4, 6, 8 };
     aCols = m_pDoc->QueryColumnsWithFormulaCells(0);

@@ -588,7 +588,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
             const ScBigRange& rBig = pAction->GetBigRange();
             if ( rBig.aStart.Tab() == nTab )
             {
-                ScRange aRange = rBig.MakeRange();
+                ScRange aRange = rBig.MakeRange( GetDocument() );
 
                 if ( eType == SC_CAT_DELETE_ROWS )
                     aRange.aEnd.SetRow( aRange.aStart.Row() );
@@ -604,7 +604,7 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
             {
                 ScRange aRange =
                     static_cast<const ScChangeActionMove*>(pAction)->
-                    GetFromRange().MakeRange();
+                    GetFromRange().MakeRange( GetDocument() );
                 if ( aRange.In( rPos ) )
                 {
                     pFound = pAction;
@@ -847,7 +847,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 case SC_CAT_INSERT_COLS :
                 case SC_CAT_INSERT_ROWS :
                 case SC_CAT_INSERT_TABS :
-                    pSourceTrack->AppendInsert( pThisAction->GetBigRange().MakeRange() );
+                    pSourceTrack->AppendInsert( pThisAction->GetBigRange().MakeRange( GetDocument() ) );
                 break;
                 case SC_CAT_DELETE_COLS :
                 case SC_CAT_DELETE_ROWS :
@@ -858,15 +858,15 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                     {   // deleted table contains deleted cols, which are not
                         sal_uLong nStart, nEnd;
                         pSourceTrack->AppendDeleteRange(
-                            pDel->GetOverAllRange().MakeRange(), nullptr, nStart, nEnd );
+                            pDel->GetOverAllRange().MakeRange( GetDocument() ), nullptr, nStart, nEnd );
                     }
                 }
                 break;
                 case SC_CAT_MOVE :
                 {
                     const ScChangeActionMove* pMove = static_cast<const ScChangeActionMove*>(pThisAction);
-                    pSourceTrack->AppendMove( pMove->GetFromRange().MakeRange(),
-                        pMove->GetBigRange().MakeRange(), nullptr );
+                    pSourceTrack->AppendMove( pMove->GetFromRange().MakeRange( GetDocument() ),
+                        pMove->GetBigRange().MakeRange( GetDocument() ), nullptr );
                 }
                 break;
                 default:
@@ -970,7 +970,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                 if ( bExecute )
                 {
                     //  execute normally
-                    ScRange aSourceRange = pSourceAction->GetBigRange().MakeRange();
+                    ScRange aSourceRange = pSourceAction->GetBigRange().MakeRange( GetDocument() );
                     rMarkData.SelectOneTable( aSourceRange.aStart.Tab() );
                     switch ( eSourceType )
                     {
@@ -1030,7 +1030,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(pSourceAction);
                             if ( pDel->IsTopDelete() )
                             {
-                                aSourceRange = pDel->GetOverAllRange().MakeRange();
+                                aSourceRange = pDel->GetOverAllRange().MakeRange( GetDocument() );
                                 (void)GetDocFunc().DeleteCells( aSourceRange, nullptr, DelCellCmd::Rows, false );
 
                                 // #i101099# [Collaboration] Changes are not correctly shown
@@ -1050,7 +1050,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                             const ScChangeActionDel* pDel = static_cast<const ScChangeActionDel*>(pSourceAction);
                             if ( pDel->IsTopDelete() && !pDel->IsTabDeleteCol() )
                             {   // deleted table contains deleted cols, which are not
-                                aSourceRange = pDel->GetOverAllRange().MakeRange();
+                                aSourceRange = pDel->GetOverAllRange().MakeRange( GetDocument() );
                                 (void)GetDocFunc().DeleteCells( aSourceRange, nullptr, DelCellCmd::Cols, false );
                             }
                         }
@@ -1058,7 +1058,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
                         case SC_CAT_MOVE :
                         {
                             const ScChangeActionMove* pMove = static_cast<const ScChangeActionMove*>(pSourceAction);
-                            ScRange aFromRange( pMove->GetFromRange().MakeRange() );
+                            ScRange aFromRange( pMove->GetFromRange().MakeRange( GetDocument() ) );
                             (void)GetDocFunc().MoveBlock( aFromRange,
                                 aSourceRange.aStart, true, true, false, false );
                         }

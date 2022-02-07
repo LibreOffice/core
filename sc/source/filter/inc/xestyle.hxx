@@ -414,7 +414,8 @@ struct XclExpXFId
     sal_uInt16          mnXFIndex;      /// Real Excel XF index.
 
     explicit            XclExpXFId();
-    explicit            XclExpXFId( sal_uInt32 nXFId );
+    explicit            XclExpXFId( sal_uInt32 nXFId )
+        : mnXFId( nXFId ), mnXFIndex( EXC_XF_DEFAULTCELL ) {}
 
     /** Converts the XF identifier in mnXFId to an Excel XF index and stores it in mnXFIndex. */
     void                ConvertXFIndex( const XclExpRoot& rRoot );

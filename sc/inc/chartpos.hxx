@@ -25,9 +25,9 @@
 #include <map>
 
 // map of row number to ScAddress*
-typedef std::map<sal_uLong, std::unique_ptr<ScAddress>> RowMap;
+typedef std::map<SCROW, std::unique_ptr<ScAddress>> RowMap;
 // map of column number to RowMap
-typedef std::map<sal_uLong, RowMap>    ColumnMap;
+typedef std::map<SCCOL, RowMap>    ColumnMap;
 
 class ScChartPositionMap
 {
@@ -36,7 +36,7 @@ class ScChartPositionMap
             std::unique_ptr<std::unique_ptr<ScAddress>[]> ppData;
             std::unique_ptr<std::unique_ptr<ScAddress>[]> ppColHeader;
             std::unique_ptr<std::unique_ptr<ScAddress>[]> ppRowHeader;
-            sal_uLong           nCount;
+            sal_uInt64          nCount;
             SCCOL               nColCount;
             SCROW               nRowCount;
 
@@ -58,10 +58,10 @@ public:
             bool                IsValid( SCCOL nCol, SCROW nRow ) const
                                     { return nCol < nColCount && nRow < nRowCount; }
                                 // data column by column
-            sal_uLong               GetIndex( SCCOL nCol, SCROW nRow ) const
-                                    { return static_cast<sal_uLong>(nCol) * nRowCount + nRow; }
+            sal_uInt64          GetIndex( SCCOL nCol, SCROW nRow ) const
+                                    { return static_cast<sal_uInt64>(nCol) * nRowCount + nRow; }
 
-            const ScAddress*    GetPosition( sal_uLong nIndex ) const
+            const ScAddress*    GetPosition( sal_uInt64 nIndex ) const
                                     {
                                         if ( nIndex < nCount )
                                             return ppData[ nIndex ].get();

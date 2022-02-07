@@ -93,13 +93,19 @@ using namespace com::sun::star;
 
 const sal_uInt16 ScDocument::nSrcVer = SC_CURRENT_VERSION;
 
-static ScSheetLimits* CreateSheetLimits()
+ScSheetLimits ScSheetLimits::CreateDefault()
 {
-    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-    if (rOpt.GetInitJumboSheets())
-        return new ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
+#if HAVE_FEATURE_JUMBO_SHEETS
+    bool jumboSheets = false;
+    if( SC_MOD())
+        jumboSheets = SC_MOD()->GetDefaultsOptions().GetInitJumboSheets();
     else
-        return new ScSheetLimits(MAXCOL, MAXROW);
+        assert( getenv("LO_TESTNAME") != nullptr ); // in unittests
+    if (jumboSheets)
+        return ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
+    else
+#endif
+        return ScSheetLimits(MAXCOL, MAXROW);
 }
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
@@ -112,7 +118,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpPrinter( nullptr ),
         mpVirtualDevice_100th_mm( nullptr ),
         pFormatExchangeList( nullptr ),
-        mxSheetLimits(CreateSheetLimits()),
+        mxSheetLimits(new ScSheetLimits(ScSheetLimits::CreateDefault())),
         pFormulaTree( nullptr ),
         pEOFormulaTree( nullptr ),
         pFormulaTrack( nullptr ),
@@ -1220,7 +1226,7 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder
             const ScBigRange& rBig = pAction->GetBigRange();
             if ( rBig.aStart.Tab() == cell.Tab())
             {
-                ScRange aRange = rBig.MakeRange();
+                ScRange aRange = rBig.MakeRange( *this );
                 if ( eType == SC_CAT_DELETE_ROWS )
                     aRange.aEnd.SetRow( aRange.aStart.Row() );
                 else if ( eType == SC_CAT_DELETE_COLS )
@@ -1244,7 +1250,7 @@ bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder
                 GetFromRange().aStart.Tab() == cell.Col() )
             {
                 ScRange aRange = static_cast<const ScChangeActionMove*>(pAction)->
-                    GetFromRange().MakeRange();
+                    GetFromRange().MakeRange( *this );
                 if (ScViewUtil::IsActionShown( *pAction, *pSettings, *this ) )
                 {
                     if (aRange.In(cell))
@@ -1287,7 +1293,7 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
             const ScBigRange& rBig = pAction->GetBigRange();
             if ( rBig.aStart.Tab() == aCellPos.Tab())
             {
-                ScRange aRange = rBig.MakeRange();
+                ScRange aRange = rBig.MakeRange( *this );
                 if ( eType == SC_CAT_DELETE_ROWS )
                     aRange.aEnd.SetRow( aRange.aStart.Row() );
                 else if ( eType == SC_CAT_DELETE_COLS )
@@ -1312,7 +1318,7 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
             {
                 ScRange aRange =
                     static_cast<const ScChangeActionMove*>(pAction)->
-                    GetFromRange().MakeRange();
+                    GetFromRange().MakeRange( *this );
                 if ( aRange.In( aCellPos ) )
                 {
                     pFound = pAction;

@@ -297,7 +297,7 @@ public:
     /** Derived classes for blank cells insert the Excel XF index(es) into the passed vector. */
     virtual void        GetBlankXFIndexes( ScfUInt16Vec& rXFIndexes ) const;
     /** Derived classes for blank cells remove unused Excel XF index(es). */
-    virtual void        RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes );
+    virtual void        RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes, size_t nStartAllNotFound );
 
 protected:
     explicit            XclExpCellBase(
@@ -500,8 +500,13 @@ protected:
     void                GetXFIndexes( ScfUInt16Vec& rXFIndexes ) const;
 
     /** Removes unused Excel XF index(es).
-        @param rXFIndexes  Specifies which XF indexes are used. */
-    void                RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes );
+        @param rXFIndexes  Specifies which XF indexes are used.
+        @param nStartAllNotFound Index in rXFIndexes which starts EXC_XF_NOTFOUND until the end.
+    */
+    void                RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes, size_t nStartAllNotFound );
+
+    /** Return starting column at which all indexes until the end are EXC_XF_DEFAULTCELL .*/
+    sal_uInt16          GetStartColAllDefaultCell() const;
 
 private:
     /** Derived classes write the remaining contents of the specified cell (without XF index).
@@ -532,7 +537,9 @@ public:
     /** Inserts the Excel XF index(es) into the passed vector. */
     virtual void        GetBlankXFIndexes( ScfUInt16Vec& rXFIndexes ) const override;
     /** Tries to remove unused Excel XF index(es). */
-    virtual void        RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes ) override;
+    virtual void        RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes, size_t nStartAllNotFound ) override;
+
+    using               XclExpMultiCellBase::GetStartColAllDefaultCell;
 
 private:
     /** Writes the remaining contents of the specified cell (without XF index). */
@@ -846,6 +853,8 @@ public:
 
     /** Converts all XF identifiers into the Excel XF indexes. */
     void                Finalize( const ScfUInt16Vec& rColXFIndexes,
+                                  ScfUInt16Vec& aXFIndexes,
+                                  size_t nStartColAllDefault,
                                   bool bUpdateProgress );
 
     /** Returns the column index of the first used cell in this row.
@@ -914,8 +923,11 @@ public:
 
     /** Converts all XF identifiers into the Excel XF indexes and calculates default formats.
         @param rDefRowData  (out-param) The default row format is returned here.
-        @param rColXFIndexes  The column default XF indexes. */
-    void                Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes );
+        @param rColXFIndexes  The column default XF indexes.
+        @param nStartColAllDefault Index in rColXFIndexes which starts EXC_XF_DEFAULTCELL until the end.
+    */
+    void                Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes,
+                                  size_t nStartColAllDefault );
 
     /** Writes the DIMENSIONS record, all ROW records and all cell records. */
     virtual void        Save( XclExpStream& rStrm ) override;

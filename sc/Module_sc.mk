@@ -71,7 +71,6 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_cond_format_merge \
 	CppunitTest_sc_copypaste \
 	CppunitTest_sc_html_export_test \
-	CppunitTest_sc_jumbosheets_test \
 	CppunitTest_sc_macros_test \
 	CppunitTest_sc_new_cond_format_api \
 	CppunitTest_sc_pdf_export \
@@ -82,6 +81,12 @@ $(eval $(call gb_Module_add_slowcheck_targets,sc, \
 	CppunitTest_sc_subsequent_export_test2 \
 	CppunitTest_sc_uicalc \
 ))
+
+ifneq ($(ENABLE_JUMBO_SHEETS),)
+$(eval $(call gb_Module_add_slowcheck_targets,sc, \
+	CppunitTest_sc_jumbosheets_test \
+))
+endif
 
 # Various function tests fail in 32-bit linux_x86 build due to dreaded floating
 # point weirdness (x87, registers, compiler optimization, ... whatever),

@@ -22,12 +22,15 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_tablesheetobj, \
 $(eval $(call gb_CppunitTest_use_libraries,sc_tablesheetobj, \
     cppu \
     sal \
+    salhelper \
+    sc \
     subsequenttest \
 	test \
 	unotest \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sc_tablesheetobj,\
+    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 

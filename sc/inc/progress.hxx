@@ -40,10 +40,10 @@ class SC_DLLPUBLIC ScProgress
 {
 private:
     static  SfxProgress*    pGlobalProgress;
-    static  sal_uLong        nGlobalRange;
-    static  sal_uLong       nGlobalPercent;
+    static  sal_uInt64      nGlobalRange;
+    static  sal_uInt64      nGlobalPercent;
     static  ScProgress*     pInterpretProgress;
-    static  sal_uLong       nInterpretProgress;
+    static  sal_uInt64      nInterpretProgress;
     static  ScDocument*     pInterpretDoc;
     static  bool            bIdleWasEnabled;
             bool            bEnabled;
@@ -53,7 +53,7 @@ private:
                             ScProgress( const ScProgress& ) = delete;
             ScProgress&     operator=( const ScProgress& ) = delete;
 
-    static  void            CalcGlobalPercent( sal_uLong nVal )
+    static  void            CalcGlobalPercent( sal_uInt64 nVal )
                                 {
                                     nGlobalPercent = nGlobalRange ?
                                         nVal * 100 / nGlobalRange : 0;
@@ -67,7 +67,7 @@ public:
 
                             ScProgress( SfxObjectShell* pObjSh,
                                          const OUString& rText,
-                                         sal_uLong nRange,
+                                         sal_uInt64 nRange,
                                          bool bWait );
                             ~ScProgress();
 
@@ -75,7 +75,7 @@ public:
                             /// for DummyInterpret only, never use otherwise!!!
                             ScProgress();
 #endif
-            void            SetState( sal_uLong nVal, sal_uLong nNewRange = 0 )
+            void            SetState( sal_uInt64 nVal, sal_uInt64 nNewRange = 0 )
                                 {
                                     if ( pProgress )
                                     {
@@ -85,7 +85,7 @@ public:
                                         pProgress->SetState( nVal, nNewRange );
                                     }
                                 }
-            void            SetStateCountDown( sal_uLong nVal )
+            void            SetStateCountDown( sal_uInt64 nVal )
                                 {
                                     if ( pProgress )
                                     {
@@ -93,20 +93,20 @@ public:
                                         pProgress->SetState( nGlobalRange - nVal );
                                     }
                                 }
-            void            SetStateOnPercent( sal_uLong nVal )
+            void            SetStateOnPercent( sal_uInt64 nVal )
                                 {   /// only if percentage increased
                                     if ( nGlobalRange && (nVal * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         SetState( nVal );
                                 }
-            void            SetStateCountDownOnPercent( sal_uLong nVal )
+            void            SetStateCountDownOnPercent( sal_uInt64 nVal )
                                 {   /// only if percentage increased
                                     if ( nGlobalRange &&
                                             ((nGlobalRange - nVal) * 100 /
                                             nGlobalRange) > nGlobalPercent )
                                         SetStateCountDown( nVal );
                                 }
-            sal_uLong           GetState() const
+            sal_uInt64          GetState() const
                                 {
                                     if ( pProgress )
                                         return pProgress->GetState();

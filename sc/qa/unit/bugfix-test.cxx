@@ -164,7 +164,7 @@ void ScFiltersTest::testTdf137576_Measureline()
     lcl_AssertPointEqualWithTolerance("Load, end point: ", Point(4800, 5200), aEnd, 1);
 
     // Save and reload
-    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
     ScDocument& rDoc2 = xDocSh->GetDocument();
 
     // Get shape
@@ -238,7 +238,7 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     rDoc.SetRowHidden(4, 5, 0, true);
 
     // Save and reload
-    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
     ScDocument& rDoc2 = xDocSh->GetDocument();
 
     // Get shape
@@ -282,7 +282,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
     lcl_AssertRectEqualWithTolerance("Mirror:", aSnapRectOrig, aSnapRectFlip, 1);
 
     // Save and reload
-    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
     ScDocument& rDoc2 = xDocSh->GetDocument();
 
     // Get shape
@@ -400,10 +400,10 @@ void ScFiltersTest::testTdf91979()
     auto& rDoc = aViewData.GetDocument();
 
     // Check coordinates of a distant cell
-    Point aPos = aViewData.GetScrPos(MAXCOL - 1, 10000, SC_SPLIT_TOPLEFT, true);
+    Point aPos = aViewData.GetScrPos(rDoc.MaxCol() - 1, 10000, SC_SPLIT_TOPLEFT, true);
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(0, 0), aViewData.GetPPTX());
     int nRowHeight = ScViewData::ToPixel(rDoc.GetRowHeight(0, 0), aViewData.GetPPTY());
-    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>((MAXCOL - 1) * nColWidth), aPos.getX());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>((rDoc.MaxCol() - 1) * nColWidth), aPos.getX());
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(10000 * nRowHeight), aPos.getY());
 }
 

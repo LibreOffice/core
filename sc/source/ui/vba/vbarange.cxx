@@ -1476,6 +1476,11 @@ uno::Reference< XCollection >& ScVbaRange::getBorders()
 void
 ScVbaRange::visitArray( ArrayVisitor& visitor )
 {
+    ScDocShell* pDocSh = nullptr;
+    if(ScCellRangeObj* range = dynamic_cast<ScCellRangeObj*>(mxRange.get()))
+        pDocSh = range->GetDocShell();
+    if ( pDocSh )
+        pDocSh->LockPaint();
     table::CellRangeAddress aRangeAddr = lclGetRangeAddress( mxRange );
     sal_Int32 nRowCount = aRangeAddr.EndRow - aRangeAddr.StartRow + 1;
     sal_Int32 nColCount = aRangeAddr.EndColumn - aRangeAddr.StartColumn + 1;
@@ -1488,6 +1493,8 @@ ScVbaRange::visitArray( ArrayVisitor& visitor )
             visitor.visitNode( i, j, xCell );
         }
     }
+    if ( pDocSh )
+        pDocSh->UnlockPaint();
 }
 
 uno::Any

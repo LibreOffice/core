@@ -41,7 +41,6 @@ public:
     ScMultiSel(ScSheetLimits const &);
     ScMultiSel(const ScMultiSel& rMultiSel) = default;
     ScMultiSel(ScMultiSel&& rMultiSel) = default;
-    ~ScMultiSel();
 
     ScMultiSel& operator=(const ScMultiSel& rMultiSel);
     ScMultiSel& operator=(ScMultiSel&& rMultiSel);
@@ -53,6 +52,9 @@ public:
     bool IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
     bool HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const;
     SCROW GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;
+    // Returns the first column of the range [column,nLastCol] for which
+    // all those columns have equal marks. Value returned is not less than nMinCol.
+    SCCOL GetStartOfEqualColumns( SCCOL nLastCol, SCCOL nMinCol = 0 ) const;
     void SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow, bool bMark );
     void Set( ScRangeList const & );
     bool IsRowMarked( SCROW nRow ) const;
@@ -67,7 +69,7 @@ public:
 
     // For faster access from within ScMarkData, instead of creating
     // ScMultiSelIter with ScFlatBoolRowSegments bottleneck.
-    const ScMarkArray& GetRowSelArray() const;
+    const ScMarkArray& GetRowSelArray() const { return aRowSel; }
     const ScMarkArray* GetMultiSelArray( SCCOL nCol ) const;
 };
 
@@ -80,7 +82,6 @@ private:
     SCROW nNextSegmentStart;
 public:
     ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol );
-    ~ScMultiSelIter();
 
     bool Next( SCROW& rTop, SCROW& rBottom );
     /** Only to be used by ScMultiSel::IsAllMarked() or otherwise sure that a

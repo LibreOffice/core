@@ -1529,7 +1529,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     SCCOL nStartCol = aRange.aStart.Col();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nStartRow = aRange.aStart.Row();
-    SCTAB nTab = aRange.aStart.Tab();
+    const SCTAB nTab = aRange.aStart.Tab();
 
     bool    bFixed              = pExtOptions->IsFixedLen();
     OUString aSeps              = pExtOptions->GetFieldSeps();  // Need non-const for ReadCsvLine(),
@@ -1591,6 +1591,9 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     bool bQuotedAsText = pExtOptions && pExtOptions->IsQuotedAsText();
 
     sal_uLong nOriginalStreamPos = rStrm.Tell();
+
+    SCROW nFirstUpdateRowHeight = SCROW_MAX;
+    SCROW nLastUpdateRowHeight = -1;
 
     ScDocumentImport aDocImport(rDoc);
     do
@@ -1705,7 +1708,10 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             if (!bDetermineRange)
             {
                 if (bMultiLine && !bRangeIsDetermined && pDocSh)
-                    pDocSh->AdjustRowHeight( nRow, nRow, nTab);
+                {   // Adjust just once at the end for a whole range.
+                    nFirstUpdateRowHeight = std::min( nFirstUpdateRowHeight, nRow );
+                    nLastUpdateRowHeight = std::max( nLastUpdateRowHeight, nRow );
+                }
                 xProgress->SetStateOnPercent( rStrm.Tell() - nOldPos );
             }
             ++nRow;
@@ -1742,10 +1748,15 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
 
         bDetermineRange = !bDetermineRange;     // toggle
     } while (!bDetermineRange);
+
     if ( !mbOverwriting )
         aDocImport.finalize();
 
     xProgress.reset();    // make room for AdjustRowHeight progress
+
+    if( nFirstUpdateRowHeight < nLastUpdateRowHeight && pDocSh )
+        pDocSh->AdjustRowHeight( nFirstUpdateRowHeight, nLastUpdateRowHeight, nTab);
+
     if (bRangeIsDetermined)
         EndPaste(false);
 

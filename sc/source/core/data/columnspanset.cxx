@@ -25,12 +25,12 @@ namespace sc {
 
 namespace {
 
-class ColumnScanner
+class ColumnNonEmptyRangesScanner
 {
     ColumnSpanSet::ColumnSpansType& mrRanges;
     bool mbVal;
 public:
-    ColumnScanner(ColumnSpanSet::ColumnSpansType& rRanges, bool bVal) :
+    ColumnNonEmptyRangesScanner(ColumnSpanSet::ColumnSpansType& rRanges, bool bVal) :
         mrRanges(rRanges), mbVal(bVal) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
@@ -137,23 +137,32 @@ void ColumnSpanSet::scan(
 
         const CellStoreType& rSrcCells = pTab->aCol[nCol].maCells;
 
-        ColumnScanner aScanner(rCol.maSpans, bVal);
+        if( nRow1 > pTab->aCol[nCol].GetLastDataPos())
+            continue;
+
+        ColumnNonEmptyRangesScanner aScanner(rCol.maSpans, bVal);
         ParseBlock(rSrcCells.begin(), rSrcCells, aScanner, nRow1, nRow2);
     }
 }
 
-void ColumnSpanSet::executeAction(Action& ac) const
+void ColumnSpanSet::executeAction(ScDocument& rDoc, Action& ac) const
 {
     for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
     {
         if (maTables[nTab].empty())
             continue;
 
+        ScTable* pTab = rDoc.FetchTable(nTab);
+        if (!pTab)
+            continue;
+
         const TableType& rTab = maTables[nTab];
-        for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
+        for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(rTab.size()); ++nCol)
         {
             if (!rTab[nCol])
                 continue;
+            if (nCol >= pTab->GetAllocatedColumnsCount())
+                break;
 
             ac.startColumn(nTab, nCol);
             const ColumnType& rCol = *rTab[nCol];
@@ -180,22 +189,17 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
         if (maTables[nTab].empty())
             continue;
 
+        ScTable* pTab = rDoc.FetchTable(nTab);
+        if (!pTab)
+            continue;
+
         const TableType& rTab = maTables[nTab];
         for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(rTab.size()); ++nCol)
         {
             if (!rTab[nCol])
                 continue;
-
-            ScTable* pTab = rDoc.FetchTable(nTab);
-            if (!pTab)
-                continue;
-
-            if (!rDoc.ValidCol(nCol) || nCol >= pTab->GetAllocatedColumnsCount())
-            {
-                // End the loop.
-                nCol = rTab.size();
-                continue;
-            }
+            if (nCol >= pTab->GetAllocatedColumnsCount())
+                break;
 
             ScColumn& rColumn = pTab->aCol[nCol];
             ac.startColumn(&rColumn);
@@ -218,11 +222,11 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
 
 namespace {
 
-class Scanner
+class NonEmptyRangesScanner
 {
     SingleColumnSpanSet::ColumnSpansType& mrRanges;
 public:
-    explicit Scanner(SingleColumnSpanSet::ColumnSpansType& rRanges) : mrRanges(rRanges) {}
+    explicit NonEmptyRangesScanner(SingleColumnSpanSet::ColumnSpansType& rRanges) : mrRanges(rRanges) {}
 
     void operator() (const sc::CellStoreType::value_type& node, size_t nOffset, size_t nDataSize)
     {
@@ -257,16 +261,20 @@ void SingleColumnSpanSet::scan(const ScColumn& rColumn)
 
 void SingleColumnSpanSet::scan(const ScColumn& rColumn, SCROW nStart, SCROW nEnd)
 {
+    if( nStart > rColumn.GetLastDataPos())
+        return;
     const CellStoreType& rCells = rColumn.maCells;
-    Scanner aScanner(maSpans);
+    NonEmptyRangesScanner aScanner(maSpans);
     sc::ParseBlock(rCells.begin(), rCells, aScanner, nStart, nEnd);
 }
 
 void SingleColumnSpanSet::scan(
     ColumnBlockConstPosition& rBlockPos, const ScColumn& rColumn, SCROW nStart, SCROW nEnd)
 {
+    if( nStart > rColumn.GetLastDataPos())
+        return;
     const CellStoreType& rCells = rColumn.maCells;
-    Scanner aScanner(maSpans);
+    NonEmptyRangesScanner aScanner(maSpans);
     rBlockPos.miCellPos = sc::ParseBlock(rBlockPos.miCellPos, rCells, aScanner, nStart, nEnd);
 }
 

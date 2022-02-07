@@ -560,7 +560,7 @@ void XclExpCellBase::GetBlankXFIndexes( ScfUInt16Vec& /*rXFIndexes*/ ) const
     // default: do nothing
 }
 
-void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& /*rXFIndexes*/ )
+void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& /*rXFIndexes*/, size_t /*nStartAllNotFound*/ )
 {
     // default: do nothing
 }
@@ -1245,7 +1245,7 @@ void XclExpMultiCellBase::AppendXFId( const XclExpMultiXFId& rXFId )
     if( maXFIds.empty() || (maXFIds.back().mnXFId != rXFId.mnXFId) )
         maXFIds.push_back( rXFId );
     else
-        maXFIds.back().mnCount = maXFIds.back().mnCount + rXFId.mnCount;
+        maXFIds.back().mnCount += rXFId.mnCount;
 }
 
 void XclExpMultiCellBase::AppendXFId( const XclExpRoot& rRoot,
@@ -1277,7 +1277,7 @@ void XclExpMultiCellBase::GetXFIndexes( ScfUInt16Vec& rXFIndexes ) const
     }
 }
 
-void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes )
+void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes, size_t nStartAllNotFound )
 {
     // save last column before calling maXFIds.clear()
     sal_uInt16 nLastXclCol = GetLastXclCol();
@@ -1285,13 +1285,15 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
 
     // build new XF index vector, containing passed XF indexes
     maXFIds.clear();
-    std::for_each(rXFIndexes.begin() + GetXclCol(), rXFIndexes.begin() + nLastXclCol + 1,
-        [this](const sal_uInt16& rXFIndex) {
-            XclExpMultiXFId aXFId( 0 );
-            // AppendXFId() tests XclExpXFIndex::mnXFId, set it too
-            aXFId.mnXFId = aXFId.mnXFIndex = rXFIndex;
-            AppendXFId( aXFId );
-        });
+    // Process only all that possibly are not EXC_XF_NOTFOUND.
+    size_t nEnd = std::min<size_t>(nLastXclCol + 1, nStartAllNotFound);
+    for( size_t i = GetXclCol(); i < nEnd; ++i )
+    {
+        XclExpMultiXFId aXFId( 0 );
+        // AppendXFId() tests XclExpXFIndex::mnXFId, set it too
+        aXFId.mnXFId = aXFId.mnXFIndex = rXFIndexes[ i ];
+        AppendXFId( aXFId );
+    }
 
     // remove leading and trailing unused XF indexes
     if( !maXFIds.empty() && (maXFIds.front().mnXFIndex == EXC_XF_NOTFOUND) )
@@ -1303,6 +1305,17 @@ void XclExpMultiCellBase::RemoveUnusedXFIndexes( const ScfUInt16Vec& rXFIndexes 
         maXFIds.pop_back();
 
     // The Save() function will skip all XF indexes equal to EXC_XF_NOTFOUND.
+}
+
+sal_uInt16 XclExpMultiCellBase::GetStartColAllDefaultCell() const
+{
+    sal_uInt16 col = GetXclCol();
+    for( const auto& rXFId : maXFIds )
+    {
+        if( rXFId.mnXFIndex != EXC_XF_DEFAULTCELL )
+            col += rXFId.mnCount;
+    }
+    return col;
 }
 
 XclExpBlankCell::XclExpBlankCell( const XclAddress& rXclPos, const XclExpMultiXFId& rXFId ) :
@@ -1333,9 +1346,9 @@ void XclExpBlankCell::GetBlankXFIndexes( ScfUInt16Vec& rXFIndexes ) const
     GetXFIndexes( rXFIndexes );
 }
 
-void XclExpBlankCell::RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes )
+void XclExpBlankCell::RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes, size_t nStartAllNotFound )
 {
-    RemoveUnusedXFIndexes( rXFIndexes );
+    RemoveUnusedXFIndexes( rXFIndexes, nStartAllNotFound );
 }
 
 void XclExpBlankCell::WriteContents( XclExpStream& /*rStrm*/, sal_uInt16 /*nRelCol*/ )
@@ -1740,31 +1753,31 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
     rXFIndexes.clear();
     rXFIndexes.reserve( maColInfos.GetSize() );
 
-    size_t nPos, nSize;
-
-    // do not cache the record list size, it may change in the loop
-    for( nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
+    if( !maColInfos.IsEmpty())
     {
-        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
-        xRec->ConvertXFIndexes();
-
-        // try to merge with previous record
-        if( nPos > 0 )
+        XclExpColinfo* xPrevRec = maColInfos.GetRecord( 0 );
+        xPrevRec->ConvertXFIndexes();
+        for( size_t nPos = 1; nPos < maColInfos.GetSize(); ++nPos )
         {
-            XclExpColinfoRef xPrevRec = maColInfos.GetRecord( nPos - 1 );
+            XclExpColinfo* xRec = maColInfos.GetRecord( nPos );
+            xRec->ConvertXFIndexes();
+
+            // try to merge with previous record
             if( xPrevRec->TryMerge( *xRec ) )
-                // adjust nPos to get the next COLINFO record at the same position
-                maColInfos.RemoveRecord( nPos-- );
+                maColInfos.InvalidateRecord( nPos );
+            else
+                xPrevRec = xRec;
         }
+        maColInfos.RemoveInvalidatedRecords();
     }
 
     // put XF indexes into passed vector, collect use count of all different widths
-    std::map< sal_uInt16, sal_uInt16 > aWidthMap;
+    std::unordered_map< sal_uInt16, sal_uInt16 > aWidthMap;
     sal_uInt16 nMaxColCount = 0;
     sal_uInt16 nMaxUsedWidth = 0;
-    for( nPos = 0, nSize = maColInfos.GetSize(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
     {
-        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
+        const XclExpColinfo* xRec = maColInfos.GetRecord( nPos );
         sal_uInt16 nColCount = xRec->GetColCount();
 
         // add XF index to passed vector
@@ -1783,15 +1796,13 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
     maDefcolwidth.SetDefWidth( nMaxUsedWidth, bXLS );
 
     // remove all default COLINFO records
-    nPos = 0;
-    while( nPos < maColInfos.GetSize() )
+    for( size_t nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
     {
-        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
+        XclExpColinfo* xRec = maColInfos.GetRecord( nPos );
         if( xRec->IsDefault( maDefcolwidth ) )
-            maColInfos.RemoveRecord( nPos );
-        else
-            ++nPos;
+            maColInfos.InvalidateRecord( nPos );
     }
+    maColInfos.RemoveInvalidatedRecords();
 }
 
 void XclExpColinfoBuffer::Save( XclExpStream& rStrm )
@@ -1887,6 +1898,17 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt32 nXclRow,
     rProgress.Progress();
 }
 
+static size_t findFirstAllSameUntilEnd( const ScfUInt16Vec& rIndexes, sal_uInt16 value,
+    size_t searchStart = std::numeric_limits<size_t>::max())
+{
+    for( size_t i = std::min(rIndexes.size(), searchStart); i >= 1; --i )
+    {
+        if( rIndexes[ i - 1 ] != value )
+            return i;
+    }
+    return 0;
+}
+
 void XclExpRow::AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase )
 {
     OSL_ENSURE( !mbAlwaysEmpty, "XclExpRow::AppendCell - row is marked to be always empty" );
@@ -1894,7 +1916,7 @@ void XclExpRow::AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase )
     InsertCell( xCell, maCellList.GetSize(), bIsMergedBase );
 }
 
-void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
+void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, ScfUInt16Vec& aXFIndexes, size_t nStartColAllDefault, bool bProgress )
 {
     size_t nPos, nSize;
 
@@ -1904,7 +1926,11 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
     size_t nColCount = GetMaxPos().Col() + 1;
     OSL_ENSURE( rColXFIndexes.size() == nColCount, "XclExpRow::Finalize - wrong column XF index count" );
 
-    ScfUInt16Vec aXFIndexes( nColCount, EXC_XF_NOTFOUND );
+    // The vector should be preset to all items being EXC_XF_NOTFOUND, to avoid repeated allocations
+    // and clearing.
+    assert( aXFIndexes.size() == nColCount );
+    assert( aXFIndexes.front() == EXC_XF_NOTFOUND );
+    assert( aXFIndexes.back() == EXC_XF_NOTFOUND );
     for( nPos = 0, nSize = maCellList.GetSize(); nPos < nSize; ++nPos )
     {
         XclExpCellBase* pCell = maCellList.GetRecord( nPos );
@@ -1939,8 +1965,8 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
                 // insert the cell, InsertCell() may merge it with existing BLANK records
                 InsertCell( xNewCell, nPos, false );
                 // insert default XF indexes into aXFIndexes
-                ::std::fill( aXFIndexes.begin() + nFirstFreeXclCol,
-                    aXFIndexes.begin() + nNextUsedXclCol, aXFId.mnXFIndex );
+                for( size_t i = nFirstFreeXclCol; i < nNextUsedXclCol; ++i )
+                    aXFIndexes[ i ] = aXFId.mnXFIndex;
                 // don't step forward with nPos, InsertCell() may remove records
             }
             else
@@ -1950,28 +1976,47 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
 
     // *** Find default row format *** ----------------------------------------
 
-    // find most used XF index in the row
-    std::map< sal_uInt16, size_t > aIndexMap;
-    sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
-    size_t nMaxXFCount = 0;
-    const size_t nHalfIndexes = aXFIndexes.size() / 2;
-    for( const auto& rXFIndex : aXFIndexes )
+    // Often there will be many EXC_XF_DEFAULTCELL at the end, optimize by ignoring them.
+    size_t nStartSearchAllDefault = aXFIndexes.size();
+    if( !maCellList.IsEmpty() && dynamic_cast< const XclExpBlankCell* >( maCellList.GetLastRecord()))
     {
-        if( rXFIndex != EXC_XF_NOTFOUND )
+        const XclExpBlankCell* pLastBlank = static_cast< const XclExpBlankCell* >( maCellList.GetLastRecord());
+        assert(pLastBlank->GetLastXclCol() == aXFIndexes.size() - 1);
+        nStartSearchAllDefault = pLastBlank->GetStartColAllDefaultCell();
+    }
+    size_t nStartAllDefault = findFirstAllSameUntilEnd( aXFIndexes, EXC_XF_DEFAULTCELL, nStartSearchAllDefault);
+
+    // find most used XF index in the row
+    sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
+    const size_t nHalfIndexes = aXFIndexes.size() / 2;
+    if( nStartAllDefault > nHalfIndexes ) // Otherwise most are EXC_XF_DEFAULTCELL.
+    {
+        // Very likely the most common one is going to be the last one.
+        nRowXFIndex = aXFIndexes.back();
+        size_t nStartLastSame = findFirstAllSameUntilEnd( aXFIndexes, nRowXFIndex );
+        if( nStartLastSame > nHalfIndexes ) // No, find out the most used one by counting.
         {
-            size_t& rnCount = aIndexMap[ rXFIndex ];
-            ++rnCount;
-            if( rnCount > nMaxXFCount )
+            std::unordered_map< sal_uInt16, size_t > aIndexMap;
+            size_t nMaxXFCount = 0;
+            for( const auto& rXFIndex : aXFIndexes )
             {
-                nRowXFIndex = rXFIndex;
-                nMaxXFCount = rnCount;
-                if (nMaxXFCount > nHalfIndexes)
+                if( rXFIndex != EXC_XF_NOTFOUND )
                 {
-                    // No other XF index can have a greater usage count, we
-                    // don't need to loop through the remaining cells.
-                    // Specifically for the tail of unused default
-                    // cells/columns this makes a difference.
-                    break;  // for
+                    size_t& rnCount = aIndexMap[ rXFIndex ];
+                    ++rnCount;
+                    if( rnCount > nMaxXFCount )
+                    {
+                        nRowXFIndex = rXFIndex;
+                        nMaxXFCount = rnCount;
+                        if (nMaxXFCount > nHalfIndexes)
+                        {
+                            // No other XF index can have a greater usage count, we
+                            // don't need to loop through the remaining cells.
+                            // Specifically for the tail of unused default
+                            // cells/columns this makes a difference.
+                            break;  // for
+                        }
+                    }
                 }
             }
         }
@@ -2004,17 +2049,21 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
 
     // *** Remove unused BLANK cell records *** -------------------------------
 
+    size_t maxStartAllNotFound;
     if( bUseColDefXFs )
     {
+        size_t maxStartAllDefault = std::max( nStartAllDefault, nStartColAllDefault );
         // use column default XF indexes
         // #i194#: remove cell XF indexes equal to column default XF indexes
-        ScfUInt16Vec::const_iterator aColIt = rColXFIndexes.begin();
-        for( auto& rXFIndex : aXFIndexes )
+        for( size_t i = 0; i < maxStartAllDefault; ++i )
         {
-            if( rXFIndex == *aColIt )
-                rXFIndex = EXC_XF_NOTFOUND;
-            ++aColIt;
+            if( aXFIndexes[ i ] == rColXFIndexes[ i ] )
+                aXFIndexes[ i ] = EXC_XF_NOTFOUND;
         }
+        // They can differ only up to maxNonDefault, in the rest they are the same.
+        for( size_t i = maxStartAllDefault; i < aXFIndexes.size(); ++i )
+            aXFIndexes[ i ] = EXC_XF_NOTFOUND;
+        maxStartAllNotFound = maxStartAllDefault;
     }
     else
     {
@@ -2025,19 +2074,24 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
         for( auto& rXFIndex : aXFIndexes )
             if( rXFIndex == nRowXFIndex )
                 rXFIndex = EXC_XF_NOTFOUND;
+        maxStartAllNotFound = aXFIndexes.size();
     }
 
     // remove unused parts of BLANK/MULBLANK cell records
+    size_t nStartAllNotFound = findFirstAllSameUntilEnd( aXFIndexes, EXC_XF_NOTFOUND, maxStartAllNotFound );
     nPos = 0;
     while( nPos < maCellList.GetSize() )   // do not cache list size, may change in the loop
     {
         XclExpCellBase* xCell = maCellList.GetRecord( nPos );
-        xCell->RemoveUnusedBlankCells( aXFIndexes );
+        xCell->RemoveUnusedBlankCells( aXFIndexes, nStartAllNotFound );
         if( xCell->IsEmpty() )
             maCellList.RemoveRecord( nPos );
         else
             ++nPos;
     }
+    // Ensure it's all EXC_XF_NOTFOUND again for next reuse.
+    for( size_t i = 0; i < nStartAllNotFound; ++i )
+        aXFIndexes[ i ] = EXC_XF_NOTFOUND;
 
     // progress bar includes disabled rows; only update it in the lead thread.
     if (bProgress)
@@ -2174,26 +2228,33 @@ class RowFinalizeTask : public comphelper::ThreadTask
 {
     bool mbProgress;
     const ScfUInt16Vec& mrColXFIndexes;
+    size_t mnStartColAllDefault;
     std::vector< XclExpRow * > maRows;
 public:
              RowFinalizeTask( const std::shared_ptr<comphelper::ThreadTaskTag> & pTag,
                               const ScfUInt16Vec& rColXFIndexes,
+                              size_t nStartColAllDefault,
                               bool bProgress ) :
                  comphelper::ThreadTask( pTag ),
                  mbProgress( bProgress ),
-                 mrColXFIndexes( rColXFIndexes ) {}
+                 mrColXFIndexes( rColXFIndexes ),
+                 mnStartColAllDefault( nStartColAllDefault )
+                 {}
 
     void     push_back( XclExpRow *pRow ) { maRows.push_back( pRow ); }
     virtual void doWork() override
     {
+        ScfUInt16Vec aXFIndexes( mrColXFIndexes.size(), EXC_XF_NOTFOUND );
         for (XclExpRow* p : maRows)
-            p->Finalize( mrColXFIndexes, mbProgress );
+            p->Finalize( mrColXFIndexes, aXFIndexes, mnStartColAllDefault, mbProgress );
     }
 };
 
 }
 
-void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt16Vec& rColXFIndexes )
+void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData,
+                                const ScfUInt16Vec& rColXFIndexes,
+                                size_t nStartColAllDefault )
 {
     // *** Finalize all rows *** ----------------------------------------------
 
@@ -2209,8 +2270,9 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
 #endif
     if (nThreads == 1)
     {
+        ScfUInt16Vec aXFIndexes( rColXFIndexes.size(), EXC_XF_NOTFOUND );
         for (auto& rEntry : maRowMap)
-            rEntry.second->Finalize( rColXFIndexes, true );
+            rEntry.second->Finalize( rColXFIndexes, aXFIndexes, nStartColAllDefault, true );
     }
     else
     {
@@ -2218,7 +2280,7 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData, const ScfUInt
         std::shared_ptr<comphelper::ThreadTaskTag> pTag = comphelper::ThreadPool::createThreadTaskTag();
         std::vector<std::unique_ptr<RowFinalizeTask>> aTasks(nThreads);
         for ( size_t i = 0; i < nThreads; i++ )
-            aTasks[ i ].reset( new RowFinalizeTask( pTag, rColXFIndexes, i == 0 ) );
+            aTasks[ i ].reset( new RowFinalizeTask( pTag, rColXFIndexes, nStartColAllDefault, i == 0 ) );
 
         size_t nIdx = 0;
         for ( const auto& rEntry : maRowMap )
@@ -2380,53 +2442,74 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
 
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {
-    RowMap::iterator itr = maRowMap.lower_bound( nXclRow );
+    // This is called rather often, so optimize for the most common case of saving row by row
+    // (so the requested row is often the last one in the map or belongs after the last one).
+    RowMap::iterator itr;
+    if(maRowMap.empty())
+        itr = maRowMap.end();
+    else
+    {
+        RowMap::reverse_iterator last = maRowMap.rbegin();
+        if( last->first == nXclRow )
+            return *last->second;
+        if( nXclRow > last->first )
+            itr = maRowMap.end();
+        else
+            itr = maRowMap.lower_bound( nXclRow );
+    }
     const bool bFound = itr != maRowMap.end();
     // bFoundHigher: nXclRow was identical to the previous entry, so not explicitly created earlier
-    const bool bFoundHigher = bFound && itr != maRowMap.find( nXclRow );
-    if( !bFound || bFoundHigher )
-    {
-        size_t nFrom = 0;
-        RowRef pPrevEntry;
-        if( itr != maRowMap.begin() )
-        {
-            --itr;
-            pPrevEntry = itr->second;
-            if( bFoundHigher )
-                nFrom = nXclRow;
-            else
-                nFrom = itr->first + 1;
-        }
+    const bool bFoundHigher = bFound && itr->first != nXclRow;
+    if( bFound && !bFoundHigher )
+        return *itr->second;
 
-        const ScDocument& rDoc = GetRoot().GetDoc();
-        const SCTAB nScTab = GetRoot().GetCurrScTab();
-        // create the missing rows first
-        while( nFrom <= nXclRow )
+    size_t nFrom = 0;
+    RowRef pPrevEntry;
+    if( itr != maRowMap.begin() )
+    {
+        --itr;
+        pPrevEntry = itr->second;
+        if( bFoundHigher )
+            nFrom = nXclRow;
+        else
+            nFrom = itr->first + 1;
+    }
+
+    const ScDocument& rDoc = GetRoot().GetDoc();
+    const SCTAB nScTab = GetRoot().GetCurrScTab();
+    // Do not repeatedly call RowHidden() / GetRowHeight() for same values.
+    bool bHidden = false;
+    SCROW lastSameHiddenRow = -1;
+    sal_uInt16 nHeight = 0;
+    SCROW lastSameHeightRow = -1;
+    // create the missing rows first
+    while( nFrom <= nXclRow )
+    {
+        // only create RowMap entries if it is first row in spreadsheet,
+        // if it is the desired row, or for rows that differ from previous.
+        if( static_cast<SCROW>(nFrom) > lastSameHiddenRow )
+            bHidden = rDoc.RowHidden(nFrom, nScTab, nullptr, &lastSameHiddenRow);
+        // Always get the actual row height even if the manual size flag is
+        // not set, to correctly export the heights of rows with wrapped
+        // texts.
+        if( static_cast<SCROW>(nFrom) > lastSameHeightRow )
+            nHeight = rDoc.GetRowHeight(nFrom, nScTab, nullptr, &lastSameHeightRow, false);
+        if ( !pPrevEntry || ( nFrom == nXclRow ) ||
+             ( maOutlineBfr.IsCollapsed() ) ||
+             ( maOutlineBfr.GetLevel() != 0 ) ||
+             ( bRowAlwaysEmpty && !pPrevEntry->IsEmpty() ) ||
+             ( bHidden != pPrevEntry->IsHidden() ) ||
+             ( nHeight != pPrevEntry->GetHeight() ) )
         {
-            // only create RowMap entries if it is first row in spreadsheet,
-            // if it is the desired row, or for rows that differ from previous.
-            const bool bHidden = rDoc.RowHidden(nFrom, nScTab);
-            // Always get the actual row height even if the manual size flag is
-            // not set, to correctly export the heights of rows with wrapped
-            // texts.
-            const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
-            if ( !pPrevEntry || ( nFrom == nXclRow ) ||
-                 ( maOutlineBfr.IsCollapsed() ) ||
-                 ( maOutlineBfr.GetLevel() != 0 ) ||
-                 ( bRowAlwaysEmpty && !pPrevEntry->IsEmpty() ) ||
-                 ( bHidden != pPrevEntry->IsHidden() ) ||
-                 ( nHeight != pPrevEntry->GetHeight() ) )
+            if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
             {
-                if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
-                {
-                    mnHighestOutlineLevel = maOutlineBfr.GetLevel();
-                }
-                RowRef p = std::make_shared<XclExpRow>(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight);
-                maRowMap.emplace(nFrom, p);
-                pPrevEntry = p;
+                mnHighestOutlineLevel = maOutlineBfr.GetLevel();
             }
-            ++nFrom;
+            RowRef p = std::make_shared<XclExpRow>(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight);
+            maRowMap.emplace(nFrom, p);
+            pPrevEntry = p;
         }
+        ++nFrom;
     }
     itr = maRowMap.find(nXclRow);
     return *itr->second;
@@ -2688,13 +2771,17 @@ void XclExpCellTable::Finalize(bool bXLS)
     ScfUInt16Vec aColXFIndexes;
     maColInfoBfr.Finalize( aColXFIndexes, bXLS );
 
+    // Usually many indexes towards the end will be EXC_XF_DEFAULTCELL, find
+    // the index that starts all EXC_XF_DEFAULTCELL until the end.
+    size_t nStartColAllDefault = findFirstAllSameUntilEnd( aColXFIndexes, EXC_XF_DEFAULTCELL );
+
     /*  Finalize row buffer. This calculates all cell XF indexes from the XF
         identifiers. Then the XF index vector aColXFIndexes (filled above) is
         used to calculate the row default formats. With this, all unneeded blank
         cell records (equal to row default or column default) will be removed.
         The function returns the (most used) default row format in aDefRowData. */
     XclExpDefaultRowData aDefRowData;
-    maRowBfr.Finalize( aDefRowData, aColXFIndexes );
+    maRowBfr.Finalize( aDefRowData, aColXFIndexes, nStartColAllDefault );
 
     // Initialize the DEFROWHEIGHT record.
     mxDefrowheight->SetDefaultData( aDefRowData );

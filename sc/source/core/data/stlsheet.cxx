@@ -113,7 +113,7 @@ bool ScStyleSheet::SetParent( const OUString& rParentName )
             // RepaintRange checks the document's IsVisible flag and locked repaints.
             ScDocument* pDoc = static_cast<ScStyleSheetPool*>(GetPool())->GetDocument();
             if (pDoc)
-                pDoc->RepaintRange( ScRange( 0,0,0, MAXCOL,MAXROW,MAXTAB ) );
+                pDoc->RepaintRange( ScRange( 0,0,0, pDoc->MaxCol(),pDoc->MaxRow(),MAXTAB ) );
         }
     }
 

@@ -31,12 +31,13 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
 
     ScSheetLimits(SCCOL nMaxCol, SCROW nMaxRow)
         : mnMaxCol(nMaxCol)
-        , mnMaxRow(nMaxRow){}
-
-              [[nodiscard]] bool ValidCol(SCCOL nCol) const
+        , mnMaxRow(nMaxRow)
     {
-        return ::ValidCol(nCol, mnMaxCol);
     }
+
+    SC_DLLPUBLIC static ScSheetLimits CreateDefault();
+
+    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mnMaxCol); }
     [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mnMaxRow); }
     [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const
     {
@@ -57,10 +58,24 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
     [[nodiscard]] SCCOL SanitizeCol(SCCOL nCol) const { return ::SanitizeCol(nCol, mnMaxCol); }
     [[nodiscard]] SCROW SanitizeRow(SCROW nRow) const { return ::SanitizeRow(nRow, mnMaxRow); }
 
+    // equivalent of MAXROW in address.hxx
+    SCROW MaxRow() const { return mnMaxRow; }
+    // equivalent of MAXCOL in address.hxx
+    SCCOL MaxCol() const { return mnMaxCol; }
     // equivalent of MAXROWCOUNT in address.hxx
     SCROW GetMaxRowCount() const { return mnMaxRow + 1; }
     // equivalent of MAXCOLCOUNT in address.hxx
     SCCOL GetMaxColCount() const { return mnMaxCol + 1; }
+    // max row number as string
+    OUString MaxRowAsString() const
+    {
+        return mnMaxRow == MAXROW ? OUString(MAXROW_STRING) : OUString(MAXROW_JUMBO_STRING);
+    }
+    // mac col as string ("AMJ" or "XFD")
+    OUString MaxColAsString() const
+    {
+        return mnMaxCol == MAXCOL ? OUString(MAXCOL_STRING) : OUString(MAXCOL_JUMBO_STRING);
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

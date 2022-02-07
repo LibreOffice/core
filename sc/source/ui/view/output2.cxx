@@ -991,7 +991,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     if (!mpDoc->ColHidden(nX, nTab) && nX >= nX1 && nX <= nX2
             && !mpDoc->RowHidden(nY, nTab) && nY >= nY1 && nY <= nY2)
     {
-        CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nX+1];
+        CellInfo* pInfo = &pRowInfo[nArrY].cellInfo(nX);
         bHOver = pInfo->bHOverlapped;
         bVOver = pInfo->bVOverlapped;
     }
@@ -1021,8 +1021,8 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
 
         if (rOverX >= nX1 && !bHidden)
         {
-            bHOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bHOverlapped;
-            bVOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bVOverlapped;
+            bHOver = pRowInfo[nArrY].cellInfo(rOverX).bHOverlapped;
+            bVOver = pRowInfo[nArrY].cellInfo(rOverX).bVOverlapped;
         }
         else
         {
@@ -1047,7 +1047,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
             !mpDoc->RowHidden(rOverY, nTab) &&
             pRowInfo[nArrY].nRowNo == rOverY)
         {
-            bVOver = pRowInfo[nArrY].pCellInfo[rOverX+1].bVOverlapped;
+            bVOver = pRowInfo[nArrY].cellInfo(rOverX).bVOverlapped;
         }
         else
         {
@@ -1159,7 +1159,7 @@ bool ScOutputData::IsEmptyCellText( const RowInfo* pThisRowInfo, SCCOL nX, SCROW
 
     bool bEmpty;
     if ( pThisRowInfo && nX <= nX2 )
-        bEmpty = pThisRowInfo->pCellInfo[nX+1].bEmptyCellText;
+        bEmpty = pThisRowInfo->basicCellInfo(nX).bEmptyCellText;
     else
     {
         ScRefCellValue aCell(*mpDoc, ScAddress(nX, nY, nTab));
@@ -1245,7 +1245,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
     {
         //! extra member function for width?
         tools::Long nColWidth = ( nCompCol <= nX2 ) ?
-                pRowInfo[0].pCellInfo[nCompCol+1].nWidth :
+                pRowInfo[0].basicCellInfo(nCompCol).nWidth :
                 static_cast<tools::Long>( mpDoc->GetColWidth( nCompCol, nTab ) * mnPPTX );
         nCellPosX += nColWidth * nLayoutSign;
         ++nCompCol;
@@ -1254,7 +1254,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
     {
         --nCompCol;
         tools::Long nColWidth = ( nCompCol <= nX2 ) ?
-                pRowInfo[0].pCellInfo[nCompCol+1].nWidth :
+                pRowInfo[0].basicCellInfo(nCompCol).nWidth :
                 static_cast<tools::Long>( mpDoc->GetColWidth( nCompCol, nTab ) * mnPPTX );
         nCellPosX -= nColWidth * nLayoutSign;
     }
@@ -1278,7 +1278,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
             ++nCompRow;
         }
     }
-    nCellPosY -= static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, mnPPTY ));
+    nCellPosY -= mpDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, mnPPTY );
 
     const ScMergeAttr* pMerge = &rPattern.GetItem( ATTR_MERGE );
     bool bMerged = pMerge->IsMerged();
@@ -1293,7 +1293,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
     for ( tools::Long i=0; i<nMergeCols; i++ )
     {
         tools::Long nColWidth = ( nCellX+i <= nX2 ) ?
-                pRowInfo[0].pCellInfo[nCellX+i+1].nWidth :
+                pRowInfo[0].basicCellInfo(nCellX+i).nWidth :
                 static_cast<tools::Long>( mpDoc->GetColWidth( sal::static_int_cast<SCCOL>(nCellX+i), nTab ) * mnPPTX );
         nMergeSizeX += nColWidth;
     }
@@ -1306,7 +1306,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
         nDirect = 1;        // skip in loop
     }
     // following rows always from document
-    nMergeSizeY += static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nCellY+nDirect, nCellY+nMergeRows-1, nTab, mnPPTY));
+    nMergeSizeY += mpDoc->GetScaledRowHeight( nCellY+nDirect, nCellY+nMergeRows-1, nTab, mnPPTY);
 
     --nMergeSizeX;      // leave out the grid horizontally, also for alignment (align between grid lines)
 
@@ -1369,13 +1369,13 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
                 rParam.maClipRect.AdjustRight(nAdd * nLayoutSign );
 
                 if ( rThisRowInfo.nRowNo == nCellY && nRightX >= nX1 && nRightX <= nX2 )
-                    rThisRowInfo.pCellInfo[nRightX].bHideGrid = true;
+                    rThisRowInfo.cellInfo(nRightX-1).bHideGrid = true;
             }
 
             while ( nLeftMissing > 0 && nLeftX > 0 && ( bOverwrite || IsAvailable( nLeftX-1, nCellY ) ) )
             {
                 if ( rThisRowInfo.nRowNo == nCellY && nLeftX >= nX1 && nLeftX <= nX2 )
-                    rThisRowInfo.pCellInfo[nLeftX].bHideGrid = true;
+                    rThisRowInfo.cellInfo(nLeftX-1).bHideGrid = true;
 
                 --nLeftX;
                 tools::Long nAdd = static_cast<tools::Long>( mpDoc->GetColWidth( nLeftX, nTab ) * mnPPTX );
@@ -1388,14 +1388,14 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
         //  even if rThisRowInfo isn't for nCellY (merged cells).
         if ( nRightMissing > 0 && bMarkClipped && nRightX >= nX1 && nRightX <= nX2 && !bBreak && !bCellIsValue )
         {
-            rThisRowInfo.pCellInfo[nRightX+1].nClipMark |= ScClipMark::Right;
+            rThisRowInfo.cellInfo(nRightX).nClipMark |= ScClipMark::Right;
             bAnyClipped = true;
             tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
             rParam.maClipRect.AdjustRight( -(nMarkPixel * nLayoutSign) );
         }
         if ( nLeftMissing > 0 && bMarkClipped && nLeftX >= nX1 && nLeftX <= nX2 && !bBreak && !bCellIsValue )
         {
-            rThisRowInfo.pCellInfo[nLeftX+1].nClipMark |= ScClipMark::Left;
+            rThisRowInfo.cellInfo(nLeftX).nClipMark |= ScClipMark::Left;
             bAnyClipped = true;
             tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
             rParam.maClipRect.AdjustLeft(nMarkPixel * nLayoutSign );
@@ -1566,12 +1566,12 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
         {
             tools::Long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
-                nPosX -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
+                nPosX -= pRowInfo[0].basicCellInfo(nLoopStartX).nWidth * nLayoutSign;
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
                 bool bMergeEmpty = false;
-                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                bool bEmpty = nX < nX1 || pInfo->bEmptyCellText;
+                const CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                bool bEmpty = nX < nX1 || pThisRowInfo->basicCellInfo(nX).bEmptyCellText;
 
                 SCCOL nCellX = nX;                  // position where the cell really starts
                 SCROW nCellY = nY;
@@ -1659,7 +1659,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 if (bDoCell)
                 {
                     if ( nCellY == nY && nCellX == nX && nCellX >= nX1 && nCellX <= nX2 )
-                        aCell = pThisRowInfo->pCellInfo[nCellX+1].maCell;
+                        aCell = pThisRowInfo->cellInfo(nCellX).maCell;
                     else
                         GetVisibleCell( nCellX, nCellY, nTab, aCell );      // get from document
                     if (aCell.isEmpty())
@@ -1679,7 +1679,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 {
                     if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
                     {
-                        CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
+                        CellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
                         pPattern = rCellInfo.pPatternAttr;
                         pCondSet = rCellInfo.pConditionSet;
 
@@ -1897,7 +1897,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                     //  right are handled by the flag for nX2
                     SCCOL nMarkX = ( nCellX <= nX2 ) ? nCellX : nX2;
                     RowInfo* pMarkRowInfo = ( nCellY == nY ) ? pThisRowInfo : &pRowInfo[0];
-                    pMarkRowInfo->pCellInfo[nMarkX+1].bEditEngine = true;
+                    pMarkRowInfo->basicCellInfo(nMarkX).bEditEngine = true;
                     bDoCell = false;    // don't draw here
                 }
                 if ( bDoCell )
@@ -2173,7 +2173,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         }
                     }
                 }
-                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pRowInfo[nArrY].nHeight;
@@ -3129,10 +3129,10 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             {
                 //  anywhere in the merged area...
                 SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
-                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
+                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].cellInfo(nClipX);
             }
             else
-                pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
+                pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
 
             pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
             bAnyClipped = true;
@@ -3234,10 +3234,10 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidt
     {
         //  anywhere in the merged area...
         SCCOL nClipX = (rParam.mnX < nX1) ? nX1 : rParam.mnX;
-        pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX + 1];
+        pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].cellInfo(nClipX);
     }
     else
-        pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX + 1];
+        pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
 
     bAnyClipped = true;
     bVertical = true;
@@ -3970,10 +3970,10 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
             {
                 //  anywhere in the merged area...
                 SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
-                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
+                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].cellInfo(nClipX);
             }
             else
-                pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
+                pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
 
             pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
             bAnyClipped = true;
@@ -4257,10 +4257,10 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
             {
                 //  anywhere in the merged area...
                 SCCOL nClipX = ( rParam.mnX < nX1 ) ? nX1 : rParam.mnX;
-                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].pCellInfo[nClipX+1];
+                pClipMarkCell = &pRowInfo[(rParam.mnArrY != 0) ? rParam.mnArrY : 1].cellInfo(nClipX);
             }
             else
-                pClipMarkCell = &rParam.mpThisRowInfo->pCellInfo[rParam.mnX+1];
+                pClipMarkCell = &rParam.mpThisRowInfo->cellInfo(rParam.mnX);
 
             pClipMarkCell->nClipMark |= ScClipMark::Right;      //! also allow left?
             bAnyClipped = true;
@@ -4354,8 +4354,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                 std::unique_ptr< ScPatternAttr > pPreviewPattr;
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
-                CellInfo*   pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                if (pInfo->bEditEngine)
+                if (pThisRowInfo->basicCellInfo(nX).bEditEngine)
                 {
                     SCROW nY = pThisRowInfo->nRowNo;
 
@@ -4377,7 +4376,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                             bDoCell = true;
                         }
                     }
-                    else if ( nX == nX2 && pThisRowInfo->pCellInfo[nX+1].maCell.isEmpty() )
+                    else if ( nX == nX2 && pThisRowInfo->cellInfo(nX).maCell.isEmpty() )
                     {
                         //  Rest of a long text further to the right?
 
@@ -4408,7 +4407,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
                              !mpDoc->ColHidden(nCellX, nTab) )
                         {
-                            CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nCellX+1];
+                            CellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
                             pPattern = rCellInfo.pPatternAttr;
                             pCondSet = rCellInfo.pConditionSet;
                             aCell = rCellInfo.maCell;
@@ -4495,7 +4494,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         bHyphenatorSet = aParam.mbHyphenatorSet;
                     }
                 }
-                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nRowPosY += pRowInfo[nArrY].nHeight;
@@ -4551,7 +4550,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
             {
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
-                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
+                const CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 if ( pInfo->nRotateDir != ScRotateDir::NONE )
                 {
                     SCROW nY = pThisRowInfo->nRowNo;
@@ -4590,7 +4589,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         if (aCell.isEmpty() || IsEmptyCellText(pThisRowInfo, nX, nY))
                             bHidden = true;     // nRotateDir is also set without a cell
 
-                        tools::Long nCellWidth = static_cast<tools::Long>(pRowInfo[0].pCellInfo[nX+1].nWidth);
+                        tools::Long nCellWidth = static_cast<tools::Long>(pRowInfo[0].basicCellInfo(nX).nWidth);
 
                         SvxCellHorJustify eHorJust =
                                             pPattern->GetItem(ATTR_HOR_JUSTIFY, pCondSet).GetValue();
@@ -4617,7 +4616,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                                 while (nCol > nX)
                                 {
                                     --nCol;
-                                    nStartX -= nLayoutSign * static_cast<tools::Long>(pRowInfo[0].pCellInfo[nCol+1].nWidth);
+                                    nStartX -= nLayoutSign * static_cast<tools::Long>(pRowInfo[0].basicCellInfo(nCol).nWidth);
                                 }
                             }
                         }
@@ -4634,9 +4633,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             {
                                 SCCOL nCountX = pMerge->GetColMerge();
                                 for (SCCOL i=1; i<nCountX; i++)
-                                    nOutWidth += static_cast<tools::Long>( mpDoc->GetColWidth(nX+i,nTab) * mnPPTX );
+                                    nOutWidth += mpDoc->GetColWidth(nX+i,nTab) * mnPPTX;
                                 SCROW nCountY = pMerge->GetRowMerge();
-                                nOutHeight += static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, mnPPTY));
+                                nOutHeight += mpDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, mnPPTY);
                             }
 
                             SvxCellVerJustify eVerJust =
@@ -5140,7 +5139,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                         }
                     }
                 }
-                nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nRowPosY += pRowInfo[nArrY].nHeight;

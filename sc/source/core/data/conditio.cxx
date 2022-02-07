@@ -501,7 +501,7 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
     if (rCxt.meMode == URM_INSDEL && rCxt.maRange.In(aSrcPos))
     {
         ScAddress aErrorPos( ScAddress::UNINITIALIZED );
-        if (!aSrcPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+        if (!aSrcPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos, *mpDoc))
         {
             assert(!"can't move ScConditionEntry");
         }
@@ -777,7 +777,7 @@ void ScConditionEntry::FillCache() const
 
         // temporary fix to workaround slow duplicate entry
         // conditions, prevent to use a whole row
-        if(nRow == MAXROW)
+        if(nRow == mpDoc->MaxRow())
         {
             bool bShrunk = false;
             mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,

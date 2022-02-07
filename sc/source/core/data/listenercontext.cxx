@@ -71,7 +71,7 @@ void EndListeningContext::addEmptyBroadcasterPosition(SCTAB nTab, SCCOL nCol, SC
 void EndListeningContext::purgeEmptyBroadcasters()
 {
     PurgeListenerAction aAction(mrDoc);
-    maSet.executeAction(aAction);
+    maSet.executeAction(mrDoc, aAction);
 }
 
 PurgeListenerAction::PurgeListenerAction(ScDocument& rDoc) :

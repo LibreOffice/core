@@ -99,7 +99,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 nXT += rDoc.GetColWidth(i,nTab);
             if (rDoc.IsNegativePage(nTab))
                 nXT = -nXT;
-            sal_uLong nYT = rDoc.GetRowHeight( 0, nPosY-1, nTab);
+            tools::Long nYT = rDoc.GetRowHeight( 0, nPosY-1, nTab);
             aPos = Point(o3tl::convert(nXT, o3tl::Length::twip, o3tl::Length::mm100),
                          o3tl::convert(nYT, o3tl::Length::twip, o3tl::Length::mm100));
         }

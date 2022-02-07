@@ -443,13 +443,14 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
         RowInfo* pThisRowInfo = &rTabInfo.mpRowInfo[nArrY];
         for (SCCOL nX=nX1; nX<=nX2; nX++)
         {
-            CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
-            if (!rCellInfo.bEmptyCellText)
+            CellInfo& rCellInfo = pThisRowInfo->cellInfo(nX);
+            BasicCellInfo& rBasicCellInfo = pThisRowInfo->basicCellInfo(nX);
+            if (!rBasicCellInfo.bEmptyCellText)
                 if (rCellInfo.pPatternAttr->
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet).GetHidePrint())
                 {
                     rCellInfo.maCell.clear();
-                    rCellInfo.bEmptyCellText = true;
+                    rBasicCellInfo.bEmptyCellText = true;
                 }
         }
     }
@@ -532,7 +533,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
     tools::Long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
         nTwipsSizeX += rDoc.GetColWidth( i, nTab );
-    tools::Long nTwipsSizeY = static_cast<tools::Long>(rDoc.GetRowHeight( nY1, nY2, nTab ));
+    tools::Long nTwipsSizeY = rDoc.GetRowHeight( nY1, nY2, nTab );
 
     //  if no lines, still space for the outline frame (20 Twips = 1pt)
     //  (HasLines initializes aLines to 0,0,0,0)
@@ -1407,8 +1408,8 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
     OSL_ENSURE(aTabInfo.mnArrCount,"nArrCount == 0");
 
     aTabInfo.mpRowInfo[1].nHeight = static_cast<sal_uInt16>(nEffHeight);
-    aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
-        aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = static_cast<sal_uInt16>(nEffWidth);
+    aTabInfo.mpRowInfo[0].basicCellInfo(0).nWidth =
+        aTabInfo.mpRowInfo[1].basicCellInfo(0).nWidth = static_cast<sal_uInt16>(nEffWidth);
 
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc.get(), 0,
                                 nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );

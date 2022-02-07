@@ -285,7 +285,7 @@ private:
     sal_Unicode cSymbol[MAXSTRLEN+1];               // current Symbol + 0
     OUString    aFormula;                           // formula source code
     sal_Int32   nSrcPos;                            // tokenizer position (source code)
-    mutable ScRawToken maRawToken;
+    ScRawToken maRawToken;
 
     std::queue<OpCode> maPendingOpCodes; // additional opcodes generated from a single symbol
 
@@ -347,21 +347,21 @@ private:
 
     std::vector<Whitespace> NextSymbol(bool bInArray);
 
-    bool IsValue( const OUString& );
-    bool IsOpCode( const OUString&, bool bInArray );
-    bool IsOpCode2( const OUString& );
-    bool IsString();
-    bool IsReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
-    bool IsSingleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
-    bool IsDoubleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
-    bool IsPredetectedReference( const OUString& rSymbol );
-    bool IsPredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
-    bool IsMacro( const OUString& );
-    bool IsNamedRange( const OUString& );
-    bool IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );
-    bool IsDBRange( const OUString& );
-    bool IsColRowName( const OUString& );
-    bool IsBoolean( const OUString& );
+    bool ParseValue( const OUString& );
+    bool ParseOpCode( const OUString&, bool bInArray );
+    bool ParseOpCode2( const OUString& );
+    bool ParseString();
+    bool ParseReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
+    bool ParseSingleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
+    bool ParseDoubleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
+    bool ParsePredetectedReference( const OUString& rSymbol );
+    bool ParsePredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
+    bool ParseMacro( const OUString& );
+    bool ParseNamedRange( const OUString&, bool onlyCheck = false );
+    bool ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );
+    bool ParseDBRange( const OUString& );
+    bool ParseColRowName( const OUString& );
+    bool ParseBoolean( const OUString& );
     void AutoCorrectParsedSymbol();
     const ScRangeData* GetRangeData( SCTAB& rSheet, const OUString& rUpperName ) const;
 
@@ -374,6 +374,8 @@ private:
         GetIndex() can be called on it. We don't check with RTTI.
      */
     ScRangeData* GetRangeData( const formula::FormulaToken& pToken ) const;
+
+    bool HasPossibleNamedRangeConflict(SCTAB nTab) const;
 
     static const CharClass* GetCharClassEnglish();
     static const CharClass* GetCharClassLocalized();
@@ -417,9 +419,9 @@ public:
     // Check if it is a valid english function name
     static bool IsEnglishSymbol( const OUString& rName );
 
-    bool IsErrorConstant( const OUString& ) const;
-    bool IsTableRefItem( const OUString& ) const;
-    bool IsTableRefColumn( const OUString& ) const;
+    bool ParseErrorConstant( const OUString& );
+    bool ParseTableRefItem( const OUString& );
+    bool ParseTableRefColumn( const OUString& );
 
     /** Calls GetToken() if PeekNextNoSpaces() is of given OpCode. */
     bool GetTokenIfOpCode( OpCode eOp );

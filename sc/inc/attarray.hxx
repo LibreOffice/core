@@ -21,6 +21,7 @@
 
 #include "global.hxx"
 #include "attrib.hxx"
+#include "document.hxx"
 #include "patattr.hxx"
 
 #include <algorithm>
@@ -114,6 +115,7 @@ public:
             ~ScAttrArray();
 
     ScDocument& GetDoc() { return rDocument; }
+    const ScDocument& GetDoc() const { return rDocument; }
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
 #if DEBUG_SC_TESTATTRARRAY
@@ -180,6 +182,7 @@ public:
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
     bool    HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
+    bool    HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
     bool    IsMerged( SCROW nRow ) const;
     bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,
@@ -266,10 +269,10 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
         if ( !nPos )
         {
             ++nPos;
-            if ( nRow > MAXROW )
+            if ( nRow > pArray->GetDoc().MaxRow())
                 return nullptr;
             rTop = nRow;
-            rBottom = std::min( nEndRow, MAXROW );
+            rBottom = std::min( nEndRow, pArray->GetDoc().MaxRow());
             nRow = rBottom + 1;
             return pDefPattern;
         }

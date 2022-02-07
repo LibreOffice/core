@@ -42,10 +42,6 @@ ScMarkData::ScMarkData(const ScSheetLimits& rSheetLimits) :
     ResetMark();
 }
 
-ScMarkData::~ScMarkData()
-{
-}
-
 ScMarkData& ScMarkData::operator=(const ScMarkData& rOther)
 {
     maTabMarked = rOther.maTabMarked;
@@ -106,16 +102,6 @@ void ScMarkData::SetMarkArea( const ScRange& rRange )
             maTabMarked.insert( aMarkRange.aStart.Tab() );
         bMarked = true;
     }
-}
-
-void ScMarkData::GetMarkArea( ScRange& rRange ) const
-{
-    rRange = aMarkRange;        //TODO: inline ?
-}
-
-void ScMarkData::GetMultiMarkArea( ScRange& rRange ) const
-{
-    rRange = aMultiRange;
 }
 
 void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark, bool bSetupMulti )
@@ -578,13 +564,20 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans() const
 
 bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
 {
-    if ( !bMultiMarked )
-        return false;
-
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
+
+    if ( !bMultiMarked )
+    {
+        if ( bMarked && !bMarkIsNeg &&
+             aMarkRange.aStart.Col() <= nStartCol && aMarkRange.aEnd.Col() >= nEndCol &&
+             aMarkRange.aStart.Row() <= nStartRow && aMarkRange.aEnd.Row() >= nEndRow )
+            return true;
+        return false;
+    }
+
     bool bOk = true;
 
     if ( nStartCol == 0 && nEndCol == mrSheetLimits.mnMaxCol )
@@ -595,6 +588,22 @@ bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
             bOk = false;
 
     return bOk;
+}
+
+SCCOL ScMarkData::GetStartOfEqualColumns( SCCOL nLastCol, SCCOL nMinCol ) const
+{
+    if( !bMultiMarked )
+    {
+        if ( bMarked && !bMarkIsNeg )
+        {
+            if( aMarkRange.aEnd.Col() >= nMinCol && aMarkRange.aStart.Col() < nLastCol )
+                return aMarkRange.aEnd.Col() + 1;
+            if( aMarkRange.aEnd.Col() >= nLastCol && aMarkRange.aStart.Col() <= nMinCol )
+                return aMarkRange.aStart.Col();
+        }
+        return nMinCol;
+    }
+    return aMultiSel.GetStartOfEqualColumns( nLastCol, nMinCol );
 }
 
 SCROW ScMarkData::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
@@ -936,37 +945,6 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
         }
         rRange = ScRange( nCol1New, nRow1New, nTab1, nCol2New, nRow2New, nTab2 );
     }
-}
-
-ScMarkArray ScMarkData::GetMarkArray( SCCOL nCol ) const
-{
-    return aMultiSel.GetMarkArray( nCol );
-}
-
-//iterators
-ScMarkData::iterator ScMarkData::begin()
-{
-    return maTabMarked.begin();
-}
-
-ScMarkData::iterator ScMarkData::end()
-{
-    return maTabMarked.end();
-}
-
-ScMarkData::const_iterator ScMarkData::begin() const
-{
-    return maTabMarked.begin();
-}
-
-ScMarkData::const_iterator ScMarkData::end() const
-{
-    return maTabMarked.end();
-}
-
-ScMarkData::const_reverse_iterator ScMarkData::rbegin() const
-{
-    return maTabMarked.rbegin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

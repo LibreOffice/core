@@ -154,7 +154,7 @@ static void Expand( R& n1, R& n2, U nStart, S nD )
     n1 = sal::static_int_cast<R>( n1 - nD );
 }
 
-static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
+static bool lcl_IsWrapBig( sal_Int64 nRef, sal_Int32 nDelta )
 {
     if ( nRef > 0 && nDelta > 0 )
         return nRef + nDelta <= 0;
@@ -163,7 +163,7 @@ static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
     return false;
 }
 
-static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
+static bool lcl_MoveBig( sal_Int64& rRef, sal_Int64 nStart, sal_Int32 nDelta )
 {
     bool bCut = false;
     if ( rRef >= nStart )
@@ -171,14 +171,14 @@ static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
         if ( nDelta > 0 )
             bCut = lcl_IsWrapBig( rRef, nDelta );
         if ( bCut )
-            rRef = nInt32Max;
+            rRef = ScBigRange::nRangeMax;
         else
             rRef += nDelta;
     }
     return bCut;
 }
 
-static bool lcl_MoveItCutBig( sal_Int32& rRef, sal_Int32 nDelta )
+static bool lcl_MoveItCutBig( sal_Int64& rRef, sal_Int32 nDelta )
 {
     bool bCut = lcl_IsWrapBig( rRef, nDelta );
     rRef += nDelta;
@@ -374,7 +374,7 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
 
 // simple UpdateReference for ScBigRange (ScChangeAction/ScChangeTrack)
 // References can also be located outside of the document!
-// Whole columns/rows (nInt32Min..nInt32Max) stay as such!
+// Whole columns/rows (ScBigRange::nRangeMin..ScBigRange::nRangeMax) stay as such!
 ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         const ScBigRange& rWhere, sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
         ScBigRange& rWhat )
@@ -382,8 +382,8 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     ScRefUpdateRes eRet = UR_NOTHING;
     const ScBigRange aOldRange( rWhat );
 
-    sal_Int32 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-    sal_Int32 theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
+    sal_Int64 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    sal_Int64 theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
     rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     rWhat.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
 
@@ -393,7 +393,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     {
         if ( nDx && (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
-                    (theCol1 != nInt32Min || theCol2 != nInt32Max) )
+                    (theCol1 != ScBigRange::nRangeMin || theCol2 != ScBigRange::nRangeMax) )
         {
             bCut1 = lcl_MoveBig( theCol1, nCol1, nDx );
             bCut2 = lcl_MoveBig( theCol2, nCol1, nDx );
@@ -404,7 +404,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         }
         if ( nDy && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
-                    (theRow1 != nInt32Min || theRow2 != nInt32Max) )
+                    (theRow1 != ScBigRange::nRangeMin || theRow2 != ScBigRange::nRangeMax) )
         {
             bCut1 = lcl_MoveBig( theRow1, nRow1, nDy );
             bCut2 = lcl_MoveBig( theRow2, nRow1, nDy );
@@ -415,7 +415,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         }
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
-                    (theTab1 != nInt32Min || theTab2 != nInt32Max) )
+                    (theTab1 != ScBigRange::nRangeMin || theTab2 != ScBigRange::nRangeMax) )
         {
             bCut1 = lcl_MoveBig( theTab1, nTab1, nDz );
             bCut2 = lcl_MoveBig( theTab2, nTab1, nDz );
@@ -429,7 +429,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     {
         if ( rWhere.In( rWhat ) )
         {
-            if ( nDx && (theCol1 != nInt32Min || theCol2 != nInt32Max) )
+            if ( nDx && (theCol1 != ScBigRange::nRangeMin || theCol2 != ScBigRange::nRangeMax) )
             {
                 bCut1 = lcl_MoveItCutBig( theCol1, nDx );
                 bCut2 = lcl_MoveItCutBig( theCol2, nDx );
@@ -438,7 +438,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
                 rWhat.aStart.SetCol( theCol1 );
                 rWhat.aEnd.SetCol( theCol2 );
             }
-            if ( nDy && (theRow1 != nInt32Min || theRow2 != nInt32Max) )
+            if ( nDy && (theRow1 != ScBigRange::nRangeMin || theRow2 != ScBigRange::nRangeMax) )
             {
                 bCut1 = lcl_MoveItCutBig( theRow1, nDy );
                 bCut2 = lcl_MoveItCutBig( theRow2, nDy );
@@ -447,7 +447,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
                 rWhat.aStart.SetRow( theRow1 );
                 rWhat.aEnd.SetRow( theRow2 );
             }
-            if ( nDz && (theTab1 != nInt32Min || theTab2 != nInt32Max) )
+            if ( nDz && (theTab1 != ScBigRange::nRangeMin || theTab2 != ScBigRange::nRangeMax) )
             {
                 bCut1 = lcl_MoveItCutBig( theTab1, nDz );
                 bCut2 = lcl_MoveItCutBig( theTab2, nDz );

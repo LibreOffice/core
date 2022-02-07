@@ -74,7 +74,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
                 const ScBigRange& rBig = pAction->GetBigRange();
                 if ( rBig.aStart.Tab() == nTab )
                 {
-                    ScRange aRange = rBig.MakeRange();
+                    ScRange aRange = rBig.MakeRange( rDoc );
 
                     if ( eType == SC_CAT_DELETE_ROWS )
                         aRange.aEnd.SetRow( aRange.aStart.Row() );
@@ -103,7 +103,7 @@ bool ScGridWindow::ShowNoteMarker( SCCOL nPosX, SCROW nPosY, bool bKeyboard )
                 {
                     ScRange aRange =
                         static_cast<const ScChangeActionMove*>(pAction)->
-                        GetFromRange().MakeRange();
+                        GetFromRange().MakeRange( rDoc );
                     if ( aRange.In( aCellPos ) )
                     {
                         pFound = pAction;

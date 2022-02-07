@@ -2117,7 +2117,6 @@ bool ScAccessibleDocument::IsTableSelected() const
         SCTAB nTab(getVisibleTable());
         //#103800#; use a copy of MarkData
         ScMarkData aMarkData(mpViewShell->GetViewData().GetMarkData());
-        aMarkData.MarkToMulti();
         ScDocument* pDoc = GetDocument();
         if (aMarkData.IsAllMarked( ScRange( 0, 0, nTab, pDoc->MaxCol(), pDoc->MaxRow(), nTab)))
             bResult = true;

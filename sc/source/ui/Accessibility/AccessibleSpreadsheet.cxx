@@ -514,8 +514,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 bool bNewMarked = refScMarkData.GetTableSelect(aNewCell.Tab()) && ( bIsMark || bIsMultMark );
 //              sal_Bool bNewCellSelected = isAccessibleSelected(aNewCell.Row(), aNewCell.Col());
                 sal_uInt16 nTab = rViewData.GetTabNo();
-                ScRange aMarkRange;
-                refScMarkData.GetMarkArea(aMarkRange);
+                const ScRange& aMarkRange = refScMarkData.GetMarkArea();
                 aEvent.OldValue.clear();
                 ScDocument* pDoc= GetDocument(mpViewShell);
                 //Mark All
@@ -1358,7 +1357,6 @@ bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
     {
         //#103800#; use a copy of MarkData
         ScMarkData aMarkData(mpViewShell->GetViewData().GetMarkData());
-        aMarkData.MarkToMulti();
         if (aMarkData.IsAllMarked(maRange))
             bResult = true;
     }

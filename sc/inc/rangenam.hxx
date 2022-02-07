@@ -156,6 +156,8 @@ public:
 
     SC_DLLPUBLIC static IsNameValidType     IsNameValid( const OUString& rName, const ScDocument& rDoc );
 
+    bool HasPossibleAddressConflict() const;
+
     void CompileUnresolvedXML( sc::CompileFormulaContext& rCxt );
 
 #if DEBUG_FORMULA_COMPILER
@@ -187,6 +189,12 @@ private:
     typedef ::std::map<OUString, std::unique_ptr<ScRangeData>> DataType;
     DataType m_Data;
     IndexDataType maIndexToData;
+    // Use for optimization, true if any of the contained names resolves
+    // as a valid cell address (e.g. 'day1' with 16k columns).
+    mutable bool mHasPossibleAddressConflict : 1;
+    mutable bool mHasPossibleAddressConflictDirty : 1;
+
+    void checkHasPossibleAddressConflict() const;
 
 public:
     /// Map that stores non-managed pointers to ScRangeName instances.
@@ -234,13 +242,11 @@ public:
     void CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, const SCTAB nNewTab,
             const ScDocument& rOldDoc, ScDocument& rNewDoc, const bool bGlobalNamesToLocal ) const;
 
-    SC_DLLPUBLIC const_iterator begin() const;
-    SC_DLLPUBLIC const_iterator end() const;
-    SC_DLLPUBLIC iterator begin();
-    SC_DLLPUBLIC iterator end();
-    SC_DLLPUBLIC size_t size() const;
-    SC_DLLPUBLIC size_t index_size() const;
-    bool empty() const;
+    SC_DLLPUBLIC const_iterator begin() const { return m_Data.begin(); }
+    SC_DLLPUBLIC const_iterator end() const  { return m_Data.end(); }
+    SC_DLLPUBLIC size_t size() const { return m_Data.size(); }
+    SC_DLLPUBLIC size_t index_size() const { return maIndexToData.size(); }
+    bool empty() const { return m_Data.empty(); }
 
     /** Insert object into set.
         @ATTENTION: The underlying ::std::map<std::unique_ptr>::insert(p) takes
@@ -264,9 +270,17 @@ public:
      * iterator's validity.  The caller must make sure that the iterator is
      * valid.
      */
-    void erase(const iterator& itr);
+    void erase(const_iterator itr);
+
     void clear();
     bool operator== (const ScRangeName& r) const;
+
+    bool hasPossibleAddressConflict() const
+    {
+        if( mHasPossibleAddressConflictDirty )
+            checkHasPossibleAddressConflict();
+        return mHasPossibleAddressConflict;
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

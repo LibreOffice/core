@@ -1678,7 +1678,7 @@ Point ScTabView::GetInsertPos() const
     nPosX = o3tl::convert(nPosX, o3tl::Length::twip, o3tl::Length::mm100);
     if ( rDoc.IsNegativePage( nTab ) )
         nPosX = -nPosX;
-    tools::Long nPosY = static_cast<tools::Long>(rDoc.GetRowHeight( 0, nRow-1, nTab));
+    tools::Long nPosY = rDoc.GetRowHeight( 0, nRow-1, nTab);
     nPosY = o3tl::convert(nPosY, o3tl::Length::twip, o3tl::Length::mm100);
     return Point(nPosX,nPosY);
 }

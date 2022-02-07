@@ -93,6 +93,8 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint 
 
 void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
 {
+    if( nStartRow > GetLastDataPos())
+        return;
     sc::SingleColumnSpanSet aSpanSet(GetDoc().GetSheetLimits());
     aSpanSet.scan(*this, nStartRow, nEndRow);
     std::vector<SCROW> aRows;
@@ -158,7 +160,7 @@ void ScColumn::FreeAll()
 {
     maCells.event_handler().stop();
 
-    auto maxRowCount = GetDoc().GetSheetLimits().GetMaxRowCount();
+    auto maxRowCount = GetDoc().GetMaxRowCount();
     // Keep a logical empty range of 0-rDoc.MaxRow() at all times.
     maCells.clear();
     maCells.resize(maxRowCount);
@@ -172,7 +174,7 @@ void ScColumn::FreeAll()
 void ScColumn::FreeNotes()
 {
     maCellNotes.clear();
-    maCellNotes.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCellNotes.resize(GetDoc().GetMaxRowCount());
 }
 
 namespace {
@@ -196,11 +198,11 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
     SCROW nEndRow = nStartRow + nSize - 1;
 
     maBroadcasters.erase(nStartRow, nEndRow);
-    maBroadcasters.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maBroadcasters.resize(GetDoc().GetMaxRowCount());
 
     CellNotesDeleting(nStartRow, nEndRow, false);
     maCellNotes.erase(nStartRow, nEndRow);
-    maCellNotes.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCellNotes.resize(GetDoc().GetMaxRowCount());
 
     // See if we have any cells that would get deleted or shifted by deletion.
     sc::CellStoreType::position_type aPos = maCells.position(nStartRow);
@@ -250,7 +252,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
 
     // Remove the cells.
     maCells.erase(nStartRow, nEndRow);
-    maCells.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCells.resize(GetDoc().GetMaxRowCount());
 
     // Get the position again after the container change.
     aPos = maCells.position(nStartRow);
@@ -265,7 +267,7 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize, std::vector<ScAddress>*
 
     // Shift the text attribute array too (before the broadcast).
     maCellTextAttrs.erase(nStartRow, nEndRow);
-    maCellTextAttrs.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCellTextAttrs.resize(GetDoc().GetMaxRowCount());
 
     CellStorageModified();
 }

@@ -157,7 +157,7 @@ bool ScViewUtil::IsActionShown( const ScChangeAction& rAction,
     }
 
     if ( rSettings.HasRange() )
-        if ( !rSettings.GetTheRangeList().Intersects( rAction.GetBigRange().MakeRange() ) )
+        if ( !rSettings.GetTheRangeList().Intersects( rAction.GetBigRange().MakeRange( rDocument ) ) )
             return false;
 
     if (rSettings.HasDate() && rSettings.GetTheDateMode() != SvxRedlinDateMode::NONE)
@@ -223,8 +223,7 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument& rDoc )
 {
     rMark.MarkToMulti();
 
-    ScRange aMultiArea;
-    rMark.GetMultiMarkArea( aMultiArea );
+    const ScRange& aMultiArea = rMark.GetMultiMarkArea();
     SCCOL nStartCol = aMultiArea.aStart.Col();
     SCROW nStartRow = aMultiArea.aStart.Row();
     SCCOL nEndCol = aMultiArea.aEnd.Col();

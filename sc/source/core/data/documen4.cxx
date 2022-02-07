@@ -968,8 +968,8 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
 
     //TODO: optimize e.g. with iterator?
 
-    sal_uLong nDif = 0;
-    sal_uLong nUsed = 0;
+    sal_uInt64 nDif = 0;
+    sal_uInt64 nUsed = 0;
     for (SCROW nThisRow=0; nThisRow<=nMaxRow; nThisRow++)
     {
         SCROW nOtherRow;
@@ -1004,7 +1004,7 @@ sal_uInt16 ScDocument::ColDifferences( SCCOL nThisCol, SCTAB nThisTab,
 
 void ScDocument::FindOrder( SCCOLROW* pOtherRows, SCCOLROW nThisEndRow, SCCOLROW nOtherEndRow,
                             bool bColumns, ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
-                            SCCOLROW nEndCol, const SCCOLROW* pTranslate, ScProgress* pProgress, sal_uLong nProAdd )
+                            SCCOLROW nEndCol, const SCCOLROW* pTranslate, ScProgress* pProgress, sal_uInt64 nProAdd )
 {
     //  bColumns=true: rows are columns and vice versa
 

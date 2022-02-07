@@ -806,12 +806,6 @@ struct ConventionOOO_A1 : public Convention_A1
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
         bool bForceTab, bool bODF, SingletonDisplay eSingletonDisplay )
     {
-        // For ODF override singleton so earlier releases still can read what
-        // we write now as of 2015-06-26.
-        /* TODO: we may want to change that in future in a few releases. */
-        if (bODF)
-            eSingletonDisplay = SINGLETON_NONE;
-
         if( rRef.IsFlag3D() || bForceTab )
         {
             if (!ValidTab(rAbsRef.Tab()) || rRef.IsTabDeleted())
@@ -861,7 +855,7 @@ struct ConventionOOO_A1 : public Convention_A1
             return SINGLETON_NONE;
 
         // A:A or $A:$A or A:$A or $A:A
-        if (rRef.IsEntireCol())
+        if (rRef.IsEntireCol(rLimits))
             return SINGLETON_COL;
 
         // Same if not in named expression and both rows of entire columns are
@@ -871,7 +865,7 @@ struct ConventionOOO_A1 : public Convention_A1
             return SINGLETON_COL;
 
         // 1:1 or $1:$1 or 1:$1 or $1:1
-        if (rRef.IsEntireRow())
+        if (rRef.IsEntireRow(rLimits))
             return SINGLETON_ROW;
 
         // Same if not in named expression and both columns of entire rows are
@@ -2881,7 +2875,7 @@ Label_MaskStateMachine:
 
 // Convert symbol to token
 
-bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
+bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
 {
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName));
     bool bFound = (iLook != mxSymbols->getHashMap().end());
@@ -3068,7 +3062,7 @@ bool ScCompiler::IsOpCode( const OUString& rName, bool bInArray )
     return bFound;
 }
 
-bool ScCompiler::IsOpCode2( const OUString& rName )
+bool ScCompiler::ParseOpCode2( const OUString& rName )
 {
     bool bFound = false;
     sal_uInt16 i;
@@ -3090,7 +3084,7 @@ static bool lcl_ParenthesisFollows( const sal_Unicode* p )
     return *p == '(';
 }
 
-bool ScCompiler::IsValue( const OUString& rSym )
+bool ScCompiler::ParseValue( const OUString& rSym )
 {
     const sal_Int32 nFormulaLanguage = FormulaGrammar::extractFormulaLanguage( GetGrammar());
     if (nFormulaLanguage == css::sheet::FormulaLanguage::ODFF || nFormulaLanguage == css::sheet::FormulaLanguage::OOXML)
@@ -3178,7 +3172,7 @@ bool ScCompiler::IsValue( const OUString& rSym )
     return true;
 }
 
-bool ScCompiler::IsString()
+bool ScCompiler::ParseString()
 {
     if ( cSymbol[0] != '"' )
         return false;
@@ -3193,20 +3187,20 @@ bool ScCompiler::IsString()
     return true;
 }
 
-bool ScCompiler::IsPredetectedErrRefReference( const OUString& rName, const OUString* pErrRef )
+bool ScCompiler::ParsePredetectedErrRefReference( const OUString& rName, const OUString* pErrRef )
 {
     switch (mnPredetectedReference)
     {
         case 1:
-            return IsSingleReference( rName, pErrRef);
+            return ParseSingleReference( rName, pErrRef);
         case 2:
-            return IsDoubleReference( rName, pErrRef);
+            return ParseDoubleReference( rName, pErrRef);
         default:
             return false;
     }
 }
 
-bool ScCompiler::IsPredetectedReference( const OUString& rName )
+bool ScCompiler::ParsePredetectedReference( const OUString& rName )
 {
     // Speedup documents with lots of broken references, e.g. sheet deleted.
     // It could also be a broken invalidated reference that contains #REF!
@@ -3228,9 +3222,9 @@ bool ScCompiler::IsPredetectedReference( const OUString& rName )
             // Per ODFF the correct string for a reference error is just #REF!,
             // so pass it on.
             if (rName.getLength() == 5)
-                return IsErrorConstant( rName);
+                return ParseErrorConstant( rName);
             // #REF!.AB42 or #REF!42 or #REF!#REF!
-            return IsPredetectedErrRefReference( rName, &aErrRef);
+            return ParsePredetectedErrRefReference( rName, &aErrRef);
         }
         sal_Unicode c = rName[nPos-1];      // before #REF!
         if ('$' == c)
@@ -3238,7 +3232,7 @@ bool ScCompiler::IsPredetectedReference( const OUString& rName )
             if (nPos == 1)
             {
                 // $#REF!.AB42 or $#REF!42 or $#REF!#REF!
-                return IsPredetectedErrRefReference( rName, &aErrRef);
+                return ParsePredetectedErrRefReference( rName, &aErrRef);
             }
             c = rName[nPos-2];              // before $#REF!
         }
@@ -3249,7 +3243,7 @@ bool ScCompiler::IsPredetectedReference( const OUString& rName )
                 if ('$' == c2 || '#' == c2 || ('0' <= c2 && c2 <= '9'))
                 {
                     // sheet.#REF!42 or sheet.#REF!#REF!
-                    return IsPredetectedErrRefReference( rName, &aErrRef);
+                    return ParsePredetectedErrRefReference( rName, &aErrRef);
                 }
                 break;
             case ':':
@@ -3258,7 +3252,7 @@ bool ScCompiler::IsPredetectedReference( const OUString& rName )
                          ('0' <= c2 && c2 <= '9')))
                 {
                     // :#REF!.AB42 or :#REF!42 or :#REF!#REF!
-                    return IsPredetectedErrRefReference( rName, &aErrRef);
+                    return ParsePredetectedErrRefReference( rName, &aErrRef);
                 }
                 break;
             default:
@@ -3266,21 +3260,21 @@ bool ScCompiler::IsPredetectedReference( const OUString& rName )
                         ((mnPredetectedReference > 1 && ':' == c2) || 0 == c2))
                 {
                     // AB#REF!: or AB#REF!
-                    return IsPredetectedErrRefReference( rName, &aErrRef);
+                    return ParsePredetectedErrRefReference( rName, &aErrRef);
                 }
         }
     }
     switch (mnPredetectedReference)
     {
         case 1:
-            return IsSingleReference( rName);
+            return ParseSingleReference( rName);
         case 2:
-            return IsDoubleReference( rName);
+            return ParseDoubleReference( rName);
     }
     return false;
 }
 
-bool ScCompiler::IsDoubleReference( const OUString& rName, const OUString* pErrRef )
+bool ScCompiler::ParseDoubleReference( const OUString& rName, const OUString* pErrRef )
 {
     ScRange aRange( aPos, aPos );
     const ScAddress::Details aDetails( pConv->meConv, aPos );
@@ -3320,7 +3314,7 @@ bool ScCompiler::IsDoubleReference( const OUString& rName, const OUString* pErrR
     return ( nFlags & ScRefFlags::VALID ) != ScRefFlags::ZERO;
 }
 
-bool ScCompiler::IsSingleReference( const OUString& rName, const OUString* pErrRef )
+bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pErrRef )
 {
     mnCurrentSheetEndPos = 0;
     mnCurrentSheetTab = -1;
@@ -3349,6 +3343,21 @@ bool ScCompiler::IsSingleReference( const OUString& rName, const OUString* pErrR
                 mnCurrentSheetTab = aAddr.Tab();
             }
             return false;
+        }
+
+        if( HasPossibleNamedRangeConflict( aAddr.Tab()))
+        {
+            // A named range named e.g. 'num1' is valid with 1k columns, but would become a reference
+            // when the document is opened later with 16k columns. Resolve the conflict by not
+            // considering it a reference.
+            OUString aUpper;
+            bool bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, rName );
+            if (bAsciiUpper || mbCharClassesDiffer)
+                aUpper = ScGlobal::getCharClass().uppercase( rName );
+            mnCurrentSheetTab = aAddr.Tab(); // temporarily set for ParseNamedRange()
+            if(ParseNamedRange( aUpper, true )) // only check
+                return false;
+            mnCurrentSheetTab = -1;
         }
 
         ScSingleRefData aRef;
@@ -3385,11 +3394,11 @@ bool ScCompiler::IsSingleReference( const OUString& rName, const OUString* pErrR
     return ( nFlags & ScRefFlags::VALID ) != ScRefFlags::ZERO;
 }
 
-bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
+bool ScCompiler::ParseReference( const OUString& rName, const OUString* pErrRef )
 {
-    // Has to be called before IsValue
+    // Has to be called before ParseValue
 
-    // A later IsNamedRange() relies on these, being set in IsSingleReference()
+    // A later ParseNamedRange() relies on these, being set in ParseSingleReference()
     // if so, reset in all cases.
     mnCurrentSheetEndPos = 0;
     mnCurrentSheetTab = -1;
@@ -3449,7 +3458,7 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
         } while(false);
     }
 
-    if (IsSingleReference( rName, pErrRef))
+    if (ParseSingleReference( rName, pErrRef))
         return true;
 
     // Though the range operator is handled explicitly, when encountering
@@ -3457,7 +3466,7 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
     // doesn't pass as single cell reference.
     if (mnRangeOpPosInSymbol > 0)   // ":foo" would be nonsense
     {
-        if (IsDoubleReference( rName, pErrRef))
+        if (ParseDoubleReference( rName, pErrRef))
             return true;
         // Now try with a symbol up to the range operator, rewind source
         // position.
@@ -3487,7 +3496,7 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
                 [[fallthrough]];
             case FormulaGrammar::CONV_XL_R1C1:
                 // C2 or C[1] are valid entire column references.
-                if (IsDoubleReference( rName, pErrRef))
+                if (ParseDoubleReference( rName, pErrRef))
                     return true;
                 break;
             default:
@@ -3497,7 +3506,7 @@ bool ScCompiler::IsReference( const OUString& rName, const OUString* pErrRef )
     return false;
 }
 
-bool ScCompiler::IsMacro( const OUString& rName )
+bool ScCompiler::ParseMacro( const OUString& rName )
 {
 #if !HAVE_FEATURE_SCRIPTING
     (void) rName;
@@ -3514,7 +3523,7 @@ bool ScCompiler::IsMacro( const OUString& rName )
     vcl::SolarMutexTryAndBuyGuard g;
     if (!g.isAcquired())
     {
-        SAL_WARN( "sc.core", "ScCompiler::IsMacro - SolarMutex would deadlock, not obtaining Basic");
+        SAL_WARN( "sc.core", "ScCompiler::ParseMacro - SolarMutex would deadlock, not obtaining Basic");
         return false;   // bad luck
     }
 
@@ -3581,15 +3590,27 @@ const ScRangeData* ScCompiler::GetRangeData( SCTAB& rSheet, const OUString& rUpp
     return pData;
 }
 
-bool ScCompiler::IsNamedRange( const OUString& rUpperName )
+bool ScCompiler::HasPossibleNamedRangeConflict( SCTAB nTab ) const
 {
-    // IsNamedRange is called only from NextNewToken, with an upper-case string
+    const ScRangeName* pRangeName = rDoc.GetRangeName();
+    if (pRangeName && pRangeName->hasPossibleAddressConflict())
+        return true;
+    pRangeName = rDoc.GetRangeName(nTab);
+    if (pRangeName && pRangeName->hasPossibleAddressConflict())
+        return true;
+    return false;
+}
+
+bool ScCompiler::ParseNamedRange( const OUString& rUpperName, bool onlyCheck )
+{
+    // ParseNamedRange is called only from NextNewToken, with an upper-case string
 
     SCTAB nSheet = -1;
     const ScRangeData* pData = GetRangeData( nSheet, rUpperName);
     if (pData)
     {
-        maRawToken.SetName( nSheet, pData->GetIndex());
+        if (!onlyCheck)
+            maRawToken.SetName( nSheet, pData->GetIndex());
         return true;
     }
 
@@ -3603,7 +3624,8 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
             pData = pRangeName->findByUpperName(aName);
             if (pData)
             {
-                maRawToken.SetName( mnCurrentSheetTab, pData->GetIndex());
+                if (!onlyCheck)
+                    maRawToken.SetName( mnCurrentSheetTab, pData->GetIndex());
                 return true;
             }
         }
@@ -3612,7 +3634,7 @@ bool ScCompiler::IsNamedRange( const OUString& rUpperName )
     return false;
 }
 
-bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange )
+bool ScCompiler::ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange )
 {
     /* FIXME: This code currently (2008-12-02T15:41+0100 in CWS mooxlsc)
      * correctly parses external named references in OOo, as required per RFE
@@ -3650,7 +3672,7 @@ bool ScCompiler::IsExternalNamedRange( const OUString& rSymbol, bool& rbInvalidE
     return true;
 }
 
-bool ScCompiler::IsDBRange( const OUString& rName )
+bool ScCompiler::ParseDBRange( const OUString& rName )
 {
     ScDBCollection::NamedDBs& rDBs = rDoc.GetDBCollection()->getNamedDBs();
     const ScDBData* p = rDBs.findByUpperName(rName);
@@ -3662,7 +3684,7 @@ bool ScCompiler::IsDBRange( const OUString& rName )
     return true;
 }
 
-bool ScCompiler::IsColRowName( const OUString& rName )
+bool ScCompiler::ParseColRowName( const OUString& rName )
 {
     bool bInList = false;
     bool bFound = false;
@@ -3917,7 +3939,7 @@ bool ScCompiler::IsColRowName( const OUString& rName )
         return false;
 }
 
-bool ScCompiler::IsBoolean( const OUString& rName )
+bool ScCompiler::ParseBoolean( const OUString& rName )
 {
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName ) );
     if( iLook != mxSymbols->getHashMap().end() &&
@@ -3931,7 +3953,7 @@ bool ScCompiler::IsBoolean( const OUString& rName )
         return false;
 }
 
-bool ScCompiler::IsErrorConstant( const OUString& rName ) const
+bool ScCompiler::ParseErrorConstant( const OUString& rName )
 {
     FormulaError nError = GetErrorConstant( rName);
     if (nError != FormulaError::NONE)
@@ -3943,7 +3965,7 @@ bool ScCompiler::IsErrorConstant( const OUString& rName ) const
         return false;
 }
 
-bool ScCompiler::IsTableRefItem( const OUString& rName ) const
+bool ScCompiler::ParseTableRefItem( const OUString& rName )
 {
     bool bItem = false;
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( rName));
@@ -4015,7 +4037,7 @@ OUString unescapeTableRefColumnSpecifier( const OUString& rStr )
 }
 }
 
-bool ScCompiler::IsTableRefColumn( const OUString& rName ) const
+bool ScCompiler::ParseTableRefColumn( const OUString& rName )
 {
     // Only called when there actually is a current TableRef, hence
     // accessing maTableRefs.back() is safe.
@@ -4369,7 +4391,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     {
         OUString aStr( cSymbol);
         bool bInvalidExternalNameRange;
-        if (!IsPredetectedReference( aStr) && !IsExternalNamedRange( aStr, bInvalidExternalNameRange ))
+        if (!ParsePredetectedReference( aStr) && !ParseExternalNamedRange( aStr, bInvalidExternalNameRange ))
         {
             svl::SharedString aSS = rDoc.GetSharedStringPool().intern(aStr);
             maRawToken.SetString(aSS.getData(), aSS.getDataIgnoreCase());
@@ -4393,7 +4415,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
         return false;
     }
 
-    if( IsString() )
+    if( ParseString() )
         return true;
 
     bool bMayBeFuncName;
@@ -4424,7 +4446,7 @@ bool ScCompiler::NextNewToken( bool bInArray )
     if (bAsciiNonAlnum && cSymbol[1] == 0 && (eLastOp != ocTableRefOpen || cSymbol[0] == '[' || cSymbol[0] == ']'))
     {
         // Shortcut for operators and separators that need no further checks or upper.
-        if (IsOpCode( OUString( cSymbol), bInArray ))
+        if (ParseOpCode( OUString( cSymbol), bInArray ))
             return true;
     }
 
@@ -4437,8 +4459,8 @@ bool ScCompiler::NextNewToken( bool bInArray )
         bMayBeFuncName = ( *p == '(' );
     }
 
-    // Italian ARCTAN.2 resulted in #REF! => IsOpcode() before
-    // IsReference().
+    // Italian ARCTAN.2 resulted in #REF! => ParseOpcode() before
+    // ParseReference().
 
     OUString aUpper;
 
@@ -4451,7 +4473,7 @@ Label_Rewind:
         // Check for TableRef column specifier first, it may be anything.
         if (cSymbol[0] != '#' && !maTableRefs.empty() && maTableRefs.back().mnLevel)
         {
-            if (IsTableRefColumn( aOrg ))
+            if (ParseTableRefColumn( aOrg ))
                 return true;
             // Do not attempt to resolve as any other name.
             aUpper = aOrg;  // for ocBad
@@ -4470,12 +4492,12 @@ Label_Rewind:
                 // Check for TableRef item specifiers first.
                 if (!maTableRefs.empty() && maTableRefs.back().mnLevel == 2)
                 {
-                    if (IsTableRefItem( aUpper ))
+                    if (ParseTableRefItem( aUpper ))
                         return true;
                 }
 
                 // This can be either an error constant ...
-                if (IsErrorConstant( aUpper))
+                if (ParseErrorConstant( aUpper))
                     return true;
 
                 // ... or some invalidated reference starting with #REF!
@@ -4483,7 +4505,7 @@ Label_Rewind:
 
                 break;  // do; create ocBad token or set error.
             }
-            if (IsOpCode( aUpper, bInArray ))
+            if (ParseOpCode( aUpper, bInArray ))
                 return true;
         }
 
@@ -4491,14 +4513,14 @@ Label_Rewind:
         {
             if (aUpper.isEmpty())
                 bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, aOrg);
-            if (IsOpCode( aUpper, bInArray ))
+            if (ParseOpCode( aUpper, bInArray ))
                 return true;
         }
 
         // Column 'DM' ("Deutsche Mark", German currency) couldn't be
-        // referred => IsReference() before IsValue().
+        // referred => ParseReference() before ParseValue().
         // Preserve case of file names in external references.
-        if (IsReference( aOrg ))
+        if (ParseReference( aOrg ))
         {
             if (mbRewind)   // Range operator, but no direct reference.
                 continue;   // do; up to range operator.
@@ -4516,12 +4538,12 @@ Label_Rewind:
         if (aUpper.isEmpty())
             bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, aOrg);
 
-        // IsBoolean() before IsValue() to catch inline bools without the kludge
+        // ParseBoolean() before ParseValue() to catch inline bools without the kludge
         //    for inline arrays.
-        if (bAllowBooleans && IsBoolean( aUpper ))
+        if (bAllowBooleans && ParseBoolean( aUpper ))
             return true;
 
-        if (IsValue( aUpper ))
+        if (ParseValue( aUpper ))
             return true;
 
         // User defined names and such do need i18n upper also in ODF.
@@ -4534,7 +4556,7 @@ Label_Rewind:
             aUpper = ScGlobal::getCharClass().uppercase( aOrg );
         }
 
-        if (IsNamedRange( aUpper ))
+        if (ParseNamedRange( aUpper ))
             return true;
 
         // Compiling a named expression during collecting them in import shall
@@ -4547,7 +4569,7 @@ Label_Rewind:
 
         // Preserve case of file names in external references.
         bool bInvalidExternalNameRange;
-        if (IsExternalNamedRange( aOrg, bInvalidExternalNameRange ))
+        if (ParseExternalNamedRange( aOrg, bInvalidExternalNameRange ))
             return true;
         // Preserve case of file names in external references even when range
         // is not valid and previous check failed tdf#89330
@@ -4559,15 +4581,15 @@ Label_Rewind:
             maRawToken.NewOpCode( ocBad );
             return true;
         }
-        if (IsDBRange( aUpper ))
+        if (ParseDBRange( aUpper ))
             return true;
         // If followed by '(' (with or without space inbetween) it can not be a
         // column/row label. Prevent arbitrary content detection.
-        if (!bMayBeFuncName && IsColRowName( aUpper ))
+        if (!bMayBeFuncName && ParseColRowName( aUpper ))
             return true;
-        if (bMayBeFuncName && IsMacro( aUpper ))
+        if (bMayBeFuncName && ParseMacro( aUpper ))
             return true;
-        if (bMayBeFuncName && IsOpCode2( aUpper ))
+        if (bMayBeFuncName && ParseOpCode2( aUpper ))
             return true;
 
     } while (mbRewind);
@@ -4576,7 +4598,7 @@ Label_Rewind:
     // #REF! (but is not equal to), which we also wrote to ODFF between 2013
     // and 2016 until 5.1.4
     OUString aErrRef( mxSymbols->getSymbol( ocErrRef));
-    if (aUpper.indexOf( aErrRef) >= 0 && IsReference( aUpper, &aErrRef))
+    if (aUpper.indexOf( aErrRef) >= 0 && ParseReference( aUpper, &aErrRef))
     {
         if (mbRewind)
             goto Label_Rewind;

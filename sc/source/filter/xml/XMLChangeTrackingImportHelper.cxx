@@ -234,22 +234,22 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
         case SC_CAT_INSERT_COLS:
         case SC_CAT_DELETE_COLS:
         {
-            pCurrentAction->aBigRange.Set(nPosition, nInt32Min, nTable,
-                                        nPosition + nCount - 1, nInt32Max, nTable);
+            pCurrentAction->aBigRange.Set(nPosition, ScBigRange::nRangeMin, nTable,
+                                        nPosition + nCount - 1, ScBigRange::nRangeMax, nTable);
         }
         break;
         case SC_CAT_INSERT_ROWS:
         case SC_CAT_DELETE_ROWS:
         {
-            pCurrentAction->aBigRange.Set(nInt32Min, nPosition, nTable,
-                                        nInt32Max, nPosition + nCount - 1, nTable);
+            pCurrentAction->aBigRange.Set(ScBigRange::nRangeMin, nPosition, nTable,
+                                        ScBigRange::nRangeMax, nPosition + nCount - 1, nTable);
         }
         break;
         case SC_CAT_INSERT_TABS:
         case SC_CAT_DELETE_TABS:
         {
-            pCurrentAction->aBigRange.Set(nInt32Min, nInt32Min, nPosition,
-                                        nInt32Max, nInt32Max, nPosition + nCount - 1);
+            pCurrentAction->aBigRange.Set(ScBigRange::nRangeMin, ScBigRange::nRangeMin, nPosition,
+                                        ScBigRange::nRangeMax, ScBigRange::nRangeMax, nPosition + nCount - 1);
         }
         break;
         default:
@@ -650,7 +650,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
     if (!pChangeActionContent->IsTopContent() || pChangeActionContent->IsDeletedIn())
         return;
 
-    sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
+    sal_Int64 nCol, nRow, nTab, nCol2, nRow2, nTab2;
     pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
     if ((nCol >= 0) && (nCol <= rDoc.MaxCol()) &&
         (nRow >= 0) && (nRow <= rDoc.MaxRow()) &&

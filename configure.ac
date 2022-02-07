@@ -6994,6 +6994,28 @@ AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT2,$SAL_TYPES_ALIGNMENT2)
 AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT4,$SAL_TYPES_ALIGNMENT4)
 AC_DEFINE_UNQUOTED(SAL_TYPES_ALIGNMENT8,$SAL_TYPES_ALIGNMENT8)
 
+dnl Calc jumbo sheets (1m+ rows) depend on 64 bit tools::Long .
+AC_MSG_CHECKING([whether jumbo sheets are supported])
+if test "$_os" != "WINNT"; then
+    if test $SAL_TYPES_SIZEOFLONG -gt 4; then
+        AC_MSG_RESULT([yes])
+        ENABLE_JUMBO_SHEETS=TRUE
+        AC_DEFINE(HAVE_FEATURE_JUMBO_SHEETS)
+    else
+        AC_MSG_RESULT([no])
+    fi
+else
+    if test $WIN_HOST_BITS -gt 32; then
+        # 64bit windows is special-cased for tools::Long because long is 32bit
+        AC_MSG_RESULT([yes])
+        ENABLE_JUMBO_SHEETS=TRUE
+        AC_DEFINE(HAVE_FEATURE_JUMBO_SHEETS)
+    else
+        AC_MSG_RESULT([no])
+    fi
+fi
+AC_SUBST(ENABLE_JUMBO_SHEETS)
+
 dnl ===================================================================
 dnl Check whether to enable runtime optimizations
 dnl ===================================================================

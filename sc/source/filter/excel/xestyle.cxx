@@ -2027,12 +2027,6 @@ XclExpXFId::XclExpXFId() :
 {
 }
 
-XclExpXFId::XclExpXFId( sal_uInt32 nXFId ) :
-    mnXFId( nXFId ),
-    mnXFIndex( EXC_XF_DEFAULTCELL )
-{
-}
-
 void XclExpXFId::ConvertXFIndex( const XclExpRoot& rRoot )
 {
     mnXFIndex = rRoot.GetXFBuffer().GetXFIndex( mnXFId );

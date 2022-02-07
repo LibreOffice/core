@@ -497,6 +497,21 @@ ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, co
     return IsNameValidType::NAME_VALID;
 }
 
+bool ScRangeData::HasPossibleAddressConflict() const
+{
+    // Similar to part of IsNameValid(), but only check if the name is a valid address.
+    ScAddress aAddr;
+    for (int nConv = FormulaGrammar::CONV_UNSPECIFIED; ++nConv < FormulaGrammar::CONV_LAST; )
+    {
+        ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
+        // Don't check Parse on VALID, any partial only VALID may result in
+        // #REF! during compile later!
+        if(aAddr.Parse(aUpperName, rDoc, details) != ScRefFlags::ZERO)
+            return true;
+    }
+    return false;
+}
+
 FormulaError ScRangeData::GetErrCode() const
 {
     return pCode ? pCode->GetCodeError() : FormulaError::NONE;
@@ -654,6 +669,8 @@ public:
 ScRangeName::ScRangeName() {}
 
 ScRangeName::ScRangeName(const ScRangeName& r)
+    : mHasPossibleAddressConflict( r.mHasPossibleAddressConflict )
+    , mHasPossibleAddressConflictDirty( r.mHasPossibleAddressConflictDirty )
 {
     for (auto const& it : r.m_Data)
     {
@@ -778,41 +795,6 @@ void ScRangeName::CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, con
     }
 }
 
-ScRangeName::const_iterator ScRangeName::begin() const
-{
-    return m_Data.begin();
-}
-
-ScRangeName::const_iterator ScRangeName::end() const
-{
-    return m_Data.end();
-}
-
-ScRangeName::iterator ScRangeName::begin()
-{
-    return m_Data.begin();
-}
-
-ScRangeName::iterator ScRangeName::end()
-{
-    return m_Data.end();
-}
-
-size_t ScRangeName::size() const
-{
-    return m_Data.size();
-}
-
-size_t ScRangeName::index_size() const
-{
-    return maIndexToData.size();
-}
-
-bool ScRangeName::empty() const
-{
-    return m_Data.empty();
-}
-
 bool ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
 {
     if (!p)
@@ -852,6 +834,7 @@ bool ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
         if (nPos >= maIndexToData.size())
             maIndexToData.resize(nPos+1, nullptr);
         maIndexToData[nPos] = p;
+        mHasPossibleAddressConflictDirty = true;
     }
     return r.second;
 }
@@ -863,24 +846,42 @@ void ScRangeName::erase(const ScRangeData& r)
 
 void ScRangeName::erase(const OUString& rName)
 {
-    DataType::iterator itr = m_Data.find(rName);
+    DataType::const_iterator itr = m_Data.find(rName);
     if (itr != m_Data.end())
         erase(itr);
 }
 
-void ScRangeName::erase(const iterator& itr)
+void ScRangeName::erase(const_iterator itr)
 {
     sal_uInt16 nIndex = itr->second->GetIndex();
     m_Data.erase(itr);
     OSL_ENSURE( 0 < nIndex && nIndex <= maIndexToData.size(), "ScRangeName::erase: bad index");
     if (0 < nIndex && nIndex <= maIndexToData.size())
         maIndexToData[nIndex-1] = nullptr;
+    if(mHasPossibleAddressConflict)
+        mHasPossibleAddressConflictDirty = true;
 }
 
 void ScRangeName::clear()
 {
     m_Data.clear();
     maIndexToData.clear();
+    mHasPossibleAddressConflict = false;
+    mHasPossibleAddressConflictDirty = false;
+}
+
+void ScRangeName::checkHasPossibleAddressConflict() const
+{
+    mHasPossibleAddressConflict = false;
+    mHasPossibleAddressConflictDirty = false;
+    for (auto const& itr : m_Data)
+    {
+        if( itr.second->HasPossibleAddressConflict())
+        {
+            mHasPossibleAddressConflict = true;
+            return;
+        }
+    }
 }
 
 bool ScRangeName::operator== (const ScRangeName& r) const

@@ -1112,7 +1112,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
 {
-    ScModelObj* pModelObj = createDoc("tdf131455.ods");
+    // Note that tdf#131455 and tdf#126904 were actually incorrect,
+    // but keep the test with a fixed version of the document.
+    ScModelObj* pModelObj = createDoc("tdf131455-fixed.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1159,37 +1161,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetTabNo());
     lcl_AssertCurrentCursorPosition(13, 4);
-
-    // Cursor can't move forward to the right
-    // Without the fix in place, this test would have failed with
-    // - Expected: 13
-    // - Actual  : 64
-    for (size_t i = 0; i < 5; ++i)
-    {
-        dispatchCommand(mxComponent, ".uno:GoRight", {});
-        lcl_AssertCurrentCursorPosition(13, 4);
-    }
-}
-
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
-{
-    ScModelObj* pModelObj = createDoc("tdf126904.ods");
-    ScDocument* pDoc = pModelObj->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-
-    lcl_AssertCurrentCursorPosition(0, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(1, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(4, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(5, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(8, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(9, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(12, 4);
 
     //Cursor can't move forward to the right
     for (size_t i = 0; i < 5; ++i)
@@ -1962,6 +1933,47 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 
     ScDBCollection* pDBs = pDoc->GetDBCollection();
     CPPUNIT_ASSERT(pDBs->empty());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // If this check fails, this entire test needs adjusting.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(64), pDoc->GetAllocatedColumnsCount(0));
+
+    // Except for first 10 cells make the entire first row bold.
+    goToCell("K1:" + pDoc->MaxColAsString() + "1");
+    dispatchCommand(mxComponent, ".uno:Bold", {});
+
+    // That shouldn't need allocating more columns, just changing the default attribute.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(64), pDoc->GetAllocatedColumnsCount(0));
+    vcl::Font aFont;
+    pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+
+    goToCell("A2:CV2"); // first 100 cells in row 2
+    dispatchCommand(mxComponent, ".uno:Bold", {});
+    // These need to be explicitly allocated.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
+    pDoc->GetPattern(99, 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+    pDoc->GetPattern(100, 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
+
+    goToCell("CW3:" + pDoc->MaxColAsString() + "3"); // All but first 100 cells in row 3.
+    dispatchCommand(mxComponent, ".uno:Bold", {});
+    // First 100 columns need to be allocated to not be bold, the rest should be handled
+    // by the default attribute.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(100), pDoc->GetAllocatedColumnsCount(0));
+    pDoc->GetPattern(99, 2, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should not be bold", WEIGHT_NORMAL, aFont.GetWeight());
+    pDoc->GetPattern(100, 2, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

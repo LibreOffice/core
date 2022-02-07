@@ -2996,12 +2996,14 @@ void ScTable::GetFilteredFilterEntries(
 
 bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings)
 {
+    if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
+        return false;
     return aCol[nCol].GetDataEntries( nRow, rStrings);
 }
 
-sal_uLong ScTable::GetCellCount() const
+sal_uInt64 ScTable::GetCellCount() const
 {
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
 
     for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
         nCellCount += aCol[nCol].GetCellCount();
@@ -3009,9 +3011,9 @@ sal_uLong ScTable::GetCellCount() const
     return nCellCount;
 }
 
-sal_uLong ScTable::GetWeightedCount() const
+sal_uInt64 ScTable::GetWeightedCount() const
 {
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
 
     for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
         nCellCount += aCol[nCol].GetWeightedCount();
@@ -3019,9 +3021,9 @@ sal_uLong ScTable::GetWeightedCount() const
     return nCellCount;
 }
 
-sal_uLong ScTable::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
+sal_uInt64 ScTable::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
 {
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
 
     for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
         nCellCount += aCol[nCol].GetWeightedCount(nStartRow, nEndRow);
@@ -3029,9 +3031,9 @@ sal_uLong ScTable::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
     return nCellCount;
 }
 
-sal_uLong ScTable::GetCodeCount() const
+sal_uInt64 ScTable::GetCodeCount() const
 {
-    sal_uLong nCodeCount = 0;
+    sal_uInt64 nCodeCount = 0;
 
     for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
         if ( aCol[nCol].GetCellCount() )
@@ -3063,9 +3065,9 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& 
     ScRangeList aRanges = rMark.GetMarkedRangesForTab( nTab );
     ScRange aMarkArea( ScAddress::UNINITIALIZED );
     if (rMark.IsMultiMarked())
-        rMark.GetMultiMarkArea( aMarkArea );
+        aMarkArea = rMark.GetMultiMarkArea();
     else if (rMark.IsMarked())
-        rMark.GetMarkArea( aMarkArea );
+        aMarkArea = rMark.GetMarkArea();
     else
     {
         assert(!"ScTable::UpdateSelectionFunction - called without anything marked");

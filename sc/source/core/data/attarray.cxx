@@ -1304,8 +1304,7 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     }
     if ( nMask & HasAttrFlags::Conditional )
     {
-        bool bContainsCondFormat = pPattern->GetItem( ATTR_CONDITIONAL ).GetCondFormatData().empty();
-        if ( bContainsCondFormat )
+        if ( !pPattern->GetItem( ATTR_CONDITIONAL ).GetCondFormatData().empty())
             bFound = true;
     }
     if ( nMask & HasAttrFlags::Protected )
@@ -1419,6 +1418,27 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
     }
 
     return bFound;
+}
+
+bool ScAttrArray::HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
+{
+    if (mvData.empty())
+    {
+        if( nStartRow )
+            *nStartRow = 0;
+        if( nEndRow )
+            *nEndRow = rDocument.MaxRow();
+        return HasAttrib_Impl(rDocument.GetDefPattern(), nMask, 0, rDocument.MaxRow(), 0);
+    }
+
+    SCSIZE nIndex;
+    Search( nRow, nIndex );
+    if( nStartRow )
+        *nStartRow = nIndex > 0 ? mvData[nIndex-1].nEndRow+1 : 0;
+    if( nEndRow )
+        *nEndRow = mvData[nIndex].nEndRow;
+    const ScPatternAttr* pPattern = mvData[nIndex].pPattern;
+    return HasAttrib_Impl(pPattern, nMask, nRow, nRow, nIndex);
 }
 
 bool ScAttrArray::IsMerged( SCROW nRow ) const
@@ -1725,13 +1745,15 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         sal_uInt16 nOldValue = rOldSet.Get( ATTR_INDENT ).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659
-        tools::Long nColWidth = static_cast<tools::Long>(rDocument.GetColWidth(nCol,nTab));
+        tools::Long nColWidth = static_cast<tools::Long>(
+            rDocument.GetColWidth(nCol == -1 ? rDocument.MaxCol() : nCol,nTab));
         if ( bIncrement )
         {
             if ( nNewValue < nColWidth-SC_INDENT_STEP )
             {
                 nNewValue += SC_INDENT_STEP;
-                if ( nNewValue > nColWidth-SC_INDENT_STEP ) nNewValue = nColWidth-SC_INDENT_STEP;
+                if ( nNewValue > nColWidth-SC_INDENT_STEP )
+                    nNewValue = nColWidth-SC_INDENT_STEP;
             }
         }
         else

@@ -32,8 +32,6 @@ class ExcelToSc;
 
 class XclImpColRowSettings;
 class XclImpAutoFilterBuffer;
-class ScRangeListTabs;
-
 class XclExpChTrTabId;
 class XclExpUserBViewList;
 
@@ -53,8 +51,6 @@ struct RootData     // -> incarnation in each case in the ImportExcel object!
 
     // Biff8
     std::unique_ptr<XclImpAutoFilterBuffer> pAutoFilterBuffer;      // ranges for autofilter and advanced filter
-    std::unique_ptr<ScRangeListTabs>        pPrintRanges;
-    std::unique_ptr<ScRangeListTabs>        pPrintTitles;
 
     // extensions for export
     XclExpChTrTabId*        pTabId;             // pointer to rec list, do not destroy

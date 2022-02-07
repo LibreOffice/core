@@ -69,8 +69,10 @@ const SCROW       MAXROW         = MAXROWCOUNT - 1;
 const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
-const SCROW       MAXROW_JUMBO   = 16 * 1000 * 1000 - 1;
-const SCCOL       MAXCOL_JUMBO   = 16384 - 1;
+const SCROW       MAXROWCOUNT_JUMBO = 16 * 1024 * 1024;
+const SCCOL       MAXCOLCOUNT_JUMBO = 16384;
+const SCROW       MAXROW_JUMBO   = MAXROWCOUNT_JUMBO - 1;
+const SCCOL       MAXCOL_JUMBO   = MAXCOLCOUNT_JUMBO - 1;
 // Maximum tiled rendering values
 const SCROW       MAXTILEDROW    = 500000;
 // Limit the initial tab count to prevent users to set the count too high,
@@ -78,6 +80,11 @@ const SCROW       MAXTILEDROW    = 500000;
 // available system memory.
 const SCTAB       MAXINITTAB = 1024;
 const SCTAB       MININITTAB = 1;
+
+inline constexpr OUStringLiteral MAXROW_STRING(u"1048575");
+inline constexpr OUStringLiteral MAXCOL_STRING(u"AMJ");
+inline constexpr OUStringLiteral MAXROW_JUMBO_STRING(u"16777215");
+inline constexpr OUStringLiteral MAXCOL_JUMBO_STRING(u"XFD");
 
 // Special values
 const SCTAB SC_TAB_APPEND     = SCTAB_MAX;
@@ -346,7 +353,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     [[nodiscard]] SC_DLLPUBLIC bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
-            ScAddress& rErrorPos, const ScDocument* pDocument = nullptr );
+            ScAddress& rErrorPos, const ScDocument& rDoc );
 
     inline bool operator==( const ScAddress& rAddress ) const;
     inline bool operator!=( const ScAddress& rAddress ) const;
@@ -487,7 +494,7 @@ struct ScAddressHashFunctor
     }
 };
 
-[[nodiscard]] inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol, SCROW nMaxRow )
 {
     return ValidCol(rAddress.Col(), nMaxCol) && ValidRow(rAddress.Row(), nMaxRow) && ValidTab(rAddress.Tab());
 }
@@ -630,7 +637,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     [[nodiscard]] bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
-            ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
+            ScRange& rErrorRange, const ScDocument& rDoc );
 
     /** Same as Move() but with sticky end col/row anchors. */
     [[nodiscard]] bool MoveSticky( const ScDocument& rDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
@@ -645,9 +652,9 @@ public:
     ScRange Intersection( const ScRange& rOther ) const;
 
     /// If maximum end column should not be adapted during reference update.
-    inline bool IsEndColSticky() const;
+    bool IsEndColSticky( const ScDocument& rDoc ) const;
     /// If maximum end row should not be adapted during reference update.
-    inline bool IsEndRowSticky() const;
+    bool IsEndRowSticky( const ScDocument& rDoc ) const;
 
     /** Increment or decrement end column unless sticky or until it becomes
         sticky. Checks if the range encompasses at least two columns so should
@@ -694,18 +701,6 @@ inline void ScRange::GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
 {
     aStart.GetVars( nCol1, nRow1, nTab1 );
     aEnd.GetVars( nCol2, nRow2, nTab2 );
-}
-
-inline bool ScRange::IsEndColSticky() const
-{
-    // Only in an actual column range, i.e. not if both columns are MAXCOL.
-    return aEnd.Col() == MAXCOL && aStart.Col() < aEnd.Col();
-}
-
-inline bool ScRange::IsEndRowSticky() const
-{
-    // Only in an actual row range, i.e. not if both rows are MAXROW.
-    return aEnd.Row() == MAXROW && aStart.Row() < aEnd.Row();
 }
 
 inline bool ScRange::operator==( const ScRange& rRange ) const
@@ -789,7 +784,7 @@ inline size_t ScRange::hashStartColumn() const
 #endif
 }
 
-[[nodiscard]] inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol, SCROW nMaxRow )
 {
     return ValidAddress(rRange.aStart, nMaxCol, nMaxRow) && ValidAddress(rRange.aEnd, nMaxCol, nMaxRow);
 }

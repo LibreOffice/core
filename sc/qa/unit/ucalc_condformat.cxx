@@ -229,7 +229,7 @@ void TestCondformat::testCondFormatINSDEL()
     auto pFormatTmp = pFormat.get();
     pList->InsertNew(std::move(pFormat));
 
-    m_pDoc->InsertCol(0,0,MAXROW,0,0,2);
+    m_pDoc->InsertCol(0,0,m_pDoc->MaxRow(),0,0,2);
     const ScRangeList& rRange = pFormatTmp->GetRange();
     CPPUNIT_ASSERT_EQUAL(static_cast<const ScRangeList&>(ScRange(2,0,0,2,3,0)), rRange);
 
@@ -255,7 +255,7 @@ void TestCondformat::testCondFormatInsertCol()
     auto pFormatTmp = pFormat.get();
     pList->InsertNew(std::move(pFormat));
 
-    m_pDoc->InsertCol(0,0,MAXROW,0,4,2);
+    m_pDoc->InsertCol(0,0,m_pDoc->MaxRow(),0,4,2);
     const ScRangeList& rRange = pFormatTmp->GetRange();
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,5,3,0)), rRange);
 
@@ -278,7 +278,7 @@ void TestCondformat::testCondFormatInsertRow()
     auto pFormatTmp = pFormat.get();
     pList->InsertNew(std::move(pFormat));
 
-    m_pDoc->InsertRow(0,0,MAXCOL,0,4,2);
+    m_pDoc->InsertRow(0,0,m_pDoc->MaxCol(),0,4,2);
     const ScRangeList& rRange = pFormatTmp->GetRange();
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(0,0,0,3,5,0)), rRange);
 
@@ -567,15 +567,15 @@ void TestCondformat::testCondCopyPasteSingleRowToRange()
     m_pDoc->AddCondFormat(std::move(pFormat), 0);
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
-    copyToClip(m_pDoc, ScRange(0,0,0,MAXCOL,0,0), &aClipDoc);
-    ScRange aTargetRange(0,4,0,MAXCOL,4,0);
+    copyToClip(m_pDoc, ScRange(0,0,0,m_pDoc->MaxCol(),0,0), &aClipDoc);
+    ScRange aTargetRange(0,4,0,m_pDoc->MaxCol(),4,0);
     pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
     ScConditionalFormat* pNewFormat = m_pDoc->GetCondFormat(0, 4, 0);
     CPPUNIT_ASSERT(pNewFormat);
     CPPUNIT_ASSERT_EQUAL(pNewFormat->GetKey(), pFormatTmp->GetKey());
 
-    for (SCCOL nCol = 1; nCol <= MAXCOL; ++nCol)
+    for (SCCOL nCol = 1; nCol <= m_pDoc->MaxCol(); ++nCol)
     {
         ScConditionalFormat* pNewFormat2 = m_pDoc->GetCondFormat(nCol, 4, 0);
         CPPUNIT_ASSERT(!pNewFormat2);
@@ -599,10 +599,10 @@ void TestCondformat::testCondCopyPasteSingleRowToRange2()
 
     ScDocument aClipDoc(SCDOCMODE_CLIP);
     copyToClip(m_pDoc, ScRange(0,0,0,3,0,0), &aClipDoc);
-    ScRange aTargetRange(0,4,0,MAXCOL,4,0);
+    ScRange aTargetRange(0,4,0,m_pDoc->MaxCol(),4,0);
     pasteOneCellFromClip(m_pDoc, aTargetRange, &aClipDoc);
 
-    for (SCCOL nCol = 0; nCol <= MAXCOL; ++nCol)
+    for (SCCOL nCol = 0; nCol <= m_pDoc->MaxCol(); ++nCol)
     {
         ScConditionalFormat* pNewFormat = m_pDoc->GetCondFormat(nCol, 4, 0);
         if (nCol % 4 == 0)
@@ -1119,7 +1119,7 @@ void TestCondformat::testCondFormatUpdateReferenceDelRow()
 
     pFormatTmp->AddEntry(pEntry);
 
-    m_pDoc->DeleteRow(0, 0, MAXCOL, 0, 4, 1);
+    m_pDoc->DeleteRow(0, 0, m_pDoc->MaxCol(), 0, 4, 1);
 
     OUString aStr = pEntry->GetExpression(ScAddress(0, 4, 0), 0);
     CPPUNIT_ASSERT_EQUAL(OUString("B5"), aStr);
@@ -1140,7 +1140,7 @@ void TestCondformat::testCondFormatUpdateReferenceInsRow()
 
     pFormatTmp->AddEntry(pEntry);
 
-    m_pDoc->InsertRow(0, 0, MAXCOL, 0, 4, 1);
+    m_pDoc->InsertRow(0, 0, m_pDoc->MaxCol(), 0, 4, 1);
 
     OUString aStr = pEntry->GetExpression(ScAddress(0, 6, 0), 0);
     CPPUNIT_ASSERT_EQUAL(OUString("B7"), aStr);

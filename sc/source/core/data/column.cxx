@@ -102,14 +102,9 @@ void ScColumn::Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, bool bEmptyA
     nCol = nNewCol;
     nTab = nNewTab;
     if ( bEmptyAttrArray )
-        pAttrArray.reset(new ScAttrArray( nCol, nTab, rDoc, nullptr ));
+        InitAttrArray(new ScAttrArray( nCol, nTab, rDoc, nullptr ));
     else
-        pAttrArray.reset(new ScAttrArray( nCol, nTab, rDoc, &rDoc.maTabs[nTab]->aDefaultColAttrArray ));
-}
-
-SCROW ScColumn::GetNextUnprotected( SCROW nRow, bool bUp ) const
-{
-    return pAttrArray->GetNextUnprotected(nRow, bUp);
+        InitAttrArray(new ScAttrArray( nCol, nTab, rDoc, &rDoc.maTabs[nTab]->aDefaultColData.AttrArray()));
 }
 
 sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask,
@@ -301,11 +296,6 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
     return bOpen;
 }
 
-bool ScColumn::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const
-{
-    return pAttrArray->HasAttrib( nRow1, nRow2, nMask );
-}
-
 bool ScColumn::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const
 {
     bool bFound = false;
@@ -326,13 +316,6 @@ bool ScColumn::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask )
     return bFound;
 }
 
-bool ScColumn::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
-                            SCCOL& rPaintCol, SCROW& rPaintRow,
-                            bool bRefresh )
-{
-    return pAttrArray->ExtendMerge( nThisCol, nStartRow, nEndRow, rPaintCol, rPaintRow, bRefresh );
-}
-
 void ScColumn::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, bool bDeep ) const
 {
     SCROW nTop;
@@ -350,35 +333,7 @@ void ScColumn::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkD
     }
 }
 
-void ScColumn::MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, bool bDeep ) const
-{
-    pAttrArray->MergePatternArea( nRow1, nRow2, rState, bDeep );
-}
-
-void ScColumn::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
-                            ScLineFlags& rFlags,
-                            SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight ) const
-{
-    pAttrArray->MergeBlockFrame( pLineOuter, pLineInner, rFlags, nStartRow, nEndRow, bLeft, nDistRight );
-}
-
-void ScColumn::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
-                               SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight)
-{
-    pAttrArray->ApplyBlockFrame(rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight);
-}
-
-const ScPatternAttr* ScColumn::GetPattern( SCROW nRow ) const
-{
-    return pAttrArray->GetPattern( nRow );
-}
-
-const SfxPoolItem& ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
-{
-    return pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
-}
-
-const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const
+const ScPatternAttr* ScColumnData::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const
 {
     ::std::map< const ScPatternAttr*, size_t > aAttrMap;
     const ScPatternAttr* pMaxPattern = nullptr;
@@ -402,29 +357,30 @@ const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRo
     return pMaxPattern;
 }
 
-sal_uInt32 ScColumn::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
+sal_uInt32 ScColumnData::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
 {
-    ScDocument& rDocument = GetDoc();
     SCROW nPatStartRow, nPatEndRow;
     const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nPatStartRow, nPatEndRow, nStartRow);
-    sal_uInt32 nFormat = pPattern->GetNumberFormat(rDocument.GetFormatTable());
+    sal_uInt32 nFormat = pPattern->GetNumberFormat(GetDoc().GetFormatTable());
     while (nEndRow > nPatEndRow)
     {
         nStartRow = nPatEndRow + 1;
         pPattern = pAttrArray->GetPatternRange(nPatStartRow, nPatEndRow, nStartRow);
-        sal_uInt32 nTmpFormat = pPattern->GetNumberFormat(rDocument.GetFormatTable());
+        sal_uInt32 nTmpFormat = pPattern->GetNumberFormat(GetDoc().GetFormatTable());
         if (nFormat != nTmpFormat)
             return 0;
     }
     return nFormat;
 }
 
-sal_uInt32 ScColumn::GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const
+SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
+                                     bool* const pIsChanged )
 {
-    return pAttrArray->GetPattern( nRow )->GetNumberFormat( rContext.GetFormatTable() );
+    return ScColumnData::ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged, nCol );
 }
 
-SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged )
+SCROW ScColumnData::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray,
+                                         bool* const pIsChanged, SCCOL nCol )
 {
     SCROW nTop = 0;
     SCROW nBottom = 0;
@@ -448,42 +404,50 @@ SCROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData&
         return nBottom;
 }
 
-void ScColumn::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
+void ScColumnData::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol )
 {
-    SCROW nTop;
-    SCROW nBottom;
-
+    assert(rMark.IsMultiMarked());
     if ( pAttrArray && rMark.IsMultiMarked() )
     {
         ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        SCROW nTop;
+        SCROW nBottom;
         while (aMultiIter.Next( nTop, nBottom ))
             pAttrArray->ChangeIndent(nTop, nBottom, bIncrement);
     }
 }
 
-void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& rMark )
+void ScColumn::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
 {
-    SCROW nTop;
-    SCROW nBottom;
+    return ScColumnData::ChangeSelectionIndent( bIncrement, rMark, nCol );
+}
 
+void ScColumnData::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& rMark, SCCOL nCol )
+{
     if (!pAttrArray)
         return;
 
     if (rMark.IsMultiMarked() )
     {
         ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), nCol );
+        SCROW nTop;
+        SCROW nBottom;
         while (aMultiIter.Next( nTop, nBottom ))
             pAttrArray->ClearItems(nTop, nBottom, pWhich);
     }
     else if (rMark.IsMarked())
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
+        const ScRange& aRange = rMark.GetMarkArea();
         if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
         {
             pAttrArray->ClearItems(aRange.aStart.Row(), aRange.aEnd.Row(), pWhich);
         }
     }
+}
+
+void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& rMark )
+{
+    ScColumnData::ClearSelectionItems( pWhich, rMark, nCol );
 }
 
 void ScColumn::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMark, bool bBroadcast )
@@ -514,7 +478,7 @@ void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
       pAttrArray->SetPattern( nRow, pNewPattern );
 }
 
-void ScColumn::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
+void ScColumnData::ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
                                  ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
     const SfxItemSet* pSet = &rPatAttr.GetItemSet();
@@ -548,27 +512,12 @@ void ScColumn::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
     }
 }
 
-void ScColumn::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
-{
-    pAttrArray->AddCondFormat( nStartRow, nEndRow, nIndex );
-}
-
-void ScColumn::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
-{
-    pAttrArray->RemoveCondFormat( nStartRow, nEndRow, nIndex );
-}
-
 void ScColumn::ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle )
 {
     const ScPatternAttr* pPattern = pAttrArray->GetPattern(nRow);
     std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pPattern));
     pNewPattern->SetStyleSheet(const_cast<ScStyleSheet*>(rStyle));
     pAttrArray->SetPattern(nRow, std::move(pNewPattern), true);
-}
-
-void ScColumn::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
-{
-    pAttrArray->ApplyStyleArea(nStartRow, nEndRow, rStyle);
 }
 
 void ScColumn::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark)
@@ -599,11 +548,6 @@ void ScColumn::ApplySelectionLineStyle( const ScMarkData& rMark,
         while (aMultiIter.Next( nTop, nBottom ))
             pAttrArray->ApplyLineStyleArea(nTop, nBottom, pLine, bColorOnly );
     }
-}
-
-const ScStyleSheet* ScColumn::GetStyle( SCROW nRow ) const
-{
-    return pAttrArray->GetPattern( nRow )->GetStyleSheet();
 }
 
 const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const
@@ -670,47 +614,6 @@ const ScStyleSheet* ScColumn::GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRo
     }
 
     return bEqual ? pStyle : nullptr;
-}
-
-void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset )
-{
-    pAttrArray->FindStyleSheet( pStyleSheet, rUsedRows, bReset );
-}
-
-bool ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
-{
-    return pAttrArray->IsStyleSheetUsed( rStyle );
-}
-
-bool ScColumn::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
-{
-    return pAttrArray->ApplyFlags( nStartRow, nEndRow, nFlags );
-}
-
-bool ScColumn::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
-{
-    return pAttrArray->RemoveFlags( nStartRow, nEndRow, nFlags );
-}
-
-void ScColumn::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich )
-{
-    pAttrArray->ClearItems( nStartRow, nEndRow, pWhich );
-}
-
-const ScPatternAttr* ScColumn::SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> pPatAttr )
-{
-    return pAttrArray->SetPattern( nRow, std::move(pPatAttr), true/*bPutToPool*/ );
-}
-
-void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
-{
-    pAttrArray->SetPattern( nRow, &rPatAttr, true/*bPutToPool*/ );
-}
-
-void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
-                                const ScPatternAttr& rPatAttr )
-{
-    pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, true/*bPutToPool*/ );
 }
 
 void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
@@ -870,16 +773,16 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     pAttrArray->InsertRow( nStartRow, nSize );
 
     maCellNotes.insert_empty(nStartRow, nSize);
-    maCellNotes.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCellNotes.resize(GetDoc().GetMaxRowCount());
 
     maBroadcasters.insert_empty(nStartRow, nSize);
-    maBroadcasters.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maBroadcasters.resize(GetDoc().GetMaxRowCount());
 
     maCellTextAttrs.insert_empty(nStartRow, nSize);
-    maCellTextAttrs.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCellTextAttrs.resize(GetDoc().GetMaxRowCount());
 
     maCells.insert_empty(nStartRow, nSize);
-    maCells.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCells.resize(GetDoc().GetMaxRowCount());
 
     CellStorageModified();
 
@@ -2182,7 +2085,8 @@ class UpdateRefOnNonCopy
             for (++pp; pp != ppEnd; ++pp) // skip the top cell.
             {
                 ScFormulaCell* pFC = *pp;
-                if (!pFC->aPos.Move(mpCxt->mnColDelta, mpCxt->mnRowDelta, mpCxt->mnTabDelta, aErrorPos))
+                if (!pFC->aPos.Move(mpCxt->mnColDelta, mpCxt->mnRowDelta, mpCxt->mnTabDelta,
+                                    aErrorPos, mpCxt->mrDoc))
                 {
                     assert(!"can't move formula cell");
                 }

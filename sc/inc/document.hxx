@@ -276,8 +276,8 @@ struct ScDocStat
 {
     OUString  aDocName;
     SCTAB   nTableCount;
-    sal_uLong   nCellCount;
-    sal_uLong   nFormulaCount;
+    sal_uInt64  nCellCount;
+    sal_uInt64  nFormulaCount;
     sal_uInt16  nPageCount;
     ScDocStat()
         : nTableCount(0)
@@ -455,8 +455,8 @@ private:
         documents, GRAM_ODFF for ODF 1.2 documents. */
     formula::FormulaGrammar::Grammar  eStorageGrammar;
 
-    sal_uLong               nFormulaCodeInTree;             // formula RPN in the formula tree
-    sal_uLong               nXMLImportedFormulaCount;        // progress count during XML import
+    sal_uInt64              nFormulaCodeInTree;             // formula RPN in the formula tree
+    sal_uInt64              nXMLImportedFormulaCount;       // progress count during XML import
     sal_uInt16              nInterpretLevel;                // >0 if in interpreter
     sal_uInt16              nMacroInterpretLevel;           // >0 if macro in interpreter
     sal_uInt16              nInterpreterTableOpLevel;       // >0 if in interpreter TableOp
@@ -587,9 +587,9 @@ public:
     void SetImagePreferredDPI(sal_Int32 nValue) { mnImagenPreferredDPI = nValue; }
     sal_Int32 GetImagePreferredDPI() { return mnImagenPreferredDPI; }
 
-    SC_DLLPUBLIC sal_uLong   GetCellCount() const;       // all cells
-    SC_DLLPUBLIC sal_uLong   GetFormulaGroupCount() const;       // all cells
-    sal_uLong                GetCodeCount() const;       // RPN-Code in formulas
+    SC_DLLPUBLIC sal_uInt64  GetCellCount() const;       // all cells
+    SC_DLLPUBLIC sal_uInt64  GetFormulaGroupCount() const;       // all cells
+    sal_uInt64               GetCodeCount() const;       // RPN-Code in formulas
     DECL_LINK( GetUserDefinedColor, sal_uInt16, Color* );
                                                                 // number formatter
 public:
@@ -875,6 +875,10 @@ public:
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
     SC_DLLPUBLIC SCCOL MaxCol() const { return mxSheetLimits->mnMaxCol; }
     SC_DLLPUBLIC SCROW MaxRow() const { return mxSheetLimits->mnMaxRow; }
+    SC_DLLPUBLIC SCCOL GetMaxColCount() const { return mxSheetLimits->GetMaxColCount(); }
+    SC_DLLPUBLIC SCROW GetMaxRowCount() const { return mxSheetLimits->GetMaxRowCount(); }
+    SC_DLLPUBLIC OUString MaxRowAsString() const { return mxSheetLimits->MaxRowAsString(); }
+    SC_DLLPUBLIC OUString MaxColAsString() const { return mxSheetLimits->MaxColAsString(); }
     ScSheetLimits& GetSheetLimits() const { return *mxSheetLimits; }
     [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mxSheetLimits->mnMaxCol); }
     [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mxSheetLimits->mnMaxRow); }
@@ -1304,11 +1308,14 @@ public:
 
     void            SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const;
     bool            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    bool            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    bool            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                     SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
 
     SC_DLLPUBLIC bool HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const;
     SC_DLLPUBLIC bool HasAttrib( const ScRange& rRange, HasAttrFlags nMask ) const;
+    bool              HasAttrib( SCCOL nCol, SCROW nRow, SCTAB nTab, HasAttrFlags nMask,
+                                 SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
 
     SC_DLLPUBLIC void GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const ::editeng::SvxBorderLine** ppLeft,
@@ -1729,7 +1736,7 @@ public:
 
     SC_DLLPUBLIC void   Fill(   SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 ScProgress* pProgress, const ScMarkData& rMark,
-                                sal_uLong nFillCount, FillDir eFillDir = FILL_TO_BOTTOM,
+                                sal_uInt64 nFillCount, FillDir eFillDir = FILL_TO_BOTTOM,
                                 FillCmd eFillCmd = FILL_LINEAR, FillDateCmd eFillDateCmd = FILL_DAY,
                                 double nStepValue = 1.0, double nMaxValue = 1E307 );
     OUString            GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
@@ -1742,6 +1749,13 @@ public:
     template<class T> const T*              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich ) const
     {
         return static_cast<const T*>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich)));
+    }
+    SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich,
+                                                     SCROW& nStartRow, SCROW& nEndRow ) const;
+    template<class T> const T*              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich,
+                                                     SCROW& nStartRow, SCROW& nEndRow ) const
+    {
+        return static_cast<const T*>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich), nStartRow, nEndRow));
     }
     SC_DLLPUBLIC const SfxPoolItem*         GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
     template<class T> const T*              GetAttr( const ScAddress& rPos, TypedWhichId<T> nWhich ) const
@@ -1902,20 +1916,21 @@ public:
     SC_DLLPUBLIC void           SetManualHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bManual );
 
     SC_DLLPUBLIC sal_uInt16         GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uLong          GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const;
+    SC_DLLPUBLIC tools::Long        GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow ) const;
-    SC_DLLPUBLIC sal_uLong          GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC tools::Long        GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
 
     /**
      * Given the height i.e. total vertical distance from the top of the sheet
      * grid, return the first visible row whose top position is below the
      * specified height.
      */
-    SCROW                       GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const;
-    sal_uLong                   GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, double fScale, const sal_uLong* pnMaxHeight = nullptr ) const;
-    SC_DLLPUBLIC sal_uLong      GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uLong      GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SCROW                       GetRowForHeight( SCTAB nTab, tools::Long nHeight ) const;
+    tools::Long                 GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab,
+                                    double fScale, const tools::Long* pnMaxHeight = nullptr ) const;
+    SC_DLLPUBLIC tools::Long    GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
+    SC_DLLPUBLIC tools::Long    GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
 
     SC_DLLPUBLIC sal_uInt16     GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const;
     SC_DLLPUBLIC sal_uInt16     GetOriginalHeight( SCROW nRow, SCTAB nTab ) const;
@@ -2252,7 +2267,7 @@ private:
                                         bool bColumns,
                                         ScDocument& rOtherDoc, SCTAB nThisTab, SCTAB nOtherTab,
                                         SCCOLROW nEndCol, const SCCOLROW* pTranslate,
-                                        ScProgress* pProgress, sal_uLong nProAdd );
+                                        ScProgress* pProgress, sal_uInt64 nProAdd );
 
     DECL_LINK(TrackTimeHdl, Timer *, void);
 
@@ -2339,7 +2354,7 @@ public:
     SC_DLLPUBLIC void   StartAllListeners( const ScRange& rRange );
 
     void                SetForcedFormulas( bool bVal ) { bHasForcedFormulas = bVal; }
-    sal_uLong           GetFormulaCodeInTree() const { return nFormulaCodeInTree; }
+    sal_uInt64          GetFormulaCodeInTree() const { return nFormulaCodeInTree; }
 
     bool                IsInInterpreter() const { return nInterpretLevel != 0; }
 
@@ -2388,13 +2403,13 @@ public:
     void                SetExpandRefs( bool bVal );
     bool                IsExpandRefs() const { return bExpandRefs; }
 
-    sal_uLong           GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
-    void                IncXMLImportedFormulaCount( sal_uLong nVal )
+    sal_uInt64          GetXMLImportedFormulaCount() const { return nXMLImportedFormulaCount; }
+    void                IncXMLImportedFormulaCount( sal_uInt64 nVal )
                             {
                                 if ( nXMLImportedFormulaCount + nVal > nXMLImportedFormulaCount )
                                     nXMLImportedFormulaCount += nVal;
                             }
-    void                DecXMLImportedFormulaCount( sal_uLong nVal )
+    void                DecXMLImportedFormulaCount( sal_uInt64 nVal )
                             {
                                 if ( nVal <= nXMLImportedFormulaCount )
                                     nXMLImportedFormulaCount -= nVal;

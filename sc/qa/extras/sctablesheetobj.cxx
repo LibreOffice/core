@@ -48,6 +48,8 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
+#include <sheetlimits.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -248,7 +250,10 @@ private:
 ScTableSheetObj::ScTableSheetObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
     apitest::XCellSeries(1, 0),
-    apitest::XFormulaQuery(table::CellRangeAddress(0, 0, 0, 1023, 1048575), table::CellRangeAddress(0, 0, 0, 1023, 1048575), 0, 0),
+    apitest::XFormulaQuery(
+        table::CellRangeAddress(0, 0, 0, ScSheetLimits::CreateDefault().MaxCol(), ScSheetLimits::CreateDefault().MaxRow()),
+        table::CellRangeAddress(0, 0, 0, ScSheetLimits::CreateDefault().MaxCol(), ScSheetLimits::CreateDefault().MaxRow()),
+        0, 0),
     apitest::XReplaceable("searchReplaceString", "replaceReplaceString"),
     apitest::XSearchable("test", 4)
 {

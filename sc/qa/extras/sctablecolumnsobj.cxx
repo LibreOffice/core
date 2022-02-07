@@ -29,6 +29,8 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <sheetlimits.hxx>
+
 using namespace css;
 
 namespace sc_apitest
@@ -90,7 +92,7 @@ private:
 ScTableColumnsObj::ScTableColumnsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<table::XCellRange>::get())
-    , XIndexAccess(1024)
+    , XIndexAccess(ScSheetLimits::CreateDefault().GetMaxColCount())
     , XNameAccess("ABC")
     , XServiceInfo("ScTableColumnsObj", "com.sun.star.table.TableColumns")
 {

@@ -76,9 +76,7 @@ void ScGridWindow::dumpCellProperties()
     }
     else if (rMark.IsMarked())
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
-        aList.Join(aRange);
+        aList.Join(rMark.GetMarkArea());
     }
     else
     {

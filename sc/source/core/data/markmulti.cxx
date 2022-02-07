@@ -30,10 +30,6 @@ ScMultiSel::ScMultiSel(const ScSheetLimits& rSheetLimits)
 {
 }
 
-ScMultiSel::~ScMultiSel()
-{
-}
-
 ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rOther)
 {
     aMultiSelContainer = rOther.aMultiSelContainer;
@@ -154,6 +150,25 @@ bool ScMultiSel::HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const
     }
 
     return true;
+}
+
+SCCOL ScMultiSel::GetStartOfEqualColumns( SCCOL nLastCol, SCCOL nMinCol ) const
+{
+    if( nMinCol > nLastCol )
+        return nMinCol;
+    if( nLastCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
+    {
+        if( nMinCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
+            return nMinCol;
+        SCCOL nCol = static_cast<SCCOL>(aMultiSelContainer.size()) - 1;
+        while( nCol >= nMinCol && aMultiSelContainer[nCol] == aRowSel )
+            --nCol;
+        return nCol + 1;
+    }
+    SCCOL nCol = nLastCol - 1;
+    while( nCol >= nMinCol && aMultiSelContainer[nCol] == aMultiSelContainer[nLastCol] )
+        --nCol;
+    return nCol + 1;
 }
 
 SCROW ScMultiSel::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
@@ -394,11 +409,6 @@ void ScMultiSel::ShiftRows(SCROW nStartRow, sal_Int32 nRowOffset)
     aRowSel.Shift(nStartRow, nRowOffset);
 }
 
-const ScMarkArray& ScMultiSel::GetRowSelArray() const
-{
-    return aRowSel;
-}
-
 const ScMarkArray* ScMultiSel::GetMultiSelArray( SCCOL nCol ) const
 {
     if (nCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
@@ -440,10 +450,6 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
     {
         aMarkArrayIter.reset( &rMultiSel.aMultiSelContainer[nCol]);
     }
-}
-
-ScMultiSelIter::~ScMultiSelIter()
-{
 }
 
 bool ScMultiSelIter::Next( SCROW& rTop, SCROW& rBottom )

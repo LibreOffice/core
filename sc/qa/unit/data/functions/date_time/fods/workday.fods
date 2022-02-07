@@ -898,7 +898,7 @@
      <table:table-cell/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:style-name="ce11" table:formula="of:=WORKDAY(day1;day2;days)" office:value-type="date" office:date-value="2014-11-07" calcext:value-type="date">
+     <table:table-cell table:style-name="ce11" table:formula="of:=WORKDAY(day1ref;day2ref;days)" office:value-type="date" office:date-value="2014-11-07" calcext:value-type="date">
       <text:p>07.11.2014</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce11" office:value-type="date" office:date-value="2014-11-07" calcext:value-type="date">
@@ -907,8 +907,8 @@
      <table:table-cell table:style-name="ce16" table:formula="of:=[.A7]=[.B7]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce20" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=WORKDAY(day1;day2;days)" calcext:value-type="string">
-      <text:p>=WORKDAY(day1;day2;days)</text:p>
+     <table:table-cell table:style-name="ce20" table:formula="of:=FORMULA([.A7])" office:value-type="string" office:string-value="=WORKDAY(day1ref;day2ref;days)" calcext:value-type="string">
+      <text:p>=WORKDAY(day1ref;day2ref;days)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce21"/>
@@ -1057,8 +1057,8 @@
     </table:table-row>
    </table:table>
    <table:named-expressions>
-    <table:named-range table:name="day1" table:base-cell-address="$Sheet2.$K$2" table:cell-range-address="$Sheet2.$K$2"/>
-    <table:named-range table:name="day2" table:base-cell-address="$Sheet2.$K$3" table:cell-range-address="$Sheet2.$K$3"/>
+    <table:named-range table:name="day1ref" table:base-cell-address="$Sheet2.$K$2" table:cell-range-address="$Sheet2.$K$2"/>
+    <table:named-range table:name="day2ref" table:base-cell-address="$Sheet2.$K$3" table:cell-range-address="$Sheet2.$K$3"/>
     <table:named-range table:name="days" table:base-cell-address="$Sheet2.$K$4" table:cell-range-address="$Sheet2.$K$4:.$K$6"/>
    </table:named-expressions>
   </office:spreadsheet>

@@ -109,7 +109,7 @@ void GetOptimalHeightsInColumn(
 
     const SCROW nMinStart = nPos;
 
-    sal_uLong nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
+    sal_uInt64 nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
     const SCCOL maxCol = rCol.size() - 1; // last col done already above
     for (SCCOL nCol=0; nCol<maxCol; nCol++)
     {
@@ -276,9 +276,9 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     bActiveScenario(false),
     mbPageBreaksValid(false),
     mbForceBreaks(false),
-    bStreamValid(false),
-    aDefaultColAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr)
+    bStreamValid(false)
 {
+    aDefaultColData.InitAttrArray(new ScAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr));
     if (bColInfo)
     {
         mpColWidth.reset( new ScCompressedArray<SCCOL, sal_uInt16>( rDocument.MaxCol()+1, STD_COL_WIDTH ) );
@@ -455,7 +455,7 @@ tools::Long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
 
 bool ScTable::SetOptimalHeight(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, bool bApi,
-    ScProgress* pOuterProgress, sal_uLong nProgressStart )
+    ScProgress* pOuterProgress, sal_uInt64 nProgressStart )
 {
     assert(nStartRow <= nEndRow);
 
@@ -488,7 +488,7 @@ bool ScTable::SetOptimalHeight(
 
 void ScTable::SetOptimalHeightOnly(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
-    ScProgress* pOuterProgress, sal_uLong nProgressStart )
+    ScProgress* pOuterProgress, sal_uInt64 nProgressStart )
 {
     OSL_ENSURE( rCxt.getExtraHeight() == 0 || rCxt.isForceAutoSize(),
         "automatic OptimalHeight with Extra" );
@@ -631,7 +631,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
     if (nMaxX == rDocument.MaxCol())                    // omit attribute at the right
     {
         --nMaxX;
-        while ( nMaxX>0 && aCol[nMaxX].IsVisibleAttrEqual(aCol[nMaxX+1]) )
+        while ( nMaxX>0 && aCol[nMaxX].IsVisibleAttrEqual(aCol[nMaxX+1], 0, rDocument.MaxRow()) )
             --nMaxX;
     }
 
@@ -645,7 +645,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
         while ( nAttrStartX < (aCol.size()-1) )
         {
             SCCOL nAttrEndX = nAttrStartX;
-            while ( nAttrEndX < (aCol.size()-1) && aCol[nAttrStartX].IsVisibleAttrEqual(aCol[nAttrEndX+1]) )
+            while ( nAttrEndX < (aCol.size()-1) && aCol[nAttrStartX].IsVisibleAttrEqual(aCol[nAttrEndX+1], 0, rDocument.MaxRow()) )
                 ++nAttrEndX;
             if ( nAttrEndX + 1 - nAttrStartX >= SC_COLUMNS_STOP )
             {
@@ -770,10 +770,10 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
 
     if (nMinX == 0)                                     // omit attribute at the right
     {
-        if ( aCol.size() > 1 && aCol[0].IsVisibleAttrEqual(aCol[1]) )      // no single ones
+        if ( aCol.size() > 1 && aCol[0].IsVisibleAttrEqual(aCol[1], 0, rDocument.MaxRow())) // no single ones
         {
             ++nMinX;
-            while ( nMinX<(aCol.size()-1) && aCol[nMinX].IsVisibleAttrEqual(aCol[nMinX-1]) )
+            while ( nMinX<(aCol.size()-1) && aCol[nMinX].IsVisibleAttrEqual(aCol[nMinX-1], 0, rDocument.MaxRow()))
                 ++nMinX;
         }
     }
@@ -1449,9 +1449,9 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
     {
         ScRange aRange( ScAddress::UNINITIALIZED);
         if (rMark.IsMarked())
-            rMark.GetMarkArea( aRange);
+            aRange = rMark.GetMarkArea();
         else if (rMark.IsMultiMarked())
-            rMark.GetMultiMarkArea( aRange);
+            aRange = rMark.GetMultiMarkArea();
         else
         {
             // Covered by assert() above, but for NDEBUG build.
@@ -1613,7 +1613,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                     nNextRow = rMark.GetNextMarked( nCol, nNextRow, bUp );
                 if ( bUnprotected )
                     nNextRow = ( nCol <= nLastCol ) ? aCol[nCol].GetNextUnprotected( nNextRow, bUp ) :
-                        aDefaultColAttrArray.GetNextUnprotected( nNextRow, bUp );
+                        aDefaultColData.GetNextUnprotected( nNextRow, bUp );
                 pNextRows[nCol - nStartCol] = nNextRow;
 
                 if (bUp)

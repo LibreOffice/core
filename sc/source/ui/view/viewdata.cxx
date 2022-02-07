@@ -750,8 +750,6 @@ ScSplitPos ScViewDataTable::SanitizeWhichActive() const
     return eWhichActive;
 }
 
-const ScSheetLimits gaNoShellSheetLimits(MAXCOL, MAXROW);
-
 ScViewData::ScViewData(ScDocShell& rDocSh, ScTabViewShell* pViewSh)
     : ScViewData(nullptr, &rDocSh, pViewSh)
 {
@@ -779,7 +777,7 @@ static ScViewOptions DefaultOptions()
 ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pViewSh) :
         nPPTX(0.0),
         nPPTY(0.0),
-        maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : gaNoShellSheetLimits),
+        maMarkData  (pDocSh ? pDocSh->GetDocument().GetSheetLimits() : pDoc->GetSheetLimits()),
         pDocShell   ( pDocSh ),
         mrDoc       (pDoc ? *pDoc : pDocSh->GetDocument()),
         pView       ( pViewSh ),
@@ -1139,7 +1137,7 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
 
         if ( rNewMark.IsMarked() && !rNewMark.IsMultiMarked() )
         {
-            rNewMark.GetMarkArea( rRange );
+            rRange = rNewMark.GetMarkArea();
             if (ScViewUtil::HasFiltered(rRange, GetDocument()))
                 eMarkType = SC_MARK_SIMPLE_FILTERED;
             else
@@ -2417,7 +2415,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         const_cast<ScViewData*>(this)->aScrSize.setHeight( pView->GetGridHeight(eWhichY) );
     }
 
-    sal_uLong nTSize;
+    tools::Long nTSize;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
 
@@ -2449,6 +2447,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                         tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
                         nScrPosX += nSizeXPix;
                     }
+                    else
+                    {   // If the width is zero, the column is possibly hidden, skips groups of such columns.
+                        SCCOL lastHidden = -1;
+                        if(mrDoc.ColHidden(nX, nForTab, nullptr, &lastHidden) && lastHidden > nX)
+                            nX = lastHidden - 1;
+                    }
                 }
             }
         }
@@ -2462,6 +2466,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 {
                     tools::Long nSizeXPix = ToPixel( nTSize, nPPTX );
                     nScrPosX -= nSizeXPix;
+                }
+                else
+                {   // If the width is zero, the column is possibly hidden, skips groups of such columns.
+                    SCCOL firstHidden = -1;
+                    if(mrDoc.ColHidden(nX, nForTab, &firstHidden, nullptr) && firstHidden >= 0)
+                        nX = firstHidden;
                 }
             }
         }
@@ -2491,13 +2501,13 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     nScrPosY = 0x7FFFFFFF;
                 else if (bAllowNeg || bIsTiledRendering)
                 {
-                    sal_uLong nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY);
+                    tools::Long nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY);
                     nScrPosY += nSizeYPix;
                 }
                 else
                 {
-                    sal_uLong nMaxHeight = aScrSize.getHeight() - nScrPosY;
-                    sal_uLong nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY, &nMaxHeight);
+                    tools::Long nMaxHeight = aScrSize.getHeight() - nScrPosY;
+                    tools::Long nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY, &nMaxHeight);
                     nScrPosY += nSizeYPix;
                 }
             }
@@ -2512,6 +2522,12 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                 {
                     tools::Long nSizeYPix = ToPixel( nTSize, nPPTY );
                     nScrPosY -= nSizeYPix;
+                }
+                else
+                {   // If the height is zero, the row is possibly hidden, skips groups of such rows.
+                    SCROW firstHidden = -1;
+                    if(mrDoc.RowHidden(nY, nForTab, &firstHidden, nullptr) && firstHidden >= 0)
+                        nY = firstHidden;
                 }
             }
         }

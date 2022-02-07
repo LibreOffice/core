@@ -125,10 +125,11 @@ bool ScDocument::CopyOneCellFromClip(
         if ((rCxt.getInsertFlag() & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)) != InsertDeleteFlags::NONE)
             rCxt.setSingleCellNote(nColOffset, pClipDoc->GetNote(aSrcPos));
 
-        ScColumn& rSrcCol = pSrcTab->aCol[aSrcPos.Col()];
+        ScColumn* pSrcCol = pSrcTab->FetchColumn(aSrcPos.Col());
+        assert(pSrcCol);
         // Determine the script type of the copied single cell.
-        rSrcCol.UpdateScriptTypes(aSrcPos.Row(), aSrcPos.Row());
-        rCxt.setSingleCell(aSrcPos, rSrcCol);
+        pSrcCol->UpdateScriptTypes(aSrcPos.Row(), aSrcPos.Row());
+        rCxt.setSingleCell(aSrcPos, *pSrcCol);
     }
 
     // All good. Proceed with the pasting.

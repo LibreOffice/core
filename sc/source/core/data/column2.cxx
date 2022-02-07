@@ -1068,7 +1068,6 @@ void ScColumn::GetOptimalHeight(
 bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const
 {
     ScDocument& rDocument = GetDoc();
-    bool bStop = false;
     sc::CellStoreType::const_iterator it = maCells.position(nRow).first;
     mdds::mtv::element_t eType = it->type;
     if (!bInSel && it != maCells.end() && eType != sc::element_type_empty)
@@ -1078,15 +1077,16 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
                rDocument.IsTabProtected(nTab)) )
             return true;
     }
-    while (!bStop)
+    if (bInSel)
     {
-        if (bInSel)
+        SCROW lastDataPos = GetLastDataPos();
+        for (;;)
         {
             nRow = rData.GetNextMarked(nCol, nRow, false);
-            if (!rDocument.ValidRow(nRow))
+            if (!rDocument.ValidRow(nRow) || nRow > lastDataPos )
             {
                 nRow = GetDoc().MaxRow()+1;
-                bStop = true;
+                return false;
             }
             else
             {
@@ -1100,7 +1100,10 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
                     nRow++;
             }
         }
-        else if (GetNextDataPos(nRow))
+    }
+    else
+    {
+        while (GetNextDataPos(nRow))
         {
             it = maCells.position(it, nRow).first;
             eType = it->type;
@@ -1111,13 +1114,9 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
             else
                 nRow++;
         }
-        else
-        {
-            nRow = GetDoc().MaxRow()+1;
-            bStop = true;
-        }
+        nRow = GetDoc().MaxRow()+1;
+        return false;
     }
-    return false;
 }
 
 namespace {
@@ -1289,14 +1288,6 @@ bool ScColumn::HasVisibleDataAt(SCROW nRow) const
         return false;
 
     return it->type != sc::element_type_empty;
-}
-
-bool ScColumn::IsEmptyAttr() const
-{
-    if (pAttrArray)
-        return pAttrArray->IsEmpty();
-    else
-        return true;
 }
 
 bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
@@ -1659,28 +1650,16 @@ void ScColumn::CellStorageModified()
 
     // TODO: Update column's "last updated" timestamp here.
 
+    assert(sal::static_int_cast<SCROW>(maCells.size()) == GetDoc().GetMaxRowCount()
+        && "Size of the cell array is incorrect." );
+
+    assert(sal::static_int_cast<SCROW>(maCellTextAttrs.size()) == GetDoc().GetMaxRowCount()
+        && "Size of the cell text attribute array is incorrect.");
+
+    assert(sal::static_int_cast<SCROW>(maBroadcasters.size()) == GetDoc().GetMaxRowCount()
+        && "Size of the broadcaster array is incorrect.");
+
 #if DEBUG_COLUMN_STORAGE
-    if (maCells.size() != MAXROWCOUNT1)
-    {
-        cout << "ScColumn::CellStorageModified: Size of the cell array is incorrect." << endl;
-        cout.flush();
-        abort();
-    }
-
-    if (maCellTextAttrs.size() != MAXROWCOUNT1)
-    {
-        cout << "ScColumn::CellStorageModified: Size of the cell text attribute array is incorrect." << endl;
-        cout.flush();
-        abort();
-    }
-
-    if (maBroadcasters.size() != MAXROWCOUNT1)
-    {
-        cout << "ScColumn::CellStorageModified: Size of the broadcaster array is incorrect." << endl;
-        cout.flush();
-        abort();
-    }
-
     // Make sure that these two containers are synchronized wrt empty segments.
     auto lIsEmptyType = [](const auto& rElement) { return rElement.type == sc::element_type_empty; };
     // Move to the first empty blocks.
@@ -2066,10 +2045,9 @@ void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1,
 
 bool ScColumn::HasCellNotes() const
 {
-    return std::any_of(maCellNotes.begin(), maCellNotes.end(),
-        [](const auto& rCellNote) {
-            // Having a cellnote block automatically means there is at least one cell note.
-            return rCellNote.type == sc::element_type_cellnote; });
+    if (maCellNotes.block_size() == 1 && maCellNotes.begin()->type == sc::element_type_empty)
+        return false; // all elements are empty
+    return true; // otherwise some must be notes
 }
 
 SCROW ScColumn::GetCellNotesMaxRow() const
@@ -3215,51 +3193,6 @@ void ScColumn::GetDataExtrasAt( SCROW nRow, ScDataAreaExtras& rDataAreaExtras ) 
     }
 }
 
-bool ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
-{
-    if (pAttrArray && rCol.pAttrArray)
-        return pAttrArray->IsAllEqual( *rCol.pAttrArray, nStartRow, nEndRow );
-    else
-        return !pAttrArray && !rCol.pAttrArray;
-}
-
-bool ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
-{
-    if (pAttrArray && rCol.pAttrArray)
-        return pAttrArray->IsVisibleEqual( *rCol.pAttrArray, nStartRow, nEndRow );
-    else
-        return !pAttrArray && !rCol.pAttrArray;
-}
-
-bool ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
-{
-    if (pAttrArray)
-        return pAttrArray->GetFirstVisibleAttr( rFirstRow );
-    else
-        return false;
-}
-
-bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
-{
-    if (pAttrArray)
-    {
-        // row of last cell is needed
-        SCROW nLastData = GetLastDataPos();    // always including notes, 0 if none
-
-        return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
-    }
-    else
-        return false;
-}
-
-bool ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
-{
-    if (pAttrArray)
-        return pAttrArray->HasVisibleAttrIn( nStartRow, nEndRow );
-    else
-        return false;
-}
-
 namespace {
 
 class FindUsedRowsHandler
@@ -3313,13 +3246,7 @@ void startListening(
         }
         break;
         default:
-#if DEBUG_COLUMN_STORAGE
-            cout << "ScColumn::StartListening: wrong block type encountered in the broadcaster storage." << endl;
-            cout.flush();
-            abort();
-#else
-            ;
-#endif
+            assert(false && "wrong block type encountered in the broadcaster storage.");
     }
 }
 
@@ -3619,14 +3546,14 @@ public:
 
 }
 
-sal_uLong ScColumn::GetWeightedCount() const
+sal_uInt64 ScColumn::GetWeightedCount() const
 {
     const WeightedCounter aFunc = std::for_each(maCells.begin(), maCells.end(),
         WeightedCounter());
     return aFunc.getCount();
 }
 
-sal_uLong ScColumn::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
+sal_uInt64 ScColumn::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
 {
     const WeightedCounterWithRows aFunc = std::for_each(maCells.begin(), maCells.end(),
         WeightedCounterWithRows(nStartRow, nEndRow));
@@ -3637,7 +3564,7 @@ namespace {
 
 class CodeCounter
 {
-    size_t mnCount;
+    sal_uInt64 mnCount;
 public:
     CodeCounter() : mnCount(0) {}
 
@@ -3646,31 +3573,16 @@ public:
         mnCount += p->GetCode()->GetCodeLen();
     }
 
-    size_t getCount() const { return mnCount; }
+    sal_uInt64 getCount() const { return mnCount; }
 };
 
 }
 
-sal_uInt32 ScColumn::GetCodeCount() const
+sal_uInt64 ScColumn::GetCodeCount() const
 {
     CodeCounter aFunc;
     sc::ParseFormula(maCells, aFunc);
     return aFunc.getCount();
-}
-
-SCSIZE ScColumn::GetPatternCount() const
-{
-    return pAttrArray ? pAttrArray->Count() : 0;
-}
-
-SCSIZE ScColumn::GetPatternCount( SCROW nRow1, SCROW nRow2 ) const
-{
-    return pAttrArray ? pAttrArray->Count( nRow1, nRow2 ) : 0;
-}
-
-bool ScColumn::ReservePatternCount( SCSIZE nReserve )
-{
-    return pAttrArray && pAttrArray->Reserve( nReserve );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -353,6 +353,9 @@ void SheetDataBuffer::addColXfStyles()
         addIfNotInMyMap( getStyles(), rangeStyleListMap, rFormatKeyPair.first, rFormatKeyPair.second, rRangeList );
     }
     // gather all ranges that have the same style and apply them in bulk
+    // Collect data in unsorted vectors and sort them just once at the end
+    // instead of possibly slow repeated inserts.
+    TmpColStyles tmpStylesPerColumn;
     for ( const auto& [rFormatKeyPair, rRanges] : rangeStyleListMap )
     {
         for (const ScRange & rAddress : rRanges)
@@ -363,8 +366,15 @@ void SheetDataBuffer::addColXfStyles()
             aStyleRows.mnStartRow = rAddress.aStart.Row();
             aStyleRows.mnEndRow = rAddress.aEnd.Row();
             for ( sal_Int32 nCol = rAddress.aStart.Col(); nCol <= rAddress.aEnd.Col(); ++nCol )
-               maStylesPerColumn[ nCol ].insert( aStyleRows );
+               tmpStylesPerColumn[ nCol ].push_back( aStyleRows );
         }
+    }
+    for( auto& rowStyles : tmpStylesPerColumn )
+    {
+        TmpRowStyles& s = rowStyles.second;
+        std::sort( s.begin(), s.end(), StyleRowRangeComp());
+        s.erase( std::unique( s.begin(), s.end(), StyleRowRangeCompEqual()), s.end());
+        maStylesPerColumn[ rowStyles.first ].insert_sorted_unique_vector( std::move( s ));
     }
 }
 

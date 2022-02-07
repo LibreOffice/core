@@ -12,7 +12,9 @@
 
 #include <vector>
 #include <algorithm>
+#include <cassert>
 #include <functional>
+#include <iterator>
 #include <memory>
 #include <type_traits>
 
@@ -229,19 +231,32 @@ public:
 
     void insert(sorted_vector<Value,Compare,Find> const& rOther)
     {
-       // optimization for the rather common case that we are overwriting this with the contents
-       // of another sorted vector
-       if ( empty() )
-       {
-           m_vector.insert(m_vector.begin(), rOther.m_vector.begin(), rOther.m_vector.end());
-       }
-       else
-       {
-           for (const_iterator it = rOther.m_vector.begin(); it != rOther.m_vector.end(); ++it)
-           {
-               insert(*it);
-           }
-       }
+        // optimization for the rather common case that we are overwriting this with the contents
+        // of another sorted vector
+        if ( empty() )
+            m_vector.insert(m_vector.begin(), rOther.m_vector.begin(), rOther.m_vector.end());
+        else
+            insert_internal( rOther.m_vector );
+    }
+
+    void insert_sorted_unique_vector(const std::vector<Value>& rOther)
+    {
+        assert( std::is_sorted(rOther.begin(), rOther.end(), Compare()));
+        assert( std::unique(rOther.begin(), rOther.end(), compare_equal) == rOther.end());
+        if ( empty() )
+            m_vector.insert(m_vector.begin(), rOther.m_vector.begin(), rOther.m_vector.end());
+        else
+            insert_internal( rOther );
+    }
+
+    void insert_sorted_unique_vector(std::vector<Value>&& rOther)
+    {
+        assert( std::is_sorted(rOther.begin(), rOther.end(), Compare()));
+        assert( std::unique(rOther.begin(), rOther.end(), compare_equal) == rOther.end());
+        if ( empty() )
+            m_vector.swap( rOther );
+        else
+            insert_internal( rOther );
     }
 
     /* Clear() elements in the vector, and free them one by one. */
@@ -266,6 +281,22 @@ public:
     }
 
 private:
+    static bool compare_equal( const Value& v1, const Value& v2 )
+    {   // Synthetize == check from < check for std::unique asserts above.
+        return !Compare()( v1, v2 ) && !Compare()( v2, v1 );
+    }
+
+    void insert_internal( const std::vector<Value>& rOther )
+    {
+        // Do a union in one pass rather than repeated insert() that could repeatedly
+        // move large amounts of data.
+        vector_t tmp;
+        tmp.reserve( m_vector.size() + rOther.size());
+        std::set_union( m_vector.begin(), m_vector.end(),
+                        rOther.begin(), rOther.end(),
+                        std::back_inserter( tmp ), Compare());
+        m_vector.swap( tmp );
+    }
 
     vector_t m_vector;
 };
