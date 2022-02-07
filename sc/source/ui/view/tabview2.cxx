@@ -840,8 +840,14 @@ void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCRO
     bool bVFlip = false;
     do
     {
-        SCROW nLastRow = -1;
-        bSkipCell = rDoc.RowHidden(rCurY, nTab, nullptr, &nLastRow) || rDoc.IsVerOverlapped( rCurX, rCurY, nTab );
+        SCROW nFirstHiddenRow = -1;
+        SCROW nLastHiddenRow = -1;
+        bSkipCell = rDoc.RowHidden(rCurY, nTab, &nFirstHiddenRow, &nLastHiddenRow);
+        if (!bSkipCell)
+        {
+            nFirstHiddenRow = nLastHiddenRow = -1;
+            bSkipCell = rDoc.IsVerOverlapped( rCurX, rCurY, nTab );
+        }
         if (bSkipProtected && !bSkipCell)
             bSkipCell = rDoc.HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
         if (bSkipUnprotected && !bSkipCell)
@@ -867,10 +873,20 @@ void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCRO
                 }
             }
             else
+            {
+                // nFirstRow/nLastRow are set only if the row is hidden, in which case we always skip,
+                // so as an optimization skip to the first row after the hidden range
                 if (nMovY > 0)
-                    ++rCurY;
+                    if (nLastHiddenRow >= 0)
+                        rCurY = std::min(nLastHiddenRow + 1, rDoc.MaxRow());
+                    else
+                        ++rCurY;
                 else
-                    --rCurY;
+                    if (nFirstHiddenRow >= 0)
+                        rCurY = std::max(nFirstHiddenRow - 1, 0);
+                    else
+                        --rCurY;
+            }
         }
     }
     while (bSkipCell);
