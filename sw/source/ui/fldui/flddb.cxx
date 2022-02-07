@@ -66,6 +66,7 @@ SwFieldDBPage::SwFieldDBPage(weld::Container* pPage, weld::DialogController* pCo
     // uitests
     m_xTypeLB->set_buildable_name(m_xTypeLB->get_buildable_name() + "-db");
     m_xNumFormatLB->set_buildable_name(m_xNumFormatLB->get_buildable_name() + "-db");
+    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-db");
 }
 
 SwFieldDBPage::~SwFieldDBPage()

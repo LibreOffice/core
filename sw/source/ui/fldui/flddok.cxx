@@ -74,6 +74,7 @@ SwFieldDokPage::SwFieldDokPage(weld::Container* pPage, weld::DialogController* p
     m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-doc");
     m_xNumFormatLB->set_buildable_name(m_xNumFormatLB->get_buildable_name() + "-doc");
     m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-doc");
+    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-doc");
 }
 
 SwFieldDokPage::~SwFieldDokPage()

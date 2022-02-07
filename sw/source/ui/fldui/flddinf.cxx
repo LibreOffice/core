@@ -82,6 +82,7 @@ SwFieldDokInfPage::SwFieldDokInfPage(weld::Container* pPage, weld::DialogControl
     // uitests
     m_xTypeTLB->set_buildable_name(m_xTypeTLB->get_buildable_name() + "-docinf");
     m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-docinf");
+    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-docinf");
 }
 
 SwFieldDokInfPage::~SwFieldDokInfPage()
