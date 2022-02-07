@@ -109,7 +109,7 @@ void GetOptimalHeightsInColumn(
 
     const SCROW nMinStart = nPos;
 
-    sal_uLong nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
+    sal_uInt64 nWeightedCount = nProgressStart + rCol.back().GetWeightedCount(nStartRow, nEndRow);
     const SCCOL maxCol = rCol.size() - 1; // last col done already above
     for (SCCOL nCol=0; nCol<maxCol; nCol++)
     {
@@ -455,7 +455,7 @@ tools::Long ScTable::GetNeededSize( SCCOL nCol, SCROW nRow,
 
 bool ScTable::SetOptimalHeight(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, bool bApi,
-    ScProgress* pOuterProgress, sal_uLong nProgressStart )
+    ScProgress* pOuterProgress, sal_uInt64 nProgressStart )
 {
     assert(nStartRow <= nEndRow);
 
@@ -488,7 +488,7 @@ bool ScTable::SetOptimalHeight(
 
 void ScTable::SetOptimalHeightOnly(
     sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
-    ScProgress* pOuterProgress, sal_uLong nProgressStart )
+    ScProgress* pOuterProgress, sal_uInt64 nProgressStart )
 {
     OSL_ENSURE( rCxt.getExtraHeight() == 0 || rCxt.isForceAutoSize(),
         "automatic OptimalHeight with Extra" );

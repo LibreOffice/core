@@ -532,7 +532,7 @@ void ScPrintFunc::DrawToDev(ScDocument& rDoc, OutputDevice* pDev, double /* nPri
     tools::Long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
         nTwipsSizeX += rDoc.GetColWidth( i, nTab );
-    tools::Long nTwipsSizeY = static_cast<tools::Long>(rDoc.GetRowHeight( nY1, nY2, nTab ));
+    tools::Long nTwipsSizeY = rDoc.GetRowHeight( nY1, nY2, nTab );
 
     //  if no lines, still space for the outline frame (20 Twips = 1pt)
     //  (HasLines initializes aLines to 0,0,0,0)

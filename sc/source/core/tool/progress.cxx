@@ -38,10 +38,10 @@ using namespace com::sun::star;
 
 static ScProgress theDummyInterpretProgress;
 SfxProgress*    ScProgress::pGlobalProgress = nullptr;
-sal_uLong       ScProgress::nGlobalRange = 0;
-sal_uLong       ScProgress::nGlobalPercent = 0;
+sal_uInt64      ScProgress::nGlobalRange = 0;
+sal_uInt64      ScProgress::nGlobalPercent = 0;
 ScProgress*     ScProgress::pInterpretProgress = &theDummyInterpretProgress;
-sal_uLong       ScProgress::nInterpretProgress = 0;
+sal_uInt64      ScProgress::nInterpretProgress = 0;
 ScDocument*     ScProgress::pInterpretDoc;
 bool            ScProgress::bIdleWasEnabled = false;
 
@@ -71,7 +71,7 @@ static bool lcl_HasControllersLocked( const SfxObjectShell& rObjSh )
 }
 
 ScProgress::ScProgress(SfxObjectShell* pObjSh, const OUString& rText,
-                       sal_uLong nRange, bool bWait)
+                       sal_uInt64 nRange, bool bWait)
     : bEnabled(true)
 {
 

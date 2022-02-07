@@ -383,9 +383,9 @@ public:
     ScFormulaCell * const * GetFormulaCellBlockAddress( SCROW nRow, size_t& rBlockSize ) const;
     CellType    GetCellType( SCROW nRow ) const;
     SCSIZE      GetCellCount() const;
-    sal_uLong GetWeightedCount() const;
-    sal_uLong GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;
-    sal_uInt32 GetCodeCount() const;       // RPN-Code in formulas
+    sal_uInt64  GetWeightedCount() const;
+    sal_uInt64  GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;
+    sal_uInt64  GetCodeCount() const;       // RPN-Code in formulas
     FormulaError  GetErrCode( SCROW nRow ) const;
 
     bool    HasStringData( SCROW nRow ) const;

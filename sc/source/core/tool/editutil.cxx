@@ -355,7 +355,7 @@ tools::Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bF
         if (bInPrintTwips)
             nCellY += pDoc->GetRowHeight(nRow + 1, nRow + nCountY - 1, nTab);
         else
-            nCellY += static_cast<tools::Long>(pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY));
+            nCellY += pDoc->GetScaledRowHeight( nRow+1, nRow+nCountY-1, nTab, nPPTY);
     }
 
     tools::Long nRightMargin = 0;

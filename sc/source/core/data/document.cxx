@@ -4138,7 +4138,7 @@ sal_uInt16 ScDocument::GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
     return 0;
 }
 
-sal_uLong ScDocument::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const
+tools::Long ScDocument::GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const
 {
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
@@ -4187,7 +4187,7 @@ sal_uInt16 ScDocument::GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, S
     return 0;
 }
 
-sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
+tools::Long ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if (nStartRow == nEndRow)
         return GetRowHeight( nStartRow, nTab, bHiddenAsZero );  // faster for a single row
@@ -4203,17 +4203,17 @@ sal_uLong ScDocument::GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, 
     return 0;
 }
 
-SCROW ScDocument::GetRowForHeight( SCTAB nTab, sal_uLong nHeight ) const
+SCROW ScDocument::GetRowForHeight( SCTAB nTab, tools::Long nHeight ) const
 {
     return maTabs[nTab]->GetRowForHeight(nHeight);
 }
 
-sal_uLong ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
-        SCTAB nTab, double fScale, const sal_uLong* pnMaxHeight ) const
+tools::Long ScDocument::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow,
+        SCTAB nTab, double fScale, const tools::Long* pnMaxHeight ) const
 {
     // faster for a single row
     if (nStartRow == nEndRow)
-        return static_cast<sal_uLong>(GetRowHeight( nStartRow, nTab) * fScale);
+        return static_cast<tools::Long>(GetRowHeight( nStartRow, nTab) * fScale);
 
     // check bounds because this method replaces former for(i=start;i<=end;++i) loops
     if (nStartRow > nEndRow)
@@ -4234,7 +4234,7 @@ SCROW ScDocument::GetHiddenRowCount( SCROW nRow, SCTAB nTab ) const
     return 0;
 }
 
-sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
+tools::Long ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetColOffset( nCol, bHiddenAsZero );
@@ -4242,7 +4242,7 @@ sal_uLong ScDocument::GetColOffset( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero )
     return 0;
 }
 
-sal_uLong ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
+tools::Long ScDocument::GetRowOffset( SCROW nRow, SCTAB nTab, bool bHiddenAsZero ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
         return maTabs[nTab]->GetRowOffset( nRow, bHiddenAsZero );
@@ -4289,14 +4289,14 @@ void ScDocument::UpdateAllRowHeights( sc::RowHeightContext& rCxt, const ScMarkDa
 {
     // one progress across all (selected) sheets
 
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
             nCellCount += maTabs[nTab]->GetWeightedCount();
 
     ScProgress aProgress( GetDocumentShell(), ScResId(STR_PROGRESS_HEIGHTING), nCellCount, true );
 
-    sal_uLong nProgressStart = 0;
+    sal_uInt64 nProgressStart = 0;
     for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()); nTab++ )
         if ( maTabs[nTab] && ( !pTabMark || pTabMark->GetTableSelect(nTab) ) )
         {
@@ -6140,9 +6140,9 @@ void ScDocument::StylesToNames()
     const_cast<ScPatternAttr&>(pPool->GetDefaultItem(ATTR_PATTERN)).StyleToName();
 }
 
-sal_uLong ScDocument::GetCellCount() const
+sal_uInt64 ScDocument::GetCellCount() const
 {
-    sal_uLong nCellCount = 0;
+    sal_uInt64 nCellCount = 0;
 
     for (const auto& a : maTabs)
     {
@@ -6153,9 +6153,9 @@ sal_uLong ScDocument::GetCellCount() const
     return nCellCount;
 }
 
-sal_uLong ScDocument::GetFormulaGroupCount() const
+sal_uInt64 ScDocument::GetFormulaGroupCount() const
 {
-    sal_uLong nFormulaGroupCount = 0;
+    sal_uInt64 nFormulaGroupCount = 0;
 
     ScFormulaGroupIterator aIter( *const_cast<ScDocument*>(this) );
     for ( sc::FormulaGroupEntry* ptr = aIter.first(); ptr; ptr = aIter.next())
@@ -6166,9 +6166,9 @@ sal_uLong ScDocument::GetFormulaGroupCount() const
     return nFormulaGroupCount;
 }
 
-sal_uLong ScDocument::GetCodeCount() const
+sal_uInt64 ScDocument::GetCodeCount() const
 {
-    sal_uLong nCodeCount = 0;
+    sal_uInt64 nCodeCount = 0;
 
     for (const auto& a : maTabs)
     {

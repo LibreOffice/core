@@ -241,9 +241,9 @@ void ScTable::UpdatePageBreaks(const ScRange* pUserArea)
         if (bStartOfPage && bRepeatRow && nY > nRepeatStartY && !bRowFound)
         {
             // subtract size of repeat rows from page size
-            tools::ULong nHeights = GetTotalRowHeight(nRepeatStartY, nRepeatEndY);
+            tools::Long nHeights = GetTotalRowHeight(nRepeatStartY, nRepeatEndY);
 #if OSL_DEBUG_LEVEL > 0
-            if (nHeights == ::std::numeric_limits<tools::ULong>::max())
+            if (nHeights == ::std::numeric_limits<tools::Long>::max())
                 OSL_FAIL("ScTable::UpdatePageBreaks: row heights overflow");
 #endif
             nPageSizeY -= nHeights;
@@ -773,9 +773,9 @@ SCROW ScTable::CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const
     return nCount;
 }
 
-sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero) const
+tools::Long ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero) const
 {
-    sal_uInt32 nHeight = 0;
+    tools::Long nHeight = 0;
     SCROW nRow = nStartRow;
     ScFlatBoolRowSegments::RangeData aData;
     while (nRow <= nEndRow)
