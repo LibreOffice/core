@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4d1e87c_abd2e967",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-07T19:27:17Z",
+      "side": 1,
+      "message": "this will need corresponding changes at\n   ScXMLImport::SetStatistics\n   SfxDocumentMetaData::getDocumentStatistics()\n   SvXMLMetaExport::MExport_  (line 259)",
+      "revId": "fc97ee2609c577a891671749dbe9c059f220ff98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
