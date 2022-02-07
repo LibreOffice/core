@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db4d0077_a675cf4a",
+        "filename": "readlicense_oo/license/license.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2847,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-07T18:34:22Z",
+      "side": 1,
+      "message": "CC-BY-SA requires to credit the author, i.e. start the following paragraph with\n\n  Author: Sina Ahmadi \u0026lt;ahmadi.sina@outlook.com\u0026gt;\u003cbr /\u003e",
+      "revId": "aecd5c4d9cc8acd1a5de480e438fe5caec92a069",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
