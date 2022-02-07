@@ -34,6 +34,7 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <TitleHelper.hxx>
+#include <LabeledDataSequence.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <CommonConverters.hxx>
 #include <NumberFormatterWrapper.hxx>
@@ -100,19 +101,17 @@ void lcl_addText( OUString& rOut, std::u16string_view rSeparator, std::u16string
         rOut+=rNext;
 }
 
-OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal_Int32 nPointIndex,
+OUString lcl_getDataPointValueText( const rtl::Reference< DataSeries >& xSeries, sal_Int32 nPointIndex,
                                     const rtl::Reference< BaseCoordinateSystem >& xCooSys,
                                     const Reference< frame::XModel >& xChartModel )
 {
 
     OUString aRet;
 
-    Reference<data::XDataSource> xDataSource(
-            uno::Reference<data::XDataSource>( xSeries, uno::UNO_QUERY ) );
-    if(!xDataSource.is())
+    if(!xSeries.is())
         return aRet;
 
-    Sequence< Reference< data::XLabeledDataSequence > > aDataSequences( xDataSource->getDataSequences() );
+    const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & aDataSequences = xSeries->getDataSequences2();
 
     OUString aX, aY, aY_Min, aY_Max, aY_First, aY_Last, a_Size;
     double fValue = 0;
@@ -122,7 +121,7 @@ OUString lcl_getDataPointValueText( const Reference< XDataSeries >& xSeries, sal
     Color nLabelColor;//dummy
     bool bColorChanged;//dummy
 
-    for(sal_Int32 nN = aDataSequences.getLength();nN--;)
+    for(sal_Int32 nN = aDataSequences.size();nN--;)
     {
         uno::Reference<data::XDataSequence>  xDataSequence( aDataSequences[nN]->getValues());
         if( !xDataSequence.is() )

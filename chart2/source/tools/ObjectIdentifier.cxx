@@ -1171,8 +1171,8 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
             case OBJECTTYPE_DATA_LABEL:
             case OBJECTTYPE_DATA_POINT:
                 {
-                    Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(
-                        rObjectCID, xChartModel ) );
+                    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID(
+                        rObjectCID, xChartModel );
                     if(xSeries.is())
                     {
                         sal_Int32 nIndex = aParticleID.toInt32();
@@ -1184,26 +1184,22 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
             case OBJECTTYPE_DATA_ERRORS_Y:
             case OBJECTTYPE_DATA_ERRORS_Z:
                 {
-                    Reference< XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID(
-                        rObjectCID, xChartModel ) );
+                    rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID(
+                        rObjectCID, xChartModel );
                     if(xSeries.is())
                     {
-                        Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
                         Reference< beans::XPropertySet > xErrorBarProp;
-                        if( xSeriesProp.is() )
-                        {
-                            OUString errorBar;
+                        OUString errorBar;
 
-                            if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X)
-                                errorBar = CHART_UNONAME_ERRORBAR_X;
-                            else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y)
-                                errorBar = CHART_UNONAME_ERRORBAR_Y;
-                            else
-                                errorBar = "ErrorBarZ";
+                        if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X)
+                            errorBar = CHART_UNONAME_ERRORBAR_X;
+                        else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y)
+                            errorBar = CHART_UNONAME_ERRORBAR_Y;
+                        else
+                            errorBar = "ErrorBarZ";
 
-                            xSeriesProp->getPropertyValue( errorBar ) >>= xErrorBarProp;
-                            xObjectProperties = xErrorBarProp;
-                        }
+                        xSeries->getPropertyValue( errorBar ) >>= xErrorBarProp;
+                        xObjectProperties = xErrorBarProp;
                     }
                     break;
                 }

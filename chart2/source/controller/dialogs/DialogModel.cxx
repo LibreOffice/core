@@ -435,9 +435,9 @@ std::vector< DialogModel::tSeriesWithChartTypeByName >
     {
         try
         {
-            const Sequence< Reference< XDataSeries > > aSeq( rxChartType->getDataSeries());
+            const std::vector< rtl::Reference< DataSeries > > & aSeq = rxChartType->getDataSeries2();
             OUString aRole = rxChartType->getRoleOfSequenceForSeriesLabel();
-            for( Reference< XDataSeries > const & dataSeries : aSeq )
+            for( rtl::Reference< DataSeries > const & dataSeries : aSeq )
             {
                 aResult.push_back(
                     ::chart::DialogModel::tSeriesWithChartTypeByName(
@@ -476,13 +476,12 @@ void addMissingRoles(DialogModel::tRolesWithRanges& rResult, const uno::Sequence
  */
 void addNewSeriesToContainer(
     const rtl::Reference<ChartType>& xChartType,
-    const Reference<XDataSeries>& xSeries,
-    const Reference<XDataSeries>& xNewSeries )
+    const rtl::Reference<DataSeries>& xSeries,
+    const rtl::Reference<DataSeries>& xNewSeries )
 {
-    auto aSeries = comphelper::sequenceToContainer<std::vector<Reference<XDataSeries> >>(xChartType->getDataSeries());
+    auto aSeries = xChartType->getDataSeries2();
 
-    std::vector<Reference<XDataSeries> >::iterator aIt =
-        std::find( aSeries.begin(), aSeries.end(), xSeries);
+    auto aIt = std::find( aSeries.begin(), aSeries.end(), xSeries);
 
     if( aIt == aSeries.end())
         // if we have no series we insert at the first position.
@@ -492,7 +491,7 @@ void addNewSeriesToContainer(
         ++aIt;
 
     aSeries.insert(aIt, xNewSeries);
-    xChartType->setDataSeries(comphelper::containerToSequence(aSeries));
+    xChartType->setDataSeries(aSeries);
 }
 
 }
@@ -543,13 +542,15 @@ void DialogModel::moveSeries(
 }
 
 rtl::Reference< ::chart::DataSeries > DialogModel::insertSeriesAfter(
-    const Reference< XDataSeries > & xSeries,
+    const Reference< XDataSeries > & xUnoSeries,
     const rtl::Reference< ::chart::ChartType > & xChartType,
     bool bCreateDataCachedSequences /* = false */ )
 {
     m_aTimerTriggeredControllerLock.startTimer();
     ControllerLockGuardUNO aLockedControllers( m_xChartDocument );
     rtl::Reference< ::chart::DataSeries > xNewSeries;
+    rtl::Reference<DataSeries> xSeries = dynamic_cast<DataSeries*>(xUnoSeries.get());
+    assert(xSeries || !xUnoSeries);
 
     try
     {

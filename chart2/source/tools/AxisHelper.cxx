@@ -260,11 +260,8 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 {
                     if( nDimensionIndex != 0 )
                         aRoleToMatch = ChartTypeHelper::getRoleOfSequenceForYAxisNumberFormatDetection( chartType );
-                    const Sequence< Reference< XDataSeries > > aDataSeriesSeq( chartType->getDataSeries());
-                    for( Reference< chart2::XDataSeries > const & xDataSeries : aDataSeriesSeq )
+                    for( rtl::Reference< DataSeries > const & xDataSeries : chartType->getDataSeries2() )
                     {
-                        Reference< data::XDataSource > xSource( xDataSeries, uno::UNO_QUERY_THROW );
-
                         if( nDimensionIndex == 1 )
                         {
                             //only take those series into account that are attached to this axis
@@ -274,7 +271,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                         }
 
                         Reference< data::XLabeledDataSequence > xLabeledSeq(
-                            DataSeriesHelper::getDataSequenceByRole( xSource, aRoleToMatch ) );
+                            DataSeriesHelper::getDataSequenceByRole( xDataSeries, aRoleToMatch ) );
 
                         if( !xLabeledSeq.is() && nDimensionIndex==0 )
                         {
@@ -958,16 +955,13 @@ bool AxisHelper::isSecondaryYAxisNeeded( const rtl::Reference< BaseCoordinateSys
     const std::vector< rtl::Reference< ChartType > > & aChartTypes( xCooSys->getChartTypes2() );
     for( rtl::Reference< ChartType > const & chartType : aChartTypes )
     {
-        Sequence< Reference< XDataSeries > > aSeriesList( chartType->getDataSeries() );
-        for( sal_Int32 nS = aSeriesList.getLength(); nS-- ; )
+        const std::vector< rtl::Reference< DataSeries > > & aSeriesList = chartType->getDataSeries2();
+        for( sal_Int32 nS = aSeriesList.size(); nS-- ; )
         {
-            Reference< beans::XPropertySet > xProp( aSeriesList[nS], uno::UNO_QUERY );
-            if(xProp.is())
-            {
-                sal_Int32 nAttachedAxisIndex = 0;
-                if( ( xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nAttachedAxisIndex ) && nAttachedAxisIndex>0 )
-                    return true;
-            }
+            sal_Int32 nAttachedAxisIndex = 0;
+            if( ( aSeriesList[nS]->getPropertyValue( "AttachedAxisIndex" ) >>= nAttachedAxisIndex ) &&
+                    nAttachedAxisIndex>0 )
+                return true;
         }
     }
     return false;

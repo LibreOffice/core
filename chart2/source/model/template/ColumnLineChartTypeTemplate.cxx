@@ -206,10 +206,10 @@ void ColumnLineChartTypeTemplate::createChartTypes(
 
         if( nNumberOfColumns > 0 )
         {
-            Sequence< Reference< XDataSeries > > aColumnSeq( nNumberOfColumns );
+            std::vector< rtl::Reference< DataSeries > > aColumnSeq( nNumberOfColumns );
             std::copy( aFlatSeriesSeq.begin(),
                          aFlatSeriesSeq.begin() + nNumberOfColumns,
-                         aColumnSeq.getArray());
+                         aColumnSeq.begin());
             xCT->setDataSeries( aColumnSeq );
         }
 
@@ -220,10 +220,10 @@ void ColumnLineChartTypeTemplate::createChartTypes(
 
         if( nNumberOfLines > 0 )
         {
-            Sequence< Reference< XDataSeries > > aLineSeq( nNumberOfLines );
+            std::vector< rtl::Reference< DataSeries > > aLineSeq( nNumberOfLines );
             std::copy( aFlatSeriesSeq.begin() + nNumberOfColumns,
                          aFlatSeriesSeq.end(),
-                         aLineSeq.getArray());
+                         aLineSeq.begin());
             xCT->setDataSeries( aLineSeq );
         }
     }

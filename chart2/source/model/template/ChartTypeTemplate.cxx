@@ -58,7 +58,7 @@ namespace
 {
 
 void lcl_applyDefaultStyle(
-    const Reference< XDataSeries > & xSeries,
+    const rtl::Reference< ::chart::DataSeries > & xSeries,
     sal_Int32 nIndex,
     const rtl::Reference< ::chart::Diagram > & xDiagram )
 {
@@ -66,10 +66,9 @@ void lcl_applyDefaultStyle(
     // setting color as hard attribute
     if( xSeries.is() && xDiagram.is())
     {
-        Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
         Reference< chart2::XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
-        if( xSeriesProp.is() && xColorScheme.is() )
-            xSeriesProp->setPropertyValue(
+        if( xColorScheme.is() )
+            xSeries->setPropertyValue(
                 "Color",
                 uno::Any( xColorScheme->getColorByIndex( nIndex )));
     }
@@ -436,13 +435,8 @@ void ChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& x
         for( rtl::Reference< ChartType > const & xChartType : xCooSys->getChartTypes2() )
         {
             //iterate through all series in this chart type
-            const uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xChartType->getDataSeries() );
-            for( Reference< XDataSeries > const & xSeries : aSeriesList )
+            for( rtl::Reference< DataSeries > const & xSeries : xChartType->getDataSeries2() )
             {
-                Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
-                if(!xSeries.is() || !xSeriesProp.is() )
-                    continue;
-
                 uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                     xChartType, isSwapXAndY(), xSeries ) );
                 if(!aAvailablePlacements.hasElements())
@@ -450,10 +444,10 @@ void ChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >& x
 
                 sal_Int32 nDefaultPlacement = aAvailablePlacements[0];
 
-                lcl_resetLabelPlacementIfDefault( xSeriesProp, nDefaultPlacement );
+                lcl_resetLabelPlacementIfDefault( xSeries, nDefaultPlacement );
 
                 uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-                if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+                if( xSeries->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
                     for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
                         lcl_resetLabelPlacementIfDefault( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), nDefaultPlacement );
             }

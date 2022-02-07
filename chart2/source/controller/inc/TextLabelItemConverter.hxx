@@ -28,6 +28,7 @@ namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::chart2 { class XDataSeries; }
 namespace com::sun::star::frame { class XModel; }
 namespace chart { class ChartModel; }
+namespace chart { class DataSeries; }
 
 namespace chart::wrapper {
 
@@ -37,7 +38,7 @@ public:
     TextLabelItemConverter(
         const rtl::Reference<::chart::ChartModel>& xChartModel,
         const css::uno::Reference<css::beans::XPropertySet>& rPropertySet,
-        const css::uno::Reference<css::chart2::XDataSeries>& xSeries,
+        const rtl::Reference<::chart::DataSeries>& xSeries,
         SfxItemPool& rItemPool,
         const css::awt::Size* pRefSize,
         bool bDataSeries,
@@ -65,7 +66,7 @@ private:
     bool mbDataSeries:1;
     bool mbForbidPercentValue:1;
 
-    css::uno::Reference<css::chart2::XDataSeries> m_xSeries;
+    rtl::Reference<::chart::DataSeries> m_xSeries;
 };
 
 }
