@@ -322,6 +322,10 @@ void SwAsCharAnchoredObjectPosition::CalcPosition()
     maAnchorPos = aAnchorPos;
     mnRelPos = nRelPos;
     maObjBoundRect = aObjBoundRect;
+
+    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
+        SwTextBoxHelper::changeAnchor, &const_cast<SwFrameFormat&>(GetFrameFormat()),
+        const_cast<SwFrameFormat&>(GetFrameFormat()).FindRealSdrObject());
 }
 
 /** determine the relative position to base line for object position type AS_CHAR
