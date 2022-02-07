@@ -451,11 +451,10 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         aMMRect = *pLastMM;
 
         tools::Long nLeft = 0;
-        SCCOL i;
-        for (i=0; i<nStartCol; i++)
+        for (SCCOL i=0; i<nStartCol; i++)
             nLeft += GetColWidth(i,nTab);
         tools::Long nRight = nLeft;
-        for (i=nStartCol; i<=nEndCol; i++)
+        for (SCCOL i=nStartCol; i<=nEndCol; i++)
             nRight += GetColWidth(i,nTab);
 
         aMMRect.SetLeft(o3tl::convert(nLeft, o3tl::Length::twip, o3tl::Length::mm100));

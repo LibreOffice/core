@@ -1617,9 +1617,8 @@ awt::Point SAL_CALL SvxCustomShape::getPosition()
 
                 Point aRef1( ( aBoundRect.Left() + aBoundRect.Right() ) >> 1, aBoundRect.Top() );
                 Point aRef2( aRef1.X(), aRef1.Y() + 1000 );
-                sal_uInt16 i;
                 sal_uInt16 nPointCount=aPol.GetSize();
-                for (i=0; i<nPointCount; i++)
+                for (sal_uInt16 i=0; i<nPointCount; i++)
                 {
                     MirrorPoint(aPol[i],aRef1,aRef2);
                 }

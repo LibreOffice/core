@@ -155,9 +155,8 @@ void SequenceAsHashMap::operator<<(const css::uno::Any& aSource)
 void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lSource)
 {
     sal_Int32 c = lSource.getLength();
-    sal_Int32 i = 0;
 
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         css::beans::PropertyValue lP;
         if (lSource[i] >>= lP)

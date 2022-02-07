@@ -36,10 +36,9 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
 {
     css::uno::Sequence< css::beans::NamedValue > lEnv;
 
-    sal_Int32                     i = 0;
     sal_Int32                     c = lArguments.getLength();
     const css::beans::NamedValue* p = lArguments.getConstArray();
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         if ( p[i].Name == "Environment" )
         {
@@ -52,7 +51,7 @@ css::uno::Any SAL_CALL MyListener::execute(const css::uno::Sequence< css::beans:
 
     c = lEnv.getLength();
     p = lEnv.getConstArray();
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         if ( p[i].Name == "Model" )
         {

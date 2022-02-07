@@ -1265,11 +1265,11 @@ static bool lcl_PutString(
             {
                 static constexpr OUStringLiteral aSepShortened = u"SEP";
                 uno::Sequence< i18n::CalendarItem2 > xMonths;
-                sal_Int32 i, nMonthCount;
+                sal_Int32 nMonthCount;
                 //  first test all month names from local international
                 xMonths = rCalendar.getMonths();
                 nMonthCount = xMonths.getLength();
-                for (i=0; i<nMonthCount && !nMonth; i++)
+                for (sal_Int32 i=0; i<nMonthCount && !nMonth; i++)
                 {
                     if ( rTransliteration.isEqual( aMStr, xMonths[i].FullName ) ||
                          rTransliteration.isEqual( aMStr, xMonths[i].AbbrevName ) )
@@ -1287,7 +1287,7 @@ static bool lcl_PutString(
                 {
                     xMonths = pSecondCalendar->getMonths();
                     nMonthCount = xMonths.getLength();
-                    for (i=0; i<nMonthCount && !nMonth; i++)
+                    for (sal_Int32 i=0; i<nMonthCount && !nMonth; i++)
                     {
                         if ( pSecondTransliteration->isEqual( aMStr, xMonths[i].FullName ) ||
                              pSecondTransliteration->isEqual( aMStr, xMonths[i].AbbrevName ) )

@@ -167,11 +167,9 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
     aDataAreaExtras.mbCellFormats = rSub.bIncludePattern;
     aDataAreaExtras.resetArea();
 
-    sal_uInt16 i;
-
     //  first the groups from the partial results
     if (rSub.bDoSort)
-        for (i=0; i<MAXSUBTOTAL; i++)
+        for (sal_uInt16 i=0; i<MAXSUBTOTAL; i++)
             if (rSub.bGroupActive[i])
             {
                 ScSortKeyState key;
@@ -182,7 +180,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             }
 
     //  then the old settings
-    for (i=0; i < rOld.GetSortKeyCount(); i++)
+    for (sal_uInt16 i=0; i < rOld.GetSortKeyCount(); i++)
         if (rOld.maKeyState[i].bDoSort)
         {
             SCCOLROW nThisField = rOld.maKeyState[i].nField;

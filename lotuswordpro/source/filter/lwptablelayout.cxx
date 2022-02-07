@@ -901,7 +901,6 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable> const & pXFTable,
         sal_uInt8 nFirstColSpann,const sal_uInt8* pCellMark)
 {
-    sal_uInt16 i;
     sal_uInt16 nRowNum = pTmpTable->GetRowCount();
     LwpTable* pTable = GetTable();
     assert(pTable);
@@ -924,7 +923,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     if (pTempRowStyle)
         *xRowStyle = *pTempRowStyle;
 
-    for (i=1;i<=nRowNum;i++)
+    for (sal_uInt16 i=1;i<=nRowNum;i++)
     {
         styleName = pTmpTable->GetRow(i)->GetStyleName();
         fHeight+=static_cast<XFRowStyle*>(pXFStyleManager->FindStyle(styleName))->GetRowHeight();
@@ -946,7 +945,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     rtl::Reference<XFTable> xSubTable2(new XFTable);
     rtl::Reference<XFCell> xNewCell;
 
-    for (i=1;i<=nRowNum;i++)
+    for (sal_uInt16 i=1;i<=nRowNum;i++)
     {
         XFRow* pOldRow = pTmpTable->GetRow(i);
         rtl::Reference<XFRow> xNewRow(new XFRow);
@@ -964,7 +963,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     xXFCell1->SetColumnSpaned(nFirstColSpann);
     xXFRow->AddCell(xXFCell1);
 
-    for (i=1;i<=nRowNum;i++)
+    for (sal_uInt16 i=1;i<=nRowNum;i++)
     {
         XFRow* pOldRow = pTmpTable->GetRow(i);
         rtl::Reference<XFRow> xNewRow(new XFRow);
@@ -985,7 +984,7 @@ void LwpTableLayout::SplitRowToCells(XFTable* pTmpTable, rtl::Reference<XFTable>
     pXFTable->AddHeaderRow(xXFRow.get());
 
     //remove tmp table
-    for (i=1;i<=nRowNum;i++)
+    for (sal_uInt16 i=1;i<=nRowNum;i++)
     {
         pTmpTable->RemoveRow(i);
     }

@@ -358,7 +358,6 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             if ( rProp.Value >>= aSeq )
             {
                 sal_Int32 nCount = aSeq.getLength();
-                sal_Int32 i;
                 if ( nCount > static_cast<sal_Int32>( rParam.GetSortKeyCount() ) )
                 {
                     // tdf#105301 - increase the size of the sorting keys
@@ -366,7 +365,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     rParam.maKeyState.resize(nCount);
                 }
                 const util::SortField* pFieldArray = aSeq.getConstArray();
-                for (i=0; i<nCount; i++)
+                for (sal_Int32 i=0; i<nCount; i++)
                 {
                     rParam.maKeyState[i].nField     = static_cast<SCCOLROW>( pFieldArray[i].Field );
                     rParam.maKeyState[i].bAscending = pFieldArray[i].SortAscending;
@@ -374,20 +373,19 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     // FieldType is ignored
                     rParam.maKeyState[i].bDoSort = true;
                 }
-                for (i=nCount; i<nSortSize; i++)
+                for (sal_Int32 i=nCount; i<nSortSize; i++)
                     rParam.maKeyState[i].bDoSort = false;
             }
             else if ( rProp.Value >>= aNewSeq )
             {
                 sal_Int32 nCount = aNewSeq.getLength();
-                sal_Int32 i;
                 if ( nCount > nSortSize )
                 {
                     nCount = nSortSize;
                     rParam.maKeyState.resize(nCount);
                 }
                 const table::TableSortField* pFieldArray = aNewSeq.getConstArray();
-                for (i=0; i<nCount; i++)
+                for (sal_Int32 i=0; i<nCount; i++)
                 {
                     rParam.maKeyState[i].nField     = static_cast<SCCOLROW>( pFieldArray[i].Field );
                     rParam.maKeyState[i].bAscending = pFieldArray[i].IsAscending;
@@ -400,7 +398,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
                     // FieldType is ignored
                     rParam.maKeyState[i].bDoSort = true;
                 }
-                for (i=nCount; i<nSortSize; i++)
+                for (sal_Int32 i=nCount; i<nSortSize; i++)
                     rParam.maKeyState[i].bDoSort = false;
             }
         }

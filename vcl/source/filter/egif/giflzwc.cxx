@@ -157,7 +157,6 @@ void GIFLZWCompressor::Compress(sal_uInt8* pSrc, sal_uInt32 nSize)
         return;
 
     GIFLZWCTreeNode* p;
-    sal_uInt16 i;
     sal_uInt8 nV;
 
     if( !pPrefix && nSize )
@@ -186,7 +185,7 @@ void GIFLZWCompressor::Compress(sal_uInt8* pSrc, sal_uInt32 nSize)
             {
                 pIDOS->WriteBits(nClearCode,nCodeSize);
 
-                for (i=0; i<nClearCode; i++)
+                for (sal_uInt16 i=0; i<nClearCode; i++)
                     pTable[i].pFirstChild=nullptr;
 
                 nCodeSize=nDataSize+1;

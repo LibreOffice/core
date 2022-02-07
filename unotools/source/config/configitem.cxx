@@ -315,8 +315,6 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
 
 Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUString >& rNames)
 {
-    sal_Int32 i;
-
     // size of return list is fix!
     // Every item must match to length of incoming name list.
     sal_Int32 nCount = rNames.getLength();
@@ -332,7 +330,7 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const css::uno::Sequence< OUS
     if (!xHierarchyAccess.is())
         return lStates;
 
-    for (i=0; i<nCount; ++i)
+    for (sal_Int32 i=0; i<nCount; ++i)
     {
         try
         {

@@ -1391,12 +1391,11 @@ char* base64_encode_string( const uchar *buf, unsigned int len )
     int inPos  = 0;
     int outPos = 0;
     int c1, c2;
-    unsigned int i;
 
     out=static_cast<char *>(malloc( (len*4/3)+8 ));
 
 /* Get three characters at a time and encode them. */
-    for (i=0; i < len/3; ++i)
+    for (unsigned int i=0; i < len/3; ++i)
     {
         c1 = buf[inPos++] & 0xFF;
         c2 = buf[inPos++] & 0xFF;

@@ -418,8 +418,7 @@ RegError ORegKey::setStringListValue(
 
     sal_uInt32 size = 4; // 4 bytes (sal_uInt32) for the length
 
-    sal_uInt32 i;
-    for (i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         size +=  4 + strlen(pValueList[i]) + 1;
     }
@@ -434,7 +433,7 @@ RegError ORegKey::setStringListValue(
     sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
 
-    for (i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         sLen = strlen(pValueList[i]) + 1;
         writeUINT32(pBuffer.get()+VALUE_HEADEROFFSET+offset, sLen);
@@ -482,8 +481,7 @@ RegError ORegKey::setUnicodeListValue(std::u16string_view valueName, sal_Unicode
 
     sal_uInt32 size = 4; // 4 bytes (sal_uInt32) for the length
 
-    sal_uInt32 i;
-    for (i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         size +=  4 + ((rtl_ustr_getLength(pValueList[i]) +1) * 2);
     }
@@ -498,7 +496,7 @@ RegError ORegKey::setUnicodeListValue(std::u16string_view valueName, sal_Unicode
     sal_uInt32 offset = 4; // initial 4 bytes for the size of the array;
     sal_uInt32 sLen = 0;
 
-    for (i=0; i < len; i++)
+    for (sal_uInt32 i=0; i < len; i++)
     {
         sLen = (rtl_ustr_getLength(pValueList[i]) + 1) * 2;
         writeUINT32(pBuffer.get()+VALUE_HEADEROFFSET+offset, sLen);

@@ -533,8 +533,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
 
             sal_uInt16 nFound = 0;
             size_t nCount = pColl->GetCount();
-            size_t i;
-            for (i=0; i<nCount; ++i)
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject& rDPObj = (*pColl)[i];
                 if ( rDPObj.GetOutRange().aStart.Tab() == nTab )
@@ -544,7 +543,7 @@ Sequence<OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
             sal_uInt16 nPos = 0;
             Sequence<OUString> aSeq(nFound);
             OUString* pAry = aSeq.getArray();
-            for (i=0; i<nCount; ++i)
+            for (size_t i=0; i<nCount; ++i)
             {
                 ScDPObject& rDPObj = (*pColl)[i];
                 if ( rDPObj.GetOutRange().aStart.Tab() == nTab )

@@ -438,9 +438,8 @@ void JobData::appendEnabledJobsForEvent( const css::uno::Reference< css::uno::XC
 {
     std::vector< OUString > lAdditionalJobs = JobData::getEnabledJobsForEvent(rxContext, sEvent);
     sal_Int32                c               = lAdditionalJobs.size();
-    sal_Int32                i               = 0;
 
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         JobData::TJob2DocEventBinding aBinding(lAdditionalJobs[i], sEvent);
         lJobs.push_back(aBinding);

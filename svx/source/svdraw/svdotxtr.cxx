@@ -240,9 +240,8 @@ void SdrTextObj::NbcMirror(const Point& rRef1, const Point& rRef2)
         bRotate90=maGeo.nRotationAngle.get() % 9000 ==0;
     }
     tools::Polygon aPol(Rect2Poly(maRect,maGeo));
-    sal_uInt16 i;
     sal_uInt16 nPointCount=aPol.GetSize();
-    for (i=0; i<nPointCount; i++) {
+    for (sal_uInt16 i=0; i<nPointCount; i++) {
          MirrorPoint(aPol[i],rRef1,rRef2);
     }
     // turn polygon and move it a little

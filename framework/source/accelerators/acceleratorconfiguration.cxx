@@ -166,13 +166,12 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
 {
     SolarMutexGuard g;
 
-    sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG();
 
     auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         const OUString& rCommand = lCommandList[i];
         if (rCommand.isEmpty())
@@ -673,13 +672,12 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
 {
     SolarMutexGuard g;
 
-    sal_Int32                           i              = 0;
     sal_Int32                           c              = lCommandList.getLength();
     css::uno::Sequence< css::uno::Any > lPreferredOnes (c); // don't pack list!
     AcceleratorCache&                   rCache         = impl_getCFG(true);
 
     auto lPreferredOnesRange = asNonConstRange(lPreferredOnes);
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         const OUString& rCommand = lCommandList[i];
         if (rCommand.isEmpty())

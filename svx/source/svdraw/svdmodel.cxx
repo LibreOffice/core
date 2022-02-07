@@ -561,10 +561,9 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
         mbInDestruction = true;
     }
 
-    sal_Int32 i;
     // delete all drawing pages
     sal_Int32 nCount=GetPageCount();
-    for (i=nCount-1; i>=0; i--)
+    for (sal_Int32 i=nCount-1; i>=0; i--)
     {
         DeletePage( static_cast<sal_uInt16>(i) );
     }
@@ -573,7 +572,7 @@ void SdrModel::ClearModel(bool bCalledFromDestructor)
 
     // delete all Masterpages
     nCount=GetMasterPageCount();
-    for(i=nCount-1; i>=0; i--)
+    for(sal_Int32 i=nCount-1; i>=0; i--)
     {
         DeleteMasterPage( static_cast<sal_uInt16>(i) );
     }
@@ -1162,8 +1161,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
     if(bMaster)
     {
         sal_uInt16 nCount=sal_uInt16(maMasterPages.size());
-        sal_uInt16 i;
-        for (i=0; i<nCount; i++) {
+        for (sal_uInt16 i=0; i<nCount; i++) {
             SdrPage* pPg = maMasterPages[i].get();
             pPg->SetPageNum(i);
         }
@@ -1172,8 +1170,7 @@ void SdrModel::RecalcPageNums(bool bMaster)
     else
     {
         sal_uInt16 nCount=sal_uInt16(maPages.size());
-        sal_uInt16 i;
-        for (i=0; i<nCount; i++) {
+        for (sal_uInt16 i=0; i<nCount; i++) {
             SdrPage* pPg = maPages[i].get();
             pPg->SetPageNum(i);
         }
