@@ -82,12 +82,12 @@ XPdfDecomposer::getDecomposition(const uno::Reference<util::XBinaryDataContainer
     BitmapEx aReplacement(aBitmaps[0]);
 
     // short form for scale and translate transformation
-    const Size aDPI(
-        Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MapMode(MapUnit::MapInch)));
     const Size aBitmapSize(aReplacement.GetSizePixel());
+    // ImpGraphic::getPrefMapMode() requires mm100 for bitmaps rendered from vector graphic data.
+    const Size aMM100(
+        Application::GetDefaultDevice()->PixelToLogic(aBitmapSize, MapMode(MapUnit::Map100thMM)));
     const basegfx::B2DHomMatrix aBitmapTransform(basegfx::utils::createScaleTranslateB2DHomMatrix(
-        aBitmapSize.getWidth() * aDPI.getWidth(), aBitmapSize.getHeight() * aDPI.getHeight(), 0,
-        0));
+        aMM100.getWidth(), aMM100.getHeight(), 0, 0));
 
     // create primitive
     return drawinglayer::primitive2d::Primitive2DContainer{
