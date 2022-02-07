@@ -1429,7 +1429,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                         bCompress = true;
 
                         // set IsMoved checking nearby redlines
-                        maRedlineTable.isMoved(n);
+                        if (n < maRedlineTable.size()) // in case above 're-insert' failed
+                            maRedlineTable.isMoved(n);
                     }
                 }
                 else if( SwComparePosition::Inside == eCmpPos )
