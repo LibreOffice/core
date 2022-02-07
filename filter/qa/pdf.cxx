@@ -14,6 +14,9 @@
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/xml/crypto/SEInitializer.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <tools/stream.hxx>
@@ -51,6 +54,8 @@ void Test::tearDown()
 
     test::BootstrapFixture::tearDown();
 }
+
+constexpr OUStringLiteral DATA_DIRECTORY = u"/filter/qa/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
 {
@@ -100,6 +105,40 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
     // without configuring a certificate, so the whole export failed.
     CPPUNIT_ASSERT(pPdfDocument);
     CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getSignatureCount());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
+{
+    // Given an empty Writer document:
+    getComponent().set(
+        loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument"));
+
+    // When inserting a 267 points wide PDF image into the document:
+    uno::Sequence<beans::PropertyValue> aArgs = {
+        comphelper::makePropertyValue("FileName",
+                                      m_directories.getURLFromSrc(DATA_DIRECTORY) + "picture.pdf"),
+    };
+    dispatchCommand(getComponent(), ".uno:InsertGraphic", aArgs);
+
+    // Then make sure that its size is correct:
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    auto xGraphic = xShape->getPropertyValue("Graphic").get<uno::Reference<graphic::XGraphic>>();
+    CPPUNIT_ASSERT(xGraphic.is());
+    Graphic aGraphic(xGraphic);
+    basegfx::B2DRange aRange = aGraphic.getVectorGraphicData()->getRange();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 9419
+    // - Actual  : 34176
+    // i.e. the width was too large, it used all width of the body frame.
+    // 9419 mm100 is 267 points from the file.
+#if defined MACOSX
+    // TODO the bitmap size is larger (75486) on macOS, but that should not affect the logic size.
+    (void)aRange;
+#else
+    CPPUNIT_ASSERT_EQUAL(static_cast<double>(9419), aRange.getWidth());
+#endif
 }
 }
 
