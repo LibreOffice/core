@@ -124,6 +124,24 @@
       "parentUuid": "91c6b7bd_2ceeae2d",
       "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aef156d_ddd34fad",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-07T17:58:13Z",
+      "side": 0,
+      "message": "Based on that I think we\u0027re good with this.",
+      "parentUuid": "907442a5_d4440cc6",
+      "revId": "ccbd2b0c663fa19be5301f0ea8ac74caa055fe47",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
