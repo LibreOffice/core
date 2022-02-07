@@ -86,6 +86,7 @@ SwFieldVarPage::SwFieldVarPage(weld::Container* pPage, weld::DialogController* p
     m_xValueED->set_buildable_name(m_xValueED->get_buildable_name() + "-var");
     m_xNumFormatLB->set_buildable_name(m_xNumFormatLB->get_buildable_name() + "-var");
     m_xSelectionLB->set_buildable_name(m_xSelectionLB->get_buildable_name() + "-var");
+    m_xFormatLB->set_buildable_name(m_xFormatLB->get_buildable_name() + "-var");
 }
 
 SwFieldVarPage::~SwFieldVarPage()
