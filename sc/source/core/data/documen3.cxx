@@ -1154,7 +1154,7 @@ void ScDocument::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY )
 }
 
 void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProgress* pProgress, const ScMarkData& rMark,
-                        sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
+                        sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                         double nStepValue, double nMaxValue)
 {
     PutInOrder( nCol1, nCol2 );

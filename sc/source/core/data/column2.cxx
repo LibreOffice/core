@@ -3618,14 +3618,14 @@ public:
 
 }
 
-sal_uLong ScColumn::GetWeightedCount() const
+sal_uInt64 ScColumn::GetWeightedCount() const
 {
     const WeightedCounter aFunc = std::for_each(maCells.begin(), maCells.end(),
         WeightedCounter());
     return aFunc.getCount();
 }
 
-sal_uLong ScColumn::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
+sal_uInt64 ScColumn::GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const
 {
     const WeightedCounterWithRows aFunc = std::for_each(maCells.begin(), maCells.end(),
         WeightedCounterWithRows(nStartRow, nEndRow));
@@ -3636,7 +3636,7 @@ namespace {
 
 class CodeCounter
 {
-    size_t mnCount;
+    sal_uInt64 mnCount;
 public:
     CodeCounter() : mnCount(0) {}
 
@@ -3645,12 +3645,12 @@ public:
         mnCount += p->GetCode()->GetCodeLen();
     }
 
-    size_t getCount() const { return mnCount; }
+    sal_uInt64 getCount() const { return mnCount; }
 };
 
 }
 
-sal_uInt32 ScColumn::GetCodeCount() const
+sal_uInt64 ScColumn::GetCodeCount() const
 {
     CodeCounter aFunc;
     sc::ParseFormula(maCells, aFunc);

@@ -82,15 +82,15 @@ public:
     void operator() (const ScRange & r)
     {
         mnCellCount +=
-              size_t(r.aEnd.Col() - r.aStart.Col() + 1)
-            * size_t(r.aEnd.Row() - r.aStart.Row() + 1)
-            * size_t(r.aEnd.Tab() - r.aStart.Tab() + 1);
+              sal_uInt64(r.aEnd.Col() - r.aStart.Col() + 1)
+            * sal_uInt64(r.aEnd.Row() - r.aStart.Row() + 1)
+            * sal_uInt64(r.aEnd.Tab() - r.aStart.Tab() + 1);
     }
 
-    size_t getCellCount() const { return mnCellCount; }
+    sal_uInt64 getCellCount() const { return mnCellCount; }
 
 private:
-    size_t mnCellCount;
+    sal_uInt64 mnCellCount;
 };
 
 
@@ -1096,7 +1096,7 @@ bool ScRangeList::Contains( const ScRange& rRange ) const
     return std::any_of(maRanges.begin(), maRanges.end(), FindEnclosingRange<ScRange>(rRange));
 }
 
-size_t ScRangeList::GetCellCount() const
+sal_uInt64 ScRangeList::GetCellCount() const
 {
     CountCells func;
     return for_each(maRanges.begin(), maRanges.end(), func).getCellCount();

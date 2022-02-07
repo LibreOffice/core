@@ -292,10 +292,10 @@ public:
     }
     // out-of-line the cold part of the function
     void CreateColumnIfNotExistsImpl( const SCCOL nScCol ) const;
-    sal_uLong       GetCellCount() const;
-    sal_uLong       GetWeightedCount() const;
-    sal_uLong       GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;
-    sal_uLong       GetCodeCount() const;       // RPN code in formula
+    sal_uInt64      GetCellCount() const;
+    sal_uInt64      GetWeightedCount() const;
+    sal_uInt64      GetWeightedCount(SCROW nStartRow, SCROW nEndRow) const;
+    sal_uInt64      GetCodeCount() const;       // RPN code in formula
 
     sal_uInt16 GetTextWidth(SCCOL nCol, SCROW nRow) const;
 
@@ -675,7 +675,7 @@ public:
     void        FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                  sc::UpdatedRangeNames& rIndexes) const;
     void        Fill( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
+                        sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd, FillDateCmd eFillDateCmd,
                         double nStepValue, double nMaxValue, ScProgress* pProgress);
     OUString    GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW nEndY );
 
@@ -795,11 +795,11 @@ public:
                                     const ScColWidthParam* pParam );
     bool SetOptimalHeight(
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, bool bApi,
-        ScProgress* pOuterProgress = nullptr, sal_uLong nProgressStart = 0 );
+        ScProgress* pOuterProgress = nullptr, sal_uInt64 nProgressStart = 0 );
 
     void SetOptimalHeightOnly(
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow,
-        ScProgress* pOuterProgress = nullptr, sal_uLong nProgressStart = 0 );
+        ScProgress* pOuterProgress = nullptr, sal_uInt64 nProgressStart = 0 );
 
     tools::Long        GetNeededSize( SCCOL nCol, SCROW nRow,
                                     OutputDevice* pDev,
@@ -826,12 +826,12 @@ public:
     void        SetManualHeight( SCROW nStartRow, SCROW nEndRow, bool bManual );
 
     sal_uInt16      GetColWidth( SCCOL nCol, bool bHiddenAsZero = true ) const;
-    sal_uLong GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const;
+    tools::Long     GetColWidth( SCCOL nStartCol, SCCOL nEndCol ) const;
     sal_uInt16 GetRowHeight( SCROW nRow, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
-    sal_uLong       GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true ) const;
-    sal_uLong       GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale, const sal_uLong* pnMaxHeight = nullptr ) const;
-    sal_uLong       GetColOffset( SCCOL nCol, bool bHiddenAsZero = true ) const;
-    sal_uLong       GetRowOffset( SCROW nRow, bool bHiddenAsZero = true ) const;
+    tools::Long     GetRowHeight( SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true ) const;
+    tools::Long     GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale, const tools::Long* pnMaxHeight = nullptr ) const;
+    tools::Long     GetColOffset( SCCOL nCol, bool bHiddenAsZero = true ) const;
+    tools::Long     GetRowOffset( SCROW nRow, bool bHiddenAsZero = true ) const;
 
     /**
      * Get the last row such that the height of row 0 to the end row is as
@@ -841,7 +841,7 @@ public:
      *
      * @return SCROW last row of the range within specified height.
      */
-    SCROW       GetRowForHeight(sal_uLong nHeight) const;
+    SCROW       GetRowForHeight(tools::Long nHeight) const;
 
     sal_uInt16      GetOriginalWidth( SCCOL nCol ) const;
     sal_uInt16      GetOriginalHeight( SCROW nRow ) const;
@@ -924,7 +924,7 @@ public:
     SCROW       FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const;
     SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
-    sal_uInt32  GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true) const;
+    tools::Long GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true) const;
 
     SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 
@@ -1109,21 +1109,21 @@ private:
     void FillFormulaVertical(
         const ScFormulaCell& rSrcCell,
         SCCOLROW& rInner, SCCOL nCol, SCROW nRow1, SCROW nRow2,
-        ScProgress* pProgress, sal_uLong& rProgress );
+        ScProgress* pProgress, sal_uInt64& rProgress );
 
     void FillSeriesSimple(
         const ScCellValue& rSrcCell, SCCOLROW& rInner, SCCOLROW nIMin, SCCOLROW nIMax,
-        const SCCOLROW& rCol, const SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uLong& rProgress );
+        const SCCOLROW& rCol, const SCCOLROW& rRow, bool bVertical, ScProgress* pProgress, sal_uInt64& rProgress );
 
     void FillAutoSimple(
         SCCOLROW nISrcStart, SCCOLROW nISrcEnd, SCCOLROW nIStart, SCCOLROW nIEnd,
         SCCOLROW& rInner, const SCCOLROW& rCol, const SCCOLROW& rRow,
-        sal_uLong nActFormCnt, sal_uLong nMaxFormCnt,
+        sal_uInt64 nActFormCnt, sal_uInt64 nMaxFormCnt,
         bool bHasFiltered, bool bVertical, bool bPositive,
-        ScProgress* pProgress, sal_uLong& rProgress );
+        ScProgress* pProgress, sal_uInt64& rProgress );
 
     void        FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                sal_uLong nFillCount, FillDir eFillDir, FillCmd eFillCmd,
+                                sal_uInt64 nFillCount, FillDir eFillDir, FillCmd eFillCmd,
                                 FillDateCmd eFillDateCmd,
                                 double nStepValue, double nMaxValue, sal_uInt16 nMinDigits,
                                 bool bAttribs, ScProgress* pProgress,
@@ -1136,7 +1136,7 @@ private:
                                 bool bHasFiltered, bool& rSkipOverlappedCells,
                                 std::vector<sal_Int32>& rNonOverlappedCellIdx );
     void        FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                        sal_uLong nFillCount, FillDir eFillDir, ScProgress* pProgress );
+                        sal_uInt64 nFillCount, FillDir eFillDir, ScProgress* pProgress );
 
     bool        ValidNextPos( SCCOL nCol, SCROW nRow, const ScMarkData& rMark,
                                 bool bMarked, bool bUnprotected ) const;

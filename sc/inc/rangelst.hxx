@@ -73,7 +73,7 @@ public:
     bool            operator!=( const ScRangeList& r ) const;
     bool            Intersects( const ScRange& ) const;
     bool            Contains( const ScRange& ) const;
-    size_t          GetCellCount() const;
+    sal_uInt64      GetCellCount() const;
     ScAddress       GetTopLeftCorner() const;
 
     ScRangeList     GetIntersectedRange(const ScRange& rRange) const;
