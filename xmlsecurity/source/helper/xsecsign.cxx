@@ -384,10 +384,9 @@ bool XSecController::WriteSignature(
              */
             css::uno::Reference<css::xml::sax::XDocumentHandler> xSEKHandler(m_xSAXEventKeeper);
 
-            int i;
             int sigNum = m_vInternalSignatureInformations.size();
 
-            for (i=0; i<sigNum; ++i)
+            for (int i=0; i<sigNum; ++i)
             {
                 InternalSignatureInformation &isi = m_vInternalSignatureInformations[i];
 

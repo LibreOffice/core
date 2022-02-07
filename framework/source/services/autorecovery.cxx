@@ -1607,7 +1607,6 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     const css::util::ElementChange*                      pChanges = lChanges.getConstArray();
 
     sal_Int32 c = lChanges.getLength();
-    sal_Int32 i = 0;
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1618,7 +1617,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
     if ((m_eJob & Job::DisableAutorecovery) == Job::DisableAutorecovery)
        return;
 
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         OUString sPath;
         pChanges[i].Accessor >>= sPath;
@@ -1807,12 +1806,11 @@ void AutoRecovery::implts_readConfig()
     const css::uno::Sequence< OUString > lItems = xRecoveryList->getElementNames();
     const OUString*                      pItems = lItems.getConstArray();
     sal_Int32                            c      = lItems.getLength();
-    sal_Int32                            i      = 0;
 
     // REENTRANT -> --------------------------
     aCacheLock.lock(LOCK_FOR_CACHE_ADD_REMOVE);
 
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         css::uno::Reference< css::beans::XPropertySet > xItem;
         xRecoveryList->getByName(pItems[i]) >>= xItem;

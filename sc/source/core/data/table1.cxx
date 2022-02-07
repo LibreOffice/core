@@ -579,9 +579,8 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
     bool bFound = false;
     SCCOL nMaxX = 0;
     SCROW nMaxY = 0;
-    SCCOL i;
 
-    for (i=0; i<aCol.size(); i++)               // Test data
+    for (SCCOL i=0; i<aCol.size(); i++)               // Test data
     {
         if (bCalcHiddens || !rDocument.ColHidden(i, nTab))
         {
@@ -613,7 +612,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
 
     SCCOL nMaxDataX = nMaxX;
 
-    for (i=0; i<aCol.size(); i++)               // Test attribute
+    for (SCCOL i=0; i<aCol.size(); i++)               // Test attribute
     {
         if (bCalcHiddens || !rDocument.ColHidden(i, nTab))
         {
@@ -672,9 +671,8 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
 {
     bool bFound = false;
     SCCOL nMaxX = 0;
-    SCCOL i;
 
-    for (i=0; i<aCol.size(); i++)               // Test attribute
+    for (SCCOL i=0; i<aCol.size(); i++)               // Test attribute
     {
         if (aCol[i].HasVisibleAttrIn( nStartRow, nEndRow ))
         {
@@ -690,7 +688,7 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
             --nMaxX;
     }
 
-    for (i=0; i<aCol.size(); i++)               // test the data
+    for (SCCOL i=0; i<aCol.size(); i++)               // test the data
     {
         if (!aCol[i].IsEmptyBlock( nStartRow, nEndRow ))        //TODO: bNotes ??????
         {
@@ -711,9 +709,8 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
     nEndCol   = std::min<SCCOL>( nEndCol,   aCol.size()-1 );
     bool bFound = false;
     SCROW nMaxY = 0;
-    SCCOL i;
 
-    for (i=nStartCol; i<=nEndCol; i++)              // Test attribute
+    for (SCCOL i=nStartCol; i<=nEndCol; i++)              // Test attribute
     {
         SCROW nLastRow;
         if (aCol[i].GetLastVisibleAttr( nLastRow ))
@@ -724,7 +721,7 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
         }
     }
 
-    for (i=nStartCol; i<=nEndCol; i++)              // Test data
+    for (SCCOL i=nStartCol; i<=nEndCol; i++)              // Test data
     {
         if (!aCol[i].IsEmptyData())
         {
@@ -753,9 +750,8 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
     bool bFound = false;
     SCCOL nMinX = aCol.size()-1;
     SCROW nMinY = rDocument.MaxRow();
-    SCCOL i;
 
-    for (i=0; i<aCol.size(); i++)                   // Test attribute
+    for (SCCOL i=0; i<aCol.size(); i++)                   // Test attribute
     {
         SCROW nFirstRow;
         if (aCol[i].GetFirstVisibleAttr( nFirstRow ))
@@ -779,7 +775,7 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
     }
 
     bool bDatFound = false;
-    for (i=0; i<aCol.size(); i++)                   // Test data
+    for (SCCOL i=0; i<aCol.size(); i++)                   // Test data
     {
         if (!aCol[i].IsEmptyData())
         {

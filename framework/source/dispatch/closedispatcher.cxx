@@ -447,8 +447,7 @@ bool CloseDispatcher::implts_prepareFrameForClosing(const css::uno::Reference< c
         FrameListAnalyzer aCheck(xDesktop, xFrame, FrameAnalyzerFlags::All);
 
         size_t c = aCheck.m_lModelFrames.size();
-        size_t i = 0;
-        for (i=0; i<c; ++i)
+        for (size_t i=0; i<c; ++i)
         {
             if (!fpf::closeIt(aCheck.m_lModelFrames[i]))
                 return false;

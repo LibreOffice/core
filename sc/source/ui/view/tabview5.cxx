@@ -65,14 +65,12 @@ void ScTabView::Init()
         Eventually this has to be disabled manually (see below). */
     pFrameWin->EnableRTL( false );
 
-    sal_uInt16 i;
-
     mbInlineWithScrollbar = officecfg::Office::Calc::Layout::Other::TabbarInlineWithScrollbar::get();
 
     aScrollTimer.SetTimeout(10);
     aScrollTimer.SetInvokeHandler( LINK( this, ScTabView, TimerHdl ) );
 
-    for (i=0; i<4; i++)
+    for (sal_uInt16 i=0; i<4; i++)
         pGridWin[i] = nullptr;
     pGridWin[SC_SPLIT_BOTTOMLEFT] = VclPtr<ScGridWindow>::Create( pFrameWin, aViewData, SC_SPLIT_BOTTOMLEFT );
 
@@ -88,7 +86,7 @@ void ScTabView::Init()
     pRowBar[SC_SPLIT_BOTTOM] = VclPtr<ScRowBar>::Create( pFrameWin, SC_SPLIT_BOTTOM,
                                                          &aHdrFunc, pHdrSelEng.get(), this );
     pRowBar[SC_SPLIT_TOP] = nullptr;
-    for (i=0; i<2; i++)
+    for (sal_uInt16 i=0; i<2; i++)
         pColOutline[i] = pRowOutline[i] = nullptr;
 
     pHSplitter = VclPtr<ScTabSplitter>::Create( pFrameWin, WinBits( WB_HSCROLL ), &aViewData );
@@ -139,8 +137,6 @@ void ScTabView::Init()
 
 ScTabView::~ScTabView()
 {
-    sal_uInt16 i;
-
     //  remove selection object
     ScModule* pScMod = SC_MOD();
     ScSelectionTransferObj* pOld = pScMod->GetSelectionTransfer();
@@ -183,7 +179,7 @@ ScTabView::~ScTabView()
 
     if (pDrawView)
     {
-        for (i=0; i<4; i++)
+        for (sal_uInt16 i=0; i<4; i++)
             if (pGridWin[i])
             {
                 pDrawView->DeleteWindowFromPaintView(pGridWin[i]->GetOutDev());
@@ -200,12 +196,12 @@ ScTabView::~ScTabView()
     mpSpellCheckCxt.reset();
 
     mxInputHintOO.reset();
-    for (i=0; i<4; i++)
+    for (sal_uInt16 i=0; i<4; i++)
         pGridWin[i].disposeAndClear();
 
     pHdrSelEng.reset();
 
-    for (i=0; i<2; i++)
+    for (sal_uInt16 i=0; i<2; i++)
     {
         pColBar[i].disposeAndClear();
         pRowBar[i].disposeAndClear();
@@ -234,16 +230,15 @@ void ScTabView::MakeDrawView( TriState nForceDesignMode )
     ScDrawLayer* pLayer = aViewData.GetDocument().GetDrawLayer();
     OSL_ENSURE(pLayer, "Where is the Draw Layer ??");
 
-    sal_uInt16 i;
     pDrawView.reset( new ScDrawView( pGridWin[SC_SPLIT_BOTTOMLEFT]->GetOutDev(), &aViewData ) );
-    for (i=0; i<4; i++)
+    for (sal_uInt16 i=0; i<4; i++)
         if (pGridWin[i])
         {
             if ( SC_SPLIT_BOTTOMLEFT != static_cast<ScSplitPos>(i) )
                 pDrawView->AddWindowToPaintView(pGridWin[i]->GetOutDev(), nullptr);
         }
     pDrawView->RecalcScale();
-    for (i=0; i<4; i++)
+    for (sal_uInt16 i=0; i<4; i++)
         if (pGridWin[i])
         {
             pGridWin[i]->SetMapMode(pGridWin[i]->GetDrawMapMode());
@@ -504,7 +499,6 @@ void ScTabView::UpdateIMap( SdrObject* pObj )
 
 void ScTabView::DrawEnableAnim(bool bSet)
 {
-    sal_uInt16 i;
     if ( !pDrawView )
         return;
 
@@ -518,7 +512,7 @@ void ScTabView::DrawEnableAnim(bool bSet)
 
             //  animated GIFs must be restarted:
             ScDocument& rDoc = aViewData.GetDocument();
-            for (i=0; i<4; i++)
+            for (sal_uInt16 i=0; i<4; i++)
                 if ( pGridWin[i] && pGridWin[i]->IsVisible() )
                     rDoc.StartAnimations( aViewData.GetTabNo() );
         }

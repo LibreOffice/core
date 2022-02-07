@@ -795,10 +795,10 @@ std::shared_ptr<OGLTransitionImpl> makeIris()
 
 
     Primitive irisPart;
-    int i, nSteps = 24, nParts = 7;
+    int nSteps = 24, nParts = 7;
     double t = 1.0/nSteps, lx = 1, ly = 0, of=2.2, f=1.42;
 
-    for (i=1; i<=nSteps; i++) {
+    for (int i=1; i<=nSteps; i++) {
         double x = cos ((3*2*M_PI*t)/nParts);
         double y = -sin ((3*2*M_PI*t)/nParts);
         double cx = (f*x + 1)/2;
@@ -823,7 +823,7 @@ std::shared_ptr<OGLTransitionImpl> makeIris()
     std::shared_ptr<Iris> pIris = std::make_shared<Iris>();
     double angle = 87;
 
-    for (i = 0; i < nParts; i++) {
+    for (int i = 0; i < nParts; i++) {
         irisPart.Operations.clear ();
         double rx, ry;
 

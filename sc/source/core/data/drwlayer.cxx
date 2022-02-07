@@ -1276,12 +1276,11 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
     {
         nStartX = 0;
         SCCOL nStartCol = rRange.aStart.Col();
-        SCCOL i;
-        for (i=0; i<nStartCol; i++)
+        for (SCCOL i=0; i<nStartCol; i++)
             nStartX +=pDoc->GetColWidth(i,nTab);
         nEndX = nStartX;
         SCCOL nEndCol = rRange.aEnd.Col();
-        for (i=nStartCol; i<=nEndCol; i++)
+        for (SCCOL i=nStartCol; i<=nEndCol; i++)
             nEndX += pDoc->GetColWidth(i,nTab);
         nStartX = convertTwipToMm100(nStartX);
         nEndX = convertTwipToMm100(nEndX);

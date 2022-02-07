@@ -1041,16 +1041,15 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( const Sc
 {
     FillMemberResults();
 
-    sal_Int32 i = 0;
     sal_Int32 nColCount = aColLevelList.size();
-    for (i=0; i<nColCount; i++)
+    for (sal_Int32 i=0; i<nColCount; i++)
     {
         ScDPLevel* pColLevel = aColLevelList[i];
         if ( pColLevel == pLevel )
             return &pColResults[i];
     }
     sal_Int32 nRowCount = aRowLevelList.size();
-    for (i=0; i<nRowCount; i++)
+    for (sal_Int32 i=0; i<nRowCount; i++)
     {
         ScDPLevel* pRowLevel = aRowLevelList[i];
         if ( pRowLevel == pLevel )
@@ -1171,13 +1170,12 @@ void ScDPDimensions::CountChanged()
     sal_Int32 nNewCount = pSource->GetData()->GetColumnCount() + 1 + pSource->GetDupCount();
     if ( ppDims )
     {
-        sal_Int32 i;
         sal_Int32 nCopy = std::min( nNewCount, nDimCount );
         rtl::Reference<ScDPDimension>* ppNew = new rtl::Reference<ScDPDimension>[nNewCount];
 
-        for (i=0; i<nCopy; i++)             // copy existing dims
+        for (sal_Int32 i=0; i<nCopy; i++)             // copy existing dims
             ppNew[i] = ppDims[i];
-        for (i=nCopy; i<nNewCount; i++)     // clear additional pointers
+        for (sal_Int32 i=nCopy; i<nNewCount; i++)     // clear additional pointers
             ppNew[i] = nullptr;
 
         ppDims.reset( ppNew );

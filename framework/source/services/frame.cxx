@@ -2030,9 +2030,8 @@ void XFrameImpl::implts_forgetSubFrames()
     // <- SAFE
 
     sal_Int32 c = xContainer->getCount();
-    sal_Int32 i = 0;
 
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         try
         {

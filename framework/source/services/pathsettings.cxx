@@ -475,10 +475,9 @@ css::uno::Sequence< css::uno::Type > SAL_CALL PathSettings::getTypes(  )
 void SAL_CALL PathSettings::changesOccurred(const css::util::ChangesEvent& aEvent)
 {
     sal_Int32 c                 = aEvent.Changes.getLength();
-    sal_Int32 i                 = 0;
     bool  bUpdateDescriptor = false;
 
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         const css::util::ElementChange& aChange = aEvent.Changes[i];
 
@@ -810,8 +809,7 @@ css::uno::Sequence< sal_Int32 > PathSettings::impl_mapPathName2IDList(std::u16st
     auto plIDs = lIDs.getArray();
 
     sal_Int32 c = m_lPropDesc.getLength();
-    sal_Int32 i = 0;
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         const css::beans::Property& rProp = m_lPropDesc[i];
 
@@ -844,9 +842,8 @@ void PathSettings::impl_notifyPropListener( std::u16string_view           sPath,
 
     css::uno::Sequence< sal_Int32 > lIDs   = impl_mapPathName2IDList(sPath);
     sal_Int32                       c      = lIDs.getLength();
-    sal_Int32                       i      = 0;
     sal_Int32                       nMaxID = m_lPropDesc.getLength()-1;
-    for (i=0; i<c; ++i)
+    for (sal_Int32 i=0; i<c; ++i)
     {
         sal_Int32 nID = lIDs[i];
 

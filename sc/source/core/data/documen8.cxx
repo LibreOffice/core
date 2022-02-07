@@ -719,8 +719,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
     // Count them first
 
     sal_uInt16 nDdeCount = 0;
-    sal_uInt16 i;
-    for (i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (ScDdeLink* pLink = dynamic_cast<ScDdeLink*>(pBase))
@@ -735,7 +734,7 @@ void ScDocument::SaveDdeLinks(SvStream& rStream) const
 
     // Save links
 
-    for (i=0; i<nCount; i++)
+    for (sal_uInt16 i=0; i<nCount; i++)
     {
         ::sfx2::SvBaseLink* pBase = rLinks[i].get();
         if (ScDdeLink* pLink = dynamic_cast<ScDdeLink*>(pBase))

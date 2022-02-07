@@ -1728,13 +1728,12 @@ tools::Rectangle ScDocument::GetEmbeddedRect() const // 1/100 mm
     }
     else
     {
-        SCCOL i;
 
-        for (i=0; i<aEmbedRange.aStart.Col(); i++)
+        for (SCCOL i=0; i<aEmbedRange.aStart.Col(); i++)
             aRect.AdjustLeft(pTable->GetColWidth(i) );
         aRect.AdjustTop(pTable->GetRowHeight( 0, aEmbedRange.aStart.Row() - 1) );
         aRect.SetRight( aRect.Left() );
-        for (i=aEmbedRange.aStart.Col(); i<=aEmbedRange.aEnd.Col(); i++)
+        for (SCCOL i=aEmbedRange.aStart.Col(); i<=aEmbedRange.aEnd.Col(); i++)
             aRect.AdjustRight(pTable->GetColWidth(i) );
         aRect.SetBottom( aRect.Top() );
         aRect.AdjustBottom(pTable->GetRowHeight( aEmbedRange.aStart.Row(), aEmbedRange.aEnd.Row()) );
@@ -2001,17 +2000,16 @@ tools::Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow, SCCOL 
         return tools::Rectangle(0,0,0,0);
     }
 
-    SCCOL i;
     tools::Rectangle aRect;
 
-    for (i=0; i<nStartCol; i++)
+    for (SCCOL i=0; i<nStartCol; i++)
         aRect.AdjustLeft(GetColWidth(i,nTab, bHiddenAsZero ) );
     aRect.AdjustTop(GetRowHeight( 0, nStartRow-1, nTab, bHiddenAsZero ) );
 
     aRect.SetRight( aRect.Left() );
     aRect.SetBottom( aRect.Top() );
 
-    for (i=nStartCol; i<=nEndCol; i++)
+    for (SCCOL i=nStartCol; i<=nEndCol; i++)
         aRect.AdjustRight(GetColWidth(i,nTab, bHiddenAsZero) );
     aRect.AdjustBottom(GetRowHeight( nStartRow, nEndRow, nTab, bHiddenAsZero ) );
 

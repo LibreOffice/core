@@ -212,9 +212,8 @@ SAL_CALL XMLSignature_NssImpl::validate(
     setErrorRecorder();
 
     sal_Int32 nSecurityEnvironment = aSecurityCtx->getSecurityEnvironmentNumber();
-    sal_Int32 i;
 
-    for (i=0; i<nSecurityEnvironment; ++i)
+    for (sal_Int32 i=0; i<nSecurityEnvironment; ++i)
     {
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
