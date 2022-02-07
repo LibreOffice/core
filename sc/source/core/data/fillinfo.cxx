@@ -199,7 +199,7 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
         if (nSignedY >= 0)
             nY = nSignedY;
         else
-            nY = MAXROW+1;          // invalid
+            nY = pDoc->MaxRow()+1;          // invalid
 
         if (nY > nDocHeightEndRow)
         {
@@ -209,7 +209,7 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
                 nDocHeight = ScGlobal::nStdRowHeight;
         }
 
-        if ( rArrRow==0 || nDocHeight || nY > MAXROW )
+        if ( rArrRow==0 || nDocHeight || nY > pDoc->MaxRow() )
         {
             RowInfo* pThisRowInfo = &pRowInfo[rArrRow];
             pThisRowInfo->pCellInfo = nullptr;                 // is loaded below
@@ -388,7 +388,7 @@ void ScDocument::FillInfo(
     bool bAnyItem = isRotateItemUsed(pPool);
 
     SCCOL nRotMax = nCol2;
-    if ( bAnyItem && HasAttrib( 0, nRow1, nTab, MAXCOL, nRow2+1, nTab,
+    if ( bAnyItem && HasAttrib( 0, nRow1, nTab, MaxCol(), nRow2+1, nTab,
                                 HasAttrFlags::Rotate | HasAttrFlags::Conditional ) )
     {
         //TODO: check Conditionals also for HasAttrFlags::Rotate ????
@@ -414,7 +414,7 @@ void ScDocument::FillInfo(
 
     for (SCCOL nArrCol=0; nArrCol<=nCol2+2; nArrCol++)                    // left & right + 1
     {
-        SCCOL nX = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;                    // negative -> invalid
+        SCCOL nX = (nArrCol>0) ? nArrCol-1 : MaxCol()+1;                    // negative -> invalid
 
         if (ValidCol(nX))
         {
@@ -472,7 +472,7 @@ void ScDocument::FillInfo(
                         }
                         else
                         {
-                            nThisRow = MAXROW;
+                            nThisRow = MaxRow();
                             pPattern = GetDefPattern();
                         }
 
@@ -635,10 +635,10 @@ void ScDocument::FillInfo(
             for (SCCOL nArrCol=nCol1; nArrCol<=nCol2+2; nArrCol++)                  // 1 more left and right
             {
                 CellInfo* pInfo = &pRowInfo[nArrRow].pCellInfo[nArrCol];
-                SCCOL nCol = (nArrCol>0) ? nArrCol-1 : MAXCOL+1;
+                SCCOL nCol = (nArrCol>0) ? nArrCol-1 : MaxCol()+1;
                 ScPatternAttr* pModifiedPatt = nullptr;
 
-                if ( ValidCol(nCol) && pRowInfo[nArrRow].nRowNo <= MAXROW )
+                if ( ValidCol(nCol) && pRowInfo[nArrRow].nRowNo <= MaxRow() )
                 {
                     if ( ScStyleSheet* pPreviewStyle = GetPreviewCellStyle( nCol, pRowInfo[nArrRow].nRowNo, nTab ) )
                     {
@@ -944,7 +944,7 @@ void ScDocument::FillInfo(
                 nFirstCol = static_cast< size_t >( nFirstCellInfoX - nCol1 );
 
                 // last visible column (nX2+1 is last processed document column)
-                SCCOL nLastDocCol = (nCol2 < MAXCOL) ? ::std::min< SCCOL >( nLastRealDocCol, nCol2 + 1 ) : nLastRealDocCol;
+                SCCOL nLastDocCol = (nCol2 < MaxCol()) ? ::std::min< SCCOL >( nLastRealDocCol, nCol2 + 1 ) : nLastRealDocCol;
                 sal_uInt16 nLastCellInfoX = static_cast< sal_uInt16 >( nLastDocCol + 1 );
                 size_t nLastCol = static_cast< size_t >( nLastCellInfoX - nCol1 );
 
