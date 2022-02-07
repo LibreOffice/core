@@ -103,6 +103,7 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/document/XEmbeddedObjectSupplier2.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -260,6 +261,8 @@ public:
     void testTdf115013();
     void testTdf114536();
     void testTdf115065();
+    void testTdf84806_MovingMultipleTableRows();
+    void testTdf147181_TrackedMovingOfMultipleTableRows();
     void testTdf115132();
     void testXDrawPagesSupplier();
     void testTdf116403();
@@ -382,6 +385,8 @@ public:
     CPPUNIT_TEST(testTdf115013);
     CPPUNIT_TEST(testTdf114536);
     CPPUNIT_TEST(testTdf115065);
+    CPPUNIT_TEST(testTdf84806_MovingMultipleTableRows);
+    CPPUNIT_TEST(testTdf147181_TrackedMovingOfMultipleTableRows);
     CPPUNIT_TEST(testTdf115132);
     CPPUNIT_TEST(testXDrawPagesSupplier);
     CPPUNIT_TEST(testTdf116403);
@@ -2920,6 +2925,143 @@ void SwUiWriterTest4::testTdf115065()
     pWrtShell->SelTableCol();
     // The copy operation (or closing document after that) segfaulted
     pWrtShell->Copy(*pWrtShell, ptFrom, ptTo);
+}
+
+void SwUiWriterTest4::testTdf84806_MovingMultipleTableRows()
+{
+    // Moving of multiple table rows.
+    // Source table (first one) has two rows;
+    // destination (second one) has only one row
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf115065.odt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table2"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable2(xTableNames->getByName("Table2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable2->getRows()->getCount());
+
+    // without redlining
+    CPPUNIT_ASSERT_MESSAGE("redlining should be off",
+                           !pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    pWrtShell->GotoTable("Table2");
+    SwRect aRect = pWrtShell->GetCurrFrame()->getFrameArea();
+    // Destination point is the middle of the first cell of second table
+    Point ptTo(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
+
+    // Move rows of the first table into the second table
+    pWrtShell->GotoTable("Table1");
+    pWrtShell->SelTable();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+
+    // This was 2 tables
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable2->getRows()->getCount());
+
+    // Undo results 2 tables
+    rUndoManager.Undo();
+    uno::Reference<container::XIndexAccess> xTables2(xTablesSupplier->getTextTables(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables2->getCount());
+    uno::Reference<text::XTextTable> xTable1b(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable2b(xTableNames->getByName("Table2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1b->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable2b->getRows()->getCount());
+
+    // FIXME assert with Redo()
+}
+
+void SwUiWriterTest4::testTdf147181_TrackedMovingOfMultipleTableRows()
+{
+    // Tracked moving of multiple table rows.
+    // Source table (first one) has two rows;
+    // destination (second one) has only one row
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf115065.odt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table2"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable2(xTableNames->getByName("Table2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable2->getRows()->getCount());
+
+    // FIXME: doesn't work with empty rows, yet
+    pWrtShell->Insert("x");
+    pWrtShell->Down(false);
+    pWrtShell->Insert("x");
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    // show changes
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+
+    pWrtShell->GotoTable("Table2");
+    SwRect aRect = pWrtShell->GetCurrFrame()->getFrameArea();
+    // Destination point is the middle of the first cell of second table
+    Point ptTo(aRect.Left() + aRect.Width() / 2, aRect.Top() + aRect.Height() / 2);
+
+    // Move rows of the first table into the second table
+    pWrtShell->GotoTable("Table1");
+    pWrtShell->SelTable();
+    rtl::Reference<SwTransferable> xTransfer = new SwTransferable(*pWrtShell);
+    xTransfer->PrivateDrop(*pWrtShell, ptTo, /*bMove=*/true, /*bXSelection=*/true);
+
+    // still 2 tables, but the second one has got 3 rows
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable2->getRows()->getCount());
+
+    // accept changes results 1 table (removing moved table)
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
+    uno::Reference<container::XIndexAccess> xTables2(xTablesSupplier->getTextTables(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables2->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable2->getRows()->getCount());
+
+    // Undo results 2 tables
+    rUndoManager.Undo();
+    rUndoManager.Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables2->getCount());
+    uno::Reference<text::XTextTable> xTable1b(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTable2b(xTableNames->getByName("Table2"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1b->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable2b->getRows()->getCount());
+
+    // reject changes results 2 table again, with the original row counts
+    dispatchCommand(mxComponent, ".uno:RejectAllTrackedChanges", {});
+    uno::Reference<container::XIndexAccess> xTables3(xTablesSupplier->getTextTables(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables3->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable1b->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTable2b->getRows()->getCount());
 }
 
 void SwUiWriterTest4::testTdf115132()
