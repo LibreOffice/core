@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23e2557f_6f31623f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-07T11:33:30Z",
+      "side": 1,
+      "message": "online.git unit-insert-delete failed, resume.",
+      "revId": "ed864c7918e175c3028947ca021e129e8f61ff3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
