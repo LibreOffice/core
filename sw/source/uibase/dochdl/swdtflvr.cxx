@@ -3930,10 +3930,23 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         {
             bool bTableCol(SelectionType::TableCol & nSelection);
 
-            ::sw::mark::IMark* pMarkMoveFrom = rSh.SetBookmark(
+            ::sw::mark::IMark* pMarkMoveFrom = bMove
+                    ? rSh.SetBookmark(
                                     vcl::KeyCode(),
                                     OUString(),
-                                    IDocumentMarkAccess::MarkType::UNO_BOOKMARK );
+                                    IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
+                    : nullptr;
+
+            // row count and direction of the table selection:
+            // up to down, if the cursor is there in its last table row
+            const SwSelBoxes& rBoxes = rSrcSh.GetTableCursor()->GetSelectedBoxes();
+            const SwTableNode* pTableNd = rSh.IsCursorInTable();
+            sal_Int32 nSelRows = !rBoxes.back()
+                ? 0
+                : pTableNd->GetTable().GetTabLines().GetPos( rBoxes.back()->GetUpper() ) -
+                  pTableNd->GetTable().GetTabLines().GetPos( rBoxes.front()->GetUpper() ) + 1;
+            bool bSelUpToDown = rBoxes.back() && rBoxes.back()->GetUpper() ==
+                           rSh.GetCursor()->GetNode().GetTableBox()->GetUpper();
 
             SwUndoId eUndoId = bMove ? SwUndoId::UI_DRAG_AND_MOVE : SwUndoId::UI_DRAG_AND_COPY;
 
@@ -3955,6 +3968,8 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             rSh.EnterStdMode();
             rSh.SwCursorShell::SetCursor(rDragPt, false);
 
+            bool bPasteIntoTable = rSh.GetCursor()->GetNode().GetTableBox() != nullptr;
+
             // store cursor
             ::sw::mark::IMark* pMark = rSh.SetBookmark(
                                     vcl::KeyCode(),
@@ -3964,23 +3979,103 @@ bool SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             // paste rows above/columns before
             pDispatch->Execute(bTableCol ? FN_TABLE_PASTE_COL_BEFORE : FN_TABLE_PASTE_ROW_BEFORE, SfxCallMode::SYNCHRON);
 
-            // go to the previously inserted table row and set it to tracked insertion
-            rSh.Up(false);
-            SvxPrintItem aTracked(RES_PRINT, false);
-            rSh.GetDoc()->SetRowNotTracked( *rSh.GetCursor(), aTracked );
+            // go to the previously inserted table rows and set them to tracked insertion, if needed
+            bool bNeedTrack = !bTableCol && rSh.getIDocumentRedlineAccess().IsRedlineOn();
 
-            rSrcSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore selection...
+            // restore cursor position
+            if (bNeedTrack && pMark != nullptr)
+                rSh.GotoMark( pMark );
 
-            // delete source rows/columns
-            if (bMove)
+            if ( !bNeedTrack && !bPasteIntoTable )
             {
-                // restore cursor position
-                if (pMarkMoveFrom != nullptr)
+                rSrcSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore selection...
+
+                // delete source rows/columns
+                if (bMove)
+                    pDispatch->Execute(bTableCol
+                        ? FN_TABLE_DELETE_COL
+                        : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+            }
+            else
+            {
+                const SwTableBox* pBoxStt = rSh.GetCursor()->GetNode().GetTableBox();
+                SwTableLine* pLine = pBoxStt ? const_cast<SwTableLine*>( pBoxStt->GetUpper()): nullptr;
+
+                for (sal_Int32 nDeleted = 0; bNeedTrack && nDeleted < nSelRows;)
                 {
-                    rSh.GotoMark( pMarkMoveFrom );
-                    rSh.getIDocumentMarkAccess()->deleteMark( pMarkMoveFrom );
+                    // move up text cursor (note: "true" is important for the layout level)
+                    if ( !rSh.Up(false) )
+                        break;
+
+                    const SwTableBox* pBox = rSh.GetCursor()->GetNode().GetTableBox();
+
+                    if ( !pBox )
+                        break;
+
+                    // Up() reaches a new row
+                    if ( pBox->GetUpper() != pLine )
+                    {
+                        //rSh.SelTableRow();
+                        SvxPrintItem aTracked(RES_PRINT, false);
+                        rSh.GetDoc()->SetRowNotTracked( *rSh.GetCursor(), aTracked );
+                        ++nDeleted;
+                        pLine = const_cast<SwTableLine*>(pBox->GetUpper());
+                    }
                 }
-                pDispatch->Execute(bTableCol ? FN_TABLE_DELETE_COL : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+
+                rSrcSh.Pop(SwCursorShell::PopMode::DeleteCurrent); // restore selection...
+
+                // delete source rows/columns
+                if (bMove)
+                {
+                    // restore cursor position
+                    if (pMarkMoveFrom != nullptr)
+                    {
+                        rSh.GotoMark( pMarkMoveFrom );
+                        rSh.getIDocumentMarkAccess()->deleteMark( pMarkMoveFrom );
+                    }
+
+                    // set all row as tracked deletion, otherwise go to the first moved row
+                    if ( bNeedTrack || ( bSelUpToDown && nSelRows > 1 ) )
+                    {
+                        pLine = nullptr;
+
+                        for (sal_Int32 nDeleted = 0; nDeleted < nSelRows - int(!bNeedTrack);)
+                        {
+                            const SwTableBox* pBox = rSh.GetCursor()->GetNode().GetTableBox();
+
+                            if ( !pBox )
+                                break;
+
+                            if ( pBox->GetUpper() != pLine )
+                            {
+                                pLine = const_cast<SwTableLine*>(pBox->GetUpper());
+                                if (bNeedTrack)
+                                    pDispatch->Execute(bTableCol
+                                        ? FN_TABLE_DELETE_COL
+                                        : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+                                ++nDeleted;
+                            }
+
+                            bool bMoved = false;
+                            if (bSelUpToDown)
+                                bMoved = rSh.Up(false);
+                            else
+                                bMoved = rSh.Down(false);
+                            if (!bMoved)
+                                break;
+                        }
+                    }
+
+                    // delete rows without track changes
+                    if ( !bNeedTrack )
+                    {
+                        for (sal_Int32 nDeleted = 0; nDeleted < nSelRows; ++nDeleted)
+                            pDispatch->Execute(bTableCol
+                                ? FN_TABLE_DELETE_COL
+                                : FN_TABLE_DELETE_ROW, SfxCallMode::SYNCHRON);
+                    }
+                }
             }
 
             // restore cursor position
