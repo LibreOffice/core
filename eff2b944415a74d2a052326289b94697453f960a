@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01406345_70955c60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-02-07T12:38:29Z",
+      "side": 1,
+      "message": "Tested with this patch:\ndiff --git a/unotools/source/i18n/resmgr.cxx b/unotools/source/i18n/resmgr.cxx\nindex ef5b83cf06bc..18c7445dbf18 100644\n--- a/unotools/source/i18n/resmgr.cxx\n+++ b/unotools/source/i18n/resmgr.cxx\n@@ -47,6 +47,7 @@\n \n #include \u003cboost/locale.hpp\u003e\n #include \u003cboost/locale/gnu_gettext.hpp\u003e\n+#include \u003cboost/locale/encoding.hpp\u003e\n \n #include \u003cunordered_map\u003e\n #include \u003cmemory\u003e\n@@ -120,11 +121,19 @@ namespace Translate\n     {\n         static std::unordered_map\u003cOString, std::locale\u003e aCache;\n         OString sIdentifier \u003d rLocale.getGlibcLocaleString(\".UTF-8\").toUtf8();\n+        // FIXME: check we have UTF8 locale installed ? ... or ...\n         OString sUnique \u003d sIdentifier + pPrefixName;\n         auto aFind \u003d aCache.find(sUnique);\n         if (aFind !\u003d aCache.end())\n             return aFind-\u003esecond;\n         boost::locale::generator gen;\n+\n+        SAL_DEBUG(\"CHECK-me!\");\n+        std::string foo \u003d \"hello world\";\n+        std::string baa \u003d boost::locale::conv::between(foo.c_str(),foo.c_str() + foo.size(),\n+                                                       \"UTF-8\", \"UTF-8\",boost::locale::conv::stop);\n+        SAL_DEBUG(\"should be \u0027\" \u003c\u003c baa \u003c\u003c \"\u0027\");\n+\n         gen.characters(boost::locale::char_facet);\n         gen.categories(boost::locale::message_facet | boost::locale::information_facet);\n #if defined(ANDROID)\n\nYielding:\n\ndebug:1920954:1920954: CHECK-me!\ndebug:1920954:1920954: should be \u0027hello world\u0027\ndebug:1920954:1920954: CHECK-me!\ndebug:1920954:1920954: should be \u0027hello world\u0027\ndebug:1920954:1920954: CHECK-me!\ndebug:1920954:1920954: should be \u0027hello world\u0027\n\non startup \u003d)",
+      "revId": "eff2b944415a74d2a052326289b94697453f960a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
