@@ -26,6 +26,7 @@
 #include <frmfmt.hxx>
 #include <viewsh.hxx>
 #include <textboxhelper.hxx>
+#include <IDocumentState.hxx>
 #include <frmatr.hxx>
 
 #include <sal/log.hxx>
@@ -363,56 +364,15 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
         aObjPositioning.CalcPosition();
     }
 
-    SwFrameFormat* pShape = FindFrameFormat(pSdrObj);
-    const SwFormatAnchor& rAnchor(pShape->GetAnchor());
-    if (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+    if (auto pFormat = FindFrameFormat(pSdrObj))
     {
-        // This is an inline draw shape, see if it has a textbox.
-        SwFrameFormat* pTextBox = SwTextBoxHelper::getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT);
-        if (pTextBox)
+        if (pFormat->GetOtherTextBoxFormat())
         {
-            // It has, so look up its text rectangle, and adjust the position
-            // of the textbox accordingly.
-            // Both rectangles are absolute, SwFormatHori/VertOrient's position
-            // is relative to the print area of the anchor text frame.
-            tools::Rectangle aTextRectangle = SwTextBoxHelper::getTextRectangle(pSdrObj);
-
-            const auto aPos(pShape->GetAnchor().GetContentAnchor());
-            SwFormatVertOrient aVert(pTextBox->GetVertOrient());
-            SwFormatHoriOrient aHori(pTextBox->GetHoriOrient());
-
-            // tdf#138598 Replace vertical alignment of As_char textboxes in footer
-            // tdf#140158 Remove horizontal positioning of As_char textboxes, because
-            // the anchor moving does the same for it.
-            const bool bIsInHeaderFooter = aPos->nNode.GetNode().FindFooterStartNode();
-            // TODO: Find solution for Group Shapes in Header/Footer.
-            tools::Long nXoffs
-                = SwTextBoxHelper::getTextRectangle(
-                      bIsInHeaderFooter ? pShape->FindRealSdrObject() : pSdrObj, false)
-                      .Left();
-            if (!bIsInHeaderFooter)
-            {
-                aVert.SetVertOrient(css::text::VertOrientation::NONE);
-                aVert.SetRelationOrient(css::text::RelOrientation::FRAME);
-                auto const nTop = aTextRectangle.Top() - rFrame.getFrameArea().Top()
-                                       - rFrame.getFramePrintArea().Top();
-                aVert.SetPos(nTop);
-            }
-            else
-            {
-                aVert.SetVertOrient(css::text::VertOrientation::NONE);
-                aVert.SetPos(SwTextBoxHelper::getTextRectangle(pShape->FindRealSdrObject(), false).Top());
-            }
-
-            SwFormatAnchor aNewTxBxAnchor(pTextBox->GetAnchor());
-            aNewTxBxAnchor.SetAnchor(aPos);
-            aHori.SetPos(nXoffs + pShape->GetLRSpace().GetLeft());
-
-            pTextBox->LockModify();
-            pTextBox->SetFormatAttr(aNewTxBxAnchor);
-            pTextBox->SetFormatAttr(aVert);
-            pTextBox->SetFormatAttr(aHori);
-            pTextBox->UnlockModify();
+            const bool bModified = pFormat->GetDoc()->getIDocumentState().IsEnableSetModified();
+            pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(false);
+            SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::changeAnchor, pFormat,
+                                                             pFormat->FindRealSdrObject());
+            pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(bModified);
         }
     }
 
