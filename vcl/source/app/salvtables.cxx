@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <limits>
 #include <string_view>
 
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
@@ -5504,7 +5505,10 @@ double SalInstanceSpinButton::toField(sal_Int64 nValue) const
 
 sal_Int64 SalInstanceSpinButton::fromField(double fValue) const
 {
-    return std::round(fValue * Power10(get_digits()));
+    auto const x = fValue * Power10(get_digits());
+    return x == double(std::numeric_limits<sal_Int64>::max())
+               ? std::numeric_limits<sal_Int64>::max()
+               : sal_Int64(std::round(x));
 }
 
 SalInstanceSpinButton::SalInstanceSpinButton(FormattedField* pButton, SalInstanceBuilder* pBuilder,
