@@ -1734,6 +1734,10 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                 if (nParaLeftMargin != 0)
                     pParaContext->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(nParaLeftMargin), /*bOverwrite=*/false);
 
+                // Override right margin value with value from current style, if any
+                if (pStyleSheetProperties && pStyleSheetProperties->isSet(PROP_PARA_RIGHT_MARGIN))
+                    nParaRightMargin = pStyleSheetProperties->getProperty(PROP_PARA_RIGHT_MARGIN)->second.get<sal_Int32>();
+
                 pParaContext->Insert(PROP_PARA_RIGHT_MARGIN, uno::makeAny(nParaRightMargin), /*bOverwrite=*/false);
             }
         }
