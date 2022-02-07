@@ -1701,9 +1701,7 @@ void OReportController::impl_initialize( )
                 const OReportPage* pPage = dynamic_cast<OReportPage*>(m_aReportModel->GetPage(static_cast<sal_uInt16>(m_nPageNum)));
                 if ( pPage )
                 {
-                    uno::Sequence< beans::PropertyValue> aArgs(1);
-                    aArgs.getArray()[0].Value <<= pPage->getSection();
-                    executeUnChecked(SID_SELECT,aArgs);
+                    executeUnChecked(SID_SELECT,{ comphelper::makePropertyValue("", pPage->getSection() ) });
                 }
             }
             else
@@ -1719,8 +1717,7 @@ void OReportController::impl_initialize( )
         {
             m_sLastActivePage = "Data";
             getDesignView()->setCurrentPage(m_sLastActivePage);
-            uno::Sequence< beans::PropertyValue> aArgs;
-            executeUnChecked(SID_SELECT_REPORT,aArgs);
+            executeUnChecked(SID_SELECT_REPORT,{});
         }
 
         setModified(false);     // and we are not modified yet
@@ -2790,8 +2787,7 @@ void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data)
                 util::URL aCommand;
                 aCommand.Complete = ".uno:" + rCommandName;
 
-                Sequence aCommandArgs{ comphelper::makePropertyValue("Value", rCommandValue) };
-                executeUnChecked( aCommand, aCommandArgs );
+                executeUnChecked( aCommand, { comphelper::makePropertyValue("Value", rCommandValue) } );
             }
             else
             {
@@ -2866,7 +2862,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                 if (pErrorId != RID_ERR_NO_COMMAND)
                 {
                     if ( !m_bShowProperties )
-                        executeUnChecked(SID_SHOW_PROPERTYBROWSER,uno::Sequence< beans::PropertyValue>());
+                        executeUnChecked(SID_SHOW_PROPERTYBROWSER, {});
 
                     m_sLastActivePage = "Data";
                     getDesignView()->setCurrentPage(m_sLastActivePage);
@@ -2878,8 +2874,7 @@ uno::Reference<frame::XModel> OReportController::executeReport()
                 }
                 if ( nCommand )
                 {
-                    uno::Sequence< beans::PropertyValue> aArgs;
-                    executeUnChecked(nCommand,aArgs);
+                    executeUnChecked(nCommand, {});
                 }
             }
         }

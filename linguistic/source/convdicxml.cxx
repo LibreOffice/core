@@ -248,8 +248,7 @@ bool ConvDicXMLExport::Export()
 {
     uno::Reference< document::XExporter > xExporter( this );
     uno::Reference< document::XFilter > xFilter( xExporter, UNO_QUERY );
-    uno::Sequence< beans::PropertyValue > aProps(0);
-    xFilter->filter( aProps );      // calls exportDoc implicitly
+    xFilter->filter( {} );      // calls exportDoc implicitly
 
     return bSuccess;
 }

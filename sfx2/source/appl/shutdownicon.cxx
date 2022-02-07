@@ -222,10 +222,7 @@ void ShutdownIcon::FromTemplate()
     if ( !xDisp.is() )
         return;
 
-    Sequence<PropertyValue> aArgs(1);
-    PropertyValue* pArg = aArgs.getArray();
-    pArg[0].Name = "Referer";
-    pArg[0].Value <<= OUString("private:user");
+    Sequence<PropertyValue> aArgs { comphelper::makePropertyValue("Referer", OUString("private:user")) };
     css::uno::Reference< css::frame::XNotifyingDispatch > xNotifier(xDisp, UNO_QUERY);
     if (xNotifier.is())
     {
