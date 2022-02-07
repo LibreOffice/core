@@ -16,6 +16,24 @@
       "message": "this assert fires on loading https://bz.apache.org/ooo/attachment.cgi?id\u003d20372\n\nhttps://dev-builds.libreoffice.org/crashtest/583185235389b55d6cfffac3067c0e1ccb2852b1/backtraces/task399-core.backtrace.txt",
       "revId": "fc03ef1e02da261073994e7478b08fa57b3ea962",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4744938_ddc290c7",
+        "filename": "chart2/source/model/template/DataInterpreter.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 482,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-07T09:13:24Z",
+      "side": 1,
+      "message": "fix here\n   https://gerrit.libreoffice.org/c/core/+/129587",
+      "parentUuid": "d8dc0acf_d469d29b",
+      "revId": "fc03ef1e02da261073994e7478b08fa57b3ea962",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
