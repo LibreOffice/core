@@ -477,7 +477,7 @@ void appendFixedInt( sal_Int32 nValue, OStringBuffer& rBuffer )
 }
 
 // appends a double. PDF does not accept exponential format, only fixed point
-void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 5 )
+void appendDouble( double fValue, OStringBuffer& rBuffer, sal_Int32 nPrecision = 10 )
 {
     bool bNeg = false;
     if( fValue < 0.0 )
@@ -8568,9 +8568,9 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
 
     aLine.append(">> >>");
     aLine.append(" /Matrix [ ");
-    appendDouble(fScaleX, aLine, /*nPrecision=*/10);
+    appendDouble(fScaleX, aLine);
     aLine.append(" 0 0 ");
-    appendDouble(fScaleY, aLine, /*nPrecision=*/10);
+    appendDouble(fScaleY, aLine);
     aLine.append(" 0 0 ]");
     aLine.append(" /BBox [ 0 0 ");
     aLine.append(aSize.Width());
