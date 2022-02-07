@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b72d060e_6481349c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-07T14:24:52Z",
+      "side": 1,
+      "message": "This is a UITest and it\u0027s not executed on windows, thus the failure is not related",
+      "revId": "d043ae296cd69741420e4f38cb8ddebcda1824a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
