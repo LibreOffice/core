@@ -14,6 +14,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/BreakType.hpp>
+#include <com/sun/star/document/XDocumentInsertable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -103,6 +104,33 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberingRestartStyleParent)
     CPPUNIT_ASSERT_EQUAL(OUString("1."), xPara->getPropertyValue(aProp).get<OUString>());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("2."), xPara->getPropertyValue(aProp).get<OUString>());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
+{
+    // Given an empty document:
+    getComponent() = loadFromDesktop("private:factory/swriter", "com.sun.star.text.TextDocument");
+
+    // When pasting RTF into that document:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<document::XDocumentInsertable> xCursor(
+        xText->createTextCursorByRange(xText->getStart()), uno::UNO_QUERY);
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paste-ole.rtf";
+    xCursor->insertDocumentFromURL(aURL, {});
+
+    // Then make sure that all the 3 paragraphs of the paste data (empty para, OLE obj, text) are
+    // inserted to the document:
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    // Without the accompanying fix in place, this test would have failed, as the paste result was a
+    // single paragaph, containing the OLE object, and the content after the OLE object was lost.
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+    xParaEnum->nextElement();
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+    uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("hello"), xPara->getString());
 }
 }
 
