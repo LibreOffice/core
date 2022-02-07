@@ -1125,7 +1125,7 @@ void ModulWindow::GetState( SfxItemSet &rSet )
                     {
                         OUString aCurrLine = GetEditEngine()->GetText( i );
                         OUString sProcType;
-                        if (GetEditorWindow().GetProcedureName(aCurrLine, sProcType, sProcName))
+                        if (GetEditorWindow().GetProcName(aCurrLine, sProcType, sProcName))
                             break;
                     } while (i--);
 

@@ -765,7 +765,7 @@ void EditorWindow::HandleProcedureCompletion()
 
     OUString sProcType;
     OUString sProcName;
-    bool bFoundName = GetProcedureName(aLine, sProcType, sProcName);
+    bool bFoundName = GetProcName(aLine, sProcType, sProcName);
     if (!bFoundName)
       return;
 
@@ -810,7 +810,7 @@ void EditorWindow::HandleProcedureCompletion()
     }
 }
 
-bool EditorWindow::GetProcedureName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const
+bool EditorWindow::GetProcName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const
 {
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions(rLine, aPortions);

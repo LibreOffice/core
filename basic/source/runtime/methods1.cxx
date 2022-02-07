@@ -122,7 +122,7 @@ void SbRtl_CallByName(StarBASIC *, SbxArray & rPar, bool)
         return;
     }
 
-    // 2. parameter is ProcedureName
+    // 2. parameter is ProcName
     OUString aNameStr = rPar.Get(2)->GetOUString();
 
     // 3. parameter is CallType
