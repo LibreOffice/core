@@ -948,7 +948,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     {
         SCCOL nC, jC;
         SCROW nR;
-        sal_uLong v;
+        tools::Long v;
         if ( pGraphEntry )
             nC = std::max( SCCOL(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
                            rMergeAttr.GetColMerge() );

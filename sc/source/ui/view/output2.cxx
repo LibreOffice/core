@@ -1278,7 +1278,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
             ++nCompRow;
         }
     }
-    nCellPosY -= static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, mnPPTY ));
+    nCellPosY -= mpDoc->GetScaledRowHeight( nCellY, nCompRow-1, nTab, mnPPTY );
 
     const ScMergeAttr* pMerge = &rPattern.GetItem( ATTR_MERGE );
     bool bMerged = pMerge->IsMerged();
@@ -1306,7 +1306,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
         nDirect = 1;        // skip in loop
     }
     // following rows always from document
-    nMergeSizeY += static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nCellY+nDirect, nCellY+nMergeRows-1, nTab, mnPPTY));
+    nMergeSizeY += mpDoc->GetScaledRowHeight( nCellY+nDirect, nCellY+nMergeRows-1, nTab, mnPPTY);
 
     --nMergeSizeX;      // leave out the grid horizontally, also for alignment (align between grid lines)
 
@@ -4634,9 +4634,9 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
                             {
                                 SCCOL nCountX = pMerge->GetColMerge();
                                 for (SCCOL i=1; i<nCountX; i++)
-                                    nOutWidth += static_cast<tools::Long>( mpDoc->GetColWidth(nX+i,nTab) * mnPPTX );
+                                    nOutWidth += mpDoc->GetColWidth(nX+i,nTab) * mnPPTX;
                                 SCROW nCountY = pMerge->GetRowMerge();
-                                nOutHeight += static_cast<tools::Long>(mpDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, mnPPTY));
+                                nOutHeight += mpDoc->GetScaledRowHeight( nY+1, nY+nCountY-1, nTab, mnPPTY);
                             }
 
                             SvxCellVerJustify eVerJust =
