@@ -141,7 +141,7 @@ constexpr Method aMethods[] = {
 
 { u"CallByName",                    SbxVARIANT,  3 | FUNCTION_,        SbRtl_CallByName           },
     arg(u"Object",        SbxOBJECT),
-    arg(u"ProcedureName", SbxSTRING),
+    arg(u"ProcName", SbxSTRING),
     arg(u"CallType",      SbxINTEGER),
 
 { u"CBool",                         SbxBOOL,     1 | FUNCTION_,        SbRtl_CBool                },
