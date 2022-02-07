@@ -92,10 +92,6 @@ public:
     /// Copy shape attributes to the text frame
     static void updateTextBoxMargin(SdrObject* pObj);
 
-    /// Sets the surround to through for the textframe of the given shape,
-    /// not to interfere with the layout. Returns true on success.
-    static bool setWrapThrough(SwFrameFormat* pShape);
-
     /// Sets the anchor of the associated textframe of the given shape, and
     /// returns true on success.
     static bool changeAnchor(SwFrameFormat* pShape, SdrObject* pObj);
@@ -104,18 +100,8 @@ public:
     /// returns true on success.
     static bool doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pObj);
 
-    /// Returns true if the anchor different for the  given shape, and the
-    /// associated textframe of the given shape.
-    /// Note: In case of AS_CHAR anchor the anchor type must be different,
-    /// because if not, layout breaks, but this situation also handled by
-    /// this function, and returns true in that case too.
-    static std::optional<bool> isAnchorTypeDifferent(const SwFrameFormat* pShape);
-
     /// Sets the correct size of textframe depending on the given SdrObject.
     static bool syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj);
-
-    /// Returns true if the given shape has a valid textframe.
-    static bool isTextBoxShapeHasValidTextFrame(const SwFrameFormat* pShape);
 
     // Returns true on success. Synchronize z-order of the text frame of the given textbox
     // by setting it one level higher than the z-order of the shape of the textbox.
@@ -188,6 +174,10 @@ public:
     /// Calls the method given by pFunc with every textboxes of the group given by pFormat.
     static void synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
                                                 SwFrameFormat* pFormat, SdrObject* pObj);
+    /// Calls the method given by pFunc with every textboxes of the group given by pFormat.
+    static void synchronizeGroupTextBoxProperty(void pFunc(SwFrameFormat*, SdrObject*),
+                                                SwFrameFormat* pFormat, SdrObject* pObj);
+
     /// Collect all textboxes of the group given by the pGroupObj Parameter. Returns with a
     /// vector filled with the textboxes.
     static std::vector<SwFrameFormat*> CollectTextBoxes(SdrObject* pGroupObject,
