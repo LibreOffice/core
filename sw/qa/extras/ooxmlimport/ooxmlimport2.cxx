@@ -248,10 +248,10 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf114212)
 {
     load(mpTestDocumentPath, "tdf114212.docx");
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1427
+    // - Expected: 1428
     // - Actual  : 387
     OUString aTop = parseDump("//anchored/fly[1]/infos/bounds", "top");
-    CPPUNIT_ASSERT_EQUAL(OUString("1427"), aTop);
+    CPPUNIT_ASSERT_EQUAL(OUString("1428"), aTop);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf109524)
