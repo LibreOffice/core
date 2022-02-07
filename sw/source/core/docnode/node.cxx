@@ -497,7 +497,7 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
     {
         pNode = GetContentNode();
         if( pNode )
-            pPgDesc = static_cast<const SwFormatPageDesc&>(pNode->GetAttr( RES_PAGEDESC )).GetPageDesc();
+            pPgDesc = pNode->GetAttr( RES_PAGEDESC ).GetPageDesc();
     }
 
     // Are we going through the layout?
@@ -697,8 +697,7 @@ const SwPageDesc* SwNode::FindPageDesc( SwNodeOffset* pPgDescNdIdx ) const
             if( nullptr != pNd )
             {
                 if( pNd->IsContentNode() )
-                    pPgDesc = static_cast<const SwFormatPageDesc&>(pNd->GetContentNode()->
-                                GetAttr( RES_PAGEDESC )).GetPageDesc();
+                    pPgDesc = pNd->GetContentNode()->GetAttr( RES_PAGEDESC ).GetPageDesc();
                 else if( pNd->IsTableNode() )
                     pPgDesc = pNd->GetTableNode()->GetTable().
                             GetFrameFormat()->GetPageDesc().GetPageDesc();
@@ -1549,7 +1548,7 @@ bool SwContentNode::GetInfo( SfxPoolItem& rInfo ) const
         break;
 
     case RES_FINDNEARESTNODE:
-        if( static_cast<const SwFormatPageDesc&>(GetAttr( RES_PAGEDESC )).GetPageDesc() )
+        if( GetAttr( RES_PAGEDESC ).GetPageDesc() )
             static_cast<SwFindNearestNode&>(rInfo).CheckNode( *this );
         return true;
 

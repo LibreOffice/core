@@ -424,7 +424,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     if( !pIDSA->get(DocumentSettingId::APPLY_PARAGRAPH_MARK_FORMAT_TO_NUMBERING ))
         return;
 
-    SwFormatAutoFormat const& rListAutoFormat(static_cast<SwFormatAutoFormat const&>(rInf.GetTextFrame()->GetTextNodeForParaProps()->GetAttr(RES_PARATR_LIST_AUTOFMT)));
+    SwFormatAutoFormat const& rListAutoFormat(rInf.GetTextFrame()->GetTextNodeForParaProps()->GetAttr(RES_PARATR_LIST_AUTOFMT));
     std::shared_ptr<SfxItemSet> pSet(rListAutoFormat.GetStyleHandle());
 
     // TODO remove this fallback (for WW8/RTF)
