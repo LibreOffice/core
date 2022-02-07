@@ -79,6 +79,14 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("FF0000"), sColor);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testParaListRightIndent, "testParaListRightIndent.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2000), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5001), getProperty<sal_Int32>(getParagraph(2), "ParaRightMargin"));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testDontAddNewStyles)
 {
     // Given a document that lacks builtin styles, and addition of them is disabled:
