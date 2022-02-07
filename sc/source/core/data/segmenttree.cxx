@@ -162,17 +162,17 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
             return 0;
         aData.mnPos2 = aData.mnPos2-1; // end point is not inclusive.
 
-        sal_uInt32 nValue = 0;
+        sal_uInt64 nValue = 0;
 
         SCROW nCurPos = nPos1;
         SCROW nEndPos = aData.mnPos2;
         while (nEndPos <= nPos2)
         {
-            sal_uInt32 nRes;
-            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            sal_uInt64 nRes;
+            if (o3tl::checked_multiply<sal_uInt64>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
             {
                 SAL_WARN("sc.core", "row height overflow");
-                nRes = SAL_MAX_INT32;
+                nRes = SAL_MAX_INT64;
             }
             nValue = o3tl::saturating_add(nValue, nRes);
             nCurPos = nEndPos + 1;
@@ -186,11 +186,11 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
         if (nCurPos <= nPos2)
         {
             nEndPos = ::std::min(nEndPos, nPos2);
-            sal_uInt32 nRes;
-            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            sal_uInt64 nRes;
+            if (o3tl::checked_multiply<sal_uInt64>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
             {
                 SAL_WARN("sc.core", "row height overflow");
-                nRes = SAL_MAX_INT32;
+                nRes = SAL_MAX_INT64;
             }
             nValue = o3tl::saturating_add(nValue, nRes);
         }
@@ -202,17 +202,17 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
         if (!getRangeDataLeaf(nPos1, aData))
             return 0;
 
-        sal_uInt32 nValue = 0;
+        sal_uInt64 nValue = 0;
 
         SCROW nCurPos = nPos1;
         SCROW nEndPos = aData.mnPos2;
         while (nEndPos <= nPos2)
         {
-            sal_uInt32 nRes;
-            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            sal_uInt64 nRes;
+            if (o3tl::checked_multiply<sal_uInt64>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
             {
                 SAL_WARN("sc.core", "row height overflow");
-                nRes = SAL_MAX_INT32;
+                nRes = SAL_MAX_INT64;
             }
             nValue = o3tl::saturating_add(nValue, nRes);
             nCurPos = nEndPos + 1;
@@ -224,11 +224,11 @@ ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOL
         if (nCurPos <= nPos2)
         {
             nEndPos = ::std::min(nEndPos, nPos2);
-            sal_uInt32 nRes;
-            if (o3tl::checked_multiply<sal_uInt32>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
+            sal_uInt64 nRes;
+            if (o3tl::checked_multiply<sal_uInt64>(aData.mnValue, nEndPos - nCurPos + 1, nRes))
             {
                 SAL_WARN("sc.core", "row height overflow");
-                nRes = SAL_MAX_INT32;
+                nRes = SAL_MAX_INT64;
             }
             nValue = o3tl::saturating_add(nValue, nRes);
         }
@@ -645,7 +645,7 @@ sal_uInt16 ScFlatUInt16RowSegments::getValue(SCROW nRow)
     return mpImpl->getValue(static_cast<SCCOLROW>(nRow));
 }
 
-sal_uInt32 ScFlatUInt16RowSegments::getSumValue(SCROW nRow1, SCROW nRow2)
+sal_uInt64 ScFlatUInt16RowSegments::getSumValue(SCROW nRow1, SCROW nRow2)
 {
     return mpImpl->getSumValue(static_cast<SCCOLROW>(nRow1), static_cast<SCCOLROW>(nRow2));
 }
