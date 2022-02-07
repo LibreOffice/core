@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16756fc3_6b890c96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-07T08:38:59Z",
+      "side": 1,
+      "message": "Kendy: any thoughts on whether there are situations where the only time a thumbnail is created is on file close (without a file-save or file-open)?",
+      "revId": "dbfffbcef60da2c31ffebe164e86fdd45bc70c53",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
