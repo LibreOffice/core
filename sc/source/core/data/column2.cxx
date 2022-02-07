@@ -3636,7 +3636,7 @@ namespace {
 
 class CodeCounter
 {
-    size_t mnCount;
+    sal_uInt64 mnCount;
 public:
     CodeCounter() : mnCount(0) {}
 
@@ -3645,12 +3645,12 @@ public:
         mnCount += p->GetCode()->GetCodeLen();
     }
 
-    size_t getCount() const { return mnCount; }
+    sal_uInt64 getCount() const { return mnCount; }
 };
 
 }
 
-sal_uInt32 ScColumn::GetCodeCount() const
+sal_uInt64 ScColumn::GetCodeCount() const
 {
     CodeCounter aFunc;
     sc::ParseFormula(maCells, aFunc);

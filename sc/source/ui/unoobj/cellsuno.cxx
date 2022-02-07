@@ -3883,7 +3883,7 @@ uno::Reference<util::XReplaceDescriptor> SAL_CALL ScCellRangesBase::createReplac
 sal_Int32 SAL_CALL ScCellRangesBase::replaceAll( const uno::Reference<util::XSearchDescriptor>& xDesc )
 {
     SolarMutexGuard aGuard;
-    sal_Int32 nReplaced = 0;
+    sal_uInt64 nReplaced = 0;
     if ( pDocShell && xDesc.is() )
     {
         ScCellSearchObj* pSearch = comphelper::getFromUnoTunnel<ScCellSearchObj>( xDesc );

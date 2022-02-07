@@ -2419,7 +2419,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
         const_cast<ScViewData*>(this)->aScrSize.setHeight( pView->GetGridHeight(eWhichY) );
     }
 
-    sal_uLong nTSize;
+    tools::Long nTSize;
     bool bIsTiledRendering = comphelper::LibreOfficeKit::isActive();
 
 
@@ -2493,13 +2493,13 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     nScrPosY = 0x7FFFFFFF;
                 else if (bAllowNeg || bIsTiledRendering)
                 {
-                    sal_uLong nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY);
+                    tools::Long nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY);
                     nScrPosY += nSizeYPix;
                 }
                 else
                 {
-                    sal_uLong nMaxHeight = aScrSize.getHeight() - nScrPosY;
-                    sal_uLong nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY, &nMaxHeight);
+                    tools::Long nMaxHeight = aScrSize.getHeight() - nScrPosY;
+                    tools::Long nSizeYPix = mrDoc.GetScaledRowHeight(nStartPosY, nWhereY - 1, nForTab, nPPTY, &nMaxHeight);
                     nScrPosY += nSizeYPix;
                 }
             }
