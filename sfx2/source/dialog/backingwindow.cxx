@@ -563,20 +563,13 @@ IMPL_LINK( BackingWindow, ClickHdl, weld::Button&, rButton, void )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-        Sequence< css::beans::PropertyValue > aArgs(1);
-        PropertyValue* pArg = aArgs.getArray();
-        pArg[0].Name = "Referer";
-        pArg[0].Value <<= OUString("private:user");
-
-        dispatchURL( ".uno:Open", OUString(), xFrame, aArgs );
+        dispatchURL( ".uno:Open", OUString(), xFrame, { comphelper::makePropertyValue("Referer", OUString("private:user")) } );
     }
     else if( &rButton == mxRemoteButton.get() )
     {
         Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-        Sequence< css::beans::PropertyValue > aArgs(0);
-
-        dispatchURL( ".uno:OpenRemote", OUString(), xFrame, aArgs );
+        dispatchURL( ".uno:OpenRemote", OUString(), xFrame, {} );
     }
     else if( &rButton == mxRecentButton.get() )
     {
@@ -631,12 +624,7 @@ IMPL_LINK (BackingWindow, MenuSelectHdl, const OString&, rId, void)
         {
             Reference< XDispatchProvider > xFrame( mxFrame, UNO_QUERY );
 
-            Sequence< css::beans::PropertyValue > aArgs(1);
-            PropertyValue* pArg = aArgs.getArray();
-            pArg[0].Name = "Referer";
-            pArg[0].Value <<= OUString("private:user");
-
-            dispatchURL( ".uno:NewDoc", OUString(), xFrame, aArgs );
+            dispatchURL( ".uno:NewDoc", OUString(), xFrame, { comphelper::makePropertyValue("Referer", OUString("private:user")) } );
             return;
         }
 

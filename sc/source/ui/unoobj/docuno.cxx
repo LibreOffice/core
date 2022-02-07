@@ -1905,19 +1905,15 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         const awt::Size aPageSize(aMMRect.GetWidth(), aMMRect.GetHeight());
         const awt::Point aCalcPagePos(aMMRect.Left(), aMMRect.Top());
 
-        uno::Sequence<beans::PropertyValue> aSequence(5);
-        beans::PropertyValue* pArray = aSequence.getArray();
-        pArray[0].Name = SC_UNONAME_PAGESIZE;
-        pArray[0].Value <<= aPageSize;
-        // #i111158# all positions are relative to the whole page, including non-printable area
-        pArray[1].Name = SC_UNONAME_INC_NP_AREA;
-        pArray[1].Value <<= true;
-        pArray[2].Name = SC_UNONAME_SOURCERANGE;
-        pArray[2].Value <<= aRangeAddress;
-        pArray[3].Name = SC_UNONAME_CALCPAGESIZE;
-        pArray[3].Value <<= aPageSize;
-        pArray[4].Name = SC_UNONAME_CALCPAGEPOS;
-        pArray[4].Value <<= aCalcPagePos;
+        uno::Sequence<beans::PropertyValue> aSequence
+        {
+            comphelper::makePropertyValue(SC_UNONAME_PAGESIZE, aPageSize),
+            // #i111158# all positions are relative to the whole page, including non-printable area
+            comphelper::makePropertyValue(SC_UNONAME_INC_NP_AREA, true),
+            comphelper::makePropertyValue(SC_UNONAME_SOURCERANGE, aRangeAddress),
+            comphelper::makePropertyValue(SC_UNONAME_CALCPAGESIZE, aPageSize), // TODO aPageSize too ?
+            comphelper::makePropertyValue(SC_UNONAME_CALCPAGEPOS, aCalcPagePos)
+        };
 
         if( ! pPrinterOptions )
             pPrinterOptions.reset(new ScPrintUIOptions);
