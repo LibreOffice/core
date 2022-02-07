@@ -328,7 +328,7 @@ public:
 
     OString getDescriptor() const;
 
-    OString getSignature() const { return m_needsSignature ? m_signatureStart.toString() + m_signatureEnd : OString();}
+    OString getSignature() const { return m_needsSignature ? m_signatureStart + m_signatureEnd : OString();}
 
 private:
     rtl::Reference< TypeManager > m_manager;

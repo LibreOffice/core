@@ -59,6 +59,20 @@ void f1(OString s1)
     // expected-error@+1 {{rather than copy, pass with a view using subView() [loplugin:stringview]}}
     ConstructWithView(s1.copy(1));
 }
+void f1(OUStringBuffer s1)
+{
+    // expected-error@+1 {{rather than call toString, pass with a view [loplugin:stringview]}}
+    call_view(s1.toString());
+    // expected-error@+1 {{rather than call toString, pass with a view [loplugin:stringview]}}
+    ConstructWithView(s1.toString());
+}
+void f1(OStringBuffer s1)
+{
+    // expected-error@+1 {{rather than call toString, pass with a view [loplugin:stringview]}}
+    call_view(s1.toString());
+    // expected-error@+1 {{rather than call toString, pass with a view [loplugin:stringview]}}
+    ConstructWithView(s1.toString());
+}
 }
 
 namespace test2
