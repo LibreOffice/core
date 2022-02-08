@@ -35,8 +35,8 @@ class VPolarGrid : public VAxisOrGridBase
 // public methods
 public:
     VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-        , const css::uno::Sequence<
-            css::uno::Reference< css::beans::XPropertySet > > & rGridPropertiesList //main grid, subgrid, subsubgrid etc
+        , std::vector<
+            css::uno::Reference< css::beans::XPropertySet > > aGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
     virtual ~VPolarGrid() override;
 
@@ -53,7 +53,7 @@ public:
                     , double fLogicRadius, double fLogicZ );
 
 private: //member
-    css::uno::Sequence<
+    std::vector<
         css::uno::Reference< css::beans::XPropertySet > > m_aGridPropertiesList;//main grid, subgrid, subsubgrid etc
     std::unique_ptr<PolarPlottingPositionHelper> m_pPosHelper;
     std::vector< ExplicitIncrementData >   m_aIncrements;

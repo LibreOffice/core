@@ -31,19 +31,19 @@ class VCartesianGrid : public VAxisOrGridBase
 // public methods
 public:
     VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-        , const css::uno::Sequence<
-            css::uno::Reference< css::beans::XPropertySet > >& rGridPropertiesList //main grid, subgrid, subsubgrid etc
+        , std::vector<
+            css::uno::Reference< css::beans::XPropertySet > > aGridPropertiesList //main grid, subgrid, subsubgrid etc
         );
     virtual ~VCartesianGrid() override;
 
     virtual void createShapes() override;
 
     static void fillLinePropertiesFromGridModel( std::vector<VLineProperties>& rLinePropertiesList
-                    , const css::uno::Sequence<
+                    , const std::vector<
                         css::uno::Reference< css::beans::XPropertySet > >& rGridPropertiesList );
 
 private:
-    css::uno::Sequence<
+    std::vector<
         css::uno::Reference< css::beans::XPropertySet > > m_aGridPropertiesList; //main grid, subgrid, subsubgrid etc
 };
 

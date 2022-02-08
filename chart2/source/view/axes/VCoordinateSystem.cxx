@@ -193,7 +193,7 @@ rtl::Reference< Axis > VCoordinateSystem::getAxisByDimension( sal_Int32 nDimensi
     return nullptr;
 }
 
-Sequence< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromAxis( const Reference< XAxis >& xAxis )
+std::vector< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromAxis( const rtl::Reference< Axis >& xAxis )
 {
     std::vector< Reference< beans::XPropertySet > > aRet;
 
@@ -204,7 +204,7 @@ Sequence< Reference< beans::XPropertySet > > VCoordinateSystem::getGridListFromA
         aRet.insert( aRet.end(), aSubGrids.begin(), aSubGrids.end() );
     }
 
-    return comphelper::containerToSequence( aRet );
+    return aRet;
 }
 
 void VCoordinateSystem::impl_adjustDimension( sal_Int32& rDimensionIndex )
@@ -568,7 +568,7 @@ void VCoordinateSystem::setSeriesNamesForAxis( const Sequence< OUString >& rSeri
 }
 
 sal_Int32 VCoordinateSystem::getNumberFormatKeyForAxis(
-        const Reference< chart2::XAxis >& xAxis
+        const rtl::Reference< Axis >& xAxis
         , const rtl::Reference<::chart::ChartModel>& xChartDoc)
 {
     return ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
