@@ -443,7 +443,7 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
         RowInfo* pThisRowInfo = &rTabInfo.mpRowInfo[nArrY];
         for (SCCOL nX=nX1; nX<=nX2; nX++)
         {
-            CellInfo& rCellInfo = pThisRowInfo->pCellInfo[nX+1];
+            CellInfo& rCellInfo = pThisRowInfo->cellInfo(nX);
             if (!rCellInfo.bEmptyCellText)
                 if (rCellInfo.pPatternAttr->
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet).GetHidePrint())
@@ -1407,8 +1407,8 @@ void ScPrintFunc::DrawBorder( tools::Long nScrX, tools::Long nScrY, tools::Long 
     OSL_ENSURE(aTabInfo.mnArrCount,"nArrCount == 0");
 
     aTabInfo.mpRowInfo[1].nHeight = static_cast<sal_uInt16>(nEffHeight);
-    aTabInfo.mpRowInfo[0].pCellInfo[1].nWidth =
-        aTabInfo.mpRowInfo[1].pCellInfo[1].nWidth = static_cast<sal_uInt16>(nEffWidth);
+    aTabInfo.mpRowInfo[0].cellInfo(0).nWidth =
+        aTabInfo.mpRowInfo[1].cellInfo(0).nWidth = static_cast<sal_uInt16>(nEffWidth);
 
     ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc.get(), 0,
                                 nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
