@@ -154,6 +154,13 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
             StrCmp( GetStyleName(), rOther.GetStyleName() );
 }
 
+size_t ScPatternAttr::LookupHashCode() const
+{
+    if (!mxHashCode)
+        CalcHashCode();
+    return *mxHashCode;
+}
+
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
 {
     SvxCellOrientation eOrient = SvxCellOrientation::Standard;
@@ -1367,7 +1374,8 @@ sal_uInt64 ScPatternAttr::GetKey() const
 void ScPatternAttr::CalcHashCode() const
 {
     auto const & rSet = GetItemSet();
-    mxHashCode = boost::hash_range(rSet.GetItems_Impl(), rSet.GetItems_Impl() + rSet.Count());
+    mxHashCode = 1; // Set up seed so that an empty pattern does not have an (invalid) hash of 0.
+    boost::hash_range(*mxHashCode, rSet.GetItems_Impl(), rSet.GetItems_Impl() + rSet.Count());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

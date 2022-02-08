@@ -187,6 +187,13 @@ public:
     // of a single kind of pool item.
     virtual bool             operator<( const SfxPoolItem& ) const { assert(false); return false; }
     virtual bool             IsSortable() const { return false; }
+    // Some item types cannot be IsSortable() (such as because they are modified while stored
+    // in a pool, which would change the ordering position, see e.g. 585e0ac43b9bd8a2f714903034).
+    // To improve performance in such cases it is possible to return a (fast/cached) non-zero hash code,
+    // which will be used to speed up linear lookup and only matching items will be fully compared.
+    // Note: Since 0 value is invalid, try to make sure it's not returned for valid items
+    // (which may easily happen e.g. if the item is empty and the hash is seeded with 0).
+    virtual size_t           LookupHashCode() const { return 0; }
 
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,
