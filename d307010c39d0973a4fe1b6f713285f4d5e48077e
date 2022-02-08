@@ -16,6 +16,23 @@
       "message": "7.2 (fedora build) is unusably slow on documents with \u003e1000 headings like\n\nhttps://docs.oasis-open.org/office/OpenDocument/v1.3/os/part3-schema/OpenDocument-v1.3-os-part3-schema.odt\n\nGabor claims that this fixes it, so let\u0027s try to backport it",
       "revId": "d307010c39d0973a4fe1b6f713285f4d5e48077e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5824857_b16a73ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-02-08T19:15:36Z",
+      "side": 1,
+      "message": "Locally built this branch and verified that the performance problem is gone: after the initial loading and rendering of the linked document, scrolling with PgUp/PgDn is fast.",
+      "revId": "d307010c39d0973a4fe1b6f713285f4d5e48077e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
