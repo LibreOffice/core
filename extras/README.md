@@ -11,13 +11,10 @@ Contains templates, clipart galleries, palettes, symbol font, autocorrections, a
 
 + How-to add a new autotext category
 	+ create a directory `extras/source/autotext/lang/xx/foo/` where `xx` is your lang code. `xx` must exactly fit with an UI lang code.
-	+ unzip your `foo.bau` autotext file in this directory (including an empty mimetype file)
+	+ unzip your `foo.bau` autotext file in this directory (excluding an empty mimetype file)
 	+ add `xx/foo.bau` in `extras/AllLangPackage_autotextshare.mk`
 	+ in `extras/CustomTarget_autotextshare.mk`:
-		+ add `xx/foo` in `extras_AUTOTEXTSHARE_AUTOTEXTS`
 		+ add all files contained in `foo.bau` (except mimetype) in `extras_AUTOTEXTSHARE_XMLFILES`
-		+ if `foo.bau` contains files with other extension than `.xml`, `.rdf`, `.svm` and `.png`
-			+ add a `CPY` call at the end of the file
 
 + How-to add a new autotext to an existing category
 	+ create a directory `extras/source/autotext/lang/xx/standard/FOO/` to add it in category standard of lang `xx`
@@ -26,8 +23,6 @@ Contains templates, clipart galleries, palettes, symbol font, autocorrections, a
 	+ add all files of autotext in `extras/source/autotext/lang/xx/standard/META-INF/manifest.xml`
 	+ in `extras/CustomTarget_autotextshare.mk`:
 		+ add all files of autotext in `extras_AUTOTEXTSHARE_XMLFILES`
-		+ if some files have different extension from `.xml`, `.rdf`, `.svm` and `.png`
-			+ add a `CPY` call at the end of the file
 
 + How-to add a new Impress template
 	+ clean-up template file as indicated on wiki <https://wiki.documentfoundation.org/Documentation/HowTo/Impress/Make_template_language_independent>
