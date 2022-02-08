@@ -870,24 +870,27 @@ uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt3
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
 {
-    uno::Sequence< sal_Int8 > aResult{ /* [ 0] */ static_cast<sal_Int8>( n1 >> 24 ),
-                                       /* [ 1] */ static_cast<sal_Int8>( ( n1 << 8 ) >> 24 ),
-                                       /* [ 2] */ static_cast<sal_Int8>( ( n1 << 16 ) >> 24 ),
-                                       /* [ 3] */ static_cast<sal_Int8>( ( n1 << 24 ) >> 24 ),
-                                       /* [ 4] */ static_cast<sal_Int8>( n2 >> 8 ),
-                                       /* [ 5] */ static_cast<sal_Int8>( ( n2 << 8 ) >> 8 ),
-                                       /* [ 6] */ static_cast<sal_Int8>( n3 >> 8 ),
-                                       /* [ 7] */ static_cast<sal_Int8>( ( n3 << 8 ) >> 8 ),
-                                       /* [ 8] */ static_cast<sal_Int8>( b8 ),
-                                       /* [ 9] */ static_cast<sal_Int8>( b9 ),
-                                       /* [10] */ static_cast<sal_Int8>( b10 ),
-                                       /* [11] */ static_cast<sal_Int8>( b11 ),
-                                       /* [12] */ static_cast<sal_Int8>( b12 ),
-                                       /* [13] */ static_cast<sal_Int8>( b13 ),
-                                       /* [14] */ static_cast<sal_Int8>( b14 ),
-                                       /* [15] */ static_cast<sal_Int8>( b15 ) };
+    return GetSequenceClassID({ n1, n2, n3, { b8, b9, b10, b11, b12, b13, b14, b15 } });
+}
 
-    return aResult;
+uno::Sequence<sal_Int8> MimeConfigurationHelper::GetSequenceClassID(const Guid& rId)
+{
+    return { /* [ 0] */ static_cast<sal_Int8>( rId.Data1 >> 24 ),
+             /* [ 1] */ static_cast<sal_Int8>( ( rId.Data1 << 8 ) >> 24 ),
+             /* [ 2] */ static_cast<sal_Int8>( ( rId.Data1 << 16 ) >> 24 ),
+             /* [ 3] */ static_cast<sal_Int8>( ( rId.Data1 << 24 ) >> 24 ),
+             /* [ 4] */ static_cast<sal_Int8>( rId.Data2 >> 8 ),
+             /* [ 5] */ static_cast<sal_Int8>( ( rId.Data2 << 8 ) >> 8 ),
+             /* [ 6] */ static_cast<sal_Int8>( rId.Data3 >> 8 ),
+             /* [ 7] */ static_cast<sal_Int8>( ( rId.Data3 << 8 ) >> 8 ),
+             /* [ 8] */ static_cast<sal_Int8>( rId.Data4[0] ),
+             /* [ 9] */ static_cast<sal_Int8>( rId.Data4[1] ),
+             /* [10] */ static_cast<sal_Int8>( rId.Data4[2] ),
+             /* [11] */ static_cast<sal_Int8>( rId.Data4[3] ),
+             /* [12] */ static_cast<sal_Int8>( rId.Data4[4] ),
+             /* [13] */ static_cast<sal_Int8>( rId.Data4[5] ),
+             /* [14] */ static_cast<sal_Int8>( rId.Data4[6] ),
+             /* [15] */ static_cast<sal_Int8>( rId.Data4[7] ) };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
