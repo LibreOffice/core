@@ -5158,7 +5158,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
                     case 0x0392:
                         pImpRec->nYRelTo = nUDData;
                         break;
-                    case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
+                    case 0x03BF: pImpRec->nGroupShapeBooleanProperties = nUDData; break;
                     case 0x0393:
                     // This seems to correspond to o:hrpct from .docx (even including
                     // the difference that it's in 0.1% even though the .docx spec
@@ -7413,7 +7413,7 @@ SvxMSDffImportRec::SvxMSDffImportRec()
       nClientDataLen(    0 ),
       nXAlign( 0 ), // position n cm from left
       nYAlign( 0 ), // position n cm below
-      nLayoutInTableCell( 0 ), // element is laid out in table cell
+      nGroupShapeBooleanProperties(0), // 16 settings: LayoutInCell/AllowOverlap/BehindDocument...
       nFlags( ShapeFlag::NONE ),
       nDxTextLeft( 144 ),
       nDyTextTop( 72 ),
@@ -7450,7 +7450,7 @@ SvxMSDffImportRec::SvxMSDffImportRec(const SvxMSDffImportRec& rCopy)
       nXRelTo( rCopy.nXRelTo ),
       nYAlign( rCopy.nYAlign ),
       nYRelTo( rCopy.nYRelTo ),
-      nLayoutInTableCell( rCopy.nLayoutInTableCell ),
+      nGroupShapeBooleanProperties(rCopy.nGroupShapeBooleanProperties),
       nFlags( rCopy.nFlags ),
       nDxTextLeft( rCopy.nDxTextLeft    ),
       nDyTextTop( rCopy.nDyTextTop ),

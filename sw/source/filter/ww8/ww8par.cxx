@@ -626,9 +626,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     maShapeRecords.Current()->nRecLen,
                     pImpRec->pClientDataBuffer, pImpRec->nClientDataLen );
 
-        // process user (== Winword) defined parameters in 0xF122 record
-        // #i84783# - set special value to determine, if property is provided or not.
-        pImpRec->nLayoutInTableCell = 0xFFFFFFFF;
+        pImpRec->nGroupShapeBooleanProperties = 0;
 
         if(    maShapeRecords.SeekToContent( rSt,
                                              DFF_msofbtUDefProp,
@@ -660,7 +658,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     case 0x0392:
                         pImpRec->nYRelTo = nUDData;
                         break;
-                    case 0x03BF: pImpRec->nLayoutInTableCell = nUDData; break;
+                    case 0x03BF: pImpRec->nGroupShapeBooleanProperties = nUDData; break;
                     case 0x0393:
                     // This seems to correspond to o:hrpct from .docx (even including
                     // the difference that it's in 0.1% even though the .docx spec
