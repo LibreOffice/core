@@ -789,8 +789,8 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
         if (pCol1 && (*pCol1 != *pCol2))
             return false;
 
-        const ScDataBarInfo* pInfo1 = rFirst.cellInfo(nX).pDataBar.get();
-        const ScDataBarInfo* pInfo2 = rOther.cellInfo(nX).pDataBar.get();
+        const ScDataBarInfo* pInfo1 = rFirst.cellInfo(nX).pDataBar;
+        const ScDataBarInfo* pInfo2 = rOther.cellInfo(nX).pDataBar;
 
         if( (pInfo1 && !pInfo2) || (!pInfo1 && pInfo2) )
             return false;
@@ -799,8 +799,8 @@ static bool lcl_EqualBack( const RowInfo& rFirst, const RowInfo& rOther,
             return false;
 
         // each cell with an icon set should be painted the same way
-        const ScIconSetInfo* pIconSet1 = rFirst.cellInfo(nX).pIconSet.get();
-        const ScIconSetInfo* pIconSet2 = rOther.cellInfo(nX).pIconSet.get();
+        const ScIconSetInfo* pIconSet1 = rFirst.cellInfo(nX).pIconSet;
+        const ScIconSetInfo* pIconSet2 = rOther.cellInfo(nX).pIconSet;
 
         if(pIconSet1 || pIconSet2)
             return false;
@@ -1133,8 +1133,8 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                     }
 
                     std::optional<Color> const & pColor = pInfo->mxColorScale;
-                    const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar.get();
-                    const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet.get();
+                    const ScDataBarInfo* pDataBarInfo = pInfo->pDataBar;
+                    const ScIconSetInfo* pIconSetInfo = pInfo->pIconSet;
 
                     tools::Long nPosXLogic = nPosX;
                     if (bWorksInPixels)

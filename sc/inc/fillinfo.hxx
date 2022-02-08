@@ -101,6 +101,8 @@ struct CellInfo
     CellInfo()
         : pPatternAttr(nullptr)
         , pConditionSet(nullptr)
+        , pDataBar(nullptr)
+        , pIconSet(nullptr)
         , pBackground(nullptr)   // TODO: omit?
         , pLinesAttr(nullptr)
         , mpTLBRLine(nullptr)
@@ -134,9 +136,9 @@ struct CellInfo
 
     const ScPatternAttr*        pPatternAttr;
     const SfxItemSet*           pConditionSet;
-    std::optional<Color>      mxColorScale;
-    std::unique_ptr<const ScDataBarInfo> pDataBar;
-    std::unique_ptr<const ScIconSetInfo> pIconSet;
+    std::optional<Color>        mxColorScale;
+    const ScDataBarInfo*        pDataBar;
+    const ScIconSetInfo*        pIconSet;
 
     const SvxBrushItem*         pBackground;
 
@@ -229,6 +231,20 @@ struct ScTableInfo
                         ~ScTableInfo();
     ScTableInfo(const ScTableInfo&) = delete;
     const ScTableInfo& operator=(const ScTableInfo&) = delete;
+
+    void addDataBarInfo(std::unique_ptr<const ScDataBarInfo> info)
+    {
+        mDataBarInfos.push_back(std::move(info));
+    }
+    void addIconSetInfo(std::unique_ptr<const ScIconSetInfo> info)
+    {
+        mIconSetInfos.push_back(std::move(info));
+    }
+private:
+    // These are owned here and not in CellInfo to avoid freeing
+    // memory for every pointer in CellInfo, most of which are nullptr.
+    std::vector<std::unique_ptr<const ScDataBarInfo>> mDataBarInfos;
+    std::vector<std::unique_ptr<const ScIconSetInfo>> mIconSetInfos;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
