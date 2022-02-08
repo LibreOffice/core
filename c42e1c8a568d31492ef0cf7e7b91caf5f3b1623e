@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b291c03_edd0a50c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-08T14:02:57Z",
+      "side": 1,
+      "message": "This is a UItest and gerrit_linux_clang_dbgutil passes, where it\u0027s executed. pushing",
+      "revId": "c42e1c8a568d31492ef0cf7e7b91caf5f3b1623e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
