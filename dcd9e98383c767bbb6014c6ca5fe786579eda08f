@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "947c0263_386cb64b",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-08T06:29:00Z",
+      "side": 1,
+      "message": "Why only strict equality is considered? Is it guaranteed that only values in tools::Long range are passed here? (and by the way, does it account for our strange treatment of tools::Long on Windows 32-bit?)",
+      "revId": "dcd9e98383c767bbb6014c6ca5fe786579eda08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
