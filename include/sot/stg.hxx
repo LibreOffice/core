@@ -32,7 +32,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 
 class StgIo;
 class StgDirEntry;
-typedef struct SvGUID ClsId;
+typedef SvGUID ClsId;
 
 class StorageBase : public SvRefBase
 {

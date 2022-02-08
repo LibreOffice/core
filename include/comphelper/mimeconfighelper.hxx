@@ -22,6 +22,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <comphelper/guid.hxx>
 #include <mutex>
 
 namespace com::sun::star::beans { struct NamedValue; }
@@ -130,6 +131,8 @@ public:
     static css::uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                                                 sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
                                                 sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
+    static css::uno::Sequence<sal_Int8> GetSequenceClassID(const Guid&);
+
 private:
     css::uno::Reference< css::container::XNameAccess >
                                             GetConfigurationByPathImpl( const OUString& aPath );
