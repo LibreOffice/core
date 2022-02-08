@@ -2447,7 +2447,17 @@ void SvxSearchDialogWrapper::SetSearchLabel(const SearchLabel& rSL)
     lcl_SetSearchLabelWindow(sStr);
     if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
             GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() )))
+    {
         pWrp->getDialog()->SetSearchLabel(sStr);
+        if(!sStr.isEmpty())
+        {
+            auto pSrchDlg = pWrp ? pWrp->getDialog() : nullptr;
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pSrchDlg->getDialog(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          sStr));
+            xInfoBox->run();
+        }
+    }
 }
 
 void SvxSearchDialogWrapper::SetSearchLabel(const OUString& sStr)
@@ -2456,7 +2466,17 @@ void SvxSearchDialogWrapper::SetSearchLabel(const OUString& sStr)
     lcl_SetSearchLabelWindow(sStr);
     if (SvxSearchDialogWrapper *pWrp = static_cast<SvxSearchDialogWrapper*>( SfxViewFrame::Current()->
             GetChildWindow( SvxSearchDialogWrapper::GetChildWindowId() )))
+    {
         pWrp->getDialog()->SetSearchLabel(sStr);
+        if(!sStr.isEmpty())
+        {
+            auto pSrchDlg = pWrp ? pWrp->getDialog() : nullptr;
+            std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pSrchDlg->getDialog(),
+                                                          VclMessageType::Info, VclButtonsType::Ok,
+                                                          sStr));
+            xInfoBox->run();
+        }
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
