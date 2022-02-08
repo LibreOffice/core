@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ded532d6_2adcd410",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-08T13:11:54Z",
+      "side": 1,
+      "message": "Stephan, you mentioned that we use that -Wno-missing-braces for clang-on-Windows case. Would this help to remove that?\n\nIt looks that there\u0027s a false [loplugin:redundantfcast]:\nhttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/107534/consoleFull#-830141182a810015-1db5-427c-9ce2-83b5f06a5284",
+      "revId": "18849d61c6f2e6053c7133846aefdf2d083fa61e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
