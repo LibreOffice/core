@@ -76,12 +76,12 @@ using namespace ::com::sun::star::beans;
 using namespace xml::sax;
 
 const std::pair<OUString, SvGUID> aServiceMap[] = {
-    { XML_IMPORT_FILTER_WRITER, { SO3_SW_CLASSID } },
-    { XML_IMPORT_FILTER_CALC, { SO3_SC_CLASSID } },
-    { XML_IMPORT_FILTER_DRAW, { SO3_SDRAW_CLASSID } },
-    { XML_IMPORT_FILTER_IMPRESS, { SO3_SIMPRESS_CLASSID } },
-    { XML_IMPORT_FILTER_CHART, { SO3_SCH_CLASSID } },
-    { XML_IMPORT_FILTER_MATH, { SO3_SM_CLASSID } },
+    { XML_IMPORT_FILTER_WRITER, SO3_SW_CLASSID },
+    { XML_IMPORT_FILTER_CALC, SO3_SC_CLASSID },
+    { XML_IMPORT_FILTER_DRAW, SO3_SDRAW_CLASSID },
+    { XML_IMPORT_FILTER_IMPRESS, SO3_SIMPRESS_CLASSID },
+    { XML_IMPORT_FILTER_CHART, SO3_SCH_CLASSID },
+    { XML_IMPORT_FILTER_MATH, SO3_SM_CLASSID },
 };
 static void lcl_putHeightAndWidth ( SfxItemSet &rItemSet,
         sal_Int32 nHeight, sal_Int32 nWidth,

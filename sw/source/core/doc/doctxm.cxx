@@ -1385,36 +1385,28 @@ static SwTOOElements lcl_IsSOObject( const SvGlobalName& rFactoryNm )
     static const struct SoObjType {
         SwTOOElements nFlag;
         // GlobalNameId
-        struct {
-            sal_uInt32 n1;
-            sal_uInt16 n2, n3;
-            sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-        } aGlNmIds[4];
+        SvGUID aGlNmIds[4];
     } aArr[] = {
         { SwTOOElements::Math,
-          { {SO3_SM_CLASSID_60},{SO3_SM_CLASSID_50},
-            {SO3_SM_CLASSID_40},{SO3_SM_CLASSID_30} } },
+          { SO3_SM_CLASSID_60,SO3_SM_CLASSID_50,
+            SO3_SM_CLASSID_40,SO3_SM_CLASSID_30 } },
         { SwTOOElements::Chart,
-          { {SO3_SCH_CLASSID_60},{SO3_SCH_CLASSID_50},
-            {SO3_SCH_CLASSID_40},{SO3_SCH_CLASSID_30} } },
+          { SO3_SCH_CLASSID_60,SO3_SCH_CLASSID_50,
+            SO3_SCH_CLASSID_40,SO3_SCH_CLASSID_30 } },
         { SwTOOElements::Calc,
-          { {SO3_SC_CLASSID_60},{SO3_SC_CLASSID_50},
-            {SO3_SC_CLASSID_40},{SO3_SC_CLASSID_30} } },
+          { SO3_SC_CLASSID_60,SO3_SC_CLASSID_50,
+            SO3_SC_CLASSID_40,SO3_SC_CLASSID_30 } },
         { SwTOOElements::DrawImpress,
-          { {SO3_SIMPRESS_CLASSID_60},{SO3_SIMPRESS_CLASSID_50},
-            {SO3_SIMPRESS_CLASSID_40},{SO3_SIMPRESS_CLASSID_30} } },
+          { SO3_SIMPRESS_CLASSID_60,SO3_SIMPRESS_CLASSID_50,
+            SO3_SIMPRESS_CLASSID_40,SO3_SIMPRESS_CLASSID_30 } },
         { SwTOOElements::DrawImpress,
-          { {SO3_SDRAW_CLASSID_60},{SO3_SDRAW_CLASSID_50} } }
+          { SO3_SDRAW_CLASSID_60,SO3_SDRAW_CLASSID_50 } }
     };
 
     for( SoObjType const & rArr : aArr )
         for (auto & rId : rArr.aGlNmIds)
         {
-            if( !rId.n1 )
-                break;
-            SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
-                        rId.b8, rId.b9, rId.b10, rId.b11,
-                        rId.b12, rId.b13, rId.b14, rId.b15 );
+            SvGlobalName aGlbNm( rId );
             if( rFactoryNm == aGlbNm )
             {
                 return rArr.nFlag;

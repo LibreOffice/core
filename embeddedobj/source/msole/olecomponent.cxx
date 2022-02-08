@@ -1153,11 +1153,11 @@ uno::Sequence< sal_Int8 > OleComponent::GetCLSID()
     if ( FAILED( hr ) )
         throw io::IOException(); // TODO:
 
-    return  MimeConfigurationHelper::GetSequenceClassID( aCLSID.Data1, aCLSID.Data2, aCLSID.Data3,
-                                aCLSID.Data4[0], aCLSID.Data4[1],
+    return  MimeConfigurationHelper::GetSequenceClassID({ aCLSID.Data1, aCLSID.Data2, aCLSID.Data3,
+                              { aCLSID.Data4[0], aCLSID.Data4[1],
                                 aCLSID.Data4[2], aCLSID.Data4[3],
                                 aCLSID.Data4[4], aCLSID.Data4[5],
-                                aCLSID.Data4[6], aCLSID.Data4[7] );
+                                aCLSID.Data4[6], aCLSID.Data4[7] } });
 }
 
 
