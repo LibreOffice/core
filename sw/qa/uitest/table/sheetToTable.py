@@ -76,8 +76,10 @@ class sheetToTable(UITestCase):
             self.xUITest.executeCommand(".uno:Copy")
 
 
-        with self.ui_test.load_file(get_url_for_data_file("tdf129083.odt")) as writer_doc:
+        with self.ui_test.load_empty_file("writer") as writer_doc:
             xWriterDoc = self.xUITest.getTopFocusWindow()
+
+            self.xUITest.executeCommand(".uno:InsertTable?Columns:short=1&Rows:short=4")
 
             self.xUITest.executeCommand(".uno:Paste")
 
