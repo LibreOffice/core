@@ -122,8 +122,8 @@ class SwXTextRangeImplPrinter(object):
         children = [('mark', mark)]
         return children.__iter__()
 
-class SwXTextCursorImplPrinter(object):
-    '''Prints SwXTextCursor::Impl.'''
+class SwXTextCursorPrinter(object):
+    '''Prints SwXTextCursor.'''
 
     def __init__(self, typename, value):
         self.typename = typename
@@ -153,16 +153,6 @@ class SwUnoImplPtrPrinter(object):
 
 class SwXTextRangePrinter(object):
     '''Prints SwXTextRange.'''
-
-    def __init__(self, typename, value):
-        self.typename = typename
-        self.value = value
-
-    def to_string(self):
-        return "%s %s" % (self.typename, self.value['m_pImpl'])
-
-class SwXTextCursorPrinter(object):
-    '''Prints SwXTextCursor.'''
 
     def __init__(self, typename, value):
         self.typename = typename
@@ -305,7 +295,6 @@ def build_pretty_printers():
     printer.add('SwXTextRange::Impl', SwXTextRangeImplPrinter)
     printer.add('sw::UnoImplPtr', SwUnoImplPtrPrinter)
     printer.add('SwXTextRange', SwXTextRangePrinter)
-    printer.add('SwXTextCursor::Impl', SwXTextCursorImplPrinter)
     printer.add('SwXTextCursor', SwXTextCursorPrinter)
 
 def register_pretty_printers(obj):
