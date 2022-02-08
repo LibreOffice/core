@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42242488_82ed1d66",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-08T06:41:37Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "8d762c146a79b5971541aa22217541c8aac017a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af2dd2d5_772574dc",
+        "filename": "sw/inc/node.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-08T06:41:37Z",
+      "side": 1,
+      "message": "Should these maybe assert dynamic_cast for debugging purposes - as in sw/source/core/txtnode/ndtxt.cxx?",
+      "revId": "8d762c146a79b5971541aa22217541c8aac017a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
