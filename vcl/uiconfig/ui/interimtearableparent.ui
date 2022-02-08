@@ -9,7 +9,6 @@
     <property name="border_width">4</property>
     <property name="resizable">False</property>
     <property name="destroy_with_parent">True</property>
-    <property name="type_hint">dock</property>
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
