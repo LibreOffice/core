@@ -875,10 +875,6 @@ void Test::TestBitBltStretchBltWMF()
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "xy23", "406");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "height", "10");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "width", "10");
-#if !defined(MACOSX)                                                                               \
-    && !defined(_WIN32) // TODO Bitmap display needs to be aligned for macOS and Windows
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]", "checksum", "747141214295528493");
-#endif
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data", 10);
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[1]/data[1]", "row",
                 "000000,000000,000000,000000,000000,000000,000000,000000,000000,000000");
@@ -896,10 +892,6 @@ void Test::TestBitBltStretchBltWMF()
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "height", "10");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "width", "10");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data", 10);
-#if !defined(MACOSX)                                                                               \
-    && !defined(_WIN32) // TODO Bitmap display needs to be aligned for macOS and Windows
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]", "checksum", "3134789313661517563");
-#endif
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[1]", "row",
                 "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap[2]/data[5]", "row",
@@ -1079,9 +1071,6 @@ void Test::TestStretchDIBWMF()
 
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "height", "10");
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "width", "10");
-#if !defined(MACOSX) // TODO DIB display needs to be aligned for macOS
-    assertXPath(pDocument, aXPathPrefix + "mask/bitmap", "checksum", "14148300367030905133");
-#endif
     assertXPath(pDocument, aXPathPrefix + "mask/bitmap/data", 10);
     assertXPath(pDocument, aXPathPrefix + "/mask/bitmap/data[1]", "row",
                 "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
