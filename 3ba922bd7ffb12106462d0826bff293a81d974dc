@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee3193de_e2a26544",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:37:25Z",
+      "side": 1,
+      "message": "I squashed the changes of https://gerrit.libreoffice.org/c/core/+/129178 into this one and did the modifications lined out in the comments here.\n\nPlease check whether the LC_INDEX section is what is really wanted, i.e. the IndexKey sort order and the two FollowPageWord elements.\n",
+      "revId": "3ba922bd7ffb12106462d0826bff293a81d974dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
