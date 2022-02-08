@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cbe3769_ee612a8c",
+        "filename": "connectivity/source/drivers/file/FNumericFunctions.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-08T12:20:27Z",
+      "side": 0,
+      "message": "Please also remove the extra blank lines.",
+      "revId": "b01e0483ee14826057c42dfa58c3d6200a474791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ef5be8b_2e1f0c6a",
+        "filename": "connectivity/source/drivers/file/FNumericFunctions.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-08T12:20:27Z",
+      "side": 0,
+      "message": "Please use basegfx to convert angle units.\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d146479\nhttps://dev.blog.documentfoundation.org/2021/12/31/use-basegfx-to-convert-angle-unit-easyhack/",
+      "revId": "b01e0483ee14826057c42dfa58c3d6200a474791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03ed3efd_830142e8",
+        "filename": "connectivity/source/drivers/file/FNumericFunctions.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-08T12:20:27Z",
+      "side": 0,
+      "message": "Also here.",
+      "revId": "b01e0483ee14826057c42dfa58c3d6200a474791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df14cb85_5f09f462",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-08T12:20:27Z",
+      "side": 0,
+      "message": "An angle unit conversion is taking place here, because of /180.0*3.14159265359.\nPlease use basegfx to convert angle units.",
+      "revId": "b01e0483ee14826057c42dfa58c3d6200a474791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c2e5c54_0a2bf8fa",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-08T12:20:27Z",
+      "side": 0,
+      "message": "The same here.",
+      "revId": "b01e0483ee14826057c42dfa58c3d6200a474791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cb678df_aa9af82b",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2074,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-08T12:20:27Z",
+      "side": 0,
+      "message": "And also here.",
+      "revId": "b01e0483ee14826057c42dfa58c3d6200a474791",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
