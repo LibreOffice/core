@@ -143,16 +143,15 @@ protected: //methods
 
     rtl::Reference< ::chart::Axis >
         getAxisByDimension( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex  ) const;
-    static css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > >
-        getGridListFromAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis );
+    static std::vector< css::uno::Reference< css::beans::XPropertySet > >
+        getGridListFromAxis( const rtl::Reference< ::chart::Axis >& xAxis );
 
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
     OUString createCIDForAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
     OUString createCIDForGrid( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
 
-    sal_Int32 getNumberFormatKeyForAxis( const css::uno::Reference<
-                     css::chart2::XAxis >& xAxis
+    sal_Int32 getNumberFormatKeyForAxis( const rtl::Reference< ::chart::Axis >& xAxis
                      , const rtl::Reference<::chart::ChartModel>& xChartDoc);
 
 private: //methods

@@ -161,9 +161,9 @@ static void addLine3D( std::vector<std::vector<css::drawing::Position3D>>& rPoin
 }
 
 VCartesianGrid::VCartesianGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-                               , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
+                               , const std::vector< Reference< beans::XPropertySet > >  aGridPropertiesList )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
-            , m_aGridPropertiesList( rGridPropertiesList )
+            , m_aGridPropertiesList( std::move(aGridPropertiesList) )
 {
     m_pPosHelper = new PlottingPositionHelper();
 }
@@ -175,10 +175,10 @@ VCartesianGrid::~VCartesianGrid()
 }
 
 void VCartesianGrid::fillLinePropertiesFromGridModel( std::vector<VLineProperties>& rLinePropertiesList
-                                     , const Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
+                                     , const std::vector< Reference< beans::XPropertySet > > & rGridPropertiesList )
 {
     rLinePropertiesList.clear();
-    if( !rGridPropertiesList.hasElements() )
+    if( rGridPropertiesList.empty() )
         return;
 
     VLineProperties aLineProperties;
@@ -194,7 +194,7 @@ void VCartesianGrid::fillLinePropertiesFromGridModel( std::vector<VLinePropertie
 
 void VCartesianGrid::createShapes()
 {
-    if(!m_aGridPropertiesList.hasElements())
+    if(m_aGridPropertiesList.empty())
         return;
     //somehow equal to axis tickmarks
 

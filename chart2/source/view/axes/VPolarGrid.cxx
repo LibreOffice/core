@@ -38,9 +38,9 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
 VPolarGrid::VPolarGrid( sal_Int32 nDimensionIndex, sal_Int32 nDimensionCount
-                       , const uno::Sequence< Reference< beans::XPropertySet > > & rGridPropertiesList )
+                       , std::vector< Reference< beans::XPropertySet > > aGridPropertiesList )
             : VAxisOrGridBase( nDimensionIndex, nDimensionCount )
-            , m_aGridPropertiesList( rGridPropertiesList )
+            , m_aGridPropertiesList( std::move(aGridPropertiesList) )
             , m_pPosHelper( new PolarPlottingPositionHelper() )
 {
     PlotterBase::m_pPosHelper = m_pPosHelper.get();
@@ -220,7 +220,7 @@ void VPolarGrid::createShapes()
     OSL_PRECOND(m_xLogicTarget.is()&&m_xFinalTarget.is(),"Axis is not proper initialized");
     if(!(m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
-    if(!m_aGridPropertiesList.hasElements())
+    if(m_aGridPropertiesList.empty())
         return;
 
     //create all scaled tickmark values
