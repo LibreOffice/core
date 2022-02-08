@@ -809,6 +809,51 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132187)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130094)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf130094.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Third"), getParagraph(3)->getString());
+
+    // Select the first and second lines
+    pWrtShell->Down(/*bSelect=*/true);
+    pWrtShell->Down(/*bSelect=*/true);
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(3)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Third"), getParagraph(3)->getString());
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("First"), getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Second"), getParagraph(2)->getString());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected:
+    // - Actual  : First
+    CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(3)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135733)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf135733.odt");
