@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa82fbb_7ef7e3b2",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7a6aaeb9_ac797b69",
+      "range": {
+        "startLine": 54,
+        "startChar": 53,
+        "endLine": 54,
+        "endChar": 56
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3095af04_f36bc934",
@@ -54,6 +78,30 @@
       "writtenOn": "2022-01-30T23:25:20Z",
       "side": 1,
       "message": "This LC_COLLATION is identical to en_US, it can be inherited instead.",
+      "range": {
+        "startLine": 202,
+        "startChar": 2,
+        "endLine": 207,
+        "endChar": 17
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24bcca00_85264e6e",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3095af04_f36bc934",
       "range": {
         "startLine": 202,
         "startChar": 2,
@@ -81,6 +129,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bafb3e4_b134544a",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc6ee333_eaeda4d0",
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "505f5863_88575225",
@@ -94,6 +160,30 @@
       "writtenOn": "2022-01-30T23:25:20Z",
       "side": 1,
       "message": "Change to true for the € currency as mentioned above for LC_FORMAT.",
+      "range": {
+        "startLine": 330,
+        "startChar": 58,
+        "endLine": 330,
+        "endChar": 63
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "550a5718_f9a0372e",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "505f5863_88575225",
       "range": {
         "startLine": 330,
         "startChar": 58,
@@ -127,6 +217,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aa6dce4_9b05c51a",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 337,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a545ad5_568e4ee0",
+      "range": {
+        "startLine": 337,
+        "startChar": 59,
+        "endLine": 337,
+        "endChar": 63
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f37176ac_da3f50c7",
@@ -140,6 +254,30 @@
       "writtenOn": "2022-01-30T23:25:20Z",
       "side": 1,
       "message": "This Pts entry can be completely removed, it was necessary only for es_ES to be able to display that currency formatting in some legacy documents.",
+      "range": {
+        "startLine": 344,
+        "startChar": 4,
+        "endLine": 350,
+        "endChar": 15
+      },
+      "revId": "b6dbbf5d969d92fa2a522b1506552ef353ffc000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ff74f12_949c61ed",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:38:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f37176ac_da3f50c7",
       "range": {
         "startLine": 344,
         "startChar": 4,
