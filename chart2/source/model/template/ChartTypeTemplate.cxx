@@ -496,7 +496,7 @@ void ChartTypeTemplate::createCoordinateSystems(
     // #i69680# make grid of first y-axis visible (was in the CooSys CTOR before)
     if( xCooSys->getDimension() >= 2 )
     {
-        Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( 1, 0 ));
+        rtl::Reference< Axis > xAxis = xCooSys->getAxisByDimension2( 1, 0 );
         if( xAxis.is())
             AxisHelper::makeGridVisible( xAxis->getGridProperties() );
     }
@@ -673,7 +673,7 @@ void ChartTypeTemplate::adaptAxes(
             sal_Int32 nMaxAxisIndex = xCooSys->getMaximumAxisIndexByDimension( nDim );
             for( sal_Int32 nAxisIndex=0; nAxisIndex<=nMaxAxisIndex; nAxisIndex++ )
             {
-                Reference< XAxis > xAxis( AxisHelper::getAxis( nDim, nAxisIndex, xCooSys ) );
+                rtl::Reference< Axis > xAxis = AxisHelper::getAxis( nDim, nAxisIndex, xCooSys );
                 if( !xAxis.is() )
                     continue;
 
@@ -683,13 +683,9 @@ void ChartTypeTemplate::adaptAxes(
                     bool bPercent = (getStackMode(0) == StackMode::YStackedPercent);
                     if( bPercent && nDim == 1 )
                     {
-                        Reference< beans::XPropertySet > xAxisProp( xAxis, uno::UNO_QUERY );
-                        if( xAxisProp.is())
-                        {
-                            // set number format to source format
-                            xAxisProp->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
-                            xAxisProp->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
-                        }
+                        // set number format to source format
+                        xAxis->setPropertyValue(CHART_UNONAME_LINK_TO_SRC_NUMFMT, uno::Any(true));
+                        xAxis->setPropertyValue(CHART_UNONAME_NUMFMT, uno::Any());
                     }
                 }
             }

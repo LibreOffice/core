@@ -742,7 +742,7 @@ void ChartController::executeDispatch_InsertAxis()
 
     try
     {
-        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+        rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
             AxisHelper::makeAxisVisible( xAxis );
@@ -764,7 +764,7 @@ void ChartController::executeDispatch_DeleteAxis()
 
     try
     {
-        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+        rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
             AxisHelper::makeAxisInvisible( xAxis );
@@ -786,7 +786,7 @@ void ChartController::executeDispatch_InsertMajorGrid()
 
     try
     {
-        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+        rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
             AxisHelper::makeGridVisible( xAxis->getGridProperties() );
@@ -808,7 +808,7 @@ void ChartController::executeDispatch_DeleteMajorGrid()
 
     try
     {
-        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+        rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
             AxisHelper::makeGridInvisible( xAxis->getGridProperties() );
@@ -830,7 +830,7 @@ void ChartController::executeDispatch_InsertMinorGrid()
 
     try
     {
-        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+        rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
             const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );
@@ -854,7 +854,7 @@ void ChartController::executeDispatch_DeleteMinorGrid()
 
     try
     {
-        Reference< XAxis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
+        rtl::Reference< Axis > xAxis = ObjectIdentifier::getAxisForCID( m_aSelection.getSelectedCID(), getChartModel() );
         if( xAxis.is() )
         {
             const Sequence< Reference< beans::XPropertySet > > aSubGrids( xAxis->getSubGridProperties() );

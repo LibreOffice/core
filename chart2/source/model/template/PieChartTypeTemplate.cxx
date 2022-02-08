@@ -542,8 +542,8 @@ void PieChartTypeTemplate::resetStyles( const rtl::Reference< ::chart::Diagram >
         {
             try
             {
-                Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
-                        , coords ) );
+                rtl::Reference< Axis > xAxis = AxisHelper::getAxis( 0 /*nDimensionIndex*/,0 /*nAxisIndex*/
+                        , coords );
                 if( xAxis.is() )
                 {
                     chart2::ScaleData aScaleData( xAxis->getScaleData() );

@@ -523,7 +523,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 
     sal_Int32 nNewAxisIndex = bAttachToMainAxis ? 0 : 1;
     sal_Int32 nOldAxisIndex = DataSeriesHelper::getAttachedAxisIndex(xDataSeries);
-    uno::Reference< chart2::XAxis > xOldAxis( DiagramHelper::getAttachedAxis( xDataSeries, xDiagram ) );
+    rtl::Reference< Axis > xOldAxis = DiagramHelper::getAttachedAxis( xDataSeries, xDiagram );
 
     if( nOldAxisIndex != nNewAxisIndex )
     {
@@ -674,13 +674,13 @@ rtl::Reference< ChartType >
 namespace
 {
 
-std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
+std::vector< rtl::Reference< Axis > > lcl_getAxisHoldingCategoriesFromDiagram(
     const rtl::Reference< Diagram > & xDiagram )
 {
-    std::vector< Reference< XAxis > > aRet;
+    std::vector< rtl::Reference< Axis > > aRet;
 
     // return first x-axis as fall-back
-    Reference< XAxis > xFallBack;
+    rtl::Reference< Axis > xFallBack;
     if (xDiagram.is()) try
     {
         for( rtl::Reference< BaseCoordinateSystem > const & xCooSys : xDiagram->getBaseCoordinateSystems() )
@@ -701,7 +701,7 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
                             aRet.push_back(xAxis);
                         }
                         if( (nN == 0) && !xFallBack.is())
-                            xFallBack.set( xAxis );
+                            xFallBack = xAxis;
                     }
                 }
             }
@@ -758,10 +758,10 @@ void DiagramHelper::setCategoriesToDiagram(
     bool bSetAxisType  /* = false */,
     bool bCategoryAxis /* = true */ )
 {
-    std::vector< Reference< chart2::XAxis > > aCatAxes(
+    std::vector< rtl::Reference< Axis > > aCatAxes(
         lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
 
-    for (const Reference< chart2::XAxis >& xCatAxis : aCatAxes)
+    for (const rtl::Reference< Axis >& xCatAxis : aCatAxes)
     {
         if( xCatAxis.is())
         {
@@ -787,12 +787,12 @@ uno::Reference< chart2::data::XLabeledDataSequence >
 
     try
     {
-        std::vector< Reference< chart2::XAxis > > aCatAxes(
+        std::vector< rtl::Reference< Axis > > aCatAxes(
             lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
         //search for first categories
         if (!aCatAxes.empty())
         {
-            Reference< chart2::XAxis > xCatAxis(aCatAxes[0]);
+            rtl::Reference< Axis > xCatAxis(aCatAxes[0]);
             if( xCatAxis.is())
             {
                 ScaleData aScaleData( xCatAxis->getScaleData());

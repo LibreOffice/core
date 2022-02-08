@@ -123,7 +123,7 @@ void setLabelPosition(const rtl::Reference<::chart::ChartModel>& xModel,
 bool isReverse(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID)
 {
-    css::uno::Reference< css::chart2::XAxis > xAxis =
+    rtl::Reference< Axis > xAxis =
         ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
@@ -137,7 +137,7 @@ bool isReverse(const rtl::Reference<::chart::ChartModel>& xModel,
 void setReverse(const rtl::Reference<::chart::ChartModel>& xModel,
         const OUString& rCID, bool bReverse)
 {
-    css::uno::Reference< css::chart2::XAxis > xAxis =
+    rtl::Reference< Axis > xAxis =
         ObjectIdentifier::getAxisForCID(rCID, xModel);
 
     if (!xAxis.is())
