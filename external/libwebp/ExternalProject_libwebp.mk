@@ -16,10 +16,15 @@ $(eval $(call gb_ExternalProject_register_targets,libwebp,\
 ifeq ($(COM),MSC)
 $(eval $(call gb_ExternalProject_use_nmake,libwebp,build))
 
+# Explicitly passing in ARCH (for the known architectures, at least) avoids
+# workdir/UnpackedTarball/libwebp/Makefile.vc not being able to detect it when CC is clang-cl:
 $(call gb_ExternalProject_get_state_target,libwebp,build):
 	$(call gb_Trace_StartRange,libwebp,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		nmake -nologo -f Makefile.vc CFG=release-static RTLIBCFG=static OBJDIR=output \
+		    $(if $(filter INTEL,$(CPUNAME)),ARCH=x86, \
+		    $(if $(filter X86_64,$(CPUNAME)),ARCH=x64, \
+		    $(if $(filter AARCH64,$(CPUNAME)),ARCH=ARM))) \
 	)
 	$(call gb_Trace_EndRange,libwebp,EXTERNAL)
 else
