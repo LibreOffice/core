@@ -276,7 +276,7 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
 }
 
 bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCondFormatIndexes& rCondFormats,
-        CellInfo* pInfo, ScStyleSheetPool* pStlPool,
+        CellInfo* pInfo, ScTableInfo* pTableInfo, ScStyleSheetPool* pStlPool,
         const ScAddress& rAddr, bool& bHidden, bool& bHideFormula, bool bTabProtect)
 {
     bool bFound = false;
@@ -324,13 +324,15 @@ bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCon
 
         if(aData.pDataBar)
         {
-            pInfo->pDataBar = std::move(aData.pDataBar);
+            pInfo->pDataBar = aData.pDataBar.get();
+            pTableInfo->addDataBarInfo(std::move(aData.pDataBar));
             bFound = true;
         }
 
         if(aData.pIconSet)
         {
-            pInfo->pIconSet = std::move(aData.pIconSet);
+            pInfo->pIconSet = aData.pIconSet.get();
+            pTableInfo->addIconSetInfo(std::move(aData.pIconSet));
             bFound = true;
         }
 
@@ -552,7 +554,8 @@ void ScDocument::FillInfo(
 
                                 if (bContainsCondFormat && pCondFormList)
                                 {
-                                    bAnyCondition |= handleConditionalFormat(*pCondFormList, rCondFormats, pInfo, pStlPool, ScAddress(nCol, nCurRow, nTab),
+                                    bAnyCondition |= handleConditionalFormat(*pCondFormList, rCondFormats,
+                                            pInfo, &rTabInfo, pStlPool, ScAddress(nCol, nCurRow, nTab),
                                             bHidden, bHideFormula, bTabProtect);
                                 }
 
