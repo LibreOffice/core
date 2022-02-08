@@ -16,6 +16,24 @@
       "message": "oh, i wonder why i get a merge conflict in 7.3 but it turns out that this is a regression from commit 03c7cd9bbe3d46bb13a5cf1ad72ba0eaf702747e \"osl::Mutex-\u003estd::mutex in SerfLockStore\"",
       "revId": "abc32f115ffd8df20ed122f6a769027b68da13f2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a47e9cfa_1f63b772",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-08T10:37:12Z",
+      "side": 1,
+      "message": "i think i just found another deadlock while looking at that commit",
+      "parentUuid": "2d593690_08ae0c72",
+      "revId": "abc32f115ffd8df20ed122f6a769027b68da13f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
