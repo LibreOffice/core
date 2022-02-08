@@ -66,6 +66,7 @@ public:
     virtual ScPatternAttr*  Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            operator==(const SfxPoolItem& rCmp) const override;
+    virtual size_t          LookupHashCode() const override;
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }

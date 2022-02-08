@@ -627,12 +627,28 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
         }
         else
         {
-            for (auto itr = rItemArr.begin(); itr != rItemArr.end(); ++itr)
+            // If the item provides a valid hash, use that to speed up comparisons.
+            size_t lookupHashCode = rItem.LookupHashCode();
+            if (lookupHashCode != 0)
             {
-                if (**itr == rItem)
+                for (auto itr = rItemArr.begin(); itr != rItemArr.end(); ++itr)
                 {
-                    pFoundItem = *itr;
-                    break;
+                    if ((*itr)->LookupHashCode() == lookupHashCode && **itr == rItem)
+                    {
+                        pFoundItem = *itr;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                for (auto itr = rItemArr.begin(); itr != rItemArr.end(); ++itr)
+                {
+                    if (**itr == rItem)
+                    {
+                        pFoundItem = *itr;
+                        break;
+                    }
                 }
             }
         }
