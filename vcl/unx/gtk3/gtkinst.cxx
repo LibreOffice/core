@@ -9640,7 +9640,8 @@ void do_ungrab(GtkWidget* pWidget)
     gdk_seat_ungrab(pSeat);
 }
 
-GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor, weld::Placement ePlace)
+GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor,
+                                    weld::Placement ePlace, bool bTryShrink)
 {
     //place the toplevel just below its launcher button
     GtkWidget* pToplevel = widget_get_toplevel(pMenuButton);
@@ -9710,18 +9711,31 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
         if (nMissingBelow > 0)
         {
             gint nNewY = y - (nButtonHeight + nMenuHeight);
-            if (nNewY < aWorkArea.Top())
+            gint nMissingAbove = aWorkArea.Top() - nNewY;
+            if (nMissingAbove > 0)
             {
-                gint nMissingAbove = aWorkArea.Top() - nNewY;
-                if (nMissingBelow <= nMissingAbove)
-                    nMenuHeight -= nMissingBelow;
+                if (bTryShrink)
+                {
+                    if (nMissingBelow <= nMissingAbove)
+                        nMenuHeight -= nMissingBelow;
+                    else
+                    {
+                        nMenuHeight -= nMissingAbove;
+                        y = aWorkArea.Top();
+                        ePosUsed = GTK_POS_TOP;
+                    }
+                    gtk_widget_set_size_request(GTK_WIDGET(pMenu), nMenuWidth, nMenuHeight);
+                }
                 else
                 {
-                    nMenuHeight -= nMissingAbove;
-                    y = aWorkArea.Top();
-                    ePosUsed = GTK_POS_TOP;
+                    if (nMissingBelow <= nMissingAbove)
+                        y -= nMissingBelow;
+                    else
+                    {
+                        y = aWorkArea.Top();
+                        ePosUsed = GTK_POS_TOP;
+                    }
                 }
-                gtk_widget_set_size_request(GTK_WIDGET(pMenu), nMenuWidth, nMenuHeight);
             }
             else
             {
@@ -9769,7 +9783,8 @@ GtkPositionType show_menu_older_gtk(GtkWidget* pMenuButton, GtkWindow* pMenu, co
     return ePosUsed;
 }
 
-bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectangle &rAnchor, weld::Placement ePlace)
+bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectangle &rAnchor,
+                         weld::Placement ePlace, bool bTryShrink)
 {
     static auto window_move_to_rect = reinterpret_cast<void (*) (GdkWindow*, const GdkRectangle*, GdkGravity,
                                                                  GdkGravity, GdkAnchorHints, gint, gint)>(
@@ -9808,8 +9823,9 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectan
         menu_anchor = !bSwapForRTL ? GDK_GRAVITY_NORTH_WEST : GDK_GRAVITY_NORTH_EAST;
     }
 
-    GdkAnchorHints anchor_hints = static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE | GDK_ANCHOR_RESIZE);
-
+    GdkAnchorHints anchor_hints = static_cast<GdkAnchorHints>(GDK_ANCHOR_FLIP | GDK_ANCHOR_SLIDE);
+    if (bTryShrink)
+        anchor_hints = static_cast<GdkAnchorHints>(anchor_hints | GDK_ANCHOR_RESIZE);
     GdkRectangle rect {x, y, rAnchor.width, rAnchor.height};
     GdkSurface* toplevel = widget_get_surface(GTK_WIDGET(pMenu));
 
@@ -9819,7 +9835,8 @@ bool show_menu_newer_gtk(GtkWidget* pComboBox, GtkWindow* pMenu, const GdkRectan
     return true;
 }
 
-GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor, weld::Placement ePlace)
+GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRectangle& rAnchor,
+                          weld::Placement ePlace, bool bTryShrink)
 {
     // we only use ePosUsed in the replacement-for-X-popover case of a
     // MenuButton, so we only need it when show_menu_older_gtk is used
@@ -9840,8 +9857,8 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu, const GdkRec
     }
 
     // try with gdk_window_move_to_rect, but if that's not available, try without
-    if (!show_menu_newer_gtk(pMenuButton, pMenu, rAnchor, ePlace))
-        ePosUsed = show_menu_older_gtk(pMenuButton, pMenu, rAnchor, ePlace);
+    if (!show_menu_newer_gtk(pMenuButton, pMenu, rAnchor, ePlace, bTryShrink))
+        ePosUsed = show_menu_older_gtk(pMenuButton, pMenu, rAnchor, ePlace, bTryShrink);
     gtk_widget_show_all(GTK_WIDGET(pMenu));
     gtk_widget_grab_focus(GTK_WIDGET(pMenu));
     do_grab(GTK_WIDGET(pMenu));
@@ -9891,7 +9908,7 @@ GtkPositionType MovePopoverContentsToWindow(GtkWidget* pPopover, GtkWindow* pMen
     gtk_container_add(GTK_CONTAINER(pMenuHack), pChild);
     g_object_unref(pChild);
 
-    GtkPositionType eRet = show_menu(pAnchor, pMenuHack, rAnchor, ePlace);
+    GtkPositionType eRet = show_menu(pAnchor, pMenuHack, rAnchor, ePlace, false);
 
     gtk_grab_add(GTK_WIDGET(pMenuHack));
 
@@ -19934,7 +19951,7 @@ private:
                 tree_view_set_cursor(0);
 
             GdkRectangle aAnchor {0, 0, gtk_widget_get_allocated_width(pComboBox), gtk_widget_get_allocated_height(pComboBox) };
-            show_menu(pComboBox, m_pMenuWindow, aAnchor, weld::Placement::Under);
+            show_menu(pComboBox, m_pMenuWindow, aAnchor, weld::Placement::Under, true);
             GdkSurface* pSurface = widget_get_surface(GTK_WIDGET(m_pMenuWindow));
             g_object_set_data(G_OBJECT(pSurface), "g-lo-InstancePopup", GINT_TO_POINTER(true));
         }
