@@ -2044,7 +2044,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
 
             for (nCol=nX1; nCol<=nX2; nCol++)
             {
-                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nCol+1];
+                CellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
                 //if several columns merged on a row, there should be only one auto button at the end of the columns.
                 //if several rows merged on a column, the button may be in the middle, so "!pInfo->bVOverlapped" should not be used
                 if ( pInfo->bAutoFilter && !pInfo->bHOverlapped )
@@ -2124,7 +2124,7 @@ void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo
             nRow = pThisRowInfo->nRowNo;
             for (nCol=nX1; nCol<=nX2; nCol++)
             {
-                CellInfo* pInfo = &pThisRowInfo->pCellInfo[nCol+1];
+                CellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
                 if (pInfo->bHOverlapped || pInfo->bVOverlapped)
                     continue;
 

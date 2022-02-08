@@ -176,7 +176,26 @@ struct RowInfo
     RowInfo(const RowInfo&) = delete;
     const RowInfo& operator=(const RowInfo&) = delete;
 
-    CellInfo*           pCellInfo;
+    CellInfo&           cellInfo(SCCOL nCol)
+    {
+#ifdef DBG_UTIL
+        assert( nCol >= -1 && nCol <= nCols + 1 );
+#endif
+        return pCellInfo[ nCol + 1 ];
+    }
+    const CellInfo&     cellInfo(SCCOL nCol) const
+    {
+        return const_cast<RowInfo*>(this)->cellInfo(nCol);
+    }
+
+    void                allocCellInfo(SCCOL cols)
+    {
+#ifdef DBG_UTIL
+        nCols = cols;
+#endif
+        pCellInfo = new CellInfo[ cols + 2 ];
+    }
+    void                freeCellInfo() { delete[] pCellInfo; }
 
     sal_uInt16          nHeight;
     SCROW               nRowNo;
@@ -186,6 +205,15 @@ struct RowInfo
     bool                bAutoFilter:1;
     bool                bPivotButton:1;
     bool                bChanged:1;           // TRUE, if not tested
+
+private:
+    // This class allocates CellInfo with also one item extra before and after.
+    // To make handling easier, this is private and access functions take care of adjusting
+    // the array indexes and error-checking.
+    CellInfo*           pCellInfo;
+#ifdef DBG_UTIL
+    SCCOL               nCols;
+#endif
 };
 
 struct ScTableInfo
