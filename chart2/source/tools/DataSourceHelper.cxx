@@ -117,12 +117,6 @@ void lcl_addErrorBarRanges(
 
 } // anonymous namespace
 
-rtl::Reference< ::chart::DataSource > DataSourceHelper::createDataSource(
-        const Sequence< Reference< chart2::data::XLabeledDataSequence > >& rSequences )
-{
-    return new DataSource(rSequences);
-}
-
 Reference< chart2::data::XDataSequence > DataSourceHelper::createCachedDataSequence()
 {
     return new ::chart::CachedDataSequence();
@@ -219,7 +213,7 @@ void DataSourceHelper::readArguments( const uno::Sequence< beans::PropertyValue 
     }
 }
 
-uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoRectangularFormat(
+rtl::Reference< DataSource > DataSourceHelper::pressUsedDataIntoRectangularFormat(
         const rtl::Reference< ChartModel >& xChartDoc )
 {
     std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVector;
@@ -250,7 +244,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
             aResultVector.push_back( labeledData );
     }
 
-    return new DataSource( comphelper::containerToSequence(aResultVector) );
+    return new DataSource( aResultVector );
 }
 
 uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges(
@@ -281,13 +275,13 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const rtl::Refere
     return getUsedDataRanges( xDiagram );
 }
 
-uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
+rtl::Reference< DataSource > DataSourceHelper::getUsedData(
     const rtl::Reference<::chart::ChartModel>& xChartDoc )
 {
     return pressUsedDataIntoRectangularFormat( xChartDoc );
 }
 
-uno::Reference< chart2::data::XDataSource > DataSourceHelper::getUsedData(
+rtl::Reference< DataSource > DataSourceHelper::getUsedData(
     ChartModel& rModel )
 {
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;

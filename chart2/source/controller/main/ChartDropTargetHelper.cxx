@@ -18,6 +18,7 @@
  */
 
 #include "ChartDropTargetHelper.hxx"
+#include <DataSource.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
@@ -125,10 +126,10 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                             if( xDataProvider.is() && xDiagram.is() &&
                                 DataSourceHelper::allArgumentsForRectRangeDetected( m_xChartDocument ))
                             {
-                                Reference< chart2::data::XDataSource > xDataSource(
-                                    DataSourceHelper::pressUsedDataIntoRectangularFormat( m_xChartDocument ));
+                                rtl::Reference< DataSource > xDataSource1 =
+                                    DataSourceHelper::pressUsedDataIntoRectangularFormat( m_xChartDocument );
                                 Sequence< beans::PropertyValue > aArguments(
-                                    xDataProvider->detectArguments( xDataSource ));
+                                    xDataProvider->detectArguments( xDataSource1 ));
 
                                 OUString aOldRange;
                                 beans::PropertyValue * pCellRange = nullptr;
@@ -156,8 +157,9 @@ sal_Int8 ChartDropTargetHelper::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                         pCellRange->Value <<= aRangeString;
                                     }
 
-                                    xDataSource.set( xDataProvider->createDataSource( aArguments ));
-                                    xDiagram->setDiagramData( xDataSource, aArguments );
+                                    Reference< chart2::data::XDataSource > xDataSource2 =
+                                        xDataProvider->createDataSource( aArguments );
+                                    xDiagram->setDiagramData( xDataSource2, aArguments );
 
                                     // always return copy state to avoid deletion of the dragged range
                                     nResult = DND_ACTION_COPY;

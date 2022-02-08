@@ -20,6 +20,7 @@
 #include <ChartModelHelper.hxx>
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
+#include <DataSource.hxx>
 #include <DataSourceHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <RangeHighlighter.hxx>
@@ -217,7 +218,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
 
             try
             {
-                uno::Reference< chart2::data::XDataSource > xUsedData( DataSourceHelper::getUsedData( rModel ) );
+                rtl::Reference< DataSource > xUsedData = DataSourceHelper::getUsedData( rModel );
                 if( xUsedData.is() )
                 {
                     uno::Reference< beans::XPropertySet > xProp;

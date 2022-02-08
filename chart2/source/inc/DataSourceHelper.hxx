@@ -42,10 +42,6 @@ class LabeledDataSequence;
 class OOO_DLLPUBLIC_CHARTTOOLS DataSourceHelper
 {
 public:
-        static rtl::Reference< ::chart::DataSource >
-            createDataSource( const css::uno::Sequence<
-                css::uno::Reference<  css::chart2::data::XLabeledDataSequence > > & rSequences );
-
         static css::uno::Reference< css::chart2::data::XDataSequence >
             createCachedDataSequence();
 
@@ -78,7 +74,7 @@ public:
             , OUString & rRangeRepresentation, css::uno::Sequence< sal_Int32 >& rSequenceMapping
             , bool& bUseColumns, bool& bFirstCellAsLabel, bool& bHasCategories );
 
-        static css::uno::Reference< css::chart2::data::XDataSource >
+        static rtl::Reference< ::chart::DataSource >
             pressUsedDataIntoRectangularFormat( const rtl::Reference< ::chart::ChartModel >& xChartDoc );
 
         SAL_DLLPRIVATE static css::uno::Sequence< OUString > getUsedDataRanges(
@@ -87,10 +83,10 @@ public:
         static css::uno::Sequence< OUString > getUsedDataRanges(
             const rtl::Reference<::chart::ChartModel> & xChartModel );
 
-        static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
+        static rtl::Reference< ::chart::DataSource > getUsedData(
                 ChartModel& rModel );
 
-        static css::uno::Reference< css::chart2::data::XDataSource > getUsedData(
+        static rtl::Reference< ::chart::DataSource > getUsedData(
             const rtl::Reference<::chart::ChartModel>& xChartModel );
 
         static bool detectRangeSegmentation(

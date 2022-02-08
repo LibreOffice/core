@@ -24,12 +24,13 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 #include <vector>
+#include "charttoolsdllapi.hxx"
 
 namespace chart
 {
 class LabeledDataSequence;
 
-class DataSource final : public
+class OOO_DLLPUBLIC_CHARTTOOLS DataSource final : public
     ::cppu::WeakImplHelper<
         css::lang::XServiceInfo,
         css::chart2::data::XDataSource,
@@ -49,7 +50,6 @@ public:
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-protected:
     // ____ XDataSource ____
     virtual css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > SAL_CALL
         getDataSequences() override;

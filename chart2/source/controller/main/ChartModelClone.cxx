@@ -21,6 +21,7 @@
 #include <ChartModel.hxx>
 #include <ChartModelHelper.hxx>
 #include <ControllerLockGuard.hxx>
+#include <DataSource.hxx>
 #include <DataSourceHelper.hxx>
 
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
@@ -201,7 +202,7 @@ namespace chart
             if ( i_model->hasInternalDataProvider() )
             {
                 Reference< XInternalDataProvider > xNewDataProvider( i_model->getDataProvider(), UNO_QUERY );
-                Reference< XDataSource > xUsedData( DataSourceHelper::getUsedData( *i_model ) );
+                rtl::Reference< DataSource > xUsedData = DataSourceHelper::getUsedData( *i_model );
                 if ( xUsedData.is() && xNewDataProvider.is() )
                 {
                     const Sequence< Reference< XLabeledDataSequence > > aData( xUsedData->getDataSequences() );

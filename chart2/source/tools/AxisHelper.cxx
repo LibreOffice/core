@@ -24,6 +24,7 @@
 #include <ChartType.hxx>
 #include <Axis.hxx>
 #include <AxisIndexDefines.hxx>
+#include <DataSource.hxx>
 #include <LabeledDataSequence.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
@@ -209,7 +210,7 @@ sal_Int32 AxisHelper::getExplicitNumberFormatKeyForAxis(
                 }
                 else
                 {
-                    Reference< data::XDataSource > xSource( DataSourceHelper::getUsedData( *xChartDoc ) );
+                    rtl::Reference< DataSource > xSource = DataSourceHelper::getUsedData( *xChartDoc );
                     if( xSource.is() )
                     {
                         std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aXValues(

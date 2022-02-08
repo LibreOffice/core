@@ -285,7 +285,7 @@ rtl::Reference< DataSource > DataInterpreter::mergeInterpretedData(
         }
     }
 
-    return DataSourceHelper::createDataSource( comphelper::containerToSequence( aResultVec ) );
+    return new DataSource(aResultVec);
 }
 
 uno::Any DataInterpreter::getChartTypeSpecificData(
