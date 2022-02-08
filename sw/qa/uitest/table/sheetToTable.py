@@ -89,4 +89,22 @@ class sheetToTable(UITestCase):
             self.assertEqual(table.getCellByName("A3").getString(), "Test 3")
             self.assertEqual(table.getCellByName("A4").getString(), "Test 4")
 
+    def test_tdf116685(self):
+        with self.ui_test.load_file(get_url_for_data_file("tdf116685.ods")) as calc_doc:
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:Copy")
+
+        with self.ui_test.load_empty_file("writer") as writer_doc:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+
+            self.xUITest.executeCommand(".uno:Paste")
+
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 0 != 1
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            table = writer_doc.getTextTables()[0]
+            self.assertEqual(len(table.getRows()), 4)
+            self.assertEqual(len(table.getColumns()), 4)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
