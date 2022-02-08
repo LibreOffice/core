@@ -21,6 +21,7 @@
 #include <ShapeFactory.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include "Tickmarks.hxx"
+#include <Axis.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
@@ -136,11 +137,10 @@ bool VAxisBase::isAnythingToDraw()
     if(!(m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return false;
 
-    uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
-    if( xProps.is() )
+    if( m_aAxisProperties.m_xAxisModel.is() )
     {
         bool bShow = false;
-        xProps->getPropertyValue( "Show" ) >>= bShow;
+        m_aAxisProperties.m_xAxisModel->getPropertyValue( "Show" ) >>= bShow;
         if( !bShow )
             return false;
     }

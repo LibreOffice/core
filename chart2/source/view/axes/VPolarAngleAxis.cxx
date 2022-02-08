@@ -22,6 +22,7 @@
 #include "VPolarAngleAxis.hxx"
 #include "VPolarGrid.hxx"
 #include <ShapeFactory.hxx>
+#include <Axis.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <PlottingPositionHelper.hxx>
@@ -60,7 +61,7 @@ void VPolarAngleAxis::createTextShapes_ForAngleAxis(
     tNameSequence aPropNames;
     tAnySequence aPropValues;
 
-    uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( m_aAxisProperties.m_xAxisModel );
     PropertyMapper::getTextLabelMultiPropertyLists( xProps, aPropNames, aPropValues, false, -1, false, false );
     LabelPositionHelper::doDynamicFontResize( aPropValues, aPropNames, xProps
         , rAxisLabelProperties.m_aFontReferenceSize );

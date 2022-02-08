@@ -25,6 +25,7 @@
 #include <LabelPositionHelper.hxx>
 #include <TrueGuard.hxx>
 #include <BaseGFXHelper.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include "Tickmarks_Equidistant.hxx"
 #include <ExplicitCategoriesProvider.hxx>
@@ -424,7 +425,7 @@ static void getAxisLabelProperties(
     const AxisLabelProperties& rAxisLabelProp,
     sal_Int32 nLimitedSpaceForText, bool bLimitedHeight )
 {
-    Reference<beans::XPropertySet> xProps(rAxisProp.m_xAxisModel, uno::UNO_QUERY);
+    Reference<beans::XPropertySet> xProps(rAxisProp.m_xAxisModel);
 
     PropertyMapper::getTextLabelMultiPropertyLists(
         xProps, rPropNames, rPropValues, false, nLimitedSpaceForText, bLimitedHeight, false);
