@@ -9,180 +9,6 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/autotext))
 
-extras_AUTOTEXTSHARE_AUTOTEXTS := \
-	af/standard \
-	am/standard \
-	ar/standard \
-	as/standard \
-	ast/standard \
-	be/standard \
-	bg/crdbus50 \
-	bg/standard \
-	bg/template \
-	bn-IN/standard \
-	bn/standard \
-	bo/standard \
-	br/standard \
-	brx/standard \
-	bs/standard \
-	ca-valencia/standard \
-	ca/standard \
-	cs/crdbus50 \
-	cs/crdbus54 \
-	cs/standard \
-	cs/template \
-	cy/standard \
-	da/crdbus50 \
-	da/standard \
-	da/template \
-	de/crdbus50 \
-	de/standard \
-	de/template \
-	dgo/standard \
-	dsb/standard \
-	dz/standard \
-	el/standard \
-	en-GB/crdbus50 \
-	en-GB/standard \
-	en-GB/template \
-	en-US/crdbus50 \
-	en-US/standard \
-	en-US/template \
-	en-ZA/standard \
-	eo/standard \
-	es/crdbus50 \
-	es/standard \
-	es/template \
-	et/standard \
-	eu/standard \
-	fa/standard \
-	fi/standard \
-	fr/crdbus50 \
-	fr/standard \
-	fr/template \
-	fy/standard \
-	ga/standard \
-	gd/standard \
-	gl/standard \
-	gu/standard \
-	gug/standard \
-	he/standard \
-	hi/standard \
-	hr/standard \
-	hsb/standard \
-	hu/crdbus50 \
-	hu/crdbus54 \
-	hu/standard \
-	hu/template \
-	id/standard \
-	is/standard \
-	it/crdbus50 \
-	it/standard \
-	it/template \
-	ja/crdbus50 \
-	ja/standard \
-	ja/template \
-	ka/standard \
-	kab/standard \
-	kk/standard \
-	km/crdbus50 \
-	km/standard \
-	km/template \
-	kmr-Latn/standard \
-	kn/standard \
-	ko/crdbus50 \
-	ko/standard \
-	ko/template \
-	kok/standard \
-	ks/standard \
-	lb/standard \
-	lo/standard \
-	lt/standard \
-	lv/standard \
-	mai/standard \
-	mk/standard \
-	ml/standard \
-	mn/crdbus50 \
-	mn/standard \
-	mn/template \
-	mni/standard \
-	mr/standard \
-	my/standard \
-	nb/standard \
-	ne/standard \
-	nl/crdbus50 \
-	nl/standard \
-	nl/template \
-	nn/standard \
-	nr/standard \
-	nso/standard \
-	oc/standard \
-	om/standard \
-	or/standard \
-	pa-IN/standard \
-	pl/crdbus50 \
-	pl/standard \
-	pl/template \
-	pt-BR/crdbus50 \
-	pt-BR/standard \
-	pt-BR/template \
-	pt/crdbus50 \
-	pt/standard \
-	pt/template \
-	ro/standard \
-	ru/crdbus50 \
-	ru/standard \
-	ru/template \
-	rw/standard \
-	sa-IN/standard \
-	sat/standard \
-	sd/standard \
-	si/standard \
-	sid/standard \
-	sk/crdbus50 \
-	sk/crdbus54 \
-	sk/standard \
-	sk/template \
-	sl/crdbus50 \
-	sl/crdbus54 \
-	sl/standard \
-	sl/template \
-	sq/standard \
-	sr/standard \
-	sr-Latn/standard \
-	ss/standard \
-	st/standard \
-	sv/crdbus50 \
-	sv/standard \
-	sv/template \
-	sw-TZ/standard \
-	szl/standard \
-	ta/standard \
-	te/standard \
-	tg/standard \
-	th/standard \
-	tn/standard \
-	tr/crdbus50 \
-	tr/standard \
-	tr/template \
-	ts/standard \
-	tt/standard \
-	ug/standard \
-	uk/standard \
-	uz/standard \
-	ve/standard \
-	vec/standard \
-	vi/standard \
-	xh/standard \
-	zh-CN/crdbus50 \
-	zh-CN/standard \
-	zh-CN/template \
-	zh-TW/crdbus50 \
-	zh-TW/standard \
-	zh-TW/template \
-	zu/standard \
-
-
 extras_AUTOTEXTSHARE_XMLFILES := \
 	af/standard/BlockList.xml \
 	af/standard/FN/content.xml \
@@ -3805,80 +3631,45 @@ extras_AUTOTEXTSHARE_XMLFILES := \
 	zu/standard/LOREM/LOREM.xml \
 	zu/standard/META-INF/manifest.xml \
 
+# param: autotext-base (e.g. af/standard)
+extras_AUTOTEXTSHARE_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_AUTOTEXTSHARE_XMLFILES)))
 
-extras_AUTOTEXTSHARE_MIMETYPEFILES := $(foreach atexts,$(extras_AUTOTEXTSHARE_AUTOTEXTS),$(atexts)/mimetype)
+.SECONDEXPANSION:
+# secondexpansion since the patterns not just cover a filename portion, but also include a
+# directory portion withdifferent number of elements
+$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : \
+        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*/mimetype).dir
+	$(call gb_Output_announce,autotext/$*/mimetype,$(true),TCH,1)
+	$(call gb_Trace_StartRange,autotext/$*/mimetype,TCH)
+	touch $@
+	$(call gb_Trace_EndRange,autotext/$*/mimetype,TCH)
 
-
-$(call gb_CustomTarget_get_target,extras/source/autotext) : \
-	$(foreach atexts,$(extras_AUTOTEXTSHARE_AUTOTEXTS),$(call gb_CustomTarget_get_workdir,extras/source/autotext)/$(atexts).bau)
-
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%/mimetype : $(SRCDIR)/extras/source/autotext/lang/%/mimetype
-	$(call gb_Output_announce,autotext/$*/mimetype,$(true),CPY,1)
-	$(call gb_Trace_StartRange,autotext/$*/mimetype,CPY)
+# rule for *.rdf, *.svm, *.png, …
+$(call gb_CustomTarget_get_workdir,extras/source/autotext)/% : $(SRCDIR)/extras/source/autotext/lang/% \
+        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*).dir
+	$(call gb_Output_announce,autotext/$*,$(true),CPY,1)
+	$(call gb_Trace_StartRange,autotext/$*,CPY)
 	cp $< $@
-	$(call gb_Trace_EndRange,autotext/$*/mimetype,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.rdf : $(SRCDIR)/extras/source/autotext/lang/%.rdf
-	$(call gb_Output_announce,autotext/$*.rdf,$(true),CPY,1)
-	$(call gb_Trace_StartRange,autotext/$*.rdf,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,autotext/$*.rdf,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.svm : $(SRCDIR)/extras/source/autotext/lang/%.svm
-	$(call gb_Output_announce,autotext/$*.svm,$(true),CPY,1)
-	$(call gb_Trace_StartRange,autotext/$*.svm,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,autotext/$*.svm,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.png : $(SRCDIR)/extras/source/autotext/lang/%.png
-	$(call gb_Output_announce,autotext/$*.png,$(true),CPY,1)
-	$(call gb_Trace_StartRange,autotext/$*.png,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,autotext/$*.png,CPY)
+	$(call gb_Trace_EndRange,autotext/$*,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.xml : $(SRCDIR)/extras/source/autotext/lang/%.xml \
-		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
+          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*.xml).dir
 	$(call gb_Output_announce,autotext/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,autotext/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,autotext/$*.xml,XSL)
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.bau :
+$(call gb_CustomTarget_get_workdir,extras/source/autotext)/%.bau : \
+        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/autotext)/$$*/,\
+            mimetype $$(call extras_AUTOTEXTSHARE_XMLFILES_RELATIVE,$$*))
 	$(call gb_Output_announce,autotext/$*.bau,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,autotext/$*.bau,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
-		cd $(EXTRAS_AUTOTEXTSHARE_DIR) && \
-		zip -q0X --filesync --must-match $@ $(EXTRAS_AUTOTEXTSHARE_MIMEFILES_FILTER) && \
-		zip -qrX --must-match $@ $(EXTRAS_AUTOTEXTSHARE_XMLFILES_FILTER) \
+		cd $(dir $<) && \
+		zip -q0X --filesync --must-match $@ mimetype && \
+		zip -qrX --must-match $@ $(call extras_AUTOTEXTSHARE_XMLFILES_RELATIVE,$*) \
 	)
 	$(call gb_Trace_EndRange,autotext/$*.bau,ZIP)
-
-define extras_Autotextshare_make_file_deps
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/lang/$(2) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
-
-endef
-
-define extras_Autotextshare_make_zip_deps
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_AUTOTEXTSHARE_MIMETYPEFILES) $(extras_AUTOTEXTSHARE_XMLFILES))) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
-
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_AUTOTEXTSHARE_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_AUTOTEXTSHARE_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_AUTOTEXTSHARE_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_AUTOTEXTSHARE_XMLFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_AUTOTEXTSHARE_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
-
-endef
-
-$(eval $(foreach file,$(extras_AUTOTEXTSHARE_MIMETYPEFILES) $(extras_AUTOTEXTSHARE_XMLFILES),\
-	$(call extras_Autotextshare_make_file_deps,extras/source/autotext,$(file)) \
-))
-
-$(eval $(foreach atexts,$(extras_AUTOTEXTSHARE_AUTOTEXTS),\
-	$(call extras_Autotextshare_make_zip_deps,extras/source/autotext,$(atexts).bau,$(atexts)) \
-))
 
 # vim: set noet sw=4 ts=4:
