@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "384b0eb5_579d00b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-08T11:57:57Z",
+      "side": 1,
+      "message": "7.2 (fedora build) is unusably slow on documents with \u003e1000 headings like\n\nhttps://docs.oasis-open.org/office/OpenDocument/v1.3/os/part3-schema/OpenDocument-v1.3-os-part3-schema.odt\n\nGabor claims that this fixes it, so let\u0027s try to backport it",
+      "revId": "d307010c39d0973a4fe1b6f713285f4d5e48077e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
