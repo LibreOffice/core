@@ -1718,7 +1718,7 @@ private:
 
     // #i84783#
     // determine object attribute "Layout in Table Cell"
-    bool IsObjectLayoutInTableCell( const sal_uInt32 nLayoutInTableCell ) const;
+    bool IsObjectLayoutInTableCell(const sal_uInt32 nGroupShapeBooleanProperties) const;
     void ReadGlobalTemplateSettings( std::u16string_view sCreatedFrom, const css::uno::Reference< css::container::XNameContainer >& xPrjNameMap );
     SwWW8ImplReader(const SwWW8ImplReader &) = delete;
     SwWW8ImplReader& operator=(const SwWW8ImplReader&) = delete;
