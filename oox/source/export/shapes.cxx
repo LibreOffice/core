@@ -202,31 +202,26 @@ static uno::Reference<io::XInputStream> lcl_StoreOwnAsOOXML(
     OUString & o_rMediaType, OUString & o_rRelationType, OUString & o_rSuffix)
 {
     static struct {
-        struct {
-            sal_uInt32 n1;
-            sal_uInt16 n2, n3;
-            sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-        } ClassId;
+        SvGUID ClassId;
         char const* pFilterName;
         char const* pMediaType;
         char const* pProgID;
         char const* pSuffix;
     } const s_Mapping[] = {
-        { {SO3_SW_CLASSID_60}, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
-        { {SO3_SC_CLASSID_60}, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
-        { {SO3_SIMPRESS_CLASSID_60}, "Impress MS PowerPoint 2007 XML", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "PowerPoint.Show.12", "pptx" },
+        { SO3_SW_CLASSID_60, "MS Word 2007 XML", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "Word.Document.12", "docx" },
+        { SO3_SC_CLASSID_60, "Calc MS Excel 2007 XML", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Excel.Sheet.12", "xlsx" },
+        { SO3_SIMPRESS_CLASSID_60, "Impress MS PowerPoint 2007 XML", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "PowerPoint.Show.12", "pptx" },
         // FIXME: Draw does not appear to have a MSO format export filter?
-//            { {SO3_SDRAW_CLASSID}, "", "", "", "" },
-        { {SO3_SCH_CLASSID_60}, "unused", "", "", "" },
-        { {SO3_SM_CLASSID_60}, "unused", "", "", "" },
+//            { SO3_SDRAW_CLASSID, "", "", "", "" },
+        { SO3_SCH_CLASSID_60, "unused", "", "", "" },
+        { SO3_SM_CLASSID_60, "unused", "", "", "" },
     };
 
     const char * pFilterName(nullptr);
     SvGlobalName const classId(xObj->getClassID());
     for (auto & i : s_Mapping)
     {
-        auto const& rId(i.ClassId);
-        SvGlobalName const temp(rId.n1, rId.n2, rId.n3, rId.b8, rId.b9, rId.b10, rId.b11, rId.b12, rId.b13, rId.b14, rId.b15);
+        SvGlobalName const temp(i.ClassId);
         if (temp == classId)
         {
             assert(SvGlobalName(SO3_SCH_CLASSID_60) != classId); // chart should be written elsewhere!

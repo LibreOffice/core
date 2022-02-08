@@ -7027,9 +7027,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             sal_uInt32 nFlag;
             const char* pFactoryNm;
             // GlobalNameId
-            sal_uInt32 n1;
-            sal_uInt16 n2, n3;
-            sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
+            SvGUID aId;
         } const aArr[] = {
             { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION3_CLASSID },
             { OLE_MATHTYPE_2_STARMATH, "smath", MSO_EQUATION2_CLASSID },
@@ -7052,9 +7050,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         {
             if( nConvertFlags & pArr->nFlag )
             {
-                SvGlobalName aTypeName( pArr->n1, pArr->n2, pArr->n3,
-                                pArr->b8, pArr->b9, pArr->b10, pArr->b11,
-                                pArr->b12, pArr->b13, pArr->b14, pArr->b15 );
+                SvGlobalName aTypeName( pArr->aId );
 
                 if ( aStgNm == aTypeName )
                 {

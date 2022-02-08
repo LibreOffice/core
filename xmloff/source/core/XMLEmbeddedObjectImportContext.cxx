@@ -188,13 +188,13 @@ XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
         if( !sClass.isEmpty() )
         {
             static const std::tuple<XMLTokenEnum, OUString, SvGUID> aServiceMap[] = {
-                { XML_TEXT, XML_IMPORT_FILTER_WRITER, { SO3_SW_CLASSID } },
-                { XML_ONLINE_TEXT, XML_IMPORT_FILTER_WRITER, { SO3_SWWEB_CLASSID } },
-                { XML_SPREADSHEET, XML_IMPORT_FILTER_CALC, { SO3_SC_CLASSID } },
-                { XML_DRAWING, XML_IMPORT_FILTER_DRAW, { SO3_SDRAW_CLASSID } },
-                { XML_GRAPHICS, XML_IMPORT_FILTER_DRAW, { SO3_SDRAW_CLASSID } },
-                { XML_PRESENTATION, XML_IMPORT_FILTER_IMPRESS, { SO3_SIMPRESS_CLASSID } },
-                { XML_CHART, XML_IMPORT_FILTER_CHART, { SO3_SCH_CLASSID } },
+                { XML_TEXT, XML_IMPORT_FILTER_WRITER, SO3_SW_CLASSID },
+                { XML_ONLINE_TEXT, XML_IMPORT_FILTER_WRITER, SO3_SWWEB_CLASSID },
+                { XML_SPREADSHEET, XML_IMPORT_FILTER_CALC, SO3_SC_CLASSID },
+                { XML_DRAWING, XML_IMPORT_FILTER_DRAW, SO3_SDRAW_CLASSID },
+                { XML_GRAPHICS, XML_IMPORT_FILTER_DRAW, SO3_SDRAW_CLASSID },
+                { XML_PRESENTATION, XML_IMPORT_FILTER_IMPRESS, SO3_SIMPRESS_CLASSID },
+                { XML_CHART, XML_IMPORT_FILTER_CHART, SO3_SCH_CLASSID },
             };
             for (auto const& [eClass, sMatchingFilterService, rCLASSID] : aServiceMap)
             {

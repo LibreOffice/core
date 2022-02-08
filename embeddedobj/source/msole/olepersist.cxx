@@ -888,8 +888,8 @@ void OleEmbeddedObject::OnViewChanged_Impl()
     // - the STAMPIT object can never be active.
     if (m_aVerbExecutionController.CanDoNotification() &&
             m_pOleComponent && m_nUpdateMode == embed::EmbedUpdateModes::ALWAYS_UPDATE &&
-            (MimeConfigurationHelper::ClassIDsEqual(m_aClassID, MimeConfigurationHelper::GetSequenceClassID(0x852ee1c9, 0x9058, 0x44ba, 0x8c, 0x6c, 0x0c, 0x5f, 0xc6, 0x6b, 0xdb, 0x8d)) ||
-             MimeConfigurationHelper::ClassIDsEqual(m_aClassID, MimeConfigurationHelper::GetSequenceClassID(0xcf1b4491, 0xbea3, 0x4c9f, 0xa7, 0x0f, 0x22, 0x1b, 0x1e, 0xca, 0xef, 0x3e)))
+            (MimeConfigurationHelper::ClassIDsEqual(m_aClassID, MimeConfigurationHelper::GetSequenceClassID({ 0x852ee1c9, 0x9058, 0x44ba, { 0x8c, 0x6c, 0x0c, 0x5f, 0xc6, 0x6b, 0xdb, 0x8d } })) ||
+             MimeConfigurationHelper::ClassIDsEqual(m_aClassID, MimeConfigurationHelper::GetSequenceClassID({ 0xcf1b4491, 0xbea3, 0x4c9f, { 0xa7, 0x0f, 0x22, 0x1b, 0x1e, 0xca, 0xef, 0x3e } })))
        )
     {
         // The view is changed while the object is in running state, save the new object

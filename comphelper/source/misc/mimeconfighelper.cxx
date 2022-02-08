@@ -866,13 +866,6 @@ bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aC
 }
 
 
-uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
-{
-    return GetSequenceClassID({ n1, n2, n3, { b8, b9, b10, b11, b12, b13, b14, b15 } });
-}
-
 uno::Sequence<sal_Int8> MimeConfigurationHelper::GetSequenceClassID(const Guid& rId)
 {
     return { /* [ 0] */ static_cast<sal_Int8>( rId.Data1 >> 24 ),

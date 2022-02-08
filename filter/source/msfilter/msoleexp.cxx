@@ -129,44 +129,37 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef const & rObj
             sal_uInt32 nFlag;
             const char* pFilterNm;
             // GlobalNameId
-            struct GlobalNameIds {
-                sal_uInt32 n1;
-                sal_uInt16 n2, n3;
-                sal_uInt8 b8, b9, b10, b11, b12, b13, b14, b15;
-            }
-            aGlNmIds[4];
+            SvGUID aGlNmIds[4];
         } const aArr[] = {
             { OLE_STARMATH_2_MATHTYPE, "MathType 3.x",
-                {{SO3_SM_CLASSID_60}, {SO3_SM_CLASSID_50},
-                 {SO3_SM_CLASSID_40}, {SO3_SM_CLASSID_30 }}},
+                {SO3_SM_CLASSID_60, SO3_SM_CLASSID_50,
+                 SO3_SM_CLASSID_40, SO3_SM_CLASSID_30}},
             { OLE_STARWRITER_2_WINWORD, "MS Word 97",
-                {{SO3_SW_CLASSID_60}, {SO3_SW_CLASSID_50},
-                 {SO3_SW_CLASSID_40}, {SO3_SW_CLASSID_30 }}},
+                {SO3_SW_CLASSID_60, SO3_SW_CLASSID_50,
+                 SO3_SW_CLASSID_40, SO3_SW_CLASSID_30}},
             { OLE_STARCALC_2_EXCEL, "MS Excel 97",
-                {{SO3_SC_CLASSID_60}, {SO3_SC_CLASSID_50},
-                 {SO3_SC_CLASSID_40}, {SO3_SC_CLASSID_30 }}},
+                {SO3_SC_CLASSID_60, SO3_SC_CLASSID_50,
+                 SO3_SC_CLASSID_40, SO3_SC_CLASSID_30}},
             { OLE_STARIMPRESS_2_POWERPOINT, "MS PowerPoint 97",
-                {{SO3_SIMPRESS_CLASSID_60}, {SO3_SIMPRESS_CLASSID_50},
-                 {SO3_SIMPRESS_CLASSID_40}, {SO3_SIMPRESS_CLASSID_30 }}},
+                {SO3_SIMPRESS_CLASSID_60, SO3_SIMPRESS_CLASSID_50,
+                 SO3_SIMPRESS_CLASSID_40, SO3_SIMPRESS_CLASSID_30}},
             { 0, "",
-                {{SO3_SCH_CLASSID_60}, {SO3_SCH_CLASSID_50},
-                 {SO3_SCH_CLASSID_40}, {SO3_SCH_CLASSID_30 }}},
+                {SO3_SCH_CLASSID_60, SO3_SCH_CLASSID_50,
+                 SO3_SCH_CLASSID_40, SO3_SCH_CLASSID_30}},
             { 0, "",
-                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
-                 {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50 }}}, // ver 5.0, it is purpose to have double entries here.
+                {SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50,    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
+                 SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50}}, // ver 5.0, it is purpose to have double entries here.
 
             { 0xffff,nullptr,
-                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},
-                {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50}}}
+                {SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50,
+                 SO3_SDRAW_CLASSID_60, SO3_SDRAW_CLASSID_50}}
         };
 
         for( const ObjExpType* pArr = aArr; !pExpFilter && ( pArr->nFlag != 0xffff ); ++pArr )
         {
-            for (const ObjExpType::GlobalNameIds& rId : pArr->aGlNmIds)
+            for (const auto& rId : pArr->aGlNmIds)
             {
-                SvGlobalName aGlbNm( rId.n1, rId.n2, rId.n3,
-                            rId.b8, rId.b9, rId.b10, rId.b11,
-                            rId.b12, rId.b13, rId.b14, rId.b15 );
+                SvGlobalName aGlbNm( rId );
                 if( aObjName == aGlbNm )
                 {
                     aOwnGlobalName = aGlbNm;
