@@ -6352,7 +6352,7 @@ static void preloadData()
     }
 
     std::cerr << "Preload config\n";
-#ifdef __GNUC__
+#if defined __GNUC__ || defined __clang__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-variable"
 #endif
@@ -6377,7 +6377,7 @@ static void preloadData()
     static MiscSettings aMiscSettings;
     static HelpSettings aHelpSettings;
     static AllSettings aAllSettings;
-#ifdef __GNUC__
+#if defined __GNUC__ || defined __clang__
 #pragma GCC diagnostic pop
 #endif
 
