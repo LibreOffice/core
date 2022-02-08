@@ -66,6 +66,7 @@ extern "C" SalInstance* create_SalInstance();
 
 #if defined(_WIN32)
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <salframe.hxx>
 #include <Windows.h>
 #else
 #include <unistd.h>
