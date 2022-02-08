@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <rtl/ref.hxx>
 
 #include <vector>
 #include <optional>
@@ -38,6 +39,7 @@ namespace com::sun::star::chart2::data { class XTextualDataSequence; }
 
 namespace chart
 {
+class Axis;
 
 //These properties describe how a couple of labels are arranged one to another.
 //The couple can contain all labels for all tickmark depth or just the labels for one single depth or
@@ -71,7 +73,7 @@ struct AxisLabelProperties final
     sal_Int32   m_nRhythm; //show only each nth label with n==nRhythm
 
     //methods:
-    void init( const css::uno::Reference< css::chart2::XAxis >&  xAxisModel );
+    void init( const rtl::Reference< ::chart::Axis >&  xAxisModel );
 
     bool isStaggered() const;
 
@@ -90,7 +92,7 @@ struct AxisLabelAlignment
 
 struct AxisProperties final
 {
-    css::uno::Reference<css::chart2::XAxis> m_xAxisModel;
+    rtl::Reference<::chart::Axis> m_xAxisModel;
 
     sal_Int32   m_nDimensionIndex;
     bool        m_bIsMainAxis;//not secondary axis
@@ -138,7 +140,7 @@ struct AxisProperties final
 
     //methods:
 
-    AxisProperties( const css::uno::Reference< css::chart2::XAxis >& xAxisModel
+    AxisProperties( const rtl::Reference< ::chart::Axis >& xAxisModel
                   , ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
     void init(bool bCartesian=false);//init from model data (m_xAxisModel)

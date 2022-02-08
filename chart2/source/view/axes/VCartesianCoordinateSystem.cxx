@@ -136,7 +136,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             aAxisProperties.m_bSwapXAndY = bSwapXAndY;
             aAxisProperties.m_bIsMainAxis = (nAxisIndex==0);
             aAxisProperties.m_bLimitSpaceForLabels = bLimitSpaceForLabels;
-            Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, m_xCooSysModel ) );
+            rtl::Reference< Axis > xCrossingMainAxis = AxisHelper::getCrossingMainAxis( xAxis, m_xCooSysModel );
             if( xCrossingMainAxis.is() )
             {
                 ScaleData aCrossingScale( xCrossingMainAxis->getScaleData() );
@@ -151,8 +151,8 @@ void VCartesianCoordinateSystem::createVAxisList(
                 aAxisProperties.m_xAxisTextProvider = new TextualDataProvider( m_aSeriesNamesForZAxis );
 
                 //for the z axis copy the positioning properties from the x axis (or from the y axis for swapped coordinate systems)
-                Reference< XAxis > xSisterAxis( AxisHelper::getCrossingMainAxis( xCrossingMainAxis, m_xCooSysModel ) );
-                aAxisProperties.initAxisPositioning( Reference< beans::XPropertySet >( xSisterAxis, uno::UNO_QUERY) );
+                rtl::Reference< Axis > xSisterAxis = AxisHelper::getCrossingMainAxis( xCrossingMainAxis, m_xCooSysModel );
+                aAxisProperties.initAxisPositioning( xSisterAxis );
             }
             aAxisProperties.init(true);
             if(aAxisProperties.m_bDisplayLabels)

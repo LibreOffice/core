@@ -20,6 +20,7 @@
 #include "VPolarRadiusAxis.hxx"
 #include "VCartesianAxis.hxx"
 #include <PlottingPositionHelper.hxx>
+#include <Axis.hxx>
 #include <CommonConverters.hxx>
 #include "Tickmarks_Equidistant.hxx"
 

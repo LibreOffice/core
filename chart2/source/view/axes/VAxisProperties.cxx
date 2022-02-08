@@ -19,6 +19,7 @@
 
 #include "VAxisProperties.hxx"
 #include <ViewDefines.hxx>
+#include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <ExplicitCategoriesProvider.hxx>
@@ -152,7 +153,7 @@ TickmarkProperties AxisProperties::getBiggestTickmarkProperties()
     return aTickmarkProperties;
 }
 
-AxisProperties::AxisProperties( const uno::Reference< XAxis >& xAxisModel
+AxisProperties::AxisProperties( const rtl::Reference< Axis >& xAxisModel
                               , ExplicitCategoriesProvider* pExplicitCategoriesProvider )
     : m_xAxisModel(xAxisModel)
     , m_nDimensionIndex(0)
@@ -240,13 +241,11 @@ void AxisProperties::initAxisPositioning( const uno::Reference< beans::XProperty
 
 void AxisProperties::init( bool bCartesian )
 {
-    uno::Reference< beans::XPropertySet > xProp =
-        uno::Reference<beans::XPropertySet>::query( m_xAxisModel );
-    if( !xProp.is() )
+    if( !m_xAxisModel.is() )
         return;
 
     if( m_nDimensionIndex<2 )
-        initAxisPositioning( xProp );
+        initAxisPositioning( m_xAxisModel );
 
     ScaleData aScaleData = m_xAxisModel->getScaleData();
     if( m_nDimensionIndex==0 )
@@ -294,19 +293,19 @@ void AxisProperties::init( bool bCartesian )
     try
     {
         //init LineProperties
-        m_aLineProperties.initFromPropertySet( xProp );
+        m_aLineProperties.initFromPropertySet( m_xAxisModel );
 
         //init display labels
-        xProp->getPropertyValue( "DisplayLabels" ) >>= m_bDisplayLabels;
+        m_xAxisModel->getPropertyValue( "DisplayLabels" ) >>= m_bDisplayLabels;
 
         // Init layout strategy hint for axis labels.
         // Compatibility option: starting from LibreOffice 5.1 the rotated
         // layout is preferred to staggering for axis labels.
-        xProp->getPropertyValue( "TryStaggeringFirst" ) >>= m_bTryStaggeringFirst;
+        m_xAxisModel->getPropertyValue( "TryStaggeringFirst" ) >>= m_bTryStaggeringFirst;
 
         //init TickmarkProperties
-        xProp->getPropertyValue( "MajorTickmarks" ) >>= m_nMajorTickmarks;
-        xProp->getPropertyValue( "MinorTickmarks" ) >>= m_nMinorTickmarks;
+        m_xAxisModel->getPropertyValue( "MajorTickmarks" ) >>= m_nMajorTickmarks;
+        m_xAxisModel->getPropertyValue( "MinorTickmarks" ) >>= m_nMinorTickmarks;
 
         sal_Int32 nMaxDepth = 0;
         if(m_nMinorTickmarks!=0)
@@ -341,22 +340,20 @@ AxisLabelProperties::AxisLabelProperties()
 
 }
 
-void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
+void AxisLabelProperties::init( const rtl::Reference< Axis >& xAxisModel )
 {
-    uno::Reference< beans::XPropertySet > xProp =
-        uno::Reference<beans::XPropertySet>::query( xAxisModel );
-    if(!xProp.is())
+    if(!xAxisModel.is())
         return;
 
     try
     {
-        xProp->getPropertyValue( "TextBreak" ) >>= m_bLineBreakAllowed;
-        xProp->getPropertyValue( "TextOverlap" ) >>= m_bOverlapAllowed;
-        xProp->getPropertyValue( "StackCharacters" ) >>= m_bStackCharacters;
-        xProp->getPropertyValue( "TextRotation" ) >>= m_fRotationAngleDegree;
+        xAxisModel->getPropertyValue( "TextBreak" ) >>= m_bLineBreakAllowed;
+        xAxisModel->getPropertyValue( "TextOverlap" ) >>= m_bOverlapAllowed;
+        xAxisModel->getPropertyValue( "StackCharacters" ) >>= m_bStackCharacters;
+        xAxisModel->getPropertyValue( "TextRotation" ) >>= m_fRotationAngleDegree;
 
         css::chart::ChartAxisArrangeOrderType eArrangeOrder;
-        xProp->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
+        xAxisModel->getPropertyValue( "ArrangeOrder" ) >>= eArrangeOrder;
         switch(eArrangeOrder)
         {
             case css::chart::ChartAxisArrangeOrderType_SIDE_BY_SIDE:
