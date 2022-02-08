@@ -81,7 +81,7 @@ public:
     void refreshLocks();
 
 private:
-    void removeLockImpl(const OUString& rURI);
+    void removeLockImpl(std::unique_lock<std::mutex> & rGuard, const OUString& rURI);
     void startTicker();
     void stopTicker(std::unique_lock<std::mutex> & rGuard);
 };

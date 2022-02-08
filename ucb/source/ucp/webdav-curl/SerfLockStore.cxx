@@ -191,19 +191,19 @@ void SerfLockStore::removeLock(const OUString& rURI)
 {
     std::unique_lock aGuard( m_aMutex );
 
-    removeLockImpl(rURI);
+    removeLockImpl(aGuard, rURI);
 }
 
-void SerfLockStore::removeLockImpl(const OUString& rURI)
+void SerfLockStore::removeLockImpl(std::unique_lock<std::mutex> & rGuard, const OUString& rURI)
 {
     assert(rURI.startsWith("http://") || rURI.startsWith("https://"));
-
-    std::unique_lock aGuard( m_aMutex );
 
     m_aLockInfoMap.erase(rURI);
 
     if ( m_aLockInfoMap.empty() )
-        stopTicker(aGuard);
+    {
+        stopTicker(rGuard);
+    }
 }
 
 void SerfLockStore::refreshLocks()
@@ -249,7 +249,7 @@ void SerfLockStore::refreshLocks()
 
     for (auto const& rLock : authFailedLocks)
     {
-        removeLockImpl(rLock);
+        removeLockImpl(aGuard, rLock);
     }
 }
 
