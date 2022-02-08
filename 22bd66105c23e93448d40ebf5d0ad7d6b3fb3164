@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e84a75a8_b8355502",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-08T05:31:29Z",
+      "side": 1,
+      "message": "Hmm, the change touches the related parts (methods1.cxx, stdobj.cxx), but also unrelated... why?",
+      "revId": "22bd66105c23e93448d40ebf5d0ad7d6b3fb3164",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
