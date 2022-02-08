@@ -89,4 +89,33 @@ class sheetToTable(UITestCase):
             self.assertEqual(table.getCellByName("A3").getString(), "Test 3")
             self.assertEqual(table.getCellByName("A4").getString(), "Test 4")
 
+    def test_tdf116685(self):
+        with self.ui_test.create_doc_in_start_center("calc"):
+
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            gridwin = xCalcDoc.getChild("grid_window")
+
+            enter_text_to_cell(gridwin, "A1", "Test 1")
+            enter_text_to_cell(gridwin, "A2", "Test 2")
+            enter_text_to_cell(gridwin, "A3", "Test 3")
+            enter_text_to_cell(gridwin, "A4", "Test 4")
+
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:Copy")
+
+        with self.ui_test.load_empty_file("writer") as writer_doc:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+
+            self.xUITest.executeCommand(".uno:Paste")
+
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 0 != 1
+            self.assertEqual(writer_doc.TextTables.getCount(), 1)
+            table = writer_doc.getTextTables()[0]
+            self.assertEqual(len(table.getRows()), 4)
+            self.assertEqual(table.getCellByName("A1").getString(), "Test 1")
+            self.assertEqual(table.getCellByName("A2").getString(), "Test 2")
+            self.assertEqual(table.getCellByName("A3").getString(), "Test 3")
+            self.assertEqual(table.getCellByName("A4").getString(), "Test 4")
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
