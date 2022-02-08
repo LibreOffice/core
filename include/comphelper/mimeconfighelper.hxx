@@ -127,9 +127,13 @@ public:
 
     static bool ClassIDsEqual( const css::uno::Sequence< sal_Int8 >& aClassID1,
                         const css::uno::Sequence< sal_Int8 >& aClassID2 );
-    static css::uno::Sequence< sal_Int8 > GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 );
+    struct ClassId {
+        sal_uInt32 n1;
+        sal_uInt16 n2;
+        sal_uInt16 n3;
+        sal_uInt8  b8_15[8];
+    };
+    static css::uno::Sequence< sal_Int8 > GetSequenceClassID(const ClassId&);
 private:
     css::uno::Reference< css::container::XNameAccess >
                                             GetConfigurationByPathImpl( const OUString& aPath );

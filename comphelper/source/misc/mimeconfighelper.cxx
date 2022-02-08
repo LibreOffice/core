@@ -866,26 +866,24 @@ bool MimeConfigurationHelper::ClassIDsEqual( const uno::Sequence< sal_Int8 >& aC
 }
 
 
-uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-                                                sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-                                                sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15 )
+uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassID(const ClassId& rId)
 {
-    uno::Sequence< sal_Int8 > aResult{ /* [ 0] */ static_cast<sal_Int8>( n1 >> 24 ),
-                                       /* [ 1] */ static_cast<sal_Int8>( ( n1 << 8 ) >> 24 ),
-                                       /* [ 2] */ static_cast<sal_Int8>( ( n1 << 16 ) >> 24 ),
-                                       /* [ 3] */ static_cast<sal_Int8>( ( n1 << 24 ) >> 24 ),
-                                       /* [ 4] */ static_cast<sal_Int8>( n2 >> 8 ),
-                                       /* [ 5] */ static_cast<sal_Int8>( ( n2 << 8 ) >> 8 ),
-                                       /* [ 6] */ static_cast<sal_Int8>( n3 >> 8 ),
-                                       /* [ 7] */ static_cast<sal_Int8>( ( n3 << 8 ) >> 8 ),
-                                       /* [ 8] */ static_cast<sal_Int8>( b8 ),
-                                       /* [ 9] */ static_cast<sal_Int8>( b9 ),
-                                       /* [10] */ static_cast<sal_Int8>( b10 ),
-                                       /* [11] */ static_cast<sal_Int8>( b11 ),
-                                       /* [12] */ static_cast<sal_Int8>( b12 ),
-                                       /* [13] */ static_cast<sal_Int8>( b13 ),
-                                       /* [14] */ static_cast<sal_Int8>( b14 ),
-                                       /* [15] */ static_cast<sal_Int8>( b15 ) };
+    uno::Sequence< sal_Int8 > aResult{ /* [ 0] */ static_cast<sal_Int8>( rId.n1 >> 24 ),
+                                       /* [ 1] */ static_cast<sal_Int8>( ( rId.n1 << 8 ) >> 24 ),
+                                       /* [ 2] */ static_cast<sal_Int8>( ( rId.n1 << 16 ) >> 24 ),
+                                       /* [ 3] */ static_cast<sal_Int8>( ( rId.n1 << 24 ) >> 24 ),
+                                       /* [ 4] */ static_cast<sal_Int8>( rId.n2 >> 8 ),
+                                       /* [ 5] */ static_cast<sal_Int8>( ( rId.n2 << 8 ) >> 8 ),
+                                       /* [ 6] */ static_cast<sal_Int8>( rId.n3 >> 8 ),
+                                       /* [ 7] */ static_cast<sal_Int8>( ( rId.n3 << 8 ) >> 8 ),
+                                       /* [ 8] */ static_cast<sal_Int8>( std::data(rId.b8_15)[0] ),
+                                       /* [ 9] */ static_cast<sal_Int8>( std::data(rId.b8_15)[1] ),
+                                       /* [10] */ static_cast<sal_Int8>( std::data(rId.b8_15)[2] ),
+                                       /* [11] */ static_cast<sal_Int8>( std::data(rId.b8_15)[3] ),
+                                       /* [12] */ static_cast<sal_Int8>( std::data(rId.b8_15)[4] ),
+                                       /* [13] */ static_cast<sal_Int8>( std::data(rId.b8_15)[5] ),
+                                       /* [14] */ static_cast<sal_Int8>( std::data(rId.b8_15)[6] ),
+                                       /* [15] */ static_cast<sal_Int8>( std::data(rId.b8_15)[7] ) };
 
     return aResult;
 }

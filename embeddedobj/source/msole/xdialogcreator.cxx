@@ -176,17 +176,17 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
     {
         uno::Reference< embed::XEmbeddedObjectCreator > xEmbCreator = embed::EmbeddedObjectCreator::create( m_xContext );
 
-        uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID( io.clsid.Data1,
+        uno::Sequence< sal_Int8 > aClassID = MimeConfigurationHelper::GetSequenceClassID({io.clsid.Data1,
                                                                                           io.clsid.Data2,
                                                                                           io.clsid.Data3,
-                                                                                          io.clsid.Data4[0],
+                                                                                         {io.clsid.Data4[0],
                                                                                           io.clsid.Data4[1],
                                                                                           io.clsid.Data4[2],
                                                                                           io.clsid.Data4[3],
                                                                                           io.clsid.Data4[4],
                                                                                           io.clsid.Data4[5],
                                                                                           io.clsid.Data4[6],
-                                                                                          io.clsid.Data4[7] );
+                                                                                          io.clsid.Data4[7]}});
 
         aClassID = GetRelatedInternalID_Impl( aClassID );
 
