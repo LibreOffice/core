@@ -61,7 +61,8 @@ enum DM_NIR {
 template<typename T, typename Ifc> HRESULT
 createInstance(REFIID iid, Ifc ** ppIfc)
 {
-    return CComCreator< CComObject<T> >::CreateInstance(0, iid, reinterpret_cast<void**>(ppIfc));
+    return
+        CComCreator< CComObject<T> >::CreateInstance(nullptr, iid, reinterpret_cast<void**>(ppIfc));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
