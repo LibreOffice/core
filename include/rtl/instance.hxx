@@ -275,7 +275,7 @@ public:
     static Inst * create(InstCtor aInstCtor, GuardCtor aGuardCtor)
     {
 #if defined _MSC_VER
-        static Inst * m_pInstance = 0;
+        static Inst * m_pInstance = NULL;
 #endif // _MSC_VER
         Inst * p = m_pInstance;
         if (!p)
@@ -300,7 +300,7 @@ public:
                                 DataCtor aDataCtor)
     {
 #if defined _MSC_VER
-        static Inst * m_pInstance = 0;
+        static Inst * m_pInstance = NULL;
 #endif // _MSC_VER
         Inst * p = m_pInstance;
         if (!p)
