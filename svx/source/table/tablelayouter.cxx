@@ -766,6 +766,11 @@ void TableLayouter::LayoutTableHeight( tools::Rectangle& rArea, bool bFit )
                 }
                 else
                 {
+                    // WARNING: tdf#144092 / tdf#139511 suggest this entire section is invalid.
+                    // Empty cells should not be ignored in regards to row height,
+                    // especially MS formats, despite this code being added to import MS files...
+                    // The problem is getMinimumHeight can give wrong values for empty cells.
+
                     bool bCellHasText = xCell->hasText();
                     bool bCellInEditMode = xCell->IsTextEditActive();
 
