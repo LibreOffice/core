@@ -21,6 +21,7 @@
 #include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <servicenames.hxx>
+#include <DataSource.hxx>
 #include <DataSourceHelper.hxx>
 #include <ChartModelHelper.hxx>
 #include <DisposeHelper.hxx>
@@ -1246,8 +1247,7 @@ void SAL_CALL ChartModel::setParent( const Reference< uno::XInterface >& Parent 
 // ____ XDataSource ____
 uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartModel::getDataSequences()
 {
-    Reference< chart2::data::XDataSource > xSource(
-        DataSourceHelper::getUsedData( *this ) );
+    rtl::Reference< DataSource > xSource = DataSourceHelper::getUsedData( *this );
     if( xSource.is())
         return xSource->getDataSequences();
 
