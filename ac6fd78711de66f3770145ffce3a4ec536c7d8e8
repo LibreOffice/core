@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55c42c3c_20141c77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-08T21:24:34Z",
+      "side": 1,
+      "message": "Perhaps I have missed it but I don\u0027t see your license statement in https://lists.freedesktop.org/archives/libreoffice/2022-February/thread.html or in January, unless you did it before? (see https://wiki.documentfoundation.org/Development/GetInvolved#License_statement).",
+      "revId": "ac6fd78711de66f3770145ffce3a4ec536c7d8e8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
