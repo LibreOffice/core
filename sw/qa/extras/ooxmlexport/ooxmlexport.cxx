@@ -39,14 +39,6 @@ public:
 
 protected:
     /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
-    }
-
-    /**
      * Validation handling
      */
     bool mustValidate(const char* filename) const override
@@ -87,8 +79,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFooterBodyDistance)
 // Check for correct header/footer with special first page with TOC inside:
 // - DECLARE_ODFEXPORT_TEST(testTdf118393, "tdf118393.odt")
 // - DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
-DECLARE_OOXMLEXPORT_TEST(testTdf118393, "tdf118393.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf118393)
 {
+    loadAndReload("tdf118393.odt");
     CPPUNIT_ASSERT_EQUAL( 7, getPages() );
 
     // First page has no header/footer
@@ -219,8 +212,9 @@ DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Even page footer 2"),  parseDump("/root/page[6]/footer/txt/text()"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFirstHeaderFooterB, "first-header-footerB.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFirstHeaderFooterB)
 {
+    loadAndReload("first-header-footerB.odt");
     CPPUNIT_ASSERT_EQUAL( 6, getPages() );
 
     CPPUNIT_ASSERT_EQUAL(OUString("First page header"),  parseDump("/root/page[1]/header/txt/text()"));
@@ -407,8 +401,9 @@ DECLARE_OOXMLEXPORT_TEST(testNumberingFont, "numbering-font.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Verdana"), sOverrideFontName);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf106541_noinheritChapterNumbering, "tdf106541_noinheritChapterNumbering.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106541_noinheritChapterNumbering)
 {
+    loadAndReload("tdf106541_noinheritChapterNumbering.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // in LO, it appears that styles based on the Chapter Numbering style explicitly set the
     // numbering style/outline level to 0 by default, and that LO prevents inheriting directly from "Outline" style.
@@ -872,8 +867,9 @@ DECLARE_OOXMLEXPORT_TEST(testEffectExtentMargin, "effectextent-margin.docx")
     CPPUNIT_ASSERT_EQUAL(oox::drawingml::convertEmuToHmm(114300+95250), getProperty<sal_Int32>(getShape(1), "LeftMargin"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf88583, "tdf88583.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf88583)
 {
+    loadAndReload("tdf88583.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, getProperty<drawing::FillStyle>(getParagraph(1), "FillStyle"));
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x00cc00), getProperty<sal_Int32>(getParagraph(1), "FillColor"));
