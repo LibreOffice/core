@@ -436,7 +436,7 @@ void SvxBorderLine::GuessLinesWidths( SvxBorderLineStyle nStyle, sal_uInt16 nOut
             SvxBorderLineStyle::THICKTHIN_LARGEGAP
         };
 
-        static size_t const len = SAL_N_ELEMENTS(aDoubleStyles);
+        static size_t const len = std::size(aDoubleStyles);
         tools::Long nWidth = 0;
         SvxBorderLineStyle nTestStyle(SvxBorderLineStyle::NONE);
         for (size_t i = 0; i < len && nWidth == 0; ++i)
@@ -644,7 +644,7 @@ OUString SvxBorderLine::GetValueString(MapUnit eSrcUnit,
     };
     OUString aStr = "(" + ::GetColorString( aColor ) + cpDelim;
 
-    if ( static_cast<int>(m_nStyle) < int(SAL_N_ELEMENTS(aStyleIds)) )
+    if ( static_cast<int>(m_nStyle) < static_cast<int>(std::size(aStyleIds)) )
     {
         TranslateId pResId = aStyleIds[static_cast<int>(m_nStyle)];
         aStr += EditResId(pResId);
