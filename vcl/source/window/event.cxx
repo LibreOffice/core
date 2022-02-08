@@ -111,7 +111,8 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
     // check for docking window
     // but do nothing if window is docked and locked
     ImplDockingWindowWrapper *pWrapper = ImplGetDockingManager()->GetDockingWindowWrapper( this );
-    if (pWrapper && ( pWrapper->IsFloatingMode() || !pWrapper->IsLocked() ))
+    if ((GetStyle() & WB_DOCKABLE) &&
+            pWrapper && ( pWrapper->IsFloatingMode() || !pWrapper->IsLocked() ))
     {
         const bool bDockingSupportCrippled = !StyleSettings::GetDockingFloatsSupported();
 
