@@ -82,29 +82,16 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::sw::access;
 
-namespace {
-
-struct SwFrameFunc
-{
-    bool operator()( const SwFrame * p1, const SwFrame * p2) const
-    {
-        return p1 < p2;
-    }
-};
-
-}
-
 class SwAccessibleContextMap_Impl
 {
 public:
     typedef const SwFrame *                                               key_type;
     typedef uno::WeakReference < XAccessible >                          mapped_type;
     typedef std::pair<const key_type,mapped_type>                       value_type;
-    typedef SwFrameFunc                                                   key_compare;
-    typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
-    typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
+    typedef std::map<key_type, mapped_type>::iterator iterator;
+    typedef std::map<key_type, mapped_type>::const_iterator const_iterator;
 private:
-    std::map <key_type,mapped_type,key_compare> maMap;
+    std::map <key_type, mapped_type> maMap;
 public:
 
 #if OSL_DEBUG_LEVEL > 0
@@ -257,18 +244,6 @@ void SwDrawModellListener_Impl::Dispose()
     mpDrawModel = nullptr;
 }
 
-namespace {
-
-struct SwShapeFunc
-{
-    bool operator()( const SdrObject * p1, const SdrObject * p2) const
-    {
-        return p1 < p2;
-    }
-};
-
-}
-
 typedef std::pair < const SdrObject *, ::rtl::Reference < ::accessibility::AccessibleShape > > SwAccessibleObjShape_Impl;
 
 class SwAccessibleShapeMap_Impl
@@ -278,14 +253,13 @@ public:
     typedef const SdrObject *                                           key_type;
     typedef uno::WeakReference<XAccessible>                             mapped_type;
     typedef std::pair<const key_type,mapped_type>                       value_type;
-    typedef SwShapeFunc                                                 key_compare;
-    typedef std::map<key_type,mapped_type,key_compare>::iterator        iterator;
-    typedef std::map<key_type,mapped_type,key_compare>::const_iterator  const_iterator;
+    typedef std::map<key_type, mapped_type>::iterator iterator;
+    typedef std::map<key_type, mapped_type>::const_iterator const_iterator;
 
 private:
 
     ::accessibility::AccessibleShapeTreeInfo    maInfo;
-    std::map<key_type,mapped_type,SwShapeFunc>  maMap;
+    std::map<key_type, mapped_type> maMap;
 
 public:
 
