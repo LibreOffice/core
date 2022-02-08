@@ -21,7 +21,6 @@
 
 #include <tools/toolsdllapi.h>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <o3tl/cow_wrapper.hxx>
 
 struct SAL_WARN_UNUSED SvGUID
 {
@@ -31,39 +30,13 @@ struct SAL_WARN_UNUSED SvGUID
     sal_uInt8  Data4[8];
 };
 
-struct SAL_WARN_UNUSED ImpSvGlobalName
-{
-    struct SvGUID   szData = {};
-
-    ImpSvGlobalName(const SvGUID &rData)
-        : szData(rData)
-    {
-    }
-    ImpSvGlobalName(sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
-              sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
-              sal_uInt8 b12, sal_uInt8 b13, sal_uInt8 b14, sal_uInt8 b15);
-    ImpSvGlobalName( const ImpSvGlobalName & rObj );
-    ImpSvGlobalName() = default;
-
-    bool        operator == ( const ImpSvGlobalName & rObj ) const;
-};
-
 class SvStream;
 
 class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SvGlobalName
 {
-    ::o3tl::cow_wrapper< ImpSvGlobalName > pImp;
-
 public:
-    SvGlobalName();
-    SvGlobalName( const SvGlobalName & rObj ) :
-        pImp( rObj.pImp )
-    {
-    }
-    SvGlobalName( SvGlobalName && rObj ) noexcept :
-        pImp( std::move(rObj.pImp) )
-    {
-    }
+    SvGlobalName() = default;
+    SvGlobalName(const SvGlobalName& rObj) = default;
 
     SvGlobalName( sal_uInt32 n1, sal_uInt16 n2, sal_uInt16 n3,
                   sal_uInt8 b8, sal_uInt8 b9, sal_uInt8 b10, sal_uInt8 b11,
@@ -74,9 +47,7 @@ public:
 
     SvGlobalName( const SvGUID & rId );
 
-    SvGlobalName & operator = ( const SvGlobalName & rObj );
-    SvGlobalName & operator = ( SvGlobalName && rObj ) noexcept;
-    ~SvGlobalName();
+    SvGlobalName & operator = ( const SvGlobalName & rObj ) = default;
 
     TOOLS_DLLPUBLIC friend SvStream & operator >> ( SvStream &, SvGlobalName & );
     TOOLS_DLLPUBLIC friend SvStream & WriteSvGlobalName( SvStream &, const SvGlobalName & );
@@ -91,11 +62,14 @@ public:
     bool          MakeId( const OUString & rId );
     OUString      GetHexName() const;
 
-    const SvGUID& GetCLSID() const { return pImp->szData; }
+    const SvGUID& GetCLSID() const { return m_aData; }
 
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
     css::uno::Sequence < sal_Int8 > GetByteSequence() const;
+
+private:
+    SvGUID m_aData = {};
 };
 
 #endif
