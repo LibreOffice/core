@@ -1009,10 +1009,12 @@ void SwHTMLWriter::writeFrameFormatOptions(HtmlWriter& aHtml, const SwFrameForma
     // Insert wrap for graphics that are anchored to a paragraph as
     // <BR CLEAR=...> in the string
 
-    if( !((nFrameOptions & HtmlFrmOpts::BrClear) &&
-        ((RndStdIds::FLY_AT_PARA == rFrameFormat.GetAnchor().GetAnchorId()) ||
-         (RndStdIds::FLY_AT_CHAR == rFrameFormat.GetAnchor().GetAnchorId())) &&
-        SfxItemState::SET == rItemSet.GetItemState( RES_SURROUND, true, &pItem )))
+    if( !(nFrameOptions & HtmlFrmOpts::BrClear) )
+        return;
+    RndStdIds nAnchorId = rFrameFormat.GetAnchor().GetAnchorId();
+    if (RndStdIds::FLY_AT_PARA != nAnchorId && RndStdIds::FLY_AT_CHAR != nAnchorId)
+        return;
+    if( SfxItemState::SET != rItemSet.GetItemState( RES_SURROUND, true, &pItem ) )
         return;
 
     const char* pSurroundString = nullptr;
