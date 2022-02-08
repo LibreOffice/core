@@ -16,6 +16,24 @@
       "message": "Stephan, you mentioned that we use that -Wno-missing-braces for clang-on-Windows case. Would this help to remove that?\n\nIt looks that there\u0027s a false [loplugin:redundantfcast]:\nhttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/107534/consoleFull#-830141182a810015-1db5-427c-9ce2-83b5f06a5284",
       "revId": "18849d61c6f2e6053c7133846aefdf2d083fa61e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db3b55d1_8f7040f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-08T13:39:19Z",
+      "side": 1,
+      "message": "\u003e Stephan, you mentioned that we use that -Wno-missing-braces for clang-on-Windows case. Would this help to remove that?\n\nI\u0027ll give this change a try with my clang-cl build, but I suspect that I globally set -Wno-missing-braces there (in line with what we do for Clang and GCC on non-Windows) because it caused hard-to-fix or otherwise annoying warnings beyond what is addressed by this change.  (In which case doing this change, and hunting down the loplugin:redundantfcast, might be kind of moot.)",
+      "parentUuid": "ded532d6_2adcd410",
+      "revId": "18849d61c6f2e6053c7133846aefdf2d083fa61e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
