@@ -16,6 +16,52 @@
       "message": "I squashed the changes of https://gerrit.libreoffice.org/c/core/+/129178 into this one and did the modifications lined out in the comments here.\n\nPlease check whether the LC_INDEX section is what is really wanted, i.e. the IndexKey sort order and the two FollowPageWord elements.\n",
       "revId": "3ba922bd7ffb12106462d0826bff293a81d974dc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3ba9bda_f57f90ec",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:41:44Z",
+      "side": 1,
+      "message": "Check sort order.",
+      "range": {
+        "startLine": 205,
+        "startChar": 67,
+        "endLine": 205,
+        "endChar": 80
+      },
+      "revId": "3ba922bd7ffb12106462d0826bff293a81d974dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "531ee36b_e18503f0",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-08T23:41:44Z",
+      "side": 1,
+      "message": "And the\nPage ... \"and the following page\"\nPage ... \"and the following pages\"\nabbreviations.",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 4
+      },
+      "revId": "3ba922bd7ffb12106462d0826bff293a81d974dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
