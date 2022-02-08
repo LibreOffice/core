@@ -7033,13 +7033,23 @@ void DomainMapper_Impl::PopFieldContext()
                             // End of index is the first item on a new paragraph - this paragraph
                             // should not be part of index
                             auto xCursor
-                                = xTextAppend->createTextCursorByRange(xTextAppend->getEnd());
-                            xCursor->gotoEnd(false);
+                                = xTextAppend->createTextCursorByRange(
+                                    m_aTextAppendStack.top().xInsertPosition.is()
+                                    ? m_aTextAppendStack.top().xInsertPosition
+                                    : xTextAppend->getEnd());
                             xCursor->goLeft(1, true);
                             // delete
                             xCursor->setString(OUString());
                             // But a new paragraph should be started after the index instead
-                            xTextAppend->finishParagraph(css::beans::PropertyValues());
+                            if (m_bIsNewDoc) // this check - see testTdf129402
+                            {   // where finishParagraph inserts between 2 EndNode
+                                xTextAppend->finishParagraph(css::beans::PropertyValues());
+                            }
+                            else
+                            {
+                                xTextAppend->finishParagraphInsert(css::beans::PropertyValues(),
+                                    m_aTextAppendStack.top().xInsertPosition);
+                            }
                         }
                         m_bStartedTOC = false;
                         m_aTextAppendStack.pop();
