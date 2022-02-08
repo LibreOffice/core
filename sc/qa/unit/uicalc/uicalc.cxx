@@ -74,10 +74,16 @@ void ScUiCalcTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-static void lcl_AssertCurrentCursorPosition(SCCOL nCol, SCROW nRow)
+static void lcl_AssertCurrentCursorPosition(const ScDocument& rDoc, const OUString& rStr)
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(nCol), ScDocShell::GetViewData()->GetCurX());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(nRow), ScDocShell::GetViewData()->GetCurY());
+    ScAddress aAddr;
+    sal_Int32 nOffset = 0;
+    ScRangeStringConverter::GetAddressFromString(aAddr, rStr, rDoc,
+                                                 formula::FormulaGrammar::CONV_OOO, nOffset);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Incorrect Column in position " + rStr).toUtf8().getStr(),
+                                 aAddr.Col(), ScDocShell::GetViewData()->GetCurX());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(OUString("Incorrect Row in position " + rStr).toUtf8().getStr(),
+                                 aAddr.Row(), ScDocShell::GetViewData()->GetCurY());
 }
 
 static void lcl_SelectObjectByName(std::u16string_view rObjName)
@@ -577,7 +583,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf140151)
     Scheduler::ProcessEventsToIdle();
 
     // Without the fix in place, the current cursor position wouldn't have changed
-    lcl_AssertCurrentCursorPosition(1, 110);
+    lcl_AssertCurrentCursorPosition(*pDoc, "B111");
 #endif
 }
 
@@ -587,17 +593,17 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    const std::vector<SCROW> aExpectedRows{ 2, 5, 8, 9, 10, 12, 14 };
+    const std::vector<OUString> aExpectedAddresses{ "L3", "L6", "L9", "L10", "L11", "L13", "L15" };
 
-    for (const auto& rRow : aExpectedRows)
+    for (const auto& rAddress : aExpectedAddresses)
     {
-        lcl_AssertCurrentCursorPosition(11, rRow);
+        lcl_AssertCurrentCursorPosition(*pDoc, rAddress);
 
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
         Scheduler::ProcessEventsToIdle();
     }
 
-    lcl_AssertCurrentCursorPosition(12, 2);
+    lcl_AssertCurrentCursorPosition(*pDoc, "M3");
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
@@ -607,17 +613,17 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
     CPPUNIT_ASSERT(pDoc);
 
     //Start with from C6. Press tabulator to reach G6.
-    lcl_AssertCurrentCursorPosition(2, 5);
+    lcl_AssertCurrentCursorPosition(*pDoc, "C6");
 
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_TAB);
     Scheduler::ProcessEventsToIdle();
-    lcl_AssertCurrentCursorPosition(6, 5);
+    lcl_AssertCurrentCursorPosition(*pDoc, "G6");
 
     //without the fix, cursor would jump to C29 instead of C7.
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
-    lcl_AssertCurrentCursorPosition(2, 6);
+    lcl_AssertCurrentCursorPosition(*pDoc, "C7");
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
@@ -626,9 +632,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    std::vector<ScAddress> aExpectedAddresses{ ScAddress(5, 2, 0), ScAddress(3, 4, 0),
-                                               ScAddress(4, 4, 0), ScAddress(5, 5, 0),
-                                               ScAddress(0, 7, 0), ScAddress(4, 8, 0) };
+    std::vector<OUString> aExpectedAddresses{ "F3", "D5", "E5", "F6", "A8", "E9" };
 
     for (const auto& rAddress : aExpectedAddresses)
     {
@@ -636,12 +640,12 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
         Scheduler::ProcessEventsToIdle();
 
-        lcl_AssertCurrentCursorPosition(rAddress.Col(), rAddress.Row());
+        lcl_AssertCurrentCursorPosition(*pDoc, rAddress);
     }
 
     aExpectedAddresses.pop_back();
 
-    for (std::vector<ScAddress>::reverse_iterator it = aExpectedAddresses.rbegin();
+    for (std::vector<OUString>::reverse_iterator it = aExpectedAddresses.rbegin();
          it != aExpectedAddresses.rend(); ++it)
     {
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | awt::Key::TAB);
@@ -649,7 +653,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf123052)
         Scheduler::ProcessEventsToIdle();
 
         // Without the fix in place, this test would have failed here
-        lcl_AssertCurrentCursorPosition((*it).Col(), (*it).Row());
+        lcl_AssertCurrentCursorPosition(*pDoc, *it);
     }
 }
 
@@ -716,7 +720,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
     CPPUNIT_ASSERT(pDoc);
 
     goToCell("B3");
-    lcl_AssertCurrentCursorPosition(1, 2);
+    lcl_AssertCurrentCursorPosition(*pDoc, "B3");
 
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
@@ -724,7 +728,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_AssertCurrentCursorPosition(3, 2);
+    lcl_AssertCurrentCursorPosition(*pDoc, "D3");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
@@ -763,7 +767,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
 
     dispatchCommand(mxComponent, ".uno:GoDown", {});
     dispatchCommand(mxComponent, ".uno:GoDown", {});
-    lcl_AssertCurrentCursorPosition(0, 2);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A3");
 
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
     Scheduler::ProcessEventsToIdle();
@@ -811,7 +815,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testMultiRangeCol)
 
     dispatchCommand(mxComponent, ".uno:GoRight", {});
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(2, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "C1");
 
     dispatchCommand(mxComponent, ".uno:SelectColumn", {});
     Scheduler::ProcessEventsToIdle();
@@ -1001,7 +1005,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     ScInputOptions aInputOption = pMod->GetInputOptions();
     sal_uInt16 bOldStatus = aInputOption.GetMoveDir();
 
-    lcl_AssertCurrentCursorPosition(0, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A1");
 
     aInputOption.SetMoveDir(DIR_BOTTOM);
     pMod->SetInputOptions(aInputOption);
@@ -1009,7 +1013,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_AssertCurrentCursorPosition(0, 1);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A2");
 
     aInputOption.SetMoveDir(DIR_TOP);
     pMod->SetInputOptions(aInputOption);
@@ -1017,7 +1021,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_AssertCurrentCursorPosition(0, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A1");
 
     aInputOption.SetMoveDir(DIR_RIGHT);
     pMod->SetInputOptions(aInputOption);
@@ -1025,7 +1029,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_AssertCurrentCursorPosition(1, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "B1");
 
     aInputOption.SetMoveDir(DIR_LEFT);
     pMod->SetInputOptions(aInputOption);
@@ -1033,7 +1037,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
 
-    lcl_AssertCurrentCursorPosition(0, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A1");
 
     // Restore previous status
     aInputOption.SetMoveDir(bOldStatus);
@@ -1260,25 +1264,25 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    lcl_AssertCurrentCursorPosition(0, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(1, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "B5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(4, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "E5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(5, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "F5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(8, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "I5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(9, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "J5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(12, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "M5");
 
     //Cursor can't move forward to the right
     for (size_t i = 0; i < 5; ++i)
     {
         dispatchCommand(mxComponent, ".uno:GoRight", {});
-        lcl_AssertCurrentCursorPosition(13, 4);
+        lcl_AssertCurrentCursorPosition(*pDoc, "N5");
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetTabNo());
@@ -1286,7 +1290,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
     dispatchCommand(mxComponent, ".uno:JumpToNextTable", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(1), ScDocShell::GetViewData()->GetTabNo());
-    lcl_AssertCurrentCursorPosition(0, 3);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A4");
 
     // Go to row 9
     for (size_t i = 0; i < 6; ++i)
@@ -1294,7 +1298,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
         dispatchCommand(mxComponent, ".uno:GoDown", {});
     }
 
-    lcl_AssertCurrentCursorPosition(0, 9);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A10");
 
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
     dispatchCommand(mxComponent, ".uno:DeleteRows", {});
@@ -1302,7 +1306,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
     dispatchCommand(mxComponent, ".uno:JumpToPrevTable", {});
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetTabNo());
-    lcl_AssertCurrentCursorPosition(13, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "N5");
 
     // Cursor can't move forward to the right
     // Without the fix in place, this test would have failed with
@@ -1311,7 +1315,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
     for (size_t i = 0; i < 5; ++i)
     {
         dispatchCommand(mxComponent, ".uno:GoRight", {});
-        lcl_AssertCurrentCursorPosition(13, 4);
+        lcl_AssertCurrentCursorPosition(*pDoc, "N5");
     }
 }
 
@@ -1321,25 +1325,25 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    lcl_AssertCurrentCursorPosition(0, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(1, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "B5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(4, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "E5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(5, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "F5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(8, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "I5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(9, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "J5");
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(12, 4);
+    lcl_AssertCurrentCursorPosition(*pDoc, "M5");
 
     //Cursor can't move forward to the right
     for (size_t i = 0; i < 5; ++i)
     {
         dispatchCommand(mxComponent, ".uno:GoRight", {});
-        lcl_AssertCurrentCursorPosition(13, 4);
+        lcl_AssertCurrentCursorPosition(*pDoc, "N5");
     }
 }
 
@@ -1353,7 +1357,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124816)
     // OFFSET() was changed as of tdf#85551 and here result of that test
     // document is now Err:502 instead of 0.
     const OUString aExpectedResult("Err:502");
-    lcl_AssertCurrentCursorPosition(3, 9);
+    lcl_AssertCurrentCursorPosition(*pDoc, "D10");
     CPPUNIT_ASSERT_EQUAL(aExpectedResult, pDoc->GetString(ScAddress(3, 9, 0)));
 
     //Without the fix, it would crash
@@ -1369,7 +1373,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124815)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    lcl_AssertCurrentCursorPosition(0, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A1");
     CPPUNIT_ASSERT_EQUAL(OUString("Rakennukset"), pDoc->GetString(ScAddress(2, 0, 0)));
 
     //Without the fix, it would crash
@@ -1437,11 +1441,11 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf83901)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    lcl_AssertCurrentCursorPosition(0, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A1");
     insertStringToCell(*pModelObj, "A2", "=ROW(A3)");
     CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 1, 0)));
 
-    lcl_AssertCurrentCursorPosition(0, 2);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A3");
     dispatchCommand(mxComponent, ".uno:SelectRow", {});
     dispatchCommand(mxComponent, ".uno:InsertRowsBefore", {});
 
@@ -1612,7 +1616,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    lcl_AssertCurrentCursorPosition(0, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "A1");
 
     // Add a new comment
     uno::Sequence<beans::PropertyValue> aArgs
@@ -1626,7 +1630,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
     dispatchCommand(mxComponent, ".uno:Copy", {});
 
     dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(1, 0);
+    lcl_AssertCurrentCursorPosition(*pDoc, "B1");
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
 
