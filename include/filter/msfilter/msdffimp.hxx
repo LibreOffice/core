@@ -228,7 +228,7 @@ struct MSFILTER_DLLPUBLIC SvxMSDffImportRec
     std::optional<sal_uInt32> nXRelTo;
     sal_uInt32      nYAlign;
     std::optional<sal_uInt32> nYRelTo;
-    sal_uInt32      nLayoutInTableCell;
+    sal_uInt32      nGroupShapeBooleanProperties;
     ShapeFlag       nFlags;
     sal_Int32       nDxTextLeft;    ///< distance of text box from surrounding shape
     sal_Int32       nDyTextTop;
