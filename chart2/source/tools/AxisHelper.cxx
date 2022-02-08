@@ -1148,7 +1148,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
     try
     {
         //reverse direction for horizontal main axis
-        Reference< chart2::XAxis > xHorizontalMainAxis( AxisHelper::getAxis( nHorizontalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
+        rtl::Reference< Axis > xHorizontalMainAxis = AxisHelper::getAxis( nHorizontalAxisDimension, MAIN_AXIS_INDEX, xCooSys );
         if( xHorizontalMainAxis.is() )
         {
             chart2::ScaleData aScale = xHorizontalMainAxis->getScaleData();
@@ -1157,7 +1157,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
         }
 
         //mathematical direction for vertical main axis
-        Reference< chart2::XAxis > xVerticalMainAxis( AxisHelper::getAxis( nVerticalAxisDimension, MAIN_AXIS_INDEX, xCooSys ) );
+        rtl::Reference< Axis > xVerticalMainAxis = AxisHelper::getAxis( nVerticalAxisDimension, MAIN_AXIS_INDEX, xCooSys );
         if( xVerticalMainAxis.is() )
         {
             chart2::ScaleData aScale = xVerticalMainAxis->getScaleData();
@@ -1173,7 +1173,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
     try
     {
         //reverse direction for horizontal secondary axis
-        Reference< chart2::XAxis > xHorizontalSecondaryAxis( AxisHelper::getAxis( nHorizontalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
+        rtl::Reference< Axis > xHorizontalSecondaryAxis = AxisHelper::getAxis( nHorizontalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys );
         if( xHorizontalSecondaryAxis.is() )
         {
             chart2::ScaleData aScale = xHorizontalSecondaryAxis->getScaleData();
@@ -1182,7 +1182,7 @@ void AxisHelper::setRTLAxisLayout( const rtl::Reference< BaseCoordinateSystem >&
         }
 
         //mathematical direction for vertical secondary axis
-        Reference< chart2::XAxis > xVerticalSecondaryAxis( AxisHelper::getAxis( nVerticalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys ) );
+        rtl::Reference< Axis > xVerticalSecondaryAxis = AxisHelper::getAxis( nVerticalAxisDimension, SECONDARY_AXIS_INDEX, xCooSys );
         if( xVerticalSecondaryAxis.is() )
         {
             chart2::ScaleData aScale = xVerticalSecondaryAxis->getScaleData();

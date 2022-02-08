@@ -291,7 +291,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
                      rItemSet.Get( nWhichId )).GetValue();
             if( m_xCooSys.is() )
             {
-                uno::Reference< chart2::XAxis > xAxis( AxisHelper::getAxis( 1, 0, m_xCooSys ) );
+                rtl::Reference< Axis > xAxis = AxisHelper::getAxis( 1, 0, m_xCooSys );
                 if( xAxis.is() )
                 {
                     chart2::ScaleData aScaleData( xAxis->getScaleData() );
