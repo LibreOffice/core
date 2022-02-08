@@ -16,6 +16,24 @@
       "message": "Why only strict equality is considered? Is it guaranteed that only values in tools::Long range are passed here? (and by the way, does it account for our strange treatment of tools::Long on Windows 32-bit?)",
       "revId": "dcd9e98383c767bbb6014c6ca5fe786579eda08f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56cda7dd_7fad3bb2",
+        "filename": "include/tools/helpers.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-08T07:33:47Z",
+      "side": 1,
+      "message": "\u003e Why only strict equality is considered? Is it guaranteed that only values in tools::Long range are passed here? (and by the way, does it account for our strange treatment of tools::Long on Windows 32-bit?)\n\nI probably should have been more verbose in the commit message.  What this change ensures is that round-tripping std::numeric_limits\u003ctools::Long\u003e::max() to double (via an implicit cast, or whatever) and back to tools::Long (via this FRound) works \"as expected\", and doesn\u0027t cause UB.  (And same for std::numeric_limits\u003ctools::Long\u003e::min().)  This is irrespective of whether tools::Long is 64-bit (where this fix is relevant) or 32-bit (where this fix happens not to be relevant, but harmless).  Also, it doesn\u0027t change in any way the behavior that trying to convert via FRound any double values that are clearly outside the tools::Long range causes UB.",
+      "parentUuid": "947c0263_386cb64b",
+      "revId": "dcd9e98383c767bbb6014c6ca5fe786579eda08f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
