@@ -162,7 +162,8 @@ bool Window::EventNotify( NotifyEvent& rNEvt )
         {
             const vcl::KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
             if (rKey.GetCode() == KEY_F10 && rKey.GetModifier() &&
-                rKey.IsShift() && rKey.IsMod1() && !bDockingSupportCrippled)
+                    rKey.IsShift() && rKey.IsMod1() && !bDockingSupportCrippled &&
+                    GetStyle() & WB_DOCKABLE)
             {
                 pWrapper->SetFloatingMode( !pWrapper->IsFloatingMode() );
                 /* At this point the floating toolbar frame does not have the

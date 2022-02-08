@@ -174,6 +174,8 @@ InterimToolbarPopup::InterimToolbarPopup(const css::uno::Reference<css::frame::X
     , m_xContainer(m_xBuilder->weld_container("container"))
     , m_xPopup(std::move(xPopup))
 {
+    SetStyle(GetStyle() & ~WB_DOCKABLE);
+
     if (SystemWindow* pWindow = GetTopMostParentSystemWindow(*this))
         pWindow->GetTaskPaneList()->AddWindow(this);
 
