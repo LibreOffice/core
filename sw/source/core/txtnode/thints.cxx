@@ -803,7 +803,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                     // the new character format:
                     OSL_ENSURE( RES_TXTATR_AUTOFMT == rpHint->Which(), "AUTOSTYLES - Misc trouble" );
                     SwTextAttr* pOther = rpHint;
-                    std::shared_ptr<SfxItemSet> pOldStyle = static_cast<const SwFormatAutoFormat&>(pOther->GetAttr()).GetStyleHandle();
+                    const std::shared_ptr<SfxItemSet> & pOldStyle = static_cast<const SwFormatAutoFormat&>(pOther->GetAttr()).GetStyleHandle();
 
                     // For each attribute in the automatic style check if it
                     // is also set the new character style:
@@ -868,7 +868,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
             std::shared_ptr<SfxItemSet> pNewStyle = static_cast<const SwFormatAutoFormat&>(rNewHint.GetAttr()).GetStyleHandle();
             if ( pCurrentAutoStyle )
             {
-                std::shared_ptr<SfxItemSet> pCurrentStyle = static_cast<const SwFormatAutoFormat&>(pCurrentAutoStyle->GetAttr()).GetStyleHandle();
+                const std::shared_ptr<SfxItemSet> & pCurrentStyle = static_cast<const SwFormatAutoFormat&>(pCurrentAutoStyle->GetAttr()).GetStyleHandle();
 
                 // Merge attributes
                 SfxItemSet aNewSet( *pCurrentStyle );
@@ -1038,7 +1038,7 @@ SwTextAttr* MakeTextAttr(
     {
         // If the attribute is an auto-style which refers to a pool that is
         // different from rDoc's pool, we have to correct this:
-        const std::shared_ptr<SfxItemSet> pAutoStyle = static_cast<const SwFormatAutoFormat&>(rAttr).GetStyleHandle();
+        const std::shared_ptr<SfxItemSet> & pAutoStyle = static_cast<const SwFormatAutoFormat&>(rAttr).GetStyleHandle();
         SfxItemSet aNewSet =
                 pAutoStyle->SfxItemSet::CloneAsValue( true, &rDoc.GetAttrPool() );
         SwTextAttr* pNew = MakeTextAttr( rDoc, aNewSet, nStt, nEnd );
@@ -1881,7 +1881,7 @@ bool SwTextNode::SetAttr(
             const bool bAutoStyle = SfxItemState::SET == aTextSet.GetItemState( RES_TXTATR_AUTOFMT, false, &pItem );
             if ( bAutoStyle )
             {
-                std::shared_ptr<SfxItemSet> pAutoStyleSet = static_cast<const SwFormatAutoFormat*>(pItem)->GetStyleHandle();
+                const std::shared_ptr<SfxItemSet> & pAutoStyleSet = static_cast<const SwFormatAutoFormat*>(pItem)->GetStyleHandle();
                 const bool bRet = SetAttr( *pAutoStyleSet );
                 if( 1 == aTextSet.Count() )
                     return bRet;
@@ -2665,7 +2665,7 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
         // check for RSID-only AUTOFMT
         if (RES_TXTATR_AUTOFMT == pHt->Which())
         {
-            std::shared_ptr<SfxItemSet> const pSet(
+            std::shared_ptr<SfxItemSet> const & pSet(
                     pHt->GetAutoFormat().GetStyleHandle());
             if ((pSet->Count() == 1) && pSet->GetItem(RES_CHRATR_RSID, false))
             {
@@ -2984,7 +2984,7 @@ bool SwpHints::TryInsertHint(
     // #i75430# Recalc hidden flags if necessary
     case RES_TXTATR_AUTOFMT:
     {
-        std::shared_ptr<SfxItemSet> const pSet( pHint->GetAutoFormat().GetStyleHandle() );
+        std::shared_ptr<SfxItemSet> const & pSet( pHint->GetAutoFormat().GetStyleHandle() );
         if (pHint->GetStart() == *pHint->GetEnd())
         {
             if (pSet->Count() == 1 && pSet->GetItem(RES_CHRATR_RSID, false))
