@@ -95,23 +95,37 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 
 // XServiceInfo methods.
 
-OUString
-ContentProvider::getImplementationName()
+XSERVICEINFO_COMMOM_IMPL( ContentProvider,
+                          "com.sun.star.comp.WebDAVContentProvider" )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface >
+ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
 {
-    return "com.sun.star.comp.WebDAVContentProvider";
+    css::lang::XServiceInfo* pX = new ContentProvider( ucbhelper::getComponentContext(rSMgr) );
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
 }
 
 css::uno::Sequence< OUString >
-ContentProvider::getSupportedServiceNames()
+ContentProvider::getSupportedServiceNames_Static()
 {
-    return { WEBDAV_CONTENT_PROVIDER_SERVICE_NAME };
+    css::uno::Sequence< OUString > aSNS { WEBDAV_CONTENT_PROVIDER_SERVICE_NAME };
+    return aSNS;
 }
 
-sal_Bool
-ContentProvider::supportsService(const OUString& s)
+// Service factory implementation.
+
+
+css::uno::Reference< css::lang::XSingleServiceFactory >
+ContentProvider::createServiceFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& rxServiceMgr )
 {
-    return cppu::supportsService(this, s);
+    return cppu::createOneInstanceFactory(
+                rxServiceMgr,
+                ContentProvider::getImplementationName_Static(),
+                ContentProvider_CreateInstance,
+                ContentProvider::getSupportedServiceNames_Static() );
 }
+
+
 
 // XContentProvider methods.
 
@@ -177,13 +191,6 @@ ContentProvider::queryContent(
         throw ucb::IllegalIdentifierException();
 
     return xContent;
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-ucb_webdav_neon_ContentProvider_get_implementation(
-    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new ContentProvider(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
