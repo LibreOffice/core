@@ -686,7 +686,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
     SwTransferable::PasteFormat(*pWrtShell, helper, SotClipboardFormatId::RTF);
     Scheduler::ProcessEventsToIdle();
 
-    // check hyperlinkering
+    // check hyperlinking
     CPPUNIT_ASSERT_EQUAL(
         headingLink, getProperty<OUString>(getRun(getParagraph(1), 1, "abc\t1"), "HyperLinkURL"));
     CPPUNIT_ASSERT_EQUAL(
