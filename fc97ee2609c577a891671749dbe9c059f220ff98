@@ -16,6 +16,24 @@
       "message": "this will need corresponding changes at\n   ScXMLImport::SetStatistics\n   SfxDocumentMetaData::getDocumentStatistics()\n   SvXMLMetaExport::MExport_  (line 259)",
       "revId": "fc97ee2609c577a891671749dbe9c059f220ff98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acebac08_5ef047ae",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-09T11:15:29Z",
+      "side": 1,
+      "message": "Yeah, I\u0027ll change this, but I bet there are more places that still need changing, I just changed what I saw when checking for sal_uLong.",
+      "parentUuid": "f4d1e87c_abd2e967",
+      "revId": "fc97ee2609c577a891671749dbe9c059f220ff98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
