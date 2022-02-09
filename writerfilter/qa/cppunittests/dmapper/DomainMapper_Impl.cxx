@@ -277,7 +277,7 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     xParaEnum->nextElement();
     // Without the accompanying fix in place, this test would have failed, as the paste result was a
-    // single paragaph, containing the OLE object, and the content after the OLE object was lost.
+    // single paragraph, containing the OLE object, and the content after the OLE object was lost.
     CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
     xParaEnum->nextElement();
     CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
