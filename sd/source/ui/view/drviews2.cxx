@@ -81,6 +81,7 @@
 #include <svx/svxids.hrc>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/chrtitem.hxx>
@@ -965,7 +966,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             const SfxItemSet* pArgs = rReq.GetArgs();
 
             const SfxUInt16Item* pScale = (pArgs && pArgs->Count () == 1) ?
-                rReq.GetArg<SfxUInt16Item>(SID_ATTR_ZOOMSLIDER) : nullptr;
+                rReq.GetArg(SID_ATTR_ZOOMSLIDER) : nullptr;
             if (pScale && CHECK_RANGE (5, pScale->GetValue (), 3000))
             {
                 SetZoom (pScale->GetValue ());
@@ -3533,7 +3534,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             OUString sAdditionsTag = "";
 
-            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(SID_ADDITIONS_TAG);
+            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
             if (pStringArg)
                 sAdditionsTag = pStringArg->GetValue();
 

@@ -35,6 +35,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svl/urlbmk.hxx>
+#include <svx/clipfmtitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdundo.hxx>

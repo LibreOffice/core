@@ -83,10 +83,15 @@ public:
     */
     template<class T> const T* GetArg(sal_uInt16 nSlotId) const
     {
-        if (pArgs)
-            return pArgs->GetItem<T>(nSlotId, false);
-
-        return nullptr;
+        if (!pArgs)
+            return nullptr;
+        return pArgs->GetItem<T>(nSlotId, false);
+    }
+    template<class T> const T* GetArg(TypedWhichId<T> nSlotId) const
+    {
+        if (!pArgs)
+            return nullptr;
+        return pArgs->GetItem(nSlotId, false);
     }
 
     void                ReleaseArgs();

@@ -542,7 +542,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         {
             // replace word/selection with text from selected sub menu entry
             OUString aReplaceText;
-            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(SID_THES);
+            const SfxStringItem* pItem2 = rReq.GetArg(FN_PARAM_THES_WORD_REPLACE);
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())
@@ -1716,7 +1716,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             {
                 // set word and locale to look up as status value
                 OUString aStatusVal = aText + "#" + aLanguageTag.getBcp47();
-                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+                rSet.Put( SfxStringItem( FN_PARAM_THES_WORD_REPLACE, aStatusVal ) );
             }
         }
         break;

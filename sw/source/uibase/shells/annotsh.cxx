@@ -1283,7 +1283,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         case SID_THES:
         {
             OUString aReplaceText;
-            const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(SID_THES);
+            const SfxStringItem* pItem2 = rReq.GetArg(FN_PARAM_THES_WORD_REPLACE);
             if (pItem2)
                 aReplaceText = pItem2->GetValue();
             if (!aReplaceText.isEmpty())
@@ -1400,7 +1400,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 OUString        aStatusVal;
                 LanguageType    nLang = LANGUAGE_NONE;
                 bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
-                rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+                rSet.Put( SfxStringItem( FN_PARAM_THES_WORD_REPLACE, aStatusVal ) );
 
                 // disable "Thesaurus" context menu entry if there is nothing to look up
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );

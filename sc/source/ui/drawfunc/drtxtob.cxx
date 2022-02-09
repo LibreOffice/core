@@ -342,7 +342,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
         case SID_THES:
             {
                 OUString aReplaceText;
-                const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(SID_THES);
+                const SfxStringItem* pItem2 = rReq.GetArg(FN_PARAM_THES_WORD_REPLACE);
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
                 if (!aReplaceText.isEmpty())
@@ -454,7 +454,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
             EditView& rEditView = pOutView->GetEditView();
             bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, rEditView );
         }
-        rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+        rSet.Put( SfxStringItem( FN_PARAM_THES_WORD_REPLACE, aStatusVal ) );
 
         // disable thesaurus main menu and context menu entry if there is nothing to look up
         bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
