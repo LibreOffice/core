@@ -33,6 +33,23 @@
       "message": "We should merge it 😋",
       "revId": "d01ff52375072ab3ba88319e5d37346d7aeca4a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da5228d9_08a0181d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-09T06:12:55Z",
+      "side": 1,
+      "message": "You don\u0027t have permission?",
+      "revId": "d01ff52375072ab3ba88319e5d37346d7aeca4a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
