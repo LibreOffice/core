@@ -207,6 +207,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/address \
     sc/source/core/tool/adiasync \
     sc/source/core/tool/appoptio \
+    sc/source/core/tool/arraysumSSE2 \
     sc/source/core/tool/autoform \
     sc/source/core/tool/calcconfig \
     sc/source/core/tool/callform \
@@ -680,18 +681,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/viewutil \
     sc/source/ui/view/waitoff \
     sc/source/ui/xmlsource/xmlsourcedlg \
-))
-
-$(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumAVX512, $(CXXFLAGS_INTRINSICS_AVX512F) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumAVX, $(CXXFLAGS_INTRINSICS_AVX) \
-))
-
-$(eval $(call gb_Library_add_exception_objects,sc,\
-    sc/source/core/tool/arraysumSSE2, $(CXXFLAGS_INTRINSICS_SSE2) \
 ))
 
 ifeq ($(ENABLE_FORMULA_LOGGER),TRUE)

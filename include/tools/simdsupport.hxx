@@ -8,6 +8,16 @@
  *
  */
 
+// IMPORTANT: Having CPU-specific routines turned out to be a maintenance
+// problem, because of various problems such as compilers moving CPU-specific
+// code out of #ifdef code into static initialization or our code using C++
+// features that caused the compiler to emit code that used CPU-specific
+// instructions (even cpuid.hxx isn't safe, see the comment there).
+// The only safe usage is using CPU-specific code that's always available,
+// such as SSE2-specific code for x86_64. Do not use for anything else
+// unless you really know what you are doing (and you check git history
+// to learn from past problems).
+
 // Determine the compiler support for SIMD compiler intrinsics.
 // This changes from one compiled unit to the other, depending if
 // the support has been detected and if the compiled unit contains
