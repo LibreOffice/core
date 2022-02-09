@@ -76,8 +76,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(weld::Container* pPage, weld::DialogContr
     OUString aSep = ScGlobal::getLocaleData().getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? u'.' : aSep[0];
 
-    maSavedDocOptions = static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(
-            SID_SCDOCOPTIONS)).GetDocOptions();
+    maSavedDocOptions = rCoreAttrs.Get(SID_SCDOCOPTIONS).GetDocOptions();
 }
 
 ScTpFormulaOptions::~ScTpFormulaOptions()

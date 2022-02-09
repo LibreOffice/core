@@ -520,8 +520,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                 if ( nResult == RET_OK )
                                 {
                                     const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-                                    const ScSortParam& rOutParam = static_cast<const ScSortItem&>(
-                                        pOutSet->Get( SCITEM_SORTDATA )).GetSortData();
+                                    const ScSortParam& rOutParam =
+                                        pOutSet->Get( SCITEM_SORTDATA ).GetSortData();
 
                                     // subtotal when needed new
 
@@ -545,8 +545,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pArgs )
                 {
                     OSL_FAIL("SID_FILTER with arguments?");
-                    pTabViewShell->Query( static_cast<const ScQueryItem&>(
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), nullptr, true );
+                    pTabViewShell->Query(
+                            pArgs->Get( SCITEM_QUERYDATA ).GetQueryData(), nullptr, true );
                     rReq.Done();
                 }
                 else
@@ -566,8 +566,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 if ( pArgs )
                 {
                     OSL_FAIL("SID_SPECIAL_FILTER with arguments?");
-                    pTabViewShell->Query( static_cast<const ScQueryItem&>(
-                            pArgs->Get( SCITEM_QUERYDATA )).GetQueryData(), nullptr, true );
+                    pTabViewShell->Query(
+                            pArgs->Get( SCITEM_QUERYDATA ).GetQueryData(), nullptr, true );
                     rReq.Done();
                 }
                 else

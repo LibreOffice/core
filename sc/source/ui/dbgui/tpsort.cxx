@@ -276,7 +276,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
 void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 {
     // Refresh local copy with shared data
-    aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
+    aSortData = rSet.Get( SCITEM_SORTDATA ).GetSortData();
     ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
     if (!pDlg)
         return;
@@ -706,7 +706,7 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
 void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
 {
     // Refresh local copy with shared data
-    aSortData = static_cast<const ScSortItem&>(rSet.Get( SCITEM_SORTDATA )).GetSortData();
+    aSortData = rSet.Get( SCITEM_SORTDATA ).GetSortData();
     ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
     if (!pDlg)
         return;

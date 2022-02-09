@@ -665,8 +665,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     if (rOldSet.HasItem(SID_ATTR_CHAR_GRABBAG))
     {
         // Set gutter position.
-        SfxGrabBagItem aGrabBagItem(
-                static_cast<const SfxGrabBagItem&>(rOldSet.Get(SID_ATTR_CHAR_GRABBAG)));
+        SfxGrabBagItem aGrabBagItem(rOldSet.Get(SID_ATTR_CHAR_GRABBAG));
         if (m_xGutterPositionLB->get_value_changed_from_saved())
         {
             bool bGutterAtTop = m_xGutterPositionLB->get_active() == 1;

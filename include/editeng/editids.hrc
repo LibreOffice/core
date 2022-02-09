@@ -88,7 +88,7 @@ class SvxLanguageItem;
 #define SID_ATTR_PARA_PAGENUM                           ( SID_SVX_START + 457 )
 #define SID_ATTR_PARA_NUMRULE                           ( SID_SVX_START + 587 )
 #define SID_ATTR_BRUSH_CHAR                             ( SID_SVX_START + 591 )
-#define SID_ATTR_NUMBERING_RULE                         ( SID_SVX_START + 855 )
+#define SID_ATTR_NUMBERING_RULE                         TypedWhichId<SvxNumBulletItem>( SID_SVX_START + 855 )
 #define SID_ATTR_CHAR_CHARSETCOLOR                      ( SID_SVX_START + 877 )
 #define SID_ATTR_CHAR_CJK_FONT                          ( SID_SVX_START + 887 )
 #define SID_ATTR_CHAR_CJK_FONTHEIGHT                    ( SID_SVX_START + 888 )
@@ -123,7 +123,7 @@ class SvxLanguageItem;
 #define SID_ATTR_CHAR_LATIN_LANGUAGE                    ( SID_SVX_START + 996 )
 #define SID_ATTR_CHAR_LATIN_POSTURE                     ( SID_SVX_START + 997 )
 #define SID_ATTR_CHAR_LATIN_WEIGHT                      ( SID_SVX_START + 998 )
-#define SID_ATTR_CHAR_GRABBAG                           ( SID_SVX_START + 1142 )
+#define SID_ATTR_CHAR_GRABBAG                           TypedWhichId<SfxGrabBagItem>( SID_SVX_START + 1142 )
 #define SID_ATTR_CHAR_BACK_COLOR                        ( SID_SVX_START + 1153 )
 
 // these ID didn't exist prior to the svx split, add new ids here

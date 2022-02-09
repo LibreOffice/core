@@ -133,8 +133,7 @@ bool SvxThemePage::FillItemSet(SfxItemSet* pAttrs)
     if (!rOldSet.HasItem(SID_ATTR_CHAR_GRABBAG))
         return true;
 
-    SfxGrabBagItem aGrabBagItem(
-        static_cast<const SfxGrabBagItem&>(rOldSet.Get(SID_ATTR_CHAR_GRABBAG)));
+    SfxGrabBagItem aGrabBagItem(rOldSet.Get(SID_ATTR_CHAR_GRABBAG));
 
     comphelper::SequenceAsHashMap aMap;
     auto it = aGrabBagItem.GetGrabBag().find("Theme");

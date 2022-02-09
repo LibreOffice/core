@@ -36,6 +36,7 @@ class SvxContourItem;
 class SvxCrossedOutItem;
 class SvxEmphasisMarkItem;
 class SvxEscapementItem;
+class SvxFieldItem;
 class SvxFontHeightItem;
 class SvxFontItem;
 class SvxForbiddenRuleItem;
@@ -134,7 +135,7 @@ constexpr sal_uInt16 EE_FEATURE_START   (EE_CHAR_END + 1);
 constexpr sal_uInt16 EE_FEATURE_TAB     (EE_FEATURE_START + 0);
 constexpr sal_uInt16 EE_FEATURE_LINEBR  (EE_FEATURE_TAB + 1);
 constexpr sal_uInt16 EE_FEATURE_NOTCONV (EE_FEATURE_LINEBR + 1);
-constexpr sal_uInt16 EE_FEATURE_FIELD   (EE_FEATURE_NOTCONV + 1);
+constexpr TypedWhichId<SvxFieldItem> EE_FEATURE_FIELD   (EE_FEATURE_NOTCONV + 1);
 constexpr sal_uInt16 EE_FEATURE_END     (EE_FEATURE_FIELD + 0);
 
 constexpr sal_uInt16 EE_ITEMS_END       (EE_FEATURE_END);
