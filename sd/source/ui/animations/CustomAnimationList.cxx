@@ -17,6 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/document/XActionLockable.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/presentation/ShapeAnimationSubType.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
@@ -26,7 +28,7 @@
 #include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <comphelper/scopeguard.hxx>
 #include <CustomAnimationList.hxx>
 #include <CustomAnimationPreset.hxx>
 #include <vcl/commandevent.hxx>
@@ -181,6 +183,15 @@ static OUString getDescription( const Any& rTarget, bool bWithText )
     {
         ParagraphTarget aParaTarget;
         rTarget >>= aParaTarget;
+
+        css::uno::Reference<css::document::XActionLockable> xLockable(aParaTarget.Shape, css::uno::UNO_QUERY);
+        if (xLockable.is())
+            xLockable->addActionLock();
+        comphelper::ScopeGuard aGuard([&xLockable]()
+        {
+            if (xLockable.is())
+                xLockable->removeActionLock();
+        });
 
         Reference< XEnumerationAccess > xText( aParaTarget.Shape, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xText->createEnumeration(), css::uno::UNO_SET_THROW );

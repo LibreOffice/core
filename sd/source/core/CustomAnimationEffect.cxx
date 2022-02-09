@@ -51,6 +51,7 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>

@@ -661,8 +661,9 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
     {
         // tdf#123470 if the text edit mode of the shape is active, then we
         // cannot trust a previously cached TextForwarder state as the text may
-        // be out of date, so force a refetch in that case.
-        if (IsEditMode())
+        // be out of date, so force a refetch in that case, unless locked against
+        // changes
+        if (IsEditMode() && mpTextForwarder && !mbIsLocked)
         {
             assert(!mbForwarderIsEditMode); // because without a view there is no other option except !mbForwarderIsEditMode
             bool bTextEditActive = false;
