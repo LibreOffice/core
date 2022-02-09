@@ -272,11 +272,13 @@ bool ConstVars::TraverseFunctionDecl(FunctionDecl* functionDecl)
 bool ConstVars::TraverseIfStmt(IfStmt* ifStmt)
 {
     VarDecl const* varDecl = nullptr;
-    Expr const* cond = ifStmt->getCond()->IgnoreParenImpCasts();
-    if (auto declRefExpr = dyn_cast<DeclRefExpr>(cond))
+    if (Expr const* cond = ifStmt->getCond())
     {
-        if ((varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl())))
-            insideConditionalCheckOfVarSet.push_back(varDecl);
+        if (auto declRefExpr = dyn_cast<DeclRefExpr>(cond->IgnoreParenImpCasts()))
+        {
+            if ((varDecl = dyn_cast<VarDecl>(declRefExpr->getDecl())))
+                insideConditionalCheckOfVarSet.push_back(varDecl);
+        }
     }
     bool ret = RecursiveASTVisitor::TraverseIfStmt(ifStmt);
     if (varDecl)

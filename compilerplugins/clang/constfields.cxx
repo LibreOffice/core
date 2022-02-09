@@ -322,11 +322,13 @@ bool ConstFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
 bool ConstFields::TraverseIfStmt(IfStmt* ifStmt)
 {
     FieldDecl const* memberFieldDecl = nullptr;
-    Expr const* cond = ifStmt->getCond()->IgnoreParenImpCasts();
-    if (auto memberExpr = dyn_cast<MemberExpr>(cond))
+    if (Expr const* cond = ifStmt->getCond())
     {
-        if ((memberFieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl())))
-            insideConditionalCheckOfMemberSet.push_back(memberFieldDecl);
+        if (auto memberExpr = dyn_cast<MemberExpr>(cond->IgnoreParenImpCasts()))
+        {
+            if ((memberFieldDecl = dyn_cast<FieldDecl>(memberExpr->getMemberDecl())))
+                insideConditionalCheckOfMemberSet.push_back(memberFieldDecl);
+        }
     }
     bool ret = RecursiveASTVisitor::TraverseIfStmt(ifStmt);
     if (memberFieldDecl)
