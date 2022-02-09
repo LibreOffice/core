@@ -16,6 +16,23 @@
       "message": "Ilmari: do you know where we can find Sinduja\u0027s license statement?",
       "revId": "0bc1f4aba10194547a8169eb568cc62e84ec89db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1345d37f_34b887b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-09T18:18:53Z",
+      "side": 1,
+      "message": "Ok license statement there: https://lists.freedesktop.org/archives/libreoffice/2022-February/088462.html\n\nThank you Sinduja!",
+      "revId": "0bc1f4aba10194547a8169eb568cc62e84ec89db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
