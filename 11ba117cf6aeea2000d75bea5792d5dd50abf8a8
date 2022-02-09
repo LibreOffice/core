@@ -16,6 +16,24 @@
       "message": "Missed this? basegfx could be used here too.",
       "revId": "11ba117cf6aeea2000d75bea5792d5dd50abf8a8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59dbecde_68c6c83e",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 991,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-09T17:40:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bf51d8e_4fbbcf72",
+      "revId": "11ba117cf6aeea2000d75bea5792d5dd50abf8a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "034fe05c_8adf4e1f",
+        "filename": "starmath/source/node.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-09T17:40:27Z",
+      "side": 1,
+      "message": "cmath is unused since M_PI was replaced with deg2rad. Please remove it.",
+      "revId": "8f4343739d4ad1184210976320e8bde92ce63981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "263a510e_798ae9e2",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-02-09T17:40:27Z",
+      "side": 1,
+      "message": "rad2reg\u003cN\u003e form is preferable, see https://git.libreoffice.org/core/+/7ff2c9cfc5fa8c261b1f7f959172f60255fcf617^!/",
+      "revId": "8f4343739d4ad1184210976320e8bde92ce63981",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
