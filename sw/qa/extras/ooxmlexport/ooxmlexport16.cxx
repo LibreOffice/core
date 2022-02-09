@@ -384,9 +384,35 @@ DECLARE_OOXMLEXPORT_TEST(testTdf143692_outlineLevelTortureTest, "tdf143692_outli
 
 DECLARE_OOXMLEXPORT_TEST(testTdf132752, "tdf132752.docx")
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(getParagraph(1), "ParaRightMargin"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaFirstLineIndent"));
+    uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(xPara1, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xPara1, "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara1, "ParaFirstLineIndent"));
+
+    uno::Reference<beans::XPropertySet> xPara2(getParagraph(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(xPara2, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xPara2, "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-630), getProperty<sal_Int32>(xPara2, "ParaFirstLineIndent"));
+
+    uno::Reference<beans::XPropertySet> xPara3(getParagraph(3), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara3, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5891), getProperty<sal_Int32>(xPara3, "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPara3, "ParaFirstLineIndent"));
+
+    uno::Reference<beans::XPropertySet> xPara4(getParagraph(4), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(xPara4, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xPara4, "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4157), getProperty<sal_Int32>(xPara4, "ParaFirstLineIndent"));
+
+    uno::Reference<beans::XPropertySet> xPara5(getParagraph(5), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1801), getProperty<sal_Int32>(xPara5, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1000), getProperty<sal_Int32>(xPara5, "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-630), getProperty<sal_Int32>(xPara5, "ParaFirstLineIndent"));
+
+    uno::Reference<beans::XPropertySet> xPara6(getParagraph(6), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3565), getProperty<sal_Int32>(xPara6, "ParaLeftMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2764), getProperty<sal_Int32>(xPara6, "ParaRightMargin"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-2394), getProperty<sal_Int32>(xPara6, "ParaFirstLineIndent"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testGutterLeft, "gutter-left.docx")
