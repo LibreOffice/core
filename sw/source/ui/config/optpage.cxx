@@ -228,8 +228,7 @@ void SwContentOptPage::Reset(const SfxItemSet* rSet)
 
 bool SwContentOptPage::FillItemSet(SfxItemSet* rSet)
 {
-    const SwElemItem*   pOldAttr = static_cast<const SwElemItem*>(
-                        GetOldItem(GetItemSet(), FN_PARAM_ELEM));
+    const SwElemItem* pOldAttr = GetOldItem(GetItemSet(), FN_PARAM_ELEM);
 
     SwElemItem aElem;
     aElem.m_bTable                = m_xTableCB->get_active();
@@ -1301,8 +1300,7 @@ bool SwShdwCursorOptionsTabPage::FillItemSet( SfxItemSet* rSet )
         bRet = true;
     }
 
-    const SwDocDisplayItem* pOldAttr = static_cast<const SwDocDisplayItem*>(
-                        GetOldItem(GetItemSet(), FN_PARAM_DOCDISP));
+    const SwDocDisplayItem* pOldAttr = GetOldItem(GetItemSet(), FN_PARAM_DOCDISP);
 
     SwDocDisplayItem aDisp;
 

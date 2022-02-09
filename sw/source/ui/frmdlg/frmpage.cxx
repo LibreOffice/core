@@ -2193,7 +2193,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
     m_nLowerBorder = rUL.GetLower();
 
     if (SfxItemState::SET == rSet.GetItemState(FN_KEEP_ASPECT_RATIO))
-        m_xFixedRatioCB->set_active(static_cast<const SfxBoolItem&>(rSet.Get(FN_KEEP_ASPECT_RATIO)).GetValue());
+        m_xFixedRatioCB->set_active(rSet.Get(FN_KEEP_ASPECT_RATIO).GetValue());
 
     // columns
     SwFormatCol aCol( rSet.Get(RES_COL) );

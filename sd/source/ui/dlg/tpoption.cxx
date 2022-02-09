@@ -78,8 +78,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet* rAttrs )
 {
     SvxGridTabPage::Reset(rAttrs);
 
-    SdOptionsSnapItem aOptsItem( static_cast<const SdOptionsSnapItem&>( rAttrs->
-                        Get( ATTR_OPTIONS_SNAP ) ) );
+    SdOptionsSnapItem aOptsItem( rAttrs->Get( ATTR_OPTIONS_SNAP ) );
 
     m_xCbxSnapHelplines->set_active( aOptsItem.GetOptionsSnap().IsSnapHelplines() );
     m_xCbxSnapBorder->set_active( aOptsItem.GetOptionsSnap().IsSnapBorder() );
@@ -143,8 +142,7 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 
 void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
 {
-    SdOptionsLayoutItem aLayoutItem( static_cast<const SdOptionsLayoutItem&>( rAttrs->
-                        Get( ATTR_OPTIONS_LAYOUT ) ) );
+    SdOptionsLayoutItem aLayoutItem( rAttrs->Get( ATTR_OPTIONS_LAYOUT ) );
 
     m_xCbxRuler->set_active( aLayoutItem.GetOptionsLayout().IsRulerVisible() );
     m_xCbxMoveOutline->set_active( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
@@ -398,8 +396,7 @@ bool SdTpOptionsMisc::FillItemSet( SfxItemSet* rAttrs )
 
 void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
 {
-    SdOptionsMiscItem aOptsItem( static_cast<const SdOptionsMiscItem&>( rAttrs->
-                        Get( ATTR_OPTIONS_MISC ) ) );
+    SdOptionsMiscItem aOptsItem( rAttrs->Get( ATTR_OPTIONS_MISC ) );
 
     m_xCbxStartWithTemplate->set_active( aOptsItem.GetOptionsMisc().IsStartWithTemplate() );
     m_xCbxMarkedHitMovesAlways->set_active( aOptsItem.GetOptionsMisc().IsMarkedHitMovesAlways() );
@@ -449,16 +446,14 @@ void SdTpOptionsMisc::Reset( const SfxItemSet* rAttrs )
     if( rAttrs->GetItemState( nWhich2 ) >= SfxItemState::DEFAULT )
     {
         MapUnit eUnit = rAttrs->GetPool()->GetMetric( nWhich2 );
-        const SfxUInt16Item& rItem = static_cast<const SfxUInt16Item&>(rAttrs->Get( nWhich2 ));
+        const SfxUInt16Item& rItem = rAttrs->Get( nWhich2 );
         SetMetricValue( *m_xMtrFldTabstop, rItem.GetValue(), eUnit );
     }
     m_xLbMetric->save_value();
     m_xMtrFldTabstop->save_value();
     //Scale
-    sal_Int32 nX = static_cast<const SfxInt32Item&>( rAttrs->
-                 Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
-    sal_Int32 nY = static_cast<const SfxInt32Item&>( rAttrs->
-                 Get( ATTR_OPTIONS_SCALE_Y ) ).GetValue();
+    sal_Int32 nX = rAttrs->Get( ATTR_OPTIONS_SCALE_X ).GetValue();
+    sal_Int32 nY = rAttrs->Get( ATTR_OPTIONS_SCALE_Y ).GetValue();
     nWidth = static_cast<const SfxUInt32Item&>( rAttrs->
                     Get( ATTR_OPTIONS_SCALE_WIDTH ) ).GetValue();
     nHeight = static_cast<const SfxUInt32Item&>( rAttrs->

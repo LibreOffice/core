@@ -21,6 +21,7 @@
 
 #include <svl/solar.hrc>
 
+class SdOptionsPrintItem;
 class XColorItem;
 
 // Layer attributes
@@ -77,12 +78,12 @@ class XColorItem;
 #define ATTR_ACTION_END                 ATTR_ACTION_PLAYFULL
 
 #define ATTR_COPY_START                 ATTR_ACTION_END + 1
-#define ATTR_COPY_NUMBER                ATTR_COPY_START
-#define ATTR_COPY_MOVE_X                ATTR_COPY_START + 1
-#define ATTR_COPY_MOVE_Y                ATTR_COPY_START + 2
+#define ATTR_COPY_NUMBER                TypedWhichId<SfxUInt16Item>(ATTR_COPY_START)
+#define ATTR_COPY_MOVE_X                TypedWhichId<SfxInt32Item>(ATTR_COPY_START + 1)
+#define ATTR_COPY_MOVE_Y                TypedWhichId<SfxInt32Item>(ATTR_COPY_START + 2)
 #define ATTR_COPY_ANGLE                 TypedWhichId<SdrAngleItem>(ATTR_COPY_START + 3)
-#define ATTR_COPY_WIDTH                 ATTR_COPY_START + 4
-#define ATTR_COPY_HEIGHT                ATTR_COPY_START + 5
+#define ATTR_COPY_WIDTH                 TypedWhichId<SfxInt32Item>(ATTR_COPY_START + 4)
+#define ATTR_COPY_HEIGHT                TypedWhichId<SfxInt32Item>(ATTR_COPY_START + 5)
 #define ATTR_COPY_START_COLOR           TypedWhichId<XColorItem>(ATTR_COPY_START + 6)
 #define ATTR_COPY_END_COLOR             TypedWhichId<XColorItem>(ATTR_COPY_START + 7)
 #define ATTR_COPY_END                   ATTR_COPY_END_COLOR
@@ -94,30 +95,30 @@ class XColorItem;
 #define ATTR_SNAPLINE_END               ATTR_SNAPLINE_Y
 
 #define ATTR_OPTIONS_START              ATTR_SNAPLINE_END + 1
-#define ATTR_OPTIONS_LAYOUT             ATTR_OPTIONS_START + 1
-#define ATTR_OPTIONS_MISC               ATTR_OPTIONS_START + 2
-#define ATTR_OPTIONS_SNAP               ATTR_OPTIONS_START + 3
-#define ATTR_OPTIONS_PRINT              ATTR_OPTIONS_START + 4
+#define ATTR_OPTIONS_LAYOUT             TypedWhichId<SdOptionsLayoutItem>(ATTR_OPTIONS_START + 1)
+#define ATTR_OPTIONS_MISC               TypedWhichId<SdOptionsMiscItem>(ATTR_OPTIONS_START + 2)
+#define ATTR_OPTIONS_SNAP               TypedWhichId<SdOptionsSnapItem>(ATTR_OPTIONS_START + 3)
+#define ATTR_OPTIONS_PRINT              TypedWhichId<SdOptionsPrintItem>(ATTR_OPTIONS_START + 4)
 #define ATTR_OPTIONS_END                ATTR_OPTIONS_PRINT
 
 #define ATTR_OPTIONS_SCALE_START        ATTR_OPTIONS_END + 1
-#define ATTR_OPTIONS_SCALE_X            ATTR_OPTIONS_SCALE_START
-#define ATTR_OPTIONS_SCALE_Y            ATTR_OPTIONS_SCALE_START + 1
+#define ATTR_OPTIONS_SCALE_X            TypedWhichId<SfxInt32Item>(ATTR_OPTIONS_SCALE_START)
+#define ATTR_OPTIONS_SCALE_Y            TypedWhichId<SfxInt32Item>(ATTR_OPTIONS_SCALE_START + 1)
 #define ATTR_OPTIONS_SCALE_WIDTH        ATTR_OPTIONS_SCALE_START + 2
 #define ATTR_OPTIONS_SCALE_HEIGHT       ATTR_OPTIONS_SCALE_START + 3
 #define ATTR_OPTIONS_SCALE_END          ATTR_OPTIONS_SCALE_HEIGHT
 
 #define ATTR_PRESLAYOUT_START           ATTR_OPTIONS_SCALE_END + 1
-#define ATTR_PRESLAYOUT_NAME            ATTR_PRESLAYOUT_START
+#define ATTR_PRESLAYOUT_NAME            TypedWhichId<SfxStringItem>(ATTR_PRESLAYOUT_START)
 #define ATTR_PRESLAYOUT_LOAD            ATTR_PRESLAYOUT_START + 1
-#define ATTR_PRESLAYOUT_MASTER_PAGE     ATTR_PRESLAYOUT_START + 2
+#define ATTR_PRESLAYOUT_MASTER_PAGE     TypedWhichId<SfxBoolItem>(ATTR_PRESLAYOUT_START + 2)
 #define ATTR_PRESLAYOUT_CHECK_MASTERS   ATTR_PRESLAYOUT_START + 3
 #define ATTR_PRESLAYOUT_END             ATTR_PRESLAYOUT_CHECK_MASTERS
 
 // paragraph numbering attributes
 #define ATTR_PARANUMBERING_START        ATTR_PRESLAYOUT_END + 1
-#define ATTR_NUMBER_NEWSTART            ATTR_PARANUMBERING_START
-#define ATTR_NUMBER_NEWSTART_AT         ATTR_PARANUMBERING_START + 1
+#define ATTR_NUMBER_NEWSTART            TypedWhichId<SfxBoolItem>(ATTR_PARANUMBERING_START)
+#define ATTR_NUMBER_NEWSTART_AT         TypedWhichId<SfxInt16Item>(ATTR_PARANUMBERING_START + 1)
 #define ATTR_PARANUMBERING_END          ATTR_NUMBER_NEWSTART_AT
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
