@@ -488,6 +488,10 @@ namespace utl {
     class TransliterationWrapper;
 }
 
+namespace sc {
+    class SharedStringPoolPurge;
+}
+
 class ScGlobal
 {
     static std::unique_ptr<SvxSearchItem> xSearchItem;
@@ -515,6 +519,8 @@ class ScGlobal
     static std::atomic<css::lang::Locale*>   pLocale;
 
     static std::unique_ptr<ScFieldEditEngine> xFieldEditEngine;
+
+    static std::atomic<sc::SharedStringPoolPurge*> pSharedStringPoolPurge;
 
     static void                 InitPPT();
 
@@ -675,6 +681,8 @@ public:
     /** A static instance of ScFieldEditEngine not capable of resolving
         document specific fields, to be used only by ScEditUtil::GetString(). */
     static ScFieldEditEngine&   GetStaticFieldEditEngine();
+
+    static sc::SharedStringPoolPurge& GetSharedStringPoolPurge();
 
     /** Replaces the first occurrence of rPlaceholder in rString with
         rReplacement, or if rPlaceholder is not found appends one space if
