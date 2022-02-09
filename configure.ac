@@ -4270,7 +4270,6 @@ if test "$_os" = "WINNT"; then
         elif test -n "$WIN_MULTI_ARCH"; then
             BUILD_X86=TRUE
             CXX_X86_BINARY=`win_short_path_for_make "$MSVC_MULTI_PATH/cl.exe"`
-            CXX_X86_BINARY+=" /arch:SSE"
             AC_MSG_RESULT([found])
         else
             AC_MSG_RESULT([not found])
