@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2628dc00_a732b7ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-09T18:14:40Z",
+      "side": 1,
+      "message": "Ilmari: do you know where we can find Sinduja\u0027s license statement?",
+      "revId": "0bc1f4aba10194547a8169eb568cc62e84ec89db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
