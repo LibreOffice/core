@@ -22,6 +22,7 @@
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/ParallelTimeContainer.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/document/XActionLockable.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -36,6 +37,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <tools/debug.hxx>
@@ -1657,6 +1659,15 @@ static bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape
     {
         xShape.set( xSelectedText->getText(), UNO_QUERY_THROW );
 
+        css::uno::Reference<css::document::XActionLockable> xLockable(xShape, css::uno::UNO_QUERY);
+        if (xLockable.is())
+            xLockable->addActionLock();
+        comphelper::ScopeGuard aGuard([&xLockable]()
+        {
+            if (xLockable.is())
+                xLockable->removeActionLock();
+        });
+
         Reference< XTextRangeCompare > xTextRangeCompare( xShape, UNO_QUERY_THROW );
         Reference< XEnumerationAccess > xParaEnumAccess( xShape, UNO_QUERY_THROW );
         Reference< XEnumeration > xParaEnum( xParaEnumAccess->createEnumeration(), UNO_SET_THROW );
@@ -1708,6 +1719,22 @@ static bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape
     }
 
     return false;
+}
+
+namespace
+{
+    Reference<XShape> getTargetShape(const Any& rTarget)
+    {
+        Reference<XShape> xShape;
+        rTarget >>= xShape;
+        if( !xShape.is() )
+        {
+            ParagraphTarget aParaTarget;
+            if (rTarget >>= aParaTarget)
+                xShape = aParaTarget.Shape;
+        }
+        return xShape;
+    }
 }
 
 void CustomAnimationPane::onAdd()
@@ -1815,6 +1842,15 @@ void CustomAnimationPane::onAdd()
         bool bFirst = true;
         for( const auto& rTarget : aTargets )
         {
+            css::uno::Reference<css::document::XActionLockable> xLockable(getTargetShape(rTarget), css::uno::UNO_QUERY);
+            if (xLockable.is())
+                xLockable->addActionLock();
+            comphelper::ScopeGuard aGuard([&xLockable]()
+            {
+                if (xLockable.is())
+                    xLockable->removeActionLock();
+            });
+
             CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, rTarget, fDuration );
 
             // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
