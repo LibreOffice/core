@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a26d4068_828c2501",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-09T22:07:19Z",
+      "side": 1,
+      "message": "Is this related to tdf#147271?",
+      "revId": "a6f925eb00aaa2dab95c67539a2034b0994215ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
