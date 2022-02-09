@@ -34,6 +34,24 @@
       "parentUuid": "f4d1e87c_abd2e967",
       "revId": "fc97ee2609c577a891671749dbe9c059f220ff98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab862bb_a4d6a75d",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-09T14:09:30Z",
+      "side": 1,
+      "message": "The UNO changes propagate futher and break tests. I\u0027ll remove the UNO part from this patch, it\u0027ll need to be done later.",
+      "parentUuid": "acebac08_5ef047ae",
+      "revId": "fc97ee2609c577a891671749dbe9c059f220ff98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
