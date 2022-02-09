@@ -3666,6 +3666,8 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
 
 bool ScTable::IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const
 {
+    assert(nColStart <= nColEnd && nRowStart <= nRowEnd
+           && "range must be normalized to obtain a valid result");
     for (SCROW i = nRowStart; i <= nRowEnd; ++i)
     {
         if (RowHidden(i))
@@ -3681,8 +3683,9 @@ bool ScTable::IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SC
 
 bool ScTable::IsDataFiltered(const ScRange& rRange) const
 {
-    return IsDataFiltered(rRange.aStart.Col(), rRange.aStart.Row(),
-                rRange.aEnd.Col(), rRange.aEnd.Row());
+    ScRange aNormalized(rRange.aStart, rRange.aEnd);
+    return IsDataFiltered(aNormalized.aStart.Col(), aNormalized.aStart.Row(),
+                          aNormalized.aEnd.Col(), aNormalized.aEnd.Row());
 }
 
 void ScTable::SetRowFlags( SCROW nRow, CRFlags nNewFlags )
