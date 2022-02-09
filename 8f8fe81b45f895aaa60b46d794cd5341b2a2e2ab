@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da8aaa21_550d8d27",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-09T09:27:11Z",
+      "side": 1,
+      "message": "Hi László,\nWould it be possible to review this patch when you have a moment? I would like to backport it to 7.3 branch asap.\nThanks in advance",
+      "revId": "8f8fe81b45f895aaa60b46d794cd5341b2a2e2ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
