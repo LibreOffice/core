@@ -58,9 +58,17 @@ namespace toolkit
     }
 
 
+    // (order matters: the first is the class name, the second is the class doing the ref counting)
     IMPLEMENT_FORWARD_XINTERFACE3( OAccessibleControlContext, OAccessibleControlContext_Base, OAccessibleImplementationAccess, OAccessibleControlContext_IBase )
-    IMPLEMENT_FORWARD_XTYPEPROVIDER3( OAccessibleControlContext, OAccessibleControlContext_Base, OAccessibleImplementationAccess, OAccessibleControlContext_IBase )
-        // (order matters: the first is the class name, the second is the class doing the ref counting)
+    css::uno::Sequence< css::uno::Type > SAL_CALL OAccessibleControlContext::getTypes()
+    {
+        return ::comphelper::concatSequences(
+            OAccessibleControlContext_Base::getTypes(),
+            OAccessibleImplementationAccess::getTypes(),
+            OAccessibleControlContext_IBase::getTypes()
+        );
+    }
+    IMPLEMENT_GET_IMPLEMENTATION_ID( OAccessibleControlContext )
 
 
     void OAccessibleControlContext::Init( const Reference< XAccessible >& _rxCreator )

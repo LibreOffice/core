@@ -144,19 +144,6 @@ namespace comphelper
         \
         IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
 
-    #define IMPLEMENT_FORWARD_XTYPEPROVIDER3( classname, baseclass1, baseclass2, baseclass3 ) \
-        css::uno::Sequence< css::uno::Type > SAL_CALL classname::getTypes(  ) \
-        { \
-            return ::comphelper::concatSequences( \
-                baseclass1::getTypes(), \
-                baseclass2::getTypes(), \
-                baseclass3::getTypes() \
-            ); \
-        } \
-        \
-        IMPLEMENT_GET_IMPLEMENTATION_ID( classname )
-
-
     /** ask for an iface of an aggregated object
         usage:<br/>
             Reference<XFoo> xFoo;<br/>
