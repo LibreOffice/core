@@ -16,6 +16,24 @@
       "message": "For Bug 136836. Thank you ",
       "revId": "195cb8a43741f43603627c789e1430ff836b35f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8ce379c_5c909284",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-09T14:14:01Z",
+      "side": 1,
+      "message": "tdf#136836 is an old bug, what is the problem there?\nOTOH, you backported it to 7-3-0, this should have been 7-3 instead",
+      "parentUuid": "92715421_95f818f1",
+      "revId": "195cb8a43741f43603627c789e1430ff836b35f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
