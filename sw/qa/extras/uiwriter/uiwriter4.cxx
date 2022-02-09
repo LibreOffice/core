@@ -1533,6 +1533,59 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTableRemoveHasTextChangesOnly2)
     CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147182_AcceptAllChangesInTableSelection)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-del-add.docx");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // check redline count
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
+
+    // 4 rows in Show Changes mode
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+
+    // Select the first table to get a table selection
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:AcceptTrackedChange", {});
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // Accepting tracked changes in the selected table results 3 rows
+    // This was 4 (only text changes of the first selected cell were accepted)
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 3);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(8), pEditShell->GetRedlineCount());
+
+    // Undo: 4 rows again
+    pDoc->GetIDocumentUndoRedo().Undo();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
+
+    // To check Undo of HasTextChangesOnly reject the same row results 3 rows
+    dispatchCommand(mxComponent, ".uno:Escape", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:RejectTrackedChange", {});
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 4 (only text changes of the first selected cell were rejected)
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 3);
+
+    // Undo: 4 rows again
+    pDoc->GetIDocumentUndoRedo().Undo();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row", 4);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(14), pEditShell->GetRedlineCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf66405)
 {
     // Imported formula should have zero margins
