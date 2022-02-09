@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22daac68_1a767d88",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-09T12:59:07Z",
+      "side": 1,
+      "message": "But note that this change doesn\u0027t guarantee that.  The compiler would still be free, under the as-if rule, to carry out the initialization (which happens not to have any observable side effects) of the local static variable upon loading the dynamic library containing it.\n\nI think compilers are lacking (non-standard) features to instruct them not to emit arch-feature-specific code that would be executed unconditionally.",
+      "revId": "3f96d70ce7f31d556b995733b44cb8715b64e329",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
