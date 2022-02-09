@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4b32635_118a0d56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-09T13:24:45Z",
+      "side": 1,
+      "message": "Nice find!\n\nAs a related thought - but please don\u0027t consider the following as suggestion to avoid this patch:\nYou have put much effort into this CPI-specific stuff already. It *seems* to me that there\u0027s no actually a safe way to combine different instruction sets in a same \"project\". I don\u0027t know if possibly splitting CPU-specific code into a static library could be safer *at some later stage*? (No idea if linking pre-compiled static library would be OK to guarantee the necessary separation; if not, maybe the only safe way would be separate DLLs?)",
+      "revId": "33dcb986e7f5f7e7ac319918d9439be90a7028ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
