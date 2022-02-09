@@ -126,8 +126,8 @@ TextToPronounce_zh::equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCo
 
 extern "C" {
 
-sal_uInt16** get_zh_zhuyin();
-sal_uInt16** get_zh_pinyin();
+sal_uInt16** get_collator_data_zh_zhuyin();
+sal_uInt16** get_collator_data_zh_pinyin();
 
 }
 
@@ -137,7 +137,7 @@ TextToPinyin_zh_CN::TextToPinyin_zh_CN() :
 #ifndef DISABLE_DYNLOADING
     TextToPronounce_zh("get_zh_pinyin")
 #else
-    TextToPronounce_zh(get_zh_pinyin)
+    TextToPronounce_zh(get_collator_data_zh_pinyin)
 #endif
 {
         transliterationName = "ChineseCharacterToPinyin";
@@ -148,7 +148,7 @@ TextToChuyin_zh_TW::TextToChuyin_zh_TW() :
 #ifndef DISABLE_DYNLOADING
     TextToPronounce_zh("get_zh_zhuyin")
 #else
-    TextToPronounce_zh(get_zh_zhuyin)
+    TextToPronounce_zh(get_collator_data_zh_zhuyin)
 #endif
 {
         transliterationName = "ChineseCharacterToChuyin";
