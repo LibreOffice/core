@@ -121,7 +121,7 @@ public:
         css::uno::Reference< css::chart2::XAxis > xAxis
         , ExplicitScaleData&  rExplicitScale
         , ExplicitIncrementData& rExplicitIncrement ) override;
-    virtual css::uno::Reference< css::drawing::XShape >
+    virtual rtl::Reference< SvxShape >
         getShapeForCID( const OUString& rObjectCID ) override;
 
     virtual css::awt::Rectangle getRectangleOfObject( const OUString& rObjectCID, bool bSnapRect=false ) override;

@@ -1707,13 +1707,17 @@ SdrPage* ChartView::getSdrPage()
     return nullptr;
 }
 
-uno::Reference< drawing::XShape > ChartView::getShapeForCID( const OUString& rObjectCID )
+rtl::Reference< SvxShape > ChartView::getShapeForCID( const OUString& rObjectCID )
 {
     SolarMutexGuard aSolarGuard;
     SdrObject* pObj = DrawModelWrapper::getNamedSdrObject( rObjectCID, this->getSdrPage() );
-    if( pObj )
-        return uno::Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY);
-    return nullptr;
+    if( !pObj )
+        return nullptr;
+
+    uno::Reference< drawing::XShape > xShape = pObj->getUnoShape();
+    rtl::Reference<SvxShape> xShape2 = dynamic_cast<SvxShape*>(xShape.get());
+    assert(xShape2 || !xShape);
+    return xShape2;
 }
 
 awt::Rectangle ChartView::getDiagramRectangleExcludingAxes()
@@ -1727,7 +1731,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
     impl_updateView();
 
     awt::Rectangle aRet;
-    uno::Reference< drawing::XShape > xShape( getShapeForCID(rObjectCID) );
+    rtl::Reference< SvxShape > xShape = getShapeForCID(rObjectCID);
     if(xShape.is())
     {
         //special handling for axis for old api:
@@ -1736,7 +1740,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
         if( eObjectType == OBJECTTYPE_AXIS || eObjectType == OBJECTTYPE_DIAGRAM )
         {
             SolarMutexGuard aSolarGuard;
-            SdrObject* pRootSdrObject = SdrObject::getSdrObjectFromXShape( xShape );
+            SdrObject* pRootSdrObject = xShape->GetSdrObject();
             if( pRootSdrObject )
             {
                 SdrObjList* pRootList = pRootSdrObject->GetSubList();
@@ -1747,7 +1751,10 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
                         aShapeName = "PlotAreaIncludingAxes";
                     SdrObject* pShape = DrawModelWrapper::getNamedSdrObject( aShapeName, pRootList );
                     if( pShape )
-                        xShape.set( pShape->getUnoShape(), uno::UNO_QUERY);
+                    {
+                        xShape = dynamic_cast<SvxShape*>(pShape->getUnoShape().get());
+                        assert(xShape);
+                    }
                 }
             }
         }
@@ -1758,7 +1765,7 @@ awt::Rectangle ChartView::getRectangleOfObject( const OUString& rObjectCID, bool
         if( bSnapRect )
         {
             //for rotated objects the shape size and position differs from the visible rectangle
-            SdrObject* pSdrObject = SdrObject::getSdrObjectFromXShape( xShape );
+            SdrObject* pSdrObject = xShape->GetSdrObject();
             if( pSdrObject )
             {
                 tools::Rectangle aSnapRect( pSdrObject->GetSnapRect() );
