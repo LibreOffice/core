@@ -3527,43 +3527,27 @@ void SwContentTree::UpdateTracking()
             return;
         }
         // bookmarks - track first bookmark at cursor
-        if (m_pActiveShell->GetSelectionType() & SelectionType::Text)
+        if (m_bBookmarkTracking && (m_pActiveShell->GetSelectionType() & SelectionType::Text))
         {
-            SwDoc* pDoc = m_pActiveShell->GetDoc();
-            uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDoc->GetDocShell()->GetBaseModel(),
-                                                                        uno::UNO_QUERY);
-            uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
-                                                               uno::UNO_QUERY);
-            sal_Int32 nBookmarkCount = xBookmarks->getCount();
-            if (nBookmarkCount && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
+            SwPaM* pCursor = m_pActiveShell->GetCursor();
+            IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
+            IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
+            if (pCursor && ppBookmark != pMarkAccess->getBookmarksEnd() &&
+                    !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
             {
-                if (!m_bBookmarkTracking) return;
-                SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
-                uno::Reference<text::XTextRange> xRange(
-                            SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
-                for (sal_Int32 i = 0; i < nBookmarkCount; ++i)
+                SwPosition* pCursorPoint = pCursor->GetPoint();
+                while (ppBookmark != pMarkAccess->getBookmarksEnd())
                 {
-                    uno::Reference<text::XTextContent> bookmark;
-                    xBookmarks->getByIndex(i) >>= bookmark;
-                    try
+                    if (lcl_IsUiVisibleBookmark(*ppBookmark) &&
+                            *pCursorPoint >= (*ppBookmark)->GetMarkStart() &&
+                            *pCursorPoint <= (*ppBookmark)->GetMarkEnd())
                     {
-                        uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
-                        uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
-                                                                                  uno::UNO_QUERY);
-                        if (xTextRangeCompare.is()
-                                && xTextRangeCompare->compareRegionStarts(bookmarkRange, xRange) != -1
-                                && xTextRangeCompare->compareRegionEnds(xRange, bookmarkRange) != -1)
-                        {
-                            uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
-                            lcl_SelectByContentTypeAndName(this, *m_xTreeView,
-                                                           SwResId(STR_CONTENT_TYPE_BOOKMARK),
-                                                           xBookmark->getName());
-                            return;
-                        }
+                        lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                                       SwResId(STR_CONTENT_TYPE_BOOKMARK),
+                                                       (*ppBookmark)->GetName());
+                        return;
                     }
-                    catch (const lang::IllegalArgumentException&)
-                    {
-                    }
+                    ++ppBookmark;
                 }
             }
         }
