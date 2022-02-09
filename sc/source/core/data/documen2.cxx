@@ -87,6 +87,7 @@
 #include <listenercontext.hxx>
 #include <datamapper.hxx>
 #include <drwlayer.hxx>
+#include <sharedstringpoolpurge.hxx>
 #include <config_features.h>
 
 using namespace com::sun::star;
@@ -400,7 +401,14 @@ ScDocument::~ScDocument()
     mpFormulaGroupCxt.reset();
     // Purge unused items if the string pool will be still used (e.g. by undo history).
     if(mpCellStringPool.use_count() > 1)
-        mpCellStringPool->purge();
+    {
+        // Calling purge() may be somewhat expensive with large documents, so
+        // try to delay and compress it for temporary documents.
+        if(IsClipOrUndo())
+            ScGlobal::GetSharedStringPoolPurge().delayedPurge(mpCellStringPool);
+        else
+            mpCellStringPool->purge();
+    }
     mpCellStringPool.reset();
 
     assert( pDelayedFormulaGrouping == nullptr );
