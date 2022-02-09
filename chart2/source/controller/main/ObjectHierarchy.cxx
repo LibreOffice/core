@@ -203,8 +203,9 @@ void ObjectHierarchy::createLegendTree(
     // iterate over child shapes of legend and search for matching CIDs
     if( m_pExplicitValueProvider )
     {
-        Reference< container::XIndexAccess > xLegendShapeContainer(
-            m_pExplicitValueProvider->getShapeForCID( aLegendOID.getObjectCID() ), uno::UNO_QUERY );
+        rtl::Reference< SvxShapeGroupAnyD > xLegendShapeContainer =
+            dynamic_cast<SvxShapeGroupAnyD*>(
+                m_pExplicitValueProvider->getShapeForCID( aLegendOID.getObjectCID() ).get() );
         ObjectHierarchy::tChildContainer aLegendEntryOIDs;
         lcl_getChildOIDs( aLegendEntryOIDs, xLegendShapeContainer );
 
@@ -394,8 +395,9 @@ void ObjectHierarchy::createDataSeriesTree(
                     // iterate over child shapes of legend and search for matching CIDs
                     if( m_pExplicitValueProvider )
                     {
-                        Reference< container::XIndexAccess > xSeriesShapeContainer(
-                            m_pExplicitValueProvider->getShapeForCID( aSeriesOID.getObjectCID() ), uno::UNO_QUERY );
+                        rtl::Reference< SvxShapeGroupAnyD > xSeriesShapeContainer =
+                            dynamic_cast<SvxShapeGroupAnyD*>(
+                            m_pExplicitValueProvider->getShapeForCID( aSeriesOID.getObjectCID() ).get() );
                         lcl_getChildOIDs( aSeriesSubContainer, xSeriesShapeContainer );
                     }
 

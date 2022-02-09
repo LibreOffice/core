@@ -38,6 +38,7 @@ namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
+class SvxShape;
 
 namespace chart
 {
@@ -64,7 +65,7 @@ public:
 
     virtual css::awt::Rectangle getDiagramRectangleExcludingAxes()=0;
 
-    virtual css::uno::Reference< css::drawing::XShape >
+    virtual rtl::Reference< SvxShape >
         getShapeForCID( const OUString& rObjectCID )=0;
 
     virtual std::shared_ptr< DrawModelWrapper > getDrawModelWrapper() = 0;
