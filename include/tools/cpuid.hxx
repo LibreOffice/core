@@ -23,6 +23,8 @@ or inline functions, otherwise their possibly emitted copies compiled
 with the CPU-specific instructions might be chosen by the linker as the copy
 to keep.
 
+Also see the note at the top of simdsupport.hxx .
+
 */
 
 namespace cpuid {
