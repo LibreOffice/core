@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8699eba_c574c4ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-09T13:10:32Z",
+      "side": 1,
+      "message": "I will upload a new patch set for the resolved item.",
+      "revId": "fbf6b1a8bec2e7dd4f38fb385c94d65a0ca50078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc056ff2_c9044ef8",
@@ -20,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3bc6fbd1_2fca59a2",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-09T13:10:32Z",
+      "side": 1,
+      "message": "I don\u0027t get your point.\nAssigning a value to c before we know if we have an UTF-16 or an UTF-32 character can mean that we have to reassign a value to c. Also, IMHO, it make the code less clear to understand.",
+      "parentUuid": "fc056ff2_c9044ef8",
+      "revId": "fbf6b1a8bec2e7dd4f38fb385c94d65a0ca50078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e96a8527_5131df70",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 4
@@ -31,6 +66,24 @@
       "writtenOn": "2022-02-07T15:07:11Z",
       "side": 1,
       "message": "There\u0027s no need to check this - it will always be greater on return than passed initially, since you make sure that the index is less than string length, so it will always be able to read something and increment the index - last time to be equal to the length.",
+      "revId": "fbf6b1a8bec2e7dd4f38fb385c94d65a0ca50078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "360f8c4f_7f75cf10",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3462,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-09T13:10:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e96a8527_5131df70",
       "revId": "fbf6b1a8bec2e7dd4f38fb385c94d65a0ca50078",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
