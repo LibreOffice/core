@@ -1159,7 +1159,8 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
     bool bValueModified = m_xWidthED->get_value_changed_from_saved() ||
                           m_xHeightED->get_value_changed_from_saved();
     bool bCheckChanged = m_xRelWidthCB->get_state_changed_from_saved() ||
-                         m_xRelHeightCB->get_state_changed_from_saved();
+                         m_xRelHeightCB->get_state_changed_from_saved() ||
+                         m_xFixedRatioCB->get_state_changed_from_saved();
 
     bool bLegalValue = !(!rOldSize.GetWidth () && !rOldSize.GetHeight() &&
                             m_xWidthED->get_value() == m_xWidthED->get_min() &&
@@ -1191,6 +1192,7 @@ bool SwFramePage::FillItemSet(SfxItemSet *rSet)
                 aSz.SetWidthPercent(SwFormatFrameSize::SYNCED);
         }
     }
+
     if( !IsInGraficMode() )
     {
         if (m_xAutoHeightCB->get_state_changed_from_saved())
@@ -2190,11 +2192,8 @@ void SwFramePage::Init(const SfxItemSet& rSet)
     m_nUpperBorder = rUL.GetUpper();
     m_nLowerBorder = rUL.GetLower();
 
-    if(SfxItemState::SET == rSet.GetItemState(FN_KEEP_ASPECT_RATIO))
-    {
+    if (SfxItemState::SET == rSet.GetItemState(FN_KEEP_ASPECT_RATIO))
         m_xFixedRatioCB->set_active(static_cast<const SfxBoolItem&>(rSet.Get(FN_KEEP_ASPECT_RATIO)).GetValue());
-        m_xFixedRatioCB->save_state();
-    }
 
     // columns
     SwFormatCol aCol( rSet.Get(RES_COL) );
@@ -2253,6 +2252,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
 
     if (rSize.GetWidthPercent() == SwFormatFrameSize::SYNCED || rSize.GetHeightPercent() == SwFormatFrameSize::SYNCED)
         m_xFixedRatioCB->set_active(true);
+    m_xFixedRatioCB->save_state();
     if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != SwFormatFrameSize::SYNCED &&
         !m_xRelWidthCB->get_active())
     {
