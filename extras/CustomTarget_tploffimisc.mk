@@ -9,10 +9,6 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/templates/offimisc))
 
-extras_TEMPLATES_OFFIMISC := \
-	Businesscard-with-logo \
-
-
 extras_OFFIMISC_XMLFILES := \
 	Businesscard-with-logo/content.xml \
 	Businesscard-with-logo/manifest.rdf \
@@ -23,92 +19,39 @@ extras_OFFIMISC_XMLFILES := \
 	Businesscard-with-logo/styles.xml \
 	Businesscard-with-logo/Thumbnails/thumbnail.png \
 
+# param: style-base (e.g. Modern)
+extras_OFFIMISC_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_OFFIMISC_XMLFILES)))
 
-extras_OFFIMISC_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_OFFIMISC),$(atexts)/mimetype)
-
-
-$(call gb_CustomTarget_get_target,extras/source/templates/offimisc) : \
-	$(foreach atexts,$(extras_TEMPLATES_OFFIMISC),$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/$(atexts).ott)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%/mimetype : $(SRCDIR)/extras/source/templates/offimisc/%/mimetype
-	$(call gb_Output_announce,templates/offimisc/$*/mimetype,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/offimisc/$*/mimetype,CPY)
+.SECONDEXPANSION:
+# secondexpansion since the patterns not just cover a filename portion, but also include a
+# directory portion withdifferent number of elements
+# copy regular files (mimetype, *.jpg, *.png, *.rdf, *.svg, *.svm, …)
+$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/% : $(SRCDIR)/extras/source/templates/offimisc/% \
+        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/$$*).dir
+	$(call gb_Output_announce,templates/offimisc/$*,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/offimisc/$*,CPY)
 	cp $< $@
-	$(call gb_Trace_EndRange,templates/offimisc/$*/mimetype,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.jpg : $(SRCDIR)/extras/source/templates/offimisc/%.jpg
-	$(call gb_Output_announce,templates/offimisc/$*.jpg,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/offimisc/$*.jpg,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/offimisc/$*.jpg,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.png : $(SRCDIR)/extras/source/templates/offimisc/%.png
-	$(call gb_Output_announce,templates/offimisc/$*.png,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/offimisc/$*.png,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/offimisc/$*.png,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.rdf : $(SRCDIR)/extras/source/templates/offimisc/%.rdf
-	$(call gb_Output_announce,templates/offimisc/$*.rdf,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/offimisc/$*.rdf,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/offimisc/$*.rdf,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.svg : $(SRCDIR)/extras/source/templates/offimisc/%.svg
-	$(call gb_Output_announce,templates/offimisc/$*.svg,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/offimisc/$*.svg,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/offimisc/$*.svg,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.svm : $(SRCDIR)/extras/source/templates/offimisc/%.svm
-	$(call gb_Output_announce,templates/offimisc/$*.svm,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/offimisc/$*.svm,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/offimisc/$*.svm,CPY)
+	$(call gb_Trace_EndRange,templates/offimisc/$*,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.xml : $(SRCDIR)/extras/source/templates/offimisc/%.xml \
-		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
+          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/$$*.xml).dir
 	$(call gb_Output_announce,templates/offimisc/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,templates/offimisc/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,templates/offimisc/$*.xml,XSL)
 
-$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.ott :
+$(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/%.ott : \
+        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/offimisc)/$$*/,\
+            mimetype $$(call extras_OFFIMISC_XMLFILES_RELATIVE,$$*))
 	$(call gb_Output_announce,templates/offimisc/$*.ott,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/offimisc/$*.ott,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
-		cd $(EXTRAS_OFFIMISC_DIR) && \
-		zip -q0X --filesync --must-match $@ $(EXTRAS_OFFIMISC_MIMEFILES_FILTER) && \
-		zip -qrX --must-match $@ $(EXTRAS_OFFIMISC_XMLFILES_FILTER) \
+		cd $(dir $<) && \
+		zip -q0X --filesync --must-match $@ mimetype && \
+		zip -qrX --must-match $@ $(call extras_OFFIMISC_XMLFILES_RELATIVE,$*) \
 	)
 	$(call gb_Trace_EndRange,templates/offimisc/$*.ott,ZIP)
-
-define extras_Tploffimisc_make_file_deps
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/$(2) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
-
-endef
-
-define extras_Tploffimisc_make_zip_deps
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_OFFIMISC_MIMETYPEFILES) $(extras_OFFIMISC_XMLFILES))) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
-
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_OFFIMISC_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_OFFIMISC_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_OFFIMISC_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_OFFIMISC_XMLFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_OFFIMISC_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
-
-endef
-
-$(eval $(foreach file,$(extras_OFFIMISC_MIMETYPEFILES) $(extras_OFFIMISC_XMLFILES),\
-	$(call extras_Tploffimisc_make_file_deps,extras/source/templates/offimisc,$(file)) \
-))
-
-$(eval $(foreach atexts,$(extras_TEMPLATES_OFFIMISC),\
-	$(call extras_Tploffimisc_make_zip_deps,extras/source/templates/offimisc,$(atexts).ott,$(atexts)) \
-))
+extras_OFFIMISC_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_OFFIMISC),$(atexts)/mimetype)
 
 # vim: set noet sw=4 ts=4:

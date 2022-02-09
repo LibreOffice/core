@@ -9,31 +9,6 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/templates/presnt))
 
-extras_TEMPLATES_PRESENTATIONS := \
-	Beehive \
-	Blue_Curve \
-	Blueprint_Plans \
-	Candy \
-	DNA \
-	Focus \
-	Forestbird \
-	Grey_Elegant \
-	Growing_Liberty \
-	Freshes \
-	Inspiration \
-	Lights \
-	Metropolis \
-	Midnightblue \
-	Nature_Illustration \
-	Pencil \
-	Piano \
-	Portfolio \
-	Progress \
-	Sunset \
-	Vintage \
-	Vivid \
-	Yellow_Idea \
-
 extras_PRESENTATIONS_XMLFILES := \
 	Beehive/content.xml \
 	Beehive/META-INF/manifest.xml \
@@ -229,85 +204,38 @@ extras_PRESENTATIONS_XMLFILES := \
 	Yellow_Idea/Pictures/100002010000009E000000BD075AA48B79110C47.png \
 	Yellow_Idea/Thumbnails/thumbnail.png \
 
-extras_PRESENTATIONS_MIMETYPEFILES := $(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),$(atexts)/mimetype)
+# param: style-base (e.g. Modern)
+extras_PRESNT_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_PRESENTATIONS_XMLFILES)))
 
-
-$(call gb_CustomTarget_get_target,extras/source/templates/presnt) : \
-	$(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$(atexts).otp)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%/mimetype : $(SRCDIR)/extras/source/templates/presnt/%/mimetype
-	$(call gb_Output_announce,templates/presnt/$*/mimetype,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/presnt/$*/mimetype,CPY)
+.SECONDEXPANSION:
+# secondexpansion since the patterns not just cover a filename portion, but also include a
+# directory portion withdifferent number of elements
+# copy regular files (mimetype, *.jpg, *.png, *.rdf, *.svg, *.svm, …)
+$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/% : $(SRCDIR)/extras/source/templates/presnt/% \
+        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*).dir
+	$(call gb_Output_announce,templates/presnt/$*,$(true),CPY,1)
+	$(call gb_Trace_StartRange,templates/presnt/$*,CPY)
 	cp $< $@
-	$(call gb_Trace_EndRange,templates/presnt/$*/mimetype,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.jpg : $(SRCDIR)/extras/source/templates/presnt/%.jpg
-	$(call gb_Output_announce,templates/presnt/$*.jpg,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/presnt/$*.jpg,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/presnt/$*.jpg,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.svg : $(SRCDIR)/extras/source/templates/presnt/%.svg
-	$(call gb_Output_announce,templates/presnt/$*.svg,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/presnt/$*.svg,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/presnt/$*.svg,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.png : $(SRCDIR)/extras/source/templates/presnt/%.png
-	$(call gb_Output_announce,templates/presnt/$*.png,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/presnt/$*.png,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/presnt/$*.png,CPY)
-
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.svm : $(SRCDIR)/extras/source/templates/presnt/%.svm
-	$(call gb_Output_announce,templates/presnt/$*.svm,$(true),CPY,1)
-	$(call gb_Trace_StartRange,templates/presnt/$*.svm,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,templates/presnt/$*.svm,CPY)
+	$(call gb_Trace_EndRange,templates/presnt/$*,CPY)
 
 $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.xml : $(SRCDIR)/extras/source/templates/presnt/%.xml \
-		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
+          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*.xml).dir
 	$(call gb_Output_announce,templates/presnt/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,templates/presnt/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,templates/presnt/$*.xml,XSL)
 
-$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.otp :
+$(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/%.otp : \
+        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/templates/presnt)/$$*/,\
+            mimetype $$(call extras_PRESNT_XMLFILES_RELATIVE,$$*))
 	$(call gb_Output_announce,templates/presnt/$*.otp,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,templates/presnt/$*.otp,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
-		cd $(EXTRAS_PRESENTATIONS_DIR) && \
-		zip -q0X --filesync --must-match $@ $(EXTRAS_PRESENTATIONS_MIMEFILES_FILTER) && \
-		zip -qrX --must-match $@ $(EXTRAS_PRESENTATIONS_XMLFILES_FILTER) \
+		cd $(dir $<) && \
+		zip -q0X --filesync --must-match $@ mimetype && \
+		zip -qrX --must-match $@ $(call extras_PRESNT_XMLFILES_RELATIVE,$*) \
 	)
 	$(call gb_Trace_EndRange,templates/presnt/$*.otp,ZIP)
-
-define extras_Tplpresnt_make_file_deps
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : $(SRCDIR)/$(1)/$(2) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
-
-endef
-
-define extras_Tplpresnt_make_zip_deps
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1))/,$(filter $(3)/%,$(extras_PRESENTATIONS_MIMETYPEFILES) $(extras_PRESENTATIONS_XMLFILES))) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1))/$(2)).dir
-
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_PRESENTATIONS_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_PRESENTATIONS_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_PRESENTATIONS_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_PRESENTATIONS_XMLFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1))/$(2) : \
-	EXTRAS_PRESENTATIONS_DIR := $(call gb_CustomTarget_get_workdir,$(1))/$(3)
-
-endef
-
-$(eval $(foreach file,$(extras_PRESENTATIONS_MIMETYPEFILES) $(extras_PRESENTATIONS_XMLFILES),\
-	$(call extras_Tplpresnt_make_file_deps,extras/source/templates/presnt,$(file)) \
-))
-
-$(eval $(foreach atexts,$(extras_TEMPLATES_PRESENTATIONS),\
-	$(call extras_Tplpresnt_make_zip_deps,extras/source/templates/presnt,$(atexts).otp,$(atexts)) \
-))
 
 # vim: set noet sw=4 ts=4:
