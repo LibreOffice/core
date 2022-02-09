@@ -3915,10 +3915,13 @@ IMPL_LINK_NOARG(SwContentTree, FocusInHdl, weld::Widget&, void)
 
         if (State::ACTIVE == m_eState && pActShell != GetWrtShell())
             SetActiveShell(pActShell);
+        // Only call HasContentChanged() if the document has changed since last called
         else if ((State::ACTIVE == m_eState || (State::CONSTANT == m_eState && pActShell == GetWrtShell())) &&
-                    HasContentChanged())
+                    m_bDocHasChanged)
         {
-            Display(true);
+            if (HasContentChanged())
+                Display(true);
+            m_bDocHasChanged = false;
         }
     }
     else if (State::ACTIVE == m_eState)
