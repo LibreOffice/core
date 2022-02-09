@@ -1782,16 +1782,28 @@ void ScTable::FillAutoSimple(
     bool bIsOrdinalSuffix = false;
 
     bool bColHidden = false, bRowHidden = false;
+    SCCOL nColHiddenFirst = rDocument.MaxCol();
     SCCOL nColHiddenLast = -1;
+    SCROW nRowHiddenFirst = rDocument.MaxRow();
     SCROW nRowHiddenLast = -1;
 
     rInner = nIStart;
     while (true)        // #i53728# with "for (;;)" old solaris/x86 compiler mis-optimizes
     {
-        if (rCol > nColHiddenLast)
-            bColHidden = ColHidden(rCol, nullptr, &nColHiddenLast);
-        if (rRow > nRowHiddenLast)
-            bRowHidden = RowHidden(rRow, nullptr, &nRowHiddenLast);
+        if (bPositive)
+        {
+            if (rCol > nColHiddenLast)
+                bColHidden = ColHidden(rCol, nullptr, &nColHiddenLast);
+            if (rRow > nRowHiddenLast)
+                bRowHidden = RowHidden(rRow, nullptr, &nRowHiddenLast);
+        }
+        else
+        {
+            if (rCol < nColHiddenFirst)
+                bColHidden = ColHidden(rCol, &nColHiddenFirst);
+            if (rRow < nRowHiddenFirst)
+                bRowHidden = RowHidden(rRow, &nRowHiddenFirst);
+        }
 
         if (!bColHidden && !bRowHidden)
         {
