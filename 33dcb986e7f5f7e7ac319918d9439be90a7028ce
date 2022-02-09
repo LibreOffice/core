@@ -16,6 +16,24 @@
       "message": "Nice find!\n\nAs a related thought - but please don\u0027t consider the following as suggestion to avoid this patch:\nYou have put much effort into this CPI-specific stuff already. It *seems* to me that there\u0027s no actually a safe way to combine different instruction sets in a same \"project\". I don\u0027t know if possibly splitting CPU-specific code into a static library could be safer *at some later stage*? (No idea if linking pre-compiled static library would be OK to guarantee the necessary separation; if not, maybe the only safe way would be separate DLLs?)",
       "revId": "33dcb986e7f5f7e7ac319918d9439be90a7028ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "916b94eb_32642b78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-09T14:15:49Z",
+      "side": 1,
+      "message": "Static libraries don\u0027t make a difference, for the resulting binary it doesn\u0027t matter where the added code comes from. A dynamically loaded library would presumably work, although it seems a bit overkill for something as simple as making \u003dSUM() a bit faster. Other projects seem to manage without things like that (I guess they don\u0027t shoot themselves in the foot by including C++ stuff in CPU-specific code, for example).\n\nThere\u0027s been so much time spent on this that I\u0027m tempted to ponder the option of simply proclaiming this to be a failed experiment and nuking it. It\u0027s apparently easy for us to get this wrong (and some things still are wrong, see e.g. my comment at the top of include/tools/cpuid.hxx), and I\u0027m getting sick and tired of fixing it :(.",
+      "parentUuid": "f4b32635_118a0d56",
+      "revId": "33dcb986e7f5f7e7ac319918d9439be90a7028ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
