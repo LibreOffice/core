@@ -862,7 +862,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
                 }
                 break;
-
+        case FID_TOGGLEHIDDENCOLROW:
+                {
+                    svtools::EditableColorConfig aEditableConfig;
+                    svtools::ColorConfigValue aValue = aEditableConfig.GetColorValue(svtools::CALCHIDDENROWCOL);
+                    aValue.bIsVisible = !aValue.bIsVisible;
+                    aEditableConfig.SetColorValue(svtools::CALCHIDDENROWCOL, aValue);
+                }
+                break;
         default:
                 OSL_FAIL("unknown message for ViewShell");
                 break;

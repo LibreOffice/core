@@ -305,7 +305,7 @@
         </node>
         <node oor:name="CalcHiddenColRow">
           <prop oor:name="IsVisible">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
@@ -598,7 +598,7 @@
         </node>
         <node oor:name="CalcHiddenColRow">
           <prop oor:name="IsVisible">
-            <value>true</value>
+            <value>false</value>
           </prop>
           <prop oor:name="Color">
             <value xsi:nil="true"/>
