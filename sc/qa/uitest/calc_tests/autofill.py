@@ -47,6 +47,36 @@ class CalcAutofill(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 10).getValue(), 17.34)
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 11).getValue(), 18.34)
 
+            #Test that hidden cells are not affected / skipped in the increment process.
+            #Simulate selecting cell A26 and dragging the fill handle in the bottom right corner of the cell down to A32
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A26:A32"}))
+            with self.ui_test.execute_dialog_through_command(".uno:FillSeries"):
+                pass
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 25).getValue(), 18.34)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 26).getValue(), 19.34)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 27).getValue(), 5.0) #hidden
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 28).getValue(), 5.0) #hidden
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 29).getString(), "hiddenA30")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 30).getValue(), 20.34) #overwrite "rows"
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 31).getValue(), 21.34)
+            #Simulate selecting cell A26 and dragging the fill handle in the bottom right corner of the cell up to A19
+            #   Note: start at empty cell A19 so Sheet - Fill Cells - Fill Series has good defaults
+            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A19:A26"}))
+            with self.ui_test.execute_dialog_through_command(".uno:FillSeries") as xDialog:
+                xup = xDialog.getChild("up")
+                xincrement = xDialog.getChild("increment")
+                xup.executeAction("CLICK", tuple())
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
+                xincrement.executeAction("TYPE", mkPropertyValues({"TEXT":"-1"}))
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 19).getString(), "hiddenA20")
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 20).getValue(), 15.34)
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 21).getValue(), 5.0) #hidden
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 22).getValue(), 16.34) #overwrite "testing"
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 23).getValue(), 5.0) #hidden
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 24).getValue(), 17.34) #overwrite "hidden"
+            self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 25).getValue(), 18.34)
+
             #Continue with the next cells with grey background
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "M12:M18"}))
             with self.ui_test.execute_dialog_through_command(".uno:FillSeries"):
