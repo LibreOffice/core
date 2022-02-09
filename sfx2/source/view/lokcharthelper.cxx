@@ -127,7 +127,17 @@ tools::Rectangle LokChartHelper::GetChartBoundingBox()
                     const auto nYNum = p.first * scaleY.GetDenominator();
                     const auto nYDen = p.second * scaleY.GetNumerator();
 
-                    Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin).scale(nXNum, nXDen, nYNum, nYDen);
+                    Point aOffset = pWindow->GetOffsetPixelFrom(*pRootWin);
+                    if (mbNegativeX && AllSettings::GetLayoutRTL())
+                    {
+                        // If global RTL flag is set, vcl-window X offset of chart window is
+                        // mirrored w.r.t parent window rectangle. This needs to be reverted.
+                        aOffset.setX(pRootWin->GetOutOffXPixel() + pRootWin->GetSizePixel().Width()
+                            - pWindow->GetOutOffXPixel() - pWindow->GetSizePixel().Width());
+
+                    }
+
+                    aOffset = aOffset.scale(nXNum, nXDen, nYNum, nYDen);
                     Size aSize = pWindow->GetSizePixel().scale(nXNum, nXDen, nYNum, nYDen);
                     aBBox = tools::Rectangle(aOffset, aSize);
                 }
@@ -158,7 +168,7 @@ bool LokChartHelper::Hit(const Point& aPos)
     return false;
 }
 
-bool LokChartHelper::HitAny(const Point& aPos)
+bool LokChartHelper::HitAny(const Point& aPos, bool bNegativeX)
 {
     SfxViewShell* pCurView = SfxViewShell::Current();
     int nPartForCurView = pCurView ? pCurView->getPart() : -1;
@@ -167,7 +177,7 @@ bool LokChartHelper::HitAny(const Point& aPos)
     {
         if (pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
-            LokChartHelper aChartHelper(pViewShell);
+            LokChartHelper aChartHelper(pViewShell, bNegativeX);
             if (aChartHelper.Hit(aPos))
                 return true;
         }
@@ -253,7 +263,7 @@ void LokChartHelper::PaintAllChartsOnTile(VirtualDevice& rDevice,
     {
         if (pCurView && pViewShell->GetDocId() == pCurView->GetDocId() && pViewShell->getPart() == nPartForCurView)
         {
-            LokChartHelper aChartHelper(pViewShell);
+            LokChartHelper aChartHelper(pViewShell, bNegativeX);
             aChartHelper.PaintTile(rDevice, aTileRect);
         }
         pViewShell = SfxViewShell::GetNext(*pViewShell);
