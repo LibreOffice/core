@@ -9,71 +9,41 @@
 
 $(eval $(call gb_CustomTarget_CustomTarget,extras/source/autotext/user))
 
-extras_AUTOTEXTUSER_AUTOTEXTS := \
-	mytexts \
-
-
 extras_AUTOTEXTUSER_XMLFILES := \
 	mytexts/BlockList.xml \
 	mytexts/META-INF/manifest.xml \
 
+# param: autotext-base (e.g. mytexts)
+extras_AUTOTEXTUSER_XMLFILES_RELATIVE = $(subst $(1)/,,$(filter $(1)/%,$(extras_AUTOTEXTUSER_XMLFILES)))
 
-extras_AUTOTEXTUSER_MIMETYPEFILES := \
-	mytexts/mimetype \
-
-
-$(call gb_CustomTarget_get_target,extras/source/autotext/user) : \
-	$(foreach atexts,$(extras_AUTOTEXTUSER_AUTOTEXTS),$(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/$(atexts).bau)
-
-$(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%/mimetype : $(SRCDIR)/extras/source/autotext/%/mimetype
-	$(call gb_Output_announce,autotext/user/$*/mimetype,$(true),CPY,1)
-	$(call gb_Trace_StartRange,autotext/user/$*/mimetype,CPY)
-	cp $< $@
-	$(call gb_Trace_EndRange,autotext/user/$*/mimetype,CPY)
+.SECONDEXPANSION:
+# secondexpansion since the patterns not just cover a filename portion, but also include a
+# directory portion withdifferent number of elements
+$(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%/mimetype : \
+        | $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/$$*/mimetype).dir
+	$(call gb_Output_announce,autotext/user/$*/mimetype,$(true),TCH,1)
+	$(call gb_Trace_StartRange,autotext/user/$*/mimetype,TCH)
+	touch $@
+	$(call gb_Trace_EndRange,autotext/user/$*/mimetype,TCH)
 
 $(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%.xml : $(SRCDIR)/extras/source/autotext/%.xml \
-		| $(call gb_ExternalExecutable_get_dependencies,xsltproc)
+        | $(call gb_ExternalExecutable_get_dependencies,xsltproc) \
+          $$(dir $(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/$$*.xml).dir
 	$(call gb_Output_announce,autotext/user/$*.xml,$(true),XSL,1)
 	$(call gb_Trace_StartRange,autotext/user/$*.xml,XSL)
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,autotext/user/$*.xml,XSL)
 
-$(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%.bau :
+$(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/%.bau : \
+        $$(addprefix $(call gb_CustomTarget_get_workdir,extras/source/autotext/user)/$$*/,\
+            mimetype $$(call extras_AUTOTEXTUSER_XMLFILES_RELATIVE,$$*))
 	$(call gb_Output_announce,autotext/user/$*.bau,$(true),ZIP,2)
 	$(call gb_Trace_StartRange,autotext/user/$*.bau,ZIP)
 	$(call gb_Helper_abbreviate_dirs,\
-		cd $(EXTRAS_AUTOTEXTUSER_DIR) && \
-		zip -q0X --filesync --must-match $@ $(EXTRAS_AUTOTEXTUSER_MIMEFILES_FILTER) && \
-		zip -qrX --must-match $@ $(EXTRAS_AUTOTEXTUSER_XMLFILES_FILTER) \
+		cd $(dir $<) && \
+		zip -q0X --filesync --must-match $@ mimetype && \
+		zip -qrX --must-match $@ $(call extras_AUTOTEXTUSER_XMLFILES_RELATIVE,$*) \
 	)
 	$(call gb_Trace_EndRange,autotext/user/$*.bau,ZIP)
-
-define extras_Autotextuser_make_file_deps
-$(call gb_CustomTarget_get_workdir,$(1)/user)/$(2) : $(SRCDIR)/$(1)/$(2) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1)/user)/$(2)).dir
-
-endef
-
-define extras_Autotextuser_make_zip_deps
-$(call gb_CustomTarget_get_workdir,$(1)/user)/$(2) : \
-	$(addprefix $(call gb_CustomTarget_get_workdir,$(1)/user)/,$(filter $(3)/%,$(extras_AUTOTEXTUSER_MIMETYPEFILES) $(extras_AUTOTEXTUSER_XMLFILES))) \
-	| $(dir $(call gb_CustomTarget_get_workdir,$(1)/user)/$(2)).dir
-
-$(call gb_CustomTarget_get_workdir,$(1)/user)/$(2) : \
-	EXTRAS_AUTOTEXTUSER_MIMEFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_AUTOTEXTUSER_MIMETYPEFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1)/user)/$(2) : \
-	EXTRAS_AUTOTEXTUSER_XMLFILES_FILTER := $(foreach file,$(filter $(3)/%,$(extras_AUTOTEXTUSER_XMLFILES)),$(subst $(3)/,,$(file)))
-$(call gb_CustomTarget_get_workdir,$(1)/user)/$(2) : \
-	EXTRAS_AUTOTEXTUSER_DIR := $(call gb_CustomTarget_get_workdir,$(1)/user)/$(3)
-
-endef
-
-$(eval $(foreach file,$(extras_AUTOTEXTUSER_MIMETYPEFILES) $(extras_AUTOTEXTUSER_XMLFILES),\
-	$(call extras_Autotextuser_make_file_deps,extras/source/autotext,$(file)) \
-))
-
-$(eval $(foreach atexts,$(extras_AUTOTEXTUSER_AUTOTEXTS),\
-	$(call extras_Autotextuser_make_zip_deps,extras/source/autotext,$(atexts).bau,$(atexts)) \
-))
 
 # vim: set noet sw=4 ts=4:
