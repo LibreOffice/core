@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "425e6c58_b96adf14",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-09T10:20:37Z",
+      "side": 1,
+      "message": "unfortunately 7.1 is EOL\nhttps://wiki.documentfoundation.org/ReleasePlan/7.1\n\n",
+      "revId": "d880ba0a3b1f8f96ea53345ed39c9dba35dab935",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
