@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3d4bd0b_bb20c229",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003180
+      },
+      "writtenOn": "2022-02-09T06:18:23Z",
+      "side": 1,
+      "message": "\u003e You don\u0027t have permission?\n\nI don\u0027t think so 😂",
+      "revId": "3e5e0c2943e057873952b5394b81dbe6d29ef1e2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
