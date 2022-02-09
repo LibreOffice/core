@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdf70fab_2a37dc41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-02-09T17:25:46Z",
+      "side": 1,
+      "message": "CI is green",
+      "revId": "72559c50d918b05bb83f0a8c56368c1b5a37226f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
