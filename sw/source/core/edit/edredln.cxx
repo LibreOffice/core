@@ -90,7 +90,28 @@ bool SwEditShell::AcceptRedlinesInSelection()
 {
     CurrShell aCurr( this );
     StartAllAction();
-    bool bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( *GetCursor(), true );
+    // in table selection mode, process the selected boxes in reverse order
+    // to allow accepting their text changes and the tracked row deletions
+    bool bRet = false;
+    if ( IsTableMode() )
+    {
+        const SwSelBoxes& rBoxes = GetTableCursor()->GetSelectedBoxes();
+        std::vector<std::unique_ptr<SwPaM>> vBoxes;
+        for(auto pBox : rBoxes)
+        {
+            if ( !pBox->IsEmpty() )
+            {
+                const SwStartNode *pSttNd = pBox->GetSttNd();
+                SwNode* pEndNode = pSttNd->GetNodes()[pSttNd->EndOfSectionIndex()];
+                vBoxes.push_back(std::unique_ptr<SwPaM>(new SwPaM(*pEndNode, 0, *pSttNd, 0)));
+            }
+        }
+
+        for (size_t i = 0; i < vBoxes.size(); ++i)
+            bRet |= GetDoc()->getIDocumentRedlineAccess().AcceptRedline( *vBoxes[vBoxes.size()-i-1], true );
+    }
+    else
+        bRet = GetDoc()->getIDocumentRedlineAccess().AcceptRedline( *GetCursor(), true );
     EndAllAction();
     return bRet;
 }
@@ -99,7 +120,28 @@ bool SwEditShell::RejectRedlinesInSelection()
 {
     CurrShell aCurr( this );
     StartAllAction();
-    bool bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( *GetCursor(), true );
+    bool bRet = false;
+    // in table selection mode, process the selected boxes in reverse order
+    // to allow rejecting their text changes and the tracked row insertions
+    if ( IsTableMode() )
+    {
+        const SwSelBoxes& rBoxes = GetTableCursor()->GetSelectedBoxes();
+        std::vector<std::unique_ptr<SwPaM>> vBoxes;
+        for(auto pBox : rBoxes)
+        {
+            if ( !pBox->IsEmpty() )
+            {
+                const SwStartNode *pSttNd = pBox->GetSttNd();
+                SwNode* pEndNode = pSttNd->GetNodes()[pSttNd->EndOfSectionIndex()];
+                vBoxes.push_back(std::unique_ptr<SwPaM>(new SwPaM(*pEndNode, 0, *pSttNd, 0)));
+            }
+        }
+
+        for (size_t i = 0; i < vBoxes.size(); ++i)
+            bRet |= GetDoc()->getIDocumentRedlineAccess().RejectRedline( *vBoxes[vBoxes.size()-i-1], true );
+    }
+    else
+        bRet = GetDoc()->getIDocumentRedlineAccess().RejectRedline( *GetCursor(), true );
     EndAllAction();
     return bRet;
 }
