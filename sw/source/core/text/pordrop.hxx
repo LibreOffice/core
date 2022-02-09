@@ -60,6 +60,7 @@ public:
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
 };
 
+/// Text portion for the Format -> Paragraph -> Drop Caps functionality.
 class SwDropPortion : public SwTextPortion
 {
     friend class SwDropCapCache;
