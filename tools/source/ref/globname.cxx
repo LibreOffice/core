@@ -21,7 +21,6 @@
 #include <string.h>
 
 #include <comphelper/mimeconfighelper.hxx>
-#include <rtl/strbuf.hxx>
 #include <rtl/character.hxx>
 
 #include <tools/stream.hxx>
@@ -153,30 +152,14 @@ bool SvGlobalName::MakeId( const OUString & rIdStr )
 
 OUString SvGlobalName::GetHexName() const
 {
-    OStringBuffer aHexBuffer(36);
-
-    char buf[ 10 ];
-    sprintf( buf, "%8.8" SAL_PRIXUINT32, m_aData.Data1 );
-    aHexBuffer.append(buf);
-    aHexBuffer.append('-');
-    sprintf( buf, "%4.4X", m_aData.Data2 );
-    aHexBuffer.append(buf);
-    aHexBuffer.append('-');
-    sprintf( buf, "%4.4X", m_aData.Data3 );
-    aHexBuffer.append(buf);
-    aHexBuffer.append('-');
-    for( int i = 0; i < 2; i++ )
-    {
-        sprintf( buf, "%2.2x", m_aData.Data4[ i ] );
-        aHexBuffer.append(buf);
-    }
-    aHexBuffer.append('-');
-    for( int i = 2; i < 8; i++ )
-    {
-        sprintf( buf, "%2.2x", m_aData.Data4[ i ] );
-        aHexBuffer.append(buf);
-    }
-    return OStringToOUString(aHexBuffer.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
+    char buf[ 37 ];
+    int n = sprintf(buf,
+                    "%8.8" SAL_PRIXUINT32 "-%4.4X-%4.4X-%2.2x%2.2x-%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x",
+                    m_aData.Data1, m_aData.Data2, m_aData.Data3,
+                    m_aData.Data4[0], m_aData.Data4[1], m_aData.Data4[2], m_aData.Data4[3],
+                    m_aData.Data4[4], m_aData.Data4[5], m_aData.Data4[6], m_aData.Data4[7]);
+    assert(n == 36);
+    return OUString::createFromAscii(std::string_view(buf, n));
 }
 
 css::uno::Sequence < sal_Int8 > SvGlobalName::GetByteSequence() const
