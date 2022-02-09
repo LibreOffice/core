@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af0a7d19_a4e6a722",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-09T19:41:40Z",
+      "side": 1,
+      "message": "Since I reverted back the useless part, let\u0027s push this one.",
+      "revId": "a432fccb687758a926e00e86cc222f16fce48f32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
