@@ -16,6 +16,23 @@
       "message": "But note that this change doesn\u0027t guarantee that.  The compiler would still be free, under the as-if rule, to carry out the initialization (which happens not to have any observable side effects) of the local static variable upon loading the dynamic library containing it.\n\nI think compilers are lacking (non-standard) features to instruct them not to emit arch-feature-specific code that would be executed unconditionally.",
       "revId": "3f96d70ce7f31d556b995733b44cb8715b64e329",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2580411d_b25d8a6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-09T14:14:24Z",
+      "side": 1,
+      "message": "See also: https://gerrit.libreoffice.org/c/core/+/129724",
+      "revId": "3f96d70ce7f31d556b995733b44cb8715b64e329",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
