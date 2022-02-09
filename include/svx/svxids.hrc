@@ -202,8 +202,8 @@ class XFillGradientItem;
 #define FN_END_DOC_DIRECT       (FN_SELECTION + 79)
 
 #define FN_PARAM                (SID_SW_START + 1100)
-#define FN_PARAM_FILTER         (FN_PARAM + 30)
-#define FN_PARAM_FIELD_CONTENT  (FN_PARAM + 55)
+#define FN_PARAM_FILTER         TypedWhichId<SfxStringItem>(FN_PARAM + 30)
+#define FN_PARAM_FIELD_CONTENT  TypedWhichId<SfxStringItem>(FN_PARAM + 55)
 
 #define FN_PGPREVIEW            (SID_SW_START + 1250)
 #define FN_SHOW_MULTIPLE_PAGES  (FN_PGPREVIEW + 2)
@@ -342,8 +342,8 @@ class XFillGradientItem;
 #define SID_DIALOG_TESTMODE                             ( SID_SVX_START + 200 )
 #define SID_FRAME_LINESTYLE                             TypedWhichId<SvxLineItem>( SID_SVX_START + 201 )
 #define SID_FRAME_LINECOLOR                             TypedWhichId<SvxColorItem>( SID_SVX_START + 202 )
-#define SID_ATTR_LINE_WIDTH_ARG                         ( SID_SVX_START + 203 )
-#define SID_FILL_GRADIENT_JSON                          ( SID_SVX_START + 204 )
+#define SID_ATTR_LINE_WIDTH_ARG                         TypedWhichId<SvxDoubleItem>( SID_SVX_START + 203 )
+#define SID_FILL_GRADIENT_JSON                          TypedWhichId<SfxStringItem>( SID_SVX_START + 204 )
 #define SID_SEARCHDLG_SEARCHSTRINGS                     ( SID_SVX_START + 215 )
 #define SID_SEARCHDLG_REPLACESTRINGS                    ( SID_SVX_START + 216 )
 #define SID_ATTR_TABLE                                  ( SID_SVX_START + 217 )
@@ -445,9 +445,9 @@ class XFillGradientItem;
 #define SID_ATTR_TEXTCOLUMNS_NUMBER                     ( SID_SVX_START + 340 )
 #define SID_ATTR_TEXTCOLUMNS_SPACING                    ( SID_SVX_START + 341 )
 
-#define SID_ATTR_COLOR_THEME_INDEX                      ( SID_SVX_START + 342 )
-#define SID_ATTR_COLOR_LUM_MOD                          ( SID_SVX_START + 343 )
-#define SID_ATTR_COLOR_LUM_OFF                          ( SID_SVX_START + 344 )
+#define SID_ATTR_COLOR_THEME_INDEX                      TypedWhichId<SfxInt16Item>( SID_SVX_START + 342 )
+#define SID_ATTR_COLOR_LUM_MOD                          TypedWhichId<SfxInt16Item>( SID_SVX_START + 343 )
+#define SID_ATTR_COLOR_LUM_OFF                          TypedWhichId<SfxInt16Item>( SID_SVX_START + 344 )
 
 #define SID_SB_CONNECTIONPOOLING                        ( SID_SVX_START + 348 )
 #define SID_SB_DBREGISTEROPTIONS                        ( SID_SVX_START + 349 )
@@ -703,8 +703,8 @@ class XFillGradientItem;
 
 // CAUTION! Range <855 .. 855> used by EditEngine (!)
 
-#define SID_PARAM_NUM_PRESET                            ( SID_SVX_START + 856 )
-#define SID_PARAM_CUR_NUM_LEVEL                         ( SID_SVX_START + 859 )
+#define SID_PARAM_NUM_PRESET                            TypedWhichId<SfxBoolItem>( SID_SVX_START + 856 )
+#define SID_PARAM_CUR_NUM_LEVEL                         TypedWhichId<SfxUInt16Item>( SID_SVX_START + 859 )
 #define SID_CREATE_SW_DRAWVIEW                          ( SID_SVX_START + 860 )
 #define SID_ATTR_GRAF_LUMINANCE                         ( SID_SVX_START + 863 )
 #define SID_ATTR_GRAF_CONTRAST                          ( SID_SVX_START + 864 )
@@ -945,7 +945,7 @@ class XFillGradientItem;
 #define SID_COMPRESS_GRAPHIC                            ( SID_SVX_START + 1117 )
 #define SID_FRAME_UP                                    ( SID_SVX_START + 1118 )
 #define SID_FRAME_DOWN                                  ( SID_SVX_START + 1119 )
-#define SID_ATTR_SPECIALCHAR                            ( SID_SVX_START + 1120 )
+#define SID_ATTR_SPECIALCHAR                            TypedWhichId<SfxStringItem>( SID_SVX_START + 1120 )
 #define SID_ROTATE_GRAPHIC_LEFT                         ( SID_SVX_START + 1121 )
 #define SID_ROTATE_GRAPHIC_RIGHT                        ( SID_SVX_START + 1122 )
 #define SID_ROTATE_GRAPHIC_180                          ( SID_SVX_START + 1123 )

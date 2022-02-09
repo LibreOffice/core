@@ -111,7 +111,7 @@ OUString SdAnimationInfo::GetBookmark() const
 {
     OUString sBookmark;
 
-    const SvxFieldItem* pFldItem = dynamic_cast< const SvxFieldItem* >( &mrObject.GetMergedItem( EE_FEATURE_FIELD ) );
+    const SvxFieldItem* pFldItem = &mrObject.GetMergedItem( EE_FEATURE_FIELD );
     if( pFldItem )
     {
         SvxURLField* pURLField = const_cast< SvxURLField* >( dynamic_cast<const SvxURLField*>( pFldItem->GetField() ) );

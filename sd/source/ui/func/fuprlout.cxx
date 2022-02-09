@@ -150,11 +150,11 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         if (pArgs->GetItemState(ATTR_PRESLAYOUT_LOAD) == SfxItemState::SET)
             bLoad = static_cast<const SfxBoolItem&>(pArgs->Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
         if( pArgs->GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE ) == SfxItemState::SET )
-            bMasterPage = static_cast<const SfxBoolItem&>( pArgs->Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
+            bMasterPage = pArgs->Get( ATTR_PRESLAYOUT_MASTER_PAGE ).GetValue();
         if( pArgs->GetItemState( ATTR_PRESLAYOUT_CHECK_MASTERS ) == SfxItemState::SET )
             bCheckMasters = static_cast<const SfxBoolItem&>( pArgs->Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
         if (pArgs->GetItemState(ATTR_PRESLAYOUT_NAME) == SfxItemState::SET)
-            aFile = static_cast<const SfxStringItem&>(pArgs->Get(ATTR_PRESLAYOUT_NAME)).GetValue();
+            aFile = pArgs->Get(ATTR_PRESLAYOUT_NAME).GetValue();
     }
     else
     {
@@ -171,11 +171,11 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                 if (aSet.GetItemState(ATTR_PRESLAYOUT_LOAD) == SfxItemState::SET)
                     bLoad = static_cast<const SfxBoolItem&>(aSet.Get(ATTR_PRESLAYOUT_LOAD)).GetValue();
                 if( aSet.GetItemState( ATTR_PRESLAYOUT_MASTER_PAGE ) == SfxItemState::SET )
-                    bMasterPage = static_cast<const SfxBoolItem&>(aSet.Get( ATTR_PRESLAYOUT_MASTER_PAGE ) ).GetValue();
+                    bMasterPage = aSet.Get( ATTR_PRESLAYOUT_MASTER_PAGE ).GetValue();
                 if( aSet.GetItemState( ATTR_PRESLAYOUT_CHECK_MASTERS ) == SfxItemState::SET )
                     bCheckMasters = static_cast<const SfxBoolItem&>(aSet.Get( ATTR_PRESLAYOUT_CHECK_MASTERS ) ).GetValue();
                 if (aSet.GetItemState(ATTR_PRESLAYOUT_NAME) == SfxItemState::SET)
-                    aFile = static_cast<const SfxStringItem&>(aSet.Get(ATTR_PRESLAYOUT_NAME)).GetValue();
+                    aFile = aSet.Get(ATTR_PRESLAYOUT_NAME).GetValue();
             }
             break;
 

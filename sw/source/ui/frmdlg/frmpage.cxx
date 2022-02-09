@@ -2192,7 +2192,7 @@ void SwFramePage::Init(const SfxItemSet& rSet)
 
     if(SfxItemState::SET == rSet.GetItemState(FN_KEEP_ASPECT_RATIO))
     {
-        m_xFixedRatioCB->set_active(static_cast<const SfxBoolItem&>(rSet.Get(FN_KEEP_ASPECT_RATIO)).GetValue());
+        m_xFixedRatioCB->set_active(rSet.Get(FN_KEEP_ASPECT_RATIO).GetValue());
         m_xFixedRatioCB->save_state();
     }
 

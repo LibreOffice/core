@@ -21,6 +21,7 @@
 
 #include <svl/typedwhich.hxx>
 
+class ScConsolidateItem;
 class SfxBoolItem;
 class SvxCharReliefItem;
 class SvxColorItem;
@@ -84,16 +85,16 @@ class SvxSetItem;
 
 #define MSGPOOL_START               1100
 
-#define SCITEM_STRING               1100
-#define SCITEM_SEARCHDATA           1101
-#define SCITEM_SORTDATA             1102
-#define SCITEM_QUERYDATA            1103
-#define SCITEM_SUBTDATA             1104
-#define SCITEM_CONSOLIDATEDATA      1105
-#define SCITEM_PIVOTDATA            1106
-#define SCITEM_SOLVEDATA            1107
-#define SCITEM_USERLIST             1108
-#define SCITEM_CONDFORMATDLGDATA    1109
+#define SCITEM_STRING               TypedWhichId<SfxStringItem>(1100)
+#define SCITEM_SEARCHDATA           TypedWhichId<SvxSearchItem>(1101)
+#define SCITEM_SORTDATA             TypedWhichId<ScSortItem>(1102)
+#define SCITEM_QUERYDATA            TypedWhichId<ScQueryItem>(1103)
+#define SCITEM_SUBTDATA             TypedWhichId<ScSubTotalItem>(1104)
+#define SCITEM_CONSOLIDATEDATA      TypedWhichId<ScConsolidateItem>(1105)
+#define SCITEM_PIVOTDATA            TypedWhichId<ScPivotItem>(1106)
+#define SCITEM_SOLVEDATA            TypedWhichId<ScSolveItem>(1107)
+#define SCITEM_USERLIST             TypedWhichId<ScUserListItem>(1108)
+#define SCITEM_CONDFORMATDLGDATA    TypedWhichId<ScCondFormatDlgItem>(1109)
 
 #define MSGPOOL_END                 1109
 

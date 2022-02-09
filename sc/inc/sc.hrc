@@ -22,6 +22,7 @@
 
 #include <svx/svxids.hrc>
 
+class ScTpPrintItem;
 class SvxZoomSliderItem;
 
 // areas
@@ -62,12 +63,12 @@ class SvxZoomSliderItem;
 #define SID_UPDATECHART         (SC_VIEW_START + 13)
 
 // TabPage entry - Legacy selection
-#define SID_SC_INPUT_LEGACY_CELL_SELECTION (SC_VIEW_START + 15)
-#define SID_SC_OPT_SORT_REF_UPDATE         (SC_VIEW_START + 16)
+#define SID_SC_INPUT_LEGACY_CELL_SELECTION TypedWhichId<SfxBoolItem>(SC_VIEW_START + 15)
+#define SID_SC_OPT_SORT_REF_UPDATE         TypedWhichId<SfxBoolItem>(SC_VIEW_START + 16)
 
 // Format options
-#define SID_SCFORMULAOPTIONS    (SC_VIEW_START + 20)
-#define SID_SCDEFAULTSOPTIONS   (SC_VIEW_START + 21)
+#define SID_SCFORMULAOPTIONS    TypedWhichId<ScTpFormulaItem>(SC_VIEW_START + 20)
+#define SID_SCDEFAULTSOPTIONS   TypedWhichId<ScTpDefaultsItem>(SC_VIEW_START + 21)
 
 
 #define SID_DATA_PROVIDER       (SC_VIEW_START + 31)
@@ -82,8 +83,8 @@ class SvxZoomSliderItem;
 // other slot-IDs:
 #define SID_SCUSERLISTS         (SC_VIEW_START + 37)    // user defined lists
 #define RES_TBX_DUMMY           (SC_VIEW_START + 38)    // dummy-item
-#define SID_SCVIEWOPTIONS       (SC_VIEW_START + 39)
-#define SID_SCDOCOPTIONS        (SC_VIEW_START + 40)
+#define SID_SCVIEWOPTIONS       TypedWhichId<ScTpViewItem>(SC_VIEW_START + 39)
+#define SID_SCDOCOPTIONS        TypedWhichId<ScTpCalcItem>(SC_VIEW_START + 40)
 
 // cursor movements as properties:
 #define SID_CURRENTCELL         (SC_VIEW_START + 41)
@@ -111,24 +112,24 @@ class SvxZoomSliderItem;
 #define SID_LINKS               (SC_VIEW_START + 60)
 #define SID_INSERT_SMATH        (SC_VIEW_START + 63)
 // Put this here since all available slots for "SC_INPUT" are taken
-#define SID_SC_INPUT_ENTER_PASTE_MODE (SC_VIEW_START + 64)
+#define SID_SC_INPUT_ENTER_PASTE_MODE TypedWhichId<SfxBoolItem>(SC_VIEW_START + 64)
 #define SID_MIRROR_VERTICAL     (SC_VIEW_START + 65)
 #define SID_MIRROR_HORIZONTAL   (SC_VIEW_START + 66)
 #define SID_CELL_FORMAT_RESET   (SC_VIEW_START + 67)
-#define SID_SCPRINTOPTIONS      (SC_VIEW_START + 68)
+#define SID_SCPRINTOPTIONS      TypedWhichId<ScTpPrintItem>(SC_VIEW_START + 68)
 #define SID_WINDOW_SPLIT        (SC_VIEW_START + 69)
 #define SID_WINDOW_FIX          (SC_VIEW_START + 70)
 #define SID_DRAW_CHART          (SC_VIEW_START + 71)
 #define SID_UPDATETABLINKS      (SC_VIEW_START + 72)
 
 // TabPage entry
-#define SID_SC_INPUT_SELECTION          (SC_VIEW_START + 73)
-#define SID_SC_INPUT_SELECTIONPOS       (SC_VIEW_START + 74)
-#define SID_SC_INPUT_EDITMODE           (SC_VIEW_START + 75)
-#define SID_SC_INPUT_FMT_EXPAND         (SC_VIEW_START + 76)
-#define SID_SC_INPUT_RANGEFINDER        (SC_VIEW_START + 77)
-#define SID_SC_INPUT_REF_EXPAND         (SC_VIEW_START + 78)
-#define SID_SC_INPUT_MARK_HEADER        (SC_VIEW_START + 79)
+#define SID_SC_INPUT_SELECTION          TypedWhichId<SfxBoolItem>(SC_VIEW_START + 73)
+#define SID_SC_INPUT_SELECTIONPOS       TypedWhichId<SfxUInt16Item>(SC_VIEW_START + 74)
+#define SID_SC_INPUT_EDITMODE           TypedWhichId<SfxBoolItem>(SC_VIEW_START + 75)
+#define SID_SC_INPUT_FMT_EXPAND         TypedWhichId<SfxBoolItem>(SC_VIEW_START + 76)
+#define SID_SC_INPUT_RANGEFINDER        TypedWhichId<SfxBoolItem>(SC_VIEW_START + 77)
+#define SID_SC_INPUT_REF_EXPAND         TypedWhichId<SfxBoolItem>(SC_VIEW_START + 78)
+#define SID_SC_INPUT_MARK_HEADER        TypedWhichId<SfxBoolItem>(SC_VIEW_START + 79)
 
 #define SID_REIMPORT_AFTER_LOAD (SC_VIEW_START + 80)
 #define SID_DRAW_NOTEEDIT       (SC_VIEW_START + 81)
@@ -138,7 +139,7 @@ class SvxZoomSliderItem;
 //See include/sfx2/sfxsids.hrc for reserved usage of (SC_VIEW_START + 84)
 #define SID_EXTERNAL_SOURCE     (SC_VIEW_START + 85)
 
-#define SID_SC_INPUT_TEXTWYSIWYG        (SC_VIEW_START + 86)
+#define SID_SC_INPUT_TEXTWYSIWYG        TypedWhichId<SfxBoolItem>(SC_VIEW_START + 86)
 
 #define SID_ENABLE_HYPHENATION          (SC_VIEW_START + 87)
 
@@ -150,10 +151,10 @@ class SvxZoomSliderItem;
 #define SID_DP_FILTER                   (SC_VIEW_START + 91)
 
 // replace cell contents warning
-#define SID_SC_INPUT_REPLCELLSWARN      (SC_VIEW_START + 92)
+#define SID_SC_INPUT_REPLCELLSWARN      TypedWhichId<SfxBoolItem>(SC_VIEW_START + 92)
 
 // additional IDs for list/range validity
-#define FID_VALID_LISTTYPE              (SC_VIEW_START + 93)
+#define FID_VALID_LISTTYPE              TypedWhichId<SfxInt16Item>(SC_VIEW_START + 93)
 
 // #i68101# ID for changing title & description of an object
 #define SID_TITLE_DESCRIPTION_OBJECT    (SC_VIEW_START + 94)
@@ -162,9 +163,9 @@ class SvxZoomSliderItem;
 #define SID_ASSIGNMACRO                 (SC_VIEW_START + 95)
 
 // "Zoom / Synchronize sheets" in options dialog
-#define SID_SC_OPT_SYNCZOOM             (SC_VIEW_START + 98)
+#define SID_SC_OPT_SYNCZOOM             TypedWhichId<SfxBoolItem>(SC_VIEW_START + 98)
 
-#define SID_SC_OPT_KEY_BINDING_COMPAT   (SC_VIEW_START + 99)
+#define SID_SC_OPT_KEY_BINDING_COMPAT   TypedWhichId<SfxUInt16Item>(SC_VIEW_START + 99)
 
 // NOTE: last valid ID is (SC_VIEW_START + 99)
 
@@ -268,7 +269,7 @@ class SvxZoomSliderItem;
 #define EDIT_MENU_END           (EDIT_MENU_START + 20)
 #define VIEW_MENU_START         (EDIT_MENU_END)
 
-#define FID_TOGGLEINPUTLINE     (VIEW_MENU_START + 1)
+#define FID_TOGGLEINPUTLINE     TypedWhichId<SfxBoolItem>(VIEW_MENU_START + 1)
 #define FID_TOGGLEHEADERS       (VIEW_MENU_START + 2)
 #define FID_SCALE               (VIEW_MENU_START + 4)
 #define FID_TOGGLESYNTAX        (VIEW_MENU_START + 5)
@@ -555,18 +556,18 @@ class SvxZoomSliderItem;
 #define FID_NOTE_VISIBLE        (SID_NEW_SLOTS+59)
 
 //  items for validation
-#define FID_VALID_MODE          (SID_NEW_SLOTS+60)
-#define FID_VALID_CONDMODE      (SID_NEW_SLOTS+61)
-#define FID_VALID_VALUE1        (SID_NEW_SLOTS+62)
-#define FID_VALID_VALUE2        (SID_NEW_SLOTS+63)
-#define FID_VALID_BLANK         (SID_NEW_SLOTS+64)
-#define FID_VALID_SHOWHELP      (SID_NEW_SLOTS+65)
-#define FID_VALID_HELPTITLE     (SID_NEW_SLOTS+66)
-#define FID_VALID_HELPTEXT      (SID_NEW_SLOTS+67)
-#define FID_VALID_SHOWERR       (SID_NEW_SLOTS+68)
-#define FID_VALID_ERRSTYLE      (SID_NEW_SLOTS+69)
-#define FID_VALID_ERRTITLE      (SID_NEW_SLOTS+70)
-#define FID_VALID_ERRTEXT       (SID_NEW_SLOTS+71)
+#define FID_VALID_MODE          TypedWhichId<SfxUInt16Item>(SID_NEW_SLOTS+60)
+#define FID_VALID_CONDMODE      TypedWhichId<SfxUInt16Item>(SID_NEW_SLOTS+61)
+#define FID_VALID_VALUE1        TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+62)
+#define FID_VALID_VALUE2        TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+63)
+#define FID_VALID_BLANK         TypedWhichId<SfxBoolItem>(SID_NEW_SLOTS+64)
+#define FID_VALID_SHOWHELP      TypedWhichId<SfxBoolItem>(SID_NEW_SLOTS+65)
+#define FID_VALID_HELPTITLE     TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+66)
+#define FID_VALID_HELPTEXT      TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+67)
+#define FID_VALID_SHOWERR       TypedWhichId<SfxBoolItem>(SID_NEW_SLOTS+68)
+#define FID_VALID_ERRSTYLE      TypedWhichId<SfxUInt16Item>(SID_NEW_SLOTS+69)
+#define FID_VALID_ERRTITLE      TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+70)
+#define FID_VALID_ERRTEXT       TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+71)
 
 #define SID_REFRESH_DBAREA      (SID_NEW_SLOTS+72)
 

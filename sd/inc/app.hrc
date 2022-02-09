@@ -451,7 +451,7 @@
 
 // Add companion for the SID_HIDE_SLIDE (that is defined in svx)
 #define SID_SHOW_SLIDE                      (SID_SD_START+441)
-#define SID_ADD_MOTION_PATH                 (SID_SD_START+442)
+#define SID_ADD_MOTION_PATH                 TypedWhichId<SfxUnoAnyItem>(SID_SD_START+442)
 
     // FREE
 #define SID_ZOOM_MODE                       (SID_SD_START+447)

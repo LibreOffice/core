@@ -1953,7 +1953,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 if ( pOkItem->GetValue() )      // OK
                 {
                     OUString             aFormula;
-                    const SfxStringItem* pSItem      = static_cast<const SfxStringItem*>(&pReqArgs->Get( SCITEM_STRING ));
+                    const SfxStringItem* pSItem      = &pReqArgs->Get( SCITEM_STRING );
                     const SfxBoolItem*   pMatrixItem = static_cast<const SfxBoolItem*>(&pReqArgs->Get( SID_DLG_MATRIX ));
 
                     aFormula += pSItem->GetValue();
@@ -2247,8 +2247,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             if (pReqArgs)
             {
                 const ScSolveItem& rItem =
-                        static_cast<const ScSolveItem&>(
-                            pReqArgs->Get( SCITEM_SOLVEDATA ));
+                            pReqArgs->Get( SCITEM_SOLVEDATA );
 
                 pTabViewShell->Solve( rItem.GetData() );
 
@@ -3263,7 +3262,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     if ( pArgs )
     {
-        pTabViewShell->DoSubTotals( static_cast<const ScSubTotalItem&>( pArgs->Get( SCITEM_SUBTDATA )).
+        pTabViewShell->DoSubTotals( pArgs->Get( SCITEM_SUBTDATA ).
                         GetSubTotalData() );
         rReq.Done();
         return;
@@ -3315,9 +3314,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
         {
             pOutSet = pDlg->GetOutputItemSet();
             aSubTotalParam =
-                static_cast<const ScSubTotalItem&>(
-                    pOutSet->Get( SCITEM_SUBTDATA )).
-                        GetSubTotalData();
+                    pOutSet->Get( SCITEM_SUBTDATA ).GetSubTotalData();
         }
         else // if (bResult == SCRET_REMOVE)
         {

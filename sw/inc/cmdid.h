@@ -24,6 +24,9 @@
 #include <svx/svxids.hrc>
 #include <svl/solar.hrc>
 
+class SwAddPrinterItem;
+class SwPtrItem;
+
 #define FN_FILE                 SID_SW_START
 //#define FN_EDIT                 (SID_SW_START +  100) defined in svxids.hrc
 #define FN_VIEW                 (SID_SW_START +  200)
@@ -173,8 +176,8 @@
 #define FN_PREVIEW_ZOOM          (FN_VIEW + 51)  /* create table controller for zoom */
 
 #define FN_SET_MODOPT_TBLNUMFMT  (FN_VIEW + 52) /* Number recognition in tables */
-#define FN_HSCROLL_METRIC        (FN_VIEW + 53) /* Metric horizontal scrollbar */
-#define FN_VSCROLL_METRIC        (FN_VIEW + 54) /* Metric vertical scrollbar */
+#define FN_HSCROLL_METRIC        TypedWhichId<SfxUInt16Item>(FN_VIEW + 53) /* Metric horizontal scrollbar */
+#define FN_VSCROLL_METRIC        TypedWhichId<SfxUInt16Item>(FN_VIEW + 54) /* Metric vertical scrollbar */
 
 #define FN_NAV_ELEMENT          (FN_VIEW + 55)  /* Navigate By drop down controller */
 #define FN_SCROLL_PREV          (FN_VIEW + 57)  /* uno:ScrollToPrevious */
@@ -278,7 +281,7 @@
 #define FN_INSERT_PAGEFOOTER    (FN_INSERT2 + 14)   /* insert default footer */
 
 #define FN_INSERT_ENDNOTE           (FN_INSERT2 + 18)   /* insert endnote*/
-#define FN_INSERT_REGION            (FN_INSERT2 + 19)   /* Insert section */
+#define FN_INSERT_REGION            TypedWhichId<SfxUInt16Item>(FN_INSERT2 + 19)   /* Insert section */
 
 #define FN_INSERT_MULTI_TOX         (FN_INSERT2 + 20)   /* insert any TOX */
 #define FN_INSERT_AUTH_ENTRY_DLG    (FN_INSERT2 + 21)   /* insert entry for table of authorities*/
@@ -549,7 +552,7 @@
 #define FN_UNO_PARENT_TEXT (FN_EXTRA2 + 42)
 #define FN_UNO_FOLLOW_STYLE                 (FN_EXTRA2 + 59)
 
-#define FN_API_CALL                         (FN_EXTRA2 + 60)
+#define FN_API_CALL                         TypedWhichId<SfxBoolItem>(FN_EXTRA2 + 60)
 
 #define FN_UNO_IS_PHYSICAL                  (FN_EXTRA2 + 61)
 #define FN_UNO_IS_AUTO_UPDATE               (FN_EXTRA2 + 62)
@@ -764,18 +767,18 @@
 #define FN_PARAM_MOVE_COUNT         (FN_PARAM+2)
 #define FN_PARAM_MOVE_SELECTION     (FN_PARAM+3)
 
-#define FN_PARAM_ADDPRINTER         (FN_PARAM+18)
-#define FN_PARAM_DOCDISP            (FN_PARAM+20)
-#define FN_PARAM_ELEM               (FN_PARAM+21)
-#define FN_PARAM_SWTEST             (FN_PARAM+22)
+#define FN_PARAM_ADDPRINTER         TypedWhichId<SwAddPrinterItem>(FN_PARAM+18)
+#define FN_PARAM_DOCDISP            TypedWhichId<SwDocDisplayItem>(FN_PARAM+20)
+#define FN_PARAM_ELEM               TypedWhichId<SwElemItem>(FN_PARAM+21)
+#define FN_PARAM_SWTEST             TypedWhichId<SwTestItem>(FN_PARAM+22)
 
 #define FN_PARAM_FTN_INFO           (FN_PARAM+23)
 
-#define FN_PARAM_REGION_NAME            (FN_PARAM+24)
-#define FN_PARAM_REGION_CONDITION       (FN_PARAM+25)
-#define FN_PARAM_REGION_HIDDEN          (FN_PARAM+26)
-#define FN_PARAM_REGION_PROTECT         (FN_PARAM+27)
-#define FN_PARAM_REGION_EDIT_IN_READONLY (FN_PARAM+28)
+#define FN_PARAM_REGION_NAME            TypedWhichId<SfxStringItem>(FN_PARAM+24)
+#define FN_PARAM_REGION_CONDITION       TypedWhichId<SfxStringItem>(FN_PARAM+25)
+#define FN_PARAM_REGION_HIDDEN          TypedWhichId<SfxBoolItem>(FN_PARAM+26)
+#define FN_PARAM_REGION_PROTECT         TypedWhichId<SfxBoolItem>(FN_PARAM+27)
+#define FN_PARAM_REGION_EDIT_IN_READONLY TypedWhichId<SfxBoolItem>(FN_PARAM+28)
 
 #define FN_PARAM_INSERT_AFTER           (FN_PARAM+29)
 
@@ -792,23 +795,23 @@
 #define FN_PARAM_GRF_DIALOG             (FN_PARAM+71)
 #define FN_INET_FIELD_MACRO             (FN_PARAM+77) /* Id for URL-Field-Macros*/
 
-#define FN_PARAM_PRINTER                (FN_PARAM+78) /* Printer */
-#define FN_PARAM_STDFONTS               (FN_PARAM+79) /* ConfigItem Standardfonts */
+#define FN_PARAM_PRINTER                TypedWhichId<SwPtrItem>(FN_PARAM+78) /* Printer */
+#define FN_PARAM_STDFONTS               TypedWhichId<SwPtrItem>(FN_PARAM+79) /* ConfigItem Standardfonts */
 
-#define FN_PARAM_WRTSHELL               (FN_PARAM2) /* SwWrtShell */
+#define FN_PARAM_WRTSHELL               TypedWhichId<SwPtrItem>(FN_PARAM2) /* SwWrtShell */
 
-#define FN_COND_COLL                    (FN_PARAM2+1) /* Item for conditional templates */
-#define FN_PARAM_SELECTION              (FN_PARAM2+2) /* selected word for format/character/hyperlink */
+#define FN_COND_COLL                    TypedWhichId<SwCondCollItem>(FN_PARAM2+1) /* Item for conditional templates */
+#define FN_PARAM_SELECTION              TypedWhichId<SfxStringItem>(FN_PARAM2+2) /* selected word for format/character/hyperlink */
 
 #define FN_PARAM_ACT_NUMBER             (FN_PARAM2+3) /* PointerItem the current NumRule */
 
 #define FN_PARAM_NUM_PRESET             (FN_PARAM2+5) /* predefined numbering */
 
-#define FN_PARAM_SHADOWCURSOR           (FN_PARAM2+8) /* for ShadowCursor options */
+#define FN_PARAM_SHADOWCURSOR           TypedWhichId<SwShadowCursorItem>(FN_PARAM2+8) /* for ShadowCursor options */
 
 #define FN_TEXT_RANGE                   (FN_PARAM2+12) /* TextRange Property*/
 
-#define FN_PARAM_CRSR_IN_PROTECTED      (FN_PARAM2+13) /* Cursor in protected areas */
+#define FN_PARAM_CRSR_IN_PROTECTED      TypedWhichId<SfxBoolItem>(FN_PARAM2+13) /* Cursor in protected areas */
 #define FN_PARAM_TOX_TYPE               (FN_PARAM2+14) /* TOX type in tox dialog*/
 #define FN_PARAM_LINK_DISPLAY_NAME      (FN_PARAM2+15) /* LinkDisplayName property*/
 #define FN_PARAM_NUM_LEVEL              (FN_PARAM2+16) /* rtf filter*/
@@ -819,7 +822,7 @@
 #define FN_DROP_CHAR_STYLE_NAME         (FN_PARAM2+19) /* character style of drop caps - for recording */
 #define FN_PARAM_CHAIN_PREVIOUS         (FN_PARAM2+20) /* Name of frame to be added as chain successor */
 #define FN_PARAM_CHAIN_NEXT             (FN_PARAM2+21) /* Name of frame to be added as chain predecessor */
-#define FN_PARAM_DATABASE_PROPERTIES    (FN_PARAM2+22) /* transport a Sequence<PropertyValue> containing database properties*/
+#define FN_PARAM_DATABASE_PROPERTIES    TypedWhichId<SfxUnoAnyItem>(FN_PARAM2+22) /* transport a Sequence<PropertyValue> containing database properties*/
 #define FN_SHAPE_TRANSFORMATION_IN_HORI_L2R (FN_PARAM2+23)
 #define FN_SHAPE_POSITION_LAYOUT_DIR    (FN_PARAM2+24)
 #define FN_SHAPE_STARTPOSITION_IN_HORI_L2R (FN_PARAM2+25)
@@ -853,8 +856,8 @@
 #define FN_SURROUND                     (FN_FRAME + 3)
 #define FN_VERT_ORIENT                  (FN_FRAME + 4)
 #define FN_HORI_ORIENT                  (FN_FRAME + 5)
-#define FN_SET_FRM_NAME                 (FN_FRAME + 6)
-#define FN_KEEP_ASPECT_RATIO            (FN_FRAME + 7)
+#define FN_SET_FRM_NAME                 TypedWhichId<SfxStringItem>(FN_FRAME + 6)
+#define FN_KEEP_ASPECT_RATIO            TypedWhichId<SfxBoolItem>(FN_FRAME + 7)
 
 #define FN_SET_FRM_ALT_NAME             (FN_FRAME + 18)
 #define FN_UNO_TITLE                    (FN_FRAME + 19)

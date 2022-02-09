@@ -36,7 +36,7 @@
 ScTpCalcOptions::ScTpCalcOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optcalculatepage.ui", "OptCalculatePage", &rCoreAttrs)
     , pOldOptions(new ScDocOptions(
-        static_cast<const ScTpCalcItem&>(rCoreAttrs.Get(SID_SCDOCOPTIONS)).GetDocOptions()))
+        rCoreAttrs.Get(SID_SCDOCOPTIONS).GetDocOptions()))
     , pLocalOptions(new ScDocOptions)
     , m_xBtnIterate(m_xBuilder->weld_check_button("iterate"))
     , m_xFtSteps(m_xBuilder->weld_label("stepsft"))
@@ -87,8 +87,7 @@ void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
     sal_Int16   y;
 
     pOldOptions.reset(new ScDocOptions(
-        static_cast<const ScTpCalcItem&>(rCoreAttrs->Get(
-            SID_SCDOCOPTIONS)).GetDocOptions()));
+        rCoreAttrs->Get(SID_SCDOCOPTIONS).GetDocOptions()));
 
     *pLocalOptions = *pOldOptions;
 
