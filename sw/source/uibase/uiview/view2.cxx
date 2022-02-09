@@ -804,10 +804,23 @@ void SwView::Execute(SfxRequest &rReq)
 
             if( pCursor->HasMark() && nRedline == SwRedlineTable::npos)
             {
-                if (FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot)
+                bool bAccept = FN_REDLINE_ACCEPT_DIRECT == nSlot || FN_REDLINE_ACCEPT_TONEXT == nSlot;
+                SwWrtShell& rSh = GetWrtShell();
+                SwRewriter aRewriter;
+                SwUndoId eUndoId;
+                bool bTableSelection = rSh.IsTableMode();
+                if ( bTableSelection )
+                {
+                    aRewriter.AddRule(UndoArg1, SwResId( STR_REDLINE_TABLECHG ));
+                    eUndoId = bAccept ? SwUndoId::ACCEPT_REDLINE : SwUndoId::REJECT_REDLINE;
+                    rSh.StartUndo( eUndoId, &aRewriter);
+                }
+                if ( bAccept )
                     m_pWrtShell->AcceptRedlinesInSelection();
                 else
                     m_pWrtShell->RejectRedlinesInSelection();
+                if ( bTableSelection )
+                    rSh.EndUndo( eUndoId, &aRewriter);
             }
             else
             {
