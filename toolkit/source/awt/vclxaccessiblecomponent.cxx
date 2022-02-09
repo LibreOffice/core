@@ -80,7 +80,15 @@ VCLXAccessibleComponent::~VCLXAccessibleComponent()
 }
 
 IMPLEMENT_FORWARD_XINTERFACE3( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
-IMPLEMENT_FORWARD_XTYPEPROVIDER3( VCLXAccessibleComponent, OAccessibleExtendedComponentHelper, OAccessibleImplementationAccess, VCLXAccessibleComponent_BASE )
+css::uno::Sequence< css::uno::Type > SAL_CALL VCLXAccessibleComponent::getTypes()
+{
+    return ::comphelper::concatSequences(
+        OAccessibleExtendedComponentHelper::getTypes(),
+        OAccessibleImplementationAccess::getTypes(),
+        VCLXAccessibleComponent_BASE::getTypes()
+    );
+}
+IMPLEMENT_GET_IMPLEMENTATION_ID( VCLXAccessibleComponent )
 
 OUString VCLXAccessibleComponent::getImplementationName()
 {
