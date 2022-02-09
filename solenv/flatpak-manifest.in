@@ -722,6 +722,7 @@
         "--socket=wayland",
         "--socket=pulseaudio",
         "--device=dri",
+        "--filesystem=xdg-config/gtk-3.0",
         "--filesystem=host",
         "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
         "--env=JAVA_HOME=/app/jre",
