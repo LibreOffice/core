@@ -8,24 +8,19 @@
  *
  */
 
-#define LO_ARRAYSUM_SPACE SSE2
 #include "arraysum.hxx"
 
-#include <arraysumfunctorinternal.hxx>
+#include <arraysumfunctor.hxx>
 
 #include <tools/simd.hxx>
 #include <tools/simdsupport.hxx>
 
 #include <stdlib.h>
 
+#if SC_USE_SSE2
+
 namespace sc::op
 {
-#ifdef LO_SSE2_AVAILABLE
-
-bool hasSSE2Code() { return true; }
-
-using namespace SSE2;
-
 /** Kahan sum with SSE2.
   */
 static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
@@ -51,7 +46,7 @@ static inline void sumSSE2(__m128d& sum, __m128d& err, const __m128d& value)
 
 /** Execute Kahan sum with SSE2.
   */
-KahanSumSimple executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
+KahanSum executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
 {
     // Make sure we don't fall out of bounds.
     // This works by sums of 8 terms.
@@ -121,13 +116,8 @@ KahanSumSimple executeSSE2(size_t& i, size_t nSize, const double* pCurrent)
     return { 0.0, 0.0 };
 }
 
-#else // LO_SSE2_AVAILABLE
-
-bool hasSSE2Code() { return false; }
-
-KahanSumSimple executeSSE2(size_t&, size_t, const double*) { abort(); }
+} // namespace
 
 #endif
-}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
