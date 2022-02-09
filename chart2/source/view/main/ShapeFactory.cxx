@@ -120,8 +120,8 @@ rtl::Reference<SvxShapeGroupAnyD> ShapeFactory::getOrCreateChartRootShape(
     // shape is identified by having the name com.sun.star.chart2.shapes.
     rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
     xShapeGroup->setShapeKind(SdrObjKind::Group);
-    uno::Reference<drawing::XShape> xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY);
-    xDrawPage->addBottom(xShape);
+    // cast to resolve ambiguity in converting to XShape
+    xDrawPage->addBottom(static_cast<SvxShape*>(xShapeGroup.get()));
 
     setShapeName(xShapeGroup, "com.sun.star.chart2.shapes");
     xShapeGroup->setSize(awt::Size(0,0));
@@ -1731,8 +1731,8 @@ rtl::Reference< SvxShapeGroup >
         //create and add to target
         rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
         xShapeGroup->setShapeKind(SdrObjKind::Group);
-        uno::Reference< drawing::XShape > xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY_THROW);
-        xTarget->add(xShape);
+        // cast to resolve ambiguity in converting to XShape
+        xTarget->add(static_cast<SvxShape*>(xShapeGroup.get()));
 
         //set name
         if(!aName.isEmpty())
@@ -1763,8 +1763,8 @@ rtl::Reference< SvxShapeGroup >
         //create and add to target
         rtl::Reference<SvxShapeGroup> xShapeGroup = new SvxShapeGroup(nullptr, nullptr);
         xShapeGroup->setShapeKind(SdrObjKind::Group);
-        uno::Reference< drawing::XShape > xShape(static_cast<cppu::OWeakObject*>(xShapeGroup.get()), uno::UNO_QUERY_THROW);
-        xTarget->add(xShape);
+        // cast to resolve ambiguity in converting to XShape
+        xTarget->add(static_cast<SvxShape*>(xShapeGroup.get()));
 
         //set name
         if(!aName.isEmpty())
