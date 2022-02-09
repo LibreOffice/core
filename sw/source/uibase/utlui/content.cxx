@@ -3580,42 +3580,32 @@ void SwContentTree::UpdateTracking()
             return;
         }
         // bookmarks - track first bookmark at cursor
-        if (m_pActiveShell->GetSelectionType() & SelectionType::Text)
+        if (m_bBookmarkTracking && (m_pActiveShell->GetSelectionType() & SelectionType::Text))
         {
             SwDoc* pDoc = m_pActiveShell->GetDoc();
-            uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(pDoc->GetDocShell()->GetBaseModel(),
-                                                                        uno::UNO_QUERY);
-            uno::Reference<container::XIndexAccess> xBookmarks(xBookmarksSupplier->getBookmarks(),
-                                                               uno::UNO_QUERY);
-            sal_Int32 nBookmarkCount = xBookmarks->getCount();
+            sal_Int32 nBookmarkCount = m_pActiveShell->getIDocumentMarkAccess()->getBookmarksCount();
             if (nBookmarkCount && !(m_bIsRoot && m_nRootType != ContentTypeId::BOOKMARK))
             {
-                if (!m_bBookmarkTracking) return;
                 SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
-                uno::Reference<text::XTextRange> xRange(
-                            SwXTextRange::CreateXTextRange(*pDoc, *pCursor->GetPoint(), nullptr));
-                for (sal_Int32 i = 0; i < nBookmarkCount; ++i)
+                IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
+                for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
+                    ppMark != pMarkAccess->getBookmarksEnd();
+                    ++ppMark)
                 {
-                    uno::Reference<text::XTextContent> bookmark;
-                    xBookmarks->getByIndex(i) >>= bookmark;
-                    try
+                    if (IDocumentMarkAccess::MarkType::BOOKMARK !=
+                            IDocumentMarkAccess::GetType(**ppMark))
+                        continue;
+                    const ::sw::mark::IMark* pBkmk = *ppMark;
+                    SwPosition* pCursorPoint = pCursor->GetPoint();
+                    // would like to use pBkmk->IsCoveringPosition(*pCursor->GetPoint() but it
+                    // returns false when the mark's start and end position are equal
+                    if (*pCursorPoint >= pBkmk->GetMarkStart() &&
+                            *pCursorPoint <= pBkmk->GetMarkEnd())
                     {
-                        uno::Reference<text::XTextRange> bookmarkRange = bookmark->getAnchor();
-                        uno::Reference<text::XTextRangeCompare> xTextRangeCompare(xRange->getText(),
-                                                                                  uno::UNO_QUERY);
-                        if (xTextRangeCompare.is()
-                                && xTextRangeCompare->compareRegionStarts(bookmarkRange, xRange) != -1
-                                && xTextRangeCompare->compareRegionEnds(xRange, bookmarkRange) != -1)
-                        {
-                            uno::Reference<container::XNamed> xBookmark(bookmark, uno::UNO_QUERY);
-                            lcl_SelectByContentTypeAndName(this, *m_xTreeView,
-                                                           SwResId(STR_CONTENT_TYPE_BOOKMARK),
-                                                           xBookmark->getName());
-                            return;
-                        }
-                    }
-                    catch (const lang::IllegalArgumentException&)
-                    {
+                        lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                                       SwResId(STR_CONTENT_TYPE_BOOKMARK),
+                                                       pBkmk->GetName());
+                        return;
                     }
                 }
             }
@@ -3706,11 +3696,10 @@ void SwContentTree::UpdateTracking()
         }
     }
     // outline
-    if (m_nOutlineTracking == 3)
-        return;
     // find out where the cursor is
     const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
-    if (!((m_bIsRoot && m_nRootType != ContentTypeId::OUTLINE) || nActPos == SwOutlineNodes::npos))
+    if (m_nOutlineTracking != 3 && !((m_bIsRoot && m_nRootType != ContentTypeId::OUTLINE) ||
+                                     nActPos == SwOutlineNodes::npos))
     {
         // assure outline content type is expanded
         // this assumes outline content type is first in treeview
