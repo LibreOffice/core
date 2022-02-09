@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "adf46a22_85faac6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-02-09T12:25:11Z",
+      "side": 1,
+      "message": "What does LIBREOFFICE-39BBF6YM mean?",
+      "revId": "7484c3393dc2216239cdb730983725fe2e08e730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
