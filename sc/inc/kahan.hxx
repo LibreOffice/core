@@ -12,8 +12,6 @@
 #include <rtl/math.hxx>
 #include <cmath>
 
-#include "arraysumfunctorinternal.hxx"
-
 /**
   * This class provides LO with Kahan summation algorithm
   * About this algorithm: https://en.wikipedia.org/wiki/Kahan_summation_algorithm
@@ -37,12 +35,6 @@ public:
     constexpr KahanSum(double x_0, double err_0)
         : m_fSum(x_0)
         , m_fError(err_0)
-    {
-    }
-
-    constexpr KahanSum(const sc::op::KahanSumSimple& sum)
-        : m_fSum(sum.m_fSum)
-        , m_fError(sum.m_fError)
     {
     }
 
