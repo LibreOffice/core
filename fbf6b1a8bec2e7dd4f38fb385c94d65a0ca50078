@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8fd29e6f_c622cb07",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 3461,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-09T13:31:56Z",
+      "side": 1,
+      "message": "There is *no* \"UTF-16 character\" or \"UTF-32 character\", only \"Unicode codepoint\", which, *when encoded in UTF-16*, may take one or two code units. But *why* do you want to know if you get a 1-code-unit \"character\" or two-code-unit one? You get it as a whole, without any calculations.\n\nSo I do not see how this\n\n    while ( nIdx \u003c  aStr.getLength() )\n    {\n        aStr.iterateCodePoints( \u0026nIdx );\n        sal_uInt32 c;\n        if ( nIdx - nPrevIdx \u003d\u003d 1 )  // UTF-16 character\n            c \u003d aStr[ nPrevIdx ];\n        else                         // UTF-32 character\n            c \u003d ( aStr[ nPrevIdx ] \u003c\u003c 10 ) + aStr[ nPrevIdx + 1 ] - 0x35FDC00;\n\n        if ( lcl_ScInterpreter_IsPrintable( c ) )\n            aBuf.appendUtf32( c );\n        nPrevIdx \u003d nIdx;\n    }\n\ncould be more clear than\n\n    while ( nIdx \u003c  aStr.getLength() )\n    {\n        sal_uInt32 c \u003d aStr.iterateCodePoints(\u0026nIdx);\n        if ( lcl_ScInterpreter_IsPrintable( c ) )\n            aResult.appendUtf32(c);\n    }",
+      "parentUuid": "3bc6fbd1_2fca59a2",
+      "revId": "fbf6b1a8bec2e7dd4f38fb385c94d65a0ca50078",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e96a8527_5131df70",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 4
