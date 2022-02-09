@@ -3681,8 +3681,9 @@ bool ScTable::IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SC
 
 bool ScTable::IsDataFiltered(const ScRange& rRange) const
 {
-    return IsDataFiltered(rRange.aStart.Col(), rRange.aStart.Row(),
-                rRange.aEnd.Col(), rRange.aEnd.Row());
+    ScRange aNormalized(rRange.aStart, rRange.aEnd);
+    return IsDataFiltered(aNormalized.aStart.Col(), aNormalized.aStart.Row(),
+                aNormalized.aEnd.Col(), aNormalized.aEnd.Row());
 }
 
 void ScTable::SetRowFlags( SCROW nRow, CRFlags nNewFlags )
