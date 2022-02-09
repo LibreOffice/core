@@ -100,63 +100,55 @@ void SvGlobalName::MakeFromMemory( void const * pData )
 bool SvGlobalName::MakeId( const OUString & rIdStr )
 {
     const sal_Unicode *pStr = rIdStr.getStr();
-    if( rIdStr.getLength() == 36
-      && '-' == pStr[ 8 ]  && '-' == pStr[ 13 ]
-      && '-' == pStr[ 18 ] && '-' == pStr[ 23 ] )
+    if( rIdStr.getLength() != 36
+      || '-' != pStr[ 8 ]  || '-' != pStr[ 13 ]
+      || '-' != pStr[ 18 ] || '-' != pStr[ 23 ] )
+        return false;
+
+    SvGUID aGuid = {};
+    auto asciiHexDigitToNumber = [](sal_Unicode c) -> sal_uInt8
     {
-        SvGUID aGuid = {};
-        auto asciiHexDigitToNumber = [](sal_Unicode c) -> sal_uInt8
-        {
-            if (rtl::isAsciiDigit(c))
-                return c - '0';
-            else
-                return rtl::toAsciiUpperCase(c) - 'A' + 10;
-        };
-        for( int i = 0; i < 8; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                aGuid.Data1 = aGuid.Data1 * 16 + asciiHexDigitToNumber( *pStr );
-            else
-                return false;
-            pStr++;
-        }
+        if (rtl::isAsciiDigit(c))
+            return c - '0';
+        else
+            return rtl::toAsciiUpperCase(c) - 'A' + 10;
+    };
 
-        pStr++;
-        for( int i = 0; i < 4; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                aGuid.Data2 = aGuid.Data2 * 16 + asciiHexDigitToNumber( *pStr );
-            else
-                return false;
-            pStr++;
-        }
-
-        pStr++;
-        for( int i = 0; i < 4; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                aGuid.Data3 = aGuid.Data3 * 16 + asciiHexDigitToNumber( *pStr );
-            else
-                return false;
-            pStr++;
-        }
-
-        pStr++;
-        for( int i = 0; i < 16; i++ )
-        {
-            if( rtl::isAsciiHexDigit( *pStr ) )
-                aGuid.Data4[i/2] = aGuid.Data4[i/2] * 16 + asciiHexDigitToNumber( *pStr );
-            else
-                return false;
-            pStr++;
-            if( i == 3 )
-                pStr++;
-        }
-
-        m_aData = aGuid;
-        return true;
+    for( int i = 0; i < 8; i++ )
+    {
+        if( !rtl::isAsciiHexDigit( *pStr ) )
+            return false;
+        aGuid.Data1 = aGuid.Data1 * 16 + asciiHexDigitToNumber( *pStr++ );
     }
-    return false;
+
+    pStr++;
+    for( int i = 0; i < 4; i++ )
+    {
+        if( !rtl::isAsciiHexDigit( *pStr ) )
+            return false;
+        aGuid.Data2 = aGuid.Data2 * 16 + asciiHexDigitToNumber( *pStr++ );
+    }
+
+    pStr++;
+    for( int i = 0; i < 4; i++ )
+    {
+        if( !rtl::isAsciiHexDigit( *pStr ) )
+            return false;
+        aGuid.Data3 = aGuid.Data3 * 16 + asciiHexDigitToNumber( *pStr++ );
+    }
+
+    pStr++;
+    for( int i = 0; i < 16; i++ )
+    {
+        if( !rtl::isAsciiHexDigit( *pStr ) )
+            return false;
+        aGuid.Data4[i/2] = aGuid.Data4[i/2] * 16 + asciiHexDigitToNumber( *pStr++ );
+        if( i == 3 )
+            pStr++;
+    }
+
+    m_aData = aGuid;
+    return true;
 }
 
 OUString SvGlobalName::GetHexName() const
