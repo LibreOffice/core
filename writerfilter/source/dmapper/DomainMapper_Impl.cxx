@@ -183,6 +183,45 @@ static void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rx
     }
 }
 
+/**
+ Very similar to DomainMapper_Impl::GetPropertyFromStyleSheet
+ It is focused on paragraph properties search in current & parent stylesheet entries.
+ But it will not take into account propeties with listid: these are "list paragraph styles" and
+ not used in some cases.
+*/
+uno::Any lcl_GetPropertyFromParaStyleSheetNoNum(PropertyIds eId, StyleSheetEntryPtr pEntry, const StyleSheetTablePtr& rStyleSheet)
+{
+    while (pEntry)
+    {
+        if (pEntry->pProperties)
+        {
+            std::optional<PropertyMap::Property> aProperty =
+                pEntry->pProperties->getProperty(eId);
+            if (aProperty)
+            {
+                if (pEntry->pProperties->GetListId())
+                    // It is a paragraph style with list. Paragraph list styles are not taken into account
+                    return uno::Any();
+                else
+                    return aProperty->second;
+            }
+        }
+        //search until the property is set or no parent is available
+        StyleSheetEntryPtr pNewEntry;
+        if (!pEntry->sBaseStyleIdentifier.isEmpty())
+            pNewEntry = rStyleSheet->FindStyleSheetByISTD(pEntry->sBaseStyleIdentifier);
+
+        SAL_WARN_IF(pEntry == pNewEntry, "writerfilter.dmapper", "circular loop in style hierarchy?");
+
+        if (pEntry == pNewEntry) //fdo#49587
+            break;
+
+        pEntry = pNewEntry;
+    }
+    return uno::Any();
+}
+
+
 namespace {
 
 struct FieldConversion
@@ -1757,11 +1796,21 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
 
         if (nListId == 0 && !pList)
         {
-            // Seems situation with listid=0 and missing list definition is used by DOCX
-            // to remove numbering defined previously. But some default numbering attributes
-            // are still applied. This is first line indent, probably something more?
-            if (!pParaContext->isSet(PROP_PARA_FIRST_LINE_INDENT))
-                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(sal_Int16(0)), false);
+            // listid = 0 and no list definition is used in DOCX to stop numbering
+            // defined somewhere in parent styles
+            // And here we should explicitly set left margin and first-line margin.
+            // They can be taken from referred style, but not from styles with listid!
+            uno::Any aProp = lcl_GetPropertyFromParaStyleSheetNoNum(PROP_PARA_FIRST_LINE_INDENT, pEntry, m_pStyleSheetTable);
+            if (aProp.hasValue())
+                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, aProp, false);
+            else
+                pParaContext->Insert(PROP_PARA_FIRST_LINE_INDENT, uno::makeAny(sal_uInt32(0)), false);
+
+            aProp = lcl_GetPropertyFromParaStyleSheetNoNum(PROP_PARA_LEFT_MARGIN, pEntry, m_pStyleSheetTable);
+            if (aProp.hasValue())
+                pParaContext->Insert(PROP_PARA_LEFT_MARGIN, aProp, false);
+            else
+                pParaContext->Insert(PROP_PARA_LEFT_MARGIN, uno::makeAny(sal_uInt32(0)), false);
         }
     }
 
