@@ -925,7 +925,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126426)
         CPPUNIT_ASSERT_EQUAL(OUString("Some text "), xRun->getString());
     }
     {
-        // Link and this content was completely missong before
+        // Link and this content was completely missing before
         uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY_THROW);
         CPPUNIT_ASSERT_EQUAL(OUString("Link"), xRun->getString());
         auto aURL = getProperty<OUString>(xRun, "HyperLinkURL");

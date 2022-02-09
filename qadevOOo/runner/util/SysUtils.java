@@ -26,7 +26,7 @@ import com.sun.star.datatransfer.*;
 public class SysUtils {
 
   /**
-   * Tries to obtain text data from cliboard if such one exists.
+   * Tries to obtain text data from clipboard if such one exists.
    * The method iterates through all 'text/plain' supported data
    * flavors and returns the first non-null String value.
    *
