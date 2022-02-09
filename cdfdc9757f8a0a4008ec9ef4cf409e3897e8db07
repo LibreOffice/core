@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84d41c32_15cb88fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-02-09T14:49:35Z",
+      "side": 1,
+      "message": "CI build passed:\n\n    Projekt : 00-LO-BuildAll\n    Buildnummer\t:\t2505",
+      "revId": "cdfdc9757f8a0a4008ec9ef4cf409e3897e8db07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
