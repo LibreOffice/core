@@ -71,6 +71,7 @@
 #include <scmod.hxx>
 #include <editutil.hxx>
 #include <docsh.hxx>
+#include <sharedstringpoolpurge.hxx>
 
 tools::SvRef<ScDocShell>  ScGlobal::xDrawClipDocShellRef;
 std::unique_ptr<SvxSearchItem> ScGlobal::xSearchItem;
@@ -98,6 +99,7 @@ std::unique_ptr<ScFunctionMgr> ScGlobal::xStarCalcFunctionMgr;
 std::atomic<ScUnitConverter*> ScGlobal::pUnitConverter(nullptr);
 std::unique_ptr<SvNumberFormatter> ScGlobal::xEnglishFormatter;
 std::unique_ptr<ScFieldEditEngine> ScGlobal::xFieldEditEngine;
+std::atomic<sc::SharedStringPoolPurge*> ScGlobal::pSharedStringPoolPurge;
 
 double          ScGlobal::nScreenPPTX           = 96.0;
 double          ScGlobal::nScreenPPTY           = 96.0;
@@ -546,6 +548,7 @@ void ScGlobal::Clear()
 
     delete pUnitConverter.exchange(nullptr);
     xFieldEditEngine.reset();
+    delete pSharedStringPoolPurge.exchange(nullptr);
 
     xDrawClipDocShellRef.clear();
 }
@@ -1085,6 +1088,12 @@ ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
         xFieldEditEngine.reset(new ScFieldEditEngine( nullptr, nullptr));
     }
     return *xFieldEditEngine;
+}
+
+sc::SharedStringPoolPurge& ScGlobal::GetSharedStringPoolPurge()
+{
+    return *comphelper::doubleCheckedInit( pSharedStringPoolPurge,
+        []() { return new sc::SharedStringPoolPurge; });
 }
 
 OUString ScGlobal::ReplaceOrAppend( const OUString& rString,
