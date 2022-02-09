@@ -14,19 +14,6 @@
 
 namespace sc::op
 {
-// Code must not be shared between different CPU intrinsics flags (e.g. in debug mode the compiler would not
-// inline them, and merge the copies, keeping only the one with the most demanding CPU set that's not available otherwise).
-// Put everything in a different namespace and additionally try to force inlining.
-namespace LO_ARRAYSUM_SPACE
-{
-#if defined _MSC_VER
-#define INLINE __forceinline static
-#elif defined __GNUC__
-#define INLINE __attribute__((always_inline)) static inline
-#else
-#define static inline
-#endif
-
 /**
   * Performs one step of the Neumanier sum between doubles
   * Overwrites the summand and error
@@ -34,7 +21,7 @@ namespace LO_ARRAYSUM_SPACE
   * @param err
   * @param value
   */
-INLINE void sumNeumanierNormal(double& sum, double& err, const double& value)
+inline void sumNeumanierNormal(double& sum, double& err, const double& value)
 {
     double t = sum + value;
     if (fabs(sum) >= fabs(value))
@@ -44,9 +31,6 @@ INLINE void sumNeumanierNormal(double& sum, double& err, const double& value)
     sum = t;
 }
 
-#undef INLINE
-
-} // end namespace LO_ARRAYSUM_SPACE
 } // end namespace sc::op
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
