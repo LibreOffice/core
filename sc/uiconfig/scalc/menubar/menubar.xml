@@ -165,6 +165,7 @@
       </menu:menu>
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:ViewValueHighlighting"/>
+      <menu:menuitem menu:id=".uno:ViewHiddenColRow"/>
       <menu:menuitem menu:id=".uno:ToggleFormula"/>
       <menu:menuitem menu:id=".uno:ShowAnnotations"/>
       <menu:menuseparator/>
