@@ -733,11 +733,11 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     // check if user hit a chart which is being edited by him
     ScTabViewShell * pTabViewShell = pViewData->GetViewShell();
     SCTAB nTab = pViewData->GetTabNo();
-    LokChartHelper aChartHelper(pTabViewShell);
     const ScDocument& rDoc = pDocShell->GetDocument();
     // In LOK RTL mode draw/svx operates in negative X coordinates
     // But the coordinates from client is always positive, so negate nX for draw.
     bool bDrawNegativeX = rDoc.IsNegativePage(nTab);
+    LokChartHelper aChartHelper(pTabViewShell, bDrawNegativeX);
     int nDrawX = bDrawNegativeX ? -nX : nX;
     if (aChartHelper.postMouseEvent(nType, nDrawX, nY,
                                     nCount, nButtons, nModifier,
@@ -753,7 +753,7 @@ void ScModelObj::postMouseEvent(int nType, int nX, int nY, int nCount, int nButt
     // and, if so, skip current mouse event
     if (nType != LOK_MOUSEEVENT_MOUSEMOVE)
     {
-        if (LokChartHelper::HitAny(aPointTwipDraw))
+        if (LokChartHelper::HitAny(aPointTwipDraw, bDrawNegativeX))
             return;
     }
 
