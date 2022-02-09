@@ -81,7 +81,7 @@ void SwView::ExecDlgExt(SfxRequest const &rReq)
         {
             OUString sAdditionsTag = "";
 
-            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(SID_ADDITIONS_TAG);
+            const SfxStringItem* pStringArg = rReq.GetArg<SfxStringItem>(FN_PARAM_ADDITIONS_TAG);
             if (pStringArg)
                 sAdditionsTag = pStringArg->GetValue();
 

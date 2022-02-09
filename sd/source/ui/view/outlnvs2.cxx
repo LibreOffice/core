@@ -27,6 +27,7 @@
 #include <sfx2/zoomitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdoutl.hxx>
+#include <svx/zoomslideritem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
 #include <editeng/editstat.hxx>
@@ -107,7 +108,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             const SfxItemSet* pArgs = rReq.GetArgs();
 
             const SfxUInt16Item* pScale = (pArgs && pArgs->Count () == 1) ?
-                rReq.GetArg<SfxUInt16Item>(SID_ATTR_ZOOMSLIDER) : nullptr;
+                rReq.GetArg(SID_ATTR_ZOOMSLIDER) : nullptr;
             if (pScale && CHECK_RANGE (5, pScale->GetValue (), 3000))
             {
                 SetZoom (pScale->GetValue ());

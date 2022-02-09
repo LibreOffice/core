@@ -5650,7 +5650,7 @@ SfxVoidItem PasteUnformatted SID_PASTE_UNFORMATTED
 
 // call thesaurus dialog from context menu
 SfxVoidItem ThesaurusFromContext SID_THES
-(SfxStringItem WordReplace SID_THES)
+(SfxStringItem WordReplace FN_PARAM_THES_WORD_REPLACE)
 [
     AutoUpdate = FALSE,
     FastCall = TRUE,
@@ -5753,7 +5753,7 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
 ]
 
 SfxVoidItem AdditionsDialog SID_ADDITIONS_DIALOG
-(SfxStringItem AdditionsTag SID_ADDITIONS_TAG)
+(SfxStringItem AdditionsTag FN_PARAM_ADDITIONS_TAG)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

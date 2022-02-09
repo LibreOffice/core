@@ -197,7 +197,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
         case SID_THES:
             {
                 OUString aReplaceText;
-                const SfxStringItem* pItem2 = rReq.GetArg<SfxStringItem>(SID_THES);
+                const SfxStringItem* pItem2 = rReq.GetArg(FN_PARAM_THES_WORD_REPLACE);
                 if (pItem2)
                     aReplaceText = pItem2->GetValue();
                 if (!aReplaceText.isEmpty())
@@ -819,7 +819,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                     LanguageType    nLang = LANGUAGE_NONE;
                     bool bIsLookUpWord = pActiveView &&
                         GetStatusValueForThesaurusFromContext(aStatusVal, nLang, *pActiveView);
-                    rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
+                    rSet.Put( SfxStringItem( FN_PARAM_THES_WORD_REPLACE, aStatusVal ) );
 
                     // disable thesaurus context menu entry if there is nothing to look up
                     bool bCanDoThesaurus = ScModule::HasThesaurusLanguage( nLang );
