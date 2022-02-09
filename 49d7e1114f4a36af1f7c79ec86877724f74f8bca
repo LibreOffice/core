@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce4a45fb_ddefd7cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-09T13:15:15Z",
+      "side": 1,
+      "message": "I closed some comments that were still marked as unresolved.",
+      "revId": "49d7e1114f4a36af1f7c79ec86877724f74f8bca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
