@@ -137,7 +137,10 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                     "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
             } else if (pathname.endsWithIgnoreAsciiCase(".class")
                        || pathname.endsWithIgnoreAsciiCase(".fileloc")
-                       || pathname.endsWithIgnoreAsciiCase(".jar"))
+                       || pathname.endsWithIgnoreAsciiCase(".inetloc")
+                       || pathname.endsWithIgnoreAsciiCase(".jar")
+                       || pathname.endsWithIgnoreAsciiCase(".url")
+                       || pathname.endsWithIgnoreAsciiCase(".webloc"))
             {
                 dir = true;
             }
