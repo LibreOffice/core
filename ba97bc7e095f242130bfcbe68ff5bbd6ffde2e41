@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56cd4e91_b3b87cc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002326
+      },
+      "writtenOn": "2022-02-09T13:30:37Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/107868/ : FAILURE\n\u003e \n\u003e likely caused by leftovers that linger around from an aborted build ( https://ci.libreoffice.org/job/gerrit_windows/119426/ )\n\n",
+      "revId": "ba97bc7e095f242130bfcbe68ff5bbd6ffde2e41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
