@@ -28,11 +28,13 @@ private:
     css::uno::Reference<css::frame::XController> mxController;
     css::uno::Reference<css::frame::XDispatch> mxDispatcher;
     VclPtr<vcl::Window> mpWindow;
+    bool mbNegativeX;
 
 public:
-    LokChartHelper(SfxViewShell* pViewShell)
+    LokChartHelper(SfxViewShell* pViewShell, bool bNegativeX = false)
         : mpViewShell(pViewShell)
         , mpWindow(nullptr)
+        , mbNegativeX(bNegativeX)
     {}
 
     css::uno::Reference<css::frame::XController>& GetXController();
@@ -42,7 +44,7 @@ public:
     void Invalidate();
 
     bool Hit(const Point& aPos);
-    static bool HitAny(const Point& aPos);
+    static bool HitAny(const Point& aPos, bool bNegativeX = false);
     void PaintTile(VirtualDevice& rRenderContext, const tools::Rectangle& rTileRect);
     static void PaintAllChartsOnTile(VirtualDevice& rDevice,
                                      int nOutputWidth, int nOutputHeight,
