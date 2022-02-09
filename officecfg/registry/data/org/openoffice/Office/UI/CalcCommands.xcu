@@ -1245,6 +1245,20 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ViewHiddenColRow" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Show Hidden Row/Column Indicator</value>
+        </prop>
+        <prop oor:name="ContextLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Hidden Row/Column Indicator</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+        <prop oor:name="TooltipLabel" oor:type="xs:string">
+          <value xml:lang="en-US">Show the indicator for hidden rows and columns</value>
+        </prop>
+      </node>
       <node oor:name=".uno:NormalViewMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">~Normal View</value>

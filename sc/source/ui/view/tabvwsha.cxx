@@ -495,6 +495,11 @@ void ScTabViewShell::GetState( SfxItemSet& rSet )
                     rSet.DisableItem( nWhich );     // enabled only if several sheets are selected
                 break;
 
+            case FID_TOGGLEHIDDENCOLROW:
+                const svtools::ColorConfig& rColorCfg = SC_MOD()->GetColorConfig();
+                rSet.Put( SfxBoolItem( nWhich, rColorCfg.GetColorValue(svtools::CALCHIDDENROWCOL).bIsVisible) );
+                break;
+
         } // switch ( nWitch )
         nWhich = aIter.NextWhich();
     } // while ( nWitch )

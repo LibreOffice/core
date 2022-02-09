@@ -5851,6 +5851,23 @@ SfxBoolItem ViewValueHighlighting FID_TOGGLESYNTAX
     GroupId = SfxGroupId::View;
 ]
 
+SfxBoolItem ViewHiddenColRow FID_TOGGLEHIDDENCOLROW
+
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::View;
+]
 
 SfxBoolItem Visible FID_TABLE_VISIBLE
 
