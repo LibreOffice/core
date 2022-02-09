@@ -105,7 +105,7 @@ struct PieChart::ShapeParam
 
 namespace
 {
-::basegfx::B2IRectangle lcl_getRect(const uno::Reference<drawing::XShape>& xShape)
+::basegfx::B2IRectangle lcl_getRect(const rtl::Reference<SvxShape>& xShape)
 {
     ::basegfx::B2IRectangle aRect;
     if (xShape.is())
@@ -402,13 +402,13 @@ void PieChart::createTextLabelShape(
 
     ///a new `PieLabelInfo` instance is initialized with all the info related to
     ///the current label in order to simplify later label position rearrangement;
-    uno::Reference< container::XChild > xChild( aPieLabelInfo.xTextShape, uno::UNO_QUERY );
+    rtl::Reference< SvxShape > xChild = aPieLabelInfo.xTextShape;
 
     ///text shape could be empty; in that case there is no need to add label info
     if( !xChild.is() )
         return;
 
-    aPieLabelInfo.xLabelGroupShape.set( xChild->getParent(), uno::UNO_QUERY );
+    aPieLabelInfo.xLabelGroupShape = dynamic_cast<SvxShapeGroupAnyD*>(xChild->getParent().get());
 
     if (bMovementAllowed && !m_bUseRings)
     {
@@ -456,12 +456,11 @@ void PieChart::createTextLabelShape(
             aPieLabelInfo.xTextShape
                 = createDataLabel(xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
                                   aScreenPosition2D, eAlignment, 0, nTextMaximumFrameWidth);
-            xChild.clear();
-            xChild.set(uno::Reference<container::XChild>(aPieLabelInfo.xTextShape, uno::UNO_QUERY));
+            xChild = aPieLabelInfo.xTextShape;
             if (!xChild.is())
                 return;
 
-            aPieLabelInfo.xLabelGroupShape.set(xChild->getParent(), uno::UNO_QUERY);
+            aPieLabelInfo.xLabelGroupShape = dynamic_cast<SvxShapeGroupAnyD*>(xChild->getParent().get());
         }
     }
 
@@ -519,13 +518,11 @@ void PieChart::createTextLabelShape(
                 {
                     drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
 
-                    uno::Reference<beans::XPropertySet> xProp(aPieLabelInfo.xTextShape,
-                                                              uno::UNO_QUERY);
                     VLineProperties aVLineProperties;
-                    if (xProp.is())
+                    if (aPieLabelInfo.xTextShape.is())
                     {
                         sal_Int32 nColor = 0;
-                        xProp->getPropertyValue("CharColor") >>= nColor;
+                        aPieLabelInfo.xTextShape->SvxShape::getPropertyValue("CharColor") >>= nColor;
                         //automatic font color does not work for lines -> fallback to black
                         if (nColor != -1)
                             aVLineProperties.Color <<= nColor;
@@ -1290,11 +1287,10 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
 
             drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
 
-            uno::Reference< beans::XPropertySet > xProp( labelInfo.xTextShape, uno::UNO_QUERY);
-            if( xProp.is() )
+            if( labelInfo.xTextShape.is() )
             {
                 sal_Int32 nColor = 0;
-                xProp->getPropertyValue("CharColor") >>= nColor;
+                labelInfo.xTextShape->SvxShape::getPropertyValue("CharColor") >>= nColor;
                 if( nColor != -1 )//automatic font color does not work for lines -> fallback to black
                     aVLineProperties.Color <<= nColor;
             }

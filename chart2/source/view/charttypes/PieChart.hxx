@@ -119,8 +119,8 @@ private: //member
         bool moveAwayFrom( const PieLabelInfo* pFix, const css::awt::Size& rPageSize
             , bool bMoveHalfWay, bool bMoveClockwise );
 
-        css::uno::Reference< css::drawing::XShape > xTextShape;
-        css::uno::Reference< css::drawing::XShape > xLabelGroupShape;
+        rtl::Reference< SvxShapeText > xTextShape;
+        rtl::Reference< SvxShapeGroupAnyD > xLabelGroupShape;
         ::basegfx::B2IVector aFirstPosition;
         ::basegfx::B2IVector aOuterPosition;
         ::basegfx::B2IVector aOrigin;

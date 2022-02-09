@@ -202,7 +202,7 @@ static bool doesOverlap( const rtl::Reference<SvxShapeText>& xShape1
 static void removeShapesAtWrongRhythm( TickIter& rIter
                               , sal_Int32 nCorrectRhythm
                               , sal_Int32 nMaxTickToCheck
-                              , const Reference< drawing::XShapes >& xTarget )
+                              , const rtl::Reference< SvxShapeGroupAnyD >& xTarget )
 {
     sal_Int32 nTick = 0;
     for( TickInfo* pTickInfo = rIter.firstInfo()

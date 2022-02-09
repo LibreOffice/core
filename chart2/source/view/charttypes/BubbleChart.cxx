@@ -262,7 +262,6 @@ void BubbleChart::createShapes()
                         pSeries->getPointCID_Stub(), nIndex );
                     rtl::Reference<SvxShapeGroupAnyD> xPointGroupShape_Shapes(
                         createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
-                    uno::Reference<drawing::XShape> xPointGroupShape_Shape = xPointGroupShape_Shapes;
 
                     {
                         nCreatedPoints++;
@@ -346,7 +345,7 @@ void BubbleChart::createShapes()
 
                     //remove PointGroupShape if empty
                     if(!xPointGroupShape_Shapes->getCount())
-                        xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shape);
+                        xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shapes);
 
                 }//next series in x slot (next y slot)
             }//next x slot
