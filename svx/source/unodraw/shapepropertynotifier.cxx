@@ -47,7 +47,7 @@ namespace svx
     using ::com::sun::star::lang::EventObject;
     using ::com::sun::star::beans::XPropertySet;
 
-    IPropertyValueProvider::~IPropertyValueProvider()
+    PropertyValueProvider::~PropertyValueProvider()
     {
     }
 
@@ -76,7 +76,7 @@ namespace svx
     {
     }
 
-    void PropertyChangeNotifier::registerProvider(const ShapePropertyProviderId _eProperty, std::unique_ptr<IPropertyValueProvider> _rProvider)
+    void PropertyChangeNotifier::registerProvider(const ShapePropertyProviderId _eProperty, std::unique_ptr<PropertyValueProvider> _rProvider)
     {
         assert( _rProvider && "NULL factory not allowed." );
 
