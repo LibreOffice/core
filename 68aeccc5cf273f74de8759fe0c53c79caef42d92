@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbbc42c5_9a996838",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-02-10T08:29:44Z",
+      "side": 1,
+      "message": "Together, these 3 changes fix the build after Cygwin upgrade on the LHM Windows builder, s. \"job/04-LO-Win64/2388\":\n\nhttps://gerrit.libreoffice.org/c/core/+/129750\nhttps://gerrit.libreoffice.org/c/core/+/129749\nhttps://gerrit.libreoffice.org/c/core/+/129744",
+      "revId": "68aeccc5cf273f74de8759fe0c53c79caef42d92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
