@@ -49,17 +49,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using std::vector;
 
-static std::vector< rtl::Reference< LabeledDataSequence> > lcl_toLabeledDataSequence(const Sequence< Reference< data::XLabeledDataSequence> > & rSeq)
-{
-    std::vector<rtl::Reference< LabeledDataSequence>> aRes(rSeq.getLength());
-    for (sal_Int32 i=0; i<rSeq.getLength(); ++i)
-    {
-        aRes[i] = dynamic_cast<LabeledDataSequence*>(rSeq[i].get());
-        assert(aRes[i]);
-    }
-    return aRes;
-}
-
 ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< BaseCoordinateSystem >& xCooSysModel
                                                        , ChartModel& rModel )
     : m_bDirty(true)
@@ -78,8 +67,7 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
             if( xAxis.is() )
             {
                 ScaleData aScale( xAxis->getScaleData() );
-                m_xOriginalCategories = dynamic_cast<LabeledDataSequence*>(aScale.Categories.get());
-                assert(m_xOriginalCategories || !aScale.Categories);
+                m_xOriginalCategories = aScale.Categories;
                 m_bIsAutoDate = (aScale.AutoDateAxis && aScale.AxisType==chart2::AxisType::CATEGORY);
                 m_bIsDateAxis = (aScale.AxisType == chart2::AxisType::DATE || m_bIsAutoDate);
             }
@@ -128,9 +116,9 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const rtl::Reference< Ba
                                     aStringDummy, aSeqDummy, bSeriesUsesColumns, bDummy, bDummy );
                         }
                         if( bSeriesUsesColumns )
-                            m_aSplitCategoriesList = lcl_toLabeledDataSequence(aColumns);
+                            m_aSplitCategoriesList = comphelper::sequenceToContainer<std::vector<Reference<data::XLabeledDataSequence>>>(aColumns);
                         else
-                            m_aSplitCategoriesList = lcl_toLabeledDataSequence(aRows);
+                            m_aSplitCategoriesList = comphelper::sequenceToContainer<std::vector<Reference<data::XLabeledDataSequence>>>(aRows);
                     }
                 }
             }
@@ -237,8 +225,7 @@ class SplitCategoriesProvider_ForLabeledDataSequences : public SplitCategoriesPr
 public:
 
     explicit SplitCategoriesProvider_ForLabeledDataSequences(
-        const std::vector<
-            rtl::Reference< LabeledDataSequence> >& rSplitCategoriesList
+        const std::vector< Reference< data::XLabeledDataSequence> >& rSplitCategoriesList
         , ChartModel& rModel )
         : m_rSplitCategoriesList( rSplitCategoriesList )
         , mrModel( rModel )
@@ -248,7 +235,7 @@ public:
     virtual uno::Sequence< OUString > getStringsForLevel( sal_Int32 nIndex ) const override;
 
 private:
-    const std::vector< rtl::Reference< LabeledDataSequence> >& m_rSplitCategoriesList;
+    const std::vector< Reference< data::XLabeledDataSequence> >& m_rSplitCategoriesList;
 
     ChartModel& mrModel;
 };
