@@ -33,6 +33,24 @@
       "message": "1. Please read the Bugzilla page carefully, specially comment 6 and 7:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d146150#c6\n\n2. You are changing many modules simultaneously. You have touched 3 different examples in which one is Windows-specific, extensions, framework, and qadevOOo modules (https://docs.libreoffice.org/). Some the changed files are in Java, and others are in C++.\nOn the other hand, I prefer that you touch them one by one, so that it would be possible to test if your changes work properly.\nCould you please start from odk/examples/DevelopersGuide? You can go to instdir/sdk/examples/DevelopersGuide/OfficeDev to build and test the example, but first you have to go to use ./instdir/sdk/setsdkenv_unix to setup environment variables.\nThe ContextMenuInterceptor example could be a good starting point. Run it after \u0027make\u0027 in this way:\n\n    make ContextMenuInterceptor.run\n\nIt is listed here:\nhttps://api.libreoffice.org/examples/DevelopersGuide/examples.html#OfficeDevelopment\nAnd described here:\nhttps://wiki.openoffice.org/wiki/Documentation/DevGuide/WritingUNO/Intercepting_Context_Menus",
       "revId": "ed17d054df851ff649e4b52452bc3250814c9198",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dece2e95_0b932e7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-10T05:56:22Z",
+      "side": 1,
+      "message": "Okay I\u0027ll go step by step, there are some problems: \n/media/malik/Vaibhav_Malik/libreoffice (master)$ ./instdir/sdk/setsdkenv_unix\nbash: ./instdir/sdk/setsdkenv_unix: No such file or directory\n\nI am not able to set up the environment variables, plus:\n/media/malik/Vaibhav_Malik/libreoffice (master)$ cd instdir/sdk/examples/DevelopersGuide/OfficeDev\nbash: cd: instdir/sdk/examples/DevelopersGuide/OfficeDev: No such file or directory",
+      "parentUuid": "76aaca79_56a78707",
+      "revId": "ed17d054df851ff649e4b52452bc3250814c9198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
