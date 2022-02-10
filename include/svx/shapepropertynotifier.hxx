@@ -54,32 +54,14 @@ namespace svx
         LAST = TextDocAnchor
     };
 
-    //= IPropertyValueProvider
-
-    /** a provider for a property value
-    */
-    class SVXCORE_DLLPUBLIC IPropertyValueProvider
-    {
-    public:
-        /** returns the name of the property which this provider is responsible for
-        */
-        virtual const OUString & getPropertyName() const = 0;
-
-        /** returns the current value of the property which the provider is responsible for
-        */
-        virtual void getCurrentValue( css::uno::Any& _out_rValue ) const = 0;
-
-        virtual ~IPropertyValueProvider();
-    };
-
     //= PropertyValueProvider
 
-    /** default implementation of an IPropertyValueProvider
+    /** Default provider for a property value
 
         This default implementation queries the object which it is constructed with for the XPropertySet interface,
         and calls the getPropertyValue method.
     */
-    class SVXCORE_DLLPUBLIC PropertyValueProvider   :public IPropertyValueProvider
+    class SVXCORE_DLLPUBLIC PropertyValueProvider
     {
     public:
         PropertyValueProvider( ::cppu::OWeakObject& _rContext, const char* _pAsciiPropertyName )
@@ -87,9 +69,14 @@ namespace svx
             ,m_sPropertyName( OUString::createFromAscii( _pAsciiPropertyName ) )
         {
         }
+        virtual ~PropertyValueProvider();
 
-        virtual const OUString & getPropertyName() const override;
-        virtual void getCurrentValue( css::uno::Any& _out_rValue ) const override;
+        /** returns the name of the property which this provider is responsible for
+        */
+        const OUString & getPropertyName() const;
+        /** returns the current value of the property which the provider is responsible for
+        */
+        virtual void getCurrentValue( css::uno::Any& _out_rValue ) const;
 
     protected:
         ::cppu::OWeakObject&    getContext() const { return m_rContext; }
@@ -122,9 +109,9 @@ namespace svx
         void addPropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
         void removePropertyChangeListener( const OUString& _rPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& _rxListener );
 
-        /** registers an IPropertyValueProvider
+        /** registers an PropertyValueProvider
         */
-        void    registerProvider( const ShapePropertyProviderId _eProperty, std::unique_ptr<IPropertyValueProvider> _rProvider );
+        void    registerProvider( const ShapePropertyProviderId _eProperty, std::unique_ptr<PropertyValueProvider> _rProvider );
 
         /** notifies changes in the given property to all registered listeners
 
@@ -142,7 +129,7 @@ namespace svx
         PropertyChangeNotifier& operator=(const PropertyChangeNotifier&) = delete;
 
         ::cppu::OWeakObject&            m_rContext;
-        o3tl::enumarray<ShapePropertyProviderId, std::unique_ptr<IPropertyValueProvider>>  m_aProviders;
+        o3tl::enumarray<ShapePropertyProviderId, std::unique_ptr<PropertyValueProvider>>  m_aProviders;
         comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XPropertyChangeListener, OUString> m_aPropertyChangeListeners;
     };
 
