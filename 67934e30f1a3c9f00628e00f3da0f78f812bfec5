@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb439994_551ba81e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-10T17:22:52Z",
+      "side": 1,
+      "message": "Since all Jenkins are ok except Windows for an unrelated reason (as often), IMHO we should push this one to help red TBs. At worst it can be reverted.\n",
+      "revId": "67934e30f1a3c9f00628e00f3da0f78f812bfec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
