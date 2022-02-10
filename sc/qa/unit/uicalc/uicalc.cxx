@@ -259,6 +259,36 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf37623)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A3:A4");
+
+    dispatchCommand(mxComponent, ".uno:HideRow", {});
+
+    insertStringToCell(*pModelObj, "A2", "1");
+
+    goToCell("A2:A6");
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "FillDir", uno::Any(OUString("B")) },
+                                           { "FillCmd", uno::Any(OUString("A")) },
+                                           { "FillStep", uno::Any(OUString("1")) },
+                                           { "FillDateCmd", uno::Any(OUString("M")) } }));
+    dispatchCommand(mxComponent, ".uno:FillSeries", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 5, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
