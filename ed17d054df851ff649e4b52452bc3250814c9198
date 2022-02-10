@@ -51,6 +51,23 @@
       "parentUuid": "76aaca79_56a78707",
       "revId": "ed17d054df851ff649e4b52452bc3250814c9198",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f223b03_ac51112d",
+        "filename": "framework/qa/complex/contextMenuInterceptor/ContextMenuInterceptor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-10T10:05:04Z",
+      "side": 1,
+      "message": "From the IRC:\n\n\u003e caolanm: if the new CommandURL of \".uno:HelpMenu\" is correct then I see hid/.uno:HelpMenu in helpcontent so I think the HelpURL can be changed to .uno:HelpMenu too and it should be good at that\n\nSo possibly we would best also replace HelpURLs from slot values into corresponding UNO URIs in scope of this easyhack?",
+      "revId": "ed17d054df851ff649e4b52452bc3250814c9198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
