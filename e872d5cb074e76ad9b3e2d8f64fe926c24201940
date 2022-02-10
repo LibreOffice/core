@@ -16,6 +16,24 @@
       "message": "Any idea why this fails with\n\nError: \"Misplaced close tag: \u003c/oor:component-data\u003e in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/desktop/test/deployment/crashextension/ToolbarMerge.xcu\" in line 49, column 22: \"\u003c/oor:component-data\u003e\"\n\nhttps://ci.libreoffice.org/job/gerrit_linux_gcc_release/111400/console",
       "revId": "e872d5cb074e76ad9b3e2d8f64fe926c24201940",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6e90012_20a16191",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-10T09:13:25Z",
+      "side": 1,
+      "message": "no idea; looks like this comes from CfgParser::ExecuteAnalyzedToken (l10ntools/source/cfgmerge.cxx), which you\u0027d probably need to debug",
+      "parentUuid": "9ca1195a_e5517ca8",
+      "revId": "e872d5cb074e76ad9b3e2d8f64fe926c24201940",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
