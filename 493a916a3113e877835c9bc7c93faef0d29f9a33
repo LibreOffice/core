@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd92e8d0_b60bf891",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-02-10T14:53:30Z",
+      "side": 1,
+      "message": "God news! The https://gerrit.libreoffice.org/c/core/+/129627 will fix the issue with the assert. Tested and works.",
+      "revId": "493a916a3113e877835c9bc7c93faef0d29f9a33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d26a7337_f87287a3",
