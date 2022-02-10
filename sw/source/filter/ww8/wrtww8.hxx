@@ -1576,7 +1576,7 @@ class MSWordStyles
 {
     MSWordExportBase& m_rExport;
     sal_uInt16 m_aHeadingParagraphStyles[MAXLEVEL];
-    std::unique_ptr<SwFormat*[]> m_pFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
+    std::vector<SwFormat*> m_aFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
     sal_uInt16 m_nUsedSlots;
     bool const m_bListStyles; ///< If list styles are requested to be exported as well.
     std::map<sal_uInt16, const SwNumRule*> m_aNumRules; ///< Slot <-> List style map.
@@ -1627,7 +1627,7 @@ public:
     /// Get styleId of the nId-th style (nId is its position in pFormatA).
     OString const & GetStyleId(sal_uInt16 nId) const;
 
-    const SwFormat* GetSwFormat(sal_uInt16 nId) const { return m_pFormatA[nId]; }
+    const SwFormat* GetSwFormat(sal_uInt16 nId) const { return m_aFormatA[nId]; }
     /// Get numbering rule of the nId-th style
     const SwNumRule* GetSwNumRule(sal_uInt16 nId) const;
     sal_uInt16 GetHeadingParagraphStyleId(sal_uInt16 nLevel) const { return m_aHeadingParagraphStyles[ nLevel ]; }
