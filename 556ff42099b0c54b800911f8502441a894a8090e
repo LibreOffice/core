@@ -16,6 +16,23 @@
       "message": "Ugh, surely you should use M_SQRT2 instead of 1.4142?",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b0a5b3d_2d35a58d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-02-10T12:32:34Z",
+      "side": 1,
+      "message": "And M_PI instead of 3.14etc. And you should make sure your patch compiles on your own machine before submitting to Gerrit. This obviously can\u0027t have successfully compiled on any machine, with the \"contsexpr\" typos.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
