@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "155358a2_808bc59e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-10T06:17:37Z",
+      "side": 1,
+      "message": "The variables you changed in activex file aren’t related to Color. All sal_Int32 vars aren’t Color vars",
+      "revId": "6fbfbb7094c94dd01449659644e2d2c92ea08ab4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
