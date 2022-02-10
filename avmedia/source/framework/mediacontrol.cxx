@@ -89,9 +89,7 @@ void MediaControl::InitializeWidgets()
     if( meControlStyle != MediaControlStyle::SingleLine )
     {
         mxPlayToolBox->set_item_help_id("open", HID_AVMEDIA_TOOLBOXITEM_OPEN);
-        mxPlayToolBox->set_item_label("open", AvmResId(AVMEDIA_STR_OPEN));
         mxPlayToolBox->set_item_help_id("apply", HID_AVMEDIA_TOOLBOXITEM_INSERT);
-        mxPlayToolBox->set_item_label("apply", AvmResId(AVMEDIA_STR_INSERT));
     }
     avmedia::MediaControlBase::InitializeWidgets();
 }

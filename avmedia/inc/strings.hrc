@@ -21,13 +21,6 @@
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
-#define AVMEDIA_STR_OPEN            NC_("AVMEDIA_STR_OPEN", "Open")
-#define AVMEDIA_STR_INSERT          NC_("AVMEDIA_STR_INSERT", "Apply")
-#define AVMEDIA_STR_PLAY            NC_("AVMEDIA_STR_PLAY", "Play")
-#define AVMEDIA_STR_PAUSE           NC_("AVMEDIA_STR_PAUSE", "Pause")
-#define AVMEDIA_STR_STOP            NC_("AVMEDIA_STR_STOP", "Stop")
-#define AVMEDIA_STR_LOOP            NC_("AVMEDIA_STR_LOOP", "Repeat")
-#define AVMEDIA_STR_MUTE            NC_("AVMEDIA_STR_MUTE", "Mute")
 #define AVMEDIA_STR_ZOOM_50         NC_("AVMEDIA_STR_ZOOM_50", "50%")
 #define AVMEDIA_STR_ZOOM_100        NC_("AVMEDIA_STR_ZOOM_100", "100%")
 #define AVMEDIA_STR_ZOOM_200        NC_("AVMEDIA_STR_ZOOM_200", "200%")
