@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee8840ac_50aee2ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-10T17:19:18Z",
+      "side": 1,
+      "message": "I suppose it should rather be \"though\" for the second typo.",
+      "revId": "3fcfc5e7c358c40aa0dcb34e3b5d866ef44b1c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
