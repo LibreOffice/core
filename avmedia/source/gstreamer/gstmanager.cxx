@@ -24,6 +24,7 @@
 
 #include <tools/urlobj.hxx>
 #include <rtl/ref.hxx>
+#include <dlfcn.h>
 
 using namespace ::com::sun::star;
 
@@ -37,15 +38,24 @@ Manager::~Manager()
 {
 }
 
-uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const OUString& rURL )
+uno::Reference<media::XPlayer> SAL_CALL Manager::createPlayer(const OUString& rURL)
 {
-    rtl::Reference<Player> pPlayer( new Player );
-    const INetURLObject                 aURL( rURL );
+    const INetURLObject aURL(rURL);
+    OUString sMainURL = aURL.GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
 
-    if( !pPlayer->create( aURL.GetMainURL( INetURLObject::DecodeMechanism::Unambiguous ) )  )
-        pPlayer.clear();
+    const bool bTryGtk4 = dlsym(nullptr, "gtk_video_new") != nullptr;
+    if (bTryGtk4)
+    {
+        rtl::Reference<GtkPlayer> xPlayer(new GtkPlayer);
+        if (!xPlayer->create(sMainURL))
+            xPlayer.clear();
+        return xPlayer;
+    }
 
-    return pPlayer;
+    rtl::Reference<Player> xPlayer(new Player);
+    if (!xPlayer->create(sMainURL))
+        xPlayer.clear();
+    return xPlayer;
 }
 
 OUString SAL_CALL Manager::getImplementationName(  )
