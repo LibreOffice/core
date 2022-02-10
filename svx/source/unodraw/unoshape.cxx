@@ -110,7 +110,6 @@ class GDIMetaFile;
 
 struct SvxShapeImpl
 {
-    SvxShape&       mrAntiImpl;
     std::optional<SfxItemSet> mxItemSet;
     SdrObjKind      mnObjId;
     SvxShapeMaster* mpMaster;
@@ -129,8 +128,7 @@ struct SvxShapeImpl
     svx::PropertyChangeNotifier       maPropertyNotifier;
 
     SvxShapeImpl( SvxShape& _rAntiImpl, ::osl::Mutex& _rMutex )
-        :mrAntiImpl( _rAntiImpl )
-        ,mnObjId( SdrObjKind::NONE )
+        :mnObjId( SdrObjKind::NONE )
         ,mpMaster( nullptr )
         ,mbHasSdrObjectOwnership( false )
         ,mbDisposing( false )
@@ -145,8 +143,8 @@ namespace {
 class ShapePositionProvider : public PropertyValueProvider
 {
 public:
-    explicit ShapePositionProvider( const SvxShapeImpl& _shapeImpl )
-        :PropertyValueProvider( _shapeImpl.mrAntiImpl, "Position" )
+    explicit ShapePositionProvider( SvxShape& _shape )
+        :PropertyValueProvider( _shape, "Position" )
     {
     }
 
@@ -161,8 +159,8 @@ protected:
 class ShapeSizeProvider : public PropertyValueProvider
 {
 public:
-    explicit ShapeSizeProvider( const SvxShapeImpl& _shapeImpl )
-        :PropertyValueProvider( _shapeImpl.mrAntiImpl, "Size" )
+    explicit ShapeSizeProvider( SvxShape& _shape )
+        :PropertyValueProvider( _shape, "Size" )
     {
     }
 
@@ -325,9 +323,9 @@ svx::PropertyChangeNotifier& SvxShape::getShapePropertyChangeNotifier()
 void SvxShape::impl_construct()
 {
     mpImpl->maPropertyNotifier.registerProvider( svx::ShapePropertyProviderId::Position,
-        std::make_unique<ShapePositionProvider>( *mpImpl ) );
+        std::make_unique<ShapePositionProvider>( *this ) );
     mpImpl->maPropertyNotifier.registerProvider( svx::ShapePropertyProviderId::Size,
-        std::make_unique<ShapeSizeProvider>( *mpImpl ) );
+        std::make_unique<ShapeSizeProvider>( *this ) );
 
     if ( HasSdrObject() )
     {
