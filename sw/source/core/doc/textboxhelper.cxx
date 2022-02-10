@@ -1408,6 +1408,35 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 (bIsGroupObj && pObj ? pObj->GetRelativePos().getY() : aNewVOri.GetPos())
                 + aRect.Top());
 
+            // Improve the positioning in case we have relative position from page but
+            // the anchor in the text. Substract the margin in case of X axis.
+            if (pShape->GetHoriOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+                && pShape->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PAGE
+                && pShape->GetAnchor().GetContentAnchor())
+            {
+                aNewHOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                auto pPageDescriptor = SwPageDesc::GetPageDescOfNode(
+                    pShape->GetAnchor().GetContentAnchor()->nNode.GetNode());
+                if (pPageDescriptor)
+                {
+                    if (auto pPageFormat = pPageDescriptor->GetPageFormatOfNode(
+                            pShape->GetAnchor().GetContentAnchor()->nNode.GetNode()))
+                        aNewHOri.SetPos(aNewHOri.GetPos() + pPageFormat->GetLRSpace().GetLeft()
+                                        + pPageFormat->GetLRSpace().GetGutterMargin());
+                }
+            }
+            if (pShape->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+                && pShape->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PAGE && bIsGroupObj
+                && pObj)
+            {
+                // not to be so proud of this but i did not find the place where
+                // this added as a hack... So substract this here.
+                const auto nMagicNumber = o3tl::toTwips(5, o3tl::Length::mm);
+                aNewVOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                aNewVOri.SetPos(pObj->GetRelativePos().getY() + pObj->GetAnchorPos().getY()
+                                + aRect.Top() - nMagicNumber);
+            }
+
             pFormat->SetFormatAttr(aNewHOri);
             pFormat->SetFormatAttr(aNewVOri);
         }
