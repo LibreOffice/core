@@ -150,13 +150,13 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
         m_rExport.m_pDoc->GetFootnoteInfo().GetAnchorCharFormat( *m_rExport.m_pDoc );
         m_rExport.m_pDoc->GetFootnoteInfo().GetCharFormat( *m_rExport.m_pDoc );
     }
-    sal_uInt16 nAlloc = WW8_RESERVED_SLOTS + m_rExport.m_pDoc->GetCharFormats()->size() - 1 +
+    sal_uInt32 nAlloc = WW8_RESERVED_SLOTS + m_rExport.m_pDoc->GetCharFormats()->size() - 1 +
                                          m_rExport.m_pDoc->GetTextFormatColls()->size() - 1 +
                                          (bListStyles ? m_rExport.m_pDoc->GetNumRuleTable().size() - 1 : 0);
+    nAlloc = std::min<sal_uInt32>(nAlloc, MSWORD_MAX_STYLES_LIMIT);
 
     // somewhat generous ( free for up to 15 )
-    m_pFormatA.reset( new SwFormat*[ nAlloc ] );
-    memset( m_pFormatA.get(), 0, nAlloc * sizeof( SwFormat* ) );
+    m_aFormatA.resize(nAlloc, nullptr);
     memset( m_aHeadingParagraphStyles, -1 , MAXLEVEL * sizeof( sal_uInt16));
 
     BuildStylesTable();
@@ -172,7 +172,7 @@ sal_uInt16 MSWordStyles::GetSlot( const SwFormat* pFormat ) const
 {
     sal_uInt16 n;
     for ( n = 0; n < m_nUsedSlots; n++ )
-        if ( m_pFormatA[n] == pFormat )
+        if ( m_aFormatA[n] == pFormat )
             return n;
     return 0xfff;                   // 0xfff: WW: zero
 }
@@ -281,19 +281,19 @@ void MSWordStyles::BuildStylesTable()
 
     const SwCharFormats& rArr = *m_rExport.m_pDoc->GetCharFormats();       // first CharFormat
     // the default character style ( 0 ) will not be outputted !
-    for( size_t n = 1; n < rArr.size(); n++ )
+    for( size_t n = 1; n < rArr.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; n++ )
     {
         SwCharFormat* pFormat = rArr[n];
-        m_pFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
+        m_aFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
     }
 
     const SwTextFormatColls& rArr2 = *m_rExport.m_pDoc->GetTextFormatColls();   // then TextFormatColls
     // the default character style ( 0 ) will not be outputted !
-    for( size_t n = 1; n < rArr2.size(); n++ )
+    for( size_t n = 1; n < rArr2.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; n++ )
     {
         SwTextFormatColl* pFormat = rArr2[n];
         sal_uInt16 nId = BuildGetSlot( *pFormat ) ;
-        m_pFormatA[ nId ] = pFormat;
+        m_aFormatA[ nId ] = pFormat;
         if ( pFormat->IsAssignedToListLevelOfOutlineStyle() )
         {
             int nLvl = pFormat->GetAssignedOutlineStyleLevel() ;
@@ -306,7 +306,7 @@ void MSWordStyles::BuildStylesTable()
         return;
 
     const SwNumRuleTable& rNumRuleTable = m_rExport.m_pDoc->GetNumRuleTable();
-    for (size_t i = 0; i < rNumRuleTable.size(); ++i)
+    for (size_t i = 0; i < rNumRuleTable.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; ++i)
     {
         const SwNumRule* pNumRule = rNumRuleTable[i];
         if (pNumRule->IsAutoRule() || pNumRule->GetName().startsWith("WWNum"))
@@ -326,8 +326,8 @@ void MSWordStyles::BuildStyleIds()
     for (sal_uInt16 n = 1; n < m_nUsedSlots; ++n)
     {
         OUString aName;
-        if(m_pFormatA[n])
-            aName = m_pFormatA[n]->GetName();
+        if (m_aFormatA[n])
+            aName = m_aFormatA[n]->GetName();
         else if (m_aNumRules.find(n) != m_aNumRules.end())
             aName = m_aNumRules[n]->GetName();
         OStringBuffer aStyleIdBuf(aName.getLength());
@@ -606,8 +606,8 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
             for ( int nSuffix = 0; ; ++nSuffix ) {
                 bool clash=false;
                 for ( sal_uInt16 n = 1; n < m_nUsedSlots; ++n )
-                    if ( m_pFormatA[n] &&
-                         m_pFormatA[n]->GetName().equalsIgnoreAsciiCase(aName) )
+                    if ( m_aFormatA[n] &&
+                         m_aFormatA[n]->GetName().equalsIgnoreAsciiCase(aName) )
                     {
                         clash = true;
                         break;
@@ -682,7 +682,7 @@ void MSWordStyles::OutputStylesTable()
         if (m_aNumRules.find(n) != m_aNumRules.end())
             OutputStyle(m_aNumRules[n], n);
         else
-            OutputStyle( m_pFormatA[n], n );
+            OutputStyle(m_aFormatA[n], n);
     }
 
     m_rExport.AttrOutput().EndStyles( m_nUsedSlots );
