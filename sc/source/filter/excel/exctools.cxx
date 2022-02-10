@@ -38,9 +38,6 @@ RootData::RootData()
     eDateiTyp = BiffX;
     pFmlaConverter = nullptr;
 
-    pPrintRanges.reset( new ScRangeListTabs );
-    pPrintTitles.reset( new ScRangeListTabs );
-
     pTabId = nullptr;
     pUserBViewList = nullptr;
 
@@ -55,8 +52,6 @@ RootData::~RootData()
     pShrfmlaBuff.reset();
     pExtNameBuff.reset();
     pAutoFilterBuffer.reset();
-    pPrintRanges.reset();
-    pPrintTitles.reset();
 }
 
 XclImpOutlineBuffer::XclImpOutlineBuffer( SCSIZE nNewSize ) :

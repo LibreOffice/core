@@ -113,6 +113,9 @@ struct XclImpRootData : public XclRootData
 
     std::shared_ptr<ScDocumentImport> mxDocImport;
 
+    std::unique_ptr<ScRangeListTabs>  mpPrintRanges;
+    std::unique_ptr<ScRangeListTabs>  mpPrintTitles;
+
     bool                mbHasCodePage;      /// true = CODEPAGE record exists.
     bool                mbHasBasic;         /// true = document contains VB project.
 

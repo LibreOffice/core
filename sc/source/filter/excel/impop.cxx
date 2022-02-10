@@ -1334,18 +1334,18 @@ void ImportExcel::PostDocLoad()
     const SCTAB     nLast = rD.GetTableCount();
     const ScRange*      p;
 
-    if( pExcRoot->pPrintRanges->HasRanges() )
+    if( GetRoot().GetPrintAreaBuffer().HasRanges() )
     {
         for( SCTAB n = 0 ; n < nLast ; n++ )
         {
-            p = pExcRoot->pPrintRanges->First(n);
+            p = GetRoot().GetPrintAreaBuffer().First(n);
             if( p )
             {
                 rD.ClearPrintRanges( n );
                 while( p )
                 {
                     rD.AddPrintRange( n, *p );
-                    p = pExcRoot->pPrintRanges->Next();
+                    p = GetRoot().GetPrintAreaBuffer().Next();
                 }
             }
             else
@@ -1357,12 +1357,12 @@ void ImportExcel::PostDocLoad()
         GetTracer().TracePrintRange();
     }
 
-    if( !pExcRoot->pPrintTitles->HasRanges() )
+    if( !GetRoot().GetTitleAreaBuffer().HasRanges() )
         return;
 
     for( SCTAB n = 0 ; n < nLast ; n++ )
     {
-        p = pExcRoot->pPrintTitles->First(n);
+        p = GetRoot().GetTitleAreaBuffer().First(n);
         if( p )
         {
             bool    bRowVirgin = true;
@@ -1382,7 +1382,7 @@ void ImportExcel::PostDocLoad()
                     bColVirgin = false;
                 }
 
-                p = pExcRoot->pPrintTitles->Next();
+                p = GetRoot().GetTitleAreaBuffer().Next();
             }
         }
     }
