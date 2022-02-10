@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0856838a_4e700601",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-10T15:22:25Z",
+      "side": 1,
+      "message": "let\u0027s push it before the tagging of 7.3.1.1",
+      "revId": "2bbf0c214676ab619de373ef853f74539436c6d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
