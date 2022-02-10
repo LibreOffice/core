@@ -888,6 +888,50 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
     CPPUNIT_ASSERT_DOUBLES_EQUAL(7945, nYposition, 20);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf69648)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf69648.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    OString sShapeXPath[2] = {
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[1]",
+        "/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[2]"
+    };
+    OString sFrameXPath[2] = { "/root/page/body/txt/anchored/fly[1]/infos/bounds",
+                               "/root/page/body/txt/anchored/fly[2]/infos/bounds" };
+
+    for (int i = 0; i < 2; ++i)
+    {
+        const auto sDrawRect = getXPath(pXmlDoc, sShapeXPath[i], "aOutRect");
+
+        const auto nComaPos1 = sDrawRect.indexOf(',', 0);
+        const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
+        const auto nComaPos3 = sDrawRect.indexOf(',', nComaPos2 + 1);
+
+        const auto nDraw1 = OUString(sDrawRect.subView(0, nComaPos1).data()).toInt64();
+        const auto nDraw2
+            = OUString(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1).data()).toInt64();
+        const auto nDraw3
+            = OUString(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2).data()).toInt64();
+        const auto nDraw4
+            = OUString(
+                  sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1).data())
+                  .toInt64();
+        const auto aChildShape = SwRect(nDraw1, nDraw2, nDraw3, nDraw4);
+
+        const auto nFlyLeft = getXPath(pXmlDoc, sFrameXPath[i], "left").toInt64();
+        const auto nFlyTop = getXPath(pXmlDoc, sFrameXPath[i], "top").toInt64();
+        const auto nFlyWidth = getXPath(pXmlDoc, sFrameXPath[i], "width").toInt64();
+        const auto nFlyHeight = getXPath(pXmlDoc, sFrameXPath[i], "height").toInt64();
+
+        const auto aFrame = SwRect(nFlyLeft, nFlyTop, nFlyWidth, nFlyHeight);
+
+        CPPUNIT_ASSERT_MESSAGE("Textbox must be inside the shape!", aChildShape.Contains(aFrame));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "xaxis-labelbreak.docx");
