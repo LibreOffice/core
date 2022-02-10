@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b9deaad_3675027d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T15:59:11Z",
+      "side": 1,
+      "message": "Please read this blog post:\n\nWorking with LibreOffice SDK Examples\nhttps://dev.blog.documentfoundation.org/2022/02/10/working-with-libreoffice-sdk-examples/",
+      "parentUuid": "dece2e95_0b932e7c",
+      "revId": "ed17d054df851ff649e4b52452bc3250814c9198",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f223b03_ac51112d",
         "filename": "framework/qa/complex/contextMenuInterceptor/ContextMenuInterceptor.java",
         "patchSetId": 2
