@@ -16,6 +16,24 @@
       "message": "I got a crashtesting hit on this assert.\n\nwget https://bz.apache.org/ooo/attachment.cgi?id\u003d49379 -O ooo83229-2.odt\n./instdir/program/soffice --headless --convert-to pdf ooo83229-2.odt",
       "revId": "b314b5a0612c9dc7279039dae44a250d4d3ec6b1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a8e2065_75a7cb28",
+        "filename": "chart2/source/tools/ExplicitCategoriesProvider.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-10T09:24:46Z",
+      "side": 1,
+      "message": "thanks, fixed with\n   https://gerrit.libreoffice.org/c/core/+/129772",
+      "parentUuid": "3387a897_c931cd6c",
+      "revId": "b314b5a0612c9dc7279039dae44a250d4d3ec6b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
