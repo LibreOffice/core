@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a58ddadf_4ed458de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-10T16:48:05Z",
+      "side": 1,
+      "message": "Since you talked about Spanish locales, should we do the same in source/localedata/data/an_ES.xml ?",
+      "revId": "3962b927bef594ca2ad74d069287f77758215ece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
