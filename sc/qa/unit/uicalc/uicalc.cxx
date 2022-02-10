@@ -179,6 +179,40 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     return pModelObj;
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A1:A20");
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "FillDir", uno::Any(OUString("B")) },
+                                           { "FillCmd", uno::Any(OUString("L")) },
+                                           { "FillStep", uno::Any(OUString("1")) },
+                                           { "FillDateCmd", uno::Any(OUString("D")) },
+                                           { "FillStart", uno::Any(OUString("1")) },
+                                           { "FillMax", uno::Any(OUString("10")) } }));
+    dispatchCommand(mxComponent, ".uno:FillSeries", aArgs);
+
+    for (size_t i = 0; i < 10; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(OUString(OUString::number(i + 1)),
+                             pDoc->GetString(ScAddress(0, i, 0)));
+    }
+
+    for (size_t i = 10; i < 20; ++i)
+    {
+        // Without the fix in place, this test would have failed with
+        // - Expected:
+        // - Actual  : #NUM!
+        CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, i, 0)));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
