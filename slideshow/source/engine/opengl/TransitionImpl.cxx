@@ -946,7 +946,8 @@ static T clamp(const T& rIn)
 
 std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , sal_uInt16 nPointsOnCircles )
 {
-    double dAngle(2*3.1415926/static_cast<double>( nPointsOnCircles ));
+    contsexpr double fM_PI = 3.1415926;
+    double dAngle(2 * fM_PI/ static_cast<double>(nPointsOnCircles));
     if(nCircles < 2 || nPointsOnCircles < 4)
         return makeNByMTileFlip(1,1);
     float Radius(1.0/static_cast<double>( nCircles ));
@@ -963,7 +964,8 @@ std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , s
     float TempAngle(0.0);
     for(unsigned int Point(0); Point < nPointsOnCircles; ++Point)
     {
-        unScaledTexCoords.emplace_back( cos(TempAngle - 3.1415926/2.0) , sin(TempAngle- 3.1415926/2.0) );
+        contsexpr double fM_PI = 3.1415926;
+        unScaledTexCoords.emplace_back(cos(TempAngle - fM_PI / 2.0), sin(TempAngle - fM_PI / 2.0));
 
         TempAngle += dAngle;
     }

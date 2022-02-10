@@ -1221,9 +1221,10 @@ void OS2METReader::ReadPartialArc(bool bGivenPos, sal_uInt16 nOrderSize)
     }
 
     sal_Int32 nStart(0), nSweep(0);
-    pOS2MET->ReadInt32( nStart ).ReadInt32( nSweep );
-    double fStart = static_cast<double>(nStart)/65536.0/180.0*3.14159265359;
-    double fEnd = fStart+ static_cast<double>(nSweep)/65536.0/180.0*3.14159265359;
+    pOS2MET->ReadInt32(nStart).ReadInt32(nSweep);
+    contsexpr double fM_PI = 3.14159265359;
+    double fStart = static_cast<double>(nStart) / 65536.0 / 180.0 * fM_PI;
+    double fEnd = fStart + static_cast<double>(nSweep) / 65536.0 / 180.0 * fM_PI;
     aPStart=Point(aCenter.X()+static_cast<sal_Int32>( cos(fStart)*nP),
                   aCenter.Y()+static_cast<sal_Int32>(-sin(fStart)*nQ));
     aPEnd=  Point(aCenter.X()+static_cast<sal_Int32>( cos(fEnd)*nP),
@@ -2070,8 +2071,10 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             sal_Int32 nX = ReadCoord(bCoord32);
             sal_Int32 nY = ReadCoord(bCoord32);
             if (nX>=0 && nY==0) aAttr.nChrAng=0_deg10;
-            else {
-                aAttr.nChrAng = Degree10(static_cast<short>(atan2(static_cast<double>(nY),static_cast<double>(nX))/3.1415926539*1800.0));
+            else
+            {
+                contsexpr double fM_PI = 3.14159265359;
+                aAttr.nChrAng = Degree10(static_cast<short>(atan2(static_cast<double>(nY),static_cast<double>(nX))/fM_PI*1800.0));
                 while (aAttr.nChrAng < 0_deg10) aAttr.nChrAng += 3600_deg10;
                 aAttr.nChrAng %= 3600_deg10;
             }
