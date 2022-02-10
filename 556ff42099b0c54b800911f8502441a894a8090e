@@ -326,6 +326,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9cf9a7e_b0ad32ab",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-10T13:25:21Z",
+      "side": 1,
+      "message": "Additionally: please do not touch the lines that you do not change functionally. This specific line should be kept intact, since the only change in it that you did was removing some spaces. Your easyhack is not about reformatting - so please only touch lines where you replace literals with constants.\n\nAvoiding touching unrelated lines, you simplify the task of reviewers.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "77302b41_0acd8dbb",
         "filename": "vcl/source/filter/imet/ios2met.cxx",
         "patchSetId": 2
@@ -337,6 +354,23 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Use basegfx to convert angle unit.\nhttps://dev.blog.documentfoundation.org/2021/12/31/use-basegfx-to-convert-angle-unit-easyhack/",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a279acdb_067555b8",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-10T13:25:21Z",
+      "side": 1,
+      "message": "Same here: it\u0027s out f scope to split \u0027else {\u0027 into two lines.",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
