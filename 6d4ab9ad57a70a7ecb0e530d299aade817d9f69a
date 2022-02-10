@@ -16,6 +16,24 @@
       "message": "Sry for the noise. This is the correct bug https://bugs.documentfoundation.org/show_bug.cgi?id\u003d146836",
       "revId": "6d4ab9ad57a70a7ecb0e530d299aade817d9f69a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31941030_5eed0b99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-10T08:20:14Z",
+      "side": 1,
+      "message": "Thanks for the information. I do confirm tdf#146836 got fixed by this path. Pushing",
+      "parentUuid": "4726fbc4_84025b7e",
+      "revId": "6d4ab9ad57a70a7ecb0e530d299aade817d9f69a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
