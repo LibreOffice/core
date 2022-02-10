@@ -770,11 +770,11 @@ void DataBrowserModel::updateFromModel()
     {
         ExplicitCategoriesProvider aExplicitCategoriesProvider( ChartModelHelper::getFirstCoordinateSystem(m_xChartDocument), *m_xChartDocument );
 
-        const std::vector< rtl::Reference< LabeledDataSequence> >& rSplitCategoriesList = aExplicitCategoriesProvider.getSplitCategoriesList();
+        const std::vector< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList = aExplicitCategoriesProvider.getSplitCategoriesList();
         sal_Int32 nLevelCount = rSplitCategoriesList.size();
         for( sal_Int32 nL = 0; nL<nLevelCount; nL++ )
         {
-            rtl::Reference< LabeledDataSequence > xCategories( rSplitCategoriesList[nL] );
+            Reference< chart2::data::XLabeledDataSequence > xCategories( rSplitCategoriesList[nL] );
             if( !xCategories.is() )
                 continue;
 

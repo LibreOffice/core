@@ -339,11 +339,11 @@ InternalDataProvider::InternalDataProvider(
                 {
                     ExplicitCategoriesProvider aExplicitCategoriesProvider(ChartModelHelper::getFirstCoordinateSystem(xModel), *xModel);
 
-                    const std::vector< rtl::Reference< LabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
+                    const std::vector< Reference< chart2::data::XLabeledDataSequence> >& rSplitCategoriesList( aExplicitCategoriesProvider.getSplitCategoriesList() );
                     sal_Int32 nLevelCount = rSplitCategoriesList.size();
                     for( sal_Int32 nL = 0; nL<nLevelCount; nL++ )
                     {
-                        rtl::Reference< LabeledDataSequence > xLDS( rSplitCategoriesList[nL] );
+                        Reference< chart2::data::XLabeledDataSequence > xLDS( rSplitCategoriesList[nL] );
                         if( !xLDS.is() )
                             continue;
                         Sequence< uno::Any > aDataSeq;
