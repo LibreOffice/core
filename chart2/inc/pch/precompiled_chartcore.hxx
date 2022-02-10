@@ -241,7 +241,6 @@
 #include <svl/typedwhich.hxx>
 #include <svl/zforlist.hxx>
 #include <svx/DiagramDataInterface.hxx>
-#include <svx/shapeproperty.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svdtypes.hxx>

@@ -28,6 +28,7 @@
 #include <svx/svdview.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/shapepropertynotifier.hxx>
 #include <drawdoc.hxx>
 #include <fmtornt.hxx>
 #include <viewimp.hxx>
@@ -1456,7 +1457,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                         {
                             // --> #i102752#
                             // assure that a ShapePropertyChangeNotifier exists
-                            maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange(svx::ShapeProperty::TextDocAnchor);
+                            maAnchoredDrawObj.DrawObj()->notifyShapePropertyChange(svx::ShapePropertyProviderId::TextDocAnchor);
                         }
                         else
                             SAL_WARN("sw.core", "SwDrawContact::Modify: no draw object here?");

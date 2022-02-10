@@ -252,7 +252,6 @@
 #include <svx/sdtaditm.hxx>
 #include <svx/sdtaitm.hxx>
 #include <svx/sdtakitm.hxx>
-#include <svx/shapeproperty.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svdoattr.hxx>
 #include <svx/svdobj.hxx>
