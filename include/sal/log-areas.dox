@@ -600,6 +600,7 @@ certain functionality.
 
 @li @c avmedia
 @li @c avmedia.gstreamer
+@li @c avmedia.gtk
 @li @c avmedia.quicktime
 
 @section other
