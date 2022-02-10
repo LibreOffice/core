@@ -1571,28 +1571,6 @@ ScRange ScRange::Intersection( const ScRange& rOther ) const
     return ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
 }
 
-void ScRange::PutInOrder()
-{
-    SCCOL nTempCol;
-    if ( aEnd.Col() < (nTempCol = aStart.Col()) )
-    {
-        aStart.SetCol(aEnd.Col());
-        aEnd.SetCol(nTempCol);
-    }
-    SCROW nTempRow;
-    if ( aEnd.Row() < (nTempRow = aStart.Row()) )
-    {
-        aStart.SetRow(aEnd.Row());
-        aEnd.SetRow(nTempRow);
-    }
-    SCTAB nTempTab;
-    if ( aEnd.Tab() < (nTempTab = aStart.Tab()) )
-    {
-        aStart.SetTab(aEnd.Tab());
-        aEnd.SetTab(nTempTab);
-    }
-}
-
 void ScRange::ExtendTo( const ScRange& rRange )
 {
     OSL_ENSURE( rRange.IsValid(), "ScRange::ExtendTo - cannot extend to invalid range" );
