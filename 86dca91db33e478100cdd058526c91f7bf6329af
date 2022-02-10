@@ -51,6 +51,24 @@
       "parentUuid": "d7de05f7_a416f940",
       "revId": "86dca91db33e478100cdd058526c91f7bf6329af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "420b0c03_f3b23ac2",
+        "filename": "xmloff/source/draw/ximpshap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3531,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-10T08:06:49Z",
+      "side": 1,
+      "message": "\u003e Does that help?\n\nAbsolutely; yes I understand the idea, was just wondering how (if) these styles are exposed to UI (I see from your explanation now that they are not).\n\nI have played with the objects a little by copying them to Draw, changing styles there, and copying back to Writer - to see if that way, we may trick other naming to their styles - but indeed, it didn\u0027t allow me (actually, on save, I lost the parent style name at all ...)\n\nSo since this is not exposed to user, this looks fine 😊",
+      "parentUuid": "bfbcb6e3_c14193b1",
+      "revId": "86dca91db33e478100cdd058526c91f7bf6329af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
