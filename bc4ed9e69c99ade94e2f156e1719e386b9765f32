@@ -46,6 +46,30 @@
       },
       "revId": "bc4ed9e69c99ade94e2f156e1719e386b9765f32",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13906520_cecaa8b6",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-10T09:04:44Z",
+      "side": 1,
+      "message": "Thanks Mike, your comment spurred me to review explicit constructors. That led me to rInetAttr is const so the const return version of GetTextNode is used and hence  the need for const_cast to remove the constness for SwPosition.\n\nI welcome your comments anytime.",
+      "parentUuid": "d77846d6_aa682b08",
+      "range": {
+        "startLine": 754,
+        "startChar": 31,
+        "endLine": 755,
+        "endChar": 86
+      },
+      "revId": "bc4ed9e69c99ade94e2f156e1719e386b9765f32",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
