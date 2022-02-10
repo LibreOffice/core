@@ -454,7 +454,8 @@ void ImplIntroTest::Init()
 
     //XInterfaceRef Source;
     Any Value;
-    Value <<= 2.718281828459;
+    contsexpr double fEulerNumber = 2.718281828459;
+    Value <<= fEulerNumber;
     m_aSecondStruct.Value = Value;
     //XIdlClassRef ListenerType;
     m_aSecondStruct.State = PropertyState_DIRECT_VALUE;

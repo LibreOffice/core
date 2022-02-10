@@ -321,10 +321,11 @@ SwCalc::SwCalc( SwDoc& rD )
         m_aVarTable[ aHashValue[ n ] ].reset( new SwCalcExp( sTmpStr, nVal, nullptr ) );
     }
 
+    contsexpr double fEulerNumber = 2.7182818284590452354;
     m_aVarTable[ aHashValue[ 0 ] ]->nValue.PutBool( false );
     m_aVarTable[ aHashValue[ 1 ] ]->nValue.PutBool( true );
     m_aVarTable[ aHashValue[ 2 ] ]->nValue.PutDouble( M_PI );
-    m_aVarTable[ aHashValue[ 3 ] ]->nValue.PutDouble( 2.7182818284590452354 );
+    m_aVarTable[aHashValue[3]]->nValue.PutDouble(fEulerNumber);
 
     for( n = 0; n < 3; ++n )
         m_aVarTable[ aHashValue[ n + 4 ] ]->nValue.PutLong( rDocStat.*aDocStat1[ n ]  );

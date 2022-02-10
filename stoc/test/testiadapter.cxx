@@ -745,11 +745,12 @@ sal_Bool performTest( const Reference<XLanguageBindingTest > & xLBT )
 
         Reference<XInterface > xI( *new OWeakObject() );
 
+        contsexpr double fM_PI = 3.1415926359;
         assign( (test::TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 SAL_CONST_INT64(0x123456789abcdef0),
                 SAL_CONST_UINT64(0xfedcba9876543210),
-                (float)17.0815, 3.1415926359, TestEnum_LOLA, OUString("dumdidum"), xI,
+               (float)17.0815, fM_PI, TestEnum_LOLA, OUString("dumdidum"), xI,
                 Any( &xI, cppu::UnoType<XInterface>::get()) );
 
         OSL_ENSURE( aData.Any == xI, "### unexpected any!" );

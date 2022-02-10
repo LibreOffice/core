@@ -1291,7 +1291,8 @@ void VclProcessor2D::RenderSvgLinearAtomPrimitive2D(
     const basegfx::B2DVector aDiscreteVector(
         getViewInformation2D().getInverseObjectToViewTransformation()
         * basegfx::B2DVector(1.0, 1.0));
-    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
+    contsexpr double fRootOfTwo = 1.414213562373;
+    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / fRootOfTwo));
 
     // use color distance and discrete lengths to calculate step count
     const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
@@ -1335,7 +1336,8 @@ void VclProcessor2D::RenderSvgRadialAtomPrimitive2D(
     const basegfx::B2DVector aDiscreteVector(
         getViewInformation2D().getInverseObjectToViewTransformation()
         * basegfx::B2DVector(1.0, 1.0));
-    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
+    contsexpr double fRootOfTwo = 1.414213562373;
+    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / fRootOfTwo));
 
     // use color distance and discrete lengths to calculate step count
     const sal_uInt32 nSteps(
