@@ -22,6 +22,7 @@
 #include <tools/stream.hxx>
 
 #include "tokstack.hxx"
+#include "xiroot.hxx"
 
 #include <memory>
 #include <vector>
@@ -51,7 +52,7 @@ enum FORMULA_TYPE
     FT_CondFormat
 };
 
-class ScRangeListTabs
+class ScRangeListTabs : protected XclImpRoot
 {
     typedef ::std::vector<ScRange> RangeListType;
     typedef ::std::map<SCTAB, RangeListType> TabRangeType;
@@ -60,7 +61,7 @@ class ScRangeListTabs
     RangeListType::const_iterator maItrCurEnd;
 
 public:
-    ScRangeListTabs ();
+    ScRangeListTabs( const XclImpRoot& rRoot );
     ~ScRangeListTabs();
 
     void Append( const ScAddress& aSRD, SCTAB nTab );

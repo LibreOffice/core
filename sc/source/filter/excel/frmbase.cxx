@@ -21,7 +21,8 @@
 
 #include <osl/diagnose.h>
 
-ScRangeListTabs::ScRangeListTabs()
+ScRangeListTabs::ScRangeListTabs( const XclImpRoot& rRoot )
+: XclImpRoot( rRoot )
 {
 }
 
@@ -32,15 +33,16 @@ ScRangeListTabs::~ScRangeListTabs()
 void ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
 {
     ScAddress a = aSRD;
+    ScDocument& rDoc = GetRoot().GetDoc();
 
     if (a.Tab() > MAXTAB)
         a.SetTab(MAXTAB);
 
-    if (a.Col() > MAXCOL)
-        a.SetCol(MAXCOL);
+    if (a.Col() > rDoc.MaxCol())
+        a.SetCol(rDoc.MaxCol());
 
-    if (a.Row() > MAXROW)
-        a.SetRow(MAXROW);
+    if (a.Row() > rDoc.MaxRow())
+        a.SetRow(rDoc.MaxRow());
 
     if( nTab == SCTAB_MAX)
         return;
@@ -69,6 +71,7 @@ void ScRangeListTabs::Append( const ScAddress& aSRD, SCTAB nTab )
 void ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
 {
     ScRange a = aCRD;
+    ScDocument& rDoc = GetRoot().GetDoc();
 
     // ignore 3D ranges
     if (a.aStart.Tab() != a.aEnd.Tab())
@@ -79,23 +82,23 @@ void ScRangeListTabs::Append( const ScRange& aCRD, SCTAB nTab )
     else if (a.aStart.Tab() < 0)
         a.aStart.SetTab(0);
 
-    if (a.aStart.Col() > MAXCOL)
-        a.aStart.SetCol(MAXCOL);
+    if (a.aStart.Col() > rDoc.MaxCol())
+        a.aStart.SetCol(rDoc.MaxCol());
     else if (a.aStart.Col() < 0)
         a.aStart.SetCol(0);
 
-    if (a.aStart.Row() > MAXROW)
-        a.aStart.SetRow(MAXROW);
+    if (a.aStart.Row() > rDoc.MaxRow())
+        a.aStart.SetRow(rDoc.MaxRow());
     else if (a.aStart.Row() < 0)
         a.aStart.SetRow(0);
 
-    if (a.aEnd.Col() > MAXCOL)
-        a.aEnd.SetCol(MAXCOL);
+    if (a.aEnd.Col() > rDoc.MaxCol())
+        a.aEnd.SetCol(rDoc.MaxCol());
     else if (a.aEnd.Col() < 0)
         a.aEnd.SetCol(0);
 
-    if (a.aEnd.Row() > MAXROW)
-        a.aEnd.SetRow(MAXROW);
+    if (a.aEnd.Row() > rDoc.MaxRow())
+        a.aEnd.SetRow(rDoc.MaxRow());
     else if (a.aEnd.Row() < 0)
         a.aEnd.SetRow(0);
 
