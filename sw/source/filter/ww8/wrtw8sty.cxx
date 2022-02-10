@@ -156,8 +156,7 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
                                          (bListStyles ? m_rExport.m_rDoc.GetNumRuleTable().size() - 1 : 0);
 
     // somewhat generous ( free for up to 15 )
-    m_pFormatA.reset( new SwFormat*[ nAlloc ] );
-    memset( m_pFormatA.get(), 0, nAlloc * sizeof( SwFormat* ) );
+    m_aFormatA.resize(nAlloc, nullptr);
     memset( m_aHeadingParagraphStyles, -1 , MAXLEVEL * sizeof( sal_uInt16));
 
     BuildStylesTable();
@@ -173,7 +172,7 @@ sal_uInt16 MSWordStyles::GetSlot( const SwFormat* pFormat ) const
 {
     sal_uInt16 n;
     for ( n = 0; n < m_nUsedSlots; n++ )
-        if ( m_pFormatA[n] == pFormat )
+        if ( m_aFormatA[n] == pFormat )
             return n;
     return 0xfff;                   // 0xfff: WW: zero
 }
@@ -286,7 +285,7 @@ void MSWordStyles::BuildStylesTable()
     for( size_t n = 1; n < rArr.size(); n++ )
     {
         SwCharFormat* pFormat = rArr[n];
-        m_pFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
+        m_aFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
     }
 
     const SwTextFormatColls& rArr2 = *m_rExport.m_rDoc.GetTextFormatColls();   // then TextFormatColls
@@ -295,7 +294,7 @@ void MSWordStyles::BuildStylesTable()
     {
         SwTextFormatColl* pFormat = rArr2[n];
         sal_uInt16 nId = BuildGetSlot( *pFormat ) ;
-        m_pFormatA[ nId ] = pFormat;
+        m_aFormatA[ nId ] = pFormat;
         if ( pFormat->IsAssignedToListLevelOfOutlineStyle() )
         {
             int nLvl = pFormat->GetAssignedOutlineStyleLevel() ;
@@ -348,8 +347,8 @@ void MSWordStyles::BuildStyleIds()
     for (sal_uInt16 n = 1; n < m_nUsedSlots; ++n)
     {
         OUString aName;
-        if(m_pFormatA[n])
-            aName = m_pFormatA[n]->GetName();
+        if (m_aFormatA[n])
+            aName = m_aFormatA[n]->GetName();
         else if (m_aNumRules.find(n) != m_aNumRules.end())
             aName = m_aNumRules[n]->GetName();
 
@@ -628,8 +627,8 @@ void MSWordStyles::OutputStyle( SwFormat* pFormat, sal_uInt16 nPos )
             for ( int nSuffix = 0; ; ++nSuffix ) {
                 bool clash=false;
                 for ( sal_uInt16 n = 1; n < m_nUsedSlots; ++n )
-                    if ( m_pFormatA[n] &&
-                         m_pFormatA[n]->GetName().equalsIgnoreAsciiCase(aName) )
+                    if ( m_aFormatA[n] &&
+                         m_aFormatA[n]->GetName().equalsIgnoreAsciiCase(aName) )
                     {
                         clash = true;
                         break;
@@ -718,7 +717,7 @@ void MSWordStyles::OutputStylesTable()
         if (m_aNumRules.find(n) != m_aNumRules.end())
             OutputStyle(m_aNumRules[n], n);
         else
-            OutputStyle( m_pFormatA[n], n );
+            OutputStyle(m_aFormatA[n], n);
     }
 
     m_rExport.AttrOutput().EndStyles( m_nUsedSlots );
