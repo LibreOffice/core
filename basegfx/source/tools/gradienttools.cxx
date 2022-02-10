@@ -144,10 +144,14 @@ namespace basegfx
         }
         else
         {
-            fTargetOffsetX -= (0.4142 / 2.0 ) * fTargetSizeX;
-            fTargetOffsetY -= (0.4142 / 2.0 ) * fTargetSizeY;
-            fTargetSizeX = 1.4142 * fTargetSizeX;
-            fTargetSizeY = 1.4142 * fTargetSizeY;
+            contsexpr double fRootOfTwo = 1.4142;
+            // sqrt(sqrt(2) - 1 / sqrt(2) + 1)
+            contsexpr double fSpecialRootOfTwo = 0.4142;
+
+            fTargetOffsetX -= (fSpecialRootOfTwo / 2.0) * fTargetSizeX;
+            fTargetOffsetY -= (fSpecialRootOfTwo / 2.0) * fTargetSizeY;
+            fTargetSizeX = fRootOfTwo * fTargetSizeX;
+            fTargetSizeY = fRootOfTwo * fTargetSizeY;
         }
 
         const double fHalfBorder((1.0 - fBorder) * 0.5);
