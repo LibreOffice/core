@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7d9f162_83b44b86",
+        "filename": "svx/source/svdraw/svdpntv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-10T17:27:15Z",
+      "side": 1,
+      "message": "so this is now potentially deferencing a null pointer? I don\u0027t see how that is an improvement?",
+      "revId": "b5f09f54c4b3b6f3da7d2dafbe9fbfa95f978d9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
