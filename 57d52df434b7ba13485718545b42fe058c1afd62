@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49367c7a_58298aa2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-10T08:38:36Z",
+      "side": 1,
+      "message": "Hello Alain,\nThanks for providing the unittest.\nCould you please add the bug id ( tdf#147262 ) to the commit message ?",
+      "revId": "57d52df434b7ba13485718545b42fe058c1afd62",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
