@@ -33,6 +33,24 @@
       "message": "Interesting - how does it work in case user defines their own frame styles? Or is it impossible to assign user styles to such objects currently? (Testing the original bugdoc, it seems so.)",
       "revId": "86dca91db33e478100cdd058526c91f7bf6329af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfbcb6e3_c14193b1",
+        "filename": "xmloff/source/draw/ximpshap.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3531,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-10T07:42:45Z",
+      "side": 1,
+      "message": "Yes, this is only nominally a style. Draw shapes in Writer only have direct formatting, and then there is this hack to assign the special Graphics or Frame parent style to shapes. If one of them is the case, then that becomes a Writer textframe or a Writer picture. In other cases, we create shared/Draw shapes.\n\nThe problem here is that it\u0027s a valid scenario to try to rename all styles, so you can merge 2 documents together just by manipulating zip/xml, but that doesn\u0027t play nicely with the hardcoded parent style name whitelist. Relaxing the \"match\" to \"has the prefix\" is meant to keep the whitelisting but allow the doc merging scenario.\n\nDoes that help?",
+      "parentUuid": "d7de05f7_a416f940",
+      "revId": "86dca91db33e478100cdd058526c91f7bf6329af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
