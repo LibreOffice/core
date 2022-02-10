@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7e35281_aa7b2917",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-10T17:53:44Z",
+      "side": 1,
+      "message": "Eike: is this patch (and the patch that depends on it) worth backporting to stable? I think it is safe enough to do so. The coding was fairly obvious and straight-forward.",
+      "revId": "67c73494ddf2cd7758a0e41f1ceae27dbf696c2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
