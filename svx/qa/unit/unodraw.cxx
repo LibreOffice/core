@@ -19,6 +19,7 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -32,6 +33,9 @@
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <test/xmltesttools.hxx>
+#include <unotools/streamwrap.hxx>
+#include <unotools/mediadescriptor.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
@@ -207,6 +211,38 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTitleShapeBullets)
     // Without the accompanying fix in place, this test would have failed, because the 2 paragraphs
     // were merged together (e.g. 1 bullet instead of 2 bullets for bulleted paragraphs).
     CPPUNIT_ASSERT(xTextE->hasMoreElements());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testPngExport)
+{
+    // Given an empty Impress document:
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+
+    // When exporting that document to PNG with a JSON size:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY_THROW);
+    SvMemoryStream aStream;
+    uno::Reference<io::XOutputStream> xOut = new utl::OOutputStreamWrapper(aStream);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("impress_png_Export");
+    aMediaDescriptor["FilterOptions"]
+        <<= OUString("{\"PixelHeight\":{\"type\":\"long\",\"value\":\"192\"},"
+                     "\"PixelWidth\":{\"type\":\"long\",\"value\":\"192\"}}");
+    aMediaDescriptor["OutputStream"] <<= xOut;
+    xStorable->storeToURL("private:stream", aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Then make sure that the size request is handled:
+    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+    vcl::PngImageReader aPngReader(aStream);
+    BitmapEx aBitmapEx;
+    aPngReader.read(aBitmapEx);
+    Size aSize = aBitmapEx.GetSizePixel();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 192
+    // - Actual  : 595
+    // i.e. it was not possible to influence the size from the cmdline.
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(192), aSize.getHeight());
+    CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(192), aSize.getWidth());
 }
 }
 

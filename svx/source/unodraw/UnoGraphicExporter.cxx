@@ -64,6 +64,9 @@
 #include <svx/xlineit0.hxx>
 #include <editeng/flditem.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 #include "UnoGraphicExporter.hxx"
 #include <memory>
 
@@ -402,8 +405,39 @@ VclPtr<VirtualDevice> GraphicExporter::CreatePageVDev( SdrPage* pPage, tools::Lo
     return pVDev;
 }
 
-void GraphicExporter::ParseSettings( const Sequence< PropertyValue >& aDescriptor, ExportSettings& rSettings )
+void GraphicExporter::ParseSettings(const Sequence<PropertyValue>& rDescriptor,
+                                    ExportSettings& rSettings)
 {
+    Sequence<PropertyValue> aDescriptor = rDescriptor;
+    if (aDescriptor.hasElements())
+    {
+        comphelper::SequenceAsHashMap aMap(aDescriptor);
+        Sequence<PropertyValue> aFilterData;
+        OUString aFilterOptions;
+        auto it = aMap.find("FilterData");
+        if (it != aMap.end())
+        {
+            it->second >>= aFilterData;
+        }
+        it = aMap.find("FilterOptions");
+        if (it != aMap.end())
+        {
+            it->second >>= aFilterOptions;
+        }
+        if (!aFilterData.hasElements() && !aFilterOptions.isEmpty())
+        {
+            // Allow setting filter data keys from the cmdline.
+            std::vector<PropertyValue> aData
+                = comphelper::JsonToPropertyValues(aFilterOptions.toUtf8());
+            aFilterData = comphelper::containerToSequence(aData);
+            if (aFilterData.hasElements())
+            {
+                aMap["FilterData"] <<= aFilterData;
+                aDescriptor = aMap.getAsConstPropertyValueList();
+            }
+        }
+    }
+
     for( const PropertyValue& rValue : aDescriptor )
     {
         if ( rValue.Name == "FilterName" )
