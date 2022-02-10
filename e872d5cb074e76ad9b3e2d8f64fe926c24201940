@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ca1195a_e5517ca8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-10T08:58:56Z",
+      "side": 1,
+      "message": "Any idea why this fails with\n\nError: \"Misplaced close tag: \u003c/oor:component-data\u003e in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/desktop/test/deployment/crashextension/ToolbarMerge.xcu\" in line 49, column 22: \"\u003c/oor:component-data\u003e\"\n\nhttps://ci.libreoffice.org/job/gerrit_linux_gcc_release/111400/console",
+      "revId": "e872d5cb074e76ad9b3e2d8f64fe926c24201940",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
