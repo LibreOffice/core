@@ -258,10 +258,10 @@ $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/%.xml : $(SRCDIR)/ext
 	$(call gb_ExternalExecutable_get_command,xsltproc) --nonet -o $@ $(SRCDIR)/extras/util/compact.xsl $<
 	$(call gb_Trace_EndRange,autocorr/$*.xml,XSL)
 
-# secondexpansion necessry since the .dat are created with longlang form, while the other files
+# secondexpansion necessary since the .dat are created with longlang form, while the other files
 # are created in the shortlang directory, and thus % cannot be used verbatim, the second expansion
 # allows the actual stem from the target to be used in the macro calls
-# there's no reason for the different directories thouch, so a janitorial cleanup would be
+# there's no reason for the different directories touch, so a janitorial cleanup would be
 # TODO: get rid of the shortform:longform language names when assembling the autocorr files
 $(call gb_CustomTarget_get_workdir,extras/source/autocorr)/acor_%.dat : \
         $$(addprefix \
