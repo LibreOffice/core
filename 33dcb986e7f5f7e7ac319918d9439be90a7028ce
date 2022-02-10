@@ -51,6 +51,24 @@
       "message": "gcc has function multi-versioning: https://lwn.net/Articles/691932/\n\nAt work we use Intel IPP on Windows, which selects the right code at runtime, and that appears to work by having multiple different DLLs and loading the right one.",
       "revId": "33dcb986e7f5f7e7ac319918d9439be90a7028ce",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bec9386_ff1fdbe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-10T08:58:09Z",
+      "side": 1,
+      "message": "I suppose the target attribute might be useful if it prevented GCC from doing things like moving AVX code outside of the function like in https://gerrit.libreoffice.org/c/core/+/129251 .\n\nI don\u0027t see how the rest could be useful for us. None of it works with MSVC, so we\u0027d need to do it manually anyway. The DLL idea was suggested above, and while that\u0027d make things safe, I consider it to be too much work for our use.",
+      "parentUuid": "5a8e014b_011a8165",
+      "revId": "33dcb986e7f5f7e7ac319918d9439be90a7028ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
