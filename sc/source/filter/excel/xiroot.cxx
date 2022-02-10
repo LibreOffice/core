@@ -21,6 +21,7 @@
 #include <addincol.hxx>
 #include <colrowst.hxx>
 #include <document.hxx>
+#include <formel.hxx>
 #include <scextopt.hxx>
 #include <xihelper.hxx>
 #include <xiformula.hxx>
@@ -84,6 +85,8 @@ XclImpRoot::XclImpRoot( XclImpRootData& rImpRootData ) :
     mrImpData.mxPageSett = std::make_shared<XclImpPageSettings>( GetRoot() );
     mrImpData.mxDocViewSett = std::make_shared<XclImpDocViewSettings>( GetRoot() );
     mrImpData.mxTabViewSett = std::make_shared<XclImpTabViewSettings>( GetRoot() );
+    mrImpData.mpPrintRanges = std::make_unique<ScRangeListTabs>();
+    mrImpData.mpPrintTitles = std::make_unique<ScRangeListTabs>();
 }
 
 void XclImpRoot::SetCodePage( sal_uInt16 nCodePage )
@@ -165,14 +168,12 @@ XclImpXFRangeBuffer& XclImpRoot::GetXFRangeBuffer() const
 
 ScRangeListTabs& XclImpRoot::GetPrintAreaBuffer() const
 {
-    // TODO still in old RootData
-    return *GetOldRoot().pPrintRanges;
+    return *mrImpData.mpPrintRanges;
 }
 
 ScRangeListTabs& XclImpRoot::GetTitleAreaBuffer() const
 {
-    // TODO still in old RootData
-    return *GetOldRoot().pPrintTitles;
+    return *mrImpData.mpPrintTitles;
 }
 
 XclImpTabInfo& XclImpRoot::GetTabInfo() const
