@@ -104,15 +104,10 @@ void MediaControlBase::UpdateTimeSlider( MediaItem const & aMediaItem )
 void MediaControlBase::InitializeWidgets()
 {
     mxPlayToolBox->set_item_help_id("play", HID_AVMEDIA_TOOLBOXITEM_PLAY);
-    mxPlayToolBox->set_item_label("play", AvmResId(AVMEDIA_STR_PLAY));
     mxPlayToolBox->set_item_help_id("pause", HID_AVMEDIA_TOOLBOXITEM_PAUSE);
-    mxPlayToolBox->set_item_label("pause", AvmResId(AVMEDIA_STR_PAUSE));
     mxPlayToolBox->set_item_help_id("stop", HID_AVMEDIA_TOOLBOXITEM_STOP);
-    mxPlayToolBox->set_item_label("stop", AvmResId(AVMEDIA_STR_STOP));
     mxPlayToolBox->set_item_help_id("loop", HID_AVMEDIA_TOOLBOXITEM_LOOP);
-    mxPlayToolBox->set_item_label("loop", AvmResId(AVMEDIA_STR_LOOP));
     mxMuteToolBox->set_item_help_id("mute", HID_AVMEDIA_TOOLBOXITEM_MUTE);
-    mxMuteToolBox->set_item_label("mute", AvmResId(AVMEDIA_STR_MUTE));
 
     mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_50), AvmResId( AVMEDIA_STR_ZOOM_50 ));
     mxZoomListBox->append(OUString::number(AVMEDIA_ZOOMLEVEL_100), AvmResId( AVMEDIA_STR_ZOOM_100 ));
