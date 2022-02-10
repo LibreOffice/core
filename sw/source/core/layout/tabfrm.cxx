@@ -1197,7 +1197,12 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     // Build follow table if not already done:
     bool bNewFollow;
     SwTabFrame *pFoll;
-    if ( GetFollow() )
+    if (GetFollow()
+        // avoid using a follow if there's a "hole" between
+        && (GetFollow()->FindPageFrame() == FindPageFrame()
+            || (static_cast<SwPageFrame const*>(FindPageFrame()->GetNext())->IsEmptyPage()
+                ? GetFollow()->FindPageFrame() == FindPageFrame()->GetNext()->GetNext()
+                : GetFollow()->FindPageFrame() == FindPageFrame()->GetNext())))
     {
         pFoll = GetFollow();
         bNewFollow = false;
@@ -2008,6 +2013,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
         }
     }
 
+    bool bRemovedExistingFollowFlowLine(false);
     int nUnSplitted = 5; // Just another loop control :-(
     int nThrowAwayValidLayoutLimit = 5; // And another one :-(
     SwRectFnSet aRectFnSet(this);
@@ -2217,6 +2223,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         {
                             SwFrame* pLastLine = GetLastLower();
                             RemoveFollowFlowLine();
+                            bRemovedExistingFollowFlowLine = true;
                             // invalidate and rebuild last row
                             if ( pLastLine )
                             {
@@ -2493,19 +2500,36 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 {
                     aNotify.SetLowersComplete( false );
                     bSplit = true;
+                    bool bAvoidRemovingFollowFlowLine = false;
+                    ::std::optional<SwFrameDeleteGuard> oGTable;
+                    ::std::optional<SwFrameDeleteGuard> oGRow;
 
                     // An existing follow flow line has to be removed.
                     if ( HasFollowFlowLine() )
                     {
-                        if (!nThrowAwayValidLayoutLimit)
-                            continue;
-                        const bool bInitialLoopEndCondition(isFrameAreaDefinitionValid());
-                        RemoveFollowFlowLine();
-                        const bool bFinalLoopEndCondition(isFrameAreaDefinitionValid());
-
-                        if (bInitialLoopEndCondition && !bFinalLoopEndCondition)
+                        if (bRemovedExistingFollowFlowLine
+                            && GetFollow()->FindPageFrame() != FindPageFrame()
+                            && (static_cast<SwPageFrame const*>(FindPageFrame()->GetNext())->IsEmptyPage()
+                                ? GetFollow()->FindPageFrame() != FindPageFrame()->GetNext()->GetNext()
+                                : GetFollow()->FindPageFrame() != FindPageFrame()->GetNext()))
+                        {   // the *real* one was already removed, avoid extra work
+                            bAvoidRemovingFollowFlowLine = true;
+                            oGTable.emplace(GetFollow());
+                            oGRow.emplace(GetFollow()->GetFirstNonHeadlineRow());
+                            SetFollowFlowLine(false); // temp override
+                        }
+                        else
                         {
-                            --nThrowAwayValidLayoutLimit;
+                            if (!nThrowAwayValidLayoutLimit)
+                                continue;
+                            const bool bInitialLoopEndCondition(isFrameAreaDefinitionValid());
+                            RemoveFollowFlowLine();
+                            const bool bFinalLoopEndCondition(isFrameAreaDefinitionValid());
+
+                            if (bInitialLoopEndCondition && !bFinalLoopEndCondition)
+                            {
+                                --nThrowAwayValidLayoutLimit;
+                            }
                         }
                     }
 
@@ -2527,7 +2551,16 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // If an error occurred during splitting. We start a second
                     // try, this time without splitting of table rows.
                     if ( bSplitError && HasFollowFlowLine() )
+                    {
                         RemoveFollowFlowLine();
+                        if (bAvoidRemovingFollowFlowLine)
+                        {
+                            assert(GetFollow()->GetFollow()->GetFirstNonHeadlineRow());
+                            m_bHasFollowFlowLine = true; // reset flag
+                        }
+                    }
+                    oGRow.reset();
+                    oGTable.reset();
 
                     // If splitting the table was successful or not,
                     // we do not want to have 'empty' follow tables.
