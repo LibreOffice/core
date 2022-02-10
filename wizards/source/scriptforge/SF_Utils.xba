@@ -507,7 +507,8 @@ Const cstMaxLength = 2^15 - 1	&apos;	32767
 Const cstByteLength = 25
 Const cstEtc = &quot; … &quot;
 
-	If IsMissing(plMax) Or plMax = 0 Then plMax = cstMaxLength
+	If IsMissing(plMax) Then plMax = cstMaxLength
+	If plMax = 0 Then plMax = cstMaxLength
 	If IsArray(pvArg) Then
 		sArg = SF_Array._Repr(pvArg)
 	Else
