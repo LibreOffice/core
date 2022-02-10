@@ -1408,6 +1408,26 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 (bIsGroupObj && pObj ? pObj->GetRelativePos().getY() : aNewVOri.GetPos())
                 + aRect.Top());
 
+            const auto& nInshapePos
+                = pObj ? pObj->GetRelativePos() - pShape->FindRealSdrObject()->GetRelativePos()
+                       : Point();
+
+            if (pShape->GetHoriOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+                && pShape->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PAGE)
+            {
+                aNewHOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                aNewHOri.SetPos(pShape->GetHoriOrient().GetPos() + nInshapePos.getX()
+                                + aRect.Left());
+            }
+
+            if (pShape->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+                && pShape->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PAGE)
+            {
+                aNewVOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+                aNewVOri.SetPos(pShape->GetVertOrient().GetPos() + nInshapePos.getY()
+                                + aRect.Top());
+            }
+
             pFormat->SetFormatAttr(aNewHOri);
             pFormat->SetFormatAttr(aNewVOri);
         }
