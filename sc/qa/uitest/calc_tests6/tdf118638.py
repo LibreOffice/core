@@ -27,10 +27,10 @@ class Subtotals(UITestCase):
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "0")
-                xGroupBy = xDialog.getChild("group_by")
+                xGroupBy = xDialog.getChild("group_by1")
                 select_by_text(xGroupBy, "Store Name")
                 xCheckListMenu = xDialog.getChild("grid1")
-                xTreeList = xCheckListMenu.getChild("columns")
+                xTreeList = xCheckListMenu.getChild("columns1")
                 xEntry = xTreeList.getChild("1")
                 xEntry.executeAction("CLICK", tuple())
 

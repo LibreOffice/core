@@ -30,7 +30,7 @@ struct ScSubTotalParam;
 class ScTpSubTotalGroup : public SfxTabPage
 {
 protected:
-    ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet);
+    ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet, const sal_uInt16& nTabNumber);
 
 public:
     virtual ~ScTpSubTotalGroup() override;

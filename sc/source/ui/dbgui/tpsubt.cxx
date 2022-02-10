@@ -38,7 +38,7 @@
 
 // Subtotals group tabpage:
 
-ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
+ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet, const sal_uInt16& rTabNumber)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/subtotalgrppage.ui", "SubTotalGrpPage", &rArgSet)
     , aStrNone(ScResId(SCSTR_NONE))
     , aStrColumn(ScResId(SCSTR_COLUMN))
@@ -62,6 +62,10 @@ ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogControl
     mxLbColumns->enable_toggle_buttons(weld::ColumnToggleType::Check);
 
     Init();
+
+    // UI tests
+    mxLbGroup->set_buildable_name(mxLbGroup->get_buildable_name() + OString::number(rTabNumber));
+    mxLbColumns->set_buildable_name(mxLbColumns->get_buildable_name() + OString::number(rTabNumber));
 }
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
@@ -407,15 +411,15 @@ std::unique_ptr<SfxTabPage> ScTpSubTotalGroup3::Create( weld::Container* pPage, 
 }
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pPage, pController, rArgSet )
+    ScTpSubTotalGroup( pPage, pController, rArgSet, 1 )
 {}
 
 ScTpSubTotalGroup2::ScTpSubTotalGroup2( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pPage, pController, rArgSet )
+    ScTpSubTotalGroup( pPage, pController, rArgSet, 2 )
 {}
 
 ScTpSubTotalGroup3::ScTpSubTotalGroup3( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet ) :
-    ScTpSubTotalGroup( pPage, pController, rArgSet )
+    ScTpSubTotalGroup( pPage, pController, rArgSet, 3 )
 {}
 
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), *rArgSet ))

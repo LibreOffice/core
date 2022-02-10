@@ -56,7 +56,7 @@ class Subtotals(UITestCase):
             # Subtotal dialog displays
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # Select group by: Category
-                xGroupBy = xDialog.getChild("group_by")
+                xGroupBy = xDialog.getChild("group_by1")
                 select_by_text(xGroupBy, "Category")
                 # Select calculate subtotals for the months -  selected by default
                 # Select tab options
@@ -77,7 +77,7 @@ class Subtotals(UITestCase):
             self.xUITest.executeCommand(".uno:SelectAll")#use uno command Menu Edit->Select All
             # 2 invoke sub-total menu and select none
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
-                xGroupBy = xDialog.getChild("group_by")
+                xGroupBy = xDialog.getChild("group_by1")
                 select_by_text(xGroupBy, "- none -")
             # 2 invoke sort menu and... crash
             with self.ui_test.execute_dialog_through_command(".uno:DataSort", close_button="cancel"):
@@ -94,22 +94,22 @@ class Subtotals(UITestCase):
             # 2. Data->Subtotals
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # 3. Group by->Trans date
-                xGroupBy = xDialog.getChild("group_by")
+                xGroupBy = xDialog.getChild("group_by1")
                 select_by_text(xGroupBy, "Trans Date")
                 # 4. Tick 'Calculate subtotals for' -> Amount  (grid1)
                 xCheckListMenu = xDialog.getChild("grid1")
-                xTreeList = xCheckListMenu.getChild("columns")
+                xTreeList = xCheckListMenu.getChild("columns1")
                 xFirstEntry = xTreeList.getChild("2")
                 xFirstEntry.executeAction("CLICK", tuple())
                 # 5. Click OK
             # 6. Data->Subtotals
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # 7. Group by->-none-
-                xGroupBy = xDialog.getChild("group_by")
+                xGroupBy = xDialog.getChild("group_by1")
                 select_by_text(xGroupBy, "- none -")
                 # 8. Untick 'Calculate subtotals for' -> Amount
                 xCheckListMenu = xDialog.getChild("grid1")
-                xTreeList = xCheckListMenu.getChild("columns")
+                xTreeList = xCheckListMenu.getChild("columns1")
                 xFirstEntry = xTreeList.getChild("2")
                 xFirstEntry.executeAction("CLICK", tuple())
                 # 9. Click OK
@@ -134,7 +134,7 @@ class Subtotals(UITestCase):
             # 3. Data → Subtotals
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 # 4. Group by: "- none -"
-                xGroupBy = xDialog.getChild("group_by")
+                xGroupBy = xDialog.getChild("group_by1")
                 select_by_text(xGroupBy, "- none -")
                 # 5. Press "OK" and watch LibreOffice crash.
 

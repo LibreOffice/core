@@ -11,8 +11,7 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.framework import UITestCase
 from libreoffice.calc.document import get_cell_by_position
 from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import select_by_text
-from uitest.uihelper.common import get_url_for_data_file
+from uitest.uihelper.common import get_url_for_data_file, get_state_as_dict
 
 #Bug 107267 - During a sub-total calculation or sum, the data set is not computed well.
 class Subtotals(UITestCase):
@@ -27,40 +26,27 @@ class Subtotals(UITestCase):
             # 2. Data->Subtotals
             with self.ui_test.execute_dialog_through_command(".uno:DataSubTotals") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
+
                 select_pos(xTabs, "0")
-                # = 1st group = 3. Group by "Person Number", select "shipping time" and use the Max function.
-                xGroupBy = xDialog.getChild("group_by")
-                select_by_text(xGroupBy, "Person Number")
-                # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
-        #        xCheckListMenu = xDialog.getChild("grid1")
-        #        xTreeList = xCheckListMenu.getChild("columns")
-        #        x6Entry = xTreeList.getChild("5")
-        #        xFirstEntry.executeAction("CLICK", tuple())
-                #use the Max function
+                xGroupBy1 = xDialog.getChild("group_by1")
+                self.assertEqual("Person Number", get_state_as_dict(xGroupBy1)["SelectEntryText"])
 
-                #= 2nd group =5. Group by "Person Number", select "shipping time" and use the Min function.
+                xColumns1 = xDialog.getChild("columns1")
+                self.assertEqual("shipping time", get_state_as_dict(xColumns1)["SelectEntryText"])
+
                 select_pos(xTabs, "1")
-                xGroupBy = xDialog.getChild("group_by")
-                select_by_text(xGroupBy, "Person Number")
-                # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
-        #        xCheckListMenu = xDialog.getChild("grid1")
-        #        xTreeList = xCheckListMenu.getChild("columns")
-        #        x6Entry = xTreeList.getChild("5")
-        #        xFirstEntry.executeAction("CLICK", tuple())
-                #use the Min function
+                xGroupBy2 = xDialog.getChild("group_by2")
+                self.assertEqual("Person Number", get_state_as_dict(xGroupBy2)["SelectEntryText"])
 
-                #= 3rd group = Group by "Person Number", select "shipping time" and use the Average function.
+                xColumns2 = xDialog.getChild("columns2")
+                self.assertEqual("shipping time", get_state_as_dict(xColumns2)["SelectEntryText"])
+
                 select_pos(xTabs, "2")
-                xGroupBy = xDialog.getChild("group_by")
-                select_by_text(xGroupBy, "Person Number")
-                # 4. Tick 'Calculate subtotals for' -> "shipping time" - already selected
-        #        xCheckListMenu = xDialog.getChild("grid1")
-        #        xTreeList = xCheckListMenu.getChild("columns")
-        #        x6Entry = xTreeList.getChild("5")
-        #        xFirstEntry.executeAction("CLICK", tuple())
-                #use the Average function
+                xGroupBy3 = xDialog.getChild("group_by3")
+                self.assertEqual("Person Number", get_state_as_dict(xGroupBy3)["SelectEntryText"])
 
-                # 5. Click OK
+                xColumns3 = xDialog.getChild("columns3")
+                self.assertEqual("shipping time", get_state_as_dict(xColumns3)["SelectEntryText"])
 
             #verify
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 141).getString(), "Grand Average")
