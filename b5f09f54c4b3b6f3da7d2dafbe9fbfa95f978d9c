@@ -16,6 +16,24 @@
       "message": "so this is now potentially deferencing a null pointer? I don\u0027t see how that is an improvement?",
       "revId": "b5f09f54c4b3b6f3da7d2dafbe9fbfa95f978d9c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce8d2266_dfd26cb6",
+        "filename": "svx/source/svdraw/svdpntv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2022-02-10T18:06:01Z",
+      "side": 1,
+      "message": "yes, it is a potentially deferencing a null pointer, but \"this\" pointer can be nullptr?, anyway I have updated the patch :)",
+      "parentUuid": "e7d9f162_83b44b86",
+      "revId": "b5f09f54c4b3b6f3da7d2dafbe9fbfa95f978d9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
