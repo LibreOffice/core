@@ -16,6 +16,24 @@
       "message": "Is this related to tdf#147271?",
       "revId": "a6f925eb00aaa2dab95c67539a2034b0994215ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de3c62e3_cc27c4be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-02-10T10:25:19Z",
+      "side": 1,
+      "message": "It is related but it does not fix tdf#147271 I\u0027m afraid.",
+      "parentUuid": "a26d4068_828c2501",
+      "revId": "a6f925eb00aaa2dab95c67539a2034b0994215ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
