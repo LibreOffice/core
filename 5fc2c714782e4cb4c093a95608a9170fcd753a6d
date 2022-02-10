@@ -68,6 +68,24 @@
       "message": "no newline at end of file",
       "revId": "5fc2c714782e4cb4c093a95608a9170fcd753a6d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2421839_376d6f45",
+        "filename": "desktop/test/deployment/crashextension/ToolbarMerge.xcu",
+        "patchSetId": 6
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-10T06:48:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53b351a1_4cea2c98",
+      "revId": "5fc2c714782e4cb4c093a95608a9170fcd753a6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
