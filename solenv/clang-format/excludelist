@@ -5992,7 +5992,6 @@ include/svx/sdtfsitm.hxx
 include/svx/sdynitm.hxx
 include/svx/searchcharmap.hxx
 include/svx/selectioncontroller.hxx
-include/svx/shapeproperty.hxx
 include/svx/shapepropertynotifier.hxx
 include/svx/sidebar/AreaPropertyPanelBase.hxx
 include/svx/sidebar/ContextChangeEventMultiplexer.hxx
