@@ -5848,9 +5848,12 @@ static SwTwips lcl_CalcHeightOfFirstContentLine( const SwRowFrame& rSourceLine )
                 const SwRowFrame* pTmpSourceRow = static_cast<const SwRowFrame*>(pCurrSourceCell->Lower());
                 nTmpHeight = lcl_CalcHeightOfFirstContentLine( *pTmpSourceRow );
             }
-            else if ( pTmp->IsTabFrame() )
+            else if (pTmp->IsTabFrame() || (pTmp->IsSctFrame() && pTmp->GetLower() && pTmp->GetLower()->IsTabFrame()))
             {
-                nTmpHeight = static_cast<const SwTabFrame*>(pTmp)->CalcHeightOfFirstContentLine();
+                SwTabFrame const*const pTabFrame(pTmp->IsTabFrame()
+                        ? static_cast<SwTabFrame const*>(pTmp)
+                        : static_cast<SwTabFrame const*>(pTmp->GetLower()));
+                nTmpHeight = pTabFrame->CalcHeightOfFirstContentLine();
             }
             else if (pTmp->IsTextFrame() || (pTmp->IsSctFrame() && pTmp->GetLower() && pTmp->GetLower()->IsTextFrame()))
             {
