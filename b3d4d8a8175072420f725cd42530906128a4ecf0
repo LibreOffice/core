@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d31b5aa1_791ecb65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-10T10:07:24Z",
+      "side": 1,
+      "message": "\u003e https://ci.libreoffice.org/job/gerrit_master/107934/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sw_txtimport failed ( https://ci.libreoffice.org/job/gerrit_windows/119546/ )\n\nThis is definitely related 😞",
+      "revId": "b3d4d8a8175072420f725cd42530906128a4ecf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
