@@ -16,6 +16,23 @@
       "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/107868/ : FAILURE\n\u003e \n\u003e likely caused by leftovers that linger around from an aborted build ( https://ci.libreoffice.org/job/gerrit_windows/119426/ )\n\n",
       "revId": "ba97bc7e095f242130bfcbe68ff5bbd6ffde2e41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7db4ae2_83b8768e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-10T07:45:51Z",
+      "side": 1,
+      "message": "Makes sense. In practice, this helps when you use \u0027sudo gdb\u0027 in online, which creates .pyc files as root, that you can remove as a user, but not without asking or using -f. And \u0027make distclean\u0027 is meant to be non-interactive.",
+      "revId": "ba97bc7e095f242130bfcbe68ff5bbd6ffde2e41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
