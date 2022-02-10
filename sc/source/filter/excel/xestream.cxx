@@ -742,16 +742,7 @@ OString XclXmlUtils::ToOString( const ScDocument& rDoc, const ScRangeList& rRang
 
 static ScAddress lcl_ToAddress( const XclAddress& rAddress )
 {
-    ScAddress aAddress;
-
-    // For some reason, ScRange::Format() returns omits row numbers if
-    // the row is >= MAXROW or the column is >= MAXCOL, and Excel doesn't
-    // like "A:IV" (i.e. no row numbers).  Prevent this.
-    // KOHEI: Find out if the above comment is still true.
-    aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW ) );
-    aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL )) );
-
-    return aAddress;
+    return ScAddress( rAddress.mnCol, rAddress.mnRow, 0 );
 }
 
 OStringBuffer& XclXmlUtils::ToOString( OStringBuffer& s, const XclAddress& rAddress )
