@@ -365,7 +365,7 @@ SdrPageView* SdrPaintView::ShowSdrPage(SdrPage* pPage)
             mpPageView.reset();
         }
 
-        mpPageView.reset(new SdrPageView(pPage, *static_cast<SdrView*>(this)));
+        mpPageView.reset(new SdrPageView(pPage, *dynamic_cast<SdrView*>(this)));
         mpPageView->Show();
     }
 
