@@ -1381,7 +1381,7 @@ bool XclExpXct::BuildCrnList( XclExpCrnList& rCrnRecs )
     for( SCROW nScRow = nScRow1; bValid && (nScRow <= nScRow2); ++nScRow )
     {
         ::std::pair< SCCOL, SCCOL > aColRange = mxCacheTable->getColRange( nScRow );
-        const SCCOL nScEnd = ::std::min( aColRange.second, MAXCOLCOUNT );
+        const SCCOL nScEnd = ::std::min( aColRange.second, GetDoc().GetSheetLimits().GetMaxColCount() );
         for( SCCOL nScCol = aColRange.first; bValid && (nScCol < nScEnd); ++nScCol )
         {
             if( maUsedCells.IsCellMarked( nScCol, nScRow, true ) )

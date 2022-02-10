@@ -53,7 +53,7 @@ ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
         case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
             {
                 nColCount = std::max<sal_Int32>(aIter.toInt32(), 1);
-                nColCount = std::min<sal_Int32>(nColCount, MAXCOLCOUNT);
+                nColCount = std::min<sal_Int32>(nColCount, rImport.GetDocument()->GetSheetLimits().GetMaxRowCount() );
             }
             break;
         case XML_ELEMENT( TABLE, XML_STYLE_NAME ):
