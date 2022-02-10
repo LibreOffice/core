@@ -2795,10 +2795,10 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
     switch ( eUserCall )
     {
     case SdrUserCallType::Resize:
-        notifyShapePropertyChange( svx::ShapeProperty::Size );
+        notifyShapePropertyChange( svx::ShapePropertyProviderId::Size );
         [[fallthrough]]; // RESIZE might also imply a change of the position
     case SdrUserCallType::MoveOnly:
-        notifyShapePropertyChange( svx::ShapeProperty::Position );
+        notifyShapePropertyChange( svx::ShapePropertyProviderId::Position );
         break;
     default:
         // not interested in
@@ -2962,7 +2962,7 @@ svx::PropertyChangeNotifier& SdrObject::getShapePropertyChangeNotifier()
     return pSvxShape->getShapePropertyChangeNotifier();
 }
 
-void SdrObject::notifyShapePropertyChange( const svx::ShapeProperty _eProperty ) const
+void SdrObject::notifyShapePropertyChange( const svx::ShapePropertyProviderId _eProperty ) const
 {
     DBG_TESTSOLARMUTEX();
 

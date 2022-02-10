@@ -54,7 +54,7 @@ namespace svx
     //= PropertyValueProvider
 
 
-    OUString PropertyValueProvider::getPropertyName() const
+    const OUString & PropertyValueProvider::getPropertyName() const
     {
         return m_sPropertyName;
     }
@@ -76,24 +76,22 @@ namespace svx
     {
     }
 
-    void PropertyChangeNotifier::registerProvider(const ShapeProperty _eProperty, std::unique_ptr<IPropertyValueProvider> _rProvider)
+    void PropertyChangeNotifier::registerProvider(const ShapePropertyProviderId _eProperty, std::unique_ptr<IPropertyValueProvider> _rProvider)
     {
-        ENSURE_OR_THROW( !!_rProvider, "NULL factory not allowed." );
+        assert( _rProvider && "NULL factory not allowed." );
 
-        OSL_ENSURE( m_aProviders.find( _eProperty ) == m_aProviders.end(),
+        assert( ! m_aProviders[_eProperty] &&
             "PropertyChangeNotifier::registerProvider: factory for this ID already present!" );
 
-        m_aProviders.emplace( _eProperty, std::move(_rProvider));
+        m_aProviders[ _eProperty ] = std::move(_rProvider);
     }
 
-    void PropertyChangeNotifier::notifyPropertyChange( const ShapeProperty _eProperty ) const
+    void PropertyChangeNotifier::notifyPropertyChange( const ShapePropertyProviderId _eProperty ) const
     {
-        PropertyProviders::const_iterator provPos = m_aProviders.find( _eProperty );
-        OSL_ENSURE( provPos != m_aProviders.end(), "PropertyChangeNotifier::notifyPropertyChange: no factory!" );
-        if ( provPos == m_aProviders.end() )
-            return;
+        assert( m_aProviders[ _eProperty ] && "PropertyChangeNotifier::notifyPropertyChange: no factory!" );
+        auto & provPos = m_aProviders[ _eProperty ];
 
-        OUString sPropertyName( provPos->second->getPropertyName() );
+        const OUString & sPropertyName( provPos->getPropertyName() );
 
         ::comphelper::OInterfaceContainerHelper3<XPropertyChangeListener>* pPropListeners = m_aPropertyChangeListeners.getContainer( sPropertyName );
         ::comphelper::OInterfaceContainerHelper3<XPropertyChangeListener>* pAllListeners = m_aPropertyChangeListeners.getContainer( OUString() );
@@ -105,8 +103,8 @@ namespace svx
             PropertyChangeEvent aEvent;
             aEvent.Source = m_rContext;
             // Handle/OldValue not supported
-            aEvent.PropertyName = provPos->second->getPropertyName();
-            provPos->second->getCurrentValue( aEvent.NewValue );
+            aEvent.PropertyName = provPos->getPropertyName();
+            provPos->getCurrentValue( aEvent.NewValue );
 
             if ( pPropListeners )
                 pPropListeners->notifyEach( &XPropertyChangeListener::propertyChange, aEvent );
