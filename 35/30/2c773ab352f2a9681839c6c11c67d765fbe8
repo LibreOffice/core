@@ -1,0 +1,8 @@
+Verified+1: Jenkins
+Code-Review+2: Eike Rathke <erack@redhat.com>
+Code-Review+1: Justin Luth <jluth@mail.com>
+Submitted-by: Eike Rathke <erack@redhat.com>
+Submitted-at: Thu, 10 Feb 2022 16:02:11 +0100
+Reviewed-on: https://gerrit.libreoffice.org/c/core/+/129761
+Project: core
+Branch: refs/heads/libreoffice-7-3
