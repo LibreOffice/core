@@ -576,7 +576,7 @@ public:
     IndexList::iterator end() { return maIndexList.end(); }
 
     /** Inserts a single row range into the list. */
-    void                SetDefaultXF( const XclImpXFIndex& rXFIndex );
+    void                SetDefaultXF( const XclImpXFIndex& rXFIndex, const XclImpRoot& rRoot );
 
     /** Inserts a new (encoded) XF index (first try to expand the last range). */
     void                SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex );

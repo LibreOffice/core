@@ -1715,14 +1715,14 @@ bool XclImpXFRange::Expand( const XclImpXFRange& rNextRange )
     return false;
 }
 
-void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
+void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex, const XclImpRoot& rRoot )
 {
     // List should be empty when inserting the default column format.
     // Later explicit SetXF() calls will break up this range.
     OSL_ENSURE( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
     // insert a complete row range with one insert.
-    maIndexList.push_back( std::make_unique<XclImpXFRange>( 0, MAXROW, rXFIndex ) );
+    maIndexList.push_back( std::make_unique<XclImpXFRange>( 0, rRoot.GetDoc().MaxRow(), rXFIndex ) );
 }
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
@@ -1939,7 +1939,7 @@ void XclImpXFRangeBuffer::SetBoolXF( const ScAddress& rScPos, sal_uInt16 nXFInde
 
 void XclImpXFRangeBuffer::SetRowDefXF( SCROW nScRow, sal_uInt16 nXFIndex )
 {
-    for( SCCOL nScCol = 0; nScCol <= MAXCOL; ++nScCol )
+    for( SCCOL nScCol = 0; nScCol <= GetDoc().MaxCol(); ++nScCol )
         SetXF( ScAddress( nScCol, nScRow, 0 ), nXFIndex, xlXFModeRow );
 }
 
@@ -1951,7 +1951,7 @@ void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
         maColumns.resize( nIndex + 1 );
     OSL_ENSURE( !maColumns[ nIndex ], "XclImpXFRangeBuffer::SetColumnDefXF - default column of XFs already has values" );
     maColumns[ nIndex ] = std::make_shared<XclImpXFRangeColumn>();
-    maColumns[ nIndex ]->SetDefaultXF( XclImpXFIndex( nXFIndex ) );
+    maColumns[ nIndex ]->SetDefaultXF( XclImpXFIndex( nXFIndex ), GetRoot());
 }
 
 void XclImpXFRangeBuffer::SetBorderLine( const ScRange& rRange, SCTAB nScTab, SvxBoxItemLine nLine )
