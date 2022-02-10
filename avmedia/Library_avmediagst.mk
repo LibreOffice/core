@@ -23,6 +23,10 @@ $(eval $(call gb_Library_add_libs,avmediagst,\
 
 $(eval $(call gb_Library_use_external,avmediagst,boost_headers))
 
+$(eval $(call gb_Library_add_cxxflags,avmediagst,\
+    $$(GTK4_CFLAGS) \
+))
+
 $(eval $(call gb_Library_use_sdk_api,avmediagst))
 
 $(eval $(call gb_Library_use_libraries,avmediagst,\
@@ -35,11 +39,16 @@ $(eval $(call gb_Library_use_libraries,avmediagst,\
 	vcl \
 ))
 
+$(eval $(call gb_Library_add_libs,avmediagst,\
+    $(GTK4_LIBS) \
+))
+
 $(eval $(call gb_Library_add_exception_objects,avmediagst,\
 	avmedia/source/gstreamer/gstmanager \
 	avmedia/source/gstreamer/gstplayer \
 	avmedia/source/gstreamer/gstwindow \
 	avmedia/source/gstreamer/gstframegrabber \
+	avmedia/source/gstreamer/gtkplayer \
 ))
 
 # vim: set noet sw=4 ts=4:

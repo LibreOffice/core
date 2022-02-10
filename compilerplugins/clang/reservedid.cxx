@@ -207,6 +207,8 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
                 // vcl/unx/gtk/xid_fullscreen_on_all_monitors.c
             && s != "_GstVideoOverlay"
                 // avmedia/source/gstreamer/gstplayer.hxx
+            && s != "_GtkMediaStream"
+                // avmedia/source/gstreamer/gtkplayer.hxx
             && s != "_Module" // extensions/source/activex/StdAfx2.h, CComModule
             && s != "_NotifyingLayout" // vcl/unx/gtk4/notifyinglayout.cxx
             && s != "_SurfacePaintable" // vcl/unx/gtk3/gtkinst.cxx
