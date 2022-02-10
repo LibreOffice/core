@@ -31,7 +31,6 @@
 #include <svx/svdtypes.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svxdllapi.h>
-#include <svx/shapeproperty.hxx>
 #include <tools/link.hxx>
 #include <tools/weakbase.h>
 #include <tools/gen.hxx>
@@ -75,6 +74,7 @@ class Fraction;
 enum class PointerStyle;
 class Graphic;
 class SvxShape;
+namespace svx { enum class ShapePropertyProviderId; }
 
 namespace basegfx
 {
@@ -787,7 +787,7 @@ public:
     // This method is equivalent to calling getShapePropertyChangeNotifier().notifyPropertyChange( _eProperty ),
     // exception that it is allowed to be called when there does not yet exist an associated SvxShape - in which
     // case the method will silently return without doing anything.
-    void notifyShapePropertyChange( const svx::ShapeProperty _eProperty ) const;
+    void notifyShapePropertyChange( const svx::ShapePropertyProviderId _eProperty ) const;
 
     // transformation interface for StarOfficeAPI. This implements support for
     // homogen 3x3 matrices containing the transformation of the SdrObject. At the
