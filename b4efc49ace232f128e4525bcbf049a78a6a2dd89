@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66553e8e_fda07fcc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-10T12:30:54Z",
+      "side": 1,
+      "message": "This does not work as intended.\n\nCreate a \u0027dbrange\u0027 on Sheet1, copy that sheet, Sheet1_2 is created with \u0027dbrange2\u0027.\nCopy Sheet1_2, Sheet1_2_2 is created but there\u0027s still only \u0027dbrange\u0027 and \u0027dbrange2\u0027.\nCopy Sheet1 again, Sheet1_3 is created with \u0027dbrange3\u0027.\n",
+      "revId": "b4efc49ace232f128e4525bcbf049a78a6a2dd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cefdef4_d79de6a5",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1003,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-10T12:30:54Z",
+      "side": 1,
+      "message": "This condition is always true as lastIndexOf() returns either -1 for not found or the position found.",
+      "revId": "b4efc49ace232f128e4525bcbf049a78a6a2dd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce364a32_3d4da575",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1005,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-10T12:30:54Z",
+      "side": 1,
+      "message": "With a trailing \u0027_\u0027 this attempts a subView behind the string. It works by chance only.",
+      "revId": "b4efc49ace232f128e4525bcbf049a78a6a2dd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61482bd2_c45725da",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1018,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-10T12:30:54Z",
+      "side": 1,
+      "message": "This is never hit.",
+      "revId": "b4efc49ace232f128e4525bcbf049a78a6a2dd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "610a6594_854bedf2",
+        "filename": "sc/source/core/tool/dbdata.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1022,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-10T12:30:54Z",
+      "side": 1,
+      "message": "Adding only a number may create invalid names. For example, \u0027A\u0027 is valid, but \u0027A1\u0027 is not as it is a cell reference.",
+      "revId": "b4efc49ace232f128e4525bcbf049a78a6a2dd89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
