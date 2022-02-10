@@ -865,8 +865,8 @@ namespace
 {
     void lcl_addShapePropertyEventFactories( SdrObject& _rObj, SwXShape& _rShape )
     {
-        auto pProvider = std::make_shared<svx::PropertyValueProvider>( _rShape, "AnchorType" );
-        _rObj.getShapePropertyChangeNotifier().registerProvider( svx::ShapeProperty::TextDocAnchor, pProvider );
+        auto pProvider = std::make_unique<svx::PropertyValueProvider>( _rShape, "AnchorType" );
+        _rObj.getShapePropertyChangeNotifier().registerProvider( svx::ShapeProperty::TextDocAnchor, std::move(pProvider) );
     }
 }
 
