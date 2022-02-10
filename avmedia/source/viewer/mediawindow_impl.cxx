@@ -37,6 +37,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/svapp.hxx>
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
@@ -181,7 +182,10 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
         uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
-        xPlayer = createPlayer(rURL, AVMEDIA_MANAGER_SERVICE_NAME, xContext);
+        if (Application::GetToolkitName() == "gtk4")
+            xPlayer = createPlayer(rURL, "com.sun.star.comp.avmedia.Manager_Gtk", xContext);
+        else
+            xPlayer = createPlayer(rURL, AVMEDIA_MANAGER_SERVICE_NAME, xContext);
     }
 
     return xPlayer;

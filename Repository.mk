@@ -643,6 +643,7 @@ endif
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
     $(call gb_Helper_optional,AVMEDIA, \
         $(if $(ENABLE_GSTREAMER_1_0),avmediagst) \
+        $(if $(ENABLE_GTK4),avmediagtk) \
         $(if $(filter WNT,$(OS)),avmediawin) \
     ) \
 	cached1 \
