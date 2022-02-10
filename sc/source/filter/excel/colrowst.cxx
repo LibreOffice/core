@@ -28,8 +28,8 @@
 
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
-    maColWidths(0, MAXCOLCOUNT, 0),
-    maColFlags(0, MAXCOLCOUNT, ExcColRowFlags::NONE),
+    maColWidths(0, rRoot.GetDoc().GetSheetLimits().GetMaxColCount(), 0),
+    maColFlags(0, rRoot.GetDoc().GetSheetLimits().GetMaxColCount(), ExcColRowFlags::NONE),
     maRowHeights(0, rRoot.GetDoc().GetSheetLimits().GetMaxRowCount(), 0),
     maRowFlags(0, rRoot.GetDoc().GetSheetLimits().GetMaxRowCount(), ExcColRowFlags::NONE),
     maHiddenRows(0, rRoot.GetDoc().GetSheetLimits().GetMaxRowCount(), false),
