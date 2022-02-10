@@ -644,7 +644,7 @@ inline SCSIZE ScBroadcastAreaSlotMachine::ComputeSlotOffset(
                 + static_cast<SCSIZE>(nRow - rSD.nStartRow) / rSD.nSliceRow
                 + rSD.nCumulatedCol
                 + static_cast<SCSIZE>(nCol - rSD.nStartCol) / rSD.nSliceCol * mnBcaSlotsCol;
-            assert(slot >= 0 && slot < mnBcaSlots);
+            assert(slot < mnBcaSlots);
             return slot;
         }
     }
