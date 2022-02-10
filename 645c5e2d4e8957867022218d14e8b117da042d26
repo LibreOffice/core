@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b63e87c_0212f23b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-10T08:07:34Z",
+      "side": 1,
+      "message": "To properly fix this will require substantial fundamental changes, I expect. Let me just leave this here for now, to remind me to investigate paragraph properties in empty content. Does EditEngine have a font-section in their paragraph properties like sw does for example?",
+      "revId": "645c5e2d4e8957867022218d14e8b117da042d26",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
