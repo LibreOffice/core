@@ -140,6 +140,12 @@ const SCROW MAXROW_30         = 8191;
     return nTab < 0 ? 0 : (nTab > MAXTAB ? MAXTAB : nTab);
 }
 
+template <typename T> inline void PutInOrder(T& nStart, T& nEnd)
+{
+    if (nEnd < nStart)
+        std::swap(nStart, nEnd);
+}
+
 // The result of ConvertRef() is a bit group of the following:
 enum class ScRefFlags : sal_uInt16
 {
@@ -382,24 +388,9 @@ inline std::basic_ostream<charT, traits> & operator <<(std::basic_ostream<charT,
 
 inline void ScAddress::PutInOrder( ScAddress& rAddress )
 {
-    if ( rAddress.Col() < Col() )
-    {
-        SCCOL nTmp = rAddress.Col();
-        rAddress.SetCol( Col() );
-        SetCol( nTmp );
-    }
-    if ( rAddress.Row() < Row() )
-    {
-        SCROW nTmp = rAddress.Row();
-        rAddress.SetRow( Row() );
-        SetRow( nTmp );
-    }
-    if ( rAddress.Tab() < Tab() )
-    {
-        SCTAB nTmp = rAddress.Tab();
-        rAddress.SetTab( Tab() );
-        SetTab( nTmp );
-    }
+    ::PutInOrder(nCol, rAddress.nCol);
+    ::PutInOrder(nRow, rAddress.nRow);
+    ::PutInOrder(nTab, rAddress.nTab);
 }
 
 inline void ScAddress::Set( SCCOL nColP, SCROW nRowP, SCTAB nTabP )
@@ -512,7 +503,7 @@ public:
     ScRange( const ScAddress& aInputStart, const ScAddress& aInputEnd ) :
         aStart( aInputStart ), aEnd( aInputEnd )
     {
-        aStart.PutInOrder( aEnd );
+        PutInOrder();
     }
     ScRange( const ScRange& rRange ) :
         aStart( rRange.aStart ), aEnd( rRange.aEnd )
@@ -621,7 +612,7 @@ public:
 
     inline void GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
                          SCCOL& nCol2, SCROW& nRow2, SCTAB& nTab2 ) const;
-    void PutInOrder();
+    void PutInOrder() { aStart.PutInOrder(aEnd); }
 
     /**
         @param  rErrorRange
@@ -957,14 +948,6 @@ inline bool ScRefAddress::operator==( const ScRefAddress& rRefAddress ) const
 // and the like).
 #define BCA_BRDCST_ALWAYS ScAddress( 0, SCROW_MAX, 0 )
 #define BCA_LISTEN_ALWAYS ScRange( BCA_BRDCST_ALWAYS, BCA_BRDCST_ALWAYS )
-
-template< typename T > inline void PutInOrder( T& nStart, T& nEnd )
-{
-    if (nEnd < nStart)
-    {
-        std::swap(nStart, nEnd);
-    }
-}
 
 bool ConvertSingleRef( const ScDocument& pDocument, const OUString& rRefString,
                        SCTAB nDefTab, ScRefAddress& rRefAddress,
