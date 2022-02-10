@@ -207,6 +207,58 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "2012-10-31");
+
+    goToCell("A1:A20");
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "FillDir", uno::Any(OUString("B")) },
+                                           { "FillCmd", uno::Any(OUString("D")) },
+                                           { "FillStep", uno::Any(OUString("1")) },
+                                           { "FillDateCmd", uno::Any(OUString("M")) },
+                                           { "FillStart", uno::Any(OUString("41213")) } }));
+    dispatchCommand(mxComponent, ".uno:FillSeries", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(OUString("2012-10-31"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2012-11-30
+    // - Actual  : 2012-12-01
+    CPPUNIT_ASSERT_EQUAL(OUString("2012-11-30"), pDoc->GetString(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2012-12-31"), pDoc->GetString(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-01-31"), pDoc->GetString(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-02-28"), pDoc->GetString(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-03-31"), pDoc->GetString(ScAddress(0, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-04-30"), pDoc->GetString(ScAddress(0, 6, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-05-31"), pDoc->GetString(ScAddress(0, 7, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-06-30"), pDoc->GetString(ScAddress(0, 8, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-07-31"), pDoc->GetString(ScAddress(0, 9, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-08-31"), pDoc->GetString(ScAddress(0, 10, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-09-30"), pDoc->GetString(ScAddress(0, 11, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-10-31"), pDoc->GetString(ScAddress(0, 12, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-11-30"), pDoc->GetString(ScAddress(0, 13, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2013-12-31"), pDoc->GetString(ScAddress(0, 14, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-01-31"), pDoc->GetString(ScAddress(0, 15, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-02-28"), pDoc->GetString(ScAddress(0, 16, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-03-31"), pDoc->GetString(ScAddress(0, 17, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-04-30"), pDoc->GetString(ScAddress(0, 18, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("2014-05-31"), pDoc->GetString(ScAddress(0, 19, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("2012-10-31"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
