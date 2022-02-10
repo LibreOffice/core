@@ -151,9 +151,10 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
         m_rExport.m_rDoc.GetFootnoteInfo().GetAnchorCharFormat( m_rExport.m_rDoc );
         m_rExport.m_rDoc.GetFootnoteInfo().GetCharFormat( m_rExport.m_rDoc );
     }
-    sal_uInt16 nAlloc = WW8_RESERVED_SLOTS + m_rExport.m_rDoc.GetCharFormats()->size() - 1 +
+    sal_uInt32 nAlloc = WW8_RESERVED_SLOTS + m_rExport.m_rDoc.GetCharFormats()->size() - 1 +
                                          m_rExport.m_rDoc.GetTextFormatColls()->size() - 1 +
                                          (bListStyles ? m_rExport.m_rDoc.GetNumRuleTable().size() - 1 : 0);
+    nAlloc = std::min<sal_uInt32>(nAlloc, MSWORD_MAX_STYLES_LIMIT);
 
     // somewhat generous ( free for up to 15 )
     m_aFormatA.resize(nAlloc, nullptr);
@@ -282,7 +283,7 @@ void MSWordStyles::BuildStylesTable()
 
     const SwCharFormats& rArr = *m_rExport.m_rDoc.GetCharFormats();       // first CharFormat
     // the default character style ( 0 ) will not be outputted !
-    for( size_t n = 1; n < rArr.size(); n++ )
+    for (size_t n = 1; n < rArr.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; ++n)
     {
         SwCharFormat* pFormat = rArr[n];
         m_aFormatA[ BuildGetSlot( *pFormat ) ] = pFormat;
@@ -290,7 +291,7 @@ void MSWordStyles::BuildStylesTable()
 
     const SwTextFormatColls& rArr2 = *m_rExport.m_rDoc.GetTextFormatColls();   // then TextFormatColls
     // the default character style ( 0 ) will not be outputted !
-    for( size_t n = 1; n < rArr2.size(); n++ )
+    for (size_t n = 1; n < rArr2.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; ++n)
     {
         SwTextFormatColl* pFormat = rArr2[n];
         sal_uInt16 nId = BuildGetSlot( *pFormat ) ;
@@ -307,7 +308,7 @@ void MSWordStyles::BuildStylesTable()
         return;
 
     const SwNumRuleTable& rNumRuleTable = m_rExport.m_rDoc.GetNumRuleTable();
-    for (size_t i = 0; i < rNumRuleTable.size(); ++i)
+    for (size_t i = 0; i < rNumRuleTable.size() && m_nUsedSlots < MSWORD_MAX_STYLES_LIMIT; ++i)
     {
         const SwNumRule* pNumRule = rNumRuleTable[i];
         if (pNumRule->IsAutoRule() || pNumRule->GetName().startsWith("WWNum"))
