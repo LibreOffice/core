@@ -33,6 +33,346 @@
       "message": "And M_PI instead of 3.14etc. And you should make sure your patch compiles on your own machine before submitting to Gerrit. This obviously can\u0027t have successfully compiled on any machine, with the \"contsexpr\" typos.",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2db6b7a_94e15a1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Please build locally on your computer before submitting the patch. You have this typo: contsexpr instead of constexpr. You have misspelled this keyword everywhere.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ae1a476_2b6f68c0",
+        "filename": "basegfx/source/tools/gradienttools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Use M_SQRT2 instead.\nhttps://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants\nhttps://www.gnu.org/software/libc/manual/html_node/Mathematical-Constants.html",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad2f06f3_e3b3f3a1",
+        "filename": "basegfx/source/tools/gradienttools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Please remove the above comment and use M_SQRT2 - 1.\n √2-1 \u003d √((√2-1)/(√2+1)), exactly.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fbbaffe_f1fc0745",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also use M_SQRT2 instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d39fa09_931ccc2b",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also use M_SQRT2 here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c9b30f7_a384f528",
+        "filename": "sc/qa/unit/subsequent_filters_test2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Please use M_PI instead of defining fM_PI.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9f8c518_d52f3930",
+        "filename": "slideshow/source/engine/opengl/TransitionImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also here, use M_PI.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea7c9336_a3100b21",
+        "filename": "slideshow/source/engine/opengl/TransitionImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1be54e4e_83e2d61c",
+        "filename": "stoc/test/testiadapter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aeeff3ab_677a4f45",
+        "filename": "stoc/test/testintrosp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Use M_E instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eba0daaf_de4e723a",
+        "filename": "sw/source/core/bastyp/calc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "173c37ba_578330c2",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Use M_PI instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5afa9d72_6972c94f",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f28f7f53_f80c8bf4",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6505a46_24ebe14d",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "And here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d0c7a4e_a0d157e9",
+        "filename": "testtools/source/bridgetest/cli/cli_cpp_bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c736a97_0e8f0e30",
+        "filename": "testtools/source/bridgetest/cli/cli_cpp_bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Use M_PI and the next instances.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77302b41_0acd8dbb",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Use basegfx to convert angle unit.\nhttps://dev.blog.documentfoundation.org/2021/12/31/use-basegfx-to-convert-angle-unit-easyhack/",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c5866a2_e79e6d70",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Also here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02e68871_128166aa",
+        "filename": "vcl/source/gdi/gradient.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-10T12:40:24Z",
+      "side": 1,
+      "message": "Use M_SQRT2 instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
