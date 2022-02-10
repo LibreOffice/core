@@ -27,12 +27,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-/* Implementation of Filters test */
+/* Tests for sheets larger than 1024 columns and/or 1048576 rows. */
 
-class ScFiltersTest : public test::FiltersTest, public ScBootstrapFixture
+class ScJumboSheetSTest : public test::FiltersTest, public ScBootstrapFixture
 {
 public:
-    ScFiltersTest();
+    ScJumboSheetSTest();
 
     virtual bool load(const OUString& rFilter, const OUString& rURL, const OUString& rUserData,
                       SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
@@ -44,7 +44,7 @@ public:
     void testTdf134392();
     void testTdf133033();
 
-    CPPUNIT_TEST_SUITE(ScFiltersTest);
+    CPPUNIT_TEST_SUITE(ScJumboSheetSTest);
 
     CPPUNIT_TEST(testTdf134392);
     CPPUNIT_TEST(testTdf133033);
@@ -55,9 +55,9 @@ private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
-bool ScFiltersTest::load(const OUString& rFilter, const OUString& rURL, const OUString& rUserData,
-                         SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-                         unsigned int nFilterVersion)
+bool ScJumboSheetSTest::load(const OUString& rFilter, const OUString& rURL,
+                             const OUString& rUserData, SfxFilterFlags nFilterFlags,
+                             SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData, OUString(),
                                                        nFilterFlags, nClipboardID, nFilterVersion);
@@ -68,7 +68,7 @@ bool ScFiltersTest::load(const OUString& rFilter, const OUString& rURL, const OU
     return bLoaded;
 }
 
-void ScFiltersTest::testTdf134392()
+void ScJumboSheetSTest::testTdf134392()
 {
     // Without the fix in place, the file would have crashed
     ScDocShellRef xDocSh = loadDoc(u"tdf134392.", FORMAT_XLSX);
@@ -79,7 +79,7 @@ void ScFiltersTest::testTdf134392()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testTdf133033()
+void ScJumboSheetSTest::testTdf133033()
 {
     // Create an empty document
     uno::Reference<frame::XDesktop2> xDesktop
@@ -113,12 +113,12 @@ void ScFiltersTest::testTdf133033()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), rViewData.GetCurY());
 }
 
-ScFiltersTest::ScFiltersTest()
+ScJumboSheetSTest::ScJumboSheetSTest()
     : ScBootstrapFixture("sc/qa/unit/data")
 {
 }
 
-void ScFiltersTest::setUp()
+void ScJumboSheetSTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -133,7 +133,7 @@ void ScFiltersTest::setUp()
     SC_MOD()->SetDefaultsOptions(aDefaultsOption);
 }
 
-void ScFiltersTest::tearDown()
+void ScJumboSheetSTest::tearDown()
 {
     uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
     test::BootstrapFixture::tearDown();
@@ -143,7 +143,7 @@ void ScFiltersTest::tearDown()
     SC_MOD()->SetDefaultsOptions(aDefaultsOption);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(ScJumboSheetSTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
