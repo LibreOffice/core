@@ -119,6 +119,27 @@ void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf137855)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf137855.odt");
+
+    const OUString sURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf137855_2.odt";
+    uno::Sequence<beans::PropertyValue> aPropertyValues(
+        comphelper::InitPropertySequence({ { "URL", uno::makeAny(sURL) } }));
+    dispatchCommand(mxComponent, ".uno:CompareDocuments", aPropertyValues);
+    Scheduler::ProcessEventsToIdle();
+
+    SwEditShell* const pEditShell(pDoc->GetEditShell());
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(263),
+                         pEditShell->GetRedlineCount());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SwRedlineTable::size_type>(0), pEditShell->GetRedlineCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96515)
 {
     // Enable hide whitespace mode.
