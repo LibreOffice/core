@@ -40,6 +40,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <cmath>
 
 using namespace cppu;
 using namespace ModuleA;
@@ -454,7 +455,7 @@ void ImplIntroTest::Init()
 
     //XInterfaceRef Source;
     Any Value;
-    Value <<= 2.718281828459;
+    Value <<= M_E;
     m_aSecondStruct.Value = Value;
     //XIdlClassRef ListenerType;
     m_aSecondStruct.State = PropertyState_DIRECT_VALUE;
