@@ -113,7 +113,7 @@ namespace svx
 
         /** registers an IPropertyValueProvider
         */
-        void    registerProvider( const ShapeProperty _eProperty, const std::shared_ptr<IPropertyValueProvider>& _rProvider );
+        void    registerProvider( const ShapeProperty _eProperty, std::unique_ptr<IPropertyValueProvider> _rProvider );
 
         /** notifies changes in the given property to all registered listeners
 
@@ -137,7 +137,7 @@ namespace svx
                 return size_t( x );
             }
         };
-        typedef std::unordered_map< ShapeProperty, std::shared_ptr<IPropertyValueProvider>, ShapePropertyHash  >
+        typedef std::unordered_map< ShapeProperty, std::unique_ptr<IPropertyValueProvider>, ShapePropertyHash  >
             PropertyProviders;
         ::cppu::OWeakObject&            m_rContext;
         PropertyProviders               m_aProviders;

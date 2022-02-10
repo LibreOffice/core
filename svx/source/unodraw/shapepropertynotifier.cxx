@@ -76,14 +76,14 @@ namespace svx
     {
     }
 
-    void PropertyChangeNotifier::registerProvider(const ShapeProperty _eProperty, const std::shared_ptr<IPropertyValueProvider>& _rProvider)
+    void PropertyChangeNotifier::registerProvider(const ShapeProperty _eProperty, std::unique_ptr<IPropertyValueProvider> _rProvider)
     {
         ENSURE_OR_THROW( !!_rProvider, "NULL factory not allowed." );
 
         OSL_ENSURE( m_aProviders.find( _eProperty ) == m_aProviders.end(),
             "PropertyChangeNotifier::registerProvider: factory for this ID already present!" );
 
-        m_aProviders[ _eProperty ] = _rProvider;
+        m_aProviders.emplace( _eProperty, std::move(_rProvider));
     }
 
     void PropertyChangeNotifier::notifyPropertyChange( const ShapeProperty _eProperty ) const
