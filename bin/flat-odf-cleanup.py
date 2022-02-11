@@ -224,13 +224,24 @@ def remove_unused(root):
             print("removing unused font-face " + font.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
             root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}font-face-decls").remove(font)
 
+    # 14) remove rsid attributes
+    styles = root.findall(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}style")
+    for style in styles:
+        tp = style.find(".//{urn:oasis:names:tc:opendocument:xmlns:style:1.0}text-properties")
+        if tp is not None:
+            if "{http://openoffice.org/2009/office}rsid" in tp.attrib:
+                print("removing rsid from " + style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
+                del tp.attrib["{http://openoffice.org/2009/office}rsid"]
+            if "{http://openoffice.org/2009/office}paragraph-rsid" in tp.attrib:
+                print("removing paragraph-rsid from " + style.get("{urn:oasis:names:tc:opendocument:xmlns:style:1.0}name"))
+                del tp.attrib["{http://openoffice.org/2009/office}paragraph-rsid"]
+
     # remove office:settings
     root.remove(root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}settings"))
 
     # scripts are almost never needed
     root.remove(root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}scripts"))
 
-    # TODO: remove rsid attributes
     # TODO: replace embedded image with some tiny one
     # TODO: perhaps replace text with xxx (optionally)?
 
