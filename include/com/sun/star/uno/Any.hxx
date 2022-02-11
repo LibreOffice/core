@@ -297,7 +297,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, bool const & value )
 
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 template< class C1, class C2 >
-inline void SAL_CALL operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& value )
+inline void operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& value )
 {
     const rtl::OUString str( std::move(value) );
     const Type & rType = ::cppu::getTypeFavourUnsigned(&str);
@@ -308,7 +308,7 @@ inline void SAL_CALL operator <<= ( Any & rAny, rtl::OUStringConcat< C1, C2 >&& 
 template<typename T1, typename T2>
 void operator <<=(Any &, rtl::OUStringConcat<T1, T2> const &) = delete;
 template< class C >
-inline void SAL_CALL operator <<= ( Any & rAny, rtl::OUStringNumber< C >&& value )
+inline void operator <<= ( Any & rAny, rtl::OUStringNumber< C >&& value )
 {
     const rtl::OUString str( std::move(value) );
     const Type & rType = ::cppu::getTypeFavourUnsigned(&str);

@@ -1109,7 +1109,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceStrAt(
         rtl_String ** newStr, rtl_String * str, sal_Int32 idx, sal_Int32 count, rtl_String * subStr ) SAL_THROW_EXTERN_C();
 
 #ifdef LIBO_INTERNAL_ONLY
-SAL_DLLPUBLIC void SAL_CALL rtl_string_newReplaceStrAt_WithLength (
+SAL_DLLPUBLIC void rtl_string_newReplaceStrAt_WithLength (
         rtl_String ** newStr, rtl_String * str, sal_Int32 idx, sal_Int32 count, char const * subStr, sal_Int32 substrLen ) SAL_THROW_EXTERN_C();
 #endif
 
