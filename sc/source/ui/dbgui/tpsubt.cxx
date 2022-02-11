@@ -41,7 +41,7 @@
 ScTpSubTotalGroup::ScTpSubTotalGroup(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/subtotalgrppage.ui", "SubTotalGrpPage", &rArgSet)
     , aStrNone(ScResId(SCSTR_NONE))
-    , aStrColumn(ScResId(SCSTR_COLUMN))
+    , aStrColumn(ScResId(SCSTR_COLUMN_LETTER))
     , pViewData(nullptr)
     , pDoc(nullptr)
     , nWhichSubTotals(rArgSet.GetPool()->GetWhich(SID_SUBTOTALS))

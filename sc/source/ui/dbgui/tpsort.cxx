@@ -74,8 +74,8 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
 
         m_aIdle("ScTabPageSortFields Scroll To End Idle"),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aStrColumn      ( ScResId( SCSTR_COLUMN_NAME ) ),
-        aStrRow         ( ScResId( SCSTR_ROW_NAME ) ),
+        aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
+        aStrRow         ( ScResId( SCSTR_ROW ) ),
 
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pViewData       ( nullptr ),
