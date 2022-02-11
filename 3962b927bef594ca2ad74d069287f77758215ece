@@ -16,6 +16,24 @@
       "message": "Since you talked about Spanish locales, should we do the same in source/localedata/data/an_ES.xml ?",
       "revId": "3962b927bef594ca2ad74d069287f77758215ece",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f98b96ca_d7895a55",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-02-11T00:32:09Z",
+      "side": 1,
+      "message": "Yes, I think it’s appropriate. After all, all languages spoken in the country share a common, French-inspired typographical tradition (we all use «guillemets», for instance 😊)",
+      "parentUuid": "a58ddadf_4ed458de",
+      "revId": "3962b927bef594ca2ad74d069287f77758215ece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
