@@ -16,6 +16,24 @@
       "message": "(might make sense to adapt the commit message now)",
       "revId": "63e2691fe89b25c372ed3d9d667a1c3f88de75a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60e44bce_bd47a9ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-11T11:39:26Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "0a86b81e_0641de81",
+      "revId": "63e2691fe89b25c372ed3d9d667a1c3f88de75a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
