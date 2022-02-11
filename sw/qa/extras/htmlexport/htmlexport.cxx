@@ -268,6 +268,8 @@ public:
     void ParseOle1FromRtfUrl(const OUString& rRtfUrl, SvMemoryStream& rOle1);
     /// Export using the C++ HTML export filter, with xhtmlns=reqif-xhtml.
     void ExportToReqif();
+    /// Import using the C++ HTML import filter, with xhtmlns=reqif-xhtml.
+    void ImportFromReqif(const OUString& rUrl);
 };
 
 OUString SwHtmlDomExportTest::GetOlePath()
@@ -320,6 +322,15 @@ void SwHtmlDomExportTest::ExportToReqif()
         comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
     };
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+}
+
+void SwHtmlDomExportTest::ImportFromReqif(const OUString& rUrl)
+{
+    uno::Sequence<beans::PropertyValue> aLoadProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+    };
+    mxComponent = loadFromDesktop(rUrl, "com.sun.star.text.TextDocument", aLoadProperties);
 }
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/htmlexport/data/";
@@ -700,11 +711,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
     };
 
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-png-img.xhtml";
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    ImportFromReqif(aURL);
     verify(/*bExported=*/false);
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProperties = {
@@ -714,8 +721,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqIfPngImg)
     };
     xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
     mxComponent->dispose();
-    mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", aLoadProperties);
+    ImportFromReqif(maTempFile.GetURL());
     verify(/*bExported=*/true);
 }
 
@@ -1011,12 +1017,8 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testRTFOLEMimeType)
 {
     // Import a document with an embedded object.
     OUString aType("test/rtf");
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-ole-data.xhtml";
-    mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    ImportFromReqif(aURL);
 
     // Export it.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -1185,12 +1187,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1PDF)
     // Now import this back and check the ODT result.
     mxComponent->dispose();
     mxComponent.clear();
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    mxComponent
-        = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", aLoadProperties);
+    ImportFromReqif(maTempFile.GetURL());
     xStorable.set(mxComponent, uno::UNO_QUERY);
     utl::TempFile aTempFile;
     aStoreProperties = {
@@ -1217,12 +1214,7 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifOle1Paint)
 {
     // Load the bug document, which has OLE1 data in it, which is not a wrapper around OLE2 data.
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "paint-ole.xhtml";
-    uno::Sequence<beans::PropertyValue> aLoadProperties = {
-        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
-        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
-    };
-    mxComponent
-        = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", aLoadProperties);
+    ImportFromReqif(aURL);
 
     // Save it as ODT to inspect the result of the OLE1 -> OLE2 conversion.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
@@ -2023,6 +2015,48 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
     assertXPathContent(
         pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p",
         "second");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTrailingLineBreak)
+{
+    // Given a document with a trailing line-break:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("test\n");
+
+    // When exporting to reqif-xhtml:
+    ExportToReqif();
+
+    // Then make sure that we still have a single line-break:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // - XPath '//reqif-xhtml:br' number of nodes is incorrect
+    assertXPath(pXmlDoc, "//reqif-xhtml:br", 1);
+
+    // Then test the import side:
+
+    // Given an empty document:
+    mxComponent->dispose();
+
+    // When importing a <br> from reqif-xhtml:
+    ImportFromReqif(maTempFile.GetURL());
+
+    // Then make sure that line-break is not lost:
+    pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    pDoc = pTextDoc->GetDocShell()->GetDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    OUString aActual = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
+    // Without the accompanying fix in place, this test would have failed, as the trailing
+    // line-break was lost.
+    CPPUNIT_ASSERT_EQUAL(OUString("test\n"), aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
