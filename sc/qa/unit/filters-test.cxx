@@ -486,7 +486,7 @@ void ScFiltersTest::testTdf79998()
     CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkarten etc)"), aTabNames1[1]);
 
     // check: saved XLSX document has truncated tab name
-    xDocSh = saveAndReload( &(*xDocSh), FORMAT_XLSX);
+    xDocSh = saveAndReload( *xDocSh, FORMAT_XLSX);
     ScDocument& rDoc2 = xDocSh->GetDocument();
     const std::vector<OUString> aTabNames2 = rDoc2.GetAllTableNames();
     CPPUNIT_ASSERT_EQUAL(OUString("Utilities (FX Kurse, Kreditkart"), aTabNames2[1]);
@@ -580,7 +580,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // test save and reload
         // for some reason having this test in subsequent_export-test.cxx causes
         // a core dump in editeng ( so moved to here )
-        xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
+        xDocSh = saveAndReload( *xDocSh, FORMAT_ODS);
         ScDocument& rDoc2 = xDocSh->GetDocument();
         impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
@@ -607,7 +607,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         rDoc.SetDrawPageSize(0); // trigger recalcpos
         impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor);
         // test save and reload
-        xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
+        xDocSh = saveAndReload( *xDocSh, FORMAT_ODS);
         ScDocument& rDoc2 = xDocSh->GetDocument();
         impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 
@@ -631,7 +631,7 @@ void ScFiltersTest::testLegacyCellAnchoredRotatedShape()
         // test import
         impl_testLegacyCellAnchoredRotatedShape( rDoc, aRect, aAnchor );
         // test save and reload
-        xDocSh = saveAndReload( &(*xDocSh), FORMAT_ODS);
+        xDocSh = saveAndReload( *xDocSh, FORMAT_ODS);
         ScDocument& rDoc2 = xDocSh->GetDocument();
         impl_testLegacyCellAnchoredRotatedShape( rDoc2, aRect, aAnchor );
 

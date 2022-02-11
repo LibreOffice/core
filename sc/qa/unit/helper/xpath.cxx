@@ -21,7 +21,7 @@
 
 xmlDocUniquePtr XPathHelper::parseExport2(ScBootstrapFixture & rFixture, ScDocShell& rShell, uno::Reference<lang::XMultiServiceFactory> const & xSFactory, const OUString& rFile, sal_Int32 nFormat)
 {
-    std::shared_ptr<utl::TempFile> pTempFile = rFixture.exportTo(&rShell, nFormat);
+    std::shared_ptr<utl::TempFile> pTempFile = rFixture.exportTo(rShell, nFormat);
 
     return parseExport(pTempFile, xSFactory, rFile);
 }

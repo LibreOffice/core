@@ -164,7 +164,7 @@ void ScFiltersTest::testTdf137576_Measureline()
     lcl_AssertPointEqualWithTolerance("Load, end point: ", Point(4800, 5200), aEnd, 1);
 
     // Save and reload
-    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
     ScDocument& rDoc2 = xDocSh->GetDocument();
 
     // Get shape
@@ -238,7 +238,7 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
     rDoc.SetRowHidden(4, 5, 0, true);
 
     // Save and reload
-    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
     ScDocument& rDoc2 = xDocSh->GetDocument();
 
     // Get shape
@@ -282,7 +282,7 @@ void ScFiltersTest::testTdf137020_FlipVertical()
     lcl_AssertRectEqualWithTolerance("Mirror:", aSnapRectOrig, aSnapRectFlip, 1);
 
     // Save and reload
-    xDocSh = saveAndReload(&(*xDocSh), FORMAT_ODS);
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
     ScDocument& rDoc2 = xDocSh->GetDocument();
 
     // Get shape
