@@ -1245,7 +1245,7 @@ void XclExpMultiCellBase::AppendXFId( const XclExpMultiXFId& rXFId )
     if( maXFIds.empty() || (maXFIds.back().mnXFId != rXFId.mnXFId) )
         maXFIds.push_back( rXFId );
     else
-        maXFIds.back().mnCount = maXFIds.back().mnCount + rXFId.mnCount;
+        maXFIds.back().mnCount += rXFId.mnCount;
 }
 
 void XclExpMultiCellBase::AppendXFId( const XclExpRoot& rRoot,
