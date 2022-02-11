@@ -855,7 +855,7 @@ struct ConventionOOO_A1 : public Convention_A1
             return SINGLETON_NONE;
 
         // A:A or $A:$A or A:$A or $A:A
-        if (rRef.IsEntireCol())
+        if (rRef.IsEntireCol(rLimits))
             return SINGLETON_COL;
 
         // Same if not in named expression and both rows of entire columns are
@@ -865,7 +865,7 @@ struct ConventionOOO_A1 : public Convention_A1
             return SINGLETON_COL;
 
         // 1:1 or $1:$1 or 1:$1 or $1:1
-        if (rRef.IsEntireRow())
+        if (rRef.IsEntireRow(rLimits))
             return SINGLETON_ROW;
 
         // Same if not in named expression and both columns of entire rows are

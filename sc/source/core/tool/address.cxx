@@ -2423,6 +2423,18 @@ void ScRange::IncRowIfNotLessThan(const ScDocument& rDoc, SCROW nStartRow, SCROW
     }
 }
 
+bool ScRange::IsEndColSticky( const ScDocument& rDoc ) const
+{
+    // Only in an actual column range, i.e. not if both columns are MAXCOL.
+    return aEnd.Col() == rDoc.MaxCol() && aStart.Col() < aEnd.Col();
+}
+
+bool ScRange::IsEndRowSticky( const ScDocument& rDoc ) const
+{
+    // Only in an actual row range, i.e. not if both rows are MAXROW.
+    return aEnd.Row() == rDoc.MaxRow() && aStart.Row() < aEnd.Row();
+}
+
 void ScRange::IncEndColSticky( const ScDocument& rDoc, SCCOL nDelta )
 {
     SCCOL nCol = aEnd.Col();
