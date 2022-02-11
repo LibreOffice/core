@@ -106,7 +106,7 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, int fo
         CPPUNIT_ASSERT_EQUAL(-5.0, rDoc.GetValue(0, 0, 0));
     }
 
-    ScDocShellRef xDocSh2 = saveAndReload(&(*xDocSh1), format);
+    ScDocShellRef xDocSh2 = saveAndReload(*xDocSh1, format);
     CPPUNIT_ASSERT(xDocSh2.is());
 
     {
@@ -135,7 +135,7 @@ void ScJumboSheetsTest::testRoundtripColumnRange()
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
     }
 
-    ScDocShellRef xDocSh2 = saveAndReloadNoClose(&(*xDocSh1), FORMAT_ODS);
+    ScDocShellRef xDocSh2 = saveAndReloadNoClose(*xDocSh1, FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh2.is());
 
     {
@@ -155,7 +155,7 @@ void ScJumboSheetsTest::testRoundtripColumnRange()
                     "formula", "of:=SUM([.C:.C])");
     }
 
-    ScDocShellRef xDocSh3 = saveAndReloadNoClose(&(*xDocSh1), FORMAT_XLSX);
+    ScDocShellRef xDocSh3 = saveAndReloadNoClose(*xDocSh1, FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh3.is());
 
     {

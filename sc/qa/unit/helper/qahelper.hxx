@@ -214,16 +214,16 @@ public:
     void createCSVPath(const char* aFileBase, OUString& rCSVPath);
     void createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath);
 
-    ScDocShellRef saveAndReload(ScDocShell* pShell, const OUString &rFilter,
+    ScDocShellRef saveAndReload(ScDocShell& rShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword = nullptr,
     bool bClose = true );
 
-    ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
-    ScDocShellRef saveAndReloadPassword( ScDocShell* pShell, sal_Int32 nFormat );
-    ScDocShellRef saveAndReloadNoClose( ScDocShell* pShell, sal_Int32 nFormat );
+    ScDocShellRef saveAndReload( ScDocShell& rShell, sal_Int32 nFormat );
+    ScDocShellRef saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat );
+    ScDocShellRef saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat );
 
-    std::shared_ptr<utl::TempFile> saveAs(ScDocShell* pShell, sal_Int32 nFormat);
-    std::shared_ptr<utl::TempFile> exportTo(ScDocShell* pShell, sal_Int32 nFormat);
+    std::shared_ptr<utl::TempFile> saveAs(ScDocShell& rShell, sal_Int32 nFormat);
+    std::shared_ptr<utl::TempFile> exportTo(ScDocShell& rShell, sal_Int32 nFormat);
 
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems );
 };
