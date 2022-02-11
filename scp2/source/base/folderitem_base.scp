@@ -35,6 +35,6 @@ End
 FolderItemProperty gid_Fip_Sbase_AppID
     ShortcutID = gid_Folderitem_Sbase;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.Base";
+    Value = "Collabora.CollaboraOffice.Base";
 End
 #endif

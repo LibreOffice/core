@@ -38,7 +38,7 @@ End
 FolderItemProperty gid_Fip_LibreOffice_AppID
     ShortcutID = gid_Folderitem_LibreOffice;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.Startcenter";
+    Value = "Collabora.CollaboraOffice.Startcenter";
 End
 
 FolderItem gid_Folderitem_Soffice_Desktop
@@ -63,7 +63,7 @@ End
 FolderItemProperty gid_Fip_Soffice_Desktop_AppID
     ShortcutID = gid_Folderitem_Soffice_Desktop;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.Startcenter";
+    Value = "Collabora.CollaboraOffice.Startcenter";
 End
 
 FolderItem gid_Folderitem_LibreOffice_SafeMode
@@ -86,5 +86,5 @@ End
 FolderItemProperty gid_Fip_LibreOffice_SafeMode
     ShortcutID = gid_Folderitem_LibreOffice_SafeMode;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.SafeMode";
+    Value = "Collabora.CollaboraOffice.SafeMode";
 End

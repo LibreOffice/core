@@ -5,31 +5,32 @@ Globals
         variables
         {
             LIBO_VERSION_MAJOR @LIBO_VERSION_MAJOR@
-            UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+            UREPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
             URELAYERVERSION 1
             REFERENCEOOOMAJORMINOR 4.1
-            WINDOWSBASISROOTNAME LibreOffice
-            UNIXBASISROOTNAME libreoffice@LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            HIDELICENSEDIALOG 1
+            WINDOWSBASISROOTNAME Collabora Office
+            UNIXBASISROOTNAME collaboraoffice
+            HIDELICENSEDIALOG 0
             PACKAGEPREFIX
-            BASISPACKAGEPREFIX libobasis
-            UREPACKAGEPREFIX libreoffice
+            BASISPACKAGEPREFIX collaboraofficebasis
+            UREPACKAGEPREFIX collaboraoffice
             SOLSUREPACKAGEPREFIX libreoffice
             PROGRESSBARCOLOR 0,0,0
+            PROGRESSSIZE 460,6
+            PROGRESSSIZEHIGH 617,12
+            PROGRESSPOSITION 26,235
+            PROGRESSPOSITIONHIGH 46,212
             PROGRESSFRAMECOLOR 102,102,102
-            PROGRESSPOSITION 30,145
-            PROGRESSSIZE 385,8
-            PROGRESSPOSITIONHIGH 30,200
-            PROGRESSSIZEHIGH 650,12
-            PROGRESSTEXTBASELINE 170
-            PROGRESSTEXTCOLOR 0,0,0
+            PROGRESSTEXTBASELINE 230
+            PROGRESSTEXTCOLOR 255,255,255
             NATIVEPROGRESS false
             REGISTRYLAYERNAME Layers
             SERVICEPACK 1
             UPDATE_DATABASE 1
             UPDATE_DATABASE_LISTNAME finals_instsetoo.txt
             PACKAGEMAP package_names.txt,package_names_ext.txt
-            WINDOWSPATCHLEVEL 8
+            WINDOWSPATCHLEVEL @LIBO_VERSION_MICRO@
+            OOOVENDOR Collabora Productivity Ltd.
             64BITPRODUCT @WINDOWS_X64@
             WINDOWSSDKVERSION @WINDOWS_SDK_VERSION@
             CRASHDUMPENABLE @DEFAULT_CRASHDUMP_VALUE@
@@ -37,15 +38,15 @@ Globals
     }
 }
 
-LibreOffice
+CollaboraOffice
 {
     Settings
     {
         variables
         {
-            PRODUCTNAME @PRODUCTNAME@
+            PRODUCTNAME Collabora Office
             PRODUCTVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
-            PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
+            PRODUCTEXTENSION .@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@
             POSTVERSIONEXTENSION
             BUNDLEIDENTIFIER @MACOSX_BUNDLE_IDENTIFIER@
             BRANDPACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@
@@ -55,8 +56,8 @@ LibreOffice
             UPDATEURL https://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cli_ure/version/version.txt,unoil/climaker/version.txt
             ADDSYSTEMINTEGRATION 1
-            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@.@LIBO_VERSION_PATCH@@LIBO_VERSION_SUFFIX@
-            PACKAGEREVISION {buildid}
+            PACKAGEVERSION @LIBO_VERSION_MAJOR@.@LIBO_VERSION_MINOR@.@LIBO_VERSION_MICRO@
+            PACKAGEREVISION @LIBO_VERSION_PATCH@
             LICENSENAME @LICENSE@
             ROOTMODULEGID gid_Module_Root
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
@@ -67,10 +68,10 @@ LibreOffice
         active          1
         compression     5
         script          setup_osl
-        downloadname    LibreOffice_{productversion}_{os}_install_{languages}
-        langpackdownloadname    LibreOffice_{productversion}_languagepack_{os}_install_{languages}
-        helppackdownloadname    LibreOffice_{productversion}_helppack_{os}_install_{languages}
-        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
+        downloadname    CollaboraOffice_{productversion}_{os}_install_{languages}
+        langpackdownloadname    CollaboraOffice_{productversion}_languagepack_{os}_install_{languages}
+        helppackdownloadname    CollaboraOffice_{productversion}_helppack_{os}_install_{languages}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
@@ -115,7 +116,7 @@ LibreOfficeDev
         downloadname    LibreOfficeDev_{productversion}_{os}_install_{languages}
         langpackdownloadname    LibreOfficeDev_{productversion}_languagepack_{os}_install_{languages}
         helppackdownloadname    LibreOfficeDev_{productversion}_helppack_{os}_install_{languages}
-        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{packinfopath}
+        include         {installscriptdir},{customtargetpath}/readlicense_oo/readme,{customtargetpath}/sysui/{pkgtype},{customtargetpath}/setup_native,{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{filelistpath}/ExtensionPackage,{filelistpath}/CustomTarget/helpcontent2/help3xsl/filelists,{extensionsdir},{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
@@ -149,7 +150,7 @@ LibreOffice_SDK
         active 1
         compression 5
         script sdkoo
-        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{packinfopath}
+        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }
 
@@ -190,6 +191,6 @@ LibreOfficeDev_SDK
         active 1
         compression 5
         script sdkoo
-        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{packinfopath}
+        include {installscriptdir},{filelistpath}/PackageSet,{filelistpath}/GeneratedPackage,{filelistpath}/Package,{licensepath},{customtargetpath}/readlicense_oo/license,{packinfopath}
     }
 }

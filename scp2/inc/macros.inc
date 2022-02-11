@@ -240,7 +240,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(.,key,\OpenWithProgIDs)); \
-        Name = STRING(CONCAT2(LibreOffice.,name)); \
+        Name = STRING(CONCAT2(CollaboraOffice.,name)); \
         Value = " "; \
     End
 
@@ -249,7 +249,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
         Subkey = STRING(CONCAT3(.,key,\OpenWithProgIDs)); \
-        Name = STRING(CONCAT2(LibreOffice.,name)); \
+        Name = STRING(CONCAT2(CollaboraOffice.,name)); \
         Value = " "; \
     End
 
@@ -258,7 +258,7 @@ End
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = gid_Module_Root_Reg_##name; \
         Subkey = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT2(LibreOffice.,name)); \
+        Value = STRING(CONCAT2(CollaboraOffice.,name)); \
         ComponentCondition = STRING(CONCAT3(REGISTER_,cond,=1)); \
     End
 
@@ -276,7 +276,7 @@ End
     RegistryItem CONCAT2(gid_Regitem_Openoffice_,name) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT2(LibreOffice.,name)); \
+        Subkey = STRING(CONCAT2(CollaboraOffice.,name)); \
         REG_VALUE_LNG(disp_name) \
     End
 
@@ -284,16 +284,16 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_AppUserModelID) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT2(LibreOffice.,name)); \
+        Subkey = STRING(CONCAT2(CollaboraOffice.,name)); \
         Name = STRING(AppUserModelID); \
-        Value = STRING(CONCAT2(TheDocumentFoundation.LibreOffice.,doc_type)); \
+        Value = STRING(CONCAT2(Collabora.CollaboraOffice.,doc_type)); \
     End
 
 #define REGISTRY_ENTRY_ICON(name,modid,icon_id) \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Defaulticon) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(LibreOffice.,name,\DefaultIcon)); \
+        Subkey = STRING(CONCAT3(CollaboraOffice.,name,\DefaultIcon)); \
         Value = "<progpath>\program\soffice.bin," STRING(icon_id); \
     End
 
@@ -301,7 +301,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell)); \
+        Subkey = STRING(CONCAT3(CollaboraOffice.,name,\shell)); \
         Value = STRING(default); \
     End
 
@@ -309,13 +309,13 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_New) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\new)); \
+        Subkey = STRING(CONCAT3(CollaboraOffice.,name,\shell\new)); \
         REG_VALUE_LNG(NEW) \
     End \
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_New_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\new\command)); \
+        Subkey = STRING(CONCAT3(CollaboraOffice.,name,\shell\new\command)); \
         Value = "\"" STRING(progpath_program_app) "\" -n \"%1\""; \
     End
 
@@ -326,7 +326,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Open_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\open\command)); \
+        Subkey = STRING(CONCAT3(CollaboraOffice.,name,\shell\open\command)); \
         Value = "\"" STRING(progpath_program_app) "\" -o \"%1\""; \
     End
 
@@ -337,7 +337,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Print_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\print\command)); \
+        Subkey = STRING(CONCAT3(CollaboraOffice.,name,\shell\print\command)); \
         Value = "\"" STRING(progpath_program_app) "\" -p \"%1\""; \
     End
 
@@ -348,7 +348,7 @@ End
     RegistryItem CONCAT3(gid_Regitem_Openoffice_,name,_Shell_Printto_Command) \
         ParentID = PREDEFINED_HKEY_CLASSES_ROOT; \
         ModuleID = modid; \
-        Subkey = STRING(CONCAT3(LibreOffice.,name,\shell\printto\command)); \
+        Subkey = STRING(CONCAT3(CollaboraOffice.,name,\shell\printto\command)); \
         Value = "\"" STRING(progpath_program_app) "\" -pt \"%2\" \"%1\""; \
     End
 
@@ -361,7 +361,7 @@ End
         ModuleID = modid; \
         Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
         Name = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT2(LibreOffice.,name)); \
+        Value = STRING(CONCAT2(CollaboraOffice.,name)); \
         Styles = (); \
     End
 
@@ -371,7 +371,7 @@ End
         ModuleID = modid; \
         Subkey = STRING(Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations); \
         Name = STRING(CONCAT2(.,key)); \
-        Value = STRING(CONCAT2(LibreOffice.,name)); \
+        Value = STRING(CONCAT2(CollaboraOffice.,name)); \
         Styles = (); \
     End
 
