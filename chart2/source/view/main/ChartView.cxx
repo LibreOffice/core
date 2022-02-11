@@ -1489,7 +1489,9 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
                 || aConsumedOuterRect.getMaxX() < aAvailableOuterRect.getMaxX()
                 || aConsumedOuterRect.getMinY() > aAvailableOuterRect.getMinY()
                 || aConsumedOuterRect.getMinY() < aAvailableOuterRect.getMaxY() )
+            {
                 bLessSpaceConsumedThanExpected = true;
+            }
         }
 
         if (bLessSpaceConsumedThanExpected && !rParam.mbUseFixedInnerSize)
@@ -1497,6 +1499,16 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             aVDiagram.adjustInnerSize( aConsumedOuterRect );
             pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
                 createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
+
+            // Need to re-adjust again if the labels have changed height because of
+            // text can break. Ideally this shouldn't be needed, but the chart height
+            // isn't readjusted otherwise.
+            pVCooSys->createAxesLabels();
+            aConsumedOuterRect = ShapeFactory::getRectangleOfShape(*xBoundingShape);
+            aVDiagram.adjustInnerSize(aConsumedOuterRect);
+            pVCooSys->setTransformationSceneToScreen(B3DHomMatrixToHomogenMatrix(
+                createTransformationSceneToScreen(aVDiagram.getCurrentRectangle())));
+
         }
         pVCooSys->updatePositions();//todo: logically this belongs to the condition above, but it seems also to be necessary to give the axes group shapes the right bounding rects for hit test -  probably caused by bug i106183 -> check again if fixed
     }

@@ -885,7 +885,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testHorizontal_multilevel)
     sal_Int32 nYposition
         = getXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[1]/push[3]/push[1]/textarray[7]", "y")
               .toInt32();
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(7945, nYposition, 20);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(8057, nYposition, 20);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
