@@ -135,15 +135,15 @@ void ScJumboSheetsTest::testRoundtripColumnRange()
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
     }
 
-    ScDocShellRef xDocSh2 = saveAndReloadNoClose(*xDocSh1, FORMAT_ODS);
+    std::shared_ptr<utl::TempFile> exportedFile;
+    ScDocShellRef xDocSh2 = saveAndReloadNoClose(*xDocSh1, FORMAT_ODS, &exportedFile);
     CPPUNIT_ASSERT(xDocSh2.is());
 
     {
         ScDocument& rDoc = xDocSh2->GetDocument();
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), rDoc.GetFormula(0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
-        xmlDocUniquePtr pDoc
-            = XPathHelper::parseExport2(*this, *xDocSh2, m_xSFactory, "content.xml", FORMAT_ODS);
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport(exportedFile, m_xSFactory, "content.xml");
         CPPUNIT_ASSERT(pDoc);
         assertXPath(pDoc,
                     "/office:document-content/office:body/office:spreadsheet/table:table/"
@@ -155,15 +155,15 @@ void ScJumboSheetsTest::testRoundtripColumnRange()
                     "formula", "of:=SUM([.C:.C])");
     }
 
-    ScDocShellRef xDocSh3 = saveAndReloadNoClose(*xDocSh1, FORMAT_XLSX);
+    ScDocShellRef xDocSh3 = saveAndReloadNoClose(*xDocSh1, FORMAT_XLSX, &exportedFile);
     CPPUNIT_ASSERT(xDocSh3.is());
 
     {
         ScDocument& rDoc = xDocSh3->GetDocument();
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), rDoc.GetFormula(0, 0, 0));
         CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
-        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh3, m_xSFactory,
-                                                         "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+        xmlDocUniquePtr pDoc
+            = XPathHelper::parseExport(exportedFile, m_xSFactory, "xl/worksheets/sheet1.xml");
         CPPUNIT_ASSERT(pDoc);
         assertXPathContent(pDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", "SUM(2:2)");
         assertXPathContent(pDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", "SUM(C:C)");
