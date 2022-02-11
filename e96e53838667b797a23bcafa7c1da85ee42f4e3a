@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f62fd305_e1981a8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-11T09:24:00Z",
+      "side": 1,
+      "message": "hmm it crashes on macOS only\n\n5   libsystem_c.dylib                   0x00007fff5e31e6a6 abort + 127\n6   libsystem_c.dylib                   0x00007fff5e2e720d basename_r + 0\n7   libswlo.dylib                       0x000000011ac28adf _ZN7SwFrame14GetNextSctLeafE12MakePageType + 4863\n8   libswlo.dylib                       0x000000011abb27f8 _ZN11SwFlowFrame7MoveFwdEbbb + 824\n9   libswlo.dylib                       0x000000011ab9f4a0 _ZN14SwContentFrame7MakeAllEP12OutputDevice + 6832\n10  libswlo.dylib                       0x000000011ab9ab71 _ZN7SwFrame11PrepareMakeEP12OutputDevice + 1409\n11  libswlo.dylib                       0x000000011abb9f6b _Z11CalcContentP13SwLayoutFrameb + 891\n12  libswlo.dylib                       0x000000011ac263f5 _ZN14SwSectionFrame13CheckClippingEbb + 1237\n13  libswlo.dylib                       0x000000011ac271c1 _ZN14SwSectionFrame6FormatEP12OutputDevicePK13SwBorderAttrs + 3217\n14  libswlo.dylib                       0x000000011ab9cfa0 _ZN13SwLayoutFrame7MakeAllEP12OutputDevice + 992\n15  libswlo.dylib                       0x000000011ac2525d _ZN14SwSectionFrame7MakeAllEP12OutputDevice + 941\n16  libswlo.dylib                       0x000000011ab9ab71 _ZN7SwFrame11PrepareMakeEP12OutputDevice + 1409\n17  libswlo.dylib                       0x000000011ac3570e _ZL19lcl_InnerCalcLayoutP7SwFramelb + 302\n18  libswlo.dylib                       0x000000011ac35724 _ZL19lcl_InnerCalcLayoutP7SwFramelb + 324\n19  libswlo.dylib                       0x000000011ac35724 _ZL19lcl_InnerCalcLayoutP7SwFramelb + 324\n20  libswlo.dylib                       0x000000011ac35724 _ZL19lcl_InnerCalcLayoutP7SwFramelb + 324\n21  libswlo.dylib                       0x000000011ac35724 _ZL19lcl_InnerCalcLayoutP7SwFramelb + 324\n22  libswlo.dylib                       0x000000011ac35724 _ZL19lcl_InnerCalcLayoutP7SwFramelb + 324\n23  libswlo.dylib                       0x000000011ac3b381 _ZL13lcl_RecalcRowR10SwRowFramel + 97\n24  libswlo.dylib                       0x000000011ac34fa7 _ZN10SwTabFrame5SplitElbb + 5687\n25  libswlo.dylib                       0x000000011ac371ec _ZN10SwTabFrame7MakeAllEP12OutputDevice + 3180\n26  libswlo.dylib                       0x000000011ab9ab71 _ZN7SwFrame11PrepareMakeEP12OutputDevice + 1409\n27  libswlo.dylib                       0x000000011abe5efa _ZN11SwLayAction15FormatLayoutTabEP10SwTabFrameb + 442\n28  libswlo.dylib                       0x000000011abe480f _ZN11SwLayAction12FormatLayoutEP12OutputDeviceP13SwLayoutFrameb + 2079\n29  libswlo.dylib                       0x000000011abe488a _ZN11SwLayAction12FormatLayoutEP12OutputDeviceP13SwLayoutFrameb + 2202\n30  libswlo.dylib                       0x000000011abe2f9e _ZN11SwLayAction14InternalActionEP12OutputDevice + 1502\n31  libswlo.dylib                       0x000000011abe25ba _ZN11SwLayAction6ActionEP12OutputDevice + 122\n32  libswlo.dylib                       0x000000011b009a07 _ZN11SwViewShell13ImplEndActionEb + 503\n33  libswlo.dylib                       0x000000011a898635 _ZN13SwCursorShell9EndActionEb + 181\n34  libswlo.dylib                       0x000000011ab0c76e _ZN12SwActContextD1Ev + 14\n35  libswlo.dylib                       0x000000011b42cabd _ZN10SwWrtShell7DelLeftEv + 493\n36  libtest_sw_uiwriter4.dylib          0x0000000118d4f7b4 _ZN15SwUiWriterTest426testSectionInTableInTable4Ev + 1300",
+      "revId": "e96e53838667b797a23bcafa7c1da85ee42f4e3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
