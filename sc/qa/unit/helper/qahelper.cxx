@@ -700,7 +700,7 @@ void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& 
 
 ScDocShellRef ScBootstrapFixture::saveAndReload(
     ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword)
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword, bool bClose)
 {
 
     utl::TempFile aTempFile;
@@ -725,7 +725,8 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
     }
     pShell->DoSaveAs( aStoreMedium );
-    pShell->DoClose();
+    if (bClose)
+        pShell->DoClose();
 
     //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
@@ -759,6 +760,17 @@ ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell* pShell, sal
     OUString aPass("test");
 
     ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, &aPass);
+
+    CPPUNIT_ASSERT(xDocSh.is());
+    return xDocSh;
+}
+
+ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell* pShell, sal_Int32 nFormat )
+{
+    OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
+    OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
+
+    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, nullptr, false);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;

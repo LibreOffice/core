@@ -12,6 +12,7 @@ $(eval $(call gb_CppunitTest_CppunitTest,sc_jumbosheets_test))
 $(eval $(call gb_CppunitTest_use_externals,sc_jumbosheets_test, \
 	boost_headers \
 	mdds_headers \
+	libxml2 \
 ))
 
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_jumbosheets_test))
