@@ -16,6 +16,23 @@
       "message": "Eike: is this patch (and the patch that depends on it) worth backporting to stable? I think it is safe enough to do so. The coding was fairly obvious and straight-forward.",
       "revId": "67c73494ddf2cd7758a0e41f1ceae27dbf696c2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a273d090_09cf3b65",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-11T18:00:59Z",
+      "side": 1,
+      "message": "It matters if rCol\u003d\u003dMaxCol() or rRow\u003d\u003dMaxRow(), shouldn\u0027t these be\n\n  SCCOL nColHiddenFirst \u003d rDocument.MaxCol() + 1;\n  SCROW nRowHiddenFirst \u003d rDocument.MaxRow() + 1;\n\n?",
+      "revId": "67c73494ddf2cd7758a0e41f1ceae27dbf696c2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
