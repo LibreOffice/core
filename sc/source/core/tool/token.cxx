@@ -2851,7 +2851,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
 
     if (rCxt.mnColDelta < 0)
     {
-        if (rRef.IsEntireRow())
+        if (rRef.IsEntireRow(rCxt.mrDoc.GetSheetLimits()))
             // Entire rows are not affected, columns are anchored.
             return STICKY;
 
@@ -2878,7 +2878,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
         }
         else if (rDeletedRange.aEnd.Col() < rRefRange.aEnd.Col())
         {
-            if (rRefRange.IsEndColSticky())
+            if (rRefRange.IsEndColSticky(rCxt.mrDoc))
                 // Sticky end not affected.
                 return STICKY;
 
@@ -2889,7 +2889,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
         }
         else
         {
-            if (rRefRange.IsEndColSticky())
+            if (rRefRange.IsEndColSticky(rCxt.mrDoc))
                 // Sticky end not affected.
                 return STICKY;
 
@@ -2901,7 +2901,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
     }
     else if (rCxt.mnRowDelta < 0)
     {
-        if (rRef.IsEntireCol())
+        if (rRef.IsEntireCol(rCxt.mrDoc.GetSheetLimits()))
             // Entire columns are not affected, rows are anchored.
             return STICKY;
 
@@ -2929,7 +2929,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
         }
         else if (rDeletedRange.aEnd.Row() < rRefRange.aEnd.Row())
         {
-            if (rRefRange.IsEndRowSticky())
+            if (rRefRange.IsEndRowSticky(rCxt.mrDoc))
                 // Sticky end not affected.
                 return STICKY;
 
@@ -2940,7 +2940,7 @@ ShrinkResult shrinkRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, 
         }
         else
         {
-            if (rRefRange.IsEndRowSticky())
+            if (rRefRange.IsEndRowSticky(rCxt.mrDoc))
                 // Sticky end not affected.
                 return STICKY;
 
@@ -2962,7 +2962,7 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
 
     if (rCxt.mnColDelta > 0)
     {
-        if (rRef.IsEntireRow())
+        if (rRef.IsEntireRow(rCxt.mrDoc.GetSheetLimits()))
             // Entire rows are not affected, columns are anchored.
             return false;
 
@@ -2984,7 +2984,7 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
                 return false;
         }
 
-        if (rRefRange.IsEndColSticky())
+        if (rRefRange.IsEndColSticky(rCxt.mrDoc))
             // Sticky end not affected.
             return false;
 
@@ -2995,7 +2995,7 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
     }
     else if (rCxt.mnRowDelta > 0)
     {
-        if (rRef.IsEntireCol())
+        if (rRef.IsEntireCol(rCxt.mrDoc.GetSheetLimits()))
             // Entire columns are not affected, rows are anchored.
             return false;
 
@@ -3017,7 +3017,7 @@ bool expandRange( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, const Sc
                 return false;
         }
 
-        if (rRefRange.IsEndRowSticky())
+        if (rRefRange.IsEndRowSticky(rCxt.mrDoc))
             // Sticky end not affected.
             return false;
 
@@ -3046,7 +3046,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
 
     if (rCxt.mnColDelta > 0)
     {
-        if (rRef.IsEntireRow())
+        if (rRef.IsEntireRow(rCxt.mrDoc.GetSheetLimits()))
             // Entire rows are not affected, columns are anchored.
             return false;
 
@@ -3064,7 +3064,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
             // Selected range is not immediately adjacent. Bail out.
             return false;
 
-        if (rRefRange.IsEndColSticky())
+        if (rRefRange.IsEndColSticky(rCxt.mrDoc))
             // Sticky end not affected.
             return false;
 
@@ -3075,7 +3075,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
     }
     else if (rCxt.mnRowDelta > 0)
     {
-        if (rRef.IsEntireCol())
+        if (rRef.IsEntireCol(rCxt.mrDoc.GetSheetLimits()))
             // Entire columns are not affected, rows are anchored.
             return false;
 
@@ -3091,7 +3091,7 @@ bool expandRangeByEdge( const sc::RefUpdateContext& rCxt, ScRange& rRefRange, co
             // Selected range is not immediately adjacent. Bail out.
             return false;
 
-        if (rRefRange.IsEndRowSticky())
+        if (rRefRange.IsEndRowSticky(rCxt.mrDoc))
             // Sticky end not affected.
             return false;
 
@@ -3276,7 +3276,8 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceOnShift( const sc::RefUpdateCon
                             // We shift either by column or by row, not both,
                             // so moving the reference has only to be done in
                             // the non-sticky case.
-                            if ((rCxt.mnRowDelta && rRef.IsEntireCol()) || (rCxt.mnColDelta && rRef.IsEntireRow()))
+                            if ((rCxt.mnRowDelta && rRef.IsEntireCol(rCxt.mrDoc.GetSheetLimits()))
+                                || (rCxt.mnColDelta && rRef.IsEntireRow(rCxt.mrDoc.GetSheetLimits())))
                             {
                                 // In entire col/row, values are shifted within
                                 // the reference, which affects all positional
@@ -3744,7 +3745,8 @@ bool adjustDoubleRefInName(
         }
     }
 
-    if ((rCxt.mnRowDelta && rRef.IsEntireCol()) || (rCxt.mnColDelta && rRef.IsEntireRow()))
+    if ((rCxt.mnRowDelta && rRef.IsEntireCol(rCxt.mrDoc.GetSheetLimits()))
+        || (rCxt.mnColDelta && rRef.IsEntireRow(rCxt.mrDoc.GetSheetLimits())))
     {
         sc::RefUpdateContext aCxt( rCxt.mrDoc);
         // We only need a few parameters of RefUpdateContext.
@@ -3754,9 +3756,9 @@ bool adjustDoubleRefInName(
         aCxt.mnTabDelta = rCxt.mnTabDelta;
 
         // References to entire col/row are not to be adjusted in the other axis.
-        if (aCxt.mnRowDelta && rRef.IsEntireCol())
+        if (aCxt.mnRowDelta && rRef.IsEntireCol(rCxt.mrDoc.GetSheetLimits()))
             aCxt.mnRowDelta = 0;
-        if (aCxt.mnColDelta && rRef.IsEntireRow())
+        if (aCxt.mnColDelta && rRef.IsEntireRow(rCxt.mrDoc.GetSheetLimits()))
             aCxt.mnColDelta = 0;
         if (!aCxt.mnColDelta && !aCxt.mnRowDelta && !aCxt.mnTabDelta)
             // early bailout
@@ -3894,7 +3896,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         {
                             // row(s) deleted.
 
-                            if (rRef.IsEntireCol())
+                            if (rRef.IsEntireCol(rCxt.mrDoc.GetSheetLimits()))
                                 // Rows of entire columns are not affected.
                                 break;
 
@@ -3925,7 +3927,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
                             if (aAbs.aStart.Row() < aDeleted.aStart.Row())
                             {
-                                if (!aAbs.IsEndRowSticky())
+                                if (!aAbs.IsEndRowSticky(rCxt.mrDoc))
                                 {
                                     if (aDeleted.aEnd.Row() < aAbs.aEnd.Row())
                                         // Deleted in the middle.  Make the reference shorter.
@@ -3940,7 +3942,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                                 // Deleted at the top.  Cut the top off and shift up.
                                 rRef.Ref1.SetAbsRow(aDeleted.aEnd.Row()+1);
                                 rRef.Ref1.IncRow(rCxt.mnRowDelta);
-                                if (!aAbs.IsEndRowSticky())
+                                if (!aAbs.IsEndRowSticky(rCxt.mrDoc))
                                     rRef.Ref2.IncRow(rCxt.mnRowDelta);
                             }
 
@@ -3950,7 +3952,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                         {
                             // column(s) deleted.
 
-                            if (rRef.IsEntireRow())
+                            if (rRef.IsEntireRow(rCxt.mrDoc.GetSheetLimits()))
                                 // Rows of entire rows are not affected.
                                 break;
 
@@ -3981,7 +3983,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
 
                             if (aAbs.aStart.Col() < aDeleted.aStart.Col())
                             {
-                                if (!aAbs.IsEndColSticky())
+                                if (!aAbs.IsEndColSticky(rCxt.mrDoc))
                                 {
                                     if (aDeleted.aEnd.Col() < aAbs.aEnd.Col())
                                         // Deleted in the middle.  Make the reference shorter.
@@ -3996,7 +3998,7 @@ sc::RefUpdateResult ScTokenArray::AdjustReferenceInName(
                                 // Deleted at the left.  Cut the left off and shift left.
                                 rRef.Ref1.SetAbsCol(aDeleted.aEnd.Col()+1);
                                 rRef.Ref1.IncCol(rCxt.mnColDelta);
-                                if (!aAbs.IsEndColSticky())
+                                if (!aAbs.IsEndColSticky(rCxt.mrDoc))
                                     rRef.Ref2.IncCol(rCxt.mnColDelta);
                             }
 
@@ -5313,14 +5315,14 @@ void ScTokenArray::WrapReference( const ScAddress& rPos, SCCOL nMaxCol, SCROW nM
                 ScComplexRefData& rRef = *pToken->GetDoubleRef();
                 ScRange aAbs = rRef.toAbs(*mxSheetLimits, rPos);
                 // Entire columns/rows are sticky.
-                if (!rRef.IsEntireCol() && !rRef.IsEntireRow())
+                if (!rRef.IsEntireCol(*mxSheetLimits) && !rRef.IsEntireRow(*mxSheetLimits))
                 {
                     wrapColRange( aAbs, nMaxCol);
                     wrapRowRange( aAbs, nMaxRow);
                 }
-                else if (rRef.IsEntireCol() && !rRef.IsEntireRow())
+                else if (rRef.IsEntireCol(*mxSheetLimits) && !rRef.IsEntireRow(*mxSheetLimits))
                     wrapColRange( aAbs, nMaxCol);
-                else if (!rRef.IsEntireCol() && rRef.IsEntireRow())
+                else if (!rRef.IsEntireCol(*mxSheetLimits) && rRef.IsEntireRow(*mxSheetLimits))
                     wrapRowRange( aAbs, nMaxRow);
                 // else nothing if both, column and row, are entire.
                 aAbs.PutInOrder();

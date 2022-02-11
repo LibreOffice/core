@@ -506,6 +506,19 @@ void ScComplexRefData::PutInOrder( const ScAddress& rPos )
     ScSingleRefData::PutInOrder( Ref1, Ref2, rPos);
 }
 
+bool ScComplexRefData::IsEntireCol( const ScSheetLimits& rLimits ) const
+{
+    // Both row anchors must be absolute.
+    return Ref1.Row() == 0 && Ref2.Row() == rLimits.MaxRow() && !Ref1.IsRowRel() && !Ref2.IsRowRel();
+}
+
+/** Whether this references entire rows, 1:1 */
+bool ScComplexRefData::IsEntireRow( const ScSheetLimits& rLimits ) const
+{
+    // Both column anchors must be absolute.
+    return Ref1.Col() == 0 && Ref2.Col() == rLimits.MaxCol() && !Ref1.IsColRel() && !Ref2.IsColRel();
+}
+
 bool ScComplexRefData::IncEndColSticky( const ScDocument& rDoc, SCCOL nDelta, const ScAddress& rPos )
 {
     SCCOL nCol1 = Ref1.IsColRel() ? Ref1.Col() + rPos.Col() : Ref1.Col();
