@@ -155,18 +155,10 @@ struct ScComplexRefData
     bool ValidExternal(const ScDocument& rDoc) const;
 
     /** Whether this references entire columns, A:A */
-    bool IsEntireCol() const
-    {
-        // Both row anchors must be absolute.
-        return Ref1.Row() == 0 && Ref2.Row() == MAXROW && !Ref1.IsRowRel() && !Ref2.IsRowRel();
-    }
+    bool IsEntireCol( const ScSheetLimits& rLimits ) const;
 
     /** Whether this references entire rows, 1:1 */
-    bool IsEntireRow() const
-    {
-        // Both column anchors must be absolute.
-        return Ref1.Col() == 0 && Ref2.Col() == MAXCOL && !Ref1.IsColRel() && !Ref2.IsColRel();
-    }
+    bool IsEntireRow( const ScSheetLimits& rLimits ) const;
 
     SC_DLLPUBLIC ScRange toAbs( const ScSheetLimits& rLimits, const ScAddress& rPos ) const;
     SC_DLLPUBLIC ScRange toAbs( const ScDocument& rDoc, const ScAddress& rPos ) const;
