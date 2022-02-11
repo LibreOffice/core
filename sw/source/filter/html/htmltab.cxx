@@ -2663,6 +2663,12 @@ sal_Int32 SwHTMLParser::StripTrailingLF()
 {
     sal_Int32 nStripped = 0;
 
+    if (IsReqIF())
+    {
+        // One <br> is exactly one line-break in the ReqIF case.
+        return nStripped;
+    }
+
     const sal_Int32 nLen = m_pPam->GetPoint()->nContent.GetIndex();
     if( nLen )
     {
