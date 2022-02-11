@@ -90,7 +90,7 @@ public:
     WeakReferenceHelper & SAL_CALL operator = ( const WeakReferenceHelper & rWeakRef );
 
 #if defined LIBO_INTERNAL_ONLY
-    WeakReferenceHelper & SAL_CALL operator =(WeakReferenceHelper && other);
+    WeakReferenceHelper & operator =(WeakReferenceHelper && other);
 #endif
 
     /** Releases this reference and takes over hard reference xInt.
@@ -177,7 +177,7 @@ public:
         { WeakReferenceHelper::operator=(xInt); return *this; }
 
 #if defined LIBO_INTERNAL_ONLY
-    WeakReference & SAL_CALL operator = (
+    WeakReference & operator = (
             css::uno::Reference< interface_type > && xInt )
         { WeakReferenceHelper::operator=(std::move(xInt)); return *this; }
 #endif
