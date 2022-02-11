@@ -35,6 +35,6 @@ End
 FolderItemProperty gid_Fip_Smath_AppID
     ShortcutID = gid_Folderitem_Smath;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.Math";
+    Value = "Collabora.CollaboraOffice.Math";
 End
 #endif

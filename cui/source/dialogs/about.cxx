@@ -125,7 +125,7 @@ AboutDialog::AboutDialog(weld::Window *pParent)
   m_pCreditsButton->set_uri(officecfg::Office::Common::Menus::CreditsURL::get());
 
   OUString sURL(officecfg::Office::Common::Help::StartCenter::InfoURL::get());
-  localizeWebserviceURI(sURL);
+  // localizeWebserviceURI(sURL);
   m_pWebsiteButton->set_uri(sURL);
 
   // See also SID_WHATSNEW in sfx2/source/appl/appserv.cxx

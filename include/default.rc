@@ -45,7 +45,7 @@ VS_VERSION_INFO VERSIONINFO
             {
                 // International StringTable
                 VALUE "CompanyName",      PPS(RES_APP_VENDOR) "\0"
-                VALUE "ProductName",      "LibreOffice\0"
+                VALUE "ProductName",      "Collabora Office\0"
                 VALUE "ProductVersion",   PPS(VER_LEVEL) "\0"
                 VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
                 VALUE "OriginalFilename", PPS(ORG_NAME) "\0"
