@@ -107,4 +107,51 @@ class tdf146145(UITestCase):
             xToolkit.processEventsToIdle()
             self.assertEqual(len(tables[0].getRows()), 3)
 
+   def test_Related_tdf147182(self):
+        with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as self.document:
+
+            # Check enabling Accept/Reject Track Change icons
+            # and Accept Change/Reject Change context menu items
+            # on table rows with tracked deletion or insertion
+
+            # enable Track Changes toolbar
+            self.xUITest.executeCommand(".uno:AvailableToolbars?Toolbar:string=changes")
+
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
+            # cursor at changed text: Accept Track Change is enabled
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            # cursor in a changed row, but not at changed text: Accept Track Change is enabled now
+            self.xUITest.executeCommand(".uno:GoRight")
+            xToolkit.processEventsToIdle()
+            # This was false
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            # delete first row
+            self.xUITest.executeCommand(".uno:AcceptTrackedChange")
+            xToolkit.processEventsToIdle()
+            # disabled Accept Track Change
+            while self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            self.assertFalse(self.is_enabled_Accept_Track_Change())
+
+            # delete first row
+            self.xUITest.executeCommand(".uno:SelectAll")
+            self.xUITest.executeCommand(".uno:SelectAll")
+            xToolkit.processEventsToIdle()
+            # This was false
+            while not self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            self.assertTrue(self.is_enabled_Accept_Track_Change())
+
+            # delete all changes in the selected table
+            self.xUITest.executeCommand(".uno:AcceptTrackedChange")
+            xToolkit.processEventsToIdle()
+            while self.is_enabled_Accept_Track_Change():
+                time.sleep(0.1)
+            # disabled Accept Track Change
+            self.assertFalse(self.is_enabled_Accept_Track_Change())
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
