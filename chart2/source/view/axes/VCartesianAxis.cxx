@@ -85,14 +85,16 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( Reference< drawing::XShape >
     if( !xTextRange.is() )
         return;
 
-    const sal_Int32 nFullSize = bIsHorizontalAxis ? rAxisLabelProperties.m_aFontReferenceSize.Height : rAxisLabelProperties.m_aFontReferenceSize.Width;
+    bool bTextHorizontal = rAxisLabelProperties.fRotationAngleDegree != 0.0;
+    bool bIsDirectionVertical = bIsHorizontalAxis && bTextHorizontal;
+    const sal_Int32 nFullSize = bIsDirectionVertical ? rAxisLabelProperties.m_aFontReferenceSize.Height : rAxisLabelProperties.m_aFontReferenceSize.Width;
 
     if( !nFullSize || !rLabel.getLength() )
         return;
 
-    sal_Int32 nMaxLabelsSize = bIsHorizontalAxis ? rAxisLabelProperties.m_aMaximumSpaceForLabels.Height : rAxisLabelProperties.m_aMaximumSpaceForLabels.Width;
+    sal_Int32 nMaxLabelsSize = bIsDirectionVertical ? rAxisLabelProperties.m_aMaximumSpaceForLabels.Height : rAxisLabelProperties.m_aMaximumSpaceForLabels.Width;
     const sal_Int32 nAvgCharWidth = xShape2DText->getSize().Width / rLabel.getLength();
-    const sal_Int32 nTextSize = bIsHorizontalAxis ? ShapeFactory::getSizeAfterRotation(xShape2DText, rAxisLabelProperties.fRotationAngleDegree).Height :
+    const sal_Int32 nTextSize = bIsDirectionVertical ? ShapeFactory::getSizeAfterRotation(xShape2DText, rAxisLabelProperties.fRotationAngleDegree).Height :
                                                     ShapeFactory::getSizeAfterRotation(xShape2DText, rAxisLabelProperties.fRotationAngleDegree).Width;
 
     if( !nAvgCharWidth )
@@ -1858,12 +1860,12 @@ void VCartesianAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
-    TickFactory2D* pTickFactory2D = apTickFactory2D.get();
-
     //create line shapes
     if(m_nDimension==2)
     {
+        std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
+        TickFactory2D* pTickFactory2D = apTickFactory2D.get();
+
         //create extra long ticks to separate complex categories (create them only there where the labels are)
         if( isComplexCategoryAxis() )
         {
