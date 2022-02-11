@@ -700,11 +700,11 @@ void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& 
 
 ScDocShellRef ScBootstrapFixture::saveAndReload(
     ScDocShell& rShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword, bool bClose)
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType,
+    std::shared_ptr<utl::TempFile>* pTempFileOut,  const OUString* pPassword, bool bClose)
 {
-
-    utl::TempFile aTempFile;
-    SfxMedium aStoreMedium( aTempFile.GetURL(), StreamMode::STD_WRITE );
+    auto pTempFile = std::make_shared<utl::TempFile>();
+    SfxMedium aStoreMedium( pTempFile->GetURL(), StreamMode::STD_WRITE );
     SotClipboardFormatId nExportFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nExportFormat = SotClipboardFormatId::STARCHART_8;
@@ -728,49 +728,51 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     if (bClose)
         rShell.DoClose();
 
-    //std::cout << "File: " << aTempFile.GetURL() << std::endl;
+    //std::cout << "File: " << pTempFile->GetURL() << std::endl;
 
     SotClipboardFormatId nFormat = SotClipboardFormatId::NONE;
     if (nFormatType == ODS_FORMAT_TYPE)
         nFormat = SotClipboardFormatId::STARCALC_8;
 
-    ScDocShellRef xDocSh = load(aTempFile.GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, pPassword );
+    ScDocShellRef xDocSh = load(pTempFile->GetURL(), rFilter, rUserData, rTypeName, nFormatType, nFormat, SOFFICE_FILEFORMAT_CURRENT, pPassword );
     if(nFormatType == XLSX_FORMAT_TYPE)
-        validate(aTempFile.GetFileName(), test::OOXML);
+        validate(pTempFile->GetFileName(), test::OOXML);
     else if (nFormatType == ODS_FORMAT_TYPE)
-        validate(aTempFile.GetFileName(), test::ODF);
-    aTempFile.EnableKillingFile();
+        validate(pTempFile->GetFileName(), test::ODF);
+    pTempFile->EnableKillingFile();
+    if(pTempFileOut)
+        *pTempFileOut = pTempFile;
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     OUString aPass("test");
 
-    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, &aPass);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile, &aPass);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, nullptr, false);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, pTempFile, nullptr, false);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
