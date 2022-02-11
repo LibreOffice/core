@@ -49,6 +49,7 @@
 #include <editeng/paravertalignitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
+#include <editeng/editids.hrc>
 
 const WhichRangesContainer SvxStdParagraphTabPage::pStdRanges(
     svl::Items<
@@ -990,6 +991,16 @@ SvxParaAlignTabPage::SvxParaAlignTabPage(weld::Container* pPage, weld::DialogCon
     , m_xPropertiesFL(m_xBuilder->weld_widget("framePROPERTIES"))
     , m_xTextDirectionLB(new svx::FrameDirectionListBox(m_xBuilder->weld_combo_box("comboLB_TEXTDIRECTION")))
 {
+
+    // Hide last line option in text boxes and simliar objects until it is fixed
+    if (!rSet.HasItem(SID_ATTR_TABSTOP_DEFAULTS) && !rSet.HasItem(SID_ATTR_TABSTOP_POS))
+    {
+        m_xLastLineFT->hide();
+        m_xLastLineLB->hide();
+        m_xExpandCB->hide();
+        m_xSnapToGridCB->hide();
+    }
+
     SetExchangeSupport();
 
     sal_uInt16 nLastLinePos = LASTLINEPOS_DEFAULT;
