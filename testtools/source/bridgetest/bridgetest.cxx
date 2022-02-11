@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
+#include <corecrt_math_defines.h>
 #include <stdio.h>
 #include <string.h>
 #include <string_view>
@@ -376,7 +376,7 @@ static bool performTest(
         assign(
             static_cast<TestElement &>(aData), true, '@', 17, 0x1234, 0xFEDC,
             0x12345678, 0xFEDCBA98, SAL_CONST_INT64(0x123456789ABCDEF0),
-            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
+            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, M_PI,
             TestEnum_LOLA, STRING_TEST_CONSTANT, 18, 0x5678, xI,
             Any(&xI, cppu::UnoType<XInterface>::get()));
         bRet &= check(aData.Any == xI, "### unexpected any!");
@@ -732,19 +732,19 @@ static bool performTest(
         assign(
             _arStruct[0], true, '@', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
-            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
+            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, M_PI,
             TestEnum_LOLA, STRING_TEST_CONSTANT, 18, 0x5678, _arObj[0],
             Any(&_arObj[0], cppu::UnoType<XInterface>::get()));
         assign(
             _arStruct[1], true, 'A', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
-            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
+            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, M_PI,
             TestEnum_TWO, STRING_TEST_CONSTANT, 18, 0x5678, _arObj[1],
             Any(&_arObj[1], cppu::UnoType<XInterface>::get()));
         assign(
             _arStruct[2], true, 'B', 17, 0x1234, 0xFEDC, 0x12345678, 0xFEDCBA98,
             SAL_CONST_INT64(0x123456789ABCDEF0),
-            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, 3.1415926359,
+            SAL_CONST_UINT64(0xFEDCBA9876543210), 17.0815f, M_PI,
             TestEnum_CHECK, STRING_TEST_CONSTANT, 18, 0x5678, _arObj[2],
             Any(&_arObj[2], cppu::UnoType<XInterface>::get()));
         {

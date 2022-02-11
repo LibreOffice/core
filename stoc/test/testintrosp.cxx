@@ -37,6 +37,7 @@
 #include <com/sun/star/reflection/XIdlReflection.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <corecrt_math_defines.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -454,7 +455,7 @@ void ImplIntroTest::Init()
 
     //XInterfaceRef Source;
     Any Value;
-    Value <<= 2.718281828459;
+    Value <<= M_E;
     m_aSecondStruct.Value = Value;
     //XIdlClassRef ListenerType;
     m_aSecondStruct.State = PropertyState_DIRECT_VALUE;
