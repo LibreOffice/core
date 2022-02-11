@@ -16,6 +16,23 @@
       "message": "this is already addressed in https://gerrit.libreoffice.org/c/core/+/129781",
       "revId": "31c34c7df2c673f2f68cb4102ffb4764cd954ddf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f96cccf_c6f8f56c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-11T09:35:45Z",
+      "side": 1,
+      "message": "Let\u0027s rebase since Stephan\u0027s patch (https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d405a7a09558ad17642808cc3739ab202f86bea0c) has been pushed.",
+      "revId": "31c34c7df2c673f2f68cb4102ffb4764cd954ddf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
