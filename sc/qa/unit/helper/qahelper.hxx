@@ -215,12 +215,12 @@ public:
     void createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath);
 
     ScDocShellRef saveAndReload(ScDocShell& rShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword = nullptr,
-    bool bClose = true );
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType,
+    std::shared_ptr<utl::TempFile>* pTempFile = nullptr, const OUString* pPassword = nullptr, bool bClose = true );
 
-    ScDocShellRef saveAndReload( ScDocShell& rShell, sal_Int32 nFormat );
-    ScDocShellRef saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat );
-    ScDocShellRef saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat );
+    ScDocShellRef saveAndReload( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
+    ScDocShellRef saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
+    ScDocShellRef saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
 
     std::shared_ptr<utl::TempFile> saveAs(ScDocShell& rShell, sal_Int32 nFormat);
     std::shared_ptr<utl::TempFile> exportTo(ScDocShell& rShell, sal_Int32 nFormat);
