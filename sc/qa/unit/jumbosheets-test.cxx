@@ -41,17 +41,22 @@ public:
     virtual void setUp() override;
     virtual void tearDown() override;
 
+    void testRoundtripColumn2000Ods();
+    void testRoundtripColumn2000Xlsx();
     void testTdf134392();
     void testTdf133033();
 
     CPPUNIT_TEST_SUITE(ScJumboSheetSTest);
 
+    CPPUNIT_TEST(testRoundtripColumn2000Ods);
+    CPPUNIT_TEST(testRoundtripColumn2000Xlsx);
     CPPUNIT_TEST(testTdf134392);
     CPPUNIT_TEST(testTdf133033);
 
     CPPUNIT_TEST_SUITE_END();
 
 private:
+    void testRoundtripColumn2000(std::u16string_view name, int format);
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
@@ -66,6 +71,48 @@ bool ScJumboSheetSTest::load(const OUString& rFilter, const OUString& rURL,
     if (bLoaded)
         xDocShRef->DoClose();
     return bLoaded;
+}
+
+void ScJumboSheetSTest::testRoundtripColumn2000Ods()
+{
+    testRoundtripColumn2000(u"value-in-column-2000.", FORMAT_ODS);
+}
+
+void ScJumboSheetSTest::testRoundtripColumn2000Xlsx()
+{
+    testRoundtripColumn2000(u"value-in-column-2000.", FORMAT_XLSX);
+}
+
+void ScJumboSheetSTest::testRoundtripColumn2000(std::u16string_view name, int format)
+{
+    ScDocShellRef xDocSh1 = loadDoc(name, format);
+    CPPUNIT_ASSERT(xDocSh1.is());
+
+    {
+        ScDocument& rDoc = xDocSh1->GetDocument();
+        // Check the value at BXX1 (2000th column).
+        CPPUNIT_ASSERT_EQUAL(-5.0, rDoc.GetValue(1999, 0, 0));
+        // Check the formula referencing the value.
+        CPPUNIT_ASSERT_EQUAL(OUString("=BXX1"), rDoc.GetFormula(0, 0, 0));
+        // Recalc and check value in the reference.
+        rDoc.CalcAll();
+        CPPUNIT_ASSERT_EQUAL(-5.0, rDoc.GetValue(0, 0, 0));
+    }
+
+    ScDocShellRef xDocSh2 = saveAndReload(&(*xDocSh1), format);
+    CPPUNIT_ASSERT(xDocSh2.is());
+
+    {
+        // Check again.
+        ScDocument& rDoc = xDocSh2->GetDocument();
+        CPPUNIT_ASSERT_EQUAL(-5.0, rDoc.GetValue(1999, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(OUString("=BXX1"), rDoc.GetFormula(0, 0, 0));
+        rDoc.CalcAll();
+        CPPUNIT_ASSERT_EQUAL(-5.0, rDoc.GetValue(0, 0, 0));
+    }
+
+    xDocSh1->DoClose();
+    xDocSh2->DoClose();
 }
 
 void ScJumboSheetSTest::testTdf134392()
