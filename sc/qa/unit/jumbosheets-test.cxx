@@ -15,6 +15,7 @@
 #include <vcl/keycodes.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <test/xmltesttools.hxx>
 
 #include <defaultsoptions.hxx>
 #include <scmod.hxx>
@@ -23,16 +24,17 @@
 #include <com/sun/star/frame/Desktop.hpp>
 
 #include "helper/qahelper.hxx"
+#include "helper/xpath.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 /* Tests for sheets larger than 1024 columns and/or 1048576 rows. */
 
-class ScJumboSheetSTest : public test::FiltersTest, public ScBootstrapFixture
+class ScJumboSheetsTest : public test::FiltersTest, public ScBootstrapFixture, public XmlTestTools
 {
 public:
-    ScJumboSheetSTest();
+    ScJumboSheetsTest();
 
     virtual bool load(const OUString& rFilter, const OUString& rURL, const OUString& rUserData,
                       SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
@@ -43,24 +45,29 @@ public:
 
     void testRoundtripColumn2000Ods();
     void testRoundtripColumn2000Xlsx();
+    void testRoundtripColumnRange();
     void testTdf134392();
     void testTdf133033();
 
-    CPPUNIT_TEST_SUITE(ScJumboSheetSTest);
+    CPPUNIT_TEST_SUITE(ScJumboSheetsTest);
 
     CPPUNIT_TEST(testRoundtripColumn2000Ods);
     CPPUNIT_TEST(testRoundtripColumn2000Xlsx);
+    CPPUNIT_TEST(testRoundtripColumnRange);
     CPPUNIT_TEST(testTdf134392);
     CPPUNIT_TEST(testTdf133033);
 
     CPPUNIT_TEST_SUITE_END();
+
+protected:
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override;
 
 private:
     void testRoundtripColumn2000(std::u16string_view name, int format);
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
-bool ScJumboSheetSTest::load(const OUString& rFilter, const OUString& rURL,
+bool ScJumboSheetsTest::load(const OUString& rFilter, const OUString& rURL,
                              const OUString& rUserData, SfxFilterFlags nFilterFlags,
                              SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
 {
@@ -73,17 +80,17 @@ bool ScJumboSheetSTest::load(const OUString& rFilter, const OUString& rURL,
     return bLoaded;
 }
 
-void ScJumboSheetSTest::testRoundtripColumn2000Ods()
+void ScJumboSheetsTest::testRoundtripColumn2000Ods()
 {
     testRoundtripColumn2000(u"value-in-column-2000.", FORMAT_ODS);
 }
 
-void ScJumboSheetSTest::testRoundtripColumn2000Xlsx()
+void ScJumboSheetsTest::testRoundtripColumn2000Xlsx()
 {
     testRoundtripColumn2000(u"value-in-column-2000.", FORMAT_XLSX);
 }
 
-void ScJumboSheetSTest::testRoundtripColumn2000(std::u16string_view name, int format)
+void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, int format)
 {
     ScDocShellRef xDocSh1 = loadDoc(name, format);
     CPPUNIT_ASSERT(xDocSh1.is());
@@ -115,7 +122,59 @@ void ScJumboSheetSTest::testRoundtripColumn2000(std::u16string_view name, int fo
     xDocSh2->DoClose();
 }
 
-void ScJumboSheetSTest::testTdf134392()
+void ScJumboSheetsTest::testRoundtripColumnRange()
+{
+    ScDocShellRef xDocSh1 = loadDoc(u"sum-whole-column-row.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh1.is());
+
+    {
+        ScDocument& rDoc = xDocSh1->GetDocument();
+        // Check the formula referencing the whole-row range.
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), rDoc.GetFormula(0, 0, 0));
+        // Check the formula referencing the whole-column range.
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
+    }
+
+    ScDocShellRef xDocSh2 = saveAndReloadNoClose(&(*xDocSh1), FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh2.is());
+
+    {
+        ScDocument& rDoc = xDocSh2->GetDocument();
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), rDoc.GetFormula(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
+        xmlDocUniquePtr pDoc
+            = XPathHelper::parseExport2(*this, *xDocSh2, m_xSFactory, "content.xml", FORMAT_ODS);
+        CPPUNIT_ASSERT(pDoc);
+        assertXPath(pDoc,
+                    "/office:document-content/office:body/office:spreadsheet/table:table/"
+                    "table:table-row[1]/table:table-cell[1]",
+                    "formula", "of:=SUM([.2:.2])");
+        assertXPath(pDoc,
+                    "/office:document-content/office:body/office:spreadsheet/table:table/"
+                    "table:table-row[1]/table:table-cell[2]",
+                    "formula", "of:=SUM([.C:.C])");
+    }
+
+    ScDocShellRef xDocSh3 = saveAndReloadNoClose(&(*xDocSh1), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh3.is());
+
+    {
+        ScDocument& rDoc = xDocSh3->GetDocument();
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(2:2)"), rDoc.GetFormula(0, 0, 0));
+        CPPUNIT_ASSERT_EQUAL(OUString("=SUM(C:C)"), rDoc.GetFormula(1, 0, 0));
+        xmlDocUniquePtr pDoc = XPathHelper::parseExport2(*this, *xDocSh3, m_xSFactory,
+                                                         "xl/worksheets/sheet1.xml", FORMAT_XLSX);
+        CPPUNIT_ASSERT(pDoc);
+        assertXPathContent(pDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", "SUM(2:2)");
+        assertXPathContent(pDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", "SUM(C:C)");
+    }
+
+    xDocSh1->DoClose();
+    xDocSh2->DoClose();
+    xDocSh3->DoClose();
+}
+
+void ScJumboSheetsTest::testTdf134392()
 {
     // Without the fix in place, the file would have crashed
     ScDocShellRef xDocSh = loadDoc(u"tdf134392.", FORMAT_XLSX);
@@ -126,7 +185,7 @@ void ScJumboSheetSTest::testTdf134392()
     xDocSh->DoClose();
 }
 
-void ScJumboSheetSTest::testTdf133033()
+void ScJumboSheetsTest::testTdf133033()
 {
     // Create an empty document
     uno::Reference<frame::XDesktop2> xDesktop
@@ -160,12 +219,12 @@ void ScJumboSheetSTest::testTdf133033()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), rViewData.GetCurY());
 }
 
-ScJumboSheetSTest::ScJumboSheetSTest()
+ScJumboSheetsTest::ScJumboSheetsTest()
     : ScBootstrapFixture("sc/qa/unit/data")
 {
 }
 
-void ScJumboSheetSTest::setUp()
+void ScJumboSheetsTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
@@ -180,7 +239,7 @@ void ScJumboSheetSTest::setUp()
     SC_MOD()->SetDefaultsOptions(aDefaultsOption);
 }
 
-void ScJumboSheetSTest::tearDown()
+void ScJumboSheetsTest::tearDown()
 {
     uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
     test::BootstrapFixture::tearDown();
@@ -190,7 +249,13 @@ void ScJumboSheetSTest::tearDown()
     SC_MOD()->SetDefaultsOptions(aDefaultsOption);
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION(ScJumboSheetSTest);
+void ScJumboSheetsTest::registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx)
+{
+    XmlTestTools::registerOOXMLNamespaces(pXmlXPathCtx);
+    XmlTestTools::registerODFNamespaces(pXmlXPathCtx);
+}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(ScJumboSheetsTest);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

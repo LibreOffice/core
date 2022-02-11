@@ -215,10 +215,12 @@ public:
     void createCSVPath(std::u16string_view aFileBase, OUString& rCSVPath);
 
     ScDocShellRef saveAndReload(ScDocShell* pShell, const OUString &rFilter,
-    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword = nullptr );
+    const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword = nullptr,
+    bool bClose = true );
 
     ScDocShellRef saveAndReload( ScDocShell* pShell, sal_Int32 nFormat );
     ScDocShellRef saveAndReloadPassword( ScDocShell* pShell, sal_Int32 nFormat );
+    ScDocShellRef saveAndReloadNoClose( ScDocShell* pShell, sal_Int32 nFormat );
 
     std::shared_ptr<utl::TempFile> saveAs(ScDocShell* pShell, sal_Int32 nFormat);
     std::shared_ptr<utl::TempFile> exportTo(ScDocShell* pShell, sal_Int32 nFormat);
