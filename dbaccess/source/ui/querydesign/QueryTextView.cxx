@@ -42,6 +42,7 @@ OQueryTextView::OQueryTextView(OQueryContainerWindow* pParent, OQueryController&
     m_xSQL->DisableInternalUndo();
     m_xSQL->SetHelpId(HID_CTL_QRYSQLEDIT);
     m_xSQL->SetModifyHdl(LINK(this, OQueryTextView, ModifyHdl));
+    m_xSQL->SetAcceptsTab(true);
 
     m_timerUndoActionCreation.SetTimeout(1000);
     m_timerUndoActionCreation.SetInvokeHandler(LINK(this, OQueryTextView, OnUndoActionTimer));
