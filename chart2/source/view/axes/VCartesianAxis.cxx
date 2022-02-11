@@ -736,10 +736,13 @@ bool VCartesianAxis::createTextShapes(
         }
     }
 
-    if (!isBreakOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) &&
+    bool bIsBreakOfLabelsAllowed = isBreakOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis );
+    if (!bIsBreakOfLabelsAllowed &&
         !isAutoStaggeringOfLabelsAllowed(rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis) &&
         !rAxisLabelProperties.isStaggered())
+    {
         return createTextShapesSimple(xTarget, rTickIter, rAxisLabelProperties, pTickFactory);
+    }
 
     FixedNumberFormatter aFixedNumberFormatter(
                 m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
@@ -748,9 +751,16 @@ bool VCartesianAxis::createTextShapes(
     B2DVector aTextToTickDistance = pTickFactory->getDistanceAxisTickToText(m_aAxisProperties, true);
     sal_Int32 nLimitedSpaceForText = -1;
 
-    if( isBreakOfLabelsAllowed( rAxisLabelProperties, bIsHorizontalAxis, bIsVerticalAxis ) )
+    if (bIsBreakOfLabelsAllowed)
     {
-        nLimitedSpaceForText = nScreenDistanceBetweenTicks;
+        if (!m_aAxisProperties.m_bLimitSpaceForLabels)
+        {
+            basegfx::B2DVector nDeltaVector = pTickFactory->getXaxisEndPos() - pTickFactory->getXaxisStartPos();
+            nLimitedSpaceForText = nDeltaVector.getX();
+        }
+        if (nScreenDistanceBetweenTicks > 0)
+            nLimitedSpaceForText = nScreenDistanceBetweenTicks;
+
         if( bIsStaggered )
             nLimitedSpaceForText *= 2;
 
@@ -889,6 +899,7 @@ bool VCartesianAxis::createTextShapes(
         // Label has multiple lines and the words are broken
         if( nLimitedSpaceForText>0 && !rAxisLabelProperties.bOverlapAllowed
                 && rAxisLabelProperties.fRotationAngleDegree == 0.0
+                && nTick > 0
                 && lcl_hasWordBreak( pTickInfo->xTextShape ) )
         {
             // Label has multiple lines and belongs to a complex category
