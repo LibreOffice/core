@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "930196df_71056db5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-02-11T10:12:41Z",
+      "side": 1,
+      "message": "ClassModule instances or UNO services can\u0027t be tested/validated in Basicic/qa context.\n",
+      "revId": "ff4a4e483d9df0dae78621c18f52f18fd38eecd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
