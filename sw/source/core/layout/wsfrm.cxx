@@ -2764,6 +2764,10 @@ SwTwips SwLayoutFrame::GrowFrame( SwTwips nDist, bool bTst, bool bInfo )
             if ( GetNext() )
             {
                 GetNext()->InvalidatePos_();
+                if (GetNext()->IsRowFrame())
+                {   // also invalidate first cell
+                    static_cast<SwLayoutFrame*>(GetNext())->Lower()->InvalidatePos_();
+                }
                 if ( GetNext()->IsContentFrame() )
                     GetNext()->InvalidatePage( pPage );
             }
