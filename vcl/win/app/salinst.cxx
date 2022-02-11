@@ -868,7 +868,7 @@ void WinSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUS
 
             if ( !sApplicationName.isEmpty() )
             {
-                OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplicationName);
+                OUString sApplicationID("Collabora.CollaboraOffice." + sApplicationName);
 
                 SHARDAPPIDINFO info;
                 info.psi = pShellItem;

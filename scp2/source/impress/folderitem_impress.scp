@@ -35,6 +35,6 @@ End
 FolderItemProperty gid_Fip_Simpress_AppID
     ShortcutID = gid_Folderitem_Simpress;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.Impress";
+    Value = "Collabora.CollaboraOffice.Impress";
 End
 #endif

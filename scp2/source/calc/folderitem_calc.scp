@@ -35,6 +35,6 @@ End
 FolderItemProperty gid_Fip_Scalc_AppID
     ShortcutID = gid_Folderitem_Scalc;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 #endif

@@ -18,7 +18,7 @@ dnl cspell:ignoreRegExp / -isystem /
 # several non-alphanumeric characters, those are split off and used only for the
 # ABOUTBOXPRODUCTVERSIONSUFFIX in openoffice.lst. Why that is necessary, no idea.
 
-AC_INIT([LibreOffice],[26.2.0.1.0+],[],[],[http://documentfoundation.org/])
+AC_INIT([Collabora Office],[26.04.0.1],[],[],[https://collaboraoffice.com/])
 
 dnl libnumbertext needs autoconf 2.68, but that can pick up autoconf268 just fine if it is installed
 dnl whereas aclocal (as run by autogen.sh) insists on using autoconf and fails hard
@@ -525,6 +525,7 @@ if test -n "$with_product_name" -a "$with_product_name" != no; then
 fi
 if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     PRODUCTNAME="${PRODUCTNAME}Dev"
+    PRODUCTNAME=AC_PACKAGE_NAME
 fi
 AC_MSG_RESULT([$PRODUCTNAME])
 AC_SUBST(PRODUCTNAME)
@@ -567,15 +568,8 @@ test -n "$LIBO_VERSION_SUFFIX" && LIBO_VERSION_SUFFIX=".$LIBO_VERSION_SUFFIX"
 # CFBundleShortVersionString at
 # https://developer.apple.com/documentation/bundleresources/information_property_list/cfbundleshortversionstring
 
-# But that is enforced only in the App Store, and we apparently want to break the rules otherwise.
-
-if test "$enable_macosx_sandbox" = yes; then
-    MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.`expr $LIBO_VERSION_MICRO '*' 1000 + $LIBO_VERSION_PATCH`
-    MACOSX_BUNDLE_VERSION=$MACOSX_BUNDLE_SHORTVERSION
-else
-    MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.$LIBO_VERSION_MICRO.$LIBO_VERSION_PATCH
-    MACOSX_BUNDLE_VERSION=$MACOSX_BUNDLE_SHORTVERSION$LIBO_VERSION_SUFFIX
-fi
+MACOSX_BUNDLE_SHORTVERSION=$LIBO_VERSION_MAJOR.$LIBO_VERSION_MINOR.`expr $LIBO_VERSION_MICRO '*' 1000 + $LIBO_VERSION_PATCH`
+MACOSX_BUNDLE_VERSION=$MACOSX_BUNDLE_SHORTVERSION
 
 AC_SUBST(LIBO_VERSION_MAJOR)
 AC_SUBST(LIBO_VERSION_MINOR)

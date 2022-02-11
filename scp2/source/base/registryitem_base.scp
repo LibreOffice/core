@@ -24,7 +24,7 @@ RegistryItem gid_Regitem_Odb
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odb";
     ModuleID = gid_Module_Prg_Base_Bin;
-    Value = "LibreOffice.DatabaseDocument.1";
+    Value = "CollaboraOffice.DatabaseDocument.1";
 End
 
 RegistryItem gid_Regitem_Odb_PersistentHandler
@@ -44,7 +44,7 @@ End
 RegistryItem gid_Regitem_DatabaseDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Base_Bin;
-    Subkey = "LibreOffice.DatabaseDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.DatabaseDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -66,14 +66,14 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.DatabaseDocument.1";
+    Subkey = "CollaboraOffice.DatabaseDocument.1";
     ModuleID = gid_Module_Prg_Base_Bin;
     REG_VALUE_LNG(OO_DATABASE)
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.DatabaseDocument.1\DefaultIcon";
+    Subkey = "CollaboraOffice.DatabaseDocument.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Base_Bin;
     Value = "<progpath>\program\soffice.bin,11";
 End
@@ -81,15 +81,15 @@ End
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Base_Bin;
-    Subkey = "LibreOffice.DatabaseDocument.1";
+    Subkey = "CollaboraOffice.DatabaseDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Base";
+    Value = "Collabora.CollaboraOffice.Base";
 End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Base_Bin;
-    Subkey = "LibreOffice.DatabaseDocument.1";
+    Subkey = "CollaboraOffice.DatabaseDocument.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_DATABASE)
 End
@@ -98,7 +98,7 @@ End
 RegistryItem gid_Regitem_odb_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.DatabaseDocument.1";
+    Subkey = "CollaboraOffice.DatabaseDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -114,21 +114,21 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.DatabaseDocument.1\shell";
+    Subkey = "CollaboraOffice.DatabaseDocument.1\shell";
     ModuleID = gid_Module_Prg_Base_Bin;
     Value = "open";
 End
 
 // RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
 //     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-//     Subkey = "LibreOffice.DatabaseDocument.1\shell\open\command";
+//     Subkey = "CollaboraOffice.DatabaseDocument.1\shell\open\command";
 //     ModuleID = gid_Module_Prg_Base_Bin;
 //     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 // End
 
 RegistryItem gid_Regitem_Openoffice_Databasedocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.DatabaseDocument.1\shell\open\command";
+    Subkey = "CollaboraOffice.DatabaseDocument.1\shell\open\command";
     ModuleID = gid_Module_Prg_Base_Bin;
     Value = "\"<progpath>\program\sbase.exe\" -o \"%1\"";
     Styles = ();
@@ -140,7 +140,7 @@ RegistryItem gid_Regitem_OpenOffice_ODB_OpenWith_Database
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odb\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Base_Bin;
-    Name = "LibreOffice.DatabaseDocument.1";
+    Name = "CollaboraOffice.DatabaseDocument.1";
     Value = " ";
 End
 
@@ -149,7 +149,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Base_Bin;
     Name = ".odb";
-    Value = "LibreOffice.DatabaseDocument.1";
+    Value = "CollaboraOffice.DatabaseDocument.1";
     Styles = ();
 End
 

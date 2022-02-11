@@ -41,7 +41,7 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,bo
 		&& echo 'InstallMode=<installmode>' \
 		&& echo 'ProductKey=$(PRODUCTNAME) $(PRODUCTVERSION)' \
 		$(if $(ENABLE_RELEASE_BUILD),\
-			&& echo 'UserInstallation=$$SYSUSERCONFIG/$(shell echo $(PRODUCTNAME) | sed -e 's/ /%20/g' $(if $(filter-out HAIKU MACOSX WNT,$(OS)),| tr "[:upper:]" "[:lower:]"))/4', \
+			&& echo 'UserInstallation=$$SYSUSERCONFIG/$(if $(filter-out HAIKU MACOSX WNT,$(OS)),$(shell echo $(PRODUCTNAME) | tr "[:upper:]" "[:lower:]" | tr -d " "),$(shell echo $(PRODUCTNAME) | tr -d " "))/4', \
 			&& echo 'UserInstallation=$$ORIGIN/..') \
 	) > $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),ECH)
@@ -144,14 +144,14 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,so
 		&& echo 'HideEula=1' \
 		&& echo 'Logo=1' \
 		&& echo 'NativeProgress=false' \
-		&& echo 'ProgressBarColor=0,0,0' \
-		&& echo 'ProgressFrameColor=102,102,102' \
-		&& echo 'ProgressPosition=30,145' \
-		&& echo 'ProgressSize=385,8' \
-		&& echo 'ProgressPositionHigh=30,200' \
-		&& echo 'ProgressSizeHigh=650,12' \
-		&& echo 'ProgressTextBaseline=170' \
-		&& echo 'ProgressTextColor=0,0,0' \
+		&& echo 'ProgressBarColor=80,73,153' \
+		&& echo 'ProgressFrameColor=255,255,255' \
+		&& echo 'ProgressPosition=268,106' \
+		&& echo 'ProgressSize=212,4' \
+		&& echo 'ProgressPositionHigh=268,137' \
+		&& echo 'ProgressSizeHigh=617,12' \
+		&& echo 'ProgressTextBaseline=230' \
+		&& echo 'ProgressTextColor=255,255,255' \
 		&& echo 'SecureUserConfig=true' \
 		&& echo 'SecureUserConfigCompress=true' \
 		&& echo 'SecureUserConfigExtensions=true' \

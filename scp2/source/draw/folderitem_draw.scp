@@ -35,6 +35,6 @@ End
 FolderItemProperty gid_Fip_Sdraw_AppID
     ShortcutID = gid_Folderitem_Sdraw;
     Key = "System.AppUserModel.ID";
-    Value = "TheDocumentFoundation.LibreOffice.Draw";
+    Value = "Collabora.CollaboraOffice.Draw";
 End
 #endif
