@@ -806,12 +806,6 @@ struct ConventionOOO_A1 : public Convention_A1
         const ScSingleRefData& rRef, const ScAddress& rAbsRef,
         bool bForceTab, bool bODF, SingletonDisplay eSingletonDisplay )
     {
-        // For ODF override singleton so earlier releases still can read what
-        // we write now as of 2015-06-26.
-        /* TODO: we may want to change that in future in a few releases. */
-        if (bODF)
-            eSingletonDisplay = SINGLETON_NONE;
-
         if( rRef.IsFlag3D() || bForceTab )
         {
             if (!ValidTab(rAbsRef.Tab()) || rRef.IsTabDeleted())
