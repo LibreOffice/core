@@ -132,6 +132,7 @@ public:
     void testTdf48041();
     void testTdf121205();
     void testFixedSizeBarChartVeryLongLabel();
+    void testAutomaticSizeBarChartVeryLongLabel();
 
     CPPUNIT_TEST_SUITE(Chart2ImportTest);
     CPPUNIT_TEST(Fdo60083);
@@ -215,6 +216,7 @@ public:
     CPPUNIT_TEST(testTdf48041);
     CPPUNIT_TEST(testTdf121205);
     CPPUNIT_TEST(testFixedSizeBarChartVeryLongLabel);
+    CPPUNIT_TEST(testAutomaticSizeBarChartVeryLongLabel);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -2101,8 +2103,9 @@ void Chart2ImportTest::testFixedSizeBarChartVeryLongLabel()
     // case the best course of action is to just crop the label text. This
     // test checks that the rendered text is actually cropped.
 
-    load(u"/chart2/qa/extras/data/odp/", "FixedSizeBarChartVeryLongLabel.odp");
+    load(u"/chart2/qa/extras/data/odp/", "BarChartVeryLongLabel.odp");
 
+    // Select shape 0 which has fixed size chart
     Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xChartDoc.is());
 
@@ -2151,7 +2154,86 @@ void Chart2ImportTest::testFixedSizeBarChartVeryLongLabel()
 
     // Check text is actually cropped
     uno::Reference<text::XTextRange> xLabel(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("Very very very very..."), xLabel->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Very very very very very very..."), xLabel->getString());
+
+    uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, "CID/DiagramWall=");
+    CPPUNIT_ASSERT(xChartWall.is());
+
+    // The text shape width should be smaller than the chart wall
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5085), xChartWall->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7113), xChartWall->getSize().Height);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4870), xXAxis->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(398), xXAxis->getSize().Height);
+}
+
+void Chart2ImportTest::testAutomaticSizeBarChartVeryLongLabel()
+{
+    // Bar chart area size is automatic so we expect the label to be broken
+    // into multiple lines.
+
+    load(u"/chart2/qa/extras/data/odp/", "BarChartVeryLongLabel.odp");
+
+    // Select shape 1, which has an automatic sized chart
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    Reference<chart2::XAxis> xHAxis = getAxisFromDoc(xChartDoc, 0, 0, 0);
+    CPPUNIT_ASSERT(xHAxis.is());
+
+    chart2::ScaleData aScaleData = xHAxis->getScaleData();
+    CPPUNIT_ASSERT(aScaleData.Categories.is());
+
+    Reference<chart2::data::XLabeledDataSequence> xLabeledDataSequence = aScaleData.Categories;
+    CPPUNIT_ASSERT(xLabeledDataSequence.is());
+
+    Reference<chart2::data::XDataSequence> xDataSequence = xLabeledDataSequence->getValues();
+    CPPUNIT_ASSERT(xDataSequence.is());
+
+    Reference<chart2::data::XTextualDataSequence> xTextualDataSequence(xDataSequence, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTextualDataSequence.is());
+
+    std::vector<OUString> aCategories;
+    const Sequence<OUString> aTextData(xTextualDataSequence->getTextualData());
+    ::std::copy(aTextData.begin(), aTextData.end(),
+        ::std::back_inserter(aCategories));
+
+    // Check that we have a very very long label text
+    CPPUNIT_ASSERT_EQUAL(OUString("Very very very very very very very very very very very loooooooooooong label"), aCategories[0]);
+
+    // Check visible text
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xShapes.is());
+
+    uno::Reference<drawing::XShape> xXAxis = getShapeByName(xShapes, "CID/D=0:CS=0:Axis=0,0",
+        // Axis occurs twice in chart xshape representation so need to get the one related to labels
+        [](const uno::Reference<drawing::XShape>& rXShape) -> bool
+    {
+        uno::Reference<drawing::XShapes> xAxisShapes(rXShape, uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xAxisShapes.is());
+        uno::Reference<drawing::XShape> xChildShape(xAxisShapes->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xChildShape, uno::UNO_QUERY_THROW);
+        return (xShapeDescriptor->getShapeType() == "com.sun.star.drawing.TextShape");
+    });
+    CPPUNIT_ASSERT(xXAxis.is());
+
+    uno::Reference<container::XIndexAccess> xIndexAccess(xXAxis, UNO_QUERY_THROW);
+
+    // Check text is unmodified
+    uno::Reference<text::XTextRange> xLabel(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Very very very very very very very very very very very loooooooooooong label"), xLabel->getString());
+
+    uno::Reference<drawing::XShape> xChartWall = getShapeByName(xShapes, "CID/DiagramWall=");
+    CPPUNIT_ASSERT(xChartWall.is());
+
+    // The text shape width should be smaller than the chart wall
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5761), xChartWall->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(7200), xChartWall->getSize().Height);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5320), xXAxis->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1192), xXAxis->getSize().Height);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Chart2ImportTest);
