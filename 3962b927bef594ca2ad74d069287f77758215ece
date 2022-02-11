@@ -68,6 +68,23 @@
       "message": "I tried this:\ndiff --git a/i18npool/source/localedata/data/es_AR.xml b/i18npool/source/localedata/data/es_AR.xml\nindex 84cc34e3bb70..d7244403174b 100644\n--- a/i18npool/source/localedata/data/es_AR.xml\n+++ b/i18npool/source/localedata/data/es_AR.xml\n@@ -47,7 +47,7 @@\n       \u003cDoubleQuotationStart\u003e“\u003c/DoubleQuotationStart\u003e\n       \u003cDoubleQuotationEnd\u003e”\u003c/DoubleQuotationEnd\u003e\n     \u003c/Markers\u003e\n-    \u003cTimeAM\u003eAM\u003c/TimeAM\u003e\n+    \u003cTimeAM ref\u003d\"es_ES\"/\u003e\n     \u003cTimePM\u003ePM\u003c/TimePM\u003e\n     \u003cMeasurementSystem\u003emetric\u003c/MeasurementSystem\u003e\n   \u003c/LC_CTYPE\u003e\n\nbut got an error with:\nError: less than 1 character (0) in TimeAM \u0027\u0027.\nWarning: FormatCode formatindex\u003d\"12\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\nWarning: FormatCode formatindex\u003d\"13\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\nWarning: FormatCode formatindex\u003d\"14\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\nWarning: FormatCode formatindex\u003d\"15\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\nWarning: FormatCode formatindex\u003d\"17\" for currency uses parentheses for negative amounts, which probably is not correct for locales not based on en_US.\nGenerated date acceptance pattern: \u0027D/M/Y\u0027 from \u0027DD/MM/AAAA\u0027 (formatindex\u003d\"21\" and defined DateSeparator \u0027/\u0027)\nfile generated\u003d/home/julien/lo/libreoffice/workdir/CustomTarget/i18npool/localedata/localedata_es_AR_new.cxx.sax\nparsing document es_AR started\nError: in data for es_AR: 1\nparsing document es_AR finished\n\n\nIf I copy paste the content of TimeAM from es_ES, it\u0027s ok.",
       "revId": "3962b927bef594ca2ad74d069287f77758215ece",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cef71088_9ced6fa6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-11T12:40:41Z",
+      "side": 1,
+      "message": "It doesn\u0027t fail if I replace all the LC_CTYPE block with \u003cLC_CTYPE ref\u003d\"es_ES\"/\u003e\nAdolfo: would it be ok for es_AR and the other locales you indicated or should we just focus on TimeAM and TimePM ?",
+      "revId": "3962b927bef594ca2ad74d069287f77758215ece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
