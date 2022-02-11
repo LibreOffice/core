@@ -102,7 +102,7 @@ $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTSOURCE := $(call gb_Compon
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTIMPL :=
 $(call gb_ComponentTarget_get_target,$(1)) : ALLFILTEREDIMPL := $(call gb_ComponentTarget__init_allfiltered,$(1))
 
-$(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget__source,$(1))
+$(call gb_ComponentTarget_get_target,$(1)) : $(call gb_ComponentTarget__init_source,$(1))
 $(call gb_ComponentTarget_get_target,$(1)).optionals : $(call gb_ComponentTarget__init_source,$(1))
 $(call gb_ComponentTarget_get_target,$(1)).allfiltered : $(call gb_ComponentTarget__init_allfiltered,$(1))
 
