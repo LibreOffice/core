@@ -699,7 +699,7 @@ void ScBootstrapFixture::createCSVPath(std::u16string_view aFileBase, OUString& 
 }
 
 ScDocShellRef ScBootstrapFixture::saveAndReload(
-    ScDocShell* pShell, const OUString &rFilter,
+    ScDocShell& rShell, const OUString &rFilter,
     const OUString &rUserData, const OUString& rTypeName, SfxFilterFlags nFormatType, const OUString* pPassword, bool bClose)
 {
 
@@ -724,9 +724,9 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
         uno::Reference< embed::XStorage > xMedStorage = aStoreMedium.GetStorage();
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
     }
-    pShell->DoSaveAs( aStoreMedium );
+    rShell.DoSaveAs( aStoreMedium );
     if (bClose)
-        pShell->DoClose();
+        rShell.DoClose();
 
     //std::cout << "File: " << aTempFile.GetURL() << std::endl;
 
@@ -743,40 +743,40 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell* pShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell& rShell, sal_Int32 nFormat )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
-    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell* pShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     OUString aPass("test");
 
-    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, &aPass);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, &aPass);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
-ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell* pShell, sal_Int32 nFormat )
+ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
 
-    ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, nullptr, false);
+    ScDocShellRef xDocSh = saveAndReload(rShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType, nullptr, false);
 
     CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
-std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell* pShell, sal_Int32 nFormat )
+std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell& rShell, sal_Int32 nFormat )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
@@ -794,15 +794,15 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell* pShell, s
         OUString(), "private:factory/scalc*" );
     pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
-    pShell->DoSaveAs( aStoreMedium );
+    rShell.DoSaveAs( aStoreMedium );
 
     return pTempFile;
 }
 
-std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell* pShell, sal_Int32 nFormat )
+std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat )
 {
-    std::shared_ptr<utl::TempFile> pTempFile = saveAs(pShell, nFormat);
-    pShell->DoClose();
+    std::shared_ptr<utl::TempFile> pTempFile = saveAs(rShell, nFormat);
+    rShell.DoClose();
 
     SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
     if(nFormatType == XLSX_FORMAT_TYPE)
@@ -825,7 +825,7 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
         CPPUNIT_ASSERT(xShell.is());
 
         if ( nExportType != -1 )
-            xShell = saveAndReload(&(*xShell), nExportType );
+            xShell = saveAndReload(*xShell, nExportType );
 
         CPPUNIT_ASSERT(xShell.is());
 
