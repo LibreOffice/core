@@ -545,7 +545,7 @@ public:
         @param rRef an interface reference
         @return this reference
     */
-    inline Reference< interface_type > & SAL_CALL operator = ( Reference< interface_type > && rRef ) noexcept;
+    inline Reference< interface_type > & operator = ( Reference< interface_type > && rRef ) noexcept;
 #endif
     /** Queries given interface reference for type interface_type.
 

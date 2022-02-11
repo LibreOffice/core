@@ -240,7 +240,7 @@ public:
     */
     inline ByteSequence & SAL_CALL operator = ( const ByteSequence & rSeq );
 #if defined LIBO_INTERNAL_ONLY
-    inline ByteSequence & SAL_CALL operator = ( ByteSequence && rSeq ) noexcept;
+    inline ByteSequence & operator = ( ByteSequence && rSeq ) noexcept;
 #endif
 
     /** Gets the length of sequence.

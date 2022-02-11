@@ -165,7 +165,7 @@ public:
     css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
         { return _aTypes; }
 #if defined LIBO_INTERNAL_ONLY
-    css::uno::Sequence< css::uno::Type > const & SAL_CALL getTypes() const
+    css::uno::Sequence< css::uno::Type > const & getTypes() const
         { return _aTypes; }
 #endif
 };
