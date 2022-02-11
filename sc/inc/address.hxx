@@ -478,7 +478,7 @@ struct ScAddressHashFunctor
     }
 };
 
-[[nodiscard]] inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidAddress( const ScAddress& rAddress, SCCOL nMaxCol, SCROW nMaxRow )
 {
     return ValidCol(rAddress.Col(), nMaxCol) && ValidRow(rAddress.Row(), nMaxRow) && ValidTab(rAddress.Tab());
 }
@@ -636,9 +636,9 @@ public:
     ScRange Intersection( const ScRange& rOther ) const;
 
     /// If maximum end column should not be adapted during reference update.
-    inline bool IsEndColSticky() const;
+    bool IsEndColSticky( const ScDocument& rDoc ) const;
     /// If maximum end row should not be adapted during reference update.
-    inline bool IsEndRowSticky() const;
+    bool IsEndRowSticky( const ScDocument& rDoc ) const;
 
     /** Increment or decrement end column unless sticky or until it becomes
         sticky. Checks if the range encompasses at least two columns so should
@@ -685,18 +685,6 @@ inline void ScRange::GetVars( SCCOL& nCol1, SCROW& nRow1, SCTAB& nTab1,
 {
     aStart.GetVars( nCol1, nRow1, nTab1 );
     aEnd.GetVars( nCol2, nRow2, nTab2 );
-}
-
-inline bool ScRange::IsEndColSticky() const
-{
-    // Only in an actual column range, i.e. not if both columns are MAXCOL.
-    return aEnd.Col() == MAXCOL && aStart.Col() < aEnd.Col();
-}
-
-inline bool ScRange::IsEndRowSticky() const
-{
-    // Only in an actual row range, i.e. not if both rows are MAXROW.
-    return aEnd.Row() == MAXROW && aStart.Row() < aEnd.Row();
 }
 
 inline bool ScRange::operator==( const ScRange& rRange ) const
@@ -788,7 +776,7 @@ inline size_t ScRange::hashStartColumn() const
 #endif
 }
 
-[[nodiscard]] inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol = MAXCOL, SCROW nMaxRow = MAXROW )
+[[nodiscard]] inline bool ValidRange( const ScRange& rRange, SCCOL nMaxCol, SCROW nMaxRow )
 {
     return ValidAddress(rRange.aStart, nMaxCol, nMaxRow) && ValidAddress(rRange.aEnd, nMaxCol, nMaxRow);
 }

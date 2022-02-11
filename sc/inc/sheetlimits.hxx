@@ -57,6 +57,10 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
     [[nodiscard]] SCCOL SanitizeCol(SCCOL nCol) const { return ::SanitizeCol(nCol, mnMaxCol); }
     [[nodiscard]] SCROW SanitizeRow(SCROW nRow) const { return ::SanitizeRow(nRow, mnMaxRow); }
 
+    // equivalent of MAXROW in address.hxx
+    SCROW MaxRow() const { return mnMaxRow; }
+    // equivalent of MAXCOL in address.hxx
+    SCCOL MaxCol() const { return mnMaxCol; }
     // equivalent of MAXROWCOUNT in address.hxx
     SCROW GetMaxRowCount() const { return mnMaxRow + 1; }
     // equivalent of MAXCOLCOUNT in address.hxx
