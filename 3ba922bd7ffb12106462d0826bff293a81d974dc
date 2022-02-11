@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "63375140_61b6e373",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-02-11T01:29:43Z",
+      "side": 1,
+      "message": "I’m not Javier, but I can check this — Aranese obviously doesn’t have the grapheme ⟨Ñ⟩, and the language is closer to Catalan and French that IMO that letter doesn’t warrant inclusion in the collation. Occitan just uses the international Latin alphabet’s collation order.",
+      "parentUuid": "f3ba9bda_f57f90ec",
+      "range": {
+        "startLine": 205,
+        "startChar": 67,
+        "endLine": 205,
+        "endChar": 80
+      },
+      "revId": "3ba922bd7ffb12106462d0826bff293a81d974dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "531ee36b_e18503f0",
         "filename": "i18npool/source/localedata/data/oc_ES.xml",
         "patchSetId": 3
