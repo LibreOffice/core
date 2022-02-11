@@ -2806,40 +2806,33 @@ void SdrObject::SendUserCall(SdrUserCallType eUserCall, const tools::Rectangle& 
     }
 }
 
-void SdrObject::setUnoShape( const uno::Reference< drawing::XShape >& _rxUnoShape )
+/// @param pSvxShape optional parameter when the call site already knows the attached SvxShape
+void SdrObject::setUnoShape( const rtl::Reference<SvxShape>& _rxUnoShape )
 {
-    const uno::Reference< uno::XInterface>& xOldUnoShape( maWeakUnoShape );
-    // the UNO shape would be gutted by the following code; return early
-    if ( _rxUnoShape == xOldUnoShape )
+    // This is only called in one of two ways:
+    // (1) at SvxShape construction time, to tell the associated SdrObject which SvxShape is attached to it
+    // (2) to dissociate an SdrObject from an attached SvxShape
+    if (_rxUnoShape)
     {
-        if ( !xOldUnoShape.is() )
-        {
-            // make sure there is no stale impl. pointer if the UNO
-            // shape was destroyed meanwhile (remember we only hold weak
-            // reference to it!)
-            mpSvxShape = nullptr;
-        }
-        return;
-    }
+        assert(!uno::Reference< uno::XInterface>( maWeakUnoShape ) && "there should not be an already attached shape");
 
-    bool bTransferOwnership( false );
-    if ( xOldUnoShape.is() )
+        maWeakUnoShape = uno::Reference<uno::XWeak>(_rxUnoShape.get());
+        mpSvxShape = _rxUnoShape.get();
+    }
+    else
     {
-        bTransferOwnership = mpSvxShape->HasSdrObjectOwnership();
+        uno::Reference< uno::XInterface> xOldUnoShape( maWeakUnoShape );
+        // already been cleared, so just return
+        if (!xOldUnoShape)
+            return;
+
         // Remove yourself from the current UNO shape. Its destructor
         // will reset our UNO shape otherwise.
-        mpSvxShape->InvalidateSdrObject();
-    }
-
-    maWeakUnoShape = _rxUnoShape;
-    mpSvxShape = comphelper::getFromUnoTunnel<SvxShape>( _rxUnoShape );
-
-    // I think this may never happen... But I am not sure enough .-)
-    if ( bTransferOwnership )
-    {
         if (mpSvxShape)
-            mpSvxShape->TakeSdrObjectOwnership();
-        SAL_WARN( "svx.uno", "a UNO shape took over an SdrObject previously owned by another UNO shape!");
+            mpSvxShape->InvalidateSdrObject();
+
+        maWeakUnoShape.clear();
+        mpSvxShape = nullptr;
     }
 }
 
@@ -2935,7 +2928,9 @@ css::uno::Reference< css::drawing::XShape > SdrObject::getUnoShape()
             {
                 // create one
                 xShape = pDrawPage->CreateShape( this );
-                setUnoShape( xShape );
+                auto pShape = dynamic_cast<SvxShape*>(xShape.get());
+                assert(pShape);
+                setUnoShape( pShape );
             }
         }
     }

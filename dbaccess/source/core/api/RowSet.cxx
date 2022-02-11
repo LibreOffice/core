@@ -2071,7 +2071,7 @@ Reference< XResultSet > SAL_CALL ORowSet::createResultSet(  )
     if(m_xStatement.is())
     {
         rtl::Reference<ORowSetClone> pClone = new ORowSetClone( m_aContext, *this, m_pMutex );
-        m_aClones.emplace_back(static_cast<cppu::OWeakObject*>(pClone.get()));
+        m_aClones.emplace_back(css::uno::Reference< css::uno::XWeak >(pClone.get()));
         return pClone;
     }
     return Reference< XResultSet >();
