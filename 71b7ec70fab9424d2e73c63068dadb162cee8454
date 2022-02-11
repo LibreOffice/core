@@ -90,6 +90,30 @@
       },
       "revId": "71b7ec70fab9424d2e73c63068dadb162cee8454",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e2bf35_4c4b8aed",
+        "filename": "sd/source/filter/eppt/pptx-epptooxml.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1003374
+      },
+      "writtenOn": "2022-02-11T07:31:23Z",
+      "side": 1,
+      "message": "If I Just use [DateTime cTime...]without SAL_DLLPUBLIC_RTTI It will tell me that is Unclear definition.So I did it.\n\nThank you for your help. I will try my best to fix the problem without making changes in writeElement.",
+      "parentUuid": "9a2dede5_7f5c24ee",
+      "range": {
+        "startLine": 419,
+        "startChar": 8,
+        "endLine": 419,
+        "endChar": 26
+      },
+      "revId": "71b7ec70fab9424d2e73c63068dadb162cee8454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
