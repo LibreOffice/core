@@ -176,12 +176,6 @@ public:
             const css::uno::Reference< interface_type > & xInt )
         { WeakReferenceHelper::operator=(xInt); return *this; }
 
-#if defined LIBO_INTERNAL_ONLY
-    WeakReference & SAL_CALL operator = (
-            css::uno::Reference< interface_type > && xInt )
-        { WeakReferenceHelper::operator=(std::move(xInt)); return *this; }
-#endif
-
     /**  Gets a hard reference to the object.
 
          @return hard reference or null, if the weakly referenced interface has gone
