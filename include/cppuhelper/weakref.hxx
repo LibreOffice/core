@@ -42,6 +42,7 @@ namespace uno
 {
 
 class OWeakRefListener;
+class XWeak;
 
 /** The WeakReferenceHelper holds a weak reference to an object.
 
@@ -79,6 +80,15 @@ public:
     */
     WeakReferenceHelper( const css::uno::Reference< css::uno::XInterface > & xInt );
 
+#if defined LIBO_INTERNAL_ONLY
+    /** Initialize this reference with the hard interface reference xInt. If the implementation
+        behind xInt does not support XWeak or xInt is null then this reference will be null.
+
+        @param xWeak another hard interface reference
+    */
+    WeakReferenceHelper( const css::uno::Reference< css::uno::XWeak > & xWeak );
+#endif
+
     /** Releases this reference.
     */
     ~WeakReferenceHelper();
@@ -101,6 +111,17 @@ public:
     */
     WeakReferenceHelper & SAL_CALL operator = (
             const css::uno::Reference< css::uno::XInterface > & xInt );
+
+#if defined LIBO_INTERNAL_ONLY
+    /** Releases this reference and takes over hard reference xInt.
+        If the implementation behind xInt does not support XWeak
+        or XInt is null, then this reference is null.
+
+        @param xWeak another hard reference
+    */
+    WeakReferenceHelper & SAL_CALL operator = (
+            const css::uno::Reference< css::uno::XWeak > & xWeak );
+#endif
 
     /** Returns true if both weak refs reference to the same object.
 
@@ -163,7 +184,7 @@ public:
     WeakReference( const Reference< interface_type > & rRef )
         : WeakReferenceHelper( rRef )
         {}
-
+xx
     /** Releases this reference and takes over hard reference xInt.
         If the implementation behind xInt does not support XWeak
         or XInt is null, then this reference is null.
