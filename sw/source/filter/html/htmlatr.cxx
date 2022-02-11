@@ -2346,8 +2346,11 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     }
 
     bool bWriteBreak = (HtmlTokenId::PREFORMTXT_ON != rHTMLWrt.m_nLastParaToken);
-    if( bWriteBreak && pNd->GetNumRule()  )
+    if (bWriteBreak && (pNd->GetNumRule() || rHTMLWrt.mbReqIF))
+    {
+        // One line-break is exactly one <br> in the ReqIF case.
         bWriteBreak = false;
+    }
 
     {
         HTMLOutContext aContext( rHTMLWrt.m_eDestEnc );
@@ -2487,11 +2490,14 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                     else
                         HTMLOutFuncs::Out_Char( rWrt.Strm(), c, aContext, &rHTMLWrt.m_aNonConvertableCharacters );
 
-                    // if a paragraph's last character is a hard line break
-                    // then we need to add an extra <br>
-                    // because browsers like Mozilla wouldn't add a line for the next paragraph
-                    bWriteBreak = (0x0a == c) &&
-                                  (HtmlTokenId::PREFORMTXT_ON != rHTMLWrt.m_nLastParaToken);
+                    if (!rHTMLWrt.mbReqIF)
+                    {
+                        // if a paragraph's last character is a hard line break
+                        // then we need to add an extra <br>
+                        // because browsers like Mozilla wouldn't add a line for the next paragraph
+                        bWriteBreak = (0x0a == c) &&
+                                      (HtmlTokenId::PREFORMTXT_ON != rHTMLWrt.m_nLastParaToken);
+                    }
                 }
             }
         }
