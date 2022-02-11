@@ -24,6 +24,7 @@
 #include "calbck.hxx"
 #include "nodeoffset.hxx"
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
 #include <tools/solar.h>
@@ -38,7 +39,6 @@ class SwRootFrame;
 class SvNumberFormatter;
 class IDocumentRedlineAccess;
 class SwGetRefField;
-namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::uno { class Any; }
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;

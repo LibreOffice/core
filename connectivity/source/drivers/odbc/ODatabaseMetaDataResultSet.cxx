@@ -47,7 +47,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(OConnection* _pConnection
     ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
 
     ,m_aStatementHandle(_pConnection->createStatementHandle())
-    ,m_aStatement(nullptr)
     ,m_pConnection(_pConnection)
     ,m_nTextEncoding(_pConnection->getTextEncoding())
     ,m_nRowPos(-1)
@@ -84,7 +83,7 @@ void ODatabaseMetaDataResultSet::disposing()
 
     m_pConnection->freeStatementHandle(m_aStatementHandle);
 
-    m_aStatement    = nullptr;
+    m_aStatement.clear();
     m_xMetaData.clear();
     m_pConnection.clear();
 }
