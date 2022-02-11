@@ -33,6 +33,24 @@
       "message": "I suppose we need to rename this compat setting in the UI 😊",
       "revId": "a5d56c2dbdc04060918d919dfc485b63b21d8c74",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d71b6336_18ecf59e",
+        "filename": "sw/source/core/layout/paintfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 5366,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-11T08:40:22Z",
+      "side": 1,
+      "message": "Yes, this is more general now, something like \"word-style table / paragraph borders\". But I can\u0027t find TABLE_ROW_KEEP in sw/source/ui/config/optcomp.cxx, so perhaps we don\u0027t have a UI for this in the first place.",
+      "parentUuid": "2647170b_81a7d059",
+      "revId": "a5d56c2dbdc04060918d919dfc485b63b21d8c74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
