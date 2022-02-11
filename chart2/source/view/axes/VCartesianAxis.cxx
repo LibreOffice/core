@@ -81,15 +81,20 @@ static void lcl_ResizeTextShapeToFitAvailableSpace( SvxShapeText& rShape2DText,
                                              const tAnySequence& rPropValues,
                                              const bool bIsHorizontalAxis )
 {
-    const sal_Int32 nFullSize = bIsHorizontalAxis ? rAxisLabelProperties.m_aFontReferenceSize.Height : rAxisLabelProperties.m_aFontReferenceSize.Width;
+    bool bTextVertical = rAxisLabelProperties.m_fRotationAngleDegree == 90.0 || rAxisLabelProperties.m_fRotationAngleDegree == 270.0;
+    bool bIsDirectionVertical = bIsHorizontalAxis && bTextVertical;
+    const sal_Int32 nFullSize = bIsDirectionVertical ? rAxisLabelProperties.m_aFontReferenceSize.Height : rAxisLabelProperties.m_aFontReferenceSize.Width;
 
     if( !nFullSize || !rLabel.getLength() )
         return;
 
-    sal_Int32 nMaxLabelsSize = bIsHorizontalAxis ? rAxisLabelProperties.m_aMaximumSpaceForLabels.Height : rAxisLabelProperties.m_aMaximumSpaceForLabels.Width;
     const sal_Int32 nAvgCharWidth = rShape2DText.getSize().Width / rLabel.getLength();
-    const sal_Int32 nTextSize = bIsHorizontalAxis ? ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.m_fRotationAngleDegree).Height :
-                                                    ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.m_fRotationAngleDegree).Width;
+
+    sal_Int32 nMaxLabelsSize = bIsDirectionVertical ? rAxisLabelProperties.m_aMaximumSpaceForLabels.Height : rAxisLabelProperties.m_aMaximumSpaceForLabels.Width;
+
+    awt::Size aSizeAfterRotation = ShapeFactory::getSizeAfterRotation(rShape2DText, rAxisLabelProperties.m_fRotationAngleDegree);
+
+    const sal_Int32 nTextSize = bIsDirectionVertical ? aSizeAfterRotation.Height : aSizeAfterRotation.Width;
 
     if( !nAvgCharWidth )
         return;
@@ -857,10 +862,12 @@ bool VCartesianAxis::createTextShapes(
 
         //create single label
         if(!pTickInfo->xTextShape.is())
+        {
             pTickInfo->xTextShape = createSingleLabel( xTarget
                                     , aAnchorScreenPosition2D, aLabel
                                     , rAxisLabelProperties, m_aAxisProperties
                                     , aPropNames, aPropValues, bIsHorizontalAxis );
+        }
         if(!pTickInfo->xTextShape.is())
             continue;
 
@@ -1836,12 +1843,12 @@ void VCartesianAxis::createShapes()
     if( !prepareShapeCreation() )
         return;
 
-    std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
-    TickFactory2D* pTickFactory2D = apTickFactory2D.get();
-
     //create line shapes
     if(m_nDimension==2)
     {
+        std::unique_ptr<TickFactory2D> apTickFactory2D(createTickFactory2D()); // throws on failure
+        TickFactory2D* pTickFactory2D = apTickFactory2D.get();
+
         //create extra long ticks to separate complex categories (create them only there where the labels are)
         if( isComplexCategoryAxis() )
         {
