@@ -219,7 +219,7 @@ RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Progid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\ProgID";
-    Value = "LibreOffice.CalcDocument.1";
+    Value = "CollaboraOffice.CalcDocument.1";
 End
 
 RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Programmable
@@ -253,7 +253,7 @@ RegistryItem gid_Regitem_Clsid__7fa8ae11_B3e3_4d88_Aabf_255526cd1ce8__Versionind
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "CLSID\{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}\VersionIndependentProgID";
-    Value = "LibreOffice.CalcDocument.1";
+    Value = "CollaboraOffice.CalcDocument.1";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6
@@ -282,7 +282,7 @@ RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "soffice.StarCalcDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_6_FriendlyTypeName
@@ -395,7 +395,7 @@ RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_AppUserModelID
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = "soffice.StarCalcTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalctemplate_6_FriendlyTypeName
@@ -614,7 +614,7 @@ End
 RegistryItem gid_Regitem_CalcDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.CalcDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -622,7 +622,7 @@ RegistryItem gid_Regitem__Ods
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".ods";
-    Value = "LibreOffice.CalcDocument.1";
+    Value = "CollaboraOffice.CalcDocument.1";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_ods
@@ -630,7 +630,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Name = ".ods";
-    Value = "LibreOffice.CalcDocument.1";
+    Value = "CollaboraOffice.CalcDocument.1";
     Styles = ();
 End
 
@@ -639,7 +639,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Name = "application/vnd.oasis.opendocument.spreadsheet";
-    Value = "LibreOffice.CalcDocument.1";
+    Value = "CollaboraOffice.CalcDocument.1";
     Styles = ();
 End
 
@@ -662,7 +662,7 @@ End
 RegistryItem gid_Regitem_Ods_Openoffice_Calcdocument_1_Shellnew
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = ".ods\LibreOffice.CalcDocument.1\ShellNew";
+    Subkey = ".ods\CollaboraOffice.CalcDocument.1\ShellNew";
     Name = "FileName";
     Value = "<progpath>\share\template\shellnew\soffice.ods";
 End
@@ -670,43 +670,43 @@ End
 RegistryItem gid_Regitem_Openoffice_Calcdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument\CurVer";
-    Value = "LibreOffice.CalcDocument.1";
+    Subkey = "CollaboraOffice.CalcDocument\CurVer";
+    Value = "CollaboraOffice.CalcDocument.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1";
+    Subkey = "CollaboraOffice.CalcDocument.1";
     REG_VALUE_LNG(OO_CALC)
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\CLSID";
+    Subkey = "CollaboraOffice.CalcDocument.1\CLSID";
     Value = "{7FA8AE11-B3E3-4D88-AABF-255526CD1CE8}";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\DefaultIcon";
+    Subkey = "CollaboraOffice.CalcDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.bin,3";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1";
+    Subkey = "CollaboraOffice.CalcDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1";
+    Subkey = "CollaboraOffice.CalcDocument.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_CALC)
 End
@@ -715,7 +715,7 @@ End
 RegistryItem gid_Regitem_ods_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.CalcDocument.1";
+    Subkey = "CollaboraOffice.CalcDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -732,62 +732,62 @@ End
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\Insertable";
+    Subkey = "CollaboraOffice.CalcDocument.1\Insertable";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\protocol\StdFileEditing\server";
+    Subkey = "CollaboraOffice.CalcDocument.1\protocol\StdFileEditing\server";
     Value = "<progpath>\program\soffice.exe";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb_0
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\protocol\StdFileEditing\verb\0";
+    Subkey = "CollaboraOffice.CalcDocument.1\protocol\StdFileEditing\verb\0";
     Value = "&Edit";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb__1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\protocol\StdFileEditing\verb\-1";
+    Subkey = "CollaboraOffice.CalcDocument.1\protocol\StdFileEditing\verb\-1";
     Value = "&Show";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Protocol_Stdfileediting_Verb__2
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\protocol\StdFileEditing\verb\-2";
+    Subkey = "CollaboraOffice.CalcDocument.1\protocol\StdFileEditing\verb\-2";
     Value = "&Open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\shell";
+    Subkey = "CollaboraOffice.CalcDocument.1\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\shell\new";
+    Subkey = "CollaboraOffice.CalcDocument.1\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\shell\new\command";
+    Subkey = "CollaboraOffice.CalcDocument.1\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\shell\open\command";
+    Subkey = "CollaboraOffice.CalcDocument.1\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
     Styles = ();
 End
@@ -795,14 +795,14 @@ End
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\shell\print\command";
+    Subkey = "CollaboraOffice.CalcDocument.1\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calcdocument_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcDocument.1\shell\printto\command";
+    Subkey = "CollaboraOffice.CalcDocument.1\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
@@ -827,7 +827,7 @@ RegistryItem gid_Regitem__Fods
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
     Subkey = ".fods";
-    Value = "LibreOffice.CalcDocument.1";
+    Value = "CollaboraOffice.CalcDocument.1";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fods
@@ -835,7 +835,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Root;
     Name = ".fods";
-    Value = "LibreOffice.CalcDocument.1";
+    Value = "CollaboraOffice.CalcDocument.1";
 End
 
 RegistryItem gid_Regitem_Fods_Contenttype
@@ -880,7 +880,7 @@ End
 RegistryItem gid_Regitem_CalcTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.CalcTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -888,7 +888,7 @@ RegistryItem gid_Regitem_Ots
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".ots";
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Value = "LibreOffice.CalcTemplate.1";
+    Value = "CollaboraOffice.CalcTemplate.1";
 End
 
 RegistryItem gid_Regitem_Ots_Contenttype
@@ -901,14 +901,14 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1";
+    Subkey = "CollaboraOffice.CalcTemplate.1";
     ModuleID = gid_Module_Prg_Calc_Bin;
     REG_VALUE_LNG(OO_CALC_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1\DefaultIcon";
+    Subkey = "CollaboraOffice.CalcTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "<progpath>\program\soffice.bin,4";
 End
@@ -916,15 +916,15 @@ End
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcTemplate.1";
+    Subkey = "CollaboraOffice.CalcTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Calc";
+    Value = "Collabora.CollaboraOffice.Calc";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Subkey = "LibreOffice.CalcTemplate.1";
+    Subkey = "CollaboraOffice.CalcTemplate.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_CALC_TEMPLATE)
 End
@@ -933,7 +933,7 @@ End
 RegistryItem gid_Regitem_ots_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.CalcTemplate.1";
+    Subkey = "CollaboraOffice.CalcTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -949,42 +949,42 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1\shell";
+    Subkey = "CollaboraOffice.CalcTemplate.1\shell";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "new";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1\shell\new";
+    Subkey = "CollaboraOffice.CalcTemplate.1\shell\new";
     ModuleID = gid_Module_Prg_Calc_Bin;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1\shell\new\command";
+    Subkey = "CollaboraOffice.CalcTemplate.1\shell\new\command";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1\shell\open\command";
+    Subkey = "CollaboraOffice.CalcTemplate.1\shell\open\command";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1\shell\print\command";
+    Subkey = "CollaboraOffice.CalcTemplate.1\shell\print\command";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Calctemplate_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.CalcTemplate.1\shell\printto\command";
+    Subkey = "CollaboraOffice.CalcTemplate.1\shell\printto\command";
     ModuleID = gid_Module_Prg_Calc_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -996,7 +996,7 @@ RegistryItem gid_Regitem_OpenOffice_ODS_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".ods\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Name = "LibreOffice.CalcDocument.1";
+    Name = "CollaboraOffice.CalcDocument.1";
     Value = " ";
 End
 
@@ -1005,7 +1005,7 @@ RegistryItem gid_Regitem_OpenOffice_OTS_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".ots\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Calc_Bin;
-    Name = "LibreOffice.CalcTemplate.1";
+    Name = "CollaboraOffice.CalcTemplate.1";
     Value = " ";
 End
 

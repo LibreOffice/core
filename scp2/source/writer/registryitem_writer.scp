@@ -219,7 +219,7 @@ RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Progid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "CLSID\{F616B81F-7BB8-4F22-B8A5-47428D59F8AD}\ProgID";
-    Value = "LibreOffice.WriterDocument.1";
+    Value = "CollaboraOffice.WriterDocument.1";
 End
 
 RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Programmable
@@ -253,7 +253,7 @@ RegistryItem gid_Regitem_Clsid__F616b81f_7bb8_4f22_B8a5_47428d59f8ad__Versionind
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "CLSID\{F616B81F-7BB8-4F22-B8A5-47428D59F8AD}\VersionIndependentProgID";
-    Value = "LibreOffice.WriterDocument.1";
+    Value = "CollaboraOffice.WriterDocument.1";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6
@@ -282,7 +282,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_6_FriendlyTypeName
@@ -402,7 +402,7 @@ RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterGlobalDocument.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_6_FriendlyTypeName
@@ -488,7 +488,7 @@ RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_AppUserModelID
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = "soffice.StarWriterTemplate.6";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_6_FriendlyTypeName
@@ -761,7 +761,7 @@ End
 RegistryItem gid_Regitem_WriterDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.WriterDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -769,7 +769,7 @@ RegistryItem gid_Regitem__Odt
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".odt";
-    Value = "LibreOffice.WriterDocument.1";
+    Value = "CollaboraOffice.WriterDocument.1";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_odt
@@ -777,7 +777,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".odt";
-    Value = "LibreOffice.WriterDocument.1";
+    Value = "CollaboraOffice.WriterDocument.1";
     Styles = ();
 End
 
@@ -786,7 +786,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\MimeAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = "application/vnd.oasis.opendocument.text";
-    Value = "LibreOffice.WriterDocument.1";
+    Value = "CollaboraOffice.WriterDocument.1";
     Styles = ();
 End
 
@@ -809,7 +809,7 @@ End
 RegistryItem gid_Regitem_Odt_Openoffice_Writerdocument_1_Shellnew
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = ".odt\LibreOffice.WriterDocument.1\ShellNew";
+    Subkey = ".odt\CollaboraOffice.WriterDocument.1\ShellNew";
     Name = "FileName";
     Value = "<progpath>\share\template\shellnew\soffice.odt";
 End
@@ -817,43 +817,43 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument\CurVer";
-    Value = "LibreOffice.WriterDocument.1";
+    Subkey = "CollaboraOffice.WriterDocument\CurVer";
+    Value = "CollaboraOffice.WriterDocument.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1";
+    Subkey = "CollaboraOffice.WriterDocument.1";
     REG_VALUE_LNG(OO_WRITER)
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Clsid
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\CLSID";
+    Subkey = "CollaboraOffice.WriterDocument.1\CLSID";
     Value = "{F616B81F-7BB8-4F22-B8A5-47428D59F8AD}";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\DefaultIcon";
+    Subkey = "CollaboraOffice.WriterDocument.1\DefaultIcon";
     Value = "<progpath>\program\soffice.bin,1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1";
+    Subkey = "CollaboraOffice.WriterDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1";
+    Subkey = "CollaboraOffice.WriterDocument.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_WRITER)
 End
@@ -861,14 +861,14 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Insertable
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\Insertable";
+    Subkey = "CollaboraOffice.WriterDocument.1\Insertable";
 End
 
 #ifdef _MSC_VER
 RegistryItem gid_Regitem_odt_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.WriterDocument.1";
+    Subkey = "CollaboraOffice.WriterDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -885,56 +885,56 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Protocol_Stdfileediting_Server
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\protocol\StdFileEditing\server";
+    Subkey = "CollaboraOffice.WriterDocument.1\protocol\StdFileEditing\server";
     Value = "<progpath>\program\soffice.exe";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Protocol_Stdfileediting_Verb_0
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\protocol\StdFileEditing\verb\0";
+    Subkey = "CollaboraOffice.WriterDocument.1\protocol\StdFileEditing\verb\0";
     Value = "&Edit";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Protocol_Stdfileediting_Verb__1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\protocol\StdFileEditing\verb\-1";
+    Subkey = "CollaboraOffice.WriterDocument.1\protocol\StdFileEditing\verb\-1";
     Value = "&Show";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Protocol_Stdfileediting_Verb__2
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\protocol\StdFileEditing\verb\-2";
+    Subkey = "CollaboraOffice.WriterDocument.1\protocol\StdFileEditing\verb\-2";
     Value = "&Open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\shell";
+    Subkey = "CollaboraOffice.WriterDocument.1\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\shell\new";
+    Subkey = "CollaboraOffice.WriterDocument.1\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\shell\new\command";
+    Subkey = "CollaboraOffice.WriterDocument.1\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\shell\open\command";
+    Subkey = "CollaboraOffice.WriterDocument.1\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
     Styles = ();
 End
@@ -942,14 +942,14 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\shell\print\command";
+    Subkey = "CollaboraOffice.WriterDocument.1\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerdocument_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterDocument.1\shell\printto\command";
+    Subkey = "CollaboraOffice.WriterDocument.1\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
@@ -957,21 +957,21 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerwebdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterWebDocument\CurVer";
-    Value = "LibreOffice.WriterWebDocument.1";
+    Subkey = "CollaboraOffice.WriterWebDocument\CurVer";
+    Value = "CollaboraOffice.WriterWebDocument.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerwebdocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterWebDocument.1";
+    Subkey = "CollaboraOffice.WriterWebDocument.1";
     REG_VALUE_LNG(OO_WRITER)
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerwebdocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterWebDocument.1\shell\open\command";
+    Subkey = "CollaboraOffice.WriterWebDocument.1\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
     Styles = ();
 End
@@ -997,7 +997,7 @@ RegistryItem gid_Regitem__Fodt
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".fodt";
-    Value = "LibreOffice.WriterDocument.1";
+    Value = "CollaboraOffice.WriterDocument.1";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_fodt
@@ -1005,7 +1005,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Root;
     Name = ".fodt";
-    Value = "LibreOffice.WriterDocument.1";
+    Value = "CollaboraOffice.WriterDocument.1";
 End
 
 RegistryItem gid_Regitem_Fodt_Contenttype
@@ -1050,7 +1050,7 @@ End
 RegistryItem gid_Regitem_WriterTemplate_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.WriterTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -1058,7 +1058,7 @@ RegistryItem gid_Regitem_Ott
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".ott";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "LibreOffice.WriterTemplate.1";
+    Value = "CollaboraOffice.WriterTemplate.1";
 End
 
 RegistryItem gid_Regitem_Ott_Contenttype
@@ -1079,14 +1079,14 @@ End
 
 RegistryItem gid_Regitem_Soffice_Starwritertemplate_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterTemplate.1";
+    Subkey = "CollaboraOffice.WriterTemplate.1";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     REG_VALUE_LNG(OO_WRITER_TEMPLATE)
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterTemplate.1\DefaultIcon";
+    Subkey = "CollaboraOffice.WriterTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "<progpath>\program\soffice.bin,2";
 End
@@ -1094,15 +1094,15 @@ End
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterTemplate.1";
+    Subkey = "CollaboraOffice.WriterTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterTemplate.1";
+    Subkey = "CollaboraOffice.WriterTemplate.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_WRITER_TEMPLATE)
 End
@@ -1111,7 +1111,7 @@ End
 RegistryItem gid_Regitem_ott_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.WriterTemplate.1";
+    Subkey = "CollaboraOffice.WriterTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -1128,41 +1128,41 @@ End
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterTemplate.1\shell";
+    Subkey = "CollaboraOffice.WriterTemplate.1\shell";
     Value = "new";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterTemplate.1\shell\new";
+    Subkey = "CollaboraOffice.WriterTemplate.1\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterTemplate.1\shell\new\command";
+    Subkey = "CollaboraOffice.WriterTemplate.1\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterTemplate.1\shell\open\command";
+    Subkey = "CollaboraOffice.WriterTemplate.1\shell\open\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterTemplate.1\shell\print\command";
+    Subkey = "CollaboraOffice.WriterTemplate.1\shell\print\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writertemplate_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterTemplate.1\shell\printto\command";
+    Subkey = "CollaboraOffice.WriterTemplate.1\shell\printto\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -1193,7 +1193,7 @@ End
 RegistryItem gid_Regitem_WriterGlobalDocument_1_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -1201,7 +1201,7 @@ RegistryItem gid_Regitem_Odm
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".odm";
-    Value = "LibreOffice.WriterGlobalDocument.1";
+    Value = "CollaboraOffice.WriterGlobalDocument.1";
 End
 
 RegistryItem gid_Regitem_Odm_Contenttype
@@ -1222,21 +1222,21 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument\CurVer";
+    Subkey = "CollaboraOffice.WriterGlobalDocument\CurVer";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "LibreOffice.WriterGlobalDocument.1";
+    Value = "CollaboraOffice.WriterGlobalDocument.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     REG_VALUE_LNG(OO_MASTERDOC)
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\DefaultIcon";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "<progpath>\program\soffice.bin,9";
 End
@@ -1244,15 +1244,15 @@ End
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterGlobalDocument.1";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterGlobalDocument.1";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_MASTERDOC)
 End
@@ -1261,7 +1261,7 @@ End
 RegistryItem gid_Regitem_odm_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.WriterGlobalDocument.1";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -1277,42 +1277,42 @@ End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\shell";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shell";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\shell\new";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shell\new";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\shell\new\command";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shell\new\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\shell\open\command";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shell\open\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\shell\print\command";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shell\print\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_Writerglobaldocument_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterGlobalDocument.1\shell\printto\command";
+    Subkey = "CollaboraOffice.WriterGlobalDocument.1\shell\printto\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -1343,7 +1343,7 @@ End
 RegistryItem gid_Regitem_WriterWebTemplate_Shellex_PropertySheetHandlers_MyPropSheet1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterWebTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\shellex\PropertySheetHandlers\MyPropSheet1";
     Value = "{63542C48-9552-494A-84F7-73AA6A7C99C1}";
 End
 
@@ -1351,7 +1351,7 @@ RegistryItem gid_Regitem_Oth
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Subkey = ".oth";
-    Value = "LibreOffice.WriterWebTemplate.1";
+    Value = "CollaboraOffice.WriterWebTemplate.1";
 End
 
 RegistryItem gid_Regitem_Oth_Contenttype
@@ -1372,21 +1372,21 @@ End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate\CurVer";
+    Subkey = "CollaboraOffice.WriterWebTemplate\CurVer";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Value = "LibreOffice.WriterWebTemplate.1";
+    Value = "CollaboraOffice.WriterWebTemplate.1";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     REG_VALUE_LNG(OO_WEBDOC)
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1\DefaultIcon";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\DefaultIcon";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "<progpath>\program\soffice.bin,10";
 End
@@ -1394,57 +1394,57 @@ End
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_AppUserModelID
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterWebTemplate.1";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1";
     Name = "AppUserModelID";
-    Value = "TheDocumentFoundation.LibreOffice.Writer";
+    Value = "Collabora.CollaboraOffice.Writer";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_FriendlyTypeName
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Subkey = "LibreOffice.WriterWebTemplate.1";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1";
     Name = "FriendlyTypeName";
     REG_VALUE_LNG(OO_WEBDOC)
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1\shell";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\shell";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1\shell\new";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\shell\new";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1\shell\new\command";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\shell\new\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1\shell\open\command";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\shell\open\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1\shell\print\command";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\shell\print\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Openoffice_WriterWebTemplate_1_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "LibreOffice.WriterWebTemplate.1\shell\printto\command";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1\shell\printto\command";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -1453,7 +1453,7 @@ End
 RegistryItem gid_Regitem_oth_FullDetails
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Winexplorerext;
-    Subkey = "LibreOffice.WriterWebTemplate.1";
+    Subkey = "CollaboraOffice.WriterWebTemplate.1";
     Name = "FullDetails";
     Value = "prop:System.PropGroup.Description;System.Title;System.Author;System.Subject;System.Keywords;System.Comment;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemType;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;System.ComputerName";
 End
@@ -1474,7 +1474,7 @@ RegistryItem gid_Regitem_OpenOffice_ODT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odt\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "LibreOffice.WriterDocument.1";
+    Name = "CollaboraOffice.WriterDocument.1";
     Value = " ";
 End
 
@@ -1483,7 +1483,7 @@ RegistryItem gid_Regitem_OpenOffice_OTT_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".ott\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "LibreOffice.WriterTemplate.1";
+    Name = "CollaboraOffice.WriterTemplate.1";
     Value = " ";
 End
 
@@ -1492,7 +1492,7 @@ RegistryItem gid_Regitem_OpenOffice_OTH_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".oth\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "LibreOffice.WriterWebTemplate.1";
+    Name = "CollaboraOffice.WriterWebTemplate.1";
     Value = " ";
 End
 
@@ -1501,7 +1501,7 @@ RegistryItem gid_Regitem_OpenOffice_ODM_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".odm\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "LibreOffice.WriterGlobalDocument.1";
+    Name = "CollaboraOffice.WriterGlobalDocument.1";
     Value = " ";
 End
 
@@ -1573,7 +1573,7 @@ RegistryItem gid_Regitem_OpenOffice_WPS_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".wps\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "LibreOffice.WriterDocument.1";
+    Name = "CollaboraOffice.WriterDocument.1";
     Value = " ";
 End
 
@@ -1582,7 +1582,7 @@ RegistryItem gid_Regitem_OpenOffice_WRI_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".wri\OpenWithProgIDs";
     ModuleID = gid_Module_Prg_Wrt_Bin;
-    Name = "LibreOffice.WriterDocument.1";
+    Name = "CollaboraOffice.WriterDocument.1";
     Value = " ";
 End
 
@@ -1610,7 +1610,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".ott";
-    Value = "LibreOffice.WriterTemplate.1";
+    Value = "CollaboraOffice.WriterTemplate.1";
     Styles = ();
 End
 
@@ -1691,7 +1691,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".oth";
-    Value = "LibreOffice.WriterWebTemplate.1";
+    Value = "CollaboraOffice.WriterWebTemplate.1";
     Styles = ();
 End
 
@@ -1700,7 +1700,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Prg_Wrt_Bin;
     Name = ".odm";
-    Value = "LibreOffice.WriterGlobalDocument.1";
+    Value = "CollaboraOffice.WriterGlobalDocument.1";
     Styles = ();
 End
 
