@@ -196,10 +196,10 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
         // but these use different SdrModels. It was possible before to completely
         // 'change' a SdrObject to another SdrModel (including dangerous MigrateItemPool
         // stuff), but is no longer. We need to Clone the SdrObject to the target model
-        // and ::Create a new SvxShape (set SdrObject there, take obver values, ...)
+        // and ::Create a new SvxShape (set SdrObject there, take over values, ...)
         SdrObject* pClonedSdrShape(pObj->CloneSdrObject(mpPage->getSdrModelFromSdrPage()));
         pObj->setUnoShape(nullptr);
-        pClonedSdrShape->setUnoShape(xShape);
+        pClonedSdrShape->setUnoShape(pShape);
         // pShape->InvalidateSdrObject();
         // pShape->Create(pClonedSdrShape, this);
         SdrObject::Free(pObj);
@@ -219,13 +219,13 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
         if(bNeededToClone)
         {
             // TTTT Unfortunately in SdrObject::SetPage (see there) the
-            // xShape/UnoShape at the newly cloned SDrObject is *removed* again,
+            // xShape/UnoShape at the newly cloned SdrObject is *removed* again,
             // so re-set it here, the caller *may need it* (e.g. Writer)
             uno::Reference< uno::XInterface > xShapeCheck(pObj->getWeakUnoShape());
 
             if( !xShapeCheck.is() )
             {
-                pObj->setUnoShape(xShape);
+                pObj->setUnoShape(pShape);
             }
         }
     }

@@ -457,7 +457,9 @@ OCustomShape::OCustomShape(
 :   SdrObjCustomShape(rSdrModel)
     ,OObjectBase(_xComponent)
 {
-    setUnoShape( uno::Reference< drawing::XShape >(_xComponent,uno::UNO_QUERY_THROW) );
+    auto pShape = dynamic_cast<SvxShape*>(_xComponent.get());
+    assert(pShape);
+    setUnoShape( pShape );
     m_bIsListening = true;
 }
 
@@ -562,7 +564,7 @@ uno::Reference< drawing::XShape > OCustomShape::getUnoShape()
     return xShape;
 }
 
-void OCustomShape::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
+void OCustomShape::setUnoShape( const rtl::Reference<SvxShape>& rxUnoShape )
 {
     SdrObjCustomShape::setUnoShape( rxUnoShape );
     releaseUnoShape();
@@ -611,7 +613,9 @@ OUnoObject::OUnoObject(
     // tdf#119067
     ,m_bSetDefaultLabel(false)
 {
-    setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
+    auto pShape = dynamic_cast<SvxShape*>(_xComponent.get());
+    assert(pShape);
+    setUnoShape ( pShape );
 
     if ( !rModelName.isEmpty() )
         impl_initializeModel_nothrow();
@@ -893,7 +897,7 @@ uno::Reference< drawing::XShape > OUnoObject::getUnoShape()
     return OObjectBase::getUnoShapeOf( *this );
 }
 
-void OUnoObject::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
+void OUnoObject::setUnoShape( const rtl::Reference<SvxShape>& rxUnoShape )
 {
     SdrUnoObj::setUnoShape( rxUnoShape );
     releaseUnoShape();
@@ -914,7 +918,9 @@ OOle2Obj::OOle2Obj(
     ,m_nType(_nType)
     ,m_bOnlyOnce(true)
 {
-    setUnoShape( uno::Reference< drawing::XShape >( _xComponent, uno::UNO_QUERY_THROW ) );
+    auto pShape = dynamic_cast<SvxShape*>( _xComponent.get() );
+    assert(pShape);
+    setUnoShape( pShape );
     m_bIsListening = true;
 }
 
@@ -1089,7 +1095,7 @@ uno::Reference< drawing::XShape > OOle2Obj::getUnoShape()
     return xShape;
 }
 
-void OOle2Obj::setUnoShape( const uno::Reference< drawing::XShape >& rxUnoShape )
+void OOle2Obj::setUnoShape( const rtl::Reference<SvxShape>& rxUnoShape )
 {
     SdrOle2Obj::setUnoShape( rxUnoShape );
     releaseUnoShape();

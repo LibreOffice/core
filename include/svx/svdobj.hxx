@@ -869,7 +869,7 @@ public:
     ///
     /// The implementation _must_ call the same method of its parent
     /// class (preferably as the first step)!
-    virtual void setUnoShape( const css::uno::Reference< css::drawing::XShape >& _rxUnoShape );
+    virtual void setUnoShape( const rtl::Reference< SvxShape >& _rxUnoShape );
 
     const css::uno::WeakReference< css::drawing::XShape >& getWeakUnoShape() const { return maWeakUnoShape; }
 
