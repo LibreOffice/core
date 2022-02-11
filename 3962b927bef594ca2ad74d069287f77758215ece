@@ -103,6 +103,24 @@
       "parentUuid": "a578ac47_1f6f1e46",
       "revId": "3962b927bef594ca2ad74d069287f77758215ece",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40a78cac_8273d9a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-11T18:32:27Z",
+      "side": 1,
+      "message": "Using new ref\u003d in LC_CTYPE should not be done if the locale has a distinct LC_FORMAT node defining FormatElement nodes. Reason is that i18npool/source/localedata/LocaleNode.cxx implements some checks on used separators.\n\nSo rather change the TimeAM and TimePM elements.",
+      "parentUuid": "cef71088_9ced6fa6",
+      "revId": "3962b927bef594ca2ad74d069287f77758215ece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
