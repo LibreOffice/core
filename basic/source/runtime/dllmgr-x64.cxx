@@ -512,8 +512,6 @@ ErrCode call(
     // We fake all calls as being to a varargs function,
     // as this means any floating-point argument among the first four
     // ones will end up in a XMM register where the callee expects it.
-    sal_Int32 (*proc_i)(double d, ...) = reinterpret_cast<sal_Int32 (*)(double, ...)>(proc.proc);
-    double (*proc_d)(double d, ...) = reinterpret_cast<double (*)(double, ...)>(proc.proc);
 
     sal_Int64 iRetVal = 0;
     double dRetVal = 0.0;
@@ -527,55 +525,21 @@ ErrCode call(
     case SbxBOOL:
     case SbxBYTE:
         {
-            auto const st = stack.data();
-            iRetVal =
-                proc_i(*reinterpret_cast<double *>(st + 0),
-                       *reinterpret_cast<double *>(st + 1*8),
-                       *reinterpret_cast<double *>(st + 2*8),
-                       *reinterpret_cast<double *>(st + 3*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 4*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 5*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 6*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 7*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 8*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 9*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 10*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 11*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 12*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 13*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 14*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 15*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 16*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 17*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 18*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 19*8));
+            auto p = reinterpret_cast<sal_Int64 (*)(...)>(proc.proc);
+            auto const st = reinterpret_cast<double *>(stack.data());
+            iRetVal
+                = p(st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7], st[8], st[9], st[10],
+                    st[11], st[12], st[13], st[14], st[15], st[16], st[17], st[18], st[19]);
             break;
         }
     case SbxSINGLE:
     case SbxDOUBLE:
         {
-            auto const st = stack.data();
-            dRetVal =
-                proc_d(*reinterpret_cast<double *>(st + 0),
-                       *reinterpret_cast<double *>(st + 1*8),
-                       *reinterpret_cast<double *>(st + 2*8),
-                       *reinterpret_cast<double *>(st + 3*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 4*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 5*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 6*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 7*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 8*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 9*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 10*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 11*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 12*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 13*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 14*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 15*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 16*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 17*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 18*8),
-                       *reinterpret_cast<sal_uInt64 *>(st + 19*8));
+            auto p = reinterpret_cast<double (*)(...)>(proc.proc);
+            auto const st = reinterpret_cast<double*>(stack.data());
+            dRetVal
+                = p(st[0], st[1], st[2], st[3], st[4], st[5], st[6], st[7], st[8], st[9], st[10],
+                    st[11], st[12], st[13], st[14], st[15], st[16], st[17], st[18], st[19]);
             break;
         }
     default:
