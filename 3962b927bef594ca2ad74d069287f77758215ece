@@ -85,6 +85,24 @@
       "message": "It doesn\u0027t fail if I replace all the LC_CTYPE block with \u003cLC_CTYPE ref\u003d\"es_ES\"/\u003e\nAdolfo: would it be ok for es_AR and the other locales you indicated or should we just focus on TimeAM and TimePM ?",
       "revId": "3962b927bef594ca2ad74d069287f77758215ece",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "919a278d_8cc52c52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-11T18:26:50Z",
+      "side": 1,
+      "message": "The ref\u003d\"...\" mechanism works only for nodes/elements for which it is implemented in i18npool/source/localedata/LocaleNode.cxx\nThese so far are only LC_* nodes and Calendar\u0027s DaysOfWeek, MonthsOfYear, GenitiveMonths, PartitiveMonths and Eras.",
+      "parentUuid": "a578ac47_1f6f1e46",
+      "revId": "3962b927bef594ca2ad74d069287f77758215ece",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
