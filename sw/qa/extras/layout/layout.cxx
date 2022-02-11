@@ -3017,6 +3017,62 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607)
                 "Portion", "Fax:");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTableCellInvalidate)
+{
+    discardDumpedLayout();
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    OUString const pName("table_cell_overlap.fodt");
+
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + pName);
+
+    // note: must set Hidden property, so that SfxFrameViewWindow_Impl::Resize()
+    // does *not* forward initial VCL Window Resize and thereby triggers a
+    // layout which does not happen on soffice --convert-to pdf.
+    std::vector<beans::PropertyValue> aFilterOptions = {
+        { beans::PropertyValue("Hidden", -1, uno::Any(true), beans::PropertyState_DIRECT_VALUE) },
+    };
+
+    std::cout << pName << ":\n";
+
+    // inline the loading because currently properties can't be passed...
+    mxComponent = loadFromDesktop(url, "com.sun.star.text.TextDocument",
+                                  comphelper::containerToSequence(aFilterOptions));
+    uno::Sequence<beans::PropertyValue> props(comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer_pdf_Export")) },
+    }));
+    utl::TempFile aTempFile;
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    xStorable->storeToURL(aTempFile.GetURL(), props);
+
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // somehow these 2 rows overlapped in the PDF unless CalcLayout() runs
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "top", "6969");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/infos/bounds", "height", "231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/infos/bounds", "top",
+                "6969");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/infos/bounds", "height",
+                "231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/txt[1]/infos/bounds",
+                "top", "6969");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[1]/cell[1]/txt[1]/infos/bounds",
+                "height", "231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "top", "7200");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/infos/bounds", "height", "231");
+    // this was 6969, causing the overlap
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/infos/bounds", "top",
+                "7200");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/infos/bounds", "height",
+                "231");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/txt[1]/infos/bounds",
+                "top", "7200");
+    assertXPath(pXmlDoc, "/root/page[1]/anchored/fly/tab[1]/row[2]/cell[1]/txt[1]/infos/bounds",
+                "height", "231");
+
+    aTempFile.EnableKillingFile();
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf122607_regression)
 {
     discardDumpedLayout();
