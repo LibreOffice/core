@@ -89,6 +89,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "349776d4_4176f579",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-12T14:12:43Z",
+      "side": 1,
+      "message": "I copied the LC_INDEX section from oc_FR.xml which seemed to make most sense.",
+      "parentUuid": "7cba4690_23141e0b",
+      "range": {
+        "startLine": 205,
+        "startChar": 67,
+        "endLine": 205,
+        "endChar": 80
+      },
+      "revId": "3ba922bd7ffb12106462d0826bff293a81d974dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "531ee36b_e18503f0",
@@ -102,6 +126,30 @@
       "writtenOn": "2022-02-08T23:41:44Z",
       "side": 1,
       "message": "And the\nPage ... \"and the following page\"\nPage ... \"and the following pages\"\nabbreviations.",
+      "range": {
+        "startLine": 208,
+        "startChar": 0,
+        "endLine": 209,
+        "endChar": 4
+      },
+      "revId": "3ba922bd7ffb12106462d0826bff293a81d974dc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bd09cdd_e2aeb1cf",
+        "filename": "i18npool/source/localedata/data/oc_ES.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-12T14:12:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "531ee36b_e18503f0",
       "range": {
         "startLine": 208,
         "startChar": 0,
