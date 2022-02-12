@@ -20,6 +20,9 @@ $(eval $(call gb_Module_add_targets,libreoffice,\
 ))
 endif
 
+build check unitcheck slowcheck subsequentcheck uicheck: \
+	$(call gb_Helper_optional,FIREBIRD,Module_firebird)
+
 # WASM_CHART change
 ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
