@@ -62,6 +62,7 @@ class SwNavigationPI final : public PanelLayout
     std::unique_ptr<weld::Menu> m_xDragModeMenu;
     std::unique_ptr<weld::Menu> m_xUpdateMenu;
     std::unique_ptr<weld::Menu> m_xInsertMenu;
+    std::unique_ptr<weld::Menu> m_xContentTypesMenu;
     std::unique_ptr<weld::Toolbar> m_xGlobalToolBox;
     std::unique_ptr<weld::SpinButton> m_xEdit;
     std::unique_ptr<weld::Widget> m_xContentBox;
@@ -104,6 +105,7 @@ class SwNavigationPI final : public PanelLayout
     DECL_LINK( DoneLink, SfxPoolItem const *, void );
     DECL_LINK( DropModeMenuSelectHdl, const OString&, void );
     DECL_LINK( HeadingsMenuSelectHdl, const OString&, void );
+    DECL_LINK( ContentTypesMenuSelectHdl, const OString&, void );
     DECL_LINK( GlobalMenuSelectHdl, const OString&, void );
     DECL_LINK( ChangePageHdl, Timer*, void );
     DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
