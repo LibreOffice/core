@@ -20,6 +20,97 @@ $(eval $(call gb_Module_add_targets,libreoffice,\
 ))
 endif
 
+build check unitcheck slowcheck subsequentcheck uicheck: \
+	$(call gb_Helper_optional,XMLSEC,Module_xmlsec) \
+	$(call gb_Helper_optional,ABW,Module_libabw) \
+	$(call gb_Helper_optional,BOOST,Module_boost) \
+	$(call gb_Helper_optional,BOX2D,Module_box2d) \
+	$(call gb_Helper_optional,BREAKPAD,Module_breakpad) \
+	$(call gb_Helper_optional,BSH,Module_beanshell) \
+	$(call gb_Helper_optional,BZIP2,Module_bzip2) \
+	$(call gb_Helper_optional,CAIRO,Module_cairo) \
+	$(call gb_Helper_optional,CDR,Module_libcdr) \
+	$(call gb_Helper_optional,OPENCL,Module_clew) \
+	$(call gb_Helper_optional,CLUCENE,Module_clucene) \
+	$(call gb_Helper_optional,LIBCMIS,Module_libcmis) \
+	$(call gb_Helper_optional,COINMP,Module_coinmp) \
+	$(call gb_Helper_optional,CPPUNIT,Module_cppunit) \
+	$(call gb_Helper_optional,CT2N,Module_ct2n) \
+	$(call gb_Helper_optional,CURL,Module_curl) \
+	Module_dtoa \
+	$(call gb_Helper_optional,EBOOK,Module_libebook) \
+	$(call gb_Helper_optional,EPM,Module_epm) \
+	$(call gb_Helper_optional,EPOXY,Module_epoxy) \
+	$(call gb_Helper_optional,EPUBGEN,Module_libepubgen) \
+	$(call gb_Helper_optional,ETONYEK,Module_libetonyek) \
+	$(call gb_Helper_optional,EXPAT,Module_expat) \
+	$(call gb_Helper_optional,FIREBIRD,Module_firebird) \
+	$(call gb_Helper_optional,FONTCONFIG,Module_fontconfig) \
+	$(call gb_Helper_optional,FREEHAND,Module_libfreehand) \
+	$(call gb_Helper_optional,FREETYPE,Module_freetype) \
+	$(call gb_Helper_optional,GLM,Module_glm) \
+	$(call gb_Helper_optional,GPGMEPP,Module_gpgmepp) \
+	$(call gb_Helper_optional,GRAPHITE,Module_graphite) \
+	$(call gb_Helper_optional,HARFBUZZ,Module_harfbuzz) \
+	$(call gb_Helper_optional,HSQLDB,Module_hsqldb) \
+	$(call gb_Helper_optional,HUNSPELL,Module_hunspell) \
+	$(call gb_Helper_optional,HYPHEN,Module_hyphen) \
+	$(call gb_Helper_optional,ICU,Module_icu) \
+	$(call gb_Helper_optional,JFREEREPORT,Module_jfreereport) \
+	$(call gb_Helper_optional,LIBJPEG_TURBO,Module_libjpeg-turbo) \
+	$(call gb_Helper_optional,LANGUAGETOOL,Module_languagetool) \
+	$(call gb_Helper_optional,LCMS2,Module_lcms2) \
+	$(call gb_Helper_optional,LIBASSUAN,Module_libassuan) \
+	$(call gb_Helper_optional,LIBATOMIC_OPS,Module_libatomic_ops) \
+	$(call gb_Helper_optional,LIBEOT,Module_libeot) \
+	$(call gb_Helper_optional,LIBEXTTEXTCAT,Module_libexttextcat) \
+	$(call gb_Helper_optional,LIBFFI,Module_libffi) \
+	$(call gb_Helper_optional,LIBGPGERROR,Module_libgpg-error) \
+	$(call gb_Helper_optional,LIBLANGTAG,Module_liblangtag) \
+	$(call gb_Helper_optional,LIBNUMBERTEXT,Module_libnumbertext) \
+	$(call gb_Helper_optional,LIBPNG,Module_libpng) \
+	$(call gb_Helper_optional,LIBWEBP,Module_libwebp) \
+	$(call gb_Helper_optional,LIBXML2,Module_libxml2) \
+	$(call gb_Helper_optional,LIBXSLT,Module_libxslt) \
+	$(call gb_Helper_optional,LPSOLVE,Module_lpsolve) \
+	$(call gb_Helper_optional,LIBTOMMATH,Module_libtommath) \
+	$(call gb_Helper_optional,LXML,Module_lxml) \
+	$(call gb_Helper_optional,MARIADB_CONNECTOR_C,Module_mariadb-connector-c) \
+	$(call gb_Helper_optional,MDDS,Module_mdds) \
+	$(call gb_Helper_optional,MDNSRESPONDER,Module_mdnsresponder) \
+	$(if $(WITH_EXTRA_EXTENSIONS),Module_misc_extensions) \
+	$(call gb_Helper_optional,MORE_FONTS,Module_more_fonts) \
+	$(call gb_Helper_optional,MSPUB,Module_libmspub) \
+	$(call gb_Helper_optional,MWAW,Module_libmwaw) \
+	$(call gb_Helper_optional,MYTHES,Module_mythes) \
+	$(call gb_Helper_optional,NSS,Module_nss) \
+	$(call gb_Helper_optional,ODFGEN,Module_libodfgen) \
+	$(call gb_Helper_optional,OPENLDAP,Module_openldap) \
+	$(call gb_Helper_optional,OPENSSL,Module_openssl) \
+	$(call gb_Helper_optional,ORCUS,Module_liborcus) \
+	$(call gb_Helper_optional,PAGEMAKER,Module_libpagemaker) \
+	$(call gb_Helper_optional,PDFIUM,Module_pdfium) \
+	$(call gb_Helper_optional,POPPLER,Module_poppler) \
+	$(call gb_Helper_optional,POSTGRESQL,Module_postgresql) \
+	$(call gb_Helper_optional,PYTHON,Module_python3) \
+	$(call gb_Helper_optional,QXP,Module_libqxp) \
+	$(call gb_Helper_optional,ZXING,Module_zxing) \
+	$(call gb_Helper_optional,REDLAND,Module_redland) \
+	$(call gb_Helper_optional,REVENGE,Module_librevenge) \
+	$(call gb_Helper_optional,RHINO,Module_rhino) \
+	$(call gb_Helper_optional,SKIA,Module_skia) \
+	$(call gb_Helper_optional,STAROFFICE,Module_libstaroffice) \
+	$(if $(filter WNT,$(OS)),Module_twain_dsm) \
+	$(call gb_Helper_optional,UCPP,Module_ucpp) \
+	$(call gb_Helper_optional,VISIO,Module_libvisio) \
+	$(call gb_Helper_optional,WPD,Module_libwpd) \
+	$(call gb_Helper_optional,WPG,Module_libwpg) \
+	$(call gb_Helper_optional,WPS,Module_libwps) \
+	$(call gb_Helper_optional,XSLTML,Module_xsltml) \
+	$(call gb_Helper_optional,ZLIB,Module_zlib) \
+	$(call gb_Helper_optional,ZMF,Module_libzmf) \
+	$(call gb_Helper_optional,CUCKOO,Module_cuckoo) \
+
 # WASM_CHART change
 ifneq ($(ENABLE_WASM_STRIP_CHART),TRUE)
 $(eval $(call gb_Module_add_moduledirs,libreoffice,\
