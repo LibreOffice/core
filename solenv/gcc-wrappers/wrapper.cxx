@@ -210,6 +210,8 @@ std::string processccargs(const std::vector<std::string>& rawargs, std::string &
             args.append("-WX");
         else if (*i == "--wrapper-print-cmdline")
             verbose = true;
+        else if(*i == "-O3")
+            args.append("-O2");
         else
         {
             size_t pos = i->find("=");
