@@ -42,6 +42,7 @@
 #include "acccell.hxx"
 #include "acctable.hxx"
 #include <fesh.hxx>
+#include <istype.hxx>
 #include <rootfrm.hxx>
 #include <txtfrm.hxx>
 #include <hffrm.hxx>
@@ -198,7 +199,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
     if (pSdrHint->GetObject() &&
            ( dynamic_cast< const SwFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
               dynamic_cast< const SwVirtFlyDrawObj* >(pSdrHint->GetObject()) !=  nullptr ||
-             typeid(SdrObject) == typeid(pSdrHint->GetObject()) ) )
+             isType<SdrObject>(pSdrHint->GetObject()) ) )
     {
         return;
     }

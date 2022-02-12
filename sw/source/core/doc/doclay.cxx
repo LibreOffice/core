@@ -30,6 +30,7 @@
 #include <osl/diagnose.h>
 #include <svx/svdouno.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <istype.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -139,7 +140,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, bool bMoveWithinDoc,
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
     if ( dynamic_cast<const SwFlyDrawObj*>( pObj) ==  nullptr &&
          dynamic_cast<const SwVirtFlyDrawObj*>( pObj) ==  nullptr &&
-         typeid(SdrObject) != typeid(pObj) )
+         !isType<SdrObject>(pObj) )
     {
         if ( getIDocumentDrawModelAccess().IsVisibleLayerId( nLayerIdForClone ) )
         {
