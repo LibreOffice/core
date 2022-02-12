@@ -86,6 +86,8 @@ public:
 /** TreeListBox for content indicator */
 class SwContentTree final : public SfxListener
 {
+    friend class SwNavigationPI;
+
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
     SwContentTreeDropTarget m_aDropTargetHelper;
@@ -125,6 +127,8 @@ class SwContentTree final : public SfxListener
     bool m_bDrawingObjectTracking = true;
     bool m_bFieldTracking = true;
     bool m_bFootnoteTracking = true;
+
+    std::map<ContentTypeId, bool> mShowContentType;
 
     SwOutlineNodes::size_type m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
 
@@ -243,6 +247,8 @@ public:
     void            SetDrawingObjectTracking(bool bSet);
     void            SetFieldTracking(bool bSet);
     void            SetFootnoteTracking(bool bSet);
+
+    void            SetContentTypeShow(ContentTypeId eCntTypeId, bool bSet);
 
     /** Execute commands of the Navigator */
     void            ExecCommand(std::string_view rCmd, bool bModifier);

@@ -5422,6 +5422,104 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="Outlines" oor:type="xs:boolean" oor:nillable="false">
+      <info>
+        <desc>Specifies if Outline content type is shown.</desc>
+        <label>Outline content type show on/off</label>
+      </info>
+      <value>true</value>
+      </prop>
+      <prop oor:name="Tables" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Table content type is shown.</desc>
+          <label>Table content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Frames" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Frame content type is shown.</desc>
+          <label>Frame content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Images" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Image content type is shown.</desc>
+          <label>Image content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="OLEobjects" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if OLE object content type is shown.</desc>
+          <label>OLE object content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Bookmarks" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Bookmark content type is shown.</desc>
+          <label>Bookmark content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Sections" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Section content type is shown.</desc>
+          <label>Section content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Hyperlinks" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Hyperlink content type is shown.</desc>
+          <label>Hyperlink content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="References" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Reference content type is shown.</desc>
+          <label>Reference content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Indexes" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Index content type is shown.</desc>
+          <label>Index content type on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Comments" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Comment content type is shown.</desc>
+          <label>Comment content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="DrawingObjects" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Drawing Object content type is shown.</desc>
+          <label>Drawing Object content type show on/off</label>
+        </info>
+        <value>true</value>
+      </prop>
+      <prop oor:name="Fields" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Field content type is shown.</desc>
+          <label>Field content type show on/off</label>
+        </info>
+        <value>false</value>
+      </prop>
+      <prop oor:name="Footnotes" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies if Footnote and Endnote content type is shown.</desc>
+          <label>Footnote and Endnote show on/off</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
     <group oor:name="Envelope">
       <info>
