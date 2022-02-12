@@ -56,69 +56,44 @@ enum
     PROP_COL_LINE_NUMBER_OF_LINES
 };
 
-void lcl_AddPropertiesToVector(
-    std::vector< Property > & rOutProperties )
+::chart::tPropertyValueMap& StaticColumnLineChartTypeTemplateDefaults()
 {
-    rOutProperties.emplace_back( "NumberOfLines",
+    static ::chart::tPropertyValueMap aStaticDefaults =
+        []()
+        {
+            ::chart::tPropertyValueMap aOutMap;
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_COL_LINE_NUMBER_OF_LINES, 1 );
+            return aOutMap;
+        }();
+    return aStaticDefaults;
+}
+
+::cppu::OPropertyArrayHelper& StaticColumnLineChartTypeTemplateInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties {
+                { "NumberOfLines",
                   PROP_COL_LINE_NUMBER_OF_LINES,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
+                  | beans::PropertyAttribute::MAYBEDEFAULT } };
+
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
+
+            return comphelper::containerToSequence( aProperties );
+        }());
+    return aPropHelper;
 }
 
-struct StaticColumnLineChartTypeTemplateDefaults_Initializer
+uno::Reference< beans::XPropertySetInfo >& StaticColumnLineChartTypeTemplateInfo()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aStaticDefaults, PROP_COL_LINE_NUMBER_OF_LINES, 1 );
-        return &aStaticDefaults;
-    }
-};
-
-struct StaticColumnLineChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticColumnLineChartTypeTemplateDefaults_Initializer >
-{
-};
-
-struct StaticColumnLineChartTypeTemplateInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticColumnLineChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticColumnLineChartTypeTemplateInfoHelper_Initializer >
-{
-};
-
-struct StaticColumnLineChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticColumnLineChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticColumnLineChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticColumnLineChartTypeTemplateInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticColumnLineChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -144,7 +119,7 @@ ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
 // ____ OPropertySet ____
 void ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticColumnLineChartTypeTemplateDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticColumnLineChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -154,13 +129,13 @@ void ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& 
 
 ::cppu::IPropertyArrayHelper & SAL_CALL ColumnLineChartTypeTemplate::getInfoHelper()
 {
-    return *StaticColumnLineChartTypeTemplateInfoHelper::get();
+    return StaticColumnLineChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticColumnLineChartTypeTemplateInfo::get();
+    return StaticColumnLineChartTypeTemplateInfo();
 }
 
 void ColumnLineChartTypeTemplate::createChartTypes(

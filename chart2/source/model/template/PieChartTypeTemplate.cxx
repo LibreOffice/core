@@ -63,92 +63,61 @@ enum
     PROP_PIE_TEMPLATE_USE_RINGS
 };
 
-void lcl_AddPropertiesToVector(
-    std::vector< Property > & rOutProperties )
+::chart::tPropertyValueMap& StaticPieChartTypeTemplateDefaults()
 {
-    rOutProperties.emplace_back( "OffsetMode",
+    static ::chart::tPropertyValueMap aStaticDefaults =
+        []{
+            ::chart::tPropertyValueMap aOutMap;
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
+            ::chart::PropertyHelper::setPropertyValueDefault< double >( aOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
+            return aOutMap;
+        }();
+    return aStaticDefaults;
+}
+
+::cppu::OPropertyArrayHelper& StaticPieChartTypeTemplateInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties {
+                { "OffsetMode",
                   PROP_PIE_TEMPLATE_OFFSET_MODE,
                   cppu::UnoType<chart2::PieChartOffsetMode>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "DefaultOffset",
+                  | beans::PropertyAttribute::MAYBEDEFAULT },
+                { "DefaultOffset",
                   PROP_PIE_TEMPLATE_DEFAULT_OFFSET,
                   cppu::UnoType<double>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "Dimension",
+                  | beans::PropertyAttribute::MAYBEDEFAULT },
+                { "Dimension",
                   PROP_PIE_TEMPLATE_DIMENSION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( "UseRings",
+                  | beans::PropertyAttribute::MAYBEDEFAULT },
+                { "UseRings",
                   PROP_PIE_TEMPLATE_USE_RINGS,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
+                  | beans::PropertyAttribute::MAYBEDEFAULT } };
+
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
+
+            return comphelper::containerToSequence( aProperties );
+        }() );
+    return aPropHelper;
 }
 
-struct StaticPieChartTypeTemplateDefaults_Initializer
+uno::Reference< beans::XPropertySetInfo >& StaticPieChartTypeTemplateInfo()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_OFFSET_MODE, chart2::PieChartOffsetMode_NONE );
-        ::chart::PropertyHelper::setPropertyValueDefault< double >( rOutMap, PROP_PIE_TEMPLATE_DEFAULT_OFFSET, 0.5 );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_PIE_TEMPLATE_DIMENSION, 2 );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_PIE_TEMPLATE_USE_RINGS, false );
-    }
-};
-
-struct StaticPieChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticPieChartTypeTemplateDefaults_Initializer >
-{
-};
-
-struct StaticPieChartTypeTemplateInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static uno::Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticPieChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticPieChartTypeTemplateInfoHelper_Initializer >
-{
-};
-
-struct StaticPieChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticPieChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticPieChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticPieChartTypeTemplateInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticPieChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -176,7 +145,7 @@ PieChartTypeTemplate::~PieChartTypeTemplate()
 // ____ OPropertySet ____
 void PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticPieChartTypeTemplateDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticPieChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -186,13 +155,13 @@ void PieChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) 
 
 ::cppu::IPropertyArrayHelper & SAL_CALL PieChartTypeTemplate::getInfoHelper()
 {
-    return *StaticPieChartTypeTemplateInfoHelper::get();
+    return StaticPieChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticPieChartTypeTemplateInfo::get();
+    return StaticPieChartTypeTemplateInfo();
 }
 
 // ____ ChartTypeTemplate ____
