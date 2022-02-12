@@ -21,6 +21,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <corecrt_math_defines.h>
 
 namespace basegfx
 {
@@ -144,10 +145,10 @@ namespace basegfx
         }
         else
         {
-            fTargetOffsetX -= (0.4142 / 2.0 ) * fTargetSizeX;
-            fTargetOffsetY -= (0.4142 / 2.0 ) * fTargetSizeY;
-            fTargetSizeX = 1.4142 * fTargetSizeX;
-            fTargetSizeY = 1.4142 * fTargetSizeY;
+            fTargetOffsetX -= ((M_SQRT2 - 1) / 2.0 ) * fTargetSizeX;
+            fTargetOffsetY -= ((M_SQRT2 - 1) / 2.0 ) * fTargetSizeY;
+            fTargetSizeX = M_SQRT2 * fTargetSizeX;
+            fTargetSizeY = M_SQRT2 * fTargetSizeY;
         }
 
         const double fHalfBorder((1.0 - fBorder) * 0.5);

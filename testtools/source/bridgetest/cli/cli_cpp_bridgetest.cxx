@@ -24,6 +24,7 @@
 #using <cli_uretypes.dll>
 #using <cli_ure.dll>
 #using <cli_types_bridgetest.dll>
+#include <corecrt_math_defines.h>
 
 using namespace System;
 using namespace System::Diagnostics;
@@ -375,7 +376,7 @@ static bool performTest(XBridgeTest* xLBT)
         assign( static_cast<TestElement*>(aData),
                 true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
                 0x123456789abcdef0, 0xfedcba9876543210,
-                17.0815f, 3.1415926359, TestEnum::LOLA,
+                17.0815f, M_PI, TestEnum::LOLA,
                 Constants::STRING_TEST_CONSTANT, xI,
                 aAny);
 
@@ -650,15 +651,15 @@ static bool performSequenceTest(XBridgeTest* xBT)
     arStruct[0] = new TestElement(); arStruct[1] = new TestElement();
     arStruct[2] = new TestElement();
     assign( arStruct[0], true, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-             0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+             0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, M_PI,
             TestEnum::LOLA, Constants::STRING_TEST_CONSTANT, 18, 0x5678, arObject[0],
             Any( __typeof(Object),  arObject[0]) );
     assign( arStruct[1], true, 'A', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-            0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+            0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, M_PI,
             TestEnum::TWO, Constants::STRING_TEST_CONSTANT, 18, 0x5678, arObject[1],
             Any( __typeof(Object), arObject[1]) );
     assign( arStruct[2], true, 'B', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-            0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
+            0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, M_PI,
             TestEnum::CHECK, Constants::STRING_TEST_CONSTANT, 18, 0x5678, arObject[2],
             Any( __typeof(Object), arObject[2] ) );
     {

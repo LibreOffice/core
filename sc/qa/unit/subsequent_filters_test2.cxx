@@ -50,6 +50,7 @@
 #include <tools/UnitConversion.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include "helper/qahelper.hxx"
+#include <corecrt_math_defines.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -3008,7 +3009,7 @@ void ScFiltersTest2::testInvalidBareBiff5()
     CPPUNIT_ASSERT_EQUAL(OUString(u"_"), rDoc.GetString(aPos));
     aPos.IncCol();
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_VALUE, rDoc.GetCellType(aPos));
-    CPPUNIT_ASSERT_EQUAL(3.14159, rDoc.GetValue(aPos));
+    CPPUNIT_ASSERT_EQUAL(M_PI, rDoc.GetValue(aPos));
 
     // Row 5
     aPos = ScAddress(0, 4, 0);

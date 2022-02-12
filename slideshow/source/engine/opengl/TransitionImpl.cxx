@@ -40,6 +40,7 @@
 #include "Operation.hxx"
 #include "TransitionImpl.hxx"
 #include <math.h>
+#include <corecrt_math_defines.h>
 
 TransitionScene::TransitionScene(TransitionScene const& rOther)
     : maLeavingSlidePrimitives(rOther.maLeavingSlidePrimitives)
@@ -946,7 +947,7 @@ static T clamp(const T& rIn)
 
 std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , sal_uInt16 nPointsOnCircles )
 {
-    double dAngle(2*3.1415926/static_cast<double>( nPointsOnCircles ));
+    double dAngle(2*M_PI/static_cast<double>( nPointsOnCircles ));
     if(nCircles < 2 || nPointsOnCircles < 4)
         return makeNByMTileFlip(1,1);
     float Radius(1.0/static_cast<double>( nCircles ));
@@ -963,7 +964,7 @@ std::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( sal_uInt16 nCircles , s
     float TempAngle(0.0);
     for(unsigned int Point(0); Point < nPointsOnCircles; ++Point)
     {
-        unScaledTexCoords.emplace_back( cos(TempAngle - 3.1415926/2.0) , sin(TempAngle- 3.1415926/2.0) );
+        unScaledTexCoords.emplace_back( cos(TempAngle - M_PI/2.0) , sin(TempAngle- M_PI/2.0) );
 
         TempAngle += dAngle;
     }

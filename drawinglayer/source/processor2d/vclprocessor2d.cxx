@@ -59,6 +59,7 @@
 
 #include <drawinglayer/primitive2d/pointarrayprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <corecrt_math_defines.h>
 
 using namespace com::sun::star;
 
@@ -1291,7 +1292,7 @@ void VclProcessor2D::RenderSvgLinearAtomPrimitive2D(
     const basegfx::B2DVector aDiscreteVector(
         getViewInformation2D().getInverseObjectToViewTransformation()
         * basegfx::B2DVector(1.0, 1.0));
-    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
+    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / M_SQRT2));
 
     // use color distance and discrete lengths to calculate step count
     const sal_uInt32 nSteps(calculateStepsForSvgGradient(aColorA, aColorB, fDelta, fDiscreteUnit));
@@ -1335,7 +1336,7 @@ void VclProcessor2D::RenderSvgRadialAtomPrimitive2D(
     const basegfx::B2DVector aDiscreteVector(
         getViewInformation2D().getInverseObjectToViewTransformation()
         * basegfx::B2DVector(1.0, 1.0));
-    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / 1.414213562373));
+    const double fDiscreteUnit(aDiscreteVector.getLength() * (1.0 / M_SQRT2));
 
     // use color distance and discrete lengths to calculate step count
     const sal_uInt32 nSteps(

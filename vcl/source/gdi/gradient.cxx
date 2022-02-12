@@ -21,6 +21,7 @@
 
 #include <vcl/gradient.hxx>
 #include <vcl/metaact.hxx>
+#include <corecrt_math_defines.h>
 
 class Gradient::Impl
 {
@@ -250,8 +251,8 @@ void Gradient::GetBoundRect( const tools::Rectangle& rRect, tools::Rectangle& rB
         else if( GetStyle() == GradientStyle::Elliptical )
         {
             // Calculation of radii for ellipse
-            aSize.setWidth( static_cast<tools::Long>( 0.5 + static_cast<double>(aSize.Width())  * 1.4142 ) );
-            aSize.setHeight( static_cast<tools::Long>( 0.5 + static_cast<double>(aSize.Height()) * 1.4142 ) );
+            aSize.setWidth( static_cast<tools::Long>( 0.5 + static_cast<double>(aSize.Width())  * M_SQRT2 ) );
+            aSize.setHeight( static_cast<tools::Long>( 0.5 + static_cast<double>(aSize.Height()) * M_SQRT2) );
         }
 
         // Calculate new centers
