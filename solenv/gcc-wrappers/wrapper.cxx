@@ -107,11 +107,12 @@ std::string processccargs(const std::vector<std::string>& rawargs, std::string &
     std::string linkargs;
     bool block_linkargs = false;
 
-    // instead of using synced PDB access (-FS), use individual PDB files based on output
+    // Instead of using synced PDB access (-FS), use individual PDB files based on output.
+    // In fact, simply use -Z7, which doesn't use PDB files at all and writes all debug into the .obj file.
     const char *const pEnvIndividualPDBs(getenv("MSVC_USE_INDIVIDUAL_PDBS"));
     const bool bIndividualPDBs = (pEnvIndividualPDBs && !strcmp(pEnvIndividualPDBs, "TRUE"));
     const char *const pEnvEnableZ7Debug(getenv("ENABLE_Z7_DEBUG"));
-    const bool bEnableZ7Debug = (pEnvEnableZ7Debug && !strcmp(pEnvEnableZ7Debug, "TRUE"));
+    const bool bEnableZ7Debug = (pEnvEnableZ7Debug && !strcmp(pEnvEnableZ7Debug, "TRUE")) || bIndividualPDBs;
 
     for(std::vector<std::string>::const_iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         if (env_prefix_next_arg)
@@ -152,21 +153,12 @@ std::string processccargs(const std::vector<std::string>& rawargs, std::string &
                      << (*i) << "\"" << std::endl;
                 exit(1);
             }
-
-            if (bIndividualPDBs && !bEnableZ7Debug)
-            {
-                if (dot == std::string::npos)
-                    args.append(" -Fd" + *i + ".pdb");
-                else
-                    args.append(" -Fd" + (*i).substr(0, dot) + ".pdb");
-            }
         }
         else if(*i == "-g" || !(*i).compare(0,5,"-ggdb")) {
             if(!bEnableZ7Debug)
             {
                 args.append("-Zi");
-                if (!bIndividualPDBs)
-                    args.append(" -FS");
+                args.append(" -FS");
             }
             else
             {
