@@ -58,89 +58,58 @@ enum
 
 };
 
-void lcl_AddPropertiesToVector(
-    std::vector< Property > & rOutProperties )
+::chart::tPropertyValueMap& StaticLineChartTypeTemplateDefaults()
 {
-    rOutProperties.emplace_back( CHART_UNONAME_CURVE_STYLE,
+    static ::chart::tPropertyValueMap aStaticDefaults =
+        []()
+        {
+            ::chart::tPropertyValueMap aOutMap;
+            ::chart::PropertyHelper::setPropertyValueDefault( aOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, chart2::CurveStyle_LINES );
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, 20 );
+
+            // todo: check whether order 3 means polygons of order 3 or 2. (see
+            // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+            ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( aOutMap, PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, 3 );
+            return aOutMap;
+        }();
+    return aStaticDefaults;
+}
+
+::cppu::OPropertyArrayHelper& StaticLineChartTypeTemplateInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aPropHelper(
+        []()
+        {
+            std::vector< css::beans::Property > aProperties {
+                { CHART_UNONAME_CURVE_STYLE,
                   PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE,
                   cppu::UnoType<chart2::CurveStyle>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( CHART_UNONAME_CURVE_RESOLUTION,
+                  | beans::PropertyAttribute::MAYBEDEFAULT },
+                { CHART_UNONAME_CURVE_RESOLUTION,
                   PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
-    rOutProperties.emplace_back( CHART_UNONAME_SPLINE_ORDER,
+                  | beans::PropertyAttribute::MAYBEDEFAULT },
+                { CHART_UNONAME_SPLINE_ORDER,
                   PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEDEFAULT );
+                  | beans::PropertyAttribute::MAYBEDEFAULT } };
+            std::sort( aProperties.begin(), aProperties.end(),
+                         ::chart::PropertyNameLess() );
+
+            return comphelper::containerToSequence( aProperties );
+        }());
+    return aPropHelper;
 }
 
-struct StaticLineChartTypeTemplateDefaults_Initializer
+uno::Reference< beans::XPropertySetInfo >& StaticLineChartTypeTemplateInfo()
 {
-    ::chart::tPropertyValueMap* operator()()
-    {
-        static ::chart::tPropertyValueMap aStaticDefaults;
-        lcl_AddDefaultsToMap( aStaticDefaults );
-        return &aStaticDefaults;
-    }
-private:
-    static void lcl_AddDefaultsToMap( ::chart::tPropertyValueMap & rOutMap )
-    {
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, chart2::CurveStyle_LINES );
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, 20 );
-
-        // todo: check whether order 3 means polygons of order 3 or 2. (see
-        // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
-        ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, 3 );
-    }
-};
-
-struct StaticLineChartTypeTemplateDefaults : public rtl::StaticAggregate< ::chart::tPropertyValueMap, StaticLineChartTypeTemplateDefaults_Initializer >
-{
-};
-
-struct StaticLineChartTypeTemplateInfoHelper_Initializer
-{
-    ::cppu::OPropertyArrayHelper* operator()()
-    {
-        static ::cppu::OPropertyArrayHelper aPropHelper( lcl_GetPropertySequence() );
-        return &aPropHelper;
-    }
-
-private:
-    static Sequence< Property > lcl_GetPropertySequence()
-    {
-        std::vector< css::beans::Property > aProperties;
-        lcl_AddPropertiesToVector( aProperties );
-
-        std::sort( aProperties.begin(), aProperties.end(),
-                     ::chart::PropertyNameLess() );
-
-        return comphelper::containerToSequence( aProperties );
-    }
-
-};
-
-struct StaticLineChartTypeTemplateInfoHelper : public rtl::StaticAggregate< ::cppu::OPropertyArrayHelper, StaticLineChartTypeTemplateInfoHelper_Initializer >
-{
-};
-
-struct StaticLineChartTypeTemplateInfo_Initializer
-{
-    uno::Reference< beans::XPropertySetInfo >* operator()()
-    {
-        static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
-            ::cppu::OPropertySetHelper::createPropertySetInfo(*StaticLineChartTypeTemplateInfoHelper::get() ) );
-        return &xPropertySetInfo;
-    }
-};
-
-struct StaticLineChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Reference< beans::XPropertySetInfo >, StaticLineChartTypeTemplateInfo_Initializer >
-{
-};
+    static uno::Reference< beans::XPropertySetInfo > xPropertySetInfo(
+        ::cppu::OPropertySetHelper::createPropertySetInfo(StaticLineChartTypeTemplateInfoHelper() ) );
+    return xPropertySetInfo;
+}
 
 } // anonymous namespace
 
@@ -172,7 +141,7 @@ LineChartTypeTemplate::~LineChartTypeTemplate()
 // ____ OPropertySet ____
 void LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny ) const
 {
-    const tPropertyValueMap& rStaticDefaults = *StaticLineChartTypeTemplateDefaults::get();
+    const tPropertyValueMap& rStaticDefaults = StaticLineChartTypeTemplateDefaults();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
     if( aFound == rStaticDefaults.end() )
         rAny.clear();
@@ -182,13 +151,13 @@ void LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle, uno::Any& rAny )
 
 ::cppu::IPropertyArrayHelper & SAL_CALL LineChartTypeTemplate::getInfoHelper()
 {
-    return *StaticLineChartTypeTemplateInfoHelper::get();
+    return StaticLineChartTypeTemplateInfoHelper();
 }
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartTypeTemplate::getPropertySetInfo()
 {
-    return *StaticLineChartTypeTemplateInfo::get();
+    return StaticLineChartTypeTemplateInfo();
 }
 
 sal_Int32 LineChartTypeTemplate::getDimension() const
