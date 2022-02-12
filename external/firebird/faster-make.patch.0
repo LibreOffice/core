@@ -1,0 +1,50 @@
+--- builds/posix/Makefile.in.sav	2020-10-20 10:40:05.000000000 +0200
++++ builds/posix/Makefile.in	2022-02-12 16:11:19.459224610 +0100
+@@ -179,34 +179,23 @@ $(TOMLIB):	$(TOM_Objs)
+ 
+ master_process:
+ 	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
+-	$(MAKE) updateBuildNum
+-	$(MAKE) export_lists
+-	$(MAKE) extern
+-	$(MAKE) updateCloopInterfaces
+-	$(MAKE) preliminaryCheck
+-	$(MAKE) boot
+-	$(MAKE) yvalve
+-ifeq ($(IsDeveloper), Y)
+-# In developer mode we must regenerate various files in include/gen
+-	$(MAKE) ids
+-endif
+-	$(MAKE) engine
+-	$(MAKE) fbintl
+-	$(MAKE) utilities
+-# Now having ready such useful tools as gbak and isql, we may restore / create
+-# required databases and switch to full-featured gpre
+-	$(MAKE) gpre
++	$(MAKE) updateBuildNum \
++		export_lists \
++		extern \
++		updateCloopInterfaces \
++		preliminaryCheck \
++		boot \
++		yvalve \
++		engine \
++		fbintl \
++		utilities \
++		gpre
+ # Pay attention - after build force gpre_current to point to gpre
+ # even if gpre itself was not rebuilt
+ 	-$(RM) $(GPRE_CURRENT)
+ 	(cd $(BIN); $(LN) $(notdir $(GPRE)) $(notdir $(GPRE_CURRENT)))
+-ifeq ($(IsDeveloper), Y)
+-# In developer mode we must regenerate various files in include/gen
+-	$(MAKE) codes
+-endif
+-	$(MAKE) plugins
+-	$(MAKE) examples
+-	$(MAKE) rest
++	$(MAKE) plugins \
++		rest
+ 
+ 
+ cross_process:
