@@ -33,6 +33,24 @@
       "message": "It matters if rCol\u003d\u003dMaxCol() or rRow\u003d\u003dMaxRow(), shouldn\u0027t these be\n\n  SCCOL nColHiddenFirst \u003d rDocument.MaxCol() + 1;\n  SCROW nRowHiddenFirst \u003d rDocument.MaxRow() + 1;\n\n?",
       "revId": "67c73494ddf2cd7758a0e41f1ceae27dbf696c2f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5994d722_97b8d6b0",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1787,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-12T14:52:45Z",
+      "side": 1,
+      "message": "I suppose it might be good to do just as a \"best practice for a copy/paste suggestion\", but I don\u0027t think it is necessary in this case. This is only used in the negative direction. Thus, by definition, the copy cell could be in the maxCol cell, and the first cell to be evaluated for autofill would then be maxCol-1.\n\nIt doesn\u0027t seem like 2 directions are supported for FillAuto (ex. a box with a negative row fill, and a positive col fill). Even if they were possible, if the last row was hidden the user wouldn\u0027t be able to select it anyway (unless done programmatically). But this theoretical situation would probably break everything else as well.",
+      "parentUuid": "a273d090_09cf3b65",
+      "revId": "67c73494ddf2cd7758a0e41f1ceae27dbf696c2f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
