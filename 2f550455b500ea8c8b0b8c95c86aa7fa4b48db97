@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12371b09_83c07792",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-12T20:29:05Z",
+      "side": 1,
+      "message": "Thank you Eike for your feedback. I tried to find how to implement \"ref\" retrieval for TimeAM and TimePM by taking a look to the other vars but didn\u0027t understand how it worked, so I\u0027ve just done the copy.",
+      "revId": "2f550455b500ea8c8b0b8c95c86aa7fa4b48db97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
