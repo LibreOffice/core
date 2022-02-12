@@ -32,25 +32,6 @@
 
 namespace {
 
-std::type_info const & getConditionTypeInfo()
-{ return typeid (salhelper::Condition *); }
-
-std::type_info const & getConditionModifierTypeInfo()
-{ return typeid (salhelper::ConditionModifier *); }
-
-std::type_info const & getConditionWaiterTypeInfo()
-{ return typeid (salhelper::ConditionWaiter *); }
-
-std::type_info const & getORealDynamicLoaderTypeInfo()
-{ return typeid (salhelper::ORealDynamicLoader *); }
-
-std::type_info const & getSimpleReferenceObjectTypeInfo()
-{ return typeid (salhelper::SimpleReferenceObject *); }
-
-}
-
-namespace {
-
 class DerivedCondition: public salhelper::Condition {
 public:
     explicit DerivedCondition(osl::Mutex & mutex): Condition(mutex) {}
@@ -69,10 +50,6 @@ class Test: public CppUnit::TestFixture {
 public:
     void testCondition();
 
-    void testConditionModifier();
-
-    void testConditionWaiter();
-
     void testConditionWaiterTimedout();
 
     void testORealDynamicLoader();
@@ -87,8 +64,6 @@ public:
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCondition);
-    CPPUNIT_TEST(testConditionModifier);
-    CPPUNIT_TEST(testConditionWaiter);
     CPPUNIT_TEST(testConditionWaiterTimedout);
     CPPUNIT_TEST(testORealDynamicLoader);
     CPPUNIT_TEST(testSimpleReferenceObject);
@@ -101,64 +76,12 @@ public:
 void Test::testCondition() {
     osl::Mutex mutex;
     std::unique_ptr< salhelper::Condition > p(new DerivedCondition(mutex));
-    CPPUNIT_ASSERT(typeid(*p) != typeid(salhelper::Condition));
-    CPPUNIT_ASSERT(bool(typeid (p.get()) == typeid (salhelper::Condition *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::Condition const * >(p.get()))
-        == typeid (salhelper::Condition const *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::Condition volatile * >(p.get()))
-        == typeid (salhelper::Condition volatile *)));
-    CPPUNIT_ASSERT(bool(typeid (salhelper::Condition *) == getConditionTypeInfo()));
-}
-
-#ifdef _MSC_VER
-#pragma warning (push)
-#pragma warning (disable: 4189) // 'p': local variable is initialized but not referenced
-#endif
-
-
-void Test::testConditionModifier() {
-    salhelper::ConditionModifier * p = nullptr;
-    CPPUNIT_ASSERT(bool(typeid (*p) == typeid (salhelper::ConditionModifier)));
-    CPPUNIT_ASSERT(bool(typeid (p) == typeid (salhelper::ConditionModifier *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::ConditionModifier const * >(p))
-        == typeid (salhelper::ConditionModifier const *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::ConditionModifier volatile * >(p))
-        == typeid (salhelper::ConditionModifier volatile *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (salhelper::ConditionModifier *)
-        == getConditionModifierTypeInfo()));
-}
-
-void Test::testConditionWaiter() {
-    salhelper::ConditionWaiter * p = nullptr;
-    CPPUNIT_ASSERT(bool(typeid (*p) == typeid (salhelper::ConditionWaiter)));
-    CPPUNIT_ASSERT(bool(typeid (p) == typeid (salhelper::ConditionWaiter *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::ConditionWaiter const * >(p))
-        == typeid (salhelper::ConditionWaiter const *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::ConditionWaiter volatile * >(p))
-        == typeid (salhelper::ConditionWaiter volatile *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (salhelper::ConditionWaiter *) == getConditionWaiterTypeInfo()));
+    [[maybe_unused]] volatile auto const rtti = &typeid(salhelper::Condition);
 }
 
 void Test::testConditionWaiterTimedout() {
     salhelper::ConditionWaiter::timedout x;
-    CPPUNIT_ASSERT(bool(typeid (x) == typeid (salhelper::ConditionWaiter::timedout)));
-    CPPUNIT_ASSERT(bool(
-        typeid (&x) == typeid (salhelper::ConditionWaiter::timedout *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::ConditionWaiter::timedout const * >(&x))
-        == typeid (salhelper::ConditionWaiter::timedout const *)));
-    CPPUNIT_ASSERT(bool(
-        (typeid
-         (const_cast< salhelper::ConditionWaiter::timedout volatile * >(&x)))
-        == typeid (salhelper::ConditionWaiter::timedout volatile *)));
+    [[maybe_unused]] volatile auto const rtti = &typeid(salhelper::ConditionWaiter::timedout);
     try {
         throw salhelper::ConditionWaiter::timedout();
     } catch (salhelper::ConditionWaiter::timedout &) {
@@ -168,46 +91,13 @@ void Test::testConditionWaiterTimedout() {
 }
 
 void Test::testORealDynamicLoader() {
-    salhelper::ORealDynamicLoader * p = nullptr;
-    CPPUNIT_ASSERT(typeid (p) != typeid (salhelper::ORealDynamicLoader));
-    CPPUNIT_ASSERT(bool(typeid (p) == typeid (salhelper::ORealDynamicLoader *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::ORealDynamicLoader const * >(p))
-        == typeid (salhelper::ORealDynamicLoader const *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (const_cast< salhelper::ORealDynamicLoader volatile * >(p))
-        == typeid (salhelper::ORealDynamicLoader volatile *)));
-    CPPUNIT_ASSERT(bool(
-        typeid (salhelper::ORealDynamicLoader *)
-        == getORealDynamicLoaderTypeInfo()));
+    [[maybe_unused]] volatile auto const rtti = &typeid(salhelper::ORealDynamicLoader);
 }
-
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
 
 void Test::testSimpleReferenceObject() {
     salhelper::SimpleReferenceObject * p = new DerivedSimpleReferenceObject;
-    try {
-        CPPUNIT_ASSERT(
-            typeid (*p) != typeid (salhelper::SimpleReferenceObject));
-        CPPUNIT_ASSERT(bool(
-            typeid (p) == typeid (salhelper::SimpleReferenceObject *)));
-        CPPUNIT_ASSERT(bool(
-            typeid (const_cast< salhelper::SimpleReferenceObject const * >(p))
-            == typeid (salhelper::SimpleReferenceObject const *)));
-        CPPUNIT_ASSERT(bool(
-            (typeid
-             (const_cast< salhelper::SimpleReferenceObject volatile * >(p)))
-            == typeid (salhelper::SimpleReferenceObject volatile *)));
-        CPPUNIT_ASSERT(bool(
-            typeid (salhelper::SimpleReferenceObject *)
-            == getSimpleReferenceObjectTypeInfo()));
-    } catch (...) {
-        delete static_cast< DerivedSimpleReferenceObject * >(p);
-        throw;
-    }
     delete static_cast< DerivedSimpleReferenceObject * >(p);
+    [[maybe_unused]] volatile auto const rtti = &typeid(salhelper::SimpleReferenceObject);
 }
 
 void Test::testDerivedCondition() {
