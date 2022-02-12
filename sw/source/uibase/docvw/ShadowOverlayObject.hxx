@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <svx/sdr/overlay/overlayobject.hxx>
 
 class SwView;

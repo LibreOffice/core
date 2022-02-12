@@ -627,7 +627,8 @@ void ScPivotLayoutDialog::PushDataFieldNames(std::vector<ScDPName>& rDataFieldNa
 
 void ScPivotLayoutDialog::Close()
 {
-    DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
+    DoClose(ScPivotLayoutWrapper::GetChildWindowId());
+    SfxDialogController::Close();
 }
 
 IMPL_LINK_NOARG( ScPivotLayoutDialog, OKClicked, weld::Button&, void )

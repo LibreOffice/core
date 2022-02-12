@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <chartview/ExplicitScaleValues.hxx>
 
 #include <basegfx/range/b2drectangle.hxx>

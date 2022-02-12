@@ -86,7 +86,7 @@ namespace comphelper
     Reference< XAccessible > OWrappedAccessibleChildrenManager::getAccessibleWrapperFor(
         const Reference< XAccessible >& _rxKey )
     {
-        Reference< XAccessible > xValue;
+        rtl::Reference< OAccessibleWrapper > xValue;
 
         if( !_rxKey.is() )
         {
@@ -140,7 +140,7 @@ namespace comphelper
 
             Reference< XComponent > xContextComponent;
             if( rChild.second.is() )
-                xContextComponent.set( rChild.second->getAccessibleContext(),
+                xContextComponent.set( rChild.second->getContextNoCreate(),
                                        ::css::uno::UNO_QUERY );
             if( xContextComponent.is() )
                 xContextComponent->dispose();

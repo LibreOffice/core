@@ -1098,7 +1098,7 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         const uno::Sequence< uno::Sequence<uno::Any> >& aData )
 {
     ScDocument& rDoc = rDocShell.GetDocument();
-    ScDocFunc& rDocFunc = rDocShell.GetDocFunc();
+    ScFieldEditEngine& rEngine = rDoc.GetEditEngine();
     SCTAB nTab = rRange.aStart.Tab();
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
@@ -1175,7 +1175,19 @@ static bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
                         rElement >>= aUStr;
                         if ( !aUStr.isEmpty() )
                         {
-                            rDocFunc.SetStringOrEditCell(aPos, aUStr, false);
+                            // tdf#146454 - check for a multiline string since setting an edit
+                            // or string cell is in magnitudes slower than setting a plain string
+                            if (ScStringUtil::isMultiline(aUStr))
+                            {
+                                rEngine.SetTextCurrentDefaults(aUStr);
+                                rDoc.SetEditText(aPos, rEngine.CreateTextObject());
+                            }
+                            else
+                            {
+                                ScSetStringParam aParam;
+                                aParam.setTextInput();
+                                rDoc.SetString(aPos, aUStr, &aParam);
+                            }
                         }
                     }
                     break;

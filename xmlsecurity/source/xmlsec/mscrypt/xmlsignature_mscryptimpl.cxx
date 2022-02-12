@@ -22,6 +22,8 @@
 #include <rtl/uuid.h>
 #include <xmlsec-wrapper.h>
 
+#include <xmlsec/mscng/x509.h>
+
 #include <com/sun/star/xml/crypto/SecurityOperationStatus.hpp>
 #include <com/sun/star/xml/crypto/XXMLSignature.hpp>
 
@@ -232,6 +234,10 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
 
     // We do certificate verification ourselves.
     pDsigCtx->keyInfoReadCtx.flags |= XMLSEC_KEYINFO_FLAGS_X509DATA_DONT_VERIFY_CERTS;
+
+    // limit possible key data to valid X509 certificates only, no KeyValues
+    if (xmlSecPtrListAdd(&(pDsigCtx->keyInfoReadCtx.enabledKeyData), BAD_CAST xmlSecMSCngKeyDataX509GetKlass()) < 0)
+        throw RuntimeException("failed to limit allowed key data");
 
     //Verify signature
     //The documentation says that the signature is only valid if the return value is 0 (that is, not < 0)

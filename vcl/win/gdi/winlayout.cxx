@@ -83,11 +83,37 @@ bool ExTextOutRenderer::operator()(GenericSalLayout const& rLayout, SalGraphics&
     int nStart = 0;
     Point aPos(0, 0);
     const GlyphItem* pGlyph;
+    const WinFontInstance* pWinFont = static_cast<const WinFontInstance*>(&rLayout.GetFont());
+    UINT nTextAlign = GetTextAlign(hDC);
+    UINT nCurTextAlign = nTextAlign;
+    sal_Int32 nGlyphOffset = -pWinFont->GetTmDescent();
+
     while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
     {
         wchar_t glyphWStr = pGlyph->glyphId();
-        ExtTextOutW(hDC, aPos.X(), aPos.Y(), ETO_GLYPH_INDEX, nullptr, &glyphWStr, 1, nullptr);
+        UINT32 nNewTextAlign = nCurTextAlign;
+        sal_Int32 nYOffset = 0;
+
+        if (pWinFont->IsCJKVerticalFont() && pGlyph->IsVertical())
+        {
+            tools::Rectangle aRect;
+            nNewTextAlign = VTA_CENTER | TA_BOTTOM;
+            nYOffset = nGlyphOffset;
+        }
+        else
+            nNewTextAlign = nTextAlign;
+
+        if (nCurTextAlign != nNewTextAlign)
+            SetTextAlign(hDC, nNewTextAlign);
+
+        ExtTextOutW(hDC, aPos.X(), aPos.Y() + nYOffset, ETO_GLYPH_INDEX, nullptr, &glyphWStr, 1,
+                    nullptr);
+
+        nCurTextAlign = nNewTextAlign;
     }
+
+    if (nCurTextAlign != nTextAlign)
+        SetTextAlign(hDC, nTextAlign);
 
     return true;
 }
@@ -109,6 +135,8 @@ WinFontInstance::WinFontInstance(const WinFontFace& rPFF, const FontSelectPatter
     , m_pGraphics(nullptr)
     , m_hFont(nullptr)
     , m_fScale(1.0f)
+    , m_bIsCJKVerticalFont(false)
+    , m_nTmDescent(0)
 {
 }
 
@@ -259,7 +287,8 @@ void WinFontInstance::SetGraphics(WinSalGraphics* pGraphics)
     if (m_hFont)
         return;
     HFONT hOrigFont;
-    m_hFont = m_pGraphics->ImplDoSetFont(GetFontSelectPattern(), GetFontFace(), hOrigFont);
+    std::tie(m_hFont, m_bIsCJKVerticalFont, m_nTmDescent)
+        = m_pGraphics->ImplDoSetFont(GetFontSelectPattern(), GetFontFace(), hOrigFont);
     SelectObject(m_pGraphics->getHDC(), hOrigFont);
 }
 
@@ -281,9 +310,8 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 
     const HFONT hOrigFont = ::SelectFont(hDC, hLayoutFont);
 
-    // There isn't a way for Win32 API ExtTextOutW to render vertical-writing glyphs correctly,
-    // so let's use DWrite text renderer in this case.
-    DrawTextLayout(rLayout, hDC, rLayout.GetFont().GetFontSelectPattern().mbVertical);
+    // DWrite text renderer performs vertical writing better except printing.
+    DrawTextLayout(rLayout, hDC, !mbPrinter && rLayout.GetFont().GetFontSelectPattern().mbVertical);
 
     ::SelectFont(hDC, hOrigFont);
 }

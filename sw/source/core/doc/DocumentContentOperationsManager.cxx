@@ -408,7 +408,8 @@ namespace
                                             *pDelPam->GetPoint(), nDelCount );
                         }
 
-                        if (pDelPam->GetNext() && *pDelPam->GetNext()->End() == *pDelPam->Start())
+                        if (pDelPam->GetNext() != pDelPam.get()
+                            && *pDelPam->GetNext()->End() == *pDelPam->Start())
                         {
                             *pDelPam->GetNext()->End() = *pDelPam->End();
                             pDelPam.reset(pDelPam->GetNext());
@@ -3544,21 +3545,28 @@ void DocumentContentOperationsManager::CopyWithFlyInFly(
         bool isRecreateEndNode(false);
         if (bMakeNewFrames) // tdf#130685 only after aRedlRest
         {   // recreate from previous node (could be merged now)
-            if (SwTextNode *const pNode = aSavePos.GetNode().GetTextNode())
+            o3tl::sorted_vector<SwTextFrame*> frames;
+            SwTextNode * pNode = aSavePos.GetNode().GetTextNode();
+            SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
+            if (pEndNode)
             {
-                o3tl::sorted_vector<SwTextFrame*> frames;
-                SwTextNode *const pEndNode = rInsPos.GetNode().GetTextNode();
-                if (pEndNode)
+                SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
+                for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
                 {
-                    SwIterator<SwTextFrame, SwTextNode, sw::IteratorMode::UnwrapMulti> aIter(*pEndNode);
-                    for (SwTextFrame* pFrame = aIter.First(); pFrame; pFrame = aIter.Next())
+                    if (pFrame->getRootFrame()->HasMergedParas())
                     {
-                        if (pFrame->getRootFrame()->HasMergedParas())
+                        frames.insert(pFrame);
+                        // tdf#135061 check if end node is merged to a preceding node
+                        if (pNode == nullptr && pFrame->GetMergedPara()
+                            && pFrame->GetMergedPara()->pFirstNode->GetIndex() < aSavePos.GetIndex())
                         {
-                            frames.insert(pFrame);
+                            pNode = pFrame->GetMergedPara()->pFirstNode;
                         }
                     }
                 }
+            }
+            if (pNode != nullptr)
+            {
                 sw::RecreateStartTextFrames(*pNode);
                 if (!frames.empty())
                 {   // tdf#132187 check if the end node needs new frames
@@ -4477,8 +4485,8 @@ bool DocumentContentOperationsManager::ReplaceRangeImpl( SwPaM& rPam, const OUSt
                 m_rDoc.getIDocumentRedlineAccess().SetRedlineFlags( eOld );
 
                 *rPam.GetPoint() = pBkmk->GetMarkPos();
-                if(pBkmk->IsExpanded())
-                    *rPam.GetMark() = pBkmk->GetOtherMarkPos();
+                *rPam.GetMark() = pBkmk->IsExpanded() ? pBkmk->GetOtherMarkPos() : pBkmk->GetMarkPos();
+
                 m_rDoc.getIDocumentMarkAccess()->deleteMark(pBkmk);
             }
             bJoinText = false;

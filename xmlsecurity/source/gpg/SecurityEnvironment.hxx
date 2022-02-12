@@ -10,6 +10,9 @@
 #pragma once
 
 #include <sal/config.h>
+
+#include <memory>
+
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
 

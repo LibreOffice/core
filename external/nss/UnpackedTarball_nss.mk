@@ -26,8 +26,6 @@ $(eval $(call gb_UnpackedTarball_add_patches,nss,\
     external/nss/nss.bzmozilla1238154.patch \
 	external/nss/nss-bz1646594.patch.1 \
     external/nss/macos-dlopen.patch.0 \
-	external/nss/nss.getopt.patch.0 \
-	external/nss/nss-win-arm64.patch \
     external/nss/nss-restore-manual-pre-dependencies.patch.1 \
     $(if $(filter iOS,$(OS)), \
         external/nss/nss-ios.patch) \

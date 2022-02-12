@@ -24,6 +24,7 @@
 
 #include <tools/ref.hxx>
 #include <svl/hint.hxx>
+#include <svl/listener.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/Metadatable.hxx>
 
@@ -73,7 +74,7 @@ private:
     /// may have different value than format attribute:
     /// format attr has value for this section, while flag is
     /// effectively ORed with parent sections!
-    bool m_bProtectFlag         : 1;
+    bool m_bProtectFlag         : 1; ///< protect flag is no longer inherited
     // Edit in readonly sections.
     bool m_bEditInReadonlyFlag  : 1;
 
@@ -137,6 +138,7 @@ public:
 
 class SW_DLLPUBLIC SwSection
     : public SwClient
+    , public SvtListener // needed for SwClientNotify to be called from SwSectionFormat
 {
     // In order to correctly maintain the flag when creating/deleting frames.
     friend class SwSectionNode;
@@ -153,6 +155,7 @@ private:
             bool const bHidden, bool const bCondition);
 
 protected:
+    virtual void Notify(SfxHint const& rHint) override;
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:

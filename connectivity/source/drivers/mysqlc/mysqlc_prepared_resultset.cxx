@@ -106,12 +106,24 @@ bool OPreparedResultSet::fetchResult()
     }
     for (sal_Int32 i = 0; i < m_nColumnCount; ++i)
     {
+        bool bIsBlobType = false;
+        switch (m_aFields[i].type)
+        {
+            case MYSQL_TYPE_BLOB:
+            case MYSQL_TYPE_TINY_BLOB:
+            case MYSQL_TYPE_MEDIUM_BLOB:
+            case MYSQL_TYPE_LONG_BLOB:
+                bIsBlobType = true;
+                break;
+            default:
+                bIsBlobType = false;
+        }
         m_aMetaData[i].is_null = false;
         m_aMetaData[i].length = 0l;
         m_aMetaData[i].error = false;
 
         m_aData[i].is_null = &m_aMetaData[i].is_null;
-        m_aData[i].buffer_length = m_aFields[i].type == MYSQL_TYPE_BLOB ? 0 : m_aFields[i].length;
+        m_aData[i].buffer_length = bIsBlobType ? 0 : m_aFields[i].length;
         m_aData[i].length = &m_aMetaData[i].length;
         m_aData[i].error = &m_aMetaData[i].error;
         m_aData[i].buffer = nullptr;
@@ -303,8 +315,21 @@ template <> OUString OPreparedResultSet::retrieveValue(sal_Int32 column)
 {
     // redirect call to the appropriate method if needed
     // BLOB can be simply read out as string
+    bool bIsBlobType = false;
+    switch (m_aFields[column - 1].type)
+    {
+        case MYSQL_TYPE_BLOB:
+        case MYSQL_TYPE_TINY_BLOB:
+        case MYSQL_TYPE_MEDIUM_BLOB:
+        case MYSQL_TYPE_LONG_BLOB:
+            bIsBlobType = true;
+            break;
+        default:
+            bIsBlobType = false;
+    }
+
     if (getTypeFromMysqlType(m_aFields[column - 1].type) != std::type_index(typeid(OUString))
-        && m_aFields[column - 1].type != MYSQL_TYPE_BLOB)
+        && !bIsBlobType)
         return getRowSetValue(column);
     const char* sStr = static_cast<const char*>(m_aData[column - 1].buffer);
 
@@ -341,6 +366,9 @@ ORowSetValue OPreparedResultSet::getRowSetValue(sal_Int32 nColumnIndex)
         case MYSQL_TYPE_NEWDECIMAL:
             return getString(nColumnIndex);
         case MYSQL_TYPE_BLOB:
+        case MYSQL_TYPE_TINY_BLOB:
+        case MYSQL_TYPE_MEDIUM_BLOB:
+        case MYSQL_TYPE_LONG_BLOB:
             throw SQLException("Column with type BLOB cannot be converted", *this, "22000", 1,
                                Any());
         default:

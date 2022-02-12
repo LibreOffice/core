@@ -909,11 +909,8 @@ void SfxCommonTemplateDialog_Impl::SelectStyle(const OUString &rStr, bool bIsCal
 
     bWaterDisabled = !IsSafeForWaterCan();
 
-    if (!bIsCallback)
-    {
-        // tdf#134598 call UpdateStyleDependents to update watercan
-        UpdateStyleDependents();
-    }
+    // tdf#134598 call UpdateStyleDependents to update watercan
+    UpdateStyleDependents();
 }
 
 OUString SfxCommonTemplateDialog_Impl::GetSelectedEntry() const
@@ -1957,9 +1954,6 @@ IMPL_LINK(SfxCommonTemplateDialog_Impl, FmtSelectHdl, weld::TreeView&, rListBox,
     if (!rListBox.get_cursor(xHdlEntry.get()))
         return;
 
-    if (rListBox.is_selected(*xHdlEntry))
-        UpdateStyleDependents();
-
     SelectStyle(rListBox.get_text(*xHdlEntry), true);
 }
 
@@ -1969,7 +1963,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyleDependents()
     if ( IsInitialized() &&
          IsCheckedItem("watercan") &&
          // only if that region is allowed
-         nullptr != pFamilyState[nActFamily-1] && (mxTreeBox || mxFmtLb->count_selected_rows() <= 1) )
+         nullptr != pFamilyState[nActFamily-1] && IsSafeForWaterCan() )
     {
         Execute_Impl(SID_STYLE_WATERCAN,
                      "", "", 0);

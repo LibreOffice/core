@@ -395,7 +395,7 @@ public:
     /// Currently there are two variants: signature and classification.
     bool RemoveParagraphMetadataFieldAtCursor();
 
-    void Insert2(SwField const &, const bool bForceExpandHints);
+    bool InsertField(SwField const &, const bool bForceExpandHints);
 
     void UpdateOneField(SwField &);   ///< One single field.
 

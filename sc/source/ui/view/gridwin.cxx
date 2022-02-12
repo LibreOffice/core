@@ -602,7 +602,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         pNotifier = SfxViewShell::Current();
 
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), mrViewData.GetPPTX());
-    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, false,
+    mpAutoFilterPopup.reset(VclPtr<ScCheckListMenuWindow>::Create(this, &rDoc, true,
                                                                   aFilterEntries.mbHasDates, nColWidth,
                                                                   nullptr, pNotifier));
     ScCheckListMenuControl& rControl = mpAutoFilterPopup->get_widget();
@@ -746,9 +746,9 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         ScResId(SCSTR_FILTER_NOTEMPTY), new AutoFilterAction(this, AutoFilterMode::NonEmpty));
     rControl.addSeparator();
     rControl.addMenuItem(
-        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor));
+        ScResId(SCSTR_FILTER_TEXT_COLOR), new AutoFilterAction(this, AutoFilterMode::TextColor), true);
     rControl.addMenuItem(
-        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor));
+        ScResId(SCSTR_FILTER_BACKGROUND_COLOR), new AutoFilterAction(this, AutoFilterMode::BackgroundColor), true);
     rControl.addSeparator();
     rControl.addMenuItem(
         ScResId(SCSTR_STDFILTER), new AutoFilterAction(this, AutoFilterMode::Custom));
@@ -1266,10 +1266,10 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
             if ( rDoc.HasValueData( nCol, nRow, nTab ) )
             {
                 double fVal = rDoc.GetValue(ScAddress(nCol, nRow, nTab));
-                pNew.reset(new ScTypedStrData(aDocStr, fVal, ScTypedStrData::Value));
+                pNew.reset(new ScTypedStrData(aDocStr, fVal, fVal, ScTypedStrData::Value));
             }
             else
-                pNew.reset(new ScTypedStrData(aDocStr, 0.0, ScTypedStrData::Standard));
+                pNew.reset(new ScTypedStrData(aDocStr, 0.0, 0.0, ScTypedStrData::Standard));
 
             if (pData->GetListType() == css::sheet::TableValidationVisibility::SORTEDASCENDING)
             {
@@ -1296,12 +1296,16 @@ void ScGridWindow::LaunchDataSelectMenu( SCCOL nCol, SCROW nRow )
     {
         rFilterBox.grab_focus();
 
+        if (rFilterBox.n_children())
+        {
+            if (nSelPos != -1)
+                rFilterBox.set_cursor(nSelPos);
+            else
+                rFilterBox.set_cursor(0);
+        }
         // Select only after GrabFocus, so that the focus rectangle gets correct
         if (nSelPos != -1)
-        {
-            rFilterBox.set_cursor(nSelPos);
             rFilterBox.select(nSelPos);
-        }
         else
             rFilterBox.unselect_all();
 

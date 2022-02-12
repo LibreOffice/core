@@ -69,6 +69,7 @@
 #include <undobj.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDrawModelAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
 #include <IDocumentTimerAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
@@ -1165,8 +1166,7 @@ void RemoveHiddenObjsOfNode(SwTextNode const& rNode,
     {
         SwFormatAnchor const& rAnchor = pFrameFormat->GetAnchor();
         if (rAnchor.GetAnchorId() == RndStdIds::FLY_AT_CHAR
-            || (rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR
-                && RES_DRAWFRMFMT == pFrameFormat->Which()))
+            || rAnchor.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
             assert(rAnchor.GetContentAnchor()->nNode.GetIndex() == rNode.GetIndex());
             if (!IsShown(rNode.GetIndex(), rAnchor, pIter, pEnd, pFirstNode, pLastNode))
@@ -1723,7 +1723,10 @@ void InsertCnt_( SwLayoutFrame *pLay, SwDoc *pDoc,
                             static_cast<SwTextFrame*>(pPrv)->Prepare( PrepareHint::QuoVadis, nullptr, false );
                     }
                 }
-                if (nIndex + 1 == nEndIndex)
+
+                if (nIndex + 1 == nEndIndex
+                        // tdf#136452 may also be needed at end of section
+                    || pNode->EndOfSectionIndex() - 1 == nEndIndex)
                 {   // tdf#131684 tdf#132236 fix upper of frame moved in
                     // SwUndoDelete; can't be done there unfortunately
                     // because empty section frames are deleted here
@@ -1950,8 +1953,10 @@ void MakeFrames( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
     SwNodeIndex aTmp( rSttIdx );
     sal_uLong nEndIdx = rEndIdx.GetIndex();
+    // TODO for multiple layouts there should be a loop here
     SwNode* pNd = pDoc->GetNodes().FindPrvNxtFrameNode( aTmp,
-                                            pDoc->GetNodes()[ nEndIdx-1 ]);
+                    pDoc->GetNodes()[ nEndIdx-1 ],
+                    pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     if ( pNd )
     {
         bool bApres = aTmp < rSttIdx;

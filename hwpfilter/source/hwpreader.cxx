@@ -515,62 +515,28 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             if( prop->flag >> 18  & 0x01 )
             {
                 padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
-                if( !prop->pictype )
+
+                EmPicture *emp = nullptr;
+                if (prop->pictype && strlen(prop->szPatternFile) > 3)
+                    emp = hwpfile.GetEmPictureByName(prop->szPatternFile);
+                if (!emp)
                 {
                     padd( "xlink:href", sXML_CDATA,
                         fromHcharStringToOUString(hstr2ucsstr(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(prop->szPatternFile).c_str())).c_str())));
+                    padd( "xlink:type", sXML_CDATA, "simple");
+                    padd( "xlink:show", sXML_CDATA, "embed");
+                    padd( "xlink:actuate", sXML_CDATA, "onLoad");
                 }
-                else
-                {
-                    EmPicture *emp = nullptr;
-                    if ( strlen( prop->szPatternFile ) > 3)
-                        emp = hwpfile.GetEmPictureByName(prop->szPatternFile);
-                    if( emp )
-                    {
-                        char filename[128+17+9];
-                        char dirname[128];
-                        int fd;
-#ifdef _WIN32
-                        GetTempPathA(sizeof(dirname), dirname);
-                        sprintf(filename, "%s%s",dirname, emp->name);
-                        if( (fd = open( filename , _O_CREAT | _O_WRONLY | _O_BINARY , 0666)) >= 0 )
-#else
-                        strcpy(dirname, "/tmp/");
-                        sprintf(filename, "%s%s", dirname, emp->name);
-                        if( (fd = open( filename , O_CREAT | O_WRONLY , 0666)) >= 0 )
-#endif
-                        {
-                            size_t nWritten = write(fd, emp->data.get(), emp->size);
-                            OSL_VERIFY(nWritten == emp->size);
-                            close(fd);
-                        }
-#ifdef _WIN32
-                        int j;
-                        for(j = 0 ; j < static_cast<int>(strlen( dirname )) ; j++)
-                        {
-                            if( dirname[j] == '\\' ) buf[j] = '/';
-                            else buf[j] = dirname[j];
-                        }
-                        buf[j] = '\0';
-                        sprintf(filename, "file:///%s%s",buf, emp->name );
-#else
-                        sprintf(filename, "file://%s%s",dirname, emp->name );
-#endif
-                        padd( "xlink:href", sXML_CDATA, ascii(filename));
-                    }
-                    else
-                    {
-                        padd( "xlink:href", sXML_CDATA,
-                            fromHcharStringToOUString(hstr2ucsstr(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(prop->szPatternFile).c_str())).c_str())));
-                    }
-
-                }
-                padd( "xlink:type", sXML_CDATA, "simple");
-                padd( "xlink:show", sXML_CDATA, "embed");
-                padd( "xlink:actuate", sXML_CDATA, "onLoad");
 
                 rstartEl( "draw:fill-image", mxList);
                 mxList->clear();
+                if (emp)
+                {
+                    rstartEl("office:binary-data", mxList);
+                    std::shared_ptr<char> pStr(base64_encode_string(emp->data.get(), emp->size), Free<char>());
+                    rchars(ascii(pStr.get()));
+                    rendEl("office:binary-data");
+                }
                 rendEl( "draw:fill-image");
             }
 /*  If there is a gradient, when a bitmap file is present, this is the first. */

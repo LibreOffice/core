@@ -59,11 +59,11 @@
 #include <sfx2/event.hxx>
 #include <sal/log.hxx>
 
-void SwWrtShell::Insert(SwField const& rField, SwPaM* pAnnotationRange)
+bool SwWrtShell::InsertField2(SwField const& rField, SwPaM* pAnnotationRange)
 {
     ResetCursorStack();
     if(!CanInsert())
-        return;
+        return false;
     StartAllAction();
 
     SwRewriter aRewriter;
@@ -111,7 +111,7 @@ void SwWrtShell::Insert(SwField const& rField, SwPaM* pAnnotationRange)
         }
     }
 
-    SwEditShell::Insert2(rField, bDeleted);
+    bool const isSuccess = SwEditShell::InsertField(rField, bDeleted);
 
     if ( pAnnotationTextRange )
     {
@@ -136,6 +136,8 @@ void SwWrtShell::Insert(SwField const& rField, SwPaM* pAnnotationRange)
 
     EndUndo();
     EndAllAction();
+
+    return isSuccess;
 }
 
 // Start the field update

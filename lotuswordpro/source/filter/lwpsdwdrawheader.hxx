@@ -64,6 +64,7 @@
 
 #include <config_lgpl.h>
 #include <sal/types.h>
+#include <vector>
 
 const sal_uInt8 DRAW_FACESIZE = 32;
 const double THRESHOLD = 0.0001;
@@ -271,15 +272,26 @@ struct SdwTextBoxRecord
     sal_Int16 nTextRotation;
     sal_Int16 nTextExtraSpacing;
     sal_uInt8* pTextString;
+    SdwTextBoxRecord()
+        : nTextWidth(0)
+        , nTextHeight(0)
+        , nTextSize(0)
+        , tmpTextFaceName{}
+        , nTextAttrs(0)
+        , nTextCharacterSet(0)
+        , nTextRotation(0)
+        , nTextExtraSpacing(0)
+        , pTextString(nullptr)
+    {
+    }
 };
 
 struct SdwFMPATH
 {
     sal_uInt16 n;
-    SdwPoint* pPts;
+    std::vector<SdwPoint> aPts;
     SdwFMPATH()
         : n(0)
-        , pPts(nullptr)
     {
     }
 };

@@ -338,6 +338,74 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testRedlineSplitContentNode)
     rUndoManager.Undo();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf137318)
+{
+    SwDoc* const pDoc = createSwDoc();
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("A");
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    // hide
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->DelLine();
+    pWrtShell->StartOfSection(false);
+    pWrtShell->SplitNode(true);
+    pWrtShell->SplitNode(true);
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text", 0);
+    // not sure why there's an empty text portion here, but it's not a problem
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[3]/Text[1][@Portion]", 0);
+
+    pWrtShell->Undo();
+
+    // the problem was that here the "A" showed up again
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 0);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[2]/Text[1][@Portion]", 0);
+
+    pWrtShell->Undo();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1][@Portion]", 0);
+
+    pWrtShell->Undo();
+
+    // now the "A" is no longer deleted
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nType", "PortionType::Para");
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1][@Portion]", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "nLength", "1");
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "A");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136704)
 {
     SwDoc* const pDoc(createSwDoc());
@@ -585,6 +653,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf134252)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xTables->getCount());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xSections->getCount());
     CPPUNIT_ASSERT_EQUAL(OUString(""), xCursor->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136452)
+{
+    SwDoc* const pDoc(createSwDoc(DATA_DIRECTORY, "tdf136452.fodt"));
+
+    auto const nNodes(pDoc->GetNodes().Count());
+
+    SwWrtShell* const pWrtShell(pDoc->GetDocShell()->GetWrtShell());
+
+    // first deletion spanning 2 sections
+    pWrtShell->SttEndDoc(false);
+    pWrtShell->SetMark();
+    pWrtShell->Up(true, 2);
+    pWrtShell->Delete();
+
+    // 2 paragraphs deleted, last section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 4, pDoc->GetNodes().Count());
+
+    // second deletion spanning 2 sections
+    pWrtShell->SetMark();
+    pWrtShell->Up(true, 3);
+    pWrtShell->Delete();
+
+    // 3 paragraphs deleted, 2nd section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 9, pDoc->GetNodes().Count());
+
+    pWrtShell->Undo();
+
+    // 2 paragraphs deleted, last section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 4, pDoc->GetNodes().Count());
+
+    // this crashed
+    pWrtShell->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(nNodes, pDoc->GetNodes().Count());
+
+    pWrtShell->Redo();
+
+    // 2 paragraphs deleted, last section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 4, pDoc->GetNodes().Count());
+
+    pWrtShell->Redo();
+
+    // 3 paragraphs deleted, 2nd section is gone
+    CPPUNIT_ASSERT_EQUAL(nNodes - 9, pDoc->GetNodes().Count());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf136453)

@@ -22,6 +22,8 @@
 #include "layfrm.hxx"
 #include "flowfrm.hxx"
 
+#include <svl/listener.hxx>
+
 class SwSection;
 class SwSectionFormat;
 class SwAttrSetChg;
@@ -45,6 +47,7 @@ namespace o3tl {
 }
 
 class SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
+    , public SvtListener // TODO?
 {
     SwSection* m_pSection;
     bool m_bFootnoteAtEnd; // footnotes at the end of section
@@ -70,6 +73,7 @@ class SwSectionFrame final: public SwLayoutFrame, public SwFlowFrame
     virtual void MakeAll(vcl::RenderContext* pRenderContext) override;
     virtual bool ShouldBwdMoved( SwLayoutFrame *pNewUpper, bool &rReformat ) override;
     virtual void Format( vcl::RenderContext* pRenderContext, const SwBorderAttrs *pAttrs = nullptr ) override;
+    virtual void Notify(SfxHint const& rHint) override;
     virtual void SwClientNotify( const SwModify&, const SfxHint& ) override;
 
 public:

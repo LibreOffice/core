@@ -476,11 +476,12 @@ sal_uInt64 tools::Time::GetMonotonicTicks()
 #if defined(USE_CLOCK_GETTIME)
     struct timespec currentTime;
     clock_gettime( CLOCK_MONOTONIC, &currentTime );
-    nMicroSeconds = currentTime.tv_sec * 1000 * 1000 + currentTime.tv_nsec / 1000;
+    nMicroSeconds
+        = static_cast<sal_uInt64>(currentTime.tv_sec) * 1000 * 1000 + currentTime.tv_nsec / 1000;
 #else
     struct timeval currentTime;
     gettimeofday( &currentTime, nullptr );
-    nMicroSeconds = currentTime.tv_sec * 1000 * 1000 + currentTime.tv_usec;
+    nMicroSeconds = static_cast<sal_uInt64>(currentTime.tv_sec) * 1000 * 1000 + currentTime.tv_usec;
 #endif
 #endif // __MACH__
     return nMicroSeconds;

@@ -10,9 +10,9 @@ diff -ur nss.org/nspr/build/autoconf/config.sub nss/nspr/build/autoconf/config.s
 +if test $1 = "i686-pc-linux-android"; then echo $1; exit; fi
 +if test $1 = "x86_64-pc-linux-android"; then echo $1; exit; fi
 +
- # Separate what the user gave into CPU-COMPANY and OS or KERNEL-OS (if any).
- # Here we must recognize all the valid KERNEL-OS combinations.
- maybe_os=`echo $1 | sed 's/^\(.*\)-\([^-]*-[^-]*\)$/\2/'`
+ # Split fields of configuration type
+ # shellcheck disable=SC2162
+ IFS="-" read field1 field2 field3 field4 <<EOF
 diff -ur nss.org/nspr/configure nss/nspr/configure
 --- nss.org/nspr/configure	2017-09-07 15:29:45.018246359 +0200
 +++ nss/nspr/configure	2017-09-07 15:31:47.604075663 +0200

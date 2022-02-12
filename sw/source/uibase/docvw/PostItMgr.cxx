@@ -1749,7 +1749,8 @@ void SwPostItMgr::Hide()
     for (auto const& postItField : mvPostItFields)
     {
         postItField->mbShow = false;
-        postItField->mpPostIt->HideNote();
+        if (postItField->mpPostIt)
+            postItField->mpPostIt->HideNote();
     }
 }
 

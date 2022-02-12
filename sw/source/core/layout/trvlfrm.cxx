@@ -2145,7 +2145,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     // If there's no doubleline portion involved or start and end are both
     // in the same doubleline portion, all works fine, but otherwise
     // we need the following...
-    if( (pSt2Pos || pEnd2Pos) && ( !pSt2Pos || !pEnd2Pos ||
+    if( (!pSt2Pos && !pEnd2Pos) && ( !pSt2Pos || !pEnd2Pos ||
         pSt2Pos->aPortion != pEnd2Pos->aPortion ) )
     {
         // If we have a start(end) position inside a doubleline portion

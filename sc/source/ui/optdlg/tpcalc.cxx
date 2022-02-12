@@ -82,12 +82,16 @@ std::unique_ptr<SfxTabPage> ScTpCalcOptions::Create( weld::Container* pPage, wel
     return std::make_unique<ScTpCalcOptions>( pPage, pController, *rAttrSet );
 }
 
-void ScTpCalcOptions::Reset( const SfxItemSet* /* rCoreAttrs */ )
+void ScTpCalcOptions::Reset(const SfxItemSet* rCoreAttrs)
 {
     sal_uInt16  d,m;
     sal_Int16   y;
 
-    *pLocalOptions  = *pOldOptions;
+    pOldOptions.reset(new ScDocOptions(
+        static_cast<const ScTpCalcItem&>(rCoreAttrs->Get(
+            GetWhich(SID_SCDOCOPTIONS))).GetDocOptions()));
+
+    *pLocalOptions = *pOldOptions;
 
     m_xBtnCase->set_active( !pLocalOptions->IsIgnoreCase() );
     m_xBtnCase->set_sensitive( !officecfg::Office::Calc::Calculate::Other::CaseSensitive::isReadOnly() );

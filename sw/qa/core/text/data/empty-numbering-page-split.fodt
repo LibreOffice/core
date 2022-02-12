@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<office:document xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+  <office:styles>
+    <style:default-style style:family="paragraph">
+      <style:text-properties fo:font-size="12pt"/>
+    </style:default-style>
+    <style:style style:name="Standard" style:family="paragraph" style:class="text"/>
+    <style:style style:name="Heading" style:family="paragraph" style:parent-style-name="Standard" style:next-style-name="Text_20_body" style:class="text">
+      <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" style:contextual-spacing="false" fo:keep-with-next="always"/>
+      <style:text-properties fo:font-size="14pt"/>
+    </style:style>
+    <style:style style:name="Text_20_body" style:display-name="Text body" style:family="paragraph" style:parent-style-name="Standard" style:class="text">
+      <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0.212cm"/>
+    </style:style>
+    <style:style style:name="Heading_20_1" style:display-name="Heading 1" style:family="paragraph" style:parent-style-name="Heading" style:class="text">
+      <style:paragraph-properties fo:margin-top="0.423cm" fo:margin-bottom="0.212cm" fo:break-before="page"/>
+    </style:style>
+    <text:outline-style style:name="Outline">
+      <text:outline-level-style text:level="1" style:num-format="">
+        <style:list-level-properties text:min-label-distance="0.381cm"/>
+      </text:outline-level-style>
+    </text:outline-style>
+  </office:styles>
+  <office:automatic-styles>
+    <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard" style:master-page-name="Intro">
+      <style:paragraph-properties style:page-number="1"/>
+    </style:style>
+    <style:page-layout style:name="pm1">
+      <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+      <style:header-style>
+        <style:header-footer-properties fo:min-height="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-bottom="0cm"/>
+      </style:header-style>
+      <style:footer-style>
+        <style:header-footer-properties fo:min-height="0.6cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0.499cm" style:dynamic-spacing="false"/>
+      </style:footer-style>
+    </style:page-layout>
+    <style:page-layout style:name="pm2">
+      <style:page-layout-properties fo:page-width="21.001cm" fo:page-height="29.7cm" fo:margin-top="2cm" fo:margin-bottom="2cm" fo:margin-left="2cm" fo:margin-right="2cm"/>
+      <style:header-style>
+        <style:header-footer-properties fo:min-height="0cm" fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-bottom="0.499cm"/>
+      </style:header-style>
+      <style:footer-style/>
+    </style:page-layout>
+  </office:automatic-styles>
+  <office:master-styles>
+    <style:master-page style:name="Standard" style:page-layout-name="pm1" style:next-style-name="Intro">
+      <style:header>
+        <text:p/>
+      </style:header>
+      <style:footer>
+        <text:p/>
+      </style:footer>
+    </style:master-page>
+    <style:master-page style:name="Intro" style:page-layout-name="pm2"/>
+  </office:master-styles>
+  <office:body>
+    <office:text text:use-soft-page-breaks="true">
+      <text:h text:style-name="Heading_20_1" text:outline-level="1"/>
+      <text:p text:style-name="P1"/>
+    </office:text>
+  </office:body>
+</office:document>

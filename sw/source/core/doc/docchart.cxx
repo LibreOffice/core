@@ -107,9 +107,30 @@ void SwDoc::UpdateCharts_( const SwTable& rTable, SwViewShell const & rVSh ) con
             aName == pONd->GetChartTableName() &&
             pONd->getLayoutFrame( rVSh.GetLayout() ) )
         {
+            // tdf#122995 for OLE/Charts in SW we do not (yet) have a refresh
+            // mechanism or embedding of the primitive representation, so this
+            // needs to be done locally here (simplest solution).
+            bool bImmediateMode(false);
+
+            if(pONd->IsChart())
+            {
+                // refresh to trigger repaint
+                const SwRect aChartRect(pONd->FindLayoutRect());
+                if(!aChartRect.IsEmpty())
+                    const_cast<SwViewShell &>(rVSh).InvalidateWindows(aChartRect);
+
+                // forced refresh of the chart's primitive representation
+                pONd->GetOLEObj().resetBufferedData();
+
+                // InvalidateTable using the Immediate-Mode, else the chart will
+                // not yet know that it is invalidated at the next repaint and create
+                // the same graphical representation again
+                bImmediateMode = true;
+            }
+
             SwChartDataProvider *pPCD = getIDocumentChartDataProviderAccess().GetChartDataProvider();
             if (pPCD)
-                pPCD->InvalidateTable( &rTable );
+                pPCD->InvalidateTable( &rTable, bImmediateMode );
             // following this the framework will now take care of repainting
             // the chart or it's replacement image...
         }

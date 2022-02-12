@@ -497,7 +497,7 @@ void LwpDrawPolyLine::Read()
     m_pStream->ReadUChar( m_aPolyLineRec.aPenColor.unused );
     m_pStream->ReadUInt16( m_aPolyLineRec.nNumPoints );
 
-    if (m_aPolyLineRec.nNumPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || m_aPolyLineRec.nNumPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_pVector.reset( new SdwPoint[m_aPolyLineRec.nNumPoints] );
@@ -577,7 +577,7 @@ void LwpDrawPolygon::Read()
     ReadClosedObjStyle();
     m_pStream->ReadUInt16( m_nNumPoints );
 
-    if (m_nNumPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || m_nNumPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_pVector.reset( new SdwPoint[m_nNumPoints] );
@@ -1023,6 +1023,7 @@ void LwpDrawTextBox::Read()
 
     m_pStream->ReadInt16( m_aTextRec.nTextHeight );
     m_pStream->ReadBytes(m_aTextRec.tmpTextFaceName, DRAW_FACESIZE);
+    m_aTextRec.tmpTextFaceName[DRAW_FACESIZE - 1] = 0;
     m_pStream->SeekRel(1);// PitchAndFamily
 
     m_pStream->ReadInt16( m_aTextRec.nTextSize );
@@ -1041,14 +1042,19 @@ void LwpDrawTextBox::Read()
     m_pStream->ReadInt16( m_aTextRec.nTextRotation );
     m_pStream->ReadInt16( m_aTextRec.nTextExtraSpacing );
 
+    if (!m_pStream->good())
+        throw BadRead();
+
     // some draw files in version 1.2 have an extra byte following '\0'.
     // can't rely on that, so read in the whole string into memory.
 
     // the 71 is the fixed length before text content in textbox record
     sal_Int16 TextLength = m_aObjHeader.nRecLen - 71;
-    m_aTextRec.pTextString = new sal_uInt8 [TextLength];
-
-    m_pStream->ReadBytes(m_aTextRec.pTextString, TextLength);
+    if (TextLength < 0)
+        throw BadRead();
+    m_aTextRec.pTextString = new sal_uInt8[TextLength];
+    if (m_pStream->ReadBytes(m_aTextRec.pTextString, TextLength) != o3tl::make_unsigned(TextLength))
+        throw BadRead();
 }
 
 OUString LwpDrawTextBox::RegisterStyle()
@@ -1086,6 +1092,9 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
         // temporary code, need to create Encoding from the value of nTextCharacterSet
         aEncoding = LwpCharSetMgr::GetTextCharEncoding();
     }
+
+    if (TextLength < 2)
+        throw BadRead();
 
     XFParagraph* pXFPara = new XFParagraph();
     pXFPara->Add(OUString(reinterpret_cast<char*>(m_aTextRec.pTextString), (TextLength-2), aEncoding));
@@ -1126,16 +1135,8 @@ LwpDrawTextArt::LwpDrawTextArt(SvStream* pStream, DrawingOffsetAndScale* pTransD
 
 LwpDrawTextArt::~LwpDrawTextArt()
 {
-    if (m_aTextArtRec.aPath[0].pPts)
-    {
-        delete [] m_aTextArtRec.aPath[0].pPts;
-        m_aTextArtRec.aPath[0].pPts = nullptr;
-    }
-    if (m_aTextArtRec.aPath[1].pPts)
-    {
-        delete [] m_aTextArtRec.aPath[1].pPts;
-        m_aTextArtRec.aPath[1].pPts = nullptr;
-    }
+    m_aTextArtRec.aPath[0].aPts.clear();
+    m_aTextArtRec.aPath[1].aPts.clear();
     if (m_aTextArtRec.pTextString)
     {
         delete [] m_aTextArtRec.pTextString;
@@ -1147,8 +1148,8 @@ LwpDrawTextArt::~LwpDrawTextArt()
 void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
 {
     sal_Int16 nX, nY;
-    nX = (m_aTextArtRec.aPath[0].pPts[0].x + m_aTextArtRec.aPath[1].pPts[0].x) / 2;
-    nY = (m_aTextArtRec.aPath[0].pPts[0].y + m_aTextArtRec.aPath[1].pPts[0].y) / 2;
+    nX = (m_aTextArtRec.aPath[0].aPts[0].x + m_aTextArtRec.aPath[1].aPts[0].x) / 2;
+    nY = (m_aTextArtRec.aPath[0].aPts[0].y + m_aTextArtRec.aPath[1].aPts[0].y) / 2;
     XFPoint aStart(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
         static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
     pPath->MoveTo(aStart);
@@ -1156,20 +1157,20 @@ void LwpDrawTextArt::CreateFWPath(XFDrawPath* pPath)
     sal_uInt8 nPtIndex = 1;
     for (sal_uInt16 nC = 1; nC <= m_aTextArtRec.aPath[0].n; nC++)
     {
-        nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
-        nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
+        nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
+        nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
         XFPoint aCtrl1(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
         nPtIndex++;
-        nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
-        nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
+        nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
+        nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
         XFPoint aCtrl2(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
         nPtIndex++;
-        nX = (m_aTextArtRec.aPath[0].pPts[nPtIndex].x + m_aTextArtRec.aPath[1].pPts[nPtIndex].x) / 2;
-        nY = (m_aTextArtRec.aPath[0].pPts[nPtIndex].y + m_aTextArtRec.aPath[1].pPts[nPtIndex].y) / 2;
+        nX = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).x + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).x) / 2;
+        nY = (m_aTextArtRec.aPath[0].aPts.at(nPtIndex).y + m_aTextArtRec.aPath[1].aPts.at(nPtIndex).y) / 2;
         XFPoint aDest(static_cast<double>(nX)/TWIPS_PER_CM * m_pTransData->fScaleX,
             static_cast<double>(nY)/TWIPS_PER_CM * m_pTransData->fScaleY);
 
@@ -1192,42 +1193,44 @@ void LwpDrawTextArt::Read()
     m_pStream->ReadInt16( m_aTextArtRec.nRotation );
 
     sal_uInt16 nPointNumber;
-    sal_Int16 nX, nY;
     m_pStream->ReadUInt16( nPointNumber );
 
     size_t nPoints = nPointNumber*3+1;
-    if (nPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || nPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_aTextArtRec.aPath[0].n = nPointNumber;
-    m_aTextArtRec.aPath[0].pPts = new SdwPoint[nPoints];
+    m_aTextArtRec.aPath[0].aPts.resize(nPoints);
     for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
+        sal_Int16 nX, nY;
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
-        m_aTextArtRec.aPath[0].pPts[nPt].x = nX;
-        m_aTextArtRec.aPath[0].pPts[nPt].y = nY;
+        m_aTextArtRec.aPath[0].aPts[nPt].x = nX;
+        m_aTextArtRec.aPath[0].aPts[nPt].y = nY;
     }
 
     m_pStream->ReadUInt16( nPointNumber );
 
     nPoints = nPointNumber*3+1;
-    if (nPoints > m_pStream->remainingSize() / 4)
+    if (!m_pStream->good() || nPoints > m_pStream->remainingSize() / 4)
         throw BadRead();
 
     m_aTextArtRec.aPath[1].n = nPointNumber;
-    m_aTextArtRec.aPath[1].pPts = new SdwPoint[nPoints];
+    m_aTextArtRec.aPath[1].aPts.resize(nPoints);
     for (size_t nPt = 0; nPt < nPoints; ++nPt)
     {
+        sal_Int16 nX, nY;
         m_pStream->ReadInt16( nX );
         m_pStream->ReadInt16( nY );
-        m_aTextArtRec.aPath[1].pPts[nPt].x = nX;
-        m_aTextArtRec.aPath[1].pPts[nPt].y = nY;
+        m_aTextArtRec.aPath[1].aPts[nPt].x = nX;
+        m_aTextArtRec.aPath[1].aPts[nPt].y = nY;
     }
 
     m_pStream->SeekRel(1);
 
     m_pStream->ReadBytes(m_aTextArtRec.tmpTextFaceName, DRAW_FACESIZE);
+    m_aTextArtRec.tmpTextFaceName[DRAW_FACESIZE - 1] = 0;
     m_pStream->SeekRel(1);// PitchAndFamily
 
     m_pStream->ReadInt16( m_aTextArtRec.nTextSize );
@@ -1246,7 +1249,7 @@ void LwpDrawTextArt::Read()
                                                     - (m_aTextArtRec.aPath[1].n*3 + 1)*4;
 
 
-    if (m_aTextArtRec.nTextLen > m_pStream->remainingSize())
+    if (!m_pStream->good() || m_aTextArtRec.nTextLen > m_pStream->remainingSize())
         throw BadRead();
 
     m_aTextArtRec.pTextString = new sal_uInt8 [m_aTextArtRec.nTextLen];
@@ -1342,6 +1345,22 @@ LwpDrawBitmap::~LwpDrawBitmap()
 {
 }
 
+static bool IsValid(const BmpInfoHeader2& rHeader)
+{
+    if (rHeader.nPlanes != 1)
+        return false;
+
+    if (rHeader.nBitCount != 0 && rHeader.nBitCount != 1 &&
+        rHeader.nBitCount != 4 && rHeader.nBitCount != 8 &&
+        rHeader.nBitCount != 16 && rHeader.nBitCount != 24 &&
+        rHeader.nBitCount != 32)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 /**
  * @descr   reading function of class LwpDrawBitmap
  */
@@ -1351,25 +1370,38 @@ void LwpDrawBitmap::Read()
     m_pStream->ReadUInt16( m_aBmpRec.nRotation );
 
     // 20 == length of draw-specific fields.
-    // 14 == length of bmp file header.
-    m_aBmpRec.nFileSize = m_aObjHeader.nRecLen - 20 + 14;
-    m_pImageData.reset( new sal_uInt8 [m_aBmpRec.nFileSize] );
+    if (m_aObjHeader.nRecLen < 20)
+        throw BadRead();
+
+    sal_uInt64 nBmpPos = m_pStream->Tell();
+    sal_uInt64 nBmpLen =
+        std::min<sal_uInt64>(m_aObjHeader.nRecLen - 20, m_pStream->remainingSize());
 
     BmpInfoHeader2 aInfoHeader2;
     m_pStream->ReadUInt32( aInfoHeader2.nHeaderLen );
+
+    if (!m_pStream->good() || nBmpLen < aInfoHeader2.nHeaderLen)
+        throw BadRead();
 
     sal_uInt32 N;
     sal_uInt32 rgbTableSize;
 
     if (aInfoHeader2.nHeaderLen == sizeof(BmpInfoHeader))
     {
-        m_pStream->ReadUInt32( aInfoHeader2.nWidth );
-        m_pStream->ReadUInt32( aInfoHeader2.nHeight );
+        sal_uInt16 nTmp;
+
+        m_pStream->ReadUInt16( nTmp );
+        aInfoHeader2.nWidth = nTmp;
+        m_pStream->ReadUInt16( nTmp );
+        aInfoHeader2.nHeight = nTmp;
         m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
         m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
 
+        if (!m_pStream->good() || !IsValid(aInfoHeader2))
+            throw BadRead();
+
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
-        if (N == 24)
+        if (N >= 16)
         {
             rgbTableSize = 0;
         }
@@ -1378,14 +1410,18 @@ void LwpDrawBitmap::Read()
             rgbTableSize = 3 * (1 << N);
         }
     }
-    else
+    else if (aInfoHeader2.nHeaderLen >= sizeof(BmpInfoHeader2))
     {
         m_pStream->ReadUInt32( aInfoHeader2.nWidth );
         m_pStream->ReadUInt32( aInfoHeader2.nHeight );
         m_pStream->ReadUInt16( aInfoHeader2.nPlanes );
         m_pStream->ReadUInt16( aInfoHeader2.nBitCount );
+
+        if (!m_pStream->good() || !IsValid(aInfoHeader2))
+            throw BadRead();
+
         N = aInfoHeader2.nPlanes * aInfoHeader2.nBitCount;
-        if (N == 24)
+        if (N >= 16)
         {
             rgbTableSize = 0;
         }
@@ -1393,8 +1429,14 @@ void LwpDrawBitmap::Read()
         {
             rgbTableSize = 4 * (1 << N);
         }
-
     }
+    else
+    {
+        throw BadRead();
+    }
+
+    m_aBmpRec.nFileSize = static_cast<sal_uInt32>(nBmpLen + 14);
+    m_pImageData.reset( new sal_uInt8 [m_aBmpRec.nFileSize] );
 
     sal_uInt32 nOffBits = 14 + aInfoHeader2.nHeaderLen + rgbTableSize;
     m_pImageData[0] = 'B';
@@ -1412,50 +1454,11 @@ void LwpDrawBitmap::Read()
     m_pImageData[12] = static_cast<sal_uInt8>(nOffBits >> 16);
     m_pImageData[13] = static_cast<sal_uInt8>(nOffBits >> 24);
 
-    sal_uInt32 nDIBRemaining;
     sal_uInt8* pPicData = m_pImageData.get();
-    if (aInfoHeader2.nHeaderLen== sizeof(BmpInfoHeader))
-    {
-        m_pImageData[14] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen);
-        m_pImageData[15] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 8);
-        m_pImageData[16] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 16);
-        m_pImageData[17] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 24);
-        m_pImageData[18] = static_cast<sal_uInt8>(aInfoHeader2.nWidth);
-        m_pImageData[19] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 8);
-        m_pImageData[20] = static_cast<sal_uInt8>(aInfoHeader2.nHeight);
-        m_pImageData[21] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 8);
-        m_pImageData[22] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes);
-        m_pImageData[23] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes >> 8);
-        m_pImageData[24] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount);
-        m_pImageData[25] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount >> 8);
 
-        nDIBRemaining = m_aBmpRec.nFileSize - 26;
-        pPicData += 26*sizeof(sal_uInt8);
-    }
-    else
-    {
-        m_pImageData[14] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen);
-        m_pImageData[15] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 8);
-        m_pImageData[16] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 16);
-        m_pImageData[17] = static_cast<sal_uInt8>(aInfoHeader2.nHeaderLen >> 24);
-        m_pImageData[18] = static_cast<sal_uInt8>(aInfoHeader2.nWidth);
-        m_pImageData[19] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 8);
-        m_pImageData[20] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 16);
-        m_pImageData[21] = static_cast<sal_uInt8>(aInfoHeader2.nWidth >> 24);
-        m_pImageData[22] = static_cast<sal_uInt8>(aInfoHeader2.nHeight);
-        m_pImageData[23] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 8);
-        m_pImageData[24] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 16);
-        m_pImageData[25] = static_cast<sal_uInt8>(aInfoHeader2.nHeight >> 24);
-        m_pImageData[26] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes);
-        m_pImageData[27] = static_cast<sal_uInt8>(aInfoHeader2.nPlanes >> 8);
-        m_pImageData[28] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount);
-        m_pImageData[29] = static_cast<sal_uInt8>(aInfoHeader2.nBitCount >> 8);
-
-        nDIBRemaining = m_aBmpRec.nFileSize - 30;
-        pPicData += 30*sizeof(sal_uInt8);
-    }
-
-    m_pStream->ReadBytes(pPicData, nDIBRemaining);
+    m_pStream->Seek(nBmpPos);
+    if (nBmpLen != m_pStream->ReadBytes(pPicData + 14, nBmpLen))
+        throw BadRead();
 }
 
 OUString LwpDrawBitmap::RegisterStyle()

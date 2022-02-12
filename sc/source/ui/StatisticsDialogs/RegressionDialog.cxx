@@ -513,7 +513,12 @@ void ScRegressionDialog::WriteRegressionEstimatesWithCI(AddressWalkerWriter& rOu
                                                         bool bTakeLogX)
 {
     rOutput.newLine();
-    SCROW nLastRow = rOutput.current(0, 1 + mnNumIndependentVars).Row();
+    ScAddress aEnd( rOutput.current(0, 1 + mnNumIndependentVars));
+    ScRefFlags eAddrFlag = mbUse3DAddresses ? ScRefFlags::ADDR_ABS_3D : ScRefFlags::ADDR_ABS;
+    aEnd.IncCol();
+    const OUString aCoeffAddr( aEnd.Format( eAddrFlag, &mDocument, mDocument.GetAddressConvention()));
+    aEnd.IncCol();
+    const OUString aStErrAddr( aEnd.Format( eAddrFlag, &mDocument, mDocument.GetAddressConvention()));
 
     // Coefficients & Std.Errors ranges (column vectors) in this table (yet to populate).
     rTemplate.autoReplaceRange("%COEFFICIENTS_RANGE%",
@@ -553,9 +558,9 @@ void ScRegressionDialog::WriteRegressionEstimatesWithCI(AddressWalkerWriter& rOu
         {
             "",
             // This puts the coefficients in the reverse order compared to that in LINEST output.
-            "=INDEX(%COEFFICIENTS_REV_RANGE%; 1 ; " + OUString::number(nLastRow + 2) + " - ROW())",
+            "=INDEX(%COEFFICIENTS_REV_RANGE%; 1 ; ROW(" + aCoeffAddr + ")+1 - ROW())",
             // This puts the standard errors in the reverse order compared to that in LINEST output.
-            "=INDEX(%SERRORSX_REV_RANGE%; 1 ; " + OUString::number(nLastRow + 2) + " - ROW())",
+            "=INDEX(%SERRORSX_REV_RANGE%; 1 ; ROW(" + aStErrAddr + ")+1 - ROW())",
             // t-Statistic
             "=%COEFFICIENTS_RANGE% / %SERRORSX_RANGE%",
             // p-Value

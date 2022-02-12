@@ -93,6 +93,7 @@ void SAL_CALL ScXMLTableColContext::endFastElement( sal_Int32 /*nElement*/ )
             nLastColumn = pDoc->MaxCol();
         if (nCurrentColumn > pDoc->MaxCol())
             nCurrentColumn = pDoc->MaxCol();
+        pDoc->CreateColumnIfNotExists(nSheet, nLastColumn);
         uno::Reference<table::XColumnRowRange> xColumnRowRange (xSheet->getCellRangeByPosition(nCurrentColumn, 0, nLastColumn, 0), uno::UNO_QUERY);
         if (xColumnRowRange.is())
         {

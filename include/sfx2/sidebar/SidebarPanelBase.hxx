@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sfx2/dllapi.h>
 
 #include <cppuhelper/compbase.hxx>

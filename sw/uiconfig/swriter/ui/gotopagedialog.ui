@@ -72,7 +72,6 @@
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <property name="label" translatable="yes" context="gotopagedialog|page_count">of $1</property>
-                <property name="use_underline">True</property>
                 <property name="xalign">0</property>
               </object>
               <packing>

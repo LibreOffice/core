@@ -377,6 +377,24 @@ public:
     virtual OUString GetComment() const override;
 };
 
+class SdrUndoSort final : public SdrUndoAction
+{
+private:
+    ::std::vector<sal_Int32> m_OldSortOrder;
+    ::std::vector<sal_Int32> m_NewSortOrder;
+    sal_uInt16 const m_nPage;
+
+    void Do(::std::vector<sal_Int32> & rSortOrder);
+
+public:
+    SdrUndoSort(SdrPage & rPage,
+        ::std::vector<sal_Int32> const& rSortOrder);
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+
+    virtual OUString GetComment() const override;
+};
 
 // #i11702#
 
@@ -732,6 +750,7 @@ public:
     virtual std::unique_ptr<SdrUndoAction> CreateUndoNewPage(SdrPage& rPage);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoCopyPage(SdrPage& rPage);
     virtual std::unique_ptr<SdrUndoAction> CreateUndoSetPageNum(SdrPage& rNewPg, sal_uInt16 nOldPageNum1, sal_uInt16 nNewPageNum1);
+    virtual std::unique_ptr<SdrUndoAction> CreateUndoSort(SdrPage& rPage, ::std::vector<sal_Int32> const& rSortOrder);
 
     // Master page
     virtual std::unique_ptr<SdrUndoAction> CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage);

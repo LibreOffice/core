@@ -1,0 +1,35 @@
+From 1d031966e08aef92ef742ae3cf91e1addaf95a47 Mon Sep 17 00:00:00 2001
+From: "Benjamin A. Beasley" <code@musicinmybrain.net>
+Date: Wed, 8 Dec 2021 18:14:54 -0500
+Subject: [PATCH 1/4] Use a patch file to document changes from upstream
+ stb_image.h
+
+---
+ thirdparty/stb/stb_image.patch | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 thirdparty/stb/stb_image.patch
+
+diff --git a/thirdparty/stb/stb_image.patch b/thirdparty/stb/stb_image.patch
+new file mode 100644
+index 0000000..5153728
+--- /dev/null
++++ b/thirdparty/stb/stb_image.patch
+@@ -0,0 +1,15 @@
++diff -Naur upstream/stb_image.h zxing/stb_image.h
++--- upstream/stb_image.h	2021-12-08 18:11:28.170529096 -0500
+++++ zxing/stb_image.h	2021-12-08 18:06:42.706717697 -0500
++@@ -1644,7 +1644,11 @@
++ 
++ static stbi_uc stbi__compute_y(int r, int g, int b)
++ {
+++#if 0 // ori
++    return (stbi_uc) (((r*77) + (g*150) +  (29*b)) >> 8);
+++#else // zxing (see ReadBarcode.cpp:RGBToGray)
+++   return (stbi_uc) ((306 * r + 601 * g + 117 * b + 0x200) >> 10);
+++#endif
++ }
++ #endif
++ 
+-- 
+2.33.1
+

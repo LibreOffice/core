@@ -124,7 +124,7 @@ public:
                            bool bCanHaveSubMenu, bool bTreeMode, int nWidth);
     ~ScCheckListMenuControl();
 
-    void addMenuItem(const OUString& rText, Action* pAction);
+    void addMenuItem(const OUString& rText, Action* pAction, bool bIndicateSubMenu = false);
     void addSeparator();
     ScCheckListMenuWindow* addSubMenuItem(const OUString& rText, bool bEnabled);
     void resizeToFitMenuItems();

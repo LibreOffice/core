@@ -9414,6 +9414,29 @@ GtkPositionType show_menu(GtkWidget* pMenuButton, GtkWindow* pMenu)
     return ePosUsed;
 }
 
+bool button_event_is_outside(GtkWidget* pMenuHack, GdkEventButton* pEvent)
+{
+    //we want to pop down if the button was released outside our popup
+    gdouble x = pEvent->x_root;
+    gdouble y = pEvent->y_root;
+
+    gint window_x, window_y;
+    GdkSurface* pWindow = widget_get_surface(pMenuHack);
+    gdk_window_get_position(pWindow, &window_x, &window_y);
+
+    GtkAllocation alloc;
+    gtk_widget_get_allocation(pMenuHack, &alloc);
+    gint x1 = window_x;
+    gint y1 = window_y;
+    gint x2 = x1 + alloc.width;
+    gint y2 = y1 + alloc.height;
+
+    if (x > x1 && x < x2 && y > y1 && y < y2)
+        return false;
+
+    return true;
+}
+
 #endif
 
 /* four types of uses of this
@@ -9548,36 +9571,17 @@ private:
         }
     }
 
-    static gboolean signalButtonRelease(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
+    static gboolean signalButtonRelease(GtkWidget* /*pWidget*/, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceMenuButton* pThis = static_cast<GtkInstanceMenuButton*>(widget);
-        return pThis->button_release(pWidget, pEvent);
+        return pThis->button_release(pEvent);
     }
 
-    bool button_release(GtkWidget* pWidget, GdkEventButton* pEvent)
+    bool button_release(GdkEventButton* pEvent)
     {
         //we want to pop down if the button was released outside our popup
-        gdouble x = pEvent->x_root;
-        gdouble y = pEvent->y_root;
-        gint xoffset, yoffset;
-        gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
-
-        GtkAllocation alloc;
-        gtk_widget_get_allocation(pWidget, &alloc);
-        xoffset += alloc.x;
-        yoffset += alloc.y;
-
-        gtk_widget_get_allocation(GTK_WIDGET(m_pMenuHack), &alloc);
-        gint x1 = alloc.x + xoffset;
-        gint y1 = alloc.y + yoffset;
-        gint x2 = x1 + alloc.width;
-        gint y2 = y1 + alloc.height;
-
-        if (x > x1 && x < x2 && y > y1 && y < y2)
-            return false;
-
-        set_active(false);
-
+        if (button_event_is_outside(GTK_WIDGET(m_pMenuHack), pEvent))
+            set_active(false);
         return false;
     }
 
@@ -19749,36 +19753,17 @@ private:
         }
     }
 
-    static gboolean signalButtonPress(GtkWidget* pWidget, GdkEventButton* pEvent, gpointer widget)
+    static gboolean signalButtonPress(GtkWidget* /*pWidget*/, GdkEventButton* pEvent, gpointer widget)
     {
         GtkInstanceComboBox* pThis = static_cast<GtkInstanceComboBox*>(widget);
-        return pThis->button_press(pWidget, pEvent);
+        return pThis->button_press(pEvent);
     }
 
-    bool button_press(GtkWidget* pWidget, GdkEventButton* pEvent)
+    bool button_press(GdkEventButton* pEvent)
     {
         //we want to pop down if the button was pressed outside our popup
-        gdouble x = pEvent->x_root;
-        gdouble y = pEvent->y_root;
-        gint xoffset, yoffset;
-        gdk_window_get_root_origin(widget_get_surface(pWidget), &xoffset, &yoffset);
-
-        GtkAllocation alloc;
-        gtk_widget_get_allocation(pWidget, &alloc);
-        xoffset += alloc.x;
-        yoffset += alloc.y;
-
-        gtk_widget_get_allocation(GTK_WIDGET(m_pMenuWindow), &alloc);
-        gint x1 = alloc.x + xoffset;
-        gint y1 = alloc.y + yoffset;
-        gint x2 = x1 + alloc.width;
-        gint y2 = y1 + alloc.height;
-
-        if (x > x1 && x < x2 && y > y1 && y < y2)
-            return false;
-
-        gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
-
+        if (button_event_is_outside(GTK_WIDGET(m_pMenuWindow), pEvent))
+            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(m_pToggleButton), false);
         return false;
     }
 
@@ -21364,7 +21349,15 @@ namespace {
             const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
             if (pDesc && pDesc[0])
             {
-                gtk_tooltip_set_text(tooltip, pDesc);
+                if (ResHookProc pStringReplace = Translate::GetReadStringHook())
+                {
+                    // tdf#142704 %PRODUCTNAME shown in extended tips
+                    OUString aDesc(pDesc, strlen(pDesc), RTL_TEXTENCODING_UTF8);
+                    aDesc = (*pStringReplace)(aDesc);
+                    gtk_tooltip_set_text(tooltip, OUStringToOString(aDesc, RTL_TEXTENCODING_UTF8).getStr());
+                }
+                else
+                    gtk_tooltip_set_text(tooltip, pDesc);
                 return true;
             }
 #endif
@@ -21685,18 +21678,6 @@ private:
                 aTooltip = (*m_pStringReplace)(aTooltip);
                 gtk_widget_set_tooltip_text(pWidget, OUStringToOString(aTooltip, RTL_TEXTENCODING_UTF8).getStr());
             }
-
-#if !GTK_CHECK_VERSION(4, 0, 0)
-            // tdf#142704 %PRODUCTNAME shown in extended tips
-            AtkObject* pAtkObject = gtk_widget_get_accessible(pWidget);
-            const char* pDesc = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
-            if (pDesc && pDesc[0])
-            {
-                OUString aDesc(pDesc, strlen(pDesc), RTL_TEXTENCODING_UTF8);
-                aDesc = (*m_pStringReplace)(aDesc);
-                atk_object_set_description(pAtkObject, OUStringToOString(aDesc, RTL_TEXTENCODING_UTF8).getStr());
-            }
-#endif
         }
 
         // expand placeholder and collect potentially missing mnemonics

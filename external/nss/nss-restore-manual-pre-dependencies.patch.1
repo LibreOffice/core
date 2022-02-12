@@ -79,5 +79,5 @@ summary:     Bug 1637083 Replace pre-dependency with shell hack r=rrelyea
 +	$(MAKE) -C lib/base libs
 +	IGNORE_DIRS=1 $(MAKE) -C lib/ckfw/builtins libs
  
- all: prepare_build
- 	$(MAKE) libs
+ lib: coreconf
+ cmd: lib
