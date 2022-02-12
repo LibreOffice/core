@@ -69,6 +69,24 @@
       "parentUuid": "440ed0c4_37975225",
       "revId": "aecd5c4d9cc8acd1a5de480e438fe5caec92a069",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afb8b566_069d83dc",
+        "filename": "readlicense_oo/license/license.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 2847,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-02-12T12:41:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15582f49_c4b7e887",
+      "revId": "aecd5c4d9cc8acd1a5de480e438fe5caec92a069",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
