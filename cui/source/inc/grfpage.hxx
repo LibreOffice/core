@@ -49,13 +49,13 @@ class SvxGrfCropPage : public SfxTabPage
 {
     friend class VclPtr<SvxGrfCropPage>;
 
-    OUString        aGraphicName;
-    Size            aOrigSize;
-    Size            aOrigPixelSize;
-    Size            aPageSize;
-    tools::Long            nOldWidth;
-    tools::Long            nOldHeight;
-    bool            bSetOrigSize;
+    OUString m_aGraphicName;
+    Size m_aOrigSize;
+    Size m_aOrigPixelSize;
+    Size m_aPageSize;
+    tools::Long m_nOldWidth;
+    tools::Long m_nOldHeight;
+    bool m_bSetOrigSize;
     sal_Int32 m_aPreferredDPI;
 
     SvxCropExample m_aExampleWN;
