@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b298e744_49ad300e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-02-12T18:49:36Z",
+      "side": 1,
+      "message": "Removed the Word Justify option as well as all related code",
+      "revId": "c3a10afa1ce651e58410b858924ab013c9066789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
