@@ -47,8 +47,30 @@
 
 #include <uiobject.hxx>
 
+#include <o3tl/enumrange.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
+
+namespace {
+    std::map<const OString, ContentTypeId> lcl_aSidToContentTypeId
+    {
+        {"outlines", ContentTypeId::OUTLINE},
+        {"tables", ContentTypeId::TABLE},
+        {"frames", ContentTypeId::FRAME},
+        {"images", ContentTypeId::GRAPHIC},
+        {"oleobjects", ContentTypeId::OLE},
+        {"bookmarks", ContentTypeId::BOOKMARK},
+        {"sections", ContentTypeId::REGION},
+        {"hyperlinks", ContentTypeId::URLFIELD},
+        {"references", ContentTypeId::REFERENCE},
+        {"indexes", ContentTypeId::INDEX},
+        {"comments", ContentTypeId::POSTIT},
+        {"drawingobjects", ContentTypeId::DRAWOBJECT},
+        {"fields", ContentTypeId::TEXTFIELD},
+        {"footnotesandendnotes", ContentTypeId::FOOTNOTE}
+    };
+}
 
 // Filter the control characters out of the Outline-Entry
 OUString SwNavigationPI::CleanEntry(const OUString& rEntry)
@@ -304,6 +326,9 @@ IMPL_LINK(SwNavigationPI, ToolBoxSelectHdl, const OString&, rCommand, void)
         m_xGlobalToolBox->set_menu_item_active("update", !m_xGlobalToolBox->get_menu_item_active("update"));
     else if (rCommand == "insert")
         m_xGlobalToolBox->set_menu_item_active("insert", !m_xGlobalToolBox->get_menu_item_active("insert"));
+    else if (rCommand == "contenttypes")
+        m_xContent5ToolBox->set_menu_item_active(
+                    "contenttypes", !m_xContent5ToolBox->get_menu_item_active("contenttypes"));
 
     if (nFuncId)
         lcl_UnSelectFrame(&rSh);
@@ -367,6 +392,15 @@ IMPL_LINK(SwNavigationPI, ToolBox5DropdownClickHdl, const OString&, rCommand, vo
 
     if (rCommand == "headings")
         m_xHeadingsMenu->set_active(OString::number(m_xContentTree->GetOutlineLevel()), true);
+    else if (rCommand == "contenttypes")
+    {
+        for (int i = 0; i < m_xContentTypesMenu->n_children(); i++)
+        {
+            const OString& sId = m_xContentTypesMenu->get_id(i);
+            m_xContentTypesMenu->set_active(
+                        sId, m_xContentTree->mShowContentType[lcl_aSidToContentTypeId[sId]]);
+        }
+    }
 }
 
 // Action-Handler Edit:
@@ -498,6 +532,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_xDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
     , m_xUpdateMenu(m_xBuilder->weld_menu("updatemenu"))
     , m_xInsertMenu(m_xBuilder->weld_menu("insertmenu"))
+    , m_xContentTypesMenu(m_xBuilder->weld_menu("contenttypesmenu"))
     , m_xGlobalToolBox(m_xBuilder->weld_toolbar("global"))
     , m_xEdit(m_xBuilder->weld_spin_button("spinbutton"))
     , m_xContentBox(m_xBuilder->weld_widget("contentbox"))
@@ -537,6 +572,9 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xContentTree->SetDrawingObjectTracking(m_pConfig->IsDrawingObjectTracking());
     m_xContentTree->SetFieldTracking(m_pConfig->IsFieldTracking());
     m_xContentTree->SetFootnoteTracking(m_pConfig->IsFootnoteTracking());
+
+    for (ContentTypeId eCntTypeId : o3tl::enumrange<ContentTypeId>())
+        m_xContentTree->SetContentTypeShow(eCntTypeId, m_pConfig->IsContentTypeShow(eCntTypeId));
 
     if (const ContentTypeId nRootType = m_pConfig->GetRootType();
             nRootType != ContentTypeId::UNKNOWN)
@@ -622,6 +660,8 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xDocListBox->connect_changed(LINK(this, SwNavigationPI, DocListBoxSelectHdl));
     m_xContent5ToolBox->set_item_menu("headings", m_xHeadingsMenu.get());
     m_xHeadingsMenu->connect_activate(LINK(this, SwNavigationPI, HeadingsMenuSelectHdl));
+    m_xContent5ToolBox->set_item_menu("contenttypes", m_xContentTypesMenu.get());
+    m_xContentTypesMenu->connect_activate(LINK(this, SwNavigationPI, ContentTypesMenuSelectHdl));
     m_xContent5ToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBox5DropdownClickHdl));
     m_xContent6ToolBox->set_item_menu("dragmode", m_xDragModeMenu.get());
     m_xDragModeMenu->connect_activate(LINK(this, SwNavigationPI, DropModeMenuSelectHdl));
@@ -701,6 +741,7 @@ SwNavigationPI::~SwNavigationPI()
     m_xDragModeMenu.reset();
     m_xUpdateMenu.reset();
     m_xInsertMenu.reset();
+    m_xContentTypesMenu.reset();
     m_xContent2Dispatch.reset();
     m_xContent3Dispatch.reset();
     m_xContent1ToolBox.reset();
@@ -816,6 +857,20 @@ IMPL_LINK( SwNavigationPI, HeadingsMenuSelectHdl, const OString&, rMenuId, void 
 {
     if (!rMenuId.isEmpty())
         m_xContentTree->SetOutlineLevel(rMenuId.toUInt32());
+}
+
+IMPL_LINK( SwNavigationPI, ContentTypesMenuSelectHdl, const OString&, rMenuId, void )
+{
+    if (!rMenuId.isEmpty())
+    {
+        ContentTypeId eCntTypeId = lcl_aSidToContentTypeId[rMenuId];
+        bool bSet = !m_xContentTree->mShowContentType[eCntTypeId];
+        m_xContentTree->SetContentTypeShow(eCntTypeId, bSet);
+        m_xContentTypesMenu->set_active(rMenuId, bSet);
+        m_xContentTree->Display(true);
+        if (m_xContentTree->HasContentChanged())
+            m_xContentTree->Display(true);
+    }
 }
 
 void SwNavigationPI::UpdateListBox()

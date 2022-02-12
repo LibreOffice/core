@@ -20,9 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_NAVICFG_HXX
 
 #include <unotools/configitem.hxx>
-
-enum class RegionMode;
-enum class ContentTypeId;
+#include "navipi.hxx"
 
 class SwNavigationConfig final : public utl::ConfigItem
 {
@@ -48,6 +46,26 @@ class SwNavigationConfig final : public utl::ConfigItem
     bool           m_bIsFieldTracking;
     bool           m_bIsFootnoteTracking;
     bool           m_bIsNavigateOnSelect;
+
+    std::map<OUString, ContentTypeId> mPropNameToContentTypeId
+    {
+        {"Outlines", ContentTypeId::OUTLINE},
+        {"Tables", ContentTypeId::TABLE},
+        {"Frames", ContentTypeId::FRAME},
+        {"Images", ContentTypeId::GRAPHIC},
+        {"OLEobjects", ContentTypeId::OLE},
+        {"Bookmarks", ContentTypeId::BOOKMARK},
+        {"Sections", ContentTypeId::REGION},
+        {"Hyperlinks", ContentTypeId::URLFIELD},
+        {"References", ContentTypeId::REFERENCE},
+        {"Indexes", ContentTypeId::INDEX},
+        {"Comments", ContentTypeId::POSTIT},
+        {"DrawingObjects", ContentTypeId::DRAWOBJECT},
+        {"Fields", ContentTypeId::TEXTFIELD},
+        {"Footnotes", ContentTypeId::FOOTNOTE}
+    };
+
+    std::map<ContentTypeId, bool> mContentTypeShow;
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
@@ -241,6 +259,21 @@ public:
                     }
 
     bool    IsNavigateOnSelect() const {return m_bIsNavigateOnSelect;}
+
+    void SetContentTypeShow(ContentTypeId eCntTypeId, const bool bSet)
+    {
+        if (mContentTypeShow[eCntTypeId] != bSet)
+        {
+            SetModified();
+            mContentTypeShow[eCntTypeId] = bSet;
+        }
+    }
+
+    bool IsContentTypeShow(ContentTypeId eCntTypeId)
+    {
+        return mContentTypeShow[eCntTypeId];
+    }
+
 };
 
 #endif
