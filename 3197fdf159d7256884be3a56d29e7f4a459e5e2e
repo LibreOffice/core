@@ -16,6 +16,23 @@
       "message": "Is this correction acceptable?",
       "revId": "3197fdf159d7256884be3a56d29e7f4a459e5e2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62d4d130_8102badf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-12T08:54:42Z",
+      "side": 1,
+      "message": "This change must be accompanied with a unit test, to show what problem it solves, and that it really does it. Here I feel that something important is missing - specifically, treatment of UTC vs local times.",
+      "revId": "3197fdf159d7256884be3a56d29e7f4a459e5e2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
