@@ -956,6 +956,7 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
     {
         if (i != ContentTypeId::OUTLINE)
             mTrackContentType[i] = true;
+        mShowContentType[i] = true;
         m_aActiveContentArr[i] = nullptr;
         m_aHiddenContentArr[i] = nullptr;
     }
@@ -2224,6 +2225,8 @@ void SwContentTree::Display( bool bActive )
 
             for( ContentTypeId nCntType : o3tl::enumrange<ContentTypeId>() )
             {
+                if (!mShowContentType[nCntType])
+                    continue;
                 std::unique_ptr<SwContentType>& rpContentT = bActive ?
                                     m_aActiveContentArr[nCntType] :
                                     m_aHiddenContentArr[nCntType];
@@ -3463,19 +3466,22 @@ void SwContentTree::UpdateTracking()
                 (SelectionType::Graphic | SelectionType::Frame | SelectionType::Ole))
         {
             OUString aContentTypeName;
-            if (m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
+            if (mShowContentType[ContentTypeId::GRAPHIC] &&
+                    m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
                     !(m_bIsRoot && m_nRootType != ContentTypeId::GRAPHIC))
             {
                 if (!mTrackContentType[ContentTypeId::GRAPHIC]) return;
                 aContentTypeName = SwResId(STR_CONTENT_TYPE_GRAPHIC);
             }
-            else if (m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
+            else if (mShowContentType[ContentTypeId::FRAME] &&
+                     m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
                      !(m_bIsRoot && m_nRootType != ContentTypeId::FRAME))
             {
                 if (!mTrackContentType[ContentTypeId::FRAME]) return;
                 aContentTypeName = SwResId(STR_CONTENT_TYPE_FRAME);
             }
-            else if (m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
+            else if (mShowContentType[ContentTypeId::OLE] &&
+                     m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
                      !(m_bIsRoot && m_nRootType != ContentTypeId::OLE))
             {
                 if (!mTrackContentType[ContentTypeId::OLE]) return;
@@ -3489,9 +3495,10 @@ void SwContentTree::UpdateTracking()
             }
         }
         // drawing
-        if ((m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
-                                                   SelectionType::DrawObjectEditMode |
-                                                   SelectionType::DbForm)) &&
+        if (mShowContentType[ContentTypeId::DRAWOBJECT] &&
+                (m_pActiveShell->GetSelectionType() & (SelectionType::DrawObject |
+                                                       SelectionType::DrawObjectEditMode |
+                                                       SelectionType::DbForm)) &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
         {
             if (mTrackContentType[ContentTypeId::DRAWOBJECT])
@@ -3523,17 +3530,21 @@ void SwContentTree::UpdateTracking()
             return;
         }
         // footnotes and endnotes
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
-                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
-        {
-            if (mTrackContentType[ContentTypeId::FOOTNOTE])
-                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
-                                                  aContentAtPos.pFndTextAttr);
-            return;
+        if (mShowContentType[ContentTypeId::FOOTNOTE])
+        { 
+            if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
+                    m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+                    !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
+            {
+                if (mTrackContentType[ContentTypeId::FOOTNOTE])
+                    lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
+                                                      aContentAtPos.pFndTextAttr);
+                return;
+            }
         }
         // bookmarks - track first bookmark at cursor
-        if (mTrackContentType[ContentTypeId::BOOKMARK] &&
+        if (mShowContentType[ContentTypeId::BOOKMARK] &&
+                mTrackContentType[ContentTypeId::BOOKMARK] &&
                 (m_pActiveShell->GetSelectionType() & SelectionType::Text))
         {
             SwPaM* pCursor = m_pActiveShell->GetCursor();
@@ -3559,48 +3570,58 @@ void SwContentTree::UpdateTracking()
             }
         }
         // references
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
-                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-                aContentAtPos.pFndTextAttr &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
+        if (mShowContentType[ContentTypeId::REFERENCE])
         {
-            if (mTrackContentType[ContentTypeId::REFERENCE])
+            if (SwContentAtPos aContentAtPos(IsAttrAtPos::RefMark);
+                    m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+                    aContentAtPos.pFndTextAttr &&
+                    !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
             {
-                const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
-                lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
-                                               rRefMark.GetRefName());
+                if (mTrackContentType[ContentTypeId::REFERENCE])
+                {
+                    const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
+                    lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
+                                                   rRefMark.GetRefName());
+                }
+                return;
             }
-            return;
         }
         // hyperlinks
-        if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
-                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
+        if (mShowContentType[ContentTypeId::URLFIELD])
         {
-            // Because hyperlink item names do not need to be unique, finding the corresponding item
-            // in the tree by name may result in incorrect selection. Find the item in the tree by
-            // comparing the SwTextINetFormat pointer at the document cursor position to that stored
-            // in the item SwURLFieldContent.
-            if (mTrackContentType[ContentTypeId::URLFIELD])
-                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
-                                                  aContentAtPos.pFndTextAttr);
-            return;
+            if (SwContentAtPos aContentAtPos(IsAttrAtPos::InetAttr);
+                    m_pActiveShell->GetContentAtPos(
+                        m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
+                    !(m_bIsRoot && m_nRootType != ContentTypeId::URLFIELD))
+            {
+                // Because hyperlink item names do not need to be unique, finding the corresponding
+                // item in the tree by name may result in incorrect selection. Find the item in the
+                // tree by comparing the SwTextINetFormat pointer at the document cursor position
+                // to that stored in the item SwURLFieldContent.
+                if (mTrackContentType[ContentTypeId::URLFIELD])
+                    lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
+                                                      aContentAtPos.pFndTextAttr);
+                return;
+            }
         }
         // fields, comments
-        if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
-                !(m_bIsRoot &&
-                  m_nRootType != ContentTypeId::TEXTFIELD &&
-                  m_nRootType != ContentTypeId::POSTIT))
+        if (mShowContentType[ContentTypeId::TEXTFIELD] || mShowContentType[ContentTypeId::POSTIT])
         {
-            ContentTypeId eCntTypeId =
-                    pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
-                                                                      ContentTypeId::TEXTFIELD;
-            if (mTrackContentType[eCntTypeId])
-                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, eCntTypeId, pField);
-            return;
+            if (SwField* pField = m_pActiveShell->GetCurField(); pField &&
+                    !(m_bIsRoot &&
+                      m_nRootType != ContentTypeId::TEXTFIELD &&
+                      m_nRootType != ContentTypeId::POSTIT))
+            {
+                ContentTypeId eCntTypeId =
+                        pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
+                                                                          ContentTypeId::TEXTFIELD;
+                if (mTrackContentType[eCntTypeId])
+                    lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, eCntTypeId, pField);
+                return;
+            }
         }
         // table
-        if (m_pActiveShell->IsCursorInTable() &&
+        if (mShowContentType[ContentTypeId::TABLE] && m_pActiveShell->IsCursorInTable() &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
         {
             if (mTrackContentType[ContentTypeId::TABLE] && m_pActiveShell->GetTableFormat())
@@ -3612,38 +3633,46 @@ void SwContentTree::UpdateTracking()
             return;
         }
         // indexes
-        if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); pTOX &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::INDEX))
+        if (mShowContentType[ContentTypeId::INDEX])
         {
-            if (mTrackContentType[ContentTypeId::INDEX])
-                lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
-                                               pTOX->GetTOXName());
-            return;
-        }
-        // section
-        if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); pSection &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
-        {
-            if (mTrackContentType[ContentTypeId::REGION])
+            if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); pTOX &&
+                    !(m_bIsRoot && m_nRootType != ContentTypeId::INDEX))
             {
-                lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
-                                               pSection->GetSectionName());
+                if (mTrackContentType[ContentTypeId::INDEX])
+                    lcl_SelectByContentTypeAndName(this, *m_xTreeView,
+                                                   SwResId(STR_CONTENT_TYPE_INDEX),
+                                                   pTOX->GetTOXName());
                 return;
             }
-            else
+        }
+        // section
+        if (mShowContentType[ContentTypeId::REGION])
+        {
+            if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); pSection &&
+                    !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
             {
-                // prevent fall through to outline tracking when section tracking is off and the last
-                // GotoContent is the current section
-                if (m_nLastSelType == ContentTypeId::REGION &&
-                        m_xTreeView->get_selected_text() == pSection->GetSectionName())
+                if (mTrackContentType[ContentTypeId::REGION])
+                {
+                    lcl_SelectByContentTypeAndName(this,
+                                                   *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
+                                                   pSection->GetSectionName());
                     return;
+                }
+                else
+                {
+                    // prevent fall through to outline tracking when section tracking is off and
+                    // the last GotoContent is the current section
+                    if (m_nLastSelType == ContentTypeId::REGION &&
+                            m_xTreeView->get_selected_text() == pSection->GetSectionName())
+                        return;
+                }
+                // fall through to outline tracking when section tracking is off and the last
+                // GotoContent is not the current section
             }
-            // fall through to outline tracking when section tracking is off and the last GotoContent
-            // is not the current section
         }
     }
     // outline
-    if (m_nOutlineTracking == 3)
+    if (!mShowContentType[ContentTypeId::OUTLINE] || m_nOutlineTracking == 3)
         return;
     // find out where the cursor is
     const SwOutlineNodes::size_type nActPos = GetWrtShell()->GetOutlinePos(MAXLEVEL);
@@ -4459,6 +4488,12 @@ void SwContentTree::SetContentTypeTracking(ContentTypeId eCntTypeId, bool bSet)
 {
     mTrackContentType[eCntTypeId] = bSet;
     m_pConfig->SetContentTypeTrack(eCntTypeId, bSet);
+}
+
+void SwContentTree::SetContentTypeShow(ContentTypeId eCntTypeId, bool bSet)
+{
+    mShowContentType[eCntTypeId] = bSet;
+    m_pConfig->SetContentTypeShow(eCntTypeId, bSet);
 }
 
 // Mode Change: Show dropped Doc

@@ -44,7 +44,21 @@ namespace {
         {"CommentTracking", ContentTypeId::POSTIT},
         {"DrawingObjectTracking", ContentTypeId::DRAWOBJECT},
         {"FieldTracking", ContentTypeId::TEXTFIELD},
-        {"FootnoteTracking", ContentTypeId::FOOTNOTE}
+        {"FootnoteTracking", ContentTypeId::FOOTNOTE},
+        {"Outlines", ContentTypeId::OUTLINE},
+        {"Tables", ContentTypeId::TABLE},
+        {"Frames", ContentTypeId::FRAME},
+        {"Images", ContentTypeId::GRAPHIC},
+        {"OLEobjects", ContentTypeId::OLE},
+        {"Bookmarks", ContentTypeId::BOOKMARK},
+        {"Sections", ContentTypeId::REGION},
+        {"Hyperlinks", ContentTypeId::URLFIELD},
+        {"References", ContentTypeId::REFERENCE},
+        {"Indexes", ContentTypeId::INDEX},
+        {"Comments", ContentTypeId::POSTIT},
+        {"DrawingObjects", ContentTypeId::DRAWOBJECT},
+        {"Fields", ContentTypeId::TEXTFIELD},
+        {"Footnotes", ContentTypeId::FOOTNOTE}
     };
 }
 
@@ -72,7 +86,21 @@ Sequence<OUString> SwNavigationConfig::GetPropertyNames()
         OUString("DrawingObjectTracking"),
         OUString("FieldTracking"),
         OUString("FootnoteTracking"),
-        OUString("NavigateOnSelect")};
+        OUString("NavigateOnSelect"),
+        OUString("Outlines"),
+        OUString("Tables"),
+        OUString("Sections"),
+        OUString("Frames"),
+        OUString("Images"),
+        OUString("OLEobjects"),
+        OUString("Bookmarks"),
+        OUString("Hyperlinks"),
+        OUString("References"),
+        OUString("Indexes"),
+        OUString("Comments"),
+        OUString("DrawingObjects"),
+        OUString("Fields"),
+        OUString("Footnotes")};
 }
 
 SwNavigationConfig::SwNavigationConfig() :
@@ -144,6 +172,13 @@ void SwNavigationConfig::Load()
                     break;
                 }
                 case 21: m_bIsNavigateOnSelect = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30:
+                case 31: case 32: case 33: case 34: case 35:
+                {
+                    mContentTypeShow[mPropNameToContentTypeId[aNames[nProp]]] =
+                            *o3tl::doAccess<bool>(pValues[nProp]);
+                    break;
+                }
             }
         }
     }
@@ -178,6 +213,12 @@ void SwNavigationConfig::ImplCommit()
                 break;
             }
             case 21: pValues[nProp] <<= m_bIsNavigateOnSelect; break;
+            case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29: case 30:
+            case 31: case 32: case 33: case 34: case 35:
+            {
+                pValues[nProp] <<= mContentTypeShow[mPropNameToContentTypeId[aNames[nProp]]];
+                break;
+            }
         }
     }
     PutProperties(aNames, aValues);

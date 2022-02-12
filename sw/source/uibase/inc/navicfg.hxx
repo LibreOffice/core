@@ -35,7 +35,7 @@ class SwNavigationConfig final : public utl::ConfigItem
     sal_Int32      m_nOutlineTracking;
     bool           m_bIsNavigateOnSelect;
 
-    o3tl::enumarray<ContentTypeId, bool> mContentTypeTrack;
+    o3tl::enumarray<ContentTypeId, bool> mContentTypeTrack, mContentTypeShow;
 
     static css::uno::Sequence<OUString> GetPropertyNames();
 
@@ -125,6 +125,19 @@ public:
     }
 
     bool    IsNavigateOnSelect() const {return m_bIsNavigateOnSelect;}
+
+    bool IsContentTypeShow(ContentTypeId eCntTypeId)
+    {
+        return mContentTypeShow[eCntTypeId];
+    }
+    void SetContentTypeShow(ContentTypeId eCntTypeId, const bool bSet)
+    {
+        if (mContentTypeShow[eCntTypeId] != bSet)
+        {
+            SetModified();
+            mContentTypeShow[eCntTypeId] = bSet;
+        }
+    }
 };
 
 #endif
