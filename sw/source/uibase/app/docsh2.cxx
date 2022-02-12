@@ -66,6 +66,7 @@
 #include <basic/basmgr.hxx>
 #include <comphelper/classids.hxx>
 #include <fmtcol.hxx>
+#include <istype.hxx>
 #include <view.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
@@ -467,13 +468,13 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SfxViewFrame *pTmpFrame = SfxViewFrame::GetFirst(this);
                 SfxViewShell* pViewShell = SfxViewShell::Current();
                 SwView* pCurrView = dynamic_cast< SwView *> ( pViewShell );
-                bool bCurrent = typeid(SwPagePreview) == typeid( pViewShell );
+                bool bCurrent = isType<SwPagePreview>( pViewShell );
 
                 while( pTmpFrame )    // search Preview
                 {
-                    if( typeid(SwView) == typeid( pTmpFrame->GetViewShell()) )
+                    if( isType<SwView>( pTmpFrame->GetViewShell()) )
                         bOnly = false;
-                    else if( typeid(SwPagePreview) == typeid( pTmpFrame->GetViewShell()))
+                    else if( isType<SwPagePreview>( pTmpFrame->GetViewShell()))
                     {
                         pTmpFrame->GetFrame().Appear();
                         bFound = true;
