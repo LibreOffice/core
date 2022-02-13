@@ -222,7 +222,8 @@ $(call gb_Helper_print_on_error,cd $(EXTERNAL_WORKDIR)/$(3) && \
 	unset Platform && \
 	$(if $(WRAPPERS),export $(WRAPPERS) &&) \
 	$(if $(NMAKE),export $(NMAKE) &&) \
-	$(gb_COMPILER_SETUP) $(2) && touch $@,$(EXTERNAL_WORKDIR)/$(if $(3),$(3)/,)$(if $(4),$(4),$(1).log))
+	$(if $(gb_COMPILER_SETUP),export $(gb_COMPILER_SETUP) &&) \
+	$(2) && touch $@,$(EXTERNAL_WORKDIR)/$(if $(3),$(3)/,)$(if $(4),$(4),$(1).log))
 )
 endef
 
