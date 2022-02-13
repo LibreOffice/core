@@ -28,6 +28,7 @@ import sys
 import threading
 import yaml
 import argparse
+import pathlib
 
 
 def ignoreRemoval(include, toAdd, absFileName, moduleRules):
@@ -340,6 +341,20 @@ def main(argv):
     except FileNotFoundError:
         print ("File 'compile_commands.json' does not exist, please run:\nmake vim-ide-integration")
         sys.exit(-1)
+
+    # quickly sanity check whether files with exceptions in yaml still exists
+    # only check for the module of the very first filename passed
+    moduleName = sorted(list_of_files)[0].split("/")[0]
+    rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
+    moduleRules = {}
+    if os.path.exists(rulePath):
+        moduleRules = yaml.full_load(open(rulePath))
+    if "excludelist" in moduleRules.keys():
+        excludelistRules = moduleRules["excludelist"]
+        for pathname in excludelistRules.keys():
+            file = pathlib.Path(pathname)
+            if not file.exists():
+                print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
 
     tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"])
 
