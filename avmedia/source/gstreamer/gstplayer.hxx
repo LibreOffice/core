@@ -86,7 +86,6 @@ private:
     bool                    mbFakeVideo;
 
     gdouble                 mnUnmutedVolume;
-    bool                    mbPlayPending;
     bool                    mbMuted;
     bool                    mbLooping;
     bool                    mbInitialized;
