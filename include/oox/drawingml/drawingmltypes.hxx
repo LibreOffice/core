@@ -34,6 +34,7 @@
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <tools/long.hxx>
 
 namespace com::sun::star {
     namespace drawing { struct Hatch; }
@@ -170,14 +171,14 @@ inline OString calcRotationValue(sal_Int32 nRotation)
     return OString::number(nRotation);
 }
 
-/** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */
-inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
+/** Converts the passed Long integer value from 1/100 mm to EMUs. */
+inline sal_Int64 convertHmmToEmu( tools::Long nValue )
 {
     return o3tl::convert(nValue, o3tl::Length::mm100, o3tl::Length::emu);
 }
 
 /** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
-inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
+inline tools::Long convertEmuToHmm( sal_Int64 nValue )
 {
     return o3tl::convertNarrowing<sal_Int32, o3tl::Length::emu, o3tl::Length::mm100>(nValue);
 }
