@@ -202,6 +202,7 @@ public:
     void testDrawCircleInMergeCells();
     void testDeleteCirclesInRowAndCol();
     void testTdf129940();
+    void testTdf147014();
     void testTdf139763ShapeAnchor();
     void testAutofilterNamedRangesXLSX();
     void testInvalidBareBiff5();
@@ -309,6 +310,7 @@ public:
     CPPUNIT_TEST(testDrawCircleInMergeCells);
     CPPUNIT_TEST(testDeleteCirclesInRowAndCol);
     CPPUNIT_TEST(testTdf129940);
+    CPPUNIT_TEST(testTdf147014);
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
     CPPUNIT_TEST(testInvalidBareBiff5);
@@ -2827,6 +2829,21 @@ void ScFiltersTest2::testTdf129940()
     aStr = rDoc.GetString(ScAddress(2, 0, 0));
     CPPUNIT_ASSERT_EQUAL(OUString(u"注音符號"), aStr);
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf147014()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf147014.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf147014.xlsx", xDocSh.is());
+    uno::Reference<frame::XModel> xModel = xDocSh->GetModel();
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xIA->getByIndex(0),
+                                                                 uno::UNO_QUERY_THROW);
+    xIA.set(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW);
+    // The sheet has a single shape, without the fix it was not imported, except in 32-bit builds
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Shape not imported", static_cast<sal_Int32>(1), xIA->getCount());
     xDocSh->DoClose();
 }
 
