@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4290dae_315def4e",
+        "filename": "basic/qa/basic_coverage/test_cstr_method.bas",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-13T22:47:02Z",
+      "side": 1,
+      "message": "Hmm, and now I have doubts about this test. Why do we expect it so? The two doubles are in fact different, and having the same string representation for them breaks round trip safety. This test only succeeds because of our flawed doubleToString implementation - something that I hope to be able to fix ~soon.",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 77
+      },
+      "revId": "ed166025123a403fbd679377387a45e097f09d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
