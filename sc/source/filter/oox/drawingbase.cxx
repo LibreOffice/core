@@ -26,6 +26,7 @@
 #include <unitconverter.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <tools/gen.hxx>
 
 namespace oox::xls {
 
@@ -34,13 +35,13 @@ using namespace ::oox::drawingml;
 namespace {
 
 /** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */
-sal_Int64 lclHmmToEmu( sal_Int32 nValue )
+sal_Int64 lclHmmToEmu( tools::Long nValue )
 {
     return (nValue < 0) ? -1 : convertHmmToEmu( nValue );
 }
 
 /** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
-sal_Int32 lclEmuToHmm( sal_Int64 nValue )
+tools::Long lclEmuToHmm( sal_Int64 nValue )
 {
     return (nValue < 0) ? -1 : convertEmuToHmm( nValue );
 }
@@ -186,10 +187,10 @@ bool ShapeAnchor::isAnchorValid() const
         (maTo.mnColOffset == maFrom.mnColOffset && maTo.mnRowOffset == maFrom.mnRowOffset));
 }
 
-EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm ) const
+EmuRectangle ShapeAnchor::calcAnchorRectEmu( const Size& rPageSizeHmm ) const
 {
     AddressConverter& rAddrConv = getAddressConverter();
-    EmuSize aPageSize( lclHmmToEmu( rPageSizeHmm.Width ), lclHmmToEmu( rPageSizeHmm.Height ) );
+    EmuSize aPageSize( lclHmmToEmu( rPageSizeHmm.Width() ), lclHmmToEmu( rPageSizeHmm.Height() ) );
     EmuRectangle aAnchorRect( -1, -1, -1, -1 );
 
     // calculate shape position
@@ -257,17 +258,17 @@ EmuRectangle ShapeAnchor::calcAnchorRectEmu( const css::awt::Size& rPageSizeHmm 
     return aAnchorRect;
 }
 
-css::awt::Rectangle ShapeAnchor::calcAnchorRectHmm( const css::awt::Size& rPageSizeHmm ) const
+css::awt::Rectangle ShapeAnchor::calcAnchorRectHmm(const Size& rPageSizeHmm) const
 {
-    EmuRectangle aAnchorRect = calcAnchorRectEmu( rPageSizeHmm );
+    EmuRectangle aAnchorRect = calcAnchorRectEmu(rPageSizeHmm);
     return css::awt::Rectangle( lclEmuToHmm( aAnchorRect.X ), lclEmuToHmm( aAnchorRect.Y ), lclEmuToHmm( aAnchorRect.Width ), lclEmuToHmm( aAnchorRect.Height ) );
 }
 
 EmuPoint ShapeAnchor::calcCellAnchorEmu( const CellAnchorModel& rModel ) const
 {
     // calculate position of top-left edge of the cell
-    css::awt::Point aPoint = getCellPosition( rModel.mnCol, rModel.mnRow );
-    EmuPoint aEmuPoint( lclHmmToEmu( aPoint.X ), lclHmmToEmu( aPoint.Y ) );
+    Point aPoint = getCellPosition( rModel.mnCol, rModel.mnRow );
+    EmuPoint aEmuPoint( lclHmmToEmu( aPoint.X() ), lclHmmToEmu( aPoint.Y() ) );
 
     // add the offset inside the cell
     switch( meCellAnchorType )

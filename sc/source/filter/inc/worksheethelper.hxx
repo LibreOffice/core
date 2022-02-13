@@ -28,10 +28,14 @@
 struct ScDataBarFormatData;
 class ScDocument;
 
+class Point;
+class Size;
+namespace tools {
+    class Rectangle;
+}
+
 namespace com::sun::star {
-    namespace awt { struct Point; }
     namespace awt { struct Rectangle; }
-    namespace awt { struct Size; }
     namespace drawing { class XDrawPage; }
     namespace sheet { class XSpreadsheet; }
     namespace table { class XCell; }
@@ -199,9 +203,9 @@ public:
                         getDrawPage() const;
 
     /** Returns the absolute cell position in 1/100 mm. */
-    css::awt::Point getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
+    Point getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const;
     /** Returns the size of the entire drawing page in 1/100 mm. */
-    const css::awt::Size& getDrawPageSize() const;
+    const Size& getDrawPageSize() const;
 
     /** Returns the buffer for cell contents and cell formatting. */
     SheetDataBuffer&    getSheetData() const;
@@ -240,6 +244,8 @@ public:
     /** Extends the used area of this sheet by the passed cell range. */
     void                extendUsedArea( const ScRange& rRange );
     /** Extends the shape bounding box by the position and size of the passed rectangle (in 1/100 mm). */
+    void                extendShapeBoundingBox( const tools::Rectangle& rShapeRect );
+    // TODO: remove once switching remaining calls to user tools:Rectangle
     void                extendShapeBoundingBox( const css::awt::Rectangle& rShapeRect );
 
     /** Sets base width for all columns (without padding pixels). This value

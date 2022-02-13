@@ -33,6 +33,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <rtl/strbuf.hxx>
 #include <svx/svdobj.hxx>
+#include <tools/gen.hxx>
 #include <drwlayer.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/drawingml/connectorshapecontext.hxx>
@@ -63,7 +64,6 @@ using namespace ::oox::ole;
 
 using ::com::sun::star::awt::Size;
 using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Rectangle;
 using ::com::sun::star::awt::XControlModel;
 // no using's for ::oox::vml, that may clash with ::oox::drawingml types
 
@@ -291,7 +291,7 @@ void DrawingFragment::onEndElement()
                     // TODO: DrawingML implementation expects 32-bit coordinates for EMU rectangles (change that to EmuRectangle)
                     // tdf#135918: Negative X,Y position has to be allowed to avoid shape displacement on rotation.
                     // The negative values can exist because of previous lines where the anchor rectangle must be mirrored in some ranges.
-                    Rectangle aShapeRectEmu32(
+                    ::com::sun::star::awt::Rectangle aShapeRectEmu32(
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.X, SAL_MIN_INT32, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Y, SAL_MIN_INT32, SAL_MAX_INT32 ),
                         getLimitedValue< sal_Int32, sal_Int64 >( aShapeRectEmu.Width, 0, SAL_MAX_INT32 ),
@@ -309,7 +309,7 @@ void DrawingFragment::onEndElement()
 
                     /*  Collect all shape positions in the WorksheetHelper base
                         class. But first, scale EMUs to 1/100 mm. */
-                    Rectangle aShapeRectHmm(
+                    tools::Rectangle aShapeRectHmm(
                         convertEmuToHmm(aShapeRectEmu32.X > 0 ? aShapeRectEmu32.X : 0), convertEmuToHmm(aShapeRectEmu32.Y > 0 ? aShapeRectEmu32.Y : 0),
                         convertEmuToHmm(aShapeRectEmu32.Width ), convertEmuToHmm(aShapeRectEmu32.Height ) );
                     extendShapeBoundingBox( aShapeRectHmm );
@@ -469,7 +469,7 @@ OUString VmlDrawing::getShapeBaseName( const ::oox::vml::ShapeBase& rShape ) con
     return ::oox::vml::Drawing::getShapeBaseName( rShape );
 }
 
-bool VmlDrawing::convertClientAnchor( Rectangle& orShapeRect, const OUString& rShapeAnchor ) const
+bool VmlDrawing::convertClientAnchor( ::com::sun::star::awt::Rectangle& orShapeRect, const OUString& rShapeAnchor ) const
 {
     if( rShapeAnchor.isEmpty() )
         return false;
@@ -480,14 +480,14 @@ bool VmlDrawing::convertClientAnchor( Rectangle& orShapeRect, const OUString& rS
 }
 
 Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::ShapeBase& rShape,
-        const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
+        const Reference< XShapes >& rxShapes, const ::com::sun::star::awt::Rectangle& rShapeRect ) const
 {
     // simulate the legacy drawing controls with OLE form controls
     OUString aShapeName = rShape.getShapeName();
     const ::oox::vml::ClientData* pClientData = rShape.getClientData();
     if( !aShapeName.isEmpty() && pClientData )
     {
-        Rectangle aShapeRect = rShapeRect;
+        ::com::sun::star::awt::Rectangle aShapeRect = rShapeRect;
         const ::oox::vml::TextBox* pTextBox = rShape.getTextBox();
         EmbeddedControl aControl( aShapeName );
         switch( pClientData->mnObjType )
@@ -660,7 +660,7 @@ Reference< XShape > VmlDrawing::createAndInsertClientXShape( const ::oox::vml::S
 }
 
 void VmlDrawing::notifyXShapeInserted( const Reference< XShape >& rxShape,
-        const Rectangle& rShapeRect, const ::oox::vml::ShapeBase& rShape, bool bGroupChild )
+        const ::com::sun::star::awt::Rectangle& rShapeRect, const ::oox::vml::ShapeBase& rShape, bool bGroupChild )
 {
     // collect all shape positions in the WorksheetHelper base class (but not children of group shapes)
     if( !bGroupChild )
