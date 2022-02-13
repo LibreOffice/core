@@ -34,6 +34,24 @@
       "parentUuid": "2f946352_e1f6c141",
       "revId": "e3d746555e6aa3529550ca167ef5496c4e8e78d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5653d76_8b1ea8df",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3313,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-02-13T20:23:22Z",
+      "side": 1,
+      "message": "OK, so this now uses covertRelToAbs; but hmm hang on; I want to add some more tests first, I\u0027m not yet that sure I understand all the cases that triggered the changed chunk of code.  I\u0027ll add some more tests first.",
+      "parentUuid": "6b589792_42d36a22",
+      "revId": "e3d746555e6aa3529550ca167ef5496c4e8e78d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
