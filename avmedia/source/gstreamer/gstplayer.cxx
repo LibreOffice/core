@@ -285,7 +285,6 @@ Player::Player() :
     mbUseGtkSink( false ),
     mbFakeVideo (false ),
     mnUnmutedVolume( 0 ),
-    mbPlayPending ( false ),
     mbMuted( false ),
     mbLooping( false ),
     mbInitialized( false ),
@@ -385,7 +384,6 @@ void Player::processMessage( GstMessage *message )
     switch( GST_MESSAGE_TYPE( message ) ) {
     case GST_MESSAGE_EOS:
         gst_element_set_state( mpPlaybin, GST_STATE_READY );
-        mbPlayPending = false;
         if (mbLooping)
             start();
         break;
@@ -401,9 +399,6 @@ void Player::processMessage( GstMessage *message )
             {
                 gst_video_overlay_expose(mpXOverlay);
             }
-
-            if (mbPlayPending)
-                mbPlayPending = ((newstate == GST_STATE_READY) || (newstate == GST_STATE_PAUSED));
         }
         break;
     default:
@@ -532,7 +527,6 @@ void Player::preparePlaybin( std::u16string_view rURL, GstElement *pSink )
     if (mpPlaybin != nullptr)
     {
         gst_element_set_state( mpPlaybin, GST_STATE_NULL );
-        mbPlayPending = false;
         g_object_unref( mpPlaybin );
     }
 
@@ -597,7 +591,6 @@ bool Player::create( const OUString& rURL )
         preparePlaybin( rURL, gst_element_factory_make( "fakesink", nullptr ) );
 
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
-        mbPlayPending = false;
 
         bRet = true;
     }
@@ -610,7 +603,6 @@ bool Player::create( const OUString& rURL )
     return bRet;
 }
 
-
 void SAL_CALL Player::start()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -619,10 +611,8 @@ void SAL_CALL Player::start()
     if( mbInitialized && mpPlaybin != nullptr )
     {
         gst_element_set_state( mpPlaybin, GST_STATE_PLAYING );
-        mbPlayPending = true;
     }
 }
-
 
 void SAL_CALL Player::stop()
 {
@@ -632,28 +622,25 @@ void SAL_CALL Player::stop()
     if( mpPlaybin )
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
 
-    mbPlayPending = false;
     SAL_INFO( "avmedia.gstreamer", AVVERSION "stop " << mpPlaybin );
 }
-
 
 sal_Bool SAL_CALL Player::isPlaying()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    bool            bRet = mbPlayPending;
+    bool bRet = false;
 
-    // return whether the pipeline is in PLAYING STATE or not
-    if( !mbPlayPending && mbInitialized && mpPlaybin )
+    // return whether the pipeline target is PLAYING STATE or not
+    if (mbInitialized && mpPlaybin)
     {
-        bRet = GST_STATE( mpPlaybin ) == GST_STATE_PLAYING;
+        bRet = GST_STATE_TARGET(mpPlaybin) == GST_STATE_PLAYING;
     }
 
     SAL_INFO( "avmedia.gstreamer", AVVERSION "isPlaying " << bRet );
 
     return bRet;
 }
-
 
 double SAL_CALL Player::getDuration()
 {
