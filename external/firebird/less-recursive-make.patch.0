@@ -1,0 +1,61 @@
+--- builds/posix/Makefile.in.orig	2022-02-13 00:35:12.323896900 +0100
++++ builds/posix/Makefile.in	2022-02-13 00:43:28.868906600 +0100
+@@ -179,23 +179,17 @@
+ 
+ master_process:
+ 	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
+-	$(MAKE) updateBuildNum
+-	$(MAKE) export_lists
+-	$(MAKE) extern
+-	$(MAKE) updateCloopInterfaces
+-	$(MAKE) preliminaryCheck
+-	$(MAKE) boot
+-	$(MAKE) yvalve
+-ifeq ($(IsDeveloper), Y)
+-# In developer mode we must regenerate various files in include/gen
+-	$(MAKE) ids
+-endif
+-	$(MAKE) engine
+-	$(MAKE) fbintl
+-	$(MAKE) utilities
+-# Now having ready such useful tools as gbak and isql, we may restore / create
+-# required databases and switch to full-featured gpre
+-	$(MAKE) gpre
++	$(MAKE) updateBuildNum \
++		export_lists \
++		extern \
++		updateCloopInterfaces \
++		preliminaryCheck \
++		boot
++	$(MAKE) yvalve \
++		engine \
++		fbintl
++	$(MAKE) utilities \
++		gpre
+ # Pay attention - after build force gpre_current to point to gpre
+ # even if gpre itself was not rebuilt
+ 	-$(RM) $(GPRE_CURRENT)
+@@ -204,9 +198,8 @@
+ # In developer mode we must regenerate various files in include/gen
+ 	$(MAKE) codes
+ endif
+-	$(MAKE) plugins
+-	$(MAKE) examples
+-	$(MAKE) rest
++	$(MAKE) plugins \
++		rest
+ 
+ 
+ cross_process:
+@@ -389,9 +389,8 @@
+ 
+ .PHONY:	udfs ibutil ibudf fbudf udfsupport
+ 
+-udfsupport:
++udfsupport: ibutil udfs
++udfs: | ibutil
+-	$(MAKE) ibutil
+-	$(MAKE) udfs
+ 
+ udfs:	ibudf fbudf
+ 

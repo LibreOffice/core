@@ -232,9 +232,9 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  master_process:
 -	ln -sf $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
 +	cp -f $(SRC_ROOT)/include/gen/autoconfig.auto $(SRC_ROOT)/include/gen/autoconfig.h
- 	$(MAKE) updateBuildNum
- 	$(MAKE) export_lists
- 	$(MAKE) extern
+ 	$(MAKE) updateBuildNum \
+ 		export_lists \
+ 		extern \
 @@ -214,7 +215,7 @@
  	$(MAKE) CROSS_OUT=Y cross2
 
