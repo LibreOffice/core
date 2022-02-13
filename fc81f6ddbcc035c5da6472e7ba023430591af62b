@@ -16,6 +16,40 @@
       "message": "1. Add tdf#145759 to the beginning of the commit message\n2. Use imperative mood in the commit message instead of past, so add vs. added, do vs. did etc.",
       "revId": "fc81f6ddbcc035c5da6472e7ba023430591af62b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3e28cf8_742b05ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-13T18:58:21Z",
+      "side": 1,
+      "message": "Mark every issue that you\u0027ve fixed as resolved.",
+      "revId": "fc81f6ddbcc035c5da6472e7ba023430591af62b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc11a14_c6e6b387",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-13T18:58:21Z",
+      "side": 1,
+      "message": "You should add #include \u003csal/config.h\u003e to avoid problem with M_PI on Windows/Visual Studio.",
+      "revId": "fc81f6ddbcc035c5da6472e7ba023430591af62b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
