@@ -306,7 +306,7 @@ def tidy(compileCommands, paths, dontstop):
 
 def main(argv):
     parser = argparse.ArgumentParser(description='Check source files for unneeded includes.')
-    parser.add_argument('--dontstop', action='store_true',
+    parser.add_argument('--continue', action='store_true',
                     help='Don\'t stop on errors. Useful for periodic re-check of large amount of files')
     parser.add_argument('Files' , nargs='*',
                     help='The files to be checked')
@@ -341,7 +341,7 @@ def main(argv):
         print ("File 'compile_commands.json' does not exist, please run:\nmake vim-ide-integration")
         sys.exit(-1)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=args.dontstop)
+    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"])
 
 if __name__ == '__main__':
     main(sys.argv[1:])
