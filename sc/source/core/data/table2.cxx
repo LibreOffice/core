@@ -4130,7 +4130,7 @@ SCROW ScTable::GetRowForHeight(tools::Long nHeight) const
 
     ScFlatUInt16RowSegments::RangeData aRowHeightRange;
     aRowHeightRange.mnRow2 = -1;
-    aRowHeightRange.mnValue = 0; // silence MSVC C4701
+    aRowHeightRange.mnValue = 1; // silence MSVC C4701
 
     for (SCROW nRow = 0; nRow <= rDocument.MaxRow(); ++nRow)
     {
