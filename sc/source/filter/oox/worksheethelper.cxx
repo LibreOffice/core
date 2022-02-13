@@ -75,6 +75,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
+#include <tools/gen.hxx>
 
 namespace oox::xls {
 
@@ -537,9 +538,11 @@ const awt::Size& WorksheetGlobals::getDrawPageSize() const
 
 awt::Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
 {
-    awt::Point aPoint;
-    PropertySet aCellProp( getCell( ScAddress( nCol, nRow, getSheetIndex() ) ) );
-    aCellProp.getProperty( aPoint, PROP_Position );
+    const tools::Rectangle aMMRect(getScDocument().GetMMRect(nCol, nRow, nCol, nRow, getSheetIndex()));
+    // TODO: No need to handle overflow once the return value is 64-bit
+    awt::Point aPoint(
+        aMMRect.Left() > SAL_MAX_INT32 || aMMRect.Left() < 0 ? SAL_MAX_INT32 : static_cast<sal_Int32>(aMMRect.Left()),
+        aMMRect.Top() > SAL_MAX_INT32 || aMMRect.Top() < 0 ? SAL_MAX_INT32 : static_cast<sal_Int32>(aMMRect.Top()) );
     return aPoint;
 }
 
@@ -1356,8 +1359,12 @@ void WorksheetGlobals::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLa
 void WorksheetGlobals::finalizeDrawings()
 {
     // calculate the current drawing page size (after rows/columns are imported)
-    PropertySet aRangeProp( getCellRange( ScRange( 0, 0, getSheetIndex(), mrMaxApiPos.Col(), mrMaxApiPos.Row(), getSheetIndex() ) ) );
-    aRangeProp.getProperty( maDrawPageSize, PROP_Size );
+    const Size aPageSize( getScDocument().GetMMRect( 0, 0, mrMaxApiPos.Col(), mrMaxApiPos.Row(), getSheetIndex() ).GetSize() );
+    // TODO: No need to handle overflow once the return value is 64-bit
+    maDrawPageSize.Width = aPageSize.Width() > SAL_MAX_INT32 || aPageSize.Width() < 0
+                               ? SAL_MAX_INT32 : static_cast<sal_Int32>(aPageSize.Width());
+    maDrawPageSize.Height = aPageSize.Height() > SAL_MAX_INT32 || aPageSize.Height() < 0
+                                ? SAL_MAX_INT32 : static_cast<sal_Int32>(aPageSize.Height());
 
     // import DML and VML
     if( !maDrawingPath.isEmpty() )
