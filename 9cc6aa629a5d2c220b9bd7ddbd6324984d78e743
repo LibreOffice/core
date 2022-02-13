@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1547ff16_d7bd9b99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-13T13:45:30Z",
+      "side": 1,
+      "message": "This appears to be good now, just waiting for the merge of https://gerrit.libreoffice.org/c/dictionaries/+/122939 which in turn is waiting for the submission of the author\u0027s license statement.",
+      "revId": "9cc6aa629a5d2c220b9bd7ddbd6324984d78e743",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
