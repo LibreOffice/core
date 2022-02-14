@@ -668,13 +668,19 @@ static void ComputeNextSlot( SCSIZE & nOff, SCSIZE & nBreak, ScBroadcastAreaSlot
     if ( nOff < nBreak )
     {
         ++nOff;
-        ++pp;
+        if (pp != nullptr)
+        {
+            ++pp;
+        }
     }
     else
     {
         nStart += nBcaSlotsCol;
         nOff = nStart;
-        pp = ppSlots + nOff;
+        if (ppSlots != nullptr)
+        {
+            pp = ppSlots + nOff;
+        }
         nBreak = nOff + nRowBreak;
     }
 }
