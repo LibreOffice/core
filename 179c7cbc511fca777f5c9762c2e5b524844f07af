@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "375b6a42_4887f849",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:51:34Z",
+      "side": 1,
+      "message": "I was totally fine with this until I reached the two non-inline functions in include/rtl/[u]string.h, exported from Library_sal, where I\u0027m a bit torn between just simplifying stuff for good and keeping those SAL_CALL (1) for consistency across Library_sal\u0027s exported functions (private or not), and (2) for consistency among Library_sal\u0027s exported public functions, should these two functions ever be turned into public ones (and in which case the \"missing\" SAL_CALL might all to easily be overlooked and not added in).",
+      "revId": "179c7cbc511fca777f5c9762c2e5b524844f07af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
