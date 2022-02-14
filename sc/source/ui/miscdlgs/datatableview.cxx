@@ -38,16 +38,11 @@ constexpr sal_uInt16 nRowHeaderWidth = 100;
 constexpr sal_uInt16 nColHeaderHeight = 20;
 constexpr sal_uInt16 nScrollBarSize = 10;
 
-ScDataTableColView::ScDataTableColView(vcl::Window* pParent, SelectionEngine* pSelectionEngine):
-        ScHeaderControl(pParent, pSelectionEngine, 1024, false, nullptr),
-        mpDoc(nullptr),
+ScDataTableColView::ScDataTableColView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine):
+        ScHeaderControl(pParent, pSelectionEngine, pDoc->MaxCol()+1, false, nullptr),
+        mpDoc(pDoc),
         mnCol(0)
 {
-}
-
-void ScDataTableColView::Init(ScDocument* pDoc)
-{
-    mpDoc = pDoc;
 }
 
 void ScDataTableColView::SetPos(SCCOLROW nCol)
@@ -89,16 +84,11 @@ void ScDataTableColView::HideEntries(SCCOLROW nPos, SCCOLROW nEndPos)
 }
 
 
-ScDataTableRowView::ScDataTableRowView(vcl::Window* pParent, SelectionEngine* pSelectionEngine):
-        ScHeaderControl(pParent, pSelectionEngine, 1048576, true, nullptr),
-        mpDoc(nullptr),
+ScDataTableRowView::ScDataTableRowView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine):
+        ScHeaderControl(pParent, pSelectionEngine, pDoc->MaxRow()+1, true, nullptr),
+        mpDoc(pDoc),
         mnRow(0)
 {
-}
-
-void ScDataTableRowView::Init(ScDocument* pDoc)
-{
-    mpDoc = pDoc;
 }
 
 void ScDataTableRowView::SetPos(SCCOLROW nRow)
@@ -139,12 +129,13 @@ void ScDataTableRowView::HideEntries(SCCOLROW nPos, SCCOLROW nEndPos)
     }
 }
 
-ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &rParent) :
+ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &rParent, std::shared_ptr<ScDocument> pDoc) :
     Control(VCLUnoHelper::GetWindow(rParent)),
+    mpDoc(std::move(pDoc)),
     mpSelectionEngine(new SelectionEngine(this)),
     mpTopLeft(VclPtr<ScrollBarBox>::Create(this, WB_SIZEABLE)),
-    mpColView(VclPtr<ScDataTableColView>::Create(this, mpSelectionEngine.get())),
-    mpRowView(VclPtr<ScDataTableRowView>::Create(this, mpSelectionEngine.get())),
+    mpColView(VclPtr<ScDataTableColView>::Create(this, mpDoc.get(), mpSelectionEngine.get())),
+    mpRowView(VclPtr<ScDataTableRowView>::Create(this, mpDoc.get(), mpSelectionEngine.get())),
     mpVScroll(VclPtr<ScrollBar>::Create(this, WinBits(WB_VSCROLL | WB_DRAG))),
     mpHScroll(VclPtr<ScrollBar>::Create(this, WinBits(WB_HSCROLL | WB_DRAG))),
     mnFirstVisibleRow(0),
@@ -167,13 +158,6 @@ ScDataTableView::ScDataTableView(const css::uno::Reference<css::awt::XWindow> &r
     mpRowView->Show();
     mpVScroll->Show();
     mpHScroll->Show();
-}
-
-void ScDataTableView::Init(std::shared_ptr<ScDocument> pDoc)
-{
-    mpDoc = std::move(pDoc);
-    mpColView->Init(mpDoc.get());
-    mpRowView->Init(mpDoc.get());
 }
 
 ScDataTableView::~ScDataTableView()
@@ -218,7 +202,7 @@ SCCOL findColFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCCOL nStartC
     }
 
     SAL_WARN("sc", "Could not find the corresponding column");
-    return MAXCOL;
+    return pDoc->MaxCol();
 }
 
 SCROW findRowFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCROW nStartRow = 0)
@@ -238,7 +222,7 @@ SCROW findRowFromPos(sal_uInt16 nPixelPos, const ScDocument* pDoc, SCROW nStartR
     }
 
     SAL_WARN("sc", "Could not find the corresponding row");
-    return MAXROW;
+    return pDoc->MaxRow();
 }
 
 }
@@ -321,13 +305,13 @@ IMPL_LINK(ScDataTableView, ScrollHdl, ScrollBar*, pScrollBar, void)
     if (pScrollBar == mpVScroll.get())
     {
         mnFirstVisibleRow = pScrollBar->GetThumbPos();
-        pScrollBar->SetRangeMax(std::min( MAXROW,static_cast<SCROW>(mnFirstVisibleRow + 100 )));
+        pScrollBar->SetRangeMax(std::min(mpDoc->MaxRow(), static_cast<SCROW>(mnFirstVisibleRow + 100)));
         mpRowView->SetPos(mnFirstVisibleRow);
     }
     else
     {
         mnFirstVisibleCol = pScrollBar->GetThumbPos();
-        pScrollBar->SetRangeMax(std::min( MAXCOL,static_cast<SCCOL>(mnFirstVisibleCol + 50 )));
+        pScrollBar->SetRangeMax(std::min(mpDoc->MaxCol(), static_cast<SCCOL>(mnFirstVisibleCol + 50)));
         mpColView->SetPos(mnFirstVisibleCol);
     }
     Invalidate();
