@@ -104,4 +104,27 @@ class chartLegend(UITestCase):
         self.assertEqual("4.51", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_X"))['Value'])
         self.assertEqual("1.44", get_state_as_dict(xDialog.getChild("MTR_FLD_POS_Y"))['Value'])
 
+   def test_Tdf147394(self):
+
+    with self.ui_test.load_file(get_url_for_data_file("dataLabels.ods")) as calc_doc:
+      xCalcDoc = self.xUITest.getTopFocusWindow()
+      gridwin = xCalcDoc.getChild("grid_window")
+
+      gridwin.executeAction("SELECT", mkPropertyValues({"OBJECT": "Object 1"}))
+      gridwin.executeAction("ACTIVATE", tuple())
+      xChartMainTop = self.xUITest.getTopFocusWindow()
+      xChartMain = xChartMainTop.getChild("chart_window")
+
+      xLegend = calc_doc.Sheets[0].Charts[0].getEmbeddedObject().getFirstDiagram().Legend
+      self.assertTrue(xLegend.Show)
+
+      # Select the legends
+      xLegends = xChartMain.getChild("CID/D=0:Legend=")
+      xLegends.executeAction("SELECT", tuple())
+
+      # Without the fix in place, this test would have crashed here
+      xChartMain.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DELETE"}))
+
+      self.assertFalse(xLegend.Show)
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
