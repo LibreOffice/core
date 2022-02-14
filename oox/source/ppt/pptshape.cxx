@@ -19,6 +19,7 @@
 
 #include <oox/ppt/pptshape.hxx>
 #include <oox/core/xmlfilterbase.hxx>
+#include <drawingml/customshapeproperties.hxx>
 #include <drawingml/textbody.hxx>
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textfield.hxx>
@@ -139,6 +140,10 @@ bool PPTShape::IsPlaceHolderCandidate(const SlidePersist& rSlidePersist) const
     if (rParagraphs.size() != 1)
         return false;
     if (rParagraphs.front()->getRuns().size() != 1)
+        return false;
+    // If the placeholder has a shape other than rectangle,
+    // we have to place it in the slide as a CustomShape.
+    if (!mpCustomShapePropertiesPtr->representsDefaultShape())
         return false;
     return ShapeHasNoVisualPropertiesOnImport(*this);
 }
@@ -315,6 +320,16 @@ void PPTShape::addShape(
                         sServiceName = sOutlinerShapeService;
                 break;
             }
+        }
+
+        // Since it is not possible to represent custom shaped placeholders in Impress
+        // Need to use service name css.drawing.CustomShape if they have a non default shape.
+        // This workaround has the drawback of them not really being processed as placeholders
+        // so it is only done for slide footers...
+        if ((mnSubType == XML_sldNum || mnSubType == XML_dt || mnSubType == XML_ftr)
+            && meShapeLocation == Slide && !mpCustomShapePropertiesPtr->representsDefaultShape())
+        {
+            sServiceName = "com.sun.star.drawing.CustomShape";
         }
 
         SAL_INFO("oox.ppt","shape service: " << sServiceName);

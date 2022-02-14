@@ -400,6 +400,35 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testChartThemeOverride)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472C4), nActual);
 }
 
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
+{
+    // slide with date, footer, slide number with custom shapes
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "testTdf132557_footerCustomShapes.pptx";
+    // When importing the document:
+    load(aURL);
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+
+    // Test if we were able to import the footer shapes with CustomShape service.
+    uno::Reference<drawing::XShape> xShapeDateTime(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"),
+                         xShapeDateTime->getShapeType());
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.lang.IndexOutOfBoundsException
+    // i.e. the shape wasn't on the slide there since it was imported as a property, not a shape.
+
+    uno::Reference<drawing::XShape> xShapeFooter(xDrawPage->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"),
+                         xShapeFooter->getShapeType());
+
+    uno::Reference<drawing::XShape> xShapeSlideNum(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"),
+                         xShapeSlideNum->getShapeType());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
