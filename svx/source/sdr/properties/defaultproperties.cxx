@@ -185,42 +185,68 @@ namespace sdr::properties
             sal_uInt16 nWhich(aWhichIter.FirstWhich());
             const SfxPoolItem *pPoolItem;
             std::vector< sal_uInt16 > aPostItemChangeList;
-            bool bDidChange(false);
-            std::optional<SfxItemSetFixed<SDRATTR_START, EE_ITEMS_END>> aSet;
-            if (WantItemSetInItemSetChanged())
-                aSet.emplace(GetSdrObject().GetObjectItemPool());
-
             // give a hint to STL_Vector
             aPostItemChangeList.reserve(rSet.Count());
-
-            while(nWhich)
+            if (WantItemSetInItemSetChanged())
             {
-                if(SfxItemState::SET == rSet.GetItemState(nWhich, false, &pPoolItem))
+                // it is unfortunate that we have to duplicate so much logic between themtwo branches of this if,
+                // but we need to because even stack-allocating an optional of the SfxItemSet, even if we don't use
+                // that optional, can be expensive because it is a significant piece of memory, and it will be zero-cleared.
+                SfxItemSetFixed<SDRATTR_START, EE_ITEMS_END> aSet(GetSdrObject().GetObjectItemPool());
+                bool bDidChange(false);
+                while(nWhich)
                 {
-                    if(AllowItemChange(nWhich, pPoolItem))
+                    if(SfxItemState::SET == rSet.GetItemState(nWhich, false, &pPoolItem))
                     {
-                        bDidChange = true;
-                        ItemChange(nWhich, pPoolItem);
-                        aPostItemChangeList.push_back( nWhich );
-                        if (aSet)
-                            aSet->Put(*pPoolItem);
+                        if(AllowItemChange(nWhich, pPoolItem))
+                        {
+                            bDidChange = true;
+                            ItemChange(nWhich, pPoolItem);
+                            aPostItemChangeList.push_back( nWhich );
+                            aSet.Put(*pPoolItem);
+                        }
                     }
+
+                    nWhich = aWhichIter.NextWhich();
                 }
 
-                nWhich = aWhichIter.NextWhich();
-            }
-
-            if(bDidChange)
-            {
-                for (const auto& rItem : aPostItemChangeList)
+                if(bDidChange)
                 {
-                    PostItemChange(rItem);
+                    for (const auto& rItem : aPostItemChangeList)
+                    {
+                        PostItemChange(rItem);
+                    }
+
+                    ItemSetChanged(&aSet);
+                }
+            }
+            else
+            {
+                bool bDidChange(false);
+                while(nWhich)
+                {
+                    if(SfxItemState::SET == rSet.GetItemState(nWhich, false, &pPoolItem))
+                    {
+                        if(AllowItemChange(nWhich, pPoolItem))
+                        {
+                            bDidChange = true;
+                            ItemChange(nWhich, pPoolItem);
+                            aPostItemChangeList.push_back( nWhich );
+                        }
+                    }
+
+                    nWhich = aWhichIter.NextWhich();
                 }
 
-                if (aSet)
-                    ItemSetChanged(&*aSet);
-                else
+                if(bDidChange)
+                {
+                    for (const auto& rItem : aPostItemChangeList)
+                    {
+                        PostItemChange(rItem);
+                    }
+
                     ItemSetChanged(nullptr);
+                }
             }
         }
 

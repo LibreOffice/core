@@ -86,7 +86,15 @@ namespace sdr::properties
             // The itemset construction is fairly expensive, and we only need it
             // if this text (or sub-type of text, eg. rectangle) actually has text.
             const svx::ITextProvider& rTextProvider(getTextProvider());
-            return rTextProvider.getTextCount() != 0;
+            sal_Int32 nText = rTextProvider.getTextCount();
+            while (nText--)
+            {
+                SdrText* pText = rTextProvider.getText( nText );
+                OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
+                if(pParaObj)
+                    return true;
+            }
+            return false;
         }
 
         void TextProperties::ItemSetChanged(const SfxItemSet* pSet)
