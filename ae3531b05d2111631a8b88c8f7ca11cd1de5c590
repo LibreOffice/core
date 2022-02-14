@@ -16,6 +16,24 @@
       "message": "FWIW this is similar to \u0027make -k\u0027, where the long name of -k is --keep-going. But I don\u0027t have a strong opinion on this, as you like. :-)",
       "revId": "ae3531b05d2111631a8b88c8f7ca11cd1de5c590",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c54ecfd3_45194959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-02-14T09:53:59Z",
+      "side": 1,
+      "message": "Would it be very weird to add -k as a short option and keep --continue ?\nI\u0027m also thinking about adding -h as short for --headers.",
+      "parentUuid": "1b8b25e0_bd403196",
+      "revId": "ae3531b05d2111631a8b88c8f7ca11cd1de5c590",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
