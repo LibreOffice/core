@@ -1247,6 +1247,49 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
 
     if ( bOk )
     {
+        tools::Long nBegin = 0;
+        tools::Long nEnd = 0;
+        tools::Long nHidden = 0;
+        if (eFillDir == FILL_TO_BOTTOM || eFillDir == FILL_TO_TOP)
+        {
+            if (nEndY > nRow1)
+            {
+                nBegin = nRow2+1;
+                nEnd = nEndY;
+            }
+            else
+            {
+                nBegin = nEndY;
+                nEnd = nRow1 -1;
+            }
+
+            tools::Long nVisible = CountVisibleRows(nBegin, nEnd);
+            nHidden = nEnd + 1 - nBegin - nVisible;
+        }
+        else
+        {
+            if (nEndX > nCol1)
+            {
+                nBegin = nCol2+1;
+                nEnd = nEndX;
+            }
+            else
+            {
+                nBegin = nEndX;
+                nEnd = nCol1 -1;
+            }
+
+            tools::Long nVisible = CountVisibleCols(nBegin, nEnd);
+            nHidden = nEnd + 1 - nBegin - nVisible;
+        }
+        if (nHidden)
+        {
+            if (nIndex > 0)
+                nIndex = nIndex - nHidden;
+            else
+                nIndex = nIndex + nHidden;
+        }
+
         FillCmd eFillCmd;
         FillDateCmd eDateCmd;
         double nInc;
@@ -1277,30 +1320,6 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         }
         else if ( eFillCmd == FILL_SIMPLE )         // fill with pattern/sample
         {
-            if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
-            {
-                tools::Long nBegin = 0;
-                tools::Long nEnd = 0;
-                if (nEndY > nRow1)
-                {
-                    nBegin = nRow2+1;
-                    nEnd = nEndY;
-                }
-                else
-                {
-                    nBegin = nEndY;
-                    nEnd = nRow1 -1;
-                }
-
-                tools::Long nNonFiltered = CountNonFilteredRows(nBegin, nEnd);
-                tools::Long nFiltered = nEnd + 1 - nBegin - nNonFiltered;
-
-                if (nIndex > 0)
-                    nIndex = nIndex - nFiltered;
-                else
-                    nIndex = nIndex + nFiltered;
-            }
-
             tools::Long nPosIndex = nIndex;
             while ( nPosIndex < 0 )
                 nPosIndex += nSrcCount;

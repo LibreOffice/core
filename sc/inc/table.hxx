@@ -928,6 +928,8 @@ public:
     SCROW       CountVisibleRows(SCROW nStartRow, SCROW nEndRow) const;
     tools::Long GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHiddenAsZero = true) const;
 
+    SCCOL       CountVisibleCols(SCCOL nStartCol, SCCOL nEndCol) const;
+
     SCCOLROW    LastHiddenColRow(SCCOLROW nPos, bool bCol) const;
 
     bool        RowFiltered(SCROW nRow, SCROW* pFirstRow = nullptr, SCROW* pLastRow = nullptr) const;
