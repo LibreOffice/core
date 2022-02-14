@@ -748,7 +748,7 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
     , mxDoc(std::move(pDoc))
     , mxBox(m_xBuilder->weld_container("data_table"))
     , m_xTableParent(mxBox->CreateChildFrame())
-    , mxTable(VclPtr<ScDataTableView>::Create(m_xTableParent))
+    , mxTable(VclPtr<ScDataTableView>::Create(m_xTableParent, mxDoc))
     , mxDBRanges(m_xBuilder->weld_combo_box("select_db_range"))
     , mxOKBtn(m_xBuilder->weld_button("okay"))
     , mxCancelBtn(m_xBuilder->weld_button("cancel"))
@@ -768,7 +768,6 @@ ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDo
     mxBox->set_size_request(aPrefSize.Width(), aPrefSize.Height());
     mxTable->Show();
 
-    mxTable->Init(mxDoc);
     ScDBCollection* pDBCollection = pDocument->GetDBCollection();
     auto& rNamedDBs = pDBCollection->getNamedDBs();
     for (auto& rNamedDB : rNamedDBs)
