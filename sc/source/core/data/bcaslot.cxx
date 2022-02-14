@@ -739,9 +739,9 @@ void ScBroadcastAreaSlotMachine::DoChecks()
     assert( nEnd == mnBcaSlots - 1 );
     SCSIZE nOff = nStart;
     SCSIZE nBreak = nOff + nRowBreak;
-    // Do not access the ScBroadcastAreaSlot pointers, just use bogus values.
-    ScBroadcastAreaSlot** ppSlots = nullptr;
-    ScBroadcastAreaSlot** pp = nullptr;
+    std::unique_ptr<ScBroadcastAreaSlot*[]> slots( new ScBroadcastAreaSlot*[ mnBcaSlots ] ); // dummy, not accessed
+    ScBroadcastAreaSlot** ppSlots = slots.get();
+    ScBroadcastAreaSlot** pp = ppSlots;
     while ( nOff <= nEnd )
     {
         SCSIZE previous = nOff;
@@ -756,6 +756,8 @@ void ScBroadcastAreaSlotMachine::DoChecks()
     assert( nEnd == mnBcaSlots - 1 );
     nOff = nStart;
     nBreak = nOff + nRowBreak;
+    ppSlots = slots.get();
+    pp = ppSlots;
     while ( nOff <= nEnd )
     {
         SCSIZE previous = nOff;
