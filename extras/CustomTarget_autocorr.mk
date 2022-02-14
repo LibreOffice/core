@@ -16,6 +16,8 @@ extras_AUTOCORR_LANGS := \
 	cs:cs-CZ \
 	da:da-DK \
 	de:de \
+	de-CH:de-CH \
+	de-LI:de-LI \
 	dsb:dsb \
 	el:el-GR \
 	en-AU:en-AU \
