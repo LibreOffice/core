@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5652056e_394dc9eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-14T01:32:01Z",
+      "side": 1,
+      "message": "Patchset 2 adds persistence",
+      "revId": "57278456097a95577a789bead167f09db997d27f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
