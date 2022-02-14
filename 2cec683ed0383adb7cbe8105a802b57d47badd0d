@@ -52,6 +52,24 @@
       "parentUuid": "655ac578_7f1a5f1e",
       "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66442de9_a1f4dfc5",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T09:29:45Z",
+      "side": 1,
+      "message": "[[expr.add]/4:\n\"When an expression J that has integral type is added to or subtracted from an expression P of pointer type, the result has the type of P.\n— \"If P evaluates to a null pointer value and J evaluates to 0, the result is a null pointer value.\n— \"Otherwise, if P points to an array element i of an array object x with n elements (9.3.3.4),76 the expressions P + J and J + P (where J has the value j) point to the (possibly-hypothetical) array element i + j of x if 0 ≤ i + j ≤ n and the expression P - J points to the (possibly-hypothetical) array element i − j of x if 0 ≤ i − j ≤ n.\n— \"Otherwise, the behavior is undefined.\"\n(Where \"possibly-hypothetical\" is about the one-past-the-end hypothetical array element.)",
+      "parentUuid": "9fc5ecb4_91eff235",
+      "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
