@@ -665,6 +665,7 @@ void SvxGrfCropPage::GraphicHasChanged( bool bFound )
              }
              sTemp += " " + CuiResId(RID_CUISTR_PPI).replaceAll("%1", sPPI);
         }
+        sTemp += "\n" + OUString::number(m_aOrigPixelSize.Width()) + u"\u00D7" + OUString::number(m_aOrigPixelSize.Height()) + " px";
         m_xOrigSizeFT->set_label(sTemp);
     }
 
