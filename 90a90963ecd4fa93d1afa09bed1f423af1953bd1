@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "303dce79_e20b8604",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-02-14T13:01:27Z",
+      "side": 1,
+      "message": "Should we leave it here until the conversion will be fixed?",
+      "revId": "90a90963ecd4fa93d1afa09bed1f423af1953bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9efc52ed_0149665e",
