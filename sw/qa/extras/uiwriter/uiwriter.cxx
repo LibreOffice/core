@@ -4233,7 +4233,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf139843)
 {
     load(DATA_DIRECTORY, "tdf139843.odt");
 
-    CPPUNIT_ASSERT_EQUAL(7, getPages());
+    int nPages = getPages();
 
     lcl_dispatchCommand(mxComponent, ".uno:SelectAll", {});
     Scheduler::ProcessEventsToIdle();
@@ -4247,7 +4247,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf139843)
     lcl_dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(7, getPages());
+    CPPUNIT_ASSERT_EQUAL(nPages, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf134252)
