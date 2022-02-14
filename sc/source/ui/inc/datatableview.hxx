@@ -33,10 +33,9 @@ class ScDataTableColView : public ScHeaderControl
     SCCOL mnCol;
 
 public:
-    ScDataTableColView(vcl::Window* pParent, SelectionEngine* pSelectionEngine);
+    ScDataTableColView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine);
 
     void SetPos(SCCOLROW nRow);
-    void Init(ScDocument* pDoc);
 
     virtual SCCOLROW GetPos() const override;
     virtual sal_uInt16 GetEntrySize(SCCOLROW nPos) const override;
@@ -52,10 +51,9 @@ class ScDataTableRowView : public ScHeaderControl
     SCROW mnRow;
 
 public:
-    ScDataTableRowView(vcl::Window* pParent, SelectionEngine* pSelectionEngine);
+    ScDataTableRowView(vcl::Window* pParent, ScDocument* pDoc, SelectionEngine* pSelectionEngine);
 
     void SetPos(SCCOLROW nRow);
-    void Init(ScDocument* pDoc);
 
     virtual SCCOLROW GetPos() const override;
     virtual sal_uInt16 GetEntrySize(SCCOLROW nPos) const override;
@@ -92,10 +90,8 @@ class ScDataTableView : public Control
     DECL_LINK(ScrollHdl, ScrollBar*, void);
 
 public:
-    ScDataTableView(const css::uno::Reference<css::awt::XWindow>& rParent);
-
-    void Init(std::shared_ptr<ScDocument> pDoc);
-
+    ScDataTableView(const css::uno::Reference<css::awt::XWindow>& rParent,
+                    std::shared_ptr<ScDocument> pDoc);
     ~ScDataTableView() override;
 
     virtual void dispose() override;
