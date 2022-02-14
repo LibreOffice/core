@@ -33,6 +33,24 @@
       "message": "This makes the entry disappear. But all entries are disabled for me (using \"Hello World\") and I cannot test the functionality. Maybe Regina knows what enabled the alignment. \n\nI also experienced an (unrelated) assertion for same letter height...",
       "revId": "c3a10afa1ce651e58410b858924ab013c9066789",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32da9dac_7e1089bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-02-14T12:25:16Z",
+      "side": 1,
+      "message": "I don\u0027t think the alignment works for just one line, it works the same in the current state as well. Try keeping multiple lines of varying length and the alignment of the shorter lines changes with respect to the longest one.\nNot sure what\u0027s up with a disappearing entry though.",
+      "parentUuid": "3573580d_0e2e546c",
+      "revId": "c3a10afa1ce651e58410b858924ab013c9066789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
