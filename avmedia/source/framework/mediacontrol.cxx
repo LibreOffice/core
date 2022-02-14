@@ -50,8 +50,6 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     mxTimeEdit = m_xBuilder->weld_entry("timeedit");
     mxMediaPath = m_xBuilder->weld_label("url");
 
-    // TODO SetParentClipMode( ParentClipMode::NoClip );
-
     InitializeWidgets();
 
     mxPlayToolBox->connect_clicked( LINK( this, MediaControl, implSelectHdl ) );
