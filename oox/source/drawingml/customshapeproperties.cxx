@@ -86,6 +86,13 @@ sal_Int32 CustomShapeProperties::GetCustomShapeGuideValue( const std::vector< Cu
     return nIndex;
 }
 
+bool CustomShapeProperties::representsDefaultShape() const
+{
+    return !((getShapePresetType() >= 0 || maPath2DList.size() > 0) &&
+             getShapePresetType() != XML_Rect &&
+             getShapePresetType() != XML_rect);
+}
+
 CustomShapeProperties::PresetDataMap CustomShapeProperties::maPresetDataMap;
 
 static OUString GetConnectorShapeType( sal_Int32 nType )
