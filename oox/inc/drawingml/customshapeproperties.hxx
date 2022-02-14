@@ -125,6 +125,12 @@ public:
 
     sal_Int32 getArcNum() { return mnArcNum++; }
 
+    /**
+       Returns whether or not the current CustomShapeProperties
+       represent a default shape preset that is rectangular.
+    */
+    bool representsDefaultShape() const;
+
 private:
 
     sal_Int32                       mnShapePresetType;
