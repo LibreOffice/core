@@ -26,8 +26,8 @@ using namespace ::com::sun::star::uno;
 ConditionEdit::ConditionEdit(std::unique_ptr<weld::Entry> xControl)
     : m_xControl(std::move(xControl))
     , m_aDropTargetHelper(*this)
-    , bBrackets(true)
-    , bEnableDrop(true)
+    , m_bBrackets(true)
+    , m_bEnableDrop(true)
 {
 }
 

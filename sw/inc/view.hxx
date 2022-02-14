@@ -163,8 +163,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     // search & replace
     static SvxSearchItem           *s_pSrchItem;
 
-    static sal_uInt16       m_nMoveType; // for buttons below the scrollbar (viewmdi)
-    static sal_Int32        m_nActMark; // current jump mark for unknown mark
+    static sal_uInt16       s_nMoveType; // for buttons below the scrollbar (viewmdi)
+    static sal_Int32        s_nActMark; // current jump mark for unknown mark
 
     static bool             s_bExtra;
     static bool             s_bFound;

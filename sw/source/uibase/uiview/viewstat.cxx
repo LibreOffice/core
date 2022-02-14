@@ -104,7 +104,7 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_SCROLL_PREV:
             case FN_SCROLL_NEXT:
             {
-                if (m_nMoveType == NID_RECENCY)
+                if (s_nMoveType == NID_RECENCY)
                 {
                     if (!m_pWrtShell->GetNavigationMgr().forwardEnabled())
                         rSet.DisableItem(FN_SCROLL_NEXT);

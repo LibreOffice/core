@@ -49,7 +49,7 @@ SwXFilterOptions::~SwXFilterOptions()
 uno::Sequence< beans::PropertyValue > SwXFilterOptions::getPropertyValues()
 {
     return comphelper::InitPropertySequence({
-            { FILTER_OPTIONS_NAME, uno::Any(sFilterOptions) }
+            { FILTER_OPTIONS_NAME, uno::Any(m_sFilterOptions) }
         });
 }
 
@@ -60,9 +60,9 @@ void   SwXFilterOptions::setPropertyValues( const uno::Sequence<beans::PropertyV
         OUString aPropName = rProp.Name;
 
         if ( aPropName == FILTER_OPTIONS_NAME )
-            rProp.Value >>= sFilterOptions;
+            rProp.Value >>= m_sFilterOptions;
         else if ( aPropName == "InputStream" )
-            rProp.Value >>= xInputStream;
+            rProp.Value >>= m_xInputStream;
     }
 }
 
@@ -75,23 +75,23 @@ sal_Int16 SwXFilterOptions::execute()
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
 
     std::unique_ptr<SvStream> pInStream;
-    if ( xInputStream.is() )
-        pInStream = utl::UcbStreamHelper::CreateStream( xInputStream );
+    if ( m_xInputStream.is() )
+        pInStream = utl::UcbStreamHelper::CreateStream( m_xInputStream );
 
     SwDocShell* pDocShell = nullptr;
-    if (auto pXDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(xModel); pXDoc)
+    if (auto pXDoc = comphelper::getFromUnoTunnel<SwXTextDocument>(m_xModel); pXDoc)
         pDocShell = pXDoc->GetDocShell();
 
     if(pDocShell)
     {
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(Application::GetFrameWeld(xDialogParent), *pDocShell,
+        ScopedVclPtr<AbstractSwAsciiFilterDlg> pAsciiDlg(pFact->CreateSwAsciiFilterDlg(Application::GetFrameWeld(m_xDialogParent), *pDocShell,
             pInStream.get()));
         if(RET_OK == pAsciiDlg->Execute())
         {
             SwAsciiOptions aOptions;
             pAsciiDlg->FillOptions( aOptions );
-            aOptions.WriteUserData(sFilterOptions);
+            aOptions.WriteUserData(m_sFilterOptions);
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
     }
@@ -101,19 +101,19 @@ sal_Int16 SwXFilterOptions::execute()
 
 void   SwXFilterOptions::setTargetDocument( const uno::Reference< XComponent >& xDoc )
 {
-    xModel = xDoc;
+    m_xModel = xDoc;
 }
 
 void   SwXFilterOptions::setSourceDocument( const uno::Reference<XComponent >& xDoc )
 {
-    xModel = xDoc;
+    m_xModel = xDoc;
 }
 
 void SAL_CALL SwXFilterOptions::initialize(const uno::Sequence<uno::Any>& rArguments)
 {
     ::comphelper::NamedValueCollection aProperties(rArguments);
     if (aProperties.has("ParentWindow"))
-        aProperties.get("ParentWindow") >>= xDialogParent;
+        aProperties.get("ParentWindow") >>= m_xDialogParent;
 }
 
 OUString SwXFilterOptions::getImplementationName()

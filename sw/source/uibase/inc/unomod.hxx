@@ -100,14 +100,14 @@ class SwXViewSettings final : public comphelper::ChainablePropertySet
 {
     friend class SwXDocumentSettings;
 
-    SwView*                     pView;
+    SwView*                     m_pView;
     std::unique_ptr<SwViewOption> mpViewOption;
     const SwViewOption*         mpConstViewOption;
-    bool                    bObjectValid:1, mbApplyZoom;
+    bool                    m_bObjectValid:1, mbApplyZoom;
 
-    FieldUnit   eHRulerUnit;
+    FieldUnit   m_eHRulerUnit;
     bool    mbApplyHRulerMetric;
-    FieldUnit   eVRulerUnit;
+    FieldUnit   m_eVRulerUnit;
     bool    mbApplyVRulerMetric;
 
     virtual void _preSetValues () override;
@@ -128,8 +128,8 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
-    bool    IsValid() const {return bObjectValid;}
-    void    Invalidate() {bObjectValid = false;}
+    bool    IsValid() const {return m_bObjectValid;}
+    void    Invalidate() {m_bObjectValid = false;}
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

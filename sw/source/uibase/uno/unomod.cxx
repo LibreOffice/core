@@ -521,17 +521,17 @@ Sequence< OUString > SwXPrintSettings::getSupportedServiceNames()
 
 SwXViewSettings::SwXViewSettings(SwView* pVw)
     : ChainablePropertySet( lcl_createViewSettingsInfo().get(), &Application::GetSolarMutex() )
-    , pView(pVw)
+    , m_pView(pVw)
     , mpConstViewOption(nullptr)
-    , bObjectValid(true)
+    , m_bObjectValid(true)
     , mbApplyZoom(false)
-    , eHRulerUnit(FieldUnit::CM)
+    , m_eHRulerUnit(FieldUnit::CM)
     , mbApplyHRulerMetric(false)
-    , eVRulerUnit(FieldUnit::CM)
+    , m_eVRulerUnit(FieldUnit::CM)
     , mbApplyVRulerMetric(false)
 {
     // This property only exists if we have a view (ie, not at the module )
-    if ( !pView )
+    if ( !m_pView )
         mxInfo->remove ( "HelpURL" );
 
 }
@@ -545,18 +545,18 @@ SwXViewSettings::~SwXViewSettings()
 void SwXViewSettings::_preSetValues ()
 {
     const SwViewOption* pVOpt = nullptr;
-    if(pView)
+    if(m_pView)
     {
         if(!IsValid())
             return;
-        pVOpt = pView->GetWrtShell().GetViewOptions();
+        pVOpt = m_pView->GetWrtShell().GetViewOptions();
     }
     else
         pVOpt = SW_MOD()->GetViewOption(false);
 
     mpViewOption.reset( new SwViewOption (*pVOpt) );
     mbApplyZoom = false;
-    if(pView)
+    if(m_pView)
         mpViewOption->SetStarOneSetting(true);
 }
 
@@ -680,34 +680,34 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT :
         {
-            if ( pView )
+            if ( m_pView )
             {
                 bool bVal = *o3tl::doAccess<bool>(rValue);
-                SwViewOption aOpt(*pView->GetWrtShell().GetViewOptions());
+                SwViewOption aOpt(*m_pView->GetWrtShell().GetViewOptions());
                 if (!bVal != !aOpt.getBrowseMode())
                 {
                     aOpt.setBrowseMode( bVal );
-                    pView->GetWrtShell().ApplyViewOptions( aOpt );
+                    m_pView->GetWrtShell().ApplyViewOptions( aOpt );
 
                     // must be set in mpViewOption as this will overwrite settings in _post!
                     if(mpViewOption)
                         mpViewOption->setBrowseMode(bVal);
 
-                    pView->GetDocShell()->ToggleLayoutMode(pView);
+                    m_pView->GetDocShell()->ToggleLayoutMode(m_pView);
                 }
             }
         }
         break;
         case HANDLE_VIEWSET_HIDE_WHITESPACE:
         {
-            if ( pView )
+            if ( m_pView )
             {
                 bool bVal = *o3tl::doAccess<bool>(rValue);
-                SwViewOption aOpt(*pView->GetWrtShell().GetViewOptions());
+                SwViewOption aOpt(*m_pView->GetWrtShell().GetViewOptions());
                 if (!bVal != !aOpt.IsHideWhitespaceMode())
                 {
                     aOpt.SetHideWhitespaceMode( bVal );
-                    pView->GetWrtShell().ApplyViewOptions( aOpt );
+                    m_pView->GetWrtShell().ApplyViewOptions( aOpt );
 
                     // must be set in mpViewOption as this will overwrite settings in _post!
                     if(mpViewOption)
@@ -718,7 +718,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         break;
         case HANDLE_VIEWSET_HELP_URL:
         {
-            if ( !pView )
+            if ( !m_pView )
                 throw UnknownPropertyException();
 
             OUString sHelpURL;
@@ -729,7 +729,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
             if ( aHID.GetProtocol() != INetProtocol::Hid )
                 throw IllegalArgumentException ();
 
-            pView->GetEditWin().SetHelpId( OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+            m_pView->GetEditWin().SetHelpId( OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
         }
         break;
         case HANDLE_VIEWSET_HORI_RULER_METRIC:
@@ -746,12 +746,12 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 case FieldUnit::INCH:
                     if( rInfo.mnHandle == HANDLE_VIEWSET_HORI_RULER_METRIC )
                     {
-                        eHRulerUnit = static_cast<FieldUnit>(nUnit);
+                        m_eHRulerUnit = static_cast<FieldUnit>(nUnit);
                         mbApplyHRulerMetric = true;
                     }
                     else
                     {
-                        eVRulerUnit = static_cast<FieldUnit>(nUnit);
+                        m_eVRulerUnit = static_cast<FieldUnit>(nUnit);
                         mbApplyVRulerMetric = true;
                     }
                     break;
@@ -767,26 +767,26 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
 
 void SwXViewSettings::_postSetValues()
 {
-    if( pView )
+    if( m_pView )
     {
         if(mbApplyZoom )
-            pView->SetZoom( mpViewOption->GetZoomType(),
+            m_pView->SetZoom( mpViewOption->GetZoomType(),
                             mpViewOption->GetZoom(), true );
         if(mbApplyHRulerMetric)
-            pView->ChangeTabMetric(eHRulerUnit);
+            m_pView->ChangeTabMetric(m_eHRulerUnit);
         if(mbApplyVRulerMetric)
-            pView->ChangeVRulerMetric(eVRulerUnit);
+            m_pView->ChangeVRulerMetric(m_eVRulerUnit);
 
     }
     else
     {
         if(mbApplyHRulerMetric)
-            SW_MOD()->ApplyRulerMetric( eHRulerUnit, true, false );
+            SW_MOD()->ApplyRulerMetric( m_eHRulerUnit, true, false );
         if(mbApplyVRulerMetric)
-            SW_MOD()->ApplyRulerMetric( eVRulerUnit, false, false );
+            SW_MOD()->ApplyRulerMetric( m_eVRulerUnit, false, false );
     }
 
-    SW_MOD()->ApplyUsrPref( *mpViewOption, pView, pView ? SvViewOpt::DestViewOnly
+    SW_MOD()->ApplyUsrPref( *mpViewOption, m_pView, m_pView ? SvViewOpt::DestViewOnly
                                                   : SvViewOpt::DestText );
 
     mpViewOption.reset();
@@ -794,11 +794,11 @@ void SwXViewSettings::_postSetValues()
 
 void SwXViewSettings::_preGetValues ()
 {
-    if(pView)
+    if(m_pView)
     {
         if(!IsValid())
             return;
-        mpConstViewOption = pView->GetWrtShell().GetViewOptions();
+        mpConstViewOption = m_pView->GetWrtShell().GetViewOptions();
     }
     else
         mpConstViewOption = SW_MOD()->GetViewOption(false);
@@ -894,26 +894,26 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         }
         break;
         case HANDLE_VIEWSET_ONLINE_LAYOUT:
-            if(pView)
-                bBoolVal = pView->GetWrtShell().GetViewOptions()->getBrowseMode();
+            if(m_pView)
+                bBoolVal = m_pView->GetWrtShell().GetViewOptions()->getBrowseMode();
         break;
         case HANDLE_VIEWSET_HELP_URL :
         {
-            if ( !pView )
+            if ( !m_pView )
                 throw UnknownPropertyException();
 
             bBool = false;
-            SwEditWin &rEditWin = pView->GetEditWin();
+            SwEditWin &rEditWin = m_pView->GetEditWin();
             OUString sHelpURL = INET_HID_SCHEME + OUString::fromUtf8( rEditWin.GetHelpId() );
             rValue <<= sHelpURL;
         }
         break;
         case HANDLE_VIEWSET_HORI_RULER_METRIC:
         {
-            if ( pView )
+            if ( m_pView )
             {
                 FieldUnit eUnit;
-                pView->GetHRulerMetric( eUnit );
+                m_pView->GetHRulerMetric( eUnit );
                 rValue <<= static_cast<sal_Int32>(eUnit);
             }
             else
@@ -926,10 +926,10 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         break;
         case HANDLE_VIEWSET_VERT_RULER_METRIC:
         {
-            if ( pView )
+            if ( m_pView )
             {
                 FieldUnit eUnit;
-                pView->GetVRulerMetric( eUnit );
+                m_pView->GetVRulerMetric( eUnit );
                 rValue <<= static_cast<sal_Int32>(eUnit);
             }
             else
