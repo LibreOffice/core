@@ -22,6 +22,30 @@
       },
       "revId": "7cd3013a3704b8365e295f4260e242273d45d27e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd633e97_2d89203b",
+        "filename": "svx/source/tbxctrls/fontworkgallery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-02-14T12:26:24Z",
+      "side": 0,
+      "message": "Yeah, good point, will do.",
+      "parentUuid": "cca948a3_d2dd62e0",
+      "range": {
+        "startLine": 331,
+        "startChar": 4,
+        "endLine": 331,
+        "endChar": 50
+      },
+      "revId": "7cd3013a3704b8365e295f4260e242273d45d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
