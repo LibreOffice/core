@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cca948a3_d2dd62e0",
+        "filename": "svx/source/tbxctrls/fontworkgallery.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-14T10:40:43Z",
+      "side": 0,
+      "message": "Would comment this out with a reference to the BZ ticket to inform developers why the next item is 4. Same below.",
+      "range": {
+        "startLine": 331,
+        "startChar": 4,
+        "endLine": 331,
+        "endChar": 50
+      },
+      "revId": "7cd3013a3704b8365e295f4260e242273d45d27e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
