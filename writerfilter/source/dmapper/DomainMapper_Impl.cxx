@@ -186,7 +186,7 @@ static void lcl_handleTextField( const uno::Reference< beans::XPropertySet >& rx
 /**
  Very similar to DomainMapper_Impl::GetPropertyFromStyleSheet
  It is focused on paragraph properties search in current & parent stylesheet entries.
- But it will not take into account propeties with listid: these are "list paragraph styles" and
+ But it will not take into account properties with listid: these are "list paragraph styles" and
  not used in some cases.
 */
 static uno::Any lcl_GetPropertyFromParaStyleSheetNoNum(PropertyIds eId, StyleSheetEntryPtr pEntry, const StyleSheetTablePtr& rStyleSheet)
