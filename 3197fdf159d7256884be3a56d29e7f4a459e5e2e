@@ -86,6 +86,24 @@
       "parentUuid": "505297f3_6d39cedf",
       "revId": "3197fdf159d7256884be3a56d29e7f4a459e5e2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65bbf804_4dddbbdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-14T09:18:03Z",
+      "side": 1,
+      "message": "The unit test should check exactly the XML markup mentioned in the bug report - dcterms:created element in docProps/core.xml. This kind of test is performed in CppunitTest_sw_ooxmlexport* - see e.g. sw/qa/extras/ooxmlexport/ooxmlexport17.cxx. The important detail is that the document should be created anew, not loaded-and-saved, to define its creation time - see testArabicZeroNumberingFootnote in sw/qa/extras/ooxmlexport/ooxmlexport14.cxx for an example of working with brand-new documents.\n\nThe tricky part would be to check that UTC is actually being taken into account. One would need to find the current system timezone offset in the test - std::gmtime and std::localtime would be likely useful, also std::mktime and std::difftime. Then one would need to get current local time, convert the value of dcterms:created into std::time_t, and compare the times to see that it fits in the frame \"local time before saving + TZ offset\", \"local time after saving + TZ offset\".\n\nHTH.",
+      "parentUuid": "4b92fa18_c4e15bb9",
+      "revId": "3197fdf159d7256884be3a56d29e7f4a459e5e2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
