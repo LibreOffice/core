@@ -46,6 +46,7 @@ public:
     void testRoundtripColumn2000Ods();
     void testRoundtripColumn2000Xlsx();
     void testRoundtripColumnRange();
+    void testRoundtripNamedRanges();
     void testTdf134392();
     void testTdf133033();
     void testTdf109061();
@@ -55,6 +56,7 @@ public:
     CPPUNIT_TEST(testRoundtripColumn2000Ods);
     CPPUNIT_TEST(testRoundtripColumn2000Xlsx);
     CPPUNIT_TEST(testRoundtripColumnRange);
+    CPPUNIT_TEST(testRoundtripNamedRanges);
     CPPUNIT_TEST(testTdf134392);
     CPPUNIT_TEST(testTdf133033);
     CPPUNIT_TEST(testTdf109061);
@@ -169,6 +171,61 @@ void ScJumboSheetsTest::testRoundtripColumnRange()
         CPPUNIT_ASSERT(pDoc);
         assertXPathContent(pDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[1]/x:f", "SUM(2:2)");
         assertXPathContent(pDoc, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f", "SUM(C:C)");
+    }
+
+    xDocSh1->DoClose();
+    xDocSh2->DoClose();
+    xDocSh3->DoClose();
+}
+
+void ScJumboSheetsTest::testRoundtripNamedRanges()
+{
+    ScDocShellRef xDocSh1 = loadDoc(u"ranges-column-2000.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh1.is());
+
+    std::pair<OUString, OUString> ranges[] = { { "CELLBXX1", "$Sheet1.$BXX$1" },
+                                               { "CELLSA4_AMJ4", "$Sheet1.$A$4:$AMJ$4" },
+                                               { "CELLSBXX1_BXX10", "$Sheet1.$BXX$1:$BXX$10" },
+                                               { "CELLSBXX1_BXX10_RELATIVE", "$Sheet1.BXX1:BXX10" },
+                                               { "CELLSE1_E1024", "$Sheet1.$E$1:$E$1024" },
+                                               { "CELLSE1_E2000000", "$Sheet1.$E$1:$E$2000000" },
+                                               { "COLUMN_E", "$Sheet1.$E:$E" },
+                                               { "ROW_4", "$Sheet1.$4:$4" } };
+    {
+        ScDocument& rDoc = xDocSh1->GetDocument();
+        for (const auto& range : ranges)
+        {
+            ScRangeData* rangeData = rDoc.GetRangeName()->findByUpperName(range.first);
+            CPPUNIT_ASSERT(rangeData);
+            CPPUNIT_ASSERT_EQUAL(range.second, rangeData->GetSymbol());
+        }
+    }
+
+    std::shared_ptr<utl::TempFile> exportedFile;
+    ScDocShellRef xDocSh2 = saveAndReloadNoClose(*xDocSh1, FORMAT_ODS, &exportedFile);
+    CPPUNIT_ASSERT(xDocSh2.is());
+
+    {
+        ScDocument& rDoc = xDocSh2->GetDocument();
+        for (const auto& range : ranges)
+        {
+            ScRangeData* rangeData = rDoc.GetRangeName()->findByUpperName(range.first);
+            CPPUNIT_ASSERT(rangeData);
+            CPPUNIT_ASSERT_EQUAL(range.second, rangeData->GetSymbol());
+        }
+    }
+
+    ScDocShellRef xDocSh3 = saveAndReloadNoClose(*xDocSh1, FORMAT_XLSX, &exportedFile);
+    CPPUNIT_ASSERT(xDocSh3.is());
+
+    {
+        ScDocument& rDoc = xDocSh3->GetDocument();
+        for (const auto& range : ranges)
+        {
+            ScRangeData* rangeData = rDoc.GetRangeName()->findByUpperName(range.first);
+            CPPUNIT_ASSERT(rangeData);
+            CPPUNIT_ASSERT_EQUAL(range.second, rangeData->GetSymbol());
+        }
     }
 
     xDocSh1->DoClose();
