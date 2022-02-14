@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ddb438c_15faa173",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-14T14:00:07Z",
+      "side": 1,
+      "message": "Meaning the unmerged https://gerrit.libreoffice.org/c/core/+/124337",
+      "revId": "66b2e8a251fa9072087947d640ad57d5d920cd69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
