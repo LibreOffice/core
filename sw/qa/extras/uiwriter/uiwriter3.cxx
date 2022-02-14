@@ -80,7 +80,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
 {
     createSwDoc(DATA_DIRECTORY, "tdf139843.odt");
 
-    CPPUNIT_ASSERT_EQUAL(7, getPages());
+    int nPages = getPages();
 
     dispatchCommand(mxComponent, ".uno:SelectAll", {});
     Scheduler::ProcessEventsToIdle();
@@ -94,7 +94,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
     dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
 
-    CPPUNIT_ASSERT_EQUAL(7, getPages());
+    CPPUNIT_ASSERT_EQUAL(nPages, getPages());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
