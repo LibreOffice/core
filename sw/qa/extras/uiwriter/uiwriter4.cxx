@@ -322,6 +322,40 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
                          lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147196)
+{
+    using TF = TransliterationFlags;
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // Insert the test text at the end of the document.
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert(
+        "2.2 Publication of information - CAA\nSection 4.2 of a CA\'s Certificate Policy and/or "
+        "Certification Practice Statement SHALL state the CA\'s policy or practice on processing "
+        "CAA Records for Fully Qualified Domain Names; that policy shall be consistent with these "
+        "Requirements. \n\nIt shall clearly specify the set of Issuer Domain Names that the CA "
+        "recognises in CAA \"issue\" or \"issuewild\" records as permitting it to issue. The CA "
+        "SHALL log all actions taken, if any, consistent with its processing practice.");
+
+    pWrtShell->StartOfSection();
+    SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
+    pCursor->SetMark();
+    for (int i = 0; i < 510; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy "
+                 "And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice "
+                 "On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be "
+                 "Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of "
+                 "Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" "
+                 "Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, "
+                 "Consistent With Its Processing Practice."),
+        lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96943)
 {
     // Enable hide whitespace mode.

@@ -2776,9 +2776,6 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 aCurWordBndry = _xBI->nextWord(aNodeStr, nCurrentStart,
                         GetLocale( EditPaM( pNode, nCurrentStart + 1 ) ),
                         nWordType);
-
-                /* Selection may end in the middle of a word */
-                aCurWordBndry.endPos = std::min(aCurWordBndry.endPos,   aSel.Max().GetIndex());
             }
             DBG_ASSERT( nCurrentEnd >= aEndBndry.endPos, "failed to reach end of transliteration" );
         }
