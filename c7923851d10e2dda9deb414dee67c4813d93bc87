@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b5775fb_c22675ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-14T11:44:59Z",
+      "side": 1,
+      "message": "What bothers me is the fact that all four buttons are arranged next to each other. If translated the sidebar might become very large.",
+      "revId": "c7923851d10e2dda9deb414dee67c4813d93bc87",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
