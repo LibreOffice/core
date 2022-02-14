@@ -16,6 +16,24 @@
       "message": "Nah, that\u0027s a pointless check (besides silencing the warning). Does the warning also go away if you change those two ScBroadcastAreaSlot nullptr in DoChecks() to e.g. \"reinterpret_cast\u003cScBroadcastAreaSlot**\u003e(sizeof(ScBroadcastAreaSlot))\" ?",
       "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "655ac578_7f1a5f1e",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T09:12:04Z",
+      "side": 1,
+      "message": "It would happen to suppress the failure for my -fsanitize\u003dundefined build, but it would still be UB.  And I\u0027d refuse to commit something like that under my authorship.  :)  But if you want to come up with whatever you consider adequate, we can abandon this change then.",
+      "parentUuid": "3333da87_005f8f93",
+      "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
