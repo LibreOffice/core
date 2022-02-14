@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02b2d9c8_5fcfcc68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-14T13:12:25Z",
+      "side": 1,
+      "message": "I don\u0027t think so - I keep thinking about it, and start to believe that it should not be sixed, at least that would not be easy, and would likely be a breaking change.\n\ntdf#107953 was about specific problem - displaying in IDE debugger. The change there attempted to make more general change, and it made *some* difference (although not the full expected result, it still increased precision from 14 decimals to maximal 15, which is why there was a visible result).\n\nHowever, the rest should be IMO still be bound to debugger (if at all). And here we should just state the current status.",
+      "parentUuid": "303dce79_e20b8604",
+      "revId": "90a90963ecd4fa93d1afa09bed1f423af1953bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9efc52ed_0149665e",
