@@ -1890,6 +1890,59 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132744)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146622)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "TC-table-del-add.docx");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTables->getCount());
+    uno::Reference<container::XNameAccess> xTableNames = xTablesSupplier->getTextTables();
+    CPPUNIT_ASSERT(xTableNames->hasByName("Table1"));
+    uno::Reference<text::XTextTable> xTable1(xTableNames->getByName("Table1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    // This was 3 (deleting the already deleted row with change tracking)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+    // This was 2 (deleting the already deleted table with change tracking)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTable1->getRows()->getCount());
+
+    // check that the first table was deleted with change tracking
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    // Undo AcceptAllTrackedChanges and DeleteRows
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    // now only the second table deleted by AcceptAllTrackedChanges
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 {
     createSwDoc();
