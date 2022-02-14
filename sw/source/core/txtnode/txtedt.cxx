@@ -1789,9 +1789,6 @@ void SwTextNode::TransliterateText(
                     GetText(), nStt,
                     g_pBreakIt->GetLocale(GetLang(nStt, 1)),
                     nWordType);
-
-            /* Selection may end in the middle of a word */
-            aCurWordBndry.endPos = std::min(aCurWordBndry.endPos, selEnd);
         }
     }
     else if (rTrans.getType() == TransliterationFlags::SENTENCE_CASE)

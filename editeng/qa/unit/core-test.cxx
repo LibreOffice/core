@@ -97,6 +97,8 @@ public:
 
     void testTransliterate();
 
+    void testTdf147196();
+
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
     CPPUNIT_TEST_SUITE(Test);
@@ -119,6 +121,7 @@ public:
     CPPUNIT_TEST(testSectionAttributes);
     CPPUNIT_TEST(testLargeParaCopyPaste);
     CPPUNIT_TEST(testTransliterate);
+    CPPUNIT_TEST(testTdf147196);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1830,6 +1833,17 @@ void Test::testTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones mET joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
 
+    /* Test behavior when there is a selection that ends in the middle of a word */
+    selStart = 11;
+    selEnd = 13;
+    esel = ESelection(0, selStart, 0, selEnd);
+    CPPUNIT_ASSERT_EQUAL(OUString("me"), editEng.GetText(esel));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones Met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones MEt joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("Mary Jones met joe Smith. Time Passed."), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+
+
     /* Test behavior when there is a selection that crosses a word boundary: "nes met joe Sm" */
     selStart = 7;
     selEnd = 21;
@@ -1865,8 +1879,16 @@ void Test::testTransliterate()
     CPPUNIT_ASSERT_EQUAL(OUString("CURRENT IS EQUAL TO 10 A"), lcl_translitTest(editEng, sText3, esel, TF::LOWERCASE_UPPERCASE));
     CPPUNIT_ASSERT_EQUAL(OUString("current is equal to 10 A"), lcl_translitTest(editEng, sText3, esel, TF::UPPERCASE_LOWERCASE));
 
-
 }
+
+void Test::testTdf147196()
+{
+    EditEngine editEng( mpItemPool.get() );
+    editEng.SetText("2.2 Publication of information - CAA\nSection 4.2 of a CA\'s Certificate Policy and/or Certification Practice Statement SHALL state the CA\'s policy or practice on processing CAA Records for Fully Qualified Domain Names; that policy shall be consistent with these Requirements. \n\nIt shall clearly specify the set of Issuer Domain Names that the CA recognises in CAA \"issue\" or \"issuewild\" records as permitting it to issue. The CA SHALL log all actions taken, if any, consistent with its processing practice.");
+    editEng.TransliterateText(ESelection(0, 0, 3, 232), TransliterationFlags::TITLE_CASE);
+    CPPUNIT_ASSERT_EQUAL(OUString("2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, Consistent With Its Processing Practice."), editEng.GetText());
+}
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
