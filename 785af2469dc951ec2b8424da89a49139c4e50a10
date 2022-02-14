@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f30ab3f0_9ff61544",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-14T18:07:30Z",
+      "side": 1,
+      "message": "Interesting, does this move change the processing? (It looks unexpected to me 😊)",
+      "revId": "785af2469dc951ec2b8424da89a49139c4e50a10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fae3aee5_42aef13e",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-14T18:07:30Z",
+      "side": 1,
+      "message": "This check is the same as the previous check in line 427 - please just use common braces after that check.",
+      "revId": "785af2469dc951ec2b8424da89a49139c4e50a10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
