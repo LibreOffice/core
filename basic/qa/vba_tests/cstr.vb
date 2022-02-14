@@ -24,6 +24,7 @@ Sub verify_testCStr()
     TestUtil.AssertEqual(CStr(500), "500",     "CStr(500)")
 
     ' tdf#143575 - round string to their nearest double representation
+    ' N.B.: check also how current conversion rounds a close number
     ' Without the fix in place, this test would have failed with:
     ' - Expected: 691.2
     ' - Actual  : 691.2000000000001
