@@ -26,30 +26,30 @@
           </node>
         </node>
       </node>
-      <node oor:name="OfficeToolbarMerging">
-        <node oor:name="org.libreoffice.test.desktop.deployment.crashextension.toolbarmerge" oor:op="replace">
-          <node oor:name="T1" oor:op="replace">
-            <prop oor:name="MergeToolBar">
+      <node o:name="OfficeToolbarMerging">
+        <node o:name="org.libreoffice.test.desktop.deployment.crashextension.toolbarmerge" o:op="replace">
+          <node o:name="T1" o:op="replace">
+            <prop o:name="MergeToolBar">
               <value>standardbar</value>
             </prop>
-            <prop oor:name="MergePoint">
+            <prop o:name="MergePoint">
               <value>.uno:HelpIndex</value>
             </prop>
-            <prop oor:name="MergeCommand">
+            <prop o:name="MergeCommand">
               <value>AddAfter</value>
             </prop>
-            <prop oor:name="MergeFallback">
+            <prop o:name="MergeFallback">
               <value>AddLast</value>
             </prop>
-            <prop oor:name="MergeContext">
+            <prop o:name="MergeContext">
               <value/>
             </prop>
-            <node oor:name="ToolBarItems">
-              <node oor:name="B1" oor:op="replace">
-                <prop oor:name="URL">
+            <node o:name="ToolBarItems">
+              <node o:name="B1" o:op="replace">
+                <prop o:name="URL">
                   <value>vnd.org.libreoffice.test.desktop.deployment.crashextension:</value>
                 </prop>
-                <prop oor:name="Title">
+                <prop o:name="Title">
                   <value xml:lang="en-US">Crash LibreOffice</value>
                 </prop>
               </node>
