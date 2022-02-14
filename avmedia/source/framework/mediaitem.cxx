@@ -178,186 +178,200 @@ bool MediaItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
     return bRet;
 }
 
-
-void MediaItem::merge( const MediaItem& rMediaItem )
+bool MediaItem::merge(const MediaItem& rMediaItem)
 {
+    bool bChanged = false;
+
     const AVMediaSetMask nMaskSet = rMediaItem.getMaskSet();
 
     if( AVMediaSetMask::URL & nMaskSet )
-        setURL( rMediaItem.getURL(), rMediaItem.getTempURL(), rMediaItem.getReferer() );
+        bChanged |= setURL(rMediaItem.getURL(), rMediaItem.getTempURL(), rMediaItem.getReferer());
 
     if( AVMediaSetMask::MIME_TYPE & nMaskSet )
-        setMimeType( rMediaItem.getMimeType() );
+        bChanged |= setMimeType(rMediaItem.getMimeType());
 
     if (nMaskSet & AVMediaSetMask::GRAPHIC)
-        setGraphic(rMediaItem.getGraphic());
+        bChanged |= setGraphic(rMediaItem.getGraphic());
 
     if( AVMediaSetMask::STATE & nMaskSet )
-        setState( rMediaItem.getState() );
+        bChanged |= setState( rMediaItem.getState() );
 
     if( AVMediaSetMask::DURATION & nMaskSet )
-        setDuration( rMediaItem.getDuration() );
+        bChanged |= setDuration(rMediaItem.getDuration());
 
     if( AVMediaSetMask::TIME & nMaskSet )
-        setTime( rMediaItem.getTime() );
+        bChanged |= setTime(rMediaItem.getTime());
 
     if( AVMediaSetMask::LOOP & nMaskSet )
-        setLoop( rMediaItem.isLoop() );
+        bChanged |= setLoop(rMediaItem.isLoop());
 
     if( AVMediaSetMask::MUTE & nMaskSet )
-        setMute( rMediaItem.isMute() );
+        bChanged |= setMute(rMediaItem.isMute());
 
     if( AVMediaSetMask::VOLUMEDB & nMaskSet )
-        setVolumeDB( rMediaItem.getVolumeDB() );
+        bChanged |= setVolumeDB(rMediaItem.getVolumeDB());
 
     if( AVMediaSetMask::ZOOM & nMaskSet )
-        setZoom( rMediaItem.getZoom() );
-}
+        bChanged |= setZoom(rMediaItem.getZoom());
 
+    return bChanged;
+}
 
 AVMediaSetMask MediaItem::getMaskSet() const
 {
     return m_pImpl->m_nMaskSet;
 }
 
-
-void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL, const OUString& rReferer )
+bool MediaItem::setURL(const OUString& rURL, const OUString& rTempURL, const OUString& rReferer)
 {
     m_pImpl->m_nMaskSet |= AVMediaSetMask::URL;
-    m_pImpl->m_URL = rURL;
-    m_pImpl->m_TempFileURL = rTempURL;
-    m_pImpl->m_Referer = rReferer;
+    bool bChanged = rURL != m_pImpl->m_URL || rTempURL != m_pImpl->m_TempFileURL || rReferer != m_pImpl->m_Referer;
+    if (bChanged)
+    {
+        m_pImpl->m_URL = rURL;
+        m_pImpl->m_TempFileURL = rTempURL;
+        m_pImpl->m_Referer = rReferer;
+    }
+    return bChanged;
 }
-
 
 const OUString& MediaItem::getURL() const
 {
     return m_pImpl->m_URL;
 }
 
-
 const OUString& MediaItem::getTempURL() const
 {
     return m_pImpl->m_TempFileURL;
 }
-
 
 const OUString& MediaItem::getReferer() const
 {
     return m_pImpl->m_Referer;
 }
 
-
-void MediaItem::setMimeType( const OUString& rMimeType )
+bool MediaItem::setMimeType(const OUString& rMimeType)
 {
     m_pImpl->m_nMaskSet |= AVMediaSetMask::MIME_TYPE;
-    m_pImpl->m_sMimeType = rMimeType;
+    bool bChanged = rMimeType != m_pImpl->m_sMimeType;
+    if (bChanged)
+        m_pImpl->m_sMimeType = rMimeType;
+    return bChanged;
 }
-
 
 OUString MediaItem::getMimeType() const
 {
     return !m_pImpl->m_sMimeType.isEmpty() ? m_pImpl->m_sMimeType : AVMEDIA_MIMETYPE_COMMON;
 }
 
-void MediaItem::setGraphic(const Graphic& rGraphic)
+bool MediaItem::setGraphic(const Graphic& rGraphic)
 {
     m_pImpl->m_nMaskSet |= AVMediaSetMask::GRAPHIC;
-    m_pImpl->m_aGraphic = rGraphic;
+    bool bChanged = rGraphic != m_pImpl->m_aGraphic;
+    if (bChanged)
+        m_pImpl->m_aGraphic = rGraphic;
+    return bChanged;
 }
 
 const Graphic & MediaItem::getGraphic() const { return m_pImpl->m_aGraphic; }
 
-void MediaItem::setState( MediaState eState )
+bool MediaItem::setState(MediaState eState)
 {
-    m_pImpl->m_eState = eState;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::STATE;
+    bool bChanged = eState != m_pImpl->m_eState;
+    if (bChanged)
+        m_pImpl->m_eState = eState;
+    return bChanged;
 }
-
 
 MediaState MediaItem::getState() const
 {
     return m_pImpl->m_eState;
 }
 
-
-void MediaItem::setDuration( double fDuration )
+bool MediaItem::setDuration(double fDuration)
 {
-    m_pImpl->m_fDuration = fDuration;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::DURATION;
+    bool bChanged = fDuration != m_pImpl->m_fDuration;
+    if (bChanged)
+        m_pImpl->m_fDuration = fDuration;
+    return bChanged;
 }
-
 
 double MediaItem::getDuration() const
 {
     return m_pImpl->m_fDuration;
 }
 
-
-void MediaItem::setTime( double fTime )
+bool MediaItem::setTime(double fTime)
 {
-    m_pImpl->m_fTime = fTime;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::TIME;
+    bool bChanged = fTime != m_pImpl->m_fTime;
+    if (bChanged)
+        m_pImpl->m_fTime = fTime;
+    return bChanged;
 }
-
 
 double MediaItem::getTime() const
 {
     return m_pImpl->m_fTime;
 }
 
-
-void MediaItem::setLoop( bool bLoop )
+bool MediaItem::setLoop(bool bLoop)
 {
-    m_pImpl->m_bLoop = bLoop;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::LOOP;
+    bool bChanged = bLoop != m_pImpl->m_bLoop;
+    if (bChanged)
+        m_pImpl->m_bLoop = bLoop;
+    return bChanged;
 }
-
 
 bool MediaItem::isLoop() const
 {
     return m_pImpl->m_bLoop;
 }
 
-
-void MediaItem::setMute( bool bMute )
+bool MediaItem::setMute(bool bMute)
 {
-    m_pImpl->m_bMute = bMute;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::MUTE;
+    bool bChanged = bMute != m_pImpl->m_bMute;
+    if (bChanged)
+        m_pImpl->m_bMute = bMute;
+    return bChanged;
 }
-
 
 bool MediaItem::isMute() const
 {
     return m_pImpl->m_bMute;
 }
 
-
-void MediaItem::setVolumeDB( sal_Int16 nDB )
+bool MediaItem::setVolumeDB(sal_Int16 nDB)
 {
-    m_pImpl->m_nVolumeDB = nDB;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::VOLUMEDB;
+    bool bChanged = nDB != m_pImpl->m_nVolumeDB;
+    if (bChanged)
+        m_pImpl->m_nVolumeDB = nDB;
+    return bChanged;
 }
-
 
 sal_Int16 MediaItem::getVolumeDB() const
 {
     return m_pImpl->m_nVolumeDB;
 }
 
-
-void MediaItem::setZoom( css::media::ZoomLevel eZoom )
+bool MediaItem::setZoom(css::media::ZoomLevel eZoom)
 {
-    m_pImpl->m_eZoom = eZoom;
     m_pImpl->m_nMaskSet |= AVMediaSetMask::ZOOM;
+    bool bChanged = eZoom != m_pImpl->m_eZoom;
+    if (bChanged)
+        m_pImpl->m_eZoom = eZoom;
+    return bChanged;
 }
-
 
 css::media::ZoomLevel MediaItem::getZoom() const
 {
     return m_pImpl->m_eZoom;
 }
-
 
 OUString GetFilename(OUString const& rSourceURL)
 {

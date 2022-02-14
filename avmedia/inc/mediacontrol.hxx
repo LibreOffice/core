@@ -66,7 +66,6 @@ private:
     MediaItem           maItem;
     bool                mbLocked;
     MediaControlStyle   meControlStyle;
-    double mfTime;
 };
 
 }
