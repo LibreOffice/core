@@ -94,6 +94,30 @@
       },
       "revId": "ed166025123a403fbd679377387a45e097f09d6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9707784a_52f52b3e",
+        "filename": "basic/qa/basic_coverage/test_cstr_method.bas",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-02-14T08:47:49Z",
+      "side": 1,
+      "message": "Yep, without any prior knowledge of the cause of the change, it makes it difficult to understand, and someone might assume the 691.1999999999999 is wrong.",
+      "parentUuid": "c5905002_c3b13c91",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 77
+      },
+      "revId": "ed166025123a403fbd679377387a45e097f09d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
