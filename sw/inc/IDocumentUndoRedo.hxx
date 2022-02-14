@@ -246,6 +246,7 @@ private:
     bool const m_bUndoWasEnabled;
 };
 
+/// Blocks grouping undo actions together into an SfxListUndoAction.
 class GroupUndoGuard
 {
 public:
