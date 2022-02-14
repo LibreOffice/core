@@ -540,6 +540,28 @@ bool SwDoc::GetRowBackground( const SwCursor& rCursor, std::unique_ptr<SvxBrushI
     return bRet;
 }
 
+bool SwDoc::HasRowNotTracked( const SwCursor& rCursor )
+{
+    SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    if( !pTableNd )
+        return false;
+
+    std::vector<SwTableLine*> aRowArr; // For Lines collecting
+    ::lcl_CollectLines( aRowArr, rCursor, true );
+
+    if( aRowArr.empty() )
+        return false;
+
+    for( auto pLn : aRowArr )
+    {
+        auto pHasTextChangesOnlyProp = pLn->GetFrameFormat()->GetAttrSet().GetItem<SvxPrintItem>(RES_PRINT);
+        if ( !pHasTextChangesOnlyProp || pHasTextChangesOnlyProp->GetValue() )
+            // there is a not deleted row in the table selection
+            return true;
+    }
+    return false;
+}
+
 void SwDoc::SetRowNotTracked( const SwCursor& rCursor, const SvxPrintItem &rNew, bool bAll )
 {
     SwTableNode* pTableNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
