@@ -45,6 +45,7 @@ public:
     void testRoundtripColumn2000Xlsx();
     void testTdf134392();
     void testTdf133033();
+    void testTdf109061();
 
     CPPUNIT_TEST_SUITE(ScJumboSheetSTest);
 
@@ -52,6 +53,7 @@ public:
     CPPUNIT_TEST(testRoundtripColumn2000Xlsx);
     CPPUNIT_TEST(testTdf134392);
     CPPUNIT_TEST(testTdf133033);
+    CPPUNIT_TEST(testTdf109061);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -158,6 +160,20 @@ void ScJumboSheetSTest::testTdf133033()
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), rViewData.GetCurX());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(16777215), rViewData.GetCurY());
+}
+
+void ScJumboSheetSTest::testTdf109061()
+{
+    // Without the fix in place, the file would have crashed
+    ScDocShellRef xDocSh = loadDoc(u"tdf109061.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll(); // perform hard re-calculation.
+
+    CPPUNIT_ASSERT_EQUAL(6.0, rDoc.GetValue(1, 3, 0));
+
+    xDocSh->DoClose();
 }
 
 ScJumboSheetSTest::ScJumboSheetSTest()
