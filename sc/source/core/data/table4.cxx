@@ -1247,6 +1247,42 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
 
     if ( bOk )
     {
+        tools::Long nBegin = 0;
+        tools::Long nEnd = 0;
+        tools::Long nHidden = 0;
+        if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
+        {
+            if (nEndY > nRow1)
+            {
+                nBegin = nRow2+1;
+                nEnd = nEndY;
+            }
+            else
+            {
+                nBegin = nEndY;
+                nEnd = nRow1 -1;
+            }
+
+            tools::Long nVisible = CountVisibleRows(nBegin, nEnd);
+            nHidden = nEnd + 1 - nBegin - nVisible;
+        }
+        else
+        {
+            if (nEndX > nCol1)
+            {
+                nBegin = nCol2+1;
+                nEnd = nEndX;
+            }
+            else
+            {
+                nBegin = nEndX;
+                nEnd = nCol1 -1;
+            }
+
+            tools::Long nVisible = CountVisibleCols(nBegin, nEnd);
+            nHidden = nEnd + 1 - nBegin - nVisible;
+        }
+
         FillCmd eFillCmd;
         FillDateCmd eDateCmd;
         double nInc;
@@ -1277,28 +1313,13 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         }
         else if ( eFillCmd == FILL_SIMPLE )         // fill with pattern/sample
         {
-            if ((eFillDir == FILL_TO_BOTTOM)||(eFillDir == FILL_TO_TOP))
+            if (nHidden)
             {
-                tools::Long nBegin = 0;
-                tools::Long nEnd = 0;
-                if (nEndY > nRow1)
-                {
-                    nBegin = nRow2+1;
-                    nEnd = nEndY;
-                }
-                else
-                {
-                    nBegin = nEndY;
-                    nEnd = nRow1 -1;
-                }
-
-                tools::Long nNonFiltered = CountNonFilteredRows(nBegin, nEnd);
-                tools::Long nFiltered = nEnd + 1 - nBegin - nNonFiltered;
-
+SAL_WARN("JCL","FILL_SIMPLE hidden["<<nHidden<<"] index["<<nIndex<<"]");
                 if (nIndex > 0)
-                    nIndex = nIndex - nFiltered;
+                    nIndex = nIndex - nHidden;
                 else
-                    nIndex = nIndex + nFiltered;
+                    nIndex = nIndex + nHidden;
             }
 
             tools::Long nPosIndex = nIndex;
@@ -1394,6 +1415,14 @@ OUString ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW
         }
         else if ( eFillCmd == FILL_LINEAR || eFillCmd == FILL_DATE )        // values
         {
+            if (nHidden)
+            {
+                if (nIndex > 0)
+                    nIndex = nIndex - nHidden;
+                else
+                    nIndex = nIndex + nHidden;
+            }
+
             bool bValueOk;
             double nStart;
             sal_Int32 nVal = 0;
