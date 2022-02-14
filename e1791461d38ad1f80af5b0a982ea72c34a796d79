@@ -51,6 +51,24 @@
       "parentUuid": "69f07b0d_1c3663f2",
       "revId": "e1791461d38ad1f80af5b0a982ea72c34a796d79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf77507_cc9016e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-14T12:02:05Z",
+      "side": 1,
+      "message": "If a command is temporarily unavailable it has to become disabled not hidden. This usability flaw is not limited to this particular patch.",
+      "parentUuid": "0ddf618b_1850081b",
+      "revId": "e1791461d38ad1f80af5b0a982ea72c34a796d79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

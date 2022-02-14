@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fee2fa3_94d4a158",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-14T12:02:05Z",
+      "side": 1,
+      "message": "Duplication works for multiple tabs and the new tabs are named nicely. ",
+      "revId": "8653ca44c0b6eed050d4938e20feecc88ca70d20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
