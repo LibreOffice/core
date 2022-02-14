@@ -70,6 +70,24 @@
       "parentUuid": "9fc5ecb4_91eff235",
       "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecd00611_77e19f37",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-14T09:35:01Z",
+      "side": 1,
+      "message": "Fair enough, https://gerrit.libreoffice.org/c/core/+/129902 .",
+      "parentUuid": "66442de9_a1f4dfc5",
+      "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
