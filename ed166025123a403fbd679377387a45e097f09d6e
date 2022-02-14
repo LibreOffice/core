@@ -22,6 +22,30 @@
       },
       "revId": "ed166025123a403fbd679377387a45e097f09d6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9f27745_47ec0ed6",
+        "filename": "basic/qa/basic_coverage/test_cstr_method.bas",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-14T07:45:58Z",
+      "side": 1,
+      "message": "OTOH, this comes from the fact that doubleToString limits precision to 15 significant decimal digits ... oh well.",
+      "parentUuid": "a4290dae_315def4e",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 77
+      },
+      "revId": "ed166025123a403fbd679377387a45e097f09d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
