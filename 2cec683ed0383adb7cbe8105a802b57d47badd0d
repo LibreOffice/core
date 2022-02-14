@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3333da87_005f8f93",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-14T07:31:08Z",
+      "side": 1,
+      "message": "Nah, that\u0027s a pointless check (besides silencing the warning). Does the warning also go away if you change those two ScBroadcastAreaSlot nullptr in DoChecks() to e.g. \"reinterpret_cast\u003cScBroadcastAreaSlot**\u003e(sizeof(ScBroadcastAreaSlot))\" ?",
+      "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
