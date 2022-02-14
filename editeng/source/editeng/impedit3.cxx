@@ -427,6 +427,10 @@ void ImpEditEngine::FormatDoc()
         if ( nDiff )
             aStatus.GetStatusWord() |= !IsEffectivelyVertical() ? EditStatusFlags::TextHeightChanged : EditStatusFlags::TEXTWIDTHCHANGED;
 
+        if (nDiff)
+            aInvalidRect.Union(tools::Rectangle::Justify(
+                { 0, nNewHeight }, { getWidthDirectionAware(aPaperSize), nCurTextHeight }));
+
         nCurTextHeight = nNewHeight;
         nCurTextHeightNTP = nNewHeightNTP;
 
@@ -449,10 +453,6 @@ void ImpEditEngine::FormatDoc()
                 }
             }
         }
-
-        if (nDiff)
-            aInvalidRect.Union(tools::Rectangle::Justify(
-                { 0, nNewHeight }, { getWidthDirectionAware(aPaperSize), nCurTextHeight }));
 
         if (!aRepaintParas.empty())
         {
