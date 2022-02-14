@@ -305,9 +305,8 @@ void ScTable::InsertCol(
 
     if ((nStartRow == 0) && (nEndRow == rDocument.MaxRow()))
     {
-        for (SCSIZE i=0; i < nSize; i++)
-            for (SCCOL nCol = aCol.size() - 1; nCol > nStartCol; nCol--)
-                aCol[nCol].SwapCol(aCol[nCol-1]);
+        for (SCCOL nCol = aCol.size() - 1 - nSize; nCol >= nStartCol; --nCol)
+            aCol[nCol].SwapCol(aCol[nCol+nSize]);
     }
     else
     {
@@ -390,9 +389,8 @@ void ScTable::DeleteCol(
 
     if ((nStartRow == 0) && (nEndRow == rDocument.MaxRow()))
     {
-        for (SCSIZE i=0; i < nSize; i++)
-            for (SCCOL nCol = nStartCol; nCol < aCol.size() - 1; nCol++)
-                aCol[nCol].SwapCol(aCol[nCol+1]);
+        for (SCCOL nCol = nStartCol + nSize; nCol < aCol.size(); ++nCol)
+            aCol[nCol].SwapCol(aCol[nCol - nSize]);
     }
     else
     {
