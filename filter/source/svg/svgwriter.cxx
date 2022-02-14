@@ -1799,6 +1799,9 @@ void SVGTextWriter::implWriteTextPortion( const Point& rPos,
     }
     else
     {
+        // Without the following attribute Google Chrome does not render leading spaces
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, "style", "white-space: pre" );
+
         SvXMLElementExport aSVGTspanElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, mbIWS, mbIWS );
         mrExport.GetDocHandler()->characters( rText );
     }
