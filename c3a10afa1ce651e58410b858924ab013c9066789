@@ -51,6 +51,23 @@
       "parentUuid": "3573580d_0e2e546c",
       "revId": "c3a10afa1ce651e58410b858924ab013c9066789",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fabcc5b8_16e36eed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-14T12:37:22Z",
+      "side": 1,
+      "message": "\"Lorem \\n Ipsum dolor\" - no success, all disabled. As for the assert it\u0027s reported here https://bugs.documentfoundation.org/show_bug.cgi?id\u003d147409",
+      "revId": "c3a10afa1ce651e58410b858924ab013c9066789",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
