@@ -51,6 +51,7 @@ private:
     std::unique_ptr<weld::Scale>        m_xQualitySlider;
     std::unique_ptr<weld::Button>       m_xBtnCalculate;
     std::unique_ptr<weld::ComboBox> m_xInterpolationCombo;
+    std::unique_ptr<weld::Button>       m_xBtnOkay;
 
     SdrGrafObj*     m_xGraphicObj;
     Graphic         m_aGraphic;
@@ -62,6 +63,7 @@ private:
     sal_Int32       m_aNativeSize;
 
     void Initialize();
+    void recallParameter();
 
     DECL_DLLPRIVATE_LINK( SlideHdl, weld::Scale&, void );
     DECL_DLLPRIVATE_LINK( NewInterpolationModifiedHdl, weld::ComboBox&, void );
@@ -74,6 +76,7 @@ private:
     DECL_DLLPRIVATE_LINK( ToggleReduceResolutionRB, weld::Toggleable&, void );
 
     DECL_DLLPRIVATE_LINK( CalculateClickHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( OkayClickHdl, weld::Button&, void );
 
     void Update();
     void UpdateNewWidthMF();
