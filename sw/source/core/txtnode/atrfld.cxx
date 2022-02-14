@@ -254,7 +254,7 @@ void SwFormatField::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         return;
     }
 
-    if( !mpTextField )
+    if (!IsFieldInDoc())
         return;
 
     // don't do anything, especially not expand!
