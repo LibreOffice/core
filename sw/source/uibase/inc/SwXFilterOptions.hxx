@@ -38,11 +38,11 @@ class SwXFilterOptions final : public ::cppu::WeakImplHelper<
                             css::lang::XInitialization,
                             css::lang::XServiceInfo >
 {
-    OUString     sFilterOptions;
+    OUString     m_sFilterOptions;
 
-    css::uno::Reference< css::io::XInputStream > xInputStream;
-    css::uno::Reference< css::lang::XComponent > xModel;
-    css::uno::Reference< css::awt::XWindow > xDialogParent;
+    css::uno::Reference< css::io::XInputStream > m_xInputStream;
+    css::uno::Reference< css::lang::XComponent > m_xModel;
+    css::uno::Reference< css::awt::XWindow > m_xDialogParent;
 
 public:
                             SwXFilterOptions();

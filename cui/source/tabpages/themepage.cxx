@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <themepage.hxx>
+
 #include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/util/Color.hpp>
 
@@ -18,8 +20,6 @@
 #include <sal/log.hxx>
 #include <svl/grabbagitem.hxx>
 #include <svx/colorbox.hxx>
-
-#include <themepage.hxx>
 
 using namespace com::sun::star;
 

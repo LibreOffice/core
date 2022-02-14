@@ -49,8 +49,8 @@
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 
-sal_uInt16  SwView::m_nMoveType = NID_PGE;
-sal_Int32 SwView::m_nActMark = 0;
+sal_uInt16  SwView::s_nMoveType = NID_PGE;
+sal_Int32 SwView::s_nActMark = 0;
 
 using namespace ::com::sun::star::uno;
 
@@ -327,22 +327,22 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         return;
     const bool bNext = *pbNext;
     SwWrtShell& rSh = GetWrtShell();
-    if ( NID_SRCH_REP != m_nMoveType)
+    if ( NID_SRCH_REP != s_nMoveType)
     {
         if ( rSh.GetDrawView()->IsTextEdit() )
             rSh.EndTextEdit();
         if ( IsDrawMode() )
             LeaveDrawCreate();
     }
-    if ( NID_POSTIT != m_nMoveType && m_pPostItMgr )
+    if ( NID_POSTIT != s_nMoveType && m_pPostItMgr )
     {
         sw::annotation::SwAnnotationWin* pActiveSidebarWin = m_pPostItMgr->GetActiveSidebarWin();
         if (pActiveSidebarWin)
             pActiveSidebarWin->SwitchToFieldPos();
     }
-    if (NID_RECENCY != m_nMoveType && NID_PGE != m_nMoveType && NID_SRCH_REP != m_nMoveType)
+    if (NID_RECENCY != s_nMoveType && NID_PGE != s_nMoveType && NID_SRCH_REP != s_nMoveType)
         rSh.addCurrentPosition();
-    switch( m_nMoveType )
+    switch( s_nMoveType )
     {
         case NID_PGE:
         {
@@ -378,9 +378,9 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         case NID_OLE:
         {
             GotoObjFlags eType = GotoObjFlags::FlyFrame;
-            if(m_nMoveType == NID_GRF)
+            if(s_nMoveType == NID_GRF)
                 eType = GotoObjFlags::FlyGrf;
-            else if(m_nMoveType == NID_OLE)
+            else if(s_nMoveType == NID_OLE)
                 eType = GotoObjFlags::FlyOLE;
             bool bSuccess = bNext ?
                     rSh.GotoNextFly(eType) :
@@ -399,7 +399,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         case NID_DRW:
         {
             bool bSuccess = rSh.GotoObj(bNext,
-                    m_nMoveType == NID_DRW ?
+                    s_nMoveType == NID_DRW ?
                         GotoObjFlags::DrawSimple :
                         GotoObjFlags::DrawControl);
             if(bSuccess)
@@ -503,23 +503,23 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
 
                 if(bNext)
                 {
-                    m_nActMark++;
-                    if (m_nActMark >= MAX_MARKS || m_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
+                    s_nActMark++;
+                    if (s_nActMark >= MAX_MARKS || s_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
                     {
-                        m_nActMark = 0;
+                        s_nActMark = 0;
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::ReminderEndWrapped );
                     }
                 }
                 else
                 {
-                    m_nActMark--;
-                    if (m_nActMark < 0 || m_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
+                    s_nActMark--;
+                    if (s_nActMark < 0 || s_nActMark >= static_cast<sal_Int32>(vNavMarkNames.size()))
                     {
-                        m_nActMark = vNavMarkNames.size()-1;
+                        s_nActMark = vNavMarkNames.size()-1;
                         SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::ReminderStartWrapped );
                     }
                 }
-                rSh.GotoMark(vNavMarkNames[m_nActMark]);
+                rSh.GotoMark(vNavMarkNames[s_nActMark]);
             }
             else
                 SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::NavElementNotFound );
@@ -690,17 +690,17 @@ IMPL_LINK( SwView, ExecRulerClick, Ruler *, pRuler, void )
 
 sal_uInt16 SwView::GetMoveType()
 {
-    return m_nMoveType;
+    return s_nMoveType;
 }
 
 void SwView::SetMoveType(sal_uInt16 nSet)
 {
-    m_nMoveType = nSet;
+    s_nMoveType = nSet;
 }
 
 void SwView::SetActMark(sal_Int32 nSet)
 {
-    m_nActMark = nSet;
+    s_nActMark = nSet;
 }
 
 void SwView::ShowHScrollbar(bool bShow)
