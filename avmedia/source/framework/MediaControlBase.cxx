@@ -128,6 +128,28 @@ void MediaControlBase::InitializeWidgets()
     mxTimeSlider->set_tooltip_text( AvmResId( AVMEDIA_STR_POSITION ));
 }
 
+void MediaControlBase::UpdatePlayState(const MediaItem& rMediaItem)
+{
+    if (rMediaItem.getState() == MediaState::Play)
+    {
+        mxPlayToolBox->set_item_active("play", true);
+        mxPlayToolBox->set_item_active("pause", false);
+        mxPlayToolBox->set_item_active("stop", false);
+    }
+    else if( rMediaItem.getState() == MediaState::Pause )
+    {
+        mxPlayToolBox->set_item_active("play", false);
+        mxPlayToolBox->set_item_active("pause", true);
+        mxPlayToolBox->set_item_active("stop", false);
+    }
+    else
+    {
+        mxPlayToolBox->set_item_active("play", false);
+        mxPlayToolBox->set_item_active("pause", false);
+        mxPlayToolBox->set_item_active("stop", true);
+    }
+}
+
 void MediaControlBase::UpdateToolBoxes(const MediaItem& rMediaItem)
 {
     const bool bValidURL = !rMediaItem.getURL().isEmpty();
@@ -145,24 +167,7 @@ void MediaControlBase::UpdateToolBoxes(const MediaItem& rMediaItem)
     {
         mxPlayToolBox->set_sensitive(true);
         mxMuteToolBox->set_sensitive(true);
-        if( rMediaItem.getState() == MediaState::Play )
-        {
-            mxPlayToolBox->set_item_active("play", true);
-            mxPlayToolBox->set_item_active("pause", false);
-            mxPlayToolBox->set_item_active("stop", false);
-        }
-        else if( rMediaItem.getState() == MediaState::Pause )
-        {
-            mxPlayToolBox->set_item_active("play", false);
-            mxPlayToolBox->set_item_active("pause", true);
-            mxPlayToolBox->set_item_active("stop", false);
-        }
-        else
-        {
-            mxPlayToolBox->set_item_active("play", false);
-            mxPlayToolBox->set_item_active("pause", false);
-            mxPlayToolBox->set_item_active("stop", true);
-        }
+        UpdatePlayState(rMediaItem);
         mxPlayToolBox->set_item_active("loop", rMediaItem.isLoop());
         mxMuteToolBox->set_item_active("mute", rMediaItem.isMute());
         if (!mbCurrentlySettingZoom)
@@ -221,15 +226,21 @@ void MediaControlBase::SelectPlayToolBoxItem( MediaItem& aExecItem, MediaItem co
             aExecItem.setTime( 0.0 );
         else
             aExecItem.setTime( aItem.getTime() );
+
+        UpdatePlayState(aExecItem);
     }
     else if (rId == "pause")
     {
         aExecItem.setState( MediaState::Pause );
+
+        UpdatePlayState(aExecItem);
     }
     else if (rId == "stop")
     {
         aExecItem.setState( MediaState::Stop );
         aExecItem.setTime( 0.0 );
+
+        UpdatePlayState(aExecItem);
     }
     else if (rId == "mute")
     {
