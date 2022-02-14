@@ -34,6 +34,24 @@
       "parentUuid": "3333da87_005f8f93",
       "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fc5ecb4_91eff235",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 671,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-14T09:24:02Z",
+      "side": 1,
+      "message": "How is incrementing a pointer containing a \"random\" but properly aligned value UB? It\u0027s never dereferenced.\n\nI know that technically the pointer should point to something, but I don\u0027t want to allocate a large array just to never use it.",
+      "parentUuid": "655ac578_7f1a5f1e",
+      "revId": "2cec683ed0383adb7cbe8105a802b57d47badd0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
