@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b8b25e0_bd403196",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-14T07:30:57Z",
+      "side": 1,
+      "message": "FWIW this is similar to \u0027make -k\u0027, where the long name of -k is --keep-going. But I don\u0027t have a strong opinion on this, as you like. :-)",
+      "revId": "ae3531b05d2111631a8b88c8f7ca11cd1de5c590",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
