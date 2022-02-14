@@ -30,6 +30,20 @@ class SdrGrafObj;
 class SfxBindings;
 class SvStream;
 
+// tdf#146929 - remember user settings within the currect session
+// memp is filled in dtor and restored after initialization
+struct memParam {
+    bool ReduceResolutionCB = false;
+    int  MFNewWidth = 1;
+    int  MFNewHeight = 1;
+    bool LosslessRB = true;
+    bool JpegCompRB = false;
+    int  CompressionMF = 6;
+    int  QualityMF = 80;
+    int  InterpolationCombo = 3;
+};
+static memParam memp;
+
 class SAL_WARN_UNUSED SVX_DLLPUBLIC CompressGraphicsDialog final : public weld::GenericDialogController
 {
 private:
@@ -51,6 +65,7 @@ private:
     std::unique_ptr<weld::Scale>        m_xQualitySlider;
     std::unique_ptr<weld::Button>       m_xBtnCalculate;
     std::unique_ptr<weld::ComboBox> m_xInterpolationCombo;
+    std::unique_ptr<weld::Button>       m_xBtnOkay;
 
     SdrGrafObj*     m_xGraphicObj;
     Graphic         m_aGraphic;
@@ -62,6 +77,7 @@ private:
     sal_Int32       m_aNativeSize;
 
     void Initialize();
+    void recallParameter();
 
     DECL_DLLPRIVATE_LINK( SlideHdl, weld::Scale&, void );
     DECL_DLLPRIVATE_LINK( NewInterpolationModifiedHdl, weld::ComboBox&, void );
@@ -74,6 +90,7 @@ private:
     DECL_DLLPRIVATE_LINK( ToggleReduceResolutionRB, weld::Toggleable&, void );
 
     DECL_DLLPRIVATE_LINK( CalculateClickHdl, weld::Button&, void );
+    DECL_DLLPRIVATE_LINK( OkayClickHdl, weld::Button&, void );
 
     void Update();
     void UpdateNewWidthMF();
