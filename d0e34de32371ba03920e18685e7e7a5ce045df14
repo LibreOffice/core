@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b43eab6_b15078e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-14T17:46:34Z",
+      "side": 1,
+      "message": "Agreed :-)\nIt\u0027s covered by ODFFv3 5.8 References.\n",
+      "revId": "d0e34de32371ba03920e18685e7e7a5ce045df14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
