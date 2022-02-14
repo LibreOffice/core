@@ -39,8 +39,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     maChangeTimeIdle( "avmedia MediaControl Change Time Idle" ),
     maItem( 0, AVMediaSetMask::ALL ),
     mbLocked( false ),
-    meControlStyle( eControlStyle ),
-    mfTime(0.0)
+    meControlStyle( eControlStyle )
 {
     mxPlayToolBox = m_xBuilder->weld_toolbar("playtoolbox");
     mxTimeSlider = m_xBuilder->weld_scale("timeslider");
@@ -112,11 +111,11 @@ void MediaControl::UpdateURLField(MediaItem const & tempItem)
 
 void MediaControl::setState( const MediaItem& rItem )
 {
-    double fTime = rItem.getTime();
-    if( !mbLocked && fTime != mfTime)
+    if (mbLocked)
+        return;
+    bool bChanged = maItem.merge(rItem);
+    if (bChanged)
     {
-        mfTime = fTime;
-        maItem.merge( rItem );
         if( rItem.getURL().isEmpty() && meControlStyle == MediaControlStyle::SingleLine )
             mxPlayToolBox->set_sensitive(false);
         UpdateToolBoxes( maItem );

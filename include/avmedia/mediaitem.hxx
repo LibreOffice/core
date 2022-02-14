@@ -85,39 +85,39 @@ public:
     virtual bool            QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool            PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    void                    merge( const MediaItem& rMediaItem );
+    bool                    merge(const MediaItem& rMediaItem);
 
     AVMediaSetMask          getMaskSet() const;
 
-    void                    setState( MediaState eState );
+    bool                    setState(MediaState eState);
     MediaState              getState() const;
 
-    void                    setDuration( double fDuration );
+    bool                    setDuration(double fDuration);
     double                  getDuration() const;
 
-    void                    setTime( double fTime );
+    bool                    setTime(double fTime);
     double                  getTime() const;
 
-    void                    setLoop( bool bLoop );
+    bool                    setLoop(bool bLoop);
     bool                    isLoop() const;
 
-    void                    setMute( bool bMute );
+    bool                    setMute(bool bMute);
     bool                    isMute() const;
 
-    void                    setVolumeDB( sal_Int16 nDB );
+    bool                    setVolumeDB(sal_Int16 nDB);
     sal_Int16               getVolumeDB() const;
 
-    void                    setZoom( ::css::media::ZoomLevel eZoom );
+    bool                    setZoom(css::media::ZoomLevel eZoom);
     ::css::media::ZoomLevel getZoom() const;
 
-    void                    setURL( const OUString& rURL,
-                                    const OUString& rTempURL,
-                                    const OUString& rReferer);
+    bool                    setURL(const OUString& rURL,
+                                   const OUString& rTempURL,
+                                   const OUString& rReferer);
     const OUString&         getURL() const;
 
-    void                    setMimeType( const OUString& rMimeType );
+    bool                    setMimeType(const OUString& rMimeType);
     OUString                getMimeType() const;
-    void setGraphic(const Graphic& rGraphic);
+    bool setGraphic(const Graphic& rGraphic);
     const Graphic & getGraphic() const;
     const OUString&         getTempURL() const;
 
