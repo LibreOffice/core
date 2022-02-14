@@ -51,6 +51,7 @@ using namespace css::animations;
 class SdExportTest : public SdModelTestBaseXML
 {
 public:
+    void testTDF112126();
     void testBackgroundImage();
     void testMediaEmbedding();
     void testFillBitmapUnused();
@@ -98,6 +99,7 @@ public:
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
+    CPPUNIT_TEST(testTDF112126);
     CPPUNIT_TEST(testBackgroundImage);
     CPPUNIT_TEST(testMediaEmbedding);
     CPPUNIT_TEST(testFillBitmapUnused);
@@ -177,6 +179,15 @@ uno::Reference<awt::XBitmap> getBitmapFromTable(const sd::DrawDocShellRef& xDocS
     return xBitmap;
 }
 
+}
+
+void SdExportTest::testTDF112126()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf112126.odg"), ODG);
+    uno::Reference<drawing::XDrawPagesSupplier> xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+    uno::Reference< drawing::XDrawPage > xDrawPage( xDoc->getDrawPages()->getByIndex(0), uno::UNO_QUERY_THROW );
+    CPPUNIT_ASSERT_EQUAL(OUString("Page 1"), getPropertyValue<OUString>(xDrawPage, "LinkDisplayName"));
+    xDocShRef->DoClose();
 }
 
 void SdExportTest::testBackgroundImage()
