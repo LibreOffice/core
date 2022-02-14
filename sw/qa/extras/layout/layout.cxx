@@ -3719,6 +3719,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf135035)
     CPPUNIT_ASSERT_GREATER(nParentWidth, nFly3Width);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf146704_EndnoteInSection)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf146704_EndnoteInSection.odt");
+    CPPUNIT_ASSERT(pDoc);
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the fix, the endnote placed to 2. page
+    assertXPath(pXmlDoc, "/root/page", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf139336_ColumnsWithFootnoteDoNotOccupyEntirePage)
 {
     SwDoc* pDoc
