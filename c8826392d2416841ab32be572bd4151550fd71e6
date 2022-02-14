@@ -16,6 +16,23 @@
       "message": "online.git unit-wopi-documentconflict failed, resume.",
       "revId": "c8826392d2416841ab32be572bd4151550fd71e6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7853ab34_ca375255",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-14T15:14:06Z",
+      "side": 1,
+      "message": "gerrit_windows_co-2021_64bit failed, resume.",
+      "revId": "c8826392d2416841ab32be572bd4151550fd71e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
