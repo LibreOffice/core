@@ -50,6 +50,24 @@
       "message": "\u003e This change must be accompanied with a unit test, to show what problem it solves, and that it really does it. Here I feel that something important is missing - specifically, treatment of UTC vs local times.\n\nSo we need to add a unit test for this issue?",
       "revId": "3197fdf159d7256884be3a56d29e7f4a459e5e2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "505297f3_6d39cedf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-14T08:40:31Z",
+      "side": 1,
+      "message": "Definitely. This is a change that targets import/export of the data to file formats; it is even mentioned as \"Areas with \"No fix without a unit test\" rule\". (And anyway, the unit test is needed here to see what is changed in the export.)\n\nhttps://wiki.documentfoundation.org/Development/Unit_Tests#Areas_with_.22No_fix_without_a_unit_test.22_rule",
+      "parentUuid": "35e8ed0e_65f45ad0",
+      "revId": "3197fdf159d7256884be3a56d29e7f4a459e5e2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
