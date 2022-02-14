@@ -458,8 +458,9 @@ SwFootnoteBossFrame* SwFrame::FindFootnoteBossFrame( bool bFootnotes )
     //         similar case can be reached with a page break + FootnoteAtEnd setting
     SwSectionFrame* pSectframe = pRet->FindSctFrame();
     bool bMoveToPageFrame = false;
+    // tdf146704: only if it is really a footnote, not an endnote.
     // tdf54465: compatibility flag to make old odt files keep these full page sections.
-    if (pSectframe
+    if (bFootnotes && pSectframe
         && pSectframe->GetFormat()->getIDocumentSettingAccess().get(
             DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND))
     {
