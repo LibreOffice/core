@@ -39,6 +39,23 @@
 #include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
 
+// tdf#146929 - remember user settings within the currect session
+// memp is filled in dtor and restored after initialization
+namespace
+{
+    struct memParam {
+        bool ReduceResolutionCB = false;
+        int  MFNewWidth = 1;
+        int  MFNewHeight = 1;
+        bool LosslessRB = true;
+        bool JpegCompRB = false;
+        int  CompressionMF = 6;
+        int  QualityMF = 80;
+        int  InterpolationCombo = 3;
+    };
+    memParam memp;
+}
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
 
@@ -66,10 +83,29 @@ CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, Graphic c
     m_dResolution     ( 300 )
 {
     Initialize();
+    recallParameter();
 }
 
 CompressGraphicsDialog::~CompressGraphicsDialog()
 {
+}
+
+void CompressGraphicsDialog::recallParameter()
+{
+    m_xReduceResolutionCB->set_active( memp.ReduceResolutionCB );
+    if (memp.ReduceResolutionCB && (memp.MFNewWidth > 1))
+        m_xMFNewWidth->set_value( memp.MFNewWidth );
+    if (memp.ReduceResolutionCB && (memp.MFNewHeight > 1))
+        m_xMFNewHeight->set_value( memp.MFNewHeight );
+
+    m_xLosslessRB->set_active( memp.LosslessRB );
+    m_xJpegCompRB->set_active( memp.JpegCompRB );
+    m_xCompressionMF->set_value( memp.CompressionMF );
+    m_xCompressionSlider->set_value( memp.CompressionMF );
+    m_xQualityMF->set_value( memp.QualityMF );
+    m_xQualitySlider->set_value( memp.QualityMF );
+
+    m_xInterpolationCombo->set_active( memp.InterpolationCombo );
 }
 
 void CompressGraphicsDialog::Initialize()
@@ -91,6 +127,7 @@ void CompressGraphicsDialog::Initialize()
     m_xResolutionLB = m_xBuilder->weld_combo_box("combo-resolution");
     m_xBtnCalculate = m_xBuilder->weld_button("calculate");
     m_xInterpolationCombo = m_xBuilder->weld_combo_box("interpolation-method-combo");
+    m_xBtnOkay = m_xBuilder->weld_button("ok");
 
     m_xInterpolationCombo->set_active_text("Lanczos");
 
@@ -115,6 +152,7 @@ void CompressGraphicsDialog::Initialize()
     m_xJpegCompRB->set_active(true);
     m_xReduceResolutionCB->set_active(true);
 
+    m_xBtnOkay->connect_clicked( LINK( this, CompressGraphicsDialog, OkayClickHdl ) );
     UpdateNewWidthMF();
     UpdateNewHeightMF();
     UpdateResolutionLB();
@@ -233,6 +271,19 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
     rFilter.ExportGraphic( aScaledGraphic, "none", aStream, nFilterFormat, &aFilterData );
+}
+
+IMPL_LINK_NOARG( CompressGraphicsDialog, OkayClickHdl, weld::Button&, void )
+{
+    memp.ReduceResolutionCB = m_xReduceResolutionCB->get_active();
+    memp.MFNewWidth =         m_xMFNewWidth->get_value();
+    memp.MFNewHeight =        m_xMFNewHeight->get_value();
+    memp.LosslessRB =         m_xLosslessRB->get_active();
+    memp.JpegCompRB =         m_xJpegCompRB->get_active();
+    memp.CompressionMF =      m_xCompressionMF->get_value();
+    memp.QualityMF =          m_xQualityMF->get_value();
+    memp.InterpolationCombo = m_xInterpolationCombo->get_active();
+    CompressGraphicsDialog::response(RET_OK);
 }
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, NewWidthModifiedHdl, weld::Entry&, void )
