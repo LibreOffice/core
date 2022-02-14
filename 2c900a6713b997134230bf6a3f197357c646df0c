@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43f4c287_a7a727a0",
+        "filename": "sc/source/core/data/bcaslot.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T10:59:01Z",
+      "side": 1,
+      "message": "that causes new[] vs. non-[] delete mismatch",
+      "revId": "2c900a6713b997134230bf6a3f197357c646df0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
