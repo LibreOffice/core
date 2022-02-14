@@ -1,0 +1,163 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdde75de_35c649e8",
+        "filename": "cppuhelper/source/gcc3.map",
+        "patchSetId": 5
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "7.5 or 7.4?",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55b95ed7_839f446d",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "wouldn\u0027t it be better (and in line with its two callers) to give this ctor a narrow interface and require that xWeak is non-null?",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0cf749d_75f273e9",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "* please don\u0027t blindly copy/paste poor uses of OSL_ASSERT\n* plesae don\u0027t blindly copy/paste try/catch code that is arguably not necessary in a noexcept(false) function (cf. 0c7c93ea6161fe8377bd67dbd1b09ecf0a722131 \"#98040# fixed exception spec\")",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ef2b18d_ff895842",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "would it be better to give this ctor a narrow interface and require that xWeak is non-null?",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e826ab6_3641f7cc",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 532,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "would it be better to give this ctor a narrow interface and require that xWeak is non-null?",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d19cf298_7c0d7c84",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 538,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "* please don\u0027t blindly copy/paste poor uses of OSL_ASSERT\n* plesae don\u0027t blindly copy/paste try/catch code that is arguably not necessary in a noexcept(false) function (cf. 0c7c93ea6161fe8377bd67dbd1b09ecf0a722131 \"#98040# fixed exception spec\")",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0db0f1e7_894df1bc",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "is this accidental?",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 8
+      },
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1fb2040_939ce5b7",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "any reason you created an additional LIBO_INTERNAL_ONLY case here vs. introducing the css::uno::Reference\u003ccss::uno::XWeak\u003e also for !LIBO_INTERNAL_ONLY in operator\u003d below?",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "995d80eb_8e94950c",
+        "filename": "reportdesign/source/core/sdr/RptObject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-14T12:43:57Z",
+      "side": 1,
+      "message": "here and elsewhere, _xComponent is known to actually implement SvxShape (e.g., it can\u0027t be a binary UNO proxy object)?",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
