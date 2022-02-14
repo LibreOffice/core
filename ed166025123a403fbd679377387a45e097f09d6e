@@ -70,6 +70,30 @@
       },
       "revId": "ed166025123a403fbd679377387a45e097f09d6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5905002_c3b13c91",
+        "filename": "basic/qa/basic_coverage/test_cstr_method.bas",
+        "patchSetId": 7
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-14T08:43:49Z",
+      "side": 1,
+      "message": "At least, the comment could be improved a bit: in current form, it looks as if we assume the 691.1999999999999 to be wrong. It could be re-worded to something like \"check also how current conversion rounds a close number\", to make it clear that there\u0027s nothing wrong with 691.1999999999999 per se 😊.",
+      "parentUuid": "5e431e38_26d0049e",
+      "range": {
+        "startLine": 28,
+        "startChar": 4,
+        "endLine": 31,
+        "endChar": 77
+      },
+      "revId": "ed166025123a403fbd679377387a45e097f09d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
