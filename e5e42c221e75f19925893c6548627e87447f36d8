@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0cd00ca_2f27d98c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Resolved,\nReplaced const with M_PI, M_E from cmath library\nBuild is successful",
+      "revId": "e5e42c221e75f19925893c6548627e87447f36d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

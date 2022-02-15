@@ -52,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3014ae29_b7459421",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2db6b7a_94e15a1b",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ae1a476_2b6f68c0",
@@ -65,6 +83,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Use M_SQRT2 instead.\nhttps://docs.microsoft.com/en-us/cpp/c-runtime-library/math-constants\nhttps://www.gnu.org/software/libc/manual/html_node/Mathematical-Constants.html",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e0b1a81_6e41a5e2",
+        "filename": "basegfx/source/tools/gradienttools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ae1a476_2b6f68c0",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -86,6 +122,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f552f89_cc47c59d",
+        "filename": "basegfx/source/tools/gradienttools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad2f06f3_e3b3f3a1",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2fbbaffe_f1fc0745",
@@ -99,6 +153,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Also use M_SQRT2 instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09a832dd_dcb463c6",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1294,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fbbaffe_f1fc0745",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -120,6 +192,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c877b39f_70389b95",
+        "filename": "drawinglayer/source/processor2d/vclprocessor2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1339,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d39fa09_931ccc2b",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c9b30f7_a384f528",
@@ -133,6 +223,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Please use M_PI instead of defining fM_PI.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74221b56_e5fe4c5c",
+        "filename": "sc/qa/unit/subsequent_filters_test2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3011,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c9b30f7_a384f528",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -154,6 +262,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7175ef7_5f28a9ab",
+        "filename": "slideshow/source/engine/opengl/TransitionImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 949,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d9f8c518_d52f3930",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea7c9336_a3100b21",
@@ -167,6 +293,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Also here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2375942_302db21f",
+        "filename": "slideshow/source/engine/opengl/TransitionImpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 967,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea7c9336_a3100b21",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -188,6 +332,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86b7899c_734cda3d",
+        "filename": "stoc/test/testiadapter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1be54e4e_83e2d61c",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aeeff3ab_677a4f45",
@@ -201,6 +363,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Use M_E instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "632bee8f_3a15dd25",
+        "filename": "stoc/test/testintrosp.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aeeff3ab_677a4f45",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -222,6 +402,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0f1d6a5_878d5d6d",
+        "filename": "sw/source/core/bastyp/calc.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 324,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eba0daaf_de4e723a",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "173c37ba_578330c2",
@@ -235,6 +433,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Use M_PI instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "816811ae_a316aafb",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "173c37ba_578330c2",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -256,6 +472,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d02a5b3_7f44d6ab",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5afa9d72_6972c94f",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f28f7f53_f80c8bf4",
@@ -269,6 +503,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d69ca6fe_51663060",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 742,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f28f7f53_f80c8bf4",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -290,6 +542,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e663238_66c61caf",
+        "filename": "testtools/source/bridgetest/bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 748,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6505a46_24ebe14d",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9d0c7a4e_a0d157e9",
@@ -303,6 +573,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Here.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04609c33_6f3966db",
+        "filename": "testtools/source/bridgetest/cli/cli_cpp_bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9d0c7a4e_a0d157e9",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -324,6 +612,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8de4d64b_8138bc09",
+        "filename": "testtools/source/bridgetest/cli/cli_cpp_bridgetest.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 650,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c736a97_0e8f0e30",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9cf9a7e_b0ad32ab",
@@ -337,6 +643,24 @@
       "writtenOn": "2022-02-10T13:25:21Z",
       "side": 1,
       "message": "Additionally: please do not touch the lines that you do not change functionally. This specific line should be kept intact, since the only change in it that you did was removing some spaces. Your easyhack is not about reformatting - so please only touch lines where you replace literals with constants.\n\nAvoiding touching unrelated lines, you simplify the task of reviewers.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1bd7d87_931dc786",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1224,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9cf9a7e_b0ad32ab",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -358,6 +682,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fe3216e_88966d9c",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1226,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77302b41_0acd8dbb",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a279acdb_067555b8",
@@ -371,6 +713,24 @@
       "writtenOn": "2022-02-10T13:25:21Z",
       "side": 1,
       "message": "Same here: it\u0027s out f scope to split \u0027else {\u0027 into two lines.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbb8f03a_0103a0eb",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2075,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a279acdb_067555b8",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -392,6 +752,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80da17d9_1a558bf7",
+        "filename": "vcl/source/filter/imet/ios2met.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2077,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c5866a2_e79e6d70",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02e68871_128166aa",
@@ -405,6 +783,24 @@
       "writtenOn": "2022-02-10T12:40:24Z",
       "side": 1,
       "message": "Use M_SQRT2 instead.",
+      "revId": "556ff42099b0c54b800911f8502441a894a8090e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a71f796_7a20d6a2",
+        "filename": "vcl/source/gdi/gradient.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-15T13:48:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02e68871_128166aa",
       "revId": "556ff42099b0c54b800911f8502441a894a8090e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
