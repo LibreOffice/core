@@ -18063,7 +18063,9 @@ private:
     std::unique_ptr<comphelper::string::NaturalStringSorter> m_xSorter;
     vcl::QuickSelectionEngine m_aQuickSelectionEngine;
     std::vector<std::unique_ptr<GtkTreeRowReference, GtkTreeRowReferenceDeleter>> m_aSeparatorRows;
+#if 0
     OUString m_sMenuButtonRow;
+#endif
 //    bool m_bHoverSelection;
 //    bool m_bMouseInOverlayButton;
     bool m_bPopupActive;
