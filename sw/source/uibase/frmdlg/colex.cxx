@@ -99,12 +99,12 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
     {
         const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            static_cast<const SfxBoolItem&>(rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) ) );
+            rHeaderSet.Get( pPool->GetWhich( SID_ATTR_PAGE_ON ) );
 
         if ( rHeaderOn.GetValue() )
         {
             const SvxSizeItem& rSize =
-                static_cast<const SvxSizeItem&>(rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE)));
+                rHeaderSet.Get(pPool->GetWhich(SID_ATTR_PAGE_SIZE));
 
             const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rHeaderSet.Get(
                                         pPool->GetWhich(SID_ATTR_ULSPACE)));
@@ -142,7 +142,7 @@ void SwPageExample::UpdateExample( const SfxItemSet& rSet )
         if ( rFooterOn.GetValue() )
         {
             const SvxSizeItem& rSize =
-                static_cast<const SvxSizeItem&>(rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) ));
+                rFooterSet.Get( pPool->GetWhich( SID_ATTR_PAGE_SIZE ) );
 
             const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(rFooterSet.Get(
                                         pPool->GetWhich( SID_ATTR_ULSPACE ) ));

@@ -222,9 +222,9 @@ ScHFEditActiveDlg::ScHFEditActiveDlg(
     :   ScHFEditDlg( pParent, rCoreSet, rPageStyle,
         "modules/scalc/ui/headerfooterdialog.ui", "HeaderFooterDialog" )
 {
-    const SvxPageItem&  rPageItem = static_cast<const SvxPageItem&>(
+    const SvxPageItem&  rPageItem =
                 rCoreSet.Get(
-                    rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) ));
+                    rCoreSet.GetPool()->GetWhich(SID_ATTR_PAGE) );
 
     bool bRightPage = SvxPageUsage::Left != rPageItem.GetPageUsage();
 
