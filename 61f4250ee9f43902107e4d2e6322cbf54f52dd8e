@@ -69,6 +69,24 @@
       "parentUuid": "7b62ecac_a9076f8c",
       "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac76121_13333b67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-15T15:53:43Z",
+      "side": 1,
+      "message": "I had a look at your fods and the fods from the source code.\nYour cell I47 [\u003dUNICHAR(H47)] returns a different value than my document. H47 is the same in both documents (64975, with FDCF in G47).\nIn Vim the result in your cell I47 looks like a single character [office:string-value\u003d\"﷏\"] and in my document it looks like 3 characters [office:string-value\u003d\"ï·\u003c8f\u003e\"].\nNot sure how this shows at your end.\nChanging my locale LANG to cz_CZ.UTF-8 (no reboot) does not result in the clean.fods to return different result.\n\nI don\u0027t know what is the matter. When it is caused by a different setting, I would expect that more rows would fail, and not just row 47.",
+      "parentUuid": "c53b3f2a_43c0e695",
+      "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
