@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0a8b215_1ab3397e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T18:45:59Z",
+      "side": 1,
+      "message": "\u003e Patch Set 8: Verified-1\n\u003e \n\u003e Uncategorized build failure. If it is generic enough, please add a suitable Cause for it. ( https://ci.libreoffice.org/job/gerrit_master/108240/ )\n\nStephan: could you please take a look at what could be the issue here - with all the builders succeeding except clang-dbgutil, which complains about \"undefined reference to \u0027jkj::dragonbox::detail::cache_holder\u003cjkj::dragonbox::ieee754_binary64\u003e::cache\u0027\", which is defined in the same \u003cdragonbox/dragonbox.h\u003e header file with the rest. Even the other clang builder succeeded. 😕",
+      "revId": "59043423de671242bf5373c6d76b580953b23940",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
