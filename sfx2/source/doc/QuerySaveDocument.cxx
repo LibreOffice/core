@@ -23,7 +23,7 @@
 
 short ExecuteQuerySaveDocument(weld::Widget* _pParent, std::u16string_view _rTitle)
 {
-    if (Application::IsHeadlessModeEnabled())
+    if (Application::IsHeadlessModeEnabled() || getenv("SAL_NO_QUERYSAVE"))
     {
         // don't block Desktop::terminate() if there's no user to ask
         return RET_NO;
