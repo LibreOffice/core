@@ -43,6 +43,7 @@ $(eval $(call gb_Library_use_libraries,sal,\
 ))
 
 $(eval $(call gb_Library_use_externals,sal,\
+    dragonbox \
     dtoa \
     valgrind \
     zlib \
