@@ -16,6 +16,41 @@
       "message": "This commit makes CppunitTest_sc_text_functions_test fail for me locally, with row 47 in clean.fods not passing. This is openSUSE 15.3, LANG\u003dcs_CZ.UTF-8, I don\u0027t know what other info to provide or how to debug this.\n",
       "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54c6ae5a_64febf11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-15T15:05:21Z",
+      "side": 1,
+      "message": "Let\u0027s see if we can find the cause.",
+      "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b62ecac_a9076f8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-02-15T15:05:21Z",
+      "side": 1,
+      "message": "Could you open /sc/qa/unit/data/functions/text/fods/clean.fods and recalculate the document? And can you copy the contents of cel A47 to me?\nI have openSUSE Leap 15.3, with LANG\u003dnl_NL.UTF-8, and here it works as expected (making it hard to debug right now, my Czech is rather inadequate to change LANG to).",
+      "parentUuid": "9c45b1e1_33f87412",
+      "revId": "61f4250ee9f43902107e4d2e6322cbf54f52dd8e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
