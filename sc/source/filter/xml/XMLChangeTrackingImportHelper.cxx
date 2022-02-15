@@ -650,7 +650,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(const ScMyContentAction* pActio
     if (!pChangeActionContent->IsTopContent() || pChangeActionContent->IsDeletedIn())
         return;
 
-    sal_Int32 nCol, nRow, nTab, nCol2, nRow2, nTab2;
+    sal_Int64 nCol, nRow, nTab, nCol2, nRow2, nTab2;
     pAction->aBigRange.GetVars(nCol, nRow, nTab, nCol2, nRow2, nTab2);
     if ((nCol >= 0) && (nCol <= rDoc.MaxCol()) &&
         (nRow >= 0) && (nRow <= rDoc.MaxRow()) &&

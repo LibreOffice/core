@@ -154,7 +154,7 @@ static void Expand( R& n1, R& n2, U nStart, S nD )
     n1 = sal::static_int_cast<R>( n1 - nD );
 }
 
-static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
+static bool lcl_IsWrapBig( sal_Int64 nRef, sal_Int32 nDelta )
 {
     if ( nRef > 0 && nDelta > 0 )
         return nRef + nDelta <= 0;
@@ -163,7 +163,7 @@ static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
     return false;
 }
 
-static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
+static bool lcl_MoveBig( sal_Int64& rRef, sal_Int64 nStart, sal_Int32 nDelta )
 {
     bool bCut = false;
     if ( rRef >= nStart )
@@ -178,7 +178,7 @@ static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
     return bCut;
 }
 
-static bool lcl_MoveItCutBig( sal_Int32& rRef, sal_Int32 nDelta )
+static bool lcl_MoveItCutBig( sal_Int64& rRef, sal_Int32 nDelta )
 {
     bool bCut = lcl_IsWrapBig( rRef, nDelta );
     rRef += nDelta;
@@ -382,8 +382,8 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     ScRefUpdateRes eRet = UR_NOTHING;
     const ScBigRange aOldRange( rWhat );
 
-    sal_Int32 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-    sal_Int32 theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
+    sal_Int64 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    sal_Int64 theCol1, theRow1, theTab1, theCol2, theRow2, theTab2;
     rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     rWhat.GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
 

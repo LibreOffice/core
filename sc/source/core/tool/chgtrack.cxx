@@ -507,9 +507,9 @@ OUString ScChangeAction::GetRefString(
                     aBuf.append(aTmp);
                     aBuf.append('.');
                 }
-                aBuf.append(static_cast<sal_Int32>(aTmpRange.aStart.Row()+1));
+                aBuf.append(static_cast<sal_Int64>(aTmpRange.aStart.Row()+1));
                 aBuf.append(':');
-                aBuf.append(static_cast<sal_Int32>(aTmpRange.aEnd.Row()+1));
+                aBuf.append(static_cast<sal_Int64>(aTmpRange.aEnd.Row()+1));
             break;
             default:
             {
