@@ -16,6 +16,24 @@
       "message": "Agreed :-)\nIt\u0027s covered by ODFFv3 5.8 References.\n",
       "revId": "d0e34de32371ba03920e18685e7e7a5ce045df14",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5af067a9_e75676b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T08:02:47Z",
+      "side": 1,
+      "message": "Hmm, but shouldn\u0027t it then depend on written ODF level?",
+      "parentUuid": "1b43eab6_b15078e7",
+      "revId": "d0e34de32371ba03920e18685e7e7a5ce045df14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
