@@ -62,8 +62,7 @@ public:
         // check if it is the right kind of macro (not particularly reliable checks)
         if (!macroLoc.isValid() || !compiler.getSourceManager().isInMainFile(macroLoc)
             || compiler.getSourceManager().isInSystemHeader(macroLoc)
-// not sure when these became available
-#if CLANG_VERSION >= 130000
+#if CLANG_VERSION >= 90000
             || compiler.getSourceManager().isWrittenInBuiltinFile(macroLoc)
             || compiler.getSourceManager().isWrittenInScratchSpace(macroLoc)
             || compiler.getSourceManager().isWrittenInCommandLineFile(macroLoc)
