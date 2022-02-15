@@ -375,7 +375,7 @@ public:
     // or SdrOle2Obj.
     // It may also have a Title and a Description for accessibility purposes.
     void SetName(const OUString& rStr, const bool bSetChanged = true);
-    OUString GetName() const;
+    const OUString & GetName() const;
     void MakeNameUnique();
     void MakeNameUnique(std::unordered_set<OUString>& rNameSet);
     void SetTitle(const OUString& rStr);
