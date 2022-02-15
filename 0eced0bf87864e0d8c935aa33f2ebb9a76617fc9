@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70617449_e4faf4e6",
+        "filename": "Makefile.in",
+        "patchSetId": 4
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-15T08:48:18Z",
+      "side": 1,
+      "message": "is this change relevant, or a mistake?",
+      "revId": "0eced0bf87864e0d8c935aa33f2ebb9a76617fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4934b25_e71aeb72",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-15T08:48:18Z",
+      "side": 1,
+      "message": "better keep this block sorted lexicographically?",
+      "revId": "0eced0bf87864e0d8c935aa33f2ebb9a76617fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
