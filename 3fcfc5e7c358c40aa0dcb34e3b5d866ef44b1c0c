@@ -16,6 +16,40 @@
       "message": "I suppose it should rather be \"though\" for the second typo.",
       "revId": "3fcfc5e7c358c40aa0dcb34e3b5d866ef44b1c0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ee4e514_34298e86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-02-15T16:53:32Z",
+      "side": 1,
+      "message": "There’s a missing word at the end of that sense anyway",
+      "revId": "3fcfc5e7c358c40aa0dcb34e3b5d866ef44b1c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5c4365f_9187c78e",
+        "filename": "extras/CustomTarget_autocorr.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-02-15T16:53:32Z",
+      "side": 1,
+      "message": "The word is “though”",
+      "revId": "3fcfc5e7c358c40aa0dcb34e3b5d866ef44b1c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
