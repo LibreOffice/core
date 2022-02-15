@@ -156,7 +156,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
     drawing::FillStyle eXFS = drawing::FillStyle_NONE;
     if( rSet.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE )
     {
-        XFillStyleItem aFillStyleItem( static_cast<const XFillStyleItem&>( rSet.Get( GetWhich( XATTR_FILLSTYLE ) ) ) );
+        XFillStyleItem aFillStyleItem( rSet.Get( GetWhich( XATTR_FILLSTYLE ) ) );
         eXFS = aFillStyleItem.GetValue();
         m_rXFSet.Put( aFillStyleItem );
     }
@@ -171,13 +171,13 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         }
         case drawing::FillStyle_SOLID:
         {
-            m_rXFSet.Put( static_cast<const XFillColorItem&>( rSet.Get( GetWhich( XATTR_FILLCOLOR ) ) ) );
+            m_rXFSet.Put( rSet.Get( GetWhich( XATTR_FILLCOLOR ) ) );
             SelectFillType(*m_xBtnColor);
             break;
         }
         case drawing::FillStyle_GRADIENT:
         {
-            m_rXFSet.Put( static_cast<const XFillGradientItem&>( rSet.Get( GetWhich( XATTR_FILLGRADIENT ) ) ) );
+            m_rXFSet.Put( rSet.Get( GetWhich( XATTR_FILLGRADIENT ) ) );
             SelectFillType(*m_xBtnGradient);
             break;
         }
@@ -191,8 +191,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
         }
         case drawing::FillStyle_BITMAP:
         {
-            const bool bPattern
-                = rSet.Get(TypedWhichId<XFillBitmapItem>(GetWhich(XATTR_FILLBITMAP))).isPattern();
+            const bool bPattern = rSet.Get(GetWhich(XATTR_FILLBITMAP)).isPattern();
             // pass full item set here, bitmap fill has many attributes (tiling, size, offset etc.)
             m_rXFSet.Put( rSet );
             if (!bPattern)

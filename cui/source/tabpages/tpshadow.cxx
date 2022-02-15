@@ -93,8 +93,7 @@ SvxShadowTabPage::SvxShadowTabPage(weld::Container* pPage, weld::DialogControlle
     drawing::FillStyle eXFS = drawing::FillStyle_SOLID;
     if( m_rOutAttrs.GetItemState( XATTR_FILLSTYLE ) != SfxItemState::DONTCARE )
     {
-        eXFS = static_cast<const XFillStyleItem&>( m_rOutAttrs.
-                                Get( GetWhich( XATTR_FILLSTYLE ) ) ).GetValue();
+        eXFS = m_rOutAttrs.Get( GetWhich( XATTR_FILLSTYLE ) ).GetValue();
         switch( eXFS )
         {
             case drawing::FillStyle_SOLID:

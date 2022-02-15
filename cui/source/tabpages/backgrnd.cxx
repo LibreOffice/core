@@ -308,7 +308,7 @@ IMPL_LINK(SvxBkgTabPage, TblDestinationHdl_Impl, weld::ComboBox&, rBox, void)
     drawing::FillStyle eXFS = drawing::FillStyle_NONE;
     if (maSet.GetItemState(XATTR_FILLSTYLE) != SfxItemState::DONTCARE)
     {
-        XFillStyleItem aFillStyleItem(static_cast<const XFillStyleItem&>(maSet.Get(GetWhich( XATTR_FILLSTYLE))));
+        XFillStyleItem aFillStyleItem(maSet.Get(GetWhich( XATTR_FILLSTYLE)));
         eXFS = aFillStyleItem.GetValue();
     }
     switch(eXFS)

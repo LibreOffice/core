@@ -1135,7 +1135,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
     {
         const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich, false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
-        const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
+        const SfxBoolItem& rOn = rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON));
 
         if(rOn.GetValue())
         {
@@ -1171,7 +1171,7 @@ void SvxPageDescPage::ResetBackground_Impl(const SfxItemSet& rSet)
     {
         const SvxSetItem& rSetItem = static_cast< const SvxSetItem& >(rSet.Get(nWhich,false));
         const SfxItemSet& rTmpSet = rSetItem.GetItemSet();
-        const SfxBoolItem& rOn = static_cast< const SfxBoolItem& >(rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON)));
+        const SfxBoolItem& rOn = rTmpSet.Get(GetWhich(SID_ATTR_PAGE_ON));
 
         if(rOn.GetValue())
         {
@@ -1244,12 +1244,12 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
     {
         const SfxItemSet& rHeaderSet = pSetItem->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            static_cast<const SfxBoolItem&>(rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_ON ) ));
+            rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
 
         if ( rHeaderOn.GetValue() )
         {
-            const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(
-                rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
+            const SvxSizeItem& rSize =
+                rHeaderSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
             const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
                 rHeaderSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
             tools::Long nDist = rUL.GetLower();
@@ -1299,12 +1299,12 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     const SfxItemSet& rFooterSet = pSetItem->GetItemSet();
     const SfxBoolItem& rFooterOn =
-        static_cast<const SfxBoolItem&>(rFooterSet.Get( GetWhich( SID_ATTR_PAGE_ON ) ));
+        rFooterSet.Get( GetWhich( SID_ATTR_PAGE_ON ) );
 
     if ( rFooterOn.GetValue() )
     {
-        const SvxSizeItem& rSize = static_cast<const SvxSizeItem&>(
-            rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) ));
+        const SvxSizeItem& rSize =
+            rFooterSet.Get( GetWhich( SID_ATTR_PAGE_SIZE ) );
         const SvxULSpaceItem& rUL = static_cast<const SvxULSpaceItem&>(
             rFooterSet.Get( GetWhich( SID_ATTR_ULSPACE ) ));
         tools::Long nDist = rUL.GetUpper();
