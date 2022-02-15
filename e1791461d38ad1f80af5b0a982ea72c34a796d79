@@ -87,6 +87,24 @@
       "parentUuid": "7cf77507_cc9016e3",
       "revId": "e1791461d38ad1f80af5b0a982ea72c34a796d79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb69b15f_dab00575",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-15T05:14:52Z",
+      "side": 1,
+      "message": "\"Move and Copy\" wont show up with TC as well, UX is messed up anyway. Just push it.",
+      "parentUuid": "723438e2_4ff29e4e",
+      "revId": "e1791461d38ad1f80af5b0a982ea72c34a796d79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
