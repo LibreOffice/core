@@ -20,10 +20,13 @@
 #include <sfx2/QuerySaveDocument.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <officecfg/Office/Common.hxx>
 
 short ExecuteQuerySaveDocument(weld::Widget* _pParent, std::u16string_view _rTitle)
 {
-    if (Application::IsHeadlessModeEnabled())
+    if (Application::IsHeadlessModeEnabled()
+        || (officecfg::Office::Common::Save::QuerySaveDocument::get()
+            == false)) //tdf#143578: QA candy
     {
         // don't block Desktop::terminate() if there's no user to ask
         return RET_NO;

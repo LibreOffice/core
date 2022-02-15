@@ -2239,6 +2239,13 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="QuerySaveDocument" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Expert option to block the query dialog on document changes.</desc>
+          <label>Query changed documents</label>
+        </info>
+        <value>true</value>
+      </prop>
       <group oor:name="Document">
         <info>
           <desc>Contains settings which specify how documents are saved.</desc>
