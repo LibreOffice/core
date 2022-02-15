@@ -166,7 +166,7 @@ namespace sdr::properties
 
             void ForceDefaultAttributes() override;
 
-            void ItemSetChanged(const SfxItemSet*) override;
+            void ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich) override;
 
             void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
@@ -222,7 +222,7 @@ namespace sdr::properties
         {
         }
 
-        void CellProperties::ItemSetChanged(const SfxItemSet* pSet )
+        void CellProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
@@ -253,12 +253,15 @@ namespace sdr::properties
                     // if the user sets character attributes to the complete
                     // cell we want to remove all hard set character attributes
                     // with same which ids from the text
-                    std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(*pSet));
+                    std::vector<sal_uInt16> aCharWhichIds(GetAllCharPropIds(aChangedItems));
 
                     for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                        aSet.Put(*pSet);
+                        for (const SfxPoolItem* pItem : aChangedItems)
+                            aSet.Put(*pItem);
+                        if (nDeletedWhich)
+                            aSet.ClearItem(nDeletedWhich);
 
                         for (const auto& rWhichId : aCharWhichIds)
                         {
@@ -288,7 +291,7 @@ namespace sdr::properties
             }
 
             // call parent
-            AttributeProperties::ItemSetChanged(pSet);
+            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
 
             if( mxCell.is() )
                 mxCell->notifyModified();

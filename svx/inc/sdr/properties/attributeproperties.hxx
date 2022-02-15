@@ -49,7 +49,7 @@ namespace sdr::properties
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // react on ItemSet changes
-            virtual void ItemSetChanged(const SfxItemSet*) override;
+            virtual void ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich) override;
 
             // apply the correct SfyStyleSheet from SdrObject's SdrModel
             virtual void applyDefaultStyleSheetFromSdrModel();
