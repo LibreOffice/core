@@ -14,11 +14,11 @@ bool ScBigAddress::IsValid( const ScDocument& rDoc ) const
 {   // min/max interval bounds define whole col/row/tab
     return
         ((0 <= nCol && nCol <= rDoc.MaxCol())
-            || nCol == nInt32Min || nCol == nInt32Max) &&
+            || nCol == ScBigRange::nInt32Min || nCol == ScBigRange::nInt32Max) &&
         ((0 <= nRow && nRow <= rDoc.MaxRow())
-            || nRow == nInt32Min || nRow == nInt32Max) &&
+            || nRow == ScBigRange::nInt32Min || nRow == ScBigRange::nInt32Max) &&
         ((0 <= nTab && nTab < rDoc.GetTableCount())
-            || nTab == nInt32Min || nTab == nInt32Max)
+            || nTab == ScBigRange::nInt32Min || nTab == ScBigRange::nInt32Max)
         ;
 }
 

@@ -234,22 +234,22 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
         case SC_CAT_INSERT_COLS:
         case SC_CAT_DELETE_COLS:
         {
-            pCurrentAction->aBigRange.Set(nPosition, nInt32Min, nTable,
-                                        nPosition + nCount - 1, nInt32Max, nTable);
+            pCurrentAction->aBigRange.Set(nPosition, ScBigRange::nInt32Min, nTable,
+                                        nPosition + nCount - 1, ScBigRange::nInt32Max, nTable);
         }
         break;
         case SC_CAT_INSERT_ROWS:
         case SC_CAT_DELETE_ROWS:
         {
-            pCurrentAction->aBigRange.Set(nInt32Min, nPosition, nTable,
-                                        nInt32Max, nPosition + nCount - 1, nTable);
+            pCurrentAction->aBigRange.Set(ScBigRange::nInt32Min, nPosition, nTable,
+                                        ScBigRange::nInt32Max, nPosition + nCount - 1, nTable);
         }
         break;
         case SC_CAT_INSERT_TABS:
         case SC_CAT_DELETE_TABS:
         {
-            pCurrentAction->aBigRange.Set(nInt32Min, nInt32Min, nPosition,
-                                        nInt32Max, nInt32Max, nPosition + nCount - 1);
+            pCurrentAction->aBigRange.Set(ScBigRange::nInt32Min, ScBigRange::nInt32Min, nPosition,
+                                        ScBigRange::nInt32Max, ScBigRange::nInt32Max, nPosition + nCount - 1);
         }
         break;
         default:
