@@ -194,7 +194,53 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     const OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
     SetupFilterOptions(sFilterOptions);
 
-    comphelper::SequenceAsHashMap aStoreMap(rMedium.GetArgs());
+    SetupFilterFromPropertyValues(rMedium.GetArgs());
+}
+
+void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
+{
+    comphelper::SequenceAsHashMap aStoreMap;
+    if (rFilterOptions.indexOf("SkipImages") >= 0)
+    {
+        aStoreMap["SkipImages"] <<= true;
+    }
+    else if (rFilterOptions.indexOf("SkipHeaderFooter") >= 0)
+    {
+        aStoreMap["SkipHeaderFooter"] <<= true;
+    }
+    else if (rFilterOptions.indexOf("EmbedImages") >= 0)
+    {
+        aStoreMap["EmbedImages"] <<= true;
+    }
+
+    // this option can be "on" together with any of above
+    if (rFilterOptions.indexOf("NoLineLimit") >= 0)
+    {
+        aStoreMap["NoLineLimit"] <<= true;
+    }
+
+    const uno::Sequence<OUString> aOptionSeq
+        = comphelper::string::convertCommaSeparated(rFilterOptions);
+    static const OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
+    for (const auto& rOption : aOptionSeq)
+    {
+        if (rOption == "XHTML")
+        {
+            aStoreMap["XHTML"] <<= true;
+        }
+        else if (rOption.startsWith(aXhtmlNsKey))
+        {
+            aStoreMap["XhtmlNs"] <<= rOption.copy(aXhtmlNsKey.getLength());
+        }
+    }
+
+    SetupFilterFromPropertyValues(aStoreMap.getAsConstPropertyValueList());
+}
+
+void SwHTMLWriter::SetupFilterFromPropertyValues(
+    const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues)
+{
+    comphelper::SequenceAsHashMap aStoreMap(rPropertyValues);
     auto it = aStoreMap.find("RTFOLEMimeType");
     if (it != aStoreMap.end())
     {
@@ -214,47 +260,65 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         it->second >>= nVal;
         m_nShapeDPI.emplace(nVal);
     }
-}
 
-void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
-{
-    if (rFilterOptions.indexOf("SkipImages") >= 0)
+    it = aStoreMap.find("SkipImages");
+    if (it != aStoreMap.end())
     {
-        mbSkipImages = true;
-    }
-    else if (rFilterOptions.indexOf("SkipHeaderFooter") >= 0)
-    {
-        mbSkipHeaderFooter = true;
-    }
-    else if (rFilterOptions.indexOf("EmbedImages") >= 0)
-    {
-        mbEmbedImages = true;
+        bool bVal{};
+        it->second >>= bVal;
+        mbSkipImages = bVal;
     }
 
-    // this option can be "on" together with any of above
-    if (rFilterOptions.indexOf("NoLineLimit") >= 0)
+    it = aStoreMap.find("SkipHeaderFooter");
+    if (it != aStoreMap.end())
     {
-        m_nWishLineLen = -1;
+        bool bVal{};
+        it->second >>= bVal;
+        mbSkipHeaderFooter = bVal;
     }
 
-    const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
-    static const OUStringLiteral aXhtmlNsKey(u"xhtmlns=");
-    for (const auto& rOption : aOptionSeq)
+    it = aStoreMap.find("EmbedImages");
+    if (it != aStoreMap.end())
     {
-        if (rOption == "XHTML")
-            mbXHTML = true;
-        else if (rOption.startsWith(aXhtmlNsKey))
+        bool bVal{};
+        it->second >>= bVal;
+        mbEmbedImages = bVal;
+    }
+
+    it = aStoreMap.find("NoLineLimit");
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        if (bVal)
         {
-            maNamespace = rOption.copy(aXhtmlNsKey.getLength()).toUtf8();
-            if (maNamespace == "reqif-xhtml")
-            {
-                mbReqIF = true;
-                // XHTML is always just a fragment inside ReqIF.
-                mbSkipHeaderFooter = true;
-            }
-            // XHTML namespace implies XHTML.
-            mbXHTML = true;
+            m_nWishLineLen = -1;
         }
+    }
+
+    it = aStoreMap.find("XHTML");
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        mbXHTML = bVal;
+    }
+
+    it = aStoreMap.find("XhtmlNs");
+    if (it != aStoreMap.end())
+    {
+        OUString aVal;
+        it->second >>= aVal;
+
+        maNamespace = aVal.toUtf8();
+        if (maNamespace == "reqif-xhtml")
+        {
+            mbReqIF = true;
+            // XHTML is always just a fragment inside ReqIF.
+            mbSkipHeaderFooter = true;
+        }
+        // XHTML namespace implies XHTML.
+        mbXHTML = true;
     }
 }
 
