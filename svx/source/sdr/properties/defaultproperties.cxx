@@ -116,14 +116,8 @@ namespace sdr::properties
             ItemChange(nWhichID, &rItem);
             PostItemChange(nWhichID);
 
-            if (WantItemSetInItemSetChanged())
-            {
-                SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhichID, nWhichID);
-                aSet.Put(rItem);
-                ItemSetChanged(&aSet);
-            }
-            else
-                ItemSetChanged(nullptr);
+            const SfxPoolItem* pItem = &rItem;
+            ItemSetChanged( {&pItem, 1}, 0);
         }
 
         void DefaultProperties::SetObjectItemDirect(const SfxPoolItem& rItem)
@@ -146,13 +140,7 @@ namespace sdr::properties
 
             if(nWhich)
             {
-                if (WantItemSetInItemSetChanged())
-                {
-                    SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich);
-                    ItemSetChanged(&aSet);
-                }
-                else
-                    ItemSetChanged(nullptr);
+                ItemSetChanged({}, nWhich);
             }
         }
 
@@ -183,48 +171,37 @@ namespace sdr::properties
 
             SfxWhichIter aWhichIter(rSet);
             sal_uInt16 nWhich(aWhichIter.FirstWhich());
-            const SfxPoolItem *pPoolItem;
-            std::vector< sal_uInt16 > aPostItemChangeList;
-            bool bDidChange(false);
-            std::optional<SfxItemSetFixed<SDRATTR_START, EE_ITEMS_END>> aSet;
-            if (WantItemSetInItemSetChanged())
-                aSet.emplace(GetSdrObject().GetObjectItemPool());
-
+            std::vector< const SfxPoolItem * > aPostItemChangeList;
             // give a hint to STL_Vector
             aPostItemChangeList.reserve(rSet.Count());
 
             while(nWhich)
             {
+                const SfxPoolItem* pPoolItem;
                 if(SfxItemState::SET == rSet.GetItemState(nWhich, false, &pPoolItem))
                 {
                     if(AllowItemChange(nWhich, pPoolItem))
                     {
-                        bDidChange = true;
                         ItemChange(nWhich, pPoolItem);
-                        aPostItemChangeList.push_back( nWhich );
-                        if (aSet)
-                            aSet->Put(*pPoolItem);
+                        aPostItemChangeList.emplace_back( pPoolItem );
                     }
                 }
 
                 nWhich = aWhichIter.NextWhich();
             }
 
-            if(bDidChange)
+            if(!aPostItemChangeList.empty())
             {
                 for (const auto& rItem : aPostItemChangeList)
                 {
-                    PostItemChange(rItem);
+                    PostItemChange(rItem->Which());
                 }
 
-                if (aSet)
-                    ItemSetChanged(&*aSet);
-                else
-                    ItemSetChanged(nullptr);
+                ItemSetChanged(aPostItemChangeList, 0);
             }
         }
 
-        void DefaultProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
+        void DefaultProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/)
         {
         }
 

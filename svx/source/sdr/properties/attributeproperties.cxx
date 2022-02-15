@@ -275,7 +275,7 @@ namespace sdr::properties
             return *mxItemSet;
         }
 
-        void AttributeProperties::ItemSetChanged(const SfxItemSet* /*pSet*/)
+        void AttributeProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > /*aChangedItems*/, sal_uInt16 /*nDeletedWhich*/)
         {
             // own modifications
             SdrObject& rObj = GetSdrObject();

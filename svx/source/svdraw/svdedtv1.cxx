@@ -1036,6 +1036,18 @@ std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet)
     return aCharWhichIds;
 }
 
+std::vector<sal_uInt16> GetAllCharPropIds(o3tl::span< const SfxPoolItem* const > aChangedItems)
+{
+    std::vector<sal_uInt16> aCharWhichIds;
+    for (const SfxPoolItem* pItem : aChangedItems)
+    {
+        sal_uInt16 nWhich = pItem->Which();
+        if (nWhich>=EE_CHAR_START && nWhich<=EE_CHAR_END)
+            aCharWhichIds.push_back( nWhich );
+    }
+    return aCharWhichIds;
+}
+
 void SdrEditView::SetAttrToMarked(const SfxItemSet& rAttr, bool bReplaceAll)
 {
     if (!AreObjectsMarked())

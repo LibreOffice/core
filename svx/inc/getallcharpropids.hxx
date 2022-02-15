@@ -21,14 +21,15 @@
 #define INCLUDED_SVX_INC_GETALLCHARPROPIDS_HXX
 
 #include <sal/config.h>
-
+#include <sal/types.h>
+#include <o3tl/span.hxx>
 #include <vector>
 
-#include <sal/types.h>
-
 class SfxItemSet;
+class SfxPoolItem;
 
 std::vector<sal_uInt16> GetAllCharPropIds(const SfxItemSet& rSet);
+std::vector<sal_uInt16> GetAllCharPropIds(o3tl::span<const SfxPoolItem* const> aChangedItems);
 
 #endif
 
