@@ -180,8 +180,9 @@ struct RowInfo
 
     CellInfo&           cellInfo(SCCOL nCol)
     {
+        assert( nCol >= -1 );
 #ifdef DBG_UTIL
-        assert( nCol >= -1 && nCol <= nCols + 1 );
+        assert( nCol <= nCols + 1 );
 #endif
         return pCellInfo[ nCol + 1 ];
     }
