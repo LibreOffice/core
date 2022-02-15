@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74b137a4_58347cf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T07:48:31Z",
+      "side": 1,
+      "message": "The change makes perfect sense.",
+      "revId": "e9df7b5cca2765eab8c2b037da873482299e3505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9645453c_a24e4e52",
+        "filename": "editeng/source/editeng/impedit3.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T07:48:31Z",
+      "side": 1,
+      "message": "Ah! I see now that this line made the following union a no-op :-) Thank you very much!",
+      "revId": "e9df7b5cca2765eab8c2b037da873482299e3505",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
