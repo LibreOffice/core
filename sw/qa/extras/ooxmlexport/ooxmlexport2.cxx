@@ -40,20 +40,6 @@ public:
 
 protected:
     /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        const char* aDenylist[] = {
-            "math-escape.docx",
-            "math-mso2k7.docx",
-        };
-        std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
-
-        // If the testcase is stored in some other format, it's pointless to test.
-        return (OString(filename).endsWith(".docx") && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
-    }
-
-    /**
      * Validation handling
      */
     bool mustValidate(const char* filename) const override
@@ -71,8 +57,9 @@ protected:
     }
 };
 
-DECLARE_OOXMLEXPORT_TEST(testPageGraphicBackground, "page-graphic-background.odt")
+CPPUNIT_TEST_FIXTURE(Test, testPageGraphicBackground)
 {
+    loadAndReload("page-graphic-background.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // No idea how the graphic background should be exported (seems there is no
     // way to do a non-tiling export to OOXML), but at least the background
@@ -200,8 +187,9 @@ DECLARE_OOXMLEXPORT_TEST(testZoom, "zoom.docx")
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:Company", "Example Ltd");
 }
 
-DECLARE_OOXMLEXPORT_TEST(defaultTabStopNotInStyles, "empty.odt")
+CPPUNIT_TEST_FIXTURE(Test, defaultTabStopNotInStyles)
 {
+    loadAndReload("empty.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 // The default tab stop was mistakenly exported to a style.
 // xray ThisComponent.StyleFamilies(1)(0).ParaTabStop
@@ -277,8 +265,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
     CPPUNIT_ASSERT_EQUAL(true, bCaught);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCommentsNested, "comments-nested.odt")
+CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)
 {
+    loadAndReload("comments-nested.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xOuter = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 2), "TextField");
     CPPUNIT_ASSERT_EQUAL(OUString("Outer"), getProperty<OUString>(xOuter, "Content"));
@@ -287,13 +276,15 @@ DECLARE_OOXMLEXPORT_TEST(testCommentsNested, "comments-nested.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("Inner"), getProperty<OUString>(xInner, "Content"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testMathEscape, "math-escape.docx")
+CPPUNIT_TEST_FIXTURE(Test, testMathEscape)
 {
+    loadAndReload("math-escape.docx");
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo51034, "fdo51034.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo51034)
 {
+    loadAndReload("fdo51034.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that the 'l' param of the HYPERLINK field was parsed with = "#", not += "#".
     CPPUNIT_ASSERT_EQUAL(OUString("http://Www.google.com/#a"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
@@ -343,8 +334,9 @@ DECLARE_OOXMLEXPORT_TEST(testMathMatrix, "math-matrix.docx")
     CHECK_FORMULA( "left [matrix {1 # 2 ## 3 # 4} right ]", getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testMathMso2k7, "math-mso2k7.docx")
+CPPUNIT_TEST_FIXTURE(Test, testMathMso2k7)
 {
+    loadAndReload("math-mso2k7.docx");
     CHECK_FORMULA( u"A = \u03C0 {r} ^ {2}", getFormula( getRun( getParagraph( 1 ), 1 )));
 // TODO check the stack/binom difference
 //    CHECK_FORMULA( "{left (x+a right )} ^ {n} = sum from {k=0} to {n} {left (binom {n} {k} right ) {x} ^ {k} {a} ^ {n-k}}",
@@ -423,8 +415,9 @@ DECLARE_OOXMLEXPORT_TEST(testMathVerticalStacks, "math-vertical_stacks.docx")
 //    CHECK_FORMULA( "binom {a} {binom {b} {c}}", getFormula( getRun( getParagraph( 4 ), 1 )));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTable, "table.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTable)
 {
+    loadAndReload("table.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Make sure we write qFormat for well-known style names.
     xmlDocUniquePtr pXmlDocCT = parseExport("word/styles.xml");
@@ -505,8 +498,9 @@ DECLARE_OOXMLEXPORT_TEST(testTableBorders, "table-borders.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo51550, "fdo51550.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo51550)
 {
+    loadAndReload("fdo51550.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The problem was that we lacked the fallback to export the replacement
@@ -545,8 +539,9 @@ DECLARE_OOXMLEXPORT_TEST(test1Table1Page, "1-table-1-page.docx")
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTextFrames, "textframes.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTextFrames)
 {
+    loadAndReload("textframes.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The frames were simply missing, so let's check if all 3 frames were imported back.
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
@@ -650,8 +645,9 @@ DECLARE_OOXMLEXPORT_TEST(testMathLiteral, "math-literal.docx")
         getFormula( getRun( getParagraph( 1 ), 1 )));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo48557, "fdo48557.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo48557)
 {
+    loadAndReload("fdo48557.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Inner margins of the textframe wasn't exported.
@@ -885,8 +881,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66543, "fdo66543.docx")
                          getProperty<sal_Int32>(paragraph1, "ParaLineNumberStartValue"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testN822175, "n822175.odt")
+CPPUNIT_TEST_FIXTURE(Test, testN822175)
 {
+    loadAndReload("n822175.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
@@ -917,15 +914,17 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66773, "fdo66773.docx")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(100), static_cast<sal_Int32>(alineSpacing.Height));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo58577, "fdo58577.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo58577)
 {
+    loadAndReload("fdo58577.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The second frame was simply missing, so let's check if both frames were imported back.
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testBnc581614, "bnc581614.doc")
+CPPUNIT_TEST_FIXTURE(Test, testBnc581614)
 {
+    loadAndReload("bnc581614.doc");
     uno::Reference<beans::XPropertySet> xFrame(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, getProperty<drawing::FillStyle>(xFrame, "FillStyle"));
 }
@@ -1022,8 +1021,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo66781, "fdo66781.docx")
     CPPUNIT_FAIL("Did not find bullet with level 0");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo60990, "fdo60990.odt")
+CPPUNIT_TEST_FIXTURE(Test, testFdo60990)
 {
+    loadAndReload("fdo60990.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The shape had no background, no paragraph adjust and no font color.
