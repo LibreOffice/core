@@ -23,9 +23,6 @@
 #include <algorithm>
 #include "document.hxx"
 
-const sal_Int32 nInt32Min = 0x80000000;
-const sal_Int32 nInt32Max = 0x7fffffff;
-
 // This is used by change tracking. References there may be located also outside of the document
 // (see ScRefUpdate::Update()), and so it needs bigger range than ScAddress/ScRange.
 
@@ -149,6 +146,10 @@ public:
                         { return (aStart == r.aStart) && (aEnd == r.aEnd); }
     bool            operator!=( const ScBigRange& r ) const
                         { return !operator==( r ); }
+
+    // These are used to define whole rows/cols/tabs.
+    constexpr static sal_Int32 nRangeMin = 0x80000000;
+    constexpr static sal_Int32 nRangeMax = 0x7fffffff;
 };
 
 inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
