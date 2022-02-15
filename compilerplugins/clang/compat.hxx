@@ -9,7 +9,6 @@
 
 #pragma once
 
-#include <cstddef>
 #include <string>
 #include <utility>
 
@@ -19,12 +18,10 @@
 #include "clang/AST/ExprCXX.h"
 #include "clang/Basic/SourceManager.h"
 #include "clang/Basic/Specifiers.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Lex/Lexer.h"
 #include "llvm/ADT/StringExtras.h"
-#include "llvm/ADT/StringRef.h"
 #include "llvm/Support/Casting.h"
 #include "llvm/Support/Compiler.h"
+#include "llvm/Support/FileSystem.h"
 
 #include "config_clang.h"
 
