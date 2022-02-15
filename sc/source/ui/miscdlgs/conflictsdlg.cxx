@@ -394,7 +394,7 @@ OUString ScConflictsDlg::GetConflictString( const ScConflictsListEntry& rConflic
         const ScChangeAction* pAction = mpOwnTrack->GetAction( rConflictEntry.maOwnActions[ 0 ] );
         if ( pAction && mpOwnDoc )
         {
-            SCTAB nTab = pAction->GetBigRange().MakeRange().aStart.Tab();
+            SCTAB nTab = pAction->GetBigRange().MakeRange( *mpOwnDoc ).aStart.Tab();
             mpOwnDoc->GetName( nTab, aString );
         }
     }
@@ -502,7 +502,7 @@ IMPL_LINK_NOARG(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
         if (rBigRange.IsValid(*mpOwnDoc))
         {
             bool bSetCursor = i == nCount - 1;
-            pTabView->MarkRange(rBigRange.MakeRange(), bSetCursor, bContMark);
+            pTabView->MarkRange(rBigRange.MakeRange( *mpOwnDoc ), bSetCursor, bContMark);
             bContMark = true;
         }
     }
