@@ -299,7 +299,7 @@ void SwGlossaryList::Update()
 
                     aGroupArr.push_back(std::unique_ptr<AutoTextGroup>(pFound));
                 }
-                else if( pFound->aDateModified < rDT )
+                else if( pFound->aDateModified != rDT )
                 {
                     FillGroup(pFound, pGlossaries);
                     pFound->aDateModified = rDT;
