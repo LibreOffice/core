@@ -800,14 +800,16 @@ void SdrObject::SetName(const OUString& rStr, const bool bSetChanged)
     }
 }
 
-OUString SdrObject::GetName() const
+const OUString & SdrObject::GetName() const
 {
+    static const OUString EMPTY = u"";
+
     if(m_pPlusData)
     {
         return m_pPlusData->aObjName;
     }
 
-    return OUString();
+    return EMPTY;
 }
 
 void SdrObject::SetTitle(const OUString& rStr)
