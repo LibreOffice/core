@@ -624,13 +624,13 @@ ScChangeActionIns::ScChangeActionIns( const ScDocument* pDoc, const ScRange& rRa
 {
     if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() )
     {
-        aBigRange.aStart.SetCol( nInt32Min );
-        aBigRange.aEnd.SetCol( nInt32Max );
+        aBigRange.aStart.SetCol( ScBigRange::nRangeMin );
+        aBigRange.aEnd.SetCol( ScBigRange::nRangeMax );
         if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
         {
             SetType( SC_CAT_INSERT_TABS );
-            aBigRange.aStart.SetRow( nInt32Min );
-            aBigRange.aEnd.SetRow( nInt32Max );
+            aBigRange.aStart.SetRow( ScBigRange::nRangeMin );
+            aBigRange.aEnd.SetRow( ScBigRange::nRangeMax );
         }
         else
             SetType( SC_CAT_INSERT_ROWS );
@@ -638,8 +638,8 @@ ScChangeActionIns::ScChangeActionIns( const ScDocument* pDoc, const ScRange& rRa
     else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
     {
         SetType( SC_CAT_INSERT_COLS );
-        aBigRange.aStart.SetRow( nInt32Min );
-        aBigRange.aEnd.SetRow( nInt32Max );
+        aBigRange.aStart.SetRow( ScBigRange::nRangeMin );
+        aBigRange.aEnd.SetRow( ScBigRange::nRangeMax );
     }
     else
     {
@@ -744,13 +744,13 @@ ScChangeActionDel::ScChangeActionDel( const ScDocument* pDoc, const ScRange& rRa
 {
     if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() )
     {
-        aBigRange.aStart.SetCol( nInt32Min );
-        aBigRange.aEnd.SetCol( nInt32Max );
+        aBigRange.aStart.SetCol( ScBigRange::nRangeMin );
+        aBigRange.aEnd.SetCol( ScBigRange::nRangeMax );
         if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
         {
             SetType( SC_CAT_DELETE_TABS );
-            aBigRange.aStart.SetRow( nInt32Min );
-            aBigRange.aEnd.SetRow( nInt32Max );
+            aBigRange.aStart.SetRow( ScBigRange::nRangeMin );
+            aBigRange.aEnd.SetRow( ScBigRange::nRangeMax );
         }
         else
             SetType( SC_CAT_DELETE_ROWS );
@@ -758,8 +758,8 @@ ScChangeActionDel::ScChangeActionDel( const ScDocument* pDoc, const ScRange& rRa
     else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
     {
         SetType( SC_CAT_DELETE_COLS );
-        aBigRange.aStart.SetRow( nInt32Min );
-        aBigRange.aEnd.SetRow( nInt32Max );
+        aBigRange.aStart.SetRow( ScBigRange::nRangeMin );
+        aBigRange.aEnd.SetRow( ScBigRange::nRangeMax );
     }
     else
     {
@@ -3243,31 +3243,31 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
     switch ( eActType )
     {
         case SC_CAT_INSERT_COLS :
-            aRange.aEnd.SetCol( nInt32Max );
+            aRange.aEnd.SetCol( ScBigRange::nRangeMax );
             nDx = rOrgRange.aEnd.Col() - rOrgRange.aStart.Col() + 1;
         break;
         case SC_CAT_INSERT_ROWS :
-            aRange.aEnd.SetRow( nInt32Max );
+            aRange.aEnd.SetRow( ScBigRange::nRangeMax );
             nDy = rOrgRange.aEnd.Row() - rOrgRange.aStart.Row() + 1;
         break;
         case SC_CAT_INSERT_TABS :
-            aRange.aEnd.SetTab( nInt32Max );
+            aRange.aEnd.SetTab( ScBigRange::nRangeMax );
             nDz = rOrgRange.aEnd.Tab() - rOrgRange.aStart.Tab() + 1;
         break;
         case SC_CAT_DELETE_COLS :
-            aRange.aEnd.SetCol( nInt32Max );
+            aRange.aEnd.SetCol( ScBigRange::nRangeMax );
             nDx = -(rOrgRange.aEnd.Col() - rOrgRange.aStart.Col() + 1);
             aDelRange.aEnd.SetCol( aDelRange.aStart.Col() - nDx - 1 );
             bDel = true;
         break;
         case SC_CAT_DELETE_ROWS :
-            aRange.aEnd.SetRow( nInt32Max );
+            aRange.aEnd.SetRow( ScBigRange::nRangeMax );
             nDy = -(rOrgRange.aEnd.Row() - rOrgRange.aStart.Row() + 1);
             aDelRange.aEnd.SetRow( aDelRange.aStart.Row() - nDy - 1 );
             bDel = true;
         break;
         case SC_CAT_DELETE_TABS :
-            aRange.aEnd.SetTab( nInt32Max );
+            aRange.aEnd.SetTab( ScBigRange::nRangeMax );
             nDz = -(rOrgRange.aEnd.Tab() - rOrgRange.aStart.Tab() + 1);
             aDelRange.aEnd.SetTab( aDelRange.aStart.Tab() - nDz - 1 );
             bDel = true;
