@@ -331,13 +331,16 @@ inline clang::QualType getDeclaredReturnType(clang::FunctionDecl const * decl) {
 #endif
 }
 
-// The isComparisonOp method on CXXOperatorCallExpr is not available yet for the clang we require
 inline bool isComparisonOp(clang::CXXOperatorCallExpr const * callExpr)
 {
+#if CLANG_VERSION >= 110000
+    return callExpr->isComparisonOp();
+#else
     using namespace clang;
     auto op = callExpr->getOperator();
     return op == OO_Less || op == OO_Greater || op == OO_LessEqual || op == OO_GreaterEqual
            || op == OO_EqualEqual || op == OO_ExclaimEqual;
+#endif
 }
 
 inline bool isPtrMemOp(clang::BinaryOperatorKind op) {
