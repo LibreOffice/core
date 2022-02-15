@@ -33,6 +33,24 @@
       "message": "Please edit the first line of your commit message, so it starts with tdf#103156",
       "revId": "7169306a97175f3d34836458e2bb3e095609b1f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1adffdd8_a63bcead",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003538
+      },
+      "writtenOn": "2022-02-15T16:36:12Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "500728ea_cb07c67b",
+      "revId": "7169306a97175f3d34836458e2bb3e095609b1f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
