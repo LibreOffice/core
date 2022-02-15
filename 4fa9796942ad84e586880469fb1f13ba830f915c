@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7762b7b_89703e24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-15T22:38:23Z",
+      "side": 1,
+      "message": "If you search more carefully, you will find places (even in the rtfexport2.cxx file that you have modified here) where you can change a variable type to Color as described in tdf#141908.",
+      "revId": "4fa9796942ad84e586880469fb1f13ba830f915c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

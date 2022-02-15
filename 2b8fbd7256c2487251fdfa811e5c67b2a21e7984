@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f49489d_60ba4ebc",
+        "filename": "sw/qa/extras/rtfexport/rtfexport2.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 689,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-15T22:38:23Z",
+      "side": 0,
+      "message": "This change is not related to tdf#141908, and the CppUnittests output. It would not be useful to use Color as the type for nFillColor variable here.",
+      "revId": "2b8fbd7256c2487251fdfa811e5c67b2a21e7984",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
