@@ -2261,7 +2261,7 @@ void ScOutputData::DrawChangeTrack()
             const ScBigRange& rBig = pAction->GetBigRange();
             if ( rBig.aStart.Tab() == nTab )
             {
-                ScRange aRange = rBig.MakeRange();
+                ScRange aRange = rBig.MakeRange( *mpDoc );
 
                 if ( eActionType == SC_CAT_DELETE_ROWS )
                     aRange.aEnd.SetRow( aRange.aStart.Row() );
@@ -2283,7 +2283,7 @@ void ScOutputData::DrawChangeTrack()
                         GetFromRange().aStart.Tab() == nTab )
             {
                 ScRange aRange = static_cast<const ScChangeActionMove*>(pAction)->
-                        GetFromRange().MakeRange();
+                        GetFromRange().MakeRange( *mpDoc );
                 if ( aRange.Intersects( aViewRange ) &&
                      ScViewUtil::IsActionShown( *pAction, *pSettings, *mpDoc ) )
                 {

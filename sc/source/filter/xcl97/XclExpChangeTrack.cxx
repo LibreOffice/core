@@ -813,7 +813,7 @@ XclExpChTrCellContent::XclExpChTrCellContent(
         const XclExpChTrTabIdBuffer& rTabIdBuffer ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer, EXC_CHTR_OP_CELL ),
     XclExpRoot( rRoot ),
-    aPosition( rAction.GetBigRange().MakeRange().aStart )
+    aPosition( rAction.GetBigRange().MakeRange( rRoot.GetDoc()).aStart )
 {
     sal_uInt32 nDummy32;
     sal_uInt16 nDummy16;
@@ -1074,7 +1074,7 @@ XclExpChTrInsert::XclExpChTrInsert(
         const ScChangeTrack& rChangeTrack ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer ),
     mbEndOfList(false),
-    aRange( rAction.GetBigRange().MakeRange() )
+    aRange( rAction.GetBigRange().MakeRange( rRoot.GetDoc()) )
 {
     nLength = 0x00000030;
     switch( rAction.GetType() )
@@ -1234,7 +1234,7 @@ XclExpChTrMoveRange::XclExpChTrMoveRange(
         const XclExpChTrTabIdBuffer& rTabIdBuffer,
         const ScChangeTrack& rChangeTrack ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer, EXC_CHTR_OP_MOVE ),
-    aDestRange( rAction.GetBigRange().MakeRange() )
+    aDestRange( rAction.GetBigRange().MakeRange( rRoot.GetDoc() ) )
 {
     nLength = 0x00000042;
     aSourceRange = aDestRange;
