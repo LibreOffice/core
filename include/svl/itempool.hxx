@@ -185,7 +185,7 @@ public:
     void                            SetItemInfos( const SfxItemInfo *pInfos );
     sal_uInt16                      GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const;
     template<class T>
-    TypedWhichId<T>                 GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
+    TypedWhichId<T>                 GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const
     { return TypedWhichId<T>(GetWhich(sal_uInt16(nSlot), bDeep)); }
     sal_uInt16                      GetSlotId( sal_uInt16 nWhich ) const;
     sal_uInt16                      GetTrueWhich( sal_uInt16 nSlot, bool bDeep = true ) const;

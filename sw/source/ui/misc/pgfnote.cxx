@@ -267,12 +267,12 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
     {
         const SfxItemSet& rHeaderSet = static_cast<const SvxSetItem*>(pItem)->GetItemSet();
         const SfxBoolItem& rHeaderOn =
-            static_cast<const SfxBoolItem&>(rHeaderSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) ));
+            rHeaderSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_ON ) );
 
         if ( rHeaderOn.GetValue() )
         {
             const SvxSizeItem& rSizeItem =
-                static_cast<const SvxSizeItem&>(rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE)));
+                rHeaderSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_PAGE_SIZE));
             lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
@@ -286,7 +286,7 @@ void SwFootNotePage::ActivatePage(const SfxItemSet& rSet)
         if ( rFooterOn.GetValue() )
         {
             const SvxSizeItem& rSizeItem =
-                static_cast<const SvxSizeItem&>(rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) ));
+                rFooterSet.Get( rSet.GetPool()->GetWhich( SID_ATTR_PAGE_SIZE ) );
             lMaxHeight -= rSizeItem.GetSize().Height();
         }
     }
