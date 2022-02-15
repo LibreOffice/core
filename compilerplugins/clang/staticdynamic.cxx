@@ -15,7 +15,8 @@
 #include <map>
 #include <vector>
 
-#include "compat.hxx"
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -107,7 +108,7 @@ bool StaticDynamic::VisitCXXStaticCastExpr(CXXStaticCastExpr const* staticCastEx
     if (it != blockState.dynamicCastVars.end())
     {
         StringRef fn = getFilenameOfLocation(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(staticCastExpr)));
+            compiler.getSourceManager().getSpellingLoc(staticCastExpr->getBeginLoc()));
         // loop
         if (loplugin::isSamePathname(fn, SRCDIR "/basctl/source/basicide/basobj3.cxx"))
             return true;
@@ -117,12 +118,12 @@ bool StaticDynamic::VisitCXXStaticCastExpr(CXXStaticCastExpr const* staticCastEx
             return true;
 
         report(DiagnosticsEngine::Warning, "static_cast after dynamic_cast",
-               compat::getBeginLoc(staticCastExpr))
+               staticCastExpr->getBeginLoc())
             << staticCastExpr->getSourceRange();
         report(DiagnosticsEngine::Note, "dynamic_cast here", it->second);
         return true;
     }
-    blockState.staticCastVars.insert({ { varDecl, varType }, compat::getBeginLoc(staticCastExpr) });
+    blockState.staticCastVars.insert({ { varDecl, varType }, staticCastExpr->getBeginLoc() });
     return true;
 }
 
@@ -142,12 +143,12 @@ bool StaticDynamic::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const* dynamicCas
     if (it != blockState.staticCastVars.end())
     {
         report(DiagnosticsEngine::Warning, "dynamic_cast after static_cast",
-               compat::getBeginLoc(dynamicCastExpr))
+               dynamicCastExpr->getBeginLoc())
             << dynamicCastExpr->getSourceRange();
         report(DiagnosticsEngine::Note, "static_cast here", it->second);
         return true;
     }
-    auto loc = compat::getBeginLoc(dynamicCastExpr);
+    auto loc = dynamicCastExpr->getBeginLoc();
     if (compiler.getSourceManager().isMacroArgExpansion(loc)
         && (Lexer::getImmediateMacroNameForDiagnostics(loc, compiler.getSourceManager(),
                                                        compiler.getLangOpts())
@@ -155,8 +156,7 @@ bool StaticDynamic::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const* dynamicCas
     {
         return true;
     }
-    blockState.dynamicCastVars.insert(
-        { { varDecl, varType }, compat::getBeginLoc(dynamicCastExpr) });
+    blockState.dynamicCastVars.insert({ { varDecl, varType }, dynamicCastExpr->getBeginLoc() });
     return true;
 }
 

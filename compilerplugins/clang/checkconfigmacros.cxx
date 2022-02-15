@@ -14,6 +14,8 @@
 
 #include "plugin.hxx"
 
+#include "config_clang.h"
+
 #include <clang/Lex/Preprocessor.h>
 
 namespace loplugin

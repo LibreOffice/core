@@ -16,6 +16,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
 
@@ -78,7 +79,7 @@ bool StringView::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperator
         handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(0));
         handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(1));
     }
-    if (compat::isComparisonOp(cxxOperatorCallExpr))
+    if (cxxOperatorCallExpr->isComparisonOp())
     {
         handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(0));
         handleSubExprThatCouldBeView(cxxOperatorCallExpr->getArg(1));
@@ -130,7 +131,7 @@ bool StringView::VisitImplicitCastExpr(ImplicitCastExpr const* expr)
 
 void StringView::handleSubExprThatCouldBeView(Expr const* subExpr)
 {
-    auto const e0 = compat::IgnoreImplicit(subExpr);
+    auto const e0 = subExpr->IgnoreImplicit();
     auto const e = e0->IgnoreParens();
     auto const tc = loplugin::TypeCheck(e->getType());
     if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
@@ -227,8 +228,7 @@ void StringView::handleCXXConstructExpr(CXXConstructExpr const* expr)
                     auto const arg = expr->getArg(1);
                     if (!arg->isValueDependent())
                     {
-                        if (auto const val
-                            = compat::getIntegerConstantExpr(arg, compiler.getASTContext()))
+                        if (auto const val = arg->getIntegerConstantExpr(compiler.getASTContext()))
                         {
                             if (val->getExtValue() == 1)
                             {
@@ -345,7 +345,7 @@ bool StringView::VisitCXXConstructExpr(CXXConstructExpr const* expr)
     {
         return true;
     }
-    if (!compat::CPlusPlus17(compiler.getLangOpts()) && expr->isElidable()) // external C++03 code
+    if (!compiler.getLangOpts().CPlusPlus17 && expr->isElidable()) // external C++03 code
     {
         return true;
     }

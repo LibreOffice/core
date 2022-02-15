@@ -8,7 +8,6 @@
  */
 
 #include "sal/config.h"
-#include "config_clang.h"
 
 #include "com/sun/star/uno/Sequence.hxx"
 #include "com/sun/star/uno/XInterface.hpp"
@@ -105,16 +104,12 @@ void test(rtl::Reference<FooStream> l)
     css::uno::Reference<css::io::XStreamListener> a2 = l;
     (void)a2;
 }
-// not should about the exact version I should use here,
-// clang 7.0.1 visits the CXXConstructorExpr inside the initializer, while clang 11 does not
-#if CLANG_VERSION >= 80000
 css::uno::Sequence<css::uno::Reference<css::io::XStreamListener>> getContinuations()
 {
     rtl::Reference<FooStream> noel1;
     // expected-error@+1 {{unnecessary get() call [loplugin:referencecasting]}}
     return { noel1.get() };
 }
-#endif
 }
 
 namespace test8

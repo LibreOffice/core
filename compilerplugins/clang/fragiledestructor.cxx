@@ -12,7 +12,7 @@
 #include <iostream>
 
 #include "plugin.hxx"
-#include "compat.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 
 
@@ -113,8 +113,8 @@ bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr
         return true;
 
     // if we see an explicit call to its own method, that's OK
-    auto s1 = compiler.getSourceManager().getCharacterData(compat::getBeginLoc(callExpr));
-    auto s2 = compiler.getSourceManager().getCharacterData(compat::getEndLoc(callExpr));
+    auto s1 = compiler.getSourceManager().getCharacterData(callExpr->getBeginLoc());
+    auto s2 = compiler.getSourceManager().getCharacterData(callExpr->getEndLoc());
     std::string tok(s1, s2-s1);
     if (tok.find("::") != std::string::npos)
         return true;
@@ -127,12 +127,12 @@ bool FragileDestructor::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr
     report(
         DiagnosticsEngine::Warning,
         "calling virtual method from destructor, either make the virtual method final, or make this class final",
-        compat::getBeginLoc(callExpr))
+        callExpr->getBeginLoc())
       << callExpr->getSourceRange();
     report(
         DiagnosticsEngine::Note,
         "callee method here",
-        compat::getBeginLoc(methodDecl))
+        methodDecl->getBeginLoc())
       << methodDecl->getSourceRange();
     return true;
 }

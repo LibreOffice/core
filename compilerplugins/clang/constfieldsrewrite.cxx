@@ -14,6 +14,7 @@
 #include <iostream>
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -154,7 +155,7 @@ bool ConstFieldsRewrite::VisitFieldDecl(const FieldDecl* fieldDecl)
     if (!success)
     {
         report(DiagnosticsEngine::Warning, "Could not mark field as const",
-               compat::getBeginLoc(fieldDecl))
+               fieldDecl->getBeginLoc())
             << fieldDecl->getSourceRange();
     }
     return true;

@@ -53,7 +53,7 @@ bool Cow_Wrapper::VisitCXXMemberCallExpr(const CXXMemberCallExpr* memberCallExpr
     if (!methodDecl || !methodDecl->isConst())
         return true;
 
-    auto expr = compat::IgnoreImplicit(memberCallExpr->getImplicitObjectArgument())->IgnoreParens();
+    auto expr = memberCallExpr->getImplicitObjectArgument()->IgnoreImplicit()->IgnoreParens();
     auto operatorCallExpr = dyn_cast<CXXOperatorCallExpr>(expr);
 
     if (operatorCallExpr && operatorCallExpr->getOperator() == OO_Arrow)
@@ -107,7 +107,7 @@ bool Cow_Wrapper::VisitCXXMemberCallExpr(const CXXMemberCallExpr* memberCallExpr
     report(DiagnosticsEngine::Warning,
            "calling const method on o3tl::cow_wrapper impl class via non-const pointer, rather use "
            "std::as_const to prevent triggering an unnecessary copy",
-           compat::getBeginLoc(memberCallExpr))
+           memberCallExpr->getBeginLoc())
         << memberCallExpr->getSourceRange();
     return true;
 }

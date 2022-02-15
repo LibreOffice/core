@@ -16,13 +16,10 @@
 #include "config_clang.h"
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "check.hxx"
 #include "functionaddress.hxx"
 
-#if CLANG_VERSION >= 110000
 #include "clang/AST/ParentMapContext.h"
-#endif
 
 /**
    Find methods that can be declared const.
@@ -96,7 +93,7 @@ public:
                 || fqn == "OutputDevice::SelectClipRegion"
                 || fqn == "OutputDevice::BlendBitmap")
                 continue;
-            StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(canonicalDecl)));
+            StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(canonicalDecl->getBeginLoc()));
             // leave the kit API alone
             if (loplugin::isSamePathname(aFileName, SRCDIR "/include/LibreOfficeKit/LibreOfficeKit.hxx"))
                 continue;
@@ -106,13 +103,13 @@ public:
             report(
                 DiagnosticsEngine::Warning,
                 "this method can be const",
-                compat::getBeginLoc(pMethodDecl))
+                pMethodDecl->getBeginLoc())
                 << pMethodDecl->getSourceRange();
             if (canonicalDecl->getLocation() != pMethodDecl->getLocation()) {
                 report(
                     DiagnosticsEngine::Note,
                     "canonical method declaration here",
-                    compat::getBeginLoc(canonicalDecl))
+                    canonicalDecl->getBeginLoc())
                     << canonicalDecl->getSourceRange();
             }
         }
@@ -223,7 +220,7 @@ bool ConstMethod::VisitCXXThisExpr( const CXXThisExpr* cxxThisExpr )
     if (ignoreLocation(cxxThisExpr))
         return true;
     // ignore stuff that forms part of the stable URE interface
-    if (isInUnoIncludeFile(compat::getBeginLoc(cxxThisExpr)))
+    if (isInUnoIncludeFile(cxxThisExpr->getBeginLoc()))
         return true;
     if (interestingMethodSet.find(currCXXMethodDecl) == interestingMethodSet.end())
         return true;
@@ -251,7 +248,7 @@ bool ConstMethod::checkIfCanBeConst(const Stmt* stmt, const CXXMethodDecl* cxxMe
             report(
                  DiagnosticsEngine::Warning,
                  "no parent?",
-                  compat::getBeginLoc(stmt))
+                  stmt->getBeginLoc())
                   << stmt->getSourceRange();
             return false;
         }
@@ -534,7 +531,7 @@ bool ConstMethod::checkIfCanBeConst(const Stmt* stmt, const CXXMethodDecl* cxxMe
     report(
          DiagnosticsEngine::Warning,
          "oh dear, what can the matter be?",
-          compat::getBeginLoc(parent))
+          parent->getBeginLoc())
           << parent->getSourceRange();
     return false;
 }

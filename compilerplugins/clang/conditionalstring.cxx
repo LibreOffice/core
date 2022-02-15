@@ -12,7 +12,6 @@
 #include <cassert>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find uses of OUString in conditional expressions that could be rewritten as std::u16string_view,
@@ -32,15 +31,13 @@ Expr const* ignoreImplicit(Expr const* expr)
         {
             e = e1->getSubExprAsWritten();
         }
-#if CLANG_VERSION >= 80000
         else if (auto const e2 = dyn_cast<FullExpr>(e))
         {
             e = e2->getSubExpr();
         }
-#endif
         else if (auto const e3 = dyn_cast<MaterializeTemporaryExpr>(e))
         {
-            e = compat::getSubExpr(e3);
+            e = e3->getSubExpr();
         }
         else if (auto const e4 = dyn_cast<CXXBindTemporaryExpr>(e))
         {
@@ -398,8 +395,7 @@ private:
             {
                 e = e1->getSubExpr();
             }
-            if (auto const e1
-                = dyn_cast<CXXConstructExpr>(compat::IgnoreImplicit(e)->IgnoreParens()))
+            if (auto const e1 = dyn_cast<CXXConstructExpr>(e->IgnoreImplicit()->IgnoreParens()))
             {
                 if (e1->getNumArgs() != 0 //TODO
                     && isa<clang::StringLiteral>(e1->getArg(0)->IgnoreParenImpCasts()))

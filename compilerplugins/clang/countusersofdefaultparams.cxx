@@ -14,8 +14,9 @@
 
 #include "clang/AST/Attr.h"
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
-#include "compat.hxx"
 
 /*
   Count call sites that are actually using the defaulted values on params on methods that declare such.
@@ -93,10 +94,6 @@ void CountUsersOfDefaultParams::niceName(const FunctionDecl* functionDecl, MyFun
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
-#if CLANG_VERSION < 90000
-    else if (functionDecl->getClassScopeSpecializationPattern())
-        functionDecl = functionDecl->getClassScopeSpecializationPattern();
-#endif
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 
@@ -157,10 +154,6 @@ bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {
     // work our way back to the root definition for template methods
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
-#if CLANG_VERSION < 90000
-    else if (functionDecl->getClassScopeSpecializationPattern())
-        functionDecl = functionDecl->getClassScopeSpecializationPattern();
-#endif
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
     int n = functionDecl->getNumParams() - 1;
@@ -174,7 +167,7 @@ bool CountUsersOfDefaultParams::VisitCallExpr(const CallExpr * callExpr) {
     if ( n < (int)callExpr->getNumArgs() && callExpr->getArg(n)->isDefaultArgument()) {
         MyCallInfo callInfo;
         niceName(functionDecl, callInfo);
-        callInfo.sourceLocationOfCall = locationToString(compat::getBeginLoc(callExpr));
+        callInfo.sourceLocationOfCall = locationToString(callExpr->getBeginLoc());
         callSet.insert(callInfo);
     }
     return true;
@@ -188,10 +181,6 @@ bool CountUsersOfDefaultParams::VisitCXXConstructExpr(const CXXConstructExpr * c
     // work our way back to the root definition for template methods
     if (constructorDecl->getInstantiatedFromMemberFunction())
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getInstantiatedFromMemberFunction());
-#if CLANG_VERSION < 90000
-    else if (constructorDecl->getClassScopeSpecializationPattern())
-        constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getClassScopeSpecializationPattern());
-#endif
     else if (constructorDecl->getTemplateInstantiationPattern())
         constructorDecl = dyn_cast<CXXConstructorDecl>(constructorDecl->getTemplateInstantiationPattern());
     int n = constructorDecl->getNumParams() - 1;
@@ -205,7 +194,7 @@ bool CountUsersOfDefaultParams::VisitCXXConstructExpr(const CXXConstructExpr * c
     if ( n < (int)constructExpr->getNumArgs() && constructExpr->getArg(n)->isDefaultArgument()) {
         MyCallInfo callInfo;
         niceName(constructorDecl, callInfo);
-        callInfo.sourceLocationOfCall = locationToString(compat::getBeginLoc(constructExpr));
+        callInfo.sourceLocationOfCall = locationToString(constructExpr->getBeginLoc());
         callSet.insert(callInfo);
     }
     return true;

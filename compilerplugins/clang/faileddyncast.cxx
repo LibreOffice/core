@@ -122,7 +122,7 @@ bool FailedDynCast::VisitCXXDynamicCastExpr(CXXDynamicCastExpr const * expr) {
     if (isAlwaysNull(expr)) {
         report(
             DiagnosticsEngine::Warning,
-            "dynamic_cast from %0 to %1 always fails", compat::getBeginLoc(expr))
+            "dynamic_cast from %0 to %1 always fails", expr->getBeginLoc())
             << expr->getSubExpr()->getType() << expr->getType()
             << expr->getSourceRange();
     }

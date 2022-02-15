@@ -8,7 +8,6 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /*
@@ -42,7 +41,7 @@ class RedundantStatic
                 return true;
             }
             if (decl->isInAnonymousNamespace()) {
-                auto loc = compat::getBeginLoc(decl);
+                auto loc = decl->getBeginLoc();
                 while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
                     loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
                 }
@@ -105,7 +104,7 @@ bool RedundantStatic::VisitFunctionDecl( const FunctionDecl* func )
                {
                     report( DiagnosticsEngine::Warning,
                         "redundant 'static' keyword in unnamed namespace",
-                        compat::getBeginLoc(func));
+                        func->getBeginLoc());
                }
          }
     }

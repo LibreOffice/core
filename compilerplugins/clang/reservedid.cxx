@@ -17,6 +17,8 @@
 
 #include "clang/AST/Attr.h"
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 
 namespace {

@@ -17,7 +17,6 @@
 #include <clang/AST/CXXInheritance.h>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -68,7 +67,7 @@ bool RedundantPointerOps::VisitMemberExpr(MemberExpr const * memberExpr)
 {
     if (ignoreLocation(memberExpr))
         return true;
-    if (compat::getBeginLoc(memberExpr).isMacroID())
+    if (memberExpr->getBeginLoc().isMacroID())
         return true;
     auto base = memberExpr->getBase()->IgnoreParenImpCasts();
             //parentStmt(parentStmt(memberExpr))->dump();
@@ -80,7 +79,7 @@ bool RedundantPointerOps::VisitMemberExpr(MemberExpr const * memberExpr)
                 report(
                     DiagnosticsEngine::Warning,
                     "'&' followed by '->' operating on %0, rather use '.'",
-                    compat::getBeginLoc(memberExpr))
+                    memberExpr->getBeginLoc())
                     << memberExpr->getBase()->getType()->getPointeeType()
                     << memberExpr->getSourceRange();
 
@@ -91,7 +90,7 @@ bool RedundantPointerOps::VisitMemberExpr(MemberExpr const * memberExpr)
                 report(
                     DiagnosticsEngine::Warning,
                     "'&' followed by '->' operating on %0, rather use '.'",
-                    compat::getBeginLoc(memberExpr))
+                    memberExpr->getBeginLoc())
                     << memberExpr->getBase()->getType()->getPointeeType()
                     << memberExpr->getSourceRange();
 
@@ -106,7 +105,7 @@ bool RedundantPointerOps::VisitMemberExpr(MemberExpr const * memberExpr)
                     report(
                         DiagnosticsEngine::Warning,
                         "'get()' followed by '->' operating on %0, just use '->'",
-                        compat::getBeginLoc(memberExpr))
+                        memberExpr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType().getLocalUnqualifiedType()
                         << memberExpr->getSourceRange();
             }
@@ -131,7 +130,7 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
 {
     if (ignoreLocation(unaryOperator))
         return true;
-    if (compat::getBeginLoc(unaryOperator).isMacroID())
+    if (unaryOperator->getBeginLoc().isMacroID())
         return true;
     if (unaryOperator->getOpcode() != UO_Deref)
         return true;
@@ -140,7 +139,7 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
     if (innerOp && innerOp->getOpcode() == UO_AddrOf)
         report(
             DiagnosticsEngine::Warning, "'&' followed by '*' operating on %0, rather use '.'",
-            compat::getBeginLoc(unaryOperator))
+            unaryOperator->getBeginLoc())
             << innerOp->getSubExpr()->getType() << unaryOperator->getSourceRange();
     if (auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(subExpr))
     {
@@ -152,7 +151,7 @@ bool RedundantPointerOps::VisitUnaryOperator(UnaryOperator const * unaryOperator
                 report(
                     DiagnosticsEngine::Warning,
                     "'*' followed by '.get()' operating on %0, just use '*'",
-                    compat::getBeginLoc(unaryOperator))
+                    unaryOperator->getBeginLoc())
                     << e->IgnoreImpCasts()->getType().getLocalUnqualifiedType()
                     << unaryOperator->getSourceRange();
         }

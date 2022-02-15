@@ -16,6 +16,7 @@
 #include <set>
 
 #include <clang/AST/CXXInheritance.h>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include "check.hxx"
 
@@ -124,7 +125,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
     }
 
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(methodDecl)));
+        compiler.getSourceManager().getSpellingLoc(methodDecl->getBeginLoc()));
 
     if (isa<CXXDestructorDecl>(methodDecl)
        && !isInUnoIncludeFile(methodDecl))
@@ -371,7 +372,7 @@ bool UnnecessaryOverride::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 
     if (pOther) {
         StringRef aFileName = getFilenameOfLocation(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(pOther)));
+            compiler.getSourceManager().getSpellingLoc(pOther->getBeginLoc()));
         // SFX_DECL_CHILDWINDOW_WITHID macro
         if (loplugin::isSamePathname(aFileName, SRCDIR "/include/sfx2/childwin.hxx"))
             return true;

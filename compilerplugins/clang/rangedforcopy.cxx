@@ -53,7 +53,7 @@ bool RangedForCopy::VisitCXXForRangeStmt( const CXXForRangeStmt* stmt )
         report(
                DiagnosticsEngine::Warning,
                "Loop variable passed by value, pass by reference instead, e.g. 'const %0&'",
-               compat::getBeginLoc(varDecl))
+               varDecl->getBeginLoc())
                << name << varDecl->getSourceRange();
     }
 

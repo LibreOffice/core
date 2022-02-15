@@ -8185,9 +8185,10 @@ if test "$COM_IS_CLANG" = "TRUE"; then
         compiler_plugins=no
     fi
     if test "$compiler_plugins" != no -a "$my_apple_clang" != yes; then
-        if test "$CLANGVER" -lt 50002; then
+        if test "$CLANGVER" -lt 120001; then
             if test "$compiler_plugins" = yes; then
-                AC_MSG_ERROR([Clang $CLANGVER is too old to build compiler plugins; need >= 5.0.2.])
+                AC_MSG_ERROR(
+                    [Clang $CLANGVER is too old to build compiler plugins; need >= 12.0.1.])
             else
                 compiler_plugins=no
             fi

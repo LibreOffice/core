@@ -283,11 +283,7 @@ int main(int argc, char** argv)
         if( contents.empty())
             continue;
         foundSomething = false;
-#if CLANG_VERSION >= 100000
         if( !tooling::runToolOnCodeWithArgs( std::unique_ptr<FindNamedClassAction>(new FindNamedClassAction), contents, args, argv[ i ] ))
-#else
-        if( !tooling::runToolOnCodeWithArgs( new FindNamedClassAction, contents, args, argv[ i ] ))
-#endif
         {
             std::cerr << "Failed to analyze: " << argv[ i ] << std::endl;
             return 2;

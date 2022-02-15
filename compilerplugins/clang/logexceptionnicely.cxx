@@ -12,7 +12,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
-#include "compat.hxx"
+#include "config_clang.h"
 #include <fstream>
 #include <unordered_set>
 
@@ -101,7 +101,7 @@ public:
             return true;
 
         StringRef fn = getFilenameOfLocation(
-            compiler.getSourceManager().getExpansionLoc(compat::getBeginLoc(operatorCallExpr)));
+            compiler.getSourceManager().getExpansionLoc(operatorCallExpr->getBeginLoc()));
         // these are below tools in the module hierarchy, so we can't use the pretty printing
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/include/comphelper/"))
             return true;
@@ -120,7 +120,7 @@ public:
                     return true;
                 if (!isDerivedFromException(cxxRecordDecl))
                     return true;
-                auto loc = compat::getBeginLoc(operatorCallExpr);
+                auto loc = operatorCallExpr->getBeginLoc();
                 // for some reason, I'm warning multiple times? so just check if I've warned already
                 if (!m_visited.insert(compiler.getSourceManager().getExpansionLoc(loc)).second)
                     return true;

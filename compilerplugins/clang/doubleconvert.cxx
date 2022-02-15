@@ -10,7 +10,6 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -58,7 +57,7 @@ bool DoubleConvert::VisitCXXConstructExpr(CXXConstructExpr const* cxxConstruct)
         = dyn_cast<CXXMemberCallExpr>(cxxConstruct->getArg(0)->IgnoreParenCasts());
     if (!cxxMemberCallExpr)
         return true;
-    if (!compat::isa_and_nonnull<CXXConversionDecl>(cxxMemberCallExpr->getMethodDecl()))
+    if (!isa_and_nonnull<CXXConversionDecl>(cxxMemberCallExpr->getMethodDecl()))
         return true;
     if (cxxConstruct->getType().getCanonicalType().getTypePtr()
         != cxxMemberCallExpr->getImplicitObjectArgument()

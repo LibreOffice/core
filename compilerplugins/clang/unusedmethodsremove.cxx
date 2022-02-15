@@ -12,8 +12,8 @@
 #include <cassert>
 #include <string>
 #include <iostream>
+#include "config_clang.h"
 #include "plugin.hxx"
-#include "compat.hxx"
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <fcntl.h>
@@ -137,7 +137,7 @@ bool UnusedMethodsRemove::VisitCXXMethodDecl( const CXXMethodDecl* functionDecl 
         report(
             DiagnosticsEngine::Warning,
             "Could not remove unused method (" + niceName(functionDecl) + ")",
-            compat::getBeginLoc(functionDecl))
+            functionDecl->getBeginLoc())
           << functionDecl->getSourceRange();
     }
     return true;

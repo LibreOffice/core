@@ -9,6 +9,8 @@
 
 #include "clang/AST/Attr.h"
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -91,11 +93,11 @@ bool StaticMethods::TraverseCXXMethodDecl(const CXXMethodDecl * pCXXMethodDecl) 
         return true;
     }
     // don't mess with the backwards compatibility stuff
-    if (loplugin::isSamePathname(getFilename(compat::getBeginLoc(pCXXMethodDecl)), SRCDIR "/cppuhelper/source/compat.cxx")) {
+    if (loplugin::isSamePathname(getFilename(pCXXMethodDecl->getBeginLoc()), SRCDIR "/cppuhelper/source/compat.cxx")) {
         return true;
     }
     // the DDE has a dummy implementation on Linux and a real one on Windows
-    auto aFilename = getFilename(compat::getBeginLoc(pCXXMethodDecl->getCanonicalDecl()));
+    auto aFilename = getFilename(pCXXMethodDecl->getCanonicalDecl()->getBeginLoc());
     if (loplugin::isSamePathname(aFilename, SRCDIR "/include/svl/svdde.hxx")) {
         return true;
     }

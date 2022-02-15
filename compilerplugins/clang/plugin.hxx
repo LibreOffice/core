@@ -22,7 +22,6 @@
 
 #include <clang/Rewrite/Core/Rewriter.h>
 
-#include "compat.hxx"
 #include "pluginhandler.hxx"
 
 using namespace clang;
@@ -120,7 +119,7 @@ public:
     explicit FilteringPlugin( const InstantiationData& data ) : Plugin(data) {}
 
     bool TraverseNamespaceDecl(NamespaceDecl * decl) {
-        if (ignoreLocation(compat::getBeginLoc(decl)))
+        if (ignoreLocation(decl->getBeginLoc()))
             return true;
         return RecursiveASTVisitor<Derived>::TraverseNamespaceDecl(decl);
     }
@@ -220,15 +219,12 @@ bool Plugin::ignoreLocation( const Stmt* stmt ) const
 {
     // Invalid location can happen at least for ImplicitCastExpr of
     // ImplicitParam 'self' in Objective C method declarations:
-    return compat::getBeginLoc(stmt).isValid() && ignoreLocation( compat::getBeginLoc(stmt));
+    return stmt->getBeginLoc().isValid() && ignoreLocation( stmt->getBeginLoc());
 }
 
 inline bool Plugin::ignoreLocation(TypeLoc tloc) const
 {
-    // Invalid locations appear to happen at least with Clang 5.0.2 (but no longer with at least
-    // recent Clang 10 trunk):
-    auto const loc = tloc.getBeginLoc();
-    return loc.isValid() && ignoreLocation(loc);
+    return ignoreLocation(tloc.getBeginLoc());
 }
 
 template< typename T >
@@ -266,7 +262,7 @@ public:
     explicit FilteringRewritePlugin( const InstantiationData& data ) : RewritePlugin(data) {}
 
     bool TraverseNamespaceDecl(NamespaceDecl * decl) {
-        if (ignoreLocation(compat::getBeginLoc(decl)))
+        if (ignoreLocation(decl->getBeginLoc()))
             return true;
         return RecursiveASTVisitor<Derived>::TraverseNamespaceDecl(decl);
     }

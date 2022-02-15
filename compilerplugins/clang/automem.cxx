@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include "config_clang.h"
 #include "plugin.hxx"
 
 /**
@@ -51,7 +52,7 @@ bool AutoMem::VisitCXXDeleteExpr(const CXXDeleteExpr* expr)
 {
     if (ignoreLocation( expr ))
         return true;
-    StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
+    StringRef aFileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc()));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/salhelper/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/osl/")
         || loplugin::hasPathnamePrefix(aFileName, SRCDIR "/salhelper/")
@@ -79,7 +80,7 @@ bool AutoMem::VisitCXXDeleteExpr(const CXXDeleteExpr* expr)
     report(
         DiagnosticsEngine::Warning,
         "calling delete on object field, rather use std::unique_ptr or std::scoped_ptr",
-        compat::getBeginLoc(expr))
+        expr->getBeginLoc())
         << expr->getSourceRange();
     return true;
 }

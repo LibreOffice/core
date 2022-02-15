@@ -6,11 +6,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include "config_clang.h"
 
-// CLANG_VERSION = older versions of clang need something different in getParentFunctionDecl
-// WIN32 = TODO, see corresponding TODO in compilerplugins/clang/unusedfields.cxx
-#if CLANG_VERSION < 110000 || defined _WIN32
+#if defined _WIN32 // TODO, see corresponding TODO in compilerplugins/clang/unusedfields.cxx
 // expected-no-diagnostics
 #else
 

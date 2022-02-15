@@ -18,9 +18,7 @@
 #include "compat.hxx"
 #include "plugin.hxx"
 
-#if CLANG_VERSION >= 110000
 #include "clang/AST/ParentMapContext.h"
-#endif
 
 /**
 Look for fields that are only ever assigned a single constant value.
@@ -115,11 +113,11 @@ public:
         else
         {
             for (const MyFieldAssignmentInfo & s : assignedSet)
-                if (s.fieldDecl && compiler.getSourceManager().isInMainFile(compat::getBeginLoc(s.fieldDecl)))
+                if (s.fieldDecl && compiler.getSourceManager().isInMainFile(s.fieldDecl->getBeginLoc()))
                     report(
                         DiagnosticsEngine::Warning,
                         "assign %0",
-                        compat::getBeginLoc(s.fieldDecl))
+                        s.fieldDecl->getBeginLoc())
                         << s.value;
         }
     }
@@ -445,7 +443,7 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
         report(
              DiagnosticsEngine::Warning,
              "oh dear, what can the matter be?",
-              compat::getBeginLoc(memberExpr))
+              memberExpr->getBeginLoc())
               << memberExpr->getSourceRange();
         parent->dump();
     }

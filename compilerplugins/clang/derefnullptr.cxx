@@ -37,7 +37,7 @@ bool DerefNullPtr::VisitUnaryOperator(UnaryOperator const * op) {
     {
         report(
             DiagnosticsEngine::Warning, "null pointer dereference",
-            compat::getBeginLoc(op))
+            op->getBeginLoc())
             << op->getSourceRange();
     }
     return true;

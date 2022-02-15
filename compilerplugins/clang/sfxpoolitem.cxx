@@ -119,7 +119,7 @@ bool SfxPoolItem::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     report(
             DiagnosticsEngine::Warning,
             "SfxPoolItem subclass %0 declares new fields, but does not override operator==",
-            compat::getBeginLoc(decl))
+            decl->getBeginLoc())
         << decl->getQualifiedNameAsString() << decl->getSourceRange();
     return true;
 }

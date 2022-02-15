@@ -126,10 +126,10 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
         return;
     }
     if (!subExpr->isValueDependent()) {
-        if (auto const res = compat::getIntegerConstantExpr(subExpr, compiler.getASTContext())) {
+        if (auto const res = subExpr->getIntegerConstantExpr(compiler.getASTContext())) {
             if (res->getLimitedValue() <= 1)
             {
-                SourceLocation loc { compat::getBeginLoc(subExpr) };
+                SourceLocation loc { subExpr->getBeginLoc() };
                 while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
                     loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
                 }
@@ -148,7 +148,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
         }
     }
     if (isa<clang::StringLiteral>(subExpr)) {
-        SourceLocation loc { compat::getBeginLoc(subExpr) };
+        SourceLocation loc { subExpr->getBeginLoc() };
         if (compiler.getSourceManager().isMacroArgExpansion(loc)
             && (Lexer::getImmediateMacroName(
                     loc, compiler.getSourceManager(), compiler.getLangOpts())
@@ -164,25 +164,25 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
         bool bRewritten = false;
         if (rewriter != nullptr) {
             SourceLocation loc { compiler.getSourceManager().getExpansionLoc(
-                    compat::getBeginLoc(expr2)) };
-            if (compiler.getSourceManager().getExpansionLoc(compat::getEndLoc(expr2))
+                    expr2->getBeginLoc()) };
+            if (compiler.getSourceManager().getExpansionLoc(expr2->getEndLoc())
                 == loc)
             {
                 char const * s = compiler.getSourceManager().getCharacterData(
                     loc);
                 unsigned n = Lexer::MeasureTokenLength(
-                    compat::getEndLoc(expr2), compiler.getSourceManager(),
+                    expr2->getEndLoc(), compiler.getSourceManager(),
                     compiler.getLangOpts());
                 std::string tok { s, n };
                 if (tok == "sal_False" || tok == "0") {
                     bRewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
-                            compat::getBeginLoc(expr2)),
+                            expr2->getBeginLoc()),
                         n, "false");
                 } else if (tok == "sal_True" || tok == "1") {
                     bRewritten = replaceText(
                         compiler.getSourceManager().getExpansionLoc(
-                            compat::getBeginLoc(expr2)),
+                            expr2->getBeginLoc()),
                         n, "true");
                 }
             }
@@ -191,7 +191,7 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
             report(
                 DiagnosticsEngine::Warning,
                 "implicit conversion (%0) of literal of type %1 to %2",
-                compat::getBeginLoc(expr2))
+                expr2->getBeginLoc())
                 << castExpr->getCastKindName() << subExpr->getType()
                 << castExpr->getType() << expr2->getSourceRange();
         }
@@ -208,16 +208,16 @@ void LiteralToBoolConversion::handleImplicitCastSubExpr(
             DiagnosticsEngine::Warning,
             ("implicit conversion (%0) of null pointer constant of type %1 to"
              " %2"),
-            compat::getBeginLoc(expr2))
+            expr2->getBeginLoc())
             << castExpr->getCastKindName() << subExpr->getType()
             << castExpr->getType() << expr2->getSourceRange();
     } else if (!subExpr->isValueDependent()) {
-        if (auto const res = compat::getIntegerConstantExpr(subExpr, compiler.getASTContext())) {
+        if (auto const res = subExpr->getIntegerConstantExpr(compiler.getASTContext())) {
             report(
                 DiagnosticsEngine::Warning,
                 ("implicit conversion (%0) of integer constant expression of type"
                  " %1 with value %2 to %3"),
-                compat::getBeginLoc(expr2))
+                expr2->getBeginLoc())
                 << castExpr->getCastKindName() << subExpr->getType()
                 << compat::toString(*res, 10) << castExpr->getType()
                 << expr2->getSourceRange();

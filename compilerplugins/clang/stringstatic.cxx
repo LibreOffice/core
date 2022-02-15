@@ -10,8 +10,9 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
+
+#include "config_clang.h"
 
 #include <unordered_set>
 
@@ -109,7 +110,7 @@ bool StringStatic::VisitVarDecl(VarDecl const* varDecl)
                 expr = castExpr->getSubExpr();
             }
             else if (MaterializeTemporaryExpr const * materializeExpr = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-                expr = compat::getSubExpr(materializeExpr);
+                expr = materializeExpr->getSubExpr();
             }
             else if (CXXBindTemporaryExpr const * bindExpr = dyn_cast<CXXBindTemporaryExpr>(expr)) {
                 expr = bindExpr->getSubExpr();
@@ -161,7 +162,7 @@ bool StringStatic::VisitDeclRefExpr(DeclRefExpr const * declRef)
         return true;
     // ignore globals that are used in CPPUNIT_ASSERT expressions, otherwise we can end up
     // trying to compare an OUStringLiteral and an OUString, and CPPUNIT can't handle that
-    auto loc = compat::getBeginLoc(declRef);
+    auto loc = declRef->getBeginLoc();
     if (compiler.getSourceManager().isMacroArgExpansion(loc))
     {
         StringRef name { Lexer::getImmediateMacroName(loc, compiler.getSourceManager(), compiler.getLangOpts()) };

@@ -12,6 +12,7 @@
 #include <iostream>
 #include <set>
 #include <unordered_set>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include <fstream>
 

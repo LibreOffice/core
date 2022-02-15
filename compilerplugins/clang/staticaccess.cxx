@@ -86,7 +86,7 @@ bool StaticAccess::VisitMemberExpr(MemberExpr const * expr) {
         DiagnosticsEngine::Warning,
         ("accessing %select{static class member|member enumerator}0 through"
          " class member access syntax, use a qualified name like '%1' instead"),
-        compat::getBeginLoc(expr))
+        expr->getBeginLoc())
         << me << decl->getQualifiedNameAsString() << expr->getSourceRange();
     return true;
 }

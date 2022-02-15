@@ -8,12 +8,10 @@
  */
 // versions before 9.0 didn't have getExceptionSpecType
 
+#include "check.hxx"
 #include "plugin.hxx"
 
-// clang before V9 does not have API to report exception spec type
-#if CLANG_VERSION >= 90000
-
-#include "check.hxx"
+#include "config_clang.h"
 
 #include <string>
 #include <set>
@@ -120,7 +118,7 @@ bool NoExceptMove::TraverseCXXMethodDecl(CXXMethodDecl* methodDecl)
     if (isMove)
     {
         StringRef fn = getFilenameOfLocation(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(methodDecl)));
+            compiler.getSourceManager().getSpellingLoc(methodDecl->getBeginLoc()));
         // SfxObjectShellLock::operator= calls SotObject::OwnerLock which in turn calls stuff which cannot be noexcept
         if (loplugin::isSamePathname(fn, SRCDIR "/include/sfx2/objsh.hxx"))
             isMove = false;
@@ -330,5 +328,4 @@ llvm::Optional<bool> NoExceptMove::IsCallThrows(const CallExpr* callExpr)
 loplugin::Plugin::Registration<NoExceptMove> noexceptmove("noexceptmove");
 }
 
-#endif // CLANG_VERSION
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

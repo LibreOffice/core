@@ -12,6 +12,7 @@
 #include <stack>
 
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 
 // In C++, find implicit conversions from char16_t (aka sal_Unicode) to char.

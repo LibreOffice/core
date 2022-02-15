@@ -16,6 +16,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
 
@@ -216,7 +217,7 @@ bool StringAdd::checkForCompoundAssign(Stmt const* stmt1, Stmt const* stmt2,
         return true;
     }
     report(DiagnosticsEngine::Warning, "simplify by merging with the preceding assignment",
-           compat::getBeginLoc(stmt2))
+           stmt2->getBeginLoc())
         << stmt2->getSourceRange();
     return true;
 }
@@ -253,7 +254,7 @@ bool StringAdd::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operatorCall
                ("rather use O[U]String::Concat than constructing %0 from %1 on %select{L|R}2HS of "
                 "+ (where %select{R|L}2HS is of"
                 " type %3)"),
-               compat::getBeginLoc(e))
+               e->getBeginLoc())
             << e->getType().getLocalUnqualifiedType() << e->getSubExprAsWritten()->getType() << arg
             << operatorCall->getArg(1 - arg)->IgnoreImpCasts()->getType() << e->getSourceRange();
     };
@@ -306,7 +307,7 @@ bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* methodCall)
         return true;
     report(DiagnosticsEngine::Warning,
            "chained append, rather use single append call and + operator",
-           compat::getBeginLoc(methodCall2))
+           methodCall2->getBeginLoc())
         << methodCall2->getSourceRange();
 
     return true;
@@ -314,7 +315,7 @@ bool StringAdd::VisitCXXMemberCallExpr(CXXMemberCallExpr const* methodCall)
 
 Expr const* StringAdd::ignore(Expr const* expr)
 {
-    return compat::IgnoreImplicit(compat::IgnoreImplicit(expr)->IgnoreParens());
+    return expr->IgnoreImplicit()->IgnoreParens()->IgnoreImplicit();
 }
 
 bool StringAdd::isSideEffectFree(Expr const* expr)
@@ -451,7 +452,7 @@ bool StringAdd::isSideEffectFree(Expr const* expr)
 
 bool StringAdd::isCompileTimeConstant(Expr const* expr)
 {
-    expr = compat::IgnoreImplicit(expr);
+    expr = expr->IgnoreImplicit();
     if (auto cxxConstructExpr = dyn_cast<CXXConstructExpr>(expr))
         if (cxxConstructExpr->getNumArgs() > 0)
             expr = cxxConstructExpr->getArg(0);

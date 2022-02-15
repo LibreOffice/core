@@ -121,7 +121,7 @@ bool Nullptr::VisitImplicitCastExpr(CastExpr const * expr) {
         case Expr::NPCK_ZeroLiteral:
             report(
                 DiagnosticsEngine::Warning,
-                "suspicious ValueDependentIsNull %0", compat::getBeginLoc(expr))
+                "suspicious ValueDependentIsNull %0", expr->getBeginLoc())
                 << kindName(k) << expr->getSourceRange();
             break;
         default:
@@ -313,7 +313,7 @@ void Nullptr::handleNull(
     SourceLocation loc;
     for (;;) {
         e = e->IgnoreImpCasts();
-        loc = compat::getBeginLoc(e);
+        loc = e->getBeginLoc();
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
@@ -378,7 +378,7 @@ void Nullptr::rewriteOrWarn(
     Expr::NullPointerConstantKind nullPointerKind, char const * replacement)
 {
     if (rewriter != nullptr) {
-        SourceLocation locStart(compat::getBeginLoc(expr));
+        SourceLocation locStart(expr->getBeginLoc());
         while (compiler.getSourceManager().isMacroArgExpansion(locStart)) {
             locStart = compiler.getSourceManager()
                 .getImmediateMacroCallerLoc(locStart);
@@ -393,7 +393,7 @@ void Nullptr::rewriteOrWarn(
             locStart = compat::getImmediateExpansionRange(compiler.getSourceManager(), locStart)
                 .first;
         }
-        SourceLocation locEnd(compat::getEndLoc(expr));
+        SourceLocation locEnd(expr->getEndLoc());
         while (compiler.getSourceManager().isMacroArgExpansion(locEnd)) {
             locEnd = compiler.getSourceManager()
                 .getImmediateMacroCallerLoc(locEnd);
@@ -412,13 +412,13 @@ void Nullptr::rewriteOrWarn(
         }
     }
     if (castKind == nullptr) {
-        report(DiagnosticsEngine::Warning, "%0 -> %1", compat::getBeginLoc(expr))
+        report(DiagnosticsEngine::Warning, "%0 -> %1", expr->getBeginLoc())
             << kindName(nullPointerKind) << replacement
             << expr->getSourceRange();
     } else {
         report(
             DiagnosticsEngine::Warning, "%0 ValueDependentIsNotNull %1 -> %2",
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << castKind << kindName(nullPointerKind) << replacement
             << expr->getSourceRange();
     }

@@ -9,7 +9,6 @@
 
 #include <cassert>
 
-#include "compat.hxx"
 #include "plugin.hxx"
 #include "clang/AST/CXXInheritance.h"
 
@@ -22,7 +21,7 @@ Expr const * ignoreAllImplicit(Expr const * expr) {
         expr = e->getSubExpr();
     }
     if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = compat::getSubExpr(e);
+        expr = e->getSubExpr();
     }
     if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
         expr = e->getSubExpr();
@@ -231,7 +230,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
         // Ignore macros, otherwise
         //    OSL_ENSURE(!b, ...);
         // triggers.
-        if (compat::getBeginLoc(e).isMacroID())
+        if (e->getBeginLoc().isMacroID())
             return true;
         // double logical not of an int is an idiom to convert to bool
         auto const sub = ignoreAllImplicit(e);
@@ -241,7 +240,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
             DiagnosticsEngine::Warning,
             ("double logical negation expression of the form '!!A' (with A of type"
              " %0) can %select{logically|literally}1 be simplified as 'A'"),
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << sub->getType()
             << sub->getType()->isBooleanType()
             << expr->getSourceRange();
@@ -249,7 +248,6 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
     }
     auto sub = expr->getSubExpr()->IgnoreParenImpCasts();
     auto reversed = false;
-#if CLANG_VERSION >= 100000
     if (auto const rewritten = dyn_cast<CXXRewrittenBinaryOperator>(sub)) {
         if (rewritten->isReversed()) {
             if (rewritten->getOperator() == BO_EQ) {
@@ -269,12 +267,11 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
             }
         }
     }
-#endif
     if (auto binaryOp = dyn_cast<BinaryOperator>(sub)) {
         // Ignore macros, otherwise
         //    OSL_ENSURE(!b, ...);
         // triggers.
-        if (compat::getBeginLoc(binaryOp).isMacroID())
+        if (binaryOp->getBeginLoc().isMacroID())
             return true;
         if (binaryOp->isComparisonOp())
         {
@@ -288,7 +285,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
             report(
                 DiagnosticsEngine::Warning,
                 ("logical negation of comparison operator, can be simplified by inverting operator"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
         }
         else if (binaryOp->isLogicalOp())
@@ -308,7 +305,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
                     if (binaryOp->isComparisonOp())
                         return expr;
                 if (auto cxxOpCall = dyn_cast<CXXOperatorCallExpr>(expr))
-                    if (compat::isComparisonOp(cxxOpCall))
+                    if (cxxOpCall->isComparisonOp())
                         return expr;
                 return (Expr const*)nullptr;
             };
@@ -318,7 +315,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
                 report(
                     DiagnosticsEngine::Warning,
                     ("logical negation of logical op containing negation, can be simplified"),
-                    compat::getBeginLoc(binaryOp))
+                    binaryOp->getBeginLoc())
                     << binaryOp->getSourceRange();
         }
     }
@@ -326,7 +323,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
         // Ignore macros, otherwise
         //    OSL_ENSURE(!b, ...);
         // triggers.
-        if (compat::getBeginLoc(binaryOp).isMacroID())
+        if (binaryOp->getBeginLoc().isMacroID())
             return true;
         auto op = binaryOp->getOperator();
         // Negating things like > and >= would probably not be wise, there is no guarantee the negation holds for operator overloaded types.
@@ -352,7 +349,7 @@ bool SimplifyBool::VisitUnaryOperator(UnaryOperator const * expr) {
         report(
             DiagnosticsEngine::Warning,
             ("logical negation of comparison operator, can be simplified by inverting operator"),
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << expr->getSourceRange();
         if (negOp != ASSUME_OPERATOR_EXISTS)
             report(
@@ -405,7 +402,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than expression of the form 'A < false' (with A of type"
                  " %0) can logically be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -418,7 +415,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                         ("less-than expression of the form 'A < true' (with A"
                          " of type %0) can %select{logically|literally}1 be"
                          " simplified as '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getLHS()->IgnoreImpCasts()->getType()
                         << (expr->getLHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -429,7 +426,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                         ("less-than expression of the form '!A < true' (with A"
                          " of type %0) can %select{logically|literally}1 be"
                          " simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -445,7 +442,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than expression of the form 'false < A' (with A of type"
                  " %0) can %select{logically|literally}1 be simplified as 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getRHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -455,7 +452,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than expression of the form 'false < false' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -463,7 +460,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than expression of the form 'false < true' can"
                  " literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -475,7 +472,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than expression of the form 'true < A' (with A of type"
                  " %0) can logically be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -484,7 +481,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than expression of the form 'true < false' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -492,7 +489,7 @@ bool SimplifyBool::visitBinLT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than expression of the form 'true < true' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -523,7 +520,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                 ("greater-than expression of the form 'A > false' (with A of"
                  " type %0) can %select{logically|literally}1 be simplified as"
                  " 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getLHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -533,7 +530,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than expression of the form 'A > true' (with A of"
                  " type %0) can logically be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -546,7 +543,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than expression of the form 'false > A' (with A of"
                  " type %0) can logically be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -555,7 +552,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than expression of the form 'false > false' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -563,7 +560,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than expression of the form 'false > true' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -579,7 +576,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                         ("greater-than expression of the form 'true > A' (with"
                          " A of type %0) can %select{logically|literally}1 be"
                          " simplified as '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getRHS()->IgnoreImpCasts()->getType()
                         << (expr->getRHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -590,7 +587,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                         ("greater-than expression of the form 'true > !A' (with"
                          " A of type %0) can %select{logically|literally}1 be"
                          " simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -602,7 +599,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than expression of the form 'true > false' can"
                  " literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -610,7 +607,7 @@ bool SimplifyBool::visitBinGT(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than expression of the form 'true > true' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -645,7 +642,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                          " false' (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as"
                          " '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getLHS()->IgnoreImpCasts()->getType()
                         << (expr->getLHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -656,7 +653,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                         ("less-than-or-equal-to expression of the form '!A <="
                          " false' (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -668,7 +665,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than-or-equal-to expression of the form 'A <= true'"
                  " (with A of type %0) can logically be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -681,7 +678,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than-or-equal-to expression of the form 'false <= A'"
                  " (with A of type %0) can logically be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -690,7 +687,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than-or-equal-to expression of the form 'false <= false'"
                  " can literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -698,7 +695,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than-or-equal-to expression of the form 'false <= true'"
                  " can literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -711,7 +708,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                 ("less-than-or-equal-to expression of the form 'true <= A'"
                  " (with A of type %0) can %select{logically|literally}1 be"
                  " simplified as 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getRHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -721,7 +718,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than-or-equal-to expression of the form 'true <= false'"
                  " can literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -729,7 +726,7 @@ bool SimplifyBool::visitBinLE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("less-than-or-equal-to expression of the form 'true <= true'"
                  " can literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -759,7 +756,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than-or-equal-to expression of the form 'A >= false'"
                  " (with A of type %0) can logically be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -769,7 +766,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                 ("greater-than-or-equal-to expression of the form 'A >= true'"
                  " (with A of type %0) can %select{logically|literally}1 be"
                  " simplified as 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getLHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -788,7 +785,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                          " 'false >= A' (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as"
                          " '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getRHS()->IgnoreImpCasts()->getType()
                         << (expr->getRHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -799,7 +796,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                         ("greater-than-or-equal-to expression of the form"
                          " 'false >= !A' (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -811,7 +808,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than-or-equal-to expression of the form 'false >="
                  " false' can literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -819,7 +816,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than-or-equal-to expression of the form 'false >="
                  " true' can literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -831,7 +828,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than-or-equal-to expression of the form 'true >= A'"
                  " (with A of type %0) can logically be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -840,7 +837,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than-or-equal-to expression of the form 'true >="
                  " false' can literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -848,7 +845,7 @@ bool SimplifyBool::visitBinGE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("greater-than-or-equal-to expression of the form 'true >="
                  " true' can literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -882,7 +879,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                         ("equal-to expression of the form 'A == false' (with A"
                          " of type %0) can %select{logically|literally}1 be"
                          " simplified as '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getLHS()->IgnoreImpCasts()->getType()
                         << (expr->getLHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -893,7 +890,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                         ("equal-to expression of the form '!A == false' (with A"
                          " of type %0) can %select{logically|literally}1 be"
                          " simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -905,7 +902,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("equal-to expression of the form 'A == true' (with A of type"
                  " %0) can %select{logically|literally}1 be simplified as 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getLHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -923,7 +920,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                         ("equal-to expression of the form 'false == A' (with A"
                          " of type %0) can %select{logically|literally}1 be"
                          " simplified as '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getRHS()->IgnoreImpCasts()->getType()
                         << (expr->getRHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -934,7 +931,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                         ("equal-to expression of the form 'false == !A' (with A"
                          " of type %0) can %select{logically|literally}1 be"
                          " simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -946,7 +943,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("equal-to expression of the form 'false == false' can"
                  " literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -954,7 +951,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("equal-to expression of the form 'false == true' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -966,7 +963,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("equal-to expression of the form 'true == A' (with A of type"
                  " %0) can %select{logically|literally}1 be simplified as 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getRHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -976,7 +973,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("equal-to expression of the form 'true == false' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -984,7 +981,7 @@ bool SimplifyBool::visitBinEQ(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("equal-to expression of the form 'true == true' can"
                  " literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -1015,7 +1012,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                 ("not-equal-to expression of the form 'A != false' (with A of"
                  " type %0) can %select{logically|literally}1 be simplified as"
                  " 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getLHS()->IgnoreImpCasts()->getType()
                 << expr->getLHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -1029,7 +1026,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                         ("not-equal-to expression of the form 'A != true' (with"
                          " A of type %0) can %select{logically|literally}1 be"
                          " simplified as '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getLHS()->IgnoreImpCasts()->getType()
                         << (expr->getLHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -1040,7 +1037,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                         ("not-equal-to expression of the form '!A != true'"
                          " (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -1057,7 +1054,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                 ("not-equal-to expression of the form 'false != A' (with A of"
                  " type %0) can %select{logically|literally}1 be simplified as"
                  " 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getRHS()->IgnoreImpCasts()->getType()
                 << expr->getRHS()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -1067,7 +1064,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("not-equal-to expression of the form 'false != false' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -1075,7 +1072,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("not-equal-to expression of the form 'false != true' can"
                  " literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -1091,7 +1088,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                         ("not-equal-to expression of the form 'true != A' (with"
                          " A of type %0) can %select{logically|literally}1 be"
                          " simplified as '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getRHS()->IgnoreImpCasts()->getType()
                         << (expr->getRHS()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -1102,7 +1099,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                         ("not-equal-to expression of the form 'true != !A'"
                          " (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -1114,7 +1111,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("not-equal-to expression of the form 'true != false' can"
                  " literally be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         case Value::True:
@@ -1122,7 +1119,7 @@ bool SimplifyBool::visitBinNE(BinaryOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("not-equal-to expression of the form 'true != true' can"
                  " literally be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getSourceRange();
             break;
         }
@@ -1148,7 +1145,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                 ("conditional expression of the form 'A ? B : false' (with A of"
                  " type %0 and B of type %1) can %select{logically|literally}2"
                  " be simplified as 'A && B'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getCond()->IgnoreImpCasts()->getType()
                 << expr->getTrueExpr()->IgnoreImpCasts()->getType()
                 << ((expr->getCond()->IgnoreImpCasts()->getType()
@@ -1167,7 +1164,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                          " (with A of type %0 and B of type %1) can"
                          " %select{logically|literally}2 be simplified as '!A"
                          " || B'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getCond()->IgnoreImpCasts()->getType()
                         << expr->getTrueExpr()->IgnoreImpCasts()->getType()
                         << ((expr->getCond()->IgnoreImpCasts()->getType()
@@ -1182,7 +1179,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                          " (with A of type %0 and B of type %1) can"
                          " %select{logically|literally}2 be simplified as 'A ||"
                          " B'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << expr->getTrueExpr()->IgnoreImpCasts()->getType()
                         << (e->IgnoreImpCasts()->getType()->isBooleanType()
@@ -1206,7 +1203,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                          " (with A of type %0 and B of type %1) can"
                          " %select{logically|literally}2 be simplified as '!A"
                          " && B'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getCond()->IgnoreImpCasts()->getType()
                         << expr->getFalseExpr()->IgnoreImpCasts()->getType()
                         << ((expr->getCond()->IgnoreImpCasts()->getType()
@@ -1221,7 +1218,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                          " (with A of type %0 and B of type %1) can"
                          " %select{logically|literally}2 be simplified as 'A &&"
                          " B'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << expr->getFalseExpr()->IgnoreImpCasts()->getType()
                         << (e->IgnoreImpCasts()->getType()->isBooleanType()
@@ -1236,7 +1233,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("conditional expression of the form 'A ? false : false' (with"
                  " A of type %0) can logically be simplified as 'false'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getCond()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;
@@ -1250,7 +1247,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                          " (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as"
                          " '!A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << expr->getCond()->IgnoreImpCasts()->getType()
                         << (expr->getCond()->IgnoreImpCasts()->getType()
                             ->isBooleanType())
@@ -1261,7 +1258,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                         ("conditional expression of the form '!A ? false :"
                          " true' (with A of type %0) can"
                          " %select{logically|literally}1 be simplified as 'A'"),
-                        compat::getBeginLoc(expr))
+                        expr->getBeginLoc())
                         << e->IgnoreImpCasts()->getType()
                         << e->IgnoreImpCasts()->getType()->isBooleanType()
                         << expr->getSourceRange();
@@ -1278,7 +1275,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                 ("conditional expression of the form 'A ? true : B' (with A of"
                  " type %0 and B of type %1) can %select{logically|literally}2"
                  " be simplified as 'A || B'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getCond()->IgnoreImpCasts()->getType()
                 << expr->getFalseExpr()->IgnoreImpCasts()->getType()
                 << ((expr->getCond()->IgnoreImpCasts()->getType()
@@ -1293,7 +1290,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                 ("conditional expression of the form 'A ? true : false' (with A"
                  " of type %0) can %select{logically|literally}1 be simplified"
                  " as 'A'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getCond()->IgnoreImpCasts()->getType()
                 << expr->getCond()->IgnoreImpCasts()->getType()->isBooleanType()
                 << expr->getSourceRange();
@@ -1303,7 +1300,7 @@ bool SimplifyBool::VisitConditionalOperator(ConditionalOperator const * expr) {
                 DiagnosticsEngine::Warning,
                 ("conditional expression of the form 'A ? true : true' (with A"
                  " of type %0) can logically be simplified as 'true'"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getCond()->IgnoreImpCasts()->getType()
                 << expr->getSourceRange();
             break;

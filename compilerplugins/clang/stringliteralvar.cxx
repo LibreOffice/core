@@ -198,7 +198,7 @@ public:
                d->getLocation())
             << d << d->getType() << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1)
             << isAutomaticVariable(cast<VarDecl>(d)) << d->getSourceRange();
-        report(DiagnosticsEngine::Note, "first assigned here", compat::getBeginLoc(expr))
+        report(DiagnosticsEngine::Note, "first assigned here", expr->getBeginLoc())
             << expr->getSourceRange();
         return true;
     }

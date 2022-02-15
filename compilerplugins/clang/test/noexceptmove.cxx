@@ -6,10 +6,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include "config_clang.h"
-
-// clang before V9 does not have API to report exception spec type
-#if CLANG_VERSION >= 90000
 
 namespace test1
 {
@@ -96,7 +92,4 @@ class Bar
 };
 };
 
-#else
-// expected-no-diagnostics
-#endif // CLANG_VERSION
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

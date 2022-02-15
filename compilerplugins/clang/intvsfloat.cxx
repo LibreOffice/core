@@ -10,7 +10,6 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
-#include "compat.hxx"
 #include <iostream>
 
 /**
@@ -55,7 +54,7 @@ bool IntVsFloat::VisitVarDecl(VarDecl const* varDecl)
     if (static_cast<long>(*d) == *d)
         return true;
     report(DiagnosticsEngine::Warning, "assigning constant float value to int truncates data",
-           compat::getBeginLoc(init))
+           init->getBeginLoc())
         << init->getSourceRange();
 
     return true;
@@ -67,7 +66,7 @@ bool IntVsFloat::VisitBinaryOperator(BinaryOperator const* op)
     {
         return true;
     }
-    if (ignoreLocation(compat::getBeginLoc(op)))
+    if (ignoreLocation(op->getBeginLoc()))
         return true;
     auto lhs = op->getLHS()->IgnoreImpCasts();
     auto rhs = op->getRHS()->IgnoreImpCasts();
@@ -83,7 +82,7 @@ bool IntVsFloat::VisitBinaryOperator(BinaryOperator const* op)
     if (static_cast<long>(*d) == *d)
         return true;
     report(DiagnosticsEngine::Warning, "comparing integer to float constant, can never be true",
-           compat::getBeginLoc(op))
+           op->getBeginLoc())
         << op->getSourceRange();
     return true;
 }

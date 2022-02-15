@@ -12,6 +12,7 @@
 #ifndef LO_CLANG_SHARED_PLUGINS
 
 #include "plugin.hxx"
+#include "config_clang.h"
 #include <unordered_set>
 
 /*
