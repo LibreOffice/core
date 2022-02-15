@@ -16,6 +16,23 @@
       "message": "This commit partly fixes the following autocorrection bug for [de-CH] and [de-LI]:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d103156\n\nThe special character \"ß\" is not used in Switzerland and Lichtenstein.\nTherefore the generic [de] autocorrection set was copied without the entries containing corrections to this character. Also all emoticon descriptions where adapted from \"ß\" to \"ss\" and added to [de-CH] and [de-LI].",
       "revId": "7169306a97175f3d34836458e2bb3e095609b1f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "500728ea_cb07c67b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-15T09:43:57Z",
+      "side": 1,
+      "message": "Please edit the first line of your commit message, so it starts with tdf#103156",
+      "revId": "7169306a97175f3d34836458e2bb3e095609b1f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
