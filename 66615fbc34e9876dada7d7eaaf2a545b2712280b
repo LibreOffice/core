@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbf7a6da_d34cf3f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-15T09:27:53Z",
+      "side": 1,
+      "message": "Hi Michael,\nThis patch fixes https://bugs.documentfoundation.org/show_bug.cgi?id\u003d146848, in case you want to add it as reference to the commit message",
+      "revId": "66615fbc34e9876dada7d7eaaf2a545b2712280b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
