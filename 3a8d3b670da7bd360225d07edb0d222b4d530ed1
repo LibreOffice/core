@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "821d5541_426a7fa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000068
+      },
+      "writtenOn": "2022-02-15T08:56:30Z",
+      "side": 1,
+      "message": "Looks great to me, thank you Sarper! :-)",
+      "revId": "3a8d3b670da7bd360225d07edb0d222b4d530ed1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
