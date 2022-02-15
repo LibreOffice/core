@@ -62,7 +62,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new CaptionProperties(*this, rObj));
         }
 
-        void CaptionProperties::ItemSetChanged(const SfxItemSet* pSet)
+        void CaptionProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrCaptionObj& rObj = static_cast<SdrCaptionObj&>(GetSdrObject());
 
@@ -70,7 +70,7 @@ namespace sdr::properties
             rObj.ImpRecalcTail();
 
             // call parent
-            RectangleProperties::ItemSetChanged(pSet);
+            RectangleProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
         }
 
         void CaptionProperties::SetStyleSheet(SfxStyleSheet* pNewStyleSheet, bool bDontRemoveHardAttr,
