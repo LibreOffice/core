@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96fcd47f_26baaddf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-15T04:20:44Z",
+      "side": 1,
+      "message": "I tried but I an not able to figure out the proper implementation. please help",
+      "revId": "d2ecf5dce64483e6ce5a1ad403d189c0e6d98ee7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
