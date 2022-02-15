@@ -1,0 +1,22 @@
+diff --git dragonbox/include/dragonbox/dragonbox.h.old dragonbox/include/dragonbox/dragonbox.h
+index af4d3450b98d..388a587b9763 100644
+--- dragonbox/include/dragonbox/dragonbox.h.old
++++ dragonbox/include/dragonbox/dragonbox.h
+@@ -730,7 +730,7 @@ namespace jkj::dragonbox {
+             static constexpr int cache_bits = 64;
+             static constexpr int min_k = -31;
+             static constexpr int max_k = 46;
+-            static constexpr cache_entry_type cache[] = {
++            inline static constexpr cache_entry_type cache[] = {
+                 0x81ceb32c4b43fcf5, 0xa2425ff75e14fc32, 0xcad2f7f5359a3b3f, 0xfd87b5f28300ca0e,
+                 0x9e74d1b791e07e49, 0xc612062576589ddb, 0xf79687aed3eec552, 0x9abe14cd44753b53,
+                 0xc16d9a0095928a28, 0xf1c90080baf72cb2, 0x971da05074da7bef, 0xbce5086492111aeb,
+@@ -759,7 +759,7 @@ namespace jkj::dragonbox {
+             static constexpr int cache_bits = 128;
+             static constexpr int min_k = -292;
+             static constexpr int max_k = 326;
+-            static constexpr cache_entry_type cache[] = {
++            inline static constexpr cache_entry_type cache[] = {
+                 {0xff77b1fcbebcdc4f, 0x25e8e89c13bb0f7b}, {0x9faacf3df73609b1, 0x77b191618c54e9ad},
+                 {0xc795830d75038c1d, 0xd59df5b9ef6a2418}, {0xf97ae3d0d2446f25, 0x4b0573286b44ad1e},
+                 {0x9becce62836ac577, 0x4ee367f9430aec33}, {0xc2e801fb244576d5, 0x229c41f793cda740},
