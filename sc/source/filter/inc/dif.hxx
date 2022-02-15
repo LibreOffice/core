@@ -21,6 +21,7 @@
 
 #include <map>
 #include <memory>
+#include <string_view>
 #include <vector>
 
 #include <rtl/ustring.hxx>
@@ -32,17 +33,12 @@ class SvStream;
 class SvNumberFormatter;
 class ScDocument;
 
-extern const sal_Unicode pKeyTABLE[];
-extern const sal_Unicode pKeyVECTORS[];
-extern const sal_Unicode pKeyTUPLES[];
-extern const sal_Unicode pKeyDATA[];
-extern const sal_Unicode pKeyBOT[];
-extern const sal_Unicode pKeyEOD[];
-extern const sal_Unicode pKeyTRUE[];
-extern const sal_Unicode pKeyFALSE[];
-extern const sal_Unicode pKeyNA[];
-extern const sal_Unicode pKeyV[];
-extern const sal_Unicode pKey1_0[];
+extern const std::u16string_view pKeyTABLE;
+extern const std::u16string_view pKeyVECTORS;
+extern const std::u16string_view pKeyTUPLES;
+extern const std::u16string_view pKeyDATA;
+extern const std::u16string_view pKeyBOT;
+extern const std::u16string_view pKeyEOD;
 
 enum TOPIC
 {
@@ -90,32 +86,22 @@ public:
 
 inline bool DifParser::IsBOT( const sal_Unicode* pRef )
 {
-    return  (   pRef[ 0 ] == pKeyBOT[0] &&
-                pRef[ 1 ] == pKeyBOT[1] &&
-                pRef[ 2 ] == pKeyBOT[2] &&
-                pRef[ 3 ] == pKeyBOT[3] );
+    return  pRef == pKeyBOT;
 }
 
 inline bool DifParser::IsEOD( const sal_Unicode* pRef )
 {
-    return  (   pRef[ 0 ] == pKeyEOD[0] &&
-                pRef[ 1 ] == pKeyEOD[1] &&
-                pRef[ 2 ] == pKeyEOD[2] &&
-                pRef[ 3 ] == pKeyEOD[3] );
+    return  pRef == pKeyEOD;
 }
 
 inline bool DifParser::Is1_0( const sal_Unicode* pRef )
 {
-    return  (   pRef[ 0 ] == pKey1_0[0] &&
-                pRef[ 1 ] == pKey1_0[1] &&
-                pRef[ 2 ] == pKey1_0[2] &&
-                pRef[ 3 ] == pKey1_0[3] );
+    return  pRef == std::u16string_view(u"1,0");
 }
 
 inline bool DifParser::IsV( const sal_Unicode* pRef )
 {
-    return  (   pRef[ 0 ] == pKeyV[0] &&
-                pRef[ 1 ] == pKeyV[1]   );
+    return  pRef == std::u16string_view(u"V");
 }
 
 inline bool DifParser::IsNumber( const sal_Unicode cChar )

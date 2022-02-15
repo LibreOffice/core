@@ -32,18 +32,12 @@
 #include <table.hxx>
 #include <memory>
 
-const sal_Unicode pKeyTABLE[]   = { 'T', 'A', 'B', 'L', 'E', 0 };
-const sal_Unicode pKeyVECTORS[] = { 'V', 'E', 'C', 'T', 'O', 'R', 'S', 0 };
-const sal_Unicode pKeyTUPLES[]  = { 'T', 'U', 'P', 'L', 'E', 'S', 0 };
-const sal_Unicode pKeyDATA[]    = { 'D', 'A', 'T', 'A', 0 };
-const sal_Unicode pKeyBOT[]     = { 'B', 'O', 'T', 0 };
-const sal_Unicode pKeyEOD[]     = { 'E', 'O', 'D', 0 };
-const sal_Unicode pKeyERROR[]   = { 'E', 'R', 'R', 'O', 'R', 0 };
-const sal_Unicode pKeyTRUE[]    = { 'T', 'R', 'U', 'E', 0 };
-const sal_Unicode pKeyFALSE[]   = { 'F', 'A', 'L', 'S', 'E', 0 };
-const sal_Unicode pKeyNA[]      = { 'N', 'A', 0 };
-const sal_Unicode pKeyV[]       = { 'V', 0 };
-const sal_Unicode pKey1_0[]     = { '1', ',', '0', 0 };
+const std::u16string_view pKeyTABLE   = u"TABLE";
+const std::u16string_view pKeyVECTORS = u"VECTORS";
+const std::u16string_view pKeyTUPLES  = u"TUPLES";
+const std::u16string_view pKeyDATA    = u"DATA";
+const std::u16string_view pKeyBOT     = u"BOT";
+const std::u16string_view pKeyEOD     = u"EOD";
 
 ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                         const rtl_TextEncoding eVon )
@@ -160,13 +154,13 @@ ErrCode ScFormatFilterPluginImpl::ScImportDif(SvStream& rIn, ScDocument* pDoc, c
                             aAttrCache.SetNumFormat( pDoc, nColCnt, nRowCnt,
                                     aDifParser.nNumFormat );
                         }
-                        else if( aData == pKeyTRUE || aData == pKeyFALSE )
+                        else if( aData == "TRUE" || aData == "FALSE" )
                         {
                             pDoc->SetValue(aPos, aDifParser.fVal);
                             aAttrCache.SetNumFormat( pDoc, nColCnt, nRowCnt,
                                 aDifParser.nNumFormat );
                         }
-                        else if( aData == pKeyNA || aData == pKeyERROR  )
+                        else if( aData == "NA" || aData == "ERROR"  )
                         {
                             pDoc->SetString(aPos, aData, &aStrParam);
                         }
@@ -243,33 +237,22 @@ TOPIC DifParser::GetNextTopic()
 {
     enum STATE { S_VectorVal, S_Data, S_END, S_START, S_UNKNOWN, S_ERROR_L2 };
 
-    static const sal_Unicode pKeyLABEL[]        = { 'L', 'A', 'B', 'E', 'L', 0 };
-    static const sal_Unicode pKeyCOMMENT[]      = { 'C', 'O', 'M', 'M', 'E', 'N', 'T', 0 };
-    static const sal_Unicode pKeySIZE[]         = { 'S', 'I', 'Z', 'E', 0 };
-    static const sal_Unicode pKeyPERIODICITY[]  = { 'P', 'E', 'R', 'I', 'O', 'D', 'I', 'C', 'I', 'T', 'Y', 0 };
-    static const sal_Unicode pKeyMAJORSTART[]   = { 'M', 'A', 'J', 'O', 'R', 'S', 'T', 'A', 'R', 'T', 0 };
-    static const sal_Unicode pKeyMINORSTART[]   = { 'M', 'I', 'N', 'O', 'R', 'S', 'T', 'A', 'R', 'T', 0 };
-    static const sal_Unicode pKeyTRUELENGTH[]   = { 'T', 'R', 'U', 'E', 'L', 'E', 'N', 'G', 'T', 'H', 0 };
-    static const sal_Unicode pKeyUINITS[]       = { 'U', 'I', 'N', 'I', 'T', 'S', 0 };
-    static const sal_Unicode pKeyDISPLAYUNITS[] = { 'D', 'I', 'S', 'P', 'L', 'A', 'Y', 'U', 'N', 'I', 'T', 'S', 0 };
-    static const sal_Unicode pKeyUNKNOWN[]      = { 0 };
-
-    static const sal_Unicode*   ppKeys[] =
+    static const std::u16string_view ppKeys[] =
     {
         pKeyTABLE,              // 0
         pKeyVECTORS,
         pKeyTUPLES,
         pKeyDATA,
-        pKeyLABEL,
-        pKeyCOMMENT,            // 5
-        pKeySIZE,
-        pKeyPERIODICITY,
-        pKeyMAJORSTART,
-        pKeyMINORSTART,
-        pKeyTRUELENGTH,         // 10
-        pKeyUINITS,
-        pKeyDISPLAYUNITS,
-        pKeyUNKNOWN             // 13
+        u"LABEL",
+        u"COMMENT",             // 5
+        u"SIZE",
+        u"PERIODICITY",
+        u"MAJORSTART",
+        u"MINORSTART",
+        u"TRUELENGTH",          // 10
+        u"UINITS",
+        u"DISPLAYUNITS",
+        u""                     // 13
     };
 
     static const TOPIC      pTopics[] =
@@ -309,15 +292,15 @@ TOPIC DifParser::GetNextTopic()
         {
             case S_START:
             {
-                const sal_Unicode*  pRef;
+                const std::u16string_view* pRef;
                 sal_uInt16          nCnt = 0;
                 bool            bSearch = true;
 
-                pRef = ppKeys[ nCnt ];
+                pRef = &ppKeys[ nCnt ];
 
                 while( bSearch )
                 {
-                    if( aLine == pRef )
+                    if( aLine == *pRef )
                     {
                         eRet = pTopics[ nCnt ];
                         bSearch = false;
@@ -325,13 +308,13 @@ TOPIC DifParser::GetNextTopic()
                     else
                     {
                         nCnt++;
-                        pRef = ppKeys[ nCnt ];
-                        if( !*pRef )
+                        pRef = &ppKeys[ nCnt ];
+                        if( pRef->empty() )
                             bSearch = false;
                     }
                 }
 
-                if( *pRef )
+                if( !pRef->empty() )
                     eS = S_VectorVal;
                 else
                     eS = S_UNKNOWN;
