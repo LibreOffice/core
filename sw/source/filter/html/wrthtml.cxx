@@ -194,49 +194,117 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     const OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
     SetupFilterOptions(sFilterOptions);
 
-    comphelper::SequenceAsHashMap aStoreMap(rMedium.GetArgs());
-    auto it = aStoreMap.find("RTFOLEMimeType");
-    if (it == aStoreMap.end())
-    {
-        return;
-    }
-
-    it->second >>= m_aRTFOLEMimeType;
+    SetupFilterFromPropertyValues(rMedium.GetArgs());
 }
 
 void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
 {
-    if (rFilterOptions == "SkipImages")
+    comphelper::SequenceAsHashMap aStoreMap;
+    if (rFilterOptions.indexOf("SkipImages") >= 0)
     {
-        mbSkipImages = true;
+        aStoreMap["SkipImages"] <<= true;
     }
-    else if (rFilterOptions == "SkipHeaderFooter")
+    else if (rFilterOptions.indexOf("SkipHeaderFooter") >= 0)
     {
-        mbSkipHeaderFooter = true;
+        aStoreMap["SkipHeaderFooter"] <<= true;
     }
-    else if (rFilterOptions == "EmbedImages")
+    else if (rFilterOptions.indexOf("EmbedImages") >= 0)
     {
-        mbEmbedImages = true;
+        aStoreMap["EmbedImages"] <<= true;
     }
 
-    const uno::Sequence<OUString> aOptionSeq = comphelper::string::convertCommaSeparated(rFilterOptions);
+    // this option can be "on" together with any of above
+    if (rFilterOptions.indexOf("NoLineLimit") >= 0)
+    {
+        aStoreMap["NoLineLimit"] <<= true;
+    }
+
+    const uno::Sequence<OUString> aOptionSeq
+        = comphelper::string::convertCommaSeparated(rFilterOptions);
     const OUString aXhtmlNsKey("xhtmlns=");
     for (const auto& rOption : aOptionSeq)
     {
         if (rOption == "XHTML")
-            mbXHTML = true;
+        {
+            aStoreMap["XHTML"] <<= true;
+        }
         else if (rOption.startsWith(aXhtmlNsKey))
         {
-            maNamespace = rOption.copy(aXhtmlNsKey.getLength()).toUtf8();
-            if (maNamespace == "reqif-xhtml")
-            {
-                mbReqIF = true;
-                // XHTML is always just a fragment inside ReqIF.
-                mbSkipHeaderFooter = true;
-            }
-            // XHTML namespace implies XHTML.
-            mbXHTML = true;
+            aStoreMap["XhtmlNs"] <<= rOption.copy(aXhtmlNsKey.getLength());
         }
+    }
+
+    SetupFilterFromPropertyValues(aStoreMap.getAsConstPropertyValueList());
+}
+
+void SwHTMLWriter::SetupFilterFromPropertyValues(
+    const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues)
+{
+    comphelper::SequenceAsHashMap aStoreMap(rPropertyValues);
+    auto it = aStoreMap.find("RTFOLEMimeType");
+    if (it != aStoreMap.end())
+    {
+        it->second >>= m_aRTFOLEMimeType;
+    }
+
+    it = aStoreMap.find("SkipImages");
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        mbSkipImages = bVal;
+    }
+
+    it = aStoreMap.find("SkipHeaderFooter");
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        mbSkipHeaderFooter = bVal;
+    }
+
+    it = aStoreMap.find("EmbedImages");
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        mbEmbedImages = bVal;
+    }
+
+    it = aStoreMap.find("NoLineLimit");
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        if (bVal)
+        {
+            m_nWhishLineLen = -1;
+        }
+    }
+
+    it = aStoreMap.find("XHTML");
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        mbXHTML = bVal;
+    }
+
+    it = aStoreMap.find("XhtmlNs");
+    if (it != aStoreMap.end())
+    {
+        OUString aVal;
+        it->second >>= aVal;
+
+        maNamespace = aVal.toUtf8();
+        if (maNamespace == "reqif-xhtml")
+        {
+            mbReqIF = true;
+            // XHTML is always just a fragment inside ReqIF.
+            mbSkipHeaderFooter = true;
+        }
+        // XHTML namespace implies XHTML.
+        mbXHTML = true;
     }
 }
 
