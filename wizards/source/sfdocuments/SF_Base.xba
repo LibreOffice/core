@@ -440,21 +440,13 @@ Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Base class as an array
 
 	Methods = Array( _
-					&quot;Activate&quot; _
-					, &quot;CloseDocument&quot; _
-					, &quot;CloseFormDocument&quot; _
-					, &quot;CreateMenu&quot; _
+					&quot;CloseFormDocument&quot; _
 					, &quot;FormDocuments&quot; _
 					, &quot;Forms&quot; _
 					, &quot;GetDatabase&quot; _
 					, &quot;IsLoaded&quot; _
 					, &quot;OpenFormDocument&quot; _
 					, &quot;PrintOut&quot; _
-					, &quot;RemoveMenu&quot; _
-					, &quot;RunCommand&quot; _
-					, &quot;Save&quot; _
-					, &quot;SaveAs&quot; _
-					, &quot;SaveCopyAs&quot; _
 					, &quot;SetPrinter&quot; _
 					)
 

@@ -1636,24 +1636,20 @@ Public Function Methods() As Variant
 
 	Methods = Array( _
 					&quot;A1Style&quot; _
-					, &quot;Activate&quot; _
 					, &quot;Charts&quot; _
 					, &quot;ClearAll&quot; _
 					, &quot;ClearFormats&quot; _
 					, &quot;ClearValues&quot; _
-					, &quot;CloseDocument&quot; _
 					, &quot;CopySheet&quot; _
 					, &quot;CopySheetFromFile&quot; _
 					, &quot;CopyToCell&quot; _
 					, &quot;CopyToRange&quot; _
 					, &quot;CreateChart&quot; _
-					, &quot;CreateMenu&quot; _
 					, &quot;DAvg&quot; _
 					, &quot;DCount&quot; _
 					, &quot;DMax&quot; _
 					, &quot;DMin&quot; _
 					, &quot;DSum&quot; _
-					, &quot;ExportAsPDF&quot; _
 					, &quot;GetColumnName&quot; _
 					, &quot;GetFormula&quot; _
 					, &quot;GetValue&quot; _
@@ -1666,17 +1662,11 @@ Public Function Methods() As Variant
 					, &quot;OpenRangeSelector&quot; _
 					, &quot;Printf&quot; _
 					, &quot;PrintOut&quot; _
-					, &quot;RemoveMenu&quot; _
 					, &quot;RemoveSheet&quot; _
 					, &quot;RenameSheet&quot; _
-					, &quot;RunCommand&quot; _
-					, &quot;Save&quot; _
-					, &quot;SaveAs&quot; _
-					, &quot;SaveCopyAs&quot; _
 					, &quot;SetArray&quot; _
 					, &quot;SetCellStyle&quot; _
 					, &quot;SetFormula&quot; _
-					, &quot;SetPrinter&quot; _
 					, &quot;SetValue&quot; _
 					, &quot;ShiftDown&quot; _
 					, &quot;ShiftLeft&quot; _

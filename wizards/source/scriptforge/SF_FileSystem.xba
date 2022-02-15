@@ -2121,7 +2121,7 @@ Dim sFolder As String		&apos;	Folder
 	End If
 
 	_SFInstallFolder = _ConvertFromUrl(sFolder)
-			
+
 End Function	&apos;	ScriptForge.SF_FileSystem._SFInstallFolder
 
 REM ============================================ END OF SCRIPTFORGE.SF_FileSystem

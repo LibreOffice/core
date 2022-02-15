@@ -712,6 +712,7 @@ Try:
 			vBasicObject = _SF_.PythonStorage(BasicObject)
 			sObjectType = vBasicObject.ObjectType
 			sServiceName = vBasicObject.ServiceName
+
 			&apos;	Basic modules have type = &quot;SF_*&quot;
 			bBasicClass = ( Left(sObjectType, 3) &lt;&gt; &quot;SF_&quot; )
 			sLibrary = Split(sServiceName, &quot;.&quot;)(0)
@@ -727,10 +728,17 @@ Try:
 			ElseIf Not bBasicClass And _
 						(((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
 				   		((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray) Then
-				Select Case sServiceName
-					Case &quot;ScriptForge.Array&quot;
-						If Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2), True)
-				End Select
+				&apos;	Not service related
+				If Script = &quot;Methods&quot; Then
+					vReturn = vBasicObject.Methods()
+				ElseIf Script = &quot;Properties&quot; Then
+					vReturn = vBasicObject.Properties()
+				Else
+					Select Case sServiceName
+						Case &quot;ScriptForge.Array&quot;
+							If Script = &quot;ImportFromCSVFile&quot; Then vReturn = SF_Array.ImportFromCSVFile(vArgs(0), vArgs(1), vArgs(2), True)
+					End Select
+				End If
 
 			&apos;	Methods in usual modules are called by ExecuteBasicScript() except if they use a ParamArray
 			ElseIf Not bBasicClass And (CallType And vbMethod) = vbMethod Then
@@ -759,38 +767,44 @@ Try:
 			&apos;	Methods in class modules using a 2D array or returning arrays are hardcoded as exceptions. Bug #138155
 			ElseIf ((CallType And vbMethod) + (CallType And cstArgArray)) = vbMethod + cstArgArray Or _
 				   ((CallType And vbMethod) + (CallType And cstRetArray)) = vbMethod + cstRetArray Then
-				Select Case sServiceName
-					Case &quot;SFDatabases.Database&quot;
-						If Script = &quot;GetRows&quot; Then		vReturn = vBasicObject.GetRows(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
-					Case &quot;SFDialogs.Dialog&quot;
-						If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
-					Case &quot;SFDialogs.DialogControl&quot;
-						If Script = &quot;SetTableData&quot; Then	vReturn = vBasicObject.SetTableData(vArgs(0), vArgs(1), vArgs(2))
-					Case &quot;SFDocuments.Document&quot;
-						If Script = &quot;Forms&quot; Then		vReturn = vBasicObject.Forms(vArgs(0))
-					Case &quot;SFDocuments.Base&quot;
-						Select Case Script
-							Case &quot;FormDocuments&quot;	:	vReturn = vBasicObject.FormDocuments()
-							Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
-						End Select
-					Case &quot;SFDocuments.Calc&quot;
-						Select Case Script
-							Case &quot;Charts&quot;			:	vReturn = vBasicObject.Charts(vArgs(0), vArgs(1))
-							Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
-							Case &quot;GetFormula&quot;		:	vReturn = vBasicObject.GetFormula(vArgs(0))
-							Case &quot;GetValue&quot;			:	vReturn = vBasicObject.GetValue(vArgs(0))
-							Case &quot;SetArray&quot;			:	vReturn = vBasicObject.SetArray(vArgs(0), vArgs(1))
-							Case &quot;SetFormula&quot;		:	vReturn = vBasicObject.SetFormula(vArgs(0), vArgs(1))
-							Case &quot;SetValue&quot;			:	vReturn = vBasicObject.SetValue(vArgs(0), vArgs(1))
-						End Select
-					Case &quot;SFDocuments.Form&quot;
-						Select Case Script
-							Case &quot;Controls&quot;			:	vReturn = vBasicObject.Controls(vArgs(0))
-							Case &quot;Subforms&quot;			:	vReturn = vBasicObject.Subforms(vArgs(0))
-						End Select
-					Case &quot;SFDocuments.FormControl&quot;
-						If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
-				End Select
+				If Script = &quot;Methods&quot; Then
+					vReturn = vBasicObject.Methods()
+				ElseIf Script = &quot;Properties&quot; Then
+					vReturn = vBasicObject.Properties()
+				Else
+					Select Case sServiceName
+						Case &quot;SFDatabases.Database&quot;
+							If Script = &quot;GetRows&quot; Then		vReturn = vBasicObject.GetRows(vArgs(0), vArgs(1), vArgs(2), vArgs(3))
+						Case &quot;SFDialogs.Dialog&quot;
+							If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
+						Case &quot;SFDialogs.DialogControl&quot;
+							If Script = &quot;SetTableData&quot; Then	vReturn = vBasicObject.SetTableData(vArgs(0), vArgs(1), vArgs(2))
+						Case &quot;SFDocuments.Document&quot;
+							If Script = &quot;Forms&quot; Then		vReturn = vBasicObject.Forms(vArgs(0))
+						Case &quot;SFDocuments.Base&quot;
+							Select Case Script
+								Case &quot;FormDocuments&quot;	:	vReturn = vBasicObject.FormDocuments()
+								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
+							End Select
+						Case &quot;SFDocuments.Calc&quot;
+							Select Case Script
+								Case &quot;Charts&quot;			:	vReturn = vBasicObject.Charts(vArgs(0), vArgs(1))
+								Case &quot;Forms&quot;			:	vReturn = vBasicObject.Forms(vArgs(0), vArgs(1))
+								Case &quot;GetFormula&quot;		:	vReturn = vBasicObject.GetFormula(vArgs(0))
+								Case &quot;GetValue&quot;			:	vReturn = vBasicObject.GetValue(vArgs(0))
+								Case &quot;SetArray&quot;			:	vReturn = vBasicObject.SetArray(vArgs(0), vArgs(1))
+								Case &quot;SetFormula&quot;		:	vReturn = vBasicObject.SetFormula(vArgs(0), vArgs(1))
+								Case &quot;SetValue&quot;			:	vReturn = vBasicObject.SetValue(vArgs(0), vArgs(1))
+							End Select
+						Case &quot;SFDocuments.Form&quot;
+							Select Case Script
+								Case &quot;Controls&quot;			:	vReturn = vBasicObject.Controls(vArgs(0))
+								Case &quot;Subforms&quot;			:	vReturn = vBasicObject.Subforms(vArgs(0))
+							End Select
+						Case &quot;SFDocuments.FormControl&quot;
+							If Script = &quot;Controls&quot; Then		vReturn = vBasicObject.Controls(vArgs(0))
+					End Select
+				End If
 			
 			&apos;	Methods in class modules are invoked with CallByName
 			ElseIf bBasicClass And ((CallType And vbMethod) = vbMethod) Then

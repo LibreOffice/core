@@ -217,18 +217,8 @@ Public Function Methods() As Variant
 &apos;&apos;&apos;	Return the list of public methods of the Writer service as an array
 
 	Methods = Array( _
-					&quot;Activate&quot; _
-					, &quot;CloseDocument&quot; _
-					, &quot;CreateMenu&quot; _
-					, &quot;ExportAsPDF&quot; _
-					, &quot;Forms&quot; _
+					&quot;Forms&quot; _
 					, &quot;PrintOut&quot; _
-					, &quot;RemoveMenu&quot; _
-					, &quot;RunCommand&quot; _
-					, &quot;Save&quot; _
-					, &quot;SaveAs&quot; _
-					, &quot;SaveCopyAs&quot; _
-					, &quot;SetPrinter&quot; _
 					)
 
 End Function	&apos;	SFDocuments.SF_Writer.Methods
