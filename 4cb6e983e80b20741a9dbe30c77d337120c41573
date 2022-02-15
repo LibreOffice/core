@@ -16,6 +16,24 @@
       "message": "This is exactly what I warned against. Well, shrug.",
       "revId": "4cb6e983e80b20741a9dbe30c77d337120c41573",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f84a6af_b707078a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-15T09:20:20Z",
+      "side": 1,
+      "message": "Well, could be worse. Point is, many QA people requested this option. And the hope is that users will not play with it.",
+      "parentUuid": "1aa8dd7c_e45e0074",
+      "revId": "4cb6e983e80b20741a9dbe30c77d337120c41573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
