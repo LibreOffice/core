@@ -1493,7 +1493,7 @@ void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
         if (!nRead)
             break;
         // fprintf(stderr, "text is %s\n", reinterpret_cast<const gchar*>(bytes.getArray()));
-        auto rc = gtk_builder_add_from_string(
+        bool rc = gtk_builder_add_from_string(
             pBuilder, reinterpret_cast<const gchar*>(bytes.getArray()), nRead, &err);
         if (!rc)
         {
