@@ -15,6 +15,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
 
@@ -318,7 +319,7 @@ bool OnceVar::VisitVarDecl( const VarDecl* varDecl )
         return true;
     }
     // Ignore macros like FD_ZERO
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(varDecl))) {
+    if (compiler.getSourceManager().isMacroBodyExpansion(varDecl->getBeginLoc())) {
         return true;
     }
     if (varDecl->hasGlobalStorage()) {

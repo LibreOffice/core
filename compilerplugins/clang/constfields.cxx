@@ -22,12 +22,9 @@
 #include "config_clang.h"
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "check.hxx"
 
-#if CLANG_VERSION >= 110000
 #include "clang/AST/ParentMapContext.h"
-#endif
 
 /**
 Look for fields that are only assigned to in the constructor using field-init, and can therefore be const.
@@ -205,7 +202,7 @@ void ConstFields::run()
     else
     {
         for (const MyFieldInfo& s : cannotBeConstSet)
-            report(DiagnosticsEngine::Warning, "notconst %0", compat::getBeginLoc(s.parentRecord))
+            report(DiagnosticsEngine::Warning, "notconst %0", s.parentRecord->getBeginLoc())
                 << s.fieldName;
     }
 }
@@ -527,11 +524,11 @@ void ConstFields::check(const FieldDecl* fieldDecl, const Expr* memberExpr)
     if (bDump)
     {
         report(DiagnosticsEngine::Warning, "oh dear, what can the matter be? writtenTo=%0",
-               compat::getBeginLoc(memberExpr))
+               memberExpr->getBeginLoc())
             << bCannotBeConst << memberExpr->getSourceRange();
         if (parent)
         {
-            report(DiagnosticsEngine::Note, "parent over here", compat::getBeginLoc(parent))
+            report(DiagnosticsEngine::Note, "parent over here", parent->getBeginLoc())
                 << parent->getSourceRange();
             parent->dump();
         }

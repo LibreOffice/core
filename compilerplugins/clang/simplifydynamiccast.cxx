@@ -14,7 +14,6 @@
 #include <set>
 
 #include <clang/AST/CXXInheritance.h>
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace
@@ -102,12 +101,10 @@ bool SimplifyDynamicCast::VisitCXXStaticCastExpr(CXXStaticCastExpr const* static
         return true;
     if (dynamicCastSubExprVec[idx] != subExprDecl->getDecl())
         return true;
-    report(DiagnosticsEngine::Warning, "simplify, use var in if",
-           compat::getBeginLoc(staticCastExpr))
+    report(DiagnosticsEngine::Warning, "simplify, use var in if", staticCastExpr->getBeginLoc())
         << staticCastExpr->getSourceRange();
     auto ifStmt = ifVec[idx];
-    report(DiagnosticsEngine::Note, "if here", compat::getBeginLoc(ifStmt))
-        << ifStmt->getSourceRange();
+    report(DiagnosticsEngine::Note, "if here", ifStmt->getBeginLoc()) << ifStmt->getSourceRange();
     return true;
 }
 

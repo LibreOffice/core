@@ -11,6 +11,7 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include <fstream>
 
@@ -144,7 +145,7 @@ bool MergeClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     }
     if (decl->isThisDeclarationADefinition())
     {
-        SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl));
+        SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(decl->getBeginLoc());
         auto filename = getFilenameOfLocation(spellingLocation);
         filename = filename.substr(strlen(SRCDIR));
         std::string s = decl->getQualifiedNameAsString();

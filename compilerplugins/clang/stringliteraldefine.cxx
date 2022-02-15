@@ -16,6 +16,8 @@
 
 #include <cassert>
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -54,7 +56,7 @@ public:
         auto const e1 = dyn_cast<clang::StringLiteral>(arg0);
         if (!e1)
             return true;
-        auto argLoc = compat::getBeginLoc(arg0);
+        auto argLoc = arg0->getBeginLoc();
         // check if the arg is a macro
         auto macroLoc = compiler.getSourceManager().getSpellingLoc(argLoc);
         if (argLoc == macroLoc)
@@ -62,16 +64,14 @@ public:
         // check if it is the right kind of macro (not particularly reliable checks)
         if (!macroLoc.isValid() || !compiler.getSourceManager().isInMainFile(macroLoc)
             || compiler.getSourceManager().isInSystemHeader(macroLoc)
-#if CLANG_VERSION >= 90000
             || compiler.getSourceManager().isWrittenInBuiltinFile(macroLoc)
             || compiler.getSourceManager().isWrittenInScratchSpace(macroLoc)
             || compiler.getSourceManager().isWrittenInCommandLineFile(macroLoc)
-#endif
             || isInUnoIncludeFile(macroLoc))
             return true;
         StringRef fileName = getFilenameOfLocation(macroLoc);
         StringRef name{ Lexer::getImmediateMacroName(
-            compat::getBeginLoc(arg0), compiler.getSourceManager(), compiler.getLangOpts()) };
+            arg0->getBeginLoc(), compiler.getSourceManager(), compiler.getLangOpts()) };
         if (loplugin::hasPathnamePrefix(fileName, SRCDIR "/config_host/"))
             return true;
         // used in both OUString and OString context
@@ -145,7 +145,7 @@ public:
                "%select{OStringLiteral|OUStringLiteral}1'",
                macroLoc)
             << name << (tc.Class("OString").Namespace("rtl").GlobalNamespace() ? 0 : 1);
-        report(DiagnosticsEngine::Note, "macro used here", compat::getBeginLoc(arg0))
+        report(DiagnosticsEngine::Note, "macro used here", arg0->getBeginLoc())
             << arg0->getSourceRange();
         return true;
     }

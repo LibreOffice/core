@@ -15,9 +15,6 @@
 
 #include <cassert>
 
-#include "config_clang.h"
-
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace
@@ -128,9 +125,7 @@ public:
         // be, so lets keep it here at least for now):
         switch (expr->getOpcode())
         {
-#if CLANG_VERSION >= 60000
             case BO_Cmp:
-#endif
             case BO_LT:
             case BO_GT:
             case BO_LE:
@@ -203,7 +198,7 @@ private:
         // Filter out e.g. `size_t(-1)`:
         if (!e2->isValueDependent())
         {
-            if (auto const val = compat::getIntegerConstantExpr(e2, compiler.getASTContext()))
+            if (auto const val = e2->getIntegerConstantExpr(compiler.getASTContext()))
             {
                 if (val->isNegative())
                 {
@@ -211,7 +206,7 @@ private:
                 }
             }
         }
-        auto loc = compat::getBeginLoc(e);
+        auto loc = e->getBeginLoc();
         while (compiler.getSourceManager().isMacroArgExpansion(loc))
         {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);

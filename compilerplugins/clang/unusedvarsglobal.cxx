@@ -25,9 +25,7 @@
 #include "compat.hxx"
 #include "check.hxx"
 
-#if CLANG_VERSION >= 110000
 #include "clang/AST/ParentMapContext.h"
-#endif
 
 /**
 This performs two analyses:
@@ -199,9 +197,9 @@ void UnusedVarsGlobal::run()
     else
     {
         for (const MyVarInfo& s : readFromSet)
-            report(DiagnosticsEngine::Warning, "read", compat::getBeginLoc(s.varDecl));
+            report(DiagnosticsEngine::Warning, "read", s.varDecl->getBeginLoc());
         for (const MyVarInfo& s : writeToSet)
-            report(DiagnosticsEngine::Warning, "write", compat::getBeginLoc(s.varDecl));
+            report(DiagnosticsEngine::Warning, "write", s.varDecl->getBeginLoc());
     }
 }
 
@@ -334,8 +332,8 @@ bool UnusedVarsGlobal::isSomeKindOfZero(const Expr* arg)
     // Get the expression contents.
     // This helps us find params which are always initialised with something like "OUString()".
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = compat::getBeginLoc(arg);
-    SourceLocation endLoc = compat::getEndLoc(arg);
+    SourceLocation startLoc = arg->getBeginLoc();
+    SourceLocation endLoc = arg->getEndLoc();
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     if (!p1 || !p2 || (p2 - p1) < 0 || (p2 - p1) > 40)
@@ -604,10 +602,7 @@ void UnusedVarsGlobal::checkIfReadFrom(const VarDecl* varDecl, const DeclRefExpr
                  || isa<CXXTypeidExpr>(parent) || isa<DefaultStmt>(parent)
                  || isa<GCCAsmStmt>(parent) || isa<LambdaExpr>(parent) // TODO
                  || isa<CXXDefaultArgExpr>(parent) || isa<AtomicExpr>(parent)
-                 || isa<VAArgExpr>(parent) || isa<DeclRefExpr>(parent)
-#if CLANG_VERSION >= 80000
-                 || isa<ConstantExpr>(parent)
-#endif
+                 || isa<VAArgExpr>(parent) || isa<DeclRefExpr>(parent) || isa<ConstantExpr>(parent)
                  || isa<SubstNonTypeTemplateParmExpr>(parent))
         {
             break;
@@ -623,9 +618,9 @@ void UnusedVarsGlobal::checkIfReadFrom(const VarDecl* varDecl, const DeclRefExpr
     if (bDump)
     {
         report(DiagnosticsEngine::Warning, "oh dear, what can the matter be?",
-               compat::getBeginLoc(declRefExpr))
+               declRefExpr->getBeginLoc())
             << declRefExpr->getSourceRange();
-        report(DiagnosticsEngine::Note, "parent over here", compat::getBeginLoc(parent))
+        report(DiagnosticsEngine::Note, "parent over here", parent->getBeginLoc())
             << parent->getSourceRange();
         parent->dump();
         declRefExpr->dump();
@@ -813,10 +808,7 @@ void UnusedVarsGlobal::checkIfWrittenTo(const VarDecl* varDecl, const DeclRefExp
                  || isa<UnaryExprOrTypeTraitExpr>(parent) || isa<CXXUnresolvedConstructExpr>(parent)
                  || isa<CompoundStmt>(parent) || isa<LabelStmt>(parent)
                  || isa<CXXForRangeStmt>(parent) || isa<CXXTypeidExpr>(parent)
-                 || isa<DefaultStmt>(parent) || isa<GCCAsmStmt>(parent)
-#if CLANG_VERSION >= 80000
-                 || isa<ConstantExpr>(parent)
-#endif
+                 || isa<DefaultStmt>(parent) || isa<GCCAsmStmt>(parent) || isa<ConstantExpr>(parent)
                  || isa<AtomicExpr>(parent) || isa<CXXDefaultArgExpr>(parent)
                  || isa<VAArgExpr>(parent) || isa<DeclRefExpr>(parent)
                  || isa<SubstNonTypeTemplateParmExpr>(parent) || isa<LambdaExpr>(parent)) // TODO
@@ -834,11 +826,11 @@ void UnusedVarsGlobal::checkIfWrittenTo(const VarDecl* varDecl, const DeclRefExp
     if (bDump)
     {
         report(DiagnosticsEngine::Warning, "oh dear, what can the matter be? writtenTo=%0",
-               compat::getBeginLoc(declRefExpr))
+               declRefExpr->getBeginLoc())
             << bPotentiallyWrittenTo << declRefExpr->getSourceRange();
         if (parent)
         {
-            report(DiagnosticsEngine::Note, "parent over here", compat::getBeginLoc(parent))
+            report(DiagnosticsEngine::Note, "parent over here", parent->getBeginLoc())
                 << parent->getSourceRange();
             parent->dump();
         }

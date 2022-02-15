@@ -10,7 +10,6 @@
 #include <string>
 
 #include "plugin.hxx"
-#include "compat.hxx"
 
 // Methods that purely return a local field should be declared in the header and be declared inline.
 // So that the compiler can elide the function call and turn it into a simple fixed-offset-load instruction.
@@ -243,8 +242,8 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     const char *p1, *p2;
 
     // get the function body contents
-    p1 = compiler.getSourceManager().getCharacterData( compat::getBeginLoc(functionDecl->getBody()) );
-    p2 = compiler.getSourceManager().getCharacterData( compat::getEndLoc(functionDecl->getBody()) );
+    p1 = compiler.getSourceManager().getCharacterData( functionDecl->getBody()->getBeginLoc() );
+    p2 = compiler.getSourceManager().getCharacterData( functionDecl->getBody()->getEndLoc() );
     std::string s1( p1, p2 - p1 + 1);
 
     /* we can't safely move around stuff containing comments, we mess up the resulting code */
@@ -274,18 +273,18 @@ bool InlineSimpleMemberFunctions::rewrite(const CXXMethodDecl * functionDecl) {
     // remove the function's out of line body and declaration
     RewriteOptions opts;
     opts.RemoveLineIfEmpty = true;
-    if (!removeText(SourceRange(compat::getBeginLoc(functionDecl), compat::getEndLoc(functionDecl->getBody())), opts)) {
+    if (!removeText(SourceRange(functionDecl->getBeginLoc(), functionDecl->getBody()->getEndLoc()), opts)) {
         return false;
     }
 
     // scan forward until we find the semicolon
     const FunctionDecl * canonicalDecl = functionDecl->getCanonicalDecl();
-    p1 = compiler.getSourceManager().getCharacterData( compat::getEndLoc(canonicalDecl) );
+    p1 = compiler.getSourceManager().getCharacterData( canonicalDecl->getEndLoc() );
     p2 = ++p1;
     while (*p2 != 0 && *p2 != ';') p2++;
 
     // insert the function body into the inline function definition (i.e. the one inside the class definition)
-    return replaceText(compat::getEndLoc(canonicalDecl).getLocWithOffset(p2 - p1 + 1), 1, s1);
+    return replaceText(canonicalDecl->getEndLoc().getLocWithOffset(p2 - p1 + 1), 1, s1);
 }
 
 loplugin::Plugin::Registration< InlineSimpleMemberFunctions > X("inlinesimplememberfunctions");

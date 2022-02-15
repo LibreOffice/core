@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include "config_clang.h"
-
 int foo();
 int foo2(int);
 
@@ -94,12 +92,10 @@ void attr() {
     foo();
 }
 
-#if CLANG_VERSION >= 100000
 void attr_bad() {
     [[maybe_unused]] int i = foo(); // expected-note {{measured against this one [loplugin:indentation]}}
      foo(); // expected-error {{statement mis-aligned compared to neighbours  [loplugin:indentation]}}
 }
-#endif
 
 void xxx();
 void test5(bool x)

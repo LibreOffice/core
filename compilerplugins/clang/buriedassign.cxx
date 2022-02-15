@@ -14,6 +14,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
 
@@ -257,13 +258,13 @@ static bool isAssignmentOp(clang::OverloadedOperatorKind Opc)
 
 static const Expr* IgnoreImplicitAndConversionOperator(const Expr* expr)
 {
-    expr = compat::IgnoreImplicit(expr);
+    expr = expr->IgnoreImplicit();
     if (auto memberCall = dyn_cast<CXXMemberCallExpr>(expr))
     {
         if (auto conversionDecl = dyn_cast_or_null<CXXConversionDecl>(memberCall->getMethodDecl()))
         {
             if (!conversionDecl->isExplicit())
-                expr = compat::IgnoreImplicit(memberCall->getImplicitObjectArgument());
+                expr = memberCall->getImplicitObjectArgument()->IgnoreImplicit();
         }
     }
     return expr;
@@ -273,7 +274,7 @@ bool BuriedAssign::VisitBinaryOperator(BinaryOperator const* binaryOp)
 {
     if (ignoreLocation(binaryOp))
         return true;
-    if (compat::getBeginLoc(binaryOp).isMacroID())
+    if (binaryOp->getBeginLoc().isMacroID())
         return true;
     if (!isAssignmentOp(binaryOp->getOpcode()))
         return true;
@@ -302,12 +303,12 @@ bool BuriedAssign::VisitBinaryOperator(BinaryOperator const* binaryOp)
 
     // assignment in constructor
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(binaryOp)));
+        compiler.getSourceManager().getSpellingLoc(binaryOp->getBeginLoc()));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/include/comphelper/flagguard.hxx"))
         return true;
 
     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
-           compat::getBeginLoc(binaryOp))
+           binaryOp->getBeginLoc())
         << binaryOp->getSourceRange();
     //getParentStmt(getParentStmt(getParentStmt(getParentStmt(getParentStmt(getParentStmt(binaryOp))))))->dump();
     return true;
@@ -317,7 +318,7 @@ bool BuriedAssign::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOper)
 {
     if (ignoreLocation(cxxOper))
         return true;
-    if (compat::getBeginLoc(cxxOper).isMacroID())
+    if (cxxOper->getBeginLoc().isMacroID())
         return true;
     if (!isAssignmentOp(cxxOper->getOperator()))
         return true;
@@ -344,7 +345,7 @@ bool BuriedAssign::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOper)
     if (!m_handled.insert(cxxOper).second)
         return true;
     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
-           compat::getBeginLoc(cxxOper))
+           cxxOper->getBeginLoc())
         << cxxOper->getSourceRange();
     //getParentStmt(getParentStmt(getParentStmt(getParentStmt(getParentStmt(cxxOper)))))->dump();
     return true;
@@ -358,7 +359,7 @@ bool BuriedAssign::VisitCompoundStmt(CompoundStmt const* compoundStmt)
     {
         if (auto expr = dyn_cast<Expr>(*i))
         {
-            expr = compat::IgnoreImplicit(expr);
+            expr = expr->IgnoreImplicit();
             if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
             {
                 // ignore comma-chained statements at this level
@@ -379,7 +380,7 @@ void BuriedAssign::MarkIfAssignment(Stmt const* stmt)
 {
     if (auto expr = dyn_cast_or_null<Expr>(stmt))
     {
-        expr = compat::IgnoreImplicit(expr);
+        expr = expr->IgnoreImplicit();
         if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
         {
             if (isAssignmentOp(binaryOp->getOpcode()))
@@ -434,7 +435,7 @@ bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
         if (isAssignmentOp(binaryOp->getOpcode()))
         {
             report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
-                   compat::getBeginLoc(expr))
+                   expr->getBeginLoc())
                 << expr->getSourceRange();
         }
         else if (binaryOp->isComparisonOp())
@@ -446,7 +447,7 @@ bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
                     && binaryOp->getRHS()->isCXX11ConstantExpr(compiler.getASTContext())
                     && isAssignmentOp(binaryOp2->getOpcode()))
                     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
-                           compat::getBeginLoc(expr))
+                           expr->getBeginLoc())
                         << expr->getSourceRange();
             }
             if (auto binaryOp2
@@ -456,7 +457,7 @@ bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
                     && binaryOp->getLHS()->isCXX11ConstantExpr(compiler.getASTContext())
                     && isAssignmentOp(binaryOp2->getOpcode()))
                     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
-                           compat::getBeginLoc(expr))
+                           expr->getBeginLoc())
                         << expr->getSourceRange();
             }
         }
@@ -467,7 +468,7 @@ bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
             {
                 if (isAssignmentOp(binaryOp2->getOpcode()))
                     report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
-                           compat::getBeginLoc(expr))
+                           expr->getBeginLoc())
                         << expr->getSourceRange();
             }
         }
@@ -479,7 +480,7 @@ bool BuriedAssign::VisitIfStmt(IfStmt const* ifStmt)
         if (isAssignmentOp(operCall->getOperator()))
         {
             report(DiagnosticsEngine::Warning, "buried assignment, rather put on own line",
-                   compat::getBeginLoc(expr))
+                   expr->getBeginLoc())
                 << expr->getSourceRange();
         }
     }
@@ -531,7 +532,7 @@ void BuriedAssign::MarkConditionForControlLoops(Expr const* expr)
 {
     if (!expr)
         return;
-    expr = compat::IgnoreImplicit(expr);
+    expr = expr->IgnoreImplicit();
 
     if (auto binaryOp = dyn_cast<BinaryOperator>(expr))
     {
@@ -550,7 +551,7 @@ void BuriedAssign::MarkConditionForControlLoops(Expr const* expr)
         if (memberCall->getMethodDecl() && isa<CXXConversionDecl>(memberCall->getMethodDecl()))
         {
             // TODO check that the conversion is converting to bool
-            expr = compat::IgnoreImplicit(memberCall->getImplicitObjectArgument());
+            expr = memberCall->getImplicitObjectArgument()->IgnoreImplicit();
         }
     }
 
@@ -559,31 +560,31 @@ void BuriedAssign::MarkConditionForControlLoops(Expr const* expr)
         // handle: ((xxx = foo()) != error)
         if (binaryOp->isComparisonOp())
         {
-            MarkIfAssignment(compat::IgnoreImplicit(binaryOp->getLHS())->IgnoreParens());
-            MarkIfAssignment(compat::IgnoreImplicit(binaryOp->getRHS())->IgnoreParens());
+            MarkIfAssignment(binaryOp->getLHS()->IgnoreImplicit()->IgnoreParens());
+            MarkIfAssignment(binaryOp->getRHS()->IgnoreImplicit()->IgnoreParens());
         }
     }
     else if (auto cxxOper = dyn_cast<CXXOperatorCallExpr>(expr))
     {
         // handle: ((xxx = foo()) != error)
-        if (compat::isComparisonOp(cxxOper))
+        if (cxxOper->isComparisonOp())
         {
-            MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(0))->IgnoreParens());
-            MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(1))->IgnoreParens());
+            MarkIfAssignment(cxxOper->getArg(0)->IgnoreImplicit()->IgnoreParens());
+            MarkIfAssignment(cxxOper->getArg(1)->IgnoreImplicit()->IgnoreParens());
         }
         // handle: (!(xxx = foo()))
         else if (cxxOper->getOperator() == OO_Exclaim)
-            MarkIfAssignment(compat::IgnoreImplicit(cxxOper->getArg(0))->IgnoreParens());
+            MarkIfAssignment(cxxOper->getArg(0)->IgnoreImplicit()->IgnoreParens());
     }
     else if (auto parenExpr = dyn_cast<ParenExpr>(expr))
     {
         // handle: ((xxx = foo()))
-        MarkIfAssignment(compat::IgnoreImplicit(parenExpr->getSubExpr()));
+        MarkIfAssignment(parenExpr->getSubExpr()->IgnoreImplicit());
     }
     else if (auto unaryOp = dyn_cast<UnaryOperator>(expr))
     {
         // handle: (!(xxx = foo()))
-        MarkIfAssignment(compat::IgnoreImplicit(unaryOp->getSubExpr())->IgnoreParens());
+        MarkIfAssignment(unaryOp->getSubExpr()->IgnoreImplicit()->IgnoreParens());
     }
     else
         MarkIfAssignment(expr);

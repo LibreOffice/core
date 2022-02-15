@@ -20,7 +20,6 @@
 #include "config_clang.h"
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace
@@ -34,21 +33,6 @@ bool isLong(QualType type)
     // some parts of the STL have ::difference_type => long
     if (type->getAs<AutoType>() || type->getAs<DecltypeType>())
         return false;
-#if CLANG_VERSION < 80000
-    // Prior to <https://github.com/llvm/llvm-project/commit/
-    // c50240dac133451b3eae5b89cecca4c1c4af9fd4> "[AST] Get aliased type info from an aliased
-    // TemplateSpecialization" in Clang 8, if type is a TemplateSpecializationType on top of a
-    // TypedefType, the above getAs<TypedefType> returned null (as it unconditionally desugared the
-    // TemplateSpecializationType to the underlying canonic type, not to any aliased type), so re-
-    // check with the TemplateSpecializationType's aliased type:
-    if (auto const t = type->getAs<TemplateSpecializationType>())
-    {
-        if (t->isTypeAlias())
-        {
-            return isLong(t->getAliasedType());
-        }
-    }
-#endif
     if (type->isSpecificBuiltinType(BuiltinType::Kind::Long))
         return true;
     auto arrayType = type->getAsArrayTypeUnsafe();
@@ -119,10 +103,9 @@ private:
         std::vector<std::pair<T, bool>> vec(map.begin(), map.end());
         std::sort(vec.begin(), vec.end(),
                   [&](std::pair<T, bool> const& lhs, std::pair<T, bool> const& rhs) {
-                      return compiler.getSourceManager().getCharacterData(
-                                 compat::getBeginLoc(lhs.first))
+                      return compiler.getSourceManager().getCharacterData(lhs.first->getBeginLoc())
                              > compiler.getSourceManager().getCharacterData(
-                                   compat::getBeginLoc(rhs.first));
+                                   rhs.first->getBeginLoc());
                   });
         return vec;
     }
@@ -178,7 +161,7 @@ void ToolsLong::run()
     for (auto const& dcl : reverseSourceOrder(varDecls_))
     {
         auto const decl = dcl.first;
-        SourceLocation loc{ compat::getBeginLoc(decl) };
+        SourceLocation loc{ decl->getBeginLoc() };
         TypeSourceInfo* tsi = decl->getTypeSourceInfo();
         if (tsi != nullptr)
         {
@@ -216,7 +199,7 @@ void ToolsLong::run()
     for (auto const& dcl : reverseSourceOrder(fieldDecls_))
     {
         auto const decl = dcl.first;
-        SourceLocation loc{ compat::getBeginLoc(decl) };
+        SourceLocation loc{ decl->getBeginLoc() };
         TypeSourceInfo* tsi = decl->getTypeSourceInfo();
         if (tsi != nullptr)
         {
@@ -254,7 +237,7 @@ void ToolsLong::run()
     for (auto const& dcl : reverseSourceOrder(parmVarDecls_))
     {
         auto const decl = dcl.first;
-        SourceLocation loc{ compat::getBeginLoc(decl) };
+        SourceLocation loc{ decl->getBeginLoc() };
         TypeSourceInfo* tsi = decl->getTypeSourceInfo();
         if (tsi != nullptr)
         {
@@ -304,7 +287,7 @@ void ToolsLong::run()
     for (auto const& dcl : functionDecls_)
     {
         auto const decl = dcl.first;
-        SourceLocation loc{ compat::getBeginLoc(decl) };
+        SourceLocation loc{ decl->getBeginLoc() };
         SourceLocation l{ compiler.getSourceManager().getExpansionLoc(loc) };
         SourceLocation end{ compiler.getSourceManager().getExpansionLoc(
             decl->getNameInfo().getLoc()) };
@@ -340,7 +323,7 @@ void ToolsLong::run()
     for (auto const& dcl : staticCasts_)
     {
         auto const expr = dcl.first;
-        SourceLocation loc{ compat::getBeginLoc(expr) };
+        SourceLocation loc{ expr->getBeginLoc() };
         TypeSourceInfo* tsi = expr->getTypeInfoAsWritten();
         if (tsi != nullptr)
         {
@@ -372,7 +355,7 @@ void ToolsLong::run()
         if (!rewrite(loc))
         {
             report(DiagnosticsEngine::Warning, "CXXStaticCastExpr, suspicious cast from %0 to %1",
-                   compat::getBeginLoc(expr))
+                   expr->getBeginLoc())
                 << expr->getSubExpr()->IgnoreParenImpCasts()->getType() << expr->getType()
                 << expr->getSourceRange();
         }
@@ -381,7 +364,7 @@ void ToolsLong::run()
     for (auto const& dcl : functionalCasts_)
     {
         auto const expr = dcl.first;
-        SourceLocation loc{ compat::getBeginLoc(expr) };
+        SourceLocation loc{ expr->getBeginLoc() };
         TypeSourceInfo* tsi = expr->getTypeInfoAsWritten();
         if (tsi != nullptr)
         {
@@ -413,8 +396,7 @@ void ToolsLong::run()
         if (!rewrite(loc))
         {
             report(DiagnosticsEngine::Warning,
-                   "CXXFunctionalCastExpr, suspicious cast from %0 to %1",
-                   compat::getBeginLoc(expr))
+                   "CXXFunctionalCastExpr, suspicious cast from %0 to %1", expr->getBeginLoc())
                 << expr->getSubExpr()->IgnoreParenImpCasts()->getType() << expr->getType()
                 << expr->getSourceRange();
         }
@@ -425,12 +407,12 @@ bool ToolsLong::VisitCStyleCastExpr(CStyleCastExpr* expr)
 {
     if (ignoreLocation(expr))
         return true;
-    if (isExcludedFile(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))))
+    if (isExcludedFile(compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc())))
         return true;
     auto const k = isLong(expr->getType());
     if (!k)
         return true;
-    SourceLocation loc{ compat::getBeginLoc(expr) };
+    SourceLocation loc{ expr->getBeginLoc() };
     while (compiler.getSourceManager().isMacroArgExpansion(loc))
         loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
     if (compiler.getSourceManager().isMacroBodyExpansion(loc)
@@ -440,7 +422,7 @@ bool ToolsLong::VisitCStyleCastExpr(CStyleCastExpr* expr)
         return true;
     }
     report(DiagnosticsEngine::Warning, "CStyleCastExpr, suspicious cast from %0 to %1",
-           compat::getBeginLoc(expr))
+           expr->getBeginLoc())
         << expr->getSubExpr()->IgnoreParenImpCasts()->getType() << expr->getType()
         << expr->getSourceRange();
     return true;
@@ -450,7 +432,7 @@ bool ToolsLong::VisitCXXStaticCastExpr(CXXStaticCastExpr* expr)
 {
     if (ignoreLocation(expr))
         return true;
-    if (isExcludedFile(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))))
+    if (isExcludedFile(compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc())))
         return true;
     auto const k = isLong(expr->getType());
     if (!k)
@@ -463,7 +445,7 @@ bool ToolsLong::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr* expr)
 {
     if (ignoreLocation(expr))
         return true;
-    if (isExcludedFile(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))))
+    if (isExcludedFile(compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc())))
         return true;
     auto const k = isLong(expr->getType());
     if (!k)

@@ -77,7 +77,7 @@ bool CollapseIf::VisitIfStmt(IfStmt const* ifStmt)
         return true;
 
     report(DiagnosticsEngine::Warning, "nested if should be collapsed into one statement %0 %1",
-           compat::getBeginLoc(ifStmt))
+           ifStmt->getBeginLoc())
         << noChars1 << noChars2 << ifStmt->getSourceRange();
     return true;
 }
@@ -88,8 +88,8 @@ int CollapseIf::getNoCharsInSourceCodeOfExpr(IfStmt const* ifStmt)
     // measuring the size of the condition expression is unreliable, because clang
     // does not report the location of the last token accurately.
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = compat::getBeginLoc(ifStmt);
-    SourceLocation endLoc = compat::getBeginLoc(ifStmt->getThen());
+    SourceLocation startLoc = ifStmt->getBeginLoc();
+    SourceLocation endLoc = ifStmt->getThen()->getBeginLoc();
     char const* p1 = SM.getCharacterData(startLoc);
     char const* p2 = SM.getCharacterData(endLoc);
 

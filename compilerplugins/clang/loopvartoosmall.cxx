@@ -16,6 +16,7 @@
 #include <list>
 #include <map>
 
+#include "compat.hxx"
 #include "plugin.hxx"
 //#include "clang/AST/CXXInheritance.h"
 

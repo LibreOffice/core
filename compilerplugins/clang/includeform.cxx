@@ -29,11 +29,7 @@ private:
     void InclusionDirective(
         SourceLocation HashLoc, Token const & IncludeTok, StringRef,
         bool IsAngled, CharSourceRange FilenameRange, FileEntry const * File,
-        StringRef SearchPath, StringRef, clang::Module const *
-#if CLANG_VERSION >= 70000
-        , SrcMgr::CharacteristicKind
-#endif
-        ) override
+        StringRef SearchPath, StringRef, clang::Module const *, SrcMgr::CharacteristicKind) override
     {
         if (ignoreLocation(HashLoc)) {
             return;

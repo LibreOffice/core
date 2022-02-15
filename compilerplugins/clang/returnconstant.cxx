@@ -44,11 +44,11 @@ public:
                 continue;
             report(DiagnosticsEngine::Warning,
                    "Method only returns a single constant value %0, does it make sense?",
-                   compat::getBeginLoc(functionDecl))
+                   functionDecl->getBeginLoc())
                 << pair.second << functionDecl->getSourceRange();
             if (functionDecl != functionDecl->getCanonicalDecl())
                 report(DiagnosticsEngine::Note, "decl here",
-                       compat::getBeginLoc(functionDecl->getCanonicalDecl()))
+                       functionDecl->getCanonicalDecl()->getBeginLoc())
                     << functionDecl->getCanonicalDecl()->getSourceRange();
         }
     }
@@ -118,12 +118,11 @@ bool ReturnConstant::TraverseCXXMethodDecl(CXXMethodDecl* functionDecl)
         return true;
 
     // ignore LINK macro stuff
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(functionDecl))
-        || compiler.getSourceManager().isMacroArgExpansion(compat::getBeginLoc(functionDecl)))
+    if (compiler.getSourceManager().isMacroBodyExpansion(functionDecl->getBeginLoc())
+        || compiler.getSourceManager().isMacroArgExpansion(functionDecl->getBeginLoc()))
     {
-        StringRef name{ Lexer::getImmediateMacroName(compat::getBeginLoc(functionDecl),
-                                                     compiler.getSourceManager(),
-                                                     compiler.getLangOpts()) };
+        StringRef name{ Lexer::getImmediateMacroName(
+            functionDecl->getBeginLoc(), compiler.getSourceManager(), compiler.getLangOpts()) };
         if (name.find("IMPL_LINK") != StringRef::npos
             || name.find("IMPL_STATIC_LINK") != StringRef::npos
             || name.find("DECL_LINK") != StringRef::npos

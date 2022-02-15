@@ -104,10 +104,6 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
-#if CLANG_VERSION < 90000
-    else if (functionDecl->getClassScopeSpecializationPattern())
-        functionDecl = functionDecl->getClassScopeSpecializationPattern();
-#endif
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 
@@ -202,8 +198,8 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     // Get the expression contents.
     // This helps us find params which are always initialised with something like "OUString()".
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = compat::getBeginLoc(arg);
-    SourceLocation endLoc = compat::getEndLoc(arg);
+    SourceLocation startLoc = arg->getBeginLoc();
+    SourceLocation endLoc = arg->getEndLoc();
     const char *p1 = SM.getCharacterData( startLoc );
     const char *p2 = SM.getCharacterData( endLoc );
     if (!p1 || !p2 || (p2 - p1) < 0 || (p2 - p1) > 40) {
@@ -249,10 +245,6 @@ bool ConstantParam::VisitCallExpr(const CallExpr * callExpr) {
     // work our way back to the root definition for template methods
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
-#if CLANG_VERSION < 90000
-    else if (functionDecl->getClassScopeSpecializationPattern())
-        functionDecl = functionDecl->getClassScopeSpecializationPattern();
-#endif
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 

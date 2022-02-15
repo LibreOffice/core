@@ -70,7 +70,7 @@ bool WeakObject::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         return true;
 
     report(DiagnosticsEngine::Warning, "more than one copy of cppu::OWeakObject inherited",
-            compat::getBeginLoc(decl))
+            decl->getBeginLoc())
         << decl->getSourceRange();
     return true;
 }

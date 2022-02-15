@@ -9,6 +9,8 @@
 
 #ifndef LO_CLANG_SHARED_PLUGINS
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 #include "check.hxx"
 
@@ -83,7 +85,7 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
     SourceLocation leftLoc;
     auto const leftExpr = expr->getArg(0)->IgnoreParenImpCasts();
     if (isStringLiteral(leftExpr)) {
-        leftLoc = compat::getBeginLoc(leftExpr);
+        leftLoc = leftExpr->getBeginLoc();
     } else {
         CallExpr const * left = dyn_cast<CallExpr>(leftExpr);
         if (left == nullptr) {
@@ -101,7 +103,7 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
         {
             return true;
         }
-        leftLoc = compat::getBeginLoc(left->getArg(1));
+        leftLoc = left->getArg(1)->getBeginLoc();
     }
 
     // We add an extra " " in the TOOLS_WARN_EXCEPTION macro, which triggers this plugin
@@ -111,13 +113,13 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
                     compiler.getSourceManager().getImmediateMacroCallerLoc(
                         compiler.getSourceManager().getImmediateMacroCallerLoc(
                             compiler.getSourceManager().getImmediateMacroCallerLoc(
-                                compat::getBeginLoc(expr)))))),
+                                expr->getBeginLoc()))))),
             SRCDIR "/include/tools/diagnose_ex.h"))
         return true;
 
     StringRef name {
         getFilenameOfLocation(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))) };
+            compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc())) };
     if (loplugin::isSamePathname(
             name, SRCDIR "/sal/qa/rtl/oustringbuffer/test_oustringbuffer_assign.cxx")
         || loplugin::isSamePathname(
@@ -133,7 +135,7 @@ bool StringConcatLiterals::VisitCallExpr(CallExpr const * expr) {
         "replace '%0' between string literals with juxtaposition",
         op == nullptr ? expr->getExprLoc() : op->getOperatorLoc())
         << (oo == OverloadedOperatorKind::OO_Plus ? "+" : "<<")
-        << SourceRange(leftLoc, compat::getEndLoc(expr->getArg(1)));
+        << SourceRange(leftLoc, expr->getArg(1)->getEndLoc());
     return true;
 }
 

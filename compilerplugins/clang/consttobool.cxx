@@ -15,8 +15,6 @@
 
 #include "clang/Basic/Builtins.h"
 
-#include "config_clang.h"
-
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -87,10 +85,6 @@ public:
         return ret;
     }
 
-#if CLANG_VERSION < 110000
-    bool TraverseUnaryLNot(UnaryOperator* expr) { return TraverseUnaryOperator(expr); }
-#endif
-
     bool PreTraverseBinaryOperator(BinaryOperator* expr)
     {
         if (expr->getOpcode() == BO_LAnd)
@@ -120,10 +114,6 @@ public:
         }
         return ret;
     }
-
-#if CLANG_VERSION < 110000
-    bool TraverseBinLAnd(BinaryOperator* expr) { return TraverseBinaryOperator(expr); }
-#endif
 
     bool VisitImplicitCastExpr(ImplicitCastExpr const* expr)
     {

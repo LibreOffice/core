@@ -111,7 +111,7 @@ bool ChangeToolsGen::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
     if (auto unaryOp = dyn_cast<UnaryOperator>(parent))
     {
         if (!ChangeUnaryOperator(unaryOp, call, methodName))
-            report(DiagnosticsEngine::Warning, "Could not fix, unary", compat::getBeginLoc(call));
+            report(DiagnosticsEngine::Warning, "Could not fix, unary", call->getBeginLoc());
         return true;
     }
     auto binaryOp = dyn_cast<BinaryOperator>(parent);
@@ -130,7 +130,7 @@ bool ChangeToolsGen::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
         if (parent2 && isa<Expr>(parent2))
         {
             report(DiagnosticsEngine::Warning, "Could not fix, embedded assign",
-                   compat::getBeginLoc(call));
+                   call->getBeginLoc());
             return true;
         }
         // Check for
@@ -139,25 +139,25 @@ bool ChangeToolsGen::VisitCXXMemberCallExpr(CXXMemberCallExpr const* call)
             if (rhs->getOpcode() == BO_Assign)
             {
                 report(DiagnosticsEngine::Warning, "Could not fix, double assign",
-                       compat::getBeginLoc(call));
+                       call->getBeginLoc());
                 return true;
             }
         if (!ChangeAssignment(parent, methodName, setPrefix))
-            report(DiagnosticsEngine::Warning, "Could not fix, assign", compat::getBeginLoc(call));
+            report(DiagnosticsEngine::Warning, "Could not fix, assign", call->getBeginLoc());
         return true;
     }
     if (opcode == BO_AddAssign || opcode == BO_SubAssign)
     {
         if (!ChangeBinaryOperatorPlusMinus(binaryOp, call, methodName))
             report(DiagnosticsEngine::Warning, "Could not fix, assign-and-change",
-                   compat::getBeginLoc(call));
+                   call->getBeginLoc());
         return true;
     }
     else if (opcode == BO_RemAssign || opcode == BO_MulAssign || opcode == BO_DivAssign)
     {
         if (!ChangeBinaryOperatorOther(binaryOp, call, methodName, setPrefix))
             report(DiagnosticsEngine::Warning, "Could not fix, assign-and-change",
-                   compat::getBeginLoc(call));
+                   call->getBeginLoc());
         return true;
     }
     else
@@ -173,8 +173,8 @@ bool ChangeToolsGen::ChangeAssignment(Stmt const* parent, std::string const& met
     // and replace with
     //    aRect.SetLeft( ... );
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = SM.getExpansionLoc(compat::getBeginLoc(parent));
-    SourceLocation endLoc = SM.getExpansionLoc(compat::getEndLoc(parent));
+    SourceLocation startLoc = SM.getExpansionLoc(parent->getBeginLoc());
+    SourceLocation endLoc = SM.getExpansionLoc(parent->getEndLoc());
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     unsigned n = Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
@@ -201,8 +201,8 @@ bool ChangeToolsGen::ChangeBinaryOperatorPlusMinus(BinaryOperator const* binaryO
     // and replace with
     //    aRect.MoveLeft( ... );
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = SM.getExpansionLoc(compat::getBeginLoc(binaryOp));
-    SourceLocation endLoc = SM.getExpansionLoc(compat::getEndLoc(binaryOp));
+    SourceLocation startLoc = SM.getExpansionLoc(binaryOp->getBeginLoc());
+    SourceLocation endLoc = SM.getExpansionLoc(binaryOp->getEndLoc());
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     if (p2 < p1) // clang is misbehaving, appears to be macro constant related
@@ -228,7 +228,7 @@ bool ChangeToolsGen::ChangeBinaryOperatorPlusMinus(BinaryOperator const* binaryO
     if (newText == callText)
     {
         report(DiagnosticsEngine::Warning, "binaryop-plusminus regex match failed",
-               compat::getBeginLoc(call));
+               call->getBeginLoc());
         return false;
     }
 
@@ -245,8 +245,8 @@ bool ChangeToolsGen::ChangeBinaryOperatorOther(BinaryOperator const* binaryOp,
     // and replace with
     //    aRect.SetLeft( aRect.GetLeft() + ... );
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = SM.getExpansionLoc(compat::getBeginLoc(binaryOp));
-    SourceLocation endLoc = SM.getExpansionLoc(compat::getEndLoc(binaryOp));
+    SourceLocation startLoc = SM.getExpansionLoc(binaryOp->getBeginLoc());
+    SourceLocation endLoc = SM.getExpansionLoc(binaryOp->getEndLoc());
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     if (p2 < p1) // clang is misbehaving, appears to be macro constant related
@@ -284,7 +284,7 @@ bool ChangeToolsGen::ChangeBinaryOperatorOther(BinaryOperator const* binaryOp,
     if (newText == callText)
     {
         report(DiagnosticsEngine::Warning, "binaryop-other regex match failed %0",
-               compat::getBeginLoc(call))
+               call->getBeginLoc())
             << reString;
         return false;
     }
@@ -308,8 +308,8 @@ bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
     //    aRect.MoveLeft( 1 );
 
     SourceManager& SM = compiler.getSourceManager();
-    SourceLocation startLoc = SM.getExpansionLoc(compat::getBeginLoc(unaryOp));
-    SourceLocation endLoc = SM.getExpansionLoc(compat::getEndLoc(unaryOp));
+    SourceLocation startLoc = SM.getExpansionLoc(unaryOp->getBeginLoc());
+    SourceLocation endLoc = SM.getExpansionLoc(unaryOp->getEndLoc());
     const char* p1 = SM.getCharacterData(startLoc);
     const char* p2 = SM.getCharacterData(endLoc);
     if (p2 < p1) // clang is misbehaving, appears to be macro constant related
@@ -352,8 +352,7 @@ bool ChangeToolsGen::ChangeUnaryOperator(UnaryOperator const* unaryOp,
     }
     if (newText == callText)
     {
-        report(DiagnosticsEngine::Warning, "unaryop regex match failed %0",
-               compat::getBeginLoc(call))
+        report(DiagnosticsEngine::Warning, "unaryop regex match failed %0", call->getBeginLoc())
             << reString;
         return false;
     }

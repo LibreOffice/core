@@ -14,6 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include "config_clang.h"
 #include "plugin.hxx"
 
 /**
@@ -55,9 +56,9 @@ bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
     auto inner = *compound->body_begin();
     if (!isa<CompoundStmt>(inner))
         return true;
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(compound)))
+    if (compiler.getSourceManager().isMacroBodyExpansion(compound->getBeginLoc()))
         return true;
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(inner)))
+    if (compiler.getSourceManager().isMacroBodyExpansion(inner->getBeginLoc()))
         return true;
     if (containsPreprocessingConditionalInclusion(compound->getSourceRange())) {
         return true;
@@ -65,12 +66,12 @@ bool BlockBlock::VisitCompoundStmt(CompoundStmt const * compound)
     report(
         DiagnosticsEngine::Warning,
         "block directly inside block",
-         compat::getBeginLoc(compound))
+         compound->getBeginLoc())
         << compound->getSourceRange();
     report(
         DiagnosticsEngine::Note,
         "inner block here",
-         compat::getBeginLoc(inner))
+         inner->getBeginLoc())
         << inner->getSourceRange();
     return true;
 }
@@ -94,7 +95,7 @@ bool BlockBlock::VisitCaseStmt(CaseStmt const * caseStmt)
     report(
         DiagnosticsEngine::Warning,
         "block directly inside block",
-         compat::getBeginLoc(compoundStmt))
+         compoundStmt->getBeginLoc())
         << compoundStmt->getSourceRange();
     return true;
 }

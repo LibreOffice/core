@@ -17,6 +17,8 @@
 
 #include "clang/AST/Attr.h"
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 
 /**
@@ -126,10 +128,6 @@ MyFuncInfo MethodCycles::niceName(const FunctionDecl* functionDecl)
 {
     if (functionDecl->getInstantiatedFromMemberFunction())
         functionDecl = functionDecl->getInstantiatedFromMemberFunction();
-#if CLANG_VERSION < 90000
-    else if (functionDecl->getClassScopeSpecializationPattern())
-        functionDecl = functionDecl->getClassScopeSpecializationPattern();
-#endif
     else if (functionDecl->getTemplateInstantiationPattern())
         functionDecl = functionDecl->getTemplateInstantiationPattern();
 

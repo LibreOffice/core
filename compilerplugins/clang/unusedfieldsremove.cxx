@@ -12,6 +12,7 @@
 #include <cassert>
 #include <string>
 #include <iostream>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -120,7 +121,7 @@ bool UnusedFieldsRemove::VisitFieldDecl( const FieldDecl* fieldDecl )
         report(
             DiagnosticsEngine::Warning,
             "Could not remove unused field (" + niceName(fieldDecl) + ")",
-            compat::getBeginLoc(fieldDecl))
+            fieldDecl->getBeginLoc())
           << fieldDecl->getSourceRange();
     }
     return true;

@@ -41,7 +41,7 @@ bool DodgySwitch::VisitDefaultStmt(DefaultStmt const * defaultStmt)
     if (!IsParentSwitch(defaultStmt))
         report(
             DiagnosticsEngine::Warning, "default statement not directly under switch",
-            compat::getBeginLoc(defaultStmt))
+            defaultStmt->getBeginLoc())
           << defaultStmt->getSourceRange();
     return true;
 }
@@ -55,7 +55,7 @@ bool DodgySwitch::VisitCaseStmt(CaseStmt const * caseStmt)
         //parentStmt(parentStmt(caseStmt))->dump();
         report(
             DiagnosticsEngine::Warning, "case statement not directly under switch",
-            compat::getBeginLoc(caseStmt))
+            caseStmt->getBeginLoc())
           << caseStmt->getSourceRange();
     }
     return true;

@@ -15,6 +15,8 @@
 #include <fstream>
 #include <set>
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -85,10 +87,10 @@ bool TypedefParam::VisitFunctionDecl(FunctionDecl const* functionDecl)
         report(DiagnosticsEngine::Warning,
                "function return type at definition site does not match function param at "
                "declaration site, %0 vs %1",
-               compat::getBeginLoc(functionDecl))
+               functionDecl->getBeginLoc())
             << functionDecl->getReturnType() << canonicalDecl->getReturnType()
             << functionDecl->getSourceRange();
-        report(DiagnosticsEngine::Note, "declaration site here", compat::getBeginLoc(canonicalDecl))
+        report(DiagnosticsEngine::Note, "declaration site here", canonicalDecl->getBeginLoc())
             << canonicalDecl->getSourceRange();
     }
     return true;
@@ -105,7 +107,7 @@ bool TypedefParam::VisitCXXMethodDecl(CXXMethodDecl const* methodDecl)
         return true;
 
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(methodDecl)));
+        compiler.getSourceManager().getSpellingLoc(methodDecl->getBeginLoc()));
     // seems to be using typedefs as a form of documentation for method params
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/sw/source/filter/ww8/ww8scan.hxx"))
         return true;
@@ -145,11 +147,11 @@ bool TypedefParam::VisitCXXMethodDecl(CXXMethodDecl const* methodDecl)
                 report(DiagnosticsEngine::Warning,
                        "method return type does not match overridden method "
                        "%0 vs %1",
-                       compat::getBeginLoc(methodDecl))
+                       methodDecl->getBeginLoc())
                     << methodDecl->getReturnType() << superMethodDecl->getReturnType()
                     << methodDecl->getSourceRange();
                 report(DiagnosticsEngine::Note, "super-class method here",
-                       compat::getBeginLoc(superMethodDecl))
+                       superMethodDecl->getBeginLoc())
                     << superMethodDecl->getSourceRange();
             }
     }

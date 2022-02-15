@@ -9,8 +9,9 @@
 
 #ifndef LO_CLANG_SHARED_PLUGINS
 
+#include "config_clang.h"
+
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -40,7 +41,7 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
         return true;
     }
     StringRef aFileName = getFilenameOfLocation(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
+            compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Any.hxx")) {
         return true;
     }
@@ -53,7 +54,7 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
         return true;
     }
     if (auto expr2 = dyn_cast<MaterializeTemporaryExpr>(expr->getArg(1))) {
-        if (auto expr3 = dyn_cast<CXXBindTemporaryExpr>(compat::getSubExpr(expr2))) {
+        if (auto expr3 = dyn_cast<CXXBindTemporaryExpr>(expr2->getSubExpr())) {
             if (auto expr4 = dyn_cast<CallExpr>(expr3->getSubExpr())) {
                 if (loplugin::DeclCheck(expr4->getDirectCallee()).Function("makeAny").
                     Namespace("uno").Namespace("star").Namespace("sun").Namespace("com").GlobalNamespace()) {
@@ -67,7 +68,7 @@ bool UnoAny::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const * expr)
                 }
             }
         }
-        if (isa<CXXFunctionalCastExpr>(compat::getSubExpr(expr2))) {
+        if (isa<CXXFunctionalCastExpr>(expr2->getSubExpr())) {
             //expr->getArg(1)->dump();
             report(
                     DiagnosticsEngine::Warning,

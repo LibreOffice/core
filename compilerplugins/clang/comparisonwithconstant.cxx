@@ -13,8 +13,6 @@
 #include <fstream>
 #include <set>
 
-#include "config_clang.h"
-
 #include "compat.hxx"
 #include "plugin.hxx"
 
@@ -50,11 +48,6 @@ public:
         occurrence_ = saved;
         return ret;
     }
-
-#if CLANG_VERSION < 110000
-    bool TraverseBinEQ(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinNE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-#endif
 
     bool VisitBinaryOperator(const BinaryOperator *);
 private:

@@ -50,7 +50,7 @@ bool WeakBase::VisitCXXRecordDecl(CXXRecordDecl const* recordDecl)
         return true;
     }
     //    StringRef aFileName = getFilenameOfLocation(
-    //        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(fieldDecl)));
+    //        compiler.getSourceManager().getSpellingLoc(fieldDecl->getBeginLoc()));
 
     //    if (loplugin::hasPathnamePrefix(aFileName, SRCDIR "/chart2/source/"))
     //        return true;
@@ -108,7 +108,7 @@ bool WeakBase::VisitCXXRecordDecl(CXXRecordDecl const* recordDecl)
     {
         report(DiagnosticsEngine::Warning,
                "multiple copies of WeakBase, through inheritance paths %0",
-               compat::getBeginLoc(recordDecl))
+               recordDecl->getBeginLoc())
             << basePaths << recordDecl->getSourceRange();
     }
     return true;

@@ -10,9 +10,9 @@
  */
 #ifndef LO_CLANG_SHARED_PLUGINS
 
-#include "compat.hxx"
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include <iostream>
 #include <unordered_map>
 #include "clang/AST/CXXInheritance.h"
@@ -93,7 +93,7 @@ private:
 
 bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 {
-    auto beginLoc = compat::getBeginLoc(methodDecl);
+    auto beginLoc = methodDecl->getBeginLoc();
     if (!beginLoc.isValid() || ignoreLocation(beginLoc))
         return true;
 
@@ -140,11 +140,11 @@ bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         {
             auto methodDecl1 = it1->second;
             report(DiagnosticsEngine::Warning, "cannot override both endFastElement and EndElement",
-                   compat::getBeginLoc(methodDecl1))
+                   methodDecl1->getBeginLoc())
                 << methodDecl1->getSourceRange();
             auto methodDecl2 = it2->second;
             report(DiagnosticsEngine::Warning, "cannot override both endFastElement and EndElement",
-                   compat::getBeginLoc(methodDecl2))
+                   methodDecl2->getBeginLoc())
                 << methodDecl2->getSourceRange();
         }
     }
@@ -157,12 +157,12 @@ bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             auto methodDecl1 = it1->second;
             report(DiagnosticsEngine::Warning,
                    "cannot override both startFastElement and StartElement",
-                   compat::getBeginLoc(methodDecl1))
+                   methodDecl1->getBeginLoc())
                 << methodDecl1->getSourceRange();
             auto methodDecl2 = it2->second;
             report(DiagnosticsEngine::Warning,
                    "cannot override both startFastElement and StartElement",
-                   compat::getBeginLoc(methodDecl2))
+                   methodDecl2->getBeginLoc())
                 << methodDecl2->getSourceRange();
         }
     }
@@ -173,11 +173,11 @@ bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         {
             auto methodDecl1 = it1->second;
             report(DiagnosticsEngine::Warning, "cannot override both characters and Characters",
-                   compat::getBeginLoc(methodDecl1))
+                   methodDecl1->getBeginLoc())
                 << methodDecl1->getSourceRange();
             auto methodDecl2 = it2->second;
             report(DiagnosticsEngine::Warning, "cannot override both characters and Characters",
-                   compat::getBeginLoc(methodDecl2))
+                   methodDecl2->getBeginLoc())
                 << methodDecl2->getSourceRange();
         }
     }
@@ -188,12 +188,11 @@ bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
         auto compoundStmt = dyn_cast_or_null<CompoundStmt>(methodDecl->getBody());
         if (compoundStmt == nullptr || compoundStmt->size() > 0)
             return;
-        report(DiagnosticsEngine::Warning, "empty, should be removed",
-               compat::getBeginLoc(methodDecl))
+        report(DiagnosticsEngine::Warning, "empty, should be removed", methodDecl->getBeginLoc())
             << methodDecl->getSourceRange();
         auto canonicalDecl = methodDecl->getCanonicalDecl();
         if (canonicalDecl != methodDecl)
-            report(DiagnosticsEngine::Note, "definition here", compat::getBeginLoc(canonicalDecl))
+            report(DiagnosticsEngine::Note, "definition here", canonicalDecl->getBeginLoc())
                 << canonicalDecl->getSourceRange();
     };
     auto checkOnlyReturn = [&]() {
@@ -213,12 +212,11 @@ bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
             return;
         if (!isa<CXXNullPtrLiteralExpr>(cxxConstructExpr->getArg(0)->IgnoreImplicit()))
             return;
-        report(DiagnosticsEngine::Warning, "empty, should be removed",
-               compat::getBeginLoc(methodDecl))
+        report(DiagnosticsEngine::Warning, "empty, should be removed", methodDecl->getBeginLoc())
             << methodDecl->getSourceRange();
         auto canonicalDecl = methodDecl->getCanonicalDecl();
         if (canonicalDecl != methodDecl)
-            report(DiagnosticsEngine::Note, "definition here", compat::getBeginLoc(canonicalDecl))
+            report(DiagnosticsEngine::Note, "definition here", canonicalDecl->getBeginLoc())
                 << canonicalDecl->getSourceRange();
     };
 
@@ -238,7 +236,7 @@ bool XmlImport::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 
 bool XmlImport::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr)
 {
-    auto beginLoc = compat::getBeginLoc(callExpr);
+    auto beginLoc = callExpr->getBeginLoc();
     if (!beginLoc.isValid() || ignoreLocation(callExpr))
         return true;
 
@@ -263,7 +261,7 @@ bool XmlImport::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr)
          * Calling this superclass method from a subclass method will mess with the fallback logic in the superclass.
          */
         report(DiagnosticsEngine::Warning, "don't call this superclass method",
-               compat::getBeginLoc(callExpr))
+               callExpr->getBeginLoc())
             << callExpr->getSourceRange();
     }
     return true;
@@ -271,7 +269,7 @@ bool XmlImport::VisitCXXMemberCallExpr(const CXXMemberCallExpr* callExpr)
 
 bool XmlImport::VisitBinaryOperator(const BinaryOperator* binaryOp)
 {
-    auto beginLoc = compat::getBeginLoc(binaryOp);
+    auto beginLoc = binaryOp->getBeginLoc();
     if (!beginLoc.isValid() || ignoreLocation(binaryOp))
         return true;
     auto op = binaryOp->getOpcode();
@@ -281,7 +279,7 @@ bool XmlImport::VisitBinaryOperator(const BinaryOperator* binaryOp)
         if (!isUInt16(expr))
             report(DiagnosticsEngine::Warning,
                    "comparing XML_TOK enum to 'sal_uInt32', expected sal_uInt16",
-                   compat::getBeginLoc(binaryOp))
+                   binaryOp->getBeginLoc())
                 << binaryOp->getSourceRange();
     };
     if (isXmlTokEnum(binaryOp->getLHS()))
@@ -293,13 +291,14 @@ bool XmlImport::VisitBinaryOperator(const BinaryOperator* binaryOp)
 
 bool XmlImport::VisitSwitchStmt(const SwitchStmt* switchStmt)
 {
-    auto beginLoc = compat::getBeginLoc(switchStmt);
+    auto beginLoc = switchStmt->getBeginLoc();
     if (!beginLoc.isValid() || ignoreLocation(switchStmt))
         return true;
     if (isUInt16(switchStmt->getCond()))
         return true;
     // if the condition is an enum type, ignore this switch
-    auto condEnumType = compat::IgnoreImplicit(switchStmt->getCond())
+    auto condEnumType = switchStmt->getCond()
+                            ->IgnoreImplicit()
                             ->getType()
                             ->getUnqualifiedDesugaredType()
                             ->getAs<EnumType>();
@@ -315,7 +314,7 @@ bool XmlImport::VisitSwitchStmt(const SwitchStmt* switchStmt)
             continue;
         report(DiagnosticsEngine::Warning,
                "comparing XML_TOK enum to 'sal_uInt32', expected sal_uInt16",
-               compat::getBeginLoc(caseStmt))
+               caseStmt->getBeginLoc())
             << caseStmt->getSourceRange();
     }
     return true;
@@ -323,7 +322,7 @@ bool XmlImport::VisitSwitchStmt(const SwitchStmt* switchStmt)
 
 bool XmlImport::VisitCallExpr(const CallExpr* callExpr)
 {
-    auto beginLoc = compat::getBeginLoc(callExpr);
+    auto beginLoc = callExpr->getBeginLoc();
     if (!beginLoc.isValid() || ignoreLocation(callExpr))
         return true;
 
@@ -336,7 +335,7 @@ bool XmlImport::VisitCallExpr(const CallExpr* callExpr)
         return true;
     for (unsigned i = 0; i != callExpr->getNumArgs(); ++i)
     {
-        auto argExpr = compat::IgnoreImplicit(callExpr->getArg(i));
+        auto argExpr = callExpr->getArg(i)->IgnoreImplicit();
         if (!isXmlTokEnum(argExpr))
             continue;
         // if the condition is an enum type, ignore this switch
@@ -350,7 +349,7 @@ bool XmlImport::VisitCallExpr(const CallExpr* callExpr)
             return true;
         report(DiagnosticsEngine::Warning,
                "passing XML_TOK enum to 'sal_Int32', wrong param or XML token type",
-               compat::getBeginLoc(callExpr))
+               callExpr->getBeginLoc())
             << callExpr->getSourceRange();
     }
 
@@ -359,7 +358,7 @@ bool XmlImport::VisitCallExpr(const CallExpr* callExpr)
 
 bool XmlImport::isXmlTokEnum(const Expr* expr)
 {
-    expr = compat::IgnoreImplicit(expr);
+    expr = expr->IgnoreImplicit();
     // check that we have an unscoped enum type
     auto condEnumType = expr->getType()->getUnqualifiedDesugaredType()->getAs<EnumType>();
     if (!condEnumType || condEnumType->getDecl()->isScoped())
@@ -375,7 +374,7 @@ bool XmlImport::isXmlTokEnum(const Expr* expr)
 
 bool XmlImport::isUInt16(const Expr* expr)
 {
-    expr = compat::IgnoreImplicit(expr);
+    expr = expr->IgnoreImplicit();
     return isUInt16(expr->getType());
 }
 

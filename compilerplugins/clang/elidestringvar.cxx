@@ -14,7 +14,6 @@
 #include <map>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find cases where a variable of a OString/OUString type is initialized
@@ -62,8 +61,8 @@ public:
             {
                 continue;
             }
-            if (containsPreprocessingConditionalInclusion(SourceRange(
-                    compat::getBeginLoc(var.first), compat::getEndLoc(*var.second.singleUse))))
+            if (containsPreprocessingConditionalInclusion(
+                    SourceRange(var.first->getBeginLoc(), (*var.second.singleUse)->getEndLoc())))
             {
                 // This is not perfect, as additional uses can be hidden in conditional blocks that
                 // only start after the (would-be) single use (as was the case in

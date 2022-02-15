@@ -13,7 +13,6 @@
 #include <stack>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Find matches of
@@ -89,7 +88,7 @@ public:
                 castToVoid = true;
             }
         }
-        auto const t = compat::getObjectType(e);
+        auto const t = e->getObjectType();
         auto const tc = loplugin::TypeCheck(t);
         if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
               || tc.Class("OUString").Namespace("rtl").GlobalNamespace()

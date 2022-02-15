@@ -63,8 +63,7 @@ bool UnusedIndex::TraverseForStmt(ForStmt* stmt)
     auto ret = RecursiveASTVisitor::TraverseStmt(stmt->getBody());
 
     if (loopVarDecl && mFoundSet.erase(loopVarDecl) == 0)
-        report(DiagnosticsEngine::Warning, "loop variable not used",
-               compat::getBeginLoc(loopVarDecl))
+        report(DiagnosticsEngine::Warning, "loop variable not used", loopVarDecl->getBeginLoc())
             << loopVarDecl->getSourceRange();
 
     if (loopVarDecl)

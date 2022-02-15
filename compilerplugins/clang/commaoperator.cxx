@@ -13,8 +13,6 @@
 #include <fstream>
 #include <set>
 
-#include "config_clang.h"
-
 #include "plugin.hxx"
 
 /**
@@ -84,10 +82,6 @@ public:
         return ret;
     }
 
-#if CLANG_VERSION < 110000
-    bool TraverseBinComma(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-#endif
-
     bool VisitBinaryOperator(const BinaryOperator* );
 
 private:
@@ -110,11 +104,11 @@ bool CommaOperator::VisitBinaryOperator(const BinaryOperator* binaryOp)
     // winsock2.h (TODO: improve heuristic of determining that the whole
     // binaryOp is part of a single macro body expansion):
     if (compiler.getSourceManager().isMacroBodyExpansion(
-            compat::getBeginLoc(binaryOp))
+            binaryOp->getBeginLoc())
         && compiler.getSourceManager().isMacroBodyExpansion(
             binaryOp->getOperatorLoc())
         && compiler.getSourceManager().isMacroBodyExpansion(
-            compat::getEndLoc(binaryOp))
+            binaryOp->getEndLoc())
         && ignoreLocation(
             compiler.getSourceManager().getSpellingLoc(
                 binaryOp->getOperatorLoc())))

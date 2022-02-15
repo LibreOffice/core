@@ -16,7 +16,6 @@
 #include <set>
 
 #include <clang/AST/CXXInheritance.h>
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -77,7 +76,7 @@ bool UnnecessaryCatchThrow::VisitCXXTryStmt(CXXTryStmt const * tryStmt)
     }
 
     report( DiagnosticsEngine::Warning, "unnecessary catch and throw",
-            compat::getBeginLoc(catchStmt))
+            catchStmt->getBeginLoc())
             << catchStmt->getSourceRange();
     return true;
 }

@@ -15,6 +15,8 @@
 #include <fstream>
 #include <set>
 
+#include "config_clang.h"
+
 #include "check.hxx"
 #include "plugin.hxx"
 
@@ -53,7 +55,7 @@ bool ColorCheck::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
         return true;
 
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(constructExpr)));
+        compiler.getSourceManager().getSpellingLoc(constructExpr->getBeginLoc()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/tools/color.hxx"))
         return true;
 
@@ -71,7 +73,7 @@ bool ColorCheck::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
         if (!arg0->isValueDependent())
         {
             llvm::Optional<llvm::APSInt> xVal
-                = compat::getIntegerConstantExpr(arg0, compiler.getASTContext());
+                = arg0->getIntegerConstantExpr(compiler.getASTContext());
             if (xVal && *xVal > 0xffffff)
                 report(DiagnosticsEngine::Warning,
                        "Rather use the ColorTransparency or ColorAlpha version of this constructor",

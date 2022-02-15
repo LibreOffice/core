@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include "check.hxx"
 

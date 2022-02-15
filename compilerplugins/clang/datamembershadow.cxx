@@ -15,6 +15,7 @@
 #include <set>
 
 #include "plugin.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 
 /**
@@ -47,7 +48,7 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
         return true;
     }
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(fieldDecl)));
+        compiler.getSourceManager().getSpellingLoc(fieldDecl->getBeginLoc()));
 
     // FIXME complex stuff to fix later
 
@@ -99,13 +100,13 @@ bool DataMemberShadow::VisitFieldDecl(FieldDecl const * fieldDecl)
             sPath += baseCXXRecordDecl->getNameAsString();
             report(DiagnosticsEngine::Warning,
                     "data member %0 is shadowing member in superclass, through inheritance path %1",
-                    compat::getBeginLoc(fieldDecl))
+                    fieldDecl->getBeginLoc())
                 << fieldDecl->getName()
                 << sPath
                 << fieldDecl->getSourceRange();
             report(DiagnosticsEngine::Note,
                     "superclass member here",
-                    compat::getBeginLoc(baseFieldDecl))
+                    baseFieldDecl->getBeginLoc())
                 << baseFieldDecl->getSourceRange();
         }
         return false;
