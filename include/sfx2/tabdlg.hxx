@@ -197,6 +197,12 @@ protected:
 
     sal_uInt16          GetWhich( sal_uInt16 nSlot, bool bDeep = true ) const
                             { return pSet->GetPool()->GetWhich( nSlot, bDeep ); }
+    template<class T>
+    TypedWhichId<T> GetWhich( TypedWhichId<T> nSlot, bool bDeep = true ) const
+    {
+        return TypedWhichId<T>(GetWhich(sal_uInt16(nSlot), bDeep));
+    }
+
     const SfxPoolItem*  GetOldItem( const SfxItemSet& rSet, sal_uInt16 nSlot, bool bDeep = true );
     template<class T> const T* GetOldItem( const SfxItemSet& rSet, TypedWhichId<T> nSlot, bool bDeep = true )
     {
