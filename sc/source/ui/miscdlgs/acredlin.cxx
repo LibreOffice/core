@@ -315,7 +315,7 @@ bool ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 
     bool bFlag = false;
 
-    ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
+    ScRange aRef=pScChangeAction->GetBigRange().MakeRange(*pDoc);
     OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
@@ -367,7 +367,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendChangeAction(
 
     bool bFlag = false;
 
-    ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
+    ScRange aRef=pScChangeAction->GetBigRange().MakeRange(*pDoc);
     OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
@@ -517,7 +517,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::AppendFilteredAction(
 
     bool bFlag = false;
 
-    ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
+    ScRange aRef=pScChangeAction->GetBigRange().MakeRange(*pDoc);
     OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
@@ -628,7 +628,7 @@ std::unique_ptr<weld::TreeIter> ScAcceptChgDlg::InsertChangeActionContent(const 
 
     bool bFlag = false;
 
-    ScRange aRef=pScChangeAction->GetBigRange().MakeRange();
+    ScRange aRef=pScChangeAction->GetBigRange().MakeRange(*pDoc);
     OUString aUser=pScChangeAction->GetUser();
     DateTime aDateTime=pScChangeAction->GetDateTime();
 
@@ -1593,7 +1593,7 @@ IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl, Timer *, void)
         if (rBigRange.IsValid(*pDoc) && m_xDialog->has_toplevel_focus())
         {
             bool bSetCursor = i == nCount - 1;
-            pTabView->MarkRange(rBigRange.MakeRange(), bSetCursor, bContMark);
+            pTabView->MarkRange(rBigRange.MakeRange(*pDoc), bSetCursor, bContMark);
             bContMark = true;
         }
     }

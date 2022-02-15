@@ -20,11 +20,13 @@
 #pragma once
 
 #include "address.hxx"
+#include "document.hxx"
 
 const sal_Int32 nInt32Min = 0x80000000;
 const sal_Int32 nInt32Max = 0x7fffffff;
 
-class ScDocument;
+// This is used by change tracking. References there may be located also outside of the document
+// (see ScRefUpdate::Update()), and so it needs bigger range than ScAddress/ScRange.
 
 class ScBigAddress
 {
@@ -59,7 +61,7 @@ public:
                 { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
     bool IsValid( const ScDocument& rDoc ) const;
-    inline ScAddress    MakeAddress() const;
+    inline ScAddress    MakeAddress( const ScDocument& rDoc ) const;
 
     ScBigAddress&   operator=( const ScBigAddress& r )
                     { nCol = r.nCol; nRow = r.nRow; nTab = r.nTab; return *this; }
@@ -72,7 +74,7 @@ public:
                     { return !operator==( r ); }
 };
 
-inline ScAddress ScBigAddress::MakeAddress() const
+inline ScAddress ScBigAddress::MakeAddress( const ScDocument& rDoc ) const
 {
     SCCOL nColA;
     SCROW nRowA;
@@ -80,15 +82,15 @@ inline ScAddress ScBigAddress::MakeAddress() const
 
     if ( nCol < 0 )
         nColA = 0;
-    else if ( nCol > MAXCOL )
-        nColA = MAXCOL;
+    else if ( nCol > rDoc.MaxCol() )
+        nColA = rDoc.MaxCol();
     else
         nColA = static_cast<SCCOL>(nCol);
 
     if ( nRow < 0 )
         nRowA = 0;
-    else if ( nRow > MAXROW )
-        nRowA = MAXROW;
+    else if ( nRow > rDoc.MaxRow() )
+        nRowA = rDoc.MaxRow();
     else
         nRowA = static_cast<SCROW>(nRow);
 
@@ -132,9 +134,8 @@ public:
 
     bool    IsValid( const ScDocument& rDoc ) const
                 { return aStart.IsValid( rDoc ) && aEnd.IsValid( rDoc ); }
-    ScRange  MakeRange() const
-                    { return ScRange( aStart.MakeAddress(),
-                        aEnd.MakeAddress() ); }
+    ScRange  MakeRange( const ScDocument& rDoc ) const
+                { return ScRange( aStart.MakeAddress( rDoc ), aEnd.MakeAddress( rDoc ) ); }
 
     inline bool Contains( const ScBigAddress& ) const;    ///< is Address& in range?
     inline bool Contains( const ScBigRange& ) const;      ///< is Range& in range?
