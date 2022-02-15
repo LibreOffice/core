@@ -19,15 +19,10 @@
 #include <sys/file.h>
 #include <unistd.h>
 
-#include "config_clang.h"
-
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "check.hxx"
 
-#if CLANG_VERSION >= 110000
 #include "clang/AST/ParentMapContext.h"
-#endif
 
 /**
 Look for static vars that are only assigned to once, and never written to, they can be const.
@@ -175,7 +170,7 @@ void ConstVars::run()
         // Implement a marker that disables this plugins warning at a specific site
         if (sourceString.contains("loplugin:constvars:ignore"))
             continue;
-        report(DiagnosticsEngine::Warning, "var can be const", compat::getBeginLoc(v));
+        report(DiagnosticsEngine::Warning, "var can be const", v->getBeginLoc());
     }
 }
 
@@ -213,7 +208,7 @@ bool ConstVars::VisitVarDecl(const VarDecl* varDecl)
 
 bool ConstVars::VisitCXXForRangeStmt(const CXXForRangeStmt* forStmt)
 {
-    if (compat::getBeginLoc(forStmt).isValid() && ignoreLocation(forStmt))
+    if (forStmt->getBeginLoc().isValid() && ignoreLocation(forStmt))
         return true;
     const VarDecl* varDecl = forStmt->getLoopVariable();
     if (!varDecl)
@@ -491,11 +486,11 @@ void ConstVars::check(const VarDecl* varDecl, const Expr* memberExpr)
     if (bDump)
     {
         report(DiagnosticsEngine::Warning, "oh dear, what can the matter be? writtenTo=%0",
-               compat::getBeginLoc(memberExpr))
+               memberExpr->getBeginLoc())
             << bCannotBeConst << memberExpr->getSourceRange();
         if (parent)
         {
-            report(DiagnosticsEngine::Note, "parent over here", compat::getBeginLoc(parent))
+            report(DiagnosticsEngine::Note, "parent over here", parent->getBeginLoc())
                 << parent->getSourceRange();
             parent->dump();
         }

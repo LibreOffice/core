@@ -99,7 +99,7 @@ bool OptMove::VisitVarDecl(const VarDecl* varDecl)
     auto cons = dyn_cast<CXXConstructExpr>(varDecl->getInit());
     if (!cons || !cons->getConstructor()->isCopyConstructor())
         return true;
-    auto arg1 = dyn_cast<DeclRefExpr>(compat::IgnoreImplicit(cons->getArg(0)));
+    auto arg1 = dyn_cast<DeclRefExpr>(cons->getArg(0)->IgnoreImplicit());
     if (!arg1)
         return true;
     auto varDecl1 = dyn_cast<VarDecl>(arg1->getDecl());
@@ -120,8 +120,8 @@ bool OptMove::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* cxxOperatorCal
     auto op = cxxOperatorCallExpr->getOperator();
     if (op != OO_Equal)
         return true;
-    auto arg0 = dyn_cast<DeclRefExpr>(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(0)));
-    auto arg1 = dyn_cast<DeclRefExpr>(compat::IgnoreImplicit(cxxOperatorCallExpr->getArg(1)));
+    auto arg0 = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(0)->IgnoreImplicit());
+    auto arg1 = dyn_cast<DeclRefExpr>(cxxOperatorCallExpr->getArg(1)->IgnoreImplicit());
     if (!arg0 || !arg1)
         return true;
     auto varDecl0 = dyn_cast<VarDecl>(arg0->getDecl());

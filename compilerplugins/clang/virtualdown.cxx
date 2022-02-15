@@ -11,6 +11,7 @@
 #include <string>
 #include <iostream>
 #include <set>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include <fstream>
 

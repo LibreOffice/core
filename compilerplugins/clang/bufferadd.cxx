@@ -15,6 +15,7 @@
 
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 #include "clang/AST/StmtVisitor.h"
 
@@ -65,7 +66,7 @@ public:
                 && badMap.find(pair.first) == badMap.end())
                 report(DiagnosticsEngine::Warning,
                        "convert this append sequence into a *String + sequence",
-                       compat::getBeginLoc(pair.first))
+                       pair.first->getBeginLoc())
                     << pair.first->getSourceRange();
     }
 
@@ -290,7 +291,7 @@ bool BufferAdd::isMethodOkToMerge(CXXMemberCallExpr const* memberCall)
 
 Expr const* BufferAdd::ignore(Expr const* expr)
 {
-    return compat::IgnoreImplicit(compat::IgnoreImplicit(expr)->IgnoreParens());
+    return expr->IgnoreImplicit()->IgnoreParens()->IgnoreImplicit();
 }
 
 bool BufferAdd::isSideEffectFree(Expr const* expr)

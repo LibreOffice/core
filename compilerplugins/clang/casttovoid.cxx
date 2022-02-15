@@ -15,7 +15,6 @@
 #include "clang/AST/Attr.h"
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 namespace {
@@ -464,7 +463,7 @@ private:
             return nullptr;
         }
         if (compiler.getSourceManager().isMacroBodyExpansion(
-                compat::getBeginLoc(expr)))
+                expr->getBeginLoc()))
         {
             return nullptr;
         }
@@ -511,7 +510,7 @@ private:
         if (usage.firstConsumption != nullptr) {
             return;
         }
-        auto const loc = compat::getBeginLoc(dre);
+        auto const loc = dre->getBeginLoc();
         if (compiler.getSourceManager().isMacroArgExpansion(loc)
             && (Lexer::getImmediateMacroNameForDiagnostics(
                     loc, compiler.getSourceManager(), compiler.getLangOpts())

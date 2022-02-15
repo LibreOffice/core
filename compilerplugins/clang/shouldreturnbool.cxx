@@ -11,7 +11,10 @@
 #include <set>
 #include <iostream>
 
+#include "config_clang.h"
+
 #include "check.hxx"
+#include "compat.hxx"
 #include "plugin.hxx"
 #include "functionaddress.hxx"
 
@@ -111,12 +114,12 @@ public:
                 continue;
             report(DiagnosticsEngine::Warning,
                    "only returning one or zero is an indication you want to return bool",
-                   compat::getBeginLoc(functionDecl))
+                   functionDecl->getBeginLoc())
                 << functionDecl->getSourceRange();
             if (canonicalDecl->getLocation() != functionDecl->getLocation())
             {
                 report(DiagnosticsEngine::Note, "canonical function declaration here",
-                       compat::getBeginLoc(canonicalDecl))
+                       canonicalDecl->getBeginLoc())
                     << canonicalDecl->getSourceRange();
             }
         }

@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <string>
 
+#include <clang/AST/ParentMapContext.h>
 #include <clang/Basic/FileManager.h>
 #include <clang/Lex/Lexer.h>
 
@@ -23,10 +24,6 @@
 #include "compat.hxx"
 #include "pluginhandler.hxx"
 #include "check.hxx"
-
-#if CLANG_VERSION >= 110000
-#include "clang/AST/ParentMapContext.h"
-#endif
 
 /*
 Base classes for plugin actions.
@@ -38,7 +35,7 @@ namespace {
 
 Expr const * skipImplicit(Expr const * expr) {
     if (auto const e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = compat::getSubExpr(e)->IgnoreImpCasts();
+        expr = e->getSubExpr()->IgnoreImpCasts();
     }
     if (auto const e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
         expr = e->getSubExpr();

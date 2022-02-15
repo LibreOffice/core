@@ -86,7 +86,7 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
 
 CXXConstructExpr const * lookForCXXConstructExpr(Expr const * expr) {
     if (auto e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
-        expr = compat::getSubExpr(e);
+        expr = e->getSubExpr();
     }
     if (auto e = dyn_cast<CXXFunctionalCastExpr>(expr)) {
         expr = e->getSubExpr();
@@ -118,56 +118,56 @@ public:
     void run() override;
 
     bool TraverseFunctionDecl(FunctionDecl * decl) {
-        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        returnTypes_.push(decl->getDeclaredReturnType());
         auto const ret = RecursiveASTVisitor::TraverseFunctionDecl(decl);
         assert(!returnTypes_.empty());
-        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        assert(returnTypes_.top() == decl->getDeclaredReturnType());
         returnTypes_.pop();
         return ret;
     }
 
     bool TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl * decl) {
-        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        returnTypes_.push(decl->getDeclaredReturnType());
         auto const ret = RecursiveASTVisitor::TraverseCXXDeductionGuideDecl(
             decl);
         assert(!returnTypes_.empty());
-        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        assert(returnTypes_.top() == decl->getDeclaredReturnType());
         returnTypes_.pop();
         return ret;
     }
 
     bool TraverseCXXMethodDecl(CXXMethodDecl * decl) {
-        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        returnTypes_.push(decl->getDeclaredReturnType());
         auto const ret = RecursiveASTVisitor::TraverseCXXMethodDecl(decl);
         assert(!returnTypes_.empty());
-        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        assert(returnTypes_.top() == decl->getDeclaredReturnType());
         returnTypes_.pop();
         return ret;
     }
 
     bool TraverseCXXConstructorDecl(CXXConstructorDecl * decl) {
-        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        returnTypes_.push(decl->getDeclaredReturnType());
         auto const ret = RecursiveASTVisitor::TraverseCXXConstructorDecl(decl);
         assert(!returnTypes_.empty());
-        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        assert(returnTypes_.top() == decl->getDeclaredReturnType());
         returnTypes_.pop();
         return ret;
     }
 
     bool TraverseCXXDestructorDecl(CXXDestructorDecl * decl) {
-        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        returnTypes_.push(decl->getDeclaredReturnType());
         auto const ret = RecursiveASTVisitor::TraverseCXXDestructorDecl(decl);
         assert(!returnTypes_.empty());
-        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        assert(returnTypes_.top() == decl->getDeclaredReturnType());
         returnTypes_.pop();
         return ret;
     }
 
     bool TraverseCXXConversionDecl(CXXConversionDecl * decl) {
-        returnTypes_.push(compat::getDeclaredReturnType(decl));
+        returnTypes_.push(decl->getDeclaredReturnType());
         auto const ret = RecursiveASTVisitor::TraverseCXXConversionDecl(decl);
         assert(!returnTypes_.empty());
-        assert(returnTypes_.top() == compat::getDeclaredReturnType(decl));
+        assert(returnTypes_.top() == decl->getDeclaredReturnType());
         returnTypes_.pop();
         return ret;
     }
@@ -424,7 +424,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         // u.equalsIngoreAsciiCase("foo"):
 
         auto file = getFilenameOfLocation(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
+            compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc()));
         if (loplugin::isSamePathname(
                 file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
         {
@@ -442,7 +442,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         // u.equalsIgnoreAsciiCaseAsciiL("foo", 3) ->
         // u.equalsIngoreAsciiCase("foo"):
         auto file = getFilenameOfLocation(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
+            compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc()));
         if (loplugin::isSamePathname(
                 file, SRCDIR "/sal/qa/rtl/strings/test_oustring_compare.cxx"))
         {
@@ -816,7 +816,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 // b.append("foo", 3) -> b.append("foo"):
                 auto file = getFilenameOfLocation(
                     compiler.getSourceManager().getSpellingLoc(
-                        compat::getBeginLoc(expr)));
+                        expr->getBeginLoc()));
                 if (loplugin::isSamePathname(
                         file,
                         SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx"))
@@ -1067,7 +1067,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
             for (auto i(argsBeg); i != argsEnd; ++i) {
                 Expr const * e = (*i)->IgnoreParenImpCasts();
                 if (isa<MaterializeTemporaryExpr>(e)) {
-                    e = compat::getSubExpr(cast<MaterializeTemporaryExpr>(e))
+                    e = cast<MaterializeTemporaryExpr>(e)->getSubExpr()
                         ->IgnoreParenImpCasts();
                 }
                 if (isa<CXXFunctionalCastExpr>(e)) {
@@ -1173,7 +1173,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                     auto file = getFilenameOfLocation(
                                             compiler.getSourceManager()
                                             .getSpellingLoc(
-                                                compat::getBeginLoc(expr)));
+                                                expr->getBeginLoc()));
                                     if (loplugin::isSamePathname(
                                             file,
                                             (SRCDIR
@@ -1186,7 +1186,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                         return true;
                                     }
                                 }
-                                auto loc = compat::getBeginLoc(expr->getArg(0));
+                                auto loc = expr->getArg(0)->getBeginLoc();
                                 while (compiler.getSourceManager()
                                        .isMacroArgExpansion(loc))
                                 {
@@ -1314,7 +1314,7 @@ bool StringConstant::VisitReturnStmt(ReturnStmt const * stmt) {
     {
         return true;
     }
-    report(DiagnosticsEngine::Warning, "elide constructor call", compat::getBeginLoc(e1))
+    report(DiagnosticsEngine::Warning, "elide constructor call", e1->getBeginLoc())
         << e1->getSourceRange();
     return true;
 }
@@ -2034,7 +2034,7 @@ void StringConstant::handleStringCtor(
     }
     //TODO: cont, emb, trm
     if (rewriter != nullptr) {
-        auto loc1 = compat::getBeginLoc(e3);
+        auto loc1 = e3->getBeginLoc();
         auto range = e3->getParenOrBraceRange();
         if (loc1.isFileID() && range.getBegin().isFileID()
             && range.getEnd().isFileID())

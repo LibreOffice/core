@@ -17,7 +17,6 @@
 #include <clang/AST/CXXInheritance.h>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -120,7 +119,7 @@ bool RefAssign::VisitBinaryOperator(BinaryOperator const* binaryOp)
     binaryOp->dump();
     report(DiagnosticsEngine::Warning,
            "assigning a %0 to a var of type %1 probably does not do what you think",
-           compat::getBeginLoc(binaryOp))
+           binaryOp->getBeginLoc())
         << rhsType << lhsType << binaryOp->getSourceRange();
     return true;
 }

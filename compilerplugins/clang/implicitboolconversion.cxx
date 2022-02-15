@@ -17,8 +17,6 @@
 
 #include "clang/Basic/Builtins.h"
 
-#include "config_clang.h"
-
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -32,7 +30,7 @@ Expr const * ignoreParenAndTemporaryMaterialization(Expr const * expr) {
         if (e == nullptr) {
             return expr;
         }
-        expr = compat::getSubExpr(e);
+        expr = e->getSubExpr();
     }
 }
 
@@ -253,26 +251,7 @@ public:
 
     bool TraverseBinaryOperator(BinaryOperator * expr);
 
-#if CLANG_VERSION < 110000
-    bool TraverseBinLT(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinLE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinGT(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinGE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinEQ(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinNE(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinAssign(BinaryOperator * expr) { return TraverseBinaryOperator(expr); }
-#endif
-
     bool TraverseCompoundAssignOperator(CompoundAssignOperator * expr);
-
-#if CLANG_VERSION < 110000
-    bool TraverseBinAndAssign(CompoundAssignOperator * expr)
-    { return TraverseCompoundAssignOperator(expr); }
-    bool TraverseBinOrAssign(CompoundAssignOperator * expr)
-    { return TraverseCompoundAssignOperator(expr); }
-    bool TraverseBinXorAssign(CompoundAssignOperator * expr)
-    { return TraverseCompoundAssignOperator(expr); }
-#endif
 
     bool TraverseInitListExpr(InitListExpr * expr);
 
@@ -613,7 +592,7 @@ bool ImplicitBoolConversion::TraverseCompoundAssignOperator(CompoundAssignOperat
             {
                 report(
                     DiagnosticsEngine::Warning, "mix of %0 and %1 in operator %2",
-                    compat::getBeginLoc(expr->getRHS()))
+                    expr->getRHS()->getBeginLoc())
                     << expr->getLHS()->getType()
                     << expr->getRHS()->IgnoreParenImpCasts()->getType()
                     << expr->getOpcodeStr()
@@ -729,7 +708,7 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
                 DiagnosticsEngine::Warning,
                 ("explicit conversion (%0) from %1 to %2 implicitly cast back"
                  " to %3"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << sub->getCastKindName() << subsub->getType() << sub->getType()
                 << expr->getType() << expr->getSourceRange();
             return true;
@@ -746,7 +725,7 @@ bool ImplicitBoolConversion::VisitImplicitCastExpr(
             report(
                 DiagnosticsEngine::Warning,
                 "implicit conversion (%0) of call argument from %1 to %2",
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << expr->getCastKindName() << expr->getSubExpr()->getType()
                 << expr->getType() << expr->getSourceRange();
             return true;
@@ -761,7 +740,7 @@ bool ImplicitBoolConversion::VisitMaterializeTemporaryExpr(
     if (ignoreLocation(expr)) {
         return true;
     }
-    if (auto const sub = dyn_cast<ExplicitCastExpr>(compat::getSubExpr(expr))) {
+    if (auto const sub = dyn_cast<ExplicitCastExpr>(expr->getSubExpr())) {
         auto const subsub = compat::getSubExprAsWritten(sub);
         if (subsub->getType().IgnoreParens() == expr->getType().IgnoreParens()
             && isBool(subsub))
@@ -770,7 +749,7 @@ bool ImplicitBoolConversion::VisitMaterializeTemporaryExpr(
                 DiagnosticsEngine::Warning,
                 ("explicit conversion (%0) from %1 to %2 implicitly converted"
                  " back to %3"),
-                compat::getBeginLoc(expr))
+                expr->getBeginLoc())
                 << sub->getCastKindName() << subsub->getType() << sub->getType()
                 << expr->getType() << expr->getSourceRange();
             return true;
@@ -895,7 +874,7 @@ void ImplicitBoolConversion::reportWarning(ImplicitCastExpr const * expr) {
         }
         report(
             DiagnosticsEngine::Warning,
-            "implicit conversion (%0) from %1 to %2", compat::getBeginLoc(expr))
+            "implicit conversion (%0) from %1 to %2", expr->getBeginLoc())
             << expr->getCastKindName() << expr->getSubExprAsWritten()->getType()
             << expr->getType() << expr->getSourceRange();
     }

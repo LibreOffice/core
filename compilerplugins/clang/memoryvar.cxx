@@ -13,6 +13,7 @@
 #include <map>
 #include <set>
 
+#include "config_clang.h"
 #include "plugin.hxx"
 #include "clang/AST/CXXInheritance.h"
 

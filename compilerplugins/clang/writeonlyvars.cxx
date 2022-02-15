@@ -22,12 +22,9 @@
 #include "config_clang.h"
 
 #include "plugin.hxx"
-#include "compat.hxx"
 #include "check.hxx"
 
-#if CLANG_VERSION >= 110000
 #include "clang/AST/ParentMapContext.h"
-#endif
 
 /**
   Finds variables that are effectively write-only.
@@ -484,18 +481,16 @@ void WriteOnlyVars::run()
             bool read = readFromSet.find(v) != readFromSet.end();
             bool write = writeToSet.find(v) != writeToSet.end();
             if (!read && write)
-                report(DiagnosticsEngine::Warning, "write-only %0", compat::getBeginLoc(v.varDecl))
+                report(DiagnosticsEngine::Warning, "write-only %0", v.varDecl->getBeginLoc())
                     << v.varName;
         }
     }
     else
     {
         for (const MyVarInfo& s : readFromSet)
-            report(DiagnosticsEngine::Warning, "read %0", compat::getBeginLoc(s.varDecl))
-                << s.varName;
+            report(DiagnosticsEngine::Warning, "read %0", s.varDecl->getBeginLoc()) << s.varName;
         for (const MyVarInfo& s : writeToSet)
-            report(DiagnosticsEngine::Warning, "write %0", compat::getBeginLoc(s.varDecl))
-                << s.varName;
+            report(DiagnosticsEngine::Warning, "write %0", s.varDecl->getBeginLoc()) << s.varName;
     }
 }
 
@@ -550,9 +545,9 @@ bool WriteOnlyVars::VisitVarDecl(const VarDecl* varDecl)
         return true;
     if (!compiler.getSourceManager().isInMainFile(varDecl->getLocation()))
         return true;
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(varDecl)))
+    if (compiler.getSourceManager().isMacroBodyExpansion(varDecl->getBeginLoc()))
         return true;
-    if (compiler.getSourceManager().isMacroArgExpansion(compat::getBeginLoc(varDecl)))
+    if (compiler.getSourceManager().isMacroArgExpansion(varDecl->getBeginLoc()))
         return true;
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(compiler.getSourceManager().getSpellingLoc(varDecl->getLocation())))
@@ -763,10 +758,7 @@ void WriteOnlyVars::checkIfReadFrom(const VarDecl* varDecl, const Expr* memberEx
                  || isa<CXXUnresolvedConstructExpr>(parent) || isa<CompoundStmt>(parent)
                  || isa<LabelStmt>(parent) || isa<CXXForRangeStmt>(parent)
                  || isa<CXXTypeidExpr>(parent) || isa<DefaultStmt>(parent)
-                 || isa<GCCAsmStmt>(parent) || isa<VAArgExpr>(parent)
-#if CLANG_VERSION >= 80000
-                 || isa<ConstantExpr>(parent)
-#endif
+                 || isa<GCCAsmStmt>(parent) || isa<VAArgExpr>(parent) || isa<ConstantExpr>(parent)
                  || isa<CXXDefaultArgExpr>(parent) || isa<LambdaExpr>(parent))
         {
             break;
@@ -782,9 +774,9 @@ void WriteOnlyVars::checkIfReadFrom(const VarDecl* varDecl, const Expr* memberEx
     if (bDump)
     {
         report(DiagnosticsEngine::Warning, "oh dear, what can the matter be?",
-               compat::getBeginLoc(memberExpr))
+               memberExpr->getBeginLoc())
             << memberExpr->getSourceRange();
-        report(DiagnosticsEngine::Note, "parent over here", compat::getBeginLoc(parent))
+        report(DiagnosticsEngine::Note, "parent over here", parent->getBeginLoc())
             << parent->getSourceRange();
         parent->dump();
         memberExpr->dump();
@@ -975,12 +967,9 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
                  || isa<UnaryExprOrTypeTraitExpr>(parent) || isa<CXXUnresolvedConstructExpr>(parent)
                  || isa<CompoundStmt>(parent) || isa<LabelStmt>(parent)
                  || isa<CXXForRangeStmt>(parent) || isa<CXXTypeidExpr>(parent)
-                 || isa<DefaultStmt>(parent)
-#if CLANG_VERSION >= 80000
-                 || isa<ConstantExpr>(parent)
-#endif
-                 || isa<GCCAsmStmt>(parent) || isa<VAArgExpr>(parent)
-                 || isa<CXXDefaultArgExpr>(parent) || isa<LambdaExpr>(parent))
+                 || isa<DefaultStmt>(parent) || isa<ConstantExpr>(parent) || isa<GCCAsmStmt>(parent)
+                 || isa<VAArgExpr>(parent) || isa<CXXDefaultArgExpr>(parent)
+                 || isa<LambdaExpr>(parent))
         {
             break;
         }
@@ -995,11 +984,11 @@ void WriteOnlyVars::checkIfWrittenTo(const VarDecl* varDecl, const Expr* memberE
     if (bDump)
     {
         report(DiagnosticsEngine::Warning, "oh dear2, what can the matter be? writtenTo=%0",
-               compat::getBeginLoc(memberExpr))
+               memberExpr->getBeginLoc())
             << bPotentiallyWrittenTo << memberExpr->getSourceRange();
         if (parent)
         {
-            report(DiagnosticsEngine::Note, "parent over here", compat::getBeginLoc(parent))
+            report(DiagnosticsEngine::Note, "parent over here", parent->getBeginLoc())
                 << parent->getSourceRange();
             parent->dump();
         }

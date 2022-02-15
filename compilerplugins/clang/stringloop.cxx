@@ -9,6 +9,7 @@
 
 #include "check.hxx"
 #include "plugin.hxx"
+#include "config_clang.h"
 #include <vector>
 
 /** Look for OUString/OString being appended to inside a loop, where OUStringBuffer/OStringBuffer would be a better idea
@@ -256,9 +257,9 @@ bool StringLoop::VisitCallExpr(CallExpr const* callExpr)
             return true;
         report(DiagnosticsEngine::Warning,
                "appending to OUString in loop, rather use OUStringBuffer",
-               compat::getBeginLoc(operatorCallExpr))
+               operatorCallExpr->getBeginLoc())
             << operatorCallExpr->getSourceRange();
-        report(DiagnosticsEngine::Note, "field here", compat::getBeginLoc(fieldDecl))
+        report(DiagnosticsEngine::Note, "field here", fieldDecl->getBeginLoc())
             << fieldDecl->getSourceRange();
     }
     else if (auto declRefExpr = dyn_cast<DeclRefExpr>(callExpr->getArg(0)))
@@ -275,9 +276,9 @@ bool StringLoop::VisitCallExpr(CallExpr const* callExpr)
                 return true;
             report(DiagnosticsEngine::Warning,
                    "appending to OUString in loop, rather use OUStringBuffer",
-                   compat::getBeginLoc(operatorCallExpr))
+                   operatorCallExpr->getBeginLoc())
                 << operatorCallExpr->getSourceRange();
-            report(DiagnosticsEngine::Note, "var here", compat::getBeginLoc(varDecl))
+            report(DiagnosticsEngine::Note, "var here", varDecl->getBeginLoc())
                 << varDecl->getSourceRange();
         }
     }

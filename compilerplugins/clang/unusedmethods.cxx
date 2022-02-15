@@ -17,6 +17,8 @@
 
 #include "clang/AST/Attr.h"
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 
 /**
@@ -144,10 +146,6 @@ MyFuncInfo UnusedMethods::niceName(const FunctionDecl* functionDecl)
     {
         if (functionDecl->getInstantiatedFromMemberFunction())
             functionDecl = functionDecl->getInstantiatedFromMemberFunction();
-#if CLANG_VERSION < 90000
-        else if (functionDecl->getClassScopeSpecializationPattern())
-            functionDecl = functionDecl->getClassScopeSpecializationPattern();
-#endif
         else if (functionDecl->getTemplateInstantiationPattern())
             functionDecl = functionDecl->getTemplateInstantiationPattern();
         else
@@ -262,7 +260,7 @@ void UnusedMethods::logCallToRootMethods(const FunctionDecl* functionDecl, std::
     {
         while (functionDecl->getTemplateInstantiationPattern())
             functionDecl = functionDecl->getTemplateInstantiationPattern();
-        if (functionDecl->getLocation().isValid() && !ignoreLocation( compat::getBeginLoc(functionDecl) )
+        if (functionDecl->getLocation().isValid() && !ignoreLocation( functionDecl->getBeginLoc() )
              && !functionDecl->isExternC())
             funcSet.insert(niceName(functionDecl));
     }
@@ -307,7 +305,7 @@ gotfunc:
     {
         const FunctionDecl* parentFunctionOfCallSite = getParentFunctionDecl(expr);
         if (parentFunctionOfCallSite != calleeFunctionDecl) {
-            if (!parentFunctionOfCallSite || !ignoreLocation(compat::getBeginLoc(parentFunctionOfCallSite))) {
+            if (!parentFunctionOfCallSite || !ignoreLocation(parentFunctionOfCallSite->getBeginLoc())) {
                 calledFromOutsideSet.insert(niceName(calleeFunctionDecl));
             }
         }
@@ -347,7 +345,7 @@ bool UnusedMethods::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
     const CXXConstructorDecl* constructorDecl = constructExpr->getConstructor();
     constructorDecl = constructorDecl->getCanonicalDecl();
 
-    if (!constructorDecl->getLocation().isValid() || ignoreLocation(compat::getBeginLoc(constructorDecl))) {
+    if (!constructorDecl->getLocation().isValid() || ignoreLocation(constructorDecl->getBeginLoc())) {
         return true;
     }
 
@@ -378,7 +376,7 @@ bool UnusedMethods::VisitFunctionDecl( const FunctionDecl* functionDecl )
     {
         return true;
     }
-    if (!canonicalFunctionDecl->getLocation().isValid() || ignoreLocation(compat::getBeginLoc(canonicalFunctionDecl))) {
+    if (!canonicalFunctionDecl->getLocation().isValid() || ignoreLocation(canonicalFunctionDecl->getBeginLoc())) {
         return true;
     }
     // ignore method overrides, since the call will show up as being directed to the root method
@@ -408,7 +406,7 @@ bool UnusedMethods::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     {
         const FunctionDecl* parentFunctionOfCallSite = getParentFunctionDecl(declRefExpr);
         if (parentFunctionOfCallSite != functionDecl) {
-            if (!parentFunctionOfCallSite || !ignoreLocation(compat::getBeginLoc(parentFunctionOfCallSite))) {
+            if (!parentFunctionOfCallSite || !ignoreLocation(parentFunctionOfCallSite->getBeginLoc())) {
                 calledFromOutsideSet.insert(niceName(functionDecl));
             }
         }

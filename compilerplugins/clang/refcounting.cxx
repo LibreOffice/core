@@ -12,6 +12,7 @@
 
 #include "check.hxx"
 #include "plugin.hxx"
+#include "config_clang.h"
 #include "clang/AST/CXXInheritance.h"
 
 /**
@@ -406,7 +407,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             DiagnosticsEngine::Warning,
             ("Temporary object of SvRefBase subclass %0 being directly stack"
              " managed, should be managed via tools::SvRef"),
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << t.getUnqualifiedType() << expr->getSourceRange();
     } else if (containsSalhelperReferenceObjectSubclass(t.getTypePtr())) {
         report(
@@ -414,7 +415,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             ("Temporary object of salhelper::SimpleReferenceObject subclass %0"
              " being directly stack managed, should be managed via"
              " rtl::Reference"),
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << t.getUnqualifiedType() << expr->getSourceRange();
     } else if (containsXInterfaceSubclass(t)) {
         report(
@@ -422,7 +423,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             ("Temporary object of css::uno::XInterface subclass %0 being"
              " directly stack managed, should be managed via"
              " css::uno::Reference"),
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << t.getUnqualifiedType() << expr->getSourceRange();
     } else if (containsOWeakObjectSubclass(t)) {
         report(
@@ -430,7 +431,7 @@ bool RefCounting::visitTemporaryObjectExpr(Expr const * expr) {
             ("Temporary object of cppu::OWeakObject subclass %0 being"
              " directly stack managed, should be managed via"
              " css::uno::Reference"),
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << t.getUnqualifiedType() << expr->getSourceRange();
     }
     return true;
@@ -501,7 +502,7 @@ bool RefCounting::VisitCXXDeleteExpr(const CXXDeleteExpr * cxxDeleteExpr)
     if (ignoreLocation(cxxDeleteExpr))
         return true;
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(cxxDeleteExpr)));
+        compiler.getSourceManager().getSpellingLoc(cxxDeleteExpr->getBeginLoc()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/cppuhelper/source/weak.cxx"))
         return true;
 
@@ -516,7 +517,7 @@ bool RefCounting::VisitCXXDeleteExpr(const CXXDeleteExpr * cxxDeleteExpr)
         report(
             DiagnosticsEngine::Warning,
             "cppu::OWeakObject subclass %0 being deleted via delete, should be managed via rtl::Reference",
-            compat::getBeginLoc(cxxDeleteExpr))
+            cxxDeleteExpr->getBeginLoc())
             << pointeeType
             << cxxDeleteExpr->getSourceRange();
     }
@@ -609,7 +610,7 @@ bool RefCounting::VisitReturnStmt(const ReturnStmt * returnStmt) {
 
     if (!returnStmt->getRetValue())
         return true;
-    auto cxxNewExpr = dyn_cast<CXXNewExpr>(compat::IgnoreImplicit(returnStmt->getRetValue()));
+    auto cxxNewExpr = dyn_cast<CXXNewExpr>(returnStmt->getRetValue()->IgnoreImplicit());
     if (!cxxNewExpr)
         return true;
 
@@ -622,7 +623,7 @@ bool RefCounting::VisitReturnStmt(const ReturnStmt * returnStmt) {
         report(
             DiagnosticsEngine::Warning,
             "new object of cppu::OWeakObject subclass %0 being returned via raw pointer, should be returned by via rtl::Reference",
-            compat::getBeginLoc(returnStmt))
+            returnStmt->getBeginLoc())
             << qt
             << returnStmt->getSourceRange();
     }
@@ -679,10 +680,10 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
 
     if (varDecl->getType()->isPointerType() && varDecl->getInit())
     {
-        auto newExpr = dyn_cast<CXXNewExpr>(compat::IgnoreImplicit(varDecl->getInit()));
+        auto newExpr = dyn_cast<CXXNewExpr>(varDecl->getInit()->IgnoreImplicit());
         if (newExpr)
         {
-            StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(varDecl)));
+            StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(varDecl->getBeginLoc()));
             if (loplugin::isSamePathname(fileName, SRCDIR "/cppuhelper/source/component_context.cxx"))
                 return true;
             auto pointeeType = varDecl->getType()->getPointeeType();
@@ -697,7 +698,7 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
         if (isCastingReference(varDecl->getInit()))
         {
             // TODO false+ code
-            StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(varDecl)));
+            StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(varDecl->getBeginLoc()));
             if (loplugin::isSamePathname(fileName, SRCDIR "/sw/source/core/unocore/unotbl.cxx"))
                 return true;
             auto pointeeType = varDecl->getType()->getPointeeType();
@@ -720,7 +721,7 @@ bool RefCounting::VisitVarDecl(const VarDecl * varDecl) {
 */
 bool RefCounting::isCastingReference(const Expr* expr)
 {
-    expr = compat::IgnoreImplicit(expr);
+    expr = expr->IgnoreImplicit();
     auto castExpr = dyn_cast<CastExpr>(expr);
     if (!castExpr)
         return false;
@@ -733,7 +734,7 @@ bool RefCounting::isCastingReference(const Expr* expr)
     if (!loplugin::TypeCheck(objectType).Class("Reference"))
         return false;
     // ignore "x.get()" where x is a var
-    auto obj = compat::IgnoreImplicit(memberCallExpr->getImplicitObjectArgument());
+    auto obj = memberCallExpr->getImplicitObjectArgument()->IgnoreImplicit();
     if (isa<DeclRefExpr>(obj) || isa<MemberExpr>(obj))
         return false;
     // if the foo in foo().get() returns "rtl::Reference<T>&" then the variable
@@ -757,11 +758,11 @@ bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
     if (!binaryOperator->getLHS()->getType()->isPointerType())
         return true;
 
-    auto newExpr = dyn_cast<CXXNewExpr>(compat::IgnoreImplicit(binaryOperator->getRHS()));
+    auto newExpr = dyn_cast<CXXNewExpr>(binaryOperator->getRHS()->IgnoreImplicit());
     if (newExpr)
     {
         // deliberately does not want to keep track at the allocation site
-        StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(binaryOperator)));
+        StringRef fileName = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(binaryOperator->getBeginLoc()));
         if (loplugin::isSamePathname(fileName, SRCDIR "/vcl/unx/generic/dtrans/X11_selection.cxx"))
             return true;
 
@@ -771,7 +772,7 @@ bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
             report(
                 DiagnosticsEngine::Warning,
                 "cppu::OWeakObject subclass %0 being managed via raw pointer, should be managed via rtl::Reference",
-                compat::getBeginLoc(binaryOperator))
+                binaryOperator->getBeginLoc())
                 << pointeeType
                 << binaryOperator->getSourceRange();
         }
@@ -783,7 +784,7 @@ bool RefCounting::VisitBinaryOperator(const BinaryOperator * binaryOperator)
             report(
                 DiagnosticsEngine::Warning,
                 "cppu::OWeakObject subclass %0 being managed via raw pointer, should be managed via rtl::Reference",
-                compat::getBeginLoc(binaryOperator))
+                binaryOperator->getBeginLoc())
                 << pointeeType
                 << binaryOperator->getSourceRange();
     }

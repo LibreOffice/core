@@ -15,6 +15,7 @@
 #include <fstream>
 #include <set>
 #include <unordered_set>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include "check.hxx"
 
@@ -90,21 +91,21 @@ bool MoveParam::VisitCXXOperatorCallExpr(const CXXOperatorCallExpr* callExpr)
         return true;
 
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(parmVarDecl)));
+        compiler.getSourceManager().getSpellingLoc(parmVarDecl->getBeginLoc()));
     if (loplugin::hasPathnamePrefix(aFileName,
                                     SRCDIR "/svx/source/sidebar/line/LineWidthValueSet.cxx"))
         return true;
 
-    report(DiagnosticsEngine::Warning, "rather use move && param1", compat::getBeginLoc(callExpr));
+    report(DiagnosticsEngine::Warning, "rather use move && param1", callExpr->getBeginLoc());
 
     return true;
 }
 
 bool MoveParam::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
 {
-    if (ignoreLocation(compat::getBeginLoc(constructExpr)))
+    if (ignoreLocation(constructExpr->getBeginLoc()))
         return true;
-    if (isInUnoIncludeFile(compat::getBeginLoc(constructExpr)))
+    if (isInUnoIncludeFile(constructExpr->getBeginLoc()))
         return true;
 
     auto qt = constructExpr->getType();
@@ -126,7 +127,7 @@ bool MoveParam::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
         return true;
 
     StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(parmVarDecl)));
+        compiler.getSourceManager().getSpellingLoc(parmVarDecl->getBeginLoc()));
     if (loplugin::hasPathnamePrefix(aFileName, SRCDIR
                                     "/include/drawinglayer/primitive2d/Primitive2DContainer.hxx"))
         return true;
@@ -155,8 +156,7 @@ bool MoveParam::VisitCXXConstructExpr(const CXXConstructExpr* constructExpr)
                                     SRCDIR "/stoc/source/servicemanager/servicemanager.cxx"))
         return true;
 
-    report(DiagnosticsEngine::Warning, "rather use move && param3",
-           compat::getBeginLoc(constructExpr));
+    report(DiagnosticsEngine::Warning, "rather use move && param3", constructExpr->getBeginLoc());
 
     return true;
 }

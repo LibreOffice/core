@@ -16,8 +16,9 @@
 #include "clang/AST/Attr.h"
 #include "clang/Basic/Builtins.h"
 
+#include "config_clang.h"
+
 #include "check.hxx"
-#include "compat.hxx"
 #include "functionaddress.hxx"
 #include "plugin.hxx"
 
@@ -237,7 +238,7 @@ void FakeBool::run() {
         TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         for (auto const & dcl: varDecls_) {
             auto const decl = dcl.first; auto const fbk = dcl.second;
-            SourceLocation loc { compat::getBeginLoc(decl) };
+            SourceLocation loc { decl->getBeginLoc() };
             TypeSourceInfo * tsi = decl->getTypeSourceInfo();
             if (tsi != nullptr) {
                 SourceLocation l {
@@ -279,7 +280,7 @@ void FakeBool::run() {
         }
         for (auto const & dcl: fieldDecls_) {
             auto const decl = dcl.first; auto const fbk = dcl.second;
-            SourceLocation loc { compat::getBeginLoc(decl) };
+            SourceLocation loc { decl->getBeginLoc() };
             TypeSourceInfo * tsi = decl->getTypeSourceInfo();
             if (tsi != nullptr) {
                 SourceLocation l {
@@ -325,7 +326,7 @@ void FakeBool::run() {
             if (ignoredFns.find(f) != ignoredFns.end()) {
                 continue;
             }
-            SourceLocation loc { compat::getBeginLoc(decl) };
+            SourceLocation loc { decl->getBeginLoc() };
             TypeSourceInfo * tsi = decl->getTypeSourceInfo();
             if (tsi != nullptr) {
                 SourceLocation l {
@@ -399,7 +400,7 @@ void FakeBool::run() {
             if (ignoredFns.find(f) != ignoredFns.end()) {
                 continue;
             }
-            SourceLocation loc { compat::getBeginLoc(decl) };
+            SourceLocation loc { decl->getBeginLoc() };
             SourceLocation l { compiler.getSourceManager().getExpansionLoc(
                 loc) };
             SourceLocation end { compiler.getSourceManager().getExpansionLoc(
@@ -536,7 +537,7 @@ bool FakeBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
     }
     auto const k = isFakeBool(expr->getType());
     if (k != FBK_No) {
-        SourceLocation loc { compat::getBeginLoc(expr) };
+        SourceLocation loc { expr->getBeginLoc() };
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
         }
@@ -549,7 +550,7 @@ bool FakeBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                 if (!isSharedCAndCppCode(callLoc)) {
                     SourceLocation argLoc;
                     if (compiler.getSourceManager().isMacroArgExpansion(
-                            compat::getBeginLoc(expr), &argLoc)
+                            expr->getBeginLoc(), &argLoc)
                         //TODO: check it's the complete (first) arg to the macro
                         && (Lexer::getImmediateMacroName(
                                 argLoc, compiler.getSourceManager(),
@@ -591,7 +592,7 @@ bool FakeBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
         report(
             DiagnosticsEngine::Warning,
             "CStyleCastExpr, suspicious cast from %0 to %1",
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
     }
@@ -608,14 +609,14 @@ bool FakeBool::VisitCXXStaticCastExpr(CXXStaticCastExpr * expr) {
     }
     if (k == FBK_sal_Bool
         && isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr))))
+            compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc())))
     {
         return true;
     }
     report(
         DiagnosticsEngine::Warning,
         "CXXStaticCastExpr, suspicious cast from %0 to %1",
-        compat::getBeginLoc(expr))
+        expr->getBeginLoc())
         << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
         << expr->getType() << expr->getSourceRange();
     return true;
@@ -629,7 +630,7 @@ bool FakeBool::VisitCXXFunctionalCastExpr(CXXFunctionalCastExpr * expr) {
         report(
             DiagnosticsEngine::Warning,
             "CXXFunctionalCastExpr, suspicious cast from %0 to %1",
-            compat::getBeginLoc(expr))
+            expr->getBeginLoc())
             << expr->getSubExpr()->IgnoreParenImpCasts()->getType()
             << expr->getType() << expr->getSourceRange();
     }
@@ -644,7 +645,7 @@ bool FakeBool::VisitImplicitCastExpr(ImplicitCastExpr * expr) {
     if (isFakeBool(expr->getType()) == FBK_No) {
         return true;
     }
-    auto l = compat::getBeginLoc(expr);
+    auto l = expr->getBeginLoc();
     while (compiler.getSourceManager().isMacroArgExpansion(l)) {
         l = compiler.getSourceManager().getImmediateMacroCallerLoc(l);
     }
@@ -675,7 +676,7 @@ bool FakeBool::VisitImplicitCastExpr(ImplicitCastExpr * expr) {
     }
     report(
         DiagnosticsEngine::Warning, "conversion from %0 to %1",
-        compat::getBeginLoc(expr))
+        expr->getBeginLoc())
         << t << expr->getType() << expr->getSourceRange();
     return true;
 }
@@ -776,7 +777,7 @@ bool FakeBool::VisitVarDecl(VarDecl const * decl) {
     if (k == FBK_No) {
         return true;
     }
-    auto const loc = compat::getBeginLoc(decl);
+    auto const loc = decl->getBeginLoc();
     if (k == FBK_sal_Bool
         && isInSpecialMainFile(
             compiler.getSourceManager().getSpellingLoc(loc)))
@@ -816,7 +817,7 @@ bool FakeBool::VisitFieldDecl(FieldDecl const * decl) {
     }
     if (k == FBK_sal_Bool
         && isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl))))
+            compiler.getSourceManager().getSpellingLoc(decl->getBeginLoc())))
     {
         return true;
     }
@@ -866,11 +867,11 @@ bool FakeBool::VisitValueDecl(ValueDecl const * decl) {
         return true;
     }
     auto const k = isFakeBool(decl->getType());
-    if (k != FBK_No && !rewrite(compat::getBeginLoc(decl), k)) {
+    if (k != FBK_No && !rewrite(decl->getBeginLoc(), k)) {
         report(
             DiagnosticsEngine::Warning,
             "ValueDecl, use \"bool\" instead of %0",
-            compat::getBeginLoc(decl))
+            decl->getBeginLoc())
             << decl->getType() << decl->getSourceRange();
     }
     return true;

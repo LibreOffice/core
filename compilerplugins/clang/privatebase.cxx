@@ -43,7 +43,7 @@ bool PrivateBase::VisitCXXRecordDecl(CXXRecordDecl const * decl) {
                 DiagnosticsEngine::Warning,
                 "base class is private by default; explicitly give an access"
                     " specifier",
-                compat::getBeginLoc(i))
+                i->getBeginLoc())
                 << i->getSourceRange();
         }
     }

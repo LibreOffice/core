@@ -43,11 +43,11 @@ private:
         assert(inlineLoc->isInvalid());
         unsigned n = {}; // avoid -Werror=maybe-uninitialized
         auto end = Lexer::getLocForEndOfToken(
-            compiler.getSourceManager().getExpansionLoc(compat::getEndLoc(decl)), 0,
+            compiler.getSourceManager().getExpansionLoc(decl->getEndLoc()), 0,
             compiler.getSourceManager(), compiler.getLangOpts());
         assert(end.isValid());
         for (auto loc = compiler.getSourceManager().getExpansionLoc(
-                 compat::getBeginLoc(decl));
+                 decl->getBeginLoc());
              loc != end; loc = loc.getLocWithOffset(std::max<unsigned>(n, 1)))
         {
             n = Lexer::MeasureTokenLength(
@@ -116,8 +116,8 @@ private:
     }
 
     bool isInMacroExpansion(FunctionDecl const * decl, StringRef name) {
-        auto loc = unwindTo(compat::getBeginLoc(decl), name);
-        return loc.isValid() && loc == unwindTo(compat::getEndLoc(decl), name);
+        auto loc = unwindTo(decl->getBeginLoc(), name);
+        return loc.isValid() && loc == unwindTo(decl->getEndLoc(), name);
     }
 
     bool handleImplicitInline(FunctionDecl const * decl) {
@@ -134,7 +134,7 @@ private:
             report(
                 DiagnosticsEngine::Warning,
                 "function definition redundantly declared 'inline'",
-                inlineLoc.isValid() ? inlineLoc : compat::getBeginLoc(decl))
+                inlineLoc.isValid() ? inlineLoc : decl->getBeginLoc())
                 << decl->getSourceRange();
         }
         return true;
@@ -161,7 +161,7 @@ private:
             report(
                 DiagnosticsEngine::Warning,
                 "function has no external linkage but is explicitly declared 'inline'",
-                inlineLoc.isValid() ? inlineLoc : compat::getBeginLoc(decl))
+                inlineLoc.isValid() ? inlineLoc : decl->getBeginLoc())
                 << decl->getSourceRange();
         }
         return true;

@@ -20,9 +20,7 @@
 #include "check.hxx"
 #include "functionaddress.hxx"
 
-#if CLANG_VERSION >= 110000
 #include "clang/AST/ParentMapContext.h"
-#endif
 
 /**
    Find pointer and reference params that can be declared const.
@@ -82,7 +80,7 @@ public:
             report(
                 DiagnosticsEngine::Warning,
                 "this parameter can be const %0",
-                compat::getBeginLoc(pParmVarDecl))
+                pParmVarDecl->getBeginLoc())
                 << fname << pParmVarDecl->getSourceRange();
             if (canonicalDecl->getLocation() != functionDecl->getLocation()) {
                 unsigned idx = pParmVarDecl->getFunctionScopeIndex();
@@ -90,7 +88,7 @@ public:
                 report(
                     DiagnosticsEngine::Note,
                     "canonical parameter declaration here",
-                    compat::getBeginLoc(pOther))
+                    pOther->getBeginLoc())
                     << pOther->getSourceRange();
             }
             //functionDecl->dump();
@@ -170,13 +168,13 @@ bool ConstParams::CheckTraverseFunctionDecl(FunctionDecl * functionDecl)
 
     // ignore the macros from include/tools/link.hxx
     auto canonicalDecl = functionDecl->getCanonicalDecl();
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(canonicalDecl))
-        || compiler.getSourceManager().isMacroArgExpansion(compat::getBeginLoc(canonicalDecl))) {
+    if (compiler.getSourceManager().isMacroBodyExpansion(canonicalDecl->getBeginLoc())
+        || compiler.getSourceManager().isMacroArgExpansion(canonicalDecl->getBeginLoc())) {
         StringRef name { Lexer::getImmediateMacroName(
-                compat::getBeginLoc(canonicalDecl), compiler.getSourceManager(), compiler.getLangOpts()) };
+                canonicalDecl->getBeginLoc(), compiler.getSourceManager(), compiler.getLangOpts()) };
         if (name.startswith("DECL_LINK") || name.startswith("DECL_STATIC_LINK"))
             return false;
-        auto loc2 = compat::getImmediateExpansionRange(compiler.getSourceManager(), compat::getBeginLoc(canonicalDecl)).first;
+        auto loc2 = compat::getImmediateExpansionRange(compiler.getSourceManager(), canonicalDecl->getBeginLoc()).first;
         if (compiler.getSourceManager().isMacroBodyExpansion(loc2))
         {
             StringRef name2 { Lexer::getImmediateMacroName(
@@ -329,7 +327,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
 //        report(
 //             DiagnosticsEngine::Warning,
 //             "no parent?",
-//              compat::getBeginLoc(stmt))
+//              stmt->getBeginLoc())
 //              << stmt->getSourceRange();
         return false;
     }
@@ -580,7 +578,7 @@ bool ConstParams::checkIfCanBeConst(const Stmt* stmt, const ParmVarDecl* parmVar
     report(
          DiagnosticsEngine::Warning,
          "oh dear, what can the matter be?",
-          compat::getBeginLoc(parent))
+          parent->getBeginLoc())
           << parent->getSourceRange();
     return true;
 }

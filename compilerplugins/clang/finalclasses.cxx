@@ -11,6 +11,7 @@
 #include <set>
 #include <string>
 #include <iostream>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include <fstream>
 
@@ -131,7 +132,7 @@ bool FinalClasses::VisitCXXRecordDecl(const CXXRecordDecl* decl)
     if (ignoreClass(s))
         return true;
 
-    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(decl));
+    SourceLocation spellingLocation = compiler.getSourceManager().getSpellingLoc(decl->getBeginLoc());
     auto const filename = getFilenameOfLocation(spellingLocation);
     auto sourceLocation = filename.substr(strlen(SRCDIR)).str() + ":"
         + std::to_string(compiler.getSourceManager().getSpellingLineNumber(spellingLocation));

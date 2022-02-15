@@ -74,7 +74,7 @@ private:
             t = tt->desugar();
         }
         auto const e1 = expr->getSubExprAsWritten();
-        auto const loc = compat::getBeginLoc(e1);
+        auto const loc = e1->getBeginLoc();
         if (loc.isMacroID()
             && compiler.getSourceManager().isAtStartOfImmediateMacroExpansion(
                 loc))

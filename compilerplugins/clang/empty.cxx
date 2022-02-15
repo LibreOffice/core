@@ -12,7 +12,6 @@
 #include <cassert>
 
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 // Warn about checks whether a container is empty done via an (expensive) call to obtain the
@@ -77,7 +76,7 @@ private:
         {
             return;
         }
-        auto const val = compat::getIntegerConstantExpr(rhs, compiler.getASTContext());
+        auto const val = rhs->getIntegerConstantExpr(compiler.getASTContext());
         if (!val)
         {
             return;

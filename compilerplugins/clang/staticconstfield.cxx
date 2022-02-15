@@ -98,7 +98,7 @@ bool StaticConstField::TraverseConstructorInitializer(CXXCtorInitializer* init)
 
     bool found = false;
     std::string value;
-    auto const initexpr = compat::IgnoreImplicit(init->getInit());
+    auto const initexpr = init->getInit()->IgnoreImplicit();
     if (tc.Const().Class("OUString").Namespace("rtl").GlobalNamespace()
         || tc.Const().Class("OString").Namespace("rtl").GlobalNamespace())
     {

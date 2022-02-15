@@ -17,11 +17,8 @@
 
 #include <clang/AST/CXXInheritance.h>
 
-#include "config_clang.h"
-
 #include "plugin.hxx"
 #include "check.hxx"
-#include "compat.hxx"
 
 /**
   Simplify boolean expressions involving smart pointers e.g.
@@ -78,10 +75,6 @@ public:
         return res;
     }
 
-#if CLANG_VERSION < 110000
-    bool TraverseUnaryLNot(UnaryOperator* expr) { return TraverseUnaryOperator(expr); }
-#endif
-
     bool PreTraverseBinaryOperator(BinaryOperator* expr)
     {
         auto const op = expr->getOpcode();
@@ -113,11 +106,6 @@ public:
         PostTraverseBinaryOperator(expr, res);
         return res;
     }
-
-#if CLANG_VERSION < 110000
-    bool TraverseBinLAnd(BinaryOperator* expr) { return TraverseBinaryOperator(expr); }
-    bool TraverseBinLOr(BinaryOperator* expr) { return TraverseBinaryOperator(expr); }
-#endif
 
     bool PreTraverseConditionalOperator(ConditionalOperator* expr)
     {
@@ -291,8 +279,7 @@ private:
             }
             start = start1;
         }
-        return SourceRange(start,
-                           compiler.getSourceManager().getSpellingLoc(compat::getEndLoc(expr)));
+        return SourceRange(start, compiler.getSourceManager().getSpellingLoc(expr->getEndLoc()));
     }
 
     //TODO: There are some more places where an expression is contextually converted to bool, but
@@ -379,7 +366,7 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
         if (rewriter)
         {
             auto const loc
-                = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(memberCallExpr));
+                = compiler.getSourceManager().getSpellingLoc(memberCallExpr->getBeginLoc());
             auto const range = getCallSourceRange(memberCallExpr);
             if (loc.isValid() && range.isValid() && insertText(loc, "bool") && removeText(range))
             {
@@ -401,7 +388,7 @@ bool SimplifyPointerToBool::VisitImplicitCastExpr(ImplicitCastExpr const* castEx
         if (rewriter)
         {
             auto const loc
-                = compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(memberCallExpr));
+                = compiler.getSourceManager().getSpellingLoc(memberCallExpr->getBeginLoc());
             auto const range = getCallSourceRange(memberCallExpr);
             if (loc.isValid() && range.isValid() && insertText(loc, "bool(")
                 && replaceText(range, ")"))

@@ -16,8 +16,9 @@
 
 #include <clang/AST/CXXInheritance.h>
 
+#include "config_clang.h"
+
 #include "check.hxx"
-#include "compat.hxx"
 #include "plugin.hxx"
 
 /**
@@ -142,14 +143,14 @@ bool MakeShared::VisitCXXConstructExpr(CXXConstructExpr const* constructExpr)
     }
 
     StringRef fn = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(constructExpr)));
+        compiler.getSourceManager().getSpellingLoc(constructExpr->getBeginLoc()));
     if (loplugin::isSamePathname(fn, SRCDIR "/include/o3tl/make_shared.hxx"))
         return true;
     if (loplugin::isSamePathname(fn, SRCDIR "/svl/source/items/stylepool.cxx"))
         return true;
 
     report(DiagnosticsEngine::Warning, "rather use make_shared than constructing from %0",
-           compat::getBeginLoc(constructExpr))
+           constructExpr->getBeginLoc())
         << arg0->getType() << constructExpr->getSourceRange();
     return true;
 }
@@ -184,11 +185,11 @@ bool MakeShared::VisitCXXMemberCallExpr(CXXMemberCallExpr const* cxxMemberCallEx
         return true;
 
     StringRef fn = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(cxxMemberCallExpr)));
+        compiler.getSourceManager().getSpellingLoc(cxxMemberCallExpr->getBeginLoc()));
     if (loplugin::isSamePathname(fn, SRCDIR "/include/o3tl/make_shared.hxx"))
         return true;
 
-    report(DiagnosticsEngine::Warning, "rather use make_shared", compat::getBeginLoc(cxxNewExpr))
+    report(DiagnosticsEngine::Warning, "rather use make_shared", cxxNewExpr->getBeginLoc())
         << cxxNewExpr->getSourceRange();
 
     return true;
@@ -210,7 +211,7 @@ bool MakeShared::VisitCXXOperatorCallExpr(CXXOperatorCallExpr const* operCallExp
         return true;
 
     report(DiagnosticsEngine::Warning, "rather use make_shared than constructing from %0",
-           compat::getBeginLoc(operCallExpr))
+           operCallExpr->getBeginLoc())
         << operCallExpr->getArg(1)->getType() << operCallExpr->getSourceRange();
 
     return true;
@@ -236,7 +237,7 @@ bool MakeShared::VisitVarDecl(VarDecl const* varDecl)
         return true;
 
     report(DiagnosticsEngine::Warning, "rather use make_shared than constructing from %0",
-           compat::getBeginLoc(varDecl))
+           varDecl->getBeginLoc())
         << varDecl->getInit()->getType() << varDecl->getSourceRange();
 
     return true;

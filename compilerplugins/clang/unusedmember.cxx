@@ -18,8 +18,6 @@
 #include <cassert>
 #include <set>
 
-#include "config_clang.h"
-
 #include "check.hxx"
 #include "compat.hxx"
 #include "plugin.hxx"
@@ -59,40 +57,6 @@ public:
         : FilteringPlugin(data)
     {
     }
-
-#if CLANG_VERSION < 60000
-
-    bool TraverseAlignedAttr(AlignedAttr* attr)
-    {
-        bool ret = FilteringPlugin::TraverseAlignedAttr(attr);
-        PostTraverseAlignedAttr(attr, ret);
-        return ret;
-    }
-
-    bool PostTraverseAlignedAttr(AlignedAttr* attr, bool run)
-    {
-        if (!run)
-        {
-            return false;
-        }
-        if (attr->isAlignmentExpr())
-        {
-            if (!TraverseStmt(attr->getAlignmentExpr()))
-            {
-                return false;
-            }
-        }
-        else if (auto const tsi = attr->getAlignmentType())
-        {
-            if (!TraverseTypeLoc(tsi->getTypeLoc()))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-#endif
 
     bool VisitDeclaratorDecl(DeclaratorDecl const* decl)
     {
@@ -279,9 +243,7 @@ public:
         {
             case UETT_SizeOf:
             case UETT_AlignOf:
-#if CLANG_VERSION >= 80000
             case UETT_PreferredAlignOf:
-#endif
                 break;
             default:
                 return true;

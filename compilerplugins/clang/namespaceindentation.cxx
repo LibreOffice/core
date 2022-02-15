@@ -84,8 +84,8 @@ bool NamespaceIndentation::VisitNamespaceDecl(NamespaceDecl const* nsDecl)
         {
             bool invalid1 = false;
             bool invalid2 = false;
-            unsigned line1 = SM.getPresumedLineNumber(compat::getBeginLoc(nsDecl), &invalid1);
-            unsigned line2 = SM.getPresumedLineNumber(compat::getBeginLoc(child), &invalid2);
+            unsigned line1 = SM.getPresumedLineNumber(nsDecl->getBeginLoc(), &invalid1);
+            unsigned line2 = SM.getPresumedLineNumber(child->getBeginLoc(), &invalid2);
             if (line1 == line2)
                 return true;
         }
@@ -95,12 +95,12 @@ bool NamespaceIndentation::VisitNamespaceDecl(NamespaceDecl const* nsDecl)
     // if we are inside the yyy NameSpaceDecl of
     //      namespace xxx::yyy
     // the beginLoc is just between the "xxx" and the "::"
-    auto nsDeclBeginLoc = compat::getBeginLoc(nsDecl);
+    auto nsDeclBeginLoc = nsDecl->getBeginLoc();
     bool foundMultiple = false;
     {
         constexpr int BACKSCAN = 32;
-        auto beginLoc = compat::getBeginLoc(nsDecl).getLocWithOffset(-BACKSCAN);
-        auto endLoc = compat::getBeginLoc(nsDecl).getLocWithOffset(3);
+        auto beginLoc = nsDecl->getBeginLoc().getLocWithOffset(-BACKSCAN);
+        auto endLoc = nsDecl->getBeginLoc().getLocWithOffset(3);
         const char* p1 = SM.getCharacterData(beginLoc);
         const char* p2 = SM.getCharacterData(endLoc);
         unsigned n = Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
@@ -114,7 +114,7 @@ bool NamespaceIndentation::VisitNamespaceDecl(NamespaceDecl const* nsDecl)
             if (namespaceToken.find("::") != std::string::npos)
             {
                 auto idx = s.rfind("\n");
-                nsDeclBeginLoc = compat::getBeginLoc(nsDecl).getLocWithOffset(idx - BACKSCAN + 1);
+                nsDeclBeginLoc = nsDecl->getBeginLoc().getLocWithOffset(idx - BACKSCAN + 1);
                 foundMultiple = true;
             }
         }
@@ -140,8 +140,8 @@ bool NamespaceIndentation::VisitNamespaceDecl(NamespaceDecl const* nsDecl)
                nsDecl->getRBraceLoc());
 
     // no easy way to get the position of the left brace
-    auto endLoc = compat::getBeginLoc(nsDecl).getLocWithOffset(256);
-    const char* p1 = SM.getCharacterData(SM.getExpansionLoc(compat::getBeginLoc(nsDecl)));
+    auto endLoc = nsDecl->getBeginLoc().getLocWithOffset(256);
+    const char* p1 = SM.getCharacterData(SM.getExpansionLoc(nsDecl->getBeginLoc()));
     const char* p2 = SM.getCharacterData(SM.getExpansionLoc(endLoc));
     unsigned n = Lexer::MeasureTokenLength(endLoc, SM, compiler.getLangOpts());
     if (p2 < p1 || n > 128 || (p2 - p1 + n) > 2048)
@@ -155,7 +155,7 @@ bool NamespaceIndentation::VisitNamespaceDecl(NamespaceDecl const* nsDecl)
             auto col3 = idx2 - idx1;
             if (col1 != col3)
                 report(DiagnosticsEngine::Warning, "statement left brace mis-aligned",
-                       compat::getBeginLoc(nsDecl));
+                       nsDecl->getBeginLoc());
         }
 
     // extract the comment following the end brace

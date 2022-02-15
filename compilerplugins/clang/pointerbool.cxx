@@ -16,6 +16,7 @@
 #include <clang/AST/CXXInheritance.h>
 #include "plugin.hxx"
 #include "check.hxx"
+#include "compat.hxx"
 
 /**
   Look for calls where the param is bool but the call-site-arg is pointer.

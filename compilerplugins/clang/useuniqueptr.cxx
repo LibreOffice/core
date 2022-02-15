@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <set>
+#include "config_clang.h"
 #include "plugin.hxx"
 #include "check.hxx"
 
@@ -589,12 +590,12 @@ void UseUniquePtr::CheckDeleteLocalVar(const FunctionDecl* functionDecl, const C
     report(
          DiagnosticsEngine::Warning,
          "call to delete on a var, should be using std::unique_ptr",
-         compat::getBeginLoc(deleteExpr))
+         deleteExpr->getBeginLoc())
          << deleteExpr->getSourceRange();
     report(
          DiagnosticsEngine::Note,
          "var is here",
-         compat::getBeginLoc(varDecl))
+         varDecl->getBeginLoc())
          << varDecl->getSourceRange();
 }
 
@@ -662,16 +663,16 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
                     auto init = iterVarDecl->getInit();
                     if (init)
                     {
-                        init = compat::IgnoreImplicit(init);
-                        if (!compat::CPlusPlus17(compiler.getLangOpts()))
+                        init = init->IgnoreImplicit();
+                        if (!compiler.getLangOpts().CPlusPlus17)
                             if (auto x = dyn_cast<CXXConstructExpr>(init))
                                 if (x->isElidable())
-                                    init = compat::IgnoreImplicit(x->getArg(0));
+                                    init = x->getArg(0)->IgnoreImplicit();
                         if (auto x = dyn_cast<CXXConstructExpr>(init))
                             if (x->getNumArgs() == 1
                                 || (x->getNumArgs() >= 2 && isa<CXXDefaultArgExpr>(x->getArg(1))))
                             {
-                                init = compat::IgnoreImplicit(x->getArg(0));
+                                init = x->getArg(0)->IgnoreImplicit();
                             }
                         if (auto x = dyn_cast<CXXMemberCallExpr>(init))
                             init = x->getImplicitObjectArgument()->IgnoreParenImpCasts();
@@ -820,12 +821,12 @@ void UseUniquePtr::CheckLoopDelete(const FunctionDecl* functionDecl, const CXXDe
         report(
             DiagnosticsEngine::Warning,
             "loopdelete: rather manage this var with std::some_container<std::unique_ptr<T>>",
-            compat::getBeginLoc(deleteExpr))
+            deleteExpr->getBeginLoc())
             << deleteExpr->getSourceRange();
         report(
             DiagnosticsEngine::Note,
             "var is here",
-            compat::getBeginLoc(varDecl))
+            varDecl->getBeginLoc())
             << varDecl->getSourceRange();
     }
 }
@@ -908,12 +909,12 @@ void UseUniquePtr::CheckCXXForRangeStmt(const FunctionDecl* functionDecl, const 
         report(
             DiagnosticsEngine::Warning,
             "rather manage this var with std::some_container<std::unique_ptr<T>>",
-            compat::getBeginLoc(deleteExpr))
+            deleteExpr->getBeginLoc())
             << deleteExpr->getSourceRange();
         report(
             DiagnosticsEngine::Note,
             "var is here",
-            compat::getBeginLoc(varDecl))
+            varDecl->getBeginLoc())
             << varDecl->getSourceRange();
     }
 }
@@ -992,12 +993,12 @@ void UseUniquePtr::CheckMemberDeleteExpr(const FunctionDecl* functionDecl, const
     report(
         DiagnosticsEngine::Warning,
         message,
-        compat::getBeginLoc(deleteExpr))
+        deleteExpr->getBeginLoc())
         << deleteExpr->getSourceRange();
     report(
         DiagnosticsEngine::Note,
         "member is here",
-        compat::getBeginLoc(fieldDecl))
+        fieldDecl->getBeginLoc())
         << fieldDecl->getSourceRange();
 }
 
@@ -1117,7 +1118,7 @@ bool UseUniquePtr::VisitCXXDeleteExpr(const CXXDeleteExpr* deleteExpr)
         return true;
     if (ignoreLocation(mpCurrentFunctionDecl))
         return true;
-    if (isInUnoIncludeFile(compat::getBeginLoc(mpCurrentFunctionDecl->getCanonicalDecl())))
+    if (isInUnoIncludeFile(mpCurrentFunctionDecl->getCanonicalDecl()->getBeginLoc()))
         return true;
     auto declRefExpr = dyn_cast<DeclRefExpr>(deleteExpr->getArgument()->IgnoreParenImpCasts()->IgnoreImplicit());
     if (!declRefExpr)
@@ -1298,7 +1299,7 @@ void UseUniquePtr::CheckDeleteParmVar(const CXXDeleteExpr* deleteExpr, const Par
     report(
         DiagnosticsEngine::Warning,
         "calling delete on a pointer param, should be either allowlisted or simplified",
-        compat::getBeginLoc(deleteExpr))
+        deleteExpr->getBeginLoc())
         << deleteExpr->getSourceRange();
 }
 

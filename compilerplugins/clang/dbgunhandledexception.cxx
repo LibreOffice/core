@@ -88,7 +88,7 @@ bool DbgUnhandledException::VisitCallExpr(const CallExpr* call)
     if (currCatchStmt.empty())
     {
         report(DiagnosticsEngine::Warning, "DBG_UNHANDLED_EXCEPTION outside catch block",
-               compat::getBeginLoc(call));
+               call->getBeginLoc());
         return true;
     }
     auto catchBlock = dyn_cast<CompoundStmt>(currCatchStmt.top()->getHandlerBlock());
@@ -96,14 +96,14 @@ bool DbgUnhandledException::VisitCallExpr(const CallExpr* call)
     {
         report(DiagnosticsEngine::Warning,
                "something wrong with DBG_UNHANDLED_EXCEPTION, no CompoundStmt?",
-               compat::getBeginLoc(call));
+               call->getBeginLoc());
         return true;
     }
     if (catchBlock->size() < 1)
     {
         report(DiagnosticsEngine::Warning,
                "something wrong with DBG_UNHANDLED_EXCEPTION, CompoundStmt size == 0?",
-               compat::getBeginLoc(call));
+               call->getBeginLoc());
         return true;
     }
 
@@ -114,7 +114,7 @@ bool DbgUnhandledException::VisitCallExpr(const CallExpr* call)
     {
         report(DiagnosticsEngine::Warning,
                "DBG_UNHANDLED_EXCEPTION must be first statement in catch block",
-               compat::getBeginLoc(call));
+               call->getBeginLoc());
     }
     return true;
 }

@@ -10,9 +10,9 @@
  */
 #ifndef LO_CLANG_SHARED_PLUGINS
 
-#include "compat.hxx"
 #include "plugin.hxx"
 #include "check.hxx"
+#include "config_clang.h"
 #include <iostream>
 
 /*
@@ -78,7 +78,7 @@ bool ReferenceCasting::VisitInitListExpr(const InitListExpr* ile)
     {
         if (CheckForUnnecessaryGet(expr, /*includeRtlReference*/ true))
         {
-            report(DiagnosticsEngine::Warning, "unnecessary get() call", compat::getBeginLoc(expr))
+            report(DiagnosticsEngine::Warning, "unnecessary get() call", expr->getBeginLoc())
                 << expr->getSourceRange();
             return true;
         }
@@ -90,8 +90,8 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     if (ignoreLocation(cce))
         return true;
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
-    StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(cce)));
+    StringRef aFileName
+        = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(cce->getBeginLoc()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
@@ -112,7 +112,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
         if (CheckForUnnecessaryGet(cce->getArg(0), /*includeRtlReference*/ cce->getNumArgs() == 1))
         {
             report(DiagnosticsEngine::Warning, "unnecessary get() call",
-                   compat::getBeginLoc(cce->getArg(0)))
+                   cce->getArg(0)->getBeginLoc())
                 << cce->getArg(0)->getSourceRange();
             return true;
         }
@@ -120,7 +120,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
         if (CheckForUnnecessaryGet(cce->getArg(0), /*includeRtlReference*/ true))
         {
             report(DiagnosticsEngine::Warning, "unnecessary get() call",
-                   compat::getBeginLoc(cce->getArg(0)))
+                   cce->getArg(0)->getBeginLoc())
                 << cce->getArg(0)->getSourceRange();
             return true;
         }
@@ -156,7 +156,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
         }
         if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(constructorArg0))
         {
-            constructorArg0 = compat::getSubExpr(matTempExpr);
+            constructorArg0 = matTempExpr->getSubExpr();
             continue;
         }
         if (auto bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(constructorArg0))
@@ -215,7 +215,7 @@ bool ReferenceCasting::VisitCXXConstructExpr(const CXXConstructExpr* cce)
     {
         report(DiagnosticsEngine::Warning,
                "the source reference is already a subtype of the destination reference, just use =",
-               compat::getBeginLoc(cce))
+               cce->getBeginLoc())
             << cce->getSourceRange();
     }
     return true;
@@ -226,8 +226,8 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
     if (ignoreLocation(mce))
         return true;
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
-    StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(mce)));
+    StringRef aFileName
+        = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(mce->getBeginLoc()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
@@ -248,8 +248,7 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
 
     if (CheckForUnnecessaryGet(mce->getArg(0), /*includeRtlReference*/ mce->getNumArgs() == 1))
     {
-        report(DiagnosticsEngine::Warning, "unnecessary get() call",
-               compat::getBeginLoc(mce->getArg(0)))
+        report(DiagnosticsEngine::Warning, "unnecessary get() call", mce->getArg(0)->getBeginLoc())
             << mce->getArg(0)->getSourceRange();
         return true;
     }
@@ -279,7 +278,7 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
         }
         if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(arg0))
         {
-            arg0 = compat::getSubExpr(matTempExpr);
+            arg0 = matTempExpr->getSubExpr();
             continue;
         }
         if (auto bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(arg0))
@@ -337,7 +336,7 @@ bool ReferenceCasting::VisitCXXMemberCallExpr(const CXXMemberCallExpr* mce)
     {
         report(DiagnosticsEngine::Warning,
                "the source reference is already a subtype of the destination reference, just use =",
-               compat::getBeginLoc(mce))
+               mce->getBeginLoc())
             << mce->getSourceRange();
     }
     return true;
@@ -348,8 +347,8 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
     if (ignoreLocation(ce))
         return true;
     // don't bother processing anything in the Reference.h file. Makes my life easier when debugging this.
-    StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(ce)));
+    StringRef aFileName
+        = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(ce->getBeginLoc()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.h"))
         return true;
     if (loplugin::isSamePathname(aFileName, SRCDIR "/include/com/sun/star/uno/Reference.hxx"))
@@ -368,8 +367,7 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
         return true;
 
     if (CheckForUnnecessaryGet(ce->getArg(0), /*includeRtlReference*/ true))
-        report(DiagnosticsEngine::Warning, "unnecessary get() call",
-               compat::getBeginLoc(ce->getArg(0)))
+        report(DiagnosticsEngine::Warning, "unnecessary get() call", ce->getArg(0)->getBeginLoc())
             << ce->getArg(0)->getSourceRange();
 
     // extract the type parameter passed to the template
@@ -394,7 +392,7 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
         }
         if (auto matTempExpr = dyn_cast<MaterializeTemporaryExpr>(arg0))
         {
-            arg0 = compat::getSubExpr(matTempExpr);
+            arg0 = matTempExpr->getSubExpr();
             continue;
         }
         if (auto bindTempExpr = dyn_cast<CXXBindTemporaryExpr>(arg0))
@@ -437,7 +435,7 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
     {
         report(DiagnosticsEngine::Warning,
                "the source reference is already a subtype of the destination reference, just use =",
-               compat::getBeginLoc(ce))
+               ce->getBeginLoc())
             << ce->getSourceRange();
     }
     return true;
@@ -450,7 +448,7 @@ bool ReferenceCasting::VisitCallExpr(const CallExpr* ce)
  */
 bool ReferenceCasting::CheckForUnnecessaryGet(const Expr* expr, bool includeRtlReference)
 {
-    expr = compat::IgnoreImplicit(expr);
+    expr = expr->IgnoreImplicit();
     auto cxxMemberCallExpr = dyn_cast<CXXMemberCallExpr>(expr);
     if (!cxxMemberCallExpr)
         return false;
@@ -470,8 +468,8 @@ bool ReferenceCasting::CheckForUnnecessaryGet(const Expr* expr, bool includeRtlR
     else
         return false;
 
-    StringRef aFileName = getFilenameOfLocation(
-        compiler.getSourceManager().getSpellingLoc(compat::getBeginLoc(expr)));
+    StringRef aFileName
+        = getFilenameOfLocation(compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc()));
     if (loplugin::isSamePathname(aFileName, SRCDIR "/cppu/qa/test_reference.cxx"))
         return false;
 

@@ -11,6 +11,8 @@
 
 #include <string>
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 
 // Having an extern prototype for a method in a module and not actually declaring that method is dodgy.

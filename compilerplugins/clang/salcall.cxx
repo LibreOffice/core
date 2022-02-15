@@ -323,7 +323,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         // qualified names this will point after the qualifiers, but needlessly including those in
         // the search should be harmless---modulo issues with using "SAL_CALL" as the name of a
         // function-like macro parameter as discussed below):
-        endLoc = compat::getBeginLoc(functionDecl->getNameInfo());
+        endLoc = functionDecl->getNameInfo().getBeginLoc();
         while (SM.isMacroArgExpansion(endLoc, &endLoc))
         {
         }
@@ -391,7 +391,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
             endLoc1 = Lexer::getLocForEndOfToken(endLoc1, 0, SM, compiler.getLangOpts());
             startLoc = Lexer::getLocForEndOfToken(SM.getSpellingLoc(startLoc), 0, SM,
                                                   compiler.getLangOpts());
-            if (!compat::isPointWithin(SM, endLoc, startLoc, endLoc1))
+            if (!SM.isPointWithin(endLoc, startLoc, endLoc1))
             {
                 ranges.emplace_back(startLoc, endLoc1);
                 startLoc = Lexer::getLocForEndOfToken(SM.getSpellingLoc(startLoc2), 0, SM,
@@ -404,7 +404,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         // Stop searching for "SAL_CALL" at the start of the function declaration's name (for
         // qualified names this will point after the qualifiers, but needlessly including those in
         // the search should be harmless):
-        endLoc = compat::getBeginLoc(functionDecl->getNameInfo());
+        endLoc = functionDecl->getNameInfo().getBeginLoc();
         while (endLoc.isMacroID() && SM.isAtStartOfImmediateMacroExpansion(endLoc, &endLoc))
         {
         }
@@ -447,8 +447,8 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         startLoc = functionDecl->getSourceRange().getBegin();
         while (startLoc.isMacroID()
                && !(macroRange.isValid()
-                    && compat::isPointWithin(SM, SM.getSpellingLoc(startLoc), macroRange.getBegin(),
-                                             macroRange.getEnd()))
+                    && SM.isPointWithin(SM.getSpellingLoc(startLoc), macroRange.getBegin(),
+                                        macroRange.getEnd()))
                && SM.isAtStartOfImmediateMacroExpansion(startLoc, &startLoc))
         {
         }
@@ -459,7 +459,7 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
 
 #if defined _WIN32
         if (macroRange.isValid()
-            && !compat::isPointWithin(SM, startLoc, macroRange.getBegin(), macroRange.getEnd()))
+            && !SM.isPointWithin(startLoc, macroRange.getBegin(), macroRange.getEnd()))
         {
             // endLoc is within a macro body but startLoc is not; two source ranges, first is from
             // startLoc to the macro invocation, second is the leading part of the corresponding
@@ -477,9 +477,11 @@ bool SalCall::isSalCallFunction(FunctionDecl const* functionDecl, SourceLocation
         if (noReturnType
             && !(functionDecl->isVirtualAsWritten()
                  || (isa<CXXConstructorDecl>(functionDecl)
-                     && compat::isExplicitSpecified(cast<CXXConstructorDecl>(functionDecl)))
+                     && cast<CXXConstructorDecl>(functionDecl)->getExplicitSpecifier().isExplicit())
                  || (isa<CXXConversionDecl>(functionDecl)
-                     && compat::isExplicitSpecified(cast<CXXConversionDecl>(functionDecl)))))
+                     && cast<CXXConversionDecl>(functionDecl)
+                            ->getExplicitSpecifier()
+                            .isExplicit())))
         {
             SourceLocation endLoc1;
             if (macroStartLoc.isMacroID()

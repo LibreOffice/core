@@ -88,12 +88,12 @@ bool SimplifyConstruct::VisitVarDecl(VarDecl const* varDecl)
         return true;
 
     auto init = varDecl->getInit();
-    auto const e1 = compat::IgnoreImplicit(init);
+    auto const e1 = init->IgnoreImplicit();
     if (!isa<CXXFunctionalCastExpr>(e1) && !isa<CXXTemporaryObjectExpr>(e1))
         return true;
 
     // e.g. the LANGUAGE_DONTKNOW defines
-    if (compiler.getSourceManager().isMacroBodyExpansion(compat::getBeginLoc(init)))
+    if (compiler.getSourceManager().isMacroBodyExpansion(init->getBeginLoc()))
         return true;
 
     report(DiagnosticsEngine::Warning, "simplify", varDecl->getLocation())

@@ -15,6 +15,8 @@
 #include <set>
 #include <string>
 
+#include "config_clang.h"
+
 #include "plugin.hxx"
 
 namespace {

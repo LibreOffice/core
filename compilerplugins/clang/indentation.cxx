@@ -16,6 +16,7 @@
 #include <fstream>
 #include <set>
 #include <unordered_set>
+#include "config_clang.h"
 #include "plugin.hxx"
 
 /*
@@ -118,7 +119,7 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
     {
         auto stmt = *i;
         auto const actualPrevEnd = prevEnd;
-        prevEnd = compat::getEndLoc(stmt); // compute early, before below `continue`s
+        prevEnd = stmt->getEndLoc(); // compute early, before below `continue`s
 
         // these show up in macro expansions, not interesting
         if (isa<NullStmt>(stmt))
@@ -126,28 +127,8 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
         // these are always weirdly indented
         if (isa<LabelStmt>(stmt))
             continue;
-#if CLANG_VERSION < 100000
-        // Before
-        // <https://github.com/llvm/llvm-project/commit/dc3957ec215dd17b8d293461f18696566637a6cd>
-        // "Include leading attributes in DeclStmt's SourceRange", getBeginLoc of a VarDecl DeclStmt
-        // with an UnusedAttr pointed after the attr (and getLocation of the attr pointed at
-        // "maybe_unused", not at the leading "[["), so just ignore those in old compiler versions:
-        if (auto const declStmt = dyn_cast<DeclStmt>(stmt))
-        {
-            if (declStmt->decl_begin() != declStmt->decl_end())
-            {
-                if (auto const decl = dyn_cast<VarDecl>(*declStmt->decl_begin()))
-                {
-                    if (decl->hasAttr<UnusedAttr>())
-                    {
-                        continue;
-                    }
-                }
-            }
-        }
-#endif
 
-        auto stmtLoc = compat::getBeginLoc(stmt);
+        auto stmtLoc = stmt->getBeginLoc();
 
         StringRef macroName;
         bool partOfMacro = false;
@@ -165,11 +146,7 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
             // similar thing in forms/
             if (macroName == "DECL_IFACE_PROP_IMPL" || macroName == "DECL_BOOL_PROP_IMPL")
                 continue;
-#if CLANG_VERSION >= 70000
             stmtLoc = SM.getExpansionRange(stmtLoc).getBegin();
-#else
-            stmtLoc = SM.getExpansionRange(stmtLoc).first;
-#endif
         }
 
         // check for comment to the left of the statement
@@ -211,13 +188,12 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
         {
             if (containsPreprocessingConditionalInclusion(SourceRange(
                     locationAfterToken(compiler.getSourceManager().getExpansionLoc(actualPrevEnd)),
-                    compiler.getSourceManager().getExpansionLoc(compat::getBeginLoc(stmt)))))
+                    compiler.getSourceManager().getExpansionLoc(stmt->getBeginLoc()))))
                 continue;
             report(DiagnosticsEngine::Warning, "statement mis-aligned compared to neighbours %0",
                    stmtLoc)
                 << macroName;
-            report(DiagnosticsEngine::Note, "measured against this one",
-                   compat::getBeginLoc(firstStmt));
+            report(DiagnosticsEngine::Note, "measured against this one", firstStmt->getBeginLoc());
             //getParentStmt(compoundStmt)->dump();
             //stmt->dump();
         }
@@ -228,7 +204,7 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
                 auto bodyStmt = ifStmt->getThen();
                 if (bodyStmt && !isa<CompoundStmt>(bodyStmt))
                 {
-                    stmtLoc = compat::getBeginLoc(bodyStmt);
+                    stmtLoc = bodyStmt->getBeginLoc();
                     invalid1 = false;
                     invalid2 = false;
                     unsigned bodyColumn = SM.getPresumedColumnNumber(stmtLoc, &invalid1);
@@ -243,7 +219,7 @@ bool Indentation::VisitCompoundStmt(CompoundStmt const* compoundStmt)
                 auto elseStmt = ifStmt->getElse();
                 if (elseStmt && !isa<CompoundStmt>(elseStmt) && !isa<IfStmt>(elseStmt))
                 {
-                    stmtLoc = compat::getBeginLoc(elseStmt);
+                    stmtLoc = elseStmt->getBeginLoc();
                     invalid1 = false;
                     invalid2 = false;
                     unsigned elseColumn = SM.getPresumedColumnNumber(stmtLoc, &invalid1);
@@ -340,7 +316,7 @@ void Indentation::checkCompoundStmtBraces(const Stmt* parentStmt, const Compound
     bool invalid1 = false;
     bool invalid2 = false;
 
-    auto parentBeginLoc = compat::getBeginLoc(parentStmt);
+    auto parentBeginLoc = parentStmt->getBeginLoc();
     unsigned parentColumn = SM.getPresumedColumnNumber(parentBeginLoc, &invalid1);
     if (invalid1)
         return;
@@ -405,7 +381,7 @@ void Indentation::checkCompoundStmtBraces(const Stmt* parentStmt, const Compound
     auto firstStmt = compoundStmt->body_front();
     if (isa<LabelStmt>(firstStmt))
         return;
-    auto firstStmtLoc = compat::getBeginLoc(firstStmt);
+    auto firstStmtLoc = firstStmt->getBeginLoc();
     unsigned firstStmtBeginColumn = SM.getPresumedColumnNumber(firstStmtLoc, &invalid1);
     if (invalid1)
         return;
@@ -440,7 +416,7 @@ bool Indentation::VisitSwitchStmt(SwitchStmt const* switchStmt)
         if (!caseStmt)
             continue;
 
-        auto stmtLoc = compat::getBeginLoc(caseStmt);
+        auto stmtLoc = caseStmt->getBeginLoc();
 
         bool invalid1 = false;
         bool invalid2 = false;
@@ -466,7 +442,7 @@ bool Indentation::VisitSwitchStmt(SwitchStmt const* switchStmt)
             //            report(DiagnosticsEngine::Warning, "statement mis-aligned compared to neighbours",
             //                   stmtLoc);
             //            report(DiagnosticsEngine::Note, "measured against this one",
-            //                   compat::getBeginLoc(firstStmt));
+            //                   firstStmt->getBeginLoc());
             //getParentStmt(compoundStmt)->dump();
             //stmt->dump();
         }
