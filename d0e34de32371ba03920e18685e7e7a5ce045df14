@@ -52,6 +52,24 @@
       "parentUuid": "5af067a9_e75676b6",
       "revId": "d0e34de32371ba03920e18685e7e7a5ce045df14",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "041e5410_593cf170",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-15T16:26:01Z",
+      "side": 1,
+      "message": "I\u0027d say don\u0027t worry here. There was no formula standard in ODFv1.0/1.1 that could be violated, most was written just as is. On the other hand, it wouldn\u0027t cost much to add yet another bool bPODF for just this and evaluate FormulaGrammar::isPODF(eGram) in the one caller ConventionOOO_A1_ODF::makeRefStr() and keep it clean for whatever insists to read a two decades old pre-standard thing.",
+      "parentUuid": "77d327bb_8a50764a",
+      "revId": "d0e34de32371ba03920e18685e7e7a5ce045df14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
