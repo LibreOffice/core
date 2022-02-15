@@ -19,6 +19,7 @@
 
 #include <rtl/math.h>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
@@ -34,6 +35,7 @@
 #include <memory>
 #include <stdlib.h>
 
+#include <dragonbox/dragonbox.h>
 #include <dtoa.h>
 
 constexpr int minExp = -323, maxExp = 308;
@@ -103,11 +105,6 @@ static double getN10Exp(int nExp)
 }
 
 namespace {
-
-double const nCorrVal[] = {
-    0, 9e-1, 9e-2, 9e-3, 9e-4, 9e-5, 9e-6, 9e-7, 9e-8,
-    9e-9, 9e-10, 9e-11, 9e-12, 9e-13, 9e-14, 9e-15
-};
 
 struct StringTraits
 {
@@ -245,6 +242,38 @@ int getBitsInFracPart(double fAbsValue)
     return std::max(nBitsInFracPart, 0);
 }
 
+constexpr sal_uInt64 eX[] = { 10ull,
+                              100ull,
+                              1000ull,
+                              10000ull,
+                              100000ull,
+                              1000000ull,
+                              10000000ull,
+                              100000000ull,
+                              1000000000ull,
+                              10000000000ull,
+                              100000000000ull,
+                              1000000000000ull,
+                              10000000000000ull,
+                              100000000000000ull,
+                              1000000000000000ull,
+                              10000000000000000ull,
+                              100000000000000000ull,
+                              1000000000000000000ull,
+                              10000000000000000000ull };
+
+int decimalDigits(sal_uInt64 n)
+{
+    return std::distance(std::begin(eX), std::upper_bound(std::begin(eX), std::end(eX), n)) + 1;
+}
+
+sal_uInt64 roundToPow10(sal_uInt64 n, int e)
+{
+    assert(e > 0 && o3tl::make_unsigned(e) <= std::size(eX));
+    const sal_uInt64 d = eX[e - 1];
+    return (n + d / 2) / d * d;
+}
+
 template< typename T >
 void doubleToString(typename T::String ** pResult,
                            sal_Int32 * pResultCapacity, sal_Int32 nResultOffset,
@@ -254,18 +283,6 @@ void doubleToString(typename T::String ** pResult,
                            typename T::Char cGroupSeparator,
                            bool bEraseTrailingDecZeros)
 {
-    static double const nRoundVal[] = {
-        5.0e+0, 0.5e+0, 0.5e-1, 0.5e-2, 0.5e-3, 0.5e-4, 0.5e-5, 0.5e-6,
-        0.5e-7, 0.5e-8, 0.5e-9, 0.5e-10,0.5e-11,0.5e-12,0.5e-13,0.5e-14
-    };
-
-    // sign adjustment, instead of testing for fValue<0.0 this will also fetch
-    // -0.0
-    bool bSign = std::signbit(fValue);
-
-    if (bSign)
-        fValue = -fValue;
-
     if (std::isnan(fValue))
     {
         // #i112652# XMLSchema-2
@@ -283,8 +300,7 @@ void doubleToString(typename T::String ** pResult,
         return;
     }
 
-    bool bHuge = fValue == HUGE_VAL; // g++ 3.0.1 requires it this way...
-    if (bHuge || std::isinf(fValue))
+    if (std::isinf(fValue))
     {
         // #i112652# XMLSchema-2
         sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
@@ -295,7 +311,7 @@ void doubleToString(typename T::String ** pResult,
             nResultOffset = 0;
         }
 
-        if ( bSign )
+        if (std::signbit(fValue))
             T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                            RTL_CONSTASCII_STRINGPARAM("-"));
 
@@ -304,6 +320,18 @@ void doubleToString(typename T::String ** pResult,
 
         return;
     }
+
+    decltype(jkj::dragonbox::to_decimal(fValue)) aParts{};
+    if (fValue) // to_decimal is documented to only handle non-zero finite numbers
+        aParts = jkj::dragonbox::to_decimal(fValue);
+    else
+        aParts.is_negative = std::signbit(fValue); // Handle -0.0
+
+    int nOrigDigits = decimalDigits(aParts.significand);
+    int nExp = nOrigDigits + aParts.exponent - 1;
+    int nRoundDigits = 15;
+    if (aParts.is_negative)
+        fValue = -fValue;
 
     // Unfortunately the old rounding below writes 1.79769313486232e+308 for
     // DBL_MAX and 4 subsequent nextafter(...,0).
@@ -318,77 +346,17 @@ void doubleToString(typename T::String ** pResult,
         // they exceed range they should not be written to exchange strings or
         // file formats.
 
-        // Writing pDig up to decimals(-1,-2) then appending one digit from
-        // pRou xor one or two digits from pSlot[].
-        constexpr char pDig[] = "7976931348623157";
-        constexpr char pRou[] = "8087931359623267";     // the only up-carry is 80
-        static_assert(SAL_N_ELEMENTS(pDig) == SAL_N_ELEMENTS(pRou), "digit count mismatch");
-        constexpr sal_Int32 nDig2 = RTL_CONSTASCII_LENGTH(pRou) - 2;
-        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH(pRou) + 8;  // + "-1.E+308"
-        const char pSlot[5][2][3] =
-        { // rounded, not
-            "67", "57",     // DBL_MAX
-            "65", "55",
-            "53", "53",
-            "51", "51",
-            "59", "49",
-        };
-
-        if (!pResultCapacity)
-        {
-            pResultCapacity = &nCapacity;
-            T::createBuffer(pResult, pResultCapacity);
-            nResultOffset = 0;
-        }
-
-        if (bSign)
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("-"));
-
-        nDecPlaces = std::clamp<sal_Int32>( nDecPlaces, 0, RTL_CONSTASCII_LENGTH(pRou));
-        if (nDecPlaces == 0)
-        {
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("2"));
-        }
-        else
-        {
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("1"));
-            T::appendChars(pResult, pResultCapacity, &nResultOffset, &cDecSeparator, 1);
-            if (nDecPlaces <= 2)
-            {
-                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pRou, nDecPlaces);
-            }
-            else if (nDecPlaces <= nDig2)
-            {
-                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces - 1);
-                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pRou + nDecPlaces - 1, 1);
-            }
-            else
-            {
-                const sal_Int32 nDec = nDecPlaces - nDig2;
-                nDecPlaces -= nDec;
-                // nDec-1 is also offset into slot, rounded(1-1=0) or not(2-1=1)
-                const size_t nSlot = ((fValue < fB3) ? 4 : ((fValue < fB2) ? 3
-                            : ((fValue < fB1) ? 2 : ((fValue < DBL_MAX) ? 1 : 0))));
-
-                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pDig, nDecPlaces);
-                T::appendAscii(pResult, pResultCapacity, &nResultOffset, pSlot[nSlot][nDec-1], nDec);
-            }
-        }
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("E+308"));
-
-        return;
+        eFormat = rtl_math_StringFormat_E;
+        nDecPlaces = std::clamp<sal_Int32>( nDecPlaces, 0, 16);
+        nRoundDigits = 17;
     }
 
     // Use integer representation for integer values that fit into the
     // mantissa (1.((2^53)-1)) with a precision of 1 for highest accuracy.
     if ((eFormat == rtl_math_StringFormat_Automatic ||
-         eFormat == rtl_math_StringFormat_F) && isRepresentableInteger(fValue))
+         eFormat == rtl_math_StringFormat_F) && aParts.exponent >= 0 && fValue < 0x1p53)
     {
-        sal_Int64 nInt = static_cast< sal_Int64 >(fValue);
+        eFormat = rtl_math_StringFormat_F;
         if (nDecPlaces == rtl_math_DecimalPlaces_Max)
             nDecPlaces = 0;
         else
@@ -397,68 +365,7 @@ void doubleToString(typename T::String ** pResult,
         if (bEraseTrailingDecZeros && nDecPlaces > 0)
             nDecPlaces = 0;
 
-        // Round before decimal position.
-        if (nDecPlaces < 0)
-        {
-            sal_Int64 nRounding = static_cast< sal_Int64 >(getN10Exp(-nDecPlaces - 1));
-            const sal_Int64 nTemp = (nInt / nRounding + 5) / 10;
-            nInt = nTemp * 10 * nRounding;
-        }
-
-        // Max 1 sign, 16 integer digits, 15 group separators, 1 decimal
-        // separator, 15 decimals digits.
-        typename T::Char aBuf[64];
-        typename T::Char* pEnd = aBuf + 40;
-        typename T::Char* pStart = pEnd;
-
-        // Backward fill.
-        sal_Int32 nGrouping = cGroupSeparator && pGroups ? *pGroups : 0;
-        sal_Int32 nGroupDigits = 0;
-        do
-        {
-            typename T::Char nDigit = nInt % 10;
-            nInt /= 10;
-            *--pStart = nDigit + '0';
-            if (nGrouping && nGrouping == ++nGroupDigits && nInt)
-            {
-                *--pStart = cGroupSeparator;
-                if (*(pGroups + 1))
-                    nGrouping = *++pGroups;
-                nGroupDigits = 0;
-            }
-        }
-        while (nInt);
-        if (bSign)
-            *--pStart = '-';
-
-        // Append decimals.
-        if (nDecPlaces > 0)
-        {
-            *pEnd++ = cDecSeparator;
-            pEnd = std::fill_n(pEnd, nDecPlaces, '0');
-        }
-
-        if (!pResultCapacity)
-            T::createString(pResult, pStart, pEnd - pStart);
-        else
-            T::appendChars(pResult, pResultCapacity, &nResultOffset, pStart, pEnd - pStart);
-
-        return;
-    }
-
-    // find the exponent
-    int nExp = 0;
-    if ( fValue > 0.0 )
-    {
-        // Cap nExp at a small value beyond which "fValue /= N10Exp" would lose precision (or N10Exp
-        // might even be zero); that will produce output with the decimal point in a non-normalized
-        // position, but the current quality of output for such small values is probably abysmal,
-        // anyway:
-        nExp = std::max(
-            static_cast< int >(floor(log10(fValue))), std::numeric_limits<double>::min_exponent10);
-        double const N10Exp = getN10Exp(nExp);
-        assert(N10Exp != 0);
-        fValue /= N10Exp;
+        nRoundDigits = nOrigDigits; // no rounding
     }
 
     switch (eFormat)
@@ -531,12 +438,14 @@ void doubleToString(typename T::String ** pResult,
         nDigits += nExp;
 
     // Round the number
-    if(nDigits >= 0)
+    nRoundDigits = std::min<int>(nDigits, nRoundDigits);
+    if(nDigits >= 0 && nOrigDigits > nRoundDigits)
     {
-        fValue += nRoundVal[std::min<sal_Int32>(nDigits, 15)];
-        if (fValue >= 10)
+        aParts.significand = roundToPow10(aParts.significand, nOrigDigits - nRoundDigits);
+        assert(aParts.significand <= eX[nOrigDigits - 1]);
+        if (aParts.significand == eX[nOrigDigits - 1]) // up-rounding to the next decade
         {
-            fValue = 1.0;
+            nOrigDigits++;
             nExp++;
 
             if (eFormat == rtl_math_StringFormat_F)
@@ -552,7 +461,7 @@ void doubleToString(typename T::String ** pResult,
     assert(nBuf <= 1024);
     typename T::Char* pBuf = static_cast<typename T::Char*>(alloca(nBuf * sizeof(typename T::Char)));
     typename T::Char * p = pBuf;
-    if ( bSign )
+    if (aParts.is_negative)
         *p++ = '-';
 
     bool bHasDec = false;
@@ -612,77 +521,22 @@ void doubleToString(typename T::String ** pResult,
     // print the number
     if (nDigits > 0)
     {
-        for (int i = 0; ; i++)
+        for (int nCurExp = nOrigDigits - 1;;)
         {
-            if (i < 15)     // was 16 in ancient versions, which leads to inaccuracies
+            int nDigit;
+            if (aParts.significand > 0 && nCurExp > 0)
             {
-                int nDigit;
-                if (nDigits-1 == 0 && i > 0 && i < 14)
-                    nDigit = floor( fValue + nCorrVal[15-i]);
-                else
-                    nDigit = fValue + 1E-15;
-
-                if (nDigit >= 10)
-                {   // after-treatment of up-rounding to the next decade
-                    typename T::Char* p1 = pBuf;
-                    // Assert that no one changed the logic we rely on.
-                    assert(!bSign || *p1 == '-');
-                    // Do not touch leading minus sign put earlier.
-                    if (bSign)
-                        ++p1;
-                    assert(p1 <= p);
-                    if (p1 == p)
-                    {
-                        *p++ = '1';
-                        if (eFormat != rtl_math_StringFormat_F)
-                        {
-                            *p++ = cDecSeparator;
-                            nExp++;
-                            bHasDec = true;
-                        }
-                        *p++ = '0';
-                    }
-                    else
-                    {
-                        for (typename T::Char* p2 = p - 1; p2 >= p1; --p2)
-                        {
-                            typename T::Char cS = *p2;
-                            if (cS == cDecSeparator)
-                                continue;
-                            if (cS != '9')
-                            {
-                                ++*p2;
-                                break;
-                            }
-                            *p2 = '0';
-                            if (p2 == p1) // The number consisted of all 9s replaced to all 0s
-                            {
-                                if (eFormat == rtl_math_StringFormat_F)
-                                { // move everything to the right before inserting '1'
-                                    std::memmove(p2 + 1, p2, (p++ - p2) * sizeof(*p));
-                                }
-                                else
-                                {
-                                    nExp++;
-                                }
-                                *p2 = '1';
-                            }
-                        }
-
-                        *p++ = '0';
-                    }
-                    fValue = 0.0;
-                }
-                else
-                {
-                    *p++ = nDigit + '0';
-                    fValue = (fValue - nDigit) * 10.0;
-                }
+                --nCurExp;
+                nDigit = aParts.significand / eX[nCurExp];
+                aParts.significand %= eX[nCurExp];
             }
             else
             {
-                *p++ = '0';
+                nDigit = aParts.significand;
+                aParts.significand = 0;
             }
+            assert(nDigit >= 0 && nDigit < 10);
+            *p++ = nDigit + '0';
 
             if (!--nDigits)
                 break;  // for
