@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3869217_23c65f44",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-15T05:18:26Z",
+      "side": 1,
+      "message": "Maybe some compiler switch? Or Linux vs. Windows? A library...\nOr some user problem - me clicking the label expecting the usual interaction instead of the icon. With 7.3 it works respectively.",
+      "revId": "2f2695e8b6729bc4d8956790e7156df2267475b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
