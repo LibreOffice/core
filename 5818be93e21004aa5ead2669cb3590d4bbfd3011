@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "948d69e1_0fbc5edf",
+        "filename": "include/svx/compressgraphicdialog.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-15T10:46:22Z",
+      "side": 1,
+      "message": "Overall this looks reasonable to me, I\u0027d move this struct and the \"static memParam memp;\" out of the .hxx and into the .cxx so it can be hidden from the public headers.",
+      "revId": "5818be93e21004aa5ead2669cb3590d4bbfd3011",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
