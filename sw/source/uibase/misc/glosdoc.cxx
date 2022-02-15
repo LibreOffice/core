@@ -347,11 +347,13 @@ static OUString lcl_makePath(const std::vector<OUString>& rPaths)
 
 void SwGlossaries::UpdateGlosPath(bool bFull)
 {
+    SAL_INFO("sw.autotext", "SwGlossaries::UpdateGlosPath bFull: " << true);
     SvtPathOptions aPathOpt;
     const OUString& aNewPath( aPathOpt.GetAutoTextPath() );
     bool bPathChanged = m_aPath != aNewPath;
     if (bFull || bPathChanged)
     {
+        SAL_INFO("sw.autotext", "if (bFull || bPathChanged)");
         m_aPath = aNewPath;
 
         m_PathArr.clear();
@@ -360,6 +362,7 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
         std::vector<OUString> aInvalidPaths;
         if (!m_aPath.isEmpty())
         {
+            SAL_INFO("sw.autotext", "if (!m_aPath.isEmpty())");
             sal_Int32 nIndex = 0;
             do
             {
@@ -374,19 +377,27 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
                 }
                 aDirArr.push_back(sPth);
                 if( !FStatHelper::IsFolder( sPth ) )
+                {
                     aInvalidPaths.push_back(sPth);
+                    SAL_INFO("sw.autotext", "invalid path: " << sPth);
+                }
                 else
+                {
                     m_PathArr.push_back(sPth);
+                    SAL_INFO("sw.autotext", "valid path: " << sPth);
+                }
             }
             while (nIndex>=0);
         }
 
         if (m_aPath.isEmpty() || !aInvalidPaths.empty())
         {
+            SAL_INFO("sw.autotext", "if (m_aPath.isEmpty() || !aInvalidPaths.empty())");
             std::sort(aInvalidPaths.begin(), aInvalidPaths.end());
             aInvalidPaths.erase(std::unique(aInvalidPaths.begin(), aInvalidPaths.end()), aInvalidPaths.end());
             if (bPathChanged || (m_aInvalidPaths != aInvalidPaths))
             {
+                SAL_INFO("sw.autotext", "err condition!");
                 m_aInvalidPaths = aInvalidPaths;
                 // wrong path, that means AutoText directory doesn't exist
 
@@ -403,10 +414,12 @@ void SwGlossaries::UpdateGlosPath(bool bFull)
 
         if (!m_GlosArr.empty())
         {
+            SAL_INFO("sw.autotext", "if (!m_GlosArr.empty())");
             m_GlosArr.clear();
             GetNameList();
         }
     }
+    SAL_INFO("sw.autotext", "END SwGlossaries::UpdateGlosPath");
 }
 
 void SwGlossaries::ShowError()
@@ -591,16 +604,23 @@ Reference< text::XAutoTextEntry > SwGlossaries::GetAutoTextEntry(
     const OUString& rGroupName,
     const OUString& rEntryName )
 {
+    SAL_INFO("sw.autotext", "SwGlossaries::GetAutoTextEntry rCompleteGroupName: " << rCompleteGroupName << " rGroupName: "  << rGroupName << " rEntryName: " << rEntryName);
     //standard must be created
     bool bCreate = ( rCompleteGroupName == GetDefName() );
     std::unique_ptr< SwTextBlocks > pGlosGroup( GetGroupDoc( rCompleteGroupName, bCreate ) );
 
     if (!pGlosGroup || pGlosGroup->GetError())
+    {
+        SAL_INFO("sw.autotext", "pGlosGroup empty!");
         throw lang::WrappedTargetException();
+    }
 
     sal_uInt16 nIdx = pGlosGroup->GetIndex( rEntryName );
     if ( USHRT_MAX == nIdx )
+    {
+        SAL_INFO("sw.autotext", "rEntryName not found!");
         throw container::NoSuchElementException();
+    }
 
     Reference< text::XAutoTextEntry > xReturn;
 

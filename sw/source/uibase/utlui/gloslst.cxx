@@ -82,6 +82,7 @@ IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl, weld::TreeView&, void)
 SwGlossaryList::SwGlossaryList() :
     bFilled(false)
 {
+    SAL_INFO("sw.autotext", "SwGlossaryList::SwGlossaryList");
     SvtPathOptions aPathOpt;
     sPath = aPathOpt.GetAutoTextPath();
     SetTimeout(GLOS_TIMEOUT);
@@ -89,6 +90,7 @@ SwGlossaryList::SwGlossaryList() :
 
 SwGlossaryList::~SwGlossaryList()
 {
+    SAL_INFO("sw.autotext", "SwGlossaryList::~SwGlossaryList");
     ClearGroups();
 }
 
@@ -225,6 +227,7 @@ OUString SwGlossaryList::GetBlockShortName(size_t nGroup, sal_uInt16 nBlock)
 
 void SwGlossaryList::Update()
 {
+    SAL_INFO("sw.autotext", "SwGlossaryList::Update");
     if(!IsActive())
         Start();
 
@@ -232,6 +235,7 @@ void SwGlossaryList::Update()
     const OUString& sTemp( aPathOpt.GetAutoTextPath() );
     if(sTemp != sPath)
     {
+        SAL_INFO("sw.autotext", "sTemp != sPath");
         sPath = sTemp;
         bFilled = false;
         ClearGroups();
@@ -241,6 +245,7 @@ void SwGlossaryList::Update()
     const OUString sExt( SwGlossaries::GetExtension() );
     if(!bFilled)
     {
+        SAL_INFO("sw.autotext", "!bFilled");
         const size_t nGroupCount = pGlossaries->GetGroupCnt();
         for(size_t i = 0; i < nGroupCount; ++i)
         {
@@ -266,6 +271,7 @@ void SwGlossaryList::Update()
     }
     else
     {
+        SAL_INFO("sw.autotext", "bFilled");
         for( size_t nPath = 0; nPath < rPathArr.size(); nPath++ )
         {
             std::vector<OUString> aFoundGroupNames;
@@ -323,10 +329,12 @@ void SwGlossaryList::Update()
             }
         }
     }
+    SAL_INFO("sw.autotext", "END SwGlossaryList::Update");
 }
 
 void SwGlossaryList::Invoke()
 {
+    SAL_INFO("sw.autotext", "SwGlossaryList::Invoke");
     // Only update automatically if a SwView has the focus.
     if(::GetActiveView())
         Update();
@@ -350,6 +358,7 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     pGroup->sShortNames.clear();
     if(pBlock)
         pGroup->sTitle = pBlock->GetName();
+    SAL_INFO("sw.autotext", "SwGlossaryList::FillGroup " << pGroup->sTitle);
 
     for(sal_uInt16 j = 0; j < pGroup->nCount; j++)
     {
@@ -358,6 +367,7 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
         pGroup->sShortNames += pBlock->GetShortName(j)
             + OUStringLiteral1(STRING_DELIM);
     }
+    SAL_INFO("sw.autotext", "END SwGlossaryList::FillGroup");
 }
 
 // Give back all (not exceeding FIND_MAX_GLOS) found modules

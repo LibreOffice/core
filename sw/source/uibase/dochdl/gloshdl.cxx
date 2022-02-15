@@ -349,12 +349,15 @@ bool SwGlossaryHdl::DelGlossary(const OUString &rShortName)
 // expand short name
 bool SwGlossaryHdl::ExpandGlossary(weld::Window* pParent)
 {
+    SAL_INFO("sw.autotext", "SwGlossaryHdl::ExpandGlossary");
     OSL_ENSURE(pWrtShell->CanInsert(), "illegal");
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc();
     OUString sGroupName( (*fnGetCurrGroup)() );
+    SAL_INFO("sw.autotext", "current group name: " << sGroupName);
     if (sGroupName.indexOf(GLOS_DELIM)<0)
         FindGroupName(sGroupName);
+    SAL_INFO("sw.autotext", "new group name: " << sGroupName);
     std::unique_ptr<SwTextBlocks> pGlossary = rStatGlossaries.GetGroupDoc(sGroupName);
 
     OUString aShortName;
@@ -378,6 +381,7 @@ bool SwGlossaryHdl::ExpandGlossary(weld::Window* pParent)
         if(pWrtShell->IsSelection())
             aShortName = pWrtShell->GetSelText();
     }
+    SAL_INFO("sw.autotext", "END SwGlossaryHdl::ExpandGlossary");
     return pGlossary && Expand(pParent, aShortName, &rStatGlossaries, std::move(pGlossary));
 }
 
@@ -385,16 +389,19 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
                             SwGlossaries *pGlossaries,
                             std::unique_ptr<SwTextBlocks> pGlossary)
 {
+    SAL_INFO("sw.autotext", "SwGlossaryHdl::Expand rShortName: " << rShortName);
     std::vector<TextBlockInfo_Impl> aFoundArr;
     OUString aShortName( rShortName );
     bool bCancel = false;
     // search for text block
     // - don't prefer current group depending on configuration setting
     const SvxAutoCorrCfg& rCfg = SvxAutoCorrCfg::Get();
+    SAL_INFO("sw.autotext", "rCfg.IsSearchInAllCategories(): " << rCfg.IsSearchInAllCategories());
     sal_uInt16 nFound = !rCfg.IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
     // if not found then search in all groups
     if( nFound == sal_uInt16(-1) )
     {
+        SAL_INFO("sw.autotext", "not found");
         const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
         SwGlossaryList* pGlossaryList = ::GetGlossaryList();
         const size_t nGroupCount = pGlossaryList->GetGroupCount();
@@ -402,11 +409,14 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
         {
             // get group name with path-extension
             const OUString sGroupName = pGlossaryList->GetGroupName(i);
+            SAL_INFO("sw.autotext", "checking group " << sGroupName);
             if(sGroupName == pGlossary->GetName())
                 continue;
+            SAL_INFO("sw.autotext", "found group " << sGroupName);
             const sal_uInt16 nBlockCount = pGlossaryList->GetBlockCount(i);
             if(nBlockCount)
             {
+                SAL_INFO("sw.autotext", "found block");
                 const OUString sTitle = pGlossaryList->GetGroupTitle(i);
                 for(sal_uInt16 j = 0; j < nBlockCount; j++)
                 {
@@ -414,6 +424,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
                     const OUString sShortName(pGlossaryList->GetBlockShortName(i, j));
                     if( rSCmp.isEqual( rShortName, sShortName ))
                     {
+                        SAL_INFO("sw.autotext", "found: sTitle: " << sTitle << " sLongName" << sLongName << " sGroupName " << sGroupName );
                         aFoundArr.emplace_back(sTitle, sLongName, sGroupName);
                     }
                 }
@@ -421,9 +432,11 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
         }
         if( !aFoundArr.empty() )  // one was found
         {
+            SAL_INFO("sw.autotext", "one was found");
             pGlossary.reset();
             if (1 == aFoundArr.size())
             {
+                SAL_INFO("sw.autotext", "aFoundArr.size() == 1");
                 TextBlockInfo_Impl& rData = aFoundArr.front();
                 pGlossary = pGlossaries->GetGroupDoc(rData.sGroupName);
                 nFound = pGlossary->GetIndex( aShortName );
@@ -459,6 +472,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
     // not found
     if( nFound == sal_uInt16(-1) )
     {
+        SAL_INFO("sw.autotext", "not found.");
         if( !bCancel )
         {
             pGlossary.reset();
@@ -480,6 +494,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
     }
     else
     {
+        SAL_INFO("sw.autotext", "inserting glossary.");
         SvxMacro aStartMacro(OUString(), OUString(), STARBASIC);
         SvxMacro aEndMacro(OUString(), OUString(), STARBASIC);
         GetMacros( aShortName, aStartMacro, aEndMacro, pGlossary.get() );
@@ -510,6 +525,7 @@ bool SwGlossaryHdl::Expand(weld::Window* pParent, const OUString& rShortName,
         if( aFieldLst.BuildSortLst() )
             pWrtShell->UpdateInputFields( &aFieldLst );
     }
+    SAL_INFO("sw.autotext", "END SwGlossaryHdl::Expand");
     return true;
 }
 
