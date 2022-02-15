@@ -66,12 +66,12 @@ void ScChangeTrackingExportHelper::GetAcceptanceState(const ScChangeAction* pAct
 
 void ScChangeTrackingExportHelper::WriteBigRange(const ScBigRange& rBigRange, XMLTokenEnum aName)
 {
-    sal_Int32 nStartColumn;
-    sal_Int32 nEndColumn;
-    sal_Int32 nStartRow;
-    sal_Int32 nEndRow;
-    sal_Int32 nStartSheet;
-    sal_Int32 nEndSheet;
+    sal_Int64 nStartColumn;
+    sal_Int64 nEndColumn;
+    sal_Int64 nStartRow;
+    sal_Int64 nEndRow;
+    sal_Int64 nStartSheet;
+    sal_Int64 nEndSheet;
     rBigRange.GetVars(nStartColumn, nStartRow, nStartSheet,
         nEndColumn, nEndRow, nEndSheet);
     if ((nStartColumn == nEndColumn) && (nStartRow == nEndRow) && (nStartSheet == nEndSheet))
@@ -392,16 +392,16 @@ void ScChangeTrackingExportHelper::WriteContentChange(const ScChangeAction* pAct
 
 void ScChangeTrackingExportHelper::AddInsertionAttributes(const ScChangeAction* pConstAction)
 {
-    sal_Int32 nPosition(0);
-    sal_Int32 nCount(0);
-    sal_Int32 nStartPosition(0);
-    sal_Int32 nEndPosition(0);
-    sal_Int32 nStartColumn;
-    sal_Int32 nEndColumn;
-    sal_Int32 nStartRow;
-    sal_Int32 nEndRow;
-    sal_Int32 nStartSheet;
-    sal_Int32 nEndSheet;
+    sal_Int64 nPosition(0);
+    sal_Int64 nCount(0);
+    sal_Int64 nStartPosition(0);
+    sal_Int64 nEndPosition(0);
+    sal_Int64 nStartColumn;
+    sal_Int64 nEndColumn;
+    sal_Int64 nStartRow;
+    sal_Int64 nEndRow;
+    sal_Int64 nStartSheet;
+    sal_Int64 nEndSheet;
     const ScBigRange& rBigRange = pConstAction->GetBigRange();
     rBigRange.GetVars(nStartColumn, nStartRow, nStartSheet,
         nEndColumn, nEndRow, nEndSheet);
@@ -460,12 +460,12 @@ void ScChangeTrackingExportHelper::AddDeletionAttributes(const ScChangeActionDel
 {
     sal_Int32 nPosition(0);
     const ScBigRange& rBigRange = pDelAction->GetBigRange();
-    sal_Int32 nStartColumn(0);
-    sal_Int32 nEndColumn(0);
-    sal_Int32 nStartRow(0);
-    sal_Int32 nEndRow(0);
-    sal_Int32 nStartSheet(0);
-    sal_Int32 nEndSheet(0);
+    sal_Int64 nStartColumn(0);
+    sal_Int64 nEndColumn(0);
+    sal_Int64 nStartRow(0);
+    sal_Int64 nEndRow(0);
+    sal_Int64 nStartSheet(0);
+    sal_Int64 nEndSheet(0);
     rBigRange.GetVars(nStartColumn, nStartRow, nStartSheet,
         nEndColumn, nEndRow, nEndSheet);
     switch (pDelAction->GetType())

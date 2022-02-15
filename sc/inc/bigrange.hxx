@@ -28,13 +28,13 @@
 
 class ScBigAddress
 {
-    sal_Int32   nRow;
-    sal_Int32   nCol;
-    sal_Int32   nTab;
+    sal_Int64   nRow;
+    sal_Int64   nCol;
+    sal_Int64   nTab;
 
 public:
             ScBigAddress() : nRow(0), nCol(0), nTab(0) {}
-            ScBigAddress( sal_Int32 nColP, sal_Int32 nRowP, sal_Int32 nTabP )
+            ScBigAddress( sal_Int64 nColP, sal_Int64 nRowP, sal_Int64 nTabP )
                 : nRow( nRowP ), nCol( nColP ), nTab( nTabP ) {}
             ScBigAddress( const ScBigAddress& r )
                 : nRow( r.nRow ), nCol( r.nCol ), nTab( r.nTab ) {}
@@ -42,20 +42,20 @@ public:
             ScBigAddress( const ScAddress& r )
                 : nRow( r.Row() ), nCol( r.Col() ), nTab( r.Tab() ) {}
 
-    sal_Int32   Col() const { return nCol; }
-    sal_Int32   Row() const { return nRow; }
-    sal_Int32   Tab() const { return nTab; }
+    sal_Int64   Col() const { return nCol; }
+    sal_Int64   Row() const { return nRow; }
+    sal_Int64   Tab() const { return nTab; }
 
-    void    Set( sal_Int32 nColP, sal_Int32 nRowP, sal_Int32 nTabP )
+    void    Set( sal_Int64 nColP, sal_Int64 nRowP, sal_Int64 nTabP )
                 { nCol = nColP; nRow = nRowP; nTab = nTabP; }
-    void    SetCol( sal_Int32 nColP ) { nCol = nColP; }
-    void    SetRow( sal_Int32 nRowP ) { nRow = nRowP; }
-    void    SetTab( sal_Int32 nTabP ) { nTab = nTabP; }
-    void    IncCol( sal_Int32 n = 1 ) { nCol += n; }
-    void    IncRow( sal_Int32 n = 1 ) { nRow += n; }
-    void    IncTab( sal_Int32 n = 1 ) { nTab += n; }
+    void    SetCol( sal_Int64 nColP ) { nCol = nColP; }
+    void    SetRow( sal_Int64 nRowP ) { nRow = nRowP; }
+    void    SetTab( sal_Int64 nTabP ) { nTab = nTabP; }
+    void    IncCol( sal_Int64 n = 1 ) { nCol += n; }
+    void    IncRow( sal_Int64 n = 1 ) { nRow += n; }
+    void    IncTab( sal_Int64 n = 1 ) { nTab += n; }
 
-    void    GetVars( sal_Int32& nColP, sal_Int32& nRowP, sal_Int32& nTabP ) const
+    void    GetVars( sal_Int64& nColP, sal_Int64& nRowP, sal_Int64& nTabP ) const
                 { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
     bool IsValid( const ScDocument& rDoc ) const;
@@ -115,18 +115,18 @@ public:
                     ScBigRange( ScBigRange&& ) = default;
                     ScBigRange( const ScRange& r )
                         : aStart( r.aStart ), aEnd( r.aEnd ) {}
-                    ScBigRange( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nTab1,
-                            sal_Int32 nCol2, sal_Int32 nRow2, sal_Int32 nTab2 )
+                    ScBigRange( sal_Int64 nCol1, sal_Int64 nRow1, sal_Int64 nTab1,
+                            sal_Int64 nCol2, sal_Int64 nRow2, sal_Int64 nTab2 )
                         : aStart( nCol1, nRow1, nTab1 ),
                         aEnd( nCol2, nRow2, nTab2 ) {}
 
-    void    Set( sal_Int32 nCol1, sal_Int32 nRow1, sal_Int32 nTab1,
-                     sal_Int32 nCol2, sal_Int32 nRow2, sal_Int32 nTab2 )
+    void    Set( sal_Int64 nCol1, sal_Int64 nRow1, sal_Int64 nTab1,
+                     sal_Int64 nCol2, sal_Int64 nRow2, sal_Int64 nTab2 )
                 { aStart.Set( nCol1, nRow1, nTab1 );
                   aEnd.Set( nCol2, nRow2, nTab2 ); }
 
-    void    GetVars( sal_Int32& nCol1, sal_Int32& nRow1, sal_Int32& nTab1,
-                     sal_Int32& nCol2, sal_Int32& nRow2, sal_Int32& nTab2 ) const
+    void    GetVars( sal_Int64& nCol1, sal_Int64& nRow1, sal_Int64& nTab1,
+                     sal_Int64& nCol2, sal_Int64& nRow2, sal_Int64& nTab2 ) const
                 { aStart.GetVars( nCol1, nRow1, nTab1 );
                   aEnd.GetVars( nCol2, nRow2, nTab2 ); }
 
@@ -148,8 +148,8 @@ public:
                         { return !operator==( r ); }
 
     // These are used to define whole rows/cols/tabs.
-    constexpr static sal_Int32 nRangeMin = 0x80000000;
-    constexpr static sal_Int32 nRangeMax = 0x7fffffff;
+    constexpr static sal_Int64 nRangeMin = ::std::numeric_limits<sal_Int64>::min();;
+    constexpr static sal_Int64 nRangeMax = ::std::numeric_limits<sal_Int64>::max();;
 };
 
 inline bool ScBigRange::In( const ScBigAddress& rAddr ) const
