@@ -16,6 +16,23 @@
       "message": "Caolán, Is this acceptable?",
       "revId": "d5c503614f9575de6d9647d9415d141722aa553c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d9672a0_25dea91d",
+        "filename": "svtools/source/control/toolbarmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-15T12:34:36Z",
+      "side": 1,
+      "message": "maybe editing vcl/uiconfig/ui/interimtearableparent.ui and removing the \"\u003cproperty name\u003d\"type_hint\"\u003edock\u003c/property\u003e\" line from it instead of this would be better. Remove the property from the start instead of setting it in the .ui and unsetting it in code",
+      "revId": "d5c503614f9575de6d9647d9415d141722aa553c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
