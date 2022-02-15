@@ -423,6 +423,9 @@ public:
 
     OUString m_aRTFOLEMimeType;
 
+    /// If set, replace leading tabs with this many non-breaking spaces.
+    std::optional<sal_Int32> m_nLeadingTabWidth;
+
     /// Construct an instance of SwHTMLWriter and optionally give it
     /// the filter options directly, which can also be set via SetupFilterOptions().
     explicit SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions = "" );

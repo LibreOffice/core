@@ -306,6 +306,14 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         // XHTML namespace implies XHTML.
         mbXHTML = true;
     }
+
+    it = aStoreMap.find("LeadingTabWidth");
+    if (it != aStoreMap.end())
+    {
+        sal_Int32 nVal{};
+        it->second >>= nVal;
+        m_nLeadingTabWidth.emplace(nVal);
+    }
 }
 
 ErrCode SwHTMLWriter::WriteStream()

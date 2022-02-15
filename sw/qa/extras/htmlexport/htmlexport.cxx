@@ -1669,6 +1669,44 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
     assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:table[2]/reqif-xhtml:tr[2]", "style");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
+{
+    // Given a document with leading tabs:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("\t first");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("\t\t second");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("thi \t rd");
+
+    // When exporting to HTML, using LeadingTabWidth=2:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", OUString("xhtmlns=reqif-xhtml")),
+        comphelper::makePropertyValue("LeadingTabWidth", static_cast<sal_Int32>(2)),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure that leading tabs are replaced with 2 nbsps:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    CPPUNIT_ASSERT(pDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: <nbsp><nbsp><space>first
+    // - Actual  : <tab><space>first
+    // i.e. the leading tab was not replaced by 2 nbsps.
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[1]", u"\xa0\xa0 first");
+    // Test a leading tab that is not at the start of the paragraph:
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[2]", u"\xa0\xa0\xa0\xa0 second");
+    // Test a tab which is not leading:
+    assertXPathContent(pXmlDoc, "//reqif-xhtml:p[3]", u"thi \t rd");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2358,6 +2358,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     {
         HTMLOutContext aContext( rHTMLWrt.m_eDestEnc );
 
+        // Tabs are leading till there is a non-tab since the start of the paragraph.
+        bool bLeadingTab = true;
         for( ; nStrPos < nEnd; nStrPos++ )
         {
             // output the frames that are anchored to the current position
@@ -2491,7 +2493,33 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         rHTMLWrt.OutPointFieldmarks(aMarkPos);
                     }
                     else
-                        HTMLOutFuncs::Out_Char( rWrt.Strm(), c, aContext, &rHTMLWrt.m_aNonConvertableCharacters );
+                    {
+                        bool bConsumed = false;
+                        if (c == '\t')
+                        {
+                            if (bLeadingTab && rHTMLWrt.m_nLeadingTabWidth.has_value())
+                            {
+                                // Consume a tab if it's leading and we know the number of NBSPs to
+                                // be used as a replacement.
+                                for (sal_Int32 i = 0; i < *rHTMLWrt.m_nLeadingTabWidth; ++i)
+                                {
+                                    rWrt.Strm().WriteCharPtr("&#160;");
+                                }
+                                bConsumed = true;
+                            }
+                        }
+                        else
+                        {
+                            // Not a tab -> later tabs are no longer leading.
+                            bLeadingTab = false;
+                        }
+
+                        if (!bConsumed)
+                        {
+                            HTMLOutFuncs::Out_Char(rWrt.Strm(), c, aContext,
+                                                   &rHTMLWrt.m_aNonConvertableCharacters);
+                        }
+                    }
 
                     // if a paragraph's last character is a hard line break
                     // then we need to add an extra <br>
