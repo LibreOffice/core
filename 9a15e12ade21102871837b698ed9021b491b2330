@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db5037a_3db96497",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T07:00:39Z",
+      "side": 1,
+      "message": "Stephan: is this a reasonable change? And could you please upload https://github.com/jk-jeon/dragonbox/archive/refs/tags/1.1.0.tar.gz to our server, so that this could be tested? Thanks!",
+      "revId": "9a15e12ade21102871837b698ed9021b491b2330",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
