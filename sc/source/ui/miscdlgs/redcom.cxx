@@ -138,7 +138,7 @@ void ScRedComDialog::SelectCell()
     if(rRange.IsValid(pDocShell->GetDocument()))
     {
         ScViewData* pViewData=ScDocShell::GetViewData();
-        ScRange aRef=rRange.MakeRange();
+        ScRange aRef=rRange.MakeRange(pDocShell->GetDocument());
         ScTabView* pTabView=pViewData->GetView();
         pTabView->MarkRange(aRef);
     }
