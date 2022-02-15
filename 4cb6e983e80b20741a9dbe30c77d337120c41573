@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa8dd7c_e45e0074",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T08:13:13Z",
+      "side": 1,
+      "message": "This is exactly what I warned against. Well, shrug.",
+      "revId": "4cb6e983e80b20741a9dbe30c77d337120c41573",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
