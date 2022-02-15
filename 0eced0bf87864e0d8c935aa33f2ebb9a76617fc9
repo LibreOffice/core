@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d8060965_86814766",
+        "filename": "Makefile.in",
+        "patchSetId": 4
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T08:52:53Z",
+      "side": 1,
+      "message": "Ah - sorry, mistakenly sneaked from https://gerrit.libreoffice.org/c/core/+/129930",
+      "parentUuid": "70617449_e4faf4e6",
+      "revId": "0eced0bf87864e0d8c935aa33f2ebb9a76617fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e4934b25_e71aeb72",
         "filename": "sal/rtl/math.cxx",
         "patchSetId": 4
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-15T08:48:18Z",
       "side": 1,
       "message": "better keep this block sorted lexicographically?",
+      "revId": "0eced0bf87864e0d8c935aa33f2ebb9a76617fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba3e04d1_c0e3c601",
+        "filename": "sal/rtl/math.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-15T08:52:53Z",
+      "side": 1,
+      "message": "Will do - thank you!",
+      "parentUuid": "e4934b25_e71aeb72",
       "revId": "0eced0bf87864e0d8c935aa33f2ebb9a76617fc9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
