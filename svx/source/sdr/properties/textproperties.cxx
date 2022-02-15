@@ -81,15 +81,7 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new TextProperties(*this, rObj));
         }
 
-        bool TextProperties::WantItemSetInItemSetChanged() const
-        {
-            // The itemset construction is fairly expensive, and we only need it
-            // if this text (or sub-type of text, eg. rectangle) actually has text.
-            const svx::ITextProvider& rTextProvider(getTextProvider());
-            return rTextProvider.getTextCount() != 0;
-        }
-
-        void TextProperties::ItemSetChanged(const SfxItemSet* pSet)
+        void TextProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
@@ -129,7 +121,10 @@ namespace sdr::properties
                     for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
                     {
                         SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
-                        aSet.Put(*pSet);
+                        for (const SfxPoolItem* pItem : aChangedItems)
+                            aSet.Put(*pItem);
+                        if (nDeletedWhich != SAL_MAX_UINT16)
+                            aSet.ClearItem(nDeletedWhich);
                         pOutliner->SetParaAttribs(nPara, aSet);
                     }
 
@@ -153,15 +148,16 @@ namespace sdr::properties
             }
 
             // Extra-Repaint for radical layout changes (#43139#)
-            if(pSet && SfxItemState::SET == pSet->GetItemState(SDRATTR_TEXT_CONTOURFRAME))
-            {
-                // Here only repaint wanted
-                rObj.ActionChanged();
-                //rObj.BroadcastObjectChange();
-            }
+            for (const SfxPoolItem* pItem : aChangedItems)
+                if (pItem->Which() == SDRATTR_TEXT_CONTOURFRAME)
+                {
+                    // Here only repaint wanted
+                    rObj.ActionChanged();
+                    //rObj.BroadcastObjectChange();
+                }
 
             // call parent
-            AttributeProperties::ItemSetChanged(pSet);
+            AttributeProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
         }
 
         void TextProperties::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
@@ -401,19 +397,66 @@ namespace sdr::properties
             AttributeProperties::ForceStyleToHardAttributes();
 
             // #i61284# push hard ObjectItemSet to OutlinerParaObject attributes
-            // using existing functionality
-            GetObjectItemSet(); // force ItemSet
-            ItemSetChanged(&*mxItemSet);
+            auto & rObjectItemSet = GetObjectItemSet(); // force ItemSet
+            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
+            if (auto pOutliner = rObj.GetTextEditOutliner())
+            {
+                pOutliner->SetTextColumns(rObj.GetTextColumnsNumber(),
+                                          rObj.GetTextColumnsSpacing());
+            }
+            const svx::ITextProvider& rTextProvider(getTextProvider());
+            sal_Int32 nText = rTextProvider.getTextCount();
+            while (nText--)
+            {
+                SdrText* pText = rTextProvider.getText( nText );
+
+                OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
+
+                if(pParaObj)
+                {
+                    const bool bTextEdit = rObj.IsTextEditActive() && (rObj.getActiveText() == pText);
+
+                    // handle outliner attributes
+                    Outliner* pOutliner = rObj.GetTextEditOutliner();
+
+                    if(!bTextEdit)
+                    {
+                        pOutliner = &rObj.ImpGetDrawOutliner();
+                        pOutliner->SetText(*pParaObj);
+                    }
+
+                    sal_Int32 nParaCount(pOutliner->GetParagraphCount());
+
+                    for(sal_Int32 nPara = 0; nPara < nParaCount; nPara++)
+                    {
+                        SfxItemSet aSet(pOutliner->GetParaAttribs(nPara));
+                        aSet.Put(rObjectItemSet);
+                        pOutliner->SetParaAttribs(nPara, aSet);
+                    }
+
+                    if(!bTextEdit)
+                    {
+                        if(nParaCount)
+                        {
+                            SfxItemSet aNewSet(pOutliner->GetParaAttribs(0));
+                            mxItemSet->Put(aNewSet);
+                        }
+
+                        std::optional<OutlinerParaObject> pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        pOutliner->Clear();
+
+                        rObj.NbcSetOutlinerParaObjectForText(std::move(pTemp),pText);
+                    }
+                }
+            }
 
             // now the standard TextProperties stuff
-            SdrTextObj& rObj = static_cast<SdrTextObj&>(GetSdrObject());
 
             if(rObj.IsTextEditActive() || rObj.IsLinkedText())
                 return;
 
             std::unique_ptr<Outliner> pOutliner = SdrMakeOutliner(OutlinerMode::OutlineObject, rObj.getSdrModelFromSdrObject());
-            const svx::ITextProvider& rTextProvider(getTextProvider());
-            sal_Int32 nText = rTextProvider.getTextCount();
+            nText = rTextProvider.getTextCount();
             while (nText--)
             {
                 SdrText* pText = rTextProvider.getText( nText );

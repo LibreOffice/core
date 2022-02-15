@@ -101,8 +101,7 @@ namespace sdr::properties
                     TextProperties::ClearObjectItemDirect( nWhich2 );
                     nWhich2 = aIter.NextWhich();
                 }
-                SfxItemSet aSet(GetSdrObject().GetObjectItemPool());
-                ItemSetChanged(&aSet);
+                ItemSetChanged({}, 0);
             }
             else
                 TextProperties::ClearObjectItem( nWhich );
@@ -124,10 +123,10 @@ namespace sdr::properties
                 TextProperties::ClearObjectItemDirect( nWhich );
         }
 
-        void CustomShapeProperties::ItemSetChanged(const SfxItemSet* pSet)
+        void CustomShapeProperties::ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich)
         {
             // call parent
-            TextProperties::ItemSetChanged(pSet);
+            TextProperties::ItemSetChanged(aChangedItems, nDeletedWhich);
 
             // update bTextFrame and RenderGeometry
             UpdateTextFrameStatus(true);

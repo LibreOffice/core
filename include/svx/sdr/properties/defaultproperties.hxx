@@ -27,6 +27,7 @@
 #include <svx/sdr/properties/properties.hxx>
 #include <svx/svxdllapi.h>
 #include <svl/itemset.hxx>
+#include <o3tl/span.hxx>
 
 struct _xmlTextWriter;
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
@@ -54,12 +55,9 @@ namespace sdr::properties
             // specific item changes
             virtual void PostItemChange(const sal_uInt16 nWhich);
 
-            // Internally react on ItemSet changes. The given ItemSet contains all changed items, the new ones.
-            virtual void ItemSetChanged(const SfxItemSet*);
-
-            // Subclasses need to return true if they want the ItemSetChanged() callback to actually have a non-zero pointer.
-            // We do this because creating the temporary item set is expensive and seldom used.
-            virtual bool WantItemSetInItemSetChanged() const { return false; }
+            // Internally react on ItemSet changes. The given span contains changed items.
+            // If nDeletedWhich is not 0, it indicates a deleted item.
+            virtual void ItemSetChanged(o3tl::span< const SfxPoolItem* const > aChangedItems, sal_uInt16 nDeletedWhich);
 
             // check if SfxItemSet exists
             bool HasSfxItemSet() const { return bool(mxItemSet); }
