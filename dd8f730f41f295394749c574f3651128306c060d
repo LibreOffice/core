@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c82ae452_3c72194f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-15T05:34:41Z",
+      "side": 1,
+      "message": "I added an \"assert(false)\" to this section of code to try and discover when an ScUserListData autofill was created by running a make sc.check, but came up empty.",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 46
+      },
+      "revId": "dd8f730f41f295394749c574f3651128306c060d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4a41eaa_b4990299",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-15T05:34:41Z",
+      "side": 1,
+      "message": "Markus: I note your LO 3.6 commit \"first part for ScTable::GetAutoFillPreview\nActually this is a bit more tricky. Currently it is showing wrong values for hidden rows/columns\"\n\nSince I didn\u0027t really see anything too tricky (other than different paths for FILL_SIMPLE, FILL_LINEAR) I\u0027m probably missing something, although I\u0027m sure things have changed greatly in the past 8 years.\n",
+      "revId": "dd8f730f41f295394749c574f3651128306c060d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
