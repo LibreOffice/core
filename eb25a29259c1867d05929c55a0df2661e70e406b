@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c0da94a_aa9cd638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-15T07:31:16Z",
+      "side": 1,
+      "message": "I\u0027m going to split off the XWeak part of this from the SvxShape part, since the SvxShape part is more likely to introduce problems.",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdde75de_35c649e8",
@@ -156,6 +173,24 @@
       "writtenOn": "2022-02-14T12:43:57Z",
       "side": 1,
       "message": "here and elsewhere, _xComponent is known to actually implement SvxShape (e.g., it can\u0027t be a binary UNO proxy object)?",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9daf28da_48d48fb1",
+        "filename": "reportdesign/source/core/sdr/RptObject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-15T07:31:16Z",
+      "side": 1,
+      "message": "There are already a bunch of places that do stuff like:\n     SvxShape* pShape \u003d comphelper::getFromUnoTunnel\u003cSvxShape\u003e( xShape );\n    if (!pShape)\n    {\n        OSL_FAIL(\"could not add XShape to group shape!\");\n        return;\n    }\nso I can\u0027t see how that would be possible.",
+      "parentUuid": "995d80eb_8e94950c",
       "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
