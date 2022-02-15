@@ -417,6 +417,9 @@ public:
     /// DPI used when exporting a vector shape as a bitmap.
     std::optional<sal_Int32> m_nShapeDPI;
 
+    /// If set, replace leading tabs with this many non-breaking spaces.
+    std::optional<sal_Int32> m_nLeadingTabWidth;
+
     /// Construct an instance of SwHTMLWriter and optionally give it
     /// the filter options directly, which can also be set via SetupFilterOptions().
     explicit SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions = "" );
