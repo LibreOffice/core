@@ -267,7 +267,7 @@ class ScriptForge(object, metaclass = _Singleton):
             Execute a given Basic script and interpret its result
             This method has as counterpart the ScriptForge.SF_PythonHelper._PythonDispatcher() Basic method
             :param basicobject: a Service subclass
-            :param flags: see the vb* and flg* constants below
+            :param flags: see the vb* and flg* constants in the SFServices class
             :param method: the name of the method or property to invoke, as a string
             :param args: the arguments of the method. Symbolic cst* constants may be necessary
             :return: The invoked Basic counterpart script (with InvokeSimpleScript()) will return a tuple
@@ -568,6 +568,18 @@ class SFServices(object):
 
     def Properties(self):
         return list(self.serviceproperties)
+
+    def basicmethods(self):
+        if self.serviceimplementation == 'basic':
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Methods')
+        else:
+            return []
+
+    def basicproperties(self):
+        if self.serviceimplementation == 'basic':
+            return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Properties')
+        else:
+            return []
 
     def SetProperty(self, propertyname, value):
         """
