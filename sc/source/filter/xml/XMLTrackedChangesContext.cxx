@@ -1056,7 +1056,7 @@ ScXMLInsertionContext::ScXMLInsertionContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetActionNumber(nActionNumber);
     pChangeTrackingImportHelper->SetActionState(nActionState);
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
-    pChangeTrackingImportHelper->SetPosition(nPosition, nCount, nTable);
+    pChangeTrackingImportHelper->SetPosition(nPosition, nCount, nTable, *rImport.GetDocument());
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL ScXMLInsertionContext::createFastChildContext(
@@ -1221,7 +1221,7 @@ ScXMLDeletionContext::ScXMLDeletionContext( ScXMLImport& rImport,
     pChangeTrackingImportHelper->SetActionNumber(nActionNumber);
     pChangeTrackingImportHelper->SetActionState(nActionState);
     pChangeTrackingImportHelper->SetRejectingNumber(nRejectingNumber);
-    pChangeTrackingImportHelper->SetPosition(nPosition, 1, nTable);
+    pChangeTrackingImportHelper->SetPosition(nPosition, 1, nTable, *rImport.GetDocument());
     pChangeTrackingImportHelper->SetMultiSpanned(static_cast<sal_Int16>(nMultiSpanned));
 }
 

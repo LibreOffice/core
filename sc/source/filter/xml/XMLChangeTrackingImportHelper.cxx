@@ -223,7 +223,8 @@ void ScXMLChangeTrackingImportHelper::SetPreviousChange(const sal_uInt32 nPrevio
     pAction->pCellInfo.reset( pCellInfo );
 }
 
-void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable)
+void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable,
+    ScDocument& rDoc)
 {
     OSL_ENSURE(((pCurrentAction->nActionType != SC_CAT_MOVE) &&
                 (pCurrentAction->nActionType != SC_CAT_CONTENT) &&
@@ -234,22 +235,22 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
         case SC_CAT_INSERT_COLS:
         case SC_CAT_DELETE_COLS:
         {
-            pCurrentAction->aBigRange.Set(nPosition, nInt32Min, nTable,
-                                        nPosition + nCount - 1, nInt32Max, nTable);
+            pCurrentAction->aBigRange.Set(nPosition, 0, nTable,
+                                        nPosition + nCount - 1, rDoc.MaxRow(), nTable);
         }
         break;
         case SC_CAT_INSERT_ROWS:
         case SC_CAT_DELETE_ROWS:
         {
-            pCurrentAction->aBigRange.Set(nInt32Min, nPosition, nTable,
-                                        nInt32Max, nPosition + nCount - 1, nTable);
+            pCurrentAction->aBigRange.Set(0, nPosition, nTable,
+                                        rDoc.MaxCol(), nPosition + nCount - 1, nTable);
         }
         break;
         case SC_CAT_INSERT_TABS:
         case SC_CAT_DELETE_TABS:
         {
-            pCurrentAction->aBigRange.Set(nInt32Min, nInt32Min, nPosition,
-                                        nInt32Max, nInt32Max, nPosition + nCount - 1);
+            pCurrentAction->aBigRange.Set(0, 0, nPosition,
+                                        rDoc.MaxCol(), rDoc.MaxRow(), nPosition + nCount - 1);
         }
         break;
         default:

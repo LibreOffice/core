@@ -194,7 +194,7 @@ public:
     void SetActionInfo(const ScMyActionInfo& aInfo);
     void SetBigRange(const ScBigRange& aBigRange) { pCurrentAction->aBigRange = aBigRange; }
     void SetPreviousChange(const sal_uInt32 nPreviousAction, ScMyCellInfo* pCellInfo);
-    void SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable);
+    void SetPosition(const sal_Int32 nPosition, const sal_Int32 nCount, const sal_Int32 nTable, ScDocument& rDoc);
     void AddDependence(const sal_uInt32 nID) { pCurrentAction->aDependencies.push_back(nID); }
     void AddDeleted(const sal_uInt32 nID);
     void AddDeleted(const sal_uInt32 nID, std::unique_ptr<ScMyCellInfo> pCellInfo);

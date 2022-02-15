@@ -409,11 +409,11 @@ DateTime ScChangeAction::GetDateTime() const
     return aDT;
 }
 
-void ScChangeAction::UpdateReference( const ScChangeTrack* /* pTrack */,
+void ScChangeAction::UpdateReference( const ScChangeTrack* pTrack,
         UpdateRefMode eMode, const ScBigRange& rRange,
         sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz )
 {
-    ScRefUpdate::Update( eMode, rRange, nDx, nDy, nDz, GetBigRange() );
+    ScRefUpdate::Update( &pTrack->GetDocument(), eMode, rRange, nDx, nDy, nDz, GetBigRange() );
 }
 
 OUString ScChangeAction::GetDescription(
@@ -623,13 +623,13 @@ ScChangeActionIns::ScChangeActionIns( const ScDocument* pDoc, const ScRange& rRa
 {
     if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() )
     {
-        aBigRange.aStart.SetCol( nInt32Min );
-        aBigRange.aEnd.SetCol( nInt32Max );
+        aBigRange.aStart.SetCol( 0 );
+        aBigRange.aEnd.SetCol( pDoc->MaxCol() );
         if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
         {
             SetType( SC_CAT_INSERT_TABS );
-            aBigRange.aStart.SetRow( nInt32Min );
-            aBigRange.aEnd.SetRow( nInt32Max );
+            aBigRange.aStart.SetRow( 0 );
+            aBigRange.aEnd.SetRow( pDoc->MaxRow() );
         }
         else
             SetType( SC_CAT_INSERT_ROWS );
@@ -637,8 +637,8 @@ ScChangeActionIns::ScChangeActionIns( const ScDocument* pDoc, const ScRange& rRa
     else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
     {
         SetType( SC_CAT_INSERT_COLS );
-        aBigRange.aStart.SetRow( nInt32Min );
-        aBigRange.aEnd.SetRow( nInt32Max );
+        aBigRange.aStart.SetRow( 0 );
+        aBigRange.aEnd.SetRow( pDoc->MaxRow() );
     }
     else
     {
@@ -743,13 +743,13 @@ ScChangeActionDel::ScChangeActionDel( const ScDocument* pDoc, const ScRange& rRa
 {
     if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == pDoc->MaxCol() )
     {
-        aBigRange.aStart.SetCol( nInt32Min );
-        aBigRange.aEnd.SetCol( nInt32Max );
+        aBigRange.aStart.SetCol( 0 );
+        aBigRange.aEnd.SetCol( pDoc->MaxCol() );
         if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
         {
             SetType( SC_CAT_DELETE_TABS );
-            aBigRange.aStart.SetRow( nInt32Min );
-            aBigRange.aEnd.SetRow( nInt32Max );
+            aBigRange.aStart.SetRow( 0 );
+            aBigRange.aEnd.SetRow( pDoc->MaxRow() );
         }
         else
             SetType( SC_CAT_DELETE_ROWS );
@@ -757,8 +757,8 @@ ScChangeActionDel::ScChangeActionDel( const ScDocument* pDoc, const ScRange& rRa
     else if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == pDoc->MaxRow() )
     {
         SetType( SC_CAT_DELETE_COLS );
-        aBigRange.aStart.SetRow( nInt32Min );
-        aBigRange.aEnd.SetRow( nInt32Max );
+        aBigRange.aStart.SetRow( 0 );
+        aBigRange.aEnd.SetRow( pDoc->MaxRow() );
     }
     else
     {
@@ -851,7 +851,7 @@ void ScChangeActionDel::UpdateReference( const ScChangeTrack* /* pTrack */,
         UpdateRefMode eMode, const ScBigRange& rRange,
         sal_Int32 nDxP, sal_Int32 nDyP, sal_Int32 nDz )
 {
-    ScRefUpdate::Update( eMode, rRange, nDxP, nDyP, nDz, GetBigRange() );
+    ScRefUpdate::Update( &pTrack->GetDocument(), eMode, rRange, nDxP, nDyP, nDz, GetBigRange() );
 
     if ( !IsDeletedIn() )
         return ;
@@ -1122,8 +1122,8 @@ void ScChangeActionMove::UpdateReference( const ScChangeTrack* /* pTrack */,
         UpdateRefMode eMode, const ScBigRange& rRange,
         sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz )
 {
-    ScRefUpdate::Update( eMode, rRange, nDx, nDy, nDz, aFromRange );
-    ScRefUpdate::Update( eMode, rRange, nDx, nDy, nDz, GetBigRange() );
+    ScRefUpdate::Update( &pTrack->GetDocument(), eMode, rRange, nDx, nDy, nDz, aFromRange );
+    ScRefUpdate::Update( &pTrack->GetDocument(), eMode, rRange, nDx, nDy, nDz, GetBigRange() );
 }
 
 void ScChangeActionMove::GetDelta( sal_Int32& nDx, sal_Int32& nDy, sal_Int32& nDz ) const
@@ -1842,7 +1842,7 @@ void ScChangeActionContent::UpdateReference( const ScChangeTrack* pTrack,
         sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz )
 {
     SCSIZE nOldSlot = pTrack->ComputeContentSlot( aBigRange.aStart.Row() );
-    ScRefUpdate::Update( eMode, rRange, nDx, nDy, nDz, aBigRange );
+    ScRefUpdate::Update( &pTrack->GetDocument(), eMode, rRange, nDx, nDy, nDz, aBigRange );
     SCSIZE nNewSlot = pTrack->ComputeContentSlot( aBigRange.aStart.Row() );
     if ( nNewSlot != nOldSlot )
     {
@@ -3242,31 +3242,31 @@ void ScChangeTrack::UpdateReference( ScChangeAction** ppFirstAction,
     switch ( eActType )
     {
         case SC_CAT_INSERT_COLS :
-            aRange.aEnd.SetCol( nInt32Max );
+            aRange.aEnd.SetCol( GetDocument().MaxCol() );
             nDx = rOrgRange.aEnd.Col() - rOrgRange.aStart.Col() + 1;
         break;
         case SC_CAT_INSERT_ROWS :
-            aRange.aEnd.SetRow( nInt32Max );
+            aRange.aEnd.SetRow( GetDocument().MaxRow() );
             nDy = rOrgRange.aEnd.Row() - rOrgRange.aStart.Row() + 1;
         break;
         case SC_CAT_INSERT_TABS :
-            aRange.aEnd.SetTab( nInt32Max );
+            aRange.aEnd.SetTab( MAXTAB );
             nDz = rOrgRange.aEnd.Tab() - rOrgRange.aStart.Tab() + 1;
         break;
         case SC_CAT_DELETE_COLS :
-            aRange.aEnd.SetCol( nInt32Max );
+            aRange.aEnd.SetCol( GetDocument().MaxCol() );
             nDx = -(rOrgRange.aEnd.Col() - rOrgRange.aStart.Col() + 1);
             aDelRange.aEnd.SetCol( aDelRange.aStart.Col() - nDx - 1 );
             bDel = true;
         break;
         case SC_CAT_DELETE_ROWS :
-            aRange.aEnd.SetRow( nInt32Max );
+            aRange.aEnd.SetRow( GetDocument().MaxRow() );
             nDy = -(rOrgRange.aEnd.Row() - rOrgRange.aStart.Row() + 1);
             aDelRange.aEnd.SetRow( aDelRange.aStart.Row() - nDy - 1 );
             bDel = true;
         break;
         case SC_CAT_DELETE_TABS :
-            aRange.aEnd.SetTab( nInt32Max );
+            aRange.aEnd.SetTab( MAXTAB );
             nDz = -(rOrgRange.aEnd.Tab() - rOrgRange.aStart.Tab() + 1);
             aDelRange.aEnd.SetTab( aDelRange.aStart.Tab() - nDz - 1 );
             bDel = true;

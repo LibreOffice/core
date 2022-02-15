@@ -163,7 +163,7 @@ static bool lcl_IsWrapBig( sal_Int32 nRef, sal_Int32 nDelta )
     return false;
 }
 
-static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
+static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta, sal_Int32 nMax )
 {
     bool bCut = false;
     if ( rRef >= nStart )
@@ -171,7 +171,7 @@ static bool lcl_MoveBig( sal_Int32& rRef, sal_Int32 nStart, sal_Int32 nDelta )
         if ( nDelta > 0 )
             bCut = lcl_IsWrapBig( rRef, nDelta );
         if ( bCut )
-            rRef = nInt32Max;
+            rRef = nMax;
         else
             rRef += nDelta;
     }
@@ -374,8 +374,8 @@ ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdat
 
 // simple UpdateReference for ScBigRange (ScChangeAction/ScChangeTrack)
 // References can also be located outside of the document!
-// Whole columns/rows (nInt32Min..nInt32Max) stay as such!
-ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
+// Whole columns/rows (0..MAXROW/MAXCOL) stay as such!
+ScRefUpdateRes ScRefUpdate::Update( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
         const ScBigRange& rWhere, sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
         ScBigRange& rWhat )
 {
@@ -393,10 +393,10 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     {
         if ( nDx && (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
-                    (theCol1 != nInt32Min || theCol2 != nInt32Max) )
+                    (theCol1 != 0 || theCol2 != pDoc->MaxCol() ) )
         {
-            bCut1 = lcl_MoveBig( theCol1, nCol1, nDx );
-            bCut2 = lcl_MoveBig( theCol2, nCol1, nDx );
+            bCut1 = lcl_MoveBig( theCol1, nCol1, nDx, pDoc->MaxCol() );
+            bCut2 = lcl_MoveBig( theCol2, nCol1, nDx, pDoc->MaxCol() );
             if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             rWhat.aStart.SetCol( theCol1 );
@@ -404,10 +404,10 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         }
         if ( nDy && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theTab1 >= nTab1) && (theTab2 <= nTab2) &&
-                    (theRow1 != nInt32Min || theRow2 != nInt32Max) )
+                    (theRow1 != 0 || theRow2 != pDoc->MaxRow() ) )
         {
-            bCut1 = lcl_MoveBig( theRow1, nRow1, nDy );
-            bCut2 = lcl_MoveBig( theRow2, nRow1, nDy );
+            bCut1 = lcl_MoveBig( theRow1, nRow1, nDy, pDoc->MaxRow() );
+            bCut2 = lcl_MoveBig( theRow2, nRow1, nDy, pDoc->MaxRow() );
             if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             rWhat.aStart.SetRow( theRow1 );
@@ -415,10 +415,10 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         }
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) &&
-                    (theTab1 != nInt32Min || theTab2 != nInt32Max) )
+                    (theTab1 != 0 || theTab2 != MAXTAB) )
         {
-            bCut1 = lcl_MoveBig( theTab1, nTab1, nDz );
-            bCut2 = lcl_MoveBig( theTab2, nTab1, nDz );
+            bCut1 = lcl_MoveBig( theTab1, nTab1, nDz, MAXTAB );
+            bCut2 = lcl_MoveBig( theTab2, nTab1, nDz, MAXTAB );
             if ( bCut1 || bCut2 )
                 eRet = UR_UPDATED;
             rWhat.aStart.SetTab( theTab1 );
@@ -429,7 +429,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
     {
         if ( rWhere.Contains( rWhat ) )
         {
-            if ( nDx && (theCol1 != nInt32Min || theCol2 != nInt32Max) )
+            if ( nDx && (theCol1 != 0 || theCol2 != pDoc->MaxCol() ) )
             {
                 bCut1 = lcl_MoveItCutBig( theCol1, nDx );
                 bCut2 = lcl_MoveItCutBig( theCol2, nDx );
@@ -438,7 +438,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
                 rWhat.aStart.SetCol( theCol1 );
                 rWhat.aEnd.SetCol( theCol2 );
             }
-            if ( nDy && (theRow1 != nInt32Min || theRow2 != nInt32Max) )
+            if ( nDy && (theRow1 != 0 || theRow2 != pDoc->MaxRow() ) )
             {
                 bCut1 = lcl_MoveItCutBig( theRow1, nDy );
                 bCut2 = lcl_MoveItCutBig( theRow2, nDy );
@@ -447,7 +447,7 @@ ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
                 rWhat.aStart.SetRow( theRow1 );
                 rWhat.aEnd.SetRow( theRow2 );
             }
-            if ( nDz && (theTab1 != nInt32Min || theTab2 != nInt32Max) )
+            if ( nDz && (theTab1 != 0 || theTab2 != MAXTAB ) )
             {
                 bCut1 = lcl_MoveItCutBig( theTab1, nDz );
                 bCut2 = lcl_MoveItCutBig( theTab2, nDz );

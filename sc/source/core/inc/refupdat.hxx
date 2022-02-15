@@ -50,7 +50,7 @@ public:
                             SCCOL& theCol1, SCROW& theRow1, SCTAB& theTab1,
                             SCCOL& theCol2, SCROW& theRow2, SCTAB& theTab2 );
 
-    static ScRefUpdateRes Update( UpdateRefMode eUpdateRefMode,
+    static ScRefUpdateRes Update( const ScDocument* pDoc, UpdateRefMode eUpdateRefMode,
                                 const ScBigRange& rWhere,
                                 sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
                                 ScBigRange& rWhat );
