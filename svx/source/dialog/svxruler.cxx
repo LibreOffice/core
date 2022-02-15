@@ -881,11 +881,16 @@ void SvxRuler::UpdatePara(const SvxLRSpaceItem *pItem) // new value of paragraph
     }
 }
 
-void SvxRuler::UpdateParaBorder()
+void SvxRuler::UpdateBorder(const SvxLRSpaceItem * pItem)
 {
     /* Border distance */
     if(bActive)
     {
+        if (pItem)
+            mxBorderItem.reset(new SvxLRSpaceItem(*pItem));
+        else
+            mxBorderItem.reset();
+
         StartListening_Impl();
     }
 }
@@ -1206,6 +1211,9 @@ tools::Long SvxRuler::GetLeftFrameMargin() const
         nLeft = mxColumnItem->GetActiveColumnDescription().nStart;
     }
 
+    if (mxBorderItem && (!mxColumnItem || mxColumnItem->IsTable()))
+        nLeft += mxBorderItem->GetLeft();
+
     return nLeft;
 }
 
@@ -1256,6 +1264,9 @@ tools::Long SvxRuler::GetRightFrameMargin() const
         lResult += mxLRSpaceItem->GetRight();
     else if(!bHorz && mxULSpaceItem)
         lResult += mxULSpaceItem->GetLower();
+
+    if (bHorz && mxBorderItem && (!mxColumnItem || mxColumnItem->IsTable()))
+        lResult += mxBorderItem->GetRight();
 
     if(bHorz)
         lResult = mxPagePosItem->GetWidth() - lResult;
