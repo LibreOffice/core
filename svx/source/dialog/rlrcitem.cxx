@@ -131,7 +131,7 @@ void SvxRulerItem::StateChangedAtToolBoxControl( sal_uInt16 nSID, SfxItemState e
         {
             const SvxLRSpaceItem *pItem = dynamic_cast<const SvxLRSpaceItem*>( pState );
             SAL_WARN_IF(pState != nullptr && pItem == nullptr, "svx.dialog", "SvxLRSpaceItem expected");
-            rRuler.UpdateParaBorder();
+            rRuler.UpdateBorder(pItem);
         }
         break;
         case SID_RULER_TEXT_RIGHT_TO_LEFT :
