@@ -15,6 +15,7 @@
 #include <vcl/keycodes.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <svx/svdoole2.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <defaultsoptions.hxx>
@@ -47,6 +48,7 @@ public:
     void testRoundtripColumn2000Xlsx();
     void testRoundtripColumnRange();
     void testRoundtripNamedRanges();
+    void testTdf134553();
     void testTdf134392();
     void testTdf133033();
     void testTdf109061();
@@ -57,6 +59,7 @@ public:
     CPPUNIT_TEST(testRoundtripColumn2000Xlsx);
     CPPUNIT_TEST(testRoundtripColumnRange);
     CPPUNIT_TEST(testRoundtripNamedRanges);
+    CPPUNIT_TEST(testTdf134553);
     CPPUNIT_TEST(testTdf134392);
     CPPUNIT_TEST(testTdf133033);
     CPPUNIT_TEST(testTdf109061);
@@ -231,6 +234,24 @@ void ScJumboSheetsTest::testRoundtripNamedRanges()
     xDocSh1->DoClose();
     xDocSh2->DoClose();
     xDocSh3->DoClose();
+}
+
+void ScJumboSheetsTest::testTdf134553()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf134553.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    const SdrOle2Obj* pOleObj = getSingleChartObject(rDoc, 0);
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(pOleObj);
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
+
+    xDocSh->DoClose();
 }
 
 void ScJumboSheetsTest::testTdf134392()
