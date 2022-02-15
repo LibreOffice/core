@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24c7335b_c45e0f40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-15T14:53:11Z",
+      "side": 1,
+      "message": "@Szücsi: thanks for the quick fix! I\u0027m going to start the 7.3 backport.",
+      "revId": "978a7f8c0355c505363e907be848657b4b959b58",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
