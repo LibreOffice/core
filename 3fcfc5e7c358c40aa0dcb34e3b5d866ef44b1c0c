@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67fc6057_04ceb50a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-02-15T17:50:25Z",
+      "side": 1,
+      "message": "It\u0027s not missing, the idea is that the sentence flows as \"so a janitorial cleanup would be [TODO]: get rid of the shortform:longform language names when assembling the autocorr files\"\nTODO: was used here since many IDEs can find/flag those for you...\n\n(and yes: it is not touch, but though -\u003e \"however there is no reason for the differently named directories\")\n\nFeel free to reword as you see fit. /me certainly cannot type :-))",
+      "parentUuid": "5ee4e514_34298e86",
+      "revId": "3fcfc5e7c358c40aa0dcb34e3b5d866ef44b1c0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5c4365f_9187c78e",
