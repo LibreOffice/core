@@ -97,6 +97,38 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
     CPPUNIT_ASSERT_EQUAL(nPages, getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146848)
+{
+    // Reuse existing document
+    createSwDoc(DATA_DIRECTORY, "tdf77014.odt");
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(
+        xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xFields = xFieldsAccess->createEnumeration();
+
+    int nFieldsCount = 0;
+    while (xFields->hasMoreElements())
+    {
+        xFields->nextElement();
+        nFieldsCount++;
+    }
+    CPPUNIT_ASSERT_EQUAL(4, nFieldsCount);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145321)
 {
     createSwDoc(DATA_DIRECTORY, "tdf145321.odt");
