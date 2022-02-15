@@ -432,7 +432,8 @@ public:
         fVal = std::nextafter( fVal, 0);
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic,
                 rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.7976931348623149E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( OUString("1.797693134862315E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL(fVal, rtl::math::stringToDouble(aRes, '.', ',')); // Test roundtrip
 
         // DBL_MAX and 4 nextafters rounded to 15 decimals
         fVal = DBL_MAX;
@@ -463,24 +464,20 @@ public:
         // DBL_MAX rounded to 2 decimals
         fVal = DBL_MAX;
         aRes = rtl::math::doubleToUString( fVal, rtl_math_StringFormat_Automatic, 2, '.', true);
-        CPPUNIT_ASSERT_EQUAL( OUString("1.80E+308"), aRes);
+        CPPUNIT_ASSERT_EQUAL( OUString("1.8E+308"), aRes);
 
         // Crashed after commit eae24a9488814e77254d175c11fc4a138c1dbd30
         fVal = 123456.789;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_E, 2, '.', false);
         CPPUNIT_ASSERT_EQUAL(OUString("1.23E+005"), aRes);
 
-        // Testing "after-treatment of up-rounding to the next decade" branch
-        // See void doubleToString in sal/rtl/math.cxx
-        // 1. Yet empty buffer
         fVal = 9.9999999999999929;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_Automatic, rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL(OUString("10"), aRes);
+        CPPUNIT_ASSERT_EQUAL(OUString("9.99999999999999"), aRes);
 
-        // 2. Buffer with some content
         fVal = 0.99999999999999933;
         aRes = rtl::math::doubleToUString(fVal, rtl_math_StringFormat_F, rtl_math_DecimalPlaces_Max, '.', true);
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), aRes);
+        CPPUNIT_ASSERT_EQUAL(OUString("0.999999999999999"), aRes);
     }
 
     void test_approx() {
