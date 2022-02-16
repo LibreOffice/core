@@ -2749,9 +2749,11 @@ void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkDa
 void ScTable::MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,
                                                     SCCOL nCol2, SCROW nRow2, bool bDeep ) const
 {
-    nCol2 = ClampToAllocatedColumns(nCol2);
-    for (SCCOL i=nCol1; i<=nCol2; i++)
+    const SCCOL nEndCol = ClampToAllocatedColumns(nCol2);
+    for (SCCOL i=nCol1; i<=nEndCol; i++)
         aCol[i].MergePatternArea( rState, nRow1, nRow2, bDeep );
+    if (nEndCol != nCol2)
+        aDefaultColAttrArray.MergePatternArea( nRow1, nRow2, rState, bDeep );
 }
 
 void ScTable::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
