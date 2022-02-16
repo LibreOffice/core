@@ -16,6 +16,24 @@
       "message": "\u003e https://ci.libreoffice.org/job/gerrit_master/107934/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sw_txtimport failed ( https://ci.libreoffice.org/job/gerrit_windows/119546/ )\n\nThis is definitely related 😞",
       "revId": "b3d4d8a8175072420f725cd42530906128a4ecf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38eafe5b_4f28cd9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001209
+      },
+      "writtenOn": "2022-02-16T00:55:20Z",
+      "side": 1,
+      "message": "Indeed, the bizzare thing is that Windows seems to detect it differently to Linux/Mac OS. IDK if that\u0027s a difference in ICU or what. Will investigate a little further when I have time...",
+      "parentUuid": "d31b5aa1_791ecb65",
+      "revId": "b3d4d8a8175072420f725cd42530906128a4ecf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
