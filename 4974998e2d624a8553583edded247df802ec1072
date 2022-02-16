@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10b9d5d8_bd8fd4ba",
+        "filename": "sd/qa/unit/export-tests-ooxml1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-16T12:07:27Z",
+      "side": 1,
+      "message": "Could you please explain what did you revert in order to get this result?\nThe original issue is an export issue, however you are not exporting the document, just  importing it",
+      "revId": "4974998e2d624a8553583edded247df802ec1072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
