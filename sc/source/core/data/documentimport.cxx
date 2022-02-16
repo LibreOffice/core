@@ -96,6 +96,15 @@ struct ScDocumentImportImpl
         return rTab.getBlockPosition(nCol);
     }
 
+    void invalidateBlockPositionSet(SCTAB nTab)
+    {
+        if (o3tl::make_unsigned(nTab) >= maBlockPosSet.size())
+            return;
+
+        sc::TableColumnBlockPositionSet& rTab = maBlockPosSet[nTab];
+        rTab.invalidate();
+    }
+
     void initForSheets()
     {
         size_t n = mrDoc.GetTableCount();
@@ -181,6 +190,11 @@ void ScDocumentImport::setOriginDate(sal_uInt16 nYear, sal_uInt16 nMonth, sal_uI
         mpImpl->mrDoc.pDocOptions.reset( new ScDocOptions );
 
     mpImpl->mrDoc.pDocOptions->SetDate(nDay, nMonth, nYear);
+}
+
+void ScDocumentImport::invalidateBlockPositionSet(SCTAB nTab)
+{
+    mpImpl->invalidateBlockPositionSet(nTab);
 }
 
 void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr, const ScSetStringParam* pStringParam)
