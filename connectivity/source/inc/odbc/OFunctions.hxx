@@ -336,7 +336,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
     #define N3SQLSetPos(a,b,c,d) (*reinterpret_cast<T3SQLSetPos>(getOdbcFunction(ODBC3SQLFunctionId::SetPos)))(a,b,c,d)
 
     typedef SQLRETURN  (SQL_API  *T3SQLBulkOperations) (    SQLHSTMT        StatementHandle,
-                                                        SQLSMALLINT Operation);
+                                                        SQLUSMALLINT Operation);
 
     #define N3SQLBulkOperations(a,b) (*reinterpret_cast<T3SQLBulkOperations>(getOdbcFunction(ODBC3SQLFunctionId::BulkOperations)))(a,b)
 
@@ -440,15 +440,15 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
     #define N3SQLProcedures(a,b,c,d,e,f,g) (*reinterpret_cast<T3SQLProcedures>(getOdbcFunction(ODBC3SQLFunctionId::Procedures)))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLSpecialColumns) (SQLHSTMT            StatementHandle,
-                                                    SQLUSMALLINT        IdentifierType,
+                                                    SQLSMALLINT         IdentifierType,
                                                     SQLCHAR *           CatalogName,
                                                     SQLSMALLINT         NameLength1,
                                                     SQLCHAR *           SchemaName,
                                                     SQLSMALLINT         NameLength2,
                                                     SQLCHAR *           TableName,
                                                     SQLSMALLINT         NameLength3,
-                                                    SQLUSMALLINT        Scope,
-                                                    SQLUSMALLINT        Nullable);
+                                                    SQLSMALLINT         Scope,
+                                                    SQLSMALLINT         Nullable);
 
     #define N3SQLSpecialColumns(a,b,c,d,e,f,g,h,i,j) (*reinterpret_cast<T3SQLSpecialColumns>(getOdbcFunction(ODBC3SQLFunctionId::SpecialColumns)))(a,b,c,d,e,f,g,h,i,j)
 
@@ -523,7 +523,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
 
     #define N3SQLGetCursorName(a,b,c,d) (*reinterpret_cast<T3SQLGetCursorName>(getOdbcFunction(ODBC3SQLFunctionId::GetCursorName)))(a,b,c,d)
 
-    typedef SQLRETURN  (SQL_API  *T3SQLNativeSql) ( SQLHSTMT                ConnectionHandle,
+    typedef SQLRETURN  (SQL_API  *T3SQLNativeSql) ( SQLHDBC                 ConnectionHandle,
                                                     SQLCHAR *               InStatementText,
                                                     SQLINTEGER              TextLength1,
                                                     SQLCHAR *               OutStatementText,
