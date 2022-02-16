@@ -248,7 +248,7 @@ private:
     std::atomic<bool> bStreamValid;
 
     // Default attributes for the unallocated columns.
-    ScAttrArray     aDefaultColAttrArray;
+    ScColumnData    aDefaultColData;
 
 friend class ScDocument;                    // for FillInfo
 friend class ScColumn;
