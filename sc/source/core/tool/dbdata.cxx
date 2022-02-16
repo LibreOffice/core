@@ -933,15 +933,35 @@ void ScDBData::Notify( const SfxHint& rHint )
         // multiple cells are affected. Expand the range to what this is
         // listening to. Broadcasted address outside should not happen,
         // but... let it trigger a refresh if.
-        ScRange aHeaderRange( GetHeaderArea());
+        const ScRange aHeaderRange( GetHeaderArea());
+        ScAddress aHintAddress( pScHint->GetStartAddress());
         if (aHeaderRange.IsValid())
         {
             mpContainer->GetDirtyTableColumnNames().Join( aHeaderRange);
+<<<<<<< HEAD   (a1d08b configure.ac: Update kf5 include/lib check to work with KF5 )
             if (!aHeaderRange.In( pScHint->GetRange()))
                 mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetRange());
+=======
+            // Header range is one row.
+            // The ScHint's "range" is an address with row count.
+            // Though broadcasted is usually only one cell, check for the
+            // possible case of row block and for one cell in the same row.
+            if (aHintAddress.Row() <= aHeaderRange.aStart.Row()
+                    && aHeaderRange.aStart.Row() < aHintAddress.Row() + pScHint->GetRowCount())
+            {
+                aHintAddress.SetRow( aHeaderRange.aStart.Row());
+                if (!aHeaderRange.Contains( aHintAddress))
+                    mpContainer->GetDirtyTableColumnNames().Join( aHintAddress);
+            }
+>>>>>>> CHANGE (f6b9c4 Handle the possible case of broadcasted row block, tdf#11908)
         }
         else
-            mpContainer->GetDirtyTableColumnNames().Join( pScHint->GetRange());
+        {
+            // We need *some* range in the dirty list even without header area,
+            // otherwise the container would not attempt to call a refresh.
+            aHintAddress.SetRow( nStartRow);
+            mpContainer->GetDirtyTableColumnNames().Join( aHintAddress);
+        }
     }
 
     // Do not refresh column names here, which might trigger unwanted
