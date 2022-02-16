@@ -1091,10 +1091,7 @@ void VSeriesPlotter::addErrorBorder(
      ,const rtl::Reference<SvxShapeGroupAnyD>& rTarget
      ,const uno::Reference< beans::XPropertySet >& rErrorBorderProp )
 {
-    std::vector<std::vector<css::drawing::Position3D>> aPoly;
-    sal_Int32 nSequenceIndex = 0;
-    AddPointToPoly( aPoly, rPos0, nSequenceIndex );
-    AddPointToPoly( aPoly, rPos1, nSequenceIndex );
+    std::vector<std::vector<css::drawing::Position3D>> aPoly { { rPos0, rPos1} };
     rtl::Reference<SvxShapePolyPolygon> xShape = ShapeFactory::createLine2D(
                     rTarget, aPoly );
     PropertyMapper::setMappedProperties( *xShape, rErrorBorderProp,
