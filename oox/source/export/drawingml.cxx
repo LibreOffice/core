@@ -2450,6 +2450,10 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
     if (GetProperty(rXPropSet, "NumberingIsNumber"))
         mAny >>= bNumberingIsNumber;
 
+    float nFontSize = -1;
+    if (GetProperty(rXPropSet, "CharHeight"))
+        mAny >>= nFontSize;
+
     bool bIsURLField = false;
     OUString sFieldValue = GetFieldValue( rRun, bIsURLField );
     bool bWriteField  = !( sFieldValue.isEmpty() || bIsURLField );
@@ -2482,7 +2486,16 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 
     if (sText == "\n")
     {
-        mpFS->singleElementNS(XML_a, XML_br);
+        // Empty run? Do not forget to write the font size in case of pptx:
+        if ((GetDocumentType() == DOCUMENT_PPTX) && (nFontSize != -1))
+        {
+            mpFS->startElementNS(XML_a, XML_br);
+            mpFS->singleElementNS(XML_a, XML_rPr, XML_sz,
+                                  OString::number(nFontSize * 100).getStr());
+            mpFS->endElementNS(XML_a, XML_br);
+        }
+        else
+            mpFS->singleElementNS(XML_a, XML_br);
     }
     else
     {
