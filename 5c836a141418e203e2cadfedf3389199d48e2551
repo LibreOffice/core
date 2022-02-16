@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c219436_1a7b6a75",
+        "filename": "sw/source/uibase/inc/conttree.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-16T09:03:27Z",
+      "side": 1,
+      "message": "o3tl::enumarray\u003cContentTypeId, bool\u003e would be faster for this",
+      "revId": "5c836a141418e203e2cadfedf3389199d48e2551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
