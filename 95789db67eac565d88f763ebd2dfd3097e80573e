@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65ac3945_a65fa315",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-16T19:01:49Z",
+      "side": 1,
+      "message": "this blocks on \u003chttps://gerrit.libreoffice.org/c/lode/+/129705\u003e \"Bump linux_clang_dbgutil_64 to Clang 12.0.1\" rolled out on Jenkins",
+      "revId": "95789db67eac565d88f763ebd2dfd3097e80573e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
