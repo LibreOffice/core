@@ -403,9 +403,22 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
 
 void SheetDataBuffer::finalizeImport()
 {
+    ScDocumentImport& rDocImport = getDocImport();
+
+    SCTAB nStartTabInvalidatedIters(SCTAB_MAX);
+    SCTAB nEndTabInvalidatedIters(0);
+
     // create all array formulas
     for( const auto& [rRange, rTokens] : maArrayFormulas )
-        finalizeArrayFormula( rRange, rTokens );
+    {
+        finalizeArrayFormula(rRange, rTokens);
+
+        nStartTabInvalidatedIters = std::min(rRange.aStart.Tab(), nStartTabInvalidatedIters);
+        nEndTabInvalidatedIters = std::max(rRange.aEnd.Tab(), nEndTabInvalidatedIters);
+    }
+
+    for (SCTAB nTab = nStartTabInvalidatedIters; nTab <= nEndTabInvalidatedIters; ++nTab)
+        rDocImport.invalidateBlockPositionSet(nTab);
 
     // create all table operations
     for( const auto& [rRange, rModel] : maTableOperations )
@@ -441,7 +454,6 @@ void SheetDataBuffer::finalizeImport()
         }
     }
 
-    ScDocumentImport& rDocImport = getDocImport();
     ScDocument& rDoc = rDocImport.getDoc();
     StylesBuffer& rStyles = getStyles();
     for ( const auto& [rCol, rRowStyles] : maStylesPerColumn )
