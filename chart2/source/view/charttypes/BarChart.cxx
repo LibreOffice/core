@@ -900,18 +900,18 @@ void BarChart::doXSlot(
                 }
                 else //m_nDimension!=3
                 {
-                    // performance improvement: alloc the sequence before the rendering
-                    // otherwise we have 2 realloc calls
-                    std::vector<std::vector<css::drawing::Position3D>> aPoly;
-                    aPoly.resize(1);
                     drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
                     drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUpperYValue,fLogicZ );
-
-                    AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
-                    AddPointToPoly( aPoly, drawing::Position3D( fLogicX+fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
-                    AddPointToPoly( aPoly, aRightUpperPoint );
-                    AddPointToPoly( aPoly, aLeftUpperPoint );
-                    AddPointToPoly( aPoly, drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ) );
+                    std::vector<std::vector<css::drawing::Position3D>> aPoly
+                    {
+                        { // inner vector
+                            drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ),
+                            drawing::Position3D( fLogicX+fLogicBarWidth/2.0,fLowerYValue,fLogicZ),
+                            aRightUpperPoint,
+                            aLeftUpperPoint,
+                            drawing::Position3D( fLogicX-fLogicBarWidth/2.0,fLowerYValue,fLogicZ)
+                        }
+                    };
                     pPosHelper->transformScaledLogicToScene( aPoly );
                     xShape = ShapeFactory::createArea2D( xSeriesGroupShape_Shapes, aPoly );
                     PropertyMapper::setMappedProperties( *xShape, xDataPointProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );

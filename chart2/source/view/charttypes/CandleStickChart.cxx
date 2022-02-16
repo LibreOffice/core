@@ -216,10 +216,10 @@ void CandleStickChart::createShapes()
                     //create min-max line
                     if( isValidPosition(aPosMiddleMinimum) && isValidPosition(aPosMiddleMaximum) )
                     {
-                        std::vector<std::vector<css::drawing::Position3D>> aPoly;
-                        sal_Int32 nLineIndex =0;
-                        AddPointToPoly( aPoly, aPosMiddleMinimum, nLineIndex);
-                        AddPointToPoly( aPoly, aPosMiddleMaximum, nLineIndex);
+                        std::vector<std::vector<css::drawing::Position3D>> aPoly
+                        {
+                            { aPosMiddleMinimum, aPosMiddleMaximum }
+                        };
 
                         rtl::Reference<SvxShapePolyPolygon> xShape =
                             ShapeFactory::createLine2D( xPointGroupShape_Shapes, aPoly);
