@@ -434,15 +434,6 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
     if(mxPrimitive2DSequence.empty())
         return;
 
-    // get ranges
-    const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
-    const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
-
-    // check geometrical visibility
-    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(maObjectRange);
-    if(!bVisible)
-        return;
-
     // temporarily take over the mxPrimitive2DSequence, in case it gets invalidated while we want to iterate over it
     auto tmp = std::move(const_cast<ViewObjectContact*>(this)->mxPrimitive2DSequence);
     int nPrevCount = mnActionChangedCount;
