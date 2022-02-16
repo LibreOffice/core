@@ -845,6 +845,8 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
             }
             if ( pSectFrame && pSectFrame->IsSctFrame() )
             {
+                assert(!_rAnchorTextFrame.IsInFootnote() && "try and flush out some examples of this\n");
+
                 SwFrameDeleteGuard aDeleteGuard(&_rAnchorTextFrame);
                 // #i44049#
                 _rAnchorTextFrame.LockJoin();
