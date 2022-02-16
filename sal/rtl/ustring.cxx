@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 #include <limits>
@@ -38,6 +39,7 @@
 #include "strimp.hxx"
 #include <rtl/character.hxx>
 #include <rtl/ustring.h>
+#include <rtl/ustrbuf.h>
 
 #include <rtl/math.h>
 
@@ -1367,15 +1369,45 @@ void rtl_uString_newReplaceAllAsciiLAsciiL(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
+    assert(str != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
     assert(toLength >= 0);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_uString_newReplaceFirstAsciiLAsciiL(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1) {
-            break;
+    assert(to != nullptr || toLength == 0);
+    if (sal_Int32 i = rtl_ustr_indexOfAscii_WithLength(str->buffer, str->length, from, fromLength);
+        i >= 0)
+    {
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        rtl_uString_acquire(str); // in case *newStr == str
+        sal_Int32 nCapacity = str->length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (str->length - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
         }
+        rtl_uString_new_WithLength(newStr, nCapacity);
+        sal_Int32 fromIndex = 0;
+        do
+        {
+            rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                     i);
+            rtl_uStringbuffer_insert_ascii(newStr, &nCapacity, (*newStr)->length, to, toLength);
+            fromIndex += i + fromLength;
+            i = rtl_ustr_indexOfAscii_WithLength(str->buffer + fromIndex, str->length - fromIndex,
+                                                 from, fromLength);
+        } while (i >= 0);
+        // the rest
+        rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                 str->length - fromIndex);
+        rtl_uString_release(str);
     }
+    else
+        rtl_uString_assign(newStr, str);
 }
 
 void rtl_uString_newReplaceAllAsciiLUtf16L(
@@ -1383,15 +1415,45 @@ void rtl_uString_newReplaceAllAsciiLUtf16L(
     sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
+    assert(str != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
     assert(toLength >= 0);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_uString_newReplaceFirstAsciiLUtf16L(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1 || *newStr == nullptr) {
-            break;
+    assert(to != nullptr || toLength == 0);
+    if (sal_Int32 i = rtl_ustr_indexOfAscii_WithLength(str->buffer, str->length, from, fromLength);
+        i >= 0)
+    {
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        rtl_uString_acquire(str); // in case *newStr == str
+        sal_Int32 nCapacity = str->length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (str->length - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
         }
+        rtl_uString_new_WithLength(newStr, nCapacity);
+        sal_Int32 fromIndex = 0;
+        do
+        {
+            rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                     i);
+            rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, to, toLength);
+            fromIndex += i + fromLength;
+            i = rtl_ustr_indexOfAscii_WithLength(str->buffer + fromIndex, str->length - fromIndex,
+                                                 from, fromLength);
+        } while (i >= 0);
+        // the rest
+        rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                 str->length - fromIndex);
+        rtl_uString_release(str);
     }
+    else
+        rtl_uString_assign(newStr, str);
 }
 
 void rtl_uString_newReplaceAllUtf16LAsciiL(
@@ -1399,15 +1461,45 @@ void rtl_uString_newReplaceAllUtf16LAsciiL(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
+    assert(str != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
     assert(toLength >= 0);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_uString_newReplaceFirstUtf16LAsciiL(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1 || *newStr == nullptr) {
-            break;
+    assert(to != nullptr || toLength == 0);
+    if (sal_Int32 i = rtl_ustr_indexOfStr_WithLength(str->buffer, str->length, from, fromLength);
+        i >= 0)
+    {
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        rtl_uString_acquire(str); // in case *newStr == str
+        sal_Int32 nCapacity = str->length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (str->length - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
         }
+        rtl_uString_new_WithLength(newStr, nCapacity);
+        sal_Int32 fromIndex = 0;
+        do
+        {
+            rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                     i);
+            rtl_uStringbuffer_insert_ascii(newStr, &nCapacity, (*newStr)->length, to, toLength);
+            fromIndex += i + fromLength;
+            i = rtl_ustr_indexOfStr_WithLength(str->buffer + fromIndex, str->length - fromIndex,
+                                               from, fromLength);
+        } while (i >= 0);
+        // the rest
+        rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                 str->length - fromIndex);
+        rtl_uString_release(str);
     }
+    else
+        rtl_uString_assign(newStr, str);
 }
 
 void rtl_uString_newReplaceAllUtf16LUtf16L(
@@ -1423,16 +1515,48 @@ void rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
     sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength, sal_Int32 fromIndex)
     SAL_THROW_EXTERN_C()
 {
+    assert(str != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
     assert(toLength >= 0);
+    assert(to != nullptr || toLength == 0);
     assert(fromIndex >= 0 && fromIndex <= str->length);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = fromIndex;; i += toLength) {
-        rtl_uString_newReplaceFirstUtf16LUtf16L(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1 || *newStr == nullptr) {
-            break;
+    if (sal_Int32 i = rtl_ustr_indexOfStr_WithLength(str->buffer + fromIndex,
+                                                     str->length - fromIndex, from, fromLength);
+        i >= 0)
+    {
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        rtl_uString_acquire(str); // in case *newStr == str
+        sal_Int32 nCapacity = str->length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (str->length - fromIndex - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
         }
+        rtl_uString_new_WithLength(newStr, nCapacity);
+        i += fromIndex;
+        fromIndex = 0;
+        do
+        {
+            rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                     i);
+            rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, to, toLength);
+            fromIndex += i + fromLength;
+            i = rtl_ustr_indexOfStr_WithLength(str->buffer + fromIndex, str->length - fromIndex,
+                                               from, fromLength);
+        } while (i >= 0);
+        // the rest
+        rtl_uStringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                 str->length - fromIndex);
+        rtl_uString_release(str);
     }
+    else
+        rtl_uString_assign(newStr, str);
 }
 
 sal_Int32 SAL_CALL rtl_ustr_getLength(const sal_Unicode* pStr) SAL_THROW_EXTERN_C()
