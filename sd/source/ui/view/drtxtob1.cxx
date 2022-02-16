@@ -827,17 +827,17 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
             {
                 auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                pColorItem->SetThemeIndex(pIntItem->GetValue());
+                pColorItem->GetThemeColor().SetThemeIndex(pIntItem->GetValue());
             }
             if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_MOD, false, &pItem) == SfxItemState::SET)
             {
                 auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                pColorItem->SetLumMod(pIntItem->GetValue());
+                pColorItem->GetThemeColor().SetLumMod(pIntItem->GetValue());
             }
             if (pArgs->GetItemState(SID_ATTR_COLOR_LUM_OFF, false, &pItem) == SfxItemState::SET)
             {
                 auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
-                pColorItem->SetLumOff(pIntItem->GetValue());
+                pColorItem->GetThemeColor().SetLumOff(pIntItem->GetValue());
             }
             if (pColorItem)
             {
