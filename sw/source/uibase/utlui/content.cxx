@@ -954,6 +954,8 @@ SwContentTree::SwContentTree(std::unique_ptr<weld::TreeView> xTreeView, SwNaviga
 
     for (ContentTypeId i : o3tl::enumrange<ContentTypeId>())
     {
+        if (i != ContentTypeId::OUTLINE)
+            mTrackContentType[i] = true;
         m_aActiveContentArr[i] = nullptr;
         m_aHiddenContentArr[i] = nullptr;
     }
@@ -1446,62 +1448,66 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             pType = weld::fromId<SwContent*>(
                         m_xTreeView->get_id(*xEntry))->GetParent();
         const ContentTypeId nContentType = pType->GetType();
+        OString aIdent;
         switch (nContentType)
         {
             case ContentTypeId::TABLE:
-                xPop->set_active("tabletracking", m_bTableTracking);
+                aIdent = "tabletracking";
                 bRemoveTableTracking = false;
             break;
             case ContentTypeId::REGION:
-                xPop->set_active("sectiontracking", m_bSectionTracking);
+                aIdent = "sectiontracking";
                 bRemoveSectionTracking = false;
             break;
             case ContentTypeId::FRAME:
-                xPop->set_active("frametracking", m_bFrameTracking);
+                aIdent = "frametracking";
                 bRemoveFrameTracking = false;
             break;
             case ContentTypeId::GRAPHIC:
-                xPop->set_active("imagetracking", m_bImageTracking);
+                aIdent = "imagetracking";
                 bRemoveImageTracking = false;
             break;
             case ContentTypeId::OLE:
-                xPop->set_active("oleobjecttracking", m_bOLEobjectTracking);
+                aIdent = "oleobjecttracking";
                 bRemoveOLEobjectTracking = false;
             break;
             case ContentTypeId::BOOKMARK:
-                xPop->set_active("bookmarktracking", m_bBookmarkTracking);
+                aIdent = "bookmarktracking";
                 bRemoveBookmarkTracking = false;
             break;
             case ContentTypeId::URLFIELD:
-                xPop->set_active("hyperlinktracking", m_bHyperlinkTracking);
+                aIdent = "hyperlinktracking";
                 bRemoveHyperlinkTracking = false;
             break;
             case ContentTypeId::REFERENCE:
-                xPop->set_active("referencetracking", m_bReferenceTracking);
+                aIdent = "referencetracking";
                 bRemoveReferenceTracking = false;
             break;
             case ContentTypeId::INDEX:
-                xPop->set_active("indextracking", m_bIndexTracking);
+                aIdent = "indextracking";
                 bRemoveIndexTracking = false;
             break;
             case ContentTypeId::POSTIT:
-                xPop->set_active("commenttracking", m_bCommentTracking);
+                aIdent = "commenttracking";
                 bRemoveCommentTracking = false;
             break;
             case ContentTypeId::DRAWOBJECT:
-                xPop->set_active("drawingobjecttracking", m_bDrawingObjectTracking);
+                aIdent = "drawingobjecttracking";
                 bRemoveDrawingObjectTracking = false;
             break;
             case ContentTypeId::TEXTFIELD:
-                xPop->set_active("fieldtracking", m_bFieldTracking);
+                aIdent = "fieldtracking";
                 bRemoveFieldTracking = false;
             break;
             case ContentTypeId::FOOTNOTE:
-                xPop->set_active("footnotetracking", m_bFootnoteTracking);
+                aIdent = "footnotetracking";
                 bRemoveFootnoteTracking = false;
             break;
             default: break;
         }
+        if (!aIdent.isEmpty())
+            xPop->set_active(aIdent, mTrackContentType[nContentType]);
+
         // Edit only if the shown content is coming from the current view.
         if (State::HIDDEN != m_eState &&
                 (State::ACTIVE == m_eState || m_pActiveShell == GetActiveView()->GetWrtShellPtr())
@@ -3460,19 +3466,19 @@ void SwContentTree::UpdateTracking()
             if (m_pActiveShell->GetSelectionType() == SelectionType::Graphic &&
                     !(m_bIsRoot && m_nRootType != ContentTypeId::GRAPHIC))
             {
-                if (!m_bImageTracking) return;
+                if (!mTrackContentType[ContentTypeId::GRAPHIC]) return;
                 aContentTypeName = SwResId(STR_CONTENT_TYPE_GRAPHIC);
             }
             else if (m_pActiveShell->GetSelectionType() == SelectionType::Frame &&
                      !(m_bIsRoot && m_nRootType != ContentTypeId::FRAME))
             {
-                if (!m_bFrameTracking) return;
+                if (!mTrackContentType[ContentTypeId::FRAME]) return;
                 aContentTypeName = SwResId(STR_CONTENT_TYPE_FRAME);
             }
             else if (m_pActiveShell->GetSelectionType() == SelectionType::Ole &&
                      !(m_bIsRoot && m_nRootType != ContentTypeId::OLE))
             {
-                if (!m_bOLEobjectTracking) return;
+                if (!mTrackContentType[ContentTypeId::OLE]) return;
                 aContentTypeName = SwResId(STR_CONTENT_TYPE_OLE);
             }
             if (!aContentTypeName.isEmpty())
@@ -3488,7 +3494,7 @@ void SwContentTree::UpdateTracking()
                                                    SelectionType::DbForm)) &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::DRAWOBJECT))
         {
-            if (m_bDrawingObjectTracking)
+            if (mTrackContentType[ContentTypeId::DRAWOBJECT])
             {
                 // Multiple selection is possible when in root content navigation view so unselect all
                 // selected entries before reselecting. This causes a bit of an annoyance when the treeview
@@ -3521,13 +3527,14 @@ void SwContentTree::UpdateTracking()
                 m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
         {
-            if (m_bFootnoteTracking)
+            if (mTrackContentType[ContentTypeId::FOOTNOTE])
                 lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
                                                   aContentAtPos.pFndTextAttr);
             return;
         }
         // bookmarks - track first bookmark at cursor
-        if (m_bBookmarkTracking && (m_pActiveShell->GetSelectionType() & SelectionType::Text))
+        if (mTrackContentType[ContentTypeId::BOOKMARK] &&
+                (m_pActiveShell->GetSelectionType() & SelectionType::Text))
         {
             SwPaM* pCursor = m_pActiveShell->GetCursor();
             IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
@@ -3557,7 +3564,7 @@ void SwContentTree::UpdateTracking()
                 aContentAtPos.pFndTextAttr &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::REFERENCE))
         {
-            if (m_bReferenceTracking)
+            if (mTrackContentType[ContentTypeId::REFERENCE])
             {
                 const SwFormatRefMark& rRefMark = aContentAtPos.pFndTextAttr->GetRefMark();
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REFERENCE),
@@ -3574,7 +3581,7 @@ void SwContentTree::UpdateTracking()
             // in the tree by name may result in incorrect selection. Find the item in the tree by
             // comparing the SwTextINetFormat pointer at the document cursor position to that stored
             // in the item SwURLFieldContent.
-            if (m_bHyperlinkTracking)
+            if (mTrackContentType[ContentTypeId::URLFIELD])
                 lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::URLFIELD,
                                                   aContentAtPos.pFndTextAttr);
             return;
@@ -3585,19 +3592,18 @@ void SwContentTree::UpdateTracking()
                   m_nRootType != ContentTypeId::TEXTFIELD &&
                   m_nRootType != ContentTypeId::POSTIT))
         {
-            ContentTypeId nContentTypeId =
+            ContentTypeId eCntTypeId =
                     pField->GetTypeId() == SwFieldTypesEnum::Postit ? ContentTypeId::POSTIT :
                                                                       ContentTypeId::TEXTFIELD;
-            if ((m_bFieldTracking && nContentTypeId == ContentTypeId::TEXTFIELD) ||
-                    (m_bCommentTracking && nContentTypeId == ContentTypeId::POSTIT))
-                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, nContentTypeId, pField);
+            if (mTrackContentType[eCntTypeId])
+                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, eCntTypeId, pField);
             return;
         }
         // table
         if (m_pActiveShell->IsCursorInTable() &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::TABLE))
         {
-            if(m_bTableTracking && m_pActiveShell->GetTableFormat())
+            if (mTrackContentType[ContentTypeId::TABLE] && m_pActiveShell->GetTableFormat())
             {
                 OUString aName = m_pActiveShell->GetTableFormat()->GetName();
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_TABLE),
@@ -3609,7 +3615,7 @@ void SwContentTree::UpdateTracking()
         if (const SwTOXBase* pTOX = m_pActiveShell->GetCurTOX(); pTOX &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::INDEX))
         {
-            if (m_bIndexTracking)
+            if (mTrackContentType[ContentTypeId::INDEX])
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_INDEX),
                                                pTOX->GetTOXName());
             return;
@@ -3618,7 +3624,7 @@ void SwContentTree::UpdateTracking()
         if (const SwSection* pSection = m_pActiveShell->GetCurrSection(); pSection &&
                 !(m_bIsRoot && m_nRootType != ContentTypeId::REGION))
         {
-            if (m_bSectionTracking)
+            if (mTrackContentType[ContentTypeId::REGION])
             {
                 lcl_SelectByContentTypeAndName(this, *m_xTreeView, SwResId(STR_CONTENT_TYPE_REGION),
                                                pSection->GetSectionName());
@@ -4151,83 +4157,31 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
         }
         return;
     }
-    if (rSelectedPopupEntry == "tabletracking")
+
     {
-        m_bTableTracking = !m_bTableTracking;
-        SetTableTracking(m_bTableTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "sectiontracking")
-    {
-        m_bSectionTracking = !m_bSectionTracking;
-        SetSectionTracking(m_bSectionTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "frametracking")
-    {
-        m_bFrameTracking = !m_bFrameTracking;
-        SetFrameTracking(m_bFrameTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "imagetracking")
-    {
-        m_bImageTracking = !m_bImageTracking;
-        SetImageTracking(m_bImageTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "oleobjecttracking")
-    {
-        m_bOLEobjectTracking = !m_bOLEobjectTracking;
-        SetOLEobjectTracking(m_bOLEobjectTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "bookmarktracking")
-    {
-        m_bBookmarkTracking = !m_bBookmarkTracking;
-        SetBookmarkTracking(m_bBookmarkTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "hyperlinktracking")
-    {
-        m_bHyperlinkTracking = !m_bHyperlinkTracking;
-        SetHyperlinkTracking(m_bHyperlinkTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "referencetracking")
-    {
-        m_bReferenceTracking = !m_bReferenceTracking;
-        SetReferenceTracking(m_bReferenceTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "indextracking")
-    {
-        m_bIndexTracking = !m_bIndexTracking;
-        SetIndexTracking(m_bIndexTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "commenttracking")
-    {
-        m_bCommentTracking = !m_bCommentTracking;
-        SetCommentTracking(m_bCommentTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "drawingobjecttracking")
-    {
-        m_bDrawingObjectTracking = !m_bDrawingObjectTracking;
-        SetDrawingObjectTracking(m_bDrawingObjectTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "fieldtracking")
-    {
-        m_bFieldTracking = !m_bFieldTracking;
-        SetFieldTracking(m_bFieldTracking);
-        return;
-    }
-    if (rSelectedPopupEntry == "footnotetracking")
-    {
-        m_bFootnoteTracking = !m_bFootnoteTracking;
-        SetFootnoteTracking(m_bFootnoteTracking);
-        return;
+        std::map<OString, ContentTypeId> mPopupEntryToContentTypeId
+        {
+            {"tabletracking", ContentTypeId::TABLE},
+            {"frametracking", ContentTypeId::FRAME},
+            {"imagetracking", ContentTypeId::GRAPHIC},
+            {"oleobjecttracking", ContentTypeId::OLE},
+            {"bookmarktracking", ContentTypeId::BOOKMARK},
+            {"sectiontracking", ContentTypeId::REGION},
+            {"hyperlinktracking", ContentTypeId::URLFIELD},
+            {"referencetracking", ContentTypeId::REFERENCE},
+            {"indextracking", ContentTypeId::INDEX},
+            {"commenttracking", ContentTypeId::POSTIT},
+            {"drawingobjecttracking", ContentTypeId::DRAWOBJECT},
+            {"fieldtracking", ContentTypeId::TEXTFIELD},
+            {"footnotetracking", ContentTypeId::FOOTNOTE}
+        };
+
+        if (mPopupEntryToContentTypeId.count(rSelectedPopupEntry))
+        {
+            ContentTypeId eCntTypeId = mPopupEntryToContentTypeId[rSelectedPopupEntry];
+            SetContentTypeTracking(eCntTypeId, !mTrackContentType[eCntTypeId]);
+            return;
+        }
     }
 
     std::unique_ptr<weld::TreeIter> xFirst(m_xTreeView->make_iterator());
@@ -4501,82 +4455,10 @@ void SwContentTree::SetOutlineTracking(sal_uInt8 nSet)
     m_pConfig->SetOutlineTracking(m_nOutlineTracking);
 }
 
-void SwContentTree::SetTableTracking(bool bSet)
+void SwContentTree::SetContentTypeTracking(ContentTypeId eCntTypeId, bool bSet)
 {
-    m_bTableTracking = bSet;
-    m_pConfig->SetTableTracking(m_bTableTracking);
-}
-
-void SwContentTree::SetSectionTracking(bool bSet)
-{
-    m_bSectionTracking = bSet;
-    m_pConfig->SetSectionTracking(m_bSectionTracking);
-}
-
-void SwContentTree::SetFrameTracking(bool bSet)
-{
-    m_bFrameTracking = bSet;
-    m_pConfig->SetFrameTracking(m_bFrameTracking);
-}
-
-void SwContentTree::SetImageTracking(bool bSet)
-{
-    m_bImageTracking = bSet;
-    m_pConfig->SetImageTracking(m_bImageTracking);
-}
-
-void SwContentTree::SetOLEobjectTracking(bool bSet)
-{
-    m_bOLEobjectTracking = bSet;
-    m_pConfig->SetOLEobjectTracking(m_bOLEobjectTracking);
-}
-
-void SwContentTree::SetBookmarkTracking(bool bSet)
-{
-    m_bBookmarkTracking = bSet;
-    m_pConfig->SetBookmarkTracking(m_bBookmarkTracking);
-}
-
-void SwContentTree::SetHyperlinkTracking(bool bSet)
-{
-    m_bHyperlinkTracking = bSet;
-    m_pConfig->SetHyperlinkTracking(m_bHyperlinkTracking);
-}
-
-void SwContentTree::SetReferenceTracking(bool bSet)
-{
-    m_bReferenceTracking = bSet;
-    m_pConfig->SetReferenceTracking(m_bReferenceTracking);
-}
-
-void SwContentTree::SetIndexTracking(bool bSet)
-{
-    m_bIndexTracking = bSet;
-    m_pConfig->SetIndexTracking(m_bIndexTracking);
-}
-
-void SwContentTree::SetCommentTracking(bool bSet)
-{
-    m_bCommentTracking = bSet;
-    m_pConfig->SetCommentTracking(m_bCommentTracking);
-}
-
-void SwContentTree::SetDrawingObjectTracking(bool bSet)
-{
-    m_bDrawingObjectTracking = bSet;
-    m_pConfig->SetDrawingObjectTracking(m_bDrawingObjectTracking);
-}
-
-void SwContentTree::SetFieldTracking(bool bSet)
-{
-    m_bFieldTracking = bSet;
-    m_pConfig->SetFieldTracking(m_bFieldTracking);
-}
-
-void SwContentTree::SetFootnoteTracking(bool bSet)
-{
-    m_bFootnoteTracking = bSet;
-    m_pConfig->SetFootnoteTracking(m_bFootnoteTracking);
+    mTrackContentType[eCntTypeId] = bSet;
+    m_pConfig->SetContentTypeTrack(eCntTypeId, bSet);
 }
 
 // Mode Change: Show dropped Doc

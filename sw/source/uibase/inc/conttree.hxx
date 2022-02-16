@@ -112,19 +112,7 @@ class SwContentTree final : public SfxListener
     sal_uInt8           m_nOutlineLevel;
 
     sal_uInt8           m_nOutlineTracking = 1; // 1 default, 2 focus, 3 off
-    bool m_bTableTracking = true;
-    bool m_bSectionTracking = true;
-    bool m_bFrameTracking = true;
-    bool m_bImageTracking = true;
-    bool m_bOLEobjectTracking = true;
-    bool m_bBookmarkTracking = true;
-    bool m_bHyperlinkTracking = true;
-    bool m_bReferenceTracking = true;
-    bool m_bIndexTracking = true;
-    bool m_bCommentTracking = true;
-    bool m_bDrawingObjectTracking = true;
-    bool m_bFieldTracking = true;
-    bool m_bFootnoteTracking = true;
+    o3tl::enumarray<ContentTypeId, bool> mTrackContentType;
 
     SwOutlineNodes::size_type m_nLastGotoContentWasOutlinePos = SwOutlineNodes::npos;
 
@@ -230,19 +218,7 @@ public:
     void            SetOutlineLevel(sal_uInt8 nSet);
 
     void            SetOutlineTracking(sal_uInt8 nSet);
-    void            SetTableTracking(bool bSet);
-    void            SetSectionTracking(bool bSet);
-    void            SetFrameTracking(bool bSet);
-    void            SetImageTracking(bool bSet);
-    void            SetOLEobjectTracking(bool bSet);
-    void            SetBookmarkTracking(bool bSet);
-    void            SetHyperlinkTracking(bool bSet);
-    void            SetReferenceTracking(bool bSet);
-    void            SetIndexTracking(bool bSet);
-    void            SetCommentTracking(bool bSet);
-    void            SetDrawingObjectTracking(bool bSet);
-    void            SetFieldTracking(bool bSet);
-    void            SetFootnoteTracking(bool bSet);
+    void            SetContentTypeTracking(ContentTypeId eCntTypeId, bool bSet);
 
     /** Execute commands of the Navigator */
     void            ExecCommand(std::string_view rCmd, bool bModifier);
