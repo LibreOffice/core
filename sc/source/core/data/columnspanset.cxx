@@ -142,18 +142,24 @@ void ColumnSpanSet::scan(
     }
 }
 
-void ColumnSpanSet::executeAction(Action& ac) const
+void ColumnSpanSet::executeAction(ScDocument& rDoc, Action& ac) const
 {
     for (size_t nTab = 0; nTab < maTables.size(); ++nTab)
     {
         if (maTables[nTab].empty())
             continue;
 
+        ScTable* pTab = rDoc.FetchTable(nTab);
+        if (!pTab)
+            continue;
+
         const TableType& rTab = maTables[nTab];
-        for (size_t nCol = 0; nCol < rTab.size(); ++nCol)
+        for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(rTab.size()); ++nCol)
         {
             if (!rTab[nCol])
                 continue;
+            if (nCol >= pTab->GetAllocatedColumnsCount())
+                break;
 
             ac.startColumn(nTab, nCol);
             const ColumnType& rCol = *rTab[nCol];
@@ -180,22 +186,17 @@ void ColumnSpanSet::executeColumnAction(ScDocument& rDoc, ColumnAction& ac) cons
         if (maTables[nTab].empty())
             continue;
 
+        ScTable* pTab = rDoc.FetchTable(nTab);
+        if (!pTab)
+            continue;
+
         const TableType& rTab = maTables[nTab];
         for (SCCOL nCol = 0; nCol < static_cast<SCCOL>(rTab.size()); ++nCol)
         {
             if (!rTab[nCol])
                 continue;
-
-            ScTable* pTab = rDoc.FetchTable(nTab);
-            if (!pTab)
-                continue;
-
-            if (!rDoc.ValidCol(nCol) || nCol >= pTab->GetAllocatedColumnsCount())
-            {
-                // End the loop.
-                nCol = rTab.size();
-                continue;
-            }
+            if (nCol >= pTab->GetAllocatedColumnsCount())
+                break;
 
             ScColumn& rColumn = pTab->aCol[nCol];
             ac.startColumn(&rColumn);
