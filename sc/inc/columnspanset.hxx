@@ -102,7 +102,7 @@ public:
      */
     void scan(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bVal);
 
-    void executeAction(Action& ac) const;
+    void executeAction(ScDocument& rDoc, Action& ac) const;
     void executeColumnAction(ScDocument& rDoc, ColumnAction& ac) const;
 };
 
