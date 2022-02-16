@@ -193,6 +193,24 @@
       "parentUuid": "995d80eb_8e94950c",
       "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96b572a7_e0ef7791",
+        "filename": "reportdesign/source/core/sdr/RptObject.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-16T12:16:14Z",
+      "side": 1,
+      "message": "Sigh. I spoke too soon. Further investigation reveals that reportdesigner likes to override all sorts of svx functionality and it doesn\u0027t use SvxShape, but rather objects that implement XShape and forward functionality to the reportdesigner library",
+      "parentUuid": "9daf28da_48d48fb1",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
