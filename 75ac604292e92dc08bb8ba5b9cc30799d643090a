@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9391d2a_3bc20492",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-16T12:44:51Z",
+      "side": 1,
+      "message": "Is there a danger that this new name is too generic and it affects behavior of other software if you set it in your global environment variable list?\n\nAt least I understood the reason why we have these LO_ or \u003cmodule name\u003e_ prefixes, and you just dropped it.",
+      "revId": "75ac604292e92dc08bb8ba5b9cc30799d643090a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
