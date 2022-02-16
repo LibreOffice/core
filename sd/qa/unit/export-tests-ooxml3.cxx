@@ -123,6 +123,7 @@ public:
     void testTdf143222_embeddedWorksheet();
     void testTdf142235_TestPlaceholderTextAlignment();
     void testTdf143315();
+    void testTdf147121();
     void testTdf140912_PicturePlaceholder();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
@@ -197,6 +198,7 @@ public:
     CPPUNIT_TEST(testTdf143222_embeddedWorksheet);
     CPPUNIT_TEST(testTdf142235_TestPlaceholderTextAlignment);
     CPPUNIT_TEST(testTdf143315);
+    CPPUNIT_TEST(testTdf147121);
     CPPUNIT_TEST(testTdf140912_PicturePlaceholder);
     CPPUNIT_TEST_SUITE_END();
 
@@ -1845,6 +1847,36 @@ void SdOOXMLExportTest3::testTdf143315()
     assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buSzPct", 0);
     assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buFont", 0);
     assertXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:pPr/a:buChar", 0);
+}
+
+void SdOOXMLExportTest3::testTdf147121()
+{
+    // Get the bugdoc
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf147121.pptx"), PPTX);
+
+    CPPUNIT_ASSERT(xDocShRef);
+    // Get the second line props of the placeholder
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xRun(
+        getRunFromParagraph(2, getParagraphFromShape(0, xShape)), uno::UNO_QUERY_THROW);
+
+    // Save the font size
+    const auto nFontSizeBefore = xRun->getPropertyValue("CharHeight").get<float>() * 100;
+
+    // Save and reload
+    utl::TempFile tmpfile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tmpfile);
+    xDocShRef->DoClose();
+
+    // Parse the export
+    xmlDocUniquePtr pXml = parseExport(tmpfile, "ppt/slides/slide1.xml");
+    const auto nFontSizeAfter
+        = getXPath(pXml, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:br[1]/a:rPr", "sz").toFloat();
+
+    // The font size was not saved before now it must be equal with the saved one.
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected font size", nFontSizeBefore, nFontSizeAfter);
 }
 
 void SdOOXMLExportTest3::testTdf140912_PicturePlaceholder()
