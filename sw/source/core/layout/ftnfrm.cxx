@@ -36,6 +36,7 @@
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
+#include <comphelper/flagguard.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -1961,6 +1962,8 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
     const sal_uInt16 nMyNum = FindPageFrame()->GetPhyPageNum();
     const sal_uInt16 nMyCol = lcl_ColumnNum( this );
     SwRectFnSet aRectFnSet(this);
+
+    ::comphelper::FlagRestorationGuard g(m_isMovingFootnotes, true);
 
     // #i21478# - keep last inserted footnote in order to
     // format the content of the following one.
