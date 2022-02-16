@@ -454,7 +454,7 @@ void ScDocument::FillInfo(
                     pThisAttrArr = pThisCol->pAttrArray.get();
                 }
                 else
-                    pThisAttrArr = &maTabs[nTab]->aDefaultColAttrArray;
+                    pThisAttrArr = &maTabs[nTab]->aDefaultColData.AttrArray();
 
                 if (nCol+1 >= nCol1)                                // Attribute/Blockmark from nX1-1
                 {

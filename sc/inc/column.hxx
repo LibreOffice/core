@@ -108,7 +108,54 @@ struct ScNeededSizeOptions
     ScNeededSizeOptions();
 };
 
-class ScColumn
+// A shared implementation of some column code and data.
+// This is used by ScColumn, but also by ScTable for the unallocated
+// columns (one instance that is the default for all not-yet allocated columns).
+class ScColumnData
+{
+protected:
+    std::unique_ptr<ScAttrArray> pAttrArray;
+
+    ScColumnData(const ScColumnData&) = delete;
+    ScColumnData& operator= (const ScColumnData&) = delete;
+
+public:
+    ScColumnData() = default;
+    void InitAttrArray(ScAttrArray* attrArray) { pAttrArray.reset(attrArray); }
+
+    ScDocument& GetDoc() const { return pAttrArray->GetDoc(); }
+
+    ScAttrArray& AttrArray() { return *pAttrArray; }
+    const ScAttrArray& AttrArray() const { return *pAttrArray; }
+
+    const ScPatternAttr*    GetPattern( SCROW nRow ) const;
+    const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
+    SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
+                                     SCCOL nCol );
+    void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
+                                  ScEditDataArray* pDataArray = nullptr,
+                                  bool* const pIsChanged = nullptr);
+    void        MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, bool bDeep ) const;
+
+    sal_uInt32  GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const;
+    sal_uInt32  GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const;
+
+    /// Including current, may return -1
+    SCROW       GetNextUnprotected( SCROW nRow, bool bUp ) const;
+
+    const ScStyleSheet* GetStyle( SCROW nRow ) const;
+    void        ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
+
+    bool        HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
+
+    void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark, SCCOL nCol );
+    void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol );
+};
+
+// Use protected inheritance to prevent publishing some internal ScColumnData
+// functions as part of ScColumn. If they should be public in ScColumn,
+// use 'using' to make them public.
+class ScColumn : protected ScColumnData
 {
     // Empty values correspond with empty cells. All non-empty cell positions
     // must have non-empty elements. For text width, the value should be
@@ -125,8 +172,6 @@ class ScColumn
 
     // Cell values.
     sc::CellStoreType maCells;
-
-    std::unique_ptr<ScAttrArray> pAttrArray;
 
     size_t mnBlkCountFormula;
 
@@ -156,9 +201,6 @@ friend class sc::CellValues;
 friend class sc::TableValues;
 friend class sc::CellStoreEvent;
 
-    ScColumn(const ScColumn&) = delete;
-    ScColumn& operator= (const ScColumn&) = delete;
-
     bool ParseString(
         ScCellValue& rCell,
         SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
@@ -179,7 +221,7 @@ public:
 
     void        Init(SCCOL nNewCol, SCTAB nNewTab, ScDocument& rDoc, bool bEmptyAttrArray);
 
-    ScDocument& GetDoc() const { return pAttrArray->GetDoc(); }
+    using ScColumnData::GetDoc;
     SCTAB GetTab() const { return nTab; }
     SCCOL GetCol() const { return nCol; }
     bool HasFiltering() const { return mbFiltering; }
@@ -204,7 +246,6 @@ public:
     void        FreeNotes();
     void        Swap( ScColumn& rOther, SCROW nRow1, SCROW nRow2, bool bPattern );
 
-    bool        HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
     bool        HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const;
     bool        IsMerged( SCROW nRow ) const;
     bool        ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
@@ -462,16 +503,10 @@ public:
     {
         return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich)));
     }
-    const ScPatternAttr*    GetPattern( SCROW nRow ) const;
-    const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
-
-    sal_uInt32  GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const;
-    sal_uInt32  GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const;
-    // Mainly to be used by ScTable to share code.
-    static sal_uInt32 GetNumberFormat( const ScDocument& rDoc, const ScAttrArray* pAttrArray, SCROW nStartRow, SCROW nEndRow );
+    using ScColumnData::GetPattern;
+    using ScColumnData::GetNumberFormat;
 
     void        MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, bool bDeep ) const;
-    void        MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, bool bDeep ) const;
     void        MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
                             ScLineFlags& rFlags,
                             SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight ) const;
@@ -480,9 +515,6 @@ public:
 
     void        ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr );
     void        ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr );
-    void        ApplyPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& rPatAttr,
-                                  ScEditDataArray* pDataArray = nullptr,
-                                  bool* const pIsChanged = nullptr);
     const ScPatternAttr* SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> );
     void        SetPattern( SCROW nRow, const ScPatternAttr& );
     void        SetPatternArea( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr& );
@@ -490,14 +522,12 @@ public:
                             const ScPatternAttr& rPattern, SvNumFormatType nNewType );
 
     void        ApplyStyle( SCROW nRow, const ScStyleSheet* rStyle );
-    void        ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
     void        ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkData& rMark);
     void        ApplySelectionLineStyle( const ScMarkData& rMark,
                                     const ::editeng::SvxBorderLine* pLine, bool bColorOnly );
     void        AddCondFormat(SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
     void        RemoveCondFormat(SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex );
 
-    const ScStyleSheet* GetStyle( SCROW nRow ) const;
     const ScStyleSheet* GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const;
     const ScStyleSheet* GetAreaStyle( bool& rFound, SCROW nRow1, SCROW nRow2 ) const;
 
@@ -538,9 +568,6 @@ public:
 
     void GetOptimalHeight(
         sc::RowHeightContext& rCxt, SCROW nStartRow, SCROW nEndRow, sal_uInt16 nMinHeight, SCROW nMinStart );
-
-                /// Including current, may return -1
-    SCROW      GetNextUnprotected( SCROW nRow, bool bUp ) const;
 
     void GetFilterEntries(
         sc::ColumnBlockConstPosition& rBlockPos, SCROW nStartRow, SCROW nEndRow,

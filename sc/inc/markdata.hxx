@@ -82,6 +82,7 @@ public:
 
     const ScRange& GetMarkArea() const { return aMarkRange; }
     const ScRange& GetMultiMarkArea() const { return aMultiRange; }
+    const ScRange& GetArea() const { return bMultiMarked ? aMultiRange : aMarkRange; }
 
     void        SetAreaTab( SCTAB nTab );
 
@@ -130,6 +131,10 @@ public:
     bool        IsColumnMarked( SCCOL nCol ) const;
     bool        IsRowMarked( SCROW nRow ) const;
     bool        IsAllMarked( const ScRange& rRange ) const;     // Multi
+
+    // Returns the first column of the range [column,nLastCol] for which
+    // all those columns have equal marks. Value returned is not less than nMinCol.
+    SCCOL       GetStartOfEqualColumns( SCCOL nLastCol, SCCOL nMinCol = 0 ) const;
 
                 /// May return -1
     SCROW       GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;

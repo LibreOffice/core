@@ -276,9 +276,9 @@ ScTable::ScTable( ScDocument& rDoc, SCTAB nNewTab, const OUString& rNewName,
     bActiveScenario(false),
     mbPageBreaksValid(false),
     mbForceBreaks(false),
-    bStreamValid(false),
-    aDefaultColAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr)
+    bStreamValid(false)
 {
+    aDefaultColData.InitAttrArray(new ScAttrArray(static_cast<SCCOL>(-1), nNewTab, rDoc, nullptr));
     if (bColInfo)
     {
         mpColWidth.reset( new ScCompressedArray<SCCOL, sal_uInt16>( rDocument.MaxCol()+1, STD_COL_WIDTH ) );
@@ -1613,7 +1613,7 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
                     nNextRow = rMark.GetNextMarked( nCol, nNextRow, bUp );
                 if ( bUnprotected )
                     nNextRow = ( nCol <= nLastCol ) ? aCol[nCol].GetNextUnprotected( nNextRow, bUp ) :
-                        aDefaultColAttrArray.GetNextUnprotected( nNextRow, bUp );
+                        aDefaultColData.GetNextUnprotected( nNextRow, bUp );
                 pNextRows[nCol - nStartCol] = nNextRow;
 
                 if (bUp)
