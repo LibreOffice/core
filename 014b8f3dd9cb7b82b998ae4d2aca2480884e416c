@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0ab8aa6_4dede5c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-16T19:32:25Z",
+      "side": 1,
+      "message": "Note: verified by Jenkins in https://gerrit.libreoffice.org/c/core/+/130011",
+      "revId": "014b8f3dd9cb7b82b998ae4d2aca2480884e416c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
