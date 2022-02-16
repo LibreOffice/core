@@ -47,6 +47,8 @@
 
 #include <uiobject.hxx>
 
+#include <o3tl/enumrange.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -524,19 +526,12 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     // unexpected content tracking could occur if these content tree settings are not done before.
     m_xContentTree->SetOutlineLevel(static_cast<sal_uInt8>(m_pConfig->GetOutlineLevel()));
     m_xContentTree->SetOutlineTracking(static_cast<sal_uInt8>(m_pConfig->GetOutlineTracking()));
-    m_xContentTree->SetTableTracking(m_pConfig->IsTableTracking());
-    m_xContentTree->SetSectionTracking(m_pConfig->IsSectionTracking());
-    m_xContentTree->SetFrameTracking(m_pConfig->IsFrameTracking());
-    m_xContentTree->SetImageTracking(m_pConfig->IsImageTracking());
-    m_xContentTree->SetOLEobjectTracking(m_pConfig->IsOLEobjectTracking());
-    m_xContentTree->SetBookmarkTracking(m_pConfig->IsBookmarkTracking());
-    m_xContentTree->SetHyperlinkTracking(m_pConfig->IsHyperlinkTracking());
-    m_xContentTree->SetReferenceTracking(m_pConfig->IsReferenceTracking());
-    m_xContentTree->SetIndexTracking(m_pConfig->IsIndexTracking());
-    m_xContentTree->SetCommentTracking(m_pConfig->IsCommentTracking());
-    m_xContentTree->SetDrawingObjectTracking(m_pConfig->IsDrawingObjectTracking());
-    m_xContentTree->SetFieldTracking(m_pConfig->IsFieldTracking());
-    m_xContentTree->SetFootnoteTracking(m_pConfig->IsFootnoteTracking());
+    for (ContentTypeId eCntTypeId : o3tl::enumrange<ContentTypeId>())
+    {
+        if (eCntTypeId != ContentTypeId::OUTLINE)
+            m_xContentTree->SetContentTypeTracking(
+                        eCntTypeId, m_pConfig->IsContentTypeTrack(eCntTypeId));
+    }
 
     if (const ContentTypeId nRootType = m_pConfig->GetRootType();
             nRootType != ContentTypeId::UNKNOWN)

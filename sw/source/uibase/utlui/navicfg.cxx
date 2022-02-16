@@ -24,9 +24,29 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <map>
 
 using namespace ::utl;
 using namespace ::com::sun::star::uno;
+
+namespace {
+    std::map<OUString, ContentTypeId> mPropNameToContentTypeId
+    {
+        {"TableTracking", ContentTypeId::TABLE},
+        {"FrameTracking", ContentTypeId::FRAME},
+        {"ImageTracking", ContentTypeId::GRAPHIC},
+        {"OLEobjectTracking", ContentTypeId::OLE},
+        {"BookmarkTracking", ContentTypeId::BOOKMARK},
+        {"SectionTracking", ContentTypeId::REGION},
+        {"HyperlinkTracking", ContentTypeId::URLFIELD},
+        {"ReferenceTracking", ContentTypeId::REFERENCE},
+        {"IndexTracking", ContentTypeId::INDEX},
+        {"CommentTracking", ContentTypeId::POSTIT},
+        {"DrawingObjectTracking", ContentTypeId::DRAWOBJECT},
+        {"FieldTracking", ContentTypeId::TEXTFIELD},
+        {"FootnoteTracking", ContentTypeId::FOOTNOTE}
+    };
+}
 
 Sequence<OUString> SwNavigationConfig::GetPropertyNames()
 {
@@ -65,19 +85,6 @@ SwNavigationConfig::SwNavigationConfig() :
     m_bIsSmall(false),
     m_bIsGlobalActive(true),
     m_nOutlineTracking(1),
-    m_bIsTableTracking(true),
-    m_bIsSectionTracking(true),
-    m_bIsFrameTracking(true),
-    m_bIsImageTracking(true),
-    m_bIsOLEobjectTracking(true),
-    m_bIsBookmarkTracking(true),
-    m_bIsHyperlinkTracking(true),
-    m_bIsReferenceTracking(true),
-    m_bIsIndexTracking(true),
-    m_bIsCommentTracking(true),
-    m_bIsDrawingObjectTracking(true),
-    m_bIsFieldTracking(true),
-    m_bIsFootnoteTracking(true),
     m_bIsNavigateOnSelect(false)
 {
     Load();
@@ -129,19 +136,13 @@ void SwNavigationConfig::Load()
                 case 5: m_bIsSmall        = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                 case 6: m_bIsGlobalActive = *o3tl::doAccess<bool>(pValues[nProp]);  break;
                 case 7: pValues[nProp] >>= m_nOutlineTracking; break;
-                case 8: m_bIsTableTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 9: m_bIsSectionTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 10: m_bIsFrameTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 11: m_bIsImageTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 12: m_bIsOLEobjectTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 13: m_bIsBookmarkTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 14: m_bIsHyperlinkTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 15: m_bIsReferenceTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 16: m_bIsIndexTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 17: m_bIsCommentTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 18: m_bIsDrawingObjectTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 19: m_bIsFieldTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
-                case 20: m_bIsFootnoteTracking = *o3tl::doAccess<bool>(pValues[nProp]); break;
+                case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
+                case 17: case 18: case 19: case 20:
+                {
+                    mContentTypeTrack[mPropNameToContentTypeId[aNames[nProp]]] =
+                            *o3tl::doAccess<bool>(pValues[nProp]);
+                    break;
+                }
                 case 21: m_bIsNavigateOnSelect = *o3tl::doAccess<bool>(pValues[nProp]); break;
             }
         }
@@ -170,19 +171,12 @@ void SwNavigationConfig::ImplCommit()
             case 5: pValues[nProp] <<= m_bIsSmall; break;
             case 6: pValues[nProp] <<= m_bIsGlobalActive; break;
             case 7: pValues[nProp] <<= m_nOutlineTracking; break;
-            case 8: pValues[nProp] <<= m_bIsTableTracking; break;
-            case 9: pValues[nProp] <<= m_bIsSectionTracking; break;
-            case 10: pValues[nProp] <<= m_bIsFrameTracking; break;
-            case 11: pValues[nProp] <<= m_bIsImageTracking; break;
-            case 12: pValues[nProp] <<= m_bIsOLEobjectTracking; break;
-            case 13: pValues[nProp] <<= m_bIsBookmarkTracking; break;
-            case 14: pValues[nProp] <<= m_bIsHyperlinkTracking; break;
-            case 15: pValues[nProp] <<= m_bIsReferenceTracking; break;
-            case 16: pValues[nProp] <<= m_bIsIndexTracking; break;
-            case 17: pValues[nProp] <<= m_bIsCommentTracking; break;
-            case 18: pValues[nProp] <<= m_bIsDrawingObjectTracking; break;
-            case 19: pValues[nProp] <<= m_bIsFieldTracking; break;
-            case 20: pValues[nProp] <<= m_bIsFootnoteTracking; break;
+            case 8: case 9: case 10: case 11: case 12: case 13: case 14: case 15: case 16:
+            case 17: case 18: case 19: case 20:
+            {
+                pValues[nProp] <<= mContentTypeTrack[mPropNameToContentTypeId[aNames[nProp]]];
+                break;
+            }
             case 21: pValues[nProp] <<= m_bIsNavigateOnSelect; break;
         }
     }
