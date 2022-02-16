@@ -33,6 +33,24 @@
       "message": "Hello,\nPlease add a comment explaining how the test would fail without the fix in place, i.e. https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dd0c4b646aa5b90794eb41a8a82db78fa0b8e66da",
       "revId": "754c9c990f9a41451bf61398dba1e446b293cb12",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef55cbd4_d09f09b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-16T08:45:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d4239a6_063860db",
+      "revId": "754c9c990f9a41451bf61398dba1e446b293cb12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
