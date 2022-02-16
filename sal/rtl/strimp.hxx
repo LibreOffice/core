@@ -25,8 +25,14 @@
 #include <sys/sdt.h>
 #endif
 
+#include <algorithm>
+#include <cassert>
+#include <cstdlib>
+
 #include <sal/types.h>
+#include <rtl/strbuf.h>
 #include <rtl/string.hxx>
+#include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
 
 /* ======================================================================= */
@@ -90,6 +96,94 @@ extern rtl_freeStringFn rtl_freeString;
 #  define RTL_LOG_STRING_INTERN_NEW(s,o)
 #  define RTL_LOG_STRING_INTERN_DELETE(s)
 #endif /* USE_SDT_PROBES */
+
+namespace
+{
+namespace detail
+{
+template <typename CharType1, typename CharType2>
+sal_Int32 indexOf(const CharType1* s, sal_Int32 len, const CharType2* subStr, sal_Int32 subLen)
+{
+    if constexpr (std::is_same_v<CharType1, sal_Unicode> && std::is_same_v<CharType2, sal_Unicode>)
+        return rtl_ustr_indexOfStr_WithLength(s, len, subStr, subLen);
+    else if constexpr (std::is_same_v<CharType1, sal_Unicode> && std::is_same_v<CharType2, char>)
+        return rtl_ustr_indexOfAscii_WithLength(s, len, subStr, subLen);
+    else if constexpr (std::is_same_v<CharType1, char> && std::is_same_v<CharType2, char>)
+        return rtl_str_indexOfStr_WithLength(s, len, subStr, subLen);
+}
+
+template <class S, typename CharType1>
+void append(S** s, sal_Int32* capacity, const CharType1* s1, sal_Int32 len)
+{
+    if constexpr (std::is_same_v<S, rtl_uString> && std::is_same_v<CharType1, sal_Unicode>)
+        return rtl_uStringbuffer_insert(s, capacity, (*s)->length, s1, len);
+    else if constexpr (std::is_same_v<S, rtl_uString> && std::is_same_v<CharType1, char>)
+        return rtl_uStringbuffer_insert_ascii(s, capacity, (*s)->length, s1, len);
+    else if constexpr (std::is_same_v<S, rtl_String> && std::is_same_v<CharType1, char>)
+        return rtl_stringbuffer_insert(s, capacity, (*s)->length, s1, len);
+}
+}
+
+template <class S, typename CharTypeFrom, typename CharTypeTo>
+void string_newReplaceAllFromIndex_impl(S** s, S* s1, CharTypeFrom const* from,
+                                        sal_Int32 fromLength, CharTypeTo const* to,
+                                        sal_Int32 toLength, sal_Int32 fromIndex)
+{
+    assert(s != nullptr);
+    assert(s1 != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
+    assert(toLength >= 0);
+    assert(to != nullptr || toLength == 0);
+    assert(fromIndex >= 0 && fromIndex <= s1->length);
+    sal_Int32 i = detail::indexOf(s1->buffer + fromIndex, s1->length - fromIndex, from, fromLength);
+    if (i >= 0)
+    {
+        if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        if constexpr (std::is_same_v<S, rtl_uString>)
+            rtl_uString_acquire(s1); // in case *s == s1
+        else
+            rtl_string_acquire(s1); // in case *s == s1
+        sal_Int32 nCapacity = s1->length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (s1->length - fromIndex - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
+        }
+        if constexpr (std::is_same_v<S, rtl_uString>)
+            rtl_uString_new_WithLength(s, nCapacity);
+        else
+            rtl_string_new_WithLength(s, nCapacity);
+        i += fromIndex;
+        fromIndex = 0;
+        do
+        {
+            detail::append(s, &nCapacity, s1->buffer + fromIndex, i);
+            detail::append(s, &nCapacity, to, toLength);
+            fromIndex += i + fromLength;
+            i = detail::indexOf(s1->buffer + fromIndex, s1->length - fromIndex, from, fromLength);
+        } while (i >= 0);
+        // the rest
+        detail::append(s, &nCapacity, s1->buffer + fromIndex, s1->length - fromIndex);
+        if constexpr (std::is_same_v<S, rtl_uString>)
+            rtl_uString_release(s1);
+        else
+            rtl_string_release(s1);
+    }
+    else
+    {
+        if constexpr (std::is_same_v<S, rtl_uString>)
+            rtl_uString_assign(s, s1);
+        else
+            rtl_string_assign(s, s1);
+    }
+}
+}
 
 #endif // INCLUDED_SAL_RTL_STRIMP_HXX
 
