@@ -1727,7 +1727,7 @@ bool SwFootnoteBossFrame::RemoveFootnote(
 {
     bool ret(false);
     SwFootnoteFrame *pFootnote = FindFootnote( pRef, pAttr );
-    if( pFootnote )
+    if (pFootnote && !pFootnote->IsDeleteForbidden())
     {
         ret = true;
         do
