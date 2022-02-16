@@ -25,18 +25,48 @@
 
 #define VERSION_USEAUTOCOLOR    1
 
+/// Represents theme metadata for a (tools) Color.
+class EDITENG_DLLPUBLIC SvxThemeColor
+{
+    sal_Int16 maThemeIndex;
+    /// Luminance Modulation: 100th percentage, defaults to 100%.
+    sal_Int16 mnLumMod;
+    /// Luminance Offset: 100th percentage, defaults to 0%.
+    sal_Int16 mnLumOff;
+
+public:
+    explicit SvxThemeColor();
+    bool operator==(const SvxThemeColor& rThemeColor) const;
+
+    sal_Int16 GetThemeIndex() const
+    {
+        return maThemeIndex;
+    }
+
+    void SetThemeIndex(sal_Int16 nIndex)
+    {
+        maThemeIndex = nIndex;
+    }
+
+    void SetLumMod(sal_Int16 nLumMod) { mnLumMod = nLumMod; }
+
+    sal_Int16 GetLumMod() const { return mnLumMod; }
+
+    void SetLumOff(sal_Int16 nLumOff) { mnLumOff = nLumOff; }
+
+    sal_Int16 GetLumOff() const { return mnLumOff; }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+};
+
 /** SvxColorItem item describes a color.
 */
 class EDITENG_DLLPUBLIC SvxColorItem final : public SfxPoolItem
 {
 private:
     Color mColor;
-    sal_Int16 maThemeIndex;
+    SvxThemeColor maThemeColor;
     sal_Int16 maTintShade;
-    /// Luminance Modulation: 100th percentage, defaults to 100%.
-    sal_Int16 mnLumMod;
-    /// Luminance Offset: 100th percentage, defaults to 0%.
-    sal_Int16 mnLumOff;
 
 public:
     static SfxPoolItem* CreateDefault();
@@ -63,16 +93,6 @@ public:
     }
     void SetValue(const Color& rNewColor);
 
-    sal_Int16 GetThemeIndex() const
-    {
-        return maThemeIndex;
-    }
-
-    void SetThemeIndex(sal_Int16 nIndex)
-    {
-        maThemeIndex = nIndex;
-    }
-
     sal_Int16 GetTintOrShade() const
     {
         return maTintShade;
@@ -83,13 +103,9 @@ public:
         maTintShade = nTintOrShade;
     }
 
-    void SetLumMod(sal_Int16 nLumMod) { mnLumMod = nLumMod; }
+    SvxThemeColor& GetThemeColor() { return maThemeColor; }
 
-    sal_Int16 GetLumMod() const { return mnLumMod; }
-
-    void SetLumOff(sal_Int16 nLumOff) { mnLumOff = nLumOff; }
-
-    sal_Int16 GetLumOff() const { return mnLumOff; }
+    const SvxThemeColor& GetThemeColor() const { return maThemeColor; }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
