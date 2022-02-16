@@ -573,7 +573,8 @@ void SwTextFrame::AdjustFollow_( SwTextFormatter &rLine,
         {
             if( GetFollow()->IsLocked() )
             {
-                OSL_FAIL( "+SwTextFrame::JoinFrame: Follow is locked." );
+                // this can happen when follow calls pMaster->GetFormatted()
+                SAL_INFO("sw.core", "+SwTextFrame::JoinFrame: Follow is locked." );
                 return;
             }
             if (GetFollow()->IsDeleteForbidden())
