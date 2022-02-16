@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b00f339_4146ea73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-16T14:38:24Z",
+      "side": 1,
+      "message": "Sorry for the noise, should enable the clang plugin locally.",
+      "revId": "83664e9ee084253173c6428f29ae8fb5b6d74809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
