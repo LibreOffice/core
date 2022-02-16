@@ -186,7 +186,7 @@ namespace connectivity::odbc
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void openTablesTypes( );
+            void openTablesTypes();
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void openTypeInfo();
