@@ -16,6 +16,23 @@
       "message": "The commit message is a bit confusing. It seems strange to me for a docking window not to be a dockable type.",
       "revId": "96e631bf47777346d33f2639d83e07fac444533e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5efa9a5_8fa964b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-16T08:57:58Z",
+      "side": 1,
+      "message": "yeah, we should rename things from DropdownDockingWindow to something like DropdownWindow and so on removing \"Dock\" from this thing used for dropdowns that presumably doesn\u0027t use any of the \"Dock\" features of its ancestor",
+      "revId": "96e631bf47777346d33f2639d83e07fac444533e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
