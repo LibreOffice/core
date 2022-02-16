@@ -281,7 +281,7 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
-        if (rAreaRange.Contains( rRange))
+        if (rAreaRange.Intersects( rRange))
         {
             if (pArea->IsGroupListening())
             {
