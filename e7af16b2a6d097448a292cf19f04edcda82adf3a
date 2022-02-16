@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24867e91_c148c1f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-16T11:43:53Z",
+      "side": 1,
+      "message": "Renaming to just NO_QUERYSAVE in Iccec99ba55a1a99a71c685489890e0695a6d6d5d",
+      "revId": "e7af16b2a6d097448a292cf19f04edcda82adf3a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
