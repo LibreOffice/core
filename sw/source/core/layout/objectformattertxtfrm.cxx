@@ -843,7 +843,9 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
                 }
                 pSectFrame = pSectFrame->GetUpper();
             }
-            if ( pSectFrame && pSectFrame->IsSctFrame() )
+            bool bSctFrame = pSectFrame && pSectFrame->IsSctFrame();
+            SAL_WARN_IF(bSctFrame && _rAnchorTextFrame.IsInFootnote(), "sw.layout", "skipping anchor in section in footnote");
+            if (bSctFrame && !_rAnchorTextFrame.IsInFootnote())
             {
                 SwFrameDeleteGuard aDeleteGuard(&_rAnchorTextFrame);
                 // #i44049#
