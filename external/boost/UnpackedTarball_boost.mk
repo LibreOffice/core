@@ -30,8 +30,6 @@ boost_patches += clang-cl.patch.0
 boost_patches += boost_1_60_0.undef.warning.patch
 boost_patches += boost_1_63_0.undef.warning.patch.1
 
-boost_patches += boost-android-unified.patch.1
-
 boost_patches += windows-no-utf8-locales.patch.0
 
 boost_patches += msvc2017.patch.0
