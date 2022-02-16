@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <algorithm>
 #include <cassert>
 #include <cstdlib>
 
@@ -29,6 +30,7 @@
 #include "strimp.hxx"
 #include <rtl/character.hxx>
 #include <rtl/string.h>
+#include <rtl/strbuf.h>
 
 #include <rtl/math.h>
 
@@ -361,14 +363,45 @@ void rtl_string_newReplaceAll(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
-    rtl_string_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_string_newReplaceFirst(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1) {
-            break;
+    assert(str != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
+    assert(toLength >= 0);
+    assert(to != nullptr || toLength == 0);
+    if (sal_Int32 i = rtl_str_indexOfStr_WithLength(str->buffer, str->length, from, fromLength);
+        i >= 0)
+    {
+        if (str->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        rtl_string_acquire(str); // in case *newStr == str
+        sal_Int32 nCapacity = str->length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (str->length - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
         }
+        rtl_string_new_WithLength(newStr, nCapacity);
+        sal_Int32 fromIndex = 0;
+        do
+        {
+            rtl_stringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                    i);
+            rtl_stringbuffer_insert(newStr, &nCapacity, (*newStr)->length, to, toLength);
+            fromIndex += i + fromLength;
+            i = rtl_str_indexOfStr_WithLength(str->buffer + fromIndex, str->length - fromIndex,
+                                              from, fromLength);
+        } while (i >= 0);
+        // the rest
+        rtl_stringbuffer_insert(newStr, &nCapacity, (*newStr)->length, str->buffer + fromIndex,
+                                str->length - fromIndex);
+        rtl_string_release(str);
     }
+    else
+        rtl_string_assign(newStr, str);
 }
 
 sal_Int32 SAL_CALL rtl_str_getLength(const char* pStr) SAL_THROW_EXTERN_C()
