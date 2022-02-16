@@ -22,6 +22,30 @@
       },
       "revId": "af8e73d1ddd62157b3ce65510bd92bb7dbd80218",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d45756d_13dac83a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-16T13:22:01Z",
+      "side": 1,
+      "message": "The constexpr calculated with the intended values could be fine though. However, the old value is 30.6001 and the new value would be ~30.60000038 so I agree we should have a unit test of some Hijri calendar values *before* this change (years 100, 200, 500, 1000, 2000 and 3000 for example) and see how that changes with the new value and if then compare with some official reference (if there is any..).",
+      "parentUuid": "a2d8f405_4120782a",
+      "range": {
+        "startLine": 11,
+        "startChar": 4,
+        "endLine": 11,
+        "endChar": 44
+      },
+      "revId": "af8e73d1ddd62157b3ce65510bd92bb7dbd80218",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
