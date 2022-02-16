@@ -45,6 +45,7 @@ ifneq ($(COMPILER_PLUGINS),)
 ifeq ($(COMPILER_EXTERNAL_TOOL)$(COMPILER_PLUGIN_TOOL),)
 $(eval $(call gb_Module_add_check_targets,solenv, \
     CompilerTest_compilerplugins_clang \
+    CompilerTest_compilerplugins_clang-c++03 \
 ))
 endif
 endif
