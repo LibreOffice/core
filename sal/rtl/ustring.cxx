@@ -1367,15 +1367,7 @@ void rtl_uString_newReplaceAllAsciiLAsciiL(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
-    assert(toLength >= 0);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_uString_newReplaceFirstAsciiLAsciiL(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1) {
-            break;
-        }
-    }
+    rtl::str::newReplaceAllFromIndex(newStr, str, from, fromLength, to, toLength, 0);
 }
 
 void rtl_uString_newReplaceAllAsciiLUtf16L(
@@ -1383,15 +1375,7 @@ void rtl_uString_newReplaceAllAsciiLUtf16L(
     sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
-    assert(toLength >= 0);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_uString_newReplaceFirstAsciiLUtf16L(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1 || *newStr == nullptr) {
-            break;
-        }
-    }
+    rtl::str::newReplaceAllFromIndex(newStr, str, from, fromLength, to, toLength, 0);
 }
 
 void rtl_uString_newReplaceAllUtf16LAsciiL(
@@ -1399,15 +1383,7 @@ void rtl_uString_newReplaceAllUtf16LAsciiL(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
-    assert(toLength >= 0);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_uString_newReplaceFirstUtf16LAsciiL(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1 || *newStr == nullptr) {
-            break;
-        }
-    }
+    rtl::str::newReplaceAllFromIndex(newStr, str, from, fromLength, to, toLength, 0);
 }
 
 void rtl_uString_newReplaceAllUtf16LUtf16L(
@@ -1423,16 +1399,7 @@ void rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
     sal_Int32 fromLength, sal_Unicode const * to, sal_Int32 toLength, sal_Int32 fromIndex)
     SAL_THROW_EXTERN_C()
 {
-    assert(toLength >= 0);
-    assert(fromIndex >= 0 && fromIndex <= str->length);
-    rtl_uString_assign(newStr, str);
-    for (sal_Int32 i = fromIndex;; i += toLength) {
-        rtl_uString_newReplaceFirstUtf16LUtf16L(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1 || *newStr == nullptr) {
-            break;
-        }
-    }
+    rtl::str::newReplaceAllFromIndex(newStr, str, from, fromLength, to, toLength, fromIndex);
 }
 
 sal_Int32 SAL_CALL rtl_ustr_getLength(const sal_Unicode* pStr) SAL_THROW_EXTERN_C()
