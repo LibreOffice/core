@@ -33,6 +33,23 @@
       "message": "👍🏻",
       "revId": "821f5760e4b440dd1ee47e8c1250fc393f1ac809",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "579bd0c6_77503704",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-16T09:52:49Z",
+      "side": 1,
+      "message": "It just needs some documentation - we have it somewhere in the tree for the available environment variables",
+      "revId": "821f5760e4b440dd1ee47e8c1250fc393f1ac809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
