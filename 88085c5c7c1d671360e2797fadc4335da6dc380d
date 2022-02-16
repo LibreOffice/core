@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62f45d07_c9c800cf",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-16T09:32:40Z",
+      "side": 1,
+      "message": "Do these changes to the rtl_uString_newReplaceFirst* functions contribute to the performance improvement of the rtl::OUString::replaceAll* functions?",
+      "revId": "88085c5c7c1d671360e2797fadc4335da6dc380d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
