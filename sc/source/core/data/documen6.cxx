@@ -203,7 +203,7 @@ SvtScriptType ScDocument::GetRangeScriptType( const ScRangeList& rRanges )
     }
 
     ScriptTypeAggregator aAction(*this);
-    aSet.executeAction(aAction);
+    aSet.executeAction(*this, aAction);
     return aAction.getScriptType();
 }
 
