@@ -361,14 +361,7 @@ void rtl_string_newReplaceAll(
     sal_Int32 fromLength, char const * to, sal_Int32 toLength)
     SAL_THROW_EXTERN_C()
 {
-    rtl_string_assign(newStr, str);
-    for (sal_Int32 i = 0;; i += toLength) {
-        rtl_string_newReplaceFirst(
-            newStr, *newStr, from, fromLength, to, toLength, &i);
-        if (i == -1) {
-            break;
-        }
-    }
+    rtl::str::newReplaceAllFromIndex(newStr, str, from, fromLength, to, toLength, 0);
 }
 
 sal_Int32 SAL_CALL rtl_str_getLength(const char* pStr) SAL_THROW_EXTERN_C()
