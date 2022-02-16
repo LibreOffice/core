@@ -304,7 +304,11 @@ bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint)
 
         ScBroadcastArea* pArea = (*aIter).mpArea;
         const ScRange& rAreaRange = pArea->GetRange();
+<<<<<<< HEAD   (ac5e91 Resolves: tdf#147421 Do not use OUString::replaceAll() to st)
         if (rAreaRange.In( rRange))
+=======
+        if (rAreaRange.Intersects( rRange))
+>>>>>>> CHANGE (a1f21d Resolves: tdf#147398 Test Intersects() instead of Contains())
         {
             if (pArea->IsGroupListening())
             {
