@@ -238,12 +238,12 @@ def remove_unused(root):
 
     # remove office:settings
     settings = root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}settings")
-    if settings:
+    if settings is not None:
         root.remove(settings)
 
     # scripts are almost never needed
     scripts = root.find(".//{urn:oasis:names:tc:opendocument:xmlns:office:1.0}scripts")
-    if scripts:
+    if scripts is not None:
         root.remove(scripts)
 
     # TODO: replace embedded image with some tiny one
