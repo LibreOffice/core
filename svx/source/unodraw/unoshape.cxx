@@ -110,7 +110,7 @@ class GDIMetaFile;
 
 struct SvxShapeImpl
 {
-    std::optional<SfxItemSet> mxItemSet;
+    std::optional<SfxAllItemSet> mxItemSet;
     SdrObjKind      mnObjId;
     SvxShapeMaster* mpMaster;
     bool            mbHasSdrObjectOwnership;
@@ -1626,11 +1626,7 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const uno::Any&
     {
         if( !mpImpl->mxItemSet )
         {
-            mpImpl->mxItemSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool(), pMap->nWID, pMap->nWID );
-        }
-        else
-        {
-            mpImpl->mxItemSet->MergeRange(pMap->nWID, pMap->nWID);
+            mpImpl->mxItemSet.emplace( GetSdrObject()->getSdrModelFromSdrObject().GetItemPool() );
         }
         pSet = &*mpImpl->mxItemSet;
     }
