@@ -148,6 +148,7 @@ namespace sdr::properties
             {
                 if (WantItemSetInItemSetChanged())
                 {
+                    assert(false);
                     SfxItemSet aSet(GetSdrObject().GetObjectItemPool(), nWhich, nWhich);
                     ItemSetChanged(&aSet);
                 }
