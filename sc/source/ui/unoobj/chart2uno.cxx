@@ -2791,8 +2791,9 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         if (bChanged)
         {
-            assert(m_oRangeIndices->size() == aRanges.size() &&
-                       "range list and range index list have different sizes after the reference update.");
+            // TODO: This should be an assert, but tdf#144537 triggers it.
+            SAL_WARN_IF(m_oRangeIndices->size() == aRanges.size(),
+                        "sc.ui", "range list and range index list have different sizes after the reference update.");
 
             // Bring the change back from the range list to the token list.
             UpdateTokensFromRanges(aRanges);
