@@ -465,8 +465,10 @@ public:
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
-    sal_uInt32 GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const;
+    sal_uInt32  GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const;
     sal_uInt32  GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const;
+    // Mainly to be used by ScTable to share code.
+    static sal_uInt32 GetNumberFormat( const ScDocument& rDoc, const ScAttrArray* pAttrArray, SCROW nStartRow, SCROW nEndRow );
 
     void        MergeSelectionPattern( ScMergePatternState& rState, const ScMarkData& rMark, bool bDeep ) const;
     void        MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, bool bDeep ) const;
