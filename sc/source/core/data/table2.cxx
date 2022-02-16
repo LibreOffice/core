@@ -2187,10 +2187,7 @@ sal_uInt32 ScTable::GetNumberFormat( const ScInterpreterContext& rContext, const
 
 sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nRow ) const
 {
-    if (ValidColRow(nCol,nRow))
-        return CreateColumnIfNotExists(nCol).GetNumberFormat(rDocument.GetNonThreadedContext(), nRow);
-    else
-        return 0;
+    return GetNumberFormat(rDocument.GetNonThreadedContext(), ScAddress(nCol, nRow, nTab));
 }
 
 sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
@@ -2198,7 +2195,9 @@ sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow 
     if (!ValidCol(nCol) || !ValidRow(nStartRow) || !ValidRow(nEndRow))
         return 0;
 
-    return CreateColumnIfNotExists(nCol).GetNumberFormat(nStartRow, nEndRow);
+    if (nCol < GetAllocatedColumnsCount())
+        return aCol[nCol].GetNumberFormat(nStartRow, nEndRow);
+    return ScColumn::GetNumberFormat( GetDoc(), &aDefaultColAttrArray, nStartRow, nEndRow);
 }
 
 void ScTable::SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat )
