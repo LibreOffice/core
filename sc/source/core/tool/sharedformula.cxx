@@ -101,14 +101,8 @@ bool SharedFormulaUtil::splitFormulaCellGroup(const CellStoreType::position_type
     }
 
     // Apply the lower group object to the lower cells.
-#if DEBUG_COLUMN_STORAGE
-    if (xGroup2->mpTopCell->aPos.Row() + size_t(xGroup2->mnLength) > aPos.first->position + aPos.first->size)
-    {
-        cerr << "ScColumn::SplitFormulaCellGroup: Shared formula region goes beyond the formula block. Not good." << endl;
-        cerr.flush();
-        abort();
-    }
-#endif
+    assert ((xGroup2 == nullptr || xGroup2->mpTopCell->aPos.Row() + size_t(xGroup2->mnLength) <= aPos.first->position + aPos.first->size)
+        && "Shared formula region goes beyond the formula block.");
     sc::formula_block::iterator itEnd = it;
     std::advance(itEnd, nLength2);
     for (; it != itEnd; ++it)
@@ -249,14 +243,8 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         if (xGroup->mnLength == 2)
         {
             // Group consists of only two cells. Mark the second one non-shared.
-#if DEBUG_COLUMN_STORAGE
-            if (aPos.second+1 >= aPos.first->size)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: There is no next formula cell but there should be!" << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
+            assert (aPos.second+1 < aPos.first->size
+                && "There is no next formula cell but there should be!");
             ScFormulaCell& rNext = *sc::formula_block::at(*it->data, aPos.second+1);
             rNext.SetCellGroup(xNone);
         }
@@ -275,14 +263,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         if (xGroup->mnLength == 2)
         {
             // Mark the top cell non-shared.
-#if DEBUG_COLUMN_STORAGE
-            if (aPos.second == 0)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: There is no previous formula cell but there should be!" << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
+            assert(aPos.second != 0 && "There is no previous formula cell but there should be!");
             ScFormulaCell& rPrev = *sc::formula_block::at(*it->data, aPos.second-1);
             rPrev.SetCellGroup(xNone);
         }
@@ -301,14 +282,7 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
         if (xGroup->mnLength == 1)
         {
             // Make the top cell non-shared.
-#if DEBUG_COLUMN_STORAGE
-            if (aPos.second == 0)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: There is no previous formula cell but there should be!" << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
+            assert(aPos.second != 0 && "There is no previous formula cell but there should be!");
             ScFormulaCell& rPrev = *sc::formula_block::at(*it->data, aPos.second-1);
             rPrev.SetCellGroup(xNone);
         }
@@ -323,14 +297,8 @@ void SharedFormulaUtil::unshareFormulaCell(const CellStoreType::position_type& a
             xGroup2->mnLength = nLength2;
             xGroup2->mbInvariant = xGroup->mbInvariant;
             xGroup2->mpCode = xGroup->mpCode->CloneValue();
-#if DEBUG_COLUMN_STORAGE
-            if (xGroup2->mpTopCell->aPos.Row() + size_t(xGroup2->mnLength) > it->position + it->size)
-            {
-                cerr << "ScColumn::UnshareFormulaCell: Shared formula region goes beyond the formula block. Not good." << endl;
-                cerr.flush();
-                abort();
-            }
-#endif
+            assert(xGroup2->mpTopCell->aPos.Row() + size_t(xGroup2->mnLength) <= it->position + it->size
+                && "Shared formula region goes beyond the formula block.");
             sc::formula_block::iterator itCell = sc::formula_block::begin(*it->data);
             std::advance(itCell, aPos.second+1);
             sc::formula_block::iterator itCellEnd = itCell;
