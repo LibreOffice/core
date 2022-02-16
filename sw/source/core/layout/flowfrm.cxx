@@ -1080,6 +1080,18 @@ bool SwFlowFrame::IsPrevObjMove() const
         OSL_ENSURE( SwFlowFrame::CastFlowFrame( pPre ), "new flowfrm?" );
         if( SwFlowFrame::CastFlowFrame( pPre )->IsAnFollow( this ) )
             return false;
+        if (SwFlowFrame::CastFlowFrame(pPre)->IsJoinLocked())
+        {
+            SwBorderAttrAccess baa(SwFrame::GetCache(), pPre);
+            SwBorderAttrs const& rAttrs(*baa.Get());
+            if (SwFlowFrame::CastFlowFrame(pPre)->IsKeep(rAttrs.GetAttrSet().GetKeep(), pPre->GetBreakItem()))
+            {   // pPre is currently being formatted - maybe it moved back but
+                // its objects still have the old page's body as
+                // mpVertPosOrientFrame and SwContentFrame::MakeAll() is calling
+                // pNxt->Calc() in this case so allow this frame to move back
+                return false; // too, else pPre is forced to move forward again.
+            }
+        }
         SwLayoutFrame* pPreUp = pPre->GetUpper();
         // If the upper is a SectionFrame, or a column of a SectionFrame, we're
         // allowed to protrude out of it.  However, we need to respect the
