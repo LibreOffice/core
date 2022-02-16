@@ -827,7 +827,18 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
 {
     // #i47014# - no format of section and previous columns
     // for follow text frames.
-    if ( !_rAnchorTextFrame.IsFollow() )
+    bool bFormatContentOfLayoutFrame = !_rAnchorTextFrame.IsFollow();
+
+    if (bFormatContentOfLayoutFrame)
+    {
+        SwFrame* pColFrameOfAnchor = _rAnchorTextFrame.FindColFrame();
+        const bool bColumnFrameInFootNote = pColFrameOfAnchor && _rAnchorTextFrame.IsInFootnote();
+        SAL_WARN_IF(bColumnFrameInFootNote, "sw.layout", "tdf#122894 skipping anchor in column in footnote");
+        if (bColumnFrameInFootNote)
+            bFormatContentOfLayoutFrame = false;
+    }
+
+    if (bFormatContentOfLayoutFrame)
     {
         // if anchor frame is directly inside a section, format this section and
         // its previous frames.
@@ -871,9 +882,7 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
         // #i40140# - if anchor frame is inside a column,
         // format the content of the previous columns.
         // Note: It's a very simple format without formatting objects.
-        SwFrame* pColFrameOfAnchor = _rAnchorTextFrame.FindColFrame();
-        SAL_WARN_IF(pColFrameOfAnchor && _rAnchorTextFrame.IsInFootnote(), "sw.layout", "tdf#122894 skipping anchor in column in footnote");
-        if (pColFrameOfAnchor && !_rAnchorTextFrame.IsInFootnote())
+        if (SwFrame* pColFrameOfAnchor = _rAnchorTextFrame.FindColFrame())
         {
             // #i44049#
             _rAnchorTextFrame.LockJoin();
