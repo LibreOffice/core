@@ -11396,8 +11396,8 @@ then
         kf5_libdirs="$kf5_libdirs /usr/lib64 /usr/lib64/kf5 /usr/lib64/kf5/devel"
     fi
 
-    kf5_test_include="KF5/kcoreaddons_version.h"
-    kf5_test_library="libKF5CoreAddons.so"
+    kf5_test_include="KF5/KIOFileWidgets/KFileWidget"
+    kf5_test_library="libKF5KIOFileWidgets.so"
     kf5_libdirs="$qt5_libdir $kf5_libdirs"
 
     dnl kf5 KDE4 support compatibility installed
