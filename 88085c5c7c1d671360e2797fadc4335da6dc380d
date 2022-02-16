@@ -16,6 +16,24 @@
       "message": "Do these changes to the rtl_uString_newReplaceFirst* functions contribute to the performance improvement of the rtl::OUString::replaceAll* functions?",
       "revId": "88085c5c7c1d671360e2797fadc4335da6dc380d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db461a7e_6ca28f18",
+        "filename": "sal/rtl/ustring.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1128,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-16T09:45:00Z",
+      "side": 1,
+      "message": "Hmm, all those rtl_uString_newReplaceFirst* changes might be in a separate change, as they don\u0027t contribute to the optimization; but same changes to *All* do, and I felt that not doing some uniformity with *First* would look odd. Do you suggest me to clean them out from here to a separate patch? (I assume you do, knowing your attitude to commits purity ;))",
+      "parentUuid": "62f45d07_c9c800cf",
+      "revId": "88085c5c7c1d671360e2797fadc4335da6dc380d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
