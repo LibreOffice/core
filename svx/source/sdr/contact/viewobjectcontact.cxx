@@ -436,10 +436,12 @@ void ViewObjectContact::getPrimitive2DSequenceHierarchy(DisplayInfo& rDisplayInf
 
     // get ranges
     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
+    // tdf#147164 cannot use maObjectRange here, it is unreliable
+    const basegfx::B2DRange aObjectRange(mxPrimitive2DSequence.getB2DRange(rViewInformation2D));
     const basegfx::B2DRange& aViewRange(rViewInformation2D.getViewport());
 
     // check geometrical visibility
-    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(maObjectRange);
+    bool bVisible = aViewRange.isEmpty() || aViewRange.overlaps(aObjectRange);
     if(!bVisible)
         return;
 
