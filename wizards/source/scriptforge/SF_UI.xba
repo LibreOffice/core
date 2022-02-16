@@ -142,6 +142,12 @@ Property Get ObjectType As String
 	ObjectType = &quot;SF_UI&quot;
 End Property	&apos;	ScriptForge.SF_UI.ObjectType
 
+REM -----------------------------------------------------------------------------
+Property Get ServiceName As String
+&apos;&apos;&apos;	Internal use
+	ServiceName = &quot;ScriptForge.UI&quot;
+End Property	&apos;	ScriptForge.SF_UI.ServiceName
+
 REM ===================================================================== METHODS
 
 REM -----------------------------------------------------------------------------
