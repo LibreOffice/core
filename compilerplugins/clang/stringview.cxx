@@ -134,7 +134,8 @@ void StringView::handleSubExprThatCouldBeView(Expr const* subExpr)
     auto const e = e0->IgnoreParens();
     auto const tc = loplugin::TypeCheck(e->getType());
     if (!(tc.Class("OString").Namespace("rtl").GlobalNamespace()
-          || tc.Class("OUString").Namespace("rtl").GlobalNamespace()))
+          || tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+          || tc.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace()))
     {
         return;
     }
@@ -272,7 +273,8 @@ void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     if (auto const dc2 = dc1.Function("copy"))
     {
         if (dc2.Class("OString").Namespace("rtl").GlobalNamespace()
-            || dc2.Class("OUString").Namespace("rtl").GlobalNamespace())
+            || dc2.Class("OUString").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace())
         {
             report(DiagnosticsEngine::Warning, "rather than copy, pass with a view using subView()",
                    expr->getExprLoc())
@@ -340,6 +342,10 @@ bool StringView::VisitCXXConstructExpr(CXXConstructExpr const* expr)
                 .Class("OStringBuffer")
                 .Namespace("rtl")
                 .GlobalNamespace())
+    {
+        return true;
+    }
+    if (!compat::CPlusPlus17(compiler.getLangOpts()) && expr->isElidable()) // external C++03 code
     {
         return true;
     }

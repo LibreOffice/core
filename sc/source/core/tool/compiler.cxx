@@ -1574,7 +1574,7 @@ struct ConventionXL_OOX : public ConventionXL_A1
         {
             rBuffer.append('\'');
             ConventionXL_OOX::makeExternalDocStr( rBuffer, nFileId);
-            rBuffer.append( aBuf.copy(1));
+            rBuffer.append( aBuf.subView(1));
         }
         else
         {
