@@ -1724,13 +1724,15 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
         sal_uInt16 nOldValue = rOldSet.Get( ATTR_INDENT ).GetValue();
         sal_uInt16 nNewValue = nOldValue;
         // To keep Increment indent from running outside the cell1659
-        tools::Long nColWidth = static_cast<tools::Long>(rDocument.GetColWidth(nCol,nTab));
+        tools::Long nColWidth = static_cast<tools::Long>(
+            rDocument.GetColWidth(nCol == -1 ? rDocument.MaxCol() : nCol,nTab));
         if ( bIncrement )
         {
             if ( nNewValue < nColWidth-SC_INDENT_STEP )
             {
                 nNewValue += SC_INDENT_STEP;
-                if ( nNewValue > nColWidth-SC_INDENT_STEP ) nNewValue = nColWidth-SC_INDENT_STEP;
+                if ( nNewValue > nColWidth-SC_INDENT_STEP )
+                    nNewValue = nColWidth-SC_INDENT_STEP;
             }
         }
         else

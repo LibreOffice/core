@@ -590,6 +590,22 @@ bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
     return bOk;
 }
 
+SCCOL ScMarkData::GetStartOfEqualColumns( SCCOL nLastCol, SCCOL nMinCol ) const
+{
+    if( !bMultiMarked )
+    {
+        if ( bMarked && !bMarkIsNeg )
+        {
+            if( aMarkRange.aEnd.Col() >= nMinCol && aMarkRange.aStart.Col() < nLastCol )
+                return aMarkRange.aEnd.Col() + 1;
+            if( aMarkRange.aEnd.Col() >= nLastCol && aMarkRange.aStart.Col() <= nMinCol )
+                return aMarkRange.aStart.Col();
+        }
+        return nMinCol;
+    }
+    return aMultiSel.GetStartOfEqualColumns( nLastCol, nMinCol );
+}
+
 SCROW ScMarkData::GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const
 {
     if ( !bMultiMarked )

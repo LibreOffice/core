@@ -559,7 +559,7 @@ void ScTable::CopyStaticToDocument(
         rDestCol.maCells.set_empty(nRow1, nRow2);
         for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow)
         {
-            sal_uInt32 nNumFmt = aDefaultColAttrArray.GetPattern(nRow)->GetNumberFormat(
+            sal_uInt32 nNumFmt = aDefaultColData.GetPattern(nRow)->GetNumberFormat(
                 rDocument.GetNonThreadedContext().GetFormatTable());
             SvNumberFormatterMergeMap::const_iterator itNum = rMap.find(nNumFmt);
             if (itNum != rMap.end())
@@ -2179,8 +2179,7 @@ sal_uInt32 ScTable::GetNumberFormat( const ScInterpreterContext& rContext, const
     {
         if (rPos.Col() < GetAllocatedColumnsCount())
             return aCol[rPos.Col()].GetNumberFormat(rContext, rPos.Row());
-        return aDefaultColAttrArray.GetPattern(rPos.Row())
-            ->GetNumberFormat(rContext.GetFormatTable());
+        return aDefaultColData.GetNumberFormat(rContext, rPos.Row());
     }
     return 0;
 }
@@ -2197,7 +2196,7 @@ sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow 
 
     if (nCol < GetAllocatedColumnsCount())
         return aCol[nCol].GetNumberFormat(nStartRow, nEndRow);
-    return ScColumn::GetNumberFormat( GetDoc(), &aDefaultColAttrArray, nStartRow, nEndRow);
+    return aDefaultColData.GetNumberFormat(nStartRow, nEndRow);
 }
 
 void ScTable::SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat )
@@ -2211,9 +2210,9 @@ void ScTable::SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat 
 const ScPatternAttr* ScTable::GetPattern( SCCOL nCol, SCROW nRow ) const
 {
     if (ValidColRow(nCol,nRow) && nCol < GetAllocatedColumnsCount())
-        return CreateColumnIfNotExists(nCol).GetPattern( nRow );
+        return aCol[nCol].GetPattern( nRow );
     else
-        return aDefaultColAttrArray.GetPattern( nRow );
+        return aDefaultColData.GetPattern( nRow );
 }
 
 const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
@@ -2222,7 +2221,7 @@ const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, S
         && nCol < GetAllocatedColumnsCount())
         return aCol[nCol].GetMostUsedPattern( nStartRow, nEndRow );
     else
-        return nullptr;
+        return aDefaultColData.GetMostUsedPattern( nStartRow, nEndRow );
 }
 
 bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, HasAttrFlags nMask ) const
@@ -2231,7 +2230,7 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, Has
         if( aCol[nCol].HasAttrib( nRow1, nRow2, nMask ))
             return true;
     if( nCol2 >= aCol.size())
-         return aDefaultColAttrArray.HasAttrib( nRow1, nRow2, nMask );
+         return aDefaultColData.HasAttrib( nRow1, nRow2, nMask );
     return false;
 }
 
@@ -2764,9 +2763,11 @@ void ScTable::MergeSelectionPattern( ScMergePatternState& rState, const ScMarkDa
 void ScTable::MergePatternArea( ScMergePatternState& rState, SCCOL nCol1, SCROW nRow1,
                                                     SCCOL nCol2, SCROW nRow2, bool bDeep ) const
 {
-    nCol2 = ClampToAllocatedColumns(nCol2);
-    for (SCCOL i=nCol1; i<=nCol2; i++)
+    const SCCOL nEndCol = ClampToAllocatedColumns(nCol2);
+    for (SCCOL i=nCol1; i<=nEndCol; i++)
         aCol[i].MergePatternArea( rState, nRow1, nRow2, bDeep );
+    if (nEndCol != nCol2)
+        aDefaultColData.MergePatternArea( rState, nRow1, nRow2, bDeep );
 }
 
 void ScTable::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner, ScLineFlags& rFlags,
@@ -2818,9 +2819,7 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
         maxCol = std::max( nStartCol, aCol.size()) - 1;
         if( maxCol >= 0 )
             CreateColumnIfNotExists(maxCol); // Allocate needed different columns before changing the default.
-        const SfxItemSet* pSet = &rAttr.GetItemSet();
-        SfxItemPoolCache aCache( GetDoc().GetPool(), pSet );
-        aDefaultColAttrArray.ApplyCacheArea(nStartRow, nEndRow, &aCache, pDataArray, pIsChanged );
+        aDefaultColData.ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray, pIsChanged);
     }
     for (SCCOL i = nStartCol; i <= maxCol; i++)
         CreateColumnIfNotExists(i).ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray, pIsChanged);
@@ -2909,12 +2908,12 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
             nEndCol = aCol.size() - 1;
             for (SCCOL i = nStartCol; i <= nEndCol; i++)
                 aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
-            aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
+            aDefaultColData.ApplyStyleArea(nStartRow, nEndRow, rStyle );
         }
         else
         {
             CreateColumnIfNotExists( nStartCol - 1 );
-            aDefaultColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle );
+            aDefaultColData.ApplyStyleArea(nStartRow, nEndRow, rStyle );
         }
     }
     else
@@ -2948,7 +2947,7 @@ const ScStyleSheet* ScTable::GetStyle( SCCOL nCol, SCROW nRow ) const
     if ( nCol < aCol.size() )
         return aCol[nCol].GetStyle( nRow );
     else
-        return aDefaultColAttrArray.GetPattern( nRow )->GetStyleSheet();
+        return aDefaultColData.GetStyle( nRow );
 }
 
 const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const
@@ -3096,36 +3095,68 @@ void ScTable::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& r
 {
     if(!rMark.GetTableSelect(nTab))
         return;
-    assert( rMark.IsMultiMarked() );
-    SCCOL maxCol;
-    if( rMark.GetMultiMarkArea().aEnd.Col() == GetDoc().MaxCol())
+    SCCOL lastChangeCol;
+    if( rMark.GetArea().aEnd.Col() == GetDoc().MaxCol())
     {
         // For the same unallocated columns until the end we can change just the default.
-        maxCol = rMark.GetMultiSelData().GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
-        if( maxCol >= 0 )
-            CreateColumnIfNotExists(maxCol); // Allocate needed different columns before changing the default.
-        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), GetDoc().MaxCol() );
-        SCROW nTop = 0;
-        SCROW nBottom = 0;
-        while (aMultiIter.Next( nTop, nBottom ))
-            aDefaultColAttrArray.ApplyCacheArea( nTop, nBottom, pCache, pDataArray, pIsChanged );
+        lastChangeCol = rMark.GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
+        if( lastChangeCol >= 0 )
+            CreateColumnIfNotExists(lastChangeCol); // Allocate needed different columns before changing the default.
+        aDefaultColData.ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged, GetDoc().MaxCol());
     }
     else // need to allocate all columns affected
-        maxCol = rMark.GetMultiMarkArea().aEnd.Col();
+    {
+        lastChangeCol = rMark.GetArea().aEnd.Col();
+        CreateColumnIfNotExists(lastChangeCol);
+    }
 
-    for (SCCOL i=0; i <= maxCol; i++)
-        CreateColumnIfNotExists(i).ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged );
+    for (SCCOL i=0; i <= lastChangeCol; i++)
+        aCol[i].ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged );
 }
 
 void ScTable::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
 {
-    for (SCCOL i=0; i < aCol.size(); i++)
+    if(!rMark.GetTableSelect(nTab))
+        return;
+    SCCOL lastChangeCol;
+    if( rMark.GetArea().aEnd.Col() == GetDoc().MaxCol())
+    {
+        // For the same unallocated columns until the end we can change just the default.
+        lastChangeCol = rMark.GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
+        if( lastChangeCol >= 0 )
+            CreateColumnIfNotExists(lastChangeCol); // Allocate needed different columns before changing the default.
+        aDefaultColData.ChangeSelectionIndent( bIncrement, rMark, GetDoc().MaxCol());
+    }
+    else
+    {
+        lastChangeCol = rMark.GetArea().aEnd.Col();
+        CreateColumnIfNotExists(lastChangeCol);
+    }
+
+    for (SCCOL i=0; i <= lastChangeCol; i++)
         aCol[i].ChangeSelectionIndent( bIncrement, rMark );
 }
 
 void ScTable::ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark )
 {
-    for (SCCOL i=0; i < aCol.size(); i++)
+    if(!rMark.GetTableSelect(nTab))
+        return;
+    SCCOL lastChangeCol;
+    if( rMark.GetArea().aEnd.Col() == GetDoc().MaxCol())
+    {
+        // For the same unallocated columns until the end we can change just the default.
+        lastChangeCol = rMark.GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
+        if( lastChangeCol >= 0 )
+            CreateColumnIfNotExists(lastChangeCol); // Allocate needed different columns before changing the default.
+        aDefaultColData.ClearSelectionItems( pWhich, rMark, GetDoc().MaxCol());
+    }
+    else
+    {
+        lastChangeCol = rMark.GetArea().aEnd.Col();
+        CreateColumnIfNotExists(lastChangeCol);
+    }
+
+    for (SCCOL i=0; i <= lastChangeCol; i++)
         aCol[i].ClearSelectionItems( pWhich, rMark );
 }
 
