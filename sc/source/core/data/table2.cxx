@@ -1803,9 +1803,10 @@ const ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow ) const
 
 ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
 {
-    if (!ValidColRow(nCol, nRow))
+    if (!ValidColRow(nCol, nRow) || nCol >= GetAllocatedColumnsCount())
         return nullptr;
-    return CreateColumnIfNotExists(nCol).GetFormulaCell(nRow);
+
+    return aCol[nCol].GetFormulaCell(nRow);
 }
 
 std::unique_ptr<ScPostIt> ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
