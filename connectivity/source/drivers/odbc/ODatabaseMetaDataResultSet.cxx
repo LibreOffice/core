@@ -869,20 +869,21 @@ void ODatabaseMetaDataResultSet::openTables(const Any& catalog, const OUString& 
 
 }
 
-void ODatabaseMetaDataResultSet::openTablesTypes( )
+void ODatabaseMetaDataResultSet::openTablesTypes(rtl::Reference<ODatabaseMetaDataResultSet>& pResult)
 {
-    SQLRETURN nRetcode = N3SQLTables(m_aStatementHandle,
-                            nullptr,0,
-                            nullptr,0,
-                            nullptr,0,
-                            reinterpret_cast<SDB_ODBC_CHAR *>(const_cast<char *>(SQL_ALL_TABLE_TYPES)),SQL_NTS);
-    OTools::ThrowException(m_pConnection.get(),nRetcode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
+    SQLPOINTER aInfoValuePtr = nullptr;
+    SQLSMALLINT nBufferLength = 0;
+    SQLSMALLINT * strLengthPtr = nullptr;
+    SQLRETURN nRetCode = N3SQLGetInfo(m_aStatementHandle, SQL_CREATE_VIEW, aInfoValuePtr, nBufferLength, strLengthPtr);
+    OTools::ThrowException(m_pConnection.get(),nRetCode,m_aStatementHandle,SQL_HANDLE_STMT,*this);
 
-    m_aColMapping.clear();
-    m_aColMapping.push_back(-1);
-    m_aColMapping.push_back(4);
-    m_xMetaData = new OResultSetMetaData(m_pConnection.get(),m_aStatementHandle,std::vector(m_aColMapping));
-    checkColumnCount();
+    if (nRetCode)
+    {
+        static ODatabaseMetaDataResultSet::ORows aRows;
+        if(aRows.empty())
+            aRows.push_back( { ODatabaseMetaDataResultSet::getEmptyValue(), new ORowSetValueDecorator(OUString("VIEW")) } );
+        pResult->setRows(std::move(aRows));
+    }
 }
 
 void ODatabaseMetaDataResultSet::openCatalogs()

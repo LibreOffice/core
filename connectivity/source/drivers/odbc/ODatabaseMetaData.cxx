@@ -719,7 +719,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  )
     {
         rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(m_pConnection);
         xRef = pResult;
-        pResult->openTablesTypes();
+        pResult->openTablesTypes(pResult);
     }
     catch(SQLException&)
     {
