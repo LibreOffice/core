@@ -50,6 +50,23 @@
       "message": "It just needs some documentation - we have it somewhere in the tree for the available environment variables",
       "revId": "821f5760e4b440dd1ee47e8c1250fc393f1ac809",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae02a2d5_884a75cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-16T10:25:47Z",
+      "side": 1,
+      "message": "Commit message should not talk about an expert option",
+      "revId": "821f5760e4b440dd1ee47e8c1250fc393f1ac809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
