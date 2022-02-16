@@ -722,6 +722,21 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf68290)
     lcl_AssertCurrentCursorPosition(*pDoc, "M3");
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf132057)
+{
+    ScModelObj* pModelObj = createDoc("tdf132057.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    lcl_AssertCurrentCursorPosition(*pDoc, "AU43");
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, the cursor would have jumped to cell BM1
+    lcl_AssertCurrentCursorPosition(*pDoc, "G39");
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf122232)
 {
     ScModelObj* pModelObj = createDoc("tdf122232.ods");
