@@ -402,9 +402,9 @@ const ScPatternAttr* ScColumn::GetMostUsedPattern( SCROW nStartRow, SCROW nEndRo
     return pMaxPattern;
 }
 
-sal_uInt32 ScColumn::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
+sal_uInt32 ScColumn::GetNumberFormat( const ScDocument& rDocument, const ScAttrArray* pAttrArray,
+    SCROW nStartRow, SCROW nEndRow )
 {
-    ScDocument& rDocument = GetDoc();
     SCROW nPatStartRow, nPatEndRow;
     const ScPatternAttr* pPattern = pAttrArray->GetPatternRange(nPatStartRow, nPatEndRow, nStartRow);
     sal_uInt32 nFormat = pPattern->GetNumberFormat(rDocument.GetFormatTable());
@@ -417,6 +417,11 @@ sal_uInt32 ScColumn::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
             return 0;
     }
     return nFormat;
+}
+
+sal_uInt32 ScColumn::GetNumberFormat( SCROW nStartRow, SCROW nEndRow ) const
+{
+    return GetNumberFormat( GetDoc(), pAttrArray.get(), nStartRow, nEndRow );
 }
 
 sal_uInt32 ScColumn::GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const
