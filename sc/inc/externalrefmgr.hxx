@@ -144,11 +144,13 @@ public:
         void setReferenced( bool bReferenced );
         bool isReferenced() const;
         /// Obtain a sorted vector of rows.
-        void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow = 0, SCROW nHigh = MAXROW) const;
+        void getAllRows(::std::vector<SCROW>& rRows, SCROW nLow, SCROW nHigh) const;
+        void getAllRows(::std::vector<SCROW>& rRows) const;
         /// Returns the half-open range of used rows in this table. Returns [0,0) if table is empty.
         SC_DLLPUBLIC ::std::pair< SCROW, SCROW > getRowRange() const;
         /// Obtain a sorted vector of columns.
-        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols, SCCOL nLow = 0, SCCOL nHigh = MAXCOL) const;
+        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols, SCCOL nLow, SCCOL nHigh) const;
+        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols) const;
         /// Returns the half-open range of used columns in the specified row. Returns [0,0) if row is empty.
         SC_DLLPUBLIC ::std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
@@ -168,6 +170,10 @@ public:
     private:
         bool isInCachedRanges(SCCOL nCol, SCROW nRow) const;
         TokenRef getEmptyOrNullToken(SCCOL nCol, SCROW nRow) const;
+        template< typename P >
+        void getAllRows(::std::vector<SCROW>& rRows, P predicate) const;
+        template< typename P >
+        void getAllCols(SCROW nRow, ::std::vector<SCCOL>& rCols, P predicate) const;
 
     private:
         /** Data cache */
