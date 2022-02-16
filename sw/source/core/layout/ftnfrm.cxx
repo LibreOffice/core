@@ -1727,7 +1727,7 @@ bool SwFootnoteBossFrame::RemoveFootnote(
 {
     bool ret(false);
     SwFootnoteFrame *pFootnote = FindFootnote( pRef, pAttr );
-    if( pFootnote )
+    if (pFootnote && !pFootnote->IsDeleteForbidden())
     {
         ret = true;
         do
@@ -2071,7 +2071,7 @@ void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool b
                 if( bUnlock )
                 {
                     pFootnote->UnlockBackMove();
-                    if( !pFootnote->ContainsAny() && !pFootnote->IsColLocked() )
+                    if (!pFootnote->ContainsAny() && !pFootnote->IsColLocked() && !pFootnote->IsDeleteForbidden())
                     {
                         pFootnote->Cut();
                         SwFrame::DestroyFrame(pFootnote);
