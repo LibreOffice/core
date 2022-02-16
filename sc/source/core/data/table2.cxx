@@ -2059,15 +2059,12 @@ const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, S
 
 bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, HasAttrFlags nMask ) const
 {
-    if ( nCol1 >= aCol.size() )
-         return false;
-    if ( nCol2 >= aCol.size() )
-         nCol2 = aCol.size() - 1; // Rows above range, doesn't contains flags
-
-    bool bFound = false;
-    for (SCCOL i=nCol1; i<=nCol2 && !bFound; i++)
-        bFound |= aCol[i].HasAttrib( nRow1, nRow2, nMask );
-    return bFound;
+    for(SCCOL nCol = nCol1; nCol <= nCol2 && nCol < aCol.size(); ++nCol )
+        if( aCol[nCol].HasAttrib( nRow1, nRow2, nMask ))
+            return true;
+    if( nCol2 >= aCol.size())
+         return aDefaultColAttrArray.HasAttrib( nRow1, nRow2, nMask );
+    return false;
 }
 
 bool ScTable::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const
