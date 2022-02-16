@@ -279,7 +279,8 @@ XColorItem::XColorItem(sal_uInt16 _nWhich, const Color& rTheColor)
 
 XColorItem::XColorItem(const XColorItem& rItem) :
     NameOrIndex(rItem),
-    aColor(rItem.aColor)
+    aColor(rItem.aColor),
+    maThemeColor(rItem.maThemeColor)
 {
 }
 
@@ -291,7 +292,8 @@ XColorItem* XColorItem::Clone(SfxItemPool* /*pPool*/) const
 bool XColorItem::operator==(const SfxPoolItem& rItem) const
 {
     return ( NameOrIndex::operator==(rItem) &&
-            static_cast<const XColorItem&>(rItem).aColor == aColor );
+            static_cast<const XColorItem&>(rItem).aColor == aColor ) &&
+            static_cast<const XColorItem&>(rItem).maThemeColor == maThemeColor;
 }
 
 const Color& XColorItem::GetColorValue() const
@@ -323,10 +325,16 @@ void XColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
     {
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("SDRATTR_SHADOWCOLOR"));
     }
+    else if (Which() == XATTR_FILLCOLOR)
+    {
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST("XATTR_FILLCOLOR"));
+    }
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aColor"),
                                 BAD_CAST(aColor.AsRGBHexString().toUtf8().getStr()));
 
     NameOrIndex::dumpAsXml(pWriter);
+
+    maThemeColor.dumpAsXml(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -1913,7 +1921,9 @@ void XFillColorItem::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("XFillColorItem"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(GetColorValue().AsRGBHexString().toUtf8().getStr()));
+
+    XColorItem::dumpAsXml(pWriter);
+
     (void)xmlTextWriterEndElement(pWriter);
 }
 
