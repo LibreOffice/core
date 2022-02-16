@@ -1759,7 +1759,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
     }
 
     // put XF indexes into passed vector, collect use count of all different widths
-    std::map< sal_uInt16, sal_uInt16 > aWidthMap;
+    std::unordered_map< sal_uInt16, sal_uInt16 > aWidthMap;
     sal_uInt16 nMaxColCount = 0;
     sal_uInt16 nMaxUsedWidth = 0;
     for( nPos = 0, nSize = maColInfos.GetSize(); nPos < nSize; ++nPos )
@@ -1951,7 +1951,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, bool bProgress )
     // *** Find default row format *** ----------------------------------------
 
     // find most used XF index in the row
-    std::map< sal_uInt16, size_t > aIndexMap;
+    std::unordered_map< sal_uInt16, size_t > aIndexMap;
     sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
     size_t nMaxXFCount = 0;
     const size_t nHalfIndexes = aXFIndexes.size() / 2;
