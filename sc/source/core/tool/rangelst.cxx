@@ -49,19 +49,6 @@ private:
 };
 
 template<typename T>
-class FindRangeIn
-{
-public:
-    FindRangeIn(const T& rTest) : mrTest(rTest) {}
-    bool operator() (const ScRange& rRange) const
-    {
-        return mrTest.Contains(rRange);
-    }
-private:
-    const T& mrTest;
-};
-
-template<typename T>
 class FindIntersectingRange
 {
 public:
@@ -967,7 +954,7 @@ bool ScRangeList::DeleteArea( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
     ScRange aRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
     for(size_t i = 0; i < maRanges.size();)
     {
-        if(FindRangeIn< ScRange >(aRange)(maRanges[i]))
+        if(aRange.Contains(maRanges[i]))
         {
             Remove(i);
             bChanged = true;
