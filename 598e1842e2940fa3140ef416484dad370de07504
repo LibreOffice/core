@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "198fcffe_0e4eafd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-16T18:21:51Z",
+      "side": 1,
+      "message": "Thanks, it looks good, but please amend your commit and add tdf#143148 to the beginning of the message",
+      "revId": "598e1842e2940fa3140ef416484dad370de07504",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
