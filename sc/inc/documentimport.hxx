@@ -125,6 +125,8 @@ public:
 
     void setMergedCells(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
 
+    void invalidateBlockPositionSet(SCTAB nTab);
+
     void finalize();
 
     /** Broadcast all formula cells that are marked with
