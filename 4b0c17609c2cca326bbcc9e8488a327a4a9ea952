@@ -16,6 +16,24 @@
       "message": "It seems we should fix rtl_uString_newReplaceAllFromIndexUtf16LUtf16L to allow to revert back to the simpler code here :-)",
       "revId": "4b0c17609c2cca326bbcc9e8488a327a4a9ea952",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b955bc8d_2045b2b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-16T07:27:09Z",
+      "side": 1,
+      "message": "\u003e It seems we should fix rtl_uString_newReplaceAllFromIndexUtf16LUtf16L to allow to revert back to the simpler code here :-)\n\nack",
+      "parentUuid": "4a142e79_1418aff7",
+      "revId": "4b0c17609c2cca326bbcc9e8488a327a4a9ea952",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
