@@ -110,6 +110,8 @@ public:
 
     void setRowsVisible(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, bool bVisible);
 
+    void invalidateBlockPositionSet(SCTAB nTab);
+
     void finalize();
 
 private:
