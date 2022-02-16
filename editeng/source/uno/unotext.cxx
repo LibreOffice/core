@@ -1141,19 +1141,19 @@ bool SvxUnoTextRangeBase::_getOnePropertyStates(const SfxItemSet* pSet, const Sf
                 switch (pMap->nMemberId)
                 {
                     case MID_COLOR_THEME_INDEX:
-                        if (pColor->GetThemeIndex() == -1)
+                        if (pColor->GetThemeColor().GetThemeIndex() == -1)
                         {
                             eItemState = SfxItemState::DEFAULT;
                         }
                         break;
                     case MID_COLOR_LUM_MOD:
-                        if (pColor->GetLumMod() == 10000)
+                        if (pColor->GetThemeColor().GetLumMod() == 10000)
                         {
                             eItemState = SfxItemState::DEFAULT;
                         }
                         break;
                     case MID_COLOR_LUM_OFF:
-                        if (pColor->GetLumOff() == 0)
+                        if (pColor->GetThemeColor().GetLumOff() == 0)
                         {
                             eItemState = SfxItemState::DEFAULT;
                         }
