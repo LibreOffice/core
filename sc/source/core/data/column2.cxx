@@ -1659,28 +1659,16 @@ void ScColumn::CellStorageModified()
 
     // TODO: Update column's "last updated" timestamp here.
 
+    assert(sal::static_int_cast<SCROW>(maCells.size()) == GetDoc().GetSheetLimits().GetMaxRowCount()
+        && "Size of the cell array is incorrect." );
+
+    assert(sal::static_int_cast<SCROW>(maCellTextAttrs.size()) == GetDoc().GetSheetLimits().GetMaxRowCount()
+        && "Size of the cell text attribute array is incorrect.");
+
+    assert(sal::static_int_cast<SCROW>(maBroadcasters.size()) == GetDoc().GetSheetLimits().GetMaxRowCount()
+        && "Size of the broadcaster array is incorrect.");
+
 #if DEBUG_COLUMN_STORAGE
-    if (maCells.size() != MAXROWCOUNT1)
-    {
-        cout << "ScColumn::CellStorageModified: Size of the cell array is incorrect." << endl;
-        cout.flush();
-        abort();
-    }
-
-    if (maCellTextAttrs.size() != MAXROWCOUNT1)
-    {
-        cout << "ScColumn::CellStorageModified: Size of the cell text attribute array is incorrect." << endl;
-        cout.flush();
-        abort();
-    }
-
-    if (maBroadcasters.size() != MAXROWCOUNT1)
-    {
-        cout << "ScColumn::CellStorageModified: Size of the broadcaster array is incorrect." << endl;
-        cout.flush();
-        abort();
-    }
-
     // Make sure that these two containers are synchronized wrt empty segments.
     auto lIsEmptyType = [](const auto& rElement) { return rElement.type == sc::element_type_empty; };
     // Move to the first empty blocks.
@@ -3313,13 +3301,7 @@ void startListening(
         }
         break;
         default:
-#if DEBUG_COLUMN_STORAGE
-            cout << "ScColumn::StartListening: wrong block type encountered in the broadcaster storage." << endl;
-            cout.flush();
-            abort();
-#else
-            ;
-#endif
+            assert(false && "wrong block type encountered in the broadcaster storage.");
     }
 }
 
