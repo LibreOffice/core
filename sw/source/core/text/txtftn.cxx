@@ -752,9 +752,8 @@ void SwTextFrame::ConnectFootnote( SwTextFootnote *pFootnote, const SwTwips nDea
         // The brute force method: Remove Footnote and append.
         // We need to call SetFootnoteDeadLine(), as we can more easily adapt the
         // nMaxFootnoteHeight after RemoveFootnote
-        if( bBrutal )
+        if (bBrutal && pBoss->RemoveFootnote(pSrcFrame, pFootnote, false))
         {
-            pBoss->RemoveFootnote( pSrcFrame, pFootnote, false );
             std::unique_ptr<SwSaveFootnoteHeight> pHeight(bEnd ? nullptr : new SwSaveFootnoteHeight( pBoss, nDeadLine ));
             pBoss->AppendFootnote( this, pFootnote );
         }

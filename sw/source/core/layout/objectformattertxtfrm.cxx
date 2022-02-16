@@ -843,8 +843,10 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
                 }
                 pSectFrame = pSectFrame->GetUpper();
             }
-            if ( pSectFrame && pSectFrame->IsSctFrame() )
+            if (pSectFrame && pSectFrame->IsSctFrame())
             {
+                // various cases requiring this workaround to not crash exist in sw/qa/extras/layout/layout.cxx
+                SwFrameDeleteGuard aFootnoteDeleteGuard(_rAnchorTextFrame.FindFootnoteFrame());
                 SwFrameDeleteGuard aDeleteGuard(&_rAnchorTextFrame);
                 // #i44049#
                 _rAnchorTextFrame.LockJoin();
