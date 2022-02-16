@@ -16,6 +16,24 @@
       "message": "Could you please explain what did you revert in order to get this result?\nThe original issue is an export issue, however you are not exporting the document, just  importing it",
       "revId": "4974998e2d624a8553583edded247df802ec1072",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68a06a5e_54c49ae3",
+        "filename": "sd/qa/unit/export-tests-ooxml1.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1793,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-16T13:23:16Z",
+      "side": 1,
+      "message": "I tried to revert the commit: http://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dd6dda0acb8bb6ca0fba607e1d566fca960b78cf8\u0026h\u003dlibreoffice-6-1. Using the command: git revert --no-commit \u003chash\u003e. But I got the error:\nPerforming inexact rename detection: 100% (497447555/497447555), done.\nAuto-merging oox/source/export/shapes.cxx\nCONFLICT (content): Merge conflict in oox/source/export/shapes.cxx\nerror: could not revert d6dda0acb8bb... tdf#119160 remove fill from all fontwork shapes\n\nI do not know how to resolve merge conflicts, hence I couldn\u0027t proceed to re-introduce the bug. Then I submitted it on gerrit, to get some guidance regarding the code. I even tried to change the fill in libreoffice, but I couldn\u0027t find any option to turn ON the background fill.",
+      "parentUuid": "10b9d5d8_bd8fd4ba",
+      "revId": "4974998e2d624a8553583edded247df802ec1072",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
