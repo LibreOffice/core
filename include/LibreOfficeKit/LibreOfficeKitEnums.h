@@ -941,11 +941,11 @@ static inline const char* lokCallbackTypeToString(int nType)
 
 typedef enum
 {
-    /// A pressed gesture has started.
+    /// A mouse button has been pressed down.
     LOK_MOUSEEVENT_MOUSEBUTTONDOWN,
-    /// A pressed gesture has finished.
+    /// A mouse button has been let go.
     LOK_MOUSEEVENT_MOUSEBUTTONUP,
-    /// A change has happened during a press gesture.
+    /// The mouse has moved while a button is pressed.
     LOK_MOUSEEVENT_MOUSEMOVE
 }
 LibreOfficeKitMouseEventType;
