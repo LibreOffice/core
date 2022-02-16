@@ -330,17 +330,29 @@ bool ScExternalRefCache::Table::hasRow( SCROW nRow ) const
     return itrRow != maRows.end();
 }
 
-void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, SCROW nLow, SCROW nHigh) const
+template< typename P >
+void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, P predicate) const
 {
     vector<SCROW> aRows;
     aRows.reserve(maRows.size());
     for (const auto& rEntry : maRows)
-        if (nLow <= rEntry.first && rEntry.first <= nHigh)
+        if (predicate(rEntry))
             aRows.push_back(rEntry.first);
 
     // hash map is not ordered, so we need to explicitly sort it.
     ::std::sort(aRows.begin(), aRows.end());
     rRows.swap(aRows);
+}
+
+void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, SCROW nLow, SCROW nHigh) const
+{
+    getAllRows(rRows,
+        [nLow, nHigh](std::pair<SCROW, RowDataType> rEntry) { return (nLow <= rEntry.first && rEntry.first <= nHigh); });
+}
+
+void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows) const
+{
+    getAllRows(rRows, [](std::pair<SCROW, RowDataType>) { return true; } );
 }
 
 ::std::pair< SCROW, SCROW > ScExternalRefCache::Table::getRowRange() const
@@ -357,7 +369,8 @@ void ScExternalRefCache::Table::getAllRows(vector<SCROW>& rRows, SCROW nLow, SCR
     return aRange;
 }
 
-void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, SCCOL nLow, SCCOL nHigh) const
+template< typename P >
+void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, P predicate) const
 {
     RowsDataType::const_iterator itrRow = maRows.find(nRow);
     if (itrRow == maRows.end())
@@ -368,12 +381,23 @@ void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, SCC
     vector<SCCOL> aCols;
     aCols.reserve(rRowData.size());
     for (const auto& rCol : rRowData)
-        if (nLow <= rCol.first && rCol.first <= nHigh)
+        if (predicate(rCol))
             aCols.push_back(rCol.first);
 
     // hash map is not ordered, so we need to explicitly sort it.
     ::std::sort(aCols.begin(), aCols.end());
     rCols.swap(aCols);
+}
+
+void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols, SCCOL nLow, SCCOL nHigh) const
+{
+    getAllCols(nRow, rCols,
+        [nLow, nHigh](std::pair<SCCOL, Cell> rCol) { return nLow <= rCol.first && rCol.first <= nHigh; } );
+}
+
+void ScExternalRefCache::Table::getAllCols(SCROW nRow, vector<SCCOL>& rCols) const
+{
+    getAllCols(nRow, rCols, [](std::pair<SCCOL, Cell>) { return true; } );
 }
 
 ::std::pair< SCCOL, SCCOL > ScExternalRefCache::Table::getColRange( SCROW nRow ) const
