@@ -2210,13 +2210,10 @@ void ScTable::SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat 
 
 const ScPatternAttr* ScTable::GetPattern( SCCOL nCol, SCROW nRow ) const
 {
-    if (ValidColRow(nCol,nRow))
+    if (ValidColRow(nCol,nRow) && nCol < GetAllocatedColumnsCount())
         return CreateColumnIfNotExists(nCol).GetPattern( nRow );
     else
-    {
-        OSL_FAIL("wrong column or row");
-        return rDocument.GetDefPattern();      // for safety
-    }
+        return aDefaultColAttrArray.GetPattern( nRow );
 }
 
 const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
