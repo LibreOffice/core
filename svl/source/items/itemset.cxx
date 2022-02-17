@@ -577,9 +577,69 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
             eItemState == SfxItemState::DEFAULT || eItemState == SfxItemState::SET)
             return;
 
+    if (!m_bItemsFixed && m_pWhichRanges.size() > 0 && m_pWhichRanges[m_pWhichRanges.size() - 1].second < nFrom)
+    {
+        std::unique_ptr<WhichPair[]> pairs(new WhichPair[m_pWhichRanges.size() + 1]);
+        std::copy(m_pWhichRanges.begin(), m_pWhichRanges.end(), pairs.get());
+        pairs[m_pWhichRanges.size()] = { nFrom, nTo };
+        WhichRangesContainer aNewRanges(std::move(pairs), m_pWhichRanges.size() + 1);
+        const auto nOldSize = svl::detail::CountRanges(m_pWhichRanges);
+        const auto nNewSize = svl::detail::CountRanges(aNewRanges);
+        SfxPoolItem const** pNewItems = new const SfxPoolItem* [ nNewSize ];
+        std::copy(m_ppItems, m_ppItems + nOldSize, pNewItems);
+        std::fill(pNewItems + nOldSize, pNewItems + nNewSize, nullptr);
+        delete[] m_ppItems;
+        m_ppItems = pNewItems;
+        m_pWhichRanges = std::move(aNewRanges);
+        return;
+    }
+
     auto pNewRanges = m_pWhichRanges.MergeRange(nFrom, nTo);
     RecreateRanges_Impl(pNewRanges);
     m_pWhichRanges = std::move(pNewRanges);
+
+//    // create vector of ranges (sal_uInt16 pairs of lower and upper bound)
+//    const size_t nOldCount = size();
+//    std::vector<WhichPair> aRangesTable;
+//    aRangesTable.reserve(nOldCount);
+//    bool bAdded = false;
+//    for (const auto& rPair : *this)
+//    {
+//        if (!bAdded && rPair.first >= nFrom)
+//        { // insert new range, keep ranges sorted
+//            aRangesTable.push_back({ nFrom, nTo });
+//            bAdded = true;
+//        }
+//        // insert current range
+//        aRangesTable.emplace_back(rPair);
+//    }
+//    if (!bAdded)
+//        aRangesTable.push_back({ nFrom, nTo });
+//
+//    // true if ranges overlap or adjoin, false if ranges are separate
+//    auto needMerge = [](WhichPair lhs, WhichPair rhs) {
+//        return (lhs.first - 1) <= rhs.second && (rhs.first - 1) <= lhs.second;
+//    };
+//
+//    auto it = aRangesTable.begin();
+//    // we got at least one range
+//    for (;;)
+//    {
+//        auto itNext = std::next(it);
+//        if (itNext == aRangesTable.end())
+//            break;
+//        // check neighbouring ranges, find first range which overlaps or adjoins a previous range
+//        if (needMerge(*it, *itNext))
+//        {
+//            // lower bounds are sorted, implies: it->first = min(it[0].first, it[1].first)
+//            it->second = std::max(it->second, itNext->second);
+//            aRangesTable.erase(itNext);
+//        }
+//        else
+//            ++it;
+//    }
+//
+//    return WhichRangesContainer(aRangesTable.data(), aRangesTable.size());
 }
 
 /**
