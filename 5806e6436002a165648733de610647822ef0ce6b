@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3251d3f0_22c7b378",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-17T09:25:12Z",
+      "side": 1,
+      "message": "@Tünde: thanks for the quick fix!\n\n@Xisco: thanks for the ping!",
+      "revId": "5806e6436002a165648733de610647822ef0ce6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
