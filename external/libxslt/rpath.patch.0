@@ -7,4 +7,4 @@
 +hardcode_libdir_flag_spec=
        ;;
  
-     netbsd*)
+     netbsd* | netbsdelf*-gnu)
