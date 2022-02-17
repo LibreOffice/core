@@ -259,6 +259,7 @@ public:
     void testRefR1C1WholeRow();
     void testIterations();
     void testInsertColCellStoreEventSwap();
+    void testTdf147398();
     void testFormulaAfterDeleteRows();
     void testMultipleOperations();
     void testFuncCOLUMN();
@@ -376,6 +377,7 @@ public:
     CPPUNIT_TEST(testRefR1C1WholeRow);
     CPPUNIT_TEST(testIterations);
     CPPUNIT_TEST(testInsertColCellStoreEventSwap);
+    CPPUNIT_TEST(testTdf147398);
     CPPUNIT_TEST(testFormulaAfterDeleteRows);
     CPPUNIT_TEST(testMultipleOperations);
     CPPUNIT_TEST(testFuncCOLUMN);
@@ -9500,6 +9502,81 @@ void TestFormula::testInsertColCellStoreEventSwap()
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Initial calculation failed", 2.0, m_pDoc->GetValue(aPos));
     m_pDoc->SetValue( 0,0,0, 2.0 );     // A1, change value
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Recalculation failed", 3.0, m_pDoc->GetValue(aPos));
+
+    m_pDoc->DeleteTab(0);
+}
+
+void TestFormula::testTdf147398()
+{
+    m_pDoc->InsertTab(0, "Test");
+
+    m_pDoc->SetString(0, 0, 0, "=SUM(A3:A5)");
+    m_pDoc->SetString(0, 1, 0, "=COUNT(A3:A5)");
+    m_pDoc->SetString(1, 0, 0, "=SUM(B3:B5)");
+    m_pDoc->SetString(1, 1, 0, "=COUNT(B3:B5)");
+    m_pDoc->SetString(2, 0, 0, "=SUM(C3:C5)");
+    m_pDoc->SetString(2, 1, 0, "=COUNT(C3:C5)");
+    m_pDoc->SetString(3, 0, 0, "=SUM(D3:D5)");
+    m_pDoc->SetString(3, 1, 0, "=COUNT(D3:D5)");
+    m_pDoc->SetString(4, 0, 0, "=SUM(E3:E5)");
+    m_pDoc->SetString(4, 1, 0, "=COUNT(E3:E5)");
+
+    m_pDoc->SetString(5, 0, 0, "=SUM(A1:E1)/SUM(A2:E2)");
+
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 50.0);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 100.0);
+
+    CPPUNIT_ASSERT_EQUAL(150.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(75.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+
+    m_pDoc->SetValue(ScAddress(1, 2, 0), 150.0);
+    m_pDoc->SetValue(ScAddress(1, 3, 0), 200.0);
+
+    CPPUNIT_ASSERT_EQUAL(150.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(350.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(125.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+
+    m_pDoc->SetValue(ScAddress(2, 2, 0), 250.0);
+    m_pDoc->SetValue(ScAddress(2, 3, 0), 300.0);
+
+    CPPUNIT_ASSERT_EQUAL(150.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(350.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(550.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(175.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+
+    m_pDoc->SetValue(ScAddress(3, 2, 0), 350.0);
+    m_pDoc->SetValue(ScAddress(3, 3, 0), 400.0);
+
+    CPPUNIT_ASSERT_EQUAL(150.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(350.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(550.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(750.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(225.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
+
+    m_pDoc->SetValue(ScAddress(4, 2, 0), 450.0);
+    m_pDoc->SetValue(ScAddress(4, 3, 0), 500.0);
+
+    CPPUNIT_ASSERT_EQUAL(150.0, m_pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(350.0, m_pDoc->GetValue(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(1, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(550.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(2, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(750.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(950.0, m_pDoc->GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(275.0, m_pDoc->GetValue(ScAddress(5, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }
