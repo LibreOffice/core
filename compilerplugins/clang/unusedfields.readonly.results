@@ -46,14 +46,12 @@ bridges/source/jni_uno/jni_java2uno.cxx:153
     jni_uno::(anonymous namespace)::largest p void *
 bridges/source/jni_uno/jni_java2uno.cxx:154
     jni_uno::(anonymous namespace)::largest a uno_Any
-chart2/source/model/main/DataPoint.hxx:107
+chart2/source/model/main/DataPoint.hxx:106
     chart::DataPoint m_bNoParentPropAllowed _Bool
 codemaker/source/javamaker/classfile.cxx:508
      uint32Bytes sal_uInt32
 codemaker/source/javamaker/classfile.cxx:540
      uint64Bytes sal_uInt64
-connectivity/inc/sdbcx/VCatalog.hxx:65
-    connectivity::sdbcx::OCatalog m_pViews std::unique_ptr<OCollection>
 connectivity/inc/sdbcx/VCatalog.hxx:66
     connectivity::sdbcx::OCatalog m_pGroups std::unique_ptr<OCollection>
 connectivity/inc/sdbcx/VGroup.hxx:52
@@ -154,13 +152,13 @@ cppu/source/uno/check.cxx:134
     (anonymous namespace)::Char3 c3 char
 cppu/source/uno/check.cxx:258
     (anonymous namespace)::Char4 chars struct (anonymous namespace)::Char3
-cui/source/options/optcolor.cxx:255
+cui/source/options/optcolor.cxx:259
     (anonymous namespace)::ColorConfigWindow_Impl aModuleOptions class SvtModuleOptions
 dbaccess/source/core/api/RowSetBase.hxx:84
     dbaccess::ORowSetBase m_aEmptyValue connectivity::ORowSetValue
 dbaccess/source/core/api/RowSetBase.hxx:95
     dbaccess::ORowSetBase m_aErrors ::connectivity::SQLError
-dbaccess/source/core/dataaccess/documentcontainer.cxx:66
+dbaccess/source/core/dataaccess/documentcontainer.cxx:67
     dbaccess::(anonymous namespace)::LocalNameApproval m_aErrors ::connectivity::SQLError
 dbaccess/source/core/inc/ContentHelper.hxx:103
     dbaccess::OContentHelper m_aErrorHelper const ::connectivity::SQLError
@@ -174,7 +172,7 @@ dbaccess/source/ui/inc/sqledit.hxx:41
     dbaui::SQLEditView m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:258
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
-editeng/source/editeng/impedit.hxx:511
+editeng/source/editeng/impedit.hxx:515
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:110
     OCommonEmbeddedObject m_aClassName rtl::OUString
@@ -338,13 +336,13 @@ io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n1 sal_uInt32
 io/source/stm/odata.cxx:559
     io_stm::(anonymous namespace)::ODataOutputStream::writeDouble(double)::(anonymous union)::(anonymous) n2 sal_uInt32
-libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:49
+libreofficekit/qa/gtktiledviewer/gtv-lok-dialog.cxx:48
     (anonymous namespace)::GtvLokDialogPrivate m_nChildKeyModifier guint32
 libreofficekit/source/gtk/lokdocview.cxx:85
     (anonymous namespace)::LOKDocViewPrivateImpl m_bIsLoading _Bool
-lingucomponent/source/languageguessing/simpleguesser.cxx:76
+lingucomponent/source/languageguessing/simpleguesser.cxx:72
     (anonymous namespace)::textcat_t fprint void **
-lingucomponent/source/languageguessing/simpleguesser.cxx:78
+lingucomponent/source/languageguessing/simpleguesser.cxx:74
     (anonymous namespace)::textcat_t size uint4
 linguistic/source/dlistimp.hxx:56
     DicList aOpt class LinguOptions
@@ -396,7 +394,7 @@ sc/inc/reordermap.hxx:20
     sc::ColRowReorderMapType maData sc::ColRowReorderMapType::DataType
 sc/source/core/inc/adiasync.hxx:41
     ScAddInAsync::(anonymous) pStr rtl::OUString *
-sc/source/core/inc/interpre.hxx:98
+sc/source/core/inc/interpre.hxx:99
     ScTokenStack pPointer const formula::FormulaToken *[512]
 sc/source/filter/excel/xltoolbar.cxx:30
     (anonymous namespace)::MSOExcelCommandConvertor msoToOOcmd IdToString
@@ -456,9 +454,9 @@ sc/source/ui/vba/vbaworksheet.hxx:49
     ScVbaWorksheet mxButtons ::rtl::Reference<ScVbaSheetObjectsBase>[2]
 sd/inc/Outliner.hxx:288
     SdOutliner mpFirstObj class SdrObject *
-sd/inc/sdmod.hxx:119
-    SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
 sd/inc/sdmod.hxx:120
+    SdModule gImplImpressPropertySetInfoCache SdExtPropertySetInfoCache
+sd/inc/sdmod.hxx:121
     SdModule gImplDrawPropertySetInfoCache SdExtPropertySetInfoCache
 sd/source/core/CustomAnimationCloner.cxx:70
     sd::(anonymous namespace)::CustomAnimationClonerImpl maSourceNodeVector std::vector<Reference<XAnimationNode> >
@@ -504,7 +502,7 @@ svl/source/misc/strmadpt.cxx:51
     SvDataPipe_Impl::Page m_aBuffer sal_Int8[1]
 svl/source/uno/pathservice.cxx:37
     (anonymous namespace)::PathService m_aOptions class SvtPathOptions
-svtools/source/control/tabbar.cxx:198
+svtools/source/control/tabbar.cxx:209
     ImplTabBarItem maHelpId rtl::OString
 svtools/source/dialogs/insdlg.cxx:54
     (anonymous namespace)::OleObjectDescriptor cbSize sal_uInt32
@@ -558,13 +556,13 @@ sw/source/core/access/accfrmobjmap.hxx:100
     SwAccessibleChildMap maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/access/acchypertextdata.hxx:40
     SwAccessibleHyperTextData maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:107
-    SwAccessibleContextMap_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:288
-    SwAccessibleShapeMap_Impl maMap std::map<key_type, mapped_type, SwShapeFunc>
-sw/source/core/access/accmap.cxx:644
+sw/source/core/access/accmap.cxx:95
+    SwAccessibleContextMap_Impl maMap std::map<key_type, mapped_type>
+sw/source/core/access/accmap.cxx:263
+    SwAccessibleShapeMap_Impl maMap std::map<key_type, mapped_type>
+sw/source/core/access/accmap.cxx:619
     SwAccessibleEventMap_Impl maMap std::map<key_type, mapped_type, key_compare>
-sw/source/core/access/accmap.cxx:688
+sw/source/core/access/accmap.cxx:663
     SwAccessibleSelectedParas_Impl maMap std::map<key_type, mapped_type, key_compare>
 sw/source/core/doc/swstylemanager.cxx:60
     (anonymous namespace)::SwStyleManager m_aAutoCharPool class StylePool
@@ -574,11 +572,11 @@ sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
 sw/source/core/text/atrhndl.hxx:48
     SwAttrHandler m_oFnt std::optional<SwFont>
-sw/source/core/text/inftxt.cxx:532
+sw/source/core/text/inftxt.cxx:533
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<class VirtualDevice>
 sw/source/core/text/redlnitr.hxx:75
     SwRedlineItr m_pSet std::unique_ptr<SfxItemSet>
-sw/source/filter/html/htmltab.cxx:2836
+sw/source/filter/html/htmltab.cxx:2842
     CellSaveStruct m_xCnts std::shared_ptr<HTMLTableCnts>
 sw/source/filter/inc/rtf.hxx:33
     RTFSurround::(anonymous) nVal sal_uInt8
@@ -586,11 +584,11 @@ sw/source/ui/dbui/dbinsdlg.cxx:103
     DB_Column::(anonymous) pText rtl::OUString *
 sw/source/ui/dbui/dbinsdlg.cxx:105
     DB_Column::(anonymous) nFormat sal_uInt32
-sw/source/uibase/dbui/mmconfigitem.cxx:112
+sw/source/uibase/dbui/mmconfigitem.cxx:113
     SwMailMergeConfigItem_Impl m_aFemaleGreetingLines std::vector<OUString>
-sw/source/uibase/dbui/mmconfigitem.cxx:114
+sw/source/uibase/dbui/mmconfigitem.cxx:115
     SwMailMergeConfigItem_Impl m_aMaleGreetingLines std::vector<OUString>
-sw/source/uibase/dbui/mmconfigitem.cxx:116
+sw/source/uibase/dbui/mmconfigitem.cxx:117
     SwMailMergeConfigItem_Impl m_aNeutralGreetingLines std::vector<OUString>
 sw/source/uibase/inc/fldmgr.hxx:78
     SwInsertField_Data m_aDBDataSource css::uno::Any
@@ -690,13 +688,13 @@ vcl/inc/qt5/QtObject.hxx:39
     QtObject m_pQWindow class QWindow *
 vcl/inc/qt5/QtTimer.hxx:29
     QtTimer m_aTimer class QTimer
-vcl/inc/salinst.hxx:82
+vcl/inc/salinst.hxx:83
     SalInstance m_bSupportsBitmap32 _Bool
 vcl/inc/salwtype.hxx:164
     SalWheelMouseEvent mbDeltaIsPixel _Bool
 vcl/inc/salwtype.hxx:217
     SalQueryCharPositionEvent mnCharPos sal_uLong
-vcl/inc/svdata.hxx:321
+vcl/inc/svdata.hxx:323
     ImplSVNWFData mbMenuBarDockingAreaCommonBG _Bool
 vcl/inc/toolbox.h:108
     vcl::ToolBoxLayoutData m_aLineItemIds std::vector<ToolBoxItemId>
@@ -736,12 +734,6 @@ vcl/source/bitmap/dibtools.cxx:66
     (anonymous namespace)::CIEXYZTriple aXyzGreen struct (anonymous namespace)::CIEXYZ
 vcl/source/bitmap/dibtools.cxx:67
     (anonymous namespace)::CIEXYZTriple aXyzBlue struct (anonymous namespace)::CIEXYZ
-vcl/source/bitmap/dibtools.cxx:104
-    (anonymous namespace)::DIBV5Header nV5RedMask sal_uInt32
-vcl/source/bitmap/dibtools.cxx:105
-    (anonymous namespace)::DIBV5Header nV5GreenMask sal_uInt32
-vcl/source/bitmap/dibtools.cxx:106
-    (anonymous namespace)::DIBV5Header nV5BlueMask sal_uInt32
 vcl/source/bitmap/dibtools.cxx:107
     (anonymous namespace)::DIBV5Header nV5AlphaMask sal_uInt32
 vcl/source/bitmap/dibtools.cxx:109
@@ -760,7 +752,7 @@ vcl/source/bitmap/dibtools.cxx:116
     (anonymous namespace)::DIBV5Header nV5Reserved sal_uInt32
 vcl/source/control/roadmapwizard.cxx:63
     vcl::RoadmapWizardImpl aStateDescriptors vcl::(anonymous namespace)::StateDescriptions
-vcl/source/control/tabctrl.cxx:80
+vcl/source/control/tabctrl.cxx:81
     ImplTabCtrlData maLayoutPageIdToLine std::unordered_map<int, int>
 vcl/source/filter/eps/eps.cxx:115
     (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>

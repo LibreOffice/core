@@ -835,12 +835,11 @@ void DataBrowser::CellModified()
 }
 
 void DataBrowser::SetDataFromModel(
-    const rtl::Reference<::chart::ChartModel> & xChartDoc,
-    const Reference< uno::XComponentContext > & xContext )
+    const rtl::Reference<::chart::ChartModel> & xChartDoc )
 {
     m_xChartDoc = xChartDoc;
 
-    m_apDataBrowserModel.reset( new DataBrowserModel( m_xChartDoc, xContext ));
+    m_apDataBrowserModel.reset( new DataBrowserModel( m_xChartDoc ));
     m_spNumberFormatterWrapper =
         std::make_shared<NumberFormatterWrapper>(m_xChartDoc);
 

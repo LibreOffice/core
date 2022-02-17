@@ -41,8 +41,7 @@ class DataSourceDialog final :
 public:
     explicit DataSourceDialog(
         weld::Window * pParent,
-        const rtl::Reference<::chart::ChartModel> & xChartDocument,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+        const rtl::Reference<::chart::ChartModel> & xChartDocument );
     virtual ~DataSourceDialog() override;
 
     // from GenericDialogController base

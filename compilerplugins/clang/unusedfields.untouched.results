@@ -1,16 +1,18 @@
-basctl/source/inc/dlged.hxx:122
+basctl/source/inc/dlged.hxx:121
     basctl::DlgEditor pObjFac std::unique_ptr<DlgEdFactory, o3tl::default_delete<DlgEdFactory> >
 basic/qa/cppunit/basictest.hxx:27
     MacroSnippet maDll class BasicDLL
-basic/qa/cppunit/test_global_array.cxx:28
+basic/qa/cppunit/test_global_array.cxx:25
     (anonymous namespace)::GlobalArrayTest lib class BasicDLL
-basic/qa/cppunit/test_global_as_new.cxx:28
+basic/qa/cppunit/test_global_as_new.cxx:25
     (anonymous namespace)::GlobalAsNewTest lib class BasicDLL
 canvas/source/vcl/canvasbitmap.hxx:113
     vclcanvas::CanvasBitmap mxDevice css::uno::Reference<css::rendering::XGraphicDevice>
 canvas/source/vcl/impltools.hxx:114
     vclcanvas::tools::LocalGuard aSolarGuard class SolarMutexGuard
-chart2/source/controller/inc/RangeSelectionListener.hxx:61
+chart2/source/controller/dialogs/DialogModel.hxx:162
+    chart::DialogModel m_xContext css::uno::Reference<css::uno::XComponentContext>
+chart2/source/controller/inc/RangeSelectionListener.hxx:65
     chart::RangeSelectionListener m_aControllerLockGuard class chart::ControllerLockGuardUNO
 chart2/source/inc/ModifyListenerCallBack.hxx:52
     chart::ModifyListenerCallBack m_xModifyListener css::uno::Reference<css::util::XModifyListener>
@@ -20,11 +22,15 @@ connectivity/source/drivers/evoab2/EApi.h:121
     (anonymous) address_format char *
 connectivity/source/drivers/evoab2/EApi.h:125
     (anonymous) ext char *
+connectivity/source/drivers/mysqlc/mysqlc_user.hxx:22
+    connectivity::mysqlc::User m_xConnection css::uno::Reference<css::sdbc::XConnection>
+connectivity/source/drivers/mysqlc/mysqlc_view.hxx:65
+    connectivity::mysqlc::View m_xConnection css::uno::Reference<css::sdbc::XConnection>
 connectivity/source/drivers/postgresql/pq_statics.hxx:104
     pq_sdbc_driver::ImplementationStatics types css::uno::Sequence<css::uno::Type>
 cppu/source/threadpool/threadpool.cxx:352
     _uno_ThreadPool dummy sal_Int32
-cppu/source/typelib/typelib.cxx:57
+cppu/source/typelib/typelib.cxx:56
     (anonymous namespace)::AlignSize_Impl nInt16 sal_Int16
 cui/source/inc/AdditionsDialog.hxx:47
     AdditionInfo sReleaseVersion rtl::OUString
@@ -60,7 +66,7 @@ embeddedobj/source/msole/olecomponent.hxx:67
     OleComponent m_xContext css::uno::Reference<css::uno::XComponentContext>
 embeddedobj/source/msole/olecomponent.hxx:69
     OleComponent m_bOleInitialized _Bool
-emfio/source/emfuno/xemfparser.cxx:50
+emfio/source/emfuno/xemfparser.cxx:48
     emfio::emfreader::(anonymous namespace)::XEmfParser context_ uno::Reference<uno::XComponentContext>
 extensions/source/scanner/scanner.hxx:43
     ScannerManager maProtector osl::Mutex
@@ -222,8 +228,6 @@ include/vcl/commandevent.hxx:314
     CommandGestureData meOrientation const enum PanningOrientation
 include/vcl/filter/PngImageReader.hxx:35
     vcl::PngImageReader mxStatusIndicator css::uno::Reference<css::task::XStatusIndicator>
-include/vcl/font/Feature.hxx:101
-    vcl::font::Feature m_eType enum vcl::font::FeatureType
 include/vcl/pdf/PDFAnnotationMarker.hxx:67
     vcl::pdf::PDFAnnotationMarkerHighlight meTextMarkerType enum vcl::pdf::PDFTextMarkerType
 include/vcl/uitest/uiobject.hxx:287
@@ -256,9 +260,9 @@ libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:28
     GtvMainToolbar parent GtkBox
 libreofficekit/qa/gtktiledviewer/gtv-main-toolbar.hxx:36
     GtvMainToolbarClass parentClass GtkBoxClass
-lingucomponent/source/languageguessing/simpleguesser.cxx:79
+lingucomponent/source/languageguessing/simpleguesser.cxx:75
     (anonymous namespace)::textcat_t maxsize uint4
-lingucomponent/source/languageguessing/simpleguesser.cxx:81
+lingucomponent/source/languageguessing/simpleguesser.cxx:77
     (anonymous namespace)::textcat_t output char[1024]
 lotuswordpro/source/filter/clone.hxx:23
     detail::has_clone::(anonymous) a char[2]
@@ -364,7 +368,7 @@ sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition array rule<ScannerT>
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:266
     (anonymous namespace)::PDFGrammar::definition value rule<ScannerT>
-sfx2/inc/autoredactdialog.hxx:94
+sfx2/inc/autoredactdialog.hxx:99
     SfxAutoRedactDialog m_xDocShell class SfxObjectShellLock
 sfx2/source/dialog/basedlgs.cxx:46
     SfxModelessDialog_Impl aMoveIdle class Idle
@@ -394,7 +398,7 @@ starmath/inc/mathml/mathmlMo.hxx:68
     moOperatorData m_properties enum moOpDP
 starmath/inc/smmod.hxx:67
     SmModule mpLocSymbolData std::unique_ptr<SmLocalizedSymbolData>
-starmath/inc/view.hxx:247
+starmath/inc/view.hxx:246
     SmViewShell maGraphicController class SmGraphicController
 svl/source/crypto/cryptosign.cxx:109
     (anonymous namespace)::Extension extnID SECItem
@@ -406,9 +410,11 @@ svl/source/crypto/cryptosign.cxx:269
     (anonymous namespace)::PKIStatusInfo statusString SECItem
 svl/source/crypto/cryptosign.cxx:270
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
+svx/inc/sdr/properties/emptyproperties.hxx:36
+    sdr::properties::EmptyProperties mxEmptyItemSet std::optional<SfxItemSet>
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
-svx/source/dialog/weldeditview.cxx:456
+svx/source/dialog/weldeditview.cxx:458
     (anonymous namespace)::WeldEditSource m_rEditAcc class WeldEditAccessible &
 svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
@@ -429,7 +435,7 @@ sw/source/uibase/inc/conttree.hxx:320
 sw/source/uibase/inc/swuicnttab.hxx:240
     SwTokenWindow m_aAdjustPositionsIdle class Idle
 sw/source/uibase/inc/uivwimp.hxx:93
-    SwView_Impl xTmpSelDocSh class SfxObjectShellLock
+    SwView_Impl m_xTmpSelDocShell class SfxObjectShellLock
 sw/source/uibase/inc/unodispatch.hxx:45
     SwXDispatchProviderInterceptor::DispatchMutexLock_Impl aGuard class SolarMutexGuard
 toolkit/source/awt/stylesettings.cxx:74

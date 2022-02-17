@@ -1381,7 +1381,7 @@ void ChartController::executeDispatch_SourceData()
         SchResId(STR_ACTION_EDIT_DATA_RANGES), m_xUndoManager);
 
     SolarMutexGuard aSolarGuard;
-    ::chart::DataSourceDialog aDlg(GetChartFrame(), xChartDoc, m_xCC);
+    ::chart::DataSourceDialog aDlg(GetChartFrame(), xChartDoc);
     if (aDlg.run() == RET_OK)
     {
         impl_adaptDataSeriesAutoResize();

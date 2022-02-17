@@ -32,9 +32,6 @@ namespace sdr::properties
     {
         class EmptyProperties final : public BaseProperties
         {
-            // the to be used ItemSet
-            mutable std::optional<SfxItemSet> mxEmptyItemSet;
-
         public:
             // basic constructor
             explicit EmptyProperties(SdrObject& rObj);

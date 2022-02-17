@@ -349,10 +349,8 @@ DialogModelTimeBasedInfo::DialogModelTimeBasedInfo():
 }
 
 DialogModel::DialogModel(
-    const rtl::Reference<::chart::ChartModel> & xChartDocument,
-    const Reference< uno::XComponentContext > & xContext ) :
+    const rtl::Reference<::chart::ChartModel> & xChartDocument ) :
         m_xChartDocument( xChartDocument ),
-        m_xContext( xContext ),
         m_aTimerTriggeredControllerLock( m_xChartDocument )
 {
 }

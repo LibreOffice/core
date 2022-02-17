@@ -64,9 +64,7 @@ struct DialogModelTimeBasedInfo
 class DialogModel
 {
 public:
-    explicit DialogModel(
-        const rtl::Reference<::chart::ChartModel> & xChartDocument,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    explicit DialogModel( const rtl::Reference<::chart::ChartModel> & xChartDocument );
     ~DialogModel();
 
     typedef std::pair<
@@ -157,9 +155,6 @@ private:
         m_xChartDocument;
 
     rtl::Reference< ::chart::ChartTypeTemplate > m_xTemplate;
-
-    css::uno::Reference< css::uno::XComponentContext >
-        m_xContext;
 
     mutable std::shared_ptr< RangeSelectionHelper >
         m_spRangeSelectionHelper;
