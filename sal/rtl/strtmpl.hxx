@@ -1481,7 +1481,7 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
     assert(nIndex >= 0 && nIndex <= pStr->length);
     assert(nCount >= 0);
     assert(nCount <= pStr->length - nIndex);
-    assert(pNewSubStr);
+    assert(pNewSubStr != nullptr || nNewSubStrLen == 0);
     assert(nNewSubStrLen >= 0);
     /* Append? */
     if ( nIndex >= pStr->length )
