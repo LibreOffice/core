@@ -30,7 +30,6 @@
 #include <svx/cube3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/camera3d.hxx>
-#include <svx/def3d.hxx>
 
 #include <vcl/weld.hxx>
 

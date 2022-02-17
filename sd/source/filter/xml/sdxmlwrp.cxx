@@ -60,7 +60,6 @@
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <editeng/eeitem.hxx>
-#include <unotools/saveopt.hxx>
 
 // include necessary for XML progress bar at load time
 #include <svl/itemset.hxx>

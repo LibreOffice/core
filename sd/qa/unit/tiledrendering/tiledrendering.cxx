@@ -9,8 +9,6 @@
 
 #include "../sdmodeltestbase.hxx"
 
-#include <com/sun/star/datatransfer/clipboard/SystemClipboard.hpp>
-
 #include <app.hrc>
 #include <test/bootstrapfixture.hxx>
 #include <test/helper/transferable.hxx>
@@ -42,7 +40,6 @@
 #include <svx/svdotable.hxx>
 #include <svx/svdoutl.hxx>
 #include <unotools/datetime.hxx>
-#include <tools/UnitConversion.hxx>
 #include <test/lokcallback.hxx>
 
 #include <DrawDocShell.hxx>
@@ -59,7 +56,6 @@
 #include <vcl/cursor.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
-#include <vcl/unohelp2.hxx>
 
 #include <chrono>
 #include <cstdlib>

@@ -20,7 +20,6 @@
 #include <DrawViewShell.hxx>
 
 #include <com/sun/star/scanner/XScannerManager2.hpp>
-#include <editeng/outlobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxids.hrc>
 #include <sfx2/bindings.hxx>

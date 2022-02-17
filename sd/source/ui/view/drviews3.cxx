@@ -28,7 +28,6 @@
 #include <editeng/protitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/adjustitem.hxx>
-#include <svx/ruler.hxx>
 #include <svx/svdotable.hxx>
 #include <editeng/numitem.hxx>
 #include <svx/rulritem.hxx>

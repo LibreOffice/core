@@ -50,7 +50,6 @@
 #include <chrono>
 #include <sdpage.hxx>
 #include <comphelper/base64.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <LayerTabBar.hxx>
 #include <vcl/event.hxx>
 #include <vcl/keycodes.hxx>
@@ -59,7 +58,6 @@
 #include <svx/view3d.hxx>
 #include <svx/scene3d.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/unoapi.hxx>
 
 using namespace ::com::sun::star;
 

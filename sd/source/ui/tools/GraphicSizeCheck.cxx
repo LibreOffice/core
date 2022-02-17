@@ -17,8 +17,8 @@
 #include <sfx2/dispatch.hxx>
 
 #include <sdresid.hxx>
-#include <DrawViewShell.hxx>
 #include <DrawDocShell.hxx>
+#include <ViewShell.hxx>
 
 namespace sd
 {

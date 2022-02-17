@@ -28,7 +28,6 @@
 #include <ViewShell.hxx>
 #include <sdresid.hxx>
 #include <drawdoc.hxx>
-#include <memory>
 
 using namespace sd;
 using namespace svx;

@@ -43,7 +43,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdotext.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>

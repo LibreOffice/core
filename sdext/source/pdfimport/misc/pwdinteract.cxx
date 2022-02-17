@@ -31,7 +31,6 @@
 #include <com/sun/star/task/DocumentPasswordRequest.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <vcl/errcode.hxx>
 

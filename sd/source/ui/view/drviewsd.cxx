@@ -31,7 +31,6 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <app.hrc>
-#include <sdmod.hxx>
 #include <sdpage.hxx>
 #include <drawdoc.hxx>
 #include <DrawDocShell.hxx>

@@ -21,7 +21,6 @@
 
 #include <fuinsert.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <editeng/outlobj.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
@@ -32,7 +31,6 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <svl/stritem.hxx>
-#include <sfx2/docfile.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/insdlg.hxx>
@@ -67,7 +65,6 @@
 #include <sdpage.hxx>
 #include <sdgrffilter.hxx>
 #include <vcl/svapp.hxx>
-#include <memory>
 #include <vcl/weld.hxx>
 #include <vcl/errinf.hxx>
 #include <vcl/graphicfilter.hxx>

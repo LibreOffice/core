@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral CMD_SID_HANDOUT_MASTER_MODE = ".uno:HandoutMode";
 inline constexpr OStringLiteral CMD_SID_NOTES_MODE = ".uno:NotesMode";
 

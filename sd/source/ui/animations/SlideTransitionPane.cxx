@@ -36,7 +36,6 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <svx/gallery.hxx>
-#include <svx/colorwindow.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -47,7 +46,6 @@
 #include <optsitem.hxx>
 
 #include <o3tl/safeint.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 
 #include <algorithm>
 

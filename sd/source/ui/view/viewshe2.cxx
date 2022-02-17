@@ -31,7 +31,6 @@
 #include <svx/svdpagv.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/ruler.hxx>
-#include <editeng/outlobj.hxx>
 #include <editeng/outliner.hxx>
 #include <svtools/ehdl.hxx>
 #include <svx/svdoole2.hxx>

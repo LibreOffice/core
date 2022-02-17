@@ -60,7 +60,6 @@
 #include "../ppt/pptanimations.hxx"
 
 #include <i18nlangtag/languagetag.hxx>
-#include <svl/languageoptions.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
 #include <sdmod.hxx>

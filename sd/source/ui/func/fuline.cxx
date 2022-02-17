@@ -27,7 +27,6 @@
 #include <View.hxx>
 #include <drawdoc.hxx>
 #include <svx/svxdlg.hxx>
-#include <memory>
 
 namespace sd {
 

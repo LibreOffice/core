@@ -19,7 +19,6 @@
 #pragma once
 
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
-#include <sfx2/sidebar/PanelLayout.hxx>
 #include <navigatr.hxx>
 
 class SfxBindings;

@@ -40,7 +40,6 @@
 #include <tools/debug.hxx>
 #include <tools/gen.hxx>
 #include <tools/diagnose_ex.h>
-#include <osl/diagnose.h>
 
 #include <sdresid.hxx>
 

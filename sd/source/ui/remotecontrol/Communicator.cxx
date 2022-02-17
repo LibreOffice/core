@@ -16,7 +16,6 @@
 #include <comphelper/documentinfo.hxx>
 #include <config_version.h>
 #include <rtl/string.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include "Communicator.hxx"

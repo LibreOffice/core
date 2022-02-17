@@ -33,7 +33,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;

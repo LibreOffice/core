@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
+#include <rtl/ustring.hxx>
 
 // SdUnoPseudoStyleFamily
 inline constexpr OUStringLiteral sUNO_PseudoSheet_Background = u"background";

@@ -72,7 +72,6 @@
 #include <editeng/unonrule.hxx>
 #include <editeng/eeitem.hxx>
 #include <unotools/datetime.hxx>
-#include <unotools/saveopt.hxx>
 #include <xmloff/autolayout.hxx>
 
 // Support creation of GraphicStorageHandler and EmbeddedObjectResolver

@@ -35,7 +35,6 @@
 #include <svx/svdoutl.hxx>
 #include <sfx2/request.hxx>
 #include <svl/ctloptions.hxx>
-#include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
 #include <tools/debug.hxx>
 

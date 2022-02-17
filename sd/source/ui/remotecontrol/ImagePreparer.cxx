@@ -25,7 +25,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>

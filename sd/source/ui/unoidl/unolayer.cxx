@@ -23,8 +23,10 @@
 #include "unolayer.hxx"
 
 #include <comphelper/extract.hxx>
+#include <editeng/unoipset.hxx>
+#include <osl/diagnose.h>
+#include <svl/itemprop.hxx>
 #include <svx/svdpagv.hxx>
-#include <svx/unoshape.hxx>
 #include <svx/svdobj.hxx>
 #include <cppuhelper/supportsservice.hxx>
 

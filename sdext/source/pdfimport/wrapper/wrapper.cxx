@@ -32,15 +32,12 @@
 #include <osl/diagnose.h>
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
-#include <com/sun/star/beans/XMaterialHolder.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
 #include <com/sun/star/rendering/PathJoinType.hpp>
 #include <com/sun/star/rendering/XPolyPolygon2D.hpp>
@@ -49,8 +46,6 @@
 #include <com/sun/star/geometry/RealRectangle2D.hpp>
 #include <com/sun/star/geometry/RealSize2D.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <tools/diagnose_ex.h>
 
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -66,9 +61,6 @@
 #include <string_view>
 #include <unordered_map>
 #include <string.h>
-#include <stdlib.h>
-
-#include <rtl/character.hxx>
 
 using namespace com::sun::star;
 

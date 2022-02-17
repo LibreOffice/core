@@ -71,7 +71,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
-#include <svl/intitem.hxx>
 
 using namespace com::sun::star;
 

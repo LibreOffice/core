@@ -26,7 +26,6 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/toolbox.hxx>
 
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 
 #include <svtools/toolbarmenu.hxx>

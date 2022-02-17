@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <vcl/vclevent.hxx>
+
 #include <smarttag.hxx>
 #include "annotationwindow.hxx"
 

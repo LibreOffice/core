@@ -34,7 +34,6 @@
 #include <vcl/graph.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/unoapi.hxx>
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -43,6 +42,7 @@
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

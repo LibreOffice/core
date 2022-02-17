@@ -23,6 +23,7 @@
 #include <sfx2/tabdlg.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <svx/xtable.hxx>
+#include <unotools/resmgr.hxx>
 #include "sdtreelb.hxx"
 
 #include <vector>

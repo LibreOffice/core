@@ -51,12 +51,9 @@
 #include <comphelper/lok.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/frame.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <svx/unoapi.hxx>
 #include <svx/svxids.hrc>
-#include <svx/colorwindow.hxx>
 #include <DrawDocShell.hxx>
 #include <ViewShellBase.hxx>
 #include <DrawViewShell.hxx>

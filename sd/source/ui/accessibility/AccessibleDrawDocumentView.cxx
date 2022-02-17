@@ -37,7 +37,6 @@
 #include <svx/AccessibleShape.hxx>
 #include <svx/ChildrenManager.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/unoapi.hxx>
 #include <vcl/svapp.hxx>
 
 #include <ViewShell.hxx>

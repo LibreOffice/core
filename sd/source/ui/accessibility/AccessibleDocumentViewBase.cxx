@@ -35,7 +35,6 @@
 #include <svx/svdobj.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <Window.hxx>
-#include <vcl/svapp.hxx>
 #include <OutlineViewShell.hxx>
 
 #include <svx/svdlayer.hxx>

@@ -53,10 +53,8 @@
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 
 #include <stlpool.hxx>
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/lok.hxx>
-#include <vcl/BitmapReadAccess.hxx>
 #include <svx/svdograf.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 

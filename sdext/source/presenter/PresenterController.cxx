@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "PresenterController.hxx"
 
 #include "PresenterAccessibility.hxx"

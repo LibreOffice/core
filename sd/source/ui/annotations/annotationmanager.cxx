@@ -26,7 +26,6 @@
 #include <comphelper/lok.hxx>
 #include <svx/svxids.hrc>
 
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -54,9 +53,6 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/wghtitem.hxx>
-#include <editeng/udlnitem.hxx>
-#include <editeng/crossedoutitem.hxx>
 
 #include <svx/postattr.hxx>
 
