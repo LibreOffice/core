@@ -11,6 +11,7 @@
 
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <com/sun/star/table/XTable.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -986,6 +987,49 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf69648)
 
         CPPUNIT_ASSERT_MESSAGE("Textbox must be inside the shape!", aChildShape.Contains(aFrame));
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
+{
+    // Open bugdoc
+    createSwDoc(DATA_DIRECTORY, "tdf116256.docx");
+    CPPUNIT_ASSERT(mxComponent);
+
+    // Get the textbox
+    uno::Reference<beans::XPropertySet> xTextBox(getShape(2), uno::UNO_QUERY_THROW);
+
+    // Ensure that is a real textbox, and follows the text flow
+    CPPUNIT_ASSERT(xTextBox->getPropertyValue("TextBox").get<bool>());
+    CPPUNIT_ASSERT(xTextBox->getPropertyValue("IsFollowingTextFlow").get<bool>());
+
+    // Parse the layout
+    auto pLayout = parseLayoutDump();
+    // Get the position of the shape
+    const auto nTextBoxShapeLeft = getXPath(pLayout,
+                                            "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/"
+                                            "anchored/SwAnchoredDrawObject/bounds",
+                                            "left")
+                                       .toInt64();
+    const auto nTextBoxShapeTop = getXPath(pLayout,
+                                           "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/"
+                                           "anchored/SwAnchoredDrawObject/bounds",
+                                           "top")
+                                      .toInt64();
+    // Get the position of the textframe too.
+    const auto nTextBoxFrameLeft
+        = getXPath(pLayout,
+                   "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/anchored/fly/infos/bounds",
+                   "left")
+              .toInt64();
+    const auto nTextBoxFrameTop
+        = getXPath(pLayout,
+                   "/root/page/body/txt/anchored/fly/tab/row[1]/cell/txt/anchored/fly/infos/bounds",
+                   "top")
+              .toInt64();
+
+    // Whitout the fix in place these were less than they supposed to.
+    CPPUNIT_ASSERT_GREATEREQUAL(nTextBoxShapeLeft, nTextBoxFrameLeft);
+    CPPUNIT_ASSERT_GREATEREQUAL(nTextBoxShapeTop, nTextBoxFrameTop);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
