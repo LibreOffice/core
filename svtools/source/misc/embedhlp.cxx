@@ -471,6 +471,15 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
     }
 
     std::unique_ptr<SvStream> pGraphicStream(GetGraphicStream( bUpdate ));
+    if (!pGraphicStream && aOldGraphic.IsNone())
+    {
+        // We have no old graphic, tried to get an updated one, but that failed. Try to get an old
+        // graphic instead of having no graphic at all.
+        pGraphicStream = GetGraphicStream(false);
+        SAL_WARN("svtools.misc",
+                 "EmbeddedObjectRef::GetReplacement: failed to get updated graphic stream");
+    }
+
     if ( pGraphicStream )
     {
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
@@ -487,7 +496,7 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
         // failed. Go back to the old graphic instead of having no graphic at
         // all.
         mpImpl->pGraphic.reset(new Graphic(aOldGraphic));
-        SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement: update failed");
+        SAL_WARN("svtools.misc", "EmbeddedObjectRef::GetReplacement: failed to update graphic");
     }
 }
 
