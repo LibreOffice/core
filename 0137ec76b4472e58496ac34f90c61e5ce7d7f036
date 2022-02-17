@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf52a4c3_d06b38c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-17T05:57:55Z",
+      "side": 1,
+      "message": "I noticed that ctrl double click will also cause the drop down window to become docked. The window knows it isn\u0027t dockable so the event doesn\u0027t get handled in the DockingWindow::EventNotify but is passed on to the Window::EventNotify where the ImplDockingWindowWrapper doesn\u0027t know that the window isn\u0027t dockable, it just sees that it is a DockingWindow in the DockingManager mvDockingWindows container and doesn\u0027t check mbDockable. I\u0027ve moved the condition to test this so when the window isn\u0027t dockable the block of code that handles dockable window events won\u0027t be entered. I think this can be removed once DropdownDockingWindow isn\u0027t used for the IterimToolbarPopup window.  ",
+      "revId": "0137ec76b4472e58496ac34f90c61e5ce7d7f036",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

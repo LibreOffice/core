@@ -33,6 +33,24 @@
       "message": "yeah, we should rename things from DropdownDockingWindow to something like DropdownWindow and so on removing \"Dock\" from this thing used for dropdowns that presumably doesn\u0027t use any of the \"Dock\" features of its ancestor",
       "revId": "96e631bf47777346d33f2639d83e07fac444533e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06db1b39_7cd09c64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-17T05:57:55Z",
+      "side": 1,
+      "message": "To remove the \"Dock\", would that involve making a new window class \u0027DropdownWindow\u0027 and window type \u0027WindowType::DROPDOWNWINDOW\u0027?",
+      "parentUuid": "b5efa9a5_8fa964b6",
+      "revId": "96e631bf47777346d33f2639d83e07fac444533e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
