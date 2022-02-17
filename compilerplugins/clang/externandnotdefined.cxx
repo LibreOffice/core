@@ -11,8 +11,6 @@
 
 #include <string>
 
-#include "config_clang.h"
-
 #include "plugin.hxx"
 
 // Having an extern prototype for a method in a module and not actually declaring that method is dodgy.
@@ -59,11 +57,6 @@ bool ExternAndNotDefined::VisitFunctionDecl(const FunctionDecl * functionDecl) {
     }
     if (!compiler.getSourceManager().isInMainFile(functionDecl->getLocation()))
     {
-        return true;
-    }
-    StringRef fileName { getFilenameOfLocation(functionDecl->getLocation()) };
-    // keeps  the code structure of salplug.cxx easier to follow
-    if (fileName == SRCDIR "/vcl/source/app/salplug.cxx") {
         return true;
     }
     report(
