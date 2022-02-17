@@ -43,7 +43,6 @@ gb_OSDEFS := \
 gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \
-	-Wdeclaration-after-statement \
 	-Wshadow \
 
 gb_CXXFLAGS := \
