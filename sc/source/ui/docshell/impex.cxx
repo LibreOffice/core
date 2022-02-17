@@ -1980,7 +1980,11 @@ bool ScImportExport::Doc2Text( SvStream& rStrm )
                 if( nCol < nEndCol )
                     lcl_WriteSimpleString( rStrm, OUString(cSep) );
             }
-            WriteUnicodeOrByteEndl( rStrm );
+            // Do not append a line feed for one single cell.
+            // NOTE: this Doc2Text() is only called for clipboard via
+            // ScImportExport::ExportStream().
+            if (nStartRow != nEndRow || nStartCol != nEndCol)
+                WriteUnicodeOrByteEndl( rStrm );
             if( rStrm.GetError() != ERRCODE_NONE )
                 break;
             if( nSizeLimit && rStrm.Tell() > nSizeLimit )
