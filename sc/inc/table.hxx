@@ -461,6 +461,8 @@ public:
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
     ScPostIt* ReleaseNote( SCCOL nCol, SCROW nRow );
+    ScPostIt*                 GetNote( SCCOL nCol, SCROW nRow );
+    void                      SetNote( SCCOL nCol, SCROW nRow, ScPostIt* pNote );
 
     size_t GetNoteCount( SCCOL nCol ) const;
     SCROW GetNotePosition( SCCOL nCol, size_t nIndex ) const;

@@ -1596,6 +1596,21 @@ ScPostIt* ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
     return aCol[nCol].ReleaseNote(nRow);
 }
 
+ScPostIt* ScTable::GetNote( SCCOL nCol, SCROW nRow )
+{
+    if (!ValidCol(nCol) || nCol >= MAXCOLCOUNT)
+        return nullptr;
+    return aCol[nCol].GetCellNote(nRow);
+}
+
+void ScTable::SetNote( SCCOL nCol, SCROW nRow, ScPostIt* pNote )
+{
+    if (!ValidColRow(nCol, nRow))
+        return;
+
+    CreateColumnIfNotExists(nCol).SetCellNote(nRow, std::move(pNote));
+}
+
 size_t ScTable::GetNoteCount( SCCOL nCol ) const
 {
     if (!ValidCol(nCol))
