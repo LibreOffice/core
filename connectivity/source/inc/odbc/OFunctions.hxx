@@ -336,7 +336,7 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
     #define N3SQLSetPos(a,b,c,d) (*reinterpret_cast<T3SQLSetPos>(getOdbcFunction(ODBC3SQLFunctionId::SetPos)))(a,b,c,d)
 
     typedef SQLRETURN  (SQL_API  *T3SQLBulkOperations) (    SQLHSTMT        StatementHandle,
-                                                        SQLUSMALLINT Operation);
+                                                        SQLSMALLINT Operation);
 
     #define N3SQLBulkOperations(a,b) (*reinterpret_cast<T3SQLBulkOperations>(getOdbcFunction(ODBC3SQLFunctionId::BulkOperations)))(a,b)
 
@@ -440,15 +440,15 @@ bool LoadLibrary_ODBC3(OUString &_rPath);
     #define N3SQLProcedures(a,b,c,d,e,f,g) (*reinterpret_cast<T3SQLProcedures>(getOdbcFunction(ODBC3SQLFunctionId::Procedures)))(a,b,c,d,e,f,g)
 
     typedef SQLRETURN  (SQL_API  *T3SQLSpecialColumns) (SQLHSTMT            StatementHandle,
-                                                    SQLSMALLINT         IdentifierType,
+                                                    SQLUSMALLINT        IdentifierType,
                                                     SQLCHAR *           CatalogName,
                                                     SQLSMALLINT         NameLength1,
                                                     SQLCHAR *           SchemaName,
                                                     SQLSMALLINT         NameLength2,
                                                     SQLCHAR *           TableName,
                                                     SQLSMALLINT         NameLength3,
-                                                    SQLSMALLINT         Scope,
-                                                    SQLSMALLINT         Nullable);
+                                                    SQLUSMALLINT        Scope,
+                                                    SQLUSMALLINT        Nullable);
 
     #define N3SQLSpecialColumns(a,b,c,d,e,f,g,h,i,j) (*reinterpret_cast<T3SQLSpecialColumns>(getOdbcFunction(ODBC3SQLFunctionId::SpecialColumns)))(a,b,c,d,e,f,g,h,i,j)
 
