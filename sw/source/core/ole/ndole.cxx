@@ -1162,18 +1162,7 @@ void SwOLEObj::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwOLEObj"));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
 
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_xOLERef"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
-                                BAD_CAST(typeid(*m_xOLERef.GetObject()).name()));
-
-    uno::Reference<embed::XEmbeddedObject> xIP = m_xOLERef.GetObject();
-    auto pComponent = dynamic_cast<sfx2::XmlDump*>(xIP->getComponent().get());
-    if (pComponent)
-    {
-        pComponent->dumpAsXml(pWriter);
-    }
-
-    (void)xmlTextWriterEndElement(pWriter);
+    m_xOLERef.dumpAsXml(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <libxml/xmlwriter.h>
 
 #include <svtools/embedhlp.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -54,6 +55,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
+#include <sfx2/xmldump.hxx>
 #include <memory>
 
 using namespace com::sun::star;
@@ -274,6 +276,34 @@ struct EmbeddedObjectRef_Impl
     {
         if (r.pGraphic && !r.bNeedUpdate)
             pGraphic.reset( new Graphic(*r.pGraphic) );
+    }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("EmbeddedObjectRef_Impl"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("mxObj"));
+        (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),
+                                          BAD_CAST(typeid(*mxObj).name()));
+        auto pComponent = dynamic_cast<sfx2::XmlDump*>(mxObj->getComponent().get());
+        if (pComponent)
+        {
+            pComponent->dumpAsXml(pWriter);
+        }
+        (void)xmlTextWriterEndElement(pWriter);
+
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("pGraphic"));
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", pGraphic.get());
+        if (pGraphic)
+        {
+            (void)xmlTextWriterWriteAttribute(
+                pWriter, BAD_CAST("is-none"),
+                BAD_CAST(OString::boolean(pGraphic->IsNone()).getStr()));
+        }
+        (void)xmlTextWriterEndElement(pWriter);
+
+        (void)xmlTextWriterEndElement(pWriter);
     }
 };
 
@@ -991,6 +1021,16 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
     DBG_ASSERT( xSizeTransmitter.is(), "Object does not support XDefaultSizeTransmitter -> will cause #i103460#!" );
     if( xSizeTransmitter.is() )
         xSizeTransmitter->setDefaultSize( mpImpl->aDefaultSizeForChart_In_100TH_MM );
+}
+
+void EmbeddedObjectRef::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("EmbeddedObjectRef"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+
+    mpImpl->dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 } // namespace svt
