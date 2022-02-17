@@ -37,6 +37,7 @@ namespace com::sun::star::embed {
 }
 
 class OutputDevice;
+typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
 namespace svt {
 
@@ -122,6 +123,8 @@ public:
     // fetching the Graphic what would be too expensive e.g. for charts
     sal_uInt32 getGraphicVersion() const;
     void            SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM );//#i103460# charts do not necessarily have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 }

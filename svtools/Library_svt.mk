@@ -64,6 +64,7 @@ $(eval $(call gb_Library_use_externals,svt,\
     icui18n \
     icuuc \
     icu_headers \
+    libxml2 \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svt,\
