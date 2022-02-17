@@ -22,6 +22,7 @@
 #include <workbookfragment.hxx>
 #include <stylesbuffer.hxx>
 #include <stylesfragment.hxx>
+#include <SparklineFragment.hxx>
 
 #include <rangeutl.hxx>
 #include <sal/log.hxx>
@@ -298,28 +299,6 @@ void ExtConditionalFormattingContext::onEndElement()
     }
 }
 
-ExtSparklineGroupsContext::ExtSparklineGroupsContext(WorksheetContextBase& rFragment)
-    : WorksheetContextBase(rFragment)
-{
-}
-
-ContextHandlerRef ExtSparklineGroupsContext::onCreateContext(sal_Int32 nElement, const AttributeList&)
-{
-
-}
-
-void ExtSparklineGroupsContext::onStartElement(const AttributeList& )
-{
-}
-
-void ExtSparklineGroupsContext::onCharacters(const OUString& rChars)
-{
-}
-
-void ExtSparklineGroupsContext::onEndElement()
-{
-}
-
 ExtLstLocalContext::ExtLstLocalContext( WorksheetContextBase& rFragment, ScDataBarFormatData* pTarget ):
     WorksheetContextBase(rFragment),
     mpTarget(pTarget)
@@ -372,7 +351,7 @@ ContextHandlerRef ExtGlobalContext::onCreateContext( sal_Int32 nElement, const A
     {
         case XLS14_TOKEN(conditionalFormatting): return new ExtConditionalFormattingContext(*this);
         case XLS14_TOKEN(dataValidations):       return new ExtDataValidationsContext(*this);
-        case XLS14_TOKEN(sparklineGroups):       return new ExtSparklineGroupsContext(*this);
+        case XLS14_TOKEN(sparklineGroups): return new SparklineGroupsContext(*this);
     }
     return this;
 }

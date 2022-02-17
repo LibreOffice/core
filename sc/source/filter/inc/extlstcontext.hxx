@@ -70,19 +70,6 @@ private:
     std::vector<ExtCondFormatRuleModel> maModels;
 };
 
-class ExtSparklineGroupsContext : public WorksheetContextBase
-{
-private:
-
-public:
-    explicit ExtSparklineGroupsContext(WorksheetContextBase& rFragment);
-
-    oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement, const AttributeList& rAttribs) override;
-    void onStartElement( const AttributeList& rAttribs ) override;
-    void onCharacters(const OUString& rCharacters) override;
-    void onEndElement() override;
-};
-
 /**
  * Handle ExtLst entries in xlsx. These entries are a way to extend the standard
  * without actually changing it
