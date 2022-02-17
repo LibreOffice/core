@@ -26,9 +26,11 @@
 #include <unoprnms.hxx>
 #include <mvsave.hxx>
 #include <fmtsrnd.hxx>
+#include <fmtfollowtextflow.hxx>
 #include <frmfmt.hxx>
 #include <frameformats.hxx>
 #include <dflyobj.hxx>
+#include <swtable.hxx>
 
 #include <editeng/unoprnms.hxx>
 #include <editeng/memberids.h>
@@ -1069,6 +1071,9 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
         return;
 
     const bool bInlineAnchored = rShape.GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR;
+    const bool bLayoutInCell
+        = rShape.GetFollowTextFlow().GetValue() && rShape.GetAnchor().GetContentAnchor()
+          && rShape.GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode();
     SfxItemSet aTextBoxSet(pFormat->GetDoc()->GetAttrPool(), aFrameFormatSetRange);
 
     SfxItemIter aIter(rSet);
@@ -1085,7 +1090,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     = mapAnchorType(rShape.GetAnchor().GetAnchorId());
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType),
                              pObj);
-                if (bInlineAnchored)
+                if (bInlineAnchored || bLayoutInCell)
                     return;
                 SwFormatVertOrient aOrient(pItem->StaticWhichCast(RES_VERT_ORIENT));
 
@@ -1115,7 +1120,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     = mapAnchorType(rShape.GetAnchor().GetAnchorId());
                 syncProperty(&rShape, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE, uno::Any(aNewAnchorType),
                              pObj);
-                if (bInlineAnchored)
+                if (bInlineAnchored || bLayoutInCell)
                     return;
                 SwFormatHoriOrient aOrient(pItem->StaticWhichCast(RES_HORI_ORIENT));
 
@@ -1399,6 +1404,8 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
             tools::Rectangle aRect(
                 getTextRectangle(pObj ? pObj : pShape->FindRealSdrObject(), false));
 
+            auto nLeftSpace = pShape->GetLRSpace().GetLeft();
+
             SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
             aNewHOri.SetPos(
                 (bIsGroupObj && pObj ? pObj->GetRelativePos().getX() : aNewHOri.GetPos())
@@ -1428,6 +1435,40 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
 
                 aNewVOri.SetPos(pShape->GetVertOrient().GetPos() + nInshapePos.getY()
                                 + aRect.Top());
+            }
+
+            if (pShape->GetFollowTextFlow().GetValue() && pShape->GetAnchor().GetContentAnchor()
+                && pShape->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode())
+            {
+                Point nTableOffset;
+                if (auto pFly = pShape->GetAnchor()
+                                    .GetContentAnchor()
+                                    ->nNode.GetNode()
+                                    .FindTableNode()
+                                    ->FindFlyStartNode())
+                {
+                    if (auto pFlyFormat = pFly->GetFlyFormat())
+                    {
+                        nTableOffset.setX(pFlyFormat->GetHoriOrient().GetPos());
+                        nTableOffset.setY(pFlyFormat->GetVertOrient().GetPos());
+                    }
+                }
+                else
+                {
+                    auto pTableNode
+                        = pShape->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode();
+                    if (auto pTableFormat = pTableNode->GetTable().GetFrameFormat())
+                    {
+                        nTableOffset.setX(pTableFormat->GetHoriOrient().GetPos());
+                        nTableOffset.setY(pTableFormat->GetVertOrient().GetPos());
+                    }
+                }
+
+                aNewHOri.SetPos(aNewHOri.GetPos() + nTableOffset.getX() + nLeftSpace);
+                if (pShape->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+                    || pShape->GetVertOrient().GetRelationOrient()
+                           == text::RelOrientation::PAGE_PRINT_AREA)
+                    aNewVOri.SetPos(aNewVOri.GetPos() + nTableOffset.getY());
             }
 
             pFormat->SetFormatAttr(aNewHOri);
