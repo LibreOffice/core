@@ -30,6 +30,8 @@
 #include <com/sun/star/i18n/CalendarFieldIndex.hpp>
 #include <com/sun/star/ui/ContextMenuExecuteEvent.hpp>
 
+#include <comphelper/scopeguard.hxx>
+
 #include <vcl/inputctx.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
@@ -164,7 +166,6 @@ bool g_bFrameDrag                   = false;
 static bool g_bValidCursorPos       = false;
 static bool g_bModePushed         = false;
 bool g_bDDTimerStarted            = false;
-bool g_bFlushCharBuffer           = false;
 bool g_bDDINetAttr                = false;
 static SdrHdlKind g_eSdrMoveHdl   = SdrHdlKind::User;
 
@@ -867,6 +868,9 @@ static sal_uInt16 lcl_isNonDefaultLanguage(LanguageType eBufferLanguage, SwView 
  */
 void SwEditWin::FlushInBuffer()
 {
+    if ( m_aKeyInputFlushTimer.IsActive())
+        m_aKeyInputFlushTimer.Stop();
+
     if ( m_aInBuffer.isEmpty() )
         return;
 
@@ -995,8 +999,6 @@ void SwEditWin::FlushInBuffer()
     rSh.Insert( m_aInBuffer );
     m_eBufferLanguage = LANGUAGE_DONTKNOW;
     m_aInBuffer.clear();
-    g_bFlushCharBuffer = false;
-
 }
 
 #define MOVE_LEFT_SMALL     0
@@ -1412,7 +1414,9 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         return;
 
     m_pShadCursor.reset();
-    m_aKeyInputFlushTimer.Stop();
+    // Do not reset the timer here, otherwise when flooded with events it would never time out
+    // if every key event stopped and started it again.
+    comphelper::ScopeGuard keyInputFlushTimerStop([this]() { m_aKeyInputFlushTimer.Stop(); });
 
     bool bIsDocReadOnly = m_rView.GetDocShell()->IsReadOnly() &&
                           rSh.IsCursorReadonly();
@@ -2488,10 +2492,15 @@ KEYINPUT_CHECKTABLE_INSDEL:
                     comphelper::string::padToLength(aBuf,
                         m_aInBuffer.getLength() + aKeyEvent.GetRepeat() + 1, aCh);
                     m_aInBuffer = aBuf.makeStringAndClear();
-                    g_bFlushCharBuffer = Application::AnyInput( VclInputFlags::KEYBOARD );
-                    bFlushBuffer = !g_bFlushCharBuffer;
-                    if( g_bFlushCharBuffer )
-                        m_aKeyInputFlushTimer.Start();
+                    bool delayFlush = Application::AnyInput( VclInputFlags::KEYBOARD );
+                    bFlushBuffer = !delayFlush;
+                    if( delayFlush )
+                    {
+                        // Start the timer, make sure to not restart it.
+                        keyInputFlushTimerStop.dismiss();
+                        if( !m_aKeyInputFlushTimer.IsActive())
+                            m_aKeyInputFlushTimer.Start();
+                    }
                 }
                 eKeyState = SwKeyState::End;
             }
@@ -2711,11 +2720,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
     // in case the buffered characters are inserted
     if( bFlushBuffer && !m_aInBuffer.isEmpty() )
     {
-        // bFlushCharBuffer was not reset here
-        // why not?
-        bool bSave = g_bFlushCharBuffer;
         FlushInBuffer();
-        g_bFlushCharBuffer = bSave;
 
         // maybe show Tip-Help
         if (bNormalChar)
@@ -5211,7 +5216,7 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     SetPointer( PointerStyle::Text );
     m_aTimer.SetInvokeHandler(LINK(this, SwEditWin, TimerHandler));
 
-    m_aKeyInputFlushTimer.SetTimeout( 200 );
+    m_aKeyInputFlushTimer.SetTimeout( 20 );
     m_aKeyInputFlushTimer.SetInvokeHandler(LINK(this, SwEditWin, KeyInputFlushHandler));
 
     // TemplatePointer for colors should be reset without
