@@ -16,6 +16,24 @@
       "message": "o3tl::enumarray\u003cContentTypeId, bool\u003e would be faster for this",
       "revId": "5c836a141418e203e2cadfedf3389199d48e2551",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58d444e5_ec8f3a03",
+        "filename": "sw/source/uibase/inc/conttree.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-17T03:01:30Z",
+      "side": 1,
+      "message": "Thanks Noel, I changed the other ContentTypeId, bool map used in navicfg.hxx to an o3tl::enumarray as well.",
+      "parentUuid": "0c219436_1a7b6a75",
+      "revId": "5c836a141418e203e2cadfedf3389199d48e2551",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
