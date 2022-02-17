@@ -16,6 +16,23 @@
       "message": "It builds but it doesn\u0027t work. After some testing, LO goes in fact in the catch.\nThe error is HY010 \"Function sequence error\", reading https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/sqlgetinfo-function?view\u003dsql-server-ver15, it tells:\n(DM) SQLExecute, SQLExecDirect, or SQLMoreResults was called for the StatementHandle and returned SQL_PARAM_DATA_AVAILABLE. This function was called before data was retrieved for all streamed parameters.\n\nI\u0027m gonna search if there was one of these 3 functions called.",
       "revId": "6d88b556d8760b5edb32fefa1203dfc954ca4281",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5bd8aa0_1a83bef4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-17T11:59:48Z",
+      "side": 1,
+      "message": "I put these breakpoints:\n1       breakpoint     keep y   0x00007fb1bc1e38c7 in connectivity::odbc::OStatement_Base::execute(rtl::OUString const\u0026) at connectivity/source/drivers/odbc/OStatement.cxx:337\n2       breakpoint     keep y   0x00007fb1bc1e493e in connectivity::odbc::OStatement::executeBatch() at connectivity/source/drivers/odbc/OStatement.cxx:486\n3       breakpoint     keep y   0x00007fb1bc1d6cc1 in connectivity::odbc::OPreparedStatement::execute() at connectivity/source/drivers/odbc/OPreparedStatement.cxx:152\n4       breakpoint     keep y   0x00007fb1bc1e4aba in connectivity::odbc::OStatement::executeBatch() at connectivity/source/drivers/odbc/OStatement.cxx:492\n5       breakpoint     keep y   0x00007fb1bc1e536f in connectivity::odbc::OStatement_Base::getMoreResults() at connectivity/source/drivers/odbc/OStatement.cxx:578\n\nnothing. I\u0027m gonna try to close cursor or something else before calling GetInfo",
+      "revId": "6d88b556d8760b5edb32fefa1203dfc954ca4281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
