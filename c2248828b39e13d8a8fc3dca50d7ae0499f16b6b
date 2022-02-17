@@ -33,6 +33,23 @@
       "message": "UITest_calc_demo failed, let\u0027s see if that happens again on resume.",
       "revId": "c2248828b39e13d8a8fc3dca50d7ae0499f16b6b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0637ba55_abd7d4f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-17T08:16:17Z",
+      "side": 1,
+      "message": "online.git calc/apply_font_spec.js failed, resume.",
+      "revId": "c2248828b39e13d8a8fc3dca50d7ae0499f16b6b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
