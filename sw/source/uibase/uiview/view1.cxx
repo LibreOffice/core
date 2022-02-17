@@ -136,8 +136,7 @@ void SwView::Activate(bool bMDIActivate)
 
 void SwView::Deactivate(bool bMDIActivate)
 {
-    if( g_bFlushCharBuffer ) // Are Characters still in the input buffer?
-        GetEditWin().FlushInBuffer();
+    GetEditWin().FlushInBuffer(); // Flush characters still in the input buffer.
 
     if( bMDIActivate )
     {
