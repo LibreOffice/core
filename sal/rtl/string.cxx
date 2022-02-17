@@ -339,19 +339,7 @@ void rtl_string_newReplaceFirst(
         if (str->length - fromLength > SAL_MAX_INT32 - toLength) {
             std::abort();
         }
-        sal_Int32 n = str->length - fromLength + toLength;
-        rtl_string_acquire(str); // in case *newStr == str
-        rtl_string_new_WithLength(newStr, n);
-        if (n != 0) {
-            (*newStr)->length = n;
-            assert(i >= 0 && i < str->length);
-            memcpy((*newStr)->buffer, str->buffer, i);
-            memcpy((*newStr)->buffer + i, to, toLength);
-            memcpy(
-                (*newStr)->buffer + i + toLength, str->buffer + i + fromLength,
-                str->length - i - fromLength);
-        }
-        rtl_string_release(str);
+        rtl::str::newReplaceStrAt(newStr, str, i, fromLength, to, toLength);
     }
     *index = i;
 }

@@ -1213,24 +1213,7 @@ void rtl_uString_newReplaceFirstAsciiLUtf16L(
             rtl_uString_release(*newStr);
             *newStr = nullptr;
         } else {
-            sal_Int32 n = str->length - fromLength + toLength;
-            rtl_uString_acquire(str); // in case *newStr == str
-            rtl_uString_new_WithLength(newStr, n);
-            if (n != 0 && /*TODO:*/ *newStr != nullptr) {
-                (*newStr)->length = n;
-                assert(i >= 0 && i < str->length);
-                memcpy(
-                    (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
-                if (toLength != 0) {
-                    memcpy(
-                        (*newStr)->buffer + i, to, toLength * sizeof (sal_Unicode));
-                }
-                memcpy(
-                    (*newStr)->buffer + i + toLength,
-                    str->buffer + i + fromLength,
-                    (str->length - i - fromLength) * sizeof (sal_Unicode));
-            }
-            rtl_uString_release(str);
+            rtl::str::newReplaceStrAt(newStr, str, i, fromLength, to, toLength);
         }
     }
     *index = i;
@@ -1306,24 +1289,7 @@ void rtl_uString_newReplaceFirstUtf16LUtf16L(
             rtl_uString_release(*newStr);
             *newStr = nullptr;
         } else {
-            sal_Int32 n = str->length - fromLength + toLength;
-            rtl_uString_acquire(str); // in case *newStr == str
-            rtl_uString_new_WithLength(newStr, n);
-            if (n != 0 && /*TODO:*/ *newStr != nullptr) {
-                (*newStr)->length = n;
-                assert(i >= 0 && i < str->length);
-                memcpy(
-                    (*newStr)->buffer, str->buffer, i * sizeof (sal_Unicode));
-                if (toLength != 0) {
-                    memcpy(
-                        (*newStr)->buffer + i, to, toLength * sizeof (sal_Unicode));
-                }
-                memcpy(
-                    (*newStr)->buffer + i + toLength,
-                    str->buffer + i + fromLength,
-                    (str->length - i - fromLength) * sizeof (sal_Unicode));
-            }
-            rtl_uString_release(str);
+            rtl::str::newReplaceStrAt(newStr, str, i, fromLength, to, toLength);
         }
     }
     *index = i;
