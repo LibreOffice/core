@@ -51,6 +51,10 @@ Option Explicit
 &apos;&apos;&apos;			CreateScriptService(&quot;L10N&quot;[, FolderName[, Locale]])
 &apos;&apos;&apos;				FolderName: the folder containing the PO-files (in SF_FileSystem.FileNaming notation)
 &apos;&apos;&apos;				Locale: in the form la-CO (language-COUNTRY)
+&apos;&apos;&apos;				Encoding: The character set that should be used (default = UTF-8)
+&apos;&apos;&apos;					Use one of the Names listed in https://www.iana.org/assignments/character-sets/character-sets.xhtml
+&apos;&apos;&apos;				Locale2: fallback Locale to select if Locale po file does not exist (typically &quot;en-US&quot;)
+&apos;&apos;&apos;				Encoding2: Encoding of the 2nd Locale file
 &apos;&apos;&apos;		Service invocation examples:
 &apos;&apos;&apos;			Dim myPO As Variant
 &apos;&apos;&apos;			myPO = CreateScriptService(&quot;L10N&quot;)	&apos;	AddText, AddTextsFromDialog and ExportToPOTFile are allowed

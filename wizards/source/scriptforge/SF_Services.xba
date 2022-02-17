@@ -521,16 +521,20 @@ Public Function _NewL10N(Optional ByVal pvArgs As Variant) As Variant
 &apos;&apos;&apos;				Use one of the Names listed in https://www.iana.org/assignments/character-sets/character-sets.xhtml
 &apos;&apos;&apos;				Note that LibreOffice probably does not implement all existing sets
 &apos;&apos;&apos;				Default = UTF-8
+&apos;&apos;&apos;		Locale2: fallback Locale to select if Locale po file does not exist (typically &quot;en-US&quot;)
+&apos;&apos;&apos;		Encoding2: Encoding of the 2nd Locale file
 &apos;&apos;&apos;	Returns: the instance or Nothing
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		UNKNOWNFILEERROR		The PO file does not exist
 
 Dim oL10N As Variant		&apos;	Return value
 Dim sFolderName	As String	&apos;	Folder containing the PO files
-Dim sLocale	 As String		&apos;	Passed argument or that of the user session
+Dim sLocale As String		&apos;	Passed argument or that of the user session
+Dim sLocale2 As String		&apos;	Alias for Locale2
 Dim oLocale As Variant		&apos;	com.sun.star.lang.Locale
 Dim sPOFile As String		&apos;	PO file must exist
 Dim sEncoding As String		&apos;	Alias for Encoding
+Dim sEncoding2 As String	&apos;	Alias for Encoding2
 
 	If SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
@@ -547,18 +551,36 @@ Check:
 			sLocale = pvArgs(1)
 		End If
 		If Len(sLocale) = 0 Then	&apos;	Called from Python, the Locale argument may be the zero-length string
-			Set oLocale = SF_Utils._GetUNOService(&quot;SystemLocale&quot;)
+			Set oLocale = SF_Utils._GetUNOService(&quot;OfficeLocale&quot;)
 			sLocale = oLocale.Language &amp; &quot;-&quot; &amp; oLocale.Country
 		End If
 		If UBound(pvArgs) &gt;= 2 Then
+			If IsMissing(pvArgs(2)) Or IsEmpty(pvArgs(2)) Then pvArgs(2) = &quot;UTF-8&quot;
 			If Not SF_Utils._Validate(pvArgs(2), &quot;Encoding (Arg2)&quot;, V_STRING) Then GoTo Catch
 			sEncoding = pvArgs(2)
 		Else
 			sEncoding = &quot;UTF-8&quot;
 		End If
+		sLocale2 = &quot;&quot;
+		If UBound(pvArgs) &gt;= 3 Then
+			If Not SF_Utils._Validate(pvArgs(3), &quot;Locale2 (Arg3)&quot;, V_STRING) Then GoTo Catch
+			sLocale2 = pvArgs(3)
+		End If
+		If UBound(pvArgs) &gt;= 4 Then
+			If Not SF_Utils._Validate(pvArgs(4), &quot;Encoding2 (Arg4)&quot;, V_STRING) Then GoTo Catch
+			sEncoding2 = pvArgs(4)
+		Else
+			sEncoding2 = &quot;UTF-8&quot;
+		End If
 		If Len(sFolderName) &gt; 0 Then
 			sPOFile = SF_FileSystem.BuildPath(sFolderName, sLocale &amp; &quot;.po&quot;)
-			If Not SF_FileSystem.FileExists(sPOFile) Then GoTo CatchNotExists
+			If Not SF_FileSystem.FileExists(sPOFile) Then
+				If Len(sLocale2) = 0 Then GoTo CatchNotExists	&apos;	No fallback =&gt; error
+				&apos;	Try the fallback
+				sPOFile = SF_FileSystem.BuildPath(sFolderName, sLocale2 &amp; &quot;.po&quot;)
+				If Not SF_FileSystem.FileExists(sPOFile) Then GoTo CatchNotExists
+				sEncoding = sEncoding2
+			End If
 		End If
 	End If
 
