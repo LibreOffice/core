@@ -2418,8 +2418,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
     createSwDoc(DATA_DIRECTORY, "forcepoint-swfootnoteframe-1.rtf");
 }
 
-//FIXME: disabled after failing again with fixed layout
-//CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76) { createSwDoc(DATA_DIRECTORY, "forcepoint76-1.rtf"); }
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76)
+{
+    createSwDoc(DATA_DIRECTORY, "forcepoint76-1.rtf");
+}
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
 {
