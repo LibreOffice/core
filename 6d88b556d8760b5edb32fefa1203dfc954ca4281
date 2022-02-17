@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbda74cd_1c2fac36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-17T11:56:04Z",
+      "side": 1,
+      "message": "It builds but it doesn\u0027t work. After some testing, LO goes in fact in the catch.\nThe error is HY010 \"Function sequence error\", reading https://docs.microsoft.com/en-us/sql/odbc/reference/syntax/sqlgetinfo-function?view\u003dsql-server-ver15, it tells:\n(DM) SQLExecute, SQLExecDirect, or SQLMoreResults was called for the StatementHandle and returned SQL_PARAM_DATA_AVAILABLE. This function was called before data was retrieved for all streamed parameters.\n\nI\u0027m gonna search if there was one of these 3 functions called.",
+      "revId": "6d88b556d8760b5edb32fefa1203dfc954ca4281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
