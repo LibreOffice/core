@@ -731,19 +731,19 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
 
                 /* #i6447#: Only the selected items are copied from the old
                    format. */
-                std::unique_ptr<SfxItemSet> pNewSet = pNewFormat->GetAttrSet().Clone();
+                SfxItemSet aNewSet = pNewFormat->GetAttrSet().CloneAsValue();
 
                 // Copy only the set attributes.
                 // The others should apply from the Templates.
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_PRINT );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_OPAQUE );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_PROTECT );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_SURROUND );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_VERT_ORIENT );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_HORI_ORIENT );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_LR_SPACE );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_UL_SPACE );
-                lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_BACKGROUND );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_PRINT );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_OPAQUE );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_PROTECT );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_SURROUND );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_VERT_ORIENT );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_HORI_ORIENT );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_LR_SPACE );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_UL_SPACE );
+                lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_BACKGROUND );
                 if( bCpyBrd )
                 {
                     // If there's no BoxItem at graphic, but the new Format has one, then set the
@@ -751,40 +751,40 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                     const SfxPoolItem *pItem;
                     if( SfxItemState::SET == pOldFormat->GetAttrSet().
                             GetItemState( RES_BOX, true, &pItem ))
-                        pNewSet->Put( *pItem );
+                        aNewSet.Put( *pItem );
                     else if( SfxItemState::SET == pNewFormat->GetAttrSet().
                             GetItemState( RES_BOX ))
-                        pNewSet->Put( *GetDfltAttr( RES_BOX ) );
+                        aNewSet.Put( *GetDfltAttr( RES_BOX ) );
 
                     if( SfxItemState::SET == pOldFormat->GetAttrSet().
                             GetItemState( RES_SHADOW, true, &pItem ))
-                        pNewSet->Put( *pItem );
+                        aNewSet.Put( *pItem );
                     else if( SfxItemState::SET == pNewFormat->GetAttrSet().
                             GetItemState( RES_SHADOW ))
-                        pNewSet->Put( *GetDfltAttr( RES_SHADOW ) );
+                        aNewSet.Put( *GetDfltAttr( RES_SHADOW ) );
                 }
                 else
                 {
                     // Hard-set the attributes, because they could come from the Template
                     // and then size calculations could not be correct anymore.
-                    pNewSet->Put( SvxBoxItem(RES_BOX) );
-                    pNewSet->Put( SvxShadowItem(RES_SHADOW) );
+                    aNewSet.Put( SvxBoxItem(RES_BOX) );
+                    aNewSet.Put( SvxShadowItem(RES_SHADOW) );
                 }
 
                 // Always transfer the anchor, which is a hard attribute anyways.
-                pNewSet->Put( pOldFormat->GetAnchor() );
+                aNewSet.Put( pOldFormat->GetAnchor() );
 
                 // The new one should be changeable in its height.
                 std::unique_ptr<SwFormatFrameSize> aFrameSize(pOldFormat->GetFrameSize().Clone());
                 aFrameSize->SetHeightSizeType( SwFrameSize::Minimum );
-                pNewSet->Put( std::move(aFrameSize) );
+                aNewSet.Put( std::move(aFrameSize) );
 
                 SwStartNode* pSttNd = rDoc.GetNodes().MakeTextSection(
                             SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
                             SwFlyStartNode, pColl );
-                pNewSet->Put( SwFormatContent( pSttNd ));
+                aNewSet.Put( SwFormatContent( pSttNd ));
 
-                pNewFormat->SetFormatAttr( *pNewSet );
+                pNewFormat->SetFormatAttr( aNewSet );
 
                 // InContents need to be treated in a special way:
                 // The TextAttribute needs to be destroyed.
@@ -815,14 +815,14 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 // The old one should not have a flow and it should be adjusted to above and
                 // middle.
                 // Also, the width should be 100% and it should also adjust the height, if changed.
-                pNewSet->ClearItem();
+                aNewSet.ClearItem();
 
-                pNewSet->Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
-                pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, true ) );
+                aNewSet.Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
+                aNewSet.Put( SvxOpaqueItem( RES_OPAQUE, true ) );
 
                 sal_Int16 eVert = bBefore ? text::VertOrientation::BOTTOM : text::VertOrientation::TOP;
-                pNewSet->Put( SwFormatVertOrient( 0, eVert ) );
-                pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER ) );
+                aNewSet.Put( SwFormatVertOrient( 0, eVert ) );
+                aNewSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER ) );
 
                 aFrameSize.reset(pOldFormat->GetFrameSize().Clone());
 
@@ -839,17 +839,17 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 }
                 aFrameSize->SetWidthPercent(isMath ? 0 : 100);
                 aFrameSize->SetHeightPercent(SwFormatFrameSize::SYNCED);
-                pNewSet->Put( std::move(aFrameSize) );
+                aNewSet.Put( std::move(aFrameSize) );
 
                 // Hard-set the attributes, because they could come from the Template
                 // and then size calculations could not be correct anymore.
                 if( bCpyBrd )
                 {
-                    pNewSet->Put( SvxBoxItem(RES_BOX) );
-                    pNewSet->Put( SvxShadowItem(RES_SHADOW) );
+                    aNewSet.Put( SvxBoxItem(RES_BOX) );
+                    aNewSet.Put( SvxShadowItem(RES_SHADOW) );
                 }
-                pNewSet->Put( SvxLRSpaceItem(RES_LR_SPACE) );
-                pNewSet->Put( SvxULSpaceItem(RES_UL_SPACE) );
+                aNewSet.Put( SvxLRSpaceItem(RES_LR_SPACE) );
+                aNewSet.Put( SvxULSpaceItem(RES_UL_SPACE) );
 
                 // The old one is paragraph-bound to the paragraph in the new one.
                 SwFormatAnchor aAnch( RndStdIds::FLY_AT_PARA );
@@ -857,14 +857,12 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 pNew = aAnchIdx.GetNode().GetTextNode();
                 SwPosition aPos( aAnchIdx );
                 aAnch.SetAnchor( &aPos );
-                pNewSet->Put( aAnch );
+                aNewSet.Put( aAnch );
 
                 if( pUndo )
-                    pUndo->SetFlys( *pOldFormat, *pNewSet, *pNewFormat );
+                    pUndo->SetFlys( *pOldFormat, aNewSet, *pNewFormat );
                 else
-                    pOldFormat->SetFormatAttr( *pNewSet );
-
-                pNewSet.reset();
+                    pOldFormat->SetFormatAttr( aNewSet );
 
                 // Have only the FlyFrames created.
                 // We leave this to established methods (especially for InCntFlys).
@@ -1050,7 +1048,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     // The TextAttribute needs to be destroyed.
     // Unfortunately, this also destroys the Format next to the Frames.
     // To avoid this, we disconnect the attribute from the Format.
-    std::unique_ptr<SfxItemSet> pNewSet = pOldFormat->GetAttrSet().Clone( false );
+    SfxItemSet aNewSet = pOldFormat->GetAttrSet().CloneAsValue( false );
 
     // Protect the Frame's size and position
     if ( rSdrObj.IsMoveProtect() || rSdrObj.IsResizeProtect() )
@@ -1059,11 +1057,11 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
         aProtect.SetContentProtect( false );
         aProtect.SetPosProtect( rSdrObj.IsMoveProtect() );
         aProtect.SetSizeProtect( rSdrObj.IsResizeProtect() );
-        pNewSet->Put( aProtect );
+        aNewSet.Put( aProtect );
     }
 
     // Take over the text wrap
-    lcl_CpyAttr( *pNewSet, pOldFormat->GetAttrSet(), RES_SURROUND );
+    lcl_CpyAttr( aNewSet, pOldFormat->GetAttrSet(), RES_SURROUND );
 
     // Send the frame to the back, if needed.
     // Consider the 'invisible' hell layer.
@@ -1072,25 +1070,25 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     {
         SvxOpaqueItem aOpaque( RES_OPAQUE );
         aOpaque.SetValue( true );
-        pNewSet->Put( aOpaque );
+        aNewSet.Put( aOpaque );
     }
 
     // Take over position
     // #i26791# - use directly drawing object's positioning attributes
-    pNewSet->Put( pOldFormat->GetHoriOrient() );
-    pNewSet->Put( pOldFormat->GetVertOrient() );
+    aNewSet.Put( pOldFormat->GetHoriOrient() );
+    aNewSet.Put( pOldFormat->GetVertOrient() );
 
-    pNewSet->Put( pOldFormat->GetAnchor() );
+    aNewSet.Put( pOldFormat->GetAnchor() );
 
     // The new one should be variable in its height!
     Size aSz( rSdrObj.GetCurrentBoundRect().GetSize() );
     SwFormatFrameSize aFrameSize( SwFrameSize::Minimum, aSz.Width(), aSz.Height() );
-    pNewSet->Put( aFrameSize );
+    aNewSet.Put( aFrameSize );
 
     // Apply the margin to the new Frame.
     // Don't set a border, use the one from the Template.
-    pNewSet->Put( pOldFormat->GetLRSpace() );
-    pNewSet->Put( pOldFormat->GetULSpace() );
+    aNewSet.Put( pOldFormat->GetLRSpace() );
+    aNewSet.Put( pOldFormat->GetULSpace() );
 
     SwStartNode* pSttNd =
         rDoc.GetNodes().MakeTextSection(
@@ -1102,13 +1100,13 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
 
     // Set border and shadow to default if the template contains any.
     if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState( RES_BOX ))
-        pNewSet->Put( *GetDfltAttr( RES_BOX ) );
+        aNewSet.Put( *GetDfltAttr( RES_BOX ) );
 
     if( SfxItemState::SET == pNewFormat->GetAttrSet().GetItemState(RES_SHADOW))
-        pNewSet->Put( *GetDfltAttr( RES_SHADOW ) );
+        aNewSet.Put( *GetDfltAttr( RES_SHADOW ) );
 
     pNewFormat->SetFormatAttr( SwFormatContent( pSttNd ));
-    pNewFormat->SetFormatAttr( *pNewSet );
+    pNewFormat->SetFormatAttr( aNewSet );
 
     const SwFormatAnchor& rAnchor = pNewFormat->GetAnchor();
     if ( RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId() )
@@ -1134,9 +1132,9 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
 
     // The old one should not have a flow
     // and it should be adjusted to above and middle.
-    pNewSet->ClearItem();
+    aNewSet.ClearItem();
 
-    pNewSet->Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
+    aNewSet.Put( SwFormatSurround( css::text::WrapTextMode_NONE ) );
     if (nLayerId == rDoc.getIDocumentDrawModelAccess().GetHellId())
     {
     // Consider drawing objects in the 'invisible' hell layer
@@ -1146,12 +1144,12 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     {
         rSdrObj.SetLayer( rDoc.getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
     }
-    pNewSet->Put( SvxLRSpaceItem( RES_LR_SPACE ) );
-    pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );
+    aNewSet.Put( SvxLRSpaceItem( RES_LR_SPACE ) );
+    aNewSet.Put( SvxULSpaceItem( RES_UL_SPACE ) );
 
     // #i26791# - set position of the drawing object, which is labeled.
-    pNewSet->Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
-    pNewSet->Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
+    aNewSet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
+    aNewSet.Put( SwFormatHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
 
     // The old one is paragraph-bound to the new one's paragraph.
     SwFormatAnchor aAnch( RndStdIds::FLY_AT_PARA );
@@ -1159,18 +1157,16 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
     pNew = aAnchIdx.GetNode().GetTextNode();
     SwPosition aPos( aAnchIdx );
     aAnch.SetAnchor( &aPos );
-    pNewSet->Put( aAnch );
+    aNewSet.Put( aAnch );
 
     if( pUndo )
     {
-        pUndo->SetFlys( *pOldFormat, *pNewSet, *pNewFormat );
+        pUndo->SetFlys( *pOldFormat, aNewSet, *pNewFormat );
         // #i26791# - position no longer needed
         pUndo->SetDrawObj( nLayerId );
     }
     else
-        pOldFormat->SetFormatAttr( *pNewSet );
-
-    pNewSet.reset();
+        pOldFormat->SetFormatAttr( aNewSet );
 
     // Have only the FlyFrames created.
     // We leave this to established methods (especially for InCntFlys).
