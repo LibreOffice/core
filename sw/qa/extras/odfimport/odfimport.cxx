@@ -1331,7 +1331,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146257)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146597)
 {
     load(mpTestDocumentPath, "tdf146597.odt");
-    // This was crashed before.
+    // This was frozen before.
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
