@@ -43,7 +43,7 @@ const char aBase64EncodeTable[] =
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
       '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/' };
 
-OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_uInt32 i_nBufferLength )
+OUString encodeBase64( const sal_Int8* i_pBuffer, const sal_Int32 i_nBufferLength )
 {
     OUStringBuffer aBuf( (i_nBufferLength+1) * 4 / 3 );
     const sal_Int32 nRemain(i_nBufferLength%3);
