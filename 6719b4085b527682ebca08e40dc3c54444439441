@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26064ee1_95954b4d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-02-17T14:22:53Z",
+      "side": 1,
+      "message": "Intermediate assertions were added to verify items\u0027 sortation.",
+      "revId": "6719b4085b527682ebca08e40dc3c54444439441",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
