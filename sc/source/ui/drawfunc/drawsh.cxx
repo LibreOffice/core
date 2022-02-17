@@ -68,12 +68,12 @@ SFX_IMPL_INTERFACE(ScDrawShell, SfxShell)
 
 namespace
 {
-    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, SfxItemSet& rArgs)
     {
         Color aColor;
         const SfxPoolItem* pItem = nullptr;
 
-        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
+        if (SfxItemState::SET == rArgs.GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
         {
             double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
             // FIXME: different units...
@@ -81,9 +81,9 @@ namespace
             int nValue = fValue * nPow;
 
             XLineWidthItem aItem(nValue);
-            pArgs->Put(aItem);
+            rArgs.Put(aItem);
         }
-        else if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+        else if (SfxItemState::SET == rArgs.GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
         {
             OUString sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
@@ -97,33 +97,33 @@ namespace
                 case SID_ATTR_LINE_COLOR:
                 {
                     XLineColorItem aLineColorItem(OUString(), aColor);
-                    pArgs->Put(aLineColorItem);
+                    rArgs.Put(aLineColorItem);
                     break;
                 }
 
                 case SID_ATTR_FILL_COLOR:
                 {
                     XFillColorItem aFillColorItem(OUString(), aColor);
-                    pArgs->Put(aFillColorItem);
+                    rArgs.Put(aFillColorItem);
                     break;
                 }
 
                 case SID_ATTR_SHADOW_COLOR:
                 {
                     XColorItem aItem(SDRATTR_SHADOWCOLOR, aColor);
-                    pArgs->Put(aItem);
+                    rArgs.Put(aItem);
                     break;
                 }
             }
         }
-        if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        if (SfxItemState::SET == rArgs.GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
         {
             const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
             if (pJSON)
             {
                 XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
                 XFillGradientItem aItem(aGradient);
-                pArgs->Put(aItem);
+                rArgs.Put(aItem);
             }
         }
     }
@@ -294,9 +294,9 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 
                 if( pView->AreObjectsMarked() )
                 {
-                    std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
-                    lcl_convertStringArguments( rReq.GetSlot(), pNewArgs );
-                    pView->SetAttrToMarked( *pNewArgs, false );
+                    SfxItemSet aNewArgs = rReq.GetArgs()->CloneAsValue();
+                    lcl_convertStringArguments( rReq.GetSlot(), aNewArgs );
+                    pView->SetAttrToMarked( aNewArgs, false );
                 }
                 else
                     pView->SetDefaultAttr( *rReq.GetArgs(), false);

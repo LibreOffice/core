@@ -85,13 +85,13 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, SfxItemSet& rArgs)
     {
         Color aColor;
         OUString sColor;
         const SfxPoolItem* pItem = nullptr;
 
-        if (SfxItemState::SET != pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+        if (SfxItemState::SET != rArgs.GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
             return;
 
         sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
@@ -106,14 +106,14 @@ namespace
             case SID_ATTR_CHAR_COLOR:
             {
                 SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
-                pArgs->Put(aColorItem);
+                rArgs.Put(aColorItem);
                 break;
             }
 
             case SID_ATTR_CHAR_BACK_COLOR:
             {
                 SvxColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
-                pArgs->Put(pBackgroundItem);
+                rArgs.Put(pBackgroundItem);
                 break;
             }
         }
@@ -130,7 +130,9 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     const sal_uInt16 nSlot = rReq.GetSlot();
 
     const sal_uInt16 nWhich = GetPool().GetWhich(nSlot);
-    std::unique_ptr<SfxItemSet> pNewAttrs(rReq.GetArgs() ? rReq.GetArgs()->Clone() : nullptr);
+    std::optional<SfxItemSet> pNewAttrs;
+    if (rReq.GetArgs())
+        pNewAttrs.emplace(rReq.GetArgs()->CloneAsValue());
 
     bool bRestoreSelection = false;
     ESelection aOldSelection;
@@ -639,7 +641,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
     }
     if (nEEWhich && pNewAttrs)
     {
-        lcl_convertStringArguments(nSlot, pNewAttrs);
+        lcl_convertStringArguments(nSlot, *pNewAttrs);
 
         aNewAttr.Put(pNewAttrs->Get(nWhich).CloneSetWhich(nEEWhich));
     }
