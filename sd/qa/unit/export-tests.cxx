@@ -42,7 +42,6 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 
 #include <svx/svdotable.hxx>
-#include <svx/unoapi.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
 using namespace css;

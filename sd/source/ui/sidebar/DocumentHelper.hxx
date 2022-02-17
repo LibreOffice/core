@@ -19,7 +19,9 @@
 
 #pragma once
 
-#include <rtl/ustring.hxx>
+#include <sal/config.h>
+#include <sal/types.h>
+
 #include <memory>
 #include <string_view>
 #include <vector>

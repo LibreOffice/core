@@ -38,7 +38,6 @@
 #include <SlideSorterViewShell.hxx>
 #include <SlideSorter.hxx>
 #include <controller/SlideSorterController.hxx>
-#include <controller/SlsClipboard.hxx>
 #include <controller/SlsPageSelector.hxx>
 #include <svl/stritem.hxx>
 #include <undo/undomanager.hxx>

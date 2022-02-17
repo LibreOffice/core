@@ -11,7 +11,6 @@
 #include <string.h>
 #include <iostream>
 
-#include <rtl/strbuf.hxx>
 #include <osl/socket.hxx>
 #include <config_features.h>
 #include <sal/log.hxx>
@@ -33,7 +32,6 @@
   #include <unistd.h>
   #include <sys/socket.h>
   #include <netinet/in.h>
-  #include <arpa/inet.h>
 #endif
 
 #ifdef MACOSX

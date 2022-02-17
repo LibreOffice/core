@@ -15,7 +15,6 @@
 #include <string_view>
 
 #include <sal/log.hxx>
-#include <osl/socket.hxx>
 
 #ifdef LINUX_BLUETOOTH
   #include <glib.h>

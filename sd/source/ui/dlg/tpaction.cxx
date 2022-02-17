@@ -33,7 +33,6 @@
 #include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <sfx2/app.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svx/svdograf.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svdoole2.hxx>

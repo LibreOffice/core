@@ -36,7 +36,6 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 using namespace ::com::sun::star;

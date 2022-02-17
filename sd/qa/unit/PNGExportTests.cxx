@@ -10,10 +10,6 @@
 
 #include <sal/config.h>
 
-#include <config_poppler.h>
-#include <memory>
-#include <ostream>
-#include <sdpage.hxx>
 #include "sdmodeltestbase.hxx"
 
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>

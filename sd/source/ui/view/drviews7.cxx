@@ -38,7 +38,6 @@
 #include <svx/clipfmtitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
-#include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
@@ -56,7 +55,6 @@
 // #UndoRedo#
 #include <svtools/insdlg.hxx>
 #include <unotools/moduleoptions.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/request.hxx>

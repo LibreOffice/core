@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <cstdlib>
 
 #include <controller/SlsClipboard.hxx>
 

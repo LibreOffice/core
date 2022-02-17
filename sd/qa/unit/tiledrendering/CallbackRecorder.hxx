@@ -9,12 +9,16 @@
 
 #pragma once
 
+#include <cppunit/TestAssert.h>
+
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <boost/property_tree/json_parser.hpp>
 #include <comphelper/string.hxx>
 #include <osl/conditn.hxx>
 #include <sfx2/viewsh.hxx>
 #include <test/lokcallback.hxx>
+
+using namespace css;
 
 namespace
 {

@@ -40,7 +40,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
-#include <unotools/saveopt.hxx>
 #include <basic/sbstar.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -51,7 +50,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/f3dchild.hxx>
 #include <svx/imapdlg.hxx>
@@ -72,11 +70,9 @@
 #include <sdresid.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/commandevent.hxx>
-#include <vcl/commandinfoprovider.hxx>
 #include <vcl/weldutils.hxx>
 
 #include <vcl/settings.hxx>
-#include <vcl/scheduler.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <comphelper/processfactory.hxx>

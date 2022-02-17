@@ -27,7 +27,6 @@
 #include <svl/intitem.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/objface.hxx>
-#include <svl/zforlist.hxx>
 #include <comphelper/processfactory.hxx>
 #include <svtools/ehdl.hxx>
 

@@ -26,6 +26,8 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <vcl/EnumContext.hxx>
 
+#include <com/sun/star/frame/XFrame.hpp>
+
 namespace sd { class ViewShellBase; }
 namespace sd::tools { class EventMultiplexerEvent; }
 

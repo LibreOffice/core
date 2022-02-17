@@ -24,7 +24,6 @@
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#include <memory>
 #include <unordered_map>
 
 namespace com::sun::star::frame { class XController; }

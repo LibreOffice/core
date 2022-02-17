@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral HID_SDDRAWVIEWSHELL = "SD_HID_SDDRAWVIEWSHELL";
 inline constexpr OStringLiteral HID_SDGRAPHICVIEWSHELL = "SD_HID_SDGRAPHICVIEWSHELL";
 inline constexpr OStringLiteral HID_SDOUTLINEVIEWSHELL = "SD_HID_SDOUTLINEVIEWSHELL";

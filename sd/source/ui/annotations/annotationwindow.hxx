@@ -21,7 +21,6 @@
 
 #include <vcl/weld.hxx>
 #include <tools/long.hxx>
-#include <basegfx/polygon/b2dpolygon.hxx>
 #include <svx/weldeditview.hxx>
 
 namespace com::sun::star::office { class XAnnotation; }

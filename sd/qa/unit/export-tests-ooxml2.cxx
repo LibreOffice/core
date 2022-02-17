@@ -9,9 +9,11 @@
 
 #include "sdmodeltestbase.hxx"
 #include <comphelper/propertysequence.hxx>
+#include <editeng/flditem.hxx>
 
 #include <svx/svdomedia.hxx>
 #include <svx/svdotable.hxx>
+#include <svx/svdpage.hxx>
 
 #include <com/sun/star/animations/TransitionType.hpp>
 #include <com/sun/star/animations/TransitionSubType.hpp>
@@ -22,8 +24,6 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-
-#include <sdpage.hxx>
 
 #include <rtl/character.hxx>
 

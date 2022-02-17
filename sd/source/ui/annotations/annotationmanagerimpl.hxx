@@ -34,6 +34,7 @@ namespace com::sun::star::office { class XAnnotation; }
 class SfxRequest;
 class SdPage;
 class SdDrawDocument;
+struct ImplSVEvent;
 
 namespace sd
 {

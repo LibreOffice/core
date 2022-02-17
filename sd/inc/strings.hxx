@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 /* do not translate */
 inline constexpr OUStringLiteral STR_LAYOUT_TITLE = u"Titel";
 inline constexpr OUStringLiteral STR_LAYOUT_OUTLINE = u"Gliederung";

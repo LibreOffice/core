@@ -23,9 +23,8 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <sdpage.hxx>
 
