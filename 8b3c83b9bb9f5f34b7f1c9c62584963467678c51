@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "459274c9_a233c128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003120
+      },
+      "writtenOn": "2022-02-17T18:28:14Z",
+      "side": 1,
+      "message": "Revert commit",
+      "revId": "8b3c83b9bb9f5f34b7f1c9c62584963467678c51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
