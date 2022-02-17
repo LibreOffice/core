@@ -598,7 +598,7 @@ void UITestLogger::logEvent(const EventDescription& rDescription)
     else if (rDescription.aKeyWord == "VerticalTab")
     {
         aLogLine = "Choose Tab number " + GetValueInMapWithIndex(rDescription.aParameters, 0)
-                   + " in '" + rDescription.aID + "' from " + rDescription.aParent;
+                   + " in '" + rDescription.aID + "'";
     }
     else
     {
