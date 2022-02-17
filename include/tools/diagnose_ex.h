@@ -57,6 +57,7 @@ inline css::uno::Any DbgGetCaughtException()
     handling is not correct...
     This takes two optional parameters: area and explanatory
 */
+#if defined SAL_LOG_WARN
 #define DBG_UNHANDLED_EXCEPTION_0_ARGS() \
     DbgUnhandledException( DbgGetCaughtException(), __func__, SAL_DETAIL_WHERE );
 #define DBG_UNHANDLED_EXCEPTION_1_ARGS(area) \
@@ -70,6 +71,9 @@ inline css::uno::Any DbgGetCaughtException()
 #define DBG_UNHANDLED_NO_ARG_EXPANDER() ,,DBG_UNHANDLED_EXCEPTION_0_ARGS
 #define DBG_UNHANDLED_MACRO_CHOOSER(...) DBG_UNHANDLED_CHOOSE_FROM_ARG_COUNT(DBG_UNHANDLED_NO_ARG_EXPANDER __VA_ARGS__ ())
 #define DBG_UNHANDLED_EXCEPTION(...) DBG_UNHANDLED_MACRO_CHOOSER(__VA_ARGS__)(__VA_ARGS__)
+#else // SAL_LOG_WARN
+#define DBG_UNHANDLED_EXCEPTION(...)
+#endif
 
 
 /** This macro asserts the given condition (in debug mode), and throws
