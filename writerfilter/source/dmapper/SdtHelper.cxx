@@ -25,11 +25,9 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
 #include <ooxml/OOXMLDocument.hxx>
 #include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
-#include <com/sun/star/xml/dom/XNode.hpp>
 
 namespace writerfilter::dmapper
 {

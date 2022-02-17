@@ -9,9 +9,6 @@
 
 #include <vcl/pdfread.hxx>
 
-#include <vcl/outdev.hxx>
-#include <vcl/svapp.hxx>
-
 #include <tools/UnitConversion.hxx>
 
 #include <pdf/PdfConfig.hxx>
