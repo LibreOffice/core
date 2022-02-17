@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cf53274_9d3f983d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-17T16:21:29Z",
+      "side": 1,
+      "message": "I hadn\u0027t thought about portability, thank you for your feedback!\nI submitted this patch on gerrit to revert this:\nhttps://gerrit.libreoffice.org/c/core/+/130084",
+      "revId": "8942956e05f2208ffb666a2118f5db092c30ce6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f1d2f610_5ffc3e6c",
