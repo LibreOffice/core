@@ -940,8 +940,6 @@ void ScViewData::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
 void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 {
-    std::vector<std::vector<std::pair<SCTAB, ScRange>>>& vMark(maMarkData.GetSheetsMark());
-
     if (nDestTab==SC_TAB_APPEND)
         nDestTab = mrDoc.GetTableCount() - 1;   // something had to have been copied
 
@@ -963,10 +961,6 @@ void ScViewData::CopyTab( SCTAB nSrcTab, SCTAB nDestTab )
 
     UpdateCurrentTab();
     maMarkData.InsertTab(nDestTab);
-
-    if (!vMark.empty())
-        vMark.clear();
-
 }
 
 void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
