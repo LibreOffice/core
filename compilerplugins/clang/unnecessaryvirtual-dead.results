@@ -1,4 +1,4 @@
-basic/source/comp/codegen.cxx:478
+basic/source/comp/codegen.cxx:477
     void (anonymous namespace)::OffSetAccumulator::start(const unsigned char *,)
 canvas/inc/base/bufferedgraphicdevicebase.hxx:105
     void canvas::BufferedGraphicDeviceBase::destroyBuffers()
@@ -14,9 +14,9 @@ slideshow/source/engine/animationfactory.cxx:616
     void slideshow::internal::(anonymous namespace)::GenericAnimation::prefetch()
 vcl/inc/salframe.hxx:147
     void SalFrame::SetRepresentedURL(const class rtl::OUString &,)
-vcl/inc/salinst.hxx:201
+vcl/inc/salinst.hxx:204
     void SalInstance::releaseMainThread()
-vcl/inc/salinst.hxx:210
+vcl/inc/salinst.hxx:213
     void SalInstance::BeforeAbort(const class rtl::OUString &,_Bool,)
 vcl/inc/salobj.hxx:49
     void SalObject::Enable(_Bool,)
