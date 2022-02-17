@@ -115,15 +115,14 @@ namespace sdr::properties
             {
                 // Generate filtered ItemSet which contains all but the SDRATTR_3DSCENE items.
                 // #i50808# Leak fix, Clone produces a new instance and we get ownership here
-                std::unique_ptr<SfxItemSet> pNewSet(rSet.Clone());
-                DBG_ASSERT(pNewSet, "E3dSceneProperties::SetMergedItemSet(): Could not clone ItemSet (!)");
+                SfxItemSet aNewSet(rSet.CloneAsValue());
 
                 for(sal_uInt16 b(SDRATTR_3DSCENE_FIRST); b <= SDRATTR_3DSCENE_LAST; b++)
                 {
-                    pNewSet->ClearItem(b);
+                    aNewSet.ClearItem(b);
                 }
 
-                if(pNewSet->Count())
+                if(aNewSet.Count())
                 {
                     for(size_t a = 0; a < nCount; ++a)
                     {
@@ -132,7 +131,7 @@ namespace sdr::properties
                         if(dynamic_cast<const E3dCompoundObject* >(pObj))
                         {
                             // set merged ItemSet at contained 3d object.
-                            pObj->SetMergedItemSet(*pNewSet, bClearAllItems);
+                            pObj->SetMergedItemSet(aNewSet, bClearAllItems);
                         }
                     }
                 }

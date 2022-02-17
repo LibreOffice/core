@@ -6790,13 +6790,13 @@ bool DocxAttributeOutput::MaybeOutputBrushItem(SfxItemSet const& rSet)
     }
 
     // sw text frames are opaque by default, even with fill none!
-    std::unique_ptr<SfxItemSet> const pClone(rSet.Clone());
+    SfxItemSet aClone(rSet.CloneAsValue());
     XFillColorItem const aColor(OUString(), COL_WHITE);
-    pClone->Put(aColor);
+    aClone.Put(aColor);
     // call getSvxBrushItemForSolid - this also takes XFillTransparenceItem into account
     XFillStyleItem const aSolid(drawing::FillStyle_SOLID);
-    pClone->Put(aSolid);
-    std::unique_ptr<SvxBrushItem> const pBrush(getSvxBrushItemFromSourceSet(*pClone, RES_BACKGROUND));
+    aClone.Put(aSolid);
+    std::unique_ptr<SvxBrushItem> const pBrush(getSvxBrushItemFromSourceSet(aClone, RES_BACKGROUND));
     FormatBackground(*pBrush);
     return true;
 }

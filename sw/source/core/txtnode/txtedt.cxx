@@ -303,14 +303,14 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 {
     bool bRet = false;
 
-    std::unique_ptr<SfxItemSet> pNewSet;
+    std::optional<SfxItemSet> pNewSet;
 
     if ( !pSet1 )
     {
         OSL_ENSURE( nWhichId, "lcl_HaveCommonAttributes not used correctly" );
         if ( SfxItemState::SET == rSet2.GetItemState( nWhichId, false ) )
         {
-            pNewSet = rSet2.Clone();
+            pNewSet.emplace(rSet2.CloneAsValue());
             pNewSet->ClearItem( nWhichId );
         }
     }
@@ -323,7 +323,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
             if ( SfxItemState::SET == rSet2.GetItemState( pItem->Which(), false ) )
             {
                 if ( !pNewSet )
-                    pNewSet = rSet2.Clone();
+                    pNewSet.emplace( rSet2.CloneAsValue() );
                 pNewSet->ClearItem( pItem->Which() );
             }
 
