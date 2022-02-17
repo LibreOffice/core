@@ -98,8 +98,7 @@ public:
     void SetReadOnly( bool bNewState );
     bool IsReadOnly() const { return m_bIsReadOnly;}
 
-    void SetDataFromModel( const rtl::Reference<::chart::ChartModel> & xChartDoc,
-                           const css::uno::Reference< css::uno::XComponentContext > & xContext );
+    void SetDataFromModel( const rtl::Reference<::chart::ChartModel> & xChartDoc );
 
     // predicates to determine what actions are possible at the current cursor
     // position.  This depends on the implementation of the according mutators

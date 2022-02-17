@@ -249,10 +249,9 @@ struct DataBrowserModel::implColumnLess
 };
 
 DataBrowserModel::DataBrowserModel(
-    const rtl::Reference<::chart::ChartModel> & xChartDoc,
-    const Reference< uno::XComponentContext > & xContext ) :
+    const rtl::Reference<::chart::ChartModel> & xChartDoc ) :
         m_xChartDocument( xChartDoc ),
-        m_apDialogModel( new DialogModel( xChartDoc, xContext ))
+        m_apDialogModel( new DialogModel( xChartDoc ))
 {
     updateFromModel();
 }

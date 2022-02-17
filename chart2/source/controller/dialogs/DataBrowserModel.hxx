@@ -44,8 +44,7 @@ class DataBrowserModel final
 {
 public:
     explicit DataBrowserModel(
-        const rtl::Reference<::chart::ChartModel> & xChartDoc,
-        const css::uno::Reference< css::uno::XComponentContext > & xContext );
+        const rtl::Reference<::chart::ChartModel> & xChartDoc );
     ~DataBrowserModel();
 
     /** Inserts a new data series after the data series to which the data column

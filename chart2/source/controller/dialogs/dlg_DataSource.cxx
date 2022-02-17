@@ -83,12 +83,11 @@ rtl::Reference< ::chart::ChartTypeTemplate > DocumentChartTypeTemplateProvider::
 sal_uInt16 DataSourceDialog::m_nLastPageId = 0;
 
 DataSourceDialog::DataSourceDialog(weld::Window * pParent,
-    const rtl::Reference<::chart::ChartModel> & xChartDocument,
-    const Reference< uno::XComponentContext > & xContext)
+    const rtl::Reference<::chart::ChartModel> & xChartDocument)
     : GenericDialogController(pParent, "modules/schart/ui/datarangedialog.ui",
                               "DataRangeDialog")
     , m_apDocTemplateProvider(new DocumentChartTypeTemplateProvider(xChartDocument))
-    , m_apDialogModel(new DialogModel(xChartDocument, xContext))
+    , m_apDialogModel(new DialogModel(xChartDocument))
     , m_bRangeChooserTabIsValid(true)
     , m_bDataSourceTabIsValid(true)
     , m_bTogglingEnabled(true)

@@ -58,7 +58,7 @@ DataEditor::DataEditor(weld::Window* pParent,
 
     m_xBrwData->SetCursorMovedHdl( LINK( this, DataEditor, BrowserCursorMovedHdl ));
 
-    m_xBrwData->SetDataFromModel( m_xChartDoc, m_xContext );
+    m_xBrwData->SetDataFromModel( m_xChartDoc );
     m_xBrwData->GrabFocus();
 
     bool bReadOnly = true;

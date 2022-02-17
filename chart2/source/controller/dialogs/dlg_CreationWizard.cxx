@@ -54,7 +54,7 @@ CreationWizard::CreationWizard(weld::Window* pParent, const rtl::Reference<::cha
     , m_aTimerTriggeredControllerLock(xChartModel)
     , m_bCanTravel(true)
 {
-    m_pDialogModel.reset(new DialogModel(m_xChartModel, m_xComponentContext));
+    m_pDialogModel.reset(new DialogModel(m_xChartModel));
     defaultButton(WizardButtonFlags::FINISH);
 
     setTitleBase(SchResId(STR_DLG_CHART_WIZARD));
