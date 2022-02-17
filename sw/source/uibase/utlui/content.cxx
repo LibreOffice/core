@@ -444,6 +444,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             // nodes in frames, headers, footers
             if (pOldMember)
             {
+                assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
                 if (pOldMember->size() != m_pMember->size())
                 {
                     *pbContentChanged = true;
@@ -543,6 +544,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 // creation due to a sorted list being used here (before,
                 // entries with same index were compared already at creation
                 // time what worked before a sorted list was used)
+                assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
                 *pbContentChanged = checkVisibilityChanged(
                     *pOldMember,
                     *m_pMember);
@@ -722,6 +724,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
                     // time what worked before a sorted list was used)
+                    assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
                     *pbContentChanged = checkVisibilityChanged(
                         *pOldMember,
                         *m_pMember);
@@ -786,9 +789,13 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
 
                 m_pMember->insert( std::unique_ptr<SwContent>(pCnt) );
                 const size_t nPos = m_pMember->size() - 1;
-                if (pOldMember && !*pbContentChanged && nOldMemberCount > nPos &&
-                        (*pOldMember)[nPos]->IsInvisible() != pCnt->IsInvisible())
-                    *pbContentChanged = true;
+                if (pOldMember)
+                {
+                    assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
+                    if (!*pbContentChanged && nOldMemberCount > nPos &&
+                            (*pOldMember)[nPos]->IsInvisible() != pCnt->IsInvisible())
+                        *pbContentChanged = true;
+                }
             }
         }
         break;
@@ -851,6 +858,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     // creation due to a sorted list being used here (before,
                     // entries with same index were compared already at creation
                     // time what worked before a sorted list was used)
+                    assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
                     *pbContentChanged = checkVisibilityChanged(
                         *pOldMember,
                         *m_pMember);
@@ -861,8 +869,12 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         default: break;
     }
     m_nMemberCount = m_pMember->size();
-    if (pOldMember && !*pbContentChanged && pOldMember->size() != m_nMemberCount)
-        *pbContentChanged = true;
+    if (pOldMember)
+    {
+        assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
+        if (!*pbContentChanged && pOldMember->size() != m_nMemberCount)
+            *pbContentChanged = true;
+    }
 
     m_bDataValid = true;
 }
