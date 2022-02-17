@@ -300,6 +300,9 @@ void doubleToString(typename T::String ** pResult,
         return;
     }
 
+    // sign adjustment, instead of testing for fValue<0.0 this will also fetch -0.0
+    bool bSign = std::signbit(fValue);
+
     if (std::isinf(fValue))
     {
         // #i112652# XMLSchema-2
@@ -311,7 +314,7 @@ void doubleToString(typename T::String ** pResult,
             nResultOffset = 0;
         }
 
-        if (std::signbit(fValue))
+        if (bSign)
             T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                            RTL_CONSTASCII_STRINGPARAM("-"));
 
@@ -321,17 +324,18 @@ void doubleToString(typename T::String ** pResult,
         return;
     }
 
-    decltype(jkj::dragonbox::to_decimal(fValue)) aParts{};
+    if (bSign)
+        fValue = -fValue;
+
+    decltype(jkj::dragonbox::to_decimal(fValue, jkj::dragonbox::policy::sign::ignore,
+                                        jkj::dragonbox::policy::trailing_zero::ignore)) aParts{};
     if (fValue) // to_decimal is documented to only handle non-zero finite numbers
-        aParts = jkj::dragonbox::to_decimal(fValue);
-    else
-        aParts.is_negative = std::signbit(fValue); // Handle -0.0
+        aParts = jkj::dragonbox::to_decimal(fValue, jkj::dragonbox::policy::sign::ignore,
+                                            jkj::dragonbox::policy::trailing_zero::ignore);
 
     int nOrigDigits = decimalDigits(aParts.significand);
     int nExp = nOrigDigits + aParts.exponent - 1;
     int nRoundDigits = 15;
-    if (aParts.is_negative)
-        fValue = -fValue;
 
     // Unfortunately the old rounding below writes 1.79769313486232e+308 for
     // DBL_MAX and 4 subsequent nextafter(...,0).
@@ -461,7 +465,7 @@ void doubleToString(typename T::String ** pResult,
     assert(nBuf <= 1024);
     typename T::Char* pBuf = static_cast<typename T::Char*>(alloca(nBuf * sizeof(typename T::Char)));
     typename T::Char * p = pBuf;
-    if (aParts.is_negative)
+    if (bSign)
         *p++ = '-';
 
     bool bHasDec = false;
