@@ -10,6 +10,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <utility>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -80,6 +81,32 @@ void f1(OStringBuffer s1)
     call_view(s1.toString());
     // expected-error@+1 {{rather than call toString, pass with a view [loplugin:stringview]}}
     ConstructWithView(s1.toString());
+}
+void makeStringAndClear(OUStringBuffer s)
+{
+    call_view(s.makeStringAndClear());
+    ConstructWithView(s.makeStringAndClear());
+    call_view((&s)->makeStringAndClear());
+    ConstructWithView((&s)->makeStringAndClear());
+    // expected-error@+1 {{rather than call makeStringAndClear on an rvalue, pass with a view [loplugin:stringview]}}
+    call_view(std::move(s).makeStringAndClear());
+    // expected-error@+1 {{rather than call makeStringAndClear on an rvalue, pass with a view [loplugin:stringview]}}
+    ConstructWithView(std::move(s).makeStringAndClear());
+    // expected-error@+1 {{rather than call makeStringAndClear on an rvalue, pass with a view [loplugin:stringview]}}
+    call_view((s).copy(1).makeStringAndClear());
+    // expected-error@+1 {{rather than call makeStringAndClear on an rvalue, pass with a view [loplugin:stringview]}}
+    ConstructWithView(s.copy(1).makeStringAndClear());
+}
+void makeStringAndClear(OStringBuffer s)
+{
+    call_view(s.makeStringAndClear());
+    ConstructWithView(s.makeStringAndClear());
+    call_view((&s)->makeStringAndClear());
+    ConstructWithView((&s)->makeStringAndClear());
+    // expected-error@+1 {{rather than call makeStringAndClear on an rvalue, pass with a view [loplugin:stringview]}}
+    call_view(std::move(s).makeStringAndClear());
+    // expected-error@+1 {{rather than call makeStringAndClear on an rvalue, pass with a view [loplugin:stringview]}}
+    ConstructWithView(std::move(s).makeStringAndClear());
 }
 }
 
