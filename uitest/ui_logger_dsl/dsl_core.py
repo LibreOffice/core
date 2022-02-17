@@ -43,7 +43,7 @@ class ul_Compiler:
     math_element_selector_initializer= False;
 
     def __init__(self, input_address, output_address):
-        self.ui_dsl_mm = metamodel_from_file("ui_logger_dsl_grammar.tx")
+        self.ui_dsl_mm = metamodel_from_file("ui_logger_dsl_grammar.tx", debug=True)
         self.output_stream = self.initiate_test_generation(output_address)
         self.input_address = input_address
 
