@@ -1141,6 +1141,8 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     SwFormatFlyCnt aFormat( pFormat );
                     pNd->InsertItem(aFormat, pInternalPam->GetPoint()
                             ->nContent.GetIndex(), 0 );
+                    //Refetch in case SwTextNode::InsertItem causes it to be deleted
+                    pFormat = GetFrameFormat();
                 }
                 else
                 {
