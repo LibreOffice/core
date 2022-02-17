@@ -2137,7 +2137,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         SvXMLImport& rImport,
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList > & xAttrList,
-        XMLTextType eType )
+        XMLTextType eType, int nParaCount )
 {
     SvXMLImportContext *pContext = nullptr;
 
@@ -2153,7 +2153,7 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
     case XML_TOK_TEXT_P:
         pContext = new XMLParaContext( rImport,
                                        nPrefix, rLocalName,
-                                       xAttrList, bHeading );
+                                       xAttrList, bHeading, nParaCount );
         if (m_xImpl->m_bProgress && XMLTextType::Shape != eType)
         {
             rImport.GetProgressBarHelper()->Increment();

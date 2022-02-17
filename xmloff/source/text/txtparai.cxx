@@ -1793,7 +1793,7 @@ XMLParaContext::XMLParaContext(
         sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
-        bool bHead ) :
+        bool bHead, int nParaCount ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xStart( rImport.GetTextImport()->GetCursorAsRange()->getStart() ),
     m_bHaveAbout(false),
@@ -1806,10 +1806,20 @@ XMLParaContext::XMLParaContext(
     bIsListHeader( false ),
     bIsRestart (false),
     nStartValue(0),
-    nStarFontsConvFlags( 0 )
+    nStarFontsConvFlags( 0 ),
+    mnParaCount( nParaCount )
 {
     const SvXMLTokenMap& rTokenMap =
         GetImport().GetTextImport()->GetTextPAttrTokenMap();
+
+    bool bInsertNewLineOnStart = mnParaCount > 0;
+    if (bInsertNewLineOnStart)
+    {
+        GetImport().GetTextImport()->InsertControlCharacter(
+            ControlCharacter::APPEND_PARAGRAPH );
+
+        xStart = GetImport().GetTextImport()->GetCursorAsRange()->getStart();
+    }
 
     bool bHaveXmlId( false );
     OUString aCondStyleName;
@@ -1901,6 +1911,7 @@ XMLParaContext::XMLParaContext(
 
 void XMLParaContext::endFastElement(sal_Int32 )
 {
+    bool bUseNewLineOnStart = (mnParaCount >= 0);
     rtl::Reference < XMLTextImportHelper > xTxtImport(
         GetImport().GetTextImport());
     Reference < XTextRange > xCrsrRange( xTxtImport->GetCursorAsRange() );
@@ -1923,8 +1934,11 @@ void XMLParaContext::endFastElement(sal_Int32 )
         }
     }
 
-    // insert a paragraph break
-    xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
+    if (!bUseNewLineOnStart)
+    {
+        // insert a paragraph break
+        xTxtImport->InsertControlCharacter( ControlCharacter::APPEND_PARAGRAPH );
+    }
 
     // create a cursor that select the whole last paragraph
     Reference < XTextCursor > xAttrCursor;

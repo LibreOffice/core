@@ -80,6 +80,7 @@ protected:
     bool                        mbPrintable;
     bool mbHaveXmlId;
     bool mbTextBox; ///< If the text of this shape is handled by a Writer TextFrame.
+    bool mbFirstParagraph; /// Is the first paragraph?
 
     /** if bSupportsStyle is false, auto styles will be set but not a style */
     void SetStyle( bool bSupportsStyle = true );

@@ -55,6 +55,7 @@ class XMLParaContext : public SvXMLImportContext
     bool                 bIsRestart;
     sal_Int16            nStartValue;
     sal_uInt8            nStarFontsConvFlags;
+    int                  mnParaCount;
 
 public:
 
@@ -63,7 +64,7 @@ public:
             sal_uInt16 nPrfx,
             const OUString& rLName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
-            bool bHeading );
+            bool bHeading, int nParaCount = -1 );
 
     virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 

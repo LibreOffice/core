@@ -162,6 +162,7 @@ SdXMLShapeContext::SdXMLShapeContext(
     , mbPrintable(true)
     , mbHaveXmlId(false)
     , mbTextBox(false)
+    , mbFirstParagraph(true)
 {
 }
 
@@ -244,9 +245,19 @@ SvXMLImportContextRef SdXMLShapeContext::CreateChildContext( sal_uInt16 p_nPrefi
         // if we have a text cursor, lets  try to import some text
         if( mxCursor.is() )
         {
+            bool bIsParagraph = false;
+            const SvXMLTokenMap& rTokenMap = GetImport().GetTextImport()->GetTextElemTokenMap();
+            sal_uInt16 nToken = rTokenMap.Get( p_nPrefix, rLocalName );
+            if ((nToken == XML_TOK_TEXT_H || nToken == XML_TOK_TEXT_P))
+                bIsParagraph = true;
+
             xContext = GetImport().GetTextImport()->CreateTextChildContext(
                 GetImport(), p_nPrefix, rLocalName, xAttrList,
-                ( mbTextBox ? XMLTextType::TextBox : XMLTextType::Shape ) );
+                ( mbTextBox ? XMLTextType::TextBox : XMLTextType::Shape ),
+                mbTextBox ? -1 : (mbFirstParagraph ? 0 : 1) );
+
+            if (!mbTextBox && bIsParagraph)
+                mbFirstParagraph = false;
         }
     }
 
@@ -345,10 +356,13 @@ void SdXMLShapeContext::endFastElement(sal_Int32 )
 {
     if(mxCursor.is())
     {
-        // delete addition newline
-        mxCursor->gotoEnd( false );
-        mxCursor->goLeft( 1, true );
-        mxCursor->setString( "" );
+        // // delete addition newline
+        if (mbTextBox || mbFirstParagraph)
+        {
+            mxCursor->gotoEnd( false );
+            mxCursor->goLeft( 1, true );
+            mxCursor->setString( "" );
+        }
 
         // reset cursor
         GetImport().GetTextImport()->ResetCursor();
