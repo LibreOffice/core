@@ -138,7 +138,8 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
             } else if (pathname.endsWithIgnoreAsciiCase(".class")
                        || pathname.endsWithIgnoreAsciiCase(".fileloc")
                        || pathname.endsWithIgnoreAsciiCase(".inetloc")
-                       || pathname.endsWithIgnoreAsciiCase(".jar"))
+                       || pathname.endsWithIgnoreAsciiCase(".jar")
+                       || pathname.endsWithIgnoreAsciiCase(".terminal"))
             {
                 dir = true;
             }
