@@ -16,6 +16,24 @@
       "message": "There seems to be a new crashtesting failure since this was merged, to reproduce:\n\nwget https://bugs.documentfoundation.org/attachment.cgi?id\u003d71895 -O fdo58539-11.ods\n./instdir/program/soffice --headless --convert-to pdf ./fdo58539-11.ods",
       "revId": "5e402bac39dc4245844efbde442bdb3bd993a157",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68bc5df9_feae091d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-17T07:57:14Z",
+      "side": 1,
+      "message": "\u003e There seems to be a new crashtesting failure since this was merged, to reproduce:\n\u003e \n\u003e wget https://bugs.documentfoundation.org/attachment.cgi?id\u003d71895 -O fdo58539-11.ods\n\u003e ./instdir/program/soffice --headless --convert-to pdf ./fdo58539-11.ods\n\nThanks, https://gerrit.libreoffice.org/c/core/+/130057 .",
+      "parentUuid": "d37a96e2_0e7dcfb6",
+      "revId": "5e402bac39dc4245844efbde442bdb3bd993a157",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
