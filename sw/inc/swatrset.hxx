@@ -166,6 +166,7 @@ public:
     SwAttrSet( const SwAttrSet& );
 
     virtual std::unique_ptr<SfxItemSet> Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const override;
+    virtual SfxItemSet CloneAsValue( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
 
     bool Put_BC( const SfxPoolItem& rAttr, SwAttrSet* pOld, SwAttrSet* pNew );
     bool Put_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );

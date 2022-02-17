@@ -141,6 +141,13 @@ std::unique_ptr<SfxItemSet> SwAttrSet::Clone( bool bItems, SfxItemPool *pToPool 
                 : new SwAttrSet( *GetPool(), GetRanges() ));
 }
 
+SfxItemSet SwAttrSet::CloneAsValue( bool, SfxItemPool * ) const
+{
+    // if you are trying to clone, then the thing you are cloning is polymorphic, which means
+    // it cannot be cloned as a value
+    throw std::logic_error("cannot do this");
+}
+
 bool SwAttrSet::Put_BC( const SfxPoolItem& rAttr,
                        SwAttrSet* pOld, SwAttrSet* pNew )
 {

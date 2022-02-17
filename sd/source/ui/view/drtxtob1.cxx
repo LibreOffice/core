@@ -68,13 +68,13 @@
 
 namespace
 {
-    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, SfxItemSet& rArgs)
     {
         Color aColor;
         OUString sColor;
         const SfxPoolItem* pColorStringItem = nullptr;
 
-        if (SfxItemState::SET != pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
+        if (SfxItemState::SET != rArgs.GetItemState(SID_ATTR_COLOR_STR, false, &pColorStringItem))
             return;
 
         sColor = static_cast<const SfxStringItem*>(pColorStringItem)->GetValue();
@@ -89,14 +89,14 @@ namespace
             case SID_ATTR_CHAR_COLOR:
             {
                 SvxColorItem aColorItem(aColor, EE_CHAR_COLOR);
-                pArgs->Put(aColorItem);
+                rArgs.Put(aColorItem);
                 break;
             }
 
             case SID_ATTR_CHAR_BACK_COLOR:
             {
                 SvxColorItem pBackgroundItem(aColor, EE_CHAR_BKGCOLOR);
-                pArgs->Put(pBackgroundItem);
+                rArgs.Put(pBackgroundItem);
                 break;
             }
         }
@@ -814,14 +814,14 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                 pArgs = rReq.GetArgs();
             }
 
-            std::unique_ptr<SfxItemSet> pNewArgs = pArgs->Clone();
-            lcl_convertStringArguments(nSlot, pNewArgs);
+            SfxItemSet aNewArgs = pArgs->CloneAsValue();
+            lcl_convertStringArguments(nSlot, aNewArgs);
 
             // Merge the color parameters to the color itself.
             std::unique_ptr<SvxColorItem> pColorItem;
             if (nSlot == SID_ATTR_CHAR_COLOR)
             {
-                pColorItem = std::make_unique<SvxColorItem>(pNewArgs->Get(EE_CHAR_COLOR));
+                pColorItem = std::make_unique<SvxColorItem>(aNewArgs.Get(EE_CHAR_COLOR));
             }
             const SfxPoolItem* pItem = nullptr;
             if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
@@ -841,10 +841,10 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             }
             if (pColorItem)
             {
-                pNewArgs->Put(*pColorItem);
+                aNewArgs.Put(*pColorItem);
             }
 
-            mpView->SetAttributes(*pNewArgs);
+            mpView->SetAttributes(aNewArgs);
 
             // invalidate entire shell because of performance and
             // extension reasons
