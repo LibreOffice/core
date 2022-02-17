@@ -355,11 +355,7 @@ namespace basprov
         if ( !xScript.is() )
         {
             throw provider::ScriptFrameworkErrorException(
-                "The following Basic script could not be found:\n"
-                "library: '" + aLibrary + "'\n"
-                "module: '" + aModule + "'\n"
-                "method: '" + aMethod + "'\n"
-                "location: '" + aLocation + "'\n",
+                aLocation + ";" + aLibrary + ";" + aModule + ";" + aMethod,
                 Reference< XInterface >(),
                 scriptURI, "Basic",
                 provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT );

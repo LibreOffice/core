@@ -250,7 +250,10 @@
 #define RID_CUISTR_EXCEPTION_RUNNING                NC_("RID_SVXSTR_EXCEPTION_RUNNING", "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME.")
 #define RID_CUISTR_ERROR_AT_LINE                    NC_("RID_SVXSTR_ERROR_AT_LINE", "An error occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.")
 #define RID_CUISTR_EXCEPTION_AT_LINE                NC_("RID_SVXSTR_EXCEPTION_AT_LINE", "An exception occurred while running the %LANGUAGENAME script %SCRIPTNAME at line: %LINENUMBER.")
-#define RID_CUISTR_FRAMEWORK_ERROR_RUNNING          NC_("RID_SVXSTR_FRAMEWORK_ERROR_RUNNING", "A Scripting Framework error occurred while running the %LANGUAGENAME script %SCRIPTNAME.")
+
+#define RID_CUISTR_FRAMEWORK_ERROR_RUNNING          NC_("RID_SVXSTR_FRAMEWORK_ERROR_RUNNING", "The %LANGUAGENAME macro %MACROLIBMODNAME could not be found.\nThe macro is expected to be located at:")
+#define RID_CUISTR_FRAMEWORK_ERROR_LOCATION         NC_("RID_SVXSTR_FRAMEWORK_ERROR_LOCATION", "Location: %LOCATION\nLibrary: %LIBRARY\nModule: %MODULE\nMacro name: %MACRONAME")
+#define RID_CUISTR_FRAMEWORK_ERROR_NOT_SUPPORTED    NC_("RID_SVXSTR_FRAMEWORK_ERROR_NOT_SUPPORTED", "The specified macro cannnot be executed.\n\nURI: %SCRIPTNAME")
 #define RID_CUISTR_ERROR_TYPE_LABEL                 NC_("RID_SVXSTR_ERROR_TYPE_LABEL", "Type:")
 #define RID_CUISTR_ERROR_MESSAGE_LABEL              NC_("RID_SVXSTR_ERROR_MESSAGE_LABEL", "Message:")
 

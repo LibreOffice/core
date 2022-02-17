@@ -1216,16 +1216,20 @@ OUString GetErrorMessage(
         unformatted, language, script, line, type, message );
 
 }
+
 OUString GetErrorMessage(
     const provider::ScriptFrameworkErrorException& sError )
 {
-    OUString unformatted = CuiResId( RID_CUISTR_FRAMEWORK_ERROR_RUNNING );
-
+    OUString initialMessage;
+    OUString detailMessage;
+    OUString errorMessage;
     OUString language("UNKNOWN");
-
     OUString script("UNKNOWN");
-
-    OUString message;
+    OUString location("UNKNOWN");
+    OUString library("UNKNOWN");
+    OUString moduleName("UNKNOWN");
+    OUString macroName("UNKNOWN");
+    OUString macroLibModName;
 
     if ( !sError.scriptName.isEmpty() )
     {
@@ -1235,18 +1239,40 @@ OUString GetErrorMessage(
     {
         language = sError.language;
     }
+
     if ( sError.errorType == provider::ScriptFrameworkErrorType::NOTSUPPORTED )
     {
-        message = CuiResId(RID_CUISTR_ERROR_LANG_NOT_SUPPORTED);
-        message = ReplaceString(message, "%LANGUAGENAME", language );
-
+        initialMessage = CuiResId( RID_CUISTR_FRAMEWORK_ERROR_NOT_SUPPORTED );
+        initialMessage = ReplaceString(initialMessage, "%SCRIPTNAME", script);
+        detailMessage = CuiResId( RID_CUISTR_ERROR_LANG_NOT_SUPPORTED );
+        detailMessage = ReplaceString(detailMessage, "%LANGUAGENAME", language);
     }
     else
     {
-        message = sError.Message;
+        // The error message contains four values separated by ";"
+        errorMessage = sError.Message;
+        // Parse the error message
+        location = errorMessage.getToken(0, u';');
+        library = errorMessage.getToken(1, u';');
+        moduleName = errorMessage.getToken(2, u';');
+        macroName = errorMessage.getToken(3, u';');
+        // This last statement removes the " at " part of the returned message
+        macroName = macroName.getToken(0, u' ');
+
+        // Build initial error message
+        initialMessage = CuiResId( RID_CUISTR_FRAMEWORK_ERROR_RUNNING );
+        macroLibModName = "'" + library + "." + moduleName + "." + macroName + "'";
+        initialMessage = ReplaceString(initialMessage, "%LANGUAGENAME", language);
+        initialMessage = ReplaceString(initialMessage, "%MACROLIBMODNAME", macroLibModName);
+
+        // Build the message with information about the location of the macro
+        detailMessage = CuiResId( RID_CUISTR_FRAMEWORK_ERROR_LOCATION );
+        detailMessage = ReplaceString(detailMessage, "%LOCATION", location);
+        detailMessage = ReplaceString(detailMessage, "%LIBRARY", library);
+        detailMessage = ReplaceString(detailMessage, "%MODULE", moduleName);
+        detailMessage = ReplaceString(detailMessage, "%MACRONAME", macroName);
     }
-    return FormatErrorString(
-        unformatted, language, script, u"", std::u16string_view(), message );
+    return initialMessage + "\n\n" + detailMessage;
 }
 
 OUString GetErrorMessage( const css::uno::Any& aException )
