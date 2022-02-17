@@ -36,13 +36,12 @@ using namespace ::com::sun::star::accessibility;
 
 namespace
 {
-void collectUIInformation( const OUString& aID, const OUString& aPos , const OUString& aParent )
+void collectUIInformation( const OUString& aID, const OUString& aPos)
 {
     EventDescription aDescription;
     aDescription.aID = aID;
     aDescription.aParameters = {{ "POS" ,  aPos}};
     aDescription.aAction = "SELECT";
-    aDescription.aParent = aParent;
     aDescription.aKeyWord = "VerticalTab";
     UITestLogger::getInstance().logEvent(aDescription);
 }
@@ -544,7 +543,7 @@ void VerticalTabControl::SetCurPageId(const OString& rId)
         ActivatePage();
         pNewData->xPage->Show();
     }
-    collectUIInformation(get_id(),OStringToOUString(m_sCurrentPageId,RTL_TEXTENCODING_UTF8), GetPageParent()->get_id());
+    collectUIInformation(get_id(),OStringToOUString(m_sCurrentPageId,RTL_TEXTENCODING_UTF8));
 }
 
 const OString & VerticalTabControl::GetPageId(sal_uInt16 nIndex) const

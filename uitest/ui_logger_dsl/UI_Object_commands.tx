@@ -1,7 +1,7 @@
 import type_options
 
 /*
-    this file is for The Grammar of: 
+    this file is for The Grammar of:
         1)  ButtonUIObject : ( Click event )
         2)  EditUIObject	: ( Type event - Clear event - Select Text event )
         3)  CheckBoxUIObject	: ( Toggle the value  )
@@ -16,26 +16,28 @@ import type_options
 */
 
 UIObjectCommand:
-  ButtonUIObject | CheckBoxUIObject | EditUIObject | 
-  RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject | 
+  ButtonUIObject | CheckBoxUIObject | EditUIObject |
+  RadioButtonUIObject | ListBoxUIObject | ComboBoxUIObject |
   SpinFieldUIObject | TabControlUIObject | ToolBoxUIObject |
   ValueSetUIObject | MenuBtnUIObject
 ;
-
+TabPageNumber:
+  INT | ID
+;
 ButtonUIObject:
   'Click on' ui_button=STRING  ('from' parent_id=ID)?
-;	
+;
 CheckBoxUIObject:
-  'Toggle' Check_box_id=STRING 'CheckBox' ('from' parent_id=ID)?   
-;	
+  'Toggle' Check_box_id=STRING 'CheckBox' ('from' parent_id=ID)?
+;
 RadioButtonUIObject:
-  'Select' Radio_button_id=STRING 'RadioButton' ('from' parent_id=ID)? 
-;	
+  'Select' Radio_button_id=STRING 'RadioButton' ('from' parent_id=ID)?
+;
 ComboBoxUIObject:
-   'Select in' Combo_box_id=STRING 'ComboBox' 'item number' item_num=INT ('from' parent_id=ID)?  
+   'Select in' Combo_box_id=STRING 'ComboBox' 'item number' item_num=INT ('from' parent_id=ID)?
 ;
 TabControlUIObject:
-   'Choose Tab number' tab_page_number=INT 'in' tab_id=STRING ('from' parent_id=ID)? 
+   'Choose Tab number' tab_page_number=TabPageNumber 'in' tab_id=STRING ('from' parent_id=ID)?
 ;
 EditUIObject:
    action=action_on_UIObject ('from' parent_id=ID)?
