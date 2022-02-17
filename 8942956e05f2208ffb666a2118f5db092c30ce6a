@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d6665f2_e4e72f35",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-02-17T15:50:58Z",
+      "side": 1,
+      "message": "In general UnixODBC has to deal with more portability to more platforms, so I would tend to more follow their signatures than the ones of Microsoft, that has to deal with only Windows OS on less CPU ABIs.",
+      "revId": "8942956e05f2208ffb666a2118f5db092c30ce6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1d2f610_5ffc3e6c",
+        "filename": "connectivity/source/inc/odbc/OFunctions.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 339,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-02-17T15:50:58Z",
+      "side": 1,
+      "message": "unixodbc has SQLSMALLINT",
+      "revId": "8942956e05f2208ffb666a2118f5db092c30ce6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4fc3828_ef699f76",
+        "filename": "connectivity/source/inc/odbc/OFunctions.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 443,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-02-17T15:50:58Z",
+      "side": 1,
+      "message": "unixodbc has SQLUSMALLINT",
+      "revId": "8942956e05f2208ffb666a2118f5db092c30ce6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4576207_0ff0ccad",
+        "filename": "connectivity/source/inc/odbc/OFunctions.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-02-17T15:50:58Z",
+      "side": 1,
+      "message": "unixodbc has SQLUSMALLINT",
+      "revId": "8942956e05f2208ffb666a2118f5db092c30ce6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d95b6c0_098f1957",
+        "filename": "connectivity/source/inc/odbc/OFunctions.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2022-02-17T15:50:58Z",
+      "side": 1,
+      "message": "yes",
+      "revId": "8942956e05f2208ffb666a2118f5db092c30ce6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
