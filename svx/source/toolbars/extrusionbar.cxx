@@ -125,23 +125,26 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
     {
     case SID_EXTRUSION_TOGGLE:
     {
-        css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
-
         bool bOn(false);
-        if( pAny )
+        css::uno::Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sExtrusion );
+        if ( pAny )
         {
             (*pAny) >>= bOn;
             bOn = !bOn;
-            (*pAny) <<= bOn;
+            css::beans::PropertyValue aPropValue;
+            aPropValue.Name = sExtrusion;
+            aPropValue.Value <<= bOn;
+            rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
         }
         else
         {
             css::beans::PropertyValue aPropValue;
             aPropValue.Name = sExtrusion;
             aPropValue.Value <<= true;
-            rGeometryItem.SetPropertyValue( sExtrusion,  aPropValue );
+            rGeometryItem.SetPropertyValue(sExtrusion, aPropValue);
             bOn = true;
         }
+
         // draw:extrusion-diffusion has default 0% and c3DDiffuseAmt has default 100%. We set property
         // "Diffusion" with value 100% here if it does not exist already. This forces, that the
         // property is written to file in case an extrusion is newly created, and users of old

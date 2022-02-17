@@ -132,6 +132,42 @@ void lcl_AssertRectEqualWithTolerance(std::string_view sInfo, const tools::Recta
                            std::abs(rExpected.GetHeight() - rActual.GetHeight()) <= nTolerance);
 }
 
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf147409_GeomItemHash)
+{
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf147409_GeomItemHash.odg";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape* pSdrCustomShape(
+        static_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)));
+
+    // Mark Object
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
+
+    // Apply FontworkSameLetterHeights toggle
+    // Without patch a debug build fails assert in SfxItemPool::PutImpl and so crashes.
+    dispatchCommand(mxComponent, ".uno:FontworkSameLetterHeights", {});
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf146866_GeomItemHash)
+{
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf147409_GeomItemHash.odg";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.comp.drawing.DrawingDocument");
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    SdrObjCustomShape* pSdrCustomShape(
+        static_cast<SdrObjCustomShape*>(SdrObject::getSdrObjectFromXShape(xShape)));
+
+    // Mark Object
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    SdrView* pSdrView = pViewShell->GetDrawView();
+    pSdrView->MarkObj(pSdrCustomShape, pSdrView->GetSdrPageView());
+
+    // Apply extrusion toggle
+    // Without patch a debug build fails assert in SfxItemPool::PutImpl and so crashes.
+    dispatchCommand(mxComponent, ".uno:ExtrusionToggle", {});
+}
+
 CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf145700_3D_NonUI)
 {
     // The document contains first light soft, no ambient color, no second light and shininess 6.

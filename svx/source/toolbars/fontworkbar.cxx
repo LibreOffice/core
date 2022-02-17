@@ -247,7 +247,10 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
                 bool bOn = false;
                 (*pAny) >>= bOn;
                 bOn = !bOn;
-                (*pAny) <<= bOn;
+                css::beans::PropertyValue aPropValue;
+                aPropValue.Name = "SameLetterHeights";
+                aPropValue.Value <<= bOn;
+                rGeometryItem.SetPropertyValue("TextPath", aPropValue);
             }
         }
         break;
