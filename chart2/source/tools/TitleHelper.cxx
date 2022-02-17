@@ -394,27 +394,6 @@ void TitleHelper::removeTitle( TitleHelper::eTitleType nTitleIndex
 
 bool TitleHelper::getTitleType( eTitleType& rType
                     , const css::uno::Reference< css::chart2::XTitle >& xTitle
-                    , ChartModel& rModel )
-{
-    if( !xTitle.is() )
-        return false;
-
-    Reference< chart2::XTitle > xCurrentTitle;
-    for( sal_Int32 nTitleType = TITLE_BEGIN; nTitleType < NORMAL_TITLE_END; nTitleType++ )
-    {
-        xCurrentTitle = TitleHelper::getTitle( static_cast<eTitleType>(nTitleType), rModel );
-        if( xCurrentTitle == xTitle )
-        {
-            rType = static_cast<eTitleType>(nTitleType);
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool TitleHelper::getTitleType( eTitleType& rType
-                    , const css::uno::Reference< css::chart2::XTitle >& xTitle
                     , const rtl::Reference<ChartModel>& xModel )
 {
     if( !xTitle.is() || !xModel.is() )

@@ -334,8 +334,6 @@ public:
 
     SvxTPFilter*    GetFilterPage() { return m_xTPFilter.get(); }
     SvxTPView*      GetViewPage() { return m_xTPView.get(); }
-
-    void set_help_id(const OString& rId) { m_xTabCtrl->set_help_id(rId); }
 };
 
 #endif // INCLUDED_SVX_CTREDLIN_HXX

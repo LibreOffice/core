@@ -222,7 +222,6 @@ namespace sw::mark {
             virtual void ReleaseDoc(SwDoc&) = 0;
 
             void SetMarkStartPos( const SwPosition& rNewStartPos );
-            void SetMarkEndPos( const SwPosition& rNewEndPos );
 
             virtual void Invalidate() override;
             virtual OUString ToString() const override;

@@ -102,13 +102,6 @@ bool AxisHelper::isLogarithmic( const Reference< XScaling >& xScaling )
         && xServiceName->getServiceName() == "com.sun.star.chart2.LogarithmicScaling";
 }
 
-chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxis >& xAxis, ChartModel& rModel )
-{
-    rtl::Reference< Axis > pAxis = dynamic_cast<Axis*>(xAxis.get());
-    assert(pAxis || !xAxis);
-    return getDateCheckedScale(pAxis, rModel);
-}
-
 chart2::ScaleData AxisHelper::getDateCheckedScale( const rtl::Reference< Axis >& xAxis, ChartModel& rModel )
 {
     ScaleData aScale = xAxis->getScaleData();
@@ -459,17 +452,6 @@ void AxisHelper::showGrid( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bo
     }
 }
 
-void AxisHelper::makeAxisVisible( const Reference< XAxis >& xAxis )
-{
-    Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
-    if( xProps.is() )
-    {
-        xProps->setPropertyValue( "Show", uno::Any( true ) );
-        LinePropertiesHelper::SetLineVisible( xProps );
-        xProps->setPropertyValue( "DisplayLabels", uno::Any( true ) );
-    }
-}
-
 void AxisHelper::makeAxisVisible( const rtl::Reference< Axis >& xAxis )
 {
     if( xAxis.is() )
@@ -495,28 +477,12 @@ void AxisHelper::hideAxis( sal_Int32 nDimensionIndex, bool bMainAxis
     AxisHelper::makeAxisInvisible( AxisHelper::getAxis( nDimensionIndex, bMainAxis, xDiagram ) );
 }
 
-void AxisHelper::makeAxisInvisible( const Reference< XAxis >& xAxis )
-{
-    Reference< beans::XPropertySet > xProps( xAxis, uno::UNO_QUERY );
-    if( xProps.is() )
-    {
-        xProps->setPropertyValue( "Show", uno::Any( false ) );
-    }
-}
-
 void AxisHelper::makeAxisInvisible( const rtl::Reference< Axis >& xAxis )
 {
     if( xAxis.is() )
     {
         xAxis->setPropertyValue( "Show", uno::Any( false ) );
     }
-}
-
-void AxisHelper::hideAxisIfNoDataIsAttached( const Reference< XAxis >& xAxis, const rtl::Reference< Diagram >& xDiagram )
-{
-    rtl::Reference< Axis > pAxis = dynamic_cast<Axis*>(xAxis.get());
-    assert(pAxis || !xAxis);
-    hideAxisIfNoDataIsAttached(pAxis, xDiagram);
 }
 
 void AxisHelper::hideAxisIfNoDataIsAttached( const rtl::Reference< Axis >& xAxis, const rtl::Reference< Diagram >& xDiagram )
@@ -754,17 +720,6 @@ Reference< beans::XPropertySet > AxisHelper::getGridProperties(
 }
 
 sal_Int32 AxisHelper::getDimensionIndexOfAxis(
-              const Reference< XAxis >& xAxis
-            , const rtl::Reference< Diagram >& xDiagram )
-{
-    sal_Int32 nDimensionIndex = -1;
-    sal_Int32 nCooSysIndex = -1;
-    sal_Int32 nAxisIndex = -1;
-    AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex , nDimensionIndex, nAxisIndex );
-    return nDimensionIndex;
-}
-
-sal_Int32 AxisHelper::getDimensionIndexOfAxis(
               const rtl::Reference< Axis >& xAxis
             , const rtl::Reference< Diagram >& xDiagram )
 {
@@ -966,31 +921,6 @@ bool AxisHelper::isSecondaryYAxisNeeded( const rtl::Reference< BaseCoordinateSys
         }
     }
     return false;
-}
-
-bool AxisHelper::shouldAxisBeDisplayed( const Reference< XAxis >& xAxis
-                                       , const rtl::Reference< BaseCoordinateSystem >& xCooSys )
-{
-    bool bRet = false;
-
-    if( xAxis.is() && xCooSys.is() )
-    {
-        sal_Int32 nDimensionIndex=-1;
-        sal_Int32 nAxisIndex=-1;
-        if( AxisHelper::getIndicesForAxis( xAxis, xCooSys, nDimensionIndex, nAxisIndex ) )
-        {
-            sal_Int32 nDimensionCount = xCooSys->getDimension();
-            rtl::Reference< ChartType > xChartType( AxisHelper::getChartTypeByIndex( xCooSys, 0 ) );
-
-            bool bMainAxis = (nAxisIndex==MAIN_AXIS_INDEX);
-            if( bMainAxis )
-                bRet = ChartTypeHelper::isSupportingMainAxis(xChartType,nDimensionCount,nDimensionIndex);
-            else
-                bRet = ChartTypeHelper::isSupportingSecondaryAxis(xChartType,nDimensionCount);
-        }
-    }
-
-    return bRet;
 }
 
 bool AxisHelper::shouldAxisBeDisplayed( const rtl::Reference< Axis >& xAxis

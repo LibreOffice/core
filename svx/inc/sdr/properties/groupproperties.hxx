@@ -34,9 +34,6 @@ namespace sdr::properties
             // basic constructor
             explicit GroupProperties(SdrObject& rObj);
 
-            // copy constructor
-            GroupProperties(const GroupProperties& rProps, SdrObject& rObj);
-
             // destructor
             virtual ~GroupProperties() override;
 

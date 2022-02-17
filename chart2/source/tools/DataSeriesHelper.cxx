@@ -201,18 +201,6 @@ OUString getRole( const uno::Reference< chart2::data::XLabeledDataSequence >& xL
     return aRet;
 }
 
-OUString getRole( const rtl::Reference< ::chart::LabeledDataSequence >& xLabeledDataSequence )
-{
-    OUString aRet;
-    if( xLabeledDataSequence.is() )
-    {
-        Reference< beans::XPropertySet > xProp( xLabeledDataSequence->getValues(), uno::UNO_QUERY );
-        if( xProp.is() )
-            xProp->getPropertyValue( "Role" ) >>= aRet;
-    }
-    return aRet;
-}
-
 uno::Reference< chart2::data::XLabeledDataSequence >
     getDataSequenceByRole(
         const Reference< chart2::data::XDataSource > & xSource,
@@ -289,12 +277,6 @@ getAllDataSequences( const std::vector<rtl::Reference<DataSeries> >& aSeries )
     }
 
     return aSeqVec;
-}
-
-rtl::Reference< ::chart::DataSource >
-    getDataSource( const Sequence< Reference< chart2::XDataSeries > > & aSeries )
-{
-    return new DataSource(getAllDataSequences(aSeries));
 }
 
 rtl::Reference< DataSource >
@@ -392,37 +374,6 @@ OUString getLabelForLabeledDataSequence(
 }
 
 OUString getDataSeriesLabel(
-    const Reference< chart2::XDataSeries > & xSeries,
-    const OUString & rLabelSequenceRole )
-{
-    OUString aResult;
-
-    Reference< chart2::data::XDataSource > xSource( xSeries, uno::UNO_QUERY );
-    if( xSource.is())
-    {
-        Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-            ::chart::DataSeriesHelper::getDataSequenceByRole( xSource, rLabelSequenceRole ));
-        if( xLabeledSeq.is())
-            aResult = getLabelForLabeledDataSequence( xLabeledSeq );
-        else
-        {
-            // special case: labeled data series with only a label and no values may
-            // serve as label
-            xLabeledSeq.set( lcl_findLSequenceWithOnlyLabel( xSource ));
-            if( xLabeledSeq.is())
-            {
-                Reference< chart2::data::XDataSequence > xSeq( xLabeledSeq->getLabel());
-                if( xSeq.is())
-                    aResult = lcl_getDataSequenceLabel( xSeq );
-            }
-        }
-
-    }
-
-    return aResult;
-}
-
-OUString getDataSeriesLabel(
     const rtl::Reference< DataSeries > & xSeries,
     const OUString & rLabelSequenceRole )
 {
@@ -450,70 +401,6 @@ OUString getDataSeriesLabel(
     }
 
     return aResult;
-}
-
-void setStackModeAtSeries(
-    const Sequence< Reference< chart2::XDataSeries > > & aSeries,
-    const rtl::Reference< BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
-    StackMode eStackMode )
-{
-    const uno::Any aPropValue(
-        ( (eStackMode == StackMode::YStacked) ||
-          (eStackMode == StackMode::YStackedPercent) )
-        ? chart2::StackingDirection_Y_STACKING
-        : (eStackMode == StackMode::ZStacked )
-        ? chart2::StackingDirection_Z_STACKING
-        : chart2::StackingDirection_NO_STACKING );
-
-    std::set< sal_Int32 > aAxisIndexSet;
-    for( Reference< chart2::XDataSeries > const & dataSeries : aSeries )
-    {
-        try
-        {
-            Reference< beans::XPropertySet > xProp( dataSeries, uno::UNO_QUERY );
-            if( xProp.is() )
-            {
-                xProp->setPropertyValue( "StackingDirection", aPropValue );
-
-                sal_Int32 nAxisIndex;
-                xProp->getPropertyValue( "AttachedAxisIndex" ) >>= nAxisIndex;
-                aAxisIndexSet.insert(nAxisIndex);
-            }
-        }
-        catch( const uno::Exception & )
-        {
-            DBG_UNHANDLED_EXCEPTION("chart2");
-        }
-    }
-
-    if( !(xCorrespondingCoordinateSystem.is() &&
-        1 < xCorrespondingCoordinateSystem->getDimension()) )
-        return;
-
-    if( aAxisIndexSet.empty() )
-    {
-        aAxisIndexSet.insert(0);
-    }
-
-    for (auto const& axisIndex : aAxisIndexSet)
-    {
-        rtl::Reference< Axis > xAxis =
-            xCorrespondingCoordinateSystem->getAxisByDimension2(1, axisIndex);
-        if( xAxis.is())
-        {
-            bool bPercent = (eStackMode == StackMode::YStackedPercent);
-            chart2::ScaleData aScaleData = xAxis->getScaleData();
-
-            if( bPercent != (aScaleData.AxisType==chart2::AxisType::PERCENT) )
-            {
-                if( bPercent )
-                    aScaleData.AxisType = chart2::AxisType::PERCENT;
-                else
-                    aScaleData.AxisType = chart2::AxisType::REALNUMBER;
-                xAxis->setScaleData( aScaleData );
-            }
-        }
-    }
 }
 
 void setStackModeAtSeries(

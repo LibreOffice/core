@@ -111,7 +111,6 @@ namespace http_dav_ucp
         void setStaleTime( const sal_uInt32 nStaleTime ) { m_nStaleTime = nStaleTime; };
 
         sal_uInt32 getRequestedTimeLife() const { return m_nRequestedTimeLife; };
-        void setRequestedTimeLife( const sal_uInt32 nRequestedTimeLife ) { m_nRequestedTimeLife = nRequestedTimeLife; };
 
         const OUString & getURL() const { return m_sURL; };
         void setURL( const OUString & sURL ) { m_sURL = sURL; };
@@ -120,7 +119,6 @@ namespace http_dav_ucp
         void setRedirectedURL( const OUString & sRedirectedURL ) { m_sRedirectedURL = sRedirectedURL; };
 
         void  setAllowedMethods( const OUString & aAllowedMethods ) { m_aAllowedMethods = aAllowedMethods; } ;
-        const OUString & getAllowedMethods() const { return m_aAllowedMethods; } ;
         bool isLockAllowed() const { return ( m_aAllowedMethods.indexOf( "LOCK" ) != -1 ); };
 
         void setLocked( bool locked = true ) { m_isLocked = locked; } ;

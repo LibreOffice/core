@@ -70,12 +70,6 @@ public:
 
     static bool HasCategories(
         const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
-        const css::uno::Sequence< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
-    static bool HasCategories(
-        const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
-        const std::vector< rtl::Reference< LabeledDataSequence > > & rData );
-    static bool HasCategories(
-        const css::uno::Sequence< css::beans::PropertyValue > & rArguments,
         const std::vector< css::uno::Reference< css::chart2::data::XLabeledDataSequence > > & rData );
 
     static bool UseCategoriesAsX(

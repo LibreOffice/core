@@ -86,9 +86,6 @@ public:
         static rtl::Reference< ::chart::DataSource > getUsedData(
                 ChartModel& rModel );
 
-        static rtl::Reference< ::chart::DataSource > getUsedData(
-            const rtl::Reference<::chart::ChartModel>& xChartModel );
-
         static bool detectRangeSegmentation(
             const rtl::Reference<::chart::ChartModel>& xChartModel
             , OUString& rOutRangeString

@@ -56,7 +56,6 @@ public:
     static bool isLogarithmic( const css::uno::Reference< css::chart2::XScaling >& xScaling );
 
     static void checkDateAxis( css::chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis );
-    static css::chart2::ScaleData getDateCheckedScale( const css::uno::Reference< css::chart2::XAxis >& xAxis, ChartModel& rModel );
     static css::chart2::ScaleData getDateCheckedScale( const rtl::Reference< ::chart::Axis >& xAxis, ChartModel& rModel );
 
     static sal_Int32 getExplicitNumberFormatKeyForAxis(
@@ -102,16 +101,12 @@ public:
     static bool isGridShown( sal_Int32 nDimensionIndex, sal_Int32 nCooSysIndex, bool bMainGrid
                 , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
-    static void makeAxisVisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
     static void makeAxisVisible( const rtl::Reference< ::chart::Axis >& xAxis );
     static void makeGridVisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
-    static void makeAxisInvisible( const css::uno::Reference< css::chart2::XAxis >& xAxis );
     static void makeAxisInvisible( const rtl::Reference< ::chart::Axis >& xAxis );
     static void makeGridInvisible( const css::uno::Reference< css::beans::XPropertySet >& xGridProperties );
 
-    static void hideAxisIfNoDataIsAttached( const css::uno::Reference< css::chart2::XAxis >& xAxis
-                                          , const rtl::Reference< ::chart::Diagram >& xDiagram);
     static void hideAxisIfNoDataIsAttached( const rtl::Reference< ::chart::Axis >& xAxis
                                           , const rtl::Reference< ::chart::Diagram >& xDiagram);
 
@@ -150,9 +145,6 @@ public:
     static rtl::Reference< ::chart::Axis >
         getParallelAxis( const css::uno::Reference< css::chart2::XAxis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
-    static rtl::Reference< ::chart::Axis >
-        getParallelAxis( const rtl::Reference< ::chart::Axis >& xAxis
-            , const rtl::Reference< ::chart::Diagram >& xDiagram );
 
     static css::uno::Reference< css::beans::XPropertySet >
         getGridProperties( const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys
@@ -161,9 +153,6 @@ public:
                 , sal_Int32 nSubGridIndex //-1: Main Grid; 0: First SubGrid etc
                 );
 
-    static sal_Int32 getDimensionIndexOfAxis(
-              const css::uno::Reference< css::chart2::XAxis >& xAxis
-            , const rtl::Reference< ::chart::Diagram >& xDiagram );
     static sal_Int32 getDimensionIndexOfAxis(
               const rtl::Reference< ::chart::Axis >& xAxis
             , const rtl::Reference< ::chart::Diagram >& xDiagram );
@@ -219,8 +208,6 @@ public:
                         , const css::uno::Reference< css::uno::XComponentContext >& xContext
                         , ReferenceSizeProvider * pRefSizeProvider );
 
-    static bool shouldAxisBeDisplayed( const css::uno::Reference< css::chart2::XAxis >& xAxis
-                                       , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
     static bool shouldAxisBeDisplayed( const rtl::Reference< ::chart::Axis >& xAxis
                                        , const rtl::Reference< ::chart::BaseCoordinateSystem >& xCooSys );
     static bool isSecondaryYAxisNeeded( const rtl::Reference<

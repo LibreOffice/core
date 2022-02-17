@@ -37,11 +37,6 @@ namespace sdr::properties
         {
         }
 
-        GroupProperties::GroupProperties(const GroupProperties& , SdrObject& rObj)
-        :   BaseProperties(rObj)
-        {
-        }
-
         GroupProperties::~GroupProperties()
         {
         }

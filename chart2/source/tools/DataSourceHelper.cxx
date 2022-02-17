@@ -276,12 +276,6 @@ uno::Sequence< OUString > DataSourceHelper::getUsedDataRanges( const rtl::Refere
 }
 
 rtl::Reference< DataSource > DataSourceHelper::getUsedData(
-    const rtl::Reference<::chart::ChartModel>& xChartDoc )
-{
-    return pressUsedDataIntoRectangularFormat( xChartDoc );
-}
-
-rtl::Reference< DataSource > DataSourceHelper::getUsedData(
     ChartModel& rModel )
 {
     std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aResult;

@@ -889,25 +889,6 @@ void VLegend::setDefaultWritingMode( sal_Int16 nDefaultWritingMode )
     m_nDefaultWritingMode = nDefaultWritingMode;
 }
 
-bool VLegend::isVisible( const Reference< XLegend > & xLegend )
-{
-    if( ! xLegend.is())
-        return false;
-
-    bool bShow = false;
-    try
-    {
-        Reference< beans::XPropertySet > xLegendProp( xLegend, uno::UNO_QUERY_THROW );
-        xLegendProp->getPropertyValue( "Show") >>= bShow;
-    }
-    catch( const uno::Exception & )
-    {
-        DBG_UNHANDLED_EXCEPTION("chart2");
-    }
-
-    return bShow;
-}
-
 bool VLegend::isVisible( const rtl::Reference< Legend > & xLegend )
 {
     if( ! xLegend.is())

@@ -102,8 +102,6 @@ namespace chart::RegressionCurveHelper
      */
     OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getFirstRegressTypeNotMeanValueLine(
         const css::uno::Reference<css::chart2::XRegressionCurveContainer>& xCurveContainer );
-    OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getFirstRegressTypeNotMeanValueLine(
-        const rtl::Reference<::chart::DataSeries>& xCurveContainer );
 
     OOO_DLLPUBLIC_CHARTTOOLS SvxChartRegress getRegressionType(
         const css::uno::Reference<css::chart2::XRegressionCurve>& xCurve );
