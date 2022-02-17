@@ -10,7 +10,6 @@
 #include <memory>
 #include <swmodeltestbase.hxx>
 
-#include <config_features.h>
 #include <config_fonts.h>
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
