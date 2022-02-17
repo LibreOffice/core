@@ -461,31 +461,31 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     if (!pSet)
         return;
 
-    std::unique_ptr<SfxItemSet> const pCleanedSet = pSet->Clone();
+    SfxItemSet aCleanedSet = pSet->CloneAsValue();
 
-    if (pCleanedSet->HasItem(RES_TXTATR_CHARFMT))
+    if (aCleanedSet.HasItem(RES_TXTATR_CHARFMT))
     {
         // Insert attributes of referenced char format into current set
-        const SwFormatCharFormat& rCharFormat = pCleanedSet->Get(RES_TXTATR_CHARFMT);
+        const SwFormatCharFormat& rCharFormat = aCleanedSet.Get(RES_TXTATR_CHARFMT);
         const SwAttrSet& rStyleAttrs = static_cast<const SwCharFormat *>(rCharFormat.GetRegisteredIn())->GetAttrSet();
         SfxWhichIter aIter(rStyleAttrs);
         sal_uInt16 nWhich = aIter.FirstWhich();
         while (nWhich)
         {
             if (!SwTextNode::IsIgnoredCharFormatForNumbering(nWhich, /*bIsCharStyle=*/true)
-                && !pCleanedSet->HasItem(nWhich)
+                && !aCleanedSet.HasItem(nWhich)
                 && !(pFormat && pFormat->HasItem(nWhich)) )
             {
                 // Copy from parent sets only allowed items which will not overwrite
                 // values explicitly defined in current set (pCleanedSet) or in pFormat
                 if (const SfxPoolItem* pItem = rStyleAttrs.GetItem(nWhich, true))
-                    pCleanedSet->Put(*pItem);
+                    aCleanedSet.Put(*pItem);
             }
             nWhich = aIter.NextWhich();
         }
 
         // It is not required here anymore, all referenced items are inserted
-        pCleanedSet->ClearItem(RES_TXTATR_CHARFMT);
+        aCleanedSet.ClearItem(RES_TXTATR_CHARFMT);
     };
 
     SfxItemIter aIter(*pSet);
@@ -493,17 +493,17 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     while (pItem)
     {
         if (SwTextNode::IsIgnoredCharFormatForNumbering(pItem->Which()))
-            pCleanedSet->ClearItem(pItem->Which());
+            aCleanedSet.ClearItem(pItem->Which());
         else if (pFormat && pFormat->HasItem(pItem->Which()))
-            pCleanedSet->ClearItem(pItem->Which());
+            aCleanedSet.ClearItem(pItem->Which());
         else if (pItem->Which() == RES_CHRATR_BACKGROUND)
         {
             bool bShadingWasImported = false;
             // If Shading was imported, it should not be converted to a Highlight,
             // but remain as Shading which is ignored for numbering.
-            if (pCleanedSet->HasItem(RES_CHRATR_GRABBAG))
+            if (aCleanedSet.HasItem(RES_CHRATR_GRABBAG))
             {
-                SfxGrabBagItem aGrabBag = pCleanedSet->Get(RES_CHRATR_GRABBAG, /*bSrchInParent=*/false);
+                SfxGrabBagItem aGrabBag = aCleanedSet.Get(RES_CHRATR_GRABBAG, /*bSrchInParent=*/false);
                 std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
                 auto aIterator = rMap.find("CharShadingMarker");
                 if (aIterator != rMap.end())
@@ -512,10 +512,10 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
 
             // If used, BACKGROUND is converted to HIGHLIGHT. So also ignore if a highlight already exists.
             if (bShadingWasImported
-                || pCleanedSet->HasItem(RES_CHRATR_HIGHLIGHT)
+                || aCleanedSet.HasItem(RES_CHRATR_HIGHLIGHT)
                 || (pFormat && pFormat->HasItem(RES_CHRATR_HIGHLIGHT)))
             {
-                pCleanedSet->ClearItem(pItem->Which());
+                aCleanedSet.ClearItem(pItem->Which());
             }
         }
         pItem = aIter.NextItem();
@@ -527,7 +527,7 @@ static void checkApplyParagraphMarkFormatToNumbering(SwFont* pNumFnt, SwTextForm
     // The same is true for the highlight color.
     const Color aHighlight = pNumFnt->GetHighlightColor();
 
-    pNumFnt->SetDiffFnt(pCleanedSet.get(), pIDSA);
+    pNumFnt->SetDiffFnt(&aCleanedSet, pIDSA);
 
     if (oFontBackColor)
         pNumFnt->SetBackColor(oFontBackColor);

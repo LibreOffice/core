@@ -750,31 +750,31 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl, weld::Button&, void)
             size_t nNewPos = rDocFormats.GetPos(pFormat);
             if ( SIZE_MAX != nNewPos )
             {
-                std::unique_ptr<SfxItemSet> pSet(pFormat->GetAttrSet().Clone( false ));
+                SfxItemSet aSet(pFormat->GetAttrSet().CloneAsValue( false ));
                 if( pFormat->GetCol() != pRepr->GetCol() )
-                    pSet->Put( pRepr->GetCol() );
+                    aSet.Put( pRepr->GetCol() );
 
                 std::unique_ptr<SvxBrushItem> aBrush(pFormat->makeBackgroundBrushItem(false));
                 if( aBrush && pRepr->GetBackground() && *aBrush != *pRepr->GetBackground() )
-                    pSet->Put( *pRepr->GetBackground() );
+                    aSet.Put( *pRepr->GetBackground() );
 
                 if( pFormat->GetFootnoteAtTextEnd(false) != pRepr->GetFootnoteNtAtEnd() )
-                    pSet->Put( pRepr->GetFootnoteNtAtEnd() );
+                    aSet.Put( pRepr->GetFootnoteNtAtEnd() );
 
                 if( pFormat->GetEndAtTextEnd(false) != pRepr->GetEndNtAtEnd() )
-                    pSet->Put( pRepr->GetEndNtAtEnd() );
+                    aSet.Put( pRepr->GetEndNtAtEnd() );
 
                 if( pFormat->GetBalancedColumns() != pRepr->GetBalance() )
-                    pSet->Put( pRepr->GetBalance() );
+                    aSet.Put( pRepr->GetBalance() );
 
                 if( pFormat->GetFrameDir() != *pRepr->GetFrameDir() )
-                    pSet->Put( *pRepr->GetFrameDir() );
+                    aSet.Put( *pRepr->GetFrameDir() );
 
                 if( pFormat->GetLRSpace() != *pRepr->GetLRSpace())
-                    pSet->Put( *pRepr->GetLRSpace());
+                    aSet.Put( *pRepr->GetLRSpace());
 
                 rSh.UpdateSection( nNewPos, pRepr->GetSectionData(),
-                                   pSet->Count() ? pSet.get() : nullptr );
+                                   aSet.Count() ? &aSet : nullptr );
             }
         } while (m_xTree->iter_next(*xIter));
     }

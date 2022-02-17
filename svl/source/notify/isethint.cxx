@@ -24,7 +24,7 @@
  * Copies the SfxItemSet passed as a parameter.
  */
 SfxItemSetHint::SfxItemSetHint(const SfxItemSet& rItemSet)
-    : _pItemSet(rItemSet.Clone())
+    : maItemSet(rItemSet.CloneAsValue())
 {
 }
 

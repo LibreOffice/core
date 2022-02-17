@@ -601,16 +601,16 @@ uno::Any SvxUnoTextRangeBase::_getPropertyValue(const OUString& PropertyName, sa
         const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry(PropertyName );
         if( pMap )
         {
-            std::unique_ptr<SfxItemSet> pAttribs;
+            std::optional<SfxItemSet> oAttribs;
             if( nPara != -1 )
-                pAttribs = pForwarder->GetParaAttribs( nPara ).Clone();
+                oAttribs.emplace(pForwarder->GetParaAttribs( nPara ).CloneAsValue());
             else
-                pAttribs = pForwarder->GetAttribs( GetSelection() ).Clone();
+                oAttribs.emplace(pForwarder->GetAttribs( GetSelection() ).CloneAsValue());
 
             //  Replace Dontcare with Default, so that one always has a mirror
-            pAttribs->ClearInvalidItems();
+            oAttribs->ClearInvalidItems();
 
-            getPropertyValue( pMap, aAny, *pAttribs );
+            getPropertyValue( pMap, aAny, *oAttribs );
 
             return aAny;
         }
@@ -879,13 +879,13 @@ uno::Sequence< uno::Any > SvxUnoTextRangeBase::_getPropertyValues( const uno::Se
     SvxTextForwarder* pForwarder = mpEditSource ? mpEditSource->GetTextForwarder() : nullptr;
     if( pForwarder )
     {
-        std::unique_ptr<SfxItemSet> pAttribs;
+        std::optional<SfxItemSet> oAttribs;
         if( nPara != -1 )
-            pAttribs = pForwarder->GetParaAttribs( nPara ).Clone();
+            oAttribs.emplace(pForwarder->GetParaAttribs( nPara ).CloneAsValue());
         else
-            pAttribs = pForwarder->GetAttribs( GetSelection() ).Clone();
+            oAttribs.emplace(pForwarder->GetAttribs( GetSelection() ).CloneAsValue() );
 
-        pAttribs->ClearInvalidItems();
+        oAttribs->ClearInvalidItems();
 
         const OUString* pPropertyNames = aPropertyNames.getConstArray();
         uno::Any* pValues = aValues.getArray();
@@ -895,7 +895,7 @@ uno::Sequence< uno::Any > SvxUnoTextRangeBase::_getPropertyValues( const uno::Se
             const SfxItemPropertyMapEntry* pMap = mpPropSet->getPropertyMapEntry( *pPropertyNames );
             if( pMap )
             {
-                getPropertyValue( pMap, *pValues, *pAttribs );
+                getPropertyValue( pMap, *pValues, *oAttribs );
             }
         }
     }
