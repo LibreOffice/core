@@ -133,7 +133,7 @@ public:
         interpretDataSource()( <code>xSource</code> ),
         the result of this method should be <code>xSource</code>.</p>
      */
-    virtual rtl::Reference< ::chart::DataSource > mergeInterpretedData(
+    static rtl::Reference< ::chart::DataSource > mergeInterpretedData(
         const InterpretedData& aInterpretedData );
 
     /** Get chart information that is specific to a particular chart

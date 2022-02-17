@@ -203,7 +203,7 @@ void ChartTypeTemplate::changeDiagram( const rtl::Reference< Diagram >& xDiagram
         }
         else
         {
-            rtl::Reference< DataSource > xSource( xInterpreter->mergeInterpretedData( aData ));
+            rtl::Reference< DataSource > xSource = DataInterpreter::mergeInterpretedData( aData );
             // todo: get a "range-union" from the data provider by calling
             // OUString aRange = getRangeRepresentationByData( xSource );
             // xSource.set( getDataByRangeRepresentation( aRange, aParam ));
