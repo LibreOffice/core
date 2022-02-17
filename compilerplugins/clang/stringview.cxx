@@ -282,6 +282,22 @@ void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
         }
         return;
     }
+    if (auto const dc2 = dc1.Function("makeStringAndClear"))
+    {
+        if (dc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace())
+        {
+            auto const obj = expr->getImplicitObjectArgument();
+            if (!(obj->isLValue() || obj->getType()->isPointerType()))
+            {
+                report(DiagnosticsEngine::Warning,
+                       "rather than call makeStringAndClear on an rvalue, pass with a view",
+                       expr->getExprLoc())
+                    << expr->getSourceRange();
+            }
+        }
+        return;
+    }
     if (auto const dc2 = dc1.Function("toString"))
     {
         if (dc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()

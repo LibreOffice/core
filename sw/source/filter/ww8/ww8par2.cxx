@@ -636,7 +636,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV con
     bool bListSymbol = pF && ( pF->aFFNBase.chs == 2 );      // Symbol/WingDings/...
 
     sal_uInt32 nLen = rAV.cbTextBefore + rAV.cbTextAfter;
-    OUStringBuffer sText(nLen);
+    OUStringBuffer sText(static_cast<sal_Int32>(nLen));
     if (m_bVer67)
     {
         if (nLen > nElements)
@@ -725,8 +725,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFormat &rNum, int nLevel, WW8_ANLV con
     }
     if( rAV.cbTextAfter )
     {
-        sSuffix = rNum.GetSuffix();
-        sSuffix += sText.copy( rAV.cbTextBefore, rAV.cbTextAfter).makeStringAndClear();
+        sSuffix = rNum.GetSuffix() + sText.subView( rAV.cbTextBefore, rAV.cbTextAfter);
     }
     if (rAV.cbTextBefore || rAV.cbTextAfter)
     {
