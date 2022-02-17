@@ -21,20 +21,18 @@
 
 #include <svl/svldllapi.h>
 #include <svl/hint.hxx>
-#include <memory>
-
-class SfxItemSet;
+#include <svl/itemset.hxx>
 
 
 class SVL_DLLPUBLIC SfxItemSetHint final : public SfxHint
 {
-    std::unique_ptr<SfxItemSet> _pItemSet;
+    SfxItemSet maItemSet;
 
 public:
                         SfxItemSetHint( const SfxItemSet &rItemSet );
     virtual             ~SfxItemSetHint() override;
 
-    const SfxItemSet&   GetItemSet() const { return *_pItemSet; }
+    const SfxItemSet&   GetItemSet() const { return maItemSet; }
 };
 
 #endif
