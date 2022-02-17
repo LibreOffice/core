@@ -181,7 +181,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 break;
                 case XML_ELEMENT( TABLE, XML_NUMBER_COLUMNS_REPEATED ):
                     nColsRepeated = static_cast<SCCOL>(
-                        std::min<sal_Int32>( rImport.GetDocument()->GetSheetLimits().GetMaxRowCount(),
+                        std::min<sal_Int32>( rImport.GetDocument()->GetSheetLimits().GetMaxColCount(),
                         std::max( it.toInt32(), static_cast<sal_Int32>(1) ) ));
                 break;
                 case XML_ELEMENT( OFFICE, XML_VALUE_TYPE ):
