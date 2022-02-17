@@ -68,8 +68,6 @@ public:
         const css::awt::Size & rDefaultLegendSize );
 
     static bool isVisible(
-        const css::uno::Reference< css::chart2::XLegend > & xLegend );
-    static bool isVisible(
         const rtl::Reference< ::chart::Legend > & xLegend );
 
 private:

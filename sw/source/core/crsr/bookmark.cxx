@@ -513,14 +513,6 @@ namespace sw::mark
             return SetOtherMarkPos( rNewStartPos );
     }
 
-    void Fieldmark::SetMarkEndPos( const SwPosition& rNewEndPos )
-    {
-        if ( GetMarkPos( ) <= GetOtherMarkPos( ) )
-            return SetOtherMarkPos( rNewEndPos );
-        else
-            return SetMarkPos( rNewEndPos );
-    }
-
     OUString Fieldmark::ToString( ) const
     {
         return "Fieldmark: ( Name, Type, [ Nd1, Id1 ], [ Nd2, Id2 ] ): ( " + m_aName + ", "

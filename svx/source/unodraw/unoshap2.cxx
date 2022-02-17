@@ -1778,10 +1778,6 @@ void SvxCustomShape::createCustomShapeDefaults( const OUString& rValueType )
     static_cast<SdrObjCustomShape*>(GetSdrObject())->MergeDefaultAttributes( &rValueType );
 }
 
-SvxShapeGroupAnyD::SvxShapeGroupAnyD(SdrObject* pObj)
-    : SvxShape(pObj)
-{}
-
 SvxShapeGroupAnyD::SvxShapeGroupAnyD( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet )
     : SvxShape(pObject, pEntries, pPropertySet)
 {}

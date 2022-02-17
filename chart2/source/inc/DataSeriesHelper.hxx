@@ -48,8 +48,6 @@ namespace chart::DataSeriesHelper
 
 OOO_DLLPUBLIC_CHARTTOOLS OUString
     getRole( const css::uno::Reference<css::chart2::data::XLabeledDataSequence>& xLabeledDataSequence );
-OOO_DLLPUBLIC_CHARTTOOLS OUString
-    getRole( const rtl::Reference<::chart::LabeledDataSequence>& xLabeledDataSequence );
 
 /** Retrieves the data sequence in the given data source that matches the
     given role.  If more than one sequences match the role, the first match
@@ -98,8 +96,6 @@ getAllDataSequences(
     series.
  */
 OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::DataSource >
-    getDataSource( const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries );
-OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::DataSource >
     getDataSource( const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries );
 
 /** Get the label of a series (e.g. for the legend)
@@ -109,9 +105,6 @@ OOO_DLLPUBLIC_CHARTTOOLS rtl::Reference< ::chart::DataSource >
         to take its label.
  */
 OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
-    const css::uno::Reference< css::chart2::XDataSeries > & xSeries,
-    const OUString & rLabelSequenceRole );
-OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
     const rtl::Reference< ::chart::DataSeries > & xSeries,
     const OUString & rLabelSequenceRole );
 
@@ -120,10 +113,6 @@ OOO_DLLPUBLIC_CHARTTOOLS OUString getDataSeriesLabel(
 OOO_DLLPUBLIC_CHARTTOOLS OUString getLabelForLabeledDataSequence(
     const css::uno::Reference< css::chart2::data::XLabeledDataSequence > & xLabeledSeq );
 
-OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
-    const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > > & aSeries,
-    const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,
-    StackMode eStackMode );
 OOO_DLLPUBLIC_CHARTTOOLS void setStackModeAtSeries(
     const std::vector< rtl::Reference< ::chart::DataSeries > > & aSeries,
     const rtl::Reference< ::chart::BaseCoordinateSystem > & xCorrespondingCoordinateSystem,

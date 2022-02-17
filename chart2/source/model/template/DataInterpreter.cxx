@@ -343,21 +343,6 @@ uno::Any DataInterpreter::GetProperty(
 
 bool DataInterpreter::HasCategories(
     const Sequence< beans::PropertyValue > & rArguments,
-    const Sequence< Reference< data::XLabeledDataSequence > > & rData )
-{
-    bool bHasCategories = false;
-
-    if( rArguments.hasElements() )
-        GetProperty( rArguments, u"HasCategories" ) >>= bHasCategories;
-
-    for( sal_Int32 nLSeqIdx=0; ! bHasCategories && nLSeqIdx<rData.getLength(); ++nLSeqIdx )
-        bHasCategories = ( rData[nLSeqIdx].is() && GetRole( rData[nLSeqIdx]->getValues() ) == "categories");
-
-    return bHasCategories;
-}
-
-bool DataInterpreter::HasCategories(
-    const Sequence< beans::PropertyValue > & rArguments,
     const std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > & rData )
 {
     bool bHasCategories = false;

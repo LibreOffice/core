@@ -179,29 +179,8 @@ OOO_DLLPUBLIC_CHARTTOOLS
 css::uno::Sequence< OUString > DataSequenceToStringSequence(
     const css::uno::Reference< css::chart2::data::XDataSequence > & xDataSequence );
 
-/** uno::Sequence< uno::Sequence< T > > -> uno::Sequence< T >
+/** std::vector< std::vector< T > > -> std::vector< T >
  */
-template< typename T >
-css::uno::Sequence< T >
-    FlattenSequence( const css::uno::Sequence< css::uno::Sequence< T > > & aSeqSeq )
-{
-    sal_Int32 nOuter, nInner, nCount = 0,
-        nResultSize = 0;
-    const sal_Int32 nOuterSize = aSeqSeq.getLength();
-    for( nOuter=0; nOuter<nOuterSize; ++nOuter )
-        nResultSize += aSeqSeq[nOuter].getLength();
-    css::uno::Sequence< T > aResult( nResultSize );
-    auto aResultRange = asNonConstRange(aResult);
-
-    for( nOuter=0; nOuter<nOuterSize; ++nOuter )
-    {
-        const sal_Int32 nInnerSize = aSeqSeq[nOuter].getLength();
-        for( nInner=0; nInner<nInnerSize; ++nInner, ++nCount )
-            aResultRange[nCount] = aSeqSeq[nOuter][nInner];
-    }
-    return aResult;
-}
-
 template< typename T >
 std::vector< T >
     FlattenSequence( const std::vector< std::vector< T > > & aSeqSeq )

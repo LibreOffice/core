@@ -417,7 +417,6 @@ class SVXCORE_DLLPUBLIC SvxShapeGroupAnyD : public SvxShape,
                       public css::drawing::XShapes
 {
 public:
-    SvxShapeGroupAnyD( SdrObject* pObj );
     SvxShapeGroupAnyD( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet );
     virtual ~SvxShapeGroupAnyD() noexcept override;
 

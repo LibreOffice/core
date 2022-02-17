@@ -756,28 +756,6 @@ SvxChartRegress RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
     return eResult;
 }
 
-SvxChartRegress RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine(
-    const rtl::Reference< DataSeries > & xRegCnt )
-{
-    SvxChartRegress eResult = SvxChartRegress::NONE;
-
-    if( xRegCnt.is())
-    {
-        for( rtl::Reference< RegressionCurveModel > const & curve : xRegCnt->getRegressionCurves2() )
-        {
-            SvxChartRegress eType = getRegressionType( curve );
-            if( eType != SvxChartRegress::MeanValue &&
-                eType != SvxChartRegress::Unknown )
-            {
-                eResult = eType;
-                break;
-            }
-        }
-    }
-
-    return eResult;
-}
-
 OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XRegressionCurve >& xRegressionCurve )
 {
     OUString aResult = getRegressionCurveSpecificName(xRegressionCurve);
