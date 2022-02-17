@@ -16,6 +16,24 @@
       "message": "Eike: I suppose that if at all, this should be a master-only revert (unless someone also cherry-picks that other commit to other branches), right?",
       "revId": "09273720b0a8c9f9fa344abd2b6ca8f418262338",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf1c76e1_9b413fa5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-17T10:47:30Z",
+      "side": 1,
+      "message": "Yes, agreed. Commit 4e4a01302a140d75a49055821b3197a2eda81db5 adds more complexity than the now existing patch and IMHO should not be backported unless we discover similar replaceAll() bottlenecks at other places.",
+      "parentUuid": "086f2b30_2ecdabe5",
+      "revId": "09273720b0a8c9f9fa344abd2b6ca8f418262338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
