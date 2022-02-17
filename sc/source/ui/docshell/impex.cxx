@@ -1767,41 +1767,10 @@ void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
 
     // The normal case is no embedded NULL, check first before de-/allocating
     // ustring stuff.
-    const sal_Unicode cNull = 0;
-    sal_Int32 i;
-    if ((i = rStr.indexOf( cNull)) >= 0)
+    sal_Unicode cNull = 0;
+    if (rStr.indexOf( cNull) >= 0)
     {
-        // Do not use OUString::replaceAll(...,""), in case of repeated null
-        // bytes that reallocates for each and for massive amounts takes
-        // ~endless. See tdf#147421 with 3577016 trailing null-bytes.
-        const sal_Int32 nLen = rStr.getLength();
-        OUStringBuffer aBuf( nLen);
-        sal_Int32 s = 0;
-        sal_Unicode const * const p = rStr.getStr();
-        do
-        {
-            // Append good substring.
-            aBuf.append( p + s, i - s);
-            // Skip all cNull.
-            while (++i < nLen && *(p+i) == cNull)
-                ;
-            // Find next cNull after good if characters left, else end.
-            if (i < nLen)
-            {
-                s = i;
-                i = rStr.indexOf( cNull, i);
-            }
-            else
-            {
-                s = nLen;
-            }
-        }
-        while (0 <= i && i < nLen);
-        // Append good trailing substring, if any.
-        if (s < nLen)
-            aBuf.append( p + s, nLen - s);
-
-        rStr = aBuf.makeStringAndClear();
+        rStr = rStr.replaceAll( std::u16string_view( &cNull, 1), "");
     }
 }
 
