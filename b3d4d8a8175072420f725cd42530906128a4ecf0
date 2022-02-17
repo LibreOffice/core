@@ -34,6 +34,24 @@
       "parentUuid": "d31b5aa1_791ecb65",
       "revId": "b3d4d8a8175072420f725cd42530906128a4ecf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "031eb4c6_39c14fce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001209
+      },
+      "writtenOn": "2022-02-17T05:02:48Z",
+      "side": 1,
+      "message": "The initial failure was due to falling back to different encodings on Windows and Linux, which as far as I can tell is expected behaviour. The solution is to test that it doesn\u0027t equal the string instead. I also changed to a different encoding/example as the EUC-KR with two chars was actually being detected as something else",
+      "parentUuid": "38eafe5b_4f28cd9d",
+      "revId": "b3d4d8a8175072420f725cd42530906128a4ecf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
