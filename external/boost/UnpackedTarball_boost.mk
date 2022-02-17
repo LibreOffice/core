@@ -17,6 +17,7 @@ boost_patches += boost.utility.Wundef.warnings.patch
 
 boost_patches += boost.noiconv.patch
 boost_patches += boost.between.warning.patch
+boost_patches += boost.fallback.encoding.patch
 
 boost_patches += rtti.patch.0
 
