@@ -610,34 +610,6 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                             sText = pField->GetDescription() + u" - " + pField->GetFieldName()
                                     + sSubType + sExpandField;
                         }
-                        else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
-                        {
-                            OUString sExpandedTextOfReferencedTextNode;
-                            if (const SwGetRefField* pRefField(
-                                        dynamic_cast<const SwGetRefField*>(pField)); pRefField)
-                            {
-                                if (pRefField->IsRefToHeadingCrossRefBookmark() ||
-                                        pRefField->IsRefToNumItemCrossRefBookmark())
-                                {
-                                    sExpandedTextOfReferencedTextNode = u" - " +
-                                            pRefField->GetExpandedTextOfReferencedTextNode(
-                                                *m_pWrtShell->GetLayout());
-                                    if (sExpandedTextOfReferencedTextNode.getLength() > 80)
-                                    {
-                                        sExpandedTextOfReferencedTextNode =
-                                                OUString::Concat(
-                                                    sExpandedTextOfReferencedTextNode.subView(
-                                                        0, 80)) + u"...";
-                                    }
-                                }
-                                else
-                                {
-                                    sExpandedTextOfReferencedTextNode = u" - " +
-                                            pRefField->GetSetRefName();
-                                }
-                            }
-                            sText = pField->GetDescription() + sExpandedTextOfReferencedTextNode;
-                        }
                         auto pCnt(std::make_unique<SwTextFieldContent>(this, sText, pFormatField,
                                       pTextField->GetTextNode().GetIndex().get()));
                         if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
