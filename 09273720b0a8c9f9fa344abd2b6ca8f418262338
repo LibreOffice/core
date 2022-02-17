@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "086f2b30_2ecdabe5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-17T08:03:44Z",
+      "side": 1,
+      "message": "Eike: I suppose that if at all, this should be a master-only revert (unless someone also cherry-picks that other commit to other branches), right?",
+      "revId": "09273720b0a8c9f9fa344abd2b6ca8f418262338",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
