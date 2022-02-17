@@ -1194,11 +1194,12 @@ class SFScriptForge:
         serviceproperties = dict(Folder = False, Languages = False, Locale = False)
 
         @classmethod
-        def ReviewServiceArgs(cls, foldername = '', locale = '', encoding = 'UTF-8'):
+        def ReviewServiceArgs(cls, foldername = '', locale = '', encoding = 'UTF-8',
+                              locale2 = '', encoding2 = 'UTF-8'):
             """
                 Transform positional and keyword arguments into positional only
                 """
-            return foldername, locale, encoding
+            return foldername, locale, encoding, locale2, encoding2
 
         def AddText(self, context = '', msgid = '', comment = ''):
             return self.ExecMethod(self.vbMethod, 'AddText', context, msgid, comment)
