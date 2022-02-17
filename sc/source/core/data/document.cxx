@@ -6499,9 +6499,8 @@ ScPostIt* ScDocument::GetNote(const ScAddress& rPos)
 
 ScPostIt* ScDocument::GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab)
 {
-    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) &&
-        nCol < maTabs[nTab]->GetAllocatedColumnsCount())
-        return maTabs[nTab]->aCol[nCol].GetCellNote(nRow);
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+        return maTabs[nTab]->GetNote(nCol, nRow);
     else
         return nullptr;
 
@@ -6514,7 +6513,8 @@ void ScDocument::SetNote(const ScAddress& rPos, std::unique_ptr<ScPostIt> pNote)
 
 void ScDocument::SetNote(SCCOL nCol, SCROW nRow, SCTAB nTab, std::unique_ptr<ScPostIt> pNote)
 {
-    return maTabs[nTab]->CreateColumnIfNotExists(nCol).SetCellNote(nRow, std::move(pNote));
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
+        maTabs[nTab]->SetNote(nCol, nRow, std::move(pNote));
 }
 
 bool ScDocument::HasNote(const ScAddress& rPos) const
@@ -6545,6 +6545,9 @@ bool ScDocument::HasColNotes(SCCOL nCol, SCTAB nTab) const
 
     const ScTable* pTab = FetchTable(nTab);
     if (!pTab)
+        return false;
+
+    if (nCol >= pTab->GetAllocatedColumnsCount())
         return false;
 
     return pTab->aCol[nCol].HasCellNotes();
@@ -6590,6 +6593,7 @@ ScPostIt* ScDocument::GetOrCreateNote(const ScAddress& rPos)
     else
         return CreateNote(rPos);
 }
+
 ScPostIt* ScDocument::CreateNote(const ScAddress& rPos)
 {
     ScPostIt* pPostIt = new ScPostIt(*this, rPos);
