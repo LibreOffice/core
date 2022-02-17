@@ -39,7 +39,6 @@ gb_OSDEFS := \
 gb_CFLAGS := \
 	$(gb_CFLAGS_COMMON) \
 	-fPIC \
-	-Wdeclaration-after-statement \
 	-Wshadow \
 
 # At least libstdc++ needs -pthread when including various C++ headers like <thread>, see

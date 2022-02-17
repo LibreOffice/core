@@ -280,7 +280,6 @@ gb_CXXCLRFLAGS := \
 ifeq ($(COM_IS_CLANG),TRUE)
 
 gb_CFLAGS += \
-	-Wdeclaration-after-statement \
 	-Wendif-labels \
 	-Wshadow \
 	-Wstrict-prototypes \
