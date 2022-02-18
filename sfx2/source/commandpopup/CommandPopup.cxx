@@ -248,6 +248,7 @@ IMPL_LINK(CommandListBox, TreeViewKeyPress, const KeyEvent&, rKeyEvent, bool)
     else if (rKeyEvent.GetKeyCode().GetCode() == KEY_RETURN)
     {
         RowActivated(*mpCommandTreeView);
+        return true;
     }
 
     return false;
