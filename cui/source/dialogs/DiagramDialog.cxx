@@ -40,12 +40,19 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
 IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
 {
     OUString sText = mpTextAdd->get_text();
+    static bool bAdvancedSmartArt(nullptr != getenv("SAL_ENABLE_ADVANCED_SMART_ART"));
+
     if (!sText.isEmpty())
     {
         OUString sNodeId = mpDiagramData->addNode(sText);
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
         mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
         mpTreeDiagram->select(*pEntry);
+        comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
+    }
+    else if (bAdvancedSmartArt)
+    {
+        // For test purposes re-layout without change
         comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
     }
 }
