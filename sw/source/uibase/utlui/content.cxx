@@ -591,13 +591,10 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     if (SwTextField* pTextField = pFormatField->GetTextField())
                     {
                         const SwField* pField = pFormatField->GetField();
-                        OUString sExpandField;
-                        // tdf#146490 page number field type in Header/Footer
-                        if (pField->GetTypeId() == SwFieldTypesEnum::PageNumber &&
-                              m_pWrtShell->GetDoc()->IsInHeaderFooter(pTextField->GetTextNode()))
-                            sExpandField = SwResId(STR_HEADER_FOOTER);
-                        else
-                            sExpandField = pField->ExpandField(true, m_pWrtShell->GetLayout());
+                        // fields in header footer don't behave well, skip them
+                        if (m_pWrtShell->GetDoc()->IsInHeaderFooter(pTextField->GetTextNode()))
+                            continue;
+                        OUString sExpandField = pField->ExpandField(true, m_pWrtShell->GetLayout());
                         if (!sExpandField.isEmpty())
                             sExpandField = u" - " + sExpandField;
                         OUString sText = pField->GetDescription() + u" - " + pField->GetFieldName()
