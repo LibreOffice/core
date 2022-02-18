@@ -1590,14 +1590,21 @@ oslFileError SAL_CALL osl_getFileStatus(
     {
         if ( !pItemImpl->bFullPathNormalized )
         {
-            ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW( sFullPath.getStr() ),
-                                                         o3tl::toW( aBuffer ),
-                                                         aBuffer.getBufSizeInSymbols(),
-                                                         true );
+            ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
+            sal_uInt32 nNewLen = GetLongPathNameW(o3tl::toW(sFullPath.getStr()), o3tl::toW(aBuffer),
+                                                 aBuffer.getBufSizeInSymbols());
 
             if ( nNewLen )
             {
+                /* Capitalizes drive names(single letter), Because, in windows file system, paths are case-sensitive and different case drive names
+                can cause issues while comparing. */
+                /* While parsing a path, function osl_DirectoryItem has a case PATHTYPE_VOLUME for drives, and it capatalizes them. That step can be
+                overwritten by osl_getFileStatus, previously our built-in getCaseCorrectPath covered this case, however winAPI does no capatalization.
+                Thus it needs to be postprocessed.*/
+                sal_Int32 nIndex = rtl_ustr_indexOfChar(aBuffer, ':');
+                if (nIndex > 0) {
+                    aBuffer[nIndex - 1] = rtl::toAsciiUpperCase(aBuffer[nIndex - 1]);
+                }
                 pItemImpl->m_sFullPath = OUString(&*aBuffer, nNewLen);
                 sFullPath = pItemImpl->m_sFullPath;
                 pItemImpl->bFullPathNormalized = true;
