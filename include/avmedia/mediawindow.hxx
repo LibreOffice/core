@@ -74,6 +74,7 @@ namespace avmedia
 
         void                show();
         void                hide();
+        bool                isVisible() const;
 
     public:
 

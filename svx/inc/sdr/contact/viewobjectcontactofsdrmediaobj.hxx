@@ -51,7 +51,11 @@ namespace sdr::contact
             void    updateMediaItem( ::avmedia::MediaItem& rItem ) const;
             void    executeMediaItem( const ::avmedia::MediaItem& rItem );
 
+            virtual void ActionChanged() override;
+
         private:
+            void updateMediaWindow() const;
+
 #if HAVE_FEATURE_AVMEDIA
             std::unique_ptr<sdr::contact::SdrMediaWindow> mpMediaWindow;
 #endif

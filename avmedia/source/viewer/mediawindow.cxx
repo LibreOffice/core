@@ -142,30 +142,30 @@ bool MediaWindow::start()
     return mpImpl->start();
 }
 
-
 void MediaWindow::updateMediaItem( MediaItem& rItem ) const
 {
     mpImpl->updateMediaItem( rItem );
 }
-
 
 void MediaWindow::executeMediaItem( const MediaItem& rItem )
 {
     mpImpl->executeMediaItem( rItem );
 }
 
-
 void MediaWindow::show()
 {
     mpImpl->Show();
 }
-
 
 void MediaWindow::hide()
 {
     mpImpl->Hide();
 }
 
+bool MediaWindow::isVisible() const
+{
+    return mpImpl->IsVisible();
+}
 
 vcl::Window* MediaWindow::getWindow() const
 {
