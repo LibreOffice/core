@@ -66,6 +66,8 @@ public:
 
     virtual ~WinSalGraphicsImpl() override;
 
+    void Flush() override;
+
     virtual void Init() override;
 
     virtual void freeResources() override;
