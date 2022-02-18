@@ -26,6 +26,21 @@
 
 // Forward declarations
 class SfxItemSet;
+class SdrObjGroup;
+
+// Helper class to allow administer advanced SmartArt related
+// data and functionality
+class SVXCORE_DLLPUBLIC SmartArtHelper
+{
+protected:
+    void anchorToSdrObjGroup(SdrObjGroup& rTarget);
+
+public:
+    SmartArtHelper();
+    virtual ~SmartArtHelper();
+
+    virtual void reLayout() = 0;
+};
 
 //   SdrObjGroup
 class SVXCORE_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
@@ -36,6 +51,15 @@ private:
     CreateObjectSpecificProperties() override;
 
     Point maRefPoint; // Reference point inside the object group
+
+    // Allow *only* SmartArtHelper itself to set this internal reference to
+    // tightly control usage
+    friend class SmartArtHelper;
+    std::unique_ptr<SmartArtHelper> mp_SmartArtHelper;
+
+public:
+    bool isSmartArt() const { return bool(mp_SmartArtHelper); }
+    SmartArtHelper* getSmartArtHelper() { return mp_SmartArtHelper.get(); }
 
 private:
     // protected destructor - due to final, make private

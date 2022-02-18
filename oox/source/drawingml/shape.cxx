@@ -50,6 +50,7 @@
 #include <oox/mathml/import.hxx>
 #include <oox/token/properties.hxx>
 #include "diagram/datamodel.hxx"
+#include "diagram/diagramhelper.hxx"
 
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -102,6 +103,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <sal/log.hxx>
 #include <svx/sdtaitm.hxx>
+#include <oox/drawingml/diagram/diagram.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -140,6 +142,7 @@ Shape::Shape( const char* pServiceName, bool bDefaultHeight )
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
 , maDiagramDoms( 0 )
+, mpSmartArtHelper( nullptr )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -189,10 +192,49 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mfAspectRatio(pSourceShape->mfAspectRatio)
 , mbUseBgFill(pSourceShape->mbUseBgFill)
 , maDiagramFontHeights(pSourceShape->maDiagramFontHeights)
+, mpSmartArtHelper( nullptr )
 {}
 
 Shape::~Shape()
 {
+    // SmartArtHelper should not be set here anymore, see
+    // propagateSmartArtHelper below (maybe assert..?)
+    delete mpSmartArtHelper;
+}
+
+void Shape::prepareSmartArtHelper(
+    const std::shared_ptr< Diagram >& rDiagramPtr,
+    const std::shared_ptr<::oox::drawingml::Theme>& rTheme)
+{
+    // Prepare SmartArt data collecting for this Shape
+    if( nullptr == mpSmartArtHelper && FRAMETYPE_DIAGRAM == meFrameType )
+    {
+        const_cast<Shape*>(this)->mpSmartArtHelper = new DiagramSmartArtHelper(rDiagramPtr, rTheme);
+    }
+}
+
+void Shape::propagateSmartArtHelper()
+{
+    // Propagate collected SmartArt data to data holder
+    if (FRAMETYPE_DIAGRAM == meFrameType && nullptr != mpSmartArtHelper)
+    {
+        SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxShape));
+
+        if(pAnchorObj)
+        {
+            static_cast<DiagramSmartArtHelper*>(mpSmartArtHelper)->doAnchor(*pAnchorObj);
+            mpSmartArtHelper = nullptr;
+        }
+    }
+
+    // If propagation failed, delete/cleanup here. Since the SmartArtHelper
+    // holds a Diagram and that this Shape it is necessary - the destructor
+    // will not be called and will be too late
+    if (nullptr != mpSmartArtHelper)
+    {
+        delete mpSmartArtHelper;
+        mpSmartArtHelper = nullptr;
+    }
 }
 
 table::TablePropertiesPtr const & Shape::getTableProperties()
