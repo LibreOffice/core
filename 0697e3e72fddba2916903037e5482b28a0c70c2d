@@ -16,6 +16,24 @@
       "message": "Added a unit test for tdf#100770, problem here is that I am not able to re-introduce the bug even after reverting the commit. Looks like the fix is no longer needed. What are your views over it?",
       "revId": "0697e3e72fddba2916903037e5482b28a0c70c2d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4a5871e_e43d65e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-18T16:53:44Z",
+      "side": 1,
+      "message": "Hello Vaibhav,\nThanks for this contribution.\nUnfortunately, How can you make sure the test works if you can make it to fail ?",
+      "parentUuid": "d302c7ca_0a84aec6",
+      "revId": "0697e3e72fddba2916903037e5482b28a0c70c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
