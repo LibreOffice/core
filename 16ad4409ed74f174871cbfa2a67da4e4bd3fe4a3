@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5d57339_b4950f7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-18T07:25:21Z",
+      "side": 1,
+      "message": "Next change in chain got Verified+1, so this is probably false alarm.",
+      "revId": "16ad4409ed74f174871cbfa2a67da4e4bd3fe4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
