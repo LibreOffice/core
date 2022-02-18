@@ -63,6 +63,7 @@ public:
 
     TextCharacterProperties          getCharacterStyle(
         const TextCharacterProperties& rTextStyleProperties,
+        const TextListStyle& rMasterTextListStyle,
         const TextListStyle& rTextListStyle) const;
 
     TextParagraphProperties*      getParagraphStyle(
@@ -73,6 +74,7 @@ public:
                                     const css::uno::Reference < css::text::XText > & xText,
                                     const css::uno::Reference < css::text::XTextCursor > &xAt,
                                     const TextCharacterProperties& rTextStyleProperties,
+                                    const TextListStyle& rMasterTextListStyle,
                                     const TextListStyle& rTextListStyle,
                                     bool bFirst,
                                     float nDefaultCharHeight) const;

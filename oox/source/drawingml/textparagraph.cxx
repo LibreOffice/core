@@ -48,14 +48,18 @@ TextParagraph::~TextParagraph()
 
 TextCharacterProperties TextParagraph::getCharacterStyle (
     const TextCharacterProperties& rTextStyleProperties,
+    const TextListStyle& rMasterTextListStyle,
     const TextListStyle& rTextListStyle) const
 {
+    const TextParagraphProperties* pMasterTextParagraphStyle = getParagraphStyle(rMasterTextListStyle);
     const TextParagraphProperties* pTextParagraphStyle = getParagraphStyle(rTextListStyle);
 
     TextCharacterProperties aTextCharacterStyle;
+    if (pMasterTextParagraphStyle)
+        aTextCharacterStyle.assignUsed(pMasterTextParagraphStyle->getTextCharacterProperties());
+    aTextCharacterStyle.assignUsed(rTextStyleProperties);
     if (pTextParagraphStyle)
         aTextCharacterStyle.assignUsed(pTextParagraphStyle->getTextCharacterProperties());
-    aTextCharacterStyle.assignUsed(rTextStyleProperties);
     aTextCharacterStyle.assignUsed(maProperties.getTextCharacterProperties());
     return aTextCharacterStyle;
 }
@@ -82,11 +86,13 @@ void TextParagraph::insertAt(
         const Reference < XText > &xText,
         const Reference < XTextCursor > &xAt,
         const TextCharacterProperties& rTextStyleProperties,
+        const TextListStyle& rMasterTextListStyle,
         const TextListStyle& rTextListStyle, bool bFirst, float nDefaultCharHeight) const
 {
     try {
         sal_Int32 nParagraphSize = 0;
-        TextCharacterProperties aTextCharacterStyle = getCharacterStyle(rTextStyleProperties, rTextListStyle);
+        TextCharacterProperties aTextCharacterStyle
+            = getCharacterStyle(rTextStyleProperties, rMasterTextListStyle, rTextListStyle);
 
         if( !bFirst )
         {
@@ -127,7 +133,10 @@ void TextParagraph::insertAt(
         PropertyMap aioBulletList;
         Reference< XPropertySet > xProps( xAt, UNO_QUERY);
 
-        TextParagraphProperties* pTextParagraphStyle = getParagraphStyle(rTextListStyle);
+        TextListStyle aCombinedTextStyle;
+        aCombinedTextStyle.apply(rMasterTextListStyle);
+        aCombinedTextStyle.apply(rTextListStyle);
+        TextParagraphProperties* pTextParagraphStyle = getParagraphStyle(aCombinedTextStyle);
         if ( pTextParagraphStyle )
         {
             TextParagraphProperties aParaProp;
