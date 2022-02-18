@@ -181,19 +181,7 @@ uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rUR
     if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
     {
         uno::Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
-
-        static std::u16string_view aServiceManagers[] =
-        {
-            u"" AVMEDIA_MANAGER_SERVICE_PREFERRED,
-            u"" AVMEDIA_MANAGER_SERVICE_NAME,
-        };
-
-        for (const auto& rServiceName : aServiceManagers)
-        {
-            xPlayer = createPlayer(rURL, OUString(rServiceName), xContext);
-            if (xPlayer)
-                break;
-        }
+        xPlayer = createPlayer(rURL, AVMEDIA_MANAGER_SERVICE_NAME, xContext);
     }
 
     return xPlayer;
