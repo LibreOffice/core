@@ -34,6 +34,24 @@
       "parentUuid": "d302c7ca_0a84aec6",
       "revId": "0697e3e72fddba2916903037e5482b28a0c70c2d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7256090b_74ce572b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-18T18:01:50Z",
+      "side": 1,
+      "message": "As I said, I couldn\u0027t re-introduce the bug either by git revert or by manually reverting the changes. What should I do re-introduce the bug so that I become able to check for failures?",
+      "parentUuid": "e4a5871e_e43d65e0",
+      "revId": "0697e3e72fddba2916903037e5482b28a0c70c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
