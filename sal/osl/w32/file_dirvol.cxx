@@ -1590,15 +1590,19 @@ oslFileError SAL_CALL osl_getFileStatus(
     {
         if ( !pItemImpl->bFullPathNormalized )
         {
-            ::osl::LongPathBuffer< sal_Unicode > aBuffer( MAX_LONG_PATH );
-            sal_uInt32 nNewLen = GetCaseCorrectPathName( o3tl::toW( sFullPath.getStr() ),
-                                                         o3tl::toW( aBuffer ),
-                                                         aBuffer.getBufSizeInSymbols(),
-                                                         true );
+            ::osl::LongPathBuffer<sal_Unicode> aBuffer(MAX_LONG_PATH);
+            sal_uInt32 nNewLen = GetLongPathNameW(o3tl::toW(sFullPath.getStr()), o3tl::toW(aBuffer),
+                                                 aBuffer.getBufSizeInSymbols());
 
             if ( nNewLen )
             {
-                pItemImpl->m_sFullPath = OUString(&*aBuffer, nNewLen);
+                OUString temp = OUString(&*aBuffer, nNewLen);
+                sal_Int32 nIndex = temp.indexOf(":");
+                if (nIndex > 0) {
+                    OUString temp2 = OUString(temp[nIndex - 1]).toAsciiUpperCase();
+                    temp = temp.replaceAt(0, temp2.getLength(), temp2);
+                }
+                pItemImpl->m_sFullPath = temp;
                 sFullPath = pItemImpl->m_sFullPath;
                 pItemImpl->bFullPathNormalized = true;
             }

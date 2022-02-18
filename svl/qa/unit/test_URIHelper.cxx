@@ -238,7 +238,7 @@ void Test::testNormalizedMakeRelative() {
           "file:///usr/bin/nonex1/nonex3/nonex4#fragmentB",
           "nonex3/nonex4#fragmentB" },
         { "file:///usr/nonex1/nonex2", "file:///usr/nonex3", "../nonex3" },
-        { "file:///c:/windows/nonex1", "file:///c:/nonex2", "../nonex2" },
+        { "file:///c:/Windows/nonex1", "file:///c:/nonex2", "../nonex2" },
 #if defined(_WIN32)
         { "file:///c:/nonex1/nonex2", "file:///C:/nonex1/nonex3/nonex4",
           "nonex3/nonex4" }
