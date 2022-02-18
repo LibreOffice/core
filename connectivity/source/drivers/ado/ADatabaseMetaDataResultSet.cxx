@@ -691,21 +691,41 @@ void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
 ::cppu::IPropertyArrayHelper* ODatabaseMetaDataResultSet::createArrayHelper( ) const
 {
 
-    Sequence< css::beans::Property > aProps(5);
-    css::beans::Property* pProperties = aProps.getArray();
-    sal_Int32 nPos = 0;
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
-        PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
-        PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
-        PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
-        PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
-        PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
-
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return new ::cppu::OPropertyArrayHelper
+    {
+        {
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+                PROPERTY_ID_CURSORNAME,
+                cppu::UnoType<OUString>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+                PROPERTY_ID_FETCHDIRECTION,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+                PROPERTY_ID_FETCHSIZE,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+                PROPERTY_ID_RESULTSETCONCURRENCY,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+                PROPERTY_ID_RESULTSETTYPE,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            }
+        }
+    };
 }
 
 ::cppu::IPropertyArrayHelper & ODatabaseMetaDataResultSet::getInfoHelper()
