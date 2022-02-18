@@ -60,6 +60,14 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::ActiveDescendantChanged));
             return;
+        case AccessibleEventId::CARET_CHANGED:
+        {
+            sal_Int32 nNewCursorPos = 0;
+            aEvent.NewValue >>= nNewCursorPos;
+            QAccessible::updateAccessibility(
+                new QAccessibleTextCursorEvent(pQAccessibleInterface, nNewCursorPos));
+            return;
+        }
         case AccessibleEventId::CHILD:
         {
             QAccessible::Event event = QAccessible::InvalidEvent;
@@ -109,7 +117,6 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableRowHeaderChanged));
             return;
         case AccessibleEventId::TABLE_SUMMARY_CHANGED:
-        case AccessibleEventId::CARET_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableSummaryChanged));
             return;
