@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98e2e127_00b9a497",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-18T09:25:09Z",
+      "side": 1,
+      "message": "so, should we go with this (backporting to 7-3 and 7-2) for now?",
+      "revId": "b86ab79197ed001eea2353155abe4a73f0d6d837",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
