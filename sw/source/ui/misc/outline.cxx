@@ -42,6 +42,7 @@
 #include <outline.hrc>
 #include <strings.hrc>
 #include <paratr.hxx>
+#include <svtools/colorcfg.hxx>
 
 #include <IDocumentOutlineNodes.hxx>
 
@@ -875,8 +876,8 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
     pVDev->SetOutputSize(aSize);
 
     // #101524# OJ
-    pVDev->SetFillColor(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
-    pVDev->SetLineColor(rRenderContext.GetSettings().GetStyleSettings().GetButtonTextColor());
+    pVDev->SetFillColor(SwViewOption::GetDocColor());
+    pVDev->SetLineColor(SwViewOption::GetDocBoundariesColor());
     pVDev->DrawRect(tools::Rectangle(Point(0,0), aSize));
 
     if (pActNum)
@@ -897,8 +898,11 @@ void NumberingPreview::Paint(vcl::RenderContext& rRenderContext, const tools::Re
         tools::Long nYStart = 4;
         aStdFont = OutputDevice::GetDefaultFont(DefaultFontType::UI_SANS, GetAppLanguage(),
                                                 GetDefaultFontFlags::OnlyOne, &rRenderContext);
-        // #101524# OJ
-        aStdFont.SetColor(SwViewOption::GetFontColor());
+
+        if (svtools::ColorConfig().GetColorValue(svtools::FONTCOLOR, false).nColor == COL_AUTO)
+            aStdFont.SetColor( SwViewOption::GetDocColor().IsDark() ? COL_WHITE : COL_BLACK );
+        else
+            aStdFont.SetColor( SwViewOption::GetFontColor() );
 
         const tools::Long nFontHeight = nYStep * ( bPosition ? 15 : 6 ) / 10;
         aStdFont.SetFontSize(Size( 0, nFontHeight ));
