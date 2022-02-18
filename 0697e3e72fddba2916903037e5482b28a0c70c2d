@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d302c7ca_0a84aec6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-18T16:09:25Z",
+      "side": 1,
+      "message": "Added a unit test for tdf#100770, problem here is that I am not able to re-introduce the bug even after reverting the commit. Looks like the fix is no longer needed. What are your views over it?",
+      "revId": "0697e3e72fddba2916903037e5482b28a0c70c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
