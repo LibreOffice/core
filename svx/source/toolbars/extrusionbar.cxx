@@ -930,7 +930,7 @@ static void getExtrusionSurfaceState( SdrView const * pSdrView, SfxItemSet& rSet
                 if( bMetal )
                 {
                     nSurface = 3; // metal ODF
-                    sal_Int16 eMetalType;
+                    sal_Int16 eMetalType = EnhancedCustomShapeMetalType::MetalODF;
                     pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, u"MetalType" );
                     if (pAny)
                     {
