@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "881a0291_e407fa08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-18T20:11:14Z",
+      "side": 1,
+      "message": "Would suggest to name the feature Dynamic_Diagram, or whatever, but not SmartArt.",
+      "revId": "e1bfedfab1d567c4c8d3760d7822d709eb0f793e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
