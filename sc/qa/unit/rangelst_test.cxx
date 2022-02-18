@@ -504,7 +504,7 @@ void Test::testJoin_Case5()
 void Test::testUpdateReference_DeleteRow()
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
-    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,MAXCOL,MAXROW,0), 0, -1, 0);
+    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0), 0, -1, 0);
     CPPUNIT_ASSERT(bUpdated);
 
     for(SCCOL nCol = 1; nCol <= 4; ++nCol)
@@ -518,35 +518,35 @@ void Test::testUpdateReference_DeleteRow()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(12), aList.GetCellCount());
 
     ScRangeList aList2(ScRange(2,2,0,2,2,0));
-    aList2.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,MAXCOL,MAXROW,0), 0, -1, 0);
+    aList2.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,3,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0), 0, -1, 0);
     CPPUNIT_ASSERT(aList2.empty());
 
     ScRangeList aList3;
     aList3.push_back(ScRange(2,2,0,2,8,0));
     aList3.push_back(ScRange(4,2,0,4,8,0));
-    aList3.UpdateReference(URM_INSDEL, m_pDoc, ScRange(2,5,0,MAXCOL,MAXROW,0), 0, -1, 0);
+    aList3.UpdateReference(URM_INSDEL, m_pDoc, ScRange(2,5,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0), 0, -1, 0);
     // Verify all ranges in the list have been updated properly.
     CPPUNIT_ASSERT_EQUAL(size_t(2), aList3.size());
     CPPUNIT_ASSERT_EQUAL(ScRange(2,2,0,2,7,0), aList3[0]);
     CPPUNIT_ASSERT_EQUAL(ScRange(4,2,0,4,7,0), aList3[1]);
 
-    ScRangeList aList4(ScRange(0,0,0,MAXCOL,MAXROW,0));
+    ScRangeList aList4(ScRange(0,0,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0));
     ScRangeList aList4Copy = aList4;
-    aList4.UpdateReference(URM_INSDEL, m_pDoc, ScRange(14,3,0,MAXCOL,7,0), 0, -2, 0);
+    aList4.UpdateReference(URM_INSDEL, m_pDoc, ScRange(14,3,0,m_pDoc->MaxCol(),7,0), 0, -2, 0);
     CPPUNIT_ASSERT_EQUAL(aList4Copy, aList4);
 }
 
 void Test::testUpdateReference_DeleteLastRow()
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
-    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,4,0,MAXCOL,4,0), 0, -1, 0);
+    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(0,4,0,m_pDoc->MaxCol(),4,0), 0, -1, 0);
     CPPUNIT_ASSERT(bUpdated);
 }
 
 void Test::testUpdateReference_DeleteCol()
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
-    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(3,0,0,MAXCOL,MAXROW,0), -1, 0, 0);
+    bool bUpdated = aList.UpdateReference(URM_INSDEL, m_pDoc, ScRange(3,0,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0), -1, 0, 0);
     CPPUNIT_ASSERT(bUpdated);
 
     for(SCROW nRow = 1; nRow <= 4; ++nRow)
@@ -570,14 +570,14 @@ void Test::testGetIntersectedRange()
 void Test::testInsertRow()
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
-    aList.InsertRow(0, 0, MAXCOL, 5, 2);
+    aList.InsertRow(0, 0, m_pDoc->MaxCol(), 5, 2);
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,0,4,6,0)), aList);
 }
 
 void Test::testInsertCol()
 {
     ScRangeList aList(ScRange(1,1,0,4,4,0));
-    aList.InsertCol(0, 0, MAXROW, 5, 2);
+    aList.InsertCol(0, 0, m_pDoc->MaxRow(), 5, 2);
     CPPUNIT_ASSERT_EQUAL(ScRangeList(ScRange(1,1,0,6,4,0)), aList);
 }
 

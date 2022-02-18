@@ -299,7 +299,7 @@ void TestSort::testSortHorizontalWholeColumn()
     CPPUNIT_ASSERT_EQUAL(9.0, m_pDoc->GetValue(ScAddress(6,0,0)));
 
     // Extend the sort range to whole column.
-    aSortRange.aEnd.SetRow(MAXROW);
+    aSortRange.aEnd.SetRow(m_pDoc->MaxRow());
 
     SCCOL nCol1 = aSortRange.aStart.Col();
     SCCOL nCol2 = aSortRange.aEnd.Col();
@@ -1250,7 +1250,7 @@ void TestSort::testSortRefUpdate4_Impl()
     {
         ScSortParam aSortData;
         aSortData.nCol1 = 0;
-        aSortData.nCol2 = MAXCOL;
+        aSortData.nCol2 = m_pDoc->MaxCol();
         aSortData.nRow1 = aSortRange.aStart.Row()+1;
         aSortData.nRow2 = aSortRange.aEnd.Row();
         aSortData.bHasHeader = false;

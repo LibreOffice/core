@@ -2068,8 +2068,13 @@ void ScFiltersTest2::testHiddenRowsColumnsXLSXML()
     };
 
     std::vector<Check> aRowChecks = {
-        { 0, 0, true }, { 1, 2, false }, { 3, 3, true },      { 4, 4, false },
-        { 5, 7, true }, { 8, 8, false }, { 9, MAXROW, true },
+        { 0, 0, true },
+        { 1, 2, false },
+        { 3, 3, true },
+        { 4, 4, false },
+        { 5, 7, true },
+        { 8, 8, false },
+        { 9, rDoc.MaxRow(), true },
     };
 
     for (const Check& c : aRowChecks)
@@ -2082,7 +2087,11 @@ void ScFiltersTest2::testHiddenRowsColumnsXLSXML()
     }
 
     std::vector<Check> aColChecks = {
-        { 0, 1, true }, { 2, 5, false }, { 6, 9, true }, { 10, 10, false }, { 11, MAXCOL, true },
+        { 0, 1, true },
+        { 2, 5, false },
+        { 6, 9, true },
+        { 10, 10, false },
+        { 11, rDoc.MaxCol(), true },
     };
 
     for (const Check& c : aColChecks)
@@ -2488,7 +2497,7 @@ void ScFiltersTest2::testXLSDefColWidth()
     ScDocShellRef xDocSh = loadDoc(u"chartx.", FORMAT_XLS); // just some XLS with narrow columns
     ScDocument& rDoc = xDocSh->GetDocument();
 
-    int nWidth = rDoc.GetColWidth(MAXCOL, 0, false);
+    int nWidth = rDoc.GetColWidth(rDoc.MaxCol(), 0, false);
     // This was 1280
     CPPUNIT_ASSERT_EQUAL(1005, nWidth);
 
@@ -2809,14 +2818,14 @@ void ScFiltersTest2::testDeleteCirclesInRowAndCol()
     // There should be 6 circle objects!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(6), pPage->GetObjCount());
 
-    // Delete first row (1023 = MAXCOLS)
-    pDrawLayer->DeleteObjectsInArea(0, 0, 0, 1023, 0, true);
+    // Delete first row.
+    pDrawLayer->DeleteObjectsInArea(0, 0, 0, rDoc.MaxCol(), 0, true);
 
     // There should be 3 circle objects!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pPage->GetObjCount());
 
-    // Delete first col (1048575 = MAXROWS)
-    pDrawLayer->DeleteObjectsInArea(0, 0, 0, 0, 1048575, true);
+    // Delete first col.
+    pDrawLayer->DeleteObjectsInArea(0, 0, 0, 0, rDoc.MaxRow(), true);
 
     // There should not be a circle object!
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());

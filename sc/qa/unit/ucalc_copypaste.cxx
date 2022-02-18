@@ -9998,7 +9998,7 @@ void TestCopyPaste::testCopyPasteRepeatOneFormula()
 #if !defined(USE_FORMULA_GROUP_LISTENER) || USE_FORMULA_GROUP_LISTENER
     // At this point, there should be only one normal area listener listening
     // on A1:B1.
-    ScRange aWholeSheet(0, 0, 0, MAXCOL, MAXROW, 0);
+    ScRange aWholeSheet(0, 0, 0, m_pDoc->MaxCol(), m_pDoc->MaxRow(), 0);
     ScBroadcastAreaSlotMachine* pBASM = m_pDoc->GetBASM();
     CPPUNIT_ASSERT(pBASM);
     std::vector<sc::AreaListener> aListeners
@@ -10045,7 +10045,7 @@ void TestCopyPaste::testCopyPasteRepeatOneFormula()
 #endif
 
     // Insert a new row at row 1.
-    ScRange aRowOne(0, 0, 0, MAXCOL, 0, 0);
+    ScRange aRowOne(0, 0, 0, m_pDoc->MaxCol(), 0, 0);
     aMark.SetMarkArea(aRowOne);
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     rFunc.InsertCells(aRowOne, &aMark, INS_INSROWS_BEFORE, true, true);

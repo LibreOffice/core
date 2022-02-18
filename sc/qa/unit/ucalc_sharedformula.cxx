@@ -356,7 +356,7 @@ void TestSharedFormula::testSharedFormulas()
 
     // Delete rows 4:8 and shift row 9 and below up to row 4.  This should
     // re-merge the two into a group of B2:B5.
-    m_pDoc->DeleteRow(ScRange(0,3,0,MAXCOL,7,0));
+    m_pDoc->DeleteRow(ScRange(0,3,0,m_pDoc->MaxCol(),7,0));
     aPos.SetRow(1);
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
@@ -365,7 +365,7 @@ void TestSharedFormula::testSharedFormulas()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("The token is expected to be shared.", pFC->GetCode(), pFC->GetSharedCode());
 
     // Insert 2 rows at row 4, to split it into B2:B3 and B6:B7.
-    m_pDoc->InsertRow(ScRange(0,3,0,MAXCOL,4,0));
+    m_pDoc->InsertRow(ScRange(0,3,0,m_pDoc->MaxCol(),4,0));
     pFC = m_pDoc->GetFormulaCell(aPos);
     CPPUNIT_ASSERT_MESSAGE("B2 should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(1), pFC->GetSharedTopRow());
@@ -711,7 +711,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateRange()
     CPPUNIT_ASSERT_MESSAGE("B3 should be shared.", pFC->IsShared());
 
     // Insert 2 rows at row 1.
-    m_pDoc->InsertRow(ScRange(0,0,0,MAXCOL,1,0));
+    m_pDoc->InsertRow(ScRange(0,0,0,m_pDoc->MaxCol(),1,0));
 
     // B5:B7 should be shared.
     pFC = m_pDoc->GetFormulaCell(ScAddress(1,4,0));
@@ -816,7 +816,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateRangeDeleteRow()
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    rFunc.DeleteCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, DelCellCmd::Rows, true);
+    rFunc.DeleteCells(ScRange(0,2,0,m_pDoc->MaxCol(),2,0), &aMark, DelCellCmd::Rows, true);
 
     // Make sure C1:C4 belong to the same group.
     pFC = m_pDoc->GetFormulaCell(ScAddress(2,0,0));
@@ -929,7 +929,7 @@ void TestSharedFormula::testSharedFormulasRefUpdateExternal()
     ScDocFunc& rDocFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    rDocFunc.DeleteCells(ScRange(0,0,0,MAXCOL,1,0), &aMark, DelCellCmd::CellsUp, true);
+    rDocFunc.DeleteCells(ScRange(0,0,0,m_pDoc->MaxCol(),1,0), &aMark, DelCellCmd::CellsUp, true);
 
     // Check the shifted formula cells now in A5:A8.
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,4,0), "'file:///extdata.fake'#$Data.A1", "Wrong formula!");
@@ -1043,7 +1043,7 @@ void TestSharedFormula::testSharedFormulasInsertRow()
     ScDocFunc& rFunc = m_xDocShell->GetDocFunc();
     ScMarkData aMark(m_pDoc->GetSheetLimits());
     aMark.SelectOneTable(0);
-    rFunc.InsertCells(ScRange(0,2,0,MAXCOL,2,0), &aMark, INS_INSROWS_BEFORE, true, true);
+    rFunc.InsertCells(ScRange(0,2,0,m_pDoc->MaxCol(),2,0), &aMark, INS_INSROWS_BEFORE, true, true);
 
     bool bResult = aCheck.checkContent(m_pDoc);
     CPPUNIT_ASSERT_MESSAGE("Failed on the initial content check.", bResult);
@@ -1112,7 +1112,7 @@ void TestSharedFormula::testSharedFormulasDeleteRows()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(10), pFC->GetSharedLength());
 
     // Delete rows 9:12
-    m_pDoc->DeleteRow(ScRange(0,8,0,MAXCOL,11,0));
+    m_pDoc->DeleteRow(ScRange(0,8,0,m_pDoc->MaxCol(),11,0));
 
     // B1:B8 should be shared.
     pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
@@ -1128,7 +1128,7 @@ void TestSharedFormula::testSharedFormulasDeleteRows()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
 
     // Delete row 3
-    m_pDoc->DeleteRow(ScRange(0,2,0,MAXCOL,2,0));
+    m_pDoc->DeleteRow(ScRange(0,2,0,m_pDoc->MaxCol(),2,0));
 
     // B1:B7 should be shared.
     pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
@@ -1144,7 +1144,7 @@ void TestSharedFormula::testSharedFormulasDeleteRows()
     CPPUNIT_ASSERT_EQUAL(static_cast<SCROW>(8), pFC->GetSharedLength());
 
     // Delete row 5
-    m_pDoc->DeleteRow(ScRange(0,4,0,MAXCOL,4,0));
+    m_pDoc->DeleteRow(ScRange(0,4,0,m_pDoc->MaxCol(),4,0));
 
     // B1:B6 should be shared.
     pFC = m_pDoc->GetFormulaCell(ScAddress(1,0,0));
@@ -1179,7 +1179,7 @@ void TestSharedFormula::testSharedFormulasDeleteColumns()
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(2,0,0)));
 
     // Delete column B.
-    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DelCellCmd::CellsLeft, true);
+    rFunc.DeleteCells(ScRange(1,0,0,1,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
     CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), m_pDoc->GetString(ScAddress(1,0,0)));
 
     // The reference should still point to row 1 but the column status should be set to 'deleted'.
@@ -1209,7 +1209,7 @@ void TestSharedFormula::testSharedFormulasDeleteColumns()
     CPPUNIT_ASSERT_EQUAL(OUString("=B1"), pFC->GetFormula(aCFCxt));
 
     // Clear row 1 and move over to a formula group case.
-    clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,0,0));
+    clearRange(m_pDoc, ScRange(0,0,0,m_pDoc->MaxCol(),0,0));
 
     // Fill A1:B2 with numbers, and C1:C2 with formula that reference those numbers.
     for (SCROW i = 0; i <= 1; ++i)
@@ -1223,7 +1223,7 @@ void TestSharedFormula::testSharedFormulasDeleteColumns()
     }
 
     // Delete column B.
-    rFunc.DeleteCells(ScRange(1,0,0,1,MAXROW,0), &aMark, DelCellCmd::CellsLeft, true);
+    rFunc.DeleteCells(ScRange(1,0,0,1,m_pDoc->MaxRow(),0), &aMark, DelCellCmd::CellsLeft, true);
 
     for (SCROW i = 0; i <= 1; ++i)
     {
@@ -1504,7 +1504,7 @@ void TestSharedFormula::testSharedFormulaInsertColumn()
     m_pDoc->SetString(ScAddress(7,2,0), "=G4*B4");
 
     // Insert a single column at Column F. This used to crash before fdo#74041.
-    m_pDoc->InsertCol(ScRange(5,0,0,5,MAXROW,0));
+    m_pDoc->InsertCol(ScRange(5,0,0,5,m_pDoc->MaxRow(),0));
 
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(8,1,0), "H3*B3", "Wrong formula!");
     ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(8,2,0), "H4*B4", "Wrong formula!");
@@ -1572,7 +1572,7 @@ void TestSharedFormula::testSharedFormulaMoveBlock()
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(1,2,0)));
 
     // Clear the range and start over.
-    clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
+    clearRange(m_pDoc, ScRange(0,0,0,m_pDoc->MaxCol(),m_pDoc->MaxRow(),0));
 
     // Set values 1,2,3,4,5 to A1:A5.
     for (SCROW i = 0; i <= 4; ++i)
