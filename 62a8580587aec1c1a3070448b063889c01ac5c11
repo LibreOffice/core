@@ -16,6 +16,23 @@
       "message": "Could you please clarify why this commit was reverted ? There is no explanation whatsoever",
       "revId": "62a8580587aec1c1a3070448b063889c01ac5c11",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "200ae208_bbee564a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-18T12:21:43Z",
+      "side": 1,
+      "message": "Because that commit caused the regression in tdf#147255.",
+      "revId": "62a8580587aec1c1a3070448b063889c01ac5c11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
