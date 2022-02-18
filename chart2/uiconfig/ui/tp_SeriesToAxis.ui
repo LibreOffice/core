@@ -146,7 +146,7 @@
                 <child>
                   <object class="GtkSpinButton" id="MT_GAP">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="adjustment">adjustmentGAP</property>
                     <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
@@ -163,7 +163,7 @@
                 <child>
                   <object class="GtkSpinButton" id="MT_OVERLAP">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="can_focus">True</property>
                     <property name="adjustment">adjustmentOVERLAP</property>
                     <property name="truncate-multiline">True</property>
                     <child internal-child="accessible">
