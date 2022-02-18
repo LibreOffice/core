@@ -1478,46 +1478,53 @@ WhichRangesContainer WhichRangesContainer::MergeRange(sal_uInt16 nFrom,
 
     // create vector of ranges (sal_uInt16 pairs of lower and upper bound)
     const size_t nOldCount = size();
-    std::vector<WhichPair> aRangesTable;
-    aRangesTable.reserve(nOldCount);
+    // Allocate one item more than we already have.
+    // In the worst case scenario we waste a little bit
+    // of memory, but we avoid another allocation, which is more important.
+    std::unique_ptr<WhichPair[]> aRangesTable(new WhichPair[nOldCount+1]);
+    int aRangesTableSize = 0;
     bool bAdded = false;
     for (const auto& rPair : *this)
     {
         if (!bAdded && rPair.first >= nFrom)
         { // insert new range, keep ranges sorted
-            aRangesTable.push_back({ nFrom, nTo });
+            aRangesTable[aRangesTableSize++] = { nFrom, nTo };
             bAdded = true;
         }
         // insert current range
-        aRangesTable.emplace_back(rPair);
+        aRangesTable[aRangesTableSize++] = rPair;
     }
     if (!bAdded)
-        aRangesTable.push_back({ nFrom, nTo });
+        aRangesTable[aRangesTableSize++] = { nFrom, nTo };
 
     // true if ranges overlap or adjoin, false if ranges are separate
     auto needMerge = [](WhichPair lhs, WhichPair rhs) {
         return (lhs.first - 1) <= rhs.second && (rhs.first - 1) <= lhs.second;
     };
 
-    auto it = aRangesTable.begin();
-    // we got at least one range
+    auto it = aRangesTable.get();
+    auto endIt = aRangesTable.get() + aRangesTableSize;
+    // we have at least one range at this point
     for (;;)
     {
         auto itNext = std::next(it);
-        if (itNext == aRangesTable.end())
+        if (itNext == endIt)
             break;
-        // check neighbouring ranges, find first range which overlaps or adjoins a previous range
+        // check if neighbouring ranges overlap or adjoin
         if (needMerge(*it, *itNext))
         {
             // lower bounds are sorted, implies: it->first = min(it[0].first, it[1].first)
             it->second = std::max(it->second, itNext->second);
-            aRangesTable.erase(itNext);
+            // remove next element
+            std::move(std::next(itNext), endIt, itNext);
+            --aRangesTableSize;
+            endIt = aRangesTable.get() + aRangesTableSize;
         }
         else
             ++it;
     }
 
-    return WhichRangesContainer(aRangesTable.data(), aRangesTable.size());
+    return WhichRangesContainer(std::move(aRangesTable), aRangesTableSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
