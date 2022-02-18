@@ -51,7 +51,7 @@
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 
-#define PIVOT_DATA_FIELD        (MAXCOLCOUNT)
+#define PIVOT_DATA_FIELD        (SCCOL(-1))
 
 struct SC_DLLPUBLIC ScDPName
 {
