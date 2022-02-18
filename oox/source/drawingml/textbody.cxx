@@ -57,16 +57,15 @@ void TextBody::insertAt(
         const TextCharacterProperties& rTextStyleProperties,
         const TextListStylePtr& pMasterTextListStylePtr ) const
 {
-    TextListStyle aCombinedTextStyle;
-    aCombinedTextStyle.apply( *pMasterTextListStylePtr );
-    aCombinedTextStyle.apply( maTextListStyle );
+    TextListStyle aMasterTextStyle(*pMasterTextListStylePtr);
 
     Reference<css::beans::XPropertySet> xPropertySet(xAt, UNO_QUERY);
     float nCharHeight = xPropertySet->getPropertyValue("CharHeight").get<float>();
     size_t nIndex = 0;
     for (auto const& paragraph : maParagraphs)
     {
-        paragraph->insertAt( rFilterBase, xText, xAt, rTextStyleProperties, aCombinedTextStyle, (nIndex == 0), nCharHeight );
+        paragraph->insertAt(rFilterBase, xText, xAt, rTextStyleProperties, aMasterTextStyle,
+                            maTextListStyle, (nIndex == 0), nCharHeight);
         ++nIndex;
     }
 }
@@ -127,15 +126,16 @@ void TextBody::ApplyStyleEmpty(
         return;
 
     // Apply character properties
-    TextListStyle aCombinedTextStyle;
-    aCombinedTextStyle.apply( *pMasterTextListStylePtr );
-    aCombinedTextStyle.apply( maTextListStyle );
-
     PropertySet aPropSet(xText);
-    TextCharacterProperties aTextCharacterProps(maParagraphs[0]->getCharacterStyle(rTextStyleProperties, aCombinedTextStyle));
+    TextCharacterProperties aTextCharacterProps(maParagraphs[0]->getCharacterStyle(
+        rTextStyleProperties, *pMasterTextListStylePtr, maTextListStyle));
     aTextCharacterProps.pushToPropSet(aPropSet, rFilterBase);
 
     // Apply paragraph properties
+    TextListStyle aCombinedTextStyle;
+    aCombinedTextStyle.apply(*pMasterTextListStylePtr);
+    aCombinedTextStyle.apply(maTextListStyle);
+
     TextParagraphProperties* pTextParagraphStyle = maParagraphs[0]->getParagraphStyle(aCombinedTextStyle);
     if (pTextParagraphStyle)
     {
