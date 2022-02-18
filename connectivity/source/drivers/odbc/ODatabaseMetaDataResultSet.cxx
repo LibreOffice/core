@@ -701,20 +701,36 @@ OUString ODatabaseMetaDataResultSet::getCursorName()
     return new ::cppu::OPropertyArrayHelper
     {
         {
-            css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
-                PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0),
-
-            css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
-                PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0),
-
-            css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
-                PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0),
-
-            css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
-                PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0),
-
-            css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
-                PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0)
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+                PROPERTY_ID_CURSORNAME,
+                cppu::UnoType<OUString>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+                PROPERTY_ID_FETCHDIRECTION,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+                PROPERTY_ID_FETCHSIZE,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+                PROPERTY_ID_RESULTSETCONCURRENCY,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+                PROPERTY_ID_RESULTSETTYPE,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            }
         }
     };
 }
