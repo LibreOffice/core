@@ -35,6 +35,14 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/canvastools.hxx>
 
+DiagramHelper::DiagramHelper() {}
+DiagramHelper::~DiagramHelper() {}
+
+void DiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
+{
+    rTarget.mp_DiagramHelper.reset(this);
+}
+
 // BaseProperties section
 std::unique_ptr<sdr::properties::BaseProperties> SdrObjGroup::CreateObjectSpecificProperties()
 {
@@ -48,14 +56,19 @@ std::unique_ptr<sdr::contact::ViewContact> SdrObjGroup::CreateObjectSpecificView
 }
 
 SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel)
-:   SdrObject(rSdrModel),
-    maRefPoint(0, 0)
+: SdrObject(rSdrModel)
+, SdrObjList()
+, maRefPoint(0, 0)
+, mp_DiagramHelper()
 {
     m_bClosedObj=false;
 }
 
 SdrObjGroup::SdrObjGroup(SdrModel& rSdrModel, SdrObjGroup const & rSource)
-:   SdrObject(rSdrModel, rSource)
+: SdrObject(rSdrModel, rSource)
+, SdrObjList()
+, maRefPoint(0, 0)
+, mp_DiagramHelper()
 {
     m_bClosedObj=false;
 
