@@ -16,6 +16,24 @@
       "message": "so, should we go with this (backporting to 7-3 and 7-2) for now?",
       "revId": "b86ab79197ed001eea2353155abe4a73f0d6d837",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "edde6eaa_99e88fe9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-18T12:34:33Z",
+      "side": 1,
+      "message": "If there\u0027s an actual crash involved, then IMO yes. Kohei wrote in https://gitlab.com/mdds/mdds/-/issues/73 that currently invalid iterators are not to be used as position hints. Even if he reconsiders, it\u0027ll presumably still take a while for him to sort it out in mdds.",
+      "parentUuid": "98e2e127_00b9a497",
+      "revId": "b86ab79197ed001eea2353155abe4a73f0d6d837",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
