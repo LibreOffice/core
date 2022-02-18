@@ -1478,6 +1478,36 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124818)
+{
+    ScModelObj* pModelObj = createDoc("tdf124818.xls");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), ScDocShell::GetViewData()->GetTabNo());
+
+    dispatchCommand(mxComponent, ".uno:JumpToPrevTable", {});
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1), ScDocShell::GetViewData()->GetTabNo());
+
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    SdrPage* pPage = pDrawLayer->GetPage(1);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124816)
 {
     ScModelObj* pModelObj = createDoc("tdf124816.xlsx");
