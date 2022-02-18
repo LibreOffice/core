@@ -58,6 +58,8 @@ public:
     QtGraphicsBackend(QtFrame* pFrame, QImage* pQImage);
     ~QtGraphicsBackend() override;
 
+    void Flush() override {};
+
     void Init() override {}
 
     QImage* getQImage() { return m_pQImage; }

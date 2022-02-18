@@ -111,6 +111,8 @@ public:
 
     virtual ~X11SalGraphicsImpl() override;
 
+    void Flush() override;
+
     virtual OUString getRenderBackendName() const override { return "gen"; }
 
     virtual bool setClipRegion( const vcl::Region& ) override;

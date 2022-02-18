@@ -141,6 +141,11 @@ OutputDevice::~OutputDevice()
     disposeOnce();
 }
 
+void OutputDevice::Flush()
+{
+    mpGraphics->Flush();
+}
+
 void OutputDevice::dispose()
 {
     if ( GetUnoGraphicsList() )

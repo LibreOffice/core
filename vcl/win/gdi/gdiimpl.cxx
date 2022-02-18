@@ -1032,6 +1032,11 @@ static bool containsOnlyHorizontalAndVerticalEdges(const basegfx::B2DPolyPolygon
     return true;
 }
 
+void WinSalGraphicsImpl::Flush()
+{
+    mrParent.Flush();
+}
+
 bool WinSalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 {
     if ( mrParent.mhRegion )

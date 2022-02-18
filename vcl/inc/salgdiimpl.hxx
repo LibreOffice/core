@@ -88,6 +88,8 @@ public:
 
     virtual void ResetClipRegion() = 0;
 
+    virtual void Flush() = 0;
+
     virtual void SetLineColor() = 0;
 
     virtual void SetLineColor( Color nColor ) = 0;

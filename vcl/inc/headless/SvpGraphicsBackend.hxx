@@ -47,6 +47,8 @@ public:
 
     tools::Long GetGraphicsWidth() const override;
 
+    void Flush() override {}
+
     void SetLineColor() override;
     void SetLineColor(Color nColor) override;
     void SetFillColor() override;

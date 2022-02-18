@@ -96,6 +96,8 @@ public:
 
     // public SalGraphics methods, the interface to the independent vcl part
 
+    virtual void Flush() = 0;
+
     // get device resolution
     virtual void                GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) = 0;
 
@@ -654,6 +656,11 @@ public:
     tools::Long GetGraphicsWidth() const override
     {
         return GetImpl()->GetGraphicsWidth();
+    }
+
+    void Flush() override
+    {
+        GetImpl()->Flush();
     }
 
     void ResetClipRegion() override

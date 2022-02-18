@@ -331,6 +331,8 @@ public:
     AquaGraphicsBackend(AquaSharedAttributes & rShared);
     ~AquaGraphicsBackend() override;
 
+    void Flush() override {};
+
     void Init() override;
 
     void freeResources() override;

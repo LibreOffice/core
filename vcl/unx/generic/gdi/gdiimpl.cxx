@@ -946,6 +946,11 @@ void X11SalGraphicsImpl::ResetClipRegion()
     mrParent.mpClipRegion    = nullptr;
 }
 
+void X11SalGraphicsImpl::Flush()
+{
+    mrParent.Flush();
+}
+
 bool X11SalGraphicsImpl::setClipRegion( const vcl::Region& i_rClip )
 {
     if( mrParent.mpClipRegion )
