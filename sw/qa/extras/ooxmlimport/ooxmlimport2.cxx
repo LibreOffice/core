@@ -236,6 +236,15 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf108849)
                                  getPages());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf100770)
+{
+    load(mpTestDocumentPath, "tdf100770.docx");
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT(pDoc);
+    CPPUNIT_ASSERT_EQUAL(12, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf97038)
 {
     load(mpTestDocumentPath, "tdf97038.docx");
