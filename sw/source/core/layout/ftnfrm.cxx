@@ -2800,8 +2800,9 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
         // it into the container.
         // Create also a SectionFrame if currently in an area inside a footnote.
         SwFootnoteFrame* pTmpFootnote = pNewUpper->IsFootnoteFrame() ? static_cast<SwFootnoteFrame*>(pNewUpper) : nullptr;
-        if (!pTmpFootnote && pNewUpper->IsFootnoteContFrame())
+        if (!pTmpFootnote)
         {
+            assert(pNewUpper->IsFootnoteContFrame() && "New Upper not a FootnoteCont");
             SwFootnoteContFrame *pCont = static_cast<SwFootnoteContFrame*>(pNewUpper);
             pTmpFootnote = SwFootnoteContFrame::AppendChained(this, true);
             SwFrame* pNx = pCont->Lower();
