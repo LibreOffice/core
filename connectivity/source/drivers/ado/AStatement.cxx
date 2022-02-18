@@ -641,31 +641,71 @@ void OStatement_Base::setCursorName(std::u16string_view _par0)
 
 ::cppu::IPropertyArrayHelper* OStatement_Base::createArrayHelper( ) const
 {
-    Sequence< css::beans::Property > aProps(10);
-    css::beans::Property* pProperties = aProps.getArray();
-    sal_Int32 nPos = 0;
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
-        PROPERTY_ID_CURSORNAME, cppu::UnoType<OUString>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),
-        PROPERTY_ID_ESCAPEPROCESSING, cppu::UnoType<bool>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
-        PROPERTY_ID_FETCHDIRECTION, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
-        PROPERTY_ID_FETCHSIZE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXFIELDSIZE),
-        PROPERTY_ID_MAXFIELDSIZE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXROWS),
-        PROPERTY_ID_MAXROWS, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_QUERYTIMEOUT),
-        PROPERTY_ID_QUERYTIMEOUT, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
-        PROPERTY_ID_RESULTSETCONCURRENCY, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
-        PROPERTY_ID_RESULTSETTYPE, cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = css::beans::Property(::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_USEBOOKMARKS),
-        PROPERTY_ID_USEBOOKMARKS, cppu::UnoType<bool>::get(), 0);
-
-    return new ::cppu::OPropertyArrayHelper(aProps);
+    return new ::cppu::OPropertyArrayHelper
+    {
+        {
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+                PROPERTY_ID_CURSORNAME,
+                cppu::UnoType<OUString>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ESCAPEPROCESSING),
+                PROPERTY_ID_ESCAPEPROCESSING,
+                cppu::UnoType<bool>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+                PROPERTY_ID_FETCHDIRECTION,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+                PROPERTY_ID_FETCHSIZE,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXFIELDSIZE),
+                PROPERTY_ID_MAXFIELDSIZE,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_MAXROWS),
+                PROPERTY_ID_MAXROWS,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_QUERYTIMEOUT),
+                PROPERTY_ID_QUERYTIMEOUT,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+                PROPERTY_ID_RESULTSETCONCURRENCY,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+                PROPERTY_ID_RESULTSETTYPE,
+                cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                ::connectivity::OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_USEBOOKMARKS),
+                PROPERTY_ID_USEBOOKMARKS,
+                cppu::UnoType<bool>::get(),
+                0
+            }
+        }
+    };
 }
 
 
