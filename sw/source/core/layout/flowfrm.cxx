@@ -2339,6 +2339,7 @@ bool SwFlowFrame::MoveBwd( bool &rbReformat )
         else
         {
             const SwFrame *pCol = m_rThis.FindColFrame();
+            assert(pCol);
             bool bGoOn = true;
             bool bJump = false;
             do
