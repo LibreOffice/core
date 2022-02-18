@@ -49,6 +49,7 @@
 #include <svx/f3dchild.hxx>
 #include <svx/float3d.hxx>
 #include <svx/sdmetitm.hxx>
+#include <svx/svdogrp.hxx>
 
 #include <app.hrc>
 #include <strings.hrc>
@@ -488,8 +489,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), UNO_QUERY);
+                static bool bAdvancedSmartArt(nullptr != getenv("SAL_ENABLE_ADVANCED_SMART_ART"));
 
-                if (oox::drawingml::DrawingML::IsDiagram(xShape))
+                if (!bAdvancedSmartArt && oox::drawingml::DrawingML::IsDiagram(xShape))
                 {
                     mpDrawView->UnmarkAll();
 
@@ -501,6 +503,15 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     xFilter->importTheme();
                     oox::drawingml::reloadDiagram(pObj, *xFilter);
 
+                    mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
+                }
+
+                // Support advanced DiagramHelper
+                SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
+                if(bAdvancedSmartArt && pAnchorObj && pAnchorObj->isDiagram())
+                {
+                    mpDrawView->UnmarkAll();
+                    pAnchorObj->getDiagramHelper()->reLayout();
                     mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                 }
             }

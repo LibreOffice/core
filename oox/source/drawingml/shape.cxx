@@ -50,6 +50,7 @@
 #include <oox/mathml/import.hxx>
 #include <oox/token/properties.hxx>
 #include "diagram/datamodel.hxx"
+#include "diagram/diagramhelper.hxx"
 
 #include <comphelper/classids.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -102,6 +103,7 @@
 #include <vcl/wmfexternal.hxx>
 #include <sal/log.hxx>
 #include <svx/sdtaitm.hxx>
+#include <oox/drawingml/diagram/diagram.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star;
@@ -140,6 +142,7 @@ Shape::Shape( const char* pServiceName, bool bDefaultHeight )
 , mbTextBox( false )
 , mbHasLinkedTxbx( false )
 , maDiagramDoms( 0 )
+, mpDiagramHelper( nullptr )
 {
     if ( pServiceName )
         msServiceName = OUString::createFromAscii( pServiceName );
@@ -189,10 +192,49 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mfAspectRatio(pSourceShape->mfAspectRatio)
 , mbUseBgFill(pSourceShape->mbUseBgFill)
 , maDiagramFontHeights(pSourceShape->maDiagramFontHeights)
+, mpDiagramHelper( nullptr )
 {}
 
 Shape::~Shape()
 {
+    // DiagramHelper should not be set here anymore, see
+    // propagateDiagramHelper below (maybe assert..?)
+    delete mpDiagramHelper;
+}
+
+void Shape::prepareDiagramHelper(
+    const std::shared_ptr< Diagram >& rDiagramPtr,
+    const std::shared_ptr<::oox::drawingml::Theme>& rTheme)
+{
+    // Prepare Diagam data collecting for this Shape
+    if( nullptr == mpDiagramHelper && FRAMETYPE_DIAGRAM == meFrameType )
+    {
+        const_cast<Shape*>(this)->mpDiagramHelper = new AdvancedDiagramHelper(rDiagramPtr, rTheme);
+    }
+}
+
+void Shape::propagateDiagramHelper()
+{
+    // Propagate collected Diagram data to data holder
+    if (FRAMETYPE_DIAGRAM == meFrameType && nullptr != mpDiagramHelper)
+    {
+        SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mxShape));
+
+        if(pAnchorObj)
+        {
+            static_cast<AdvancedDiagramHelper*>(mpDiagramHelper)->doAnchor(*pAnchorObj);
+            mpDiagramHelper = nullptr;
+        }
+    }
+
+    // If propagation failed, delete/cleanup here. Since the DiagramHelper
+    // holds a Diagram and that this Shape it is necessary - the destructor
+    // will not be called and will be too late
+    if (nullptr != mpDiagramHelper)
+    {
+        delete mpDiagramHelper;
+        mpDiagramHelper = nullptr;
+    }
 }
 
 table::TablePropertiesPtr const & Shape::getTableProperties()

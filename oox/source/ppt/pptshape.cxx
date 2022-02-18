@@ -564,6 +564,12 @@ void PPTShape::addShape(
                 syncDiagramFontHeights();
             }
 
+            // Support advanced DiagramHelper
+            if (FRAMETYPE_DIAGRAM == meFrameType)
+            {
+                propagateDiagramHelper();
+            }
+
             getShapeProperties().getProperty(PROP_URL) >>= sURL;
             if (!sURL.isEmpty() && !xShapes.is())
                 aURLShapes.push_back({ sURL, xShape });

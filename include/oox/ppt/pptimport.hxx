@@ -75,6 +75,7 @@ public:
     virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<   css::beans::PropertyValue >& rDescriptor ) override;
 
     ::Color getSchemeColor( sal_Int32 nToken ) const;
+    const std::shared_ptr<::oox::drawingml::Theme> getCurrentThemePtr() const;
 
 #if OSL_DEBUG_LEVEL > 0
     static XmlFilterBase* mpDebugFilterBase;

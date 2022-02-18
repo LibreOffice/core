@@ -26,6 +26,21 @@
 
 // Forward declarations
 class SfxItemSet;
+class SdrObjGroup;
+
+// Helper class to allow administer advanced Diagram related
+// data and functionality
+class SVXCORE_DLLPUBLIC DiagramHelper
+{
+protected:
+    void anchorToSdrObjGroup(SdrObjGroup& rTarget);
+
+public:
+    DiagramHelper();
+    virtual ~DiagramHelper();
+
+    virtual void reLayout() = 0;
+};
 
 //   SdrObjGroup
 class SVXCORE_DLLPUBLIC SdrObjGroup final : public SdrObject, public SdrObjList
@@ -36,6 +51,15 @@ private:
     CreateObjectSpecificProperties() override;
 
     Point maRefPoint; // Reference point inside the object group
+
+    // Allow *only* DiagramHelper itself to set this internal reference to
+    // tightly control usage
+    friend class DiagramHelper;
+    std::unique_ptr<DiagramHelper> mp_DiagramHelper;
+
+public:
+    bool isDiagram() const { return bool(mp_DiagramHelper); }
+    DiagramHelper* getDiagramHelper() { return mp_DiagramHelper.get(); }
 
 private:
     // protected destructor - due to final, make private
