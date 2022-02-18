@@ -182,6 +182,11 @@ const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const
     return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : nullptr;
 }
 
+std::shared_ptr<::oox::drawingml::Theme> PowerPointImport::getCurrentThemePtr() const
+{
+    return mpActualSlidePersist ? mpActualSlidePersist->getTheme() : std::shared_ptr<::oox::drawingml::Theme>();
+}
+
 sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     if( XmlFilterBase::filter( rDescriptor ) )
