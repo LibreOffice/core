@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b476dbb8_f02d89a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-18T21:10:33Z",
+      "side": 1,
+      "message": "I may be wrong but wonder if it\u0027s not the cause of my local build failure with:\n[ULF] /home/julien/lo/libo_perf/workdir/ScpMergeTarget/scp2/source/ooo/module_helppack.ulf\n[ULF] /home/julien/lo/libo_perf/workdir/ScpMergeTarget/scp2/source/ooo/module_langpack.ulf\n[ULF] /home/julien/lo/libo_perf/workdir/ScpMergeTarget/scp2/source/ooo/module_ooo.ulf\n[ULF] /home/julien/lo/libo_perf/workdir/ScpMergeTarget/scp2/source/ooo/module_systemint.ulf\nSegmentation fault\nmake[1]: *** [/home/julien/lo/libo_perf/solenv/gbuild/InstallModuleTarget.mk:113 : /home/julien/lo/libo_perf/workdir/ScpMergeTarget/scp2/source/ooo/module_ooo.ulf] Erreur 139\nmake[1]: *** Suppression du fichier « /home/julien/lo/libo_perf/workdir/ScpMergeTarget/scp2/source/ooo/module_ooo.ulf »\n",
+      "revId": "bb0f3f7e1603ef3a207dd07fb10590a74dcf7e4c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
