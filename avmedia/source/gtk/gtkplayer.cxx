@@ -272,10 +272,12 @@ uno::Reference<::media::XPlayerWindow>
 
     m_pVideo = gtk_picture_new_for_paintable(GDK_PAINTABLE(m_pStream));
     gtk_picture_set_keep_aspect_ratio(GTK_PICTURE(m_pVideo), false);
+    gtk_widget_set_can_target(m_pVideo, false);
     gtk_widget_set_vexpand(m_pVideo, true);
     gtk_widget_set_hexpand(m_pVideo, true);
 
     GtkWidget* pParent = static_cast<GtkWidget*>(pEnvData->pWidget);
+    gtk_widget_set_can_target(pParent, false);
     gtk_grid_attach(GTK_GRID(pParent), m_pVideo, 0, 0, 1, 1);
     gtk_widget_show(m_pVideo);
     gtk_widget_show(pParent);
@@ -355,7 +357,7 @@ uno::Reference<media::XFrameGrabber> SAL_CALL GtkPlayer::createFrameGrabber()
     rtl::Reference<GtkFrameGrabber> xFrameGrabber;
     SAL_WARN("avmedia.gtk", "TODO: createFrameGrabber");
 
-    const awt::Size aPrefSize(getPreferredPlayerWindowSize());
+    // const awt::Size aPrefSize(getPreferredPlayerWindowSize());
 
     xFrameGrabber.set(new GtkFrameGrabber(m_pStream));
 
