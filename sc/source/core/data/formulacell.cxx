@@ -5235,11 +5235,11 @@ void startListeningArea(
     {   // automagically
         if ( rRef1.IsColRel() )
         {   // ColName
-            aCell2.SetRow(MAXROW);
+            aCell2.SetRow(rDoc.MaxRow());
         }
         else
         {   // RowName
-            aCell2.SetCol(MAXCOL);
+            aCell2.SetCol(rDoc.MaxCol());
         }
     }
     rDoc.StartListeningArea(ScRange(aCell1, aCell2), false, pCell);
@@ -5347,11 +5347,11 @@ void endListeningArea(
     {   // automagically
         if ( rRef1.IsColRel() )
         {   // ColName
-            aCell2.SetRow(MAXROW);
+            aCell2.SetRow(rDoc.MaxRow());
         }
         else
         {   // RowName
-            aCell2.SetCol(MAXCOL);
+            aCell2.SetCol(rDoc.MaxCol());
         }
     }
 

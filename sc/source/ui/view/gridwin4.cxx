@@ -1791,14 +1791,14 @@ void ScGridWindow::DrawHiddenIndicator( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW n
             aLineInfo.SetLineCap(css::drawing::LineCap_ROUND);
         aLineInfo.SetDotLen(1);
         for (int i=nX1; i<nX2; i++) {
-            if (rDoc.ColHidden(i,nTab) && (i<MAXCOL ? !rDoc.ColHidden(i+1,nTab) : true)) {
+            if (rDoc.ColHidden(i,nTab) && (i<rDoc.MaxCol() ? !rDoc.ColHidden(i+1,nTab) : true)) {
                 Point aStart = mrViewData.GetScrPos(i, nY1, eWhich, true );
                 Point aEnd = mrViewData.GetScrPos(i, nY2, eWhich, true );
                 rRenderContext.DrawLine(aStart,aEnd,aLineInfo);
             }
         }
         for (int i=nY1; i<nY2; i++) {
-            if (rDoc.RowHidden(i,nTab) && (i<MAXROW ? !rDoc.RowHidden(i+1,nTab) : true)) {
+            if (rDoc.RowHidden(i,nTab) && (i<rDoc.MaxRow() ? !rDoc.RowHidden(i+1,nTab) : true)) {
                 Point aStart = mrViewData.GetScrPos(nX1, i, eWhich, true );
                 Point aEnd = mrViewData.GetScrPos(nX2, i, eWhich, true );
                 rRenderContext.DrawLine(aStart,aEnd,aLineInfo);
