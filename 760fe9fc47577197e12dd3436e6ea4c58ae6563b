@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca49ddb2_907e2b33",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2022-02-18T10:46:38Z",
+      "side": 1,
+      "message": "Hi, This patch currently introduces the structure for calling the Flush() method in the benchmarks, do let me know if this structure\u0027s the correct way to achieve the results we\u0027re looking for or not. Also, since some of the backends doesn\u0027t include a pre-defined Flush() method, what should be my approach to implement a fully working Flush() method for each of them. Thanks!",
+      "revId": "760fe9fc47577197e12dd3436e6ea4c58ae6563b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
