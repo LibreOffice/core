@@ -88,7 +88,9 @@ public:
     virtual ~SfxItemSet();
 
     virtual std::unique_ptr<SfxItemSet> Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
-    virtual SfxItemSet CloneAsValue(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
+    /** note that this only works if you know for sure that you are dealing with an SfxItemSet
+        and not one of it's subclasses. */
+    SfxItemSet CloneAsValue(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
 
     // Get number of items
     sal_uInt16                  Count() const { return m_nCount; }
@@ -219,7 +221,6 @@ public:
                                 SfxAllItemSet( const SfxAllItemSet & );
 
     virtual std::unique_ptr<SfxItemSet> Clone( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
-    virtual SfxItemSet CloneAsValue( bool bItems = true, SfxItemPool *pToPool = nullptr ) const override;
 private:
     virtual const SfxPoolItem*  PutImpl( const SfxPoolItem&, sal_uInt16 nWhich, bool bPassingOwnership ) override;
 };

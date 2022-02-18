@@ -1251,6 +1251,10 @@ std::unique_ptr<SfxItemSet> SfxItemSet::Clone(bool bItems, SfxItemPool *pToPool 
 
 SfxItemSet SfxItemSet::CloneAsValue(bool bItems, SfxItemPool *pToPool ) const
 {
+    // if you are trying to clone, then the thing you are cloning is polymorphic, which means
+    // it cannot be cloned as a value
+    assert((typeid(*this) == typeid(SfxItemSet)) && "cannot call this on a subclass of SfxItemSet");
+
     if (pToPool && pToPool != m_pPool)
     {
         SfxItemSet aNewSet(*pToPool, m_pWhichRanges);
@@ -1385,15 +1389,6 @@ std::unique_ptr<SfxItemSet> SfxAllItemSet::Clone(bool bItems, SfxItemPool *pToPo
     else
         return std::unique_ptr<SfxItemSet>(bItems ? new SfxAllItemSet(*this) : new SfxAllItemSet(*m_pPool));
 }
-
-SfxItemSet SfxAllItemSet::CloneAsValue(bool , SfxItemPool * ) const
-{
-    // if you are trying to clone, then the thing you are cloning is polymorphic, which means
-    // it cannot be cloned as a value
-    throw std::logic_error("cannot do this");
-}
-
-
 
 
 WhichRangesContainer::WhichRangesContainer( const WhichPair* wids, sal_Int32 nSize )
