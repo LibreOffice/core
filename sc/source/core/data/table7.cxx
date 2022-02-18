@@ -520,19 +520,19 @@ OString ScTable::dumpColumnRowSizes(bool bColumns)
     // If the data-structures are not available, just report that all
     // rows/cols have the default sizes.
     static const OString aDefaultForCols
-        = OString::number(STD_COL_WIDTH) + ":" + OString::number(MAXCOL) + " ";
+        = OString::number(STD_COL_WIDTH) + ":" + OString::number(GetDoc().MaxCol()) + " ";
     static const OString aDefaultForRows
-        = OString::number(ScGlobal::nStdRowHeight) + ":" + OString::number(MAXROW) + " ";
+        = OString::number(ScGlobal::nStdRowHeight) + ":" + OString::number(GetDoc().MaxRow()) + " ";
 
     // ScCompressedArray is a template class and we don't want to impose
     // the restriction that its value type should be string serializable,
     // instead just operate on the specialized object.
     typedef ScCompressedArray<SCCOL, sal_uInt16> ColWidthsType;
-    auto dumpColWidths = [](const ColWidthsType& rWidths) -> OString {
+    auto dumpColWidths = [this](const ColWidthsType& rWidths) -> OString {
         OString aOutput;
         OString aSegment;
         SCCOL nStartCol = 0;
-        const SCCOL nMaxCol = std::min(rWidths.GetLastPos(), MAXCOL);
+        const SCCOL nMaxCol = std::min(rWidths.GetLastPos(), GetDoc().MaxCol());
         size_t nDummy = 0;
         while (nStartCol <= nMaxCol)
         {
@@ -558,8 +558,8 @@ OString ScTable::dumpColumnRowSizes(bool bColumns)
 OString ScTable::dumpHiddenFiltered(bool bColumns, bool bHidden)
 {
     // defaults to no hidden/filtered row/cols.
-    static const OString aDefaultForCols = "0:" + OString::number(MAXCOL) + " ";
-    static const OString aDefaultForRows = "0:" + OString::number(MAXROW) + " ";
+    static const OString aDefaultForCols = "0:" + OString::number(GetDoc().MaxCol()) + " ";
+    static const OString aDefaultForRows = "0:" + OString::number(GetDoc().MaxRow()) + " ";
 
     if (bHidden)
     {
