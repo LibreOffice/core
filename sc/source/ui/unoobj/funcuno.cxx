@@ -423,8 +423,14 @@ public:
             mrDocRow++;
         }
         mbArgError = aVisitor.hasArgError();
-        if ( nRowCount && nMaxColCount && !mbOverflow )
-            lcl_AddRef( mrTokenArr, nStartRow, nMaxColCount, nRowCount );
+        if (!mbOverflow)
+        {
+            if (nRowCount && nMaxColCount)
+                lcl_AddRef( mrTokenArr, nStartRow, nMaxColCount, nRowCount );
+            else if (nRowCount == 1 && !nMaxColCount)
+                // Empty Sequence<Sequence<Any>> is omitted argument.
+                mrTokenArr.AddOpCode( ocMissing);
+        }
     }
     bool getOverflow() const { return mbOverflow; }
     bool getArgError() const { return mbArgError; }
