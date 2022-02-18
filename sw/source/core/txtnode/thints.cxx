@@ -914,7 +914,7 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                 // #i81764# This should not be applied for no length attributes!!! <--
                 if ( !bNoLengthAttribute && rNode.HasSwAttrSet() && pNewStyle->Count() )
                 {
-                    std::optional<SfxItemSet> oNewSet;
+                    std::unique_ptr<SfxItemSet> pNewSet;
 
                     SfxItemIter aIter2( *pNewStyle );
                     const SfxPoolItem* pItem = aIter2.GetCurItem();
@@ -929,19 +929,19 @@ void SwpHints::BuildPortions( SwTextNode& rNode, SwTextAttr& rNewHint,
                             // Do not clear item if the attribute is set in a character format:
                             if ( !pCurrentCharFormat || nullptr == CharFormat::GetItem( *pCurrentCharFormat, pItem->Which() ) )
                             {
-                                if ( !oNewSet )
-                                    oNewSet.emplace(pNewStyle->CloneAsValue());
-                                oNewSet->ClearItem( pItem->Which() );
+                                if ( !pNewSet )
+                                    pNewSet = pNewStyle->Clone();
+                                pNewSet->ClearItem( pItem->Which() );
                             }
                         }
                     }
                     while ((pItem = aIter2.NextItem()));
 
-                    if ( oNewSet )
+                    if ( pNewSet )
                     {
                         bOptimizeAllowed = false;
-                        if ( oNewSet->Count() )
-                            pNewStyle = rNode.getIDocumentStyleAccess().getAutomaticStyle( *oNewSet, IStyleAccess::AUTO_STYLE_CHAR );
+                        if ( pNewSet->Count() )
+                            pNewStyle = rNode.getIDocumentStyleAccess().getAutomaticStyle( *pNewSet, IStyleAccess::AUTO_STYLE_CHAR );
                         else
                             pNewStyle.reset();
                     }
@@ -1039,9 +1039,9 @@ SwTextAttr* MakeTextAttr(
         // If the attribute is an auto-style which refers to a pool that is
         // different from rDoc's pool, we have to correct this:
         const std::shared_ptr<SfxItemSet> & pAutoStyle = static_cast<const SwFormatAutoFormat&>(rAttr).GetStyleHandle();
-        SfxItemSet aNewSet =
-                pAutoStyle->SfxItemSet::CloneAsValue( true, &rDoc.GetAttrPool() );
-        SwTextAttr* pNew = MakeTextAttr( rDoc, aNewSet, nStt, nEnd );
+        std::unique_ptr<const SfxItemSet> pNewSet(
+                pAutoStyle->SfxItemSet::Clone( true, &rDoc.GetAttrPool() ));
+        SwTextAttr* pNew = MakeTextAttr( rDoc, *pNewSet, nStt, nEnd );
         return pNew;
     }
 
