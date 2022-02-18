@@ -34,6 +34,7 @@
 #include <oox/token/namespaces.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpage.hxx>
+#include <oox/ppt/pptimport.hxx>
 
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"
@@ -362,6 +363,14 @@ void loadDiagram( ShapePtr const & pShape,
     pDiagram->addTo(pShape);
     pShape->setDiagramData(pData);
     pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
+
+    // We need the shared_ptr to oox::Theme here, so do something direct when
+    // we can identify the expected type of the used import filter
+    oox::ppt::PowerPointImport* pFilter(dynamic_cast<oox::ppt::PowerPointImport*>(&rFilter));
+    const std::shared_ptr<::oox::drawingml::Theme> aThemePtr(pFilter ? pFilter->getCurrentThemePtr() : nullptr);
+
+    // Prepare support for the advanced DiagramHelper using Diagram & Theme data
+    pShape->prepareDiagramHelper(pDiagram, aThemePtr);
 }
 
 void loadDiagram(ShapePtr const& pShape,

@@ -57,6 +57,8 @@ namespace oox::vml {
     struct OleObjectInfo;
 }
 
+class DiagramHelper;
+
 namespace oox::drawingml {
 
 class Theme;
@@ -99,6 +101,8 @@ struct LinkedTxbxAttr
     sal_Int32 seq;
     LinkedTxbxAttr(): id(0),seq(0){};
 };
+
+class Diagram;
 
 class OOX_DLLPUBLIC Shape
     : public std::enable_shared_from_this< Shape >
@@ -249,6 +253,11 @@ public:
 
     oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
 
+    // Allows preparation of a local Diagram helper && propagate an eventually
+    // existing one to the data holder object later
+    void prepareDiagramHelper(const std::shared_ptr< Diagram >& rDiagramPtr, const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
+    void propagateDiagramHelper();
+
 protected:
 
     enum FrameType
@@ -392,6 +401,10 @@ private:
 
     /// For SmartArt, this contains groups of shapes: automatic font size is the same in each group.
     oox::core::NamedShapePairs maDiagramFontHeights;
+
+    // temporary space for DiagramHelper in preparation for collecting data
+    // Note: I tried to use a unique_ptr here, but existing constuctor func does not allow that
+    DiagramHelper* mpDiagramHelper;
 };
 
 }
