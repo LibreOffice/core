@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed908a72_4c48a708",
+        "filename": "svl/qa/unit/test_URIHelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-18T14:02:29Z",
+      "side": 0,
+      "message": "`anonymous namespace\u0027::Test::testNormalizedMakeRelative finished in: 6ms\n[_RUN_____] `anonymous namespace\u0027::Test::testFindFirstURLInText\n`anonymous namespace\u0027::Test::testFindFirstURLInText finished in: 2ms\n[_RUN_____] `anonymous namespace\u0027::Test::testResolveIdnaHost\n`anonymous namespace\u0027::Test::testResolveIdnaHost finished in: 0ms\n[_RUN_____] `anonymous namespace\u0027::Test::finish\n`anonymous namespace\u0027::Test::finish finished in: 1ms\nC:/cygwin/home/pawar/lode/dev/core/svl/qa/unit/test_URIHelper.cxx(282) : error : Assertion\nTest name: `anonymous namespace\u0027::Test::testNormalizedMakeRelative\nassertion failed\n- Expression: ok\n- \u003cfile:///c:/windows/nonex1\u003e, \u003cfile:///c:/nonex2\u003e: \u003c/C:/nonex2\u003e instead of \u003c../nonex2\u003e\n\nFailures !!!\nRun: 4   Failure total: 1   Failures: 1   Errors: 0\n\nError: a unit test failed, please do one of:\nmake CppunitTest_svl_urihelper CPPUNITTRACE\u003dTRUE # which is a shortcut for the following line\n\nI believe this case is not handled by getlongpathw",
+      "revId": "d0a42ce9b1033a200f8d354c1abf8c3b0d569f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
