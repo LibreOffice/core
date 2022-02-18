@@ -69,6 +69,24 @@
       "message": "As mentioned in our private chat \"in this case it might be that our code has become safer in other places\"",
       "revId": "0697e3e72fddba2916903037e5482b28a0c70c2d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73dcb32f_b2062c8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-02-18T18:19:57Z",
+      "side": 1,
+      "message": "Fine, so I think that I can drop this unit test and try to write one for a different fix",
+      "parentUuid": "31b5ac7c_aa817085",
+      "revId": "0697e3e72fddba2916903037e5482b28a0c70c2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
