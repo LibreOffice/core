@@ -777,7 +777,7 @@ void ScConditionEntry::FillCache() const
 
         // temporary fix to workaround slow duplicate entry
         // conditions, prevent to use a whole row
-        if(nRow == MAXROW)
+        if(nRow == mpDoc->MaxRow())
         {
             bool bShrunk = false;
             mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,

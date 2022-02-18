@@ -459,7 +459,7 @@ std::vector<double>& ScColorFormat::getValues() const
             SCCOL nColEnd = rRange.aEnd.Col();
             SCROW nRowEnd = rRange.aEnd.Row();
 
-            if(nRowEnd == MAXROW)
+            if(nRowEnd == mpDoc->MaxRow())
             {
                 bool bShrunk = false;
                 mpDoc->ShrinkToUsedDataArea(bShrunk, nTab, nColStart, nRowStart,

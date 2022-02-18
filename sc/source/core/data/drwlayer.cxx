@@ -1357,7 +1357,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             rRange.aStart.SetCol( 0 );
             if (nWidth <= nStartX)
             {
-                for (SCCOL nCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL))
+                for (SCCOL nCol : pDoc->GetColumnsRange(nTab, 0, pDoc->MaxCol()))
                 {
                     nWidth += pDoc->GetColWidth(nCol,nTab);
                     if (nWidth > nStartX)
@@ -1372,7 +1372,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             rRange.aEnd.SetCol( 0 );
             if (nWidth <= nEndX)
             {
-                for (SCCOL nCol : pDoc->GetColumnsRange(nTab, 0, MAXCOL)) //TODO: start at Start
+                for (SCCOL nCol : pDoc->GetColumnsRange(nTab, 0, pDoc->MaxCol())) //TODO: start at Start
                 {
                     nWidth += pDoc->GetColWidth(nCol,nTab);
                     if (nWidth > nEndX)
@@ -1391,7 +1391,7 @@ bool ScDrawLayer::GetPrintArea( ScRange& rRange, bool bSetHor, bool bSetVer ) co
             SCROW nRow = pDoc->GetRowForHeight( nTab, nStartY);
             rRange.aStart.SetRow( nRow>0 ? (nRow-1) : 0);
             nRow = pDoc->GetRowForHeight( nTab, nEndY);
-            rRange.aEnd.SetRow( nRow == MAXROW ? MAXROW :
+            rRange.aEnd.SetRow( nRow == pDoc->MaxRow() ? pDoc->MaxRow() :
                     (nRow>0 ? (nRow-1) : 0));
         }
     }
@@ -1502,7 +1502,7 @@ bool ScDrawLayer::HasObjectsInRows( SCTAB nTab, SCROW nStartRow, SCROW nEndRow )
 
     aTestRect.AdjustTop(pDoc->GetRowHeight( 0, nStartRow-1, nTab) );
 
-    if (nEndRow==MAXROW)
+    if (nEndRow==pDoc->MaxRow())
         aTestRect.SetBottom( MAXMM );
     else
     {
@@ -2469,7 +2469,7 @@ ScDrawLayer::GetObjectsAnchoredToRows(SCTAB nTab, SCROW nStartRow, SCROW nEndRow
     std::vector<SdrObject*> aObjects;
     SdrObjListIter aIter( pPage, SdrIterMode::Flat );
     SdrObject* pObject = aIter.Next();
-    ScRange aRange( 0, nStartRow, nTab, MAXCOL, nEndRow, nTab);
+    ScRange aRange( 0, nStartRow, nTab, pDoc->MaxCol(), nEndRow, nTab);
     while (pObject)
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently
@@ -2541,7 +2541,7 @@ std::vector<SdrObject*> ScDrawLayer::GetObjectsAnchoredToCols(SCTAB nTab, SCCOL 
     std::vector<SdrObject*> aObjects;
     SdrObjListIter aIter(pPage, SdrIterMode::Flat);
     SdrObject* pObject = aIter.Next();
-    ScRange aRange(nStartCol, 0, nTab, nEndCol, MAXROW, nTab);
+    ScRange aRange(nStartCol, 0, nTab, nEndCol, pDoc->MaxRow(), nTab);
     while (pObject)
     {
         if (!dynamic_cast<SdrCaptionObj*>(pObject)) // Caption objects are handled differently

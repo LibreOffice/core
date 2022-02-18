@@ -1075,7 +1075,7 @@ void testDBRanges_Impl(ScDocument& rDoc, sal_Int32 nFormat)
     bHidden = rDoc.RowHidden(6, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("Sheet1: row 6-end should be visible", !bHidden);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", SCROW(6), nRow1);
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", MAXROW, nRow2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Sheet1: row 6-end should be visible", rDoc.MaxRow(), nRow2);
     if (nFormat == FORMAT_ODS) //excel doesn't support named db ranges
     {
         double aValue = rDoc.GetValue(0,10,1);
@@ -2165,7 +2165,7 @@ void ScFiltersTest::testRowHeightODS()
     bManual = rDoc.IsManualRowHeight(++nRow, nTab);
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
 
-    bManual = rDoc.IsManualRowHeight(MAXROW, nTab);
+    bManual = rDoc.IsManualRowHeight(rDoc.MaxRow(), nTab);
     CPPUNIT_ASSERT_MESSAGE("Row should have an automatic height.", !bManual);
 
     xDocSh->DoClose();

@@ -1109,7 +1109,7 @@ void clearRange(ScDocument* pDoc, const ScRange& rRange)
 
 void clearSheet(ScDocument* pDoc, SCTAB nTab)
 {
-    ScRange aRange(0,0,nTab,MAXCOL,MAXROW,nTab);
+    ScRange aRange(0,0,nTab,pDoc->MaxCol(),pDoc->MaxRow(),nTab);
     clearRange(pDoc, aRange);
 }
 

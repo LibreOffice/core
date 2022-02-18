@@ -799,7 +799,7 @@ bool ScTable::SearchAndReplace(
     bool bFound = false;
     if ( ValidColRow(rCol, rRow) ||
          ((nCommand == SvxSearchCmd::FIND || nCommand == SvxSearchCmd::REPLACE) &&
-           (((rCol == MAXCOLCOUNT || rCol == -1) && ValidRow(rRow)) ||
+           (((rCol == GetDoc().GetSheetLimits().GetMaxColCount() || rCol == -1) && ValidRow(rRow)) ||
             ((rRow == GetDoc().GetSheetLimits().GetMaxRowCount() || rRow == -1) && ValidCol(rCol))
            )
          )

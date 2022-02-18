@@ -4366,7 +4366,7 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     CPPUNIT_ASSERT_EQUAL(aDataEnd, aNDataEnd);
 
     // Insert 2 rows.
-    rDoc.InsertRow(ScRange(0, aDataStart.Row() - 1, 0, MAXCOL, aDataStart.Row(), 0));
+    rDoc.InsertRow(ScRange(0, aDataStart.Row() - 1, 0, rDoc.MaxCol(), aDataStart.Row(), 0));
 
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
@@ -4431,7 +4431,7 @@ void ScExportTest::testMoveCellAnchoredShapesODS()
     CPPUNIT_ASSERT_EQUAL(pNData->maEnd, aNDataEnd);
 
     // Insert a column.
-    rDoc1.InsertCol(ScRange(aDataStart.Col(), 0, 0, aDataStart.Col(), MAXROW, 0));
+    rDoc1.InsertCol(ScRange(aDataStart.Col(), 0, 0, aDataStart.Col(), rDoc1.MaxRow(), 0));
 
     // Get anchor data
     pData = ScDrawLayer::GetObjData(pObj);
