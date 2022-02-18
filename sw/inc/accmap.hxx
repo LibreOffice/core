@@ -96,6 +96,11 @@ class SwAccessibleMap final : public ::accessibility::IAccessibleViewForwarder,
     SwShapeList_Impl mvShapes;
     std::unique_ptr<SwAccessibleEventList_Impl> mpEvents;
     std::unique_ptr<SwAccessibleEventMap_Impl> mpEventMap;
+
+    // Para Container for InvalidateCursorPosition
+    o3tl::sorted_vector<SwAccessibleParagraph*> m_setParaAdd;
+    o3tl::sorted_vector<SwAccessibleParagraph*> m_setParaRemove;
+
     // #i27301 data structure to keep information about
     // accessible paragraph, which have a selection.
     std::unique_ptr<SwAccessibleSelectedParas_Impl> mpSelectedParas;
@@ -302,11 +307,6 @@ private:
                      MapMode&     _orMapMode ) const;
 public:
     virtual bool IsDocumentSelAll() override;
-
-    //Para Container for InvalidateCursorPosition
-    typedef o3tl::sorted_vector< SwAccessibleParagraph* >  SET_PARA;
-    SET_PARA m_setParaAdd;
-    SET_PARA m_setParaRemove;
 };
 #endif
 
