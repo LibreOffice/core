@@ -189,6 +189,7 @@ public:
     void testTdf99729();
     void testTdf89927();
     void testTdf135843();
+    void testTdf103800();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -258,6 +259,7 @@ public:
     CPPUNIT_TEST(testTdf99729);
     CPPUNIT_TEST(testTdf89927);
     CPPUNIT_TEST(testTdf135843);
+    CPPUNIT_TEST(testTdf103800);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1979,6 +1981,21 @@ void SdImportTest::testTdf135843()
 
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "x", "21165");
     assertXPath(pXmlDoc, "/metafile/push[1]/push[1]/push[5]/polyline[1]/point[2]", "y", "5956");
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf103800()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf103800.pptx"), PPTX);
+    uno::Reference< beans::XPropertySet > xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference< text::XTextRange > xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference< text::XTextRange > xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference< beans::XPropertySet > xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0xC00000), nCharColor);
 
     xDocShRef->DoClose();
 }
