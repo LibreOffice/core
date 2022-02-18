@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf97e7c3_7f4b0994",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-18T07:28:40Z",
+      "side": 1,
+      "message": "Next change got Verified+1 from CI, so this failure is probably just a false alarm.",
+      "revId": "0ee67ed996bdcdb8116836d0c3e368dc732a1687",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
