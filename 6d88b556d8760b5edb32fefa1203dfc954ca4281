@@ -33,6 +33,23 @@
       "message": "I put these breakpoints:\n1       breakpoint     keep y   0x00007fb1bc1e38c7 in connectivity::odbc::OStatement_Base::execute(rtl::OUString const\u0026) at connectivity/source/drivers/odbc/OStatement.cxx:337\n2       breakpoint     keep y   0x00007fb1bc1e493e in connectivity::odbc::OStatement::executeBatch() at connectivity/source/drivers/odbc/OStatement.cxx:486\n3       breakpoint     keep y   0x00007fb1bc1d6cc1 in connectivity::odbc::OPreparedStatement::execute() at connectivity/source/drivers/odbc/OPreparedStatement.cxx:152\n4       breakpoint     keep y   0x00007fb1bc1e4aba in connectivity::odbc::OStatement::executeBatch() at connectivity/source/drivers/odbc/OStatement.cxx:492\n5       breakpoint     keep y   0x00007fb1bc1e536f in connectivity::odbc::OStatement_Base::getMoreResults() at connectivity/source/drivers/odbc/OStatement.cxx:578\n\nnothing. I\u0027m gonna try to close cursor or something else before calling GetInfo",
       "revId": "6d88b556d8760b5edb32fefa1203dfc954ca4281",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3884e5af_ce93d69b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-18T07:40:41Z",
+      "side": 1,
+      "message": "No better after closing cursor, no idea then.",
+      "revId": "6d88b556d8760b5edb32fefa1203dfc954ca4281",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
