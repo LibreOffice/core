@@ -44,6 +44,8 @@ public:
 
     virtual void DeInit() override;
 
+    void Flush() override { performFlush(); }
+
     virtual OUString getRenderBackendName() const override { return "skia"; }
 
     const vcl::Region& getClipRegion() const;

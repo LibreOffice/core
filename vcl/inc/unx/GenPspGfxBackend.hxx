@@ -26,6 +26,8 @@ public:
     GenPspGfxBackend(psp::PrinterGfx* pPrinterGfx);
     ~GenPspGfxBackend() override;
 
+    void Flush() override {}
+
     void Init() override;
     void freeResources() override;
     OUString getRenderBackendName() const override { return "genpsp"; }
