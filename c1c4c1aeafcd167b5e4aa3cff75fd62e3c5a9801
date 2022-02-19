@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4c6f1d4_6b859ae0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-19T10:52:45Z",
+      "side": 1,
+      "message": "It\u0027s just about removing executable bits so no change in the content itself, let\u0027s push this one.",
+      "revId": "c1c4c1aeafcd167b5e4aa3cff75fd62e3c5a9801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
