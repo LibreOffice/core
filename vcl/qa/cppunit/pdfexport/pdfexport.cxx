@@ -2989,28 +2989,43 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
     {
         OUString in;
         OString out;
-    } URIs[] = { {
-                     "http://example.com/",
-                     "http://example.com/",
-                 },
-                 {
-                     "file://localfile.odt/",
-                     "file://localfile.odt/",
-                 },
-                 {
-                     "git://git.example.org/project/example",
-                     "git://git.example.org/project/example",
-                 },
-                 {
-                     // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
-                     "filebypath.odt",
-                     "filebypath.pdf",
-                 },
-                 {
-                     // This also gets made relative due to 'ExportLinksRelativeFsys'
-                     utl::TempFile::GetTempNameBaseDirectory() + "fileintempdir.odt",
-                     "fileintempdir.pdf",
-                 } };
+        bool relativeFsys;
+    } URIs[]
+        = { {
+                "http://example.com/",
+                "http://example.com/",
+                true,
+            },
+            {
+                "file://localfile.odt/",
+                "file://localfile.odt/",
+                true,
+            },
+            {
+                "git://git.example.org/project/example",
+                "git://git.example.org/project/example",
+                true,
+            },
+            {
+                // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
+                "filebypath.odt",
+                "filebypath.pdf",
+                true,
+            },
+            {
+                // The odt/pdf gets substituted due to 'ConvertOOoTargetToPDFTarget'
+                // but this time with ExportLinksRelativeFsys off the path is added
+                "filebypath.odt",
+                OUStringToOString(utl::TempFile::GetTempNameBaseDirectory(), RTL_TEXTENCODING_UTF8)
+                    + "filebypath.pdf",
+                false,
+            },
+            {
+                // This also gets made relative due to 'ExportLinksRelativeFsys'
+                utl::TempFile::GetTempNameBaseDirectory() + "fileintempdir.odt",
+                "fileintempdir.pdf",
+                true,
+            } };
 
     // Create an empty document.
     // Note: The test harness gets very upset if we try and create multiple
@@ -3025,15 +3040,15 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     xModel->attachResource(maTempFile.GetURL(), xModel->getArgs());
 
-    // Test the filename rewriting
-    uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-        { "ExportLinksRelativeFsys", uno::makeAny(true) },
-        { "ConvertOOoTargetToPDFTarget", uno::makeAny(true) },
-    }));
-    aMediaDescriptor["FilterData"] <<= aFilterData;
-
     for (unsigned int i = 0; i < (sizeof(URIs) / sizeof(URIs[0])); i++)
     {
+        // Test the filename rewriting
+        uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
+            { "ExportLinksRelativeFsys", uno::makeAny(URIs[i].relativeFsys) },
+            { "ConvertOOoTargetToPDFTarget", uno::makeAny(true) },
+        }));
+        aMediaDescriptor["FilterData"] <<= aFilterData;
+
         // Add a link (based on testNestedHyperlink in rtfexport3)
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
