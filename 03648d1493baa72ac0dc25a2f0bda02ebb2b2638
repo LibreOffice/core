@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "061c6027_222e6638",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-02-19T19:35:43Z",
+      "side": 1,
+      "message": "OK, that\u0027s using covertRelToAbs now and I\u0027ve added one extra test case which is happy.\n",
+      "revId": "03648d1493baa72ac0dc25a2f0bda02ebb2b2638",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
