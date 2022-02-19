@@ -10,7 +10,6 @@
 #pragma once
 
 #include "attribute.hxx"
-#include "starmathdatabase.hxx"
 #include <rect.hxx>
 
 #include <editeng/editdata.hxx>

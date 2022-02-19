@@ -28,7 +28,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/character.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>

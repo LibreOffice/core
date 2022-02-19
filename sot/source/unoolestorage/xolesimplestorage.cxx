@@ -29,7 +29,6 @@
 #include <com/sun/star/io/XTruncate.hpp>
 #include <com/sun/star/io/TempFile.hpp>
 
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>

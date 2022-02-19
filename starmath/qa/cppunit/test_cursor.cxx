@@ -17,6 +17,7 @@
 #include <document.hxx>
 #include <node.hxx>
 #include <cursor.hxx>
+#include <parse5.hxx>
 
 #include <memory>
 

@@ -19,10 +19,10 @@
 
 #include <sidebar/DeckTitleBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/strings.hrc>
 
+#include <vcl/bitmapex.hxx>
 #include <vcl/customweld.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/ptrstyle.hxx>
 
 #ifdef DEBUG

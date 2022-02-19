@@ -26,13 +26,9 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <sfx2/viewsh.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/gen.hxx>
-#include <tools/json_writer.hxx>
 #include <vcl/event.hxx>
-#include <comphelper/lok.hxx>
-#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <osl/diagnose.h>
 
 #include <boost/property_tree/json_parser.hpp>

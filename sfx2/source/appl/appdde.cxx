@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <config_features.h>
 #include <rtl/character.hxx>
 #include <rtl/malformeduriexception.hxx>

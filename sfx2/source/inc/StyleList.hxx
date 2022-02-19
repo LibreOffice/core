@@ -21,6 +21,15 @@
 
 #include <sal/config.h>
 
+#include <o3tl/typed_flags_set.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/styfitem.hxx>
+#include <svl/eitem.hxx>
+#include <svl/style.hxx>
+#include <vcl/idle.hxx>
+#include <vcl/transfer.hxx>
+#include <vcl/weld.hxx>
+
 class SfxObjectShell;
 class SfxStyleFamilyItem;
 class SfxTemplateItem;

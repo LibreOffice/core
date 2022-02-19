@@ -32,6 +32,8 @@
 #include <cfgitem.hxx>
 #include <starmathdatabase.hxx>
 
+#include <stack>
+
 using namespace ::com::sun::star::i18n;
 
 //Definition of math keywords

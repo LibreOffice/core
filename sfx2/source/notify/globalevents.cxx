@@ -34,7 +34,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <sfx2/app.hxx>
 #include <tools/diagnose_ex.h>

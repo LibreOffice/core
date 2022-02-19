@@ -1,9 +1,6 @@
 ---
 assumeFilename: sfx2/source/appl/app.cxx
 excludelist:
-    sfx2/inc/sidebar/Accessible.hxx:
-    # base class has to be a complete type
-    - com/sun/star/accessibility/XAccessible.hpp
     sfx2/inc/sidebar/UnoDeck.hxx:
     # base class has to be a complete type
     - com/sun/star/ui/XDeck.hpp
@@ -55,6 +52,10 @@ excludelist:
     sfx2/source/appl/appmisc.cxx:
     # Needed for TypedWhichId macro
     - svl/stritem.hxx
+    sfx2/source/appl/appquit.cxx:
+    # Full type is needed for implicit dtor
+    - sfx2/stbitem.hxx
+    - sfx2/tbxctrl.hxx
     sfx2/source/appl/appbas.cxx:
     # Needed for createSfxPoolItem calls
     - svl/eitem.hxx
@@ -103,6 +104,9 @@ excludelist:
     sfx2/source/doc/graphhelp.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx
+    sfx2/source/doc/doctempl.cxx:
+    # Needed for template
+    - com/sun/star/ucb/NumberedSortingInfo.hpp
     sfx2/source/doc/guisaveas.cxx:
     # Needed on WIN32
     - o3tl/char16_t2wchar_t.hxx

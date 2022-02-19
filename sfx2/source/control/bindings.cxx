@@ -22,6 +22,7 @@
 #include <iomanip>
 
 #include <comphelper/servicehelper.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>

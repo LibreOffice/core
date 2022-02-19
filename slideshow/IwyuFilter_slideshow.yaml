@@ -16,7 +16,7 @@ excludelist:
     - glm/gtc/type_ptr.hpp
     slideshow/source/engine/box2dtools.cxx:
     # Macro BOX2D_HEADER is resolved to this
-    - Box2D/Box2D.h
+    - box2d/box2d.h
     slideshow/source/engine/opengl/Operation.cxx:
     # Wrapper for external lib
     - glm/gtc/matrix_transform.hpp

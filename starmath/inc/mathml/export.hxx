@@ -28,8 +28,7 @@
 #include <xmloff/xmltoken.hxx>
 
 // Extras
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/xml/sax/Writer.hpp>
+#include <com/sun/star/io/XOutputStream.hpp>
 
 class SfxMedium;
 class SmDocShell;

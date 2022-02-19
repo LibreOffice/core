@@ -16,6 +16,7 @@
 
 #include <document.hxx>
 #include <node.hxx>
+#include <parse5.hxx>
 #include <visitors.hxx>
 #include <cursor.hxx>
 
