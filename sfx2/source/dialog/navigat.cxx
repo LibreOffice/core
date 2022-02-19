@@ -21,12 +21,9 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/navigat.hxx>
-#include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
-#include <vcl/layout.hxx>
 #include <helpids.h>
-#include <tools/debug.hxx>
 
 SfxNavigatorWrapper::SfxNavigatorWrapper(vcl::Window* pParentWnd, sal_uInt16 nId)
     : SfxChildWindow(pParentWnd , nId)

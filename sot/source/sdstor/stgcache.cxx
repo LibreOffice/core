@@ -20,7 +20,6 @@
 #include <string.h>
 #include <osl/endian.h>
 #include <osl/diagnose.h>
-#include <tools/solar.h>
 
 #include <sot/stg.hxx>
 #include "stgcache.hxx"

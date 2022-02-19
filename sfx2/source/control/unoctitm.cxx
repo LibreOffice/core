@@ -19,7 +19,6 @@
 
 #include <config_java.h>
 
-#include <rtl/strbuf.hxx>
 #include <tools/debug.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -34,17 +33,14 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/status/ItemStatus.hpp>
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Template.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <comphelper/processfactory.hxx>
-#include <officecfg/Office/Common.hxx>
 #include <uno/current_context.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/uitest/logger.hxx>
@@ -64,14 +60,9 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/viewsh.hxx>
 #include <slotserv.hxx>
-#include <osl/file.hxx>
 #include <rtl/ustring.hxx>
-#include <unotools/pathoptions.hxx>
-#include <osl/time.h>
 #include <sfx2/lokhelper.hxx>
-#include <basic/sberrors.hxx>
 
-#include <map>
 #include <memory>
 #include <string_view>
 
@@ -83,7 +74,6 @@
 #include <desktop/crashreport.hxx>
 #include <vcl/threadex.hxx>
 #include <unotools/mediadescriptor.hxx>
-#include <tools/json_writer.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

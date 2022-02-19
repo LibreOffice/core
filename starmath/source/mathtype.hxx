@@ -21,6 +21,8 @@
 
 #include <node.hxx>
 
+#include <set>
+
 class SfxMedium;
 class SotStorage;
 class SvStream;

@@ -22,7 +22,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <unoview.hxx>
 #include <unoviewcontainer.hxx>
 #include "tests.hxx"
 

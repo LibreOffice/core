@@ -21,23 +21,17 @@
 
 #include <sal/config.h>
 
-#include <array>
 #include <memory>
-#include <optional>
 
 #include <vcl/transfer.hxx>
 #include <vcl/weld.hxx>
-#include <svl/lstner.hxx>
 #include <svl/eitem.hxx>
 
 #include <svl/style.hxx>
 
-#include <sfx2/childwin.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/templdlg.hxx>
-
-#include <vcl/idle.hxx>
 
 #include "StyleList.hxx"
 

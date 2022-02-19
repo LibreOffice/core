@@ -18,15 +18,12 @@
  */
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/servicehelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <com/sun/star/awt/MouseButton.hpp>
 #include <com/sun/star/awt/SystemPointer.hpp>
-#include <com/sun/star/presentation/XShapeEventListener.hpp>
 #include <com/sun/star/system/SystemShellExecute.hpp>
 #include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/system/XSystemShellExecute.hpp>
-#include <svx/unoshape.hxx>
 #include <svx/ImageMapInfo.hxx>
 
 #include "shapemanagerimpl.hxx"

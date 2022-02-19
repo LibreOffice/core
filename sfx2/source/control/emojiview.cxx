@@ -16,7 +16,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/processfactory.hxx>
 #include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
 
 #include <orcus/json_document_tree.hpp>

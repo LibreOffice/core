@@ -45,8 +45,6 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 
-#include <toolkit/helper/vclunohelper.hxx>
-
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/task/ErrorCodeRequest.hpp>

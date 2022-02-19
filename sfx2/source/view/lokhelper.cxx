@@ -30,7 +30,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <comphelper/lok.hxx>
-#include <editeng/outliner.hxx>
 #include <sfx2/msgpool.hxx>
 
 #include <boost/property_tree/json_parser.hpp>

@@ -105,7 +105,6 @@
 #include <ucbhelper/content.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 #include <sot/storage.hxx>
-#include <unotools/saveopt.hxx>
 #include <svl/documentlockfile.hxx>
 #include <svl/msodocumentlockfile.hxx>
 #include <com/sun/star/document/DocumentRevisionListPersistence.hpp>
@@ -128,7 +127,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/threadpool.hxx>
 #include <condition_variable>
-#include <comphelper/scopeguard.hxx>
 
 #include <com/sun/star/io/WrongFormatException.hpp>
 

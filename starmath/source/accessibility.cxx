@@ -26,27 +26,18 @@
 
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#include <com/sun/star/i18n/WordType.hpp>
 #include <unotools/accessiblestatesethelper.hxx>
 #include <comphelper/accessibleeventnotifier.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/diagnose.h>
-#include <svx/AccessibleTextHelper.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 #include <vcl/unohelp2.hxx>
 #include <vcl/settings.hxx>
 
 #include <tools/gen.hxx>
-#include <svl/itemset.hxx>
 
 #include <editeng/editobj.hxx>
-#include <editeng/editdata.hxx>
-#include <editeng/editview.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/outliner.hxx>
-#include <editeng/unoedhlp.hxx>
 
 
 #include "accessibility.hxx"

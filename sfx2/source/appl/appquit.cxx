@@ -24,14 +24,11 @@
 
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
-#include <sfx2/tbxctrl.hxx>
 #include <sfx2/stbitem.hxx>
+#include <sfx2/tbxctrl.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/msgpool.hxx>
-#include <sfx2/fcontnr.hxx>
 #include <nochaos.hxx>
-#include <sfx2/doctempl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
 #include <appbaslib.hxx>

@@ -9,25 +9,21 @@
 
 #include <commandpopup/CommandPopup.hxx>
 
-#include <workwin.hxx>
-
 #include <sfx2/msgpool.hxx>
 #include <sfx2/bindings.hxx>
+#include <sfx2/msg.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/dispatchcommand.hxx>
 
-#include <com/sun/star/frame/Desktop.hpp>
-#include <com/sun/star/frame/theUICommandDescription.hpp>
-#include <com/sun/star/ui/theUICategoryDescription.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-#include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/i18n/CharacterClassification.hpp>
 
 #include <vcl/commandinfoprovider.hxx>
+#include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <i18nlangtag/languagetag.hxx>
 

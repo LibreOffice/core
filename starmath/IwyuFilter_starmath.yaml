@@ -4,6 +4,9 @@ excludelist:
     starmath/inc/smmod.hxx:
     # Needed for define
     - sfx2/app.hxx
+    starmath/inc/format.hxx:
+    # Needed for FONTNAME_MATH macro
+    - types.hxx
     starmath/qa/extras/mmlexport-test.cxx:
     # Required in C++20 mode.
     - o3tl/cppunittraitshelper.hxx
@@ -28,9 +31,6 @@ excludelist:
     starmath/source/node.cxx:
     # Actually used
     - vector
-    starmath/source/mathmlexport.cxx:
-    # Needed for rtl::math::round
-    - rtl/math.hxx
     starmath/source/smdll.cxx:
     # Needed to inherit linker visibility
     - smdll.hxx
@@ -46,3 +46,9 @@ excludelist:
     - register.hxx
     # Needed for template
     - com/sun/star/frame/XModel.hpp
+    starmath/source/mathml/def.cxx:
+    # Needed for extern
+    - mathml/attribute.hxx
+    starmath/source/mathml/mathmlexport.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx

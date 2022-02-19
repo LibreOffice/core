@@ -17,7 +17,7 @@
 #include <document.hxx>
 #include <smdll.hxx>
 #include <node.hxx>
-#include <parse.hxx>
+#include <parse5.hxx>
 #include <utility.hxx>
 
 #include <memory>

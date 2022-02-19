@@ -21,7 +21,8 @@
 #include <sfx2/sidebar/IContextChangeReceiver.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/sidebar/SidebarModelUpdate.hxx>
-#include <vcl/layout.hxx>
+#include <vcl/EnumContext.hxx>
+#include <vcl/svapp.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>

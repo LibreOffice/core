@@ -22,6 +22,7 @@
 #include <mathml/iterator.hxx>
 
 // LO tools to use
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/uno/Any.h>
@@ -29,27 +30,22 @@
 #include <com/sun/star/xml/sax/Writer.hpp>
 
 // Extra LO tools
-#include <comphelper/fileformat.h>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysetinfo.hxx>
-#include <sax/tools/converter.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/namespacemap.hxx>
 
 // Our starmath tools
-#include <cfgitem.hxx>
 #include <document.hxx>
 #include <smmod.hxx>
 #include <strings.hrc>
 #include <unomodel.hxx>
-#include <utility.hxx>
 #include <xparsmlbase.hxx>
 #include <starmathdatabase.hxx>
 

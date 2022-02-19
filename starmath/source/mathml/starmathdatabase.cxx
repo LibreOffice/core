@@ -18,6 +18,7 @@
  */
 
 #include <starmathdatabase.hxx>
+#include <types.hxx>
 
 SmToken starmathdatabase::Identify_SmXMLOperatorContext_Impl(sal_Unicode cChar, bool bIsStretchy)
 {

@@ -23,10 +23,11 @@
 
 #pragma once
 
-#include <unotools/charclass.hxx>
 #include <unotools/resmgr.hxx>
 
 #include "node.hxx"
+
+#include <set>
 
 #define DEPTH_LIMIT 1024
 

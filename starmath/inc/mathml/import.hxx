@@ -17,7 +17,6 @@
 #include <xmloff/xmlimp.hxx>
 
 // Extras
-#include <com/sun/star/beans/PropertyAttribute.hpp>
 
 class SfxMedium;
 class SmDocShell;

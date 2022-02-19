@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include <memory>
-
 #include <sfx2/devtools/DevelopmentToolDockingWindow.hxx>
 
 #include <com/sun/star/frame/XController.hpp>

@@ -43,9 +43,7 @@
 #include <unoctitm.hxx>
 #include <appdata.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/msgpool.hxx>
 #include <nochaos.hxx>
-#include <sfxpicklist.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

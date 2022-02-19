@@ -9,8 +9,9 @@
 
 #pragma once
 
-#include <sfx2/dllapi.h>
 #include <vcl/tabctrl.hxx>
+
+#include <com/sun/star/frame/XFrame.hpp>
 
 namespace com::sun::star::ui { class XUIConfigurationListener; }
 namespace com::sun::star::uno { class XComponentContext; }

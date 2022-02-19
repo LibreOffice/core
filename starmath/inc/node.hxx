@@ -68,6 +68,7 @@
 #include "nodetype.hxx"
 
 #include <editeng/editdata.hxx>
+#include <rtl/ustrbuf.hxx>
 
 enum class FontAttribute {
     None   = 0x0000,

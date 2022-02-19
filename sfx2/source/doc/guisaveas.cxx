@@ -50,10 +50,8 @@
 #include <guisaveas.hxx>
 
 #include <sal/log.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svl/itemset.hxx>
 #include <svl/eitem.hxx>
-#include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>

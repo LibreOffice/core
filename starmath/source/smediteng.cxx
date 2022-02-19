@@ -10,13 +10,15 @@
 #include <smmod.hxx>
 #include <cfgitem.hxx>
 
-#include <svx/weldeditview.hxx>
 #include <vcl/settings.hxx>
-#include <sfx2/viewfrm.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
+#include <editeng/fontitem.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/svapp.hxx>
 
 SmEditEngine::SmEditEngine(SfxItemPool* pItemPool)
     : EditEngine(pItemPool)

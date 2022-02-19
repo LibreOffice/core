@@ -50,7 +50,6 @@
 #include <box2dtools.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/svdograf.hxx>
-#include <svx/unoshape.hxx>
 
 using namespace ::com::sun::star;
 

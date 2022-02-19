@@ -25,7 +25,6 @@
 #include <srchdlg.hxx>
 #include <sfx2/sfxhelp.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 

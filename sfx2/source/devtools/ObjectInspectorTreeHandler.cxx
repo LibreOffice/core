@@ -18,11 +18,11 @@
 #include <com/sun/star/beans/theIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospection.hpp>
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#include <com/sun/star/beans/Property.hpp>
+//#include <com/sun/star/beans/Property.hpp>
 #include <com/sun/star/beans/PropertyConcept.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/MethodConcept.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
+//#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <com/sun/star/reflection/XIdlReflection.hpp>

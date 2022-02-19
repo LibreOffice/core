@@ -49,7 +49,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <svtools/addresstemplate.hxx>
-#include <svtools/miscopt.hxx>
 #include <svtools/restartdialog.hxx>
 #include <svl/visitem.hxx>
 
@@ -63,7 +62,6 @@
 #include <basic/basrdll.hxx>
 #include <basic/sberrors.hxx>
 #include <vcl/help.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <osl/file.hxx>
 #include <vcl/EnumContext.hxx>

@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral RID_UNDOFORMATNAME = u"Format";
 
 // clang-format off

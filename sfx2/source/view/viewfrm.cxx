@@ -27,7 +27,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
-#include <svx/svdview.hxx>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/DispatchRecorder.hpp>
@@ -73,8 +72,6 @@
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -84,7 +81,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/docpasswordrequest.hxx>
 #include <comphelper/docpasswordhelper.hxx>
-#include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 
@@ -97,7 +93,6 @@
 
 #include <optional>
 
-#include <unotools/configmgr.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
 #include <commandpopup/CommandPopup.hxx>
@@ -145,7 +140,6 @@ using ::com::sun::star::container::XIndexContainer;
 #define ShellClass_SfxViewFrame
 #include <sfxslots.hxx>
 
-#include <sfx2/sidebar/SidebarController.hxx>
 constexpr OUStringLiteral CHANGES_STR = u"private:resource/toolbar/changes";
 
 SFX_IMPL_SUPERCLASS_INTERFACE(SfxViewFrame,SfxShell)

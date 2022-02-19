@@ -28,19 +28,11 @@
 
 #pragma once
 
-#include "types.hxx"
-#include <rtl/ustrbuf.hxx>
 #include <tools/color.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 // std imports
-#include <cassert>
 #include <memory>
-#include <vector>
-#include <stack>
-#include <tuple>
-#include <list>
-#include <set>
 
 // TokenGroups
 enum class TG

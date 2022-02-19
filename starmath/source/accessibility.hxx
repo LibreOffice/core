@@ -28,11 +28,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <cppuhelper/implbase.hxx>
-#include <svl/SfxBroadcaster.hxx>
 
-#include <editeng/editeng.hxx>
-#include <editeng/unoedsrc.hxx>
-#include <edit.hxx>
 #include <view.hxx>
 
 class SmDocShell;

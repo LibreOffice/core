@@ -30,7 +30,6 @@
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
 
-#include <vcl/vclptr.hxx>
 #include <vector>
 
 class ThumbnailView;

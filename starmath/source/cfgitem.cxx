@@ -19,7 +19,6 @@
 
 #include <svl/itemset.hxx>
 #include <svl/intitem.hxx>
-#include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/configmgr.hxx>

@@ -9,8 +9,6 @@
 
 #include <mathml/iterator.hxx>
 
-#include <stdlib.h>
-
 /** The purpose of this iterator is to be able to iterate threw an infinite element tree
   * infinite -> as much as your memory can hold
   * No call-backs that will end up in out of stack

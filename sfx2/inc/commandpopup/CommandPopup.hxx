@@ -9,13 +9,7 @@
 
 #pragma once
 
-#include <vcl/layout.hxx>
-
-#include <sfx2/dllapi.h>
-#include <sfx2/viewfrm.hxx>
-
 #include <vcl/weld.hxx>
-#include <vcl/window.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/XFrame.hpp>

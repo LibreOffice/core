@@ -24,7 +24,8 @@
 #include <vcl/weld.hxx>
 #include <unotools/resmgr.hxx>
 
-#include "parse.hxx"
+#include "node.hxx"
+#include "parsebase.hxx"
 #include "AccessibleSmElementsControl.hxx"
 
 class SmDocShell;

@@ -18,9 +18,6 @@
  */
 
 
-#include <osl/diagnose.h>
-#include <tools/debug.hxx>
-
 #include <sfx2/app.hxx>
 #include <appdata.hxx>
 #include <workwin.hxx>

@@ -19,15 +19,7 @@
 
 #include <memory>
 
-#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <vcl/commandevent.hxx>
 #include <vcl/commandinfoprovider.hxx>
-#include <vcl/event.hxx>
-#include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/weldutils.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/style.hxx>
@@ -47,25 +39,15 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/templdlg.hxx>
 #include <templdgi.hxx>
-#include <tplcitem.hxx>
 #include <sfx2/styfitem.hxx>
 #include <sfx2/objsh.hxx>
-#include <sfx2/viewsh.hxx>
-#include <sfx2/newstyle.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/sfxresid.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/strings.hrc>
-#include <sfx2/docfac.hxx>
-#include <sfx2/module.hxx>
 #include <helpids.h>
 #include <sfx2/viewfrm.hxx>
-
-#include <comphelper/string.hxx>
-
-#include <sfx2/StyleManager.hxx>
-#include <sfx2/StylePreviewRenderer.hxx>
 
 using namespace css;
 using namespace css::beans;

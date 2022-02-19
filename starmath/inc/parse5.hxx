@@ -24,6 +24,7 @@
 #pragma once
 
 #include "parsebase.hxx"
+#include <unotools/charclass.hxx>
 
 class SmParser5 final : public AbstractSmParser
 {

@@ -19,6 +19,8 @@
 #ifndef INCLUDED_SFX2_SOURCE_INC_HELPIDS_H
 #define INCLUDED_SFX2_SOURCE_INC_HELPIDS_H
 
+#include <rtl/string.hxx>
+
 inline constexpr OStringLiteral HID_TEMPLATE_FMT = "SFX2_HID_TEMPLATE_FMT";
 inline constexpr OStringLiteral HID_TEMPLATE_FILTER = "SFX2_HID_TEMPLATE_FILTER";
 inline constexpr OStringLiteral HID_TEMPLDLG_NEWBYEXAMPLE = "SFX2_HID_TEMPLDLG_NEWBYEXAMPLE";

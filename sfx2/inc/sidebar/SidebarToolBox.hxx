@@ -19,8 +19,6 @@
 #ifndef INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 #define INCLUDED_SFX2_SIDEBAR_SIDEBARTOOLBOX_HXX
 
-#include <config_options.h>
-#include <sfx2/dllapi.h>
 #include <vcl/builder.hxx>
 #include <vcl/toolbox.hxx>
 #include <map>

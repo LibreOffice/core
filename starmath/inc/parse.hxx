@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "parse5.hxx"
+#include "parsebase.hxx"
 
 namespace starmathdatabase
 {

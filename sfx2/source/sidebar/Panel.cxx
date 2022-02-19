@@ -20,7 +20,6 @@
 #include <sfx2/sidebar/Panel.hxx>
 #include <sidebar/PanelTitleBar.hxx>
 #include <sidebar/PanelDescriptor.hxx>
-#include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/SidebarController.hxx>
 #include <sfx2/sidebar/SidebarPanelBase.hxx>
@@ -33,7 +32,6 @@
 #include <sfx2/sidebar/Deck.hxx>
 #endif
 
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/ui/XToolPanel.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
 #include <com/sun/star/ui/XUIElement.hpp>

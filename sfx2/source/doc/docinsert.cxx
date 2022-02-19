@@ -39,7 +39,6 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <memory>
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

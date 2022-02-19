@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/saveopt.hxx>
 #include <alienwarn.hxx>
 #include <officecfg/Office/Common.hxx>
 

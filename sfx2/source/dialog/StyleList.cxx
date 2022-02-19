@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <unordered_map>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -28,23 +29,15 @@
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
+#include <vcl/window.hxx>
 #include <svl/intitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/style.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/sequenceashashmap.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/frame/ModuleManager.hpp>
-#include <com/sun/star/frame/UnknownModuleException.hpp>
 #include <officecfg/Office/Common.hxx>
 
-#include <sal/log.hxx>
 #include <osl/diagnose.h>
-#include <tools/diagnose_ex.h>
-#include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/templdlg.hxx>
 #include <templdgi.hxx>
 #include <tplcitem.hxx>
 #include <sfx2/styfitem.hxx>
@@ -67,7 +60,6 @@
 #include <sfx2/StylePreviewRenderer.hxx>
 
 #include <StyleList.hxx>
-#include <vcl/toolbox.hxx>
 
 using namespace css;
 using namespace css::beans;

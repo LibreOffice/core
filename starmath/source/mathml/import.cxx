@@ -32,27 +32,22 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <sfx2/sfxmodelfactory.hxx>
 #include <sot/storage.hxx>
 #include <svtools/sfxecode.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
-#include <sax/tools/converter.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
-#include <tools/diagnose_ex.h>
 #include <unotools/streamwrap.hxx>
 #include <xmloff/DocumentSettingsContext.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/xmluconv.hxx>
 
 // Our starmath tools
 #include <cfgitem.hxx>
 #include <document.hxx>
 #include <xparsmlbase.hxx>
-#include <utility.hxx>
 #include <smmod.hxx>
 #include <starmathdatabase.hxx>
 #include <unomodel.hxx>
