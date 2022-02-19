@@ -501,7 +501,7 @@ void ScConditionEntry::UpdateReference( sc::RefUpdateContext& rCxt )
     if (rCxt.meMode == URM_INSDEL && rCxt.maRange.In(aSrcPos))
     {
         ScAddress aErrorPos( ScAddress::UNINITIALIZED );
-        if (!aSrcPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+        if (!aSrcPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos, *mpDoc))
         {
             assert(!"can't move ScConditionEntry");
         }

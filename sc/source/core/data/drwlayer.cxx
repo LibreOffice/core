@@ -1768,7 +1768,8 @@ static bool lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector,
     return true;            // everything is fine
 }
 
-static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange, const ScAddress& rDestPos )
+static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange& rSourceRange,
+                            const ScAddress& rDestPos, const ScDocument& rDoc )
 {
     bool bChanged = false;
 
@@ -1783,7 +1784,7 @@ static bool lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const S
                 SCCOL nDiffX = rDestPos.Col() - rSourceRange.aStart.Col();
                 SCROW nDiffY = rDestPos.Row() - rSourceRange.aStart.Row();
                 SCTAB nDiffZ = rDestPos.Tab() - rSourceRange.aStart.Tab();
-                if (!rRange.Move( nDiffX, nDiffY, nDiffZ, aErrorRange))
+                if (!rRange.Move( nDiffX, nDiffY, nDiffZ, aErrorRange, rDoc ))
                 {
                     assert(!"can't move range");
                 }
@@ -1956,7 +1957,7 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                                     if ( rDestPos != aClipRange.aStart )
                                     {
                                         //  update the data ranges to the new (copied) position
-                                        if ( lcl_MoveRanges( aRangesVector, aClipRange, rDestPos ) )
+                                        if ( lcl_MoveRanges( aRangesVector, aClipRange, rDestPos, *pDoc ) )
                                             pDoc->SetChartRanges( aChartName, aRangesVector );
                                     }
                                 }
