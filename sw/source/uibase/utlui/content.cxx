@@ -178,6 +178,15 @@ namespace
     {
         return IDocumentMarkAccess::GetType(*pMark) == IDocumentMarkAccess::MarkType::BOOKMARK;
     }
+
+    const OUString lcl_GetFootnoteText(const SwTextFootnote& rTextFootnote)
+    {
+        SwNodeIndex aIdx(*rTextFootnote.GetStartNode(), 1);
+        SwContentNode* pCNd = aIdx.GetNode().GetTextNode();
+        if(!pCNd)
+            pCNd = aIdx.GetNodes().GoNext( &aIdx );
+        return pCNd->IsTextNode() ? static_cast<SwTextNode*>(pCNd)->GetText() : OUString();
+    }
 }
 
 // Content, contains names and reference at the content type.
@@ -620,36 +629,24 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         case ContentTypeId::FOOTNOTE:
         {
             const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
-            size_t nFootnoteCount = 0;
-            for (SwTextFootnote* pTextFootnote : rFootnoteIdxs)
-                if (!pTextFootnote->GetFootnote().IsEndNote())
-                    ++nFootnoteCount;
+            for (const SwTextFootnote* pTextFootnote : rFootnoteIdxs)
+            {
+                const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
+                const OUString& sText = rFormatFootnote.GetViewNumStr(
+                            *m_pWrtShell->GetDoc(), m_pWrtShell->GetLayout(), true) + u" " +
+                        lcl_GetFootnoteText(*pTextFootnote);
+                auto pCnt(std::make_unique<SwTextFootnoteContent>(
+                              this, sText, pTextFootnote,rFormatFootnote.IsEndNote() ? 2 : 0));
+                if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
+                    pCnt->SetInvisible();
+                m_pMember->insert(std::move(pCnt));
+            }
             // insert a separator bar between footnote and endnote entries
             if (rFootnoteIdxs.size())
             {
-                std::unique_ptr<SwTextFootnoteContent> pCnt(new SwTextFootnoteContent(
-                                                            this, "-------------------------------",
-                                                            nullptr, nFootnoteCount + 1));
+                auto pCnt(std::make_unique<SwTextFootnoteContent>(
+                              this, "-------------------------------", nullptr, 1));
                 pCnt->SetInvisible();
-                m_pMember->insert(std::move(pCnt));
-            }
-            tools::Long nPos = 0, nInsertPos = 0;
-            for (SwTextFootnote* pTextFootnote : rFootnoteIdxs)
-            {
-                const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
-                const OUString& sText =
-                        rFormatFootnote.GetViewNumStr(*m_pWrtShell->GetDoc(),
-                                                      m_pWrtShell->GetLayout(), true) + " " +
-                        rFormatFootnote.GetFootnoteText(*m_pWrtShell->GetLayout());
-                if (rFormatFootnote.IsEndNote())
-                    nInsertPos = nPos + nFootnoteCount + 2;
-                else
-                    nInsertPos = ++nPos;
-                std::unique_ptr<SwTextFootnoteContent> pCnt(new SwTextFootnoteContent(
-                                                                this, sText, pTextFootnote,
-                                                                nInsertPos));
-                if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
-                    pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
             }
         }
