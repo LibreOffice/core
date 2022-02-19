@@ -1749,7 +1749,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     if ( eCmd == INS_INSROWS_AFTER )
     {
         ScRange aErrorRange( ScAddress::UNINITIALIZED );
-        if (!aTargetRange.Move(0, rRange.aEnd.Row() - rRange.aStart.Row() + 1, 0, aErrorRange))
+        if (!aTargetRange.Move(0, rRange.aEnd.Row() - rRange.aStart.Row() + 1, 0, aErrorRange, rDoc))
         {
             return false;
         }
@@ -1757,7 +1757,7 @@ bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
     if ( eCmd == INS_INSCOLS_AFTER )
     {
         ScRange aErrorRange( ScAddress::UNINITIALIZED );
-        if (!aTargetRange.Move(rRange.aEnd.Col() - rRange.aStart.Col() + 1, 0, 0, aErrorRange))
+        if (!aTargetRange.Move(rRange.aEnd.Col() - rRange.aStart.Col() + 1, 0, 0, aErrorRange, rDoc))
         {
             return false;
         }
