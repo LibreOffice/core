@@ -1434,10 +1434,8 @@ void ScInterpreter::ScConcat_MS()
                     SetError( FormulaError::IllegalParameter);
                     break;
                 }
-                if ( nRow1 > nRow2 )
-                    std::swap( nRow1, nRow2 );
-                if ( nCol1 > nCol2 )
-                    std::swap( nCol1, nCol2 );
+                PutInOrder( nRow1, nRow2 );
+                PutInOrder( nCol1, nCol2 );
                 ScAddress aAdr;
                 aAdr.SetTab( nTab1 );
                 for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
@@ -1559,10 +1557,8 @@ void ScInterpreter::ScTextJoin_MS()
                 SetError( FormulaError::IllegalParameter);
                 break;
             }
-            if ( nRow1 > nRow2 )
-                std::swap( nRow1, nRow2 );
-            if ( nCol1 > nCol2 )
-                std::swap( nCol1, nCol2 );
+            PutInOrder( nRow1, nRow2 );
+            PutInOrder( nCol1, nCol2 );
             ScAddress aAdr;
             aAdr.SetTab( nTab1 );
             for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
@@ -1712,10 +1708,8 @@ void ScInterpreter::ScTextJoin_MS()
                     SetError( FormulaError::IllegalParameter);
                     break;
                 }
-                if ( nRow1 > nRow2 )
-                    std::swap( nRow1, nRow2 );
-                if ( nCol1 > nCol2 )
-                    std::swap( nCol1, nCol2 );
+                PutInOrder( nRow1, nRow2 );
+                PutInOrder( nCol1, nCol2 );
                 ScAddress aAdr;
                 aAdr.SetTab( nTab1 );
                 OUString aStr;
