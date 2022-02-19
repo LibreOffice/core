@@ -5,9 +5,6 @@ excludelist:
     # Base class needs complete type
     - com/sun/star/embed/XOLESimpleStorage.hpp
     - com/sun/star/lang/XServiceInfo.hpp
-    sot/source/sdstor/stgcache.hxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
-    sot/source/sdstor/stgcache.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
+    sot/source/base/formats.cxx:
+    # Needed on WIN32
+    - o3tl/char16_t2wchar_t.hxx

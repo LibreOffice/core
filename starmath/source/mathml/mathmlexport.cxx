@@ -37,7 +37,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <osl/diagnose.h>
-#include <unotools/saveopt.hxx>
 #include <sot/storage.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>

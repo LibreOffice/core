@@ -26,8 +26,6 @@
 #include <com/sun/star/view/PaperFormat.hpp>
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/ucb/NameClash.hpp>
-#include <com/sun/star/ucb/ContentCreationException.hpp>
-#include <com/sun/star/ucb/CommandAbortedException.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/DuplexMode.hpp>
 #include <comphelper/processfactory.hxx>
@@ -40,7 +38,6 @@
 #include <tools/diagnose_ex.h>
 #include <ucbhelper/content.hxx>
 #include <comphelper/interfacecontainer4.hxx>
-#include <osl/mutex.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>

@@ -21,7 +21,6 @@
 
 #include <svx/weldeditview.hxx>
 #include <vcl/idle.hxx>
-#include <vcl/transfer.hxx>
 
 class SmDocShell;
 class SmViewShell;

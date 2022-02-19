@@ -25,13 +25,11 @@
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/ucb/NameClashException.hpp>
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
 #include <unotest/macros_test.hxx>
 
-#include <unotools/mediadescriptor.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/processfactory.hxx>

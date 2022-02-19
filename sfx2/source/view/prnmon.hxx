@@ -21,7 +21,6 @@
 
 #include <memory>
 #include <sal/config.h>
-#include <vcl/vclptr.hxx>
 #include <vcl/weld.hxx>
 
 

@@ -20,7 +20,6 @@
 
 #include <inettbc.hxx>
 
-#include <com/sun/star/uno/Any.h>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

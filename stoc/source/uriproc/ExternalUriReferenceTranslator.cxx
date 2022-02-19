@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uri/XExternalUriReferenceTranslator.hpp>

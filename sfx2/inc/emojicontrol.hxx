@@ -10,7 +10,6 @@
 #pragma once
 
 #include <sal/config.h>
-#include <sfx2/dllapi.h>
 #include <svtools/toolbarmenu.hxx>
 #include <vcl/customweld.hxx>
 
