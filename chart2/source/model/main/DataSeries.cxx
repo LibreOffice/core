@@ -19,7 +19,7 @@
 
 #include <DataSeries.hxx>
 #include "DataSeriesProperties.hxx"
-#include "DataPointProperties.hxx"
+#include <DataPointProperties.hxx>
 #include <CharacterProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include "DataPoint.hxx"

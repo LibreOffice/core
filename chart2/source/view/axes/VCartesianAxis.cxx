@@ -1135,7 +1135,7 @@ B2DVector VCartesianAxis::getScreenPosition( double fLogicX, double fLogicY, dou
         {
             if (m_xLogicTarget.is())
             {
-                tPropertyNameMap aDummyPropertyNameMap;
+                tPropertyNameMap2 aDummyPropertyNameMap;
                 rtl::Reference<Svx3DExtrudeObject> xShape3DAnchor = ShapeFactory::createCube( m_xLogicTarget
                         , aScenePos,drawing::Direction3D(1,1,1), 0, nullptr, aDummyPropertyNameMap);
                 awt::Point a2DPos = xShape3DAnchor->getPosition(); //get 2D position from xShape3DAnchor

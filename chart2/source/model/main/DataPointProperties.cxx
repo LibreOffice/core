@@ -17,9 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "DataPointProperties.hxx"
+#include <DataPointProperties.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
+#include <LabelProperties.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -36,7 +37,9 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 
 using namespace ::com::sun::star;
-
+using namespace ::chart::FillProperties;
+using namespace ::chart::LabelProperties;
+using namespace ::chart::DataPointProperties;
 using ::com::sun::star::beans::Property;
 
 namespace chart
@@ -50,101 +53,101 @@ void DataPointProperties::AddPropertiesToVector(
     // Common
 
     rOutProperties.emplace_back( "Color",
-                  PROP_DATAPOINT_COLOR,
+                  PROP_FILL_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "FillColor",
-                  PROP_DATAPOINT_COLOR,
+                  PROP_FILL_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "Transparency",
-                  PROP_DATAPOINT_TRANSPARENCY,
+                  PROP_FILL_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "FillTransparence",
-                  PROP_DATAPOINT_TRANSPARENCY,
+                  PROP_FILL_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     // Fill Properties
     rOutProperties.emplace_back( "FillStyle",
-                  PROP_DATAPOINT_FILL_STYLE,
+                  PROP_FILL_STYLE,
                   cppu::UnoType<drawing::FillStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( "TransparencyGradientName",
-                  PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
+                  PROP_FILL_TRANSPARENCE_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "FillTransparenceGradientName",
-                  PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME,
+                  PROP_FILL_TRANSPARENCE_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "GradientName",
-                  PROP_DATAPOINT_GRADIENT_NAME,
+                  PROP_FILL_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "FillGradientName",
-                  PROP_DATAPOINT_GRADIENT_NAME,
+                  PROP_FILL_GRADIENT_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "GradientStepCount",
-                  PROP_DATAPOINT_GRADIENT_STEPCOUNT,
+                  PROP_FILL_GRADIENT_STEPCOUNT,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "FillGradientStepCount",
-                  PROP_DATAPOINT_GRADIENT_STEPCOUNT,
+                  PROP_FILL_GRADIENT_STEPCOUNT,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "HatchName",
-                  PROP_DATAPOINT_HATCH_NAME,
+                  PROP_FILL_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "FillHatchName",
-                  PROP_DATAPOINT_HATCH_NAME,
+                  PROP_FILL_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "FillBitmapName",
-                  PROP_DATAPOINT_FILL_BITMAP_NAME,
+                  PROP_FILL_BITMAP_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
                   | beans::PropertyAttribute::MAYBEVOID  );
 
     rOutProperties.emplace_back( "FillBackground",
-                  PROP_DATAPOINT_FILL_BACKGROUND,
+                  PROP_FILL_BACKGROUND,
                   cppu::UnoType<bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT
@@ -177,7 +180,7 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "BorderTransparency",
-                  PROP_DATAPOINT_BORDER_TRANSPARENCY,
+                  LinePropertiesHelper::PROP_LINE_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
@@ -216,7 +219,7 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID );
 
     rOutProperties.emplace_back( "LineTransparence",
-                  PROP_DATAPOINT_BORDER_TRANSPARENCY,
+                  LinePropertiesHelper::PROP_LINE_TRANSPARENCE,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
@@ -382,39 +385,39 @@ void DataPointProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_STYLE,
-                  PROP_DATAPOINT_LABEL_BORDER_STYLE,
+                  PROP_LABEL_BORDER_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_COLOR,
-                  PROP_DATAPOINT_LABEL_BORDER_COLOR,
+                  PROP_LABEL_BORDER_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_STYLE,
-                  PROP_DATAPOINT_LABEL_FILL_STYLE,
+                  PROP_LABEL_FILL_STYLE,
                   cppu::UnoType<drawing::FillStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_COLOR,
-                  PROP_DATAPOINT_LABEL_FILL_COLOR,
+                  PROP_LABEL_FILL_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_BACKGROUND,
-                  PROP_DATAPOINT_LABEL_FILL_BACKGROUND,
+                  PROP_LABEL_FILL_BACKGROUND,
                   cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_HATCH_NAME,
-                  PROP_DATAPOINT_LABEL_FILL_HATCH_NAME,
+                  PROP_LABEL_FILL_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_WIDTH,
-                  PROP_DATAPOINT_LABEL_BORDER_WIDTH,
+                  PROP_LABEL_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
@@ -429,7 +432,7 @@ void DataPointProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_TRANS,
-                  PROP_DATAPOINT_LABEL_BORDER_TRANS,
+                  PROP_LABEL_BORDER_TRANS,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
@@ -450,23 +453,23 @@ void DataPointProperties::AddPropertiesToVector(
 void DataPointProperties::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_COLOR, 0x0099ccff ); // blue 8
-    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_TRANSPARENCY, 0 );
+    PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_FILL_COLOR, 0x0099ccff ); // blue 8
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_FILL_TRANSPARENCE, 0 );
 
     //fill
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_STYLE, drawing::FillStyle_SOLID );
-    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_TRANSPARENCY_GRADIENT_NAME );
-    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_GRADIENT_NAME );
-    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_HATCH_NAME );
-    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_BITMAP_NAME );
-    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_FILL_BACKGROUND, false );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_FILL_STYLE, drawing::FillStyle_SOLID );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_FILL_TRANSPARENCE_GRADIENT_NAME );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_FILL_GRADIENT_NAME );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_FILL_HATCH_NAME );
+    PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_FILL_BITMAP_NAME );
+    PropertyHelper::setPropertyValueDefault( rOutMap, PROP_FILL_BACKGROUND, false );
 
     //border
     PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_BORDER_COLOR, 0x000000 ); // black
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_BORDER_STYLE, drawing::LineStyle_SOLID ); // drawing::LineStyle_NONE
     PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_DATAPOINT_BORDER_WIDTH, 0 );
     PropertyHelper::setEmptyPropertyValueDefault( rOutMap, PROP_DATAPOINT_BORDER_DASH_NAME );
-    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_DATAPOINT_BORDER_TRANSPARENCY, 0 );
+    PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, LinePropertiesHelper::PROP_LINE_TRANSPARENCE, 0 );
 
     //line
     PropertyHelper::setPropertyValueDefault( rOutMap, LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_SOLID );
@@ -522,16 +525,16 @@ void DataPointProperties::AddDefaultsToMap(
 
     PropertyHelper::setPropertyValueDefault( rOutMap, PROP_DATAPOINT_TEXT_WORD_WRAP, false );
     PropertyHelper::setPropertyValueDefault< OUString >( rOutMap, PROP_DATAPOINT_LABEL_SEPARATOR, " " );
-    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_STYLE, sal_Int32(drawing::LineStyle_NONE));
-    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_COLOR);
-    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_FILL_STYLE);
-    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_FILL_COLOR);
-    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_FILL_BACKGROUND);
-    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_FILL_HATCH_NAME);
-    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_WIDTH, 0);
+    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_LABEL_BORDER_STYLE, sal_Int32(drawing::LineStyle_NONE));
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_LABEL_BORDER_COLOR);
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_LABEL_FILL_STYLE);
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_LABEL_FILL_COLOR);
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_LABEL_FILL_BACKGROUND);
+    PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_LABEL_FILL_HATCH_NAME);
+    PropertyHelper::setPropertyValueDefault<sal_Int32>(rOutMap, PROP_LABEL_BORDER_WIDTH, 0);
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH, drawing::LineDash());
     PropertyHelper::setEmptyPropertyValueDefault(rOutMap, PROP_DATAPOINT_LABEL_BORDER_DASH_NAME);
-    PropertyHelper::setPropertyValueDefault<sal_Int16>(rOutMap, PROP_DATAPOINT_LABEL_BORDER_TRANS, 0);
+    PropertyHelper::setPropertyValueDefault<sal_Int16>(rOutMap, PROP_LABEL_BORDER_TRANS, 0);
 
     uno::Sequence<uno::Reference<chart2::XDataPointCustomLabelField>> aFields(0);
     PropertyHelper::setPropertyValueDefault(rOutMap, PROP_DATAPOINT_CUSTOM_LABEL_FIELDS, aFields);

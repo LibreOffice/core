@@ -202,7 +202,7 @@ awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing
     if(nDimensionCount==3)
     {
         //create 3D anchor shape
-        tPropertyNameMap aDummyPropertyNameMap;
+        tPropertyNameMap2 aDummyPropertyNameMap;
         rtl::Reference<Svx3DExtrudeObject> xShape3DAnchor = ShapeFactory::createCube( xSceneTarget
                 , rScenePosition3D,drawing::Direction3D(1,1,1)
                 , 0, nullptr, aDummyPropertyNameMap);

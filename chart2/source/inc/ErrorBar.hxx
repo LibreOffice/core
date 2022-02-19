@@ -23,6 +23,7 @@
 
 #include <cppuhelper/implbase.hxx>
 
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
@@ -53,6 +54,7 @@ typedef ::cppu::WeakImplHelper<
         css::chart2::data::XDataSource,
         css::chart2::data::XDataSink,
         css::beans::XPropertySet,
+        css::beans::XFastPropertySet,
         css::beans::XPropertyState >
     ErrorBar_Base;
 }
@@ -84,6 +86,9 @@ public:
     virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& aValue ) override;
+    virtual css::uno::Any SAL_CALL getFastPropertyValue( sal_Int32 nHandle ) override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
