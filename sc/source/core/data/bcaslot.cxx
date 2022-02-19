@@ -909,24 +909,23 @@ bool ScBroadcastAreaSlotMachine::AreaBroadcast( const ScHint& rHint ) const
         TableSlotsMap::const_iterator iTab( aTableSlotsMap.find( rAddress.Tab()));
         if (iTab == aTableSlotsMap.end())
             return false;
-        // Process all slots for the given row range, but it's enough to process
-        // each only once.
-        ScBroadcastAreaSlot* pLastSlot = nullptr;
-        ScAddress address(rAddress);
-        bool wasBroadcast = false;
-        for( SCROW nRow = rAddress.Row(); nRow < rAddress.Row() + rHint.GetRowCount(); ++nRow )
+        // Process all slots for the given row range.
+        ScRange broadcastRange( rAddress,
+            ScAddress( rAddress.Col(), rAddress.Row() + rHint.GetRowCount() - 1, rAddress.Tab()));
+        bool bBroadcasted = false;
+        ScBroadcastAreaSlot** ppSlots = (*iTab).second->getSlots();
+        SCSIZE nStart, nEnd, nRowBreak;
+        ComputeAreaPoints( broadcastRange, nStart, nEnd, nRowBreak );
+        SCSIZE nOff = nStart;
+        SCSIZE nBreak = nOff + nRowBreak;
+        ScBroadcastAreaSlot** pp = ppSlots + nOff;
+        while ( nOff <= nEnd )
         {
-            address.SetRow(nRow);
-            ScBroadcastAreaSlot* pSlot = (*iTab).second->getAreaSlot(
-                    ComputeSlotOffset( address));
-            if ( pSlot && pSlot != pLastSlot )
-            {
-                if(pSlot->AreaBroadcast( rHint ))
-                    wasBroadcast = true;
-                pLastSlot = pSlot;
-            }
+            if ( *pp )
+                bBroadcasted |= (*pp)->AreaBroadcast( rHint );
+            ComputeNextSlot( nOff, nBreak, pp, nStart, ppSlots, nRowBreak, mnBcaSlotsCol);
         }
-        return wasBroadcast;
+        return bBroadcasted;
     }
 }
 
