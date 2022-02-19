@@ -305,7 +305,7 @@ public:
 
     bool            IsCursorAtWrongSpelledWord();
     bool            IsWrongSpelledWordAtPos( const Point& rPosPixel, bool bMarkIfWrong = false );
-    void            ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void>& rCallBack);
+    bool            ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void>& rCallBack);
     OUString        SpellIgnoreWord();
 
     void                InsertField( const SvxFieldItem& rFld );

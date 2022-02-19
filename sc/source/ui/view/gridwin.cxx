@@ -3229,12 +3229,9 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             if (aPos.Col() >= 0 && (aSpellCheckCell.meType == CELLTYPE_STRING || aSpellCheckCell.meType == CELLTYPE_EDIT))
                 nColSpellError = aPos.Col();
 
+            // Is there a missspelled word somewhere in the cell?
+            // A "yes" does not mean that the word under the mouse pointer is wrong though.
             bSpellError = (mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY));
-            if (bSpellError)
-            {
-                // Check and see if a misspelled word is under the mouse pointer.
-                bSpellError = IsSpellErrorAtPos(aPosPixel, nColSpellError, nCellY);
-            }
         }
 
         //  #i18735# First select the item under the mouse pointer.
@@ -3248,7 +3245,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     if ( !bEdit )
     {
         // Edit cell with spelling errors?
-        // tdf#127341 the formally used GetEditUrl(aPosPixel) additionally
+        // tdf#127341 the formerly used GetEditUrl(aPosPixel) additionally
         // to bSpellError activated EditMode here for right-click on URL
         // which prevents the regular context-menu from appearing. Since this
         // is more expected than the context-menu for editing an URL, I removed
@@ -3300,13 +3297,18 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
 
             const OUString sOldText = pHdl ? pHdl->GetEditString() : "";
 
+            // Only done/shown if a misspelled word is actually under the mouse pointer.
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
-            pEditView->ExecuteSpellPopup(aMenuPos, aLink);
+            bDone = pEditView->ExecuteSpellPopup(aMenuPos, aLink);
 
             if (pHdl && pHdl->GetEditString() != sOldText)
                 pHdl->EnterHandler();
 
-            bDone = true;
+            if (!bDone && nColSpellError != nCellX)
+            {
+                // NOTE: This call can change the selection, and the view state (edit mode, etc).
+                SelectForContextMenu(aPosPixel, nCellX, nCellY);
+            }
         }
     }
     else if ( !bMouse )
@@ -5765,60 +5767,6 @@ bool ScGridWindow::GetEditUrl( const Point& rPos,
         return bRet;
     }
     return false;
-}
-
-bool ScGridWindow::IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow )
-{
-    if (!mpSpellCheckCxt)
-        return false;
-
-    SCTAB nTab = mrViewData.GetTabNo();
-    ScDocShell* pDocSh = mrViewData.GetDocShell();
-    ScDocument& rDoc = pDocSh->GetDocument();
-
-    ScAddress aCellPos(nCol1, nRow, nTab);
-    ScRefCellValue aCell(rDoc, aCellPos);
-    if (aCell.meType != CELLTYPE_STRING && aCell.meType != CELLTYPE_EDIT)
-        return false;
-
-    const std::vector<editeng::MisspellRanges>* pRanges = mpSpellCheckCxt->getMisspellRanges(nCol1, nRow);
-    if (!pRanges)
-        return false;
-
-    const ScPatternAttr* pPattern = rDoc.GetPattern(nCol1, nRow, nTab);
-
-    tools::Rectangle aEditRect = mrViewData.GetEditArea(eWhich, nCol1, nRow, this, pPattern, false);
-    if (rPos.Y() < aEditRect.Top())
-        return false;
-
-    std::shared_ptr<ScFieldEditEngine> pEngine = createEditEngine(pDocSh, *pPattern);
-
-    Size aPaperSize(1000000, 1000000);
-    pEngine->SetPaperSize(aPaperSize);
-
-    if (aCell.meType == CELLTYPE_EDIT)
-        pEngine->SetTextCurrentDefaults(*aCell.mpEditText);
-    else
-        pEngine->SetTextCurrentDefaults(aCell.mpString->getString());
-
-    tools::Long nTextWidth = static_cast<tools::Long>(pEngine->CalcTextWidth());
-
-    MapMode aEditMode = mrViewData.GetLogicMode(eWhich);
-    tools::Rectangle aLogicEdit = PixelToLogic(aEditRect, aEditMode);
-    Point aLogicClick = PixelToLogic(rPos, aEditMode);
-
-    aLogicEdit.setWidth(nTextWidth + 1);
-
-    if (!aLogicEdit.Contains(aLogicClick))
-        return false;
-
-    pEngine->SetControlWord(pEngine->GetControlWord() | EEControlBits::ONLINESPELLING);
-    pEngine->SetAllMisspellRanges(*pRanges);
-
-    EditView aTempView(pEngine.get(), this);
-    aTempView.SetOutputArea(aLogicEdit);
-
-    return aTempView.IsWrongSpelledWordAtPos(rPos);
 }
 
 bool ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRange )

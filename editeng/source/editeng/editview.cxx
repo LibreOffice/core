@@ -978,7 +978,7 @@ static void LOKSendSpellPopupMenu(const weld::Menu& rMenu, LanguageType nGuessLa
     pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_CONTEXT_MENU, aStream.str().c_str());
 }
 
-void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void> &rCallBack)
+bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbackInfo&,void> &rCallBack)
 {
     OutputDevice& rDevice = pImpEditView->GetOutputDevice();
     Point aPos(rDevice.PixelToLogic(rPosPixel));
@@ -987,7 +987,7 @@ void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     Reference< linguistic2::XSpellChecker1 >  xSpeller( pImpEditView->pEditEngine->pImpEditEngine->GetSpeller() );
     ESelection aOldSel = GetSelection();
     if ( !(xSpeller.is() && pImpEditView->IsWrongSpelledWord( aPaM, true )) )
-        return;
+        return false;
 
     // PaMtoEditCursor returns Logical units
     tools::Rectangle aTempRect = pImpEditView->pEditEngine->pImpEditEngine->PaMtoEditCursor( aPaM, GetCursorFlags::TextOnly );
@@ -1167,7 +1167,7 @@ void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         xPopupMenu->remove("autocorrectdlg");
 
         LOKSendSpellPopupMenu(*xPopupMenu, nGuessLangWord, nGuessLangPara, nWords);
-        return;
+        return true;
     }
 
     OString sId = xPopupMenu->popup_at_rect(pPopupParent, aTempRect);
@@ -1267,6 +1267,7 @@ void EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
     {
         SetSelection( aOldSel );
     }
+    return true;
 }
 
 OUString EditView::SpellIgnoreWord()
