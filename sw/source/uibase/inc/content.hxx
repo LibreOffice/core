@@ -118,6 +118,12 @@ public:
     {}
 
     const SwTextFootnote* GetTextFootnote() const {return m_pTextFootnote;}
+
+    bool operator<(const SwContent& rCont) const override
+    {
+        // insert into array after elements having less than or equal position
+        return GetYPos() <= rCont.GetYPos();
+    }
 };
 
 class SwPostItContent final : public SwContent
