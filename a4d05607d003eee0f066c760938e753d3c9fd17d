@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06acc75e_b1c5608d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-19T12:07:42Z",
+      "side": 1,
+      "message": "Since I can\u0027t build to test locally, let\u0027s abandon this one",
+      "revId": "a4d05607d003eee0f066c760938e753d3c9fd17d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
