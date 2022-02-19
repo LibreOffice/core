@@ -90,7 +90,7 @@ public:
         // they're never equal, otherwise they'd fall out of the array
         return false;
     }
-    bool operator<(const SwContent& rCont) const
+    virtual bool operator<(const SwContent& rCont) const
     {
         // at first sort by position and then by name
         if (m_nYPosition != rCont.m_nYPosition)
@@ -100,6 +100,8 @@ public:
 
     bool        IsInvisible() const {return m_bInvisible;}
     void        SetInvisible(){ m_bInvisible = true;}
+
+    tools::Long GetYPos() const {return m_nYPosition;}
 };
 
 #endif
