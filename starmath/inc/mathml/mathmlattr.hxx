@@ -14,7 +14,6 @@
 #include <string_view>
 
 #include <rtl/ustring.hxx>
-#include <sal/types.h>
 #include <tools/fract.hxx>
 
 // MathML 3: 2.1.5.1 Syntax notation used in the MathML specification

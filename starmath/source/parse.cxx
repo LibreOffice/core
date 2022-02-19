@@ -18,6 +18,7 @@
  */
 
 #include <parse.hxx>
+#include <parse5.hxx>
 #include <smmod.hxx>
 #include <cfgitem.hxx>
 

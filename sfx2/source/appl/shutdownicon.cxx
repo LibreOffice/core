@@ -23,7 +23,6 @@
 #include "shutdownicon.hxx"
 #include <sfx2/strings.hrc>
 #include <sfx2/app.hxx>
-#include <osl/mutex.hxx>
 #include <svtools/imagemgr.hxx>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/frame/Desktop.hpp>

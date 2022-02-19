@@ -18,9 +18,8 @@
  */
 #pragma once
 
-#include <sidebar/SidebarToolBox.hxx>
 #include <sfx2/sidebar/Theme.hxx>
-#include <sfx2/weldutils.hxx>
+#include <vcl/weld.hxx>
 
 namespace sfx2::sidebar {
 

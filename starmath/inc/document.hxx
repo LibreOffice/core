@@ -30,7 +30,8 @@
 #include <oox/export/utils.hxx>
 
 #include "format.hxx"
-#include "parse.hxx"
+#include "node.hxx"
+#include "parsebase.hxx"
 #include "smdllapi.hxx"
 #include "mathml/iterator.hxx"
 

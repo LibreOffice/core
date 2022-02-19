@@ -21,7 +21,6 @@
 #include <emojipopup.hxx>
 #include <emojiview.hxx>
 #include <sfx2/thumbnailviewitem.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/dispatchcommand.hxx>
 #include <officecfg/Office/Common.hxx>

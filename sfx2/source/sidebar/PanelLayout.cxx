@@ -8,12 +8,12 @@
  */
 
 #include <sal/log.hxx>
-#include <sfx2/sidebar/SidebarController.hxx>
+#include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
-#include <sfx2/sidebar/TabBar.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/event.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace sfx2::sidebar;
 

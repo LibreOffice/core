@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <config_feature_desktop.h>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 
@@ -53,7 +52,6 @@
 #include <sidebar/ControllerFactory.hxx>
 
 #include <officecfg/Office/Common.hxx>
-#include <unotools/viewoptions.hxx>
 #include <rtl/strbuf.hxx>
 #include <memory>
 #include <mutex>

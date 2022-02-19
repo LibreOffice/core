@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/multiinterfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <svl/lstner.hxx>

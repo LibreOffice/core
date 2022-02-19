@@ -26,7 +26,6 @@
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
-#include <com/sun/star/sheet/XSpreadsheets.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
 #include <com/sun/star/sheet/XDataPilotTables.hpp>
 #include <com/sun/star/table/XTableChartsSupplier.hpp>

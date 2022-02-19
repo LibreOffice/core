@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <sfx2/dllapi.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <vcl/toolbox.hxx>
 

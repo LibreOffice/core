@@ -49,12 +49,7 @@
 #include <svl/stritem.hxx>
 #include <svl/undo.hxx>
 #include <svl/whiter.hxx>
-#include <editeng/editstat.hxx>
-#include <editeng/eeitem.hxx>
-#include <editeng/fhgtitem.hxx>
-#include <editeng/fontitem.hxx>
 #include <vcl/mapmod.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 #include <tools/mapunit.hxx>
 #include <vcl/settings.hxx>
@@ -63,6 +58,7 @@
 #include <action.hxx>
 #include <dialog.hxx>
 #include <format.hxx>
+#include <parse.hxx>
 #include <starmath.hrc>
 #include <strings.hrc>
 #include <smmod.hxx>

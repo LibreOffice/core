@@ -20,16 +20,15 @@
 #include <config_features.h>
 
 #include <sal/log.hxx>
-#include <rtl/strbuf.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
-#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld.hxx>
 #include <svl/intitem.hxx>
 #include <svtools/langhelp.hxx>
+#include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/io/IOException.hpp>

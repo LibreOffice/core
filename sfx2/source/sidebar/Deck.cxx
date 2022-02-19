@@ -29,12 +29,7 @@
 
 #include <vcl/event.hxx>
 #include <comphelper/lok.hxx>
-#include <vcl/commandevent.hxx>
-#include <vcl/IDialogRenderable.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
-#include <tools/svborder.hxx>
 #include <tools/json_writer.hxx>
-#include <sal/log.hxx>
 
 using namespace css;
 using namespace css::uno;

@@ -31,7 +31,6 @@
 #include <sfx2/sfxsids.hrc>
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <svx/AccessibleTextHelper.hxx>
 #include <osl/diagnose.h>
 
 #include <edit.hxx>
@@ -40,7 +39,6 @@
 #include <document.hxx>
 #include <cfgitem.hxx>
 #include <smediteng.hxx>
-#include "accessibility.hxx"
 
 using namespace com::sun::star::accessibility;
 using namespace com::sun::star;

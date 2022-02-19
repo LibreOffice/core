@@ -18,7 +18,6 @@
  */
 
 #include <memory>
-#include <comphelper/sequence.hxx>
 #include <osl/file.hxx>
 
 #include <rtl/ustring.hxx>
@@ -38,7 +37,6 @@
 #include <officecfg/Inet.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Recovery.hxx>
-#include <unotools/saveopt.hxx>
 #include <unotools/securityoptions.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/miscopt.hxx>

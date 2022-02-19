@@ -18,12 +18,9 @@
  */
 
 #include <sidebar/PanelTitleBar.hxx>
-#include <sfx2/sfxresid.hxx>
-#include <sfx2/strings.hrc>
 #include <sfx2/sidebar/Panel.hxx>
 #include <sfx2/sidebar/Theme.hxx>
 #include <sidebar/ControllerFactory.hxx>
-#include <vcl/event.hxx>
 
 using namespace css;
 using namespace css::uno;

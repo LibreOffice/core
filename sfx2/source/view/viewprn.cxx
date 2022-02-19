@@ -26,14 +26,12 @@
 #include <comphelper/propertyvalue.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
-#include <svl/itempool.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svtools/prnsetup.hxx>
 #include <svl/flagitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
-#include <sfx2/app.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
 #include <sfx2/bindings.hxx>

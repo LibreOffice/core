@@ -29,7 +29,6 @@
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <tools/svborder.hxx>
-#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
 #include <appdata.hxx>

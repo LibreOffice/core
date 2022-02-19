@@ -35,6 +35,7 @@
 
 
 #include <framework/ContextChangeEventMultiplexerTunnel.hxx>
+#include <vcl/EnumContext.hxx>
 #include <vcl/uitest/logger.hxx>
 #include <vcl/uitest/eventdescription.hxx>
 #include <vcl/svapp.hxx>
@@ -49,8 +50,6 @@
 #include <sal/log.hxx>
 #include <officecfg/Office/UI/Sidebar.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>

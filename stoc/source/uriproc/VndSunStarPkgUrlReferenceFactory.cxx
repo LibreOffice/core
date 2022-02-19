@@ -30,7 +30,6 @@
 #include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 

@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/uri/ExternalUriReferenceTranslator.hpp>
@@ -36,7 +35,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include <rtl/string.h>
 #include <rtl/string.hxx>
 #include <rtl/textenc.h>
 #include <rtl/uri.hxx>
@@ -44,8 +42,6 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <sal/macros.h>
-
-#include <cstdlib>
 
 namespace {
 

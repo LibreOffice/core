@@ -19,11 +19,7 @@
 #pragma once
 
 #include <vcl/image.hxx>
-#include <vcl/gradient.hxx>
 
-#include <sfx2/dllapi.h>
-
-#include <com/sun/star/awt/Gradient.hpp>
 #include <com/sun/star/util/URL.hpp>
 
 namespace com::sun::star::frame { class XController; }
