@@ -783,8 +783,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             // Light Intensity
 
-            // For "FirstLight" the 3D-Scene light "1" is regulary used. In case of surface "Matte"
-            // the light 4 is used instead. For "SecondLight" the 3D-Scene light "2" is regulary used.
+            // For "FirstLight" the 3D-Scene light "1" is regularly used. In case of surface "Matte"
+            // the light 4 is used instead. For "SecondLight" the 3D-Scene light "2" is regularly used.
             // In case first or second light is not harsh, the lights 5 to 8 are used in addition
             // to get a soft light appearance.
             // The 3D-Scene light "3" is currently not used.
@@ -892,7 +892,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject(
 
             // ToDo: How to handle fAmbientIntensity larger 1.0 ? Perhaps lighten object color?
 
-            // Now set the regulary 3D-scene light attributes.
+            // Now set the regularly 3D-scene light attributes.
             Color aAmbientColor(basegfx::BColor(fAmbientIntensity).clamp());
             pScene->GetProperties().SetObjectItem(makeSvx3DAmbientcolorItem(aAmbientColor));
 

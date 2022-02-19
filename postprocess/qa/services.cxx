@@ -16,7 +16,7 @@
 // service there are multiple implementations or it does not have an appropriate
 // constructor) but does support at least one accumulation-based service, then
 // instantiate it through its implementation name (a heuristic to identify
-// instantiatable implementations that appears to work well).
+// instantiable implementations that appears to work well).
 
 #include <sal/config.h>
 
