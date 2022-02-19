@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c58f555_b3bc5a57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-19T09:02:43Z",
+      "side": 1,
+      "message": "I think that if in translations repo, there\u0027s no \"STR_DESC_MODULE_EXTENSION_DICTIONARY_CKB\", it\u0027s because of this typo, eg in source/fr/scp2/source/ooo.po:\n   4484 #. CVnGE\n   4485 #: module_ooo.ulf\n   4486 msgctxt \"\"\n   4487 \"module_ooo.ulf\\n\"\n   4488 \"STR_NAME_MODULE_EXTENSION_DICTIONARY_CKB\\n\"\n   4489 \"LngText.text\"\n   4490 msgid \"Central Kurdish\"\n   4491 msgstr \"\"\n   4492 \n   4493 #. TspN8\n   4494 #: module_ooo.ulf\n   4495 msgctxt \"\"\n   4496 \"module_ooo.ulf\\n\"\n   4497 \"STR_DESC_MODULE_EXTENSION_DICTIONARY_CS\\n\"\n   4498 \"LngText.text\"\n   4499 msgid \"Central Kurdish spelling dictionary\"\n   4500 msgstr \"\"\nand I\u0027m quite sure that\u0027s the cause of the segfault. If it\u0027s not the case, at least it can\u0027t be bad.\n\nNow this patch is pushed, I suppose it requires some synchronization with translation repo.",
+      "revId": "f0a3678ef3b048d166179513670633e1bb3acfb8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
