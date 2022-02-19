@@ -21,6 +21,7 @@
 #include <EventListenerHelper.hxx>
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <LinePropertiesHelper.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -37,6 +38,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::chart::LinePropertiesHelper;
 
 namespace
 {
@@ -49,25 +51,38 @@ bool lcl_isInternalData( const uno::Reference< chart2::data::XLabeledDataSequenc
     return ( xServiceInfo.is() && xServiceInfo->getImplementationName() == "com.sun.star.comp.chart2.LabeledDataSequence" );
 }
 
+enum ErrorBarProperties
+{
+    PROP_ERROR_BAR_STYLE,
+    PROP_ERROR_BAR_POSITIVE_ERROR,
+    PROP_ERROR_BAR_NEGATIVE_ERROR,
+    PROP_ERROR_BAR_PERCENTAGE_ERROR,
+    PROP_ERROR_BAR_WEIGHT,
+    PROP_ERROR_SHOW_POSITIVE_ERROR,
+    PROP_ERROR_SHOW_NEGATIVE_ERROR,
+    PROP_ERROR_RANGE_POSITIVE,
+    PROP_ERROR_RANGE_NEGATIVE
+};
+
 const SfxItemPropertySet* GetErrorBarPropertySet()
 {
     static const SfxItemPropertyMapEntry aErrorBarPropertyMap_Impl[] =
     {
-        {u"ShowPositiveError",0,cppu::UnoType<bool>::get(), 0, 0},
-        {u"ShowNegativeError",1,cppu::UnoType<bool>::get(), 0, 0},
-        {u"PositiveError",2,cppu::UnoType<double>::get(),0,0},
-        {u"NegativeError",3,cppu::UnoType<double>::get(), 0, 0},
-        {u"PercentageError",4,cppu::UnoType<double>::get(), 0, 0},
-        {u"ErrorBarStyle",5,cppu::UnoType<sal_Int32>::get(),0,0},
-        {u"ErrorBarRangePositive",6,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
-        {u"ErrorBarRangeNegative",7,cppu::UnoType<OUString>::get(),0,0}, // read-only for export
-        {u"Weight",8,cppu::UnoType<double>::get(),0,0},
-        {u"LineStyle",9,cppu::UnoType<css::drawing::LineStyle>::get(),0,0},
-        {u"LineDash",10,cppu::UnoType<drawing::LineDash>::get(),0,0},
-        {u"LineWidth",11,cppu::UnoType<sal_Int32>::get(),0,0},
-        {u"LineColor",12,cppu::UnoType<css::util::Color>::get(),0,0},
-        {u"LineTransparence",13,cppu::UnoType<sal_Int16>::get(),0,0},
-        {u"LineJoint",14,cppu::UnoType<css::drawing::LineJoint>::get(),0,0},
+        {u"ShowPositiveError", PROP_ERROR_SHOW_POSITIVE_ERROR, cppu::UnoType<bool>::get(), 0, 0},
+        {u"ShowNegativeError", PROP_ERROR_SHOW_NEGATIVE_ERROR, cppu::UnoType<bool>::get(), 0, 0},
+        {u"PositiveError", PROP_ERROR_BAR_POSITIVE_ERROR, cppu::UnoType<double>::get(),0,0},
+        {u"NegativeError", PROP_ERROR_BAR_NEGATIVE_ERROR, cppu::UnoType<double>::get(), 0, 0},
+        {u"PercentageError", PROP_ERROR_BAR_PERCENTAGE_ERROR, cppu::UnoType<double>::get(), 0, 0},
+        {u"ErrorBarStyle",PROP_ERROR_BAR_STYLE, cppu::UnoType<sal_Int32>::get(),0,0},
+        {u"ErrorBarRangePositive", PROP_ERROR_RANGE_POSITIVE, cppu::UnoType<OUString>::get(),0,0}, // read-only for export
+        {u"ErrorBarRangeNegative", PROP_ERROR_RANGE_NEGATIVE, cppu::UnoType<OUString>::get(),0,0}, // read-only for export
+        {u"Weight", PROP_ERROR_BAR_WEIGHT, cppu::UnoType<double>::get(),0,0},
+        {u"LineStyle", PROP_LINE_STYLE, cppu::UnoType<css::drawing::LineStyle>::get(),0,0},
+        {u"LineDash", PROP_LINE_DASH, cppu::UnoType<drawing::LineDash>::get(),0,0},
+        {u"LineWidth", PROP_LINE_WIDTH, cppu::UnoType<sal_Int32>::get(),0,0},
+        {u"LineColor", PROP_LINE_COLOR, cppu::UnoType<css::util::Color>::get(),0,0},
+        {u"LineTransparence", PROP_LINE_TRANSPARENCE, cppu::UnoType<sal_Int16>::get(),0,0},
+        {u"LineJoint", PROP_LINE_JOINT, cppu::UnoType<css::drawing::LineJoint>::get(),0,0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
     static SfxItemPropertySet aPropSet( aErrorBarPropertyMap_Impl );
@@ -136,6 +151,64 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo(
     static uno::Reference< beans::XPropertySetInfo > aRef (
             new SfxItemPropertySetInfo( GetErrorBarPropertySet()->getPropertyMap() ) );
     return aRef;
+}
+
+void ErrorBar::setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rAny )
+{
+    SolarMutexGuard aGuard;
+
+    switch (nHandle)
+    {
+        case PROP_ERROR_BAR_STYLE:
+            rAny >>= meStyle;
+            break;
+        case PROP_ERROR_BAR_POSITIVE_ERROR:
+            rAny >>= mfPositiveError;
+            break;
+        case PROP_ERROR_BAR_PERCENTAGE_ERROR:
+            rAny >>= mfPositiveError;
+            rAny >>= mfNegativeError;
+            break;
+        case PROP_ERROR_BAR_WEIGHT:
+            rAny >>= mfWeight;
+            break;
+        case PROP_ERROR_BAR_NEGATIVE_ERROR:
+            rAny >>= mfNegativeError;
+            break;
+        case PROP_ERROR_SHOW_POSITIVE_ERROR:
+            rAny >>= mbShowPositiveError;
+            break;
+        case PROP_ERROR_SHOW_NEGATIVE_ERROR:
+            rAny >>= mbShowNegativeError;
+            break;
+        case PROP_ERROR_RANGE_POSITIVE:
+        case PROP_ERROR_RANGE_NEGATIVE:
+            throw beans::UnknownPropertyException("read-only property", static_cast< uno::XWeak*>(this));
+        case PROP_LINE_DASH_NAME:
+            rAny >>= maDashName;
+            break;
+        case PROP_LINE_DASH:
+            rAny >>= maLineDash;
+            break;
+        case PROP_LINE_WIDTH:
+            rAny >>= mnLineWidth;
+            break;
+        case PROP_LINE_STYLE:
+            rAny >>= meLineStyle;
+            break;
+        case PROP_LINE_COLOR:
+            rAny >>= maLineColor;
+            break;
+        case PROP_LINE_TRANSPARENCE:
+            rAny >>= mnLineTransparence;
+            break;
+        case PROP_LINE_JOINT:
+            rAny >>= meLineJoint;
+            break;
+        default: break;
+    }
+
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
 void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny )
@@ -224,6 +297,90 @@ OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Refere
     return OUString();
 }
 
+}
+
+css::uno::Any ErrorBar::getFastPropertyValue( sal_Int32 nHandle )
+{
+    SolarMutexGuard aGuard;
+
+    uno::Any aRet;
+    switch (nHandle)
+    {
+    case PROP_ERROR_BAR_STYLE:
+        aRet <<= meStyle;
+        break;
+    case PROP_ERROR_BAR_POSITIVE_ERROR:
+        aRet <<= mfPositiveError;
+        break;
+    case PROP_ERROR_BAR_NEGATIVE_ERROR:
+        aRet <<= mfNegativeError;
+        break;
+    case PROP_ERROR_BAR_PERCENTAGE_ERROR:
+        aRet <<= mfPositiveError;
+        break;
+    case PROP_ERROR_SHOW_POSITIVE_ERROR:
+        aRet <<= mbShowPositiveError;
+        break;
+    case PROP_ERROR_SHOW_NEGATIVE_ERROR:
+        aRet <<= mbShowNegativeError;
+        break;
+    case PROP_ERROR_BAR_WEIGHT:
+        aRet <<= mfWeight;
+        break;
+    case PROP_ERROR_RANGE_POSITIVE:
+    {
+        OUString aRange;
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
+        {
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+                getDataSequences();
+
+            aRange = getSourceRangeStrFromLabeledSequences( aSequences, true );
+        }
+
+        aRet <<= aRange;
+        break;
+    }
+    case PROP_ERROR_RANGE_NEGATIVE:
+    {
+        OUString aRange;
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
+        {
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+                getDataSequences();
+
+            aRange = getSourceRangeStrFromLabeledSequences( aSequences, false );
+        }
+
+        aRet <<= aRange;
+        break;
+    }
+    case PROP_LINE_DASH_NAME:
+        aRet <<= maDashName;
+        break;
+    case PROP_LINE_DASH:
+        aRet <<= maLineDash;
+        break;
+    case PROP_LINE_WIDTH:
+        aRet <<= mnLineWidth;
+        break;
+    case PROP_LINE_STYLE:
+        aRet <<= meLineStyle;
+        break;
+    case PROP_LINE_COLOR:
+        aRet <<= maLineColor;
+        break;
+    case PROP_LINE_TRANSPARENCE:
+        aRet <<= mnLineTransparence;
+        break;
+    case PROP_LINE_JOINT:
+        aRet <<= meLineJoint;
+        break;
+    default: break;
+    }
+
+    SAL_WARN_IF(!aRet.hasValue(), "chart2", "asked for property value: " << nHandle);
+    return aRet;
 }
 
 uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
