@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
 # This file is part of the LibreOffice UI_logger project.
 #
-# This file contain the implementation of the Compiler
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
+# This file contains the implementation of the Compiler
 # for the new logger grammar
 #
 # ul stands for Ui_Logger
@@ -956,7 +962,7 @@ class ul_Compiler:
     def handle_math_element_selector(self, math_element_selector):
 
         if( self.math_element_selector_initializer == False ):
-            # This part to initialize the element selector in math application
+            # This part is for initializing the element selector in the Math application
             self.math_element_selector_initializer = True
             line = (
                 tab * 4
@@ -967,7 +973,7 @@ class ul_Compiler:
             )
             self.variables.append(line)
 
-        # this put a prefix of char 'x' to avoid variable with name equal to number only
+        # This inserts a prefix of 'x' to avoid creating variables with only numeric characters
         element_name="x"+str(math_element_selector.element_no)
 
         self.init_Object(element_name,str(math_element_selector.element_no),"element_selector")

@@ -1,8 +1,8 @@
-//this file is to define the new dsl grammar
 /*
-  This file just Import all Grammar Statements from all other files to this file
-  The Compiler just work with this file to Compile it
-  Each file of these imported file has a Comments related to it's content
+  This file is for defining the DSL grammar.
+  This file imports all grammar rules from all the other files.
+  The compiler works with this file.
+  Each imported file has comments related to its content.
 */
 
 import dialog_commands
@@ -13,7 +13,7 @@ import Special_commands
 import General_commands
 
 UILogger:
-    commands*=Command   
+    commands*=Command
 ;
 
 Command:
@@ -21,8 +21,8 @@ Command:
   SpecialCommand | GeneralCommand | Comment
 ;
 /*
-  The Comment Command is just for give the ability to write a Comment 
-  if you want to write a test Case in the new dsl language
+  The Comment rule is for having an ability to write a comment,
+  if you want to write a test case in the DSL
 */
 Comment:
   /\/\/.*$/

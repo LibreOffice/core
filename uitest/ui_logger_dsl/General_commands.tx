@@ -1,9 +1,8 @@
 /*
-    This file for the log statements that is general for all application
-    we can use it as general commands then relate it to its application
-    as we have in the starter command
-    //====================================
-    also I make set zoom to be general as it will be better
+    This file is for the log statements that are general for all applications.
+    We can use them as general rules for commands and relate them to the
+    applications found in starter_commands.tx
+    Zoom is also general as it is better to treat it that way.
 */
 
 import type_options
@@ -21,9 +20,8 @@ Select_command:
     'Select ' '{"OBJECT":' name=STRING '}'
 ;
 
-//==================================================
-//This Part if you want to type text in any of these UI elements This will be handled with this Grammar
+// This part is for typing text in any of these UI elements
 
 General_type_command_on_UI_Object:
-  'Type on' UI_Obj=STRING  what_to_type=Type_options 'from' parent_id=ID  
+  'Type on' UI_Obj=STRING  what_to_type=Type_options 'from' parent_id=ID
 ;
