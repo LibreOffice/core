@@ -18,7 +18,7 @@
  */
 
 #include "DataPoint.hxx"
-#include "DataPointProperties.hxx"
+#include <DataPointProperties.hxx>
 #include <CharacterProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include <PropertyHelper.hxx>

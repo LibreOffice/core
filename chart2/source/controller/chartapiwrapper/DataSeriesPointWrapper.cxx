@@ -25,6 +25,7 @@
 #include <DataSeries.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <FillProperties.hxx>
+#include <LabelProperties.hxx>
 #include <CharacterProperties.hxx>
 #include <UserDefinedProperties.hxx>
 #include "WrappedCharacterHeightProperty.hxx"
@@ -58,6 +59,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
+using namespace ::chart::FillProperties;
+using namespace ::chart::LabelProperties;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -83,14 +86,6 @@ enum
     PROP_SERIES_ATTACHED_AXIS,
     PROP_SERIES_SHOW_CUSTOM_LEADERLINES,
     PROP_SERIES_DATAPOINT_TEXT_ROTATION,
-    PROP_SERIES_DATAPOINT_LABEL_BORDER_STYLE,
-    PROP_SERIES_DATAPOINT_LABEL_BORDER_WIDTH,
-    PROP_SERIES_DATAPOINT_LABEL_BORDER_COLOR,
-    PROP_SERIES_DATAPOINT_LABEL_BORDER_TRANS,
-    PROP_SERIES_DATAPOINT_LABEL_FILL_STYLE,
-    PROP_SERIES_DATAPOINT_LABEL_FILL_COLOR,
-    PROP_SERIES_DATAPOINT_LABEL_FILL_BACKGROUND,
-    PROP_SERIES_DATAPOINT_LABEL_FILL_HATCH_NAME
 };
 
 void lcl_AddPropertiesToVector_PointProperties(
@@ -158,49 +153,49 @@ void lcl_AddPropertiesToVector_PointProperties(
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_STYLE,
-                  PROP_SERIES_DATAPOINT_LABEL_BORDER_STYLE,
+                  PROP_LABEL_BORDER_STYLE,
                   cppu::UnoType<drawing::LineStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_STYLE,
-                  PROP_SERIES_DATAPOINT_LABEL_FILL_STYLE,
+                  PROP_LABEL_FILL_STYLE,
                   cppu::UnoType<drawing::FillStyle>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_COLOR,
-                  PROP_SERIES_DATAPOINT_LABEL_FILL_COLOR,
+                  PROP_LABEL_FILL_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_BACKGROUND,
-                  PROP_SERIES_DATAPOINT_LABEL_FILL_BACKGROUND,
+                  PROP_LABEL_FILL_BACKGROUND,
                   cppu::UnoType<sal_Bool>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_FILL_HATCH_NAME,
-                  PROP_SERIES_DATAPOINT_LABEL_FILL_HATCH_NAME,
+                  PROP_FILL_HATCH_NAME,
                   cppu::UnoType<OUString>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_WIDTH,
-                  PROP_SERIES_DATAPOINT_LABEL_BORDER_WIDTH,
+                  PROP_LABEL_BORDER_WIDTH,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_COLOR,
-                  PROP_SERIES_DATAPOINT_LABEL_BORDER_COLOR,
+                  PROP_LABEL_BORDER_COLOR,
                   cppu::UnoType<sal_Int32>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
                   | beans::PropertyAttribute::MAYBEDEFAULT );
 
     rOutProperties.emplace_back( CHART_UNONAME_LABEL_BORDER_TRANS,
-                  PROP_SERIES_DATAPOINT_LABEL_BORDER_TRANS,
+                  PROP_LABEL_BORDER_TRANS,
                   cppu::UnoType<sal_Int16>::get(),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT );
