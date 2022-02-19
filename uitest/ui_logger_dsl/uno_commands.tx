@@ -1,6 +1,6 @@
 /*
-    This file is for the grammar of the UNO Command Statements
-    It's Automatically have 2 modes one with parameters and one without
+    This file is for the grammar of the UNO commands.
+    It has two modes: one with parameters and one without.
 */
 
 UNOCommand:
