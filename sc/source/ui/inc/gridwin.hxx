@@ -283,8 +283,6 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     bool            GetEditUrl( const Point& rPos,
                                 OUString* pName=nullptr, OUString* pUrl=nullptr, OUString* pTarget=nullptr );
 
-    bool IsSpellErrorAtPos( const Point& rPos, SCCOL nCol1, SCROW nRow );
-
     bool            HitRangeFinder( const Point& rMouse, RfCorner& rCorner, sal_uInt16* pIndex,
                                     SCCOL* pAddX, SCROW* pAddY );
 
