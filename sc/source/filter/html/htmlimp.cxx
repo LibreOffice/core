@@ -176,7 +176,7 @@ void ScHTMLImport::WriteToDocument(
     while( (pTable = pGlobTable->FindNestedTable( ++nTableId )) != nullptr )
     {
         pTable->GetDocRange( aNewRange );
-        if (!aNewRange.Move( nColDiff, nRowDiff, nTabDiff, aErrorRange ))
+        if (!aNewRange.Move( nColDiff, nRowDiff, nTabDiff, aErrorRange, *mpDoc ))
         {
             assert(!"can't move");
         }

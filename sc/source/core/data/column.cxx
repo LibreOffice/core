@@ -2187,7 +2187,8 @@ class UpdateRefOnNonCopy
             for (++pp; pp != ppEnd; ++pp) // skip the top cell.
             {
                 ScFormulaCell* pFC = *pp;
-                if (!pFC->aPos.Move(mpCxt->mnColDelta, mpCxt->mnRowDelta, mpCxt->mnTabDelta, aErrorPos))
+                if (!pFC->aPos.Move(mpCxt->mnColDelta, mpCxt->mnRowDelta, mpCxt->mnTabDelta,
+                                    aErrorPos, mpCxt->mrDoc))
                 {
                     assert(!"can't move formula cell");
                 }

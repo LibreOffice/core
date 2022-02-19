@@ -3128,7 +3128,7 @@ bool ScFormulaCell::UpdatePosOnShift( const sc::RefUpdateContext& rCxt )
     // This formula cell itself is being shifted during cell range
     // insertion or deletion. Update its position.
     ScAddress aErrorPos( ScAddress::UNINITIALIZED );
-    if (!aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos))
+    if (!aPos.Move(rCxt.mnColDelta, rCxt.mnRowDelta, rCxt.mnTabDelta, aErrorPos, rCxt.mrDoc))
     {
         assert(!"can't move ScFormulaCell");
     }

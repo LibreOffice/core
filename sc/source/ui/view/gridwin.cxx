@@ -4445,14 +4445,14 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                                  nDestPosX == aSource.aStart.Col() && nDestPosY < aSource.aStart.Row() )
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                                bDone = aSource.Move( 0, nSizeY, 0, aErrorRange, pSourceDoc );
+                                bDone = aSource.Move( 0, nSizeY, 0, aErrorRange, *pSourceDoc );
                                 nCorrectCursorPosRow = nSizeY;
                             }
                             else if ( meDragInsertMode == INS_CELLSRIGHT &&
                                       nDestPosY == aSource.aStart.Row() && nDestPosX < aSource.aStart.Col() )
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                                bDone = aSource.Move( nSizeX, 0, 0, aErrorRange, pSourceDoc );
+                                bDone = aSource.Move( nSizeX, 0, 0, aErrorRange, *pSourceDoc );
                                 nCorrectCursorPosCol = nSizeX;
                             }
                         }
@@ -4495,12 +4495,12 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                             if ( eCmd == DelCellCmd::CellsUp && nDestPosY > aSource.aEnd.Row() )
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                                bDone = aDest.Move( 0, -nSizeY, 0, aErrorRange, &rThisDoc );
+                                bDone = aDest.Move( 0, -nSizeY, 0, aErrorRange, rThisDoc );
                             }
                             else if ( eCmd == DelCellCmd::CellsLeft && nDestPosX > aSource.aEnd.Col() )
                             {
                                 ScRange aErrorRange( ScAddress::UNINITIALIZED );
-                                bDone = aDest.Move( -nSizeX, 0, 0, aErrorRange, &rThisDoc );
+                                bDone = aDest.Move( -nSizeX, 0, 0, aErrorRange, rThisDoc );
                             }
                             pDocSh->UpdateOle(mrViewData);
                             pView->CellContentChanged();

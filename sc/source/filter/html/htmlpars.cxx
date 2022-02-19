@@ -1720,7 +1720,7 @@ public:
 
     /** Inserts a new table into the container. This container owns the created table.
         @param bPreFormText  true = New table is based on preformatted text (<pre> tag). */
-    ScHTMLTable*        CreateTable( const HtmlImportInfo& rInfo, bool bPreFormText );
+    ScHTMLTable*        CreateTable( const HtmlImportInfo& rInfo, bool bPreFormText, const ScDocument& rDoc );
 
 private:
     /** Sets a working table with its index for search optimization. */
@@ -1755,9 +1755,9 @@ ScHTMLTable* ScHTMLTableMap::FindTable( ScHTMLTableId nTableId, bool bDeep ) con
     return pResult;
 }
 
-ScHTMLTable* ScHTMLTableMap::CreateTable( const HtmlImportInfo& rInfo, bool bPreFormText )
+ScHTMLTable* ScHTMLTableMap::CreateTable( const HtmlImportInfo& rInfo, bool bPreFormText, const ScDocument& rDoc )
 {
-    ScHTMLTable* pTable = new ScHTMLTable( mrParentTable, rInfo, bPreFormText );
+    ScHTMLTable* pTable = new ScHTMLTable( mrParentTable, rInfo, bPreFormText, rDoc );
     maTables[ pTable->GetTableId() ].reset( pTable );
     SetCurrTable( pTable );
     return pTable;
@@ -1807,7 +1807,7 @@ ScHTMLTableAutoId::ScHTMLTableAutoId( ScHTMLTableId& rnUnusedId ) :
     ++mrnUnusedId;
 }
 
-ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo, bool bPreFormText ) :
+ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo, bool bPreFormText, const ScDocument& rDoc ) :
     mpParentTable( &rParentTable ),
     maTableId( rParentTable.maTableId.mrnUnusedId ),
     maTableItemSet( rParentTable.GetCurrItemSet() ),
@@ -1816,6 +1816,7 @@ ScHTMLTable::ScHTMLTable( ScHTMLTable& rParentTable, const HtmlImportInfo& rInfo
     mpCurrEntryVector( nullptr ),
     maSize( 1, 1 ),
     mpParser(rParentTable.mpParser),
+    mrDoc(rDoc),
     mbBorderOn( false ),
     mbPreFormText( bPreFormText ),
     mbRowOn( false ),
@@ -1854,7 +1855,7 @@ ScHTMLTable::ScHTMLTable(
     SfxItemPool& rPool,
     EditEngine& rEditEngine,
     std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseList,
-    ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser
+    ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser, const ScDocument& rDoc
 ) :
     mpParentTable( nullptr ),
     maTableId( rnUnusedId ),
@@ -1864,6 +1865,7 @@ ScHTMLTable::ScHTMLTable(
     mpCurrEntryVector( nullptr ),
     maSize( 1, 1 ),
     mpParser(pParser),
+    mrDoc(rDoc),
     mbBorderOn( false ),
     mbPreFormText( false ),
     mbRowOn( false ),
@@ -2229,7 +2231,7 @@ void ScHTMLTable::GetDocRange( ScRange& rRange ) const
     rRange.aStart = rRange.aEnd = maDocBasePos.MakeAddr();
     ScAddress aErrorPos( ScAddress::UNINITIALIZED );
     if (!rRange.aEnd.Move( static_cast< SCCOL >( GetDocSize( tdCol ) ) - 1,
-                static_cast< SCROW >( GetDocSize( tdRow ) ) - 1, 0, aErrorPos))
+                static_cast< SCROW >( GetDocSize( tdRow ) ) - 1, 0, aErrorPos, mrDoc ))
     {
         assert(!"can't move");
     }
@@ -2390,7 +2392,7 @@ ScHTMLTable* ScHTMLTable::InsertNestedTable( const HtmlImportInfo& rInfo, bool b
         mxNestedTables.reset( new ScHTMLTableMap( *this ) );
     if( bPreFormText )      // enclose new preformatted table with empty lines
         InsertLeadingEmptyLine();
-    return mxNestedTables->CreateTable( rInfo, bPreFormText );
+    return mxNestedTables->CreateTable( rInfo, bPreFormText, mrDoc );
 }
 
 void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
@@ -2421,7 +2423,7 @@ void ScHTMLTable::InsertNewCell( const ScHTMLSize& rSpanSize )
     // insert the new range into the cell lists
     ScRange aNewRange( maCurrCell.MakeAddr() );
     ScAddress aErrorPos( ScAddress::UNINITIALIZED );
-    if (!aNewRange.aEnd.Move( rSpanSize.mnCols - 1, rSpanSize.mnRows - 1, 0, aErrorPos))
+    if (!aNewRange.aEnd.Move( rSpanSize.mnCols - 1, rSpanSize.mnRows - 1, 0, aErrorPos, mrDoc ))
     {
         assert(!"can't move");
     }
@@ -2746,9 +2748,10 @@ ScHTMLGlobalTable::ScHTMLGlobalTable(
     EditEngine& rEditEngine,
     std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseVector,
     ScHTMLTableId& rnUnusedId,
-    ScHTMLParser* pParser
+    ScHTMLParser* pParser,
+    const ScDocument& rDoc
 ) :
-    ScHTMLTable( rPool, rEditEngine, rEEParseVector, rnUnusedId, pParser )
+    ScHTMLTable( rPool, rEditEngine, rEEParseVector, rnUnusedId, pParser, rDoc )
 {
 }
 
@@ -2772,7 +2775,7 @@ ScHTMLQueryParser::ScHTMLQueryParser( EditEngine* pEditEngine, ScDocument* pDoc 
     mbTitleOn( false )
 {
     mxGlobTable.reset(
-        new ScHTMLGlobalTable(*pPool, *pEdit, maList, mnUnusedId, this));
+        new ScHTMLGlobalTable(*pPool, *pEdit, maList, mnUnusedId, this, *pDoc));
     mpCurrTable = mxGlobTable.get();
 }
 

@@ -333,7 +333,8 @@ public:
     explicit            ScHTMLTable(
                             ScHTMLTable& rParentTable,
                             const HtmlImportInfo& rInfo,
-                            bool bPreFormText );
+                            bool bPreFormText,
+                            const ScDocument& rDoc );
 
     virtual             ~ScHTMLTable();
 
@@ -435,7 +436,8 @@ protected:
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
                             std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseList,
-                            ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
+                            ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser,
+                            const ScDocument& rDoc );
 
     /** Fills all empty cells in this and nested tables with dummy parse entries. */
     void                FillEmptyCells();
@@ -542,6 +544,7 @@ private:
     ScHTMLPos           maCurrCell;         /// Address of current cell to fill.
     ScHTMLPos           maDocBasePos;       /// Resulting base address in a Calc document.
     ScHTMLParser*       mpParser;
+    const ScDocument&   mrDoc;
     bool                mbBorderOn:1;       /// true = Table borders on.
     bool                mbPreFormText:1;    /// true = Table from preformatted text (<pre> tag).
     bool                mbRowOn:1;          /// true = Inside of <tr> </tr>.
@@ -558,7 +561,8 @@ public:
                             SfxItemPool& rPool,
                             EditEngine& rEditEngine,
                             std::vector<std::shared_ptr<ScEEParseEntry>>& rEEParseList,
-                            ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser );
+                            ScHTMLTableId& rnUnusedId, ScHTMLParser* pParser,
+                            const ScDocument& rDoc );
 
     virtual             ~ScHTMLGlobalTable() override;
 
