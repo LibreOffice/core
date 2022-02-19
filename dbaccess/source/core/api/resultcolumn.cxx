@@ -125,32 +125,32 @@ void OResultColumn::disposing()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* OResultColumn::createArrayHelper( ) const
 {
-    css::uno::Sequence< css::beans::Property> aDescriptor(21);
-    css::beans::Property* pDesc = aDescriptor.getArray();
-    sal_Int32 nPos = 0;
-    pDesc[nPos++] = css::beans::Property(PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_DISPLAYSIZE, PROPERTY_ID_DISPLAYSIZE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISAUTOINCREMENT, PROPERTY_ID_ISAUTOINCREMENT, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISCASESENSITIVE, PROPERTY_ID_ISCASESENSITIVE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISCURRENCY, PROPERTY_ID_ISCURRENCY, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISDEFINITELYWRITABLE, PROPERTY_ID_ISDEFINITELYWRITABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISNULLABLE, PROPERTY_ID_ISNULLABLE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISREADONLY, PROPERTY_ID_ISREADONLY, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISROWVERSION, PROPERTY_ID_ISROWVERSION, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISSEARCHABLE, PROPERTY_ID_ISSEARCHABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISSIGNED, PROPERTY_ID_ISSIGNED, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISWRITABLE, PROPERTY_ID_ISWRITABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_LABEL, PROPERTY_ID_LABEL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_PRECISION, PROPERTY_ID_PRECISION, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_SCALE, PROPERTY_ID_SCALE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_SCHEMANAME, PROPERTY_ID_SCHEMANAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_SERVICENAME, PROPERTY_ID_SERVICENAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_TABLENAME, PROPERTY_ID_TABLENAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_TYPE, PROPERTY_ID_TYPE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_TYPENAME, PROPERTY_ID_TYPENAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
-    return new ::cppu::OPropertyArrayHelper(aDescriptor);
+    return new ::cppu::OPropertyArrayHelper
+    {
+        {
+            { PROPERTY_CATALOGNAME, PROPERTY_ID_CATALOGNAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_DISPLAYSIZE, PROPERTY_ID_DISPLAYSIZE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISAUTOINCREMENT, PROPERTY_ID_ISAUTOINCREMENT, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISCASESENSITIVE, PROPERTY_ID_ISCASESENSITIVE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISCURRENCY, PROPERTY_ID_ISCURRENCY, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISDEFINITELYWRITABLE, PROPERTY_ID_ISDEFINITELYWRITABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISNULLABLE, PROPERTY_ID_ISNULLABLE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISREADONLY, PROPERTY_ID_ISREADONLY, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISROWVERSION, PROPERTY_ID_ISROWVERSION, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISSEARCHABLE, PROPERTY_ID_ISSEARCHABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISSIGNED, PROPERTY_ID_ISSIGNED, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_ISWRITABLE, PROPERTY_ID_ISWRITABLE, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_LABEL, PROPERTY_ID_LABEL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_PRECISION, PROPERTY_ID_PRECISION, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_SCALE, PROPERTY_ID_SCALE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_SCHEMANAME, PROPERTY_ID_SCHEMANAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_SERVICENAME, PROPERTY_ID_SERVICENAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_TABLENAME, PROPERTY_ID_TABLENAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_TYPE, PROPERTY_ID_TYPE, cppu::UnoType<sal_Int32>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_TYPENAME, PROPERTY_ID_TYPENAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY }
+        }
+    };
 }
 
 // cppu::OPropertySetHelper

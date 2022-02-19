@@ -797,25 +797,25 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo()
 // comphelper::OPropertyArrayUsageHelper
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
-    css::uno::Sequence< css::beans::Property> aDescriptor(13);
-    css::beans::Property* pDesc = aDescriptor.getArray();
-    sal_Int32 nPos = 0;
-    pDesc[nPos++] = css::beans::Property(PROPERTY_INFO, PROPERTY_ID_INFO, cppu::UnoType<Sequence< PropertyValue >>::get(), css::beans::PropertyAttribute::BOUND);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISPASSWORDREQUIRED, PROPERTY_ID_ISPASSWORDREQUIRED, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_ISREADONLY, PROPERTY_ID_ISREADONLY, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, cppu::UnoType<Sequence< PropertyValue >>::get(), css::beans::PropertyAttribute::BOUND);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_NUMBERFORMATSSUPPLIER, PROPERTY_ID_NUMBERFORMATSSUPPLIER,
-                    cppu::UnoType<XNumberFormatsSupplier>::get(), css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_PASSWORD, PROPERTY_ID_PASSWORD, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_SETTINGS, PROPERTY_ID_SETTINGS, cppu::UnoType<XPropertySet>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_SUPPRESSVERSIONCL, PROPERTY_ID_SUPPRESSVERSIONCL, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_TABLEFILTER, PROPERTY_ID_TABLEFILTER, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_TABLETYPEFILTER, PROPERTY_ID_TABLETYPEFILTER, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_URL, PROPERTY_ID_URL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
-    pDesc[nPos++] = css::beans::Property(PROPERTY_USER, PROPERTY_ID_USER, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND);
-    OSL_ENSURE(nPos == aDescriptor.getLength(), "forgot to adjust the count ?");
-    return new ::cppu::OPropertyArrayHelper(aDescriptor);
+    return new ::cppu::OPropertyArrayHelper
+    {
+        {
+            { PROPERTY_INFO, PROPERTY_ID_INFO, cppu::UnoType<Sequence< PropertyValue >>::get(), css::beans::PropertyAttribute::BOUND },
+            { PROPERTY_ISPASSWORDREQUIRED, PROPERTY_ID_ISPASSWORDREQUIRED, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND },
+            { PROPERTY_ISREADONLY, PROPERTY_ID_ISREADONLY, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_LAYOUTINFORMATION, PROPERTY_ID_LAYOUTINFORMATION, cppu::UnoType<Sequence< PropertyValue >>::get(), css::beans::PropertyAttribute::BOUND },
+            { PROPERTY_NAME, PROPERTY_ID_NAME, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_NUMBERFORMATSSUPPLIER, PROPERTY_ID_NUMBERFORMATSSUPPLIER, cppu::UnoType<XNumberFormatsSupplier>::get(),
+              css::beans::PropertyAttribute::READONLY | css::beans::PropertyAttribute::TRANSIENT },
+            { PROPERTY_PASSWORD, PROPERTY_ID_PASSWORD, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::TRANSIENT },
+            { PROPERTY_SETTINGS, PROPERTY_ID_SETTINGS, cppu::UnoType<XPropertySet>::get(), css::beans::PropertyAttribute::BOUND | css::beans::PropertyAttribute::READONLY },
+            { PROPERTY_SUPPRESSVERSIONCL, PROPERTY_ID_SUPPRESSVERSIONCL, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND },
+            { PROPERTY_TABLEFILTER, PROPERTY_ID_TABLEFILTER, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND },
+            { PROPERTY_TABLETYPEFILTER, PROPERTY_ID_TABLETYPEFILTER, cppu::UnoType<Sequence< OUString >>::get(), css::beans::PropertyAttribute::BOUND },
+            { PROPERTY_URL, PROPERTY_ID_URL, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND },
+            { PROPERTY_USER, PROPERTY_ID_USER, cppu::UnoType<OUString>::get(), css::beans::PropertyAttribute::BOUND }
+        }
+    };
 }
 
 // cppu::OPropertySetHelper
