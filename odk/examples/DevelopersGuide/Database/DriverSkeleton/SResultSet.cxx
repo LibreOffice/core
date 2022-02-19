@@ -763,23 +763,46 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const  Sequence<  Any >& 
 
 IPropertyArrayHelper* OResultSet::createArrayHelper( ) const
 {
-    Sequence< Property > aProps(6);
-    Property* pProperties = aProps.getArray();
-    sal_Int32 nPos = 0;
-    pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
-        PROPERTY_ID_CURSORNAME, ::cppu::UnoType<rtl::OUString>::get(), PropertyAttribute::READONLY);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
-        PROPERTY_ID_FETCHDIRECTION, ::cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
-        PROPERTY_ID_FETCHSIZE, ::cppu::UnoType<sal_Int32>::get(), 0);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
-        PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(), PropertyAttribute::READONLY);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
-        PROPERTY_ID_RESULTSETCONCURRENCY, ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
-    pProperties[nPos++] = ::com::sun::star::beans::Property(OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
-        PROPERTY_ID_RESULTSETTYPE, ::cppu::UnoType<sal_Int32>::get(), PropertyAttribute::READONLY);
-
-    return new OPropertyArrayHelper(aProps);
+    return new OPropertyArrayHelper
+    {
+        {
+            {
+                OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_CURSORNAME),
+                PROPERTY_ID_CURSORNAME,
+                ::cppu::UnoType<rtl::OUString>::get(),
+                PropertyAttribute::READONLY
+            },
+            {
+                OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHDIRECTION),
+                PROPERTY_ID_FETCHDIRECTION,
+                ::cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_FETCHSIZE),
+                PROPERTY_ID_FETCHSIZE,
+                ::cppu::UnoType<sal_Int32>::get(),
+                0
+            },
+            {
+                OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),
+                PROPERTY_ID_ISBOOKMARKABLE, cppu::UnoType<bool>::get(),
+                PropertyAttribute::READONLY
+            },
+            {
+                OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETCONCURRENCY),
+                PROPERTY_ID_RESULTSETCONCURRENCY,
+                ::cppu::UnoType<sal_Int32>::get(),
+                PropertyAttribute::READONLY
+            },
+            {
+                OPropertyMap::getPropMap().getNameByIndex(PROPERTY_ID_RESULTSETTYPE),
+                PROPERTY_ID_RESULTSETTYPE,
+                ::cppu::UnoType<sal_Int32>::get(),
+                PropertyAttribute::READONLY
+            }
+        }
+    };
 }
 
 IPropertyArrayHelper & OResultSet::getInfoHelper()
