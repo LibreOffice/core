@@ -383,6 +383,7 @@ std::unique_ptr<OutlinerParaObject> Outliner::CreateParaObject( sal_Int32 nStart
         aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
     }
 
+    xText->ClearPortionInfo(); // tdf#147166 the PortionInfo is unwanted here
     std::unique_ptr<OutlinerParaObject> pPObj(new OutlinerParaObject(std::move(xText), aParagraphDataVector, bIsEditDoc));
     pPObj->SetOutlinerMode(GetMode());
 
