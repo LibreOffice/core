@@ -20,6 +20,7 @@
 #include <PropertyMapper.hxx>
 #include <unonames.hxx>
 
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -28,6 +29,19 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
+#include <CharacterProperties.hxx>
+#include <LinePropertiesHelper.hxx>
+#include <FillProperties.hxx>
+#include <TitleProperties.hxx>
+#include <LabelProperties.hxx>
+#include <DataPointProperties.hxx>
+
+using namespace chart::LinePropertiesHelper;
+using namespace chart::CharacterProperties;
+using namespace chart::FillProperties;
+using namespace chart::TitleProperties;
+using namespace chart::LabelProperties;
+using namespace chart::DataPointProperties;
 
 namespace chart
 {
@@ -35,11 +49,21 @@ using namespace ::com::sun::star;
 
 void PropertyMapper::setMappedProperties(
           SvxShape& xTarget
-        , const uno::Reference< beans::XPropertySet >& xSource
-        , const tPropertyNameMap& rMap )
+        , const uno::Reference< beans::XPropertySet >& xSlowSource
+        , const tPropertyNameMap2& rMap )
 {
-    if( !xSource.is() )
+    if( !xSlowSource.is() )
         return;
+
+    /**
+     * Ideally we could change this function to take XFastPropertySet.
+     * But.... that would change signatures all over the place, and everywhere else
+     * really wants to use XPropertySet, and we have no way of making a type signature
+     * for XPropertySet UNION XFastPropertySet.
+     */
+
+    uno::Reference< beans::XFastPropertySet > xSource(xSlowSource, uno::UNO_QUERY);
+    assert(xSource && "we assume that everything supports XFastPropertySet here");
 
     sal_Int32 nPropertyCount = rMap.size();
     tNameSequence aNames(nPropertyCount);
@@ -51,10 +75,10 @@ void PropertyMapper::setMappedProperties(
     for (auto const& elem : rMap)
     {
         const OUString & rTarget = elem.first;
-        const OUString & rSource = elem.second;
+        sal_Int32 rSource = elem.second;
         try
         {
-            uno::Any aAny( xSource->getPropertyValue(rSource) );
+            uno::Any aAny( xSource->getFastPropertyValue(rSource) );
             if( aAny.hasValue() )
             {
                 //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
@@ -161,6 +185,92 @@ void PropertyMapper::setMappedProperties(
     }
 }
 
+void PropertyMapper::setMappedProperties(
+          const uno::Reference< beans::XPropertySet >& xTarget
+        , const uno::Reference< beans::XPropertySet >& xSlowSource
+        , const tPropertyNameMap2& rMap )
+{
+    if( !xTarget.is() || !xSlowSource.is() )
+        return;
+
+    /**
+     * Ideally we could change this function to take XFastPropertySet.
+     * But.... that would change signatures all over the place, and everywhere else
+     * really wants to use XPropertySet, and we have no way of making a type signature
+     * for XPropertySet UNION XFastPropertySet.
+     */
+
+    uno::Reference< beans::XFastPropertySet > xSource(xSlowSource, uno::UNO_QUERY);
+    assert(xSource && "we assume that everything supports XFastPropertySet here");
+
+    tNameSequence aNames;
+    tAnySequence  aValues;
+    sal_Int32 nN=0;
+    sal_Int32 nPropertyCount = rMap.size();
+    aNames.realloc(nPropertyCount);
+    auto pNames = aNames.getArray();
+    aValues.realloc(nPropertyCount);
+    auto pValues = aValues.getArray();
+
+    for (auto const& elem : rMap)
+    {
+        const OUString & rTarget = elem.first;
+        const sal_Int32 & rSource = elem.second;
+        try
+        {
+            uno::Any aAny( xSource->getFastPropertyValue(rSource) );
+            if( aAny.hasValue() )
+            {
+                //do not set empty anys because of performance (otherwise SdrAttrObj::ItemChange will take much longer)
+                pNames[nN]  = rTarget;
+                pValues[nN] = std::move(aAny);
+                ++nN;
+            }
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
+        }
+    }
+    if (nN == 0)
+        return;
+
+    uno::Reference< beans::XMultiPropertySet > xShapeMultiProp( xTarget, uno::UNO_QUERY );
+    if (xShapeMultiProp)
+        try
+        {
+            //reduce to real property count
+            aNames.realloc(nN);
+            aValues.realloc(nN);
+            xShapeMultiProp->setPropertyValues( aNames, aValues );
+            return; // successful
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" ); //if this occurs more often think of removing the XMultiPropertySet completely for better performance
+        }
+
+    // fall back to one at a time
+    try
+    {
+        for( sal_Int32 i = 0; i < nN; i++ )
+        {
+            try
+            {
+                xTarget->setPropertyValue( aNames[i], aValues[i] );
+            }
+            catch( const uno::Exception& )
+            {
+                TOOLS_WARN_EXCEPTION("chart2", "" );
+            }
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        TOOLS_WARN_EXCEPTION("chart2", "" );
+    }
+}
+
 void PropertyMapper::getValueMap(
                   tPropertyNameValueMap& rValueMap
                 , const tPropertyNameMap& rNameMap
@@ -206,6 +316,39 @@ void PropertyMapper::getValueMap(
             {
                 TOOLS_WARN_EXCEPTION("chart2", "" );
             }
+        }
+    }
+}
+
+void PropertyMapper::getValueMap(
+                  tPropertyNameValueMap& rValueMap
+                , const tPropertyNameMap2& rNameMap
+                , const uno::Reference< beans::XPropertySet >& xSlowSourceProp
+                )
+{
+    /**
+     * Ideally we could change this function to take XFastPropertySet.
+     * But.... that would change signatures all over the place, and everywhere else
+     * really wants to use XPropertySet, and we have no way of making a type signature
+     * for XPropertySet UNION XFastPropertySet.
+     */
+
+    uno::Reference< beans::XFastPropertySet > xSourceProp(xSlowSourceProp, uno::UNO_QUERY);
+    assert(xSourceProp && "we assume that everything supports XFastPropertySet here");
+
+    for (auto const& elem : rNameMap)
+    {
+        const OUString & rTarget = elem.first;
+        const sal_Int32 & rSource = elem.second;
+        try
+        {
+            uno::Any aAny( xSourceProp->getFastPropertyValue(rSource) );
+            if( aAny.hasValue() )
+                rValueMap.emplace(  rTarget, std::move(aAny) );
+        }
+        catch( const uno::Exception& )
+        {
+            TOOLS_WARN_EXCEPTION("chart2", "" );
         }
     }
 }
@@ -261,117 +404,117 @@ uno::Any* PropertyMapper::getValuePointerForLimitedSpace( tAnySequence& rPropVal
         , bLimitedHeight ? OUString("TextMaximumFrameHeight") : OUString("TextMaximumFrameWidth") );
 }
 
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForCharacterProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForCharacterProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForCharacterProperties{
-        {"CharColor",                "CharColor"},
-        {"CharContoured",            "CharContoured"},
-        {"CharEmphasis",             "CharEmphasis"},//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
+    static tPropertyNameMap2 s_aShapePropertyMapForCharacterProperties{
+        {"CharColor",                PROP_CHAR_COLOR},
+        {"CharContoured",            PROP_CHAR_CONTOURED},
+        {"CharEmphasis",             PROP_CHAR_EMPHASIS},//the service style::CharacterProperties  describes a property called 'CharEmphasize' which is nowhere implemented
 
-        {"CharFontFamily",           "CharFontFamily"},
-        {"CharFontFamilyAsian",      "CharFontFamilyAsian"},
-        {"CharFontFamilyComplex",    "CharFontFamilyComplex"},
-        {"CharFontCharSet",          "CharFontCharSet"},
-        {"CharFontCharSetAsian",     "CharFontCharSetAsian"},
-        {"CharFontCharSetComplex",   "CharFontCharSetComplex"},
-        {"CharFontName",             "CharFontName"},
-        {"CharFontNameAsian",        "CharFontNameAsian"},
-        {"CharFontNameComplex",      "CharFontNameComplex"},
-        {"CharFontPitch",            "CharFontPitch"},
-        {"CharFontPitchAsian",       "CharFontPitchAsian"},
-        {"CharFontPitchComplex",     "CharFontPitchComplex"},
-        {"CharFontStyleName",        "CharFontStyleName"},
-        {"CharFontStyleNameAsian",   "CharFontStyleNameAsian"},
-        {"CharFontStyleNameComplex", "CharFontStyleNameComplex"},
+        {"CharFontFamily",           PROP_CHAR_FONT_FAMILY},
+        {"CharFontFamilyAsian",      PROP_CHAR_ASIAN_FONT_FAMILY},
+        {"CharFontFamilyComplex",    PROP_CHAR_COMPLEX_FONT_FAMILY},
+        {"CharFontCharSet",          PROP_CHAR_FONT_CHAR_SET},
+        {"CharFontCharSetAsian",     PROP_CHAR_ASIAN_CHAR_SET},
+        {"CharFontCharSetComplex",   PROP_CHAR_COMPLEX_CHAR_SET},
+        {"CharFontName",             PROP_CHAR_FONT_NAME},
+        {"CharFontNameAsian",        PROP_CHAR_ASIAN_FONT_NAME},
+        {"CharFontNameComplex",      PROP_CHAR_COMPLEX_FONT_NAME},
+        {"CharFontPitch",            PROP_CHAR_FONT_PITCH},
+        {"CharFontPitchAsian",       PROP_CHAR_ASIAN_FONT_PITCH},
+        {"CharFontPitchComplex",     PROP_CHAR_COMPLEX_FONT_PITCH},
+        {"CharFontStyleName",        PROP_CHAR_FONT_STYLE_NAME},
+        {"CharFontStyleNameAsian",   PROP_CHAR_ASIAN_FONT_STYLE_NAME},
+        {"CharFontStyleNameComplex", PROP_CHAR_COMPLEX_FONT_STYLE_NAME},
 
-        {"CharHeight",               "CharHeight"},
-        {"CharHeightAsian",          "CharHeightAsian"},
-        {"CharHeightComplex",        "CharHeightComplex"},
-        {"CharKerning",              "CharKerning"},
-        {"CharLocale",               "CharLocale"},
-        {"CharLocaleAsian",          "CharLocaleAsian"},
-        {"CharLocaleComplex",        "CharLocaleComplex"},
-        {"CharPosture",              "CharPosture"},
-        {"CharPostureAsian",         "CharPostureAsian"},
-        {"CharPostureComplex",       "CharPostureComplex"},
-        {"CharRelief",               "CharRelief"},
-        {"CharShadowed",             "CharShadowed"},
-        {"CharStrikeout",            "CharStrikeout"},
-        {"CharUnderline",            "CharUnderline"},
-        {"CharUnderlineColor",       "CharUnderlineColor"},
-        {"CharUnderlineHasColor",    "CharUnderlineHasColor"},
-        {"CharOverline",             "CharOverline"},
-        {"CharOverlineColor",        "CharOverlineColor"},
-        {"CharOverlineHasColor",     "CharOverlineHasColor"},
-        {"CharWeight",               "CharWeight"},
-        {"CharWeightAsian",          "CharWeightAsian"},
-        {"CharWeightComplex",        "CharWeightComplex"},
-        {"CharWordMode",             "CharWordMode"},
+        {"CharHeight",               PROP_CHAR_CHAR_HEIGHT},
+        {"CharHeightAsian",          PROP_CHAR_ASIAN_CHAR_HEIGHT},
+        {"CharHeightComplex",        PROP_CHAR_COMPLEX_CHAR_HEIGHT},
+        {"CharKerning",              PROP_CHAR_KERNING},
+        {"CharLocale",               PROP_CHAR_LOCALE},
+        {"CharLocaleAsian",          PROP_CHAR_ASIAN_LOCALE},
+        {"CharLocaleComplex",        PROP_CHAR_COMPLEX_LOCALE},
+        {"CharPosture",              PROP_CHAR_POSTURE},
+        {"CharPostureAsian",         PROP_CHAR_ASIAN_POSTURE},
+        {"CharPostureComplex",       PROP_CHAR_COMPLEX_POSTURE},
+        {"CharRelief",               PROP_CHAR_RELIEF},
+        {"CharShadowed",             PROP_CHAR_SHADOWED},
+        {"CharStrikeout",            PROP_CHAR_STRIKE_OUT},
+        {"CharUnderline",            PROP_CHAR_UNDERLINE},
+        {"CharUnderlineColor",       PROP_CHAR_UNDERLINE_COLOR},
+        {"CharUnderlineHasColor",    PROP_CHAR_UNDERLINE_HAS_COLOR},
+        {"CharOverline",             PROP_CHAR_OVERLINE},
+        {"CharOverlineColor",        PROP_CHAR_OVERLINE_COLOR},
+        {"CharOverlineHasColor",     PROP_CHAR_OVERLINE_HAS_COLOR},
+        {"CharWeight",               PROP_CHAR_WEIGHT},
+        {"CharWeightAsian",          PROP_CHAR_ASIAN_WEIGHT},
+        {"CharWeightComplex",        PROP_CHAR_COMPLEX_WEIGHT},
+        {"CharWordMode",             PROP_CHAR_WORD_MODE},
 
-        {"WritingMode",              "WritingMode"},
+        {"WritingMode",              PROP_WRITING_MODE},
 
-        {"ParaIsCharacterDistance",  "ParaIsCharacterDistance"}};
+        {"ParaIsCharacterDistance",  PROP_PARA_IS_CHARACTER_DISTANCE}};
 
     return s_aShapePropertyMapForCharacterProperties;
 }
 
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForParagraphProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForParagraphProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForParagraphProperties{
-        {"ParaAdjust",          "ParaAdjust"},
-        {"ParaBottomMargin",    "ParaBottomMargin"},
-        {"ParaIsHyphenation",   "ParaIsHyphenation"},
-        {"ParaLastLineAdjust",  "ParaLastLineAdjust"},
-        {"ParaLeftMargin",      "ParaLeftMargin"},
-        {"ParaRightMargin",     "ParaRightMargin"},
-        {"ParaTopMargin",       "ParaTopMargin"}};
+    static tPropertyNameMap2 s_aShapePropertyMapForParagraphProperties{
+        {"ParaAdjust",          PROP_TITLE_PARA_ADJUST},
+        {"ParaBottomMargin",    PROP_TITLE_PARA_BOTTOM_MARGIN},
+        {"ParaIsHyphenation",   PROP_TITLE_PARA_IS_HYPHENATION},
+        {"ParaLastLineAdjust",  PROP_TITLE_PARA_LAST_LINE_ADJUST},
+        {"ParaLeftMargin",      PROP_TITLE_PARA_LEFT_MARGIN},
+        {"ParaRightMargin",     PROP_TITLE_PARA_RIGHT_MARGIN},
+        {"ParaTopMargin",       PROP_TITLE_PARA_TOP_MARGIN}};
     return s_aShapePropertyMapForParagraphProperties;
 }
 
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForFillProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForFillProperties{
-        {"FillBackground",               "FillBackground"},
-        {"FillBitmapName",               "FillBitmapName"},
-        {"FillColor",                    "FillColor"},
-        {"FillGradientName",             "FillGradientName"},
-        {"FillGradientStepCount",        "FillGradientStepCount"},
-        {"FillHatchName",                "FillHatchName"},
-        {"FillStyle",                    "FillStyle"},
-        {"FillTransparence",             "FillTransparence"},
-        {"FillTransparenceGradientName", "FillTransparenceGradientName"},
+    static tPropertyNameMap2 s_aShapePropertyMapForFillProperties{
+        {"FillBackground",               PROP_FILL_BACKGROUND},
+        {"FillBitmapName",               PROP_FILL_BITMAP_NAME},
+        {"FillColor",                    PROP_FILL_COLOR},
+        {"FillGradientName",             PROP_FILL_GRADIENT_NAME},
+        {"FillGradientStepCount",        PROP_FILL_GRADIENT_STEPCOUNT},
+        {"FillHatchName",                PROP_FILL_HATCH_NAME},
+        {"FillStyle",                    PROP_FILL_STYLE},
+        {"FillTransparence",             PROP_FILL_TRANSPARENCE},
+        {"FillTransparenceGradientName", PROP_FILL_TRANSPARENCE_GRADIENT_NAME},
         //bitmap properties
-        {"FillBitmapMode",               "FillBitmapMode"},
-        {"FillBitmapSizeX",              "FillBitmapSizeX"},
-        {"FillBitmapSizeY",              "FillBitmapSizeY"},
-        {"FillBitmapLogicalSize",        "FillBitmapLogicalSize"},
-        {"FillBitmapOffsetX",            "FillBitmapOffsetX"},
-        {"FillBitmapOffsetY",            "FillBitmapOffsetY"},
-        {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
-        {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
-        {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"}};
+        {"FillBitmapMode",               PROP_FILL_BITMAP_MODE},
+        {"FillBitmapSizeX",              PROP_FILL_BITMAP_SIZEX},
+        {"FillBitmapSizeY",              PROP_FILL_BITMAP_SIZEY},
+        {"FillBitmapLogicalSize",        PROP_FILL_BITMAP_LOGICALSIZE},
+        {"FillBitmapOffsetX",            PROP_FILL_BITMAP_OFFSETX},
+        {"FillBitmapOffsetY",            PROP_FILL_BITMAP_OFFSETY},
+        {"FillBitmapRectanglePoint",     PROP_FILL_BITMAP_RECTANGLEPOINT},
+        {"FillBitmapPositionOffsetX",    PROP_FILL_BITMAP_POSITION_OFFSETX},
+        {"FillBitmapPositionOffsetY",    PROP_FILL_BITMAP_POSITION_OFFSETY}};
     return s_aShapePropertyMapForFillProperties;
 }
 
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForLineProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForLineProperties{
-        {"LineColor",              "LineColor"},
-        {"LineDashName",           "LineDashName"},
-        {"LineJoint",              "LineJoint"},
-        {"LineStyle",              "LineStyle"},
-        {"LineTransparence",       "LineTransparence"},
-        {"LineWidth",              "LineWidth"},
-        {"LineCap",                "LineCap"}};
+    static tPropertyNameMap2 s_aShapePropertyMapForLineProperties{
+        {"LineColor",              PROP_LINE_COLOR},
+        {"LineDashName",           PROP_LINE_DASH_NAME},
+        {"LineJoint",              PROP_LINE_JOINT},
+        {"LineStyle",              PROP_LINE_STYLE},
+        {"LineTransparence",       PROP_LINE_TRANSPARENCE},
+        {"LineWidth",              PROP_LINE_WIDTH},
+        {"LineCap",                PROP_LINE_CAP}};
     return s_aShapePropertyMapForLineProperties;
 }
 
 namespace {
-    tPropertyNameMap getPropertyNameMapForFillAndLineProperties_() {
+    tPropertyNameMap2 getPropertyNameMapForFillAndLineProperties_() {
         auto map = PropertyMapper::getPropertyNameMapForFillProperties();
         auto const & add
             = PropertyMapper::getPropertyNameMapForLineProperties();
@@ -379,15 +522,15 @@ namespace {
         return map;
     }
 }
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForFillAndLineProperties()
 {
-    static tPropertyNameMap s_aShapePropertyMapForFillAndLineProperties
+    static tPropertyNameMap2 s_aShapePropertyMapForFillAndLineProperties
         = getPropertyNameMapForFillAndLineProperties_();
     return s_aShapePropertyMapForFillAndLineProperties;
 }
 
 namespace {
-    tPropertyNameMap getPropertyNameMapForTextShapeProperties_() {
+    tPropertyNameMap2 getPropertyNameMapForTextShapeProperties_() {
         auto map = PropertyMapper::getPropertyNameMapForCharacterProperties();
         auto const & add1
             = PropertyMapper::getPropertyNameMapForFillProperties();
@@ -398,80 +541,80 @@ namespace {
         return map;
     }
 }
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForTextShapeProperties()
 {
-    static tPropertyNameMap s_aShapePropertyMapForTextShapeProperties
+    static tPropertyNameMap2 s_aShapePropertyMapForTextShapeProperties
         = getPropertyNameMapForTextShapeProperties_();
     return s_aShapePropertyMapForTextShapeProperties;
 }
 
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForLineSeriesProperties{
-        {"LineColor",           "Color"},
-        {"LineDashName",        "LineDashName"},
-        {"LineStyle",           "LineStyle"},
-        {"LineTransparence",    "Transparency"},
-        {"LineWidth",           "LineWidth"},
-        {"LineCap",             "LineCap"}};
+    static tPropertyNameMap2 s_aShapePropertyMapForLineSeriesProperties{
+        {"LineColor",           PROP_FILL_COLOR},
+        {"LineDashName",        PROP_LINE_DASH_NAME},
+        {"LineStyle",           PROP_LINE_STYLE},
+        {"LineTransparence",    PROP_FILL_TRANSPARENCE},
+        {"LineWidth",           PROP_LINE_WIDTH},
+        {"LineCap",             PROP_LINE_CAP}};
     return s_aShapePropertyMapForLineSeriesProperties;
 }
 
 namespace {
-    tPropertyNameMap getPropertyNameMapForTextLabelProperties_() {
+    tPropertyNameMap2 getPropertyNameMapForTextLabelProperties_() {
         auto map = PropertyMapper::getPropertyNameMapForCharacterProperties();
         map.insert({
-            {"LineStyle", CHART_UNONAME_LABEL_BORDER_STYLE},
-            {"LineWidth", CHART_UNONAME_LABEL_BORDER_WIDTH},
-            {"LineColor", CHART_UNONAME_LABEL_BORDER_COLOR},
-            {"LineTransparence", CHART_UNONAME_LABEL_BORDER_TRANS},
-            {"FillStyle", CHART_UNONAME_LABEL_FILL_STYLE},
-            {"FillColor", CHART_UNONAME_LABEL_FILL_COLOR},
-            {"FillBackground", CHART_UNONAME_LABEL_FILL_BACKGROUND},
-            {"FillHatchName", CHART_UNONAME_LABEL_FILL_HATCH_NAME}
+            {"LineStyle", PROP_LABEL_BORDER_STYLE},
+            {"LineWidth", PROP_LABEL_BORDER_WIDTH},
+            {"LineColor", PROP_LABEL_BORDER_COLOR},
+            {"LineTransparence", PROP_LABEL_BORDER_TRANS},
+            {"FillStyle", PROP_LABEL_FILL_STYLE},
+            {"FillColor", PROP_LABEL_FILL_COLOR},
+            {"FillBackground", PROP_LABEL_FILL_BACKGROUND},
+            {"FillHatchName", PROP_LABEL_FILL_HATCH_NAME},
             });
                 // fix the spelling!
         return map;
     }
 }
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForTextLabelProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForTextLabelProperties()
 {
     // target name (drawing layer) : source name (chart model)
-    static tPropertyNameMap aMap = getPropertyNameMapForTextLabelProperties_();
+    static tPropertyNameMap2 aMap = getPropertyNameMapForTextLabelProperties_();
     return aMap;
 }
 
-const tPropertyNameMap& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
+const tPropertyNameMap2& PropertyMapper::getPropertyNameMapForFilledSeriesProperties()
 {
     //shape property -- chart model object property
-    static tPropertyNameMap s_aShapePropertyMapForFilledSeriesProperties{
-        {"FillBackground",               "FillBackground"},
-        {"FillBitmapName",               "FillBitmapName"},
-        {"FillColor",                    "Color"},
-        {"FillGradientName",             "GradientName"},
-        {"FillGradientStepCount",        "GradientStepCount"},
-        {"FillHatchName",                "HatchName"},
-        {"FillStyle",                    "FillStyle"},
-        {"FillTransparence",             "Transparency"},
-        {"FillTransparenceGradientName", "TransparencyGradientName"},
+    static tPropertyNameMap2 s_aShapePropertyMapForFilledSeriesProperties{
+        {"FillBackground",               PROP_FILL_BACKGROUND},
+        {"FillBitmapName",               PROP_FILL_BITMAP_NAME},
+        {"FillColor",                    PROP_FILL_COLOR},
+        {"FillGradientName",             PROP_FILL_GRADIENT_NAME},
+        {"FillGradientStepCount",        PROP_FILL_GRADIENT_STEPCOUNT},
+        {"FillHatchName",                PROP_FILL_HATCH_NAME},
+        {"FillStyle",                    PROP_FILL_STYLE},
+        {"FillTransparence",             PROP_FILL_TRANSPARENCE},
+        {"FillTransparenceGradientName", PROP_FILL_TRANSPARENCE_GRADIENT_NAME},
         //bitmap properties
-        {"FillBitmapMode",               "FillBitmapMode"},
-        {"FillBitmapSizeX",              "FillBitmapSizeX"},
-        {"FillBitmapSizeY",              "FillBitmapSizeY"},
-        {"FillBitmapLogicalSize",        "FillBitmapLogicalSize"},
-        {"FillBitmapOffsetX",            "FillBitmapOffsetX"},
-        {"FillBitmapOffsetY",            "FillBitmapOffsetY"},
-        {"FillBitmapRectanglePoint",     "FillBitmapRectanglePoint"},
-        {"FillBitmapPositionOffsetX",    "FillBitmapPositionOffsetX"},
-        {"FillBitmapPositionOffsetY",    "FillBitmapPositionOffsetY"},
+        {"FillBitmapMode",               PROP_FILL_BITMAP_MODE},
+        {"FillBitmapSizeX",              PROP_FILL_BITMAP_SIZEX},
+        {"FillBitmapSizeY",              PROP_FILL_BITMAP_SIZEY},
+        {"FillBitmapLogicalSize",        PROP_FILL_BITMAP_LOGICALSIZE},
+        {"FillBitmapOffsetX",            PROP_FILL_BITMAP_OFFSETX},
+        {"FillBitmapOffsetY",            PROP_FILL_BITMAP_OFFSETY},
+        {"FillBitmapRectanglePoint",     PROP_FILL_BITMAP_RECTANGLEPOINT},
+        {"FillBitmapPositionOffsetX",    PROP_FILL_BITMAP_POSITION_OFFSETX},
+        {"FillBitmapPositionOffsetY",    PROP_FILL_BITMAP_POSITION_OFFSETY},
         //line properties
-        {"LineColor",                    "BorderColor"},
-        {"LineDashName",                 "BorderDashName"},
-        {"LineStyle",                    "BorderStyle"},
-        {"LineTransparence",             "BorderTransparency"},
-        {"LineWidth",                    "BorderWidth"},
-        {"LineCap",                      "LineCap"}};
+        {"LineColor",                    PROP_DATAPOINT_BORDER_COLOR},
+        {"LineDashName",                 PROP_DATAPOINT_BORDER_DASH_NAME},
+        {"LineStyle",                    PROP_DATAPOINT_BORDER_STYLE},
+        {"LineTransparence",             PROP_LINE_TRANSPARENCE},
+        {"LineWidth",                    PROP_DATAPOINT_BORDER_WIDTH},
+        {"LineCap",                      PROP_LINE_CAP}};
     return s_aShapePropertyMapForFilledSeriesProperties;
 }
 
@@ -500,7 +643,7 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
 {
     //fill character properties into the ValueMap
     tPropertyNameValueMap aValueMap;
-    tPropertyNameMap const & aNameMap = bSupportsLabelBorder ? PropertyMapper::getPropertyNameMapForTextLabelProperties() : getPropertyNameMapForCharacterProperties();
+    tPropertyNameMap2 const & aNameMap = bSupportsLabelBorder ? PropertyMapper::getPropertyNameMapForTextLabelProperties() : getPropertyNameMapForCharacterProperties();
 
     PropertyMapper::getValueMap(aValueMap, aNameMap, xSourceProp);
 
