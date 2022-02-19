@@ -21,6 +21,7 @@
 #include <EventListenerHelper.hxx>
 #include <CloneHelper.hxx>
 #include <ModifyListenerHelper.hxx>
+#include <LinePropertiesHelper.hxx>
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -37,6 +38,7 @@
 #include <sal/log.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::chart::LinePropertiesHelper;
 
 namespace
 {
@@ -138,6 +140,81 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo(
     return aRef;
 }
 
+namespace
+{
+enum ErrorBarProperties
+{
+    PROP_ERROR_BAR_STYLE,
+    PROP_ERROR_BAR_POSITIVE_ERROR,
+    PROP_ERROR_BAR_PERCENTAGE_ERROR,
+    PROP_ERROR_BAR_WEIGHT,
+    PROP_ERROR_BAR_NEGATIVE_ERROR,
+    PROP_ERROR_SHOW_POSITIVE_ERROR,
+    PROP_ERROR_SHOW_NEGATIVE_ERROR,
+    PROP_ERROR_RANGE_POSITIVE,
+    PROP_ERROR_RANGE_NEGATIVE
+};
+}
+
+void ErrorBar::setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rAny )
+{
+    SolarMutexGuard aGuard;
+
+    switch (nHandle)
+    {
+        case PROP_ERROR_BAR_STYLE:
+            rAny >>= meStyle;
+            break;
+        case PROP_ERROR_BAR_POSITIVE_ERROR:
+            rAny >>= mfPositiveError;
+            break;
+        case PROP_ERROR_BAR_PERCENTAGE_ERROR:
+            rAny >>= mfPositiveError;
+            rAny >>= mfNegativeError;
+            break;
+        case PROP_ERROR_BAR_WEIGHT:
+            rAny >>= mfWeight;
+            break;
+        case PROP_ERROR_BAR_NEGATIVE_ERROR:
+            rAny >>= mfNegativeError;
+            break;
+        case PROP_ERROR_SHOW_POSITIVE_ERROR:
+            rAny >>= mbShowPositiveError;
+            break;
+        case PROP_ERROR_SHOW_NEGATIVE_ERROR:
+            rAny >>= mbShowNegativeError;
+            break;
+        case PROP_ERROR_RANGE_POSITIVE:
+        case PROP_ERROR_RANGE_NEGATIVE:
+            throw beans::UnknownPropertyException("read-only property", static_cast< uno::XWeak*>(this));
+        case PROP_LINE_DASH_NAME:
+            rAny >>= maDashName;
+            break;
+        case PROP_LINE_DASH:
+            rAny >>= maLineDash;
+            break;
+        case PROP_LINE_WIDTH:
+            rAny >>= mnLineWidth;
+            break;
+        case PROP_LINE_STYLE:
+            rAny >>= meLineStyle;
+            break;
+        case PROP_LINE_COLOR:
+            rAny >>= maLineColor;
+            break;
+        case PROP_LINE_TRANSPARENCE:
+            rAny >>= mnLineTransparence;
+            break;
+        case PROP_LINE_JOINT:
+            rAny >>= meLineJoint;
+            break;
+        default:
+            throw beans::UnknownPropertyException("", static_cast< uno::XWeak*>(this));
+    }
+
+    m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
+}
+
 void ErrorBar::setPropertyValue( const OUString& rPropName, const uno::Any& rAny )
 {
     SolarMutexGuard aGuard;
@@ -224,6 +301,91 @@ OUString getSourceRangeStrFromLabeledSequences( const uno::Sequence< uno::Refere
     return OUString();
 }
 
+}
+
+css::uno::Any ErrorBar::getFastPropertyValue( sal_Int32 nHandle )
+{
+    SolarMutexGuard aGuard;
+
+    uno::Any aRet;
+    switch (nHandle)
+    {
+    case PROP_ERROR_BAR_STYLE:
+        aRet <<= meStyle;
+        break;
+    case PROP_ERROR_BAR_POSITIVE_ERROR:
+        aRet <<= mfPositiveError;
+        break;
+    case PROP_ERROR_BAR_NEGATIVE_ERROR:
+        aRet <<= mfNegativeError;
+        break;
+    case PROP_ERROR_BAR_PERCENTAGE_ERROR:
+        aRet <<= mfPositiveError;
+        break;
+    case PROP_ERROR_SHOW_POSITIVE_ERROR:
+        aRet <<= mbShowPositiveError;
+        break;
+    case PROP_ERROR_SHOW_NEGATIVE_ERROR:
+        aRet <<= mbShowNegativeError;
+        break;
+    case PROP_ERROR_BAR_WEIGHT:
+        aRet <<= mfWeight;
+        break;
+    case PROP_ERROR_RANGE_POSITIVE:
+    {
+        OUString aRange;
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
+        {
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+                getDataSequences();
+
+            aRange = getSourceRangeStrFromLabeledSequences( aSequences, true );
+        }
+
+        aRet <<= aRange;
+        break;
+    }
+    case PROP_ERROR_RANGE_NEGATIVE:
+    {
+        OUString aRange;
+        if(meStyle == css::chart::ErrorBarStyle::FROM_DATA)
+        {
+            uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > aSequences =
+                getDataSequences();
+
+            aRange = getSourceRangeStrFromLabeledSequences( aSequences, false );
+        }
+
+        aRet <<= aRange;
+        break;
+    }
+    case PROP_LINE_DASH_NAME:
+        aRet <<= maDashName;
+        break;
+    case PROP_LINE_DASH:
+        aRet <<= maLineDash;
+        break;
+    case PROP_LINE_WIDTH:
+        aRet <<= mnLineWidth;
+        break;
+    case PROP_LINE_STYLE:
+        aRet <<= meLineStyle;
+        break;
+    case PROP_LINE_COLOR:
+        aRet <<= maLineColor;
+        break;
+    case PROP_LINE_TRANSPARENCE:
+        aRet <<= mnLineTransparence;
+        break;
+    case PROP_LINE_JOINT:
+        aRet <<= meLineJoint;
+        break;
+    default:
+        throw beans::UnknownPropertyException("", static_cast< uno::XWeak*>(this));
+    }
+
+    SAL_WARN_IF(!aRet.hasValue(), "chart2", "asked for property value: " << nHandle);
+    return aRet;
 }
 
 uno::Any ErrorBar::getPropertyValue(const OUString& rPropName)
