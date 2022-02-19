@@ -352,7 +352,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     [[nodiscard]] SC_DLLPUBLIC bool Move( SCCOL nDeltaX, SCROW nDeltaY, SCTAB nDeltaZ,
-            ScAddress& rErrorPos, const ScDocument* pDocument = nullptr );
+            ScAddress& rErrorPos, const ScDocument& rDoc );
 
     inline bool operator==( const ScAddress& rAddress ) const;
     inline bool operator!=( const ScAddress& rAddress ) const;
@@ -622,7 +622,7 @@ public:
                 The document for the maximum defined sheet number.
      */
     [[nodiscard]] bool Move( SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
-            ScRange& rErrorRange, const ScDocument* pDocument = nullptr );
+            ScRange& rErrorRange, const ScDocument& rDoc );
 
     /** Same as Move() but with sticky end col/row anchors. */
     [[nodiscard]] bool MoveSticky( const ScDocument& rDoc, SCCOL aDeltaX, SCROW aDeltaY, SCTAB aDeltaZ,
