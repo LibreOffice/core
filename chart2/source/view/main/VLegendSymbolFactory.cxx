@@ -38,9 +38,9 @@ void getPropNamesAndValues( const Reference< beans::XPropertySet >& xProp,
         ::chart::VLegendSymbolFactory::PropertyType ePropertyType,
         const awt::Size& aMaxSymbolExtent)
 {
-    const ::chart::tPropertyNameMap & aFilledSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
-    const ::chart::tPropertyNameMap & aLineSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
-    const ::chart::tPropertyNameMap & aLineNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineProperties());
+    const ::chart::tPropertyNameMap2 & aFilledSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
+    const ::chart::tPropertyNameMap2 & aLineSeriesNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineSeriesProperties());
+    const ::chart::tPropertyNameMap2 & aLineNameMap( ::chart::PropertyMapper::getPropertyNameMapForLineProperties());
 
     ::chart::tPropertyNameValueMap aValueMap;
     switch( ePropertyType )

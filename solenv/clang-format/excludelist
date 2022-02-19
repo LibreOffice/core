@@ -1023,6 +1023,7 @@ chart2/source/inc/CommonConverters.hxx
 chart2/source/inc/CommonFunctors.hxx
 chart2/source/inc/ConfigColorScheme.hxx
 chart2/source/inc/DataInterpreter.hxx
+chart2/source/inc/DataPointProperties.hxx
 chart2/source/inc/DataSeries.hxx
 chart2/source/inc/DataSeriesHelper.hxx
 chart2/source/inc/DataSource.hxx
@@ -1092,7 +1093,6 @@ chart2/source/model/main/ChartModel_Persistence.cxx
 chart2/source/model/main/DataPoint.cxx
 chart2/source/model/main/DataPoint.hxx
 chart2/source/model/main/DataPointProperties.cxx
-chart2/source/model/main/DataPointProperties.hxx
 chart2/source/model/main/DataSeries.cxx
 chart2/source/model/main/DataSeriesProperties.cxx
 chart2/source/model/main/DataSeriesProperties.hxx

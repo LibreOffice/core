@@ -389,7 +389,7 @@ rtl::Reference<Svx3DExtrudeObject>
             , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
             , sal_Int32 nRotateZAngleHundredthDegree
             , const uno::Reference< beans::XPropertySet >& xSourceProp
-            , const tPropertyNameMap& rPropertyNameMap
+            , const tPropertyNameMap2& rPropertyNameMap
             , bool bRounded )
 {
     if( !xTarget.is() )
@@ -489,7 +489,7 @@ rtl::Reference<Svx3DSceneObject>
           , const drawing::Position3D& rPosition, const drawing::Direction3D& rSize
           , double fTopHeight, bool bRotateZ
           , const uno::Reference< beans::XPropertySet >& xSourceProp
-          , const tPropertyNameMap& rPropertyNameMap )
+          , const tPropertyNameMap2& rPropertyNameMap )
 {
     if( !xTarget.is() )
         return nullptr;
@@ -1001,7 +1001,7 @@ rtl::Reference<Svx3DPolygonObject>
         ShapeFactory::createStripe( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const Stripe& rStripe
                     , const uno::Reference< beans::XPropertySet >& xSourceProp
-                    , const tPropertyNameMap& rPropertyNameMap
+                    , const tPropertyNameMap2& rPropertyNameMap
                     , bool bDoubleSided
                     , short nRotatedTexture
                     , bool bFlatNormals )
@@ -2181,7 +2181,7 @@ rtl::Reference<SvxShapeText>
         tPropertyNameValueMap aValueMap;
         //fill line-, fill- and paragraph-properties into the ValueMap
         {
-            tPropertyNameMap aNameMap = PropertyMapper::getPropertyNameMapForParagraphProperties();
+            tPropertyNameMap2 aNameMap = PropertyMapper::getPropertyNameMapForParagraphProperties();
             auto const & add = PropertyMapper::getPropertyNameMapForFillAndLineProperties();
             aNameMap.insert(add.begin(), add.end());
 

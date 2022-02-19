@@ -31,6 +31,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
+#include <TitleProperties.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -39,30 +40,12 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans::PropertyAttribute;
-
+using namespace ::chart::TitleProperties;
 using ::com::sun::star::beans::Property;
 using ::osl::MutexGuard;
 
 namespace
 {
-
-enum
-{
-    PROP_TITLE_PARA_ADJUST,
-    PROP_TITLE_PARA_LAST_LINE_ADJUST,
-    PROP_TITLE_PARA_LEFT_MARGIN,
-    PROP_TITLE_PARA_RIGHT_MARGIN,
-    PROP_TITLE_PARA_TOP_MARGIN,
-    PROP_TITLE_PARA_BOTTOM_MARGIN,
-    PROP_TITLE_PARA_IS_HYPHENATION,
-    PROP_TITLE_VISIBLE,
-
-    PROP_TITLE_TEXT_ROTATION,
-    PROP_TITLE_TEXT_STACKED,
-    PROP_TITLE_REL_POS,
-
-    PROP_TITLE_REF_PAGE_SIZE
-};
 
 void lcl_AddPropertiesToVector(
     std::vector< Property > & rOutProperties )

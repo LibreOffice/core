@@ -94,7 +94,7 @@ public:
                         , const css::drawing::Direction3D& rSize
                         , sal_Int32 nRotateZAngleHundredthDegree
                         , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
-                        , const tPropertyNameMap& rPropertyNameMap
+                        , const tPropertyNameMap2& rPropertyNameMap
                         , bool bRounded = false);
 
     static rtl::Reference<Svx3DLatheObject>
@@ -110,7 +110,7 @@ public:
                         , double fTopHeight
                         , bool bRotateZ
                         , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
-                        , const tPropertyNameMap& rPropertyNameMap);
+                        , const tPropertyNameMap2& rPropertyNameMap);
 
     static rtl::Reference<Svx3DLatheObject>
         createCone(       const rtl::Reference<SvxShapeGroupAnyD>& xTarget
@@ -137,7 +137,7 @@ public:
         createStripe( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
                     , const Stripe& rStripe
                     , const css::uno::Reference< css::beans::XPropertySet >& xSourceProp
-                    , const tPropertyNameMap& rPropertyNameMap
+                    , const tPropertyNameMap2& rPropertyNameMap
                     , bool bDoubleSided
                     , short nRotatedTexture = 0 //0 to 7 are the different possibilities
                     , bool bFlatNormals=true );
