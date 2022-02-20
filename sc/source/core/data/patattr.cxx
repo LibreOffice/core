@@ -96,10 +96,6 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
 {
 }
 
-ScPatternAttr::~ScPatternAttr()
-{
-}
-
 ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
     ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().CloneAsValue(true, pPool) );
@@ -160,11 +156,26 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
             StrCmp( GetStyleName(), rOther.GetStyleName() );
 }
 
-size_t ScPatternAttr::LookupHashCode() const
+SfxPoolItem::lookup_iterator ScPatternAttr::Lookup(lookup_iterator begin, lookup_iterator end ) const
 {
-    if (SAL_UNLIKELY(!mxHashCode))
+    if( !mxHashCode )
         CalcHashCode();
-    return *mxHashCode;
+    if( *mxHashCode != 0 )
+    {
+        for( auto it = begin; it != end; ++it)
+        {
+            const ScPatternAttr* other = static_cast<const ScPatternAttr*>(*it);
+            if( !other->mxHashCode )
+                other->CalcHashCode();
+            if (*mxHashCode == *other->mxHashCode
+                && EqualPatternSets( GetItemSet(), other->GetItemSet())
+                && StrCmp( GetStyleName(), other->GetStyleName()))
+            {
+                return it;
+            }
+        }
+    }
+    return end;
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
