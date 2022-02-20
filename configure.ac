@@ -3073,7 +3073,19 @@ if test "$enable_wasm_strip" = "yes"; then
     AC_DEFINE(ENABLE_WASM_STRIP_SWEXPORTS)
 fi
 
+EMSCRIPTEN_NEH_MAJOR=3
+EMSCRIPTEN_NEH_MINOR=1
+EMSCRIPTEN_NEH_TINY=3
+EMSCRIPTEN_NEH_VERSION="${EMSCRIPTEN_NEH_MAJOR}.${EMSCRIPTEN_NEH_MINOR}.${EMSCRIPTEN_NEH_TINY}"
+
 if test "$enable_wasm_exceptions" = yes; then
+    AC_MSG_CHECKING([if Emscripten version is at least $EMSCRIPTEN_NEH_VERSION for SjLj + native EH])
+    check_semantic_version_three_prefixed EMSCRIPTEN NEH
+    if test $? -ne 0; then
+        AC_MSG_ERROR([no, found $EMSCRIPTEN_VERSION])
+    else
+        AC_MSG_RESULT([yes ($EMSCRIPTEN_VERSION)])
+    fi
     ENABLE_WASM_EXCEPTIONS=TRUE
 fi
 AC_SUBST(ENABLE_WASM_EXCEPTIONS)
