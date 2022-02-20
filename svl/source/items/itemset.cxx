@@ -578,7 +578,80 @@ void SfxItemSet::MergeRange( sal_uInt16 nFrom, sal_uInt16 nTo )
             return;
 
     auto pNewRanges = m_pWhichRanges.MergeRange(nFrom, nTo);
-    RecreateRanges_Impl(pNewRanges);
+
+    if (m_bItemsFixed)
+    {
+        RecreateRanges_Impl(pNewRanges);
+        return;
+    }
+
+    // create new item-array (by iterating through all new ranges)
+    const auto nSize = svl::detail::CountRanges(pNewRanges);
+    SfxPoolItem const** aNewItems = new const SfxPoolItem* [ nSize ];
+    sal_uInt16 nNewCount = 0;
+    sal_uInt16 n = 0;
+    auto itOldRange = m_pWhichRanges.begin();
+    sal_uInt16 nOldItemIndex = 0;
+    for ( auto const & pRange : pNewRanges )
+    {
+        while (itOldRange != m_pWhichRanges.end() && itOldRange->first < pRange.first)
+        {
+            nOldItemIndex += (itOldRange->second - itOldRange->first + 1);
+            ++itOldRange;
+        }
+        // if we can, do direct move of pointer (not via pool)
+        if (itOldRange != m_pWhichRanges.end() && *itOldRange == pRange)
+        {
+            for ( sal_uInt16 nWID = pRange.first, i = 0; nWID <= pRange.second; ++nWID, ++n, ++i )
+            {
+                ++nNewCount;
+                aNewItems[n] = m_ppItems[nOldItemIndex + i];
+                m_ppItems[nOldItemIndex + i] = nullptr;
+            }
+            continue;
+        }
+        // iterate through all ids in the range
+        for ( sal_uInt16 nWID = pRange.first; nWID <= pRange.second; ++nWID, ++n )
+        {
+            SfxItemState eState = GetItemState( nWID, false, aNewItems+n );
+            if ( SfxItemState::SET == eState )
+            {
+                // increment new item count and possibly increment ref count
+                ++nNewCount;
+                aNewItems[n]->AddRef();
+            }
+            else if ( SfxItemState::DISABLED == eState )
+            {
+                // put "disabled" item
+                ++nNewCount;
+                aNewItems[n] = new SfxVoidItem(0);
+            }
+            else if ( SfxItemState::DONTCARE == eState )
+            {
+                ++nNewCount;
+                aNewItems[n] = INVALID_POOL_ITEM;
+            }
+            else
+            {
+                // default
+                aNewItems[n] = nullptr;
+            }
+        }
+    }
+    // free old items
+    sal_uInt16 nOldTotalCount = TotalCount();
+    for ( sal_uInt16 nItem = 0; nItem < nOldTotalCount; ++nItem )
+    {
+        const SfxPoolItem *pItem = m_ppItems[nItem];
+        if ( pItem && !IsInvalidItem(pItem) && pItem->Which() )
+            m_pPool->Remove(*pItem);
+    }
+
+    // replace old items-array and ranges
+    delete[] m_ppItems;
+    m_ppItems = aNewItems;
+    m_nCount = nNewCount;
+
     m_pWhichRanges = std::move(pNewRanges);
 }
 
