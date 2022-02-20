@@ -145,6 +145,10 @@ public:
     void                    SetKey(sal_uInt64 nKey);
     sal_uInt64              GetKey() const;
 
+    // tdf#135215: This is a band-aid to detect changes and invalidate the hash.
+    SfxItemSet& GetItemSet() { mxHashCode.reset(); return SfxSetItem::GetItemSet(); }
+    using SfxSetItem::GetItemSet;
+
 private:
     void                    CalcHashCode() const;
 };
