@@ -16,6 +16,24 @@
       "message": "Please amend your commit so there is only one empty line here",
       "revId": "687717ba4390200247836a49826cdd76cf8ab224",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92e62fd3_ef6ee439",
+        "filename": "sdext/source/presenter/PresenterSpritePane.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1003536
+      },
+      "writtenOn": "2022-02-20T20:35:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc4224c4_16964954",
+      "revId": "687717ba4390200247836a49826cdd76cf8ab224",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
