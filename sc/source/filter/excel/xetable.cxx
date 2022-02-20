@@ -2426,53 +2426,67 @@ void XclExpRowBuffer::SaveXml( XclExpXmlStream& rStrm )
 
 XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysEmpty )
 {
-    RowMap::iterator itr = maRowMap.lower_bound( nXclRow );
+    // This is called rather often, so optimize for the most common case of saving row by row
+    // (so the requested row is often the last one in the map or belongs after the last one).
+    RowMap::iterator itr;
+    if(maRowMap.empty())
+        itr = maRowMap.end();
+    else
+    {
+        RowMap::reverse_iterator last = maRowMap.rbegin();
+        if( last->first == nXclRow )
+            return *last->second;
+        if( nXclRow > last->first )
+            itr = maRowMap.end();
+        else
+            itr = maRowMap.lower_bound( nXclRow );
+    }
     const bool bFound = itr != maRowMap.end();
     // bFoundHigher: nXclRow was identical to the previous entry, so not explicitly created earlier
-    const bool bFoundHigher = bFound && itr != maRowMap.find( nXclRow );
-    if( !bFound || bFoundHigher )
-    {
-        size_t nFrom = 0;
-        RowRef pPrevEntry;
-        if( itr != maRowMap.begin() )
-        {
-            --itr;
-            pPrevEntry = itr->second;
-            if( bFoundHigher )
-                nFrom = nXclRow;
-            else
-                nFrom = itr->first + 1;
-        }
+    const bool bFoundHigher = bFound && itr->first != nXclRow;
+    if( bFound && !bFoundHigher )
+        return *itr->second;
 
-        const ScDocument& rDoc = GetRoot().GetDoc();
-        const SCTAB nScTab = GetRoot().GetCurrScTab();
-        // create the missing rows first
-        while( nFrom <= nXclRow )
+    size_t nFrom = 0;
+    RowRef pPrevEntry;
+    if( itr != maRowMap.begin() )
+    {
+        --itr;
+        pPrevEntry = itr->second;
+        if( bFoundHigher )
+            nFrom = nXclRow;
+        else
+            nFrom = itr->first + 1;
+    }
+
+    const ScDocument& rDoc = GetRoot().GetDoc();
+    const SCTAB nScTab = GetRoot().GetCurrScTab();
+    // create the missing rows first
+    while( nFrom <= nXclRow )
+    {
+        // only create RowMap entries if it is first row in spreadsheet,
+        // if it is the desired row, or for rows that differ from previous.
+        const bool bHidden = rDoc.RowHidden(nFrom, nScTab);
+        // Always get the actual row height even if the manual size flag is
+        // not set, to correctly export the heights of rows with wrapped
+        // texts.
+        const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
+        if ( !pPrevEntry || ( nFrom == nXclRow ) ||
+             ( maOutlineBfr.IsCollapsed() ) ||
+             ( maOutlineBfr.GetLevel() != 0 ) ||
+             ( bRowAlwaysEmpty && !pPrevEntry->IsEmpty() ) ||
+             ( bHidden != pPrevEntry->IsHidden() ) ||
+             ( nHeight != pPrevEntry->GetHeight() ) )
         {
-            // only create RowMap entries if it is first row in spreadsheet,
-            // if it is the desired row, or for rows that differ from previous.
-            const bool bHidden = rDoc.RowHidden(nFrom, nScTab);
-            // Always get the actual row height even if the manual size flag is
-            // not set, to correctly export the heights of rows with wrapped
-            // texts.
-            const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
-            if ( !pPrevEntry || ( nFrom == nXclRow ) ||
-                 ( maOutlineBfr.IsCollapsed() ) ||
-                 ( maOutlineBfr.GetLevel() != 0 ) ||
-                 ( bRowAlwaysEmpty && !pPrevEntry->IsEmpty() ) ||
-                 ( bHidden != pPrevEntry->IsHidden() ) ||
-                 ( nHeight != pPrevEntry->GetHeight() ) )
+            if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
             {
-                if( maOutlineBfr.GetLevel() > mnHighestOutlineLevel )
-                {
-                    mnHighestOutlineLevel = maOutlineBfr.GetLevel();
-                }
-                RowRef p = std::make_shared<XclExpRow>(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight);
-                maRowMap.emplace(nFrom, p);
-                pPrevEntry = p;
+                mnHighestOutlineLevel = maOutlineBfr.GetLevel();
             }
-            ++nFrom;
+            RowRef p = std::make_shared<XclExpRow>(GetRoot(), nFrom, maOutlineBfr, bRowAlwaysEmpty, bHidden, nHeight);
+            maRowMap.emplace(nFrom, p);
+            pPrevEntry = p;
         }
+        ++nFrom;
     }
     itr = maRowMap.find(nXclRow);
     return *itr->second;
