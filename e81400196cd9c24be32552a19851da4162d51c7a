@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a37d5623_4f9b2b57",
+        "filename": "sc/inc/patattr.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-20T20:04:50Z",
+      "side": 1,
+      "message": "Late at night here, and brain is dead, so didn\u0027t think of this until now - how is this going to work if a call site is working with a SfxSetItem and not a ScPatternAttr? The SfxSetItem::GetItemSet method should surely be virtual and this should be an override?",
+      "revId": "e81400196cd9c24be32552a19851da4162d51c7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
