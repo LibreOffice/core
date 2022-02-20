@@ -717,7 +717,7 @@ bool ScCondFormatItem::operator==( const SfxPoolItem& rCmp ) const
     auto const & other = static_cast<const ScCondFormatItem&>(rCmp);
     if (maIndex.empty() && other.maIndex.empty())
         return true;
-    // memcmp is faster than operator< on std::vector
+    // memcmp is faster than operator== on std::vector
     return maIndex.size() == other.maIndex.size()
         && memcmp(&maIndex.front(), &other.maIndex.front(), maIndex.size() * sizeof(sal_uInt32)) == 0;
 }
@@ -732,6 +732,8 @@ bool ScCondFormatItem::operator<( const SfxPoolItem& rCmp ) const
     if (maIndex.empty() && other.maIndex.empty())
         return false;
     // memcmp is faster than operator< on std::vector
+    // Note that on little-endian this results in a confusing ordering (256 < 1),
+    // which technically doesn't matter as the ordering may be arbitrary.
     return memcmp(&maIndex.front(), &other.maIndex.front(), maIndex.size() * sizeof(sal_uInt32)) < 0;
 }
 
