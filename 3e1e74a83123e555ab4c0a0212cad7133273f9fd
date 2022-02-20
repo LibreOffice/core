@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3867c914_e25ffbae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-20T19:27:50Z",
+      "side": 1,
+      "message": "I have no idea why we even bother putting mutable state into item pools, its a complete abuse of the concept of shared flyweight objects.\nBut here we are, so we just gotta work with it \u003cshrug\u003e",
+      "revId": "3e1e74a83123e555ab4c0a0212cad7133273f9fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0da83144_b5db27d5",
+        "filename": "sc/inc/patattr.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-20T19:27:50Z",
+      "side": 1,
+      "message": "SfxItemSet::Changed -\u003e SfxSetItem::Changed",
+      "revId": "3e1e74a83123e555ab4c0a0212cad7133273f9fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
