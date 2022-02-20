@@ -30,7 +30,7 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,CPPUNIT,cppunit) \
 	$(call gb_Helper_optional,CT2N,ct2n) \
 	$(call gb_Helper_optional,CURL,curl) \
-	dragonbox \
+	$(call gb_Helper_optional,DRAGONBOX,dragonbox) \
 	dtoa \
 	$(call gb_Helper_optional,EBOOK,libebook) \
 	$(call gb_Helper_optional,EPM,epm) \
