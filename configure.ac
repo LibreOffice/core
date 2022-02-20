@@ -248,6 +248,34 @@ dnl path location is gpg, so make sure we find it
     unset mac_gpg_path
 }
 
+dnl sematically test a three digits version
+dnl $1 - $3 = minimal version
+dnl $4 - $6 = current version
+
+check_semantic_version_three()
+{
+    test "$4" -gt "$1" \
+        -o \( "$4" -eq "$1" -a "$5" -gt "$2" \) \
+        -o \( "$4" -eq "$1" -a "$5" -eq "$2" -a "$6" -ge "$3" \)
+    return $?
+}
+
+dnl calls check_semantic_version_three with digits in named variables $1_MAJOR, $1_MINOR, $1_TINY
+dnl $1 = current version prefix, e.g. EMSCRIPTEN => EMSCRIPTEN_
+dnl $2 = postfix to $1, e.g. MIN => EMSCRIPTEN_MIN_
+
+check_semantic_version_three_prefixed()
+{
+    eval local MIN_MAJOR="\$${1}_${2}_MAJOR"
+    eval local MIN_MINOR="\$${1}_${2}_MINOR"
+    eval local MIN_TINY="\$${1}_${2}_TINY"
+    eval local CUR_MAJOR="\$${1}_MAJOR"
+    eval local CUR_MINOR="\$${1}_MINOR"
+    eval local CUR_TINY="\$${1}_TINY"
+    check_semantic_version_three $MIN_MAJOR $MIN_MINOR $MIN_TINY $CUR_MAJOR $CUR_MINOR $CUR_TINY
+    return $?
+}
+
 echo "********************************************************************"
 echo "*"
 echo "*   Running ${PACKAGE_NAME} build configuration."
@@ -1375,7 +1403,26 @@ dnl ===================================================================
 dnl Sanity checks for Emscripten SDK setup
 dnl ===================================================================
 
+EMSCRIPTEN_MIN_MAJOR=2
+EMSCRIPTEN_MIN_MINOR=0
+EMSCRIPTEN_MIN_TINY=31
+EMSCRIPTEN_MIN_VERSION="${EMSCRIPTEN_MIN_MAJOR}.${EMSCRIPTEN_MIN_MINOR}.${EMSCRIPTEN_MIN_TINY}"
+
 if test "$_os" = "Emscripten"; then
+    AC_MSG_CHECKING([if Emscripten is at least $EMSCRIPTEN_MIN_VERSION])
+    EMSCRIPTEN_DEFINES=$(echo | emcc -dM -E - | $GREP __EMSCRIPTEN_)
+    EMSCRIPTEN_MAJOR=$(echo "$EMSCRIPTEN_DEFINES" | $SED -ne 's/.*__EMSCRIPTEN_major__ //p')
+    EMSCRIPTEN_MINOR=$(echo "$EMSCRIPTEN_DEFINES" | $SED -ne 's/.*__EMSCRIPTEN_minor__ //p')
+    EMSCRIPTEN_TINY=$(echo "$EMSCRIPTEN_DEFINES" | $SED -ne 's/.*__EMSCRIPTEN_tiny__ //p')
+    EMSCRIPTEN_VERSION="${EMSCRIPTEN_MAJOR}.${EMSCRIPTEN_MINOR}.${EMSCRIPTEN_TINY}"
+
+    check_semantic_version_three_prefixed EMSCRIPTEN MIN
+    if test $? -eq 0; then
+        AC_MSG_RESULT([yes ($EMSCRIPTEN_VERSION)])
+    else
+        AC_MSG_ERROR([no, found $EMSCRIPTEN_VERSION])
+    fi
+
     EMSCRIPTEN_ERROR=0
     if ! which emconfigure >/dev/null 2>&1; then
         AC_MSG_WARN([emconfigure must be in your \$PATH])
