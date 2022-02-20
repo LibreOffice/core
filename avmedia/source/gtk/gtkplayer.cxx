@@ -13,12 +13,14 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
-#include <vcl/BitmapTools.hxx>
 #include <rtl/string.hxx>
+#include <tools/link.hxx>
+#include <vcl/BitmapTools.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
+#include <vcl/timer.hxx>
 
 #include <gstwindow.hxx>
 #include "gtkplayer.hxx"
@@ -237,6 +239,12 @@ awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
 
     if (m_pStream)
     {
+        double width;
+        double height;
+
+        gdk_paintable_compute_concrete_size(GDK_PAINTABLE(m_pStream), 0.0, 0.0, 100, 200, &width,
+                                            &height);
+
         aSize.Width = gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(m_pStream));
         aSize.Height = gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(m_pStream));
     }
@@ -297,40 +305,53 @@ public:
     GtkFrameGrabber(GtkMediaStream* pStream)
         : m_pStream(pStream)
     {
+        g_object_ref(m_pStream);
     }
+
+    virtual ~GtkFrameGrabber() override { g_object_unref(m_pStream); }
+
+    static void invalidate_size(GdkPaintable* /*paintable*/, Timer* pTimer) { pTimer->Stop(); }
 
     // XFrameGrabber
     virtual css::uno::Reference<css::graphic::XGraphic>
         SAL_CALL grabFrame(double fMediaTime) override
     {
-        GtkWidget* pWindow = gtk_window_new();
-        GtkWidget* pVideo = gtk_picture_new_for_paintable(GDK_PAINTABLE(m_pStream));
-        gtk_window_set_child(GTK_WINDOW(pWindow), pVideo);
-        gtk_widget_realize(pVideo);
-        gtk_widget_map(pVideo);
-
-        //bool bMuted = gtk_media_stream_get_muted(m_pStream);
-        gtk_media_stream_set_muted(m_pStream, true);
-        gtk_media_stream_set_volume(m_pStream, 0);
         gint64 gst_position = llround(fMediaTime * 1000000);
         gtk_media_stream_seek(m_pStream, gst_position);
-        gtk_media_stream_play(m_pStream);
 
-        // while (!gtk_media_stream_is_prepared(m_pStream))
-        //    Application::Yield();
+        Size aSize(gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(m_pStream)),
+                   gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(m_pStream)));
 
-        gtk_media_stream_pause(m_pStream);
+        // This is pretty nasty, maybe it could be possible to implement an
+        // XGraphic which can be updated when the information becomes available
+        // rather than explicitly wait for it here, but the
+        // getPreferredPlayerWindowSize problem would remain.
+        if (aSize.Width() == 0 && aSize.Height() == 0)
+        {
+            Timer aTimer("gtkplayer waiting to find out size");
+            aTimer.SetTimeout(3000);
 
-        GdkPaintable* current_paintable = gdk_paintable_get_current_image(GDK_PAINTABLE(m_pStream));
+            gulong nSignalId = g_signal_connect(m_pStream, "invalidate-size",
+                                                G_CALLBACK(invalidate_size), &aTimer);
 
-        // gtk_media_stream_set_muted(m_pStream, bMuted);
+            aTimer.Start();
+            while (aTimer.IsActive())
+                Application::Yield();
 
-        Size aSize(200, 200);
+            g_signal_handler_disconnect(m_pStream, nSignalId);
+
+            aSize = Size(gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(m_pStream)),
+                         gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(m_pStream)));
+        }
+
+        if (!aSize.Width() || !aSize.Height())
+            return nullptr;
+
         cairo_surface_t* surface
             = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.Width(), aSize.Height());
 
         GtkSnapshot* snapshot = gtk_snapshot_new();
-        gdk_paintable_snapshot(current_paintable, snapshot, aSize.Width(), aSize.Height());
+        gdk_paintable_snapshot(GDK_PAINTABLE(m_pStream), snapshot, aSize.Width(), aSize.Height());
         GskRenderNode* node = gtk_snapshot_free_to_node(snapshot);
 
         cairo_t* cr = cairo_create(surface);
@@ -338,13 +359,10 @@ public:
         cairo_destroy(cr);
 
         gsk_render_node_unref(node);
-        g_object_unref(current_paintable);
 
         std::unique_ptr<BitmapEx> xBitmap(vcl::bitmap::CreateFromCairoSurface(aSize, surface));
 
         cairo_surface_destroy(surface);
-
-        gtk_window_destroy(GTK_WINDOW(pWindow));
 
         return Graphic(*xBitmap).GetXGraphic();
     }
@@ -354,16 +372,7 @@ public:
 uno::Reference<media::XFrameGrabber> SAL_CALL GtkPlayer::createFrameGrabber()
 {
     osl::MutexGuard aGuard(m_aMutex);
-    rtl::Reference<GtkFrameGrabber> xFrameGrabber;
-    SAL_WARN("avmedia.gtk", "TODO: createFrameGrabber");
-
-    // const awt::Size aPrefSize(getPreferredPlayerWindowSize());
-
-    xFrameGrabber.set(new GtkFrameGrabber(m_pStream));
-
-    // if( ( aPrefSize.Width > 0 ) && ( aPrefSize.Height > 0 ) )
-    //  pFrameGrabber = FrameGrabber::create( maURL );
-
+    rtl::Reference<GtkFrameGrabber> xFrameGrabber(new GtkFrameGrabber(m_pStream));
     return xFrameGrabber;
 }
 
