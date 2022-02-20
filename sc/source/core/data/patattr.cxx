@@ -121,11 +121,14 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
     return *pStr1 == *pStr2;
 }
 
+static constexpr size_t compareSize = (ATTR_PATTERN_END - ATTR_PATTERN_START + 1);
+
 static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
 {
     // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
     // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
     // so it's enough to compare just the pointers (Count just because it's even faster).
+    assert( rSet1.TotalCount() == compareSize && rSet2.TotalCount() == compareSize );
 
     if ( rSet1.Count() != rSet2.Count() )
         return false;
@@ -133,7 +136,7 @@ static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     SfxPoolItem const ** pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
     SfxPoolItem const ** pItems2 = rSet2.GetItems_Impl();
 
-    return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
+    return ( 0 == memcmp( pItems1, pItems2, compareSize * sizeof(pItems1[0]) ) );
 }
 
 bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
@@ -1197,6 +1200,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
         GetItemSet().SetParent(nullptr);
         pStyle = nullptr;
     }
+    mxHashCode.reset();
 }
 
 void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
@@ -1222,6 +1226,7 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
     }
     else
         pStyle = nullptr;
+    mxHashCode.reset();
 }
 
 void ScPatternAttr::StyleToName()
@@ -1233,6 +1238,7 @@ void ScPatternAttr::StyleToName()
         pName = pStyle->GetName();
         pStyle = nullptr;
         GetItemSet().SetParent( nullptr );
+        mxHashCode.reset();
     }
 }
 
@@ -1373,8 +1379,9 @@ sal_uInt64 ScPatternAttr::GetKey() const
 void ScPatternAttr::CalcHashCode() const
 {
     auto const & rSet = GetItemSet();
+    assert( rSet.TotalCount() == compareSize );
     mxHashCode = 1; // Set up seed so that an empty pattern does not have an (invalid) hash of 0.
-    boost::hash_range(*mxHashCode, rSet.GetItems_Impl(), rSet.GetItems_Impl() + rSet.Count());
+    boost::hash_range(*mxHashCode, rSet.GetItems_Impl(), rSet.GetItems_Impl() + compareSize);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
