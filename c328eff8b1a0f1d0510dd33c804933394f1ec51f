@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72765a03_16e54b15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-20T11:42:40Z",
+      "side": 1,
+      "message": "I\u0027m afraid I\u0027m not a good reviewer - I can\u0027t test, and I\u0027m not aa makefile expert. I can just thank you for making this :)",
+      "revId": "c328eff8b1a0f1d0510dd33c804933394f1ec51f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
