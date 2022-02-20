@@ -1911,7 +1911,7 @@ res/da02.png res/da01.png
 res/dir-clos.png cmd/sc_open.png
 res/dir-open.png cmd/sc_open.png
 res/fileopen.png cmd/sc_open.png
-res/foldercl.png formula/res/fapclose.png
+res/foldercl.png svtools/res/folder.png
 res/fp010.png cmd/sc_upsearch.png
 res/grafikei.png cmd/sc_graphic.png
 res/im30820.png cmd/sc_scriptorganizer.png
@@ -1980,7 +1980,7 @@ res/lx03254.png res/ots_32_8.png
 res/lx03255_32.png res/ott_32_8.png
 res/lx03256.png cmd/lc_insertplugin.png
 res/mainapp_32.png res/mainapp_32_8.png
-res/newdoc.png formula/res/fapclose.png
+res/newdoc.png svtools/res/folder.png
 res/oleobj.png cmd/32/insertobject.png
 res/plugin.png cmd/32/insertplugin.png
 res/printeradmin_16_8.png res/printeradmin_16.png
@@ -2023,7 +2023,7 @@ res/sx03131.png res/sx03126.png
 res/sx03137.png res/sx03125.png
 res/sx03139.png cmd/sc_newhtmldoc.png
 res/sx03140.png res/sx03125.png
-res/sx03141.png formula/res/fapclose.png
+res/sx03141.png svtools/res/folder.png
 res/sx03144.png res/odf_16_8.png
 res/sx03145.png res/otf_16_8.png
 res/sx03150.png cmd/sc_showsinglepage.png
@@ -2038,7 +2038,7 @@ res/sx03164.png res/harddisk_16.png
 res/sx03165.png cmd/sc_save.png
 res/sx03167.png cmd/sc_openremote.png
 res/sx03188.png cmd/sc_dbviewtables.png
-res/sx03189.png formula/res/fapclose.png
+res/sx03189.png svtools/res/folder.png
 res/sx03202.png cmd/sc_dbviewqueries.png
 res/sx03217.png res/odg_16_8.png
 res/sx03218.png res/odg_16_8.png
@@ -2207,7 +2207,6 @@ startmath/res/im21108.png cmd/lc_outlineformat.png
 svtools/res/back_small.png cmd/sc_prevrecord.png
 svtools/res/back_large.png cmd/lc_prevrecord.png
 svtools/res/ed06.png dbaccess/res/pkey.png
-svtools/res/folder.png formula/res/fapclose.png
 svtools/res/folderop.png cmd/sc_open.png
 
 # svx
@@ -2242,7 +2241,7 @@ svx/res/fontworkalignstretch_16.png cmd/sc_text_marquee.png
 svx/res/fw07.png cmd/sc_alignleft.png
 svx/res/fw08.png cmd/sc_alignhorizontalcenter.png
 svx/res/fw09.png cmd/sc_alignright.png
-svx/res/galrdos.png formula/res/fapclose.png
+svx/res/galrdos.png svtools/res/folder.png
 svx/res/id01.png cmd/sc_ok.png
 svx/res/id018.png cmd/sc_controlproperties.png
 svx/res/id02.png cmd/sc_open.png
