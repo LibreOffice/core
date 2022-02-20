@@ -4132,14 +4132,26 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo,\
 ))
 endif
 
+ifneq ($(SYSTEM_DRAGONBOX),)
+
+define gb_LinkTarget__use_dragonbox
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$$(DRAGONBOX_CFLAGS) \
+)
+endef
+
+else
+
 define gb_LinkTarget__use_dragonbox
 $(call gb_LinkTarget_use_unpacked,$(1),dragonbox)
 $(call gb_LinkTarget_set_include,$(1),\
 	-I$(call gb_UnpackedTarball_get_dir,dragonbox/include/)\
 	$$(INCLUDE) \
 )
-
 endef
+
+endif
 
 define gb_LinkTarget__use_dtoa
 $(call gb_LinkTarget_use_unpacked,$(1),dtoa)

@@ -2438,6 +2438,11 @@ AC_ARG_WITH(system-cuckoo,
         [Use libcuckoo already on system.]),,
     [with_system_cuckoo="$with_system_headers"])
 
+AC_ARG_WITH(system-dragonbox,
+    AS_HELP_STRING([--with-system-dragonbox],
+        [Use dragonbox already on system.]),,
+    [with_system_dragonbox="$with_system_headers"])
+
 AC_ARG_WITH(system-glm,
     AS_HELP_STRING([--with-system-glm],
         [Use glm already on system.]),,
@@ -5712,6 +5717,7 @@ if test "$cross_compiling" = "yes"; then
         CURL
         DBCONNECTIVITY
         DESKTOP
+        DRAGONBOX
         DYNLOADING
         EPOXY
         EXPAT
@@ -10523,6 +10529,30 @@ else
     SYSTEM_CUCKOO=
 fi
 AC_SUBST([SYSTEM_CUCKOO])
+
+dnl ===================================================================
+dnl Check for system dragonbox
+dnl ===================================================================
+AC_MSG_CHECKING([which dragonbox to use])
+if test "$with_system_dragonbox" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_DRAGONBOX=TRUE
+    AC_LANG_PUSH([C++])
+    save_CPPFLAGS=$CPPFLAGS
+    # This is where upstream installs to, unfortunately no .pc or so...
+    DRAGONBOX_CFLAGS=-I/usr/include/dragonbox-1.0.0
+    CPPFLAGS="$CPPFLAGS $DRAGONBOX_CFLAGS"
+    AC_CHECK_HEADER([dragonbox/dragonbox.h], [],
+       [AC_MSG_ERROR([dragonbox/dragonbox.h not found. install dragonbox])], [])
+    AC_LANG_POP([C++])
+    CPPFLAGS=$save_CPPFLAGS
+else
+    AC_MSG_RESULT([internal])
+    BUILD_TYPE="$BUILD_TYPE DRAGONBOX"
+    SYSTEM_DRAGONBOX=
+fi
+AC_SUBST([SYSTEM_DRAGONBOX])
+AC_SUBST([DRAGONBOX_CFLAGS])
 
 dnl ===================================================================
 dnl Check for system glm
