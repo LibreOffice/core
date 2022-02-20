@@ -87,12 +87,15 @@ Size ViewObjectContactOfSdrMediaObj::getPreferredSize() const
 void ViewObjectContactOfSdrMediaObj::ActionChanged()
 {
     ViewObjectContactOfSdrObj::ActionChanged();
-    if (mpMediaWindow && mpMediaWindow->isVisible())
-        updateMediaWindow();
+    updateMediaWindow(false);
 }
 
-void ViewObjectContactOfSdrMediaObj::updateMediaWindow() const
+void ViewObjectContactOfSdrMediaObj::updateMediaWindow(bool bShow) const
 {
+#if HAVE_FEATURE_AVMEDIA
+    if (!mpMediaWindow || (!bShow && !mpMediaWindow->isVisible()))
+        return;
+
     basegfx::B2DRange aViewRange(getObjectRange());
     aViewRange.transform(GetObjectContact().getViewInformation2D().getViewTransformation());
 
@@ -120,6 +123,9 @@ void ViewObjectContactOfSdrMediaObj::updateMediaWindow() const
     // through to gtk which will now accept it as the underlying
     // m_pSocket of GtkSalObject::SetPosSize is now visible
     mpMediaWindow->setPosSize(aViewRectangle);
+#else
+    (void) bShow;
+#endif
 }
 
 void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rItem ) const
@@ -137,7 +143,7 @@ void ViewObjectContactOfSdrMediaObj::updateMediaItem( ::avmedia::MediaItem& rIte
     }
     else
     {
-        updateMediaWindow();
+        updateMediaWindow(true);
     }
 #else
     (void) rItem;

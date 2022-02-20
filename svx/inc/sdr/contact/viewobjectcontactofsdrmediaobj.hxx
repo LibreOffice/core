@@ -54,7 +54,7 @@ namespace sdr::contact
             virtual void ActionChanged() override;
 
         private:
-            void updateMediaWindow() const;
+            void updateMediaWindow(bool bShow) const;
 
 #if HAVE_FEATURE_AVMEDIA
             std::unique_ptr<sdr::contact::SdrMediaWindow> mpMediaWindow;
