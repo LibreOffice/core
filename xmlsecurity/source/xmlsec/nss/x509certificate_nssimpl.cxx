@@ -21,11 +21,8 @@
 #include <secder.h>
 
 #include <cert.h>
-#include <hasht.h>
-#include <secoid.h>
 #include <pk11pub.h>
 
-#include <sal/config.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -41,12 +38,7 @@
 #include <tools/time.hxx>
 #include <svl/sigstruct.hxx>
 
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno ;
-using namespace ::com::sun::star::security ;
-
-using ::com::sun::star::security::XCertificate ;
-using ::com::sun::star::util::DateTime ;
+using ::css::util::DateTime;
 
 X509Certificate_NssImpl::X509Certificate_NssImpl() :
     m_pCert(nullptr)
@@ -104,7 +96,7 @@ css::util::DateTime SAL_CALL X509Certificate_NssImpl::getNotValidBefore() {
         DateTime dateTime ;
 
         rv = DER_DecodeTimeChoice( &notBefore, &m_pCert->validity.notBefore ) ;
-        if( rv ) {
+        if( rv != SECStatus::SECSuccess ) {
             return DateTime() ;
         }
 
@@ -133,7 +125,7 @@ css::util::DateTime SAL_CALL X509Certificate_NssImpl::getNotValidAfter() {
         DateTime dateTime ;
 
         rv = DER_DecodeTimeChoice( &notAfter, &m_pCert->validity.notAfter ) ;
-        if( rv ) {
+        if( rv != SECStatus::SECSuccess ) {
             return DateTime() ;
         }
 
@@ -177,7 +169,7 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
         int len ;
 
         for( len = 0, extns = m_pCert->extensions; *extns != nullptr; len ++, extns ++ ) ;
-        Sequence< Reference< XCertificateExtension > > xExtns( len ) ;
+        css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > xExtns( len ) ;
         auto xExtnsRange = asNonConstRange(xExtns);
 
         for( extns = m_pCert->extensions, len = 0; *extns != nullptr; extns ++, len ++ ) {
@@ -301,7 +293,7 @@ const CERTCertificate* X509Certificate_NssImpl::getNssCert() const {
     }
 }
 
-void X509Certificate_NssImpl::setRawCert( const Sequence< sal_Int8 >& rawCert ) {
+void X509Certificate_NssImpl::setRawCert( const css::uno::Sequence< sal_Int8 >& rawCert ) {
     CERTCertificate* cert ;
     SECItem certItem ;
 
@@ -310,7 +302,7 @@ void X509Certificate_NssImpl::setRawCert( const Sequence< sal_Int8 >& rawCert ) 
 
     cert = CERT_DecodeDERCertificate( &certItem, PR_TRUE, nullptr ) ;
     if( cert == nullptr )
-        throw RuntimeException() ;
+        throw css::uno::RuntimeException() ;
 
     if( m_pCert != nullptr ) {
         CERT_DestroyCertificate( m_pCert ) ;
@@ -332,13 +324,13 @@ SECKEYPrivateKey* X509Certificate_NssImpl::getPrivateKey()
 }
 
 /* XUnoTunnel */
-sal_Int64 SAL_CALL X509Certificate_NssImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier ) {
+sal_Int64 SAL_CALL X509Certificate_NssImpl::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) {
     return comphelper::getSomethingImpl(aIdentifier, this);
 }
 
 /* XUnoTunnel extension */
 
-const Sequence< sal_Int8>& X509Certificate_NssImpl::getUnoTunnelId() {
+const css::uno::Sequence< sal_Int8>& X509Certificate_NssImpl::getUnoTunnelId() {
     static const comphelper::UnoIdInit theX509Certificate_NssImplUnoTunnelId;
     return theX509Certificate_NssImplUnoTunnelId.getSeq();
 }
@@ -377,7 +369,7 @@ static css::uno::Sequence< sal_Int8 > getThumbprint(CERTCertificate const *pCert
 
         memset(fingerprint, 0, sizeof fingerprint);
         rv = PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
-        if(rv == SECSuccess)
+        if(rv == SECStatus::SECSuccess)
         {
             return comphelper::arrayToSequence<sal_Int8>(fingerprint, length);
         }
@@ -444,7 +436,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getSHA1Thumbpri
     return getThumbprint(m_pCert, SEC_OID_SHA1);
 }
 
-uno::Sequence<sal_Int8> X509Certificate_NssImpl::getSHA256Thumbprint()
+css::uno::Sequence<sal_Int8> X509Certificate_NssImpl::getSHA256Thumbprint()
 {
     return getThumbprint(m_pCert, SEC_OID_SHA256);
 }
@@ -454,9 +446,9 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_NssImpl::getMD5Thumbprin
     return getThumbprint(m_pCert, SEC_OID_MD5);
 }
 
-CertificateKind SAL_CALL X509Certificate_NssImpl::getCertificateKind()
+css::security::CertificateKind SAL_CALL X509Certificate_NssImpl::getCertificateKind()
 {
-    return CertificateKind_X509;
+    return css::security::CertificateKind_X509;
 }
 
 sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
@@ -466,7 +458,7 @@ sal_Int32 SAL_CALL X509Certificate_NssImpl::getCertificateUsage(  )
     sal_Int32 usage;
 
     rv = CERT_FindKeyUsageExtension(m_pCert, &tmpitem);
-    if ( rv == SECSuccess )
+    if ( rv == SECStatus::SECSuccess )
     {
         usage = tmpitem.data[0];
         PORT_Free(tmpitem.data);
@@ -504,7 +496,7 @@ sal_Bool SAL_CALL X509Certificate_NssImpl::supportsService(const OUString& servi
 }
 
 /* XServiceInfo */
-Sequence<OUString> SAL_CALL X509Certificate_NssImpl::getSupportedServiceNames() { return { OUString() }; }
+css::uno::Sequence<OUString> SAL_CALL X509Certificate_NssImpl::getSupportedServiceNames() { return { OUString() }; }
 
 namespace xmlsecurity {
 
