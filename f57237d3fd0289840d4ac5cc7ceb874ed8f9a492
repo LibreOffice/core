@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3e81161_e0a01120",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-20T16:38:37Z",
+      "side": 1,
+      "message": "Thanks! See inline comments.",
+      "revId": "f57237d3fd0289840d4ac5cc7ceb874ed8f9a492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8909e291_5d8ecdad",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-20T16:38:37Z",
+      "side": 1,
+      "message": "We should return after this",
+      "revId": "f57237d3fd0289840d4ac5cc7ceb874ed8f9a492",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
