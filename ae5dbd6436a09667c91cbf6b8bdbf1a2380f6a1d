@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6953881c_c274f057",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-20T14:22:41Z",
+      "side": 1,
+      "message": "Note that the GetItemSet() TODO note is actually not really needed for the performance here, so I\u0027m not going to do anything about it, I just wanted to note it down. It seems to me the hold-by-pointer in SfxSetItem was by design to allow polymorphism, and so changing it to hold-by-value would be better done e.g. by adding the data member to each subclass and making GetItemSet() virtual, in case there\u0027s actually code that would need it.\n",
+      "revId": "ae5dbd6436a09667c91cbf6b8bdbf1a2380f6a1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
