@@ -60,12 +60,12 @@ public:
                             ScPatternAttr(SfxItemPool* pItemPool);
                             ScPatternAttr(const ScPatternAttr& rPatternAttr);
 
-                            virtual ~ScPatternAttr() override;
-
     virtual ScPatternAttr*  Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            operator==(const SfxPoolItem& rCmp) const override;
-    virtual size_t          LookupHashCode() const override;
+    // Class cannot be IsSortable() because it's mutable, implement at least Lookup().
+    virtual bool            HasLookup() const override { return true; }
+    virtual lookup_iterator Lookup(lookup_iterator begin, lookup_iterator end ) const override;
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }

@@ -51,11 +51,6 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
 }
 
 
-SfxSetItem::~SfxSetItem()
-{
-}
-
-
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 {
     assert(SfxPoolItem::operator==(rCmp));

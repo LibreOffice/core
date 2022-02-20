@@ -34,7 +34,6 @@ public:
     SfxSetItem(sal_uInt16 nWhich, SfxItemSet&& pSet);
     SfxSetItem(sal_uInt16 nWhich, const SfxItemSet& rSet);
     SfxSetItem(const SfxSetItem&, SfxItemPool* pPool = nullptr);
-    virtual ~SfxSetItem() override;
 
     virtual bool operator==(const SfxPoolItem&) const override;
 

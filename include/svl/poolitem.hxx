@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <vector>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <svl/hint.hxx>
@@ -187,13 +188,19 @@ public:
     // of a single kind of pool item.
     virtual bool             operator<( const SfxPoolItem& ) const { assert(false); return false; }
     virtual bool             IsSortable() const { return false; }
+
     // Some item types cannot be IsSortable() (such as because they are modified while stored
     // in a pool, which would change the ordering position, see e.g. 585e0ac43b9bd8a2f714903034).
-    // To improve performance in such cases it is possible to return a (fast/cached) non-zero hash code,
-    // which will be used to speed up linear lookup and only matching items will be fully compared.
-    // Note: Since 0 value is invalid, try to make sure it's not returned for valid items
-    // (which may easily happen e.g. if the item is empty and the hash is seeded with 0).
-    virtual size_t           LookupHashCode() const { return 0; }
+    // To improve performance in such cases it is possible to reimplement Lookup() to do a linear
+    // lookup optimized for the specific class (avoiding virtual functions may allow the compiler
+    // to generate better code and class-specific optimizations such as hashing or caching may
+    // be used.)
+    // If reimplemented, the Lookup() function should search [begin,end) for an item matching
+    // this object and return an iterator pointing to the item or the end iterator.
+    virtual bool             HasLookup() const { return false; }
+    typedef std::vector<SfxPoolItem*>::const_iterator lookup_iterator;
+    virtual lookup_iterator  Lookup(lookup_iterator /*begin*/, lookup_iterator end ) const
+                             { assert( false ); return end; }
 
     /**  @return true if it has a valid string representation */
     virtual bool             GetPresentation( SfxItemPresentation ePresentation,
