@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc4224c4_16964954",
+        "filename": "sdext/source/presenter/PresenterSpritePane.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-20T19:51:04Z",
+      "side": 1,
+      "message": "Please amend your commit so there is only one empty line here",
+      "revId": "687717ba4390200247836a49826cdd76cf8ab224",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
