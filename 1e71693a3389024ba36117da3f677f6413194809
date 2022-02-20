@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95fd5e18_335b398f",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3297,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-20T10:54:32Z",
+      "side": 1,
+      "message": "IMO the problem here is \"if there is no protocol\" detection; it should simply detect the https: protocol at this stage, and avoid processing. Maybe use some \"local path to file URI\" to detect when you may actually make it relative?",
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
