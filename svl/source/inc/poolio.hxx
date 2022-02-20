@@ -86,7 +86,7 @@ public:
         {
             if (it == maSortablePoolItems.end())
                 return nullptr;
-            if (**it < *pNeedle)
+            if (*pNeedle < **it)
                 return nullptr;
             if (*pNeedle == **it)
                 return *it;
@@ -130,7 +130,7 @@ public:
                     assert(false && "did not find item?");
                     break;
                 }
-                if (**sortIt < *pNeedle)
+                if (*pNeedle < **sortIt)
                 {
                     assert(false && "did not find item?");
                     break;
