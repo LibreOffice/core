@@ -106,6 +106,23 @@
       "parentUuid": "22a0b2be_599de192",
       "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d5c884d_398a71d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-21T22:17:58Z",
+      "side": 1,
+      "message": "So I\u0027ve written the patch that changes the non-const GetItemSet() to complain if the object is already in a pool ... and I can\u0027t get it to complain. I\u0027ve also put back your ScPatternAttr::IsSortable(), and I can\u0027t get it to complain either if I try what 585e0ac43b9bd8a2f714903034e435c84ae3fc96 talks about. And SfxPoolItem now has asserts that check that the items are sorted, and those don\u0027t complain either.\n\nSo ... whatever the problem was, maybe it\u0027s been fixed? It seems quite possible that if there really was some modifying of ScPatternAttr behind the pool\u0027s back, it posibly caused also other problems, and somebody might have fixed that without knowing about IsSortable.\n\nCould you try? I\u0027m quite tempted putting IsSortable back in. In the worst case, somebody will find the problem again.\n",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
