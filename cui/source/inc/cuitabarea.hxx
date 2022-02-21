@@ -279,7 +279,7 @@ public:
     void    SetBitmapList( XBitmapListRef const & pBmpLst) { m_pBitmapList = pBmpLst; }
     void    SetPatternList( XPatternListRef const &pPtrnLst ) { m_pPatternList = pPtrnLst; }
     virtual void PageCreated(const SfxAllItemSet& aSet) override;
-    void    CreatePage(sal_Int32 nId, SfxTabPage* pTab);
+    void    CreatePage(sal_Int32 nId, SfxTabPage& rTab);
     void    SetColorChgd( ChangeType* pIn ) { m_pnColorListState = pIn; }
     void    SetGrdChgd( ChangeType* pIn ) { m_pnGradientListState = pIn; }
     void    SetHtchChgd( ChangeType* pIn ) { m_pnHatchingListState = pIn; }

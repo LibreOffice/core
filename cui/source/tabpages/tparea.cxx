@@ -372,8 +372,10 @@ void SvxAreaTabPage::SelectFillType(weld::Toggleable& rButton, const SfxItemSet*
         FillType eFillType = static_cast<FillType>(maBox.GetCurrentButtonPos());
         m_xFillTabPage = lcl_CreateFillStyleTabPage(eFillType, m_xFillTab.get(), GetDialogController(), m_rXFSet);
         if (m_xFillTabPage)
+        {
             m_xFillTabPage->SetDialogController(GetDialogController());
-        CreatePage(eFillType, m_xFillTabPage.get());
+            CreatePage(eFillType, *m_xFillTabPage);
+        }
     }
 }
 
@@ -397,63 +399,63 @@ void SvxAreaTabPage::PageCreated(const SfxAllItemSet& aSet)
         SetPatternList(pPatternListItem->GetPatternList());
 }
 
-void SvxAreaTabPage::CreatePage( sal_Int32 nId, SfxTabPage* pTab )
+void SvxAreaTabPage::CreatePage(sal_Int32 nId, SfxTabPage& rTab)
 {
     if(nId == SOLID )
     {
-        auto* pColorTab = static_cast<SvxColorTabPage*>(pTab);
-        pColorTab->SetColorList(m_pColorList);
-        pColorTab->SetColorChgd(m_pnColorListState);
-        pColorTab->Construct();
-        pColorTab->ActivatePage(m_rXFSet);
-        pColorTab->Reset(&m_rXFSet);
-        pColorTab->set_visible(true);
+        auto& rColorTab = static_cast<SvxColorTabPage&>(rTab);
+        rColorTab.SetColorList(m_pColorList);
+        rColorTab.SetColorChgd(m_pnColorListState);
+        rColorTab.Construct();
+        rColorTab.ActivatePage(m_rXFSet);
+        rColorTab.Reset(&m_rXFSet);
+        rColorTab.set_visible(true);
     }
     else if(nId == GRADIENT)
     {
-        auto* pGradientTab = static_cast<SvxGradientTabPage*>(pTab);
-        pGradientTab->SetColorList(m_pColorList);
-        pGradientTab->SetGradientList(m_pGradientList);
-        pGradientTab->SetGrdChgd(m_pnGradientListState);
-        pGradientTab->SetColorChgd(m_pnColorListState);
-        pGradientTab->Construct();
-        pGradientTab->ActivatePage(m_rXFSet);
-        pGradientTab->Reset(&m_rXFSet);
-        pGradientTab->set_visible(true);
+        auto& rGradientTab = static_cast<SvxGradientTabPage&>(rTab);
+        rGradientTab.SetColorList(m_pColorList);
+        rGradientTab.SetGradientList(m_pGradientList);
+        rGradientTab.SetGrdChgd(m_pnGradientListState);
+        rGradientTab.SetColorChgd(m_pnColorListState);
+        rGradientTab.Construct();
+        rGradientTab.ActivatePage(m_rXFSet);
+        rGradientTab.Reset(&m_rXFSet);
+        rGradientTab.set_visible(true);
     }
     else if(nId == HATCH)
     {
-        auto* pHatchTab = static_cast<SvxHatchTabPage*>(pTab);
-        pHatchTab->SetColorList(m_pColorList);
-        pHatchTab->SetHatchingList(m_pHatchingList);
-        pHatchTab->SetHtchChgd(m_pnHatchingListState);
-        pHatchTab->SetColorChgd(m_pnColorListState);
-        pHatchTab->Construct();
-        pHatchTab->ActivatePage(m_rXFSet);
-        pHatchTab->Reset(&m_rXFSet);
-        pHatchTab->set_visible(true);
+        auto& rHatchTab = static_cast<SvxHatchTabPage&>(rTab);
+        rHatchTab.SetColorList(m_pColorList);
+        rHatchTab.SetHatchingList(m_pHatchingList);
+        rHatchTab.SetHtchChgd(m_pnHatchingListState);
+        rHatchTab.SetColorChgd(m_pnColorListState);
+        rHatchTab.Construct();
+        rHatchTab.ActivatePage(m_rXFSet);
+        rHatchTab.Reset(&m_rXFSet);
+        rHatchTab.set_visible(true);
     }
     else if(nId == BITMAP)
     {
-        auto* pBitmapTab = static_cast<SvxBitmapTabPage*>(pTab);
-        pBitmapTab->SetBitmapList(m_pBitmapList);
-        pBitmapTab->SetBmpChgd(m_pnBitmapListState);
-        pBitmapTab->Construct();
-        pBitmapTab->ActivatePage(m_rXFSet);
-        pBitmapTab->Reset(&m_rXFSet);
-        pBitmapTab->set_visible(true);
+        auto& rBitmapTab = static_cast<SvxBitmapTabPage&>(rTab);
+        rBitmapTab.SetBitmapList(m_pBitmapList);
+        rBitmapTab.SetBmpChgd(m_pnBitmapListState);
+        rBitmapTab.Construct();
+        rBitmapTab.ActivatePage(m_rXFSet);
+        rBitmapTab.Reset(&m_rXFSet);
+        rBitmapTab.set_visible(true);
     }
     else if(nId == PATTERN)
     {
-        auto* pPatternTab = static_cast<SvxPatternTabPage*>(pTab);
-        pPatternTab->SetColorList(m_pColorList);
-        pPatternTab->SetPatternList(m_pPatternList);
-        pPatternTab->SetPtrnChgd(m_pnPatternListState);
-        pPatternTab->SetColorChgd(m_pnColorListState);
-        pPatternTab->Construct();
-        pPatternTab->ActivatePage(m_rXFSet);
-        pPatternTab->Reset(&m_rXFSet);
-        pPatternTab->set_visible(true);
+        auto& rPatternTab = static_cast<SvxPatternTabPage&>(rTab);
+        rPatternTab.SetColorList(m_pColorList);
+        rPatternTab.SetPatternList(m_pPatternList);
+        rPatternTab.SetPtrnChgd(m_pnPatternListState);
+        rPatternTab.SetColorChgd(m_pnColorListState);
+        rPatternTab.Construct();
+        rPatternTab.ActivatePage(m_rXFSet);
+        rPatternTab.Reset(&m_rXFSet);
+        rPatternTab.set_visible(true);
     }
 }
 
