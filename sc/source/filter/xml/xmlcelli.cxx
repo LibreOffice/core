@@ -795,7 +795,7 @@ void ScXMLTableRowCellContext::SetContentValidation( const ScRange& rScRange )
     sal_uLong nIndex = pDoc->AddValidationEntry( aScValidationData );
 
     ScPatternAttr aPattern( pDoc->GetPool() );
-    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
+    aPattern.Put( SfxUInt32Item( ATTR_VALIDDATA, nIndex ) );
     if( rScRange.aStart == rScRange.aEnd )  //for a single cell
     {
         pDoc->ApplyPattern( rScRange.aStart.Col(), rScRange.aStart.Row(),

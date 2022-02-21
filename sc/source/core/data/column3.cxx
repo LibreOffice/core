@@ -1968,8 +1968,7 @@ void applyTextNumFormat( ScColumn& rCol, SCROW nRow, SvNumberFormatter* pFormatt
 {
     sal_uInt32 nFormat = pFormatter->GetStandardFormat(SvNumFormatType::TEXT);
     ScPatternAttr aNewAttrs(rCol.GetDoc().GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     rCol.ApplyPattern(nRow, aNewAttrs);
 }
 

@@ -67,7 +67,8 @@
 #include <boost/functional/hash.hpp>
 
 ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName )
-    :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
+    :   SfxPoolItem ( ATTR_PATTERN ),
+        maItemSet   ( std::move(pItemSet) ),
         pName       ( rStyleName ),
         pStyle      ( nullptr ),
         mnKey(0)
@@ -75,21 +76,24 @@ ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet, const OUString& rStyleName 
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemSet&& pItemSet )
-    :   SfxSetItem  ( ATTR_PATTERN, std::move(pItemSet) ),
+    :   SfxPoolItem ( ATTR_PATTERN ),
+        maItemSet   ( std::move(pItemSet) ),
         pStyle      ( nullptr ),
         mnKey(0)
 {
 }
 
 ScPatternAttr::ScPatternAttr( SfxItemPool* pItemPool )
-    :   SfxSetItem  ( ATTR_PATTERN, SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *pItemPool ) ),
+    :   SfxPoolItem ( ATTR_PATTERN ),
+        maItemSet   ( SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *pItemPool ) ),
         pStyle      ( nullptr ),
         mnKey(0)
 {
 }
 
 ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
-    :   SfxSetItem  ( rPatternAttr ),
+    :   SfxPoolItem ( rPatternAttr ),
+        maItemSet   ( rPatternAttr.maItemSet ),
         pName       ( rPatternAttr.pName ),
         pStyle      ( rPatternAttr.pStyle ),
         mnKey(rPatternAttr.mnKey)
@@ -102,7 +106,7 @@ ScPatternAttr::~ScPatternAttr()
 
 ScPatternAttr* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
-    ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().CloneAsValue(true, pPool) );
+    ScPatternAttr* pPattern = new ScPatternAttr( maItemSet.CloneAsValue(true, pPool) );
 
     pPattern->pStyle = pStyle;
     pPattern->pName = pName;
@@ -122,6 +126,17 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 }
 
 constexpr size_t compareSize = ATTR_PATTERN_END - ATTR_PATTERN_START + 1;
+
+static bool StrLess( const OUString* pStr1, const OUString* pStr2 )
+{
+    if (pStr1 == pStr2)
+        return false;
+    if (pStr1 && !pStr2)
+        return false;
+    if (!pStr1 && pStr2)
+        return true;
+    return *pStr1 < *pStr2;
+}
 
 static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
 {
@@ -143,6 +158,23 @@ static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     return ( 0 == memcmp( pItems1, pItems2, compareSize * sizeof(pItems1[0]) ) );
 }
 
+static int CmpPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
+{
+    // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
+    // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
+    // so it's enough to compare just the pointers (Count just because it's even faster).
+
+    if ( rSet1.Count() < rSet2.Count() )
+        return -1;
+    if ( rSet1.Count() > rSet2.Count() )
+        return 1;
+
+    SfxPoolItem const ** pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
+    SfxPoolItem const ** pItems2 = rSet2.GetItems_Impl();
+
+    return memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) );
+}
+
 bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
     // #i62090# Use quick comparison between ScPatternAttr's ItemSets
@@ -156,15 +188,20 @@ bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
         rOther.CalcHashCode();
     if (*mxHashCode != *rOther.mxHashCode)
         return false;
-    return EqualPatternSets( GetItemSet(), rOther.GetItemSet() ) &&
+    return EqualPatternSets( maItemSet, rOther.maItemSet ) &&
             StrCmp( GetStyleName(), rOther.GetStyleName() );
 }
 
-size_t ScPatternAttr::LookupHashCode() const
+bool ScPatternAttr::operator<( const SfxPoolItem& rCmp ) const
 {
-    if (SAL_UNLIKELY(!mxHashCode))
-        CalcHashCode();
-    return *mxHashCode;
+    // #i62090# Use quick comparison between ScPatternAttr's ItemSets
+    auto const & rOtherAttr = static_cast<const ScPatternAttr&>(rCmp);
+    int cmp = CmpPatternSets( GetItemSet(), rOtherAttr.GetItemSet() );
+    if (cmp < 0)
+        return true;
+    if (cmp > 0)
+        return false;
+    return StrLess(GetStyleName(), rOtherAttr.GetStyleName());
 }
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet, const SfxItemSet* pCondSet )
@@ -189,7 +226,7 @@ SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet& rItemSet
 
 SvxCellOrientation ScPatternAttr::GetCellOrientation( const SfxItemSet* pCondSet ) const
 {
-    return GetCellOrientation( GetItemSet(), pCondSet );
+    return GetCellOrientation( maItemSet, pCondSet );
 }
 
 namespace {
@@ -464,7 +501,7 @@ void ScPatternAttr::GetFont(
         const SfxItemSet* pCondSet, SvtScriptType nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor ) const
 {
-    GetFont( rFont, GetItemSet(), eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor );
+    GetFont( rFont, maItemSet, eAutoMode, pOutDev, pScale, pCondSet, nScript, pBackConfigColor, pTextConfigColor );
 }
 
 ScDxfFont ScPatternAttr::GetDxfFont(const SfxItemSet& rItemSet, SvtScriptType nScript)
@@ -788,7 +825,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
 void ScPatternAttr::FillEditItemSet( SfxItemSet* pEditSet, const SfxItemSet* pCondSet ) const
 {
     if( pEditSet )
-        FillToEditItemSet( *pEditSet, GetItemSet(), pCondSet );
+        FillToEditItemSet( *pEditSet, maItemSet, pCondSet );
 }
 
 void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& rEditSet )
@@ -905,7 +942,7 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 {
     if( !pEditSet )
         return;
-    GetFromEditItemSet( GetItemSet(), *pEditSet );
+    GetFromEditItemSet( maItemSet, *pEditSet );
     mxHashCode.reset();
 }
 
@@ -914,7 +951,7 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
     //  already there in GetFromEditItemSet, but not in FillEditItemSet
     //  Default horizontal alignment is always implemented as left
 
-    const SfxItemSet& rMySet = GetItemSet();
+    const SfxItemSet& rMySet = maItemSet;
 
     SvxCellHorJustify eHorJust = rMySet.Get(ATTR_HOR_JUSTIFY).GetValue();
 
@@ -931,7 +968,7 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 
 void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 {
-    SfxItemSet& rThisSet = GetItemSet();
+    SfxItemSet& rThisSet = maItemSet;
     const SfxItemSet& rOldSet = pOldAttrs->GetItemSet();
 
     const SfxPoolItem* pThisItem;
@@ -967,18 +1004,16 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 
 bool ScPatternAttr::HasItemsSet( const sal_uInt16* pWhich ) const
 {
-    const SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
-        if ( rSet.GetItemState( pWhich[i], false ) == SfxItemState::SET )
+        if ( maItemSet.GetItemState( pWhich[i], false ) == SfxItemState::SET )
             return true;
     return false;
 }
 
 void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
 {
-    SfxItemSet& rSet = GetItemSet();
     for (sal_uInt16 i=0; pWhich[i]; i++)
-        rSet.ClearItem(pWhich[i]);
+        maItemSet.ClearItem(pWhich[i]);
     mxHashCode.reset();
 }
 
@@ -1043,10 +1078,9 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
 
 ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcDoc ) const
 {
-    const SfxItemSet* pSrcSet = &GetItemSet();
+    const SfxItemSet* pSrcSet = &maItemSet;
 
     ScPatternAttr aDestPattern( pDestDoc->GetPool() );
-    SfxItemSet* pDestSet = &aDestPattern.GetItemSet();
 
     // Copy cell pattern style to other document:
 
@@ -1103,10 +1137,10 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
             if ( pNewItem )
             {
-                pDestSet->Put(*pNewItem);
+                aDestPattern.Put(*pNewItem);
             }
             else
-                pDestSet->Put(*pSrcItem);
+                aDestPattern.Put(*pSrcItem);
         }
     }
 
@@ -1116,17 +1150,15 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
 bool ScPatternAttr::IsVisible() const
 {
-    const SfxItemSet& rSet = GetItemSet();
-
     const SfxPoolItem* pItem;
     SfxItemState eState;
 
-    eState = rSet.GetItemState( ATTR_BACKGROUND, true, &pItem );
+    eState = maItemSet.GetItemState( ATTR_BACKGROUND, true, &pItem );
     if ( eState == SfxItemState::SET )
         if ( static_cast<const SvxBrushItem*>(pItem)->GetColor() != COL_TRANSPARENT )
             return true;
 
-    eState = rSet.GetItemState( ATTR_BORDER, true, &pItem );
+    eState = maItemSet.GetItemState( ATTR_BORDER, true, &pItem );
     if ( eState == SfxItemState::SET )
     {
         const SvxBoxItem* pBoxItem = static_cast<const SvxBoxItem*>(pItem);
@@ -1135,17 +1167,17 @@ bool ScPatternAttr::IsVisible() const
             return true;
     }
 
-    eState = rSet.GetItemState( ATTR_BORDER_TLBR, true, &pItem );
+    eState = maItemSet.GetItemState( ATTR_BORDER_TLBR, true, &pItem );
     if ( eState == SfxItemState::SET )
         if( static_cast< const SvxLineItem* >( pItem )->GetLine() )
             return true;
 
-    eState = rSet.GetItemState( ATTR_BORDER_BLTR, true, &pItem );
+    eState = maItemSet.GetItemState( ATTR_BORDER_BLTR, true, &pItem );
     if ( eState == SfxItemState::SET )
         if( static_cast< const SvxLineItem* >( pItem )->GetLine() )
             return true;
 
-    eState = rSet.GetItemState( ATTR_SHADOW, true, &pItem );
+    eState = maItemSet.GetItemState( ATTR_SHADOW, true, &pItem );
     if ( eState == SfxItemState::SET )
         if ( static_cast<const SvxShadowItem*>(pItem)->GetLocation() != SvxShadowLocation::NONE )
             return true;
@@ -1162,8 +1194,8 @@ static bool OneEqual( const SfxItemSet& rSet1, const SfxItemSet& rSet2, sal_uInt
 
 bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
 {
-    const SfxItemSet& rThisSet = GetItemSet();
-    const SfxItemSet& rOtherSet = rOther.GetItemSet();
+    const SfxItemSet& rThisSet = maItemSet;
+    const SfxItemSet& rOtherSet = rOther.maItemSet;
 
     return OneEqual( rThisSet, rOtherSet, ATTR_BACKGROUND ) &&
             OneEqual( rThisSet, rOtherSet, ATTR_BORDER ) &&
@@ -1183,7 +1215,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
 {
     if (pNewStyle)
     {
-        SfxItemSet&       rPatternSet = GetItemSet();
+        SfxItemSet&       rPatternSet = maItemSet;
         const SfxItemSet& rStyleSet = pNewStyle->GetItemSet();
 
         if (bClearDirectFormat)
@@ -1201,7 +1233,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
     else
     {
         OSL_FAIL( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
-        GetItemSet().SetParent(nullptr);
+        maItemSet.SetParent(nullptr);
         pStyle = nullptr;
     }
     mxHashCode.reset();
@@ -1224,7 +1256,7 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
 
         if (pStyle)
         {
-            GetItemSet().SetParent(&pStyle->GetItemSet());
+            maItemSet.SetParent(&pStyle->GetItemSet());
             pName.reset();
         }
     }
@@ -1241,7 +1273,7 @@ void ScPatternAttr::StyleToName()
     {
         pName = pStyle->GetName();
         pStyle = nullptr;
-        GetItemSet().SetParent( nullptr );
+        maItemSet.SetParent( nullptr );
         mxHashCode.reset();
     }
 }
@@ -1249,7 +1281,7 @@ void ScPatternAttr::StyleToName()
 bool ScPatternAttr::IsSymbolFont() const
 {
     const SfxPoolItem* pItem;
-    if( GetItemSet().GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
+    if( maItemSet.GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
         return static_cast<const SvxFontItem*>(pItem)->GetCharSet() == RTL_TEXTENCODING_SYMBOL;
     else
         return false;
@@ -1271,8 +1303,8 @@ LanguageType getLanguageType(const SfxItemSet& rSet)
 
 sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
 {
-    sal_uInt32 nFormat = getNumberFormatKey(GetItemSet());
-    LanguageType eLang = getLanguageType(GetItemSet());
+    sal_uInt32 nFormat = getNumberFormatKey(maItemSet);
+    LanguageType eLang = getLanguageType(maItemSet);
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
         ;       // it remains as it is
     else if ( pFormatter )
@@ -1301,12 +1333,12 @@ sal_uInt32 ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
         if (pCondSet->GetItemState(ATTR_LANGUAGE_FORMAT, true, &pLangItem) == SfxItemState::SET)
             eLang = getLanguageType(*pCondSet);
         else
-            eLang = getLanguageType(GetItemSet());
+            eLang = getLanguageType(maItemSet);
     }
     else
     {
-        nFormat = getNumberFormatKey(GetItemSet());
-        eLang = getLanguageType(GetItemSet());
+        nFormat = getNumberFormatKey(maItemSet);
+        eLang = getLanguageType(maItemSet);
     }
 
     return pFormatter->GetFormatForLanguageIfBuiltIn(nFormat, eLang);
@@ -1322,7 +1354,7 @@ const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nWhich, const SfxItemSet& 
 
 const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nSubWhich, const SfxItemSet* pCondSet ) const
 {
-    return GetItem( nSubWhich, GetItemSet(), pCondSet );
+    return GetItem( nSubWhich, maItemSet, pCondSet );
 }
 
 //  GetRotateVal is tested before ATTR_ORIENTATION
@@ -1382,7 +1414,7 @@ sal_uInt64 ScPatternAttr::GetKey() const
 
 void ScPatternAttr::CalcHashCode() const
 {
-    auto const & rSet = GetItemSet();
+    auto const & rSet = maItemSet;
     if( rSet.TotalCount() != compareSize ) // see EqualPatternSets()
     {
         mxHashCode = 0; // invalid
@@ -1390,6 +1422,33 @@ void ScPatternAttr::CalcHashCode() const
     }
     mxHashCode = 1; // Set up seed so that an empty pattern does not have an (invalid) hash of 0.
     boost::hash_range(*mxHashCode, rSet.GetItems_Impl(), rSet.GetItems_Impl() + compareSize);
+}
+
+
+void ScPatternAttr::Put( const SfxPoolItem& rItem )
+{
+    maItemSet.Put(rItem);
+    // TODO invalidate sorting
+}
+void ScPatternAttr::Put( std::unique_ptr<SfxPoolItem> xItem )
+{
+    maItemSet.Put(std::move(xItem));
+    // TODO invalidate sorting
+}
+sal_uInt16 ScPatternAttr::ClearItem( sal_uInt16 nWhich )
+{
+    return maItemSet.ClearItem(nWhich);
+    // TODO invalidate sorting
+}
+void ScPatternAttr::ClearInvalidItems()
+{
+    maItemSet.ClearInvalidItems();
+    // TODO invalidate sorting
+}
+void ScPatternAttr::setPropertyValue(const SfxItemPropertySet& rMap, const SfxItemPropertyMapEntry& rEntry, const css::uno::Any& aVal)
+{
+    rMap.setPropertyValue(rEntry, aVal, maItemSet);
+    // TODO invalidate sorting
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

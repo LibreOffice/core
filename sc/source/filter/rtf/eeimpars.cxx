@@ -218,33 +218,32 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             // Set attributes
             auto pAttr = std::make_unique<ScPatternAttr>( pDocPool );
             pAttr->GetFromEditItemSet( &aSet );
-            SfxItemSet* pAttrItemSet = &pAttr->GetItemSet();
             if (!aNumStr.isEmpty())
             {
-                pAttrItemSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumForm ) );
-                pAttrItemSet->Put( SvxLanguageItem( eNumLang, ATTR_LANGUAGE_FORMAT ) );
+                pAttr->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumForm ) );
+                pAttr->Put( SvxLanguageItem( eNumLang, ATTR_LANGUAGE_FORMAT ) );
             }
             const SfxItemSet& rESet = pE->aItemSet;
             if ( rESet.Count() )
             {
                 const SfxPoolItem* pItem;
                 if ( rESet.GetItemState( ATTR_BACKGROUND, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 if ( rESet.GetItemState( ATTR_BORDER, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 if ( rESet.GetItemState( ATTR_SHADOW, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 // HTML
                 if ( rESet.GetItemState( ATTR_HOR_JUSTIFY, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 if ( rESet.GetItemState( ATTR_VER_JUSTIFY, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 if ( rESet.GetItemState( ATTR_LINEBREAK, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 if ( rESet.GetItemState( ATTR_FONT_COLOR, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 if ( rESet.GetItemState( ATTR_FONT_UNDERLINE, false, &pItem) == SfxItemState::SET )
-                    pAttrItemSet->Put( *pItem );
+                    pAttr->Put( *pItem );
                 // HTML LATIN/CJK/CTL script type dependent
                 const SfxPoolItem* pFont;
                 if ( rESet.GetItemState( ATTR_FONT, false, &pFont) != SfxItemState::SET )
@@ -261,7 +260,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                 // Number format
                 const SfxPoolItem* pNumFmt = nullptr;
                 if ( rESet.GetItemState(ATTR_VALUE_FORMAT, false, &pNumFmt) == SfxItemState::SET )
-                    pAttrItemSet->Put(*pNumFmt);
+                    pAttr->Put(*pNumFmt);
                 if ( pFont || pHeight || pWeight || pPosture )
                 {
                     OUString aStr( mpEngine->GetText( pE->aSel ) );
@@ -274,22 +273,22 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
                         {
                             if ( pFont )
                             {
-                                pAttrItemSet->Put( pFont->CloneSetWhich(
+                                pAttr->Put( pFont->CloneSetWhich(
                                         ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT )) );
                             }
                             if ( pHeight )
                             {
-                                pAttrItemSet->Put( pHeight->CloneSetWhich(
+                                pAttr->Put( pHeight->CloneSetWhich(
                                         ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_HEIGHT )) );
                             }
                             if ( pWeight )
                             {
-                                pAttrItemSet->Put( pWeight->CloneSetWhich(
+                                pAttr->Put( pWeight->CloneSetWhich(
                                         ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_WEIGHT )) );
                             }
                             if ( pPosture )
                             {
-                                pAttrItemSet->Put( pPosture->CloneSetWhich(
+                                pAttr->Put( pPosture->CloneSetWhich(
                                         ScGlobal::GetScriptedWhichID(nScript, ATTR_FONT_POSTURE )) );
                             }
                         }
@@ -300,7 +299,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             {   // Merged cells, with SfxItemSet.Put() is faster than
                 // with ScDocument.DoMerge() afterwards
                 ScMergeAttr aMerge( pE->nColOverlap, pE->nRowOverlap );
-                pAttrItemSet->Put( aMerge );
+                pAttr->Put( aMerge );
                 SCROW nRO = 0;
                 if ( pE->nColOverlap > 1 )
                     mpDoc->ApplyFlagsTab( nCol+1, nRow,

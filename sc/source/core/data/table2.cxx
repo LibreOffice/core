@@ -60,7 +60,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <svl/poolcach.hxx>
+#include <poolcach.hxx>
 #include <unotools/charclass.hxx>
 #include <math.h>
 
@@ -428,7 +428,7 @@ void ScTable::DeleteArea(
         if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
         {
             ScPatternAttr aPattern(rDocument.GetPool());
-            aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
+            aPattern.Put( ScProtectionAttr( false ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
 
@@ -764,7 +764,7 @@ void ScTable::CopyFromClip(
     if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
     {
         ScPatternAttr aPattern(rDocument.GetPool());
-        aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
+        aPattern.Put( ScProtectionAttr( false ) );
         ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
     }
 
@@ -1064,7 +1064,6 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                 {
                     // transpose borders and merge values, remove merge flags (refreshed after pasting)
                     ScPatternAttr aNewPattern( *pPattern );
-                    SfxItemSet& rNewSet = aNewPattern.GetItemSet();
 
                     const SvxBoxItem& rOldBox = rSet.Get(ATTR_BORDER);
                     if ( rOldBox.GetTop() || rOldBox.GetBottom() || rOldBox.GetLeft() || rOldBox.GetRight() )
@@ -1078,12 +1077,12 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                         aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::LEFT ), SvxBoxItemLine::TOP );
                         aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::BOTTOM ), SvxBoxItemLine::RIGHT );
                         aNew.SetDistance( rOldBox.GetDistance( SvxBoxItemLine::RIGHT ), SvxBoxItemLine::BOTTOM );
-                        rNewSet.Put( aNew );
+                        aNewPattern.Put( aNew );
                     }
 
                     const ScMergeAttr& rOldMerge = rSet.Get(ATTR_MERGE);
                     if (rOldMerge.IsMerged())
-                        rNewSet.Put( ScMergeAttr( std::min(
+                        aNewPattern.Put( ScMergeAttr( std::min(
                                         static_cast<SCCOL>(rOldMerge.GetRowMerge()),
                                         static_cast<SCCOL>(rDocument.MaxCol()+1 - (nAttrRow2-nRow1))),
                                     std::min(
@@ -1094,9 +1093,9 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                     {
                         ScMF nNewFlags = rOldFlag.GetValue() & ~ScMF( ScMF::Hor | ScMF::Ver );
                         if ( nNewFlags != ScMF::NONE )
-                            rNewSet.Put( ScMergeFlagAttr( nNewFlags ) );
+                            aNewPattern.Put( ScMergeFlagAttr( nNewFlags ) );
                         else
-                            rNewSet.ClearItem( ATTR_MERGE_FLAG );
+                            aNewPattern.ClearItem( ATTR_MERGE_FLAG );
                     }
 
                     // Set pattern in cells from nAttrRow1 to nAttrRow2

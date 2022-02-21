@@ -41,7 +41,6 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
         return;
 
     ScPatternAttr aPattern(pDoc->GetPool());
-    SfxItemSet& rItemSet = aPattern.GetItemSet();
 
     sal_uInt8 nTmp = maAlign[ nStyle ];
     sal_uInt8 nHor = ( nTmp & 0x07 );
@@ -72,7 +71,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
             eJustify = SvxCellHorJustify::Block;
             break;
     }
-    rItemSet.Put( SvxHorJustifyItem( eJustify, ATTR_HOR_JUSTIFY ) );
+    aPattern.Put( SvxHorJustifyItem( eJustify, ATTR_HOR_JUSTIFY ) );
 
     // Vertical Alignment
     SvxCellVerJustify eVerJustify = SvxCellVerJustify::Standard;
@@ -91,7 +90,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
             break;
     }
 
-    rItemSet.Put(SvxVerJustifyItem( eVerJustify, ATTR_VER_JUSTIFY ) );
+    aPattern.Put(SvxVerJustifyItem( eVerJustify, ATTR_VER_JUSTIFY ) );
 
     // Orientation
     SvxCellOrientation eOrient = SvxCellOrientation::Standard;
@@ -102,13 +101,13 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
             break;
 
     }
-    rItemSet.Put( SvxOrientationItem( eOrient, TypedWhichId<SvxOrientationItem>(0)) );
+    aPattern.Put( SvxOrientationItem( eOrient, TypedWhichId<SvxOrientationItem>(0)) );
 
     // Wrap cell contents
     if( nTmp & 0x80 )
     {
         ScLineBreakCell aWrapItem(true);
-        rItemSet.Put( aWrapItem );
+        aPattern.Put( aWrapItem );
     }
 
     // Font Attributes
@@ -121,17 +120,17 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     //(nTmpFnt & 0x0020 ) for StrikeThrough
 
     if( bIsBold )
-        rItemSet.Put( SvxWeightItem( WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
+        aPattern.Put( SvxWeightItem( WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
     if( bIsItalic )
-        rItemSet.Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
+        aPattern.Put( SvxPostureItem( ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
     if( bIsUnderLine )
-        rItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
+        aPattern.Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
     if (maFontHeight[ maFont [ nStyle ] ])
-        rItemSet.Put( SvxFontHeightItem( static_cast<sal_uLong>(20 * maFontHeight[ maFont[ nStyle ] ] ), 100, ATTR_FONT_HEIGHT ) );
+        aPattern.Put( SvxFontHeightItem( static_cast<sal_uLong>(20 * maFontHeight[ maFont[ nStyle ] ] ), 100, ATTR_FONT_HEIGHT ) );
 
     OUString fntName = maFontType[ maFont[ nStyle ] ];
-    rItemSet.Put( SvxFontItem( FAMILY_SYSTEM, fntName, OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
+    aPattern.Put( SvxFontItem( FAMILY_SYSTEM, fntName, OUString(), PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, ATTR_FONT ) );
 
     pDoc->ApplyPattern( nCol, nRow, nTab, aPattern );
 }

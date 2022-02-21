@@ -244,7 +244,7 @@ void ScUndoEnterData::Undo()
         else
         {
             auto pPattern = std::make_unique<ScPatternAttr>(*rDoc.GetPattern(maPos.Col(), maPos.Row(), rVal.mnTab));
-            pPattern->GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
+            pPattern->ClearItem( ATTR_VALUE_FORMAT );
             rDoc.SetPattern(maPos.Col(), maPos.Row(), rVal.mnTab, std::move(pPattern));
         }
         pDocShell->PostPaintCell(maPos.Col(), maPos.Row(), rVal.mnTab);
