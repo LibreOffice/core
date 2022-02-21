@@ -169,22 +169,31 @@ void SAL_CALL SvxShapeGroup::leaveGroup(  )
 
 void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape, size_t nPos )
 {
-    if (!HasSdrObject() || !mxPage.is())
-    {
-        OSL_FAIL("could not add XShape to group shape!");
-        return;
-    }
-
     SvxShape* pShape = comphelper::getFromUnoTunnel<SvxShape>( xShape );
     if (!pShape)
     {
         OSL_FAIL("could not add XShape to group shape!");
         return;
     }
+    addShape(*pShape, nPos);
+}
 
-    SdrObject* pSdrShape = pShape->GetSdrObject();
+void SvxShapeGroup::addShape( SvxShape& rShape )
+{
+    addShape(rShape, SAL_MAX_SIZE);
+}
+
+void SvxShapeGroup::addShape( SvxShape& rShape, size_t nPos )
+{
+    if (!HasSdrObject() || !mxPage.is())
+    {
+        OSL_FAIL("could not add XShape to group shape!");
+        return;
+    }
+
+    SdrObject* pSdrShape = rShape.GetSdrObject();
     if( pSdrShape == nullptr )
-        pSdrShape = mxPage->CreateSdrObject_( xShape );
+        pSdrShape = mxPage->CreateSdrObject_( &rShape );
 
     if( pSdrShape->IsInserted() )
         pSdrShape->getParentSdrObjListFromSdrObject()->RemoveObject( pSdrShape->GetOrdNum() );
@@ -205,7 +214,7 @@ void SvxShapeGroup::addUnoShape( const uno::Reference< drawing::XShape >& xShape
     // Establish connection between new SdrObject and its wrapper before
     // inserting the new shape into the group.  There a new wrapper
     // would be created when this connection would not already exist.
-    pShape->Create( pSdrShape, mxPage.get() );
+    rShape.Create( pSdrShape, mxPage.get() );
 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
