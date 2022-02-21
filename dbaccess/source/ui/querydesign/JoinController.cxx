@@ -204,6 +204,7 @@ AddTableDialogContext& OJoinController::impl_getDialogContext() const
         OJoinController* pNonConstThis = const_cast< OJoinController* >( this );
         pNonConstThis->m_pDialogContext.reset( new AddTableDialogContext( *pNonConstThis ) );
     }
+    assert(m_pDialogContext && "always exists at this point");
     return *m_pDialogContext;
 }
 
