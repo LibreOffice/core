@@ -2032,6 +2032,7 @@ framework/res/arrow.png cmd/sc_nextrecord.png
 framework/res/extension.png cmd/lc_insertplugin.png
 framework/res/info_26.png cmd/lc_helpindex.png
 framework/res/addtemplate_32.png cmd/32/newdoc.png
+framework/res/templates_32.png cmd/32/templatemanager.png
 
 # reportdesign
 # ==============================================
