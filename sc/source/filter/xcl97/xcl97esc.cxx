@@ -433,8 +433,7 @@ std::unique_ptr<XclExpTbxControlObj> XclEscherEx::CreateTBXCtrlObj( Reference< X
     ::std::unique_ptr< XclExpTbxControlObj > xTbxCtrl( new XclExpTbxControlObj( mrObjMgr, xShape, pChildAnchor ) );
     if( xTbxCtrl->GetObjType() == EXC_OBJTYPE_UNKNOWN )
         xTbxCtrl.reset();
-
-    if (xTbxCtrl)
+    else
     {
         // find attached macro
         Reference< XControlModel > xCtrlModel = XclControlHelper::GetControlModel( xShape );
