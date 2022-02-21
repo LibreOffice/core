@@ -1049,7 +1049,7 @@ void SwStartNode::dumpAsXml(xmlTextWriterPtr pWriter) const
  *
  * The EndOfSection pointer of the corresponding start node is set to this node.
  *
- * @param rWhere position where the node shoul be inserted
+ * @param rWhere position where the node should be inserted
  * @param rSttNd the start note of the section
  */
 

@@ -248,7 +248,7 @@ dnl path location is gpg, so make sure we find it
     unset mac_gpg_path
 }
 
-dnl sematically test a three digits version
+dnl semantically test a three digits version
 dnl $1 - $3 = minimal version
 dnl $4 - $6 = current version
 

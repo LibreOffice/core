@@ -1991,7 +1991,7 @@ void ScExportTest::testRichTextExportODS()
             if (aSecAttrs.size() != 3)
                 return false;
 
-            // First section shoul have overline applied.
+            // First section should have overline applied.
             const editeng::Section* pAttr = aSecAttrs.data();
             if (pAttr->mnParagraph != 0 || pAttr->mnStart != 0 || pAttr->mnEnd != 4)
                 return false;

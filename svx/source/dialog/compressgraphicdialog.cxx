@@ -39,7 +39,7 @@
 #include <tools/stream.hxx>
 #include <unotools/localedatawrapper.hxx>
 
-// tdf#146929 - remember user settings within the currect session
+// tdf#146929 - remember user settings within the current session
 // memp is filled in dtor and restored after initialization
 namespace
 {
