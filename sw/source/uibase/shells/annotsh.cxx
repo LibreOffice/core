@@ -696,7 +696,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
                     if( !pSecondPool )
                         pSecondPool = aEditAttr.GetPool();
                     SvxScriptSetItem aSetItem( nSlotId, *pSecondPool );
-                    aSetItem.GetItemSet().Put( aEditAttr, false );
+                    aSetItem.Put( aEditAttr, false );
                     const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                     if( pI )
                     {
@@ -1754,7 +1754,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     std::shared_ptr<SvxFontItem> aSetDlgFont(std::make_shared<SvxFontItem>(RES_CHRATR_FONT));
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-        aSetItem.GetItemSet().Put( aSet, false );
+        aSetItem.Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
         {

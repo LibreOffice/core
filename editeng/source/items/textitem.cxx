@@ -2543,15 +2543,15 @@ SvxScriptSetItem::SvxScriptSetItem( sal_uInt16 nSlotId, SfxItemPool& rPool )
 {
     sal_uInt16 nLatin, nAsian, nComplex;
     GetWhichIds( nLatin, nAsian, nComplex );
-    GetItemSet().MergeRange( nLatin, nLatin );
-    GetItemSet().MergeRange( nAsian, nAsian );
-    GetItemSet().MergeRange( nComplex, nComplex );
+    GetItemSetToModify().MergeRange( nLatin, nLatin );
+    GetItemSetToModify().MergeRange( nAsian, nAsian );
+    GetItemSetToModify().MergeRange( nComplex, nComplex );
 }
 
 SvxScriptSetItem* SvxScriptSetItem::Clone( SfxItemPool * ) const
 {
     SvxScriptSetItem* p = new SvxScriptSetItem( Which(), *GetItemSet().GetPool() );
-    p->GetItemSet().Put( GetItemSet(), false );
+    p->Put( GetItemSet(), false );
     return p;
 }
 
@@ -2624,17 +2624,17 @@ void SvxScriptSetItem::PutItemForScriptType( SvtScriptType nScriptType,
     if( SvtScriptType::LATIN & nScriptType )
     {
         pCpy->SetWhich( nLatin );
-        GetItemSet().Put( *pCpy );
+        Put( *pCpy );
     }
     if( SvtScriptType::ASIAN & nScriptType )
     {
         pCpy->SetWhich( nAsian );
-        GetItemSet().Put( *pCpy );
+        Put( *pCpy );
     }
     if( SvtScriptType::COMPLEX & nScriptType )
     {
         pCpy->SetWhich( nComplex );
-        GetItemSet().Put( *pCpy );
+        Put( *pCpy );
     }
 }
 

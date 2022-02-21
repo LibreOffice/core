@@ -115,7 +115,6 @@ private:
     bool                m_bObjSelected;
 
     XLineAttrSetItem    m_aXLineAttr;
-    SfxItemSet&         m_rXLSet;
 
     XDashListRef          m_pDashList;
     XLineEndListRef       m_pLineEndList;
@@ -241,7 +240,6 @@ private:
     XDash               aDash;
 
     XLineAttrSetItem    aXLineAttr;
-    SfxItemSet&         rXLSet;
 
     XDashListRef          pDashList;
 
@@ -321,7 +319,6 @@ private:
     const SdrObject*    pPolyObj;
 
     XLineAttrSetItem    aXLineAttr;
-    SfxItemSet&         rXLSet;
 
     XLineEndListRef       pLineEndList;
 

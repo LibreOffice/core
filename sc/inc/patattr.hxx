@@ -145,11 +145,12 @@ public:
     void                    SetKey(sal_uInt64 nKey);
     sal_uInt64              GetKey() const;
 
-    // TODO: tdf#135215: This is a band-aid to detect changes and invalidate the hash,
-    // a proper way would be probably to override SfxItemSet::Changed(), but 6cb400f41df0dd10
-    // hardcoded SfxSetItem to contain SfxItemSet.
-    SfxItemSet& GetItemSet() { mxHashCode.reset(); return SfxSetItem::GetItemSet(); }
-    using SfxSetItem::GetItemSet;
+protected:
+    virtual void ItemSetAboutToChange() override
+    {
+        mxHashCode.reset();
+        SfxSetItem::ItemSetAboutToChange();
+    }
 
 private:
     void                    CalcHashCode() const;

@@ -218,7 +218,7 @@ void ScEEImport::WriteToDocument( bool bSizeColsRows, double nOutputFactor, SvNu
             // Set attributes
             auto pAttr = std::make_unique<ScPatternAttr>( pDocPool );
             pAttr->GetFromEditItemSet( &aSet );
-            SfxItemSet* pAttrItemSet = &pAttr->GetItemSet();
+            SfxItemSet* pAttrItemSet = &pAttr->GetItemSetToModify();
             if (!aNumStr.isEmpty())
             {
                 pAttrItemSet->Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumForm ) );

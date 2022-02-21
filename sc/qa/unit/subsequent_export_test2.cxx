@@ -1811,8 +1811,7 @@ void ScExportTest2::testTdf143979()
     pFormatter->PutEntry(aCode, nCheckPos, nType, nFormat);
 
     ScPatternAttr aNewAttrs(rDoc.GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
 
     rDoc.ApplyPattern(0, 0, 0, aNewAttrs);
 

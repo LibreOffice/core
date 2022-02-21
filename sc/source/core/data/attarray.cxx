@@ -311,20 +311,20 @@ void ScAttrArray::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nInd
                     aNewCondFormatData = rCondFormatData;
                     aNewCondFormatData.insert(nIndex);
                     ScCondFormatItem aItem( std::move(aNewCondFormatData) );
-                    pNewPattern->GetItemSet().Put( aItem );
+                    pNewPattern->Put( aItem );
                 }
             }
             else
             {
                 ScCondFormatItem aItem(nIndex);
-                pNewPattern->GetItemSet().Put( aItem );
+                pNewPattern->Put( aItem );
             }
         }
         else
         {
             pNewPattern.reset( new ScPatternAttr( rDocument.GetPool() ) );
             ScCondFormatItem aItem(nIndex);
-            pNewPattern->GetItemSet().Put( aItem );
+            pNewPattern->Put( aItem );
             nTempEndRow = nEndRow;
         }
 
@@ -365,7 +365,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
                 if (nIndex == 0)
                 {
                     ScCondFormatItem aItem;
-                    pPatternAttr->GetItemSet().Put( aItem );
+                    pPatternAttr->Put( aItem );
                     SetPatternArea( nTempStartRow, nTempEndRow, std::move(pPatternAttr), true );
                 }
                 else
@@ -377,7 +377,7 @@ void ScAttrArray::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 n
                         ScCondFormatIndexes aNewCondFormatData(rCondFormatData);
                         aNewCondFormatData.erase_at(std::distance(rCondFormatData.begin(), itr));
                         ScCondFormatItem aItem( std::move(aNewCondFormatData) );
-                        pPatternAttr->GetItemSet().Put( aItem );
+                        pPatternAttr->Put( aItem );
                         SetPatternArea( nTempStartRow, nTempEndRow, std::move(pPatternAttr), true );
                     }
                 }
@@ -749,7 +749,7 @@ void ScAttrArray::ApplyLineStyleArea( SCROW nStartRow, SCROW nEndRow,
         if ( (SfxItemState::SET == eState) || (SfxItemState::SET == eTLBRState) || (SfxItemState::SET == eBLTRState) )
         {
             std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr(*pOldPattern));
-            SfxItemSet&     rNewSet = pNewPattern->GetItemSet();
+            SfxItemSet&     rNewSet = pNewPattern->GetItemSetToModify();
             SCROW           nY1 = nStart;
             SCROW           nY2 = mvData[nPos].nEndRow;
 
@@ -1530,7 +1530,7 @@ void ScAttrArray::RemoveAreaMerge(SCROW nStartRow, SCROW nEndRow)
                 rDocument.ApplyAttr( nThisCol, nThisRow, nTab, *pAttr );
 
             ScPatternAttr aNewPattern( rDocument.GetPool() );
-            SfxItemSet*     pSet = &aNewPattern.GetItemSet();
+            SfxItemSet*     pSet = &aNewPattern.GetItemSetToModify();
             pSet->Put( *pFlagAttr );
             rDocument.ApplyPatternAreaTab( nThisCol, nThisStart, nMergeEndCol, nMergeEndRow,
                                                 nTab, aNewPattern );
@@ -1577,7 +1577,7 @@ void ScAttrArray::SetPatternAreaSafe( SCROW nStartRow, SCROW nEndRow,
                 //  Instead, the document's GetDefPattern is copied. Since it is passed as
                 //  pWantedPattern, no special treatment of default is needed here anymore.
                 std::unique_ptr<ScPatternAttr> pNewPattern(new ScPatternAttr( *pWantedPattern ));
-                pNewPattern->GetItemSet().Put( *pItem );
+                pNewPattern->Put( *pItem );
                 SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
             }
             else
@@ -1625,7 +1625,7 @@ bool ScAttrArray::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
             auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
-            pNewPattern->GetItemSet().Put( ScMergeFlagAttr( nOldValue | nFlags ) );
+            pNewPattern->Put( ScMergeFlagAttr( nOldValue | nFlags ) );
             SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
             Search( nThisRow, nIndex );  // data changed
             bChanged = true;
@@ -1662,7 +1662,7 @@ bool ScAttrArray::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
             nRow = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nRow, nEndRow );
             auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
-            pNewPattern->GetItemSet().Put( ScMergeFlagAttr( nOldValue & ~nFlags ) );
+            pNewPattern->Put( ScMergeFlagAttr( nOldValue & ~nFlags ) );
             SetPatternArea( nThisRow, nAttrRow, std::move(pNewPattern), true );
             Search( nThisRow, nIndex );  // data changed
             bChanged = true;
@@ -1750,9 +1750,9 @@ void ScAttrArray::ChangeIndent( SCROW nStartRow, SCROW nEndRow, bool bIncrement 
             SCROW nThisEnd = mvData[nIndex].nEndRow;
             SCROW nAttrRow = std::min( nThisEnd, nEndRow );
             auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
-            pNewPattern->GetItemSet().Put( ScIndentItem( nNewValue ) );
+            pNewPattern->Put( ScIndentItem( nNewValue ) );
             if ( bNeedJust )
-                pNewPattern->GetItemSet().Put(
+                pNewPattern->Put(
                                 SvxHorJustifyItem( SvxCellHorJustify::Left, ATTR_HOR_JUSTIFY ) );
             SetPatternArea( nThisStart, nAttrRow, std::move(pNewPattern), true );
 
@@ -2345,7 +2345,7 @@ void ScAttrArray::DeleteHardAttr(SCROW nStartRow, SCROW nEndRow)
             SCROW nAttrRow = std::min( nRow, nEndRow );
 
             auto pNewPattern = std::make_unique<ScPatternAttr>(*pOldPattern);
-            SfxItemSet& rSet = pNewPattern->GetItemSet();
+            SfxItemSet& rSet = pNewPattern->GetItemSetToModify();
             for (sal_uInt16 nId = ATTR_PATTERN_START; nId <= ATTR_PATTERN_END; nId++)
                 if (nId != ATTR_MERGE && nId != ATTR_MERGE_FLAG)
                     rSet.ClearItem(nId);
@@ -2427,9 +2427,9 @@ void ScAttrArray::CopyArea(
                     nNewFlags = aTmpPattern.GetItem(ATTR_MERGE_FLAG).GetValue() & ~nStripFlags;
 
                 if ( nNewFlags != ScMF::NONE )
-                    aTmpPattern.GetItemSet().Put( ScMergeFlagAttr( nNewFlags ) );
+                    aTmpPattern.Put( ScMergeFlagAttr( nNewFlags ) );
                 else
-                    aTmpPattern.GetItemSet().ClearItem( ATTR_MERGE_FLAG );
+                    aTmpPattern.ClearItem( ATTR_MERGE_FLAG );
 
                 if (bSamePool)
                     pNewPattern = &pDestDocPool->Put(aTmpPattern);

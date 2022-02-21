@@ -1185,7 +1185,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                             aHeaderSize.setHeight(o3tl::convert( aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) + o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip) - aULItem.GetUpper());
                             aHeaderSize.setHeight( aHeaderSize.Height() * 100 / mnScale );
                             SvxSetItem  aNewHeader( rStyleSet.Get(ATTR_PAGE_HEADERSET) );
-                            aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
+                            aNewHeader.Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
                             rStyleSet.Put( aNewHeader );
                             pDocShell->SetModified();
                         }
@@ -1200,7 +1200,7 @@ void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                             aFooterSize.setHeight(nHeight - o3tl::convert(aButtonUpPt.Y(), o3tl::Length::mm100, o3tl::Length::twip) - o3tl::convert(aOffset.Y(), o3tl::Length::mm100, o3tl::Length::twip) - aULItem.GetLower());
                             aFooterSize.setHeight( aFooterSize.Height() * 100 / mnScale );
                             SvxSetItem  aNewFooter( rStyleSet.Get(ATTR_PAGE_FOOTERSET) );
-                            aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
+                            aNewFooter.Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
                             rStyleSet.Put( aNewFooter );
                             pDocShell->SetModified();
                         }

@@ -428,7 +428,7 @@ void ScTable::DeleteArea(
         if ( IsProtected() && (nDelFlag & InsertDeleteFlags::ATTRIB) )
         {
             ScPatternAttr aPattern(rDocument.GetPool());
-            aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
+            aPattern.Put( ScProtectionAttr( false ) );
             ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
         }
 
@@ -764,7 +764,7 @@ void ScTable::CopyFromClip(
     if (IsProtected() && (rCxt.getInsertFlag() & InsertDeleteFlags::ATTRIB))
     {
         ScPatternAttr aPattern(rDocument.GetPool());
-        aPattern.GetItemSet().Put( ScProtectionAttr( false ) );
+        aPattern.Put( ScProtectionAttr( false ) );
         ApplyPatternArea( nCol1, nRow1, nCol2, nRow2, aPattern );
     }
 
@@ -1064,7 +1064,7 @@ void ScTable::TransposeColPatterns(ScTable* pTransClip, SCCOL nCol1, SCCOL nCol,
                 {
                     // transpose borders and merge values, remove merge flags (refreshed after pasting)
                     ScPatternAttr aNewPattern( *pPattern );
-                    SfxItemSet& rNewSet = aNewPattern.GetItemSet();
+                    SfxItemSet& rNewSet = aNewPattern.GetItemSetToModify();
 
                     const SvxBoxItem& rOldBox = rSet.Get(ATTR_BORDER);
                     if ( rOldBox.GetTop() || rOldBox.GetBottom() || rOldBox.GetLeft() || rOldBox.GetRight() )

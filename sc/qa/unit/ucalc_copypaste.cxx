@@ -1814,7 +1814,7 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
 
     // add patterns
     ScPatternAttr aCellBlueColor(m_pDoc->GetPool());
-    aCellBlueColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBlueColor.Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(1, 2, 1, 4, srcSheet, aCellBlueColor);
 
     // Check pattern precondition
@@ -1829,12 +1829,12 @@ void TestCopyPaste::executeCopyPasteSpecial(const SCTAB srcSheet, const SCTAB de
 
     // row 2 on empty cell
     ScPatternAttr aCellGreenColor(m_pDoc->GetPool());
-    aCellGreenColor.GetItemSet().Put(SvxBrushItem(COL_GREEN, ATTR_BACKGROUND));
+    aCellGreenColor.Put(SvxBrushItem(COL_GREEN, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(5, 4, 5, 4, srcSheet, aCellGreenColor);
 
     // row 4 for multi range row selection
     ScPatternAttr aCellRedColor(m_pDoc->GetPool());
-    aCellRedColor.GetItemSet().Put(SvxBrushItem(COL_RED, ATTR_BACKGROUND));
+    aCellRedColor.Put(SvxBrushItem(COL_RED, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(3, 6, 4, 6, srcSheet, aCellRedColor);
 
     // add borders
@@ -9472,7 +9472,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
 
     // Set the background color of B1:B5 to blue.
     ScPatternAttr aCellBackColor(m_pDoc->GetPool());
-    aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBackColor.Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(1, 0, 1, 4, 0, aCellBackColor);
 
     // Insert notes to B1:B5.
@@ -9492,7 +9492,7 @@ void TestCopyPaste::testCopyPasteSkipEmpty()
     aClipDoc.SetString(ScAddress(0, 4, 0), "Clip3");
 
     // Set the background color of A1:A5 to yellow.
-    aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_YELLOW, ATTR_BACKGROUND));
+    aCellBackColor.Put(SvxBrushItem(COL_YELLOW, ATTR_BACKGROUND));
     aClipDoc.ApplyPatternAreaTab(0, 0, 0, 4, 0, aCellBackColor);
 
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_STRING, aClipDoc.GetCellType(ScAddress(0, 0, 0)));

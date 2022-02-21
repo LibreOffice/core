@@ -2175,7 +2175,7 @@ void ScExportTest::testRichTextExportODS()
         CPPUNIT_ASSERT_MESSAGE("Incorrect B9 value.", aCheckFunc.checkB9(pEditText));
 
         ScPatternAttr aCellFontColor(rDoc3.GetPool());
-        aCellFontColor.GetItemSet().Put(SvxColorItem(COL_BLUE, ATTR_FONT_COLOR));
+        aCellFontColor.Put(SvxColorItem(COL_BLUE, ATTR_FONT_COLOR));
         // Set font color of B10 to blue.
         rDoc3.ApplyPattern(1, 9, 0, aCellFontColor);
         pEE->Clear();

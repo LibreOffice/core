@@ -1002,7 +1002,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                 bool bOld = false;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
+                aOldSetItem.Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && static_cast<const SvxWeightItem*>(pCore)->GetWeight() > WEIGHT_NORMAL )
                     bOld = true;
@@ -1025,7 +1025,7 @@ void ScEditShell::ExecuteAttr(SfxRequest& rReq)
 
                 bool bOld = false;
                 SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                aOldSetItem.GetItemSet().Put( pEditView->GetAttribs(), false );
+                aOldSetItem.Put( pEditView->GetAttribs(), false );
                 const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                 if ( pCore && static_cast<const SvxPostureItem*>(pCore)->GetValue() != ITALIC_NONE )
                     bOld = true;

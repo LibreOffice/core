@@ -81,12 +81,12 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     std::unique_ptr<SfxSetItem> pNewItem(rOrigItem.Clone());
     if ( pItemToPut )
     {
-        pNewItem->GetItemSet().PutDirect( *pItemToPut );
+        pNewItem->GetItemSetToModify().PutDirect( *pItemToPut );
         DBG_ASSERT( &pNewItem->GetItemSet().Get( pItemToPut->Which() ) == pItemToPut,
                     "wrong item in temporary set" );
     }
     else
-        pNewItem->GetItemSet().Put( *pSetToPut );
+        pNewItem->GetItemSetToModify().Put( *pSetToPut );
     const SfxSetItem* pNewPoolItem = &pPool->Put( std::move(pNewItem) );
 
     // Adapt refcount; one each for the cache

@@ -4578,7 +4578,7 @@ void TestFormula::testFormulaRefUpdateValidity()
 
     ScPatternAttr aNewAttrs(
         SfxItemSet(*m_pDoc->GetPool(), svl::Items<ATTR_PATTERN_START, ATTR_PATTERN_END>));
-    aNewAttrs.GetItemSet().Put(aItem);
+    aNewAttrs.Put(aItem);
 
     m_pDoc->ApplyPattern(0, 1, 0, aNewAttrs);
 

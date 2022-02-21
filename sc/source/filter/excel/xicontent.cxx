@@ -939,7 +939,7 @@ void XclImpValidationManager::Apply()
         // set the handle ID
         sal_uLong nHandle = rDoc.AddValidationEntry( rItem.maValidData );
         ScPatternAttr aPattern( rDoc.GetPool() );
-        aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
+        aPattern.Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
         // apply all ranges
         for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i )

@@ -914,9 +914,10 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
 
 void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 {
+    SAL_WARN_IF(IsPooledItem(this), "svl.items", "Items in a pool are not to be modified.");
     if( !pEditSet )
         return;
-    GetFromEditItemSet( GetItemSet(), *pEditSet );
+    GetFromEditItemSet( GetItemSetToModify(), *pEditSet );
     mxHashCode.reset();
 }
 
@@ -942,7 +943,8 @@ void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 
 void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 {
-    SfxItemSet& rThisSet = GetItemSet();
+    SAL_WARN_IF(IsPooledItem(this), "svl.items", "Items in a pool are not to be modified.");
+    SfxItemSet& rThisSet = GetItemSetToModify();
     const SfxItemSet& rOldSet = pOldAttrs->GetItemSet();
 
     const SfxPoolItem* pThisItem;
@@ -987,7 +989,8 @@ bool ScPatternAttr::HasItemsSet( const sal_uInt16* pWhich ) const
 
 void ScPatternAttr::ClearItems( const sal_uInt16* pWhich )
 {
-    SfxItemSet& rSet = GetItemSet();
+    SAL_WARN_IF(IsPooledItem(this), "svl.items", "Items in a pool are not to be modified.");
+    SfxItemSet& rSet = GetItemSetToModify();
     for (sal_uInt16 i=0; pWhich[i]; i++)
         rSet.ClearItem(pWhich[i]);
     mxHashCode.reset();
@@ -1057,7 +1060,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
     const SfxItemSet* pSrcSet = &GetItemSet();
 
     ScPatternAttr aDestPattern( pDestDoc->GetPool() );
-    SfxItemSet* pDestSet = &aDestPattern.GetItemSet();
+    SfxItemSet* pDestSet = &aDestPattern.GetItemSetToModify();
 
     // Copy cell pattern style to other document:
 
@@ -1192,9 +1195,10 @@ const OUString* ScPatternAttr::GetStyleName() const
 
 void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFormat )
 {
+    SAL_WARN_IF(IsPooledItem(this), "svl.items", "Items in a pool are not to be modified.");
     if (pNewStyle)
     {
-        SfxItemSet&       rPatternSet = GetItemSet();
+        SfxItemSet&       rPatternSet = GetItemSetToModify();
         const SfxItemSet& rStyleSet = pNewStyle->GetItemSet();
 
         if (bClearDirectFormat)
@@ -1212,7 +1216,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
     else
     {
         OSL_FAIL( "ScPatternAttr::SetStyleSheet( NULL ) :-|" );
-        GetItemSet().SetParent(nullptr);
+        GetItemSetToModify().SetParent(nullptr);
         pStyle = nullptr;
     }
     mxHashCode.reset();
@@ -1220,6 +1224,7 @@ void ScPatternAttr::SetStyleSheet( ScStyleSheet* pNewStyle, bool bClearDirectFor
 
 void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
 {
+    SAL_WARN_IF(IsPooledItem(this), "svl.items", "Items in a pool are not to be modified.");
     if (pName)
     {
         pStyle = static_cast<ScStyleSheet*>(rDoc.GetStyleSheetPool()->Find(*pName, SfxStyleFamily::Para));
@@ -1235,7 +1240,7 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
 
         if (pStyle)
         {
-            GetItemSet().SetParent(&pStyle->GetItemSet());
+            GetItemSetToModify().SetParent(&pStyle->GetItemSet());
             pName.reset();
         }
     }
@@ -1246,13 +1251,14 @@ void ScPatternAttr::UpdateStyleSheet(const ScDocument& rDoc)
 
 void ScPatternAttr::StyleToName()
 {
+    SAL_WARN_IF(IsPooledItem(this), "svl.items", "Items in a pool are not to be modified.");
     // Style was deleted, remember name:
 
     if ( pStyle )
     {
         pName = pStyle->GetName();
         pStyle = nullptr;
-        GetItemSet().SetParent( nullptr );
+        GetItemSetToModify().SetParent( nullptr );
         mxHashCode.reset();
     }
 }

@@ -901,7 +901,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     std::shared_ptr<SvxFontItem> aFont(std::make_shared<SvxFontItem>(RES_CHRATR_FONT));
     {
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-        aSetItem.GetItemSet().Put( aSet, false );
+        aSetItem.Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
         {
@@ -958,7 +958,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         rSh.GetCurAttr( aSet );
 
         SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );
-        aSetItem.GetItemSet().Put( aSet, false );
+        aSetItem.Put( aSet, false );
         const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScript );
         if( pI )
         {

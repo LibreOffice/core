@@ -536,7 +536,7 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     sal_uInt16 nCode;
 
     ScPatternAttr aPattern(rContext.rDoc.GetPool());
-    SfxItemSet& rItemSet = aPattern.GetItemSet();
+    SfxItemSet& rItemSet = aPattern.GetItemSetToModify();
 
     r.ReadUInt16( nCode );
     n -= std::min<sal_uInt16>(n, 2);

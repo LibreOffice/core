@@ -1331,7 +1331,7 @@ void Test::testHorizontalAttrIterator()
 
     // Set the background color of B2:C3,D2,E3,C4:D4,B5:D5 to blue
     ScPatternAttr aCellBackColor(m_pDoc->GetPool());
-    aCellBackColor.GetItemSet().Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
+    aCellBackColor.Put(SvxBrushItem(COL_BLUE, ATTR_BACKGROUND));
     m_pDoc->ApplyPatternAreaTab(1, 1, 2, 2, 0, aCellBackColor);
     m_pDoc->ApplyPatternAreaTab(3, 1, 3, 1, 0, aCellBackColor);
     m_pDoc->ApplyPatternAreaTab(4, 2, 4, 2, 0, aCellBackColor);
@@ -3478,8 +3478,7 @@ void Test::testAutoFilterTimeValue()
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_TIME_HH_MMSS, LANGUAGE_ENGLISH_US);
     ScPatternAttr aNewAttrs(m_pDoc->GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
 
     m_pDoc->ApplyPatternAreaTab(0, 1, 0, 2, 0, aNewAttrs); // apply it to A2:A3.
 
@@ -3631,8 +3630,7 @@ void Test::testTdf76441()
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     {
         // First insert the string, then the format
         m_pDoc->SetString(ScAddress(0,0,0), "01:20");
@@ -3669,8 +3667,7 @@ void Test::testTdf76836()
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
 
     m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
     m_pDoc->SetValue(0,0,0, 10.0);
@@ -3702,8 +3699,7 @@ void Test::testTdf142186()
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     {
         // First insert the string, then the format
         m_pDoc->SetString(ScAddress(0,0,0), "123.45");
@@ -3756,8 +3752,7 @@ void Test::testTdf126342()
     pFormatter->PutEntry( aCode, nCheckPos, nType, nFormat );
 
     ScPatternAttr aNewAttrs(m_pDoc->GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     m_pDoc->ApplyPattern(0, 0, 0, aNewAttrs);
 
     m_pDoc->SetString(ScAddress(0,0,0), "11/7/19");
@@ -3889,8 +3884,7 @@ void Test::testDateFilterContains()
     SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
     sal_uInt32 nFormat = pFormatter->GetFormatIndex(NF_DATE_DIN_YYMMDD, LANGUAGE_ENGLISH_US);
     ScPatternAttr aNewAttrs(m_pDoc->GetPool());
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
+    aNewAttrs.Put(SfxUInt32Item(ATTR_VALUE_FORMAT, nFormat));
     m_pDoc->ApplyPatternAreaTab(0, 1, 0, 5, 0, aNewAttrs); // apply it to A1:A6
 
     ScDBData* pDBData = new ScDBData("NONAME", 0, 0, 0, nCols, nRows);
@@ -6501,7 +6495,7 @@ void Test::testProtectedSheetEditByRow()
     {
         // Remove protected flags from rows 2-5.
         ScPatternAttr aAttr(m_pDoc->GetPool());
-        aAttr.GetItemSet().Put(ScProtectionAttr(false));
+        aAttr.Put(ScProtectionAttr(false));
         m_pDoc->ApplyPatternAreaTab(0, 1, m_pDoc->MaxCol(), 4, 0, aAttr);
 
         // Protect the sheet without any options.
@@ -6577,7 +6571,7 @@ void Test::testProtectedSheetEditByColumn()
     {
         // Remove protected flags from columns B to E.
         ScPatternAttr aAttr(m_pDoc->GetPool());
-        aAttr.GetItemSet().Put(ScProtectionAttr(false));
+        aAttr.Put(ScProtectionAttr(false));
         m_pDoc->ApplyPatternAreaTab(1, 0, 4, m_pDoc->MaxRow(), 0, aAttr);
 
         // Protect the sheet without any options.

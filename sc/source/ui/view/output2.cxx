@@ -1708,11 +1708,11 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         {
                             const SfxPoolItem* pItem;
                             if ( pFontSet->GetItemState( ATTR_FONT, true, &pItem ) == SfxItemState::SET )
-                                pAltPattern->GetItemSet().Put( static_cast<const SvxFontItem&>(*pItem) );
+                                pAltPattern->Put( static_cast<const SvxFontItem&>(*pItem) );
                             if ( pFontSet->GetItemState( ATTR_CJK_FONT, true, &pItem ) == SfxItemState::SET )
-                                pAltPattern->GetItemSet().Put( static_cast<const SvxFontItem&>(*pItem) );
+                                pAltPattern->Put( static_cast<const SvxFontItem&>(*pItem) );
                             if ( pFontSet->GetItemState( ATTR_CTL_FONT, true, &pItem ) == SfxItemState::SET )
-                                pAltPattern->GetItemSet().Put( static_cast<const SvxFontItem&>(*pItem) );
+                                pAltPattern->Put( static_cast<const SvxFontItem&>(*pItem) );
                         }
                         pPattern = pAltPattern;
                     }
@@ -1724,7 +1724,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                         aAltPatterns.push_back(std::make_unique<ScPatternAttr>(*pPattern));
                         ScPatternAttr* pAltPattern = aAltPatterns.back().get();
                         ScLineBreakCell aLineBreak(false);
-                        pAltPattern->GetItemSet().Put(aLineBreak);
+                        pAltPattern->Put(aLineBreak);
                         pPattern = pAltPattern;
                     }
 

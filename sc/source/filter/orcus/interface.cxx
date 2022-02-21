@@ -1209,7 +1209,7 @@ void ScOrcusSheet::set_format(os::row_t row, os::col_t col, size_t xf_index)
     SAL_INFO("sc.orcus.style", "set format: " << xf_index);
 
     ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
-    mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
+    mrStyles.applyXfToItemSet(aPattern.GetItemSetToModify(), xf_index);
     mrDoc.getDoc().ApplyPattern(col, row, mnTab, aPattern);
 }
 
@@ -1218,7 +1218,7 @@ void ScOrcusSheet::set_format(os::row_t row_start, os::col_t col_start,
 {
     SAL_INFO("sc.orcus.style", "set format range: " << xf_index);
     ScPatternAttr aPattern(mrDoc.getDoc().GetPool());
-    mrStyles.applyXfToItemSet(aPattern.GetItemSet(), xf_index);
+    mrStyles.applyXfToItemSet(aPattern.GetItemSetToModify(), xf_index);
     mrDoc.getDoc().ApplyPatternAreaTab(col_start, row_start, col_end, row_end, mnTab, aPattern);
 }
 

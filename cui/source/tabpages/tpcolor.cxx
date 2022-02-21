@@ -46,7 +46,6 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     // All the horrific pointers we store and should not
     , pnColorListState( nullptr )
     , aXFillAttr( rInAttrs.GetPool() )
-    , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( ColorModel::RGB )
     , m_context(comphelper::getProcessComponentContext())
     , m_xValSetColorList(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
@@ -94,8 +93,8 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     SetExchangeSupport();
 
     // setting the output device
-    rXFSet.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
-    rXFSet.Put( XFillColorItem(OUString(), COL_BLACK) );
+    aXFillAttr.Put( XFillStyleItem(drawing::FillStyle_SOLID) );
+    aXFillAttr.Put( XFillColorItem(OUString(), COL_BLACK) );
     m_aCtlPreviewOld.SetAttributes( aXFillAttr.GetItemSet() );
     m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -286,7 +285,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, SpinValueHdl_Impl, weld::SpinButton&, void)
                           static_cast<sal_uInt8>(PercentToColor_Impl(m_xBcustom->get_value())));
     UpdateColorValues();
 
-    rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
+    aXFillAttr.Put( XFillColorItem( OUString(), aCurrentColor ) );
     m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
     m_aCtlPreviewNew.Invalidate();
@@ -301,7 +300,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, MetricSpinValueHdl_Impl, weld::MetricSpinButton
                           static_cast<sal_uInt8>(PercentToColor_Impl(m_xMcustom->get_value(FieldUnit::NONE))));
     ConvertColorValues (aCurrentColor, ColorModel::RGB);
 
-    rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
+    aXFillAttr.Put( XFillColorItem( OUString(), aCurrentColor ) );
     m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
     m_aCtlPreviewNew.Invalidate();
@@ -312,7 +311,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl, weld::Entry&, void)
     aCurrentColor = m_xHexcustom->GetColor();
     UpdateColorValues();
 
-    rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
+    aXFillAttr.Put( XFillColorItem( OUString(), aCurrentColor ) );
     m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
     m_aCtlPreviewNew.Invalidate();
@@ -395,7 +394,7 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
         aCurrentColor = aPreviewColor;
         UpdateColorValues( false );
         // fill ItemSet and pass it on to XOut
-        rXFSet.Put( XFillColorItem( OUString(), aPreviewColor ) );
+        aXFillAttr.Put( XFillColorItem( OUString(), aPreviewColor ) );
         //m_aCtlPreviewOld.SetAttributes( aXFillAttr );
         m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -486,7 +485,7 @@ IMPL_LINK(SvxColorTabPage, SelectValSetHdl_Impl, ValueSet*, pValSet, void)
 
     Color aColor = pValSet->GetItemColor( nPos );
 
-    rXFSet.Put( XFillColorItem( OUString(), aColor ) );
+    aXFillAttr.Put( XFillColorItem( OUString(), aColor ) );
     m_aCtlPreviewNew.SetAttributes( aXFillAttr.GetItemSet() );
     m_aCtlPreviewNew.Invalidate();
     ChangeColor(aColor, false);
@@ -558,7 +557,7 @@ void SvxColorTabPage::ChangeColor(const Color &rNewColor, bool bUpdatePreset )
     aCurrentColor = rNewColor;
     UpdateColorValues( bUpdatePreset );
     // fill ItemSet and pass it on to XOut
-    rXFSet.Put( XFillColorItem( OUString(), aCurrentColor ) );
+    aXFillAttr.Put( XFillColorItem( OUString(), aCurrentColor ) );
     m_aCtlPreviewNew.SetAttributes(aXFillAttr.GetItemSet());
     m_aCtlPreviewNew.Invalidate();
 }

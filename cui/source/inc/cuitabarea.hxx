@@ -136,7 +136,6 @@ class SvxTransparenceTabPage : public SfxTabPage
     bool                bBitmap;
 
     XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
 
     SvxXRectPreview     m_aCtlBitmapPreview;
     SvxXRectPreview     m_aCtlXRectPreview;
@@ -229,7 +228,6 @@ private:
     ChangeType*         m_pnHatchingListState;
 
     XFillAttrSetItem    m_aXFillAttr;
-    SfxItemSet&         m_rXFSet;
 
     bool m_bBtnClicked = false;
 
@@ -301,7 +299,6 @@ private:
     sal_uInt16          m_nDlgType;
 
     XFillAttrSetItem    m_aXFillAttr;
-    SfxItemSet&         m_rXFSet;
     MapUnit             m_ePoolUnit;
 
     SvxRectCtl m_aCtlPosition;
@@ -353,7 +350,6 @@ private:
     ChangeType*         m_pnColorListState;
 
     XFillAttrSetItem    m_aXFillAttr;
-    SfxItemSet&         m_rXFSet;
 
     SvxXRectPreview m_aCtlPreview;
     std::unique_ptr<weld::ComboBox> m_xLbGradientType;
@@ -428,7 +424,6 @@ private:
     ChangeType*         m_pnColorListState;
 
     XFillAttrSetItem    m_aXFillAttr;
-    SfxItemSet&         m_rXFSet;
 
     MapUnit             m_ePoolUnit;
 
@@ -499,7 +494,6 @@ private:
     bool                       m_bLogicalSize;
 
     XFillAttrSetItem           m_aXFillAttr;
-    SfxItemSet&                m_rXFSet;
     const SdrView*             mpView;
     MapUnit                    mePoolUnit;
     FieldUnit                  meFieldUnit;
@@ -572,7 +566,6 @@ private:
     ChangeType*         m_pnColorListState;
 
     XFillAttrSetItem    m_aXFillAttr;
-    SfxItemSet&         m_rXFSet;
 
     SvxXRectPreview m_aCtlPreview;
     std::unique_ptr<SvxPixelCtl> m_xCtlPixel;
@@ -635,7 +628,6 @@ private:
     ChangeType*         pnColorListState;
 
     XFillAttrSetItem    aXFillAttr;
-    SfxItemSet&         rXFSet;
 
     ColorModel          eCM;
 

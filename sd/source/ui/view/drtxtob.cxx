@@ -167,7 +167,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
             {
                 sal_uInt16 stretchX = 100;
                 SvxScriptSetItem aSetItem( nSlotId, GetPool() );
-                aSetItem.GetItemSet().Put( aAttrSet, false );
+                aSetItem.Put( aAttrSet, false );
 
                 SvtScriptType nScriptType = mpView->GetScriptType();
 

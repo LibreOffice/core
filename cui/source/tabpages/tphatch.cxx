@@ -49,7 +49,6 @@ SvxHatchTabPage::SvxHatchTabPage(weld::Container* pPage, weld::DialogController*
     , m_pnHatchingListState(nullptr)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
-    , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_xMtrDistance(m_xBuilder->weld_metric_spin_button("distancemtr", FieldUnit::MM))
     , m_xMtrAngle(m_xBuilder->weld_metric_spin_button("anglemtr", FieldUnit::DEGREE))
     , m_xSliderAngle(m_xBuilder->weld_scale("angleslider"))
@@ -91,8 +90,8 @@ SvxHatchTabPage::SvxHatchTabPage(weld::Container* pPage, weld::DialogController*
     m_ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
     // setting the output device
-    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_HATCH) );
-    m_rXFSet.Put( XFillHatchItem(OUString(), XHatch()) );
+    m_aXFillAttr.Put( XFillStyleItem(drawing::FillStyle_HATCH) );
+    m_aXFillAttr.Put( XFillHatchItem(OUString(), XHatch()) );
     m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_xHatchLB->SetSelectHdl( LINK( this, SvxHatchTabPage, ChangeHatchHdl ) );
     m_xHatchLB->SetRenameHdl( LINK( this, SvxHatchTabPage, ClickRenameHdl_Impl ) );
@@ -173,7 +172,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
     }
 
     XFillBackgroundItem aBckItem( rSet.Get(XATTR_FILLBACKGROUND));
-    m_rXFSet.Put( aBckItem );
+    m_aXFillAttr.Put( aBckItem );
 
     if (aBckItem.GetValue())
     {
@@ -182,7 +181,7 @@ void SvxHatchTabPage::ActivatePage( const SfxItemSet& rSet )
         Color aColor(aColorItem.GetColorValue());
         m_xLbBackgroundColor->SelectEntry(aColor);
         m_xLbBackgroundColor->set_sensitive(true);
-        m_rXFSet.Put( aColorItem );
+        m_aXFillAttr.Put( aColorItem );
     }
     else
     {
@@ -256,14 +255,14 @@ void SvxHatchTabPage::Reset( const SfxItemSet* rSet )
 
     XFillColorItem aColItem( rSet->Get(XATTR_FILLCOLOR) );
     m_xLbBackgroundColor->SelectEntry(aColItem.GetColorValue());
-    m_rXFSet.Put( aColItem );
+    m_aXFillAttr.Put( aColItem );
 
     XFillBackgroundItem aBckItem( rSet->Get(XATTR_FILLBACKGROUND) );
     if(aBckItem.GetValue())
         m_xCbBackgroundColor->set_state(TRISTATE_TRUE);
     else
         m_xCbBackgroundColor->set_state(TRISTATE_FALSE);
-    m_rXFSet.Put( aBckItem );
+    m_aXFillAttr.Put( aBckItem );
 
     m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlPreview.Invalidate();
@@ -294,7 +293,7 @@ IMPL_LINK_NOARG( SvxHatchTabPage, ToggleHatchBackgroundColor_Impl, weld::Togglea
         m_xLbBackgroundColor->set_sensitive(true);
     else
         m_xLbBackgroundColor->set_sensitive(false);
-    m_rXFSet.Put( XFillBackgroundItem( m_xCbBackgroundColor->get_active() ) );
+    m_aXFillAttr.Put( XFillBackgroundItem( m_xCbBackgroundColor->get_active() ) );
     ModifiedBackgroundHdl_Impl(*m_xLbBackgroundColor);
 }
 
@@ -307,7 +306,7 @@ IMPL_LINK_NOARG( SvxHatchTabPage, ModifiedBackgroundHdl_Impl, ColorListBox&, voi
         m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlPreview.Invalidate();
     }
-    m_rXFSet.Put(XFillColorItem( OUString(), aColor ));
+    m_aXFillAttr.Put(XFillColorItem( OUString(), aColor ));
 
     m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlPreview.Invalidate();
@@ -338,7 +337,7 @@ void SvxHatchTabPage::ModifiedHdl_Impl( void const * p )
                     GetCoreValue( *m_xMtrDistance, m_ePoolUnit ),
                     Degree10(static_cast<sal_Int16>(m_xMtrAngle->get_value(FieldUnit::NONE) * 10)) );
 
-    m_rXFSet.Put( XFillHatchItem( OUString(), aXHatch ) );
+    m_aXFillAttr.Put( XFillHatchItem( OUString(), aXHatch ) );
 
     m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlPreview.Invalidate();
@@ -387,7 +386,7 @@ void SvxHatchTabPage::ChangeHatchHdl_Impl()
         m_xSliderAngle->set_value(nHatchAngle);
 
         // fill ItemSet and pass it on to m_aCtlPreview
-        m_rXFSet.Put( XFillHatchItem( OUString(), *pHatch ) );
+        m_aXFillAttr.Put( XFillHatchItem( OUString(), *pHatch ) );
         m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
 
         m_aCtlPreview.Invalidate();

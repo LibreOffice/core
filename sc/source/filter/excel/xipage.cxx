@@ -299,7 +299,7 @@ void XclImpPageSettings::Finalize()
     // header
     bool bHasHeader = !maData.maHeader.isEmpty();
     SvxSetItem aHdrSetItem( rItemSet.Get( ATTR_PAGE_HEADERSET ) );
-    SfxItemSet& rHdrItemSet = aHdrSetItem.GetItemSet();
+    SfxItemSet& rHdrItemSet = aHdrSetItem.GetItemSetToModify();
     rHdrItemSet.Put( SfxBoolItem( ATTR_PAGE_ON, bHasHeader ) );
     if( bHasHeader )
     {
@@ -336,7 +336,7 @@ void XclImpPageSettings::Finalize()
     // footer
     bool bHasFooter = !maData.maFooter.isEmpty();
     SvxSetItem aFtrSetItem( rItemSet.Get( ATTR_PAGE_FOOTERSET ) );
-    SfxItemSet& rFtrItemSet = aFtrSetItem.GetItemSet();
+    SfxItemSet& rFtrItemSet = aFtrSetItem.GetItemSetToModify();
     rFtrItemSet.Put( SfxBoolItem( ATTR_PAGE_ON, bHasFooter ) );
     if( bHasFooter )
     {

@@ -54,7 +54,6 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogC
     , rOutAttrs(rInAttrs)
     , pPolyObj(nullptr)
     , aXLineAttr(rInAttrs.GetPool())
-    , rXLSet(aXLineAttr.GetItemSet())
     , pnLineEndListState(nullptr)
     , pPageType(nullptr)
     , nDlgType(0)
@@ -71,11 +70,11 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage(weld::Container* pPage, weld::DialogC
     // this page needs ExchangeSupport
     SetExchangeSupport();
 
-    rXLSet.Put( XLineStyleItem(css::drawing::LineStyle_SOLID) );
-    rXLSet.Put( XLineWidthItem(XOUT_WIDTH) );
-    rXLSet.Put( XLineColorItem( OUString(), COL_BLACK ) );
-    rXLSet.Put( XLineStartWidthItem( m_aCtlPreview.GetOutputSize().Height()  / 2 ) );
-    rXLSet.Put( XLineEndWidthItem( m_aCtlPreview.GetOutputSize().Height() / 2 ) );
+    aXLineAttr.Put( XLineStyleItem(css::drawing::LineStyle_SOLID) );
+    aXLineAttr.Put( XLineWidthItem(XOUT_WIDTH) );
+    aXLineAttr.Put( XLineColorItem( OUString(), COL_BLACK ) );
+    aXLineAttr.Put( XLineStartWidthItem( m_aCtlPreview.GetOutputSize().Height()  / 2 ) );
+    aXLineAttr.Put( XLineEndWidthItem( m_aCtlPreview.GetOutputSize().Height() / 2 ) );
 
     // #i34740#
     m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -208,8 +207,8 @@ void SvxLineEndDefTabPage::Reset( const SfxItemSet* )
 
         m_xEdtName->set_text(m_xLbLineEnds->get_active_text());
 
-        rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
-        rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
+        aXLineAttr.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
+        aXLineAttr.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
         // #i34740#
         m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -247,8 +246,8 @@ void SvxLineEndDefTabPage::SelectLineEndHdl_Impl()
 
     m_xEdtName->set_text(m_xLbLineEnds->get_active_text());
 
-    rXLSet.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
-    rXLSet.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
+    aXLineAttr.Put( XLineStartItem( OUString(), pEntry->GetLineEnd() ) );
+    aXLineAttr.Put( XLineEndItem( OUString(), pEntry->GetLineEnd() ) );
 
     // #i34740#
     m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());

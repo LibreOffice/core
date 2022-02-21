@@ -629,7 +629,7 @@ void DifColumn::NewEntry( const SCROW nPos, const sal_uInt32 nNumFormat )
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 {
     ScPatternAttr aAttr( rDoc.GetPool() );
-    SfxItemSet &rItemSet = aAttr.GetItemSet();
+    SfxItemSet &rItemSet = aAttr.GetItemSetToModify();
 
     for (const auto& rEntry : maEntries)
     {

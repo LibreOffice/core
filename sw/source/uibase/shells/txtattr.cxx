@@ -253,7 +253,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
         case FN_SHRINK_FONT_SIZE:
         {
             SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, rPool );
-            rWrtSh.GetCurAttr( aSetItem.GetItemSet() );
+            rWrtSh.GetCurAttr( aSetItem.GetItemSetToModify() );
             SfxItemSet aAttrSet( rPool, aSetItem.GetItemSet().GetRanges() );
 
             SvtScriptType nScriptTypes = rWrtSh.GetScriptType();
@@ -276,8 +276,8 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
             {
                 std::unique_ptr<SwPaM> pPaM = std::move(iPair.second);
                 const SfxPoolItem* pItem = iPair.first;
-                aSetItem.GetItemSet().ClearItem();
-                rWrtSh.GetPaMAttr( pPaM.get(), aSetItem.GetItemSet() );
+                aSetItem.ClearItem();
+                rWrtSh.GetPaMAttr( pPaM.get(), aSetItem.GetItemSetToModify() );
                 aAttrSet.SetRanges( aSetItem.GetItemSet().GetRanges() );
 
                 pSize = static_cast<const SvxFontHeightItem*>( pItem );
@@ -666,7 +666,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             {
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT,
                                             *rSet.GetPool() );
-                aSetItem.GetItemSet().Put( aCoreSet, false );
+                aSetItem.Put( aCoreSet, false );
                 const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>(
                                             aSetItem.GetItemOfScript( rSh.GetScriptType() ) ) );
 

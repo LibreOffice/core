@@ -90,7 +90,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     // generate new Pattern Attribute
     ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
 
-    SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
+    SfxItemSet&     rItemSet = pNewPatt->GetItemSetToModify();
     ENTRY *pCurrent = new ENTRY( std::unique_ptr<ScPatternAttr>(pNewPatt) );
 
     pCurrent->nHash0 = nRefHash;

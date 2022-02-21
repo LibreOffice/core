@@ -75,7 +75,6 @@ SvxPatternTabPage::SvxPatternTabPage(weld::Container* pPage, weld::DialogControl
     , m_pnPatternListState(nullptr)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
-    , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_xCtlPixel(new SvxPixelCtl(this))
     , m_xLbColor(new ColorListBox(m_xBuilder->weld_menu_button("LB_COLOR"),
                 [this]{ return GetDialogController()->getDialog(); }))
@@ -99,8 +98,8 @@ SvxPatternTabPage::SvxPatternTabPage(weld::Container* pPage, weld::DialogControl
     SetExchangeSupport();
 
     // setting the output device
-    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
-    m_rXFSet.Put( XFillBitmapItem(OUString(), Graphic()) );
+    m_aXFillAttr.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
+    m_aXFillAttr.Put( XFillBitmapItem(OUString(), Graphic()) );
 
     m_xBtnAdd->connect_clicked( LINK( this, SvxPatternTabPage, ClickAddHdl_Impl ) );
     m_xBtnModify->connect_clicked( LINK( this, SvxPatternTabPage, ClickModifyHdl_Impl ) );
@@ -217,7 +216,7 @@ void SvxPatternTabPage::Reset( const SfxItemSet*  )
     const XFillBitmapItem aBmpItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx()));
     if(aBmpItem.isPattern())
     {
-        m_rXFSet.Put( aBmpItem );
+        m_aXFillAttr.Put( aBmpItem );
         m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlPreview.Invalidate();
     }
@@ -302,9 +301,9 @@ IMPL_LINK_NOARG(SvxPatternTabPage, ChangePatternHdl_Impl, ValueSet*, void)
         // update m_xBitmapCtl, rXFSet and m_aCtlPreview
         m_xBitmapCtl->SetPixelColor( aPixelColor );
         m_xBitmapCtl->SetBackgroundColor( aBackColor );
-        m_rXFSet.ClearItem();
-        m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-        m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
+        m_aXFillAttr.ClearItem();
+        m_aXFillAttr.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
+        m_aXFillAttr.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
         m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlPreview.Invalidate();
     }
@@ -518,7 +517,7 @@ void SvxPatternTabPage::ChangeColor_Impl()
     m_xBitmapCtl->SetBackgroundColor( m_xLbBackgroundColor->GetSelectEntryColor() );
 
     // get bitmap and display it
-    m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
+    m_aXFillAttr.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
     m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlPreview.Invalidate();
 }
@@ -530,7 +529,7 @@ void SvxPatternTabPage::PointChanged(weld::DrawingArea* pDrawingArea, RectPoint)
         m_xBitmapCtl->SetBmpArray(m_xCtlPixel->GetBitmapPixelPtr());
 
         // get bitmap and display it
-        m_rXFSet.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
+        m_aXFillAttr.Put(XFillBitmapItem(OUString(), Graphic(m_xBitmapCtl->GetBitmapEx())));
         m_aCtlPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlPreview.Invalidate();
     }

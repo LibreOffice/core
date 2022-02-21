@@ -2843,7 +2843,7 @@ void SwXStyle::PutItemToSet(const SvxSetItem* pSetItem, const SfxItemPropertySet
 {
     // create a new SvxSetItem and get it's ItemSet as new target
     const std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
-    SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
+    SfxItemSet& rSetSet = pNewSetItem->GetItemSetToModify();
 
     // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
     rSetSet.SetParent(&m_pDoc->GetDfltFrameFormat()->GetAttrSet());
@@ -2994,7 +2994,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     {
                         // create a new SvxSetItem and get it's ItemSet as new target
                         std::unique_ptr<SvxSetItem> pNewSetItem(pSetItem->Clone());
-                        SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
+                        SfxItemSet& rSetSet = pNewSetItem->GetItemSetToModify();
 
                         // set parent to ItemSet to ensure XFILL_NONE as XFillStyleItem
                         rSetSet.SetParent(&GetDoc()->GetDfltFrameFormat()->GetAttrSet());

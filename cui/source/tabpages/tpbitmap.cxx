@@ -74,7 +74,6 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_fObjectHeight(0.0)
     , m_bLogicalSize(false)
     , m_aXFillAttr(rInAttrs.GetPool())
-    , m_rXFSet(m_aXFillAttr.GetItemSet())
     , mpView(nullptr)
     , m_xBitmapLB(new SvxPresetListBox(m_xBuilder->weld_scrolled_window("imagewin", true)))
     , m_xBitmapStyleLB(m_xBuilder->weld_combo_box("imagestyle"))
@@ -95,8 +94,8 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     , m_xBitmapLBWin(new weld::CustomWeld(*m_xBuilder, "IMAGE", *m_xBitmapLB))
 {
     // setting the output device
-    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
-    m_rXFSet.Put( XFillBitmapItem(OUString(), Graphic()) );
+    m_aXFillAttr.Put( XFillStyleItem(drawing::FillStyle_BITMAP) );
+    m_aXFillAttr.Put( XFillBitmapItem(OUString(), Graphic()) );
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
 
     m_xBitmapLB->SetSelectHdl( LINK(this, SvxBitmapTabPage, ModifyBitmapHdl) );
@@ -121,7 +120,7 @@ SvxBitmapTabPage::SvxBitmapTabPage(weld::Container* pPage, weld::DialogControlle
     m_xBitmapLB->set_size_request(aSize.Width(), aSize.Height());
     m_xCtlBitmapPreview->set_size_request(aSize.Width(), aSize.Height());
 
-    SfxItemPool* pPool = m_rXFSet.GetPool();
+    SfxItemPool* pPool = m_aXFillAttr.GetItemSet().GetPool();
     mePoolUnit = pPool->GetMetric( XATTR_FILLBMP_SIZEX );
     meFieldUnit = GetModuleFieldUnit( rInAttrs );
     SetFieldUnit( *m_xBitmapWidth, meFieldUnit, true );
@@ -282,7 +281,7 @@ void SvxBitmapTabPage::Reset( const SfxItemSet* rAttrs )
 
     if(!aItem.isPattern())
     {
-        m_rXFSet.Put( aItem );
+        m_aXFillAttr.Put( aItem );
         m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlBitmapPreview.Invalidate();
     }
@@ -501,9 +500,9 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapHdl, ValueSet*, void)
         ModifyBitmapStyleHdl( *m_xBitmapStyleLB );
         ModifyBitmapPositionHdl( *m_xPositionLB );
 
-        m_rXFSet.ClearItem(XATTR_FILLBITMAP);
-        m_rXFSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
-        m_rXFSet.Put(XFillBitmapItem(OUString(), *pGraphicObject));
+        m_aXFillAttr.ClearItem(XATTR_FILLBITMAP);
+        m_aXFillAttr.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
+        m_aXFillAttr.Put(XFillBitmapItem(OUString(), *pGraphicObject));
 
         m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
         m_aCtlBitmapPreview.Invalidate();
@@ -640,8 +639,8 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBox&, void )
     m_xPositionOffBox->set_sensitive( bIsTiled );
     m_xTileOffBox->set_sensitive( bIsTiled );
 
-    m_rXFSet.Put( XFillBmpTileItem( bIsTiled ) );
-    m_rXFSet.Put( XFillBmpStretchItem( bIsStretched ) );
+    m_aXFillAttr.Put( XFillBmpTileItem( bIsTiled ) );
+    m_aXFillAttr.Put( XFillBmpStretchItem( bIsStretched ) );
 
     if(!bIsStretched)
     {
@@ -667,8 +666,8 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBox&, void )
                 break;
         }
 
-        m_rXFSet.Put( XFillBmpSizeXItem( aSetBitmapSize.Width() ) );
-        m_rXFSet.Put( XFillBmpSizeYItem( aSetBitmapSize.Height() ) );
+        m_aXFillAttr.Put( XFillBmpSizeXItem( aSetBitmapSize.Width() ) );
+        m_aXFillAttr.Put( XFillBmpSizeYItem( aSetBitmapSize.Height() ) );
     }
 
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
@@ -678,7 +677,7 @@ IMPL_LINK_NOARG( SvxBitmapTabPage, ModifyBitmapStyleHdl, weld::ComboBox&, void )
 IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapPositionHdl, weld::ComboBox&, void)
 {
     if (m_xPositionLB->get_sensitive())
-        m_rXFSet.Put( XFillBmpPosItem( static_cast< RectPoint >( m_xPositionLB->get_active() ) ) );
+        m_aXFillAttr.Put( XFillBmpPosItem( static_cast< RectPoint >( m_xPositionLB->get_active() ) ) );
 
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlBitmapPreview.Invalidate();
@@ -687,10 +686,10 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyBitmapPositionHdl, weld::ComboBox&, void
 IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyPositionOffsetHdl, weld::MetricSpinButton&, void)
 {
     if (m_xPositionOffX->get_sensitive())
-        m_rXFSet.Put( XFillBmpPosOffsetXItem( m_xPositionOffX->get_value(FieldUnit::PERCENT) ) );
+        m_aXFillAttr.Put( XFillBmpPosOffsetXItem( m_xPositionOffX->get_value(FieldUnit::PERCENT) ) );
 
     if (m_xPositionOffY->get_sensitive())
-        m_rXFSet.Put( XFillBmpPosOffsetYItem( m_xPositionOffY->get_value(FieldUnit::PERCENT) ) );
+        m_aXFillAttr.Put( XFillBmpPosOffsetYItem( m_xPositionOffY->get_value(FieldUnit::PERCENT) ) );
 
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlBitmapPreview.Invalidate();
@@ -707,8 +706,8 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ModifyTileOffsetHdl, weld::MetricSpinButton&, 
     if(m_xTileOffLB->get_active() == static_cast<sal_Int32>(COLUMN))
         nTileYOff = m_xTileOffset->get_value(FieldUnit::PERCENT);
 
-    m_rXFSet.Put( XFillBmpTileOffsetXItem(nTileXOff) );
-    m_rXFSet.Put( XFillBmpTileOffsetYItem(nTileYOff) );
+    m_aXFillAttr.Put( XFillBmpTileOffsetXItem(nTileXOff) );
+    m_aXFillAttr.Put( XFillBmpTileOffsetYItem(nTileYOff) );
 
     m_aCtlBitmapPreview.SetAttributes( m_aXFillAttr.GetItemSet() );
     m_aCtlBitmapPreview.Invalidate();

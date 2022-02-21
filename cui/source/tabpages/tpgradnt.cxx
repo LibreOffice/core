@@ -46,7 +46,6 @@ SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogContr
     , m_pnGradientListState(nullptr)
     , m_pnColorListState(nullptr)
     , m_aXFillAttr(rInAttrs.GetPool())
-    , m_rXFSet(m_aXFillAttr.GetItemSet())
     , m_xLbGradientType(m_xBuilder->weld_combo_box("gradienttypelb"))
     , m_xFtCenter(m_xBuilder->weld_label("centerft"))
     , m_xMtrCenterX(m_xBuilder->weld_metric_spin_button("centerxmtr", FieldUnit::PERCENT))
@@ -82,8 +81,8 @@ SvxGradientTabPage::SvxGradientTabPage(weld::Container* pPage, weld::DialogContr
     m_xMtrColorFrom->set_value(100, FieldUnit::PERCENT);
 
     // setting the output device
-    m_rXFSet.Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
-    m_rXFSet.Put( XFillGradientItem(OUString(), XGradient( COL_BLACK, COL_WHITE )) );
+    m_aXFillAttr.Put( XFillStyleItem(drawing::FillStyle_GRADIENT) );
+    m_aXFillAttr.Put( XFillGradientItem(OUString(), XGradient( COL_BLACK, COL_WHITE )) );
     m_aCtlPreview.SetAttributes(m_aXFillAttr.GetItemSet());
 
     // set handler
@@ -310,10 +309,10 @@ void SvxGradientTabPage::ModifiedHdl_Impl( void const * pControl )
     sal_uInt16 nValue = 0;
     if (!m_xCbIncrement->get_active())
         nValue = static_cast<sal_uInt16>(m_xMtrIncrement->get_value());
-    m_rXFSet.Put( XGradientStepCountItem( nValue ) );
+    m_aXFillAttr.Put( XGradientStepCountItem( nValue ) );
 
     // displaying in XOutDev
-    m_rXFSet.Put( XFillGradientItem( OUString(), aXGradient ) );
+    m_aXFillAttr.Put( XFillGradientItem( OUString(), aXGradient ) );
     m_aCtlPreview.SetAttributes(m_aXFillAttr.GetItemSet());
     m_aCtlPreview.Invalidate();
 }
@@ -560,8 +559,8 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
     SetControlState_Impl( eXGS );
 
     // fill ItemSet and pass it on to aCtlPreview
-    m_rXFSet.Put( XFillGradientItem( OUString(), *pGradient ) );
-    m_rXFSet.Put( XGradientStepCountItem( nValue ) );
+    m_aXFillAttr.Put( XFillGradientItem( OUString(), *pGradient ) );
+    m_aXFillAttr.Put( XGradientStepCountItem( nValue ) );
     m_aCtlPreview.SetAttributes(m_aXFillAttr.GetItemSet());
 
     m_aCtlPreview.Invalidate();

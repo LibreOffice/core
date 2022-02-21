@@ -326,7 +326,7 @@ void ScStyleSheetPool::CreateStandardStyles()
     aBoxInfoItem.SetDist ( true );
 
     SvxSetItem aHFSetItem2 = pSet->Get( ATTR_PAGE_HEADERSET );
-    pHFSet = &(aHFSetItem2.GetItemSet());
+    pHFSet = &(aHFSetItem2.GetItemSetToModify());
 
     pHFSet->Put( SvxBrushItem( COL_LIGHTGRAY, ATTR_BACKGROUND ) );
     pHFSet->Put( aBoxItem );

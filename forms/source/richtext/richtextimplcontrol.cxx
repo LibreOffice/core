@@ -218,16 +218,16 @@ namespace frm
 
     void RichTextControlImpl::normalizeScriptDependentAttribute( SvxScriptSetItem& _rScriptSetItem )
     {
-        _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), false );
+        _rScriptSetItem.Put( m_pView->GetAttribs(), false );
         const SfxPoolItem* pNormalizedItem = _rScriptSetItem.GetItemOfScript( getSelectedScriptType() );
 
         WhichId nNormalizedWhichId = _rScriptSetItem.GetItemSet().GetPool()->GetWhich( _rScriptSetItem.Which() );
         if ( pNormalizedItem )
         {
-            _rScriptSetItem.GetItemSet().Put( pNormalizedItem->CloneSetWhich(nNormalizedWhichId) );
+            _rScriptSetItem.Put( pNormalizedItem->CloneSetWhich(nNormalizedWhichId) );
         }
         else
-            _rScriptSetItem.GetItemSet().InvalidateItem( nNormalizedWhichId );
+            _rScriptSetItem.GetItemSetToModify().InvalidateItem( nNormalizedWhichId );
     }
 
 

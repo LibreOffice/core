@@ -1487,9 +1487,9 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
             {
                 SvxSetItem aNewHeader( rSet.Get(ATTR_PAGE_HEADERSET) );
                 if (pValue)
-                    pPropSet->setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSet() );
+                    pPropSet->setPropertyValue( *pHeaderEntry, *pValue, aNewHeader.GetItemSetToModify() );
                 else
-                    aNewHeader.GetItemSet().ClearItem( pHeaderEntry->nWID );
+                    aNewHeader.ClearItem( pHeaderEntry->nWID );
                 rSet.Put( aNewHeader );
                 bDone = true;
             }
@@ -1501,9 +1501,9 @@ void ScStyleObj::setPropertyValue_Impl( std::u16string_view rPropertyName, const
             {
                 SvxSetItem aNewFooter( rSet.Get(ATTR_PAGE_FOOTERSET) );
                 if (pValue)
-                    pPropSet->setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSet() );
+                    pPropSet->setPropertyValue( *pFooterEntry, *pValue, aNewFooter.GetItemSetToModify() );
                 else
-                    aNewFooter.GetItemSet().ClearItem( pFooterEntry->nWID );
+                    aNewFooter.ClearItem( pFooterEntry->nWID );
                 rSet.Put( aNewFooter );
                 bDone = true;
             }

@@ -1248,7 +1248,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 
     // create new pattern attribute set
     mpPattern.reset( new ScPatternAttr( GetDoc().GetPool() ) );
-    SfxItemSet& rItemSet = mpPattern->GetItemSet();
+    SfxItemSet& rItemSet = mpPattern->GetItemSetToModify();
     XclImpXF* pParentXF = IsCellXF() ? GetXFBuffer().GetXF( mnParent ) : nullptr;
 
     // parent cell style
@@ -1375,8 +1375,8 @@ void XclImpXF::ApplyPatternToAttrVector(
     if (nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND)
     {
         ScPatternAttr aNumPat(rDoc.GetPool());
-        GetNumFmtBuffer().FillScFmtToItemSet(aNumPat.GetItemSet(), nForceScNumFmt);
-        rPat.GetItemSet().Put(aNumPat.GetItemSet());
+        GetNumFmtBuffer().FillScFmtToItemSet(aNumPat.GetItemSetToModify(), nForceScNumFmt);
+        rPat.Put(aNumPat.GetItemSet());
     }
 
     // Make sure we skip unnamed styles.

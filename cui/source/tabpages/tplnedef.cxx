@@ -54,7 +54,6 @@ SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogControl
     : SfxTabPage(pPage, pController, "cui/ui/linestyletabpage.ui", "LineStylePage", &rInAttrs)
     , rOutAttrs(rInAttrs)
     , aXLineAttr(rInAttrs.GetPool())
-    , rXLSet(aXLineAttr.GetItemSet())
     , pnDashListState(nullptr)
     , pPageType(nullptr)
     , nDlgType(0)
@@ -98,10 +97,10 @@ SvxLineDefTabPage::SvxLineDefTabPage(weld::Container* pPage, weld::DialogControl
     DBG_ASSERT( pPool, "Where is the pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
 
-    rXLSet.Put( XLineStyleItem(drawing::LineStyle_DASH) );
-    rXLSet.Put( XLineWidthItem(XOUT_WIDTH) );
-    rXLSet.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ) );
-    rXLSet.Put( XLineColorItem(OUString(), COL_BLACK) );
+    aXLineAttr.Put( XLineStyleItem(drawing::LineStyle_DASH) );
+    aXLineAttr.Put( XLineWidthItem(XOUT_WIDTH) );
+    aXLineAttr.Put( XLineDashItem( OUString(), XDash( css::drawing::DashStyle_RECT, 3, 7, 2, 40, 15 ) ) );
+    aXLineAttr.Put( XLineColorItem(OUString(), COL_BLACK) );
 
     // #i34740#
     m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -322,7 +321,7 @@ void SvxLineDefTabPage::SelectLinestyleHdl_Impl(const weld::ComboBox* p)
 
     FillDialog_Impl();
 
-    rXLSet.Put( XLineDashItem( OUString(), aDash ) );
+    aXLineAttr.Put( XLineDashItem( OUString(), aDash ) );
 
     // #i34740#
     m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());
@@ -803,7 +802,7 @@ void SvxLineDefTabPage::FillDash_Impl()
     aDash.SetDashLen( m_xLbType2->get_active() == 0 ? 0 : GetCoreValue( *m_xMtrLength2, ePoolUnit ) );
     aDash.SetDistance( GetCoreValue( *m_xMtrDistance, ePoolUnit ) );
 
-    rXLSet.Put( XLineDashItem( OUString(), aDash ) );
+    aXLineAttr.Put( XLineDashItem( OUString(), aDash ) );
 
     // #i34740#
     m_aCtlPreview.SetLineAttributes(aXLineAttr.GetItemSet());

@@ -961,7 +961,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if ( nOldValue != nOldValueMerge )
                         {
                             pNewPattern.reset(new ScPatternAttr(*pSrcPattern));
-                            SfxItemSet& rNewSet = pNewPattern->GetItemSet();
+                            SfxItemSet& rNewSet = pNewPattern->GetItemSetToModify();
                             if ( nOldValueMerge == ScMF::NONE )
                                 rNewSet.ClearItem(ATTR_MERGE_FLAG);
                             else
@@ -2533,7 +2533,7 @@ void ScTable::AutoFormat( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW
     for (sal_uInt8 i = 0; i < 16; ++i)
     {
         pPatternAttrs[i].reset(new ScPatternAttr(rDocument.GetPool()));
-        pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSet(), rDocument);
+        pData->FillToItemSet(i, pPatternAttrs[i]->GetItemSetToModify(), rDocument);
     }
 
     SCCOL nCol = nStartCol;

@@ -306,8 +306,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SfxItemSet aItemSet( GetPool() );
 
                 ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
-                SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
-                rNewSet.Put( aItemSet, false );
+                aNewAttrs.Put( aItemSet, false );
 
                 rDoc.ApplySelectionPattern( aNewAttrs, rDoc.GetPreviewSelection() );
                 pTabViewShell->UpdateSelectionArea( aFuncMark, &aAttr );
@@ -329,8 +328,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SfxItemSet aItemSet( GetPool() );
 
                 ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
-                SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
-                rNewSet.Put( aItemSet, false );
+                aNewAttrs.Put( aItemSet, false );
                 rDoc.ApplySelectionPattern( aNewAttrs, aPreviewMark );
                 pTabViewShell->UpdateSelectionArea( aPreviewMark, &aAttr );
             }
@@ -1076,11 +1074,10 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     {
                         const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
                         ScPatternAttr aNewAttrs( rDoc.GetPool() );
-                        SfxItemSet& rSet = aNewAttrs.GetItemSet();
                         LanguageType eNewLang = pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
                         if ( eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW )
-                            rSet.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
-                        rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+                            aNewAttrs.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
+                        aNewAttrs.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
                         pTabViewShell->ApplySelectionPattern( aNewAttrs );
                     }
                     else
@@ -1427,7 +1424,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
                     FontWeight eWeight = WEIGHT_BOLD;
                     SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                    aOldSetItem.GetItemSet().Put( pAttrs->GetItemSet(), false );
+                    aOldSetItem.Put( pAttrs->GetItemSet(), false );
                     const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                     if ( pCore && static_cast<const SvxWeightItem*>(pCore)->GetWeight() == WEIGHT_BOLD )
                         eWeight = WEIGHT_NORMAL;
@@ -1454,7 +1451,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
 
                     FontItalic eItalic = ITALIC_NORMAL;
                     SvxScriptSetItem aOldSetItem( nSlot, rPool );
-                    aOldSetItem.GetItemSet().Put( pAttrs->GetItemSet(), false );
+                    aOldSetItem.Put( pAttrs->GetItemSet(), false );
                     const SfxPoolItem* pCore = aOldSetItem.GetItemOfScript( nScript );
                     if ( pCore && static_cast<const SvxPostureItem*>(pCore)->GetPosture() == ITALIC_NORMAL )
                         eItalic = ITALIC_NONE;
@@ -1672,7 +1669,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             {
                 SfxItemPool& rPool = GetPool();
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, rPool );
-                aSetItem.GetItemSet().Put( pTabViewShell->GetSelectionPattern()->GetItemSet(), false );
+                aSetItem.Put( pTabViewShell->GetSelectionPattern()->GetItemSet(), false );
 
                 SvtScriptType nScriptTypes = pTabViewShell->GetSelectionScriptType();
                 const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptTypes ) ) );
@@ -2697,9 +2694,8 @@ void ScFormatShell::ExecuteTextDirection( const SfxRequest& rReq )
         {
             bool bVert = (nSlot == SID_TEXTDIRECTION_TOP_TO_BOTTOM);
             ScPatternAttr aAttr( GetViewData().GetDocument().GetPool() );
-            SfxItemSet& rItemSet = aAttr.GetItemSet();
-            rItemSet.Put( ScVerticalStackCell( bVert ) );
-            rItemSet.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );
+            aAttr.Put( ScVerticalStackCell( bVert ) );
+            aAttr.Put( SfxBoolItem( ATTR_VERTICAL_ASIAN, bVert ) );
             pTabViewShell->ApplySelectionPattern( aAttr );
             pTabViewShell->AdjustBlockHeight();
         }

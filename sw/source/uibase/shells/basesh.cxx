@@ -2349,7 +2349,7 @@ void SwBaseShell::GetTextFontCtrlState( SfxItemSet& rSet )
                 }
                 SfxItemPool& rPool = *rSet.GetPool();
                 SvxScriptSetItem aSetItem( rPool.GetSlotId( nWhich ), rPool );
-                aSetItem.GetItemSet().Put( *pFntCoreSet, false );
+                aSetItem.Put( *pFntCoreSet, false );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
                 {

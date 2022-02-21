@@ -1016,7 +1016,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
                 if( !pEditPool )
                     pEditPool = aEditAttr.GetPool();
                 SvxScriptSetItem aSetItem( nSlotId, *pEditPool );
-                aSetItem.GetItemSet().Put( aEditAttr, false );
+                aSetItem.Put( aEditAttr, false );
                 const SfxPoolItem* pI = aSetItem.GetItemOfScript( nScriptType );
                 if( pI )
                 {
@@ -1057,7 +1057,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
                     pEditPool = aEditAttr.GetPool();
 
                 SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONTHEIGHT, *pEditPool );
-                aSetItem.GetItemSet().Put( aEditAttr, false );
+                aSetItem.Put( aEditAttr, false );
                 const SvxFontHeightItem* pSize( static_cast<const SvxFontHeightItem*>( aSetItem.GetItemOfScript( nScriptType ) ) );
 
                 if( pSize )

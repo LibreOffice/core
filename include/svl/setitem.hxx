@@ -45,7 +45,38 @@ public:
     virtual SfxSetItem* Clone(SfxItemPool* pPool = nullptr) const override = 0;
 
     const SfxItemSet& GetItemSet() const { return maSet; }
-    SfxItemSet& GetItemSet() { return maSet; }
+    SfxItemSet& GetItemSetToModify()
+    {
+        ItemSetAboutToChange();
+        return maSet;
+    }
+
+    // Implement a couple of wrappers for commonly called functions to avoid having
+    // to explicitly type the call to GetItemSetToModify() in callers.
+    const SfxPoolItem* Put(const SfxPoolItem& rItem, sal_uInt16 nWhich)
+    {
+        return GetItemSetToModify().Put(rItem, nWhich);
+    }
+    const SfxPoolItem* Put(std::unique_ptr<SfxPoolItem> xItem, sal_uInt16 nWhich)
+    {
+        return GetItemSetToModify().Put(std::move(xItem), nWhich);
+    }
+    const SfxPoolItem* Put(const SfxPoolItem& rItem) { return GetItemSetToModify().Put(rItem); }
+    const SfxPoolItem* Put(std::unique_ptr<SfxPoolItem> xItem)
+    {
+        return GetItemSetToModify().Put(std::move(xItem));
+    }
+    bool Put(const SfxItemSet& rItemSet, bool bInvalidAsDefault = true)
+    {
+        return GetItemSetToModify().Put(rItemSet, bInvalidAsDefault);
+    }
+    sal_uInt16 ClearItem(sal_uInt16 nWhich = 0) { return GetItemSetToModify().ClearItem(nWhich); }
+
+protected:
+    virtual void ItemSetAboutToChange()
+    {
+        assert(!IsPooledItem(this) && "Items in a pool are not to be modified.");
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

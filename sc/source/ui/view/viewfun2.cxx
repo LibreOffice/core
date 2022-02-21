@@ -960,7 +960,7 @@ void ScViewFunc::EnterBlock( const OUString& rString, const EditTextObject* pDat
         ScRange aRange;
         rMark.GetMarkArea( aRange );
         ScPatternAttr aPattern( rDoc.GetPool() );
-        aPattern.GetItemSet().Put( *pItem );
+        aPattern.Put( *pItem );
         SvNumFormatType nNewType = rDoc.GetFormatTable()->GetType( pItem->GetValue() );
         rDoc.ApplyPatternIfNumberformatIncompatible( aRange, rMark,
             aPattern, nNewType );
@@ -2348,8 +2348,8 @@ void ScViewFunc::ExtendScenario()
 
     ScDocument& rDoc = GetViewData().GetDocument();
     ScPatternAttr aPattern( rDoc.GetPool() );
-    aPattern.GetItemSet().Put( ScMergeFlagAttr( ScMF::Scenario ) );
-    aPattern.GetItemSet().Put( ScProtectionAttr( true ) );
+    aPattern.Put( ScMergeFlagAttr( ScMF::Scenario ) );
+    aPattern.Put( ScProtectionAttr( true ) );
     ApplySelectionPattern(aPattern);
 }
 

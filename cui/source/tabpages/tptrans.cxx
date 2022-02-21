@@ -52,8 +52,8 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransOffHdl_Impl, weld::Toggleable&
     ActivateGradient(false);
 
     // Preview
-    rXFSet.ClearItem(XATTR_FILLTRANSPARENCE);
-    rXFSet.ClearItem(XATTR_FILLFLOATTRANSPARENCE);
+    aXFillAttr.ClearItem(XATTR_FILLTRANSPARENCE);
+    aXFillAttr.ClearItem(XATTR_FILLFLOATTRANSPARENCE);
     m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
     m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );
 
@@ -67,7 +67,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransLinearHdl_Impl, weld::Toggleab
     ActivateGradient(false);
 
     // preview
-    rXFSet.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
+    aXFillAttr.ClearItem (XATTR_FILLFLOATTRANSPARENCE);
     ModifyTransparentHdl_Impl(*m_xMtrTransparent);
 }
 
@@ -78,7 +78,7 @@ IMPL_LINK_NOARG(SvxTransparenceTabPage, ClickTransGradientHdl_Impl, weld::Toggle
     ActivateGradient(true);
 
     // preview
-    rXFSet.ClearItem (XATTR_FILLTRANSPARENCE);
+    aXFillAttr.ClearItem (XATTR_FILLTRANSPARENCE);
     ModifiedTrgrHdl_Impl(nullptr);
 }
 
@@ -94,7 +94,7 @@ void SvxTransparenceTabPage::ActivateLinear(bool bActivate)
 IMPL_LINK_NOARG(SvxTransparenceTabPage, ModifyTransparentHdl_Impl, weld::MetricSpinButton&, void)
 {
     sal_uInt16 nPos = m_xMtrTransparent->get_value(FieldUnit::PERCENT);
-    rXFSet.Put(XFillTransparenceItem(nPos));
+    aXFillAttr.Put(XFillTransparenceItem(nPos));
 
     // preview
     InvalidatePreview();
@@ -132,7 +132,7 @@ void SvxTransparenceTabPage::ModifiedTrgrHdl_Impl(const weld::ComboBox* pControl
                 100, 100);
 
     XFillFloatTransparenceItem aItem( aTmpGradient);
-    rXFSet.Put ( aItem );
+    aXFillAttr.Put ( aItem );
 
     InvalidatePreview();
 }
@@ -193,7 +193,6 @@ SvxTransparenceTabPage::SvxTransparenceTabPage(weld::Container* pPage, weld::Dia
     , nDlgType(0)
     , bBitmap(false)
     , aXFillAttr(rInAttrs.GetPool())
-    , rXFSet(aXFillAttr.GetItemSet())
     , m_xRbtTransOff(m_xBuilder->weld_radio_button("RBT_TRANS_OFF"))
     , m_xRbtTransLinear(m_xBuilder->weld_radio_button("RBT_TRANS_LINEAR"))
     , m_xRbtTransGradient(m_xBuilder->weld_radio_button("RBT_TRANS_GRADIENT"))
@@ -452,12 +451,12 @@ bool SvxTransparenceTabPage::InitPreview(const SfxItemSet& rSet)
     }
 
     // Get fillstyle for preview
-    rXFSet.Put ( rSet.Get(XATTR_FILLSTYLE) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLCOLOR) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLGRADIENT) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLHATCH) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLBACKGROUND) );
-    rXFSet.Put ( rSet.Get(XATTR_FILLBITMAP) );
+    aXFillAttr.Put ( rSet.Get(XATTR_FILLSTYLE) );
+    aXFillAttr.Put ( rSet.Get(XATTR_FILLCOLOR) );
+    aXFillAttr.Put ( rSet.Get(XATTR_FILLGRADIENT) );
+    aXFillAttr.Put ( rSet.Get(XATTR_FILLHATCH) );
+    aXFillAttr.Put ( rSet.Get(XATTR_FILLBACKGROUND) );
+    aXFillAttr.Put ( rSet.Get(XATTR_FILLBITMAP) );
 
     m_aCtlXRectPreview.SetAttributes( aXFillAttr.GetItemSet() );
     m_aCtlBitmapPreview.SetAttributes( aXFillAttr.GetItemSet() );

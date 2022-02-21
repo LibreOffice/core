@@ -727,7 +727,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
     ScPatternAttr aTemp(*pOldPattern);
-    aTemp.GetItemSet().Put(rAttr);
+    aTemp.Put(rAttr);
     const ScPatternAttr* pNewPattern = &pDocPool->Put( aTemp );
 
     if ( pNewPattern != pOldPattern )

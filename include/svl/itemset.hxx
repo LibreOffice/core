@@ -167,8 +167,7 @@ public:
                                 { return Put(rItem, rItem.Which()); }
     const SfxPoolItem*          Put( std::unique_ptr<SfxPoolItem> xItem )
                                 { auto nWhich = xItem->Which(); return Put(std::move(xItem), nWhich); }
-    bool                        Put( const SfxItemSet&,
-                                     bool bInvalidAsDefault = true );
+    bool                        Put( const SfxItemSet&, bool bInvalidAsDefault = true );
     void                        PutExtended( const SfxItemSet&,
                                              SfxItemState eDontCareAs,
                                              SfxItemState eDefaultAs );

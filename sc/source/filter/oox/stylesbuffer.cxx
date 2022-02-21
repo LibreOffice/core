@@ -2061,8 +2061,8 @@ void Xf::applyPatternToAttrList( AttrList& rAttrs, SCROW nRow1, SCROW nRow2, sal
     if ( nNumFmtId >= 0 )
     {
         ScPatternAttr aNumPat(rDoc.GetPool());
-        mnScNumFmt = getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId, false );
-        rPat.GetItemSet().Put(aNumPat.GetItemSet());
+        mnScNumFmt = getStyles().writeNumFmtToItemSet( aNumPat.GetItemSetToModify(), nNumFmtId, false );
+        rPat.Put(aNumPat.GetItemSet());
     }
 
     if (!rDocImport.isLatinScript(mnScNumFmt))
@@ -2134,7 +2134,7 @@ Xf::createPattern( bool bSkipPoolDefs )
     if( mpPattern )
         return *mpPattern;
     mpPattern.reset( new ::ScPatternAttr( getScDocument().GetPool() ) );
-    SfxItemSet& rItemSet = mpPattern->GetItemSet();
+    SfxItemSet& rItemSet = mpPattern->GetItemSetToModify();
     /*  Enables the used flags, if the formatting attributes differ from the
         style XF. In cell XFs Excel uses the cell attributes, if they differ
         from the parent style XF (even if the used flag is switched off).

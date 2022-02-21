@@ -563,7 +563,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                     const LanguageType nLang = (pEntry ? pEntry->GetLanguage() : ScGlobal::eLnge);
                     const sal_uInt32 nFormat = pFormatter->GetStandardFormat( SvNumFormatType::NUMBER, nLang);
                     ScPatternAttr aPattern( rDoc.GetPool());
-                    aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
+                    aPattern.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nFormat));
                     ScMarkData aMark(rDoc.GetSheetLimits());
                     aMark.SelectTable( i, true);
                     aMark.SetMarkArea( ScRange( aPos));
@@ -947,14 +947,14 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
                 pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
             if ( eNewLang != eOldLang )
             {
-                aNewAttrs.GetItemSet().Put(
+                aNewAttrs.Put(
                     SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
 
                 //  only the language has changed -> do not touch numberformat-attribute
                 sal_uInt32 nNewMod = nNewFormat % SV_COUNTRY_LANGUAGE_OFFSET;
                 if ( nNewMod == ( nOldFormat % SV_COUNTRY_LANGUAGE_OFFSET ) &&
                      nNewMod <= SV_MAX_COUNT_STANDARD_FORMATS )
-                    aNewAttrs.GetItemSet().ClearItem( ATTR_VALUE_FORMAT );
+                    aNewAttrs.ClearItem( ATTR_VALUE_FORMAT );
             }
         }
     }
@@ -967,13 +967,12 @@ void ScViewFunc::ApplyAttributes( const SfxItemSet* pDialogSet,
     const SvxBoxItem&     rNewOuter = pDialogSet->Get(ATTR_BORDER);
     const SvxBoxInfoItem& rOldInner = pOldSet->Get(ATTR_BORDER_INNER);
     const SvxBoxInfoItem& rNewInner = pDialogSet->Get(ATTR_BORDER_INNER);
-    SfxItemSet&           rNewSet   = aNewAttrs.GetItemSet();
-    SfxItemPool*          pNewPool  = rNewSet.GetPool();
+    SfxItemPool*          pNewPool  = aNewAttrs.GetItemSetToModify().GetPool();
 
     pNewPool->Put(rNewOuter);        // don't delete yet
     pNewPool->Put(rNewInner);
-    rNewSet.ClearItem( ATTR_BORDER );
-    rNewSet.ClearItem( ATTR_BORDER_INNER );
+    aNewAttrs.ClearItem( ATTR_BORDER );
+    aNewAttrs.ClearItem( ATTR_BORDER_INNER );
 
     /*
      * establish whether border attribute is to be set:
@@ -1038,10 +1037,10 @@ void ScViewFunc::ApplyAttr( const SfxPoolItem& rAttrItem, bool bAdjustBlockHeigh
     ScPatternAttr aNewAttrs(
         SfxItemSetFixed<ATTR_PATTERN_START, ATTR_PATTERN_END>( *GetViewData().GetDocument().GetPool() ) );
 
-    aNewAttrs.GetItemSet().Put( rAttrItem );
+    aNewAttrs.Put( rAttrItem );
     //  if justify is set (with Buttons), always indentation 0
     if ( rAttrItem.Which() == ATTR_HOR_JUSTIFY )
-        aNewAttrs.GetItemSet().Put( ScIndentItem( 0 ) );
+        aNewAttrs.Put( ScIndentItem( 0 ) );
     ApplySelectionPattern( aNewAttrs );
 
     // Prevent useless compute
@@ -1315,8 +1314,7 @@ void ScViewFunc::ApplyUserItemSet( const SfxItemSet& rItemSet )
     }
 
     ScPatternAttr aNewAttrs( GetViewData().GetDocument().GetPool() );
-    SfxItemSet& rNewSet = aNewAttrs.GetItemSet();
-    rNewSet.Put( rItemSet, false );
+    aNewAttrs.Put( rItemSet, false );
     ApplySelectionPattern( aNewAttrs );
 
     AdjustBlockHeight();
@@ -2657,8 +2655,7 @@ void ScViewFunc::SetNumberFormat( SvNumFormatType nFormatType, sal_uLong nAdd )
 
     nNumberFormat = pNumberFormatter->GetStandardFormat( nFormatType, eLanguage ) + nAdd;
 
-    SfxItemSet& rSet = aNewAttrs.GetItemSet();
-    rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
+    aNewAttrs.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
     //  ATTR_LANGUAGE_FORMAT not
     ApplySelectionPattern( aNewAttrs );
 }
@@ -2701,9 +2698,8 @@ void ScViewFunc::SetNumFmtByStr( const OUString& rCode )
     if ( bOk )          // valid format?
     {
         ScPatternAttr aNewAttrs( rDoc.GetPool() );
-        SfxItemSet& rSet = aNewAttrs.GetItemSet();
-        rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
-        rSet.Put( SvxLanguageItem( eLanguage, ATTR_LANGUAGE_FORMAT ) );
+        aNewAttrs.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNumberFormat ) );
+        aNewAttrs.Put( SvxLanguageItem( eLanguage, ATTR_LANGUAGE_FORMAT ) );
         ApplySelectionPattern( aNewAttrs );
     }
 
@@ -2834,8 +2830,7 @@ void ScViewFunc::ChangeNumFmtDecimals( bool bIncrement )
     if (!bError)
     {
         ScPatternAttr aNewAttrs( rDoc.GetPool() );
-        SfxItemSet& rSet = aNewAttrs.GetItemSet();
-        rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+        aNewAttrs.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
         //  ATTR_LANGUAGE_FORMAT not
         ApplySelectionPattern( aNewAttrs );
     }

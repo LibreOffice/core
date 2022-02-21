@@ -160,7 +160,6 @@ SfxItemSet& ScStyleSheet::GetItemSet()
                         SvxSetItem      aHFSetItem(
                                             rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) );
 
-                        SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
                         SvxSizeItem     aHFSizeItem( // 0,5 cm + distance
                                             ATTR_PAGE_SIZE,
                                             Size( 0, o3tl::convert(500, o3tl::Length::mm100, o3tl::Length::twip) + HFDIST_CM ) );
@@ -185,10 +184,10 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
                         aPageItem.SetLandscape( false );
 
-                        rHFSet.Put( aBoxInfoItem );
-                        rHFSet.Put( aHFSizeItem );
-                        rHFSet.Put( aHFDistItem );
-                        rHFSet.Put( SvxLRSpaceItem( 0,0,0,0, ATTR_LRSPACE ) ); // Set border to Null
+                        aHFSetItem.Put( aBoxInfoItem );
+                        aHFSetItem.Put( aHFSizeItem );
+                        aHFSetItem.Put( aHFDistItem );
+                        aHFSetItem.Put( SvxLRSpaceItem( 0,0,0,0, ATTR_LRSPACE ) ); // Set border to Null
 
                         aHFSetItem.SetWhich(ATTR_PAGE_HEADERSET);
                         pSet->Put( aHFSetItem );
