@@ -34,6 +34,24 @@
       "parentUuid": "a37d5623_4f9b2b57",
       "revId": "e81400196cd9c24be32552a19851da4162d51c7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7377c317_fe363ce9",
+        "filename": "sc/inc/patattr.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-21T08:27:16Z",
+      "side": 1,
+      "message": "\u003e Speaking of which, do you still have the patch mentioned at https://bugs.documentfoundation.org/show_bug.cgi?id\u003d81765#c28 ?\n\nNo. That was a fairly mechanical patch, so I didn\u0027t bother storing it.\nBut I could re-create it for you fairly easily.",
+      "parentUuid": "3240a7b5_98a0f612",
+      "revId": "e81400196cd9c24be32552a19851da4162d51c7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
