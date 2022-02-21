@@ -711,24 +711,35 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsolutePositionOffsetValue)
     loadAndSave("fdo78432.docx");
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
 
-    xmlXPathObjectPtr pXmlObjs[6];
-    pXmlObjs[0] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
-    pXmlObjs[1] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+    const auto pXmlData1 = getXPathContent(
+        pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/"
+                 "w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    const auto pXmlData2 = getXPathContent(
+        pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[1]/mc:Choice[1]/"
+                 "w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
 
-    pXmlObjs[2] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
-    pXmlObjs[3] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+    const auto pXmlData3 = getXPathContent(
+        pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/"
+                 "w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    const auto pXmlData4 = getXPathContent(
+        pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[2]/mc:Choice[1]/"
+                 "w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
 
-    pXmlObjs[4] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
-    pXmlObjs[5] = getXPathNode(pXmlDoc,"/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
+    const auto pXmlData5 = getXPathContent(
+        pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/"
+                 "w:drawing[1]/wp:anchor[1]/wp:positionH[1]/wp:posOffset[1]");
+    const auto pXmlData6 = getXPathContent(
+        pXmlDoc, "/w:document[1]/w:body[1]/w:p[1]/w:r[1]/mc:AlternateContent[3]/mc:Choice[1]/"
+                 "w:drawing[1]/wp:anchor[1]/wp:positionV[1]/wp:posOffset[1]");
 
-    for(sal_Int32 index = 0; index<6; ++index)
-    {
-        CPPUNIT_ASSERT(pXmlObjs[index]->nodesetval != nullptr);
-        xmlNodePtr pXmlNode = pXmlObjs[index]->nodesetval->nodeTab[0];
-        OUString contents = OUString::createFromAscii(reinterpret_cast<const char*>((pXmlNode->children[0]).content));
-        CPPUNIT_ASSERT( contents.toInt64() <= SAL_MAX_INT32 );
-        xmlXPathFreeObject(pXmlObjs[index]);
-    }
+    CPPUNIT_ASSERT( pXmlData1.toInt64() <= SAL_MAX_INT32 );
+    CPPUNIT_ASSERT( pXmlData2.toInt64() <= SAL_MAX_INT32 );
+
+    CPPUNIT_ASSERT( pXmlData3.toInt64() <= SAL_MAX_INT32 );
+    CPPUNIT_ASSERT( pXmlData4.toInt64() <= SAL_MAX_INT32 );
+
+    CPPUNIT_ASSERT( pXmlData5.toInt64() <= SAL_MAX_INT32 );
+    CPPUNIT_ASSERT( pXmlData6.toInt64() <= SAL_MAX_INT32 );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testRubyHyperlink, "rubyhyperlink.fodt")
