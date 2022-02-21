@@ -321,25 +321,10 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
     bool bSameRule = rNextInfo.GetNumRule() == rInfo.GetNumRule();
     bool bListEnd = !bSameRule || rNextInfo.GetDepth() < rInfo.GetDepth() || rNextInfo.IsRestart();
 
-    if (rWrt.mbXHTML)
-    {
-        // XHTML </li> for the list item content.
-        if ((bListEnd && rInfo.IsNumbered()) || (!bListEnd && rNextInfo.IsNumbered()))
-        {
-            HTMLOutFuncs::Out_AsciiTag(rWrt.Strm(),
-                                       rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li, false);
-        }
-    }
-
-    if (!bListEnd)
-    {
-        return rWrt;
-    }
-
+    std::optional<bool> oAtLeastOneNumbered;
     if (rWrt.mbXHTML && !rInfo.IsNumbered())
     {
-        // If the list only consisted of non-numbered text nodes, then don't end the list.
-        bool bAtLeastOneNumbered = false;
+        oAtLeastOneNumbered = false;
         sal_uLong nPos = rWrt.m_pCurrentPam->GetPoint()->nNode.GetIndex() - 1;
         SwNumRule* pNumRule = nullptr;
         while (true)
@@ -360,13 +345,36 @@ Writer& OutHTML_NumberBulletListEnd( SwHTMLWriter& rWrt,
             pNumRule = pTextNode->GetNumRule();
             if (pTextNode->IsNumbered())
             {
-                bAtLeastOneNumbered = true;
+                oAtLeastOneNumbered = true;
                 break;
             }
             --nPos;
         }
+    }
 
-        if (!bAtLeastOneNumbered)
+    if (rWrt.mbXHTML)
+    {
+        // The list is numbered if the previous text node is numbered or any other previous text
+        // node is numbered.
+        bool bPrevIsNumbered = rInfo.IsNumbered() || *oAtLeastOneNumbered;
+        // XHTML </li> for the list item content, if there is an open <li>.
+        if ((bListEnd && bPrevIsNumbered) || (!bListEnd && rNextInfo.IsNumbered()))
+        {
+            HTMLOutFuncs::Out_AsciiTag(
+                rWrt.Strm(), rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_li,
+                false);
+        }
+    }
+
+    if (!bListEnd)
+    {
+        return rWrt;
+    }
+
+    if (rWrt.mbXHTML && !rInfo.IsNumbered())
+    {
+        // If the list only consisted of non-numbered text nodes, then don't end the list.
+        if (!*oAtLeastOneNumbered)
         {
             return rWrt;
         }
