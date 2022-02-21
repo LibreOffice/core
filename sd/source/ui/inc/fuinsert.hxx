@@ -101,6 +101,8 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
+
+    void InsertMediaURL(const OUString& rURL, const Size& rPrefSize, bool bLink);
 };
 } // end of namespace sd
 

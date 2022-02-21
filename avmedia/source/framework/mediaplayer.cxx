@@ -25,6 +25,7 @@
 #include <helpids.h>
 
 #include <svl/stritem.hxx>
+#include <svl/rectitem.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -122,7 +123,6 @@ void MediaFloater::setURL( const OUString& rURL, const OUString& rReferer, bool 
             mpMediaWindow->start();
     }
 }
-
 
 void MediaFloater::dispatchCurrentURL()
 {
