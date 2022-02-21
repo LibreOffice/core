@@ -52,6 +52,24 @@
       "parentUuid": "6625f29e_d3482fce",
       "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "87a61e7d_b5a56e96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-21T11:39:50Z",
+      "side": 1,
+      "message": "\u003e \n\u003e So, to simplify it, there\u0027d be some std::unordered_set\u003cScPatternAttr*\u003e in ScDocument and that\u0027d do it? Ok, I can give it a shot somewhen, unless you beat me to it.\n\nEssentially yes. I had a very quick bash at it this morning, but ran into the problem that I don\u0027t know what on earth SfxItemPoolCache is doing with ScPatternAttr objects, so maybe even that idea won\u0027t work.",
+      "parentUuid": "462d4d02_f79bad03",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
