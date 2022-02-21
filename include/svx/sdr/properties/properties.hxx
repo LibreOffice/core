@@ -92,6 +92,8 @@ namespace sdr::properties
             // destructor
             virtual ~BaseProperties();
 
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) = 0;
+
             // Clone() operator, normally just calls the local copy constructor,
             // see above.
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const = 0;

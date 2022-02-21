@@ -47,6 +47,11 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new PageProperties(*this, rObj));
         }
 
+        SfxItemSet PageProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        {
+            return SfxItemSet(rPool);
+        }
+
         // get itemset. Override here to allow creating the empty itemset
         // without asserting
         const SfxItemSet& PageProperties::GetObjectItemSet() const
