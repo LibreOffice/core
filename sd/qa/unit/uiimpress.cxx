@@ -681,25 +681,6 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127481)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pActualPage->GetObjCount());
 }
 
-namespace
-{
-void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand,
-                     const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference<frame::XController> xController
-        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
-}
-}
-
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
 {
     // Load the document and create two new windows.
@@ -713,7 +694,7 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
         { "Color", uno::makeAny(OUString("ff0000")) },
     }));
 
-    ::dispatchCommand(mxComponent, ".uno:FillPageColor", aPropertyValues);
+    dispatchCommand(mxComponent, ".uno:FillPageColor", aPropertyValues);
 
     SdPage* pPage = pViewShell->getCurrentPage();
     const SfxItemSet& rPageAttr = pPage->getSdrPageProperties().GetItemSet();
