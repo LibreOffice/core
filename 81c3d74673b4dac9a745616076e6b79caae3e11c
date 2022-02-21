@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b44fcd5_1d9d71fb",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-02-21T00:27:57Z",
+      "side": 1,
+      "message": "This is a good idea. Done.",
+      "parentUuid": "7127fb98_46b87f9a",
+      "range": {
+        "startLine": 254,
+        "startChar": 118,
+        "endLine": 254,
+        "endChar": 146
+      },
+      "revId": "81c3d74673b4dac9a745616076e6b79caae3e11c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63052c53_82257708",
@@ -66,6 +90,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bffe15d0_73d43427",
+        "filename": "cui/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-02-21T00:27:57Z",
+      "side": 1,
+      "message": "I dropped the %LANGUAGENAME in RID_CUISTR_FRAMEWORK_ERROR_NOT_SUPPORTED because it is already presented in RID_CUISTR_ERROR_LANG_NOT_SUPPORTED. I feel it is less redundant now.\n\nAs for what the user could do to solve the problem, we could add something more general such as \"Check the scripting documentation to learn about the languages supported by LibreOffice\". But this would be too vague.",
+      "parentUuid": "63052c53_82257708",
+      "range": {
+        "startLine": 256,
+        "startChar": 101,
+        "endLine": 256,
+        "endChar": 186
+      },
+      "revId": "81c3d74673b4dac9a745616076e6b79caae3e11c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2777d229_aa9615b3",
         "filename": "scripting/source/basprov/basprov.cxx",
         "patchSetId": 3
@@ -77,6 +125,30 @@
       "writtenOn": "2022-02-18T08:44:35Z",
       "side": 1,
       "message": "This is used a lot and I\u0027m a bit concerned about unwanted side-effects.",
+      "range": {
+        "startLine": 357,
+        "startChar": 28,
+        "endLine": 357,
+        "endChar": 57
+      },
+      "revId": "81c3d74673b4dac9a745616076e6b79caae3e11c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da79055c_f7f7a53c",
+        "filename": "scripting/source/basprov/basprov.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 357,
+      "author": {
+        "id": 1002862
+      },
+      "writtenOn": "2022-02-21T00:27:57Z",
+      "side": 1,
+      "message": "Ideally I would have done the l10n inside basprov.cxx, however the \"scripting\" folder does not have l10n support, so I sent the string to scriptdlg.cxx (in \"cui\") which has l10n support.\n\nI agree that this might have side-effects... It would be good to hear the opinion of a more experienced dev on this issue.",
+      "parentUuid": "2777d229_aa9615b3",
       "range": {
         "startLine": 357,
         "startChar": 28,
