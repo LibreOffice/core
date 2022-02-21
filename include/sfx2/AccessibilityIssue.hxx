@@ -8,8 +8,7 @@
  *
  */
 
-#ifndef INCLUDED_SFX2_ACCESSIBILITYISSUE_HXX
-#define INCLUDED_SFX2_ACCESSIBILITYISSUE_HXX
+#pragma once
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
@@ -56,7 +55,5 @@ public:
 };
 
 } // end sfx namespace
-
-#endif // INCLUDED_SFX2_ACCESSIBILITYISSUE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
