@@ -40,6 +40,8 @@ class ImageMap;
 class Graphic;
 class SdrOutliner;
 
+namespace avmedia { class PlayerListener; }
+
 namespace sd {
 
 class DrawDocShell;
@@ -268,6 +270,7 @@ protected:
     sal_Int8                mnAction;
     Idle                    maDropErrorIdle;
     Idle                    maDropInsertFileIdle;
+    rtl::Reference<avmedia::PlayerListener> mxDropMediaSizeListener;
     sal_uInt16              mnLockRedrawSmph;
     bool                    mbIsDropAllowed;
 

@@ -22,6 +22,7 @@
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
 
 #include <View.hxx>
+#include <avmedia/mediawindow.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/unolingu.hxx>
 #include <o3tl/deleter.hxx>
@@ -141,6 +142,12 @@ View::~View()
 
     // release content of selection clipboard, if we own the content
     ClearSelectionClipboard();
+
+    if (mxDropMediaSizeListener)
+    {
+        mxDropMediaSizeListener->dispose();
+        mxDropMediaSizeListener.clear();
+    }
 
     maDropErrorIdle.Stop();
     maDropInsertFileIdle.Stop();
