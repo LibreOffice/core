@@ -166,20 +166,6 @@ AtkStateType mapAtkState( sal_Int16 nState )
     return type;
 }
 
-static AtkRole getRoleForName( const gchar * name )
-{
-    AtkRole ret = atk_role_for_name( name );
-    if( ATK_ROLE_INVALID == ret )
-    {
-        // this should only happen in old ATK versions
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        ret = atk_role_register( name );
-        SAL_WNODEPRECATED_DECLARATIONS_POP
-    }
-
-    return ret;
-}
-
 static AtkRole mapToAtkRole( sal_Int16 nRole )
 {
     AtkRole role = ATK_ROLE_UNKNOWN;
@@ -198,21 +184,21 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_DESKTOP_FRAME,   // ? pane
         ATK_ROLE_DIRECTORY_PANE,
         ATK_ROLE_DIALOG,
-        ATK_ROLE_UNKNOWN,         // DOCUMENT - registered below
-        ATK_ROLE_UNKNOWN,         // EMBEDDED_OBJECT - registered below
-        ATK_ROLE_UNKNOWN,         // END_NOTE - registered below
+        ATK_ROLE_DOCUMENT_FRAME,  // DOCUMENT
+        ATK_ROLE_EMBEDDED,        // EMBEDDED_OBJECT
+        ATK_ROLE_FOOTNOTE,        // END_NOTE
         ATK_ROLE_FILE_CHOOSER,
         ATK_ROLE_FILLER,
         ATK_ROLE_FONT_CHOOSER,
         ATK_ROLE_FOOTER,
-        ATK_ROLE_UNKNOWN,         // FOOTNOTE - registered below
+        ATK_ROLE_FOOTNOTE,
         ATK_ROLE_FRAME,
         ATK_ROLE_GLASS_PANE,
         ATK_ROLE_IMAGE,           // GRAPHIC
-        ATK_ROLE_UNKNOWN,         // GROUP_BOX - registered below
+        ATK_ROLE_GROUPING,        // GROUP_BOX
         ATK_ROLE_HEADER,
         ATK_ROLE_HEADING,
-        ATK_ROLE_TEXT,            // HYPER_LINK - registered below
+        ATK_ROLE_LINK,            // HYPER_LINK
         ATK_ROLE_ICON,
         ATK_ROLE_INTERNAL_FRAME,
         ATK_ROLE_LABEL,
@@ -255,50 +241,24 @@ static AtkRole mapToAtkRole( sal_Int16 nRole )
         ATK_ROLE_WINDOW,
         ATK_ROLE_PUSH_BUTTON,   // BUTTON_DROPDOWN
         ATK_ROLE_PUSH_BUTTON,   // BUTTON_MENU
-        ATK_ROLE_UNKNOWN,       // CAPTION - registered below
-        ATK_ROLE_UNKNOWN,       // CHART - registered below
-        ATK_ROLE_UNKNOWN,       // EDIT_BAR - registered below
-        ATK_ROLE_UNKNOWN,       // FORM - registered below
-        ATK_ROLE_UNKNOWN,       // IMAGE_MAP - registered below
-        ATK_ROLE_UNKNOWN,       // NOTE - registered below
-        ATK_ROLE_UNKNOWN,       // PAGE - registered below
+        ATK_ROLE_CAPTION,
+        ATK_ROLE_CHART,
+        ATK_ROLE_EDITBAR,
+        ATK_ROLE_FORM,
+        ATK_ROLE_IMAGE_MAP,
+        ATK_ROLE_COMMENT,       // NOTE
+        ATK_ROLE_PAGE,
         ATK_ROLE_RULER,
-        ATK_ROLE_UNKNOWN,       // SECTION - registered below
-        ATK_ROLE_UNKNOWN,       // TREE_ITEM - registered below
+        ATK_ROLE_SECTION,
+        ATK_ROLE_TREE_ITEM,
         ATK_ROLE_TREE_TABLE,
-        ATK_ROLE_SCROLL_PANE,   // COMMENT - mapped to atk_role_scroll_pane
+        ATK_ROLE_COMMENT,
         ATK_ROLE_UNKNOWN,        // COMMENT_END - mapped to atk_role_unknown
         ATK_ROLE_DOCUMENT_PRESENTATION,
         ATK_ROLE_DOCUMENT_SPREADSHEET,
         ATK_ROLE_DOCUMENT_TEXT,
         ATK_ROLE_STATIC
     };
-
-    static bool initialized = false;
-
-    if( ! initialized )
-    {
-        // the accessible roles below were added to ATK in later versions,
-        // with role_for_name we will know if they exist in runtime.
-        roleMap[accessibility::AccessibleRole::EDIT_BAR] = getRoleForName("edit bar");
-        roleMap[accessibility::AccessibleRole::EMBEDDED_OBJECT] = getRoleForName("embedded");
-        roleMap[accessibility::AccessibleRole::CHART] = getRoleForName("chart");
-        roleMap[accessibility::AccessibleRole::CAPTION] = getRoleForName("caption");
-        roleMap[accessibility::AccessibleRole::DOCUMENT] = getRoleForName("document frame");
-        roleMap[accessibility::AccessibleRole::PAGE] = getRoleForName("page");
-        roleMap[accessibility::AccessibleRole::SECTION] = getRoleForName("section");
-        roleMap[accessibility::AccessibleRole::FORM] = getRoleForName("form");
-        roleMap[accessibility::AccessibleRole::GROUP_BOX] = getRoleForName("grouping");
-        roleMap[accessibility::AccessibleRole::COMMENT] = getRoleForName("comment");
-        roleMap[accessibility::AccessibleRole::IMAGE_MAP] = getRoleForName("image map");
-        roleMap[accessibility::AccessibleRole::TREE_ITEM] = getRoleForName("tree item");
-        roleMap[accessibility::AccessibleRole::HYPER_LINK] = getRoleForName("link");
-        roleMap[accessibility::AccessibleRole::END_NOTE] = getRoleForName("footnote");
-        roleMap[accessibility::AccessibleRole::FOOTNOTE] = getRoleForName("footnote");
-        roleMap[accessibility::AccessibleRole::NOTE] = getRoleForName("comment");
-
-        initialized = true;
-    }
 
     static const sal_Int32 nMapSize = SAL_N_ELEMENTS(roleMap);
     if( 0 <= nRole &&  nMapSize > nRole )
