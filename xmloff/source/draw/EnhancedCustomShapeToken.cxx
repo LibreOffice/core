@@ -66,6 +66,7 @@ const TokenTable pTokenTableArray[] =
     { "extrusion-shininess",                EAS_extrusion_shininess },
     { "extrusion-skew",                     EAS_extrusion_skew },
     { "extrusion-specularity",              EAS_extrusion_specularity },
+    { "extrusion-specularity-loext",        EAS_extrusion_specularity_loext },
     { "projection",                         EAS_projection },
     { "extrusion-viewpoint",                EAS_extrusion_viewpoint },
     { "extrusion-origin",                   EAS_extrusion_origin },
