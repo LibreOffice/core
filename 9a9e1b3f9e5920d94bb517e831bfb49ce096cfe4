@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f9b6617_661aab62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-21T14:20:59Z",
+      "side": 1,
+      "message": "Hi Cloph,\nIn libreoffice-7-3-1, we bumped it directly from 2.4.4 to 2.4.6 \u003c https://gerrit.libreoffice.org/c/core/+/130157 \u003e\nShould we just do the same in this branch ?",
+      "revId": "9a9e1b3f9e5920d94bb517e831bfb49ce096cfe4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
