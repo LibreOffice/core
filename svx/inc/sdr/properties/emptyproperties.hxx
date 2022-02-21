@@ -39,6 +39,9 @@ namespace sdr::properties
             // Clone() operator, normally just calls the local copy constructor
             virtual std::unique_ptr<BaseProperties> Clone(SdrObject& rObj) const override;
 
+            // create a new object specific itemset with object specific ranges.
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
+
             // get itemset
             virtual const SfxItemSet& GetObjectItemSet() const override;
 

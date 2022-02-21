@@ -41,7 +41,7 @@ namespace sdr::properties
             mutable std::optional<SfxItemSet> mxItemSet;
 
             // create a new object specific itemset with object specific ranges.
-            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool);
+            virtual SfxItemSet CreateObjectSpecificItemSet(SfxItemPool& pPool) override;
 
             // Test changeability for a single item. If an implementation wants to prevent
             // changing an item it should override this method.

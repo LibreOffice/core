@@ -46,6 +46,11 @@ namespace sdr::properties
             return std::unique_ptr<BaseProperties>(new GroupProperties(rObj));
         }
 
+        SfxItemSet GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
+        {
+            return SfxItemSet(rPool);
+        }
+
         const SfxItemSet& GroupProperties::GetObjectItemSet() const
         {
             assert(!"GroupProperties::GetObjectItemSet() should never be called");

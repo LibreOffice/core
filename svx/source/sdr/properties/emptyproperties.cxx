@@ -42,6 +42,12 @@ namespace sdr::properties
             abort();
         }
 
+        SfxItemSet EmptyProperties::CreateObjectSpecificItemSet(SfxItemPool&)
+        {
+            assert(!"EmptyProperties::CreateObjectSpecificItemSet() should never be called");
+            abort();
+        }
+
         void EmptyProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
         {
             assert(!"EmptyProperties::SetObjectItem() should never be called");
