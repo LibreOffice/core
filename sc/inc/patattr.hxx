@@ -66,6 +66,8 @@ public:
     // Class cannot be IsSortable() because it's mutable, implement at least Lookup().
     virtual bool            HasLookup() const override { return true; }
     virtual lookup_iterator Lookup(lookup_iterator begin, lookup_iterator end ) const override;
+    virtual bool            operator<(const SfxPoolItem& rCmp) const override;
+    virtual bool            IsSortable() const override { return true; }
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }
