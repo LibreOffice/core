@@ -50,7 +50,7 @@ public:
     bool setValue(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue);
     void setValueIf(SCCOLROW nPos1, SCCOLROW nPos2, ValueType nValue, const std::function<bool(ValueType)>& rPredicate);
     ValueType getValue(SCCOLROW nPos);
-    ExtValueType getSumValue(SCCOLROW nPos1, SCCOLROW nPos2);
+    sal_uInt64 getSumValue(SCCOLROW nPos1, SCCOLROW nPos2);
     bool getRangeData(SCCOLROW nPos, RangeData& rData);
     bool getRangeDataLeaf(SCCOLROW nPos, RangeData& rData);
     void removeSegment(SCCOLROW nPos1, SCCOLROW nPos2);
@@ -144,8 +144,7 @@ typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ValueType ScFlatSegments
 }
 
 template<typename ValueType_, typename ExtValueType_>
-typename ScFlatSegmentsImpl<ValueType_, ExtValueType_>::ExtValueType
-ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOLROW nPos2)
+sal_uInt64 ScFlatSegmentsImpl<ValueType_, ExtValueType_>::getSumValue(SCCOLROW nPos1, SCCOLROW nPos2)
 {
     if (mbTreeSearchEnabled)
     {
