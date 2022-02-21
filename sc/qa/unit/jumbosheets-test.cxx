@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 #include <unotest/filters-test.hxx>
+#include <unotest/macros_test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
@@ -32,7 +33,10 @@ using namespace ::com::sun::star::uno;
 
 /* Tests for sheets larger than 1024 columns and/or 1048576 rows. */
 
-class ScJumboSheetsTest : public test::FiltersTest, public ScBootstrapFixture, public XmlTestTools
+class ScJumboSheetsTest : public test::FiltersTest,
+                          public unotest::MacrosTest,
+                          public ScBootstrapFixture,
+                          public XmlTestTools
 {
 public:
     ScJumboSheetsTest();
@@ -50,6 +54,7 @@ public:
     void testRoundtripNamedRanges();
     void testTdf134553();
     void testTdf134392();
+    void testTdf147509();
     void testTdf133033();
     void testTdf109061();
 
@@ -61,6 +66,7 @@ public:
     CPPUNIT_TEST(testRoundtripNamedRanges);
     CPPUNIT_TEST(testTdf134553);
     CPPUNIT_TEST(testTdf134392);
+    CPPUNIT_TEST(testTdf147509);
     CPPUNIT_TEST(testTdf133033);
     CPPUNIT_TEST(testTdf109061);
 
@@ -263,6 +269,53 @@ void ScJumboSheetsTest::testTdf134392()
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
     xDocSh->DoClose();
+}
+
+void ScJumboSheetsTest::testTdf147509()
+{
+    // Create an empty document
+    uno::Reference<frame::XDesktop2> xDesktop
+        = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
+
+    m_xCalcComponent = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
+    CPPUNIT_ASSERT(m_xCalcComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(m_xCalcComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    rDoc.SetString(0, 0, 0, "A");
+    rDoc.SetString(1, 0, 0, "B");
+
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+    ScViewData& rViewData = pViewShell->GetViewData();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), rViewData.GetCurX());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rViewData.GetCurY());
+
+    uno::Reference<lang::XComponent> xComponent(m_xCalcComponent, uno::UNO_QUERY);
+    dispatchCommand(xComponent, ".uno:SelectColumn", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(xComponent, ".uno:InsertColumnsAfter", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("A"), rDoc.GetString(ScAddress(0, 0, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected:
+    // - Actual  : B
+    CPPUNIT_ASSERT_EQUAL(OUString(""), rDoc.GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), rDoc.GetString(ScAddress(2, 0, 0)));
 }
 
 void ScJumboSheetsTest::testTdf133033()
