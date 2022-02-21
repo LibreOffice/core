@@ -52,6 +52,24 @@
       "parentUuid": "3240a7b5_98a0f612",
       "revId": "e81400196cd9c24be32552a19851da4162d51c7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae80ec74_ad28ecba",
+        "filename": "sc/inc/patattr.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-21T08:42:02Z",
+      "side": 1,
+      "message": "I\u0027m more interested in the various ways that ScPatternAttr can change rather than the patch itself (I actually don\u0027t understand all this item stuff much), so if you can describe how you did those mechanical changes that\u0027d be enough.\n\nBased on my previous comment I think the hash approach is also fragile (although not as fragile as IsSortable), so I\u0027m pondering whether that should be dumped (making it slow again) or fixed (in which case as I said I think even IsSortable can be made to work). I\u0027ve meanwhile also done https://gerrit.libreoffice.org/c/core/+/130228 , but that\u0027s starting to feel like getting desperate to make it faster.",
+      "parentUuid": "7377c317_fe363ce9",
+      "revId": "e81400196cd9c24be32552a19851da4162d51c7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
