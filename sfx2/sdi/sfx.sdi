@@ -5387,7 +5387,12 @@ SfxVoidItem AVMediaPlayer SID_AVMEDIA_PLAYER
 ]
 
 SfxVoidItem InsertAVMedia SID_INSERT_AVMEDIA
-()
+(
+    SfxRectangleItem Size FN_PARAM_1, // SvxRectItem would be more natural
+                                      // but that requires avmedia to depend
+                                      // on editeng
+    SfxBoolItem IsLink FN_PARAM_2
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
