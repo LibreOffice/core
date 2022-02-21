@@ -3325,8 +3325,14 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             Link<SpellCallbackInfo&,void> aLink = LINK( this, ScGridWindow, PopupSpellingHdl );
             bDone = pEditView->ExecuteSpellPopup(aMenuPos, aLink);
 
-            if (pHdl && pHdl->GetEditString() != sOldText)
+            // If the spelling is corrected, stop editing to flush any cached spelling info.
+            // Or, if no misspelled word at this position, and it wasn't initially in edit mode,
+            // then exit the edit mode in order to get the full context popup (not edit popup).
+            if (pHdl && (pHdl->GetEditString() != sOldText
+                         || (!bDone && !bPosIsInEditView)))
+            {
                 pHdl->EnterHandler();
+            }
 
             if (!bDone && nColSpellError != nCellX)
             {
