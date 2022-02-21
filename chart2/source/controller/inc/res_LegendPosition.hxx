@@ -57,6 +57,7 @@ public:
 
 private:
     void impl_setRadioButtonToggleHdl();
+    void PositionEnable();
 
 private:
     css::uno::Reference< css::uno::XComponentContext>    m_xCC;
