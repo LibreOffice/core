@@ -424,6 +424,8 @@ public:
     { SvxShape::acquire(); }
     virtual void SAL_CALL release() noexcept override
     { SvxShape::release(); }
+
+    virtual void addShape(SvxShape& rShape) = 0;
 };
 
 /***********************************************************************
@@ -437,6 +439,7 @@ private:
     rtl::Reference< SvxDrawPage> mxPage;
 
     void addUnoShape( const css::uno::Reference< css::drawing::XShape >& xShape, size_t nPos );
+    void addShape(SvxShape& rShape, size_t nPos);
 
 public:
     SvxShapeGroup(SdrObject* pObj,SvxDrawPage* pDrawPage);
@@ -483,6 +486,8 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+
+    virtual void addShape(SvxShape& rShape) final override;
 };
 
 /***********************************************************************
@@ -710,6 +715,8 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
+
+    virtual void addShape(SvxShape& rShape) override final;
 };
 
 /***********************************************************************
