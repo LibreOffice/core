@@ -713,17 +713,22 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // all versions below 1.5.1
     options.emplace_back("abort", reinterpret_cast<void*>(abort_handler));
     bool hasStackSize = false;
+#ifdef UNX
+    // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
+    // in the class path in order to have applet support:
+    OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
+#endif
     for (int i = 0; i < cOptions; i++)
     {
         OString opt(arOptions[i].optionString);
 #ifdef UNX
-        // Until java 1.5 we need to put a plugin.jar or javaplugin.jar (<1.4.2)
-        // in the class path in order to have applet support:
         if (opt.startsWith("-Djava.class.path="))
         {
-            OString sAddPath = getPluginJarPath(pInfo->sVendor, pInfo->sLocation,pInfo->sVersion);
             if (!sAddPath.isEmpty())
+            {
                 opt += OStringChar(SAL_PATHSEPARATOR) + sAddPath;
+                sAddPath.clear();
+            }
         }
 #endif
         if (opt == "-Xint") {
@@ -768,6 +773,11 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
         }
 #endif
     }
+#ifdef UNX
+    if (!sAddPath.isEmpty()) {
+        options.emplace_back("-Djava.class.path=" + sAddPath, nullptr);
+    }
+#endif
 
     std::unique_ptr<JavaVMOption[]> sarOptions(new JavaVMOption[options.size()]);
     for (std::vector<Option>::size_type i = 0; i != options.size(); ++i) {
