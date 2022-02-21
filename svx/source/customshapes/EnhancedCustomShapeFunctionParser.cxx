@@ -864,6 +864,8 @@ public:
         std::shared_ptr<ExpressionNode> pFirstArg( std::move(rNodeStack.top()) );
         rNodeStack.pop();
 
+        assert(pSecondArg && pFirstArg && "count of arg checked before we get here");
+
         // create combined ExpressionNode
         auto pNode = std::make_shared<BinaryFunctionExpression>( meFunct, pFirstArg, pSecondArg );
         // check for constness
