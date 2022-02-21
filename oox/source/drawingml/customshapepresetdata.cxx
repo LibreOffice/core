@@ -507,6 +507,71 @@ void lcl_parsePathCoordinates(std::vector<beans::PropertyValue>& rPath, const OS
     }
 }
 
+void lcl_parsePathGluePointsValues(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
+{
+    std::vector<drawing::EnhancedCustomShapeParameterPair> aPairs;
+    sal_Int32 nLevel = 0;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
+    {
+        if (rValue[i] == '{')
+        {
+            if (!nLevel)
+                nStart = i;
+            nLevel++;
+        }
+        else if (rValue[i] == '}')
+        {
+            nLevel--;
+            if (!nLevel)
+                aPairs.push_back(lcl_parseEnhancedCustomShapeParameterPair(
+                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+        }
+    }
+
+    beans::PropertyValue aPropertyValue;
+    aPropertyValue.Name = "GluePoints";
+    aPropertyValue.Value <<= comphelper::containerToSequence(aPairs);
+    rPath.push_back(aPropertyValue);
+}
+
+void lcl_parsePathGluePoints(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
+{
+    sal_Int32 nLevel = 0;
+    bool bIgnore = false;
+    sal_Int32 nStart = 0;
+    for (sal_Int32 i = 0; i < rValue.getLength(); ++i)
+    {
+        if (rValue[i] == '{')
+        {
+            if (!nLevel)
+                bIgnore = true;
+            nLevel++;
+        }
+        else if (rValue[i] == '}')
+        {
+            nLevel--;
+            if (!nLevel)
+                bIgnore = false;
+        }
+        else if (rValue[i] == ',' && !bIgnore)
+        {
+            OString aToken = rValue.copy(nStart, i - nStart);
+            static const char aExpectedPrefix[]
+                = "Value = (any) { ([]com.sun.star.drawing.EnhancedCustomShapeParameterPair) { ";
+            if (aToken.startsWith(aExpectedPrefix))
+            {
+                aToken = aToken.copy(strlen(aExpectedPrefix),
+                    aToken.getLength() - strlen(aExpectedPrefix) - strlen(" } }"));
+                lcl_parsePathGluePointsValues(rPath, aToken);
+            }
+            else if (!aToken.startsWith("Name =") && !aToken.startsWith("Handle ="))
+                SAL_WARN("oox", "lcl_parsePathGluePoints: unexpected token: " << aToken);
+            nStart = i + strlen(", ");
+        }
+    }
+}
+
 void lcl_parsePathSegmentValues(std::vector<beans::PropertyValue>& rPath, const OString& rValue)
 {
     std::vector<drawing::EnhancedCustomShapeSegment> aSegments;
@@ -725,6 +790,8 @@ void lcl_parsePath(std::vector<beans::PropertyValue>& rPath, const OString& rVal
                 OString aToken = rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"));
                 if (aToken.startsWith("Name = \"Coordinates\""))
                     lcl_parsePathCoordinates(rPath, aToken);
+                else if (aToken.startsWith("Name = \"GluePoints\""))
+                    lcl_parsePathGluePoints(rPath, aToken);
                 else if (aToken.startsWith("Name = \"Segments\""))
                     lcl_parsePathSegments(rPath, aToken);
                 else if (aToken.startsWith("Name = \"TextFrames\""))

@@ -51,6 +51,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -140,6 +141,7 @@ public:
     void testTdf93097();
     void testTdf62255();
     void testTdf89927();
+    void testTdf147459();
 
     CPPUNIT_TEST_SUITE(SdImportTest);
 
@@ -205,6 +207,7 @@ public:
     CPPUNIT_TEST(testTdf93097);
     CPPUNIT_TEST(testTdf62255);
     CPPUNIT_TEST(testTdf89927);
+    CPPUNIT_TEST(testTdf147459);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1745,6 +1748,38 @@ void SdImportTest::testTdf89927()
     Color nCharColor;
     xPropSet->getPropertyValue( "CharColor" ) >>= nCharColor;
     CPPUNIT_ASSERT_EQUAL( COL_WHITE, nCharColor );
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest::testTdf147459()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf147459.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xTriangleShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Sequence<beans::PropertyValue> aProps;
+    xTriangleShape->getPropertyValue("CustomShapeGeometry") >>= aProps;
+
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (beans::PropertyValue const& rProp : std::as_const(aProps))
+    {
+        if (rProp.Name == "Path")
+            aPathProps = rProp.Value.get<uno::Sequence<beans::PropertyValue>>();
+    }
+
+    uno::Sequence<drawing::EnhancedCustomShapeParameterPair> seqGluePoints;
+    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    {
+        if (rProp.Name == "GluePoints")
+        {
+            seqGluePoints
+                = rProp.Value.get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>();
+        }
+    }
+
+    sal_Int32 nCountGluePoints = seqGluePoints.getLength();
+    // The triangle has 6 glue points.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), nCountGluePoints);
 
     xDocShRef->DoClose();
 }
