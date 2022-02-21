@@ -873,7 +873,7 @@ void FillFormatter::convertFormatting( ShapePropertyMap& rPropMap, const ModelRe
     FillProperties aFillProps;
     if( mxAutoFill )
         aFillProps.assignUsed( *mxAutoFill );
-    if( rxShapeProp.is() )
+    if (rxShapeProp)
         aFillProps.assignUsed( rxShapeProp->getFillProperties() );
     if( pPicOptions )
         lclConvertPictureOptions( aFillProps, *pPicOptions );
