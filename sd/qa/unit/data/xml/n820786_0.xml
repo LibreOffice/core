@@ -127,6 +127,7 @@
          </EnhancedCustomShapeParameterPair>
         </Coordinates>
        </PropertyValue>
+       <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
        <PropertyValue name="Segments">
         <Segments>
          <EnhancedCustomShapeSegment command="1" count="1"/>
@@ -209,6 +210,7 @@
          </EnhancedCustomShapeParameterPair>
         </Coordinates>
        </PropertyValue>
+       <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
        <PropertyValue name="Segments">
         <Segments>
          <EnhancedCustomShapeSegment command="1" count="1"/>
