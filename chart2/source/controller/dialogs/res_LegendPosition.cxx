@@ -87,7 +87,7 @@ void LegendPositionResources::writeToResources( const rtl::Reference<::chart::Ch
             xProp->getPropertyValue( "Show" ) >>= bShowLegend;
             if (m_xCbxShow)
                 m_xCbxShow->set_active( bShowLegend );
-            PositionEnableHdl(*m_xCbxShow);
+            PositionEnable();
 
             //position
             chart2::LegendPosition ePos;
@@ -161,6 +161,11 @@ void LegendPositionResources::writeToModel( const rtl::Reference<::chart::ChartM
 }
 
 IMPL_LINK_NOARG(LegendPositionResources, PositionEnableHdl, weld::Toggleable&, void)
+{
+    PositionEnable();
+}
+
+void LegendPositionResources::PositionEnable()
 {
     bool bEnable = !m_xCbxShow || m_xCbxShow->get_active();
 
