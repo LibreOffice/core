@@ -34,6 +34,24 @@
       "parentUuid": "cc51d2c2_ce931f71",
       "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "462d4d02_f79bad03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-21T11:28:27Z",
+      "side": 1,
+      "message": "\u003e Yeah, you are correct, that is a problem.\n\nI think that could be solved (making GetItemSet() pure virtual and derived classes would store the set), but if the whole itempool idea is bad for this case, then I guess it\u0027s better not to waste more time on band-aiding this.\n\n\u003e Ultimately I don\u0027t think ScPatternAttr should be stored in the pool at all. It would probably make more sense to make ScPatternAttr be some kind of ref-counted object, store it separately, and do the de-duplication thing during load time as a separate chunk of code specialised to ScPatternAttr.\n\nSo, to simplify it, there\u0027d be some std::unordered_set\u003cScPatternAttr*\u003e in ScDocument and that\u0027d do it? Ok, I can give it a shot somewhen, unless you beat me to it.",
+      "parentUuid": "6625f29e_d3482fce",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
