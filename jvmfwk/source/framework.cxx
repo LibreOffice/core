@@ -189,8 +189,12 @@ javaFrameworkError jfw_startVM(
                 //In direct mode the options are specified by bootstrap variables
                 //of the form UNO_JAVA_JFW_PARAMETER_1 .. UNO_JAVA_JFW_PARAMETER_n
                 vmParams = jfw::BootParams::getVMParameters();
-                sUserClassPath =
-                    "-Djava.class.path=" + jfw::BootParams::getClasspath();
+                auto const cp = jfw::BootParams::getClasspath();
+                if (!cp.isEmpty())
+                {
+                    sUserClassPath =
+                        "-Djava.class.path=" + cp;
+                }
             }
             else
                 OSL_ASSERT(false);
