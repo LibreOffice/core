@@ -54,6 +54,7 @@ namespace xmloff::EnhancedCustomShapeToken {
         EAS_extrusion_shininess,
         EAS_extrusion_skew,
         EAS_extrusion_specularity,
+        EAS_extrusion_specularity_loext,
         EAS_projection,
         EAS_extrusion_viewpoint,
         EAS_extrusion_origin,
