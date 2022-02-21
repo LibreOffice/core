@@ -914,8 +914,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    css::uno::WeakReferenceHelper      aStatement(static_cast<OWeakObject*>(m_pStatement));
-    return aStatement.get();
+    return static_cast<cppu::OWeakObject*>(m_pStatement);
 }
 
 

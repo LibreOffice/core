@@ -77,14 +77,22 @@ public:
     {
     }
 
-    /** Copy ctor.  Initialize this reference with a hard reference.
+        /** Copy ctor.  Initialize this reference with a hard reference.
 
         @param rRef another hard ref
     */
+#if defined LIBO_INTERNAL_ONLY
+    WeakReference(interface_type* pRef)
+        : WeakReferenceHelper(
+              css::uno::Reference<css::uno::XWeak>(static_cast<cppu::OWeakObject*>(pRef)))
+    {
+    }
+#else
     WeakReference(interface_type* pRef)
         : WeakReferenceHelper(static_cast<cppu::OWeakObject*>(pRef))
     {
     }
+#endif
 
     /** Releases this reference and takes over hard reference xInt.
         If the implementation behind xInt does not support XWeak
@@ -106,7 +114,8 @@ public:
 
     WeakReference& operator=(interface_type* pInt)
     {
-        WeakReferenceHelper::operator=(static_cast<::cppu::OWeakObject*>(pInt));
+        WeakReferenceHelper::operator=(
+            css::uno::Reference<css::uno::XWeak>(static_cast<::cppu::OWeakObject*>(pInt)));
         return *this;
     }
 

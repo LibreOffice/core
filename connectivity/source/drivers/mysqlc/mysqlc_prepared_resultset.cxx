@@ -183,7 +183,7 @@ OPreparedResultSet::OPreparedResultSet(OConnection& rConn, OPreparedStatement* p
     : OPreparedResultSet_BASE(m_aMutex)
     , OPropertySetHelper(OPreparedResultSet_BASE::rBHelper)
     , m_rConnection(rConn)
-    , m_aStatement(static_cast<OWeakObject*>(pStmt))
+    , m_aStatement(css::uno::Reference<css::uno::XWeak>(static_cast<OWeakObject*>(pStmt)))
     , m_pStmt(pMyStmt)
     , m_encoding(rConn.getConnectionEncoding())
     , m_nColumnCount(mysql_stmt_field_count(pMyStmt))
@@ -201,7 +201,7 @@ void OPreparedResultSet::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    m_aStatement = nullptr;
+    m_aStatement.clear();
     m_xMetaData = nullptr;
 }
 
