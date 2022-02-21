@@ -21,8 +21,9 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svl/setitem.hxx>
-#include <svl/poolcach.hxx>
+#include <poolcach.hxx>
 #include <tools/debug.hxx>
+#include <patattr.hxx>
 
 SfxItemPoolCache::SfxItemPoolCache( SfxItemPool *pItemPool,
                                     const SfxPoolItem *pPutItem ):
@@ -56,7 +57,7 @@ SfxItemPoolCache::~SfxItemPoolCache()
 }
 
 
-const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
+const ScPatternAttr& SfxItemPoolCache::ApplyTo( const ScPatternAttr &rOrigItem )
 {
     DBG_ASSERT( pPool == rOrigItem.GetItemSet().GetPool(), "invalid Pool" );
     DBG_ASSERT( IsDefaultItem( &rOrigItem ) || IsPooledItem( &rOrigItem ),
@@ -78,16 +79,16 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     }
 
     // Insert the new attributes in a new Set
-    std::unique_ptr<SfxSetItem> pNewItem(rOrigItem.Clone());
+    std::unique_ptr<ScPatternAttr> pNewItem(rOrigItem.Clone());
     if ( pItemToPut )
     {
-        pNewItem->GetItemSet().PutDirect( *pItemToPut );
+        pNewItem->maItemSet.PutDirect( *pItemToPut );
         DBG_ASSERT( &pNewItem->GetItemSet().Get( pItemToPut->Which() ) == pItemToPut,
                     "wrong item in temporary set" );
     }
     else
-        pNewItem->GetItemSet().Put( *pSetToPut );
-    const SfxSetItem* pNewPoolItem = &pPool->Put( std::move(pNewItem) );
+        pNewItem->maItemSet.Put( *pSetToPut );
+    const ScPatternAttr* pNewPoolItem = &pPool->Put( std::move(pNewItem) );
 
     // Adapt refcount; one each for the cache
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
@@ -96,7 +97,7 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem )
     // Add the transformation to the cache
     SfxItemModifyImpl aModify;
     aModify.pOrigItem = &rOrigItem;
-    aModify.pPoolItem = const_cast<SfxSetItem*>(pNewPoolItem);
+    aModify.pPoolItem = const_cast<ScPatternAttr*>(pNewPoolItem);
     m_aCache.push_back( aModify );
 
     DBG_ASSERT( !pItemToPut ||

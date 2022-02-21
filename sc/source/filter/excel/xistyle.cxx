@@ -1279,28 +1279,28 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 
     // cell protection
     if( mbProtUsed )
-        maProtection.FillToItemSet( rItemSet, bSkipPoolDefs );
+        maProtection.FillToItemSet( aPattern, bSkipPoolDefs );
 
     // font
     if( mbFontUsed )
-        GetFontBuffer().FillToItemSet( rItemSet, XclFontItemType::Cell, mnXclFont, bSkipPoolDefs );
+        GetFontBuffer().FillToItemSet( aPattern, XclFontItemType::Cell, mnXclFont, bSkipPoolDefs );
 
     // value format
     if( mbFmtUsed )
     {
-        GetNumFmtBuffer().FillToItemSet( rItemSet, mnXclNumFmt, bSkipPoolDefs );
+        GetNumFmtBuffer().FillToItemSet( aPattern, mnXclNumFmt, bSkipPoolDefs );
         // Trace occurrences of Windows date formats
         GetTracer().TraceDates( mnXclNumFmt );
     }
 
     // alignment
     if( mbAlignUsed )
-        maAlignment.FillToItemSet( rItemSet, GetFontBuffer().GetFont( mnXclFont ), bSkipPoolDefs );
+        maAlignment.FillToItemSet( aPattern, GetFontBuffer().GetFont( mnXclFont ), bSkipPoolDefs );
 
     // border
     if( mbBorderUsed )
     {
-        maBorder.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
+        maBorder.FillToItemSet( aPattern, GetPalette(), bSkipPoolDefs );
         GetTracer().TraceBorderLineStyle(maBorder.mnLeftLine > EXC_LINE_HAIR ||
             maBorder.mnRightLine > EXC_LINE_HAIR || maBorder.mnTopLine > EXC_LINE_HAIR ||
             maBorder.mnBottomLine > EXC_LINE_HAIR );
@@ -1309,7 +1309,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
     // area
     if( mbAreaUsed )
     {
-        maArea.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
+        maArea.FillToItemSet( aPattern, GetPalette(), bSkipPoolDefs );
         GetTracer().TraceFillPattern(maArea.mnPattern != EXC_PATT_NONE &&
             maArea.mnPattern != EXC_PATT_SOLID);
     }
@@ -1325,12 +1325,12 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
         const XclImpCellBorder* pBorder = mbBorderUsed ? &maBorder : (pParentXF ? &pParentXF->maBorder : nullptr);
         if( pAlign && pBorder && (0 < pAlign->mnRotation) && (pAlign->mnRotation <= 180) && pBorder->HasAnyOuterBorder() )
             eRotateMode = SVX_ROTATE_MODE_BOTTOM;
-        ScfTools::PutItem( rItemSet, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
+        ScfTools::PutItem( aPattern, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
     }
 
     // Excel's cell margins are different from Calc's default margins.
     SvxMarginItem aItem(40, 40, 40, 40, ATTR_MARGIN);
-    ScfTools::PutItem(rItemSet, aItem, bSkipPoolDefs);
+    ScfTools::PutItem(aPattern, aItem, bSkipPoolDefs);
 
     return *mpPattern;
 }
@@ -1376,7 +1376,7 @@ void XclImpXF::ApplyPatternToAttrVector(
     {
         ScPatternAttr aNumPat(rDoc.GetPool());
         GetNumFmtBuffer().FillScFmtToItemSet(aNumPat.GetItemSet(), nForceScNumFmt);
-        rPat.GetItemSet().Put(aNumPat.GetItemSet());
+        rPat.Put(aNumPat.GetItemSet());
     }
 
     // Make sure we skip unnamed styles.

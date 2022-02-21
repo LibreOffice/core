@@ -48,8 +48,10 @@ enum ScAutoFontColorMode
     SC_AUTOCOL_IGNOREALL    ///< like DISPLAY, but ignore stored font and background colors
 };
 
-class SC_DLLPUBLIC ScPatternAttr final : public SfxSetItem
+class SC_DLLPUBLIC ScPatternAttr final : public SfxPoolItem
 {
+friend class SfxItemPoolCache;
+    SfxItemSet               maItemSet;
     std::optional<OUString>  pName;
     mutable std::optional<size_t> mxHashCode;
     ScStyleSheet*              pStyle;
@@ -65,7 +67,8 @@ public:
     virtual ScPatternAttr*  Clone( SfxItemPool *pPool = nullptr ) const override;
 
     virtual bool            operator==(const SfxPoolItem& rCmp) const override;
-    virtual size_t          LookupHashCode() const override;
+    virtual bool            operator<( const SfxPoolItem& ) const override;
+    virtual bool            IsSortable() const override { return true; }
 
     const SfxPoolItem&      GetItem( sal_uInt16 nWhichP ) const
                                         { return GetItemSet().Get(nWhichP); }
@@ -144,6 +147,15 @@ public:
 
     void                    SetKey(sal_uInt64 nKey);
     sal_uInt64              GetKey() const;
+
+    const SfxItemSet& GetItemSet() const { return maItemSet; }
+    // Reflect parts of the SfxItemSet API here, so we can trigger re-sorting in the pool
+    // when this object is modified
+    void Put( const SfxPoolItem& rItem );
+    void Put( std::unique_ptr<SfxPoolItem> xItem );
+    sal_uInt16 ClearItem( sal_uInt16 nWhich );
+    void ClearInvalidItems();
+    void setPropertyValue(const SfxItemPropertySet& rPropSet, const SfxItemPropertyMapEntry& rEntry, const css::uno::Any& aVal);
 
 private:
     void                    CalcHashCode() const;

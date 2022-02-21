@@ -536,7 +536,6 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
     sal_uInt16 nCode;
 
     ScPatternAttr aPattern(rContext.rDoc.GetPool());
-    SfxItemSet& rItemSet = aPattern.GetItemSet();
 
     r.ReadUInt16( nCode );
     n -= std::min<sal_uInt16>(n, 2);
@@ -559,20 +558,20 @@ void OP_CreatePattern123(LotusContext& rContext, SvStream& r, sal_uInt16 n)
         bIsUnderLine = (temp & 0x04);
 
         if ( bIsBold )
-            rItemSet.Put( SvxWeightItem(WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
+            aPattern.Put( SvxWeightItem(WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
         if ( bIsItalics )
-            rItemSet.Put( SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
+            aPattern.Put( SvxPostureItem(ITALIC_NORMAL, ATTR_FONT_POSTURE ) );
         if ( bIsUnderLine )
-            rItemSet.Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
+            aPattern.Put( SvxUnderlineItem( LINESTYLE_SINGLE, ATTR_FONT_UNDERLINE ) );
 
         r.SeekRel(3);
 
         // Read 21st Byte
         r.ReadUChar( Hor_Align );
-        OP_HorAlign123(rContext, Hor_Align, rItemSet );
+        OP_HorAlign123(rContext, Hor_Align, aPattern );
 
         r.ReadUChar( Ver_Align );
-        OP_VerAlign123(rContext, Ver_Align, rItemSet );
+        OP_VerAlign123(rContext, Ver_Align, aPattern );
 
         rContext.aLotusPatternPool.emplace( nPatternId, aPattern );
         n -= std::min<sal_uInt16>(n, 20);

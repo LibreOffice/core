@@ -41,6 +41,7 @@
 #include <climits>
 
 class ScDocument;
+class ScPatternAttr;
 
 /**
 A binary blob of writer-specific data. This data typically consists of types that are
@@ -165,7 +166,7 @@ public:
 
     bool                        IsEqualData( sal_uInt16 nIndex1, sal_uInt16 nIndex2 ) const;
 
-    void                        FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, const ScDocument& rDoc ) const;
+    void                        FillToItemSet( sal_uInt16 nIndex, ScPatternAttr& rItemSet, const ScDocument& rDoc ) const;
     void                        GetFromItemSet( sal_uInt16 nIndex, const SfxItemSet& rItemSet, const ScNumFormatAbbrev& rNumFormat );
 
     bool                        Load( SvStream& rStream, const ScAfVersions& rVersions );

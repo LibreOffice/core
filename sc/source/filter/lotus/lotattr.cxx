@@ -90,12 +90,11 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     // generate new Pattern Attribute
     ScPatternAttr*  pNewPatt = new ScPatternAttr(pDocPool);
 
-    SfxItemSet&     rItemSet = pNewPatt->GetItemSet();
     ENTRY *pCurrent = new ENTRY( std::unique_ptr<ScPatternAttr>(pNewPatt) );
 
     pCurrent->nHash0 = nRefHash;
 
-    mrContext.maFontBuff.Fill( rAttr.nFont, rItemSet );
+    mrContext.maFontBuff.Fill( rAttr.nFont, pNewPatt );
 
     sal_uInt8 nLine = rAttr.nLineStyle;
     if( nLine )
@@ -116,7 +115,7 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
         aBox.SetLine( &aBottom, SvxBoxItemLine::BOTTOM );
         aBox.SetLine( &aRight, SvxBoxItemLine::RIGHT );
 
-        rItemSet.Put( aBox );
+        pNewPatt->Put( aBox );
     }
 
     sal_uInt8               nFontCol = rAttr.nFontCol & 0x07;
@@ -124,19 +123,19 @@ const ScPatternAttr& LotAttrCache::GetPattAttr( const LotAttrWK3& rAttr )
     {
         // nFontCol > 0
         if( nFontCol < 7 )
-            rItemSet.Put( GetColorItem( nFontCol ) );
+            pNewPatt->Put( GetColorItem( nFontCol ) );
         else
-            rItemSet.Put( *pWhite );
+            pNewPatt->Put( *pWhite );
     }
 
     sal_uInt8 nBack = rAttr.nBack & 0x1F;
     if( nBack )
-        rItemSet.Put( SvxBrushItem( GetColor( nBack & 0x07 ), ATTR_BACKGROUND ) );
+        pNewPatt->Put( SvxBrushItem( GetColor( nBack & 0x07 ), ATTR_BACKGROUND ) );
 
     if( rAttr.nBack & 0x80 )
     {
         SvxHorJustifyItem   aHorJustify(SvxCellHorJustify::Center, ATTR_HOR_JUSTIFY );
-        rItemSet.Put( aHorJustify );
+        pNewPatt->Put( aHorJustify );
     }
 
     aEntries.push_back(std::unique_ptr<ENTRY>(pCurrent));

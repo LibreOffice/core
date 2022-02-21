@@ -437,7 +437,7 @@ bool ScAutoFormatData::IsEqualData( sal_uInt16 nIndex1, sal_uInt16 nIndex2 ) con
     return bEqual;
 }
 
-void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, const ScDocument& rDoc ) const
+void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, ScPatternAttr& rItemSet, const ScDocument& rDoc ) const
 {
     const ScAutoFormatDataField& rField = GetField( nIndex );
 

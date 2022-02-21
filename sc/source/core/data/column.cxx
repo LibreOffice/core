@@ -46,7 +46,7 @@
 #include <bcaslot.hxx>
 
 #include <svl/numformat.hxx>
-#include <svl/poolcach.hxx>
+#include <poolcach.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <editeng/fieldupdater.hxx>
@@ -513,7 +513,7 @@ void ScColumn::ApplyPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
 
     //  true = keep old content
 
-    const ScPatternAttr* pNewPattern = static_cast<const ScPatternAttr*>( &aCache.ApplyTo( *pPattern ) );
+    const ScPatternAttr* pNewPattern = &aCache.ApplyTo( *pPattern );
 
     if (pNewPattern != pPattern)
       pAttrArray->SetPattern( nRow, pNewPattern );
@@ -727,7 +727,7 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 
     const ScPatternAttr* pOldPattern = pAttrArray->GetPattern( nRow );
     ScPatternAttr aTemp(*pOldPattern);
-    aTemp.GetItemSet().Put(rAttr);
+    aTemp.Put(rAttr);
     const ScPatternAttr* pNewPattern = &pDocPool->Put( aTemp );
 
     if ( pNewPattern != pOldPattern )

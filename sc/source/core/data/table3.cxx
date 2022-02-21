@@ -2001,9 +2001,8 @@ static void lcl_RemoveNumberFormat( ScTable* pTab, SCCOL nCol, SCROW nRow )
             == SfxItemState::SET )
     {
         auto pNewPattern = std::make_unique<ScPatternAttr>( *pPattern );
-        SfxItemSet& rSet = pNewPattern->GetItemSet();
-        rSet.ClearItem( ATTR_VALUE_FORMAT );
-        rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
+        pNewPattern->ClearItem( ATTR_VALUE_FORMAT );
+        pNewPattern->ClearItem( ATTR_LANGUAGE_FORMAT );
         pTab->SetPattern( nCol, nRow, std::move(pNewPattern) );
     }
 }
