@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b35cfaaa_cfcc5106",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-21T09:14:17Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "dd404a52c881e7bfcf288f054773e6815d7aef10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a0a4c2a_58e3876b",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-21T09:14:17Z",
+      "side": 1,
+      "message": "Now let\u0027s return to this place. It is related to my earlier comment [1].\n\nHere you return, which makes the code behave differently than before (see line 218 in the original code). What was happening previously was that the error was set, and then line 226 was continued, until the function returned at line 249, performing some further operations.\n\nAlthough it\u0027s unclear if we really need to perform these operations after setting the error, changing that is not part of the task here; the easyhack is targeted at re-factoring for better readability, and hence it must not introduce any new behavior.\n\nOTOH, *if* it were required to return here, then you would need to flatten the \u0027else\u0027 part here, as we discussed in the other place. (But it is just \"what if...\" kind of remark; again, you should not return - and so of course, you will not flatten the \u0027else\u0027 here).\n\n[1] https://gerrit.libreoffice.org/c/core/+/130206/3..8/basic/source/runtime/methods.cxx#b214",
+      "revId": "dd404a52c881e7bfcf288f054773e6815d7aef10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
