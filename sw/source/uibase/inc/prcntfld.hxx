@@ -27,16 +27,16 @@ class SW_DLLPUBLIC SwPercentField
 {
     std::unique_ptr<weld::MetricSpinButton> m_pField;
 
-    sal_Int64 nRefValue;      // 100% value for conversion (in Twips)
-    sal_Int64 nOldMax;
-    sal_Int64 nOldMin;
-    int nOldSpinSize;
-    int nOldPageSize;
-    sal_Int64 nLastPercent;
-    sal_Int64 nLastValue;
-    sal_uInt16  nOldDigits;
-    FieldUnit   eOldUnit;
-    bool bLockAutoCalculation; //prevent recalculation of percent values when the
+    sal_Int64 m_nRefValue;      // 100% value for conversion (in Twips)
+    sal_Int64 m_nOldMax;
+    sal_Int64 m_nOldMin;
+    int m_nOldSpinSize;
+    int m_nOldPageSize;
+    sal_Int64 m_nLastPercent;
+    sal_Int64 m_nLastValue;
+    sal_uInt16  m_nOldDigits;
+    FieldUnit   m_eOldUnit;
+    bool m_bLockAutoCalculation; //prevent recalculation of percent values when the
                                //reference value is changed
 
     SAL_DLLPRIVATE static int ImpPower10(sal_uInt16 n);
@@ -78,7 +78,7 @@ public:
 
     void ShowPercent(bool bPercent);
 
-    void LockAutoCalculation(bool bLock) {bLockAutoCalculation = bLock;}
+    void LockAutoCalculation(bool bLock) {m_bLockAutoCalculation = bLock;}
 };
 
 

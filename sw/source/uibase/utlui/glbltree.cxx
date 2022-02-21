@@ -56,23 +56,23 @@ using namespace ::com::sun::star::uno;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
-const SfxObjectShell* SwGlobalTree::pShowShell = nullptr;
+const SfxObjectShell* SwGlobalTree::s_pShowShell = nullptr;
 
 namespace {
 
 class SwGlobalFrameListener_Impl : public SfxListener
 {
-    bool bValid;
+    bool m_bValid;
 public:
     explicit SwGlobalFrameListener_Impl(SfxViewFrame& rFrame)
-        : bValid(true)
+        : m_bValid(true)
     {
         StartListening(rFrame);
     }
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
 
-    bool                IsValid() const {return bValid;}
+    bool                IsValid() const {return m_bValid;}
 };
 
 }
@@ -80,7 +80,7 @@ public:
 void SwGlobalFrameListener_Impl::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.GetId() == SfxHintId::Dying)
-        bValid = false;
+        m_bValid = false;
 }
 
 namespace {
@@ -997,7 +997,7 @@ SwNavigationPI* SwGlobalTree::GetParentWindow()
 
 IMPL_STATIC_LINK_NOARG(SwGlobalTree, ShowFrameHdl, void*, void)
 {
-    SfxViewFrame* pFirst = pShowShell ? SfxViewFrame::GetFirst(pShowShell) : nullptr;
+    SfxViewFrame* pFirst = s_pShowShell ? SfxViewFrame::GetFirst(s_pShowShell) : nullptr;
     if (pFirst)
         pFirst->ToTop();
     SwGlobalTree::SetShowShell(nullptr);

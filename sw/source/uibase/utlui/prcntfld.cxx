@@ -22,28 +22,28 @@
 
 SwPercentField::SwPercentField(std::unique_ptr<weld::MetricSpinButton> pControl)
     : m_pField(std::move(pControl))
-    , nOldMax(0)
-    , nOldMin(0)
-    , nLastPercent(-1)
-    , nLastValue(-1)
-    , nOldDigits(m_pField->get_digits())
-    , eOldUnit(FieldUnit::NONE)
-    , bLockAutoCalculation(false)
+    , m_nOldMax(0)
+    , m_nOldMin(0)
+    , m_nLastPercent(-1)
+    , m_nLastValue(-1)
+    , m_nOldDigits(m_pField->get_digits())
+    , m_eOldUnit(FieldUnit::NONE)
+    , m_bLockAutoCalculation(false)
 {
     sal_Int64 nMin, nMax;
     m_pField->get_range(nMin, nMax, FieldUnit::TWIP);
-    nRefValue = DenormalizePercent(nMax);
-    m_pField->get_increments(nOldSpinSize, nOldPageSize, FieldUnit::NONE);
+    m_nRefValue = DenormalizePercent(nMax);
+    m_pField->get_increments(m_nOldSpinSize, m_nOldPageSize, FieldUnit::NONE);
 }
 
 void SwPercentField::SetRefValue(sal_Int64 nValue)
 {
-    sal_Int64 nRealValue = GetRealValue(eOldUnit);
+    sal_Int64 nRealValue = GetRealValue(m_eOldUnit);
 
-    nRefValue = nValue;
+    m_nRefValue = nValue;
 
-    if (!bLockAutoCalculation && (m_pField->get_unit() == FieldUnit::PERCENT))
-        set_value(nRealValue, eOldUnit);
+    if (!m_bLockAutoCalculation && (m_pField->get_unit() == FieldUnit::PERCENT))
+        set_value(nRealValue, m_eOldUnit);
 }
 
 void SwPercentField::ShowPercent(bool bPercent)
@@ -58,50 +58,51 @@ void SwPercentField::ShowPercent(bool bPercent)
     {
         nOldValue = get_value();
 
-        eOldUnit = m_pField->get_unit();
-        nOldDigits = m_pField->get_digits();
-        m_pField->get_range(nOldMin, nOldMax, FieldUnit::NONE);
-        m_pField->get_increments(nOldSpinSize, nOldPageSize, FieldUnit::NONE);
+        m_eOldUnit = m_pField->get_unit();
+        m_nOldDigits = m_pField->get_digits();
+        m_pField->get_range(m_nOldMin, m_nOldMax, FieldUnit::NONE);
+        m_pField->get_increments(m_nOldSpinSize, m_nOldPageSize, FieldUnit::NONE);
         m_pField->set_unit(FieldUnit::PERCENT);
         m_pField->set_digits(0);
 
         sal_Int64 nCurrentWidth
-            = vcl::ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
+            = vcl::ConvertValue(m_nOldMin, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
         // round to 0.5 percent
-        int nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
+        int nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
 
         m_pField->set_range(std::max(1, nPercent), 100, FieldUnit::NONE);
         m_pField->set_increments(5, 10, FieldUnit::NONE);
-        if (nOldValue != nLastValue)
+        if (nOldValue != m_nLastValue)
         {
-            nCurrentWidth = vcl::ConvertValue(nOldValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
-            nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
+            nCurrentWidth
+                = vcl::ConvertValue(nOldValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
+            nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
             m_pField->set_value(nPercent, FieldUnit::NONE);
-            nLastPercent = nPercent;
-            nLastValue = nOldValue;
+            m_nLastPercent = nPercent;
+            m_nLastValue = nOldValue;
         }
         else
-            m_pField->set_value(nLastPercent, FieldUnit::NONE);
+            m_pField->set_value(m_nLastPercent, FieldUnit::NONE);
     }
     else
     {
         sal_Int64 nOldPercent = get_value(FieldUnit::PERCENT);
 
-        nOldValue = Convert(get_value(), m_pField->get_unit(), eOldUnit);
+        nOldValue = Convert(get_value(), m_pField->get_unit(), m_eOldUnit);
 
-        m_pField->set_unit(eOldUnit);
-        m_pField->set_digits(nOldDigits);
-        m_pField->set_range(nOldMin, nOldMax, FieldUnit::NONE);
-        m_pField->set_increments(nOldSpinSize, nOldPageSize, FieldUnit::NONE);
+        m_pField->set_unit(m_eOldUnit);
+        m_pField->set_digits(m_nOldDigits);
+        m_pField->set_range(m_nOldMin, m_nOldMax, FieldUnit::NONE);
+        m_pField->set_increments(m_nOldSpinSize, m_nOldPageSize, FieldUnit::NONE);
 
-        if (nOldPercent != nLastPercent)
+        if (nOldPercent != m_nLastPercent)
         {
-            set_value(nOldValue, eOldUnit);
-            nLastPercent = nOldPercent;
-            nLastValue = nOldValue;
+            set_value(nOldValue, m_eOldUnit);
+            m_nLastPercent = nOldPercent;
+            m_nLastValue = nOldValue;
         }
         else
-            set_value(nLastValue, eOldUnit);
+            set_value(m_nLastValue, m_eOldUnit);
     }
 }
 
@@ -116,14 +117,14 @@ void SwPercentField::set_value(sal_Int64 nNewValue, FieldUnit eInUnit)
         if (eInUnit == FieldUnit::TWIP)
         {
             nCurrentWidth
-                = vcl::ConvertValue(nNewValue, 0, nOldDigits, FieldUnit::TWIP, FieldUnit::TWIP);
+                = vcl::ConvertValue(nNewValue, 0, m_nOldDigits, FieldUnit::TWIP, FieldUnit::TWIP);
         }
         else
         {
-            sal_Int64 nValue = Convert(nNewValue, eInUnit, eOldUnit);
-            nCurrentWidth = vcl::ConvertValue(nValue, 0, nOldDigits, eOldUnit, FieldUnit::TWIP);
+            sal_Int64 nValue = Convert(nNewValue, eInUnit, m_eOldUnit);
+            nCurrentWidth = vcl::ConvertValue(nValue, 0, m_nOldDigits, m_eOldUnit, FieldUnit::TWIP);
         }
-        nPercent = nRefValue ? (((nCurrentWidth * 10) / nRefValue + 5) / 10) : 0;
+        nPercent = m_nRefValue ? (((nCurrentWidth * 10) / m_nRefValue + 5) / 10) : 0;
         m_pField->set_value(nPercent, FieldUnit::NONE);
     }
 }
@@ -140,8 +141,8 @@ void SwPercentField::set_min(sal_Int64 nNewMin, FieldUnit eInUnit)
     else
     {
         if (eInUnit == FieldUnit::NONE)
-            eInUnit = eOldUnit;
-        nOldMin = Convert(nNewMin, eInUnit, eOldUnit);
+            eInUnit = m_eOldUnit;
+        m_nOldMin = Convert(nNewMin, eInUnit, m_eOldUnit);
 
         int nPercent = Convert(nNewMin, eInUnit, FieldUnit::PERCENT);
         m_pField->set_min(std::max(1, nPercent), FieldUnit::NONE);
@@ -159,7 +160,7 @@ sal_Int64 SwPercentField::NormalizePercent(sal_Int64 nValue)
     if (m_pField->get_unit() != FieldUnit::PERCENT)
         nValue = m_pField->normalize(nValue);
     else
-        nValue = nValue * ImpPower10(nOldDigits);
+        nValue = nValue * ImpPower10(m_nOldDigits);
     return nValue;
 }
 
@@ -169,7 +170,7 @@ sal_Int64 SwPercentField::DenormalizePercent(sal_Int64 nValue)
         nValue = m_pField->denormalize(nValue);
     else
     {
-        int nFactor = ImpPower10(nOldDigits);
+        int nFactor = ImpPower10(m_nOldDigits);
         nValue = ((nValue + (nFactor / 2)) / nFactor);
     }
     return nValue;
@@ -202,12 +203,12 @@ sal_Int64 SwPercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit
     if (eInUnit == FieldUnit::PERCENT)
     {
         // Convert to metric
-        sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
+        sal_Int64 nTwipValue = (m_nRefValue * nValue + 50) / 100;
 
         if (eOutUnit == FieldUnit::TWIP) // Only convert if necessary
             return NormalizePercent(nTwipValue);
         else
-            return vcl::ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FieldUnit::TWIP,
+            return vcl::ConvertValue(NormalizePercent(nTwipValue), 0, m_nOldDigits, FieldUnit::TWIP,
                                      eOutUnit);
     }
 
@@ -220,11 +221,11 @@ sal_Int64 SwPercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit
         if (eInUnit == FieldUnit::TWIP) // Only convert if necessary
             nCurrentWidth = nValue;
         else
-            nCurrentWidth = vcl::ConvertValue(nValue, 0, nOldDigits, eInUnit, FieldUnit::TWIP);
+            nCurrentWidth = vcl::ConvertValue(nValue, 0, m_nOldDigits, eInUnit, FieldUnit::TWIP);
         // Round to 0.5 percent
-        return nRefValue ? (((nCurrentWidth * 1000) / nRefValue + 5) / 10) : 0;
+        return m_nRefValue ? (((nCurrentWidth * 1000) / m_nRefValue + 5) / 10) : 0;
     }
 
-    return vcl::ConvertValue(nValue, 0, nOldDigits, eInUnit, eOutUnit);
+    return vcl::ConvertValue(nValue, 0, m_nOldDigits, eInUnit, eOutUnit);
 }
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
