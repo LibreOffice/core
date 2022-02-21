@@ -238,6 +238,7 @@
    <PropertyValue name="Type" value="ooxml-rtTriangle" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Path">
     <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Coordinates">
       <Coordinates>
@@ -293,6 +294,7 @@
    <PropertyValue name="Type" value="ooxml-rtTriangle" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Path">
     <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Coordinates">
       <Coordinates>
@@ -348,6 +350,7 @@
    <PropertyValue name="Type" value="ooxml-rtTriangle" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="Path">
     <Path>
+     <PropertyValue name="GluePoints" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
      <PropertyValue name="Coordinates">
       <Coordinates>
