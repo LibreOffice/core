@@ -3182,9 +3182,24 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
     Point aPosPixel = rCEvt.GetMousePosPixel();
     Point aMenuPos = aPosPixel;
 
+    bool bPosIsInEditView = mrViewData.HasEditView(eWhich);
     SCCOL nCellX = -1;
     SCROW nCellY = -1;
     mrViewData.GetPosFromPixel(aPosPixel.X(), aPosPixel.Y(), eWhich, nCellX, nCellY);
+    // GetPosFromPixel ignores the fact that when editing a cell, the cell might grow to cover
+    // other rows/columns. In addition, the mouse might now be outside the edited cell.
+    if (bPosIsInEditView)
+    {
+        if (nCellX >= mrViewData.GetEditViewCol() && nCellX <= mrViewData.GetEditEndCol())
+            nCellX = mrViewData.GetEditViewCol();
+        else
+            bPosIsInEditView = false;
+
+        if (nCellY >= mrViewData.GetEditViewRow() && nCellY <= mrViewData.GetEditEndRow())
+            nCellY = mrViewData.GetEditViewRow();
+        else
+            bPosIsInEditView = false;
+    }
 
     bool bSpellError = false;
     SCCOL nColSpellError = nCellX;
@@ -3216,7 +3231,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             // Find the first string to the left for spell checking in case the current cell is empty.
             ScAddress aPos(nCellX, nCellY, nTab);
             ScRefCellValue aSpellCheckCell(rDoc, aPos);
-            while (aSpellCheckCell.meType == CELLTYPE_NONE)
+            while (!bPosIsInEditView && aSpellCheckCell.meType == CELLTYPE_NONE)
             {
                 // Loop until we get the first non-empty cell in the row.
                 aPos.IncCol(-1);
