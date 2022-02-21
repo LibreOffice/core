@@ -1134,7 +1134,7 @@ rtl::Reference<SvxShapePolyPolygon>
     return static_cast<SvxShapePolyPolygon*>(pPath->getUnoShape().get());
 }
 
-static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Position3D& rPos
+static drawing::PointSequenceSequence createPolyPolygon_Symbol( const drawing::Position3D& rPos
                                  , const drawing::Direction3D& rSize
                                  , sal_Int32 nStandardSymbol )
 {
@@ -1181,195 +1181,141 @@ static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Posi
             break;
     }
 
-    drawing::PolyPolygonShape3D aPP;
+    drawing::PointSequenceSequence aPP;
 
-    aPP.SequenceX.realloc(1);
-    aPP.SequenceY.realloc(1);
-    aPP.SequenceZ.realloc(1);
+    aPP.realloc(1);
 
-    drawing::DoubleSequence* pOuterSequenceX = aPP.SequenceX.getArray();
-    drawing::DoubleSequence* pOuterSequenceY = aPP.SequenceY.getArray();
-    drawing::DoubleSequence* pOuterSequenceZ = aPP.SequenceZ.getArray();
+    uno::Sequence<awt::Point>* pOuterSequence = aPP.getArray();
 
-    pOuterSequenceX->realloc(nPointCount);
-    pOuterSequenceY->realloc(nPointCount);
-    pOuterSequenceZ->realloc(nPointCount);
+    pOuterSequence->realloc(nPointCount);
 
-    double* pInnerSequenceX = pOuterSequenceX->getArray();
-    double* pInnerSequenceY = pOuterSequenceY->getArray();
-    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
+    awt::Point* pInnerSequence = pOuterSequence->getArray();
 
     for(sal_Int32 nN = nPointCount; nN--;)
-        *pInnerSequenceZ++ = 0.0;
+        *pInnerSequence++ = {};
 
     switch(eSymbolType)
     {
         case Symbol_Square:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
             break;
         }
         case Symbol_UpArrow:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH };
             break;
         }
         case Symbol_DownArrow:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
             break;
         }
         case Symbol_RightArrow:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH  };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX+fWidthH, fY };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
             break;
         }
         case Symbol_LeftArrow:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX-fWidthH, fY };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY-fHeightH  };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX-fWidthH, fY };
             break;
         }
         case Symbol_Bowtie:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
             break;
         }
         case Symbol_Sandglass:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH };
             break;
         }
         case Symbol_Diamond:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX-fWidthH, fY };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX+fWidthH, fY };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX-fWidthH, fY };
             break;
         }
         case Symbol_HorizontalBar:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-0.2*fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-0.2*fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY-0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+0.2*fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY+0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+0.2*fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-0.2*fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-0.2*fHeightH };
             break;
         }
         case Symbol_VerticalBar:
         {
-            *pInnerSequenceX++ = fX-0.2*fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-0.2*fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX+0.2*fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+0.2*fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX+0.2*fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+0.2*fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX-0.2*fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-0.2*fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX-0.2*fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-0.2*fWidthH, fY-fHeightH };
 
             break;
         }
@@ -1377,71 +1323,53 @@ static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Posi
         {
             double fOmega = 1.5707963267948966192 / (nQuarterCount + 1.0);
             // one point in the middle of each edge to get full size bounding rectangle
-            *pInnerSequenceX++ = fX + fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX + fWidthH, fY };
             // 0 to PI/2
             for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
             {
-                *pInnerSequenceX++ = fX + fWidthH * cos( i * fOmega );
-                *pInnerSequenceY++ = fY - fHeightH * sin( i * fOmega );
+                *pInnerSequence++ = { fX + fWidthH * cos( i * fOmega ), fY - fHeightH * sin( i * fOmega ) };
             }
             // PI/2 to PI
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY - fHeightH;
+            *pInnerSequence++ = { fX, fY - fHeightH };
             for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
             {
-                *pInnerSequenceX++ = fX - fWidthH * sin( i * fOmega);
-                *pInnerSequenceY++ = fY - fHeightH * cos( i * fOmega);
+                *pInnerSequence++ = { fX - fWidthH * sin( i * fOmega), fY - fHeightH * cos( i * fOmega) };
             }
             // PI to 3/2*PI
-            *pInnerSequenceX++ = fX - fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX - fWidthH, fY };
             for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
             {
-                *pInnerSequenceX++ = fX - fWidthH * cos( i * fOmega);
-                *pInnerSequenceY++ = fY + fHeightH * sin( i * fOmega);
+                *pInnerSequence++ = { fX - fWidthH * cos( i * fOmega), fY + fHeightH * sin( i * fOmega) };
             }
             // 3/2*PI to 2*PI
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY + fHeightH;
+            *pInnerSequence++ = { fX, fY + fHeightH };
             for (sal_Int32 i = 1; i <= nQuarterCount; ++i)
             {
-                *pInnerSequenceX++ = fX + fWidthH * sin(i * fOmega);
-                *pInnerSequenceY++ = fY + fHeightH * cos(i * fOmega);
+                *pInnerSequence++ = { fX + fWidthH * sin(i * fOmega), fY + fHeightH * cos(i * fOmega) };
             }
             // close polygon
-            *pInnerSequenceX++ = fX + fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX + fWidthH, fY };
             break;
         }
         case Symbol_Star:
         {
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX+0.2*fWidthH;
-            *pInnerSequenceY++ = fY-0.2*fHeightH;
+            *pInnerSequence++ = { fX+0.2*fWidthH, fY-0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX+fWidthH, fY };
 
-            *pInnerSequenceX++ = fX+0.2*fWidthH;
-            *pInnerSequenceY++ = fY+0.2*fHeightH;
+            *pInnerSequence++ = { fX+0.2*fWidthH, fY+0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX-0.2*fWidthH;
-            *pInnerSequenceY++ = fY+0.2*fHeightH;
+            *pInnerSequence++ = { fX-0.2*fWidthH, fY+0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX-fWidthH, fY };
 
-            *pInnerSequenceX++ = fX-0.2*fWidthH;
-            *pInnerSequenceY++ = fY-0.2*fHeightH;
+            *pInnerSequence++ = { fX-0.2*fWidthH, fY-0.2*fHeightH };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX, fY-fHeightH };
             break;
         }
         case Symbol_X:
@@ -1451,44 +1379,31 @@ static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Posi
             const double fSmall = sqrt(200.0);
             const double fLarge = 128.0 - fSmall;
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY - fScaleY * fSmall;
+            *pInnerSequence++ = { fX, fY - fScaleY * fSmall };
 
-            *pInnerSequenceX++ = fX - fScaleX * fLarge;
-            *pInnerSequenceY++ = fY - fHeightH;
+            *pInnerSequence++ = { fX - fScaleX * fLarge, fY - fHeightH };
 
-            *pInnerSequenceX++ = fX - fWidthH;
-            *pInnerSequenceY++ = fY - fScaleY * fLarge;
+            *pInnerSequence++ = { fX - fWidthH, fY - fScaleY * fLarge };
 
-            *pInnerSequenceX++ = fX - fScaleX * fSmall;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX - fScaleX * fSmall, fY };
 
-            *pInnerSequenceX++ = fX - fWidthH;
-            *pInnerSequenceY++ = fY + fScaleY * fLarge;
+            *pInnerSequence++ = { fX - fWidthH, fY + fScaleY * fLarge };
 
-            *pInnerSequenceX++ = fX - fScaleX * fLarge;
-            *pInnerSequenceY++ = fY + fHeightH;
+            *pInnerSequence++ = { fX - fScaleX * fLarge, fY + fHeightH };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY + fScaleY * fSmall;
+            *pInnerSequence++ = { fX, fY + fScaleY * fSmall };
 
-            *pInnerSequenceX++ = fX + fScaleX * fLarge;
-            *pInnerSequenceY++ = fY + fHeightH;
+            *pInnerSequence++ = { fX + fScaleX * fLarge, fY + fHeightH };
 
-            *pInnerSequenceX++ = fX + fWidthH;
-            *pInnerSequenceY++ = fY + fScaleY * fLarge;
+            *pInnerSequence++ = { fX + fWidthH, fY + fScaleY * fLarge };
 
-            *pInnerSequenceX++ = fX + fScaleX * fSmall;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX + fScaleX * fSmall, fY };
 
-            *pInnerSequenceX++ = fX + fWidthH;
-            *pInnerSequenceY++ = fY - fScaleY * fLarge;
+            *pInnerSequence++ = { fX + fWidthH, fY - fScaleY * fLarge };
 
-            *pInnerSequenceX++ = fX + fScaleX * fLarge;
-            *pInnerSequenceY++ = fY - fHeightH;
+            *pInnerSequence++ = { fX + fScaleX * fLarge, fY - fHeightH };
 
-            *pInnerSequenceX++ = fX;
-            *pInnerSequenceY++ = fY - fScaleY * fSmall;
+            *pInnerSequence++ = { fX, fY - fScaleY * fSmall };
             break;
 
         }
@@ -1500,44 +1415,31 @@ static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Posi
             const double fdX = fScaleX * fHalf;
             const double fdY = fScaleY * fHalf;
 
-            *pInnerSequenceX++ = fX-fdX;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fdX, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fdX;
-            *pInnerSequenceY++ = fY-fdY;
+            *pInnerSequence++ = { fX-fdX, fY-fdY };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fdY;
+            *pInnerSequence++ = { fX-fWidthH, fY-fdY };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fdY;
+            *pInnerSequence++ = { fX-fWidthH, fY+fdY };
 
-            *pInnerSequenceX++ = fX-fdX;
-            *pInnerSequenceY++ = fY+fdY;
+            *pInnerSequence++ = { fX-fdX, fY+fdY };
 
-            *pInnerSequenceX++ = fX-fdX;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fdX, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fdX;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fdX, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fdX;
-            *pInnerSequenceY++ = fY+fdY;
+            *pInnerSequence++ = { fX+fdX, fY+fdY };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fdY;
+            *pInnerSequence++ = { fX+fWidthH, fY+fdY };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fdY;
+            *pInnerSequence++ = { fX+fWidthH, fY-fdY };
 
-            *pInnerSequenceX++ = fX+fdX;
-            *pInnerSequenceY++ = fY-fdY;
+            *pInnerSequence++ = { fX+fdX, fY-fdY };
 
-            *pInnerSequenceX++ = fX+fdY;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fdY, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fdX;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fdX, fY-fHeightH };
             break;
 
         }
@@ -1554,80 +1456,56 @@ static drawing::PolyPolygonShape3D createPolyPolygon_Symbol( const drawing::Posi
             const double fScaleY = fHeightH / 128.0;
 
             //1
-            *pInnerSequenceX++ = fX-fScaleX * fHalf;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fScaleX * fHalf, fY-fHeightH };
             //2
-            *pInnerSequenceX++ = fX-fScaleX * fHalf;
-            *pInnerSequenceY++ = fY-fScaleY * fTwoY;
+            *pInnerSequence++ = { fX-fScaleX * fHalf, fY-fScaleY * fTwoY };
             //3
-            *pInnerSequenceX++ = fX-fScaleX * fThreeX;
-            *pInnerSequenceY++ = fY-fScaleY * fThreeY;
+            *pInnerSequence++ = { fX-fScaleX * fThreeX, fY-fScaleY * fThreeY };
             //4
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fScaleY * fFourY;
+            *pInnerSequence++ = { fX-fWidthH, fY-fScaleY * fFourY };
             //5
-            *pInnerSequenceX++ = fX-fScaleX * fFiveX;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX-fScaleX * fFiveX, fY };
             //6 as 4
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fScaleY * fFourY;
+            *pInnerSequence++ = { fX-fWidthH, fY+fScaleY * fFourY };
             //7 as 3
-            *pInnerSequenceX++ = fX-fScaleX * fThreeX;
-            *pInnerSequenceY++ = fY+fScaleY * fThreeY;
+            *pInnerSequence++ = { fX-fScaleX * fThreeX, fY+fScaleY * fThreeY };
             //8 as 2
-            *pInnerSequenceX++ = fX-fScaleX * fHalf;
-            *pInnerSequenceY++ = fY+fScaleY * fTwoY;
+            *pInnerSequence++ = { fX-fScaleX * fHalf, fY+fScaleY * fTwoY };
             //9 as 1
-            *pInnerSequenceX++ = fX-fScaleX * fHalf;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fScaleX * fHalf, fY+fHeightH };
             //10 as 1
-            *pInnerSequenceX++ = fX+fScaleX * fHalf;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fScaleX * fHalf, fY+fHeightH };
             //11 as 2
-            *pInnerSequenceX++ = fX+fScaleX * fHalf;
-            *pInnerSequenceY++ = fY+fScaleY * fTwoY;
+            *pInnerSequence++ = { fX+fScaleX * fHalf, fY+fScaleY * fTwoY };
             //12 as 3
-            *pInnerSequenceX++ = fX+fScaleX * fThreeX;
-            *pInnerSequenceY++ = fY+fScaleY * fThreeY;
+            *pInnerSequence++ = { fX+fScaleX * fThreeX, fY+fScaleY * fThreeY };
             //13 as 4
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fScaleY * fFourY;
+            *pInnerSequence++ = { fX+fWidthH, fY+fScaleY * fFourY };
             //14 as 5
-            *pInnerSequenceX++ = fX+fScaleX * fFiveX;
-            *pInnerSequenceY++ = fY;
+            *pInnerSequence++ = { fX+fScaleX * fFiveX, fY };
             //15 as 4
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fScaleY * fFourY;
+            *pInnerSequence++ = { fX+fWidthH, fY-fScaleY * fFourY };
             //16 as 3
-            *pInnerSequenceX++ = fX+fScaleX * fThreeX;
-            *pInnerSequenceY++ = fY-fScaleY * fThreeY;
+            *pInnerSequence++ = { fX+fScaleX * fThreeX, fY-fScaleY * fThreeY };
             //17 as 2
-            *pInnerSequenceX++ = fX+fScaleX * fHalf;
-            *pInnerSequenceY++ = fY-fScaleY * fTwoY;
+            *pInnerSequence++ = { fX+fScaleX * fHalf, fY-fScaleY * fTwoY };
             // 18 as 1
-            *pInnerSequenceX++ = fX+fScaleX * fHalf;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fScaleX * fHalf, fY-fHeightH };
             // 19 = 1, closing
-            *pInnerSequenceX++ = fX-fScaleX * fHalf;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fScaleX * fHalf, fY-fHeightH };
             break;
         }
         default: //case Symbol_Square:
         {
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY+fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY+fHeightH };
 
-            *pInnerSequenceX++ = fX+fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX+fWidthH, fY-fHeightH };
 
-            *pInnerSequenceX++ = fX-fWidthH;
-            *pInnerSequenceY++ = fY-fHeightH;
+            *pInnerSequence++ = { fX-fWidthH, fY-fHeightH };
             break;
         }
     }
@@ -1655,8 +1533,8 @@ rtl::Reference<SvxShapePolyPolygon>
     //set properties
     try
     {
-        drawing::PointSequenceSequence aPoints( PolyToPointSequence(
-            createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol ) ));
+        drawing::PointSequenceSequence aPoints =
+            createPolyPolygon_Symbol( rPosition, rSize, nStandardSymbol );
 
         //Polygon
         xShape->SvxShape::setPropertyValue( UNO_NAME_POLYPOLYGON
