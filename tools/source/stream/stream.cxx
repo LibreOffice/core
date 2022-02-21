@@ -1850,7 +1850,8 @@ OUString read_uInt16s_ToOUString(SvStream& rStrm, std::size_t nLen)
         }
     }
 
-    //take ownership of buffer and return, otherwise return empty string
+    // take ownership of buffer and return, otherwise return empty string
+    // coverity[return_tainted_data : SUPPRESS] - we consider the string untainted at this point
     return pStr ? OUString(pStr, SAL_NO_ACQUIRE) : OUString();
 }
 
