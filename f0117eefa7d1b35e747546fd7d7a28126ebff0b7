@@ -16,6 +16,24 @@
       "message": "It seems that starting from this commit, compiling has failed on my Fedora 34 machine:\nmake[1]: *** [/home/suokunlong/lo/bibisect-master-source/solenv/gbuild/InstallModuleTarget.mk:113：/home/suokunlong/lo/bibisect-master-source/workdir/ScpMergeTarget/scp2/source/ooo/module_ooo.ulf] error 139.\n\nStill reproducible as of today.",
       "revId": "f0117eefa7d1b35e747546fd7d7a28126ebff0b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232ecf51_87bb697c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-02-21T03:33:37Z",
+      "side": 1,
+      "message": "hi Kevin, this error doesn\u0027t seem to be related with current commit... (see directories: solenv and scp2 - not vcl which was modified. Or there are other errors?",
+      "parentUuid": "fe7c2163_613fc029",
+      "revId": "f0117eefa7d1b35e747546fd7d7a28126ebff0b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
