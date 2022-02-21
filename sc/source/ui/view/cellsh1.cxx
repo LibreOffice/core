@@ -3132,9 +3132,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                                     pServDlg->GetParPass() );
                             std::unique_ptr<ScDPObject> pNewDPObject(new ScDPObject(&rDoc));
                             pNewDPObject->SetServiceData( aServDesc );
-
-                            if ( pNewDPObject )
-                                pNewDPObject->SetOutRange( aDestPos );
+                            pNewDPObject->SetOutRange(aDestPos);
 
                             RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
                         }
@@ -3157,9 +3155,7 @@ void ScCellShell::ExecuteDataPilotDialog()
                             pDataDlg->GetValues( aImpDesc );
                             std::unique_ptr<ScDPObject> pNewDPObject(new ScDPObject(&rDoc));
                             pNewDPObject->SetImportDesc( aImpDesc );
-
-                            if ( pNewDPObject )
-                                pNewDPObject->SetOutRange( aDestPos );
+                            pNewDPObject->SetOutRange(aDestPos);
 
                             RunPivotLayoutDialog(pScMod, pTabViewShell, pNewDPObject);
                         }
