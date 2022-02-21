@@ -342,6 +342,72 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionMetalTypeStrict)
     SetODFDefaultVersion(nCurrentODFVersion);
 }
 
+namespace
+{
+void lcl_assertSpecularityProperty(std::string_view sInfo, uno::Reference<drawing::XShape>& rxShape)
+{
+    uno::Reference<beans::XPropertySet> xShapeProps(rxShape, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aGeoPropSeq;
+    xShapeProps->getPropertyValue("CustomShapeGeometry") >>= aGeoPropSeq;
+    comphelper::SequenceAsHashMap aGeoPropMap(aGeoPropSeq);
+    uno::Sequence<beans::PropertyValue> aExtrusionSeq;
+    aGeoPropMap.getValue("Extrusion") >>= aExtrusionSeq;
+    comphelper::SequenceAsHashMap aExtrusionPropMap(aExtrusionSeq);
+
+    double fSpecularity(-1.0);
+    aExtrusionPropMap.getValue("Specularity") >>= fSpecularity;
+    OString sMsg = OString::Concat(sInfo) + "Specularity";
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sMsg.getStr(), 8000000.0/ 65536.0, fSpecularity);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularityExtended)
+{
+    // import
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf147580_extrusion-specularity.doc",
+                                     "com.sun.star.text.TextDocument");
+    // verify property
+    uno::Reference<drawing::XShape> xShape(getShape(0));
+    lcl_assertSpecularityProperty("from doc", xShape);
+
+    // Test, that attribute is written in draw namespace with value 100% and in loext namespace with
+    // value 122.0703125%.
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    // assert XML.
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//draw:enhanced-geometry[@draw:extrusion-specularity='100%']");
+    assertXPath(pXmlDoc,
+                "//draw:enhanced-geometry[@loext:extrusion-specularity-loext='122.0703125%']");
+
+    // reload and verify, that the loext value is used
+    getComponent()->dispose();
+    getComponent() = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    // verify properties
+    uno::Reference<drawing::XShape> xShapeReload(getShape(0));
+    lcl_assertSpecularityProperty("from ODF 1.3 extended", xShapeReload);
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testExtrusionSpecularity)
+{
+    // import
+    getComponent() = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY)
+                                         + "tdf147580_extrusion-specularity.doc",
+                                     "com.sun.star.text.TextDocument");
+
+    // The file has c3DSpecularAmt="80000" which results internally in specularity=122%.
+    // Save to ODF 1.3 strict and make sure it does not produce a validation error.
+    const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion(GetODFDefaultVersion());
+    SetODFDefaultVersion(SvtSaveOptions::ODFVER_013);
+    utl::TempFile aTempFile;
+    save("writer8", aTempFile);
+
+    SetODFDefaultVersion(nCurrentODFVersion);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
