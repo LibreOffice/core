@@ -463,6 +463,9 @@ OString makeClassPathOption(std::u16string_view sUserClassPath)
     }
 
     sPaths = OUStringToOString(sBufCP.makeStringAndClear(), PathEncoding());
+    if (sPaths.isEmpty()) {
+        return "";
+    }
 
     OString sOptionClassPath = "-Djava.class.path=" + sPaths;
     return sOptionClassPath;
