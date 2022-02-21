@@ -502,6 +502,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
         if( !bOK )
         {
 #if HAVE_FEATURE_AVMEDIA
+#if 0
             Size aPrefSize;
 
             if( ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) &&
@@ -522,6 +523,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                 InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize, true ) ;
             }
             else
+#endif
 #endif
             if( mnAction & DND_ACTION_LINK )
                 static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, OUString(), &maDropPos );

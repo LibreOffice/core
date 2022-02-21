@@ -21,6 +21,7 @@
 
 #include <fuinsert.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <editeng/outlobj.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svx/svxdlg.hxx>
@@ -30,7 +31,9 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 
+#include <svl/rectitem.hxx>
 #include <svl/stritem.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/msg.hxx>
 #include <svtools/insdlg.hxx>
@@ -664,6 +667,11 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
     bool                bAPI = false;
 
+    const SfxRectangleItem* pSizeItem = rReq.GetArg<SfxRectangleItem>(FN_PARAM_1);
+    const SfxBoolItem* pLinkItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
+    const bool bSizeUnknown = !pSizeItem;
+    Size aPrefSize;
+
     if( pReqArgs )
     {
         const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( &pReqArgs->Get( rReq.GetSlot() )  );
@@ -675,56 +683,81 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
         }
     }
 
-    bool bLink(true);
+    bool bLink(pLinkItem ? pLinkItem->GetValue() : true);
     if (!(bAPI
         || ::avmedia::MediaWindow::executeMediaURLDialog(mpWindow ? mpWindow->GetFrameWeld() : nullptr, aURL, & bLink)
        ))
         return;
 
-    Size aPrefSize;
-
-    if( mpWindow )
-        mpWindow->EnterWait();
-
-    if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
+    if (!bSizeUnknown)
     {
-        if( mpWindow )
-            mpWindow->LeaveWait();
-
-        if( !bAPI )
-            ::avmedia::MediaWindow::executeFormatErrorBox(mpWindow->GetFrameWeld());
+        aPrefSize = pSizeItem->GetValue().GetSize();
     }
     else
     {
-        Point       aPos;
-        Size        aSize;
-        sal_Int8    nAction = DND_ACTION_COPY;
-
-        if( aPrefSize.Width() && aPrefSize.Height() )
-        {
-            if( mpWindow )
-                aSize = mpWindow->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-            else
-                aSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-        }
-        else
-            aSize = Size( 5000, 5000 );
-
+        // If we don't have a size then try and find that out, the resulted might be deliver async, so dispatch a follow up
+        // effort to insert the video, this time with a size.
         if( mpWindow )
-        {
-            aPos = mpWindow->PixelToLogic( ::tools::Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
-            aPos.AdjustX( -(aSize.Width() >> 1) );
-            aPos.AdjustY( -(aSize.Height() >> 1) );
-        }
+            mpWindow->EnterWait();
 
-        mpView->InsertMediaURL( aURL, nAction, aPos, aSize, bLink ) ;
+        SfxDispatcher* pDispatcher = mpViewShell->GetViewFrame()->GetDispatcher();
+        rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
+            [pDispatcher, aURL, bLink](const css::awt::Size& rSize){
+                const SfxStringItem aMediaURLItem(SID_INSERT_AVMEDIA, aURL);
+                const SfxRectangleItem aPrefSizeItem(FN_PARAM_1, ::tools::Rectangle(Point(0, 0), Size(rSize.Width, rSize.Height)));
+                const SfxBoolItem aLinkItem(FN_PARAM_2, bLink);
+                SolarMutexGuard g;
+                pDispatcher->ExecuteList(SID_INSERT_AVMEDIA, SfxCallMode::ASYNCHRON, { &aMediaURLItem, &aPrefSizeItem, &aLinkItem });
+            }));
+
+        const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, "", true, xPlayerListener);
 
         if( mpWindow )
             mpWindow->LeaveWait();
+
+        if (!bIsMediaURL && !bAPI)
+            ::avmedia::MediaWindow::executeFormatErrorBox(mpWindow->GetFrameWeld());
+
+        return;
     }
+
+    InsertMediaURL(aURL, aPrefSize, bLink);
+
 #else
     (void)rReq;
 #endif
+}
+
+void FuInsertAVMedia::InsertMediaURL(const OUString& rURL, const Size& rPrefSize, bool bLink)
+{
+    if( mpWindow )
+        mpWindow->EnterWait();
+
+    Point       aPos;
+    Size        aSize;
+    sal_Int8    nAction = DND_ACTION_COPY;
+
+    if (rPrefSize.Width() && rPrefSize.Height())
+    {
+        if( mpWindow )
+            aSize = mpWindow->PixelToLogic(rPrefSize, MapMode(MapUnit::Map100thMM));
+        else
+            aSize = Application::GetDefaultDevice()->PixelToLogic(rPrefSize, MapMode(MapUnit::Map100thMM));
+    }
+    else
+        aSize = Size( 5000, 5000 );
+
+    if( mpWindow )
+    {
+        aPos = mpWindow->PixelToLogic( ::tools::Rectangle( aPos, mpWindow->GetOutputSizePixel() ).Center() );
+        aPos.AdjustX( -(aSize.Width() >> 1) );
+        aPos.AdjustY( -(aSize.Height() >> 1) );
+    }
+
+    mpView->InsertMediaURL(rURL, nAction, aPos, aSize, bLink);
+
+    if( mpWindow )
+        mpWindow->LeaveWait();
 }
 
 } // end of namespace sd
