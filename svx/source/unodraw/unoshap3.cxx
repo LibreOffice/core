@@ -131,6 +131,27 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
 }
 
+void Svx3DSceneObject::addShape( SvxShape& rShape )
+{
+    SolarMutexGuard aGuard;
+
+    if(!HasSdrObject() || !mxPage.is() || nullptr != rShape.GetSdrObject() )
+        throw uno::RuntimeException();
+
+    SdrObject* pSdrShape = mxPage->CreateSdrObject_( &rShape );
+    if( dynamic_cast<const E3dObject* >(pSdrShape) !=  nullptr )
+    {
+        GetSdrObject()->GetSubList()->NbcInsertObject( pSdrShape );
+        rShape.Create(pSdrShape, mxPage.get());
+    }
+    else
+    {
+        SdrObject::Free( pSdrShape );
+        throw uno::RuntimeException();
+    }
+
+    GetSdrObject()->getSdrModelFromSdrObject().SetChanged();
+}
 
 void SAL_CALL Svx3DSceneObject::remove( const Reference< drawing::XShape >& xShape )
 {
