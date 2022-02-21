@@ -51,6 +51,7 @@ struct SdrMediaObj::Impl
     std::shared_ptr< ::avmedia::MediaTempFile >  m_pTempFile;
 #endif
     uno::Reference< graphic::XGraphic >   m_xCachedSnapshot;
+    rtl::Reference<avmedia::PlayerListener> m_xPlayerListener;
     OUString m_LastFailedPkgURL;
 };
 
@@ -150,7 +151,18 @@ uno::Reference< graphic::XGraphic > const & SdrMediaObj::getSnapshot() const
         OUString aRealURL = m_xImpl->m_MediaProperties.getTempURL();
         if( aRealURL.isEmpty() )
             aRealURL = m_xImpl->m_MediaProperties.getURL();
-        m_xImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame( aRealURL, m_xImpl->m_MediaProperties.getReferer(), m_xImpl->m_MediaProperties.getMimeType());
+        OUString sReferer = m_xImpl->m_MediaProperties.getReferer();
+        OUString sMimeType = m_xImpl->m_MediaProperties.getMimeType();
+        uno::Reference<graphic::XGraphic> xCachedSnapshot = m_xImpl->m_xCachedSnapshot;
+
+        m_xImpl->m_xPlayerListener.set(new avmedia::PlayerListener(
+            [this, xCachedSnapshot, aRealURL, sReferer, sMimeType](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+                SolarMutexGuard g;
+                m_xImpl->m_xCachedSnapshot = avmedia::MediaWindow::grabFrame(rPlayer);
+                ActionChanged();
+            }));
+
+        avmedia::MediaWindow::grabFrame(aRealURL, sReferer, sMimeType, m_xImpl->m_xPlayerListener);
     }
 #endif
     return m_xImpl->m_xCachedSnapshot;
@@ -341,6 +353,7 @@ void SdrMediaObj::mediaPropertiesChanged( const ::avmedia::MediaItem& rNewProper
         ( rNewProperties.getURL() != getURL() ))
     {
         m_xImpl->m_xCachedSnapshot.clear();
+        m_xImpl->m_xPlayerListener.clear();
         OUString const& url(rNewProperties.getURL());
         if (url.startsWithIgnoreAsciiCase("vnd.sun.star.Package:"))
         {

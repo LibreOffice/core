@@ -5387,7 +5387,11 @@ SfxVoidItem AVMediaPlayer SID_AVMEDIA_PLAYER
 ]
 
 SfxVoidItem InsertAVMedia SID_INSERT_AVMEDIA
-()
+(
+    SfxStringItem URL SID_INSERT_AVMEDIA,
+    SvxSizeItem Size FN_PARAM_1,
+    SfxBoolItem IsLink FN_PARAM_2
+)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
