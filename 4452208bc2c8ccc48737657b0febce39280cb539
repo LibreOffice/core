@@ -88,6 +88,24 @@
       "parentUuid": "87a61e7d_b5a56e96",
       "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ecb3de4_e055db99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-21T13:47:53Z",
+      "side": 1,
+      "message": "That would certainly solve the immutability/sorting issue, but given the size of ScPatternAttr, and the necessaity for doing a new/delete every time, I would guess that it would slow a number of things down.",
+      "parentUuid": "22a0b2be_599de192",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
