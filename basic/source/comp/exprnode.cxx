@@ -296,8 +296,8 @@ void SbiExprNode::FoldConstantsBinaryNode(SbiParser* pParser)
     {
         double nl = pLeft->nVal;
         double nr = pRight->nVal;
-        // tdf#141201 - round MOD literals to Integer values
-        if (eTok == MOD)
+        // tdf#141201, tdf#147089 - round MOD/IDIV literals to Integer values
+        if (eTok == MOD || eTok == IDIV)
         {
             nl = rtl::math::round(nl);
             nr = rtl::math::round(nr);
