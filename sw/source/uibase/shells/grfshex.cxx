@@ -25,12 +25,14 @@
 #include <doc.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
-#include <svx/svdomedia.hxx>
-
+#include <avmedia/mediawindow.hxx>
+#include <editeng/sizeitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
-#include <avmedia/mediawindow.hxx>
+#include <svx/svdomedia.hxx>
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#include <com/sun/star/media/XPlayer.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -49,6 +51,10 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
     vcl::Window&        rWindow = GetView().GetViewFrame()->GetWindow();
     bool bAPI = false;
 
+    const SvxSizeItem* pSizeItem = rReq.GetArg<SvxSizeItem>(FN_PARAM_1);
+    const SfxBoolItem* pLinkItem = rReq.GetArg<SfxBoolItem>(FN_PARAM_2);
+    const bool bSizeUnknown = !pSizeItem;
+
     if( pReqArgs )
     {
         const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( &pReqArgs->Get( rReq.GetSlot() )  );
@@ -59,67 +65,85 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
         }
     }
 
-    bool bLink(true);
+    bool bLink(pLinkItem ? pLinkItem->GetValue() : true);
+
     if (bAPI || ::avmedia::MediaWindow::executeMediaURLDialog(rWindow.GetFrameWeld(), aURL, & bLink))
     {
         Size aPrefSize;
 
-        rWindow.EnterWait();
-
-        if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
+        if (!bSizeUnknown)
+            aPrefSize = pSizeItem->GetSize();
+        else
         {
+            rWindow.EnterWait();
+
+            css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(GetView().GetViewFrame()->GetFrame().GetFrameInterface(), css::uno::UNO_QUERY);
+
+            rtl::Reference<avmedia::PlayerListener> xPlayerListener(new avmedia::PlayerListener(
+                [xDispatchProvider, aURL, bLink](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+                    css::awt::Size aSize = rPlayer->getPreferredPlayerWindowSize();
+                    avmedia::MediaWindow::dispatchInsertAVMedia(xDispatchProvider, aSize, aURL, bLink);
+                }));
+
+            const bool bIsMediaURL = ::avmedia::MediaWindow::isMediaURL(aURL, "", true, xPlayerListener);
+
             rWindow.LeaveWait();
 
-            if( !bAPI )
-                ::avmedia::MediaWindow::executeFormatErrorBox(rWindow.GetFrameWeld());
+            if (!bIsMediaURL)
+            {
+                if( !bAPI )
+                    ::avmedia::MediaWindow::executeFormatErrorBox(rWindow.GetFrameWeld());
+
+                return bRet;
+            }
+        }
+
+        rWindow.EnterWait();
+
+        SwWrtShell& rSh = GetShell();
+
+        if( !rSh.HasDrawView() )
+            rSh.MakeDrawView();
+
+        Size            aDocSz( rSh.GetDocSize() );
+        const SwRect&   rVisArea = rSh.VisArea();
+        Point           aPos( rVisArea.Center() );
+        Size            aSize;
+
+        if( rVisArea.Width() > aDocSz.Width())
+            aPos.setX( aDocSz.Width() / 2 + rVisArea.Left() );
+
+        if(rVisArea.Height() > aDocSz.Height())
+            aPos.setY( aDocSz.Height() / 2 + rVisArea.Top() );
+
+        if( aPrefSize.Width() && aPrefSize.Height() )
+            aSize = rWindow.PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
+        else
+            aSize = Size( 2835, 2835 );
+
+        OUString realURL;
+        if (bLink)
+        {
+            realURL = aURL;
         }
         else
         {
-            SwWrtShell& rSh = GetShell();
-
-            if( !rSh.HasDrawView() )
-                rSh.MakeDrawView();
-
-            Size            aDocSz( rSh.GetDocSize() );
-            const SwRect&   rVisArea = rSh.VisArea();
-            Point           aPos( rVisArea.Center() );
-            Size            aSize;
-
-            if( rVisArea.Width() > aDocSz.Width())
-                aPos.setX( aDocSz.Width() / 2 + rVisArea.Left() );
-
-            if(rVisArea.Height() > aDocSz.Height())
-                aPos.setY( aDocSz.Height() / 2 + rVisArea.Top() );
-
-            if( aPrefSize.Width() && aPrefSize.Height() )
-                aSize = rWindow.PixelToLogic(aPrefSize, MapMode(MapUnit::MapTwip));
-            else
-                aSize = Size( 2835, 2835 );
-
-            OUString realURL;
-            if (bLink)
-            {
-                realURL = aURL;
-            }
-            else
-            {
-                uno::Reference<frame::XModel> const xModel(
-                        rSh.GetDoc()->GetDocShell()->GetModel());
-                bRet = ::avmedia::EmbedMedia(xModel, aURL, realURL);
-                if (!bRet) { return bRet; }
-            }
-
-            SdrMediaObj* pObj = new SdrMediaObj(
-                *rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel(),
-                tools::Rectangle(aPos, aSize));
-
-            pObj->setURL( realURL, "" );
-            rSh.EnterStdMode();
-            rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
-            bRet = true;
-
-            rWindow.LeaveWait();
+            uno::Reference<frame::XModel> const xModel(
+                    rSh.GetDoc()->GetDocShell()->GetModel());
+            bRet = ::avmedia::EmbedMedia(xModel, aURL, realURL);
+            if (!bRet) { return bRet; }
         }
+
+        SdrMediaObj* pObj = new SdrMediaObj(
+            *rSh.GetDoc()->getIDocumentDrawModelAccess().GetDrawModel(),
+            tools::Rectangle(aPos, aSize));
+
+        pObj->setURL( realURL, "" );
+        rSh.EnterStdMode();
+        rSh.SwFEShell::InsertDrawObj( *pObj, aPos );
+        bRet = true;
+
+        rWindow.LeaveWait();
     }
 #endif
 

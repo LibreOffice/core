@@ -28,11 +28,16 @@
 #include <vcl/weld.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
+#include <com/sun/star/media/XPlayerNotifier.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
+#include <com/sun/star/util/URLTransformer.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <memory>
 #include <sal/log.hxx>
 
@@ -296,14 +301,14 @@ void MediaWindow::executeFormatErrorBox(weld::Window* pParent)
     xBox->run();
 }
 
-bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep, Size* pPreferredSizePixel )
+bool MediaWindow::isMediaURL(const OUString& rURL, const OUString& rReferer, bool bDeep, rtl::Reference<PlayerListener> xPreferredPixelSizeListener)
 {
     const INetURLObject aURL( rURL );
 
     if( aURL.GetProtocol() == INetProtocol::NotValid )
         return false;
 
-    if( bDeep || pPreferredSizePixel )
+    if (bDeep || xPreferredPixelSizeListener)
     {
         try
         {
@@ -313,14 +318,20 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
 
             if( xPlayer.is() )
             {
-                if( pPreferredSizePixel )
+                if (xPreferredPixelSizeListener)
                 {
-                    const awt::Size aAwtSize( xPlayer->getPreferredPlayerWindowSize() );
-
-                    pPreferredSizePixel->setWidth( aAwtSize.Width );
-                    pPreferredSizePixel->setHeight( aAwtSize.Height );
+                    uno::Reference<media::XPlayerNotifier> xPlayerNotifier(xPlayer, css::uno::UNO_QUERY);
+                    if (xPlayerNotifier)
+                    {
+                        // wait until its possible to query this to get a sensible answer
+                        xPreferredPixelSizeListener->startListening(xPlayerNotifier);
+                    }
+                    else
+                    {
+                        // assume the size is possible to query immediately
+                        xPreferredPixelSizeListener->callPlayerWindowSizeAvailable(xPlayer);
+                    }
                 }
-
                 return true;
             }
         }
@@ -346,18 +357,13 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
     return false;
 }
 
-
 uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType )
 {
     return priv::MediaWindowImpl::createPlayer( rURL, rReferer, pMimeType );
 }
 
-
-uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
-                                                            const OUString& rReferer,
-                                                            const OUString& sMimeType )
+uno::Reference< graphic::XGraphic > MediaWindow::grabFrame(const css::uno::Reference<css::media::XPlayer>& xPlayer)
 {
-    uno::Reference< media::XPlayer >    xPlayer( createPlayer( rURL, rReferer, &sMimeType ) );
     uno::Reference< graphic::XGraphic > xRet;
     std::unique_ptr< Graphic > xGraphic;
 
@@ -399,6 +405,85 @@ uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL
     return xRet;
 }
 
+uno::Reference< graphic::XGraphic > MediaWindow::grabFrame(const OUString& rURL,
+                                                           const OUString& rReferer,
+                                                           const OUString& sMimeType,
+                                                           rtl::Reference<PlayerListener> xPreferredPixelSizeListener)
+{
+    uno::Reference<media::XPlayer> xPlayer(createPlayer(rURL, rReferer, &sMimeType));
+
+    if (xPreferredPixelSizeListener)
+    {
+        uno::Reference<media::XPlayerNotifier> xPlayerNotifier(xPlayer, css::uno::UNO_QUERY);
+        if (xPlayerNotifier)
+        {
+            // set a callback to call when a more sensible result is available, which
+            // might be called immediately if already available
+            xPreferredPixelSizeListener->startListening(xPlayerNotifier);
+        }
+        else
+        {
+            // assume the size is possible to query immediately
+            xPreferredPixelSizeListener->callPlayerWindowSizeAvailable(xPlayer);
+        }
+
+        return nullptr;
+    }
+
+    return grabFrame(xPlayer);
+}
+
+void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XDispatchProvider>& rDispatchProvider,
+                                        const css::awt::Size& rSize, const OUString& rURL, bool bLink)
+{
+    util::URL aDispatchURL;
+    aDispatchURL.Complete = ".uno:InsertAVMedia";
+
+    css::uno::Reference<css::util::XURLTransformer> xTrans(css::util::URLTransformer::create(::comphelper::getProcessComponentContext()));
+    xTrans->parseStrict(aDispatchURL);
+
+    css::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, "", 0);
+    css::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
+        { "URL", css::uno::makeAny(rURL) },
+        { "Size.Width", uno::makeAny(rSize.Width)},
+        { "Size.Height", uno::makeAny(rSize.Height)},
+        { "IsLink", css::uno::makeAny(bLink) },
+    }));
+    xDispatch->dispatch(aDispatchURL, aArgs);
+}
+
+PlayerListener::PlayerListener(const std::function<void(const css::uno::Reference<css::media::XPlayer>&)> &rFn)
+    : PlayerListener_BASE(m_aMutex)
+    , m_aFn(rFn)
+{
+}
+
+void PlayerListener::startListening(const css::uno::Reference<media::XPlayerNotifier>& rNotifier)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    m_xNotifier = rNotifier;
+    m_xNotifier->addPlayerListener(this);
+}
+
+void SAL_CALL PlayerListener::preferredPlayerWindowSizeAvailable(const css::lang::EventObject&)
+{
+    osl::MutexGuard aGuard(m_aMutex);
+
+    css::uno::Reference<media::XPlayer> xPlayer(m_xNotifier, css::uno::UNO_QUERY_THROW);
+    callPlayerWindowSizeAvailable(xPlayer);
+
+    m_xNotifier->removePlayerListener(this);
+    m_xNotifier.clear();
+}
+
+void SAL_CALL PlayerListener::disposing(const css::lang::EventObject&)
+{
+}
+
+PlayerListener::~PlayerListener()
+{
+}
 
 } // namespace avmedia
 

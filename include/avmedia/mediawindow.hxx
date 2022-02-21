@@ -22,14 +22,22 @@
 
 #include <vector>
 #include <tools/gen.hxx>
+#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/media/XPlayerListener.hpp>
+#include <cppuhelper/compbase.hxx>
+#include <cppuhelper/basemutex.hxx>
 #include <vcl/vclptr.hxx>
 #include <avmedia/avmediadllapi.h>
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME -1.0
 
+namespace com::sun::star::frame { class XDispatchProvider; }
 namespace com::sun::star::graphic { class XGraphic; }
-namespace com::sun::star::media { class XPlayer; }
+namespace com::sun::star::media {
+    class XPlayer;
+    class XPlayerNotifier;
+}
 
 namespace vcl { class Window; }
 namespace weld { class Window; }
@@ -40,7 +48,6 @@ struct AcceptDropEvent;
 struct ExecuteDropEvent;
 enum class PointerStyle;
 
-
 namespace avmedia
 {
     typedef ::std::vector< ::std::pair< OUString, OUString > > FilterNameVector;
@@ -48,6 +55,26 @@ namespace avmedia
     class MediaItem;
 
     namespace priv { class MediaWindowImpl; }
+
+    typedef cppu::WeakComponentImplHelper<css::media::XPlayerListener> PlayerListener_BASE;
+
+    class AVMEDIA_DLLPUBLIC PlayerListener final : public cppu::BaseMutex, public PlayerListener_BASE
+    {
+    private:
+        css::uno::Reference<css::media::XPlayerNotifier> m_xNotifier;
+        std::function<void(const css::uno::Reference<css::media::XPlayer>&)> m_aFn;
+
+        using WeakComponentImplHelperBase::disposing;
+    public:
+        PlayerListener(const std::function<void(const css::uno::Reference<css::media::XPlayer>&)> &rFn);
+        virtual void SAL_CALL preferredPlayerWindowSizeAvailable(const css::lang::EventObject& rSource) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
+
+        void startListening(const css::uno::Reference<css::media::XPlayerNotifier>& rNotifier);
+        void callPlayerWindowSizeAvailable(const css::uno::Reference<css::media::XPlayer>& rPlayer) { m_aFn(rPlayer); }
+
+        virtual ~PlayerListener() override;
+    };
 
     class AVMEDIA_DLLPUBLIC MediaWindow
     {
@@ -99,12 +126,18 @@ namespace avmedia
         ///                 checkbox and store its state in *o_pbLink
         static bool         executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink);
         static void         executeFormatErrorBox(weld::Window* pParent);
-        static bool         isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep = false, Size* pPreferredSizePixel = nullptr );
+        static bool         isMediaURL(const OUString& rURL, const OUString& rReferer, bool bDeep = false,
+                                       rtl::Reference<PlayerListener> xPreferredPixelSizeListener = nullptr);
 
         static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );
 
-        static css::uno::Reference< css::graphic::XGraphic > grabFrame( const OUString& rURL, const OUString& rReferer,
-            const OUString& sMimeType );
+        static css::uno::Reference<css::graphic::XGraphic> grabFrame(const css::uno::Reference<css::media::XPlayer>& rPlayer);
+
+        static css::uno::Reference< css::graphic::XGraphic > grabFrame(const OUString& rURL, const OUString& rReferer,
+            const OUString& sMimeType, rtl::Reference<PlayerListener> xPreferredPixelSizeListener = nullptr);
+
+        static void dispatchInsertAVMedia(const css::uno::Reference<css::frame::XDispatchProvider>&,
+                                          const css::awt::Size& rSize, const OUString& rURL, bool bLink);
 
     private:
         MediaWindow(const MediaWindow&) = delete;
@@ -112,6 +145,7 @@ namespace avmedia
 
         VclPtr<priv::MediaWindowImpl>                 mpImpl;
     };
+
 }
 
 #endif // INCLUDED_AVMEDIA_MEDIAWINDOW_HXX

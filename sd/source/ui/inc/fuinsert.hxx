@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <config_features.h>
 #include "fupoor.hxx"
 
 namespace sd {
@@ -101,6 +102,10 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
+
+#if HAVE_FEATURE_AVMEDIA
+    void InsertMediaURL(const OUString& rURL, const Size& rPrefSize, bool bLink);
+#endif
 };
 } // end of namespace sd
 
