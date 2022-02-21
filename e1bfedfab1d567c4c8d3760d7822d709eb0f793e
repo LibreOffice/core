@@ -16,6 +16,24 @@
       "message": "Would suggest to name the feature Dynamic_Diagram, or whatever, but not SmartArt.",
       "revId": "e1bfedfab1d567c4c8d3760d7822d709eb0f793e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2360ba29_989e0697",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-02-21T15:19:18Z",
+      "side": 1,
+      "message": "UI name is to be defined anyways, suggestions welcome. Have now concentrated on \"Diagram\" in sources, except where import from oox is explicitly mentioned.",
+      "parentUuid": "881a0291_e407fa08",
+      "revId": "e1bfedfab1d567c4c8d3760d7822d709eb0f793e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
