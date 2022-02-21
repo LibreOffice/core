@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc51d2c2_ce931f71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-21T10:25:19Z",
+      "side": 1,
+      "message": "I see, thanks.\n\nWhen I grep the source for SfxSetItem, I see a couple of places that check for it, e.g. SfxItemPool::SetSecondaryPool(). Will it not be a problem that ScPatternAttr is no longer inherited from SfxSetItem?\n",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
