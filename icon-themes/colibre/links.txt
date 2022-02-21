@@ -1008,22 +1008,8 @@ cmd/sc_previewprintoptions.png cmd/sc_printpreview.png
 cmd/sc_printpagepreview.png cmd/sc_printpreview.png
 
 # Folder
-cmd/32/dbformopen.png cmd/32/open.png
-cmd/32/dbqueryopen.png cmd/32/open.png
-cmd/32/dbreportopen.png cmd/32/open.png
-cmd/32/dbtableopen.png cmd/32/open.png
 cmd/32/open_h.png cmd/32/open.png
-
-cmd/lc_dbformopen.png cmd/lc_open.png
-cmd/lc_dbqueryopen.png cmd/lc_open.png
-cmd/lc_dbreportopen.png cmd/lc_open.png
-cmd/lc_dbtableopen.png cmd/lc_open.png
 cmd/lc_open_h.png cmd/lc_open.png
-
-cmd/sc_dbformopen.png cmd/sc_open.png
-cmd/sc_dbqueryopen.png cmd/sc_open.png
-cmd/sc_dbreportopen.png cmd/sc_open.png
-cmd/sc_dbtableopen.png cmd/sc_open.png
 cmd/sc_open_h.png cmd/sc_open.png
 
 # Wizard
