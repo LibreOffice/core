@@ -353,7 +353,7 @@ bool OSQLParseNode::parseNodeToExecutableStatement( OUString& _out_rString, cons
                 || xMeta->getURL().startsWithIgnoreAsciiCase("sdbc:firebird:")))
     {
         sLimitValue = pTableExp->getChild(6)->getChild(1)->getTokenValue();
-        pTableExp->removeAt(6);
+        delete pTableExp->removeAt(6);
     }
 
     _out_rString.clear();
