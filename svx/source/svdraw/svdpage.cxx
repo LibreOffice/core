@@ -1431,7 +1431,7 @@ Size SdrPage::GetSize() const
     return Size(mnWidth,mnHeight);
 }
 
-sal_Int32 SdrPage::GetWidth() const
+tools::Long SdrPage::GetWidth() const
 {
     return mnWidth;
 }
@@ -1457,7 +1457,7 @@ Orientation SdrPage::GetOrientation() const
     return eRet;
 }
 
-sal_Int32 SdrPage::GetHeight() const
+tools::Long SdrPage::GetHeight() const
 {
     return mnHeight;
 }

@@ -410,8 +410,8 @@ private:
     SdrModel&                   mrSdrModelFromSdrPage;
 
 private:
-    sal_Int32 mnWidth;       // page size
-    sal_Int32 mnHeight;      // page size
+    tools::Long mnWidth;       // page size
+    tools::Long mnHeight;      // page size
     sal_Int32 mnBorderLeft;  // left page margin
     sal_Int32 mnBorderUpper; // top page margin
     sal_Int32 mnBorderRight; // right page margin
@@ -476,8 +476,8 @@ public:
     Size GetSize() const;
     virtual void SetOrientation(Orientation eOri);
     virtual Orientation GetOrientation() const;
-    sal_Int32 GetWidth() const;
-    sal_Int32 GetHeight() const;
+    tools::Long GetWidth() const;
+    tools::Long GetHeight() const;
     virtual void  SetBorder(sal_Int32 nLft, sal_Int32 nUpp, sal_Int32 nRgt, sal_Int32 Lwr);
     virtual void  SetLeftBorder(sal_Int32 nBorder);
     virtual void  SetUpperBorder(sal_Int32 nBorder);
