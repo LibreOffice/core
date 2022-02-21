@@ -1923,6 +1923,22 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147027)
     CPPUNIT_ASSERT_EQUAL(778, pPdfPage->getObjectCount());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf147164)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    saveAsPDF(u"tdf147164.odp");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(2, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/1);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 22
+    // - Actual  : 16
+    CPPUNIT_ASSERT_EQUAL(22, pPdfPage->getObjectCount());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testReduceImage)
 {
     // Load the Writer document.
