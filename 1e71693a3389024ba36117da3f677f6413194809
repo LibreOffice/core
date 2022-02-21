@@ -51,6 +51,46 @@
       "parentUuid": "95fd5e18_335b398f",
       "revId": "1e71693a3389024ba36117da3f677f6413194809",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ebbde99_069e6b95",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-21T14:14:31Z",
+      "side": 1,
+      "message": "That rtl::Uri::convertRelToAbs is \"more forgiving\" than the INetURLObject constructor is not relevant here, when all that is done with the result of rtl::Uri::convertRelToAbs is to pass it into the INetURLObject constructor anyway.  (See my other comment below for what I think I thought using rtl::Uri::convertRelToAbs here should actually be useful for.)",
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5b60900_da041f83",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-21T14:14:31Z",
+      "side": 1,
+      "message": "* So when bUnparsedURI is set to true above, any subsequent modifications of aTargetURL (.setExtension(...), .SetMark(...)) are \"lost\" here, when we just use the original url.  I think that with my original mention of rtl::Uri::convertRelToAbs back in November, I had hoped that we could get rid of aTargetURL as an INetURLObject here, and use the OUString result of rtl::Uri::convertRelToAbs directly in the following code, without turning it into an INetURLObject (which \"damages\" the given URI if it does not match INetURLObject\u0027s idea of what a valid URI should look like).  But it might be a bit hard to replace all that INetURLObject-based querying and modifying (.GetProtocol(), .GetFileExtension(), .hasFinalSlash(), .setExtension(...), .GetMark(...), .GetURLNoMark(...), .SetMark(...)) with functionality based on rtl::Uri and/or UNO\u0027s css.uri stuff.  :(\n\n* I would add a space between \"url\" and \":\".",
+      "range": {
+        "startLine": 3422,
+        "startChar": 36,
+        "endLine": 3422,
+        "endChar": 54
+      },
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
