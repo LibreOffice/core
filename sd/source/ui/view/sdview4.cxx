@@ -61,6 +61,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/media/XPlayer.hpp>
 #include <svtools/soerr.hxx>
 #include <sfx2/ipclient.hxx>
 #include <tools/debug.hxx>
@@ -425,7 +426,7 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
     {
         OUString aCurrentDropFile( *aIter );
         INetURLObject   aURL( aCurrentDropFile );
-        bool            bOK = false;
+        bool bHandled = false;
 
         if( aURL.GetProtocol() == INetProtocol::NotValid )
         {
@@ -458,9 +459,9 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                 if( aIter == maDropFileVector.begin() )
                     mnAction = nTempAction;
 
-                bOK = true;
+                bHandled = true;
             }
-            if( !bOK )
+            if (!bHandled)
             {
                 std::shared_ptr<const SfxFilter> pFoundFilter;
                 SfxMedium               aSfxMedium( aCurrentDropFile, StreamMode::READ | StreamMode::SHARE_DENYNONE );
@@ -493,36 +494,48 @@ IMPL_LINK_NOARG(View, DropInsertFileHdl, Timer *, void)
                         aReq.AppendItem( aItem1 );
                         aReq.AppendItem( aItem2 );
                         FuInsertFile::Create( mpViewSh, pWin, this, &mrDoc, aReq );
-                        bOK = true;
+                        bHandled = true;
                     }
                 }
             }
         }
 
-        if( !bOK )
-        {
 #if HAVE_FEATURE_AVMEDIA
-            Size aPrefSize;
-
-            if( ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/ ) &&
-                ::avmedia::MediaWindow::isMediaURL( aCurrentDropFile, ""/*TODO?*/, true, &aPrefSize ) )
+        if (!bHandled)
+        {
+            bool bShallowDetect = ::avmedia::MediaWindow::isMediaURL(aCurrentDropFile, ""/*TODO?*/);
+            if (bShallowDetect)
             {
-                if( aPrefSize.Width() && aPrefSize.Height() )
-                {
-                    ::sd::Window* pWin = mpViewSh->GetActiveWindow();
+                mxDropMediaSizeListener.set(new avmedia::PlayerListener(
+                    [this, aCurrentDropFile](const css::uno::Reference<css::media::XPlayer>& rPlayer){
+                        SolarMutexGuard g;
 
-                    if( pWin )
-                        aPrefSize = pWin->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-                    else
-                        aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
-                }
-                else
-                    aPrefSize  = Size( 5000, 5000 );
+                        css::awt::Size aSize = rPlayer->getPreferredPlayerWindowSize();
+                        Size aPrefSize(aSize.Width, aSize.Height);
 
-                InsertMediaURL( aCurrentDropFile, mnAction, maDropPos, aPrefSize, true ) ;
+                        if (aPrefSize.Width() && aPrefSize.Height())
+                        {
+                            ::sd::Window* pWin = mpViewSh->GetActiveWindow();
+
+                            if( pWin )
+                                aPrefSize = pWin->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
+                            else
+                                aPrefSize = Application::GetDefaultDevice()->PixelToLogic(aPrefSize, MapMode(MapUnit::Map100thMM));
+                        }
+                        else
+                            aPrefSize  = Size( 5000, 5000 );
+
+                        InsertMediaURL(aCurrentDropFile, mnAction, maDropPos, aPrefSize, true);
+
+                        mxDropMediaSizeListener.clear();
+                    }));
             }
-            else
+            bHandled = bShallowDetect && ::avmedia::MediaWindow::isMediaURL(aCurrentDropFile, ""/*TODO?*/, true, mxDropMediaSizeListener);
+        }
 #endif
+
+        if (!bHandled)
+        {
             if( mnAction & DND_ACTION_LINK )
                 static_cast< DrawViewShell* >( mpViewSh )->InsertURLButton( aCurrentDropFile, aCurrentDropFile, OUString(), &maDropPos );
             else
