@@ -293,7 +293,7 @@ void SwFormatField::UpdateTextNode(const SfxPoolItem* pOld, const SfxPoolItem* p
 {
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached UNO object
-        m_wXTextField = nullptr;
+        m_wXTextField.clear();
         // ??? why does this Modify method not already do this?
         CallSwClientNotify(sw::LegacyModifyHint(pOld, pNew));
         return;

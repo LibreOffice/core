@@ -29,15 +29,13 @@
 #include <sal/log.hxx>
 #include <svl/listener.hxx>
 #include <svl/poolitem.hxx>
+#include <com/sun/star/text/XDocumentIndexMark.hpp>
 
 #include "calbck.hxx"
 #include "hints.hxx"
 #include "swtypes.hxx"
 #include "toxe.hxx"
 
-namespace com::sun::star {
-    namespace text { class XDocumentIndexMark; }
-}
 class SwTOXType;
 class SwTOXMark;
 class SwTextTOXMark;
