@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deaaf906_e75dc2fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-21T20:03:16Z",
+      "side": 1,
+      "message": "👍🏻",
+      "revId": "39651b89917022a0dd19e7b8746c63e2af95ff2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76262422_fb013575",
+        "filename": "basic/qa/basic_coverage/test_tdf147089_idiv.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-21T20:03:16Z",
+      "side": 1,
+      "message": "I\u0027m afraid that this line is not specific: both 15 \\ 6, and 16 \\ 6, and even 15 \\ 7 give 2.\n\nOTOH, line 21 is usefully testing (15 or 16) \\ 5 \u003d 3 vs. (15 or 16) \\ 6 \u003d 2.\n\nThere need to be cases demonstrating rounding up, down both arguments separately, and also rounding of .5, both even and odd whole part to show how .5 behaves. I\u0027d suggest to use whole numbers at one position, and floating point at the other, to clearly show what happens.",
+      "revId": "39651b89917022a0dd19e7b8746c63e2af95ff2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
