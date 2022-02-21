@@ -16,6 +16,24 @@
       "message": "I see, thanks.\n\nWhen I grep the source for SfxSetItem, I see a couple of places that check for it, e.g. SfxItemPool::SetSecondaryPool(). Will it not be a problem that ScPatternAttr is no longer inherited from SfxSetItem?\n",
       "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6625f29e_d3482fce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-21T11:12:37Z",
+      "side": 1,
+      "message": "Yeah, you are correct, that is a problem.\n\nUltimately I don\u0027t think ScPatternAttr should be stored in the pool at all. It would probably make more sense to make ScPatternAttr be some kind of ref-counted object, store it separately, and do the de-duplication thing during load time as a separate chunk of code specialised to ScPatternAttr.",
+      "parentUuid": "cc51d2c2_ce931f71",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
