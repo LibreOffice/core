@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1ad5e52_4de164b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-21T07:15:22Z",
+      "side": 1,
+      "message": "I do not ask you to be super-fast. Taking a couple of minutes, reading carefully and implementing mentor suggestions sensibly shown your skills much better than breaking records of fast typing, but failing to implement the suggested logic 😊",
+      "revId": "7024342f364d2e7bf62a2770b9d6e62ba51c4b4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c74d7701_01251a34",
