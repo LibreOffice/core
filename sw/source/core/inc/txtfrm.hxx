@@ -349,7 +349,7 @@ public:
     void CollectAutoCmplWrds(SwTextNode &, sal_Int32);
 
     /**
-     * Returns the screen position of rPos. The values are relative to the upper
+     * Returns the view rectangle for the rPos model position. The values are relative to the upper
      * left position of the page frame.
      * Additional information can be obtained by passing an SwCursorMoveState object.
      * Returns false if rPos > number of character is string
