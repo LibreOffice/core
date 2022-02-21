@@ -19,6 +19,7 @@
 #pragma once
 
 #include <cppuhelper/weakref.hxx>
+#include <com/sun/star/text/XTextContent.hpp>
 
 #include "swdllapi.h"
 #include "IDocumentContentOperations.hxx"
@@ -70,7 +71,6 @@ namespace com::sun::star {
     namespace uno {
         template < class > class Sequence;
     }
-    namespace text { class XTextContent; }
 }
 
 typedef o3tl::sorted_vector< sal_Int32 > SwSoftPageBreakList;

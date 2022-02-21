@@ -121,7 +121,7 @@ Reference< XNumberFormatsSupplier > StandardFormatsSupplier::get( const Referenc
             // somebody used the small time frame where the mutex was not locked to create and set
             // the supplier
             return xSupplier;
-        s_xDefaultFormatsSupplier = pSupplier;
+        s_xDefaultFormatsSupplier = css::uno::Reference<css::uno::XWeak>(pSupplier);
     }
     return pSupplier;
 }

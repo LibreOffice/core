@@ -53,7 +53,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
     ,m_pRecordSet(_pRecordSet)
-    ,m_aStatement(nullptr)
     ,m_nRowPos(0)
     ,m_bWasNull(false)
     ,m_bEOF(false)
@@ -88,7 +87,7 @@ void ODatabaseMetaDataResultSet::disposing()
     ::osl::MutexGuard aGuard(m_aMutex);
     if(m_pRecordSet)
         m_pRecordSet->Close();
-    m_aStatement    = nullptr;
+    m_aStatement.clear();
     m_xMetaData.clear();
 }
 

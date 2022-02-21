@@ -24,6 +24,7 @@
 #include <vcl/keycod.hxx>
 #include <memory>
 #include <string_view>
+#include <com/sun/star/text/XTextContent.hpp>
 
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
@@ -31,8 +32,6 @@
 #include <IMark.hxx>
 #include <swrect.hxx>
 #include "FormFieldButton.hxx"
-
-namespace com::sun::star::text { class XTextContent; }
 
 class SwDoc;
 class SwEditWin;

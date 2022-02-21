@@ -22,12 +22,9 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
+#include <com/sun/star/text/XTextContent.hpp>
 
 #include "calbck.hxx"
-
-namespace com::sun::star {
-    namespace text { class XTextContent; }
-}
 
 class SwTextRefMark;
 
