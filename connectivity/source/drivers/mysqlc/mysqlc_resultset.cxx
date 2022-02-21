@@ -107,7 +107,7 @@ OResultSet::OResultSet(OConnection& rConn, OCommonStatement* pStmt, MYSQL_RES* p
     : OResultSet_BASE(m_aMutex)
     , OPropertySetHelper(OResultSet_BASE::rBHelper)
     , m_pMysql(rConn.getMysqlConnection())
-    , m_aStatement(static_cast<OWeakObject*>(pStmt))
+    , m_aStatement(css::uno::Reference<css::uno::XWeak>(static_cast<OWeakObject*>(pStmt)))
     , m_pResult(pResult)
     , m_encoding(_encoding)
 {
@@ -181,7 +181,7 @@ void OResultSet::disposing()
         mysql_free_result(m_pResult);
         m_pResult = nullptr;
     }
-    m_aStatement = nullptr;
+    m_aStatement.clear();
     m_xMetaData = nullptr;
 }
 

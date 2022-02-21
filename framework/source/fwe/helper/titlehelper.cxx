@@ -243,7 +243,7 @@ void SAL_CALL TitleHelper::disposing(const css::lang::EventObject& aEvent)
     {
         osl::MutexGuard aLock(m_aMutex);
 
-        m_xOwner        = nullptr;
+        m_xOwner.clear();
         m_sTitle        = OUString ();
         m_nLeasedNumber = css::frame::UntitledNumbersConst::INVALID_NUMBER;
     }

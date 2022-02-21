@@ -40,6 +40,7 @@
 #include <ndole.hxx>
 #include <frameformats.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/unoshape.hxx>
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrameFormat* pFormat, SwUndoId nUndoId )
     : SwUndo(nUndoId, pFormat->GetDoc())

@@ -23,6 +23,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/SfxBroadcaster.hxx>
+#include <com/sun/star/text/XTextField.hpp>
 
 #include "swdllapi.h"
 #include "calbck.hxx"
@@ -36,7 +37,6 @@ class SwFieldType;
 class SwDDETable;
 class SwFormatField;
 class IDocumentRedlineAccess;
-namespace com::sun::star::text { class XTextField; }
 
 namespace sw {
     struct FindFormatForFieldHint final : SfxHint {
