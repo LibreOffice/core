@@ -86,6 +86,73 @@ do { \
 #define CHECK_SLOTS() do {} while (false)
 #endif
 
+/// clear array of PoolItem variants
+/// after all PoolItems are deleted
+/// or all ref counts are decreased
+void SfxPoolItemArray_Impl::clear()
+{
+    maPoolItemSet.clear();
+    maSortablePoolItems.clear();
+}
+
+sal_uInt16 SfxItemPool::GetFirstWhich() const
+{
+    return pImpl->mnStart;
+}
+
+sal_uInt16 SfxItemPool::GetLastWhich() const
+{
+    return pImpl->mnEnd;
+}
+
+bool SfxItemPool::IsInRange( sal_uInt16 nWhich ) const
+{
+    return nWhich >= pImpl->mnStart && nWhich <= pImpl->mnEnd;
+}
+
+sal_uInt16 SfxItemPool::GetIndex_Impl(sal_uInt16 nWhich) const
+{
+    if (nWhich < pImpl->mnStart || nWhich > pImpl->mnEnd)
+    {
+        assert(false && "missing bounds check before use");
+        return 0;
+    }
+    return nWhich - pImpl->mnStart;
+}
+
+sal_uInt16 SfxItemPool::GetSize_Impl() const
+{
+    return pImpl->mnEnd - pImpl->mnStart + 1;
+}
+
+
+bool SfxItemPool::CheckItemInPool(const SfxPoolItem *pItem) const
+{
+    DBG_ASSERT( pItem, "no 0-Pointer Surrogate" );
+    DBG_ASSERT( !IsInvalidItem(pItem), "no Invalid-Item Surrogate" );
+    DBG_ASSERT( !IsPoolDefaultItem(pItem), "no Pool-Default-Item Surrogate" );
+
+    if ( !IsInRange(pItem->Which()) )
+    {
+        if ( pImpl->mpSecondary )
+            return pImpl->mpSecondary->CheckItemInPool( pItem );
+        SAL_WARN( "svl.items", "unknown Which-Id - don't ask me for surrogates, with ID/pos " << pItem->Which());
+    }
+
+    // Pointer on static or pool-default attribute?
+    if( IsStaticDefaultItem(pItem) || IsPoolDefaultItem(pItem) )
+        return true;
+
+    SfxPoolItemArray_Impl& rItemArr = pImpl->maPoolItemArrays[GetIndex_Impl(pItem->Which())];
+
+    for ( auto p : rItemArr )
+    {
+        if ( p == pItem )
+            return true;
+    }
+    SAL_WARN( "svl.items", "Item not in the pool, with ID/pos " << pItem->Which());
+    return false;
+}
 
 const SfxPoolItem* SfxItemPool::GetPoolDefaultItem( sal_uInt16 nWhich ) const
 {
