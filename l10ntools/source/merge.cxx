@@ -21,7 +21,9 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <cstdlib>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -298,7 +300,11 @@ void MergeDataFile::InsertEntry(
     if( !pMergeEntrys )
     {
         pMergeEntrys = new MergeEntrys;
-        aMap.emplace( sKey, std::unique_ptr<MergeEntrys>(pMergeEntrys) );
+        if (!aMap.emplace( sKey, std::unique_ptr<MergeEntrys>(pMergeEntrys) ).second)
+        {
+            std::cerr << "Duplicate entry " << sKey << "\n";
+            std::exit(EXIT_FAILURE);
+        }
     }
 
 
