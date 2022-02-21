@@ -39,6 +39,23 @@
       "message": "Markus: I note your LO 3.6 commit \"first part for ScTable::GetAutoFillPreview\nActually this is a bit more tricky. Currently it is showing wrong values for hidden rows/columns\"\n\nSince I didn\u0027t really see anything too tricky (other than different paths for FILL_SIMPLE, FILL_LINEAR) I\u0027m probably missing something, although I\u0027m sure things have changed greatly in the past 8 years.\n",
       "revId": "dd8f730f41f295394749c574f3651128306c060d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff6eeecd_a96f8a1f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-21T18:12:55Z",
+      "side": 1,
+      "message": "Markus doesn\u0027t seem to be very active in the past half year.",
+      "revId": "dd8f730f41f295394749c574f3651128306c060d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
