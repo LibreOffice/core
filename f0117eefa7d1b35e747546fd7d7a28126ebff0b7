@@ -34,6 +34,24 @@
       "parentUuid": "fe7c2163_613fc029",
       "revId": "f0117eefa7d1b35e747546fd7d7a28126ebff0b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03f6b0d_44ff1428",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-21T13:35:40Z",
+      "side": 1,
+      "message": "It seems to be related to commit eb786dcfdb26a3ea4162190386fe01adba7ae992 in the \"translations\" submodule, which was committed to core as the parent of your commit. I didn\u0027t realize that the submodule changes can break builds. Now it is fixed by commit 56c4445a8060d8ef6aec78f54ea28f4d7e5a8aa7 in core.",
+      "parentUuid": "232ecf51_87bb697c",
+      "revId": "f0117eefa7d1b35e747546fd7d7a28126ebff0b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
