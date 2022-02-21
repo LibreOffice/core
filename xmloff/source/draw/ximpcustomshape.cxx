@@ -866,6 +866,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
     const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList )
 {
     sal_Int32               nAttrNumber;
+    std::optional<std::string_view> oSpecularityValue; // for postpone extrusion-specularity
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
         switch( EASGet( aIter.getToken() ) )
@@ -1024,7 +1025,11 @@ void XMLEnhancedCustomShapeContext::startFastElement(
                 GetEnhancedParameterPair( maExtrusion, aIter.toString(), EAS_Skew );
             break;
             case EAS_extrusion_specularity :
-                GetDoublePercentage( maExtrusion, aIter.toView(), EAS_Specularity );
+                if (!oSpecularityValue)
+                    oSpecularityValue = aIter.toView();
+            break;
+            case EAS_extrusion_specularity_loext :
+                oSpecularityValue = aIter.toView();
             break;
             case EAS_projection :
             {
@@ -1125,6 +1130,8 @@ void XMLEnhancedCustomShapeContext::startFastElement(
                 break;
         }
     }
+    if (oSpecularityValue)
+        GetDoublePercentage( maExtrusion, *oSpecularityValue, EAS_Specularity );
 }
 
 static void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
