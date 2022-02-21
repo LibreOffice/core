@@ -2326,6 +2326,7 @@ extrusion-rotation-center
 extrusion-shininess
 extrusion-skew
 extrusion-specularity
+extrusion-specularity-loext
 extrusion-projection-mode
 extrusion-viewpoint
 extrusion-origin

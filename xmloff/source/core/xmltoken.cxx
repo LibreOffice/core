@@ -2479,6 +2479,7 @@ namespace xmloff::token {
         TOKEN( "extrusion-shininess" ,                  XML_EXTRUSION_SHININESS ),
         TOKEN( "extrusion-skew" ,                       XML_EXTRUSION_SKEW ),
         TOKEN( "extrusion-specularity" ,                XML_EXTRUSION_SPECULARITY ),
+        TOKEN( "extrusion-specularity-loext",           XML_EXTRUSION_SPECULARITY_LOEXT ),
         TOKEN( "extrusion-projection-mode" ,            XML_EXTRUSION_PROJECTION_MODE ),
         TOKEN( "extrusion-viewpoint" ,                  XML_EXTRUSION_VIEWPOINT ),
         TOKEN( "extrusion-origin" ,                 XML_EXTRUSION_ORIGIN ),
