@@ -239,6 +239,7 @@ const SwPrintData & DocumentDeviceManager::getPrintData() const
         SwPrintOptions aPrintOptions( bWeb );
         *pThis->mpPrtData = aPrintOptions;
     }
+    assert(mpPrtData && "this will always be set by now");
     return *mpPrtData;
 }
 
