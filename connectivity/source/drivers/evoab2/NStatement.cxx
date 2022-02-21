@@ -614,7 +614,7 @@ Reference< XResultSet > OCommonStatement::impl_executeQuery_throw( const QueryDa
     pResult->construct( _rQueryData );
 
     // done
-    m_xResultSet = pResult;
+    m_xResultSet = Reference<XWeak>(pResult);
     return pResult;
 }
 

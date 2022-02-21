@@ -660,7 +660,7 @@ void UnoControl::disposing( const EventObject& rEvt )
     if ( maAccessibleContext.get() == rEvt.Source )
     {
         // just in case the context is disposed, but not released - ensure that we do not re-use it in the future
-        maAccessibleContext = nullptr;
+        maAccessibleContext.clear();
     }
     else if( mxModel.get() == Reference< XControlModel >(rEvt.Source,UNO_QUERY).get() )
     {

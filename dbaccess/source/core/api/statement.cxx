@@ -124,7 +124,7 @@ void OStatementBase::disposeResultSet()
     Reference< XComponent > xComp(m_aResultSet.get(), UNO_QUERY);
     if (xComp.is())
         xComp->dispose();
-    m_aResultSet = nullptr;
+    m_aResultSet.clear();
 }
 
 // OComponentHelper
