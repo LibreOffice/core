@@ -172,9 +172,19 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::ForegroundChanged));
             return;
+        case AccessibleEventId::VALUE_CHANGED:
+        {
+            QAccessibleValueInterface* pValueInterface = pQAccessibleInterface->valueInterface();
+            if (pValueInterface)
+            {
+                const QVariant aValue = pValueInterface->currentValue();
+                QAccessible::updateAccessibility(
+                    new QAccessibleValueChangeEvent(pQAccessibleInterface, aValue));
+            }
+            return;
+        }
         case AccessibleEventId::ROLE_CHANGED:
         case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-        case AccessibleEventId::VALUE_CHANGED:
         case AccessibleEventId::CONTENT_FLOWS_FROM_RELATION_CHANGED:
         case AccessibleEventId::CONTENT_FLOWS_TO_RELATION_CHANGED:
         case AccessibleEventId::CONTROLLED_BY_RELATION_CHANGED:
