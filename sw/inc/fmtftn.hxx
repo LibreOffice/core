@@ -22,12 +22,12 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
+#include <com/sun/star/text/XFootnote.hpp>
 
 #include "swdllapi.h"
 #include "calbck.hxx"
 
 namespace com::sun::star::text {
-    class XFootnote;
     class XTextRange;
 }
 

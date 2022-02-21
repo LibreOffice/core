@@ -44,7 +44,6 @@ using namespace ::com::sun::star::lang;
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
-    ,m_aStatement(nullptr)
     ,m_nColPos(0)
     ,m_bBOF(true)
     ,m_bEOF(true)
@@ -56,7 +55,6 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _eType )
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,::comphelper::OPropertyContainer(ODatabaseMetaDataResultSet_BASE::rBHelper)
-    ,m_aStatement(nullptr)
     ,m_nColPos(0)
     ,m_bBOF(true)
     ,m_bEOF(true)
@@ -111,7 +109,7 @@ void ODatabaseMetaDataResultSet::disposing()
     OPropertySetHelper::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aStatement    = nullptr;
+    m_aStatement.clear();
     m_xMetaData.clear();
     m_aRowsIter = m_aRows.end();
     m_aRows.clear();
