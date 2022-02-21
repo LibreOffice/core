@@ -200,6 +200,8 @@ void ScTiledRenderingTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
+    comphelper::LibreOfficeKit::setActive(true);
+
     mxDesktop.set(css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
 }
 
@@ -298,7 +300,6 @@ void ScTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
 
 void ScTiledRenderingTest::testRowColumnSelections()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
 
     // Select the 5th row with no modifier
@@ -371,7 +372,6 @@ void ScTiledRenderingTest::testRowColumnSelections()
 
 void ScTiledRenderingTest::testPartHash()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("sort-range.ods");
 
     int nParts = pModelObj->getParts();
@@ -386,7 +386,6 @@ void ScTiledRenderingTest::testPartHash()
 
 void ScTiledRenderingTest::testDocumentSize()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("sort-range.ods");
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
     CPPUNIT_ASSERT(pDocSh);
@@ -416,7 +415,6 @@ void ScTiledRenderingTest::testDocumentSize()
 
 void ScTiledRenderingTest::testEmptyColumnSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
 
     // Select empty column, 1000
@@ -721,8 +719,6 @@ public:
 
 void ScTiledRenderingTest::testViewCursors()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ViewCallback aView1;
     SfxLokHelper::createView();
@@ -755,8 +751,6 @@ void ScTiledRenderingTest::testSpellOnlineRenderParameter()
 
 void ScTiledRenderingTest::testTextViewSelection()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views, and leave the second one current.
     ScModelObj* pModelObj = createDoc("select-row-cols.ods");
     ViewCallback aView1;
@@ -774,8 +768,6 @@ void ScTiledRenderingTest::testTextViewSelection()
 
 void ScTiledRenderingTest::testDocumentSizeChanged()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that doesn't have much content.
     createDoc("small.ods");
     setupLibreOfficeKitViewCallback(SfxViewShell::Current());
@@ -794,8 +786,6 @@ void ScTiledRenderingTest::testDocumentSizeChanged()
 
 void ScTiledRenderingTest::testViewLock()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView1;
@@ -842,7 +832,6 @@ void lcl_extractHandleParameters(const OString& selection, sal_uInt32& id, sal_u
 
 void ScTiledRenderingTest::testMoveShapeHandle()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView1;
     pModelObj->postMouseEvent(LOK_MOUSEEVENT_MOUSEBUTTONDOWN, /*x=*/ 1,/*y=*/ 1,/*count=*/ 1, /*buttons=*/ 1, /*modifier=*/0);
@@ -872,7 +861,6 @@ void ScTiledRenderingTest::testMoveShapeHandle()
 
 void ScTiledRenderingTest::testColRowResize()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("sort-range.ods");
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
     CPPUNIT_ASSERT(pDocSh);
@@ -907,7 +895,6 @@ void ScTiledRenderingTest::testColRowResize()
 
 void ScTiledRenderingTest::testUndoShells()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("small.ods");
     // Clear the currently selected cell.
     comphelper::dispatchCommand(".uno:ClearContents", {});
@@ -936,8 +923,6 @@ bool lcl_hasEditView(const ScViewData& rViewData)
 
 void ScTiledRenderingTest::testTextEditViews()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -969,8 +954,6 @@ void ScTiledRenderingTest::testTextEditViews()
 
 void ScTiledRenderingTest::testTextEditViewInvalidations()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1028,9 +1011,6 @@ void ScTiledRenderingTest::testTextEditViewInvalidations()
 
 void ScTiledRenderingTest::testCreateViewGraphicSelection()
 {
-    // Load a document
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView1;
@@ -1062,9 +1042,6 @@ void ScTiledRenderingTest::testCreateViewGraphicSelection()
 
 void ScTiledRenderingTest::testGraphicInvalidate()
 {
-    // Load a document
-    comphelper::LibreOfficeKit::setActive();
-
     // Load a document that has a shape and create two views.
     ScModelObj* pModelObj = createDoc("shape.ods");
     ViewCallback aView;
@@ -1091,8 +1068,6 @@ void ScTiledRenderingTest::testGraphicInvalidate()
 
 void ScTiledRenderingTest::testAutoSum()
 {
-     // Load a document
-    comphelper::LibreOfficeKit::setActive();
     createDoc("small.ods");
 
     ViewCallback aView;
@@ -1105,8 +1080,6 @@ void ScTiledRenderingTest::testAutoSum()
 
 void ScTiledRenderingTest::testHideColRow()
 {
-    // Load a document
-    comphelper::LibreOfficeKit::setActive();
     createDoc("small.ods");
     {
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
@@ -1166,8 +1139,6 @@ void ScTiledRenderingTest::testHideColRow()
 
 void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
 {
-    // Load a document
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
 
@@ -1203,8 +1174,6 @@ void ScTiledRenderingTest::testInvalidateOnCopyPasteCells()
 
 void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 {
-    // Load a document
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
 
@@ -1249,8 +1218,6 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
 
 void ScTiledRenderingTest::testCommentCallback()
 {
-    // Load a document
-    comphelper::LibreOfficeKit::setActive();
     // Comments callback are emitted only if tiled annotations are off
     comphelper::LibreOfficeKit::setTiledAnnotations(false);
 
@@ -1339,8 +1306,6 @@ void ScTiledRenderingTest::testCommentCallback()
 
 void ScTiledRenderingTest::testUndoLimiting()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -1403,8 +1368,6 @@ void ScTiledRenderingTest::testUndoLimiting()
 
 void ScTiledRenderingTest::testUndoRepairDispatch()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -1454,8 +1417,6 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
 
 void ScTiledRenderingTest::testInsertGraphicInvalidations()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -1492,8 +1453,6 @@ void ScTiledRenderingTest::testInsertGraphicInvalidations()
 
 void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Open a document that has the cursor far away & paint a tile
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
 
@@ -1532,7 +1491,6 @@ void ScTiledRenderingTest::testDocumentSizeWithTwoViews()
 
 void ScTiledRenderingTest::testDisableUndoRepair()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
     CPPUNIT_ASSERT(pModelObj);
 
@@ -1603,8 +1561,6 @@ void ScTiledRenderingTest::testDisableUndoRepair()
 
 void ScTiledRenderingTest::testDocumentRepair()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     // Create two views.
     ScModelObj* pModelObj = createDoc("cursor-away.ods");
     CPPUNIT_ASSERT(pModelObj);
@@ -1659,7 +1615,6 @@ void ScTiledRenderingTest::testDocumentRepair()
 
 void ScTiledRenderingTest::testLanguageStatus()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("small.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
@@ -1713,8 +1668,6 @@ void ScTiledRenderingTest::testLanguageStatus()
 
 void ScTiledRenderingTest::testMultiViewCopyPaste()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
@@ -1764,8 +1717,6 @@ void ScTiledRenderingTest::testMultiViewCopyPaste()
 
 void ScTiledRenderingTest::testIMESupport()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     VclPtr<vcl::Window> pDocWindow = pModelObj->getDocWindow();
     ScDocument* pDoc = pModelObj->GetDocument();
@@ -1797,8 +1748,6 @@ void ScTiledRenderingTest::testIMESupport()
 
 void ScTiledRenderingTest::testFilterDlg()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     createDoc("empty.ods");
 
     // view #1
@@ -1835,8 +1784,6 @@ void ScTiledRenderingTest::testFilterDlg()
 
 void ScTiledRenderingTest::testFunctionDlg()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     createDoc("empty.ods");
 
     // view #1
@@ -1894,7 +1841,6 @@ void ScTiledRenderingTest::testSpellOnlineParameter()
 
 void ScTiledRenderingTest::testVbaRangeCopyPaste()
 {
-    comphelper::LibreOfficeKit::setActive();
     ScModelObj* pModelObj = createDoc("RangeCopyPaste.ods");
     ScDocShell* pDocShell = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
     CPPUNIT_ASSERT(pDocShell);
@@ -1923,8 +1869,6 @@ void ScTiledRenderingTest::testInvalidationLoop()
 
 void ScTiledRenderingTest::testPageDownInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -1946,7 +1890,6 @@ void ScTiledRenderingTest::testPageDownInvalidation()
 
 void ScTiledRenderingTest::testSheetChangeInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
     const bool oldPartInInvalidation = comphelper::LibreOfficeKit::isPartInInvalidation();
     comphelper::LibreOfficeKit::setPartInInvalidation(true);
 
@@ -1977,8 +1920,6 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
 
 void ScTiledRenderingTest::testInsertDeletePageInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("insert_delete_sheet.ods");
     // the document has 1 sheet
     CPPUNIT_ASSERT_EQUAL(1, pModelObj->getParts());
@@ -2020,8 +1961,6 @@ void ScTiledRenderingTest::testInsertDeletePageInvalidation()
 
 void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2066,8 +2005,6 @@ void ScTiledRenderingTest::testGetRowColumnHeadersInvalidation()
 
 void ScTiledRenderingTest::testJumpHorizontallyInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2092,8 +2029,6 @@ void ScTiledRenderingTest::testJumpHorizontallyInvalidation()
 
 void ScTiledRenderingTest::testJumpToLastRowInvalidation()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2116,8 +2051,6 @@ void ScTiledRenderingTest::testJumpToLastRowInvalidation()
 // We need to ensure that views are not perterbed by rendering (!?) hmm ...
 void ScTiledRenderingTest::testRowColumnHeaders()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2325,8 +2258,6 @@ public:
 // should also not alter it.
 void ScTiledRenderingTest::testSheetGeometryDataInvariance()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     const SheetGeometryData aSGData(
         // cols
@@ -2431,8 +2362,6 @@ void ScTiledRenderingTest::testSheetGeometryDataInvariance()
 
 void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     const SheetGeometryData aSGData(
         // cols
@@ -2509,8 +2438,6 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
 
 void ScTiledRenderingTest::testDeleteCellMultilineContent()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("multiline.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScViewData* pViewData = ScDocShell::GetViewData();
@@ -2542,7 +2469,6 @@ void ScTiledRenderingTest::testDeleteCellMultilineContent()
 
 void ScTiledRenderingTest::testPasteIntoWrapTextCell()
 {
-    comphelper::LibreOfficeKit::setActive();
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
 
@@ -2589,7 +2515,6 @@ void ScTiledRenderingTest::testPasteIntoWrapTextCell()
 
 void ScTiledRenderingTest::testSortAscendingDescending()
 {
-    comphelper::LibreOfficeKit::setActive();
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
     ScModelObj* pModelObj = createDoc("sort-range.ods");
@@ -2652,8 +2577,6 @@ void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabV
 
 void ScTiledRenderingTest::testAutoInputStringBlock()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -2687,8 +2610,6 @@ void ScTiledRenderingTest::testAutoInputStringBlock()
 
 void ScTiledRenderingTest::testAutoInputExactMatch()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
     CPPUNIT_ASSERT(pModelObj);
     ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
@@ -2736,7 +2657,6 @@ void ScTiledRenderingTest::testAutoInputExactMatch()
 
 void ScTiledRenderingTest::testEditCursorBounds()
 {
-    comphelper::LibreOfficeKit::setActive();
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
     ScModelObj* pModelObj = createDoc("empty.ods");
@@ -2780,7 +2700,6 @@ void ScTiledRenderingTest::testEditCursorBounds()
 
 void ScTiledRenderingTest::testTextSelectionBounds()
 {
-    comphelper::LibreOfficeKit::setActive();
     comphelper::LibreOfficeKit::setCompatFlag(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
     ScModelObj* pModelObj = createDoc("empty.ods");
@@ -2829,8 +2748,6 @@ void ScTiledRenderingTest::testTextSelectionBounds()
 
 void ScTiledRenderingTest::testSheetViewDataCrash()
 {
-    comphelper::LibreOfficeKit::setActive();
-
     ScModelObj* pModelObj = createDoc("empty.ods");
 
     // view #1
