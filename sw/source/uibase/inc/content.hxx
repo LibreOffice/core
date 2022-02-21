@@ -138,14 +138,14 @@ public:
 
 class SwGraphicContent final : public SwContent
 {
-    OUString      sLink;
+    OUString      m_sLink;
 public:
     SwGraphicContent(const SwContentType* pCnt, const OUString& rName, const OUString& rLink, tools::Long nYPos)
-        : SwContent( pCnt, rName, nYPos ), sLink( rLink )
+        : SwContent( pCnt, rName, nYPos ), m_sLink( rLink )
         {}
     virtual ~SwGraphicContent() override;
 
-    const OUString&   GetLink() const {return sLink;}
+    const OUString&   GetLink() const {return m_sLink;}
 };
 
 class SwTOXBaseContent final : public SwContent

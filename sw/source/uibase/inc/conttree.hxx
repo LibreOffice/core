@@ -304,7 +304,7 @@ private:
     std::unique_ptr<SwGlblDocContent>       m_pDocContent;
     std::unique_ptr<sfx2::DocumentInserter> m_pDocInserter;
 
-    static const SfxObjectShell* pShowShell;
+    static const SfxObjectShell* s_pShowShell;
 
     void        InsertRegion( const SwGlblDocContent* _pContent,
                               const css::uno::Sequence< OUString >& _rFiles );
@@ -327,7 +327,7 @@ private:
     void            GotoContent(const SwGlblDocContent*);
     MenuEnableFlags GetEnableFlags() const;
 
-    static void     SetShowShell(const SfxObjectShell*pSet) {pShowShell = pSet;}
+    static void     SetShowShell(const SfxObjectShell*pSet) {s_pShowShell = pSet;}
     DECL_STATIC_LINK(SwGlobalTree, ShowFrameHdl, void*, void);
 
 public:
