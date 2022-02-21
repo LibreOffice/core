@@ -1239,8 +1239,11 @@ sal_Int8 FmFilterNavigator::ExecuteDrop( const ExecuteDropEvent& rEvt )
     FmFilterItems* pTargetItems = getTargetItems(*m_xTreeView, *xDropTarget);
     m_xTreeView->unselect_all();
     std::unique_ptr<weld::TreeIter> xEntry = FindEntry(pTargetItems);
-    m_xTreeView->select(*xEntry);
-    m_xTreeView->set_cursor(*xEntry);
+    if (xEntry)
+    {
+        m_xTreeView->select(*xEntry);
+        m_xTreeView->set_cursor(*xEntry);
+    }
 
     insertFilterItem(m_aControlExchange->getDraggedEntries(),pTargetItems,DND_ACTION_COPY == rEvt.mnAction);
 
