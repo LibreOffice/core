@@ -16,6 +16,24 @@
       "message": "Late at night here, and brain is dead, so didn\u0027t think of this until now - how is this going to work if a call site is working with a SfxSetItem and not a ScPatternAttr? The SfxSetItem::GetItemSet method should surely be virtual and this should be an override?",
       "revId": "e81400196cd9c24be32552a19851da4162d51c7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3240a7b5_98a0f612",
+        "filename": "sc/inc/patattr.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-21T08:03:23Z",
+      "side": 1,
+      "message": "It\u0027s going to work the same way as it did before this commit. Which, thinking of it, was apparently by assuming that things will work out somehow :-/. When you introduced 8f25472d3de4f43cf594fa41ebfba2a1b01d4c9d you created the assumption that the hash is a faster way of detecting that two ScPatternAttr instances don\u0027t match. But for that, the hash needs to be up to date at the time of the comparison, otherwise an outdated hash could prevent a comparison that would turn out to be equal. Which is really the core of the entire SfxItemPool/ScPatternAttr problem. \n\nThis patch only invalidates the hash in more places that change the instance. It wasn\u0027t perfect before, and it\u0027s presumably not perfect now. If we cannot detect all changes to ScPatternAttr data, then this is fundamentally unreliable and it\u0027s really a question of whether we believe it enough. And if we can detect all changes, then I guess it could be just as well used to implement IsSortable() and dirty the sorted array on any such change.\n\nSpeaking of which, do you still have the patch mentioned at https://bugs.documentfoundation.org/show_bug.cgi?id\u003d81765#c28 ?",
+      "parentUuid": "a37d5623_4f9b2b57",
+      "revId": "e81400196cd9c24be32552a19851da4162d51c7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
