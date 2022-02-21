@@ -15,6 +15,8 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/media/XPlayer.hpp>
+#include <com/sun/star/media/XPlayerNotifier.hpp>
+#include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 
@@ -23,7 +25,9 @@ typedef struct _GtkWidget GtkWidget;
 
 namespace avmedia::gtk
 {
-typedef cppu::WeakComponentImplHelper<css::media::XPlayer, css::lang::XServiceInfo> GtkPlayer_BASE;
+typedef cppu::WeakComponentImplHelper<css::media::XPlayer, css::media::XPlayerNotifier,
+                                      css::lang::XServiceInfo>
+    GtkPlayer_BASE;
 
 class GtkPlayer final : public cppu::BaseMutex, public GtkPlayer_BASE
 {
@@ -54,15 +58,29 @@ public:
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
+    virtual void SAL_CALL
+    addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener) override;
+    virtual void SAL_CALL removePlayerListener(
+        const css::uno::Reference<css::media::XPlayerListener>& rListener) override;
+
     virtual void SAL_CALL disposing() final override;
+
+    void notifyListeners();
+    void installNotify();
+    void uninstallNotify();
 
 private:
     void cleanup();
+
+    comphelper::OMultiTypeInterfaceContainerHelper2 m_lListener;
 
     OUString m_aURL;
     css::awt::Rectangle m_aArea; // Area of the player window.
     GtkMediaStream* m_pStream;
     GtkWidget* m_pVideo;
+    unsigned long m_nNotifySignalId;
+    unsigned long m_nInvalidateSizeSignalId;
+    unsigned long m_nTimeoutId;
     sal_Int16 m_nUnmutedVolume;
 };
 

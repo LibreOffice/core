@@ -37,8 +37,12 @@ namespace avmedia::gtk
 {
 GtkPlayer::GtkPlayer()
     : GtkPlayer_BASE(m_aMutex)
+    , m_lListener(m_aMutex)
     , m_pStream(nullptr)
     , m_pVideo(nullptr)
+    , m_nNotifySignalId(0)
+    , m_nInvalidateSizeSignalId(0)
+    , m_nTimeoutId(0)
     , m_nUnmutedVolume(0)
 {
 }
@@ -61,6 +65,8 @@ void GtkPlayer::cleanup()
 
     if (m_pStream)
     {
+        uninstallNotify();
+
         // shouldn't have to attempt this unref on idle, but with gtk4-4.4.1 I get
         // intermittent "instance of invalid non-instantiatable type '(null)'"
         // on some mysterious gst dbus callback
@@ -79,6 +85,51 @@ void SAL_CALL GtkPlayer::disposing()
     stop();
 
     cleanup();
+}
+
+static void do_notify(GtkPlayer* pThis)
+{
+    rtl::Reference<GtkPlayer> xThis(pThis);
+    xThis->notifyListeners();
+    xThis->uninstallNotify();
+}
+
+static void invalidate_size_cb(GdkPaintable* /*pPaintable*/, GtkPlayer* pThis) { do_notify(pThis); }
+
+static void notify_cb(GtkMediaStream* /*pStream*/, GParamSpec* pspec, GtkPlayer* pThis)
+{
+    if (g_str_equal(pspec->name, "prepared") || g_str_equal(pspec->name, "error"))
+        do_notify(pThis);
+}
+
+static bool timeout_cb(GtkPlayer* pThis)
+{
+    do_notify(pThis);
+    return false;
+}
+
+void GtkPlayer::installNotify()
+{
+    if (m_nNotifySignalId)
+        return;
+    m_nNotifySignalId = g_signal_connect(m_pStream, "notify", G_CALLBACK(notify_cb), this);
+    // notify should be enough, but there is an upstream bug so also try "invalidate-size" and add a timeout for
+    // audio-only case where that won't happen, see: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4513
+    m_nInvalidateSizeSignalId
+        = g_signal_connect(m_pStream, "invalidate-size", G_CALLBACK(invalidate_size_cb), this);
+    m_nTimeoutId = g_timeout_add_seconds(10, G_SOURCE_FUNC(timeout_cb), this);
+}
+
+void GtkPlayer::uninstallNotify()
+{
+    if (!m_nNotifySignalId)
+        return;
+    g_signal_handler_disconnect(m_pStream, m_nNotifySignalId);
+    m_nNotifySignalId = 0;
+    g_signal_handler_disconnect(m_pStream, m_nInvalidateSizeSignalId);
+    m_nInvalidateSizeSignalId = 0;
+    g_source_remove(m_nTimeoutId);
+    m_nTimeoutId = 0;
 }
 
 bool GtkPlayer::create(const OUString& rURL)
@@ -102,6 +153,22 @@ bool GtkPlayer::create(const OUString& rURL)
         m_aURL.clear();
 
     return bRet;
+}
+
+void GtkPlayer::notifyListeners()
+{
+    comphelper::OInterfaceContainerHelper2* pContainer
+        = m_lListener.getContainer(cppu::UnoType<css::media::XPlayerListener>::get());
+    if (!pContainer)
+        return;
+
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
+    while (pIterator.hasMoreElements())
+    {
+        css::uno::Reference<css::media::XPlayerListener> xListener(
+            static_cast<css::media::XPlayerListener*>(pIterator.next()));
+        xListener->preferredPlayerWindowSizeAvailable();
+    }
 }
 
 void SAL_CALL GtkPlayer::start()
@@ -231,41 +298,6 @@ sal_Int16 SAL_CALL GtkPlayer::getVolumeDB()
     return m_nUnmutedVolume;
 }
 
-namespace
-{
-void invalidate_size(GdkPaintable* /*paintable*/, Timer* pTimer) { pTimer->Stop(); }
-
-Size GetPreferredPlayerWindowSize(GdkPaintable* pStream)
-{
-    Size aSize(gdk_paintable_get_intrinsic_width(pStream),
-               gdk_paintable_get_intrinsic_height(pStream));
-
-    // This is pretty nasty, maybe for the XFrameGrabber case it could be
-    // possible to implement an XGraphic which can be updated when the
-    // information becomes available rather than explicitly wait for it here,
-    // but the getPreferredPlayerWindowSize problem would remain.
-    if (aSize.Width() == 0 && aSize.Height() == 0)
-    {
-        Timer aTimer("gtkplayer waiting to find out size");
-        aTimer.SetTimeout(3000);
-
-        gulong nSignalId
-            = g_signal_connect(pStream, "invalidate-size", G_CALLBACK(invalidate_size), &aTimer);
-
-        aTimer.Start();
-        while (aTimer.IsActive())
-            Application::Yield();
-
-        g_signal_handler_disconnect(pStream, nSignalId);
-
-        aSize = Size(gdk_paintable_get_intrinsic_width(pStream),
-                     gdk_paintable_get_intrinsic_height(pStream));
-    }
-
-    return aSize;
-}
-}
-
 awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -274,9 +306,8 @@ awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
 
     if (m_pStream)
     {
-        Size aPrefSize = GetPreferredPlayerWindowSize(GDK_PAINTABLE(m_pStream));
-        aSize.Width = aPrefSize.Width();
-        aSize.Height = aPrefSize.Height();
+        aSize.Width = gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(m_pStream));
+        aSize.Height = gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(m_pStream));
     }
 
     return aSize;
@@ -323,6 +354,22 @@ uno::Reference<::media::XPlayerWindow>
     xRet = new ::avmedia::gstreamer::Window;
 
     return xRet;
+}
+
+void SAL_CALL
+GtkPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
+{
+    m_lListener.addInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
+    if (gtk_media_stream_is_prepared(m_pStream))
+        rListener->preferredPlayerWindowSizeAvailable();
+    else
+        installNotify();
+}
+
+void SAL_CALL
+GtkPlayer::removePlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
+{
+    m_lListener.removeInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
 }
 
 namespace
