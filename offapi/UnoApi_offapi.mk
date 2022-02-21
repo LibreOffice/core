@@ -2913,6 +2913,8 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/media,\
 	XFrameGrabber \
 	XManager \
 	XPlayer \
+	XPlayerListener \
+	XPlayerNotifier \
 	XPlayerWindow \
 	ZoomLevel \
 ))
