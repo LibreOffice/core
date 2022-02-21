@@ -584,11 +584,11 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ ".uno:InsertMenuDataLabels" ] = bIsWritable;
     m_aCommandAvailability[ ".uno:InsertRemoveAxes" ] = m_aCommandAvailability[ ".uno:InsertMenuAxes" ] = bIsWritable && m_apModelState->bSupportsAxes;
     m_aCommandAvailability[ ".uno:InsertMenuGrids" ] = bIsWritable && m_apModelState->bSupportsAxes;
-    m_aCommandAvailability[ ".uno:InsertMenuTrendlines" ] = bIsWritable && m_apModelState->bSupportsStatistics && m_apControllerState->bMayAddMenuTrendline;
+    m_aCommandAvailability[ ".uno:InsertMenuTrendlines" ] = bIsWritable && m_apModelState->bSupportsStatistics && bControllerStateIsValid && m_apControllerState->bMayAddMenuTrendline;
     m_aCommandAvailability[ ".uno:InsertMenuMeanValues" ] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ ".uno:InsertMenuXErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ ".uno:InsertMenuYErrorBars" ] = bIsWritable && m_apModelState->bSupportsStatistics;
-    m_aCommandAvailability[ ".uno:InsertSymbol" ] = bIsWritable && m_apControllerState->bIsTextObject;
+    m_aCommandAvailability[ ".uno:InsertSymbol" ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsTextObject;
 
     // format objects
     bool bFormatObjectAvailable = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
