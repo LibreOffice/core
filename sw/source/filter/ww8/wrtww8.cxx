@@ -3742,7 +3742,7 @@ ErrCode SwWW8Writer::WriteStorage()
 
     ErrCode nErrorCode = WriteStorageImpl();
 
-    if (xPackageEncryption.is())
+    if (xPackageEncryption)
     {
         m_pStg->Commit();
         pSotStorageStream->Seek(0);
