@@ -37,13 +37,20 @@ namespace avmedia::gtk
 {
 GtkPlayer::GtkPlayer()
     : GtkPlayer_BASE(m_aMutex)
+    , m_lListener(m_aMutex)
     , m_pStream(nullptr)
     , m_pVideo(nullptr)
+    , m_nNotifySignalId(0)
     , m_nUnmutedVolume(0)
 {
+    fprintf(stderr, "GtkPlayer ctor %p\n", this);
 }
 
-GtkPlayer::~GtkPlayer() { disposing(); }
+GtkPlayer::~GtkPlayer()
+{
+    fprintf(stderr, "GtkPlayer dtor %p\n", this);
+    disposing();
+}
 
 static gboolean gtk_media_stream_unref(gpointer user_data)
 {
@@ -61,6 +68,8 @@ void GtkPlayer::cleanup()
 
     if (m_pStream)
     {
+        uninstallNotify();
+
         // shouldn't have to attempt this unref on idle, but with gtk4-4.4.1 I get
         // intermittent "instance of invalid non-instantiatable type '(null)'"
         // on some mysterious gst dbus callback
@@ -76,9 +85,42 @@ void SAL_CALL GtkPlayer::disposing()
 {
     osl::MutexGuard aGuard(m_aMutex);
 
+    fprintf(stderr, "GtkPlayer disposing %p\n", this);
+
     stop();
 
     cleanup();
+}
+
+static void notify_cb(GtkMediaStream* /*pStream*/, GParamSpec* pspec, GtkPlayer* pThis)
+{
+    fprintf(stderr, "%p name is %s\n", pThis, pspec->name);
+    // gtk_media_stream_set_volume(pStream, 0);
+    // gtk_media_stream_set_muted(pStream, true);
+    if (g_str_equal(pspec->name, "prepared") || g_str_equal(pspec->name, "error"))
+    {
+        rtl::Reference<GtkPlayer> xThis(pThis);
+        xThis->stop();
+        // gtk_media_stream_set_muted(pStream, false);
+        xThis->notifyListeners();
+        xThis->uninstallNotify();
+    }
+}
+
+void GtkPlayer::installNotify()
+{
+    if (m_nNotifySignalId)
+        return;
+    m_nNotifySignalId = g_signal_connect(m_pStream, "notify", G_CALLBACK(notify_cb), this);
+    gtk_media_stream_play(m_pStream);
+}
+
+void GtkPlayer::uninstallNotify()
+{
+    if (!m_nNotifySignalId)
+        return;
+    g_signal_handler_disconnect(m_pStream, m_nNotifySignalId);
+    m_nNotifySignalId = 0;
 }
 
 bool GtkPlayer::create(const OUString& rURL)
@@ -91,9 +133,12 @@ bool GtkPlayer::create(const OUString& rURL)
     {
         GFile* pFile = g_file_new_for_uri(OUStringToOString(rURL, RTL_TEXTENCODING_UTF8).getStr());
         m_pStream = gtk_media_file_new_for_file(pFile);
+        // installNotify();
         g_object_unref(pFile);
 
         bRet = gtk_media_stream_get_error(m_pStream) == nullptr;
+
+        // gtk_media_stream_play(m_pStream);
     }
 
     if (bRet)
@@ -102,6 +147,28 @@ bool GtkPlayer::create(const OUString& rURL)
         m_aURL.clear();
 
     return bRet;
+}
+
+void GtkPlayer::notifyListeners()
+{
+    Size aSize(gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(m_pStream)),
+               gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(m_pStream)));
+
+    fprintf(stderr, "%p notifyListeners size is avail (robably) %ld %ld\n", this, aSize.Width(),
+            aSize.Height());
+
+    comphelper::OInterfaceContainerHelper2* pContainer
+        = m_lListener.getContainer(cppu::UnoType<css::media::XPlayerListener>::get());
+    if (!pContainer)
+        return;
+
+    comphelper::OInterfaceIteratorHelper2 pIterator(*pContainer);
+    while (pIterator.hasMoreElements())
+    {
+        css::uno::Reference<css::media::XPlayerListener> xListener(
+            static_cast<css::media::XPlayerListener*>(pIterator.next()));
+        xListener->preferredPlayerWindowSizeAvailable();
+    }
 }
 
 void SAL_CALL GtkPlayer::start()
@@ -231,41 +298,6 @@ sal_Int16 SAL_CALL GtkPlayer::getVolumeDB()
     return m_nUnmutedVolume;
 }
 
-namespace
-{
-void invalidate_size(GdkPaintable* /*paintable*/, Timer* pTimer) { pTimer->Stop(); }
-
-Size GetPreferredPlayerWindowSize(GdkPaintable* pStream)
-{
-    Size aSize(gdk_paintable_get_intrinsic_width(pStream),
-               gdk_paintable_get_intrinsic_height(pStream));
-
-    // This is pretty nasty, maybe for the XFrameGrabber case it could be
-    // possible to implement an XGraphic which can be updated when the
-    // information becomes available rather than explicitly wait for it here,
-    // but the getPreferredPlayerWindowSize problem would remain.
-    if (aSize.Width() == 0 && aSize.Height() == 0)
-    {
-        Timer aTimer("gtkplayer waiting to find out size");
-        aTimer.SetTimeout(3000);
-
-        gulong nSignalId
-            = g_signal_connect(pStream, "invalidate-size", G_CALLBACK(invalidate_size), &aTimer);
-
-        aTimer.Start();
-        while (aTimer.IsActive())
-            Application::Yield();
-
-        g_signal_handler_disconnect(pStream, nSignalId);
-
-        aSize = Size(gdk_paintable_get_intrinsic_width(pStream),
-                     gdk_paintable_get_intrinsic_height(pStream));
-    }
-
-    return aSize;
-}
-}
-
 awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
 {
     osl::MutexGuard aGuard(m_aMutex);
@@ -274,9 +306,9 @@ awt::Size SAL_CALL GtkPlayer::getPreferredPlayerWindowSize()
 
     if (m_pStream)
     {
-        Size aPrefSize = GetPreferredPlayerWindowSize(GDK_PAINTABLE(m_pStream));
-        aSize.Width = aPrefSize.Width();
-        aSize.Height = aPrefSize.Height();
+        aSize.Width = gdk_paintable_get_intrinsic_width(GDK_PAINTABLE(m_pStream));
+        aSize.Height = gdk_paintable_get_intrinsic_height(GDK_PAINTABLE(m_pStream));
+        fprintf(stderr, "getPreferredPlayerWindowSize is %d %d\n", aSize.Width, aSize.Height);
     }
 
     return aSize;
@@ -323,6 +355,23 @@ uno::Reference<::media::XPlayerWindow>
     xRet = new ::avmedia::gstreamer::Window;
 
     return xRet;
+}
+
+void SAL_CALL
+GtkPlayer::addPlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
+{
+    fprintf(stderr, "%p GtkPlayer::addPlayerListener\n", this);
+    m_lListener.addInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
+    if (gtk_media_stream_is_prepared(m_pStream))
+        rListener->preferredPlayerWindowSizeAvailable();
+    else
+        installNotify();
+}
+
+void SAL_CALL
+GtkPlayer::removePlayerListener(const css::uno::Reference<css::media::XPlayerListener>& rListener)
+{
+    m_lListener.removeInterface(cppu::UnoType<css::media::XPlayerListener>::get(), rListener);
 }
 
 namespace

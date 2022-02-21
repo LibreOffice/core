@@ -66,7 +66,7 @@ bool SwTextShell::InsertMediaDlg( SfxRequest const & rReq )
 
         rWindow.EnterWait();
 
-        if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, &aPrefSize ) )
+        if( !::avmedia::MediaWindow::isMediaURL( aURL, "", true, nullptr ) )
         {
             rWindow.LeaveWait();
 

@@ -402,7 +402,7 @@ FuInsertMedia::FuInsertMedia( ScTabViewShell&   rViewSh,
         pWin->EnterWait();
 
 #if HAVE_FEATURE_AVMEDIA
-    if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true, &aPrefSize ) )
+    if( !::avmedia::MediaWindow::isMediaURL( aURL, ""/*TODO?*/, true, nullptr ) )
     {
         if( pWin )
             pWin->LeaveWait();

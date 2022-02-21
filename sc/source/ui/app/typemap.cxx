@@ -25,6 +25,7 @@
 #include <svl/slstitm.hxx>
 #include <editeng/fontitem.hxx>
 #include <svx/hlnkitem.hxx>
+#include <svl/rectitem.hxx>
 #include <svl/srchitem.hxx>
 #include <svx/postattr.hxx>
 #include <editeng/postitem.hxx>
