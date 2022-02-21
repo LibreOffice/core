@@ -3199,6 +3199,15 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             nCellY = mrViewData.GetEditViewRow();
         else
             bPosIsInEditView = false;
+
+        if (!bPosIsInEditView)
+        {
+            // Close the edit view when moving outside of the edited cell
+            // to avoid showing the edit popup, or providing the wrong EditView to spellcheck.
+            ScInputHandler* pHdl = pScMod->GetInputHdl();
+            if (pHdl)
+                pHdl->EnterHandler();
+        }
     }
 
     bool bSpellError = false;
