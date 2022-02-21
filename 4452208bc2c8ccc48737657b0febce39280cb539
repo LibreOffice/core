@@ -70,6 +70,24 @@
       "parentUuid": "462d4d02_f79bad03",
       "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22a0b2be_599de192",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-21T13:44:22Z",
+      "side": 1,
+      "message": "There\u0027s a question that has occurred to me: If the problem is that SfxItemPool expects immutable objects and Calc breaks that by modifying ScPatternAttr behind the pool\u0027s back, why not fix the problem by simply not doing that? I.e. replacing all modify operations by clone+modify+put+unref?",
+      "parentUuid": "87a61e7d_b5a56e96",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
