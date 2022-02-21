@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a725037_27e7f951",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-21T19:15:11Z",
+      "side": 1,
+      "message": "ScUserListData is triggered by user sort lists, which can be found at Tools -\u003e Options -\u003e Calc -\u003e Sort Lists, default lists are day names and month names. So when a cell containing `January` is pulled down, February, March, ... are sequenced (re-starting with the first element after having reached the list\u0027s last element).",
+      "parentUuid": "c82ae452_3c72194f",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 46
+      },
+      "revId": "dd8f730f41f295394749c574f3651128306c060d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "b4a41eaa_b4990299",
