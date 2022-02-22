@@ -80,6 +80,8 @@ $(call gb_ExternalProject_get_state_target,icu,build) :
 				--with-data-packaging=static --enable-static --disable-shared --disable-dyload,\
 				--disable-static --enable-shared $(if $(filter ANDROID,$(OS)),--with-library-suffix=lo)) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))) \
 			$(if $(CROSS_COMPILING), \
 				--with-cross-build=$(WORKDIR_FOR_BUILD)/UnpackedTarball/icu/source \
 				--disable-tools --disable-extras) \
