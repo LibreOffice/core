@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ccf8057_620f9bca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-22T20:41:14Z",
+      "side": 1,
+      "message": "apk (android) and ipa, dmg (macOS) are presumably silly to have in this windows-specific list. But it is simple to sync with gmails list of suffixes(?)",
+      "revId": "20a46b6552750b3d9529c66fe20245a008065a45",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
