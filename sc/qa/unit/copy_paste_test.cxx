@@ -76,7 +76,7 @@ public:
 
 private:
 
-    ScDocShellRef loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite);
+    ScDocShellRef loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat);
     void addToUserList(const OUString& rStr);
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
@@ -84,29 +84,7 @@ private:
 // tdf#83366
 void ScCopyPasteTest::testCopyPasteXLS()
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT( xDesktop.is() );
-
-    // create a frame
-    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
-    CPPUNIT_ASSERT( xTargetFrame.is() );
-
-    // 1. Open the document
-    ScDocShellRef xDocSh = loadDoc(u"chartx2.", FORMAT_XLS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load chartx2.xls.", xDocSh.is());
-
-    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
-    CPPUNIT_ASSERT( xModel2.is() );
-
-    Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
-    CPPUNIT_ASSERT( xController.is() );
-
-    // introduce model/view/controller to each other
-    xController->attachModel( xModel2 );
-    xModel2->connectController( xController );
-    xTargetFrame->setComponent( xController->getComponentWindow(), xController );
-    xController->attachFrame( xTargetFrame );
-    xModel2->setCurrentController( xController );
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"chartx2.", FORMAT_XLS);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -131,6 +109,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     // 4. Close the document (Ctrl-W)
     xDocSh->DoClose();
 
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     // 5. Create a new Spreadsheet
     Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
 
@@ -463,7 +442,7 @@ static ScAddress lcl_getMergeSizeOfCell(const ScDocument& rDoc, SCCOL nCol, SCRO
     return ScAddress(rMerge.GetColMerge(), rMerge.GetRowMerge(), nTab);
 }
 
-ScDocShellRef ScCopyPasteTest::loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite)
+ScDocShellRef ScCopyPasteTest::loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
     CPPUNIT_ASSERT(xDesktop.is());
@@ -473,7 +452,7 @@ ScDocShellRef ScCopyPasteTest::loadDocAndSetupModelViewController(std::u16string
     CPPUNIT_ASSERT(xTargetFrame.is());
 
     // 1. Open the document
-    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, bReadWrite);
+    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, true);
     CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocSh.is());
 
     uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
@@ -494,7 +473,7 @@ ScDocShellRef ScCopyPasteTest::loadDocAndSetupModelViewController(std::u16string
 
 void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf53431_autofilterFilldown.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf53431_autofilterFilldown.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -532,7 +511,7 @@ void ScCopyPasteTest::testTdf53431_fillOnAutofilter()
 
 void ScCopyPasteTest::testTdf40993_fillMergedCells()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf40993_fillMergedCells.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf40993_fillMergedCells.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -619,7 +598,7 @@ static void lcl_clickAndCheckCurrentArea(SCCOL nCol, SCROW nRow, SCCOL nCol2, SC
 
 void ScCopyPasteTest::testTdf43958_clickSelectOnMergedCells()
 {
-    loadDocAndSetupModelViewController(u"tdf40993_fillMergedCells.", FORMAT_ODS, true);
+    loadDocAndSetupModelViewController(u"tdf40993_fillMergedCells.", FORMAT_ODS);
 
     // select cell (e.g. by clicking on it) and check what is selected [but not marked]:
     // if it is the top left cell of a merged area, the selection is enlarged to the area
@@ -640,7 +619,7 @@ void ScCopyPasteTest::testTdf43958_clickSelectOnMergedCells()
 
 void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf88782_AutofillLinearNumbersInMergedCells.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf88782_AutofillLinearNumbersInMergedCells.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -700,7 +679,7 @@ void ScCopyPasteTest::testTdf88782_autofillLinearNumbersInMergedCells()
 
 void ScCopyPasteTest::tdf137621_autofillMergedBool()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137621_autofillMergedBool.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137621_autofillMergedBool.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -732,7 +711,7 @@ void ScCopyPasteTest::tdf137621_autofillMergedBool()
 
 void ScCopyPasteTest::tdf137205_autofillDatesInMergedCells()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137205_AutofillDatesInMergedCells.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137205_AutofillDatesInMergedCells.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -770,7 +749,7 @@ void ScCopyPasteTest::addToUserList(const OUString& rStr)
 
 void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137653_137654_autofillUserlist.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137653_137654_autofillUserlist.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -829,7 +808,7 @@ void ScCopyPasteTest::tdf137653_137654_autofillUserlist()
 
 void ScCopyPasteTest::tdf113500_autofillMixed()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf113500_autofillMixed.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf113500_autofillMixed.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -878,7 +857,7 @@ void ScCopyPasteTest::tdf113500_autofillMixed()
 
 void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137625_autofillMergedUserlist.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137625_autofillMergedUserlist.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
@@ -937,7 +916,7 @@ void ScCopyPasteTest::tdf137625_autofillMergedUserlist()
 
 void ScCopyPasteTest::tdf137624_autofillMergedMixed()
 {
-    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137624_autofillMergedMixed.", FORMAT_ODS, true);
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf137624_autofillMergedMixed.", FORMAT_ODS);
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get the document controller
