@@ -54,6 +54,7 @@
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <unotools/mediadescriptor.hxx>
 
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
@@ -392,6 +393,9 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
 
     try
     {
+        // Save handling for the Refresh-Button
+        HandleLinkAndTempFileSave(eSaveTmpLnkState::CopyLinkToTemp);
+
         // the document is not really an embedded one, it is a link
         EmbedAndReparentDoc_Impl( xDocument );
 
@@ -1254,11 +1258,13 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                             const uno::Sequence< beans::PropertyValue >& lArguments,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
 {
-    // TODO: use lObjArgs
-
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
+
+    bool AutoSaveEvent = false;
+    utl::MediaDescriptor lArgs(lObjArgs);
+    lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
 
     if ( m_nObjectState == -1 )
     {
@@ -1279,26 +1285,9 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
     {
         m_aNewEntryName = sEntName;
 
-        if(m_aLinkTempFile.is() && m_bLinkTempFileChanged)
-        {
-            // tdf#141529 if we have a changed copy of the original OLE data we now
-            // need to write it back 'over' the original OLE data
-            uno::Reference < ucb::XSimpleFileAccess2 > xFileAccess(ucb::SimpleFileAccess::create( m_xContext ));
-
-            uno::Reference< ucb::XSimpleFileAccess > xTempAccess(ucb::SimpleFileAccess::create(m_xContext));
-            // if the temp stream is used, then the temp file remains locked
-            uno::Reference< io::XInputStream > xInStream(xTempAccess->openFileRead(m_aLinkTempFile->getUri()));
-            // This is *needed* since OTempFileService calls OTempFileService::readBytes which
-            // ensures the SvStream mpStream gets/is opened, *but* also sets the mnCachedPos from
-            // OTempFileService which still points to the end-of-file (from write-cc'ing).
-            uno::Reference < io::XSeekable > xSeek( xInStream, uno::UNO_QUERY_THROW );
-            xSeek->seek(0);
-
-            xFileAccess->writeFile(m_aLinkURL, xInStream);
-
-            // reset flag m_bLinkTempFileChanged
-            m_bLinkTempFileChanged = false;
-        }
+        if ( !AutoSaveEvent )
+            // Save handling for the Save-Button, but not for Recovery/Autosave
+            HandleLinkAndTempFileSave(eSaveTmpLnkState::CopyTempToLink);
 
         return;
     }

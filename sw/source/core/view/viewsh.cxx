@@ -757,7 +757,7 @@ void SwViewShell::UpdateOleObjectPreviews()
 
         SwOLEObj& rOleObj = pOleNode->GetOLEObj();
         svt::EmbeddedObjectRef& rObject = rOleObj.GetObject();
-        rObject.UpdateReplacement();
+        rObject.UpdateReplacement( true );
         // Trigger the repaint.
         pOleNode->SetChanged();
     }
