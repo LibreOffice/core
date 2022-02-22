@@ -35,7 +35,9 @@ private:
 
 public:
     void resetTimer();
-    bool hasFileChanged();
+    bool hasFileChanged(bool bUpdate = true);
     FileChangedChecker(const OUString& rFilename,
             const ::std::function<void ()>& rCallback);
+    // with out Timer function
+    FileChangedChecker(const OUString& rFilename);
 };
