@@ -338,6 +338,7 @@ public:
 
     virtual void SAL_CALL setContainerName( const OUString& sName ) override;
 
+    virtual void SAL_CALL UpdateOleObject( sal_Bool bUpdateOle ) override;
 
 // XVisualObject
 

@@ -3007,6 +3007,9 @@ void AutoRecovery::implts_saveOneDoc(const OUString&                            
     // for make hyperlinks working
     lNewArgs[utl::MediaDescriptor::PROP_DOCUMENTBASEURL] <<= OUString();
 
+    //that is the Recovery/AutoSave event
+    lNewArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] <<= true;
+
     // try to save this document as a new temp file every time.
     // Mark AutoSave state as "INCOMPLETE" if it failed.
     // Because the last temp file is too old and does not include all changes.
