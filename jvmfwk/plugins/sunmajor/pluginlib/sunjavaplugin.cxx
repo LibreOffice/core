@@ -828,7 +828,6 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     // On Android we always have a Java VM as we only expect this code
     // to be run in an Android app anyway.
     *ppVm = lo_get_javavm();
-    fprintf(stderr, "lo_get_javavm returns %p", *ppVm);
 #endif
 
     return errorcode;
