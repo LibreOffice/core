@@ -187,12 +187,11 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         return;
 
     const SfxPoolItem* pItem;
-    if (pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) != SfxItemState::SET)
-        return;
-
-
-    const OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
-    SetupFilterOptions(sFilterOptions);
+    if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
+    {
+        const OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
+        SetupFilterOptions(sFilterOptions);
+    }
 
     SetupFilterFromPropertyValues(rMedium.GetArgs());
 }
