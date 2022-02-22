@@ -16,6 +16,24 @@
       "message": "@Caolán: Any concerns?",
       "revId": "30506a70ebcf4fb3d090ab5b09126652ac0850fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97ba41fc_628143de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-22T08:48:57Z",
+      "side": 1,
+      "message": "not at all, looks good to me",
+      "parentUuid": "7526382c_c0491703",
+      "revId": "30506a70ebcf4fb3d090ab5b09126652ac0850fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
