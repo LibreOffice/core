@@ -868,17 +868,8 @@ T toInt_WithLength                                              ( const IMPL_RTL
     sal_Int16 nMod;
     if ( bNeg )
     {
-        nDiv = std::numeric_limits<T>::min() / nRadix;
-        nMod = std::numeric_limits<T>::min() % nRadix;
-        // Cater for C++03 implementations that round the quotient down
-        // instead of truncating towards zero as mandated by C++11:
-        if ( nMod > 0 )
-        {
-            --nDiv;
-            nMod -= nRadix;
-        }
-        nDiv = -nDiv;
-        nMod = -nMod;
+        nDiv = -(std::numeric_limits<T>::min() / nRadix);
+        nMod = -(std::numeric_limits<T>::min() % nRadix);
     }
     else
     {
