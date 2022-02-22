@@ -1476,7 +1476,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 uno::Reference< XResultSet > ODatabaseMetaData::lcl_getKeys(const bool bIsImport, std::u16string_view table )
 {
     rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
-        ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eImportedKeys);
+        ODatabaseMetaDataResultSet(bIsImport?ODatabaseMetaDataResultSet::eImportedKeys:ODatabaseMetaDataResultSet::eExportedKeys);
 
     uno::Reference< XStatement > statement = m_pConnection->createStatement();
 
@@ -1701,7 +1701,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
         aResults.push_back(aCurrentRow);
     }
     rtl::Reference<ODatabaseMetaDataResultSet> pResultSet = new
-            ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::ePrimaryKeys);
+            ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eIndexInfo);
     pResultSet->setRows( std::move(aResults) );
 
     return pResultSet;
