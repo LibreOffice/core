@@ -49,6 +49,7 @@ class SVT_DLLPUBLIC EmbeddedObjectRef
 
     SVT_DLLPRIVATE std::unique_ptr<SvStream> GetGraphicStream( bool bUpdate ) const;
     SVT_DLLPRIVATE void GetReplacement( bool bUpdate );
+    SVT_DLLPRIVATE void UpdateOleObject( bool bUpdateOle);
 
     EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& ) = delete;
 
@@ -101,7 +102,7 @@ public:
                         const css::uno::Reference< css::io::XInputStream >& xInGrStream,
                         const OUString& rMediaType );
 
-    void            UpdateReplacement();
+    void            UpdateReplacement( bool bUpdateOle = false );
     void            UpdateReplacementOnDemand();
     void Lock( bool bLock = true );
     void            Clear();
