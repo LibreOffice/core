@@ -65,16 +65,10 @@ using namespace ::com::sun::star::uno;
 
 /* Implementation of Filters test */
 
-class ScFiltersTest
-    : public test::FiltersTest
-    , public ScBootstrapFixture
+class ScFiltersTest : public ScBootstrapFixture
 {
 public:
     ScFiltersTest();
-
-    virtual bool load( const OUString &rFilter, const OUString &rURL,
-        const OUString &rUserData, SfxFilterFlags nFilterFlags,
-        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion) override;
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -306,19 +300,6 @@ private:
 
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
-
-bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
-    const OUString &rUserData, SfxFilterFlags nFilterFlags,
-        SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
-{
-    ScDocShellRef xDocShRef = ScBootstrapFixture::load( rURL, rFilter, rUserData,
-        OUString(), nFilterFlags, nClipboardID, nFilterVersion);
-    bool bLoaded = xDocShRef.is();
-    //reference counting of ScDocShellRef is very confused.
-    if (bLoaded)
-        xDocShRef->DoClose();
-    return bLoaded;
-}
 
 namespace {
 

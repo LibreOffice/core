@@ -64,14 +64,10 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-class ScFiltersTest2 : public test::FiltersTest, public ScBootstrapFixture
+class ScFiltersTest2 : public ScBootstrapFixture
 {
 public:
     ScFiltersTest2();
-
-    virtual bool load(const OUString& rFilter, const OUString& rURL, const OUString& rUserData,
-                      SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-                      unsigned int nFilterVersion) override;
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -323,19 +319,6 @@ void ScFiltersTest2::tearDown()
 {
     uno::Reference<lang::XComponent>(m_xCalcComponent, UNO_QUERY_THROW)->dispose();
     test::BootstrapFixture::tearDown();
-}
-
-bool ScFiltersTest2::load(const OUString& rFilter, const OUString& rURL, const OUString& rUserData,
-                          SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-                          unsigned int nFilterVersion)
-{
-    ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData, OUString(),
-                                                       nFilterFlags, nClipboardID, nFilterVersion);
-    bool bLoaded = xDocShRef.is();
-    //reference counting of ScDocShellRef is very confused.
-    if (bLoaded)
-        xDocShRef->DoClose();
-    return bLoaded;
 }
 
 void ScFiltersTest2::testMiscRowHeights()
