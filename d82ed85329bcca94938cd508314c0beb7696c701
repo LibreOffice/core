@@ -33,6 +33,23 @@
       "message": "Now the DevGuide was imported. Pages are found under the same path as in AOO wiki. Random example as don\u0027t have time to search now https://wiki.documentfoundation.org/Documentation/DevGuide/Spreadsheets/Function_Handling",
       "revId": "d82ed85329bcca94938cd508314c0beb7696c701",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "330a5270_d8b672c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-22T10:35:04Z",
+      "side": 1,
+      "message": "Does this mean that it will be impossible to create extensions compatible both with LO and other OOo derivatives, using LO? (Sorry if it\u0027s a stupid question - I am not very familiar with this.)",
+      "revId": "d82ed85329bcca94938cd508314c0beb7696c701",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
