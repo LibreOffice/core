@@ -42,6 +42,8 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 			CPPFLAGS=" $(SOLARINC)" \
 			$(if $(filter MSC,$(COM)),--force_use_syscfg=true) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 	                $(if $(filter TRUE,$(DISABLE_DYNLOADING)),--disable-shared,--disable-static) \
 	  && $(MAKE) \

@@ -32,6 +32,8 @@ $(call gb_ExternalProject_get_state_target,coinmp,build) :
 		$(gb_RUN_CONFIGURE) ./configure COIN_SKIP_PROJECTS="Data/Sample" \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))) \
 			$(if $(DISABLE_DYNLOADING),--disable-shared) \
 			--disable-bzlib \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \

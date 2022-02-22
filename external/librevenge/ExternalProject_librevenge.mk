@@ -38,6 +38,8 @@ $(call gb_ExternalProject_get_state_target,librevenge,build) :
 			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 		&& $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\

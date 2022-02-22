@@ -70,6 +70,8 @@ $(call gb_ExternalProject_get_state_target,postgresql,build) :
 			--without-zlib \
 			--with-ldap \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))) \
 			$(if $(ENABLE_OPENSSL),--with-openssl \
 				$(if $(WITH_GSSAPI),--with-gssapi)) \
 				$(if $(ENABLE_LDAP),,--with-ldap=no) \

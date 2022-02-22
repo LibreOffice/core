@@ -115,6 +115,8 @@ $(call gb_ExternalProject_get_state_target,liborcus,build) :
 				boost_cv_lib_filesystem=yes \
 			) \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))) \
 		&& $(if $(verbose),V=1) \
 		   $(MAKE) \
 		$(if $(filter MACOSX,$(OS)),\

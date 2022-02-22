@@ -39,6 +39,8 @@ $(call gb_ExternalProject_get_state_target,redland,build):
 			--without-bdb --without-sqlite --without-mysql \
 			--without-postgresql --without-threestone --without-virtuoso \
 			$(gb_CONFIGURE_PLATFORMS) \
+			$(if $(filter MACOSX,$(OS)), \
+				--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))) \
 			$(if $(CROSS_COMPILING),$(if $(filter INTEL ARM,$(CPUNAME)),ac_cv_c_bigendian=no)) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(ENABLE_DEBUG),--enable-debug) \
