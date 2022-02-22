@@ -35,10 +35,16 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 
+#include <vcl/weld.hxx>
+#include <unotools/resmgr.hxx>
+#include <vcl/stdtext.hxx>
+#include "../inc/strings.hrc"
+
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <osl/file.hxx>
 
 #include "persistence.hxx"
 
@@ -63,6 +69,9 @@ OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XCompon
 , m_bIsLinkURL( false )
 , m_bLinkTempFileChanged( false )
 , m_bLinkHasPassword( false )
+, m_aLinkTempFile( )
+, m_pLinkFile( nullptr )
+, m_pTempFile( nullptr )
 , m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {
@@ -89,6 +98,9 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
 , m_bIsLinkURL( true )
 , m_bLinkTempFileChanged( false )
 , m_bLinkHasPassword( false )
+, m_aLinkTempFile( )
+, m_pLinkFile(nullptr)
+, m_pTempFile(nullptr)
 , m_bHasClonedSize( false )
 , m_nClonedMapUnit( 0 )
 {
@@ -224,27 +236,30 @@ void OCommonEmbeddedObject::LinkInit_Impl(
         // task-ID above)
         //
         // open OLE original data as read input file
-        uno::Reference< ucb::XSimpleFileAccess3 > xTempAccess( ucb::SimpleFileAccess::create( m_xContext ) );
-        uno::Reference< io::XInputStream > xInStream( xTempAccess->openFileRead( m_aLinkURL ) );
+        uno::Reference< ucb::XSimpleFileAccess > xTempInAccess( ucb::SimpleFileAccess::create( m_xContext ) );
+        uno::Reference< io::XInputStream > xInStream( xTempInAccess->openFileRead( m_aLinkURL ) );
 
         if(xInStream.is())
         {
             // create temporary file
             m_aLinkTempFile = io::TempFile::create(m_xContext);
-            uno::Reference< ucb::XSimpleFileAccess > xTempOutAccess(ucb::SimpleFileAccess::create(m_xContext));
-            // if the temp stream is used, then the temp file remains locked
-            uno::Reference< io::XOutputStream > xOutStream(xTempOutAccess->openFileWrite(m_aLinkTempFile->getUri()));
+            uno::Reference< ucb::XSimpleFileAccess > xTempOutAccess( ucb::SimpleFileAccess::create( m_xContext ) );
+            uno::Reference< io::XOutputStream > xOutStream( xTempOutAccess->openFileWrite( m_aLinkTempFile->getUri() ) );
 
             if(m_aLinkTempFile.is())
             {
-                // completely copy content of original OLE data
-                ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
-
+                ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xOutStream );
+                xOutStream->closeOutput();
                 // reset flag m_bLinkTempFileChanged, so it will also work for multiple
                 // save op's of the containing file/document
                 m_bLinkTempFileChanged = false;
+
+                // store the timestamp of both files
+                m_pLinkFile.reset(new FileChangedChecker(m_aLinkURL));
+                m_pTempFile.reset(new FileChangedChecker(m_aLinkTempFile->getUri()));
             }
         }
+
     }
 
     if(m_aLinkTempFile.is())
@@ -376,6 +391,103 @@ void OCommonEmbeddedObject::PostEvent_Impl( const OUString& aEventName )
         if ( m_bDisposed )
             return;
     }
+}
+
+
+static int ShowMsgDialog(TranslateId Msg, const OUString& sFileName)
+{
+    std::locale aResLocale = Translate::Create("emo");
+    OUString aMsg    = Translate::get(Msg, aResLocale);
+    OUString aBtn    = Translate::get(BTN_OVERWRITE_TEXT, aResLocale);
+    OUString aTemp   = sFileName;
+
+    osl::FileBase::getSystemPathFromFileURL(sFileName, aTemp);
+
+    aMsg = aMsg.replaceFirst("%{filename}", aTemp);
+    weld::Window* pParent = Application::GetFrameWeld(nullptr);
+
+    std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(pParent,
+        VclMessageType::Warning, VclButtonsType::NONE, aMsg));
+    xQueryBox->add_button(aBtn, RET_YES);
+    xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+    xQueryBox->set_default_response(RET_CANCEL);
+
+    return xQueryBox->run();
+}
+
+
+void OCommonEmbeddedObject::HandleLinkAndTempFileSave(eSaveTmpLnkState eState)
+{
+    static bool InHndFunc = false;
+
+    // do not Refresh and autosave at the same time
+    if (InHndFunc)
+        return;
+
+    InHndFunc = true;
+
+    bool bLnkFileChg = m_pLinkFile->hasFileChanged(false);
+    bool bTmpFileChg = m_pTempFile->hasFileChanged(false);
+
+
+    if (!bLnkFileChg && !bTmpFileChg)
+    {// no changes
+        eState = eSaveTmpLnkState::NoCopy;
+    }
+    else if ((eState == eSaveTmpLnkState::CopyTempToLink) && bLnkFileChg)
+    {// Save pressed,  but the Link-file are changed, question to user for overwrite
+        // it is not importent it has bTmpFileChg, always overwite the link-file
+        if (ShowMsgDialog(STR_OVERWRITE_LINK, m_aLinkURL) == RET_CANCEL)
+            eState = eSaveTmpLnkState::NoCopy;
+    }
+    else if ((eState == eSaveTmpLnkState::CopyLinkToTemp) && bTmpFileChg)
+    {// Refresh pressed,  but the Temp-file are changed, question to user for overwrite
+        // it is not importent it has bLnkFileChg, always overwite the temp-file
+        if (ShowMsgDialog(STR_OVERWRITE_TEMP, m_aLinkURL) == RET_CANCEL)
+            eState = eSaveTmpLnkState::NoCopy;
+    }
+    // no conflict's we can copy
+
+    // lambda function var for write
+    auto writeFile = [this](const OUString& SrcName, const OUString& DesName )
+    {
+        uno::Reference < ucb::XSimpleFileAccess2 > xWriteAccess(ucb::SimpleFileAccess::create(m_xContext));
+        uno::Reference < ucb::XSimpleFileAccess > xReadAccess(ucb::SimpleFileAccess::create(m_xContext));
+        uno::Reference < io::XInputStream > xInStream(xReadAccess->openFileRead(SrcName));
+
+        // This is *needed* since OTempFileService calls OTempFileService::readBytes which
+        // ensures the SvStream mpStream gets/is opened, *but* also sets the mnCachedPos from
+        // OTempFileService which still points to the end-of-file (from write-cc'ing).
+        uno::Reference < io::XSeekable > xSeek(xInStream, uno::UNO_QUERY_THROW);
+        xSeek->seek(0);
+
+        if (xInStream.is())
+        {
+            xWriteAccess->writeFile(DesName, xInStream);
+            // reset flag m_bLinkTempFileChanged
+            m_bLinkTempFileChanged = false;
+        }
+    };
+
+    switch (eState)
+    {
+        case eSaveTmpLnkState::NoCopy:
+            break;
+        case eSaveTmpLnkState::CopyLinkToTemp: // copy Link-File to Temp-File   (Refresh)
+            writeFile( m_aLinkURL, m_aLinkTempFile->getUri());
+            m_pTempFile->hasFileChanged();
+            break;
+        case eSaveTmpLnkState::CopyTempToLink: // copy Temp-File to Link-File   (Save)
+            // tdf#141529 if we have a changed copy of the original OLE data we now
+            // need to write it back 'over' the original OLE data
+            writeFile(m_aLinkTempFile->getUri(), m_aLinkURL);
+            m_pLinkFile->hasFileChanged();
+            break;
+        default:
+            break;
+    }
+
+    InHndFunc = false;
 }
 
 
