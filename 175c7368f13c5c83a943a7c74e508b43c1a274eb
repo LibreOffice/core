@@ -1,0 +1,101 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e9aa5fb_12be26c9",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-22T14:12:19Z",
+      "side": 1,
+      "message": "if you decide that it is a good idea to give this function a narrow interface, you should document that in include/cppuhelper/weakref.hxx",
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00e6c7a2_c4596de7",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-22T14:12:19Z",
+      "side": 1,
+      "message": "if you decide that it is a good idea to give this function a narrow interface, you should document that in include/cppuhelper/weakref.hxx",
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "040327ec_66ec76b3",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-22T14:12:19Z",
+      "side": 1,
+      "message": "this random whitespace addition still needs addressing",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 8
+      },
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7edd285e_667d7c73",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-22T14:12:19Z",
+      "side": 1,
+      "message": "* LIBO_INTERNAL_ONLY *case*?\n\n* who is \"I\"?\n\n* but why not just do the harmless Reference\u003cXWeak\u003e wrapper also for !LIBO_INTERNAL_ONLY, and avoid the #if?",
+      "range": {
+        "startLine": 85,
+        "startChar": 33,
+        "endLine": 85,
+        "endChar": 34
+      },
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef077ce9_65b737b7",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-22T14:12:19Z",
+      "side": 1,
+      "message": "why add this now (see above)?",
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
