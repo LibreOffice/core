@@ -15,6 +15,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/keycodes.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <svx/svdoole2.hxx>
 #include <test/xmltesttools.hxx>
@@ -224,8 +225,22 @@ void ScJumboSheetsTest::testRoundtripNamedRanges()
 
 void ScJumboSheetsTest::testTdf134553()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf134553.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
+    OUString aFileURL;
+    createFileURL(u"tdf134553.", u"xlsx", aFileURL);
+
+    uno::Reference<frame::XDesktop2> xDesktop
+        = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    m_xCalcComponent = xDesktop->loadComponentFromURL(aFileURL, "_default", 0, {});
+    CPPUNIT_ASSERT(m_xCalcComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(m_xCalcComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(xDocSh);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -236,8 +251,39 @@ void ScJumboSheetsTest::testTdf134553()
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4574), pOleObj->GetLogicRect().getX());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(437), pOleObj->GetLogicRect().getY());
 
-    xDocSh->DoClose();
+    uno::Reference<lang::XComponent> xComponent(m_xCalcComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aArgs
+        = comphelper::InitPropertySequence({ { "ToObject", uno::makeAny(OUString("Diagram 1")) } });
+    dispatchCommand(xComponent, ".uno:GoToObject", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(xComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(m_xCalcComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+
+    uno::Reference<drawing::XDrawPage> xPage(pModelObj->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xPage->getCount());
+
+    dispatchCommand(xComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pOleObj = getSingleChartObject(rDoc, 0);
+    CPPUNIT_ASSERT(pOleObj);
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1700), pOleObj->GetLogicRect().getX());
+
+    // tdf#147458: Without the fix in place, this test would have failed with
+    // - Expected: 2117
+    // - Actual  : -7421
+    CPPUNIT_ASSERT_EQUAL(tools::Long(2117), pOleObj->GetLogicRect().getY());
 }
 
 void ScJumboSheetsTest::testTdf134392()
