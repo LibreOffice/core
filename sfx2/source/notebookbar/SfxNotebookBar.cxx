@@ -300,6 +300,26 @@ bool SfxNotebookBar::IsActive()
     return false;
 }
 
+void SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp)
+{
+    const OUString appName( lcl_getAppName( eApp ) );
+
+    if ( appName.isEmpty() )
+        return;
+
+    const OUString aPath = "org.openoffice.Office.UI.ToolbarMode/Applications/" + appName;
+
+    utl::OConfigurationTreeRoot aAppNode(
+                                        ::comphelper::getProcessComponentContext(),
+                                        aPath,
+                                        true);
+    if ( !aAppNode.isValid() )
+        return;
+
+    aAppNode.setNodeValue( "Active", makeAny( OUString( "Default" ) ) );
+    aAppNode.commit();
+}
+
 void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
 {
     // Save active UI file name
@@ -345,9 +365,13 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
         const Reference<frame::XModuleManager> xModuleManager  = frame::ModuleManager::create( xContext );
         OUString aModuleName = xModuleManager->identify( xFrame );
         vcl::EnumContext::Application eApp = vcl::EnumContext::GetApplicationEnum( aModuleName );
-        OUString sFile = lcl_getNotebookbarFileName( eApp );
+
+        OUString sFile;
         if (comphelper::LibreOfficeKit::isActive())
             sFile = "notebookbar_online.ui";
+        else
+            sFile = lcl_getNotebookbarFileName( eApp );
+
         OUString sNewFile = rUIFile + sFile;
         OUString sCurrentFile;
         VclPtr<NotebookBar> pNotebookBar = pSysWindow->GetNotebookBar();
@@ -369,6 +393,7 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
                 && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
             {
                 bSkippedFirstInit[pViewShell] = true;
+                ResetActiveToolbarModeToDefault(eApp);
                 return false;
             }
 
