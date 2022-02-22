@@ -351,7 +351,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
-#include <svx/DiagramDataInterface.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dlgutil.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>

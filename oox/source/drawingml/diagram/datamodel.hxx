@@ -29,7 +29,6 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/token/tokens.hxx>
-#include <svx/DiagramDataInterface.hxx>
 
 namespace oox::drawingml {
 
@@ -143,7 +142,8 @@ typedef std::vector< Point >        Points;
 
 }
 
-class DiagramData : public DiagramDataInterface
+// class DiagramData : public DiagramDataInterface
+class DiagramData
 {
 public:
     typedef std::map< OUString, dgm::Point* > PointNameMap;
@@ -178,10 +178,11 @@ public:
         { return maExtDrawings; }
     const dgm::Point* getRootPoint() const;
     void dump() const;
-    OUString getString() const override;
-    std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const override;
-    OUString addNode(const OUString& rText) override;
-    bool removeNode(const OUString& rNodeId) override;
+
+    OUString getString() const;
+    std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const;
+    OUString addNode(const OUString& rText);
+    bool removeNode(const OUString& rNodeId);
 
 private:
     void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;

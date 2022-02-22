@@ -391,7 +391,6 @@
 #include <svtools/svtdllapi.h>
 #include <svtools/unitconv.hxx>
 #include <svtools/valueset.hxx>
-#include <svx/DiagramDataInterface.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/drawitem.hxx>
 #include <svx/flagsdef.hxx>

@@ -429,7 +429,6 @@
 #include <svl/zforlist.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svtools/svtdllapi.h>
-#include <svx/DiagramDataInterface.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/flagsdef.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
