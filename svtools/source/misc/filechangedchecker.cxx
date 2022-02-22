@@ -21,7 +21,7 @@ FileChangedChecker::FileChangedChecker(const OUString& rFilename,
     , mLastModTime()
     , mpCallback(rCallback)
 {
-    // Get the curren last file modified Status
+    // Get the current last file modified Status
     getCurrentModTime(mLastModTime);
 
     // associate the callback function for the Timer
@@ -34,10 +34,23 @@ FileChangedChecker::FileChangedChecker(const OUString& rFilename,
     resetTimer();
 }
 
+FileChangedChecker::FileChangedChecker(const OUString& rFilename)
+    : mTimer("")
+    , mFileName(rFilename)
+    , mLastModTime()
+    , mpCallback(nullptr)
+{
+    // Get the current last file modified Status
+    getCurrentModTime(mLastModTime);
+}
+
 void FileChangedChecker::resetTimer()
 {
+    if (mpCallback == nullptr)
+        return;
+
     // Start the Idle if it's not active
-    if(!mTimer.IsActive())
+    if (!mTimer.IsActive())
         mTimer.Start();
 
     // Set lowest Priority
@@ -61,7 +74,7 @@ bool FileChangedChecker::getCurrentModTime(TimeValue& o_rValue) const
     return true;
 }
 
-bool FileChangedChecker::hasFileChanged()
+bool FileChangedChecker::hasFileChanged(bool bUpdate)
 {
     // Get the current file Status
     TimeValue newTime={0,0};
@@ -75,7 +88,8 @@ bool FileChangedChecker::hasFileChanged()
     {
         // Since the file has changed, set the new status as the file status and
         // return True
-        mLastModTime = newTime ;
+        if(bUpdate)
+            mLastModTime = newTime ;
 
         return true;
     }
