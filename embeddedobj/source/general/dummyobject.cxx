@@ -194,6 +194,11 @@ void SAL_CALL ODummyEmbeddedObject::setContainerName( const OUString& )
     CheckInit_Runtime();
 }
 
+void SAL_CALL ODummyEmbeddedObject::UpdateOleObject( sal_Bool )
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    CheckInit_WrongState();
+}
 
 void SAL_CALL ODummyEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
 {
