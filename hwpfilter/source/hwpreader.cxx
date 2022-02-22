@@ -130,39 +130,17 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportHWP(SvStream &rStream)
             stream->addData(aData, static_cast<int>(nRead));
         }
 
-        HWPFile hwpfile;
-        if (hwpfile.ReadHwpFile(std::move(stream)))
-            return false;
+        rtl::Reference<HwpReader> hwpreader(new HwpReader);
+        return hwpreader->importHStream(std::move(stream));
     }
     catch (...)
     {
-        return false;
     }
-    return true;
+    return false;
 }
 
-sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
+bool HwpReader::importHStream(std::unique_ptr<HStream> stream)
 {
-    utl::MediaDescriptor aDescriptor(rDescriptor);
-    aDescriptor.addInputStream();
-
-    Reference< XInputStream > xInputStream(
-        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY_THROW);
-
-    std::unique_ptr<HStream> stream(new HStream);
-    Sequence < sal_Int8 > aBuffer;
-    sal_Int32 nRead, nTotal = 0;
-    while( true )
-    {
-        nRead = xInputStream->readBytes(aBuffer, 32768);
-        if( nRead == 0 )
-            break;
-        stream->addData( reinterpret_cast<const byte *>(aBuffer.getConstArray()), nRead );
-        nTotal += nRead;
-    }
-
-    if( nTotal == 0 ) return false;
-
     if (hwpfile.ReadHwpFile(std::move(stream)))
           return false;
 
@@ -205,6 +183,30 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
     return true;
 }
 
+sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
+{
+    utl::MediaDescriptor aDescriptor(rDescriptor);
+    aDescriptor.addInputStream();
+
+    Reference< XInputStream > xInputStream(
+        aDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM], UNO_QUERY_THROW);
+
+    std::unique_ptr<HStream> stream(new HStream);
+    Sequence < sal_Int8 > aBuffer;
+    sal_Int32 nRead, nTotal = 0;
+    while( true )
+    {
+        nRead = xInputStream->readBytes(aBuffer, 32768);
+        if( nRead == 0 )
+            break;
+        stream->addData( reinterpret_cast<const byte *>(aBuffer.getConstArray()), nRead );
+        nTotal += nRead;
+    }
+
+    if( nTotal == 0 ) return false;
+
+    return importHStream(std::move(stream));
+}
 
 /**
  * make office:body

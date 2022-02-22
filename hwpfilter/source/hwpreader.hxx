@@ -88,6 +88,8 @@ public:
     {
         m_rxDocumentHandler = xHandler;
     }
+
+    bool importHStream(std::unique_ptr<HStream> stream);
 private:
     Reference< XDocumentHandler > m_rxDocumentHandler;
     rtl::Reference<AttributeListImpl> mxList;
