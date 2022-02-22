@@ -40,7 +40,6 @@ IDLFILES = XImageShrink.idl \
 GENCLASSFILES = $(patsubst %.idl,$(OUT_COMP_CLASS)/$(IDL_PACKAGE)/%.class,$(IDLFILES))
 GENCLASSNAMES = $(patsubst %.idl,$(IDL_PACKAGE)/%.class,$(IDLFILES))
 GENTYPELIST = $(subst /,.,$(patsubst %.idl,-T$(IDL_PACKAGE)/% ,$(IDLFILES)))
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
 APP1_NAME=Thumbs
 APP1_JAR=$(OUT_COMP_CLASS)/$(APP1_NAME).jar

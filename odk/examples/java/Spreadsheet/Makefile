@@ -75,7 +75,6 @@ COMPJAVAFILES  = CalcAddins.java
 #GENJAVAFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/$(PACKAGE)/%.java,$(IDLFILES))
 GENCLASSFILES = $(patsubst %.idl,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(IDLFILES))
 GENTYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
-GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
 COMPCLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(COMPJAVAFILES))
 #COMPCLASSFILES += $(subst $(OUT_COMP_GEN),$(OUT_COMP_CLASS),$(GENJAVAFILES:.java=.class))
@@ -101,14 +100,10 @@ $(OUT_COMP_CLASS)/%.Manifest :
 	@echo UNO-Type-Path: $(basename $*).uno.jar> $@
 	@echo RegistrationClassName: $(basename $*)>> $@
 
-$(OUT_COMP_GEN)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -C -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
-
-$(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+$(OUT_COMP_GEN)/%.rdb : $(IDLFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GENURDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) $< $@
 
 #$(OUT_COMP_GEN)/%.java : $(COMP_RDB)
 $(GENCLASSFILES) : $(COMP_RDB)
@@ -157,11 +152,11 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_NAME).components
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_NAME).components description.xml
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	$(SDK_ZIP) $@ -u $(COMP_NAME).components
+	$(SDK_ZIP) $@ -u $(COMP_NAME).components description.xml
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_RDB_NAME) $(COMP_JAR_NAME)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_COMP_CLASS)/$(<F)))

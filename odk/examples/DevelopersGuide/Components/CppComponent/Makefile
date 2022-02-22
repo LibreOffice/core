@@ -59,6 +59,7 @@ COMP_PACKAGE = $(OUT_BIN)/$(COMP_NAME).$(UNOOXT_EXT)
 COMP_PACKAGE_URL = $(subst \\,\,"$(COMP_PACKAGE_DIR)$(PS)$(COMP_NAME).$(UNOOXT_EXT)")
 COMP_UNOPKG_MANIFEST = $(SAMPLE_GEN_OUT)/$(COMP_NAME)/META-INF/manifest.xml
 COMP_COMPONENTS = $(SAMPLE_GEN_OUT)/$(COMP_NAME).components
+COMP_DESCRIPTION = $(SAMPLE_GEN_OUT)/description.xml
 
 COMP_REGISTERFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_register_component.flag
 COMP_TYPEFLAG = $(SAMPLE_GEN_OUT)/devguide_$(COMP_NAME)_types.flag
@@ -70,11 +71,9 @@ CXXFILES = service1_impl.cxx \
 
 SLOFILES = $(patsubst %.cxx,$(SAMPLE_SLO_OUT)/%.$(OBJ_EXT),$(CXXFILES))
 
-GENURDFILES = $(patsubst %.idl,$(SAMPLE_GEN_OUT)/%.urd,$(IDLFILES))
-
-TYPESLIST=-Tmy_module.XSomething  \
-	-Tmy_module.MyService1 \
-	-Tmy_module.MyService2
+TYPESLIST=-Tmymodule.XSomething  \
+	-Tmymodule.MyService1 \
+	-Tmymodule.MyService2
  
 # Targets
 .PHONY: ALL
@@ -83,14 +82,10 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(SAMPLE_GEN_OUT)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -I. -I$(IDL_DIR) -O$(SAMPLE_GEN_OUT) $<
-
-$(SAMPLE_GEN_OUT)/%.rdb : $(GENURDFILES)
+$(SAMPLE_GEN_OUT)/%.rdb : $(IDLFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GENURDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) $< $@
 
 $(COMP_TYPEFLAG) : $(COMP_RDB) $(SDKTYPEFLAG)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
@@ -137,21 +132,25 @@ $(COMP_COMPONENTS) :
 	@echo $(OSEP)?xml version="$(QM)1.0$(QM)" encoding="$(QM)UTF-8$(QM)"?$(CSEP) > $@
 	@echo $(OSEP)components xmlns="$(QM)http://openoffice.org/2010/uno-components$(QM)"$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)component loader="$(QM)com.sun.star.loader.SharedLibrary$(QM)" uri="$(QM)$(UNOPKG_PLATFORM)/$(COMP_IMPL_NAME)$(QM)"$(CSEP) >> $@
-	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)my_module.my_sc_implementation.MyService1$(QM)"$(CSEP) >> $@
-	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)my_module.MyService1$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)mymodule.my_sc_implementation.MyService1$(QM)"$(CSEP) >> $@
+	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)mymodule.MyService1$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
-	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)my_module.my_sc_implementation.MyService2$(QM)"$(CSEP) >> $@
-	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)my_module.MyService2$(QM)"/$(CSEP) >> $@
+	@echo $(SQM)    $(SQM)$(OSEP)implementation name="$(QM)mymodule.my_sc_implementation.MyService2$(QM)"$(CSEP) >> $@
+	@echo $(SQM)      $(SQM)$(OSEP)service name="$(QM)mymodule.MyService2$(QM)"/$(CSEP) >> $@
 	@echo $(SQM)    $(SQM)$(OSEP)/implementation$(CSEP) >> $@
 	@echo $(SQM)  $(SQM)$(OSEP)/component$(CSEP) >> $@
 	@echo $(OSEP)/components$(CSEP) >> $@
 
-$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) $(COMP_RDB) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
+$(COMP_DESCRIPTION) : description.xml
+	-$(MKDIR) $(subst /,$(PS),$(@D))
+	cp $^ $@
+
+$(COMP_PACKAGE) : $(SHAREDLIB_OUT)/$(COMP_IMPL_NAME) $(COMP_RDB) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS) $(COMP_DESCRIPTION)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(MKDIR) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(UNOPKG_PLATFORM))	 
 	$(COPY) $(subst /,$(PS),$<) $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(UNOPKG_PLATFORM))
-	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(COMP_NAME).components
+	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)) && $(SDK_ZIP) ../../bin/$(@F) $(COMP_NAME).components description.xml
 	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_RDB_NAME) $(UNOPKG_PLATFORM)/$(<F)
 	cd $(subst /,$(PS),$(SAMPLE_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
@@ -224,5 +223,6 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_SLO_OUT))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(SAMPLE_OBJ_OUT))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_COMPONENTS)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMP_DESCRIPTION)))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/$(COMP_NAME)*))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/*$(APP1_NAME)*))

@@ -91,11 +91,11 @@ $(OUT_COMP_CLASS)/%/manifest.xml :
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS)
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_COMPONENTS) description.xml
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) $(subst /,$(PS),$(COMP_RDB)) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	$(SDK_ZIP) $@ $(COMP_COMPONENTS)
+	$(SDK_ZIP) $@ $(COMP_COMPONENTS) description.xml
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_RDB_NAME) $(COMP_JAR_NAME)
 	cd $(subst /,$(PS),$(OUT_COMP_CLASS)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 	$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_CLASS)/$(COMP_RDB_NAME)))
