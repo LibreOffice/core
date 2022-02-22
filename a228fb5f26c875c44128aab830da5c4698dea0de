@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71355d30_729590ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-02-22T12:05:06Z",
+      "side": 1,
+      "message": "Hi Michael, here is the code to idea A. What do you think about it?",
+      "revId": "a228fb5f26c875c44128aab830da5c4698dea0de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
