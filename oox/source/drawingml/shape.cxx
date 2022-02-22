@@ -1805,12 +1805,6 @@ void Shape::keepDiagramCompatibilityInfo()
         if ( !xSetInfo.is() )
             return;
 
-        if (mpDiagramData)
-        {
-            if (SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape))
-                pObj->SetDiagramData(mpDiagramData);
-        }
-
         const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
         if( !xSetInfo->hasPropertyByName( aGrabBagPropName ) )
             return;

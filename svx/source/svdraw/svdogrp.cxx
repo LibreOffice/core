@@ -35,10 +35,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/canvastools.hxx>
 
-DiagramHelper::DiagramHelper() {}
-DiagramHelper::~DiagramHelper() {}
+IDiagramHelper::IDiagramHelper() {}
+IDiagramHelper::~IDiagramHelper() {}
 
-void DiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
+void IDiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
 {
     rTarget.mp_DiagramHelper.reset(this);
 }
