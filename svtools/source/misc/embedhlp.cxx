@@ -47,7 +47,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
-#include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedObject2.hpp>
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
@@ -878,7 +878,7 @@ bool EmbeddedObjectRef::IsChart(const css::uno::Reference < css::embed::XEmbedde
         || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId;
 }
 
-void EmbeddedObjectRef::UpdateReplacement()
+void EmbeddedObjectRef::UpdateReplacement( bool bUpdateOle )
 {
     if (mpImpl->bUpdating)
     {
@@ -886,9 +886,19 @@ void EmbeddedObjectRef::UpdateReplacement()
         return;
     }
     mpImpl->bUpdating = true;
+    UpdateOleObject( bUpdateOle );
     GetReplacement(true);
+    UpdateOleObject( false );
     mpImpl->bUpdating = false;
 }
+
+void EmbeddedObjectRef::UpdateOleObject(bool bUpdateOle)
+{
+    embed::XEmbeddedObject2 *pObj = dynamic_cast<embed::XEmbeddedObject2 *> (mpImpl->mxObj.get());
+    if (pObj != nullptr)
+        pObj->UpdateOleObject(bUpdateOle);
+}
+
 
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
