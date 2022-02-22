@@ -343,8 +343,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                     if (!(checkExtension(ext, env)
                           && checkExtension(
                               ext,
-                              ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.MSI;.PY;.CLASS;"
-                                  ".JAR;.APPLICATION;.LNK;.SCR")))
+                              ".APPLICATION;.BAT;.CLASS;.CMD;.COM;.EXE;.JAR;.JS;"
+                              ".JSE;.LNK;.MSC;.MSI;.PY;.SCR;.VBE;.VBS;.WSF;.WSH;")))
                     {
                         throw css::lang::IllegalArgumentException(
                             "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {},
