@@ -21,6 +21,10 @@ $(eval $(call gb_Library_set_include,embobj,\
 	$$(INCLUDE) \
 ))
 
+$(eval $(call gb_Library_add_defs,embobj,\
+    -DEMO_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_external,embobj,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,embobj))
