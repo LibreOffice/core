@@ -222,8 +222,7 @@ public:
     ScDocShellRef saveAndReloadPassword( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
     ScDocShellRef saveAndReloadNoClose( ScDocShell& rShell, sal_Int32 nFormat, std::shared_ptr<utl::TempFile>* pTempFile = nullptr );
 
-    std::shared_ptr<utl::TempFile> saveAs(ScDocShell& rShell, sal_Int32 nFormat);
-    std::shared_ptr<utl::TempFile> exportTo(ScDocShell& rShell, sal_Int32 nFormat);
+    std::shared_ptr<utl::TempFile> exportTo(ScDocShell& rShell, sal_Int32 nFormat, bool bValidate = true);
 
     void miscRowHeightsTest( TestParam const * aTestValues, unsigned int numElems );
 };

@@ -1297,7 +1297,7 @@ void ScExportTest2::testPivotCacheAfterExportXLSX()
     CPPUNIT_ASSERT(xDocSh.is());
 
     // export only
-    std::shared_ptr<utl::TempFile> pTemp = saveAs(*xDocSh, FORMAT_XLSX);
+    std::shared_ptr<utl::TempFile> pTemp = exportTo(*xDocSh, FORMAT_XLSX);
 
     ScDocument& rDoc = xDocSh->GetDocument();
     CPPUNIT_ASSERT(rDoc.HasPivotTable());
@@ -1739,7 +1739,7 @@ void ScExportTest2::testRotatedImageODS()
     ScDocShellRef xDocSh = loadDoc(u"tdf103092_RotatedImage.", FORMAT_ODS, true);
     CPPUNIT_ASSERT(xDocSh.is());
 
-    std::shared_ptr<utl::TempFile> pTemp = saveAs(*xDocSh, FORMAT_ODS);
+    std::shared_ptr<utl::TempFile> pTemp = exportTo(*xDocSh, FORMAT_ODS);
     CPPUNIT_ASSERT(pTemp);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pTemp, m_xSFactory, "content.xml");
     CPPUNIT_ASSERT(pXmlDoc);
