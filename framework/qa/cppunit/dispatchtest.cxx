@@ -139,9 +139,6 @@ class DispatchTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 protected:
     uno::Reference<lang::XComponent> mxComponent;
-    void dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
-                         const OUString& rCommand,
-                         const uno::Sequence<beans::PropertyValue>& rPropertyValues);
 
 public:
     virtual void setUp() override;
@@ -161,23 +158,6 @@ void DispatchTest::tearDown()
         mxComponent->dispose();
 
     test::BootstrapFixture::tearDown();
-}
-
-void DispatchTest::dispatchCommand(const uno::Reference<lang::XComponent>& xComponent,
-                                   const OUString& rCommand,
-                                   const uno::Sequence<beans::PropertyValue>& rPropertyValues)
-{
-    uno::Reference<frame::XController> xController
-        = uno::Reference<frame::XModel>(xComponent, uno::UNO_QUERY_THROW)->getCurrentController();
-    CPPUNIT_ASSERT(xController.is());
-    uno::Reference<frame::XDispatchProvider> xFrame(xController->getFrame(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(xFrame.is());
-
-    uno::Reference<uno::XComponentContext> xContext = ::comphelper::getProcessComponentContext();
-    uno::Reference<frame::XDispatchHelper> xDispatchHelper(frame::DispatchHelper::create(xContext));
-    CPPUNIT_ASSERT(xDispatchHelper.is());
-
-    xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
 }
 
 CPPUNIT_TEST_FIXTURE(DispatchTest, testInterception)
