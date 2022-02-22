@@ -226,6 +226,13 @@ published interface XEmbeddedObject
      */
     void setContainerName( [in] string sName );
 
+    /** refresh for the OLE object, otherwise link-refresh.
+
+        @param bUpdateOle
+            what kind of update, when true is OLE-Object
+     */
+    void UpdateOleObject( [in] boolean bUpdateOle );
+
 };
 
 

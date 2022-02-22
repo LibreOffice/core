@@ -44,6 +44,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -1158,7 +1159,8 @@ namespace {
 
 }
 
-bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEmbedded,const uno::Reference < embed::XStorage >& _xStorage)
+bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEmbedded, bool _AutoSaveEvent,
+                                            const uno::Reference < embed::XStorage >& _xStorage)
 {
     bool bResult = false;
     try
@@ -1222,7 +1224,7 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                 uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
                 if ( xPersist.is() )
                 {
-                    uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 2 : 3 );
+                    uno::Sequence< beans::PropertyValue > aArgs( _bOasisFormat ? 3 : 4 );
                     auto pArgs = aArgs.getArray();
                     pArgs[0].Name = "StoreVisualReplacement";
                     pArgs[0].Value <<= !_bOasisFormat;
@@ -1230,11 +1232,15 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                     // if it is an embedded object or the optimized inserting fails the normal inserting should be done
                     pArgs[1].Name = "CanTryOptimization";
                     pArgs[1].Value <<= !_bCreateEmbedded;
+
+                    pArgs[2].Name = "AutoSaveEvent"; // utl::MediaDescriptor::PROP_AUTOSAVEEVENT; trouble with include lib utl
+                    pArgs[2].Value <<= _AutoSaveEvent;
+
                     if ( !_bOasisFormat )
                     {
                         // if object has no cached replacement it will use this one
-                        pArgs[2].Name = "VisualReplacement";
-                        pArgs[2].Value <<= xStream;
+                        pArgs[3].Name = "VisualReplacement";
+                        pArgs[3].Value <<= xStream;
                     }
 
                     try
