@@ -150,6 +150,7 @@ public:
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
     const ShapePtr & getShape() const { return mpShape; }
+    void newTargetShape(ShapePtr& pTarget);
 
 private:
     ShapePtr mpShape;
