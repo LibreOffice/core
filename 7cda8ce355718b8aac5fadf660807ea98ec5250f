@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e31bc78_f7230b5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-02-22T11:19:33Z",
+      "side": 1,
+      "message": "needed for https://github.com/CollaboraOnline/online/pull/4254",
+      "revId": "7cda8ce355718b8aac5fadf660807ea98ec5250f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
