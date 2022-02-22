@@ -878,7 +878,7 @@ bool EmbeddedObjectRef::IsChart(const css::uno::Reference < css::embed::XEmbedde
         || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId;
 }
 
-void EmbeddedObjectRef::UpdateReplacement()
+void EmbeddedObjectRef::UpdateReplacement( bool bUpdateOle )
 {
     if (mpImpl->bUpdating)
     {
@@ -886,7 +886,9 @@ void EmbeddedObjectRef::UpdateReplacement()
         return;
     }
     mpImpl->bUpdating = true;
+    GetObject()->UpdateOleObject( bUpdateOle );
     GetReplacement(true);
+    GetObject()->UpdateOleObject( false );
     mpImpl->bUpdating = false;
 }
 

@@ -76,6 +76,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/docinfohelper.hxx>
+#include <unotools/mediadescriptor.hxx>
 #include <ucbhelper/content.hxx>
 #include <sot/storage.hxx>
 #include <sot/exchange.hxx>
@@ -3252,10 +3253,14 @@ bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
         return true;
     }
 
+    bool AutoSaveEvent = false;
+    utl::MediaDescriptor lArgs(rMedium.GetArgs());
+    lArgs[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
+
     if ( pImpl->mxObjectContainer )
     {
         bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
-        GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SfxObjectCreateMode::EMBEDDED == eCreateMode,xStorage);
+        GetEmbeddedObjectContainer().StoreAsChildren(bOasis,SfxObjectCreateMode::EMBEDDED == eCreateMode,AutoSaveEvent,xStorage);
     }
 
     uno::Sequence<OUString> aExceptions;
