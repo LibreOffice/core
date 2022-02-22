@@ -33,17 +33,10 @@ using namespace ::com::sun::star::uno;
 
 /* Tests for sheets larger than 1024 columns and/or 1048576 rows. */
 
-class ScJumboSheetsTest : public test::FiltersTest,
-                          public unotest::MacrosTest,
-                          public ScBootstrapFixture,
-                          public XmlTestTools
+class ScJumboSheetsTest : public unotest::MacrosTest, public ScBootstrapFixture, public XmlTestTools
 {
 public:
     ScJumboSheetsTest();
-
-    virtual bool load(const OUString& rFilter, const OUString& rURL, const OUString& rUserData,
-                      SfxFilterFlags nFilterFlags, SotClipboardFormatId nClipboardID,
-                      unsigned int nFilterVersion) override;
 
     virtual void setUp() override;
     virtual void tearDown() override;
@@ -79,19 +72,6 @@ private:
     void testRoundtripColumn2000(std::u16string_view name, int format);
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
-
-bool ScJumboSheetsTest::load(const OUString& rFilter, const OUString& rURL,
-                             const OUString& rUserData, SfxFilterFlags nFilterFlags,
-                             SotClipboardFormatId nClipboardID, unsigned int nFilterVersion)
-{
-    ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData, OUString(),
-                                                       nFilterFlags, nClipboardID, nFilterVersion);
-    bool bLoaded = xDocShRef.is();
-    //reference counting of ScDocShellRef is very confused.
-    if (bLoaded)
-        xDocShRef->DoClose();
-    return bLoaded;
-}
 
 void ScJumboSheetsTest::testRoundtripColumn2000Ods()
 {
