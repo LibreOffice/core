@@ -19,6 +19,11 @@
 <description xmlns="http://openoffice.org/extensions/description/2006"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
+    <dependencies>
+        <l:LibreOffice-minimal-version value="4.1" d:name="LibreOffice 4.1"
+                xmlns:d="http://openoffice.org/extensions/description/2006"
+                xmlns:l="http://libreoffice.org/extensions/description/2011"/>
+    </dependencies>
     <registration>
         <simple-license  accept-by="admin" default-license-id="de">
             <license-text xlink:href="registration/license_de.txt" lang="de" license-id="de" />

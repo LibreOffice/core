@@ -111,7 +111,6 @@ APP_CLASSNAMES = $(patsubst %.java,%.class,$(APP_JAVAFILES))
 
 COMP1_GENCLASSFILES = $(patsubst %.idl,$(COMP1_CLASS_OUT)/$(PACKAGE)/%.class,$(COMP1_IDLFILES))
 COMP1_GENTYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(COMP1_IDLFILES)))
-COMP1_GENURDFILES = $(patsubst %.idl,$(COMP1_GEN_OUT)/%.urd,$(COMP1_IDLFILES))
 
 COMP1_CLASSFILES = $(patsubst %.java,$(COMP1_CLASS_OUT)/%.class,$(COMP1_JAVAFILES))
 
@@ -139,14 +138,10 @@ $(SAMPLE_GEN_OUT)/%.Manifest :
 	@echo RegistrationClassName: $(basename $(basename $(@F)))>> $@
 
 # IDLs only for component 1 relevant
-$(COMP1_GEN_OUT)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -I. -I$(IDL_DIR) -O$(COMP1_GEN_OUT) $^
-
-$(COMP1_RDB) : $(COMP1_GENURDFILES)
+$(COMP1_RDB) : $(COMP1_IDLFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $<
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) $< $@
 
 $(COMP1_CLASS_OUT)/$(PACKAGE)/%.class : $(COMP1_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -190,11 +185,11 @@ $(COMP2_UNOPKG_MANIFEST) :
 	@echo $(SQM)                       $(SQM)manifest:full-path="$(QM)$(COMP2_COMPONENTS)$(QM)"/$(CSEP)>> $@
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
-$(COMP1_PACKAGE) : $(COMP1_RDB) $(COMP1_JAR) $(COMP1_UNOPKG_MANIFEST) $(COMP1_COMPONENTS)
+$(COMP1_PACKAGE) : $(COMP1_RDB) $(COMP1_JAR) $(COMP1_UNOPKG_MANIFEST) $(COMP1_COMPONENTS) description.xml
 	echo "####" $(@)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_ZIP) $@ $(COMP1_COMPONENTS)
+	$(SDK_ZIP) $@ $(COMP1_COMPONENTS) description.xml
 	cd $(subst /,$(PS),$(COMP1_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) $(<F)
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP1_JAR_NAME)
 	cd $(subst /,$(PS),$(COMP1_GEN_OUT)/$(subst .$(UNOOXT_EXT),,$(@F))) && $(SDK_ZIP) -u ../../../../bin/$(@F) META-INF/manifest.xml

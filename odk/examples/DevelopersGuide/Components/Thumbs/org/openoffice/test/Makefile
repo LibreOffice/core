@@ -54,14 +54,10 @@ ALL : \
 
 include $(SETTINGS)/stdtarget.mk
 
-$(OUT_COMP_GEN)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -I. -I../../.. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $^
-
-$(OUT_COMP_GEN)/%.rdb : $(GENURDFILES)
+$(OUT_COMP_GEN)/%.rdb : $(IDLFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GENURDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) ../../.. $@
 
 $(OUT_COMP_CLASS)/%.class : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
