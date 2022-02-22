@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06e722d8_607b5532",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-02-22T14:53:51Z",
+      "side": 1,
+      "message": "/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/UnpackedTarball/python3/LO_lib/_elementtree.cpython-3.8d.so does not exist in the tarball.  Stop.\n\nis unrelated to that change.\n\nOrther than that, compared to 2 a internal dragonbox builds still builds *and* android now builds.\nMy builds with system-dragonbox of course also work.",
+      "revId": "c2433f9f03c60d4622f29e0a6928814c337a2f2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
