@@ -18,10 +18,12 @@
  */
 
 #include <QtAccessibleEventListener.hxx>
+#include <QtTools.hxx>
 
 #include <sal/log.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/TextSegment.hpp>
 
 #include <QtGui/QAccessible>
 
@@ -96,6 +98,24 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::AttributeChanged));
             return;
+        case AccessibleEventId::TEXT_CHANGED:
+        {
+            TextSegment aDeletedText;
+            TextSegment aInsertedText;
+            if (aEvent.OldValue >>= aDeletedText)
+            {
+                QAccessible::updateAccessibility(
+                    new QAccessibleTextRemoveEvent(pQAccessibleInterface, aDeletedText.SegmentStart,
+                                                   toQString(aDeletedText.SegmentText)));
+            }
+            if (aEvent.NewValue >>= aInsertedText)
+            {
+                QAccessible::updateAccessibility(new QAccessibleTextInsertEvent(
+                    pQAccessibleInterface, aInsertedText.SegmentStart,
+                    toQString(aInsertedText.SegmentText)));
+            }
+            return;
+        }
         case AccessibleEventId::TABLE_CAPTION_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableCaptionChanged));
@@ -140,7 +160,6 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::SectionChanged));
             return;
-        case AccessibleEventId::TEXT_CHANGED:
         case AccessibleEventId::COLUMN_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TextColumnChanged));
