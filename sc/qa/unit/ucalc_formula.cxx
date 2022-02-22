@@ -796,7 +796,9 @@ void TestFormula::testFormulaParseReference()
 
     // Both rows at sheet bounds and relative => convert to absolute => entire column reference.
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("B1:B1048576", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse(m_pDoc->MaxRow() == MAXROW ? OUString("B1:B1048576")
+                                                   : OUString("B1:B16777216"),
+                        *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(1), aRange.aStart.Col());
@@ -815,7 +817,7 @@ void TestFormula::testFormulaParseReference()
 
     // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse("A2:AMJ2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse(m_pDoc->MaxCol() == MAXCOL ? "A2:AMJ2" : "A2:XFD2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());
@@ -834,24 +836,69 @@ void TestFormula::testFormulaParseReference()
 
     // Check for reference input conversion to and display string of entire column/row.
     {
-        const char* aChecks[][2] = {
+        const char* row1048576Checks[][2] = {
             { "=B:B",           "B:B" },
             { "=B1:B1048576",   "B:B" },
             { "=B1:B$1048576",  "B1:B$1048576" },
             { "=B$1:B1048576",  "B$1:B1048576" },
-            { "=B$1:B$1048576", "B:B" },
+            { "=B$1:B$1048576", "B:B" }
+        };
+        const char* row16777216Checks[][2] = {
+            { "=B:B",           "B:B" },
+            { "=B1:B16777216",   "B:B" },
+            { "=B1:B$16777216",  "B1:B$16777216" },
+            { "=B$1:B16777216",  "B$1:B16777216" },
+            { "=B$1:B$16777216", "B:B" }
+        };
+        const char* col1024Checks[][2] = {
             { "=2:2",           "2:2" },
             { "=A2:AMJ2",       "2:2" },
             { "=A2:$AMJ2",      "A2:$AMJ2" },
             { "=$A2:AMJ2",      "$A2:AMJ2" },
             { "=$A2:$AMJ2",     "2:2" }
         };
+        const char* col16384Checks[][2] = {
+            { "=2:2",           "2:2" },
+            { "=A2:XFD2",       "2:2" },
+            { "=A2:$XFD2",      "A2:$XFD2" },
+            { "=$A2:XFD2",      "$A2:XFD2" },
+            { "=$A2:$XFD2",     "2:2" }
+        };
 
-        for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+        if (m_pDoc->MaxRow() == 1048575)
         {
-            // Use the 'Dummy' sheet for this.
-            m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(aChecks[i][0]));
-            ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), aChecks[i][1], "Wrong formula");
+            for (const auto& check : row1048576Checks)
+            {
+                // Use the 'Dummy' sheet for this.
+                m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(check[0]));
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), check[1], "Wrong formula");
+            }
+        }
+        else
+        {
+            CPPUNIT_ASSERT_EQUAL(SCROW(16777215), m_pDoc->MaxRow());
+            for (const auto& check : row16777216Checks)
+            {
+                m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(check[0]));
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), check[1], "Wrong formula");
+            }
+        }
+        if (m_pDoc->MaxCol() == 1023)
+        {
+            for (const auto& check : col1024Checks)
+            {
+                m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(check[0]));
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), check[1], "Wrong formula");
+            }
+        }
+        else
+        {
+            CPPUNIT_ASSERT_EQUAL(SCROW(16383), m_pDoc->MaxRow());
+            for (const auto& check : col16384Checks)
+            {
+                m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(check[0]));
+                ASSERT_FORMULA_EQUAL(*m_pDoc, ScAddress(0,0,0), check[1], "Wrong formula");
+            }
         }
     }
 
@@ -2438,14 +2485,16 @@ void TestFormula::testFormulaRefUpdateRange()
     ASSERT_FORMULA_EQUAL(*m_pDoc, aPos, "$B:$B", "Wrong reference in A17 after deletion.");
     aPos.IncRow();
 
-    // Enter values in B1 and B1048576 (last row).
+    // Enter values in B1 and B1048576/B16777216 (last row).
     m_pDoc->SetValue( 1,0,1, 1.0);
     m_pDoc->SetValue( 1,m_pDoc->MaxRow(),1, 2.0);
     // Sticky reference including last row.
     m_pDoc->SetString( 2,0,1, "=SUM(B:B)");
     // Reference to last row.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("m_pDoc->MaxRow() changed, adapt unit test.", 1048575, int(m_pDoc->MaxRow()));
-    m_pDoc->SetString( 2,1,1, "=SUM(B1048576:C1048576)");
+    CPPUNIT_ASSERT_MESSAGE("m_pDoc->MaxRow() changed, adapt unit test.",
+        m_pDoc->MaxRow() == 1048575 || m_pDoc->MaxRow() == 16777215);
+    m_pDoc->SetString( 2,1,1, m_pDoc->MaxRow() == 1048575 ? OUString("=SUM(B1048576:C1048576)")
+                                                          : OUString("=SUM(B16777216:C16777216)"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C1.", 3.0, m_pDoc->GetValue(2,0,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C2.", 2.0, m_pDoc->GetValue(2,1,1));
     // Delete last row.
@@ -2453,14 +2502,15 @@ void TestFormula::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C1.", 1.0, m_pDoc->GetValue(2,0,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Reference in C2 not invalidated.", OUString("#REF!"), m_pDoc->GetString(2,1,1));
 
-    // Enter values in A23 and AMJ23 (last column).
+    // Enter values in A23 and AMJ23/XFD23 (last column).
     m_pDoc->SetValue( 0,22,1, 1.0);
     m_pDoc->SetValue( m_pDoc->MaxCol(),22,1, 2.0);
     // C3 with sticky reference including last column.
     m_pDoc->SetString( 2,2,1, "=SUM(23:23)");
     // C4 with reference to last column.
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("m_pDoc->MaxCol() changed, adapt unit test.", 1023, int(m_pDoc->MaxCol()));
-    m_pDoc->SetString( 2,3,1, "=SUM(AMJ22:AMJ23)");
+    CPPUNIT_ASSERT_MESSAGE("m_pDoc->MaxCol() changed, adapt unit test.",
+        m_pDoc->MaxCol() == 1023 || m_pDoc->MaxCol() == 16383);
+    m_pDoc->SetString( 2,3,1, m_pDoc->MaxCol() == 1023 ? "=SUM(AMJ22:AMJ23)" : "=SUM(XFD22:XFD23)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C3.", 3.0, m_pDoc->GetValue(2,2,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C4.", 2.0, m_pDoc->GetValue(2,3,1));
     // Delete last column.
