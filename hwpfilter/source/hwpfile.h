@@ -283,6 +283,10 @@ class DLLEXPORT HWPFile
         std::vector<std::unique_ptr<ColumnInfo>> columnlist;
         // paragraph list
         std::vector<std::unique_ptr<HWPPara>> plist;
+        // keep paragraph's that failed to load until
+        // import is complete to avoid dangling references
+        // elsewhere
+        std::vector<std::unique_ptr<HWPPara>> pfailedlist;
         // floating box list
         std::vector<FBox*> blist;
         // embedded picture list(tag data)
