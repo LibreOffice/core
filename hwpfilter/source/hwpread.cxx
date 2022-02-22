@@ -221,7 +221,6 @@ bool TxtBox::Read(HWPFile & hwpf)
     if (hh != dummy || CH_TEXT_BOX != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
-    hwpf.AddBox(this);
     hwpf.Read2b(&style.cap_len, 1);
     hwpf.Read2b(&dummy1, 1);
     unsigned short next;
@@ -400,7 +399,6 @@ bool Picture::Read(HWPFile & hwpf)
     if (hh != dummy || CH_PICTURE != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
-    hwpf.AddBox(this);
 
     hwpf.Read4b(follow_block_size);
 
@@ -541,7 +539,6 @@ bool Line::Read(HWPFile & hwpf)
     if (hh != dummy || CH_LINE != dummy) {
         return hwpf.SetState(HWP_InvalidFileFormat);
     }
-    hwpf.AddBox(this);
 
     style.boxnum = fboxnum++;
     zorder = zindex++;
