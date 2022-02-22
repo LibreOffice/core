@@ -50,6 +50,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "a2cf5bd6_7823ea39",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-22T05:44:59Z",
+      "side": 1,
+      "message": "Thanks. The same logic applies in this case too, so that simplifies things a little bit.",
+      "parentUuid": "6a725037_27e7f951",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 46
+      },
+      "revId": "dd8f730f41f295394749c574f3651128306c060d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b4a41eaa_b4990299",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 2
