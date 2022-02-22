@@ -101,7 +101,7 @@ public:
                         const css::uno::Reference< css::io::XInputStream >& xInGrStream,
                         const OUString& rMediaType );
 
-    void            UpdateReplacement();
+    void            UpdateReplacement( bool bUpdateOle = false );
     void            UpdateReplacementOnDemand();
     void Lock( bool bLock = true );
     void            Clear();

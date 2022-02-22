@@ -6240,6 +6240,7 @@ module com {
      void setUpdateMode([in] long nMode) raises (::com::sun::star::embed::WrongStateException);
      hyper getStatus([in] hyper nAspect) raises (::com::sun::star::embed::WrongStateException);
      void setContainerName([in] string sName);
+     void UpdateOleObject([in] boolean bUpdateOle);
     };
     published interface XExtendedStorageStream {
      interface ::com::sun::star::io::XStream;

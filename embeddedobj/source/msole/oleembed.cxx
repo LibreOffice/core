@@ -1176,4 +1176,22 @@ void SAL_CALL OleEmbeddedObject::setContainerName( const OUString& sName )
 }
 
 
+void SAL_CALL OleEmbeddedObject::UpdateOleObject( sal_Bool bUpdateOle )
+{
+    // begin wrapping related part ====================
+    uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
+    if ( xWrappedObject.is() )
+    {
+        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        xWrappedObject->UpdateOleObject( bUpdateOle );
+        return;
+    }
+    // end wrapping related part ====================
+
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+}
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
