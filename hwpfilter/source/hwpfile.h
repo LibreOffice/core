@@ -202,7 +202,6 @@ class DLLEXPORT HWPFile
             A3Paper = 8
         };
 
-        void AddBox(FBox *);
         void AddPage(){ m_nCurrentPage++;}
         void AddColumnInfo();
         void SetColumnDef(std::shared_ptr<ColumnDef> const &);
@@ -280,8 +279,6 @@ class DLLEXPORT HWPFile
         std::vector<std::unique_ptr<ColumnInfo>> columnlist;
         // paragraph list
         std::vector<std::unique_ptr<HWPPara>> plist;
-        // floating box list
-        std::vector<FBox*> blist;
         // embedded picture list(tag data)
         std::vector<std::unique_ptr<EmPicture>> emblist;
         std::vector<std::unique_ptr<HyperText>> hyperlist;
