@@ -144,8 +144,10 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                 throw css::lang::IllegalArgumentException(
                     "XSystemShellExecute.execute, cannot process <" + aCommand + ">", {}, 0);
             } else if (pathname.endsWithIgnoreAsciiCase(".class")
+                       || pathname.endsWithIgnoreAsciiCase(".dmg")
                        || pathname.endsWithIgnoreAsciiCase(".fileloc")
                        || pathname.endsWithIgnoreAsciiCase(".inetloc")
+                       || pathname.endsWithIgnoreAsciiCase(".ipa")
                        || pathname.endsWithIgnoreAsciiCase(".jar")
                        || pathname.endsWithIgnoreAsciiCase(".terminal"))
             {
