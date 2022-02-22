@@ -1291,6 +1291,8 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     uno::Sequence< uno::Any > aDelegatorArguments;
     utl::MediaDescriptor aDescriptor( _aMediaDescriptor );
     lcl_extractAndStartStatusIndicator( aDescriptor, xStatusIndicator, aDelegatorArguments );
+    bool AutoSaveEvent = false;
+    aDescriptor[utl::MediaDescriptor::PROP_AUTOSAVEEVENT] >>= AutoSaveEvent;
 
     // properties
     uno::Sequence < beans::PropertyValue > aProps;
@@ -1382,7 +1384,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         if ( _xStorageToSaveTo == m_pImpl->m_xStorage )
             bPersist = m_pImpl->m_pObjectContainer->StoreChildren(true,false);
         else
-            bPersist = m_pImpl->m_pObjectContainer->StoreAsChildren(true,true,_xStorageToSaveTo);
+            bPersist = m_pImpl->m_pObjectContainer->StoreAsChildren(true,true,AutoSaveEvent,_xStorageToSaveTo);
 
         if( bPersist )
             m_pImpl->m_pObjectContainer->SetPersistentEntries(m_pImpl->m_xStorage);

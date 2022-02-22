@@ -25,6 +25,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/embed/XEmbeddedUpdate.hpp>
 #include <com/sun/star/embed/XEmbedPersist2.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/embed/XInplaceObject.hpp>
@@ -39,6 +40,7 @@
 #include <rtl/ref.hxx>
 #include <map>
 #include <memory>
+#include <svtools/filechangedchecker.hxx>
 
 namespace com::sun::star {
     namespace embed {
@@ -76,6 +78,7 @@ class Interceptor;
  * document model successfully.
  */
 class OCommonEmbeddedObject : public css::embed::XEmbeddedObject
+                            , public css::embed::XEmbeddedUpdate
                             , public css::embed::XEmbedPersist2
                             , public css::embed::XLinkageSupport
                             , public css::embed::XInplaceObject
@@ -141,6 +144,9 @@ protected:
 
     bool m_bIsLinkURL;
     bool m_bLinkTempFileChanged;
+    ::std::unique_ptr< FileChangedChecker > m_pLinkFile;
+    bool m_bOleUpdate;
+    bool m_bInHndFunc;
 
     // embedded object related stuff
     OUString m_aEntryName;
@@ -192,6 +198,16 @@ private:
     sal_Int32 ConvertVerbToState_Impl( sal_Int32 nVerb );
 
     void Deactivate();
+
+    // when State = CopyTempToLink        -> the user pressed the save button
+    //                                       when change in embedded part then copy to the linked-file
+    //              CopyLinkToTemp        -> the user pressed the refresh button
+    //                                       when change in linked-file then copy to the embedded part (temp-file)
+    //              CopyLinkToTempInit    -> create the temp file
+    //              CopyLinkToTempRefresh -> when save and Link change but not temp then update temp
+    enum class CopyBackToOLELink {NoCopy, CopyTempToLink, CopyLinkToTemp, CopyLinkToTempInit, CopyLinkToTempRefresh};
+
+    void handleLinkedOLE( CopyBackToOLELink eState );
 
     void StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState,::osl::ResettableMutexGuard& _rGuard );
 
@@ -293,6 +309,10 @@ public:
     virtual sal_Int64 SAL_CALL getStatus( sal_Int64 nAspect ) override;
 
     virtual void SAL_CALL setContainerName( const OUString& sName ) override;
+
+// XEmbeddedUpdate
+
+    virtual void SAL_CALL updateOleObject( sal_Bool bUpdateOle ) override;
 
 
 // XVisualObject
