@@ -31,6 +31,10 @@
 
 #include "sal/types.h"
 
+#if defined LIBO_INTERNAL_ONLY
+#include <type_traits>
+#endif
+
 namespace rtl
 {
 /** Check for Unicode code point.
@@ -60,7 +64,12 @@ inline SAL_CONSTEXPR bool isAscii(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAscii(char) = delete;
 bool isAscii(signed char) = delete;
-template <typename T> inline constexpr bool isAscii(T code) { return isAscii(sal_uInt32(code)); }
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAscii(T code)
+{
+    return isAscii(sal_uInt32(code));
+}
 #endif
 
 /** Check for ASCII lower case character.
@@ -81,7 +90,9 @@ inline SAL_CONSTEXPR bool isAsciiLowerCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiLowerCase(char) = delete;
 bool isAsciiLowerCase(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiLowerCase(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiLowerCase(T code)
 {
     return isAsciiLowerCase(sal_uInt32(code));
 }
@@ -105,7 +116,9 @@ inline SAL_CONSTEXPR bool isAsciiUpperCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiUpperCase(char) = delete;
 bool isAsciiUpperCase(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiUpperCase(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiUpperCase(T code)
 {
     return isAsciiUpperCase(sal_uInt32(code));
 }
@@ -129,7 +142,9 @@ inline SAL_CONSTEXPR bool isAsciiAlpha(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlpha(char) = delete;
 bool isAsciiAlpha(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiAlpha(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiAlpha(T code)
 {
     return isAsciiAlpha(sal_uInt32(code));
 }
@@ -153,7 +168,9 @@ inline SAL_CONSTEXPR bool isAsciiDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiDigit(char) = delete;
 bool isAsciiDigit(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiDigit(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiDigit(T code)
 {
     return isAsciiDigit(sal_uInt32(code));
 }
@@ -177,7 +194,9 @@ inline SAL_CONSTEXPR bool isAsciiAlphanumeric(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiAlphanumeric(char) = delete;
 bool isAsciiAlphanumeric(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiAlphanumeric(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiAlphanumeric(T code)
 {
     return isAsciiAlphanumeric(sal_uInt32(code));
 }
@@ -201,7 +220,9 @@ inline SAL_CONSTEXPR bool isAsciiCanonicHexDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiCanonicHexDigit(char) = delete;
 bool isAsciiCanonicHexDigit(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiCanonicHexDigit(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiCanonicHexDigit(T code)
 {
     return isAsciiCanonicHexDigit(sal_uInt32(code));
 }
@@ -225,7 +246,9 @@ inline SAL_CONSTEXPR bool isAsciiHexDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiHexDigit(char) = delete;
 bool isAsciiHexDigit(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiHexDigit(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiHexDigit(T code)
 {
     return isAsciiHexDigit(sal_uInt32(code));
 }
@@ -248,7 +271,9 @@ inline SAL_CONSTEXPR bool isAsciiOctalDigit(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiOctalDigit(char) = delete;
 bool isAsciiOctalDigit(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiOctalDigit(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiOctalDigit(T code)
 {
     return isAsciiOctalDigit(sal_uInt32(code));
 }
@@ -273,7 +298,9 @@ inline SAL_CONSTEXPR bool isAsciiWhiteSpace(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 bool isAsciiWhiteSpace(char) = delete;
 bool isAsciiWhiteSpace(signed char) = delete;
-template <typename T> inline constexpr bool isAsciiWhiteSpace(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32), bool>
+isAsciiWhiteSpace(T code)
 {
     return isAsciiWhiteSpace(sal_uInt32(code));
 }
@@ -296,7 +323,10 @@ inline SAL_CONSTEXPR sal_uInt32 toAsciiUpperCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiUpperCase(char) = delete;
 sal_uInt32 toAsciiUpperCase(signed char) = delete;
-template <typename T> inline constexpr sal_uInt32 toAsciiUpperCase(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32),
+                                  sal_uInt32>
+toAsciiUpperCase(T code)
 {
     return toAsciiUpperCase(sal_uInt32(code));
 }
@@ -319,7 +349,10 @@ inline SAL_CONSTEXPR sal_uInt32 toAsciiLowerCase(sal_uInt32 code)
 #if defined LIBO_INTERNAL_ONLY
 sal_uInt32 toAsciiLowerCase(char) = delete;
 sal_uInt32 toAsciiLowerCase(signed char) = delete;
-template <typename T> inline constexpr sal_uInt32 toAsciiLowerCase(T code)
+template <typename T>
+inline constexpr std::enable_if_t<std::is_integral_v<T> && sizeof(T) <= sizeof(sal_uInt32),
+                                  sal_uInt32>
+toAsciiLowerCase(T code)
 {
     return toAsciiLowerCase(sal_uInt32(code));
 }
