@@ -51,6 +51,7 @@
 #include <com/sun/star/embed/XStateChangeListener.hpp>
 #include <com/sun/star/embed/XLinkageSupport.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
+#include <embeddedobj/embeddedupdate.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
@@ -878,7 +879,7 @@ bool EmbeddedObjectRef::IsChart(const css::uno::Reference < css::embed::XEmbedde
         || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId;
 }
 
-void EmbeddedObjectRef::UpdateReplacement()
+void EmbeddedObjectRef::UpdateReplacement( bool bUpdateOle )
 {
     if (mpImpl->bUpdating)
     {
@@ -886,9 +887,19 @@ void EmbeddedObjectRef::UpdateReplacement()
         return;
     }
     mpImpl->bUpdating = true;
+    UpdateOleObject( bUpdateOle );
     GetReplacement(true);
+    UpdateOleObject( false );
     mpImpl->bUpdating = false;
 }
+
+void EmbeddedObjectRef::UpdateOleObject( bool bUpdateOle )
+{
+    embed::EmbeddedUpdate* pObj = dynamic_cast<embed::EmbeddedUpdate*> (GetObject().get());
+    if( pObj )
+        pObj->SetOleState( bUpdateOle );
+}
+
 
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
