@@ -28,12 +28,12 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			OPT_CODE_SIZE=0) \
 		OS_TARGET=WIN95 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
-		$(if $(filter ARM64,$(CPUNAME)),USE_64=1) \
+		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
 		LIB="$(ILIB)" \
 		XCFLAGS="$(SOLARINC)" \
 		$(if $(CROSS_COMPILING),\
 			CROSS_COMPILE=1 \
-			$(if $(filter ARM64,$(CPUNAME)),CPU_ARCH=aarch64) \
+			$(if $(filter AARCH64,$(CPUNAME)),CPU_ARCH=aarch64) \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
 		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
@@ -51,13 +51,14 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 	$(call gb_Trace_StartRange,nss,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter ANDROID FREEBSD LINUX MACOSX,$(OS)),$(if $(filter X86_64,$(CPUNAME)),USE_64=1)) \
-		$(if $(filter ANDROID,$(OS)),$(if $(filter AARCH64,$(CPUNAME)),USE_64=1)) \
-		$(if $(filter AARCH64 ARM64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
+		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
+		$(if $(filter POWERPC64,$(CPUNAME)),USE_64=1 CPU_ARCH=ppc64le) \
 		$(if $(filter MACOSX,$(OS)),\
 			MACOS_SDK_DIR=$(MACOSX_SDK_PATH) \
 			NSS_USE_SYSTEM_SQLITE=1) \
 		$(if $(filter LINUX,$(OS)),$(if $(ENABLE_DBGUTIL),,BUILD_OPT=1)) \
 		$(if $(filter SOLARIS,$(OS)),NS_USE_GCC=1) \
+		$(if $(filter ARM,$(CPUNAME)),NSS_DISABLE_ARM32_NEON=1) \
 		$(if $(CROSS_COMPILING),\
 			CROSS_COMPILE=1 \
 			NSPR_CONFIGURE_OPTS="--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)") \
