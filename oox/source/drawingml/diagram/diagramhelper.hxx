@@ -41,10 +41,12 @@ class Diagram;
 // - deliver representative data from the Diagram-Model
 // - modify it eventually
 // - im/export Diagram model to other representations
-class AdvancedDiagramHelper final : public DiagramHelper
+class AdvancedDiagramHelper final : public IDiagramHelper
 {
     const std::shared_ptr< Diagram >                mpDiagramPtr;
     const std::shared_ptr<::oox::drawingml::Theme>  mpThemePtr;
+
+    bool hasDiagramData() const;
 
 public:
     AdvancedDiagramHelper(
@@ -52,8 +54,23 @@ public:
         const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
     virtual ~AdvancedDiagramHelper();
 
-    virtual void reLayout();
+    // re-create XShapes
+    virtual void reLayout() override;
+
+    // get text representation of data tree
+    virtual OUString getString() const override;
+
+    // get children of provided data node
+    // use empty string for top-level nodes
+    // returns vector of (id, text)
+    virtual std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const override;
+
+    // add/remove new top-level node to data model, returns its id
+    virtual OUString addNode(const OUString& rText) override;
+    virtual bool removeNode(const OUString& rNodeId) override;
+
     void doAnchor(SdrObjGroup& rTarget);
+    void newTargetShape(ShapePtr& pTarget);
 };
 
 }

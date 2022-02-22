@@ -245,7 +245,6 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/whichranges.hxx>
-#include <svx/DiagramDataInterface.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/sdr/properties/defaultproperties.hxx>
 #include <svx/sdr/properties/properties.hxx>

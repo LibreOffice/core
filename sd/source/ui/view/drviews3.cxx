@@ -487,27 +487,9 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), UNO_QUERY);
-                static bool bAdvancedSmartArt(nullptr != getenv("SAL_ENABLE_ADVANCED_SMART_ART"));
-
-                if (!bAdvancedSmartArt && oox::drawingml::DrawingML::IsDiagram(xShape))
-                {
-                    mpDrawView->UnmarkAll();
-
-                    css::uno::Reference<css::uno::XComponentContext> xContext
-                        = comphelper::getProcessComponentContext();
-                    rtl::Reference<oox::shape::ShapeFilterBase> xFilter(
-                        new oox::shape::ShapeFilterBase(xContext));
-                    xFilter->setTargetDocument(GetDocSh()->GetModel());
-                    xFilter->importTheme();
-                    oox::drawingml::reloadDiagram(pObj, *xFilter);
-
-                    mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
-                }
-
                 // Support advanced DiagramHelper
                 SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
-                if(bAdvancedSmartArt && pAnchorObj && pAnchorObj->isDiagram())
+                if(pAnchorObj && pAnchorObj->isDiagram())
                 {
                     mpDrawView->UnmarkAll();
                     pAnchorObj->getDiagramHelper()->reLayout();
@@ -525,13 +507,15 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             if (rMarkList.GetMarkCount() == 1)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                Reference<css::drawing::XShape> xShape(pObj->getUnoShape(), UNO_QUERY);
+                // Support advanced DiagramHelper
+                SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
 
-                if (oox::drawingml::DrawingML::IsDiagram(xShape))
+                if(pAnchorObj && pAnchorObj->isDiagram())
                 {
                     VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                    ScopedVclPtr<VclAbstractDialog> pDlg
-                        = pFact->CreateDiagramDialog(GetFrameWeld(), pObj->GetDiagramData());
+                    ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
+                        GetFrameWeld(),
+                        pAnchorObj->getDiagramHelper());
                     pDlg->Execute();
                 }
             }

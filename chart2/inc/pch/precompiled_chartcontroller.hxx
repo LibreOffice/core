@@ -369,7 +369,6 @@
 #include <svtools/colorcfg.hxx>
 #include <svtools/svtdllapi.h>
 #include <svx/ActionDescriptionProvider.hxx>
-#include <svx/DiagramDataInterface.hxx>
 #include <svx/XPropertyEntry.hxx>
 #include <svx/chrtitem.hxx>
 #include <svx/ipolypolygoneditorcontroller.hxx>
