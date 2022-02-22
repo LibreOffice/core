@@ -305,8 +305,6 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    ScDocShellRef loadDocAndSetupModelViewController(std::u16string_view rFileName,
-                                                     sal_Int32 nFormat, bool bReadWrite);
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
@@ -2560,51 +2558,18 @@ void ScExportTest2::testTdf139258_rotated_image()
     assertXPathContent(pDrawing, "/xdr:wsDr/xdr:twoCellAnchor/xdr:to/xdr:row", "25");
 }
 
-ScDocShellRef ScExportTest2::loadDocAndSetupModelViewController(std::u16string_view rFileName,
-                                                                sal_Int32 nFormat, bool bReadWrite)
-{
-    uno::Reference<frame::XDesktop2> xDesktop
-        = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
-
-    // create a frame
-    Reference<frame::XFrame> xTargetFrame = xDesktop->findFrame("_blank", 0);
-    CPPUNIT_ASSERT(xTargetFrame.is());
-
-    // 1. Open the document
-    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, bReadWrite);
-    CPPUNIT_ASSERT_MESSAGE(
-        OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(),
-        xDocSh.is());
-
-    uno::Reference<frame::XModel2> xModel2 = xDocSh->GetModel();
-    CPPUNIT_ASSERT(xModel2.is());
-
-    Reference<frame::XController2> xController = xModel2->createDefaultViewController(xTargetFrame);
-    CPPUNIT_ASSERT(xController.is());
-
-    // introduce model/view/controller to each other
-    xController->attachModel(xModel2);
-    xModel2->connectController(xController);
-    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
-    xController->attachFrame(xTargetFrame);
-    xModel2->setCurrentController(xController);
-
-    return xDocSh;
-}
-
 void ScExportTest2::testTdf142854_GridVisibilityImportXlsxInHeadlessMode()
 {
     // Tests are running in Headless mode
     // Import an ods file with 'Hide' global grid visibility setting.
     ScDocShellRef xShell
-        = loadDocAndSetupModelViewController(u"tdf126541_GridOffGlobally.", FORMAT_ODS, true);
+        = loadDocAndSetupModelViewController(u"tdf126541_GridOffGlobally.", FORMAT_ODS);
     CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
 
     // To avoid regression, in headless mode leave the bug tdf126541
     // It means Sheet based grid line visibility setting will overwrite the global setting.
     // If there is only 1 sheet in the document, it will not result visible problems.
-    xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX, true);
+    xShell = loadDocAndSetupModelViewController(u"tdf126541_GridOff.", FORMAT_XLSX);
     CPPUNIT_ASSERT(!xShell->GetDocument().GetViewOptions().GetOption(VOPT_GRID));
 }
 
