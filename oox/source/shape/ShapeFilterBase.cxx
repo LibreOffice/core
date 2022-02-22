@@ -54,6 +54,11 @@ const ::oox::drawingml::Theme* ShapeFilterBase::getCurrentTheme() const
     return mpTheme.get();
 }
 
+std::shared_ptr<::oox::drawingml::Theme> ShapeFilterBase::getCurrentThemePtr() const
+{
+    return mpTheme;
+}
+
 void ShapeFilterBase::setCurrentTheme(const ::oox::drawingml::ThemePtr& pTheme)
 {
     mpTheme = pTheme;

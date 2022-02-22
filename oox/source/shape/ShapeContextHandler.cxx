@@ -427,6 +427,10 @@ ShapeContextHandler::getShape()
                     pShapePtr->setDiagramDoms(mpShape->getDiagramDoms());
                     pShapePtr->keepDiagramDrawing(*mxShapeFilterBase, aFragmentPath);
 
+                    // migrate IDiagramHelper to new oox::Shape (from mpShape which was loaded
+                    // to pShapePtr where the geometry is now constructed)
+                    mpShape->migrateDiagramHelperToNewShape(pShapePtr);
+
                     if (!mpShape->getChildren().empty())
                     {
                         // first child is diagram background - we want to keep it, as drawingML fallback doesn't contain it

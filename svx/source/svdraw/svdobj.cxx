@@ -189,7 +189,6 @@ SdrObjTransformInfoRec::SdrObjTransformInfoRec() :
 struct SdrObject::Impl
 {
     sdr::ObjectUserVector maObjectUsers;
-    std::shared_ptr<DiagramDataInterface> mpDiagramData;
     std::optional<double> mnRelativeWidth;
     std::optional<double> mnRelativeHeight;
     sal_Int16               meRelativeWidthRelation;
@@ -635,16 +634,6 @@ const double* SdrObject::GetRelativeHeight( ) const
 sal_Int16 SdrObject::GetRelativeHeightRelation() const
 {
     return mpImpl->meRelativeHeightRelation;
-}
-
-void SdrObject::SetDiagramData(std::shared_ptr<DiagramDataInterface> pDiagramData)
-{
-    mpImpl->mpDiagramData = pDiagramData;
-}
-
-const std::shared_ptr<DiagramDataInterface> & SdrObject::GetDiagramData() const
-{
-    return mpImpl->mpDiagramData;
 }
 
 SfxItemPool& SdrObject::GetObjectItemPool() const

@@ -150,6 +150,7 @@ public:
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
     ShapePtr getShape() const { return mpShape.lock(); }
+    void newTargetShape(ShapePtr& pTarget);
 
 private:
     WeakShapePtr mpShape;

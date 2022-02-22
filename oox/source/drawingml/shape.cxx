@@ -237,6 +237,36 @@ void Shape::propagateDiagramHelper()
     }
 }
 
+void Shape::migrateDiagramHelperToNewShape(ShapePtr& pTarget)
+{
+    if(!mpDiagramHelper)
+    {
+        return;
+    }
+
+    if(!pTarget)
+    {
+        // no migrate target, but cleanup helper
+        delete mpDiagramHelper;
+        mpDiagramHelper = nullptr;
+        return;
+    }
+
+    if(pTarget->mpDiagramHelper)
+    {
+        // this should no happen, bu if there is already a helper, clean it up
+        delete pTarget->mpDiagramHelper;
+        pTarget->mpDiagramHelper = nullptr;
+    }
+
+    // DiagramHelper has references to this, these need to be replaced
+    static_cast<AdvancedDiagramHelper*>(mpDiagramHelper)->newTargetShape(pTarget);
+
+    // exchange and reset to nullptr
+    pTarget->mpDiagramHelper = mpDiagramHelper;
+    mpDiagramHelper = nullptr;
+}
+
 table::TablePropertiesPtr const & Shape::getTableProperties()
 {
     if ( !mpTablePropertiesPtr )
@@ -374,6 +404,9 @@ void Shape::addShape(
             if( meFrameType == FRAMETYPE_DIAGRAM )
             {
                 keepDiagramCompatibilityInfo();
+
+                // set DiagramHelper at SdrObjGroup
+                propagateDiagramHelper();
 
                 // Check if this is the PPTX import, so far converting SmartArt to a non-editable
                 // metafile is only implemented for DOCX.
@@ -1804,12 +1837,6 @@ void Shape::keepDiagramCompatibilityInfo()
         Reference < XPropertySetInfo > xSetInfo( xSet->getPropertySetInfo() );
         if ( !xSetInfo.is() )
             return;
-
-        if (mpDiagramData)
-        {
-            if (SdrObject* pObj = SdrObject::getSdrObjectFromXShape(mxShape))
-                pObj->SetDiagramData(mpDiagramData);
-        }
 
         const OUString aGrabBagPropName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
         if( !xSetInfo->hasPropertyByName( aGrabBagPropName ) )

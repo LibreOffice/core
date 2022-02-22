@@ -276,7 +276,6 @@
 #include <svl/svldllapi.h>
 #include <svl/typedwhich.hxx>
 #include <svl/whichranges.hxx>
-#include <svx/DiagramDataInterface.hxx>
 #include <svx/itextprovider.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
