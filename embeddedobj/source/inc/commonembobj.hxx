@@ -39,6 +39,7 @@
 #include <rtl/ref.hxx>
 #include <map>
 #include <memory>
+#include <svtools/filechangedchecker.hxx>
 
 namespace com::sun::star {
     namespace embed {
@@ -141,6 +142,8 @@ protected:
 
     bool m_bIsLinkURL;
     bool m_bLinkTempFileChanged;
+    ::std::unique_ptr<FileChangedChecker> m_pLinkFile;
+    ::std::unique_ptr<FileChangedChecker> m_pTempFile;
 
     // embedded object related stuff
     OUString m_aEntryName;
@@ -192,6 +195,14 @@ private:
     sal_Int32 ConvertVerbToState_Impl( sal_Int32 nVerb );
 
     void Deactivate();
+
+    // when State = CopyTempToLink -> the user pressed the save button
+    //                                when change in embedded part then copy to the linked-file
+    //              CopyLinkToTemp -> the user pressed the refresh button
+    //                                when change in linked-file then copy to the embedded part (temp-file)
+    enum class eSaveTmpLnkState {NoCopy, CopyTempToLink, CopyLinkToTemp};
+
+    void HandleLinkAndTempFileSave(eSaveTmpLnkState eState);
 
     void StateChangeNotification_Impl( bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState,::osl::ResettableMutexGuard& _rGuard );
 
