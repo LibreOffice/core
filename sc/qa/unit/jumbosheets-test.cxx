@@ -16,6 +16,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdpage.hxx>
 #include <test/xmltesttools.hxx>
 
 #include <defaultsoptions.hxx>
@@ -223,8 +224,8 @@ void ScJumboSheetsTest::testRoundtripNamedRanges()
 
 void ScJumboSheetsTest::testTdf134553()
 {
-    ScDocShellRef xDocSh = loadDoc(u"tdf134553.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf134553.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -235,6 +236,36 @@ void ScJumboSheetsTest::testTdf134553()
 
     CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(4574), pOleObj->GetLogicRect().getX());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(437), pOleObj->GetLogicRect().getY());
+
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    pViewShell->SelectObject(u"Diagram 1");
+
+    uno::Reference<lang::XComponent> xComponent(xDocSh->GetModel(), uno::UNO_QUERY);
+    dispatchCommand(xComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    dispatchCommand(xComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    pOleObj = getSingleChartObject(rDoc, 0);
+    CPPUNIT_ASSERT(pOleObj);
+
+    CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(5097), pOleObj->GetLogicRect().getX());
+
+    // tdf#147458: Without the fix in place, this test would have failed with
+    // - Expected: 1058
+    // - Actual  : -7421
+    CPPUNIT_ASSERT_EQUAL(tools::Long(1058), pOleObj->GetLogicRect().getY());
 
     xDocSh->DoClose();
 }
