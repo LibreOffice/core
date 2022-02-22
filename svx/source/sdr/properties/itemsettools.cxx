@@ -31,8 +31,9 @@ namespace sdr::properties
 {
         ItemChangeBroadcaster::ItemChangeBroadcaster(const SdrObject& rObj)
         {
-            if (const SdrObjGroup* pGroupObj = dynamic_cast<const SdrObjGroup*>(&rObj))
+            if (rObj.GetObjIdentifier() == SdrObjKind::Group)
             {
+                const SdrObjGroup* pGroupObj = static_cast<const SdrObjGroup*>(&rObj);
                 SdrObjListIter aIter(pGroupObj->GetSubList(), SdrIterMode::DeepNoGroups);
                 maRectangles.reserve(aIter.Count());
 
