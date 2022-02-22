@@ -11,6 +11,7 @@
 #include "csv_handler.hxx"
 #include "debughelper.hxx"
 #include <drwlayer.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <compiler.hxx>
@@ -51,6 +52,9 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
+
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -639,6 +643,35 @@ ScDocShellRef ScBootstrapFixture::load(const OUString& rURL, sal_Int32 nFormat, 
         nClipboardId = SotClipboardFormatId::STARCALC_8;
 
     return load(bReadWrite, rURL, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, static_cast<sal_uIntPtr>(nFormatType));
+}
+
+ScDocShellRef ScBootstrapFixture::loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat)
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    // create a frame
+    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame("_blank", 0);
+    CPPUNIT_ASSERT(xTargetFrame.is());
+
+    // 1. Open the document
+    ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, true);
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocSh.is());
+
+    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
+    CPPUNIT_ASSERT(xModel2.is());
+
+    Reference< frame::XController2 > xController = xModel2->createDefaultViewController(xTargetFrame);
+    CPPUNIT_ASSERT(xController.is());
+
+    // introduce model/view/controller to each other
+    xController->attachModel(xModel2);
+    xModel2->connectController(xController);
+    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
+    xController->attachFrame(xTargetFrame);
+    xModel2->setCurrentController(xController);
+
+    return xDocSh;
 }
 
 ScDocShellRef ScBootstrapFixture::loadDoc(
