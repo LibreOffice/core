@@ -82,6 +82,10 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
                     new QAccessibleEvent(pQAccessibleInterface, event));
             return;
         }
+        case AccessibleEventId::HYPERTEXT_CHANGED:
+            QAccessible::updateAccessibility(
+                new QAccessibleEvent(pQAccessibleInterface, QAccessible::HypertextChanged));
+            return;
         case AccessibleEventId::SELECTION_CHANGED:
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::Selection));
@@ -193,7 +197,6 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::LABELED_BY_RELATION_CHANGED:
         case AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
         case AccessibleEventId::SUB_WINDOW_OF_RELATION_CHANGED:
-        case AccessibleEventId::HYPERTEXT_CHANGED:
         case AccessibleEventId::TABLE_MODEL_CHANGED:
         case AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
         case AccessibleEventId::LISTBOX_ENTRY_COLLAPSED:
