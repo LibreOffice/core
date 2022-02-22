@@ -123,6 +123,24 @@
       "message": "So I\u0027ve written the patch that changes the non-const GetItemSet() to complain if the object is already in a pool ... and I can\u0027t get it to complain. I\u0027ve also put back your ScPatternAttr::IsSortable(), and I can\u0027t get it to complain either if I try what 585e0ac43b9bd8a2f714903034e435c84ae3fc96 talks about. And SfxPoolItem now has asserts that check that the items are sorted, and those don\u0027t complain either.\n\nSo ... whatever the problem was, maybe it\u0027s been fixed? It seems quite possible that if there really was some modifying of ScPatternAttr behind the pool\u0027s back, it posibly caused also other problems, and somebody might have fixed that without knowing about IsSortable.\n\nCould you try? I\u0027m quite tempted putting IsSortable back in. In the worst case, somebody will find the problem again.\n",
       "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfbcdf28_b8a9379f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-22T07:03:22Z",
+      "side": 1,
+      "message": "I suggest you commit your patch making ScPattern sortable (along with the assert in GetItemSet()), and lets see.\n\nWe can get Caolan to trigger a crash-testing run, and if there are any issues, that will likely flush it out.\n\nWorst case, it crashes again, and then there are now two of us with reasonable knowledge who can try figure out the problem :-)",
+      "parentUuid": "0d5c884d_398a71d7",
+      "revId": "4452208bc2c8ccc48737657b0febce39280cb539",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
