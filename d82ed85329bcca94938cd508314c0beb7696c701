@@ -16,6 +16,23 @@
       "message": "\u003e Uploaded patch set 4.\n\n[manual rebase to solve accrued merge conflicts across this change set relation chain]",
       "revId": "d82ed85329bcca94938cd508314c0beb7696c701",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0711ea24_6f03e901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-22T10:23:21Z",
+      "side": 1,
+      "message": "Now the DevGuide was imported. Pages are found under the same path as in AOO wiki. Random example as don\u0027t have time to search now https://wiki.documentfoundation.org/Documentation/DevGuide/Spreadsheets/Function_Handling",
+      "revId": "d82ed85329bcca94938cd508314c0beb7696c701",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
