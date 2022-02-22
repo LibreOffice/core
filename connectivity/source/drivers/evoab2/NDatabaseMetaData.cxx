@@ -1069,7 +1069,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
+    rtl::Reference<ODatabaseMetaDataResultSet> pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
 
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
