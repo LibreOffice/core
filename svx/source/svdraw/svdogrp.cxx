@@ -35,10 +35,10 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/canvastools.hxx>
 
-DiagramHelper::DiagramHelper() {}
-DiagramHelper::~DiagramHelper() {}
+IDiagramHelper::IDiagramHelper() {}
+IDiagramHelper::~IDiagramHelper() {}
 
-void DiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
+void IDiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)
 {
     rTarget.mp_DiagramHelper.reset(this);
 }
@@ -203,6 +203,38 @@ void SdrObjGroup::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
 SdrObjList* SdrObjGroup::GetSubList() const
 {
     return const_cast< SdrObjGroup* >(this);
+}
+
+bool containsOOXData(const css::uno::Any& rVal)
+{
+    const css::uno::Sequence<css::beans::PropertyValue>& propList(rVal.get< css::uno::Sequence<css::beans::PropertyValue> >());
+    for (const auto& rProp : std::as_const(propList))
+    {
+        if(rProp.Name.startsWith("OOX"))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void SdrObjGroup::SetGrabBagItem(const css::uno::Any& rVal)
+{
+    // detect if the intention is to disable Diagram functionality
+    if(isDiagram() && !containsOOXData(rVal))
+    {
+        css::uno::Any aOld;
+        GetGrabBagItem(aOld);
+
+        if(containsOOXData(aOld))
+        {
+            mp_DiagramHelper.reset();
+        }
+    }
+
+    // call parent
+    SdrObject::SetGrabBagItem(rVal);
 }
 
 const tools::Rectangle& SdrObjGroup::GetCurrentBoundRect() const

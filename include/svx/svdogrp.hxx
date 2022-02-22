@@ -30,16 +30,29 @@ class SdrObjGroup;
 
 // Helper class to allow administer advanced Diagram related
 // data and functionality
-class SVXCORE_DLLPUBLIC DiagramHelper
+class SVXCORE_DLLPUBLIC IDiagramHelper
 {
 protected:
     void anchorToSdrObjGroup(SdrObjGroup& rTarget);
 
 public:
-    DiagramHelper();
-    virtual ~DiagramHelper();
+    IDiagramHelper();
+    virtual ~IDiagramHelper();
 
+    // re-create XShapes
     virtual void reLayout() = 0;
+
+    // get text representation of data tree
+    virtual OUString getString() const = 0;
+
+    // get children of provided data node
+    // use empty string for top-level nodes
+    // returns vector of (id, text)
+    virtual std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const = 0;
+
+    // add/remove new top-level node to data model, returns its id
+    virtual OUString addNode(const OUString& rText) = 0;
+    virtual bool removeNode(const OUString& rNodeId) = 0;
 };
 
 //   SdrObjGroup
@@ -54,12 +67,12 @@ private:
 
     // Allow *only* DiagramHelper itself to set this internal reference to
     // tightly control usage
-    friend class DiagramHelper;
-    std::unique_ptr<DiagramHelper> mp_DiagramHelper;
+    friend class IDiagramHelper;
+    std::shared_ptr<IDiagramHelper> mp_DiagramHelper;
 
 public:
     bool isDiagram() const { return bool(mp_DiagramHelper); }
-    DiagramHelper* getDiagramHelper() { return mp_DiagramHelper.get(); }
+    const std::shared_ptr<IDiagramHelper>& getDiagramHelper() { return mp_DiagramHelper; }
 
 private:
     // protected destructor - due to final, make private
@@ -87,6 +100,7 @@ public:
     virtual void handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage) override;
 
     virtual SdrObjList* GetSubList() const override;
+    virtual void SetGrabBagItem(const css::uno::Any& rVal) override;
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetSnapRect() const override;

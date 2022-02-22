@@ -2865,29 +2865,6 @@ bool DrawingML::IsGroupShape( const Reference< XShape >& rXShape )
     return bRet;
 }
 
-bool DrawingML::IsDiagram(const Reference<XShape>& rXShape)
-{
-    uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY);
-    if (!xPropSet.is())
-        return false;
-
-    // if the shape doesn't have the InteropGrabBag property, it's not a diagram
-    uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
-    OUString aName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
-    if (!xPropSetInfo->hasPropertyByName(aName))
-        return false;
-
-    uno::Sequence<beans::PropertyValue> propList;
-    xPropSet->getPropertyValue(aName) >>= propList;
-    return std::any_of(std::cbegin(propList), std::cend(propList),
-        [](const beans::PropertyValue& rProp) {
-            // if we find any of the diagram components, it's a diagram
-            OUString propName = rProp.Name;
-            return propName == "OOXData" || propName == "OOXLayout" || propName == "OOXStyle"
-                || propName == "OOXColor" || propName == "OOXDrawing";
-        });
-}
-
 sal_Int32 DrawingML::getBulletMarginIndentation (const Reference< XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName)
 {
     if (nLevel < 0 || !GetProperty(rXPropSet, "NumberingRules"))

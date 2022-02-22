@@ -100,6 +100,9 @@ public:
     /** Has to be implemented by each filter, returns the current theme. */
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const = 0;
 
+    /** May be implemented by filters which handle Diagrams, default returns empty ptr */
+    virtual std::shared_ptr<::oox::drawingml::Theme> getCurrentThemePtr() const;
+
     /** Has to be implemented by each filter to return the collection of VML shapes. */
     virtual ::oox::vml::Drawing* getVmlDrawing() = 0;
 

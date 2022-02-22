@@ -338,7 +338,6 @@ public:
                             const sax_fastparser::FSHelperPtr& pDrawing);
 
     static bool IsGroupShape( const css::uno::Reference< css::drawing::XShape >& rXShape );
-    static bool IsDiagram(const css::uno::Reference<css::drawing::XShape>& rXShape);
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
 
     static void ResetCounters();
