@@ -273,6 +273,7 @@ bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
         aplist.push_back(spNode.release());
         spNode.reset( new HWPPara );
     }
+    pfailedlist.push_back(std::move(spNode));
 
     return true;
 }
