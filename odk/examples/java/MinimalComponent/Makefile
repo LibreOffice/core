@@ -79,7 +79,6 @@ COMP_CLASSFILES = $(patsubst %.java,$(COMP_CLASS_OUT)/%.class,$(COMP_JAVAFILES))
 
 GEN_CLASSFILES = $(patsubst %.idl,$(SAMPLE_CLASS_OUT)/$(PACKAGE)/%.class,$(IDLFILES))
 GEN_TYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
-GEN_URDFILES = $(patsubst %.idl,$(SAMPLE_GEN_OUT)/%.urd,$(IDLFILES))
 
 # the generated types are necessary for the component and the application jar
 GEN_CLASSFILENAMES = $(subst $(SAMPLE_CLASS_OUT)/,,$(GEN_CLASSFILES))
@@ -101,14 +100,10 @@ $(COMP_GEN_OUT)/%.Manifest :
 	@echo UNO-Type-Path: $(basename $*).uno.jar> $@
 	@echo RegistrationClassName: $(basename $*)>> $@
 
-$(SAMPLE_GEN_OUT)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -C -I. -I$(IDL_DIR) -O$(SAMPLE_GEN_OUT) $<
-
-$(COMP_GEN_OUT)/%.rdb : $(GEN_URDFILES)
+$(COMP_GEN_OUT)/%.rdb : $(IDLFILES)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GEN_URDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) $< $@
 
 $(GEN_CLASSFILES) : $(COMP_RDB)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
@@ -161,10 +156,10 @@ $(COMP_GEN_OUT)/%/manifest.xml :
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_NAME).components
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) $(COMP_UNOPKG_MANIFEST) $(COMP_NAME).components description.xml
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(SDK_ZIP) $@ $(COMP_NAME).components
+	$(SDK_ZIP) $@ $(COMP_NAME).components description.xml
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) $(COMP_RDB_NAME)
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_JAR_NAME)
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml

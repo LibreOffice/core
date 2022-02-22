@@ -65,8 +65,6 @@ COMP_REGISTERFLAG=$(COMP_GEN_OUT)$(PS)java_$(COMP_NAME)_register_component.flag
 IDLFILES = InstanceInspector.idl \
 	XInstanceInspector.idl
 
-# normally the idl file should be stored in a directory tree fitting the
-# module structure, for the example we know the module structure
 PACKAGE = org/openoffice
 
 COMP_JAVAFILES = XDialogProvider.java XTreeControlProvider.java XTreePathProvider.java MethodParametersDialog.java HideableMutableTreeNode.java HideableTreeModel.java Introspector.java XUnoNode.java SwingUnoNode.java UnoNode.java XUnoMethodNode.java SwingUnoMethodNode.java UnoMethodNode.java XUnoPropertyNode.java SwingUnoPropertyNode.java UnoPropertyNode.java XUnoFacetteNode.java SwingUnoFacetteNode.java TDocSupplier.java UnoTreeRenderer.java InspectorAddon.java XLanguageSourceCodeGenerator.java SourceCodeGenerator.java InspectorPane.java SwingDialogProvider.java SwingTreeControlProvider.java SwingTreePathProvider.java Inspector.java 
@@ -74,7 +72,6 @@ COMP_CLASSFILES = $(patsubst %.java,$(COMP_CLASS_OUT)/%.class,$(COMP_JAVAFILES))
 
 GEN_CLASSFILES = $(patsubst %.idl,$(SAMPLE_CLASS_OUT)/$(PACKAGE)/%.class,$(IDLFILES))
 GEN_TYPELIST = $(subst /,.,$(patsubst %.idl,-T$(PACKAGE)/% ,$(IDLFILES)))
-GEN_URDFILES = $(patsubst %.idl,$(SAMPLE_GEN_OUT)/%.urd,$(IDLFILES))
 
 # the generated types are necessary for the component jar
 GEN_CLASSFILENAMES = $(subst $(SAMPLE_CLASS_OUT)/,,$(GEN_CLASSFILES))
@@ -101,16 +98,11 @@ $(COMP_GEN_OUT)/%.Manifest :
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	@echo RegistrationClassName: $(basename $(basename $(@F)))> $@
 
-# rule for compiling the IDL files
-$(SAMPLE_GEN_OUT)/%.urd : %.idl
-	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(IDLC) -C -I. -I$(IDL_DIR) -O$(SAMPLE_GEN_OUT) $<
-
 # rule for creating the component rdb file
-$(COMP_GEN_OUT)/%.rdb : $(GEN_URDFILES)
+$(COMP_GEN_OUT)/%.rdb : $(patsubst %,$(PACKAGE)/%,$(IDLFILES))
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	$(REGMERGE) $@ /UCR $(GEN_URDFILES)
+	$(UNOIDLWRITE) $(URE_TYPES) $(OFFICE_TYPES) . $@
 
 # rule for creating IDL dependent class files
 $(GEN_CLASSFILES) : $(COMP_RDB)
@@ -152,13 +144,13 @@ $(COMP_GEN_OUT)/%/manifest.xml :
 	@echo $(OSEP)/manifest:manifest$(CSEP) >> $@
 
 # rule for component package file
-$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) Addons.xcu ProtocolHandler.xcu  ObjectInspector.xcu ObjectInspector.xcs $(COMP_UNOPKG_MANIFEST)
+$(COMP_PACKAGE) : $(COMP_RDB) $(COMP_JAR) Addons.xcu ProtocolHandler.xcu  ObjectInspector.xcu ObjectInspector.xcs description.xml $(COMP_UNOPKG_MANIFEST)
 	-$(DEL) $(subst \\,\,$(subst /,$(PS),$@))
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) ../../../bin/$(@F) $(COMP_RDB_NAME)
 
 	cd $(subst /,$(PS),$(SAMPLE_CLASS_OUT)) && $(SDK_ZIP) -u ../../bin/$(@F) $(COMP_JAR_NAME)
-	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu ObjectInspector.xcu ObjectInspector.xcs
+	$(SDK_ZIP) -u $@ Addons.xcu ProtocolHandler.xcu ObjectInspector.xcu ObjectInspector.xcs description.xml
 	cd $(subst /,$(PS),$(COMP_GEN_OUT)) && $(SDK_ZIP) -u ../../../bin/$(@F) META-INF/manifest.xml
 
 $(COMP_REGISTERFLAG) : $(COMP_PACKAGE)
