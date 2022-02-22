@@ -1092,28 +1092,15 @@ void new_WithLength( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
 /* ----------------------------------------------------------------------- */
 
 template <typename IMPL_RTL_STRINGDATA>
+void newFromStr_WithLength(IMPL_RTL_STRINGDATA**, const STRCODE<IMPL_RTL_STRINGDATA>*, sal_Int32);
+
+template <typename IMPL_RTL_STRINGDATA>
 void newFromString                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                     const IMPL_RTL_STRINGDATA* pStr )
 {
-    assert(ppThis);
     assert(pStr);
-    IMPL_RTL_STRINGDATA* pOrg;
 
-    if ( !pStr->length )
-    {
-        new_( ppThis );
-        return;
-    }
-
-    pOrg = *ppThis;
-    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( pStr->length );
-    OSL_ASSERT(*ppThis != nullptr);
-    Copy( (*ppThis)->buffer, pStr->buffer, pStr->length );
-    RTL_LOG_STRING_NEW( *ppThis );
-
-    /* must be done last, if pStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
+    newFromStr_WithLength(ppThis, pStr->buffer, pStr->length);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1122,10 +1109,6 @@ template <typename IMPL_RTL_STRINGDATA>
 void newFromStr                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                  const STRCODE<IMPL_RTL_STRINGDATA>* pCharStr )
 {
-    assert(ppThis);
-    IMPL_RTL_STRINGDATA*    pOrg;
-    sal_Int32               nLen;
-
 #if OSL_DEBUG_LEVEL > 0
     //TODO: For now, only abort in non-production debug builds; once all places that rely on the
     // undocumented newFromStr behavior of treating a null pCharStr like an empty string have been
@@ -1135,28 +1118,7 @@ void newFromStr                                ( IMPL_RTL_STRINGDATA** ppThis,
     }
 #endif
 
-    if ( pCharStr )
-    {
-        nLen = getLength( pCharStr );
-    }
-    else
-        nLen = 0;
-
-    if ( !nLen )
-    {
-        new_( ppThis );
-        return;
-    }
-
-    pOrg = *ppThis;
-    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
-    OSL_ASSERT(*ppThis != nullptr);
-    Copy( (*ppThis)->buffer, pCharStr, nLen );
-    RTL_LOG_STRING_NEW( *ppThis );
-
-    /* must be done last, if pCharStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
+    newFromStr_WithLength(ppThis, pCharStr, pCharStr ? getLength(pCharStr) : 0);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1167,9 +1129,6 @@ void newFromStr_WithLength                                ( IMPL_RTL_STRINGDATA*
                                                             sal_Int32 nLen )
 {
     assert(ppThis);
-    assert(pCharStr != nullptr || nLen == 0);
-    assert(nLen >= 0);
-    IMPL_RTL_STRINGDATA* pOrg;
 
     if ( nLen == 0 )
     {
@@ -1177,7 +1136,10 @@ void newFromStr_WithLength                                ( IMPL_RTL_STRINGDATA*
         return;
     }
 
-    pOrg = *ppThis;
+    assert(nLen > 0);
+    assert(pCharStr);
+
+    IMPL_RTL_STRINGDATA* pOrg = *ppThis;
     *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
     OSL_ASSERT(*ppThis != nullptr);
     Copy( (*ppThis)->buffer, pCharStr, nLen );
