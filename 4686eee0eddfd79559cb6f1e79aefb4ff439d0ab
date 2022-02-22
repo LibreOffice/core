@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88aa5474_6a7d9c77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-02-22T11:57:22Z",
+      "side": 1,
+      "message": "$(call gb_Helper_optional,DRAGONBOX,dragonbox) will remove it from build-side, since it was not added to PERMITTED_BUILD_TARGETS, causing a dependency mixup.",
+      "revId": "4686eee0eddfd79559cb6f1e79aefb4ff439d0ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
