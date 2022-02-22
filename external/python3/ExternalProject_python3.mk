@@ -44,6 +44,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			/maxcpucount \
 			/p:PlatformToolset=$(VCTOOLSET) /p:VisualStudioVersion=$(VCVER) /ToolsVersion:Current \
 			$(if $(filter 10,$(WINDOWS_SDK_VERSION)),/p:WindowsTargetPlatformVersion=$(UCRTVERSION)) \
+		$(foreach i,$(python3_EXTENSION_MODULES), \
+			&& { test -e ../$i || { printf 'Error: missing %s\n' $i; false; } }) \
 	,PCBuild)
 	$(call gb_Trace_EndRange,python3,EXTERNAL)
 
@@ -123,6 +125,8 @@ $(call gb_ExternalProject_get_state_target,python3,build) :
 			$(if $(filter MACOSX,$(OS)),DESTDIR=$(EXTERNAL_WORKDIR)/python-inst install) \
 			$(if $(SYSTEM_ZLIB),,ZLIB_INCDIR=$(WORKDIR)/UnpackedTarball/zlib) \
 		&& ln -s build/lib.* LO_lib \
+		$(foreach i,$(python3_EXTENSION_MODULES), \
+			&& { test -e $i || { printf 'Error: missing %s\n' $i; false; } }) \
 	)
 	$(call gb_Trace_EndRange,python3,EXTERNAL)
 
