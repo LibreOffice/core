@@ -12,6 +12,7 @@
 
 #include <sfx2/dllapi.h>
 #include <rtl/ustring.hxx>
+#include <vcl/EnumContext.hxx>
 #include <map>
 
 namespace com::sun::star::frame
@@ -71,6 +72,8 @@ private:
 
     static std::map<const SfxViewShell*, std::shared_ptr<WeldedTabbedNotebookbar>>
         m_pNotebookBarWeldedWrapper;
+
+    static void ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp);
 
     DECL_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
 };
