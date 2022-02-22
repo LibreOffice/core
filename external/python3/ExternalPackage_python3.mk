@@ -25,7 +25,7 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYT
 ifeq ($(MSVC_USE_DEBUG_RUNTIME),)
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python$(PYTHON_VERSION_MAJOR).dll,PCbuild/$(python_arch_subdir)python$(PYTHON_VERSION_MAJOR).dll))
 endif
-$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+python3_EXTENSION_MODULES= \
 	PCbuild/$(python_arch_subdir)_asyncio$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_ctypes$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)_decimal$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
@@ -40,6 +40,9 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	PCbuild/$(python_arch_subdir)select$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)unicodedata$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
 	PCbuild/$(python_arch_subdir)winsound$(if $(MSVC_USE_DEBUG_RUNTIME),_d).pyd \
+
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib,\
+	$(python3_EXTENSION_MODULES) \
 ))
 else
 $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin,python))
@@ -49,14 +52,14 @@ $(eval $(call gb_ExternalPackage_add_file,python3,$(LIBO_BIN_FOLDER)/python.bin-
 
 # Unfortunately the python build system does not allow to explicitly enable or
 # disable these, it just tries to build them and then prints which did not
-# build successfully without stopping; so the build will break on delivering if
-# one of these failed to build.
+# build successfully without stopping; that's why ExternalProject_python3 explicitly checks for the
+# existence of all the files on the python3_EXTENSION_MODULES list at the end of the build.
 # Obviously this list should not contain stuff with external dependencies
 # that may not be available on baseline systems.
 
 ifneq ($(OS),AIX)
 python3_EXTENSION_MODULE_SUFFIX=cpython-$(PYTHON_VERSION_MAJOR).$(PYTHON_VERSION_MINOR)$(if $(ENABLE_DBGUTIL),d)
-$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
+python3_EXTENSION_MODULES= \
 	LO_lib/array.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_asyncio.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/audioop.$(python3_EXTENSION_MODULE_SUFFIX).so \
@@ -121,6 +124,9 @@ $(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-cor
 	LO_lib/_xxsubinterpreters.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/_xxtestfuzz.$(python3_EXTENSION_MODULE_SUFFIX).so \
 	LO_lib/zlib.$(python3_EXTENSION_MODULE_SUFFIX).so \
+
+$(eval $(call gb_ExternalPackage_add_files,python3,$(LIBO_BIN_FOLDER)/python-core-$(PYTHON_VERSION)/lib/lib-dynload,\
+	$(python3_EXTENSION_MODULES) \
 ))
 endif
 endif
