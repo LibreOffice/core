@@ -1707,6 +1707,33 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTab)
     assertXPathContent(pXmlDoc, "//reqif-xhtml:p[3]", u"thi \t rd");
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
+{
+    // Given a document with leading tabs:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("\t test");
+
+    // When exporting to plain HTML, using LeadingTabWidth=2:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("LeadingTabWidth", static_cast<sal_Int32>(2)),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure that leading tabs are replaced with 2 nbsps:
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: <newline><nbsp><nbsp><space>test
+    // - Actual  : <newline><tab><space>test
+    // i.e. the leading tab was not replaced by 2 nbsps.
+    assertXPathContent(pHtmlDoc, "/html/body/p", SAL_NEWLINE_STRING u"\xa0\xa0 test");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
