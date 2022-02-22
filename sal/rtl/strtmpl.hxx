@@ -416,8 +416,7 @@ sal_Int32 indexOfStr_WithLength                             ( const IMPL_RTL_STR
     // take advantage of builtin optimisations
     using my_string_view = std::basic_string_view<IMPL_RTL_STRCODE>;
     my_string_view v(pStr, nStrLen);
-    my_string_view needle(pSubStr, nSubLen);
-    typename my_string_view::size_type idx = v.find(needle);
+    auto idx = nSubLen == 1 ? v.find(*pSubStr) : v.find(pSubStr, 0, nSubLen);
     return idx == my_string_view::npos ? -1 : idx;
 }
 
@@ -1543,65 +1542,17 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
 
 /* ----------------------------------------------------------------------- */
 
+template <class S, typename CharTypeFrom, typename CharTypeTo>
+void newReplaceAllFromIndex(S**, S*, CharTypeFrom const*, sal_Int32, CharTypeTo const*, sal_Int32,
+                            sal_Int32);
+
 template <typename IMPL_RTL_STRINGDATA>
 void newReplace                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                  IMPL_RTL_STRINGDATA* pStr,
                                                  STRCODE<IMPL_RTL_STRINGDATA> cOld,
                                                  STRCODE<IMPL_RTL_STRINGDATA> cNew )
 {
-    assert(ppThis);
-    assert(pStr);
-    IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    bool                    bChanged    = false;
-    sal_Int32               nLen        = pStr->length;
-    const auto*             pCharStr    = pStr->buffer;
-
-    while ( nLen > 0 )
-    {
-        if ( *pCharStr == cOld )
-        {
-            /* Copy String */
-            auto* pNewCharStr = NewCopy( ppThis, pStr, pCharStr-pStr->buffer );
-
-            /* replace/copy rest of the string */
-            if ( pNewCharStr )
-            {
-                *pNewCharStr = cNew;
-                pNewCharStr++;
-                pCharStr++;
-                nLen--;
-
-                while ( nLen > 0 )
-                {
-                    if ( *pCharStr == cOld )
-                        *pNewCharStr = cNew;
-                    else
-                        *pNewCharStr = *pCharStr;
-
-                    pNewCharStr++;
-                    pCharStr++;
-                    nLen--;
-                }
-            }
-
-            bChanged = true;
-            break;
-        }
-
-        pCharStr++;
-        nLen--;
-    }
-
-    if ( !bChanged )
-    {
-        *ppThis = pStr;
-        acquire( pStr );
-    }
-
-    RTL_LOG_STRING_NEW( *ppThis );
-    /* must be done last, if pStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
+    return newReplaceAllFromIndex(ppThis, pStr, &cOld, 1, &cNew, 1, 0);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1877,6 +1828,8 @@ void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fr
     }
     else
         assign(s, s1);
+
+    RTL_LOG_STRING_NEW(*s);
 }
 
 }

@@ -89,7 +89,7 @@ sal_Int32 rtl_ustr_indexOfAscii_WithLength(
                 break;
             }
             /* now it is worth trying a full match */
-            if (rtl_ustr_asciil_reverseEquals_WithLength(cursor, subStr, subLen))
+            if (subLen == 1 || rtl_ustr_asciil_reverseEquals_WithLength(cursor, subStr, subLen))
             {
                 return cursor - str;
             }
