@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "551ea484_ba8583a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-22T11:15:39Z",
+      "side": 1,
+      "message": "Un-CC\u0027ing myself, happy to review at any time.",
+      "revId": "1da3a175be0af873f390dc96c9816603870f08da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
