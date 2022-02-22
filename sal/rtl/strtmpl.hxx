@@ -130,13 +130,8 @@ sal_Int32 shortenedCompare_WithLength                             ( const IMPL_R
                                                                     sal_Int32 nStr2Len,
                                                                     sal_Int32 nShortenedLength )
 {
-    assert(nStr1Len >= 0);
-    assert(nStr2Len >= 0);
-    assert(nShortenedLength >= 0);
-    // take advantage of builtin optimisations
-    std::basic_string_view<IMPL_RTL_STRCODE> aView1(pStr1, std::min(nStr1Len, nShortenedLength));
-    std::basic_string_view<IMPL_RTL_STRCODE> aView2(pStr2, std::min(nStr2Len, nShortenedLength));
-    return aView1.compare(aView2);
+    return compare_WithLength(pStr1, std::min(nStr1Len, nShortenedLength),
+                              pStr2, std::min(nStr2Len, nShortenedLength));
 }
 
 /* ----------------------------------------------------------------------- */
@@ -225,27 +220,8 @@ sal_Int32 shortenedCompareIgnoreAsciiCase_WithLength                            
                                                                                    sal_Int32 nStr2Len,
                                                                                    sal_Int32 nShortenedLength )
 {
-    assert(nStr1Len >= 0);
-    assert(nStr2Len >= 0);
-    assert(nShortenedLength >= 0);
-    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
-    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
-    while ( (nShortenedLength > 0) &&
-            (pStr1 < pStr1End) && (pStr2 < pStr2End) )
-    {
-        sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
-            IMPL_RTL_USTRCODE(*pStr1), IMPL_RTL_USTRCODE(*pStr2));
-        if ( nRet != 0 )
-            return nRet;
-
-        nShortenedLength--;
-        pStr1++;
-        pStr2++;
-    }
-
-    if ( nShortenedLength <= 0 )
-        return 0;
-    return nStr1Len - nStr2Len;
+    return compareIgnoreAsciiCase_WithLength(pStr1, std::min(nStr1Len, nShortenedLength),
+                                             pStr2, std::min(nStr2Len, nShortenedLength));
 }
 
 /* ----------------------------------------------------------------------- */
