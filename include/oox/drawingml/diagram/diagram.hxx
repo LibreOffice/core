@@ -54,7 +54,7 @@ void loadDiagram(ShapePtr const& pShape,
                  const css::uno::Reference<css::xml::dom::XDocument>& colorDom,
                  core::XmlFilterBase& rFilter);
 
-OOX_DLLPUBLIC void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter);
+// OOX_DLLPUBLIC void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter);
 
 }
 

@@ -62,6 +62,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/unoapi.hxx>
+#include <svx/svdogrp.hxx>
 #include <sdmod.hxx>
 #include <sdpage.hxx>
 
@@ -1646,7 +1647,10 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
         if (GetShapeByIndex(GetCurrentGroupIndex(), true))
         {
             SAL_INFO("sd.eppt", "mType: " << mType);
-            if (DrawingML::IsDiagram(mXShape))
+            const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(mXShape)));
+            const bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
+
+            if (bIsDiagram)
                 WriteDiagram(pFS, aDML, mXShape, mnDiagramId++);
             else
                 aDML.WriteShape(mXShape);

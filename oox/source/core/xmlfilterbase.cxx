@@ -213,6 +213,12 @@ XmlFilterBase::~XmlFilterBase()
     mxImpl->maFastParser.clearDocumentHandler();
 }
 
+std::shared_ptr<::oox::drawingml::Theme> XmlFilterBase::getCurrentThemePtr() const
+{
+    // default returns empty ptr
+    return std::shared_ptr<::oox::drawingml::Theme>();
+}
+
 void XmlFilterBase::checkDocumentProperties(const Reference<XDocumentProperties>& xDocProps)
 {
     mbMSO2007 = mbMSO = false;

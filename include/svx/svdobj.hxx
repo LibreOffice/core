@@ -27,7 +27,6 @@
 #include <svl/poolitem.hxx>
 #include <svl/typedwhich.hxx>
 #include <tools/degree.hxx>
-#include <svx/DiagramDataInterface.hxx>
 #include <svx/svdtypes.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/svxdllapi.h>
@@ -333,9 +332,6 @@ public:
     const double* GetRelativeHeight() const;
     sal_Int16 GetRelativeHeightRelation() const;
 
-    void SetDiagramData(std::shared_ptr<DiagramDataInterface> pDiagramData);
-    const std::shared_ptr<DiagramDataInterface> & GetDiagramData() const;
-
     /// @param bNotMyself = true: set only ObjList to dirty, don't mark this object as dirty.
     ///
     /// This is needed for instance for NbcMove, because usually one moves SnapRect and aOutRect
@@ -401,7 +397,7 @@ public:
     // GrabBagItem for interim interop purposes
     void GetGrabBagItem(css::uno::Any& rVal) const;
 
-    void SetGrabBagItem(const css::uno::Any& rVal);
+    virtual void SetGrabBagItem(const css::uno::Any& rVal);
 
     // Return the position in the navigation order for the called object.
     // Note that this method may update the navigation position of the
