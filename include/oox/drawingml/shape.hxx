@@ -57,7 +57,7 @@ namespace oox::vml {
     struct OleObjectInfo;
 }
 
-class DiagramHelper;
+class IDiagramHelper;
 
 namespace oox::drawingml {
 
@@ -81,9 +81,6 @@ struct ShapeStyleRef
 };
 
 typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
-
-class DiagramData;
-typedef std::shared_ptr<DiagramData> DiagramDataPtr;
 
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
@@ -217,7 +214,6 @@ public:
     const css::uno::Sequence<css::beans::PropertyValue> &
                         getDiagramDoms() const { return maDiagramDoms; }
     void                setDiagramDoms(const css::uno::Sequence<css::beans::PropertyValue>& rDiagramDoms) { maDiagramDoms = rDiagramDoms; }
-    void                setDiagramData(const DiagramDataPtr& pDiagramData) { mpDiagramData = pDiagramData; }
     css::uno::Sequence< css::uno::Sequence< css::uno::Any > >resolveRelationshipsOfTypeFromOfficeDoc(
                                                                           core::XmlFilterBase& rFilter, const OUString& sFragment, std::u16string_view sType );
     void                setLinkedTxbxAttributes(const LinkedTxbxAttr& rhs){ maLinkedTxbxAttr = rhs; };
@@ -379,7 +375,6 @@ private:
     bool                            mbHasLinkedTxbx; // this text box has linked text box ?
 
     css::uno::Sequence<css::beans::PropertyValue> maDiagramDoms;
-    DiagramDataPtr mpDiagramData;
 
     /// Z-Order.
     sal_Int32 mnZOrder = 0;
@@ -404,7 +399,7 @@ private:
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constuctor func does not allow that
-    DiagramHelper* mpDiagramHelper;
+    IDiagramHelper* mpDiagramHelper;
 };
 
 }

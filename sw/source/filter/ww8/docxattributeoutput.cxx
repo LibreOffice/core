@@ -98,6 +98,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/unobrushitemhelper.hxx>
+#include <svx/svdogrp.hxx>
 #include <svl/grabbagitem.hxx>
 #include <sfx2/sfxbasemodel.hxx>
 #include <tools/date.hxx>
@@ -6426,10 +6427,10 @@ void DocxAttributeOutput::WriteFlyFrame(const ww8::Frame& rFrame)
                 const SdrObject* pSdrObj = rFrame.GetFrameFormat().FindRealSdrObject();
                 if ( pSdrObj )
                 {
-                    uno::Reference<drawing::XShape> xShape(
-                        const_cast<SdrObject*>(pSdrObj)->getUnoShape(), uno::UNO_QUERY);
+                    const SdrObjGroup* pDiagramCandidate(dynamic_cast<const SdrObjGroup*>(pSdrObj));
+                    const bool bIsDiagram(nullptr != pDiagramCandidate && pDiagramCandidate->isDiagram());
 
-                    if (xShape.is() && oox::drawingml::DrawingML::IsDiagram(xShape))
+                    if (bIsDiagram)
                     {
                         if ( !m_pPostponedDiagrams )
                         {

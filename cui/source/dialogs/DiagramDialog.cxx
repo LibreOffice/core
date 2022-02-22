@@ -10,19 +10,20 @@
 #include <DiagramDialog.hxx>
 
 #include <comphelper/dispatchcommand.hxx>
-#include <svx/DiagramDataInterface.hxx>
+#include <svx/svdogrp.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
-DiagramDialog::DiagramDialog(weld::Window* pWindow,
-                             std::shared_ptr<DiagramDataInterface> pDiagramData)
-    : GenericDialogController(pWindow, "cui/ui/diagramdialog.ui", "DiagramDialog")
-    , mpDiagramData(pDiagramData)
-    , mpBtnOk(m_xBuilder->weld_button("btnOk"))
-    , mpBtnCancel(m_xBuilder->weld_button("btnCancel"))
-    , mpBtnAdd(m_xBuilder->weld_button("btnAdd"))
-    , mpBtnRemove(m_xBuilder->weld_button("btnRemove"))
-    , mpTreeDiagram(m_xBuilder->weld_tree_view("treeDiagram"))
-    , mpTextAdd(m_xBuilder->weld_text_view("textAdd"))
+DiagramDialog::DiagramDialog(
+    weld::Window* pWindow,
+    const std::shared_ptr<IDiagramHelper>& pDiagramHelper)
+: GenericDialogController(pWindow, "cui/ui/diagramdialog.ui", "DiagramDialog")
+, mpDiagramHelper(pDiagramHelper)
+, mpBtnOk(m_xBuilder->weld_button("btnOk"))
+, mpBtnCancel(m_xBuilder->weld_button("btnCancel"))
+, mpBtnAdd(m_xBuilder->weld_button("btnAdd"))
+, mpBtnRemove(m_xBuilder->weld_button("btnRemove"))
+, mpTreeDiagram(m_xBuilder->weld_tree_view("treeDiagram"))
+, mpTextAdd(m_xBuilder->weld_text_view("textAdd"))
 {
     mpBtnAdd->connect_clicked(LINK(this, DiagramDialog, OnAddClick));
     mpBtnRemove->connect_clicked(LINK(this, DiagramDialog, OnRemoveClick));
@@ -40,19 +41,13 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
 IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
 {
     OUString sText = mpTextAdd->get_text();
-    static bool bAdvancedSmartArt(nullptr != getenv("SAL_ENABLE_ADVANCED_SMART_ART"));
 
     if (!sText.isEmpty())
     {
-        OUString sNodeId = mpDiagramData->addNode(sText);
+        OUString sNodeId = mpDiagramHelper->addNode(sText);
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
         mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
         mpTreeDiagram->select(*pEntry);
-        comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
-    }
-    else if (bAdvancedSmartArt)
-    {
-        // For test purposes re-layout without change
         comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
     }
 }
@@ -62,7 +57,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
     std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
     if (mpTreeDiagram->get_selected(pEntry.get()))
     {
-        if (mpDiagramData->removeNode(mpTreeDiagram->get_id(*pEntry)))
+        if (mpDiagramHelper->removeNode(mpTreeDiagram->get_id(*pEntry)))
         {
             mpTreeDiagram->remove(*pEntry);
             comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
@@ -72,7 +67,7 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
 
 void DiagramDialog::populateTree(const weld::TreeIter* pParent, const OUString& rParentId)
 {
-    auto aItems = mpDiagramData->getChildren(rParentId);
+    auto aItems = mpDiagramHelper->getChildren(rParentId);
     for (auto& aItem : aItems)
     {
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());

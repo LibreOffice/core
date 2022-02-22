@@ -361,7 +361,6 @@ void loadDiagram( ShapePtr const & pShape,
 
     // diagram loaded. now lump together & attach to shape
     pDiagram->addTo(pShape);
-    pShape->setDiagramData(pData);
     pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
 
     // We need the shared_ptr to oox::Theme here, so do something direct when
@@ -416,52 +415,6 @@ void loadDiagram(ShapePtr const& pShape,
 
     // diagram loaded. now lump together & attach to shape
     pDiagram->addTo(pShape);
-}
-
-void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter)
-{
-    DiagramDataPtr pDiagramData = std::dynamic_pointer_cast<DiagramData>(pObj->GetDiagramData());
-    if (!pDiagramData)
-        return;
-
-    pObj->getChildrenOfSdrObject()->ClearSdrObjList();
-
-    uno::Reference<css::drawing::XShape> xShape(pObj->getUnoShape());
-    uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY_THROW);
-
-    uno::Reference<xml::dom::XDocument> layoutDom;
-    uno::Reference<xml::dom::XDocument> styleDom;
-    uno::Reference<xml::dom::XDocument> colorDom;
-
-    // retrieve the doms from the GrabBag
-    uno::Sequence<beans::PropertyValue> propList;
-    xPropSet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= propList;
-    for (const auto& rProp : std::as_const(propList))
-    {
-        OUString propName = rProp.Name;
-        if (propName == "OOXLayout")
-            rProp.Value >>= layoutDom;
-        else if (propName == "OOXStyle")
-            rProp.Value >>= styleDom;
-        else if (propName == "OOXColor")
-            rProp.Value >>= colorDom;
-    }
-
-    ShapePtr pShape = std::make_shared<Shape>();
-    pShape->setDiagramType();
-    pShape->setSize(
-        awt::Size(o3tl::convert(xShape->getSize().Width, o3tl::Length::mm100, o3tl::Length::emu),
-                  o3tl::convert(xShape->getSize().Height, o3tl::Length::mm100, o3tl::Length::emu)));
-
-    loadDiagram(pShape, pDiagramData, layoutDom, styleDom, colorDom, rFilter);
-
-    uno::Reference<drawing::XShapes> xShapes(xShape, uno::UNO_QUERY_THROW);
-    basegfx::B2DHomMatrix aTransformation;
-    aTransformation.translate(
-        o3tl::convert(xShape->getPosition().X, o3tl::Length::mm100, o3tl::Length::emu),
-        o3tl::convert(xShape->getPosition().Y, o3tl::Length::mm100, o3tl::Length::emu));
-    for (auto const& child : pShape->getChildren())
-        child->addShape(rFilter, rFilter.getCurrentTheme(), xShapes, aTransformation, pShape->getFillProperties());
 }
 
 const oox::drawingml::Color&
