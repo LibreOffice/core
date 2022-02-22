@@ -317,6 +317,7 @@ public:
     void RemoveObjectUser(sdr::ObjectUser& rOldUser);
 
     sdr::contact::ViewContact& GetViewContact() const;
+    sdr::contact::ViewContact* GetViewContactNoCreate() const { return mpViewContact.get(); }
 
     virtual sdr::properties::BaseProperties& GetProperties() const;
 

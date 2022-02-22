@@ -71,7 +71,7 @@ protected:
 
 private:
     /// simple ActionChildInserted forwarder to have it on a central place
-    static void impChildInserted(SdrObject const & rChild);
+    void impChildInserted(SdrObject const & rChild);
 
     // tdf#116879 Clear SdrObjList, no Undo done. Used from destructor, but also
     // from other places. When used from destructor, suppress broadcasts

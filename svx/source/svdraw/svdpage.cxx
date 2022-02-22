@@ -269,12 +269,13 @@ void SdrObjList::SetSdrObjListRectsDirty()
 
 void SdrObjList::impChildInserted(SdrObject const & rChild)
 {
-    sdr::contact::ViewContact* pParent = rChild.GetViewContact().GetParentContact();
-
-    if(pParent)
-    {
-        pParent->ActionChildInserted(rChild.GetViewContact());
-    }
+    SdrObject* pParentSdrObject(getSdrObjectFromSdrObjList());
+    if (!pParentSdrObject)
+        return;
+    sdr::contact::ViewContact* pParentVC = pParentSdrObject->GetViewContactNoCreate();
+    if (!pParentVC)
+        return;
+    pParentVC->ActionChildInserted(rChild.GetViewContact());
 }
 
 void SdrObjList::NbcInsertObject(SdrObject* pObj, size_t nPos)

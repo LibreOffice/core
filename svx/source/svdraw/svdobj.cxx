@@ -264,7 +264,8 @@ sdr::contact::ViewContact& SdrObject::GetViewContact() const
 void SdrObject::ActionChanged() const
 {
     // Do necessary ViewContact actions
-    GetViewContact().ActionChanged();
+    if (mpViewContact)
+        mpViewContact->ActionChanged();
 }
 
 SdrPage* SdrObject::getSdrPageFromSdrObject() const
