@@ -34,6 +34,24 @@
       "parentUuid": "e1c3e8b6_ea5d464d",
       "revId": "7778d9f51bd1f4d086cafe95995406c3157afb89",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0314617d_d4491c48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-22T09:11:21Z",
+      "side": 1,
+      "message": "\u003e Something like\n\u003e \n\u003e   bool isAscii(char c) { return isAscii(static_cast\u003cunsigned char\u003e(c)); }\n\u003e   bool isAscii(signed char c) { return isAscii(static_cast\u003cunsigned char\u003e(c)); }\n\u003e \n\u003e They are well-defined by the standard, and produce correct results, right?\n\nYes, that\u0027s effectively what this Gerrit change added to the (handful of affected) call sites.\n\nOne benefit I see of doing it the way it was done is that we were able to confine the additions to LIBO_INTERNAL_ONLY and at the same time make sure that any potential problematic uses in code that could be compiled as both LIBO_INTERNAL_ONLY and !LIBO_INTERNAL_ONLY (i.e., potential uses in include files that are part of the URE interface) are caught when compiled as LIBO_INTERNAL_ONLY and thus need to be rewritten, instead of silently generating different code for LIBO_INTERNAL_ONLY (where they would now do the \"right thing\") and !LIBO_INTERNAL_ONLY (where they would potentially fire the `assert(isUnicodeCodePoint(code))` at runtime).",
+      "parentUuid": "0dd149b2_26e5140b",
+      "revId": "7778d9f51bd1f4d086cafe95995406c3157afb89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
