@@ -1960,6 +1960,7 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     comphelper::LibreOfficeKit::setPartInInvalidation(true);
 
     ScModelObj* pModelObj = createDoc("two_sheets.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
 
@@ -1976,7 +1977,10 @@ void ScTiledRenderingTest::testSheetChangeInvalidation()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView1.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1310720, 268435456), aView1.m_aInvalidations[0]);
+    const ScSheetLimits& rLimits = pDoc->GetSheetLimits();
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1280 * rLimits.GetMaxColCount(),
+                                          256 * rLimits.GetMaxRowCount()),
+                         aView1.m_aInvalidations[0]);
     CPPUNIT_ASSERT_EQUAL(tools::Rectangle(0, 0, 1000000000, 1000000000), aView1.m_aInvalidations[1]);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView1.m_aInvalidationsParts.size());
     CPPUNIT_ASSERT_EQUAL(pModelObj->getPart(), aView1.m_aInvalidationsParts[0]);
@@ -2284,27 +2288,6 @@ class SheetGeometryData
 
 public:
 
-    SheetGeometryData()
-    {
-        aCols = {
-            // width spans
-            { { STD_COL_WIDTH, MAXCOL } },
-            // hidden spans
-            { { 0,             MAXCOL } },
-            // filtered spans
-            { { 0,             MAXCOL } }
-        };
-
-        aRows = {
-            // height spans
-            { { ScGlobal::nStdRowHeight, MAXROW } },
-            // hidden spans
-            { { 0,                       MAXROW } },
-            // filtered spans
-            { { 0,                       MAXROW } }
-        };
-    }
-
     SheetGeometryData(const SheetDimData& rCols, const SheetDimData& rRows) :
         aCols(rCols), aRows(rRows)
     {}
@@ -2337,6 +2320,7 @@ void ScTiledRenderingTest::testSheetGeometryDataInvariance()
     comphelper::LibreOfficeKit::setActive();
 
     ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
     const SheetGeometryData aSGData(
         // cols
         {
@@ -2344,21 +2328,21 @@ void ScTiledRenderingTest::testSheetGeometryDataInvariance()
             {
                 { STD_COL_WIDTH,   20     },
                 { 2*STD_COL_WIDTH, 26     },
-                { STD_COL_WIDTH,   MAXCOL }
+                { STD_COL_WIDTH,   pDoc->MaxCol() }
             },
 
             // hidden spans
             {
                 { 0, 5      },
                 { 1, 12     },
-                { 0, MAXCOL }
+                { 0, pDoc->MaxCol() }
             },
 
             // filtered spans
             {
                 { 0, 50     },
                 { 1, 59     },
-                { 0, MAXCOL }
+                { 0, pDoc->MaxCol() }
             }
         },
 
@@ -2368,7 +2352,7 @@ void ScTiledRenderingTest::testSheetGeometryDataInvariance()
             {
                 { 300,  50     },
                 { 600,  65     },
-                { 300,  MAXROW }
+                { 300,  pDoc->MaxRow() }
             },
 
             // hidden spans
@@ -2376,19 +2360,17 @@ void ScTiledRenderingTest::testSheetGeometryDataInvariance()
                 { 1, 100    },
                 { 0, 500    },
                 { 1, 578    },
-                { 0, MAXROW }
+                { 0, pDoc->MaxRow() }
             },
 
             // filtered spans
             {
                 { 0, 150    },
                 { 1, 159    },
-                { 0, MAXROW }
+                { 0, pDoc->MaxRow() }
             }
         }
     );
-
-    ScDocument* pDoc = pModelObj->GetDocument();
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2443,6 +2425,28 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
     comphelper::LibreOfficeKit::setActive();
 
     ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    const SheetGeometryData aDefaultSGData(
+        // cols
+        {
+            // width spans
+            { { STD_COL_WIDTH, pDoc->MaxCol() } },
+            // hidden spans
+            { { 0,             pDoc->MaxCol() } },
+            // filtered spans
+            { { 0,             pDoc->MaxCol() } }
+        },
+        // rows
+        {
+            // height spans
+            { { ScGlobal::nStdRowHeight, pDoc->MaxRow() } },
+            // hidden spans
+            { { 0,                       pDoc->MaxRow() } },
+            // filtered spans
+            { { 0,                       pDoc->MaxRow() } }
+        }
+    );
+
     const SheetGeometryData aSGData(
         // cols
         {
@@ -2450,21 +2454,21 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
             {
                 { STD_COL_WIDTH,   20     },
                 { 2*STD_COL_WIDTH, 26     },
-                { STD_COL_WIDTH,   MAXCOL }
+                { STD_COL_WIDTH,   pDoc->MaxCol() }
             },
 
             // hidden spans
             {
                 { 0, 5      },
                 { 1, 12     },
-                { 0, MAXCOL }
+                { 0, pDoc->MaxCol() }
             },
 
             // filtered spans
             {
                 { 0, 50     },
                 { 1, 59     },
-                { 0, MAXCOL }
+                { 0, pDoc->MaxCol() }
             }
         },
 
@@ -2474,7 +2478,7 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
             {
                 { 300,  50     },
                 { 600,  65     },
-                { 300,  MAXROW }
+                { 300,  pDoc->MaxRow() }
             },
 
             // hidden spans
@@ -2482,19 +2486,17 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
                 { 1, 100    },
                 { 0, 500    },
                 { 1, 578    },
-                { 0, MAXROW }
+                { 0, pDoc->MaxRow() }
             },
 
             // filtered spans
             {
                 { 0, 150    },
                 { 1, 159    },
-                { 0, MAXROW }
+                { 0, pDoc->MaxRow() }
             }
         }
     );
-
-    ScDocument* pDoc = pModelObj->GetDocument();
 
     ScViewData* pViewData = ScDocShell::GetViewData();
     CPPUNIT_ASSERT(pViewData);
@@ -2505,7 +2507,7 @@ void ScTiledRenderingTest::testSheetGeometryDataCorrectness()
     // with the default empty sheet and test the JSON encoding.
     OString aGeomDefaultStr = pModelObj->getSheetGeometryData(/*bColumns*/ true, /*bRows*/ true, /*bSizes*/ true,
             /*bHidden*/ true, /*bFiltered*/ true, /*bGroups*/ true);
-    SheetGeometryData().parseTest(aGeomDefaultStr);
+    aDefaultSGData.parseTest(aGeomDefaultStr);
 
     // Apply geometry settings to the sheet and then test the resulting JSON encoding.
     aSGData.setDataToDoc(pDoc);
