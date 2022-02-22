@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b99ee8ec_9f2c9a96",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-22T18:01:22Z",
+      "side": 1,
+      "message": "backed this out, turns out some places are using in an empty reference",
+      "parentUuid": "5e9aa5fb_12be26c9",
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "00e6c7a2_c4596de7",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e26617b4_18c5ae75",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-22T18:01:22Z",
+      "side": 1,
+      "message": "back this out, it seems quite reasonable to be able to assign an empty ref",
+      "parentUuid": "00e6c7a2_c4596de7",
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "040327ec_66ec76b3",
@@ -48,6 +84,30 @@
       "writtenOn": "2022-02-22T14:12:19Z",
       "side": 1,
       "message": "this random whitespace addition still needs addressing",
+      "range": {
+        "startLine": 80,
+        "startChar": 4,
+        "endLine": 80,
+        "endChar": 8
+      },
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "006c3af2_7007b26e",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-22T18:01:22Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "040327ec_66ec76b3",
       "range": {
         "startLine": 80,
         "startChar": 4,
@@ -81,6 +141,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70e903cf_99b4e857",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-22T18:01:22Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "7edd285e_667d7c73",
+      "range": {
+        "startLine": 85,
+        "startChar": 33,
+        "endLine": 85,
+        "endChar": 34
+      },
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef077ce9_65b737b7",
@@ -94,6 +178,24 @@
       "writtenOn": "2022-02-22T14:12:19Z",
       "side": 1,
       "message": "why add this now (see above)?",
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12373b8d_4b571c18",
+        "filename": "include/unotools/weakref.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-22T18:01:22Z",
+      "side": 1,
+      "message": "removed",
+      "parentUuid": "ef077ce9_65b737b7",
       "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
