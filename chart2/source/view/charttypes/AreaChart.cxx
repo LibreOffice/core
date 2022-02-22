@@ -636,6 +636,8 @@ void AreaChart::createShapes()
         }
     }
 
+    const bool bUseErrorRectangle = ConfigAccess::getUseErrorRectangle();
+
     sal_Int32 nZ=1;
     for( auto const& rZSlot : m_aZSlots )
     {
@@ -794,12 +796,6 @@ void AreaChart::createShapes()
                             !bCreateXErrorBar && !pSeries->getDataPointLabelIfLabel(nIndex) )
                         continue;
 
-                    //create a group shape for this point and add to the series shape:
-                    OUString aPointCID = ObjectIdentifier::createPointCID(
-                            pSeries->getPointCID_Stub(), nIndex );
-                    rtl::Reference<SvxShapeGroupAnyD> xPointGroupShape_Shapes(
-                            createGroupShape(xSeriesGroupShape_Shapes,aPointCID) );
-
                     {
                         nCreatedPoints++;
 
@@ -809,6 +805,13 @@ void AreaChart::createShapes()
                         {
                             if(m_nDimension!=3)
                             {
+                                //create a group shape for this point and add to the series shape:
+                                OUString aPointCID = ObjectIdentifier::createPointCID(
+                                        pSeries->getPointCID_Stub(), nIndex );
+                                rtl::Reference<SvxShapeGroupAnyD> xPointGroupShape_Shapes;
+                                if (pSymbolProperties->Style == SymbolStyle_STANDARD || pSymbolProperties->Style == SymbolStyle_GRAPHIC)
+                                    xPointGroupShape_Shapes = createGroupShape(xSeriesGroupShape_Shapes,aPointCID);
+
                                 if (pSymbolProperties->Style != SymbolStyle_NONE)
                                 {
                                     aSymbolSize.DirectionX = pSymbolProperties->Size.Width;
@@ -833,7 +836,7 @@ void AreaChart::createShapes()
                             }
                         }
                         //create error bars or rectangles, depending on configuration
-                        if ( ConfigAccess::getUseErrorRectangle() )
+                        if ( bUseErrorRectangle )
                         {
                             if ( bCreateXErrorBar || bCreateYErrorBar )
                             {
@@ -917,10 +920,6 @@ void AreaChart::createShapes()
                                     , rLogicYSumMap[nAttachedAxisIndex], aScreenPosition2D, eAlignment, nOffset );
                         }
                     }
-
-                    //remove PointGroupShape if empty
-                    if(!xPointGroupShape_Shapes->getCount())
-                        xSeriesGroupShape_Shapes->remove(xPointGroupShape_Shapes);
                 }
 
             }//next series in x slot (next y slot)
