@@ -54,6 +54,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/date.hxx>
+#include <i18nutil/calendar.hxx>
 
 #include <algorithm>
 #include <cassert>
@@ -132,13 +133,13 @@ void lcl_CalcJulDate(sal_Int32& _nJulianDate,sal_Int32& _nJulianTime, const css:
     if ( aDateTime.Year <= 0 )
     {
         _nJulianDate = static_cast<sal_Int32>((365.25 * iy0) - 0.75)
-            + static_cast<sal_Int32>(30.6001 * (im0 + 1) )
+            + static_cast<sal_Int32>(i18nutil::monthDaysWithoutJanFeb * (im0 + 1) )
             + aDateTime.Day + 1720994;
     } // if ( rDateTime.Year <= 0 )
     else
     {
         _nJulianDate = static_cast<sal_Int32>(365.25 * iy0)
-            + static_cast<sal_Int32>(30.6001 * (im0 + 1))
+            + static_cast<sal_Int32>(i18nutil::monthDaysWithoutJanFeb * (im0 + 1))
             + aDateTime.Day + 1720994;
     }
     double JD = _nJulianDate + 0.5;
@@ -164,8 +165,8 @@ void lcl_CalDate(sal_Int32 _nJulianDate,sal_Int32 _nJulianTime,css::util::DateTi
         sal_Int64 kb = ka + 1524;
         sal_Int64 kc = static_cast<sal_Int64>((static_cast<double>(kb) - 122.1) / 365.25);
         sal_Int64 kd = static_cast<sal_Int64>(static_cast<double>(kc) * 365.25);
-        sal_Int64 ke = static_cast<sal_Int64>(static_cast<double>(kb - kd) / 30.6001);
-        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - static_cast<sal_Int64>( static_cast<double>(ke) * 30.6001 ));
+        sal_Int64 ke = static_cast<sal_Int64>(static_cast<double>(kb - kd) / i18nutil::monthDaysWithoutJanFeb);
+        _rDateTime.Day = static_cast<sal_uInt16>(kb - kd - static_cast<sal_Int64>( static_cast<double>(ke) * i18nutil::monthDaysWithoutJanFeb ));
         if ( ke > 13 )
             _rDateTime.Month = static_cast<sal_uInt16>(ke - 13);
         else
