@@ -99,6 +99,7 @@ public:
     void testTdf88657ODS();
     void testTdf41722();
     void testTdf113621();
+    void testTdf122098();
     void testEscapeCharInNumberFormatXLSX();
     void testNatNumInNumberFormatXLSX();
     void testExponentWithoutSignFormatXLSX();
@@ -216,6 +217,7 @@ public:
     CPPUNIT_TEST(testTdf88657ODS);
     CPPUNIT_TEST(testTdf41722);
     CPPUNIT_TEST(testTdf113621);
+    CPPUNIT_TEST(testTdf122098);
     CPPUNIT_TEST(testEscapeCharInNumberFormatXLSX);
     CPPUNIT_TEST(testNatNumInNumberFormatXLSX);
     CPPUNIT_TEST(testExponentWithoutSignFormatXLSX);
@@ -903,6 +905,21 @@ void ScExportTest2::testTdf113621()
     assertXPath(pDoc, "//x:conditionalFormatting", "sqref", "A1:A1048576");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf122098()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf122098.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), xDocSh->GetDocument().GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), xDocSh->GetDocument().GetString(ScAddress(0, 1, 0)));
+
+    xDocSh = saveAndReload(&(*xDocSh), FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    //CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), xDocSh->GetDocument().GetString(ScAddress(0, 0, 0)));
+    //CPPUNIT_ASSERT_EQUAL(OUString("FALSE"), xDocSh->GetDocument().GetString(ScAddress(0, 1, 0)));
 }
 
 void ScExportTest2::testEscapeCharInNumberFormatXLSX()

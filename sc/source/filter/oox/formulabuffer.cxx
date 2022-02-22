@@ -153,6 +153,8 @@ void applySharedFormulas(
                 pCell = new ScFormulaCell(rDoc.getDoc(), aPos, *pArray);
 
             rDoc.setFormulaCell(aPos, pCell);
+            if (rDoc.getDoc().GetNumberFormat(aPos.Col(), aPos.Row(), aPos.Tab()) % SV_COUNTRY_LANGUAGE_OFFSET == 0)
+                pCell->SetNeedNumberFormat(true);
             if (rDesc.maCellValue.isEmpty())
             {
                 // No cached cell value. Mark it for re-calculation.
@@ -227,6 +229,8 @@ void applyCellFormulas(
                 pCell = new ScFormulaCell(rDoc.getDoc(), aPos, p->mpCell->GetCode()->Clone());
 
             rDoc.setFormulaCell(aPos, pCell);
+            if (rDoc.getDoc().GetNumberFormat(aPos.Col(), aPos.Row(), aPos.Tab()) % SV_COUNTRY_LANGUAGE_OFFSET == 0)
+                pCell->SetNeedNumberFormat(true);
 
             // Update the cache.
             p->mnRow = aPos.Row();
@@ -245,6 +249,8 @@ void applyCellFormulas(
 
         ScFormulaCell* pCell = new ScFormulaCell(rDoc.getDoc(), aPos, std::move(pCode));
         rDoc.setFormulaCell(aPos, pCell);
+        if (rDoc.getDoc().GetNumberFormat(aPos.Col(), aPos.Row(), aPos.Tab()) % SV_COUNTRY_LANGUAGE_OFFSET == 0)
+            pCell->SetNeedNumberFormat(true);
         rCache.store(aPos, pCell);
     }
 }
