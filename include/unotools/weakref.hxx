@@ -82,6 +82,7 @@ public:
         @param rRef another hard ref
     */
 #if defined LIBO_INTERNAL_ONLY
+    // in the LIBO_INTERNAL_ONLY I need to cast to disambiguate the call
     WeakReference(interface_type* pRef)
         : WeakReferenceHelper(
               css::uno::Reference<css::uno::XWeak>(static_cast<cppu::OWeakObject*>(pRef)))
@@ -114,8 +115,13 @@ public:
 
     WeakReference& operator=(interface_type* pInt)
     {
+#if defined LIBO_INTERNAL_ONLY
+        // disambiguate call
         WeakReferenceHelper::operator=(
             css::uno::Reference<css::uno::XWeak>(static_cast<::cppu::OWeakObject*>(pInt)));
+#else
+        WeakReferenceHelper::operator=(static_cast<::cppu::OWeakObject*>(pInt));
+#endif
         return *this;
     }
 
