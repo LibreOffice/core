@@ -111,25 +111,27 @@ namespace sdr::properties
             const sal_uInt32 nCount(rChange.GetRectangleCount());
 
             // invalidate all new rectangles
-            if(auto pObjGroup = dynamic_cast<SdrObjGroup*>( &GetSdrObject() ))
+            SdrObject* pObj = &GetSdrObject();
+            if (pObj->GetObjIdentifier() == SdrObjKind::Group)
             {
+                SdrObjGroup* pObjGroup = static_cast<SdrObjGroup*>(pObj);
                 SdrObjListIter aIter(pObjGroup, SdrIterMode::DeepNoGroups);
 
                 while(aIter.IsMore())
                 {
-                    SdrObject* pObj = aIter.Next();
-                    pObj->BroadcastObjectChange();
+                    SdrObject* pChildObj = aIter.Next();
+                    pChildObj->BroadcastObjectChange();
                 }
             }
             else
             {
-                GetSdrObject().BroadcastObjectChange();
+                pObj->BroadcastObjectChange();
             }
 
             // also send the user calls
             for(sal_uInt32 a(0); a < nCount; a++)
             {
-                GetSdrObject().SendUserCall(SdrUserCallType::ChangeAttr, rChange.GetRectangle(a));
+                pObj->SendUserCall(SdrUserCallType::ChangeAttr, rChange.GetRectangle(a));
             }
         }
 
