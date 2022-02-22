@@ -19,7 +19,6 @@
 
 
 #ifdef _WIN32
-# include <stdio.h>
 # include <sys/stat.h>
 # if !defined WIN32_LEAN_AND_MEAN
 #  define WIN32_LEAN_AND_MEAN
@@ -199,7 +198,7 @@ extern "C" void JNICALL abort_handler()
     // If we are within JNI_CreateJavaVM then we jump back into getJavaVM
     if( g_bInGetJavaVM != 0 )
     {
-        fprintf(stderr, "JavaVM: JNI_CreateJavaVM called os::abort(), caught by abort_handler in javavm.cxx\n");
+        SAL_WARN("jfw", "JavaVM: JNI_CreateJavaVM called os::abort(), caught by abort_handler");
         longjmp( jmp_jvm_abort, 0);
     }
 }
@@ -681,9 +680,7 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
             sRuntimeLib, osl_getThreadTextEncoding());
         OString sSymbol = OUStringToOString(
             sSymbolCreateJava, osl_getThreadTextEncoding());
-        fprintf(stderr,"[Java framework]sunjavaplugin" SAL_DLLEXTENSION
-                ": Java runtime library: %s does not export symbol %s !\n",
-                sLib.getStr(), sSymbol.getStr());
+        SAL_WARN("jfw", "Java runtime library: " << sLib << " does not export symbol " << sSymbol);
         return javaPluginError::VmCreationFailed;
     }
     moduleRt.release();
@@ -805,14 +802,12 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
     {
         if( err < 0)
         {
-            fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
-                    ": Can not create Java Virtual Machine, %" SAL_PRIdINT32 "\n", sal_Int32(err));
+            SAL_WARN("jfw", "Can not create Java Virtual Machine, " << err);
             errorcode = javaPluginError::VmCreationFailed;
         }
         else if( err > 0)
         {
-            fprintf(stderr,"[Java framework] sunjavaplugin" SAL_DLLEXTENSION
-                    ": Can not create JavaVirtualMachine, abort handler was called.\n");
+            SAL_WARN("jfw", "Can not create JavaVirtualMachine, abort handler was called");
             errorcode = javaPluginError::VmCreationFailed;
         }
     }
