@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1c3e8b6_ea5d464d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-22T08:52:51Z",
+      "side": 1,
+      "message": "Is it conceptually wrong to ask isAsciiFoo on [[un]signed] char?\nIt looked useful, and I feel that it could be better to just fix it in a way to convert it to corresponding unsigned value, to avoid the wrong assertion?",
+      "revId": "7778d9f51bd1f4d086cafe95995406c3157afb89",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
