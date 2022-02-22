@@ -166,6 +166,7 @@ public:
     bool            StoreChildren(bool _bOasisFormat,bool _bObjectsOnly);
     bool            StoreAsChildren( bool _bOasisFormat
                                         ,bool _bCreateEmbedded
+                                        ,bool _bAutoSaveEvent
                                         ,const css::uno::Reference < css::embed::XStorage >& _xStorage);
 
     static css::uno::Reference< css::io::XInputStream > GetGraphicReplacementStream(
