@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "470b0090_010d5469",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-22T12:43:33Z",
+      "side": 1,
+      "message": "I managed to accidentally create a new version of this when stripping out the svx/ part, and consequently did not address the review comments.\n\nThose comments have addressed in the changed at:\n    https://gerrit.libreoffice.org/c/core/+/130349",
+      "revId": "eb25a29259c1867d05929c55a0df2661e70e406b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdde75de_35c649e8",
