@@ -639,6 +639,13 @@ void SAL_CALL OCommonEmbeddedObject::setContainerName( const OUString& sName )
     m_aContainerName = sName;
 }
 
+void OCommonEmbeddedObject::SetOleState(bool bIsOleUpdate)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+
+    m_bOleUpdate = bIsOleUpdate;
+}
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL OCommonEmbeddedObject::getParent()
 {
     return m_xParent;
