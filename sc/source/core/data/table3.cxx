@@ -2996,6 +2996,8 @@ void ScTable::GetFilteredFilterEntries(
 
 bool ScTable::GetDataEntries(SCCOL nCol, SCROW nRow, std::set<ScTypedStrData>& rStrings)
 {
+    if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
+        return false;
     return aCol[nCol].GetDataEntries( nRow, rStrings);
 }
 
