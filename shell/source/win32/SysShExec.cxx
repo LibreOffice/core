@@ -424,7 +424,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                     if (!(checkExtension(ext, env)
                           && checkExtension(
                               ext,
-                              ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.PY;.CLASS;"
+                              ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC;.MSI;.PY;.CLASS;"
                                   ".JAR;.APPLICATION;.LNK;.SCR")))
                     {
                         throw css::lang::IllegalArgumentException(
