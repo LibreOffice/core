@@ -28,21 +28,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        const char* aDenylist[] = {
-            "math-escape.docx",
-            "math-mso2k7.docx"
-        };
-        std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
-
-        // If the testcase is stored in some other format, it's pointless to test.
-        return (OString(filename).endsWith(".docx") && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testFdo68418, "fdo68418.docx")
@@ -92,16 +77,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf108944_footnoteSeparator2, "tdf108944_footnoteSeparator2.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf108944_footnoteSeparator2)
 {
+    loadAndReload("tdf108944_footnoteSeparator2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     //This was zero. The comment was causing the bHasFtnSep flag to be reset to false, so the separator was missing.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
+CPPUNIT_TEST_FIXTURE(Test, testCharacterBorder)
 {
+    loadAndReload("charborder.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
     // OOXML has just one border attribute (<w:bdr>) for text border so all side has
@@ -785,8 +772,9 @@ DECLARE_OOXMLEXPORT_TEST(testPNGImageCrop, "test_PNG_ImageCrop.docx")
     CPPUNIT_ASSERT_DOUBLES_EQUAL(635 * fYScaleFactor, aGraphicCropStruct.Bottom, 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf41542_imagePadding, "tdf41542_imagePadding.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf41542_imagePadding)
 {
+    loadAndReload("tdf41542_imagePadding.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // borderlessImage - image WITHOUT BORDERS : simulate padding with -crop
@@ -961,8 +949,9 @@ CPPUNIT_TEST_FIXTURE(Test, testcantSplit)
     assertXPath(pXmlDoc, "/w:document/w:body/w:tbl[2]/w:tr/w:trPr/w:cantSplit","val","true");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDontSplitTable, "tdf101589_dontSplitTable.odt")
+CPPUNIT_TEST_FIXTURE(Test, testDontSplitTable)
 {
+    loadAndReload("tdf101589_dontSplitTable.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     //single row tables need to prevent split by setting row to no split
     CPPUNIT_ASSERT_EQUAL( OUString("Row 1"), parseDump("/root/page[2]/body/tab[1]/row[1]/cell[1]/txt[1]") );
@@ -1206,8 +1195,9 @@ CPPUNIT_TEST_FIXTURE(Test, testBodyPrUpright)
         "/a:graphic/a:graphicData/wps:wsp/wps:bodyPr", "upright", "1");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLostArrow, "tdf99810-lost-arrow.odt")
+CPPUNIT_TEST_FIXTURE(Test, testLostArrow)
 {
+    loadAndReload("tdf99810-lost-arrow.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // tdf#99810: check whether we use normal shape instead of connector shape if the XML namespace
