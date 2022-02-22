@@ -376,9 +376,7 @@ OWeakRefListener::OWeakRefListener(const Reference< XInterface >& xInt)
 OWeakRefListener::OWeakRefListener(const Reference< XWeak >& xWeak)
     : m_aRefCount( 1 )
 {
-    try
-    {
-    if (xWeak.is())
+    if (xWeak)
     {
         m_XWeakConnectionPoint = xWeak->queryAdapter();
 
@@ -387,8 +385,6 @@ OWeakRefListener::OWeakRefListener(const Reference< XWeak >& xWeak)
             m_XWeakConnectionPoint->addReference(static_cast<XReference*>(this));
         }
     }
-    }
-    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
     osl_atomic_decrement( &m_aRefCount );
 }
 
@@ -455,13 +451,9 @@ WeakReferenceHelper::WeakReferenceHelper(const Reference< XInterface >& xInt)
 }
 
 WeakReferenceHelper::WeakReferenceHelper(const Reference< XWeak >& xWeak)
-    : m_pImpl( nullptr )
+    : m_pImpl( new OWeakRefListener(xWeak) )
 {
-    if (xWeak.is())
-    {
-        m_pImpl = new OWeakRefListener(xWeak);
-        m_pImpl->acquire();
-    }
+    m_pImpl->acquire();
 }
 
 WeakReferenceHelper::WeakReferenceHelper(const WeakReferenceHelper& rWeakRef)
@@ -526,16 +518,12 @@ WeakReferenceHelper::operator= (const Reference< XInterface > & xInt)
 WeakReferenceHelper &
 WeakReferenceHelper::operator= (const Reference< XWeak > & xWeak)
 {
-    try
+    clear();
+    if (xWeak)
     {
-        clear();
-        if (xWeak.is())
-        {
-            m_pImpl = new OWeakRefListener(xWeak);
-            m_pImpl->acquire();
-        }
+        m_pImpl = new OWeakRefListener(xWeak);
+        m_pImpl->acquire();
     }
-    catch (RuntimeException &) { OSL_ASSERT( false ); } // assert here, but no unexpected()
     return *this;
 }
 
