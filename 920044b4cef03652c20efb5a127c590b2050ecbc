@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2f8383a_b3ce919a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-22T20:42:13Z",
+      "side": 1,
+      "message": "Looking in the gmail list of denied suffixes I see these two macOS ones. I wonder if we should include those too or not.",
+      "revId": "920044b4cef03652c20efb5a127c590b2050ecbc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
