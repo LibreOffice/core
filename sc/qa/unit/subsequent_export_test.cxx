@@ -1134,7 +1134,8 @@ void ScExportTest::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(9, pBatch);
         pBatch->commit();
 
-        std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::saveAs(*pShell, FORMAT_ODS);
+        std::shared_ptr<utl::TempFile> pXPathFile
+            = exportTo(*pShell, FORMAT_ODS, /*bValidate*/ false);
         pShell->DoClose();
 
         // check XML
@@ -1163,7 +1164,7 @@ void ScExportTest::testODF13()
         officecfg::Office::Common::Save::ODF::DefaultVersion::set(4, pBatch);
         pBatch->commit();
 
-        std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::saveAs(*pShell, FORMAT_ODS);
+        std::shared_ptr<utl::TempFile> pXPathFile = exportTo(*pShell, FORMAT_ODS);
         pShell->DoClose();
 
         // check XML

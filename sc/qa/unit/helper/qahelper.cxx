@@ -778,7 +778,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReloadNoClose( ScDocShell& rShell, sal_
     return xDocSh;
 }
 
-std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell& rShell, sal_Int32 nFormat )
+std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat, bool bValidate )
 {
     OUString aFilterName(aFileFormats[nFormat].pFilterName, strlen(aFileFormats[nFormat].pFilterName), RTL_TEXTENCODING_UTF8) ;
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
@@ -797,20 +797,15 @@ std::shared_ptr<utl::TempFile> ScBootstrapFixture::saveAs( ScDocShell& rShell, s
     pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
     aStoreMedium.SetFilter(pExportFilter);
     rShell.DoSaveAs( aStoreMedium );
-
-    return pTempFile;
-}
-
-std::shared_ptr<utl::TempFile> ScBootstrapFixture::exportTo( ScDocShell& rShell, sal_Int32 nFormat )
-{
-    std::shared_ptr<utl::TempFile> pTempFile = saveAs(rShell, nFormat);
     rShell.DoClose();
 
-    SfxFilterFlags nFormatType = aFileFormats[nFormat].nFormatType;
-    if(nFormatType == XLSX_FORMAT_TYPE)
-        validate(pTempFile->GetFileName(), test::OOXML);
-    else if (nFormatType == ODS_FORMAT_TYPE)
-        validate(pTempFile->GetFileName(), test::ODF);
+    if(bValidate)
+    {
+        if(nFormatType == XLSX_FORMAT_TYPE)
+            validate(pTempFile->GetFileName(), test::OOXML);
+        else if (nFormatType == ODS_FORMAT_TYPE)
+            validate(pTempFile->GetFileName(), test::ODF);
+    }
 
     return pTempFile;
 }
