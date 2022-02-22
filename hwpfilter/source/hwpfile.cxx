@@ -450,11 +450,6 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
     return nullptr;
 }
 
-void HWPFile::AddBox(FBox * box)
-{
-    blist.push_back(box);
-}
-
 ParaShape *HWPFile::getParaShape(int index)
 {
     if (index < 0 || o3tl::make_unsigned(index) >= pslist.size())
