@@ -2451,6 +2451,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/embed,\
 	XEmbedPersist2 \
 	XEmbeddedClient \
 	XEmbeddedObject \
+	XEmbeddedUpdate \
 	XEmbeddedOleObject \
 	XEncryptionProtectedSource \
 	XEncryptionProtectedSource2 \

@@ -101,6 +101,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         static constexpr OUStringLiteral PROP_VIEWONLY = u"ViewOnly";
         static constexpr OUStringLiteral PROP_DOCUMENTBASEURL = u"DocumentBaseURL";
         static constexpr OUStringLiteral PROP_SUGGESTEDSAVEASNAME = u"SuggestedSaveAsName";
+        static constexpr OUStringLiteral PROP_AUTOSAVEEVENT = u"AutoSaveEvent";
 
     // interface
     public:
