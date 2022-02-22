@@ -566,34 +566,27 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         }
         case accessibility::AccessibleEventId::TEXT_CHANGED:
         {
-            // TESTME: and remove this comment:
             // cf. comphelper/source/misc/accessibletexthelper.cxx (implInitTextChangedEvent)
             accessibility::TextSegment aDeletedText;
             accessibility::TextSegment aInsertedText;
 
-            // TODO: when GNOME starts to send "update" kind of events, change
-            // we need to re-think this implementation as well
             if( aEvent.OldValue >>= aDeletedText )
             {
-                /* Remember the text segment here to be able to return removed text in get_text().
-                 * This is clearly a hack to be used until appropriate API exists in atk to pass
-                 * the string value directly or we find a compelling reason to start caching the
-                 * UTF-8 converted strings in the atk wrapper object.
-                 */
-
-                g_object_set_data( G_OBJECT(atk_obj), "ooo::text_changed::delete", &aDeletedText);
-
-                g_signal_emit_by_name( atk_obj, "text_changed::delete",
+                const OString aDeletedTextUtf8 = OUStringToOString(aDeletedText.SegmentText, RTL_TEXTENCODING_UTF8);
+                g_signal_emit_by_name( atk_obj, "text-remove",
                                        static_cast<gint>(aDeletedText.SegmentStart),
-                                       static_cast<gint>( aDeletedText.SegmentEnd - aDeletedText.SegmentStart ) );
+                                       static_cast<gint>(aDeletedText.SegmentEnd - aDeletedText.SegmentStart),
+                                       g_strdup(aDeletedTextUtf8.getStr()));
 
-                g_object_steal_data( G_OBJECT(atk_obj), "ooo::text_changed::delete" );
             }
-
             if( aEvent.NewValue >>= aInsertedText )
-                g_signal_emit_by_name( atk_obj, "text_changed::insert",
+            {
+                const OString aInsertedTextUtf8 = OUStringToOString(aInsertedText.SegmentText, RTL_TEXTENCODING_UTF8);
+                g_signal_emit_by_name( atk_obj, "text-insert",
                                        static_cast<gint>(aInsertedText.SegmentStart),
-                                       static_cast<gint>( aInsertedText.SegmentEnd - aInsertedText.SegmentStart ) );
+                                       static_cast<gint>(aInsertedText.SegmentEnd - aInsertedText.SegmentStart),
+                                       g_strdup(aInsertedTextUtf8.getStr()));
+            }
             break;
         }
 
