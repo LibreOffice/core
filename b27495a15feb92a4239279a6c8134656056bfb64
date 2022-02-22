@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6080d770_aa7bd0bf",
+        "filename": "xmlsecurity/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-22T12:03:36Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 6,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 10
+      },
+      "revId": "b27495a15feb92a4239279a6c8134656056bfb64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f241d31_c5d7b536",
+        "filename": "xmlsecurity/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-22T12:03:36Z",
+      "side": 1,
+      "message": "iirc it\u0027s also possible to open an existing PDF file and sign it.",
+      "range": {
+        "startLine": 11,
+        "startChar": 9,
+        "endLine": 11,
+        "endChar": 27
+      },
+      "revId": "b27495a15feb92a4239279a6c8134656056bfb64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
