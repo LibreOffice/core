@@ -254,24 +254,6 @@ text_wrapper_get_text (AtkText *text,
 
     g_return_val_if_fail( (end_offset == -1) || (end_offset >= start_offset), nullptr );
 
-    /* at-spi expects the delete event to be send before the deletion happened
-     * so we save the deleted string object in the UNO event notification and
-     * fool libatk-bridge.so here ..
-     */
-    void * pData = g_object_get_data( G_OBJECT(text), "ooo::text_changed::delete" );
-    if( pData != nullptr )
-    {
-        accessibility::TextSegment * pTextSegment =
-            static_cast <accessibility::TextSegment *> (pData);
-
-        if( pTextSegment->SegmentStart == start_offset &&
-            pTextSegment->SegmentEnd == end_offset )
-        {
-            OString aUtf8 = OUStringToOString( pTextSegment->SegmentText, RTL_TEXTENCODING_UTF8 );
-            return g_strdup( aUtf8.getStr() );
-        }
-    }
-
     try {
         css::uno::Reference<css::accessibility::XAccessibleText> pText
             = getText( text );
