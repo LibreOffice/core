@@ -1130,12 +1130,12 @@ void OStorage_Impl::Commit()
 
                 if ( pElement->m_bIsStorage )
                 {
+                    OSL_ENSURE(pElement->m_xStorage, "An inserted storage is incomplete!");
+                    if (!pElement->m_xStorage)
+                        throw uno::RuntimeException( THROW_WHERE );
+
                     if (pElement->m_xStorage->m_bCommited)
                     {
-                        OSL_ENSURE(pElement->m_xStorage, "An inserted storage is incomplete!");
-                        if (!pElement->m_xStorage)
-                            throw uno::RuntimeException( THROW_WHERE );
-
                         pElement->m_xStorage->InsertIntoPackageFolder(/*aName*/pair.first, xNewPackageFolder);
 
                         pElement->m_bIsInserted = false;
