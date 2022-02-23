@@ -20,6 +20,7 @@ public:
     void testTdf116925();
     void testTdf117028();
     void testForcepoint76();
+    void testUXTSOREL();
     void testN4LA0OHZ();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
@@ -27,6 +28,7 @@ public:
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testForcepoint76);
+    CPPUNIT_TEST(testUXTSOREL);
     CPPUNIT_TEST(testN4LA0OHZ);
     CPPUNIT_TEST_SUITE_END();
 
@@ -111,6 +113,12 @@ void SwLayoutWriter::testTdf117028()
     // Make sure the text is still rendered.
     assertXPathContent(pXmlDoc, "//textarray/text", "Hello");
 }
+
+// FIXME: apparently infinite loop on Mac
+#ifndef MACOSX
+//just care it doesn't crash/assert
+void SwLayoutWriter::testUXTSOREL() { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
+#endif
 
 //just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
