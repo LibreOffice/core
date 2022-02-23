@@ -4597,10 +4597,32 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
         for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
             AttachTextBoxContentToShape(uno::Reference<drawing::XShape>(xGroup->getByIndex(i),uno::UNO_QUERY_THROW));
 
-    if (xProps->getPropertyValue("TextBox").get<bool>())
+    if (xProps->getPropertyValue("TextBox").get<bool>()) try
     {
         xProps->setPropertyValue("TextBoxContent", uno::Any(m_xPendingTextBoxFrames.front()));
+        uno::Sequence<beans::PropertyValue> aGrabbag
+            = xProps->getPropertyValue("InteropGrabBag").get<uno::Sequence<beans::PropertyValue>>();
+        for (const auto& rProp : aGrabbag)
+        {
+            if (rProp.Name == "TxbxHasLink" && rProp.Value.get<bool>())
+            {
+                uno::Reference<container::XNamed> xName(xProps->getPropertyValue("TextBoxContent"),
+                                                        uno::UNO_QUERY_THROW);
+                aGrabbag.realloc(aGrabbag.size() + 1);
+                aGrabbag.getArray()[aGrabbag.getLength() - 1]
+                    = beans::PropertyValue("LinkChainName", 0, uno::Any(xName->getName()),
+                                           beans::PropertyState::PropertyState_DIRECT_VALUE);
+                xProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabbag));
+
+                m_vTextFramesForChaining.push_back(xShape);
+            }
+        }
         m_xPendingTextBoxFrames.pop();
+    }
+    catch (uno::Exception& e)
+    {
+        SAL_WARN("writerfilter.dmapper",
+                 "Exception while trying to attach and link textboxes (" + e.Message + ")!");
     }
 }
 
