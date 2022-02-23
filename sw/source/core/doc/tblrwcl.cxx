@@ -2613,7 +2613,6 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
     const SwFormatFrameSize& rSz = GetFrameFormat()->GetFrameSize();
     const SvxLRSpaceItem& rLR = GetFrameFormat()->GetLRSpace();
 
-    std::unique_ptr<FndBox_> xFndBox;                // for insertion/deletion
     bool bBigger,
         bRet = false,
         bLeft = TableChgWidthHeightType::ColLeft == extractPosition( eType ) ||
@@ -2912,22 +2911,6 @@ bool SwTable::SetColWidth( SwTableBox& rCurrentBox, TableChgWidthHeightType eTyp
         default: break;
     }
 
-    if( xFndBox )
-    {
-        // Clean up the structure of all Lines
-        GCLines();
-
-        // Update Layout
-        if( !bBigger || xFndBox->AreLinesToRestore( *this ) )
-            xFndBox->MakeFrames( *this );
-
-        // TL_CHART2: it is currently unclear if sth has to be done here.
-        // The function name hints that nothing needs to be done, on the other
-        // hand there is a case where sth gets deleted.  :-(
-
-        xFndBox.reset();
-    }
-
 #if defined DBG_UTIL
     if( bRet )
     {
@@ -3055,7 +3038,6 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
     while( pBaseLine->GetUpper() )
         pBaseLine = pBaseLine->GetUpper()->GetUpper();
 
-    std::unique_ptr<FndBox_> xFndBox;                // for insertion/deletion
     bool bBigger,
         bRet = false,
         bTop = TableChgWidthHeightType::CellTop == extractPosition( eType );
@@ -3196,26 +3178,11 @@ bool SwTable::SetRowHeight( SwTableBox& rCurrentBox, TableChgWidthHeightType eTy
                                         nRelDiff, ppUndo );
 
                     m_eTableChgMode = eOld;
-                    xFndBox.reset();
                 }
             }
         }
         break;
         default: break;
-    }
-
-    if( xFndBox )
-    {
-        // then clean up the structure of all Lines
-        GCLines();
-
-        // Update Layout
-        if( bBigger || xFndBox->AreLinesToRestore( *this ) )
-            xFndBox->MakeFrames( *this );
-
-        // TL_CHART2: it is currently unclear if sth has to be done here.
-
-        xFndBox.reset();
     }
 
     CHECKTABLELAYOUT
