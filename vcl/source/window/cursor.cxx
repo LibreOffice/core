@@ -196,6 +196,13 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
         vcl::Window* pWindow;
         if ( mpWindow )
             pWindow = mpWindow;
+        else if (comphelper::LibreOfficeKit::isActive())
+        {
+            pWindow = Application::GetFocusWindow();
+            if (!pWindow || !pWindow->mpWindowImpl || !pWindow->mpWindowImpl->mpFrameData->mpFocusWin)
+                pWindow = nullptr;
+
+        }
         else
         {
             // show the cursor, if there is an active window and the cursor
