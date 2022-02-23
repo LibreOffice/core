@@ -99,37 +99,6 @@ void ScPDFExportTest::setUp()
 
     mxDesktop.set(
         css::frame::Desktop::create(comphelper::getComponentContext(getMultiServiceFactory())));
-
-    {
-        uno::Reference<frame::XDesktop2> xDesktop = mxDesktop;
-        CPPUNIT_ASSERT(xDesktop.is());
-
-        // Create spreadsheet
-        uno::Sequence<beans::PropertyValue> args{ comphelper::makePropertyValue("Hidden", true) };
-        mxComponent = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
-        CPPUNIT_ASSERT(mxComponent.is());
-
-        // create a frame
-        xTargetFrame = xDesktop->findFrame("_blank", 0);
-        CPPUNIT_ASSERT(xTargetFrame.is());
-
-        uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
-        uno::Reference<frame::XModel2> xModel2(xModel, UNO_QUERY);
-        CPPUNIT_ASSERT(xModel2.is());
-
-        Reference<frame::XController2> xController
-            = xModel2->createDefaultViewController(xTargetFrame);
-        CPPUNIT_ASSERT(xController.is());
-
-        // introduce model/view/controller to each other
-        xController->attachModel(xModel2);
-        xModel2->connectController(xController);
-
-        xTargetFrame->setComponent(xController->getComponentWindow(), xController);
-        xController->attachFrame(xTargetFrame);
-
-        xModel2->setCurrentController(xController);
-    }
 }
 
 void ScPDFExportTest::tearDown()
@@ -274,6 +243,7 @@ void ScPDFExportTest::setFont(ScFieldEditEngine& rEE, sal_Int32 nStart, sal_Int3
 void ScPDFExportTest::testExportRange_Tdf120161()
 {
     // create test document
+    mxComponent = loadFromDesktop("private:factory/scalc");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
@@ -333,6 +303,7 @@ void ScPDFExportTest::testExportRange_Tdf120161()
 void ScPDFExportTest::testExportFitToPage_Tdf103516()
 {
     // create test document
+    mxComponent = loadFromDesktop("private:factory/scalc");
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheets> xSheets(xDoc->getSheets(), UNO_SET_THROW);
