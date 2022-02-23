@@ -3044,6 +3044,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint72) { createDoc("forcepoint72
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint75) { createDoc("forcepoint75-1.rtf"); }
 
+// FIXME: apparently infinite loop on Mac
+#ifndef MACOSX
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL) { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
+#endif
+
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
 {
