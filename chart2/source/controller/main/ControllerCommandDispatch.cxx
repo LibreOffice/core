@@ -562,12 +562,12 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // toolbar commands
     m_aCommandAvailability[ ".uno:ToggleGridHorizontal" ] = bIsWritable;
-    m_aCommandArguments[ ".uno:ToggleGridHorizontal" ] <<= m_apModelState->bHasMainYGrid;
+    m_aCommandArguments[ ".uno:ToggleGridHorizontal" ] <<= bModelStateIsValid && m_apModelState->bHasMainYGrid;
     m_aCommandAvailability[ ".uno:ToggleGridVertical" ] = bIsWritable;
-    m_aCommandArguments[ ".uno:ToggleGridVertical" ] <<= m_apModelState->bHasMainXGrid;
+    m_aCommandArguments[ ".uno:ToggleGridVertical" ] <<= bModelStateIsValid && m_apModelState->bHasMainXGrid;
 
     m_aCommandAvailability[ ".uno:ToggleLegend" ] = bIsWritable;
-    m_aCommandArguments[ ".uno:ToggleLegend" ] <<= m_apModelState->bHasLegend;
+    m_aCommandArguments[ ".uno:ToggleLegend" ] <<= bModelStateIsValid && m_apModelState->bHasLegend;
 
     m_aCommandAvailability[ ".uno:NewArrangement" ] = bIsWritable;
     m_aCommandAvailability[ ".uno:Update" ] = bIsWritable;
