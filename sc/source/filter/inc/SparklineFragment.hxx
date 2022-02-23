@@ -11,10 +11,10 @@
 
 #include "excelhandlers.hxx"
 #include <oox/core/contexthandler.hxx>
+#include <SparklineGroup.hxx>
 
 #include <vector>
 #include <memory>
-#include <optional>
 
 namespace oox
 {
@@ -36,40 +36,15 @@ class SparklineGroup
 private:
     std::vector<Sparkline> m_aSparklines;
 
+    std::shared_ptr<sc::SparklineGroup> m_pSparklineGroup;
+
 public:
-    Color m_aColorSeries;
-    Color m_aColorNegative;
-    Color m_aColorAxis;
-    Color m_aColorMarkers;
-    Color m_aColorFirst;
-    Color m_aColorLast;
-    Color m_aColorHigh;
-    Color m_aColorLow;
+    SparklineGroup()
+        : m_pSparklineGroup(new sc::SparklineGroup())
+    {
+    }
 
-    OUString m_sMinAxisType; // individual, group, custom
-    OUString m_sMaxAxisType;
-
-    double m_fLineWeight; // In pt
-
-    OUString m_sType; // line, column, stacked
-
-    bool m_bDateAxis;
-
-    OUString m_sDisplayEmptyCellsAs; // span, gap, zero
-
-    bool m_bMarkers;
-    bool m_bHigh;
-    bool m_bLow;
-    bool m_bFirst;
-    bool m_bLast;
-    bool m_bNegative;
-    bool m_bDisplayXAxis;
-    bool m_bDisplayHidden;
-    bool m_bRightToLeft;
-
-    std::optional<double> m_aManualMax;
-    std::optional<double> m_aManualMin;
-    OUString m_sUID;
+    std::shared_ptr<sc::SparklineGroup> getSparklineGroup() { return m_pSparklineGroup; }
 
     std::vector<Sparkline>& getSparklines() { return m_aSparklines; }
 };
@@ -87,6 +62,8 @@ public:
     void onStartElement(const AttributeList& rAttribs) override;
     void onCharacters(const OUString& rCharacters) override;
     void onEndElement() override;
+
+    void insertSparkline(SparklineGroup& rSparklineGroup, Sparkline& rSparkline);
 };
 
 } //namespace oox::xls
