@@ -15,6 +15,8 @@
 #include <oox/helper/attributelist.hxx>
 #include <document.hxx>
 #include <rangeutl.hxx>
+#include <Sparkline.hxx>
+#include <themebuffer.hxx>
 
 using ::oox::core::ContextHandlerRef;
 
@@ -22,51 +24,74 @@ namespace oox::xls
 {
 namespace
 {
-Color getColor(const AttributeList& rAttribs)
+// TODO: deduplicate with importOOXColor
+::Color getColor(const AttributeList& rAttribs, ThemeBuffer const& rThemeBuffer)
 {
     if (rAttribs.hasAttribute(XML_rgb))
     {
-        return Color(ColorTransparency,
-                     rAttribs.getIntegerHex(XML_rgb, sal_Int32(API_RGB_TRANSPARENT)));
+        return ::Color(ColorAlpha, rAttribs.getIntegerHex(XML_rgb, sal_Int32(API_RGB_TRANSPARENT)));
     }
-    return Color();
+    else if (rAttribs.hasAttribute(XML_theme))
+    {
+        sal_uInt32 nThemeIndex = rAttribs.getUnsigned(XML_theme, 0);
+
+        // Excel has a bug in the mapping of index 0, 1, 2 and 3.
+        if (nThemeIndex == 0)
+            nThemeIndex = 1;
+        else if (nThemeIndex == 1)
+            nThemeIndex = 0;
+        else if (nThemeIndex == 2)
+            nThemeIndex = 3;
+        else if (nThemeIndex == 3)
+            nThemeIndex = 2;
+
+        ::Color aColor = rThemeBuffer.getColorByIndex(nThemeIndex);
+        double nTint = rAttribs.getDouble(XML_tint, 0.0);
+
+        if (nTint > 0.0)
+            aColor.ApplyTintOrShade(nTint * 10000);
+        return aColor;
+    }
+
+    return ::Color();
 }
 
-void addColorsToSparklineGroup(SparklineGroup& rSparklineGroup, sal_Int32 nElement,
-                               const AttributeList& rAttribs)
+void addColorsToSparklineGroup(sc::SparklineGroup& rSparklineGroup, sal_Int32 nElement,
+                               const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer)
 {
     switch (nElement)
     {
         case XLS14_TOKEN(colorSeries):
-            rSparklineGroup.m_aColorSeries = getColor(rAttribs);
+            rSparklineGroup.m_aColorSeries = getColor(rAttribs, rThemeBuffer);
             break;
         case XLS14_TOKEN(colorNegative):
-            rSparklineGroup.m_aColorNegative = getColor(rAttribs);
+            rSparklineGroup.m_aColorNegative = getColor(rAttribs, rThemeBuffer);
             break;
         case XLS14_TOKEN(colorAxis):
-            rSparklineGroup.m_aColorAxis = getColor(rAttribs);
+            rSparklineGroup.m_aColorAxis = getColor(rAttribs, rThemeBuffer);
             break;
         case XLS14_TOKEN(colorMarkers):
-            rSparklineGroup.m_aColorMarkers = getColor(rAttribs);
+            rSparklineGroup.m_aColorMarkers = getColor(rAttribs, rThemeBuffer);
             break;
         case XLS14_TOKEN(colorFirst):
-            rSparklineGroup.m_aColorFirst = getColor(rAttribs);
+            rSparklineGroup.m_aColorFirst = getColor(rAttribs, rThemeBuffer);
             break;
         case XLS14_TOKEN(colorLast):
-            rSparklineGroup.m_aColorLast = getColor(rAttribs);
+            rSparklineGroup.m_aColorLast = getColor(rAttribs, rThemeBuffer);
             break;
         case XLS14_TOKEN(colorHigh):
-            rSparklineGroup.m_aColorHigh = getColor(rAttribs);
+            rSparklineGroup.m_aColorHigh = getColor(rAttribs, rThemeBuffer);
             break;
         case XLS14_TOKEN(colorLow):
-            rSparklineGroup.m_aColorLow = getColor(rAttribs);
+            rSparklineGroup.m_aColorLow = getColor(rAttribs, rThemeBuffer);
             break;
         default:
             break;
     }
 }
 
-void addAttributesToSparklineGroup(SparklineGroup& rSparklineGroup, const AttributeList& rAttribs)
+void addAttributesToSparklineGroup(sc::SparklineGroup& rSparklineGroup,
+                                   const AttributeList& rAttribs)
 {
     auto oManualMax = rAttribs.getDouble(XML_manualMax);
     auto oManualMin = rAttribs.getDouble(XML_manualMin);
@@ -116,7 +141,7 @@ ContextHandlerRef SparklineGroupsContext::onCreateContext(sal_Int32 nElement,
         case XLS14_TOKEN(sparklineGroup):
         {
             auto& rLastGroup = m_aSparklineGroups.emplace_back();
-            addAttributesToSparklineGroup(rLastGroup, rAttribs);
+            addAttributesToSparklineGroup(*rLastGroup.getSparklineGroup(), rAttribs);
             return this;
         }
         case XLS14_TOKEN(colorSeries):
@@ -129,7 +154,8 @@ ContextHandlerRef SparklineGroupsContext::onCreateContext(sal_Int32 nElement,
         case XLS14_TOKEN(colorLow):
         {
             auto& rLastGroup = m_aSparklineGroups.back();
-            addColorsToSparklineGroup(rLastGroup, nElement, rAttribs);
+            addColorsToSparklineGroup(*rLastGroup.getSparklineGroup(), nElement, rAttribs,
+                                      getTheme());
             return this;
         }
         case XLS14_TOKEN(sparklines):
@@ -155,7 +181,6 @@ void SparklineGroupsContext::onCharacters(const OUString& rChars)
         ScDocument& rDocument = getScDocument();
         auto& rLastGroup = m_aSparklineGroups.back();
         auto& rLastSparkline = rLastGroup.getSparklines().back();
-
         ScRangeList aRange;
         if (ScRangeStringConverter::GetRangeListFromString(aRange, rChars, rDocument,
                                                            formula::FormulaGrammar::CONV_XL_OOX))
@@ -182,7 +207,32 @@ void SparklineGroupsContext::onCharacters(const OUString& rChars)
     }
 }
 
-void SparklineGroupsContext::onEndElement() {}
+void SparklineGroupsContext::onEndElement()
+{
+    if (getCurrentElement() == XLS14_TOKEN(sparklineGroup))
+    {
+        auto& rLastGroup = m_aSparklineGroups.back();
+        for (Sparkline& rSparkline : rLastGroup.getSparklines())
+        {
+            insertSparkline(rLastGroup, rSparkline);
+        }
+    }
+}
+
+void SparklineGroupsContext::insertSparkline(SparklineGroup& rSparklineGroup, Sparkline& rSparkline)
+{
+    auto& rDocument = getScDocument();
+    if (rSparkline.m_aTargetRange.size() == 1)
+    {
+        auto& rRange = rSparkline.m_aTargetRange[0];
+        if (rRange.aStart == rRange.aEnd)
+        {
+            auto pSparklineGroup = rSparklineGroup.getSparklineGroup();
+            auto* pCreated = rDocument.CreateSparkline(rRange.aStart, pSparklineGroup);
+            pCreated->setInputRange(rSparkline.m_aInputRange);
+        }
+    }
+}
 
 } //namespace oox::xls
 
