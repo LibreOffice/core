@@ -1324,8 +1324,7 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
              ( rCEvt.GetCommand() == CommandEventId::InputContextChange ) )
     {
         //#i84417# enable editing with IME
-        if( m_pDrawViewWrapper )
-            m_pDrawViewWrapper->Command( rCEvt, pChartWindow );
+        m_pDrawViewWrapper->Command( rCEvt, pChartWindow );
     }
 }
 
