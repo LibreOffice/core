@@ -596,35 +596,40 @@ FieldUnit SwModule::GetMetric( bool bWeb ) const
             GetUsrPref(false);
         pPref = m_pUsrPref.get();
     }
+    assert(pPref && "pPref is set by here");
     return pPref->GetMetric();
 }
 
 // Pass-through Update-Status
 sal_uInt16 SwModule::GetLinkUpdMode() const
 {
-    if(!m_pUsrPref)
+    if (!m_pUsrPref)
         GetUsrPref(false);
+    assert(m_pUsrPref && "m_pUsrPref is set by here");
     return o3tl::narrowing<sal_uInt16>(m_pUsrPref->GetUpdateLinkMode());
 }
 
 SwFieldUpdateFlags SwModule::GetFieldUpdateFlags() const
 {
-    if(!m_pUsrPref)
+    if (!m_pUsrPref)
         GetUsrPref(false);
+    assert(m_pUsrPref && "m_pUsrPref is set by here");
     return m_pUsrPref->GetFieldUpdateFlags();
 }
 
 void SwModule::ApplyFieldUpdateFlags(SwFieldUpdateFlags eFieldFlags)
 {
-    if(!m_pUsrPref)
+    if (!m_pUsrPref)
         GetUsrPref(false);
+    assert(m_pUsrPref && "m_pUsrPref is set by here");
     m_pUsrPref->SetFieldUpdateFlags(eFieldFlags);
 }
 
 void SwModule::ApplyLinkMode(sal_Int32 nNewLinkMode)
 {
-    if(!m_pUsrPref)
+    if (!m_pUsrPref)
         GetUsrPref(false);
+    assert(m_pUsrPref && "m_pUsrPref is set by here");
     m_pUsrPref->SetUpdateLinkMode(nNewLinkMode);
 }
 
