@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7449b65_29e6a30d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-23T16:17:09Z",
+      "side": 1,
+      "message": "FWIW I think this one is more targeted (only prevent formatting when we\u0027re in the middle of a move vs more broadly giving up), so it looks better than https://gerrit.libreoffice.org/c/core/+/130030 (which would be probably also acceptable).",
+      "revId": "d8170965ce0d8612f36314a7e81a2d57e52bf3ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
