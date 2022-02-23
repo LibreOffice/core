@@ -1900,20 +1900,49 @@ bool XFillColorItem::GetPresentation
     return true;
 }
 
-bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
+bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    rVal <<= GetColorValue().GetRGBColor();
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_COLOR_THEME_INDEX:
+        {
+            rVal <<= GetThemeColor().GetThemeIndex();
+            break;
+        }
+        default:
+        {
+            rVal <<= GetColorValue().GetRGBColor();
+            break;
+        }
+    }
 
     return true;
 }
 
-bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
+bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
 {
-    Color nValue;
-    if(!(rVal >>= nValue ))
-        return false;
+    nMemberId &= ~CONVERT_TWIPS;
+    switch(nMemberId)
+    {
+        case MID_COLOR_THEME_INDEX:
+        {
+            sal_Int16 nIndex = -1;
+            if (!(rVal >>= nIndex))
+                return false;
+            GetThemeColor().SetThemeIndex(nIndex);
+            break;
+        }
+        default:
+        {
+            Color nValue;
+            if(!(rVal >>= nValue ))
+                return false;
 
-    SetColorValue( nValue );
+            SetColorValue( nValue );
+            break;
+        }
+    }
     return true;
 }
 
