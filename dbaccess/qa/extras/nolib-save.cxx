@@ -47,12 +47,6 @@ DialogSaveTest::DialogSaveTest()
 
 void DialogSaveTest::test()
 {
-    // UnoApiTest::setUp (via InitVCL) puts each test under a locked SolarMutex,
-    // but at least the below xDocCloseable->close call could lead to a deadlock
-    // then, and it looks like none of the code here requires the SolarMutex to
-    // be locked anyway:
-    SolarMutexReleaser rel;
-
     const OUString aFileName(m_directories.getURLFromWorkdir(u"CppunitTest/testNolibSave.odb"));
     {
         uno::Reference< lang::XComponent > xComponent = loadFromDesktop(aFileName);

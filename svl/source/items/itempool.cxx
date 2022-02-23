@@ -23,6 +23,7 @@
 #include <string.h>
 #include <libxml/xmlwriter.h>
 
+#include <comphelper/solarmutex.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <svl/SfxBroadcaster.hxx>
@@ -635,6 +636,7 @@ void SfxItemPool::ResetPoolDefaultItem( sal_uInt16 nWhichId )
 
 const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nWhich, bool bPassingOwnership )
 {
+    assert(!comphelper::SolarMutex::get() || comphelper::SolarMutex::get()->IsCurrentThread());
     if ( 0 == nWhich )
         nWhich = rItem.Which();
 
@@ -749,6 +751,7 @@ const SfxPoolItem& SfxItemPool::PutImpl( const SfxPoolItem& rItem, sal_uInt16 nW
 void SfxItemPool::Remove( const SfxPoolItem& rItem )
 {
     assert(!IsPoolDefaultItem(&rItem) && "cannot remove Pool Default");
+    assert(!comphelper::SolarMutex::get() || comphelper::SolarMutex::get()->IsCurrentThread());
 
     // Find correct Secondary Pool
     const sal_uInt16 nWhich = rItem.Which();

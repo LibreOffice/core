@@ -120,6 +120,7 @@ void HTMLFetchThread::handleCell(xmlNodePtr pCellNode, SCROW nRow, SCCOL nCol)
     if (!aStr.isEmpty())
     {
         OUString aCellStr = aStr.makeStringAndClear();
+        SolarMutexGuard guard;
         mrDocument.SetString(nCol, nRow, 0, aCellStr);
     }
 }
