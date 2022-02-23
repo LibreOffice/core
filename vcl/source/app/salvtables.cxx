@@ -529,6 +529,15 @@ OUString SalInstanceWidget::get_tooltip_text() const
     return m_xWidget->GetQuickHelpText();
 }
 
+void SalInstanceWidget::set_cursor_data(void * pData)
+{
+    vcl::Cursor * pCursor = static_cast<vcl::Cursor *>(pData);
+    if (!pCursor)
+        return;
+
+    m_xWidget->SetCursor(pCursor);
+}
+
 void SalInstanceWidget::connect_focus_in(const Link<Widget&, void>& rLink)
 {
     ensure_event_listener();
@@ -5405,7 +5414,6 @@ void SalInstanceDrawingArea::HandleMouseEventListener(VclSimpleEvent& rEvent)
     }
     SalInstanceWidget::HandleMouseEventListener(rEvent);
 }
-
 
 bool SalInstanceDrawingArea::HandleKeyEventListener(VclWindowEvent& /*rEvent*/)
 {
