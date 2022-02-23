@@ -253,6 +253,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, bool bHorizontal, bool bWeb 
             GetUsrPref(false);
         pPref = m_pUsrPref.get();
     }
+    assert(pPref && "pPref will be set by now");
     if( bHorizontal )
         pPref->SetHScrollMetric(eMetric);
     else
