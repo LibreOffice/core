@@ -645,6 +645,25 @@ ScDocShellRef ScBootstrapFixture::load(const OUString& rURL, sal_Int32 nFormat, 
     return load(bReadWrite, rURL, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, static_cast<sal_uIntPtr>(nFormatType));
 }
 
+ScDocShellRef ScBootstrapFixture::loadEmptyDocument(const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
+        "private:factory/scalc",
+        "_blank",
+        0,
+        rPropertyValues);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    return dynamic_cast<ScDocShell*>(pFoundShell);
+}
+
 ScDocShellRef ScBootstrapFixture::loadDocAndSetupModelViewController(std::u16string_view rFileName, sal_Int32 nFormat)
 {
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getProcessComponentContext());
