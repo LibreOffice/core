@@ -54,6 +54,7 @@ class SAL_DLLPUBLIC_RTTI SwFootnoteBossFrame: public SwLayoutFrame
 
     // max. height of the footnote container on this page
     SwTwips m_nMaxFootnoteHeight;
+    bool m_isMovingFootnotes = false;
 
     SwFootnoteContFrame *MakeFootnoteCont();
     SwFootnoteFrame     *FindFirstFootnote();
@@ -106,9 +107,12 @@ public:
                          SwFootnoteBossFrame*     _pOld,
                          SwFootnoteFrames&        _rFootnoteArr,
                          const bool    _bCollectOnlyPreviousFootnotes = false );
-    void    MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool bCalc = false );
+    void    MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool bCalc = false,
+                SwFootnoteBossFrame * pOldBoss = nullptr);
     void    MoveFootnotes( const SwContentFrame *pSrc, SwContentFrame *pDest,
                       SwTextFootnote const *pAttr );
+
+    bool IsMovingFootnotes() const { return m_isMovingFootnotes; }
 
     // should AdjustNeighbourhood be called (or Grow/Shrink)?
     SwNeighbourAdjust NeighbourhoodAdjustment() const
