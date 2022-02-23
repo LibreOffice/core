@@ -76,6 +76,7 @@ typedef std::shared_ptr< TextListStyle > TextListStylePtr;
 
 class Shape;
 typedef std::shared_ptr< Shape > ShapePtr;
+typedef std::weak_ptr< Shape > WeakShapePtr;
 
 class Theme;
 typedef std::shared_ptr< Theme > ThemePtr;
