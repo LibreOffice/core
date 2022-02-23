@@ -2302,6 +2302,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
     assertXPath(pXmlDoc, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "foar");
 }
 
+// FIXME: apparently infinite loop on Mac
+#ifndef MACOSX
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL) { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
+#endif
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
