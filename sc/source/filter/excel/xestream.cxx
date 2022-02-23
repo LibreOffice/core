@@ -673,8 +673,16 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
             rsValue = ToOUString(lcl_GetErrorString(aResValue.mnError));
         break;
         case sc::FormulaResultValue::Value:
-            rsType = "n";
-            rsValue = OUString::number(aResValue.mfValue);
+            if (rCell.GetFormatType() == SvNumFormatType::LOGICAL)
+            {
+                rsType = "b";
+                rsValue = rCell.GetValue() == 0.0 ? "0" : "1";
+            }
+            else
+            {
+                rsType = "n";
+                rsValue = OUString::number(aResValue.mfValue);
+            }
         break;
         case sc::FormulaResultValue::String:
             rsType = "str";
