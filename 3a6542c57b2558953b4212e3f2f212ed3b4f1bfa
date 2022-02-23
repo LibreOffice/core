@@ -16,6 +16,23 @@
       "message": "A number of bug duplicates, so probably good backport candidate to the 7.3 \"compatibility release\".",
       "revId": "3a6542c57b2558953b4212e3f2f212ed3b4f1bfa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "236f7cbc_939fed40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-23T19:27:03Z",
+      "side": 1,
+      "message": "See data loss comment at https://gerrit.libreoffice.org/c/core/+/130406",
+      "revId": "3a6542c57b2558953b4212e3f2f212ed3b4f1bfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
