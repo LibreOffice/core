@@ -27,7 +27,6 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <algorithm>
-#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
@@ -39,7 +38,7 @@
 // primitive decomposition helpers
 
 #include <drawinglayer/attribute/strokeattribute.hxx>
-#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>

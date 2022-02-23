@@ -22,7 +22,6 @@
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <memory>
 #include <optional>
 
 namespace svgio::svgreader

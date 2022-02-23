@@ -33,7 +33,6 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/resmgr.hxx>
 #include <svx/xmlexchg.hxx>
-#include <unotools/pathoptions.hxx>
 #include <unotools/viewoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/viewfrm.hxx>

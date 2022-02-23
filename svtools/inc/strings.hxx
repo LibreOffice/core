@@ -9,6 +9,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 // no need to translate this
 // the items in this string have to be in the same order as the STR_FIELD_* strings are added to the
 // field label list of the dialog

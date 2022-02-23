@@ -47,7 +47,6 @@
 #include <map>
 #include <memory>
 #include <mutex>
-#include <string_view>
 
 using namespace ::osl;
 using namespace ::cppu;

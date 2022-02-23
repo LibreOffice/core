@@ -19,7 +19,6 @@
 
 #include <svgtools.hxx>
 #include <sal/log.hxx>
-#include <osl/diagnose.h>
 #include <tools/color.hxx>
 #include <rtl/math.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

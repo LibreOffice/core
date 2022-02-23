@@ -28,7 +28,6 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svxids.hrc>
-#include <svx/unoapi.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 

@@ -11,8 +11,6 @@
 #include <svl/sharedstring.hxx>
 #include <unotools/charclass.hxx>
 
-#include <mutex>
-#include <unordered_map>
 #include <unordered_set>
 
 #ifdef __GNUC__

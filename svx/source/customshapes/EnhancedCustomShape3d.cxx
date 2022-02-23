@@ -45,7 +45,9 @@
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <svx/sdr/properties/properties.hxx>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <drawinglayer/attribute/sdrlineattribute.hxx>

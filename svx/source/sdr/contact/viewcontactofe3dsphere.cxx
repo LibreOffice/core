@@ -23,7 +23,6 @@
 #include <drawinglayer/primitive3d/sdrsphereprimitive3d.hxx>
 #include <sdr/primitive2d/sdrattributecreator.hxx>
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
-#include <memory>
 
 
 namespace sdr::contact

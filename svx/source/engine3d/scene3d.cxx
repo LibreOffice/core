@@ -25,7 +25,6 @@
 #include <svx/dialmgr.hxx>
 #include <svx/svditer.hxx>
 
-#include <stdlib.h>
 #include <svx/svdobjkind.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/scene3d.hxx>
@@ -39,7 +38,6 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <svx/svdmodel.hxx>
-#include <rtl/ustrbuf.hxx>
 
 namespace {
 

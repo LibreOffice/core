@@ -21,7 +21,6 @@
 #define INCLUDED_SVX_SOURCE_INC_STYLES_PREVIEW_WINDOW_HXX
 
 #include <vcl/InterimItemWindow.hxx>
-#include <vcl/customweld.hxx>
 #include <svl/style.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <sfx2/sfxstatuslistener.hxx>

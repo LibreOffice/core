@@ -19,7 +19,6 @@
 
 #include "EnhancedCustomShapeHandle.hxx"
 #include <svx/EnhancedCustomShape2d.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdoashp.hxx>
 
 

@@ -20,6 +20,7 @@
 #include "cellvalueconversion.hxx"
 
 #include <com/sun/star/util/NumberFormatsSupplier.hpp>
+#include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/Time.hpp>

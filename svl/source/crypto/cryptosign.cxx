@@ -10,7 +10,6 @@
 #include <sal/config.h>
 
 #include <algorithm>
-#include <string_view>
 
 #include <svl/cryptosign.hxx>
 #include <svl/sigstruct.hxx>

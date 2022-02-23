@@ -38,7 +38,6 @@
 #include <svx/xlnstit.hxx>
 #include <editeng/editeng.hxx>
 #include <svx/xtable.hxx>
-#include <svx/svdtrans.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdundo.hxx>

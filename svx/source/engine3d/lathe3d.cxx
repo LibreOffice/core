@@ -31,7 +31,6 @@
 #include <sdr/contact/viewcontactofe3dlathe.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <rtl/ustrbuf.hxx>
 
 
 // DrawContact section

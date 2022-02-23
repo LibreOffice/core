@@ -18,16 +18,11 @@
  */
 #pragma once
 
+#include <drawinglayer/primitive2d/Primitive2DVisitor.hxx>
 #include <com/sun/star/graphic/XPrimitiveFactory2D.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <svx/svdobj.hxx>
-#include <svx/svdpage.hxx>
-#include <svx/unoapi.hxx>
-#include <svx/sdr/contact/viewcontact.hxx>
-#include <comphelper/sequence.hxx>
 
 typedef comphelper::WeakComponentImplHelper<css::graphic::XPrimitiveFactory2D,
                                             css::lang::XServiceInfo>

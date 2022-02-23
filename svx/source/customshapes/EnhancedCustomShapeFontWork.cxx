@@ -41,7 +41,6 @@
 #include <vector>
 #include <numeric>
 #include <algorithm>
-#include <memory>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/i18n/BreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>

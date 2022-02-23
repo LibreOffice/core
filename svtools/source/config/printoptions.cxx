@@ -18,11 +18,10 @@
  */
 
 #include <svtools/printoptions.hxx>
-#include <vcl/print.hxx>
 #include <vcl/printer/Options.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sal/macros.h>
-#include <tools/diagnose_ex.h>
+#include <tools/long.hxx>
 
 const sal_uInt16 aDPIArray[] = { 72, 96, 150, 200, 300, 600 };
 

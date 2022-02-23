@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <com/sun/star/util/NumberFormatter.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <unordered_map>
 #include <memory>

@@ -66,7 +66,6 @@
 #include <tools/multisel.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/help.hxx>
-#include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>

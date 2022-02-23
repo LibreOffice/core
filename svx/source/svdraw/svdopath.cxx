@@ -20,7 +20,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <tools/bigint.hxx>
 #include <tools/helpers.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <svx/svdopath.hxx>
 #include <math.h>
 #include <svx/xpoly.hxx>

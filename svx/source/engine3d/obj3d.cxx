@@ -39,7 +39,6 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>
 #include <svx/e3dsceneupdater.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <unotools/configmgr.hxx>
 
 using namespace com::sun::star;

@@ -29,7 +29,6 @@
 #include <svl/hint.hxx>
 #include <svl/itemset.hxx>
 
-#include <items_helper.hxx>
 #include <poolio.hxx>
 
 #include <cassert>

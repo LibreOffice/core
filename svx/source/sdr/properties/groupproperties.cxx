@@ -20,13 +20,10 @@
 #include <sal/config.h>
 
 #include <sdr/properties/groupproperties.hxx>
-#include <sdr/properties/itemsettools.hxx>
 #include <svl/itemset.hxx>
 #include <svl/whiter.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdpage.hxx>
-#include <svx/svdtrans.hxx>
-#include <svx/svdmodel.hxx>
 #include <osl/diagnose.h>
 
 

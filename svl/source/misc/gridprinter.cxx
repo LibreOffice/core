@@ -10,9 +10,9 @@
 #include <svl/gridprinter.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <mdds/multi_type_vector_types.hpp>
-#include <mdds/multi_type_vector_custom_func1.hpp>
-#include <mdds/multi_type_vector_macro.hpp>
+#include <mdds/multi_type_vector/types.hpp>
+#include <mdds/multi_type_vector/custom_func1.hpp>
+#include <mdds/multi_type_vector/macro.hpp>
 #include <mdds/multi_type_matrix.hpp>
 
 #include <iostream>

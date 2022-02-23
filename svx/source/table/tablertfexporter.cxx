@@ -25,7 +25,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
-#include <tools/UnitConversion.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtfout.hxx>
 

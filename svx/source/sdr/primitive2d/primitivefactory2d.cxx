@@ -17,7 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <sdr/primitive2d/primitivefactory2d.hxx>
+#include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unoapi.hxx>
 
 using namespace com::sun::star;
 

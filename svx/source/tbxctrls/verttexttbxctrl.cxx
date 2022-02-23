@@ -19,7 +19,6 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <verttexttbxctrl.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <vcl/toolbox.hxx>

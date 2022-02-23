@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <comphelper/propertyvalue.hxx>
 #include <svtools/toolbarmenu.hxx>
 #include <vcl/toolbox.hxx>

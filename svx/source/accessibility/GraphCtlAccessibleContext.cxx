@@ -27,7 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/window.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <tools/gen.hxx>

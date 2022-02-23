@@ -30,7 +30,6 @@
 
 #include <algorithm>
 #include <math.h>
-#include <string_view>
 
 #include <frmselimpl.hxx>
 #include <AccessibleFrameSelector.hxx>
@@ -40,7 +39,6 @@
 #include <vcl/svapp.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 #include <bitmaps.hlst>
 
