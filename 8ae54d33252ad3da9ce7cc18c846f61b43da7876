@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39637d00_fd42adb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-23T15:48:48Z",
+      "side": 1,
+      "message": "Jenkins approved - just restored a mistakenly added file.",
+      "revId": "8ae54d33252ad3da9ce7cc18c846f61b43da7876",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
