@@ -36,12 +36,12 @@ private:
     void mapToGregorian() override;
     void mapFromGregorian() override;
 
-private:
-    static double NewMoon(sal_Int32 n);
-    static void getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
-    static void ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
-    static void getGregorianDay(sal_Int32 jd, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear);
-    static sal_Int32 getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
+public:
+    static double SAL_DLLPUBLIC_EXPORT NewMoon(sal_Int32 n);
+    static void SAL_DLLPUBLIC_EXPORT getHijri(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
+    static void SAL_DLLPUBLIC_EXPORT ToGregorian(sal_Int32 *day, sal_Int32 *month, sal_Int32 *year);
+    static void SAL_DLLPUBLIC_EXPORT getGregorianDay(sal_Int32 jd, sal_Int32 *pnDay, sal_Int32 *pnMonth, sal_Int32 *pnYear);
+    static sal_Int32 SAL_DLLPUBLIC_EXPORT getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year);
 };
 
 }
