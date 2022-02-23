@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ebc54a2d_8fd0c463",
+        "filename": "xmloff/source/draw/EnhancedCustomShapeToken.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-02-23T22:10:19Z",
+      "side": 1,
+      "message": "\u003e so this code is not namespace aware and that\u0027s why we need a different attribute name?\n\nI could get the prefix from aIter in XMLEnhancedCustomShapeContext::startFastElement. But if we write loext:extrusion-specularity and draw:extrusion-specularity to file, then a LibreOffice version, which does not have the patch will generate two properties \"Specularity\" in CustomShapeGeometry/Extrusion, because the switch over EASGet() considers only the local name. Such version will then write these two properties as two times draw:extrusion-specularity to file. That would be a severe error, the resaved file cannot be opened but produces a parse error. Therefore I think, that a different local name then \u0027extrusion-specularity\u0027 is needed for the loext-attribute.",
+      "parentUuid": "76fe879d_ad01449f",
+      "revId": "bf67aa98686f3c9adbf6a82f35b137cc47ec0c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de16a036_2981d6a5",
