@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cd32550_78c35739",
+        "filename": "hwpfilter/source/hwpfile.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-23T10:38:13Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 286,
+        "startChar": 25,
+        "endLine": 286,
+        "endChar": 27
+      },
+      "revId": "b1e29e12f43a812aa859afb48e7ed362ba375e51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
