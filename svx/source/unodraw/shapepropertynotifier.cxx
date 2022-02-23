@@ -22,11 +22,8 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
-
-#include <unordered_map>
 
 namespace
 {

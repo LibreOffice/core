@@ -28,7 +28,6 @@
 #include <svtools/unoevent.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/debug.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <svx/unofill.hxx>

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <sfx2/objsh.hxx>
 #include <comphelper/fileformat.h>
 #include <comphelper/servicehelper.hxx>

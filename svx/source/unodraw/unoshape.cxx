@@ -87,7 +87,6 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/wmf.hxx>
 #include <svx/sdtfsitm.hxx>
-#include <svx/svdoutl.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/SvxXTextColumns.hxx>
 

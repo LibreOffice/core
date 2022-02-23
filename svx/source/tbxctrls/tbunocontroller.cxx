@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/status/FontHeight.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>

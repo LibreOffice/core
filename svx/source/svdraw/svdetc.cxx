@@ -39,7 +39,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/svdoole2.hxx>
 #include <svl/itempool.hxx>
-#include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>

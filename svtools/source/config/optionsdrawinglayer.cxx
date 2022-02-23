@@ -18,7 +18,6 @@
  */
 
 #include <svtools/optionsdrawinglayer.hxx>
-#include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>

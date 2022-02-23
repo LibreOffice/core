@@ -19,7 +19,6 @@
 
 #include <memory>
 #include <svx/sidebar/LinePropertyPanelBase.hxx>
-#include <com/sun/star/drawing/LineStyle.hpp>
 #include <sfx2/weldutils.hxx>
 #include <svx/linectrl.hxx>
 #include <svx/xlnwtit.hxx>

@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <sal/types.h>
+
 class SdrObjEditView;
 class SdrTextObj;
 class KeyEvent;

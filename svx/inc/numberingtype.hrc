@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
 #define INCLUDED_SVX_INC_NUMBERINGTYPE_HRC
 
+#include <unotools/resmgr.hxx>
+
 #include <utility>
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))

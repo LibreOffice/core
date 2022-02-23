@@ -24,13 +24,10 @@
 #include <com/sun/star/util/XUpdatable2.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/graphic/PrimitiveFactory2D.hpp>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <rtl/ref.hxx>
 #include <sdr/primitive2d/primitivefactory2d.hxx>
 
 using namespace ::com::sun::star;

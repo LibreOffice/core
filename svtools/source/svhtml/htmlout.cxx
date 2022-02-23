@@ -23,7 +23,6 @@
 #include <svl/macitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <svl/zforlist.hxx>
 
 #include <svtools/HtmlWriter.hxx>
 #include <svtools/htmlout.hxx>

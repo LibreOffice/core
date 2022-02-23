@@ -13,7 +13,6 @@
 #include <test/xmltesttools.hxx>
 
 #include <comphelper/seqstream.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <com/sun/star/graphic/XPrimitive2D.hpp>
