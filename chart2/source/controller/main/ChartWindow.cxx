@@ -204,7 +204,6 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
     if( ( rHEvt.GetMode() & HelpEventMode::QUICK ) &&
         m_pWindowController )
     {
-//         Point aLogicHitPos = PixelToLogic( rHEvt.GetMousePosPixel()); // old chart: GetPointerPosPixel()
         Point aLogicHitPos = PixelToLogic( GetPointerPosPixel());
         OUString aQuickHelpText;
         awt::Rectangle aHelpRect;
@@ -213,12 +212,14 @@ void ChartWindow::RequestHelp( const HelpEvent& rHEvt )
 
         if( bHelpHandled )
         {
+            tools::Rectangle aPixelRect(LogicToPixel(lcl_AWTRectToVCLRect(aHelpRect)));
+            tools::Rectangle aScreenRect(OutputToScreenPixel(aPixelRect.TopLeft()),
+                                         OutputToScreenPixel(aPixelRect.BottomRight()));
+
             if( bIsBalloonHelp )
-                Help::ShowBalloon(
-                    this, rHEvt.GetMousePosPixel(), lcl_AWTRectToVCLRect( aHelpRect ), aQuickHelpText );
+                Help::ShowBalloon(this, rHEvt.GetMousePosPixel(), aScreenRect, aQuickHelpText);
             else
-                Help::ShowQuickHelp(
-                    this, lcl_AWTRectToVCLRect( aHelpRect ), aQuickHelpText );
+                Help::ShowQuickHelp(this, aScreenRect, aQuickHelpText);
         }
     }
 
