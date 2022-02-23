@@ -181,18 +181,8 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTable::getAccessibleCellA
 
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    sal_Int32 nCount = getAccessibleChildCount();
     sal_Int32 nChildIndex = nRow*m_aTable.GetColumnCount() + nColumn;
-    if(m_aCellVector.empty() || m_aCellVector.size() != static_cast<unsigned>(nCount))
-    {
-        m_aCellVector.resize(nCount);
-    }
-    if(!m_aCellVector[nChildIndex].is())
-    {
-        rtl::Reference<AccessibleGridControlTableCell> pCell = new AccessibleGridControlTableCell(this, m_aTable, nRow, nColumn);
-        m_aCellVector[nChildIndex] = pCell;
-    }
-    return m_aCellVector[nChildIndex];
+    return getAccessibleChild(nChildIndex);
 }
 
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleSelected(
