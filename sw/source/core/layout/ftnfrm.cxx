@@ -36,6 +36,7 @@
 #include <ndindex.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
+#include <comphelper/flagguard.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -1954,13 +1955,20 @@ void SwFootnoteBossFrame::CollectFootnotes_( const SwContentFrame*   _pRef,
     while ( _pFootnote );
 }
 
-void SwFootnoteBossFrame::MoveFootnotes_( SwFootnoteFrames &rFootnoteArr, bool bCalc )
+void SwFootnoteBossFrame::MoveFootnotes_(SwFootnoteFrames &rFootnoteArr,
+        bool bCalc, SwFootnoteBossFrame *const pOldBoss)
 {
     // All footnotes referenced by pRef need to be moved
     // to a new position (based on the new column/page)
     const sal_uInt16 nMyNum = FindPageFrame()->GetPhyPageNum();
     const sal_uInt16 nMyCol = lcl_ColumnNum( this );
     SwRectFnSet aRectFnSet(this);
+
+    ::std::optional<::comphelper::FlagGuard> g;
+    if (pOldBoss)
+    {
+        g.emplace(pOldBoss->m_isMovingFootnotes);
+    }
 
     // #i21478# - keep last inserted footnote in order to
     // format the content of the following one.
@@ -2188,7 +2196,7 @@ void SwFootnoteBossFrame::MoveFootnotes( const SwContentFrame *pSrc, SwContentFr
     if ( aFootnoteArr.empty() )
         return;
 
-    pDestBoss->MoveFootnotes_( aFootnoteArr, true );
+    pDestBoss->MoveFootnotes_(aFootnoteArr, true, this);
     SwPageFrame* pSrcPage = FindPageFrame();
     SwPageFrame* pDestPage = pDestBoss->FindPageFrame();
     // update FootnoteNum only at page change
@@ -2719,11 +2727,11 @@ bool SwLayoutFrame::MoveLowerFootnotes( SwContentFrame *pStart, SwFootnoteBossFr
     if ( !aFootnoteArr.empty() || pFootnoteArr )
     {
         if( !aFootnoteArr.empty() )
-            pNewBoss->MoveFootnotes_( aFootnoteArr, true );
+            pNewBoss->MoveFootnotes_(aFootnoteArr, true, pOldBoss);
         if( pFootnoteArr )
         {
             assert(pNewChief);
-            static_cast<SwFootnoteBossFrame*>(pNewChief)->MoveFootnotes_( *pFootnoteArr, true );
+            static_cast<SwFootnoteBossFrame*>(pNewChief)->MoveFootnotes_(*pFootnoteArr, true, pOldBoss);
             pFootnoteArr.reset();
         }
         bMoved = true;
