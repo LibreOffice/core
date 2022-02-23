@@ -21,6 +21,7 @@
 #define INCLUDED_FILTER_SOURCE_PDF_IMPDIALOG_HXX
 
 #include <sfx2/tabdlg.hxx>
+#include <svx/AccessibilityCheckDialog.hxx>
 
 #include <vcl/pdfwriter.hxx>
 #include <vcl/FilterConfigItem.hxx>
@@ -67,6 +68,7 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     Any                         maSelection;
 
     DECL_LINK(CancelHdl, weld::Button&, void);
+    DECL_LINK(OkHdl, weld::Button&, void);
 
     // the following data are the configuration used throughout the dialog and pages
     bool                        mbIsPresentation;
@@ -124,6 +126,8 @@ class ImpPDFTabDialog final : public SfxTabDialogController
     bool                        mbCanExtractForAccessibility;
     css::uno::Reference< css::beans::XMaterialHolder > mxPreparedPasswords;
 
+    std::shared_ptr< svx::AccessibilityCheckDialog > mpAccessibilityCheckDialog;
+
     bool                        mbIsRangeChecked;
     OUString                    msPageRange;
     bool                        mbSelectionIsChecked;
@@ -164,7 +168,6 @@ public:
 
 private:
     virtual void                PageCreated(const OString& rId, SfxTabPage& rPage) override;
-    virtual short               Ok() override;
 };
 
 
