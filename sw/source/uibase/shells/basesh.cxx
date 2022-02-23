@@ -2701,8 +2701,8 @@ void SwBaseShell::ExecDlg(SfxRequest &rReq)
         {
             sw::AccessibilityCheck aCheck(rSh.GetDoc());
             aCheck.check();
-            svx::AccessibilityCheckDialog aDialog(pMDI, aCheck.getIssueCollection());
-            aDialog.run();
+            std::shared_ptr<svx::AccessibilityCheckDialog> aDialog = std::make_shared<svx::AccessibilityCheckDialog>(pMDI, aCheck.getIssueCollection());
+            weld::DialogController::runAsync(aDialog, [](int){});
         }
         break;
         case SID_GRAPHIC_SIZE_CHECK:
