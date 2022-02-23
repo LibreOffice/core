@@ -57,6 +57,30 @@
       },
       "revId": "bf67aa98686f3c9adbf6a82f35b137cc47ec0c98",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c3a22b6_f47e354c",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4560,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-02-23T23:16:15Z",
+      "side": 1,
+      "message": "I have changed it to ODFSVER_012. And removed some obsolete comments in unittests.",
+      "parentUuid": "de16a036_2981d6a5",
+      "range": {
+        "startLine": 4560,
+        "startChar": 109,
+        "endLine": 4560,
+        "endChar": 120
+      },
+      "revId": "bf67aa98686f3c9adbf6a82f35b137cc47ec0c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
