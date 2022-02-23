@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76fe879d_ad01449f",
+        "filename": "xmloff/source/draw/EnhancedCustomShapeToken.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-23T10:11:11Z",
+      "side": 1,
+      "message": "so this code is not namespace aware and that\u0027s why we need a different attribute name?",
+      "revId": "bf67aa98686f3c9adbf6a82f35b137cc47ec0c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de16a036_2981d6a5",
+        "filename": "xmloff/source/draw/shapeexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 4560,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-23T10:11:11Z",
+      "side": 1,
+      "message": "why not ODFSVER_012? i thought the change was from 1.1 to 1.2? so we can write the attribute to any extended \u003e\u003d 1.2 version",
+      "range": {
+        "startLine": 4560,
+        "startChar": 109,
+        "endLine": 4560,
+        "endChar": 120
+      },
+      "revId": "bf67aa98686f3c9adbf6a82f35b137cc47ec0c98",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
