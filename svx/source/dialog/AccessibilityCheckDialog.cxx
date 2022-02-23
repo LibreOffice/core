@@ -41,12 +41,6 @@ AccessibilityCheckDialog::AccessibilityCheckDialog(
     , m_aIssueCollection(rIssueCollection)
     , m_xAccessibilityCheckBox(m_xBuilder->weld_box("accessibilityCheckBox"))
 {
-}
-
-AccessibilityCheckDialog::~AccessibilityCheckDialog() {}
-
-short AccessibilityCheckDialog::run()
-{
     sal_Int32 i = 0;
 
     for (std::shared_ptr<sfx::AccessibilityIssue> const& pIssue : m_aIssueCollection.getIssues())
@@ -56,8 +50,10 @@ short AccessibilityCheckDialog::run()
         m_xAccessibilityCheckBox->reorder_child(xEntry->get_widget(), i++);
         m_aAccessibilityCheckEntries.push_back(std::move(xEntry));
     }
-    return GenericDialogController::run();
 }
+
+AccessibilityCheckDialog::~AccessibilityCheckDialog() {}
+
 
 } // end svx namespace
 
