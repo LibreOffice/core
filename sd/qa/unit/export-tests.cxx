@@ -94,6 +94,7 @@ public:
     void testTdf140714();
     void testMasterPageBackgroundFullSize();
     void testColumnsODG();
+    void testTdf112126();
 
     CPPUNIT_TEST_SUITE(SdExportTest);
 
@@ -141,7 +142,7 @@ public:
     CPPUNIT_TEST(testTdf140714);
     CPPUNIT_TEST(testMasterPageBackgroundFullSize);
     CPPUNIT_TEST(testColumnsODG);
-
+    CPPUNIT_TEST(testTdf112126);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1713,6 +1714,22 @@ void SdExportTest::testColumnsODG()
                 "column-gap", "0.7cm");
 
     tempFile.EnableKillingFile();
+}
+
+void SdExportTest::testTdf112126()
+{
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf112126.odg"), ODG);
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0, xDocShRef));
+    uno::Reference<beans::XPropertySet> xPropertySet(xPage, uno::UNO_QUERY);
+
+    OUString xPageName;
+    xPropertySet->getPropertyValue("LinkDisplayName") >>= xPageName;
+
+    // without the fix in place, it fails with
+    // - Expected: Page 1
+    // - Actual  : Slide 1
+    CPPUNIT_ASSERT_EQUAL(OUString("Page 1"), xPageName);
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdExportTest);
