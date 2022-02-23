@@ -69,6 +69,24 @@
       "parentUuid": "ff0f9dc5_4d8eb9ff",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "522c9ab9_3876a897",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-23T15:09:01Z",
+      "side": 1,
+      "message": "Hello,\nThanks for the hint. With the new patch, it builds for me after a make clean\n\n\n--host\u003dx86_64-apple-macos\n--build\u003dx86_64-apple-macos\n--disable-werror\n--disable-odk\n--with-package-format\u003ddmg\n--disable-online-update\n\nnot sure whether it might fail when using other options",
+      "parentUuid": "d17ddd22_ee4a7619",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
