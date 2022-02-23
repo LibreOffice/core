@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58ab1ca2_02c79b46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003166
+      },
+      "writtenOn": "2022-02-23T14:46:15Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1:\n\u003e \n\u003e A polite ping, still working on this patch?\n\nYes, I am working on it",
+      "revId": "f8dc315249e219c7464b397c91850009f31e4584",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
