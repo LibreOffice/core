@@ -206,6 +206,8 @@ public:
     virtual void set_tooltip_text(const OUString& rTip) = 0;
     virtual OUString get_tooltip_text() const = 0;
 
+    virtual void set_cursor_data(void * pData) = 0;
+
     virtual void connect_focus_in(const Link<Widget&, void>& rLink)
     {
         assert(!m_aFocusInHdl.IsSet() || !rLink.IsSet());
