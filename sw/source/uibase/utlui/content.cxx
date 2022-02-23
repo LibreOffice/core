@@ -779,8 +779,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 {
                     if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadcaster())) // SwPostit
                     {
-                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc() &&
-                            (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
+                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc())
                         {
                             OUString sEntry = pFormatField->GetField()->GetPar2();
                             sEntry = RemoveNewline(sEntry);
@@ -789,6 +788,17 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                                 sEntry,
                                                 pFormatField,
                                                 nYPos));
+                            if (!pFormatField->GetTextField()->GetTextNode().getLayoutFrame(
+                                        m_pWrtShell->GetLayout()))
+                                pCnt->SetInvisible();
+                            if (pOldMember)
+                            {
+                                assert(pbContentChanged && "pbContentChanged is always set if pOldMember is");
+                                if (!*pbContentChanged &&
+                                        nOldMemberCount > static_cast<size_t>(nYPos) &&
+                                        (*pOldMember)[nYPos]->IsInvisible() != pCnt->IsInvisible())
+                                    *pbContentChanged = true;
+                            }
                             m_pMember->insert(std::move(pCnt));
                             nYPos++;
                         }
