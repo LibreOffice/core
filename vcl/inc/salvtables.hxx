@@ -300,6 +300,8 @@ public:
 
     virtual OUString get_tooltip_text() const override;
 
+    virtual void set_cursor_data(void * pData) override;
+
     virtual void connect_focus_in(const Link<Widget&, void>& rLink) override;
 
     virtual void connect_mnemonic_activate(const Link<Widget&, bool>& rLink) override;
