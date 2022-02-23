@@ -16,6 +16,24 @@
       "message": "i have no idea if this is better or worse, the document looks the same either way...\n\n(it looked different in a downstream 6.1 branch, there it was 5 pages)",
       "revId": "ab091164d69e048028c28101f7a54dc4222cc898",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe9b34e5_5e9d73c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-23T14:51:59Z",
+      "side": 1,
+      "message": "I prefer it automatically cause I didn\u0027t write it. The guard around lcl_FormatContentOfLayoutFrame is definitely the right way around? I mean only call lcl_FormatContentOfLayoutFrame if IsMovingFootnotes is true?",
+      "parentUuid": "82708254_aeea18c7",
+      "revId": "ab091164d69e048028c28101f7a54dc4222cc898",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
