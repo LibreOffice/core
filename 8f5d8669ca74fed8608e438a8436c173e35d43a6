@@ -16,6 +16,24 @@
       "message": "Note that can be data loss if the formula result was neither 0 nor 1 but the cell is formatted as BOOLEAN. Rather additionally check the result if it is exactly 0 or 1 and only then use the boolean type.",
       "revId": "8f5d8669ca74fed8608e438a8436c173e35d43a6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8f0b2e2a_4436e26e",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 679,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-23T20:22:21Z",
+      "side": 1,
+      "message": "followup commit in the relation chain.",
+      "parentUuid": "eb90df80_fec1cbc3",
+      "revId": "8f5d8669ca74fed8608e438a8436c173e35d43a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
