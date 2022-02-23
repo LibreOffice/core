@@ -545,10 +545,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         if( pOutlinerParaObject && ( bOwnParaObj || !mpObject->IsEmptyPresObj() || mpObject->getSdrPageFromSdrObject()->IsMasterPage() ) )
         {
-            // tdf#72776: do not set empty text to SdrOutliner, if it is already set
-            if( !mpOutliner->GetEditEngine().GetTextLen() || pOutlinerParaObject->Count() > 1 || ( pOutlinerParaObject->Count() == 1 &&
-                !pOutlinerParaObject->GetTextObject().GetText(0).isEmpty() ) )
-                mpOutliner->SetText( *pOutlinerParaObject );
+            mpOutliner->SetText( *pOutlinerParaObject );
 
             // put text to object and set EmptyPresObj to FALSE
             if( mpText && bOwnParaObj && mpObject->IsEmptyPresObj() && pTextObj->IsReallyEdited() )
@@ -778,7 +775,8 @@ void SvxTextEditSourceImpl::UpdateData()
             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
             if( pTextObj )
             {
-                if( mpOutliner->GetParagraphCount() != 1 || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
+                if( (mpOutliner->GetParagraphCount() != 1 && mpOutliner->GetParagraphCount() != 2)
+                    || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
                 {
                     pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
                 }
