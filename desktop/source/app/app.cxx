@@ -26,6 +26,7 @@
 #include <config_extensions.h>
 
 #include <sal/config.h>
+#include <comphelper/lok.hxx>
 
 #include <iostream>
 #include <mutex>
@@ -1546,7 +1547,8 @@ int Desktop::Main()
         SetSplashScreenProgress(75);
 
         // use system window dialogs
-        Application::SetSystemWindowMode( SystemWindowFlags::DIALOG );
+        if (!comphelper::LibreOfficeKit::isActive())
+            Application::SetSystemWindowMode( SystemWindowFlags::DIALOG );
 
         SetSplashScreenProgress(80);
 

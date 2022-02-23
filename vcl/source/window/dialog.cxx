@@ -447,8 +447,11 @@ void Dialog::ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFla
         nStyle |= WB_DIALOGCONTROL;
     nStyle |= WB_ROLLABLE;
 
-    // Now, all Dialogs are per default system windows !!!
-    nStyle |= WB_SYSTEMWINDOW;
+    if (!comphelper::LibreOfficeKit::isActive())
+    {
+        // Now, all Dialogs are per default system windows !!!
+        nStyle |= WB_SYSTEMWINDOW;
+    }
 
     if (InitFlag::NoParent == eFlag)
     {

@@ -21,6 +21,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
+#include <comphelper/lok.hxx>
 
 #include <window.h>
 #include <salinst.hxx>
