@@ -1032,6 +1032,33 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf116256)
     CPPUNIT_ASSERT_GREATEREQUAL(nTextBoxShapeTop, nTextBoxFrameTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf73499)
+{
+    // open the bugdoc
+    CPPUNIT_ASSERT(createSwDoc(DATA_DIRECTORY, "tdf73499.docx"));
+
+    // ensure there is a groupshape
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Type mismatch!", OUString("com.sun.star.drawing.GroupShape"),
+                                 getShape(1)->getShapeType());
+    // dump the layout
+    auto pLayout = parseLayoutDump();
+
+    // Get the ids
+    const auto TextBox1_id
+        = getXPath(pLayout, "/root/page/body/txt/anchored/fly[1]/txt", "id").toInt32();
+    const auto TextBox2_id
+        = getXPath(pLayout, "/root/page/body/txt/anchored/fly[2]/txt", "id").toInt32();
+
+    const auto TextBox1_link_id
+        = getXPath(pLayout, "/root/page/body/txt/anchored/fly[1]/txt", "follow").toInt32();
+    const auto TextBox2_link_id
+        = getXPath(pLayout, "/root/page/body/txt/anchored/fly[2]/txt", "precede").toInt32();
+
+    // Without the fix theese were not match:
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Link Id bad!", TextBox1_id, TextBox2_link_id);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Link Id bad!", TextBox2_id, TextBox1_link_id);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf138194)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "xaxis-labelbreak.docx");
