@@ -63,6 +63,7 @@ public:
     }
     virtual void Show() { m_pDrawingArea->show(); }
     virtual void Hide() { m_pDrawingArea->hide(); }
+    void SetCursor(void* pData) { m_pDrawingArea->set_cursor_data(pData); }
     void GrabFocus() { m_pDrawingArea->grab_focus(); }
     bool HasFocus() const { return m_pDrawingArea->has_focus(); }
     bool HasChildFocus() const { return m_pDrawingArea->has_child_focus(); }

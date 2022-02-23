@@ -3900,6 +3900,8 @@ public:
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
     }
 
+    virtual void set_cursor_data(void * /*pData*/) override {};
+
     virtual std::unique_ptr<weld::Container> weld_parent() const override;
 
     virtual OString get_buildable_name() const override
