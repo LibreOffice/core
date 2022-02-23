@@ -4529,6 +4529,28 @@ void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::dra
     if (xProps->getPropertyValue("TextBox").get<bool>())
     {
         xProps->setPropertyValue("TextBoxContent", uno::Any(m_xPendingTextBoxFrames.front()));
+        uno::Sequence<beans::PropertyValue> aGrabbag
+            = xProps->getPropertyValue("InteropGrabBag").get<uno::Sequence<beans::PropertyValue>>();
+        for (const auto& rProp : aGrabbag)
+        {
+            if (rProp.Name == "TxbxHasLink" && rProp.Value.get<bool>())
+            {
+                uno::Reference<container::XNamed> xName(xProps->getPropertyValue("TextBoxContent"),
+                                                        uno::UNO_QUERY_THROW);
+
+                //Chaining of textboxes will happen in ~DomainMapper_Impl
+                //i.e when all the textboxes are read and all its attributes
+                //have been set ( basically the Name/LinkedDisplayName )
+                //which is set in Graphic Import.
+                m_vTextFramesForChaining.push_back(xShape);
+
+                aGrabbag.realloc(aGrabbag.size() + 1);
+                aGrabbag.getArray()[aGrabbag.getLength() - 1]
+                    = beans::PropertyValue("LinkChainName", 0, uno::Any(xName->getName()),
+                                           beans::PropertyState::PropertyState_DIRECT_VALUE);
+                xProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabbag));
+            }
+        }
         m_xPendingTextBoxFrames.pop();
     }
 }
