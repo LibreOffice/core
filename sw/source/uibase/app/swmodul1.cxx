@@ -217,6 +217,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
                 GetUsrPref(false);
             pPref = m_pUsrPref.get();
         }
+        assert(pPref && "pPref is set by here");
         FieldUnit eOldMetric = pPref->GetMetric();
         if(eOldMetric != eMetric)
             pPref->SetMetric(eMetric);
