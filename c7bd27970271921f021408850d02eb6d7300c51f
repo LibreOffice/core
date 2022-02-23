@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e2b95f7_7c994f34",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-02-23T23:47:23Z",
+      "side": 1,
+      "message": "I\u0027d explain what you fix, rather than the bug here",
+      "revId": "c7bd27970271921f021408850d02eb6d7300c51f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed70e834_f1b3c473",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-02-23T23:47:23Z",
+      "side": 1,
+      "message": "Standard phrasing would be \"regression from \u003chash\u003e\"..",
+      "revId": "c7bd27970271921f021408850d02eb6d7300c51f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4260caa2_7994aaef",
