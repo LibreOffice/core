@@ -31,6 +31,7 @@ inline constexpr OUStringLiteral UNO_NAME_CHAR_WEIGHT = u"CharWeight";
 
 inline constexpr OUStringLiteral UNO_NAME_FILLSTYLE = u"FillStyle";
 inline constexpr OUStringLiteral UNO_NAME_FILLCOLOR = u"FillColor";
+inline constexpr OUStringLiteral UNO_NAME_FILLCOLOR_THEME = u"FillColorTheme";
 inline constexpr OUStringLiteral UNO_NAME_FILLGRADIENT = u"FillGradient";
 inline constexpr OUStringLiteral UNO_NAME_FILLGRADIENTNAME = u"FillGradientName";
 inline constexpr OUStringLiteral UNO_NAME_FILLHATCH = u"FillHatch";

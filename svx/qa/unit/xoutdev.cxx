@@ -7,10 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include <unotest/bootstrapfixturebase.hxx>
+#include <test/bootstrapfixture.hxx>
+#include <unotest/macros_test.hxx>
+
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sal/types.h>
 #include <sfx2/app.hxx>
@@ -22,15 +24,32 @@
 #include <svx/xoutbmp.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
-class XOutdevTest : public CppUnit::TestFixture
+using namespace com::sun::star;
+
+class XOutdevTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
+    uno::Reference<lang::XComponent> mxComponent;
+
 public:
-    virtual void setUp() override
-    {
-        CppUnit::TestFixture::setUp();
-        SfxApplication::GetOrCreate();
-    }
+    virtual void setUp() override;
+    void tearDown() override;
+    uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
+
+void XOutdevTest::setUp()
+{
+    test::BootstrapFixture::setUp();
+
+    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+}
+
+void XOutdevTest::tearDown()
+{
+    if (mxComponent.is())
+        mxComponent->dispose();
+
+    test::BootstrapFixture::tearDown();
+}
 
 CPPUNIT_TEST_FIXTURE(XOutdevTest, testPdfGraphicExport)
 {
@@ -94,6 +113,30 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testTdf60684)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('P'), sFirstBytes[1]);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('N'), sFirstBytes[2]);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>('G'), sFirstBytes[3]);
+}
+
+CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
+{
+    // Given an empty Impress document with a (title) shape:
+    getComponent() = loadFromDesktop("private:factory/simpress",
+                                     "com.sun.star.presentation.PresentationDocument");
+
+    // When setting the theme index of the shape's fill color:
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    sal_Int16 nExpected = 4; // Accent 1
+    xShape->setPropertyValue("FillColorTheme", uno::makeAny(nExpected));
+
+    // Then make sure the value we read back is the expected one:
+    sal_Int16 nActual = -1;
+    xShape->getPropertyValue("FillColorTheme") >>= nActual;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : -1
+    // i.e. setting the value was broken.
+    CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
