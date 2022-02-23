@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6371550_9477a2e6",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-23T21:54:37Z",
+      "side": 1,
+      "message": "erm.. can we have indentation of 4 spaces please?\nSorry for nitpicking..",
+      "range": {
+        "startLine": 1287,
+        "startChar": 0,
+        "endLine": 1290,
+        "endChar": 38
+      },
+      "revId": "d1cd7779b3dbce6c58a3f2d6fcfcac308af5e2de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
