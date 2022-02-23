@@ -84,6 +84,7 @@ ScColumn::ScColumn(ScSheetLimits const & rSheetLimits) :
     maCellNotes(rSheetLimits.GetMaxRowCount()),
     maBroadcasters(rSheetLimits.GetMaxRowCount()),
     maCells(sc::CellStoreEvent(this)),
+    maSparklines(rSheetLimits.GetMaxRowCount()),
     mnBlkCountFormula(0),
     nCol( 0 ),
     nTab( 0 ),
@@ -774,6 +775,9 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 
     maCellNotes.insert_empty(nStartRow, nSize);
     maCellNotes.resize(GetDoc().GetMaxRowCount());
+
+    maSparklines.insert_empty(nStartRow, nSize);
+    maSparklines.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
 
     maBroadcasters.insert_empty(nStartRow, nSize);
     maBroadcasters.resize(GetDoc().GetMaxRowCount());
@@ -1871,6 +1875,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCells.swap(rCol.maCells);
     maCellTextAttrs.swap(rCol.maCellTextAttrs);
     maCellNotes.swap(rCol.maCellNotes);
+    maSparklines.swap(rCol.maSparklines);
 
     // Swap all CellStoreEvent mdds event_func related.
     maCells.event_handler().swap(rCol.maCells.event_handler());
