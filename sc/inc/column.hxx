@@ -65,6 +65,7 @@ class CompileFormulaContext;
 struct SetFormulaDirtyContext;
 enum class MatrixEdge;
 class ColumnIterator;
+class Sparkline;
 
 }
 
@@ -99,7 +100,7 @@ struct ScInterpreterContext;
 
 struct ScNeededSizeOptions
 {
-    const ScPatternAttr*    pPattern;
+    const ScPatternAttr* pPattern;
     bool                bFormula;
     bool                bSkipMerged;
     bool                bGetFont;
@@ -125,6 +126,9 @@ class ScColumn
 
     // Cell values.
     sc::CellStoreType maCells;
+
+    // Sparklines
+    sc::SparklineStoreType maSparklines;
 
     std::unique_ptr<ScAttrArray> pAttrArray;
 
@@ -611,6 +615,10 @@ public:
     void Broadcast( SCROW nRow );
     void BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint );
     void BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint );
+
+    // Spaklines
+    sc::Sparkline* GetSparkline(SCROW nRow);
+    void SetSparkline(SCROW nRow, std::unique_ptr<sc::Sparkline> pSparkline);
 
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );

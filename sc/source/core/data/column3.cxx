@@ -148,6 +148,7 @@ void ScColumn::Delete( SCROW nRow )
     DeleteContent(nRow, false);
     maCellTextAttrs.set_empty(nRow, nRow);
     maCellNotes.set_empty(nRow, nRow);
+    maSparklines.set_empty(nRow, nRow);
 
     Broadcast(nRow);
     CellStorageModified();
@@ -165,6 +166,8 @@ void ScColumn::FreeAll()
     maCellTextAttrs.resize(maxRowCount);
     maCellNotes.clear();
     maCellNotes.resize(maxRowCount);
+    maSparklines.clear();
+    maSparklines.resize(maxRowCount);
     CellStorageModified();
 }
 
