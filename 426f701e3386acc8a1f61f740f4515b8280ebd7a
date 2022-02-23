@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "939287c4_94cb8d93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-23T08:07:09Z",
+      "side": 1,
+      "message": "Many thanks for importing the dev guide, Ilmari!\n\nWe need to make sure that documentation is indeed updated (maybe create task with documentation team?)",
+      "revId": "426f701e3386acc8a1f61f740f4515b8280ebd7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
