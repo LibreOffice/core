@@ -25,7 +25,6 @@
 #include <svx/svdpage.hxx>
 #include <sdr/properties/pageproperties.hxx>
 #include <sdr/contact/viewcontactofpageobj.hxx>
-#include <rtl/ustrbuf.hxx>
 
 
 // BaseProperties section

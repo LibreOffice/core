@@ -28,7 +28,6 @@
 #include <unicode/ucsdet.h>
 
 #include <vector>
-#include <climits>
 
 // structure to store the actual data
 template<typename T>

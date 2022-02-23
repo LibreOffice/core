@@ -22,11 +22,9 @@
 #include <sal/config.h>
 
 #include <sal/types.h>
-#include <svl/itemset.hxx>
+#include <svl/whichranges.hxx>
 
-#include <memory>
 #include <utility>
-#include <vector>
 
 namespace svl::detail
 {

@@ -14,14 +14,12 @@
 
 #include <libxml/xmlwriter.h>
 
-#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-#include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>

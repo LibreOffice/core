@@ -15,6 +15,7 @@
 
 #include <tools/link.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/weld.hxx>
 
 namespace com :: sun :: star :: ucb { class XCommandEnvironment; }
 namespace com :: sun :: star :: awt { class XWindow; }

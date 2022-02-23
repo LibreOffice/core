@@ -23,7 +23,6 @@
 #include <svx/fmtools.hxx>
 #include <svx/svdobjkind.hxx>
 
-#include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/io/XPersistObject.hpp>
@@ -41,10 +40,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
-#include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

@@ -26,7 +26,6 @@
 #include <svx/svditer.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
-#include <svx/svdmodel.hxx>
 
 using namespace com::sun::star;
 

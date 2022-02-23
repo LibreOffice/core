@@ -20,7 +20,6 @@
 #include <memory>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
-#include <osl/diagnose.h>
 
 #include <vcl/taskpanelist.hxx>
 #include <vcl/svapp.hxx>

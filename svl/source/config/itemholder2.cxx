@@ -25,7 +25,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <rtl/ref.hxx>
-#include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/options.hxx>

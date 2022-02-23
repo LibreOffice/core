@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SVX_SOURCE_SIDEBAR_AREA_FONTWORKPROPERTYPANEL_HXX
 #define INCLUDED_SVX_SOURCE_SIDEBAR_AREA_FONTWORKPROPERTYPANEL_HXX
 
-#include <com/sun/star/ui/XUIElement.hpp>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <sfx2/weldutils.hxx>
 

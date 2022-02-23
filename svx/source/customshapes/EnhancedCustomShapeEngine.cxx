@@ -31,7 +31,6 @@
 #include "EnhancedCustomShapeHandle.hxx"
 #include <svx/unoshape.hxx>
 #include <svx/unopage.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>

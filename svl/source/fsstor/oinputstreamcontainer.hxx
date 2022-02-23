@@ -29,7 +29,6 @@
 #include <comphelper/interfacecontainer4.hxx>
 
 #include <mutex>
-#include <memory>
 
 class OFSInputStreamContainer : public cppu::WeakImplHelper < css::io::XInputStream
                                                             ,css::embed::XExtendedStorageStream >

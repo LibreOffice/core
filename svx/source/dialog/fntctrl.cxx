@@ -43,7 +43,6 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/stritem.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 

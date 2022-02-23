@@ -25,7 +25,6 @@
 #include <sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
-#include <memory>
 
 
 namespace sdr::contact

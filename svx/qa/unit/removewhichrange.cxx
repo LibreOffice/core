@@ -16,7 +16,6 @@
 
 #include <sal/types.h>
 #include <svx/svdetc.hxx>
-#include <svl/itemset.hxx>
 
 namespace
 {

@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <map>
-#include <string_view>
 
 #include <sal/macros.h>
 #include <fmundo.hxx>

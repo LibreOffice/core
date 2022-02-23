@@ -26,6 +26,9 @@ excludelist:
     # Actually used
     - com/sun/star/sdbc/XConnection.hpp
     - com/sun/star/beans/XPropertySet.hpp
+    svx/source/fmcomp/gridcell.cxx:
+    # Needed to avoid mysterious linking error on WIN32 no-pch
+    - toolkit/helper/listenermultiplexer.hxx
     svx/source/gallery2/gallerybinaryengine.cxx:
     # Don't propose hxx -> h change in URE libs
     - osl/thread.hxx
@@ -121,6 +124,12 @@ excludelist:
     svx/source/table/accessibletableshape.cxx:
     # Actually used
     - com/sun/star/drawing/XShape.hpp
+    svx/source/table/tablecolumns.cxx:
+    # Complete type is needed for template class
+    - tablecolumn.hxx
+    svx/source/tbxctrls/tbunocontroller.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     svx/source/unodraw/recoveryui.cxx:
     # Needed for LIBO_ETC_FOLDER on WIN32
     - config_folders.h

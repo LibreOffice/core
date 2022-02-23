@@ -37,7 +37,6 @@
 #include <unotools/accessiblerelationsethelper.hxx>
 #include <svx/IAccessibleParent.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/ShapeTypeHandler.hxx>
 #include <svx/SvxShapeTypes.hxx>
 #include <comphelper/accessiblewrapper.hxx>

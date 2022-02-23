@@ -33,7 +33,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/lang/Locale.hpp>
-#include <tools/debug.hxx>
 #include <tools/fldunit.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/propertysetinfo.hxx>

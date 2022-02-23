@@ -31,7 +31,6 @@
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer4.hxx>
 #include <mutex>
-#include <memory>
 
 class OFSStreamContainer : public cppu::OWeakObject,
                      public css::lang::XTypeProvider,

@@ -56,8 +56,8 @@
 #include <o3tl/safeint.hxx>
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
-#include <svl/zforlist.hxx>
 #include <svx/dialmgr.hxx>
+#include <toolkit/helper/listenermultiplexer.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
 #include <tools/fract.hxx>
