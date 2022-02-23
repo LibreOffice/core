@@ -149,10 +149,10 @@ public:
     void addTo( const ShapePtr & pShape );
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
-    const ShapePtr & getShape() const { return mpShape; }
+    ShapePtr getShape() const { return mpShape.lock(); }
 
 private:
-    ShapePtr mpShape;
+    WeakShapePtr mpShape;
     DiagramDataPtr                 mpData;
     DiagramLayoutPtr               mpLayout;
     DiagramQStyleMap               maStyles;
