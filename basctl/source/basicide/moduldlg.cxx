@@ -843,6 +843,8 @@ void ObjectPage::DeleteCurrent()
     if (!m_xBasicBox->get_cursor(xCurEntry.get()))
         xCurEntry.reset();
     DBG_ASSERT( xCurEntry, "No current entry!" );
+    if (!xCurEntry)
+        return;
     EntryDescriptor aDesc( m_xBasicBox->GetEntryDescriptor( xCurEntry.get() ) );
     const ScriptDocument& aDocument( aDesc.GetDocument() );
     DBG_ASSERT( aDocument.isAlive(), "ObjectPage::DeleteCurrent: no document!" );
