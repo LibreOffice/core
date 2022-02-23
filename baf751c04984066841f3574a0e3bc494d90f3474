@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5357d340_01f2edbc",
+        "filename": "include/unotools/VersionConfig.hxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-02-23T09:30:01Z",
+      "side": 1,
+      "message": "Better wording would be: \"Updating property ooSetupLastVersion to version x.y.z. failed (read-only property?)\"",
+      "range": {
+        "startLine": 44,
+        "startChar": 45,
+        "endLine": 44,
+        "endChar": 79
+      },
+      "revId": "baf751c04984066841f3574a0e3bc494d90f3474",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
