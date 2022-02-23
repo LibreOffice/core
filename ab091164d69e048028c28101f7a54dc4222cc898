@@ -52,6 +52,24 @@
       "parentUuid": "fe9b34e5_5e9d73c8",
       "revId": "ab091164d69e048028c28101f7a54dc4222cc898",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13a9a737_7404e6c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-23T16:02:31Z",
+      "side": 1,
+      "message": "argh, this worked entirely by accident, by disabling the recursion for the 3rd frame in the stack because it\u0027s not a boss frame.\n\nfix the condition and the crash is back, it looks like the guard is on the wrong boss frame too...\n\nnow it ... produces the same result as before, oddly enough, but looks vastly more plausible.",
+      "parentUuid": "5b48bef4_a24a6b78",
+      "revId": "ab091164d69e048028c28101f7a54dc4222cc898",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
