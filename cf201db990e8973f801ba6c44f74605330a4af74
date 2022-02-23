@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d3bc775_7300b919",
+        "filename": "svx/source/sdr/properties/itemsettools.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-23T12:42:29Z",
+      "side": 1,
+      "message": "Is the cast really needed here? SdrObjListIter seems to accept simple SdrObject\u0026, and uses its virtual getChildrenOfSdrObject. Would that be enough?",
+      "revId": "cf201db990e8973f801ba6c44f74605330a4af74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
