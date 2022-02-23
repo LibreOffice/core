@@ -50,7 +50,6 @@ public:
     AccessibilityCheckDialog(weld::Window* pParent,
                              sfx::AccessibilityIssueCollection const& rIssueCollection);
     virtual ~AccessibilityCheckDialog() override;
-    virtual short run() override;
 };
 
 } // end svx namespace
