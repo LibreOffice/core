@@ -110,6 +110,7 @@ void SdOptionsGeneric::Init() const
 
     if( !mpCfgItem )
         pThis->mpCfgItem.reset( new SdOptionsItem( *this, maSubTree ) );
+    assert(mpCfgItem && "mpCfgItem is set by now");
 
     const Sequence< OUString >  aNames( GetPropertyNames() );
     const Sequence< Any >       aValues = mpCfgItem->GetProperties( aNames );
