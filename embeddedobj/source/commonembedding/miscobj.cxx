@@ -231,14 +231,14 @@ void OCommonEmbeddedObject::LinkInit_Impl(
         {
             // create temporary file
             m_aLinkTempFile = io::TempFile::create(m_xContext);
+            uno::Reference< ucb::XSimpleFileAccess > xTempOutAccess(ucb::SimpleFileAccess::create(m_xContext));
+            // if the temp stream is used, then the temp file remains locked
+            uno::Reference< io::XOutputStream > xOutStream(xTempOutAccess->openFileWrite(m_aLinkTempFile->getUri()));
 
             if(m_aLinkTempFile.is())
             {
                 // completely copy content of original OLE data
-                uno::Reference < io::XOutputStream > xTempOut = m_aLinkTempFile->getOutputStream();
-                ::comphelper::OStorageHelper::CopyInputToOutput( xInStream, xTempOut );
-                xTempOut->flush();
-                xTempOut->closeOutput();
+                ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
 
                 // reset flag m_bLinkTempFileChanged, so it will also work for multiple
                 // save op's of the containing file/document
