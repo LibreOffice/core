@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55131d3f_8a28b0f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-23T19:16:30Z",
+      "side": 1,
+      "message": "A number of bug duplicates, so probably good backport candidate to the 7.3 \"compatibility release\".",
+      "revId": "3a6542c57b2558953b4212e3f2f212ed3b4f1bfa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
