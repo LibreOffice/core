@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a162a742_6e96fa57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-23T15:20:06Z",
+      "side": 1,
+      "message": "unfortunately 7-3-1 was tagged today",
+      "revId": "60ba20df1f2a6010a3d22803d61e0d4772b92057",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
