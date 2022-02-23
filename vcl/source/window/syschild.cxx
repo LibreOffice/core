@@ -21,6 +21,7 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
+#include <comphelper/lok.hxx>
 
 #include <window.h>
 #include <salinst.hxx>
@@ -58,7 +59,7 @@ static void ImplSysChildProc( SystemChildWindow* pInst, SalObjEvent nEvent )
             if (pWindow->IsDisposed())
                 break;
             pWindow->ImplGetFrameData()->mbSysObjFocus = false;
-            if ( !pWindow->ImplGetFrameData()->mnFocusId )
+            if ( !comphelper::LibreOfficeKit::isActive() && !pWindow->ImplGetFrameData()->mnFocusId )
             {
                 pWindow->ImplGetFrameData()->mbStartFocusState = true;
                 pWindow->ImplGetFrameData()->mnFocusId = Application::PostUserEvent( LINK( pWindow->ImplGetFrameWindow(), vcl::Window, ImplAsyncFocusHdl ), nullptr, true );

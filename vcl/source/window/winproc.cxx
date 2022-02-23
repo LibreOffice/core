@@ -1850,7 +1850,7 @@ static void ImplHandleGetFocus( vcl::Window* pWindow )
 
     // execute Focus-Events after a delay, such that SystemChildWindows
     // do not blink when they receive focus
-    if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
+    if ( !comphelper::LibreOfficeKit::isActive() && !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
         pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), nullptr, true);
@@ -1885,7 +1885,7 @@ static void ImplHandleLoseFocus( vcl::Window* pWindow )
 
         // execute Focus-Events after a delay, such that SystemChildWindows
         // do not flicker when they receive focus
-        if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
+        if ( !comphelper::LibreOfficeKit::isActive() && !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
         {
             pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
             pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId = Application::PostUserEvent( LINK( pWindow, vcl::Window, ImplAsyncFocusHdl ), nullptr, true );
