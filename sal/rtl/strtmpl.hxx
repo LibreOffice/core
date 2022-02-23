@@ -1001,18 +1001,17 @@ auto* NewCopy                                              ( IMPL_RTL_STRINGDATA
                                                              IMPL_RTL_STRINGDATA* pStr,
                                                              sal_Int32 nCount )
 {
-    assert(nCount >= 0);
-    IMPL_RTL_STRINGDATA*    pData = Alloc<IMPL_RTL_STRINGDATA>( pStr->length );
-    OSL_ASSERT(pData != nullptr);
+    assert(ppThis);
+    assert(pStr);
+    assert(nCount >= 0 && nCount <= pStr->length);
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( pStr->length );
+    OSL_ASSERT(*ppThis != nullptr);
 
-    auto* pDest   = pData->buffer;
-    auto* pSrc    = pStr->buffer;
+    auto* pDest   = (*ppThis)->buffer;
 
-    memcpy( pDest, pSrc, nCount * sizeof(*pSrc) );
+    Copy(pDest, pStr->buffer, nCount);
 
-    *ppThis = pData;
-
-    RTL_LOG_STRING_NEW( pData );
+    RTL_LOG_STRING_NEW( *ppThis );
     return pDest + nCount;
 }
 
