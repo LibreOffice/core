@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8759d5c3_8d165dcd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-23T09:19:08Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1 was rebased\n\nthis needed to be rebased atop \u003chttps://git.libreoffice.org/core/+/c7a920a9b742ee273f3e7a8583d11eaeebf4fe1d%5E%21\u003e \"Sync the two definitions of python_arch_subdir\"",
+      "revId": "480fb35c1fb8e3aad56d55d0b30ad681a483ac21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
