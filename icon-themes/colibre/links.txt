@@ -2751,3 +2751,15 @@ cmd/sc_librelogo-goforward.png cmd/sc_arrowshapes.up-arrow.png
 cmd/sc_librelogo-run.png cmd/sc_runbasic.png
 cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
 cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
+<<<<<<< HEAD   (ec3a32 libxml2: upgrade to release 2.9.13)
+=======
+
+# Draw/Redaction Toolbar
+cmd/32/redactionpreviewexport.png cmd/32/exportdirecttopdf.png
+cmd/lc_redactionpreviewexport.png cmd/lc_exportdirecttopdf.png
+cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
+
+# Extension Dialog
+cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
+cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
+>>>>>>> CHANGE (7705ea Colibre: tdf#147603 Star icons in Extension dialog)
