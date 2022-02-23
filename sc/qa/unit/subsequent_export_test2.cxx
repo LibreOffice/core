@@ -1033,7 +1033,7 @@ void ScExportTest2::testExtendedLCIDXLSX()
 
 void ScExportTest2::testHiddenRepeatedRowsODS()
 {
-    ScDocShellRef xDocSh = loadDoc(u"empty.", FORMAT_ODS);
+    ScDocShellRef xDocSh = loadEmptyDocument();
     CPPUNIT_ASSERT(xDocSh.is());
 
     {

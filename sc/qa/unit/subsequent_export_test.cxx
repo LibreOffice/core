@@ -2077,7 +2077,8 @@ void ScExportTest::testRichTextExportODS()
 
     // Start with an empty document, put one edit text cell, and make sure it
     // survives the save and reload.
-    ScDocShellRef xOrigDocSh = loadDoc(u"empty.", FORMAT_ODS, true);
+    ScDocShellRef xOrigDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xOrigDocSh);
     const EditTextObject* pEditText;
     {
         ScDocument& rDoc = xOrigDocSh->GetDocument();
@@ -2278,7 +2279,8 @@ void ScExportTest::testFormulaRefSheetNameODS()
 void ScExportTest::testCellValuesExportODS()
 {
     // Start with an empty document
-    ScDocShellRef xOrigDocSh = loadDoc(u"empty.", FORMAT_ODS);
+    ScDocShellRef xOrigDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xOrigDocSh);
     {
         ScDocument& rDoc = xOrigDocSh->GetDocument();
         CPPUNIT_ASSERT_MESSAGE("This document should at least have one sheet.",
