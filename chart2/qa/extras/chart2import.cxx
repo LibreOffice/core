@@ -53,6 +53,7 @@ public:
     void testDOCXChartSeries();
     void testDOCXChartEmptySeries();
     void testTdf81396();
+    void testPPTXChartErrorBars();
     void testDOCXChartValuesSize();
     void testPPTXChartSeries();
     void testPPTXSparseChartSeries();
@@ -154,6 +155,7 @@ public:
     CPPUNIT_TEST(testDOCXChartSeries);
     CPPUNIT_TEST(testDOCXChartEmptySeries);
     CPPUNIT_TEST(testTdf81396);
+    CPPUNIT_TEST(testPPTXChartErrorBars);
     CPPUNIT_TEST(testDOCXChartValuesSize);
     CPPUNIT_TEST(testPPTChartSeries);
     CPPUNIT_TEST(testPPTXChartSeries);
@@ -489,6 +491,19 @@ void Chart2ImportTest::testTdf81396()
     // - Expected: 105.210801910481
     // - Actual  : nan
     CPPUNIT_ASSERT_EQUAL(105.210801910481, aDataSeriesYValues[0][0]);
+}
+
+void Chart2ImportTest::testPPTXChartErrorBars()
+{
+    load(u"/chart2/qa/extras/data/pptx/", "tdf127720.pptx");
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromDrawImpress(0, 0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+
+    uno::Reference< chart::XChartDataArray > xDataArray(xChartDoc->getDataProvider(), UNO_QUERY_THROW);
+    Sequence<OUString> aColumnDesc = xDataArray->getColumnDescriptions();
+    // Number of columns = 4 (Y-values, X-values and positive/negative error bars).
+    // Without the fix there would only be 2 columns (no error range).
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be 4 columns and descriptions", static_cast<sal_Int32>(4), aColumnDesc.getLength());
 }
 
 void Chart2ImportTest::testDOCXChartValuesSize()
