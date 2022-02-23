@@ -2201,6 +2201,7 @@ void ScPivotTableFiltersTest::testPivotTableBoolFieldFilterXLSX()
     ScDocument& rDoc = xDocSh->GetDocument();
     ScDPCollection* pDPs = rDoc.GetDPCollection();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), rDoc.GetString(ScAddress(0, 1, 0))); //A2
 
     // Reload and check filtering of row dimensions
     xDocSh = saveAndReload(&(*xDocSh), FORMAT_XLSX);
@@ -2218,11 +2219,11 @@ void ScPivotTableFiltersTest::testPivotTableBoolFieldFilterXLSX()
 
     const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
     CPPUNIT_ASSERT_EQUAL(size_t(2), rMembers.size());
-    ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("0");
+    ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("FALSE");
     CPPUNIT_ASSERT(pMember);
     CPPUNIT_ASSERT(pMember->HasIsVisible());
     CPPUNIT_ASSERT(!pMember->GetIsVisible());
-    pMember = pSaveDim->GetExistingMemberByName("1");
+    pMember = pSaveDim->GetExistingMemberByName("TRUE");
     CPPUNIT_ASSERT(pMember);
     CPPUNIT_ASSERT(pMember->HasIsVisible());
     CPPUNIT_ASSERT(pMember->GetIsVisible());
