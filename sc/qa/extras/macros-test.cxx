@@ -65,6 +65,7 @@ public:
     void testTdf146742();
     void testMacroButtonFormControlXlsxExport();
     void testShapeLayerId();
+    void testVbaRangeSort();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -94,6 +95,7 @@ public:
     CPPUNIT_TEST(testTdf146742);
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
     CPPUNIT_TEST(testShapeLayerId);
+    CPPUNIT_TEST(testVbaRangeSort);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1044,6 +1046,40 @@ void ScMacrosTest::testShapeLayerId()
     // The LayerID property of com.sun.star.drawing.Shape service has 'short' IDL type.
     // The expected run-time error is because there are only 5 layers there.
     CPPUNIT_ASSERT_EQUAL(Any(OUString("0 Expected runtime error happened")), aRet);
+    pDocSh->DoClose();
+}
+
+void ScMacrosTest::testVbaRangeSort()
+{
+    auto xComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(OUString(
+            "Option VBASupport 1\n"
+            "Sub TestVbaRangeSort\n"
+            "  Range(Cells(1, 1), Cells(2, 2)).Select\n"
+            "  Selection.Sort Key1:=Range(\"A1\"), Header:=False, Order1:=xlDescending, _\n"
+            "                 OrderCustom:=1, MatchCase:=False, Orientation:=xlTopToBottom, _\n"
+            "                 DataOption1:=xlSortNormal\n"
+            "End Sub\n")));
+
+    Any aRet;
+    Sequence<sal_Int16> aOutParamIndex;
+    Sequence<Any> aOutParam;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Without the fix in place, this call would have crashed in debug builds with failed assertion
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.TestLayerID?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
     pDocSh->DoClose();
 }
 

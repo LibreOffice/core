@@ -3413,9 +3413,9 @@ ScVbaRange::Sort( const uno::Any& Key1, const uno::Any& Order1, const uno::Any& 
 
     // set up defaults
 
-    sal_Int16 nOrder1 = aSortParam.maKeyState[1].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
-    sal_Int16 nOrder2 = aSortParam.maKeyState[2].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
-    sal_Int16 nOrder3 = aSortParam.maKeyState[3].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
+    sal_Int16 nOrder1 = aSortParam.maKeyState[0].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
+    sal_Int16 nOrder2 = aSortParam.maKeyState[1].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
+    sal_Int16 nOrder3 = aSortParam.maKeyState[2].bAscending ? excel::XlSortOrder::xlAscending : excel::XlSortOrder::xlDescending;
 
     sal_Int16 nCustom = aSortParam.nUserIndex;
     sal_Int16 nSortMethod = excel::XlSortMethod::xlPinYin;
