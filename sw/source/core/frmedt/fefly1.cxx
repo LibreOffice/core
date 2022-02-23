@@ -613,20 +613,10 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, bool bMoveIt )
                                 new SwHandleAnchorNodeChg( *pFlyFrameFormat, aAnch ));
                         }
                         rFormat.GetDoc()->SetAttr( aAnch, rFormat );
-                        if (SwTextBoxHelper::getOtherTextBoxFormat(&rFormat, RES_DRAWFRMFMT,
-                            pObj ? pObj : rFormat.FindRealSdrObject()))
+                        if (auto pTextBoxes = rFormat.GetOtherTextBoxFormat())
                         {
-                            if (pObj->getChildrenOfSdrObject())
-                            {
-                                for (size_t i = 0;
-                                     i < pObj->getChildrenOfSdrObject()->GetObjCount(); ++i)
-                                    SwTextBoxHelper::changeAnchor(
-                                        &rFormat, pObj->getChildrenOfSdrObject()->GetObj(i));
-                            }
-                            else
-                                SwTextBoxHelper::syncFlyFrameAttr(
-                                    rFormat, rFormat.GetAttrSet(),
-                                    pObj ? pObj : rFormat.FindRealSdrObject());
+                            pTextBoxes->SyncronizeTextBoxProperties(
+                                ::SwTextBoxSyncableProperty(true, true, true));
                         }
                     }
                     // #i28701# - no call of method

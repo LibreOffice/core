@@ -1085,13 +1085,10 @@ class NestedUserCallHdl
 /// Notify the format's textbox that it should reconsider its position / size.
 static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 {
-    if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
+    if (pFormat && pFormat->GetOtherTextBoxFormat())
     {
-        // Just notify the textbox that the size has changed, the actual object size is not interesting.
-        SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE> aResizeSet(pFormat->GetDoc()->GetAttrPool());
-        SwFormatFrameSize aSize;
-        aResizeSet.Put(aSize);
-        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet, pFormat->FindRealSdrObject());
+        pFormat->GetOtherTextBoxFormat()->SyncronizeTextBoxProperties(
+            ::SwTextBoxSyncableProperty(true));
     }
 }
 
@@ -1250,9 +1247,6 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();
 
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::changeAnchor, GetFormat(), &const_cast<SdrObject&>(rObj));
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::syncTextBoxSize, GetFormat(), &const_cast<SdrObject&>(rObj));
-
                 }
                 SwTwips nXPosDiff(0);
                 SwTwips nYPosDiff(0);
@@ -1339,48 +1333,11 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
             }
 
             // tdf#135198: keep text box together with its shape
-            const SwPageFrame* rPageFrame = pAnchoredDrawObj->GetPageFrame();
-            if (rPageFrame && rPageFrame->isFrameAreaPositionValid() && !rObj.getChildrenOfSdrObject())
-            {
-                SwDoc* const pDoc = GetFormat()->GetDoc();
+            if (GetFormat())
+                if (auto pTextBoxes = GetFormat()->GetOtherTextBoxFormat())
+                    pTextBoxes->SyncronizeTextBoxProperties(
+                        ::SwTextBoxSyncableProperty(true, true, true, true));
 
-                // avoid Undo creation
-                ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
-
-                // hide any artificial "changes" made by synchronizing the textbox position
-                const bool bEnableSetModified = pDoc->getIDocumentState().IsEnableSetModified();
-                pDoc->getIDocumentState().SetEnableSetModified(false);
-
-                SfxItemSetFixed<RES_VERT_ORIENT, RES_HORI_ORIENT, RES_ANCHOR, RES_ANCHOR>
-                    aSyncSet( pDoc->GetAttrPool() );
-                aSyncSet.Put(GetFormat()->GetHoriOrient());
-                bool bRelToTableCell(false);
-                aSyncSet.Put(SwFormatVertOrient(pAnchoredDrawObj->GetRelPosToPageFrame(false, bRelToTableCell).getY(),
-                                                text::VertOrientation::NONE,
-                                                text::RelOrientation::PAGE_FRAME));
-                aSyncSet.Put(SwFormatAnchor(RndStdIds::FLY_AT_PAGE, rPageFrame->GetPhyPageNum()));
-
-                auto pSdrObj = const_cast<SdrObject*>(&rObj);
-                if (pSdrObj != GetFormat()->FindRealSdrObject())
-                {
-                    SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE>  aSet( pDoc->GetAttrPool() );
-
-                    aSet.Put(aSyncSet);
-                    aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));
-                    SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSet, pSdrObj);
-
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::changeAnchor, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::syncTextBoxSize, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
-                }
-                else
-                    SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());
-
-                pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
-            }
         }
         break;
         case SdrUserCallType::ChangeAttr:

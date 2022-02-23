@@ -75,7 +75,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                     {
                         // If the shape has textframe, set its params as well.
                         if (SwTextBoxHelper::hasTextFrame(pObj))
-                            SwTextBoxHelper::updateTextBoxMargin(pObj);
+                            SwTextBoxHelper::updateTextBoxMargin(nullptr, pObj);
                     }
                     rReq.Done(*(pDlg->GetOutputItemSet()));
                     pSh->EndAction();

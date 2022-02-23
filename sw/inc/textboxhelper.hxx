@@ -43,6 +43,27 @@ namespace com::sun::star::text
 class XTextFrame;
 }
 
+/// This has the components what can be synced for the textboxes.
+/// If the member true, it will be synced, otherwise not.
+struct SwTextBoxSyncableProperty
+{
+    SwTextBoxSyncableProperty(bool bSize = false, bool bPos = false, bool bAnchor = false,
+                              bool bZorder = false, bool bMargin = false)
+        : m_bSize(bSize)
+        , m_bPosition(bPos)
+        , m_bAnchor(bAnchor)
+        , m_bZorder(bZorder)
+        , m_bMargin(bMargin)
+    {
+    }
+
+    bool m_bSize;
+    bool m_bPosition;
+    bool m_bAnchor;
+    bool m_bZorder;
+    bool m_bMargin;
+};
+
 /**
  * A TextBox is a TextFrame, that is tied to a drawinglayer shape.
  *
@@ -90,15 +111,15 @@ public:
     static void syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet, SdrObject* pObj);
 
     /// Copy shape attributes to the text frame
-    static void updateTextBoxMargin(SdrObject* pObj);
+    static bool updateTextBoxMargin(SwFrameFormat* pShape, SdrObject* pObj);
 
     /// Sets the anchor of the associated textframe of the given shape, and
     /// returns true on success.
-    static bool changeAnchor(SwFrameFormat* pShape, SdrObject* pObj);
+    static bool syncTextBoxAnchor(SwFrameFormat* pShape, SdrObject* pObj);
 
     /// Does the positioning for the associated textframe of the shape, and
     /// returns true on success.
-    static bool doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pObj);
+    static bool syncTextBoxPosition(SwFrameFormat* pShape, SdrObject* pObj);
 
     /// Sets the correct size of textframe depending on the given SdrObject.
     static bool syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj);
@@ -172,7 +193,10 @@ public:
                              SavedLink& rSavedLinks);
 
     /// Calls the method given by pFunc with every textboxes of the group given by pFormat.
-    static void synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
+    static bool synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
+                                                SwFrameFormat* pFormat, SdrObject* pObj);
+    /// Calls the method given by pFunc with every textboxes of the group given by pFormat.
+    static bool synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, const SdrObject*),
                                                 SwFrameFormat* pFormat, SdrObject* pObj);
 
     /// Collect all textboxes of the group given by the pGroupObj Parameter. Returns with a
@@ -215,6 +239,8 @@ public:
 
     // default copy ctor is enough
     SwTextBoxNode(SwTextBoxNode&) = default;
+
+    bool SyncronizeTextBoxProperties(const SwTextBoxSyncableProperty& rProps);
 
     // This method adds a textbox entry to the shape
     // Parameters:

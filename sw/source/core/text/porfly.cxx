@@ -366,12 +366,11 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
     if (auto pFormat = FindFrameFormat(pSdrObj))
     {
-        if (pFormat->GetOtherTextBoxFormat())
+        if (auto pTextBoxes = pFormat->GetOtherTextBoxFormat())
         {
             const bool bModified = pFormat->GetDoc()->getIDocumentState().IsEnableSetModified();
             pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(false);
-            SwTextBoxHelper::synchronizeGroupTextBoxProperty(SwTextBoxHelper::changeAnchor, pFormat,
-                                                             pFormat->FindRealSdrObject());
+            pTextBoxes->SyncronizeTextBoxProperties(SwTextBoxSyncableProperty(true, true, true));
             pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(bModified);
         }
     }

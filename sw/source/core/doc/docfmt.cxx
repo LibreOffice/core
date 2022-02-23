@@ -480,13 +480,10 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFormat& rFormat )
 
     // If the format is a shape, and it has a textbox, sync.
     auto pShapeFormat = dynamic_cast<SwFrameFormat*>(&rFormat);
-    if (pShapeFormat && SwTextBoxHelper::isTextBox(pShapeFormat, RES_DRAWFRMFMT))
+    if (pShapeFormat && pShapeFormat->GetOtherTextBoxFormat())
     {
-        if (auto pObj = pShapeFormat->FindRealSdrObject())
-        {
-            SwTextBoxHelper::syncFlyFrameAttr(*pShapeFormat, rSet, pObj);
-            SwTextBoxHelper::changeAnchor(pShapeFormat, pObj);
-        }
+        const auto aSyncableProps = ::SwTextBoxSyncableProperty(true, true, true);
+        pShapeFormat->GetOtherTextBoxFormat()->SyncronizeTextBoxProperties(aSyncableProps);
     }
 
     getIDocumentState().SetModified();
