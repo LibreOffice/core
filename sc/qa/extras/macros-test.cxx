@@ -17,6 +17,7 @@
 
 #include <docsh.hxx>
 #include <document.hxx>
+#include <sortparam.hxx>
 
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
@@ -65,6 +66,7 @@ public:
     void testTdf146742();
     void testMacroButtonFormControlXlsxExport();
     void testShapeLayerId();
+    void testVbaRangeSort();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -94,6 +96,7 @@ public:
     CPPUNIT_TEST(testTdf146742);
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
     CPPUNIT_TEST(testShapeLayerId);
+    CPPUNIT_TEST(testVbaRangeSort);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1044,6 +1047,67 @@ void ScMacrosTest::testShapeLayerId()
     // The LayerID property of com.sun.star.drawing.Shape service has 'short' IDL type.
     // The expected run-time error is because there are only 5 layers there.
     CPPUNIT_ASSERT_EQUAL(Any(OUString("0 Expected runtime error happened")), aRet);
+    pDocSh->DoClose();
+}
+
+void ScMacrosTest::testVbaRangeSort()
+{
+    auto xComponent = loadFromDesktop("private:factory/scalc");
+
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(OUString("Option VBASupport 1\n"
+                          "Sub TestRangeSort\n"
+                          "  Range(Cells(1, 1), Cells(3, 1)).Select\n"
+                          "  Selection.Sort Key1:=Range(\"A1\"), Header:=False\n"
+                          "End Sub\n")));
+
+    Any aRet;
+    Sequence<sal_Int16> aOutParamIndex;
+    Sequence<Any> aOutParam;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    rDoc.SetValue(ScAddress(0, 0, 0), 1.0);
+    rDoc.SetValue(ScAddress(0, 1, 0), 0.5);
+    rDoc.SetValue(ScAddress(0, 2, 0), 2.0);
+
+    // Without the fix in place, this call would have crashed in debug builds with failed assertion
+    ErrCode result = SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+
+    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 2, 0)));
+
+    // Change sheet's first param sorting order
+    ScSortParam aParam;
+    rDoc.GetSortParam(aParam, 0);
+    aParam.maKeyState[0].bAscending = false;
+    rDoc.SetSortParam(aParam, 0);
+
+    result = SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.TestRangeSort?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, result);
+
+    // Without the fix in place, this test would have failed in non-debug builds with
+    // - Expected: 2
+    // - Actual  : 0.5
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, rDoc.GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 2, 0)));
+
     pDocSh->DoClose();
 }
 
