@@ -51,6 +51,24 @@
       "message": "Hi Jan-Marek,\nWith your patch in place, it fails somewhere else now, see https://paste.ee/p/q1x37",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d17ddd22_ee4a7619",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-02-23T14:17:52Z",
+      "side": 1,
+      "message": "You can check, if external/coinmp/ExternalProject_coinmp.mk needs the same fix to pass and update this patch, if it does. Maybe there is more. Just a reminder, that you can build single externals via \"make \u003cexternal\u003e\", so you don\u0027t need to start a full build for tests.",
+      "parentUuid": "ff0f9dc5_4d8eb9ff",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
