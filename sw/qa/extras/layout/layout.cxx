@@ -2579,6 +2579,12 @@ void SwLayoutWriter::testTdf109137()
 //just care it doesn't crash
 void SwLayoutWriter::testForcepoint72() { createDoc("forcepoint72-1.rtf"); }
 
+// FIXME: apparently infinite loop on Mac
+#ifndef MACOSX
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL) { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
+#endif
+
 //just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
 
