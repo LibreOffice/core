@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "348fa9ac_507ffd5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-23T10:17:35Z",
+      "side": 1,
+      "message": "(while at it: even if there is precedent of redundant \"_test_\" in existing CppunitTest_i18npool_test_*, I wouldn\u0027t needlessly follow that here)",
+      "revId": "4136ea73743c9f8456b78eefc66ddfdc7c949bab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f859626b_b8a58e3b",
+        "filename": "i18npool/CppunitTest_i18npool_test_calendar.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-23T10:17:35Z",
+      "side": 1,
+      "message": "CppunitTest",
+      "range": {
+        "startLine": 27,
+        "startChar": 17,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "4136ea73743c9f8456b78eefc66ddfdc7c949bab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
