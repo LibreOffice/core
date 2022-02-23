@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1df34791_f7dbcd42",
+        "filename": "cppuhelper/source/weak.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 450,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-23T09:50:11Z",
+      "side": 1,
+      "message": "rather keep the narrow interface of the new OWeakRefListener ctor and only initialize m_pImpl here if xWeak.is() (in line with the corresponding WeakReferenceHelper ctor taking a Reference\u003cXInterface\u003e)?",
+      "parentUuid": "b99ee8ec_9f2c9a96",
+      "revId": "175c7368f13c5c83a943a7c74e508b43c1a274eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "00e6c7a2_c4596de7",
         "filename": "cppuhelper/source/weak.cxx",
         "patchSetId": 1
