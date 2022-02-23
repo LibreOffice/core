@@ -464,7 +464,7 @@ void Dialog::ImplInitDialog( vcl::Window* pParent, WinBits nStyle, InitFlag eFla
          (nSysWinMode & SystemWindowFlags::DIALOG) )
     {
         // create window with a small border ?
-        if ((nStyle & WB_ALLOWMENUBAR) || ((nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER))
+        if (!comphelper::LibreOfficeKit::isActive() && ((nStyle & WB_ALLOWMENUBAR) || ((nStyle & (WB_BORDER | WB_NOBORDER | WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE)) == WB_BORDER)))
         {
             AddBorderWindow(pParent, nStyle);
         }
