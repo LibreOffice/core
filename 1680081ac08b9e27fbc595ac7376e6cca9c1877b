@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6154b9bd_888bcc8b",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-23T14:22:29Z",
+      "side": 1,
+      "message": "After debugging, I have found only a minor difference for the test svl_urihelper.\nThere is some capitalization issue. Instead of \"C:\\\\\" there is \"c:\\\\\". This is the case for only the last line of tests.\nhttps://imgur.com/u9DtGTk",
+      "range": {
+        "startLine": 1595,
+        "startChar": 0,
+        "endLine": 1595,
+        "endChar": 49
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0d082f7_51040dee",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-23T14:22:29Z",
+      "side": 1,
+      "message": "This is quick fix solution for this issue. I am sure there would be better ways of doing this. I am not completely sure of other changes between the functions. In my machine basic_macros_test is not passing, could it be related to this code?",
+      "range": {
+        "startLine": 1598,
+        "startChar": 0,
+        "endLine": 1598,
+        "endChar": 13
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

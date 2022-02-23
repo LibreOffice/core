@@ -34,6 +34,24 @@
       "parentUuid": "ed908a72_4c48a708",
       "revId": "d0a42ce9b1033a200f8d354c1abf8c3b0d569f46",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21b0e15f_c9951d18",
+        "filename": "svl/qa/unit/test_URIHelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-23T14:22:29Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "890c1100_31df3e22",
+      "revId": "d0a42ce9b1033a200f8d354c1abf8c3b0d569f46",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
