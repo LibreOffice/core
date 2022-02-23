@@ -106,22 +106,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     // 4. Close the document (Ctrl-W)
     xDocSh->DoClose();
 
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    // 5. Create a new Spreadsheet
-    Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
-
-    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
-            "private:factory/scalc",
-            "_blank",
-            0,
-            args );
-    CPPUNIT_ASSERT( xComponent.is() );
-
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    xDocSh = loadEmptyDocument();
     CPPUNIT_ASSERT(xDocSh);
 
     // Get the document controller
@@ -131,7 +116,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     // 6. Paste
     pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
 
-    xComponent->dispose();
+    xDocSh->DoClose();
 }
 
 namespace {
@@ -169,41 +154,8 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
 
 void ScCopyPasteTest::testTdf84411()
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT( xDesktop.is() );
-
-    // create a frame
-    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
-    CPPUNIT_ASSERT( xTargetFrame.is() );
-
-    // 1. Create spreadsheet
-    uno::Sequence< beans::PropertyValue > aEmptyArgList;
-    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
-            "private:factory/scalc",
-            "_blank",
-            0,
-            aEmptyArgList );
-    CPPUNIT_ASSERT( xComponent.is() );
-
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    ScDocShellRef xDocSh = loadEmptyDocument();
     CPPUNIT_ASSERT(xDocSh);
-
-    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
-    CPPUNIT_ASSERT( xModel2.is() );
-
-    Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
-    CPPUNIT_ASSERT( xController.is() );
-
-    // introduce model/view/controller to each other
-    xController->attachModel( xModel2 );
-    xModel2->connectController( xController );
-    xTargetFrame->setComponent( xController->getComponentWindow(), xController );
-    xController->attachFrame( xTargetFrame );
-    xModel2->setCurrentController( xController );
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -225,7 +177,8 @@ void ScCopyPasteTest::testTdf84411()
 
 
     // 3. Disable OpenCL
-    ScModelObj* pModel = comphelper::getFromUnoTunnel<ScModelObj>(pFoundShell->GetModel());
+    uno::Reference<lang::XComponent> xComponent = xDocSh->GetModel();
+    ScModelObj* pModel = dynamic_cast<ScModelObj*>(xComponent.get());
     CPPUNIT_ASSERT(pModel != nullptr);
     bool bOpenCLState = ScCalcConfig::isOpenCLEnabled();
     pModel->enableOpenCL(false);
@@ -243,36 +196,14 @@ void ScCopyPasteTest::testTdf84411()
 
     // 5. Close the document (Ctrl-W)
     pModel->enableOpenCL(bOpenCLState);
-    xComponent->dispose();
+
+    xDocSh->DoClose();
 }
 
 void ScCopyPasteTest::testTdf124565()
 {
-    // Create new document
-    ScDocShell* xDocSh = new ScDocShell(
-        SfxModelFlags::EMBEDDED_OBJECT |
-        SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |
-        SfxModelFlags::DISABLE_DOCUMENT_RECOVERY);
-    xDocSh->DoInitNew();
-
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT( xDesktop.is() );
-
-    Reference< frame::XFrame > xTargetFrame = xDesktop->findFrame( "_blank", 0 );
-    CPPUNIT_ASSERT( xTargetFrame.is() );
-
-    uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
-    CPPUNIT_ASSERT( xModel2.is() );
-
-    Reference< frame::XController2 > xController = xModel2->createDefaultViewController( xTargetFrame );
-    CPPUNIT_ASSERT( xController.is() );
-
-    // introduce model/view/controller to each other
-    xController->attachModel( xModel2 );
-    xModel2->connectController( xController );
-    xTargetFrame->setComponent( xController->getComponentWindow(), xController );
-    xController->attachFrame( xTargetFrame );
-    xModel2->setCurrentController( xController );
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
 
     ScDocument& rDoc = xDocSh->GetDocument();
     ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
@@ -311,39 +242,8 @@ void ScCopyPasteTest::testTdf124565()
 
 void ScCopyPasteTest::testTdf126421()
 {
-    uno::Reference<frame::XDesktop2> xDesktop
-        = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
-
-    // create a frame
-    Reference<frame::XFrame> xTargetFrame = xDesktop->findFrame("_blank", 0);
-    CPPUNIT_ASSERT(xTargetFrame.is());
-
-    // 1. Create spreadsheet
-    uno::Sequence<beans::PropertyValue> aEmptyArgList;
-    uno::Reference<lang::XComponent> xComponent
-        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aEmptyArgList);
-    CPPUNIT_ASSERT(xComponent.is());
-
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    ScDocShellRef xDocSh = loadEmptyDocument();
     CPPUNIT_ASSERT(xDocSh);
-
-    uno::Reference<frame::XModel2> xModel2 = xDocSh->GetModel();
-    CPPUNIT_ASSERT(xModel2.is());
-
-    Reference<frame::XController2> xController = xModel2->createDefaultViewController(xTargetFrame);
-    CPPUNIT_ASSERT(xController.is());
-
-    // introduce model/view/controller to each other
-    xController->attachModel(xModel2);
-    xModel2->connectController(xController);
-    xTargetFrame->setComponent(xController->getComponentWindow(), xController);
-    xController->attachFrame(xTargetFrame);
-    xModel2->setCurrentController(xController);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -372,19 +272,10 @@ void ScCopyPasteTest::testTdf126421()
 
 void ScCopyPasteTest::testTdf107394()
 {
-    uno::Reference<frame::XDesktop2> xDesktop
-        = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
 
-    uno::Reference<lang::XComponent> xComponent
-        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, {});
-    CPPUNIT_ASSERT(xComponent.is());
-
-    auto pModelObj = dynamic_cast<ScModelObj*>(xComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
-    CPPUNIT_ASSERT(pModelObj->GetDocument());
-
-    ScDocument& rDoc = *pModelObj->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
 
     sal_uInt16 nFirstRowHeight = rDoc.GetRowHeight(0, 0);
     sal_uInt16 nSecondRowHeight = rDoc.GetRowHeight(1, 0);
@@ -422,7 +313,7 @@ void ScCopyPasteTest::testTdf107394()
     // i.e. the increased height of the second row remained after undo.
     CPPUNIT_ASSERT_EQUAL(nFirstRowHeight, nSecondRowHeight);
 
-    xComponent->dispose();
+    xDocSh->DoClose();
 }
 
 static ScMF lcl_getMergeFlagOfCell(const ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab)

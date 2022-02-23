@@ -1781,25 +1781,10 @@ void ScExportTest2::testTdf128976()
 
 void ScExportTest2::testTdf143979()
 {
-    // Create an empty worksheet
-    css::uno::Reference<css::frame::XDesktop2> xDesktop
-        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop);
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
 
-    css::uno::Sequence args{ comphelper::makePropertyValue("Hidden", true) };
-
-    css::uno::Reference<css::lang::XComponent> xComponent
-        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
-    CPPUNIT_ASSERT(xComponent);
-
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShellRef xShell = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xShell);
-
-    ScDocument& rDoc = xShell->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
 
     OUString aCode = "YYYY-MM\"\"MMM-DDNN";
     sal_Int32 nCheckPos;
@@ -1818,7 +1803,7 @@ void ScExportTest2::testTdf143979()
 
     CPPUNIT_ASSERT_EQUAL(OUString("2021-08Aug-30Mon"), rDoc.GetString(ScAddress(0, 0, 0)));
 
-    ScDocShellRef pDocSh = saveAndReload(*xShell, FORMAT_ODS);
+    ScDocShellRef pDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
     CPPUNIT_ASSERT(pDocSh.is());
 
     ScDocument& rDoc2 = pDocSh->GetDocument();
@@ -1827,43 +1812,32 @@ void ScExportTest2::testTdf143979()
     // - Expected: 2021-08Aug-30Mon
     // - Actual  : 2021-A-30Mon
     CPPUNIT_ASSERT_EQUAL(OUString("2021-08Aug-30Mon"), rDoc2.GetString(ScAddress(0, 0, 0)));
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest2::testTdf120502()
 {
     // Create an empty worksheet; resize last column on its first sheet; export to XLSX, and check
     // that the last exported column number is correct
-    css::uno::Reference<css::frame::XDesktop2> xDesktop
-        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop);
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
 
-    css::uno::Sequence args{ comphelper::makePropertyValue("Hidden", true) };
-
-    css::uno::Reference<css::lang::XComponent> xComponent
-        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, args);
-    CPPUNIT_ASSERT(xComponent);
-
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShellRef xShell = dynamic_cast<ScDocShell*>(pFoundShell);
-    CPPUNIT_ASSERT(xShell);
-
-    ScDocument& rDoc = xShell->GetDocument();
+    ScDocument& rDoc = xDocSh->GetDocument();
     const SCCOL nMaxCol = rDoc.MaxCol(); // 0-based
 
     const auto nOldWidth = rDoc.GetColWidth(nMaxCol, 0);
     rDoc.SetColWidth(nMaxCol, 0, nOldWidth + 100);
 
-    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xShell, FORMAT_XLSX);
-    xShell->DoClose();
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xmlDocUniquePtr pSheet1
         = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
     CPPUNIT_ASSERT(pSheet1);
 
     // This was 1025 when nMaxCol+1 was 1024
     assertXPath(pSheet1, "/x:worksheet/x:cols/x:col", "max", OUString::number(nMaxCol + 1));
+
+    xDocSh->DoClose();
 }
 
 void ScExportTest2::testTdf131372()

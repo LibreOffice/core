@@ -374,23 +374,8 @@ void ScFiltersTest::testTdf43534()
 
 void ScFiltersTest::testTdf91979()
 {
-    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
-
     Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
-
-    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
-        "private:factory/scalc",
-        "_blank",
-        0,
-        args);
-    CPPUNIT_ASSERT(xComponent.is());
-
-    // Get the document model
-    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
-    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
-
-    ScDocShellRef xDocSh = dynamic_cast<ScDocShell*>(pFoundShell);
+    ScDocShellRef xDocSh = loadEmptyDocument(args);
     CPPUNIT_ASSERT(xDocSh);
 
     // Get the document controller
@@ -405,6 +390,8 @@ void ScFiltersTest::testTdf91979()
     int nRowHeight = ScViewData::ToPixel(rDoc.GetRowHeight(0, 0), aViewData.GetPPTY());
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>((rDoc.MaxCol() - 1) * nColWidth), aPos.getX());
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(10000 * nRowHeight), aPos.getY());
+
+    xDocSh->DoClose();
 }
 
 /*
@@ -708,17 +695,12 @@ void ScFiltersTest::testTdf129789()
 
 void ScFiltersTest::testTdf130725()
 {
-    css::uno::Reference<css::frame::XDesktop2> xDesktop
-        = css::frame::Desktop::create(comphelper::getProcessComponentContext());
-    CPPUNIT_ASSERT(xDesktop.is());
+    Sequence < beans::PropertyValue > args{ comphelper::makePropertyValue("Hidden", true) };
+    ScDocShellRef xDocSh = loadEmptyDocument(args);
+    CPPUNIT_ASSERT(xDocSh);
 
-    // 1. Create spreadsheet
-    css::uno::Sequence aHiddenArgList{ comphelper::makePropertyValue("Hidden", true) };
-
-    css::uno::Reference<css::lang::XComponent> xComponent
-        = xDesktop->loadComponentFromURL("private:factory/scalc", "_blank", 0, aHiddenArgList);
-    css::uno::Reference<css::sheet::XSpreadsheetDocument> xDoc(xComponent,
-        css::uno::UNO_QUERY_THROW);
+    uno::Reference<frame::XModel> xModel = xDocSh->GetModel();
+    uno::Reference<sheet::XSpreadsheetDocument> xDoc(xModel, uno::UNO_QUERY_THROW);
 
     // 2. Insert 0.0042 into a cell as a formula, to force the conversion from string to double
     css::uno::Reference<css::sheet::XCellRangesAccess> xSheets(xDoc->getSheets(),
@@ -730,6 +712,8 @@ void ScFiltersTest::testTdf130725()
     //    (it was 0.0042000000000000006 instead of 0.0041999999999999997).
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Value must be the nearest representation of decimal 0.0042",
         0.0042, xCell->getValue()); // strict equality
+
+    xDocSh->DoClose();
 }
 
 void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
