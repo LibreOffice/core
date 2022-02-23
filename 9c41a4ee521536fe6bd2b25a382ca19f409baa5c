@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e17f32d_3f44f91d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-02-23T17:07:01Z",
+      "side": 1,
+      "message": "Looks great to me - thanks Lubos \u003d) I guess the 200ms wait is years old ;-)",
+      "revId": "9c41a4ee521536fe6bd2b25a382ca19f409baa5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
