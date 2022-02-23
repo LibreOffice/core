@@ -20,12 +20,10 @@
 #include <o3tl/safeint.hxx>
 #include <sal/config.h>
 
-#include <string_view>
 #include <svx/dialmgr.hxx>
 
 #include <svx/sidebar/InspectorTextPanel.hxx>
 
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>

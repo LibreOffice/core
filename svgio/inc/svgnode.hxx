@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include "svgtools.hxx"
+#include "SvgNumber.hxx"
 #include "svgtoken.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>

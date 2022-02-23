@@ -19,11 +19,8 @@
 
 #include <sal/config.h>
 
-#include <osl/thread.h>
 #include <svtools/htmlcfg.hxx>
-#include <svtools/parhtml.hxx>
 #include <unotools/syslocale.hxx>
-#include <tools/debug.hxx>
 #include <officecfg/Office/Common.hxx>
 
 namespace SvxHtmlOptions

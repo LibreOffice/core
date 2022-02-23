@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <unotools/pathoptions.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/filedlghelper.hxx>
@@ -51,7 +50,6 @@
 
 #include <map>
 
-#include <sfx2/objsh.hxx>
 #include <unotools/streamwrap.hxx>
 
 using namespace css::uno;

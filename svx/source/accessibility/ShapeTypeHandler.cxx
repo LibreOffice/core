@@ -25,7 +25,6 @@
 #include <svx/AccessibleShape.hxx>
 #include <svx/dialmgr.hxx>
 
-#include <svx/unoshape.hxx>
 #include <svx/svdoashp.hxx>
 
 #include <svx/strings.hrc>

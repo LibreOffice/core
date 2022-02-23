@@ -20,12 +20,6 @@
 #ifndef INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPE3D_HXX
 #define INCLUDED_SVX_SOURCE_CUSTOMSHAPES_ENHANCEDCUSTOMSHAPE3D_HXX
 
-#include <com/sun/star/drawing/ProjectionMode.hpp>
-#include <basegfx/point/b3dpoint.hxx>
-#include <basegfx/polygon/b3dpolygon.hxx>
-
-#include <tools/gen.hxx>
-
 class SdrObject;
 class SdrObjCustomShape;
 

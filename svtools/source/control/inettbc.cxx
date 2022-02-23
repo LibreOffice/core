@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/Property.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>

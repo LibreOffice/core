@@ -21,8 +21,8 @@
 
 #include "svgnode.hxx"
 #include "svgstyleattributes.hxx"
+#include "svgtools.hxx"
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
-#include <memory>
 
 namespace svgio::svgreader
     {

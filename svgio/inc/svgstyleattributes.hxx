@@ -21,6 +21,7 @@
 
 #include "svgpaint.hxx"
 #include "svgnode.hxx"
+#include "svgtools.hxx"
 #include <tools/fontenum.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>

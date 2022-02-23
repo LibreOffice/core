@@ -19,15 +19,10 @@
 
 
 #include <svl/languageoptions.hxx>
-#include <svl/cjkoptions.hxx>
-#include <svl/ctloptions.hxx>
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <unotools/syslocale.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
-#include <mutex>
 
 #ifdef _WIN32
 #if !defined WIN32_LEAN_AND_MEAN

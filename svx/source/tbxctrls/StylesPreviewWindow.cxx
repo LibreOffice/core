@@ -20,7 +20,6 @@
 #include <StylesPreviewWindow.hxx>
 
 #include <comphelper/propertyvalue.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/itemset.hxx>
@@ -52,9 +51,7 @@
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <cppuhelper/weak.hxx>
 
-#include <vcl/event.hxx>
 #include <vcl/commandevent.hxx>
 
 StyleStatusListener::StyleStatusListener(

@@ -121,6 +121,12 @@ excludelist:
     svx/source/table/accessibletableshape.cxx:
     # Actually used
     - com/sun/star/drawing/XShape.hpp
+    svx/source/table/tablecolumns.cxx:
+    # Complete type is needed for template class
+    - tablecolumn.hxx
+    svx/source/tbxctrls/tbunocontroller.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
     svx/source/unodraw/recoveryui.cxx:
     # Needed for LIBO_ETC_FOLDER on WIN32
     - config_folders.h

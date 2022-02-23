@@ -22,9 +22,6 @@
 #include <svl/languageoptions.hxx>
 #include <i18nlangtag/lang.h>
 #include <i18nlangtag/languagetag.hxx>
-#include <unotools/configitem.hxx>
-#include <com/sun/star/uno/Any.h>
-#include <com/sun/star/uno/Sequence.hxx>
 #include <officecfg/System.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <mutex>

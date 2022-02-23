@@ -45,7 +45,6 @@
 #include <sdr/overlay/overlayobjectcell.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/svxids.hrc>
-#include <editeng/outlobj.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdetc.hxx>

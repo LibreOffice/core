@@ -26,8 +26,6 @@
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <svx/svdmrkv.hxx>
 
-#include <memory>
-
 namespace svx::MediaShellHelpers
 {
 void GetState(const SdrMarkView* pSdrView, SfxItemSet& rSet)

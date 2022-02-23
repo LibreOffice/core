@@ -38,7 +38,6 @@
 #include <fmshimp.hxx>
 #include <o3tl/safeint.hxx>
 #include <sfx2/objitem.hxx>
-#include <sfx2/request.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/fmshell.hxx>
 #include <svx/fmtools.hxx>

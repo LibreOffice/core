@@ -50,7 +50,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <svtools/stringtransfer.hxx>
 #include <svl/whiter.hxx>

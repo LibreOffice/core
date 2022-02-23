@@ -24,7 +24,6 @@
 #include <svx/svdograf.hxx>
 #include <svx/svddrgv.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
-#include <rtl/ustrbuf.hxx>
 
 sdr::properties::BaseProperties& SdrVirtObj::GetProperties() const
 {

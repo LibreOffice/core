@@ -19,13 +19,10 @@
 
 #include <sal/config.h>
 
-#include <utility>
-
 #include <rtl/ustring.hxx>
 #include <svl/itemset.hxx>
 #include <svl/setitem.hxx>
 #include <svl/poolitem.hxx>
-#include <tools/debug.hxx>
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     SfxPoolItem(which),

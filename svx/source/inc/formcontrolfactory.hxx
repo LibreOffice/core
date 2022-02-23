@@ -29,7 +29,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include <memory>
 #include <string_view>
 
 class SdrUnoObj;

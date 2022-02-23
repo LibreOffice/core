@@ -22,7 +22,6 @@
 #include <sdr/properties/pageproperties.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdobj.hxx>
-#include <svx/xdef.hxx>
 #include <tools/debug.hxx>
 
 

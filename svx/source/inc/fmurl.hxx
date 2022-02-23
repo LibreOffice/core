@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 #define INCLUDED_SVX_SOURCE_INC_FMURL_HXX
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral FMURL_FORM_POSITION = u".uno:FormController/positionForm";
 inline constexpr OUStringLiteral FMURL_FORM_RECORDCOUNT = u".uno:FormController/RecordCount";
 inline constexpr OUStringLiteral FMURL_RECORD_MOVEFIRST = u".uno:FormController/moveToFirst";

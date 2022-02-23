@@ -21,9 +21,9 @@
 #define INCLUDED_SVL_SOURCE_NUMBERS_SUPSERVS_HXX
 
 #include <svl/numuno.hxx>
-#include <svl/zforlist.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <memory>
 
 /**

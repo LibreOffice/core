@@ -18,9 +18,7 @@
  */
 
 #include <svx/EnhancedCustomShapeTypeNames.hxx>
-#include <osl/mutex.hxx>
 #include <unordered_map>
-#include <memory>
 
 namespace {
 

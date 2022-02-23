@@ -54,7 +54,6 @@
 #include <svx/svdograf.hxx>
 #include <svx/xoutbmp.hxx>
 #include <vcl/graphicfilter.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmview.hxx>

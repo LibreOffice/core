@@ -30,8 +30,6 @@
 #include <helpids.h>
 
 #include <svx/ctredlin.hxx>
-#include <svx/dialmgr.hxx>
-#include <svx/strings.hrc>
 
 #define WRITER_DATE     2
 #define CALC_DATE       3

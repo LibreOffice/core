@@ -27,8 +27,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 
-#include <vector>
-
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;

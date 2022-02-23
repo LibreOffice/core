@@ -65,8 +65,6 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/optional/optional.hpp>
-#include <tools/UnitConversion.hxx>
 
 using namespace com::sun::star;
 

@@ -41,8 +41,6 @@
 #include <svx/svdlayer.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdundo.hxx>
-#include <svx/strings.hrc>
-#include <svx/dialmgr.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/fmdpage.hxx>
 

@@ -21,6 +21,7 @@
 #define INCLUDED_SVX_INC_TXENCTAB_HRC
 
 #include <rtl/textenc.h>
+#include <unotools/resmgr.hxx>
 #include <utility>
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))

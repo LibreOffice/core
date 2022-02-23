@@ -29,7 +29,6 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
 #include <comphelper/compbase.hxx>

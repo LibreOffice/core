@@ -11,7 +11,6 @@
 
 #include <osl/file.hxx>
 #include <sfx2/safemode.hxx>
-#include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <comphelper/processfactory.hxx>
@@ -23,9 +22,6 @@
 
 #include <com/sun/star/task/OfficeRestartManager.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
-#include <com/sun/star/system/XSystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
 
 using namespace css;
 

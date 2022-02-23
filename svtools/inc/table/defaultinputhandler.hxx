@@ -23,7 +23,6 @@
 #include <rtl/ref.hxx>
 #include <mousefunction.hxx>
 
-#include <memory>
 #include <vector>
 
 

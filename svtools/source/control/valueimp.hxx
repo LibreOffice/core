@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <tools/color.hxx>
 #include <vcl/image.hxx>
 #include <cppuhelper/implbase.hxx>
