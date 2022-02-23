@@ -15,6 +15,7 @@
 #include <editeng/editobj.hxx>
 #include "calcmacros.hxx"
 #include "postit.hxx"
+#include "Sparkline.hxx"
 #include "celltextattr.hxx"
 
 #if DEBUG_COLUMN_STORAGE
@@ -49,6 +50,7 @@ const mdds::mtv::element_t element_type_edittext = mdds::mtv::element_type_user_
 const mdds::mtv::element_t element_type_formula = mdds::mtv::element_type_user_start + 4;
 
 const mdds::mtv::element_t element_type_cellnote = mdds::mtv::element_type_user_start + 5;
+const mdds::mtv::element_t element_type_sparkline = mdds::mtv::element_type_user_start + 6;
 
 /// Mapped standard element types (for convenience).
 const mdds::mtv::element_t element_type_numeric = mdds::mtv::element_type_double;
@@ -57,6 +59,7 @@ const mdds::mtv::element_t element_type_uint16 = mdds::mtv::element_type_uint16;
 
 /// Custom element blocks.
 
+typedef mdds::mtv::noncopyable_managed_element_block<element_type_sparkline, sc::Sparkline> sparkline_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_cellnote, ScPostIt> cellnote_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> broadcaster_block;
 typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> celltextattr_block;
@@ -68,8 +71,13 @@ typedef mdds::mtv::noncopyable_managed_element_block<element_type_formula, ScFor
 typedef mdds::mtv::double_element_block numeric_block;
 typedef mdds::mtv::uint16_element_block uint16_block;
 
-/// This needs to be in the same namespace as CellTextAttr.
+} // end sc namespace
+
+/// CAUTION! The following defines must be in the same namespace as the respective type.
+/// For example sc types like sc::CellTextAttr, ScFormulaCell in global namespace.
+namespace sc {
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellTextAttr(), celltextattr_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(Sparkline, sc::element_type_sparkline, nullptr, sc::sparkline_block)
 }
 
 /// These need to be in global namespace just like their respective types are.
@@ -79,9 +87,7 @@ MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(ScFormulaCell, sc::element_type_formula, n
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(EditTextObject, sc::element_type_edittext, nullptr, sc::edittext_block)
 
 namespace svl {
-
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(SharedString, sc::element_type_string, SharedString(), sc::string_block)
-
 }
 
 namespace sc {
@@ -109,6 +115,10 @@ struct CellStoreTrait
     using event_func = CellStoreEvent;
     static constexpr mdds::mtv::lu_factor_t loop_unrolling = mdds::mtv::lu_factor_t::lu16;
 };
+
+/// Sparkline container
+typedef mdds::mtv::custom_block_func1<sc::sparkline_block> CSparklineFunction;
+typedef mdds::mtv::soa::multi_type_vector<CSparklineFunction> SparklineStoreType;
 
 /// Cell note container
 typedef mdds::mtv::custom_block_func1<sc::cellnote_block> CNoteFunc;
