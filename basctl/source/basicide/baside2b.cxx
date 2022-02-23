@@ -467,8 +467,9 @@ void EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
 void EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
 {
     GrabFocus();
-    if ( pEditView )
-        pEditView->MouseButtonDown( rEvt );
+    if (!pEditView)
+        return;
+    pEditView->MouseButtonDown(rEvt);
     if( pCodeCompleteWnd->IsVisible() )
     {
         if (pEditView->GetSelection() != pCodeCompleteWnd->GetTextSelection())
