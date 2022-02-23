@@ -545,13 +545,11 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
 
         if( pOutlinerParaObject && ( bOwnParaObj || !mpObject->IsEmptyPresObj() || mpObject->getSdrPageFromSdrObject()->IsMasterPage() ) )
         {
-            // tdf#72776: do not set empty text to SdrOutliner, if it is already set
-            if( !mpOutliner->GetEditEngine().GetTextLen() || pOutlinerParaObject->Count() > 1 || ( pOutlinerParaObject->Count() == 1 &&
-                !pOutlinerParaObject->GetTextObject().GetText(0).isEmpty() ) )
-                mpOutliner->SetText( *pOutlinerParaObject );
+            mpOutliner->SetText( *pOutlinerParaObject );
 
             // put text to object and set EmptyPresObj to FALSE
-            if( mpText && bOwnParaObj && mpObject->IsEmptyPresObj() && pTextObj->IsReallyEdited() )
+            // tdf#72776: if mbIsLocked above SetText removed content
+            if( mpText && bOwnParaObj && mpObject->IsEmptyPresObj() && (pTextObj->IsReallyEdited() || mbIsLocked) )
             {
                 mpObject->SetEmptyPresObj( false );
                 static_cast< SdrTextObj* >( mpObject)->NbcSetOutlinerParaObjectForText( std::unique_ptr<OutlinerParaObject>(pOutlinerParaObject), mpText );
