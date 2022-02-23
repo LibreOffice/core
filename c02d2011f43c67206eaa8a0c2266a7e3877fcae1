@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09bc9ab8_81645fc3",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-23T07:35:18Z",
+      "side": 1,
+      "message": "\"Cannot be installed\" is not precise in this case (the text implies some unsuccessful attempt) - rather, the situation is that we don\u0027t even try, because it\u0027s disallowed in settings.\n\nAlso no \"LibreOffice\" literal, rather should be substituted variable (use Translate::ExpandVariables).\n\nMaybe \"%PRODUCTNAME Base is not installed, and automatic installation is disabled\"?",
+      "range": {
+        "startLine": 183,
+        "startChar": 55,
+        "endLine": 183,
+        "endChar": 74
+      },
+      "revId": "c02d2011f43c67206eaa8a0c2266a7e3877fcae1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
