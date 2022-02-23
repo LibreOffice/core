@@ -271,6 +271,7 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, Sequence< PropertyValue 
         GetOKButton().set_label(sOkButtonText);
 
     GetCancelButton().connect_clicked(LINK(this, ImpPDFTabDialog, CancelHdl));
+    GetOKButton().connect_clicked(LINK(this, ImpPDFTabDialog, OkHdl));
 
     // remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
@@ -313,6 +314,28 @@ IMPL_LINK_NOARG(ImpPDFTabDialog, CancelHdl, weld::Button&, void)
     m_xDialog->response(RET_CANCEL);
 }
 
+IMPL_LINK_NOARG(ImpPDFTabDialog, OkHdl, weld::Button&, void)
+{
+    if (getGeneralPage()->IsPdfUaSelected())
+    {
+        SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mrDoc);
+        if (pShell)
+        {
+            sfx::AccessibilityIssueCollection aCollection = pShell->runAccessibilityCheck();
+            if (!aCollection.getIssues().empty())
+            {
+                std::shared_ptr<svx::AccessibilityCheckDialog> aDialog = std::make_shared<svx::AccessibilityCheckDialog>(mpParent, aCollection);
+                weld::DialogController::runAsync(aDialog, [this](sal_Int32 retValue){
+                    m_xDialog->response(retValue);
+                });
+            }
+        }
+    }
+    else{
+        m_xDialog->response(RET_OK);
+    }
+}
+
 ImpPDFTabDialog::~ImpPDFTabDialog()
 {
     maConfigItem.WriteModifiedConfig();
@@ -345,26 +368,6 @@ void ImpPDFTabDialog::PageCreated(const OString& rId, SfxTabPage& rPage)
     }
 }
 
-short ImpPDFTabDialog::Ok( )
-{
-    // here the whole mechanism of the base class is not used
-    // when Ok is hit, the user means 'convert to PDF', so simply close with ok
-
-    if (getGeneralPage()->IsPdfUaSelected())
-    {
-        SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(mrDoc);
-        if (pShell)
-        {
-            sfx::AccessibilityIssueCollection aCollection = pShell->runAccessibilityCheck();
-            if (!aCollection.getIssues().empty())
-            {
-                svx::AccessibilityCheckDialog aDialog(mpParent, aCollection);
-                return aDialog.run();
-            }
-        }
-    }
-    return RET_OK;
-}
 
 Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 {
