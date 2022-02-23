@@ -32,6 +32,7 @@
 
 #define UNO_NAME_FILLSTYLE                      "FillStyle"
 #define UNO_NAME_FILLCOLOR                      "FillColor"
+#define UNO_NAME_FILLCOLOR_THEME                "FillColorTheme"
 #define UNO_NAME_FILLGRADIENT                   "FillGradient"
 #define UNO_NAME_FILLGRADIENTNAME               "FillGradientName"
 #define UNO_NAME_FILLHATCH                      "FillHatch"
