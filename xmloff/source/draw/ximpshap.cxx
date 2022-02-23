@@ -345,6 +345,13 @@ void SdXMLShapeContext::endFastElement(sal_Int32 )
 {
     if(mxCursor.is())
     {
+        // tdf#72776 force UpdateData in the EditSource so we will not override text in SdrOutliner
+        if( mxLockable.is() )
+        {
+            mxLockable->removeActionLock();
+            mxLockable->addActionLock();
+        }
+
         // delete addition newline
         mxCursor->gotoEnd( false );
         mxCursor->goLeft( 1, true );
