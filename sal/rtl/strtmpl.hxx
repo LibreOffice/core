@@ -1210,7 +1210,7 @@ void newFromLiteral                                ( IMPL_RTL_STRINGDATA** ppThi
     {
         if constexpr (sizeof(STRCODE<IMPL_RTL_STRINGDATA>) == sizeof(sal_Unicode))
         {
-            assert(static_cast<unsigned char>(*pCharStr) < 0x80); // ASCII range
+            assert(rtl::isAscii(static_cast<unsigned char>(*pCharStr)));
         }
         SAL_WARN_IF( (static_cast<unsigned char>(*pCharStr)) == '\0', "rtl.string",
                     "rtl_uString_newFromLiteral - Found embedded \\0 character" );
