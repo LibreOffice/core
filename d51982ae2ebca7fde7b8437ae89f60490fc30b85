@@ -87,6 +87,24 @@
       "parentUuid": "d17ddd22_ee4a7619",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c0f2d31_02b4b438",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-02-23T19:14:36Z",
+      "side": 1,
+      "message": "So the current patch changes many more externals then I expected. I\u0027m beginning to wonder, if x86_64-apple-macos should actually be x86_64-apple-darwin... Also the reference of ICU in the commit message is now completely misleading.\n\nWhat happens, if you build using --build\u003dx86_64-apple-darwin?\n\nAnd you should just adapt the authorship to yourself. I just did a quick untested hack.",
+      "parentUuid": "522c9ab9_3876a897",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
