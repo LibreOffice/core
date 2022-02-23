@@ -2488,6 +2488,7 @@ void SwPostItMgr::ShowHideResolvedNotes(bool visible) {
         }
     }
     LayoutPostIts();
+    mpView->GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
 void SwPostItMgr::UpdateResolvedStatus(const sw::annotation::SwAnnotationWin* topNote) {

@@ -800,21 +800,24 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 tools::Long nYPos = 0;
                 for(SwPostItMgr::const_iterator i = aMgr->begin(); i != aMgr->end(); ++i)
                 {
-                    if (const SwFormatField* pFormatField = dynamic_cast<const SwFormatField *>((*i)->GetBroadcaster())) // SwPostit
+                    const SwSidebarItem* pSidebarItem = (*i).get();
+                    const SwFormatField& rFormatField = pSidebarItem->GetFormatField();
+                    if (rFormatField.GetTextField() && rFormatField.IsFieldInDoc())
                     {
-                        if (pFormatField->GetTextField() && pFormatField->IsFieldInDoc() &&
-                            (*i)->mLayoutStatus!=SwPostItHelper::INVISIBLE )
-                        {
-                            OUString sEntry = pFormatField->GetField()->GetPar2();
-                            sEntry = RemoveNewline(sEntry);
-                            std::unique_ptr<SwPostItContent> pCnt(new SwPostItContent(
-                                                this,
-                                                sEntry,
-                                                pFormatField,
-                                                nYPos));
-                            m_pMember->insert(std::move(pCnt));
-                            nYPos++;
-                        }
+                        OUString sEntry = rFormatField.GetField()->GetPar2();
+                        sEntry = RemoveNewline(sEntry);
+                        auto pCnt = make_unique<SwPostItContent>(this, sEntry, &rFormatField,
+                                                                 nYPos++);
+                        if (pSidebarItem->mpPostIt && (!pSidebarItem->mbShow ||
+                                !pSidebarItem->mpPostIt->IsVisible()))
+                            pCnt->SetInvisible();
+                        // check for visibility change
+                        if (pOldMember && !*pbContentChanged &&
+                                nOldMemberCount > m_pMember->size() &&
+                                (*pOldMember)[m_pMember->size()]->IsInvisible() !=
+                                 pCnt->IsInvisible())
+                            *pbContentChanged = true;
+                        m_pMember->insert(std::move(pCnt));
                     }
                 }
             }
