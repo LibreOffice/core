@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8768b69_c3ad8e46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-02-23T07:46:42Z",
+      "side": 1,
+      "message": "Thanks for the polite ping, and indeed I am not working on this patch any longer. What do you suggest I do with it? Abandon it? Yeah, will do.",
+      "revId": "a65d8a4d4fa1e584fa5f0659f86bec8cc7f56e5b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
