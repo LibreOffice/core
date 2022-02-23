@@ -21,8 +21,6 @@ chart2/res/dataeditor_icon01.png cmd/sc_insertrowsafter.png
 chart2/res/dataeditor_icon02.png cmd/sc_insertcolumnsafter.png
 chart2/res/dataeditor_icon03.png cmd/sc_deleterows.png
 chart2/res/dataeditor_icon04.png cmd/sc_deletecolumns.png
-chart2/res/netlinepoint_52x60.png chart2/res/net_52x60.png
-chart2/res/netlinepointstack_52x60.png chart2/res/netstack_52x60.png
 chart2/res/selectrange.png formula/res/refinp1.png
 
 cmd/32/charttitlemenu.png cmd/32/toggletitle.png
@@ -2751,3 +2749,12 @@ cmd/sc_librelogo-goforward.png cmd/sc_arrowshapes.up-arrow.png
 cmd/sc_librelogo-run.png cmd/sc_runbasic.png
 cmd/sc_librelogo-stop.png cmd/sc_basicstop.png
 cmd/sc_librelogo-translate.png cmd/sc_editglossary.png
+
+# Draw/Redaction Toolbar
+cmd/32/redactionpreviewexport.png cmd/32/exportdirecttopdf.png
+cmd/lc_redactionpreviewexport.png cmd/lc_exportdirecttopdf.png
+cmd/sc_redactionpreviewexport.png cmd/sc_exportdirecttopdf.png
+
+# Extension Dialog
+cmd/sc_stars-full.png sc/res/icon-set-stars-full.png
+cmd/sc_stars-empty.png sc/res/icon-set-stars-empty.png
