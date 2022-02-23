@@ -281,7 +281,8 @@ bool ScInterpreter::CreateDoubleArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 {
 
     // Old Add-Ins are hard limited to sal_uInt16 values.
-    static_assert(MAXCOLCOUNT <= SAL_MAX_UINT16, "Add check for columns > SAL_MAX_UINT16!");
+    static_assert(MAXCOL < SAL_MAX_UINT16 && MAXCOL_JUMBO < SAL_MAX_UINT16,
+        "Add check for columns > SAL_MAX_UINT16!");
     if (nRow1 > SAL_MAX_UINT16 || nRow2 > SAL_MAX_UINT16)
         return false;
 
@@ -364,7 +365,8 @@ bool ScInterpreter::CreateStringArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 {
 
     // Old Add-Ins are hard limited to sal_uInt16 values.
-    static_assert(MAXCOLCOUNT <= SAL_MAX_UINT16, "Add check for columns > SAL_MAX_UINT16!");
+    static_assert(MAXCOL < SAL_MAX_UINT16 && MAXCOL_JUMBO < SAL_MAX_UINT16,
+        "Add check for columns > SAL_MAX_UINT16!");
     if (nRow1 > SAL_MAX_UINT16 || nRow2 > SAL_MAX_UINT16)
         return false;
 
@@ -461,7 +463,8 @@ bool ScInterpreter::CreateCellArr(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
 {
 
     // Old Add-Ins are hard limited to sal_uInt16 values.
-    static_assert(MAXCOLCOUNT <= SAL_MAX_UINT16, "Add check for columns > SAL_MAX_UINT16!");
+    static_assert(MAXCOL < SAL_MAX_UINT16 && MAXCOL_JUMBO < SAL_MAX_UINT16,
+        "Add check for columns > SAL_MAX_UINT16!");
     if (nRow1 > SAL_MAX_UINT16 || nRow2 > SAL_MAX_UINT16)
         return false;
 
