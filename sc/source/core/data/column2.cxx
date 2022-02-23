@@ -1970,6 +1970,16 @@ void ScColumn::PrepareBroadcastersForDestruction()
     }
 }
 
+sc::Sparkline* ScColumn::GetSparkline(SCROW nRow)
+{
+    return maSparklines.get<sc::Sparkline*>(nRow);
+}
+
+void ScColumn::SetSparkline(SCROW nRow, std::unique_ptr<sc::Sparkline> pSparkline)
+{
+    maSparklines.set(nRow, pSparkline.release());
+}
+
 ScPostIt* ScColumn::GetCellNote(SCROW nRow)
 {
     return maCellNotes.get<ScPostIt*>(nRow);

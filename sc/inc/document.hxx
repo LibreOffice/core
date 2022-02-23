@@ -99,6 +99,8 @@ class UpdatedRangeNames;
 class TableColumnBlockPositionSet;
 class ColumnIterator;
 class ExternalDataMapper;
+class Sparkline;
+class SparklineGroup;
 
 }
 
@@ -1237,6 +1239,10 @@ public:
      */
     sc::MultiDataCellState HasMultipleDataCells( const ScRange& rRange ) const;
 
+    /** Spaklines */
+    SC_DLLPUBLIC sc::Sparkline* GetSparkline(ScAddress const & rPosition);
+    SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> & pSparklineGroup);
+
     /** Notes **/
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
@@ -1268,6 +1274,7 @@ public:
     SC_DLLPUBLIC void GetAllNoteEntries( std::vector<sc::NoteEntry>& rNotes ) const;
     SC_DLLPUBLIC void GetAllNoteEntries( SCTAB nTab, std::vector<sc::NoteEntry>& rNotes ) const;
     void              GetNotesInRange( const ScRangeList& rRange, std::vector<sc::NoteEntry>& rNotes ) const;
+
     bool              ContainsNotesInRange( const ScRangeList& rRange ) const;
 
     SC_DLLPUBLIC void SetDrawPageSize(SCTAB nTab);

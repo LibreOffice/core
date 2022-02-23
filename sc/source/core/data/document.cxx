@@ -6556,6 +6556,33 @@ bool ScDocument::IsInVBAMode() const
     return false;
 }
 
+sc::Sparkline* ScDocument::GetSparkline(ScAddress const& rPosition)
+{
+    SCTAB nTab = rPosition.Tab();
+    SCCOL nCol = rPosition.Col();
+
+    if (ValidTab(nTab) && nTab < SCTAB(maTabs.size()) &&
+        nCol < maTabs[nTab]->GetAllocatedColumnsCount())
+    {
+        SCROW nRow = rPosition.Row();
+        return maTabs[nTab]->aCol[nCol].GetSparkline(nRow);
+    }
+    return nullptr;
+}
+
+sc::Sparkline* ScDocument::CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> & pSparklineGroup)
+{
+    std::unique_ptr<sc::Sparkline> pSparkline(new sc::Sparkline(pSparklineGroup));
+    sc::Sparkline* pCreated = pSparkline.get();
+
+    SCTAB nTab = rPosition.Tab();
+    SCCOL nCol = rPosition.Col();
+    SCROW nRow = rPosition.Row();
+    maTabs[nTab]->CreateColumnIfNotExists(nCol).SetSparkline(nRow, std::move(pSparkline));
+
+    return pCreated;
+}
+
 ScPostIt* ScDocument::GetNote(const ScAddress& rPos)
 {
     return GetNote(rPos.Col(), rPos.Row(), rPos.Tab());
