@@ -231,6 +231,24 @@
       "parentUuid": "63122a37_a06372dd",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02e4225a_feb19f8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-02-24T13:28:36Z",
+      "side": 1,
+      "message": "That patch has some lines of \"-target x86_64-apple-macos\"; guess this started the idea to unify the identifier with configure.ac...",
+      "parentUuid": "1a696ecc_3033256d",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
