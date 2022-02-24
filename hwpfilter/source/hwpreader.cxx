@@ -1451,7 +1451,8 @@ void HwpReader::makePStyle(ParaShape const * pshape)
     rstartEl("style:style", mxList);
     mxList->clear();
     parseParaShape(pshape);
-    parseCharShape(pshape->cshape.get());
+    if (pshape->cshape)
+        parseCharShape(pshape->cshape.get());
     rstartEl("style:properties", mxList);
     mxList->clear();
 
