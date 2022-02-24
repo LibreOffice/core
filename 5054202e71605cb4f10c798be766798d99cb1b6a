@@ -34,6 +34,24 @@
       "parentUuid": "abf187e6_9cef2ae8",
       "revId": "5054202e71605cb4f10c798be766798d99cb1b6a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "567f6314_79b6b307",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T16:59:00Z",
+      "side": 1,
+      "message": "We just generally try to avoid publishing stuff as much as possible, to have more freedom to do incompatible changes later.  But that of course needs to be set off against legitimate needs to actually use such stuff from 3rd-party code.",
+      "parentUuid": "1c3cd4d6_aaa26938",
+      "revId": "5054202e71605cb4f10c798be766798d99cb1b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
