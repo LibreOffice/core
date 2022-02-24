@@ -99,10 +99,10 @@ namespace frm
 
     void RichTextControlImpl::implUpdateAttribute( const AttributeHandlerPool::const_iterator& _pHandler )
     {
-        if  (  ( _pHandler->first == SID_ATTR_CHAR_WEIGHT )
-            || ( _pHandler->first == SID_ATTR_CHAR_POSTURE )
-            || ( _pHandler->first == SID_ATTR_CHAR_FONT )
-            || ( _pHandler->first == SID_ATTR_CHAR_FONTHEIGHT )
+        if  (  ( _pHandler->first == sal_uInt16(SID_ATTR_CHAR_WEIGHT) )
+            || ( _pHandler->first == sal_uInt16(SID_ATTR_CHAR_POSTURE) )
+            || ( _pHandler->first == sal_uInt16(SID_ATTR_CHAR_FONT) )
+            || ( _pHandler->first == sal_uInt16(SID_ATTR_CHAR_FONTHEIGHT) )
             )
         {
             // these are attributes whose value depends on the current script type.

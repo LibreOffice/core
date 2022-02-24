@@ -1596,14 +1596,13 @@ void   SwTextFlowPage::Reset( const SfxItemSet* rSet )
     }
     if ( rSet->GetItemState(FN_TABLE_BOX_TEXTORIENTATION) > SfxItemState::DEFAULT )
     {
-        SvxFrameDirection nDirection =
-                static_cast<const SvxFrameDirectionItem&>(rSet->Get(FN_TABLE_BOX_TEXTORIENTATION)).GetValue();
+        SvxFrameDirection nDirection = rSet->Get(FN_TABLE_BOX_TEXTORIENTATION).GetValue();
         m_xTextDirectionLB->set_active_id(OUString::number(static_cast<sal_uInt32>(nDirection)));
     }
 
     if ( rSet->GetItemState(FN_TABLE_SET_VERT_ALIGN) > SfxItemState::DEFAULT )
     {
-        sal_uInt16 nVert = static_cast<const SfxUInt16Item&>(rSet->Get(FN_TABLE_SET_VERT_ALIGN)).GetValue();
+        sal_uInt16 nVert = rSet->Get(FN_TABLE_SET_VERT_ALIGN).GetValue();
         sal_uInt16 nPos = 0;
         switch(nVert)
         {

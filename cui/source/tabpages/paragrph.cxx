@@ -1626,8 +1626,7 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         {
             aApplyCollState.bTriStateEnabled = false;
 
-            const SvxPageModelItem& rModel =
-                static_cast<const SvxPageModelItem&>(rSet->Get( SID_ATTR_PARA_MODEL ));
+            const SvxPageModelItem& rModel = rSet->Get( SID_ATTR_PARA_MODEL );
             const OUString& aStr( rModel.GetValue() );
 
             if (!aStr.isEmpty() && m_xApplyCollBox->find_text(aStr) != -1)

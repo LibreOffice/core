@@ -794,11 +794,11 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
             if ( m_pHMap )
             {
                 const SfxInt16Item& rHoriOrient =
-                        static_cast<const SfxInt16Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_HORI_ORIENT));
+                        rOldSet.Get( SID_ATTR_TRANSFORM_HORI_ORIENT );
                 const SfxInt16Item& rHoriRelation =
-                        static_cast<const SfxInt16Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_HORI_RELATION));
+                        rOldSet.Get( SID_ATTR_TRANSFORM_HORI_RELATION);
                 const SfxInt32Item& rHoriPosition =
-                        static_cast<const SfxInt32Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_HORI_POSITION)) ;
+                        rOldSet.Get( SID_ATTR_TRANSFORM_HORI_POSITION);
 
                 sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_xHoriLB);
                 short nAlign = GetAlignment(m_pHMap, nMapPos, *m_xHoriToLB);
@@ -823,11 +823,11 @@ bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet* rSet)
             if ( m_pVMap )
             {
                 const SfxInt16Item& rVertOrient =
-                        static_cast<const SfxInt16Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_VERT_ORIENT));
+                        rOldSet.Get( SID_ATTR_TRANSFORM_VERT_ORIENT);
                 const SfxInt16Item& rVertRelation =
-                        static_cast<const SfxInt16Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_VERT_RELATION));
+                        rOldSet.Get( SID_ATTR_TRANSFORM_VERT_RELATION);
                 const SfxInt32Item& rVertPosition =
-                        static_cast<const SfxInt32Item&>(rOldSet.Get( SID_ATTR_TRANSFORM_VERT_POSITION));
+                        rOldSet.Get( SID_ATTR_TRANSFORM_VERT_POSITION);
 
                 sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_xVertLB);
                 short nAlign = GetAlignment(m_pVMap, nMapPos, *m_xVertToLB);

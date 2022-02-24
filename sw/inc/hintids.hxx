@@ -464,7 +464,7 @@ constexpr sal_uInt16 RES_FLTRATTR_END(197);
 
 constexpr sal_uInt16 RES_TBX_DUMMY(RES_FLTRATTR_END + 1);
 
-constexpr sal_uInt16 HINT_END(RES_TBX_DUMMY);
+constexpr TypedWhichId<SfxStringItem> HINT_END(RES_TBX_DUMMY);
 
 // Error recognition!!
 constexpr sal_uInt16 INVALID_HINT(HINT_END);

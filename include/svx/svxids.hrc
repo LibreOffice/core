@@ -139,8 +139,8 @@ class XFillGradientItem;
 #define SID_SIZE_PAGE_WIDTH                 (SID_SD_START+98)
 #define SID_INSERT_MATH                     (SID_SD_START+106)
 #define SID_SIZE_VISAREA                    (SID_SD_START+114)
-#define SID_ATTR_SYMBOLTYPE                 (SID_SD_START+115)  // used by Chart and SvxLineTabPage
-#define SID_ATTR_SYMBOLSIZE                 (SID_SD_START+116)
+#define SID_ATTR_SYMBOLTYPE                 TypedWhichId<SfxInt32Item>(SID_SD_START+115)  // used by Chart and SvxLineTabPage
+#define SID_ATTR_SYMBOLSIZE                 TypedWhichId<SvxSizeItem>(SID_SD_START+116)
 #define SID_HELPLINES_MOVE                  (SID_SD_START+153)
 #define SID_GRID_USE                        (SID_SD_START+154)
 #define ID_VAL_MOUSESTART_X                 (SID_SD_START+200)
@@ -422,14 +422,14 @@ class XFillGradientItem;
 #define SID_ATTR_TRANSFORM_RESIZE_REF_Y                 ( SID_SVX_START + 309 )
 #define SID_ATTR_TRANSFORM_AUTOWIDTH                    TypedWhichId<SfxBoolItem>( SID_SVX_START + 310 )
 #define SID_ATTR_TRANSFORM_AUTOHEIGHT                   TypedWhichId<SfxBoolItem>( SID_SVX_START + 311 )
-#define SID_ATTR_TRANSFORM_HORI_RELATION                ( SID_SVX_START + 312 )
-#define SID_ATTR_TRANSFORM_VERT_RELATION                ( SID_SVX_START + 313 )
-#define SID_ATTR_TRANSFORM_HORI_ORIENT                  ( SID_SVX_START + 314 )
+#define SID_ATTR_TRANSFORM_HORI_RELATION                TypedWhichId<SfxInt16Item>( SID_SVX_START + 312 )
+#define SID_ATTR_TRANSFORM_VERT_RELATION                TypedWhichId<SfxInt16Item>( SID_SVX_START + 313 )
+#define SID_ATTR_TRANSFORM_HORI_ORIENT                  TypedWhichId<SfxInt16Item>( SID_SVX_START + 314 )
 #define SID_ATTR_TRANSFORM_IN_VERTICAL_TEXT             ( SID_SVX_START + 315 )
 #define SID_ATTR_TRANSFORM_IN_RTL_TEXT                  ( SID_SVX_START + 316 )
-#define SID_ATTR_TRANSFORM_HORI_MIRROR                  ( SID_SVX_START + 317 )
-#define SID_ATTR_TRANSFORM_ANCHOR                       ( SID_SVX_START + 318 )
-#define SID_ATTR_TRANSFORM_VERT_ORIENT                  ( SID_SVX_START + 319 )
+#define SID_ATTR_TRANSFORM_HORI_MIRROR                  TypedWhichId<SfxBoolItem>( SID_SVX_START + 317 )
+#define SID_ATTR_TRANSFORM_ANCHOR                       TypedWhichId<SfxInt16Item>( SID_SVX_START + 318 )
+#define SID_ATTR_TRANSFORM_VERT_ORIENT                  TypedWhichId<SfxInt16Item>( SID_SVX_START + 319 )
 #define SID_ATTR_GLOW_RADIUS                            ( SID_SVX_START + 320 )
 #define SID_ATTR_GLOW_COLOR                             ( SID_SVX_START + 321 )
 #define SID_ATTR_GLOW_TRANSPARENCY                      ( SID_SVX_START + 322 )
@@ -458,7 +458,7 @@ class XFillGradientItem;
 // CAUTION! Range <363 .. 363> used by EditEngine (!)
 
 #define SID_ATTR_TEXT_FITTOSIZE                         ( SID_SVX_START + 367 )
-#define SID_ATTR_BRUSH_ROW                              ( SID_SVX_START + 368 )
+#define SID_ATTR_BRUSH_ROW                              TypedWhichId<SvxBrushItem>( SID_SVX_START + 368 )
 #define SID_OPTFILTER_MSOFFICE                          ( SID_SVX_START + 369 )
 #define SID_IMAP                                        ( SID_SVX_START + 371 )
 #define SID_IMAP_EXEC                                   ( SID_SVX_START + 374 )
@@ -524,9 +524,9 @@ class XFillGradientItem;
 #define SID_SD_GRAPHIC_OPTIONS                          ( SID_SVX_START + 447 )
 #define SID_SM_TP_PRINTOPTIONS                          ( SID_SVX_START + 448 )
 #define SID_SB_STARBASEOPTIONS                          ( SID_SVX_START + 450 )
-#define SID_SWREGISTER_COLLECTION                       ( SID_SVX_START + 451 )
+#define SID_SWREGISTER_COLLECTION                       TypedWhichId<SfxStringItem>( SID_SVX_START + 451 )
 #define SID_FILTER_DLG                                  ( SID_SVX_START + 452 )
-#define SID_ATTR_BRUSH_TABLE                            ( SID_SVX_START + 453 )
+#define SID_ATTR_BRUSH_TABLE                            TypedWhichId<SvxBrushItem>( SID_SVX_START + 453 )
 #define SID_GROUP                                       ( SID_SVX_START + 454 )
 #define SID_UNGROUP                                     ( SID_SVX_START + 455 )
 #define SID_SET_DEFAULT                                 ( SID_SVX_START + 456 )
@@ -540,7 +540,7 @@ class XFillGradientItem;
 #define SID_DRAW_FREELINE                               ( SID_SVX_START + 463 )
 #define SID_DRAW_FREELINE_NOFILL                        ( SID_SVX_START + 464 )
 #define SID_DRAW_TEXT_MARQUEE                           ( SID_SVX_START + 465 )
-#define SID_SWREGISTER_MODE                             ( SID_SVX_START + 467 )
+#define SID_SWREGISTER_MODE                             TypedWhichId<SfxBoolItem>( SID_SVX_START + 467 )
 #define SID_GRFFILTER                                   ( SID_SVX_START + 469 )
 #define SID_GRFFILTER_INVERT                            ( SID_SVX_START + 470 )
 #define SID_GRFFILTER_SMOOTH                            ( SID_SVX_START + 471 )
@@ -564,9 +564,9 @@ class XFillGradientItem;
 
 // CAUTION! Range <587 .. 587> used by EditEngine (!)
 
-#define SID_PARAGRAPH_FIRST_LINE_INDENT                 ( SID_SVX_START + 588 )
-#define SID_PARAGRAPH_LEFT_INDENT                       ( SID_SVX_START + 589 )
-#define SID_PARAGRAPH_RIGHT_INDENT                      ( SID_SVX_START + 590 )
+#define SID_PARAGRAPH_FIRST_LINE_INDENT                 TypedWhichId<SfxStringItem>( SID_SVX_START + 588 )
+#define SID_PARAGRAPH_LEFT_INDENT                       TypedWhichId<SfxStringItem>( SID_SVX_START + 589 )
+#define SID_PARAGRAPH_RIGHT_INDENT                      TypedWhichId<SfxStringItem>( SID_SVX_START + 590 )
 
 // CAUTION! Range <591 .. 591> used by EditEngine (!)
 
@@ -625,7 +625,7 @@ class XFillGradientItem;
 #define SID_CONVERT_TO_3D                               ( SID_SVX_START + 648 )
 #define SID_CONVERT_TO_3D_LATHE_FAST                    ( SID_SVX_START + 649 )
 #define SID_ATTR_3D_END                                   SID_CONVERT_TO_3D_LATHE_FAST
-#define SID_ATTR_NUMBERFORMAT_NOLANGUAGE                ( SID_SVX_START + 700 )
+#define SID_ATTR_NUMBERFORMAT_NOLANGUAGE                TypedWhichId<SfxBoolItem>( SID_SVX_START + 700 )
 
 #define SID_MORE_FMSLOTS_START                          ( SID_SVX_START + 702 )
 #define SID_FM_SHOW_PROPERTY_BROWSER                    ( SID_SVX_START + 703 )
@@ -718,10 +718,10 @@ class XFillGradientItem;
 
 // CAUTION! Range <877 .. 877> used by EditEngine (!)
 
-#define SID_ATTR_GRAF_KEEP_ZOOM                         ( SID_SVX_START + 882 )
+#define SID_ATTR_GRAF_KEEP_ZOOM                         TypedWhichId<SfxBoolItem>( SID_SVX_START + 882 )
 #define SID_ATTR_GRAF_CROP                              ( SID_SVX_START + 883 )
 #define SID_ATTR_GRAF_FRMSIZE                           TypedWhichId<SvxSizeItem>( SID_SVX_START + 884 )
-#define SID_ATTR_GRAF_FRMSIZE_PERCENT                   ( SID_SVX_START + 885 )
+#define SID_ATTR_GRAF_FRMSIZE_PERCENT                   TypedWhichId<SvxSizeItem>( SID_SVX_START + 885 )
 #define SID_ATTR_GRAF_GRAPHIC                           TypedWhichId<SvxBrushItem>( SID_SVX_START + 886 )
 #define SID_DRAW_TEXT_VERTICAL                          SID_ATTR_CHAR_VERTICAL
 
@@ -756,7 +756,7 @@ class XFillGradientItem;
 #define SID_INSERT_VFIXEDLINE                           ( SID_SVX_START + 929 )
 #define SID_READONLY_MODE                               ( SID_SVX_START + 930 )
 #define SID_ATTR_ALIGN_HYPHENATION                      ( SID_SVX_START + 931 )
-#define SID_ATTR_NUMBERFORMAT_SOURCE                    ( SID_SVX_START + 932 )
+#define SID_ATTR_NUMBERFORMAT_SOURCE                    TypedWhichId<SfxBoolItem>( SID_SVX_START + 932 )
 
 #define SID_RULER_BORDER_DISTANCE                       ( SID_SVX_START + 935 )
 #define SID_INSERT_DATEFIELD                            ( SID_SVX_START + 936 )
@@ -781,7 +781,7 @@ class XFillGradientItem;
 
 #define SID_RULER_TEXT_RIGHT_TO_LEFT                    ( SID_SVX_START + 952 )
 #define SID_ATTR_HDFT_DYNAMIC_SPACING                   ( SID_SVX_START + 953 )
-#define SID_ATTR_NUMBERFORMAT_ADD_AUTO                  ( SID_SVX_START + 954 )
+#define SID_ATTR_NUMBERFORMAT_ADD_AUTO                  TypedWhichId<SfxBoolItem>( SID_SVX_START + 954 )
 #define SID_OPEN_HYPERLINK                              ( SID_SVX_START + 955 )
 #define SID_CTLFONT_STATE                               ( SID_SVX_START + 956 )
 #define SID_VERTICALTEXT_STATE                          ( SID_SVX_START + 957 )
@@ -826,8 +826,8 @@ class XFillGradientItem;
 
 // CAUTION! Range <994 .. 998> used by EditEngine (!)
 
-#define SID_ATTR_TRANSFORM_HORI_POSITION                ( SID_SVX_START + 999 )
-#define SID_ATTR_TRANSFORM_VERT_POSITION                ( SID_SVX_START + 1000 )
+#define SID_ATTR_TRANSFORM_HORI_POSITION                TypedWhichId<SfxInt32Item>( SID_SVX_START + 999 )
+#define SID_ATTR_TRANSFORM_VERT_POSITION                TypedWhichId<SfxInt32Item>( SID_SVX_START + 1000 )
 // Available for use 1001
 #define SID_ALIGN_ANY_LEFT                              ( SID_SVX_START + 1002 )
 #define SID_ALIGN_ANY_HCENTER                           ( SID_SVX_START + 1003 )

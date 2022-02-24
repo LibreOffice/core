@@ -583,15 +583,14 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
 
     if(SfxItemState::SET == rSet->GetItemState(SID_SWREGISTER_MODE))
     {
-        m_xRegisterCB->set_active(static_cast<const SfxBoolItem&>(rSet->Get(
-                                  SID_SWREGISTER_MODE)).GetValue());
+        m_xRegisterCB->set_active(rSet->Get(SID_SWREGISTER_MODE).GetValue());
         m_xRegisterCB->save_state();
         RegisterModify(*m_xRegisterCB);
     }
     if(SfxItemState::SET == rSet->GetItemState(SID_SWREGISTER_COLLECTION))
     {
         m_xRegisterLB->set_active_text(
-                static_cast<const SfxStringItem&>(rSet->Get(SID_SWREGISTER_COLLECTION)).GetValue());
+                rSet->Get(SID_SWREGISTER_COLLECTION).GetValue());
         m_xRegisterLB->save_value();
     }
 
@@ -850,7 +849,7 @@ bool SvxPageDescPage::FillItemSet( SfxItemSet* rSet )
     if (m_xRegisterCB->get_visible() &&
        (m_xRegisterCB->get_active() || m_xRegisterCB->get_state_changed_from_saved()))
     {
-        const SfxBoolItem& rRegItem = static_cast<const SfxBoolItem&>(rOldSet.Get(SID_SWREGISTER_MODE));
+        const SfxBoolItem& rRegItem = rOldSet.Get(SID_SWREGISTER_MODE);
         std::unique_ptr<SfxBoolItem> pRegItem(rRegItem.Clone());
         bool bCheck = m_xRegisterCB->get_active();
         pRegItem->SetValue(bCheck);

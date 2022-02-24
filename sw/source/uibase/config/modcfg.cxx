@@ -25,6 +25,7 @@
 #include <editeng/editids.hrc>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <svl/typedwhich.hxx>
 
 #include <tools/globname.hxx>
 #include <tools/UnitConversion.hxx>
