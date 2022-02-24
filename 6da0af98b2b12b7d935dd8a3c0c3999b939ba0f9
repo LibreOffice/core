@@ -16,6 +16,23 @@
       "message": "I don\u0027t have any OSX HW. Maybe other OSX users have additional insight on the problem. I\u0027m already setting a different gb_CONFIGURE_PLATFORMS in solenv/gbuild/platform/windows.mk. Maybe something like this is preferable in solenv/gbuild/platform/macosx.mk?\n\nI\u0027m not sure my starting idea for this patch is the correct solution for the problem.",
       "revId": "6da0af98b2b12b7d935dd8a3c0c3999b939ba0f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9b8b629_93522c42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T08:28:54Z",
+      "side": 1,
+      "message": "What is the actual issue that this change tries to fix?  That should be explained in the commit message (with the necessary detail to make it possible for a reviewer to have an informed opinion about the usefulness of the propose fix: mention any relevant properties of the configuration, mention the exact way in which the build fails, ...)",
+      "revId": "6da0af98b2b12b7d935dd8a3c0c3999b939ba0f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
