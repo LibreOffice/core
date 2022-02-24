@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "901fa7b8_9f27eac0",
+        "filename": "shell/source/unix/exec/shellexec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-24T10:29:43Z",
+      "side": 1,
+      "message": "what\u0027s this? i dont see it on the linked gmail page\n... ah, \"an iOS application\" apparently.",
+      "range": {
+        "startLine": 142,
+        "startChar": 59,
+        "endLine": 142,
+        "endChar": 65
+      },
+      "revId": "3062f30cb1af61dfb9d1cfc96330b213ef396c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
