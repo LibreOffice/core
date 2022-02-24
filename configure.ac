@@ -956,7 +956,7 @@ cygwin*|wsl*)
     fi
     ;;
 
-darwin*|macos*) # macOS
+darwin*) # macOS
     using_freetype_fontconfig=no
     using_x11=no
     build_skia=yes
@@ -982,14 +982,6 @@ darwin*|macos*) # macOS
     LINKFLAGSNOUNDEFS=""
     case "$host_cpu" in
     aarch64|arm64)
-        case "$host_os" in
-        macos*)
-            # HOST_PLATFORM is used for external projects and their configury occasionally doesn't like
-            # the "macos" part so be sure to use aarch64-apple-darwin for now.
-            HOST_PLATFORM=aarch64-apple-darwin
-            ;;
-        esac
-
         # Apple's Clang uses "arm64"
         host_cpu_for_clang=arm64
     esac
@@ -4933,7 +4925,7 @@ cygwin*|wsl*)
     # Already handled
     ;;
 
-darwin*|macos*)
+darwin*)
     COM=GCC
     OS=MACOSX
     RTL_OS=MacOSX
@@ -8844,7 +8836,7 @@ if test -n "$ENABLE_JAVA" -a -z "$JAVAINC"; then
         JAVAINC="$JAVAINC -I$JAVA_HOME/include"
         ;;
 
-    darwin*|macos*)
+    darwin*)
         if test -d "$JAVA_HOME/include/darwin"; then
             JAVAINC="-I$JAVA_HOME/include  -I$JAVA_HOME/include/darwin"
         else
@@ -11536,7 +11528,7 @@ elif $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null;
     AC_MSG_RESULT([yes])
 else
     case "$build_os" in
-    darwin*|macos*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
+    darwin*|netbsd*|openbsd*|freebsd*|dragonfly*|aix*)
         x_GNUCP=[\#]
         GNUCP=''
         AC_MSG_RESULT([no gnucp found - using the system's cp command])
