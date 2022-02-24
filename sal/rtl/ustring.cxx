@@ -166,23 +166,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare( const sal_Unicode* pStr1,
                                            const char* pStr2 )
     SAL_THROW_EXTERN_C()
 {
-    assert(pStr1);
-    assert(pStr2);
-    sal_Int32 nRet;
-    for (;;)
-    {
-        nRet = static_cast<sal_Int32>(*pStr1)-
-                     static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
-        if (!(nRet == 0 && *pStr2 ))
-            break;
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
-                    "rtl_ustr_ascii_compare - Found char > 127" );
-        pStr1++;
-        pStr2++;
-    }
-
-    return nRet;
+    return rtl::str::compare(pStr1, pStr2);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -268,23 +252,7 @@ sal_Int32 SAL_CALL rtl_ustr_asciil_reverseCompare_WithLength( const sal_Unicode*
                                                               sal_Int32 nStr2Len )
     SAL_THROW_EXTERN_C()
 {
-    assert(nStr1Len >= 0 && nStr2Len >= 0);
-    const sal_Unicode*  pStr1Run = pStr1+nStr1Len;
-    const char*     pStr2Run = pStr2+nStr2Len;
-    sal_Int32           nRet;
-    while ( (pStr1 < pStr1Run) && (pStr2 < pStr2Run) )
-    {
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
-                    "rtl_ustr_asciil_reverseCompare_WithLength - Found char > 127" );
-        pStr1Run--;
-        pStr2Run--;
-        nRet = static_cast<sal_Int32>(*pStr1Run)- static_cast<sal_Int32>(*pStr2Run);
-        if ( nRet )
-            return nRet;
-    }
-
-    return nStr1Len - nStr2Len;
+    return rtl::str::reverseCompare_WithLength(pStr1, nStr1Len, pStr2, nStr2Len);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -317,33 +285,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase( const sal_Unicode* pSt
                                                           const char* pStr2 )
     SAL_THROW_EXTERN_C()
 {
-    assert(pStr1);
-    assert(pStr2);
-    sal_Int32   nRet;
-    sal_Int32   c1;
-    sal_Int32   c2;
-    do
-    {
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
-                    "rtl_ustr_ascii_compareIgnoreAsciiCase - Found char > 127" );
-        /* If character between 'A' and 'Z', then convert it to lowercase */
-        c1 = static_cast<sal_Int32>(*pStr1);
-        c2 = static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
-        if ( nRet != 0 )
-            return nRet;
-
-        pStr1++;
-        pStr2++;
-    }
-    while ( c2 );
-
-    return 0;
+    return rtl::str::compareIgnoreAsciiCase(pStr1, pStr2);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -390,28 +332,7 @@ sal_Int32 rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
     sal_Unicode const * first, sal_Int32 firstLen,
     char const * second, sal_Int32 secondLen) SAL_THROW_EXTERN_C()
 {
-    assert(firstLen >= 0 && secondLen >= 0);
-    sal_Int32 i;
-    sal_Int32 len = std::min(firstLen, secondLen);
-    for (i = 0; i < len; ++i) {
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*second)) > 127, "rtl.string",
-                    "rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths - Found char > 127" );
-        sal_Int32 c1 = *first++;
-        sal_Int32 c2 = static_cast<unsigned char>(*second++);
-        sal_Int32 d;
-        if (c1 >= 65 && c1 <= 90) {
-            c1 += 32;
-        }
-        if (c2 >= 65 && c2 <= 90) {
-            c2 += 32;
-        }
-        d = c1 - c2;
-        if (d != 0) {
-            return d;
-        }
-    }
-    return firstLen - secondLen;
+    return rtl::str::compareIgnoreAsciiCase_WithLength(first, firstLen, second, secondLen);
 }
 
 /* ----------------------------------------------------------------------- */

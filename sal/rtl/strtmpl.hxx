@@ -82,23 +82,41 @@ template <typename T> sal_Int32 getLength( const T* pStr )
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 compare                             ( const IMPL_RTL_STRCODE* pStr1,
-                                                const IMPL_RTL_STRCODE* pStr2 )
+template <typename C> void warnIfCharAndNotAscii(C c)
+{
+    if constexpr (sizeof(C) == sizeof(char))
+        SAL_WARN_IF(!rtl::isAscii(static_cast<unsigned char>(c)), "rtl.string",
+                    "Found non-ASCII char");
+}
+
+template <typename C1, typename C2> void warnIfOneIsCharAndNotAscii(C1 c1, C2 c2)
+{
+    if constexpr (sizeof(C1) != sizeof(C2))
+    {
+        warnIfCharAndNotAscii(c1);
+        warnIfCharAndNotAscii(c2);
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+
+template <typename C1, typename C2>
+sal_Int32 compare                             ( const C1* pStr1,
+                                                const C2* pStr2 )
 {
     assert(pStr1);
     assert(pStr2);
-    if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
+    if constexpr (sizeof(C1) == sizeof(char) && sizeof(C2) == sizeof(char))
     {
         // take advantage of builtin optimisations
         return strcmp( pStr1, pStr2);
     }
-    else if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(wchar_t))
+    else if constexpr (sizeof(C1) == sizeof(wchar_t) && sizeof(C2) == sizeof(wchar_t))
     {
         // take advantage of builtin optimisations
         return wcscmp(reinterpret_cast<wchar_t const *>(pStr1), reinterpret_cast<wchar_t const *>(pStr2));
     }
-    else
+    else // including C1 != C2
     {
         sal_Int32 nRet;
         for (;;)
@@ -107,6 +125,9 @@ sal_Int32 compare                             ( const IMPL_RTL_STRCODE* pStr1,
                    static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr2));
             if (!(nRet == 0 && *pStr2 ))
                 break;
+
+            warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
+
             pStr1++;
             pStr2++;
         }
@@ -146,19 +167,19 @@ sal_Int32 shortenedCompare_WithLength                             ( const IMPL_R
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 reverseCompare_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
-                                                                  sal_Int32 nStr1Len,
-                                                                  const IMPL_RTL_STRCODE* pStr2,
-                                                                  sal_Int32 nStr2Len )
+template <typename C1, typename C2>
+sal_Int32 reverseCompare_WithLength(const C1* pStr1, sal_Int32 nStr1Len,
+                                    const C2* pStr2, sal_Int32 nStr2Len)
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
-    const IMPL_RTL_STRCODE* pStr1Run = pStr1+nStr1Len;
-    const IMPL_RTL_STRCODE* pStr2Run = pStr2+nStr2Len;
+    const C1* pStr1Run = pStr1+nStr1Len;
+    const C2* pStr2Run = pStr2+nStr2Len;
     sal_Int32               nRet;
     while ( (pStr1 < pStr1Run) && (pStr2 < pStr2Run) )
     {
+        warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
+
         pStr1Run--;
         pStr2Run--;
         nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1Run ))-
@@ -172,15 +193,16 @@ sal_Int32 reverseCompare_WithLength                             ( const IMPL_RTL
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 compareIgnoreAsciiCase                             ( const IMPL_RTL_STRCODE* pStr1,
-                                                               const IMPL_RTL_STRCODE* pStr2 )
+template <typename C1, typename C2>
+sal_Int32 compareIgnoreAsciiCase(const C1* pStr1, const C2* pStr2)
 {
     assert(pStr1);
     assert(pStr2);
     sal_uInt32 c1;
     do
     {
+        warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
+
         c1 = IMPL_RTL_USTRCODE(*pStr1);
         sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
             c1, IMPL_RTL_USTRCODE(*pStr2));
@@ -197,18 +219,18 @@ sal_Int32 compareIgnoreAsciiCase                             ( const IMPL_RTL_ST
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 compareIgnoreAsciiCase_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
-                                                                          sal_Int32 nStr1Len,
-                                                                          const IMPL_RTL_STRCODE* pStr2,
-                                                                          sal_Int32 nStr2Len )
+template <typename C1, typename C2>
+sal_Int32 compareIgnoreAsciiCase_WithLength(const C1* pStr1, sal_Int32 nStr1Len,
+                                            const C2* pStr2, sal_Int32 nStr2Len)
 {
     assert(nStr1Len >= 0);
     assert(nStr2Len >= 0);
-    const IMPL_RTL_STRCODE* pStr1End = pStr1 + nStr1Len;
-    const IMPL_RTL_STRCODE* pStr2End = pStr2 + nStr2Len;
+    const C1* pStr1End = pStr1 + nStr1Len;
+    const C2* pStr2End = pStr2 + nStr2Len;
     while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
     {
+        warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
+
         sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
             IMPL_RTL_USTRCODE(*pStr1), IMPL_RTL_USTRCODE(*pStr2));
         if ( nRet != 0 )
