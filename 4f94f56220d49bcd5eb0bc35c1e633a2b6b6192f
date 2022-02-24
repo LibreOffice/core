@@ -33,6 +33,24 @@
       "message": "This is not correct. You uppercase the whole string up to the found colon, which may include other characters (e.g., \\\\.\\ for long paths, or even maybe some device path syntax (look for volume GUID in [1]) - not sure if that is possible, but we need to be careful).\n\nPlease:\n1. Find the colon (you do);\n2. Check if it\u0027s not the first character (you do);\n3. Check if the previous character is rtl::isAsciiLowerCase (that is the simplest and in the same time the most precise check when we need to uppercase it, including making sure it\u0027s an alpha);\n4. Uppercase it using rtl::toAsciiUpperCase in-place (no need to call a function for that; toAsciiUpperCase is inline, while rtl_ustr_toAsciiUpperCase_WithLength would be called with all the function call overhead, while not adding to simplicity of use).\n\nThank you!\n\n[1] https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats#dos-device-paths",
       "revId": "4f94f56220d49bcd5eb0bc35c1e633a2b6b6192f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10335e84_ebac0d79",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-24T10:16:22Z",
+      "side": 1,
+      "message": "\u003e 3. Check if the previous character is rtl::isAsciiLowerCase\n\nOTOH, explicit check looks redundant, as rtl::toAsciiUpperCase will do something only in case it\u0027s isAsciiLowerCase - just do the #4, without #3.",
+      "parentUuid": "10c51eb5_b45d682b",
+      "revId": "4f94f56220d49bcd5eb0bc35c1e633a2b6b6192f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
