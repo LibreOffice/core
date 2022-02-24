@@ -258,6 +258,18 @@ void ParaShape::Read(HWPFile & hwpf)
     hwpf.ReadBlock(reserved, 2);
 }
 
+CharShape::CharShape()
+    : index(0)
+    , size(0)
+    , font{0}
+    , ratio{0}
+    , space{0}
+    , color{0}
+    , shade(0)
+    , attr(0)
+    , reserved{0}
+{
+}
 
 void CharShape::Read(HWPFile & hwpf)
 {
