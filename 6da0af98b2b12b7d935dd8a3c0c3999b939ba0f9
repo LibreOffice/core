@@ -33,6 +33,24 @@
       "message": "What is the actual issue that this change tries to fix?  That should be explained in the commit message (with the necessary detail to make it possible for a reviewer to have an informed opinion about the usefulness of the propose fix: mention any relevant properties of the configuration, mention the exact way in which the build fails, ...)",
       "revId": "6da0af98b2b12b7d935dd8a3c0c3999b939ba0f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a8b82d6_1fde0bbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-24T08:57:14Z",
+      "side": 1,
+      "message": "This patch tries to address https://www.mail-archive.com/libreoffice@lists.freedesktop.org/msg300977.html",
+      "parentUuid": "b9b8b629_93522c42",
+      "revId": "6da0af98b2b12b7d935dd8a3c0c3999b939ba0f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
