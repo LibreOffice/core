@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fce8c67b_1c3e8050",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T14:07:02Z",
+      "side": 1,
+      "message": "Will this work on macOS, where closing the last open document doesn\u0027t automatically show the start center, I think?",
+      "revId": "c262f68bb3089336b5ce11c4b4c8f8b8fb81b589",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
