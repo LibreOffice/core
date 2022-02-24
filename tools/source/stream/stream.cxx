@@ -1787,7 +1787,8 @@ void SvMemoryStream::SetSize(sal_uInt64 const nNewSize)
     ReAllocateMemory( nDiff );
 }
 
-//Create an OString of nLen bytes from rStream
+// Create an OString of nLen bytes from rStream
+// coverity[ -taint_source ]
 OString read_uInt8s_ToOString(SvStream& rStrm, std::size_t nLen)
 {
     rtl_String *pStr = nullptr;
@@ -1818,7 +1819,8 @@ OString read_uInt8s_ToOString(SvStream& rStrm, std::size_t nLen)
     return pStr ? OString(pStr, SAL_NO_ACQUIRE) : OString();
 }
 
-//Create an OUString of nLen sal_Unicode code units from rStream
+// Create an OUString of nLen sal_Unicode code units from rStream
+// coverity[ -taint_source ]
 OUString read_uInt16s_ToOUString(SvStream& rStrm, std::size_t nLen)
 {
     rtl_uString *pStr = nullptr;
