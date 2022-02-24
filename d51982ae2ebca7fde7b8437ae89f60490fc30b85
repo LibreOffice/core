@@ -177,6 +177,24 @@
       "parentUuid": "79c6fd4d_230ee8e8",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1cbc8ea_de3c6ddc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T12:36:19Z",
+      "side": 1,
+      "message": "\u003e \"Automagically\" fixing that in configure.ac seems the easiest fix with a ${BUILD_PLATFORM/macos/darwin} and for HOST_PLATFORM.\n\u003e And then just add an add_warning, so the user can adapt.\n\nWhy do the automagic rewrite?  Just providing an error in configure.ac is fine IMO and avoids carrying any unnecessary baggage.\n\nWhere does that idea of $host_os \u003d \u0027macos*\u0027 come from anyway?  At least my two macOS boxes both report $host_os \u003d \u0027darwin*\u0027 if I run ./autogen.sh without any manually specified --host\u003d... or --build\u003d...",
+      "parentUuid": "b1a27605_8ed0a49a",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
