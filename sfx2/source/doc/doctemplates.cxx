@@ -1285,8 +1285,13 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( std::u16string_view
         } catch( uno::Exception& )
         {}
 
-        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(mxContext));
-        xAccess->writeFile(OUString::Concat(aUserPath) + "groupuinames.xml", xTempFile->getInputStream());
+        Content aTargetContent( OUString(aUserPath), maCmdEnv, comphelper::getProcessComponentContext() );
+        Content aSourceContent( xTempFile->getUri(), maCmdEnv, comphelper::getProcessComponentContext() );
+        aTargetContent.transferContent( aSourceContent,
+                                        InsertOperation::Move,
+                                        "groupuinames.xml",
+                                        ucb::NameClash::OVERWRITE,
+                                        "text/xml" );
 
         bResult = true;
     }
