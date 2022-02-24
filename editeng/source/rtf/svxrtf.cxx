@@ -899,7 +899,7 @@ void SvxRTFParser::BuildWhichTable()
     // Here are the IDs for all paragraph attributes, which can be detected by
     // SvxParser and can be set in a SfxItemSet. The IDs are set correctly through
     // the SlotIds from POOL.
-    for (sal_uInt16 nWid : {
+    static constexpr sal_uInt16 WIDS1[] {
              SID_ATTR_PARA_LINESPACE,
              SID_ATTR_PARA_ADJUST,
              SID_ATTR_TABSTOP,
@@ -917,7 +917,8 @@ void SvxRTFParser::BuildWhichTable()
              SID_ATTR_PARA_HANGPUNCTUATION,
              SID_ATTR_PARA_FORBIDDEN_RULES,
              SID_ATTR_FRAMEDIRECTION,
-         })
+         };
+    for (sal_uInt16 nWid : WIDS1)
     {
         sal_uInt16 nTrueWid = pAttrPool->GetTrueWhich(nWid, false);
         aPardMap[nWid] = nTrueWid;
@@ -929,7 +930,7 @@ void SvxRTFParser::BuildWhichTable()
     // Here are the IDs for all character attributes, which can be detected by
     // SvxParser and can be set in a SfxItemSet. The IDs are set correctly through
     // the SlotIds from POOL.
-    constexpr sal_uInt16 WIDS[] {
+    static constexpr sal_uInt16 WIDS[] {
              SID_ATTR_CHAR_CASEMAP,        SID_ATTR_BRUSH_CHAR,        SID_ATTR_CHAR_COLOR,
              SID_ATTR_CHAR_CONTOUR,        SID_ATTR_CHAR_STRIKEOUT,    SID_ATTR_CHAR_ESCAPEMENT,
              SID_ATTR_CHAR_FONT,           SID_ATTR_CHAR_FONTHEIGHT,   SID_ATTR_CHAR_KERNING,

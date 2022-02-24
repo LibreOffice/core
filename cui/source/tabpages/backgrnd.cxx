@@ -204,7 +204,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         if (SfxItemState::SET == maSet.GetItemState(SID_ATTR_BRUSH_ROW))
         {
-            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(SID_ATTR_BRUSH_ROW)));
+            SvxBrushItem aBrushItem(maSet.Get(SID_ATTR_BRUSH_ROW));
             rCoreSet->Put(aBrushItem);
         }
     }
@@ -212,7 +212,7 @@ bool SvxBkgTabPage::FillItemSet( SfxItemSet* rCoreSet )
     {
         if (SfxItemState::SET == maSet.GetItemState(SID_ATTR_BRUSH_TABLE))
         {
-            SvxBrushItem aBrushItem(static_cast<const SvxBrushItem&>(maSet.Get(SID_ATTR_BRUSH_TABLE)));
+            SvxBrushItem aBrushItem(maSet.Get(SID_ATTR_BRUSH_TABLE));
             rCoreSet->Put(aBrushItem);
         }
     }

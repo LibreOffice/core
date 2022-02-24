@@ -172,7 +172,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
         {
             SfxItemSet aFontAttr( mpDoc->GetPool() );
             mpView->GetAttributes( aFontAttr );
-            const SvxFontItem* pFItem = static_cast<const SvxFontItem*>(aFontAttr.GetItem( SID_ATTR_CHAR_FONT ));
+            const SvxFontItem* pFItem = aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
             if( pFItem )
                 aFont = vcl::Font( pFItem->GetFamilyName(), pFItem->GetStyleName(), Size( 1, 1 ) );
         }
@@ -185,7 +185,7 @@ void FuBullet::InsertSpecialCharacter( SfxRequest const & rReq )
 
         SfxItemSet aFontAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aFontAttr );
-        const SvxFontItem* pFontItem = static_cast<const SvxFontItem*>(aFontAttr.GetItem( SID_ATTR_CHAR_FONT ));
+        const SvxFontItem* pFontItem = aFontAttr.GetItem( SID_ATTR_CHAR_FONT );
         if( pFontItem )
             aSet.Put( *pFontItem );
 

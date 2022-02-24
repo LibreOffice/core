@@ -211,7 +211,7 @@ void SwFootNotePage::Reset(const SfxItemSet *rSet)
 // stuff attributes into the set, when OK
 bool SwFootNotePage::FillItemSet(SfxItemSet *rSet)
 {
-    SwPageFootnoteInfoItem aItem(static_cast<const SwPageFootnoteInfoItem&>(GetItemSet().Get(FN_PARAM_FTN_INFO)));
+    SwPageFootnoteInfoItem aItem(GetItemSet().Get(FN_PARAM_FTN_INFO));
 
     // that's the original
     SwPageFootnoteInfo &rFootnoteInfo = aItem.GetPageFootnoteInfo();

@@ -21,7 +21,14 @@
 
 #include <svl/solar.hrc>
 
+class SfxGrabBagItem;
+class SfxUInt16Item;
+class SvxBrushItem;
+class SvxFontItem;
 class SvxLanguageItem;
+class SvxPageModelItem;
+class SvxPostureItem;
+class SvxTabStopItem;
 
 /*
   These SID_SVX_START entries came from include/svx/svxids.hrc, avoid
@@ -29,14 +36,14 @@ class SvxLanguageItem;
   include/sfx2/sfxsids.hrc. Only add new SID_SVX_START entries to
   include/svx/svxids.hrc
 */
-#define SID_ATTR_BRUSH                                  ( SID_SVX_START + 1 )
-#define SID_ATTR_TABSTOP                                ( SID_SVX_START + 2 )
-#define SID_ATTR_TABSTOP_DEFAULTS                       ( SID_SVX_START + 3 )
-#define SID_ATTR_TABSTOP_POS                            ( SID_SVX_START + 4 )
-#define SID_ATTR_TABSTOP_OFFSET                         ( SID_SVX_START + 5 )
+#define SID_ATTR_BRUSH                                  TypedWhichId<SvxBrushItem>( SID_SVX_START + 1 )
+#define SID_ATTR_TABSTOP                                TypedWhichId<SvxTabStopItem>( SID_SVX_START + 2 )
+#define SID_ATTR_TABSTOP_DEFAULTS                       TypedWhichId<SfxUInt16Item>( SID_SVX_START + 3 )
+#define SID_ATTR_TABSTOP_POS                            TypedWhichId<SfxUInt16Item>( SID_SVX_START + 4 )
+#define SID_ATTR_TABSTOP_OFFSET                         TypedWhichId<SfxInt32Item>( SID_SVX_START + 5 )
 #define SID_ATTR_CHAR                                   ( SID_SVX_START + 6 )
-#define SID_ATTR_CHAR_FONT                              ( SID_SVX_START + 7 )
-#define SID_ATTR_CHAR_POSTURE                           ( SID_SVX_START + 8 )
+#define SID_ATTR_CHAR_FONT                              TypedWhichId<SvxFontItem>( SID_SVX_START + 7 )
+#define SID_ATTR_CHAR_POSTURE                           TypedWhichId<SvxPostureItem>( SID_SVX_START + 8 )
 #define SID_ATTR_CHAR_WEIGHT                            ( SID_SVX_START + 9 )
 #define SID_ATTR_CHAR_SHADOWED                          ( SID_SVX_START + 10 )
 #define SID_ATTR_CHAR_WORDLINEMODE                      ( SID_SVX_START + 11 )
@@ -77,7 +84,7 @@ class SvxLanguageItem;
 #define SID_ATTR_LRSPACE                                ( SID_SVX_START + 48 )
 #define SID_ATTR_ULSPACE                                ( SID_SVX_START + 49 )
 #define SID_ATTR_PARA_ABOVESPACE                        ( SID_SVX_START + 64 )
-#define SID_ATTR_PARA_MODEL                             ( SID_SVX_START + 65 )
+#define SID_ATTR_PARA_MODEL                             TypedWhichId<SvxPageModelItem>( SID_SVX_START + 65 )
 #define SID_ATTR_PARA_KEEP                              ( SID_SVX_START + 66 )
 #define SID_ATTR_CHAR_AUTOKERN                          ( SID_SVX_START + 67 )
 #define SID_HANGING_INDENT                              ( SID_SVX_START + 68 )
@@ -131,13 +138,13 @@ class SvxLanguageItem;
 #define SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD               ( SID_EDIT_START + 69 )
 #define SID_ATTR_ALIGN_VER_JUSTIFY_METHOD               ( SID_EDIT_START + 70 )
 #define SID_ATTR_ALIGN_HOR_JUSTIFY                      ( SID_EDIT_START + 71 )
-#define SID_ATTR_ALIGN_VER_JUSTIFY                      ( SID_EDIT_START + 72 )
-#define SID_ATTR_PARA_OUTLINE_LEVEL                     ( SID_EDIT_START + 73 )
-#define SID_ATTR_CHAR_PREVIEW_FONT                      ( SID_EDIT_START + 74 )
-#define SID_ATTR_CHAR_ENDPREVIEW_FONT                   ( SID_EDIT_START + 75 )
+#define SID_ATTR_ALIGN_VER_JUSTIFY                      TypedWhichId<SvxVerJustifyItem>( SID_EDIT_START + 72 )
+#define SID_ATTR_PARA_OUTLINE_LEVEL                     TypedWhichId<SfxUInt16Item>( SID_EDIT_START + 73 )
+#define SID_ATTR_CHAR_PREVIEW_FONT                      TypedWhichId<SvxFontItem>( SID_EDIT_START + 74 )
+#define SID_ATTR_CHAR_ENDPREVIEW_FONT                   TypedWhichId<SvxFontItem>( SID_EDIT_START + 75 )
 #define SID_ATTR_CHAR_BOX                               ( SID_EDIT_START + 76 )
 #define SID_ATTR_CHAR_SHADOW                            ( SID_EDIT_START + 77 )
-#define SID_ATTR_PARA_GRABBAG                           ( SID_EDIT_START + 78 )
+#define SID_ATTR_PARA_GRABBAG                           TypedWhichId<SfxGrabBagItem>( SID_EDIT_START + 78 )
 
 
 #if 95 > (SID_EDIT_END-SID_EDIT_START)

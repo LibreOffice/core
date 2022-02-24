@@ -364,8 +364,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if(eState==SfxItemState::SET)
     {
-        const SfxBoolItem* pBoolLangItem = static_cast<const SfxBoolItem*>(
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE));
+        const SfxBoolItem* pBoolLangItem =
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE);
 
         if(pBoolLangItem!=nullptr && pBoolLangItem->GetValue())
         {
@@ -415,8 +415,8 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     if ( eState == SfxItemState::SET )
     {
-        const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE ));
+        const SfxBoolItem* pBoolItem =
+                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_SOURCE );
         if ( pBoolItem )
             m_xCbSourceFormat->set_active(pBoolItem->GetValue());
         else
@@ -514,8 +514,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     }
     eState = rSet->GetItemState( SID_ATTR_NUMBERFORMAT_ADD_AUTO );
     if(SfxItemState::SET == eState)
-         pAutoEntryAttr = static_cast<const SfxBoolItem*>(
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO ));
+         pAutoEntryAttr = GetItem( *rSet, SID_ATTR_NUMBERFORMAT_ADD_AUTO );
     // no_NO is an alias for nb_NO and normally isn't listed, we need it for
     // backwards compatibility, but only if the format passed is of
     // LanguageType no_NO.
@@ -735,8 +734,8 @@ bool SvxNumberFormatTabPage::FillItemSet( SfxItemSet* rCoreAttrs )
         if ( m_xCbSourceFormat->get_sensitive() )
         {
             SfxItemState _eItemState = rMyItemSet.GetItemState( SID_ATTR_NUMBERFORMAT_SOURCE, false );
-            const SfxBoolItem* pBoolItem = static_cast<const SfxBoolItem*>(
-                        GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE ));
+            const SfxBoolItem* pBoolItem =
+                        GetItem( rMyItemSet, SID_ATTR_NUMBERFORMAT_SOURCE );
             bool bOld = pBoolItem && pBoolItem->GetValue();
             rCoreAttrs->Put( SfxBoolItem( SID_ATTR_NUMBERFORMAT_SOURCE, m_xCbSourceFormat->get_active() ) );
             if ( !bDataChanged )

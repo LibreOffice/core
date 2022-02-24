@@ -268,9 +268,9 @@ namespace frm
         :AttributeHandler( _nAttributeId, _nWhichId )
         ,m_bScriptDependent( false )
     {
-        m_bScriptDependent = ( SID_ATTR_CHAR_WEIGHT == _nAttributeId )
-                         ||  ( SID_ATTR_CHAR_POSTURE == _nAttributeId )
-                         ||  ( SID_ATTR_CHAR_FONT == _nAttributeId );
+        m_bScriptDependent = ( sal_uInt16(SID_ATTR_CHAR_WEIGHT) == _nAttributeId )
+                         ||  ( sal_uInt16(SID_ATTR_CHAR_POSTURE) == _nAttributeId )
+                         ||  ( sal_uInt16(SID_ATTR_CHAR_FONT) == _nAttributeId );
     }
 
 
