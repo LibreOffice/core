@@ -54,6 +54,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4175ac3_b8291430",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-24T15:48:20Z",
+      "side": 1,
+      "message": "Now I understood what you mean. I will rename all these in a follow up patch:\n    CppunitTest_i18npool_test_breakiterator\n    CppunitTest_i18npool_test_characterclassification\n    CppunitTest_i18npool_test_ordinalsuffix\n    CppunitTest_i18npool_test_textsearch\n    CppunitTest_i18npool_test_calendar",
+      "parentUuid": "408c08d6_a2627212",
+      "revId": "4136ea73743c9f8456b78eefc66ddfdc7c949bab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f859626b_b8a58e3b",
