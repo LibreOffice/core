@@ -57,7 +57,7 @@
 #include <rtl/process.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/diagnose_ex.h>
+#include <sal/log.hxx>
 #include <uno/current_context.hxx>
 #include <jvmfwk/framework.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -419,23 +419,23 @@ void initVMConfiguration(
     try {
         getINetPropsFromConfig(&jvm, xSMgr, xCtx);
     }
-    catch(const css::uno::Exception &) {
-        TOOLS_INFO_EXCEPTION("stoc", "can not get INETProps");
+    catch(const css::uno::Exception & exception) {
+        SAL_INFO("stoc", "can not get INETProps because of " << exception);
     }
 
     try {
         getDefaultLocaleFromConfig(&jvm, xSMgr,xCtx);
     }
-    catch(const css::uno::Exception &) {
-        TOOLS_INFO_EXCEPTION("stoc", "can not get locale");
+    catch(const css::uno::Exception & exception) {
+        SAL_INFO("stoc", "can not get locale because of " << exception);
     }
 
     try
     {
         getJavaPropsFromSafetySettings(&jvm, xSMgr, xCtx);
     }
-    catch(const css::uno::Exception &) {
-        TOOLS_INFO_EXCEPTION("stoc", "couldn't get safety settings");
+    catch(const css::uno::Exception & exception) {
+        SAL_INFO("stoc", "couldn't get safety settings because of " << exception);
     }
 
     *pjvm= jvm;
@@ -1129,7 +1129,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            TOOLS_WARN_EXCEPTION( "stoc", "");
+            OSL_FAIL("com.sun.star.uno.Exception caught");
         }
     if (m_xJavaConfiguration.is())
         // We should never get here, but just in case...
@@ -1139,7 +1139,7 @@ JavaVirtualMachine::~JavaVirtualMachine()
         }
         catch (css::uno::Exception &)
         {
-            TOOLS_WARN_EXCEPTION( "stoc", "");
+            OSL_FAIL("com.sun.star.uno.Exception caught");
         }
 }
 
@@ -1209,9 +1209,9 @@ void JavaVirtualMachine::registerConfigChangesListener()
             if (m_xJavaConfiguration.is())
                 m_xJavaConfiguration->addContainerListener(this);
         }
-    }catch(const css::uno::Exception &)
+    }catch(const css::uno::Exception & e)
     {
-        TOOLS_INFO_EXCEPTION("stoc", "could not set up listener for Configuration");
+        SAL_INFO("stoc", "could not set up listener for Configuration because of >" << e << "<");
     }
 }
 
@@ -1338,11 +1338,11 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
     }
     catch (css::uno::RuntimeException &)
     {
-        TOOLS_WARN_EXCEPTION( "stoc", "");
+        OSL_FAIL("RuntimeException");
     }
     catch (jvmaccess::VirtualMachine::AttachGuard::CreationException &)
     {
-        TOOLS_WARN_EXCEPTION( "stoc", "");
+        OSL_FAIL("jvmaccess::VirtualMachine::AttachGuard::CreationException");
     }
 }
 

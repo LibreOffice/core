@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/factory.hxx>
@@ -289,11 +288,11 @@ void OServiceManager_Listener::disposing(const EventObject & rEvt )
     }
     catch( const IllegalArgumentException & )
     {
-        TOOLS_WARN_EXCEPTION( "stoc", "" );
+        OSL_FAIL( "IllegalArgumentException caught" );
     }
     catch( const NoSuchElementException & )
     {
-        TOOLS_WARN_EXCEPTION( "stoc", "" );
+        OSL_FAIL( "NoSuchElementException caught" );
     }
 }
 
@@ -608,9 +607,9 @@ void OServiceManager::disposing()
             if( xComp.is() )
                 xComp->dispose();
         }
-        catch (const RuntimeException &)
+        catch (const RuntimeException & exc)
         {
-            TOOLS_INFO_EXCEPTION("stoc", "RuntimeException occurred upon disposing factory:");
+            SAL_INFO("stoc", "RuntimeException occurred upon disposing factory: " << exc);
         }
     }
 
@@ -793,9 +792,9 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
                 }
             }
         }
-        catch (const lang::DisposedException &)
+        catch (const lang::DisposedException & exc)
         {
-            TOOLS_INFO_EXCEPTION("stoc", "");
+            SAL_INFO("stoc", "DisposedException occurred: " << exc);
         }
     }
 
@@ -845,9 +844,9 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
                 }
             }
         }
-        catch (const lang::DisposedException &)
+        catch (const lang::DisposedException & exc)
         {
-            TOOLS_INFO_EXCEPTION("stoc", "DisposedException occurred:");
+            SAL_INFO("stoc", "DisposedException occurred: " << exc);
         }
     }
 

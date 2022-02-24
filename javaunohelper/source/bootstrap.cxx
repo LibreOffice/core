@@ -44,7 +44,6 @@
 #endif
 
 #include <jvmaccess/unovirtualmachine.hxx>
-#include <tools/diagnose_ex.h>
 
 #include "juhx-export-functions.hxx"
 #include "vm.hxx"
@@ -156,11 +155,10 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     }
     catch (const RuntimeException & exc)
     {
-        css::uno::Any exAny( cppu::getCaughtException() );
         jclass c = jni_env->FindClass( "com/sun/star/uno/RuntimeException" );
         if (nullptr != c)
         {
-            SAL_WARN("javaunohelper", "forwarding RuntimeException: " << exceptionToString(exAny) );
+            SAL_WARN("javaunohelper", "forwarding RuntimeException: " << exc );
             OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             jni_env->ThrowNew( c, cstr.getStr() );
@@ -168,11 +166,10 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     }
     catch (const Exception & exc)
     {
-        css::uno::Any ex( cppu::getCaughtException() );
         jclass c = jni_env->FindClass( "com/sun/star/uno/Exception" );
         if (nullptr != c)
         {
-            SAL_WARN("javaunohelper",  "forwarding Exception: " << exceptionToString(ex) );
+            SAL_WARN("javaunohelper",  "forwarding Exception: " << exc );
             OString cstr( OUStringToOString(
                               exc.Message, RTL_TEXTENCODING_JAVA_UTF8 ) );
             jni_env->ThrowNew( c, cstr.getStr() );
