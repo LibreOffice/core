@@ -44,6 +44,9 @@ class tdf147086(UITestCase):
                         with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="save"):
                             pass
 
+            # Wait until the startcenter is displayed
+            self.ui_test.wait_until_child_is_available('StartCenter')
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
                 self.assertTrue(document.isReadonly())

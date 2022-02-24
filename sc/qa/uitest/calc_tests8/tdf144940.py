@@ -46,6 +46,9 @@ class tdf144940(UITestCase):
                     xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                     xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
+            # Wait until the startcenter is displayed
+            self.ui_test.wait_until_child_is_available('StartCenter')
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
                 xPageStyles = document.StyleFamilies.getByIndex(1)

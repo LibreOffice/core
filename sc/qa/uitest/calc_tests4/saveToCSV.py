@@ -59,6 +59,9 @@ class saveToCSV(UITestCase):
 
                             xFormulas.executeAction("CLICK", tuple())
 
+            # Wait until the startcenter is displayed
+            self.ui_test.wait_until_child_is_available('StartCenter')
+
             with open(xFilePath, "r") as f:
                 lines = f.readlines()
                 self.assertEqual("1", lines[0].strip())
