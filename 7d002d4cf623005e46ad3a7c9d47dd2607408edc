@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "735b8cad_04a60428",
+        "filename": "shell/source/win32/SysShExec.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-24T10:25:35Z",
+      "side": 1,
+      "message": "it looks like with \";\" at the end this will deny an empty extension too (intentional?) but there is already a check in line 336 so it shouldn\u0027t matter",
+      "range": {
+        "startLine": 351,
+        "startChar": 68,
+        "endLine": 351,
+        "endChar": 69
+      },
+      "revId": "7d002d4cf623005e46ad3a7c9d47dd2607408edc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
