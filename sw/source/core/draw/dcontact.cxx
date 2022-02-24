@@ -1338,7 +1338,10 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
 
             // tdf#135198: keep text box together with its shape
             const SwPageFrame* rPageFrame = pAnchoredDrawObj->GetPageFrame();
-            if (rPageFrame && rPageFrame->isFrameAreaPositionValid())
+            auto pFormat = GetFormat();
+            if (rPageFrame && rPageFrame->isFrameAreaPositionValid() && pFormat
+                && (SwTextBoxHelper::isTextBox(pFormat, RES_FLYFRMFMT) ||
+                    SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT)))
             {
                 SwDoc* const pDoc = GetFormat()->GetDoc();
 
