@@ -641,7 +641,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
 
     // text
     m_aCommandAvailability[ ".uno:ScaleText" ] = bIsWritable && bModelStateIsValid ;
-    m_aCommandArguments[ ".uno:ScaleText" ] <<= m_apModelState->bHasAutoScaledText;
+    m_aCommandArguments[ ".uno:ScaleText" ] <<= bModelStateIsValid && m_apModelState->bHasAutoScaledText;
 
     // axes
     m_aCommandAvailability[ ".uno:DiagramAxisX" ] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis;
