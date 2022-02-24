@@ -16,6 +16,23 @@
       "message": "Hi Heiko,\nWould it be possible to create a unittest for this issue ?",
       "revId": "3c94c670fa3c3a4e00e88de7463c5e35f32b866e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "85ddfb68_8b79f2ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-02-24T15:04:46Z",
+      "side": 1,
+      "message": "Was so happy to not need to change unit tests ;-). In fact, I\u0027d prefer to have some \"random\" hard-coded values but a sane standard template that we load by default.",
+      "revId": "3c94c670fa3c3a4e00e88de7463c5e35f32b866e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
