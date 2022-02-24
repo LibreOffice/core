@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fac064f1_f5b50e8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-24T10:39:32Z",
+      "side": 1,
+      "message": "Unfortunately 7.3.1.2 was tagged yesterday",
+      "revId": "d3162f73dbaee0d7f27e49f8e802935dd23157db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
