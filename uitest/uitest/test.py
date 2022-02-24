@@ -133,6 +133,11 @@ class UITest(object):
                     xDialog = self._xUITest.getTopFocusWindow()
                     try:
                         yield xDialog
+                    except:
+                        if not close_button:
+                            if 'cancel' in xDialog.getChildren():
+                                self.close_dialog_through_button(xDialog.getChild("cancel"))
+                        raise
                     finally:
                         if close_button:
                             self.close_dialog_through_button(xDialog.getChild(close_button))
@@ -259,6 +264,11 @@ class UITest(object):
                     xDialog = self._xUITest.getTopFocusWindow()
                     try:
                         yield xDialog
+                    except:
+                        if not close_button:
+                            if 'cancel' in xDialog.getChildren():
+                                self.close_dialog_through_button(xDialog.getChild("cancel"))
+                        raise
                     finally:
                         if close_button:
                             self.close_dialog_through_button(xDialog.getChild(close_button))
