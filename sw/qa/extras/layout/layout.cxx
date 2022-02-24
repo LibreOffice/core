@@ -2479,6 +2479,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint75)
 }
 
 //just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL)
+{
+    createSwDoc(DATA_DIRECTORY, "LIBREOFFICE-UXTSOREL.rtf");
+}
+
+//just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
 {
     createSwDoc(DATA_DIRECTORY, "forcepoint-swfootnoteframe-1.rtf");
