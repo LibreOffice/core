@@ -405,6 +405,7 @@ const std::vector<OUString>& Printer::GetPrinterQueues()
     ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->maGDIData.mpPrinterQueueList )
         ImplInitPrnQueueList();
+    assert(pSVData->maGDIData.mpPrinterQueueList && "mpPrinterQueueList exists by now");
     return pSVData->maGDIData.mpPrinterQueueList->m_aPrinterList;
 }
 
