@@ -32,7 +32,6 @@ $(eval $(call gb_Library_use_libraries,bootstrap,\
     reg \
     sal \
     salhelper \
-    tl \
 ))
 
 $(eval $(call gb_Library_set_componentfile,bootstrap,stoc/util/bootstrap,ure/services))

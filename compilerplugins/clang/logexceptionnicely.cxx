@@ -46,6 +46,12 @@ public:
             return false;
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/comphelper/"))
             return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/io/"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/javaunohelper/"))
+            return false;
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/stoc/"))
+            return false;
         // can't do that here, don't have an Any
         if (loplugin::hasPathnamePrefix(fn, SRCDIR
                                         "/connectivity/source/drivers/hsqldb/HStorageMap.cxx"))

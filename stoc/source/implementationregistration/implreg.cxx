@@ -27,7 +27,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -1367,7 +1366,7 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
         {
             // no way to transport the error, as no exception is specified and a runtime
             // exception is not appropriate.
-            TOOLS_WARN_EXCEPTION( "stoc", "InvalidRegistryException during revokeImplementation" );
+            OSL_FAIL( "InvalidRegistryException during revokeImplementation" );
         }
     }
 
