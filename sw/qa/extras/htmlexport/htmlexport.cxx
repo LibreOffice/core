@@ -1841,6 +1841,39 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testShapeAsImageHtml)
     CPPUNIT_ASSERT_EQUAL(OUString(" "), getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testJson)
+{
+    // Given a document with a shape:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<css::lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(2540, 2540));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+
+    // When exporting to HTML, and specifying options as JSON:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    OUString aJson("{\"XhtmlNs\":{\"type\":\"string\", \"value\":\"reqif-xhtml\"},"
+                   "\"ShapeDPI\":{\"type\":\"long\",\"value\":\"192\"}}");
+    uno::Sequence<beans::PropertyValue> aStoreProperties = {
+        comphelper::makePropertyValue("FilterName", OUString("HTML (StarWriter)")),
+        comphelper::makePropertyValue("FilterOptions", aJson),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProperties);
+
+    // Then make sure those options are not ignored:
+    // Without the accompanying fix in place, this test would have failed, as GetPngPath() expects
+    // XML output, but xhtmlns=reqif-xhtml was ignored.
+    OUString aPngUrl = GetPngPath();
+    SvFileStream aFileStream(aPngUrl, StreamMode::READ);
+    GraphicDescriptor aDescriptor(aFileStream, nullptr);
+    aDescriptor.Detect(/*bExtendedInfo=*/true);
+    // Make sure that the increased DPI is taken into account:
+    tools::Long nExpected = 192;
+    CPPUNIT_ASSERT_EQUAL(nExpected, aDescriptor.GetSizePixel().getWidth());
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifEmbedShapeAsPNGCustomDPI)
 {
     // Given a document with a shape:
