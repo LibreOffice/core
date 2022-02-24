@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e3098b6_026a4efb",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-24T10:09:01Z",
+      "side": 1,
+      "message": "Please don\u0027t use \u0027L\u0027 prefix here: it\u0027s incorrect. L is for wide char, which is a separate type, happening to be the same size as sal_Unicode on Windows, but still different. Here it will use standard number conversions to change wchar_t into sal_Unicode, but the code is logically wrong. Please just use \u0027:\u0027, or, if wanted, use u\u0027:\u0027 (redundant, not required, we use it only when actually have some non-ASCII character).\n\n(I\u0027d still use std::find, as being potentially faster, but not a problem to use rtl_ustr_indexOfChar, or rtl_ustr_indexOfChar_WithLength)",
+      "revId": "4f94f56220d49bcd5eb0bc35c1e633a2b6b6192f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10c51eb5_b45d682b",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-24T10:09:01Z",
+      "side": 1,
+      "message": "This is not correct. You uppercase the whole string up to the found colon, which may include other characters (e.g., \\\\.\\ for long paths, or even maybe some device path syntax (look for volume GUID in [1]) - not sure if that is possible, but we need to be careful).\n\nPlease:\n1. Find the colon (you do);\n2. Check if it\u0027s not the first character (you do);\n3. Check if the previous character is rtl::isAsciiLowerCase (that is the simplest and in the same time the most precise check when we need to uppercase it, including making sure it\u0027s an alpha);\n4. Uppercase it using rtl::toAsciiUpperCase in-place (no need to call a function for that; toAsciiUpperCase is inline, while rtl_ustr_toAsciiUpperCase_WithLength would be called with all the function call overhead, while not adding to simplicity of use).\n\nThank you!\n\n[1] https://docs.microsoft.com/en-us/dotnet/standard/io/file-path-formats#dos-device-paths",
+      "revId": "4f94f56220d49bcd5eb0bc35c1e633a2b6b6192f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
