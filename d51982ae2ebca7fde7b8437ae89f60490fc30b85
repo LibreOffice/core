@@ -249,6 +249,24 @@
       "parentUuid": "1a696ecc_3033256d",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dad7a073_e93c127a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T16:50:17Z",
+      "side": 1,
+      "message": "\u003e I\u0027m preparing a change now\n\n\u003chttps://gerrit.libreoffice.org/c/core/+/130505\u003e \"Drop support for $host_os \u003d \u0027macos*\u0027, in addition to \u0027darwin*\u0027\"",
+      "parentUuid": "02e4225a_feb19f8c",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
