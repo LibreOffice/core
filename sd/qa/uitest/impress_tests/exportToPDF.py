@@ -60,7 +60,7 @@ class exportToPDF(UITestCase):
                         self.assertEqual("false", get_state_as_dict(xDialog.getChild(child))['Checked'])
 
                     self.assertEqual("300 DPI", get_state_as_dict(xDialog.getChild("resolution"))['Text'])
-                    self.assertEqual("90%", get_state_as_dict(xDialog.getChild("quality"))['Text'])
+                    self.assertEqual("90", get_state_as_dict(xDialog.getChild("quality"))['Value'])
                     self.assertEqual("FDF", get_state_as_dict(xDialog.getChild("format"))['DisplayText'])
 
                     xOk = xDialog.getChild("ok")
