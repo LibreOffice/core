@@ -159,6 +159,24 @@
       "parentUuid": "afcb8dfa_e5dbf764",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1a27605_8ed0a49a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-02-24T11:50:19Z",
+      "side": 1,
+      "message": "\u003e could also just update our config.guess and have gb_UnpackedTarball_update_autoconf_configs add a file that knows about it...\n\nThe problem seems to be, that Xisco manually provided \n\n--host\u003dx86_64-apple-macos\n--build\u003dx86_64-apple-macos\n\nI guess that was valid at some point. For all I can see, macos is (now?) wrong. \"Automagically\" fixing that in configure.ac seems the easiest fix with a ${BUILD_PLATFORM/macos/darwin} and for HOST_PLATFORM.\nAnd then just add an add_warning, so the user can adapt. This way you can also drop the existing special handling in Firebird and NSS configure calls.\n\nOTOH I have no idea, if macos is still correct in some cases, where darwin wouldn\u0027t be, but from all the info I have, I would doubt that. Especially since I found that aarch64 case doing the same.",
+      "parentUuid": "79c6fd4d_230ee8e8",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
