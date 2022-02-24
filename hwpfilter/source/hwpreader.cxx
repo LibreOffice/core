@@ -1094,7 +1094,8 @@ void HwpReader::makeMasterStyles()
                 d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
             }
-            parsePara(pPage->header->plist.front().get());
+            if (!pPage->header->plist.empty())
+                parsePara(pPage->header->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             rendEl("style:header");
@@ -1109,7 +1110,8 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
             }
-            parsePara(pPage->header_even->plist.front().get());
+            if (!pPage->header_even->plist.empty())
+                parsePara(pPage->header_even->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
@@ -1144,7 +1146,8 @@ void HwpReader::makeMasterStyles()
                 d->nPnPos = 1;
                 d->pPn = pPage->pagenumber;
             }
-            parsePara(pPage->header_odd->plist.front().get());
+            if (!pPage->header_odd->plist.empty())
+                parsePara(pPage->header_odd->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
@@ -1195,7 +1198,8 @@ void HwpReader::makeMasterStyles()
                 d->bInHeader = true;
                 d->pPn = pPage->pagenumber;
             }
-            parsePara(pPage->footer->plist.front().get());
+            if (!pPage->footer->plist.empty())
+                parsePara(pPage->footer->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             rendEl("style:footer");
@@ -1210,7 +1214,8 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 3;
             }
-            parsePara(pPage->footer_even->plist.front().get());
+            if (!pPage->footer_even->plist.empty())
+                parsePara(pPage->footer_even->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
@@ -1245,7 +1250,8 @@ void HwpReader::makeMasterStyles()
                 d->pPn = pPage->pagenumber;
                 d->nPnPos = 1;
             }
-            parsePara(pPage->footer_odd->plist.front().get());
+            if (!pPage->footer_odd->plist.empty())
+                parsePara(pPage->footer_odd->plist.front().get());
             d->bInHeader = false;
             d->pPn = nullptr;
             d->nPnPos = 0;
