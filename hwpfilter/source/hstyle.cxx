@@ -99,7 +99,7 @@ void HWPStyle::SetCharShape(int n, CharShape const* cshapep)
         if (cshapep)
             DATA[n].cshape = *cshapep;
         else
-            memset(&DATA[n].cshape, 0, sizeof(CharShape));
+            DATA[n].cshape = CharShape();
     }
 }
 
