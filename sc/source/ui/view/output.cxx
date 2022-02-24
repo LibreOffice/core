@@ -30,7 +30,6 @@
 #include <svx/framelinkarray.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/processor2d/processorfromoutputdevice.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/gradient.hxx>
@@ -39,6 +38,10 @@
 #include <sal/log.hxx>
 #include <comphelper/lok.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b2drectangle.hxx>
 
 #include <output.hxx>
 #include <document.hxx>
@@ -60,6 +63,7 @@
 #include <detfunc.hxx>
 
 #include <colorscale.hxx>
+#include <Sparkline.hxx>
 
 #include <math.h>
 #include <memory>
@@ -2297,6 +2301,202 @@ void ScOutputData::DrawChangeTrack()
 
         pAction = pAction->GetNext();
     }
+}
+
+namespace
+{
+
+/** Draw a line chart into the rectangle bounds */
+void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
+                std::vector<double> const & rValues, double nMin, double nMax)
+{
+    basegfx::B2DPolygon aPolygon;
+    double numebrOfSteps = rValues.size() - 1;
+    double xStep = 0;
+    double nDelta = nMax - nMin;
+
+    for (double aValue : rValues)
+    {
+        double nP = (aValue - nMin) / nDelta;
+        double x = rRectangle.GetWidth() * (xStep / numebrOfSteps);
+        double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
+
+        aPolygon.append({ x, y } );
+        xStep++;
+    }
+
+    basegfx::B2DHomMatrix aMatrix;
+    aMatrix.translate(rRectangle.Left(), rRectangle.Top());
+    aPolygon.transform(aMatrix);
+
+    rRenderContext.DrawPolyLine(aPolygon);
+}
+
+/** Draw a column chart into the rectangle bounds */
+void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
+                std::vector<double> const & rValues, double nMin, double nMax)
+{
+    basegfx::B2DPolygon aPolygon;
+
+    double xStep = 0;
+    double numberOfSteps = rValues.size();
+    double nDelta = nMax - nMin;
+
+    double nColumnSize = rRectangle.GetWidth() / numberOfSteps;
+
+    double nZero = (0 - nMin) / nDelta;
+    double nZeroPosition;
+    if (nZero >= 0)
+        nZeroPosition = rRectangle.GetHeight() - rRectangle.GetHeight() * nZero;
+    else
+        nZeroPosition = rRectangle.GetHeight();
+
+    for (double aValue : rValues)
+    {
+        if (aValue != 0.0)
+        {
+            double nP = (aValue - nMin) / nDelta;
+            double x = rRectangle.GetWidth() * (xStep / numberOfSteps);
+            double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
+
+            basegfx::B2DRectangle aRectangle(x, y, x + nColumnSize, nZeroPosition);
+            aPolygon = basegfx::utils::createPolygonFromRect(aRectangle);
+
+            basegfx::B2DHomMatrix aMatrix;
+            aMatrix.translate(rRectangle.Left(), rRectangle.Top());
+            aPolygon.transform(aMatrix);
+            rRenderContext.DrawPolygon(aPolygon);
+        }
+        xStep++;
+    }
+}
+
+void drawSparkline(sc::Sparkline* pSparkline, vcl::RenderContext& rRenderContext, ScDocument* pDocument,
+                                 tools::Rectangle const & rRectangle)
+{
+    auto const & rRangeList = pSparkline->getInputRange();
+
+    if (rRangeList.empty())
+        return;
+
+    auto pSparklineGroup = pSparkline->getSparklineGroup();
+
+    rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
+
+    rRenderContext.SetLineColor(pSparklineGroup->m_aColorSeries);
+    rRenderContext.SetFillColor(pSparklineGroup->m_aColorSeries);
+
+    ScRange aRange = rRangeList[0];
+
+    std::vector<double> aValues;
+
+    double nMin = std::numeric_limits<double>::max();
+    double nMax = std::numeric_limits<double>::min();
+
+    if (aRange.aStart.Row() == aRange.aEnd.Row())
+    {
+        ScAddress aAddress = aRange.aStart;
+
+        while (aAddress.Col() <= aRange.aEnd.Col())
+        {
+            double fCellValue = pDocument->GetValue(aAddress);
+            aValues.push_back(fCellValue);
+            if (fCellValue < nMin)
+                nMin = fCellValue;
+            if (fCellValue > nMax)
+                nMax = fCellValue;
+            aAddress.IncCol();
+        }
+    }
+    else if (aRange.aStart.Col() == aRange.aEnd.Col())
+    {
+        ScAddress aAddress = aRange.aStart;
+
+        while (aAddress.Row() <= aRange.aEnd.Row())
+        {
+            double fCellValue = pDocument->GetValue(aAddress);
+            aValues.push_back(fCellValue);
+            if (fCellValue < nMin)
+                nMin = fCellValue;
+            if (fCellValue > nMax)
+                nMax = fCellValue;
+            aAddress.IncRow();
+        }
+    }
+
+    if (pSparklineGroup->m_sType == "column")
+    {
+        drawColumn(rRenderContext, rRectangle, aValues, nMin, nMax);
+    }
+    else if (pSparklineGroup->m_sType == "stacked")
+    {
+        for (auto & rValue : aValues)
+        {
+            if (rValue != 0.0)
+                rValue = rValue > 0.0 ? 1.0 : -1.0;
+        }
+        drawColumn(rRenderContext, rRectangle, aValues, -1, 1);
+    }
+    else if (pSparklineGroup->m_sType == "line")
+    {
+        drawLine(rRenderContext, rRectangle, aValues, nMin, nMax);
+    }
+}
+} // end anonymous namespace
+
+void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
+{
+    tools::Long nInitPosX = nScrX;
+    if ( bLayoutRTL )
+        nInitPosX += nMirrorW - 1;              // always in pixels
+    tools::Long nLayoutSign = bLayoutRTL ? -1 : 1;
+
+    tools::Long nPosY = nScrY;
+    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
+    {
+        RowInfo* pThisRowInfo = &pRowInfo[nArrY];
+        if ( pThisRowInfo->bChanged )
+        {
+            tools::Long nPosX = nInitPosX;
+            for (SCCOL nX=nX1; nX<=nX2; nX++)
+            {
+                CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                bool bIsMerged = false;
+
+                if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
+                {
+                    // find start of merged cell
+                    bIsMerged = true;
+                    SCROW nY = pRowInfo[nArrY].nRowNo;
+                    SCCOL nMergeX = nX;
+                    SCROW nMergeY = nY;
+                    mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
+                }
+
+                sc::Sparkline* pSparkline = nullptr;
+                ScAddress aCurrentAddress(nX, pRowInfo[nArrY].nRowNo, nTab);
+
+                if (!mpDoc->ColHidden(nX, nTab) && (pSparkline = mpDoc->GetSparkline(aCurrentAddress))
+                    && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
+                {
+                    constexpr tools::Long constMarginX = 6;
+                    constexpr tools::Long constMarginY = 3;
+
+                    const tools::Long nWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
+                    const tools::Long nHeight = pThisRowInfo->nHeight;
+
+                    Point aPoint(nPosX + constMarginX , nPosY + constMarginY);
+                    Size aSize(nWidth - 2 * constMarginX, nHeight - 2 * constMarginY);
+
+                    drawSparkline(pSparkline, rRenderContext, mpDoc, tools::Rectangle(aPoint, aSize));
+                }
+
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
+            }
+        }
+        nPosY += pThisRowInfo->nHeight;
+    }
+
 }
 
 //TODO: moggi Need to check if this can't be written simpler

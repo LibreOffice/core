@@ -382,6 +382,7 @@ public:
 
     void    DrawNoteMarks(vcl::RenderContext& rRenderContext);
     void    AddPDFNotes();
+    void    DrawSparklines(vcl::RenderContext& rRenderContext);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
