@@ -1328,5 +1328,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146257)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf146597)
+{
+    loadAndReload("tdf146597.odt");
+    CPPUNIT_ASSERT(getShape(1));
+    // This was creashed before.
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
