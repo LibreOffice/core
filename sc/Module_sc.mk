@@ -207,6 +207,7 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,sc,\
 	CppunitTest_sc_sheetlinkobj \
 	CppunitTest_sc_sheetlinksobj \
 	CppunitTest_sc_sortdescriptorbaseobj \
+	CppunitTest_sc_sparkline_test \
 	CppunitTest_sc_spreadsheetsettings \
 	CppunitTest_sc_spreadsheetsettingsobj \
 	CppunitTest_sc_styleobj \
