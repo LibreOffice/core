@@ -1281,12 +1281,17 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( std::u16string_view
         DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, mxContext);
         try {
             // the SAX writer might close the stream
-            xOutStream->closeOutput();
+//            xOutStream->closeOutput();
         } catch( uno::Exception& )
         {}
 
-        uno::Reference < ucb::XSimpleFileAccess3 > xAccess(ucb::SimpleFileAccess::create(mxContext));
-        xAccess->writeFile(OUString::Concat(aUserPath) + "groupuinames.xml", xTempFile->getInputStream());
+        Content aTargetContent( OUString(aUserPath), maCmdEnv, comphelper::getProcessComponentContext() );
+        Content aSourceContent( xTempFile->getUri(), maCmdEnv, comphelper::getProcessComponentContext() );
+        aTargetContent.transferContent( aSourceContent,
+                                        InsertOperation::Copy,
+                                        "groupuinames.xml",
+                                        ucb::NameClash::OVERWRITE,
+                                        "text/xml" );
 
         bResult = true;
     }
