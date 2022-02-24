@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4073ae21_6a5560aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-24T17:10:40Z",
+      "side": 1,
+      "message": "for me wrt being in pass or fail and these cve/fuzz tests it doesn\u0027t really matter if it\u0027s pass or fail, only that it doesn\u0027t crash and doesn\u0027t spontaneously flip pass/fail without knowing why. About warning/error I have no idea.",
+      "revId": "a0f9099c8bf430632ca07786e54291fd2e438709",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
