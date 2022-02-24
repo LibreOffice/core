@@ -22,6 +22,30 @@
       },
       "revId": "d1cd7779b3dbce6c58a3f2d6fcfcac308af5e2de",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76bef445_12363817",
+        "filename": "sc/source/core/data/table4.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1290,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-24T06:46:58Z",
+      "side": 1,
+      "message": "Hmm. How did that happen. I must have edited in gerrit, and it must not be smart enough to format well. This was just a cut/paste/reduce-by-one-level...",
+      "parentUuid": "c6371550_9477a2e6",
+      "range": {
+        "startLine": 1287,
+        "startChar": 0,
+        "endLine": 1290,
+        "endChar": 38
+      },
+      "revId": "d1cd7779b3dbce6c58a3f2d6fcfcac308af5e2de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
