@@ -2000,6 +2000,16 @@ module com {
      long getStringWidthArray([in] string str, [out] sequence< long > aDXArray);
      void getKernPairs([out] sequence< char > Chars1, [out] sequence< char > Chars2, [out] sequence< short > Kerns);
     };
+    published struct XFontMappingUseItem {
+     string originalFont;
+     sequence< string > usedFonts;
+     long count;
+    };
+    published interface XFontMappingUse {
+     interface ::com::sun::star::uno::XInterface;
+     void startTrackingFontMappingUse();
+     sequence< ::com::sun::star::awt::XFontMappingUseItem > finishTrackingFontMappingUse();
+    };
     published interface XGraphics {
      interface ::com::sun::star::uno::XInterface;
      ::com::sun::star::awt::XDevice getDevice();
@@ -2174,6 +2184,10 @@ module com {
     published interface XTextListener {
      interface ::com::sun::star::lang::XEventListener;
      void textChanged([in] ::com::sun::star::awt::TextEvent rEvent);
+    };
+    published interface XToolkit3 {
+     interface ::com::sun::star::awt::XToolkit2;
+     interface ::com::sun::star::awt::XFontMappingUse;
     };
     published interface XTopWindowListener {
      interface ::com::sun::star::lang::XEventListener;
@@ -2988,6 +3002,8 @@ module com {
      [property, optional] sequence< ::com::sun::star::beans::PropertyValue > CharInteropGrabBag;
      [property, optional] short RubyPosition;
      [property, optional] short CharTransparence;
+     [property, optional] short CharColorTheme;
+     [property, optional] short CharColorTintOrShade;
     };
    };
    module chart {
@@ -4943,6 +4959,18 @@ module com {
     published service Background {
      service ::com::sun::star::drawing::FillProperties;
     };
+    published struct BarCode {
+     long Type;
+     string Payload;
+     long ErrorCorrection;
+     long Border;
+    };
+    published constants BarCodeErrorCorrection {
+     const long HIGH = 4;
+     const long LOW = 1;
+     const long MEDIUM = 2;
+     const long QUARTILE = 3;
+    };
     /** @deprecated */ published struct BezierPoint {
      ::com::sun::star::awt::Point Position;
      ::com::sun::star::awt::Point ControlPoint1;
@@ -5535,12 +5563,6 @@ module com {
      interface ::com::sun::star::document::XMimeTypeInfo;
     };
     published service GraphicExportFilter: ::com::sun::star::drawing::XGraphicExportFilter;
-    published struct BarCode {
-     long Type;
-     string Payload;
-     long ErrorCorrection;
-     long Border;
-    };
     published service GraphicObjectShape {
      service ::com::sun::star::drawing::Shape;
      service ::com::sun::star::drawing::Text;
@@ -5742,12 +5764,6 @@ module com {
      ::com::sun::star::drawing::DoubleSequenceSequence SequenceX;
      ::com::sun::star::drawing::DoubleSequenceSequence SequenceY;
      ::com::sun::star::drawing::DoubleSequenceSequence SequenceZ;
-    };
-    published constants BarCodeErrorCorrection {
-     const long HIGH = 4;
-     const long LOW = 1;
-     const long MEDIUM = 2;
-     const long QUARTILE = 3;
     };
     published service RectangleShape {
      service ::com::sun::star::drawing::Shape;
@@ -13368,10 +13384,13 @@ module com {
      const short IROHA_HALFWIDTH_JA = 24;
      const short NATIVE_NUMBERING = 12;
      const short NUMBER_ARABIC_INDIC = 57;
+     const short NUMBER_DIGITAL2_KO = 70;
+     const short NUMBER_DIGITAL_KO = 69;
      const short NUMBER_EAST_ARABIC_INDIC = 58;
      const short NUMBER_HANGUL_KO = 26;
      const short NUMBER_HEBREW = 56;
      const short NUMBER_INDIC_DEVANAGARI = 59;
+     const short NUMBER_LEGAL_KO = 71;
      const short NUMBER_LOWER_ZH = 15;
      const short NUMBER_NONE = 5;
      const short NUMBER_TRADITIONAL_JA = 20;
@@ -13896,6 +13915,7 @@ module com {
      const short INSTITUTION = 10;
      const short ISBN = 30;
      const short JOURNAL = 11;
+     const short LOCAL_URL = 31;
      const short MONTH = 12;
      const short NOTE = 13;
      const short NUMBER = 14;
