@@ -58,6 +58,9 @@ class Tdf145326(UITestCase):
 
             self.ui_test.close_doc()
 
+            # Wait until the startcenter is displayed
+            self.ui_test.wait_until_child_is_available('StartCenter')
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
 
                 self.xUITest.executeCommand(".uno:LinkDialog")
