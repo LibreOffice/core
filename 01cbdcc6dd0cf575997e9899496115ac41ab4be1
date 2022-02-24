@@ -34,6 +34,24 @@
       "parentUuid": "2a7b0760_a3b8a686",
       "revId": "01cbdcc6dd0cf575997e9899496115ac41ab4be1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44e9a8c7_edbe8787",
+        "filename": "sw/qa/uitest/writer_tests6/edit_file_properties_before_saving.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T10:39:55Z",
+      "side": 1,
+      "message": "but also note what I wrote on #libreoffice-dev earlier today: \"\u003chttps://ci.libreoffice.org//job/lo_tb_master_linux_dbg/36848/\u003e now failed similarly at sw/qa/uitest/writer_tests6/save_readonly_with_password.py:50, so there might be an issue with the pattern of saving a file though a Save dialog and then immediately opening it with load_file, without some intermediate waiting/process-to-idle...\"",
+      "parentUuid": "17b20cc1_2a1dbf9b",
+      "revId": "01cbdcc6dd0cf575997e9899496115ac41ab4be1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
