@@ -429,14 +429,17 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 if (nLevel >= m_nOutlineLevel || !m_pWrtShell->getIDocumentOutlineNodesAccess()->
                         isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
                     continue;
-                tools::Long nYPos = getYPos(
-                            *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
+                const SwTextNode* pOutlineNode =
+                        m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i);
+                tools::Long nYPos = getYPos(*pOutlineNode);
                 OUString aEntry(comphelper::string::stripStart(
                                     m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
                                         i, m_pWrtShell->GetLayout(), true, false, false), ' '));
                 aEntry = SwNavigationPI::CleanEntry(aEntry);
                 auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
                                                         m_pWrtShell->IsOutlineMovable( i ), nYPos));
+                if (!pOutlineNode->getLayoutFrame(m_pWrtShell->GetLayout()))
+                    pCnt->SetInvisible();
                 m_pMember->insert(std::move(pCnt));
             }
 
