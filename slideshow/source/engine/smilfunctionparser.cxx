@@ -313,9 +313,11 @@ namespace slideshow::internal
                     // create combined ExpressionNode
                     std::shared_ptr<ExpressionNode> pNode( maGenerator( pFirstArg,
                                                                 pSecondArg ) );
+
+                    assert(pSecondArg && pFirstArg);
+
                     // check for constness
-                    if( pFirstArg->isConstant() &&
-                        pSecondArg->isConstant() )
+                    if (pFirstArg->isConstant() && pSecondArg->isConstant())
                     {
                         // call the operator() at pNode, store result
                         // in constant value ExpressionNode.
