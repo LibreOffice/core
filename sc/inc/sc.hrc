@@ -187,8 +187,8 @@ class SvxZoomSliderItem;
 #define SID_STATUS_SELMODE_ERW  (SC_MESSAGE_START + 23)
 #define SID_STATUS_SELMODE_NORM (SC_MESSAGE_START + 24)
 
-#define SID_CHART_SOURCE        (SC_MESSAGE_START + 25)
-#define SID_CHART_NAME          (SC_MESSAGE_START + 26)
+#define SID_CHART_SOURCE        TypedWhichId<SfxStringItem>(SC_MESSAGE_START + 25)
+#define SID_CHART_NAME          TypedWhichId<SfxStringItem>(SC_MESSAGE_START + 26)
 #define SID_CHART_ADDSOURCE     (SC_MESSAGE_START + 27)
 
 #define SID_AUTO_STYLE          (SC_MESSAGE_START + 28)
@@ -310,11 +310,11 @@ class SvxZoomSliderItem;
 
 #define FORMAT_MENU_START       (INSERT_MENU_END)
 #define FID_CELL_FORMAT         (FORMAT_MENU_START)
-#define FID_ROW_HEIGHT          (FORMAT_MENU_START + 1)
+#define FID_ROW_HEIGHT          TypedWhichId<SfxUInt16Item>(FORMAT_MENU_START + 1)
 #define FID_ROW_OPT_HEIGHT      (FORMAT_MENU_START + 2)
 #define FID_ROW_HIDE            (FORMAT_MENU_START + 3)
 #define FID_ROW_SHOW            (FORMAT_MENU_START + 4)
-#define FID_COL_WIDTH           (FORMAT_MENU_START + 5)
+#define FID_COL_WIDTH           TypedWhichId<SfxUInt16Item>(FORMAT_MENU_START + 5)
 #define FID_COL_OPT_WIDTH       (FORMAT_MENU_START + 6)
 #define FID_COL_HIDE            (FORMAT_MENU_START + 7)
 #define FID_COL_SHOW            (FORMAT_MENU_START + 8)
@@ -336,7 +336,7 @@ class SvxZoomSliderItem;
 #define FID_PROTECT_TABLE       (EXTRA_MENU_START + 6)
 #define FID_PROTECT_DOC         (EXTRA_MENU_START + 7)
 #define SID_SHARE_DOC           (EXTRA_MENU_START + 11)
-#define SID_SCENARIOS           (EXTRA_MENU_START + 12)
+#define SID_SCENARIOS           TypedWhichId<SfxStringItem>(EXTRA_MENU_START + 12)
 #define SID_PIVOT_RECALC        (EXTRA_MENU_START + 14)
 #define SID_PIVOT_KILL          (EXTRA_MENU_START + 15)
 
@@ -490,7 +490,7 @@ class SvxZoomSliderItem;
 
 #define SID_MARKAREA            (SID_KEYFUNC_START + 33)
 
-#define FID_FILL_AUTO           (SID_KEYFUNC_START + 35)
+#define FID_FILL_AUTO           TypedWhichId<SfxStringItem>(SID_KEYFUNC_START + 35)
 #define SID_CANCEL              (SID_KEYFUNC_START + 36)
 
 #define SID_CURSORENTERUP       (SID_KEYFUNC_START + 37)
@@ -505,13 +505,13 @@ class SvxZoomSliderItem;
 
 #define SID_NEW_SLOTS           (SID_KEYFUNC_END)
 
-#define SID_NEW_TABLENAME       (SID_NEW_SLOTS+1)
+#define SID_NEW_TABLENAME       TypedWhichId<SfxStringItem>(SID_NEW_SLOTS+1)
 #define SID_EXPORT_AS_GRAPHIC   (SID_NEW_SLOTS+2)
 
 #define FID_MERGE_TOGGLE        (SID_NEW_SLOTS+10)
 
-#define SID_RANGE_ROW           (SID_NEW_SLOTS+20)
-#define SID_RANGE_COL           (SID_NEW_SLOTS+21)
+#define SID_RANGE_ROW           TypedWhichId<SfxInt32Item>(SID_NEW_SLOTS+20)
+#define SID_RANGE_COL           TypedWhichId<SfxInt16Item>(SID_NEW_SLOTS+21)
 #define SID_RANGE_TABLE         (SID_NEW_SLOTS+22)
 // empty, was SID_RANGE_VALUE
 #define SID_RANGE_FORMULA       (SID_NEW_SLOTS+24)
@@ -605,14 +605,14 @@ class SvxZoomSliderItem;
 #define SID_CURRENT_FORMULA_RANGE    (SID_NEW_SLOTS+109)
 // idl parameter
 
-#define SID_SORT_BYROW          (SC_PARAM_START)
-#define SID_SORT_HASHEADER      (SC_PARAM_START+1)
-#define SID_SORT_CASESENS       (SC_PARAM_START+2)
-#define SID_SORT_ATTRIBS        (SC_PARAM_START+3)
-#define SID_SORT_USERDEF        (SC_PARAM_START+4)
-#define SID_SORT_NATURALSORT    (SC_PARAM_START+5)
-#define SID_SORT_INCCOMMENTS    (SC_PARAM_START+6)
-#define SID_SORT_INCIMAGES      (SC_PARAM_START+7)
+#define SID_SORT_BYROW          TypedWhichId<SfxBoolItem>(SC_PARAM_START)
+#define SID_SORT_HASHEADER      TypedWhichId<SfxBoolItem>(SC_PARAM_START+1)
+#define SID_SORT_CASESENS       TypedWhichId<SfxBoolItem>(SC_PARAM_START+2)
+#define SID_SORT_ATTRIBS        TypedWhichId<SfxBoolItem>(SC_PARAM_START+3)
+#define SID_SORT_USERDEF        TypedWhichId<SfxUInt16Item>(SC_PARAM_START+4)
+#define SID_SORT_NATURALSORT    TypedWhichId<SfxBoolItem>(SC_PARAM_START+5)
+#define SID_SORT_INCCOMMENTS    TypedWhichId<SfxBoolItem>(SC_PARAM_START+6)
+#define SID_SORT_INCIMAGES      TypedWhichId<SfxBoolItem>(SC_PARAM_START+7)
 
 // Sidebar -------------------------------------------------------------
 

@@ -113,6 +113,7 @@
 
 #include <ccoll.hxx>
 #include <hints.hxx>
+#include <uiitems.hxx>
 
 #include <cassert>
 #include <memory>
@@ -3037,7 +3038,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                 throw lang::IllegalArgumentException();
             case FN_PARAM_FTN_INFO:
             {
-                const SfxPoolItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
+                const SwPageFootnoteInfoItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
                 std::unique_ptr<SfxPoolItem> pNewFootnoteItem(rItem.Clone());
                 if(!pNewFootnoteItem->PutValue(rValues[nProp], pEntry->nMemberId))
                     throw lang::IllegalArgumentException();

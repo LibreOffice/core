@@ -32,6 +32,7 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/escapementitem.hxx>
+#include <editeng/pmdlitem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <editeng/frmdiritem.hxx>

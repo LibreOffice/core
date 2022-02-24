@@ -122,7 +122,7 @@ OUString SwBasicEscherEx::GetBasePath() const
         const SfxItemSet* pPItemSet = pMedium->GetItemSet();
         if( pPItemSet )
         {
-            const SfxStringItem* pPItem = dynamic_cast< const SfxStringItem* >( pPItemSet->GetItem( SID_FILE_NAME ) );
+            const SfxStringItem* pPItem = pPItemSet->GetItem( SID_FILE_NAME );
             if ( pPItem )
                 sDocUrl = pPItem->GetValue();
         }
