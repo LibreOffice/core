@@ -18,7 +18,7 @@
  */
 
 #include <sal/config.h>
-
+#include <i18nutil/calendar.hxx>
 #include <cmath>
 #include <stdlib.h>
 
@@ -257,10 +257,10 @@ Calendar_hijri::getGregorianDay(sal_Int32 lJulianDay, sal_Int32 *pnDay, sal_Int3
     lFactorB = lFactorA + 1524;
     lFactorC = static_cast<tools::Long>(6680.0 + (static_cast<float>(lFactorB - 2439870) - 122.1) / 365.25);
     lFactorD = static_cast<tools::Long>(365 * lFactorC + (0.25 * lFactorC));
-    lFactorE = static_cast<tools::Long>((lFactorB - lFactorD) / 30.6001);
+    lFactorE = static_cast<tools::Long>((lFactorB - lFactorD) / i18nutil::monthDaysWithoutJanFeb);
 
     /* now, pull out the day number */
-    *pnDay = lFactorB - lFactorD - static_cast<tools::Long>(30.6001 * lFactorE);
+    *pnDay = lFactorB - lFactorD - static_cast<tools::Long>(i18nutil::monthDaysWithoutJanFeb * lFactorE);
 
     /* ...and the month, adjusting it if necessary */
     *pnMonth = lFactorE - 1;
@@ -298,7 +298,7 @@ Calendar_hijri::getJulianDay(sal_Int32 day, sal_Int32 month, sal_Int32 year)
     jm = month + 13;
     }
 
-    sal_Int32 intgr = static_cast<sal_Int32>(static_cast<sal_Int32>(365.25 * jy) + static_cast<sal_Int32>(30.6001 * jm) + day + 1720995 );
+    sal_Int32 intgr = static_cast<sal_Int32>(static_cast<sal_Int32>(365.25 * jy) + static_cast<sal_Int32>(i18nutil::monthDaysWithoutJanFeb * jm) + day + 1720995 );
 
     //check for switch to Gregorian calendar
     double const gregcal = 15 + 31 * ( 10 + 12 * 1582 );
