@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abf187e6_9cef2ae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T16:19:55Z",
+      "side": 1,
+      "message": "Was there any reason to mark as published the three UNOIDL entities added to css.awt?  I apparently missed this when it hit master towards LO 7.3, but now the ship has sailed anyway with LO 7.3 out the door.",
+      "revId": "5054202e71605cb4f10c798be766798d99cb1b6a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
