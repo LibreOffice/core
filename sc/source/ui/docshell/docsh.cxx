@@ -1217,16 +1217,12 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             // all graphics objects must have names
             m_aDocument.EnsureGraphicNames();
 
-            if (eError == SCWARN_IMPORT_RANGE_OVERFLOW)
+            if (eError != ERRCODE_NONE)
             {
                 if (!GetError())
                     SetError(eError);
-                bRet = true;
-            }
-            else if (eError != ERRCODE_NONE)
-            {
-                if (!GetError())
-                    SetError(eError);
+                if( eError.IsWarning() )
+                    bRet = true;
             }
             else
                 bRet = true;
@@ -1317,6 +1313,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 if (!GetError())
                     SetError(eError);
+                if( eError.IsWarning() )
+                    bRet = true;
             }
             else if (!GetError() && (bOverflowRow || bOverflowCol || bOverflowCell))
             {
@@ -1357,7 +1355,8 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 if (!GetError())
                     SetError(eError);
-                bRet = ( eError == SCWARN_IMPORT_RANGE_OVERFLOW );
+                if( eError.IsWarning() )
+                    bRet = true;
             }
             else
                 bRet = true;
@@ -1435,8 +1434,13 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
             }
 
-            if ( eError != ERRCODE_NONE && !GetError() )
-                SetError(eError);
+            if (eError != ERRCODE_NONE)
+            {
+                if (!GetError())
+                    SetError(eError);
+                if( eError.IsWarning() )
+                    bRet = true;
+            }
             else if (!GetError() && (bOverflowRow || bOverflowCol || bOverflowCell))
             {
                 // precedence: row, column, cell
@@ -1500,8 +1504,13 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
             }
 
-            if ( eError != ERRCODE_NONE && !GetError() )
-                SetError(eError);
+            if (eError != ERRCODE_NONE)
+            {
+                if (!GetError())
+                    SetError(eError);
+                if( eError.IsWarning() )
+                    bRet = true;
+            }
         }
         else if (aFltName == pFilterHtml || aFltName == pFilterHtmlWebQ)
         {
@@ -1551,8 +1560,13 @@ bool ScDocShell::ConvertFrom( SfxMedium& rMedium )
                 }
             }
 
-            if ( eError != ERRCODE_NONE && !GetError() )
-                SetError(eError);
+            if (eError != ERRCODE_NONE)
+            {
+                if (!GetError())
+                    SetError(eError);
+                if( eError.IsWarning() )
+                    bRet = true;
+            }
         }
         else
         {
