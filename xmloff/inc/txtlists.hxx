@@ -121,6 +121,9 @@ class XMLTextListsHelper
             bool* o_pRestartNumbering = nullptr,
             bool* io_pSetDefaults = nullptr);
 
+        /// Looks up the last list id of a given list style, by name.
+        OUString GetLastIdOfStyleName(const OUString& sListStyleName) const;
+
     private:
 
         /** list context: list, list-item, numbered-paragraph
@@ -151,6 +154,8 @@ class XMLTextListsHelper
         // continuing the master list as value
         typedef ::std::map< OUString, OUString > tMapForContinuingLists;
         std::unique_ptr<tMapForContinuingLists> mpContinuingLists;
+
+        std::unique_ptr<std::map<OUString, OUString>> mpStyleNameLastListIds;
 
         // stack type for opened list elements and its list style:
         // vector with pair( <ListId>, <ListStyleName> ) as value
