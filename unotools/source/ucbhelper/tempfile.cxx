@@ -413,6 +413,13 @@ OUString TempFile::GetFileName() const
 
 OUString const & TempFile::GetURL() const
 {
+    // if you request the URL, then you presumably want to access this via UCB,
+    // and UCB will want to open the file via a separate file handle, which means
+    // we have to make this file data actually hit disk. We do this here (and not
+    // elsewhere) to make the other (normal) paths fast. Flushing to disk
+    // really slows temp files down.
+    if (pStream)
+        pStream->Flush();
     return aName;
 }
 
