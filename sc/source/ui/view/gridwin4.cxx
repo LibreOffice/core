@@ -903,6 +903,8 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     aOutputData.DrawShadow();
     aOutputData.DrawFrame(*pContentDev);
 
+    aOutputData.DrawSparklines(*pContentDev);
+
     // Show Note Mark
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks(*pContentDev);
