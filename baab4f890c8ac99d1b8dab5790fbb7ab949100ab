@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d479d13_394374f0",
+        "filename": "configure.ac",
+        "patchSetId": 7
+      },
+      "lineNbr": 694,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T12:52:36Z",
+      "side": 1,
+      "message": "what is this talking about?",
+      "range": {
+        "startLine": 694,
+        "startChar": 4,
+        "endLine": 694,
+        "endChar": 43
+      },
+      "revId": "baab4f890c8ac99d1b8dab5790fbb7ab949100ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
