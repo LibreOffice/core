@@ -52,6 +52,16 @@ void Copy( IMPL_RTL_STRCODE* _pDest,
     memcpy( _pDest, _pSrc, _nCount * sizeof(IMPL_RTL_STRCODE));
 }
 
+inline void Copy(sal_Unicode* _pDest, const char* _pSrc, sal_Int32 _nCount)
+{
+    std::transform(_pSrc, _pSrc + _nCount, _pDest,
+                   [](char c)
+                   {
+                       assert(rtl::isAscii(static_cast<unsigned char>(c)));
+                       return static_cast<unsigned char>(c);
+                   });
+}
+
 /* ======================================================================= */
 /* C-String functions which could be used without the String-Class         */
 /* ======================================================================= */
@@ -1152,38 +1162,44 @@ template <typename IMPL_RTL_STRINGDATA> auto* getStr( IMPL_RTL_STRINGDATA* pThis
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRINGDATA>
-void newConcat                                ( IMPL_RTL_STRINGDATA** ppThis,
-                                                IMPL_RTL_STRINGDATA* pLeft,
-                                                IMPL_RTL_STRINGDATA* pRight )
+enum ThrowPolicy { NoThrow, Throw };
+
+template <ThrowPolicy throwPolicy, typename IMPL_RTL_STRINGDATA, typename C1, typename C2>
+void newConcat(IMPL_RTL_STRINGDATA** ppThis, const C1* pLeft, sal_Int32 nLeftLength,
+               const C2* pRight, sal_Int32 nRightLength)
 {
     assert(ppThis);
+    assert(nLeftLength >= 0);
+    assert(pLeft || nLeftLength == 0);
+    assert(nRightLength >= 0);
+    assert(pRight || nRightLength == 0);
     IMPL_RTL_STRINGDATA* pOrg = *ppThis;
 
-    /* Test for 0-Pointer - if not, change newReplaceStrAt! */
-    if ( !pRight || !pRight->length )
+    if (nLeftLength > std::numeric_limits<sal_Int32>::max() - nRightLength)
     {
-        *ppThis = pLeft;
-        acquire( pLeft );
-    }
-    else if ( !pLeft || !pLeft->length )
-    {
-        *ppThis = pRight;
-        acquire( pRight );
-    }
-    else if (pLeft->length
-             > std::numeric_limits<sal_Int32>::max() - pRight->length)
-    {
-        *ppThis = nullptr;
+        if constexpr (throwPolicy == NoThrow)
+            *ppThis = nullptr;
+        else
+        {
+#if !defined(__COVERITY__)
+            throw std::length_error("newConcat");
+#else
+            //coverity doesn't report std::bad_alloc as an unhandled exception when
+            //potentially thrown from destructors but does report std::length_error
+            throw std::bad_alloc();
+#endif
+        }
     }
     else
     {
-        auto* pTempStr = Alloc<IMPL_RTL_STRINGDATA>( pLeft->length + pRight->length );
+        auto* pTempStr = Alloc<IMPL_RTL_STRINGDATA>(nLeftLength + nRightLength);
         OSL_ASSERT(pTempStr != nullptr);
         *ppThis = pTempStr;
         if (*ppThis != nullptr) {
-            Copy( pTempStr->buffer, pLeft->buffer, pLeft->length );
-            Copy( pTempStr->buffer+pLeft->length, pRight->buffer, pRight->length );
+            if (nLeftLength)
+                Copy( pTempStr->buffer, pLeft, nLeftLength );
+            if (nRightLength)
+                Copy( pTempStr->buffer+nLeftLength, pRight, nRightLength );
 
             RTL_LOG_STRING_NEW( *ppThis );
         }
@@ -1192,6 +1208,34 @@ void newConcat                                ( IMPL_RTL_STRINGDATA** ppThis,
     /* must be done last, if left or right == *ppThis */
     if ( pOrg )
         release( pOrg );
+}
+
+template<typename IMPL_RTL_STRINGDATA, typename IMPL_RTL_STRCODE>
+void newConcat(IMPL_RTL_STRINGDATA** ppThis, IMPL_RTL_STRINGDATA* pLeft,
+               const IMPL_RTL_STRCODE* pRight, sal_Int32 nRightLength)
+{
+    assert(pLeft != nullptr);
+    if (nRightLength == 0)
+        assign(ppThis, pLeft);
+    else
+        newConcat<Throw>(ppThis, pLeft->buffer, pLeft->length, pRight, nRightLength);
+}
+
+template <typename IMPL_RTL_STRINGDATA>
+void newConcat                                ( IMPL_RTL_STRINGDATA** ppThis,
+                                                IMPL_RTL_STRINGDATA* pLeft,
+                                                IMPL_RTL_STRINGDATA* pRight )
+{
+    /* Test for 0-Pointer - if not, change newReplaceStrAt! */
+    if ( !pRight || !pRight->length )
+    {
+        assert(pLeft != nullptr);
+        assign(ppThis, pLeft);
+    }
+    else if ( !pLeft || !pLeft->length )
+        assign(ppThis, pRight);
+    else
+        newConcat<NoThrow>(ppThis, pLeft->buffer, pLeft->length, pRight->buffer, pRight->length);
 }
 
 /* ----------------------------------------------------------------------- */

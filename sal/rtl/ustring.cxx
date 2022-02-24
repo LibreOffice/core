@@ -562,57 +562,14 @@ void rtl_uString_newConcatAsciiL(
     rtl_uString ** newString, rtl_uString * left, char const * right,
     sal_Int32 rightLength)
 {
-    assert(newString != nullptr);
-    assert(left != nullptr);
-    assert(right != nullptr);
-    assert(rightLength >= 0);
-    if (left->length > std::numeric_limits<sal_Int32>::max() - rightLength) {
-#if !defined(__COVERITY__)
-        throw std::length_error("rtl_uString_newConcatAsciiL");
-#else
-        //coverity doesn't report std::bad_alloc as an unhandled exception when
-        //potentially thrown from destructors but does report std::length_error
-        throw std::bad_alloc();
-#endif
-    }
-    sal_Int32 n = left->length + rightLength;
-    rtl_uString_assign(newString, left);
-    rtl_uString_ensureCapacity(newString, n);
-    sal_Unicode * p = (*newString)->buffer + (*newString)->length;
-    for (sal_Int32 i = 0; i != rightLength; ++i) {
-        p[i] = static_cast<unsigned char>(right[i]);
-    }
-    (*newString)->buffer[n] = 0;
-    (*newString)->length = n;
+    rtl::str::newConcat(newString, left, right, rightLength);
 }
 
 void rtl_uString_newConcatUtf16L(
     rtl_uString ** newString, rtl_uString * left, sal_Unicode const * right,
     sal_Int32 rightLength)
 {
-    assert(newString != nullptr);
-    assert(left != nullptr);
-    assert(right != nullptr || rightLength == 0);
-    assert(rightLength >= 0);
-    if (left->length > std::numeric_limits<sal_Int32>::max() - rightLength) {
-#if !defined(__COVERITY__)
-        throw std::length_error("rtl_uString_newConcatUtf16L");
-#else
-        //coverity doesn't report std::bad_alloc as an unhandled exception when
-        //potentially thrown from destructors but does report std::length_error
-        throw std::bad_alloc();
-#endif
-    }
-    sal_Int32 n = left->length + rightLength;
-    rtl_uString_assign(newString, left);
-    rtl_uString_ensureCapacity(newString, n);
-    if (rightLength != 0) {
-        memcpy(
-            (*newString)->buffer + (*newString)->length, right,
-            rightLength * sizeof (sal_Unicode));
-    }
-    (*newString)->buffer[n] = 0;
-    (*newString)->length = n;
+    rtl::str::newConcat(newString, left, right, rightLength);
 }
 
 /* ======================================================================= */
