@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08ae5f3e_3ffc4437",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-02-24T06:16:38Z",
+      "side": 1,
+      "message": "In my test examples, I didn\u0027t see an SvNumFormatType::LOGICAL assigned to non-bool formula\u0027s (like \u003dsum(100)), even when I set the cell formatting to boolean. Thus the cell format was logical, but the numFormatType was still NUMBER. So I couldn\u0027t create an example document to prove the necessity of this. But it certainly can\u0027t hurt to do this, compared to the state where we were before.\n\nAs a cleaner alternative, I could see just writing the mfValue regardless, and setting\nrsType \u003d LOGICAL ? \"b\" : \"n\";\n\nActually, I rather strongly prefer to do it this way, and I don\u0027t see any downsides.\n",
+      "revId": "0c4bfbe293e57d1daf78ccaad42991e1f0eb8486",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
