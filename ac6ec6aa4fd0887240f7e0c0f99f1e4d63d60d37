@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45102d19_ffc8beaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-24T14:20:12Z",
+      "side": 1,
+      "message": "sberg, this fixes the problem of creating those xml files in the home folder",
+      "revId": "ac6ec6aa4fd0887240f7e0c0f99f1e4d63d60d37",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
