@@ -52,6 +52,24 @@
       "parentUuid": "17b20cc1_2a1dbf9b",
       "revId": "01cbdcc6dd0cf575997e9899496115ac41ab4be1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17df8957_e2bc0ef5",
+        "filename": "sw/qa/uitest/writer_tests6/edit_file_properties_before_saving.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-24T10:51:35Z",
+      "side": 1,
+      "message": "ok, will add this wait to every test then, just to be sure",
+      "parentUuid": "44e9a8c7_edbe8787",
+      "revId": "01cbdcc6dd0cf575997e9899496115ac41ab4be1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
