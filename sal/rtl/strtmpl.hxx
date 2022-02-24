@@ -1663,6 +1663,30 @@ void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fr
     RTL_LOG_STRING_NEW(*s);
 }
 
+template <class IMPL_RTL_STRINGDATA>
+using doubleToString_t
+    = void(SAL_CALL*)(IMPL_RTL_STRINGDATA** pResult, sal_Int32* pResultCapacity,
+                      sal_Int32 nResultOffset, double fValue, rtl_math_StringFormat eFormat,
+                      sal_Int32 nDecPlaces, STRCODE<IMPL_RTL_STRINGDATA> cDecSeparator,
+                      sal_Int32 const* pGroups, STRCODE<IMPL_RTL_STRINGDATA> cGroupSeparator,
+                      sal_Bool bEraseTrailingDecZeros) SAL_THROW_EXTERN_C();
+
+template <sal_Int32 maxLen, typename T, typename IMPL_RTL_STRINGDATA>
+sal_Int32 SAL_CALL valueOfFP(STRCODE<IMPL_RTL_STRINGDATA>* pStr, T f,
+                             doubleToString_t<IMPL_RTL_STRINGDATA> doubleToString)
+{
+    assert(pStr);
+    IMPL_RTL_STRINGDATA* pResult = nullptr;
+    sal_Int32 nLen;
+    doubleToString(&pResult, nullptr, 0, f, rtl_math_StringFormat_G,
+                   maxLen - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr, 0, true);
+    nLen = pResult->length;
+    OSL_ASSERT(nLen < maxLen);
+    Copy(pStr, pResult->buffer, nLen + 1);
+    release(pResult);
+    return nLen;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
