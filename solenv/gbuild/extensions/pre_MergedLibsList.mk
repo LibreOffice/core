@@ -48,9 +48,6 @@ gb_MERGE_LIBRARY_LIST := \
 	i18nsearch \
 	i18npool \
 	i18nutil \
-	io \
-	$(if $(ENABLE_JAVA),javaloader) \
-	$(if $(ENABLE_JAVA),javavm) \
 	lng \
 	lnth \
 	localebe1 \
