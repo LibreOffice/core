@@ -22,6 +22,9 @@ class tdf141708(UITestCase):
 
             self.xUITest.executeCommand(".uno:CloseDoc")
 
+        # Wait until the startcenter is displayed
+        self.ui_test.wait_until_child_is_available('StartCenter')
+
         with self.ui_test.create_doc_in_start_center("impress"):
 
             xTemplateDlg = self.xUITest.getTopFocusWindow()
