@@ -6690,6 +6690,7 @@ void SwEditWin::ToggleOutlineContentVisibility(const size_t nOutlinePos, const b
 
     rSh.InvalidateOutlineContentVisibility();
     rSh.GotoOutline(nOutlinePos);
+    GetView().GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

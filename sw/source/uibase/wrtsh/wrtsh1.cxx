@@ -2407,6 +2407,7 @@ void SwWrtShell::MakeAllFoldedOutlineContentVisible(bool bMakeVisible)
                 GotoOutline(nPos);
         }
     }
+    GetView().GetDocShell()->Broadcast(SfxHint(SfxHintId::DocChanged));
 }
 
 bool SwWrtShell::GetAttrOutlineContentVisible(const size_t nPos)
