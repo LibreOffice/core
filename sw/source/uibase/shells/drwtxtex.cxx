@@ -257,6 +257,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
         break;
         case SID_ATTR_PARA_LINESPACE:
+            if (pNewAttrs)
             {
                 SvxLineSpacingItem aLineSpace = static_cast<const SvxLineSpacingItem&>(pNewAttrs->Get(
                                                             GetPool().GetWhich(nSlot)));
@@ -266,6 +267,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
             }
             break;
         case SID_ATTR_PARA_ULSPACE:
+            if (pNewAttrs)
             {
                 SvxULSpaceItem aULSpace = static_cast<const SvxULSpaceItem&>(pNewAttrs->Get(
                     GetPool().GetWhich(nSlot)));
