@@ -121,35 +121,13 @@ sal_Int32 rtl_ustr_lastIndexOfAscii_WithLength(
 sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    rtl_uString * pResult = nullptr;
-    sal_Int32 nLen;
-    rtl_math_doubleToUString(
-        &pResult, nullptr, 0, f, rtl_math_StringFormat_G,
-        RTL_USTR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
-        0, true);
-    nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFFLOAT);
-    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
-    rtl_uString_release(pResult);
-    return nLen;
+    return rtl::str::valueOfFP<RTL_USTR_MAX_VALUEOFFLOAT>(pStr, f, &rtl_math_doubleToUString);
 }
 
 sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    rtl_uString * pResult = nullptr;
-    sal_Int32 nLen;
-    rtl_math_doubleToUString(
-        &pResult, nullptr, 0, d, rtl_math_StringFormat_G,
-        RTL_USTR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
-        0, true);
-    nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_USTR_MAX_VALUEOFDOUBLE);
-    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(sal_Unicode));
-    rtl_uString_release(pResult);
-    return nLen;
+    return rtl::str::valueOfFP<RTL_USTR_MAX_VALUEOFDOUBLE>(pStr, d, &rtl_math_doubleToUString);
 }
 
 namespace {

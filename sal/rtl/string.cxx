@@ -64,35 +64,13 @@ rtl_String rtl::str::EmptyStringImpl<rtl_String>::data =
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(char * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    rtl_String * pResult = nullptr;
-    sal_Int32 nLen;
-    rtl_math_doubleToString(
-        &pResult, nullptr, 0, f, rtl_math_StringFormat_G,
-        RTL_STR_MAX_VALUEOFFLOAT - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr, 0,
-        true);
-    nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFFLOAT);
-    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(char));
-    rtl_string_release(pResult);
-    return nLen;
+    return rtl::str::valueOfFP<RTL_STR_MAX_VALUEOFFLOAT>(pStr, f, &rtl_math_doubleToString);
 }
 
 sal_Int32 SAL_CALL rtl_str_valueOfDouble(char * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    rtl_String * pResult = nullptr;
-    sal_Int32 nLen;
-    rtl_math_doubleToString(
-        &pResult, nullptr, 0, d, rtl_math_StringFormat_G,
-        RTL_STR_MAX_VALUEOFDOUBLE - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr,
-        0, true);
-    nLen = pResult->length;
-    OSL_ASSERT(nLen < RTL_STR_MAX_VALUEOFDOUBLE);
-    memcpy(pStr, pResult->buffer, (nLen + 1) * sizeof(char));
-    rtl_string_release(pResult);
-    return nLen;
+    return rtl::str::valueOfFP<RTL_STR_MAX_VALUEOFDOUBLE>(pStr, d, &rtl_math_doubleToString);
 }
 
 float SAL_CALL rtl_str_toFloat(char const * pStr) SAL_THROW_EXTERN_C()
