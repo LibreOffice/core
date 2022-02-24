@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8880bb6_83e796fd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-02-24T18:06:10Z",
+      "side": 1,
+      "message": "\u003e Patch Set 6: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/109030/ : FAILURE\n\u003e \n\u003e the junit test JunitTest_chart2_unoapi failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/108695/ )\n\nNo problem on my local build (linux, standard)",
+      "revId": "52012946b1189e6e304010177898077c11057e7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
