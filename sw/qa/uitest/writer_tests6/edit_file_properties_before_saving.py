@@ -53,6 +53,9 @@ class edit_file_properties_before_saving(UITestCase):
                         xReadOnly.executeAction("CLICK", tuple())
                         self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
 
+            # Wait until the startcenter is displayed
+            self.ui_test.wait_until_child_is_available('StartCenter')
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
 
                 self.change_doc_info_setting("false")
@@ -89,6 +92,9 @@ class edit_file_properties_before_saving(UITestCase):
                             xReadOnly = xPropertiesDialog.getChild("readonly")
                             xReadOnly.executeAction("CLICK", tuple())
                             self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
+
+            # Wait until the startcenter is displayed
+            self.ui_test.wait_until_child_is_available('StartCenter')
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
 
