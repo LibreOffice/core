@@ -62,8 +62,7 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 		NSPR_CONFIGURE_OPTS="$(gb_CONFIGURE_PLATFORMS)" \
 		$(if $(CROSS_COMPILING),CROSS_COMPILE=1) \
 		$(if $(filter MACOSX-X86_64-arm64,$(OS)-$(CPUNAME)-$(shell uname -m)), \
-			CPU_ARCH=x86_64 \
-			NSPR_CONFIGURE_OPTS="--build=$(subst macos,darwin,$(BUILD_PLATFORM)) --host=$(subst macos,darwin,$(HOST_PLATFORM))") \
+			CPU_ARCH=x86_64) \
 		NSDISTMODE=copy \
 		$(MAKE) \
 			AR="$(AR)" \
