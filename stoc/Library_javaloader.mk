@@ -19,7 +19,6 @@ $(eval $(call gb_Library_use_libraries,javaloader,\
     jvmaccess \
     sal \
     salhelper \
-    tl \
 ))
 
 $(eval $(call gb_Library_set_componentfile,javaloader,stoc/source/javaloader/javaloader,ure/services))

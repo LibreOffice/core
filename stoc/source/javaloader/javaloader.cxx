@@ -26,7 +26,6 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <tools/diagnose_ex.h>
 
 #ifdef LINUX
 #undef minor
@@ -335,8 +334,10 @@ stoc_JavaComponentLoader_get_implementation(
     try {
         return cppu::acquire(new JavaComponentLoader(context));
     }
-    catch(const RuntimeException &) {
-        TOOLS_INFO_EXCEPTION("stoc", "could not init javaloader");
+    catch(const RuntimeException & runtimeException) {
+        SAL_INFO(
+            "stoc",
+            "could not init javaloader due to " << runtimeException);
         throw;
     }
 }

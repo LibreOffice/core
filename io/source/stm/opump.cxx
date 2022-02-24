@@ -18,6 +18,8 @@
  */
 
 
+#include <sal/log.hxx>
+
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/NotConnectedException.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>
@@ -32,7 +34,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/mutex.hxx>
 #include <osl/thread.h>
-#include <tools/diagnose_ex.h>
+
 
 using namespace osl;
 using namespace cppu;
@@ -123,9 +125,9 @@ void Pump::fireError( const  Any & exception )
         {
             static_cast< XStreamListener * > ( iter.next() )->error( exception );
         }
-        catch ( const RuntimeException & )
+        catch ( const RuntimeException &e )
         {
-            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
         }
     }
 }
@@ -152,9 +154,9 @@ void Pump::fireClose()
         {
             static_cast< XStreamListener * > ( iter.next() )->closed( );
         }
-        catch ( const RuntimeException & )
+        catch ( const RuntimeException &e )
         {
-            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
         }
     }
 }
@@ -168,9 +170,9 @@ void Pump::fireStarted()
         {
             static_cast< XStreamListener * > ( iter.next() )->started( );
         }
-        catch ( const RuntimeException & )
+        catch ( const RuntimeException &e )
         {
-            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
         }
     }
 }
@@ -184,9 +186,9 @@ void Pump::fireTerminated()
         {
             static_cast< XStreamListener * > ( iter.next() )->terminated();
         }
-        catch ( const RuntimeException & )
+        catch ( const RuntimeException &e )
         {
-            TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
+            SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
         }
     }
 }
@@ -284,11 +286,11 @@ void Pump::run()
         close();
         fireClose();
     }
-    catch ( const css::uno::Exception & )
+    catch ( const css::uno::Exception &e )
     {
         // we are the last on the stack.
         // this is to avoid crashing the program, when e.g. a bridge crashes
-        TOOLS_WARN_EXCEPTION("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners");
+        SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e);
     }
 }
 
