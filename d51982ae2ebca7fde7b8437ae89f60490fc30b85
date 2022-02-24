@@ -213,6 +213,24 @@
       "parentUuid": "a1cbc8ea_de3c6ddc",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a696ecc_3033256d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-24T13:17:00Z",
+      "side": 1,
+      "message": "Yes, found that too now.  I\u0027m preparing a change now that reverts those parts of \u003chttps://git.libreoffice.org/core/+/baab4f890c8ac99d1b8dab5790fbb7ab949100ab%5E!/\u003e \"Initial WIP steps for building for macOS on Apple Silicon\" and \u003chttps://git.libreoffice.org/core/+/5a0991c9cd60b6ab10fe0665511e7749a0c0ecc2%5E!/\u003e \"mac: allow cross compiling with host/build x86_64-apple-macos\" that would support $host_os \u003d \u0027macos*\u0027.",
+      "parentUuid": "63122a37_a06372dd",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
