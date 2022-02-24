@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c40a3ba9_68275d6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-24T09:32:06Z",
+      "side": 1,
+      "message": "Hi Michael,\nYou added sw/qa/extras/layout/data/LIBREOFFICE-UXTSOREL.rtf but it\u0027s not tested anywhere, isn\u0027t it ?",
+      "revId": "fe5d3fbfe63fe8b433776bd3a0508dd712b868b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
