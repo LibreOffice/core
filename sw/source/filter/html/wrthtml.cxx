@@ -83,6 +83,8 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <comphelper/propertysequence.hxx>
+#include <comphelper/sequence.hxx>
 
 #define MAX_INDENT_LEVEL 20
 
@@ -187,13 +189,22 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
         return;
 
     const SfxPoolItem* pItem;
+    uno::Sequence<beans::PropertyValue> aArgs = rMedium.GetArgs();
     if (pSet->GetItemState(SID_FILE_FILTEROPTIONS, true, &pItem) == SfxItemState::SET)
     {
         const OUString sFilterOptions = static_cast<const SfxStringItem*>(pItem)->GetValue();
+
+        if (sFilterOptions.startsWith("{"))
+        {
+            std::vector<beans::PropertyValue> aArgsVec
+                = comphelper::JsonToPropertyValues(sFilterOptions.toUtf8());
+            aArgs = comphelper::containerToSequence(aArgsVec);
+        }
+
         SetupFilterOptions(sFilterOptions);
     }
 
-    SetupFilterFromPropertyValues(rMedium.GetArgs());
+    SetupFilterFromPropertyValues(aArgs);
 }
 
 void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
