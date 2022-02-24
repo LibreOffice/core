@@ -1540,19 +1540,19 @@ sal_Int32 SAL_CALL rtl_ustr_valueOfChar(sal_Unicode* pStr, sal_Unicode c) SAL_TH
 sal_Int32 SAL_CALL rtl_ustr_valueOfInt32(sal_Unicode* pStr, sal_Int32 n, sal_Int16 nRadix)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::valueOfInt32(pStr, n, nRadix);
+    return rtl::str::valueOfInt<RTL_USTR_MAX_VALUEOFINT32>(pStr, n, nRadix);
 }
 
 sal_Int32 SAL_CALL rtl_ustr_valueOfInt64(sal_Unicode* pStr, sal_Int64 n, sal_Int16 nRadix)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::valueOfInt64(pStr, n, nRadix);
+    return rtl::str::valueOfInt<RTL_USTR_MAX_VALUEOFINT64>(pStr, n, nRadix);
 }
 
 sal_Int32 SAL_CALL rtl_ustr_valueOfUInt64(sal_Unicode* pStr, sal_uInt64 n, sal_Int16 nRadix)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::valueOfUInt64(pStr, n, nRadix);
+    return rtl::str::valueOfInt<RTL_STR_MAX_VALUEOFUINT64>(pStr, n, nRadix);
 }
 
 sal_Bool SAL_CALL rtl_ustr_toBoolean(const sal_Unicode* pStr) SAL_THROW_EXTERN_C()

@@ -623,135 +623,38 @@ sal_Int32 valueOfChar                             ( IMPL_RTL_STRCODE* pStr,
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 valueOfInt32                             ( IMPL_RTL_STRCODE* pStr,
-                                                     sal_Int32 n,
+template <sal_Int32 maxLen, typename IMPL_RTL_STRCODE, typename T>
+sal_Int32 valueOfInt                               ( IMPL_RTL_STRCODE* pStr,
+                                                     T n,
                                                      sal_Int16 nRadix )
 {
     assert(pStr);
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    char    aBuf[RTL_STR_MAX_VALUEOFINT32];
+    char    aBuf[maxLen];
     char*   pBuf = aBuf;
     sal_Int32   nLen = 0;
-    sal_uInt32  nValue;
+    using uT = std::make_unsigned_t<T>;
+    uT nValue;
 
     /* Radix must be valid */
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
         nRadix = 10;
 
-    /* is value negative */
-    if ( n < 0 )
+    if constexpr (std::is_signed_v<T>)
     {
-        *pStr = '-';
-        pStr++;
-        nLen++;
-        nValue = n == SAL_MIN_INT32 ? static_cast<sal_uInt32>(n) : -n;
+        /* is value negative */
+        if ( n < 0 )
+        {
+            *pStr = '-';
+            pStr++;
+            nLen++;
+            nValue = n == std::numeric_limits<T>::min() ? static_cast<uT>(n) : -n;
+        }
+        else
+            nValue = n;
     }
     else
         nValue = n;
-
-    /* create a recursive buffer with all values, except the last one */
-    do
-    {
-        char nDigit = static_cast<char>(nValue % nRadix);
-        nValue /= nRadix;
-        if ( nDigit > 9 )
-            *pBuf = (nDigit-10) + 'a';
-        else
-            *pBuf = (nDigit + '0' );
-        pBuf++;
-    }
-    while ( nValue > 0 );
-
-    /* copy the values in the right direction into the destination buffer */
-    do
-    {
-        pBuf--;
-        *pStr = *pBuf;
-        pStr++;
-        nLen++;
-    }
-    while ( pBuf != aBuf );
-    *pStr = 0;
-
-    return nLen;
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 valueOfInt64                             ( IMPL_RTL_STRCODE* pStr,
-                                                     sal_Int64 n,
-                                                     sal_Int16 nRadix )
-{
-    assert(pStr);
-    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    char    aBuf[RTL_STR_MAX_VALUEOFINT64];
-    char*   pBuf = aBuf;
-    sal_Int32   nLen = 0;
-    sal_uInt64  nValue;
-
-    /* Radix must be valid */
-    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-        nRadix = 10;
-
-    /* is value negative */
-    if ( n < 0 )
-    {
-        *pStr = '-';
-        pStr++;
-        nLen++;
-        nValue = n == SAL_MIN_INT64 ? static_cast<sal_uInt64>(n) : -n;
-    }
-    else
-        nValue = n;
-
-    /* create a recursive buffer with all values, except the last one */
-    do
-    {
-        char nDigit = static_cast<char>(nValue % nRadix);
-        nValue /= nRadix;
-        if ( nDigit > 9 )
-            *pBuf = (nDigit-10) + 'a';
-        else
-            *pBuf = (nDigit + '0' );
-        pBuf++;
-    }
-    while ( nValue > 0 );
-
-    /* copy the values in the right direction into the destination buffer */
-    do
-    {
-        pBuf--;
-        *pStr = *pBuf;
-        pStr++;
-        nLen++;
-    }
-    while ( pBuf != aBuf );
-    *pStr = 0;
-
-    return nLen;
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 valueOfUInt64                             ( IMPL_RTL_STRCODE* pStr,
-                                                      sal_uInt64 n,
-                                                      sal_Int16 nRadix )
-{
-    assert(pStr);
-    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    char    aBuf[RTL_STR_MAX_VALUEOFUINT64];
-    char*   pBuf = aBuf;
-    sal_Int32   nLen = 0;
-    sal_uInt64  nValue;
-
-    /* Radix must be valid */
-    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-        nRadix = 10;
-
-    nValue = n;
 
     /* create a recursive buffer with all values, except the last one */
     do
