@@ -1213,7 +1213,7 @@ void newFromLiteral                                ( IMPL_RTL_STRINGDATA** ppThi
             assert(rtl::isAscii(static_cast<unsigned char>(*pCharStr)));
         }
         SAL_WARN_IF( (static_cast<unsigned char>(*pCharStr)) == '\0', "rtl.string",
-                    "rtl_uString_newFromLiteral - Found embedded \\0 character" );
+                    "newFromLiteral - Found embedded \\0 character" );
 
         *pBuffer = *pCharStr;
         pBuffer++;
