@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b91d41ec_bdb5f9bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-24T14:46:58Z",
+      "side": 1,
+      "message": "The test should work now. Is there any other issues remaining?",
+      "parentUuid": "348fa9ac_507ffd5c",
+      "revId": "4136ea73743c9f8456b78eefc66ddfdc7c949bab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f859626b_b8a58e3b",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-02-23T10:17:35Z",
       "side": 1,
       "message": "CppunitTest",
+      "range": {
+        "startLine": 27,
+        "startChar": 17,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "4136ea73743c9f8456b78eefc66ddfdc7c949bab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fda22b2_a31ceff5",
+        "filename": "i18npool/CppunitTest_i18npool_test_calendar.mk",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-24T14:46:58Z",
+      "side": 1,
+      "message": "Fixed.",
+      "parentUuid": "f859626b_b8a58e3b",
       "range": {
         "startLine": 27,
         "startChar": 17,
