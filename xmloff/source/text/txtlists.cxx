@@ -126,6 +126,13 @@ void XMLTextListsHelper::KeepListAsProcessed( const OUString& sListId,
     msLastProcessedListId = sListId;
     msListStyleOfLastProcessedList = sListStyleName;
 
+    // Remember what is the last list id of this list style.
+    if (!mpStyleNameLastListIds)
+    {
+        mpStyleNameLastListIds = std::make_unique<std::map<OUString, OUString>>();
+    }
+    (*mpStyleNameLastListIds)[sListStyleName] = sListId;
+
     // Inconsistent behavior regarding lists (#i92811#)
     if ( sListStyleDefaultListId.isEmpty())
         return;
@@ -473,6 +480,22 @@ XMLTextListsHelper::MakeNumRule(
     }
 
     return xNumRules;
+}
+
+OUString XMLTextListsHelper::GetLastIdOfStyleName(const OUString& sListStyleName) const
+{
+    if (!mpStyleNameLastListIds)
+    {
+        return {};
+    }
+
+    auto it = mpStyleNameLastListIds->find(sListStyleName);
+    if (it == mpStyleNameLastListIds->end())
+    {
+        return {};
+    }
+
+    return it->second;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -194,6 +194,14 @@ XMLTextListBlockContext::XMLTextListBlockContext(
         }
     }
 
+    bool bContinueNumbering = bIsContinueNumberingAttributePresent && !mbRestartNumbering;
+    if (msContinueListId.isEmpty() && bContinueNumbering && GetImport().IsMSO())
+    {
+        // No "continue list" id, but continue numbering was requested. Connect to the last list of
+        // the same list style in the Word case, even if there was a different list in the meantime.
+        msContinueListId = rTextListsHelper.GetLastIdOfStyleName(msListStyleName);
+    }
+
     if ( !msContinueListId.isEmpty() )
     {
         if ( !rTextListsHelper.IsListProcessed( msContinueListId ) )

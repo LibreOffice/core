@@ -100,6 +100,31 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
     CPPUNIT_ASSERT(bResolved);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContinueNumberingWord)
+{
+    // Given a document, which is produced by Word and contains text:continue-numbering="true":
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "continue-numbering-word.odt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the numbering from the 1st para is continued on the 3rd para:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(),
+                                                                  uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    xParaEnum->nextElement();
+    xParaEnum->nextElement();
+    uno::Reference<beans::XPropertySet> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
+    auto aActual = xPara->getPropertyValue("ListLabelString").get<OUString>();
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: 2.
+    // - Actual  : 1.
+    // i.e. the numbering was not continued, like in Word.
+    CPPUNIT_ASSERT_EQUAL(OUString("2."), aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

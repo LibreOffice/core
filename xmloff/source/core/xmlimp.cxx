@@ -55,6 +55,7 @@
 #include <com/sun/star/xml/sax/FastParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -278,6 +279,8 @@ public:
     std::optional<OUString> mxODFVersion;
 
     bool mbIsOOoXML;
+
+    std::optional<bool> mbIsMSO;
 
     // Boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
@@ -1940,6 +1943,25 @@ OUString SvXMLImport::GetODFVersion() const
 bool SvXMLImport::IsOOoXML() const
 {
     return mpImpl->mbIsOOoXML;
+}
+
+bool SvXMLImport::IsMSO() const
+{
+    if (!mpImpl->mbIsMSO.has_value())
+    {
+        uno::Reference<document::XDocumentPropertiesSupplier> xSupplier(GetModel(), uno::UNO_QUERY);
+        if (xSupplier.is())
+        {
+            uno::Reference<document::XDocumentProperties> xProps
+                = xSupplier->getDocumentProperties();
+            if (xProps.is())
+            {
+                mpImpl->mbIsMSO = xProps->getGenerator().startsWith("MicrosoftOffice");
+            }
+        }
+    }
+
+    return mpImpl->mbIsMSO.has_value() ? *mpImpl->mbIsMSO : false;
 }
 
 // xml:id for RDF metadata
