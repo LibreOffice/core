@@ -16,6 +16,23 @@
       "message": "doing this makes the leak not happen, unsure though if this is the best solution",
       "revId": "73b57803f017d3f2a323740cb066289c32a9b5ed",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06622d98_864bb36c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-02-24T08:55:58Z",
+      "side": 1,
+      "message": "@Caolan: Thanks for having an eye on it. I thought to solve that by not holding that helper class longer than needed. Also the DiagramDataPtr in that Diagram class also hosts a ShapePtr to the same shape, so maybe mpShape can be avoided completely - have to check this after having reached a form that serves the needed purposes - it\u0027s somewhat in progress.\nFor now just push it I guess. Thanks again!",
+      "revId": "73b57803f017d3f2a323740cb066289c32a9b5ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
