@@ -88,8 +88,10 @@ namespace
     const sal_uInt16 PT_3   =  3 * 20;      //  3 pt
     const sal_uInt16 PT_6   =  6 * 20;      //  6 pt
     const sal_uInt16 PT_7   =  7 * 20;      //  7 pt
+    const sal_uInt16 PT_9   =  9 * 20;      //  9 pt
     const sal_uInt16 PT_10  = 10 * 20;      // 10 pt
     const sal_uInt16 PT_12  = 12 * 20;      // 12 pt
+    const sal_uInt16 PT_13  = 13 * 20;      // 13 pt
     const sal_uInt16 PT_14  = 14 * 20;      // 14 pt
     const sal_uInt16 PT_16  = 16 * 20;      // 16 pt
     const sal_uInt16 PT_18  = 18 * 20;      // 18 pt
@@ -100,8 +102,9 @@ namespace
 
     const sal_uInt16 aHeadlineSizes[ 2 * MAXLEVEL ] = {
         // we do everything percentual now:
-        130, 115, 101, 95, 85,
-        85,   80,  80, 75, 75,  // normal
+        PT_18, PT_16, PT_14, PT_13, PT_12,
+        PT_12, PT_10, PT_10, PT_9, PT_9,  // normal
+
         PT_24, PT_18, PT_14, PT_12, PT_10,
         PT_7, PT_7, PT_7, PT_7, PT_7            // HTML mode
     };
@@ -180,7 +183,7 @@ namespace
         if( bHTMLMode )
             aHItem.SetHeight( aHeadlineSizes[ MAXLEVEL + nLevel ] );
         else
-            aHItem.SetHeight( PT_14, aHeadlineSizes[ nLevel ] );
+            aHItem.SetHeight( aHeadlineSizes[ nLevel ] );
         SetAllScriptItem( rSet, aHItem );
 
         if( bItalic && !bHTMLMode )
