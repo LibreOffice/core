@@ -454,7 +454,6 @@ inline OUString read_uInt8s_ToOUString(SvStream& rStrm,
 
 /// Attempt to read nUnits 16bit units to an OUString, returned
 /// OUString's length is number of units successfully read
-// coverity[ -taint_source ]
 TOOLS_DLLPUBLIC OUString read_uInt16s_ToOUString(SvStream& rStrm,
     std::size_t nUnits);
 
