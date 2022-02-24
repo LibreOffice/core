@@ -291,6 +291,7 @@ void SwModule::ApplyUserCharUnit(bool bApplyChar, bool bWeb)
             GetUsrPref(false);
         pPref = m_pUsrPref.get();
     }
+    assert(pPref && "pPref is set by here");
     bool bOldApplyCharUnit = pPref->IsApplyCharUnit();
     bool bHasChanged = false;
     if(bOldApplyCharUnit != bApplyChar)
@@ -659,8 +660,9 @@ void SwModule::CheckSpellChanges( bool bOnlineSpelling,
 
 void SwModule::ApplyDefaultPageMode(bool bIsSquaredPageMode)
 {
-    if(!m_pUsrPref)
+    if (!m_pUsrPref)
         GetUsrPref(false);
+    assert(m_pUsrPref && "pPref is set by here");
     m_pUsrPref->SetDefaultPageMode(bIsSquaredPageMode);
 }
 
