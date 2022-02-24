@@ -123,6 +123,24 @@
       "parentUuid": "4c0f2d31_02b4b438",
       "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afcb8dfa_e5dbf764",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-02-24T11:22:18Z",
+      "side": 1,
+      "message": "If I look at https://ci.libreoffice.org/job/gerrit_mac/114064/consoleFull, it seems the config.guess defaults to darwin. So maybe the correct fix would be to error and abort configure, if *-apple-macos is detected in either --build or --host? And just tell the user to use *-apple-darwin instead?\n\nSeems more reasonable then always replacing macos with darwin.\n\nNow I just checked configure.ac and found https://git.libreoffice.org/core/+/refs/heads/master/configure.ac#987\n\nSo maybe just drop the special aarch64 case and make it the default by replacing macos with darwin for HOST_PLATFORM and BUILD_PLATFORM in there?",
+      "parentUuid": "45db93a3_1ad42a1e",
+      "revId": "d51982ae2ebca7fde7b8437ae89f60490fc30b85",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
