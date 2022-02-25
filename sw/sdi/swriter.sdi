@@ -2494,7 +2494,6 @@ SfxVoidItem InsertAnnotation FN_POSTIT
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
-    Asynchron;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
