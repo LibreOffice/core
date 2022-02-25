@@ -89,6 +89,8 @@ private:
     static bool CreateFontSubsetFromType1( const sal_Int32* pOutGlyphWidths );
 };
 
+int VCL_DLLPUBLIC TestFontSubset(const void* data, sal_uInt32 size);
+
 #endif // INCLUDED_VCL_INC_FONTSUBSET_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

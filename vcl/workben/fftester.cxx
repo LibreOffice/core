@@ -69,6 +69,7 @@
 #include <rtl/bootstrap.hxx>
 #include <tools/stream.hxx>
 #include <vcl/gdimtf.hxx>
+#include <fontsubset.hxx>
 
 #include "../source/filter/igif/gifread.hxx"
 #include "../source/filter/ixbm/xbmread.hxx"
@@ -525,7 +526,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             std::vector<sal_uInt8> aData(aFileStream.remainingSize());
             aFileStream.ReadBytes(aData.data(), aData.size());
-            (void)vcl::Font::identifyFont(aData.data(), aData.size());
+            ret = TestFontSubset(aData.data(), aData.size());
         }
 
 #endif
