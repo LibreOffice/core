@@ -1695,19 +1695,20 @@ void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fr
     {
         if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
             std::abort();
-        acquire(s1); // in case *s == s1
+        i += fromIndex;
         sal_Int32 nCapacity = s1->length + (toLength - fromLength);
         if (fromLength < toLength)
         {
             // Pre-allocate up to 16 replacements more
-            const sal_Int32 nMaxMoreFinds = (s1->length - fromIndex - i - fromLength) / fromLength;
+            const sal_Int32 nMaxMoreFinds = (s1->length - i - fromLength) / fromLength;
             const sal_Int32 nIncrease = toLength - fromLength;
             const sal_Int32 nMoreReplacements = std::min(
                 { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
             nCapacity += nMoreReplacements * nIncrease;
         }
-        new_WithLength(s, nCapacity);
-        i += fromIndex;
+        const auto pOld = *s;
+        *s = Alloc<S>(nCapacity);
+        (*s)->length = 0;
         fromIndex = 0;
         do
         {
@@ -1718,7 +1719,8 @@ void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fr
         } while (i >= 0);
         // the rest
         detail::append(s, &nCapacity, s1->buffer + fromIndex, s1->length - fromIndex);
-        release(s1);
+        if (pOld)
+            release(pOld); // Must be last in case *s == s1
     }
     else
         assign(s, s1);
