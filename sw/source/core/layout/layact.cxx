@@ -1615,6 +1615,9 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             {
                 SAL_INFO("sw.layout", "SwLayAction::FormatContent: move anchored " << pObj << " from " << pPage->GetPhyPageNum() << " to " << pAnchorPage->GetPhyPageNum());
                 pObj->RegisterAtPage(*pAnchorPage);
+                // tdf#143239 if the position remains valid, it may not be
+                // positioned again so would remain on the wrong page!
+                pObj->InvalidateObjPos();
                 ::Notify_Background(pObj->GetDrawObj(), pPage,
                     pObj->GetObjRect(), PREP_FLY_LEAVE, false);
             }
