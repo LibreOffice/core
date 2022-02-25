@@ -841,18 +841,34 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
         // if anchor frame is directly inside a section, format this section and
         // its previous frames.
         // Note: It's a very simple format without formatting objects.
-        if ( _rAnchorTextFrame.IsInSct() )
+        SwFrame * pSectFrame(nullptr);
+        SwFrame * pColFrameOfAnchor(nullptr);
+        for (SwFrame* pUpper = _rAnchorTextFrame.GetUpper();
+             pUpper != nullptr; pUpper = pUpper->GetUpper())
         {
-            SwFrame* pSectFrame = _rAnchorTextFrame.GetUpper();
-            while ( pSectFrame )
+            if (pUpper->IsCellFrame())
             {
-                if ( pSectFrame->IsSctFrame() || pSectFrame->IsCellFrame() )
-                {
-                    break;
-                }
-                pSectFrame = pSectFrame->GetUpper();
+                break; // apparently nothing to be done?
             }
-            if ( pSectFrame && pSectFrame->IsSctFrame() )
+            if (pUpper->IsSctFrame())
+            {
+                pColFrameOfAnchor = nullptr;
+                pSectFrame = pUpper;
+                break;
+            }
+            if (pColFrameOfAnchor != nullptr)
+            {   // parent of column not a section frame => column not in section
+                break;
+            }
+            if (pUpper->IsColumnFrame())
+            {
+                pColFrameOfAnchor = pUpper;
+            }
+        }
+
+        if (pSectFrame)
+        {
+            assert(pSectFrame->IsSctFrame());
             {
                 SwFrameDeleteGuard aDeleteGuard(&_rAnchorTextFrame);
                 // #i44049#
@@ -880,10 +896,30 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
         // #i40140# - if anchor frame is inside a column,
         // format the content of the previous columns.
         // Note: It's a very simple format without formatting objects.
+#if 0
         SwFrame* pColFrameOfAnchor = _rAnchorTextFrame.FindColFrame();
-        SAL_WARN_IF(pColFrameOfAnchor && _rAnchorTextFrame.IsInFootnote(), "sw.layout", "tdf#122894 skipping anchor in column in footnote");
-        if (pColFrameOfAnchor && !_rAnchorTextFrame.IsInFootnote())
+        bool isMovingFootnotes(false);
+        if (pColFrameOfAnchor)
         {
+            for (SwFrame* pColFrame = pColFrameOfAnchor->GetUpper()->GetLower();
+                 pColFrame != nullptr; // all columns!
+                 pColFrame = pColFrame->GetNext())
+            {
+                assert(pColFrame->IsFootnoteBossFrame());
+                if (static_cast<SwFootnoteBossFrame const*>(pColFrame)->IsMovingFootnotes())
+                {
+                    SAL_INFO("sw.layout", "suppressing layout of footnote boss frame during moving footnotes");
+                    isMovingFootnotes = true;
+                    break;
+                }
+            }
+        }
+//        SAL_WARN_IF(pColFrameOfAnchor && _rAnchorTextFrame.IsInFootnote(), "sw.layout", "tdf#122894 skipping anchor in column in footnote");
+        if (pColFrameOfAnchor && !isMovingFootnotes)//&& !_rAnchorTextFrame.IsInFootnote())
+#endif
+        if (pColFrameOfAnchor)
+        {
+            assert(pColFrameOfAnchor->IsColumnFrame());
             // #i44049#
             _rAnchorTextFrame.LockJoin();
             SwFrameDeleteGuard aDeleteGuard(&_rAnchorTextFrame);
