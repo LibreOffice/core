@@ -90,6 +90,33 @@ void addColorsToSparklineGroup(sc::SparklineGroup& rSparklineGroup, sal_Int32 nE
     }
 }
 
+sc::SparklineType parseSparklineType(std::u16string_view rString)
+{
+    if (rString == u"column")
+        return sc::SparklineType::Column;
+    else if (rString == u"stacked")
+        return sc::SparklineType::Stacked;
+    return sc::SparklineType::Line;
+}
+
+sc::DisplayEmptyCellAs parseDisplayEmptyCellAs(std::u16string_view rString)
+{
+    if (rString == u"span")
+        return sc::DisplayEmptyCellAs::Span;
+    else if (rString == u"gap")
+        return sc::DisplayEmptyCellAs::Gap;
+    return sc::DisplayEmptyCellAs::Zero;
+}
+
+sc::AxisType parseAxisType(std::u16string_view rString)
+{
+    if (rString == u"group")
+        return sc::AxisType::Group;
+    else if (rString == u"custom")
+        return sc::AxisType::Custom;
+    return sc::AxisType::Individual;
+}
+
 void addAttributesToSparklineGroup(sc::SparklineGroup& rSparklineGroup,
                                    const AttributeList& rAttribs)
 {
@@ -98,11 +125,13 @@ void addAttributesToSparklineGroup(sc::SparklineGroup& rSparklineGroup,
 
     rSparklineGroup.m_fLineWeight = rAttribs.getDouble(XML_lineWeight, 0.75);
 
-    rSparklineGroup.m_sType = rAttribs.getString(XML_type, "line");
+    OUString sType = rAttribs.getString(XML_type, "line");
+    rSparklineGroup.m_eType = parseSparklineType(sType);
 
     rSparklineGroup.m_bDateAxis = rAttribs.getBool(XML_dateAxis, false);
 
-    rSparklineGroup.m_sDisplayEmptyCellsAs = rAttribs.getString(XML_displayEmptyCellsAs, "zero");
+    OUString sDisplayEmptyCellsAs = rAttribs.getString(XML_displayEmptyCellsAs, "zero");
+    rSparklineGroup.m_eDisplayEmptyCellsAs = parseDisplayEmptyCellAs(sDisplayEmptyCellsAs);
 
     rSparklineGroup.m_bMarkers = rAttribs.getBool(XML_markers, false);
     rSparklineGroup.m_bHigh = rAttribs.getBool(XML_high, false);
@@ -113,16 +142,19 @@ void addAttributesToSparklineGroup(sc::SparklineGroup& rSparklineGroup,
     rSparklineGroup.m_bDisplayXAxis = rAttribs.getBool(XML_displayXAxis, false);
     rSparklineGroup.m_bDisplayHidden = rAttribs.getBool(XML_displayHidden, false);
 
-    rSparklineGroup.m_sMinAxisType = rAttribs.getString(XML_minAxisType, "individual");
-    rSparklineGroup.m_sMaxAxisType = rAttribs.getString(XML_maxAxisType, "individual");
+    OUString sMinAxisType = rAttribs.getString(XML_minAxisType, "individual");
+    rSparklineGroup.m_eMinAxisType = parseAxisType(sMinAxisType);
+
+    OUString sMaxAxisType = rAttribs.getString(XML_maxAxisType, "individual");
+    rSparklineGroup.m_eMaxAxisType = parseAxisType(sMaxAxisType);
 
     rSparklineGroup.m_bRightToLeft = rAttribs.getBool(XML_rightToLeft, false);
 
     rSparklineGroup.m_sUID = rAttribs.getString(XML_uid, OUString());
 
-    if (rSparklineGroup.m_sMaxAxisType == "custom")
+    if (rSparklineGroup.m_eMaxAxisType == sc::AxisType::Custom)
         rSparklineGroup.m_aManualMax = oManualMax.get();
-    if (rSparklineGroup.m_sMinAxisType == "custom")
+    if (rSparklineGroup.m_eMinAxisType == sc::AxisType::Custom)
         rSparklineGroup.m_aManualMin = oManualMin.get();
 }
 

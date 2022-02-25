@@ -2440,12 +2440,13 @@ void drawSparkline(sc::Sparkline* pSparkline, vcl::RenderContext& rRenderContext
         }
     }
 
-    if (pSparklineGroup->m_sType == "column")
+    if (pSparklineGroup->m_eType == sc::SparklineType::Column)
     {
         drawColumn(rRenderContext, rRectangle, aValues, nMin, nMax);
     }
-    else if (pSparklineGroup->m_sType == "stacked")
+    else if (pSparklineGroup->m_eType == sc::SparklineType::Stacked)
     {
+        // transform the data to 1, -1
         for (auto & rValue : aValues)
         {
             if (rValue != 0.0)
@@ -2453,7 +2454,7 @@ void drawSparkline(sc::Sparkline* pSparkline, vcl::RenderContext& rRenderContext
         }
         drawColumn(rRenderContext, rRectangle, aValues, -1, 1);
     }
-    else if (pSparklineGroup->m_sType == "line")
+    else if (pSparklineGroup->m_eType == sc::SparklineType::Line)
     {
         drawLine(rRenderContext, rRectangle, aValues, nMin, nMax);
     }
