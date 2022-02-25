@@ -28,6 +28,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/settings.hxx>
+#include <comphelper/lok.hxx>
 
 #include <svdata.hxx>
 #include <window.h>
@@ -926,7 +927,9 @@ Point DockingWindow::GetFloatingPos() const
             aData.SetMask( WindowStateMask::Pos );
             pWrapper->mpFloatWin->GetWindowStateData( aData );
             Point aPos( aData.GetX(), aData.GetY() );
-            aPos = pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
+            // LOK needs logic coordinates not absolute screen position for autofilter menu
+            if (!comphelper::LibreOfficeKit::isActive() || get_id() != "check_list_menu")
+                aPos = pWrapper->mpFloatWin->GetParent()->ImplGetFrameWindow()->AbsoluteScreenToOutputPixel( aPos );
             return aPos;
         }
         else
