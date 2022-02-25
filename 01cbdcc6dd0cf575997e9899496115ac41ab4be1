@@ -70,6 +70,24 @@
       "parentUuid": "44e9a8c7_edbe8787",
       "revId": "01cbdcc6dd0cf575997e9899496115ac41ab4be1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cfc8e43_accd56f1",
+        "filename": "sw/qa/uitest/writer_tests6/edit_file_properties_before_saving.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-25T12:31:25Z",
+      "side": 1,
+      "message": "Now patch in https://gerrit.libreoffice.org/c/core/+/130530/1",
+      "parentUuid": "17df8957_e2bc0ef5",
+      "revId": "01cbdcc6dd0cf575997e9899496115ac41ab4be1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
