@@ -25,6 +25,9 @@
 #include <salgdi.hxx>
 #include <sft.hxx>
 
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/infobar.hxx>
+
 
 #if ENABLE_LIBEOT
 extern "C"
@@ -155,6 +158,10 @@ bool EmbeddedFontsHelper::addEmbeddedFont( const uno::Reference< io::XInputStrea
         // It would be actually better to open the document in read-only mode in this case,
         // warn the user about this, and provide a button to drop the font(s) in order
         // to switch to editing.
+
+        SfxViewFrame* ptr;
+        ptr->AppendInfoBar("embeddedFonts", "", "Some fonts embedded in the document couldn't be loaded due to restricted licensing rights", InfobarType::INFO, true);
+
         SAL_INFO( "vcl.fonts", "Ignoring embedded font that is not usable for editing" );
         osl::File::remove( fileUrl );
         return false;
