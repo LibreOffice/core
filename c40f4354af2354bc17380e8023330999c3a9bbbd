@@ -16,6 +16,23 @@
       "message": "maybe fix the other one at:\n\n  svx/source/form/fmtextcontrolshell.cxx:1259:        Reference\u003c XDispatch \u003e xDispatcher \u003d _rxProvider-\u003equeryDispatch( aFeatureURL, OUString(), 0xFF );\n\ntoo ?",
       "revId": "c40f4354af2354bc17380e8023330999c3a9bbbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f059c29_30884bb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-25T10:41:28Z",
+      "side": 1,
+      "message": "I saw that one too, but that one look less clear cut as to what its trying to do",
+      "revId": "c40f4354af2354bc17380e8023330999c3a9bbbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
