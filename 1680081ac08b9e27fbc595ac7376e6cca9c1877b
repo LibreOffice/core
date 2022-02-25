@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "42e4aca4_e7d31e2c",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-25T07:42:07Z",
+      "side": 1,
+      "message": "Please now add some comment there in the introduced code, that would describe where we rely on this drive letter case. Have you checked why svl_urihelper test checks that, and where does the uppercase in its counterpart value comes from?",
+      "parentUuid": "6154b9bd_888bcc8b",
+      "range": {
+        "startLine": 1595,
+        "startChar": 0,
+        "endLine": 1595,
+        "endChar": 49
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0d082f7_51040dee",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 5

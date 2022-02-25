@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13ccbe2f_1eb2f24d",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1599,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-25T07:42:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e3098b6_026a4efb",
+      "revId": "4f94f56220d49bcd5eb0bc35c1e633a2b6b6192f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10c51eb5_b45d682b",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "\u003e 3. Check if the previous character is rtl::isAsciiLowerCase\n\nOTOH, explicit check looks redundant, as rtl::toAsciiUpperCase will do something only in case it\u0027s isAsciiLowerCase - just do the #4, without #3.",
       "parentUuid": "10c51eb5_b45d682b",
+      "revId": "4f94f56220d49bcd5eb0bc35c1e633a2b6b6192f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be03ee18_d22a9df1",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-25T07:42:07Z",
+      "side": 1,
+      "message": "Thanks - done.",
+      "parentUuid": "10335e84_ebac0d79",
       "revId": "4f94f56220d49bcd5eb0bc35c1e633a2b6b6192f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
