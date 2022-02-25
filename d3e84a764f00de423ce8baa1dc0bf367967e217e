@@ -16,6 +16,40 @@
       "message": "Checked that this does not break a no-pch build on Win",
       "revId": "d3e84a764f00de423ce8baa1dc0bf367967e217e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c52ac570_fce5271a",
+        "filename": "sfx2/source/devtools/ObjectInspectorTreeHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-25T13:13:11Z",
+      "side": 1,
+      "message": "Why don\u0027t you just remove this?",
+      "revId": "d3e84a764f00de423ce8baa1dc0bf367967e217e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c790bc31_4a1b9f59",
+        "filename": "sfx2/source/devtools/ObjectInspectorTreeHandler.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-25T13:13:11Z",
+      "side": 1,
+      "message": "Same here.",
+      "revId": "d3e84a764f00de423ce8baa1dc0bf367967e217e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
