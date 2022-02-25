@@ -1975,6 +1975,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     maCellNotes.swap(rCol.maCellNotes);
 
     // Swap all CellStoreEvent mdds event_func related.
+    maCells.event_handler().swap(rCol.maCells.event_handler());
     std::swap( mnBlkCountFormula, rCol.mnBlkCountFormula);
 
     // notes update caption
