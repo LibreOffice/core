@@ -222,6 +222,8 @@ public:
     void testProtectedSheetEditByRow();
     void testProtectedSheetEditByColumn();
 
+    void testInsertColumnsWithFormulaCells();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testSharedStringPool);
@@ -311,6 +313,7 @@ public:
     CPPUNIT_TEST(testPrecisionAsShown);
     CPPUNIT_TEST(testProtectedSheetEditByRow);
     CPPUNIT_TEST(testProtectedSheetEditByColumn);
+    CPPUNIT_TEST(testInsertColumnsWithFormulaCells);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -6642,6 +6645,44 @@ void Test::testProtectedSheetEditByColumn()
     }
 
     m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testInsertColumnsWithFormulaCells()
+{
+    m_pDoc->InsertTab(0, "Tab1");
+
+    std::set<SCCOL> aCols = m_pDoc->QueryColumnsWithFormulaCells(0);
+    CPPUNIT_ASSERT_MESSAGE("empty sheet should contain no formula cells.", aCols.empty());
+
+    // insert formula cells in columns 2, 4 and 6.
+    m_pDoc->SetFormula(ScAddress(2, 2, 0), "=1", m_pDoc->GetGrammar());
+    m_pDoc->SetFormula(ScAddress(4, 2, 0), "=1", m_pDoc->GetGrammar());
+    m_pDoc->SetFormula(ScAddress(6, 2, 0), "=1", m_pDoc->GetGrammar());
+
+    aCols = m_pDoc->QueryColumnsWithFormulaCells(0);
+
+    std::set<SCCOL> aExpected = { 2, 4, 6 };
+    CPPUNIT_ASSERT_MESSAGE("Columns 2, 4 and 6 should contain formula cells.", aExpected == aCols);
+
+    // Insert 2 columns at column A to shift everything to right by 2.
+    m_pDoc->InsertCol(0, 0, MAXROW, 0, 0, 2);
+
+    aExpected = { 4, 6, 8 };
+    aCols = m_pDoc->QueryColumnsWithFormulaCells(0);
+    CPPUNIT_ASSERT_MESSAGE("Columns 4, 6 and 8 should contain formula cells.", aExpected == aCols);
+
+    try
+    {
+        m_pDoc->CheckIntegrity(0);
+    }
+    catch (const std::exception& e)
+    {
+        std::ostringstream os;
+        os << "document integrity check failed: " << e.what();
+        CPPUNIT_FAIL(os.str());
+    }
+
     m_pDoc->DeleteTab(0);
 }
 
