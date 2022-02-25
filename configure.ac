@@ -970,7 +970,7 @@ darwin*|macos*) # macOS
     INSTROOTBASESUFFIX=/$PRODUCTNAME_WITHOUT_SPACES.app
     INSTROOTCONTENTSUFFIX=/Contents
     SDKDIRNAME=${PRODUCTNAME_WITHOUT_SPACES}${PRODUCTVERSION}_SDK
-    # See comment above the case "$host_os"
+    # See "Default values, as such probably valid just for Linux" comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
 
     # -fPIC is default
@@ -1019,7 +1019,7 @@ ios*) # iOS
     if test "$enable_ios_simulator" = "yes"; then
         host=x86_64-apple-darwin
     fi
-    # See comment above the case "$host_os"
+    # See "Default values, as such probably valid just for Linux" comment above the case "$host_os"
     LINKFLAGSSHL="-dynamiclib -single_module"
 
     # -fPIC is default
