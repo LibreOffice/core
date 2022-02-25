@@ -50,6 +50,24 @@
       "message": "Aha.\n\nSo this seems to be a problem with passing the information from lower level (vcl) to the higher level (sfx2) - see https://wiki.documentfoundation.org/Development/Code_Overview. Of course, it\u0027s impossible to just call anything sfx2 from here, because there\u0027s no sfx2 on this layer.\n\nI suppose we need to store this information in EmbeddedFontsHelper, and retrieve it on the sfx2 level (or higher) when finished loading document, to add the infobar there.\n\nSo first, please think how to store the information. Also look at the call stack to see what calls this code on loading, to think which place would be a candidate for the next \"show infobar\" part 😊",
       "revId": "63a71fd7b9ad7dd81331bd3b11c37da4504556c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec3b79e0_0de8f894",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-02-25T13:09:52Z",
+      "side": 1,
+      "message": "Thanks a lot. Let me study about it.",
+      "parentUuid": "e8551747_8438dc43",
+      "revId": "63a71fd7b9ad7dd81331bd3b11c37da4504556c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
