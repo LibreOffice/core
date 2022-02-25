@@ -5,8 +5,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-use_sleep = False
-
 DEFAULT_SLEEP = 0.1
 
 MAX_WAIT = 60

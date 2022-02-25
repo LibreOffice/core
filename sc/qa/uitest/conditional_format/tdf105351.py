@@ -13,7 +13,6 @@ from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from uitest.debug import sleep
 #Bug 105351 - FORMATTING: Unable to change Data Bar conditional formatting
 class tdf105351(UITestCase):
     def test_tdf105351_cond_format_data_bar(self):
