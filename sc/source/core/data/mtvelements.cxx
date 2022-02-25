@@ -56,6 +56,11 @@ void CellStoreEvent::stop()
     mpCol = nullptr;
 }
 
+void CellStoreEvent::swap(CellStoreEvent& other)
+{
+    std::swap(mpCol, other.mpCol);
+}
+
 ColumnBlockPositionSet::ColumnBlockPositionSet(ScDocument& rDoc) : mrDoc(rDoc) {}
 
 ColumnBlockPosition* ColumnBlockPositionSet::getBlockPosition(SCTAB nTab, SCCOL nCol)

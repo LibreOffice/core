@@ -98,6 +98,8 @@ public:
 
     /** Stop processing events. */
     void stop();
+
+    void swap(CellStoreEvent& other);
 };
 
 struct CellStoreTrait
