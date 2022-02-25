@@ -375,17 +375,7 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
     SAL_THROW_EXTERN_C()
 {
     assert(ppThis);
-    sal_Int32 nLen;
-
-    if ( pCharStr )
-    {
-        const char* pTempStr = pCharStr;
-        while( *pTempStr )
-            pTempStr++;
-        nLen = pTempStr-pCharStr;
-    }
-    else
-        nLen = 0;
+    sal_Int32 nLen = pCharStr ? rtl::str::getLength(pCharStr) : 0;
 
     if ( !nLen )
     {
