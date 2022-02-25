@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4f4542d_68f568ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-25T18:12:37Z",
+      "side": 1,
+      "message": "Looks good. I tried the test in an unpatched version and it passes with the same results, so nothing changes in this regard (whatever the expected values difference to the web site mentioned might be, it didn\u0027t change).\n",
+      "revId": "5ffcb28ad1ae6d66d2411a69248b0db70f97878a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
