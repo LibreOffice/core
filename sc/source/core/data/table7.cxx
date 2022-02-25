@@ -630,4 +630,23 @@ bool ScTable::SetLOKFreezeRow(SCROW nFreezeRow)
     return false;
 }
 
+std::set<SCCOL> ScTable::QueryColumnsWithFormulaCells() const
+{
+    std::set<SCCOL> aColIndices;
+
+    for (const auto& pCol : aCol)
+    {
+        if (pCol->HasFormulaCell())
+            aColIndices.insert(pCol->GetCol());
+    }
+
+    return aColIndices;
+}
+
+void ScTable::CheckIntegrity() const
+{
+    for (const auto& pCol : aCol)
+        pCol->CheckIntegrity();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
