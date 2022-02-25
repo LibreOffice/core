@@ -1304,8 +1304,7 @@ bool ScAttrArray::HasAttrib_Impl(const ScPatternAttr* pPattern, HasAttrFlags nMa
     }
     if ( nMask & HasAttrFlags::Conditional )
     {
-        bool bContainsCondFormat = pPattern->GetItem( ATTR_CONDITIONAL ).GetCondFormatData().empty();
-        if ( bContainsCondFormat )
+        if ( !pPattern->GetItem( ATTR_CONDITIONAL ).GetCondFormatData().empty())
             bFound = true;
     }
     if ( nMask & HasAttrFlags::Protected )
