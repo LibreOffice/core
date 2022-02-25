@@ -524,6 +524,16 @@ OString SwSelPaintRects::getLOKPayload( int nType, int nViewId, bool* ignore ) c
             SwRect aEndRect;
             FillStartEnd(aStartRect, aEndRect);
 
+            if (aStartRect.HasArea() && aEndRect.HasArea())
+            {
+                // no selection
+                if (aStartRect == aEndRect)
+                {
+                    *ignore = true;
+                    return OString();
+                }
+            }
+
             if( nType == LOK_CALLBACK_TEXT_SELECTION_START )
             {
                 if (aStartRect.HasArea())
