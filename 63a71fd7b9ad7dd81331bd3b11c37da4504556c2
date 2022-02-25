@@ -16,6 +16,23 @@
       "message": "This is not completed yet; I am still working on it.\n\nMike, please have a look about the initialization of pointer I asked you about.\n",
       "revId": "63a71fd7b9ad7dd81331bd3b11c37da4504556c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac37a060_f2295073",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-02-25T12:50:12Z",
+      "side": 1,
+      "message": "Also, Heiko recommeded me to use some codes like -\n\n       Shell* pShell \u003d GetShell();\n       SfxViewFrame* pViewFrame \u003d pShell ? pShell-\u003eGetViewFrame() : nullptr;\n\n       Please check SfxInfoBarContainerWindow::isInfobarEnabled() for the full\n       integration (it allows to disable per Tools \u003e Options \u003e Advanced \u003e Expert Settings).\n\nI searched and found one at basctl/source/basicide/baside3.cxx. I also found that this \u0027Shell\u0027 is being declared at basctl/source/inc/basidesh.hxx and I cannot import this header file \"basidesh.hxx\" in order to use \"shell\".",
+      "revId": "63a71fd7b9ad7dd81331bd3b11c37da4504556c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
