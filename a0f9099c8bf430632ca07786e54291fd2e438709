@@ -33,6 +33,24 @@
       "message": "I think this is ok.\nFor some file formats we should inspect whether the warning is actually a warning or is a data loss and thus should be an error instead, for example dBase import that exceeds number of rows sets SCWARN_IMPORT_RANGE_OVERFLOW (and likely also some other places that set it) that maybe rather should be SCERR_IMPORT_RANGE_OVERFLOW. But so far at least the dBase example set also bRet\u003dtrue for that case.\n\nOdd might be that the overflow occurred with binary .xls test documents, because the older BIFF formats don\u0027t support more than 256 columns, so for a broken or crafted document an error may have been appropriate.. unless those are BIFF8, which knows 16k columns as well.\n",
       "revId": "a0f9099c8bf430632ca07786e54291fd2e438709",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6dfb1a8_6dbe2f21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-25T21:28:02Z",
+      "side": 1,
+      "message": "\u003e I think this is ok.\n\u003e For some file formats we should inspect whether the warning is actually a warning or is a data loss and thus should be an error instead, for example dBase import that exceeds number of rows sets SCWARN_IMPORT_RANGE_OVERFLOW (and likely also some other places that set it) that maybe rather should be SCERR_IMPORT_RANGE_OVERFLOW. But so far at least the dBase example set also bRet\u003dtrue for that case.\n\nIf I try to import 16k columns document from Excel into 1k column Calc, that will result in SCWARN_IMPORT_COLUMN_OVERFLOW which is a warning about a data loss. I\u0027m confused why you say \"warning or data loss\", it\u0027s both. When we load such Excel files, we cut the data and show the warning. Current master even without this patch, to be clear.\n\n\u003e Odd might be that the overflow occurred with binary .xls test documents, because the older BIFF formats don\u0027t support more than 256 columns, so for a broken or crafted document an error may have been appropriate.. unless those are BIFF8, which knows 16k columns as well.\n\nThe filter selected is \"MS Excel 97\", so it is presumably BIFF8.",
+      "parentUuid": "398d4bf3_7a286131",
+      "revId": "a0f9099c8bf430632ca07786e54291fd2e438709",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
