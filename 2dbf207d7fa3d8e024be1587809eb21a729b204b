@@ -34,6 +34,24 @@
       "parentUuid": "2587b604_35ffadcf",
       "revId": "2dbf207d7fa3d8e024be1587809eb21a729b204b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a211f5b_10dcece4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-25T12:56:46Z",
+      "side": 1,
+      "message": "Yes, I hope the update MS doc will arrive sooner than later, then can refer to that.",
+      "parentUuid": "7aa275db_68f3351e",
+      "revId": "2dbf207d7fa3d8e024be1587809eb21a729b204b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
