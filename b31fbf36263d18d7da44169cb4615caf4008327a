@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3c5e313_0afc19bb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-02-25T12:07:59Z",
+      "side": 1,
+      "message": "Hi Gabor,\nI Just restored this patch but it has merge conflict now.\nJust put it back to abandon if you don\u0027t want to work on it anymore but it\u0027s a pity this patch would go to waste",
+      "revId": "b31fbf36263d18d7da44169cb4615caf4008327a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
