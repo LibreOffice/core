@@ -16,6 +16,30 @@
 
 namespace sc
 {
+/** Supported sparkline types */
+enum class SparklineType
+{
+    Line,
+    Column,
+    Stacked
+};
+
+/** The method of calculating the axis min or max value */
+enum class AxisType
+{
+    Individual, // calculate the min/max of a sparkline
+    Group, // calculate the min or max of the whole sparkline group
+    Custom // user defined
+};
+
+/** Determines how to display the empty cells */
+enum class DisplayEmptyCellAs
+{
+    Span,
+    Gap,
+    Zero // empty cell equals zero
+};
+
 /** Common properties for a group of sparklines */
 class SC_DLLPUBLIC SparklineGroup
 {
@@ -29,16 +53,16 @@ public:
     Color m_aColorHigh;
     Color m_aColorLow;
 
-    OUString m_sMinAxisType; // individual, group, custom
-    OUString m_sMaxAxisType; // individual, group, custom
+    AxisType m_eMinAxisType;
+    AxisType m_eMaxAxisType;
 
     double m_fLineWeight; // In pt
 
-    OUString m_sType; // line, column, stacked
+    SparklineType m_eType;
 
     bool m_bDateAxis;
 
-    OUString m_sDisplayEmptyCellsAs; // span, gap, zero
+    DisplayEmptyCellAs m_eDisplayEmptyCellsAs;
 
     bool m_bMarkers;
     bool m_bHigh;
