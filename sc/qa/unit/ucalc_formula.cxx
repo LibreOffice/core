@@ -893,7 +893,7 @@ void TestFormula::testFormulaParseReference()
         }
         else
         {
-            CPPUNIT_ASSERT_EQUAL(SCROW(16383), m_pDoc->MaxRow());
+            CPPUNIT_ASSERT_EQUAL(SCCOL(16383), m_pDoc->MaxCol());
             for (const auto& check : col16384Checks)
             {
                 m_pDoc->SetString(ScAddress(0,0,0), OUString::createFromAscii(check[0]));
