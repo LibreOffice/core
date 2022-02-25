@@ -120,7 +120,7 @@ lcl_SplineCalculation::lcl_SplineCalculation(
           m_fYp1( fY1FirstDerivation ),
           m_fYpN( fYnFirstDerivation ),
           m_nKLow( 0 ),
-          m_nKHigh( rSortedPoints.size() - 1 ),
+          m_nKHigh( m_aPoints.size() - 1 ),
           m_fLastInterpolatedValue(std::numeric_limits<double>::infinity())
 {
     Calculate();
@@ -132,7 +132,7 @@ lcl_SplineCalculation::lcl_SplineCalculation(
           m_fYp1( 0.0 ),  /*dummy*/
           m_fYpN( 0.0 ),  /*dummy*/
           m_nKLow( 0 ),
-          m_nKHigh( rSortedPoints.size() - 1 ),
+          m_nKHigh( m_aPoints.size() - 1 ),
           m_fLastInterpolatedValue(std::numeric_limits<double>::infinity())
 {
     CalculatePeriodic();
