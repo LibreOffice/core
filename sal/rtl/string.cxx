@@ -618,13 +618,6 @@ void SAL_CALL rtl_string_newConcat(rtl_String** ppThis, rtl_String* pLeft, rtl_S
     rtl::str::newConcat(ppThis, pLeft, pRight);
 }
 
-static void rtl_string_newConcatL(
-    rtl_String ** newString, rtl_String * left, char const * right,
-    sal_Int32 rightLength)
-{
-    rtl::str::newConcat(newString, left, right, rightLength);
-}
-
 void SAL_CALL rtl_string_ensureCapacity(rtl_String** ppThis, sal_Int32 size) SAL_THROW_EXTERN_C()
 {
     rtl::str::ensureCapacity(ppThis, size);

@@ -1378,33 +1378,21 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
     assert(nNewSubStrLen >= 0);
     /* Append? */
     if ( nIndex >= pStr->length )
-    {
-        if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
-            rtl_string_newConcatL( ppThis, pStr, pNewSubStr, nNewSubStrLen );
-        else
-            rtl_uString_newConcatUtf16L( ppThis, pStr, pNewSubStr, nNewSubStrLen );
-        return;
-    }
+        return newConcat(ppThis, pStr, pNewSubStr, nNewSubStrLen);
 
     /* not more than the String length could be deleted */
     if ( nCount >= pStr->length-nIndex )
     {
-        nCount = pStr->length-nIndex;
-
         /* Assign of NewSubStr? */
-        if ( !nIndex && (nCount >= pStr->length) )
-        {
-            newFromStr_WithLength( ppThis, pNewSubStr, nNewSubStrLen );
-            return;
-        }
+        if (nIndex == 0)
+            return newFromStr_WithLength( ppThis, pNewSubStr, nNewSubStrLen );
+
+        nCount = pStr->length - nIndex;
     }
 
     /* Assign of Str? */
     if ( !nCount && !nNewSubStrLen )
-    {
-        assign( ppThis, pStr );
-        return;
-    }
+        return assign(ppThis, pStr);
 
     IMPL_RTL_STRINGDATA*    pOrg = *ppThis;
     sal_Int32               nNewLen;
