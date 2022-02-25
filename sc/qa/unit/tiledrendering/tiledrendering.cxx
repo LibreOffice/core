@@ -1236,7 +1236,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 50985, 32212230, 63990), aView.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(-75, 51240, 32212230, 63990), aView.m_aInvalidations[0]);
 
     // move on the right
     for (int i = 0; i < 200; ++i)
@@ -1253,7 +1253,7 @@ void ScTiledRenderingTest::testInvalidateOnInserRowCol()
     Scheduler::ProcessEventsToIdle();
     CPPUNIT_ASSERT(aView.m_bInvalidateTiles);
     CPPUNIT_ASSERT_EQUAL(size_t(2), aView.m_aInvalidations.size());
-    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(253650, -15, 32212230, 63990), aView.m_aInvalidations[0]);
+    CPPUNIT_ASSERT_EQUAL(tools::Rectangle(254925, -15, 32212230, 63990), aView.m_aInvalidations[0]);
 }
 
 void ScTiledRenderingTest::testCommentCallback()
