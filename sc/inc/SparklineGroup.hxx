@@ -16,6 +16,27 @@
 
 namespace sc
 {
+enum class SparklineType
+{
+    Line,
+    Column,
+    Stacked
+};
+
+enum class AxisType
+{
+    Individual,
+    Group,
+    Custom
+};
+
+enum class DisplayEmptyCellAs
+{
+    Span,
+    Gap,
+    Zero
+};
+
 class SC_DLLPUBLIC SparklineGroup
 {
 public:
@@ -28,16 +49,16 @@ public:
     Color m_aColorHigh;
     Color m_aColorLow;
 
-    OUString m_sMinAxisType; // individual, group, custom
-    OUString m_sMaxAxisType;
+    AxisType m_eMinAxisType;
+    AxisType m_eMaxAxisType;
 
     double m_fLineWeight; // In pt
 
-    OUString m_sType; // line, column, stacked
+    SparklineType m_eType;
 
     bool m_bDateAxis;
 
-    OUString m_sDisplayEmptyCellsAs; // span, gap, zero
+    DisplayEmptyCellAs m_eDisplayEmptyCellsAs; // span, gap, zero
 
     bool m_bMarkers;
     bool m_bHigh;
