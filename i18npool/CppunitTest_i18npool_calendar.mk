@@ -7,16 +7,16 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-$(eval $(call gb_CppunitTest_CppunitTest,i18npool_test_calendar))
+$(eval $(call gb_CppunitTest_CppunitTest,i18npool_calendar))
 
-$(eval $(call gb_CppunitTest_set_include,i18npool_test_calendar,\
+$(eval $(call gb_CppunitTest_set_include,i18npool_calendar,\
     $$(INCLUDE) \
     -I$(SRCDIR)/i18npool/inc \
 ))
 
-$(eval $(call gb_CppunitTest_use_sdk_api,i18npool_test_calendar))
+$(eval $(call gb_CppunitTest_use_sdk_api,i18npool_calendar))
 
-$(eval $(call gb_CppunitTest_use_libraries,i18npool_test_calendar,\
+$(eval $(call gb_CppunitTest_use_libraries,i18npool_calendar,\
 	cppu \
 	cppuhelper \
 	sal \
@@ -24,19 +24,19 @@ $(eval $(call gb_CppunitTest_use_libraries,i18npool_test_calendar,\
     i18npool \
 ))
 
-$(eval $(call gb_CppunitTest_use_externals,i18npool_test_calendar,\
+$(eval $(call gb_CppunitTest_use_externals,i18npool_calendar,\
     icui18n \
     icuuc \
     icu_headers \
 ))
 
-$(eval $(call gb_CppunitTest_add_exception_objects,i18npool_test_calendar,\
+$(eval $(call gb_CppunitTest_add_exception_objects,i18npool_calendar,\
     i18npool/qa/cppunit/test_calendar \
 ))
 
-$(eval $(call gb_CppunitTest_use_ure,i18npool_test_calendar))
+$(eval $(call gb_CppunitTest_use_ure,i18npool_calendar))
 
-$(eval $(call gb_CppunitTest_use_components,i18npool_test_calendar,\
+$(eval $(call gb_CppunitTest_use_components,i18npool_calendar,\
 	i18npool/util/i18npool \
 ))
 
