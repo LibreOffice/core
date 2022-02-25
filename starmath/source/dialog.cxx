@@ -1349,8 +1349,9 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
                        return pSym1->GetCharacter() < pSym2->GetCharacter();
                    } );
 
+        const bool bEmptySymbolSet = aSymbolSet.empty();
         m_xSymbolSetDisplay->SetSymbolSet( std::move(aSymbolSet) );
-        if (!aSymbolSet.empty())
+        if (!bEmptySymbolSet)
             SelectSymbol(0);
 
         bRet = true;
