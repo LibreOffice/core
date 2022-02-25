@@ -29,6 +29,7 @@
 #include <sal/types.h>
 
 #include <memory>
+#include <tuple>
 
 namespace utl { class TempFile; }
 
@@ -112,6 +113,18 @@ SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const ScRange
 SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const Color& rColor);
 
 SCQAHELPER_DLLPUBLIC std::ostream& operator<<(std::ostream& rStrm, const OpCode& rCode);
+
+template<template<typename...> typename ContainerT, typename ...T>
+std::ostream& operator<<(std::ostream& rStrm, const ContainerT<T...>& rVals)
+{
+    using value_type = typename std::tuple_element<0, std::tuple<T...>>::type;
+
+    rStrm << "{";
+    std::copy(rVals.begin(), rVals.end(), std::ostream_iterator<value_type>(rStrm, ", "));
+    rStrm << "}";
+
+    return rStrm;
+}
 
 // Why is this here and not in osl, and using the already existing file
 // handling APIs? Do we really want to add arbitrary new file handling
