@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ae26ff7_1108da65",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-25T08:36:05Z",
+      "side": 1,
+      "message": "From file_url.cxx (w32)\n```\n/* File specification can\u0027t be removed therefore the short path is either a drive\nor a network share. If still levels to skip are left, the path specification\ntries to travel below the file system root */\nif (nSkipLevels)\n    lpszPath[0] \u003d 0;\nelse\n    _wcsupr(lpszPath);\n```\n\nI belive svl_urihelper test case checks for a case related to presence of drive in the url. and that drive being the common part. (as compared to the next case). \n\nShould this comment be okay\n```\n/* Capitalizes drive names, GetLongPathW doesn\u0027t do it by default, eg: c:\\\\ -\u003e C:\\\\ */\n```",
+      "parentUuid": "42e4aca4_e7d31e2c",
+      "range": {
+        "startLine": 1595,
+        "startChar": 0,
+        "endLine": 1595,
+        "endChar": 49
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0d082f7_51040dee",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 5
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "\u003e I am sure there would be better ways of doing this\n\nPlease change the character right in the buffer, using std::find, and rtl::rtl::toAsciiUpperCase.\n\n\u003e could it be related to this code?\n\nNo idea - needs debugging.",
       "parentUuid": "b0d082f7_51040dee",
+      "range": {
+        "startLine": 1598,
+        "startChar": 0,
+        "endLine": 1598,
+        "endChar": 13
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0947dc9a_0f7070c0",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-25T08:36:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb0b4420_b34f18de",
       "range": {
         "startLine": 1598,
         "startChar": 0,
