@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c340f4d9_d23e66db",
+        "filename": "sfx2/source/doc/doctemplates.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1284,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-25T11:33:24Z",
+      "side": 1,
+      "message": "Did you really mean to keep this commented out part in? (I don\u0027t know the code, I\u0027ve just noticed this and one way or another it looks like a mistake.)",
+      "revId": "02caa6e40cfa55d96befc82515b343045b5cfd7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
