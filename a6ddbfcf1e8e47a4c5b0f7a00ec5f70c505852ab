@@ -16,6 +16,23 @@
       "message": "This chain of 4 commits are tied together. This is the last of the chain. I +1\u0027d the first one. I think this series has turned out quite nice.",
       "revId": "a6ddbfcf1e8e47a4c5b0f7a00ec5f70c505852ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ad04f62_58539898",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-25T14:24:50Z",
+      "side": 1,
+      "message": "Nice ones. I also like the series of self-contained commits to address individual problems.\nThanks!",
+      "revId": "a6ddbfcf1e8e47a4c5b0f7a00ec5f70c505852ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
