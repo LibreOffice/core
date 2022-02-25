@@ -276,7 +276,10 @@ OUString SdrObjGroup::TakeObjNameSingul() const
     }
     else
     {
-        sName = SvxResId(STR_ObjNameSingulGRUP);
+        if(isDiagram())
+            sName = SvxResId(STR_ObjNameSingulDIAGRAM);
+        else
+            sName = SvxResId(STR_ObjNameSingulGRUP);
     }
 
     const OUString aName(GetName());
@@ -292,6 +295,8 @@ OUString SdrObjGroup::TakeObjNamePlural() const
 {
     if(0 == GetObjCount())
         return SvxResId(STR_ObjNamePluralGRUPEMPTY);
+    if(isDiagram())
+        return SvxResId(RID_GALLERYSTR_THEME_DIAGRAMS);
     return SvxResId(STR_ObjNamePluralGRUP);
 }
 
