@@ -1392,6 +1392,8 @@ void CallbackFlushHandler::setUpdatedType( int nType, bool value )
     if( m_updatedTypes.size() <= o3tl::make_unsigned( nType ))
         m_updatedTypes.resize( nType + 1 ); // new are default-constructed, i.e. false
     m_updatedTypes[ nType ] = value;
+    if(value)
+        startTimer();
 }
 
 void CallbackFlushHandler::resetUpdatedType( int nType )
@@ -1406,6 +1408,8 @@ void CallbackFlushHandler::setUpdatedTypePerViewId( int nType, int nViewId, int 
     if( types.size() <= o3tl::make_unsigned( nType ))
         types.resize( nType + 1 ); // new are default-constructed, i.e. 'set' is false
     types[ nType ] = PerViewIdData{ value, nSourceViewId };
+    if(value)
+        startTimer();
 }
 
 void CallbackFlushHandler::resetUpdatedTypePerViewId( int nType, int nViewId )
@@ -1730,12 +1734,7 @@ void CallbackFlushHandler::queue(const int type, CallbackData& aCallbackData)
 #endif
 
     lock.unlock();
-    if (!IsActive())
-    {
-        Start();
-    }
-    if (!m_TimeoutIdle.IsActive())
-        m_TimeoutIdle.Start();
+    startTimer();
 }
 
 bool CallbackFlushHandler::processInvalidateTilesEvent(int type, CallbackData& aCallbackData)
@@ -2216,6 +2215,14 @@ void CallbackFlushHandler::Invoke()
     m_queue2.clear();
     Stop();
     m_TimeoutIdle.Stop();
+}
+
+void CallbackFlushHandler::startTimer()
+{
+    if (!IsActive())
+        Start();
+    if (!m_TimeoutIdle.IsActive())
+        m_TimeoutIdle.Start();
 }
 
 bool CallbackFlushHandler::removeAll(int type)
