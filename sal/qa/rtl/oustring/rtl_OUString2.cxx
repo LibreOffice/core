@@ -30,6 +30,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include <config_options.h>
 #include <o3tl/cppunittraitshelper.hxx>
 
 #include <stringhelper.hxx>
@@ -41,14 +42,22 @@ namespace rtl_OUString
 namespace {
 
 // Avoid -fsanitize=undefined warning e.g. "runtime error: value 1e+99 is
-// outside the range of representable values of type 'float'":
+// outside the range of representable values of type 'float'" with Clang prior to
+// <https://github.com/llvm/llvm-project/commit/9e52c43090f8cd980167bbd2719878ae36bcf6b5> "Treat the
+// range of representable values of floating-point types as [-inf, +inf] not as [-max, +max]"
+// (ENABLE_RUNTIME_OPTIMIZATIONS is an approximation for checking whether building is done without
+// -fsanitize=undefined):
 float doubleToFloat(double x) {
+#if !defined __clang__ || __clang_major__ >= 9 || ENABLE_RUNTIME_OPTIMIZATIONS
+    return static_cast<float>(x);
+#else
     return
         x < -std::numeric_limits<float>::max()
         ? -std::numeric_limits<float>::infinity()
         : x > std::numeric_limits<float>::max()
         ? std::numeric_limits<float>::infinity()
         : static_cast<float>(x);
+#endif
 }
 
 }
