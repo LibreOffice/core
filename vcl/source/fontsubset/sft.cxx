@@ -43,6 +43,7 @@
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/endian.h>
+#include <fontsubset.hxx>
 #include <algorithm>
 
 namespace vcl
@@ -2278,5 +2279,35 @@ bool getTTCoverage(
 }
 
 } // namespace vcl
+
+int TestFontSubset(const void* data, sal_uInt32 size)
+{
+    int nResult = -1;
+    vcl::TrueTypeFont* pTTF = nullptr;
+    if (OpenTTFontBuffer(data, size, 0, &pTTF) == vcl::SFErrCodes::Ok)
+    {
+        vcl::TTGlobalFontInfo aInfo;
+        GetTTGlobalFontInfo(pTTF, &aInfo);
+
+        sal_uInt16 aGlyphIds[ 256 ] = {};
+        sal_uInt8 aEncoding[ 256 ] = {};
+
+        for (sal_uInt16 c = 32; c < 256; ++c)
+        {
+            aEncoding[c] = c;
+            aGlyphIds[c] = c - 31;
+        }
+
+        CreateTTFromTTGlyphs(pTTF, nullptr, aGlyphIds, aEncoding, 256);
+
+
+        // cleanup
+        CloseTTFont( pTTF );
+        // success
+        nResult = 0;
+    }
+
+    return nResult;
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -30,6 +30,7 @@
 
 #include <impfont.hxx>
 #include <fontattributes.hxx>
+#include <fontsubset.hxx>
 #include <sft.hxx>
 
 #include <algorithm>

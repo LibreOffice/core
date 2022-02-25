@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/font.hxx>
+#include <fontsubset.hxx>
 #include "commonfuzzer.hxx"
 
 #include <config_features.h>
@@ -37,8 +37,7 @@ extern "C" int LLVMFuzzerInitialize(int* argc, char*** argv)
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
-    (void)vcl::Font::identifyFont(data, size);
-    return 0;
+    return TestFontSubset(data, size);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
