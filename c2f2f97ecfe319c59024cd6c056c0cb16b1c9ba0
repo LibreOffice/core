@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a81d408_213c89b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-25T10:21:55Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! Many thanks for supporting the backport!",
+      "revId": "c2f2f97ecfe319c59024cd6c056c0cb16b1c9ba0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
