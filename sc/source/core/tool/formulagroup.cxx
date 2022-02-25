@@ -41,7 +41,7 @@ FormulaGroupEntry::FormulaGroupEntry( ScFormulaCell* pCell, size_t nRow ) :
 
 size_t FormulaGroupContext::ColKey::Hash::operator ()( const FormulaGroupContext::ColKey& rKey ) const
 {
-    return rKey.mnTab * MAXCOLCOUNT + rKey.mnCol;
+    return rKey.mnTab * MAXCOLCOUNT_JUMBO + rKey.mnCol;
 }
 
 FormulaGroupContext::ColKey::ColKey( SCTAB nTab, SCCOL nCol ) : mnTab(nTab), mnCol(nCol) {}
