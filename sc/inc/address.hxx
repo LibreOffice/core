@@ -69,8 +69,10 @@ const SCROW       MAXROW         = MAXROWCOUNT - 1;
 const SCCOL       MAXCOL         = MAXCOLCOUNT - 1;
 const SCTAB       MAXTAB         = MAXTABCOUNT - 1;
 const SCCOLROW    MAXCOLROW      = MAXROW;
-const SCROW       MAXROW_JUMBO   = 16 * 1024 * 1024 - 1;
-const SCCOL       MAXCOL_JUMBO   = 16384 - 1;
+const SCROW       MAXROWCOUNT_JUMBO = 16 * 1024 * 1024;
+const SCCOL       MAXCOLCOUNT_JUMBO = 16384;
+const SCROW       MAXROW_JUMBO   = MAXROWCOUNT_JUMBO - 1;
+const SCCOL       MAXCOL_JUMBO   = MAXCOLCOUNT_JUMBO - 1;
 // Maximum tiled rendering values
 const SCROW       MAXTILEDROW    = 500000;
 // Limit the initial tab count to prevent users to set the count too high,

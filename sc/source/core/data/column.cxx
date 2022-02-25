@@ -875,16 +875,16 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
     pAttrArray->InsertRow( nStartRow, nSize );
 
     maCellNotes.insert_empty(nStartRow, nSize);
-    maCellNotes.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCellNotes.resize(GetDoc().GetMaxRowCount());
 
     maBroadcasters.insert_empty(nStartRow, nSize);
-    maBroadcasters.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maBroadcasters.resize(GetDoc().GetMaxRowCount());
 
     maCellTextAttrs.insert_empty(nStartRow, nSize);
-    maCellTextAttrs.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCellTextAttrs.resize(GetDoc().GetMaxRowCount());
 
     maCells.insert_empty(nStartRow, nSize);
-    maCells.resize(GetDoc().GetSheetLimits().GetMaxRowCount());
+    maCells.resize(GetDoc().GetMaxRowCount());
 
     CellStorageModified();
 

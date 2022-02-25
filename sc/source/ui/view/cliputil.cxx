@@ -104,8 +104,11 @@ void ScClipUtil::PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTab
             ScClipParam clipParam = pOwnClip->GetDocument()->GetClipParam();
             if (clipParam.maRanges.size() > 0)
             {
-                if (clipParam.maRanges[0].aEnd.Col() == MAXCOLCOUNT -1 || clipParam.maRanges[0].aEnd.Row() == MAXROWCOUNT - 1)
+                if (clipParam.maRanges[0].aEnd.Col() == pOwnClip->GetDocument()->MaxCol()
+                    || clipParam.maRanges[0].aEnd.Row() == pOwnClip->GetDocument()->MaxRow())
+                {
                     entireColumnOrRowSelected = true;
+                }
             }
         }
         const SfxBoolItem* pItem = rThisDoc.GetAttr(nThisCol, nThisRow, nThisTab, ATTR_LINEBREAK);
