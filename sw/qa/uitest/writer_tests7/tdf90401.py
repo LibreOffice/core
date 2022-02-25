@@ -63,6 +63,8 @@ class tdf90401(UITestCase):
                     xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
                     xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
+            self.ui_test.wait_until_file_is_available(xFilePath)
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as writer_doc2:
 
                 # check removed personal info on comments
@@ -133,6 +135,8 @@ class tdf90401(UITestCase):
                     # DOCX confirmation dialog is displayed
                     with self.ui_test.execute_dialog_through_action(xOpen, "CLICK", close_button="save"):
                         pass
+
+            self.ui_test.wait_until_file_is_available(xFilePath)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as writer_doc2:
 

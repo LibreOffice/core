@@ -54,6 +54,8 @@ class Tdf117899(UITestCase):
                 xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                 xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
+        self.ui_test.wait_until_file_is_available(xFilePath)
+
         with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 
             xCalcDoc = self.xUITest.getTopFocusWindow()
