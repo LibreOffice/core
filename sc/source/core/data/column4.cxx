@@ -2138,4 +2138,19 @@ void ScColumn::RestoreFromCache(SvStream& rStrm)
     }
 }
 
+void ScColumn::CheckIntegrity() const
+{
+    const ScColumn* pColTest = maCells.event_handler().getColumn();
+
+    if (pColTest != this)
+    {
+        std::ostringstream os;
+        os << "cell store's event handler references wrong column instance (this=" << this
+            << "; stored=" << pColTest << ")";
+        throw std::runtime_error(os.str());
+    }
+
+    // Add more integrity checks as needed.
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

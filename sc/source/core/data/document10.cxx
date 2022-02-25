@@ -1068,4 +1068,22 @@ bool ScDocument::SetLOKFreezeRow(SCROW nFreezeRow, SCTAB nTab)
     return pTab->SetLOKFreezeRow(nFreezeRow);
 }
 
+std::set<SCCOL> ScDocument::QueryColumnsWithFormulaCells( SCTAB nTab ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return std::set<SCCOL>{};
+
+    return pTab->QueryColumnsWithFormulaCells();
+}
+
+void ScDocument::CheckIntegrity( SCTAB nTab ) const
+{
+    const ScTable* pTab = FetchTable(nTab);
+    if (!pTab)
+        return;
+
+    pTab->CheckIntegrity();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
