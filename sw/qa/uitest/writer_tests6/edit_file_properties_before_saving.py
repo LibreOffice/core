@@ -53,6 +53,8 @@ class edit_file_properties_before_saving(UITestCase):
                         xReadOnly.executeAction("CLICK", tuple())
                         self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
 
+            self.ui_test.wait_until_file_is_available(xFilePath)
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
 
                 self.change_doc_info_setting("false")
@@ -89,6 +91,8 @@ class edit_file_properties_before_saving(UITestCase):
                             xReadOnly = xPropertiesDialog.getChild("readonly")
                             xReadOnly.executeAction("CLICK", tuple())
                             self.assertEqual("true", get_state_as_dict(xReadOnly)['Selected'])
+
+            self.ui_test.wait_until_file_is_available(xFilePath)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as doc2:
 

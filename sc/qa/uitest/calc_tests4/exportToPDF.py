@@ -67,6 +67,8 @@ class exportToPDF(UITestCase):
                         xFileName.executeAction('TYPE', mkPropertyValues({'KEYCODE':'BACKSPACE'}))
                         xFileName.executeAction('TYPE', mkPropertyValues({'TEXT': xFilePath}))
 
+            self.ui_test.wait_until_file_is_available(xFilePath)
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
                 self.assertEqual("Sheet1", document.DrawPages[0].getByIndex(0).String)

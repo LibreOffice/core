@@ -64,6 +64,8 @@ class tdf119661(UITestCase):
                         xFileName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
                         xFileName.executeAction("TYPE", mkPropertyValues({"TEXT": xFilePath}))
 
+            self.ui_test.wait_until_file_is_available(xFilePath)
+
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)):
 
                 self.xUITest.executeCommand(".uno:LinkDialog")

@@ -7,6 +7,7 @@
 
 import time
 import threading
+import os.path
 from contextlib import contextmanager
 from uitest.uihelper.common import get_state_as_dict
 
@@ -60,6 +61,13 @@ class UITest(object):
     def wait_until_property_is_updated(self, element, propertyName, value):
         while True:
             if get_state_as_dict(element)[propertyName] == value:
+                return
+            else:
+                time.sleep(DEFAULT_SLEEP)
+
+    def wait_until_file_is_available(self, fileName):
+        while True:
+            if os.path.isfile(fileName):
                 return
             else:
                 time.sleep(DEFAULT_SLEEP)
