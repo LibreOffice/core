@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "458815db_78c78c40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003497
+      },
+      "writtenOn": "2022-02-25T12:38:05Z",
+      "side": 1,
+      "message": "This is not completed yet; I am still working on it.\n\nMike, please have a look about the initialization of pointer I asked you about.\n",
+      "revId": "63a71fd7b9ad7dd81331bd3b11c37da4504556c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
