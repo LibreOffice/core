@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c966fbf1_cae0fd88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-25T10:03:30Z",
+      "side": 1,
+      "message": "maybe fix the other one at:\n\n  svx/source/form/fmtextcontrolshell.cxx:1259:        Reference\u003c XDispatch \u003e xDispatcher \u003d _rxProvider-\u003equeryDispatch( aFeatureURL, OUString(), 0xFF );\n\ntoo ?",
+      "revId": "c40f4354af2354bc17380e8023330999c3a9bbbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
