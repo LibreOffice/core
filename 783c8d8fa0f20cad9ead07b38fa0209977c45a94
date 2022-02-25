@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d887202_cdd4afad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-02-25T18:37:00Z",
+      "side": 1,
+      "message": "this is weird...\n\n* here on Linux the test runs in 14.5 seconds (--enable-dbgutil).\n\n* here in Windows VM (--enable-dbgutil) the test takes 278 seconds but never fails.\n  loading the doc in Writer takes similar time.\n\n* in Jenkins Windows the test fails with the same assert as the bug\n  except that on Linux i only get:\nwarn:sw.layout:15620:12928:sw/source/core/layout/objectformattertxtfrm.cxx:884: tdf#122894 skipping anchor in column in footnote\n  ... while jenkins prints:\nwarn:sw.layout:21092:23216:sw/source/core/layout/objectformattertxtfrm.cxx:884: tdf#122894 skipping anchor in column in footnote\nwarn:sw.layout:21092:23216:sw/source/core/layout/objectformattertxtfrm.cxx:884: tdf#122894 skipping anchor in column in footnote\nwarn:sw.layout:21092:23216:sw/source/core/layout/objectformattertxtfrm.cxx:884: tdf#122894 skipping anchor in column in footnote\nwarn:legacy.osl:21092:23216:sw/source/core/layout/flowfrm.cxx:2576: \u003cSwFlowFrame::MoveBwd(..)\u003e - layout loop control for layout action \u003cMove Backward\u003e applied!\nwarn:legacy.osl:21092:23216:sw/source/core/layout/flowfrm.cxx:2576: \u003cSwFlowFrame::MoveBwd(..)\u003e - layout loop control for layout action \u003cMove Backward\u003e applied!\nwarn:legacy.osl:21092:23216:sw/source/core/layout/flowfrm.cxx:2576: \u003cSwFlowFrame::MoveBwd(..)\u003e - layout loop control for layout action \u003cMove Backward\u003e applied!\nwarn:sw.layout:21092:23216:sw/source/core/layout/objectformattertxtfrm.cxx:884: tdf#122894 skipping anchor in column in footnote\n\n* macOS jenkins times out",
+      "revId": "783c8d8fa0f20cad9ead07b38fa0209977c45a94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
