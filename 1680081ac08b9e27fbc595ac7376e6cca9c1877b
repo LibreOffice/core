@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "995715c7_2d48ea54",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-25T09:20:20Z",
+      "side": 1,
+      "message": "Yes, _wcsupr did that for us; but the nice comment that you suggest *needs* to be amended *why* do we need it uppercase. Please check e.g. what osl_getDirectoryItem does for PATHTYPE_VOLUME case, which is where the uppercase for drive comes from in the compared string. So we need to refer to that code, and also to the URIHelper::normalizedMakeRelative, which is (one of the functions that) rely on drives being uniformly uppercase.",
+      "parentUuid": "2ae26ff7_1108da65",
+      "range": {
+        "startLine": 1595,
+        "startChar": 0,
+        "endLine": 1595,
+        "endChar": 49
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0d082f7_51040dee",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 5
