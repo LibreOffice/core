@@ -717,6 +717,8 @@ public:
     SCSIZE      GetPatternCount( SCROW nRow1, SCROW nRow2 ) const;
     bool        ReservePatternCount( SCSIZE nReserve );
 
+    void CheckIntegrity() const;
+
 private:
 
     sc::CellStoreType::iterator GetPositionToInsert( SCROW nRow, std::vector<SCROW>& rNewSharedRows,

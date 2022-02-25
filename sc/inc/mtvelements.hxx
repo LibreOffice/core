@@ -100,6 +100,8 @@ public:
     void stop();
 
     void swap(CellStoreEvent& other);
+
+    const ScColumn* getColumn() const;
 };
 
 struct CellStoreTrait
