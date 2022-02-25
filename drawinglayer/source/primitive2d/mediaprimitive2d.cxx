@@ -113,7 +113,8 @@ namespace drawinglayer::primitive2d
                 return (getTransform() == rCompare.getTransform()
                     && maURL == rCompare.maURL
                     && getBackgroundColor() == rCompare.getBackgroundColor()
-                    && getDiscreteBorder() == rCompare.getDiscreteBorder());
+                    && getDiscreteBorder() == rCompare.getDiscreteBorder()
+                    && maSnapshot.IsNone() == rCompare.maSnapshot.IsNone());
             }
 
             return false;
