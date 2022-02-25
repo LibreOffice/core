@@ -29,6 +29,7 @@
 #include <sal/types.h>
 
 #include <memory>
+#include <tuple>
 
 namespace utl { class TempFile; }
 
