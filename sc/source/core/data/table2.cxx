@@ -235,7 +235,7 @@ void ScTable::DeleteRow(
 
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( rDocument.GetBASM(), SfxHintId::ScDataChanged);
-        for (SCCOL j=nStartCol; j<=nEndCol; j++)
+        for (SCCOL j=nStartCol; j<=ClampToAllocatedColumns(nEndCol); j++)
             aCol[j].DeleteRow(nStartRow, nSize, pGroupPos);
     }
 
@@ -384,8 +384,8 @@ void ScTable::DeleteCol(
         }
     }
 
-    for (SCSIZE i = 0; i < nSize; i++)
-        aCol[nStartCol + i].DeleteArea(nStartRow, nEndRow, InsertDeleteFlags::ALL, false);
+    for (SCCOL col = nStartCol; col <= ClampToAllocatedColumns(nStartCol + nSize - 1); ++col)
+        aCol[col].DeleteArea(nStartRow, nEndRow, InsertDeleteFlags::ALL, false);
 
     if ((nStartRow == 0) && (nEndRow == rDocument.MaxRow()))
     {
