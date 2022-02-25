@@ -350,7 +350,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByQName(const OUString& rQName,
             rtl::Reference<NameSpaceEntry> xEntry(new NameSpaceEntry);
             xEntry->sPrefix = std::move(sEntryPrefix);
             xEntry->sName = std::move(sEntryName);
-            xEntry->nKey = std::move(nKey);
+            xEntry->nKey = nKey;
             aNameCache.emplace(rQName, std::move(xEntry));
         }
     }
