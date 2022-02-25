@@ -419,7 +419,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             break;
 
         case SID_UNGROUP:
-            if (pSh->IsGroupSelected() && pSh->IsUnGroupAllowed())
+            if (pSh->IsGroupSelected(true) && pSh->IsUnGroupAllowed())
             {
                 pSh->UnGroupSelection();
                 rBind.Invalidate(SID_GROUP);
@@ -427,7 +427,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
             break;
 
         case SID_ENTER_GROUP:
-            if (pSh->IsGroupSelected())
+            if (pSh->IsGroupSelected(false))
             {
                 pSdrView->EnterMarkedGroup();
                 rBind.InvalidateAll(false);
@@ -731,11 +731,11 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                     rSet.DisableItem( nWhich );
                 break;
             case SID_UNGROUP:
-                if ( !rSh.IsGroupSelected() || bProtected || !rSh.IsUnGroupAllowed() )
+                if ( !rSh.IsGroupSelected(true) || bProtected || !rSh.IsUnGroupAllowed() )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_ENTER_GROUP:
-                if ( !rSh.IsGroupSelected() )
+                if ( !rSh.IsGroupSelected(false) )
                     rSet.DisableItem( nWhich );
                 break;
             case SID_LEAVE_GROUP:

@@ -542,7 +542,7 @@ public:
     bool EndMark  ();
 
     /// Create and destroy group, don't when frame is selected.
-    bool IsGroupSelected();     ///< Can be a mixed selection!
+    bool IsGroupSelected(bool bAllowDiagams);     ///< Can be a mixed selection!
     void GroupSelection();          ///< Afterwards the group is selected.
     void UnGroupSelection();        /**< The individual objects are selected, but
                                     it is possible that there are groups included. */
