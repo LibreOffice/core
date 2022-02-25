@@ -1006,9 +1006,9 @@ void ScDocument::UpdateReference(
 {
     if (!ValidRange(rCxt.maRange) && !(rCxt.meMode == URM_INSDEL &&
                 ((rCxt.mnColDelta < 0 &&    // convention from ScDocument::DeleteCol()
-                  rCxt.maRange.aStart.Col() == MAXCOLCOUNT && rCxt.maRange.aEnd.Col() == MAXCOLCOUNT) ||
+                  rCxt.maRange.aStart.Col() == GetMaxColCount() && rCxt.maRange.aEnd.Col() == GetMaxColCount()) ||
                  (rCxt.mnRowDelta < 0 &&    // convention from ScDocument::DeleteRow()
-                  rCxt.maRange.aStart.Row() == GetSheetLimits().GetMaxRowCount() && rCxt.maRange.aEnd.Row() == GetSheetLimits().GetMaxRowCount()))))
+                  rCxt.maRange.aStart.Row() == GetMaxRowCount() && rCxt.maRange.aEnd.Row() == GetMaxRowCount()))))
         return;
 
     std::unique_ptr<sc::ExpandRefsSwitch> pExpandRefsSwitch;
