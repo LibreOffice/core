@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1cf6802e_d2b3ef51",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-02-25T14:58:36Z",
+      "side": 1,
+      "message": "\u003e Patch Set 3:\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/109048/ : FAILURE\n\u003e \n\u003e clang plugin cppunitassertequals did trigger. rather call CPPUNIT_ASSERT_EQUAL_MESSAGE when comparing \"std::set\u003cSCCOL\u003e\" (aka \"set\u003cshort\u003e\") and \"std::set\u003cSCCOL\u003e\" (aka \"set\u003cshort\u003e\") (or rewrite as an explicit operator \u003d\u003d call when the operator itself is the topic) ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/108713/ )\n\u003e \n\u003e error: rather call CPPUNIT_ASSERT_EQUAL_MESSAGE when comparing \"std::set\u003cSCCOL\u003e\" (aka \"set\u003cshort\u003e\") and \"std::set\u003cSCCOL\u003e\" (aka \"set\u003cshort\u003e\") (or rewrite as an explicit operator \u003d\u003d call when the operator itself is the topic) [loplugin:cppunitassertequals] in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sc/qa/unit/ucalc.cxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/108713/ )\n\nJust for the record, using CPPUNIT_ASSERT_EQUAL_MESSAGE with std::set\u003cSCCOL\u003e results in:\n\nIn file included from /home/kohei/libo/my-master-dbgutil/workdir/UnpackedTarball/cppunit/include/cppunit/TestAssert.h:8,\n                 from /home/kohei/libo/my-master-dbgutil/include/test/bootstrapfixture.hxx:20,\n                 from /home/kohei/libo/my-master-dbgutil/sc/qa/unit/helper/qahelper.hxx:17,\n                 from /home/kohei/libo/my-master-dbgutil/sc/qa/unit/ucalc.cxx:11:\n/home/kohei/libo/my-master-dbgutil/workdir/UnpackedTarball/cppunit/include/cppunit/tools/StringHelper.h: In instantiation of ‘typename std::enable_if\u003c(! std::is_enum\u003c_Tp\u003e::value), std::__cxx11::basic_string\u003cchar\u003e \u003e::type CppUnit::StringHelper::toString(const T\u0026) [with T \u003d std::__debug::set\u003cshort int\u003e; typename std::enable_if\u003c(! std::is_enum\u003c_Tp\u003e::value), std::__cxx11::basic_string\u003cchar\u003e \u003e::type \u003d std::__cxx11::basic_string\u003cchar\u003e]’:\n/home/kohei/libo/my-master-dbgutil/workdir/UnpackedTarball/cppunit/include/cppunit/TestAssert.h:74:50:   required from ‘static std::string CppUnit::assertion_traits\u003cT\u003e::toString(const T\u0026) [with T \u003d std::__debug::set\u003cshort int\u003e; std::string \u003d std::__cxx11::basic_string\u003cchar\u003e]’\n/home/kohei/libo/my-master-dbgutil/workdir/UnpackedTarball/cppunit/include/cppunit/TestAssert.h:168:58:   required from ‘void CppUnit::assertEquals(const T\u0026, const T\u0026, CppUnit::SourceLine, const string\u0026) [with T \u003d std::__debug::set\u003cshort int\u003e; std::string \u003d std::__cxx11::basic_string\u003cchar\u003e]’\n/home/kohei/libo/my-master-dbgutil/sc/qa/unit/ucalc.cxx:6666:5:   required from here\n/home/kohei/libo/my-master-dbgutil/workdir/UnpackedTarball/cppunit/include/cppunit/tools/StringHelper.h:25:9: error: no match for ‘operator\u003c\u003c’ (operand types are ‘CppUnit::OStringStream’ {aka ‘std::__cxx11::basic_ostringstream\u003cchar\u003e’} and ‘const std::__debug::set\u003cshort int\u003e’)\n   25 |     ost \u003c\u003c x;\n      |     ~~~~^~~~\n",
+      "revId": "0da813034e242deb7ac5cb3501b29c570a5e35db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
