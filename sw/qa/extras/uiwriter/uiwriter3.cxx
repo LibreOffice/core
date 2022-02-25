@@ -688,6 +688,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
 
     pWrtShell->EndOfSection(false);
 
+    // tdf#142423: Without the fix in place, this test would have failed with
+    // - Expected: 18
+    // - Actual  : 18.2
+    CPPUNIT_ASSERT_EQUAL(18.0f, getProperty<float>(getParagraph(2), "CharHeight"));
+
     // insert table of contents
     SwTOXMgr mgr(pWrtShell);
     SwTOXDescription desc{ TOX_CONTENT };
