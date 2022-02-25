@@ -2000,8 +2000,8 @@ SCSIZE ScChangeTrack::ComputeContentSlot( sal_Int32 nRow ) const
 SCROW ScChangeTrack::InitContentRowsPerSlot()
 {
     const SCSIZE nMaxSlots = 0xffe0 / sizeof( ScChangeActionContent* ) - 2;
-    SCROW nRowsPerSlot = rDoc.GetSheetLimits().GetMaxRowCount() / nMaxSlots;
-    if ( nRowsPerSlot * nMaxSlots < sal::static_int_cast<SCSIZE>(rDoc.GetSheetLimits().GetMaxRowCount()) )
+    SCROW nRowsPerSlot = rDoc.GetMaxRowCount() / nMaxSlots;
+    if ( nRowsPerSlot * nMaxSlots < sal::static_int_cast<SCSIZE>(rDoc.GetMaxRowCount()) )
         ++nRowsPerSlot;
     return nRowsPerSlot;
 }
@@ -2037,7 +2037,7 @@ ScChangeTrack::~ScChangeTrack()
 void ScChangeTrack::Init()
 {
     mnContentRowsPerSlot = InitContentRowsPerSlot();
-    mnContentSlots = rDoc.GetSheetLimits().GetMaxRowCount() / InitContentRowsPerSlot() + 2;
+    mnContentSlots = rDoc.GetMaxRowCount() / InitContentRowsPerSlot() + 2;
 
     pFirst = nullptr;
     pLast = nullptr;

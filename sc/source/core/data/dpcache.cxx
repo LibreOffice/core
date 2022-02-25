@@ -72,7 +72,7 @@ ScDPCache::Field::Field() : mnNumFormat(0) {}
 ScDPCache::ScDPCache(ScDocument& rDoc) :
     mrDoc( rDoc ),
     mnColumnCount ( 0 ),
-    maEmptyRows(0, rDoc.GetSheetLimits().GetMaxRowCount(), true),
+    maEmptyRows(0, rDoc.GetMaxRowCount(), true),
     mnDataSize(-1),
     mnRowCount(0),
     mbDisposing(false)

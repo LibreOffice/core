@@ -568,7 +568,6 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     pEOUpdateChain( nullptr ),
     nInBulkBroadcast( 0 )
 {
-    const ScSheetLimits& rSheetLimits = pDoc->GetSheetLimits();
     // initSlotDistribution ---------
     // Logarithmic or any other distribution.
     // Upper and leftmost sheet part usually is more populated and referenced and gets fine
@@ -585,7 +584,7 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
     sal_Int32 nCol1 = 0;
     sal_Int32 nCol2 = 1024;
     SCSIZE nSliceCol = 16;
-    while (nCol2 <= rSheetLimits.GetMaxColCount())
+    while (nCol2 <= pDoc->GetMaxColCount())
     {
         SCROW nRow1 = 0;
         SCROW nRow2 = 32*1024;
@@ -593,7 +592,7 @@ ScBroadcastAreaSlotMachine::ScBroadcastAreaSlotMachine(
         SCSIZE nSlotsCol = 0;
         SCSIZE nSlotsStartCol = nSlots;
         // Must be sorted by row1,row2!
-        while (nRow2 <= rSheetLimits.GetMaxRowCount())
+        while (nRow2 <= pDoc->GetMaxRowCount())
         {
             maSlotDistribution.emplace_back(nRow1, nRow2, nSliceRow, nSlotsCol, nCol1, nCol2, nSliceCol, nSlotsStartCol);
             nSlotsCol += (nRow2 - nRow1) / nSliceRow;
@@ -690,7 +689,6 @@ static void compare(SCSIZE value1, SCSIZE value2, int line)
 // Basic checks that the calculations work correctly.
 void ScBroadcastAreaSlotMachine::DoChecks()
 {
-    const ScSheetLimits& rSheetLimits = pDoc->GetSheetLimits();
     // Copy&paste from the ctor.
     constexpr SCSIZE nSliceRow = 128;
     constexpr SCSIZE nSliceCol = 16;
@@ -702,7 +700,7 @@ void ScBroadcastAreaSlotMachine::DoChecks()
     compare( ComputeSlotOffset( ScAddress( nSliceCol - 1, 0, 0 )),
              ComputeSlotOffset( ScAddress( nSliceCol, 0, 0 )) - mnBcaSlotsCol, __LINE__ );
     // Check that last cell is the last slot.
-    compare( ComputeSlotOffset( ScAddress( rSheetLimits.GetMaxColCount() - 1, rSheetLimits.GetMaxRowCount() - 1, 0 )),
+    compare( ComputeSlotOffset( ScAddress( pDoc->GetMaxColCount() - 1, pDoc->GetMaxRowCount() - 1, 0 )),
              mnBcaSlots - 1, __LINE__ );
     // Check that adjacent rows in the same column but in different distribution areas differ by one slot.
     for( size_t i = 0; i < maSlotDistribution.size() - 1; ++i )
@@ -732,7 +730,7 @@ void ScBroadcastAreaSlotMachine::DoChecks()
         }
     }
     // Iterate all slots.
-    ScRange range( ScAddress( 0, 0, 0 ), ScAddress( rSheetLimits.GetMaxColCount() - 1, rSheetLimits.GetMaxRowCount() - 1, 0 ));
+    ScRange range( ScAddress( 0, 0, 0 ), ScAddress( pDoc->MaxCol(), pDoc->MaxRow(), 0 ));
     SCSIZE nStart, nEnd, nRowBreak;
     ComputeAreaPoints( range, nStart, nEnd, nRowBreak );
     assert( nStart == 0 );
@@ -749,8 +747,8 @@ void ScBroadcastAreaSlotMachine::DoChecks()
         compare( nOff, previous + 1, __LINE__ );
     }
     // Iterate slots in the last row (each will differ by mnBcaSlotsCol).
-    range = ScRange( ScAddress( 0, rSheetLimits.GetMaxRowCount() - 1, 0 ),
-                     ScAddress( rSheetLimits.GetMaxColCount() - 1, rSheetLimits.GetMaxRowCount() - 1, 0 ));
+    range = ScRange( ScAddress( 0, pDoc->MaxRow(), 0 ),
+                     ScAddress( pDoc->MaxCol(), pDoc->MaxRow() - 1, 0 ));
     ComputeAreaPoints( range, nStart, nEnd, nRowBreak );
     assert( nStart == mnBcaSlotsCol - 1 );
     assert( nEnd == mnBcaSlots - 1 );

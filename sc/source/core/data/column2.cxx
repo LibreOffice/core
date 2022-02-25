@@ -1659,13 +1659,13 @@ void ScColumn::CellStorageModified()
 
     // TODO: Update column's "last updated" timestamp here.
 
-    assert(sal::static_int_cast<SCROW>(maCells.size()) == GetDoc().GetSheetLimits().GetMaxRowCount()
+    assert(sal::static_int_cast<SCROW>(maCells.size()) == GetDoc().GetMaxRowCount()
         && "Size of the cell array is incorrect." );
 
-    assert(sal::static_int_cast<SCROW>(maCellTextAttrs.size()) == GetDoc().GetSheetLimits().GetMaxRowCount()
+    assert(sal::static_int_cast<SCROW>(maCellTextAttrs.size()) == GetDoc().GetMaxRowCount()
         && "Size of the cell text attribute array is incorrect.");
 
-    assert(sal::static_int_cast<SCROW>(maBroadcasters.size()) == GetDoc().GetSheetLimits().GetMaxRowCount()
+    assert(sal::static_int_cast<SCROW>(maBroadcasters.size()) == GetDoc().GetMaxRowCount()
         && "Size of the broadcaster array is incorrect.");
 
 #if DEBUG_COLUMN_STORAGE

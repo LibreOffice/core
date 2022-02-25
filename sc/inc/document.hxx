@@ -875,6 +875,8 @@ public:
     SC_DLLPUBLIC bool GetTable( const OUString& rName, SCTAB& rTab ) const;
     SC_DLLPUBLIC SCCOL MaxCol() const { return mxSheetLimits->mnMaxCol; }
     SC_DLLPUBLIC SCROW MaxRow() const { return mxSheetLimits->mnMaxRow; }
+    SC_DLLPUBLIC SCCOL GetMaxColCount() const { return mxSheetLimits->GetMaxColCount(); }
+    SC_DLLPUBLIC SCROW GetMaxRowCount() const { return mxSheetLimits->GetMaxRowCount(); }
     ScSheetLimits& GetSheetLimits() const { return *mxSheetLimits; }
     [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mxSheetLimits->mnMaxCol); }
     [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mxSheetLimits->mnMaxRow); }
