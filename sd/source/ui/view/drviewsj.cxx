@@ -132,8 +132,15 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             /* If it is not a group object or 3D object, we disable "enter
                group". */
-            if( !( ( dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr && nInv == SdrInventor::Default ) ||
+            const auto* pIsGroup(dynamic_cast<const SdrObjGroup*>(pObj));
+            if( !( ( pIsGroup != nullptr && nInv == SdrInventor::Default ) ||
                    ( dynamic_cast< const E3dScene* >(pObj) != nullptr ) ) )
+            {
+                rSet.DisableItem( SID_ENTER_GROUP );
+            }
+
+            // Don't allow enter Diagrams
+            if(nullptr != pIsGroup && pIsGroup->isDiagram())
             {
                 rSet.DisableItem( SID_ENTER_GROUP );
             }

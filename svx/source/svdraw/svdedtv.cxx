@@ -676,6 +676,14 @@ void SdrEditView::CheckPossibilities()
             if (pNode1!=nullptr || pNode2!=nullptr) m_bMoveAllowed=false;
         }
     }
+
+    // Don't allow enter Diagrams
+    if (1 == nMarkCount && m_bGrpEnterPossible)
+    {
+        auto* pGroup(dynamic_cast<SdrObjGroup*>(GetMarkedObjectByIndex(0)));
+        if(nullptr != pGroup && pGroup->isDiagram())
+            m_bGrpEnterPossible = false;
+    }
 }
 
 

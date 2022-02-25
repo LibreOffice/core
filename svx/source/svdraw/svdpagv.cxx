@@ -726,51 +726,52 @@ void SdrPageView::SetCurrentGroupAndList(SdrObject* pNewGroup, SdrObjList* pNewL
 
 bool SdrPageView::EnterGroup(SdrObject* pObj)
 {
-    bool bRet(false);
+    if(!pObj || !pObj->IsGroupObject())
+        return false;
 
-    if(pObj && pObj->IsGroupObject())
+    // Don't allow enter Diagrams
+    auto* pGroup(dynamic_cast<SdrObjGroup*>(pObj));
+    if(nullptr != pGroup && pGroup->isDiagram())
+        return false;
+
+    const bool bGlueInvalidate(GetView().ImpIsGlueVisible());
+
+    if (bGlueInvalidate)
     {
-        bool bGlueInvalidate(GetView().ImpIsGlueVisible());
-
-        if(bGlueInvalidate)
-        {
-            GetView().GlueInvalidate();
-        }
-
-        // deselect all
-        GetView().UnmarkAll();
-
-        // set current group and list
-        SdrObjList* pNewObjList = pObj->GetSubList();
-        SetCurrentGroupAndList(pObj, pNewObjList);
-
-        // select contained object if only one object is contained,
-        // else select nothing and let the user decide what to do next
-        if(pNewObjList && pNewObjList->GetObjCount() == 1)
-        {
-            SdrObject* pFirstObject = pNewObjList->GetObj(0);
-
-            if(GetView().GetSdrPageView())
-            {
-                GetView().MarkObj(pFirstObject, GetView().GetSdrPageView());
-            }
-        }
-
-        // build new handles
-        GetView().AdjustMarkHdl();
-
-        // invalidate only when view wants to visualize group entering
-        InvalidateAllWin();
-
-        if (bGlueInvalidate)
-        {
-            GetView().GlueInvalidate();
-        }
-
-        bRet = true;
+        GetView().GlueInvalidate();
     }
 
-    return bRet;
+    // deselect all
+    GetView().UnmarkAll();
+
+    // set current group and list
+    SdrObjList* pNewObjList = pObj->GetSubList();
+    SetCurrentGroupAndList(pObj, pNewObjList);
+
+    // select contained object if only one object is contained,
+    // else select nothing and let the user decide what to do next
+    if(pNewObjList && pNewObjList->GetObjCount() == 1)
+    {
+        SdrObject* pFirstObject = pNewObjList->GetObj(0);
+
+        if(GetView().GetSdrPageView())
+        {
+            GetView().MarkObj(pFirstObject, GetView().GetSdrPageView());
+        }
+    }
+
+    // build new handles
+    GetView().AdjustMarkHdl();
+
+    // invalidate only when view wants to visualize group entering
+    InvalidateAllWin();
+
+    if (bGlueInvalidate)
+    {
+        GetView().GlueInvalidate();
+    }
+
+    return true;
 }
 
 void SdrPageView::LeaveOneGroup()

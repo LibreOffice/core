@@ -2425,7 +2425,7 @@ Point SwFEShell::GetObjAbsPos() const
     return Imp()->GetDrawView()->GetDragStat().GetActionRect().TopLeft();
 }
 
-bool SwFEShell::IsGroupSelected()
+bool SwFEShell::IsGroupSelected(bool bAllowDiagams)
 {
     if ( IsObjSelected() )
     {
@@ -2441,6 +2441,16 @@ bool SwFEShell::IsGroupSelected()
                  RndStdIds::FLY_AS_CHAR != static_cast<SwDrawContact*>(GetUserCall(pObj))->
                                       GetFormat()->GetAnchor().GetAnchorId() )
             {
+                if(!bAllowDiagams)
+                {
+                    // Don't allow enter Diagrams
+                    auto* pGroup(dynamic_cast<SdrObjGroup*>(pObj));
+                    if(nullptr != pGroup && pGroup->isDiagram())
+                    {
+                        return false;
+                    }
+                }
+
                 return true;
             }
         }
@@ -2565,7 +2575,7 @@ void SwFEShell::GroupSelection()
 // The individual objects get a copy of the anchor and the contactobject of the group
 void SwFEShell::UnGroupSelection()
 {
-    if ( IsGroupSelected() )
+    if ( IsGroupSelected(true) )
     {
         StartAllAction();
         StartUndo( SwUndoId::START );
