@@ -22,6 +22,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/frame/Frame.hpp>
+#include <com/sun/star/frame/FrameSearchFlag.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -96,7 +97,8 @@ SwDBTablePreviewDialog::SwDBTablePreviewDialog(weld::Window* pParent, uno::Seque
 
     util::URL aURL;
     aURL.Complete = ".component:DB/DataSourceBrowser";
-    uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, "", 0x0C);
+    uno::Reference<frame::XDispatch> xD = xFrame->queryDispatch(aURL, "",
+            css::frame::FrameSearchFlag::CHILDREN | css::frame::FrameSearchFlag::CREATE);
     if (xD.is())
     {
         xD->dispatch(aURL, rValues);
