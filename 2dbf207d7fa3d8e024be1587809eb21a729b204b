@@ -16,6 +16,24 @@
       "message": "Mike: could you please review this? Thanks.\n\nIn the meantime, I got reply from dochelp@: \"I investigated and we will add a note in a future release to MS-OODF13 2.1.906 describing how Word treats text:continue-numbering differently from what\u0027s described in ODF 19.786.\" i.e. the bug is confirmed and they don\u0027t plan to fix this, rather document it.",
       "revId": "2dbf207d7fa3d8e024be1587809eb21a729b204b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa275db_68f3351e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-25T12:19:21Z",
+      "side": 1,
+      "message": "Likely a note is needed near this code pointing to that, which hopely would be eventually replaced with a reference to MS-OODF13 2.1.906 with that note.",
+      "parentUuid": "2587b604_35ffadcf",
+      "revId": "2dbf207d7fa3d8e024be1587809eb21a729b204b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
