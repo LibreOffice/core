@@ -1108,6 +1108,10 @@ public:
      */
     OString dumpSheetGeomData(bool bColumns, SheetGeomType eGeomType);
 
+    std::set<SCCOL> QueryColumnsWithFormulaCells() const;
+
+    void CheckIntegrity() const;
+
 private:
 
     void FillFormulaVertical(
