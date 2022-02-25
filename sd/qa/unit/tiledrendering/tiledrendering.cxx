@@ -2581,31 +2581,12 @@ void SdTiledRenderingTest::testRegenerateDiagram()
     SdPage* pActualPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
 
-    // select diagram
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    Scheduler::ProcessEventsToIdle();
-
-    // enter group
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::F3);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::F3);
-    Scheduler::ProcessEventsToIdle();
-
-    // select shape and delete
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
-    Scheduler::ProcessEventsToIdle();
-
-    // exit group
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::TAB);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::F3);
-    pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::F3);
-    Scheduler::ProcessEventsToIdle();
+    // For new Diagram funcionality entering group using UI is not allowed as long
+    // as the group shape is a diagram. Do the same as before done by triggering UI
+    // events directly in the model
+    // Remove and free top-left entry (Box showing "A")
+    SdrObject* pTopLeftRemoved = pActualPage->GetObj(0)->GetSubList()->RemoveObject(1);
+    SdrObject::Free(pTopLeftRemoved);
 
     // select diagram
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::TAB);
