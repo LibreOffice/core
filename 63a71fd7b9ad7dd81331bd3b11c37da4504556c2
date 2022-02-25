@@ -33,6 +33,23 @@
       "message": "Also, Heiko recommeded me to use some codes like -\n\n       Shell* pShell \u003d GetShell();\n       SfxViewFrame* pViewFrame \u003d pShell ? pShell-\u003eGetViewFrame() : nullptr;\n\n       Please check SfxInfoBarContainerWindow::isInfobarEnabled() for the full\n       integration (it allows to disable per Tools \u003e Options \u003e Advanced \u003e Expert Settings).\n\nI searched and found one at basctl/source/basicide/baside3.cxx. I also found that this \u0027Shell\u0027 is being declared at basctl/source/inc/basidesh.hxx and I cannot import this header file \"basidesh.hxx\" in order to use \"shell\".",
       "revId": "63a71fd7b9ad7dd81331bd3b11c37da4504556c2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8551747_8438dc43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-25T12:53:47Z",
+      "side": 1,
+      "message": "Aha.\n\nSo this seems to be a problem with passing the information from lower level (vcl) to the higher level (sfx2) - see https://wiki.documentfoundation.org/Development/Code_Overview. Of course, it\u0027s impossible to just call anything sfx2 from here, because there\u0027s no sfx2 on this layer.\n\nI suppose we need to store this information in EmbeddedFontsHelper, and retrieve it on the sfx2 level (or higher) when finished loading document, to add the infobar there.\n\nSo first, please think how to store the information. Also look at the call stack to see what calls this code on loading, to think which place would be a candidate for the next \"show infobar\" part 😊",
+      "revId": "63a71fd7b9ad7dd81331bd3b11c37da4504556c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
