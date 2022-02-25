@@ -177,6 +177,7 @@ namespace desktop {
         typedef std::vector<int> queue_type1;
         typedef std::vector<CallbackData> queue_type2;
 
+        void startTimer();
         bool removeAll(int type);
         bool removeAll(int type, const std::function<bool (const CallbackData&)>& rTestFunc);
         bool processInvalidateTilesEvent(int type, CallbackData& aCallbackData);
