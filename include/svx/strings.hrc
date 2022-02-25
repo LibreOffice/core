@@ -25,7 +25,7 @@
 #define STR_ObjNameSingulNONE                               NC_("STR_ObjNameSingulNONE", "Drawing object")
 #define STR_ObjNamePluralNONE                               NC_("STR_ObjNamePluralNONE", "Drawing objects")
 #define STR_ObjNameSingulGRUP                               NC_("STR_ObjNameSingulGRUP", "Group object")
-#define STR_ObjNameSingulDIAGRAM                            NC_("STR_ObjNameSingulDIAGAM", "Diagram")
+#define STR_ObjNameSingulDIAGRAM                            NC_("STR_ObjNameSingulDIAGRAM", "Diagram")
 #define STR_ObjNamePluralGRUP                               NC_("STR_ObjNamePluralGRUP", "Group objects")
 #define STR_ObjNameSingulGRUPEMPTY                          NC_("STR_ObjNameSingulGRUPEMPTY", "Blank group object")
 #define STR_ObjNamePluralGRUPEMPTY                          NC_("STR_ObjNamePluralGRUPEMPTY", "Blank group objects")
