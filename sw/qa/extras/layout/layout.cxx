@@ -1163,6 +1163,64 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf138039)
     assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf143239)
+{
+    SwDoc* pDoc = createDoc("tdf143239-1-min.odt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // These are unstable on macOS and Win64 builds,
+    // so only test that they restore original values for now
+    OUString p2txt1Left, p2txt2Left, p3txt1Left;
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top",
+                    "18540");
+        p2txt1Left
+            = getXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "left");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/anchored/fly[1]/infos/bounds", "top",
+                    "23894");
+        p2txt2Left
+            = getXPath(pXmlDoc, "/root/page[2]/body/txt[2]/anchored/fly[1]/infos/bounds", "left");
+        assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly[1]/infos/bounds", "top",
+                    "35662");
+        p3txt1Left
+            = getXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly[1]/infos/bounds", "left");
+        assertXPath(pXmlDoc, "/root/page", 3);
+        discardDumpedLayout();
+    }
+
+    pWrtShell->SelAll();
+    pWrtShell->Delete();
+    pWrtShell->Undo();
+    Scheduler::ProcessEventsToIdle();
+
+    {
+        xmlDocPtr pXmlDoc = parseLayoutDump();
+        // now the 1st fly was on page 1, and the fly on page 2 was the 2nd one
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "top",
+                    "18540");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds", "left",
+                    p2txt1Left);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/anchored/fly[1]/infos/bounds", "top",
+                    "23894");
+        assertXPath(pXmlDoc, "/root/page[2]/body/txt[2]/anchored/fly[1]/infos/bounds", "left",
+                    p2txt2Left);
+        assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly", 1);
+        assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly[1]/infos/bounds", "top",
+                    "35662");
+        assertXPath(pXmlDoc, "/root/page[3]/body/txt[1]/anchored/fly[1]/infos/bounds", "left",
+                    p3txt1Left);
+        assertXPath(pXmlDoc, "/root/page", 3);
+        discardDumpedLayout();
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf116486)
 {
     SwDoc* pDoc = createDoc("tdf116486.docx");
