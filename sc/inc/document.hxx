@@ -2225,6 +2225,16 @@ public:
     std::set<Color>       GetDocColors();
     sc::IconSetBitmapMap& GetIconSetBitmapMap();
 
+    std::set<SCCOL> QueryColumnsWithFormulaCells( SCTAB nTab ) const;
+
+    /**
+     * Check the integrity of the internal table state.  Useful from testing
+     * code.  It throws an exception upon first failure.
+     *
+     * Feel free to add more checks as needed.
+     */
+    void CheckIntegrity( SCTAB nTab ) const;
+
 private:
     ScDocument(const ScDocument& r) = delete;
 
