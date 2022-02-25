@@ -12,8 +12,6 @@ import unittest
 import importlib
 import importlib.machinery
 
-import uitest.config
-
 from uitest.framework import UITestCase
 
 from libreoffice.connection import OfficeConnection
