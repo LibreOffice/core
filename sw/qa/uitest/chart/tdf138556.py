@@ -11,7 +11,6 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict
-from uitest.debug import sleep
 
 class tdf138556( UITestCase ):
 

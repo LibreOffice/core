@@ -13,7 +13,6 @@ from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
-from uitest.debug import sleep
 
 #Bug 44398 - : Find, replace, regular expression bug
 

@@ -21,8 +21,8 @@ from libreoffice.connection import OfficeConnection
 test_name_limit_found = False
 
 def parseArgs(argv):
-    (optlist,args) = getopt.getopt(argv[1:], "hdr",
-            ["help", "debug", "soffice=", "userdir=", "dir=", "file=", "gdb"])
+    (optlist,args) = getopt.getopt(argv[1:], "hr",
+            ["help", "soffice=", "userdir=", "dir=", "file=", "gdb"])
     return (dict(optlist), args)
 
 def usage():
@@ -125,9 +125,6 @@ if __name__ == '__main__':
     else:
         usage()
         sys.exit()
-
-    if "-d" in opts or "--debug" in opts:
-        uitest.config.use_sleep = True
 
     result = unittest.TextTestRunner(stream=sys.stdout, verbosity=2).run(test_suite)
     print("Tests run: %d" % result.testsRun)
