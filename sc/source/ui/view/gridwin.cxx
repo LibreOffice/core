@@ -671,7 +671,7 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
         nSizeX = nSizeX / fZoomX;
         nSizeY = nSizeY / fZoomY;
     }
-    tools::Rectangle aCellRect(OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
+    tools::Rectangle aCellRect(bLOKActive ? aPos : OutputToScreenPixel(aPos), Size(nSizeX, nSizeY));
 
     ScDBData* pDBData = pDoc->GetDBAtCursor(nCol, nRow, nTab, ScDBDataPortion::AREA);
     if (!pDBData)
@@ -924,7 +924,8 @@ void ScGridWindow::LaunchPageFieldMenu( SCCOL nCol, SCROW nRow )
     Point aScrPos;
     Size aScrSize;
     getCellGeometry(aScrPos, aScrSize, pViewData, nCol, nRow, eWhich);
-    DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol-1, nRow, nTab), pDPObj);
+    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    DPLaunchFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol-1, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
@@ -937,7 +938,8 @@ void ScGridWindow::LaunchDPFieldMenu( SCCOL nCol, SCROW nRow )
     Point aScrPos;
     Size aScrSize;
     getCellGeometry(aScrPos, aScrSize, pViewData, nCol, nRow, eWhich);
-    DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
+    bool bLOK = comphelper::LibreOfficeKit::isActive();
+    DPLaunchFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, ScAddress(nCol, nRow, nTab), pDPObj);
 }
 
 void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
