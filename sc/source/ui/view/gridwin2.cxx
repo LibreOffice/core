@@ -343,6 +343,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     const MouseEvent& rMEvt, const ScAddress& rPos, const ScAddress& rDimPos, ScDPObject* pDPObj)
 {
     bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLOK = comphelper::LibreOfficeKit::isActive();
 
     // Get the geometry of the cell.
     Point aScrPos = pViewData->GetScrPos(rPos.Col(), rPos.Row(), eWhich);
@@ -361,7 +362,7 @@ bool ScGridWindow::DPTestFieldPopupArrow(
     if (aRect.IsInside(rMEvt.GetPosPixel()))
     {
         // Mouse cursor inside the popup arrow box.  Launch the field menu.
-        DPLaunchFieldPopupMenu(OutputToScreenPixel(aScrPos), aScrSize, rDimPos, pDPObj);
+        DPLaunchFieldPopupMenu(bLOK ? aScrPos : OutputToScreenPixel(aScrPos), aScrSize, rDimPos, pDPObj);
         return true;
     }
 
