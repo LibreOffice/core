@@ -1726,6 +1726,40 @@ void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fr
     RTL_LOG_STRING_NEW(*s);
 }
 
+template <class S, typename CharTypeFrom, typename CharTypeTo>
+void newReplaceFirst(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fromLength,
+                     CharTypeTo const* to, sal_Int32 toLength, sal_Int32& fromIndex)
+{
+    assert(s != nullptr);
+    assert(s1 != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
+    assert(toLength >= 0);
+    assert(to != nullptr || toLength == 0);
+    assert(fromIndex >= 0 && fromIndex <= s1->length);
+    sal_Int32 i = detail::indexOf(s1->buffer + fromIndex, s1->length - fromIndex, from, fromLength);
+    if (i >= 0)
+    {
+        if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        i += fromIndex;
+        const sal_Int32 n = s1->length + (toLength - fromLength);
+        const auto pOld = *s;
+        *s = Alloc<S>(n);
+        if (i)
+            Copy((*s)->buffer, s1->buffer, i);
+        if (toLength)
+            Copy((*s)->buffer + i, to, toLength);
+        Copy((*s)->buffer + i + toLength, s1->buffer + i + fromLength, s1->length - i - fromLength);
+        if (pOld)
+            release(pOld); // Must be last in case *s == s1
+    }
+    else
+        assign(s, s1);
+
+    fromIndex = i;
+}
+
 template <class IMPL_RTL_STRINGDATA>
 using doubleToString_t
     = void(SAL_CALL*)(IMPL_RTL_STRINGDATA** pResult, sal_Int32* pResultCapacity,
