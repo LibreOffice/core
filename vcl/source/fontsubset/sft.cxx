@@ -412,7 +412,7 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
     const sal_uInt8* p = ptr + nOffset;
 
     const sal_uInt32 nBytesRemaining = nTableSize - nOffset;
-    const sal_uInt16 palen = lastPoint+1;
+    const sal_uInt32 palen = lastPoint+1;
 
     //at a minimum its one byte per entry
     if (palen > nBytesRemaining || lastPoint > nBytesRemaining-1)
