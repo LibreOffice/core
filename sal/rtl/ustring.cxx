@@ -186,8 +186,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compare_WithLength( const sal_Unicode* pStr1,
                static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
         if (!(nRet == 0 && nStr1Len && *pStr2 ))
             break;
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
+        SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(*pStr2)), "rtl.string",
                     "rtl_ustr_ascii_compare_WithLength - Found char > 127" );
         pStr1++;
         pStr2++;
@@ -212,8 +211,7 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode
     while ( (nShortenedLength > 0) &&
             (pStr1 < pStr1End) && *pStr2 )
     {
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
+        SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(*pStr2)), "rtl.string",
                     "rtl_ustr_ascii_shortenedCompare_WithLength - Found char > 127" );
 
         nRet = static_cast<sal_Int32>(*pStr1)-
@@ -267,8 +265,7 @@ sal_Bool SAL_CALL rtl_ustr_asciil_reverseEquals_WithLength( const sal_Unicode* p
     const char*     pStr2Run = pStr2+nStrLen;
     while ( pStr1 < pStr1Run )
     {
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
+        SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(*pStr2)), "rtl.string",
                     "rtl_ustr_asciil_reverseEquals_WithLength - Found char > 127" );
         pStr1Run--;
         pStr2Run--;
@@ -297,25 +294,16 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( const sal_U
 {
     assert(nStr1Len >= 0);
     assert(pStr2);
-    sal_Int32   nRet;
-    sal_Int32   c1;
-    sal_Int32   c2;
+    unsigned char c2;
     do
     {
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
+        SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(*pStr2)), "rtl.string",
                     "rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength - Found char > 127" );
         if ( !nStr1Len )
             return *pStr2 == '\0' ? 0 : -1;
 
-        /* If character between 'A' and 'Z', then convert it to lowercase */
-        c1 = static_cast<sal_Int32>(*pStr1);
-        c2 = static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
+        c2 = static_cast<unsigned char>(*pStr2);
+        sal_Int32 nRet = rtl::compareIgnoreAsciiCase(*pStr1, c2);
         if ( nRet != 0 )
             return nRet;
 
@@ -347,23 +335,13 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( co
     assert(nShortenedLength >= 0);
     const sal_Unicode*  pStr1End = pStr1 + nStr1Len;
     sal_Int32           nRet;
-    sal_Int32           c1;
-    sal_Int32           c2;
     while ( (nShortenedLength > 0) &&
             (pStr1 < pStr1End) && *pStr2 )
     {
-        /* Check ASCII range */
-        SAL_WARN_IF( (static_cast<unsigned char>(*pStr2)) > 127, "rtl.string",
+        SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(*pStr2)), "rtl.string",
                     "rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength - Found char > 127" );
 
-        /* If character between 'A' and 'Z', then convert it to lowercase */
-        c1 = static_cast<sal_Int32>(*pStr1);
-        c2 = static_cast<sal_Int32>(static_cast<unsigned char>(*pStr2));
-        if ( (c1 >= 65) && (c1 <= 90) )
-            c1 += 32;
-        if ( (c2 >= 65) && (c2 <= 90) )
-            c2 += 32;
-        nRet = c1-c2;
+        nRet = rtl::compareIgnoreAsciiCase(*pStr1, static_cast<unsigned char>(*pStr2));
         if ( nRet != 0 )
             return nRet;
 
@@ -842,7 +820,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
             for (i = 0; i < len; i++)
             {
                 /* Check ASCII range */
-                SAL_WARN_IF( (static_cast<unsigned char>(str[i])) > 127, "rtl.string",
+                SAL_WARN_IF( !rtl::isAscii(static_cast<unsigned char>(str[i])), "rtl.string",
                             "rtl_ustring_internConvert() - Found char > 127 and RTL_TEXTENCODING_ASCII_US is specified" );
                 pScratch->buffer[i] = str[i];
             }
