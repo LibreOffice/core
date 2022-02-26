@@ -29,14 +29,14 @@
 
 class ScRefreshTimerControl
 {
-    std::mutex      aMutex;
-    sal_uInt16      nBlockRefresh;
+    std::recursive_mutex    aMutex;
+    sal_uInt16              nBlockRefresh;
 
 public:
     ScRefreshTimerControl() : nBlockRefresh(0) {}
     void SetAllowRefresh( bool b );
     bool IsRefreshAllowed() const { return !nBlockRefresh; }
-    std::mutex& GetMutex() { return aMutex; }
+    std::recursive_mutex& GetMutex() { return aMutex; }
 };
 
 class ScRefreshTimer : public AutoTimer
