@@ -663,4 +663,9 @@ HWPFile *SetCurrentDoc(HWPFile * hwpfp)
     return org;
 }
 
+void HWPFile::failed_box(std::unique_ptr<HBox> box)
+{
+    pfailedbox.push_back(std::move(box));
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

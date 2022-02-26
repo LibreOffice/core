@@ -252,6 +252,8 @@ class DLLEXPORT HWPFile
         }
         void pop_hpara_type() { element_import_stack.pop_back(); }
 
+        void failed_box(std::unique_ptr<HBox> box);
+
     private:
         int compareCharShape(CharShape const *shape);
         int compareParaShape(ParaShape const *shape);
@@ -283,6 +285,8 @@ class DLLEXPORT HWPFile
         // import is complete to avoid dangling references
         // elsewhere
         std::vector<std::unique_ptr<HWPPara>> pfailedlist;
+        // likesize, keep boxes that failed to load
+        std::vector<std::unique_ptr<HBox>> pfailedbox;
         // embedded picture list(tag data)
         std::vector<std::unique_ptr<EmPicture>> emblist;
         std::vector<std::unique_ptr<HyperText>> hyperlist;
