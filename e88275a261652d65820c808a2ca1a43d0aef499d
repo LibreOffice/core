@@ -16,6 +16,24 @@
       "message": "It tries to make sure that no new clients obtain the address of pRefreshTimerControl after the guard has been established. However, it still looks wrong: GetRefreshTimerControlAddress looks used left and right, storing references to the object in multiple places; if the already stored ones outlive the object itself, they will be dangling.\n\nIt feels that it might be needed to use shared pointer + weak pointers instead of unique_ptr maybe?",
       "revId": "e88275a261652d65820c808a2ca1a43d0aef499d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d7bd885_395e0213",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-26T09:14:24Z",
+      "side": 1,
+      "message": "Using shared_ptr or rtl::Reference sounds like a much better idea. Espeically since that mutex is now recursive, so releasing the lock is no guarantee that something higher up the stack does not also have a lock on it.",
+      "parentUuid": "3e7b61dc_8ce6445e",
+      "revId": "e88275a261652d65820c808a2ca1a43d0aef499d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
