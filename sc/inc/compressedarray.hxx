@@ -72,7 +72,7 @@ public:
     /** Construct with nMaxAccess=MAXROW, for example. */
                                 ScCompressedArray( A nMaxAccess,
                                         const D& rValue );
-    virtual                     ~ScCompressedArray();
+                                ~ScCompressedArray();
     void                        Reset( const D& rValue );
     void                        SetValue( A nPos, const D& rValue );
     void                        SetValue( A nStart, A nEnd, const D& rValue );
