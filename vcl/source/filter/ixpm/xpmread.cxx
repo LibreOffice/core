@@ -288,7 +288,7 @@ bool XPMReader::ImplGetColor()
         return false;
 
     OString aKey(reinterpret_cast<char*>(pString), mnCpp);
-    colordata aValue;
+    colordata aValue{0};
     bool bStatus = ImplGetColSub(aValue);
     if (bStatus)
     {
