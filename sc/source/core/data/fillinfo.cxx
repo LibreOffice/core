@@ -125,6 +125,7 @@ class RowInfoFiller
     RowInfo* mpRowInfo;
     SCCOL mnCol;
     SCSIZE mnArrY;
+    SCCOL mnStartCol;
     SCROW mnHiddenEndRow;
     bool mbHiddenRow;
 
@@ -147,14 +148,15 @@ class RowInfoFiller
         alignArray(nRow);
 
         RowInfo& rThisRowInfo = mpRowInfo[mnArrY];
-        rThisRowInfo.cellInfo(mnCol).maCell = rCell;
+        if(mnCol >= mnStartCol-1)
+            rThisRowInfo.cellInfo(mnCol).maCell = rCell;
         rThisRowInfo.basicCellInfo(mnCol).bEmptyCellText = false;
         ++mnArrY;
     }
 
 public:
-    RowInfoFiller(ScDocument& rDoc, SCTAB nTab, RowInfo* pRowInfo, SCCOL nCol, SCSIZE nArrY) :
-        mrDoc(rDoc), mnTab(nTab), mpRowInfo(pRowInfo), mnCol(nCol), mnArrY(nArrY),
+    RowInfoFiller(ScDocument& rDoc, SCTAB nTab, RowInfo* pRowInfo, SCCOL nCol, SCSIZE nArrY, SCCOL nStartCol) :
+        mrDoc(rDoc), mnTab(nTab), mpRowInfo(pRowInfo), mnCol(nCol), mnArrY(nArrY), mnStartCol(nStartCol),
         mnHiddenEndRow(-1), mbHiddenRow(false) {}
 
     void operator() (size_t nRow, double fVal)
@@ -438,7 +440,7 @@ void ScDocument::FillInfo(
                     nArrRow = 1;
                     // Iterate between rows nY1 and nY2 and pick up non-empty
                     // cells that are not hidden.
-                    RowInfoFiller aFunc(*this, nTab, pRowInfo, nCol, nArrRow);
+                    RowInfoFiller aFunc(*this, nTab, pRowInfo, nCol, nArrRow, nCol1);
                     sc::ParseAllNonEmpty(pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2,
                                          aFunc);
 
