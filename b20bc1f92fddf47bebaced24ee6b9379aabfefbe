@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "004c9b32_fd30f5a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-26T18:37:11Z",
+      "side": 1,
+      "message": "If we do 7.3.1.3 for https://gerrit.libreoffice.org/c/core/+/130571 then please let\u0027s get this in as well.",
+      "revId": "b20bc1f92fddf47bebaced24ee6b9379aabfefbe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
