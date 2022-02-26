@@ -77,7 +77,6 @@
 #include <formulacell.hxx>
 #include <clipcontext.hxx>
 #include <refupdatecontext.hxx>
-#include <refreshtimerprotector.hxx>
 #include <scopetools.hxx>
 #include <documentlinkmgr.hxx>
 #include <interpre.hxx>
@@ -337,14 +336,15 @@ ScDocument::~ScDocument()
 
     // first of all disable all refresh timers by deleting the control
     if ( pRefreshTimerControl )
-    {   // To be sure there isn't anything running do it with a protector,
+    {   // To be sure there isn't anything running do it with a lock,
         // this ensures also that nothing needs the control anymore.
-        {
-            // Use a scope on its own because it is undefined behaviour if a
-            // mutex is destroyed while still owned.
-            ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
-        }
-        pRefreshTimerControl.reset();
+        pRefreshTimerControl->SetAllowRefresh(false);
+        std::unique_ptr<ScRefreshTimerControl> pTempControl; // let it outlive the guard
+        // wait for any running refresh in another thread to finish
+        std::lock_guard g(pRefreshTimerControl->GetMutex());
+        // Clear pRefreshTimerControl before guard is released, and
+        // before the control itself is destroyed in pTempControl dtor
+        pTempControl = std::move(pRefreshTimerControl);
     }
 
     mxFormulaParserPool.reset();
