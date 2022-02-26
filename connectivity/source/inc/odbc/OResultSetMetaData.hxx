@@ -62,7 +62,7 @@ namespace connectivity::odbc
                     :m_vMapping(std::move(_vMapping))
                     ,m_aStatementHandle( _pStmt )
                     ,m_pConnection(_pConnection)
-                    ,m_nColCount(_vMapping.size()-1)
+                    ,m_nColCount(m_vMapping.size()-1)
                     ,m_bUseODBC2Types(false)
             {}
             virtual ~OResultSetMetaData() override;
