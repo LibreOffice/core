@@ -2182,8 +2182,13 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
 
 GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
 {
+    sal_uInt32 hmtxlength;
+    const sal_uInt8* hmtx = ttf->table(O_hmtx, hmtxlength);
+
+    if (!hmtxlength)
+        return nullptr;
+
     sal_uInt32 length;
-    const sal_uInt8* hmtx = ttf->table(O_hmtx, length);
     const sal_uInt8* glyf = ttf->table(O_glyf, length);
     int n;
 
