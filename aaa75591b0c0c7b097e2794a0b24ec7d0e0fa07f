@@ -52,6 +52,24 @@
       "parentUuid": "3c2b6daa_320f8892",
       "revId": "aaa75591b0c0c7b097e2794a0b24ec7d0e0fa07f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01ff7c4e_5c655ddf",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-26T16:55:50Z",
+      "side": 1,
+      "message": "This got already got merged on 7-3, I created a revert:\nhttps://gerrit.libreoffice.org/c/core/+/130556",
+      "parentUuid": "b8ec4716_a9524931",
+      "revId": "aaa75591b0c0c7b097e2794a0b24ec7d0e0fa07f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
