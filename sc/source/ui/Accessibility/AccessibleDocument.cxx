@@ -258,7 +258,6 @@ private:
 
     mutable ::accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
     mutable css::uno::Reference<css::view::XSelectionSupplier> xSelectionSupplier;
-    mutable size_t mnSdrObjCount;
     mutable sal_uInt32 mnShapesSelected;
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccessibleDocument;
@@ -499,9 +498,9 @@ sal_Int32 ScChildrenShapes::GetCount() const
     SdrPage* pDrawPage = GetDrawPage();
     if (pDrawPage && (maZOrderedShapes.size() == 1)) // the table is always in
     {
-        mnSdrObjCount = pDrawPage->GetObjCount();
-        maZOrderedShapes.reserve(mnSdrObjCount + 1); // the table is always in
-        for (size_t i = 0; i < mnSdrObjCount; ++i)
+        size_t nSdrObjCount = pDrawPage->GetObjCount();
+        maZOrderedShapes.reserve(nSdrObjCount + 1); // the table is always in
+        for (size_t i = 0; i < nSdrObjCount; ++i)
         {
             SdrObject* pObj = pDrawPage->GetObj(i);
             if (pObj/* && (pObj->GetLayer() != SC_LAYER_INTERN)*/)
