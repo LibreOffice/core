@@ -129,6 +129,9 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     meRefDevMode = RefDevMode::NONE;
     mbForceZeroExtleadBug = false;
+    mnBitCount = 0;
+    mbScreenComp = false;
+
 
     bool bErase = nDX > 0 && nDY > 0;
 
