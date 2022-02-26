@@ -2054,10 +2054,9 @@ void ScColumn::DeleteCellNotes( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1,
 
 bool ScColumn::HasCellNotes() const
 {
-    return std::any_of(maCellNotes.begin(), maCellNotes.end(),
-        [](const auto& rCellNote) {
-            // Having a cellnote block automatically means there is at least one cell note.
-            return rCellNote.type == sc::element_type_cellnote; });
+    if (maCellNotes.block_size() == 1 && maCellNotes.begin()->type == sc::element_type_empty)
+        return false; // all elements are empty
+    return true; // otherwise some must be notes
 }
 
 SCROW ScColumn::GetCellNotesMaxRow() const
