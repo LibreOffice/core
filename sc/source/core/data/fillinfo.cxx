@@ -413,6 +413,8 @@ void ScDocument::FillInfo(
     if (pCondFormList)
         pCondFormList->startRendering();
 
+    SCCOL nLastHiddenCheckedCol = -2;
+    bool bColHidden = false;
     for (SCCOL nCol=-1; nCol<=nCol2+1; nCol++)                    // left & right + 1
     {
         if (ValidCol(nCol))
@@ -420,10 +422,13 @@ void ScDocument::FillInfo(
             // #i58049#, #i57939# Hidden columns must be skipped here, or their attributes
             // will disturb the output
 
+            if (nCol > nLastHiddenCheckedCol)
+                bColHidden = ColHidden(nCol, nTab, nullptr, &nLastHiddenCheckedCol);
             // TODO: Optimize this loop.
-            if (!ColHidden(nCol, nTab))
+            if (!bColHidden)
             {
-                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(std::clamp(GetColWidth( nCol, nTab ) * fColScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
+                sal_uInt16 nColWidth = GetColWidth( nCol, nTab, false ); // false=no need to check for hidden, checked above
+                sal_uInt16 nThisWidth = static_cast<sal_uInt16>(std::clamp(nColWidth * fColScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
 
                 pRowInfo[0].cellInfo(nCol).nWidth = nThisWidth;           //TODO: this should be enough
 
