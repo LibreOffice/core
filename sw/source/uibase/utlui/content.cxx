@@ -4679,16 +4679,17 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             [[fallthrough]]; // execute FN_POSTIT assuring standard mode first
         }
         case ContentTypeId::POSTIT:
-            m_pActiveShell->GetView().GetPostItMgr()->AssureStdModeAtShell();
+        {
+            auto& rView = m_pActiveShell->GetView();
+            auto pPostItMgr = rView.GetPostItMgr();
+            pPostItMgr->AssureStdModeAtShell();
+            pPostItMgr->SetActiveSidebarWin(nullptr);
+            rView.GetEditWin().GrabFocus();
             if(nMode == EditEntryMode::DELETE)
-            {
-                m_pActiveShell->GetView().GetPostItMgr()->SetActiveSidebarWin(nullptr);
                 m_pActiveShell->DelRight();
-            }
             else
-            {
                 nSlot = FN_POSTIT;
-            }
+        }
         break;
         case ContentTypeId::INDEX:
         {
