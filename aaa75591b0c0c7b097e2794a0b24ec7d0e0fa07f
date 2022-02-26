@@ -34,6 +34,24 @@
       "parentUuid": "c73c0cf9_c7762b04",
       "revId": "aaa75591b0c0c7b097e2794a0b24ec7d0e0fa07f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8ec4716_a9524931",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-26T16:39:32Z",
+      "side": 1,
+      "message": "In theory yes. Practically it doesn\u0027t happen because the refresh timers aren\u0027t executed in threads. Rethinking, I may had even been wrong putting that protector in its own scope because it does SetAllowRefresh(true) in dtor, preventing other refresh timers to execute.",
+      "parentUuid": "3c2b6daa_320f8892",
+      "revId": "aaa75591b0c0c7b097e2794a0b24ec7d0e0fa07f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
