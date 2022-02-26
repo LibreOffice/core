@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c73c0cf9_c7762b04",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-26T07:07:07Z",
+      "side": 1,
+      "message": "So this line just creates an object that grabs a mutex in its ctor?\n\nIt looks strange, because the mutex is grabbed only in the ScRefreshTimerProtector ctor scope, and released before the ctor ends.\n\nBut if we just need the object be destructed immediately after construction, we could use a temporary instead of a named local object, which would be simpler and destruct it immediately:\n\n    ScRefreshTimerProtector( GetRefreshTimerControlAddress() );",
+      "revId": "aaa75591b0c0c7b097e2794a0b24ec7d0e0fa07f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
