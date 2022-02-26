@@ -96,6 +96,22 @@ struct ScIconSetInfo
     bool mbShowValue;
 };
 
+// FillInfo() computes some info for all cells starting from column 0,
+// but most of the info is needed only for cells in the given columns.
+// Keeping all the info in CellInfo could lead to allocation and initialization
+// of MiB's of memory, so split the info needed for all cells to a smaller structure.
+struct BasicCellInfo
+{
+    BasicCellInfo()
+        : nWidth(0)
+        , bEmptyCellText(true)
+        , bEditEngine(false)    // view-internal
+        {}
+    sal_uInt16                  nWidth;
+    bool                        bEmptyCellText : 1;
+    bool                        bEditEngine : 1;            // output-internal
+};
+
 struct CellInfo
 {
     CellInfo()
@@ -113,9 +129,7 @@ struct CellInfo
         , eHShadowPart(SC_SHADOW_HSTART)
         , eVShadowPart(SC_SHADOW_HSTART)
         , nClipMark(ScClipMark::NONE)
-        , nWidth(0)
         , nRotateDir(ScRotateDir::NONE)
-        , bEmptyCellText(false)
         , bMerged(false)
         , bHOverlapped(false)
         , bVOverlapped(false)
@@ -125,7 +139,6 @@ struct CellInfo
         , bFilterActive(false)
         , bPrinted(false)       // view-internal
         , bHideGrid(false)      // view-internal
-        , bEditEngine(false)    // view-internal
     {
     }
 
@@ -154,10 +167,8 @@ struct CellInfo
     ScShadowPart                eHShadowPart : 4;           // shadow effective for drawing
     ScShadowPart                eVShadowPart : 4;
     ScClipMark                  nClipMark;
-    sal_uInt16                  nWidth;
     ScRotateDir                 nRotateDir;
 
-    bool                        bEmptyCellText : 1;
     bool                        bMerged : 1;
     bool                        bHOverlapped : 1;
     bool                        bVOverlapped : 1;
@@ -167,7 +178,6 @@ struct CellInfo
     bool                        bFilterActive:1;
     bool                        bPrinted : 1;               // when required (pagebreak mode)
     bool                        bHideGrid : 1;              // output-internal
-    bool                        bEditEngine : 1;            // output-internal
 };
 
 const SCCOL SC_ROTMAX_NONE = SCCOL_MAX;
@@ -180,24 +190,44 @@ struct RowInfo
 
     CellInfo&           cellInfo(SCCOL nCol)
     {
+        assert( nCol >= nStartCol - 1 );
 #ifdef DBG_UTIL
-        assert( nCol >= -1 && nCol <= nCols + 1 );
+        assert( nCol <= nEndCol + 1 );
 #endif
-        return pCellInfo[ nCol + 1 ];
+        return pCellInfo[ nCol - nStartCol + 1 ];
     }
     const CellInfo&     cellInfo(SCCOL nCol) const
     {
         return const_cast<RowInfo*>(this)->cellInfo(nCol);
     }
 
-    void                allocCellInfo(SCCOL cols)
+    BasicCellInfo&      basicCellInfo(SCCOL nCol)
     {
+        assert( nCol >= -1 );
 #ifdef DBG_UTIL
-        nCols = cols;
+        assert( nCol <= nEndCol + 1 );
 #endif
-        pCellInfo = new CellInfo[ cols + 2 ];
+        return pBasicCellInfo[ nCol + 1 ];
     }
-    void                freeCellInfo() { delete[] pCellInfo; }
+    const BasicCellInfo& basicCellInfo(SCCOL nCol) const
+    {
+        return const_cast<RowInfo*>(this)->basicCellInfo(nCol);
+    }
+
+    void                allocCellInfo(SCCOL startCol, SCCOL endCol)
+    {
+        nStartCol = startCol;
+#ifdef DBG_UTIL
+        nEndCol = endCol;
+#endif
+        pCellInfo = new CellInfo[ endCol - nStartCol + 1 + 2 ];
+        pBasicCellInfo = new BasicCellInfo[ endCol + 2 ];
+    }
+    void                freeCellInfo()
+    {
+        delete[] pCellInfo;
+        delete[] pBasicCellInfo;
+    }
 
     sal_uInt16          nHeight;
     SCROW               nRowNo;
@@ -211,10 +241,14 @@ struct RowInfo
 private:
     // This class allocates CellInfo with also one item extra before and after.
     // To make handling easier, this is private and access functions take care of adjusting
-    // the array indexes and error-checking.
+    // the array indexes and error-checking. CellInfo is allocated only for a given
+    // range of columns plus one on each side, BasicCellInfo is allocated for columns
+    // starting from column 0 until the last column given, again plus one on each side.
     CellInfo*           pCellInfo;
+    BasicCellInfo*      pBasicCellInfo;
+    SCCOL               nStartCol;
 #ifdef DBG_UTIL
-    SCCOL               nCols;
+    SCCOL               nEndCol;
 #endif
 };
 

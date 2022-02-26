@@ -195,7 +195,7 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
 
     nScrW = 0;
     for (SCCOL nX=nVisX1; nX<=nVisX2; nX++)
-        nScrW += pRowInfo[0].cellInfo(nX).nWidth;
+        nScrW += pRowInfo[0].basicCellInfo(nX).nWidth;
 
     nMirrorW = nScrW;
 
@@ -368,7 +368,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
     for (nX=nX1; nX<=nX2; nX++)
     {
-        sal_uInt16 nWidth = pRowInfo[0].cellInfo(nX).nWidth;
+        sal_uInt16 nWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
         if (nWidth)
         {
             nPosX += nWidth * nLayoutSign;
@@ -409,7 +409,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
             bool bDraw = bGrid || nBreakOld != ScBreakType::NONE || bMergeCover; // simple grid only if set that way
 
-            sal_uInt16 nWidthXplus1 = pRowInfo[0].cellInfo(nX+1).nWidth;
+            sal_uInt16 nWidthXplus1 = pRowInfo[0].basicCellInfo(nX+1).nWidth;
             bSingle = false; //! get into Fillinfo !!!!!
             if ( nX<mpDoc->MaxCol() && !bSingle )
             {
@@ -546,7 +546,7 @@ void ScOutputData::DrawGrid(vcl::RenderContext& rRenderContext, bool bGrid, bool
 
                     for (SCCOL i=nX1; i<=nX2; i++)
                     {
-                        const tools::Long nNextX = nPosX + pRowInfo[0].cellInfo(i).nWidth * nLayoutSign;
+                        const tools::Long nNextX = nPosX + pRowInfo[0].basicCellInfo(i).nWidth * nLayoutSign;
                         if (nNextX != nPosX)                                // visible
                         {
                             bool bVOver;
@@ -1146,7 +1146,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
                         SCCOL nCol = nX+nOldMerged+nMerged;
                         if (nCol > nX2+2)
                             break;
-                        nPosX += pRowInfo[0].cellInfo(nCol-1).nWidth * nLayoutSign;
+                        nPosX += pRowInfo[0].basicCellInfo(nCol-1).nWidth * nLayoutSign;
                     }
                 }
 
@@ -1198,7 +1198,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
 
         if ( pThisRowInfo->bChanged && !bSkipY )
         {
-            tools::Long nPosX = nInitPosX - pRowInfo[0].cellInfo(nX1-1).nWidth * nLayoutSign;
+            tools::Long nPosX = nInitPosX - pRowInfo[0].basicCellInfo(nX1-1).nWidth * nLayoutSign;
             for (SCCOL nCol=nX1-1; nCol<=nX2+1; nCol++)
             {
                 bool bCornerX = ( nCol==nX1-1 || nCol==nX2+1 );
@@ -1222,15 +1222,15 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
 
                         if (bDo)
                         {
-                            tools::Long nThisWidth = pRowInfo[0].cellInfo(nCol).nWidth;
+                            tools::Long nThisWidth = pRowInfo[0].basicCellInfo(nCol).nWidth;
                             tools::Long nMaxWidth = nThisWidth;
                             if (!nMaxWidth)
                             {
                                 //! direction must depend on shadow location
                                 SCCOL nWx = nCol+1;
-                                while (nWx<nX2 && !pRowInfo[0].cellInfo(nWx).nWidth)
+                                while (nWx<nX2 && !pRowInfo[0].basicCellInfo(nWx).nWidth)
                                     ++nWx;
-                                nMaxWidth = pRowInfo[0].cellInfo(nWx).nWidth;
+                                nMaxWidth = pRowInfo[0].basicCellInfo(nWx).nWidth;
                             }
 
                             // rectangle is in logical orientation
@@ -1302,7 +1302,7 @@ void ScOutputData::DrawExtraShadow(bool bLeft, bool bTop, bool bRight, bool bBot
                     }
                 }
 
-                nPosX += pRowInfo[0].cellInfo(nCol).nWidth * nLayoutSign;
+                nPosX += pRowInfo[0].basicCellInfo(nCol).nWidth * nLayoutSign;
             }
         }
         nPosY += nRowHeight;
@@ -1438,7 +1438,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
 
     // column nX1-1 is not visible (dummy for borders from left) - subtract its width from initial position
     // subtract 1 unit more, because position 0 is first *in* cell, grid line is one unit above
-    tools::Long nOldPosX = nInitPosX - nLayoutSign * (1 + pRowInfo[ 0 ].cellInfo( nX1 - 1 ).nWidth);
+    tools::Long nOldPosX = nInitPosX - nLayoutSign * (1 + pRowInfo[ 0 ].basicCellInfo( nX1 - 1 ).nWidth);
     tools::Long nOldSnapX = lclGetSnappedX( rRenderContext, nOldPosX, bSnapPixel );
     // set X offset for left-to-right sheets; for right-to-left sheets this is done after for() loop
     if( !bLayoutRTL )
@@ -1446,7 +1446,7 @@ void ScOutputData::DrawFrame(vcl::RenderContext& rRenderContext)
     for( SCCOL nCol = nX1 - 1; nCol <= nX2 + 1; ++nCol )
     {
         size_t nArrCol = bLayoutRTL ? nX2 + 1 - nCol : nCol - (nX1 - 1);
-        tools::Long nNewPosX = nOldPosX + pRowInfo[ 0 ].cellInfo( nCol ).nWidth * nLayoutSign;
+        tools::Long nNewPosX = nOldPosX + pRowInfo[ 0 ].basicCellInfo( nCol ).nWidth * nLayoutSign;
         tools::Long nNewSnapX = lclGetSnappedX( rRenderContext, nNewPosX, bSnapPixel );
         rArray.SetColWidth( nArrCol, std::abs( nNewSnapX - nOldSnapX ) );
         nOldPosX = nNewPosX;
@@ -1545,7 +1545,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                 if (nX==nX1) nPosX = nInitPosX;     // calculated individually for preceding positions
 
                 CellInfo* pInfo = &rThisRowInfo.cellInfo(nX);
-                tools::Long nColWidth = pRowInfo[0].cellInfo(nX).nWidth;
+                tools::Long nColWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
                 if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                         !pInfo->bHOverlapped && !pInfo->bVOverlapped )
                 {
@@ -1574,7 +1574,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
                             while (nCol > nX)
                             {
                                 --nCol;
-                                nPosX -= nLayoutSign * static_cast<tools::Long>(pRowInfo[0].cellInfo(nCol).nWidth);
+                                nPosX -= nLayoutSign * static_cast<tools::Long>(pRowInfo[0].basicCellInfo(nCol).nWidth);
                             }
                         }
 
@@ -1969,10 +1969,10 @@ ReferenceMark ScOutputData::FillReferenceMark( SCCOL nRefStartX, SCROW nRefStart
             }
             if ( nX==nRefEndX )
             {
-                nMaxX = nPosX + ( pRowInfo[0].cellInfo(nX).nWidth - 2 ) * nLayoutSign;
+                nMaxX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
                 bRight = true;
             }
-            nPosX += pRowInfo[0].cellInfo(nX).nWidth * nLayoutSign;
+            nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
         }
 
         if (bTop && bBottom && bLeft && bRight)
@@ -2061,10 +2061,10 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
         }
         if ( nX==nRefEndX )
         {
-            nMaxX = nPosX + ( pRowInfo[0].cellInfo(nX).nWidth - 2 ) * nLayoutSign;
+            nMaxX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 2 ) * nLayoutSign;
             bRight = true;
         }
-        nPosX += pRowInfo[0].cellInfo(nX).nWidth * nLayoutSign;
+        nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
     }
 
     if ( nMaxX * nLayoutSign < nMinX * nLayoutSign || nMaxY < nMinY )
@@ -2188,10 +2188,10 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
         }
         if ( nX==nRefEndX )
         {
-            nMaxX = nPosX + ( pRowInfo[0].cellInfo(nX).nWidth - 1 ) * nLayoutSign;
+            nMaxX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 1 ) * nLayoutSign;
             bRight = true;
         }
-        nPosX += pRowInfo[0].cellInfo(nX).nWidth * nLayoutSign;
+        nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
     }
 
     if ( nMaxX * nLayoutSign < nMinX * nLayoutSign || nMaxY < nMinY )
@@ -2348,14 +2348,14 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                         bFirst = false;
                     }
 
-                    tools::Long nMarkX = nPosX + ( pRowInfo[0].cellInfo(nX).nWidth - 4 ) * nLayoutSign;
+                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - 4 ) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
                     {
                         //  if merged, add widths of all cells
                         SCCOL nNextX = nX + 1;
                         while ( nNextX <= nX2 + 1 && pThisRowInfo->cellInfo(nNextX).bHOverlapped )
                         {
-                            nMarkX += pRowInfo[0].cellInfo(nNextX).nWidth * nLayoutSign;
+                            nMarkX += pRowInfo[0].basicCellInfo(nNextX).nWidth * nLayoutSign;
                             ++nNextX;
                         }
                     }
@@ -2363,7 +2363,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
                         rRenderContext.DrawRect( tools::Rectangle( nMarkX-5*nLayoutSign,nPosY,nMarkX+1*nLayoutSign,nPosY+6 ) );
                 }
 
-                nPosX += pRowInfo[0].cellInfo(nX).nWidth * nLayoutSign;
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;
@@ -2414,14 +2414,14 @@ void ScOutputData::AddPDFNotes()
                     tools::Long nNoteWidth = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
                     tools::Long nNoteHeight = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTY );
 
-                    tools::Long nMarkX = nPosX + ( pRowInfo[0].cellInfo(nX).nWidth - nNoteWidth ) * nLayoutSign;
+                    tools::Long nMarkX = nPosX + ( pRowInfo[0].basicCellInfo(nX).nWidth - nNoteWidth ) * nLayoutSign;
                     if ( bIsMerged || pInfo->bMerged )
                     {
                         //  if merged, add widths of all cells
                         SCCOL nNextX = nX + 1;
                         while ( nNextX <= nX2 + 1 && pThisRowInfo->cellInfo(nNextX).bHOverlapped )
                         {
-                            nMarkX += pRowInfo[0].cellInfo(nNextX).nWidth * nLayoutSign;
+                            nMarkX += pRowInfo[0].basicCellInfo(nNextX).nWidth * nLayoutSign;
                             ++nNextX;
                         }
                     }
@@ -2445,7 +2445,7 @@ void ScOutputData::AddPDFNotes()
                     }
                 }
 
-                nPosX += pRowInfo[0].cellInfo(nX).nWidth * nLayoutSign;
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;
@@ -2527,7 +2527,7 @@ void ScOutputData::DrawClipMarks()
                     }
                     else
                     {
-                        tools::Long nOutWidth = pRowInfo[0].cellInfo(nX).nWidth;
+                        tools::Long nOutWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
                         tools::Long nOutHeight = pThisRowInfo->nHeight;
 
                         if ( pInfo->bMerged && pInfo->pPatternAttr )
@@ -2598,7 +2598,7 @@ void ScOutputData::DrawClipMarks()
                         }
                     }
                 }
-                nPosX += pRowInfo[0].cellInfo(nX).nWidth * nLayoutSign;
+                nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
             }
         }
         nPosY += pThisRowInfo->nHeight;
