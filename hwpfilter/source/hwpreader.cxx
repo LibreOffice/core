@@ -460,7 +460,9 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC || hdo->type == HWPDO_FREEFORM ||
             hdo->type == HWPDO_ADVANCED_ARC )
         {
-            if( prop->line_tstyle && !ArrowShape[prop->line_tstyle].bMade  )
+            if( prop->line_tstyle > 0 &&
+                o3tl::make_unsigned(prop->line_tstyle) < std::size(ArrowShape) &&
+                !ArrowShape[prop->line_tstyle].bMade  )
             {
                 ArrowShape[prop->line_tstyle].bMade = true;
                 padd("draw:name", sXML_CDATA,
@@ -484,7 +486,9 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 mxList->clear();
                 rendEl("draw:marker");
             }
-            if( prop->line_hstyle && !ArrowShape[prop->line_hstyle].bMade)
+            if (prop->line_hstyle > 0 &&
+                o3tl::make_unsigned(prop->line_hstyle) < std::size(ArrowShape) &&
+                !ArrowShape[prop->line_hstyle].bMade)
             {
                 ArrowShape[prop->line_hstyle].bMade = true;
                 padd("draw:name", sXML_CDATA,
@@ -2044,7 +2048,8 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             hdo->type == HWPDO_FREEFORM || hdo->type == HWPDO_ADVANCED_ARC )
         {
 
-            if( hdo->property.line_tstyle > 0 )
+            if( hdo->property.line_tstyle > 0 &&
+                o3tl::make_unsigned(hdo->property.line_tstyle) < std::size(ArrowShape) )
             {
                 padd("draw:marker-start", sXML_CDATA,
                     ascii(ArrowShape[hdo->property.line_tstyle].name) );
@@ -2065,7 +2070,8 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                               Double2Str( WTMM(hdo->property.line_width * 7)) + "mm");
             }
 
-            if( hdo->property.line_hstyle > 0 )
+            if( hdo->property.line_hstyle > 0 &&
+                o3tl::make_unsigned(hdo->property.line_hstyle) < std::size(ArrowShape) )
             {
                 padd("draw:marker-end", sXML_CDATA,
                     ascii(ArrowShape[hdo->property.line_hstyle].name) );
