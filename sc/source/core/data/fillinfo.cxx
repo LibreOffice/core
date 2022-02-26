@@ -125,6 +125,7 @@ class RowInfoFiller
     RowInfo* mpRowInfo;
     SCCOL mnCol;
     SCSIZE mnArrY;
+    SCCOL mnStartCol;
     SCROW mnHiddenEndRow;
     bool mbHiddenRow;
 
@@ -147,15 +148,15 @@ class RowInfoFiller
         alignArray(nRow);
 
         RowInfo& rThisRowInfo = mpRowInfo[mnArrY];
-        CellInfo& rInfo = rThisRowInfo.cellInfo(mnCol);
-        rInfo.maCell = rCell;
-        rInfo.bEmptyCellText = false;
+        if(mnCol >= mnStartCol-1)
+            rThisRowInfo.cellInfo(mnCol).maCell = rCell;
+        rThisRowInfo.basicCellInfo(mnCol).bEmptyCellText = false;
         ++mnArrY;
     }
 
 public:
-    RowInfoFiller(ScDocument& rDoc, SCTAB nTab, RowInfo* pRowInfo, SCCOL nCol, SCSIZE nArrY) :
-        mrDoc(rDoc), mnTab(nTab), mpRowInfo(pRowInfo), mnCol(nCol), mnArrY(nArrY),
+    RowInfoFiller(ScDocument& rDoc, SCTAB nTab, RowInfo* pRowInfo, SCCOL nCol, SCSIZE nArrY, SCCOL nStartCol) :
+        mrDoc(rDoc), mnTab(nTab), mpRowInfo(pRowInfo), mnCol(nCol), mnArrY(nArrY), mnStartCol(nStartCol),
         mnHiddenEndRow(-1), mbHiddenRow(false) {}
 
     void operator() (size_t nRow, double fVal)
@@ -240,18 +241,24 @@ void initRowInfo(const ScDocument* pDoc, RowInfo* pRowInfo, const SCSIZE nMaxRow
     }
 }
 
-void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nRotMax,
+void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nStartCol, SCCOL nRotMax,
         const SvxShadowItem* pDefShadow)
 {
     for (SCSIZE nArrRow = 0; nArrRow < nArrCount; ++nArrRow)
     {
         RowInfo& rThisRowInfo = pRowInfo[nArrRow];
-        rThisRowInfo.allocCellInfo( nRotMax + 1 );
+        // A lot of memory (and performance allocating and initializing it) can
+        // be saved if we do not allocate CellInfo for columns before nStartCol.
+        // But code in ScOutputData::SetCellRotation(), ScOutputData::DrawRotatedFrame()
+        // and ScOutputData::SetCellRotations() accesses those. That depends on
+        // nRotMaxCol being set to something else than none, and the value is already
+        // initialized here. So allocate all those cells starting from column 0 only if needed.
+        SCCOL nMinCol = rThisRowInfo.nRotMaxCol != SC_ROTMAX_NONE ? 0 : nStartCol;
+        rThisRowInfo.allocCellInfo( nMinCol, nRotMax + 1 );
 
-        for (SCCOL nCol = -1; nCol <= nRotMax+1; ++nCol) // Preassign cell info
+        for (SCCOL nCol = nMinCol-1; nCol <= nRotMax+1; ++nCol) // Preassign cell info
         {
             CellInfo& rInfo = rThisRowInfo.cellInfo(nCol);
-            rInfo.bEmptyCellText = true;
             rInfo.pShadowAttr    = pDefShadow;
         }
     }
@@ -269,7 +276,7 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
                 if (!nThisWidth)
                     nThisWidth = 1;
 
-                pRowInfo[0].cellInfo(nCol).nWidth = nThisWidth;
+                pRowInfo[0].basicCellInfo(nCol).nWidth = nThisWidth;
             }
         }
     }
@@ -405,7 +412,7 @@ void ScDocument::FillInfo(
 
     //  Allocate cell information only after the test rotation
     //  to nRotMax due to nRotateDir Flag
-    initCellInfo(pRowInfo, nArrCount, nRotMax, pDefShadow);
+    initCellInfo(pRowInfo, nArrCount, nCol1, nRotMax, pDefShadow);
 
     initColWidths(pRowInfo, this, fColScale, nTab, nCol2, nRotMax);
 
@@ -415,7 +422,7 @@ void ScDocument::FillInfo(
 
     SCCOL nLastHiddenCheckedCol = -2;
     bool bColHidden = false;
-    for (SCCOL nCol=-1; nCol<=nCol2+1; nCol++)                    // left & right + 1
+    for (SCCOL nCol=-1; nCol<=nCol2+1; nCol++) // collect basic info also for all previous cols, and left & right + 1
     {
         if (ValidCol(nCol))
         {
@@ -430,7 +437,7 @@ void ScDocument::FillInfo(
                 sal_uInt16 nColWidth = GetColWidth( nCol, nTab, false ); // false=no need to check for hidden, checked above
                 sal_uInt16 nThisWidth = static_cast<sal_uInt16>(std::clamp(nColWidth * fColScale, 1.0, double(std::numeric_limits<sal_uInt16>::max())));
 
-                pRowInfo[0].cellInfo(nCol).nWidth = nThisWidth;           //TODO: this should be enough
+                pRowInfo[0].basicCellInfo(nCol).nWidth = nThisWidth;           //TODO: this should be enough
 
                 const ScAttrArray* pThisAttrArr; // Attribute
                 if (nCol < maTabs[nTab]->GetAllocatedColumnsCount())
@@ -440,7 +447,7 @@ void ScDocument::FillInfo(
                     nArrRow = 1;
                     // Iterate between rows nY1 and nY2 and pick up non-empty
                     // cells that are not hidden.
-                    RowInfoFiller aFunc(*this, nTab, pRowInfo, nCol, nArrRow);
+                    RowInfoFiller aFunc(*this, nTab, pRowInfo, nCol, nArrRow, nCol1);
                     sc::ParseAllNonEmpty(pThisCol->maCells.begin(), pThisCol->maCells, nRow1, nRow2,
                                          aFunc);
 
@@ -536,6 +543,7 @@ void ScDocument::FillInfo(
                                     pThisRowInfo->bPivotButton = true;
 
                                 CellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
+                                BasicCellInfo* pBasicInfo = &pThisRowInfo->basicCellInfo(nCol);
                                 pInfo->pBackground  = pBackground;
                                 pInfo->pPatternAttr = pPattern;
                                 pInfo->bMerged      = bMerged;
@@ -565,7 +573,7 @@ void ScDocument::FillInfo(
                                 }
 
                                 if (bHidden || (bFormulaMode && bHideFormula && pInfo->maCell.meType == CELLTYPE_FORMULA))
-                                    pInfo->bEmptyCellText = true;
+                                    pBasicInfo->bEmptyCellText = true;
 
                                 ++nArrRow;
                             }
@@ -613,17 +621,12 @@ void ScDocument::FillInfo(
                 else                                    // columns in front
                 {
                     for (nArrRow=1; nArrRow+1<nArrCount; nArrRow++)
-                    {
-                        RowInfo* pThisRowInfo = &pRowInfo[nArrRow];
-                        CellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
-
-                        pInfo->nWidth       = nThisWidth;           //TODO: or check only 0 ??
-                    }
+                        pRowInfo[nArrRow].basicCellInfo(nCol).nWidth = nThisWidth; //TODO: or check only 0 ??
                 }
             }
         }
         else
-            pRowInfo[0].cellInfo(nCol).nWidth = STD_COL_WIDTH;
+            pRowInfo[0].basicCellInfo(nCol).nWidth = STD_COL_WIDTH;
         // STD_COL_WIDTH farthest to the left and right is needed for DrawExtraShadow
     }
 
@@ -760,9 +763,9 @@ void ScDocument::FillInfo(
                     SCCOL nDxPos = 1;
                     SCCOL nDxNeg = -1;
 
-                    while ( nCol+nDxPos < nCol2+1 && pRowInfo[0].cellInfo(nCol+nDxPos).nWidth == 0 )
+                    while ( nCol+nDxPos < nCol2+1 && pRowInfo[0].basicCellInfo(nCol+nDxPos).nWidth == 0 )
                         ++nDxPos;
-                    while ( nCol+nDxNeg > nCol1-1 && pRowInfo[0].cellInfo(nCol+nDxNeg).nWidth == 0 )
+                    while ( nCol+nDxNeg > nCol1-1 && pRowInfo[0].basicCellInfo(nCol+nDxNeg).nWidth == 0 )
                         --nDxNeg;
 
                     bool bLeftDiff = !bLeft &&
@@ -884,8 +887,9 @@ void ScDocument::FillInfo(
 
     // *** create the frame border array ***
 
-    // RowInfo structs are filled in the range [ 0 , nArrCount-1 ]
+    // RowInfo structs are filled in the range [ 0 , nArrCount-1 ],
     // each RowInfo contains CellInfo structs in the range [ nCol1-1 , nCol2+1 ]
+    // and BasicCellInfo structs in the range [ -1, nCol2+1 ]
 
     size_t nColCount = nCol2 - nCol1 + 1 + 2;
     size_t nRowCount = nArrCount;
