@@ -229,8 +229,9 @@ const Sequence<OUString>& SwRevisionConfig::GetPropertyNames()
     return aNames;
 }
 
-SwRevisionConfig::SwRevisionConfig() :
-    ConfigItem("Office.Writer/Revision", ConfigItemMode::ReleaseTree)
+SwRevisionConfig::SwRevisionConfig()
+    : ConfigItem("Office.Writer/Revision", ConfigItemMode::ReleaseTree)
+    , m_nMarkAlign(0)
 {
     m_aInsertAttr.m_nItemId = SID_ATTR_CHAR_UNDERLINE;
     m_aInsertAttr.m_nAttr = LINESTYLE_SINGLE;
