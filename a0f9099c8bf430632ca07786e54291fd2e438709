@@ -51,6 +51,24 @@
       "parentUuid": "398d4bf3_7a286131",
       "revId": "a0f9099c8bf430632ca07786e54291fd2e438709",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56dcd85e_6ab3f28c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-26T17:50:47Z",
+      "side": 1,
+      "message": "Sorry, I meant BIFF12, not BIFF8.\n\nRegarding data loss or not, the Excel situation isn\u0027t that clear; the warning also triggers if only formatting overflows our boundaries or dimensions say it would be larger but in fact isn\u0027t, not just for actual data lying outside.\n\nFor CSV or dBase and the like an overflow clearly indicates data loss so IMHO that shouldn\u0027t be only a warning. On the other hand, one may want the data imported as far as it can and then continue, but I think it should fail for conversion from the command line, for example.",
+      "parentUuid": "d6dfb1a8_6dbe2f21",
+      "revId": "a0f9099c8bf430632ca07786e54291fd2e438709",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
