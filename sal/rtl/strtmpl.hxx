@@ -98,159 +98,176 @@ template <typename C1, typename C2> void warnIfOneIsCharAndNotAscii(C1 c1, C2 c2
     }
 }
 
+struct CompareNormal
+{
+    template <typename C1, typename C2> static sal_Int32 compare(C1 c1, C2 c2)
+    {
+        warnIfOneIsCharAndNotAscii(c1, c2);
+        return static_cast<sal_Int32>(IMPL_RTL_USTRCODE(c1))
+               - static_cast<sal_Int32>(IMPL_RTL_USTRCODE(c2));
+    }
+};
+
+struct CompareIgnoreAsciiCase
+{
+    template <typename C1, typename C2> static sal_Int32 compare(C1 c1, C2 c2)
+    {
+        warnIfOneIsCharAndNotAscii(c1, c2);
+        return rtl::compareIgnoreAsciiCase(IMPL_RTL_USTRCODE(c1), IMPL_RTL_USTRCODE(c2));
+    }
+};
+
 /* ----------------------------------------------------------------------- */
 
-template <typename C1, typename C2> sal_Int32 compare(const C1* pStr1, const C2* pStr2)
+template <typename C1, typename C2, class Compare>
+sal_Int32 compare(const C1* pStr1, const C2* pStr2, Compare)
 {
     assert(pStr1);
     assert(pStr2);
-    if constexpr (sizeof(C1) == sizeof(char) && sizeof(C2) == sizeof(char))
+    for (;;)
     {
-        // take advantage of builtin optimisations
-        return strcmp( pStr1, pStr2);
+        const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2);
+        if (!(nRet == 0 && *pStr2))
+            return nRet;
+        ++pStr1;
+        ++pStr2;
     }
-    else if constexpr (sizeof(C1) == sizeof(wchar_t) && sizeof(C2) == sizeof(wchar_t))
-    {
-        // take advantage of builtin optimisations
-        return wcscmp(reinterpret_cast<wchar_t const *>(pStr1), reinterpret_cast<wchar_t const *>(pStr2));
-    }
-    else // including C1 != C2
-    {
-        sal_Int32 nRet;
-        for (;;)
-        {
-            warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
+}
 
-            nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr1)) -
-                   static_cast<sal_Int32>(IMPL_RTL_USTRCODE(*pStr2));
-            if (!(nRet == 0 && *pStr2 ))
-                break;
-            pStr1++;
-            pStr2++;
-        }
+// take advantage of builtin optimisations
+template <typename C, std::enable_if_t<sizeof(C) == sizeof(wchar_t), int> = 0>
+sal_Int32 compare(const C* pStr1, const C* pStr2, CompareNormal)
+{
+    assert(pStr1);
+    assert(pStr2);
+    return wcscmp(reinterpret_cast<wchar_t const*>(pStr1), reinterpret_cast<wchar_t const*>(pStr2));
+}
+inline sal_Int32 compare(const char* pStr1, const char* pStr2, CompareNormal)
+{
+    assert(pStr1);
+    assert(pStr2);
+    return strcmp(pStr1, pStr2);
+}
 
-        return nRet;
+/* ----------------------------------------------------------------------- */
+
+template <typename C1, typename C2, class Compare>
+sal_Int32 compare_WithLength(const C1* pStr1, sal_Int32 nStr1Len, const C2* pStr2, Compare)
+{
+    assert(pStr1 || nStr1Len == 0);
+    assert(nStr1Len >= 0);
+    assert(pStr2);
+    for (;;)
+    {
+        if (*pStr2 == '\0')
+            return nStr1Len;
+        if (nStr1Len == 0)
+            return -1;
+        if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
+            return nRet;
+        pStr1++;
+        pStr2++;
+        nStr1Len--;
     }
 }
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 compare_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
-                                                           sal_Int32 nStr1Len,
-                                                           const IMPL_RTL_STRCODE* pStr2,
-                                                           sal_Int32 nStr2Len )
+template <typename C1, typename C2, class Compare>
+sal_Int32 compare_WithLengths(const C1* pStr1, sal_Int32 nStr1Len,
+                              const C2* pStr2, sal_Int32 nStr2Len, Compare)
 {
+    assert(pStr1 || nStr1Len == 0);
     assert(nStr1Len >= 0);
+    assert(pStr2 || nStr2Len == 0);
+    assert(nStr2Len >= 0);
+    // TODO: use std::lexicographical_compare_three_way when C++20 is available
+    const C1* pStr1End = pStr1 + nStr1Len;
+    const C2* pStr2End = pStr2 + nStr2Len;
+    while ((pStr1 < pStr1End) && (pStr2 < pStr2End))
+    {
+        if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
+            return nRet;
+        pStr1++;
+        pStr2++;
+    }
+
+    return nStr1Len - nStr2Len;
+}
+
+template <typename C>
+sal_Int32 compare_WithLengths(const C* pStr1, sal_Int32 nStr1Len,
+                              const C* pStr2, sal_Int32 nStr2Len, CompareNormal)
+{
+    assert(pStr1 || nStr1Len == 0);
+    assert(nStr1Len >= 0);
+    assert(pStr2 || nStr2Len == 0);
     assert(nStr2Len >= 0);
     // take advantage of builtin optimisations
-    std::basic_string_view<IMPL_RTL_STRCODE> aView1(pStr1, nStr1Len);
-    std::basic_string_view<IMPL_RTL_STRCODE> aView2(pStr2, nStr2Len);
+    std::basic_string_view<C> aView1(pStr1, nStr1Len);
+    std::basic_string_view<C> aView2(pStr2, nStr2Len);
     return aView1.compare(aView2);
 }
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 shortenedCompare_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
-                                                                    sal_Int32 nStr1Len,
-                                                                    const IMPL_RTL_STRCODE* pStr2,
-                                                                    sal_Int32 nStr2Len,
-                                                                    sal_Int32 nShortenedLength )
+template <typename C1, typename C2, class Compare>
+sal_Int32 shortenedCompare_WithLength(const C1* pStr1, sal_Int32 nStr1Len, const C2* pStr2,
+                                      sal_Int32 nShortenedLength, Compare)
 {
-    return compare_WithLength(pStr1, std::min(nStr1Len, nShortenedLength),
-                              pStr2, std::min(nStr2Len, nShortenedLength));
+    assert(pStr1);
+    assert(nStr1Len >= 0);
+    assert(pStr2);
+    assert(nShortenedLength >= 0);
+    const C1* pStr1End = pStr1 + nStr1Len;
+    for (;;)
+    {
+        if (nShortenedLength == 0)
+            return 0;
+        if (*pStr2 == '\0')
+            return pStr1End - pStr1;
+        if (pStr1 == pStr1End)
+            return -1; // first is a substring of the second string => less (negative value)
+        if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
+            return nRet;
+        nShortenedLength--;
+        pStr1++;
+        pStr2++;
+    }
 }
 
 /* ----------------------------------------------------------------------- */
 
-template <typename C1, typename C2>
-sal_Int32 reverseCompare_WithLength(const C1* pStr1, sal_Int32 nStr1Len,
-                                    const C2* pStr2, sal_Int32 nStr2Len)
+template <typename C1, typename C2, class Compare>
+sal_Int32 shortenedCompare_WithLengths(const C1* pStr1, sal_Int32 nStr1Len,
+                                       const C2* pStr2, sal_Int32 nStr2Len,
+                                       sal_Int32 nShortenedLength, Compare cf)
 {
+    return compare_WithLengths(pStr1, std::min(nStr1Len, nShortenedLength),
+                               pStr2, std::min(nStr2Len, nShortenedLength), cf);
+}
+
+/* ----------------------------------------------------------------------- */
+
+template <typename C1, typename C2, class Compare>
+sal_Int32 reverseCompare_WithLengths(const C1* pStr1, sal_Int32 nStr1Len,
+                                     const C2* pStr2, sal_Int32 nStr2Len, Compare)
+{
+    assert(pStr1 || nStr1Len == 0);
     assert(nStr1Len >= 0);
+    assert(pStr2 || nStr2Len == 0);
     assert(nStr2Len >= 0);
     const C1* pStr1Run = pStr1+nStr1Len;
     const C2* pStr2Run = pStr2+nStr2Len;
-    sal_Int32               nRet;
-    while ( (pStr1 < pStr1Run) && (pStr2 < pStr2Run) )
+    while ((pStr1 < pStr1Run) && (pStr2 < pStr2Run))
     {
-        warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
-
         pStr1Run--;
         pStr2Run--;
-        nRet = static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr1Run ))-
-               static_cast<sal_Int32>(IMPL_RTL_USTRCODE( *pStr2Run ));
-        if ( nRet )
+        if (const sal_Int32 nRet = Compare::compare(*pStr1Run, *pStr2Run))
             return nRet;
     }
 
     return nStr1Len - nStr2Len;
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename C1, typename C2>
-sal_Int32 compareIgnoreAsciiCase(const C1* pStr1, const C2* pStr2)
-{
-    assert(pStr1);
-    assert(pStr2);
-    sal_uInt32 c1;
-    do
-    {
-        warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
-
-        c1 = IMPL_RTL_USTRCODE(*pStr1);
-        sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
-            c1, IMPL_RTL_USTRCODE(*pStr2));
-        if ( nRet != 0 )
-            return nRet;
-
-        pStr1++;
-        pStr2++;
-    }
-    while (c1);
-
-    return 0;
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename C1, typename C2>
-sal_Int32 compareIgnoreAsciiCase_WithLength(const C1* pStr1, sal_Int32 nStr1Len,
-                                            const C2* pStr2, sal_Int32 nStr2Len)
-{
-    assert(nStr1Len >= 0);
-    assert(nStr2Len >= 0);
-    const C1* pStr1End = pStr1 + nStr1Len;
-    const C2* pStr2End = pStr2 + nStr2Len;
-    while ( (pStr1 < pStr1End) && (pStr2 < pStr2End) )
-    {
-        warnIfOneIsCharAndNotAscii(*pStr1, *pStr2);
-
-        sal_Int32 nRet = rtl::compareIgnoreAsciiCase(
-            IMPL_RTL_USTRCODE(*pStr1), IMPL_RTL_USTRCODE(*pStr2));
-        if ( nRet != 0 )
-            return nRet;
-
-        pStr1++;
-        pStr2++;
-    }
-
-    return nStr1Len - nStr2Len;
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 shortenedCompareIgnoreAsciiCase_WithLength                             ( const IMPL_RTL_STRCODE* pStr1,
-                                                                                   sal_Int32 nStr1Len,
-                                                                                   const IMPL_RTL_STRCODE* pStr2,
-                                                                                   sal_Int32 nStr2Len,
-                                                                                   sal_Int32 nShortenedLength )
-{
-    return compareIgnoreAsciiCase_WithLength(pStr1, std::min(nStr1Len, nShortenedLength),
-                                             pStr2, std::min(nStr2Len, nShortenedLength));
 }
 
 /* ----------------------------------------------------------------------- */
