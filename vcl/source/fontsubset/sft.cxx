@@ -1588,7 +1588,7 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
 
     /**                       name                         **/
 
-    NameRecord *names;
+    NameRecord *names = nullptr;
     int n = GetTTNameRecords(ttf, &names);
     name = TrueTypeTableNew_name(n, names);
     DisposeNameRecords(names, n);
