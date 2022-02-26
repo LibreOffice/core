@@ -107,6 +107,8 @@ DateFormat::DateFormat()
 // date code(8)
 DateCode::DateCode()
     : HBox(CH_DATE_CODE)
+    , format{0}
+    , date{0}
     , dummy(0)
     , key(0)
 {
