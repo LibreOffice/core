@@ -339,7 +339,11 @@ ScDocument::~ScDocument()
     if ( pRefreshTimerControl )
     {   // To be sure there isn't anything running do it with a protector,
         // this ensures also that nothing needs the control anymore.
-        ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
+        {
+            // Use a scope on its own because it is undefined behaviour if a
+            // mutex is destroyed while still owned.
+            ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
+        }
         pRefreshTimerControl.reset();
     }
 
