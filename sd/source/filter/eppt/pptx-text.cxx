@@ -651,6 +651,7 @@ ParagraphObj::ParagraphObj(const css::uno::Reference< css::beans::XPropertySet >
     : mnTextSize(0)
     , mbFirstParagraph(false)
     , mbLastParagraph(false)
+    , meBullet(css::beans::PropertyState_AMBIGUOUS_VALUE)
     , mnTextAdjust(0)
     , mnLineSpacing(0)
     , mbFixedLineSpacing(false)
