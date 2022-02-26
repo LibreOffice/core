@@ -631,7 +631,7 @@ void ScOutputData::SetCellRotations()
 
             for (SCCOL nX=0; nX<=nRotMax; nX++)
             {
-                CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 const ScPatternAttr* pPattern = pInfo->pPatternAttr;
                 const SfxItemSet* pCondSet = pInfo->pConditionSet;
 
@@ -646,7 +646,7 @@ void ScOutputData::SetCellRotations()
                     ScRotateDir nDir = pPattern->GetRotateDir( pCondSet );
                     if (nDir != ScRotateDir::NONE)
                     {
-                        // Needed for CellInfo internal decisions (bg fill, ...)
+                        // Needed for ScCellInfo internal decisions (bg fill, ...)
                         pInfo->nRotateDir = nDir;
 
                         // create target coordinates
@@ -1095,7 +1095,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
                 for (SCCOL nX=nX1; nX + nMergedCols <= nX2 + 1; nX += nOldMerged)
                 {
-                    CellInfo* pInfo = &pThisRowInfo->cellInfo(nX-1+nMergedCols);
+                    ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX-1+nMergedCols);
 
                     nOldMerged = nMergedCols;
 
@@ -1554,7 +1554,7 @@ void ScOutputData::DrawRotatedFrame(vcl::RenderContext& rRenderContext)
             {
                 if (nX==nX1) nPosX = nInitPosX;     // calculated individually for preceding positions
 
-                CellInfo* pInfo = &rThisRowInfo.cellInfo(nX);
+                ScCellInfo* pInfo = &rThisRowInfo.cellInfo(nX);
                 tools::Long nColWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
                 if ( pInfo->nRotateDir > ScRotateDir::Standard &&
                         !pInfo->bHOverlapped && !pInfo->bVOverlapped )
@@ -2329,7 +2329,7 @@ void ScOutputData::DrawNoteMarks(vcl::RenderContext& rRenderContext)
             tools::Long nPosX = nInitPosX;
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
-                CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bIsMerged = false;
 
                 if ( nX==nX1 && pInfo->bHOverlapped && !pInfo->bVOverlapped )
@@ -2404,7 +2404,7 @@ void ScOutputData::AddPDFNotes()
             tools::Long nPosX = nInitPosX;
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
-                CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bIsMerged = false;
                 SCROW nY = pRowInfo[nArrY].nRowNo;
                 SCCOL nMergeX = nX;
@@ -2495,7 +2495,7 @@ void ScOutputData::DrawClipMarks()
             tools::Long nPosX = nInitPosX;
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
-                CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 if (pInfo->nClipMark != ScClipMark::NONE)
                 {
                     if (pInfo->bHOverlapped || pInfo->bVOverlapped)
