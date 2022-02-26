@@ -16,6 +16,24 @@
       "message": "So this line just creates an object that grabs a mutex in its ctor?\n\nIt looks strange, because the mutex is grabbed only in the ScRefreshTimerProtector ctor scope, and released before the ctor ends.\n\nBut if we just need the object be destructed immediately after construction, we could use a temporary instead of a named local object, which would be simpler and destruct it immediately:\n\n    ScRefreshTimerProtector( GetRefreshTimerControlAddress() );",
       "revId": "aaa75591b0c0c7b097e2794a0b24ec7d0e0fa07f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c2b6daa_320f8892",
+        "filename": "sc/source/core/data/documen2.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 345,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-26T07:24:27Z",
+      "side": 1,
+      "message": "Actually, it still seems to be unsafe: if the pRefreshTimerControl can be used in other threads, there will still be possible race condition here, if another thread tries to grab the mutex while this scope is active; then it may succeed after the scope ends, but before pRefreshTimerControl gets reset.",
+      "parentUuid": "c73c0cf9_c7762b04",
+      "revId": "aaa75591b0c0c7b097e2794a0b24ec7d0e0fa07f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
