@@ -30,7 +30,10 @@
 
 void ProgressBar::ImplInit()
 {
+    mnPrgsWidth = 0;
+    mnPrgsHeight = 0;
     mnPercent = 0;
+    mnPercentCount = 0;
     mbCalcNew = true;
 
     ImplInitSettings( true, true, true );
