@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62ac219a_5a7da882",
+        "filename": "sw/source/uibase/inc/content.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-02-26T09:21:45Z",
+      "side": 1,
+      "message": "this is a little suspicios, since you\u0027re making operator\u003c work on less data than it\u0027s superclass uses - which is probably fine, I\u0027m sure you have good reasons, just that it would be nice to mention them in the code.\n\nMy general rule for comments is \"comment anything that is abnormal, to prevent people removing it when they think it\u0027s a mistake\" :-)",
+      "revId": "087ac6ccceb09b1f678d0730a2e6164cebf40675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
