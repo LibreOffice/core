@@ -34,6 +34,24 @@
       "parentUuid": "3e7b61dc_8ce6445e",
       "revId": "e88275a261652d65820c808a2ca1a43d0aef499d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24439c5f_b791eb0b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-26T17:38:02Z",
+      "side": 1,
+      "message": "(Side note: the original worked with plain pointer pRefreshTimerControl and pointers to that pointer in ScRefreshTimerProtector and osl:Mutex). I think it still holds that the pRefreshTimerControl address outlives all instances of ScRefreshTimerProtector that might be holding a reference to its pointer because\n\na) the refresh timers are still not executed in threads (it was a two decades old idea that never got implemented) so we reach here only when nothing up there holds a lock\n\nb) if timers were in threads, obtaining a lock here guarantees all those threads ended and returned to and left the scope in ScRefreshTimer::Invoke() before we hop on to destroy ScRefreshTimerControl here\n\nc) if anything else was executed threaded using a ScRefreshTimerProtector we shouldn\u0027t even reach this ScDocument dtor",
+      "parentUuid": "9d7bd885_395e0213",
+      "revId": "e88275a261652d65820c808a2ca1a43d0aef499d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
