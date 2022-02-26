@@ -107,6 +107,8 @@ DateFormat::DateFormat()
 // date code(8)
 DateCode::DateCode()
     : HBox(CH_DATE_CODE)
+    , format{0}
+    , date{0}
     , dummy(0)
     , key(0)
 {
@@ -344,6 +346,7 @@ TxtBox::~TxtBox()
 
 Picture::Picture()
     : FBox(CH_PICTURE)
+    , reserved{0}
     , dummy(0)
     , follow_block_size(0)
     , dummy1(0)
@@ -352,6 +355,10 @@ Picture::Picture()
     , cap_pos(0)
     , num(0)
     , pictype(0)
+    , skip{0}
+    , scale{0}
+    , picinfo{}
+    , reserved3{0}
     , ishyper(false)
 {
 }

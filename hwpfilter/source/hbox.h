@@ -617,7 +617,7 @@ struct Picture: public FBox
  * Ratio of magnification or reduction.
  */
     hunit     scale[2];
-    PicDef    picinfo = {};
+    PicDef    picinfo;
     char      reserved3[9];
 
     std::vector<std::unique_ptr<HWPPara>> caption;
