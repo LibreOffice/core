@@ -1223,6 +1223,8 @@ hchar_string kstr2hstr(unsigned char const* src)
         {
             ret.push_back(src[i] << 8 | src[i+1]);
             i++;
+            if (src[i] == '\0')
+                break;
         }
     }
     return ret;
