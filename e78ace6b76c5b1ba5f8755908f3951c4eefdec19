@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c53bf0f_2c9a33ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-02-26T06:52:40Z",
+      "side": 1,
+      "message": "We need an unplanned RC3 for 7.3.1",
+      "revId": "e78ace6b76c5b1ba5f8755908f3951c4eefdec19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
