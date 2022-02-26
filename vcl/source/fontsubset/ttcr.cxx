@@ -1250,7 +1250,11 @@ static void ProcessTables(TrueTypeCreator *tt)
     glyf = FindTable(tt, T_glyf);
     glyphlist = static_cast<list>(glyf->data);
     nGlyphs = listCount(glyphlist);
-    assert(nGlyphs != 0);
+    if (!nGlyphs)
+    {
+        SAL_WARN("vcl.fonts", "no glyphs found in ProcessTables");
+        return;
+    }
     gid = static_cast<sal_uInt32*>(scalloc(nGlyphs, sizeof(sal_uInt32)));
 
     RemoveTable(tt, T_loca);
