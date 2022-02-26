@@ -346,7 +346,7 @@ bool ImplReadRegion( basegfx::B2DPolyPolygon& rPolyPoly, SvStream& rStream, sal_
     rStream.ReadInt32(nRight);
     rStream.ReadInt32(nBottom);
 
-    if (!rStream.good() || nCountRects == 0 || nType != RDH_RECTANGLES)
+    if (!rStream.good() || nCountRects == 0 || nType != emfio::RDH_RECTANGLES)
         return false;
 
     SAL_INFO("emfio", "\t\tBounds Left: " << nLeft << ", top: " << nTop << ", right: " << nRight << ", bottom: " << nBottom);
@@ -1016,7 +1016,7 @@ namespace emfio
                         sal_uInt32 nMapMode(0);
                         mpInputStream->ReadUInt32( nMapMode );
                         SAL_INFO("emfio", "\t\tMapMode: 0x" << std::hex << nMapMode << std::dec);
-                        SetMapMode( nMapMode );
+                        SetMapMode( static_cast<MappingMode>(nMapMode) );
                     }
                     break;
 
@@ -1123,7 +1123,7 @@ namespace emfio
                         XForm aTempXForm;
                         *mpInputStream >> aTempXForm;
                         mpInputStream->ReadUInt32( nMode );
-                        ModifyWorldTransform( aTempXForm, nMode );
+                        ModifyWorldTransform( aTempXForm, static_cast<ModifyWorldTransformMode>(nMode) );
                     }
                     break;
 
@@ -1326,7 +1326,8 @@ namespace emfio
                         {
                             sal_uInt32  nStyle;
                             mpInputStream->ReadUInt32( nStyle );
-                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( ReadColor(), ( nStyle == BS_HOLLOW ) ));
+                            BrushStyle eStyle = static_cast<BrushStyle>(nStyle);
+                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfFillStyle>( ReadColor(), ( eStyle == BrushStyle::BS_HOLLOW ) ));
                         }
                     }
                     break;
@@ -1455,7 +1456,7 @@ namespace emfio
                     {
                         sal_Int32 nClippingMode(0);
                         mpInputStream->ReadInt32(nClippingMode);
-                        SetClipPath(GetPathObj(), nClippingMode, true);
+                        SetClipPath(GetPathObj(), static_cast<RegionMode>(nClippingMode), true);
                     }
                     break;
 
@@ -1473,7 +1474,7 @@ namespace emfio
 
                             // This record's region data should be ignored if mode
                             // is RGN_COPY - see EMF spec section 2.3.2.2
-                            if (nClippingMode == RGN_COPY)
+                            if (static_cast<RegionMode>(nClippingMode) == RegionMode::RGN_COPY)
                             {
                                 SetDefaultClipPath();
                             }
@@ -1483,7 +1484,7 @@ namespace emfio
                                 if (cbRgnData)
                                     ImplReadRegion(aPolyPoly, *mpInputStream, nRemainingRecSize);
                                 const tools::PolyPolygon aPolyPolygon(aPolyPoly);
-                                SetClipPath(aPolyPolygon, nClippingMode, false);
+                                SetClipPath(aPolyPolygon, static_cast<RegionMode>(nClippingMode), false);
                             }
                         }
                     }
@@ -2007,7 +2008,7 @@ namespace emfio
                                     Push(); // Save the current clip. It will be restored after text drawing
                                     IntersectClipRect( aRect );
                                 }
-                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), mbRecordPath, nGfxMode);
+                                DrawText(aPos, aText, aDXAry.empty() ? nullptr : &aDXAry, pDYAry.get(), mbRecordPath, static_cast<GraphicsMode>(nGfxMode));
                                 if ( nOptions & ETO_CLIPPED )
                                     Pop();
                             }

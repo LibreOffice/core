@@ -76,23 +76,23 @@ namespace emfio
         maClip.subtractPolyPolygon(rPolyPolygon);
     }
 
-    void WinMtfClipPath::setClipPath( const basegfx::B2DPolyPolygon& rB2DPoly, sal_Int32 nClippingMode )
+    void WinMtfClipPath::setClipPath( const basegfx::B2DPolyPolygon& rB2DPoly, RegionMode nClippingMode )
     {
         switch ( nClippingMode )
         {
-            case RGN_OR :
+            case RegionMode::RGN_OR :
                 maClip.unionPolyPolygon(rB2DPoly);
                 break;
-            case RGN_XOR :
+            case RegionMode::RGN_XOR :
                 maClip.xorPolyPolygon(rB2DPoly);
                 break;
-            case RGN_DIFF :
+            case RegionMode::RGN_DIFF :
                 maClip.subtractPolyPolygon(rB2DPoly);
                 break;
-            case RGN_AND :
+            case RegionMode::RGN_AND :
                 maClip.intersectPolyPolygon(rB2DPoly);
                 break;
-            case RGN_COPY :
+            case RegionMode::RGN_COPY :
                 maClip = basegfx::utils::B2DClipState(rB2DPoly);
                 break;
         }
@@ -181,23 +181,23 @@ namespace emfio
         FontFamily eFamily;
         switch ( rFont.lfPitchAndFamily & 0xf0 )
         {
-            case FF_ROMAN:
+            case FamilyFont::FF_ROMAN:
                 eFamily = FAMILY_ROMAN;
             break;
 
-            case FF_SWISS:
+            case FamilyFont::FF_SWISS:
                 eFamily = FAMILY_SWISS;
             break;
 
-            case FF_MODERN:
+            case FamilyFont::FF_MODERN:
                 eFamily = FAMILY_MODERN;
             break;
 
-            case FF_SCRIPT:
+            case FamilyFont::FF_SCRIPT:
                 eFamily = FAMILY_SCRIPT;
             break;
 
-            case FF_DECORATIVE:
+            case FamilyFont::FF_DECORATIVE:
                  eFamily = FAMILY_DECORATIVE;
             break;
 
@@ -517,38 +517,38 @@ namespace emfio
             double fX2 = fX * maXForm.eM11 + fY * maXForm.eM21 + maXForm.eDx;
             double fY2 = fX * maXForm.eM12 + fY * maXForm.eM22 + maXForm.eDy;
 
-            if ( mnGfxMode == GM_COMPATIBLE )
+            if ( meGfxMode == GraphicsMode::GM_COMPATIBLE )
             {
                 fX2 -= mnWinOrgX;
                 fY2 -= mnWinOrgY;
 
-                switch( mnMapMode )
+                switch( meMapMode )
                 {
-                    case MM_LOENGLISH :
+                    case MappingMode::MM_LOENGLISH :
                     {
                         fX2 = o3tl::convert(fX2, o3tl::Length::in100, o3tl::Length::mm100);
                         fY2 = o3tl::convert(-fY2, o3tl::Length::in100, o3tl::Length::mm100);
                     }
                     break;
-                    case MM_HIENGLISH :
+                    case MappingMode::MM_HIENGLISH :
                     {
                         fX2 = o3tl::convert(fX2, o3tl::Length::in1000, o3tl::Length::mm100);
                         fY2 = o3tl::convert(-fY2, o3tl::Length::in1000, o3tl::Length::mm100);
                     }
                     break;
-                    case MM_TWIPS:
+                    case MappingMode::MM_TWIPS:
                     {
                         fX2 = o3tl::convert(fX2, o3tl::Length::twip, o3tl::Length::mm100);
                         fY2 = o3tl::convert(-fY2, o3tl::Length::twip, o3tl::Length::mm100);
                     }
                     break;
-                    case MM_LOMETRIC :
+                    case MappingMode::MM_LOMETRIC :
                     {
                         fX2 = o3tl::convert(fX2, o3tl::Length::mm10, o3tl::Length::mm100);
                         fY2 = o3tl::convert(-fY2, o3tl::Length::mm10, o3tl::Length::mm100);
                     }
                     break;
-                    case MM_HIMETRIC : // in hundredth of a millimeter
+                    case MappingMode::MM_HIMETRIC : // in hundredth of a millimeter
                     {
                         fY2 *= -1;
                     }
@@ -562,7 +562,7 @@ namespace emfio
                         }
                         else
                         {
-                            if ( mnMapMode != MM_TEXT )
+                            if ( meMapMode != MappingMode::MM_TEXT )
                             {
                                 fX2 /= mnWinExtX;
                                 fY2 /= mnWinExtY;
@@ -621,34 +621,34 @@ namespace emfio
                 fHeight = rSz.Height() * aScale.getY();
             }
 
-            if ( mnGfxMode == GM_COMPATIBLE )
+            if ( meGfxMode == GraphicsMode::GM_COMPATIBLE )
             {
-                switch( mnMapMode )
+                switch( meMapMode )
                 {
-                    case MM_LOENGLISH :
+                    case MappingMode::MM_LOENGLISH :
                     {
                         fWidth = o3tl::convert(fWidth, o3tl::Length::in100, o3tl::Length::mm100);
                         fHeight = o3tl::convert(-fHeight, o3tl::Length::in100, o3tl::Length::mm100);
                     }
                     break;
-                    case MM_HIENGLISH :
+                    case MappingMode::MM_HIENGLISH :
                     {
                         fWidth = o3tl::convert(fWidth, o3tl::Length::in1000, o3tl::Length::mm100);
                         fHeight = o3tl::convert(-fHeight, o3tl::Length::in1000, o3tl::Length::mm100);
                     }
                     break;
-                    case MM_LOMETRIC :
+                    case MappingMode::MM_LOMETRIC :
                     {
                         fWidth = o3tl::convert(fWidth, o3tl::Length::mm10, o3tl::Length::mm100);
                         fHeight = o3tl::convert(-fHeight, o3tl::Length::mm10, o3tl::Length::mm100);
                     }
                     break;
-                    case MM_HIMETRIC : // in hundredth of millimeters
+                    case MappingMode::MM_HIMETRIC : // in hundredth of millimeters
                     {
                         fHeight *= -1;
                     }
                     break;
-                    case MM_TWIPS:
+                    case MappingMode::MM_TWIPS:
                     {
                         fWidth = o3tl::convert(fWidth, o3tl::Length::twip, o3tl::Length::mm100);
                         fHeight = o3tl::convert(-fHeight, o3tl::Length::twip, o3tl::Length::mm100);
@@ -663,7 +663,7 @@ namespace emfio
                         }
                         else
                         {
-                            if ( mnMapMode != MM_TEXT )
+                            if ( meMapMode != MappingMode::MM_TEXT )
                             {
                                 fWidth /= mnWinExtX;
                                 fHeight /= mnWinExtY;
@@ -750,56 +750,56 @@ namespace emfio
         if ( nIndex & ENHMETA_STOCK_OBJECT )
         {
             SAL_INFO ( "emfio", "\t\t ENHMETA_STOCK_OBJECT, StockObject Enumeration: 0x" << std::hex  << nIndex );
-            sal_uInt16 nStockId = static_cast<sal_uInt8>(nIndex);
+            StockObjectType nStockId = static_cast<StockObjectType>(nIndex);
             switch( nStockId )
             {
-                case WHITE_BRUSH :
+                case StockObjectType::WHITE_BRUSH :
                 {
                     maFillStyle = WinMtfFillStyle( COL_WHITE );
                     mbFillStyleSelected = true;
                 }
                 break;
-                case LTGRAY_BRUSH :
+                case StockObjectType::LTGRAY_BRUSH :
                 {
                     maFillStyle = WinMtfFillStyle( COL_LIGHTGRAY );
                     mbFillStyleSelected = true;
                 }
                 break;
-                case GRAY_BRUSH :
+                case StockObjectType::GRAY_BRUSH :
                 {
                     maFillStyle = WinMtfFillStyle( COL_GRAY );
                     mbFillStyleSelected = true;
                 }
                 break;
-                case DKGRAY_BRUSH :
+                case StockObjectType::DKGRAY_BRUSH :
                 {
                     maFillStyle = WinMtfFillStyle( COL_GRAY7 );
                     mbFillStyleSelected = true;
                 }
                 break;
-                case BLACK_BRUSH :
+                case StockObjectType::BLACK_BRUSH :
                 {
                     maFillStyle = WinMtfFillStyle( COL_BLACK );
                     mbFillStyleSelected = true;
                 }
                 break;
-                case NULL_BRUSH :
+                case StockObjectType::NULL_BRUSH :
                 {
                    maFillStyle = WinMtfFillStyle( COL_TRANSPARENT, true );
                    mbFillStyleSelected = true;
                 }
                 break;
-                case WHITE_PEN :
+                case StockObjectType::WHITE_PEN :
                 {
                     maLineStyle = WinMtfLineStyle( COL_WHITE );
                 }
                 break;
-                case BLACK_PEN :
+                case StockObjectType::BLACK_PEN :
                 {
                     maLineStyle = WinMtfLineStyle( COL_BLACK );
                 }
                 break;
-                case NULL_PEN :
+                case StockObjectType::NULL_PEN :
                 {
                     maLineStyle = WinMtfLineStyle( COL_TRANSPARENT, true );
                 }
@@ -1030,7 +1030,7 @@ namespace emfio
         maClipPath.moveClipRegion( ImplMap( rSize ) );
     }
 
-    void MtfTools::SetClipPath( const tools::PolyPolygon& rPolyPolygon, sal_Int32 nClippingMode, bool bIsMapped )
+    void MtfTools::SetClipPath( const tools::PolyPolygon& rPolyPolygon, RegionMode eClippingMode, bool bIsMapped )
     {
         if (utl::ConfigManager::IsFuzzing())
             return;
@@ -1039,12 +1039,12 @@ namespace emfio
 
         if (!bIsMapped)
         {
-            if (!mbIsMapDevSet && (mnMapMode == MM_ISOTROPIC || mnMapMode == MM_ANISOTROPIC))
+            if (!mbIsMapDevSet && (meMapMode == MappingMode::MM_ISOTROPIC || meMapMode == MappingMode::MM_ANISOTROPIC))
                 aPolyPolygon = ImplScale(aPolyPolygon);
             else
                 aPolyPolygon = ImplMap(aPolyPolygon);
         }
-        maClipPath.setClipPath(aPolyPolygon.getB2DPolyPolygon(), nClippingMode);
+        maClipPath.setClipPath(aPolyPolygon.getB2DPolyPolygon(), eClippingMode);
     }
 
     void MtfTools::SetDefaultClipPath()
@@ -1055,7 +1055,7 @@ namespace emfio
 
     MtfTools::MtfTools( GDIMetaFile& rGDIMetaFile, SvStream& rStreamWMF)
     :   mnLatestTextAlign(90),
-        mnTextAlign(TA_LEFT | TA_TOP | TA_NOUPDATECP),
+        mnTextAlign(TextAlignmentMode::TA_LEFT | TextAlignmentMode::TA_TOP | TextAlignmentMode::TA_NOUPDATECP),
         maLatestBkColor(ColorTransparency, 0x12345678),
         maBkColor(COL_WHITE),
         mnLatestTextLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
@@ -1065,8 +1065,8 @@ namespace emfio
         meLatestRasterOp(RasterOp::Invert),
         meRasterOp(RasterOp::OverPaint),
         mnRop(),
-        mnGfxMode(GM_COMPATIBLE),
-        mnMapMode(MM_TEXT),
+        meGfxMode(GraphicsMode::GM_COMPATIBLE),
+        meMapMode(MappingMode::MM_TEXT),
         mnDevOrgX(0),
         mnDevOrgY(0),
         mnDevWidth(1),
@@ -1637,12 +1637,12 @@ namespace emfio
         }
     }
 
-    void MtfTools::DrawText( Point& rPosition, OUString const & rText, std::vector<sal_Int32>* pDXArry, tools::Long* pDYArry, bool bRecordPath, sal_Int32 nGfxMode )
+    void MtfTools::DrawText( Point& rPosition, OUString const & rText, std::vector<sal_Int32>* pDXArry, tools::Long* pDYArry, bool bRecordPath, GraphicsMode nGfxMode )
     {
         UpdateClipRegion();
         rPosition = ImplMap( rPosition );
-        sal_Int32 nOldGfxMode = GetGfxMode();
-        SetGfxMode( GM_COMPATIBLE );
+        GraphicsMode nOldGfxMode = GetGfxMode();
+        SetGfxMode( GraphicsMode::GM_COMPATIBLE );
 
         if (pDXArry)
         {
@@ -1722,7 +1722,7 @@ namespace emfio
 
         aTmp.SetAlignment( eTextAlign );
 
-        if ( nGfxMode == GM_ADVANCED )
+        if ( nGfxMode == GraphicsMode::GM_ADVANCED )
         {
             // check whether there is a font rotation applied via transformation
             Point aP1( ImplMap( Point() ) );
@@ -2136,14 +2136,19 @@ namespace emfio
         if ( !(rSize.Width() && rSize.Height()) )
             return;
 
-        switch( mnMapMode )
+        switch( meMapMode )
         {
-            case MM_ISOTROPIC :
-            case MM_ANISOTROPIC :
+            case MappingMode::MM_ISOTROPIC :
+            case MappingMode::MM_ANISOTROPIC :
             {
                 mnDevWidth = rSize.Width();
                 mnDevHeight = rSize.Height();
+                break;
             }
+
+            //do nothing
+            default:
+                break;
         }
         if (regular)
         {
@@ -2178,7 +2183,7 @@ namespace emfio
     {
         if (!mbIsMapDevSet)
         {
-            if ( mnMapMode == MM_ISOTROPIC ) //TODO: WHAT ABOUT ANISOTROPIC???
+            if ( meMapMode == MappingMode::MM_ISOTROPIC ) //TODO: WHAT ABOUT ANISOTROPIC???
             {
                 sal_Int32 nX, nY;
                 if (o3tl::checked_add(mnWinExtX, mnWinOrgX, nX) || o3tl::checked_sub(mnWinExtY, mnWinOrgY, nY))
@@ -2194,10 +2199,10 @@ namespace emfio
         if (!(rSize.Width() && rSize.Height()))
             return;
 
-        switch( mnMapMode )
+        switch( meMapMode )
         {
-            case MM_ISOTROPIC :
-            case MM_ANISOTROPIC :
+            case MappingMode::MM_ISOTROPIC :
+            case MappingMode::MM_ANISOTROPIC :
             {
                 mnWinExtX = rSize.Width();
                 mnWinExtY = rSize.Height();
@@ -2206,7 +2211,12 @@ namespace emfio
                     SetDevByWin();
                 }
                 mbIsMapWinSet = true;
+                break;
             }
+
+            default:
+                //do nothing
+                break;
         }
     }
 
@@ -2238,15 +2248,15 @@ namespace emfio
         mnMillY = rSize.Height();
     }
 
-    void MtfTools::SetMapMode( sal_uInt32 nMapMode )
+    void MtfTools::SetMapMode( MappingMode nMapMode )
     {
-        mnMapMode = nMapMode;
-        if ( nMapMode == MM_TEXT && !mbIsMapWinSet )
+        meMapMode = nMapMode;
+        if ( nMapMode == MappingMode::MM_TEXT && !mbIsMapWinSet )
         {
             mnWinExtX = mnDevWidth;
             mnWinExtY = mnDevHeight;
         }
-        else if ( mnMapMode == MM_HIMETRIC )
+        else if ( meMapMode == MappingMode::MM_HIMETRIC )
         {
             sal_Int32 nWinExtX, nWinExtY;
             if (o3tl::checked_multiply<sal_Int32>(mnMillX, 100, nWinExtX) ||
@@ -2269,24 +2279,24 @@ namespace emfio
         maXForm.eDy = rXForm.eDy;
     }
 
-    void MtfTools::ModifyWorldTransform( const XForm& rXForm, sal_uInt32 nMode )
+    void MtfTools::ModifyWorldTransform( const XForm& rXForm, ModifyWorldTransformMode nMode )
     {
         switch( nMode )
         {
-            case MWT_IDENTITY :
+            case ModifyWorldTransformMode::MWT_IDENTITY :
             {
                 maXForm.eM11 = maXForm.eM22 = 1.0f;
                 maXForm.eM12 = maXForm.eM21 = maXForm.eDx = maXForm.eDy = 0.0f;
                 break;
             }
 
-            case MWT_RIGHTMULTIPLY :
-            case MWT_LEFTMULTIPLY :
+            case ModifyWorldTransformMode::MWT_RIGHTMULTIPLY :
+            case ModifyWorldTransformMode::MWT_LEFTMULTIPLY :
             {
                 const XForm* pLeft;
                 const XForm* pRight;
 
-                if ( nMode == MWT_LEFTMULTIPLY )
+                if ( nMode == ModifyWorldTransformMode::MWT_LEFTMULTIPLY )
                 {
                     pLeft = &rXForm;
                     pRight = &maXForm;
@@ -2339,7 +2349,7 @@ namespace emfio
                 maXForm.eDy = cF[2][1];
                 break;
             }
-            case MWT_SET:
+            case ModifyWorldTransformMode::MWT_SET:
             {
                 SetWorldTransform(rXForm);
                 break;
@@ -2359,8 +2369,8 @@ namespace emfio
         pSave->aTextColor = maTextColor;
         pSave->nTextAlign = mnTextAlign;
         pSave->nTextLayoutMode = mnTextLayoutMode;
-        pSave->nMapMode = mnMapMode;
-        pSave->nGfxMode = mnGfxMode;
+        pSave->eMapMode = meMapMode;
+        pSave->eGfxMode = meGfxMode;
         pSave->nBkMode = mnBkMode;
         pSave->aBkColor = maBkColor;
         pSave->bFillStyleSelected = mbFillStyleSelected;
@@ -2381,8 +2391,8 @@ namespace emfio
         pSave->maPathObj = maPathObj;
         pSave->maClipPath = maClipPath;
 
-        SAL_INFO("emfio", "\t\t GfxMode: " << mnGfxMode);
-        SAL_INFO("emfio", "\t\t MapMode: " << mnMapMode);
+        SAL_INFO("emfio", "\t\t GfxMode: " << static_cast<sal_uInt32>(meGfxMode));
+        SAL_INFO("emfio", "\t\t MapMode: " << static_cast<sal_uInt32>(meMapMode));
         SAL_INFO("emfio", "\t\t WinOrg: " << mnWinOrgX << ", " << mnWinOrgY);
         SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
         SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
@@ -2421,8 +2431,8 @@ namespace emfio
         mnTextAlign = pSave->nTextAlign;
         mnTextLayoutMode = pSave->nTextLayoutMode;
         mnBkMode = pSave->nBkMode;
-        mnGfxMode = pSave->nGfxMode;
-        mnMapMode = pSave->nMapMode;
+        meGfxMode = pSave->eGfxMode;
+        meMapMode = pSave->eMapMode;
         maBkColor = pSave->aBkColor;
         mbFillStyleSelected = pSave->bFillStyleSelected;
 
@@ -2451,8 +2461,8 @@ namespace emfio
             meLatestRasterOp = meRasterOp;
         }
 
-        SAL_INFO("emfio", "\t\t GfxMode: " << mnGfxMode);
-        SAL_INFO("emfio", "\t\t MapMode: " << mnMapMode);
+        SAL_INFO("emfio", "\t\t GfxMode: " << static_cast<sal_uInt32>(meGfxMode));
+        SAL_INFO("emfio", "\t\t MapMode: " << static_cast<sal_uInt32>(meMapMode));
         SAL_INFO("emfio", "\t\t WinOrg: " << mnWinOrgX << ", " << mnWinOrgY);
         SAL_INFO("emfio", "\t\t WinExt: " << mnWinExtX << " x " << mnWinExtY);
         SAL_INFO("emfio", "\t\t DevOrg: " << mnDevOrgX << ", " << mnDevOrgY);
