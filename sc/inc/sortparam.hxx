@@ -165,6 +165,14 @@ struct ReorderParam
      * original reordering.
      */
     void reverse();
+
+    ReorderParam()
+        : mbByRow(false)
+        , mbHiddenFiltered(false)
+        , mbUpdateRefs(false)
+        , mbHasHeaders(false)
+    {
+    }
 };
 
 }
