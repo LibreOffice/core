@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d6aa18d_67d539be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-26T19:16:52Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1 was rebased\n\nSorry, accidental",
+      "revId": "b20ba0d8c05ed7039f9713b37701c34dadeb25fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
