@@ -991,7 +991,7 @@ bool ScOutputData::GetMergeOrigin( SCCOL nX, SCROW nY, SCSIZE nArrY,
     if (!mpDoc->ColHidden(nX, nTab) && nX >= nX1 && nX <= nX2
             && !mpDoc->RowHidden(nY, nTab) && nY >= nY1 && nY <= nY2)
     {
-        CellInfo* pInfo = &pRowInfo[nArrY].cellInfo(nX);
+        ScCellInfo* pInfo = &pRowInfo[nArrY].cellInfo(nX);
         bHOver = pInfo->bHOverlapped;
         bVOver = pInfo->bVOverlapped;
     }
@@ -1570,7 +1570,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
             for (SCCOL nX=nLoopStartX; nX<=nX2; nX++)
             {
                 bool bMergeEmpty = false;
-                const CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                const ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 bool bEmpty = nX < nX1 || pThisRowInfo->basicCellInfo(nX).bEmptyCellText;
 
                 SCCOL nCellX = nX;                  // position where the cell really starts
@@ -1679,7 +1679,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 {
                     if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 )
                     {
-                        CellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
+                        ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
                         pPattern = rCellInfo.pPatternAttr;
                         pCondSet = rCellInfo.pConditionSet;
 
@@ -1892,7 +1892,7 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
                 }
                 if (bUseEditEngine)
                 {
-                    //  mark the cell in CellInfo to be drawn in DrawEdit:
+                    //  mark the cell in ScCellInfo to be drawn in DrawEdit:
                     //  Cells to the left are marked directly, cells to the
                     //  right are handled by the flag for nX2
                     SCCOL nMarkX = ( nCellX <= nX2 ) ? nCellX : nX2;
@@ -3124,7 +3124,7 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
              rParam.mbBreak && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
-            CellInfo* pClipMarkCell = nullptr;
+            ScCellInfo* pClipMarkCell = nullptr;
             if ( bMerged )
             {
                 //  anywhere in the merged area...
@@ -3229,7 +3229,7 @@ void ScOutputData::ShowClipMarks( DrawEditParam& rParam, tools::Long nEngineWidt
         || (rParam.mpEngine->GetParagraphCount() <= 1 && rParam.mpEngine->GetLineCount(0) <= 1))
         return;
 
-    CellInfo* pClipMarkCell = nullptr;
+    ScCellInfo* pClipMarkCell = nullptr;
     if (bMerged)
     {
         //  anywhere in the merged area...
@@ -3965,7 +3965,7 @@ void ScOutputData::DrawEditStacked(DrawEditParam& rParam)
              rParam.mbBreak && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
-            CellInfo* pClipMarkCell = nullptr;
+            ScCellInfo* pClipMarkCell = nullptr;
             if ( bMerged )
             {
                 //  anywhere in the merged area...
@@ -4252,7 +4252,7 @@ void ScOutputData::DrawEditAsianVertical(DrawEditParam& rParam)
              !rParam.mbAsianVertical && bMarkClipped &&
              ( rParam.mpEngine->GetParagraphCount() > 1 || rParam.mpEngine->GetLineCount(0) > 1 ) )
         {
-            CellInfo* pClipMarkCell = nullptr;
+            ScCellInfo* pClipMarkCell = nullptr;
             if ( bMerged )
             {
                 //  anywhere in the merged area...
@@ -4407,7 +4407,7 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
                              !mpDoc->ColHidden(nCellX, nTab) )
                         {
-                            CellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
+                            ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nCellX);
                             pPattern = rCellInfo.pPatternAttr;
                             pCondSet = rCellInfo.pConditionSet;
                             aCell = rCellInfo.maCell;
@@ -4550,7 +4550,7 @@ void ScOutputData::DrawRotated(bool bPixelToLogic)
             {
                 if (nX==nX1) nPosX = nInitPosX;                 // positions before nX1 are calculated individually
 
-                const CellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
+                const ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nX);
                 if ( pInfo->nRotateDir != ScRotateDir::NONE )
                 {
                     SCROW nY = pThisRowInfo->nRowNo;

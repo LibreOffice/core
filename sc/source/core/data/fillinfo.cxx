@@ -53,7 +53,7 @@ static void lcl_GetMergeRange( SCCOL nX, SCROW nY, SCSIZE nArrY,
                             SCCOL nX1, SCROW nY1, SCTAB nTab,
                             SCCOL& rStartX, SCROW& rStartY, SCCOL& rEndX, SCROW& rEndY )
 {
-    CellInfo* pInfo = &pRowInfo[nArrY].cellInfo(nX);
+    ScCellInfo* pInfo = &pRowInfo[nArrY].cellInfo(nX);
 
     rStartX = nX;
     rStartY = nY;
@@ -249,7 +249,7 @@ void initCellInfo(RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nStartCol, SCCOL nR
 
         for (SCCOL nCol = nStartCol-1; nCol <= nRotMax+1; ++nCol) // Preassign cell info
         {
-            CellInfo& rInfo = rThisRowInfo.cellInfo(nCol);
+            ScCellInfo& rInfo = rThisRowInfo.cellInfo(nCol);
             rInfo.pShadowAttr    = pDefShadow;
         }
     }
@@ -274,7 +274,7 @@ void initColWidths(RowInfo* pRowInfo, const ScDocument* pDoc, double fColScale, 
 }
 
 bool handleConditionalFormat(ScConditionalFormatList& rCondFormList, const ScCondFormatIndexes& rCondFormats,
-        CellInfo* pInfo, ScTableInfo* pTableInfo, ScStyleSheetPool* pStlPool,
+        ScCellInfo* pInfo, ScTableInfo* pTableInfo, ScStyleSheetPool* pStlPool,
         const ScAddress& rAddr, bool& bHidden, bool& bHideFormula, bool bTabProtect)
 {
     bool bFound = false;
@@ -533,8 +533,8 @@ void ScDocument::FillInfo(
                                 if (bPivotButton || bPivotPopupButton)
                                     pThisRowInfo->bPivotButton = true;
 
-                                CellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
-                                BasicCellInfo* pBasicInfo = &pThisRowInfo->basicCellInfo(nCol);
+                                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
+                                ScBasicCellInfo* pBasicInfo = &pThisRowInfo->basicCellInfo(nCol);
                                 pInfo->pBackground  = pBackground;
                                 pInfo->pPatternAttr = pPattern;
                                 pInfo->bMerged      = bMerged;
@@ -633,7 +633,7 @@ void ScDocument::FillInfo(
         {
             for (SCCOL nCol=nCol1-1; nCol<=nCol2+1; nCol++)                  // 1 more left and right
             {
-                CellInfo* pInfo = &pRowInfo[nArrRow].cellInfo(nCol);
+                ScCellInfo* pInfo = &pRowInfo[nArrRow].cellInfo(nCol);
                 ScPatternAttr* pModifiedPatt = nullptr;
 
                 if ( ValidCol(nCol) && pRowInfo[nArrRow].nRowNo <= MaxRow() )
@@ -697,7 +697,7 @@ void ScDocument::FillInfo(
 
             for (SCCOL nCol=nCol1-1; nCol<=nCol2+1; nCol++)                  // 1 more left and right
             {
-                CellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
+                ScCellInfo* pInfo = &pThisRowInfo->cellInfo(nCol);
 
                 if (pInfo->bMerged || pInfo->bHOverlapped || pInfo->bVOverlapped)
                 {
@@ -744,7 +744,7 @@ void ScDocument::FillInfo(
                 bool bLeft = ( nCol == nCol1-1 );
                 bool bRight = ( nCol == nCol2+1 );
 
-                CellInfo* pInfo = &pRowInfo[nArrRow].cellInfo(nCol);
+                ScCellInfo* pInfo = &pRowInfo[nArrRow].cellInfo(nCol);
                 const SvxShadowItem* pThisAttr = pInfo->pShadowAttr;
                 SvxShadowLocation eLoc = pThisAttr ? pThisAttr->GetLocation() : SvxShadowLocation::NONE;
                 if (eLoc != SvxShadowLocation::NONE)
@@ -879,8 +879,8 @@ void ScDocument::FillInfo(
     // *** create the frame border array ***
 
     // RowInfo structs are filled in the range [ 0 , nArrCount-1 ],
-    // each RowInfo contains CellInfo structs in the range [ nCol1-1 , nCol2+1 ]
-    // and BasicCellInfo structs in the range [ -1, nCol2+1 ]
+    // each RowInfo contains ScCellInfo structs in the range [ nCol1-1 , nCol2+1 ]
+    // and ScBasicCellInfo structs in the range [ -1, nCol2+1 ]
 
     size_t nColCount = nCol2 - nCol1 + 1 + 2;
     size_t nRowCount = nArrCount;
@@ -895,7 +895,7 @@ void ScDocument::FillInfo(
 
         for( SCCOL nCol = nCol1 - 1; nCol <= nCol2 + 1; ++nCol ) // 1 more left and right
         {
-            const CellInfo& rInfo = rThisRowInfo.cellInfo( nCol );
+            const ScCellInfo& rInfo = rThisRowInfo.cellInfo( nCol );
             const SvxBoxItem* pBox = rInfo.pLinesAttr;
             const SvxLineItem* pTLBR = rInfo.mpTLBRLine;
             const SvxLineItem* pBLTR = rInfo.mpBLTRLine;
