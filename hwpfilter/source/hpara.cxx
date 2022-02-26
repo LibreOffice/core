@@ -285,7 +285,7 @@ std::unique_ptr<HBox> HWPPara::readHBox(HWPFile & hwpf)
     hwpf.pop_hpara_type();
     if (!bRead)
     {
-        hbox.reset();
+        hwpf.failed_box(std::move(hbox));
         return nullptr;
     }
 
