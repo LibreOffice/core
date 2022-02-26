@@ -443,8 +443,8 @@ static void lcl_HidePrint( const ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
         RowInfo* pThisRowInfo = &rTabInfo.mpRowInfo[nArrY];
         for (SCCOL nX=nX1; nX<=nX2; nX++)
         {
-            CellInfo& rCellInfo = pThisRowInfo->cellInfo(nX);
-            BasicCellInfo& rBasicCellInfo = pThisRowInfo->basicCellInfo(nX);
+            ScCellInfo& rCellInfo = pThisRowInfo->cellInfo(nX);
+            ScBasicCellInfo& rBasicCellInfo = pThisRowInfo->basicCellInfo(nX);
             if (!rBasicCellInfo.bEmptyCellText)
                 if (rCellInfo.pPatternAttr->
                             GetItem(ATTR_PROTECTION, rCellInfo.pConditionSet).GetHidePrint())
