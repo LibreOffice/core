@@ -16,6 +16,24 @@
       "message": "this is a little suspicios, since you\u0027re making operator\u003c work on less data than it\u0027s superclass uses - which is probably fine, I\u0027m sure you have good reasons, just that it would be nice to mention them in the code.\n\nMy general rule for comments is \"comment anything that is abnormal, to prevent people removing it when they think it\u0027s a mistake\" :-)",
       "revId": "087ac6ccceb09b1f678d0730a2e6164cebf40675",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1e3161f_ab37b91c",
+        "filename": "sw/source/uibase/inc/content.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-02-26T22:50:06Z",
+      "side": 1,
+      "message": "Thank you for the suspicion and advice on comments which I do need to improve on. I thought the short blurb about inserting elements after elements having equal position might be enough.\n\nI don\u0027t think the operator\u003c is working on less data than it\u0027s superclass. The override was done so that inserting new elements into the sorted array would be placed after elements with equal ordering position. If the superclass operator\u003c is used, elements having equal ordering positions are sorted alphabetically. I thought this override and changes made to footnote fill code in FillMemberList would result in slower insertion versus the current code but testing shows it to be the same time to fill as the current code, all things being equal. The big time reduction results when using lcl_GetFootnoteText versus using SwFormatFootnote::GetFootnoteText.\n\nBelow is a couple of samples from Footnotes and Endnotes FillMembersList for both current code and patched code using SwFormatFootnote::GetFootnoteText and lcl_GetFootnoteText\n\nCurrent code using SwFormatFootnote::GetFootnoteText\n[Footnotes and Endnotes] members: 6243 fill duration: 176921 microseconds\n[Footnotes and Endnotes] members: 6243 fill duration: 167633 microseconds\n            \nCurrent code using lcl_GetFootnoteText\n[Footnotes and Endnotes] members: 6243 fill duration: 73172 microseconds\n[Footnotes and Endnotes] members: 6243 fill duration: 73664 microseconds\n            \nPatched code using SwFormatFootnote::GetFootnoteText\n[Footnotes and Endnotes] members: 6243 fill duration: 170012 microseconds\n[Footnotes and Endnotes] members: 6243 fill duration: 166939 microseconds\n\nPatched code using lcl_GetFootnoteText\n[Footnotes and Endnotes] members: 6243 fill duration: 73184 microseconds\n[Footnotes and Endnotes] members: 6243 fill duration: 73101 microseconds",
+      "parentUuid": "62ac219a_5a7da882",
+      "revId": "087ac6ccceb09b1f678d0730a2e6164cebf40675",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
