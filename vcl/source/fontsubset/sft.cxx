@@ -2098,10 +2098,15 @@ GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
         return nullptr;
 
     /* #127161# check the glyph offsets */
+    sal_uInt32 nNextOffset = ttf->glyphOffset(glyphID + 1);
+    sal_uInt32 nOffset = ttf->glyphOffset(glyphID);
+    if (nNextOffset < nOffset)
+        return nullptr;
+
     if (length < ttf->glyphOffset(glyphID + 1))
         return nullptr;
 
-    length = ttf->glyphOffset(glyphID + 1) - ttf->glyphOffset(glyphID);
+    length = nNextOffset - nOffset;
 
     GlyphData* d = static_cast<GlyphData*>(malloc(sizeof(GlyphData))); assert(d != nullptr);
 
