@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2f8fea8_fcd62eef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T17:29:43Z",
+      "side": 1,
+      "message": "Do you mean I should revert this one and perhaps should I revert too https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d4202ea2c932a14d216e74617bbb74a85030c9a59 ?\n\nIf yes, perhaps should we remove the \"delete\" here too (line 1516) where I took example:\n   1504 void OSQLParseNode::substituteParameterNames(OSQLParseNode const * _pNode)\n   1505 {\n   1506     sal_Int32 nCount \u003d _pNode-\u003ecount();\n   1507     for(sal_Int32 i\u003d0;i \u003c nCount;++i)\n   1508     {\n   1509         OSQLParseNode* pChildNode \u003d _pNode-\u003egetChild(i);\n   1510         if(SQL_ISRULE(pChildNode,parameter) \u0026\u0026 pChildNode-\u003ecount() \u003e 1)\n   1511         {\n   1512             OSQLParseNode* pNewNode \u003d new OSQLParseNode(\"?\" ,SQLNodeType::Punctuation,0);\n   1513             delete pChildNode-\u003ereplace(pChildNode-\u003egetChild(0),pNewNode);\n   1514             sal_Int32 nChildCount \u003d pChildNode-\u003ecount();\n   1515             for(sal_Int32 j\u003d1;j \u003c nChildCount;++j)\n   1516                 delete pChildNode-\u003eremoveAt(1);\n   1517         }\n   1518         else\n   1519             substituteParameterNames(pChildNode);\n   1520 \n   1521     }\n   1522 }\n",
+      "revId": "1142dc2398de2e2be0e057ecb432ad9c8895313a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd63462e_cb9a8db2",
