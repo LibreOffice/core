@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66e580a3_15487cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T18:01:32Z",
+      "side": 1,
+      "message": "Just added the # in the comment so the link to the bugtracker works + remove OUString/OString stuff since they\u0027re just English logs.\nJust wonder if it shouldn\u0027t be a SAL_WARN instead of SAL_INFO.\nI mean, if it\u0027s an exception, it shouldn\u0027t happen so a warn could be more relevant.",
+      "revId": "49363cecb509ee9416159a0421d72a75efd35e44",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
