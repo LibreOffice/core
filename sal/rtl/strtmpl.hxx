@@ -1218,87 +1218,6 @@ void ensureCapacity                                ( IMPL_RTL_STRINGDATA** ppThi
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRINGDATA>
-void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppThis,
-                                                      IMPL_RTL_STRINGDATA* pStr,
-                                                      sal_Int32 nIndex,
-                                                      sal_Int32 nCount,
-                                                      IMPL_RTL_STRINGDATA* pNewSubStr )
-{
-    assert(ppThis);
-    assert(nIndex >= 0 && nIndex <= pStr->length);
-    assert(nCount >= 0);
-    assert(nCount <= pStr->length - nIndex);
-    /* Append? */
-    if ( nIndex >= pStr->length )
-    {
-        /* newConcat test, if pNewSubStr is 0 */
-        newConcat( ppThis, pStr, pNewSubStr );
-        return;
-    }
-
-    /* negative index? */
-    if ( nIndex < 0 )
-    {
-        nCount -= nIndex;
-        nIndex = 0;
-    }
-
-    /* not more than the String length could be deleted */
-    if ( nCount >= pStr->length-nIndex )
-    {
-        nCount = pStr->length-nIndex;
-
-        /* Assign of NewSubStr? */
-        if ( !nIndex && (nCount >= pStr->length) )
-        {
-            if ( !pNewSubStr )
-                new_( ppThis );
-            else
-                assign( ppThis, pNewSubStr );
-            return;
-        }
-    }
-
-    /* Assign of Str? */
-    if ( !nCount && (!pNewSubStr || !pNewSubStr->length) )
-    {
-        assign( ppThis, pStr );
-        return;
-    }
-
-    IMPL_RTL_STRINGDATA*    pOrg = *ppThis;
-    sal_Int32               nNewLen;
-
-    /* Calculate length of the new string */
-    nNewLen = pStr->length-nCount;
-    if ( pNewSubStr )
-        nNewLen += pNewSubStr->length;
-
-    /* Alloc New Buffer */
-    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nNewLen );
-    OSL_ASSERT(*ppThis != nullptr);
-    auto* pBuffer = (*ppThis)->buffer;
-    if ( nIndex )
-    {
-        Copy( pBuffer, pStr->buffer, nIndex );
-        pBuffer += nIndex;
-    }
-    if ( pNewSubStr && pNewSubStr->length )
-    {
-        Copy( pBuffer, pNewSubStr->buffer, pNewSubStr->length );
-        pBuffer += pNewSubStr->length;
-    }
-    Copy( pBuffer, pStr->buffer+nIndex+nCount, pStr->length-nIndex-nCount );
-
-    RTL_LOG_STRING_NEW( *ppThis );
-    /* must be done last, if pStr or pNewSubStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
-}
-
-/* ----------------------------------------------------------------------- */
-
 template <typename IMPL_RTL_STRINGDATA, typename IMPL_RTL_STRCODE>
 void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppThis,
                                                       IMPL_RTL_STRINGDATA* pStr,
@@ -1332,14 +1251,10 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
         return assign(ppThis, pStr);
 
     IMPL_RTL_STRINGDATA*    pOrg = *ppThis;
-    sal_Int32               nNewLen;
-
-    /* Calculate length of the new string */
-    nNewLen = pStr->length-nCount + nNewSubStrLen;
 
     /* Alloc New Buffer */
-    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nNewLen );
-    OSL_ASSERT(*ppThis != nullptr);
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>(pStr->length - nCount + nNewSubStrLen);
+    assert(*ppThis != nullptr);
     auto* pBuffer = (*ppThis)->buffer;
     if ( nIndex )
     {
@@ -1357,6 +1272,60 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
     /* must be done last, if pStr or pNewSubStr == *ppThis */
     if ( pOrg )
         release( pOrg );
+}
+
+/* ----------------------------------------------------------------------- */
+
+template <typename IMPL_RTL_STRINGDATA>
+void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppThis,
+                                                      IMPL_RTL_STRINGDATA* pStr,
+                                                      sal_Int32 nIndex,
+                                                      sal_Int32 nCount,
+                                                      IMPL_RTL_STRINGDATA* pNewSubStr )
+{
+    assert(ppThis);
+    assert(nIndex >= 0 && nIndex <= pStr->length);
+    assert(nCount >= 0);
+    assert(nCount <= pStr->length - nIndex);
+    /* Append? */
+    if (nIndex >= pStr->length)
+    {
+        /* newConcat test, if pNewSubStr is 0 */
+        newConcat(ppThis, pStr, pNewSubStr);
+        return;
+    }
+
+    /* negative index? */
+    if (nIndex < 0)
+    {
+        nCount -= nIndex;
+        nIndex = 0;
+    }
+
+    /* not more than the String length could be deleted */
+    if (nCount >= pStr->length-nIndex)
+    {
+        /* Assign of NewSubStr? */
+        if (nIndex == 0)
+        {
+            if (!pNewSubStr)
+                return new_(ppThis);
+            else
+                return assign(ppThis, pNewSubStr);
+        }
+        nCount = pStr->length - nIndex;
+    }
+
+    /* Assign of Str? */
+    if (!nCount && (!pNewSubStr || !pNewSubStr->length))
+    {
+        assign(ppThis, pStr);
+        return;
+    }
+
+    const auto* pNewSubStrBuf = pNewSubStr ? pNewSubStr->buffer : nullptr;
+    const sal_Int32 nNewSubStrLength = pNewSubStr ? pNewSubStr->length : 0;
+    newReplaceStrAt(ppThis, pStr, nIndex, nCount, pNewSubStrBuf, nNewSubStrLength);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1600,16 +1569,7 @@ void newReplaceFirst(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fromLengt
         if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
             std::abort();
         i += fromIndex;
-        const sal_Int32 n = s1->length + (toLength - fromLength);
-        const auto pOld = *s;
-        *s = Alloc<S>(n);
-        if (i)
-            Copy((*s)->buffer, s1->buffer, i);
-        if (toLength)
-            Copy((*s)->buffer + i, to, toLength);
-        Copy((*s)->buffer + i + toLength, s1->buffer + i + fromLength, s1->length - i - fromLength);
-        if (pOld)
-            release(pOld); // Must be last in case *s == s1
+        newReplaceStrAt(s, s1, i, fromLength, to, toLength);
     }
     else
         assign(s, s1);
