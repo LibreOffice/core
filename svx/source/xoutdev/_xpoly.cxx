@@ -113,22 +113,22 @@ void ImpXPolygon::Resize( sal_uInt16 nNewSize, bool bDeletePoints )
     memset( pFlagAry.get(), 0, nSize );
 
     // copy if needed
-    if( !nOldSize )
-        return;
-
-    if( nOldSize < nSize )
+    if (nOldSize)
     {
-        memcpy( pPointAry.get(), pOldPointAry, nOldSize*sizeof( Point ) );
-        memcpy( pFlagAry.get(),  pOldFlagAry, nOldSize );
-    }
-    else
-    {
-        memcpy( pPointAry.get(), pOldPointAry, nSize*sizeof( Point ) );
-        memcpy( pFlagAry.get(), pOldFlagAry, nSize );
+        if( nOldSize < nSize )
+        {
+            memcpy( pPointAry.get(), pOldPointAry, nOldSize*sizeof( Point ) );
+            memcpy( pFlagAry.get(),  pOldFlagAry, nOldSize );
+        }
+        else
+        {
+            memcpy( pPointAry.get(), pOldPointAry, nSize*sizeof( Point ) );
+            memcpy( pFlagAry.get(), pOldFlagAry, nSize );
 
-        // adjust number of valid points
-        if( nPoints > nSize )
-            nPoints = nSize;
+            // adjust number of valid points
+            if( nPoints > nSize )
+                nPoints = nSize;
+        }
     }
     if ( bDeletePoints )
     {
