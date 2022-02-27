@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cdb96778_086c87fc",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-02-27T03:43:18Z",
+      "side": 1,
+      "message": "I did some more debugging and found some points\n\n1. What if we remove functionality of GetLongPathW/GetCaseCorrectPath\n```\nosl::FileBase::RC nError2 \u003d aDirItem.getFileStatus( aFileStatus );\nif( nError1 \u003d\u003d osl::FileBase::E_None \u0026\u0026\n    nError2 !\u003d osl::FileBase::E_None )\n    installError(CommandId,\n                    TASKHANDLING_OPEN_FILE_FOR_PAGING, // BEAWARE, REUSED\n                    nError2);\n```\n\nThis basically remove GetLongPathW func osl_getFileStatus. Now all the path checking will go through osl_getDirectoryItem. All the svl_urihelper tests run for small c. \n\n2. However these testc do not run\n```\n\"file:///c:/nonex1/nonex2\", \"file:///C:/nonex1/nonex3/nonex4\"\n\"file:///C:/windows/nonex1\", \"file:///c:/nonex2\"\n```\nBecause they include drive name. which osl_getDirectoryItem tries to capatalize but there might be a bug where capatalization doesnt commit to the uniquepath var. \n\n3. However capatalization always happens in\n```\nosl::FileBase::RC nError2 \u003d aDirItem.getFileStatus( aFileStatus );\n```\nWhen we call getFileStatus i.e. osl_getFileStatus and GetLongPathW/GetCaseCorrectPath\n\n4. Ultimately the paths are going to be compared by function in test file\n```\nref-\u003egetUriReference().equalsAscii(tests[i].relative\n```\nWhich distinguishes between upper and lower case\n\n\n```\n/* Capitalizes drive names(single letter), Because it is not done by getLongPathW by default as compared to getCaseCorrectPath. This is to prevent differences caused by equal but different case drive letters (eg: c:\\\\ and C:\\\\) */\n```",
+      "parentUuid": "995715c7_2d48ea54",
+      "range": {
+        "startLine": 1595,
+        "startChar": 0,
+        "endLine": 1595,
+        "endChar": 49
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0d082f7_51040dee",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 5
