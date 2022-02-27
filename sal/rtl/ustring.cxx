@@ -1321,13 +1321,13 @@ void SAL_CALL rtl_uString_newReplace(rtl_uString** ppThis, rtl_uString* pStr, sa
 void SAL_CALL rtl_uString_newToAsciiLowerCase(rtl_uString** ppThis, rtl_uString* pStr)
     SAL_THROW_EXTERN_C()
 {
-    rtl::str::newToAsciiLowerCase(ppThis, pStr);
+    rtl::str::newReplaceChars<rtl::str::ToAsciiLower>(ppThis, pStr);
 }
 
 void SAL_CALL rtl_uString_newToAsciiUpperCase(rtl_uString** ppThis, rtl_uString* pStr)
     SAL_THROW_EXTERN_C()
 {
-    rtl::str::newToAsciiUpperCase(ppThis, pStr);
+    rtl::str::newReplaceChars<rtl::str::ToAsciiUpper>(ppThis, pStr);
 }
 
 void SAL_CALL rtl_uString_newTrim(rtl_uString** ppThis, rtl_uString* pStr) SAL_THROW_EXTERN_C()
