@@ -173,12 +173,12 @@ private:
 public:
     /** Exports an attribute of type "length"
      */
-    void exportMlAttributteLength(xmloff::token::XMLTokenEnum pAttribute,
-                                  const SmLengthValue& aLengthValue);
+    void exportMlAttributeLength(xmloff::token::XMLTokenEnum pAttribute,
+                                 const SmLengthValue& aLengthValue);
 
     /** Exports attributes of an element
       */
-    void exportMlAttributtes(const SmMlElement* pMlElement);
+    void exportMlAttributes(const SmMlElement* pMlElement);
 
     /** Exports an element and all it's attributes
       */

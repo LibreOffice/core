@@ -690,7 +690,7 @@ public:
 
     /** Handle mathml length attributes
     */
-    SmLengthValue handleLengthAttributte(const OUString& aAttribute);
+    SmLengthValue handleLengthAttribute(const OUString& aAttribute);
 };
 
 uno::Reference<XFastContextHandler> SAL_CALL
@@ -809,7 +809,7 @@ void SmMLImportContext::inheritStyleEnd()
     }
 }
 
-SmLengthValue SmMLImportContext::handleLengthAttributte(const OUString& aAttribute)
+SmLengthValue SmMLImportContext::handleLengthAttribute(const OUString& aAttribute)
 {
     // Locate unit indication
     int32_t nUnitPos;
@@ -953,7 +953,7 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
             case XML_LSPACE:
             {
                 SmMlLspace aLspace;
-                aLspace.m_aLengthValue = handleLengthAttributte(aIter.toString());
+                aLspace.m_aLengthValue = handleLengthAttribute(aIter.toString());
                 aAttribute.setMlLspace(&aLspace);
                 break;
             }
@@ -995,7 +995,7 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
             case XML_MATHSIZE:
             {
                 SmMlMathsize aMathsize;
-                aMathsize.m_aLengthValue = handleLengthAttributte(aIter.toString());
+                aMathsize.m_aLengthValue = handleLengthAttribute(aIter.toString());
                 aAttribute.setMlMathsize(&aMathsize);
                 break;
             }
@@ -1053,7 +1053,7 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
                 else
                 {
                     aMaxsize.m_aMaxsize = SmMlAttributeValueMaxsize::MlFinite;
-                    aMaxsize.m_aLengthValue = handleLengthAttributte(aIter.toString());
+                    aMaxsize.m_aLengthValue = handleLengthAttribute(aIter.toString());
                 }
                 aAttribute.setMlMaxsize(&aMaxsize);
                 break;
@@ -1061,7 +1061,7 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
             case XML_MINSIZE:
             {
                 SmMlMinsize aMinsize;
-                aMinsize.m_aLengthValue = handleLengthAttributte(aIter.toString());
+                aMinsize.m_aLengthValue = handleLengthAttribute(aIter.toString());
                 aAttribute.setMlMinsize(&aMinsize);
                 break;
             }
@@ -1086,7 +1086,7 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
             case XML_RSPACE:
             {
                 SmMlRspace aRspace;
-                aRspace.m_aLengthValue = handleLengthAttributte(aIter.toString());
+                aRspace.m_aLengthValue = handleLengthAttribute(aIter.toString());
                 aAttribute.setMlRspace(&aRspace);
                 break;
             }
