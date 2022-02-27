@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6b676dd_4aad3fda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T12:22:28Z",
+      "side": 1,
+      "message": "I\u0027m not completely sure but it seemed reasonable to me.\n\nmake svx.check was ok",
+      "revId": "0b1b323f37582e162e6efdf5d05092ac6157e4a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
