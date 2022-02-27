@@ -16,6 +16,23 @@
       "message": "I thought first about creating a bool value to know if we entered in the \"Create\" case but finally it wasn\u0027t necessary.",
       "revId": "b5cf3b2bca34ef15065f875792fed4bed325ef57",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8e69230_5cade901",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T15:02:29Z",
+      "side": 1,
+      "message": "No code change, only comment, let\u0027s push this one (and hope that Coverity will take it into account)",
+      "revId": "b5cf3b2bca34ef15065f875792fed4bed325ef57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
