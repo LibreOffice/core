@@ -16,6 +16,23 @@
       "message": "Thanks! It\u0027s just too expensive to test it properly. It\u0027s better that you did not change the length of the text.",
       "revId": "7032e57be00245137225cf2448f97bf0ded5fc59",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b512325a_46c96b6a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T20:45:20Z",
+      "side": 1,
+      "message": "No pb, at least translators won\u0027t have this string to translate :-)",
+      "revId": "7032e57be00245137225cf2448f97bf0ded5fc59",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
