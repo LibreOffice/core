@@ -118,7 +118,6 @@ const WhichRangesContainer aUITableAttrRange(svl::Items<
     FN_TABLE_BOX_TEXTORIENTATION,   FN_TABLE_BOX_TEXTORIENTATION,
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
     FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,
-    FN_PARAM_TABLE_SPACE,           FN_PARAM_TABLE_SPACE
 >);
 
 const WhichRangesContainer& SwuiGetUITableAttrRange()
