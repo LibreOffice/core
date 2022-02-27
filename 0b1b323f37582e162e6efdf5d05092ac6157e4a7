@@ -16,6 +16,23 @@
       "message": "I\u0027m not completely sure but it seemed reasonable to me.\n\nmake svx.check was ok",
       "revId": "0b1b323f37582e162e6efdf5d05092ac6157e4a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0446788_b7d2dac1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-27T12:30:33Z",
+      "side": 1,
+      "message": "looks reasonable to me too, well this change, the overall function looks weird but can be left alone",
+      "revId": "0b1b323f37582e162e6efdf5d05092ac6157e4a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
