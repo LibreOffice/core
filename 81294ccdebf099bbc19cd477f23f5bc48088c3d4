@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e639784_46fa9978",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T18:39:19Z",
+      "side": 1,
+      "message": "I don\u0027t know how all these things work but comparing with \ngit grep -n SetupError|grep ProductName, I noticed:\ninc_ooohelppack/windows/msi_templates/Dialog.idt:26:SetupError\t50\t10\t300\t127\t65543\t[ProductName] [STR_INSTALLATION_WIZARD]\tErrorText\tO\tC\ninc_openoffice/windows/msi_templates/Dialog.idt:28:SetupError\t50\t10\t300\t127\t65543\t[ProductName] [STR_INSTALLATION_WIZARD]\tErrorText\tO\tC\ninc_sdkoo/windows/msi_templates/Dialog.idt:25:SetupError\t50\t10\t270\t110\t65543\t[ProductName] Installerinformationen\tErrorText\tO\tC\n",
+      "revId": "81294ccdebf099bbc19cd477f23f5bc48088c3d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
