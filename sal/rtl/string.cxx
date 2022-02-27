@@ -598,7 +598,7 @@ void SAL_CALL rtl_string_newFromSubString(rtl_String** ppThis, const rtl_String*
 void SAL_CALL rtl_string_newFromLiteral(rtl_String** ppThis, const char* pCharStr, sal_Int32 nLen,
                                         sal_Int32 allocExtra) SAL_THROW_EXTERN_C()
 {
-    rtl::str::newFromLiteral(ppThis, pCharStr, nLen, allocExtra);
+    rtl::str::newFromStr_WithLength(ppThis, pCharStr, nLen, allocExtra);
 }
 
 void SAL_CALL rtl_string_assign(rtl_String** ppThis, rtl_String* pStr) SAL_THROW_EXTERN_C()

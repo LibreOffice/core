@@ -58,6 +58,7 @@ inline void Copy(sal_Unicode* _pDest, const char* _pSrc, sal_Int32 _nCount)
                    [](char c)
                    {
                        assert(rtl::isAscii(static_cast<unsigned char>(c)));
+                       SAL_WARN_IF(c == '\0', "rtl.string", "Found embedded \\0 ASCII character");
                        return static_cast<unsigned char>(c);
                    });
 }
@@ -1012,8 +1013,35 @@ void new_WithLength( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRINGDATA>
-void newFromStr_WithLength(IMPL_RTL_STRINGDATA**, const STRCODE<IMPL_RTL_STRINGDATA>*, sal_Int32);
+template <typename IMPL_RTL_STRINGDATA, typename C>
+void newFromStr_WithLength(IMPL_RTL_STRINGDATA** ppThis, const C* pCharStr, sal_Int32 nLen,
+                           sal_Int32 allocExtra = 0)
+{
+    assert(ppThis);
+    assert(nLen >= 0);
+    assert(pCharStr || nLen == 0);
+    assert(allocExtra >= 0);
+
+    if (nLen + allocExtra == 0)
+        return new_(ppThis);
+
+    IMPL_RTL_STRINGDATA* pOrg = *ppThis;
+    *ppThis = Alloc<IMPL_RTL_STRINGDATA>(nLen + allocExtra);
+    assert(*ppThis != nullptr);
+    if (nLen > 0)
+        Copy((*ppThis)->buffer, pCharStr, nLen);
+    if (allocExtra > 0)
+    {
+        (*ppThis)->length = nLen;
+        (*ppThis)->buffer[nLen] = 0;
+    }
+
+    RTL_LOG_STRING_NEW(*ppThis);
+
+    /* must be done last, if pCharStr belongs to *ppThis */
+    if (pOrg)
+        release(pOrg);
+}
 
 template <typename IMPL_RTL_STRINGDATA>
 void newFromString                                ( IMPL_RTL_STRINGDATA** ppThis,
@@ -1044,39 +1072,7 @@ void newFromStr                                ( IMPL_RTL_STRINGDATA** ppThis,
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRINGDATA>
-void newFromStr_WithLength                                ( IMPL_RTL_STRINGDATA** ppThis,
-                                                            const STRCODE<IMPL_RTL_STRINGDATA>* pCharStr,
-                                                            sal_Int32 nLen )
-{
-    assert(ppThis);
-
-    if ( nLen == 0 )
-    {
-        new_( ppThis );
-        return;
-    }
-
-    assert(nLen > 0);
-    assert(pCharStr);
-
-    IMPL_RTL_STRINGDATA* pOrg = *ppThis;
-    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
-    OSL_ASSERT(*ppThis != nullptr);
-    Copy( (*ppThis)->buffer, pCharStr, nLen );
-
-    RTL_LOG_STRING_NEW( *ppThis );
-
-    /* must be done last, if pCharStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
-}
-
-/* ----------------------------------------------------------------------- */
-
 template <typename IMPL_RTL_STRINGDATA> void assign(IMPL_RTL_STRINGDATA**, IMPL_RTL_STRINGDATA*);
-template <typename IMPL_RTL_STRINGDATA>
-void newFromLiteral(IMPL_RTL_STRINGDATA**, const char*, sal_Int32, sal_Int32);
 
 template <typename IMPL_RTL_STRINGDATA>
 void newFromSubString                                ( IMPL_RTL_STRINGDATA** ppThis,
@@ -1086,63 +1082,14 @@ void newFromSubString                                ( IMPL_RTL_STRINGDATA** ppT
 {
     assert(ppThis);
     if ( beginIndex == 0 && count == pFrom->length )
-    {
-        assign( ppThis, const_cast< IMPL_RTL_STRINGDATA * >( pFrom ) );
-        return;
-    }
+        return assign(ppThis, const_cast<IMPL_RTL_STRINGDATA*>(pFrom));
     if ( count < 0 || beginIndex < 0 || beginIndex + count > pFrom->length )
     {
         assert(false); // fail fast at least in debug builds
-        newFromLiteral( ppThis, "!!br0ken!!", 10, 0 );
-        return;
+        return newFromStr_WithLength(ppThis, "!!br0ken!!", 10);
     }
 
     newFromStr_WithLength( ppThis, pFrom->buffer + beginIndex, count );
-}
-
-/* ----------------------------------------------------------------------- */
-
-// Used when creating from string literals.
-template <typename IMPL_RTL_STRINGDATA>
-void newFromLiteral                                ( IMPL_RTL_STRINGDATA** ppThis,
-                                                     const char* pCharStr,
-                                                     sal_Int32 nLen,
-                                                     sal_Int32 allocExtra )
-{
-    assert(ppThis);
-    assert(nLen >= 0);
-    assert(allocExtra >= 0);
-    if ( nLen + allocExtra == 0 )
-    {
-        new_( ppThis );
-        return;
-    }
-
-    if ( *ppThis )
-        release( *ppThis );
-
-    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen + allocExtra );
-    assert( *ppThis != nullptr );
-
-    (*ppThis)->length = nLen; // fix after possible allocExtra != 0
-    (*ppThis)->buffer[nLen] = 0;
-    auto* pBuffer = (*ppThis)->buffer;
-    sal_Int32 nCount;
-    for( nCount = nLen; nCount > 0; --nCount )
-    {
-        if constexpr (sizeof(STRCODE<IMPL_RTL_STRINGDATA>) == sizeof(sal_Unicode))
-        {
-            assert(rtl::isAscii(static_cast<unsigned char>(*pCharStr)));
-        }
-        SAL_WARN_IF( (static_cast<unsigned char>(*pCharStr)) == '\0', "rtl.string",
-                    "newFromLiteral - Found embedded \\0 character" );
-
-        *pBuffer = *pCharStr;
-        pBuffer++;
-        pCharStr++;
-    }
-
-    RTL_LOG_STRING_NEW( *ppThis );
 }
 
 /* ----------------------------------------------------------------------- */
