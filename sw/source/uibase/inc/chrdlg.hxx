@@ -21,9 +21,10 @@
 
 #include <sfx2/tabdlg.hxx>
 #include "chrdlgmodes.hxx"
+#include <svl/macitem.hxx>
+#include <optional>
 
 class SwView;
-class SvxMacroItem;
 
 class SwCharDlg final : public SfxTabDialogController
 {
@@ -41,7 +42,7 @@ public:
 
 class SwCharURLPage final : public SfxTabPage
 {
-    std::unique_ptr<SvxMacroItem> pINetItem;
+    std::optional<SvxMacroTableDtor> m_oINetMacroTable;
     bool                bModified;
 
     std::unique_ptr<weld::Entry> m_xURLED;

@@ -101,15 +101,15 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 }
 
 bool SwMacroAssignDlg::INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh,
-                                     std::unique_ptr<SvxMacroItem>& rpINetItem )
+                                     std::optional<SvxMacroTableDtor>& rpINetItem )
 {
     bool bRet = false;
     SfxItemSetFixed<RES_FRMMACRO, RES_FRMMACRO, SID_EVENTCONFIG, SID_EVENTCONFIG> aSet( rSh.GetAttrPool() );
     SvxMacroItem aItem( RES_FRMMACRO );
     if( !rpINetItem )
-        rpINetItem.reset(new SvxMacroItem( RES_FRMMACRO ));
+        rpINetItem.emplace();
     else
-        aItem.SetMacroTable( rpINetItem->GetMacroTable() );
+        aItem.SetMacroTable( *rpINetItem );
 
     aSet.Put( aItem );
     aSet.Put( AddEvents( MACASSGN_INETFMT ) );
@@ -123,7 +123,7 @@ bool SwMacroAssignDlg::INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh,
         const SfxPoolItem* pItem;
         if( SfxItemState::SET == pOutSet->GetItemState( RES_FRMMACRO, false, &pItem ))
         {
-            rpINetItem->SetMacroTable( static_cast<const SvxMacroItem*>(pItem)->GetMacroTable() );
+            *rpINetItem = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable();
             bRet = true;
         }
     }
