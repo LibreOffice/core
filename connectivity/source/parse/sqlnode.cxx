@@ -1862,7 +1862,7 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
             OSQLParseNode* pNewRight = nullptr;
 
             // cut left from parent
-            pSearchCondition->removeAt(sal_uInt32(0));
+            delete pSearchCondition->removeAt(sal_uInt32(0));
 
             pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
             pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt(sal_uInt32(0)));
