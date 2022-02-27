@@ -256,6 +256,8 @@ class DLLEXPORT HWPFile
         }
         void pop_hpara_type() { element_import_stack.pop_back(); }
 
+        void move_to_failed(std::unique_ptr<HWPPara> rPara);
+
     private:
         int compareCharShape(CharShape const *shape);
         int compareParaShape(ParaShape const *shape);

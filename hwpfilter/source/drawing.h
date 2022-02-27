@@ -315,7 +315,7 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, unsigned short * link_info)
     return hmem->skipBlock(size - common_size ) != 0;
 }
 
-static std::unique_ptr<HWPDrawingObject> LoadDrawingObject(void)
+static std::unique_ptr<HWPDrawingObject> LoadDrawingObject(HWPFile& hwpf)
 {
     HWPDrawingObject *prev = nullptr;
     std::unique_ptr<HWPDrawingObject> hdo, head;
@@ -354,7 +354,7 @@ static std::unique_ptr<HWPDrawingObject> LoadDrawingObject(void)
         }
         if (link_info & HDOFILE_HAS_CHILD)
         {
-            hdo->child = LoadDrawingObject();
+            hdo->child = LoadDrawingObject(hwpf);
             if (hdo->child == nullptr)
             {
                 goto error;
@@ -383,6 +383,11 @@ error:
     {
         hdo->type = HWPDO_RECT;
     }
+    if (hdo->property.pPara)
+    {
+        hwpf.move_to_failed(std::unique_ptr<HWPPara>(hdo->property.pPara));
+        hdo->property.pPara = nullptr;
+    }
     HWPDOFunc(hdo.get(), OBJFUNC_FREE, nullptr, 0);
     hdo.reset();
 
@@ -396,7 +401,7 @@ error:
 }
 
 
-static bool LoadDrawingObjectBlock(Picture * pic)
+static bool LoadDrawingObjectBlock(Picture * pic, HWPFile& hwpf)
 {
     int size;
     if (!hmem->read4b(size))
@@ -422,7 +427,7 @@ static bool LoadDrawingObjectBlock(Picture * pic)
         !hmem->skipBlock(size - HDOFILE_HEADER_SIZE))
         return false;
 
-    pic->picinfo.picdraw.hdo = LoadDrawingObject().release();
+    pic->picinfo.picdraw.hdo = LoadDrawingObject(hwpf).release();
     if (pic->picinfo.picdraw.hdo == nullptr)
         return false;
     return true;

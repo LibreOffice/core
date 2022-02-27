@@ -244,7 +244,7 @@ void HWPFile::ReadParaList(std::vector < HWPPara* > &aplist)
         aplist.push_back(spNode.release());
         spNode.reset( new HWPPara );
     }
-    pfailedlist.push_back(std::move(spNode));
+    move_to_failed(std::move(spNode));
 }
 
 void HWPFile::ReadParaList(std::vector< std::unique_ptr<HWPPara> > &aplist, unsigned char flag)
@@ -278,7 +278,12 @@ void HWPFile::ReadParaList(std::vector< std::unique_ptr<HWPPara> > &aplist, unsi
         aplist.push_back(std::move(spNode));
         spNode.reset( new HWPPara );
     }
-    pfailedlist.push_back(std::move(spNode));
+    move_to_failed(std::move(spNode));
+}
+
+void HWPFile::move_to_failed(std::unique_ptr<HWPPara> xPara)
+{
+    pfailedlist.push_back(std::move(xPara));
 }
 
 void HWPFile::TagsRead()
