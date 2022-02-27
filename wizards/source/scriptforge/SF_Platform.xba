@@ -83,6 +83,15 @@ Property Get Extensions() As Variant
 End Property	&apos;	ScriptForge.SF_Platform.Extensions (get)
 
 REM -----------------------------------------------------------------------------
+Property Get FilterNames() As Variant
+&apos;&apos;&apos;	Returns the list of available document import and export filter names as an unsorted array of unique strings
+&apos;&apos;&apos;	To get the list sorted, use SF_Array.Sort()
+&apos;&apos;&apos;	Example:
+&apos;&apos;&apos;		myFilterNamesList = platform.FilterNames
+	FilterNames = _PropertyGet(&quot;FilterNames&quot;)
+End Property	&apos;	ScriptForge.SF_Platform.FilterNames (get)
+
+REM -----------------------------------------------------------------------------
 Property Get Fonts() As Variant
 &apos;&apos;&apos;	Returns the list of available fonts as an unsorted array of unique strings
 &apos;&apos;&apos;	To get the list sorted, use SF_Array.Sort()
@@ -261,6 +270,7 @@ Public Function Properties() As Variant
 					, &quot;CPUCount&quot; _
 					, &quot;CurrentUser&quot; _
 					, &quot;Extensions&quot; _
+					, &quot;FilterNames&quot; _
 					, &quot;Fonts&quot; _
 					, &quot;FormatLocale&quot; _
 					, &quot;Locale&quot; _
@@ -357,6 +367,7 @@ Dim oLocale As Object			&apos;	com.sun.star.lang.Locale
 Dim oPrinterServer As Object	&apos;	com.sun.star.awt.PrinterServer
 Dim oToolkit As Object			&apos;	com.sun.star.awt.Toolkit
 Dim oDevice As Object			&apos;	com.sun.star.awt.XDevice
+Dim oFilterFactory As Object	&apos;	com.sun.star.document.FilterFactory
 Dim oFontDescriptors As Variant	&apos;	Array of com.sun.star.awt.FontDescriptor
 Dim sFonts As String			&apos;	Comma-separated list of fonts
 Dim sFont As String				&apos;	A single font name
@@ -385,6 +396,9 @@ Const cstSubArgs = &quot;&quot;
 				sExtensions = sExtensions &amp; &quot;,&quot; &amp; vExtensionsList(i)(0)
 			Next i
 			If Len(sExtensions) &gt; 0 Then _PropertyGet = Split(Mid(sExtensions, 2), &quot;,&quot;) Else _PropertyGet = Array()
+		Case &quot;FilterNames&quot;
+			Set oFilterFactory = SF_Utils._GetUNOService(&quot;FilterFactory&quot;)
+			_PropertyGet = oFilterFactory.getElementNames()
 		Case &quot;Fonts&quot;
 			Set oToolkit = SF_Utils._GetUnoService(&quot;Toolkit&quot;)
 			Set oDevice = oToolkit.createScreenCompatibleDevice(0, 0)
