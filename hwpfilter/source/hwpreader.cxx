@@ -2521,7 +2521,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
             padd("style:horizontal-rel", sXML_CDATA, "page-content");
         }
     }
-    if( fstyle->boxtype == 'X' || fstyle->boxtype == 'B' )
+    if (fstyle->cell && (fstyle->boxtype == 'X' || fstyle->boxtype == 'B'))
     {
         Cell *cell = static_cast<Cell *>(fstyle->cell);
         if(cell->linetype[0] == cell->linetype[1] &&
