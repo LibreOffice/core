@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd63462e_cb9a8db2",
+        "filename": "connectivity/source/parse/sqlnode.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1865,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-27T17:10:11Z",
+      "side": 1,
+      "message": "I have a doubt. \"cut left\" made me look above to pLeft \u003d pSearchCondition-\u003egetChild(0) so I suspect this deletes what pLeft points to and isn\u0027t safe.\n\nThese new coverity warnings aren\u0027t of the highest quality in safety. More indications of \"weird code\"",
+      "revId": "1142dc2398de2e2be0e057ecb432ad9c8895313a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
