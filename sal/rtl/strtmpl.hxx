@@ -1576,28 +1576,13 @@ template <typename IMPL_RTL_STRINGDATA>
 void newTrim                                ( IMPL_RTL_STRINGDATA** ppThis,
                                               IMPL_RTL_STRINGDATA* pStr )
 {
-    assert(ppThis);
     assert(pStr);
-    IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
     const auto view = trimView(pStr->buffer, pStr->length);
 
     if (static_cast<sal_Int32>(view.size()) == pStr->length)
-    {
-        *ppThis = pStr;
-        acquire( pStr );
-    }
+        assign(ppThis, pStr);
     else
-    {
-        sal_Int32 nLen = static_cast<sal_Int32>(view.size());
-        *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
-        assert(*ppThis);
-        Copy( (*ppThis)->buffer, view.data(), nLen );
-    }
-
-    RTL_LOG_STRING_NEW( *ppThis );
-    /* must be done last, if pStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
+        newFromStr_WithLength(ppThis, view.data(), view.size());
 }
 
 /* ----------------------------------------------------------------------- */
