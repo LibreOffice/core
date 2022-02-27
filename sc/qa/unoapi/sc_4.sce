@@ -19,7 +19,6 @@
 -o sc.ScDatabaseRangeObj
 -o sc.ScDocumentConfiguration
 # ported to cppunit -o sc.ScHeaderFieldObj
--o sc.ScHeaderFieldsObj
 # The two HeaderFooter tests seem to fail randomly
 # -o sc.ScHeaderFooterTextCursor
 # SHF_TextObj is composed of SHF_TextData, which has a weak reference to

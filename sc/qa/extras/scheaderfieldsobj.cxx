@@ -8,6 +8,7 @@
  */
 
 #include <test/calc_unoapi_test.hxx>
+#include <test/container/xelementaccess.hxx>
 #include <test/container/xenumerationaccess.hxx>
 #include <test/util/xrefreshable.hxx>
 
@@ -21,6 +22,7 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 
@@ -31,6 +33,7 @@ using namespace css;
 namespace sc_apitest
 {
 class ScHeaderFieldsObj : public CalcUnoApiTest,
+                          public apitest::XElementAccess,
                           public apitest::XEnumerationAccess,
                           public apitest::XRefreshable
 {
@@ -43,6 +46,10 @@ public:
 
     CPPUNIT_TEST_SUITE(ScHeaderFieldsObj);
 
+    // XElementAccess
+    CPPUNIT_TEST(testGetElementType);
+    CPPUNIT_TEST(testHasElements);
+
     // XEnumerationAccess
     CPPUNIT_TEST(testCreateEnumeration);
 
@@ -53,10 +60,17 @@ public:
 
 private:
     uno::Reference<lang::XComponent> m_xComponent;
+    // We need a long living reference to css::text::XText to make the
+    // XElementAccess::hasElements() test work as ScHeaderFooterEditSource holds
+    // only (weak) references and they sometimes are gone.
+    static uno::Reference<text::XText> m_xText;
 };
+
+uno::Reference<text::XText> ScHeaderFieldsObj::m_xText;
 
 ScHeaderFieldsObj::ScHeaderFieldsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
+    , ::apitest::XElementAccess(cppu::UnoType<text::XTextField>::get())
 {
 }
 
@@ -72,15 +86,15 @@ uno::Reference<uno::XInterface> ScHeaderFieldsObj::init()
     uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XHeaderFooterContent> xHFC(
         xPropertySet->getPropertyValue("RightPageHeaderContent"), uno::UNO_QUERY_THROW);
-    uno::Reference<text::XText> xText(xHFC->getLeftText(), uno::UNO_SET_THROW);
+    m_xText = xHFC->getLeftText();
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextContent> xTC(xMSF->createInstance("com.sun.star.text.TextField.Time"),
                                            uno::UNO_QUERY_THROW);
-    xText->insertTextContent(xText->createTextCursor(), xTC, false);
+    m_xText->insertTextContent(m_xText->createTextCursor(), xTC, false);
     xPropertySet->setPropertyValue("RightPageHeaderContent", uno::makeAny(xHFC));
 
-    uno::Reference<text::XTextFieldsSupplier> xTFS(xText, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextFieldsSupplier> xTFS(m_xText, uno::UNO_QUERY_THROW);
     return xTFS->getTextFields();
 }
 
@@ -93,6 +107,8 @@ void ScHeaderFieldsObj::setUp()
 
 void ScHeaderFieldsObj::tearDown()
 {
+    m_xText.clear();
+
     closeDocument(m_xComponent);
     CalcUnoApiTest::tearDown();
 }
