@@ -490,7 +490,7 @@ bool Picture::Read(HWPFile & hwpf)
         if (pictype == PICTYPE_DRAW)
         {
             auto xGuard(std::make_unique<ChangeMemGuard>(follow.data(), follow_block_size));
-            LoadDrawingObjectBlock(this);
+            LoadDrawingObjectBlock(this, hwpf);
             style.cell = picinfo.picdraw.hdo;
             xGuard.reset();
         }
