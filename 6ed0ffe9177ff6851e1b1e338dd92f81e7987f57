@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2a97f5ac_eb316e08",
+        "filename": "dbaccess/qa/extras/rowsetclones.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-02-27T09:38:13Z",
+      "side": 0,
+      "message": "Thank you for the review. Will you please suggest me how can I find various throwing constructors? So that, I can use an appropriate one here.",
+      "parentUuid": "4d42b9ed_a869176b",
+      "revId": "6ed0ffe9177ff6851e1b1e338dd92f81e7987f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b193388c_fc2ec1f3",
         "filename": "dbaccess/qa/unit/dbtest_base.cxx",
         "patchSetId": 1
