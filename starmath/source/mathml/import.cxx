@@ -1049,7 +1049,10 @@ void SmMLImportContext::handleAttributes(const Reference<XFastAttributeList>& aA
             {
                 SmMlMaxsize aMaxsize;
                 if (IsXMLToken(aIter, XML_INFINITY))
+                {
                     aMaxsize.m_aMaxsize = SmMlAttributeValueMaxsize::MlInfinity;
+                    aMaxsize.m_aLengthValue = { SmLengthUnit::MlP, 10000, new OUString(u"10000%") };
+                }
                 else
                 {
                     aMaxsize.m_aMaxsize = SmMlAttributeValueMaxsize::MlFinite;
