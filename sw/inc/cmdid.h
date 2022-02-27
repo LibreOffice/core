@@ -788,7 +788,6 @@ class SwUINumRuleItem;
 
 #define FN_PARAM_TABLE_NAME             TypedWhichId<SfxStringItem>(FN_PARAM+44)
 #define FN_PARAM_TABLE_HEADLINE         TypedWhichId<SfxUInt16Item>(FN_PARAM+50)
-#define FN_PARAM_TABLE_SPACE            (FN_PARAM+51)
 
 #define FN_PARAM_GRF_CONNECT            TypedWhichId<SfxBoolItem>(FN_PARAM+53)
 #define FN_PARAM_FIELD_TYPE             TypedWhichId<SfxUInt16Item>(FN_PARAM+54)
