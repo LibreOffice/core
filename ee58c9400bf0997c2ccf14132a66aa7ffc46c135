@@ -16,6 +16,24 @@
       "message": "I\u0027m not sure what would happen, when the error text is longer than this placeholder. I think it was long for a reason.",
       "revId": "ee58c9400bf0997c2ccf14132a66aa7ffc46c135",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "622c5aa6_eb26703f",
+        "filename": "instsetoo_native/inc_sdkoo/windows/msi_templates/Control.idt",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T20:29:21Z",
+      "side": 1,
+      "message": "Ok let\u0027s put 10 times the same message here (I also kept the 2 spaces between each).",
+      "parentUuid": "31a26435_0d4267bb",
+      "revId": "ee58c9400bf0997c2ccf14132a66aa7ffc46c135",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
