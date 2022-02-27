@@ -22,7 +22,7 @@ ReadyToInstall	50	50	374	266	35	[ProductName] - [STR_INSTALLATION_WIZARD]	Instal
 ReadyToRemove	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	RemoveNow	RemoveNow	Cancel
 SetupCompleteError	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Finish	Finish	Finish
 SetupCompleteSuccess	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	OK	OK	OK
-SetupError	50	10	270	110	65543	[ProductName] Installerinformationen	ErrorText	O	C
+SetupError	50	10	270	110	65543	[ProductName] [STR_INSTALLATION_WIZARD]	ErrorText	O	C
 SetupInitialization	50	50	374	266	5	[ProductName] - [STR_INSTALLATION_WIZARD]	Cancel	Cancel	Cancel
 SetupInterrupted	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Finish	Finish	Finish
 SetupProgress	50	50	374	266	5	[ProductName] - [STR_INSTALLATION_WIZARD]	Cancel	Cancel	Cancel
