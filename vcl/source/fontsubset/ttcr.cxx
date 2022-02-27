@@ -1308,14 +1308,21 @@ static void ProcessTables(TrueTypeCreator *tt)
     do {
         GlyphData *gd = static_cast<GlyphData *>(listCurrent(glyphlist));
 
-        if (gd->compflag) {                       /* re-number all components */
+        if (gd->compflag && gd->nbytes > 10) {    /* re-number all components */
             sal_uInt16 flags, index;
             sal_uInt8 *ptr = gd->ptr + 10;
+            size_t nRemaining = gd->nbytes - 10;
             do {
-                sal_uInt32 j;
+                if (nRemaining < 4)
+                {
+                    SAL_WARN("vcl.fonts", "truncated font");
+                    break;
+                }
                 flags = GetUInt16(ptr, 0);
                 index = GetUInt16(ptr, 2);
+
                 /* XXX use the sorted array of old to new glyphID mapping and do a binary search */
+                sal_uInt32 j;
                 for (j = 0; j < nGlyphs; j++) {
                     if (gid[j] == index) {
                         break;
@@ -1326,20 +1333,32 @@ static void ProcessTables(TrueTypeCreator *tt)
                 PutUInt16(static_cast<sal_uInt16>(j), ptr, 2);
 
                 ptr += 4;
+                nRemaining -= 4;
 
+                sal_uInt32 nAdvance = 0;
                 if (flags & ARG_1_AND_2_ARE_WORDS) {
-                    ptr += 4;
+                    nAdvance += 4;
                 } else {
-                    ptr += 2;
+                    nAdvance += 2;
                 }
 
                 if (flags & WE_HAVE_A_SCALE) {
-                    ptr += 2;
+                    nAdvance += 2;
                 } else if (flags & WE_HAVE_AN_X_AND_Y_SCALE) {
-                    ptr += 4;
+                    nAdvance += 4;
                 } else if (flags & WE_HAVE_A_TWO_BY_TWO) {
-                    ptr += 8;
+                    nAdvance += 8;
                 }
+
+                if (nRemaining < nAdvance)
+                {
+                    SAL_WARN("vcl.fonts", "truncated font");
+                    break;
+                }
+
+                ptr += nAdvance;
+                nRemaining -= nAdvance;
+
             } while (flags & MORE_COMPONENTS);
         }
 
