@@ -16,6 +16,24 @@
       "message": "Oh fun, raw pointers :) I smell memory leaks (unrelated to the change of course)",
       "revId": "317e8a3893402bf30e43d8acdc6a8959a4c3ea7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "906b9a1a_bc516307",
+        "filename": "starmath/source/mathml/import.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-27T11:33:54Z",
+      "side": 1,
+      "message": "Very plausible.\nNew Coverity version revealed quite a lot of bugs to fix.\nIt would be great too to have more feedback from PVS Studio too.",
+      "parentUuid": "f04a4762_79e6781c",
+      "revId": "317e8a3893402bf30e43d8acdc6a8959a4c3ea7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
