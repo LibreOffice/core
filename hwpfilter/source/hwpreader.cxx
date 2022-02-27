@@ -2296,7 +2296,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
     padd("style:vertical-rel", sXML_CDATA, "paragraph");
     padd("style:horizontal-pos", sXML_CDATA, "from-left");
     padd("style:horizontal-rel", sXML_CDATA, "paragraph");
-    if( fstyle->boxtype == 'G' )
+    if (fstyle->boxtype == 'G' && fstyle->cell)
     {
         char *cell = static_cast<char *>(fstyle->cell);
         padd("draw:luminance", sXML_CDATA,
@@ -2310,7 +2310,7 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
         else if( cell[2] == 2 )
             padd("draw:color-mode", sXML_CDATA, "mono");
     }
-    else
+    else if (fstyle->cell)
     {
         Cell *cell = static_cast<Cell *>(fstyle->cell);
         if(cell->linetype[0] == cell->linetype[1] &&
