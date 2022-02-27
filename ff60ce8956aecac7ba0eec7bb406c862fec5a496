@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a3214ac_54214686",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-27T23:27:05Z",
+      "side": 1,
+      "message": "In the specification documents for WMF/EMF, there is no suggested integer type for each of these enumerations, but there is a description for the type of integers used for storing the values in the appropriate objects, or set of bytes. I\u0027ve used that here.\nFor example, if a 4 byte unsigned integer is used to store values of an enumeration type, I\u0027ve used sal_uInt32.",
+      "parentUuid": "b5df4051_160a0ff0",
+      "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8168b14e_02ed6282",
@@ -31,6 +49,24 @@
       "writtenOn": "2021-11-09T15:10:34Z",
       "side": 1,
       "message": "Whenever you find a \"SOME_UNITS_PER_ANOTHER_UNIT\" definition, please consider converting its uses to proper use of o3tl::convert, instead of prettifying such constants.",
+      "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40ddd82c_29fd3f28",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 307,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-27T23:27:05Z",
+      "side": 1,
+      "message": "I think you have fixed this yourself.",
+      "parentUuid": "8168b14e_02ed6282",
       "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -66,6 +102,24 @@
       "side": 1,
       "message": "Or, looking at the definition of \u0027MILLIINCH_PER_TWIPS\u0027, it\u0027s the misleading name, which in fact has the opposite value: 1.44 is twips per milliinch. This way, the calculation was actually correct, but still there was a mistake, even though less problematic in practice :-)\n\nProper API avoids those problems.",
       "parentUuid": "eb25d713_1ac4f30e",
+      "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d9703f5_c5022bcd",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 561,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-02-27T23:27:05Z",
+      "side": 1,
+      "message": "And also this.",
+      "parentUuid": "6d1c0dc2_1336736f",
       "revId": "ff60ce8956aecac7ba0eec7bb406c862fec5a496",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
