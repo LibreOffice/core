@@ -190,7 +190,6 @@ SwCharURLPage::SwCharURLPage(weld::Container* pPage, weld::DialogController* pCo
 
 SwCharURLPage::~SwCharURLPage()
 {
-    pINetItem.reset();
 }
 
 void SwCharURLPage::Reset(const SfxItemSet* rSet)
@@ -225,10 +224,10 @@ void SwCharURLPage::Reset(const SfxItemSet* rSet)
         m_xVisitedLB->save_value();
         m_xNotVisitedLB->save_value();
         m_xTargetFrameLB->save_value();
-        pINetItem.reset( new SvxMacroItem(FN_INET_FIELD_MACRO) );
+        m_oINetMacroTable.emplace();
 
         if( pINetFormat->GetMacroTable() )
-            pINetItem->SetMacroTable(*pINetFormat->GetMacroTable());
+            m_oINetMacroTable = *pINetFormat->GetMacroTable();
     }
     if (SfxItemState::SET == rSet->GetItemState(FN_PARAM_SELECTION, false, &pItem))
     {
@@ -265,8 +264,8 @@ bool SwCharURLPage::FillItemSet(SfxItemSet* rSet)
     nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, SwGetPoolIdFromName::ChrFmt);
     aINetFormat.SetINetFormatAndId( sEntry, nId );
 
-    if (pINetItem && !pINetItem->GetMacroTable().empty())
-        aINetFormat.SetMacroTable(&pINetItem->GetMacroTable());
+    if (m_oINetMacroTable && !m_oINetMacroTable->empty())
+        aINetFormat.SetMacroTable(&*m_oINetMacroTable);
 
     if (m_xVisitedLB->get_value_changed_from_saved())
         bModified = true;
@@ -304,7 +303,7 @@ IMPL_LINK_NOARG(SwCharURLPage, InsertFileHdl, weld::Button&, void)
 IMPL_LINK_NOARG(SwCharURLPage, EventHdl, weld::Button&, void)
 {
     bModified |= SwMacroAssignDlg::INetFormatDlg(GetFrameWeld(),
-                    ::GetActiveView()->GetWrtShell(), pINetItem);
+                    ::GetActiveView()->GetWrtShell(), m_oINetMacroTable);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

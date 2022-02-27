@@ -21,9 +21,10 @@
 
 #include <sfx2/evntconf.hxx>
 #include <vcl/weld.hxx>
+#include <svl/macitem.hxx>
+#include <optional>
 
 class SwWrtShell;
-class SvxMacroItem;
 
 enum DlgEventType
 {
@@ -40,7 +41,7 @@ class SwMacroAssignDlg
 public:
     static SfxEventNamesItem AddEvents(DlgEventType eType);
     static bool INetFormatDlg(weld::Window* pParent, SwWrtShell& rSh,
-                              std::unique_ptr<SvxMacroItem>& rpINetItem);
+                              std::optional<SvxMacroTableDtor>& rpINetItem);
 };
 
 #endif
