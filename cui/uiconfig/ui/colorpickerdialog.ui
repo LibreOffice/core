@@ -636,7 +636,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="colorpickerdialog|label5">_Cyan:</property>
+                            <property name="label" translatable="yes" context="colorpickerdialog|label5" comments="This is the C of the CMYK color model: https://en.wikipedia.org/wiki/CMYK_color_model">_Cyan:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">cyanSpinbutton</property>
                             <property name="xalign">0</property>
@@ -651,7 +651,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="colorpickerdialog|label6">_Magenta:</property>
+                            <property name="label" translatable="yes" context="colorpickerdialog|label6" comments="This is the M of the CMYK color model: https://en.wikipedia.org/wiki/CMYK_color_model">_Magenta:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">magSpinbutton</property>
                             <property name="xalign">0</property>
@@ -666,7 +666,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="colorpickerdialog|label7">_Yellow:</property>
+                            <property name="label" translatable="yes" context="colorpickerdialog|label7" comments="This is the Y of the CMYK color model: https://en.wikipedia.org/wiki/CMYK_color_model">_Yellow:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">yellowSpinbutton</property>
                             <property name="xalign">0</property>
@@ -681,7 +681,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="halign">start</property>
-                            <property name="label" translatable="yes" context="colorpickerdialog|label8">_Key:</property>
+                            <property name="label" translatable="yes" context="colorpickerdialog|label8" comments="This is the K of the CMYK color model: https://en.wikipedia.org/wiki/CMYK_color_model">_Key:</property>
                             <property name="use-underline">True</property>
                             <property name="mnemonic-widget">keySpinbutton</property>
                             <property name="xalign">0</property>
