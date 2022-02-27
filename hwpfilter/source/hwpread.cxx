@@ -463,7 +463,7 @@ bool Picture::Read(HWPFile & hwpf)
             HMemIODev* pOldMem = hmem;
             HMemIODev* pNewMem = new HMemIODev(reinterpret_cast<char *>(follow.data()), follow_block_size);
             hmem = pNewMem;
-            LoadDrawingObjectBlock(this);
+            LoadDrawingObjectBlock(this, hwpf);
             style.cell = picinfo.picdraw.hdo;
             assert(hmem == pNewMem);
             delete pNewMem;
