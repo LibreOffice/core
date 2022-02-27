@@ -248,7 +248,7 @@ SetupCompleteSuccess	TextLine2	Text	135	55	328	45	65538		OOO_CONTROL_199
 SetupCompleteSuccess	TextLine3	Text	135	55	328	45	65538		OOO_CONTROL_200		
 SetupError	A	PushButton	222	97	66	17	3		OOO_CONTROL_204		
 SetupError	C	PushButton	222	97	66	17	3		OOO_CONTROL_205		
-SetupError	ErrorText	Text	50	15	230	67	3		OOO_CONTROL_206		
+SetupError	ErrorText	Text	50	15	230	67	3		error text goes here  error text goes here  error text goes here  error text goes here  error text goes here  error text goes here  error text goes here  error text goes here  error text goes here  error text goes here		
 SetupError	I	PushButton	222	97	66	17	3		OOO_CONTROL_207		
 SetupError	N	PushButton	222	97	66	17	3		OOO_CONTROL_208		
 SetupError	O	PushButton	222	97	66	17	3		OOO_CONTROL_209		
