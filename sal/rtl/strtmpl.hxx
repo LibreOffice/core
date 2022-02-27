@@ -918,13 +918,7 @@ sal_uInt64 toUInt64                             ( const IMPL_RTL_STRCODE* pStr,
 /* Internal String-Class help functions                                    */
 /* ======================================================================= */
 
-template <typename STRINGDATA> struct STRCODE_DATA
-{
-    using type = std::remove_extent_t<decltype(STRINGDATA::buffer)>;
-    using unsigned_type = std::make_unsigned_t<type>;
-};
-template <class STRINGDATA> using STRCODE = typename STRCODE_DATA<STRINGDATA>::type;
-template <class STRINGDATA> using USTRCODE = typename STRCODE_DATA<STRINGDATA>::unsigned_type;
+template <class STRINGDATA> using STRCODE = std::remove_extent_t<decltype(STRINGDATA::buffer)>;
 
 template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* Alloc( sal_Int32 nLen )
 {
@@ -941,27 +935,6 @@ template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* Alloc( sal_Int32 nL
         pData->buffer[nLen] = 0;
     }
     return pData;
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRINGDATA>
-auto* NewCopy                                              ( IMPL_RTL_STRINGDATA** ppThis,
-                                                             IMPL_RTL_STRINGDATA* pStr,
-                                                             sal_Int32 nCount )
-{
-    assert(ppThis);
-    assert(pStr);
-    assert(nCount >= 0 && nCount <= pStr->length);
-    *ppThis = Alloc<IMPL_RTL_STRINGDATA>( pStr->length );
-    OSL_ASSERT(*ppThis != nullptr);
-
-    auto* pDest   = (*ppThis)->buffer;
-
-    Copy(pDest, pStr->buffer, nCount);
-
-    RTL_LOG_STRING_NEW( *ppThis );
-    return pDest + nCount;
 }
 
 /* ======================================================================= */
@@ -1456,118 +1429,63 @@ void newReplace                                ( IMPL_RTL_STRINGDATA** ppThis,
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRINGDATA>
-void newToAsciiLowerCase                                ( IMPL_RTL_STRINGDATA** ppThis,
-                                                          IMPL_RTL_STRINGDATA* pStr )
+struct ToAsciiLower
+{
+    template <typename C> static bool Applicable(C c)
+    {
+        return rtl::isAsciiUpperCase(IMPL_RTL_USTRCODE(c));
+    }
+    template <typename C> static C Replace(C c)
+    {
+        return rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(c));
+    }
+};
+
+struct ToAsciiUpper
+{
+    template <typename C> static bool Applicable(C c)
+    {
+        return rtl::isAsciiLowerCase(IMPL_RTL_USTRCODE(c));
+    }
+    template <typename C> static C Replace(C c)
+    {
+        return rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(c));
+    }
+};
+
+template <class Traits, typename IMPL_RTL_STRINGDATA>
+void newReplaceChars(IMPL_RTL_STRINGDATA** ppThis, IMPL_RTL_STRINGDATA* pStr)
 {
     assert(ppThis);
     assert(pStr);
-    IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    bool                    bChanged    = false;
-    sal_Int32               nLen        = pStr->length;
-    const auto*             pCharStr    = pStr->buffer;
 
-    while ( nLen > 0 )
+    const auto pEnd = pStr->buffer + pStr->length;
+    auto pCharStr = std::find_if(pStr->buffer, pEnd, [](auto c) { return Traits::Applicable(c); });
+    if (pCharStr != pEnd)
     {
-        if ( rtl::isAsciiUpperCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr)) )
+        IMPL_RTL_STRINGDATA* pOrg = *ppThis;
+        *ppThis = Alloc<IMPL_RTL_STRINGDATA>(pStr->length);
+        OSL_ASSERT(*ppThis != nullptr);
+        auto* pNewCharStr = (*ppThis)->buffer;
+        /* Copy String */
+        const sal_Int32 nCount = pCharStr - pStr->buffer;
+        Copy(pNewCharStr, pStr->buffer, nCount);
+        pNewCharStr += nCount;
+        /* replace/copy rest of the string */
+        do
         {
-            /* Copy String */
-            auto* pNewCharStr = NewCopy( ppThis, pStr, pCharStr-pStr->buffer );
+            *pNewCharStr = Traits::Replace(*pCharStr);
+            pNewCharStr++;
+            pCharStr++;
+        } while (pCharStr != pEnd);
 
-            /* replace/copy rest of the string */
-            if ( pNewCharStr )
-            {
-                *pNewCharStr = rtl::toAsciiLowerCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
-                pNewCharStr++;
-                pCharStr++;
-                nLen--;
-
-                while ( nLen > 0 )
-                {
-                    *pNewCharStr = rtl::toAsciiLowerCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
-
-                    pNewCharStr++;
-                    pCharStr++;
-                    nLen--;
-                }
-            }
-
-            bChanged = true;
-            break;
-        }
-
-        pCharStr++;
-        nLen--;
+        RTL_LOG_STRING_NEW(*ppThis);
+        /* must be done last, if pStr == *ppThis */
+        if (pOrg)
+            release(pOrg);
     }
-
-    if ( !bChanged )
-    {
-        *ppThis = pStr;
-        acquire( pStr );
-    }
-
-    RTL_LOG_STRING_NEW( *ppThis );
-    /* must be done last, if pStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRINGDATA>
-void newToAsciiUpperCase                                ( IMPL_RTL_STRINGDATA** ppThis,
-                                                          IMPL_RTL_STRINGDATA* pStr )
-{
-    assert(ppThis);
-    assert(pStr);
-    IMPL_RTL_STRINGDATA*    pOrg        = *ppThis;
-    bool                    bChanged    = false;
-    sal_Int32               nLen        = pStr->length;
-    const auto*             pCharStr    = pStr->buffer;
-
-    while ( nLen > 0 )
-    {
-        if ( rtl::isAsciiLowerCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr)) )
-        {
-            /* Copy String */
-            auto* pNewCharStr = NewCopy( ppThis, pStr, pCharStr-pStr->buffer );
-
-            /* replace/copy rest of the string */
-            if ( pNewCharStr )
-            {
-                *pNewCharStr = rtl::toAsciiUpperCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
-                pNewCharStr++;
-                pCharStr++;
-                nLen--;
-
-                while ( nLen > 0 )
-                {
-                    *pNewCharStr = rtl::toAsciiUpperCase(USTRCODE<IMPL_RTL_STRINGDATA>(*pCharStr));
-
-                    pNewCharStr++;
-                    pCharStr++;
-                    nLen--;
-                }
-            }
-
-            bChanged = true;
-            break;
-        }
-
-        pCharStr++;
-        nLen--;
-    }
-
-    if ( !bChanged )
-    {
-        *ppThis = pStr;
-        acquire( pStr );
-    }
-
-    RTL_LOG_STRING_NEW( *ppThis );
-    /* must be done last, if pStr == *ppThis */
-    if ( pOrg )
-        release( pOrg );
+    else
+        assign(ppThis, pStr);
 }
 
 /* ----------------------------------------------------------------------- */
