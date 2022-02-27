@@ -674,11 +674,11 @@ FastSaxParserImpl::~FastSaxParserImpl()
 {
     if( mxDocumentLocator.is() )
         mxDocumentLocator->dispose();
-    for ( size_t i = 0; i < m_TemporalEntities.size(); ++i )
+    for (const auto& entity : m_TemporalEntities)
     {
-        if (!m_TemporalEntities[i])
+        if (!entity)
             continue;
-        xmlNodePtr pPtr = reinterpret_cast<xmlNodePtr>(m_TemporalEntities[i]);
+        xmlNodePtr pPtr = reinterpret_cast<xmlNodePtr>(entity);
         xmlUnlinkNode(pPtr);
         xmlFreeNode(pPtr);
     }
