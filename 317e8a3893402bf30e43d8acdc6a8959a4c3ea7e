@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f04a4762_79e6781c",
+        "filename": "starmath/source/mathml/import.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1054,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-27T10:58:41Z",
+      "side": 1,
+      "message": "Oh fun, raw pointers :) I smell memory leaks (unrelated to the change of course)",
+      "revId": "317e8a3893402bf30e43d8acdc6a8959a4c3ea7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
