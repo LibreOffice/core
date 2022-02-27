@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "271f01b7_d5a4900d",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3222,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-02-27T02:15:01Z",
+      "side": 1,
+      "message": "Oops, fixed.",
+      "parentUuid": "c99dc4b7_9188557e",
+      "revId": "3c5a29cf248331a1164237adbbee3abeb786ce91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b80aca7_6f087f71",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-02-21T14:14:31Z",
       "side": 1,
       "message": "why do you reformat the above statement (without even changing it in any way but for its layout)? that makes it very hard to review this change",
+      "revId": "3c5a29cf248331a1164237adbbee3abeb786ce91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f40d3df_5b34c85c",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3433,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-02-27T02:15:01Z",
+      "side": 1,
+      "message": "I\u0027ll put it back; the lines were getting a bit long for me and I was trying to make the pair of ?:\u0027s more obvious.",
+      "parentUuid": "1b80aca7_6f087f71",
       "revId": "3c5a29cf248331a1164237adbbee3abeb786ce91",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

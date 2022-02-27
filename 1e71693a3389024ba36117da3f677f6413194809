@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7d86d8a_e6418676",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-02-27T02:15:01Z",
+      "side": 1,
+      "message": "Well what I meant was it does manage to do the rel-\u003eabs conversion on more things than INetURLObject and does manage to store more url-like things; perhaps it\u0027s worth spelling that out more; actually uri.cxx\u0027s parseUriRef has a good line: \u0027This algorithm is liberal and accepts various forms of illegal input.\u0027",
+      "parentUuid": "1ebbde99_069e6b95",
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5b60900_da041f83",
         "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
         "patchSetId": 10
@@ -83,6 +101,30 @@
       "writtenOn": "2022-02-21T14:14:31Z",
       "side": 1,
       "message": "* So when bUnparsedURI is set to true above, any subsequent modifications of aTargetURL (.setExtension(...), .SetMark(...)) are \"lost\" here, when we just use the original url.  I think that with my original mention of rtl::Uri::convertRelToAbs back in November, I had hoped that we could get rid of aTargetURL as an INetURLObject here, and use the OUString result of rtl::Uri::convertRelToAbs directly in the following code, without turning it into an INetURLObject (which \"damages\" the given URI if it does not match INetURLObject\u0027s idea of what a valid URI should look like).  But it might be a bit hard to replace all that INetURLObject-based querying and modifying (.GetProtocol(), .GetFileExtension(), .hasFinalSlash(), .setExtension(...), .GetMark(...), .GetURLNoMark(...), .SetMark(...)) with functionality based on rtl::Uri and/or UNO\u0027s css.uri stuff.  :(\n\n* I would add a space between \"url\" and \":\".",
+      "range": {
+        "startLine": 3422,
+        "startChar": 36,
+        "endLine": 3422,
+        "endChar": 54
+      },
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "811d5c42_092b0957",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-02-27T02:15:01Z",
+      "side": 1,
+      "message": "Space added between the url and :.\nOh, I thought you just meant that as a replacement for my hacky regexp - which I think it is still a step better than that (and possibly what we had before).\nIt\u0027s a shame rtl::Uri doesn\u0027t expose it\u0027s parseUriRef and Components, since those would get it part way.",
+      "parentUuid": "d5b60900_da041f83",
       "range": {
         "startLine": 3422,
         "startChar": 36,
