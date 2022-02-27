@@ -627,8 +627,8 @@ void SmMLExport::declareMlError()
     m_bSuccess = false;
 }
 
-void SmMLExport::exportMlAttributteLength(xmloff::token::XMLTokenEnum pAttribute,
-                                          const SmLengthValue& aLengthValue)
+void SmMLExport::exportMlAttributeLength(xmloff::token::XMLTokenEnum pAttribute,
+                                         const SmLengthValue& aLengthValue)
 {
     if (!aLengthValue.m_aOriginalText->isEmpty())
     {
@@ -677,7 +677,7 @@ void SmMLExport::exportMlAttributteLength(xmloff::token::XMLTokenEnum pAttribute
     }
 }
 
-void SmMLExport::exportMlAttributtes(const SmMlElement* pMlElement)
+void SmMLExport::exportMlAttributes(const SmMlElement* pMlElement)
 {
     size_t nAttributeCount = pMlElement->getAttributeCount();
     for (size_t i = 0; i < nAttributeCount; ++i)
@@ -776,7 +776,7 @@ void SmMLExport::exportMlAttributtes(const SmMlElement* pMlElement)
             {
                 auto aSizeData = aAttribute.getMlLspace();
                 auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributteLength(XML_LSPACE, aLengthData);
+                exportMlAttributeLength(XML_LSPACE, aLengthData);
                 break;
             }
             case SmMlAttributeValueType::MlMathbackground:
@@ -828,7 +828,7 @@ void SmMLExport::exportMlAttributtes(const SmMlElement* pMlElement)
             {
                 auto aSizeData = aAttribute.getMlMathsize();
                 auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributteLength(XML_MATHSIZE, aLengthData);
+                exportMlAttributeLength(XML_MATHSIZE, aLengthData);
                 break;
             }
             case SmMlAttributeValueType::MlMathvariant:
@@ -909,7 +909,7 @@ void SmMLExport::exportMlAttributtes(const SmMlElement* pMlElement)
                     }
                     case SmMlAttributeValueMaxsize::MlFinite:
                     {
-                        exportMlAttributteLength(XML_MAXSIZE, aLengthData);
+                        exportMlAttributeLength(XML_MAXSIZE, aLengthData);
                         break;
                     }
                 }
@@ -919,7 +919,7 @@ void SmMLExport::exportMlAttributtes(const SmMlElement* pMlElement)
             {
                 auto aSizeData = aAttribute.getMlMinsize();
                 auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributteLength(XML_MINSIZE, aLengthData);
+                exportMlAttributeLength(XML_MINSIZE, aLengthData);
                 break;
             }
             case SmMlAttributeValueType::MlMovablelimits:
@@ -943,7 +943,7 @@ void SmMLExport::exportMlAttributtes(const SmMlElement* pMlElement)
             {
                 auto aSizeData = aAttribute.getMlRspace();
                 auto aLengthData = aSizeData->m_aLengthValue;
-                exportMlAttributteLength(XML_RSPACE, aLengthData);
+                exportMlAttributeLength(XML_RSPACE, aLengthData);
                 break;
             }
             case SmMlAttributeValueType::MlSeparator:
@@ -1037,7 +1037,7 @@ SvXMLElementExport* SmMLExport::exportMlElement(const SmMlElement* pMlElement)
             pElementExport = nullptr;
     }
     const OUString& aElementText = pMlElement->getText();
-    exportMlAttributtes(pMlElement);
+    exportMlAttributes(pMlElement);
     if (aElementText.isEmpty())
         GetDocHandler()->characters(aElementText);
     return pElementExport;
