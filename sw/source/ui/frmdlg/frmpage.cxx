@@ -905,11 +905,7 @@ void SwFramePage::Reset( const SfxItemSet *rSet )
     if ( m_sDlgType == "PictureDialog" || m_sDlgType == "ObjectDialog" )
     {
         OSL_ENSURE(pSh , "shell not found");
-        //OS: only for the variant Insert/Graphic/Properties
-        if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_GRF_REALSIZE, false, &pItem))
-            m_aGrfSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
-        else
-            pSh->GetGrfSize( m_aGrfSize );
+        pSh->GetGrfSize( m_aGrfSize );
 
         if ( !m_bNew )
         {

@@ -795,9 +795,6 @@ class SwUINumRuleItem;
 #define FN_PARAM_FIELD_SUBTYPE          TypedWhichId<SfxUInt16Item>(FN_PARAM+56)
 #define FN_PARAM_FIELD_FORMAT           TypedWhichId<SfxUInt32Item>(FN_PARAM+57)
 
-#define FN_PARAM_GRF_REALSIZE           TypedWhichId<SvxSizeItem>(FN_PARAM+70)
-#define FN_PARAM_GRF_DIALOG             (FN_PARAM+71)
-
 #define FN_PARAM_PRINTER                TypedWhichId<SwPtrItem>(FN_PARAM+78) /* Printer */
 #define FN_PARAM_STDFONTS               TypedWhichId<SwPtrItem>(FN_PARAM+79) /* ConfigItem Standardfonts */
 

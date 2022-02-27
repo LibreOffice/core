@@ -278,7 +278,6 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     // contains SID_ATTR_GRAF_FRMSIZE_PERCENT
                     FN_GET_PRINT_AREA, FN_GET_PRINT_AREA,
                     FN_PARAM_GRF_CONNECT, FN_PARAM_GRF_CONNECT,
-                    FN_PARAM_GRF_DIALOG, FN_PARAM_GRF_DIALOG,
                     FN_SET_FRM_NAME, FN_KEEP_ASPECT_RATIO,
                     FN_SET_FRM_ALT_NAME, FN_SET_FRM_ALT_NAME,
                     FN_UNO_DESCRIPTION, FN_UNO_DESCRIPTION>  aSet( GetPool() );
