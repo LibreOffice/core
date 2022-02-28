@@ -1843,10 +1843,11 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
             OSQLParseNode* pNewRight = nullptr;
 
             // cut right from parent
-            pSearchCondition->removeAt(2);
+            OSQLParseNode* pOldRight = pSearchCondition->removeAt(2);
+            assert(pOldRight == pRight);
 
-            pNewRight   = MakeANDNode(pOr->removeAt(2)      ,pRight);
-            pNewLeft    = MakeANDNode(pOr->removeAt(sal_uInt32(0))  ,new OSQLParseNode(*pRight));
+            pNewRight   = MakeANDNode(pOr->removeAt(2), pOldRight);
+            pNewLeft    = MakeANDNode(pOr->removeAt(sal_uInt32(0)), new OSQLParseNode(*pOldRight));
             pNewNode    = MakeORNode(pNewLeft,pNewRight);
             // and append new Node
             replaceAndReset(pSearchCondition,pNewNode);
@@ -1862,10 +1863,11 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
             OSQLParseNode* pNewRight = nullptr;
 
             // cut left from parent
-            delete pSearchCondition->removeAt(sal_uInt32(0));
+            OSQLParseNode* pOldLeft = pSearchCondition->removeAt(sal_uInt32(0));
+            assert(pOldLeft == pLeft);
 
-            pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
-            pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt(sal_uInt32(0)));
+            pNewRight   = MakeANDNode(pOldLeft, pOr->removeAt(2));
+            pNewLeft    = MakeANDNode(new OSQLParseNode(*pOldLeft), pOr->removeAt(sal_uInt32(0)));
             pNewNode    = MakeORNode(pNewLeft,pNewRight);
 
             // and append new Node
