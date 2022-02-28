@@ -1647,11 +1647,20 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
 
     /**                       post                          **/
     if ((p = ttf->table(O_post, nTableSize)) != nullptr)
+    {
+        sal_Int32 nItalic = (POST_italicAngle_offset + 4 < nTableSize) ?
+            GetInt32(p, POST_italicAngle_offset) : 0;
+        sal_Int16 nPosition = (POST_underlinePosition_offset + 2 < nTableSize) ?
+            GetInt16(p, POST_underlinePosition_offset) : 0;
+        sal_Int16 nThickness = (POST_underlineThickness_offset + 2 < nTableSize) ?
+            GetInt16(p, POST_underlineThickness_offset) : 0;
+        sal_uInt32 nFixedPitch = (POST_isFixedPitch_offset + 4 < nTableSize) ?
+            GetUInt32(p, POST_isFixedPitch_offset) : 0;
+
         post = TrueTypeTableNew_post(0x00030000,
-                                     GetInt32(p, POST_italicAngle_offset),
-                                     GetInt16(p, POST_underlinePosition_offset),
-                                     GetInt16(p, POST_underlineThickness_offset),
-                                     GetUInt32(p, POST_isFixedPitch_offset));
+                                     nItalic, nPosition,
+                                     nThickness, nFixedPitch);
+    }
     else
         post = TrueTypeTableNew_post(0x00030000, 0, 0, 0, 0);
 
