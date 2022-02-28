@@ -2627,7 +2627,7 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         padd( "style:border-line-width-bottom", sXML_CDATA, "0.02mm 0.35mm 0.02mm");
         padd("fo:border-bottom", sXML_CDATA,"0.039cm double #808080");
     }
-    else if( fstyle->boxtype == 'G' )
+    else if( fstyle->boxtype == 'G' && fstyle->cell )
     {
         if( fstyle->margin[1][0] || fstyle->margin[1][1] || fstyle->margin[1][2] || fstyle->margin[1][3] ){
              OUString clip = "rect(" +
