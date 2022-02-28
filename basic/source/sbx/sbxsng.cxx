@@ -54,9 +54,7 @@ start:
             nRes = p->nSingle; break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-            if( p->pDecimal )
-                p->pDecimal->getSingle( nRes );
-            else
+            if (!p->pDecimal || !p->pDecimal->getSingle(nRes))
                 nRes = 0.0;
             break;
         case SbxDATE:
