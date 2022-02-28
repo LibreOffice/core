@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "346098b6_d7fff40e",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-28T15:00:52Z",
+      "side": 1,
+      "message": "What does Excel do if the type is boolean but the value is not 0 or 1? Note it has a distinct boolean type, so probably it would complain or bail out.",
+      "revId": "3391ae21ee2d6e84cfd6c61835ac93c315ec5475",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
