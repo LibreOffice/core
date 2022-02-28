@@ -581,14 +581,9 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
     sal_uInt16 nSheetNum(0);
     rStream.ReadUInt16(nSheetNum);
 
-    ::std::vector<char> sSheetName;
-    sSheetName.reserve(nLength-4);
-    for (sal_uInt16 i = 4; i < nLength; ++i)
-    {
-        char c;
-        rStream.ReadChar( c );
-        sSheetName.push_back(c);
-    }
+    const size_t nStrLen = nLength - 4;
+    std::vector<char> sSheetName(nStrLen + 1);
+    sSheetName[rStream.ReadBytes(sSheetName.data(), nStrLen)] = 0;
 
     if (!ValidTab(nSheetNum))
         return;
