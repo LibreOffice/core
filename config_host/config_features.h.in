@@ -156,4 +156,10 @@
 
 #define HAVE_FEATURE_XMLHELP 0
 
+/*
+ * Whether Calc supports jumbo sheets (more than 1m rows), which can overflow
+ * 32bit drawing coordinates (see tools::Long definition).
+ */
+#define HAVE_FEATURE_JUMBO_SHEETS 0
+
 #endif

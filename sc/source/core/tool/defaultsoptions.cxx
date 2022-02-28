@@ -79,7 +79,6 @@ ScDefaultsCfg::ScDefaultsCfg() :
     ConfigItem( CFGPATH_FORMULA )
 {
     OUString aPrefix;
-    bool bValue;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
@@ -104,8 +103,13 @@ ScDefaultsCfg::ScDefaultsCfg() :
                     SetInitTabPrefix(aPrefix);
                 break;
             case SCDEFAULTSOPT_JUMBO_SHEETS:
+#if HAVE_FEATURE_JUMBO_SHEETS
+            {
+                bool bValue;
                 if (pValues[nProp] >>= bValue)
                     SetInitJumboSheets(bValue);
+            }
+#endif
                 break;
             }
         }
