@@ -11,6 +11,7 @@
 
 #include <svl/poolitem.hxx>
 #include <unotools/configitem.hxx>
+#include <config_features.h>
 #include "scdllapi.h"
 #include "types.hxx"
 
@@ -31,8 +32,9 @@ public:
     void   SetInitTabPrefix(const OUString& aPrefix) { aInitTabPrefix = aPrefix; }
     const OUString& GetInitTabPrefix() const { return aInitTabPrefix; }
     bool   GetInitJumboSheets() const           { return bJumboSheets; }
+#if HAVE_FEATURE_JUMBO_SHEETS
     void   SetInitJumboSheets( bool b) { bJumboSheets = b; }
-
+#endif
     bool                operator== ( const ScDefaultsOptions& rOpt ) const;
 
 };
