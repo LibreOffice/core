@@ -39,6 +39,11 @@ namespace utl
 class TempFile;
 }
 
+namespace com::sun::star::security
+{
+class XCertificate;
+}
+
 namespace unotest
 {
 class OOO_DLLPUBLIC_UNOTEST MacrosTest
@@ -86,6 +91,10 @@ public:
                                                        const OUString& rStreamName);
 
     void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);
+
+    static css::uno::Reference<css::security::XCertificate> GetValidCertificate(
+        const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs);
+
     void tearDownNssGpg();
 
 protected:
