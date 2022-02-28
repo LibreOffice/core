@@ -516,16 +516,14 @@ void ErrorBarResources::Reset(const SfxItemSet& rInAttrs)
     }
 
     // parameters
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTPLUS, true, &pPoolItem );
-    if( aState == SfxItemState::SET )
+    if( const SvxDoubleItem* pDoubleItem = rInAttrs.GetItemIfSet( SCHATTR_STAT_CONSTPLUS ) )
     {
-        m_fPlusValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue();
+        m_fPlusValue = pDoubleItem->GetValue();
     }
 
-    aState = rInAttrs.GetItemState( SCHATTR_STAT_CONSTMINUS, true, &pPoolItem );
-    if( aState == SfxItemState::SET )
+    if( const SvxDoubleItem* pStatItem = rInAttrs.GetItemIfSet( SCHATTR_STAT_CONSTMINUS ) )
     {
-        m_fMinusValue = static_cast<const SvxDoubleItem*>(pPoolItem)->GetValue();
+        m_fMinusValue = pStatItem->GetValue();
 
         if( m_eErrorKind != SvxChartKindError::Range &&
             m_fPlusValue == m_fMinusValue )
