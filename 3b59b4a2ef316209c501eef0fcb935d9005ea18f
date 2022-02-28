@@ -16,6 +16,23 @@
       "message": "Could you please check if this change still allows the tests to test something on systems with properly configured certificates? I only have one expired, and it failed here locally; this indeed allows to pass the tests, but I can\u0027t verify that it doesn\u0027t effectively disable the test for all.",
       "revId": "3b59b4a2ef316209c501eef0fcb935d9005ea18f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cd7f15c_27b1136a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-02-28T11:37:27Z",
+      "side": 1,
+      "message": "What do you think about having this next to unotest::MacrosTest::setUpNssGpg(), and then both tests could call the new unotest::MacrosTest() function to do this check? Otherwise good to hear you have an idea how to solve this. :-)\n\nThe Linux case completely ignores \"system\" signing certificates during tests, so you are not breaking them with this change, I think.\n\nI\u0027m not familiar with the windows case, but if this change is needed, then I assume we have a layered approach there if filter/qa/pdf.cxx already calls MacrosTest::setUpNssGpg() and you still have a problem.",
+      "revId": "3b59b4a2ef316209c501eef0fcb935d9005ea18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
