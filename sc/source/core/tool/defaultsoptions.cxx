@@ -104,8 +104,10 @@ ScDefaultsCfg::ScDefaultsCfg() :
                     SetInitTabPrefix(aPrefix);
                 break;
             case SCDEFAULTSOPT_JUMBO_SHEETS:
+#if HAVE_FEATURE_JUMBO_SHEETS
                 if (pValues[nProp] >>= bValue)
                     SetInitJumboSheets(bValue);
+#endif
                 break;
             }
         }

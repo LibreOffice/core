@@ -14,6 +14,7 @@
 #include <defaultsoptions.hxx>
 #include <document.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <config_features.h>
 
 ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet &rCoreSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/optdefaultpage.ui", "OptDefaultPage", &rCoreSet)
@@ -24,7 +25,9 @@ ScTpDefaultsOptions::ScTpDefaultsOptions(weld::Container* pPage, weld::DialogCon
     m_xEdNSheets->connect_changed( LINK(this, ScTpDefaultsOptions, NumModifiedHdl) );
     m_xEdSheetPrefix->connect_changed( LINK(this, ScTpDefaultsOptions, PrefixModifiedHdl) );
     m_xEdSheetPrefix->connect_focus_in( LINK(this, ScTpDefaultsOptions, PrefixEditOnFocusHdl) );
+#if HAVE_FEATURE_JUMBO_SHEETS
     if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
+#endif
         m_xEdJumboSheets->hide();
 }
 
@@ -52,8 +55,9 @@ bool ScTpDefaultsOptions::FillItemSet(SfxItemSet *rCoreSet)
     {
         aOpt.SetInitTabCount( nTabCount );
         aOpt.SetInitTabPrefix( aSheetPrefix );
+#if HAVE_FEATURE_JUMBO_SHEETS
         aOpt.SetInitJumboSheets( bJumboSheets );
-
+#endif
         rCoreSet->Put( ScTpDefaultsItem( aOpt ) );
         bRet = true;
     }
