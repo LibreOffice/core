@@ -24,9 +24,6 @@ class insertQrCode(UITestCase):
                 xURL = xDialog.getChild("edit_text")
                 type_text(xURL, "www.libreoffice.org")
 
-            with self.assertRaises(IndexOutOfBoundsException):
-                document.Sheets.getByIndex(0).DrawPage.getByIndex(0)
-
             # Reopen the dialog box
             with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
 

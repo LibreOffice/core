@@ -23,9 +23,6 @@ class insertSignatureLine(UITestCase):
                 xName = xDialog.getChild("edit_name")
                 xName.executeAction("TYPE", mkPropertyValues({"TEXT":"Name"})) #set the signature line
 
-            with self.assertRaises(IndexOutOfBoundsException):
-                document.DrawPage.getByIndex(0)
-
             # set the signature line
             with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:
 
