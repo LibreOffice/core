@@ -28,26 +28,26 @@ class SwView;
 class SW_DLLPUBLIC SwNumFormatBase
 {
 protected:
-    sal_Int32           nStdEntry;
-    sal_uInt32          nDefFormat;
-    SvNumFormatType     nCurrFormatType;
-    LanguageType        eCurLanguage;
-    bool                bOneArea;
+    sal_Int32           m_nStdEntry;
+    sal_uInt32          m_nDefFormat;
+    SvNumFormatType     m_nCurrFormatType;
+    LanguageType        m_eCurLanguage;
+    bool                m_bOneArea;
     bool                mbCurrFormatTypeNeedsInit;
-    bool                bShowLanguageControl; //determine whether the language control has
+    bool                m_bShowLanguageControl; //determine whether the language control has
                                               //to be shown in the number format dialog
-    bool                bUseAutomaticLanguage;//determine whether language is automatically assigned
+    bool                m_bUseAutomaticLanguage;//determine whether language is automatically assigned
 public:
     SwNumFormatBase();
 
-    void SetAutomaticLanguage(bool bSet) { bUseAutomaticLanguage = bSet; }
-    bool IsAutomaticLanguage()const { return bUseAutomaticLanguage; }
-    SvNumFormatType GetFormatType() const { return nCurrFormatType; }
-    LanguageType GetCurLanguage() const { return eCurLanguage;}
-    void SetLanguage(LanguageType eSet)  { eCurLanguage = eSet; }
-    void SetShowLanguageControl(bool bSet) { bShowLanguageControl = bSet; }
+    void SetAutomaticLanguage(bool bSet) { m_bUseAutomaticLanguage = bSet; }
+    bool IsAutomaticLanguage()const { return m_bUseAutomaticLanguage; }
+    SvNumFormatType GetFormatType() const { return m_nCurrFormatType; }
+    LanguageType GetCurLanguage() const { return m_eCurLanguage;}
+    void SetLanguage(LanguageType eSet)  { m_eCurLanguage = eSet; }
+    void SetShowLanguageControl(bool bSet) { m_bShowLanguageControl = bSet; }
     SAL_DLLPRIVATE static double GetDefValue(const SvNumFormatType nFormatType);
-    void SetOneArea(bool bOnlyOne) { bOneArea = bOnlyOne; }
+    void SetOneArea(bool bOnlyOne) { m_bOneArea = bOnlyOne; }
 
     void SetFormatType(const SvNumFormatType nFormatType);
     void SetDefFormat(const sal_uInt32 nDefFormat);
