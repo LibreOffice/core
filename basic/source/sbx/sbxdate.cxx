@@ -84,14 +84,8 @@ double ImpGetDate( const SbxValues* p )
         break;
     case SbxDECIMAL:
     case SbxBYREF | SbxDECIMAL:
-        if( p->pDecimal )
-        {
-            p->pDecimal->getDouble( nRes );
-        }
-        else
-        {
+        if (!p->pDecimal || !p->pDecimal->getDouble(nRes))
             nRes = 0.0;
-        }
         break;
     case SbxBYREF | SbxSTRING:
     case SbxSTRING:
