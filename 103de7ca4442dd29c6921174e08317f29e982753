@@ -16,6 +16,24 @@
       "message": "@Stephan: Do you think it would be OK to merge this?",
       "revId": "103de7ca4442dd29c6921174e08317f29e982753",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1ed1d43_6123f038",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-28T08:37:14Z",
+      "side": 1,
+      "message": "\u003e @Stephan: Do you think it would be OK to merge this?\n\nI have no idea whether `nRow - rSD.nStartRow` and `nCol - rSD.nStartCol` are guaranteed to be non-negative here (i.e., adding the asserts would be correct) or not (i.e., the code casting those to unsigned SCSIZE is wrong).  Deferring to Kohei who (I assume from the commit message\u0027s mention of \"koheirowlimitperf\") introduced `nRow - rSD.nStartRow` with \u003chttps://git.libreoffice.org/core/+/b3579d71c6536ab1d03cc47249d582a574fd054a%5E!/\u003e \"koheirowlimitperf: #i109369# #i109373# #i109384# #i109385# #i109386# #i109387# #i109388# #i109389# #i109391# #i109934# #i109935# #i110116# #i111531# #i111887# #i112190# #i30215# increased the row limit to 1 million, and integrated lots of speed optimization and bug fixes to ensure Calc remains usable after the row limit increase\" and to Luboš who introduce `nCol - rSD.nStartCol` with \u003chttps://git.libreoffice.org/core/+/8bb457d17ef970676f60976cc4e2de9c9f5340c0%5E!/\u003e \"dynamic logarithmic columns in ScBroadcastAreaSlotMachine\".",
+      "parentUuid": "698a1738_3f583e51",
+      "revId": "103de7ca4442dd29c6921174e08317f29e982753",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
