@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bccd1056_51dc02b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-02-28T18:17:21Z",
+      "side": 1,
+      "message": "Hi Xisco! You may know where I could place the test of this change? In https://opengrok.libreoffice.org/xref/core/sd/qa/uitest/ there are only impress tests. Should I create a new folder for draw tests?",
+      "revId": "2f95f252312b0de0ab1098561c62bd7ae4527b9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
