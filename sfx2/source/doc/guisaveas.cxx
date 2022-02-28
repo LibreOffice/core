@@ -986,8 +986,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
                          GetMediaDescr().getAsConstPropertyValueList(),
                          *pDialogParams );
 
-    const SfxPoolItem* pItem = nullptr;
-    if ( bPreselectPassword && pDialogParams->GetItemState( SID_ENCRYPTIONDATA, true, &pItem ) != SfxItemState::SET )
+    if ( bPreselectPassword && !pDialogParams->HasItem( SID_ENCRYPTIONDATA ) )
     {
         // the file dialog preselects the password checkbox if the provided mediadescriptor has encryption data entry
         // after dialog execution the password interaction flag will be either removed or not
