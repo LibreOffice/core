@@ -13,12 +13,19 @@
 #include <sal/config.h>
 
 #include <cassert>
+#include <utility>
 
-// A better replacement for assert(false) to indicate a place in the code that should not be
-// reachable.  This should improve on the sometimes poor false-positive warnings emitted by
-// compilers when they cannot detect that some condition flagged by assert(false) cannot occur,
-// either because assert is reduced to a no-op by NDEBUG or because assert is not marked as noreturn
-// in the MSVC headers.  This is inspired by LLVM's LLVM_BUILTIN_UNREACHABLE
+// An approximation of C++23 std::unreachable
+// (<http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2021/p0627r6.pdf> "Function to mark
+// unreachable code").
+
+#if defined __cpp_lib_unreachable
+
+#define O3TL_UNREACHABLE ::std::unreachable
+
+#else
+
+// This fallback implementation is inspired by LLVM's LLVM_BUILTIN_UNREACHABLE
 // (llvm/include/llvm/Support/Compiler.h).
 
 #if defined _MSC_VER
@@ -33,6 +40,8 @@
         assert(false);                                                                             \
         O3TL_UNREACHABLE_detail;                                                                   \
     } while (false)
+
+#endif
 
 #endif
 
