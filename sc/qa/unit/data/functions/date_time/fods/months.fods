@@ -802,7 +802,7 @@
      <table:table-cell table:number-columns-repeated="4"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:formula="of:=ORG.OPENOFFICE.MONTHS(day1; day2; 1)" office:value-type="float" office:value="1" calcext:value-type="float">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.MONTHS(day1ref; day2ref; 1)" office:value-type="float" office:value="1" calcext:value-type="float">
       <text:p>1</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
@@ -811,15 +811,15 @@
      <table:table-cell table:style-name="ce14" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=MONTHS(day1, day2, 1)" calcext:value-type="string">
-      <text:p>=MONTHS(day1, day2, 1)</text:p>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=MONTHS(day1ref, day2ref, 1)" calcext:value-type="string">
+      <text:p>=MONTHS(day1ref, day2ref, 1)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="5"/>
      <table:table-cell table:style-name="ce20"/>
      <table:table-cell table:number-columns-repeated="5"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
-     <table:table-cell table:formula="of:=ORG.OPENOFFICE.MONTHS(day1; day2; 8999)" office:value-type="string" office:string-value="" calcext:value-type="error">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.MONTHS(day1ref; day2ref; 8999)" office:value-type="string" office:string-value="" calcext:value-type="error">
       <text:p>Err:502</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
@@ -828,8 +828,8 @@
      <table:table-cell table:style-name="ce14" table:formula="of:=ISERROR([.A9])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=MONTHS(day1, day2, 8999)" calcext:value-type="string">
-      <text:p>=MONTHS(day1, day2, 8999)</text:p>
+     <table:table-cell table:style-name="ce11" table:formula="of:=FORMULA([.A9])" office:value-type="string" office:string-value="=MONTHS(day1ref, day2ref, 8999)" calcext:value-type="string">
+      <text:p>=MONTHS(day1ref, day2ref, 8999)</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="string" calcext:value-type="string">
       <text:p>Tdf#100440 </text:p>
@@ -1053,8 +1053,8 @@
     </table:table-row>
    </table:table>
    <table:named-expressions>
-    <table:named-range table:name="day1" table:base-cell-address="$Sheet2.$J$7" table:cell-range-address="$Sheet2.$J$7"/>
-    <table:named-range table:name="day2" table:base-cell-address="$Sheet2.$K$7" table:cell-range-address="$Sheet2.$K$7"/>
+    <table:named-range table:name="day1ref" table:base-cell-address="$Sheet2.$J$7" table:cell-range-address="$Sheet2.$J$7"/>
+    <table:named-range table:name="day2ref" table:base-cell-address="$Sheet2.$K$7" table:cell-range-address="$Sheet2.$K$7"/>
    </table:named-expressions>
   </office:spreadsheet>
  </office:body>

@@ -992,7 +992,7 @@
      <table:table-cell table:style-name="ce28"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=ORG.OPENOFFICE.YEARS(day1;day2;one)" office:value-type="float" office:value="3" calcext:value-type="float">
+     <table:table-cell table:formula="of:=ORG.OPENOFFICE.YEARS(day1ref;day2ref;one)" office:value-type="float" office:value="3" calcext:value-type="float">
       <text:p>3</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
@@ -1001,8 +1001,8 @@
      <table:table-cell table:style-name="ce17" table:formula="of:=[.A8]=[.B8]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=YEARS(day1,day2,one)" calcext:value-type="string">
-      <text:p>=YEARS(day1,day2,one)</text:p>
+     <table:table-cell table:style-name="ce27" table:formula="of:=FORMULA([.A8])" office:value-type="string" office:string-value="=YEARS(day1ref,day2ref,one)" calcext:value-type="string">
+      <text:p>=YEARS(day1ref,day2ref,one)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell table:style-name="ce30" office:value-type="date" office:date-value="2001-12-25" calcext:value-type="date">
@@ -1267,8 +1267,8 @@
     </table:table-row>
    </table:table>
    <table:named-expressions>
-    <table:named-range table:name="day1" table:base-cell-address="$Sheet2.$K$2" table:cell-range-address="$Sheet2.$K$2"/>
-    <table:named-range table:name="day2" table:base-cell-address="$Sheet2.$K$3" table:cell-range-address="$Sheet2.$K$3"/>
+    <table:named-range table:name="day1ref" table:base-cell-address="$Sheet2.$K$2" table:cell-range-address="$Sheet2.$K$2"/>
+    <table:named-range table:name="day2ref" table:base-cell-address="$Sheet2.$K$3" table:cell-range-address="$Sheet2.$K$3"/>
     <table:named-range table:name="days" table:base-cell-address="$Sheet2.$K$4" table:cell-range-address="$Sheet2.$K$4:.$K$6"/>
     <table:named-range table:name="one" table:base-cell-address="$Sheet2.$M$1" table:cell-range-address="$Sheet2.$M$1"/>
    </table:named-expressions>
