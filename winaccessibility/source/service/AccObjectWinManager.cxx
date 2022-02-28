@@ -79,10 +79,6 @@ AccObjectWinManager::~AccObjectWinManager()
     HwndXAcc.clear();
     XResIdAccList.clear();
     XHWNDDocList.clear();
-#ifdef ACC_DEBUG
-
-    fclose( pFile );
-#endif
 }
 
 
