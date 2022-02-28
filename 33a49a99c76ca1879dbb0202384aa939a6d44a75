@@ -34,6 +34,24 @@
       "parentUuid": "a7ff1f82_281176c4",
       "revId": "33a49a99c76ca1879dbb0202384aa939a6d44a75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f5c717f_e61da31d",
+        "filename": "sw/qa/uitest/writer_tests6/save_readonly_with_password.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-28T16:37:39Z",
+      "side": 1,
+      "message": "\u003e Have you also seen this hang with other tests or just with this one so far ?\n\nonly with this one (from my cursory inspection of \u003chttps://listarchives.libreoffice.org/global/libreoffice-ci/\u003e failure mails)",
+      "parentUuid": "65682595_53b3f67e",
+      "revId": "33a49a99c76ca1879dbb0202384aa939a6d44a75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
