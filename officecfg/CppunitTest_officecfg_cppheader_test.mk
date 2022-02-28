@@ -19,6 +19,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,officecfg_cppheader_test, \
 
 $(eval $(call gb_CppunitTest_use_api,officecfg_cppheader_test, \
     udkapi \
+    offapi \
 ))
 
 $(eval $(call gb_CppunitTest_use_externals,officecfg_cppheader_test, \
