@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa184679_dd7f33c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-28T20:07:49Z",
+      "side": 1,
+      "message": "It fails on my Win10 with no screen scaling (and no HiDPI) with\n\nC:/lo/src/core/test/source/xmltesttools.cxx(172) : error : Assertion\nTest name: testTdf143239::TestBody\nequality assertion failed\n- Expected: 3559\n- Actual  : 6581\n- In \u003c\u003e, attribute \u0027left\u0027 of \u0027/root/page[2]/body/txt[1]/anchored/fly[1]/infos/bounds\u0027 incorrect value.",
+      "revId": "b14bb255199e7d6db6ec9155b5d9237cb35fdba7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
