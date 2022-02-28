@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b884357_4d3bd14f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-02-28T13:53:49Z",
+      "side": 1,
+      "message": "@Attila: many thanks for fixing this regression! I\u0027m going to start its backport.",
+      "revId": "0a3bf9ccb6cc6c47fd67a63895310eb35df3cb8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
