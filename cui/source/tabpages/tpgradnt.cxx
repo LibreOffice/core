@@ -503,13 +503,13 @@ void SvxGradientTabPage::ChangeGradientHdl_Impl()
         pGradient.reset(new XGradient( m_pGradientList->GetGradient( static_cast<sal_uInt16>( nPos ) )->GetGradient() ));
     else
     {
-        const SfxPoolItem* pPoolItem = nullptr;
-        if( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLSTYLE ), true, &pPoolItem ) )
+        if( const XFillStyleItem* pFillStyleItem = m_rOutAttrs.GetItemIfSet( GetWhich( XATTR_FILLSTYLE ) ) )
         {
-            if( ( drawing::FillStyle_GRADIENT == static_cast<const XFillStyleItem*>( pPoolItem )->GetValue() ) &&
-                ( SfxItemState::SET == m_rOutAttrs.GetItemState( GetWhich( XATTR_FILLGRADIENT ), true, &pPoolItem ) ) )
+            const XFillGradientItem* pGradientItem;
+            if( ( drawing::FillStyle_GRADIENT == pFillStyleItem->GetValue() ) &&
+                ( pGradientItem = m_rOutAttrs.GetItemIfSet( GetWhich( XATTR_FILLGRADIENT ) ) ) )
             {
-                pGradient.reset(new XGradient( static_cast<const XFillGradientItem*>( pPoolItem )->GetGradientValue() ));
+                pGradient.reset(new XGradient( pGradientItem->GetGradientValue() ));
             }
         }
         if( !pGradient )

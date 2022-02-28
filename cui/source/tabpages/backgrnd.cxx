@@ -118,10 +118,9 @@ void SvxBkgTabPage::Reset( const SfxItemSet* )
     if ( m_xTblLBox && m_xTblLBox->get_visible() )
     {
         m_nActPos = -1;
-        const SfxPoolItem* pItem;
-        if ( SfxItemState::SET == m_pResetSet->GetItemState( SID_BACKGRND_DESTINATION, false, &pItem ) )
+        if ( const SfxUInt16Item* pDestItem = m_pResetSet->GetItemIfSet( SID_BACKGRND_DESTINATION, false ) )
         {
-            sal_uInt16 nDestValue = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+            sal_uInt16 nDestValue = pDestItem->GetValue();
             m_xTblLBox->set_active( nDestValue );
             TblDestinationHdl_Impl( *m_xTblLBox );
         }

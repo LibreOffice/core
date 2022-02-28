@@ -785,15 +785,14 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     drawing::LineStyle  eXLS; // drawing::LineStyle_NONE, drawing::LineStyle_SOLID, drawing::LineStyle_DASH
 
     // Line style
-    const SfxPoolItem *pPoolItem;
     tools::Long nSymType=SVX_SYMBOLTYPE_UNKNOWN;
     bool bPrevSym=false;
     bool bEnable=true;
     bool bIgnoreGraphic=false;
     bool bIgnoreSize=false;
-    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE),true,&pPoolItem) == SfxItemState::SET)
+    if(const SfxInt32Item* pSymbolTypeItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLTYPE)))
     {
-        nSymType=static_cast<const SfxInt32Item *>(pPoolItem)->GetValue();
+        nSymType = pSymbolTypeItem->GetValue();
     }
 
     if(nSymType == SVX_SYMBOLTYPE_AUTO)
@@ -878,9 +877,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         }
         }
     }
-    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH),true,&pPoolItem) == SfxItemState::SET)
+    if(const SvxBrushItem* pBrushItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhich(SID_ATTR_BRUSH)))
     {
-        const Graphic* pGraphic = static_cast<const SvxBrushItem *>(pPoolItem)->GetGraphic();
+        const Graphic* pGraphic = pBrushItem->GetGraphic();
         if( pGraphic )
         {
             if(!bIgnoreGraphic)
@@ -897,9 +896,9 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
         }
     }
 
-    if(rAttrs->GetItemState(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE),true,&pPoolItem) == SfxItemState::SET)
+    if(const SvxSizeItem* pSymbolSizeItem = rAttrs->GetItemIfSet(rAttrs->GetPool()->GetWhich(SID_ATTR_SYMBOLSIZE)))
     {
-        m_aSymbolSize = static_cast<const SvxSizeItem *>(pPoolItem)->GetSize();
+        m_aSymbolSize = pSymbolSizeItem->GetSize();
     }
 
     m_xGridIconSize->set_sensitive(bEnable);

@@ -196,13 +196,16 @@ SvxPageDescPage::SvxPageDescPage(weld::Container* pPage, weld::DialogController*
     bool bCJK = SvtCJKOptions::IsAsianTypographyEnabled();
     bool bCTL = aCTLLanguageOptions.IsCTLFontEnabled();
     bool bWeb = false;
-    const SfxPoolItem* pItem;
 
-    SfxObjectShell* pShell;
-    if(SfxItemState::SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( nullptr != (pShell = SfxObjectShell::Current()) &&
-                    nullptr != (pItem = pShell->GetItem(SID_HTML_MODE))))
-        bWeb = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
+    const SfxUInt16Item* pHtmlModeItem = rAttr.GetItemIfSet(SID_HTML_MODE, false);
+    if (!pHtmlModeItem)
+    {
+        SfxObjectShell* pShell = SfxObjectShell::Current();
+        if (pShell)
+            pHtmlModeItem = pShell->GetItem(SID_HTML_MODE);
+    }
+    if (pHtmlModeItem)
+        bWeb = 0 != (pHtmlModeItem->GetValue() & HTMLMODE_ON);
 
     //  fill text flow listbox with valid entries
 
@@ -359,12 +362,11 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             static_cast<sal_uInt16>(ConvertLong_Impl( static_cast<tools::Long>(rULSpace.GetLower()), eUnit )) );
     }
 
-    if (rSet->HasItem(SID_ATTR_CHAR_GRABBAG, &pItem))
+    if (const SfxGrabBagItem* pGragbagItem = rSet->GetItemIfSet(SID_ATTR_CHAR_GRABBAG))
     {
-        const auto& rGrabBagItem = static_cast<const SfxGrabBagItem&>(*pItem);
         bool bGutterAtTop{};
-        auto it = rGrabBagItem.GetGrabBag().find("GutterAtTop");
-        if (it != rGrabBagItem.GetGrabBag().end())
+        auto it = pGragbagItem->GetGrabBag().find("GutterAtTop");
+        if (it != pGragbagItem->GetGrabBag().end())
         {
             it->second >>= bGutterAtTop;
         }
@@ -378,17 +380,17 @@ void SvxPageDescPage::Reset( const SfxItemSet* rSet )
             // Left.
             m_xGutterPositionLB->set_active(0);
         }
-        it = rGrabBagItem.GetGrabBag().find("RtlGutter");
+        it = pGragbagItem->GetGrabBag().find("RtlGutter");
         bool bRtlGutter{};
-        if (it != rGrabBagItem.GetGrabBag().end())
+        if (it != pGragbagItem->GetGrabBag().end())
         {
             it->second >>= bRtlGutter;
             m_xRtlGutterCB->set_active(bRtlGutter);
             m_xRtlGutterCB->show();
         }
-        it = rGrabBagItem.GetGrabBag().find("BackgroundFullSize");
+        it = pGragbagItem->GetGrabBag().find("BackgroundFullSize");
         bool isBackgroundFullSize{};
-        if (it != rGrabBagItem.GetGrabBag().end())
+        if (it != pGragbagItem->GetGrabBag().end())
         {
             it->second >>= isBackgroundFullSize;
             m_xBackgroundFullSizeCB->set_active(isBackgroundFullSize);
