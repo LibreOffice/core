@@ -93,6 +93,7 @@
 #include <fmtfsize.hxx>
 #include <fmtftn.hxx>
 #include <fmtftntx.hxx>
+#include <formatlinebreak.hxx>
 #include <fmthdft.hxx>
 #include <fmtinfmt.hxx>
 #include <fmtline.hxx>
@@ -318,7 +319,7 @@ SfxItemInfo aSlotTab[] =
     { 0, false },                               // RES_TXTATR_FLYCNT
     { 0, false },                               // RES_TXTATR_FTN
     { 0, false },                               // RES_TXTATR_ANNOTATION
-    { 0, true },                           // RES_TXTATR_DUMMY3
+    { 0, true },                           // RES_TXTATR_LINEBREAK
     { 0, true },                           // RES_TXTATR_DUMMY1
     { 0, true },                           // RES_TXTATR_DUMMY2
 
@@ -516,11 +517,11 @@ void InitCore()
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFormatFlyCnt( nullptr );
     aAttrTab[ RES_TXTATR_FTN - POOLATTR_BEGIN ] =           new SwFormatFootnote;
     aAttrTab[ RES_TXTATR_ANNOTATION - POOLATTR_BEGIN ] = new SwFormatField( RES_TXTATR_ANNOTATION );
+    aAttrTab[RES_TXTATR_LINEBREAK - POOLATTR_BEGIN] = new SwFormatLineBreak(SwLineBreakClear::NONE);
 
 // TextAttr - Dummies
     aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY1 );
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY2 );
-    aAttrTab[ RES_TXTATR_DUMMY3 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY3 );
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] =    new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
     aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] =         new SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST );

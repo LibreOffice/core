@@ -43,6 +43,7 @@
 #include <txttxmrk.hxx>
 #include <txtrfmrk.hxx>
 #include <txtftn.hxx>
+#include <textlinebreak.hxx>
 #include <txtfld.hxx>
 #include <txtannotationfld.hxx>
 #include <unotools/fltrcfg.hxx>
@@ -1139,6 +1140,9 @@ SwTextAttr* MakeTextAttr(
     case RES_TXTATR_METAFIELD:
         pNew = SwTextMeta::CreateTextMeta( rDoc.GetMetaFieldManager(), pTextNode,
                 static_cast<SwFormatMeta&>(rNew), nStt, nEnd, bIsCopy == CopyOrNewType::Copy );
+        break;
+    case RES_TXTATR_LINEBREAK:
+        pNew = new SwTextLineBreak(static_cast<SwFormatLineBreak&>(rNew), nStt);
         break;
     default:
         assert(RES_TXTATR_AUTOFMT == rNew.Which());
