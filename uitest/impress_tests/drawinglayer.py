@@ -23,28 +23,21 @@ class ImpressDrawinglayerTest(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            self.assertEqual(1400, document.DrawPages[0].getByIndex(0).Position.X)
-            self.assertEqual(628, document.DrawPages[0].getByIndex(0).Position.Y)
-            self.assertEqual(1400, document.DrawPages[0].getByIndex(1).Position.X)
-            self.assertEqual(3685, document.DrawPages[0].getByIndex(1).Position.Y)
-
-
-            xEditWin = xImpressDoc.getChild("impress_win")
-            xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
-            xDrawinglayerObject.executeAction("MOVE", mkPropertyValues({"X": "1000", "Y":"1000"}))
-
-            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-            xToolkit.processEventsToIdle()
-
-            self.assertEqual(1400, document.DrawPages[0].getByIndex(0).Position.X)
-            self.assertEqual(628, document.DrawPages[0].getByIndex(0).Position.Y)
-            self.assertEqual(2400, document.DrawPages[0].getByIndex(1).Position.X)
-            self.assertEqual(4685, document.DrawPages[0].getByIndex(1).Position.Y)
-
             self.assertIsNone(document.CurrentSelection)
 
+            xEditWin = xImpressDoc.getChild("impress_win")
             xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
+            with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
+                self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                self.assertEqual('1.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                self.assertEqual('3.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
+
+            xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
+            xDrawinglayerObject.executeAction("MOVE", mkPropertyValues({"X": "1000", "Y":"1000"}))
 
             with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
                 self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
@@ -57,7 +50,6 @@ class ImpressDrawinglayerTest(UITestCase):
             xEditWin.executeAction("DESELECT", tuple())
             self.assertIsNone(document.CurrentSelection)
 
-
     def test_resize_object(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
 
@@ -69,25 +61,21 @@ class ImpressDrawinglayerTest(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
-            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
-            self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
+            self.assertIsNone(document.CurrentSelection)
 
             xEditWin = xImpressDoc.getChild("impress_win")
+            xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
+            self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
+            with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
+                self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                self.assertEqual('1.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                self.assertEqual('3.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
             xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
             xDrawinglayerObject.executeAction("RESIZE", mkPropertyValues({"X": "500", "Y":"4000", "FRAC_X": "0.5", "FRAC_Y": "0.5"}))
-
-            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-            xToolkit.processEventsToIdle()
-
-            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
-            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
-            self.assertEqual(12600, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertAlmostEqual(4568, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
-
-            self.assertIsNone(document.CurrentSelection)
 
             xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
@@ -103,7 +91,6 @@ class ImpressDrawinglayerTest(UITestCase):
             xEditWin.executeAction("DESELECT", tuple())
             self.assertIsNone(document.CurrentSelection)
 
-
     def test_rotate_object(self):
         with self.ui_test.create_doc_in_start_center("impress") as document:
 
@@ -113,27 +100,21 @@ class ImpressDrawinglayerTest(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
-            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
-            self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
-            self.assertEqual(0, document.DrawPages[0].getByIndex(1).RotateAngle)
+            self.assertIsNone(document.CurrentSelection)
 
             xEditWin = xImpressDoc.getChild("impress_win")
+            xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
+            self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
+            with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
+                self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                self.assertEqual('1.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                self.assertEqual('3.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
             xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
             xDrawinglayerObject.executeAction("ROTATE", mkPropertyValues({"X": "500", "Y":"4000", "ANGLE": "3000"}))
-
-            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
-            xToolkit.processEventsToIdle()
-
-            self.assertEqual(25199, document.DrawPages[0].getByIndex(0).Size.Width)
-            self.assertEqual(2629, document.DrawPages[0].getByIndex(0).Size.Height)
-            self.assertEqual(25199, document.DrawPages[0].getByIndex(1).Size.Width)
-            self.assertAlmostEqual(9134, document.DrawPages[0].getByIndex(1).Size.Height,delta=1)
-            self.assertEqual(3000, document.DrawPages[0].getByIndex(1).RotateAngle)
-
-            self.assertIsNone(document.CurrentSelection)
 
             xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
