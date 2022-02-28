@@ -46,6 +46,9 @@ class insertSignatureLineCalc(UITestCase):
                 xComment.executeAction("CLICK", tuple())
                 xInstructions.executeAction("TYPE", mkPropertyValues({"TEXT":"Instructions"}))
 
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
+
             #check the signature Line in the document
             self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSuggestedSignerName, "Name")
             self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
@@ -76,6 +79,9 @@ class insertSignatureLineCalc(UITestCase):
                 xDate.executeAction("CLICK", tuple())
                 xComment.executeAction("CLICK", tuple())
                 xInstructions.executeAction("TYPE", mkPropertyValues({"TEXT":"Instructions"}))
+
+            xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+            xToolkit.processEventsToIdle()
 
             #check the signature Line in the document
             self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSuggestedSignerName, "Name")
