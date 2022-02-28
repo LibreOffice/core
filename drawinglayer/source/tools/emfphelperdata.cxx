@@ -350,7 +350,7 @@ namespace emfplushelper
         }
         else // we use a pen
         {
-            const EMFPPen* pen = static_cast<EMFPPen*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
+            const EMFPPen* pen = dynamic_cast<EMFPPen*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
             if (pen)
             {
                 color = pen->GetColor();
@@ -535,7 +535,7 @@ namespace emfplushelper
         }
         else // use Brush
         {
-            EMFPBrush* brush = static_cast<EMFPBrush*>( maEMFPObjects[brushIndexOrColor & 0xff].get() );
+            EMFPBrush* brush = dynamic_cast<EMFPBrush*>( maEMFPObjects[brushIndexOrColor & 0xff].get() );
             SAL_INFO("drawinglayer", "EMF+\t Fill polygon, brush slot: " << brushIndexOrColor << " (brush type: " << (brush ? brush->GetType() : -1) << ")");
 
             // give up in case something wrong happened
@@ -1033,7 +1033,11 @@ namespace emfplushelper
                         rMS.ReadUInt32(brushIndexOrColor);
                         SAL_INFO("drawinglayer", "EMF+ FillRegion slot: " << index);
 
-                        EMFPPlusFillPolygon(static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get())->regionPolyPolygon, flags & 0x8000, brushIndexOrColor);
+                        EMFPRegion* region = dynamic_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
+                        if (region)
+                            EMFPPlusFillPolygon(region->regionPolyPolygon, flags & 0x8000, brushIndexOrColor);
+                        else
+                            SAL_WARN("drawinglayer.emf", "EMF+\tEmfPlusRecordTypeFillRegion missing region");
                     }
                     break;
                     case EmfPlusRecordTypeDrawEllipse:
@@ -1210,9 +1214,10 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+\tTODO: use image attributes");
 
                         // For DrawImage and DrawImagePoints, source unit of measurement type must be 1 pixel
-                        if (sourceUnit == UnitTypePixel && maEMFPObjects[flags & 0xff].get())
+                        if (EMFPImage* image = sourceUnit == UnitTypePixel ?
+                                dynamic_cast<EMFPImage*>(maEMFPObjects[flags & 0xff].get()) :
+                                nullptr)
                         {
-                            EMFPImage& image = *static_cast<EMFPImage *>(maEMFPObjects[flags & 0xff].get());
                             float sx, sy, sw, sh;
                             ReadRectangle(rMS, sx, sy, sw, sh);
                             ::tools::Rectangle aSource(Point(sx, sy), Size(sw, sh));
@@ -1262,9 +1267,9 @@ namespace emfplushelper
                                 aDstPoint.getX(),
                                 aDstPoint.getY());
 
-                            if (image.type == ImageDataTypeBitmap)
+                            if (image->type == ImageDataTypeBitmap)
                             {
-                                BitmapEx aBmp(image.graphic.GetBitmapEx());
+                                BitmapEx aBmp(image->graphic.GetBitmapEx());
                                 aBmp.Crop(aSource);
                                 Size aSize(aBmp.GetSizePixel());
                                 SAL_INFO("drawinglayer", "EMF+\t bitmap size: " << aSize.Width() << "x" << aSize.Height());
@@ -1278,9 +1283,9 @@ namespace emfplushelper
                                     SAL_INFO("drawinglayer", "EMF+\t warning: empty bitmap");
                                 }
                             }
-                            else if (image.type == ImageDataTypeMetafile)
+                            else if (image->type == ImageDataTypeMetafile)
                             {
-                                GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
+                                GDIMetaFile aGDI(image->graphic.GetGDIMetaFile());
                                 aGDI.Clip(aSource);
                                 mrTargetHolders.Current().append(
                                         o3tl::make_unique<drawinglayer::primitive2d::MetafilePrimitive2D>(aTransformMatrix, aGDI));
@@ -1314,7 +1319,7 @@ namespace emfplushelper
                             // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
                             const EMFPStringFormat *stringFormat = dynamic_cast<EMFPStringFormat*>(maEMFPObjects[formatId & 0xff].get());
                             // get the font from the flags
-                            const EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                        const EMFPFont *font = dynamic_cast<EMFPFont*>(maEMFPObjects[flags & 0xff].get());
                             if (!font)
                             {
                                 break;
@@ -1680,7 +1685,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer", "EMF+ SetClipPath combine mode: " << combineMode);
                         SAL_INFO("drawinglayer", "EMF+\tpath in slot: " << (flags & 0xff));
 
-                        EMFPPath *path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
+                        EMFPPath *path = dynamic_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         if (!path)
                         {
                             break;
@@ -1697,7 +1702,7 @@ namespace emfplushelper
                         int combineMode = (flags >> 8) & 0xf;
                         SAL_INFO("drawinglayer", "EMF+ SetClipRegion");
                         SAL_INFO("drawinglayer", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
-                        EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
+                        EMFPRegion *region = dynamic_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
                         if (!region)
                         {
                             break;
@@ -1765,7 +1770,7 @@ namespace emfplushelper
                             }
 
                             // get the font from the flags
-                            EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                            EMFPFont *font = dynamic_cast<EMFPFont*>(maEMFPObjects[flags & 0xff].get());
                             if (!font)
                             {
                                 break;
