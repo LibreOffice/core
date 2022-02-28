@@ -1045,17 +1045,15 @@ void OutlinerView::ApplyBulletsNumbering(
 
                     // Get old bullet space.
                     {
-                        const SfxPoolItem* pPoolItem=nullptr;
-                        SfxItemState eState = rAttrs.GetItemState(EE_PARA_NUMBULLET, false, &pPoolItem);
-                        if (eState != SfxItemState::SET)
+                        const SvxNumBulletItem* pNumBulletItem = rAttrs.GetItemIfSet(EE_PARA_NUMBULLET, false);
+                        if (pNumBulletItem)
                         {
                             // Use default value when has not contain bullet item.
                             ESelection aSelection(nPara, 0);
                             SfxItemSet aTmpSet(pOwner->pEditEngine->GetAttribs(aSelection));
-                            pPoolItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
+                            pNumBulletItem = aTmpSet.GetItem(EE_PARA_NUMBULLET);
                         }
 
-                        const SvxNumBulletItem* pNumBulletItem = dynamic_cast< const SvxNumBulletItem* >(pPoolItem);
                         if (pNumBulletItem)
                         {
                             const sal_uInt16 nLevelCnt = std::min(pNumBulletItem->GetNumRule().GetLevelCount(), aNewRule.GetLevelCount());
