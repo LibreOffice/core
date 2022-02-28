@@ -745,6 +745,37 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSpellOnlineParameter)
     CPPUNIT_ASSERT_EQUAL(!bSet, pImpressDocument->GetDoc()->GetOnlineSpell());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf38669)
+{
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    // Insert shape with ctrl key
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::makeAny(KEY_MOD1) } }));
+    dispatchCommand(mxComponent, ".uno:BasicShapes.rectangle", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws = xDrawPagesSupplier->getDrawPages();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xDraws->getCount());
+
+    // Insert an UTF-8 character (176 is the code of the degree sign, i.e., '°')
+    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 176, 0);
+    pImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 176, 0);
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<text::XTextRange> xShape(xDrawPage->getByIndex(2), uno::UNO_QUERY);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: °
+    // - Actual  : ㅀ
+    CPPUNIT_ASSERT_EQUAL(OUString(u"°"), xShape->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf123841)
 {
     // To check if selecting unfilled rectangle produces unfilled rectangle
