@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20175dfe_f884dd8f",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-02-28T15:02:55Z",
+      "side": 1,
+      "message": "See my comment at https://gerrit.libreoffice.org/c/core/+/130469\nI\u0027d like to have that clarified first.",
+      "revId": "aaa8fe73d814fde5556eb7bfdd782324f0a2e7f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
