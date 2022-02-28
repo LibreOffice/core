@@ -328,32 +328,41 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
 
     CurrShell aCurr( this );
 
+    bool bRecordChanges = GetDoc()->GetDocShell()->IsChangeRecording();
+    bool bRecordAndHideChanges = bRecordChanges &&
+        GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
+
+    // tracked deletion: all rows have already had tracked row change in the table selection
+    if ( bRecordChanges && !SwDoc::HasRowNotTracked( *getShellCursor( false ) ) )
+        return false;
+
+    if ( bRecordChanges )
+        StartUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
+
+    StartAllAction();
+
     // tracked deletion: remove only textbox content,
     // and set IsNoTracked table line property to false
-    if ( GetDoc()->GetDocShell()->IsChangeRecording() )
+    if ( bRecordChanges )
     {
-        // all rows have already had tracked row change in the table selection
-        if ( !SwDoc::HasRowNotTracked( *getShellCursor( false ) ) )
-            return false;
-
-        SwEditShell* pEditShell = GetDoc()->GetEditShell();
-        StartUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
-        StartAllAction();
-
         SvxPrintItem aNotTracked(RES_PRINT, false);
         GetDoc()->SetRowNotTracked( *getShellCursor( false ), aNotTracked );
 
         if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
             pWrtShell->SelectTableRow();
 
-        pEditShell->Delete();
+        // don't need to remove the row frames in Show Changes mode
+        if ( !bRecordAndHideChanges )
+        {
+            SwEditShell* pEditShell = GetDoc()->GetEditShell();
+            pEditShell->Delete();
 
-        EndAllActionAndCall();
-        EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
-        return true;
+            EndAllActionAndCall();
+            EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
+
+            return true;
+        }
     }
-
-    StartAllAction();
 
     // search for boxes via the layout
     bool bRet;
@@ -425,6 +434,32 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                     pNextBox = pNextBox->FindPreviousBox( pTableNd->GetTable(), pNextBox );
             }
 
+            // delete row content in Hide Changes mode
+            if ( bRecordAndHideChanges )
+            {
+                SwEditShell* pEditShell = GetDoc()->GetEditShell();
+
+                // select the rows deleted with change tracking
+                if ( SwWrtShell* pWrtShell = dynamic_cast<SwWrtShell*>(this) )
+                {
+                    pWrtShell->SelectTableRow();
+                    SwShellTableCursor* pTableCursor = GetTableCursor();
+                    auto pStt = aBoxes[0];
+                    auto pEnd = aBoxes.back();
+                    pTableCursor->DeleteMark();
+
+                    // set start and end of the selection
+                    pTableCursor->GetPoint()->nNode = *pEnd->GetSttNd();
+                    pTableCursor->Move( fnMoveForward, GoInContent );
+                    pTableCursor->SetMark();
+                    pTableCursor->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
+                    pTableCursor->Move( fnMoveBackward, GoInContent );
+                    pWrtShell->UpdateCursor();
+                }
+
+                pEditShell->Delete();
+            }
+
             SwNodeOffset nIdx;
             if( pNextBox )      // put cursor here
                 nIdx = pNextBox->GetSttIdx() + 1;
@@ -443,6 +478,33 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 pPam->GetPoint()->nContent.Assign( pCNd, 0 );
                 pPam->SetMark();            // both want something
                 pPam->DeleteMark();
+            }
+
+            // remove row frames in Hide Changes mode
+            if ( bRecordAndHideChanges )
+            {
+                for (auto & rpFndLine : aFndBox.GetLines())
+                {
+                    SwTableLine* pTmpLine = rpFndLine->GetLine();
+                    SwIterator<SwRowFrame,SwFormat> aIt( *pTmpLine->GetFrameFormat() );
+                    for( SwRowFrame* pRowFrame = aIt.First(); pRowFrame; pRowFrame = aIt.Next() )
+                    {
+                        auto pTabFrame = pRowFrame->GetUpper();
+                        // FIXME remove table frame instead of keeping the last row frame
+                        if ( pTabFrame->IsTabFrame() && pTabFrame->Lower() == pTabFrame->GetLastLower() )
+                            break;
+
+                        if( pRowFrame->GetTabLine() == pTmpLine )
+                        {
+                            pRowFrame->RemoveFromLayout();
+                            SwFrame::DestroyFrame(pRowFrame);
+                        }
+                    }
+                }
+
+                EndAllActionAndCall();
+                EndUndo(bCompleteTable ? SwUndoId::UI_TABLE_DELETE : SwUndoId::ROW_DELETE);
+                return true;
             }
         }
 
