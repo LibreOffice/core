@@ -21,9 +21,6 @@ class insertQrCode(UITestCase):
                 xURL = xDialog.getChild("edit_text")
                 type_text(xURL, "www.libreoffice.org")
 
-            with self.assertRaises(IndexOutOfBoundsException):
-                document.Sheets.getByIndex(0).DrawPage.getByIndex(0)
-
             # Reopen the dialog box
             with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
 
@@ -38,28 +35,6 @@ class insertQrCode(UITestCase):
                 xBorder.executeAction("DOWN", tuple())
 
             # check the QR code in the document
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).BarCodeProperties.Payload, "www.libreoffice.org")
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).BarCodeProperties.ErrorCorrection, 1)
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).BarCodeProperties.Border, 1)
-
-
-   def test_insert_qr_code_gen2(self):
-        with self.ui_test.create_doc_in_start_center("calc") as document:
-            xCalcDoc = self.xUITest.getTopFocusWindow()
-            gridwin = xCalcDoc.getChild("grid_window")
-
-            with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
-
-                xURL = xDialog.getChild("edit_text")
-                xECC_Low = xDialog.getChild("button_low")
-                xBorder = xDialog.getChild("edit_margin")
-
-                type_text(xURL, "www.libreoffice.org") #set the QR code
-                xECC_Low.executeAction("CLICK", tuple())
-                xBorder.executeAction("UP", tuple())
-                xBorder.executeAction("DOWN", tuple())
-
-            #check the QR Code in the document
             self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).BarCodeProperties.Payload, "www.libreoffice.org")
             self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).BarCodeProperties.ErrorCorrection, 1)
             self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).BarCodeProperties.Border, 1)
