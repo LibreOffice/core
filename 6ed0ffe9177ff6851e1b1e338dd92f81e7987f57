@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "63afb0b0_d63f245e",
+        "filename": "dbaccess/qa/extras/rowsetclones.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-02-28T10:04:56Z",
+      "side": 0,
+      "message": "In order to do that I\u0027ll have to pass UNO_QUERY_THROW as an argument to xDocument() instead of UNO_QUERY?",
+      "parentUuid": "681839e7_7a293ae0",
+      "revId": "6ed0ffe9177ff6851e1b1e338dd92f81e7987f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b193388c_fc2ec1f3",
         "filename": "dbaccess/qa/unit/dbtest_base.cxx",
         "patchSetId": 1
