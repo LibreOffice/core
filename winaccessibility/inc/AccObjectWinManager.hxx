@@ -139,7 +139,7 @@ public:
 
     void UpdateChildState(css::accessibility::XAccessible* pXAcc);
 
-    bool IsSpecialToolboItem(css::accessibility::XAccessible* pXAcc);
+    bool IsSpecialToolbarItem(css::accessibility::XAccessible* pXAcc);
 
     static short GetRole(css::accessibility::XAccessible* pXAcc);
 
