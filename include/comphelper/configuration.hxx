@@ -88,6 +88,7 @@ public:
     static ConfigurationWrapper const & get(
         css::uno::Reference< css::uno::XComponentContext >
             const & context);
+    static ConfigurationWrapper const & getWithProcessComponentContext();
 
     SAL_DLLPRIVATE explicit ConfigurationWrapper(
         css::uno::Reference< css::uno::XComponentContext >
@@ -204,13 +205,24 @@ template< typename T, typename U > struct ConfigurationProperty
     ///
     /// For nillable properties, U is of type std::optional<U'>.
     static U get(
-        css::uno::Reference< css::uno::XComponentContext >
-            const & context = comphelper::getProcessComponentContext())
+        css::uno::Reference< css::uno::XComponentContext > const & context )
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
         css::uno::Any a(
             detail::ConfigurationWrapper::get(context).getPropertyValue(
+                T::path()));
+        return detail::Convert< U >::fromAny(a);
+    }
+
+    // The purpose of this overload is to avoid calling comphelper::getProcessComponentContext()
+    // in case the value is already cached.
+    static U get()
+    {
+        // Folding this into one statement causes a bogus error at least with
+        // Red Hat GCC 4.6.2-1:
+        css::uno::Any a(
+            detail::ConfigurationWrapper::getWithProcessComponentContext().getPropertyValue(
                 T::path()));
         return detail::Convert< U >::fromAny(a);
     }
