@@ -2322,35 +2322,123 @@ void ScOutputData::DrawChangeTrack()
 namespace
 {
 
+struct SparklineMarker
+{
+    basegfx::B2DPolygon maPolygon;
+    Color maColor;
+};
+
+void createMarker(std::vector<SparklineMarker> & rMarkers, double x, double y, Color const & rColor)
+{
+    auto & rMarker = rMarkers.emplace_back();
+    basegfx::B2DRectangle aRectangle(x - 2, y - 2, x + 2, y + 2);
+    rMarker.maPolygon = basegfx::utils::createPolygonFromRect(aRectangle);
+    rMarker.maColor = rColor;
+}
+
 /** Draw a line chart into the rectangle bounds */
 void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
-                std::vector<double> const & rValues, double nMin, double nMax)
+                std::vector<double> const & rValues, double nMin, double nMax,
+                std::shared_ptr<sc::SparklineGroup> const & pSparklineGroup)
 {
     basegfx::B2DPolygon aPolygon;
     double numebrOfSteps = rValues.size() - 1;
     double xStep = 0;
     double nDelta = nMax - nMin;
 
-    for (double aValue : rValues)
+    std::vector<SparklineMarker> aMarkers;
+    sal_Int64 nValueIndex = 0;
+    sal_Int64 nValuesSize = rValues.size();
+
+    for (double nValue : rValues)
     {
-        double nP = (aValue - nMin) / nDelta;
+        double nP = (nValue - nMin) / nDelta;
         double x = rRectangle.GetWidth() * (xStep / numebrOfSteps);
         double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
 
         aPolygon.append({ x, y } );
+
+        if (pSparklineGroup->m_bFirst && nValueIndex == 0)
+        {
+            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorFirst);
+        }
+        else if (pSparklineGroup->m_bLast && nValueIndex == (nValuesSize - 1))
+        {
+            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorLast);
+        }
+        else if (pSparklineGroup->m_bHigh && nValue == nMax)
+        {
+            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorHigh);
+        }
+        else if (pSparklineGroup->m_bLow && nValue == nMin)
+        {
+            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorLow);
+        }
+        else if (pSparklineGroup->m_bNegative && nValue < 0.0)
+        {
+            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorNegative);
+        }
+
         xStep++;
+        nValueIndex++;
     }
 
     basegfx::B2DHomMatrix aMatrix;
     aMatrix.translate(rRectangle.Left(), rRectangle.Top());
     aPolygon.transform(aMatrix);
 
+    rRenderContext.SetLineColor(pSparklineGroup->m_aColorSeries);
     rRenderContext.DrawPolyLine(aPolygon);
+
+    for (auto const & rMarker : aMarkers)
+    {
+        rRenderContext.SetLineColor(rMarker.maColor);
+        rRenderContext.SetFillColor(rMarker.maColor);
+        aPolygon = rMarker.maPolygon;
+        aPolygon.transform(aMatrix);
+        rRenderContext.DrawPolygon(aPolygon);
+    }
+}
+
+void setFillAndLineColor(vcl::RenderContext& rRenderContext, std::shared_ptr<sc::SparklineGroup> const & pSparklineGroup,
+                         double nValue, sal_Int64 nValueIndex, sal_Int64 nValuesSize, double nMin, double nMax)
+{
+    if (pSparklineGroup->m_bFirst && nValueIndex == 0)
+    {
+        rRenderContext.SetLineColor(pSparklineGroup->m_aColorFirst);
+        rRenderContext.SetFillColor(pSparklineGroup->m_aColorFirst);
+    }
+    else if (pSparklineGroup->m_bLast && nValueIndex == (nValuesSize - 1))
+    {
+        rRenderContext.SetLineColor(pSparklineGroup->m_aColorLast);
+        rRenderContext.SetFillColor(pSparklineGroup->m_aColorLast);
+    }
+    else if (pSparklineGroup->m_bHigh && nValue == nMax)
+    {
+        rRenderContext.SetLineColor(pSparklineGroup->m_aColorHigh);
+        rRenderContext.SetFillColor(pSparklineGroup->m_aColorHigh);
+    }
+    else if (pSparklineGroup->m_bLow && nValue == nMin)
+    {
+        rRenderContext.SetLineColor(pSparklineGroup->m_aColorLow);
+        rRenderContext.SetFillColor(pSparklineGroup->m_aColorLow);
+    }
+    else if (pSparklineGroup->m_bNegative && nValue < 0.0)
+    {
+        rRenderContext.SetLineColor(pSparklineGroup->m_aColorNegative);
+        rRenderContext.SetFillColor(pSparklineGroup->m_aColorNegative);
+    }
+    else
+    {
+        rRenderContext.SetLineColor(pSparklineGroup->m_aColorSeries);
+        rRenderContext.SetFillColor(pSparklineGroup->m_aColorSeries);
+    }
 }
 
 /** Draw a column chart into the rectangle bounds */
 void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
-                std::vector<double> const & rValues, double nMin, double nMax)
+                std::vector<double> const & rValues, double nMin, double nMax,
+                std::shared_ptr<sc::SparklineGroup> const & pSparklineGroup)
 {
     basegfx::B2DPolygon aPolygon;
 
@@ -2367,11 +2455,15 @@ void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRe
     else
         nZeroPosition = rRectangle.GetHeight();
 
-    for (double aValue : rValues)
+    sal_Int64 nValueIndex = 0;
+
+    for (double nValue : rValues)
     {
-        if (aValue != 0.0)
+        if (nValue != 0.0)
         {
-            double nP = (aValue - nMin) / nDelta;
+            setFillAndLineColor(rRenderContext, pSparklineGroup, nValue, nValueIndex, sal_Int64(rValues.size()), nMax, nMin);
+
+            double nP = (nValue - nMin) / nDelta;
             double x = rRectangle.GetWidth() * (xStep / numberOfSteps);
             double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
 
@@ -2384,6 +2476,7 @@ void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRe
             rRenderContext.DrawPolygon(aPolygon);
         }
         xStep++;
+        nValueIndex++;
     }
 }
 
@@ -2398,9 +2491,6 @@ void drawSparkline(sc::Sparkline* pSparkline, vcl::RenderContext& rRenderContext
     auto pSparklineGroup = pSparkline->getSparklineGroup();
 
     rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
-
-    rRenderContext.SetLineColor(pSparklineGroup->m_aColorSeries);
-    rRenderContext.SetFillColor(pSparklineGroup->m_aColorSeries);
 
     ScRange aRange = rRangeList[0];
 
@@ -2442,7 +2532,7 @@ void drawSparkline(sc::Sparkline* pSparkline, vcl::RenderContext& rRenderContext
 
     if (pSparklineGroup->m_eType == sc::SparklineType::Column)
     {
-        drawColumn(rRenderContext, rRectangle, aValues, nMin, nMax);
+        drawColumn(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup);
     }
     else if (pSparklineGroup->m_eType == sc::SparklineType::Stacked)
     {
@@ -2452,11 +2542,11 @@ void drawSparkline(sc::Sparkline* pSparkline, vcl::RenderContext& rRenderContext
             if (rValue != 0.0)
                 rValue = rValue > 0.0 ? 1.0 : -1.0;
         }
-        drawColumn(rRenderContext, rRectangle, aValues, -1, 1);
+        drawColumn(rRenderContext, rRectangle, aValues, -1, 1, pSparklineGroup);
     }
     else if (pSparklineGroup->m_eType == sc::SparklineType::Line)
     {
-        drawLine(rRenderContext, rRectangle, aValues, nMin, nMax);
+        drawLine(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup);
     }
 }
 } // end anonymous namespace
