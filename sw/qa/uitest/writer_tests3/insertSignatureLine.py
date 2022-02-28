@@ -6,19 +6,12 @@
 
 from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from com.sun.star.lang import IndexOutOfBoundsException
 
 class insertSignatureLine(UITestCase):
 
    def test_insert_signature_line(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
-
-            # cancel the dialog without doing anything
-            with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine", close_button="cancel") as xDialog:
-
-                xName = xDialog.getChild("edit_name")
-                xName.executeAction("TYPE", mkPropertyValues({"TEXT":"Name"})) #set the signature line
 
             # set the signature line
             with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:

@@ -8,7 +8,6 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict, type_text
 from libreoffice.uno.propertyvalue import mkPropertyValues
-from com.sun.star.lang import IndexOutOfBoundsException
 
 #Bug 117903 - Allow signature lines in Calc
 
@@ -18,12 +17,6 @@ class insertSignatureLineCalc(UITestCase):
         with self.ui_test.create_doc_in_start_center("calc") as document:
             xCalcDoc = self.xUITest.getTopFocusWindow()
             gridwin = xCalcDoc.getChild("grid_window")
-
-            # cancel the dialog without doing anything
-            with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine", close_button="cancel") as xDialog:
-
-                xName = xDialog.getChild("edit_name")
-                xName.executeAction("TYPE", mkPropertyValues({"TEXT":"Name"})) #set the signature line
 
             # set the signature line
             with self.ui_test.execute_dialog_through_command(".uno:InsertSignatureLine") as xDialog:
@@ -41,12 +34,13 @@ class insertSignatureLineCalc(UITestCase):
                 xInstructions.executeAction("TYPE", mkPropertyValues({"TEXT":"Instructions"}))
 
             #check the signature Line in the document
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSuggestedSignerName, "Name")
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSuggestedSignerEmail, "Email")
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSuggestedSignerTitle, "Title")
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineCanAddComment, False)
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineShowSignDate, True)
-            self.assertEqual(document.Sheets.getByIndex(0).DrawPage.getByIndex(0).SignatureLineSigningInstructions, "Instructions")
+            element = document.Sheets.getByIndex(0).DrawPage.getByIndex(0)
+            self.assertEqual(element.SignatureLineSuggestedSignerName, "Name")
+            self.assertEqual(element.SignatureLineSuggestedSignerTitle, "Title")
+            self.assertEqual(element.SignatureLineSuggestedSignerEmail, "Email")
+            self.assertEqual(element.SignatureLineSuggestedSignerTitle, "Title")
+            self.assertEqual(element.SignatureLineCanAddComment, False)
+            self.assertEqual(element.SignatureLineShowSignDate, True)
+            self.assertEqual(element.SignatureLineSigningInstructions, "Instructions")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
