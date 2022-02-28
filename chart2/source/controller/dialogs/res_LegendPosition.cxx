@@ -179,10 +179,9 @@ void LegendPositionResources::PositionEnable()
 
 void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 {
-    const SfxPoolItem* pPoolItem = nullptr;
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxInt32Item* pPosItem = rInAttrs.GetItemIfSet( SCHATTR_LEGEND_POS ) )
     {
-        chart2::LegendPosition nLegendPosition = static_cast<chart2::LegendPosition>(static_cast<const SfxInt32Item*>(pPoolItem)->GetValue());
+        chart2::LegendPosition nLegendPosition = static_cast<chart2::LegendPosition>(pPosItem->GetValue());
         switch( nLegendPosition )
         {
             case chart2::LegendPosition_LINE_START:
@@ -202,10 +201,10 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
         }
     }
 
-    if( m_xCbxShow && rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, true, &pPoolItem ) == SfxItemState::SET )
+    const SfxBoolItem* pShowItem;
+    if( m_xCbxShow && (pShowItem = rInAttrs.GetItemIfSet( SCHATTR_LEGEND_SHOW )) )
     {
-        bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
-        m_xCbxShow->set_active(bShow);
+        m_xCbxShow->set_active(pShowItem->GetValue());
     }
 }
 

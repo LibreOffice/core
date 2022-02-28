@@ -114,8 +114,8 @@ void SchAlignmentTabPage::Reset(const SfxItemSet* rInAttrs)
     m_xCbStacked->set_active(bStacked);
     StackedToggleHdl(*m_xCbStacked);
 
-    if( rInAttrs->GetItemState(EE_PARA_WRITINGDIR, true, &pItem) == SfxItemState::SET)
-        m_xLbTextDirection->set_active_id(static_cast<const SvxFrameDirectionItem*>(pItem)->GetValue());
+    if( const SvxFrameDirectionItem* pDirectionItem = rInAttrs->GetItemIfSet(EE_PARA_WRITINGDIR) )
+        m_xLbTextDirection->set_active_id(pDirectionItem->GetValue());
 }
 
 } //namespace chart
