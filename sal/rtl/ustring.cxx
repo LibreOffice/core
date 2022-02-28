@@ -760,8 +760,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
     rtl_ustring_intern_internal( newStr, scratch, CAN_RETURN );
 }
 
-static void
-internRelease (rtl_uString *pThis)
+void internRelease (rtl_uString *pThis)
 {
     rtl_uString *pFree = nullptr;
     if ( SAL_STRING_REFCOUNT(

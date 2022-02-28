@@ -23,6 +23,12 @@
 #include <rtl/strbuf.hxx>
 #include "strimp.hxx"
 
+#if USE_SDT_PROBES
+#define RTL_LOG_STRING_BITS 8
+#endif
+
+#include "strtmpl.hxx"
+
 /*************************************************************************
  *  rtl_stringbuffer_newFromStr_WithLength
  */
@@ -30,21 +36,7 @@ void SAL_CALL rtl_stringbuffer_newFromStr_WithLength( rtl_String ** newStr,
                                                       const char * value,
                                                       sal_Int32 count )
 {
-    assert(newStr);
-    assert(count >= 0);
-    if (!value)
-    {
-        rtl_string_new_WithLength( newStr, 16 );
-        return;
-    }
-
-    // use raw alloc to avoid overwriting the buffer twice
-    if ( *newStr)
-        rtl_string_release( *newStr );
-    *newStr = rtl_string_ImplAlloc( count + 16 );
-    (*newStr)->length = count;
-    memcpy( (*newStr)->buffer, value, count );
-    memset( (*newStr)->buffer + count, 0, 16 );
+    rtl::str::stringbuffer_newFromStr_WithLength(newStr, value, count);
 }
 
 /*************************************************************************
@@ -54,20 +46,7 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
                                                          sal_Int32 capacity,
                                                          rtl_String * oldStr )
 {
-    assert(newStr);
-    assert(oldStr);
-    assert(capacity >= 0);
-    sal_Int32 newCapacity = capacity;
-
-    if (newCapacity < oldStr->length)
-        newCapacity = oldStr->length;
-
-    rtl_string_new_WithLength( newStr, newCapacity );
-    if (oldStr->length > 0) {
-        (*newStr)->length = oldStr->length;
-        memcpy( (*newStr)->buffer, oldStr->buffer, oldStr->length );
-    }
-    return newCapacity;
+    return rtl::str::stringbuffer_newFromStringBuffer(newStr, capacity, oldStr);
 }
 
 /*************************************************************************
@@ -76,28 +55,7 @@ sal_Int32 SAL_CALL rtl_stringbuffer_newFromStringBuffer( rtl_String ** newStr,
 void SAL_CALL rtl_stringbuffer_ensureCapacity
     (rtl_String ** This, sal_Int32* capacity, sal_Int32 minimumCapacity)
 {
-    assert(This);
-//    assert(capacity && *capacity >= 0);
-//    assert(minimumCapacity >= 0);
-    if (minimumCapacity <= *capacity)
-        return;
-
-    rtl_String * pTmp = *This;
-    rtl_String * pNew = nullptr;
-    auto nLength = (*This)->length;
-    *capacity = (nLength + 1) * 2;
-    if (minimumCapacity > *capacity)
-        /* still lower, set to the minimum capacity */
-        *capacity = minimumCapacity;
-
-    // use raw alloc to avoid overwriting the buffer twice
-    pNew = rtl_string_ImplAlloc( *capacity );
-    pNew->length = nLength;
-    *This = pNew;
-
-    memcpy( (*This)->buffer, pTmp->buffer, nLength );
-    memset( (*This)->buffer + nLength, 0, *capacity - nLength );
-    rtl_string_release( pTmp );
+    rtl::str::stringbuffer_ensureCapacity(This, capacity, minimumCapacity);
 }
 
 /*************************************************************************
@@ -109,41 +67,7 @@ void SAL_CALL rtl_stringbuffer_insert( rtl_String ** This,
                                        const char * str,
                                        sal_Int32 len )
 {
-    assert(This);
-    assert(capacity && *capacity >= 0);
-    assert(offset >= 0 && offset <= (**This).length);
-    assert(len >= 0);
-    sal_Int32 nOldLen;
-    char * pBuf;
-    sal_Int32 n;
-    if( len == 0 )
-        return;
-
-    if (*capacity < (*This)->length + len)
-        rtl_stringbuffer_ensureCapacity( This, capacity, (*This)->length + len );
-
-    nOldLen = (*This)->length;
-    pBuf = (*This)->buffer;
-
-    /* copy the tail */
-    n = (nOldLen - offset);
-    if( n == 1 )
-        /* optimized for 1 character */
-        pBuf[offset + len] = pBuf[offset];
-    else if( n > 1 )
-        memmove( pBuf + offset + len, pBuf + offset, n * sizeof(char) );
-
-    /* insert the new characters */
-    if( str != nullptr )
-    {
-        if( len == 1 )
-            /* optimized for 1 character */
-            pBuf[offset] = *str;
-        else
-            memcpy( pBuf + offset, str, len * sizeof(char) );
-    }
-    (*This)->length = nOldLen + len;
-    pBuf[ nOldLen + len ] = 0;
+    rtl::str::stringbuffer_insert(This, capacity, offset, str, len);
 }
 
 /*************************************************************************
@@ -153,30 +77,7 @@ void SAL_CALL rtl_stringbuffer_remove( rtl_String ** This,
                                        sal_Int32 start,
                                        sal_Int32 len )
 {
-    assert(This);
-    assert(start >= 0 && start <= (**This).length);
-    assert(len >= 0);
-    sal_Int32 nTailLen;
-    char * pBuf;
-
-    if (len > (*This)->length - start)
-        len = (*This)->length - start;
-
-    //remove nothing
-    if (!len)
-        return;
-
-    pBuf = (*This)->buffer;
-    nTailLen = (*This)->length - ( start + len );
-
-    if (nTailLen)
-    {
-        /* move the tail */
-        memmove(pBuf + start, pBuf + start + len, nTailLen * sizeof(char));
-    }
-
-    (*This)->length-=len;
-    pBuf[ (*This)->length ] = 0;
+    rtl::str::stringbuffer_remove(This, start, len);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
