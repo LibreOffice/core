@@ -208,9 +208,7 @@ CUPSManager::~CUPSManager()
 {
     if( m_aDestThread )
     {
-        // if the thread is still running here, then
-        // cupsGetDests is hung; terminate the thread instead of joining
-        osl_terminateThread( m_aDestThread );
+        osl_joinWithThread( m_aDestThread );
         osl_destroyThread( m_aDestThread );
     }
 
