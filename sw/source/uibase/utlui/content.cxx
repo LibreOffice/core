@@ -208,7 +208,7 @@ bool SwTextFieldContent::IsProtect() const
 
 bool SwPostItContent::IsProtect() const
 {
-    return pField->IsProtect();
+    return m_pField->IsProtect();
 }
 
 bool SwURLFieldContent::IsProtect() const

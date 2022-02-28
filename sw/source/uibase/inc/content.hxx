@@ -37,9 +37,9 @@ class SwTextFootnote;
 
 class SwOutlineContent final : public SwContent
 {
-    SwOutlineNodes::size_type nOutlinePos;
-    sal_uInt8   nOutlineLevel;
-    bool    bIsMoveable;
+    SwOutlineNodes::size_type m_nOutlinePos;
+    sal_uInt8   m_nOutlineLevel;
+    bool    m_bIsMoveable;
     public:
         SwOutlineContent(   const SwContentType* pCnt,
                             const OUString& rName,
@@ -48,17 +48,17 @@ class SwOutlineContent final : public SwContent
                             bool bMove,
                             tools::Long nYPos) :
             SwContent(pCnt, rName, nYPos),
-            nOutlinePos(nArrPos), nOutlineLevel(nLevel), bIsMoveable(bMove) {}
+            m_nOutlinePos(nArrPos), m_nOutlineLevel(nLevel), m_bIsMoveable(bMove) {}
 
-    SwOutlineNodes::size_type GetOutlinePos() const {return nOutlinePos;}
-    sal_uInt8   GetOutlineLevel() const {return nOutlineLevel;}
-    bool        IsMoveable() const {return bIsMoveable;};
+    SwOutlineNodes::size_type GetOutlinePos() const {return m_nOutlinePos;}
+    sal_uInt8   GetOutlineLevel() const {return m_nOutlineLevel;}
+    bool        IsMoveable() const {return m_bIsMoveable;};
 };
 
 class SwRegionContent final : public SwContent
 {
 
-    sal_uInt8   nRegionLevel;
+    sal_uInt8   m_nRegionLevel;
 
     public:
         SwRegionContent(    const SwContentType* pCnt,
@@ -66,8 +66,8 @@ class SwRegionContent final : public SwContent
                             sal_uInt8 nLevel,
                             tools::Long nYPos) :
             SwContent(pCnt, rName, nYPos),
-                        nRegionLevel(nLevel){}
-    sal_uInt8   GetRegionLevel() const {return nRegionLevel;}
+                        m_nRegionLevel(nLevel){}
+    sal_uInt8   GetRegionLevel() const {return m_nRegionLevel;}
 };
 
 class SwURLFieldContent final : public SwContent
@@ -122,17 +122,17 @@ public:
 
 class SwPostItContent final : public SwContent
 {
-    const SwFormatField*     pField;
+    const SwFormatField*     m_pField;
 public:
     SwPostItContent( const SwContentType* pCnt,
                             const OUString& rName,
                             const SwFormatField* pFormatField,
                             tools::Long nYPos )
         : SwContent(pCnt, rName, nYPos)
-        , pField(pFormatField)
+        , m_pField(pFormatField)
     {}
 
-    const SwFormatField* GetPostIt() const  { return pField; }
+    const SwFormatField* GetPostIt() const  { return m_pField; }
     virtual bool    IsProtect()     const override;
 };
 
