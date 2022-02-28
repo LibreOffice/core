@@ -21,7 +21,7 @@
 
 #if defined __cpp_lib_unreachable
 
-#define O3TL_UNREACHABLE ::std::unreachable
+#define O3TL_UNREACHABLE (::std::unreachable())
 
 #else
 
