@@ -588,14 +588,9 @@ void OP_SheetName123(LotusContext& rContext, SvStream& rStream, sal_uInt16 nLeng
     SCTAB nSheetNum = static_cast<SCTAB>(nDummy);
     rContext.pDoc->MakeTable(nSheetNum);
 
-    ::std::vector<sal_Char> sSheetName;
-    sSheetName.reserve(nLength-4);
-    for (sal_uInt16 i = 4; i < nLength; ++i)
-    {
-        sal_Char c;
-        rStream.ReadChar( c );
-        sSheetName.push_back(c);
-    }
+    const size_t nStrLen = nLength - 4;
+    std::vector<sal_Char> sSheetName(nStrLen + 1);
+    sSheetName[rStream.ReadBytes(sSheetName.data(), nStrLen)] = 0;
 
     if (!sSheetName.empty())
     {
