@@ -65,7 +65,7 @@ CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
         = xSEInitializer->createSecurityContext(OUString());
     uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
         = xSecurityContext->getSecurityEnvironment();
-    if (!xSecurityEnvironment->getPersonalCertificates().hasElements())
+    if (!GetValidCertificate(xSecurityEnvironment->getPersonalCertificates()))
     {
         return;
     }

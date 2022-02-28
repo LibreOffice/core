@@ -15,6 +15,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/security/XCertificate.hpp>
 
 #include <basic/basrdll.hxx>
 #include <cppunit/TestAssert.h>
@@ -24,6 +25,7 @@
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
+#include <tools/datetime.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -168,6 +170,18 @@ void MacrosTest::tearDownNssGpg()
 #else
     (void)this;
 #endif
+}
+
+css::uno::Reference<css::security::XCertificate> MacrosTest::GetValidCertificate(
+    const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs)
+{
+    auto it
+        = std::find_if(certs.begin(), certs.end(), [now = DateTime(DateTime::SYSTEM)](auto& xCert) {
+              return now.IsBetween(xCert->getNotValidBefore(), xCert->getNotValidAfter());
+          });
+    if (it != certs.end())
+        return *it;
+    return {};
 }
 }
 
