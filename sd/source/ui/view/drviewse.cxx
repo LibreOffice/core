@@ -127,9 +127,9 @@ static void ImpAddPrintableCharactersToTextEdit(SfxRequest const & rReq, ::sd::V
     {
         for(sal_Int32 a(0); a < aInputString.getLength(); a++)
         {
-            char aChar = static_cast<char>(aInputString[a]);
             vcl::KeyCode aKeyCode;
-            KeyEvent aKeyEvent(aChar, aKeyCode);
+            // tdf#38669 - create the key event using a Unicode character
+            KeyEvent aKeyEvent(aInputString[a], aKeyCode);
 
             // add actual character
             pOLV->PostKeyEvent(aKeyEvent);
