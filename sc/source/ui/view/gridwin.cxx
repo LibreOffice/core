@@ -3253,7 +3253,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             if (aPos.Col() >= 0 && (aSpellCheckCell.meType == CELLTYPE_STRING || aSpellCheckCell.meType == CELLTYPE_EDIT))
                 nColSpellError = aPos.Col();
 
-            // Is there a missspelled word somewhere in the cell?
+            // Is there a misspelled word somewhere in the cell?
             // A "yes" does not mean that the word under the mouse pointer is wrong though.
             bSpellError = (mpSpellCheckCxt->isMisspelled(nColSpellError, nCellY));
         }

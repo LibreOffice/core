@@ -1022,7 +1022,7 @@ ios*) # iOS
     # -undefined error is the default
     LINKFLAGSNOUNDEFS=""
 
-    # HOST_PLATFORM is used for external projects and their configury typically doesn't like the "ios"
+    # HOST_PLATFORM is used for external projects and their configure typically doesn't like the "ios"
     # part, so use aarch64-apple-darwin for now.
     HOST_PLATFORM=aarch64-apple-darwin
 

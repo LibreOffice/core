@@ -1498,7 +1498,7 @@ void SdOOXMLExportTest2::testSmartartRotation2()
 
     // clear SmartArt data to check how group shapes with double-rotated children are exported, not smartart
     // NOTE: Resetting the GrabBag data is a *very* indirect way to reset the SmartArt functionality.
-    //       Since this worked before and there is not (yet?) a better way do do it using UNO API, I added
+    //       Since this worked before and there is not (yet?) a better way to do it using UNO API, I added
     //       code to support this for now
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
