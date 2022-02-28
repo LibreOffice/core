@@ -79,6 +79,8 @@ public:
     void testPivotTableBoolFieldFilterXLSX();
     void testPivotTableRowColPageFieldFilterXLSX();
     void testPivotTableErrorItemFilterXLSX();
+    void testPivotTableErrorItemFilterXLSB();
+    void testPivotTableErrorItem2FilterXLSX();
     void testPivotTableOutlineModeXLSX();
     void testPivotTableDuplicatedMemberFilterXLSX();
     void testPivotTableTabularModeXLSX();
@@ -130,6 +132,8 @@ public:
     CPPUNIT_TEST(testPivotTableBoolFieldFilterXLSX);
     CPPUNIT_TEST(testPivotTableRowColPageFieldFilterXLSX);
     CPPUNIT_TEST(testPivotTableErrorItemFilterXLSX);
+    CPPUNIT_TEST(testPivotTableErrorItemFilterXLSB);
+    CPPUNIT_TEST(testPivotTableErrorItem2FilterXLSX);
     CPPUNIT_TEST(testPivotTableOutlineModeXLSX);
     CPPUNIT_TEST(testPivotTableDuplicatedMemberFilterXLSX);
     CPPUNIT_TEST(testPivotTableTabularModeXLSX);
@@ -2366,6 +2370,58 @@ void ScPivotTableFiltersTest::testPivotTableErrorItemFilterXLSX()
     CPPUNIT_ASSERT(pMember);
     CPPUNIT_ASSERT(pMember->HasIsVisible());
     CPPUNIT_ASSERT(!pMember->GetIsVisible());
+
+    xDocSh->DoClose();
+}
+
+void ScPivotTableFiltersTest::testPivotTableErrorItemFilterXLSB()
+{
+    ScDocShellRef xDocSh = loadDoc(u"pivottable_error_item_filter.", FORMAT_XLSB);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"b");
+    CPPUNIT_ASSERT(pSaveDim);
+    const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), rMembers.size());
+    ScDPSaveMember* pMember = pSaveDim->GetExistingMemberByName("#DIV/0!");
+    CPPUNIT_ASSERT(pMember);
+    CPPUNIT_ASSERT(pMember->HasIsVisible());
+    CPPUNIT_ASSERT(!pMember->GetIsVisible());
+
+    xDocSh->DoClose();
+}
+
+void ScPivotTableFiltersTest::testPivotTableErrorItem2FilterXLSX()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf122471.", FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    ScDPCollection* pDPs = rDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+
+    // Reload and check whether filtering is preserved
+    xDocSh = saveAndReload(&(*xDocSh), FORMAT_XLSX);
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file", xDocSh.is());
+    ScDocument& rLoadedDoc = xDocSh->GetDocument();
+    pDPs = rLoadedDoc.GetDPCollection();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pDPs->GetCount());
+    const ScDPObject* pDPObj = &(*pDPs)[0];
+    CPPUNIT_ASSERT(pDPObj);
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT(pSaveData);
+
+    ScDPSaveDimension* pSaveDim = pSaveData->GetExistingDimensionByName(u"PPP");
+    CPPUNIT_ASSERT(pSaveDim);
+    const ScDPSaveDimension::MemberList& rMembers = pSaveDim->GetMembers();
+    // prior to the patch, columns were missing due to an exception dropping the column data
+    CPPUNIT_ASSERT_EQUAL(size_t(21), rMembers.size());
 
     xDocSh->DoClose();
 }
