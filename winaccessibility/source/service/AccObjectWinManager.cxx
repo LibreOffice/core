@@ -46,7 +46,6 @@
 
 
 using namespace com::sun::star::accessibility;
-using namespace com::sun::star::accessibility::AccessibleStateType;
 using namespace com::sun::star::uno;
 
 /**
@@ -1062,7 +1061,7 @@ bool AccObjectWinManager::IsStateManageDescendant(XAccessible* pAccessible)
             int count = pStates.getLength();
             for( int iIndex = 0;iIndex < count;iIndex++ )
             {
-                if(pStates[iIndex] == /*AccessibleStateType::*/MANAGES_DESCENDANTS)
+                if (pStates[iIndex] == AccessibleStateType::MANAGES_DESCENDANTS)
                     return true;
             }
         }
