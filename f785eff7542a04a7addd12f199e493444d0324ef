@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8da3f9c0_d05aa77a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-28T18:01:39Z",
+      "side": 1,
+      "message": "i don\u0027t typically go near these, so is there any stupid in here?",
+      "revId": "f785eff7542a04a7addd12f199e493444d0324ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
