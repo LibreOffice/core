@@ -43,6 +43,7 @@ class ResIDGenerator;
 class AccObjectManagerAgent;
 class AccEventListener;
 class AccObject;
+enum class UnoMSAAEvent;
 
 /*******************************************************************
 AccObjectWinManager complete the functions:
@@ -106,7 +107,7 @@ public:
     void DeleteAccObj( css::accessibility::XAccessible* pXAcc );
     void DeleteChildrenAccObj(css::accessibility::XAccessible* pAccObj);
 
-    bool NotifyAccEvent( css::accessibility::XAccessible* pXAcc,short state = 0 );
+    bool NotifyAccEvent(css::accessibility::XAccessible* pXAcc, UnoMSAAEvent eEvent);
 
     LRESULT Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam);
 

@@ -229,13 +229,13 @@ void  AccObjectManagerAgent::UpdateState( css::accessibility::XAccessible* pXAcc
 /**
    * Interface of notify MSAA event when some UNO event occurred.
    * @param pXAcc Uno XAccessible interface of control.
-   * @param pEvent UNO event ID.
+   * @param eEvent event type.
    * @return If the method is correctly processed.
    */
-bool AccObjectManagerAgent::NotifyAccEvent(short pEvent, XAccessible* pXAcc)
+bool AccObjectManagerAgent::NotifyAccEvent(UnoMSAAEvent eEvent, XAccessible* pXAcc)
 {
     if(pWinManager)
-        return pWinManager->NotifyAccEvent(pXAcc,pEvent);
+        return pWinManager->NotifyAccEvent(pXAcc, eEvent);
 
     return false;
 }

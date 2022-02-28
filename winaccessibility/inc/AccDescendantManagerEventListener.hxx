@@ -19,6 +19,8 @@
 
 #pragma once
 
+enum class UnoMSAAEvent;
+
 #include <stdio.h>
 #include <vector>
 #include "AccComponentEventListener.hxx"
@@ -54,7 +56,7 @@ public:
     virtual void HandleChildChangedNoFocusEvent(
             css::uno::Any oldValue, css::uno::Any newValue);
 
-    bool NotifyChildEvent(short nWinEvent,const css::uno::Any &Value);
+    bool NotifyChildEvent(UnoMSAAEvent eWinEvent, const css::uno::Any& Value);
 
     virtual void HandleSelectionChangedAddEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);

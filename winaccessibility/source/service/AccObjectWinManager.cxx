@@ -148,10 +148,10 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
 /**
    * Simulate MSAA event via XAccessible interface and event type.
    * @param pXAcc XAccessible interface.
-   * @param state Customize Interface
+   * @param eEvent eventy type
    * @return The terminate result that identifies if the call is successful.
    */
-bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
+bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc, UnoMSAAEvent eEvent)
 {
     Reference< XAccessibleContext > pRContext;
 
@@ -172,9 +172,9 @@ bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
     long dChildID = selfAccObj->GetResID();
     HWND hAcc = selfAccObj->GetParentHWND();
 
-    switch(state)
+    switch(eEvent)
     {
-    case UM_EVENT_STATE_FOCUSED:
+    case UnoMSAAEvent::STATE_FOCUSED:
         {
             UpdateAccFocus(pXAcc);
             selfAccObj->UpdateDefaultAction( );
@@ -182,124 +182,124 @@ bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
             NotifyWinEvent( EVENT_OBJECT_FOCUS,hAcc, OBJID_CLIENT,dChildID  );
             break;
         }
-    case UM_EVENT_STATE_BUSY:
+    case UnoMSAAEvent::STATE_BUSY:
         NotifyWinEvent( EVENT_OBJECT_STATECHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_STATE_CHECKED:
+    case UnoMSAAEvent::STATE_CHECKED:
         NotifyWinEvent( EVENT_OBJECT_STATECHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_STATE_PRESSED:
+    case UnoMSAAEvent::STATE_PRESSED:
         NotifyWinEvent( EVENT_OBJECT_STATECHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
 
     //Removed fire out selected event
-    //case UM_EVENT_STATE_SELECTED:
+    //case UnoMSAAEvent::STATE_SELECTED:
     //  NotifyWinEvent( EVENT_OBJECT_STATECHANGE,hAcc, OBJID_CLIENT,dChildID  );
     //  break;
-    case UM_EVENT_STATE_ARMED:
+    case UnoMSAAEvent::STATE_ARMED:
         UpdateAccFocus(pXAcc);
         NotifyWinEvent( EVENT_OBJECT_FOCUS,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_MENU_START:
+    case UnoMSAAEvent::MENU_START:
         NotifyWinEvent( EVENT_SYSTEM_MENUSTART,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_MENU_END:
+    case UnoMSAAEvent::MENU_END:
         NotifyWinEvent( EVENT_SYSTEM_MENUEND,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_MENUPOPUPSTART:
+    case UnoMSAAEvent::MENUPOPUPSTART:
         NotifyWinEvent( EVENT_SYSTEM_MENUPOPUPSTART,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_MENUPOPUPEND:
+    case UnoMSAAEvent::MENUPOPUPEND:
         NotifyWinEvent( EVENT_SYSTEM_MENUPOPUPEND,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_SELECTION_CHANGED:
+    case UnoMSAAEvent::SELECTION_CHANGED:
         NotifyWinEvent( EVENT_OBJECT_SELECTION,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_SELECTION_CHANGED_ADD:
+    case UnoMSAAEvent::SELECTION_CHANGED_ADD:
         NotifyWinEvent( EVENT_OBJECT_SELECTIONADD,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_SELECTION_CHANGED_REMOVE:
+    case UnoMSAAEvent::SELECTION_CHANGED_REMOVE:
         NotifyWinEvent( EVENT_OBJECT_SELECTIONREMOVE,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_SELECTION_CHANGED_WITHIN:
+    case UnoMSAAEvent::SELECTION_CHANGED_WITHIN:
         NotifyWinEvent( EVENT_OBJECT_SELECTIONWITHIN,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_VALUECHANGE:
+    case UnoMSAAEvent::OBJECT_VALUECHANGE:
         UpdateValue(pXAcc);
         NotifyWinEvent( EVENT_OBJECT_VALUECHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_NAMECHANGE:
+    case UnoMSAAEvent::OBJECT_NAMECHANGE:
         NotifyWinEvent( EVENT_OBJECT_NAMECHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_DESCRIPTIONCHANGE:
+    case UnoMSAAEvent::OBJECT_DESCRIPTIONCHANGE:
         NotifyWinEvent( EVENT_OBJECT_DESCRIPTIONCHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_DEFACTIONCHANGE:
+    case UnoMSAAEvent::OBJECT_DEFACTIONCHANGE:
         NotifyWinEvent( IA2_EVENT_ACTION_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_CARETCHANGE:
+    case UnoMSAAEvent::OBJECT_CARETCHANGE:
         NotifyWinEvent( IA2_EVENT_TEXT_CARET_MOVED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_TEXTCHANGE:
+    case UnoMSAAEvent::OBJECT_TEXTCHANGE:
         NotifyWinEvent( IA2_EVENT_TEXT_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_ACTIVE_DESCENDANT_CHANGED:
+    case UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED:
         UpdateAccFocus(pXAcc);
         NotifyWinEvent( EVENT_OBJECT_FOCUS,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_BOUNDRECT_CHANGED:
+    case UnoMSAAEvent::BOUNDRECT_CHANGED:
         NotifyWinEvent( EVENT_OBJECT_LOCATIONCHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_VISIBLE_DATA_CHANGED:
+    case UnoMSAAEvent::VISIBLE_DATA_CHANGED:
         NotifyWinEvent( IA2_EVENT_VISIBLE_DATA_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_SHOW :
+    case UnoMSAAEvent::SHOW :
         NotifyWinEvent( EVENT_OBJECT_SHOW,hAcc, OBJID_CLIENT,dChildID  );
         NotifyWinEvent( EVENT_SYSTEM_FOREGROUND,hAcc, OBJID_CLIENT,dChildID  );
     break;
-    case UM_EVENT_TABLE_CAPTION_CHANGED:
+    case UnoMSAAEvent::TABLE_CAPTION_CHANGED:
         NotifyWinEvent( IA2_EVENT_TABLE_CAPTION_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_TABLE_COLUMN_DESCRIPTION_CHANGED:
+    case UnoMSAAEvent::TABLE_COLUMN_DESCRIPTION_CHANGED:
         NotifyWinEvent( IA2_EVENT_TABLE_COLUMN_DESCRIPTION_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_TABLE_COLUMN_HEADER_CHANGED:
+    case UnoMSAAEvent::TABLE_COLUMN_HEADER_CHANGED:
         NotifyWinEvent( IA2_EVENT_TABLE_COLUMN_HEADER_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_TABLE_MODEL_CHANGED:
+    case UnoMSAAEvent::TABLE_MODEL_CHANGED:
         NotifyWinEvent( IA2_EVENT_TABLE_MODEL_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_TABLE_ROW_HEADER_CHANGED:
+    case UnoMSAAEvent::TABLE_ROW_HEADER_CHANGED:
         NotifyWinEvent( IA2_EVENT_TABLE_ROW_HEADER_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_TABLE_SUMMARY_CHANGED:
+    case UnoMSAAEvent::TABLE_SUMMARY_CHANGED:
         NotifyWinEvent( IA2_EVENT_TABLE_SUMMARY_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_TABLE_ROW_DESCRIPTION_CHANGED:
+    case UnoMSAAEvent::TABLE_ROW_DESCRIPTION_CHANGED:
         NotifyWinEvent( IA2_EVENT_TABLE_ROW_DESCRIPTION_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_REORDER:
+    case UnoMSAAEvent::OBJECT_REORDER:
         NotifyWinEvent( EVENT_OBJECT_REORDER,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_PAGE_CHANGED:
+    case UnoMSAAEvent::PAGE_CHANGED:
         NotifyWinEvent( IA2_EVENT_PAGE_CHANGED,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_CHILD_REMOVED:
+    case UnoMSAAEvent::CHILD_REMOVED:
         NotifyWinEvent( EVENT_OBJECT_DESTROY,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_CHILD_ADDED:
+    case UnoMSAAEvent::CHILD_ADDED:
         NotifyWinEvent( EVENT_OBJECT_CREATE ,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_OBJECT_PAGECHANGED:
+    case UnoMSAAEvent::OBJECT_PAGECHANGED:
         NotifyWinEvent( IA2_EVENT_PAGE_CHANGED ,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_TEXT_SELECTION_CHANGED:
+    case UnoMSAAEvent::TEXT_SELECTION_CHANGED:
         NotifyWinEvent( IA2_EVENT_TEXT_SELECTION_CHANGED ,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_SECTION_CHANGED:
+    case UnoMSAAEvent::SECTION_CHANGED:
         NotifyWinEvent( IA2_EVENT_SECTION_CHANGED ,hAcc, OBJID_CLIENT,dChildID  );
         break;
-    case UM_EVENT_COLUMN_CHANGED:
+    case UnoMSAAEvent::COLUMN_CHANGED:
         NotifyWinEvent( IA2_EVENT_TEXT_COLUMN_CHANGED ,hAcc, OBJID_CLIENT,dChildID  );
         break;
     default:
