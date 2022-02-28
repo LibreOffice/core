@@ -202,9 +202,9 @@ void PivotCacheItem::readBool( SequenceInputStream& rStrm )
     mnType = XML_b;
 }
 
-void PivotCacheItem::readError( SequenceInputStream& rStrm )
+void PivotCacheItem::readError(SequenceInputStream& rStrm, const UnitConverter& rUnitConverter)
 {
-    maValue <<= static_cast< sal_Int32 >( rStrm.readuInt8() );
+    maValue <<= rUnitConverter.calcErrorString(rStrm.readuInt8());
     mnType = XML_e;
 }
 
@@ -294,7 +294,7 @@ void PivotCacheItemList::importItem( sal_Int32 nRecId, SequenceInputStream& rStr
         case BIFF12_ID_PCITEM_BOOL:
         case BIFF12_ID_PCITEMA_BOOL:    rItem.readBool( rStrm );    break;
         case BIFF12_ID_PCITEM_ERROR:
-        case BIFF12_ID_PCITEMA_ERROR:   rItem.readError( rStrm );   break;
+        case BIFF12_ID_PCITEMA_ERROR: rItem.readError(rStrm, getUnitConverter()); break;
         default:    OSL_FAIL( "PivotCacheItemList::importItem - unknown record type" );
     }
 }
@@ -339,7 +339,7 @@ void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
         {
             case BIFF12_PCITEM_ARRAY_DOUBLE: createItem().readDouble( rStrm );   break;
             case BIFF12_PCITEM_ARRAY_STRING: createItem().readString( rStrm );   break;
-            case BIFF12_PCITEM_ARRAY_ERROR:  createItem().readError( rStrm );    break;
+            case BIFF12_PCITEM_ARRAY_ERROR: createItem().readError(rStrm, getUnitConverter()); break;
             case BIFF12_PCITEM_ARRAY_DATE:   createItem().readDate( rStrm );     break;
             default:
                 OSL_FAIL( "PivotCacheItemList::importArray - unknown data type" );
@@ -831,7 +831,7 @@ void PivotCacheField::writeItemToSourceDataCell( const WorksheetHelper& rSheetHe
         case XML_i: rSheetData.setValueCell( aModel, rItem.getValue().get< sal_Int16 >() );                             break;
         case XML_d: rSheetData.setDateTimeCell( aModel, rItem.getValue().get< css::util::DateTime >() );                           break;
         case XML_b: rSheetData.setBooleanCell( aModel, rItem.getValue().get< bool >() );                                break;
-        case XML_e: rSheetData.setErrorCell( aModel, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) ); break;
+        case XML_e: rSheetData.setErrorCell(aModel, rItem.getValue().get<OUString>()); break;
         default:    OSL_FAIL( "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );
     }
 }
