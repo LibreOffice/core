@@ -97,9 +97,11 @@ const sal_uInt16 ScDocument::nSrcVer = SC_CURRENT_VERSION;
 static ScSheetLimits* CreateSheetLimits()
 {
     const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
+#if HAVE_FEATURE_JUMBO_SHEETS
     if (rOpt.GetInitJumboSheets())
         return new ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
     else
+#endif
         return new ScSheetLimits(MAXCOL, MAXROW);
 }
 
