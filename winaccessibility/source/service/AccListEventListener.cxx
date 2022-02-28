@@ -92,7 +92,7 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
 
             pAgent->IncreaseState( pAcc, AccessibleStateType::FOCUSED);
 
-            pAgent->NotifyAccEvent(UM_EVENT_ACTIVE_DESCENDANT_CHANGED, pAcc);
+            pAgent->NotifyAccEvent(UnoMSAAEvent::ACTIVE_DESCENDANT_CHANGED, pAcc);
         }
     }
     if (oldValue >>= xChild)
@@ -119,7 +119,7 @@ void AccListEventListener::HandleValueChangedEvent(Any, Any)
         XAccessible* pParentAcc =
             pAgent->GetParentXAccessible(m_xAccessible.get());
         pAgent->UpdateValue(pParentAcc);
-        pAgent->NotifyAccEvent(UM_EVENT_OBJECT_VALUECHANGE, pParentAcc);
+        pAgent->NotifyAccEvent(UnoMSAAEvent::OBJECT_VALUECHANGE, pParentAcc);
     }
 }
 

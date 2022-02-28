@@ -93,7 +93,7 @@ void AccDescendantManagerEventListener::HandleChildChangedEvent(Any oldValue, An
             pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             pAgent->InsertChildrenAccObj(pAcc);
 
-            pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
+            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
 
         }
     }
@@ -104,7 +104,7 @@ void AccDescendantManagerEventListener::HandleChildChangedEvent(Any oldValue, An
         {
             XAccessible* pAcc = xChild.get();
 
-            pAgent->NotifyAccEvent(UM_EVENT_CHILD_REMOVED, pAcc);
+            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_REMOVED, pAcc);
             pAgent->DeleteChildrenAccObj( pAcc );
             pAgent->DeleteAccObj( pAcc );
         }
@@ -130,7 +130,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedEvent(Any oldValue
                 pAgent->IncreaseState( pAcc, AccessibleStateType::SELECTED);
             }
 
-            pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, pAcc);
+            pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED, pAcc);
             bSend=true;
         }
     }
@@ -144,7 +144,7 @@ void AccDescendantManagerEventListener::HandleSelectionChangedEvent(Any oldValue
     }
     if (!bSend)
     {
-        pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, m_xAccessible.get());
+        pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED, m_xAccessible.get());
     }
 }
 
@@ -173,7 +173,7 @@ void AccDescendantManagerEventListener::HandleChildChangedNoFocusEvent(Any oldVa
     }
 }
 
-bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const Any &Value)
+bool AccDescendantManagerEventListener::NotifyChildEvent(UnoMSAAEvent eWinEvent, const Any& Value)
 {
     Reference< XAccessible > xChild;
     if(Value >>= xChild )
@@ -181,11 +181,11 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const A
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->NotifyAccEvent(nWinEvent, pAcc);
+            pAgent->NotifyAccEvent(eWinEvent, pAcc);
 
             if (pAgent->IsStateManageDescendant(m_xAccessible.get()))
             {
-                if (nWinEvent == UM_EVENT_SELECTION_CHANGED_REMOVE)
+                if (eWinEvent == UnoMSAAEvent::SELECTION_CHANGED_REMOVE)
                 {
                     // The object has just been sent in a SELECTION_CHANGED_REMOVE event
                     // and accessibility tools may query for the object and call methods on
@@ -209,29 +209,29 @@ bool AccDescendantManagerEventListener::NotifyChildEvent(short nWinEvent,const A
 }
 void AccDescendantManagerEventListener::HandleSelectionChangedAddEvent(const Any& /*oldValue*/, const Any &newValue)
 {
-    if(NotifyChildEvent(UM_EVENT_SELECTION_CHANGED_ADD,newValue))
+    if (NotifyChildEvent(UnoMSAAEvent::SELECTION_CHANGED_ADD, newValue))
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_ADD, m_xAccessible.get());
+    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED_ADD, m_xAccessible.get());
 }
 
 void AccDescendantManagerEventListener::HandleSelectionChangedRemoveEvent(const Any& /*oldValue*/, const Any &newValue)
 {
-    if(NotifyChildEvent(UM_EVENT_SELECTION_CHANGED_REMOVE,newValue))
+    if (NotifyChildEvent(UnoMSAAEvent::SELECTION_CHANGED_REMOVE, newValue))
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_REMOVE, m_xAccessible.get());
+    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED_REMOVE, m_xAccessible.get());
 }
 
 void AccDescendantManagerEventListener::HandleSelectionChangedWithinEvent(const Any& /*oldValue*/, const Any &newValue)
 {
-    if(NotifyChildEvent(UM_EVENT_SELECTION_CHANGED_WITHIN,newValue))
+    if (NotifyChildEvent(UnoMSAAEvent::SELECTION_CHANGED_WITHIN, newValue))
     {
         return ;
     }
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED_WITHIN, m_xAccessible.get());
+    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED_WITHIN, m_xAccessible.get());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

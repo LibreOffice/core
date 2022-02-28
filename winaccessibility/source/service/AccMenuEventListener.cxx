@@ -81,7 +81,7 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
             pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             //add all oldValue's existing children
             pAgent->InsertChildrenAccObj(pAcc);
-            pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
+            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_ADDED, pAcc);
         }
     }
     else if (oldValue >>= xChild)
@@ -90,7 +90,7 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            pAgent->NotifyAccEvent(UM_EVENT_CHILD_REMOVED, pAcc);
+            pAgent->NotifyAccEvent(UnoMSAAEvent::CHILD_REMOVED, pAcc);
             //delete all oldValue's existing children
             pAgent->DeleteChildrenAccObj( pAcc );
             //delete this child
@@ -105,7 +105,7 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
  */
 void AccMenuEventListener::HandleSelectionChangedEventNoArgs()
 {
-    pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, m_xAccessible.get());
+    pAgent->NotifyAccEvent(UnoMSAAEvent::SELECTION_CHANGED, m_xAccessible.get());
 }
 
 /**

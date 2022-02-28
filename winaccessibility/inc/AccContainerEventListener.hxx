@@ -19,6 +19,8 @@
 
 #pragma once
 
+enum class UnoMSAAEvent;
+
 #include <stdio.h>
 #include "AccEventListener.hxx"
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
@@ -73,7 +75,7 @@ public:
     // update all children's state
     void UpdateAllChildrenState( css::accessibility::XAccessible* pXAccessible);
 
-    bool NotifyChildEvent(short nWinEvent, const css::uno::Any &Value);
+    bool NotifyChildEvent(UnoMSAAEvent eWinEvent, const css::uno::Any& Value);
 
     virtual void HandleSelectionChangedAddEvent(
             const css::uno::Any &oldValue, const css::uno::Any &newValue);

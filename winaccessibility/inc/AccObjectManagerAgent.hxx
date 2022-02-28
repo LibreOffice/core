@@ -30,6 +30,7 @@
 struct IMAccessible;
 struct IAccessible;
 class AccObjectWinManager;
+enum class UnoMSAAEvent;
 
 /****************************************************************
 AccObjectManagerAgent is used for managing AccObjects, which encapsulates
@@ -56,7 +57,7 @@ public:
     virtual void DeleteAccObj( css::accessibility::XAccessible* pXAcc );
     virtual IMAccessible*  GetIMAccByXAcc(css::accessibility::XAccessible* pXAcc);
 
-    bool NotifyAccEvent(short pEvent = 0, css::accessibility::XAccessible* pXAcc = nullptr);
+    bool NotifyAccEvent(UnoMSAAEvent eEvent, css::accessibility::XAccessible* pXAcc = nullptr);
 
     bool InsertChildrenAccObj(css::accessibility::XAccessible* pXAcc,
                               HWND  hWnd = nullptr);
