@@ -1024,7 +1024,7 @@
      <table:table-cell table:number-columns-repeated="3"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
-     <table:table-cell table:formula="of:=NETWORKDAYS(day1;day2;days)" office:value-type="float" office:value="17" calcext:value-type="float">
+     <table:table-cell table:formula="of:=NETWORKDAYS(day1ref;day2ref;days)" office:value-type="float" office:value="17" calcext:value-type="float">
       <text:p>17</text:p>
      </table:table-cell>
      <table:table-cell office:value-type="float" office:value="17" calcext:value-type="float">
@@ -1033,8 +1033,8 @@
      <table:table-cell table:style-name="ce14" table:formula="of:=[.A12]=[.B12]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>PRAVDA</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=NETWORKDAYS(day1;day2;days)" calcext:value-type="string">
-      <text:p>=NETWORKDAYS(day1;day2;days)</text:p>
+     <table:table-cell table:style-name="ce18" table:formula="of:=FORMULA([.A12])" office:value-type="string" office:string-value="=NETWORKDAYS(day1ref;day2ref;days)" calcext:value-type="string">
+      <text:p>=NETWORKDAYS(day1ref;day2ref;days)</text:p>
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="6"/>
      <table:table-cell office:value-type="float" office:value="17" calcext:value-type="float">
@@ -1149,8 +1149,8 @@
     </table:table-row>
    </table:table>
    <table:named-expressions>
-    <table:named-range table:name="day1" table:base-cell-address="$Sheet2.$K$2" table:cell-range-address="$Sheet2.$K$2"/>
-    <table:named-range table:name="day2" table:base-cell-address="$Sheet2.$K$3" table:cell-range-address="$Sheet2.$K$3"/>
+    <table:named-range table:name="day1ref" table:base-cell-address="$Sheet2.$K$2" table:cell-range-address="$Sheet2.$K$2"/>
+    <table:named-range table:name="day2ref" table:base-cell-address="$Sheet2.$K$3" table:cell-range-address="$Sheet2.$K$3"/>
     <table:named-range table:name="days" table:base-cell-address="$Sheet2.$K$4" table:cell-range-address="$Sheet2.$K$4:.$K$6"/>
    </table:named-expressions>
   </office:spreadsheet>
