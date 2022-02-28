@@ -23,6 +23,7 @@
  * of tools::Long in the codebase as meaning "we're not sure what the ideal size of the datatype is",
  * and where possible, replace it with a better datatype like sal_Int32/sal_Int64/etc.
  *
+ * NOTE: If you change this, make sure HAVE_FEATURE_JUMBO_SHEETS matches this, as it requires at least 64bit tools::Long.
  */
 namespace tools
 {
