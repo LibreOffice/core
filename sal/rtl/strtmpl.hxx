@@ -17,39 +17,43 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-/* ======================================================================= */
-/* Internal C-String help functions which could be used without the        */
-/* String-Class                                                            */
-/* ======================================================================= */
-
 #pragma once
 
 #include <algorithm>
 #include <cassert>
 #include <cstdlib>
+#include <cstring>
+#include <cwchar>
 #include <limits>
 #include <string_view>
 #include <type_traits>
 
-#include <cstring>
-#include <wchar.h>
+#include "strimp.hxx"
+
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
+#include <rtl/math.h>
 #include <rtl/strbuf.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.hxx>
+
+void internRelease(rtl_uString*);
 
 namespace rtl::str
 {
 template <typename C> auto IMPL_RTL_USTRCODE(C c) { return std::make_unsigned_t<C>(c); }
 
-template <typename IMPL_RTL_STRCODE>
-void Copy( IMPL_RTL_STRCODE* _pDest,
-                                     const IMPL_RTL_STRCODE* _pSrc,
-                                     sal_Int32 _nCount )
+template <typename C> void Copy(C* _pDest, const C* _pSrc, sal_Int32 _nCount)
 {
     // take advantage of builtin optimisations
-    memcpy( _pDest, _pSrc, _nCount * sizeof(IMPL_RTL_STRCODE));
+    std::copy(_pSrc, _pSrc + _nCount, _pDest);
+}
+
+template <typename C> void CopyBackward(C* _pDest, const C* _pSrc, sal_Int32 _nCount)
+{
+    // take advantage of builtin optimisations
+    std::copy_backward(_pSrc, _pSrc + _nCount, _pDest + _nCount);
 }
 
 inline void Copy(sal_Unicode* _pDest, const char* _pSrc, sal_Int32 _nCount)
@@ -614,7 +618,7 @@ sal_Int32 trim_WithLength( IMPL_RTL_STRCODE* pStr, sal_Int32 nLen )
     {
         nLen = static_cast<sal_Int32>(view.size());
         if (view.data() != pStr)
-            memmove(pStr, view.data(), nLen * sizeof(IMPL_RTL_STRCODE));
+            Copy(pStr, view.data(), nLen);
         *(pStr+nLen) = 0;
     }
 
@@ -976,7 +980,24 @@ template <typename IMPL_RTL_STRINGDATA> void release( IMPL_RTL_STRINGDATA* pThis
 
 template <typename IMPL_RTL_STRINGDATA> struct EmptyStringImpl
 {
-    static IMPL_RTL_STRINGDATA data; // defined in respective units
+    static IMPL_RTL_STRINGDATA data;
+};
+
+/* static data to be referenced by all empty strings
+ * the refCount is predefined to 1 and must never become 0 !
+ */
+template <>
+inline rtl_uString EmptyStringImpl<rtl_uString>::data = {
+    sal_Int32(SAL_STRING_INTERN_FLAG | SAL_STRING_STATIC_FLAG | 1), /* sal_Int32   refCount;  */
+    0,                                                              /* sal_Int32   length;    */
+    { 0 }                                                           /* sal_Unicode buffer[1]; */
+};
+
+template <>
+inline rtl_String rtl::str::EmptyStringImpl<rtl_String>::data = {
+    SAL_STRING_STATIC_FLAG | 1, /* sal_Int32 refCount;  */
+    0,                          /* sal_Int32 length;    */
+    { 0 }                       /* char      buffer[1]; */
 };
 
 template <typename IMPL_RTL_STRINGDATA> void new_( IMPL_RTL_STRINGDATA** ppThis )
@@ -1599,6 +1620,110 @@ sal_Int32 SAL_CALL valueOfFP(STRCODE<IMPL_RTL_STRINGDATA>* pStr, T f,
     Copy(pStr, pResult->buffer, nLen + 1);
     release(pResult);
     return nLen;
+}
+
+/* ======================================================================= */
+/* String buffer help functions                                            */
+/* ======================================================================= */
+
+template <class IMPL_RTL_STRINGDATA>
+void stringbuffer_newFromStr_WithLength(IMPL_RTL_STRINGDATA** ppThis,
+                                        const STRCODE<IMPL_RTL_STRINGDATA>* pStr, sal_Int32 count)
+{
+    assert(ppThis);
+    assert(count >= 0);
+    if (!pStr)
+        count = 0; // Because old code didn't care about count when !pStr
+
+    newFromStr_WithLength(ppThis, pStr, count, 16);
+}
+
+template <class IMPL_RTL_STRINGDATA>
+sal_Int32 stringbuffer_newFromStringBuffer(IMPL_RTL_STRINGDATA** ppThis, sal_Int32 capacity,
+                                           IMPL_RTL_STRINGDATA* pStr)
+{
+    assert(capacity >= 0);
+    assert(pStr);
+
+    if (capacity < pStr->length)
+        capacity = pStr->length;
+
+    newFromStr_WithLength(ppThis, pStr->buffer, pStr->length, capacity - pStr->length);
+    return capacity;
+}
+
+template <class IMPL_RTL_STRINGDATA>
+void stringbuffer_ensureCapacity(IMPL_RTL_STRINGDATA** ppThis, sal_Int32* capacity,
+                                 sal_Int32 minimumCapacity)
+{
+    assert(ppThis);
+    assert(capacity && *capacity >= 0);
+    // assert(minimumCapacity >= 0); // It was commented out in rtl_stringbuffer_ensureCapacity
+    if (minimumCapacity <= *capacity)
+        return;
+
+    const auto nLength = (*ppThis)->length;
+    *capacity = (nLength + 1) * 2;
+    if (minimumCapacity > *capacity)
+        *capacity = minimumCapacity;
+
+    newFromStr_WithLength(ppThis, (*ppThis)->buffer, nLength, *capacity - nLength);
+}
+
+template <class IMPL_RTL_STRINGDATA, typename C>
+void stringbuffer_insert(IMPL_RTL_STRINGDATA** ppThis, sal_Int32* capacity, sal_Int32 offset,
+                         const C* pStr, sal_Int32 len)
+{
+    assert(ppThis);
+    assert(capacity && *capacity >= 0);
+    assert(offset >= 0 && offset <= (*ppThis)->length);
+    assert(len >= 0);
+    if (len == 0)
+        return;
+
+    stringbuffer_ensureCapacity(ppThis, capacity, (*ppThis)->length + len);
+
+    sal_Int32 nOldLen = (*ppThis)->length;
+    auto* pBuf = (*ppThis)->buffer;
+
+    /* copy the tail */
+    const sal_Int32 n = nOldLen - offset;
+    if (n > 0)
+        CopyBackward(pBuf + offset + len, pBuf + offset, n);
+
+    /* insert the new characters */
+    if (pStr != nullptr)
+        Copy(pBuf + offset, pStr, len);
+
+    (*ppThis)->length = nOldLen + len;
+    pBuf[nOldLen + len] = 0;
+}
+
+template <class IMPL_RTL_STRINGDATA>
+void stringbuffer_remove(IMPL_RTL_STRINGDATA** ppThis, sal_Int32 start, sal_Int32 len)
+{
+    assert(ppThis);
+    assert(start >= 0 && start <= (*ppThis)->length);
+    assert(len >= 0);
+
+    if (len > (*ppThis)->length - start)
+        len = (*ppThis)->length - start;
+
+    //remove nothing
+    if (!len)
+        return;
+
+    auto* pBuf = (*ppThis)->buffer;
+    const sal_Int32 nTailLen = (*ppThis)->length - (start + len);
+
+    if (nTailLen)
+    {
+        /* move the tail */
+        Copy(pBuf + start, pBuf + start + len, nTailLen);
+    }
+
+    (*ppThis)->length -= len;
+    pBuf[(*ppThis)->length] = 0;
 }
 
 }

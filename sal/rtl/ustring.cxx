@@ -57,17 +57,6 @@ static_assert(sizeof (rtl_uString) == 12);
 
 #include "strtmpl.hxx"
 
-/* static data to be referenced by all empty strings
- * the refCount is predefined to 1 and must never become 0 !
- */
-template<>
-rtl_uString rtl::str::EmptyStringImpl<rtl_uString>::data =
-{
-    sal_Int32(SAL_STRING_INTERN_FLAG|SAL_STRING_STATIC_FLAG|1), /*sal_Int32    refCount; */
-    0,                                               /*sal_Int32    length;   */
-    { 0 }                                            /*sal_Unicode  buffer[1];*/
-};
-
 /* ======================================================================= */
 
 sal_Int32 rtl_ustr_indexOfAscii_WithLength(
@@ -760,8 +749,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
     rtl_ustring_intern_internal( newStr, scratch, CAN_RETURN );
 }
 
-static void
-internRelease (rtl_uString *pThis)
+void internRelease (rtl_uString *pThis)
 {
     rtl_uString *pFree = nullptr;
     if ( SAL_STRING_REFCOUNT(
