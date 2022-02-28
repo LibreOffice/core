@@ -10,11 +10,9 @@
 #include <sal/config.h>
 
 #include <cassert>
-#include <map>
-#include <memory>
-#include <mutex>
 #include <string_view>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/configuration/ReadOnlyAccess.hpp>
 #include <com/sun/star/configuration/ReadWriteAccess.hpp>
@@ -27,9 +25,11 @@
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/configurationlistener.hxx>
+#include <cppuhelper/implbase.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -38,9 +38,9 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace {
 
-comphelper::detail::ConfigurationWrapper& GetTheConfigurationWrapper(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+comphelper::detail::ConfigurationWrapper& GetTheConfigurationWrapper(const css::uno::Reference< css::uno::XComponentContext >* xContext)
 {
-    static comphelper::detail::ConfigurationWrapper WRAPPER(xContext);
+    static comphelper::detail::ConfigurationWrapper WRAPPER(xContext ? *xContext : comphelper::getProcessComponentContext());
     return WRAPPER;
 }
 
@@ -70,7 +70,7 @@ std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::ConfigurationChanges::create(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return GetTheConfigurationWrapper(context).createChanges();
+    return GetTheConfigurationWrapper(&context).createChanges();
 }
 
 comphelper::ConfigurationChanges::~ConfigurationChanges() {}
@@ -110,14 +110,77 @@ comphelper::detail::ConfigurationWrapper const &
 comphelper::detail::ConfigurationWrapper::get(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
-    return GetTheConfigurationWrapper(context);
+    return GetTheConfigurationWrapper(&context);
 }
+
+comphelper::detail::ConfigurationWrapper const &
+comphelper::detail::ConfigurationWrapper::getWithProcessComponentContext()
+{
+    // The object is a singleton, so comphelper::getProcessComponentContext() needs
+    // to be called just once (and the first used context wins), avoid repeatedly
+    // calling the somewhat expensive function.
+    return GetTheConfigurationWrapper(nullptr);
+}
+
+namespace
+{
+class ConfigurationChangesListener
+    : public ::cppu::WeakImplHelper<css::util::XChangesListener>
+{
+public:
+    ConfigurationChangesListener(comphelper::detail::ConfigurationWrapper& wrapper)
+        : wrapper_(wrapper)
+    {}
+    // util::XChangesListener
+    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& ) override
+    {
+        wrapper_.discardCache();
+    }
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
+private:
+    comphelper::detail::ConfigurationWrapper& wrapper_;
+};
+
+} // namespace
 
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
     css::uno::Reference< css::uno::XComponentContext > const & context):
     context_(context),
     access_(css::configuration::ReadWriteAccess::create(context, "*"))
-{}
+{
+    // Set up a configuration notifier to invalidate the cache as needed.
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
+            css::configuration::theDefaultProvider::get( context ) );
+
+        ::std::vector< css::uno::Any > lParams;
+        css::beans::NamedValue aParam;
+
+        // set root path
+        aParam.Name = "nodepath";
+        aParam.Value <<= OUString("/");
+        lParams.push_back(css::uno::makeAny(aParam));
+
+        aParam.Name = "locale";
+        aParam.Value <<= OUString("*");
+        lParams.push_back(css::uno::makeAny(aParam));
+
+        css::uno::Reference< css::uno::XInterface > xCfg
+            = xConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess",
+                comphelper::containerToSequence(lParams));
+
+        notifier_ = css::uno::Reference< css::util::XChangesNotifier >(xCfg, css::uno::UNO_QUERY);
+        assert(notifier_.is());
+        listener_ = css::uno::Reference< ConfigurationChangesListener >(new ConfigurationChangesListener(*this));
+        notifier_->addChangesListener(listener_);
+    }
+    catch(const css::uno::Exception& ex)
+    {
+        SAL_WARN("comphelper", "Exception while setting up XChangesNotifier for configuration:" << ex.Message);
+        assert(false);
+    }
+}
 
 comphelper::detail::ConfigurationWrapper::~ConfigurationWrapper() {}
 
@@ -132,29 +195,29 @@ bool comphelper::detail::ConfigurationWrapper::isReadOnly(OUString const & path)
 
 css::uno::Any comphelper::detail::ConfigurationWrapper::getPropertyValue(OUString const& path) const
 {
+    std::scoped_lock aGuard(mutex_);
     // Cache the configuration access, since some of the keys are used in hot code.
-    // Note that this cache is only used by the officecfg:: auto-generated code, using it for anything
-    // else would be unwise because the cache could end up containing stale entries.
-    static std::mutex gMutex;
-    static std::map<OUString, css::uno::Reference< css::container::XNameAccess >> gAccessMap;
+    auto it = propertyCache_.find(path);
+    if( it != propertyCache_.end())
+        return it->second;
 
     sal_Int32 idx = path.lastIndexOf("/");
     assert(idx!=-1);
     OUString parentPath = path.copy(0, idx);
     OUString childName = path.copy(idx+1);
 
-    std::scoped_lock aGuard(gMutex);
+    css::uno::Reference<css::container::XNameAccess> access(
+        access_->getByHierarchicalName(parentPath), css::uno::UNO_QUERY_THROW);
+    css::uno::Any property = access->getByName(childName);
+    if(notifier_.is())
+        propertyCache_.emplace(path, property);
+    return property;
+}
 
-    // check cache
-    auto it = gAccessMap.find(parentPath);
-    if (it == gAccessMap.end())
-    {
-        // not in the cache, look it up
-        css::uno::Reference<css::container::XNameAccess> access(
-            access_->getByHierarchicalName(parentPath), css::uno::UNO_QUERY_THROW);
-        it = gAccessMap.emplace(parentPath, access).first;
-    }
-    return it->second->getByName(childName);
+void comphelper::detail::ConfigurationWrapper::discardCache()
+{
+    std::scoped_lock aGuard(mutex_);
+    propertyCache_.clear();
 }
 
 void comphelper::detail::ConfigurationWrapper::setPropertyValue(

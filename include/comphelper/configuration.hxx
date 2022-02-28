@@ -14,13 +14,17 @@
 
 #include <optional>
 #include <string_view>
+#include <unordered_map>
+#include <memory>
+#include <mutex>
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <sal/types.h>
-#include <memory>
 
 namespace com::sun::star {
     namespace configuration { class XReadWriteAccess; }
@@ -88,6 +92,7 @@ public:
     static ConfigurationWrapper const & get(
         css::uno::Reference< css::uno::XComponentContext >
             const & context);
+    static ConfigurationWrapper const & getWithProcessComponentContext();
 
     SAL_DLLPRIVATE explicit ConfigurationWrapper(
         css::uno::Reference< css::uno::XComponentContext >
@@ -130,6 +135,8 @@ public:
 
     std::shared_ptr< ConfigurationChanges > createChanges() const;
 
+    SAL_DLLPRIVATE void discardCache();
+
 private:
     ConfigurationWrapper(const ConfigurationWrapper&) = delete;
     ConfigurationWrapper& operator=(const ConfigurationWrapper&) = delete;
@@ -141,6 +148,11 @@ private:
         // css.beans.XHierarchicalPropertySetInfo), but then
         // configmgr::Access::asProperty() would report all properties as
         // READONLY, so isReadOnly() would not work
+
+    css::uno::Reference< css::util::XChangesNotifier > notifier_;
+    css::uno::Reference< css::util::XChangesListener > listener_;
+    mutable std::mutex mutex_;
+    mutable std::unordered_map<OUString, css::uno::Any> propertyCache_;
 };
 
 /// @internal
@@ -204,13 +216,24 @@ template< typename T, typename U > struct ConfigurationProperty
     ///
     /// For nillable properties, U is of type std::optional<U'>.
     static U get(
-        css::uno::Reference< css::uno::XComponentContext >
-            const & context = comphelper::getProcessComponentContext())
+        css::uno::Reference< css::uno::XComponentContext > const & context )
     {
         // Folding this into one statement causes a bogus error at least with
         // Red Hat GCC 4.6.2-1:
         css::uno::Any a(
             detail::ConfigurationWrapper::get(context).getPropertyValue(
+                T::path()));
+        return detail::Convert< U >::fromAny(a);
+    }
+
+    // The purpose of this overload is to avoid calling comphelper::getProcessComponentContext()
+    // in case the value is already cached.
+    static U get()
+    {
+        // Folding this into one statement causes a bogus error at least with
+        // Red Hat GCC 4.6.2-1:
+        css::uno::Any a(
+            detail::ConfigurationWrapper::getWithProcessComponentContext().getPropertyValue(
                 T::path()));
         return detail::Convert< U >::fromAny(a);
     }
