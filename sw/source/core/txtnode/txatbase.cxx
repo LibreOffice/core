@@ -97,6 +97,7 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (End())
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end"), BAD_CAST(OString::number(*End()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pAttr"), "%p", m_pAttr);
     const char* pWhich = nullptr;
     std::optional<OString> oValue;
     switch (Which())
@@ -158,6 +159,9 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             GetFormatField().dumpAsXml(pWriter);
             break;
         case RES_TXTATR_FTN:
+            break;
+        case RES_TXTATR_LINEBREAK:
+            GetLineBreak().dumpAsXml(pWriter);
             break;
         default:
             SAL_WARN("sw.core", "Unhandled TXTATR");

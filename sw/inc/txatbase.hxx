@@ -28,6 +28,7 @@
 #include "fmtfld.hxx"
 #include "fmtflcnt.hxx"
 #include "fmtftn.hxx"
+#include "formatlinebreak.hxx"
 #include "fchrfmt.hxx"
 #include "tox.hxx"
 #include "ndhints.hxx"
@@ -119,6 +120,7 @@ public:
     inline const SwFormatAutoFormat           &GetAutoFormat() const;
     inline const SwFormatField               &GetFormatField() const;
     inline const SwFormatFootnote               &GetFootnote() const;
+    inline const SwFormatLineBreak& GetLineBreak() const;
     inline const SwFormatFlyCnt            &GetFlyCnt() const;
     inline const SwTOXMark              &GetTOXMark() const;
     inline const SwFormatRefMark           &GetRefMark() const;
@@ -205,6 +207,12 @@ inline const SwFormatFootnote& SwTextAttr::GetFootnote() const
 {
     assert( m_pAttr && m_pAttr->Which() == RES_TXTATR_FTN );
     return static_cast<const SwFormatFootnote&>(*m_pAttr);
+}
+
+inline const SwFormatLineBreak& SwTextAttr::GetLineBreak() const
+{
+    assert(m_pAttr && m_pAttr->Which() == RES_TXTATR_LINEBREAK);
+    return static_cast<const SwFormatLineBreak&>(*m_pAttr);
 }
 
 inline const SwFormatFlyCnt& SwTextAttr::GetFlyCnt() const
