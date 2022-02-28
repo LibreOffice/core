@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0af8029e_25788c50",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-28T11:10:09Z",
+      "side": 1,
+      "message": "Could you please check if this change still allows the tests to test something on systems with properly configured certificates? I only have one expired, and it failed here locally; this indeed allows to pass the tests, but I can\u0027t verify that it doesn\u0027t effectively disable the test for all.",
+      "revId": "3b59b4a2ef316209c501eef0fcb935d9005ea18f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
