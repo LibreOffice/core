@@ -48,6 +48,7 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <rootfrm.hxx>
 
 namespace
 {
@@ -1941,6 +1942,51 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146622)
     // now only the second table deleted by AcceptAllTrackedChanges
     dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146962)
+{
+    // load a 2-row table, set Hide Changes mode and delete the first row with change tracking
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf116789.fodt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    // hide changes
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    // Without the fix in place, the deleted row would be visible
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 2
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
+
+    // check it in Show Changes mode
+
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // 2 rows are visible now
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+
+    // check it in Hide Changes mode again
+
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // only a single row is visible again
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
