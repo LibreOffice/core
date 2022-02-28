@@ -17,6 +17,8 @@
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/util/XChangesNotifier.hpp>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/processfactory.hxx>
 #include <sal/types.h>
@@ -137,6 +139,9 @@ private:
         // css.beans.XHierarchicalPropertySetInfo), but then
         // configmgr::Access::asProperty() would report all properties as
         // READONLY, so isReadOnly() would not work
+
+    css::uno::Reference< css::util::XChangesNotifier > notifier_;
+    css::uno::Reference< css::util::XChangesListener > listener_;
 };
 
 /// @internal
