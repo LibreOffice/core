@@ -16,6 +16,24 @@
       "message": "Hi Lubos,\nI added you to this patch because maybe you know what it\u0027s going on here. It fails on Windows with\n\nTest name: ScJumboSheetsTest::testTdf134553\nequality assertion failed\n- Expected: 1058\n- Actual  : -7421\n\nHowever, if performed manually, everything looks fine",
       "revId": "569b82e2b976a2f2b499a42549f2ecc79fac80f3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b344741_0490ca90",
+        "filename": "sc/qa/unit/jumbosheets-test.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-02-28T20:00:07Z",
+      "side": 1,
+      "message": "I see. As discussed on IRC, jumbo sheets do not work on 32bit, so https://gerrit.libreoffice.org/c/core/+/130713 should take care of it.",
+      "parentUuid": "63995675_158c9bb3",
+      "revId": "569b82e2b976a2f2b499a42549f2ecc79fac80f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
