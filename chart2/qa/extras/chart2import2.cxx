@@ -55,6 +55,7 @@ public:
     void testTdf137505();
     void testTdf137734();
     void testTdf137874();
+    void testTdf146463();
     void testTdfCustomShapePos();
     void testTdf121281();
     void testTdf139658();
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testTdf137505);
     CPPUNIT_TEST(testTdf137734);
     CPPUNIT_TEST(testTdf137874);
+    CPPUNIT_TEST(testTdf146463);
     CPPUNIT_TEST(testTdfCustomShapePos);
     CPPUNIT_TEST(testTdf121281);
     CPPUNIT_TEST(testTdf139658);
@@ -790,6 +792,29 @@ void Chart2ImportTest2::testTdf137874()
     xLegendEntry
         = getShapeByName(xShapes, "CID/MultiClick/D=0:CS=0:CT=0:Series=0:Point=0:LegendEntry=0");
     CPPUNIT_ASSERT(xLegendEntry.is());
+}
+
+void Chart2ImportTest2::testTdf146463()
+{
+    load(u"/chart2/qa/extras/data/ods/", "tdf146463.ods");
+    Reference<chart::XChartDocument> xChartDoc(getChartDocFromSheet(0, mxComponent),
+                                               UNO_QUERY_THROW);
+    Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xChartDoc, UNO_QUERY_THROW);
+    Reference<drawing::XDrawPage> xDrawPage(xDrawPageSupplier->getDrawPage(), UNO_SET_THROW);
+    Reference<drawing::XShapes> xShapes(xDrawPage->getByIndex(0), UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xLegend = getShapeByName(xShapes, "CID/D=0:Legend=");
+    CPPUNIT_ASSERT(xLegend.is());
+
+    awt::Size aSize = xLegend->getSize();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 598
+    // - Actual  : 7072
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(598, aSize.Height, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4256, aSize.Width, 30);
+    awt::Point aPosition = xLegend->getPosition();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(11534, aPosition.X, 30);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(4201, aPosition.Y, 30);
 }
 
 void Chart2ImportTest2::testTdfCustomShapePos()
