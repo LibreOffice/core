@@ -1446,7 +1446,9 @@ GotoPrevLayoutTextFrame(SwNodeIndex & rIndex, SwRootFrame const*const pLayout)
     {
         if (rIndex.GetNode().IsTextNode())
         {
-            if (rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None)
+            if (rIndex.GetNode().GetRedlineMergeFlag() != SwNode::Merge::None &&
+                // not a tracked row deletion in Hide Changes mode
+                rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout) )
             {
                 rIndex = *static_cast<SwTextFrame*>(rIndex.GetNode().GetTextNode()->getLayoutFrame(pLayout))->GetMergedPara()->pFirstNode;
             }
