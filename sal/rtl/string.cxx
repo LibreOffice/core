@@ -47,18 +47,6 @@ static_assert(sizeof (rtl_String) == 12);
 
 #include "strtmpl.hxx"
 
-/* static data to be referenced by all empty strings
- * the refCount is predefined to 1 and must never become 0 !
- */
-template<>
-rtl_String rtl::str::EmptyStringImpl<rtl_String>::data =
-{
-    SAL_STRING_STATIC_FLAG|1,
-            /* sal_Int32    refCount;   */
-    0,      /* sal_Int32    length;     */
-    { 0 }   /* char     buffer[1];  */
-};
-
 /* ======================================================================= */
 
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(char * pStr, float f)
