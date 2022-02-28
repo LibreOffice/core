@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8d84734_dcd1dde9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-28T18:18:36Z",
+      "side": 1,
+      "message": "Tor: could you take a look at the typo in configure.ac ? (for the rest it should be ok) I hesitate between 2 options but perhaps I\u0027m wrong ",
+      "revId": "5ccfdb919782664f84cbe406d507bf000644f5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83604f82_9c45095e",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-28T18:18:36Z",
+      "side": 1,
+      "message": "\"configure\" script or \"configuration\", I must recognize I don\u0027t know.",
+      "range": {
+        "startLine": 1025,
+        "startChar": 60,
+        "endLine": 1025,
+        "endChar": 69
+      },
+      "revId": "5ccfdb919782664f84cbe406d507bf000644f5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
