@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac8a860_33480a4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-02-28T18:10:20Z",
+      "side": 1,
+      "message": "Ok now I let you respond to the 4 Samuel\u0027s questions.",
+      "revId": "e0310d8275c4dea596c04258c665ea56bb3c32fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
