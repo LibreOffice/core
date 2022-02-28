@@ -1024,7 +1024,7 @@ void new_WithLength( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
             release( *ppThis );
 
         *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
-        OSL_ASSERT(*ppThis != nullptr);
+        assert(*ppThis != nullptr);
         (*ppThis)->length   = 0;
 
         auto* pTempStr = (*ppThis)->buffer;
@@ -1402,7 +1402,7 @@ void newReplaceChars(IMPL_RTL_STRINGDATA** ppThis, IMPL_RTL_STRINGDATA* pStr)
     {
         IMPL_RTL_STRINGDATA* pOrg = *ppThis;
         *ppThis = Alloc<IMPL_RTL_STRINGDATA>(pStr->length);
-        OSL_ASSERT(*ppThis != nullptr);
+        assert(*ppThis != nullptr);
         auto* pNewCharStr = (*ppThis)->buffer;
         /* Copy String */
         const sal_Int32 nCount = pCharStr - pStr->buffer;
