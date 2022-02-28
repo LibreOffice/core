@@ -6,7 +6,6 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import type_text
-from com.sun.star.lang import IndexOutOfBoundsException
 
 class insertQrCode(UITestCase):
 
@@ -14,13 +13,6 @@ class insertQrCode(UITestCase):
         with self.ui_test.create_doc_in_start_center("writer") as document:
             xWriterDoc = self.xUITest.getTopFocusWindow()
 
-            # cancel the dialog without doing anything
-            with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode", close_button="cancel") as xDialog:
-
-                xURL = xDialog.getChild("edit_text")
-                type_text(xURL, "www.libreoffice.org")
-
-            # Reopen the dialog box
             with self.ui_test.execute_dialog_through_command(".uno:InsertQrCode") as xDialog:
 
                 # Get elements in the Dialog Box
@@ -34,8 +26,9 @@ class insertQrCode(UITestCase):
                 xBorder.executeAction("DOWN", tuple())
 
             # check the QR code in the document
-            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.Payload, "www.libreoffice.org")
-            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.ErrorCorrection, 1)
-            self.assertEqual(document.DrawPage.getByIndex(0).BarCodeProperties.Border, 1)
+            element = document.DrawPage.getByIndex(0)
+            self.assertEqual(element.BarCodeProperties.Payload, "www.libreoffice.org")
+            self.assertEqual(element.BarCodeProperties.ErrorCorrection, 1)
+            self.assertEqual(element.BarCodeProperties.Border, 1)
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
