@@ -276,7 +276,10 @@ void ScCheckListMenuControl::queueLaunchSubMenu(size_t nPos, ScListSubMenuContro
 
     maOpenTimer.mpSubMenu = pMenu;
     maOpenTimer.mnMenuPos = nPos;
-    maOpenTimer.maTimer.Start();
+    if (comphelper::LibreOfficeKit::isActive())
+        maOpenTimer.maTimer.Invoke();
+    else
+        maOpenTimer.maTimer.Start();
 }
 
 void ScCheckListMenuControl::queueCloseSubMenu()
@@ -298,7 +301,10 @@ void ScCheckListMenuControl::queueCloseSubMenu()
     maCloseTimer.mnMenuPos = maOpenTimer.mnMenuPos;
     maOpenTimer.mpSubMenu = nullptr;
     maOpenTimer.mnMenuPos = MENU_NOT_SELECTED;
-    maCloseTimer.maTimer.Start();
+    if (comphelper::LibreOfficeKit::isActive())
+        maCloseTimer.maTimer.Invoke();
+    else
+        maCloseTimer.maTimer.Start();
 }
 
 tools::Rectangle ScCheckListMenuControl::GetSubMenuParentRect()
@@ -1433,6 +1439,8 @@ void ScCheckListMenuControl::launch(weld::Widget* pWidget, const tools::Rectangl
     }
 
     StartPopupMode(pWidget, aRect);
+    if (comphelper::LibreOfficeKit::isActive())
+        jsdialog::SendFullUpdate(std::to_string(mxFrame->GetLOKWindowId()), "toggle_all");
 }
 
 void ScCheckListMenuControl::NotifyCloseLOK()
