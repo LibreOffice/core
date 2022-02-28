@@ -61,9 +61,7 @@ double ImpGetDouble( const SbxValues* p )
             nRes = ImpSalUInt64ToDouble( p->uInt64 ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-            if( p->pDecimal )
-                p->pDecimal->getDouble( nRes );
-            else
+            if (!p->pDecimal || !p->pDecimal->getDouble(nRes))
                 nRes = 0.0;
             break;
         case SbxBYREF | SbxSTRING:
