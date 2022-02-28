@@ -261,13 +261,10 @@ void ScJumboSheetsTest::testTdf134553()
     CPPUNIT_ASSERT_EQUAL(tools::Long(12741), pOleObj->GetLogicRect().getWidth());
     CPPUNIT_ASSERT_EQUAL(tools::Long(7620), pOleObj->GetLogicRect().getHeight());
     CPPUNIT_ASSERT_EQUAL(tools::Long(5097), pOleObj->GetLogicRect().getX());
-
-#if !defined(_WIN32) //FIXME
     // tdf#147458: Without the fix in place, this test would have failed with
     // - Expected: 1058
     // - Actual  : -7421
     CPPUNIT_ASSERT_EQUAL(tools::Long(1058), pOleObj->GetLogicRect().getY());
-#endif
 
     xDocSh->DoClose();
 }
