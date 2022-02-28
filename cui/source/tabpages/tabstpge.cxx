@@ -312,10 +312,9 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     m_xTabBox->clear();
 
     tools::Long nOffset = 0;
-    const SfxPoolItem* pItem = nullptr;
-    if (GetItemSet().GetItemState(SID_ATTR_TABSTOP_OFFSET, true, &pItem) == SfxItemState::SET)
+    if (const SfxInt32Item* pOffSetItem = GetItemSet().GetItemIfSet(SID_ATTR_TABSTOP_OFFSET))
     {
-        nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+        nOffset = pOffSetItem->GetValue();
         MapUnit eUnit = GetItemSet().GetPool()->GetMetric(GetWhich(SID_ATTR_TABSTOP));
         nOffset = OutputDevice::LogicToLogic(nOffset, eUnit, MapUnit::Map100thMM);
     }
@@ -426,12 +425,10 @@ void SvxTabulatorTabPage::NewHdl_Impl(const weld::Button* pBtn)
         return;
 
     tools::Long nOffset = 0;
-    const SfxPoolItem* pItem = nullptr;
 
-    if ( GetItemSet().GetItemState( SID_ATTR_TABSTOP_OFFSET, true, &pItem ) ==
-         SfxItemState::SET )
+    if ( const SfxInt32Item* pOffsetItem = GetItemSet().GetItemIfSet( SID_ATTR_TABSTOP_OFFSET ) )
     {
-        nOffset = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+        nOffset = pOffsetItem->GetValue();
         MapUnit eUnit = GetItemSet().GetPool()->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MapUnit::Map100thMM  );
     }

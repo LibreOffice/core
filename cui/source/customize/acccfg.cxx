@@ -1510,10 +1510,9 @@ void SfxAcceleratorConfigPage::Reset(const SfxItemSet* rSet)
     RadioHdl(*m_xOfficeButton);
 
 #if HAVE_FEATURE_SCRIPTING
-    const SfxPoolItem* pMacroItem = nullptr;
-    if (SfxItemState::SET == rSet->GetItemState(SID_MACROINFO, true, &pMacroItem))
+    if (const SfxMacroInfoItem* pMacroItem = rSet->GetItemIfSet(SID_MACROINFO))
     {
-        m_pMacroInfoItem = &dynamic_cast<const SfxMacroInfoItem&>(*pMacroItem);
+        m_pMacroInfoItem = pMacroItem;
         m_xGroupLBox->SelectMacro(m_pMacroInfoItem);
     }
 #else
