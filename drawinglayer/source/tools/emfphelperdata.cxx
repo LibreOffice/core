@@ -459,7 +459,7 @@ namespace emfplushelper
         }
         else // we use a brush
         {
-            const EMFPBrush* brush = static_cast<EMFPBrush*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
+            const EMFPBrush* brush = dynamic_cast<EMFPBrush*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
             if (brush)
             {
                 color = brush->GetColor();
@@ -735,7 +735,7 @@ namespace emfplushelper
         }
         else // use Brush
         {
-            EMFPBrush* brush = static_cast<EMFPBrush*>( maEMFPObjects[brushIndexOrColor & 0xff].get() );
+            EMFPBrush* brush = dynamic_cast<EMFPBrush*>(maEMFPObjects[brushIndexOrColor & 0xff].get());
             SAL_INFO("drawinglayer.emf", "EMF+\t\t Fill polygon, brush slot: " << brushIndexOrColor << " (brush type: " << (brush ? brush->GetType() : -1) << ")");
 
             // give up in case something wrong happened
@@ -1257,7 +1257,11 @@ namespace emfplushelper
                         rMS.ReadUInt32(brushIndexOrColor);
                         SAL_INFO("drawinglayer.emf", "EMF+\t FillRegion slot: " << index);
 
-                        EMFPPlusFillPolygon(static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get())->regionPolyPolygon, flags & 0x8000, brushIndexOrColor);
+                        EMFPRegion* region = dynamic_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
+                        if (region)
+                            EMFPPlusFillPolygon(region->regionPolyPolygon, flags & 0x8000, brushIndexOrColor);
+                        else
+                            SAL_WARN("drawinglayer.emf", "EMF+\tEmfPlusRecordTypeFillRegion missing region");
                     }
                     break;
                     case EmfPlusRecordTypeDrawEllipse:
@@ -1435,10 +1439,10 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer.emf", "EMF+\t TODO: use image attributes");
 
                         // Source unit of measurement type must be 1 pixel
-                        if (sourceUnit == UnitTypePixel && maEMFPObjects[flags & 0xff])
+                        if (EMFPImage* image = sourceUnit == UnitTypePixel ?
+                                dynamic_cast<EMFPImage*>(maEMFPObjects[flags & 0xff].get()) :
+                                nullptr)
                         {
-                            EMFPImage& image
-                                = *static_cast<EMFPImage*>(maEMFPObjects[flags & 0xff].get());
                             float sx, sy, sw, sh;
                             ReadRectangle(rMS, sx, sy, sw, sh);
 
@@ -1488,9 +1492,9 @@ namespace emfplushelper
                             SAL_INFO("drawinglayer.emf",
                                     "EMF+\t Rectangle: " << dx << "," << dy << " " << dw << "x" << dh);
                             Size aSize;
-                            if (image.type == ImageDataTypeBitmap)
+                            if (image->type == ImageDataTypeBitmap)
                             {
-                                aSize = image.graphic.GetBitmapEx().GetSizePixel();
+                                aSize = image->graphic.GetBitmapEx().GetSizePixel();
                                 SAL_INFO("drawinglayer.emf", "EMF+\t Bitmap size: " << aSize.Width()
                                                                                     << "x"
                                                                                     << aSize.Height());
@@ -1535,9 +1539,9 @@ namespace emfplushelper
                                     /* Row 1, Column 1 */ aDstSize.getY(),
                                     /* Row 1, Column 2 */ aDstPoint.getY());
 
-                            if (image.type == ImageDataTypeBitmap)
+                            if (image->type == ImageDataTypeBitmap)
                             {
-                                BitmapEx aBmp(image.graphic.GetBitmapEx());
+                                BitmapEx aBmp(image->graphic.GetBitmapEx());
                                 aBmp.Crop(aSource);
                                 aSize = aBmp.GetSizePixel();
                                 if (aSize.Width() > 0 && aSize.Height() > 0)
@@ -1549,9 +1553,9 @@ namespace emfplushelper
                                 else
                                     SAL_WARN("drawinglayer.emf", "EMF+\t warning: empty bitmap");
                             }
-                            else if (image.type == ImageDataTypeMetafile)
+                            else if (image->type == ImageDataTypeMetafile)
                             {
-                                GDIMetaFile aGDI(image.graphic.GetGDIMetaFile());
+                                GDIMetaFile aGDI(image->graphic.GetGDIMetaFile());
                                 aGDI.Clip(aSource);
                                 mrTargetHolders.Current().append(
                                     new drawinglayer::primitive2d::MetafilePrimitive2D(aTransformMatrix,
@@ -1586,7 +1590,7 @@ namespace emfplushelper
                         // get the stringFormat from the Object table ( this is OPTIONAL and may be nullptr )
                         const EMFPStringFormat *stringFormat = dynamic_cast<EMFPStringFormat*>(maEMFPObjects[formatId & 0xff].get());
                         // get the font from the flags
-                        const EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                        const EMFPFont *font = dynamic_cast<EMFPFont*>(maEMFPObjects[flags & 0xff].get());
                         if (!font)
                         {
                             break;
@@ -2026,7 +2030,7 @@ namespace emfplushelper
                         SAL_INFO("drawinglayer.emf", "EMF+\t SetClipPath combine mode: " << combineMode);
                         SAL_INFO("drawinglayer.emf", "EMF+\t Path in slot: " << (flags & 0xff));
 
-                        EMFPPath *path = static_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
+                        EMFPPath *path = dynamic_cast<EMFPPath*>(maEMFPObjects[flags & 0xff].get());
                         if (!path)
                         {
                             SAL_WARN("drawinglayer.emf", "EMF+\t TODO Unable to find path in slot: " << (flags & 0xff));
@@ -2044,7 +2048,7 @@ namespace emfplushelper
                         int combineMode = (flags >> 8) & 0xf;
                         SAL_INFO("drawinglayer.emf", "EMF+\t Region in slot: " << (flags & 0xff));
                         SAL_INFO("drawinglayer.emf", "EMF+\t Combine mode: " << combineMode);
-                        EMFPRegion *region = static_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
+                        EMFPRegion *region = dynamic_cast<EMFPRegion*>(maEMFPObjects[flags & 0xff].get());
                         if (!region)
                         {
                             SAL_WARN("drawinglayer.emf", "EMF+\t TODO Unable to find region in slot: " << (flags & 0xff));
@@ -2113,7 +2117,7 @@ namespace emfplushelper
                             }
 
                             // get the font from the flags
-                            EMFPFont *font = static_cast< EMFPFont* >( maEMFPObjects[flags & 0xff].get() );
+                            EMFPFont *font = dynamic_cast<EMFPFont*>(maEMFPObjects[flags & 0xff].get());
                             if (!font)
                             {
                                 break;
