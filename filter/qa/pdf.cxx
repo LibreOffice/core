@@ -19,6 +19,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <tools/datetime.hxx>
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
@@ -55,17 +56,26 @@ void Test::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
+bool bHasValidCertificates(const css::uno::Reference<css::uno::XComponentContext>& xContext)
+{
+    css::uno::Reference<css::xml::crypto::XSEInitializer> xSEInitializer
+        = css::xml::crypto::SEInitializer::create(xContext);
+    css::uno::Reference<css::xml::crypto::XXMLSecurityContext> xSecurityContext
+        = xSEInitializer->createSecurityContext({});
+    const auto certs = xSecurityContext->getSecurityEnvironment()->getPersonalCertificates();
+    return std::find_if(certs.begin(), certs.end(),
+                        [now = DateTime(DateTime::SYSTEM)](auto& xCert) {
+                            return now.IsBetween(xCert->getNotValidBefore(),
+                                                 xCert->getNotValidAfter());
+                        })
+           != certs.end();
+}
+
 constexpr OUStringLiteral DATA_DIRECTORY = u"/filter/qa/data/";
 
 CPPUNIT_TEST_FIXTURE(Test, testSignCertificateSubjectName)
 {
-    uno::Reference<xml::crypto::XSEInitializer> xSEInitializer
-        = xml::crypto::SEInitializer::create(mxComponentContext);
-    uno::Reference<xml::crypto::XXMLSecurityContext> xSecurityContext
-        = xSEInitializer->createSecurityContext(OUString());
-    uno::Reference<xml::crypto::XSecurityEnvironment> xSecurityEnvironment
-        = xSecurityContext->getSecurityEnvironment();
-    if (!xSecurityEnvironment->getPersonalCertificates().hasElements())
+    if (!bHasValidCertificates(mxComponentContext))
     {
         return;
     }

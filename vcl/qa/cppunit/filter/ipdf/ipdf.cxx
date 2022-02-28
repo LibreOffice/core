@@ -33,6 +33,20 @@ using namespace ::com::sun::star;
 namespace
 {
 constexpr OUStringLiteral DATA_DIRECTORY = u"/vcl/qa/cppunit/filter/ipdf/data/";
+
+css::uno::Reference<css::security::XCertificate>
+GetValidCertificate(const css::uno::Reference<css::xml::crypto::XXMLSecurityContext>& xContext)
+{
+    const auto certs = xContext->getSecurityEnvironment()->getPersonalCertificates();
+    css::uno::Reference<css::security::XCertificate> xRet;
+    auto it
+        = std::find_if(certs.begin(), certs.end(), [now = DateTime(DateTime::SYSTEM)](auto& xCert) {
+              return now.IsBetween(xCert->getNotValidBefore(), xCert->getNotValidAfter());
+          });
+    if (it != certs.end())
+        xRet = *it;
+    return xRet;
+}
 }
 
 /// Covers vcl/source/filter/ipdf/ fixes.
@@ -115,17 +129,16 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
     xSelectionSupplier->select(uno::makeAny(xShape));
-    uno::Sequence<uno::Reference<security::XCertificate>> aCertificates
-        = getSecurityContext()->getSecurityEnvironment()->getPersonalCertificates();
-    if (!aCertificates.hasElements())
+    auto xCert = GetValidCertificate(getSecurityContext());
+    if (!xCert)
     {
         return;
     }
     SdrView* pView = SfxViewShell::Current()->GetDrawView();
-    svx::SignatureLineHelper::setShapeCertificate(pView, aCertificates[0]);
+    svx::SignatureLineHelper::setShapeCertificate(pView, xCert);
 
     // When: do the actual signing.
-    pObjectShell->SignDocumentContentUsingCertificate(aCertificates[0]);
+    pObjectShell->SignDocumentContentUsingCertificate(xCert);
 
     // Then: count the # of shapes on the signature widget/annotation.
     std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
