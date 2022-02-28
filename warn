@@ -1,0 +1,4 @@
+*************************************
+*[1;33;40m WARNING [0m: JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script
+*[1;33;40m WARNING [0m: attempted to find JAVA_HOME automatically, but apparently it failed
+*[1;33;40m WARNING [0m: in case JAVA_HOME is incorrectly set, some projects will not be built correctly
