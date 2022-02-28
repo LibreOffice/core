@@ -16,6 +16,40 @@
       "message": "i don\u0027t typically go near these, so is there any stupid in here?",
       "revId": "f785eff7542a04a7addd12f199e493444d0324ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e5ea738_2fa00460",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-28T22:08:02Z",
+      "side": 1,
+      "message": "please add\n\n  @since LibreOffice 7.4\n\ntags to the new interfaces\u0027 introducing comments",
+      "revId": "f785eff7542a04a7addd12f199e493444d0324ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa8dec56_9f51805a",
+        "filename": "offapi/com/sun/star/media/XPlayerListener.idl",
+        "patchSetId": 8
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-02-28T22:08:02Z",
+      "side": 1,
+      "message": "common (though not universal) practice appears to be to pass a css.lang.EventObject argument (even if its just a plain EventObject and not a more specific derived one)",
+      "revId": "f785eff7542a04a7addd12f199e493444d0324ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
