@@ -33,6 +33,24 @@
       "message": "I suppose that .1 release is still early adopter release, so I believe we don\u0027t need to push this hard to hit 7.3.1. Or is this really needed?",
       "revId": "e78ace6b76c5b1ba5f8755908f3951c4eefdec19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3baaa6a8_03ccbe78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-02-28T11:44:08Z",
+      "side": 1,
+      "message": "Hi devs, I don\u0027t know who should decide this, but we need to schedule a 7.3.1 RC3 to incorporate the fix to tdf#147298. This is a serious bug which is not easy to observe (they may not find this until they encounter  big trouble on their data). This bug causes cell formulas not to update correctly. If we release 7.3.1 with this bug, users lose confidient to out product once they find that the calculation result is wrong.  We already had tdf#146842 and tdf#146795 in the 7.3.0 release (which are now all fixed in 7.3.1 RC2), we should not allow tdf#147298 to be still there in our 7.3.1 bug fix release. Many people once downloaded a release version will not do regular update of the software for many month or years. Please consider this seriously. It makes no sense to \"strictly\" follow the release schedule while allowing serious bugs in the release, given that there is already a fix on master and 7.3 branch.",
+      "parentUuid": "26f49b76_3cd01fa1",
+      "revId": "e78ace6b76c5b1ba5f8755908f3951c4eefdec19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
