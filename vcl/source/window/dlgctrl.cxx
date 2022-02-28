@@ -520,9 +520,11 @@ void Window::ImplControlFocus( GetFocusFlags nFlags )
         if (mpWindowImpl->maMnemonicActivateHdl.Call(*this))
             return;
 
+        const bool bUniqueMnemonic(nFlags & GetFocusFlags::UniqueMnemonic);
+
         if ( GetType() == WindowType::RADIOBUTTON )
         {
-            if ( !static_cast<RadioButton*>(this)->IsChecked() )
+            if (bUniqueMnemonic && !static_cast<RadioButton*>(this)->IsChecked())
                 static_cast<RadioButton*>(this)->ImplCallClick( true, nFlags );
             else
                 ImplGrabFocus( nFlags );
@@ -530,7 +532,7 @@ void Window::ImplControlFocus( GetFocusFlags nFlags )
         else
         {
             ImplGrabFocus( nFlags );
-            if ( nFlags & GetFocusFlags::UniqueMnemonic )
+            if (bUniqueMnemonic)
             {
                 if ( GetType() == WindowType::CHECKBOX )
                     static_cast<CheckBox*>(this)->ImplCheck();
