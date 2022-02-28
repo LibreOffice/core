@@ -3478,7 +3478,7 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_TXTATR_FLYCNT */             nullptr,
 /* RES_TXTATR_FTN */                nullptr,
 /* RES_TXTATR_ANNOTATION */         nullptr,
-/* RES_TXTATR_DUMMY3 */             nullptr,
+/* RES_TXTATR_LINEBREAK */          nullptr,
 /* RES_TXTATR_DUMMY1 */             nullptr, // Dummy:
 /* RES_TXTATR_DUMMY2 */             nullptr, // Dummy:
 
