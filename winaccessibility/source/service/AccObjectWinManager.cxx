@@ -146,7 +146,7 @@ AccObject* AccObjectWinManager::GetTopWindowAccObj(HWND hWnd)
 /**
    * Simulate MSAA event via XAccessible interface and event type.
    * @param pXAcc XAccessible interface.
-   * @param eEvent eventy type
+   * @param eEvent event type
    * @return The terminate result that identifies if the call is successful.
    */
 bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc, UnoMSAAEvent eEvent)
