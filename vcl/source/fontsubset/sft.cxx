@@ -2090,29 +2090,29 @@ void GetTTGlobalFontInfo(TrueTypeFont *ttf, TTGlobalFontInfo *info)
 
 GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
 {
+    if (glyphID >= ttf->glyphCount())
+        return nullptr;
+
     sal_uInt32 hmtxlength;
     const sal_uInt8* hmtx = ttf->table(O_hmtx, hmtxlength);
 
     if (!hmtxlength)
         return nullptr;
 
-    sal_uInt32 length;
-    const sal_uInt8* glyf = ttf->table(O_glyf, length);
+    sal_uInt32 glyflength;
+    const sal_uInt8* glyf = ttf->table(O_glyf, glyflength);
     int n;
-
-    if (glyphID >= ttf->glyphCount())
-        return nullptr;
 
     /* #127161# check the glyph offsets */
     sal_uInt32 nNextOffset = ttf->glyphOffset(glyphID + 1);
+    if (nNextOffset > glyflength)
+        return nullptr;
+
     sal_uInt32 nOffset = ttf->glyphOffset(glyphID);
-    if (nNextOffset < nOffset)
+    if (nOffset > nNextOffset)
         return nullptr;
 
-    if (length < ttf->glyphOffset(glyphID + 1))
-        return nullptr;
-
-    length = nNextOffset - nOffset;
+    sal_uInt32 length = nNextOffset - nOffset;
 
     GlyphData* d = static_cast<GlyphData*>(malloc(sizeof(GlyphData))); assert(d != nullptr);
 
