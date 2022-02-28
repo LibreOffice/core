@@ -347,20 +347,20 @@ bool SvxTransparenceTabPage::FillItemSet(SfxItemSet* rAttrs)
 
 void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
 {
-    const SfxPoolItem* pGradientItem = nullptr;
-    SfxItemState eStateGradient(rAttrs->GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem));
+    const XFillFloatTransparenceItem* pGradientItem =
+        rAttrs->GetItemIfSet(XATTR_FILLFLOATTRANSPARENCE);
+    bool bGradActive = (pGradientItem && pGradientItem->IsEnabled());
     if(!pGradientItem)
         pGradientItem = &rAttrs->Get(XATTR_FILLFLOATTRANSPARENCE);
-    bool bGradActive = (eStateGradient == SfxItemState::SET && static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->IsEnabled());
 
-    const SfxPoolItem* pLinearItem = nullptr;
-    SfxItemState eStateLinear(rAttrs->GetItemState(XATTR_FILLTRANSPARENCE, true, &pLinearItem));
+    const XFillTransparenceItem* pLinearItem =
+        rAttrs->GetItemIfSet(XATTR_FILLTRANSPARENCE);
+    bool bLinearActive = (pLinearItem && pLinearItem->GetValue() != 0);
     if(!pLinearItem)
         pLinearItem = &rAttrs->Get(XATTR_FILLTRANSPARENCE);
-    bool bLinearActive = (eStateLinear == SfxItemState::SET && static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue() != 0);
 
     // transparence gradient
-    const XGradient& rGradient = static_cast<const XFillFloatTransparenceItem*>(pGradientItem)->GetGradientValue();
+    const XGradient& rGradient = pGradientItem->GetGradientValue();
     css::awt::GradientStyle eXGS(rGradient.GetGradientStyle());
     m_xLbTrgrGradientType->set_active(sal::static_int_cast< sal_Int32 >(eXGS));
     m_xMtrTrgrAngle->set_value(rGradient.GetAngle().get() / 10, FieldUnit::DEGREE);
@@ -371,7 +371,7 @@ void SvxTransparenceTabPage::Reset(const SfxItemSet* rAttrs)
     m_xMtrTrgrEndValue->set_value(static_cast<sal_uInt16>(((static_cast<sal_uInt16>(rGradient.GetEndColor().GetRed()) + 1) * 100) / 255), FieldUnit::PERCENT);
 
     // linear transparence
-    sal_uInt16 nTransp = static_cast<const XFillTransparenceItem*>(pLinearItem)->GetValue();
+    sal_uInt16 nTransp = pLinearItem->GetValue();
     m_xMtrTransparent->set_value(bLinearActive ? nTransp : 50, FieldUnit::PERCENT);
     ModifyTransparentHdl_Impl(*m_xMtrTransparent);
 

@@ -360,14 +360,9 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
     double                      nValDouble      = 0;
     OUString                    aValString;
 
-    SfxItemState eState = rSet->GetItemState( SID_ATTR_NUMBERFORMAT_NOLANGUAGE,true,&pItem);
-
-    if(eState==SfxItemState::SET)
+    if(const SfxBoolItem* pBoolLangItem = rSet->GetItemIfSet( SID_ATTR_NUMBERFORMAT_NOLANGUAGE ))
     {
-        const SfxBoolItem* pBoolLangItem =
-                      GetItem( *rSet, SID_ATTR_NUMBERFORMAT_NOLANGUAGE);
-
-        if(pBoolLangItem!=nullptr && pBoolLangItem->GetValue())
+        if(pBoolLangItem->GetValue())
         {
             HideLanguage();
         }
@@ -378,7 +373,7 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet* rSet )
 
     }
 
-    eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),true,&pItem);
+    SfxItemState eState = rSet->GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_INFO ),true,&pItem);
 
     if(eState==SfxItemState::SET)
     {
