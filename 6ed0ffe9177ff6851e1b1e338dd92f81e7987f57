@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d7bb386c_3297e9de",
+        "filename": "dbaccess/qa/extras/rowsetclones.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-02-28T09:36:48Z",
+      "side": 0,
+      "message": "Is it right to use CPPUNIT_ASSERT_ASSERTION_FAIL(assertion) OR  CPPUNIT_ASSERT_THROW( assertion, CPPUNIT_NS::Exception) in place of CPPUNIT_ASSERT?",
+      "parentUuid": "97289119_f52d6020",
+      "revId": "6ed0ffe9177ff6851e1b1e338dd92f81e7987f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b193388c_fc2ec1f3",
         "filename": "dbaccess/qa/unit/dbtest_base.cxx",
         "patchSetId": 1
