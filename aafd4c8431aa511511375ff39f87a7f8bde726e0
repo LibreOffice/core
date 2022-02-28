@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3291d265_7b8c0f43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-02-28T06:41:46Z",
+      "side": 1,
+      "message": "The text is what will be shown e.g. when you test the dialog in MSI-authoring tools like MS orca or InstEd. Using a long enough text, you get the reasonable display on the preview dialog, and will get an idea how the resulting, possibly long, text will look like, and wrap, when it will be shown for real.",
+      "revId": "aafd4c8431aa511511375ff39f87a7f8bde726e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
