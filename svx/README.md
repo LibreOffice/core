@@ -72,7 +72,7 @@ From `SdrView` on, it is not flat, but a real hierarchy again.
 See `drawinglayer/README.md` for general information about drawinglayer.
 
 Below is the class diagram that comes from
-<http://www.openoffice.org/marketing/ooocon2006/presentations/wednesday_g11.odp>,
+<https://web.archive.org/web/20160827020830if_/http://www.openoffice.org:80/marketing/ooocon2006/presentations/wednesday_g11.odp>
 slide number 6.
 
     .------- Model --------------.      .------- View -----------------------------------------.
@@ -101,5 +101,5 @@ If the number of visualizable objects (e.g. `SdrObjects`) is `X`, and the number
 
 - there are `X` `ViewContact` instances (1:1 relation with a visualizable object)
 - there are `Y` `ObjectContact` instances (1:1 relation with an `SdrView`)
-- there are `X*Y` `ViewObjecContact` instances (1:N relation to both
+- there are `X*Y` `ViewObjectContact` instances (1:N relation to both
   visualizable objects and `SdrView`s)
