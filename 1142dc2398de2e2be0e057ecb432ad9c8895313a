@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4270f7_68bcdf9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-02-28T12:48:28Z",
+      "side": 1,
+      "message": "I *think* 4202ea2c932a14d216e74617bbb74a85030c9a59 is ok as is the above example. The difference being between cutting something out of the tree and then throwing it away, where we should delete it, vs cutting something out of the tree and putting it back in somewhere else where we don\u0027t want to delete it.\n\nhttps://gerrit.libreoffice.org/c/core/+/130707 is my proposed change for this cid which hopefully leaves it less of a trap for the future",
+      "parentUuid": "a2f8fea8_fcd62eef",
+      "revId": "1142dc2398de2e2be0e057ecb432ad9c8895313a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd63462e_cb9a8db2",
