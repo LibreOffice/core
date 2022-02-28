@@ -71,7 +71,7 @@ public:
     /** Reads the boolean value from a pivot cache item. */
     void                readBool( SequenceInputStream& rStrm );
     /** Reads the error code value from a pivot cache item. */
-    void                readError( SequenceInputStream& rStrm );
+    void                readError(SequenceInputStream& rStrm, const UnitConverter& rUnitConverter);
     /** Reads the index of a shared item. */
     void                readIndex( SequenceInputStream& rStrm );
 
