@@ -362,7 +362,13 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
 
     if( glyphID >= ttf->nglyphs )           /*- glyph is not present in the font */
         return 0;
-    const sal_uInt8* ptr = table + ttf->goffsets[glyphID];
+    sal_uInt32 nGlyphOffset = ttf->goffsets[glyphID];
+    if (nGlyphOffset > nTableSize)
+        return 0;
+
+    const sal_uInt8* ptr = table + nGlyphOffset;
+    const sal_uInt32 nMaxGlyphSize = nTableSize - nGlyphOffset;
+
     const sal_Int16 numberOfContours = GetInt16(ptr, GLYF_numberOfContours_offset);
     if( numberOfContours <= 0 )             /*- glyph is not simple */
         return 0;
@@ -377,7 +383,7 @@ static int GetSimpleTTOutline(TrueTypeFont const *ttf, sal_uInt32 glyphID, Contr
 
     /* determine the last point and be extra safe about it. But probably this code is not needed */
     sal_uInt16 lastPoint=0;
-    const sal_Int32 nMaxContours = (nTableSize - 10)/2;
+    const sal_Int32 nMaxContours = (nMaxGlyphSize - 10)/2;
     if (numberOfContours > nMaxContours)
         return 0;
     for (i=0; i<numberOfContours; i++)
