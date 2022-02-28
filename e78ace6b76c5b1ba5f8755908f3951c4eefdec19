@@ -69,6 +69,23 @@
       "parentUuid": "3baaa6a8_03ccbe78",
       "revId": "e78ace6b76c5b1ba5f8755908f3951c4eefdec19",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0788a4e1_cf0786d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-02-28T17:33:33Z",
+      "side": 1,
+      "message": "In this case it is a triaged bug with major severity \u0026 high priority, there is an with already verified patch and enough time for TDF to prepare a new batch of builds from rc3, so I\u0027ll accept it and will do a respin/create an additional rc3.\n\nBut please note that the release plan is not only just for TDF\u0027s own sake, other people also plan accordingly, so cases like this should be the rare exception and really reserved for non-obvious-but-easy-to-run-into problems (and of course requires an existing patch to be considered) and for which there\u0027s no easy workaround. (manually recalculating requires to be aware of the problem, but that the problem occurs is too easy to miss in this case)",
+      "revId": "e78ace6b76c5b1ba5f8755908f3951c4eefdec19",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
