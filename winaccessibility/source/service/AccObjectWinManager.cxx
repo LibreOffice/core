@@ -1144,7 +1144,7 @@ void AccObjectWinManager::UpdateChildState(css::accessibility::XAccessible* pAcc
 }
 
 
-bool AccObjectWinManager::IsSpecialToolboItem(css::accessibility::XAccessible* pXAcc)
+bool AccObjectWinManager::IsSpecialToolbarItem(css::accessibility::XAccessible* pXAcc)
 {
     if (pXAcc && oldFocus != pXAcc)
     {

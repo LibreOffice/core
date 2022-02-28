@@ -216,7 +216,7 @@ void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
             pAgent->IncreaseState(m_xAccessible.get(), state);
             pAgent->UpdateAction(m_xAccessible.get());
 
-            if(!pAgent->IsSpecialToolboItem(m_xAccessible.get()))
+            if (!pAgent->IsSpecialToolbarItem(m_xAccessible.get()))
             {
                 pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_CHECKED, m_xAccessible.get());
             }
@@ -255,7 +255,7 @@ void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
             pAgent->DecreaseState(m_xAccessible.get(), state);
             pAgent->UpdateAction(m_xAccessible.get());
 
-            if(!pAgent->IsSpecialToolboItem(m_xAccessible.get()))
+            if (!pAgent->IsSpecialToolbarItem(m_xAccessible.get()))
             {
                 pAgent->NotifyAccEvent(UnoMSAAEvent::STATE_CHECKED, m_xAccessible.get());
             }

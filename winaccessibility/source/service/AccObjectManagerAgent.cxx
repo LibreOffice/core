@@ -328,10 +328,10 @@ void AccObjectManagerAgent::UpdateChildState(XAccessible* pXAcc)
 }
 
 
-bool AccObjectManagerAgent::IsSpecialToolboItem(XAccessible* pXAcc)
+bool AccObjectManagerAgent::IsSpecialToolbarItem(XAccessible* pXAcc)
 {
     if(pWinManager)
-        return pWinManager->IsSpecialToolboItem( pXAcc );
+        return pWinManager->IsSpecialToolbarItem(pXAcc);
 
     return false;
 }
