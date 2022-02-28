@@ -618,7 +618,6 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     }
 
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
-    sendFullUpdate();
 }
 
 JSInstanceBuilder* JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
