@@ -16,6 +16,182 @@
       "message": "Caolán: I\u0027m not very familiar with config code or the UNO stuff, I based the setup here on FilterCache::impl_createConfigAccess(), which has that wrapped in utl::ConfigManager::IsFuzzing() test, which I can\u0027t use in comphelper. I have no idea if it\u0027s needed or how to handle it here.\n",
       "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50cb1ae8_fcbb1e25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "This change does two (or even three) different things, which I would prefer to keep in separate changes:\n\n* Drop passing in an XComponentContext and instead obtain getProcessComponentContext() in GetTheConfigurationWrapper.\n\n* Add cache-invalidation (and thus allowing for more aggressive caching) to ConfigurationWrapper::getPropertyValue.\n\n* Turn the gratuitous local static variables in ConfigurationWrapper::getPropertyValue into (somewhat ugly, though: mutable) non-static data members.",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fc498fa_e7a931e0",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "#include \u003cmutex\u003e should arguably be left in here for the uses of std::scoped_lock (but YMMV regarding assumptions about what functionality becomes implicitly available through files included here)",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f5ae3a0_1dfb3ac6",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "rather than introducing two Configuration::get overloads and two ConfigurationWrapper::get(WithProcessComponentContext) functions, never allow to pass in an XComponentContext and always call getProcessComponentContext here?",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb55a589_78fb0e6d",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "#include \u003cvector\u003e is missing (but I would drastically simplify this construction of a css::uno::Sequence\u003ccss::uno::Any\u003e containing two css::breans::NamedValue anyway, not going via a std::vector and comphelper::containerToSequence boilerplate)",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff03da78_324c00b5",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "this doesn\u0027t make sense, either the catch block can never be reached (\u003d\u003e assert(false)), or it can (\u003d\u003e SAL_WARN), but not both",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34aa5279_164ae587",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "how could this be false?",
+      "range": {
+        "startLine": 212,
+        "startChar": 7,
+        "endLine": 212,
+        "endChar": 21
+      },
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa15f2f8_36c72546",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "please keep this block of includes sorted lexicographically",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da2a26ab_31756317",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "probably better to keep these two function declarations separated by an empty line too (like all the other function declarations here)",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79844711_dc32cb4d",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "* probably better to split this block of data member declarations (mutex_ plus those data members \"controlled\" by it) off from its surroundings by an empty line\n\n* instead of mutable, make the relevant ConfigurationWrapper functions non-const?",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b311f4f4_7cc0e077",
+        "filename": "officecfg/CppunitTest_officecfg_cppheader_test.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:26:17Z",
+      "side": 1,
+      "message": "please keep this list sorted lexicographically",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
