@@ -1032,7 +1032,7 @@ void MSWord_SdrAttrIter::NextPara( sal_Int32 nPar )
 
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
     pEditPool = aSet.GetPool();
-    eNdChrSet = ItemGet<SvxFontItem>(aSet,EE_CHAR_FONTINFO).GetCharSet();
+    eNdChrSet = aSet.Get(EE_CHAR_FONTINFO).GetCharSet();
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
     nScript = g_pBreakIt->GetBreakIter()->getScriptType( pEditObj->GetText(nPara), 0);

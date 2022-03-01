@@ -1742,7 +1742,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
 
     // now calculate the borders and build the box: The unit is needed for the
     // frame SIZE!
-    SvxBoxItem aBox(sw::util::ItemGet<SvxBoxItem>(rFlySet, RES_BOX));
+    SvxBoxItem aBox(rFlySet.Get(RES_BOX));
     // dashed or solid becomes solid
     // WW-default: 0.75 pt = 15 twips
     sal_Int32 nLineThick = 15, nOutside=0;

@@ -562,9 +562,9 @@ void SwWW8ImplReader::SetPageBorder(SwFrameFormat &rFormat, const wwSection &rSe
     SfxItemSet aSet(rFormat.GetAttrSet());
     short aSizeArray[5]={0};
     SetFlyBordersShadow(aSet, rSection.brc, &aSizeArray[0]);
-    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
-    SvxULSpaceItem aUL(ItemGet<SvxULSpaceItem>(aSet, RES_UL_SPACE));
-    SvxBoxItem aBox(ItemGet<SvxBoxItem>(aSet, RES_BOX));
+    SvxLRSpaceItem aLR(aSet.Get(RES_LR_SPACE));
+    SvxULSpaceItem aUL(aSet.Get(RES_UL_SPACE));
+    SvxBoxItem aBox(aSet.Get(RES_BOX));
     bool bFromEdge = rSection.maSep.pgbOffsetFrom == 1;
 
     aLR.SetLeft(SetBorderDistance(bFromEdge, aBox, SvxBoxItemLine::LEFT, aLR.GetLeft()));
@@ -2740,7 +2740,7 @@ void SwWW8ImplReader::StopApo()
             using namespace sw::util;
             SfxItemSet aFlySet( m_xSFlyPara->GetFlyFormat()->GetAttrSet() );
 
-            SwFormatFrameSize aSize(ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE));
+            SwFormatFrameSize aSize(aFlySet.Get(RES_FRM_SIZE));
 
             aFlySet.ClearItem(RES_FRM_SIZE);
 
@@ -2750,7 +2750,7 @@ void SwWW8ImplReader::StopApo()
                     m_xSFlyPara->nWidth);
             }
 
-            nNewWidth = ItemGet<SwFormatFrameSize>(aFlySet, RES_FRM_SIZE).GetWidth();
+            nNewWidth = aFlySet.Get(RES_FRM_SIZE).GetWidth();
 
             aSize.SetWidth(nNewWidth);
             aSize.SetWidthSizeType(SwFrameSize::Variable);

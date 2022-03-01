@@ -4145,7 +4145,7 @@ bool SwWW8ImplReader::ReadText(WW8_CP nStartCp, WW8_CP nTextLen, ManTypes nType)
             const SwFormatCharFormat *pSwFormatCharFormat = nullptr;
 
             if (m_xCurrentItemSet)
-                pSwFormatCharFormat = &(ItemGet<SwFormatCharFormat>(*m_xCurrentItemSet, RES_TXTATR_CHARFMT));
+                pSwFormatCharFormat = &(m_xCurrentItemSet->Get(RES_TXTATR_CHARFMT));
 
             if (pSwFormatCharFormat)
                 pFormat = pSwFormatCharFormat->GetCharFormat();

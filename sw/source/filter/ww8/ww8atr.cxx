@@ -657,7 +657,7 @@ sal_uLong MSWordExportBase::GetSectionLineNo( const SfxItemSet* pSet, const SwNo
     const SwFormatLineNumber* pNItem = nullptr;
     if ( pSet )
     {
-        pNItem = &( ItemGet<SwFormatLineNumber>( *pSet, RES_LINENUMBER ) );
+        pNItem = & pSet->Get( RES_LINENUMBER );
     }
     else if ( const SwContentNode *pNd = rNd.GetContentNode() )
     {
@@ -849,8 +849,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                      rNFormat.GetAbsLSpace() )
                 {
                     SfxItemSet aSet( rFormat.GetAttrSet() );
-                    SvxLRSpaceItem aLR(
-                        ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
+                    SvxLRSpaceItem aLR(aSet.Get(RES_LR_SPACE));
 
                     aLR.SetTextLeft( aLR.GetTextLeft() + rNFormat.GetAbsLSpace() );
                     aLR.SetTextFirstLineOffset( GetWordFirstLineOffset(rNFormat));
@@ -872,8 +871,7 @@ void MSWordExportBase::OutputFormat( const SwFormat& rFormat, bool bPapFormat, b
                 if ( m_bStyDef && DisallowInheritingOutlineNumbering(rFormat) )
                 {
                     SfxItemSet aSet( rFormat.GetAttrSet() );
-                    const SvxLRSpaceItem& aLR(
-                        ItemGet<SvxLRSpaceItem>(aSet, RES_LR_SPACE));
+                    const SvxLRSpaceItem& aLR = aSet.Get(RES_LR_SPACE);
                     aSet.Put( aLR );
                     OutputItemSet( aSet, bPapFormat, bChpFormat,
                         css::i18n::ScriptType::LATIN, m_bExportModeRTF);
@@ -5321,7 +5319,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         tools::Long nParentLeft = 0;
         if ( bTabsRelativeToIndex )
         {
-            const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>( pParentStyle->GetAttrSet(), RES_LR_SPACE );
+            const SvxLRSpaceItem &rStyleLR = pParentStyle->GetAttrSet().Get( RES_LR_SPACE );
             nParentLeft = rStyleLR.GetTextLeft();
         }
 
@@ -5344,7 +5342,7 @@ void WW8AttributeOutput::ParaTabStop( const SvxTabStopItem& rTabStops )
         tools::Long nStyleLeft = 0;
         if ( bTabsRelativeToIndex )
         {
-            const SvxLRSpaceItem &rStyleLR = ItemGet<SvxLRSpaceItem>(*m_rWW8Export.m_pStyAttr, RES_LR_SPACE);
+            const SvxLRSpaceItem &rStyleLR = m_rWW8Export.m_pStyAttr->Get(RES_LR_SPACE);
             nStyleLeft = rStyleLR.GetTextLeft();
         }
 

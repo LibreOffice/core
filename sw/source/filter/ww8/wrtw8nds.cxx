@@ -403,7 +403,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
      script, the idea is that the font that is actually in use to render this
      range of text ends up in pFont
     */
-    sal_uInt16 nFontId = GetWhichOfScript( RES_CHRATR_FONT, GetScript() );
+    TypedWhichId<SvxFontItem> nFontId = GetWhichOfScript( RES_CHRATR_FONT, GetScript() );
 
     const SvxFontItem &rParentFont = ItemGet<SvxFontItem>(
         static_cast<const SwTextFormatColl&>(rNd.GetAnyFormatColl()), nFontId);
@@ -418,7 +418,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
         // only copy hard attributes - bDeep = false
         aExportSet.Set(rNd.GetSwAttrSet(), false/*bDeep*/);
         // get the current font item. Use rNd.GetSwAttrSet instead of aExportSet:
-        const SvxFontItem &rNdFont = ItemGet<SvxFontItem>(rNd.GetSwAttrSet(), nFontId);
+        const SvxFontItem &rNdFont = rNd.GetSwAttrSet().Get(nFontId);
         pFont = &rNdFont;
         aExportSet.ClearItem(nFontId);
     }
@@ -2807,7 +2807,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
 
                 if ( !bCheckSectionBreak )
                 {
-                    auto rBreak = ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK);
+                    const SvxFormatBreakItem& rBreak = rNode.GetSwAttrSet().Get(RES_BREAK);
                     if ( rBreak.GetBreak() == SvxBreak::PageAfter )
                     {
                         if ( pNextNode && pNextNode->FindPageDesc() != pNextSplitParaPageDesc )
@@ -2898,7 +2898,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if( !oTmpSet )
                     oTmpSet.emplace( rNode.GetSwAttrSet() );
 
-                SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*oTmpSet, RES_LR_SPACE));
+                SvxLRSpaceItem aLR(oTmpSet->Get(RES_LR_SPACE));
                 // #i86652#
                 if ( pFormat->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
@@ -2952,8 +2952,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                     oTmpSet->Put(aLR);
 
                     //#i21847#
-                    SvxTabStopItem aItem(
-                        ItemGet<SvxTabStopItem>(*oTmpSet, RES_PARATR_TABSTOP));
+                    SvxTabStopItem aItem(oTmpSet->Get(RES_PARATR_TABSTOP));
                     SvxTabStop aTabStop(pFormat->GetAbsLSpace());
                     aItem.Insert(aTabStop);
                     oTmpSet->Put(aItem);
@@ -3059,7 +3058,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                  SfxItemState::SET != rNode.GetpSwAttrSet()->GetItemState(RES_BREAK, false) )
             {
                 const SvxFormatBreakItem& rBreakAtParaStyle
-                    = ItemGet<SvxFormatBreakItem>(rNode.GetSwAttrSet(), RES_BREAK);
+                    = rNode.GetSwAttrSet().Get(RES_BREAK);
                 if (rBreakAtParaStyle.GetBreak() == SvxBreak::PageAfter)
                 {
                     if ( !oTmpSet )
