@@ -2619,7 +2619,7 @@ void SwWW8ImplReader::StripNegativeAfterIndent(SwFrameFormat const *pFlyFormat)
         SwTextNode *pNd = aIdx.GetNode().GetTextNode();
         if (pNd)
         {
-            const SvxLRSpaceItem& rLR = ItemGet<SvxLRSpaceItem>(*pNd, RES_LR_SPACE);
+            const SvxLRSpaceItem& rLR = pNd->GetAttr(RES_LR_SPACE);
             if (rLR.GetRight() < 0)
             {
                 SvxLRSpaceItem aLR(rLR);

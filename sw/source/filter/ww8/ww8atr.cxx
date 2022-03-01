@@ -594,15 +594,13 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
     {
         if ( const SwContentNode *pNd = rNd.GetContentNode() )
         {
-            const SvxFormatBreakItem &rBreak =
-                ItemGet<SvxFormatBreakItem>( *pNd, RES_BREAK );
+            const SvxFormatBreakItem &rBreak = pNd->GetAttr( RES_BREAK );
             if ( rBreak.GetBreak() == SvxBreak::PageBefore )
                 bHackInBreak = true;
             else
             {   // Even a pagedesc item is set, the break item can be set 'NONE',
                 // but a pagedesc item is an implicit page break before...
-                const SwFormatPageDesc &rPageDesc =
-                    ItemGet<SwFormatPageDesc>( *pNd, RES_PAGEDESC );
+                const SwFormatPageDesc &rPageDesc = pNd->GetAttr( RES_PAGEDESC );
                 if ( rPageDesc.KnowsPageDesc() )
                     bHackInBreak = true;
             }
@@ -661,7 +659,7 @@ sal_uLong MSWordExportBase::GetSectionLineNo( const SfxItemSet* pSet, const SwNo
     }
     else if ( const SwContentNode *pNd = rNd.GetContentNode() )
     {
-        pNItem = &( ItemGet<SwFormatLineNumber>( *pNd, RES_LINENUMBER ) );
+        pNItem = &pNd->GetAttr( RES_LINENUMBER );
     }
 
     return pNItem? pNItem->GetStartValue() : 0;
