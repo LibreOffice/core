@@ -10,6 +10,7 @@ from uitest.framework import UITestCase
 from libreoffice.uno.propertyvalue import mkPropertyValues
 from org.libreoffice.unotest import systemPathToFileUrl
 from uitest.uihelper.common import select_by_text
+from uitest.uihelper.common import get_state_as_dict
 from tempfile import TemporaryDirectory
 import os.path
 
@@ -47,6 +48,9 @@ class save_readonly_with_password(UITestCase):
                         with self.ui_test.execute_dialog_through_action(xOk, "CLICK", close_button="save"):
                             pass
 
+            win = self.xUITest.getTopFocusWindow()
+            print(get_state_as_dict(win))
+            print(win.getChildren())
             self.ui_test.wait_until_file_is_available(xFilePath)
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
