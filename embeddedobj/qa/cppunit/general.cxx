@@ -21,8 +21,10 @@
 
 using namespace ::com::sun::star;
 
-/// embeddedobj general tests.
-class EmbeddedobjGeneralTest : public test::BootstrapFixture, public unotest::MacrosTest
+namespace
+{
+/// Covers embeddedobj/source/general/ fixes.
+class Test : public test::BootstrapFixture, public unotest::MacrosTest
 {
 private:
     uno::Reference<lang::XComponent> mxComponent;
@@ -33,22 +35,23 @@ public:
     uno::Reference<lang::XComponent>& getComponent() { return mxComponent; }
 };
 
-void EmbeddedobjGeneralTest::setUp()
+void Test::setUp()
 {
     test::BootstrapFixture::setUp();
 
     mxDesktop.set(frame::Desktop::create(mxComponentContext));
 }
 
-void EmbeddedobjGeneralTest::tearDown()
+void Test::tearDown()
 {
     if (mxComponent.is())
         mxComponent->dispose();
 
     test::BootstrapFixture::tearDown();
 }
+}
 
-CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfig)
+CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfig)
 {
     // Explicitly disable Word->Writer mapping for this test.
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -82,7 +85,7 @@ CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfig)
     CPPUNIT_ASSERT(!xObject.is());
 }
 
-CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfigVsdx)
+CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigVsdx)
 {
     // Explicitly disable Word->Writer mapping for this test.
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
@@ -115,7 +118,7 @@ CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfigVsdx)
     CPPUNIT_ASSERT(!xObject.is());
 }
 
-CPPUNIT_TEST_FIXTURE(EmbeddedobjGeneralTest, testInsertFileConfigPdf)
+CPPUNIT_TEST_FIXTURE(Test, testInsertFileConfigPdf)
 {
     // Explicitly disable Word->Writer mapping for this test.
     std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
