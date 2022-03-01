@@ -761,58 +761,61 @@ template <typename IMPL_RTL_STRCODE> sal_Bool toBoolean( const IMPL_RTL_STRCODE*
 }
 
 /* ----------------------------------------------------------------------- */
-template <typename T, typename U, typename IMPL_RTL_STRCODE>
-T toInt_WithLength                                              ( const IMPL_RTL_STRCODE* pStr,
-                                                                  sal_Int16 nRadix,
-                                                                  sal_Int32 nStrLength )
+
+template <typename T, class Iter> inline bool HandleSignChar(Iter& iter)
 {
-    static_assert(std::numeric_limits<T>::is_signed, "is signed");
+    if constexpr (std::numeric_limits<T>::is_signed)
+    {
+        if (*iter == '-')
+        {
+            ++iter;
+            return true;
+        }
+    }
+    if (*iter == '+')
+        ++iter;
+    return false;
+}
+
+template <typename T> std::pair<T, sal_Int16> DivMod(sal_Int16 nRadix, [[maybe_unused]] bool bNeg)
+{
+    if constexpr (std::numeric_limits<T>::is_signed)
+        if (bNeg)
+            return { -(std::numeric_limits<T>::min() / nRadix),
+                     -(std::numeric_limits<T>::min() % nRadix) };
+    return { std::numeric_limits<T>::max() / nRadix, std::numeric_limits<T>::max() % nRadix };
+}
+
+template <class SV> auto getIter(const SV& sv) { return sv.begin(); }
+template <typename C> auto getIter(const C* pStr) { return pStr; }
+
+template <class SV> auto good(typename SV::iterator iter, const SV& sv) { return iter != sv.end(); }
+template <typename C> auto good(const C* pStr, const C*) { return *pStr != 0; }
+
+template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
+{
     assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    assert( nStrLength >= 0 );
-    bool    bNeg;
-    sal_Int16   nDigit;
-    U           n = 0;
-    const IMPL_RTL_STRCODE* pEnd = pStr + nStrLength;
 
     if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
         nRadix = 10;
 
+    auto pStr = getIter(str);
+
     /* Skip whitespaces */
-    while ( pStr != pEnd && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
+    while (good(pStr, str) && rtl_ImplIsWhitespace(IMPL_RTL_USTRCODE(*pStr)))
         pStr++;
 
-    if ( *pStr == '-' )
-    {
-        bNeg = true;
-        pStr++;
-    }
-    else
-    {
-        if ( *pStr == '+' )
-            pStr++;
-        bNeg = false;
-    }
+    const bool bNeg = HandleSignChar<T>(pStr);
+    const auto& [nDiv, nMod] = DivMod<T>(nRadix, bNeg);
+    assert(nDiv > 0);
 
-    T nDiv;
-    sal_Int16 nMod;
-    if ( bNeg )
+    std::make_unsigned_t<T> n = 0;
+    while (good(pStr, str))
     {
-        nDiv = -(std::numeric_limits<T>::min() / nRadix);
-        nMod = -(std::numeric_limits<T>::min() % nRadix);
-    }
-    else
-    {
-        nDiv = std::numeric_limits<T>::max() / nRadix;
-        nMod = std::numeric_limits<T>::max() % nRadix;
-    }
-
-    while ( pStr != pEnd )
-    {
-        nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
+        sal_Int16 nDigit = rtl_ImplGetDigit(IMPL_RTL_USTRCODE(*pStr), nRadix);
         if ( nDigit < 0 )
             break;
-        assert(nDiv > 0);
-        if( static_cast<U>( nMod < nDigit ? nDiv-1 : nDiv ) < n )
+        if (static_cast<std::make_unsigned_t<T>>(nMod < nDigit ? nDiv - 1 : nDiv) < n)
             return 0;
 
         n *= nRadix;
@@ -821,11 +824,12 @@ T toInt_WithLength                                              ( const IMPL_RTL
         pStr++;
     }
 
-    if ( bNeg )
-        return n == static_cast<U>(std::numeric_limits<T>::min())
-            ? std::numeric_limits<T>::min() : -static_cast<T>(n);
-    else
-        return static_cast<T>(n);
+    if constexpr (std::numeric_limits<T>::is_signed)
+        if (bNeg)
+            return n == static_cast<std::make_unsigned_t<T>>(std::numeric_limits<T>::min())
+                       ? std::numeric_limits<T>::min()
+                       : -static_cast<T>(n);
+    return static_cast<T>(n);
 }
 
 template <typename IMPL_RTL_STRCODE>
@@ -833,7 +837,7 @@ sal_Int32 toInt32                             ( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
 {
     assert(pStr);
-    return toInt_WithLength<sal_Int32, sal_uInt32>(pStr, nRadix, getLength(pStr));
+    return toInt<sal_Int32>(pStr, nRadix);
 }
 
 template <typename IMPL_RTL_STRCODE>
@@ -843,7 +847,7 @@ sal_Int32 toInt32_WithLength                  ( const IMPL_RTL_STRCODE* pStr,
 
 {
     assert(pStr);
-    return toInt_WithLength<sal_Int32, sal_uInt32>(pStr, nRadix, nStrLength);
+    return toInt<sal_Int32>(std::basic_string_view(pStr, nStrLength), nRadix);
 }
 
 template <typename IMPL_RTL_STRCODE>
@@ -851,7 +855,7 @@ sal_Int64 toInt64                             ( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
 {
     assert(pStr);
-    return toInt_WithLength<sal_Int64, sal_uInt64>(pStr, nRadix, getLength(pStr));
+    return toInt<sal_Int64>(pStr, nRadix);
 }
 
 template <typename IMPL_RTL_STRCODE>
@@ -861,46 +865,7 @@ sal_Int64 toInt64_WithLength                  ( const IMPL_RTL_STRCODE* pStr,
 
 {
     assert(pStr);
-    return toInt_WithLength<sal_Int64, sal_uInt64>(pStr, nRadix, nStrLength);
-}
-
-/* ----------------------------------------------------------------------- */
-template <typename T, typename IMPL_RTL_STRCODE> T toUInt( const IMPL_RTL_STRCODE* pStr,
-                                                                      sal_Int16 nRadix )
-{
-    static_assert(!std::numeric_limits<T>::is_signed, "is not signed");
-    assert( nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX );
-    sal_Int16   nDigit;
-    T           n = 0;
-
-    if ( (nRadix < RTL_STR_MIN_RADIX) || (nRadix > RTL_STR_MAX_RADIX) )
-        nRadix = 10;
-
-    /* Skip whitespaces */
-    while ( *pStr && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE( *pStr ) ) )
-        ++pStr;
-
-    // skip optional explicit sign
-    if ( *pStr == '+' )
-        ++pStr;
-
-    T nDiv = std::numeric_limits<T>::max() / nRadix;
-    sal_Int16 nMod = std::numeric_limits<T>::max() % nRadix;
-    while ( *pStr )
-    {
-        nDigit = rtl_ImplGetDigit( IMPL_RTL_USTRCODE( *pStr ), nRadix );
-        if ( nDigit < 0 )
-            break;
-        if( ( nMod < nDigit ? nDiv-1 : nDiv ) < n )
-            return 0;
-
-        n *= nRadix;
-        n += nDigit;
-
-        ++pStr;
-    }
-
-    return n;
+    return toInt<sal_Int64>(std::basic_string_view(pStr, nStrLength), nRadix);
 }
 
 template <typename IMPL_RTL_STRCODE>
@@ -908,7 +873,7 @@ sal_uInt32 toUInt32                             ( const IMPL_RTL_STRCODE* pStr,
                                                   sal_Int16 nRadix )
 {
     assert(pStr);
-    return toUInt<sal_uInt32>(pStr, nRadix);
+    return toInt<sal_uInt32>(pStr, nRadix);
 }
 
 template <typename IMPL_RTL_STRCODE>
@@ -916,7 +881,7 @@ sal_uInt64 toUInt64                             ( const IMPL_RTL_STRCODE* pStr,
                                                   sal_Int16 nRadix )
 {
     assert(pStr);
-    return toUInt<sal_uInt64>(pStr, nRadix);
+    return toInt<sal_uInt64>(pStr, nRadix);
 }
 
 /* ======================================================================= */
