@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c147797a_9ebab757",
+        "filename": "editeng/source/rtf/svxrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-01T20:32:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97d29ae7_ed92e0ab",
+      "range": {
+        "startLine": 587,
+        "startChar": 4,
+        "endLine": 590,
+        "endChar": 27
+      },
+      "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "65ba5170_52217b1e",
