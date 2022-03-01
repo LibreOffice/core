@@ -2394,14 +2394,12 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
             const ScPatternAttr* pPattern = aIter.GetNext( nAttrCol, nAttrRow1, nAttrRow2 );
             while ( pPattern )
             {
-                const SfxPoolItem* pCondItem;
-                if ( pPattern->GetItemSet().GetItemState( ATTR_CONDITIONAL, true, &pCondItem )
-                        == SfxItemState::SET )
+                if ( const ScCondFormatItem* pCondItem = pPattern->GetItemSet().GetItemIfSet( ATTR_CONDITIONAL ) )
                 {
                     //  Run through all formats, so that each cell does not have to be
                     //  handled individually
 
-                    const ScCondFormatIndexes& rCondFormatData = static_cast<const ScCondFormatItem*>(pCondItem)->GetCondFormatData();
+                    const ScCondFormatIndexes& rCondFormatData = pCondItem->GetCondFormatData();
                     ScStyleSheetPool* pStylePool = rDocument.GetStyleSheetPool();
                     if (mpCondFormatList && pStylePool && !rCondFormatData.empty())
                     {

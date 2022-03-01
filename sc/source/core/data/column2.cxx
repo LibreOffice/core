@@ -144,19 +144,18 @@ tools::Long ScColumn::GetNeededSize(
     }
     //  line break?
 
-    const SfxPoolItem* pCondItem;
+    const SvxHorJustifyItem* pCondItem;
     SvxCellHorJustify eHorJust;
-    if (pCondSet &&
-            pCondSet->GetItemState(ATTR_HOR_JUSTIFY, true, &pCondItem) == SfxItemState::SET)
-        eHorJust = static_cast<const SvxHorJustifyItem*>(pCondItem)->GetValue();
+    if (pCondSet && (pCondItem = pCondSet->GetItemIfSet(ATTR_HOR_JUSTIFY)) )
+        eHorJust = pCondItem->GetValue();
     else
         eHorJust = pPattern->GetItem( ATTR_HOR_JUSTIFY ).GetValue();
     bool bBreak;
+    const ScLineBreakCell* pLineBreakCell;
     if ( eHorJust == SvxCellHorJustify::Block )
         bBreak = true;
-    else if ( pCondSet &&
-                pCondSet->GetItemState(ATTR_LINEBREAK, true, &pCondItem) == SfxItemState::SET)
-        bBreak = static_cast<const ScLineBreakCell*>(pCondItem)->GetValue();
+    else if ( pCondSet && (pLineBreakCell = pCondSet->GetItemIfSet(ATTR_LINEBREAK)) )
+        bBreak = pLineBreakCell->GetValue();
     else
         bBreak = pPattern->GetItem(ATTR_LINEBREAK).GetValue();
 
@@ -216,16 +215,18 @@ tools::Long ScColumn::GetNeededSize(
     SvxRotateMode eRotMode = SVX_ROTATE_MODE_STANDARD;
     if ( eOrient == SvxCellOrientation::Standard )
     {
+        const ScRotateValueItem* pRotateValueItem;
         if (pCondSet &&
-                pCondSet->GetItemState(ATTR_ROTATE_VALUE, true, &pCondItem) == SfxItemState::SET)
-            nRotate = static_cast<const ScRotateValueItem*>(pCondItem)->GetValue();
+                (pRotateValueItem = pCondSet->GetItemIfSet(ATTR_ROTATE_VALUE)) )
+            nRotate = pRotateValueItem->GetValue();
         else
             nRotate = pPattern->GetItem(ATTR_ROTATE_VALUE).GetValue();
         if ( nRotate )
         {
+            const SvxRotateModeItem* pRotateModeItem;
             if (pCondSet &&
-                    pCondSet->GetItemState(ATTR_ROTATE_MODE, true, &pCondItem) == SfxItemState::SET)
-                eRotMode = static_cast<const SvxRotateModeItem*>(pCondItem)->GetValue();
+                    (pRotateModeItem = pCondSet->GetItemIfSet(ATTR_ROTATE_MODE)) )
+                eRotMode = pRotateModeItem->GetValue();
             else
                 eRotMode = pPattern->GetItem(ATTR_ROTATE_MODE).GetValue();
 
@@ -244,16 +245,17 @@ tools::Long ScColumn::GetNeededSize(
 
     const SvxMarginItem* pMargin;
     if (pCondSet &&
-            pCondSet->GetItemState(ATTR_MARGIN, true, &pCondItem) == SfxItemState::SET)
-        pMargin = static_cast<const SvxMarginItem*>(pCondItem);
+            (pMargin = pCondSet->GetItemIfSet(ATTR_MARGIN)) )
+        ;
     else
         pMargin = &pPattern->GetItem(ATTR_MARGIN);
     sal_uInt16 nIndent = 0;
     if ( eHorJust == SvxCellHorJustify::Left )
     {
+        const ScIndentItem* pIndentItem;
         if (pCondSet &&
-                pCondSet->GetItemState(ATTR_INDENT, true, &pCondItem) == SfxItemState::SET)
-            nIndent = static_cast<const ScIndentItem*>(pCondItem)->GetValue();
+                (pIndentItem = pCondSet->GetItemIfSet(ATTR_INDENT)) )
+            nIndent = pIndentItem->GetValue();
         else
             nIndent = pPattern->GetItem(ATTR_INDENT).GetValue();
     }

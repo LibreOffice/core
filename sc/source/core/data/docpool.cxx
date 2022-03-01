@@ -399,17 +399,16 @@ static bool lcl_HFPresentation
 )
 {
     const SfxItemSet& rSet = static_cast<const SfxSetItem&>(rItem).GetItemSet();
-    const SfxPoolItem* pItem;
 
-    if ( SfxItemState::SET == rSet.GetItemState(ATTR_PAGE_ON,false,&pItem) )
+    if ( const SfxBoolItem* pItem = rSet.GetItemIfSet(ATTR_PAGE_ON,false) )
     {
-        if( !static_cast<const SfxBoolItem*>(pItem)->GetValue() )
+        if( !pItem->GetValue() )
             return false;
     }
 
     SfxItemIter aIter( rSet );
 
-    for (pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
+    for (const SfxPoolItem* pItem = aIter.GetCurItem(); pItem; pItem = aIter.NextItem())
     {
         sal_uInt16 nWhich = pItem->Which();
 
