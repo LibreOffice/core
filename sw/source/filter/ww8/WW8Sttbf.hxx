@@ -47,7 +47,7 @@ namespace ww8
         sal_uInt16 getU16(sal_uInt32 nOffset)
         { return getU8(nOffset) + (getU8(nOffset + 1) << 8); }
 
-        OUString getUString(sal_uInt32 nOffset, sal_uInt32 nCount);
+        OUString getUString(sal_uInt32 nOffset, sal_Int32 nCount);
     };
 
     template <class T>
