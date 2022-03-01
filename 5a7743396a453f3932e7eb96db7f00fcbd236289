@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a787c6b1_4ec57d6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-03-01T10:07:01Z",
+      "side": 1,
+      "message": "hmmm this is better at least, now windows succeeds and macOS goes into an infinite loop where it prints\n\nwarn:legacy.osl:63450:276849457:sw/source/core/layout/flowfrm.cxx:2575: \u003cSwFlowFrame::MoveBwd(..)\u003e - layout loop control for layout action \u003cMove Backward\u003e applied!\n\nwhile here on Linux it prints this only 23 times.\n\nbut since it\u0027s not a real document, maybe it\u0027s good enough for now...\n",
+      "revId": "5a7743396a453f3932e7eb96db7f00fcbd236289",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
