@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8492ae3_dda37dde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T10:08:15Z",
+      "side": 1,
+      "message": "Nice. Just a note: currently, even normal (not jumbo) sheets are easy to overflow tools::Long on 32-bit platforms, if you make row heights large enough (IIRC, 10 cm should be more than enough).",
+      "revId": "0156eba76667fe1b0ed4355272fa77f98f9f63a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
