@@ -1251,7 +1251,7 @@ static void ProcessTables(TrueTypeCreator *tt)
 
         /* printf("IDs: %d %d.\n", gd->glyphID, gd->newID); */
 
-        if (gd->nbytes != 0) {
+        if (gd->nbytes >= 10) {
             z = GetInt16(gd->ptr, 2);
             if (z < xMin) xMin = z;
 
