@@ -424,41 +424,37 @@ std::unique_ptr<SfxTabPage> ScTPValidationValue::Create(weld::Container* pPage, 
 
 void ScTPValidationValue::Reset( const SfxItemSet* rArgSet )
 {
-    const SfxPoolItem* pItem;
-
     sal_uInt16 nLbPos = SC_VALIDDLG_ALLOW_ANY;
-    if( rArgSet->GetItemState( FID_VALID_MODE, true, &pItem ) == SfxItemState::SET )
-        nLbPos = lclGetPosFromValMode( static_cast< ScValidationMode >(
-            static_cast< const SfxUInt16Item* >( pItem )->GetValue() ) );
+    if( const SfxUInt16Item* pItem = rArgSet->GetItemIfSet( FID_VALID_MODE ) )
+        nLbPos = lclGetPosFromValMode( static_cast< ScValidationMode >( pItem->GetValue() ) );
     m_xLbAllow->set_active( nLbPos );
 
     nLbPos = SC_VALIDDLG_DATA_EQUAL;
-    if( rArgSet->GetItemState( FID_VALID_CONDMODE, true, &pItem ) == SfxItemState::SET )
-        nLbPos = lclGetPosFromCondMode( static_cast< ScConditionMode >(
-            static_cast< const SfxUInt16Item* >( pItem )->GetValue() ) );
+    if( const SfxUInt16Item* pItem = rArgSet->GetItemIfSet( FID_VALID_CONDMODE ) )
+        nLbPos = lclGetPosFromCondMode( static_cast< ScConditionMode >( pItem->GetValue() ) );
     m_xLbValue->set_active( nLbPos );
 
     // *** check boxes ***
     bool bCheck = true;
-    if( rArgSet->GetItemState( FID_VALID_BLANK, true, &pItem ) == SfxItemState::SET )
-        bCheck = static_cast< const SfxBoolItem* >( pItem )->GetValue();
+    if( const SfxBoolItem* pItem = rArgSet->GetItemIfSet( FID_VALID_BLANK ) )
+        bCheck = pItem->GetValue();
     m_xCbAllow->set_active( bCheck );
 
     sal_Int32 nListType = ValidListType::UNSORTED;
-    if( rArgSet->GetItemState( FID_VALID_LISTTYPE, true, &pItem ) == SfxItemState::SET )
-        nListType = static_cast< const SfxInt16Item* >( pItem )->GetValue();
+    if( const SfxInt16Item* pItem = rArgSet->GetItemIfSet( FID_VALID_LISTTYPE ) )
+        nListType = pItem->GetValue();
     m_xCbShow->set_active( nListType != ValidListType::INVISIBLE );
     m_xCbSort->set_active( nListType == ValidListType::SORTEDASCENDING );
 
     // *** formulas ***
     OUString aFmlaStr;
-    if ( rArgSet->GetItemState( FID_VALID_VALUE1, true, &pItem ) == SfxItemState::SET )
-        aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
+    if ( const SfxStringItem* pItem = rArgSet->GetItemIfSet( FID_VALID_VALUE1 ) )
+        aFmlaStr = pItem->GetValue();
     SetFirstFormula( aFmlaStr );
 
     aFmlaStr.clear();
-    if ( rArgSet->GetItemState( FID_VALID_VALUE2, true, &pItem ) == SfxItemState::SET )
-        aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
+    if ( const SfxStringItem* pItem = rArgSet->GetItemIfSet( FID_VALID_VALUE2 ) )
+        aFmlaStr = pItem->GetValue();
     SetSecondFormula( aFmlaStr );
 
     SelectHdl( *m_xLbAllow );
@@ -715,20 +711,18 @@ std::unique_ptr<SfxTabPage> ScTPValidationHelp::Create(weld::Container* pPage, w
 
 void ScTPValidationHelp::Reset( const SfxItemSet* rArgSet )
 {
-    const SfxPoolItem* pItem;
-
-    if ( rArgSet->GetItemState( FID_VALID_SHOWHELP, true, &pItem ) == SfxItemState::SET )
-        m_xTsbHelp->set_state( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
+    if ( const SfxBoolItem* pItem = rArgSet->GetItemIfSet( FID_VALID_SHOWHELP ) )
+        m_xTsbHelp->set_state( pItem->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
         m_xTsbHelp->set_state( TRISTATE_FALSE );
 
-    if ( rArgSet->GetItemState( FID_VALID_HELPTITLE, true, &pItem ) == SfxItemState::SET )
-        m_xEdtTitle->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+    if ( const SfxStringItem* pItem = rArgSet->GetItemIfSet( FID_VALID_HELPTITLE ) )
+        m_xEdtTitle->set_text( pItem->GetValue() );
     else
         m_xEdtTitle->set_text( OUString() );
 
-    if ( rArgSet->GetItemState( FID_VALID_HELPTEXT, true, &pItem ) == SfxItemState::SET )
-        m_xEdInputHelp->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+    if ( const SfxStringItem* pItem = rArgSet->GetItemIfSet( FID_VALID_HELPTEXT ) )
+        m_xEdInputHelp->set_text( pItem->GetValue() );
     else
         m_xEdInputHelp->set_text( OUString() );
 }
@@ -784,25 +778,23 @@ std::unique_ptr<SfxTabPage> ScTPValidationError::Create(weld::Container* pPage, 
 
 void ScTPValidationError::Reset( const SfxItemSet* rArgSet )
 {
-    const SfxPoolItem* pItem;
-
-    if ( rArgSet->GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SfxItemState::SET )
-        m_xTsbShow->set_state( static_cast<const SfxBoolItem*>(pItem)->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
+    if ( const SfxBoolItem* pItem = rArgSet->GetItemIfSet( FID_VALID_SHOWERR ) )
+        m_xTsbShow->set_state( pItem->GetValue() ? TRISTATE_TRUE : TRISTATE_FALSE );
     else
         m_xTsbShow->set_state( TRISTATE_TRUE );   // check by default
 
-    if ( rArgSet->GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SfxItemState::SET )
-        m_xLbAction->set_active( static_cast<const SfxUInt16Item*>(pItem)->GetValue() );
+    if ( const SfxUInt16Item* pItem = rArgSet->GetItemIfSet( FID_VALID_ERRSTYLE ) )
+        m_xLbAction->set_active( pItem->GetValue() );
     else
         m_xLbAction->set_active( 0 );
 
-    if ( rArgSet->GetItemState( FID_VALID_ERRTITLE, true, &pItem ) == SfxItemState::SET )
-        m_xEdtTitle->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+    if ( const SfxStringItem* pItem = rArgSet->GetItemIfSet( FID_VALID_ERRTITLE ) )
+        m_xEdtTitle->set_text( pItem->GetValue() );
     else
         m_xEdtTitle->set_text( OUString() );
 
-    if ( rArgSet->GetItemState( FID_VALID_ERRTEXT, true, &pItem ) == SfxItemState::SET )
-        m_xEdError->set_text( static_cast<const SfxStringItem*>(pItem)->GetValue() );
+    if ( const SfxStringItem* pItem = rArgSet->GetItemIfSet( FID_VALID_ERRTEXT ) )
+        m_xEdError->set_text( pItem->GetValue() );
     else
         m_xEdError->set_text( OUString() );
 
