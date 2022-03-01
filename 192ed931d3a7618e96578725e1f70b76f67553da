@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e597693_5d50b72a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-01T11:11:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6602c8b_c5026bfb",
+      "revId": "192ed931d3a7618e96578725e1f70b76f67553da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8ef2ea11_369a7faa",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-01T10:07:51Z",
       "side": 1,
       "message": "\u003chttps://git.libreoffice.org/core/+/33ecd0d5c4fff9511a8436513936a3f7044a775a%5E!/\u003e \"Change OUStringLiteral from char[] to char16_t[]\" changed\n\n       bool equalsIgnoreAsciiCase(OUStringLiteral const \u0026 literal) const {\n  -        return pData-\u003elength \u003d\u003d literal.size\n  -            \u0026\u0026 (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength(\n  -                    pData-\u003ebuffer, pData-\u003elength, literal.data)\n  -                \u003d\u003d 0);\n  +        return\n  +            rtl_ustr_compareIgnoreAsciiCase_WithLength(\n  +                pData-\u003ebuffer, pData-\u003elength, literal.data, literal.size)\n  +            \u003d\u003d 0;\n       }\n\napparently based on the observation that while rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength does not take literal.size as an argument (and thus cannot optimize on the equal-length case internally), rtl_ustr_compareIgnoreAsciiCase_WithLength does, so that keeping the redundant equal-length check here would be an unsubstantiated micro-optimization.  But if you consider the optimizations you\u0027re now adding with this change as substantiated...",
+      "revId": "192ed931d3a7618e96578725e1f70b76f67553da",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e417194b_5496bd84",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-01T11:11:21Z",
+      "side": 1,
+      "message": "The size check will be often inlined with a constant, so I consider it worth it.",
+      "parentUuid": "8ef2ea11_369a7faa",
       "revId": "192ed931d3a7618e96578725e1f70b76f67553da",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
