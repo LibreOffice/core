@@ -539,8 +539,8 @@ void SvxTableController::onInsert( sal_uInt16 nSId, const SfxItemSet* pArgs )
         if (pItem)
         {
             nCount = static_cast<const SfxInt16Item*>(pItem)->GetValue();
-            if(SfxItemState::SET == pArgs->GetItemState(SID_TABLE_PARAM_INSERT_AFTER, true, &pItem))
-                bInsertAfter = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+            if(const SfxBoolItem* pItem2 = pArgs->GetItemIfSet(SID_TABLE_PARAM_INSERT_AFTER))
+                bInsertAfter = pItem2->GetValue();
         }
     }
 
@@ -1200,25 +1200,25 @@ void SvxTableController::SetTableStyleSettings( const SfxItemSet* pArgs )
     SdrModel& rModel(rTableObj.getSdrModelFromSdrObject());
 
     TableStyleSettings aSettings(rTableObj.getTableStyleSettings() );
-    const SfxPoolItem *pPoolItem=nullptr;
+    const SfxBoolItem *pPoolItem=nullptr;
 
-    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTROWSTYLE, false,&pPoolItem) )
-        aSettings.mbUseFirstRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
+    if( (pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEFIRSTROWSTYLE, false)) )
+        aSettings.mbUseFirstRow = pPoolItem->GetValue();
 
-    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USELASTROWSTYLE, false,&pPoolItem) )
-        aSettings.mbUseLastRow = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
+    if( (pPoolItem = pArgs->GetItemIfSet(ID_VAL_USELASTROWSTYLE, false)) )
+        aSettings.mbUseLastRow = pPoolItem->GetValue();
 
-    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEBANDINGROWSTYLE, false,&pPoolItem) )
-        aSettings.mbUseRowBanding = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
+    if( (pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEBANDINGROWSTYLE, false)) )
+        aSettings.mbUseRowBanding = pPoolItem->GetValue();
 
-    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEFIRSTCOLUMNSTYLE, false,&pPoolItem) )
-        aSettings.mbUseFirstColumn = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
+    if( (pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEFIRSTCOLUMNSTYLE, false)) )
+        aSettings.mbUseFirstColumn = pPoolItem->GetValue();
 
-    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USELASTCOLUMNSTYLE, false,&pPoolItem) )
-        aSettings.mbUseLastColumn = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
+    if( (pPoolItem = pArgs->GetItemIfSet(ID_VAL_USELASTCOLUMNSTYLE, false)) )
+        aSettings.mbUseLastColumn = pPoolItem->GetValue();
 
-    if( SfxItemState::SET == pArgs->GetItemState(ID_VAL_USEBANDINGCOLUMNSTYLE, false,&pPoolItem) )
-        aSettings.mbUseColumnBanding = static_cast< const SfxBoolItem* >(pPoolItem)->GetValue();
+    if( (pPoolItem = pArgs->GetItemIfSet(ID_VAL_USEBANDINGCOLUMNSTYLE, false)) )
+        aSettings.mbUseColumnBanding = pPoolItem->GetValue();
 
     if( aSettings == rTableObj.getTableStyleSettings() )
         return;
