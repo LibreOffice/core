@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2179dc5c_ddbb9dd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-03-01T14:37:40Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/109344/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_svx_unit failed ( https://ci.libreoffice.org/job/gerrit_windows/121250/ )\n\nHave in te meantime built a local win version, and the unit test CppunitTest_svx_unit ran just fine",
+      "revId": "5f49ec6d941a0edaca9d051618a7deea64b647c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
