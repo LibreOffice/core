@@ -196,10 +196,10 @@ CalcOp* FindOperator( const OUString& rSrch )
 
 static LanguageType GetDocAppScriptLang( SwDoc const & rDoc )
 {
-    return static_cast<const SvxLanguageItem&>(rDoc.GetDefault(
+    TypedWhichId<SvxLanguageItem> nWhich =
                GetWhichOfScript( RES_CHRATR_LANGUAGE,
-                                 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ))
-            )).GetLanguage();
+                                 SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ));
+    return rDoc.GetDefault(nWhich).GetLanguage();
 }
 
 static double lcl_ConvertToDateValue( SwDoc& rDoc, sal_Int32 nDate )

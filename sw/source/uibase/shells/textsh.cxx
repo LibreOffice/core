@@ -909,11 +909,11 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         }
         else
         {
-            aFont.reset(static_cast<SvxFontItem*>(
-                        aSet.Get(
+            TypedWhichId<SvxFontItem> nFontWhich =
                             GetWhichOfScript(
                                 RES_CHRATR_FONT,
-                                SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
+                                SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) );
+            aFont.reset(aSet.Get(nFontWhich).Clone());
         }
 
         if (aFontName.isEmpty())
@@ -966,9 +966,11 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         }
         else
         {
-            aFont.reset(static_cast<SvxFontItem*>(aSet.Get( GetWhichOfScript(
+            TypedWhichId<SvxFontItem> nFontWhich =
+                GetWhichOfScript(
                         RES_CHRATR_FONT,
-                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
+                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) );
+            aFont.reset(aSet.Get( nFontWhich ).Clone());
         }
     }
 
