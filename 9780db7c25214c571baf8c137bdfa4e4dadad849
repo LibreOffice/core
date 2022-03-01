@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38be6ed8_7e81e7c7",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_alpha/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-01T11:45:02Z",
+      "side": 1,
+      "message": "Was it a conscious decision to not include the index 0 for the second nRegReturn?",
+      "range": {
+        "startLine": 516,
+        "startChar": 100,
+        "endLine": 516,
+        "endChar": 109
+      },
+      "revId": "9780db7c25214c571baf8c137bdfa4e4dadad849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
