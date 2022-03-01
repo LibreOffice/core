@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ecfd021_b9e4efff",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-01T07:56:02Z",
+      "side": 1,
+      "message": "For the user of the SfxItemSet class, there was already GetItem() with the same (similar?) signature: a which id and a boolean to determine if to search in parents.\n\nHow one should decide when to use GetItem() and GetItemIfSet() when both have a bool to decide whether the search should continue in parents when the item is not set directly?\n\nI\u0027m a bit confused. :-)",
+      "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
