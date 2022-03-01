@@ -70,8 +70,7 @@ namespace myImplHelpers
         const SwFormatFrameSize& rSz = rFormat.GetFrameSize();
 
         const SwHeaderAndFooterEatSpacingItem &rSpacingCtrl =
-            sw::util::ItemGet<SwHeaderAndFooterEatSpacingItem>
-            (rFormat, RES_HEADER_FOOTER_EAT_SPACING);
+            rFormat.GetFormatAttr(RES_HEADER_FOOTER_EAT_SPACING);
         if (rSpacingCtrl.GetValue())
             nDist += rSz.GetHeight();
         else

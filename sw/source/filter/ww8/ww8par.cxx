@@ -1765,8 +1765,8 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         if (!m_pCurrentColl) // not importing into a style
         {
             SvxTabStopItem aOrig = pSty ?
-            ItemGet<SvxTabStopItem>(*pSty, RES_PARATR_TABSTOP) :
-            DefaultItemGet<SvxTabStopItem>(m_rDoc, RES_PARATR_TABSTOP);
+                pSty->GetFormatAttr(RES_PARATR_TABSTOP) :
+                DefaultItemGet<SvxTabStopItem>(m_rDoc, RES_PARATR_TABSTOP);
             NewAttr(aOrig);
         }
     }

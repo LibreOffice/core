@@ -1699,7 +1699,7 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
     {
         const auto nAbsLSpace = rFormat.GetAbsLSpace();
         const tools::Long nListFirstLineIndent = GetListFirstLineIndent(rFormat);
-        SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
+        SvxLRSpaceItem aLR(rStyle.m_pFormat->GetFormatAttr(RES_LR_SPACE));
         aLR.SetTextLeft(nAbsLSpace);
         aLR.SetTextFirstLineOffset(writer_cast<short>(nListFirstLineIndent));
         rStyle.m_pFormat->SetFormatAttr(aLR);
@@ -1712,7 +1712,7 @@ void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat)
     if ( rFormat.GetPositionAndSpaceMode() != SvxNumberFormat::LABEL_WIDTH_AND_POSITION ) // #i86652#
         return;
 
-    SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.m_pFormat, RES_LR_SPACE));
+    SvxLRSpaceItem aLR(rStyle.m_pFormat->GetFormatAttr(RES_LR_SPACE));
     if (rStyle.m_bListRelevantIndentSet)
     {
 
@@ -1769,7 +1769,7 @@ void SwWW8ImplReader::RegisterNumFormatOnStyle(sal_uInt16 nStyle)
         return;
 
     //Save old pre-list modified indent, which are the word indent values
-    rStyleInf.maWordLR.reset(ItemGet<SvxLRSpaceItem>(*rStyleInf.m_pFormat, RES_LR_SPACE).Clone());
+    rStyleInf.maWordLR.reset(rStyleInf.m_pFormat->GetFormatAttr(RES_LR_SPACE).Clone());
 
     // Phase 2: refresh StyleDef after reading all Lists
     if (rStyleInf.m_nLFOIndex >= USHRT_MAX || rStyleInf.m_nListLevel >= WW8ListManager::nMaxLevel)
