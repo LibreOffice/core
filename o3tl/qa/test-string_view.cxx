@@ -60,6 +60,7 @@ private:
     CPPUNIT_TEST(testStartsWithRest);
     CPPUNIT_TEST(testEndsWith);
     CPPUNIT_TEST(testEndsWithRest);
+    CPPUNIT_TEST(testEqualsIgnoreAsciiCase);
     CPPUNIT_TEST_SUITE_END();
 
     void testStartsWith()
@@ -584,6 +585,13 @@ private:
             CPPUNIT_ASSERT(!o3tl::ends_with(u"raboof"sv, oustringSraboof(), &rest));
             CPPUNIT_ASSERT_EQUAL(u""sv, rest);
         }
+    }
+
+    void testEqualsIgnoreAsciiCase()
+    {
+        using namespace std::string_view_literals;
+        CPPUNIT_ASSERT(o3tl::equalsIgnoreAsciiCase(u"test"sv, u"test"sv));
+        CPPUNIT_ASSERT(!o3tl::equalsIgnoreAsciiCase(u"test"sv, u"test2"sv));
     }
 };
 

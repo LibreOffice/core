@@ -977,6 +977,10 @@ public:
     */
 #if defined LIBO_INTERNAL_ONLY
     bool equalsIgnoreAsciiCase(std::u16string_view sv) const {
+        if ( sal_uInt32(pData->length) != sv.size() )
+            return false;
+        if ( pData->buffer == sv.data() )
+            return true;
         return
             rtl_ustr_compareIgnoreAsciiCase_WithLength(
                 pData->buffer, pData->length, sv.data(), sv.size())
