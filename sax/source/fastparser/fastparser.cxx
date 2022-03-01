@@ -674,7 +674,7 @@ FastSaxParserImpl::~FastSaxParserImpl()
 {
     if( mxDocumentLocator.is() )
         mxDocumentLocator->dispose();
-    for (const auto& entity : m_TemporalEntities)
+    for (auto& entity : m_TemporalEntities)
     {
         if (!entity)
             continue;
