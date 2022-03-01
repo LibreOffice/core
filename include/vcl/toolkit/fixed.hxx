@@ -33,6 +33,7 @@ public:
 
     virtual void    LoseFocus() override;
     virtual void    ApplySettings(vcl::RenderContext&) override;
+    virtual void    DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
 };
 
 class VCL_DLLPUBLIC FixedLine final : public Control
