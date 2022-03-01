@@ -29,10 +29,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#ifdef OSL_BIGENDIAN
-#include <rtl/ustrbuf.hxx>
-#endif
-
 namespace ww8
 {
     WW8Struct::WW8Struct(SvStream& rSt, sal_uInt32 nPos, sal_uInt32 nSize)
