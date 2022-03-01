@@ -592,7 +592,7 @@ namespace sw
                     pBreak = &(ItemGet<SvxFormatBreakItem>(*pApply, RES_BREAK));
             }
             else if (const SwContentNode *pNd = rNd.GetContentNode())
-                pBreak = &(ItemGet<SvxFormatBreakItem>(*pNd, RES_BREAK));
+                pBreak = &pNd->GetAttr(RES_BREAK);
 
             return pBreak && pBreak->GetBreak() == SvxBreak::PageBefore;
         }

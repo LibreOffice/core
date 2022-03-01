@@ -532,8 +532,8 @@ namespace sw
             if (!rText.isEmpty())
                 nScript = g_pBreakIt->GetBreakIter()->getScriptType(rText, 0);
 
-            rtl_TextEncoding eChrSet = ItemGet<SvxFontItem>(rTextNd,
-                GetWhichOfScript(RES_CHRATR_FONT, nScript)).GetCharSet();
+            TypedWhichId<SvxFontItem> nFontWhichId = GetWhichOfScript(RES_CHRATR_FONT, nScript);
+            rtl_TextEncoding eChrSet = rTextNd.GetAttr(nFontWhichId).GetCharSet();
             eChrSet = GetExtendedTextEncoding(eChrSet);
 
             CharRuns aRunChanges;

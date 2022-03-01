@@ -3069,7 +3069,7 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 {   // Even a pagedesc item is set, the break item can be set 'NONE',
                     // this has to be overruled.
                     const SwFormatPageDesc& rPageDescAtParaStyle =
-                        ItemGet<SwFormatPageDesc>( rNode, RES_PAGEDESC );
+                        rNode.GetAttr( RES_PAGEDESC );
                     if( rPageDescAtParaStyle.KnowsPageDesc() )
                         oTmpSet->ClearItem( RES_BREAK );
                 }
