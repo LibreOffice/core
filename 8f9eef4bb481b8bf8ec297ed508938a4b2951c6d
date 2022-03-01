@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "97d29ae7_ed92e0ab",
+        "filename": "editeng/source/rtf/svxrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 590,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T16:11:48Z",
+      "side": 1,
+      "message": "It may be simplified to\n\n    rStr.strip(\u0027 \u0027);",
+      "range": {
+        "startLine": 587,
+        "startChar": 4,
+        "endLine": 590,
+        "endChar": 27
+      },
+      "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "65ba5170_52217b1e",
         "filename": "svtools/source/svrtf/parrtf.cxx",
         "patchSetId": 1
