@@ -12,6 +12,8 @@
 #include <officecfg/Setup.hxx>
 #include <unotools/configmgr.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
+
 namespace utl
 {
 /** This method is called when there's a need to determine if the
