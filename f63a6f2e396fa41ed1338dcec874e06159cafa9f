@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff21c944_b09e18a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-01T13:38:01Z",
+      "side": 1,
+      "message": "The reference \u0027entity\u0027 is used to change the nodes using xmlUnlinkNode() and xmlFreeNode(), thus the \u0027const\u0027 should have not been used.\nIt should be noted that the reinterpret_cast operator cannot cast away the const, volatile, or __unaligned attributes.\nhttps://docs.microsoft.com/en-us/cpp/cpp/reinterpret-cast-operator\nI\u0027m sending a fix.",
+      "revId": "f63a6f2e396fa41ed1338dcec874e06159cafa9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
