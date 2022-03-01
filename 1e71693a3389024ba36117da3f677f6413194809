@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3a6f652f_c0dbeab2",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T14:01:37Z",
+      "side": 1,
+      "message": "\"manage to do the rel-\u003eabs conversion on more things\":  but which is not the main concern here, at least for the motivating \u003chttp://user:password@domain\u003e already-absolute URI issue from tdf#143216\n\n\"manage to store more url-like things\":  which, as I argued, is irrelevant here as those don\u0027t survive the surrounding INetURLObject aNewURL constructor, anyway\n\nthus, I think the comment causes more confusion than clarification, and I would just remove it completely",
+      "parentUuid": "e7d86d8a_e6418676",
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d5b60900_da041f83",
         "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
         "patchSetId": 10
@@ -125,6 +143,30 @@
       "side": 1,
       "message": "Space added between the url and :.\nOh, I thought you just meant that as a replacement for my hacky regexp - which I think it is still a step better than that (and possibly what we had before).\nIt\u0027s a shame rtl::Uri doesn\u0027t expose it\u0027s parseUriRef and Components, since those would get it part way.",
       "parentUuid": "d5b60900_da041f83",
+      "range": {
+        "startLine": 3422,
+        "startChar": 36,
+        "endLine": 3422,
+        "endChar": 54
+      },
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f5d2a8b_d6b76c8d",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3422,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T14:01:37Z",
+      "side": 1,
+      "message": "\u003e Oh, I thought you just meant that as a replacement for my hacky regexp - which I think it is still a step better than that (and possibly what we had before).\n\u003e It\u0027s a shame rtl::Uri doesn\u0027t expose it\u0027s parseUriRef and Components, since those would get it part way.\n\nThe functionality available through the css::uri::UriReferenceFactory UNO service does, but would still only get us part-way.  So yeah, probably best to leave it at this for now.",
+      "parentUuid": "811d5c42_092b0957",
       "range": {
         "startLine": 3422,
         "startChar": 36,
