@@ -589,10 +589,10 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
         if (abs3 < 0) abs3 = -abs3;
         if (abs3 <= 33) n *= 2;
 
-        SAL_WARN_IF(np && !m, "vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fileName()) <<
+        SAL_WARN_IF(np && (!m || !n), "vcl.fonts", "Parsing error in " << OUString::createFromAscii(ttf->fileName()) <<
                      ": divide by zero");
 
-        if (m != 0) {
+        if (m != 0 && n != 0) {
             for (i=0; i<np; i++) {
                 F16Dot16 t;
                 ControlPoint cp;
