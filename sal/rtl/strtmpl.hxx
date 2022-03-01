@@ -1026,9 +1026,7 @@ void new_WithLength( IMPL_RTL_STRINGDATA** ppThis, sal_Int32 nLen )
         *ppThis = Alloc<IMPL_RTL_STRINGDATA>( nLen );
         assert(*ppThis != nullptr);
         (*ppThis)->length   = 0;
-
-        auto* pTempStr = (*ppThis)->buffer;
-        memset(pTempStr, 0, nLen*sizeof(*pTempStr));
+        (*ppThis)->buffer[0] = 0;
     }
 }
 
