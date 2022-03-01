@@ -404,8 +404,7 @@ namespace sw
             {
                 dyaHdrTop = dyaHdrBottom = 0;
             }
-            const SvxULSpaceItem &rUL =
-                ItemGet<SvxULSpaceItem>(rPage, RES_UL_SPACE);
+            const SvxULSpaceItem &rUL = rPage.Get(RES_UL_SPACE);
             dyaHdrTop += rUL.GetUpper();
             dyaHdrBottom += rUL.GetLower();
 
