@@ -16,6 +16,24 @@
       "message": "it doesn\u0027t crash for me if I revert the fix...",
       "revId": "e835c2c0d3aff4f1ee5d29c9eaf36400b1aca6a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e32e2c0_62fda492",
+        "filename": "sw/qa/extras/odfimport/odfimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-01T12:51:06Z",
+      "side": 1,
+      "message": "Ah, I rewrote \"crash\" to \"freezing\" in the commit description, but I missed this text (with the unwanted typo)... Thanks for your report! I will suggest the fix of the text in the next commit.",
+      "parentUuid": "98cbfd19_1fb349d9",
+      "revId": "e835c2c0d3aff4f1ee5d29c9eaf36400b1aca6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
