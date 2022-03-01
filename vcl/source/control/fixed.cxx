@@ -454,6 +454,13 @@ void SelectableFixedText::LoseFocus()
     Invalidate();
 }
 
+void SelectableFixedText::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Edit::DumpAsPropertyTree(rJsonWriter);
+    rJsonWriter.put("type", "fixedtext");
+    rJsonWriter.put("selectable", "true");
+}
+
 void FixedLine::ImplInit( vcl::Window* pParent, WinBits nStyle )
 {
     nStyle = ImplInitStyle( nStyle );
