@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5009fafb_e142577a",
+        "filename": "svtools/source/svrtf/parrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-01T13:10:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65ba5170_52217b1e",
+      "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7474da58_c3c0ec90",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-03-01T12:11:01Z",
       "side": 1,
       "message": "and here, although that might be worth a separate patch",
+      "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9c2dcbc_12a8b677",
+        "filename": "svtools/source/svrtf/parrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-01T13:10:24Z",
+      "side": 1,
+      "message": "See the next patch, although it doesn\u0027t seem to make any visible difference here.",
+      "parentUuid": "7474da58_c3c0ec90",
       "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
