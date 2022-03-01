@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb51ea02_5cddb468",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-03-01T10:07:59Z",
+      "side": 1,
+      "message": "Noel, your suspicion was correct about overriding the operator\u003c to make it a \u003c\u003d. This is the cause of the windows build failing with \u0027C:\\PROGRA~2\\MIB055~1\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1429~1.301\\Include\\xutility(1520) : Assertion failed: invalid comparator\u0027 After seeing this failure a few times I was suspicious as well.\n\nI found the following for a similar issue on stackoverflow:\n\nThis is the cool thing about Undefined Behaviour: The implementer gets a lot of leeway to do whatever they want. In the debug Standard Library that comes with Visual Studio the crafty coders have added in a check to make sure the comparator is valid strict-weak ordering. The default Standard Library implementation that comes with g++ and the Release libraries that come with Visual Studio save time by performing absolutely no checking and let the invalid comparator produce invalid sorted output. In other words, the comparator is still wrong in g++, you just don\u0027t get warned. – \nuser4581301\nFeb 3 at 21:37\n\nreturn a-\u003eget_distance() \u003c b-\u003eget_distance() ? false : true; -- What if a-\u003eget_distance() \u003d\u003d b-\u003eget_distance()? You return true. Meaning that item a will be placed before b. However, what if b-\u003eget_distance() \u003d\u003d a-\u003eget_distance()? You return true, meaning item b is placed before a. So which one is it, does item a get placed before item b, or does item b get placed before item a? That is exactly how Visual C++ works in debug mode, and can detect that your comparison is faulty. It calls your operator() twice with the values switched, and checks return values. – \nPaulMcKenzie\nFeb 3 at 21:37\n\nThe problem is that \u003e\u003d, and specifically the equivalence inclusion of that operation. That does not enforce a strict-weak ordering. Equivalence should not be a part of any strict weak order comparator. That is left to the algorithm utilizing the comparator to determine by derivation, specifically when neither (a\u003cb) nor (b\u003ca) are true, the objects are considered equivalent.\nWhozCraig\nFeb 3 at 21:36\n\nI have mostly reverted back to the original fill method with some consts added and changed creating new objects using std::unique_ptr to std::make_unique, it seems they are close in performance.  \n\n\n\n",
+      "revId": "6998f7252a090b2f0b64f2985556ecd03574b5a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
