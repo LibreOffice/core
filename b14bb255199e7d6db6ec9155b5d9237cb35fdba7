@@ -52,6 +52,24 @@
       "parentUuid": "676a6443_d8d936fc",
       "revId": "b14bb255199e7d6db6ec9155b5d9237cb35fdba7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02563487_25875eb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T07:18:13Z",
+      "side": 1,
+      "message": "Attempting to address in https://gerrit.libreoffice.org/c/core/+/130738",
+      "parentUuid": "ccfb03fe_8dbf3eff",
+      "revId": "b14bb255199e7d6db6ec9155b5d9237cb35fdba7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
