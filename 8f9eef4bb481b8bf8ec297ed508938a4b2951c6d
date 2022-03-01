@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "845733ae_5514a8af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-01T12:11:01Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65ba5170_52217b1e",
+        "filename": "svtools/source/svrtf/parrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-01T12:11:01Z",
+      "side": 1,
+      "message": "could skip the intermediate buffer here and just call appendUtf32 on aToken",
+      "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7474da58_c3c0ec90",
+        "filename": "svtools/source/svrtf/parrtf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 522,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-01T12:11:01Z",
+      "side": 1,
+      "message": "and here, although that might be worth a separate patch",
+      "revId": "8f9eef4bb481b8bf8ec297ed508938a4b2951c6d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
