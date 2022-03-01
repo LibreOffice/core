@@ -853,6 +853,7 @@ public:
 
     /** Converts all XF identifiers into the Excel XF indexes. */
     void                Finalize( const ScfUInt16Vec& rColXFIndexes,
+                                  ScfUInt16Vec& aXFIndexes,
                                   size_t nStartColAllDefault,
                                   bool bUpdateProgress );
 
