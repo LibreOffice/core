@@ -1766,7 +1766,7 @@ void SwWW8ImplReader::Read_Tab(sal_uInt16 , const sal_uInt8* pData, short nLen)
         {
             SvxTabStopItem aOrig = pSty ?
                 pSty->GetFormatAttr(RES_PARATR_TABSTOP) :
-                DefaultItemGet<SvxTabStopItem>(m_rDoc, RES_PARATR_TABSTOP);
+                m_rDoc.GetAttrPool().GetDefaultItem(RES_PARATR_TABSTOP);
             NewAttr(aOrig);
         }
     }

@@ -1706,7 +1706,7 @@ const SvxBrushItem* WW8Export::GetCurrentPageBgBrush() const
     if (SfxItemState::SET != eState || !pRet || (!pRet->GetGraphic() &&
         pRet->GetColor() == COL_TRANSPARENT))
     {
-        pRet = &(DefaultItemGet<SvxBrushItem>(m_rDoc,RES_BACKGROUND));
+        pRet = &m_rDoc.GetAttrPool().GetDefaultItem(RES_BACKGROUND);
     }
     return pRet;
 }
@@ -3644,12 +3644,12 @@ WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWor
         pPool = pPool ? pPool : &rExport.m_rDoc.GetAttrPool();
 
 
-        const auto& rFont
-            = DefaultItemGet<SvxFontItem>(*pPool, GetWhichOfScript(RES_CHRATR_FONT, nRubyScript));
+        const SvxFontItem& rFont
+            = pPool->GetDefaultItem( GetWhichOfScript(RES_CHRATR_FONT, nRubyScript) );
         m_sFontFamily = rFont.GetFamilyName();
 
-        const auto& rHeight = DefaultItemGet<SvxFontHeightItem>(
-            *pPool, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        const SvxFontHeightItem& rHeight =
+            pPool->GetDefaultItem( GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
         m_nRubyHeight = rHeight.GetHeight();
     }
 
