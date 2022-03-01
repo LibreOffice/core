@@ -223,7 +223,7 @@ class JSInstanceBuilder : public SalInstanceBuilder, public JSDialogSender
 
     static std::map<std::string, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(const std::string& nWindowId);
-    void RememberWidget(const OString& id, weld::Widget* pWidget);
+    void RememberWidget(OString id, weld::Widget* pWidget);
     static void RememberWidget(const std::string& nWindowId, const OString& id,
                                weld::Widget* pWidget);
     static weld::Widget* FindWeldWidgetsMap(const std::string& nWindowId, const OString& rWidget);
@@ -457,10 +457,10 @@ public:
                 bool bTakeOwnership);
 };
 
-class JSLabel : public JSWidget<SalInstanceLabel, FixedText>
+class JSLabel : public JSWidget<SalInstanceLabel, Control>
 {
 public:
-    JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder* pBuilder,
+    JSLabel(JSDialogSender* pSender, Control* pLabel, SalInstanceBuilder* pBuilder,
             bool bTakeOwnership);
     virtual void set_label(const OUString& rText) override;
 };
@@ -702,6 +702,8 @@ class JSBox : public JSWidget<SalInstanceBox, VclBox>
 {
 public:
     JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder, bool bTakeOwnership);
+
+    void reorder_child(weld::Widget* pWidget, int nNewPosition) override;
 };
 
 class JSWidgetInstance : public JSWidget<SalInstanceWidget, vcl::Window>
