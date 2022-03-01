@@ -543,12 +543,12 @@ public:
     }
 };
 
-    void lcl_convertStringArguments(sal_uInt16 nSlot, SfxItemSet& rArgs)
+    void lcl_convertStringArguments(sal_uInt16 nSlot, const std::unique_ptr<SfxItemSet>& pArgs)
     {
         Color aColor;
         const SfxPoolItem* pItem = nullptr;
 
-        if (SfxItemState::SET == rArgs.GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_LINE_WIDTH_ARG, false, &pItem))
         {
             double fValue = static_cast<const SvxDoubleItem*>(pItem)->GetValue();
             // FIXME: different units...
@@ -556,9 +556,9 @@ public:
             int nValue = fValue * nPow;
 
             XLineWidthItem aItem(nValue);
-            rArgs.Put(aItem);
+            pArgs->Put(aItem);
         }
-        if (SfxItemState::SET == rArgs.GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
+        if (SfxItemState::SET == pArgs->GetItemState(SID_ATTR_COLOR_STR, false, &pItem))
         {
             OUString sColor = static_cast<const SfxStringItem*>(pItem)->GetValue();
 
@@ -572,26 +572,26 @@ public:
                 case SID_ATTR_LINE_COLOR:
                 {
                     XLineColorItem aLineColorItem(OUString(), aColor);
-                    rArgs.Put(aLineColorItem);
+                    pArgs->Put(aLineColorItem);
                     break;
                 }
 
                 case SID_ATTR_FILL_COLOR:
                 {
                     XFillColorItem aFillColorItem(OUString(), aColor);
-                    rArgs.Put(aFillColorItem);
+                    pArgs->Put(aFillColorItem);
                     break;
                 }
             }
         }
-        if (SfxItemState::SET == rArgs.GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
+        if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
         {
             const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
             if (pJSON)
             {
                 XGradient aGradient = XGradient::fromJSON(pJSON->GetValue());
                 XFillGradientItem aItem(aGradient);
-                rArgs.Put(aItem);
+                pArgs->Put(aItem);
             }
         }
     }
@@ -683,9 +683,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
         {
             if( rReq.GetArgs() )
             {
-                SfxItemSet aNewArgs = rReq.GetArgs()->CloneAsValue();
-                lcl_convertStringArguments(rReq.GetSlot(), aNewArgs);
-                mpDrawView->SetAttributes(aNewArgs);
+                std::unique_ptr<SfxItemSet> pNewArgs = rReq.GetArgs()->Clone();
+                lcl_convertStringArguments(rReq.GetSlot(), pNewArgs);
+                mpDrawView->SetAttributes(*pNewArgs);
                 rReq.Done();
             }
             else
