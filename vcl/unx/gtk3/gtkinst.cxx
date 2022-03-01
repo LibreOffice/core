@@ -3996,7 +3996,8 @@ public:
         return false;
     }
 #else
-    bool signal_key_press(const GdkEventKey* pEvent)
+
+    virtual bool do_signal_key_press(const GdkEventKey* pEvent)
     {
         if (m_aKeyPressHdl.IsSet())
         {
@@ -4006,7 +4007,7 @@ public:
         return false;
     }
 
-    bool signal_key_release(const GdkEventKey* pEvent)
+    virtual bool do_signal_key_release(const GdkEventKey* pEvent)
     {
         if (m_aKeyReleaseHdl.IsSet())
         {
@@ -4014,6 +4015,16 @@ public:
             return m_aKeyReleaseHdl.Call(GtkToVcl(*pEvent));
         }
         return false;
+    }
+
+    bool signal_key_press(const GdkEventKey* pEvent)
+    {
+        return do_signal_key_press(pEvent);
+    }
+
+    bool signal_key_release(const GdkEventKey* pEvent)
+    {
+        return do_signal_key_release(pEvent);
     }
 #endif
 
@@ -17551,6 +17562,11 @@ public:
         return signal_im_context_delete_surrounding(rRange);
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    virtual bool do_signal_key_press(const GdkEventKey* pEvent) override;
+    virtual bool do_signal_key_release(const GdkEventKey* pEvent) override;
+#endif
+
     virtual void queue_draw() override
     {
         gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
@@ -17932,7 +17948,30 @@ public:
         pThis->updateIMSpotLocation();
         pThis->EndExtTextInput();
     }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    bool im_context_filter_keypress(const GdkEventKey* pEvent)
+    {
+        return gtk_im_context_filter_keypress(m_pIMContext, const_cast<GdkEventKey*>(pEvent));
+    }
+#endif
 };
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+bool GtkInstanceDrawingArea::do_signal_key_press(const GdkEventKey* pEvent)
+{
+    if (m_xIMHandler && m_xIMHandler->im_context_filter_keypress(pEvent))
+        return true;
+    return GtkInstanceWidget::do_signal_key_press(pEvent);
+}
+
+bool GtkInstanceDrawingArea::do_signal_key_release(const GdkEventKey* pEvent)
+{
+    if (m_xIMHandler && m_xIMHandler->im_context_filter_keypress(pEvent))
+        return true;
+    return GtkInstanceWidget::do_signal_key_release(pEvent);
+}
+#endif
 
 void GtkInstanceDrawingArea::set_input_context(const InputContext& rInputContext)
 {
