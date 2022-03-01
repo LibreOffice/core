@@ -399,7 +399,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0111: { // Strip Offset(s)
             size_t nOldNumSO = aStripOffsets.size();
             nDataLen += nOldNumSO;
-            size_t const nMaxAllocAllowed = SAL_MAX_UINT32 / sizeof(sal_uInt32);
+            size_t const nMaxAllocAllowed = SAL_MAX_INT32 / sizeof(sal_uInt32);
             size_t nMaxRecordsAvailable = pTIFF->remainingSize() / DataTypeSize();
             if (nDataLen > nOldNumSO && nDataLen < nMaxAllocAllowed &&
                 (nDataLen - nOldNumSO) <= nMaxRecordsAvailable)
@@ -445,7 +445,7 @@ void TIFFReader::ReadTagData( sal_uInt16 nTagType, sal_uInt32 nDataLen)
         case 0x0117: { // Strip Byte Counts
             size_t nOldNumSBC = aStripByteCounts.size();
             nDataLen += nOldNumSBC;
-            size_t const nMaxAllocAllowed = SAL_MAX_UINT32 / sizeof(sal_uInt32);
+            size_t const nMaxAllocAllowed = SAL_MAX_INT32 / sizeof(sal_uInt32);
             size_t nMaxRecordsAvailable = pTIFF->remainingSize() / DataTypeSize();
             if (nDataLen > nOldNumSBC && nDataLen < nMaxAllocAllowed &&
                 (nDataLen - nOldNumSBC) <= nMaxRecordsAvailable)
