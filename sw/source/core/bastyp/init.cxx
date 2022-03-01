@@ -319,7 +319,7 @@ SfxItemInfo aSlotTab[] =
     { 0, false },                               // RES_TXTATR_FLYCNT
     { 0, false },                               // RES_TXTATR_FTN
     { 0, false },                               // RES_TXTATR_ANNOTATION
-    { 0, true },                           // RES_TXTATR_LINEBREAK
+    { 0, false },                               // RES_TXTATR_LINEBREAK
     { 0, true },                           // RES_TXTATR_DUMMY1
     { 0, true },                           // RES_TXTATR_DUMMY2
 

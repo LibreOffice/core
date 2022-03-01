@@ -482,6 +482,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/unoframe \
     sw/source/core/unocore/unoftn \
     sw/source/core/unocore/unoidx \
+    sw/source/core/unocore/unolinebreak \
     sw/source/core/unocore/unomap \
     sw/source/core/unocore/unomap1 \
     sw/source/core/unocore/unoobj \

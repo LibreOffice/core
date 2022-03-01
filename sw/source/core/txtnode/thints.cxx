@@ -3476,6 +3476,11 @@ sal_Unicode GetCharOfTextAttr( const SwTextAttr& rAttr )
             cRet = CH_TXTATR_BREAKWORD;
         }
         break;
+        case RES_TXTATR_LINEBREAK:
+        {
+            cRet = CH_TXTATR_NEWLINE;
+        }
+        break;
 
         default:
             assert(!"GetCharOfTextAttr: unknown attr");

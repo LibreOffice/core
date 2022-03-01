@@ -23,6 +23,8 @@
 #include <unotxdoc.hxx>
 #include <docsh.hxx>
 #include <view.hxx>
+#include <ndtxt.hxx>
+#include <textlinebreak.hxx>
 
 using namespace ::com::sun::star;
 
@@ -213,6 +215,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBrokenEmbeddedObject)
     // shown to the user.
     CPPUNIT_ASSERT(
         xEmbeddedObject->supportsService("com.sun.star.comp.embed.OCommonEmbeddedObject"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakInsert)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a line-break with properties:
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xLineBreak(
+        xMSF->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+
+    // Then make sure that both the line break and its matching text attribute is inserted:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNode = pDoc->GetNodes()[nIndex]->GetTextNode();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: "\n" (newline)
+    // - Actual  : "" (empty string)
+    // i.e. SwXLineBreak::attach() did not insert the newline + its text attribute.
+    CPPUNIT_ASSERT_EQUAL(OUString("\n"), pTextNode->GetText());
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_LINEBREAK);
+    CPPUNIT_ASSERT(pAttr);
+    auto pTextLineBreak = static_cast<SwTextLineBreak*>(pAttr);
+    auto& rFormatLineBreak = static_cast<SwFormatLineBreak&>(pTextLineBreak->GetAttr());
+    CPPUNIT_ASSERT_EQUAL(SwLineBreakClear::ALL, rFormatLineBreak.GetValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
