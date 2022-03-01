@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "927e0fec_2496d1a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-01T16:52:57Z",
+      "side": 1,
+      "message": "@Attila Very nice fix and cleanup! I\u0027ve added more details in the commit description, mentioning the fixed regression.",
+      "revId": "ac4024d9f917cfe6252daf3b3961372a3a99e84d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
