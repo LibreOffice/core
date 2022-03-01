@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35f79af7_ffcf9fe2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-01T09:47:38Z",
+      "side": 1,
+      "message": "Don\u0027t worry about the fuzzing stuff. If it turns out to be an issue it\u0027s always possible to use the compile time config_fuzzers.h header instead of that runtime IsFuzzing to resolve it.",
+      "parentUuid": "6af8ab92_d871d594",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fc498fa_e7a931e0",
