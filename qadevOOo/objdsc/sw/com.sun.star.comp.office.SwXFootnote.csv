@@ -10,8 +10,6 @@
 "SwXFootnote";"com::sun::star::text::XTextRange";"getEnd()"
 "SwXFootnote";"com::sun::star::text::XTextRange";"getString()"
 "SwXFootnote";"com::sun::star::text::XTextRange";"setString()"
-"SwXFootnote";"com::sun::star::text::XFootnote";"getLabel()"
-"SwXFootnote";"com::sun::star::text::XFootnote";"setLabel()"
 "SwXFootnote";"com::sun::star::text::XTextContent";"attach()"
 "SwXFootnote";"com::sun::star::text::XTextContent";"getAnchor()"
 "SwXFootnote";"com::sun::star::text::XText";"insertTextContent()"
