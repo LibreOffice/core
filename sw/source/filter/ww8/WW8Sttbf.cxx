@@ -24,14 +24,11 @@
 #include "WW8Sttbf.hxx"
 #include <osl/endian.h>
 #include <o3tl/make_shared.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/stream.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
-
-#ifdef OSL_BIGENDIAN
-#include <rtl/ustrbuf.hxx>
-#endif
 
 namespace ww8
 {
@@ -71,7 +68,7 @@ namespace ww8
     }
 
     OUString WW8Struct::getUString(sal_uInt32 nOffset,
-                                          sal_uInt32 nCount)
+                                          sal_Int32 nCount)
     {
         OUString aResult;
 
@@ -82,10 +79,10 @@ namespace ww8
             if (nStartOff >= mn_size)
                 return aResult;
             sal_uInt32 nAvailable = (mn_size - nStartOff)/sizeof(sal_Unicode);
-            if (nCount > nAvailable)
+            if (o3tl::make_unsigned(nCount) > nAvailable)
                 nCount = nAvailable;
-            OUStringBuffer aBuf;
-            for (sal_uInt32 i = 0; i < nCount; ++i)
+            OUStringBuffer aBuf(nCount);
+            for (sal_Int32 i = 0; i < nCount; ++i)
                 aBuf.append(static_cast<sal_Unicode>(getU16(nStartOff+i*2)));
             aResult = aBuf.makeStringAndClear();
         }
