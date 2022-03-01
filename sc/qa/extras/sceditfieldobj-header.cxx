@@ -9,6 +9,7 @@
 
 #include <test/calc_unoapi_test.hxx>
 #include <test/beans/xpropertyset.hxx>
+#include <test/lang/xcomponent.hxx>
 #include <test/text/textcontent.hxx>
 #include <test/text/xtextcontent.hxx>
 #include <test/text/xtextfield.hxx>
@@ -35,6 +36,7 @@ namespace sc_apitest
 {
 class ScEditFieldObj_Header : public CalcUnoApiTest,
                               public apitest::TextContent,
+                              public apitest::XComponent,
                               public apitest::XPropertySet,
                               public apitest::XTextContent,
                               public apitest::XTextField
@@ -48,11 +50,17 @@ public:
     virtual uno::Reference<text::XTextContent> getTextContent() override;
     virtual uno::Reference<text::XTextRange> getTextRange() override;
     virtual bool isAttachSupported() override { return false; }
+    virtual void triggerDesktopTerminate() override{};
 
     CPPUNIT_TEST_SUITE(ScEditFieldObj_Header);
 
     // TextContent
     CPPUNIT_TEST(testTextContentProperties);
+
+    // XComponent
+    CPPUNIT_TEST(testAddEventListener);
+    CPPUNIT_TEST(testRemoveEventListener);
+    CPPUNIT_TEST(testDispose);
 
     // XPropertySet
     CPPUNIT_TEST(testGetPropertySetInfo);
