@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af8ab92_d871d594",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-01T07:06:08Z",
+      "side": 1,
+      "message": "Caolán: I\u0027m not very familiar with config code or the UNO stuff, I based the setup here on FilterCache::impl_createConfigAccess(), which has that wrapped in utl::ConfigManager::IsFuzzing() test, which I can\u0027t use in comphelper. I have no idea if it\u0027s needed or how to handle it here.\n",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
