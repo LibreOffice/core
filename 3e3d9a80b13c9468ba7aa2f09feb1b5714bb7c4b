@@ -69,6 +69,23 @@
       "parentUuid": "529b4c4b_3f10e040",
       "revId": "3e3d9a80b13c9468ba7aa2f09feb1b5714bb7c4b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f944cf_877996e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-03-01T16:39:59Z",
+      "side": 1,
+      "message": "Thanks a lot guys.\n\nBecause of the good part already integrated, I\u0027m going to abandon this patch.\n\nCheers,\nGelma",
+      "revId": "3e3d9a80b13c9468ba7aa2f09feb1b5714bb7c4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
