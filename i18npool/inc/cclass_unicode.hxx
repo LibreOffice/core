@@ -134,7 +134,6 @@ private:
     std::unique_ptr<ParserFlags[]> pCont;
     sal_Int32            nStartTypes;
     sal_Int32            nContTypes;
-    ScanState            eState;
     sal_Unicode          cGroupSep;
     sal_Unicode          cDecimalSep;
     sal_Unicode          cDecimalSepAlt;
@@ -143,10 +142,10 @@ private:
     static sal_Int32 getParseTokensType(sal_uInt32 c, bool isFirst);
 
     /// Access parser table flags.
-    ParserFlags getFlags(sal_uInt32 c);
+    ParserFlags getFlags(sal_uInt32 c, ScanState eState);
 
     /// Access parser flags via International and special definitions.
-    ParserFlags getFlagsExtended(sal_uInt32 c) const;
+    ParserFlags getFlagsExtended(sal_uInt32 c, ScanState eState) const;
 
     /// Access parser table flags for user defined start characters.
     ParserFlags getStartCharsFlags( sal_uInt32 c );

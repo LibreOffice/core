@@ -557,13 +557,13 @@ void cclass_Unicode::destroyParserTable()
 }
 
 
-ParserFlags cclass_Unicode::getFlags(sal_uInt32 const c)
+ParserFlags cclass_Unicode::getFlags(sal_uInt32 const c, const cclass_Unicode::ScanState eState)
 {
     ParserFlags nMask;
     if ( c < nDefCnt )
         nMask = pTable[ sal_uInt8(c) ];
     else
-        nMask = getFlagsExtended(c);
+        nMask = getFlagsExtended(c, eState);
     switch ( eState )
     {
         case ssGetChar :
@@ -593,7 +593,7 @@ ParserFlags cclass_Unicode::getFlags(sal_uInt32 const c)
 }
 
 
-ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c) const
+ParserFlags cclass_Unicode::getFlagsExtended(sal_uInt32 const c, const cclass_Unicode::ScanState eState) const
 {
     if ( c == cGroupSep )
         return ParserFlags::VALUE;
@@ -702,7 +702,7 @@ ParserFlags cclass_Unicode::getContCharsFlags( sal_Unicode c )
 void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32 nPos, sal_Int32 nTokenType )
 {
     assert(r.LeadingWhiteSpace == 0);
-    eState = ssGetChar;
+    ScanState eState = ssGetChar;
 
     //! All the variables below (plus ParseResult) have to be reset on ssRewindFromValue!
     OUStringBuffer aSymbol;
@@ -723,7 +723,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
     while ((current != 0) && (eState != ssStop))
     {
         ++nCodePoints;
-        ParserFlags nMask = getFlags(current);
+        ParserFlags nMask = getFlags(current, eState);
         if ( nMask & ParserFlags::EXCLUDED )
             eState = ssBounce;
         if ( bMightBeWord )
@@ -827,7 +827,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if (current == cGroupSep)
                     {
-                        if (getFlags(nextChar) & ParserFlags::VALUE_DIGIT)
+                        if (getFlags(nextChar, eState) & ParserFlags::VALUE_DIGIT)
                             nParseTokensType |= KParseTokens::GROUP_SEPARATOR_IN_NUMBER;
                         else
                         {
@@ -850,7 +850,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 }
                 else if (current == 'E' || current == 'e')
                 {
-                    ParserFlags nNext = getFlags(nextChar);
+                    ParserFlags nNext = getFlags(nextChar, eState);
                     if ( nNext & ParserFlags::VALUE_EXP )
                         ;   // keep it going
                     else if (bMightBeWord && ((nNext & ParserFlags::WORD) || !nextChar))
@@ -865,7 +865,7 @@ void cclass_Unicode::parseText( ParseResult& r, const OUString& rText, sal_Int32
                 {
                     if ( (cLast == 'E') || (cLast == 'e') )
                     {
-                        ParserFlags nNext = getFlags(nextChar);
+                        ParserFlags nNext = getFlags(nextChar, eState);
                         if ( nNext & ParserFlags::VALUE_EXP_VALUE )
                             ;   // keep it going
                         else if (bMightBeWord && ((nNext & ParserFlags::WORD) || !nextChar))
