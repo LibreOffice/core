@@ -254,7 +254,7 @@ void Shape::migrateDiagramHelperToNewShape(ShapePtr& pTarget)
 
     if(pTarget->mpDiagramHelper)
     {
-        // this should no happen, bu if there is already a helper, clean it up
+        // this should no happen, but if there is already a helper, clean it up
         delete pTarget->mpDiagramHelper;
         pTarget->mpDiagramHelper = nullptr;
     }

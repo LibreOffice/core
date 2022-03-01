@@ -2004,7 +2004,7 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
     if( aOutSet.Count() )
         pList->Put( aOutSet );
 
-    PaintAttrText_Impl(); // Set AttributText in GroupBox
+    PaintAttrText_Impl(); // Set AttributeText in GroupBox
 }
 
 IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl, weld::Button&, void)
