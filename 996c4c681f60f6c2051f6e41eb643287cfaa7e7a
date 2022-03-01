@@ -16,6 +16,24 @@
       "message": "this is just going to hang now, which kind of defeats the point of the original code?",
       "revId": "996c4c681f60f6c2051f6e41eb643287cfaa7e7a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22988f96_e9f62f66",
+        "filename": "vcl/unx/generic/printer/cupsmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T07:21:37Z",
+      "side": 1,
+      "message": "The main point of the original code had presumably more to do with getting the thread\u0027s activity off the main thread than with not blocking indefinitely here (during shutdown).  Note that there are already other places in this source file that call osl_joinWithThread on that m_aDestThread, see the commit message and my hope \"that any blocking (if that is even still an issue today) is not\nindefinite\".",
+      "parentUuid": "073ad21f_6b9e7276",
+      "revId": "996c4c681f60f6c2051f6e41eb643287cfaa7e7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
