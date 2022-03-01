@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42d326f0_e7b4d174",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T07:59:20Z",
+      "side": 1,
+      "message": "Very nice improvement.",
+      "revId": "782fd80b371e9716e7e96036b265caf2029f282e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3b81204_dc52297a",
+        "filename": "cui/source/dialogs/scriptdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1225,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T07:59:20Z",
+      "side": 1,
+      "message": "errorMessage is only used inside one branch; please define it where it\u0027s used, no need for forward declaration. It\u0027s best to limit the scope of variables to the minimum; it helps reducing name clutter, mistakes, stack use; and also it reduces CPU wastage in objects having those, by avoiding useless default constructors just to re-assign to an actual value later.",
+      "revId": "782fd80b371e9716e7e96036b265caf2029f282e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "168da2cf_a3d69f49",
+        "filename": "cui/source/dialogs/scriptdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1232,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T07:59:20Z",
+      "side": 1,
+      "message": "The same \"only used inside one branch\" holds for location, library, moduleName, macroName, and macroLibModName, and the default \"UNKNOWN\" values are not even used, because where the variables are used, they are always re-defined.",
+      "revId": "782fd80b371e9716e7e96036b265caf2029f282e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd0eb80d_8dc2b38f",
+        "filename": "cui/source/dialogs/scriptdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1255,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T07:59:20Z",
+      "side": 1,
+      "message": "\u0027u\u0027 prefix is redundant for ASCII chars (and is distracting a bit), but no real problem as it is - just nitpicking.",
+      "range": {
+        "startLine": 1255,
+        "startChar": 44,
+        "endLine": 1255,
+        "endChar": 48
+      },
+      "revId": "782fd80b371e9716e7e96036b265caf2029f282e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "685be073_3af8c453",
+        "filename": "cui/source/dialogs/scriptdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1256,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T07:59:20Z",
+      "side": 1,
+      "message": "You obtain all the tokens in sequence. To make it more performant, there\u0027s an optional last argument, that takes and returns the index allowing to resume from where you stopped the previous operation, instead of parsing the same string from the beginning again.",
+      "revId": "782fd80b371e9716e7e96036b265caf2029f282e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
