@@ -43,6 +43,7 @@
 #include <unoframe.hxx>
 #include <textboxhelper.hxx>
 #include <unofootnote.hxx>
+#include <unolinebreak.hxx>
 #include <vcl/svapp.hxx>
 #include <fmtcntnt.hxx>
 #include <authfld.hxx>
@@ -453,7 +454,8 @@ const ProvNamesId_Type aProvNamesId[] =
     { CSS_TEXT_FIELDMASTER_DATABASE,                  SwServiceType::FieldMasterDatabase },
     { CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY,              SwServiceType::FieldMasterBibliography },
     { "com.sun.star.style.TableStyle",                SwServiceType::StyleTable },
-    { "com.sun.star.style.CellStyle",                 SwServiceType::StyleCell }
+    { "com.sun.star.style.CellStyle",                 SwServiceType::StyleCell },
+    { "com.sun.star.text.LineBreak",                  SwServiceType::LineBreak }
 };
 
 const SvEventDescription* sw_GetSupportedMacroItems()
@@ -822,6 +824,9 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         break;
         case SwServiceType::FieldTypeMetafield:
             xRet = SwXMeta::CreateXMeta(rDoc, true);
+        break;
+        case SwServiceType::LineBreak:
+            xRet = SwXLineBreak::CreateXLineBreak();
         break;
         default:
             throw uno::RuntimeException();
