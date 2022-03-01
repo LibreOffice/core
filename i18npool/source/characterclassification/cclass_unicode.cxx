@@ -43,7 +43,6 @@ cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxCo
         m_xContext( rxContext ),
         nStartTypes( 0 ),
         nContTypes( 0 ),
-        eState( ssGetChar ),
         cGroupSep( ',' ),
         cDecimalSep( '.' ),
         cDecimalSepAlt( 0 )

@@ -194,7 +194,8 @@ Transliteration_casemapping::Transliteration_casemapping()
 void
 Transliteration_casemapping::setMappingType( const MappingType rMappingType, const Locale& rLocale )
 {
-    nMappingType = rMappingType;
+    if (nMappingType != rMappingType)
+        nMappingType = rMappingType;
     if (aLocale != rLocale)
         aLocale = rLocale;
 }
