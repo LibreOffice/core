@@ -2080,6 +2080,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
             SwFootnoteBossFrame *pOldBoss = bFootnotesInDoc ? FindFootnoteBossFrame( true ) : nullptr;
             bool bReformat;
+            SwFrameDeleteGuard g(this);
             if ( MoveBwd( bReformat ) )
             {
                 aRectFnSet.Refresh(this);
