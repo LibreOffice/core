@@ -29,10 +29,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#ifdef OSL_BIGENDIAN
-#include <rtl/ustrbuf.hxx>
-#endif
-
 namespace ww8
 {
     WW8Struct::WW8Struct(SvStream& rSt, sal_uInt32 nPos, sal_uInt32 nSize)
@@ -84,7 +80,7 @@ namespace ww8
             sal_uInt32 nAvailable = (mn_size - nStartOff)/sizeof(sal_Unicode);
             if (nCount > nAvailable)
                 nCount = nAvailable;
-            OUStringBuffer aBuf;
+            OUStringBuffer aBuf(nCount);
             for (sal_uInt32 i = 0; i < nCount; ++i)
                 aBuf.append(static_cast<sal_Unicode>(getU16(nStartOff+i*2)));
             aResult = aBuf.makeStringAndClear();
