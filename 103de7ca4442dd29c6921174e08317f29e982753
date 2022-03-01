@@ -69,6 +69,24 @@
       "parentUuid": "d1ed1d43_6123f038",
       "revId": "103de7ca4442dd29c6921174e08317f29e982753",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21365dd5_8e71bb7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T14:17:32Z",
+      "side": 1,
+      "message": "\u003e Clang seems to have an exception for this case and doesn\u0027t\n\nIt appears that Clang, arguably unfortunately, doesn\u0027t warn from within the body of a macro expansion here.",
+      "parentUuid": "38cb4dae_df56bfcf",
+      "revId": "103de7ca4442dd29c6921174e08317f29e982753",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
