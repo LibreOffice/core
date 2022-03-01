@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a859156_2b29eee8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-01T07:06:38Z",
+      "side": 1,
+      "message": "Thank you for your feedback, I didn’t know it and had just used Word Reference website. No pb to let it as it is then.",
+      "revId": "5ccfdb919782664f84cbe406d507bf000644f5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83604f82_9c45095e",
