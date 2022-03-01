@@ -16,6 +16,24 @@
       "message": "What does Excel do if the type is boolean but the value is not 0 or 1? Note it has a distinct boolean type, so probably it would complain or bail out.",
       "revId": "3391ae21ee2d6e84cfd6c61835ac93c315ec5475",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c47defc9_869d5cc8",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-01T04:49:35Z",
+      "side": 1,
+      "message": "if (rCell.GetFormatType() \u003d\u003d SvNumFormatType::LOGICAL)\n    assert(rsValue \u003d\u003d \"0\" || rsValue \u003d\u003d \"1\");\ndoesn\u0027t find any examples in the unit tests, so I can only speculate. My earlier version of the code (which forced a 1 or 0) was part of LO\u0027s earlier code - essentially it was just a revert.\n\nI don\u0027t know how to make a valid example. If I create a formula \"\u003d100+1\", set the display to boolean, then on export the style is boolean but t\u003d\"n\".\n\nBut yes, if I take the above example and force the \"n\" to be a \"b\" then Excel 2003 complained about the file-open. So I\u0027ll revise the code again to be conditional on the two valid values for b.",
+      "parentUuid": "346098b6_d7fff40e",
+      "revId": "3391ae21ee2d6e84cfd6c61835ac93c315ec5475",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
