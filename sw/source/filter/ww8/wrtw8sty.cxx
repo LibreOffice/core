@@ -1679,9 +1679,9 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             // at the child ONLY change column structure according to Sect-Attr.
 
             const SvxLRSpaceItem &rSectionLR =
-                ItemGet<SvxLRSpaceItem>( *(rSepInfo.pSectionFormat), RES_LR_SPACE );
+                rSepInfo.pSectionFormat->GetFormatAttr( RES_LR_SPACE );
             const SvxLRSpaceItem &rPageLR =
-                ItemGet<SvxLRSpaceItem>( *pPdFormat, RES_LR_SPACE );
+                pPdFormat->GetFormatAttr( RES_LR_SPACE );
 
             SvxLRSpaceItem aResultLR( rPageLR.GetLeft() +
                     rSectionLR.GetLeft(), rPageLR.GetRight() +

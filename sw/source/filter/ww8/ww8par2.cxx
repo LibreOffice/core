@@ -3316,7 +3316,7 @@ void WW8TabDesc::AdjustNewBand()
 
         SetTabBorders(pBox, j);
 
-        SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrameFormat()), RES_BOX));
+        SvxBoxItem aCurrentBox(pBox->GetFrameFormat()->GetFormatAttr(RES_BOX));
         pBox->GetFrameFormat()->SetFormatAttr(aCurrentBox);
 
         SetTabVertAlign(pBox, j);

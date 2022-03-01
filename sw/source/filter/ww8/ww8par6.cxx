@@ -219,12 +219,12 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
     rFormat.SetFormatAttr(SvxFrameDirectionItem(rSection.meDir, RES_FRAMEDIR));
 
     SwTwips nTextareaHeight = rFormat.GetFrameSize().GetHeight();
-    const SvxULSpaceItem &rUL = ItemGet<SvxULSpaceItem>(rFormat, RES_UL_SPACE);
+    const SvxULSpaceItem &rUL = rFormat.GetFormatAttr(RES_UL_SPACE);
     nTextareaHeight -= rUL.GetUpper();
     nTextareaHeight -= rUL.GetLower();
 
     SwTwips nTextareaWidth = rFormat.GetFrameSize().GetWidth();
-    const SvxLRSpaceItem &rLR = ItemGet<SvxLRSpaceItem>(rFormat, RES_LR_SPACE);
+    const SvxLRSpaceItem &rLR = rFormat.GetFormatAttr(RES_LR_SPACE);
     nTextareaWidth -= rLR.GetLeft();
     nTextareaWidth -= rLR.GetRight();
 
@@ -276,8 +276,9 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrameFormat &rFormat, const wwSection &r
         if (m_vColl[nI].m_bValid && m_vColl[nI].m_pFormat &&
             m_vColl[nI].IsWW8BuiltInDefaultStyle())
         {
-            nCharWidth = ItemGet<SvxFontHeightItem>(*(m_vColl[nI].m_pFormat),
-                RES_CHRATR_CJK_FONTSIZE).GetHeight();
+            const SvxFontHeightItem& rFontHeightItem =
+                m_vColl[nI].m_pFormat->GetFormatAttr(RES_CHRATR_CJK_FONTSIZE);
+            nCharWidth = rFontHeightItem.GetHeight();
             break;
         }
     }
@@ -4311,8 +4312,7 @@ void SwWW8ImplReader::Read_LR( sal_uInt16 nId, const sal_uInt8* pData, short nLe
                 if (aIsZeroed.pSprm && aIsZeroed.nRemainingData >= 1 && *aIsZeroed.pSprm == 0)
                 {
                     const SvxLRSpaceItem &rLR =
-                        ItemGet<SvxLRSpaceItem>(*(m_vColl[m_nCurrentColl].m_pFormat),
-                        RES_LR_SPACE);
+                        m_vColl[m_nCurrentColl].m_pFormat->GetFormatAttr(RES_LR_SPACE);
                     nPara = nPara - rLR.GetTextFirstLineOffset();
                 }
             }

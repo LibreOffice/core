@@ -589,7 +589,7 @@ namespace sw
                 const SwFrameFormat* pApply = rTable.GetFrameFormat();
                 OSL_ENSURE(pApply, "impossible");
                 if (pApply)
-                    pBreak = &(ItemGet<SvxFormatBreakItem>(*pApply, RES_BREAK));
+                    pBreak = &pApply->GetFormatAttr(RES_BREAK);
             }
             else if (const SwContentNode *pNd = rNd.GetContentNode())
                 pBreak = &pNd->GetAttr(RES_BREAK);

@@ -405,8 +405,8 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
     */
     TypedWhichId<SvxFontItem> nFontId = GetWhichOfScript( RES_CHRATR_FONT, GetScript() );
 
-    const SvxFontItem &rParentFont = ItemGet<SvxFontItem>(
-        static_cast<const SwTextFormatColl&>(rNd.GetAnyFormatColl()), nFontId);
+    const SvxFontItem &rParentFont =
+        static_cast<const SwTextFormatColl&>(rNd.GetAnyFormatColl()).GetFormatAttr(nFontId);
     const SvxFontItem *pFont = &rParentFont;
     const SfxPoolItem *pGrabBag = nullptr;
 
@@ -3629,11 +3629,11 @@ WW8Ruby::WW8Ruby(const SwTextNode& rNode, const SwFormatRuby& rRuby, const MSWor
     if (pFormat)
     {
         const auto& rFont
-            = ItemGet<SvxFontItem>(*pFormat, GetWhichOfScript(RES_CHRATR_FONT, nRubyScript));
+            = pFormat->GetFormatAttr( GetWhichOfScript(RES_CHRATR_FONT, nRubyScript) );
         m_sFontFamily = rFont.GetFamilyName();
 
-        const auto& rHeight = ItemGet<SvxFontHeightItem>(
-            *pFormat, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        const auto& rHeight =
+            pFormat->GetFormatAttr( GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript) );
         m_nRubyHeight = rHeight.GetHeight();
     }
     else

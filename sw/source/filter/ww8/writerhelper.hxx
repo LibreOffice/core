@@ -248,32 +248,6 @@ namespace sw
             return dynamic_cast<const T *>(pItem);
         }
 
-        /** Extract a SfxPoolItem derived property from a SwFormat
-
-            Writer's attributes are retrieved by passing a numeric identifier
-            and receiving a SfxPoolItem reference which must then typically be
-            cast back to its original type which is both tedious and verbose.
-
-            ItemGet uses item_cast () on the retrieved reference to test that the
-            retrieved property is of the type that the developer thinks it is.
-
-            @param rFormat
-            The SwFormat to retrieve the property from
-
-            @param eType
-            The numeric identifier of the property to be retrieved
-
-            @tplparam T
-            A SfxPoolItem derived class of the retrieved property
-
-            @exception std::bad_cast Thrown if the property was not a T
-        */
-        template<class T> const T & ItemGet(const SwFormat &rFormat,
-            sal_uInt16 eType)
-        {
-            return item_cast<T>(rFormat.GetFormatAttr(eType));
-        }
-
         /** Extract a default SfxPoolItem derived property from a SfxItemPool
 
             Writer's attributes are retrieved by passing a numeric identifier

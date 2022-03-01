@@ -2768,11 +2768,11 @@ void SwWW8ImplReader::Read_SubF_Ruby( WW8ReadFieldParams& rReadParam)
     for(const auto& rpCharFormat : m_aRubyCharFormats)
     {
         const SvxFontHeightItem &rFH =
-            ItemGet<SvxFontHeightItem>(*rpCharFormat,
-            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
+            rpCharFormat->GetFormatAttr(
+                GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript));
         if (rFH.GetHeight() == nFontSize*10)
         {
-            const SvxFontItem &rF = ItemGet<SvxFontItem>(*rpCharFormat,
+            const SvxFontItem &rF = rpCharFormat->GetFormatAttr(
                 GetWhichOfScript(RES_CHRATR_FONT,nScript));
             if (rF.GetFamilyName() == sFontName)
             {

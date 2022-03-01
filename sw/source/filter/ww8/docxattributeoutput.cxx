@@ -3324,12 +3324,12 @@ void DocxAttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 nPos, co
     {
         const SwCharFormat* pFormat = rRuby.GetTextRuby()->GetCharFormat();
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType(rRuby.GetText(), 0);
-        sal_uInt16 nWhichFont = (nScript == i18n::ScriptType::LATIN) ?  RES_CHRATR_FONT : RES_CHRATR_CJK_FONT;
-        sal_uInt16 nWhichFontSize = (nScript == i18n::ScriptType::LATIN) ?  RES_CHRATR_FONTSIZE : RES_CHRATR_CJK_FONTSIZE;
+        TypedWhichId<SvxFontItem> nWhichFont = (nScript == i18n::ScriptType::LATIN) ?  RES_CHRATR_FONT : RES_CHRATR_CJK_FONT;
+        TypedWhichId<SvxFontHeightItem> nWhichFontSize = (nScript == i18n::ScriptType::LATIN) ?  RES_CHRATR_FONTSIZE : RES_CHRATR_CJK_FONTSIZE;
 
-        CharFont(ItemGet<SvxFontItem>(*pFormat, nWhichFont));
-        CharFontSize(ItemGet<SvxFontHeightItem>(*pFormat, nWhichFontSize));
-        CharFontSize(ItemGet<SvxFontHeightItem>(*pFormat, RES_CHRATR_CTL_FONTSIZE));
+        CharFont(pFormat->GetFormatAttr(nWhichFont));
+        CharFontSize(pFormat->GetFormatAttr(nWhichFontSize));
+        CharFontSize(pFormat->GetFormatAttr(RES_CHRATR_CTL_FONTSIZE));
     }
 
     EndRunProperties( nullptr );

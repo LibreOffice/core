@@ -4037,8 +4037,7 @@ sal_uInt32 AttributeOutputBase::GridCharacterPitch( const SwTextGridItem& rGrid 
 
     if (pSwFormat != nullptr)
     {
-        nPageCharSize = ItemGet<SvxFontHeightItem>
-            (*pSwFormat, RES_CHRATR_FONTSIZE).GetHeight();
+        nPageCharSize = pSwFormat->GetFormatAttr(RES_CHRATR_FONTSIZE).GetHeight();
     }
     sal_uInt16 nPitch = rGrid.IsSquaredMode() ? rGrid.GetBaseHeight() :
         rGrid.GetBaseWidth( );
@@ -4953,8 +4952,7 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
         }
         else if (auto pC = dynamic_cast<const SwTextFormatColl*>(m_rWW8Export.m_pOutFormatNode))
         {
-            const SvxFrameDirectionItem &rItem =
-                ItemGet<SvxFrameDirectionItem>(*pC, RES_FRAMEDIR);
+            const SvxFrameDirectionItem &rItem = pC->GetFormatAttr(RES_FRAMEDIR);
             nDirection = rItem.GetValue();
         }
         if ( ( nDirection == SvxFrameDirection::Horizontal_RL_TB ) ||
