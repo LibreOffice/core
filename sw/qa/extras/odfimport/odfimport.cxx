@@ -1331,7 +1331,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146257)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146597)
 {
     load(mpTestDocumentPath, "tdf146597.odt");
-    // This was creashed before.
+    // This was crashed before.
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

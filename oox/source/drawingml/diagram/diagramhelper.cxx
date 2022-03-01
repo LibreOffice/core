@@ -184,7 +184,7 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
 
     if(pParentShape)
     {
-        // The oox::Shapes childs are not needed for holding the original data,
+        // The oox::Shapes children are not needed for holding the original data,
         // free that memory
         pParentShape->getChildren().clear();
     }

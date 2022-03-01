@@ -12,7 +12,7 @@
 namespace i18nutil
 {
 /** This number shows month days without Jan and Feb.
- *  According to the article, it is calcuated as (365-31-28)/10 = 30.6, but because
+ *  According to the article, it is calculated as (365-31-28)/10 = 30.6, but because
  *  of a floating point bug, it was used as 30.6001 as a workaround.
  *
  *  "30.6001, 25 year old hack?"
