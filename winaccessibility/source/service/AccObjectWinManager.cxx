@@ -1057,11 +1057,9 @@ bool AccObjectWinManager::IsStateManageDescendant(XAccessible* pAccessible)
             if( !pRState.is() )
                 return false;
 
-            Sequence<short> pStates = pRState->getStates();
-            int count = pStates.getLength();
-            for( int iIndex = 0;iIndex < count;iIndex++ )
+            for (sal_Int16 nState : pRState->getStates())
             {
-                if (pStates[iIndex] == AccessibleStateType::MANAGES_DESCENDANTS)
+                if (nState == AccessibleStateType::MANAGES_DESCENDANTS)
                     return true;
             }
         }
