@@ -3911,7 +3911,7 @@ public:
     }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    bool signal_key(const GdkEventKey* pEvent)
+    virtual bool do_signal_key(const GdkEventKey* pEvent)
     {
         if (pEvent->type == GDK_KEY_PRESS && m_aKeyPressHdl.IsSet())
         {
@@ -3924,6 +3924,11 @@ public:
             return m_aKeyReleaseHdl.Call(GtkToVcl(*pEvent));
         }
         return false;
+    }
+
+    bool signal_key(const GdkEventKey* pEvent)
+    {
+        return do_signal_key(pEvent);
     }
 #endif
 
@@ -16855,6 +16860,10 @@ public:
         return signal_im_context_delete_surrounding(rRange);
     }
 
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    virtual bool do_signal_key(const GdkEventKey* pEvent) override;
+#endif
+
     virtual void queue_draw() override
     {
         gtk_widget_queue_draw(GTK_WIDGET(m_pDrawingArea));
@@ -17206,7 +17215,23 @@ public:
         pThis->updateIMSpotLocation();
         pThis->EndExtTextInput();
     }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    bool im_context_filter_keypress(const GdkEventKey* pEvent)
+    {
+        return gtk_im_context_filter_keypress(m_pIMContext, const_cast<GdkEventKey*>(pEvent));
+    }
+#endif
 };
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+bool GtkInstanceDrawingArea::do_signal_key(const GdkEventKey* pEvent)
+{
+    if (m_xIMHandler && m_xIMHandler->im_context_filter_keypress(pEvent))
+        return true;
+    return GtkInstanceWidget::do_signal_key(pEvent);
+}
+#endif
 
 void GtkInstanceDrawingArea::set_input_context(const InputContext& rInputContext)
 {
