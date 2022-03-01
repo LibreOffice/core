@@ -55,7 +55,9 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
         || rUIFile == "modules/scalc/ui/textimportcsv.ui"
         || rUIFile == "xmlsec/ui/digitalsignaturesdialog.ui"
         || rUIFile == "xmlsec/ui/viewcertdialog.ui" || rUIFile == "xmlsec/ui/certgeneral.ui"
-        || rUIFile == "xmlsec/ui/viewcertdialog.ui" || rUIFile == "xmlsec/ui/certpage.ui")
+        || rUIFile == "xmlsec/ui/viewcertdialog.ui" || rUIFile == "xmlsec/ui/certpage.ui"
+        || rUIFile == "svx/ui/accessibilitycheckdialog.ui"
+        || rUIFile == "svx/ui/accessibilitycheckentry.ui")
     {
         return true;
     }
