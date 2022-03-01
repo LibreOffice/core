@@ -2712,43 +2712,37 @@ OUString CMAccessible::get_StringFromAny(Any const & pAny)
 
                 OUStringBuffer pString;
 
-                int count = val.getLength();
+                for (const OUString& rElem : val)
+                    pString.append(rElem);
 
-                for( int iIndex = 0;iIndex < count;iIndex++ )
-                {
-                    pString.append(val[iIndex]);
-                }
                 return pString.makeStringAndClear();
             }
             else if (pAny.getValueType() == cppu::UnoType<Sequence< css::style::TabStop >>::get())
             {
                 Sequence < css::style::TabStop > val;
                 pAny >>= val;
-                int count = val.getLength();
 
                 OUStringBuffer buf;
-                for( int iIndex = 0;iIndex < count;iIndex++ )
+                for (const css::style::TabStop& rSingleVal : val)
                 {
-                    css::style::TabStop sigleVal = val[iIndex];
-
                     buf.append("Position=");
-                    buf.append(sigleVal.Position);
+                    buf.append(rSingleVal.Position);
                     buf.append(",TabAlign=");
-                    buf.append(sal_Int32(sigleVal.Alignment));
+                    buf.append(sal_Int32(rSingleVal.Alignment));
                     buf.append(",");
 
                     buf.append("DecimalChar=");
-                    if(sigleVal.DecimalChar==';' || sigleVal.DecimalChar == ':' || sigleVal.DecimalChar == ',' ||
-                        sigleVal.DecimalChar == '=' || sigleVal.DecimalChar == '\\')
+                    if (rSingleVal.DecimalChar==';' || rSingleVal.DecimalChar == ':' || rSingleVal.DecimalChar == ',' ||
+                        rSingleVal.DecimalChar == '=' || rSingleVal.DecimalChar == '\\')
                         buf.append('\\');
-                    buf.append(sigleVal.DecimalChar);
+                    buf.append(rSingleVal.DecimalChar);
                     buf.append(",");
 
                     buf.append("FillChar=");
-                    if(sigleVal.FillChar==';' || sigleVal.FillChar == ':' || sigleVal.FillChar == ',' ||
-                        sigleVal.FillChar == '=' || sigleVal.FillChar == '\\')
+                    if (rSingleVal.FillChar==';' || rSingleVal.FillChar == ':' || rSingleVal.FillChar == ',' ||
+                        rSingleVal.FillChar == '=' || rSingleVal.FillChar == '\\')
                         buf.append('\\');
-                    buf.append(sigleVal.FillChar);
+                    buf.append(rSingleVal.FillChar);
                     buf.append(",");
                 }
                 return buf.makeStringAndClear();
