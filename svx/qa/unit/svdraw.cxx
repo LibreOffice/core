@@ -398,7 +398,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testFontWorks)
     assertXPath(pXmlDoc, "//scene", "projectionMode", "Perspective");
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/fill", "color", "#ff0000");
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "color", "#ff0000");
-    // ODF default 50% is repesented by Specular Intensity = 2^5. The relationship is not linear.
+    // ODF default 50% is represented by Specular Intensity = 2^5. The relationship is not linear.
     assertXPath(pXmlDoc, "//scene/extrude3D[1]/object3Dattributes/material", "specularIntensity",
                 "32");
 }
@@ -471,11 +471,11 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testMaterialSpecular)
     CPPUNIT_ASSERT(pXmlDoc);
 
     // 3D specular color is derived from properties 'extrusion-specularity' and 'extrusion-first-light
-    // -level'. 3D specularIntensity is dervied from property 'draw:extrusion-shininess'. Both are
+    // -level'. 3D specularIntensity is derived from property 'draw:extrusion-shininess'. Both are
     // object properties, not scene properties. Those were wrong in various forms before the patch.
     // Specularity = 77% * first-light-level 67% = 0.5159, which corresponds to gray color #848484.
     assertXPath(pXmlDoc, "(//material)[1]", "specular", "#848484");
-    // extrusion-shinines 50% corresponds to 3D specularIntensity 32, use 2^(50/10).
+    // extrusion-shininess 50% corresponds to 3D specularIntensity 32, use 2^(50/10).
     assertXPath(pXmlDoc, "(//material)[1]", "specularIntensity", "32");
     // extrusion-first-light-level 67% corresponds to gray color #ababab, use 255 * 0.67.
     assertXPath(pXmlDoc, "(//light)[1]", "color", "#ababab");

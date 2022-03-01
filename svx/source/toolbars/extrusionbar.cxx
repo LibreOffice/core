@@ -383,7 +383,7 @@ static void impl_execute( SfxRequest const & rReq, SdrCustomShapeGeometryItem& r
             case 4: // metal MS Office
                 if (basegfx::fTools::equalZero(fOldSpecularity, 0.0001))
                     // MS Office uses 80000/65536. That is currently not allowed in ODF.
-                    // But the ODF error will be catched in xmloff.
+                    // But the ODF error will be caught in xmloff.
                     fSpecularity = 80000.0 / 655.36; // interpreted as %
                 break;
             }
