@@ -356,9 +356,11 @@ void normalizeAddLabel(const OUString& rLabel, std::vector<OUString>& rLabels, L
 
 std::vector<OUString> normalizeLabels(const std::vector<InitColumnData>& rColData)
 {
-    std::vector<OUString> aLabels(1u, ScResId(STR_PIVOT_DATA));
+    std::vector<OUString> aLabels;
+    aLabels.reserve(rColData.size() + 1);
 
     LabelSet aExistingNames;
+    normalizeAddLabel(ScResId(STR_PIVOT_DATA), aLabels, aExistingNames);
 
     for (const InitColumnData& rCol : rColData)
         normalizeAddLabel(rCol.maLabel, aLabels, aExistingNames);
@@ -368,10 +370,11 @@ std::vector<OUString> normalizeLabels(const std::vector<InitColumnData>& rColDat
 
 std::vector<OUString> normalizeLabels(const ScDPCache::DBConnector& rDB, const sal_Int32 nLabelCount)
 {
-    std::vector<OUString> aLabels(1u, ScResId(STR_PIVOT_DATA));
+    std::vector<OUString> aLabels;
     aLabels.reserve(nLabelCount + 1);
 
     LabelSet aExistingNames;
+    normalizeAddLabel(ScResId(STR_PIVOT_DATA), aLabels, aExistingNames);
 
     for (sal_Int32 nCol = 0; nCol < nLabelCount; ++nCol)
     {
