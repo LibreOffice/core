@@ -16,6 +16,24 @@
       "message": "See my comment at https://gerrit.libreoffice.org/c/core/+/130469\nI\u0027d like to have that clarified first.",
       "revId": "aaa8fe73d814fde5556eb7bfdd782324f0a2e7f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "542c5920_5ad2d667",
+        "filename": "sc/source/filter/excel/xestream.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 674,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-01T12:14:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20175dfe_f884dd8f",
+      "revId": "aaa8fe73d814fde5556eb7bfdd782324f0a2e7f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
