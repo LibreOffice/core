@@ -79,9 +79,7 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
 
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pViewData       ( nullptr ),
-        aSortData       ( static_cast<const ScSortItem&>(
-                           rArgSet.Get( nWhichSort )).
-                                GetSortData() ),
+        aSortData       ( rArgSet.Get( nWhichSort ).GetSortData() ),
         nFieldCount     ( 0 ),
         // show actual size of the sorting keys without limiting them to the default size
         nSortKeyCount(std::max(aSortData.GetSortKeyCount(), static_cast<sal_uInt16>(DEFSORT))),
@@ -108,8 +106,7 @@ ScTabPageSortFields::~ScTabPageSortFields()
 
 void ScTabPageSortFields::Init()
 {
-    const ScSortItem& rSortItem = static_cast<const ScSortItem&>(
-                                  GetItemSet().Get( nWhichSort ));
+    const ScSortItem& rSortItem = GetItemSet().Get( nWhichSort );
 
     pViewData = rSortItem.GetViewData();
     OSL_ENSURE( pViewData, "ViewData not found!" );
@@ -217,10 +214,9 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
     const SfxItemSet* pExample = GetDialogExampleSet();
     if (pExample)
     {
-        const SfxPoolItem* pItem;
-        if (pExample->GetItemState(nWhichSort, true, &pItem) == SfxItemState::SET)
+        if (const ScSortItem* pItem = pExample->GetItemIfSet(nWhichSort))
         {
-            ScSortParam aTempData = static_cast<const ScSortItem*>(pItem)->GetSortData();
+            ScSortParam aTempData = pItem->GetSortData();
             aTempData.maKeyState = aNewSortData.maKeyState;
             aNewSortData = aTempData;
         }
@@ -481,7 +477,7 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , aStrColLabel(ScResId(SCSTR_COL_LABEL))
     , aStrUndefined(ScResId(SCSTR_UNDEFINED))
     , nWhichSort(rArgSet.GetPool()->GetWhich(SID_SORT))
-    , aSortData(static_cast<const ScSortItem&>(rArgSet.Get(nWhichSort)).GetSortData())
+    , aSortData(rArgSet.Get(nWhichSort).GetSortData())
     , pViewData(nullptr)
     , pDoc(nullptr)
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))
@@ -514,8 +510,7 @@ void ScTabPageSortOptions::Init()
     //! use CollatorWrapper from document?
     m_xColWrap.reset(new CollatorWrapper(comphelper::getProcessComponentContext()));
 
-    const ScSortItem&   rSortItem = static_cast<const ScSortItem&>(
-                                    GetItemSet().Get( nWhichSort ));
+    const ScSortItem& rSortItem = GetItemSet().Get( nWhichSort );
 
     m_xLbOutPos->connect_changed( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
     m_xBtnCopyResult->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
@@ -658,9 +653,8 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
     const SfxItemSet* pExample = GetDialogExampleSet();
     if (pExample)
     {
-        const SfxPoolItem* pItem;
-        if (pExample->GetItemState(nWhichSort, true, &pItem) == SfxItemState::SET)
-            aNewSortData = static_cast<const ScSortItem*>(pItem)->GetSortData();
+        if (const ScSortItem* pSortItem = pExample->GetItemIfSet(nWhichSort))
+            aNewSortData = pSortItem->GetSortData();
     }
     aNewSortData.bByRow          = m_xBtnTopDown->get_active();
     aNewSortData.bHasHeader      = m_xBtnHeader->get_active();
