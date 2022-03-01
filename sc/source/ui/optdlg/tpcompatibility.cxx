@@ -45,10 +45,8 @@ bool ScTpCompatOptions::FillItemSet(SfxItemSet *rCoreAttrs)
 
 void ScTpCompatOptions::Reset(const SfxItemSet *rCoreAttrs)
 {
-    const SfxPoolItem* pItem;
-    if (rCoreAttrs->HasItem(SID_SC_OPT_KEY_BINDING_COMPAT, &pItem))
+    if (const SfxUInt16Item* p16Item = rCoreAttrs->GetItemIfSet(SID_SC_OPT_KEY_BINDING_COMPAT))
     {
-        const SfxUInt16Item* p16Item = static_cast<const SfxUInt16Item*>(pItem);
         ScOptionsUtil::KeyBindingType eKeyB =
             static_cast<ScOptionsUtil::KeyBindingType>(p16Item->GetValue());
 

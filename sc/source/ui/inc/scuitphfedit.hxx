@@ -56,12 +56,12 @@ public:
 protected:
                 ScHFEditPage( weld::Container* pPage, weld::DialogController* pController,
                               const SfxItemSet& rCoreSet,
-                              sal_uInt16        nWhich,
+                              TypedWhichId<ScPageHFItem> nWhich,
                               bool              bHeader );
     virtual     ~ScHFEditPage() override;
 
 private:
-    sal_uInt16 nWhich;
+    TypedWhichId<ScPageHFItem> nWhich;
     bool m_bDropDownActive;
     sal_Int64 m_nTimeToggled;
 
