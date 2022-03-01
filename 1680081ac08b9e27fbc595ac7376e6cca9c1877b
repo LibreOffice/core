@@ -122,6 +122,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fa0dfbd_5174e8a8",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T06:09:41Z",
+      "side": 1,
+      "message": "I might misunderstand the idea here; it would be best if you create a patch set implementing the idea. We could then discuss it at the code (since here in the comment, I do not easily see the places and their interrelations).\n\nJust to rule out one possible source of confusion: we can\u0027t use any home-grown case-insensitive comparison to mimic what Windows does, because Windows implements its Unicode case-insensitive operation using own case match table burnt into the filesystem; and that means that e.g. case-insensitive match on one drive might be different from another drive on the same system.\n\nhttp://archives.miloush.net/michkap/archive/2005/01/16/353873.html\nhttp://archives.miloush.net/michkap/archive/2005/10/17/481600.html\n\nWhat we do here is getting the real case of filenames from Windows (so that we can later do normal case-sensitive match); the only problem is correct case of  drive, which is not handled by GetLongPathW.\n\nBut again - it would be very interesting if you see a simplification/unification of the processing that would reduce code duplication, if I understand your idea correctly.",
+      "parentUuid": "cdb96778_086c87fc",
+      "range": {
+        "startLine": 1595,
+        "startChar": 0,
+        "endLine": 1595,
+        "endChar": 49
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0d082f7_51040dee",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 5
