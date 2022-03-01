@@ -234,7 +234,6 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.Read2b(&option, 1);
     hwpf.Read2b(&ctrl_ch, 1);
     hwpf.Read2b(style.margin, 12);
-    hwpf.AddFBoxStyle(&style);
     hwpf.Read2b(&box_xs, 1);
     hwpf.Read2b(&box_ys, 1);
     hwpf.Read2b(&cap_xs, 1);
@@ -362,7 +361,10 @@ bool TxtBox::Read(HWPFile & hwpf)
     else
         m_pTable = nullptr;
 
-    return !hwpf.State();
+    bSuccess = !hwpf.State();
+    if (bSuccess)
+        hwpf.AddFBoxStyle(&style);
+    return bSuccess;
 }
 
 namespace
@@ -510,12 +512,14 @@ bool Picture::Read(HWPFile & hwpf)
         style.boxtype = 'G';
     else
         style.boxtype = 'D';
-    hwpf.AddFBoxStyle(&style);
 
 // caption
     hwpf.ReadParaList(caption);
 
-    return !hwpf.State();
+    bool bSuccess = !hwpf.State();
+    if (bSuccess)
+        hwpf.AddFBoxStyle(&style);
+    return bSuccess;
 }
 
 // line(15)
@@ -553,7 +557,6 @@ bool Line::Read(HWPFile & hwpf)
     hwpf.Read2b(&option, 1);
     hwpf.Read2b(&ctrl_ch, 1);
     hwpf.Read2b(style.margin, 12);
-    hwpf.AddFBoxStyle(&style);
     hwpf.Read2b(&box_xs, 1);
     hwpf.Read2b(&box_ys, 1);
     hwpf.Read2b(&cap_xs, 1);
@@ -582,7 +585,10 @@ bool Line::Read(HWPFile & hwpf)
     hwpf.Read2b(&color, 1);
     style.xpos = width;
 
-    return !hwpf.State();
+    bool bSuccess = !hwpf.State();
+    if (bSuccess)
+        hwpf.AddFBoxStyle(&style);
+    return bSuccess;
 }
 
 // hidden(15)
