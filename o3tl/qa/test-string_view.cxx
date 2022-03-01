@@ -592,6 +592,10 @@ private:
         using namespace std::string_view_literals;
         CPPUNIT_ASSERT(o3tl::equalsIgnoreAsciiCase(u"test"sv, u"test"sv));
         CPPUNIT_ASSERT(!o3tl::equalsIgnoreAsciiCase(u"test"sv, u"test2"sv));
+
+        CPPUNIT_ASSERT_EQUAL(0, o3tl::compareToIgnoreAsciiCase(u"test"sv, u"test"sv));
+        CPPUNIT_ASSERT_GREATER(0, o3tl::compareToIgnoreAsciiCase(u"zest"sv, u"test"sv));
+        CPPUNIT_ASSERT_LESS(0, o3tl::compareToIgnoreAsciiCase(u"test"sv, u"test2"sv));
     }
 };
 

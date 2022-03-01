@@ -179,7 +179,7 @@ void EditHTMLParser::NextToken( HtmlTokenId nToken )
             if ( !bInPara )
                 StartPara( false );
 
-            OUString aText = aToken;
+            OUString aText = aToken.toString();
             if ( aText.startsWith(" ") && ThrowAwayBlank() && !IsReadPRE() )
                 aText = aText.copy( 1 );
 

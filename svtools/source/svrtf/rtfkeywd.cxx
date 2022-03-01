@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <svtools/rtfkeywd.hxx>
 #include <svtools/rtftoken.h>
@@ -1175,7 +1176,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
 };
 
 
-int GetRTFToken( const OUString& rSearch )
+int GetRTFToken( std::u16string_view rSearch )
 {
     if( !bSortKeyWords )
     {
@@ -1187,12 +1188,12 @@ int GetRTFToken( const OUString& rSearch )
         bSortKeyWords = true;
     }
 
-    auto findCompare = [](const RTF_TokenEntry & lhs, const OUString & s)
+    auto findCompare = [](const RTF_TokenEntry & lhs, std::u16string_view s)
         {
-            return s.compareToIgnoreAsciiCase(lhs.sToken) > 0;
+            return o3tl::compareToIgnoreAsciiCase(s, lhs.sToken) > 0;
         };
     auto findIt = std::lower_bound( std::begin(aRTFTokenTab), std::end(aRTFTokenTab), rSearch, findCompare);
-    if (findIt != std::end(aRTFTokenTab) && rSearch.compareToIgnoreAsciiCase(findIt->sToken)==0)
+    if (findIt != std::end(aRTFTokenTab) && o3tl::compareToIgnoreAsciiCase(rSearch, findIt->sToken)==0)
         return findIt->nToken;
 
     return 0;

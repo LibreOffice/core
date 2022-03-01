@@ -31,6 +31,12 @@ inline bool equalsIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2
            == 0;
 };
 
+// Like OUString::compareToIgnoreAsciiCase, but for two std::u16string_view:
+inline int compareToIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2)
+{
+    return rtl_ustr_compareIgnoreAsciiCase_WithLength(s1.data(), s1.size(), s2.data(), s2.size());
+};
+
 // Similar to OString::getToken, returning the first token of a std::string_view, starting at a
 // given position (and if needed, it can be turned into a template to also cover std::u16string_view
 // etc., or extended to return the n'th token instead of just the first, or support an initial

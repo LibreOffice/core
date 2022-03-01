@@ -166,7 +166,7 @@ void SvxRTFParser::NextToken( int nToken )
     case RTF_LDBLQUOTE:     cCh = 0x201C;   goto INSINGLECHAR;
     case RTF_RDBLQUOTE:     cCh = 0x201D;   goto INSINGLECHAR;
 INSINGLECHAR:
-        aToken = OUString(cCh);
+        aToken = OUStringChar(cCh);
         [[fallthrough]]; // aToken is set as Text
     case RTF_TEXTTOKEN:
         {
@@ -324,7 +324,8 @@ void SvxRTFParser::ReadStyleTable()
         case RTF_TEXTTOKEN:
             if (bHasStyleNo)
             {
-                xStyle->sName = DelCharAtEnd( aToken, ';' );
+                DelCharAtEnd( aToken, ';' );
+                xStyle->sName = aToken.toString();
 
                 if (!m_StyleTable.empty())
                 {
@@ -581,15 +582,11 @@ void SvxRTFParser::ClearAttrStack()
     aAttrStack.clear();
 }
 
-OUString& SvxRTFParser::DelCharAtEnd( OUString& rStr, const sal_Unicode cDel )
+void SvxRTFParser::DelCharAtEnd( OUStringBuffer& rStr, const sal_Unicode cDel )
 {
-    if( !rStr.isEmpty() && ' ' == rStr[ 0 ])
-        rStr = comphelper::string::stripStart(rStr, ' ');
-    if( !rStr.isEmpty() && ' ' == rStr[ rStr.getLength()-1 ])
-        rStr = comphelper::string::stripEnd(rStr, ' ');
+    rStr.strip(' ');
     if( !rStr.isEmpty() && cDel == rStr[ rStr.getLength()-1 ])
-        rStr = rStr.copy( 0, rStr.getLength()-1 );
-    return rStr;
+        rStr.setLength( rStr.getLength()-1 );
 }
 
 
