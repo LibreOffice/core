@@ -16,6 +16,24 @@
       "message": "For the user of the SfxItemSet class, there was already GetItem() with the same (similar?) signature: a which id and a boolean to determine if to search in parents.\n\nHow one should decide when to use GetItem() and GetItemIfSet() when both have a bool to decide whether the search should continue in parents when the item is not set directly?\n\nI\u0027m a bit confused. :-)",
       "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10755a47_a0eb8f7c",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-01T08:11:19Z",
+      "side": 1,
+      "message": "GetItem() will also find items which are DEFAULT. \n\nNo I don\u0027t really know what that means. Personally I think we should split off SfxItemSet into\n\nSfxItemSetThatIsUsedToPassCollectionsOfItemsAround\n\nand\n\nSfxItemSetUsedForGlobalVariables\n\nand only the second should need \"DEFAULT\", and also only the second should need \"bSearchInParent\"",
+      "parentUuid": "9ecfd021_b9e4efff",
+      "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
