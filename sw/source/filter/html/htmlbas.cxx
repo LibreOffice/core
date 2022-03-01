@@ -189,7 +189,7 @@ void SwHTMLParser::AddScriptSource()
             if( nPos != -1 )
             {
                 m_aBasicLib =
-                    aToken.copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_library) - 1 );
+                    aToken.subView( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_library) - 1 );
                 m_aBasicLib = comphelper::string::strip(m_aBasicLib, ' ');
             }
         }
@@ -200,7 +200,7 @@ void SwHTMLParser::AddScriptSource()
             if( nPos != -1 )
             {
                 m_aBasicModule =
-                    aToken.copy( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_module) - 1 );
+                    aToken.subView( nPos + sizeof(OOO_STRING_SVTOOLS_HTML_SB_module) - 1 );
                 m_aBasicModule = comphelper::string::strip(m_aBasicModule, ' ');
             }
         }

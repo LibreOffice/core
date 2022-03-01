@@ -24,6 +24,7 @@
 #include <tools/ref.hxx>
 #include <tools/long.hxx>
 #include <rtl/textenc.h>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <memory>
 
@@ -46,7 +47,7 @@ class SVT_DLLPUBLIC SvParser : public SvRefBase
 
 protected:
     SvStream&           rInput;
-    OUString            aToken;             // scanned token
+    OUStringBuffer      aToken;             // scanned token
     sal_uInt32          nlLineNr;           // current line number
     sal_uInt32          nlLinePos;          // current column number
 
