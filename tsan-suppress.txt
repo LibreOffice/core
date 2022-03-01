@@ -25,9 +25,14 @@ race:__vsnprintf_chk
 # right now, I'm not interested in deadlocks at all, too many false+
 deadlock:
 
-# This is checking  SAL_STRING_IS_STATIC, which is safe because that is written at compile time
+# This is checking SAL_STRING_IS_STATIC, which is safe because that is written at compile time.
+# Depending on the optimisation/debug level, the call stack may have different leaves, hence
+# specifying this in more than one way.
 race:rtl::str::acquire<_rtl_uString>
 race:rtl::str::release<_rtl_uString>
+race:rtl_uString_acquire
+race:rtl_uString_release
+race:rtl_uString_assign
 
 # I've convinced myself this is a false+, caused by ping-ponging the buffer between two
 # threads, but I might be wrong
