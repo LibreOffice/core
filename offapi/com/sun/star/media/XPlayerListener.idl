@@ -14,11 +14,11 @@
 
 module com { module sun { module star { module media {
 
-/** Interface to be implemented by a FilePicker listener.
+/** Interface to be implemented by a Player listener.
 
     <p> The XPlayerListener interface must be implemented by
-    the clients of the FilePicker service which need to be informed about
-    events while the FilePicker service is displayed.</p>
+    the clients of the Player service which need to be informed about
+    events while the Player service is displayed.</p>
 
     @since LibreOffice 7.4
 */
