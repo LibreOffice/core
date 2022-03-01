@@ -1762,9 +1762,11 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         }
         else
         {
-            aSetDlgFont.reset(static_cast<SvxFontItem*>(aSet.Get( GetWhichOfScript(
+            TypedWhichId<SvxFontItem> nFontWhich =
+                GetWhichOfScript(
                         SID_ATTR_CHAR_FONT,
-                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) )).Clone()));
+                        SvtLanguageOptions::GetI18NScriptTypeOfLanguage( GetAppLanguage() ) );
+            aSetDlgFont.reset(aSet.Get(nFontWhich).Clone());
         }
 
         if (sFontName.isEmpty())

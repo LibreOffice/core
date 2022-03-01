@@ -3248,8 +3248,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
         sal_uInt16 nScript = g_pBreakIt->GetBreakIter()->getScriptType( pField->GetPar1(), 0);
 
-        tools::Long nHeight = static_cast<const SvxFontHeightItem&>((GetExport().GetItem(
-            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)))).GetHeight();
+        TypedWhichId<SvxFontHeightItem> nFontHeightWhich = GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript);
+        tools::Long nHeight = GetExport().GetItem(nFontHeightWhich).GetHeight();
 
         nHeight = (nHeight + 10) / 20; //Font Size in points;
 

@@ -547,6 +547,12 @@ template <class T> inline const T* GetDfltAttr(TypedWhichId<T> nWhich)
 
 SW_DLLPUBLIC sal_uInt16 GetWhichOfScript(sal_uInt16 nWhich, sal_uInt16 nScript);
 
+template <class T>
+inline TypedWhichId<T> GetWhichOfScript(TypedWhichId<T> nWhich, sal_uInt16 nScript)
+{
+    return TypedWhichId<T>(GetWhichOfScript(sal_uInt16(nWhich), nScript));
+}
+
 // return for the given TextAttribute without an end the correct character.
 // This function returns
 //      CH_TXTATR_BREAKWORD for Textattribute which breaks a word (default)

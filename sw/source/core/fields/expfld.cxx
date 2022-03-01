@@ -996,11 +996,11 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFormatField& rFormat, SwDo
         SwAttrSet aSet(rDoc.GetAttrPool(), nIds);
         rTextNode.GetParaAttr(aSet, nRet, nRet+1);
 
-        if( RTL_TEXTENCODING_SYMBOL != static_cast<const SvxFontItem&>(aSet.Get(
-                GetWhichOfScript( RES_CHRATR_FONT, nSrcpt )) ).GetCharSet() )
+        TypedWhichId<SvxFontItem> nFontWhich = GetWhichOfScript( RES_CHRATR_FONT, nSrcpt );
+        if( RTL_TEXTENCODING_SYMBOL != aSet.Get( nFontWhich ).GetCharSet() )
         {
-            LanguageType eLang = static_cast<const SvxLanguageItem&>(aSet.Get(
-                GetWhichOfScript( RES_CHRATR_LANGUAGE, nSrcpt )) ).GetLanguage();
+            TypedWhichId<SvxLanguageItem> nLangWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nSrcpt ) ;
+            LanguageType eLang = aSet.Get(nLangWhich).GetLanguage();
             LanguageTag aLanguageTag( eLang);
             CharClass aCC( aLanguageTag);
             sal_Unicode c0 = sNodeText[0];
