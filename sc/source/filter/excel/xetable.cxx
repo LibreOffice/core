@@ -1985,29 +1985,35 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, size_t nStartColAll
     size_t nStartAllDefault = findFirstAllSameUntilEnd( aXFIndexes, EXC_XF_DEFAULTCELL, nStartSearchAllDefault);
 
     // find most used XF index in the row
-    std::unordered_map< sal_uInt16, size_t > aIndexMap;
     sal_uInt16 nRowXFIndex = EXC_XF_DEFAULTCELL;
     const size_t nHalfIndexes = aXFIndexes.size() / 2;
     if( nStartAllDefault > nHalfIndexes ) // Otherwise most are EXC_XF_DEFAULTCELL.
     {
-        size_t nMaxXFCount = 0;
-        for( const auto& rXFIndex : aXFIndexes )
+        // Very likely the most common one is going to be the last one.
+        nRowXFIndex = aXFIndexes.back();
+        size_t nStartLastSame = findFirstAllSameUntilEnd( aXFIndexes, nRowXFIndex );
+        if( nStartLastSame > nHalfIndexes ) // No, find out the most used one by counting.
         {
-            if( rXFIndex != EXC_XF_NOTFOUND )
+            std::unordered_map< sal_uInt16, size_t > aIndexMap;
+            size_t nMaxXFCount = 0;
+            for( const auto& rXFIndex : aXFIndexes )
             {
-                size_t& rnCount = aIndexMap[ rXFIndex ];
-                ++rnCount;
-                if( rnCount > nMaxXFCount )
+                if( rXFIndex != EXC_XF_NOTFOUND )
                 {
-                    nRowXFIndex = rXFIndex;
-                    nMaxXFCount = rnCount;
-                    if (nMaxXFCount > nHalfIndexes)
+                    size_t& rnCount = aIndexMap[ rXFIndex ];
+                    ++rnCount;
+                    if( rnCount > nMaxXFCount )
                     {
-                        // No other XF index can have a greater usage count, we
-                        // don't need to loop through the remaining cells.
-                        // Specifically for the tail of unused default
-                        // cells/columns this makes a difference.
-                        break;  // for
+                        nRowXFIndex = rXFIndex;
+                        nMaxXFCount = rnCount;
+                        if (nMaxXFCount > nHalfIndexes)
+                        {
+                            // No other XF index can have a greater usage count, we
+                            // don't need to loop through the remaining cells.
+                            // Specifically for the tail of unused default
+                            // cells/columns this makes a difference.
+                            break;  // for
+                        }
                     }
                 }
             }
