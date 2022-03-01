@@ -268,8 +268,6 @@ void HTMLDataProvider::Import()
 void HTMLDataProvider::ImportFinished()
 {
     mrDataSource.getDBManager()->WriteToDoc(*mpDoc);
-    mxHTMLFetchThread.clear();
-    mpDoc.reset();
 }
 
 const OUString& HTMLDataProvider::GetURL() const
