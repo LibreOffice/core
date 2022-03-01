@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75cf9548_fadcefb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-01T12:43:07Z",
+      "side": 1,
+      "message": "@Tibi: very nice and useful fix! I\u0027ve extended the description with some details. The next big step could be the import of the connectors, i.e. connected to the glue points. And the next minor steps would be the extension of the set of the supported basic shapes. E.g. \"rtTriangle\" hasn\u0027t supported yet.",
+      "revId": "24076bd60359b83320cbece435bb93cd77e9e3f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
