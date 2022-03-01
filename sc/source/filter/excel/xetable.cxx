@@ -1918,7 +1918,7 @@ void XclExpRow::AppendCell( XclExpCellRef const & xCell, bool bIsMergedBase )
     InsertCell( xCell, maCellList.GetSize(), bIsMergedBase );
 }
 
-void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, size_t nStartColAllDefault, bool bProgress )
+void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, ScfUInt16Vec& aXFIndexes, size_t nStartColAllDefault, bool bProgress )
 {
     size_t nPos, nSize;
 
@@ -1928,7 +1928,11 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, size_t nStartColAll
     size_t nColCount = GetMaxPos().Col() + 1;
     OSL_ENSURE( rColXFIndexes.size() == nColCount, "XclExpRow::Finalize - wrong column XF index count" );
 
-    ScfUInt16Vec aXFIndexes( nColCount, EXC_XF_NOTFOUND );
+    // The vector should be preset to all items being EXC_XF_NOTFOUND, to avoid repeated allocations
+    // and clearing.
+    assert( aXFIndexes.size() == nColCount );
+    assert( aXFIndexes.front() == EXC_XF_NOTFOUND );
+    assert( aXFIndexes.back() == EXC_XF_NOTFOUND );
     for( nPos = 0, nSize = maCellList.GetSize(); nPos < nSize; ++nPos )
     {
         XclExpCellBase* pCell = maCellList.GetRecord( nPos );
@@ -2084,6 +2088,9 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, size_t nStartColAll
         else
             ++nPos;
     }
+    // Ensure it's all EXC_XF_NOTFOUND again for next reuse.
+    for( size_t i = 0; i < nStartAllNotFound; ++i )
+        aXFIndexes[ i ] = EXC_XF_NOTFOUND;
 
     // progress bar includes disabled rows; only update it in the lead thread.
     if (bProgress)
@@ -2236,8 +2243,9 @@ public:
     void     push_back( XclExpRow *pRow ) { maRows.push_back( pRow ); }
     virtual void doWork() override
     {
+        ScfUInt16Vec aXFIndexes( mrColXFIndexes.size(), EXC_XF_NOTFOUND );
         for (XclExpRow* p : maRows)
-            p->Finalize( mrColXFIndexes, mnStartColAllDefault, mbProgress );
+            p->Finalize( mrColXFIndexes, aXFIndexes, mnStartColAllDefault, mbProgress );
     }
 };
 
@@ -2261,8 +2269,9 @@ void XclExpRowBuffer::Finalize( XclExpDefaultRowData& rDefRowData,
 #endif
     if (nThreads == 1)
     {
+        ScfUInt16Vec aXFIndexes( rColXFIndexes.size(), EXC_XF_NOTFOUND );
         for (auto& rEntry : maRowMap)
-            rEntry.second->Finalize( rColXFIndexes, nStartColAllDefault, true );
+            rEntry.second->Finalize( rColXFIndexes, aXFIndexes, nStartColAllDefault, true );
     }
     else
     {
