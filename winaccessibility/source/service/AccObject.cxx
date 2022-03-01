@@ -432,14 +432,8 @@ OUString AccObject::GetMAccessibleValueFromAny(Any pAny)
         Sequence< OUString > val;
         if (pAny >>= val)
         {
-
-            int count = val.getLength();
-
-            for( int iIndex = 0;iIndex < count;iIndex++ )
-            {
-                strValue += val[iIndex];
-            }
-
+            for (const OUString& rElem : val)
+                strValue += rElem;
         }
     }
     else if(pAny.getValueType() == cppu::UnoType<double>::get())
@@ -1052,19 +1046,12 @@ void AccObject::GetExpandedState( sal_Bool* isExpandable, sal_Bool* isExpanded)
         return;
     }
 
-    Sequence<short> pStates = pRState->getStates();
-    int count = pStates.getLength();
-
-    for( int iIndex = 0;iIndex < count;iIndex++ )
+    for (sal_Int16 nState : pRState->getStates())
     {
-        if( EXPANDED == pStates[iIndex]  )
-        {
+        if (nState == EXPANDED)
             *isExpanded = true;
-        }
-        else if( EXPANDABLE == pStates[iIndex]  )
-        {
+        else if (nState == EXPANDABLE)
             *isExpandable = true;
-        }
     }
 }
 
