@@ -16,6 +16,24 @@
       "message": "I usually shy away from such optimizations involving non-matching types (sal_uInt32 nCount vs. sal_Int32-based OUStringBuffer) to avoid unexpected and/or undefined behavior.  Though in this particular case, the relevant OUStringBuffer ctors have already been broken with \u003chttps://git.libreoffice.org/core/+/d91d98a53612a972de368186415aa48698e074d9%5E!/\u003e \"fix gcc-4.0.1 and/or 32bit build for string literals\" and its follow-up \u003chttps://git.libreoffice.org/core/+/853c2fc71a96755a9dee629fd5d0e1cff9a48034%5E!/\u003e \"sal: try to avoid abuse of OUStringBuffer(int) ctor\", anyway.",
       "revId": "d55da5155eb2fd20b004e9d506390f20a67cc674",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5591d55d_d6a4ba63",
+        "filename": "sw/source/filter/ww8/WW8Sttbf.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T12:51:13Z",
+      "side": 1,
+      "message": "I suppose this version should address your concerns (even though there are those hacks :))",
+      "parentUuid": "563ce6a3_686625bc",
+      "revId": "d55da5155eb2fd20b004e9d506390f20a67cc674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
