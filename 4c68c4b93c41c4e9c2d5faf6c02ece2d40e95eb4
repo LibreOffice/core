@@ -16,6 +16,24 @@
       "message": "Likely this one was intended for the !OSL_LITENDIAN case - are these cases unaligned?",
       "revId": "4c68c4b93c41c4e9c2d5faf6c02ece2d40e95eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627304c0_203cb0df",
+        "filename": "sw/source/filter/ww8/WW8Sttbf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T09:51:27Z",
+      "side": 1,
+      "message": "Oh, well spotted, I had missed this!  Will drop this now-obsolete part in a follow-up commit (unless you want to beat me to it).  What do you mean with \"are these cases unaligned\"?",
+      "parentUuid": "5683ce93_9eadbffa",
+      "revId": "4c68c4b93c41c4e9c2d5faf6c02ece2d40e95eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
