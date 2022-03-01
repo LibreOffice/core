@@ -397,11 +397,11 @@ void CAccEditableText::get_AnyFromOLECHAR(std::u16string_view ouName, const OUSt
 
 
         // Dump into Sequence.
-        int iSeqLen = (vecTabStop.size() == 0) ? 1 : vecTabStop.size();
+        int iSeqLen = vecTabStop.empty() ? 1 : vecTabStop.size();
         Sequence< css::style::TabStop > seqTabStop(iSeqLen);
         auto pseqTabStop = seqTabStop.getArray();
 
-        if(vecTabStop.size() != 0)
+        if (!vecTabStop.empty())
         {
             // Dump every element.
             for(int i = 0; i < iSeqLen; i ++)
