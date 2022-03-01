@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "073ad21f_6b9e7276",
+        "filename": "vcl/unx/generic/printer/cupsmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-01T06:51:48Z",
+      "side": 1,
+      "message": "this is just going to hang now, which kind of defeats the point of the original code?",
+      "revId": "996c4c681f60f6c2051f6e41eb643287cfaa7e7a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
