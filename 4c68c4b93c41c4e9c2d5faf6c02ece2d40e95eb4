@@ -52,6 +52,24 @@
       "parentUuid": "627304c0_203cb0df",
       "revId": "4c68c4b93c41c4e9c2d5faf6c02ece2d40e95eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e80ec81_9f465591",
+        "filename": "sw/source/filter/ww8/WW8Sttbf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T10:01:15Z",
+      "side": 1,
+      "message": "\u003e I\u0027m going to add a buffer pre-initialization with known length\n\nhttps://gerrit.libreoffice.org/c/core/+/130754",
+      "parentUuid": "af73d14c_32ff7fd8",
+      "revId": "4c68c4b93c41c4e9c2d5faf6c02ece2d40e95eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
