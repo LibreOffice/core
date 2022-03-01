@@ -380,11 +380,11 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
 
     sal_uInt16 instLen = GetUInt16(ptr, 10 + numberOfContours*2);
     sal_uInt32 nOffset = 10 + 2 * numberOfContours + 2 + instLen;
-    if (nOffset > nTableSize)
+    if (nOffset > nMaxGlyphSize)
         return 0;
     const sal_uInt8* p = ptr + nOffset;
 
-    const sal_uInt32 nBytesRemaining = nTableSize - nOffset;
+    const sal_uInt32 nBytesRemaining = nMaxGlyphSize - nOffset;
     const sal_uInt32 palen = lastPoint+1;
 
     //at a minimum its one byte per entry
@@ -638,8 +638,8 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
  */
 static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint **pointArray, TTGlyphMetrics *metrics, std::vector< sal_uInt32 >* glyphlist)
 {
-    sal_uInt32 nSize;
-    const sal_uInt8 *table = ttf->table(O_glyf, nSize);
+    sal_uInt32 glyflength;
+    const sal_uInt8 *table = ttf->table(O_glyf, glyflength);
     sal_Int16 numberOfContours;
     int res;
     *pointArray = nullptr;
@@ -650,13 +650,25 @@ static int GetTTGlyphOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, Cont
     if (glyphID >= ttf->glyphCount())
         return -1;
 
-    const sal_uInt8* ptr = table + ttf->glyphOffset(glyphID);
-    int length = ttf->glyphOffset(glyphID + 1) - ttf->glyphOffset(glyphID);
+    sal_uInt32 nNextOffset = ttf->glyphOffset(glyphID + 1);
+    if (nNextOffset > glyflength)
+        return -1;
 
+    sal_uInt32 nOffset = ttf->glyphOffset(glyphID);
+    if (nOffset > nNextOffset)
+        return -1;
+
+    int length = nNextOffset - nOffset;
     if (length == 0) {                                      /*- empty glyphs still have hmtx and vmtx metrics values */
         if (metrics) GetMetrics(ttf, glyphID, metrics);
         return 0;
     }
+
+    const sal_uInt8* ptr = table + nOffset;
+    const sal_uInt32 nMaxGlyphSize = glyflength - nOffset;
+
+    if (nMaxGlyphSize < 2)
+        return -1;
 
     numberOfContours = GetInt16(ptr, 0);
 
@@ -1388,16 +1400,27 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
     if (glyphID >= ttf->glyphCount())
         return 0;
 
-    sal_uInt32 nSize;
-    const sal_uInt8* glyf = ttf->table(O_glyf, nSize);
-    const sal_uInt8* ptr = glyf + ttf->glyphOffset(glyphID);
-    const sal_uInt8* nptr = glyf + ttf->glyphOffset(glyphID + 1);
+    sal_uInt32 glyflength;
+    const sal_uInt8* glyf = ttf->table(O_glyf, glyflength);
+
+    sal_uInt32 nNextOffset = ttf->glyphOffset(glyphID + 1);
+    if (nNextOffset > glyflength)
+        return 0;
+
+    sal_uInt32 nOffset = ttf->glyphOffset(glyphID);
+    if (nOffset > nNextOffset)
+        return 0;
+
+    const sal_uInt8* ptr = glyf + nOffset;
+    const sal_uInt8* nptr = glyf + nNextOffset;
     if (nptr <= ptr)
         return 0;
 
     glyphlist.push_back( glyphID );
 
-    if (GetInt16(ptr, 0) == -1) {
+    const sal_uInt32 nMaxGlyphSize = glyflength - nOffset;
+
+    if (nMaxGlyphSize >= 10 && GetInt16(ptr, 0) == -1) {
         sal_uInt16 flags, index;
         ptr += 10;
         do {
