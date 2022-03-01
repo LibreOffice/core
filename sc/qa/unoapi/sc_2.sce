@@ -24,5 +24,4 @@
 # -o sc.ScAnnotationShapeObj
 -o sc.ScAutoFormatFieldObj
 -o sc.ScCellCursorObj
-# ported to cppunit -o sc.ScCellFieldObj
 -o sc.ScCellObj
