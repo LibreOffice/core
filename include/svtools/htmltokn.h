@@ -33,7 +33,7 @@ enum class HtmlTokenId : sal_Int16;
 sal_Unicode GetHTMLCharName( const rtl::OUString& rName );
 
 // search the TokenID for the token
-SVT_DLLPUBLIC HtmlTokenId GetHTMLToken( const rtl::OUString& rName );
+SVT_DLLPUBLIC HtmlTokenId GetHTMLToken( std::u16string_view rName );
 
 // search the TokenId for an attribute token
 HtmlOptionId GetHTMLOption( const rtl::OUString& rName );

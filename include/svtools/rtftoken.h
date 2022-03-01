@@ -26,7 +26,7 @@ namespace rtl {
 };
 
 // search the TokenID for the token
-int GetRTFToken( const OUString& rSearch );
+int GetRTFToken( std::u16string_view rSearch );
 
 enum RTF_TOKEN_RANGES {
     RTF_NOGROUP                     = 0x0100,

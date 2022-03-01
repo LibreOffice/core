@@ -1270,7 +1270,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
             {
                 if( !m_bDocInitialized )
                     DocumentDetected();
-                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
+                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken.toString());
 
                 // if there are temporary paragraph attributes and the
                 // paragraph isn't empty then the paragraph attributes
@@ -1569,7 +1569,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 }
             }
 
-            m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
+            m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken.toString());
 
             // if there are temporary paragraph attributes and the
             // paragraph isn't empty then the paragraph attributes

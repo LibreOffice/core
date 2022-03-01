@@ -106,7 +106,7 @@ int SvRTFParser::GetNextToken_()
                                 aStrBuffer.appendUtf32(nNextCh);
                                 nNextCh = GetNextChar();
                             } while( RTF_ISALPHA( nNextCh ) );
-                            aToken += aStrBuffer;
+                            aToken.append( aStrBuffer );
                         }
 
                         // minus before numeric parameters
@@ -157,7 +157,7 @@ int SvRTFParser::GetNextToken_()
                                     aParserStates.top().nUCharOverread = nUCharOverread;
                                 }
                             }
-                            aToken.clear(); // #i47831# erase token to prevent the token from being treated as text
+                            aToken.setLength( 0 ); // #i47831# erase token to prevent the token from being treated as text
                             // read next token
                             nRet = 0;
                             break;
@@ -502,7 +502,7 @@ void SvRTFParser::ScanText()
                     if (sal_Unicode(EOF) == (nNextCh = GetNextChar()))
                     {
                         if (!aStrBuffer.isEmpty())
-                            aToken += aStrBuffer;
+                            aToken.append( aStrBuffer );
                         return;
                     }
                 } while
@@ -519,7 +519,7 @@ void SvRTFParser::ScanText()
     }
 
     if (!aStrBuffer.isEmpty())
-        aToken += aStrBuffer;
+        aToken.append( aStrBuffer );
 }
 
 
