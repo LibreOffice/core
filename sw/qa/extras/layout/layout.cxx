@@ -20,12 +20,14 @@ public:
     void testTdf116925();
     void testTdf117028();
     void testForcepoint76();
+    void testN4LA0OHZ();
 
     CPPUNIT_TEST_SUITE(SwLayoutWriter);
     CPPUNIT_TEST(testTdf116830);
     CPPUNIT_TEST(testTdf116925);
     CPPUNIT_TEST(testTdf117028);
     CPPUNIT_TEST(testForcepoint76);
+    CPPUNIT_TEST(testN4LA0OHZ);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -112,6 +114,9 @@ void SwLayoutWriter::testTdf117028()
 
 //just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testN4LA0OHZ() { createDoc("LIBREOFFICE-N4LA0OHZ.rtf"); }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwLayoutWriter);
 CPPUNIT_PLUGIN_IMPLEMENT();
