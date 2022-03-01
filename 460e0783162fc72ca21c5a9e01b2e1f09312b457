@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa04705f_5cc24952",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-01T07:43:18Z",
+      "side": 1,
+      "message": "\u003e Patch Set 7 was rebased.\n\n[unnecessarily, by accident]",
+      "revId": "460e0783162fc72ca21c5a9e01b2e1f09312b457",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
