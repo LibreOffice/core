@@ -137,7 +137,7 @@ namespace avmedia
         static css::uno::Reference<css::graphic::XGraphic> grabFrame(const css::uno::Reference<css::media::XPlayer>& rPlayer);
 
         static css::uno::Reference< css::graphic::XGraphic > grabFrame(const OUString& rURL, const OUString& rReferer,
-            const OUString& sMimeType, rtl::Reference<PlayerListener> xPreferredPixelSizeListener = nullptr);
+            const OUString& sMimeType, rtl::Reference<PlayerListener> xPreferredPixelSizeListener);
 
         static void dispatchInsertAVMedia(const css::uno::Reference<css::frame::XDispatchProvider>&,
                                           const css::awt::Size& rSize, const OUString& rURL, bool bLink);
