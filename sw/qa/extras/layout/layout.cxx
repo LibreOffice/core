@@ -2315,6 +2315,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76)
 }
 
 //just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testN4LA0OHZ)
+{
+    createSwDoc(DATA_DIRECTORY, "LIBREOFFICE-N4LA0OHZ.rtf");
+}
+
 #if 0 // no createSwWebDoc
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint89)
 {

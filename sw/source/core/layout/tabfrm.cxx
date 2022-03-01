@@ -2118,6 +2118,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
             SwFootnoteBossFrame *pOldBoss = bFootnotesInDoc ? FindFootnoteBossFrame( true ) : nullptr;
             bool bReformat;
+            SwFrameDeleteGuard g(this);
             std::optional<SfxDeleteListener> oDeleteListener;
             if (pOldBoss)
                 oDeleteListener.emplace(*pOldBoss);
