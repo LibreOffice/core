@@ -55,7 +55,7 @@ void testDataBar_Impl(const ScDocument& rDoc)
     ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
 
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
+    for(size_t i = 0; i < std::size(aData); ++i)
     {
         ScConditionalFormatList::const_iterator itr = std::find_if(pList->begin(),
                 pList->end(), FindCondFormatByEnclosingRange(aData[i].aRange));
@@ -92,7 +92,7 @@ void testColorScale2Entry_Impl(const ScDocument& rDoc)
     const ScConditionalFormatList* pList = rDoc.GetCondFormList(0);
     CPPUNIT_ASSERT(pList);
 
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aData2Entry); ++i)
+    for(size_t i = 0; i < std::size(aData2Entry); ++i)
     {
         ScConditionalFormatList::const_iterator itr = std::find_if(pList->begin(),
                             pList->end(), FindCondFormatByEnclosingRange(aData2Entry[i].aRange));
@@ -131,7 +131,7 @@ void testColorScale3Entry_Impl(const ScDocument& rDoc)
     ScConditionalFormatList* pList = rDoc.GetCondFormList(1);
     CPPUNIT_ASSERT(pList);
 
-    for(size_t i = 0; i < SAL_N_ELEMENTS(aData3Entry); ++i)
+    for(size_t i = 0; i < std::size(aData3Entry); ++i)
     {
         ScConditionalFormatList::const_iterator itr = std::find_if(pList->begin(),
                             pList->end(), FindCondFormatByEnclosingRange(aData3Entry[i].aRange));
@@ -244,7 +244,7 @@ void testFunctionsExcel2010_Impl( ScDocument& rDoc )
         { 80, true  }
     };
 
-    for (size_t i=0; i < SAL_N_ELEMENTS(aTests); ++i)
+    for (size_t i=0; i < std::size(aTests); ++i)
     {
         if (aTests[i].bEvaluate)
         {

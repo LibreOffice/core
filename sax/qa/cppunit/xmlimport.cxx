@@ -288,13 +288,13 @@ Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
     if ( ( nToken & 0xffff0000 ) != 0 ) //namespace
     {
         sal_uInt32 nNamespaceToken = ( nToken >> 16 ) - 1;
-        if ( nNamespaceToken < SAL_N_ELEMENTS(namespacePrefixes) )
+        if ( nNamespaceToken < std::size(namespacePrefixes) )
             aUtf8Token = namespacePrefixes[ nNamespaceToken ];
     }
     else //element or attribute
     {
         size_t nElementToken = nToken & 0xffff;
-        if ( nElementToken < SAL_N_ELEMENTS(tokens) )
+        if ( nElementToken < std::size(tokens) )
             aUtf8Token = tokens[ nElementToken ];
     }
     Sequence< sal_Int8 > aSeq( reinterpret_cast< const sal_Int8* >(
@@ -311,7 +311,7 @@ sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& 
 sal_Int32 DummyTokenHandler::getTokenDirect( const char* pToken, sal_Int32 nLength ) const
 {
     std::string_view sToken( pToken, nLength );
-    for( size_t  i = 0; i < SAL_N_ELEMENTS(tokens); i++ )
+    for( size_t  i = 0; i < std::size(tokens); i++ )
     {
         if ( tokens[i] == sToken )
             return static_cast<sal_Int32>(i);
@@ -380,7 +380,7 @@ void XMLImportTest::parse()
                             "multiplens.xml", "multiplepfx.xml",
                             "nstoattributes.xml", "nestedns.xml", "testthreading.xml"};
 
-    for (size_t i = 0; i < SAL_N_ELEMENTS( fileNames ); i++)
+    for (size_t i = 0; i < std::size( fileNames ); i++)
     {
         InputSource source;
         source.sSystemId    = "internal";
@@ -407,7 +407,7 @@ void XMLImportTest::testMissingNamespaceDeclaration()
                             uno::UNO_QUERY_THROW);
     xInit->initialize({ uno::Any(OUString("IgnoreMissingNSDecl")) });
 
-    for (sal_uInt16 i = 0; i < SAL_N_ELEMENTS( fileNames ); i++)
+    for (sal_uInt16 i = 0; i < std::size( fileNames ); i++)
     {
         try
         {
