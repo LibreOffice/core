@@ -104,6 +104,7 @@ SwTextLineBreak::SwTextLineBreak(SwFormatLineBreak& rAttr, sal_Int32 nStartPos)
     : SwTextAttr(rAttr, nStartPos)
 {
     rAttr.SetTextLineBreak(this);
+    SetHasDummyChar(true);
 }
 
 SwTextLineBreak::~SwTextLineBreak() {}

@@ -176,6 +176,7 @@ enum class SwServiceType {
     VbaGlobals                      = 113,
     StyleTable                      = 114,
     StyleCell                       = 115,
+    LineBreak                       = 116,
 
     Invalid                         = USHRT_MAX
 };
