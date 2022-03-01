@@ -221,10 +221,9 @@ void XclExpExtCF::SaveXml( XclExpXmlStream& rStrm )
     std::unique_ptr<XclExpDxfFont> pFont(new XclExpDxfFont(GetRoot(), rSet));
 
     std::unique_ptr<XclExpNumFmt> pNumFormat;
-    const SfxPoolItem *pPoolItem = nullptr;
-    if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SfxItemState::SET )
+    if( const SfxUInt32Item* pPoolItem = rSet.GetItemIfSet( ATTR_VALUE_FORMAT ) )
     {
-        sal_uInt32 nScNumFmt = static_cast< const SfxUInt32Item* >(pPoolItem)->GetValue();
+        sal_uInt32 nScNumFmt = pPoolItem->GetValue();
         XclExpNumFmtBuffer& rNumFmtBuffer = GetRoot().GetNumFmtBuffer();
         sal_uInt32 nXclNumFmt = rNumFmtBuffer.Insert(nScNumFmt);
         pNumFormat.reset(new XclExpNumFmt(nScNumFmt, nXclNumFmt, rNumFmtBuffer.GetFormatCode(nScNumFmt)));

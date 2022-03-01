@@ -3151,10 +3151,9 @@ XclExpDxfs::XclExpDxfs( const XclExpRoot& rRoot )
                         std::unique_ptr<XclExpDxfFont> pFont(new XclExpDxfFont(rRoot, rSet));
 
                         std::unique_ptr<XclExpNumFmt> pNumFormat;
-                        const SfxPoolItem *pPoolItem = nullptr;
-                        if( rSet.GetItemState( ATTR_VALUE_FORMAT, true, &pPoolItem ) == SfxItemState::SET )
+                        if( const SfxUInt32Item *pPoolItem = rSet.GetItemIfSet( ATTR_VALUE_FORMAT ) )
                         {
-                            sal_uInt32 nScNumFmt = static_cast< const SfxUInt32Item* >(pPoolItem)->GetValue();
+                            sal_uInt32 nScNumFmt = pPoolItem->GetValue();
                             sal_Int32 nXclNumFmt = GetRoot().GetNumFmtBuffer().Insert(nScNumFmt);
                             pNumFormat.reset(new XclExpNumFmt( nScNumFmt, nXclNumFmt, GetNumberFormatCode( *this, nScNumFmt, xFormatter.get(), mpKeywordTable.get() )));
                         }
