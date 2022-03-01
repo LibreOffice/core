@@ -39,6 +39,30 @@
       },
       "revId": "5ccfdb919782664f84cbe406d507bf000644f5c4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb6a91b0_b0ee45b1",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 1025,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-01T06:48:27Z",
+      "side": 1,
+      "message": "\"Configury\" is not a typo. It is an idiomatic expression meaning configure script and related stuff (like autoconf macros etc). Just google for it, it is commonly used.",
+      "parentUuid": "83604f82_9c45095e",
+      "range": {
+        "startLine": 1025,
+        "startChar": 60,
+        "endLine": 1025,
+        "endChar": 69
+      },
+      "revId": "5ccfdb919782664f84cbe406d507bf000644f5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
