@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e7d12c5_7f3bb8cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-01T06:49:55Z",
+      "side": 1,
+      "message": "But sure, it can be replaced by \"configuration mechanism\" if \"configury\" feels too technobabble, I don\u0027t object.",
+      "revId": "5ccfdb919782664f84cbe406d507bf000644f5c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83604f82_9c45095e",
