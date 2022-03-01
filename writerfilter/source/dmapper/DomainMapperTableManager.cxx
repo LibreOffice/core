@@ -547,6 +547,8 @@ void DomainMapperTableManager::endOfRowAction()
     // Compare the table position and style with the previous ones. We may need to split
     // into two tables if those are different. We surely don't want to do anything
     // if we don't have any row yet.
+    if (m_aTmpPosition.empty())
+        throw std::out_of_range("row without a position");
     TablePositionHandlerPtr pTmpPosition = m_aTmpPosition.back();
     TablePropertyMapPtr pTablePropMap = m_aTmpTableProperties.back( );
     TablePositionHandlerPtr pCurrentPosition = m_aTablePositions.back();
