@@ -589,11 +589,9 @@ void ScTabViewShell::ExecuteCellFormatDlg(SfxRequest& rReq, const OString &rName
         if ( nResult == RET_OK )
         {
             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
-
-            const SfxPoolItem* pItem=nullptr;
-            if(pOutSet->GetItemState(SID_ATTR_NUMBERFORMAT_INFO,true,&pItem)==SfxItemState::SET)
+            if(const SvxNumberInfoItem* pItem = pOutSet->GetItemIfSet(SID_ATTR_NUMBERFORMAT_INFO))
             {
-                UpdateNumberFormatter(static_cast<const SvxNumberInfoItem&>(*pItem));
+                UpdateNumberFormatter(*pItem);
             }
 
             ApplyAttributes(pOutSet, pOldSet.get());
