@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fb05248_671592ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-03-01T11:31:26Z",
+      "side": 1,
+      "message": "In ODF, border properties do not exist as table-, column-, or row-properties but only as cell properties. ",
+      "revId": "5183e33a32500731585d2a624c112996bad7ae76",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
