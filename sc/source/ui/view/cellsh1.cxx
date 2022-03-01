@@ -809,12 +809,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 if( pReqArgs != nullptr )
                 {
-                    const SfxPoolItem* pItem;
-
-                    if( pReqArgs->HasItem( FID_FILL_AUTO, &pItem ) )
+                    if( const SfxStringItem* pItem = pReqArgs->GetItemIfSet( FID_FILL_AUTO ) )
                     {
                         ScAddress aScAddress;
-                        OUString aArg = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                        OUString aArg = pItem->GetValue();
 
                         if( aScAddress.Parse( aArg, rDoc, rDoc.GetAddressConvention() ) & ScRefFlags::VALID )
                         {
@@ -1927,12 +1925,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_CONSOLIDATE:
             {
-                const SfxPoolItem* pItem;
-                if ( pReqArgs && SfxItemState::SET ==
-                        pReqArgs->GetItemState( SCITEM_CONSOLIDATEDATA, true, &pItem ) )
+                const ScConsolidateItem* pItem;
+                if ( pReqArgs && (pItem =
+                        pReqArgs->GetItemIfSet( SCITEM_CONSOLIDATEDATA )) )
                 {
-                    const ScConsolidateParam& rParam =
-                            static_cast<const ScConsolidateItem*>(pItem)->GetData();
+                    const ScConsolidateParam& rParam = pItem->GetData();
 
                     pTabViewShell->Consolidate( rParam );
                     GetViewData().GetDocument().SetConsolidateDlgData( std::unique_ptr<ScConsolidateParam>(new ScConsolidateParam(rParam)) );
@@ -2305,16 +2302,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         case SID_INSERT_POSTIT:
         case SID_EDIT_POSTIT:
             {
-                const SfxPoolItem* pText;
-                if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_TEXT, &pText) )
+                const SvxPostItTextItem* pTextItem;
+                if ( pReqArgs && (pTextItem = pReqArgs->GetItemIfSet( SID_ATTR_POSTIT_TEXT )) )
                 {
-                    const SfxPoolItem* pCellId;
                     OUString aCellId;
                     // SID_ATTR_POSTIT_ID only argument for SID_EDIT_POSTIT
-                    if (pReqArgs->HasItem( SID_ATTR_POSTIT_ID, &pCellId ))
-                        aCellId = static_cast<const SvxPostItIdItem*>(pCellId)->GetValue();
+                    if (const SvxPostItIdItem* pCellId = pReqArgs->GetItemIfSet( SID_ATTR_POSTIT_ID ))
+                        aCellId = pCellId->GetValue();
 
-                    const SvxPostItTextItem*    pTextItem   = static_cast<const SvxPostItTextItem*>( pText );
                     const SvxPostItAuthorItem*  pAuthorItem = pReqArgs->GetItem( SID_ATTR_POSTIT_AUTHOR );
                     const SvxPostItDateItem*    pDateItem   = pReqArgs->GetItem( SID_ATTR_POSTIT_DATE );
 
@@ -2491,11 +2486,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_DELETE_NOTE:
         {
-            const SfxPoolItem* pId;
+            const SvxPostItIdItem* pIdItem;
             // If Id is mentioned, select the appropriate cell first
-            if ( pReqArgs && pReqArgs->HasItem( SID_ATTR_POSTIT_ID, &pId) )
+            if ( pReqArgs && (pIdItem = pReqArgs->GetItemIfSet( SID_ATTR_POSTIT_ID )) )
             {
-                const SvxPostItIdItem* pIdItem = static_cast<const SvxPostItIdItem*>(pId);
                 const OUString& aCellId = pIdItem->GetValue();
                 if (!aCellId.isEmpty())
                 {
@@ -2539,9 +2533,8 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     const SfxStringItem* pStringItem = dynamic_cast<const SfxStringItem*>( pItem  );
                     if ( pStringItem )
                         aChars = pStringItem->GetValue();
-                    const SfxPoolItem* pFtItem = nullptr;
-                    pArgs->GetItemState( SID_ATTR_SPECIALCHAR, false, &pFtItem);
-                    const SfxStringItem* pFontItem = dynamic_cast<const SfxStringItem*>( pFtItem  );
+                    const SfxStringItem* pFontItem =
+                        pArgs->GetItemIfSet( SID_ATTR_SPECIALCHAR, false);
                     if ( pFontItem )
                         aFontName = pFontItem->GetValue();
                 }
