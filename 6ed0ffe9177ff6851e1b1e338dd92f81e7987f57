@@ -144,6 +144,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a95ee1dc_a7e049b2",
+        "filename": "dbaccess/qa/extras/rowsetclones.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-03-01T11:28:49Z",
+      "side": 0,
+      "message": "Resolved.",
+      "parentUuid": "4f348af7_48e3e5f3",
+      "revId": "6ed0ffe9177ff6851e1b1e338dd92f81e7987f57",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b193388c_fc2ec1f3",
