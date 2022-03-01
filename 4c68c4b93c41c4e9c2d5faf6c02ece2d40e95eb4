@@ -34,6 +34,24 @@
       "parentUuid": "5683ce93_9eadbffa",
       "revId": "4c68c4b93c41c4e9c2d5faf6c02ece2d40e95eb4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af73d14c_32ff7fd8",
+        "filename": "sw/source/filter/ww8/WW8Sttbf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-01T09:55:00Z",
+      "side": 1,
+      "message": "\u003e What do you mean with \"are these cases unaligned\"?\n\n\nI didn\u0027t know you missed that, and thus I was wondering if there may be cases when e.g. neither OSL_LITENDIAN nor OSL_BIGENDIAN are defined. I then looked at the definition site, and it obviously would not compile because of \u0027undetermined endianness\u0027 check.\n\nI\u0027m going to add a buffer pre-initialization with known length, and was going to remove that - please don\u0027t bother fixing this.",
+      "parentUuid": "627304c0_203cb0df",
+      "revId": "4c68c4b93c41c4e9c2d5faf6c02ece2d40e95eb4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
