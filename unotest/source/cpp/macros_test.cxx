@@ -172,14 +172,16 @@ void MacrosTest::tearDownNssGpg()
 #endif
 }
 
+bool MacrosTest::IsValid(const css::uno::Reference<css::security::XCertificate>& cert)
+{
+    return DateTime(DateTime::SYSTEM)
+        .IsBetween(cert->getNotValidBefore(), cert->getNotValidAfter());
+}
+
 css::uno::Reference<css::security::XCertificate> MacrosTest::GetValidCertificate(
     const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs)
 {
-    auto it
-        = std::find_if(certs.begin(), certs.end(), [now = DateTime(DateTime::SYSTEM)](auto& xCert) {
-              return now.IsBetween(xCert->getNotValidBefore(), xCert->getNotValidAfter());
-          });
-    if (it != certs.end())
+    if (auto it = std::find_if(certs.begin(), certs.end(), IsValid); it != certs.end())
         return *it;
     return {};
 }

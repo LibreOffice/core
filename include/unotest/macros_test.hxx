@@ -93,6 +93,7 @@ public:
     void setUpNssGpg(const test::Directories& rDirectories, const OUString& rTestName);
     void tearDownNssGpg();
 
+    static bool IsValid(const css::uno::Reference<css::security::XCertificate>& cert);
     static css::uno::Reference<css::security::XCertificate> GetValidCertificate(
         const css::uno::Sequence<css::uno::Reference<css::security::XCertificate>>& certs);
 
