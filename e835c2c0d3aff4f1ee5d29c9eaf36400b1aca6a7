@@ -34,6 +34,24 @@
       "parentUuid": "98cbfd19_1fb349d9",
       "revId": "e835c2c0d3aff4f1ee5d29c9eaf36400b1aca6a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "911b4959_e536de9c",
+        "filename": "sw/qa/extras/odfimport/odfimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-01T12:53:51Z",
+      "side": 1,
+      "message": "Hi László,\nThanks for your answer. it doesn\u0027t freeze for me either",
+      "parentUuid": "2e32e2c0_62fda492",
+      "revId": "e835c2c0d3aff4f1ee5d29c9eaf36400b1aca6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
