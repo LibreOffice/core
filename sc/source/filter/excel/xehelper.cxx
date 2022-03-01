@@ -464,10 +464,9 @@ XclExpStringRef lclCreateFormattedString(
             if( aSel.nStartPos + 1 == aSel.nEndPos )
             {
                 // test if the character is a text field
-                const SfxPoolItem* pItem;
-                if( aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET )
+                if( const SvxFieldItem* pItem = aEditSet.GetItemIfSet( EE_FEATURE_FIELD, false ) )
                 {
-                    const SvxFieldData* pField = static_cast< const SvxFieldItem* >( pItem )->GetField();
+                    const SvxFieldData* pField = pItem->GetField();
                     if( const SvxURLField* pUrlField = dynamic_cast<const SvxURLField*>( pField )  )
                     {
                         // convert URL field to string representation
@@ -807,11 +806,11 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 
 // --- text content or text fields ---
 
-                const SfxPoolItem* pItem;
+                const SvxFieldItem* pItem;
                 if( (aSel.nStartPos + 1 == aSel.nEndPos) &&     // fields are single characters
-                    (aEditSet.GetItemState( EE_FEATURE_FIELD, false, &pItem ) == SfxItemState::SET) )
+                    (pItem = aEditSet.GetItemIfSet( EE_FEATURE_FIELD, false )) )
                 {
-                    if( const SvxFieldData* pFieldData = static_cast< const SvxFieldItem* >( pItem )->GetField() )
+                    if( const SvxFieldData* pFieldData = pItem->GetField() )
                     {
                         if( dynamic_cast<const SvxPageField*>( pFieldData) !=  nullptr )
                             aParaText.append("&P");
