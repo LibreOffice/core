@@ -51,6 +51,24 @@
       "message": "Start rows/cols are always less than stop rows/cols, so the asserts are a guaranteed. I find them a bit superfluous, but given that GCC annoyingly warns about the \u003e\u003d0 comparison (Clang seems to have an exception for this case and doesn\u0027t), then I guess they make sense.\n",
       "revId": "103de7ca4442dd29c6921174e08317f29e982753",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af465ab9_8c4bb0e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-01T10:39:10Z",
+      "side": 1,
+      "message": "Considering the comment from Luboš, it should be OK.",
+      "parentUuid": "d1ed1d43_6123f038",
+      "revId": "103de7ca4442dd29c6921174e08317f29e982753",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
