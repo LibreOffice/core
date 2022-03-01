@@ -189,7 +189,7 @@ void OAddFieldWindow::Update()
         m_xListBox->clear();
         m_aListBoxData.clear();
         const OString aIds[] = { "up", "down" };
-        for (size_t j = 0; j< SAL_N_ELEMENTS(aIds); ++j)
+        for (size_t j = 0; j< std::size(aIds); ++j)
             m_xActions->set_item_sensitive(aIds[j], false);
 
         OUString aTitle(RptResId(RID_STR_FIELDSELECTION));
@@ -233,7 +233,7 @@ void OAddFieldWindow::Update()
             m_xDialog->set_title(aTitle);
             if ( !m_aCommandName.isEmpty() )
             {
-                for (size_t i = 0; i < SAL_N_ELEMENTS(aIds); ++i)
+                for (size_t i = 0; i < std::size(aIds); ++i)
                     m_xActions->set_item_sensitive(aIds[i], true);
             }
             OnSelectHdl(*m_xListBox);
@@ -331,7 +331,7 @@ IMPL_LINK(OAddFieldWindow, OnSortAction, const OString&, rCurItem, void)
 
     if (rCurItem == "delete")
     {
-        for (size_t j = 0; j< SAL_N_ELEMENTS(aIds); ++j)
+        for (size_t j = 0; j< std::size(aIds); ++j)
             m_xActions->set_item_active(aIds[j], false);
 
         m_xListBox->make_unsorted();
@@ -339,7 +339,7 @@ IMPL_LINK(OAddFieldWindow, OnSortAction, const OString&, rCurItem, void)
         return;
     }
 
-    for (size_t j = 0; j< SAL_N_ELEMENTS(aIds); ++j)
+    for (size_t j = 0; j< std::size(aIds); ++j)
         m_xActions->set_item_active(aIds[j], rCurItem == aIds[j]);
 
     m_xListBox->make_sorted();
