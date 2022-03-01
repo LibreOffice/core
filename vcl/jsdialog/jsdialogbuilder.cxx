@@ -711,10 +711,31 @@ void JSInstanceBuilder::InsertWindowToMap(const std::string& nWindowId)
         GetLOKWeldWidgetsMap().insert(std::map<std::string, WidgetMap>::value_type(nWindowId, map));
 }
 
-void JSInstanceBuilder::RememberWidget(const OString& id, weld::Widget* pWidget)
+void JSInstanceBuilder::RememberWidget(OString sId, weld::Widget* pWidget)
 {
-    RememberWidget(getMapIdFromWindowId(), id, pWidget);
-    m_aRememberedWidgets.push_back(id.getStr());
+    // do not use the same id for two widgets inside one builder
+    // exception is sidebar where we base our full invalidation on that "Panel" id sharing
+    if (m_sTypeOfJSON != "sidebar")
+    {
+        static std::atomic<unsigned long long int> nNotRepeatIndex = 0;
+        auto aWindowIt = GetLOKWeldWidgetsMap().find(getMapIdFromWindowId());
+        if (aWindowIt != GetLOKWeldWidgetsMap().end())
+        {
+            auto aWidgetIt = aWindowIt->second.find(sId);
+            if (aWidgetIt != aWindowIt->second.end())
+            {
+                unsigned long long int nIndex = nNotRepeatIndex++;
+                // found duplicated it -> add some number to the id and apply to the widget
+                sId = sId + OString::number(nIndex);
+                SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+                vcl::Window* pVclWidget = pSalWidget->getWidget();
+                pVclWidget->set_id(pVclWidget->get_id() + OUString::number(nIndex));
+            }
+        }
+    }
+
+    RememberWidget(getMapIdFromWindowId(), sId, pWidget);
+    m_aRememberedWidgets.push_back(sId.getStr());
 }
 
 void JSInstanceBuilder::RememberWidget(const std::string& nWindowId, const OString& id,
@@ -832,7 +853,7 @@ std::unique_ptr<weld::Container> JSInstanceBuilder::weld_container(const OString
 
 std::unique_ptr<weld::Label> JSInstanceBuilder::weld_label(const OString& id)
 {
-    ::FixedText* pLabel = m_xBuilder->get<FixedText>(id);
+    Control* pLabel = m_xBuilder->get<Control>(id);
     auto pWeldWidget = std::make_unique<JSLabel>(this, pLabel, this, false);
 
     if (pWeldWidget)
@@ -1165,9 +1186,9 @@ JSContainer::JSContainer(JSDialogSender* pSender, vcl::Window* pContainer,
 {
 }
 
-JSLabel::JSLabel(JSDialogSender* pSender, FixedText* pLabel, SalInstanceBuilder* pBuilder,
+JSLabel::JSLabel(JSDialogSender* pSender, Control* pLabel, SalInstanceBuilder* pBuilder,
                  bool bTakeOwnership)
-    : JSWidget<SalInstanceLabel, FixedText>(pSender, pLabel, pBuilder, bTakeOwnership)
+    : JSWidget<SalInstanceLabel, Control>(pSender, pLabel, pBuilder, bTakeOwnership)
 {
 }
 
@@ -1749,6 +1770,12 @@ JSBox::JSBox(JSDialogSender* pSender, VclBox* pBox, SalInstanceBuilder* pBuilder
              bool bTakeOwnership)
     : JSWidget<SalInstanceBox, VclBox>(pSender, pBox, pBuilder, bTakeOwnership)
 {
+}
+
+void JSBox::reorder_child(weld::Widget* pWidget, int nNewPosition)
+{
+    SalInstanceBox::reorder_child(pWidget, nNewPosition);
+    sendUpdate();
 }
 
 JSImage::JSImage(JSDialogSender* pSender, FixedImage* pImage, SalInstanceBuilder* pBuilder,
