@@ -15,12 +15,13 @@
         <property name="label-xalign">0</property>
         <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=2 n-rows=12 -->
+          <!-- n-columns=2 n-rows=11 -->
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
+            <property name="margin-bottom">12</property>
             <property name="row-spacing">6</property>
             <property name="column-spacing">12</property>
             <child>
@@ -43,25 +44,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkCheckButton" id="header">
-                <property name="label" translatable="yes" context="sortoptionspage|header">Range contains...</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="header-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|header">Omits the first row or the first column in the selection from the sort.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="formats">
                 <property name="label" translatable="yes" context="sortoptionspage|formats">Include formats</property>
                 <property name="visible">True</property>
@@ -77,7 +59,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
@@ -96,7 +78,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">3</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
@@ -110,7 +92,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">4</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
@@ -124,7 +106,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">5</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
@@ -146,7 +128,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">6</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
@@ -167,7 +149,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">7</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -189,7 +171,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">7</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
@@ -211,7 +193,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">8</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
@@ -231,7 +213,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">9</property>
+                <property name="top-attach">8</property>
                 <property name="width">2</property>
               </packing>
             </child>
@@ -246,7 +228,7 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">10</property>
+                <property name="top-attach">9</property>
               </packing>
             </child>
             <child>
@@ -260,7 +242,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">10</property>
+                <property name="top-attach">9</property>
               </packing>
             </child>
             <child>
@@ -275,7 +257,7 @@
               </object>
               <packing>
                 <property name="left-attach">1</property>
-                <property name="top-attach">11</property>
+                <property name="top-attach">10</property>
               </packing>
             </child>
             <child>
@@ -297,11 +279,8 @@
               </object>
               <packing>
                 <property name="left-attach">0</property>
-                <property name="top-attach">11</property>
+                <property name="top-attach">10</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -341,78 +320,6 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkFrame" id="frame1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label-xalign">0</property>
-        <property name="shadow-type">none</property>
-        <child>
-          <!-- n-columns=1 n-rows=2 -->
-          <object class="GtkGrid" id="grid1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-top">6</property>
-            <child>
-              <object class="GtkRadioButton" id="topdown">
-                <property name="label" translatable="yes" context="sortoptionspage|topdown">_Top to bottom (sort rows)</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="active">True</property>
-                <property name="draw-indicator">True</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="topdown-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|topdown">Sorts rows by the values in the active columns of the selected range.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRadioButton" id="leftright">
-                <property name="label" translatable="yes" context="sortoptionspage|leftright">L_eft to right (sort columns)</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="use-underline">True</property>
-                <property name="draw-indicator">True</property>
-                <property name="group">topdown</property>
-                <child internal-child="accessible">
-                  <object class="AtkObject" id="leftright-atkobject">
-                    <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|leftright">Sorts columns by the values in the active rows of the selected range.</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-        <child type="label">
-          <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes" context="sortoptionspage|label1">Direction</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">10</property>
       </packing>
     </child>
     <child internal-child="accessible">
