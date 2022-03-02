@@ -180,7 +180,8 @@ int SvRTFParser::GetNextToken_()
                             if( !bRTF_InTextRead )
                             {
                                 nRet = RTF_TEXTTOKEN;
-                                aToken = OUStringChar( static_cast<sal_Unicode>(nTokenValue) );
+                                aToken.setLength(1);
+                                aToken[0] = static_cast<sal_Unicode>(nTokenValue);
 
                                 // overread the next n "RTF" characters. This
                                 // can be also \{, \}, \'88
