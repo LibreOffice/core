@@ -25,20 +25,68 @@ namespace sc
  */
 class SC_DLLPUBLIC Sparkline
 {
-private:
+    SCCOL m_nColumn;
+    SCROW m_nRow;
+
     ScRangeList m_aInputRange;
     std::shared_ptr<SparklineGroup> m_pSparklineGroup;
 
 public:
-    Sparkline(const std::shared_ptr<SparklineGroup>& pSparklineGroup);
+    Sparkline(SCCOL nColumn, SCROW nRow, std::shared_ptr<SparklineGroup> const& pSparklineGroup)
+        : m_nColumn(nColumn)
+        , m_nRow(nRow)
+        , m_pSparklineGroup(pSparklineGroup)
+    {
+    }
 
     Sparkline(const Sparkline&) = delete;
     Sparkline& operator=(const Sparkline&) = delete;
 
     void setInputRange(ScRangeList const& rInputRange) { m_aInputRange = rInputRange; }
+
     ScRangeList const& getInputRange() { return m_aInputRange; }
 
     std::shared_ptr<SparklineGroup> const& getSparklineGroup() { return m_pSparklineGroup; }
+
+    SCCOL getColumn() { return m_nColumn; }
+
+    SCROW getRow() { return m_nRow; }
+};
+
+/** Contains a list of all created sparklines */
+class SC_DLLPUBLIC SparklineList
+{
+private:
+    std::vector<std::weak_ptr<Sparkline>> m_pSparklines;
+
+public:
+    SparklineList() {}
+
+    void addSparkline(std::shared_ptr<Sparkline> const& pSparkline)
+    {
+        m_pSparklines.push_back(pSparkline);
+    }
+
+    std::vector<std::shared_ptr<Sparkline>> getSparklines()
+    {
+        std::vector<std::shared_ptr<Sparkline>> toReturn;
+
+        std::vector<std::weak_ptr<Sparkline>>::iterator aIter;
+        for (aIter = m_pSparklines.begin(); aIter != m_pSparklines.end();)
+        {
+            if (auto aSparkline = aIter->lock())
+            {
+                toReturn.push_back(aSparkline);
+                aIter++;
+            }
+            else
+            {
+                aIter = m_pSparklines.erase(aIter);
+            }
+        }
+
+        return toReturn;
+    }
 };
 
 } // end sc
