@@ -11,6 +11,7 @@
 #include <AccessibilityIssue.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
+#include <comphelper/lok.hxx>
 
 namespace sw
 {
@@ -49,12 +50,16 @@ void AccessibilityIssue::gotoIssue() const
         {
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
             pWrtShell->GotoFly(m_sObjectID, FLYCNTTYPE_ALL, true);
+            if (comphelper::LibreOfficeKit::isActive())
+                pWrtShell->ShowCursor();
         }
         break;
         case IssueObject::TABLE:
         {
             SwWrtShell* pWrtShell = m_pDoc->GetDocShell()->GetWrtShell();
             pWrtShell->GotoTable(m_sObjectID);
+            if (comphelper::LibreOfficeKit::isActive())
+                pWrtShell->ShowCursor();
         }
         break;
         case IssueObject::TEXT:
@@ -70,6 +75,8 @@ void AccessibilityIssue::gotoIssue() const
             pPaM->SetMark();
             *pPaM->GetMark() = aMark;
             pWrtShell->EndAllAction();
+            if (comphelper::LibreOfficeKit::isActive())
+                pWrtShell->ShowCursor();
         }
         break;
         default:
