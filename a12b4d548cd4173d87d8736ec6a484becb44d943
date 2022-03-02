@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "031b7d7a_202c056d",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3250,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-02T07:36:54Z",
+      "side": 0,
+      "message": "Interesting: I\u0027d expect it to only need removal of explicit cast:\n\n        tools::Long nHeight \u003d GetExport().GetItem(\n            GetWhichOfScript(RES_CHRATR_FONTSIZE,nScript)).GetHeight();\n\nDoesn\u0027t it work out of the box this way?",
+      "revId": "a12b4d548cd4173d87d8736ec6a484becb44d943",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
