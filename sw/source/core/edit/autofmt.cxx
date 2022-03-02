@@ -1012,9 +1012,7 @@ void SwAutoFormat::SetColl( sal_uInt16 nId, bool bHdLineOrText )
     {
         aSet.Put(*m_aDelPam.GetPoint()->nNode.GetNode().GetTextNode()->GetpSwAttrSet());
         // take HeaderLine/TextBody only if centered or right aligned, otherwise only justification
-        SvxAdjustItem const * pAdj;
-        if( SfxItemState::SET == aSet.GetItemState( RES_PARATR_ADJUST,
-                        false, reinterpret_cast<const SfxPoolItem**>(&pAdj) ))
+        if( SvxAdjustItem const * pAdj = aSet.GetItemIfSet( RES_PARATR_ADJUST, false) )
         {
             SvxAdjust eAdj = pAdj->GetAdjust();
             if( bHdLineOrText ? (SvxAdjust::Right != eAdj &&
@@ -1053,14 +1051,13 @@ bool SwAutoFormat::HasBreakAttr(const SwTextFrame& rTextFrame)
     if( !pSet )
         return false;
 
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem )
-        && SvxBreak::NONE != static_cast<const SvxFormatBreakItem*>(pItem)->GetBreak() )
+    const SvxFormatBreakItem* pBreakItem = pSet->GetItemIfSet( RES_BREAK, false );
+    if( pBreakItem && SvxBreak::NONE != pBreakItem->GetBreak() )
         return true;
 
-    if( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem )
-        && static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()
-        && UseOnPage::NONE != static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc()->GetUseOn() )
+    const SwFormatPageDesc* pItem = pSet->GetItemIfSet( RES_PAGEDESC, false );
+    if( pItem && pItem->GetPageDesc()
+        && UseOnPage::NONE != pItem->GetPageDesc()->GetUseOn() )
         return true;
     return false;
 }
@@ -2427,10 +2424,9 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                     RES_POOLCOLL_STANDARD == nPoolId )
                 {
                     short nSz;
-                    SvxLRSpaceItem const * pLRSpace;
-                    if (SfxItemState::SET == m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
-                        GetItemState( RES_LR_SPACE, true,
-                                        reinterpret_cast<const SfxPoolItem**>(&pLRSpace) ) &&
+                    SvxLRSpaceItem const * pLRSpace = m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
+                        GetItemIfSet( RES_LR_SPACE );
+                    if (pLRSpace &&
                         ( 0 != (nSz = pLRSpace->GetTextFirstLineOffset()) ||
                             0 != pLRSpace->GetTextLeft() ) )
                     {
@@ -2663,9 +2659,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                     short nSz;
                     SvxLRSpaceItem const * pLRSpace;
                     if( bReplaceStyles &&
-                        SfxItemState::SET == m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
-                        GetItemState( RES_LR_SPACE, false,
-                                        reinterpret_cast<const SfxPoolItem**>(&pLRSpace) ) &&
+                        (pLRSpace = m_pCurTextFrame->GetTextNodeForParaProps()->GetSwAttrSet().
+                            GetItemIfSet( RES_LR_SPACE, false )) &&
                         ( 0 != (nSz = pLRSpace->GetTextFirstLineOffset()) ||
                             0 != pLRSpace->GetTextLeft() ) )
                     {
