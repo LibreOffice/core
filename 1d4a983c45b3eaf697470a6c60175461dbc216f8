@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7fb93d9_d6d217a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-03-02T08:49:34Z",
+      "side": 1,
+      "message": "\u003e Patch Set 3: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/109373/ : FAILURE\n\u003e \n\u003e error \"no type named \"IllegalArgumentException\" in namespace \"com::sun::star::lang\"\" triggered in included file /home/tdf/lode/jenkins/workspace/android_x86/include/unotools/VersionConfig.hxx:42:31 ( https://ci.libreoffice.org/job/gerrit_android_x86/15190/ )\n\u003e \n\u003e error: no type named \"IllegalArgumentException\" in namespace \"com::sun::star::lang\" in file /home/tdf/lode/jenkins/workspace/android_x86/include/unotools/VersionConfig.hxx ( https://ci.libreoffice.org/job/gerrit_android_x86/15190/ )\n\nSo - build 2 failed only for Windows, while in build 3 *only* windows worked - all with identical code, to mention that. What to think about gerrit and involved time...?",
+      "revId": "1d4a983c45b3eaf697470a6c60175461dbc216f8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
