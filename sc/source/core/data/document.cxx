@@ -6565,32 +6565,40 @@ bool ScDocument::IsInVBAMode() const
     return false;
 }
 
+// Sparklines
 sc::Sparkline* ScDocument::GetSparkline(ScAddress const& rPosition)
 {
     SCTAB nTab = rPosition.Tab();
-    SCCOL nCol = rPosition.Col();
 
-    if (ValidTab(nTab) && nTab < SCTAB(maTabs.size()) &&
-        nCol < maTabs[nTab]->GetAllocatedColumnsCount())
+    if (ValidTab(nTab) && nTab < SCTAB(maTabs.size()))
     {
-        SCROW nRow = rPosition.Row();
-        return maTabs[nTab]->aCol[nCol].GetSparkline(nRow);
+        return maTabs[nTab]->GetSparkline(rPosition.Col(), rPosition.Row());
     }
     return nullptr;
 }
 
 sc::Sparkline* ScDocument::CreateSparkline(ScAddress const & rPosition, const std::shared_ptr<sc::SparklineGroup> & pSparklineGroup)
 {
-    std::unique_ptr<sc::Sparkline> pSparkline(new sc::Sparkline(pSparklineGroup));
-    sc::Sparkline* pCreated = pSparkline.get();
-
     SCTAB nTab = rPosition.Tab();
-    SCCOL nCol = rPosition.Col();
-    SCROW nRow = rPosition.Row();
-    maTabs[nTab]->CreateColumnIfNotExists(nCol).SetSparkline(nRow, std::move(pSparkline));
 
-    return pCreated;
+    if (ValidTab(nTab) && nTab < SCTAB(maTabs.size()))
+    {
+        return maTabs[nTab]->CreateSparkline(rPosition.Col(), rPosition.Row(), pSparklineGroup);
+    }
+
+    return nullptr;
 }
+
+sc::SparklineList* ScDocument::GetSparklineList(SCTAB nTab)
+{
+    if (ValidTab(nTab) && nTab < SCTAB(maTabs.size()))
+    {
+        return &maTabs[nTab]->GetSparklineList();
+    }
+    return nullptr;
+}
+
+// Notes
 
 ScPostIt* ScDocument::GetNote(const ScAddress& rPos)
 {

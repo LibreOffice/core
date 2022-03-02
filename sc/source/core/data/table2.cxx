@@ -1809,6 +1809,43 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
     return aCol[nCol].GetFormulaCell(nRow);
 }
 
+// Sparklines
+
+sc::Sparkline* ScTable::GetSparkline(SCCOL nCol, SCROW nRow)
+{
+    if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
+        return nullptr;
+
+    sc::SparklineCell* pSparklineCell = aCol[nCol].GetSparklineCell(nRow);
+    if (!pSparklineCell)
+        return nullptr;
+
+    std::shared_ptr<sc::Sparkline> pSparkline(pSparklineCell->getSparkline());
+    assert(pSparkline);
+
+    return pSparkline.get();
+}
+
+sc::Sparkline* ScTable::CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<sc::SparklineGroup>& pSparklineGroup)
+{
+    if (!ValidCol(nCol))
+        return nullptr;
+
+    ScColumn& rColumn = CreateColumnIfNotExists(nCol);
+
+    std::shared_ptr<sc::Sparkline> pSparkline(new sc::Sparkline(nCol, nRow, pSparklineGroup));
+    maSparklineList.addSparkline(pSparkline);
+    rColumn.CreateSparklineCell(nRow, pSparkline);
+    return pSparkline.get();
+}
+
+sc::SparklineList& ScTable::GetSparklineList()
+{
+    return maSparklineList;
+}
+
+// Notes
+
 std::unique_ptr<ScPostIt> ScTable::ReleaseNote( SCCOL nCol, SCROW nRow )
 {
     if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
