@@ -65,6 +65,24 @@ void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPorti
                                uno::makeAny(static_cast<sal_Int32>(aColor)));
 }
 
+void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, svx::ColorSet& rColorSet)
+{
+    if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME))
+    {
+        return;
+    }
+
+    sal_Int16 nFillColorTheme = -1;
+    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_THEME) >>= nFillColorTheme;
+    if (nFillColorTheme < 0 || nFillColorTheme > 11)
+    {
+        return;
+    }
+
+    Color aColor = rColorSet.getColor(nFillColorTheme);
+    xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(aColor)));
+}
+
 void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
 {
     svx::ColorSet* pColorSet = pTheme->GetColorSet();
@@ -73,25 +91,27 @@ void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)
         return;
     }
 
-    uno::Reference<text::XTextRange> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
-    if (!xShape.is())
+    uno::Reference<drawing::XShape> xShape = pObject->getUnoShape();
+    uno::Reference<text::XTextRange> xShapeText(xShape, uno::UNO_QUERY);
+    if (xShapeText.is())
     {
         // E.g. group shapes have no text.
-        return;
-    }
-
-    uno::Reference<container::XEnumerationAccess> xText(xShape->getText(), uno::UNO_QUERY);
-    uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
-    while (xParagraphs->hasMoreElements())
-    {
-        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
-        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
-        while (xPortions->hasMoreElements())
+        uno::Reference<container::XEnumerationAccess> xText(xShapeText->getText(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs = xText->createEnumeration();
+        while (xParagraphs->hasMoreElements())
         {
-            uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
-            UpdateTextPortionColorSet(xPortion, *pColorSet);
+            uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(), uno::UNO_QUERY);
+            uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+            while (xPortions->hasMoreElements())
+            {
+                uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
+                UpdateTextPortionColorSet(xPortion, *pColorSet);
+            }
         }
     }
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    UpdateFillColorSet(xShapeProps, *pColorSet);
 }
 }
 

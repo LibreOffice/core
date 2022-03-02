@@ -62,6 +62,14 @@ sal_Int32 GetShapeTextColor(const uno::Reference<text::XTextRange>& xShape)
     return nColor;
 }
 
+/// Get the solid fill color of xShape.
+sal_Int32 GetShapeFillColor(const uno::Reference<beans::XPropertySet>& xShape)
+{
+    sal_Int32 nColor{};
+    xShape->getPropertyValue("FillColor") >>= nColor;
+    return nColor;
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
 {
     // Given a document, with a first slide and blue shape text from theme:
@@ -81,6 +89,12 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     uno::Reference<text::XTextRange> xShape3(xDrawPageShapes->getByIndex(2), uno::UNO_QUERY);
     // Blue, darker.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x2f5597), GetShapeTextColor(xShape3));
+    // Shape fill:
+    uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getByIndex(4), uno::UNO_QUERY);
+    // Blue.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeFillColor(xShape4));
+    // Set theme index to accent 1 till PPTX import is missing.
+    xShape4->setPropertyValue("FillColorTheme", uno::makeAny(static_cast<sal_Int16>(4)));
 
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
@@ -104,6 +118,11 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd5eda2), GetShapeTextColor(xShape2));
     // Green, darker.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x6c911d), GetShapeTextColor(xShape3));
+    // Shape fill:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 9486886 (#90c226, green)
+    // - Actual  : 4485828 (#4472c4, blue)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), GetShapeFillColor(xShape4));
 }
 }
 
