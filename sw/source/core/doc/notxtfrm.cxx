@@ -281,11 +281,10 @@ void SwNoTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect cons
         {
             const SwFlyFreeFrame *pFly = static_cast< const SwFlyFreeFrame* >( pFindFly );
             bool bGetUnclippedFrame=true;
-            const SfxPoolItem* pItem;
-            if( pFly->GetFormat() && SfxItemState::SET == pFly->GetFormat()->GetItemState(RES_BOX, false, &pItem) )
+            const SvxBoxItem* pBoxItem;
+            if( pFly->GetFormat() && (pBoxItem = pFly->GetFormat()->GetItemIfSet(RES_BOX, false)) )
             {
-                const SvxBoxItem& rBox = *static_cast<const SvxBoxItem*>(pItem);
-                if( rBox.HasBorder( /*bTreatPaddingAsBorder*/true) )
+                if( pBoxItem->HasBorder( /*bTreatPaddingAsBorder*/true) )
                     bGetUnclippedFrame = false;
             }
 

@@ -380,13 +380,10 @@ bool sw_JoinText( SwPaM& rPam, bool bJoinPrev )
                 pTextNd = aIdx.GetNode().GetTextNode();
                 if (pTextNd->HasSwAttrSet())
                 {
-                    const SfxPoolItem* pItem;
-                    if( SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState(
-                        RES_BREAK, false, &pItem ) )
+                    if( SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState( RES_BREAK, false) )
                         pTextNd->ResetAttr( RES_BREAK );
                     if( pTextNd->HasSwAttrSet() &&
-                        SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState(
-                        RES_PAGEDESC, false, &pItem ) )
+                        SfxItemState::SET == pTextNd->GetpSwAttrSet()->GetItemState( RES_PAGEDESC, false ) )
                         pTextNd->ResetAttr( RES_PAGEDESC );
                 }
 
