@@ -23,6 +23,7 @@
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -303,6 +304,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     OUString aBulletFontName;
     sal_Int16 nBulletFontPitch = 0;
     sal_Int16 nBulletFontFamily = 0;
+    float nBulletFontWeight = css::awt::FontWeight::NORMAL;
     bool bSymbolFont = false;
     if( pFilterBase) {
         if (maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) )
@@ -316,6 +318,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
             aFontDesc.Name = aBulletFontName;
             aFontDesc.Pitch = nBulletFontPitch;
             aFontDesc.Family = nBulletFontFamily;
+            aFontDesc.Weight = nBulletFontWeight;
             if ( aBulletFontName.equalsIgnoreAsciiCase("Wingdings") ||
                  aBulletFontName.equalsIgnoreAsciiCase("Wingdings 2") ||
                  aBulletFontName.equalsIgnoreAsciiCase("Wingdings 3") ||
