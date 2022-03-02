@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8add1fcf_11d5836c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-02T07:09:50Z",
+      "side": 1,
+      "message": "...which would IMO be worth pointing out in the commit message",
+      "parentUuid": "7c4f9f87_18c3fbc3",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4fc498fa_e7a931e0",
         "filename": "comphelper/source/misc/configuration.cxx",
         "patchSetId": 5
@@ -119,6 +137,24 @@
       "side": 1,
       "message": "\u003e rather than introducing two Configuration::get overloads and two ConfigurationWrapper::get(WithProcessComponentContext) functions, never allow to pass in an XComponentContext and always call getProcessComponentContext here?\n\nThere are a number of callers that explicitly pass an argument. Can I just mechanically remove all of those?",
       "parentUuid": "7f5ae3a0_1dfb3ac6",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfdc10e6_57036ead",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-02T07:09:50Z",
+      "side": 1,
+      "message": "\u003e There are a number of callers that explicitly pass an argument. Can I just mechanically remove all of those?\n\nYes.  (An XComponentContext has traditionally been passed into those functions where already easily available at the call site, and left out otherwise.)",
+      "parentUuid": "e816defd_2a9a10b2",
       "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
