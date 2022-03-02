@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef436c52_1e329d05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-02T05:57:23Z",
+      "side": 1,
+      "message": "This is completely unnecessary change.\n\nThe entity is a reference to a pointer to an object. And you don\u0027t change the pointer in the loop, so the *pointer* can be const. The object that it points to is not const just because the pointer itself is const.\n\nSo you seem to confuse the two consts in expressions like\n\n    const Foo* const pFoo;\n\nThe first const is part of the type of the *object* that we point to (so you can\u0027t do \u0027pFoo-\u003ebar \u003d baz;\u0027); the last const defined constness of the pointer itself (co you can\u0027t \u0027++pFoo;\u0027).",
+      "revId": "d1cfe4228316322d0ae9f3b8020036e5140fc32b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
