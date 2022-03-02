@@ -482,41 +482,33 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
         break;
 
         case SID_REGENERATE_DIAGRAM:
-        {
-            const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() == 1)
-            {
-                SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-                // Support advanced DiagramHelper
-                SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
-                if(pAnchorObj && pAnchorObj->isDiagram())
-                {
-                    mpDrawView->UnmarkAll();
-                    pAnchorObj->getDiagramHelper()->reLayout();
-                    mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
-                }
-            }
-
-            rReq.Done();
-        }
-        break;
-
         case SID_EDIT_DIAGRAM:
         {
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-            if (rMarkList.GetMarkCount() == 1)
+
+            if (1 == rMarkList.GetMarkCount())
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
                 // Support advanced DiagramHelper
                 SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
 
                 if(pAnchorObj && pAnchorObj->isDiagram())
                 {
-                    VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
-                    ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
-                        GetFrameWeld(),
-                        pAnchorObj->getDiagramHelper());
-                    pDlg->Execute();
+                    if(SID_REGENERATE_DIAGRAM == nSlot)
+                    {
+                        mpDrawView->UnmarkAll();
+                        pAnchorObj->getDiagramHelper()->reLayout();
+                        mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
+                    }
+                    else // SID_EDIT_DIAGRAM
+                    {
+                        VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                        ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
+                            GetFrameWeld(),
+                            pAnchorObj->getDiagramHelper());
+                        pDlg->Execute();
+                    }
                 }
             }
 

@@ -60,6 +60,20 @@ interface BaseTextDrawBase
         StateMethod = GetState ;
     ]
 
+    SID_REGENERATE_DIAGRAM
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
+    SID_EDIT_DIAGRAM
+    [
+        AutoUpdate = TRUE ,
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
+
     SID_FRAME_TO_TOP
     [
         ExecMethod = Execute ;
