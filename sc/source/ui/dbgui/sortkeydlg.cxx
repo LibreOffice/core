@@ -11,6 +11,9 @@
 #include <sortkeydlg.hxx>
 #include <vcl/svapp.hxx>
 
+#include <scresid.hxx>
+#include <strings.hrc>
+
 ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
     : m_xBuilder(Application::CreateBuilder(pParent, "modules/scalc/ui/sortkey.ui"))
     , m_xFrame(m_xBuilder->weld_frame("SortKeyFrame"))
@@ -23,6 +26,9 @@ ScSortKeyItem::ScSortKeyItem(weld::Container* pParent)
     // tdf#136155 let the other elements in the dialog determine the width of the
     // combobox
     m_xLbSort->set_size_request(m_xLbSort->get_approximate_digit_width() * 12, -1);
+    // keep the UI static when switching the labels
+    const sal_Int32 nChars = std::max( ScResId(SCSTR_COLUMN).getLength(), ScResId(SCSTR_ROW).getLength() ) + 2; // +2 to avoid cut-off labels on kf5/gen
+    m_xLabel->set_size_request( m_xLabel->get_approximate_digit_width() * nChars, -1);
 }
 
 ScSortKeyItem::~ScSortKeyItem()
