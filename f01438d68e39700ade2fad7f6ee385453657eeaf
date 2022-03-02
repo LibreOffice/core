@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "738cab82_156b137a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-02T09:46:40Z",
+      "side": 1,
+      "message": "sberg, so I fixed this one spot, but now my build progresses a little more, I see that it is warning on other similar usages of OUStringChar\n\nAny ideas?",
+      "revId": "f01438d68e39700ade2fad7f6ee385453657eeaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
