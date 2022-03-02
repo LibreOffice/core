@@ -2808,14 +2808,11 @@ OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numbering
         Any aAny = pXIndex->getByIndex(numberingLevel);
         Sequence< css::beans::PropertyValue > aProps;
         aAny >>= aProps;
-        const css::beans::PropertyValue* pPropArray = aProps.getConstArray();
-        sal_Int32 nCount = aProps.getLength();
         OUStringBuffer buf("Numbering:NumberingLevel=");
         buf.append(sal_Int32(numberingLevel));
         buf.append(',');
-        for( sal_Int32 i=0; i<nCount; i++ )
+        for (const css::beans::PropertyValue& rProp : aProps)
         {
-            css::beans::PropertyValue rProp = pPropArray[i];
             if( (rProp.Name == "BulletChar" ) ||
                 (rProp.Name == "NumberingType" ))
             {
@@ -2825,13 +2822,10 @@ OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numbering
                 buf.append(pTemp);
                 buf.append(',');
 
-                if(rProp.Name == "NumberingType")
+                if (rProp.Name == "NumberingType" && !numberingPrefix.isEmpty())
                 {
-                    if(numberingPrefix.getLength()!=0)
-                    {
-                        buf.append("NumberingPrefix=");
-                        buf.append(numberingPrefix);
-                    }
+                    buf.append("NumberingPrefix=");
+                    buf.append(numberingPrefix);
                 }
             }
         }
