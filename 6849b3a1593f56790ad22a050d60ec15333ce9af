@@ -52,6 +52,24 @@
       "parentUuid": "10755a47_a0eb8f7c",
       "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "401cd2c1_d69b82d8",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-02T07:47:49Z",
+      "side": 1,
+      "message": "Sure, that would be great. GetItemIfSet is really just sugar over the existing pattern of\n\n   if (SfxItemState::SET \u003d\u003d xxx.GetItemState(....",
+      "parentUuid": "45ac2b7c_e5fed4a1",
+      "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
