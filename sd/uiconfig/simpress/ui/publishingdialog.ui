@@ -1192,7 +1192,7 @@
                             <property name="group">resolution1Radiobutton</property>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="resolution4Radiobutton-atkobject">
-                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|resolution4Radiobutton">Select a full hd resolution for a very high quality slide display.</property>
+                                <property name="AtkObject::accessible-description" translatable="yes" context="publishingdialog|extended_tip|resolution4Radiobutton">Select a full HD resolution for a very high-quality slide display.</property>
                               </object>
                             </child>
                           </object>

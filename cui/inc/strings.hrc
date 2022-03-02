@@ -400,7 +400,7 @@
 #define RID_CUISTR_OLE_INSERT                       NC_("RID_SVXSTR_OLE_INSERT", "Inserting OLE object...")
 
 #define RID_CUISTR_CLICK_RESULT                     NC_("RID_CUISTR_CLICK_RESULT", "(Click on any test to view its resultant bitmap image)")
-#define RID_CUISTR_ZIPFAIL                          NC_("RID_CUISTR_ZIPFAIL", "Creation of Zip file failed!")
+#define RID_CUISTR_ZIPFAIL                          NC_("RID_CUISTR_ZIPFAIL", "Creation of ZIP file failed.")
 #define RID_CUISTR_SAVED                            NC_("RID_CUISTR_SAVED", "The results have been successfully saved in the file 'GraphicTestResults.zip'!")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
