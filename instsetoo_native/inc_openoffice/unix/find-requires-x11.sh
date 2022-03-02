@@ -23,5 +23,7 @@ if [[ "${OS}" == "AIX" ]]; then
   echo "libfreetype.a(libfreetype.so.6${mark64})"
 else
   echo "libfreetype.so.6${mark64}"
-  echo "libXinerama.so.1${mark64}"
+  if [[ "${XINERAMA_LINK}" == "dynamic" ]]; then
+    echo "libXinerama.so.1${mark64}"
+  fi
 fi
