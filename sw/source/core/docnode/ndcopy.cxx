@@ -155,11 +155,10 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
 
     if (pBoxFormat == pBox->GetFrameFormat()) // Create a new one?
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pBoxFormat->GetItemState( RES_BOXATR_FORMULA, false,
-            &pItem ) && static_cast<const SwTableBoxFormula*>(pItem)->IsIntrnlName() )
+        const SwTableBoxFormula* pFormulaItem = pBoxFormat->GetItemIfSet( RES_BOXATR_FORMULA, false );
+        if( pFormulaItem && pFormulaItem->IsIntrnlName() )
         {
-            const_cast<SwTableBoxFormula*>(static_cast<const SwTableBoxFormula*>(pItem))->PtrToBoxNm(pCT->m_pOldTable);
+            const_cast<SwTableBoxFormula*>(pFormulaItem)->PtrToBoxNm(pCT->m_pOldTable);
         }
 
         pBoxFormat = pCT->m_rDoc.MakeTableBoxFormat();
@@ -168,10 +167,11 @@ static void lcl_CopyTableBox( SwTableBox* pBox, CopyTable* pCT )
         if( pBox->GetSttIdx() )
         {
             SvNumberFormatter* pN = pCT->m_rDoc.GetNumberFormatter(false);
-            if( pN && pN->HasMergeFormatTable() && SfxItemState::SET == pBoxFormat->
-                GetItemState( RES_BOXATR_FORMAT, false, &pItem ) )
+            const SwTableBoxNumFormat* pFormatItem;
+            if( pN && pN->HasMergeFormatTable() &&
+                (pFormatItem = pBoxFormat->GetItemIfSet( RES_BOXATR_FORMAT, false )) )
             {
-                sal_uLong nOldIdx = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+                sal_uLong nOldIdx = pFormatItem->GetValue();
                 sal_uLong nNewIdx = pN->GetMergeFormatIndex( nOldIdx );
                 if( nNewIdx != nOldIdx )
                     pBoxFormat->SetFormatAttr( SwTableBoxNumFormat( nNewIdx ));
