@@ -196,7 +196,10 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont(FontSelectPatte
         while( nStrIndex < rMissingCodes.getLength() )
         {
             cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-            bCached = pFontInstance->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName );
+            bCached = pFontInstance->GetFallbackForUnicode(cChar, rFontSelData.GetWeight(),
+                                                           &rFontSelData.maSearchName,
+                                                           &rFontSelData.mbEmbolden,
+                                                           &rFontSelData.maItalicMatrix);
 
             // ignore entries which don't have a fallback
             if( !bCached || !rFontSelData.maSearchName.isEmpty() )
@@ -210,13 +213,20 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont(FontSelectPatte
             int nRemainingLength = 0;
             std::unique_ptr<sal_UCS4[]> const pRemainingCodes(new sal_UCS4[rMissingCodes.getLength()]);
             OUString aFontName;
+            bool bEmbolden;
+            ItalicMatrix aMatrix;
 
             while( nStrIndex < rMissingCodes.getLength() )
             {
                 cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-                bCached = pFontInstance->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &aFontName );
-                if( !bCached || (rFontSelData.maSearchName != aFontName) )
+                bCached = pFontInstance->GetFallbackForUnicode(cChar, rFontSelData.GetWeight(),
+                                                               &aFontName, &bEmbolden, &aMatrix);
+                if (!bCached || rFontSelData.maSearchName != aFontName ||
+                                rFontSelData.mbEmbolden != bEmbolden ||
+                                rFontSelData.maItalicMatrix != aMatrix)
+                {
                     pRemainingCodes[ nRemainingLength++ ] = cChar;
+                }
             }
             rMissingCodes = OUString( pRemainingCodes.get(), nRemainingLength );
         }
@@ -231,31 +241,33 @@ PhysicalFontFamily* PhysicalFontCollection::GetGlyphFallbackFont(FontSelectPatte
             else
                 rFontSelData.maSearchName.clear();
 
-            // See fdo#32665 for an example. FreeSerif that has glyphs in normal
-            // font, but not in the italic or bold version
-            bool bSubSetOfFontRequiresPropertyFaking = rFontSelData.mbEmbolden || rFontSelData.maItalicMatrix != ItalicMatrix();
-
-            // Cache the result even if there was no match, unless its from part of a font for which the properties need
-            // to be faked. We need to rework this cache to take into account that fontconfig can return different fonts
-            // for different input sizes, weights, etc. Basically the cache is way to naive
-            if (!bSubSetOfFontRequiresPropertyFaking)
+            // Cache the result even if there was no match
+            // See tdf#32665 and tdf#147283 for an example where FreeSerif that has glyphs that exist
+            // in the bold font, but not in the bold+italic version where fontconfig suggest the bold
+            // font + applying a matrix to fake the missing italic.
+            for(;;)
             {
-                for(;;)
+                 if (!pFontInstance->GetFallbackForUnicode(cChar, rFontSelData.GetWeight(),
+                                                           &rFontSelData.maSearchName,
+                                                           &rFontSelData.mbEmbolden,
+                                                           &rFontSelData.maItalicMatrix))
+                 {
+                     pFontInstance->AddFallbackForUnicode(cChar, rFontSelData.GetWeight(),
+                                                          rFontSelData.maSearchName,
+                                                          rFontSelData.mbEmbolden,
+                                                          rFontSelData.maItalicMatrix);
+                 }
+                 if( nStrIndex >= aOldMissingCodes.getLength() )
+                     break;
+                 cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
+            }
+            if( !rFontSelData.maSearchName.isEmpty() )
+            {
+                // remove cache entries that were still not resolved
+                for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
                 {
-                     if( !pFontInstance->GetFallbackForUnicode( cChar, rFontSelData.GetWeight(), &rFontSelData.maSearchName ) )
-                         pFontInstance->AddFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
-                     if( nStrIndex >= aOldMissingCodes.getLength() )
-                         break;
-                     cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
-                }
-                if( !rFontSelData.maSearchName.isEmpty() )
-                {
-                    // remove cache entries that were still not resolved
-                    for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
-                    {
-                        cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
-                        pFontInstance->IgnoreFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
-                    }
+                    cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
+                    pFontInstance->IgnoreFallbackForUnicode( cChar, rFontSelData.GetWeight(), rFontSelData.maSearchName );
                 }
             }
         }
