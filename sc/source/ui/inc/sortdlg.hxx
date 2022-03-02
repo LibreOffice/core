@@ -26,15 +26,6 @@ class ScSortDlg : public SfxTabDialogController
 {
 public:
     ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet);
-
-    void SetHeaders( bool bHeaders )  { bIsHeaders = bHeaders; }
-    void SetByRows ( bool bByRows  )  { bIsByRows = bByRows; }
-    bool GetHeaders() const           { return bIsHeaders; }
-    bool GetByRows () const           { return bIsByRows; }
-
-private:
-    bool    bIsHeaders;
-    bool    bIsByRows;
 };
 
 class ScSortWarningDlg : public weld::GenericDialogController

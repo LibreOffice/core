@@ -25,8 +25,6 @@
 
 ScSortDlg::ScSortDlg(weld::Window* pParent, const SfxItemSet* pArgSet)
     : SfxTabDialogController(pParent, "modules/scalc/ui/sortdialog.ui", "SortDialog", pArgSet)
-    , bIsHeaders(false)
-    , bIsByRows(false)
 {
     AddTabPage("criteria", ScTabPageSortFields::Create, nullptr);
     AddTabPage("options", ScTabPageSortOptions::Create, nullptr);
