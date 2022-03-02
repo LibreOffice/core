@@ -170,7 +170,7 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
     }
     nIdx--;
 
-    sal_uInt32 nNumItemId = SID_ATTR_NUMBERING_RULE;
+    TypedWhichId<SvxNumBulletItem> nNumItemId = SID_ATTR_NUMBERING_RULE;
     const SfxPoolItem* pTmpItem = GetNumBulletItem( aNewAttr, nNumItemId );
     std::unique_ptr<SvxNumRule> pNumRule;
     if ( pTmpItem )
@@ -184,9 +184,8 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
         if ( pNumRuleMgr )
         {
             sal_uInt16 nActNumLvl = sal_uInt16(0xFFFF);
-            const SfxPoolItem* pNumLevelItem = nullptr;
-            if(SfxItemState::SET == aNewAttr.GetItemState(SID_PARAM_CUR_NUM_LEVEL, false, &pNumLevelItem))
-                nActNumLvl = static_cast<const SfxUInt16Item*>(pNumLevelItem)->GetValue();
+            if(const SfxUInt16Item* pNumLevelItem = aNewAttr.GetItemIfSet(SID_PARAM_CUR_NUM_LEVEL, false))
+                nActNumLvl = pNumLevelItem->GetValue();
 
             pNumRuleMgr->SetItems(&aNewAttr);
             SvxNumRule aTmpRule( *pNumRule );
@@ -264,86 +263,75 @@ void FuBulletAndPosition::SetCurrentBulletsNumbering(SfxRequest& rReq)
     rReq.Done();
 }
 
-const SfxPoolItem* FuBulletAndPosition::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId)
+const SvxNumBulletItem* FuBulletAndPosition::GetNumBulletItem(SfxItemSet& aNewAttr, TypedWhichId<SvxNumBulletItem>& nNumItemId)
 {
-    //SvxNumBulletItem* pRetItem = NULL;
-    const SfxPoolItem* pTmpItem = nullptr;
+    const SvxNumBulletItem* pTmpItem = aNewAttr.GetItemIfSet(nNumItemId, false);
 
-    if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SfxItemState::SET)
-    {
+    if(pTmpItem)
         return pTmpItem;
-    }
-    else
+
+    nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
+    pTmpItem = aNewAttr.GetItemIfSet(nNumItemId, false);
+    if (pTmpItem)
+        return pTmpItem;
+
+    bool bOutliner = false;
+    bool bTitle = false;
+
+    if( mpView )
     {
-        nNumItemId = aNewAttr.GetPool()->GetWhich(SID_ATTR_NUMBERING_RULE);
-        SfxItemState eState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-        if (eState == SfxItemState::SET)
-            return pTmpItem;
-        else
+        const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+        const size_t nCount = rMarkList.GetMarkCount();
+
+        for(size_t nNum = 0; nNum < nCount; ++nNum)
         {
-            bool bOutliner = false;
-            bool bTitle = false;
-
-            if( mpView )
+            SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
+            if( pObj->GetObjInventor() == SdrInventor::Default )
             {
-                const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
-                const size_t nCount = rMarkList.GetMarkCount();
-
-                for(size_t nNum = 0; nNum < nCount; ++nNum)
+                switch(pObj->GetObjIdentifier())
                 {
-                    SdrObject* pObj = rMarkList.GetMark(nNum)->GetMarkedSdrObj();
-                    if( pObj->GetObjInventor() == SdrInventor::Default )
-                    {
-                        switch(pObj->GetObjIdentifier())
-                        {
-                        case SdrObjKind::TitleText:
-                            bTitle = true;
-                            break;
-                        case SdrObjKind::OutlineText:
-                            bOutliner = true;
-                            break;
-                        default:
-                            break;
-                        }
-                    }
+                case SdrObjKind::TitleText:
+                    bTitle = true;
+                    break;
+                case SdrObjKind::OutlineText:
+                    bOutliner = true;
+                    break;
+                default:
+                    break;
                 }
             }
-
-            const SvxNumBulletItem *pItem = nullptr;
-            if(bOutliner)
-            {
-                SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
-                SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( STR_LAYOUT_OUTLINE + " 1", SfxStyleFamily::Pseudo);
-                if( pFirstStyleSheet )
-                    pFirstStyleSheet->GetItemSet().GetItemState(EE_PARA_NUMBULLET, false, reinterpret_cast<const SfxPoolItem**>(&pItem));
-            }
-
-            if( pItem == nullptr )
-                pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
-
-            //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
-
-            std::unique_ptr<SfxPoolItem> pNewItem(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
-            aNewAttr.Put(*pNewItem);
-
-            if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
-            {
-                const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
-                const SvxNumRule& rLclRule = pBulletItem->GetNumRule();
-                SvxNumRule aNewRule( rLclRule );
-                aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
-
-                SvxNumBulletItem aNewItem( std::move(aNewRule), EE_PARA_NUMBULLET );
-                aNewAttr.Put(aNewItem);
-            }
-
-            SfxItemState eItemState = aNewAttr.GetItemState(nNumItemId, false, &pTmpItem);
-            if (eItemState == SfxItemState::SET)
-                return pTmpItem;
-
         }
-        //DBG_ASSERT(eState == SfxItemState::SET, "No item found");
     }
+
+    const SvxNumBulletItem *pItem = nullptr;
+    if(bOutliner)
+    {
+        SfxStyleSheetBasePool* pSSPool = mpView->GetDocSh()->GetStyleSheetPool();
+        SfxStyleSheetBase* pFirstStyleSheet = pSSPool->Find( STR_LAYOUT_OUTLINE + " 1", SfxStyleFamily::Pseudo);
+        if( pFirstStyleSheet )
+            pItem = pFirstStyleSheet->GetItemSet().GetItemIfSet(EE_PARA_NUMBULLET, false);
+    }
+
+    if( pItem == nullptr )
+        pItem = aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
+
+    //DBG_ASSERT( pItem, "No EE_PARA_NUMBULLET in the Pool!" );
+
+    std::unique_ptr<SfxPoolItem> pNewItem(pItem->CloneSetWhich(EE_PARA_NUMBULLET));
+    aNewAttr.Put(*pNewItem);
+
+    if(bTitle && aNewAttr.GetItemState(EE_PARA_NUMBULLET) == SfxItemState::SET )
+    {
+        const SvxNumBulletItem* pBulletItem = aNewAttr.GetItem(EE_PARA_NUMBULLET);
+        const SvxNumRule& rLclRule = pBulletItem->GetNumRule();
+        SvxNumRule aNewRule( rLclRule );
+        aNewRule.SetFeatureFlag( SvxNumRuleFlags::NO_NUMBERS );
+
+        SvxNumBulletItem aNewItem( std::move(aNewRule), EE_PARA_NUMBULLET );
+        aNewAttr.Put(aNewItem);
+    }
+
+    pTmpItem = aNewAttr.GetItemIfSet(nNumItemId, false);
     return pTmpItem;
 }
 

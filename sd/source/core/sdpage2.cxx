@@ -469,16 +469,16 @@ bool SdPage::setAlienAttributes( const css::uno::Any& rAttributes )
 
 void SdPage::getAlienAttributes( css::uno::Any& rAttributes )
 {
-    const SfxPoolItem* pItem;
+    const SvXMLAttrContainerItem* pItem;
 
-    if( (mpItems == nullptr) || ( SfxItemState::SET != mpItems->GetItemState( SDRATTR_XMLATTRIBUTES, false, &pItem ) ) )
+    if( (mpItems == nullptr) || !( pItem = mpItems->GetItemIfSet( SDRATTR_XMLATTRIBUTES, false ) ) )
     {
         SvXMLAttrContainerItem aAlienAttributes;
         aAlienAttributes.QueryValue( rAttributes );
     }
     else
     {
-        static_cast<const SvXMLAttrContainerItem*>(pItem)->QueryValue( rAttributes );
+        pItem->QueryValue( rAttributes );
     }
 }
 
