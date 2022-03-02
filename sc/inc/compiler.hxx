@@ -357,7 +357,7 @@ private:
     bool ParsePredetectedReference( const OUString& rSymbol );
     bool ParsePredetectedErrRefReference( const OUString& rName, const OUString* pErrRef );
     bool ParseMacro( const OUString& );
-    bool ParseNamedRange( const OUString& );
+    bool ParseNamedRange( const OUString&, bool onlyCheck = false );
     bool ParseExternalNamedRange( const OUString& rSymbol, bool& rbInvalidExternalNameRange );
     bool ParseDBRange( const OUString& );
     bool ParseColRowName( const OUString& );
