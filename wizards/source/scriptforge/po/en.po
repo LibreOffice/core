@@ -7,14 +7,14 @@
 #  *** are part of the LibreOffice project.                          ***
 #  *********************************************************************
 #  
-#  ScriptForge Release 7.3
+#  ScriptForge Release 7.4
 #  -----------------------
 #  
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2022-01-31 16:58:10\n"
+"POT-Creation-Date: 2022-03-01 15:25:24\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -760,6 +760,23 @@ msgid  ""
 "« %3 » = %4\n"
 "« %5 » = %6\n"
 ""
+msgstr ""
+
+#. SF_Calc.ExportRangeToFile error message
+#. %1: An identifier
+#. %2: A file name
+#. %3: An identifier
+#. %4: True or False
+#. 
+#, kde-format
+msgctxt "RANGEEXPORT"
+msgid  ""
+"The given range could not be exported.\n"
+"Either the destination file must not be overwritten, or it has a "
+"read-only attribute set.\n"
+"\n"
+"%1 = '%2'\n"
+"%3 = %4"
 msgstr ""
 
 #. SF_Chart.ExportToFile error message
