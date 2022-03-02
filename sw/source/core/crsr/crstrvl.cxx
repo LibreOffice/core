@@ -1742,18 +1742,18 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                 const SwTableNode* pTableNd;
                 const SwTableBox* pBox;
                 const SwStartNode* pSttNd = pTextNd->FindTableBoxStartNode();
-                const SfxPoolItem* pItem;
+                const SwTableBoxFormula* pItem;
+#ifdef DBG_UTIL
+                const SwTableBoxValue* pItem2;
+#endif
                 if( pSttNd && nullptr != ( pTableNd = pTextNd->FindTableNode()) &&
                     nullptr != ( pBox = pTableNd->GetTable().GetTableBox(
                     pSttNd->GetIndex() )) &&
 #ifdef DBG_UTIL
-                    ( SfxItemState::SET == pBox->GetFrameFormat()->GetItemState(
-                    RES_BOXATR_FORMULA, false, &pItem ) ||
-                    SfxItemState::SET == pBox->GetFrameFormat()->GetItemState(
-                    RES_BOXATR_VALUE, false, &pItem ))
+                    ( (pItem = pBox->GetFrameFormat()->GetItemIfSet( RES_BOXATR_FORMULA, false )) ||
+                      (pItem2 = pBox->GetFrameFormat()->GetItemIfSet( RES_BOXATR_VALUE, false )) )
 #else
-                    SfxItemState::SET == pBox->GetFrameFormat()->GetItemState(
-                    RES_BOXATR_FORMULA, false, &pItem )
+                    (pItem = pBox->GetFrameFormat()->GetItemIfSet( RES_BOXATR_FORMULA, false ))
 #endif
                     )
                 {
@@ -1781,11 +1781,11 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         // (for UI) formula
                         rContentAtPos.eContentAtPos = IsAttrAtPos::TableBoxFml;
 #ifdef DBG_UTIL
-                        if( RES_BOXATR_VALUE == pItem->Which() )
+                        if( RES_BOXATR_VALUE == pItem2->Which() )
                             rContentAtPos.eContentAtPos = IsAttrAtPos::TableBoxValue;
                         else
 #endif
-                            const_cast<SwTableBoxFormula&>(pItem->StaticWhichCast(RES_BOXATR_FORMULA)).PtrToBoxNm( &pTableNd->GetTable() );
+                            const_cast<SwTableBoxFormula&>(*pItem).PtrToBoxNm( &pTableNd->GetTable() );
 
                         bRet = true;
                         if( bSetCursor )
