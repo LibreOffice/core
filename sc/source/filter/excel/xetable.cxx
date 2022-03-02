@@ -2041,9 +2041,10 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, size_t nStartColAll
 
     // *** Remove unused BLANK cell records *** -------------------------------
 
-    size_t maxStartAllDefault = std::max( nStartAllDefault, nStartColAllDefault );
+    size_t maxStartAllNotFound;
     if( bUseColDefXFs )
     {
+        size_t maxStartAllDefault = std::max( nStartAllDefault, nStartColAllDefault );
         // use column default XF indexes
         // #i194#: remove cell XF indexes equal to column default XF indexes
         for( size_t i = 0; i < maxStartAllDefault; ++i )
@@ -2054,6 +2055,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, size_t nStartColAll
         // They can differ only up to maxNonDefault, in the rest they are the same.
         for( size_t i = maxStartAllDefault; i < aXFIndexes.size(); ++i )
             aXFIndexes[ i ] = EXC_XF_NOTFOUND;
+        maxStartAllNotFound = maxStartAllDefault;
     }
     else
     {
@@ -2064,10 +2066,11 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes, size_t nStartColAll
         for( auto& rXFIndex : aXFIndexes )
             if( rXFIndex == nRowXFIndex )
                 rXFIndex = EXC_XF_NOTFOUND;
+        maxStartAllNotFound = aXFIndexes.size();
     }
 
     // remove unused parts of BLANK/MULBLANK cell records
-    size_t nStartAllNotFound = findFirstAllSameUntilEnd( aXFIndexes, EXC_XF_NOTFOUND, maxStartAllDefault );
+    size_t nStartAllNotFound = findFirstAllSameUntilEnd( aXFIndexes, EXC_XF_NOTFOUND, maxStartAllNotFound );
     nPos = 0;
     while( nPos < maCellList.GetSize() )   // do not cache list size, may change in the loop
     {
