@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f081a40_132cb11a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-02T09:16:53Z",
+      "side": 1,
+      "message": "Did you actually verify that this still builds? This is the alpha arch uno bridge, it\u0027s not build on any platform that Jenkins covers.\n\nI mean: if you do a change to a source code file, make sure you do it in a file that is built on your platform.",
+      "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
