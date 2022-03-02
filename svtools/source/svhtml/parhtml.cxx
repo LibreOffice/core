@@ -1079,7 +1079,7 @@ HtmlTokenId HTMLParser::GetNextToken_()
                     aToken = aToken.toString().toAsciiLowerCase();
 
                     if (!maNamespace.isEmpty() && o3tl::starts_with(aToken, maNamespace))
-                        aToken = aToken.remove( 0, maNamespace.getLength());
+                        aToken.remove( 0, maNamespace.getLength());
 
                     if( HtmlTokenId::NONE == (nRet = GetHTMLToken( aToken )) )
                         // Unknown control
