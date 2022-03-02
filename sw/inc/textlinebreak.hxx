@@ -32,10 +32,15 @@ class SwFormatLineBreak;
  */
 class SW_DLLPUBLIC SwTextLineBreak final : public SwTextAttr
 {
+    SwTextNode* m_pTextNode;
+
 public:
     SwTextLineBreak(SwFormatLineBreak& rAttr, sal_Int32 nStart);
 
     ~SwTextLineBreak() override;
+
+    const SwTextNode& GetTextNode() const;
+    void SetTextNode(SwTextNode* pNew);
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };

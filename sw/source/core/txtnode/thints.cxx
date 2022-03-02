@@ -1528,6 +1528,11 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
                     }
                 }
                 break;
+        case RES_TXTATR_LINEBREAK :
+                {
+                    static_cast<SwTextLineBreak*>(pAttr)->SetTextNode(this);
+                }
+                break;
 
         }
         // CH_TXTATR_* are inserted for SwTextHints without EndIndex

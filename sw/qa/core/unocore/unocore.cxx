@@ -227,6 +227,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakInsert)
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xLineBreak(
         xMSF->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
+    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);

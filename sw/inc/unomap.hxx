@@ -125,7 +125,8 @@ struct SfxItemPropertyMapEntry;
 #define PROPERTY_MAP_TABLE_STYLE                        100
 #define PROPERTY_MAP_CELL_STYLE                         101
 #define PROPERTY_MAP_FIELDMARK                          102
-#define PROPERTY_MAP_END                                103
+#define PROPERTY_MAP_LINEBREAK                          103
+#define PROPERTY_MAP_END                                104
 
 //S&E
 #define WID_WORDS                0
@@ -351,6 +352,7 @@ private:
     static const SfxItemPropertyMapEntry*  GetRedlinePropertyMap();
     static const SfxItemPropertyMapEntry*  GetRedlinePortionPropertyMap();
     static       SfxItemPropertyMapEntry*  GetTextDefaultPropertyMap();
+    static const SfxItemPropertyMapEntry* GetLineBreakPropertyMap();
 };
 
 extern SwUnoPropertyMapProvider aSwMapProvider;

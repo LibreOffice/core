@@ -1008,6 +1008,18 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetFootnotePropertyMap
     return aFootnoteMap_Impl;
 }
 
+const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetLineBreakPropertyMap()
+{
+    static SfxItemPropertyMapEntry const aLineBreakMap_Impl[] =
+    {
+        { u"" UNO_NAME_CLEAR, 0, cppu::UnoType<sal_Int16>::get(), PROPERTY_NONE, 0 },
+        COMMON_TEXT_CONTENT_PROPERTIES
+        { u"", 0, css::uno::Type(), 0, 0 }
+    };
+
+    return aLineBreakMap_Impl;
+}
+
 const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetRedlinePropertyMap()
 {
     static SfxItemPropertyMapEntry const aRedlineMap_Impl[] =
@@ -1659,6 +1671,12 @@ const SfxItemPropertySet*  SwUnoPropertyMapProvider::GetPropertySet( sal_uInt16 
             {
                 static SfxItemPropertySet aPROPERTY_MAP_CELL_STYLE(pEntries);
                 m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_CELL_STYLE;
+            }
+            break;
+            case PROPERTY_MAP_LINEBREAK:
+            {
+                static SfxItemPropertySet aPROPERTY_MAP_LINEBREAK(pEntries);
+                m_aPropertySetArr[nPropertyId] = &aPROPERTY_MAP_LINEBREAK;
             }
             break;
         }
