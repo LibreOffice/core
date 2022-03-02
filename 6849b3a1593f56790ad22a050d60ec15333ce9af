@@ -70,6 +70,24 @@
       "parentUuid": "45ac2b7c_e5fed4a1",
       "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3be176bb_797bb483",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-02T08:34:59Z",
+      "side": 1,
+      "message": "And reading GetItem():\n\nhttps://github.com/libreoffice/core/blob/3dc44504eeab89f8a6fb48b6f30a4c9733326ffe/svl/source/items/itemset.cxx#L733-L739\n\nis really similar (also sugar over GetItemState()).\n\nProbably my confusion was about: there is a difference between:\n\n1) a pool item is SET, but in a parent\n\nand\n\n2) a pool item is not set at all, but there is a pool DEFAULT\n\nWhich means the safest way is to keep these two variants, and it\u0027s not that problematic to have them both as a wrapper around GetItemState().\n\nSorry for the noise. :-)",
+      "parentUuid": "401cd2c1_d69b82d8",
+      "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
