@@ -23,6 +23,7 @@
 #include <cppuhelper/weakref.hxx>
 #include <sal/log.hxx>
 #include <svl/listener.hxx>
+#include <svl/itemprop.hxx>
 
 #include <IDocumentContentOperations.hxx>
 #include <doc.hxx>
@@ -30,6 +31,8 @@
 #include <unotextrange.hxx>
 #include <ndtxt.hxx>
 #include <textlinebreak.hxx>
+#include <unomap.hxx>
+#include <unoprnms.hxx>
 
 using namespace com::sun::star;
 
@@ -40,11 +43,13 @@ public:
     uno::WeakReference<uno::XInterface> m_wThis;
     bool m_bIsDescriptor;
     SwFormatLineBreak* m_pFormatLineBreak;
+    SwLineBreakClear m_eClear;
 
     Impl(SwXLineBreak& rThis, SwFormatLineBreak* const pLineBreak)
         : m_rThis(rThis)
         , m_bIsDescriptor(pLineBreak == nullptr)
         , m_pFormatLineBreak(pLineBreak)
+        , m_eClear(SwLineBreakClear::NONE)
     {
         if (m_pFormatLineBreak)
         {
@@ -52,11 +57,31 @@ public:
         }
     }
 
+    const SwFormatLineBreak* GetLineBreakFormat() const;
+
+    const SwFormatLineBreak& GetLineBreakFormatOrThrow() const;
+
     void Invalidate();
 
 protected:
     void Notify(const SfxHint& rHint) override;
 };
+
+const SwFormatLineBreak* SwXLineBreak::Impl::GetLineBreakFormat() const
+{
+    return m_pFormatLineBreak;
+}
+
+const SwFormatLineBreak& SwXLineBreak::Impl::GetLineBreakFormatOrThrow() const
+{
+    const SwFormatLineBreak* pLineBreak(GetLineBreakFormat());
+    if (!pLineBreak)
+    {
+        throw uno::RuntimeException("SwXLineBreak: disposed or invalid", nullptr);
+    }
+
+    return *pLineBreak;
+}
 
 void SwXLineBreak::Impl::Invalidate()
 {
@@ -126,7 +151,7 @@ void SAL_CALL SwXLineBreak::attach(const uno::Reference<text::XTextRange>& xText
     SwUnoInternalPaM aPam(rNewDoc);
     sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aContext(&rNewDoc);
-    SwFormatLineBreak aLineBreak(SwLineBreakClear::ALL);
+    SwFormatLineBreak aLineBreak(m_pImpl->m_eClear);
     SetAttrMode nInsertFlags = SetAttrMode::DEFAULT;
     rNewDoc.getIDocumentContentOperations().InsertPoolItem(aPam, aLineBreak, nInsertFlags);
     auto pTextAttr
@@ -146,9 +171,7 @@ uno::Reference<text::XTextRange> SAL_CALL SwXLineBreak::getAnchor()
 {
     SolarMutexGuard aGuard;
 
-    SAL_WARN("sw.uno", "SwXLineBreak::getAnnchor: not implemented");
-
-    return {};
+    return m_pImpl->GetLineBreakFormatOrThrow().GetAnchor();
 }
 
 void SAL_CALL SwXLineBreak::dispose()
@@ -172,26 +195,62 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL SwXLineBreak::getPropertySetInf
 {
     SolarMutexGuard aGuard;
 
-    SAL_WARN("sw.uno", "SwXLineBreak::getPropertySetInfo: not implemented");
-
-    return {};
+    static uno::Reference<beans::XPropertySetInfo> xRet
+        = aSwMapProvider.GetPropertySet(PROPERTY_MAP_LINEBREAK)->getPropertySetInfo();
+    return xRet;
 }
 
-void SAL_CALL SwXLineBreak::setPropertyValue(const OUString& /*rPropertyName*/,
-                                             const css::uno::Any& /*rValue*/)
+void SAL_CALL SwXLineBreak::setPropertyValue(const OUString& rPropertyName,
+                                             const css::uno::Any& rValue)
 {
     SolarMutexGuard aGuard;
 
-    SAL_WARN("sw.uno", "SwXLineBreak::setPropertySetInfo: not implemented");
+    if (rPropertyName != UNO_NAME_CLEAR)
+    {
+        throw lang::IllegalArgumentException();
+    }
+
+    if (m_pImpl->m_bIsDescriptor)
+    {
+        sal_Int16 eValue{};
+        if (rValue >>= eValue)
+        {
+            m_pImpl->m_eClear = static_cast<SwLineBreakClear>(eValue);
+        }
+    }
+    else
+    {
+        m_pImpl->m_pFormatLineBreak->PutValue(rValue, 0);
+    }
 }
 
-uno::Any SAL_CALL SwXLineBreak::getPropertyValue(const OUString& /*rPropertyName*/)
+uno::Any SAL_CALL SwXLineBreak::getPropertyValue(const OUString& rPropertyName)
 {
     SolarMutexGuard aGuard;
 
-    SAL_WARN("sw.uno", "SwXLineBreak::getPropertyValue: not implemented");
+    uno::Any aRet;
+    if (sw::GetDefaultTextContentValue(aRet, rPropertyName))
+    {
+        return aRet;
+    }
 
-    return {};
+    if (rPropertyName != UNO_NAME_CLEAR)
+    {
+        beans::UnknownPropertyException aExcept;
+        aExcept.Message = rPropertyName;
+        throw aExcept;
+    }
+
+    if (m_pImpl->m_bIsDescriptor)
+    {
+        auto eValue = static_cast<sal_Int16>(m_pImpl->m_eClear);
+        aRet <<= eValue;
+    }
+    else
+    {
+        m_pImpl->m_pFormatLineBreak->QueryValue(aRet, 0);
+    }
+    return aRet;
 }
 
 void SAL_CALL SwXLineBreak::addPropertyChangeListener(
