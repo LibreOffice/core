@@ -1223,7 +1223,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         OUString aDicName;
         if (sId.toInt32() >= MN_DICTSTART)
         {
-            assert(pPopupParent && "this case only occurs when xInsertMenu exists");
+            assert(xInsertMenu && "this case only occurs when xInsertMenu exists");
             // strip_mnemonic is necessary to retrieve the correct dictionary name
             aDicName = pPopupParent->strip_mnemonic(xInsertMenu->get_label(sId));
         }
