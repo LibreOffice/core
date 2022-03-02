@@ -58,7 +58,7 @@ class CalcSorting(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 #Verify that option "Range contains column labels" is set
-                xHeader = xDialog.getChild("header")
+                xHeader = xDialog.getChild("cbHeader")
                 self.assertEqual(get_state_as_dict(xHeader)["Selected"], "true")
                 #Cancel dialog
             #Select Range A1:B5
@@ -100,7 +100,7 @@ class CalcSorting(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 #Verify that option "Range contains column labels" is not set
-                xHeader = xDialog.getChild("header")
+                xHeader = xDialog.getChild("cbHeader")
                 self.assertEqual(get_state_as_dict(xHeader)["Selected"], "false")
                 #Cancel dialog
 

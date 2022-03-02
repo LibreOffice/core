@@ -85,12 +85,13 @@ class CalcNaturalSorting(UITestCase):
             #Open sort dialog by DATA - SORT
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                xleftright = xDialog.getChild("leftright")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")
-                xleftright.executeAction("CLICK", tuple())
                 if (get_state_as_dict(xNatural)["Selected"]) == "false":
                     xNatural.executeAction("CLICK", tuple())
+                select_pos(xTabs, "0")
+                xleftright = xDialog.getChild("rbLeftRight")
+                xleftright.executeAction("CLICK", tuple())
 
             #Verify
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "MW-1")
