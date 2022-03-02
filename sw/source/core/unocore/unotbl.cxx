@@ -286,10 +286,9 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
         case RES_PAGEDESC:
         {
             const SfxItemSet& rSet = pFormat->GetAttrSet();
-            const SfxPoolItem* pItem;
-            if(SfxItemState::SET == rSet.GetItemState(RES_PAGEDESC, false, &pItem))
+            if(const SwFormatPageDesc* pItem = rSet.GetItemIfSet(RES_PAGEDESC, false))
             {
-                const SwPageDesc* pDsc = static_cast<const SwFormatPageDesc*>(pItem)->GetPageDesc();
+                const SwPageDesc* pDsc = pItem->GetPageDesc();
                 if(pDsc)
                     return uno::makeAny<OUString>(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ));
             }
@@ -695,13 +694,13 @@ void sw_setValue( SwXCell &rCell, double nVal )
     UnoActionContext aAction(pDoc);
     SwFrameFormat* pBoxFormat = rCell.m_pBox->ClaimFrameFormat();
     SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_VALUE> aSet(pDoc->GetAttrPool());
-    const SfxPoolItem* pItem;
 
     //!! do we need to set a new number format? Yes, if
     // - there is no current number format
     // - the current number format is not a number format according to the number formatter, but rather a text format
-    if(SfxItemState::SET != pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
-        ||  pDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue()))
+    const SwTableBoxNumFormat* pNumFormat = pBoxFormat->GetAttrSet().GetItemIfSet(RES_BOXATR_FORMAT);
+    if(!pNumFormat
+        ||  pDoc->GetNumberFormatter()->IsTextFormat(pNumFormat->GetValue()))
     {
         aSet.Put(SwTableBoxNumFormat(0));
     }
@@ -853,10 +852,11 @@ void SwXCell::setFormula(const OUString& rFormula)
     SwDoc* pMyDoc = GetDoc();
     UnoActionContext aAction(pMyDoc);
     SfxItemSetFixed<RES_BOXATR_FORMAT, RES_BOXATR_FORMULA> aSet(pMyDoc->GetAttrPool());
-    const SfxPoolItem* pItem;
     SwFrameFormat* pBoxFormat = m_pBox->GetFrameFormat();
-    if(SfxItemState::SET != pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem)
-        ||  pMyDoc->GetNumberFormatter()->IsTextFormat(static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue()))
+    const SwTableBoxNumFormat* pNumFormat =
+        pBoxFormat->GetAttrSet().GetItemIfSet(RES_BOXATR_FORMAT);
+    if(!pNumFormat
+        ||  pMyDoc->GetNumberFormatter()->IsTextFormat(pNumFormat->GetValue()))
     {
         aSet.Put(SwTableBoxNumFormat(0));
     }
@@ -1166,15 +1166,14 @@ double SwXCell::GetForcedNumericalValue() const
     sal_uInt32 nFIndex;
     SvNumberFormatter* pNumFormatter(const_cast<SvNumberFormatter*>(GetDoc()->GetNumberFormatter()));
     // look for SwTableBoxNumFormat value in parents as well
-    const SfxPoolItem* pItem;
     auto pBoxFormat(GetTableBox()->GetFrameFormat());
-    SfxItemState eState = pBoxFormat->GetAttrSet().GetItemState(RES_BOXATR_FORMAT, true, &pItem);
+    const SwTableBoxNumFormat* pNumFormat = pBoxFormat->GetAttrSet().GetItemIfSet(RES_BOXATR_FORMAT);
 
-    if (eState == SfxItemState::SET)
+    if (pNumFormat)
     {
         // please note that the language of the numberformat
         // is implicitly coded into the below value as well
-        nFIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+        nFIndex = pNumFormat->GetValue();
 
         // since the current value indicates a text format but the call
         // to 'IsNumberFormat' below won't work for text formats
