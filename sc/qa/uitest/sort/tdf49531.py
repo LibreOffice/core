@@ -31,14 +31,14 @@ class tdf49531(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")
-                xtopdown = xDialog.getChild("topdown")
-                xHeader = xDialog.getChild("header")
                 if (get_state_as_dict(xNatural)["Selected"]) == "true":
                     xNatural.executeAction("CLICK", tuple())
+                select_pos(xTabs, "0")
+                xtopdown = xDialog.getChild("rbTopDown")
+                xHeader = xDialog.getChild("cbHeader")
                 if (get_state_as_dict(xHeader)["Selected"]) == "true":
                     xHeader.executeAction("CLICK", tuple())
                 xtopdown.executeAction("CLICK", tuple())
-                select_pos(xTabs, "0")
                 xSortKey1 = xDialog.getChild("sortlb")
                 xAsc = xDialog.getChild("up")
                 select_by_text(xSortKey1, "B")

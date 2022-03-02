@@ -23,16 +23,14 @@ class tdf57465(UITestCase):
 
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "1")
+                select_pos(xTabs, "0")
 
-                xHeader = xDialog.getChild("header")
+                xHeader = xDialog.getChild("cbHeader")
                 if (get_state_as_dict(xHeader)["Selected"]) == 'true':
                     xHeader.executeAction("CLICK", tuple())
 
-                xLeftRight = xDialog.getChild("leftright")
+                xLeftRight = xDialog.getChild("rbLeftRight")
                 xLeftRight.executeAction("CLICK", tuple())
-
-                select_pos(xTabs, "0")
 
                 self.assertEqual("1", get_state_as_dict(xDialog.getChild("sortlb"))['DisplayText'])
 

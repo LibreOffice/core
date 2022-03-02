@@ -29,7 +29,7 @@ class tdf53482(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 #3. On Options tab, tick 'Range contains column labels'
-                xHeader = xDialog.getChild("header")
+                xHeader = xDialog.getChild("cbHeader")
                 xHeader.executeAction("CLICK", tuple())
                 if (get_state_as_dict(xHeader)["Selected"]) == "false":
                     xHeader.executeAction("CLICK", tuple())
@@ -60,14 +60,13 @@ class tdf53482(UITestCase):
             #2. Click Data menu, Sort
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                select_pos(xTabs, "1")
+                select_pos(xTabs, "0")
                 #3. On Options tab, tick 'Range contains column labels'
-                xHeader = xDialog.getChild("header")
+                xHeader = xDialog.getChild("cbHeader")
                 xHeader.executeAction("CLICK", tuple())
                 if (get_state_as_dict(xHeader)["Selected"]) == "false":
                     xHeader.executeAction("CLICK", tuple())
                 #4. On Sort Criteria tab, set appropriate criteria
-                select_pos(xTabs, "0")
                 xDown = xDialog.getChild("down")
                 xDown.executeAction("CLICK", tuple())
                 #5. Click Ok
