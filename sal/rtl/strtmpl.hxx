@@ -834,58 +834,6 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
     return static_cast<T>(n);
 }
 
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 toInt32                             ( const IMPL_RTL_STRCODE* pStr,
-                                                sal_Int16 nRadix )
-{
-    assert(pStr);
-    return toInt<sal_Int32>(pStr, nRadix);
-}
-
-template <typename IMPL_RTL_STRCODE>
-sal_Int32 toInt32_WithLength                  ( const IMPL_RTL_STRCODE* pStr,
-                                                sal_Int16 nRadix,
-                                                sal_Int32 nStrLength)
-
-{
-    assert(pStr);
-    return toInt<sal_Int32>(std::basic_string_view(pStr, nStrLength), nRadix);
-}
-
-template <typename IMPL_RTL_STRCODE>
-sal_Int64 toInt64                             ( const IMPL_RTL_STRCODE* pStr,
-                                                sal_Int16 nRadix )
-{
-    assert(pStr);
-    return toInt<sal_Int64>(pStr, nRadix);
-}
-
-template <typename IMPL_RTL_STRCODE>
-sal_Int64 toInt64_WithLength                  ( const IMPL_RTL_STRCODE* pStr,
-                                                sal_Int16 nRadix,
-                                                sal_Int32 nStrLength)
-
-{
-    assert(pStr);
-    return toInt<sal_Int64>(std::basic_string_view(pStr, nStrLength), nRadix);
-}
-
-template <typename IMPL_RTL_STRCODE>
-sal_uInt32 toUInt32                             ( const IMPL_RTL_STRCODE* pStr,
-                                                  sal_Int16 nRadix )
-{
-    assert(pStr);
-    return toInt<sal_uInt32>(pStr, nRadix);
-}
-
-template <typename IMPL_RTL_STRCODE>
-sal_uInt64 toUInt64                             ( const IMPL_RTL_STRCODE* pStr,
-                                                  sal_Int16 nRadix )
-{
-    assert(pStr);
-    return toInt<sal_uInt64>(pStr, nRadix);
-}
-
 /* ======================================================================= */
 /* Internal String-Class help functions                                    */
 /* ======================================================================= */

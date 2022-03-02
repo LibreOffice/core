@@ -506,28 +506,33 @@ sal_Bool SAL_CALL rtl_str_toBoolean(const char* pStr) SAL_THROW_EXTERN_C()
 
 sal_Int32 SAL_CALL rtl_str_toInt32(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toInt32(pStr, nRadix);
+    assert(pStr);
+    return rtl::str::toInt<sal_Int32>(pStr, nRadix);
 }
 
 sal_Int64 SAL_CALL rtl_str_toInt64(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toInt64(pStr, nRadix);
+    assert(pStr);
+    return rtl::str::toInt<sal_Int64>(pStr, nRadix);
 }
 
 sal_Int64 SAL_CALL rtl_str_toInt64_WithLength(const char* pStr, sal_Int16 nRadix,
                                               sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toInt64_WithLength(pStr, nRadix, nStrLength);
+    assert(pStr || nStrLength == 0);
+    return rtl::str::toInt<sal_Int64>(std::basic_string_view(pStr, nStrLength), nRadix);
 }
 
 sal_uInt32 SAL_CALL rtl_str_toUInt32(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toUInt32(pStr, nRadix);
+    assert(pStr);
+    return rtl::str::toInt<sal_uInt32>(pStr, nRadix);
 }
 
 sal_uInt64 SAL_CALL rtl_str_toUInt64(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toUInt64(pStr, nRadix);
+    assert(pStr);
+    return rtl::str::toInt<sal_uInt64>(pStr, nRadix);
 }
 
 rtl_String* rtl_string_ImplAlloc(sal_Int32 nLen) { return rtl::str::Alloc<rtl_String>(nLen); }
