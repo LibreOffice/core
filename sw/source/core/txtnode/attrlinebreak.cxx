@@ -27,6 +27,8 @@
 #include <hints.hxx>
 #include <pam.hxx>
 #include <textlinebreak.hxx>
+#include <ndtxt.hxx>
+#include <unotextrange.hxx>
 
 using namespace com::sun::star;
 
@@ -74,17 +76,21 @@ void SwFormatLineBreak::InvalidateLineBreak()
     CallSwClientNotify(sw::LegacyModifyHint(&aItem, &aItem));
 }
 
-uno::Reference<text::XTextRange> SwFormatLineBreak::getAnchor(SwDoc& /*rDoc*/) const
+uno::Reference<text::XTextRange> SwFormatLineBreak::GetAnchor() const
 {
     SolarMutexGuard aGuard;
 
-    SAL_WARN("sw.core", "SwFormatLineBreak::getAnchor: not implemented");
     if (!m_pTextAttr)
     {
         return uno::Reference<text::XTextRange>();
     }
 
-    return {};
+    SwPaM aPam(m_pTextAttr->GetTextNode(), m_pTextAttr->GetStart());
+    aPam.SetMark();
+    ++aPam.GetMark()->nContent;
+    uno::Reference<text::XTextRange> xRet
+        = SwXTextRange::CreateXTextRange(aPam.GetDoc(), *aPam.Start(), aPam.End());
+    return xRet;
 }
 
 void SwFormatLineBreak::dumpAsXml(xmlTextWriterPtr pWriter) const
@@ -102,6 +108,7 @@ void SwFormatLineBreak::dumpAsXml(xmlTextWriterPtr pWriter) const
 
 SwTextLineBreak::SwTextLineBreak(SwFormatLineBreak& rAttr, sal_Int32 nStartPos)
     : SwTextAttr(rAttr, nStartPos)
+    , m_pTextNode(nullptr)
 {
     rAttr.SetTextLineBreak(this);
     SetHasDummyChar(true);
@@ -112,8 +119,25 @@ SwTextLineBreak::~SwTextLineBreak() {}
 void SwTextLineBreak::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextLineBreak"));
+    if (m_pTextNode)
+    {
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("m_pTextNode"));
+        (void)xmlTextWriterWriteAttribute(
+            pWriter, BAD_CAST("index"),
+            BAD_CAST(OString::number(sal_Int32(m_pTextNode->GetIndex())).getStr()));
+        (void)xmlTextWriterEndElement(pWriter);
+    }
+
     SwTextAttr::dumpAsXml(pWriter);
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+void SwTextLineBreak::SetTextNode(SwTextNode* pNew) { m_pTextNode = pNew; }
+
+const SwTextNode& SwTextLineBreak::GetTextNode() const
+{
+    assert(m_pTextNode);
+    return *m_pTextNode;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
