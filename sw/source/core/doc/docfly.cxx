@@ -327,7 +327,6 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
     rFormat.SetFormatAttr( aNewAnch );
 
     // Correct the position
-    const SfxPoolItem* pItem;
     switch( nNew )
     {
     case RndStdIds::FLY_AS_CHAR:
@@ -342,7 +341,7 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             pNd->InsertItem( aFormat, pPos->nContent.GetIndex(), 0 );
         }
 
-        if( SfxItemState::SET != rSet.GetItemState( RES_VERT_ORIENT, false, &pItem ))
+        if( SfxItemState::SET != rSet.GetItemState( RES_VERT_ORIENT, false ))
         {
             SwFormatVertOrient aOldV( rFormat.GetVertOrient() );
             bool bSet = true;
@@ -369,31 +368,29 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
             // such that the fly's document coordinates are preserved.
             // If only the alignment changes in the position attributes (text::RelOrientation::FRAME
             // vs. text::RelOrientation::PRTAREA), we also correct the position.
-            if( SfxItemState::SET != rSet.GetItemState( RES_HORI_ORIENT, false, &pItem ))
-                pItem = nullptr;
+            const SwFormatHoriOrient* pHoriOrientItem = rSet.GetItemIfSet( RES_HORI_ORIENT, false );
 
             SwFormatHoriOrient aOldH( rFormat.GetHoriOrient() );
             bool bPutOldH(false);
 
-            if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pItem ||
-                aOldH.GetPos() == pItem->StaticWhichCast(RES_HORI_ORIENT).GetPos() ))
+            if( text::HoriOrientation::NONE == aOldH.GetHoriOrient() && ( !pHoriOrientItem ||
+                aOldH.GetPos() == pHoriOrientItem->GetPos() ))
             {
                 SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldH.GetPos();
                 nPos += aOldAnchorPos.getX() - aNewAnchorPos.getX();
 
-                if( pItem )
+                if( pHoriOrientItem )
                 {
-                    SwFormatHoriOrient& rH = const_cast<SwFormatHoriOrient&>(pItem->StaticWhichCast(RES_HORI_ORIENT));
-                    aOldH.SetHoriOrient( rH.GetHoriOrient() );
-                    aOldH.SetRelationOrient( rH.GetRelationOrient() );
+                    aOldH.SetHoriOrient( pHoriOrientItem->GetHoriOrient() );
+                    aOldH.SetRelationOrient( pHoriOrientItem->GetRelationOrient() );
                 }
                 aOldH.SetPos( nPos );
                 bPutOldH = true;
             }
             if (nNew == RndStdIds::FLY_AT_PAGE)
             {
-                sal_Int16 nRelOrient(pItem
-                    ? pItem->StaticWhichCast(RES_HORI_ORIENT).GetRelationOrient()
+                sal_Int16 nRelOrient(pHoriOrientItem
+                    ? pHoriOrientItem->GetRelationOrient()
                     : aOldH.GetRelationOrient());
                 if (sw::GetAtPageRelOrientation(nRelOrient, false))
                 {
@@ -407,20 +404,19 @@ sal_Int8 SwDoc::SetFlyFrameAnchor( SwFrameFormat& rFormat, SfxItemSet& rSet, boo
                 rSet.Put( aOldH );
             }
 
-            if( SfxItemState::SET != rSet.GetItemState( RES_VERT_ORIENT, false, &pItem ))
-                pItem = nullptr;
+            const SwFormatVertOrient* pVertOrientItem = rSet.GetItemIfSet( RES_VERT_ORIENT, false );
             SwFormatVertOrient aOldV( rFormat.GetVertOrient() );
 
             // #i28922# - correction: compare <aOldV.GetVertOrient() with
             // <text::VertOrientation::NONE>
-            if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pItem ||
-                aOldV.GetPos() == pItem->StaticWhichCast(RES_VERT_ORIENT).GetPos() ) )
+            if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pVertOrientItem ||
+                aOldV.GetPos() == pVertOrientItem->GetPos() ) )
             {
                 SwTwips nPos = (RndStdIds::FLY_AS_CHAR == nOld) ? 0 : aOldV.GetPos();
                 nPos += aOldAnchorPos.getY() - aNewAnchorPos.getY();
-                if( pItem )
+                if( pVertOrientItem )
                 {
-                    SwFormatVertOrient& rV = const_cast<SwFormatVertOrient&>(pItem->StaticWhichCast(RES_VERT_ORIENT));
+                    SwFormatVertOrient& rV = const_cast<SwFormatVertOrient&>(*pVertOrientItem);
                     aOldV.SetVertOrient( rV.GetVertOrient() );
                     aOldV.SetRelationOrient( rV.GetRelationOrient() );
                 }
@@ -650,7 +646,6 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
 
     // Set the column first, or we'll have trouble with
     //Set/Reset/Synch. and so on
-    const SfxPoolItem* pItem;
     if( SfxItemState::SET != rNewFormat.GetAttrSet().GetItemState( RES_COL ))
         rFormat.ResetFormatAttr( RES_COL );
 
@@ -668,8 +663,9 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
 
         const SfxItemSet* pAsk = pSet;
         if( !pAsk ) pAsk = &rNewFormat.GetAttrSet();
-        if( SfxItemState::SET == pAsk->GetItemState( RES_ANCHOR, false, &pItem )
-            && pItem->StaticWhichCast(RES_ANCHOR).GetAnchorId() !=
+        const SwFormatAnchor* pFormatAnchor = pAsk->GetItemIfSet( RES_ANCHOR, false );
+        if( pFormatAnchor
+            && pFormatAnchor->GetAnchorId() !=
                 rFormat.GetAnchor().GetAnchorId() )
         {
             if( pSet )
@@ -680,7 +676,7 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
                 // in SetFlyFrameAnchor.
                 SfxItemSet aFlySet( *rNewFormat.GetAttrSet().GetPool(),
                                     rNewFormat.GetAttrSet().GetRanges() );
-                aFlySet.Put( *pItem );
+                aFlySet.Put( *pFormatAnchor );
                 bChgAnchor = MAKEFRMS == SetFlyFrameAnchor( rFormat, aFlySet, false);
             }
         }
