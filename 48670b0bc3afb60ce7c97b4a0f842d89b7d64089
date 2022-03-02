@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d981a479_93663514",
+        "filename": "sw/source/core/draw/dcontact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-03-02T07:41:58Z",
+      "side": 1,
+      "message": "Hmm. this was a private/protected member before and it seems there is missing that patch where i modified this. No problem other method can do the same so i can modify this if agree.",
+      "range": {
+        "startLine": 1342,
+        "startChar": 19,
+        "endLine": 1342,
+        "endChar": 55
+      },
+      "revId": "48670b0bc3afb60ce7c97b4a0f842d89b7d64089",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
