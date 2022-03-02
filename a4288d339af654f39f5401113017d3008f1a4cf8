@@ -16,6 +16,207 @@
       "message": "can be submitted",
       "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7110ad7_7db3d9c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! I\u0027ve found some typos. I suggest to fix here the typo which was merged accidentally:\n\nhttps://gerrit.libreoffice.org/c/core/+/130478/4#message-cb35f54e70e925839ac8dc655e9ada77644afcd8",
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6905e52c_a92ec126",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1030,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "Without",
+      "range": {
+        "startLine": 1030,
+        "startChar": 7,
+        "endLine": 1030,
+        "endChar": 14
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "623ada18_b312508f",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "create",
+      "range": {
+        "startLine": 1337,
+        "startChar": 18,
+        "endLine": 1337,
+        "endChar": 23
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e25388d_4e35f07f",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "handling",
+      "range": {
+        "startLine": 1356,
+        "startChar": 23,
+        "endLine": 1356,
+        "endChar": 30
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4577687_d761b2ac",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "subtracted",
+      "range": {
+        "startLine": 1361,
+        "startChar": 76,
+        "endLine": 1361,
+        "endChar": 87
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "627d8cf1_13dfecf2",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "subtract",
+      "range": {
+        "startLine": 1362,
+        "startChar": 87,
+        "endLine": 1362,
+        "endChar": 95
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1decfc90_8bae566c",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "position",
+      "range": {
+        "startLine": 1430,
+        "startChar": 28,
+        "endLine": 1430,
+        "endChar": 35
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85b7303f_bd780152",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1445,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "relative",
+      "range": {
+        "startLine": 1445,
+        "startChar": 43,
+        "endLine": 1445,
+        "endChar": 51
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6593e386_25eedcd9",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1468,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:56:38Z",
+      "side": 1,
+      "message": "floating table",
+      "range": {
+        "startLine": 1468,
+        "startChar": 19,
+        "endLine": 1468,
+        "endChar": 29
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
