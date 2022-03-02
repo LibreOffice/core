@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6d5fc6c_dcf39517",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-02T17:05:50Z",
+      "side": 1,
+      "message": "Makes sense, it\u0027s the same API so I didn\u0027t catch that it\u0027s safe with OUString and not so with OUStringBuffer.\n",
+      "revId": "615be697ecdf554b4d0f88178913453e6b083d5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
