@@ -86,6 +86,10 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
         bHasHeader      ( false ),
         bSortByRows     ( false )
 
+    , m_xTop(m_xBuilder->weld_container("TopWindow"))
+    , m_xBtnHeader(m_xBuilder->weld_check_button("cbHeader"))
+    , m_xBtnTopDown(m_xBuilder->weld_radio_button("rbTopDown"))
+    , m_xBtnLeftRight(m_xBuilder->weld_radio_button("rbLeftRight"))
     , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("SortCriteriaPage"))
     , m_xBox(m_xBuilder->weld_container("SortKeyWindow"))
     , m_aSortWin(m_xBox.get())
@@ -481,7 +485,6 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , pViewData(nullptr)
     , pDoc(nullptr)
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))
-    , m_xBtnHeader(m_xBuilder->weld_check_button("header"))
     , m_xBtnFormats(m_xBuilder->weld_check_button("formats"))
     , m_xBtnNaturalSort(m_xBuilder->weld_check_button("naturalsort"))
     , m_xBtnCopyResult(m_xBuilder->weld_check_button("copyresult"))
@@ -492,8 +495,6 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xFtAlgorithm(m_xBuilder->weld_label("algorithmft"))
     , m_xLbAlgorithm(m_xBuilder->weld_combo_box("algorithmlb"))
-    , m_xBtnTopDown(m_xBuilder->weld_radio_button("topdown"))
-    , m_xBtnLeftRight(m_xBuilder->weld_radio_button("leftright"))
     , m_xBtnIncComments(m_xBuilder->weld_check_button("includenotes"))
     , m_xBtnIncImages(m_xBuilder->weld_check_button("includeimages"))
 {

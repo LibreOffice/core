@@ -72,6 +72,11 @@ private:
     bool                bHasHeader;
     bool                bSortByRows;
 
+    std::unique_ptr<weld::Container> m_xTop;
+    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
+    std::unique_ptr<weld::RadioButton> m_xBtnTopDown;
+    std::unique_ptr<weld::RadioButton> m_xBtnLeftRight;
+
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::unique_ptr<weld::Container> m_xBox;
     ScSortKeyWindow m_aSortWin;
@@ -121,7 +126,6 @@ private:
     std::unique_ptr<CollatorWrapper>   m_xColWrap;
 
     std::unique_ptr<weld::CheckButton> m_xBtnCase;
-    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
     std::unique_ptr<weld::CheckButton> m_xBtnFormats;
     std::unique_ptr<weld::CheckButton> m_xBtnNaturalSort;
     std::unique_ptr<weld::CheckButton> m_xBtnCopyResult;
@@ -132,8 +136,6 @@ private:
     std::unique_ptr<SvxLanguageBox> m_xLbLanguage;
     std::unique_ptr<weld::Label> m_xFtAlgorithm;
     std::unique_ptr<weld::ComboBox> m_xLbAlgorithm;
-    std::unique_ptr<weld::RadioButton> m_xBtnTopDown;
-    std::unique_ptr<weld::RadioButton> m_xBtnLeftRight;
     std::unique_ptr<weld::CheckButton> m_xBtnIncComments;
     std::unique_ptr<weld::CheckButton> m_xBtnIncImages;
 
