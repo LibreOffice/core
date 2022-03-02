@@ -336,10 +336,9 @@ void SwTable::SwClientNotify(const SwModify&, const SfxHint& rHint)
         case RES_ATTRSET_CHG:
         {
             if (pLegacy->m_pOld && pLegacy->m_pNew
-                    && SfxItemState::SET == static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet()->GetItemState(
+                    && (pNewSize = static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet()->GetItemIfSet(
                             RES_FRM_SIZE,
-                            false,
-                            reinterpret_cast<const SfxPoolItem**>(&pNewSize)))
+                            false)))
             {
                 pOldSize = &static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet()->GetFrameSize();
             }
@@ -2137,11 +2136,11 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
 
     SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
     SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
-    const SfxPoolItem* pItem;
 
     // assign adjustment
     if( bChgAlign )
     {
+        const SfxPoolItem* pItem;
         pItem = &pTNd->SwContentNode::GetAttr( RES_PARATR_ADJUST );
         SvxAdjust eAdjust = static_cast<const SvxAdjustItem*>(pItem)->GetAdjust();
         if( SvxAdjust::Left == eAdjust || SvxAdjust::Block == eAdjust )
@@ -2153,14 +2152,14 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
     }
 
     // assign color or save "user color"
-    if( !pTNd->GetpSwAttrSet() || SfxItemState::SET != pTNd->GetpSwAttrSet()->
-        GetItemState( RES_CHRATR_COLOR, false, &pItem ))
-        pItem = nullptr;
+    const SvxColorItem* pColorItem = nullptr;
+    if( pTNd->GetpSwAttrSet() )
+        pColorItem = pTNd->GetpSwAttrSet()->GetItemIfSet( RES_CHRATR_COLOR, false );
 
     const std::optional<Color>& pOldNumFormatColor = rBox.GetSaveNumFormatColor();
     std::optional<Color> pNewUserColor;
-    if (pItem)
-        pNewUserColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
+    if (pColorItem)
+        pNewUserColor = pColorItem->GetValue();
 
     if( ( pNewUserColor && pOldNumFormatColor &&
             *pNewUserColor == *pOldNumFormatColor ) ||
@@ -2170,7 +2169,7 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
         if( pCol )
             // if needed, set the color
             pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
-        else if( pItem )
+        else if( pColorItem )
         {
             pNewUserColor = rBox.GetSaveUserColor();
             if( pNewUserColor )
@@ -2246,10 +2245,10 @@ void ChgTextToNum( SwTableBox& rBox, const OUString& rText, const Color* pCol,
     }
 
     // assign vertical orientation
+    const SwFormatVertOrient* pVertOrientItem;
     if( bChgAlign &&
-        ( SfxItemState::SET != rBox.GetFrameFormat()->GetItemState(
-            RES_VERT_ORIENT, true, &pItem ) ||
-            text::VertOrientation::TOP == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() ))
+        ( !(pVertOrientItem = rBox.GetFrameFormat()->GetItemIfSet( RES_VERT_ORIENT )) ||
+            text::VertOrientation::TOP == pVertOrientItem->GetVertOrient() ))
     {
         rBox.GetFrameFormat()->SetFormatAttr( SwFormatVertOrient( 0, text::VertOrientation::BOTTOM ));
     }
@@ -2265,7 +2264,6 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     SwDoc* pDoc = rBox.GetFrameFormat()->GetDoc();
     SwTextNode* pTNd = pDoc->GetNodes()[ nNdPos ]->GetTextNode();
     bool bChgAlign = pDoc->IsInsTableAlignNum();
-    const SfxPoolItem* pItem;
 
     const Color * pCol = nullptr;
     if( getSwDefaultTextFormat() != nFormat )
@@ -2289,22 +2287,23 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     const SfxItemSet* pAttrSet = pTNd->GetpSwAttrSet();
 
     // assign adjustment
-    if( bChgAlign && pAttrSet && SfxItemState::SET == pAttrSet->GetItemState(
-        RES_PARATR_ADJUST, false, &pItem ) &&
-            SvxAdjust::Right == static_cast<const SvxAdjustItem*>(pItem)->GetAdjust() )
+    const SvxAdjustItem* pAdjustItem;
+    if( bChgAlign && pAttrSet &&
+        (pAdjustItem = pAttrSet->GetItemIfSet( RES_PARATR_ADJUST, false )) &&
+        SvxAdjust::Right == pAdjustItem->GetAdjust() )
     {
         pTNd->SetAttr( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
     }
 
     // assign color or save "user color"
-    if( !pAttrSet || SfxItemState::SET != pAttrSet->
-        GetItemState( RES_CHRATR_COLOR, false, &pItem ))
-        pItem = nullptr;
+    const SvxColorItem* pColorItem = nullptr;
+    if( pAttrSet )
+        pColorItem = pAttrSet->GetItemIfSet( RES_CHRATR_COLOR, false );
 
     const std::optional<Color>& pOldNumFormatColor = rBox.GetSaveNumFormatColor();
     std::optional<Color> pNewUserColor;
-    if (pItem)
-        pNewUserColor = static_cast<const SvxColorItem*>(pItem)->GetValue();
+    if (pColorItem)
+        pNewUserColor = pColorItem->GetValue();
 
     if( ( pNewUserColor && pOldNumFormatColor &&
             *pNewUserColor == *pOldNumFormatColor ) ||
@@ -2314,7 +2313,7 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
         if( pCol )
             // if needed, set the color
             pTNd->SetAttr( SvxColorItem( *pCol, RES_CHRATR_COLOR ));
-        else if( pItem )
+        else if( pColorItem )
         {
             pNewUserColor = rBox.GetSaveUserColor();
             if( pNewUserColor )
@@ -2336,10 +2335,10 @@ static void ChgNumToText( SwTableBox& rBox, sal_uLong nFormat )
     rBox.SetSaveNumFormatColor( pCol ? *pCol : std::optional<Color>() );
 
     // assign vertical orientation
+    const SwFormatVertOrient* pVertOrientItem;
     if( bChgAlign &&
-        SfxItemState::SET == rBox.GetFrameFormat()->GetItemState(
-        RES_VERT_ORIENT, false, &pItem ) &&
-        text::VertOrientation::BOTTOM == static_cast<const SwFormatVertOrient*>(pItem)->GetVertOrient() )
+        (pVertOrientItem = rBox.GetFrameFormat()->GetItemIfSet( RES_VERT_ORIENT, false )) &&
+        text::VertOrientation::BOTTOM == pVertOrientItem->GetVertOrient() )
     {
         rBox.GetFrameFormat()->SetFormatAttr( SwFormatVertOrient( 0, text::VertOrientation::TOP ));
     }
@@ -2359,7 +2358,7 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
     else
     {
         // fetch the current Item
-        (void)GetItemState(RES_BOXATR_FORMAT, false, reinterpret_cast<const SfxPoolItem**>(&pNewFormat));
+        pNewFormat = GetItemIfSet(RES_BOXATR_FORMAT, false);
         nOldFormat = GetTableBoxNumFormat().GetValue();
         nNewFormat = pNewFormat ? pNewFormat->GetValue() : nOldFormat;
     }
@@ -2397,7 +2396,9 @@ void SwTableBoxFormat::BoxAttributeChanged(SwTableBox& rBox, const SwTableBoxNum
         OUString aOrigText;
         bool bChgText = true;
         double fVal = 0;
-        if(!pNewValue && SfxItemState::SET != GetItemState(RES_BOXATR_VALUE, false, reinterpret_cast<const SfxPoolItem**>(&pNewValue)))
+        if(!pNewValue)
+            pNewValue = GetItemIfSet(RES_BOXATR_VALUE, false);
+        if(!pNewValue)
         {
             // so far, no value has been set, so try to evaluate the content
             SwNodeOffset nNdPos = rBox.IsValidNumTextNd();
@@ -2528,10 +2529,11 @@ void SwTableBoxFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
         case RES_ATTRSET_CHG:
         {
             const SfxItemSet& rSet = *static_cast<const SwAttrSetChg*>(pLegacy->m_pNew)->GetChgSet();
-            if(SfxItemState::SET == rSet.GetItemState( RES_BOXATR_FORMAT, false, reinterpret_cast<const SfxPoolItem**>(&pNewFormat)))
+            pNewFormat = rSet.GetItemIfSet( RES_BOXATR_FORMAT, false);
+            if(pNewFormat)
                 nOldFormat = static_cast<const SwAttrSetChg*>(pLegacy->m_pOld)->GetChgSet()->Get(RES_BOXATR_FORMAT).GetValue();
-            rSet.GetItemState(RES_BOXATR_FORMULA, false, reinterpret_cast<const SfxPoolItem**>(&pNewFormula));
-            rSet.GetItemState(RES_BOXATR_VALUE, false, reinterpret_cast<const SfxPoolItem**>(&pNewVal));
+            pNewFormula = rSet.GetItemIfSet(RES_BOXATR_FORMULA, false);
+            pNewVal = rSet.GetItemIfSet(RES_BOXATR_VALUE, false);
             break;
         }
         case RES_BOXATR_FORMAT:
@@ -2591,10 +2593,9 @@ bool SwTableBox::HasNumContent( double& rNum, sal_uInt32& rFormatIndex,
         rIsEmptyTextNd = aText.isEmpty();
         SvNumberFormatter* pNumFormatr = GetFrameFormat()->GetDoc()->GetNumberFormatter();
 
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == GetFrameFormat()->GetItemState( RES_BOXATR_FORMAT, false, &pItem ))
+        if( const SwTableBoxNumFormat* pItem = GetFrameFormat()->GetItemIfSet( RES_BOXATR_FORMAT, false) )
         {
-            rFormatIndex = static_cast<const SwTableBoxNumFormat*>(pItem)->GetValue();
+            rFormatIndex = pItem->GetValue();
             // Special casing for percent
             if( !rIsEmptyTextNd && SvNumFormatType::PERCENT == pNumFormatr->GetType( rFormatIndex ))
             {
@@ -2620,15 +2621,8 @@ bool SwTableBox::IsNumberChanged() const
 
     if( SfxItemState::SET == GetFrameFormat()->GetItemState( RES_BOXATR_FORMULA, false ))
     {
-        const SwTableBoxNumFormat *pNumFormat;
-        const SwTableBoxValue *pValue;
-
-        if( SfxItemState::SET != GetFrameFormat()->GetItemState( RES_BOXATR_VALUE, false,
-            reinterpret_cast<const SfxPoolItem**>(&pValue) ))
-            pValue = nullptr;
-        if( SfxItemState::SET != GetFrameFormat()->GetItemState( RES_BOXATR_FORMAT, false,
-            reinterpret_cast<const SfxPoolItem**>(&pNumFormat) ))
-            pNumFormat = nullptr;
+        const SwTableBoxNumFormat *pNumFormat = GetFrameFormat()->GetItemIfSet( RES_BOXATR_FORMAT, false );
+        const SwTableBoxValue *pValue = GetFrameFormat()->GetItemIfSet( RES_BOXATR_VALUE, false );
 
         SwNodeOffset nNdPos;
         if( pNumFormat && pValue && NODE_OFFSET_MAX != ( nNdPos = IsValidNumTextNd() ) )
@@ -2753,20 +2747,22 @@ sal_uInt16 SwTableBox::IsFormulaOrValueBox() const
 
 void SwTableBox::ActualiseValueBox()
 {
-    const SfxPoolItem *pFormatItem, *pValItem;
     SwFrameFormat* pFormat = GetFrameFormat();
-    if( SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_FORMAT, true, &pFormatItem )
-        || SfxItemState::SET != pFormat->GetItemState( RES_BOXATR_VALUE, true, &pValItem ))
+    const SwTableBoxNumFormat *pFormatItem = pFormat->GetItemIfSet( RES_BOXATR_FORMAT, true );
+    if (!pFormatItem)
+        return;
+    const SwTableBoxValue *pValItem = pFormat->GetItemIfSet( RES_BOXATR_VALUE );
+    if (!pValItem)
         return;
 
-    const sal_uLong nFormatId = static_cast<const SwTableBoxNumFormat*>(pFormatItem)->GetValue();
+    const sal_uLong nFormatId = pFormatItem->GetValue();
     SwNodeOffset nNdPos = NODE_OFFSET_MAX;
     SvNumberFormatter* pNumFormatr = pFormat->GetDoc()->GetNumberFormatter();
 
     if( !pNumFormatr->IsTextFormat( nFormatId ) &&
         NODE_OFFSET_MAX != (nNdPos = IsValidNumTextNd()) )
     {
-        double fVal = static_cast<const SwTableBoxValue*>(pValItem)->GetValue();
+        double fVal = pValItem->GetValue();
         const Color* pCol = nullptr;
         OUString sNewText;
         pNumFormatr->GetOutputString( fVal, nFormatId, sNewText, &pCol );
