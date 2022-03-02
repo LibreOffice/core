@@ -185,7 +185,6 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/sheetevents \
     sc/source/core/data/simpleformulacalc \
     sc/source/core/data/sortparam \
-    sc/source/core/data/Sparkline \
     sc/source/core/data/stlpool \
     sc/source/core/data/stlsheet \
     sc/source/core/data/subtotalparam \

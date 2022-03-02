@@ -15,7 +15,7 @@
 #include <editeng/editobj.hxx>
 #include "calcmacros.hxx"
 #include "postit.hxx"
-#include "Sparkline.hxx"
+#include "SparklineCell.hxx"
 #include "celltextattr.hxx"
 
 #if DEBUG_COLUMN_STORAGE
@@ -59,7 +59,7 @@ const mdds::mtv::element_t element_type_uint16 = mdds::mtv::element_type_uint16;
 
 /// Custom element blocks.
 
-typedef mdds::mtv::noncopyable_managed_element_block<element_type_sparkline, sc::Sparkline> sparkline_block;
+typedef mdds::mtv::noncopyable_managed_element_block<element_type_sparkline, sc::SparklineCell> sparkline_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_cellnote, ScPostIt> cellnote_block;
 typedef mdds::mtv::noncopyable_managed_element_block<element_type_broadcaster, SvtBroadcaster> broadcaster_block;
 typedef mdds::mtv::default_element_block<element_type_celltextattr, CellTextAttr> celltextattr_block;
@@ -77,7 +77,7 @@ typedef mdds::mtv::uint16_element_block uint16_block;
 /// For example sc types like sc::CellTextAttr, ScFormulaCell in global namespace.
 namespace sc {
 MDDS_MTV_DEFINE_ELEMENT_CALLBACKS(CellTextAttr, element_type_celltextattr, CellTextAttr(), celltextattr_block)
-MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(Sparkline, sc::element_type_sparkline, nullptr, sc::sparkline_block)
+MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(SparklineCell, sc::element_type_sparkline, nullptr, sc::sparkline_block)
 }
 
 /// These need to be in global namespace just like their respective types are.
