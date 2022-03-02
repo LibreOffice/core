@@ -2018,6 +2018,9 @@ class SFDocuments:
         def DSum(self, range):
             return self.ExecMethod(self.vbMethod, 'DSum', range)
 
+        def ExportRangeToFile(self, range, filename, imagetype = 'pdf', overwrite = False):
+            return self.ExecMethod(self.vbMethod, 'ExportRangeToFile', range, filename, imagetype, overwrite)
+
         def Forms(self, sheetname, form = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Forms', sheetname, form)
 

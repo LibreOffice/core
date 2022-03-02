@@ -85,6 +85,7 @@ Private Const DUPLICATESHEETERROR	=	&quot;DUPLICATESHEETERROR&quot;
 Private Const OFFSETADDRESSERROR	=	&quot;OFFSETADDRESSERROR&quot;
 Private Const CALCFORMNOTFOUNDERROR	=	&quot;CALCFORMNOTFOUNDERROR&quot;
 Private Const DUPLICATECHARTERROR	=	&quot;DUPLICATECHARTERROR&quot;
+Private Const RANGEEXPORTERROR		=	&quot;RANGEEXPORTERROR&quot;
 
 REM ============================================================= PRIVATE MEMBERS
 
@@ -1155,6 +1156,113 @@ Finally:
 End Function	&apos;	SF_Documents.SF_Calc.DSum
 
 REM -----------------------------------------------------------------------------
+Public Function ExportRangeToFile(Optional ByVal Range As Variant _
+									, Optional ByVal FileName As Variant _
+									, Optional ByVal ImageType As Variant _
+									, Optional ByVal Overwrite As Variant _
+									) As Boolean
+&apos;&apos;&apos; Store the given range as an image to the given file location
+&apos;&apos;&apos;	Actual selections are not impacted
+&apos;&apos;&apos;	Inspired by https://stackoverflow.com/questions/30509532/how-to-export-cell-range-to-pdf-file
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Range: sheet name or cell range to be exported, as a string
+&apos;&apos;&apos;		FileName: Identifies the file where to save. It must follow the SF_FileSystem.FileNaming notation
+&apos;&apos;&apos;		ImageType: the name of the targeted media type
+&apos;&apos;&apos;			Allowed values: jpeg, pdf (default) and png
+&apos;&apos;&apos;		Overwrite: True if the destination file may be overwritten (default = False)
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		False if the document could not be saved
+&apos;&apos;&apos;	Exceptions:
+&apos;&apos;&apos;		RANGEEXPORTERROR		The destination has its readonly attribute set or overwriting rejected
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDoc.ExportRangeToFile(&apos;SheetX.B2:J15&quot;, &quot;C:\Me\Range2.png&quot;, ImageType := &quot;png&quot;, Overwrite := True)
+
+Dim bSaved As Boolean				&apos;	return value
+Dim oSfa As Object					&apos;	com.sun.star.ucb.SimpleFileAccess
+Dim sFile As String					&apos;	Alias of FileName
+Dim vStoreArguments As Variant		&apos;	Array of com.sun.star.beans.PropertyValue
+Dim vFilterData As Variant			&apos;	Array of com.sun.star.beans.PropertyValue
+Dim FSO As Object					&apos;	SF_FileSystem
+Dim vImageTypes As Variant			&apos;	Array of permitted image types
+Dim vFilters As Variant				&apos;	Array of corresponding filters in the same order as vImageTypes
+Dim sFilter As String				&apos;	The filter to apply
+Dim oSelect As Object				&apos;	Currently selected range(s)
+Dim oAddress As Object				&apos;	Alias of Range
+
+Const cstImageTypes =	&quot;jpeg,pdf,png&quot;
+Const cstFilters =		&quot;calc_jpg_Export,calc_pdf_Export,calc_png_Export&quot;
+
+Const cstThisSub = &quot;SFDocuments.Calc.ExportRangeToFile&quot;
+Const cstSubArgs = &quot;Range, FileName, [ImageType=&quot;&quot;pdf&quot;&quot;|&quot;&quot;jpeg&quot;&quot;|&quot;&quot;png&quot;&quot;], [Overwrite=False]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo CatchError
+	bSaved = False
+
+Check:
+	If IsMissing(ImageType) Or IsEmpty(ImageType) Then ImageType = &quot;pdf&quot;
+	If IsMissing(Overwrite) Or IsEmpty(Overwrite) Then Overwrite = False
+
+	vImageTypes = Split(cstImageTypes, &quot;,&quot;)
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive() Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Range, &quot;Range&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._ValidateFile(FileName, &quot;FileName&quot;) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ImageType, &quot;ImageType&quot;, V_STRING, vImageTypes) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Overwrite, &quot;Overwrite&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+
+	&apos;	Check destination file overwriting
+	Set FSO = CreateScriptService(&quot;FileSystem&quot;)
+	sFile = FSO._ConvertToUrl(FileName)
+	If FSO.FileExists(FileName) Then
+		If Overwrite = False Then GoTo CatchError
+		Set oSfa = ScriptForge.SF_Utils._GetUNOService(&quot;FileAccess&quot;)
+		If oSfa.isReadonly(sFile) Then GoTo CatchError
+	End If
+
+Try:
+	&apos;	Setup arguments
+	vFilters = Split(cstFilters, &quot;,&quot;)
+	sFilter = vFilters(ScriptForge.SF_Array.IndexOf(vImageTypes, ImageType, CaseSensitive := False))
+	Set oAddress = _ParseAddress(Range)
+
+	&apos;	The filter arguments differ between
+	&apos;		1) pdf : store range in Selection property value
+	&apos;		2) png, jpeg : save current selection, select range, restore initial selection
+	If LCase(ImageType) = &quot;pdf&quot; Then
+		vFilterData = Array(ScriptForge.SF_Utils._MakePropertyValue(&quot;Selection&quot;, oAddress.XCellRange)	)
+		vStoreArguments = Array( _
+								ScriptForge.SF_Utils._MakePropertyValue(&quot;FilterName&quot;, sFilter) _
+								, ScriptForge.SF_Utils._MakePropertyValue(&quot;FilterData&quot;, vFilterData) _
+								)
+	Else		&apos;	png, jpeg
+		&apos;	Save the current selection(s)
+		Set oSelect = _Component.CurrentController.getSelection()
+		_Component.CurrentController.select(oAddress.XCellRange)
+		vStoreArguments = Array( _
+								ScriptForge.SF_Utils._MakePropertyValue(&quot;FilterName&quot;, sFilter) _
+								, ScriptForge.SF_Utils._MakePropertyValue(&quot;SelectionOnly&quot;, True) _
+								)
+	End If
+
+	&apos;	Apply the filter and export
+	_Component.storeToUrl(sFile, vStoreArguments)
+	If LCase(ImageType) &lt;&gt; &quot;pdf&quot; Then _RestoreSelections(_Component, oSelect)
+
+	bSaved = True
+
+Finally:
+	ExportRangeToFile = bSaved
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+CatchError:
+	ScriptForge.SF_Exception.RaiseFatal(RANGEEXPORTERROR, &quot;FileName&quot;, FileName, &quot;Overwrite&quot;, Overwrite)
+	GoTo Finally
+End Function   &apos;   SFDocuments.SF_Chart.ExportRangeToFile
+
+REM -----------------------------------------------------------------------------
 Public Function Forms(Optional ByVal SheetName As Variant _
 							, Optional ByVal Form As Variant _
 							) As Variant
@@ -1650,6 +1758,7 @@ Public Function Methods() As Variant
 					, &quot;DMax&quot; _
 					, &quot;DMin&quot; _
 					, &quot;DSum&quot; _
+					, &quot;ExportRangeToFile&quot; _
 					, &quot;GetColumnName&quot; _
 					, &quot;GetFormula&quot; _
 					, &quot;GetValue&quot; _

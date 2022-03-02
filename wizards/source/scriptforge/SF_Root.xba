@@ -849,6 +849,18 @@ Try:
 									&amp;	&quot;%5: An identifier\n&quot; _
 									&amp;	&quot;%6: A file name&quot; _
 					)
+	&apos;	SF_Calc.ExportRangeToFile
+			.AddText(	Context := &quot;RANGEEXPORT&quot; _
+						, MsgId := &quot;The given range could not be exported.\n&quot; _
+									&amp; &quot;Either the destination file must not be overwritten, or it has a read-only attribute set.\n\n&quot; _
+									&amp; &quot;%1 = &apos;%2&apos;\n&quot; _
+									&amp; &quot;%3 = %4&quot; _
+						, Comment :=	&quot;SF_Calc.ExportRangeToFile error message\n&quot; _
+									&amp;	&quot;%1: An identifier\n&quot; _
+									&amp;	&quot;%2: A file name\n&quot; _
+									&amp;	&quot;%3: An identifier\n&quot; _
+									&amp;	&quot;%4: True or False\n&quot; _
+					)
 	&apos;	SF_Chart.ExportToFile
 			.AddText(	Context := &quot;CHARTEXPORT&quot; _
 						, MsgId := &quot;The chart could not be exported.\n&quot; _
