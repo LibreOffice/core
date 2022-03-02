@@ -2866,6 +2866,7 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
 }
 
 SwSaveFootnoteHeight::SwSaveFootnoteHeight( SwFootnoteBossFrame *pBs, const SwTwips nDeadLine ) :
+    aGuard(pBs),
     pBoss( pBs ),
     nOldHeight( pBs->GetMaxFootnoteHeight() )
 {
