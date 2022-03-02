@@ -3144,7 +3144,16 @@ void DomainMapper_Impl::CreateRedline(uno::Reference<text::XTextRange> const& xR
         pRedlineProperties[0].Name = getPropertyName( PROP_REDLINE_AUTHOR );
         pRedlineProperties[0].Value <<= pRedline->m_sAuthor;
         pRedlineProperties[1].Name = getPropertyName( PROP_REDLINE_DATE_TIME );
-        pRedlineProperties[1].Value <<= ConversionHelper::ConvertDateStringToDateTime( pRedline->m_sDate );
+        util::DateTime aDateTime = ConversionHelper::ConvertDateStringToDateTime( pRedline->m_sDate );
+        // tdf#146171 import not specified w:date (or specified as zero date "0-00-00")
+        // as Epoch time to avoid of losing change tracking data during ODF roundtrip
+        if ( aDateTime.Year == 0 && aDateTime.Month == 0 && aDateTime.Day == 0 )
+        {
+            aDateTime.Year = 1970;
+            aDateTime.Month = 1;
+            aDateTime.Day = 1;
+        }
+        pRedlineProperties[1].Value <<= aDateTime;
         pRedlineProperties[2].Name = getPropertyName( PROP_REDLINE_REVERT_PROPERTIES );
         pRedlineProperties[2].Value <<= pRedline->m_aRevertProperties;
         pRedlineProperties[3].Name = "RedlineMoved";
