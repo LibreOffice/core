@@ -2596,6 +2596,74 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141613)
     CPPUNIT_ASSERT_EQUAL(OUString(""), getParagraph(1)->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107494_Header)
+{
+    createSwDoc();
+
+    // Create a graphic object, but don't insert it yet.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+
+    // Set a URL on it.
+    OUString aGraphicURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "LibreOffice_external_logo_100px.png";
+    xTextGraphic->setPropertyValue("GraphicURL", uno::makeAny(aGraphicURL));
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+
+    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(true));
+
+    uno::Reference<text::XText> xHeader(
+        getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText"));
+    CPPUNIT_ASSERT(xHeader.is());
+    uno::Reference<text::XTextCursor> xHeaderCursor(xHeader->createTextCursor());
+
+    xHeader->insertTextContent(xHeaderCursor, xTextContent, false);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107494_Footer)
+{
+    createSwDoc();
+
+    // Create a graphic object, but don't insert it yet.
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+
+    // Set a URL on it.
+    OUString aGraphicURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "LibreOffice_external_logo_100px.png";
+    xTextGraphic->setPropertyValue("GraphicURL", uno::makeAny(aGraphicURL));
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
+                                                   uno::UNO_QUERY);
+
+    xPageStyle->setPropertyValue("FooterIsOn", uno::makeAny(true));
+
+    uno::Reference<text::XText> xFooter(
+        getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterText"));
+    CPPUNIT_ASSERT(xFooter.is());
+    uno::Reference<text::XTextCursor> xFooterCursor(xFooter->createTextCursor());
+
+    xFooter->insertTextContent(xFooterCursor, xTextContent, false);
+
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
+
+    xPageStyle->setPropertyValue("FooterIsOn", uno::makeAny(false));
+
+    CPPUNIT_ASSERT_EQUAL(0, getShapes());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133358)
 {
     SwDoc* const pDoc = createSwDoc();
