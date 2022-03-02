@@ -34,6 +34,24 @@
       "parentUuid": "9ecfd021_b9e4efff",
       "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45ac2b7c_e5fed4a1",
+        "filename": "include/svl/itemset.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-02T07:34:23Z",
+      "side": 1,
+      "message": "Hmm, my mental model of the item set was that either it contains a pool item directly, or once of the parents have that item. A parent can be a parent item set or the pool default. Possibly this is more complex in practice, this simplified picture just matches how formatting of e.g. paragraphs or text portions work with styles and document defaults.\n\nIn this context, \"search in parent\" means \"also look up non-direct pool items\", regardless if it comes from a real parent or from some pool default.\n\nAnyhow, I think there would be value in figuring out when one is supposed to use the older GetItem() (I would expect that won\u0027t return default items in the bSearchInParent\u003dfalse case) and when to use GetItemIfSet(). Their implementation is very similar, so unless we either get rid of one of them or document the intended usage, I fear people (including myself) will just use one or the other randomly, which is not great.\n\nWhat do you think?",
+      "parentUuid": "10755a47_a0eb8f7c",
+      "revId": "6849b3a1593f56790ad22a050d60ec15333ce9af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
