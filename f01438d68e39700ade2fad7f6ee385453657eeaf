@@ -33,6 +33,23 @@
       "message": "I think trying to address false warnings in --enable-optimized GCC builds is just not worth it, esp. since which false warnings exactly get emitted with exactly which -O settings appears to be a moving target in GCC.  (For example, my current GCC 12 trunk LO test build is littered with various temporary local\n\n  #pragma GCC diagnostic ignored \"-Warray-bounds\"\n  #pragma GCC diagnostic ignored \"-Wstringop-overflow\"\n\npatches across the code base, to allow it to build---though none at the location addressed here.  Some of them may become obsolete when a stable GCC 12 is released, some of them will keep being annoyance for longer, new ones will almost inevitably arise.)  I think the only sane approach, if one is not into reporting introduction of new false warnings to the GCC developers, is to combine --enable-optimized with --disable-werror when building with GCC.",
       "revId": "f01438d68e39700ade2fad7f6ee385453657eeaf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39d79d92_a741e9d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-02T10:07:47Z",
+      "side": 1,
+      "message": "thnaks",
+      "revId": "f01438d68e39700ade2fad7f6ee385453657eeaf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
