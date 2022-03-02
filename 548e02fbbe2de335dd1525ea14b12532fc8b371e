@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80162176_355b49d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-02T08:11:18Z",
+      "side": 1,
+      "message": "@Attila: very nice and useful fix! I mentioned fixing the partial regression, according to Gábor\u0027s comment, and the details of the referred tdf#119234.",
+      "revId": "548e02fbbe2de335dd1525ea14b12532fc8b371e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
