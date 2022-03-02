@@ -20,6 +20,7 @@
 #include <memory>
 #include <UndoSection.hxx>
 
+#include <editeng/protitem.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/scopeguard.hxx>
 #include <sfx2/linkmgr.hxx>
@@ -474,9 +475,8 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     if (m_oAttrSet)
     {
         // The Content and Protect items must persist
-        const SfxPoolItem* pItem;
         m_oAttrSet->Put( pFormat->GetFormatAttr( RES_CNTNT ));
-        if( SfxItemState::SET == pFormat->GetItemState( RES_PROTECT, true, &pItem ))
+        if( const SvxProtectItem* pItem = pFormat->GetItemIfSet( RES_PROTECT ))
         {
             m_oAttrSet->Put( *pItem );
         }

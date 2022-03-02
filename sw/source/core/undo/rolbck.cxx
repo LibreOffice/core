@@ -1165,9 +1165,7 @@ void SwHistory::AddDeleteFly(SwFrameFormat& rFormat, sal_uInt16& rSetPos)
         std::unique_ptr<SwHistoryHint> pHint(new SwHistoryTextFlyCnt( &rFormat ));
         m_SwpHstry.push_back( std::move(pHint) );
 
-        const SwFormatChain* pChainItem;
-        if( SfxItemState::SET == rFormat.GetItemState( RES_CHAIN, false,
-            reinterpret_cast<const SfxPoolItem**>(&pChainItem) ))
+        if( const SwFormatChain* pChainItem = rFormat.GetItemIfSet( RES_CHAIN, false ) )
         {
             assert(RES_FLYFRMFMT == nWh); // not supported on SdrObjects
             if( pChainItem->GetNext() || pChainItem->GetPrev() )
