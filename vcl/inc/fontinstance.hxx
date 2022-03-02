@@ -61,8 +61,10 @@ public: // TODO: make data members private
     Degree10        mnOrientation;          // text angle in 3600 system
     bool            mbInit;                 // true if maFontMetric member is valid
 
-    void            AddFallbackForUnicode( sal_UCS4, FontWeight eWeight, const OUString& rFontName );
-    bool            GetFallbackForUnicode( sal_UCS4, FontWeight eWeight, OUString* pFontName ) const;
+    void            AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName,
+                                          bool bEmbolden, const ItalicMatrix& rMatrix);
+    bool            GetFallbackForUnicode(sal_UCS4 cInChar, FontWeight eInWeight,
+                                          OUString* pOutFontName, bool* pOutEmbolden, ItalicMatrix* pOutItalicMatrix) const;
     void            IgnoreFallbackForUnicode( sal_UCS4, FontWeight eWeight, std::u16string_view rFontName );
 
     inline hb_font_t* GetHbFont();
@@ -93,10 +95,16 @@ protected:
     virtual hb_font_t* ImplInitHbFont() { assert(false); return hb_font_get_empty(); }
 
 private:
-    // cache of Unicode characters and replacement font names
+    struct MapEntry
+    {
+        OUString sFontName;
+        bool bEmbolden;
+        ItalicMatrix aItalicMatrix;
+    };
+    // cache of Unicode characters and replacement font names and attributes
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
-    typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, OUString > UnicodeFallbackList;
+    typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, MapEntry > UnicodeFallbackList;
     std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
     mutable ImplFontCache * mpFontCache;
     const vcl::font::FontSelectPattern m_aFontSelData;
