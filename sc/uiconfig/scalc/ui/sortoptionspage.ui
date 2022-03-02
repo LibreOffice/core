@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
+<!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
   <object class="GtkBox" id="SortOptionsPage">
     <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">6</property>
+    <property name="can-focus">False</property>
+    <property name="border-width">6</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkFrame" id="frame2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=2 n-rows=12 -->
           <object class="GtkGrid" id="grid2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
+            <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
               <object class="GtkCheckButton" id="case">
                 <property name="label" translatable="yes" context="sortoptionspage|case">Case _sensitive</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="case-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|case">Sorts first by uppercase letters and then by lowercase letters. For Asian languages, special handling applies.</property>
@@ -38,18 +38,18 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="header">
                 <property name="label" translatable="yes" context="sortoptionspage|header">Range contains...</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="header-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|header">Omits the first row or the first column in the selection from the sort.</property>
@@ -57,18 +57,18 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="formats">
                 <property name="label" translatable="yes" context="sortoptionspage|formats">Include formats</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="formats-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|formats">Preserves the current cell formatting.</property>
@@ -76,18 +76,18 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">2</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="naturalsort">
                 <property name="label" translatable="yes" context="sortoptionspage|naturalsort">Enable natural sort</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="naturalsort-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|naturalsort">Natural sort is a sort algorithm that sorts string-prefixed numbers based on the value of the numerical element in each sorted number, instead of the traditional way of sorting them as ordinary strings.</property>
@@ -95,46 +95,46 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">3</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="includenotes">
                 <property name="label" translatable="yes" context="sortoptionspage|includenotes">Include boundary column(s) containing only comments</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">4</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="includeimages">
                 <property name="label" translatable="yes" context="sortoptionspage|includeimages">Include boundary column(s) containing only images</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">5</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">5</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="copyresult">
                 <property name="label" translatable="yes" context="sortoptionspage|copyresult">Copy sort results to:</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <accessibility>
                   <relation type="label-for" target="outarealb"/>
                 </accessibility>
@@ -145,14 +145,14 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">6</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">6</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="outarealb">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <accessibility>
                   <relation type="labelled-by" target="copyresult"/>
@@ -166,20 +166,20 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">7</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
               <object class="GtkEntry" id="outareaed">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can-focus">True</property>
                 <property name="hexpand">True</property>
-                <property name="activates_default">True</property>
+                <property name="activates-default">True</property>
+                <property name="truncate-multiline">True</property>
                 <accessibility>
                   <relation type="labelled-by" target="outarealb"/>
                 </accessibility>
-                <property name="truncate-multiline">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="outareaed-atkobject">
                     <property name="AtkObject::accessible-name" translatable="yes" context="sortoptionspage|outareaed-atkobject">Copy sort results to:</property>
@@ -188,18 +188,18 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">7</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">7</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="sortuser">
                 <property name="label" translatable="yes" context="sortoptionspage|sortuser">Custom sort order</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <accessibility>
                   <relation type="label-for" target="sortuserlb"/>
                 </accessibility>
@@ -210,14 +210,14 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">8</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="sortuserlb">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="margin-start">12</property>
                 <accessibility>
                   <relation type="labelled-by" target="sortuser"/>
@@ -230,43 +230,43 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">9</property>
                 <property name="width">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label6">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="sortoptionspage|label6">Language</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">language</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">language</property>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">10</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="algorithmft">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes" context="sortoptionspage|algorithmft">Options</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">algorithmlb</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">algorithmlb</property>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">10</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">10</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="algorithmlb">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="can-focus">False</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="algorithmlb-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|algorithmlb">Select a sorting option for the language.</property>
@@ -274,19 +274,19 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">11</property>
+                <property name="left-attach">1</property>
+                <property name="top-attach">11</property>
               </packing>
             </child>
             <child>
               <object class="GtkComboBoxText" id="language">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="has_entry">True</property>
+                <property name="can-focus">False</property>
+                <property name="has-entry">True</property>
                 <child internal-child="entry">
                   <object class="GtkEntry">
+                    <property name="can-focus">True</property>
                     <property name="truncate-multiline">True</property>
-                    <property name="can_focus">True</property>
                   </object>
                 </child>
                 <child internal-child="accessible">
@@ -296,8 +296,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">11</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">11</property>
               </packing>
             </child>
             <child>
@@ -329,7 +329,7 @@
         <child type="label">
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="sortoptionspage|label2">Sort Options</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -346,25 +346,25 @@
     <child>
       <object class="GtkFrame" id="frame1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label_xalign">0</property>
-        <property name="shadow_type">none</property>
+        <property name="can-focus">False</property>
+        <property name="label-xalign">0</property>
+        <property name="shadow-type">none</property>
         <child>
-          <!-- n-columns=1 n-rows=1 -->
+          <!-- n-columns=1 n-rows=2 -->
           <object class="GtkGrid" id="grid1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="margin-start">12</property>
             <property name="margin-top">6</property>
             <child>
               <object class="GtkRadioButton" id="topdown">
                 <property name="label" translatable="yes" context="sortoptionspage|topdown">_Top to bottom (sort rows)</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
                 <property name="active">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="draw-indicator">True</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="topdown-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="sortoptionspage|extended_tip|topdown">Sorts rows by the values in the active columns of the selected range.</property>
@@ -372,18 +372,18 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkRadioButton" id="leftright">
                 <property name="label" translatable="yes" context="sortoptionspage|leftright">L_eft to right (sort columns)</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="use_underline">True</property>
-                <property name="draw_indicator">True</property>
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="use-underline">True</property>
+                <property name="draw-indicator">True</property>
                 <property name="group">topdown</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="leftright-atkobject">
@@ -392,8 +392,8 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
               </packing>
             </child>
           </object>
@@ -401,7 +401,7 @@
         <child type="label">
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="can-focus">False</property>
             <property name="label" translatable="yes" context="sortoptionspage|label1">Direction</property>
             <attributes>
               <attribute name="weight" value="bold"/>
