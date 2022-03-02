@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae3452b6_e543c50c",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4069,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-02T15:38:05Z",
+      "side": 1,
+      "message": "isn\u0027t it the now-redundant surrounding double(...) rather than the random whitespace surrounding + that should have been cleaned up here?",
+      "revId": "3e94bd846ab02f3f0dac55e9646ac778d6b7f284",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
