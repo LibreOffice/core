@@ -58,6 +58,7 @@ template <typename uniqueptr> void reset_preserve_ptr_during(uniqueptr& ptr)
     // e.g. SdrObject::GetBroadcaster() is called during the destructor
     // in SdrEdgeObj::Notify(). So delete first, then clear the pointer
     delete ptr.get();
+    // coverity[leaked_storage] - not a leak, deleted on line above
     (void)ptr.release();
 }
 }
