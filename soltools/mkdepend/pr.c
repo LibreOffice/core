@@ -67,6 +67,7 @@ void add_include(struct filepointer *filep, struct inclist *file, struct inclist
     if (!newfile->i_searched) {
         newfile->i_searched = TRUE;
         content = getfile(newfile->i_file);
+        // coverity[tainted_data] - this is a build time tool
         find_includes(content, newfile, file_red, 0, failOK, incCollection, symbols);
         freefile(content);
     }
