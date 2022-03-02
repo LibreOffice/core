@@ -33,6 +33,42 @@
       "message": "OSL_DEBUG_LEVEL \u003e 2 is a high debug level that would not be normally enabled (the default debug level is 1). So the patch technically looks ok to me, but I think it\u0027d be better to add area named e.g. \"bridges.debug\" to include/sal/log-areas.dox and use that, so that this chatty debug code can be explicitly controlled.\n\n",
       "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0efcb9c3_4853e261",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-03-02T10:13:24Z",
+      "side": 1,
+      "message": "Is there a way to test it without having a DEC Alpha instructions set architecture? \nOr I shouldn\u0027t have touched this file in the first place.",
+      "parentUuid": "3f081a40_132cb11a",
+      "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d186e4c_4ad2656f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-03-02T10:13:24Z",
+      "side": 1,
+      "message": "Okay",
+      "parentUuid": "9db77294_431fadba",
+      "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
