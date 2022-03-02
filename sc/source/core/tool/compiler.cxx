@@ -3345,6 +3345,18 @@ bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pE
             return false;
         }
 
+        // A named range named e.g. 'num1' is valid with 1k columns, but would become a reference
+        // when the document is opened later with 16k columns. Resolve the conflict by not
+        // considering it a reference.
+        OUString aUpper;
+        bool bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, rName );
+        if (bAsciiUpper || mbCharClassesDiffer)
+            aUpper = ScGlobal::getCharClass().uppercase( rName );
+        mnCurrentSheetTab = aAddr.Tab(); // temporarily set for ParseNamedRange()
+        if(ParseNamedRange( aUpper, true )) // only check
+            return false;
+        mnCurrentSheetTab = -1;
+
         ScSingleRefData aRef;
         aRef.InitAddress( aAddr );
         aRef.SetColRel( (nFlags & ScRefFlags::COL_ABS) == ScRefFlags::ZERO );
@@ -3575,7 +3587,7 @@ const ScRangeData* ScCompiler::GetRangeData( SCTAB& rSheet, const OUString& rUpp
     return pData;
 }
 
-bool ScCompiler::ParseNamedRange( const OUString& rUpperName )
+bool ScCompiler::ParseNamedRange( const OUString& rUpperName, bool onlyCheck )
 {
     // ParseNamedRange is called only from NextNewToken, with an upper-case string
 
@@ -3583,7 +3595,8 @@ bool ScCompiler::ParseNamedRange( const OUString& rUpperName )
     const ScRangeData* pData = GetRangeData( nSheet, rUpperName);
     if (pData)
     {
-        maRawToken.SetName( nSheet, pData->GetIndex());
+        if (!onlyCheck)
+            maRawToken.SetName( nSheet, pData->GetIndex());
         return true;
     }
 
@@ -3597,7 +3610,8 @@ bool ScCompiler::ParseNamedRange( const OUString& rUpperName )
             pData = pRangeName->findByUpperName(aName);
             if (pData)
             {
-                maRawToken.SetName( mnCurrentSheetTab, pData->GetIndex());
+                if (!onlyCheck)
+                    maRawToken.SetName( mnCurrentSheetTab, pData->GetIndex());
                 return true;
             }
         }
