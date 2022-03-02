@@ -798,7 +798,6 @@ static void lcl_FormatContentOfLayoutFrame( SwLayoutFrame* pLayFrame,
         if ( pLowerFrame->IsLayoutFrame() )
         {
             SwFrameDeleteGuard aCrudeHack(pLowerFrame); // ??? any issue setting this for non-footnote frames?
-            // prevent moving footnotes by formatting if they are already being moved
             lcl_FormatContentOfLayoutFrame( static_cast<SwLayoutFrame*>(pLowerFrame),
                                         pLastLowerFrame );
         }
