@@ -4065,8 +4065,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     bIsRotate = true;
                 }
                 if( bIsRotate ){
-                    drawobj->extent.w = static_cast<int>(sqrt(double(DBL(pt[1].x-pt[0].x) + DBL(pt[1].y-pt[0].y))));
-                    drawobj->extent.h = static_cast<int>(sqrt(double(DBL(pt[2].x-pt[1].x) + DBL(pt[2].y-pt[1].y))));
+                    drawobj->extent.w = static_cast<int>(sqrt(DBL(pt[1].x-pt[0].x) + DBL(pt[1].y-pt[0].y)));
+                    drawobj->extent.h = static_cast<int>(sqrt(DBL(pt[2].x-pt[1].x) + DBL(pt[2].y-pt[1].y)));
                     padd("draw:transform", sXML_CDATA, trans);
                 }
             }
