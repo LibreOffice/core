@@ -1329,7 +1329,6 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
 
 bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pObj)
 {
-    bool bSuccess = false;
     // Set the position of the textboxes according to the position of its shape-pair
     const bool bIsGroupObj = (pObj != pShape->FindRealSdrObject()) && pObj;
     if (auto pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
@@ -1414,8 +1413,8 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                 }
             }
 
-            bSuccess = pFormat->SetFormatAttr(aNewHOri);
-            bSuccess &= pFormat->SetFormatAttr(aNewVOri);
+            pFormat->SetFormatAttr(aNewHOri);
+            pFormat->SetFormatAttr(aNewVOri);
         }
         // Other cases when the shape has different anchor from AS_CHAR
         else
@@ -1498,10 +1497,10 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
                     aNewVOri.SetPos(aNewVOri.GetPos() + nTableOffset.getY());
             }
 
-            bSuccess = pFormat->SetFormatAttr(aNewHOri);
-            bSuccess &= pFormat->SetFormatAttr(aNewVOri);
+            pFormat->SetFormatAttr(aNewHOri);
+            pFormat->SetFormatAttr(aNewVOri);
         }
-        return bSuccess;
+        return true;
     }
 
     return false;

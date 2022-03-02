@@ -119,6 +119,36 @@ static OUString lcl_translitTest(SwDoc& rDoc, const SwPaM& rPaM, Transliteration
     return rPaM.GetNode(false).GetTextNode()->GetText();
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf146449)
+{
+    load(DATA_DIRECTORY, "tdf146449.odt");
+
+    auto pDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pDoc);
+    auto pShell = pDoc->GetDocShell()->GetFEShell();
+    CPPUNIT_ASSERT(pShell);
+
+    auto xTextBox = getShapeByName(u"Frame1");
+    auto pObject = SdrObject::getSdrObjectFromXShape(xTextBox);
+
+    CPPUNIT_ASSERT(pShell->SelectObj(Point(), 0, pObject));
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    uno::Reference<beans::XPropertySet> xShapeProps(xTextBox, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProps(xShapeProps->getPropertyValue("TextBoxContent"),
+                                                    uno::UNO_QUERY);
+
+    const auto& nShapeZOrder = pObject->GetOrdNum();
+    const auto& nFrameZOrder = xFrameProps->getPropertyValue("ZOrder");
+
+    CPPUNIT_ASSERT_MESSAGE("Wrong Zorder!", nShapeZOrder < nFrameZOrder.get<sal_uInt32>());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf49033)
 {
     SwDoc* pDoc = createSwDoc();
