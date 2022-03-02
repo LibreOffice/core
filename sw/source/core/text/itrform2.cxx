@@ -1561,11 +1561,9 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                     pInfo = &pDoc->GetFootnoteInfo();
                 const SwAttrSet& rSet = pInfo->GetAnchorCharFormat(const_cast<SwDoc&>(*pDoc))->GetAttrSet();
 
-                const SfxPoolItem* pItem;
                 Degree10 nDir(0);
-                if( SfxItemState::SET == rSet.GetItemState( RES_CHRATR_ROTATE,
-                    true, &pItem ))
-                    nDir = static_cast<const SvxCharRotateItem*>(pItem)->GetValue();
+                if( const SvxCharRotateItem* pItem = rSet.GetItemIfSet( RES_CHRATR_ROTATE ) )
+                    nDir = pItem->GetValue();
 
                 if ( nDir )
                 {

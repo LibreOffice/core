@@ -2621,9 +2621,8 @@ void SwScriptInfo::selectHiddenTextProperty(const SwTextNode& rNode,
     assert((rNode.GetText().isEmpty() && rHiddenMulti.GetTotalRange().Len() == 1)
         || (rNode.GetText().getLength() == rHiddenMulti.GetTotalRange().Len()));
 
-    const SfxPoolItem* pItem = nullptr;
-    if( SfxItemState::SET == rNode.GetSwAttrSet().GetItemState( RES_CHRATR_HIDDEN, true, &pItem ) &&
-        static_cast<const SvxCharHiddenItem*>(pItem)->GetValue() )
+    const SvxCharHiddenItem* pItem = rNode.GetSwAttrSet().GetItemIfSet( RES_CHRATR_HIDDEN );
+    if( pItem && pItem->GetValue() )
     {
         rHiddenMulti.SelectAll();
     }
