@@ -1464,7 +1464,8 @@ bool SvxGraphicObject::getPropertyValueImpl( const OUString& rName, const SfxIte
 
         Reference<graphic::XGraphic> xGraphic;
         auto pSdrGraphicObject = static_cast<SdrGrafObj*>(GetSdrObject());
-        if (pSdrGraphicObject->GetGraphicObject().GetType() != GraphicType::NONE)
+        if (pSdrGraphicObject
+            && pSdrGraphicObject->GetGraphicObject().GetType() != GraphicType::NONE)
             xGraphic = pSdrGraphicObject->GetGraphic().GetXGraphic();
         rValue <<= xGraphic;
         break;
