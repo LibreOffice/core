@@ -145,7 +145,7 @@ View::~View()
 
     if (mxDropMediaSizeListener)
     {
-        mxDropMediaSizeListener->dispose();
+        suppress_fun_call_w_exception(mxDropMediaSizeListener->dispose());
         mxDropMediaSizeListener.clear();
     }
 
@@ -157,7 +157,6 @@ View::~View()
     while(PaintWindowCount())
     {
         // remove all registered OutDevs
-        // cid#1485150 silence Uncaught exception
         suppress_fun_call_w_exception(DeleteWindowFromPaintView(GetFirstOutputDevice()));
     }
 }
