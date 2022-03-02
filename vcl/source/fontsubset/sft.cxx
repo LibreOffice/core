@@ -541,9 +541,9 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
 
         if( std::find( glyphlist.begin(), glyphlist.end(), index ) != glyphlist.end() )
         {
-#if OSL_DEBUG_LEVEL > 1
-            SAL_INFO("vcl.fonts", "Endless loop found in a compound glyph.");
+            SAL_WARN("vcl.fonts", "Endless loop found in a compound glyph.");
 
+#if OSL_DEBUG_LEVEL > 1
             std::ostringstream oss;
             oss << index << " -> [";
             for( const auto& rGlyph : glyphlist )
@@ -554,6 +554,7 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             SAL_INFO("vcl.fonts", oss.str());
         /**/
 #endif
+            return 0;
         }
 
         glyphlist.push_back( index );
@@ -561,10 +562,8 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
         if ((np = GetTTGlyphOutline(ttf, index, &nextComponent, nullptr, &glyphlist)) == 0)
         {
             /* XXX that probably indicates a corrupted font */
-#if OSL_DEBUG_LEVEL > 1
             SAL_WARN("vcl.fonts", "An empty compound!");
             /* assert(!"An empty compound"); */
-#endif
         }
 
         if( ! glyphlist.empty() )
@@ -1452,6 +1451,12 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
     const sal_uInt8* nptr = glyf + nNextOffset;
     if (nptr <= ptr)
         return 0;
+
+    if (std::find(glyphlist.begin(), glyphlist.end(), glyphID) != glyphlist.end())
+    {
+        SAL_WARN("vcl.fonts", "Endless loop found in a compound glyph.");
+        return 0;
+    }
 
     glyphlist.push_back( glyphID );
 
