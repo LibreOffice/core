@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4525585_94233f2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-02T12:29:09Z",
+      "side": 1,
+      "message": "I had this in mind too. soon we should also do it for uiwriter3",
+      "revId": "7d5db1d321ddcd42554b3a3a477ef06e17c79249",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
