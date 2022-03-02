@@ -647,6 +647,24 @@ CPPUNIT_TEST_FIXTURE(Test, testTextframeHyperlink)
     assertXPath(pXmlDoc, "//w:pict/v:rect", "href", "https://libreoffice.org/");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
+{
+    load(mpTestDocumentPath, "tdf146171.docx");
+    // false alarm? during ODF roundtrip:
+    // 'Error: "1970-01-01" does not satisfy the "dateTime" type'
+    // disable and check only the conversion of the invalid (zeroed) change date
+    // reload("writer8", "tdf146171.odt");
+    reload("Office Open XML Text", "tdf146171.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport();
+    // This was 0
+    assertXPath(pXmlDoc, "//w:ins", 4);
+    // This was 0
+    assertXPath(pXmlDoc, "//w:del", 1);
+    // This was 0000-00-00T00:00:00Z, resulting loss of change tracking during ODF roundtrip
+    assertXPath(pXmlDoc, "//w:del", "date", "1970-01-01T00:00:00Z");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
 {
     // Without the fix in place, this test would have crashed at export time
