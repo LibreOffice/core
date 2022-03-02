@@ -31,8 +31,8 @@ class tdf91305(UITestCase):
             #Open sort dialog by DATA - SORT
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                xleftright = xDialog.getChild("leftright")
-                select_pos(xTabs, "1")
+                xleftright = xDialog.getChild("rbLeftRight")
+                select_pos(xTabs, "0")
                 xleftright.executeAction("CLICK", tuple())
             #verify
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "aa")
@@ -41,11 +41,10 @@ class tdf91305(UITestCase):
             #Open sort dialog by DATA - SORT
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                xleftright = xDialog.getChild("leftright")
+                xleftright = xDialog.getChild("rbLeftRight")
                 xdown = xDialog.getChild("down")
-                select_pos(xTabs, "1")
-                xleftright.executeAction("CLICK", tuple())
                 select_pos(xTabs, "0")
+                xleftright.executeAction("CLICK", tuple())
                 xdown.executeAction("CLICK", tuple())
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "ff")
             self.assertEqual(get_cell_by_position(document, 0, 1, 0).getString(), "cc")

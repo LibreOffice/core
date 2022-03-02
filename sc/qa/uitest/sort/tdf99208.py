@@ -30,17 +30,18 @@ class tdf99208(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")
-                xtopdown = xDialog.getChild("topdown")
-                xHeader = xDialog.getChild("header")
                 xFormats = xDialog.getChild("formats")
                 if (get_state_as_dict(xNatural)["Selected"]) == "false":
                     xNatural.executeAction("CLICK", tuple())
-                if (get_state_as_dict(xHeader)["Selected"]) == "false":
-                    xHeader.executeAction("CLICK", tuple())
                 if (get_state_as_dict(xFormats)["Selected"]) == "false":
                     xFormats.executeAction("CLICK", tuple())
-                xtopdown.executeAction("CLICK", tuple())
                 select_pos(xTabs, "0")
+                xtopdown = xDialog.getChild("rbTopDown")
+                xHeader = xDialog.getChild("cbHeader")
+                if (get_state_as_dict(xHeader)["Selected"]) == "false":
+                    xHeader.executeAction("CLICK", tuple())
+                xtopdown.executeAction("CLICK", tuple())
+
                 xSortKey1 = xDialog.getChild("sortlb")
                 xAsc = xDialog.getChild("up")
                 select_by_text(xSortKey1, "FODMAP")
