@@ -22,6 +22,7 @@
 #include <rtl/ref.hxx>
 
 #include <sfx2/viewsh.hxx>
+#include <svl/typedwhich.hxx>
 #include <vcl/prntypes.hxx>
 #include <vcl/scrbar.hxx>
 #include <o3tl/deleter.hxx>
@@ -36,6 +37,7 @@ class SdPage;
 class SvxRuler;
 class SdrOle2Obj;       // for the ones, who have undefined parts of SVDRAW
 class SdDrawDocument;
+class SvxNumBulletItem;
 
 namespace weld
 {
@@ -184,7 +186,7 @@ public:
     void SetUIUnit(FieldUnit eUnit);
     void SetDefTabHRuler( sal_uInt16 nDefTab );
 
-    const SfxPoolItem* GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt16& nNumItemId);
+    const SvxNumBulletItem* GetNumBulletItem(SfxItemSet& aNewAttr, TypedWhichId<SvxNumBulletItem>& nNumItemId);
 
     bool HasRuler() const { return mbHasRulers;}
     void SetRuler(bool bRuler);

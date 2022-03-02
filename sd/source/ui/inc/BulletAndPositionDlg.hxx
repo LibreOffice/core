@@ -67,7 +67,7 @@ class SvxBulletAndPositionDlg : public weld::GenericDialogController
     sal_uInt8 nBullet;
     sal_uInt16 nActNumLvl;
     weld::Window* p_Window;
-    sal_uInt16 nNumItemId;
+    TypedWhichId<SvxNumBulletItem> nNumItemId;
     MapUnit eCoreUnit;
 
     SvxNumberingPreview m_aPreviewWIN;

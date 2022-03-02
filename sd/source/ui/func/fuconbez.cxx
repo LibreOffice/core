@@ -108,9 +108,9 @@ void FuConstructBezierPolygon::DoExecute( SfxRequest& rReq )
     if( !pArgs )
         return;
 
-    const SfxPoolItem*  pPoolItem = nullptr;
-    if( SfxItemState::SET == pArgs->GetItemState( SID_ADD_MOTION_PATH, true, &pPoolItem ) )
-        maTargets = static_cast<const SfxUnoAnyItem*>( pPoolItem )->GetValue();
+    const SfxUnoAnyItem* pPoolItem = pArgs->GetItemIfSet( SID_ADD_MOTION_PATH );
+    if( pPoolItem )
+        maTargets = pPoolItem->GetValue();
 
     if (nSlotId != SID_DRAW_FREELINE_NOFILL)
         return;
