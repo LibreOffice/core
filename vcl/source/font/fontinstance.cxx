@@ -118,14 +118,19 @@ void LogicalFontInstance::GetScale(double* nXScale, double* nYScale)
         *nXScale = nWidth / nUPEM;
 }
 
-void LogicalFontInstance::AddFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName )
+void LogicalFontInstance::AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName,
+                                                bool bEmbolden, const ItalicMatrix& rMatrix)
 {
     if( !mpUnicodeFallbackList )
         mpUnicodeFallbackList.reset(new UnicodeFallbackList);
-    (*mpUnicodeFallbackList)[ std::pair< sal_UCS4, FontWeight >(cChar,eWeight) ] = rFontName;
+    MapEntry& rEntry = (*mpUnicodeFallbackList)[ std::pair< sal_UCS4, FontWeight >(cChar,eWeight) ];
+    rEntry.sFontName = rFontName;
+    rEntry.bEmbolden = bEmbolden;
+    rEntry.aItalicMatrix = rMatrix;
 }
 
-bool LogicalFontInstance::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, OUString* pFontName ) const
+bool LogicalFontInstance::GetFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight,
+                                                OUString* pFontName, bool* pEmbolden, ItalicMatrix* pMatrix) const
 {
     if( !mpUnicodeFallbackList )
         return false;
@@ -134,7 +139,10 @@ bool LogicalFontInstance::GetFallbackForUnicode( sal_UCS4 cChar, FontWeight eWei
     if( it == mpUnicodeFallbackList->end() )
         return false;
 
-    *pFontName = (*it).second;
+    const MapEntry& rEntry = (*it).second;
+    *pFontName = rEntry.sFontName;
+    *pEmbolden = rEntry.bEmbolden;
+    *pMatrix = rEntry.aItalicMatrix;
     return true;
 }
 
@@ -143,7 +151,8 @@ void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight e
     UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( std::pair< sal_UCS4,FontWeight >(cChar,eWeight) );
     if( it == mpUnicodeFallbackList->end() )
         return;
-    if( (*it).second == rFontName )
+    const MapEntry& rEntry = (*it).second;
+    if (rEntry.sFontName == rFontName)
         mpUnicodeFallbackList->erase( it );
 }
 
