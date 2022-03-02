@@ -144,6 +144,8 @@ interface TableDraw
     SID_UNGROUP         [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
     SID_ENTER_GROUP     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
     SID_LEAVE_GROUP     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; ]
+    SID_REGENERATE_DIAGRAM [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState ]
+    SID_EDIT_DIAGRAM    [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState ]
     // !!! special
     SID_DELETE          [ExecMethod = ExecDrawFunc ;StateMethod = GetDrawFuncState; ]
 

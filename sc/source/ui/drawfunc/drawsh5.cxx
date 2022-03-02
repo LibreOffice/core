@@ -30,6 +30,7 @@
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
+#include <svx/svdogrp.hxx>
 #include <sfx2/docfile.hxx>
 #include <osl/diagnose.h>
 
@@ -269,6 +270,42 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
             break;
         case SID_LEAVE_GROUP:
             pView->LeaveOneGroup();
+            break;
+
+        case SID_REGENERATE_DIAGRAM:
+        case SID_EDIT_DIAGRAM:
+            {
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+
+                if (1 == rMarkList.GetMarkCount())
+                {
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+                    // Support advanced DiagramHelper
+                    SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
+
+                    if(pAnchorObj && pAnchorObj->isDiagram())
+                    {
+                        if(SID_REGENERATE_DIAGRAM == nSlotId)
+                        {
+                            pView->UnmarkAll();
+                            pAnchorObj->getDiagramHelper()->reLayout();
+                            pView->MarkObj(pObj, pView->GetSdrPageView());
+                        }
+                        else // SID_EDIT_DIAGRAM
+                        {
+                            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                            vcl::Window* pWin = rViewData.GetActiveWin();
+                            ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
+                                pWin ? pWin->GetFrameWeld() : nullptr,
+                                pAnchorObj->getDiagramHelper());
+                            pDlg->Execute();
+                        }
+                    }
+                }
+
+                rReq.Done();
+            }
             break;
 
         case SID_MIRROR_HORIZONTAL:

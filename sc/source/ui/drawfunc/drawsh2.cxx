@@ -28,6 +28,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/ptitem.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/svdogrp.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -267,6 +268,15 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // disable functions
         if (pView->GetAnchorType() != SCA_CELL &&
             pView->GetAnchorType() != SCA_CELL_RESIZE)
             rSet.DisableItem( SID_FITCELLSIZE );
+
+        // Support advanced DiagramHelper
+        SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
+
+        if(!pAnchorObj || !pAnchorObj->isDiagram())
+        {
+            rSet.DisableItem( SID_REGENERATE_DIAGRAM );
+            rSet.DisableItem( SID_EDIT_DIAGRAM );
+        }
     }
     if ( !bCanRename )
     {
