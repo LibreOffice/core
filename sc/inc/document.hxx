@@ -101,6 +101,7 @@ class ColumnIterator;
 class ExternalDataMapper;
 class Sparkline;
 class SparklineGroup;
+class SparklineList;
 
 }
 
@@ -1241,7 +1242,8 @@ public:
 
     /** Spaklines */
     SC_DLLPUBLIC sc::Sparkline* GetSparkline(ScAddress const & rPosition);
-    SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> & pSparklineGroup);
+    SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
+    SC_DLLPUBLIC sc::SparklineList* GetSparklineList(SCTAB nTab);
 
     /** Notes **/
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);

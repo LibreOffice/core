@@ -656,8 +656,8 @@ public:
     void BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint );
 
     // Spaklines
-    sc::Sparkline* GetSparkline(SCROW nRow);
-    void SetSparkline(SCROW nRow, std::unique_ptr<sc::Sparkline> pSparkline);
+    sc::SparklineCell* GetSparklineCell(SCROW nRow);
+    void CreateSparklineCell(SCROW nRow, std::shared_ptr<sc::Sparkline> const& pSparkline);
 
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
