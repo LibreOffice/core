@@ -2856,7 +2856,7 @@ void WW8TabDesc::FinishSwTable()
     m_pIo->m_aInsertedTables.InsertTable(*m_pTableNd, *m_pIo->m_pPaM);
 
     if (aListener.WasDeleted())
-        return;
+        throw std::runtime_error("table unexpectedly destroyed by applying redlines");
 
     MergeCells();
 
