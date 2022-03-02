@@ -47,6 +47,7 @@ public:
     void testRoundtripColumn2000Xlsx();
     void testRoundtripColumnRange();
     void testRoundtripNamedRanges();
+    void testNamedRangeNameConflict();
     void testTdf134392();
     void testTdf133033();
     void testTdf109061();
@@ -57,6 +58,7 @@ public:
     CPPUNIT_TEST(testRoundtripColumn2000Xlsx);
     CPPUNIT_TEST(testRoundtripColumnRange);
     CPPUNIT_TEST(testRoundtripNamedRanges);
+    CPPUNIT_TEST(testNamedRangeNameConflict);
     CPPUNIT_TEST(testTdf134392);
     CPPUNIT_TEST(testTdf133033);
     CPPUNIT_TEST(testTdf109061);
@@ -231,6 +233,30 @@ void ScJumboSheetsTest::testRoundtripNamedRanges()
     xDocSh1->DoClose();
     xDocSh2->DoClose();
     xDocSh3->DoClose();
+}
+
+void ScJumboSheetsTest::testNamedRangeNameConflict()
+{
+    // The document contains named ranges named 'num1' and 'num2', that should be still treated
+    // as named references even though with 16k columns those are normally NUM1 and NUM2 cells.
+    ScDocShellRef xDocSh = loadDoc(u"named-range-conflict.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    ScDocument& rDoc = xDocSh->GetDocument();
+    rDoc.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(10022, 0, 0)); // NUM1
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(10022, 1, 0)); // NUM2
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(0, 0, 0)); // = num1
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(0, 1, 0)); // = sheet2.num2
+    CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(0, 2, 0)); // = SUM(NUM1:NUM2) (not named ranges)
+    rDoc.SetValue(10022, 0, 0, 100); // NUM1
+    rDoc.SetValue(10022, 1, 0, 200); // NUM2
+    rDoc.CalcAll();
+    // First two are the same, the sum changes.
+    CPPUNIT_ASSERT_EQUAL(2.0, rDoc.GetValue(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(300.0, rDoc.GetValue(0, 2, 0));
+
+    xDocSh->DoClose();
 }
 
 void ScJumboSheetsTest::testTdf134392()
