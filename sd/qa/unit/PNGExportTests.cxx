@@ -281,6 +281,61 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113197)
+{
+    mxComponent
+        = loadFromDesktop(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf113197.odp"));
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    uno::Sequence<beans::PropertyValue> aFilterData{
+        comphelper::makePropertyValue("PixelWidth", sal_Int32(100)),
+        comphelper::makePropertyValue("PixelHeight", sal_Int32(100)),
+    };
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG")),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                           uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xPage);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+
+    // make sure the bitmap is not empty and correct size (PNG export->import was successful)
+    Size aSize = aBMPEx.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(Size(100, 100), aSize);
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    {
+        Bitmap::ScopedReadAccess pReadAccess(aBMP);
+        for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+        {
+            // Check the bottom half of the document is white
+            for (tools::Long nY = 50; nY < aSize.Height() - 1; ++nY)
+            {
+                // Check all pixels in the image are black
+                // Without the fix in place, this test would have failed with
+                // - Expected: Color: R:255 G:255 B:255 A:0
+                // - Actual  : Color: R:153 G:0 B:51 A:0
+                const Color aColor = pReadAccess->GetColor(nY, nX);
+                CPPUNIT_ASSERT_EQUAL(COL_WHITE, aColor);
+            }
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf93124)
 {
     mxComponent
