@@ -2338,24 +2338,21 @@ void SwTextFrame::SwClientNotify(SwModify const& rModify, SfxHint const& rHint)
             InvalidateLineNum();
 
             const SwAttrSet& rNewSet = *static_cast<const SwAttrSetChg*>(pNew)->GetChgSet();
-            const SfxPoolItem* pItem = nullptr;
             int nClear = 0;
             sal_uInt16 nCount = rNewSet.Count();
 
-            if( SfxItemState::SET == rNewSet.GetItemState( RES_TXTATR_FTN, false, &pItem ))
+            if( const SwFormatFootnote* pItem = rNewSet.GetItemIfSet( RES_TXTATR_FTN, false ) )
             {
-                nPos = MapModelToView(&rNode,
-                    static_cast<const SwFormatFootnote*>(pItem)->GetTextFootnote()->GetStart());
+                nPos = MapModelToView(&rNode, pItem->GetTextFootnote()->GetStart());
                 if (IsIdxInside(nPos, TextFrameIndex(1)))
                     Prepare( PrepareHint::FootnoteInvalidation, pNew );
                 nClear = 0x01;
                 --nCount;
             }
 
-            if( SfxItemState::SET == rNewSet.GetItemState( RES_TXTATR_FIELD, false, &pItem ))
+            if( const SwFormatField* pItem = rNewSet.GetItemIfSet( RES_TXTATR_FIELD, false ) )
             {
-                nPos = MapModelToView(&rNode,
-                    static_cast<const SwFormatField*>(pItem)->GetTextField()->GetStart());
+                nPos = MapModelToView(&rNode, pItem->GetTextField()->GetStart());
                 if (IsIdxInside(nPos, TextFrameIndex(1)))
                 {
                     const SfxPoolItem* pOldItem = pOld ?

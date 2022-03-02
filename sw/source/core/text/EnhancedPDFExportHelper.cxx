@@ -1730,15 +1730,15 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
         for( size_t n = 0; n < nSpzFrameFormatsCount; ++n )
         {
             SwFrameFormat* pFrameFormat = (*pTable)[n];
-            const SfxPoolItem* pItem;
+            const SwFormatURL* pItem;
             if ( RES_DRAWFRMFMT != pFrameFormat->Which() &&
                 GetFrameOfModify(mrSh.GetLayout(), *pFrameFormat, SwFrameType::Fly) &&
-                 SfxItemState::SET == pFrameFormat->GetAttrSet().GetItemState( RES_URL, true, &pItem ) )
+                 (pItem = pFrameFormat->GetAttrSet().GetItemIfSet( RES_URL )) )
             {
                 const SwPageFrame* pCurrPage =
                     static_cast<const SwPageFrame*>( mrSh.GetLayout()->Lower() );
 
-                OUString aURL( static_cast<const SwFormatURL*>(pItem)->GetURL() );
+                OUString aURL( pItem->GetURL() );
                 if (aURL.isEmpty())
                     continue;
                 const bool bIntern = '#' == aURL[0];
