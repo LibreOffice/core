@@ -31,6 +31,7 @@ class SwTextFootnote;
 // Restoration of the old value in DTor. Implementation in ftnfrm.cxx
 class SwSaveFootnoteHeight
 {
+    SwFrameDeleteGuard aGuard;
     SwFootnoteBossFrame *pBoss;
     const SwTwips nOldHeight;
     SwTwips nNewHeight;
