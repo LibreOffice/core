@@ -132,16 +132,25 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
             /* If it is not a group object or 3D object, we disable "enter
                group". */
-            if( !( ( dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr && nInv == SdrInventor::Default ) ||
+            const SdrObjGroup* pSdrObjGroup = dynamic_cast<const SdrObjGroup*>(pObj);
+
+            if( !( ( pSdrObjGroup != nullptr && nInv == SdrInventor::Default ) ||
                    ( dynamic_cast< const E3dScene* >(pObj) != nullptr ) ) )
             {
                 rSet.DisableItem( SID_ENTER_GROUP );
             }
 
             // If it is not a group object, we disable "ungroup"
-            if(dynamic_cast< const SdrObjGroup *>( pObj ) == nullptr || nInv != SdrInventor::Default)
+            if(pSdrObjGroup == nullptr || nInv != SdrInventor::Default)
             {
                 rSet.DisableItem(SID_UNGROUP);
+            }
+
+            // Support advanced DiagramHelper
+            if(!pSdrObjGroup || !pSdrObjGroup->isDiagram())
+            {
+                rSet.DisableItem( SID_REGENERATE_DIAGRAM );
+                rSet.DisableItem( SID_EDIT_DIAGRAM );
             }
 
             if( nInv == SdrInventor::Default &&

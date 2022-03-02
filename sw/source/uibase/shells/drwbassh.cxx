@@ -48,6 +48,7 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <svx/svxdlg.hxx>
+#include <svx/svdogrp.hxx>
 #include <vcl/unohelp2.hxx>
 #include <swabstdlg.hxx>
 #include <swundo.hxx>
@@ -440,6 +441,39 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 pSdrView->LeaveOneGroup();
                 rBind.Invalidate(SID_ENTER_GROUP);
                 rBind.Invalidate(SID_UNGROUP);
+            }
+            break;
+
+        case SID_REGENERATE_DIAGRAM:
+        case SID_EDIT_DIAGRAM:
+            {
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+
+                if (1 == rMarkList.GetMarkCount())
+                {
+                    SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
+
+                    // Support advanced DiagramHelper
+                    SdrObjGroup* pAnchorObj = dynamic_cast<SdrObjGroup*>(pObj);
+
+                    if(pAnchorObj && pAnchorObj->isDiagram())
+                    {
+                        if(SID_REGENERATE_DIAGRAM == nSlotId)
+                        {
+                            pSdrView->UnmarkAll();
+                            pAnchorObj->getDiagramHelper()->reLayout();
+                            pSdrView->MarkObj(pObj, pSdrView->GetSdrPageView());
+                        }
+                        else // SID_EDIT_DIAGRAM
+                        {
+                            VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
+                            ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
+                                GetView().GetFrameWeld(),
+                                pAnchorObj->getDiagramHelper());
+                            pDlg->Execute();
+                        }
+                    }
+                }
             }
             break;
 
@@ -906,6 +940,29 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 }
             }
             break;
+
+            case SID_REGENERATE_DIAGRAM:
+            case SID_EDIT_DIAGRAM:
+            {
+                bool bDisable(true);
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
+                if (nullptr != rMarkList.GetMark(0))
+                {
+                    SdrObjGroup* pSdrObjGroup = dynamic_cast<SdrObjGroup*>(rMarkList.GetMark(0)->GetMarkedSdrObj());
+                    if(nullptr != pSdrObjGroup && pSdrObjGroup->isDiagram())
+                    {
+                        bDisable = false;
+                    }
+                }
+
+                if(bDisable)
+                {
+                    rSet.DisableItem(nWhich);
+                }
+            }
+            break;
+
+
         }
         nWhich = aIter.NextWhich();
     }
