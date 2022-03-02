@@ -339,7 +339,7 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
 {
     sal_uInt32 nTableSize;
     const sal_uInt8* table = ttf->table(O_glyf, nTableSize);
-    sal_uInt8 flag, n;
+    sal_uInt8 n;
     int i, j, z;
 
     *pointArray = nullptr;
@@ -384,7 +384,7 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
         return 0;
     const sal_uInt8* p = ptr + nOffset;
 
-    const sal_uInt32 nBytesRemaining = nMaxGlyphSize - nOffset;
+    sal_uInt32 nBytesRemaining = nMaxGlyphSize - nOffset;
     const sal_uInt32 palen = lastPoint+1;
 
     //at a minimum its one byte per entry
@@ -400,10 +400,22 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
 
     i = 0;
     while (i <= lastPoint) {
-        flag = *p++;
+        if (!nBytesRemaining)
+        {
+            SAL_WARN("vcl.fonts", "short read");
+            break;
+        }
+        sal_uInt8 flag = *p++;
+        --nBytesRemaining;
         pa[i++].flags = static_cast<sal_uInt32>(flag);
         if (flag & 8) {                                     /*- repeat flag */
+            if (!nBytesRemaining)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                break;
+            }
             n = *p++;
+            --nBytesRemaining;
             // coverity[tainted_data : FALSE] - i > lastPoint extra checks the n loop bound
             for (j=0; j<n; j++) {
                 if (i > lastPoint) {                        /*- if the font is really broken */
@@ -419,14 +431,26 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
     z = 0;
     for (i = 0; i <= lastPoint; i++) {
         if (pa[i].flags & 0x02) {
+            if (!nBytesRemaining)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                break;
+            }
             if (pa[i].flags & 0x10) {
                 z += static_cast<int>(*p++);
             } else {
                 z -= static_cast<int>(*p++);
             }
+            --nBytesRemaining;
         } else if ( !(pa[i].flags & 0x10)) {
+            if (nBytesRemaining < 2)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                break;
+            }
             z += GetInt16(p, 0);
             p += 2;
+            nBytesRemaining -= 2;
         }
         pa[i].x = static_cast<sal_Int16>(z);
     }
@@ -435,14 +459,26 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
     z = 0;
     for (i = 0; i <= lastPoint; i++) {
         if (pa[i].flags & 0x04) {
+            if (!nBytesRemaining)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                break;
+            }
             if (pa[i].flags & 0x20) {
                 z += *p++;
             } else {
                 z -= *p++;
             }
+            --nBytesRemaining;
         } else if ( !(pa[i].flags & 0x20)) {
+            if (nBytesRemaining < 2)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                break;
+            }
             z += GetInt16(p, 0);
             p += 2;
+            nBytesRemaining -= 2;
         }
         pa[i].y = static_cast<sal_Int16>(z);
     }
