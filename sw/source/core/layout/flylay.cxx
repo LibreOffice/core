@@ -333,13 +333,11 @@ bool SwFlyFreeFrame::supportsAutoContour() const
 
     // Check for Padding. Do not support when padding is used, this will
     // produce a covered space around the object (filled with fill defines)
-    const SfxPoolItem* pItem(nullptr);
+    const SvxBoxItem* pBoxItem(nullptr);
 
-    if(GetFormat() && SfxItemState::SET == GetFormat()->GetItemState(RES_BOX, false, &pItem))
+    if(GetFormat() && (pBoxItem = GetFormat()->GetItemIfSet(RES_BOX, false)))
     {
-        const SvxBoxItem& rBox = *static_cast< const SvxBoxItem* >(pItem);
-
-        if(rBox.HasBorder(/*bTreatPaddingAsBorder*/true))
+        if(pBoxItem->HasBorder(/*bTreatPaddingAsBorder*/true))
         {
             return false;
         }
