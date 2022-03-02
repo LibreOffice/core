@@ -227,6 +227,7 @@ private:
     mutable std::unique_ptr<ScRangeName> mpRangeName;
 
     std::unique_ptr<ScConditionalFormatList> mpCondFormatList;
+    sc::SparklineList maSparklineList;
 
     ScAddress       maLOKFreezeCell;
 
@@ -469,6 +470,14 @@ public:
     void        GetFirstDataPos(SCCOL& rCol, SCROW& rRow) const;
     void        GetLastDataPos(SCCOL& rCol, SCROW& rRow) const;
 
+    // Sparklines
+
+    sc::Sparkline* GetSparkline(SCCOL nCol, SCROW nRow);
+    sc::Sparkline* CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<sc::SparklineGroup> & pSparklineGroup);
+
+    sc::SparklineList& GetSparklineList();
+
+    // Notes / Comments
     std::unique_ptr<ScPostIt> ReleaseNote( SCCOL nCol, SCROW nRow );
     ScPostIt*                 GetNote( SCCOL nCol, SCROW nRow );
     void                      SetNote( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPostIt> pNote );

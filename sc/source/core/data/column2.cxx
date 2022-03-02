@@ -1970,14 +1970,14 @@ void ScColumn::PrepareBroadcastersForDestruction()
     }
 }
 
-sc::Sparkline* ScColumn::GetSparkline(SCROW nRow)
+sc::SparklineCell* ScColumn::GetSparklineCell(SCROW nRow)
 {
-    return maSparklines.get<sc::Sparkline*>(nRow);
+    return maSparklines.get<sc::SparklineCell*>(nRow);
 }
 
-void ScColumn::SetSparkline(SCROW nRow, std::unique_ptr<sc::Sparkline> pSparkline)
+void ScColumn::CreateSparklineCell(SCROW nRow, std::shared_ptr<sc::Sparkline> const& pSparkline)
 {
-    maSparklines.set(nRow, pSparkline.release());
+    maSparklines.set(nRow, new sc::SparklineCell(pSparkline));
 }
 
 namespace
