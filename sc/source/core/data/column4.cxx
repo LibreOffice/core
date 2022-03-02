@@ -2150,7 +2150,17 @@ void ScColumn::CheckIntegrity() const
         throw std::runtime_error(os.str());
     }
 
-    // Add more integrity checks as needed.
+    size_t nCount = std::count_if(maCells.cbegin(), maCells.cend(),
+        [](const auto& blk) { return blk.type == sc::element_type_formula; }
+    );
+
+    if (mnBlkCountFormula != nCount)
+    {
+        std::ostringstream os;
+        os << "incorrect cached formula block count (expected=" << nCount << "; actual="
+            << mnBlkCountFormula << ")";
+        throw std::runtime_error(os.str());
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
