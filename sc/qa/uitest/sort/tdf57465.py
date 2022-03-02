@@ -25,11 +25,11 @@ class tdf57465(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
 
-                xHeader = xDialog.getChild("header")
+                xHeader = xDialog.getChild("cbHeader")
                 if (get_state_as_dict(xHeader)["Selected"]) == 'true':
                     xHeader.executeAction("CLICK", tuple())
 
-                xLeftRight = xDialog.getChild("leftright")
+                xLeftRight = xDialog.getChild("rbLeftRight")
                 xLeftRight.executeAction("CLICK", tuple())
 
                 select_pos(xTabs, "0")

@@ -31,8 +31,8 @@ class tdf49531(UITestCase):
                 xTabs = xDialog.getChild("tabcontrol")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")
-                xtopdown = xDialog.getChild("topdown")
-                xHeader = xDialog.getChild("header")
+                xtopdown = xDialog.getChild("rbTopDown")
+                xHeader = xDialog.getChild("cbHeader")
                 if (get_state_as_dict(xNatural)["Selected"]) == "true":
                     xNatural.executeAction("CLICK", tuple())
                 if (get_state_as_dict(xHeader)["Selected"]) == "true":

@@ -85,7 +85,7 @@ class CalcNaturalSorting(UITestCase):
             #Open sort dialog by DATA - SORT
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                xleftright = xDialog.getChild("leftright")
+                xleftright = xDialog.getChild("rbLeftRight")
                 select_pos(xTabs, "1")
                 xNatural = xDialog.getChild("naturalsort")
                 xleftright.executeAction("CLICK", tuple())

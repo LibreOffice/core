@@ -28,7 +28,7 @@ class tdf81696(UITestCase):
             #Open sort dialog by DATA - SORT,Just sort it by Column A, ascending. (it's default)
             with self.ui_test.execute_dialog_through_command(".uno:DataSort") as xDialog:
                 xTabs = xDialog.getChild("tabcontrol")
-                xleftright = xDialog.getChild("leftright")
+                xleftright = xDialog.getChild("rbLeftRight")
                 select_pos(xTabs, "0")
 
             #verify
