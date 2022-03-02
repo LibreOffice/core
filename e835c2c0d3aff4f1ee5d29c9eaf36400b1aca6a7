@@ -52,6 +52,24 @@
       "parentUuid": "2e32e2c0_62fda492",
       "revId": "e835c2c0d3aff4f1ee5d29c9eaf36400b1aca6a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1738b289_0d9a2de5",
+        "filename": "sw/qa/extras/odfimport/odfimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 1334,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-03-02T07:35:45Z",
+      "side": 1,
+      "message": "Hi Xisco,\ni will re-examine the problem, again. I have written crash but this is not a really crash, because writer works, only hangs, because when the shape is selected and you try to scroll down it does not work. (This was in the ticket if i remember well) So crash is not correct i will change it. Locally when i checked the test, without the fix it stopped with fatal exception/segfault if i remember well, with the fix it passed, so there should be a much better solution to check this, so if you have any suggestion i will accept it. Thanks.",
+      "parentUuid": "911b4959_e536de9c",
+      "revId": "e835c2c0d3aff4f1ee5d29c9eaf36400b1aca6a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
