@@ -1792,7 +1792,7 @@ HtmlTokenId HTMLParser::FilterXMP( HtmlTokenId nToken )
             {
                 UnescapeToken();
                 sSaveToken += " ";
-                aToken = sSaveToken + aToken;
+                aToken.insert(0, sSaveToken);
             }
             else
                 aToken = sSaveToken;
