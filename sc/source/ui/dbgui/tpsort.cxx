@@ -76,6 +76,8 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
+        aStrRowLabel    ( ScResId( SCSTR_ROW_LABEL ) ),
+        aStrColLabel    ( ScResId( SCSTR_COL_LABEL ) ),
 
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pViewData       ( nullptr ),
@@ -86,6 +88,10 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
         bHasHeader      ( false ),
         bSortByRows     ( false )
 
+    , m_xTop(m_xBuilder->weld_container("TopWindow"))
+    , m_xBtnHeader(m_xBuilder->weld_check_button("cbHeader"))
+    , m_xBtnTopDown(m_xBuilder->weld_radio_button("rbTopDown"))
+    , m_xBtnLeftRight(m_xBuilder->weld_radio_button("rbLeftRight"))
     , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("SortCriteriaPage"))
     , m_xBox(m_xBuilder->weld_container("SortKeyWindow"))
     , m_aSortWin(m_xBox.get())
@@ -106,6 +112,29 @@ ScTabPageSortFields::~ScTabPageSortFields()
 
 void ScTabPageSortFields::Init()
 {
+    // Check whether the field that is passed on is a database field:
+    ScDocument* pDoc = pViewData ? &pViewData->GetDocument() : nullptr;
+    if ( pDoc )
+    {
+        ScDBCollection* pDBColl = pDoc->GetDBCollection();
+        const SCTAB     nCurTab = pViewData->GetTabNo();
+        if ( pDBColl )
+        {
+            ScDBData* pDBData
+                    = pDBColl->GetDBAtArea( nCurTab,
+                                            aSortData.nCol1, aSortData.nRow1,
+                                            aSortData.nCol2, aSortData.nRow2 );
+            if ( pDBData )
+            {
+                m_xBtnHeader->set_active(pDBData->HasHeader());
+            }
+        }
+    }
+    m_xBtnHeader->set_label(aStrColLabel);
+
+    m_xBtnTopDown->connect_toggled( LINK( this, ScTabPageSortFields, SortDirHdl ) );
+    m_xBtnLeftRight->connect_toggled( LINK( this, ScTabPageSortFields, SortDirHdl ) );
+
     const ScSortItem& rSortItem = GetItemSet().Get( nWhichSort );
 
     pViewData = rSortItem.GetViewData();
@@ -130,6 +159,18 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
 {
     bSortByRows = aSortData.bByRow;
     bHasHeader  = aSortData.bHasHeader;
+
+    m_xBtnHeader->set_active( bHasHeader );
+    if ( aSortData.bByRow )
+    {
+        m_xBtnTopDown->set_active(true);
+        m_xBtnHeader->set_label( aStrColLabel );
+    }
+    else
+    {
+        m_xBtnLeftRight->set_active(true);
+        m_xBtnHeader->set_label( aStrRowLabel );
+    }
 
     if (m_aSortWin.m_aSortKeyItems[0]->m_xLbSort->get_count() == 0)
         FillFieldLists(0);
@@ -211,6 +252,9 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
 {
     ScSortParam aNewSortData = aSortData;
 
+    aNewSortData.bByRow        = m_xBtnTopDown->get_active();
+    aNewSortData.bHasHeader    = m_xBtnHeader->get_active();
+
     const SfxItemSet* pExample = GetDialogExampleSet();
     if (pExample)
     {
@@ -276,6 +320,21 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
     ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
     if (!pDlg)
         return;
+
+    if ( m_xBtnHeader->get_active() != pDlg->GetHeaders() )
+    {
+        m_xBtnHeader->set_active( pDlg->GetHeaders() );
+    }
+
+    if ( m_xBtnTopDown->get_active() != pDlg->GetByRows() )
+    {
+        m_xBtnTopDown->set_active( pDlg->GetByRows() );
+        m_xBtnLeftRight->set_active( !pDlg->GetByRows() );
+    }
+
+    m_xBtnHeader->set_label( (pDlg->GetByRows())
+                        ? aStrColLabel
+                        : aStrRowLabel );
 
     if ( bHasHeader == pDlg->GetHeaders() && bSortByRows == pDlg->GetByRows() )
         return;
@@ -416,6 +475,14 @@ void ScTabPageSortFields::SetLastSortKey( sal_uInt16 nItem )
 
 // Handler:
 
+IMPL_LINK_NOARG(ScTabPageSortFields, SortDirHdl, weld::Toggleable&, void)
+{
+    if (m_xBtnTopDown->get_active())
+        m_xBtnHeader->set_label(aStrColLabel);
+    else
+        m_xBtnHeader->set_label(aStrRowLabel);
+}
+
 IMPL_LINK( ScTabPageSortFields, SelectHdl, weld::ComboBox&, rLb, void )
 {
     OUString aSelEntry = rLb.get_active_text();
@@ -473,15 +540,12 @@ void ScTabPageSortFields::AddSortKey( sal_uInt16 nItem )
 
 ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rArgSet)
     : SfxTabPage(pPage, pController, "modules/scalc/ui/sortoptionspage.ui", "SortOptionsPage", &rArgSet)
-    , aStrRowLabel(ScResId(SCSTR_ROW_LABEL))
-    , aStrColLabel(ScResId(SCSTR_COL_LABEL))
     , aStrUndefined(ScResId(SCSTR_UNDEFINED))
     , nWhichSort(rArgSet.GetPool()->GetWhich(SID_SORT))
     , aSortData(rArgSet.Get(nWhichSort).GetSortData())
     , pViewData(nullptr)
     , pDoc(nullptr)
     , m_xBtnCase(m_xBuilder->weld_check_button("case"))
-    , m_xBtnHeader(m_xBuilder->weld_check_button("header"))
     , m_xBtnFormats(m_xBuilder->weld_check_button("formats"))
     , m_xBtnNaturalSort(m_xBuilder->weld_check_button("naturalsort"))
     , m_xBtnCopyResult(m_xBuilder->weld_check_button("copyresult"))
@@ -492,8 +556,6 @@ ScTabPageSortOptions::ScTabPageSortOptions(weld::Container* pPage, weld::DialogC
     , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("language")))
     , m_xFtAlgorithm(m_xBuilder->weld_label("algorithmft"))
     , m_xLbAlgorithm(m_xBuilder->weld_combo_box("algorithmlb"))
-    , m_xBtnTopDown(m_xBuilder->weld_radio_button("topdown"))
-    , m_xBtnLeftRight(m_xBuilder->weld_radio_button("leftright"))
     , m_xBtnIncComments(m_xBuilder->weld_check_button("includenotes"))
     , m_xBtnIncImages(m_xBuilder->weld_check_button("includeimages"))
 {
@@ -515,8 +577,6 @@ void ScTabPageSortOptions::Init()
     m_xLbOutPos->connect_changed( LINK( this, ScTabPageSortOptions, SelOutPosHdl ) );
     m_xBtnCopyResult->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
     m_xBtnSortUser->connect_toggled( LINK( this, ScTabPageSortOptions, EnableHdl ) );
-    m_xBtnTopDown->connect_toggled( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
-    m_xBtnLeftRight->connect_toggled( LINK( this, ScTabPageSortOptions, SortDirHdl ) );
     m_xLbLanguage->connect_changed( LINK( this, ScTabPageSortOptions, FillAlgorHdl ) );
 
     pViewData = rSortItem.GetViewData();
@@ -526,8 +586,6 @@ void ScTabPageSortOptions::Init()
 
     if ( pViewData && pDoc )
     {
-        ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        const SCTAB     nCurTab     = pViewData->GetTabNo();
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         m_xLbOutPos->clear();
@@ -545,22 +603,6 @@ void ScTabPageSortOptions::Init()
 
         m_xLbOutPos->set_active(0);
         m_xEdOutPos->set_text(OUString());
-
-        // Check whether the field that is passed on is a database field:
-
-        if ( pDBColl )
-        {
-            ScDBData* pDBData
-                    = pDBColl->GetDBAtArea( nCurTab,
-                                            aSortData.nCol1, aSortData.nRow1,
-                                            aSortData.nCol2, aSortData.nRow2 );
-            if ( pDBData )
-            {
-                m_xBtnHeader->set_active(pDBData->HasHeader());
-            }
-        }
-
-        m_xBtnHeader->set_label(aStrColLabel);
     }
 
     FillUserSortListBox();
@@ -593,21 +635,9 @@ void ScTabPageSortOptions::Reset( const SfxItemSet* /* rArgSet */ )
 
     m_xBtnCase->set_active( aSortData.bCaseSens );
     m_xBtnFormats->set_active( aSortData.aDataAreaExtras.mbCellFormats );
-    m_xBtnHeader->set_active( aSortData.bHasHeader );
     m_xBtnNaturalSort->set_active( aSortData.bNaturalSort );
     m_xBtnIncComments->set_active( aSortData.aDataAreaExtras.mbCellNotes );
     m_xBtnIncImages->set_active( aSortData.aDataAreaExtras.mbCellDrawObjects );
-
-    if ( aSortData.bByRow )
-    {
-        m_xBtnTopDown->set_active(true);
-        m_xBtnHeader->set_label( aStrColLabel );
-    }
-    else
-    {
-        m_xBtnLeftRight->set_active(true);
-        m_xBtnHeader->set_label( aStrRowLabel );
-    }
 
     LanguageType eLang = LanguageTag::convertToLanguageType( aSortData.aCollatorLocale, false);
     if ( eLang == LANGUAGE_DONTKNOW )
@@ -656,8 +686,6 @@ bool ScTabPageSortOptions::FillItemSet( SfxItemSet* rArgSet )
         if (const ScSortItem* pSortItem = pExample->GetItemIfSet(nWhichSort))
             aNewSortData = pSortItem->GetSortData();
     }
-    aNewSortData.bByRow          = m_xBtnTopDown->get_active();
-    aNewSortData.bHasHeader      = m_xBtnHeader->get_active();
     aNewSortData.bCaseSens       = m_xBtnCase->get_active();
     aNewSortData.bNaturalSort    = m_xBtnNaturalSort->get_active();
     aNewSortData.aDataAreaExtras.mbCellNotes = m_xBtnIncComments->get_active();
@@ -701,21 +729,6 @@ void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
     ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
     if (!pDlg)
         return;
-
-    if ( m_xBtnHeader->get_active() != pDlg->GetHeaders() )
-    {
-        m_xBtnHeader->set_active( pDlg->GetHeaders() );
-    }
-
-    if ( m_xBtnTopDown->get_active() != pDlg->GetByRows() )
-    {
-        m_xBtnTopDown->set_active( pDlg->GetByRows() );
-        m_xBtnLeftRight->set_active( !pDlg->GetByRows() );
-    }
-
-    m_xBtnHeader->set_label( (pDlg->GetByRows())
-                        ? aStrColLabel
-                        : aStrRowLabel );
 }
 
 DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
@@ -759,13 +772,13 @@ DeactivateRC ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
         }
     }
 
-    ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
+/*    ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController());
     if (pDlg && bPosInputOk)
     {
         pDlg->SetHeaders( m_xBtnHeader->get_active() );
         pDlg->SetByRows ( m_xBtnTopDown->get_active() );
     }
-
+*/
     if ( pSetP && bPosInputOk )
         FillItemSet( pSetP );
 
@@ -827,14 +840,6 @@ IMPL_LINK(ScTabPageSortOptions, SelOutPosHdl, weld::ComboBox&, rLb, void)
 
         m_xEdOutPos->set_text(aString);
     }
-}
-
-IMPL_LINK_NOARG(ScTabPageSortOptions, SortDirHdl, weld::Toggleable&, void)
-{
-    if (m_xBtnTopDown->get_active())
-        m_xBtnHeader->set_label(aStrColLabel);
-    else
-        m_xBtnHeader->set_label(aStrRowLabel);
 }
 
 void ScTabPageSortOptions::EdOutPosModHdl()

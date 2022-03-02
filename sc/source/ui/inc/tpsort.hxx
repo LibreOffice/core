@@ -61,6 +61,8 @@ private:
     OUString            aStrUndefined;
     OUString            aStrColumn;
     OUString            aStrRow;
+    OUString            aStrRowLabel;
+    OUString            aStrColLabel;
 
     TypedWhichId<ScSortItem> nWhichSort;
     ScViewData*         pViewData;
@@ -72,6 +74,10 @@ private:
     bool                bHasHeader;
     bool                bSortByRows;
 
+    std::unique_ptr<weld::Container> m_xTop;
+    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
+    std::unique_ptr<weld::RadioButton> m_xBtnTopDown;
+    std::unique_ptr<weld::RadioButton> m_xBtnLeftRight;
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::unique_ptr<weld::Container> m_xBox;
     ScSortKeyWindow m_aSortWin;
@@ -87,6 +93,8 @@ private:
     // Handler ------------------------
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
     DECL_LINK(ScrollToEndHdl, Timer*, void);
+    DECL_LINK(SortDirHdl, weld::Toggleable&, void);
+
 };
 
 // Sort Options
@@ -107,8 +115,6 @@ protected:
     virtual DeactivateRC   DeactivatePage  ( SfxItemSet* pSet ) override;
 
 private:
-    OUString            aStrRowLabel;
-    OUString            aStrColLabel;
     OUString            aStrUndefined;
 
     TypedWhichId<ScSortItem> nWhichSort;
@@ -121,7 +127,6 @@ private:
     std::unique_ptr<CollatorWrapper>   m_xColWrap;
 
     std::unique_ptr<weld::CheckButton> m_xBtnCase;
-    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
     std::unique_ptr<weld::CheckButton> m_xBtnFormats;
     std::unique_ptr<weld::CheckButton> m_xBtnNaturalSort;
     std::unique_ptr<weld::CheckButton> m_xBtnCopyResult;
@@ -132,8 +137,6 @@ private:
     std::unique_ptr<SvxLanguageBox> m_xLbLanguage;
     std::unique_ptr<weld::Label> m_xFtAlgorithm;
     std::unique_ptr<weld::ComboBox> m_xLbAlgorithm;
-    std::unique_ptr<weld::RadioButton> m_xBtnTopDown;
-    std::unique_ptr<weld::RadioButton> m_xBtnLeftRight;
     std::unique_ptr<weld::CheckButton> m_xBtnIncComments;
     std::unique_ptr<weld::CheckButton> m_xBtnIncImages;
 
@@ -145,7 +148,6 @@ private:
     DECL_LINK( EnableHdl, weld::Toggleable&, void );
     DECL_LINK( SelOutPosHdl, weld::ComboBox&, void );
     void EdOutPosModHdl();
-    DECL_LINK( SortDirHdl, weld::Toggleable&, void );
     void FillAlgor();
     DECL_LINK( FillAlgorHdl, weld::ComboBox&, void );
 };
