@@ -1223,9 +1223,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author",
                     u"Tekijä");
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "date",
-                    "0-00-00T00:00:00Z");
+                    "1970-01-01T00:00:00Z");
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "date",
-                    "0-00-00T00:00:00Z");
+                    "1970-01-01T00:00:00Z");
     }
 }
 
