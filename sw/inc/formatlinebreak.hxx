@@ -70,7 +70,7 @@ public:
 
     void InvalidateLineBreak();
 
-    css::uno::Reference<css::text::XTextRange> getAnchor(SwDoc& rDoc) const;
+    css::uno::Reference<css::text::XTextRange> GetAnchor() const;
 
     void SetTextLineBreak(SwTextLineBreak* pTextAttr) { m_pTextAttr = pTextAttr; }
 
