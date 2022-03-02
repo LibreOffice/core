@@ -30,6 +30,7 @@
 
 #include "strimp.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
@@ -43,6 +44,25 @@ void internRelease(rtl_uString*);
 namespace rtl::str
 {
 template <typename C> auto IMPL_RTL_USTRCODE(C c) { return std::make_unsigned_t<C>(c); }
+
+template <typename C> auto null_terminated(C* pStr)
+{
+    assert(pStr);
+    return pStr;
+}
+
+template <typename C> auto with_length(C* pStr, sal_Int32 nLength)
+{
+    assert(nLength >= 0);
+    assert(pStr || nLength == 0);
+    return std::basic_string_view(pStr, nLength);
+}
+
+template <class SV> auto getIter(const SV& sv) { return sv.begin(); }
+template <typename C> auto getIter(C* pStr) { return pStr; }
+
+template <class SV> auto good(typename SV::iterator iter, const SV& sv) { return iter != sv.end(); }
+template <typename C> auto good(C* pStr, C*) { return *pStr != 0; }
 
 template <typename C> void Copy(C* _pDest, const C* _pSrc, sal_Int32 _nCount)
 {
@@ -124,16 +144,30 @@ struct CompareIgnoreAsciiCase
 
 /* ----------------------------------------------------------------------- */
 
-template <typename C1, typename C2, class Compare>
-sal_Int32 compare(const C1* pStr1, const C2* pStr2, Compare)
+struct NoShortening
 {
-    assert(pStr1);
-    assert(pStr2);
+    constexpr bool operator>=(int) { return true; } // for assert
+    constexpr bool operator==(int) { return false; } // for loop break check
+    constexpr void operator--() {} // for decrement in loop
+} constexpr noShortening;
+
+template <class S1, class S2, class Compare, typename Shortening>
+sal_Int32 compare(S1 s1, S2 s2, Compare, Shortening shortenedLength)
+{
+    assert(shortenedLength >= 0);
+    auto pStr1 = getIter(s1);
+    auto pStr2 = getIter(s2);
     for (;;)
     {
-        const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2);
-        if (!(nRet == 0 && *pStr2))
+        if (shortenedLength == 0)
+            return 0;
+        if (!good(pStr2, s2))
+            return good(pStr1, s1) ? 1 : 0;
+        if (!good(pStr1, s1))
+            return -1;
+        if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
             return nRet;
+        --shortenedLength;
         ++pStr1;
         ++pStr2;
     }
@@ -141,115 +175,27 @@ sal_Int32 compare(const C1* pStr1, const C2* pStr2, Compare)
 
 // take advantage of builtin optimisations
 template <typename C, std::enable_if_t<sizeof(C) == sizeof(wchar_t), int> = 0>
-sal_Int32 compare(const C* pStr1, const C* pStr2, CompareNormal)
+sal_Int32 compare(C* pStr1, C* pStr2, CompareNormal, NoShortening)
 {
-    assert(pStr1);
-    assert(pStr2);
     return wcscmp(reinterpret_cast<wchar_t const*>(pStr1), reinterpret_cast<wchar_t const*>(pStr2));
 }
-inline sal_Int32 compare(const char* pStr1, const char* pStr2, CompareNormal)
+template <typename C, std::enable_if_t<sizeof(C) == sizeof(char), int> = 0>
+sal_Int32 compare(C* pStr1, C* pStr2, CompareNormal, NoShortening)
 {
-    assert(pStr1);
-    assert(pStr2);
     return strcmp(pStr1, pStr2);
 }
-
-/* ----------------------------------------------------------------------- */
-
-template <typename C1, typename C2, class Compare>
-sal_Int32 compare_WithLength(const C1* pStr1, sal_Int32 nStr1Len, const C2* pStr2, Compare)
+template <typename SV> sal_Int32 compare(SV s1, SV s2, CompareNormal, NoShortening)
 {
-    assert(pStr1 || nStr1Len == 0);
-    assert(nStr1Len >= 0);
-    assert(pStr2);
-    for (;;)
-    {
-        if (*pStr2 == '\0')
-            return nStr1Len;
-        if (nStr1Len == 0)
-            return -1;
-        if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
-            return nRet;
-        pStr1++;
-        pStr2++;
-        nStr1Len--;
-    }
+    return s1.compare(s2);
 }
-
-/* ----------------------------------------------------------------------- */
-
 template <typename C1, typename C2, class Compare>
-sal_Int32 compare_WithLengths(const C1* pStr1, sal_Int32 nStr1Len,
-                              const C2* pStr2, sal_Int32 nStr2Len, Compare)
+sal_Int32 compare(std::basic_string_view<C1> s1, std::basic_string_view<C2> s2, Compare cf,
+                           sal_Int32 nShortenedLength)
 {
-    assert(pStr1 || nStr1Len == 0);
-    assert(nStr1Len >= 0);
-    assert(pStr2 || nStr2Len == 0);
-    assert(nStr2Len >= 0);
-    // TODO: use std::lexicographical_compare_three_way when C++20 is available
-    const C1* pStr1End = pStr1 + nStr1Len;
-    const C2* pStr2End = pStr2 + nStr2Len;
-    while ((pStr1 < pStr1End) && (pStr2 < pStr2End))
-    {
-        if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
-            return nRet;
-        pStr1++;
-        pStr2++;
-    }
-
-    return nStr1Len - nStr2Len;
-}
-
-template <typename C>
-sal_Int32 compare_WithLengths(const C* pStr1, sal_Int32 nStr1Len,
-                              const C* pStr2, sal_Int32 nStr2Len, CompareNormal)
-{
-    assert(pStr1 || nStr1Len == 0);
-    assert(nStr1Len >= 0);
-    assert(pStr2 || nStr2Len == 0);
-    assert(nStr2Len >= 0);
-    // take advantage of builtin optimisations
-    std::basic_string_view<C> aView1(pStr1, nStr1Len);
-    std::basic_string_view<C> aView2(pStr2, nStr2Len);
-    return aView1.compare(aView2);
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename C1, typename C2, class Compare>
-sal_Int32 shortenedCompare_WithLength(const C1* pStr1, sal_Int32 nStr1Len, const C2* pStr2,
-                                      sal_Int32 nShortenedLength, Compare)
-{
-    assert(pStr1);
-    assert(nStr1Len >= 0);
-    assert(pStr2);
-    assert(nShortenedLength >= 0);
-    const C1* pStr1End = pStr1 + nStr1Len;
-    for (;;)
-    {
-        if (nShortenedLength == 0)
-            return 0;
-        if (*pStr2 == '\0')
-            return pStr1End - pStr1;
-        if (pStr1 == pStr1End)
-            return -1; // first is a substring of the second string => less (negative value)
-        if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
-            return nRet;
-        nShortenedLength--;
-        pStr1++;
-        pStr2++;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename C1, typename C2, class Compare>
-sal_Int32 shortenedCompare_WithLengths(const C1* pStr1, sal_Int32 nStr1Len,
-                                       const C2* pStr2, sal_Int32 nStr2Len,
-                                       sal_Int32 nShortenedLength, Compare cf)
-{
-    return compare_WithLengths(pStr1, std::min(nStr1Len, nShortenedLength),
-                               pStr2, std::min(nStr2Len, nShortenedLength), cf);
+    return compare(
+        s1.substr(0, std::min<size_t>(s1.length(), o3tl::make_unsigned(nShortenedLength))),
+        s2.substr(0, std::min<size_t>(s2.length(), o3tl::make_unsigned(nShortenedLength))), cf,
+        noShortening);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -785,12 +731,6 @@ template <typename T> std::pair<T, sal_Int16> DivMod(sal_Int16 nRadix, [[maybe_u
                      -(std::numeric_limits<T>::min() % nRadix) };
     return { std::numeric_limits<T>::max() / nRadix, std::numeric_limits<T>::max() % nRadix };
 }
-
-template <class SV> auto getIter(const SV& sv) { return sv.begin(); }
-template <typename C> auto getIter(const C* pStr) { return pStr; }
-
-template <class SV> auto good(typename SV::iterator iter, const SV& sv) { return iter != sv.end(); }
-template <typename C> auto good(const C* pStr, const C*) { return *pStr != 0; }
 
 template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
 {

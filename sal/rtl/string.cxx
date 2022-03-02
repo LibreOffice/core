@@ -325,15 +325,17 @@ sal_Int32 SAL_CALL rtl_str_getLength(const char* pStr) SAL_THROW_EXTERN_C()
 
 sal_Int32 SAL_CALL rtl_str_compare(const char* pStr1, const char* pStr2) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::compare(pStr1, pStr2, rtl::str::CompareNormal());
+    return rtl::str::compare(rtl::str::null_terminated(pStr1), rtl::str::null_terminated(pStr2),
+                             rtl::str::CompareNormal(), rtl::str::noShortening);
 }
 
 sal_Int32 SAL_CALL rtl_str_compare_WithLength(const char* pStr1, sal_Int32 nStr1Len,
                                               const char* pStr2, sal_Int32 nStr2Len)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::compare_WithLengths(pStr1, nStr1Len, pStr2, nStr2Len,
-                                         rtl::str::CompareNormal());
+    return rtl::str::compare(rtl::str::with_length(pStr1, nStr1Len),
+                             rtl::str::with_length(pStr2, nStr2Len),
+                             rtl::str::CompareNormal(), rtl::str::noShortening);
 }
 
 sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength(const char* pStr1, sal_Int32 nStr1Len,
@@ -341,8 +343,9 @@ sal_Int32 SAL_CALL rtl_str_shortenedCompare_WithLength(const char* pStr1, sal_In
                                                        sal_Int32 nShortenedLength)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::shortenedCompare_WithLengths(pStr1, nStr1Len, pStr2, nStr2Len,
-                                                  nShortenedLength, rtl::str::CompareNormal());
+    return rtl::str::compare(rtl::str::with_length(pStr1, nStr1Len),
+                             rtl::str::with_length(pStr2, nStr2Len),
+                             rtl::str::CompareNormal(), nShortenedLength);
 }
 
 sal_Int32 SAL_CALL rtl_str_reverseCompare_WithLength(const char* pStr1, sal_Int32 nStr1Len,
@@ -356,23 +359,26 @@ sal_Int32 SAL_CALL rtl_str_reverseCompare_WithLength(const char* pStr1, sal_Int3
 sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase(const char* pStr1, const char* pStr2)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::compare(pStr1, pStr2, rtl::str::CompareIgnoreAsciiCase());
+    return rtl::str::compare(rtl::str::null_terminated(pStr1), rtl::str::null_terminated(pStr2),
+                             rtl::str::CompareIgnoreAsciiCase(), rtl::str::noShortening);
 }
 
 sal_Int32 SAL_CALL rtl_str_compareIgnoreAsciiCase_WithLength(const char* pStr1, sal_Int32 nStr1Len,
                                                              const char* pStr2, sal_Int32 nStr2Len)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::compare_WithLengths(pStr1, nStr1Len, pStr2, nStr2Len,
-                                         rtl::str::CompareIgnoreAsciiCase());
+    return rtl::str::compare(rtl::str::with_length(pStr1, nStr1Len),
+                             rtl::str::with_length(pStr2, nStr2Len),
+                             rtl::str::CompareIgnoreAsciiCase(), rtl::str::noShortening);
 }
 
 sal_Int32 SAL_CALL rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
     const char* pStr1, sal_Int32 nStr1Len, const char* pStr2, sal_Int32 nStr2Len,
     sal_Int32 nShortenedLength) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::shortenedCompare_WithLengths(
-        pStr1, nStr1Len, pStr2, nStr2Len, nShortenedLength, rtl::str::CompareIgnoreAsciiCase());
+    return rtl::str::compare(rtl::str::with_length(pStr1, nStr1Len),
+                             rtl::str::with_length(pStr2, nStr2Len),
+                             rtl::str::CompareIgnoreAsciiCase(), nShortenedLength);
 }
 
 sal_Int32 SAL_CALL rtl_str_hashCode(const char* pStr) SAL_THROW_EXTERN_C()
@@ -506,33 +512,28 @@ sal_Bool SAL_CALL rtl_str_toBoolean(const char* pStr) SAL_THROW_EXTERN_C()
 
 sal_Int32 SAL_CALL rtl_str_toInt32(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    return rtl::str::toInt<sal_Int32>(pStr, nRadix);
+    return rtl::str::toInt<sal_Int32>(rtl::str::null_terminated(pStr), nRadix);
 }
 
 sal_Int64 SAL_CALL rtl_str_toInt64(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    return rtl::str::toInt<sal_Int64>(pStr, nRadix);
+    return rtl::str::toInt<sal_Int64>(rtl::str::null_terminated(pStr), nRadix);
 }
 
 sal_Int64 SAL_CALL rtl_str_toInt64_WithLength(const char* pStr, sal_Int16 nRadix,
                                               sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
 {
-    assert(pStr || nStrLength == 0);
-    return rtl::str::toInt<sal_Int64>(std::basic_string_view(pStr, nStrLength), nRadix);
+    return rtl::str::toInt<sal_Int64>(rtl::str::with_length(pStr, nStrLength), nRadix);
 }
 
 sal_uInt32 SAL_CALL rtl_str_toUInt32(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    return rtl::str::toInt<sal_uInt32>(pStr, nRadix);
+    return rtl::str::toInt<sal_uInt32>(rtl::str::null_terminated(pStr), nRadix);
 }
 
 sal_uInt64 SAL_CALL rtl_str_toUInt64(const char* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
-    assert(pStr);
-    return rtl::str::toInt<sal_uInt64>(pStr, nRadix);
+    return rtl::str::toInt<sal_uInt64>(rtl::str::null_terminated(pStr), nRadix);
 }
 
 rtl_String* rtl_string_ImplAlloc(sal_Int32 nLen) { return rtl::str::Alloc<rtl_String>(nLen); }
