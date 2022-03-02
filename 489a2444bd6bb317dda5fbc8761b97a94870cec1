@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d375eeb_a690fc80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-03-02T10:51:42Z",
+      "side": 1,
+      "message": "I\u0027ve Just tested it with:\nVersion: 7.2.7.0.0+ (x64) / LibreOffice Community\nBuild ID: 489a2444bd6bb317dda5fbc8761b97a94870cec1\nCPU threads: 8; OS: Windows 10.0 Build 19043; UI render: Skia/Raster; VCL: win\nLocale: hu-HU (hu_HU); UI: hu-HU\nCalc: CL\nSo it seems to work, can be submitted in my opinion.",
+      "revId": "489a2444bd6bb317dda5fbc8761b97a94870cec1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
