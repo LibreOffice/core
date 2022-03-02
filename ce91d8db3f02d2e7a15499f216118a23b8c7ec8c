@@ -16,6 +16,24 @@
       "message": "I haven\u0027t really done anything right at all on this bug report/patches. Yikes.\n\nEike: you are a good reviewer. Thanks for keeping my feet to the fire.",
       "revId": "ce91d8db3f02d2e7a15499f216118a23b8c7ec8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e133d37c_4fbe5773",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-02T12:05:18Z",
+      "side": 1,
+      "message": ":-D Thanks!",
+      "parentUuid": "c4b1a761_3c42da9f",
+      "revId": "ce91d8db3f02d2e7a15499f216118a23b8c7ec8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
