@@ -250,6 +250,9 @@ void SwXTextPortion::GetPropertyValue(
             case PORTION_ANNOTATION_END:
                 pRet = "AnnotationEnd";
                 break;
+            case PORTION_LINEBREAK:
+                pRet = "LineBreak";
+                break;
             default:
                 pRet = nullptr;
             }
@@ -280,6 +283,9 @@ void SwXTextPortion::GetPropertyValue(
         case FN_UNO_META:
             rVal <<= m_xMeta;
         break;
+        case FN_UNO_LINEBREAK:
+            rVal <<= m_xLineBreak;
+            break;
         case FN_UNO_IS_COLLAPSED:
         {
             switch (m_ePortionType)

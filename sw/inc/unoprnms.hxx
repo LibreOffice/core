@@ -867,6 +867,7 @@
 #define UNO_NAME_RESOLVED "Resolved"
 #define UNO_NAME_ALLOW_OVERLAP "AllowOverlap"
 #define UNO_NAME_CLEAR "Clear"
+#define UNO_NAME_LINEBREAK "LineBreak"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

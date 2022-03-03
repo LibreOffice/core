@@ -250,6 +250,37 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakInsert)
     CPPUNIT_ASSERT_EQUAL(SwLineBreakClear::ALL, rFormatLineBreak.GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testLineBreakTextPortionEnum)
+{
+    // Given a document with a clearing break:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xLineBreak(
+        xMSF->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
+    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+
+    // When enumerating the text portions of the only paragraph in the document:
+    uno::Reference<css::text::XTextRange> xTextPortion = getRun(getParagraph(1), 1);
+
+    // Then make sure that the text portion type is correct + the clear type can be read:
+    auto aPortionType = getProperty<OUString>(xTextPortion, "TextPortionType");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: LineBreak
+    // - Actual  : Text
+    // i.e. a line break with properties was part of the normal Text portion, making it impossible
+    // to get those properties.
+    CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"), aPortionType);
+    xLineBreak = getProperty<uno::Reference<text::XTextContent>>(xTextPortion, "LineBreak");
+    eClear = getProperty<sal_Int16>(xLineBreak, "Clear");
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SwLineBreakClear::ALL), eClear);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
