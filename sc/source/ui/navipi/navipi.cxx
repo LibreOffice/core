@@ -899,8 +899,7 @@ void ScNavigatorDlg::MarkDataArea()
         pMarkArea.reset( new ScArea );
 
     pViewSh->MarkDataArea();
-    ScRange aMarkRange;
-    pViewSh->GetViewData().GetMarkData().GetMarkArea(aMarkRange);
+    const ScRange& aMarkRange = pViewSh->GetViewData().GetMarkData().GetMarkArea();
     pMarkArea->nColStart = aMarkRange.aStart.Col();
     pMarkArea->nRowStart = aMarkRange.aStart.Row();
     pMarkArea->nColEnd = aMarkRange.aEnd.Col();
@@ -926,8 +925,7 @@ void ScNavigatorDlg::StartOfDataArea()
     if ( GetViewData() )
     {
         ScMarkData& rMark = pViewData->GetMarkData();
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
+        const ScRange& aMarkRange = rMark.GetMarkArea();
 
         SCCOL nCol = aMarkRange.aStart.Col();
         SCROW nRow = aMarkRange.aStart.Row();
@@ -944,8 +942,7 @@ void ScNavigatorDlg::EndOfDataArea()
     if ( GetViewData() )
     {
         ScMarkData& rMark = pViewData->GetMarkData();
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
+        const ScRange& aMarkRange = rMark.GetMarkArea();
 
         SCCOL nCol = aMarkRange.aEnd.Col();
         SCROW nRow = aMarkRange.aEnd.Row();

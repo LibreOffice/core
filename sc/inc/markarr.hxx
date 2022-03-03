@@ -52,7 +52,6 @@ public:
             ScMarkArray( const ScSheetLimits& rLimits );
             ScMarkArray( ScMarkArray&& rArray ) noexcept;
             ScMarkArray( const ScMarkArray& rArray );
-            ~ScMarkArray();
     void    Reset( bool bMarked = false, SCSIZE nNeeded = 1 );
     bool    GetMark( SCROW nRow ) const;
     void    SetMarkArea( SCROW nStartRow, SCROW nEndRow, bool bMarked );
@@ -82,7 +81,6 @@ class SC_DLLPUBLIC ScMarkArrayIter // iterate over selected range
     SCSIZE              nPos;
 public:
                 ScMarkArrayIter( const ScMarkArray* pNewArray );
-                ~ScMarkArrayIter();
 
     bool        Next( SCROW& rTop, SCROW& rBottom );
     void        reset( const ScMarkArray* pNewArray );

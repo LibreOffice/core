@@ -3046,8 +3046,7 @@ void ScDocument::CopyMultiRangeFromClip(const ScAddress& rDestPos, const ScMarkD
     sc::AutoCalcSwitch aACSwitch(*this, false); // turn of auto calc temporarily.
     NumFmtMergeHandler aNumFmtMergeHdl(*this, *pClipDoc);
 
-    ScRange aDestRange;
-    rMark.GetMarkArea(aDestRange);
+    const ScRange& aDestRange = rMark.GetMarkArea();
 
     bInsertingFromOtherDoc = true;  // No Broadcast/Listener created at Insert
 
@@ -3339,8 +3338,7 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
         bool bOldAutoCalc = GetAutoCalc();
         SetAutoCalc( false );                   // avoid multiple calculations
 
-        ScRange aArea;
-        rMark.GetMultiMarkArea( aArea );
+        const ScRange& aArea = rMark.GetMultiMarkArea();
         SCCOL nStartCol = aArea.aStart.Col();
         SCROW nStartRow = aArea.aStart.Row();
         SCCOL nEndCol = aArea.aEnd.Col();
@@ -4874,8 +4872,7 @@ void ScDocument::ApplySelectionStyle(const ScStyleSheet& rStyle, const ScMarkDat
     // ApplySelectionStyle needs multi mark
     if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea( aRange );
+        const ScRange& aRange = rMark.GetMarkArea();
         ApplyStyleArea( aRange.aStart.Col(), aRange.aStart.Row(),
                           aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rStyle );
     }
@@ -4946,8 +4943,7 @@ const ScStyleSheet* ScDocument::GetSelectionStyle( const ScMarkData& rMark ) con
     }
     if ( rMark.IsMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea( aRange );
+        const ScRange& aRange = rMark.GetMarkArea();
         for (SCTAB i=aRange.aStart.Tab(); i<=aRange.aEnd.Tab() && bEqual && i < static_cast<SCTAB>(maTabs.size()); i++)
             if (maTabs[i] && rMark.GetTableSelect(i))
             {
@@ -5078,8 +5074,7 @@ std::unique_ptr<ScPatternAttr> ScDocument::CreateSelectionPattern( const ScMarkD
     }
     if ( rMark.IsMarked() )                                     // single selection
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
+        const ScRange& aRange = rMark.GetMarkArea();
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
         for (const auto& rTab : rMark)
         {
@@ -5157,8 +5152,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     }
     else if( rMark.IsMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
+        const ScRange& aRange = rMark.GetMarkArea();
         rLineInner.EnableHor( aRange.aStart.Row() != aRange.aEnd.Row() );
         rLineInner.EnableVer( aRange.aStart.Col() != aRange.aEnd.Col() );
         SCTAB nMax = static_cast<SCTAB>(maTabs.size());
@@ -5367,8 +5361,7 @@ bool ScDocument::IsSelectionEditable( const ScMarkData& rMark,
         return false;
     }
 
-    ScRange aRange;
-    rMark.GetMarkArea(aRange);
+    const ScRange& aRange = rMark.GetMarkArea();
 
     bool bOk = true;
     bool bMatrix = ( pOnlyNotBecauseOfMatrix != nullptr );
@@ -5894,8 +5887,7 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
     // ApplySelectionCache needs multi mark
     if ( rMark.IsMarked() && !rMark.IsMultiMarked() )
     {
-        ScRange aRange;
-        rMark.GetMarkArea( aRange );
+        const ScRange& aRange = rMark.GetMarkArea();
         ApplyPatternArea( aRange.aStart.Col(), aRange.aStart.Row(),
                           aRange.aEnd.Col(), aRange.aEnd.Row(), rMark, rAttr, pDataArray, pIsChanged );
     }

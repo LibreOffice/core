@@ -1009,8 +1009,7 @@ bool ScViewFunc::PasteFromClip( InsertDeleteFlags nFlags, ScDocument* pClipDoc,
         {
             // Expand the marked area when the destination area is larger than the
             // current selection, to get the undo do the right thing. (i#106711)
-            ScRange aRange;
-            aFilteredMark.GetMarkArea( aRange );
+            ScRange aRange = aFilteredMark.GetMarkArea();
             if( (aRange.aEnd.Col() - aRange.aStart.Col()) < nDestSizeX )
             {
                 aRange.aEnd.SetCol(aRange.aStart.Col() + nDestSizeX);
