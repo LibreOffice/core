@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e54c2ce_8b8c1ae4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-03T22:06:25Z",
+      "side": 1,
+      "message": "the failure is on windows. not related to this patch",
+      "revId": "f3cccc76d2ecb95998499c1c7b2df4890f30cc94",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
