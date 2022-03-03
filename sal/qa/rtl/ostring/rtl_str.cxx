@@ -28,10 +28,8 @@
 namespace rtl_str
 {
 
-    class compare : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE compare : public CppUnit::TestFixture
     {
-    public:
-
         void compare_000()
             {
                 rtl_str_compare( NULL, NULL);
@@ -48,7 +46,7 @@ namespace rtl_str
                 OString aStr2 = "";
 
                 sal_Int32 nValue = rtl_str_compare( aStr1.getStr(), aStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
             }
 
         void compare_002()
@@ -57,7 +55,7 @@ namespace rtl_str
                 OString aStr2 = "Line must be equal.";
 
                 sal_Int32 nValue = rtl_str_compare( aStr1.getStr(), aStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
             }
 
         void compare_003()
@@ -74,18 +72,16 @@ namespace rtl_str
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(compare);
-    CPPUNIT_TEST(compare_000);
-    CPPUNIT_TEST(compare_000_1);
+//    CPPUNIT_TEST(compare_000); // Commented out: null-terminated arguments cannot be null
+//    CPPUNIT_TEST(compare_000_1); // Commented out: null-terminated arguments cannot be null
     CPPUNIT_TEST(compare_001);
     CPPUNIT_TEST(compare_002);
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST_SUITE_END();
-}; // class compare
+    }; // class compare
 
-    class compareIgnoreAsciiCase : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE compareIgnoreAsciiCase : public CppUnit::TestFixture
     {
-    public:
-
         void compare_000()
             {
                 rtl_str_compareIgnoreAsciiCase( NULL, NULL);
@@ -102,7 +98,7 @@ namespace rtl_str
                 OString aStr2 = "";
 
                 sal_Int32 nValue = rtl_str_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
             }
 
         void compare_002()
@@ -111,7 +107,7 @@ namespace rtl_str
                 OString aStr2 = "Line must be equal.";
 
                 sal_Int32 nValue = rtl_str_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
             }
 
         void compare_002_1()
@@ -120,7 +116,7 @@ namespace rtl_str
                 OString aStr2 = "LINE MUST BE EQUAL.";
 
                 sal_Int32 nValue = rtl_str_compareIgnoreAsciiCase( aStr1.getStr(), aStr2.getStr());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal (if case insensitive).", sal_Int32(0), nValue);
             }
 
         void compare_003()
@@ -137,8 +133,8 @@ namespace rtl_str
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(compareIgnoreAsciiCase);
-    CPPUNIT_TEST(compare_000);
-    CPPUNIT_TEST(compare_000_1);
+//    CPPUNIT_TEST(compare_000); // Commented out: null-terminated arguments cannot be null
+//    CPPUNIT_TEST(compare_000_1); // Commented out: null-terminated arguments cannot be null
     CPPUNIT_TEST(compare_001);
     CPPUNIT_TEST(compare_002);
     CPPUNIT_TEST(compare_002_1);
@@ -146,10 +142,8 @@ namespace rtl_str
     CPPUNIT_TEST_SUITE_END();
     }; // class compareIgnoreAsciiCase
 
-    class shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
-    public:
-
         void compare_000()
             {
                 rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( NULL, 0, NULL, 0, 0);
@@ -166,7 +160,7 @@ namespace rtl_str
                 OString aStr2 = "";
 
                 sal_Int32 nValue = rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(), aStr2.getStr(), aStr2.getLength(), aStr1.getLength());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
             }
 
         void compare_002()
@@ -177,7 +171,7 @@ namespace rtl_str
                 sal_Int32 nValue = rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
                                                                                        aStr1.getLength());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal.", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal.", sal_Int32(0), nValue);
             }
 
         void compare_002_1()
@@ -188,7 +182,7 @@ namespace rtl_str
                 sal_Int32 nValue = rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
                                                                                        aStr1.getLength());
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal (if case insensitive).", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal (if case insensitive).", sal_Int32(0), nValue);
             }
 
         void compare_003()
@@ -199,7 +193,7 @@ namespace rtl_str
                 sal_Int32 nValue = rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( aStr1.getStr(), aStr1.getLength(),
                                                                                        aStr2.getStr(), aStr2.getLength(),
                                                                                        5);
-                CPPUNIT_ASSERT_MESSAGE("compare failed, strings are equal first 5 characters.", nValue == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("compare failed, strings are equal first 5 characters.", sal_Int32(0), nValue);
             }
 
         void compare_004()
@@ -226,12 +220,10 @@ namespace rtl_str
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST(compare_004);
     CPPUNIT_TEST_SUITE_END();
-}; // class compare
+    }; // class compare
 
-    class hashCode : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE hashCode : public CppUnit::TestFixture
     {
-    public:
-
         void hashCode_000()
             {
                 rtl_str_hashCode( NULL );
@@ -253,7 +245,7 @@ namespace rtl_str
                 OString aStr2 = "Line for a hashCode.";
                 sal_Int32 nHashCode2 = rtl_str_hashCode( aStr2.getStr() );
 
-                CPPUNIT_ASSERT_MESSAGE("hashcodes must be equal.", nHashCode1 == nHashCode2 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("hashcodes must be equal.", nHashCode1, nHashCode2 );
             }
 
         void hashCode_003()
@@ -272,17 +264,15 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(hashCode);
-        CPPUNIT_TEST(hashCode_000);
+//        CPPUNIT_TEST(hashCode_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(hashCode_001);
         CPPUNIT_TEST(hashCode_002);
         CPPUNIT_TEST(hashCode_003);
         CPPUNIT_TEST_SUITE_END();
     }; // class compare
 
-    class indexOfChar : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE indexOfChar : public CppUnit::TestFixture
     {
-    public:
-
         void indexOfChar_000()
             {
                 rtl_str_indexOfChar( NULL, 0 );
@@ -293,16 +283,16 @@ namespace rtl_str
                 OString aStr1 = "Line for an indexOfChar.";
 
                 sal_Int32 nIndex = rtl_str_indexOfChar( aStr1.getStr(), 'L' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(0), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_indexOfChar( aStr1.getStr(), 'i' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 1);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(1), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_indexOfChar( aStr1.getStr(), 'n' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 2);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(2), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_indexOfChar( aStr1.getStr(), 'e' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 3);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(3), nIndex);
             }
 
         void indexOfChar_002()
@@ -310,7 +300,7 @@ namespace rtl_str
                 OString aStr1 = "Line for an indexOfChar.";
                 sal_Int32 nIndex = rtl_str_indexOfChar( aStr1.getStr(), 'y' );
 
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(-1), nIndex);
             }
 
         // Change the following lines only, if you add, remove or rename
@@ -318,16 +308,14 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfChar);
-        CPPUNIT_TEST(indexOfChar_000);
+//        CPPUNIT_TEST(indexOfChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(indexOfChar_001);
         CPPUNIT_TEST(indexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class compare
 
-    class lastIndexOfChar : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE lastIndexOfChar : public CppUnit::TestFixture
     {
-    public:
-
         void lastIndexOfChar_000()
             {
                 rtl_str_lastIndexOfChar( NULL, 0 );
@@ -338,16 +326,16 @@ namespace rtl_str
                 OString aStr1 = "Line for a lastIndexOfChar.";
 
                 sal_Int32 nIndex = rtl_str_lastIndexOfChar( aStr1.getStr(), 'C' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 22);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(22), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_lastIndexOfChar( aStr1.getStr(), 'h' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 23);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(23), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_lastIndexOfChar( aStr1.getStr(), 'a' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 24);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(24), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_lastIndexOfChar( aStr1.getStr(), 'r' );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 25);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(25), nIndex);
             }
 
         void lastIndexOfChar_002()
@@ -355,7 +343,7 @@ namespace rtl_str
                 OString aStr1 = "Line for a lastIndexOfChar.";
                 sal_Int32 nIndex = rtl_str_lastIndexOfChar( aStr1.getStr(), 'y' );
 
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(-1), nIndex);
             }
 
         // Change the following lines only, if you add, remove or rename
@@ -363,16 +351,14 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfChar);
-        CPPUNIT_TEST(lastIndexOfChar_000);
+//        CPPUNIT_TEST(lastIndexOfChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(lastIndexOfChar_001);
         CPPUNIT_TEST(lastIndexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class lastIndexOfChar
 
-    class indexOfStr : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE indexOfStr : public CppUnit::TestFixture
     {
-    public:
-
         void indexOfStr_000()
             {
                 rtl_str_indexOfStr( NULL, 0 );
@@ -389,16 +375,16 @@ namespace rtl_str
                 OString aStr1 = "Line for an indexOfStr.";
 
                 sal_Int32 nIndex = rtl_str_indexOfStr( aStr1.getStr(), "Line" );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(0), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_indexOfStr( aStr1.getStr(), "for" );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 5);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(5), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_indexOfStr( aStr1.getStr(), "a" );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 9);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(9), nIndex);
 
                 /* sal_Int32 */ nIndex = rtl_str_indexOfStr( aStr1.getStr(), "an index" );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex ==9);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(9), nIndex);
             }
 
         void indexOfStr_002()
@@ -406,7 +392,7 @@ namespace rtl_str
                 OString aStr1 = "Line for an indexOfStr.";
                 sal_Int32 nIndex = rtl_str_indexOfStr( aStr1.getStr(), "not exist" );
 
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(-1), nIndex);
             }
 
         // Change the following lines only, if you add, remove or rename
@@ -414,16 +400,14 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfStr);
-        CPPUNIT_TEST(indexOfStr_000);
+//        CPPUNIT_TEST(indexOfStr_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(indexOfStr_001);
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
     }; // class compare
 
-    class lastIndexOfStr : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE lastIndexOfStr : public CppUnit::TestFixture
     {
-    public:
-
         void lastIndexOfStr_000()
             {
                 rtl_str_lastIndexOfStr( NULL, NULL );
@@ -441,15 +425,15 @@ namespace rtl_str
                 OString aSearchStr = "Index";
 
                 sal_Int32 nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 15);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(15), nIndex);
 
                 /* OString */ aSearchStr = "Line";
                 /* sal_Int32 */ nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(0), nIndex);
 
                 /* OString */ aSearchStr = "";
                 /* sal_Int32 */ nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(-1), nIndex);
             }
 
         void lastIndexOfStr_002()
@@ -458,7 +442,7 @@ namespace rtl_str
                 OString aSearchStr = "foo";
                 sal_Int32 nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
 
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(-1), nIndex);
             }
 
         void lastIndexOfStr_003()
@@ -467,7 +451,7 @@ namespace rtl_str
                 OString aSearchStr = "O";
                 sal_Int32 nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), aSearchStr.getStr() );
 
-                CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 20 );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("index is wrong.", sal_Int32(20), nIndex);
             }
 
         // Change the following lines only, if you add, remove or rename
@@ -475,17 +459,15 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfStr);
-        CPPUNIT_TEST(lastIndexOfStr_000);
+//        CPPUNIT_TEST(lastIndexOfStr_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(lastIndexOfStr_001);
         CPPUNIT_TEST(lastIndexOfStr_002);
         CPPUNIT_TEST(lastIndexOfStr_003);
         CPPUNIT_TEST_SUITE_END();
     }; // class lastIndexOfStr
 
-    class replaceChar : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE replaceChar : public CppUnit::TestFixture
     {
-    public:
-
         void replaceChar_000()
             {
                 rtl_str_replaceChar( NULL, 0, 0 );
@@ -496,13 +478,13 @@ namespace rtl_str
                 OString aStr1 = "replace char.";
                 OString aShouldStr1 = "ruplacu char.";
 
-                char* pStr = (char*) malloc(aStr1.getLength() + 1);
+                char* pStr = static_cast<char*>(malloc(aStr1.getLength() + 1));
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
                 rtl_str_replaceChar( pStr, 'e', 'u' );
 
-                CPPUNIT_ASSERT_MESSAGE("replace failed", aShouldStr1.equals(OString(pStr)) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("replace failed", aShouldStr1.equals(OString(pStr)));
                 free(pStr);
             }
 
@@ -511,15 +493,13 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(replaceChar);
-        CPPUNIT_TEST(replaceChar_000);
+//        CPPUNIT_TEST(replaceChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(replaceChar_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-    class replaceChar_WithLength : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE replaceChar_WithLength : public CppUnit::TestFixture
     {
-    public:
-
         void replaceChar_WithLength_000()
             {
                 rtl_str_replaceChar_WithLength( NULL, 0, 0, 0 );
@@ -534,13 +514,13 @@ namespace rtl_str
                 OString aStr1 = "replace char.";
                 OString aShouldStr1 = "ruplace char.";
 
-                char* pStr = (char*) malloc(aStr1.getLength() + 1);
+                char* pStr = static_cast<char*>(malloc(aStr1.getLength() + 1));
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
                 rtl_str_replaceChar_WithLength( pStr, 6, 'e', 'u' );
 
-                CPPUNIT_ASSERT_MESSAGE("replace failed", aShouldStr1.equals(OString(pStr)) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("replace failed", aShouldStr1.equals(OString(pStr)));
                 free(pStr);
             }
 
@@ -550,15 +530,13 @@ namespace rtl_str
 
         CPPUNIT_TEST_SUITE(replaceChar_WithLength);
         CPPUNIT_TEST(replaceChar_WithLength_000);
-        CPPUNIT_TEST(replaceChar_WithLength_000_1);
+//        CPPUNIT_TEST(replaceChar_WithLength_000_1); // Commented out: when length is not 0, string can't be null
         CPPUNIT_TEST(replaceChar_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-    class toAsciiLowerCase : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE toAsciiLowerCase : public CppUnit::TestFixture
     {
-    public:
-
         void toAsciiLowerCase_000()
             {
                 rtl_str_toAsciiLowerCase( NULL );
@@ -569,13 +547,13 @@ namespace rtl_str
                 OString aStr1 = "CHANGE THIS TO ASCII LOWER CASE.";
                 OString aShouldStr1 = "change this to ascii lower case.";
 
-                char* pStr = (char*) malloc(aStr1.getLength() + 1);
+                char* pStr = static_cast<char*>(malloc(aStr1.getLength() + 1));
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
                 rtl_str_toAsciiLowerCase( pStr );
 
-                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)));
                 free(pStr);
             }
 
@@ -584,15 +562,13 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase);
-        CPPUNIT_TEST(toAsciiLowerCase_000);
+//        CPPUNIT_TEST(toAsciiLowerCase_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(toAsciiLowerCase_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-    class toAsciiLowerCase_WithLength : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE toAsciiLowerCase_WithLength : public CppUnit::TestFixture
     {
-    public:
-
         void toAsciiLowerCase_WithLength_000()
             {
                 rtl_str_toAsciiLowerCase_WithLength( NULL, 0 );
@@ -603,14 +579,14 @@ namespace rtl_str
                 OString aStr1 = "CHANGE THIS TO ASCII LOWER CASE.";
                 OString aShouldStr1 = "change thiS TO ASCII LOWER CASE.";
 
-                char* pStr = (char*) malloc(aStr1.getLength() + 1);
+                char* pStr = static_cast<char*>(malloc(aStr1.getLength() + 1));
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
                 rtl_str_toAsciiLowerCase_WithLength( pStr, 10 );
 
                 printf("Lowercase with length: '%s'\n", pStr);
-                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)));
                 free(pStr);
             }
 
@@ -624,10 +600,8 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-    class toAsciiUpperCase : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE toAsciiUpperCase : public CppUnit::TestFixture
     {
-    public:
-
         void toAsciiUpperCase_000()
             {
                 rtl_str_toAsciiUpperCase( NULL );
@@ -638,13 +612,13 @@ namespace rtl_str
                 OString aStr1 = "change this to ascii upper case.";
                 OString aShouldStr1 = "CHANGE THIS TO ASCII UPPER CASE.";
 
-                char* pStr = (char*) malloc(aStr1.getLength() + 1);
+                char* pStr = static_cast<char*>(malloc(aStr1.getLength() + 1));
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
                 strcpy(pStr, aStr1.getStr());
 
                 rtl_str_toAsciiUpperCase( pStr );
 
-                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)));
                 free(pStr);
             }
 
@@ -653,15 +627,13 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase);
-        CPPUNIT_TEST(toAsciiUpperCase_000);
+//        CPPUNIT_TEST(toAsciiUpperCase_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(toAsciiUpperCase_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-    class toAsciiUpperCase_WithLength : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE toAsciiUpperCase_WithLength : public CppUnit::TestFixture
     {
-    public:
-
         void toAsciiUpperCase_WithLength_000()
             {
                 rtl_str_toAsciiUpperCase_WithLength( NULL, 0 );
@@ -672,14 +644,14 @@ namespace rtl_str
                 OString aStr1 = "change this to ascii lower case.";
                 OString aShouldStr1 = "CHANGE THIs to ascii lower case.";
 
-                char* pStr = (char*) malloc(aStr1.getLength() + 1);
+                char* pStr = static_cast<char*>(malloc(aStr1.getLength() + 1));
                 CPPUNIT_ASSERT_MESSAGE("can't get memory for test", pStr != NULL);
 
                 strcpy(pStr, aStr1.getStr());
                 rtl_str_toAsciiUpperCase_WithLength( pStr, 10 );
 
                 printf("Uppercase with length: '%s'\n", aStr1.getStr());
-                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)) == sal_True);
+                CPPUNIT_ASSERT_MESSAGE("failed", aShouldStr1.equals(OString(pStr)));
                 free(pStr);
             }
 
@@ -693,9 +665,8 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
-    class trim_WithLength : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE trim_WithLength : public CppUnit::TestFixture
     {
-      public:
         void trim_WithLength_000()
         {
             rtl_str_trim_WithLength(NULL, 0);
@@ -710,68 +681,42 @@ namespace rtl_str
 
         void trim_WithLength_001()
         {
-            char const *pStr = "  trim this";
-            char *pStr2 = strdup(pStr);
-            if (pStr2)
-            {
-                rtl_str_trim_WithLength( pStr2, 2 );
+            char pStr[] = { "  trim this" };
+            rtl_str_trim_WithLength( pStr, 2 );
 
-                CPPUNIT_ASSERT_MESSAGE("string should be empty", strlen(pStr2) == 0);
-                free(pStr2);
-            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("string should be empty", size_t(0), strlen(pStr));
         }
 
         void trim_WithLength_002()
         {
-            char const *pStr = "trim this";
-            char *pStr2 = strdup(pStr);
-            if (pStr2)
-            {
-                rtl_str_trim_WithLength( pStr2, 5 );
+            char pStr[] = { "trim this" };
+            rtl_str_trim_WithLength( pStr, 5 );
 
-                CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
-                free(pStr2);
-            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("string should contain 'trim'", size_t(4), strlen(pStr));
         }
 
         void trim_WithLength_003()
         {
-            char const *pStr = "     trim   this";
-            char *pStr2 = strdup(pStr);
-            if (pStr2)
-            {
-                strcpy(pStr2, pStr);
-                rtl_str_trim_WithLength( pStr2, 11 );
+            char pStr[] = {"     trim   this"};
+            rtl_str_trim_WithLength( pStr, 11 );
 
-                CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
-                free(pStr2);
-            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("string should contain 'trim'", size_t(4), strlen(pStr));
         }
 
         void trim_WithLength_004()
         {
-            char const *pStr = "\r\n\t \n\r    trim  \n this";
-            char *pStr2 = strdup(pStr);
-            if (pStr2)
-            {
-                rtl_str_trim_WithLength( pStr2, 17 );
+            char pStr[] = { "\r\n\t \n\r    trim  \n this" };
+            rtl_str_trim_WithLength( pStr, 17 );
 
-                CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 4);
-                free(pStr2);
-            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("string should contain 'trim'", size_t(4), strlen(pStr));
         }
 
         void trim_WithLength_005()
         {
-            char const *pStr = "\r\n\t \n\r    trim \t this \n\r\t\t     ";
-            char *pStr2 = strdup(pStr);
-            if (pStr2)
-            {
-                rtl_str_trim_WithLength( pStr2, strlen(pStr2) );
+            char pStr[] = { "\r\n\t \n\r    trim \t this \n\r\t\t     " };
+            rtl_str_trim_WithLength( pStr, strlen(pStr) );
 
-                CPPUNIT_ASSERT_MESSAGE("string should contain 'trim'", strlen(pStr2) == 11);
-                free(pStr2);
-            }
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("string should contain 'trim \t this'", size_t(11), strlen(pStr));
         }
 
         // Change the following lines only, if you add, remove or rename
@@ -789,9 +734,8 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     };
 
-    class valueOfChar : public CppUnit::TestFixture
+    class SAL_DLLPRIVATE valueOfChar : public CppUnit::TestFixture
     {
-      public:
         void valueOfChar_000()
             {
                 rtl_str_valueOfChar(NULL, 0);
@@ -799,14 +743,10 @@ namespace rtl_str
             }
         void valueOfChar_001()
             {
-                char *pStr = (char*)malloc(RTL_STR_MAX_VALUEOFCHAR);
-                if (pStr)
-                {
-                    rtl_str_valueOfChar(pStr, 'A');
+                char pStr[RTL_STR_MAX_VALUEOFCHAR];
+                rtl_str_valueOfChar(pStr, 'A');
 
-                    CPPUNIT_ASSERT_MESSAGE("string should contain 'A'", pStr[0] == 'A');
-                    free(pStr);
-                }
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("string should contain 'A'", 'A', pStr[0]);
             }
 
         // Change the following lines only, if you add, remove or rename
@@ -814,7 +754,7 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(valueOfChar);
-        CPPUNIT_TEST(valueOfChar_000);
+//        CPPUNIT_TEST(valueOfChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(valueOfChar_001);
         CPPUNIT_TEST_SUITE_END();
     };
@@ -841,9 +781,5 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::trim_WithLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::valueOfChar);
 
 } // namespace rtl_str
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
