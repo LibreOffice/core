@@ -71,6 +71,7 @@ CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, SdrGrafOb
     m_aCropRectangle = tools::Rectangle(rCrop.GetLeft(), rCrop.GetTop(), rCrop.GetRight(), rCrop.GetBottom());
 
     Initialize();
+    recallParameter();
 }
 
 CompressGraphicsDialog::CompressGraphicsDialog( weld::Window* pParent, Graphic const & rGraphic, Size rViewSize100mm, tools::Rectangle const & rCropRectangle, SfxBindings& rBindings ) :
