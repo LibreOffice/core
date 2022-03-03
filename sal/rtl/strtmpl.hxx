@@ -57,7 +57,14 @@ template <typename C> struct null_terminated
         assert(pStr);
     }
     auto getIter() const { return p; }
-    static auto getEndDetector() { return [](C* iter) { return *iter == 0; }; }
+    struct EndDetector
+    {
+        friend bool operator==(EndDetector, C* iter) { return *iter == 0; }
+        friend bool operator==(C* iter, EndDetector) { return *iter == 0; }
+        friend bool operator!=(EndDetector, C* iter) { return *iter != 0; }
+        friend bool operator!=(C* iter, EndDetector) { return *iter != 0; }
+    };
+    static auto end() { return EndDetector{}; }
 };
 
 template <typename C> struct with_length
@@ -71,7 +78,7 @@ template <typename C> struct with_length
         assert(len >= 0);
     }
     auto getIter() const { return p; }
-    auto getEndDetector() const { return [pEnd = p + len](C* iter) { return iter == pEnd; }; }
+    auto end() const { return p + len; }
 };
 
 template <typename C> void Copy(C* _pDest, const C* _pSrc, sal_Int32 _nCount)
@@ -167,16 +174,16 @@ sal_Int32 compare(S1 s1, S2 s2, Compare, Shorten_t shortenedLength)
     static_assert(std::is_same_v<Shorten_t, NoShortening> || std::is_same_v<Shorten_t, sal_Int32>);
     assert(shortenedLength >= 0);
     auto pStr1 = s1.getIter();
-    const auto atEnd1 = s1.getEndDetector();
+    const auto end1 = s1.end();
     auto pStr2 = s2.getIter();
-    const auto atEnd2 = s2.getEndDetector();
+    const auto end2 = s2.end();
     for (;;)
     {
         if (shortenedLength == 0)
             return 0;
-        if (atEnd2(pStr2))
-            return atEnd1(pStr1) ? 0 : 1;
-        if (atEnd1(pStr1))
+        if (pStr2 == end2)
+            return pStr1 == end1 ? 0 : 1;
+        if (pStr1 == end1)
             return -1;
         if (const sal_Int32 nRet = Compare::compare(*pStr1, *pStr2))
             return nRet;
@@ -754,12 +761,12 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
         nRadix = 10;
 
     auto pStr = str.getIter();
-    const auto atEnd = str.getEndDetector();
+    const auto end = str.end();
 
     /* Skip whitespaces */
-    while (!atEnd(pStr) && rtl_ImplIsWhitespace(IMPL_RTL_USTRCODE(*pStr)))
+    while (pStr != end && rtl_ImplIsWhitespace(IMPL_RTL_USTRCODE(*pStr)))
         pStr++;
-    if (atEnd(pStr))
+    if (pStr == end)
         return 0;
 
     const bool bNeg = HandleSignChar<T>(pStr);
@@ -767,7 +774,7 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
     assert(nDiv > 0);
 
     std::make_unsigned_t<T> n = 0;
-    while (!atEnd(pStr))
+    while (pStr != end)
     {
         sal_Int16 nDigit = rtl_ImplGetDigit(IMPL_RTL_USTRCODE(*pStr), nRadix);
         if ( nDigit < 0 )
