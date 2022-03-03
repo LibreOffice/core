@@ -203,12 +203,12 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         pDlg->StartExecuteAsync([aSet, pDlg, pNumRuleAtCurrentSelection, pRequest, this](sal_Int32 nResult){
             if (RET_OK == nResult)
             {
-                const SfxPoolItem* pItem;
-                if (SfxItemState::SET == pDlg->GetOutputItemSet()->GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem))
+                const SvxNumBulletItem* pBulletItem = pDlg->GetOutputItemSet()->GetItemIfSet(SID_ATTR_NUMBERING_RULE, false);
+                if (pBulletItem)
                 {
-                    pRequest->AppendItem(*pItem);
+                    pRequest->AppendItem(*pBulletItem);
                     pRequest->Done();
-                    SvxNumRule& rSetRule = const_cast<SvxNumRule&>(static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule());
+                    SvxNumRule& rSetRule = const_cast<SvxNumRule&>(pBulletItem->GetNumRule());
                     rSetRule.UnLinkGraphics();
                     SwNumRule aSetRule(pNumRuleAtCurrentSelection != nullptr
                                        ? pNumRuleAtCurrentSelection->GetName()
@@ -224,11 +224,11 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 // If the Dialog was leaved with OK but nothing was chosen then the
                 // numbering must be at least activated, if it is not already.
                 else if (pNumRuleAtCurrentSelection == nullptr
-                         && SfxItemState::SET == aSet.GetItemState(SID_ATTR_NUMBERING_RULE, false, &pItem))
+                         && (pBulletItem = aSet.GetItemIfSet(SID_ATTR_NUMBERING_RULE, false)))
                 {
-                    pRequest->AppendItem(*pItem);
+                    pRequest->AppendItem(*pBulletItem);
                     pRequest->Done();
-                    const SvxNumRule& rSetRule = static_cast<const SvxNumBulletItem*>(pItem)->GetNumRule();
+                    const SvxNumRule& rSetRule = pBulletItem->GetNumRule();
                     SwNumRule aSetRule(
                         GetShell().GetUniqueNumRuleName(),
                         numfunc::GetDefaultPositionAndSpaceMode());

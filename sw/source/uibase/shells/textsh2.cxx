@@ -67,40 +67,36 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
     SwDBManager* pDBManager = GetShell().GetDBManager();
     OUString sSourceArg, sCommandArg;
     sal_Int32 nCommandTypeArg = 0;
-
-    const SfxPoolItem* pSourceItem = nullptr;
-    const SfxPoolItem* pCursorItem = nullptr;
-    const SfxPoolItem* pConnectionItem = nullptr;
-    const SfxPoolItem* pCommandItem = nullptr;
-    const SfxPoolItem* pCommandTypeItem = nullptr;
-    const SfxPoolItem* pSelectionItem = nullptr;
+    const SfxUnoAnyItem* pSourceItem = nullptr;
+    const SfxUnoAnyItem* pCommandItem = nullptr;
+    const SfxUnoAnyItem* pCommandTypeItem = nullptr;
+    const SfxUnoAnyItem* pConnectionItem = nullptr;
 
     // first get the selection of rows to be inserted
-    pArgs->GetItemState(FN_DB_DATA_SELECTION_ANY, false, &pSelectionItem);
 
     Sequence<Any> aSelection;
-    if(pSelectionItem)
-        static_cast<const SfxUnoAnyItem*>(pSelectionItem)->GetValue() >>= aSelection;
+    if(const SfxUnoAnyItem* pSelectionItem = pArgs->GetItemIfSet(FN_DB_DATA_SELECTION_ANY, false))
+        pSelectionItem->GetValue() >>= aSelection;
 
     // get the data source name
-    pArgs->GetItemState(FN_DB_DATA_SOURCE_ANY, false, &pSourceItem);
+    pSourceItem = pArgs->GetItemIfSet(FN_DB_DATA_SOURCE_ANY, false);
     if(pSourceItem)
-        static_cast<const SfxUnoAnyItem*>(pSourceItem)->GetValue() >>= sSourceArg;
+        pSourceItem->GetValue() >>= sSourceArg;
 
     // get the command
-    pArgs->GetItemState(FN_DB_DATA_COMMAND_ANY, false, &pCommandItem);
+    pCommandItem = pArgs->GetItemIfSet(FN_DB_DATA_COMMAND_ANY, false);
     if(pCommandItem)
-        static_cast<const SfxUnoAnyItem*>(pCommandItem)->GetValue() >>= sCommandArg;
+        pCommandItem->GetValue() >>= sCommandArg;
 
     // get the command type
-    pArgs->GetItemState(FN_DB_DATA_COMMAND_TYPE_ANY, false, &pCommandTypeItem);
+    pCommandTypeItem = pArgs->GetItemIfSet(FN_DB_DATA_COMMAND_TYPE_ANY, false);
     if(pCommandTypeItem)
-        static_cast<const SfxUnoAnyItem*>(pCommandTypeItem)->GetValue() >>= nCommandTypeArg;
+        pCommandTypeItem->GetValue() >>= nCommandTypeArg;
 
     Reference<XConnection> xConnection;
-    pArgs->GetItemState(FN_DB_CONNECTION_ANY, false, &pConnectionItem);
-    if ( pConnectionItem )
-        static_cast<const SfxUnoAnyItem*>(pConnectionItem)->GetValue() >>= xConnection;
+    pConnectionItem = pArgs->GetItemIfSet(FN_DB_CONNECTION_ANY, false);
+    if(pConnectionItem)
+        pConnectionItem->GetValue() >>= xConnection;
     // may be we even get no connection
     if ( !xConnection.is() )
     {
@@ -113,9 +109,8 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
 
     // get the cursor, we use to travel, may be NULL
     Reference<XResultSet> xCursor;
-    pArgs->GetItemState(FN_DB_DATA_CURSOR_ANY, false, &pCursorItem);
-    if ( pCursorItem )
-        static_cast<const SfxUnoAnyItem*>(pCursorItem)->GetValue() >>= xCursor;
+    if ( const SfxUnoAnyItem* pCursorItem = pArgs->GetItemIfSet(FN_DB_DATA_CURSOR_ANY, false) )
+        pCursorItem->GetValue() >>= xCursor;
 
     switch (rReq.GetSlot())
     {
@@ -167,15 +162,13 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
 
         case FN_QRY_INSERT_FIELD:
             {
-                const SfxPoolItem* pColumnItem = nullptr;
-                const SfxPoolItem* pColumnNameItem = nullptr;
-
-                pArgs->GetItemState(FN_DB_COLUMN_ANY, false, &pColumnItem);
-                pArgs->GetItemState(FN_DB_DATA_COLUMN_NAME_ANY, false, &pColumnNameItem);
+                const SfxUnoAnyItem* pColumnItem = pArgs->GetItemIfSet(FN_DB_COLUMN_ANY, false);
+                const SfxUnoAnyItem* pColumnNameItem =
+                    pArgs->GetItemIfSet(FN_DB_DATA_COLUMN_NAME_ANY, false);
 
                 OUString sColumnName;
                 if(pColumnNameItem)
-                    static_cast<const SfxUnoAnyItem*>(pColumnNameItem)->GetValue() >>= sColumnName;
+                    pColumnNameItem->GetValue() >>= sColumnName;
                 OUString sDBName = sSourceArg + OUStringChar(DB_DELIM)
                     + sCommandArg + OUStringChar(DB_DELIM)
                     + OUString::number(nCommandTypeArg)
@@ -184,9 +177,9 @@ void SwTextShell::ExecDB(SfxRequest const &rReq)
                 SwFieldMgr aFieldMgr(GetShellPtr());
                 SwInsertField_Data aData(SwFieldTypesEnum::Database, 0, sDBName, OUString(), 0);
                 if(pConnectionItem)
-                    aData.m_aDBConnection = static_cast<const SfxUnoAnyItem*>(pConnectionItem)->GetValue();
+                    aData.m_aDBConnection = pConnectionItem->GetValue();
                 if(pColumnItem)
-                    aData.m_aDBColumn = static_cast<const SfxUnoAnyItem*>(pColumnItem)->GetValue();
+                    aData.m_aDBColumn = pColumnItem->GetValue();
                 aFieldMgr.InsertField(aData);
                 SfxViewFrame* pViewFrame = GetView().GetViewFrame();
                 uno::Reference< XDispatchRecorder > xRecorder =

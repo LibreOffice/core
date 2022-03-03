@@ -701,26 +701,25 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         break;
     case SID_PARAGRAPH_CHANGE_STATE:
     {
-        const SfxPoolItem *fLineIndent, *pLeftIndent, *pRightIndent;
         if (pReqArgs)
         {
             SfxItemSetFixed<RES_LR_SPACE, RES_LR_SPACE> aLRSpaceSet( GetPool() );
             rSh.GetCurAttr( aLRSpaceSet );
             SvxLRSpaceItem aParaMargin( aLRSpaceSet.Get( RES_LR_SPACE ) );
 
-            if (pReqArgs->GetItemState(SID_PARAGRAPH_FIRST_LINE_INDENT,true,&fLineIndent) == SfxItemState::SET)
+            if (const SfxStringItem *fLineIndent = pReqArgs->GetItemIfSet(SID_PARAGRAPH_FIRST_LINE_INDENT))
             {
-                const OUString ratio = static_cast<const SfxStringItem*>(fLineIndent)->GetValue();
+                const OUString ratio = fLineIndent->GetValue();
                 aParaMargin.SetTextFirstLineOffset(nPageWidth * ratio.toFloat());
             }
-            else if (pReqArgs->GetItemState(SID_PARAGRAPH_LEFT_INDENT,true,&pLeftIndent) == SfxItemState::SET)
+            else if (const SfxStringItem *pLeftIndent = pReqArgs->GetItemIfSet(SID_PARAGRAPH_LEFT_INDENT))
             {
-                const OUString ratio = static_cast<const SfxStringItem*>(pLeftIndent)->GetValue();
+                const OUString ratio = pLeftIndent->GetValue();
                 aParaMargin.SetLeft(nPageWidth * ratio.toFloat());
             }
-            else if (pReqArgs->GetItemState(SID_PARAGRAPH_RIGHT_INDENT,true,&pRightIndent) == SfxItemState::SET)
+            else if (const SfxStringItem *pRightIndent = pReqArgs->GetItemIfSet(SID_PARAGRAPH_RIGHT_INDENT))
             {
-                const OUString ratio = static_cast<const SfxStringItem*>(pRightIndent)->GetValue();
+                const OUString ratio = pRightIndent->GetValue();
                 aParaMargin.SetRight(nPageWidth * ratio.toFloat());
             }
             rSh.SetAttrItem(aParaMargin);
@@ -874,18 +873,16 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
         break;
 
     case SID_RULER_CHANGE_STATE:
+        if (pReqArgs)
         {
-            const SfxPoolItem *pMargin1, *pMargin2;
-            if ( pReqArgs &&
-                 pReqArgs->GetItemState(SID_RULER_MARGIN1,true,&pMargin1) == SfxItemState::SET )
+            if ( const SfxStringItem *pMargin1 = pReqArgs->GetItemIfSet(SID_RULER_MARGIN1) )
             {
-                const OUString ratio = static_cast<const SfxStringItem*>(pMargin1)->GetValue();
+                const OUString ratio = pMargin1->GetValue();
                 GetHRuler().SetValues(RulerChangeType::MARGIN1, GetHRuler().GetPageWidth() * ratio.toFloat());
             }
-            else if ( pReqArgs &&
-                 pReqArgs->GetItemState(SID_RULER_MARGIN2,true,&pMargin2) == SfxItemState::SET )
+            else if ( const SfxStringItem *pMargin2 = pReqArgs->GetItemIfSet(SID_RULER_MARGIN2) )
             {
-                const OUString ratio = static_cast<const SfxStringItem*>(pMargin2)->GetValue();
+                const OUString ratio = pMargin2->GetValue();
                 GetHRuler().SetValues(RulerChangeType::MARGIN2, GetHRuler().GetPageWidth() * ratio.toFloat());
             }
         }
@@ -1063,9 +1060,8 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
                     }
                 }
                 bool bSingleLine = false;
-                const SfxPoolItem* pSingleLine;
-                if( SfxItemState::SET == rReq.GetArgs()->GetItemState(SID_RULER_ACT_LINE_ONLY, false, &pSingleLine))
-                    bSingleLine = static_cast<const SfxBoolItem*>(pSingleLine)->GetValue();
+                if( const SfxBoolItem* pSingleLine = rReq.GetArgs()->GetItemIfSet(SID_RULER_ACT_LINE_ONLY, false) )
+                    bSingleLine = pSingleLine->GetValue();
                 if ( m_bSetTabRowFromDoc )
                 {
                     if( !rSh.IsViewLocked() )
@@ -1084,18 +1080,16 @@ void SwView::ExecTabWin( SfxRequest const & rReq )
     {
         if (pReqArgs)
         {
-            const SfxPoolItem *pBorderType;
-            const SfxPoolItem *pIndex;
-            const SfxPoolItem *pOffset;
+            const SfxStringItem *pBorderType = pReqArgs->GetItemIfSet(SID_TABLE_BORDER_TYPE);
+            const SfxUInt16Item *pIndex = pReqArgs->GetItemIfSet(SID_TABLE_BORDER_INDEX);
+            const SfxInt32Item *pOffset = pReqArgs->GetItemIfSet(SID_TABLE_BORDER_OFFSET);
             constexpr tools::Long constDistanceOffset = 40;
 
-            if (pReqArgs->GetItemState(SID_TABLE_BORDER_TYPE, true, &pBorderType) == SfxItemState::SET
-            && pReqArgs->GetItemState(SID_TABLE_BORDER_INDEX, true, &pIndex) == SfxItemState::SET
-            && pReqArgs->GetItemState(SID_TABLE_BORDER_OFFSET, true, &pOffset) == SfxItemState::SET)
+            if (pBorderType && pIndex && pOffset)
             {
-                const OUString sType = static_cast<const SfxStringItem*>(pBorderType)->GetValue();
-                const sal_uInt16 nIndex = static_cast<const SfxUInt16Item*>(pIndex)->GetValue();
-                const sal_Int32 nOffset = static_cast<const SfxInt32Item*>(pOffset)->GetValue();
+                const OUString sType = pBorderType->GetValue();
+                const sal_uInt16 nIndex = pIndex->GetValue();
+                const sal_Int32 nOffset = pOffset->GetValue();
 
                 if (sType.startsWith("column"))
                 {
