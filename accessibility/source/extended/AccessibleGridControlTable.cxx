@@ -69,6 +69,8 @@ AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
 
 sal_Int32 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
 {
+    SolarMutexGuard aSolarGuard;
+
     ensureIsAlive();
     if(m_aTable.HasRowHeader() && m_aTable.HasColHeader())
         return 0;
