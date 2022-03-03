@@ -600,8 +600,9 @@ void SwBaseShell::ExecUndo(SfxRequest &rReq)
     // Repair mode: allow undo/redo of all undo actions, even if access would
     // be limited based on the view shell ID.
     bool bRepair = false;
-    if (pArgs && pArgs->GetItemState(SID_REPAIRPACKAGE, false, &pItem) == SfxItemState::SET)
-        bRepair = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+    const SfxBoolItem* pRepairItem;
+    if (pArgs && (pRepairItem = pArgs->GetItemIfSet(SID_REPAIRPACKAGE, false)))
+        bRepair = pRepairItem->GetValue();
 
     // #i106349#: save pointer: undo/redo may delete the shell, i.e., this!
     SfxViewFrame *const pViewFrame( GetView().GetViewFrame() );
