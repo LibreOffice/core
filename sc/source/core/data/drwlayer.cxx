@@ -1619,8 +1619,7 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
     if ( !rMark.IsMultiMarked() )
         return;
 
-    ScRange aMarkRange;
-    rMark.GetMultiMarkArea( aMarkRange );
+    const ScRange& aMarkRange = rMark.GetMultiMarkArea();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     for (const SCTAB nTab : rMark)

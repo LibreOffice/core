@@ -2802,8 +2802,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 rMark.MarkToMulti();
 
-                ScRange aMultiArea;
-                rMark.GetMultiMarkArea(aMultiArea);
+                const ScRange& aMultiArea = rMark.GetMultiMarkArea();
                 SCCOL nStartCol = aMultiArea.aStart.Col();
                 SCROW nStartRow = aMultiArea.aStart.Row();
                 SCCOL nEndCol = aMultiArea.aEnd.Col();
@@ -2842,8 +2841,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                 rMark.MarkToMulti();
 
-                ScRange aMultiArea;
-                rMark.GetMultiMarkArea(aMultiArea);
+                const ScRange& aMultiArea = rMark.GetMultiMarkArea();
                 SCCOL nStartCol = aMultiArea.aStart.Col();
                 SCROW nStartRow = aMultiArea.aStart.Row();
                 SCCOL nEndCol = aMultiArea.aEnd.Col();
@@ -2949,7 +2947,7 @@ void ScCellShell::ExecuteExternalSource(
         rMark.MarkToSimple();
         if ( rMark.IsMarked() )
         {
-            rMark.GetMarkArea( aLinkRange );
+            aLinkRange = rMark.GetMarkArea();
             bMove = true;                       // insert/delete cells to fit range
         }
         else

@@ -41,7 +41,6 @@ public:
     ScMultiSel(ScSheetLimits const &);
     ScMultiSel(const ScMultiSel& rMultiSel) = default;
     ScMultiSel(ScMultiSel&& rMultiSel) = default;
-    ~ScMultiSel();
 
     ScMultiSel& operator=(const ScMultiSel& rMultiSel);
     ScMultiSel& operator=(ScMultiSel&& rMultiSel);
@@ -67,7 +66,7 @@ public:
 
     // For faster access from within ScMarkData, instead of creating
     // ScMultiSelIter with ScFlatBoolRowSegments bottleneck.
-    const ScMarkArray& GetRowSelArray() const;
+    const ScMarkArray& GetRowSelArray() const { return aRowSel; }
     const ScMarkArray* GetMultiSelArray( SCCOL nCol ) const;
 };
 
@@ -80,7 +79,6 @@ private:
     SCROW nNextSegmentStart;
 public:
     ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol );
-    ~ScMultiSelIter();
 
     bool Next( SCROW& rTop, SCROW& rBottom );
     /** Only to be used by ScMultiSel::IsAllMarked() or otherwise sure that a

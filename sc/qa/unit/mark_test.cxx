@@ -155,9 +155,7 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
     CPPUNIT_ASSERT( aMark.IsMarked() );
     CPPUNIT_ASSERT( !aMark.IsMultiMarked() );
 
-    ScRange aRangeResult;
-    aMark.GetMarkArea( aRangeResult );
-    CPPUNIT_ASSERT_EQUAL( rRange, aRangeResult );
+    CPPUNIT_ASSERT_EQUAL( rRange, aMark.GetMarkArea() );
 
     SCROW nMidRow = ( rRange.aStart.Row() + rRange.aEnd.Row() ) / 2;
     SCCOL nMidCol = ( rRange.aStart.Col() + rRange.aEnd.Col() ) / 2;
