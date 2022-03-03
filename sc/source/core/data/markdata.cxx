@@ -564,13 +564,20 @@ std::vector<sc::ColRowSpan> ScMarkData::GetMarkedColSpans() const
 
 bool ScMarkData::IsAllMarked( const ScRange& rRange ) const
 {
-    if ( !bMultiMarked )
-        return false;
-
     SCCOL nStartCol = rRange.aStart.Col();
     SCROW nStartRow = rRange.aStart.Row();
     SCCOL nEndCol = rRange.aEnd.Col();
     SCROW nEndRow = rRange.aEnd.Row();
+
+    if ( !bMultiMarked )
+    {
+        if ( bMarked && !bMarkIsNeg &&
+             aMarkRange.aStart.Col() <= nStartCol && aMarkRange.aEnd.Col() >= nEndCol &&
+             aMarkRange.aStart.Row() <= nStartRow && aMarkRange.aEnd.Row() >= nEndRow )
+            return true;
+        return false;
+    }
+
     bool bOk = true;
 
     if ( nStartCol == 0 && nEndCol == mrSheetLimits.mnMaxCol )
