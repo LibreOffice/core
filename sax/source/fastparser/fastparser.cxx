@@ -581,14 +581,8 @@ OUString lclGetErrorMessage( xmlParserCtxtPtr ctxt, std::u16string_view sSystemI
         pMessage = error->message;
     else
         pMessage = "unknown error";
-    OUStringBuffer aBuffer( 128 );
-    aBuffer.append( "[" );
-    aBuffer.append( sSystemId );
-    aBuffer.append( " line " );
-    aBuffer.append( nLine );
-    aBuffer.append( "]: " );
-    aBuffer.appendAscii( pMessage );
-    return aBuffer.makeStringAndClear();
+    return OUString::Concat("[") + sSystemId + " line " + OUString::number(nLine) + "]: " +
+           OUString(pMessage, strlen(pMessage), RTL_TEXTENCODING_ASCII_US);
 }
 
 // throw an exception, but avoid callback if
