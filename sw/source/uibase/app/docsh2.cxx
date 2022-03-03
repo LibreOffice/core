@@ -422,9 +422,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
             SfxItemSetFixed<SID_AUTO_CORRECT_DLG, SID_AUTO_CORRECT_DLG, SID_OPEN_SMARTTAGOPTIONS, SID_OPEN_SMARTTAGOPTIONS> aSet( pApp->GetPool() );
             aSet.Put( aSwOptions );
 
-            const SfxPoolItem* pOpenSmartTagOptionsItem = nullptr;
-            if( pArgs && SfxItemState::SET == pArgs->GetItemState( SID_OPEN_SMARTTAGOPTIONS, false, &pOpenSmartTagOptionsItem ) )
-                aSet.Put( *static_cast<const SfxBoolItem*>(pOpenSmartTagOptionsItem) );
+            const SfxBoolItem* pOpenSmartTagOptionsItem = nullptr;
+            if( pArgs && (pOpenSmartTagOptionsItem = pArgs->GetItemIfSet( SID_OPEN_SMARTTAGOPTIONS, false )) )
+                aSet.Put( *pOpenSmartTagOptionsItem );
 
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             VclPtr<SfxAbstractTabDialog> pDlg = pFact->CreateAutoCorrTabDialog(GetView()->GetFrameWeld(), &aSet);
@@ -1199,9 +1199,9 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SwWrtShell* pSh = GetWrtShell();
                 const OUString& rValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
                 auto eType = SfxClassificationPolicyType::IntellectualProperty;
-                if (pArgs->GetItemState(SID_TYPE_NAME, false, &pItem) == SfxItemState::SET)
+                if (const SfxStringItem* pTypeNameItem = pArgs->GetItemIfSet(SID_TYPE_NAME, false))
                 {
-                    const OUString& rType = static_cast<const SfxStringItem*>(pItem)->GetValue();
+                    const OUString& rType = pTypeNameItem->GetValue();
                     eType = SfxClassificationHelper::stringToPolicyType(rType);
                 }
                 pSh->SetClassification(rValue, eType);
@@ -1251,14 +1251,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
                     SfxWatermarkItem aItem;
                     aItem.SetText( static_cast<const SfxStringItem*>( pItem )->GetValue() );
 
-                    if ( pArgs->GetItemState( SID_WATERMARK_FONT, false, &pItem ) == SfxItemState::SET )
-                        aItem.SetFont( static_cast<const SfxStringItem*>( pItem )->GetValue() );
-                    if ( pArgs->GetItemState( SID_WATERMARK_ANGLE, false, &pItem ) == SfxItemState::SET )
-                        aItem.SetAngle( static_cast<const SfxInt16Item*>( pItem )->GetValue() );
-                    if ( pArgs->GetItemState( SID_WATERMARK_TRANSPARENCY, false, &pItem ) == SfxItemState::SET )
-                        aItem.SetTransparency( static_cast<const SfxInt16Item*>( pItem )->GetValue() );
-                    if ( pArgs->GetItemState( SID_WATERMARK_COLOR, false, &pItem ) == SfxItemState::SET )
-                        aItem.SetColor( Color(ColorTransparency, static_cast<const SfxUInt32Item*>( pItem )->GetValue()) );
+                    if ( const SfxStringItem* pFontItem = pArgs->GetItemIfSet( SID_WATERMARK_FONT, false ) )
+                        aItem.SetFont( pFontItem->GetValue() );
+                    if ( const SfxInt16Item* pAngleItem = pArgs->GetItemIfSet( SID_WATERMARK_ANGLE, false ) )
+                        aItem.SetAngle( pAngleItem->GetValue() );
+                    if ( const SfxInt16Item* pTransItem = pArgs->GetItemIfSet( SID_WATERMARK_TRANSPARENCY, false ) )
+                        aItem.SetTransparency( pTransItem->GetValue() );
+                    if ( const SfxUInt32Item* pColorItem = pArgs->GetItemIfSet( SID_WATERMARK_COLOR, false ) )
+                        aItem.SetColor( Color(ColorTransparency, pColorItem->GetValue()) );
 
                     pSh->SetWatermark( aItem );
                 }

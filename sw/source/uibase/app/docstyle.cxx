@@ -1484,16 +1484,12 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         case SfxStyleFamily::Para :
         {
             OSL_ENSURE(m_pColl, "Where's Collection");
-            const SfxPoolItem* pAutoUpdate;
-            if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
+            if(const SfxBoolItem* pAutoUpdate = rSet.GetItemIfSet(SID_ATTR_AUTO_STYLE_UPDATE,false))
             {
-                m_pColl->SetAutoUpdateFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
+                m_pColl->SetAutoUpdateFormat(pAutoUpdate->GetValue());
             }
 
-            const SwCondCollItem* pCondItem;
-            if( SfxItemState::SET != rSet.GetItemState( FN_COND_COLL, false,
-                reinterpret_cast<const SfxPoolItem**>(&pCondItem) ))
-                pCondItem = nullptr;
+            const SwCondCollItem* pCondItem = rSet.GetItemIfSet( FN_COND_COLL, false );
 
             if( RES_CONDTXTFMTCOLL == m_pColl->Which() && pCondItem )
             {
@@ -1558,8 +1554,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             // we have to create a physical instance of the numbering style. If we do not and
             // neither the paragraph style nor the numbering style is used in the document
             // the numbering style will not be saved with the document and the assignment got lost.
-            const SfxPoolItem* pNumRuleItem = nullptr;
-            if( SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE, false, &pNumRuleItem ) )
+            if( const SfxPoolItem* pNumRuleItem = rSet.GetItemIfSet( RES_PARATR_NUMRULE, false ) )
             {   // Setting a numbering rule?
                 const OUString sNumRule = static_cast<const SwNumRuleItem*>(pNumRuleItem)->GetValue();
                 if (!sNumRule.isEmpty())
@@ -1608,8 +1603,8 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
         case SfxStyleFamily::Frame:
         {
             OSL_ENSURE(m_pFrameFormat, "Where's FrameFormat");
-            const SfxPoolItem* pAutoUpdate;
-            if(SfxItemState::SET == rSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE,false, &pAutoUpdate ))
+
+            if(const SfxPoolItem* pAutoUpdate = rSet.GetItemIfSet(SID_ATTR_AUTO_STYLE_UPDATE,false))
             {
                 m_pFrameFormat->SetAutoUpdateFormat(static_cast<const SfxBoolItem*>(pAutoUpdate)->GetValue());
             }

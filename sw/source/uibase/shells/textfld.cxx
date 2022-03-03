@@ -216,9 +216,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 OUString aPar2;
                 sal_Int32 nCommand = 0;
 
-                if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
-                                                            false, &pItem ))
-                    nType = static_cast<SwFieldTypesEnum>(static_cast<const SfxUInt16Item *>(pItem)->GetValue());
+                if( const SfxUInt16Item* pFieldItem = pArgs->GetItemIfSet( FN_PARAM_FIELD_TYPE,
+                                                            false ))
+                    nType = static_cast<SwFieldTypesEnum>(pFieldItem->GetValue());
                 aPar1 += OUStringChar(DB_DELIM);
                 if( SfxItemState::SET == pArgs->GetItemState(
                                     FN_PARAM_1, false, &pItem ))
@@ -236,12 +236,12 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 {
                     aPar1 += static_cast<const SfxStringItem *>(pItem)->GetValue();
                 }
-                if( SfxItemState::SET == pArgs->GetItemState(
-                                    FN_PARAM_FIELD_CONTENT, false, &pItem ))
-                    aPar2 = static_cast<const SfxStringItem *>(pItem)->GetValue();
-                if( SfxItemState::SET == pArgs->GetItemState(
-                                    FN_PARAM_FIELD_FORMAT, false, &pItem ))
-                    nFormat = static_cast<const SfxUInt32Item *>(pItem)->GetValue();
+                if( const SfxStringItem* pContentItem = pArgs->GetItemIfSet(
+                                    FN_PARAM_FIELD_CONTENT, false ))
+                    aPar2 = pContentItem->GetValue();
+                if( const SfxUInt32Item* pFormatItem = pArgs->GetItemIfSet(
+                                    FN_PARAM_FIELD_FORMAT, false ))
+                    nFormat = pFormatItem->GetValue();
                 OSL_FAIL("Command is not yet used");
                 SwInsertField_Data aData(nType, 0, aPar1, aPar2, nFormat, GetShellPtr(), ' '/*separator*/ );
                 bRes = aFieldMgr.InsertField(aData);
@@ -262,18 +262,18 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 OUString aPar2;
                 sal_Unicode cSeparator = ' ';
 
-                if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_TYPE,
-                                                            false, &pItem ))
-                    nType = static_cast<SwFieldTypesEnum>(static_cast<const SfxUInt16Item *>(pItem)->GetValue());
-                if( SfxItemState::SET == pArgs->GetItemState( FN_PARAM_FIELD_SUBTYPE,
-                                                            false, &pItem ))
-                    nSubType = static_cast<const SfxUInt16Item *>(pItem)->GetValue();
-                if( SfxItemState::SET == pArgs->GetItemState(
-                                    FN_PARAM_FIELD_CONTENT, false, &pItem ))
-                    aPar2 = static_cast<const SfxStringItem *>(pItem)->GetValue();
-                if( SfxItemState::SET == pArgs->GetItemState(
-                                    FN_PARAM_FIELD_FORMAT, false, &pItem ))
-                    nFormat = static_cast<const SfxUInt32Item *>(pItem)->GetValue();
+                if( const SfxUInt16Item* pTypeItem = pArgs->GetItemIfSet( FN_PARAM_FIELD_TYPE,
+                                                            false ))
+                    nType = static_cast<SwFieldTypesEnum>(pTypeItem->GetValue());
+                if( const SfxUInt16Item* pSubtypeItem = pArgs->GetItemIfSet( FN_PARAM_FIELD_SUBTYPE,
+                                                            false ))
+                    nSubType = pSubtypeItem->GetValue();
+                if( const SfxStringItem* pContentItem = pArgs->GetItemIfSet(
+                                    FN_PARAM_FIELD_CONTENT, false ))
+                    aPar2 = pContentItem->GetValue();
+                if( const SfxUInt32Item* pFormatItem = pArgs->GetItemIfSet(
+                                    FN_PARAM_FIELD_FORMAT, false ))
+                    nFormat = pFormatItem->GetValue();
                 if( SfxItemState::SET == pArgs->GetItemState(
                                     FN_PARAM_3, false, &pItem ))
                 {
@@ -989,8 +989,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
     SfxItemSetFixed<RES_TXTATR_INETFMT, RES_TXTATR_INETFMT> aSet(GetPool());
     rSh.GetCurAttr( aSet );
 
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
+    if(SfxItemState::SET == aSet.GetItemState(RES_TXTATR_INETFMT, false))
     {
         // Select links
         rSh.SwCursorShell::SelectTextAttr(RES_TXTATR_INETFMT, false);
