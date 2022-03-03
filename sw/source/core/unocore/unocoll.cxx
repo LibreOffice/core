@@ -826,8 +826,8 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
             xRet = SwXMeta::CreateXMeta(rDoc, true);
         break;
         case SwServiceType::LineBreak:
-            xRet = SwXLineBreak::CreateXLineBreak();
-        break;
+            xRet = SwXLineBreak::CreateXLineBreak(nullptr);
+            break;
         default:
             throw uno::RuntimeException();
     }
