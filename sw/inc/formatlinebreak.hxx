@@ -23,7 +23,6 @@
 #include <svl/eitem.hxx>
 #include "calbck.hxx"
 
-#include <rtl/ustring.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/text/XTextContent.hpp>
 
