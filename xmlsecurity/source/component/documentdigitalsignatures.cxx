@@ -647,8 +647,17 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     for ( ; pAuthors != pAuthorsEnd; ++pAuthors )
     {
         SvtSecurityOptions::Certificate aAuthor = *pAuthors;
-        if (xmlsecurity::EqualDistinguishedNames(aAuthor[0], xAuthor->getIssuerName(), xmlsecurity::NOCOMPAT)
-            && (aAuthor[1] == sSerialNum))
+        if (!xmlsecurity::EqualDistinguishedNames(aAuthor[0], xAuthor->getIssuerName(), xmlsecurity::NOCOMPAT))
+            continue;
+        if (aAuthor[1] != sSerialNum)
+            continue;
+
+        DocumentSignatureManager aSignatureManager(mxCtx, {});
+        if (!aSignatureManager.init())
+            return false;
+        uno::Reference<css::security::XCertificate> xCert =
+            aSignatureManager.getSecurityEnvironment()->createCertificateFromAscii(aAuthor[2]);
+        if (xCert->getSHA1Thumbprint() == xAuthor->getSHA1Thumbprint())
         {
             bFound = true;
             break;
