@@ -223,8 +223,7 @@ void ScViewUtil::UnmarkFiltered( ScMarkData& rMark, const ScDocument& rDoc )
 {
     rMark.MarkToMulti();
 
-    ScRange aMultiArea;
-    rMark.GetMultiMarkArea( aMultiArea );
+    const ScRange& aMultiArea = rMark.GetMultiMarkArea();
     SCCOL nStartCol = aMultiArea.aStart.Col();
     SCROW nStartRow = aMultiArea.aStart.Row();
     SCCOL nEndCol = aMultiArea.aEnd.Col();

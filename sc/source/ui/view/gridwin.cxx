@@ -2610,8 +2610,7 @@ void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         OUString aAddr;                               // CurrentCell
         if( rMark.IsMarked() )
         {
-            ScRange aScRange;
-            rMark.GetMarkArea( aScRange );
+            const ScRange& aScRange = rMark.GetMarkArea();
             aAddr = aScRange.Format(rDoc, ScRefFlags::RANGE_ABS);
             if ( aScRange.aStart == aScRange.aEnd )
             {

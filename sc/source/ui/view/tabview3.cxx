@@ -499,8 +499,7 @@ void ScTabView::CheckSelectionTransfer()
     ScMarkData& rMark = aViewData.GetMarkData();
     if (rMark.IsMarked())
     {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
+        const ScRange& aMarkRange = rMark.GetMarkArea();
         OUString aStartAddress =  aMarkRange.aStart.GetColRowString();
         OUString aEndAddress = aMarkRange.aEnd.GetColRowString();
         collectUIInformation({{"RANGE", aStartAddress + ":" + aEndAddress}});
@@ -1570,8 +1569,7 @@ void ScTabView::MarkColumns()
     ScMarkData& rMark = aViewData.GetMarkData();
     if (rMark.IsMarked())
     {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
+        const ScRange& aMarkRange = rMark.GetMarkArea();
         nStartCol = aMarkRange.aStart.Col();
         nEndCol = aMarkRange.aEnd.Col();
     }
@@ -1598,8 +1596,7 @@ void ScTabView::MarkRows()
     ScMarkData& rMark = aViewData.GetMarkData();
     if (rMark.IsMarked())
     {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
+        const ScRange& aMarkRange = rMark.GetMarkArea();
         nStartRow = aMarkRange.aStart.Row();
         nEndRow = aMarkRange.aEnd.Row();
     }

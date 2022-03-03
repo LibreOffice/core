@@ -220,7 +220,7 @@ void ScDBFunc::AutoOutline( )
     if ( rMark.IsMarked() || rMark.IsMultiMarked() )
     {
         rMark.MarkToMulti();
-        rMark.GetMultiMarkArea( aRange );
+        aRange = rMark.GetMultiMarkArea();
     }
 
     ScDocShell* pDocSh = GetViewData().GetDocShell();

@@ -466,8 +466,7 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
     ScMarkData& rMark = aViewData.GetMarkData();
     OSL_ENSURE(rMark.IsMarked() || rMark.IsMultiMarked(), "MarkCursor, !IsMarked()");
-    ScRange aMarkRange;
-    rMark.GetMarkArea(aMarkRange);
+    const ScRange& aMarkRange = rMark.GetMarkArea();
     if (( aMarkRange.aStart.Col() != nBlockStartX && aMarkRange.aEnd.Col() != nBlockStartX ) ||
         ( aMarkRange.aStart.Row() != nBlockStartY && aMarkRange.aEnd.Row() != nBlockStartY ) ||
         ( meBlockMode == Own ))
@@ -1039,12 +1038,12 @@ void ScTabView::PaintBlock( bool bReset )
         bool bFlag = rMark.GetMarkingFlag();
         rMark.SetMarking(false);
         rMark.MarkToMulti();
-        rMark.GetMultiMarkArea(aMarkRange);
+        aMarkRange = rMark.GetMultiMarkArea();
         rMark.MarkToSimple();
         rMark.SetMarking(bFlag);
     }
     else
-        rMark.GetMarkArea(aMarkRange);
+        aMarkRange = rMark.GetMarkArea();
 
     nBlockStartX = aMarkRange.aStart.Col();
     nBlockStartY = aMarkRange.aStart.Row();
@@ -1085,9 +1084,7 @@ void ScTabView::SelectAll( bool bContinue )
 
     if (rMark.IsMarked())
     {
-        ScRange aMarkRange;
-        rMark.GetMarkArea( aMarkRange );
-        if ( aMarkRange == ScRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab ) )
+        if ( rMark.GetMarkArea() == ScRange( 0,0,nTab, rDoc.MaxCol(),rDoc.MaxRow(),nTab ) )
             return;
     }
 
@@ -1216,7 +1213,7 @@ sal_uInt16 ScTabView::CalcZoom( SvxZoomType eType, sal_uInt16 nOldZoom )
                     SCTAB   nTab = aViewData.GetTabNo();
                     ScRange aMarkRange;
                     if ( aViewData.GetSimpleArea( aMarkRange ) != SC_MARK_SIMPLE )
-                        rMark.GetMultiMarkArea( aMarkRange );
+                        aMarkRange = rMark.GetMultiMarkArea();
 
                     SCCOL   nStartCol = aMarkRange.aStart.Col();
                     SCROW   nStartRow = aMarkRange.aStart.Row();
