@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e7427f1_7aa37071",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-03T17:44:49Z",
+      "side": 1,
+      "message": "This may indeed benefit from some optimization, probably the mnPredetectedReference value can be used to not execute this extra check if the DefinedName cases (see comment at case ssSkipReference) in NextSymbol() do increment mnPredetectedReference further to indicate such name. Just a quick idea..",
+      "revId": "03f141062fb80df60808d684ad1c5595613f9cfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f656a25f_db04fdf2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-03T17:44:49Z",
+      "side": 1,
+      "message": "Looks like a viable approach.",
+      "revId": "03f141062fb80df60808d684ad1c5595613f9cfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b112b80_3db36e17",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3355,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-03T17:44:49Z",
+      "side": 1,
+      "message": "Nitpick: in future, can we please have one blank between keyword and opening parenthesis? Thanks.",
+      "range": {
+        "startLine": 3355,
+        "startChar": 8,
+        "endLine": 3355,
+        "endChar": 11
+      },
+      "revId": "03f141062fb80df60808d684ad1c5595613f9cfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
