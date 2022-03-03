@@ -42,6 +42,7 @@
 #include <unobookmark.hxx>
 #include <unofield.hxx>
 #include <unometa.hxx>
+#include <unolinebreak.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>
 #include <fmtmeta.hxx>
@@ -952,6 +953,21 @@ lcl_ExportHints(
                         }
                     }
                 break;
+                case RES_TXTATR_LINEBREAK:
+                    if (!bRightMoveForbidden)
+                    {
+                        pUnoCursor->Right(1);
+                        if (*pUnoCursor->GetMark() == *pUnoCursor->GetPoint())
+                            break;
+                        rtl::Reference<SwXTextPortion> pPortion
+                            = new SwXTextPortion(pUnoCursor, xParent, PORTION_LINEBREAK);
+                        xRef = pPortion;
+                        uno::Reference<text::XTextContent> xLineBreak
+                            = SwXLineBreak::CreateXLineBreak(
+                                &const_cast<SwFormatLineBreak&>(pAttr->GetLineBreak()));
+                        pPortion->SetLineBreak(xLineBreak);
+                    }
+                    break;
                 case RES_TXTATR_AUTOFMT:
                 case RES_TXTATR_INETFMT:
                 case RES_TXTATR_CHARFMT:

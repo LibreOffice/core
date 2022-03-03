@@ -989,6 +989,7 @@ const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextPortionExtensio
         //REDLINE_PROPERTIES
         {u"" UNO_NAME_TEXT_PORTION_TYPE, FN_UNO_TEXT_PORTION_TYPE, cppu::UnoType<OUString>::get(),                        PropertyAttribute::READONLY, 0},
         {u"" UNO_NAME_META, FN_UNO_META, cppu::UnoType<css::text::XTextContent>::get(), PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY, 0 },
+        { u"" UNO_NAME_LINEBREAK, FN_UNO_LINEBREAK, cppu::UnoType<css::text::XTextContent>::get(),  PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY ,0 },
         { u"", 0, css::uno::Type(), 0, 0 }
     };
 

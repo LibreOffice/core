@@ -21,8 +21,6 @@
 
 #include "txatbase.hxx"
 
-#include "ndindex.hxx"
-
 class SwFormatLineBreak;
 
 /**

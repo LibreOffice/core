@@ -109,14 +109,25 @@ SwXLineBreak::SwXLineBreak()
 
 SwXLineBreak::~SwXLineBreak() {}
 
-uno::Reference<text::XTextContent> SwXLineBreak::CreateXLineBreak()
+uno::Reference<text::XTextContent>
+SwXLineBreak::CreateXLineBreak(SwFormatLineBreak* pLineBreakFormat)
 {
     uno::Reference<text::XTextContent> xLineBreak;
-
-    rtl::Reference<SwXLineBreak> pLineBreak(new SwXLineBreak);
-    xLineBreak.set(pLineBreak);
-    pLineBreak->m_pImpl->m_wThis = xLineBreak;
-
+    if (pLineBreakFormat)
+    {
+        xLineBreak = pLineBreakFormat->GetXTextContent();
+    }
+    if (!xLineBreak.is())
+    {
+        SwXLineBreak* const pLineBreak(pLineBreakFormat ? new SwXLineBreak(*pLineBreakFormat)
+                                                        : new SwXLineBreak);
+        xLineBreak.set(pLineBreak);
+        if (pLineBreakFormat)
+        {
+            pLineBreakFormat->SetXLineBreak(xLineBreak);
+        }
+        pLineBreak->m_pImpl->m_wThis = xLineBreak;
+    }
     return xLineBreak;
 }
 
@@ -140,7 +151,6 @@ void SAL_CALL SwXLineBreak::attach(const uno::Reference<text::XTextRange>& xText
         throw uno::RuntimeException();
     }
 
-    uno::Reference<lang::XUnoTunnel> xRangeTunnel(xTextRange, uno::UNO_QUERY);
     auto pRange = dynamic_cast<SwXTextRange*>(xTextRange.get());
     if (!pRange)
     {
@@ -248,7 +258,7 @@ uno::Any SAL_CALL SwXLineBreak::getPropertyValue(const OUString& rPropertyName)
     }
     else
     {
-        m_pImpl->m_pFormatLineBreak->QueryValue(aRet, 0);
+        aRet <<= m_pImpl->m_pFormatLineBreak->GetEnumValue();
     }
     return aRet;
 }
