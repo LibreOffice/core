@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sal_rtl,\
 	sal/qa/rtl/doublelock/rtl_doublelocking \
 	sal/qa/rtl/locale/rtl_locale \
 	sal/qa/rtl/math/test-rtl-math \
+	sal/qa/rtl/ostring/rtl_str \
 	sal/qa/rtl/oustringbuffer/test_oustringbuffer_appendchar \
 	sal/qa/rtl/oustringbuffer/test_oustringbuffer_appenduninitialized \
 	sal/qa/rtl/oustringbuffer/test_oustringbuffer_assign \
