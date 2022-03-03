@@ -17,21 +17,13 @@
 #include <redline.hxx>
 #include <dcontact.hxx>
 #include <view.hxx>
-#include <swacorr.hxx>
-#include <modcfg.hxx>
-#include <editeng/acorrcfg.hxx>
 #include <unotbl.hxx>
 #include <IDocumentSettingAccess.hxx>
-#include <com/sun/star/text/XTextColumns.hpp>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
-#include <svl/itemiter.hxx>
-#include <vcl/filter/PDFiumLibrary.hxx>
 
 #include <i18nutil/transliteration.hxx>
-#include <dbfld.hxx>
-#include <txatbase.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <UndoManager.hxx>
@@ -39,13 +31,11 @@
 #include <tblafmt.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <osl/thread.hxx>
-#include <txtfrm.hxx>
 #include <hyp.hxx>
 #include <swdtflvr.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -53,14 +43,10 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
-#include <comphelper/configuration.hxx>
 #include <editeng/unolingu.hxx>
 #include <vcl/scheduler.hxx>
 #include <config_fonts.h>
-#include <wrthtml.hxx>
-#include <dbmgr.hxx>
 #include <unotxdoc.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <officecfg/Office/Writer.hxx>
 

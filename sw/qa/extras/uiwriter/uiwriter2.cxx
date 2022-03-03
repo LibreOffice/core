@@ -9,22 +9,11 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <boost/property_tree/json_parser.hpp>
-
-#include <com/sun/star/awt/FontSlant.hpp>
-#include <com/sun/star/awt/FontUnderline.hpp>
-#include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <comphelper/propertysequence.hxx>
-#include <comphelper/propertyvalue.hxx>
-#include <comphelper/configuration.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <vcl/scheduler.hxx>
 #include <vcl/settings.hxx>
@@ -38,28 +27,14 @@
 #include <sortedobjs.hxx>
 #include <itabenum.hxx>
 #include <fmtfsize.hxx>
-#include <xmloff/odffields.hxx>
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/dispatch.hxx>
-#include <comphelper/lok.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <swacorr.hxx>
-#include <txtfrm.hxx>
 #include <redline.hxx>
-#include <view.hxx>
-#include <cmdid.h>
-#include <AnnotationWin.hxx>
-#include <PostItMgr.hxx>
-#include <fmtcntnt.hxx>
 #include <frameformats.hxx>
-#include <shellio.hxx>
-#include <editeng/fontitem.hxx>
-#include <tools/json_writer.hxx>
 #include <unotxdoc.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
-#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 namespace
 {
