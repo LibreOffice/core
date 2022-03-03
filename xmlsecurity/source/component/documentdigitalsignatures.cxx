@@ -19,9 +19,10 @@
 
 #include <resourcemanager.hxx>
 
-#include <digitalsignaturesdialog.hxx>
+#include <certificate.hxx>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
+#include <digitalsignaturesdialog.hxx>
 #include <macrosecurity.hxx>
 #include <biginteger.hxx>
 #include <strings.hrc>
@@ -624,20 +625,26 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     OUString sSerialNum = xmlsecurity::bigIntegerToNumericString(xAuthor->getSerialNumber());
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
-    const SvtSecurityOptions::Certificate* pAuthors = aTrustedAuthors.getConstArray();
-    const SvtSecurityOptions::Certificate* pAuthorsEnd = pAuthors + aTrustedAuthors.getLength();
-    for ( ; pAuthors != pAuthorsEnd; ++pAuthors )
-    {
-        SvtSecurityOptions::Certificate aAuthor = *pAuthors;
-        if (xmlsecurity::EqualDistinguishedNames(aAuthor[0], xAuthor->getIssuerName())
-            && (aAuthor[1] == sSerialNum))
-        {
-            bFound = true;
-            break;
-        }
-    }
 
-    return bFound;
+    return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
+        [this, &xAuthor, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
+            if (!xmlsecurity::EqualDistinguishedNames(rAuthor[0], xAuthor->getIssuerName()))
+                return false;
+            if (rAuthor[1] != sSerialNum)
+                return false;
+
+            DocumentSignatureManager aSignatureManager(mxCtx, {});
+            if (!aSignatureManager.init())
+                return false;
+            uno::Reference<css::security::XCertificate> xCert = aSignatureManager.getSecurityEnvironment()->createCertificateFromAscii(rAuthor[2]);
+
+            auto pAuthor = dynamic_cast<xmlsecurity::Certificate*>(xAuthor.get());
+            auto pCert = dynamic_cast<xmlsecurity::Certificate*>(xCert.get());
+            if (pAuthor && pCert)
+                return pCert->getSHA256Thumbprint() == pAuthor->getSHA256Thumbprint();
+
+            return xCert->getSHA1Thumbprint() == xAuthor->getSHA1Thumbprint();
+        });
 }
 
 uno::Sequence<Reference<css::security::XCertificate>>
