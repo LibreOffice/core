@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e9eae4d_73cb6a81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-03T21:31:04Z",
+      "side": 1,
+      "message": "Hi Xisco! I tried to convert the test file, but somehow the shift modifier does nothing.",
+      "revId": "02d96d3ec922856c1f13f9e18229973ba46bc3d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f4e1e78_8e63f667",
+        "filename": "sd/qa/unit/uiimpress.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 803,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-03T21:31:04Z",
+      "side": 1,
+      "message": "Somehow this KEY_SHIFT does nothing 😕",
+      "revId": "02d96d3ec922856c1f13f9e18229973ba46bc3d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
