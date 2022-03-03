@@ -4737,12 +4737,8 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
         const SwTextFormatColl *pTopColl =
             m_pCSS1Parser->GetTextFormatColl( nTopColl, rTopClass );
         const SfxItemSet& rItemSet = pTopColl->GetAttrSet();
-        const SfxPoolItem *pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState(RES_LR_SPACE,true, &pItem) )
+        if( const SvxLRSpaceItem *pLRItem = rItemSet.GetItemIfSet(RES_LR_SPACE) )
         {
-            const SvxLRSpaceItem *pLRItem =
-                static_cast<const SvxLRSpaceItem *>(pItem);
-
             sal_Int32 nLeft = pLRItem->GetTextLeft();
             sal_Int32 nRight = pLRItem->GetRight();
             nFirstLineIndent = pLRItem->GetTextFirstLineOffset();
@@ -4769,10 +4765,8 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
             pContext->SetMargins( nLeftMargin, nRightMargin,
                                   nFirstLineIndent );
         }
-        if( SfxItemState::SET == rItemSet.GetItemState(RES_UL_SPACE,true, &pItem) )
+        if( const SvxULSpaceItem* pULItem = rItemSet.GetItemIfSet(RES_UL_SPACE) )
         {
-            const SvxULSpaceItem *pULItem =
-                static_cast<const SvxULSpaceItem *>(pItem);
             pContext->SetULSpace( pULItem->GetUpper(), pULItem->GetLower() );
         }
     }
