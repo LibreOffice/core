@@ -16,6 +16,23 @@
       "message": "Works as expected. This is only patch I need for issue to be fixed btw.",
       "revId": "461ada8ccfe34ea2fd7b697023229b90b43316b8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcf9be6f_562c713d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000865
+      },
+      "writtenOn": "2022-03-03T18:01:46Z",
+      "side": 1,
+      "message": "Thanks",
+      "revId": "461ada8ccfe34ea2fd7b697023229b90b43316b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
