@@ -1401,6 +1401,26 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf105954)
     CPPUNIT_ASSERT_LESS(static_cast<tools::Long>(250), aMeta.getWidth());
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128445)
+{
+    // Import the bugdoc and export as PDF.
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    saveAsPDF(u"tdf128445.odp");
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 7
+    // - Actual  : 6
+    CPPUNIT_ASSERT_EQUAL(7, pPdfPage->getObjectCount());
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf128630)
 {
     // Import the bugdoc and export as PDF.
