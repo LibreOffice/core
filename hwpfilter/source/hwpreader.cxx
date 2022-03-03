@@ -3942,7 +3942,7 @@ void HwpReader::makePicture(Picture * hbox)
             if( hbox->style.cap_len > 0 )
             {
                 rendEl( "text:p");
-                if( !(hbox->cap_pos % 2))         /* Caption is at the bottom, */
+                if (!hbox->caption.empty() && !(hbox->cap_pos % 2))         /* Caption is at the bottom, */
                 {
                     parsePara(hbox->caption.front().get());
                 }
