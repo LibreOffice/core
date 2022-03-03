@@ -16,6 +16,23 @@
       "message": "In my personal opinion, this is no longer an improvement, it just makes the code harder to read (the other previous changes were fine :-)",
       "revId": "4f67cf95bbfe744da8e4e55a0bf1a8eee5a790cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6498c4_e3bdefc2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-03T06:51:22Z",
+      "side": 1,
+      "message": "FTR: the main motivation here was the bad (IMO) separation of null-terminated-vs-sized algorithms, which may be generalized easily without performance trade-offs.",
+      "revId": "4f67cf95bbfe744da8e4e55a0bf1a8eee5a790cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
