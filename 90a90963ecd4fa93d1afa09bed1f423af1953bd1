@@ -51,6 +51,24 @@
       "message": "The problem is that the 691.1999999999999 is already only 16 decimal digits. If we used 17 digits, it would not be rounded to 691.2 - but the code rounds it to 15 decimals.\n\nThe change that you did recently to try to force 17 decimals looks not doing its job (and the code in sal/rtl/math.cxx indeed has the 15 hard-coded, irrespective of passed nDecPlaces unfortunately.)",
       "revId": "90a90963ecd4fa93d1afa09bed1f423af1953bd1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a897f9fc_e5b90f82",
+        "filename": "basic/qa/basic_coverage/test_cstr_method.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-03T21:30:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9efc52ed_0149665e",
+      "revId": "90a90963ecd4fa93d1afa09bed1f423af1953bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
