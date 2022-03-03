@@ -146,6 +146,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe4e4055_ccdb5014",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1595,
+      "author": {
+        "id": 1003535
+      },
+      "writtenOn": "2022-03-03T02:14:29Z",
+      "side": 1,
+      "message": "Thanks for clarifying my doubt, I understand the code better now and I think what is implemented is very precise. I just added some comments.",
+      "parentUuid": "2fa0dfbd_5174e8a8",
+      "range": {
+        "startLine": 1595,
+        "startChar": 0,
+        "endLine": 1595,
+        "endChar": 49
+      },
+      "revId": "1680081ac08b9e27fbc595ac7376e6cca9c1877b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b0d082f7_51040dee",
         "filename": "sal/osl/w32/file_dirvol.cxx",
         "patchSetId": 5
