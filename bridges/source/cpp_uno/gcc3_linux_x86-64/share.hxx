@@ -153,19 +153,19 @@ struct __cxa_eh_globals {
 
 #if !HAVE_CXXABI_H_CXA_GET_GLOBALS
 namespace __cxxabiv1 {
-extern "C" __cxa_eh_globals * __cxa_get_globals() throw();
+extern "C" __cxa_eh_globals * __cxa_get_globals() noexcept;
 }
 #endif
 
 #if !HAVE_CXXABI_H_CXA_CURRENT_EXCEPTION_TYPE
 namespace __cxxabiv1 {
-extern "C" std::type_info *__cxa_current_exception_type() throw();
+extern "C" std::type_info *__cxa_current_exception_type() noexcept;
 }
 #endif
 
 #if !HAVE_CXXABI_H_CXA_ALLOCATE_EXCEPTION
 namespace __cxxabiv1 {
-extern "C" void * __cxa_allocate_exception(std::size_t thrown_size) throw();
+extern "C" void * __cxa_allocate_exception(std::size_t thrown_size) noexcept;
 }
 #endif
 
