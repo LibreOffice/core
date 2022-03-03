@@ -485,7 +485,23 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             pTextFrame->VisitPortions( pdumper );
             if (const SwParaPortion* pPara = pTextFrame->GetPara())
             {
-                pPara->dumpAsXml(writer);
+                (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));
+                (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pPara);
+                const SwLineLayout* pLine = pPara;
+                while (pLine)
+                {
+                    (void)xmlTextWriterStartElement(writer, BAD_CAST("SwLineLayout"));
+                    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pLine);
+                    const SwLinePortion* pPor = pLine->GetFirstPortion();
+                    while (pPor)
+                    {
+                        pPor->dumpAsXml(writer);
+                        pPor = pPor->GetNextPortion();
+                    }
+                    (void)xmlTextWriterEndElement(writer);
+                    pLine = pLine->GetNext();
+                }
+                (void)xmlTextWriterEndElement(writer);
             }
 
         }
