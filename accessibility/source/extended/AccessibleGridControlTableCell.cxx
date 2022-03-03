@@ -59,16 +59,6 @@ namespace accessibility
         ,m_nRowPos( _nRowPos )
         ,m_nColPos( _nColPos )
     {
-        // set accessible name here, because for that we need the position of the cell
-        // and so the base class isn't capable of doing this
-        OUString aAccName;
-        if(_eType == TCTYPE_TABLECELL)
-            aAccName = _rTable.GetAccessibleObjectName( TCTYPE_TABLECELL, _nRowPos, _nColPos );
-        else if(_eType == TCTYPE_ROWHEADERCELL)
-            aAccName = _rTable.GetAccessibleObjectName( TCTYPE_ROWHEADERCELL, _nRowPos, 0 );
-        else if(_eType == TCTYPE_COLUMNHEADERCELL)
-            aAccName = _rTable.GetAccessibleObjectName( TCTYPE_COLUMNHEADERCELL, 0, _nRowPos );
-        implSetName( aAccName );
     }
 
     void SAL_CALL AccessibleGridControlCell::grabFocus()
@@ -76,6 +66,24 @@ namespace accessibility
         SolarMutexGuard aSolarGuard;
 
         m_aTable.GoToCell( m_nColPos, m_nRowPos );
+    }
+
+    OUString SAL_CALL AccessibleGridControlCell::getAccessibleName()
+    {
+        SolarMutexGuard g;
+
+        ensureIsAlive();
+
+        OUString sAccName;
+        if (m_eObjType == TCTYPE_TABLECELL)
+            sAccName = m_aTable.GetAccessibleObjectName(TCTYPE_TABLECELL, m_nRowPos, m_nColPos);
+        else if (m_eObjType == TCTYPE_ROWHEADERCELL)
+            sAccName = m_aTable.GetAccessibleObjectName(TCTYPE_ROWHEADERCELL, m_nRowPos, 0);
+        else if (m_eObjType == TCTYPE_COLUMNHEADERCELL)
+            sAccName = m_aTable.GetAccessibleObjectName(TCTYPE_COLUMNHEADERCELL, 0, m_nRowPos);
+        else
+            assert(false && "Unhandled table cell type");
+        return sAccName;
     }
 
     // implementation of a table cell

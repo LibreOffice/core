@@ -40,6 +40,10 @@ namespace accessibility
         // XAccessibleComponent
         virtual void SAL_CALL grabFocus() override;
 
+    public:
+        // XAccessibleContext
+        virtual OUString SAL_CALL getAccessibleName() override;
+
     protected:
         AccessibleGridControlCell(
             const css::uno::Reference< css::accessibility::XAccessible >& _rxParent,
