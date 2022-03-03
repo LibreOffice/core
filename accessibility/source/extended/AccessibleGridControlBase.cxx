@@ -54,7 +54,6 @@ AccessibleGridControlBase::AccessibleGridControlBase(
     m_xParent( rxParent ),
     m_aTable( rTable),
     m_eObjType( eObjType ),
-    m_aDescription( rTable.GetAccessibleObjectDescription( eObjType ) ),
     m_aClientId(0)
 {
 }
@@ -134,7 +133,7 @@ OUString SAL_CALL AccessibleGridControlBase::getAccessibleDescription()
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return m_aDescription;
+    return m_aTable.GetAccessibleObjectDescription(m_eObjType);
 }
 
 OUString SAL_CALL AccessibleGridControlBase::getAccessibleName()
