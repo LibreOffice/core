@@ -3657,7 +3657,6 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryPreceden
             //  aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
             ScMarkData aMarkData(rDoc.GetSheetLimits());
             aMarkData.MarkFromRangeList( aNewRanges, false );
-            aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             for (size_t nR = 0, nCount = aNewRanges.size(); nR<nCount; ++nR)
             {
@@ -3706,7 +3705,6 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryDependen
             //  aMarkData uses aNewRanges, not aRanges, so GetMarkData can't be used
             ScMarkData aMarkData(rDoc.GetSheetLimits());
             aMarkData.MarkFromRangeList( aNewRanges, false );
-            aMarkData.MarkToMulti();        // needed for IsAllMarked
 
             SCTAB nTab = lcl_FirstTab(aNewRanges);              //! all tables
 
@@ -4285,7 +4283,6 @@ static bool lcl_FindRangeOrEntry( const std::vector<ScCellRangesObj::ScNamedEntr
     {
         ScMarkData aMarkData(pDocSh->GetDocument().GetSheetLimits());
         aMarkData.MarkFromRangeList( rRanges, false );
-        aMarkData.MarkToMulti();        // needed for IsAllMarked
         if ( aMarkData.IsAllMarked( aCellRange ) )
         {
             rFound = aCellRange;
@@ -4303,7 +4300,6 @@ static bool lcl_FindRangeOrEntry( const std::vector<ScCellRangesObj::ScNamedEntr
             const ScRange& rComp = rNamedEntry.GetRange();
             ScMarkData aMarkData(pDocSh->GetDocument().GetSheetLimits());
             aMarkData.MarkFromRangeList( rRanges, false );
-            aMarkData.MarkToMulti();        // needed for IsAllMarked
             if ( aMarkData.IsAllMarked( rComp ) )
             {
                 rFound = rComp;
