@@ -112,6 +112,8 @@ public:
 
     void testScMarkArraySearch();
 
+    void testIsAllMarked();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSimpleMark_Simple);
     CPPUNIT_TEST(testSimpleMark_Column);
@@ -123,6 +125,7 @@ public:
     CPPUNIT_TEST(testDeleteTabBeforeSelected);
     CPPUNIT_TEST(testDeleteTabAfterSelected);
     CPPUNIT_TEST(testScMarkArraySearch);
+    CPPUNIT_TEST(testIsAllMarked);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -968,6 +971,35 @@ void Test::testScMarkArraySearch()
         testScMarkArraySearch_check(ar, 200, true, 1);
         testScMarkArraySearch_check(ar, MAXROW, true, 1);
     }
+}
+
+void Test::testIsAllMarked()
+{
+    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScMarkData mark(aSheetLimits);
+    ScRange range1( ScAddress( 5, 10, 0 ), ScAddress( 15, 20, 0 ));
+    ScRange range2( ScAddress( 2, 2, 0 ), ScAddress( 25, 30, 0 ));
+    CPPUNIT_ASSERT( !mark.IsAllMarked( range1 ));
+    CPPUNIT_ASSERT( !mark.IsAllMarked( range2 ));
+    mark.MarkToMulti();
+    CPPUNIT_ASSERT( !mark.IsAllMarked( range1 ));
+    CPPUNIT_ASSERT( !mark.IsAllMarked( range2 ));
+
+    mark.ResetMark();
+    mark.SetMarkArea( range1 );
+    CPPUNIT_ASSERT( mark.IsAllMarked( range1 ));
+    CPPUNIT_ASSERT( !mark.IsAllMarked( range2 ));
+    mark.MarkToMulti();
+    CPPUNIT_ASSERT( mark.IsAllMarked( range1 ));
+    CPPUNIT_ASSERT( !mark.IsAllMarked( range2 ));
+
+    mark.ResetMark();
+    mark.SetMarkArea( range2 );
+    CPPUNIT_ASSERT( mark.IsAllMarked( range1 ));
+    CPPUNIT_ASSERT( mark.IsAllMarked( range2 ));
+    mark.MarkToMulti();
+    CPPUNIT_ASSERT( mark.IsAllMarked( range1 ));
+    CPPUNIT_ASSERT( mark.IsAllMarked( range2 ));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
