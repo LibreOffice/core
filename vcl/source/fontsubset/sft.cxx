@@ -511,8 +511,8 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
 {
     sal_uInt16 flags, index;
     sal_Int16 e, f;
-    sal_uInt32 nSize;
-    const sal_uInt8* table = ttf->table(O_glyf, nSize);
+    sal_uInt32 nTableSize;
+    const sal_uInt8* table = ttf->table(O_glyf, nTableSize);
     std::vector<ControlPoint> myPoints;
     ControlPoint *nextComponent, *pa;
     int i, np;
@@ -523,7 +523,16 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
     if (glyphID >= ttf->glyphCount())
         return 0;
 
-    const sal_uInt8* ptr = table + ttf->glyphOffset(glyphID);
+    sal_uInt32 nGlyphOffset = ttf->glyphOffset(glyphID);
+    if (nGlyphOffset > nTableSize)
+        return 0;
+
+    const sal_uInt8* ptr = table + nGlyphOffset;
+    sal_uInt32 nAvailableBytes = nTableSize - nGlyphOffset;
+
+    if (GLYF_numberOfContours_offset + 2 > nAvailableBytes)
+        return 0;
+
     if (GetInt16(ptr, GLYF_numberOfContours_offset) != -1)   /* number of contours - glyph is not compound */
         return 0;
 
@@ -535,13 +544,27 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
         GetMetrics(ttf, glyphID, metrics);
     }
 
+    if (nAvailableBytes < 10)
+    {
+        SAL_WARN("vcl.fonts", "short read");
+        return 0;
+    }
+
     ptr += 10;
+    nAvailableBytes -= 10;
 
     do {
+
+        if (nAvailableBytes < 4)
+        {
+            SAL_WARN("vcl.fonts", "short read");
+            return 0;
+        }
         flags = GetUInt16(ptr, 0);
         /* printf("flags: 0x%X\n", flags); */
         index = GetUInt16(ptr, 2);
         ptr += 4;
+        nAvailableBytes -= 4;
 
         if( std::find( glyphlist.begin(), glyphlist.end(), index ) != glyphlist.end() )
         {
@@ -577,11 +600,24 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
             GetMetrics(ttf, index, metrics);
 
         if (flags & ARG_1_AND_2_ARE_WORDS) {
+            if (nAvailableBytes < 4)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                free(nextComponent);
+                return 0;
+            }
             e = GetInt16(ptr, 0);
             f = GetInt16(ptr, 2);
             /* printf("ARG_1_AND_2_ARE_WORDS: %d %d\n", e & 0xFFFF, f & 0xFFFF); */
             ptr += 4;
+            nAvailableBytes -= 4;
         } else {
+            if (nAvailableBytes < 2)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                free(nextComponent);
+                return 0;
+            }
             if (flags & ARGS_ARE_XY_VALUES) {     /* args are signed */
                 e = static_cast<sal_Int8>(*ptr++);
                 f = static_cast<sal_Int8>(*ptr++);
@@ -591,26 +627,47 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
                 e = *ptr++;
                 f = *ptr++;
             }
-
+            nAvailableBytes -= 2;
         }
 
         a = d = 0x10000;
         b = c = 0;
 
         if (flags & WE_HAVE_A_SCALE) {
+            if (nAvailableBytes < 2)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                free(nextComponent);
+                return 0;
+            }
             a = fromF2Dot14(GetInt16(ptr, 0));
             d = a;
             ptr += 2;
+            nAvailableBytes -= 2;
         } else if (flags & WE_HAVE_AN_X_AND_Y_SCALE) {
+            if (nAvailableBytes < 4)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                free(nextComponent);
+                return 0;
+            }
             a = fromF2Dot14(GetInt16(ptr, 0));
             d = fromF2Dot14(GetInt16(ptr, 2));
             ptr += 4;
+            nAvailableBytes -= 4;
         } else if (flags & WE_HAVE_A_TWO_BY_TWO) {
+            if (nAvailableBytes < 8)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                free(nextComponent);
+                return 0;
+            }
             a = fromF2Dot14(GetInt16(ptr, 0));
             b = fromF2Dot14(GetInt16(ptr, 2));
             c = fromF2Dot14(GetInt16(ptr, 4));
             d = fromF2Dot14(GetInt16(ptr, 6));
             ptr += 8;
+            nAvailableBytes -= 8;
         }
 
         abs1 = (a < 0) ? -a : a;
