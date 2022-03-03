@@ -441,33 +441,33 @@ sal_Int32 SAL_CALL rtl_str_lastIndexOfStr_WithLength(const char* pStr, sal_Int32
 
 void SAL_CALL rtl_str_replaceChar(char* pStr, char cOld, char cNew) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::replaceChar(pStr, cOld, cNew);
+    return rtl::str::replaceChars(rtl::str::null_terminated(pStr), rtl::str::FromTo(cOld, cNew));
 }
 
 void SAL_CALL rtl_str_replaceChar_WithLength(char* pStr, sal_Int32 nLen, char cOld, char cNew)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::replaceChar_WithLength(pStr, nLen, cOld, cNew);
+    return rtl::str::replaceChars(rtl::str::with_length(pStr, nLen), rtl::str::FromTo(cOld, cNew));
 }
 
 void SAL_CALL rtl_str_toAsciiLowerCase(char* pStr) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toAsciiLowerCase(pStr);
+    return rtl::str::replaceChars(rtl::str::null_terminated(pStr), rtl::str::toAsciiLower);
 }
 
 void SAL_CALL rtl_str_toAsciiLowerCase_WithLength(char* pStr, sal_Int32 nLen) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toAsciiLowerCase_WithLength(pStr, nLen);
+    return rtl::str::replaceChars(rtl::str::with_length(pStr, nLen), rtl::str::toAsciiLower);
 }
 
 void SAL_CALL rtl_str_toAsciiUpperCase(char* pStr) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toAsciiUpperCase(pStr);
+    return rtl::str::replaceChars(rtl::str::null_terminated(pStr), rtl::str::toAsciiUpper);
 }
 
 void SAL_CALL rtl_str_toAsciiUpperCase_WithLength(char* pStr, sal_Int32 nLen) SAL_THROW_EXTERN_C()
 {
-    return rtl::str::toAsciiUpperCase_WithLength(pStr, nLen);
+    return rtl::str::replaceChars(rtl::str::with_length(pStr, nLen), rtl::str::toAsciiUpper);
 }
 
 sal_Int32 SAL_CALL rtl_str_trim(char* pStr) SAL_THROW_EXTERN_C() { return rtl::str::trim(pStr); }

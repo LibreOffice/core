@@ -80,6 +80,38 @@ template <typename C> struct with_length
     auto end() const { return p + len; }
 };
 
+struct ToAsciiLower
+{
+    template <typename C> static bool Applicable(C c)
+    {
+        return rtl::isAsciiUpperCase(IMPL_RTL_USTRCODE(c));
+    }
+    template <typename C> static C Replace(C c)
+    {
+        return rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(c));
+    }
+} constexpr toAsciiLower;
+
+struct ToAsciiUpper
+{
+    template <typename C> static bool Applicable(C c)
+    {
+        return rtl::isAsciiLowerCase(IMPL_RTL_USTRCODE(c));
+    }
+    template <typename C> static C Replace(C c)
+    {
+        return rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(c));
+    }
+} constexpr toAsciiUpper;
+
+template <typename C> struct FromTo
+{
+    C from;
+    C to;
+    FromTo(C cFrom, C cTo) : from(cFrom), to(cTo) {}
+    C Replace(C c) const { return c == from ? to : c; }
+};
+
 template <typename C> void Copy(C* _pDest, const C* _pSrc, sal_Int32 _nCount)
 {
     // take advantage of builtin optimisations
@@ -450,96 +482,10 @@ sal_Int32 lastIndexOfStr_WithLength                             ( const IMPL_RTL
 
 /* ----------------------------------------------------------------------- */
 
-template <typename IMPL_RTL_STRCODE>
-void replaceChar                             ( IMPL_RTL_STRCODE* pStr,
-                                               IMPL_RTL_STRCODE cOld,
-                                               IMPL_RTL_STRCODE cNew )
+template <class S, class Replacer> void replaceChars(S str, Replacer replacer)
 {
-    assert(pStr);
-    while ( *pStr )
-    {
-        if ( *pStr == cOld )
-            *pStr = cNew;
-
-        pStr++;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE>
-void replaceChar_WithLength                             ( IMPL_RTL_STRCODE* pStr,
-                                                          sal_Int32 nLen,
-                                                          IMPL_RTL_STRCODE cOld,
-                                                          IMPL_RTL_STRCODE cNew )
-{
-    assert(nLen >= 0);
-    while ( nLen > 0 )
-    {
-        if ( *pStr == cOld )
-            *pStr = cNew;
-
-        pStr++;
-        nLen--;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE> void toAsciiLowerCase( IMPL_RTL_STRCODE* pStr )
-{
-    assert(pStr);
-    while ( *pStr )
-    {
-        *pStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pStr));
-
-        pStr++;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE>
-void toAsciiLowerCase_WithLength                             ( IMPL_RTL_STRCODE* pStr,
-                                                               sal_Int32 nLen )
-{
-    assert(nLen >= 0);
-    while ( nLen > 0 )
-    {
-        *pStr = rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(*pStr));
-
-        pStr++;
-        nLen--;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE> void toAsciiUpperCase( IMPL_RTL_STRCODE* pStr )
-{
-    assert(pStr);
-    while ( *pStr )
-    {
-        *pStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pStr));
-
-        pStr++;
-    }
-}
-
-/* ----------------------------------------------------------------------- */
-
-template <typename IMPL_RTL_STRCODE>
-void toAsciiUpperCase_WithLength                             ( IMPL_RTL_STRCODE* pStr,
-                                                               sal_Int32 nLen )
-{
-    assert(nLen >= 0);
-    while ( nLen > 0 )
-    {
-        *pStr = rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(*pStr));
-
-        pStr++;
-        nLen--;
-    }
+    for (auto& rChar : str)
+        rChar = replacer.Replace(rChar);
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1239,30 +1185,6 @@ void newReplace                                ( IMPL_RTL_STRINGDATA** ppThis,
 }
 
 /* ----------------------------------------------------------------------- */
-
-struct ToAsciiLower
-{
-    template <typename C> static bool Applicable(C c)
-    {
-        return rtl::isAsciiUpperCase(IMPL_RTL_USTRCODE(c));
-    }
-    template <typename C> static C Replace(C c)
-    {
-        return rtl::toAsciiLowerCase(IMPL_RTL_USTRCODE(c));
-    }
-};
-
-struct ToAsciiUpper
-{
-    template <typename C> static bool Applicable(C c)
-    {
-        return rtl::isAsciiLowerCase(IMPL_RTL_USTRCODE(c));
-    }
-    template <typename C> static C Replace(C c)
-    {
-        return rtl::toAsciiUpperCase(IMPL_RTL_USTRCODE(c));
-    }
-};
 
 template <class Traits, typename IMPL_RTL_STRINGDATA>
 void newReplaceChars(IMPL_RTL_STRINGDATA** ppThis, IMPL_RTL_STRINGDATA* pStr)
