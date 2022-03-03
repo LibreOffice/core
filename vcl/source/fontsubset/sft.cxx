@@ -2244,8 +2244,20 @@ GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
         nLsboffset = (ttf->horzMetricCount() * 4) + ((glyphID - ttf->horzMetricCount()) * 2);
     }
 
-    d->aw = GetUInt16(hmtx, nAwOffset);
-    d->lsb = GetInt16(hmtx, nLsboffset);
+    if (nAwOffset + 2 <= hmtxlength)
+        d->aw = GetUInt16(hmtx, nAwOffset);
+    else
+    {
+        SAL_WARN("vcl.fonts", "hmtx offset " << nAwOffset << " not available");
+        d->aw = 0;
+    }
+    if (nLsboffset + 2 <= hmtxlength)
+        d->lsb = GetInt16(hmtx, nLsboffset);
+    else
+    {
+        SAL_WARN("vcl.fonts", "hmtx offset " << nLsboffset << " not available");
+        d->lsb = 0;
+    }
 
     return d;
 }
