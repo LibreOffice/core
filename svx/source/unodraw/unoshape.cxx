@@ -374,12 +374,12 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
 {
     DBG_TESTSOLARMUTEX();
 
-    OSL_PRECOND( pNewObj, "SvxShape::Create: invalid new object!" );
+    assert( pNewObj && "SvxShape::Create: invalid new object!" );
     if ( !pNewObj )
         return;
 
     SdrObject* pCreatedObj = mpSdrObjectWeakReference.get();
-    OSL_ENSURE( ( pCreatedObj == nullptr ) || ( pCreatedObj == pNewObj ),
+    assert( ( !pCreatedObj || ( pCreatedObj == pNewObj ) ) &&
         "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
 
     // Correct condition (#i52126#)
