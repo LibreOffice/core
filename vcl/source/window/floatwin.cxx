@@ -509,7 +509,7 @@ tools::Rectangle FloatingWindow::ImplConvertToAbsPos(vcl::Window* pReference, co
 
     // compare coordinates in absolute screen coordinates
     // Keep in sync with FloatingWindow::ImplFloatHitTest, e.g. fdo#33509
-    if( pParentWinOutDev->HasMirroredGraphics()  )
+    if( pParentWinOutDev->HasMirroredGraphics() && !comphelper::LibreOfficeKit::isActive() )
     {
         if(!pReference->IsRTLEnabled() )
             pParentWinOutDev->ReMirror(aFloatRect);
