@@ -1357,7 +1357,6 @@ bool ScAccessibleSpreadsheet::IsCompleteSheetSelected()
     {
         //#103800#; use a copy of MarkData
         ScMarkData aMarkData(mpViewShell->GetViewData().GetMarkData());
-        aMarkData.MarkToMulti();
         if (aMarkData.IsAllMarked(maRange))
             bResult = true;
     }
