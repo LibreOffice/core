@@ -105,6 +105,24 @@
       "parentUuid": "a898a75c_79a18fad",
       "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8040883_d6c5c688",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-03-03T08:09:10Z",
+      "side": 1,
+      "message": "New area is added to specified file and is used instead of \"bridges\" in patchset 5",
+      "parentUuid": "2d186e4c_4ad2656f",
+      "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
