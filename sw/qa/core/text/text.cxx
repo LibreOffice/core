@@ -186,15 +186,17 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testChineseAutoFirstLineIndent)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
 
     // Get the line width of the first line for the 1st paragraph.
-    sal_Int32 nFirstLineWidth
-        = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion[1]/SwLineLayout[1]/SwLinePortion[1]",
-                   "width")
-              .toInt32();
+    sal_Int32 nFirstLineWidth = getXPath(pXmlDoc,
+                                         "//body/txt[1]/SwParaPortion/SwLineLayout[1]/"
+                                         "SwParaPortion/SwLineLayout/SwLinePortion",
+                                         "width")
+                                    .toInt32();
     // Get the line width of the first line for the 2nd paragraph.
-    sal_Int32 nSecondLineWidth
-        = getXPath(pXmlDoc, "//body/txt[2]/SwParaPortion[1]/SwLineLayout[1]/SwLinePortion[1]",
-                   "width")
-              .toInt32();
+    sal_Int32 nSecondLineWidth = getXPath(pXmlDoc,
+                                          "//body/txt[2]/SwParaPortion/SwLineLayout[1]/"
+                                          "SwParaPortion/SwLineLayout/SwLinePortion",
+                                          "width")
+                                     .toInt32();
 
     // Tdf#129448: the changing of line-height should not affect the auto first line indent.
     // As a result, the first line width of the two paragraphs should be the same.
