@@ -16,6 +16,24 @@
       "message": "isn\u0027t it the now-redundant surrounding double(...) rather than the random whitespace surrounding + that should have been cleaned up here?",
       "revId": "3e94bd846ab02f3f0dac55e9646ac778d6b7f284",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e049e677_fcb15d61",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4069,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-03T15:18:15Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/130896 will take care of it",
+      "parentUuid": "ae3452b6_e543c50c",
+      "revId": "3e94bd846ab02f3f0dac55e9646ac778d6b7f284",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
