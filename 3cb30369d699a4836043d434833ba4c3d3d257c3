@@ -16,6 +16,24 @@
       "message": "is this an unused leftover from a previous patch set version?",
       "revId": "3cb30369d699a4836043d434833ba4c3d3d257c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c600206e_904b3c61",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-03T08:54:21Z",
+      "side": 1,
+      "message": "Ah - yes; I\u0027m sorry. Will drop it.",
+      "parentUuid": "de58916e_ffd33281",
+      "revId": "3cb30369d699a4836043d434833ba4c3d3d257c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
