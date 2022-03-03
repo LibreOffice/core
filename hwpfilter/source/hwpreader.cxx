@@ -86,6 +86,10 @@ struct Free
     }
 };
 
+constexpr OUStringLiteral sBeginOfDoc(u"[\uBB38\uC11C\uC758 \uCC98\uC74C]");
+    // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
+    // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
+    // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
 }
 
 struct HwpReaderPrivate
@@ -1406,32 +1410,28 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
         padd("fo:line-height", sXML_CDATA,
             ascii(Int2Str (pshape->lspacing, "%d%%", buf)));
 
-    unsigned char set_align = 0;
+    const char* align = nullptr;
 
     switch (static_cast<int>(pshape->arrange_type))
     {
         case 1:
-            strcpy(buf, "start");
-            set_align = 1;
+            align = "start";
             break;
         case 2:
-            strcpy(buf, "end");
-            set_align = 1;
+            align = "end";
             break;
         case 3:
-            strcpy(buf, "center");
-            set_align = 1;
+            align = "center";
             break;
         case 4:
         case 5:
         case 6:
-            strcpy(buf, "justify");
-            set_align = 1;
+            align = "justify";
             break;
     }
 
-    if (set_align)
-        padd("fo:text-align", sXML_CDATA, ascii(buf));
+    if (align)
+        padd("fo:text-align", sXML_CDATA, ascii(align));
 
     if (pshape->outline)
         padd("fo:border", sXML_CDATA, "0.002cm solid #000000");
@@ -2705,13 +2705,7 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     }
     if( d->bFirstPara && d->bInBody )
     {
-        strcpy(
-            buf,
-            "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98 \xEC\xB2\x98\xEC\x9D\x8C]");
-            // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
-            // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
-            // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
-        padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+        padd("text:name", sXML_CDATA, sBeginOfDoc);
         rstartEl("text:bookmark", mxList);
         mxList->clear();
         rendEl("text:bookmark");
@@ -2781,13 +2775,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
     if( d->bFirstPara && d->bInBody )
     {
 /* for HWP's Bookmark */
-        strcpy(
-            buf,
-            "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98 \xEC\xB2\x98\xEC\x9D\x8C]");
-            // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
-            // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
-            // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
-        padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+        padd("text:name", sXML_CDATA, sBeginOfDoc);
         rstartEl("text:bookmark", mxList);
         mxList->clear();
         rendEl("text:bookmark");
@@ -2865,13 +2853,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         if ( !pstart ) {
             STARTP;
         }
-        strcpy(
-            buf,
-            "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98 \xEC\xB2\x98\xEC\x9D\x8C]");
-            // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
-            // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
-            // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
-        padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+        padd("text:name", sXML_CDATA, sBeginOfDoc);
         rstartEl("text:bookmark", mxList);
         mxList->clear();
         rendEl("text:bookmark");
@@ -4730,14 +4712,7 @@ void HwpReader::parsePara(HWPPara * para)
             if( d->bFirstPara && d->bInBody )
             {
 /* for HWP's Bookmark */
-                strcpy(
-                    buf,
-                    "[\xEB\xAC\xB8\xEC\x84\x9C\xEC\x9D\x98"
-                        " \xEC\xB2\x98\xEC\x9D\x8C]");
-                    // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
-                    // U+C758 HANGUL SYLLABLE YI, U+CC98 HANGUL SYLLABLE CEO,
-                    // U+C74C HANGUL SYLLABLE EUM: "Begin of Document"
-                padd("text:name", sXML_CDATA, OUString(buf, strlen(buf), RTL_TEXTENCODING_UTF8));
+                padd("text:name", sXML_CDATA, sBeginOfDoc);
                 rstartEl("text:bookmark", mxList);
                 mxList->clear();
                 rendEl("text:bookmark");
