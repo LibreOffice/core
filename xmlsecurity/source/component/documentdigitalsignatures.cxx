@@ -673,9 +673,17 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
     std::vector< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions::GetTrustedAuthors();
 
     return std::any_of(aTrustedAuthors.begin(), aTrustedAuthors.end(),
-        [&xAuthor, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
-            return xmlsecurity::EqualDistinguishedNames(rAuthor.SubjectName, xAuthor->getIssuerName(), xmlsecurity::NOCOMPAT)
-                && ( rAuthor.SerialNumber == sSerialNum );
+        [this, &xAuthor, &sSerialNum](const SvtSecurityOptions::Certificate& rAuthor) {
+            if (!xmlsecurity::EqualDistinguishedNames(rAuthor.SubjectName, xAuthor->getIssuerName(), xmlsecurity::NOCOMPAT))
+                return false;
+            if (rAuthor.SerialNumber != sSerialNum)
+                return false;
+
+            DocumentSignatureManager aSignatureManager(mxCtx, {});
+            if (!aSignatureManager.init())
+                return false;
+            uno::Reference<css::security::XCertificate> xCert = aSignatureManager.getSecurityEnvironment()->createCertificateFromAscii(rAuthor.RawData);
+            return xCert->getSHA1Thumbprint() == xAuthor->getSHA1Thumbprint();
         });
 }
 
