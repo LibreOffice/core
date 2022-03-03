@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2db7d9ae_4ff43163",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-03T12:22:55Z",
+      "side": 1,
+      "message": "Hi Xisco! Thank you for your help. I will check how to implement it using a c++ test.",
+      "revId": "f16d15ce4fb73fd88f1e5ccff2fba7bec7111fc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
