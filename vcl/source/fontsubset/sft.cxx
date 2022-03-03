@@ -175,8 +175,8 @@ static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
     int sign;
 
     sign = (a & 0x80000000) ^ (b & 0x80000000);
-    if (a < 0) a = -a;
-    if (b < 0) b = -b;
+    if (a < 0) a = o3tl::saturating_toggle_sign(a);
+    if (b < 0) b = o3tl::saturating_toggle_sign(b);
 
     a1 = a >> 16;
     b1 = a & 0xFFFF;
