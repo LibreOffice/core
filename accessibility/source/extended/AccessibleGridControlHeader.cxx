@@ -74,11 +74,11 @@ AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
 
 sal_Int32 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
 {
-     ensureIsAlive();
-     if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
-         return 1;
-     else
-         return 0;
+    ensureIsAlive();
+    if(m_eObjType == vcl::table::TCTYPE_ROWHEADERBAR && m_aTable.HasColHeader())
+        return 1;
+    else
+        return 0;
 }
 
 // XAccessibleComponent -------------------------------------------------------
