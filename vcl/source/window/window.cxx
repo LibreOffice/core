@@ -2708,11 +2708,14 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
             {
                 tools::Rectangle aRect( Point ( nX, nY ), Size( nWidth, nHeight ) );
                 const OutputDevice *pParentOutDev = pParent->GetOutDev();
-                pParentOutDev->ReMirror( aRect );
+                if (!comphelper::LibreOfficeKit::isActive())
+                    pParentOutDev->ReMirror( aRect );
                 nX = aRect.Left();
             }
         }
-        if( !(nFlags & PosSizeFlags::X) && bHasValidSize && pWindow->mpWindowImpl->mpFrame->maGeometry.nWidth )
+        if( !comphelper::LibreOfficeKit::isActive() &&
+            !(nFlags & PosSizeFlags::X) && bHasValidSize &&
+            pWindow->mpWindowImpl->mpFrame->maGeometry.nWidth )
         {
             // RTL: make sure the old right aligned position is not changed
             // system windows will always grow to the right
