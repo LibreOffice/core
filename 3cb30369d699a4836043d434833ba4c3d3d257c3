@@ -34,6 +34,24 @@
       "parentUuid": "de58916e_ffd33281",
       "revId": "3cb30369d699a4836043d434833ba4c3d3d257c3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "923957ae_0492979b",
+        "filename": "sal/rtl/strtmpl.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-03T08:58:01Z",
+      "side": 1,
+      "message": "Addressed in the new set of https://gerrit.libreoffice.org/c/core/+/130902",
+      "parentUuid": "c600206e_904b3c61",
+      "revId": "3cb30369d699a4836043d434833ba4c3d3d257c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
