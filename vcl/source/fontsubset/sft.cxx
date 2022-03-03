@@ -2229,12 +2229,29 @@ GlyphData *GetTTRawGlyphData(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID)
     }
 
     /* get advance width and left sidebearing */
+    sal_uInt32 nAwOffset;
+    sal_uInt32 nLsboffset;
     if (glyphID < ttf->horzMetricCount()) {
-        d->aw = GetUInt16(hmtx, 4 * glyphID);
-        d->lsb = GetInt16(hmtx, 4 * glyphID + 2);
+        nAwOffset = 4 * glyphID;
+        nLsboffset = 4 * glyphID + 2;
     } else {
-        d->aw = GetUInt16(hmtx, 4 * (ttf->horzMetricCount() - 1));
-        d->lsb  = GetInt16(hmtx + ttf->horzMetricCount() * 4, (glyphID - ttf->horzMetricCount()) * 2);
+        nAwOffset = 4 * (ttf->horzMetricCount() - 1);
+        nLsboffset = (ttf->horzMetricCount() * 4) + ((glyphID - ttf->horzMetricCount()) * 2);
+    }
+
+    if (nAwOffset + 2 <= hmtxlength)
+        d->aw = GetUInt16(hmtx, nAwOffset);
+    else
+    {
+        SAL_WARN("vcl.fonts", "hmtx offset " << nAwOffset << " not available");
+        d->aw = 0;
+    }
+    if (nLsboffset + 2 <= hmtxlength)
+        d->lsb = GetInt16(hmtx, nLsboffset);
+    else
+    {
+        SAL_WARN("vcl.fonts", "hmtx offset " << nLsboffset << " not available");
+        d->lsb = 0;
     }
 
     return d;
