@@ -378,7 +378,11 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
             lastPoint = t;
     }
 
-    sal_uInt16 instLen = GetUInt16(ptr, 10 + numberOfContours*2);
+    sal_uInt32 nInstLenOffset = 10 + numberOfContours * 2;
+    if (nInstLenOffset + 2 > nMaxGlyphSize)
+        return 0;
+    sal_uInt16 instLen = GetUInt16(ptr, nInstLenOffset);
+
     sal_uInt32 nOffset = 10 + 2 * numberOfContours + 2 + instLen;
     if (nOffset > nMaxGlyphSize)
         return 0;
