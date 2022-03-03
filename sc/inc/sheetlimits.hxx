@@ -65,6 +65,16 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
     SCROW GetMaxRowCount() const { return mnMaxRow + 1; }
     // equivalent of MAXCOLCOUNT in address.hxx
     SCCOL GetMaxColCount() const { return mnMaxCol + 1; }
+    // max row number as string
+    OUString MaxRowAsString() const
+    {
+        return mnMaxRow == MAXROW ? OUString(MAXROW_STRING) : OUString(MAXROW_JUMBO_STRING);
+    }
+    // mac col as string ("AMJ" or "XFD")
+    OUString MaxColAsString() const
+    {
+        return mnMaxCol == MAXCOL ? OUString(MAXCOL_STRING) : OUString(MAXCOL_JUMBO_STRING);
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
