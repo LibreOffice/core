@@ -1155,8 +1155,7 @@ void ScDocument::Fill(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScProg
 {
     PutInOrder( nCol1, nCol2 );
     PutInOrder( nRow1, nRow2 );
-    ScRange aRange;
-    rMark.GetMarkArea(aRange);
+    const ScRange& aRange = rMark.GetMarkArea();
     SCTAB nMax = maTabs.size();
     for (const auto& rTab : rMark)
     {

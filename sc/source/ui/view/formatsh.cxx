@@ -2838,9 +2838,7 @@ SvNumFormatType ScFormatShell::GetCurrentNumberFormatType()
     if ( aMark.IsMarked() || aMark.IsMultiMarked() )
     {
         aMark.MarkToMulti();
-        ScRange aRange;
-        aMark.GetMultiMarkArea(aRange);
-
+        const ScRange& aRange = aMark.GetMultiMarkArea();
         const ScMultiSel& rMultiSel = aMark.GetMultiSelData();
 
         SvNumFormatType nComboType = SvNumFormatType::ALL;

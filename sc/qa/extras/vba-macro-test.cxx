@@ -297,12 +297,7 @@ void VBAMacroTest::testSelectAllChaged()
     ScTabViewShell* pView = pDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pView != nullptr);
     auto const& pViewData = pView->GetViewData();
-
-    {
-        ScRange aRange;
-        pViewData.GetMarkData().GetMarkArea(aRange);
-        CPPUNIT_ASSERT_EQUAL(ScRange(), aRange);
-    }
+    CPPUNIT_ASSERT_EQUAL(ScRange(), pViewData.GetMarkData().GetMarkArea());
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
@@ -314,12 +309,8 @@ void VBAMacroTest::testSelectAllChaged()
                                 "language=Basic&location=document",
                                 aParams, aRet, aOutParamIndex, aOutParam);
 
-    {
-        ScRange aRange;
-        pViewData.GetMarkData().GetMarkArea(aRange);
-        // A1:E1048576
-        CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, MAXROW, 0), aRange);
-    }
+    // A1:E1048576
+    CPPUNIT_ASSERT_EQUAL(ScRange(0, 0, 0, 4, MAXROW, 0), pViewData.GetMarkData().GetMarkArea());
 }
 
 void VBAMacroTest::testRangeSelect()
@@ -338,12 +329,7 @@ void VBAMacroTest::testRangeSelect()
     ScTabViewShell* pView = pDocSh->GetBestViewShell(false);
     CPPUNIT_ASSERT(pView != nullptr);
     auto const& pViewData = pView->GetViewData();
-
-    {
-        ScRange aRange;
-        pViewData.GetMarkData().GetMarkArea(aRange);
-        CPPUNIT_ASSERT_EQUAL(ScRange(), aRange);
-    }
+    CPPUNIT_ASSERT_EQUAL(ScRange(), pViewData.GetMarkData().GetMarkArea());
 
     uno::Any aRet;
     uno::Sequence<sal_Int16> aOutParamIndex;
@@ -355,12 +341,8 @@ void VBAMacroTest::testRangeSelect()
                                 "language=Basic&location=document",
                                 aParams, aRet, aOutParamIndex, aOutParam);
 
-    {
-        ScRange aRange;
-        pViewData.GetMarkData().GetMarkArea(aRange);
-        // B2:E5
-        CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 4, 1, 0), aRange);
-    }
+    // B2:E5
+    CPPUNIT_ASSERT_EQUAL(ScRange(1, 1, 0, 4, 1, 0), pViewData.GetMarkData().GetMarkArea());
 }
 
 void VBAMacroTest::testWindowState()

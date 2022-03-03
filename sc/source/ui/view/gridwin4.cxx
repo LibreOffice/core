@@ -2248,8 +2248,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     if (!aMultiMark.IsMultiMarked())
     {
         // simple range case - simplify calculation
-        ScRange aSimpleRange;
-        aMultiMark.GetMarkArea( aSimpleRange );
+        const ScRange& aSimpleRange = aMultiMark.GetMarkArea();
 
         aMultiMark.MarkToMulti();
         if ( !aMultiMark.IsMultiMarked() )
@@ -2297,8 +2296,7 @@ void ScGridWindow::GetRectsAnyFor(const ScMarkData &rMarkData,
     aMultiMark.MarkToMulti();
     if ( !aMultiMark.IsMultiMarked() )
         return;
-    ScRange aMultiRange;
-    aMultiMark.GetMultiMarkArea( aMultiRange );
+    const ScRange& aMultiRange = aMultiMark.GetMultiMarkArea();
     SCCOL nX1 = aMultiRange.aStart.Col();
     SCROW nY1 = aMultiRange.aStart.Row();
     SCCOL nX2 = aMultiRange.aEnd.Col();

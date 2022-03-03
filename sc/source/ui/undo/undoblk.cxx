@@ -1965,10 +1965,7 @@ bool ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
 static ScRange lcl_GetMultiMarkRange( const ScMarkData& rMark )
 {
     OSL_ENSURE( rMark.IsMultiMarked(), "wrong mark type" );
-
-    ScRange aRange;
-    rMark.GetMultiMarkArea( aRange );
-    return aRange;
+    return rMark.GetMultiMarkArea();
 }
 
 ScUndoIndent::ScUndoIndent( ScDocShell* pNewDocShell, const ScMarkData& rMark,

@@ -681,8 +681,7 @@ void ScDocShell::UseScenario( SCTAB nTab, const OUString& rName, bool bRecord )
                 ScDocShellModificator aModificator( *this );
                 ScMarkData aScenMark(m_aDocument.GetSheetLimits());
                 m_aDocument.MarkScenario( nSrcTab, nTab, aScenMark );
-                ScRange aMultiRange;
-                aScenMark.GetMultiMarkArea( aMultiRange );
+                const ScRange& aMultiRange = aScenMark.GetMultiMarkArea();
                 SCCOL nStartCol = aMultiRange.aStart.Col();
                 SCROW nStartRow = aMultiRange.aStart.Row();
                 SCCOL nEndCol = aMultiRange.aEnd.Col();

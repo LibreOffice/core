@@ -1620,8 +1620,7 @@ bool ScModelObj::FillRenderMarkData( const uno::Any& aSelection,
             {
                 // #i115266# copy behavior of old printing:
                 // treat multiple selection like a single selection with the enclosing range
-                ScRange aMultiMarkArea;
-                rMark.GetMultiMarkArea( aMultiMarkArea );
+                const ScRange& aMultiMarkArea = rMark.GetMultiMarkArea();
                 rMark.ResetMark();
                 rMark.SetMarkArea( aMultiMarkArea );
             }
@@ -1854,8 +1853,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
         if (lcl_renderSelectionToGraphic( bRenderToGraphic, aStatus))
         {
             assert( aMark.IsMarked());
-            ScRange aRange;
-            aMark.GetMarkArea( aRange );
+            const ScRange& aRange = aMark.GetMarkArea();
             tools::Rectangle aMMRect( pDocShell->GetDocument().GetMMRect(
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aStart.Tab()));
@@ -1943,7 +1941,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     }
     else if ( aMark.IsMarked() )
     {
-        aMark.GetMarkArea( aRange );
+        aRange = aMark.GetMarkArea();
         pSelRange = &aRange;
     }
 
@@ -2132,7 +2130,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     }
     else if ( aMark.IsMarked() )
     {
-        aMark.GetMarkArea( aRange );
+        aRange = aMark.GetMarkArea();
         pSelRange = &aRange;
     }
 

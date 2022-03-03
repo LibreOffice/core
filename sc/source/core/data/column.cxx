@@ -482,8 +482,7 @@ void ScColumn::ClearSelectionItems( const sal_uInt16* pWhich,const ScMarkData& r
     }
     else if (rMark.IsMarked())
     {
-        ScRange aRange;
-        rMark.GetMarkArea(aRange);
+        const ScRange& aRange = rMark.GetMarkArea();
         if (aRange.aStart.Col() <= nCol && nCol <= aRange.aEnd.Col())
         {
             pAttrArray->ClearItems(aRange.aStart.Row(), aRange.aEnd.Row(), pWhich);

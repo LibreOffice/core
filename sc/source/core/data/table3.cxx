@@ -3065,9 +3065,9 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData, const ScMarkData& 
     ScRangeList aRanges = rMark.GetMarkedRangesForTab( nTab );
     ScRange aMarkArea( ScAddress::UNINITIALIZED );
     if (rMark.IsMultiMarked())
-        rMark.GetMultiMarkArea( aMarkArea );
+        aMarkArea = rMark.GetMultiMarkArea();
     else if (rMark.IsMarked())
-        rMark.GetMarkArea( aMarkArea );
+        aMarkArea = rMark.GetMarkArea();
     else
     {
         assert(!"ScTable::UpdateSelectionFunction - called without anything marked");

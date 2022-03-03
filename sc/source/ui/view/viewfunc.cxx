@@ -1071,9 +1071,9 @@ void ScViewFunc::ApplyPatternLines( const ScPatternAttr& rAttr, const SvxBoxItem
     aFuncMark.MarkToSimple();
     bool bMulti = aFuncMark.IsMultiMarked();
     if (bMulti)
-        aFuncMark.GetMultiMarkArea( aMarkRange );
+        aMarkRange = aFuncMark.GetMultiMarkArea();
     else if (aFuncMark.IsMarked())
-        aFuncMark.GetMarkArea( aMarkRange );
+        aMarkRange = aFuncMark.GetMarkArea();
     else
     {
         aMarkRange = ScRange( GetViewData().GetCurX(),
@@ -1183,8 +1183,7 @@ void ScViewFunc::ApplySelectionPattern( const ScPatternAttr& rAttr, bool bCursor
 
     if (aFuncMark.IsMultiMarked() && !bCursorOnly)
     {
-        ScRange aMarkRange;
-        aFuncMark.GetMultiMarkArea( aMarkRange );
+        const ScRange& aMarkRange = aFuncMark.GetMultiMarkArea();
         SCTAB nTabCount = rDoc.GetTableCount();
         for (const auto& rTab : aFuncMark)
         {
@@ -1371,9 +1370,8 @@ void ScViewFunc::SetStyleSheetToMarked( const SfxStyleSheet* pStyleSheet )
 
     if ( aFuncMark.IsMarked() || aFuncMark.IsMultiMarked() )
     {
-        ScRange aMarkRange;
         aFuncMark.MarkToMulti();
-        aFuncMark.GetMultiMarkArea( aMarkRange );
+        const ScRange& aMarkRange = aFuncMark.GetMultiMarkArea();
 
         if ( bRecord )
         {
@@ -3013,9 +3011,9 @@ void ScViewFunc::UpdateSelectionArea( const ScMarkData& rSel, ScPatternAttr* pAt
     ScDocShell* pDocShell = GetViewData().GetDocShell();
     ScRange aMarkRange;
     if (rSel.IsMultiMarked() )
-        rSel.GetMultiMarkArea( aMarkRange );
+        aMarkRange = rSel.GetMultiMarkArea();
     else
-        rSel.GetMarkArea( aMarkRange );
+        aMarkRange = rSel.GetMarkArea();
 
     bool bSetLines = false;
     bool bSetAlign = false;

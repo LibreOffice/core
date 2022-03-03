@@ -1449,9 +1449,9 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCCOL nMovX, SCROW nMovY,
     {
         ScRange aRange( ScAddress::UNINITIALIZED);
         if (rMark.IsMarked())
-            rMark.GetMarkArea( aRange);
+            aRange = rMark.GetMarkArea();
         else if (rMark.IsMultiMarked())
-            rMark.GetMultiMarkArea( aRange);
+            aRange = rMark.GetMultiMarkArea();
         else
         {
             // Covered by assert() above, but for NDEBUG build.

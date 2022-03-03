@@ -30,10 +30,6 @@ ScMultiSel::ScMultiSel(const ScSheetLimits& rSheetLimits)
 {
 }
 
-ScMultiSel::~ScMultiSel()
-{
-}
-
 ScMultiSel& ScMultiSel::operator=(const ScMultiSel& rOther)
 {
     aMultiSelContainer = rOther.aMultiSelContainer;
@@ -394,11 +390,6 @@ void ScMultiSel::ShiftRows(SCROW nStartRow, sal_Int32 nRowOffset)
     aRowSel.Shift(nStartRow, nRowOffset);
 }
 
-const ScMarkArray& ScMultiSel::GetRowSelArray() const
-{
-    return aRowSel;
-}
-
 const ScMarkArray* ScMultiSel::GetMultiSelArray( SCCOL nCol ) const
 {
     if (nCol >= static_cast<SCCOL>(aMultiSelContainer.size()))
@@ -440,10 +431,6 @@ ScMultiSelIter::ScMultiSelIter( const ScMultiSel& rMultiSel, SCCOL nCol ) :
     {
         aMarkArrayIter.reset( &rMultiSel.aMultiSelContainer[nCol]);
     }
-}
-
-ScMultiSelIter::~ScMultiSelIter()
-{
 }
 
 bool ScMultiSelIter::Next( SCROW& rTop, SCROW& rBottom )

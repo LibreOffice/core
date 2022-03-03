@@ -67,7 +67,6 @@ public:
     ScMarkData(ScMarkData&& rData) = default;
     ScMarkData& operator=(const ScMarkData& rData);
     ScMarkData& operator=(ScMarkData&& rData);
-    ~ScMarkData();
 
     void        ResetMark();
     void        SetMarkArea( const ScRange& rRange );
@@ -81,8 +80,8 @@ public:
     bool        IsMarked() const                { return bMarked; }
     bool        IsMultiMarked() const           { return bMultiMarked; }
 
-    void        GetMarkArea( ScRange& rRange ) const;
-    void        GetMultiMarkArea( ScRange& rRange ) const;
+    const ScRange& GetMarkArea() const { return aMarkRange; }
+    const ScRange& GetMultiMarkArea() const { return aMultiRange; }
 
     void        SetAreaTab( SCTAB nTab );
 
@@ -104,7 +103,7 @@ public:
 
     //  for FillInfo / Document etc.
     const ScMultiSel& GetMultiSelData() const   { return aMultiSel;   }
-    ScMarkArray GetMarkArray( SCCOL nCol ) const;
+    ScMarkArray GetMarkArray( SCCOL nCol ) const { return aMultiSel.GetMarkArray( nCol ); }
 
     bool        IsCellMarked( SCCOL nCol, SCROW nRow, bool bNoSimple = false ) const;
 
@@ -157,11 +156,11 @@ public:
     typedef std::set<SCTAB>::iterator iterator;
     typedef std::set<SCTAB>::const_iterator const_iterator;
     typedef std::set<SCTAB>::const_reverse_iterator const_reverse_iterator;
-    iterator begin();
-    iterator end();
-    const_iterator begin() const;
-    const_iterator end() const;
-    const_reverse_iterator rbegin() const;
+    iterator begin() { return maTabMarked.begin(); }
+    iterator end() { return maTabMarked.end(); }
+    const_iterator begin() const { return maTabMarked.begin(); }
+    const_iterator end() const { return maTabMarked.end(); }
+    const_reverse_iterator rbegin() const { return maTabMarked.rbegin(); }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

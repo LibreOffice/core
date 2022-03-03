@@ -79,7 +79,7 @@ static bool lcl_GetTextToColumnsRange( const ScViewData& rData, ScRange& rRange,
     {
         if ( !rMark.IsMultiMarked() )
         {
-            rMark.GetMarkArea( rRange );
+            rRange = rMark.GetMarkArea();
             if ( rRange.aStart.Col() == rRange.aEnd.Col() )
             {
                 bRet = true;
