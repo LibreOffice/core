@@ -81,6 +81,11 @@ const SCROW       MAXTILEDROW    = 500000;
 const SCTAB       MAXINITTAB = 1024;
 const SCTAB       MININITTAB = 1;
 
+constexpr OUStringLiteral MAXROW_STRING(u"1048575");
+constexpr OUStringLiteral MAXCOL_STRING(u"AMJ");
+constexpr OUStringLiteral MAXROW_JUMBO_STRING(u"16777215");
+constexpr OUStringLiteral MAXCOL_JUMBO_STRING(u"XFD");
+
 // Special values
 const SCTAB SC_TAB_APPEND     = SCTAB_MAX;
 const SCTAB TABLEID_DOC       = SCTAB_MAX;  // entire document, e.g. protect
