@@ -285,8 +285,8 @@ struct SvxCSS1ItemIds
     sal_uInt16 nOrphans;
     sal_uInt16 nFormatSplit;
 
-    sal_uInt16 nLRSpace;
-    sal_uInt16 nULSpace;
+    TypedWhichId<SvxLRSpaceItem> nLRSpace{0};
+    TypedWhichId<SvxULSpaceItem> nULSpace{0};
     sal_uInt16 nBox;
     sal_uInt16 nBrush;
 
@@ -736,8 +736,8 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL,
     aItemIds.nOrphans = initTrueWhich( SID_ATTR_PARA_ORPHANS );
     aItemIds.nFormatSplit = initTrueWhich( SID_ATTR_PARA_SPLIT );
 
-    aItemIds.nLRSpace = initTrueWhich( SID_ATTR_LRSPACE );
-    aItemIds.nULSpace = initTrueWhich( SID_ATTR_ULSPACE );
+    aItemIds.nLRSpace = TypedWhichId<SvxLRSpaceItem>(initTrueWhich( SID_ATTR_LRSPACE ));
+    aItemIds.nULSpace = TypedWhichId<SvxULSpaceItem>(initTrueWhich( SID_ATTR_ULSPACE ));
     aItemIds.nBox = initTrueWhich( SID_ATTR_BORDER_OUTER );
     aItemIds.nBrush = initTrueWhich( SID_ATTR_BRUSH );
 
@@ -941,16 +941,15 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
     }
     else
     {
-        SvxLRSpaceItem aLRSpace( static_cast<const SvxLRSpaceItem&>(rTargetSet.Get(aItemIds.nLRSpace)) );
-        SvxULSpaceItem aULSpace( static_cast<const SvxULSpaceItem&>(rTargetSet.Get(aItemIds.nULSpace)) );
+        SvxLRSpaceItem aLRSpace( rTargetSet.Get(aItemIds.nLRSpace) );
+        SvxULSpaceItem aULSpace( rTargetSet.Get(aItemIds.nULSpace) );
 
         rTargetSet.Put( rSrcSet );
 
         if( rSrcInfo.m_bLeftMargin || rSrcInfo.m_bRightMargin ||
             rSrcInfo.m_bTextIndent )
         {
-            const SvxLRSpaceItem& rNewLRSpace =
-                static_cast<const SvxLRSpaceItem&>(rSrcSet.Get( aItemIds.nLRSpace ));
+            const SvxLRSpaceItem& rNewLRSpace = rSrcSet.Get( aItemIds.nLRSpace );
 
             if( rSrcInfo.m_bLeftMargin )
                 aLRSpace.SetLeft( rNewLRSpace.GetLeft() );
@@ -964,8 +963,7 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
 
         if( rSrcInfo.m_bTopMargin || rSrcInfo.m_bBottomMargin )
         {
-            const SvxULSpaceItem& rNewULSpace =
-                static_cast<const SvxULSpaceItem&>(rSrcSet.Get( aItemIds.nULSpace ));
+            const SvxULSpaceItem& rNewULSpace = rSrcSet.Get( aItemIds.nULSpace );
 
             if( rSrcInfo.m_bTopMargin )
                 aULSpace.SetUpper( rNewULSpace.GetUpper() );
@@ -1981,11 +1979,9 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
     if( !bSet )
         return;
 
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
-                                               &pItem ) )
+    if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
     {
-        SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
+        SvxLRSpaceItem aLRItem( *pItem );
         aLRItem.SetTextFirstLineOffset( nIndent );
         rItemSet.Put( aLRItem );
     }
@@ -2044,11 +2040,9 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
     rPropInfo.m_nLeftMargin = nLeft;
     if( nLeft < 0 )
         nLeft = 0;
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
-                                               &pItem ) )
+    if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
     {
-        SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
+        SvxLRSpaceItem aLRItem( *pItem );
         aLRItem.SetTextLeft( o3tl::narrowing<sal_uInt16>(nLeft) );
         rItemSet.Put( aLRItem );
     }
@@ -2103,11 +2097,9 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
     rPropInfo.m_nRightMargin = nRight;
     if( nRight < 0 )
         nRight = 0;
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
-                                               &pItem ) )
+    if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
     {
-        SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
+        SvxLRSpaceItem aLRItem( *pItem );
         aLRItem.SetRight( o3tl::narrowing<sal_uInt16>(nRight) );
         rItemSet.Put( aLRItem );
     }
@@ -2165,11 +2157,9 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
     if( !bSet )
         return;
 
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
-                                               &pItem ) )
+    if( const SvxULSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nULSpace, false ) )
     {
-        SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
+        SvxULSpaceItem aULItem( *pItem );
         aULItem.SetUpper( nUpper );
         rItemSet.Put( aULItem );
     }
@@ -2227,11 +2217,9 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
     if( !bSet )
         return;
 
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
-                                               &pItem ) )
+    if( const SvxULSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nULSpace, false ) )
     {
-        SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
+        SvxULSpaceItem aULItem( *pItem );
         aULItem.SetLower( nLower );
         rItemSet.Put( aULItem );
     }
@@ -2337,11 +2325,9 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
                 nMargins[1] = 0;
         }
 
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nLRSpace, false,
-                                                   &pItem ) )
+        if( const SvxLRSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nLRSpace, false ) )
         {
-            SvxLRSpaceItem aLRItem( *static_cast<const SvxLRSpaceItem*>(pItem) );
+            SvxLRSpaceItem aLRItem( *pItem );
             if( bSetMargins[3] )
                 aLRItem.SetLeft( o3tl::narrowing<sal_uInt16>(nMargins[3]) );
             if( bSetMargins[1] )
@@ -2367,11 +2353,9 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
     if( nMargins[2] < 0 )
         nMargins[2] = 0;
 
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rItemSet.GetItemState( aItemIds.nULSpace, false,
-                                               &pItem ) )
+    if( const SvxULSpaceItem* pItem = rItemSet.GetItemIfSet( aItemIds.nULSpace, false ) )
     {
-        SvxULSpaceItem aULItem( *static_cast<const SvxULSpaceItem*>(pItem) );
+        SvxULSpaceItem aULItem( *pItem );
         if( bSetMargins[0] )
             aULItem.SetUpper( o3tl::narrowing<sal_uInt16>(nMargins[0]) );
         if( bSetMargins[2] )

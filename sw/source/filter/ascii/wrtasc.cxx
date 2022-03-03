@@ -210,12 +210,11 @@ void SwASCWriter::SetupFilterOptions(SfxMedium& rMedium)
     const SfxItemSet* pSet = rMedium.GetItemSet();
     if( nullptr != pSet )
     {
-        const SfxPoolItem* pItem;
-        if( SfxItemState::SET == pSet->GetItemState( SID_FILE_FILTEROPTIONS, true, &pItem ) )
+        if( const SfxStringItem* pItem = pSet->GetItemIfSet( SID_FILE_FILTEROPTIONS ) )
         {
             SwAsciiOptions aOpt;
             OUString sItemOpt;
-            sItemOpt = static_cast<const SfxStringItem*>(pItem)->GetValue();
+            sItemOpt = pItem->GetValue();
             aOpt.ReadUserData(sItemOpt);
             SetAsciiOptions(aOpt);
         }

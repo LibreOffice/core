@@ -258,11 +258,9 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 
     // set left/right margin
-    const SfxPoolItem *pItem;
-    if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
+    if( const SvxLRSpaceItem* pLRItem = rCSS1ItemSet.GetItemIfSet( RES_LR_SPACE ) )
     {
         // if applicable remove the first line indent
-        const SvxLRSpaceItem *pLRItem = static_cast<const SvxLRSpaceItem *>(pItem);
         SvxLRSpaceItem aLRItem( *pLRItem );
         aLRItem.SetTextFirstLineOffset( 0 );
         if( rCSS1PropInfo.m_bLeftMargin )
@@ -297,10 +295,9 @@ void SwHTMLParser::SetSpace( const Size& rPixSpace,
     }
 
     // set top/bottom margin
-    if( SfxItemState::SET==rCSS1ItemSet.GetItemState( RES_UL_SPACE, true, &pItem ) )
+    if( const SvxULSpaceItem *pULItem = rCSS1ItemSet.GetItemIfSet( RES_UL_SPACE ) )
     {
         // if applicable remove the first line indent
-        const SvxULSpaceItem *pULItem = static_cast<const SvxULSpaceItem *>(pItem);
         if( rCSS1PropInfo.m_bTopMargin )
         {
             nUpperSpace = pULItem->GetUpper();

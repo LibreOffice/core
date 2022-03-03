@@ -81,13 +81,12 @@ SvXMLImportContextRef SwXMLItemSetContext::createFastChildContext( sal_Int32 nEl
     {
     case RES_BACKGROUND:
         {
-            const SfxPoolItem *pItem;
-            if( SfxItemState::SET == m_rItemSet.GetItemState( RES_BACKGROUND,
-                                                       false, &pItem ) )
+            if( const SvxBrushItem* pItem = m_rItemSet.GetItemIfSet( RES_BACKGROUND,
+                                                       false ) )
             {
                 xContext = new SwXMLBrushItemImportContext(
                                 GetImport(), nElement, xAttrList,
-                                m_rUnitConv, *static_cast<const SvxBrushItem *>(pItem) );
+                                m_rUnitConv, *pItem );
             }
             else
             {
