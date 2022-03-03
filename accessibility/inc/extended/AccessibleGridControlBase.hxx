@@ -253,8 +253,6 @@ protected:
     ::vcl::table::AccessibleTableControlObjType m_eObjType;
 
 private:
-    /** Localized description text. */
-    OUString m_aDescription;
     ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
 };
 
