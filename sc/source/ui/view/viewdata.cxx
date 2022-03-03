@@ -1137,7 +1137,7 @@ ScMarkType ScViewData::GetSimpleArea( ScRange & rRange, ScMarkData & rNewMark ) 
 
         if ( rNewMark.IsMarked() && !rNewMark.IsMultiMarked() )
         {
-            rNewMark.GetMarkArea( rRange );
+            rRange = rNewMark.GetMarkArea();
             if (ScViewUtil::HasFiltered(rRange, GetDocument()))
                 eMarkType = SC_MARK_SIMPLE_FILTERED;
             else

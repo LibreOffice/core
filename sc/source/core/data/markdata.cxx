@@ -42,10 +42,6 @@ ScMarkData::ScMarkData(const ScSheetLimits& rSheetLimits) :
     ResetMark();
 }
 
-ScMarkData::~ScMarkData()
-{
-}
-
 ScMarkData& ScMarkData::operator=(const ScMarkData& rOther)
 {
     maTabMarked = rOther.maTabMarked;
@@ -106,16 +102,6 @@ void ScMarkData::SetMarkArea( const ScRange& rRange )
             maTabMarked.insert( aMarkRange.aStart.Tab() );
         bMarked = true;
     }
-}
-
-void ScMarkData::GetMarkArea( ScRange& rRange ) const
-{
-    rRange = aMarkRange;        //TODO: inline ?
-}
-
-void ScMarkData::GetMultiMarkArea( ScRange& rRange ) const
-{
-    rRange = aMultiRange;
 }
 
 void ScMarkData::SetMultiMarkArea( const ScRange& rRange, bool bMark, bool bSetupMulti )
@@ -936,37 +922,6 @@ void ScMarkData::GetSelectionCover( ScRange& rRange )
         }
         rRange = ScRange( nCol1New, nRow1New, nTab1, nCol2New, nRow2New, nTab2 );
     }
-}
-
-ScMarkArray ScMarkData::GetMarkArray( SCCOL nCol ) const
-{
-    return aMultiSel.GetMarkArray( nCol );
-}
-
-//iterators
-ScMarkData::iterator ScMarkData::begin()
-{
-    return maTabMarked.begin();
-}
-
-ScMarkData::iterator ScMarkData::end()
-{
-    return maTabMarked.end();
-}
-
-ScMarkData::const_iterator ScMarkData::begin() const
-{
-    return maTabMarked.begin();
-}
-
-ScMarkData::const_iterator ScMarkData::end() const
-{
-    return maTabMarked.end();
-}
-
-ScMarkData::const_reverse_iterator ScMarkData::rbegin() const
-{
-    return maTabMarked.rbegin();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

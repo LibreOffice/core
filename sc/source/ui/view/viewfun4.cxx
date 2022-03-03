@@ -190,9 +190,9 @@ void ScViewFunc::DoRefConversion()
     rMark.MarkToSimple();
     bool bMulti = rMark.IsMultiMarked();
     if (bMulti)
-        rMark.GetMultiMarkArea( aMarkRange );
+        aMarkRange = rMark.GetMultiMarkArea();
     else if (rMark.IsMarked())
-        rMark.GetMarkArea( aMarkRange );
+        aMarkRange = rMark.GetMarkArea();
     else
     {
         aMarkRange = ScRange( GetViewData().GetCurX(),
