@@ -61,7 +61,7 @@ class AccessibleGridControlBase :
     public AccessibleGridControlImplHelper
 {
 public:
-    /** Constructor sets specified name and description.
+    /** Constructor.
         @param rxParent  XAccessible interface of the parent object.
         @param rTable    The Table control.
         @param eObjType  Type of accessible table control. */
@@ -227,10 +227,6 @@ protected:
     /** @throws <type>DisposedException</type>  If the object is not alive. */
     void ensureIsAlive() const;
 
-    /** Changes the name of the object (flat assignment, no notify).
-        @attention  This method requires a locked mutex. */
-    inline void implSetName( const OUString& rName );
-
     /** Locks all mutex's and calculates the bounding box relative to the
         parent window.
         @return  The bounding box (VCL rect.) relative to the parent object.
@@ -257,8 +253,6 @@ protected:
     ::vcl::table::AccessibleTableControlObjType m_eObjType;
 
 private:
-    /** Localized name. */
-    OUString m_aName;
     /** Localized description text. */
     OUString m_aDescription;
     ::comphelper::AccessibleEventNotifier::TClientId    m_aClientId;
@@ -313,12 +307,6 @@ private:
 inline ::vcl::table::AccessibleTableControlObjType AccessibleGridControlBase::getType() const
 {
     return m_eObjType;
-}
-
-inline void AccessibleGridControlBase::implSetName(
-        const OUString& rName )
-{
-    m_aName = rName;
 }
 
 
