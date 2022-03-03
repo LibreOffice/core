@@ -15,6 +15,7 @@
 #include <drawingml/customshapeproperties.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/drawing/HomogenMatrix3.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/XText.hpp>
@@ -155,20 +156,59 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
                 xTextCursor->gotoStart(false);
                 xTextCursor->gotoEnd(true);
-                const uno::Reference<beans::XPropertyState> xPropertyState(xTextCursor,
-                                                                           uno::UNO_QUERY);
-                const beans::PropertyState ePropertyState
-                    = xPropertyState->getPropertyState("CharColor");
-                if (ePropertyState == beans::PropertyState_DEFAULT_VALUE)
+                uno::Reference<beans::XPropertySet> xTextBoxPropertySet(xTextCursor,
+                                                                        uno::UNO_QUERY);
+                uno::Any xCharColor = xPropertySet->getPropertyValue("CharColor");
+                Color aColor = COL_AUTO;
+                if ((xCharColor >>= aColor) && aColor != COL_AUTO)
                 {
-                    uno::Reference<beans::XPropertySet> xTextBoxPropertySet(xTextCursor,
-                                                                            uno::UNO_QUERY);
-                    uno::Any xCharColor = xPropertySet->getPropertyValue("CharColor");
-                    Color aColor = COL_AUTO;
-                    if (xCharColor >>= aColor)
+                    const uno::Reference<beans::XPropertyState> xPropertyState(xTextCursor,
+                                                                               uno::UNO_QUERY);
+                    const beans::PropertyState ePropertyState
+                        = xPropertyState->getPropertyState("CharColor");
+                    if (ePropertyState == beans::PropertyState_DEFAULT_VALUE)
                     {
-                        if (aColor != COL_AUTO)
-                            xTextBoxPropertySet->setPropertyValue("CharColor", xCharColor);
+                        xTextBoxPropertySet->setPropertyValue("CharColor", xCharColor);
+                    }
+                    else
+                    {
+                        // tdf#135923 Apply character color of the shape to the textrun
+                        //            when the character color of the textrun is default.
+                        uno::Reference<container::XEnumerationAccess> paraEnumAccess(
+                            xText, uno::UNO_QUERY);
+                        if (paraEnumAccess.is())
+                        {
+                            uno::Reference<container::XEnumeration> paraEnum(
+                                paraEnumAccess->createEnumeration());
+
+                            while (paraEnum->hasMoreElements())
+                            {
+                                uno::Reference<text::XTextRange> xParagraph(paraEnum->nextElement(),
+                                                                            uno::UNO_QUERY);
+                                uno::Reference<container::XEnumerationAccess> runEnumAccess(
+                                    xParagraph, uno::UNO_QUERY);
+                                if (!runEnumAccess.is())
+                                    continue;
+
+                                uno::Reference<container::XEnumeration> runEnum
+                                    = runEnumAccess->createEnumeration();
+
+                                while (runEnum->hasMoreElements())
+                                {
+                                    uno::Reference<text::XTextRange> xRun(runEnum->nextElement(),
+                                                                          uno::UNO_QUERY);
+                                    const uno::Reference<beans::XPropertyState> xRunState(
+                                        xRun, uno::UNO_QUERY);
+                                    if (xRunState->getPropertyState("CharColor")
+                                        == beans::PropertyState_DEFAULT_VALUE)
+                                    {
+                                        uno::Reference<beans::XPropertySet> xRunPropSet(
+                                            xRun, uno::UNO_QUERY);
+                                        xRunPropSet->setPropertyValue("CharColor", xCharColor);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
