@@ -4541,7 +4541,7 @@ void HwpReader::makeHidden(Hidden * hbox)
     padd("text:string-value", sXML_CDATA, "");
     rstartEl("text:hidden-text", mxList);
     mxList->clear();
-    HWPPara *para = hbox->plist.front().get();
+    HWPPara *para = !hbox->plist.empty() ? hbox->plist.front().get() : nullptr;
 
     while (para)
     {
