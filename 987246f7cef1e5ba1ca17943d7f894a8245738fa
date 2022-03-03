@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b519dd6a_684a1611",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-03-03T07:53:10Z",
+      "side": 1,
+      "message": "Now this builds on Windows no-pch. Had to add an exception due to the mystery build failure, which was unseen before.",
+      "revId": "987246f7cef1e5ba1ca17943d7f894a8245738fa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
