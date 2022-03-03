@@ -42,10 +42,6 @@ ScMarkArray::ScMarkArray( const ScMarkArray & rOther )
     operator=(rOther);
 }
 
-ScMarkArray::~ScMarkArray()
-{
-}
-
 void ScMarkArray::Reset( bool bMarked, SCSIZE nNeeded )
 {
     // always create pData here
@@ -433,10 +429,6 @@ void ScMarkArray::Intersect(const ScMarkArray& rOther)
 ScMarkArrayIter::ScMarkArrayIter( const ScMarkArray* pNewArray ) :
     pArray( pNewArray ),
     nPos( 0 )
-{
-}
-
-ScMarkArrayIter::~ScMarkArrayIter()
 {
 }
 

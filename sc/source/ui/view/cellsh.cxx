@@ -361,8 +361,7 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 {
                     ScMarkData aMarkData = GetViewData().GetMarkData();
                     aMarkData.MarkToSimple();
-                    ScRange aRange;
-                    aMarkData.GetMarkArea(aRange);
+                    const ScRange& aRange = aMarkData.GetMarkArea();
                     if(aMarkData.IsMarked())
                     {
                         if (!rDoc.IsBlockEditable( aCursor.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),

@@ -593,15 +593,13 @@ bool ScDocFunc::DeleteContents(
         return false;
     }
 
-    ScRange aMarkRange;
-
     ScMarkData aMultiMark = rMark;
     aMultiMark.SetMarking(false);       // for MarkToMulti
 
     ScDocumentUniquePtr pUndoDoc;
     bool bMulti = aMultiMark.IsMultiMarked();
     aMultiMark.MarkToMulti();
-    aMultiMark.GetMultiMarkArea( aMarkRange );
+    const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
     ScRange aExtendedRange(aMarkRange);
     if ( rDoc.ExtendMerge( aExtendedRange, true ) )
         bMulti = false;
@@ -747,11 +745,10 @@ bool ScDocFunc::TransliterateText( const ScMarkData& rMark, TransliterationFlags
         return false;
     }
 
-    ScRange aMarkRange;
     ScMarkData aMultiMark = rMark;
     aMultiMark.SetMarking(false);       // for MarkToMulti
     aMultiMark.MarkToMulti();
-    aMultiMark.GetMultiMarkArea( aMarkRange );
+    const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
 
     if (bRecord)
     {
@@ -1442,9 +1439,9 @@ bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& r
     ScRange aMultiRange;
     bool bMulti = rMark.IsMultiMarked();
     if ( bMulti )
-        rMark.GetMultiMarkArea( aMultiRange );
+        aMultiRange = rMark.GetMultiMarkArea();
     else
-        rMark.GetMarkArea( aMultiRange );
+        aMultiRange = rMark.GetMarkArea();
 
     if ( bRecord )
     {
@@ -1514,9 +1511,9 @@ bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const OUString& rStyleName,
     ScRange aMultiRange;
     bool bMulti = rMark.IsMultiMarked();
     if ( bMulti )
-        rMark.GetMultiMarkArea( aMultiRange );
+        aMultiRange = rMark.GetMultiMarkArea();
     else
-        rMark.GetMarkArea( aMultiRange );
+        aMultiRange = rMark.GetMarkArea();
 
     if ( bRecord )
     {
@@ -4098,11 +4095,10 @@ void ScDocFunc::ClearItems( const ScMarkData& rMark, const sal_uInt16* pWhich, b
     //  MarkData (GetMarkData), so rMark must be changed to multi selection for ClearSelectionItems
     //  here.
 
-    ScRange aMarkRange;
     ScMarkData aMultiMark = rMark;
     aMultiMark.SetMarking(false);       // for MarkToMulti
     aMultiMark.MarkToMulti();
-    aMultiMark.GetMultiMarkArea( aMarkRange );
+    const ScRange& aMarkRange = aMultiMark.GetMultiMarkArea();
 
     if (bUndo)
     {
@@ -4139,8 +4135,7 @@ bool ScDocFunc::ChangeIndent( const ScMarkData& rMark, bool bIncrement, bool bAp
         return false;
     }
 
-    ScRange aMarkRange;
-    rMark.GetMultiMarkArea( aMarkRange );
+    const ScRange& aMarkRange = rMark.GetMultiMarkArea();
 
     if (bUndo)
     {

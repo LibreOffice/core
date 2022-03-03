@@ -423,8 +423,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         if (rMark.IsMarked())           // is the same range already marked?
                         {
-                            ScRange aOldMark;
-                            rMark.GetMarkArea( aOldMark );
+                            ScRange aOldMark = rMark.GetMarkArea();
                             aOldMark.PutInOrder();
                             ScRange aCurrent = aScRange;
                             aCurrent.PutInOrder();
