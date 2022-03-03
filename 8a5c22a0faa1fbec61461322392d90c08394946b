@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f930d751_9be6debf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-03T07:12:49Z",
+      "side": 1,
+      "message": "It\u0027s already like this in 7.3 and it works reasonably well, I\u0027m fine with this.",
+      "revId": "8a5c22a0faa1fbec61461322392d90c08394946b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
