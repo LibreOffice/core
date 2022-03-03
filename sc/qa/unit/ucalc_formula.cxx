@@ -2508,9 +2508,7 @@ void TestFormula::testFormulaRefUpdateRange()
     // C3 with sticky reference including last column.
     m_pDoc->SetString( 2,2,1, "=SUM(23:23)");
     // C4 with reference to last column.
-    CPPUNIT_ASSERT_MESSAGE("m_pDoc->MaxCol() changed, adapt unit test.",
-        m_pDoc->MaxCol() == 1023 || m_pDoc->MaxCol() == 16383);
-    m_pDoc->SetString( 2,3,1, m_pDoc->MaxCol() == 1023 ? "=SUM(AMJ22:AMJ23)" : "=SUM(XFD22:XFD23)");
+    m_pDoc->SetString( 2,3,1, "=SUM(" + m_pDoc->MaxColAsString() + "22:" + m_pDoc->MaxColAsString() + "23)");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C3.", 3.0, m_pDoc->GetValue(2,2,1));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong result in C4.", 2.0, m_pDoc->GetValue(2,3,1));
     // Delete last column.
