@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "359eac92_a0c4a5f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-03T07:21:38Z",
+      "side": 1,
+      "message": "Do you think this improves things by itself?\nAnd additionally (orthogonal to this change itself): would this make https://gerrit.libreoffice.org/c/core/+/130901 better?",
+      "revId": "d62c51dac9e0163ebcbaabf49e73e2a3a23655be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
