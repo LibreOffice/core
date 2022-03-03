@@ -1458,31 +1458,46 @@ int GetTTGlyphComponents(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, std::vec
 
     glyphlist.push_back( glyphID );
 
-    const sal_uInt32 nMaxGlyphSize = glyflength - nOffset;
+    sal_uInt32 nRemainingData = glyflength - nOffset;
 
-    if (nMaxGlyphSize >= 10 && GetInt16(ptr, 0) == -1) {
+    if (nRemainingData >= 10 && GetInt16(ptr, 0) == -1) {
         sal_uInt16 flags, index;
         ptr += 10;
+        nRemainingData -= 10;
         do {
+            if (nRemainingData < 4)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                break;
+            }
             flags = GetUInt16(ptr, 0);
             index = GetUInt16(ptr, 2);
 
             ptr += 4;
+            nRemainingData -= 4;
             n += GetTTGlyphComponents(ttf, index, glyphlist);
 
+            sal_uInt32 nAdvance;
             if (flags & ARG_1_AND_2_ARE_WORDS) {
-                ptr += 4;
+                nAdvance = 4;
             } else {
-                ptr += 2;
+                nAdvance = 2;
             }
 
             if (flags & WE_HAVE_A_SCALE) {
-                ptr += 2;
+                nAdvance += 2;
             } else if (flags & WE_HAVE_AN_X_AND_Y_SCALE) {
-                ptr += 4;
+                nAdvance += 4;
             } else if (flags & WE_HAVE_A_TWO_BY_TWO) {
-                ptr += 8;
+                nAdvance += 8;
             }
+            if (nRemainingData < nAdvance)
+            {
+                SAL_WARN("vcl.fonts", "short read");
+                break;
+            }
+            ptr += nAdvance;
+            nRemainingData -= nAdvance;
         } while (flags & MORE_COMPONENTS);
     }
 
