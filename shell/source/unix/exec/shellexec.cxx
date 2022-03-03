@@ -123,12 +123,12 @@ void SAL_CALL ShellExec::execute( const OUString& aCommand, const OUString& aPar
                     0);
             }
             struct stat st;
-            auto const e2 = stat(pathname8.getStr(), &st);
+            auto const e2 = lstat(pathname8.getStr(), &st);
             if (e2 != 0) {
                 auto const e3 = errno;
-                SAL_INFO("shell", "stat(" << pathname8 << ") failed with errno " << e3);
+                SAL_INFO("shell", "lstat(" << pathname8 << ") failed with errno " << e3);
             }
-            if (e2 == 0 && S_ISDIR(st.st_mode)) {
+            if (e2 == 0 && (S_ISDIR(st.st_mode) || S_ISLNK(st.st_mode))) {
                 dir = true;
             } else if (e2 != 0 || !S_ISREG(st.st_mode)
                        || (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH)) != 0)
