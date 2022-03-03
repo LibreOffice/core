@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "734fdb81_6dda4a76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-03-03T17:48:00Z",
+      "side": 1,
+      "message": "Works as expected. This is only patch I need for issue to be fixed btw.",
+      "revId": "461ada8ccfe34ea2fd7b697023229b90b43316b8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
