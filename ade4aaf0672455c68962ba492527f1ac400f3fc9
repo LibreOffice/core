@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c751f6b1_1047696f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-04T08:14:12Z",
+      "side": 1,
+      "message": "It took me three days to even find this spot in the code, so my understanding of charts and the structure around it are pretty much non-existent. But based on my testing, I think what I have done is safe enough.\n\nWho is the NISZ expert on charts (since you guys do a lot of work here)? Can they review this patch?",
+      "revId": "ade4aaf0672455c68962ba492527f1ac400f3fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
