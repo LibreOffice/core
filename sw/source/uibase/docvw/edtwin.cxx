@@ -3731,7 +3731,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                     // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
                     // and CH_TXT_ATR_INPUTFIELDEND
                     rSh.SttSelect();
-                    rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
+                    rSh.SelectTextModel( aFieldAtPos.pFndTextAttr->GetStart() + 1,
                                  *(aFieldAtPos.pFndTextAttr->End()) - 1 );
                 }
                 // don't reset here any longer so that, in case through MouseMove
@@ -3777,7 +3777,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 // select content of Input Field, but exclude CH_TXT_ATR_INPUTFIELDSTART
                 // and CH_TXT_ATR_INPUTFIELDEND
                 rSh.SttSelect();
-                rSh.SelectText( aFieldAtPos.pFndTextAttr->GetStart() + 1,
+                rSh.SelectTextModel( aFieldAtPos.pFndTextAttr->GetStart() + 1,
                                 *(aFieldAtPos.pFndTextAttr->End()) - 1 );
             }
         }
@@ -6474,13 +6474,13 @@ Selection SwEditWin::GetSurroundingTextSelection() const
 
         // Return the position of the visible cursor in the sentence
         // around the visible cursor.
-        SwPosition *pPos = rSh.GetCursor()->GetPoint();
-        const sal_Int32 nPos = pPos->nContent.GetIndex();
+        TextFrameIndex const nPos(rSh.GetCursorPointAsViewIndex());
+
         rSh.Push();
 
         rSh.HideCursor();
         rSh.GoStartSentence();
-        const sal_Int32 nStartPos = rSh.GetCursor()->GetPoint()->nContent.GetIndex();
+        TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
 
         rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         rSh.ShowCursor();
@@ -6488,7 +6488,7 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         if (bUnLockView)
             rSh.LockView(false);
 
-        return Selection( nPos - nStartPos, nPos - nStartPos );
+        return Selection(sal_Int32(nPos - nStartPos), sal_Int32(nPos - nStartPos));
     }
 }
 
@@ -6507,11 +6507,12 @@ bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
     rSh.Push();
     rSh.HideCursor();
     rSh.GoStartSentence();
-    const sal_Int32 nStartPos = rSh.GetCursor()->GetPoint()->nContent.GetIndex();
+    TextFrameIndex const nStartPos(rSh.GetCursorPointAsViewIndex());
+
     rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
     rSh.ShowCursor();
 
-    if (rSh.SelectText(nStartPos + rSelection.Min(), nStartPos + rSelection.Max()))
+    if (rSh.SelectTextView(nStartPos + TextFrameIndex(rSelection.Min()), nStartPos + TextFrameIndex(rSelection.Max())))
     {
         rSh.Delete();
         return true;

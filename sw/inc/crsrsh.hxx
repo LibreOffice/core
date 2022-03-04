@@ -26,6 +26,9 @@
 #include <vcl/keycod.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#ifdef SW_DLLIMPLEMENTATION
+#include <TextFrameIndex.hxx>
+#endif
 #include "IShellCursorSupplier.hxx"
 #include "swdllapi.h"
 #include "docary.hxx"
@@ -789,8 +792,12 @@ public:
     bool GotoINetAttr( const SwTextINetFormat& rAttr );
     const SwFormatINetFormat* FindINetAttr( std::u16string_view rName ) const;
 
-    bool SelectText( const sal_Int32 nStart,
-                        const sal_Int32 nEnd );
+    bool SelectTextModel(sal_Int32 nStart, sal_Int32 nEnd);
+#ifdef SW_DLLIMPLEMENTATION
+    bool SelectTextView(TextFrameIndex nStart, TextFrameIndex nEnd);
+    // result is only valid while cursor isn't moved!
+    TextFrameIndex GetCursorPointAsViewIndex() const;
+#endif
 
     bool CheckTableBoxContent( const SwPosition* pPos = nullptr );
     void SaveTableBoxContent( const SwPosition* pPos = nullptr );
