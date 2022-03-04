@@ -1461,7 +1461,11 @@ SwLinePortion *SwTextFormatter::NewPortion( SwTextFormatInfo &rInf )
                 pPor = NewTabPortion( rInf, false ); break;
 
             case CH_BREAK:
-                pPor = new SwBreakPortion( *rInf.GetLast() ); break;
+            {
+                SwTextAttr* pHint = GetAttr(rInf.GetIdx());
+                pPor = new SwBreakPortion(*rInf.GetLast(), pHint);
+                break;
+            }
 
             case CHAR_SOFTHYPHEN:                   // soft hyphen
                 pPor = new SwSoftHyphPortion; break;

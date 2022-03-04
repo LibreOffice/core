@@ -27,6 +27,7 @@
 
 #include <porlay.hxx>
 #include <pormulti.hxx>
+#include <formatlinebreak.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/text/data/";
 
@@ -230,6 +231,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testEmptyNumberingPageSplit)
     };
     // Without the accompanying fix in place, this never finished.
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreak)
+{
+    // Given a document with a fly frame and two characters wrapped around it:
+    createSwDoc(DATA_DIRECTORY, "clearing-break.fodt");
+    // Insert a clearing break between "A" and "B":
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoEnd(/*bSelect=*/false);
+    xCursor->goLeft(/*nCount=*/1, /*bSelect=*/false);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xLineBreak(
+        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
+    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure that the second line "jumps down", below the fly frame:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1024
+    // - Actual  : 276
+    // i.e. the line height wasn't the twips value of the 1.806 cm from the file, but was based on
+    // the font size of the text, which is only correct for non-clearing breaks.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "1024");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
