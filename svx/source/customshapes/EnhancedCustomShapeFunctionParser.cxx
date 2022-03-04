@@ -901,6 +901,8 @@ public:
         std::shared_ptr<ExpressionNode> pFirstArg( std::move(rNodeStack.top()) );
         rNodeStack.pop();
 
+        assert(pThirdArg && pSecondArg && pFirstArg);
+
         // create combined ExpressionNode
         auto pNode = std::make_shared<IfExpression>( pFirstArg, pSecondArg, pThirdArg );
         // check for constness
