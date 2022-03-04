@@ -19,6 +19,10 @@
 
 #pragma once
 
+#include <sal/config.h>
+
+#include <rtl/ustring.hxx>
+
 #include "hwplib.h"
 
 /**
@@ -66,7 +70,7 @@ DLLEXPORT char* Int2Str(int value, const char *format, char *buf);
  */
 DLLEXPORT char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar = false);
 
-DLLEXPORT char *base64_encode_string( const uchar *buf, unsigned int len );
+DLLEXPORT OUString base64_encode_string( const uchar *buf, unsigned int len );
 DLLEXPORT double calcAngle(int x1, int y1, int x2, int y2);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
