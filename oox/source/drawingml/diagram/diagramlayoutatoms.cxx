@@ -701,7 +701,7 @@ void CompositeAlg::layoutShapeChildren(AlgAtom& rAlg, const ShapePtr& rShape,
         nVertMax = std::max(aPos.Y + aSize.Height, nVertMax);
 
         NamedShapePairs& rDiagramFontHeights
-            = rAlg.getLayoutNode().getDiagram().getShape()->getDiagramFontHeights();
+            = rAlg.getLayoutNode().getDiagram().getDiagramFontHeights();
         auto it = rDiagramFontHeights.find(aCurrShape->getInternalName());
         if (it != rDiagramFontHeights.end())
         {
@@ -1421,7 +1421,7 @@ void AlgAtom::layoutShape(const ShapePtr& rShape, const std::vector<Constraint>&
                     && rConstraint.mnOperator == XML_equ)
                 {
                     NamedShapePairs& rDiagramFontHeights
-                        = getLayoutNode().getDiagram().getShape()->getDiagramFontHeights();
+                        = getLayoutNode().getDiagram().getDiagramFontHeights();
                     auto it = rDiagramFontHeights.find(rConstraint.msForName);
                     if (it == rDiagramFontHeights.end())
                     {

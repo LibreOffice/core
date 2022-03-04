@@ -130,7 +130,7 @@ typedef std::map<OUString,DiagramColor> DiagramColorMap;
 class Diagram
 {
 public:
-    explicit Diagram(const ShapePtr& pShape);
+    explicit Diagram();
     void setData( const DiagramDataPtr & pData )
         { mpData = pData; }
     const DiagramDataPtr& getData() const
@@ -149,11 +149,13 @@ public:
     void addTo( const ShapePtr & pShape );
 
     css::uno::Sequence<css::beans::PropertyValue> getDomsAsPropertyValues() const;
-    ShapePtr getShape() const { return mpShape.lock(); }
-    void newTargetShape(ShapePtr& pTarget);
+    oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
+    void syncDiagramFontHeights();
 
 private:
-    WeakShapePtr mpShape;
+    // This contains groups of shapes: automatic font size is the same in each group.
+    oox::core::NamedShapePairs maDiagramFontHeights;
+
     DiagramDataPtr                 mpData;
     DiagramLayoutPtr               mpLayout;
     DiagramQStyleMap               maStyles;

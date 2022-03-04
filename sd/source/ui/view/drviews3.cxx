@@ -498,7 +498,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     if(SID_REGENERATE_DIAGRAM == nSlot)
                     {
                         mpDrawView->UnmarkAll();
-                        pAnchorObj->getDiagramHelper()->reLayout();
+                        pAnchorObj->getDiagramHelper()->reLayout(*pAnchorObj);
                         mpDrawView->MarkObj(pObj, mpDrawView->GetSdrPageView());
                     }
                     else // SID_EDIT_DIAGRAM

@@ -247,8 +247,6 @@ public:
 
     void keepDiagramDrawing(::oox::core::XmlFilterBase& rFilterBase, const OUString& rFragmentPath);
 
-    oox::core::NamedShapePairs& getDiagramFontHeights() { return maDiagramFontHeights; }
-
     // Allows preparation of a local Diagram helper && propagate an eventually
     // existing one to the data holder object later
     void prepareDiagramHelper(const std::shared_ptr< Diagram >& rDiagramPtr, const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
@@ -290,7 +288,6 @@ protected:
                             const basegfx::B2DHomMatrix& aTransformation );
 
     void                keepDiagramCompatibilityInfo();
-    void syncDiagramFontHeights();
     void                convertSmartArtToMetafile( ::oox::core::XmlFilterBase const& rFilterBase );
 
     css::uno::Reference< css::drawing::XShape >
@@ -396,9 +393,6 @@ private:
 
     /// The shape fill should be set to that of the slide background surface.
     bool mbUseBgFill = false;
-
-    /// For SmartArt, this contains groups of shapes: automatic font size is the same in each group.
-    oox::core::NamedShapePairs maDiagramFontHeights;
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constuctor func does not allow that

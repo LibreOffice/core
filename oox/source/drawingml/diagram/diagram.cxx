@@ -137,8 +137,8 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     aChildren.insert(aChildren.begin(), pBackground);
 }
 
-Diagram::Diagram(const ShapePtr& pShape)
-    : mpShape(pShape)
+Diagram::Diagram()
+: maDiagramFontHeights()
 {
 }
 
@@ -168,9 +168,48 @@ uno::Sequence<beans::PropertyValue> Diagram::getDomsAsPropertyValues() const
     return aValue;
 }
 
-void Diagram::newTargetShape(ShapePtr& pTarget)
+using ShapePairs
+    = std::map<std::shared_ptr<drawingml::Shape>, css::uno::Reference<css::drawing::XShape>>;
+
+void Diagram::syncDiagramFontHeights()
 {
-    mpShape = pTarget;
+    // Each name represents a group of shapes, for which the font height should have the same
+    // scaling.
+    for (const auto& rNameAndPairs : maDiagramFontHeights)
+    {
+        // Find out the minimum scale within this group.
+        const ShapePairs& rShapePairs = rNameAndPairs.second;
+        sal_Int16 nMinScale = 100;
+        for (const auto& rShapePair : rShapePairs)
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
+            if (xPropertySet.is())
+            {
+                sal_Int16 nTextFitToSizeScale = 0;
+                xPropertySet->getPropertyValue("TextFitToSizeScale") >>= nTextFitToSizeScale;
+                if (nTextFitToSizeScale > 0 && nTextFitToSizeScale < nMinScale)
+                {
+                    nMinScale = nTextFitToSizeScale;
+                }
+            }
+        }
+
+        // Set that minimum scale for all members of the group.
+        if (nMinScale < 100)
+        {
+            for (const auto& rShapePair : rShapePairs)
+            {
+                uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
+                if (xPropertySet.is())
+                {
+                    xPropertySet->setPropertyValue("TextFitToSizeScale", uno::makeAny(nMinScale));
+                }
+            }
+        }
+    }
+
+    // no longer needed after processing
+    maDiagramFontHeights.clear();
 }
 
 static uno::Reference<xml::dom::XDocument> loadFragment(
@@ -257,13 +296,16 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations )
 {
-    DiagramPtr pDiagram = std::make_shared<Diagram>(pShape);
+    DiagramPtr pDiagram = std::make_shared<Diagram>();
 
     DiagramDataPtr pData = std::make_shared<DiagramData>();
     pDiagram->setData( pData );
 
     DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);
     pDiagram->setLayout( pLayout );
+
+    // set DiagramFontHeights at filter
+    rFilter.setDiagramFontHeights(&pDiagram->getDiagramFontHeights());
 
     // data
     if( !rDataModelPath.isEmpty() )
@@ -379,7 +421,7 @@ void loadDiagram(ShapePtr const& pShape,
                  const uno::Reference<xml::dom::XDocument>& colorDom,
                  core::XmlFilterBase& rFilter)
 {
-    DiagramPtr pDiagram = std::make_shared<Diagram>(pShape);
+    DiagramPtr pDiagram = std::make_shared<Diagram>();
 
     pDiagram->setData(pDiagramData);
 

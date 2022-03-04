@@ -40,7 +40,7 @@ public:
     virtual ~IDiagramHelper();
 
     // re-create XShapes
-    virtual void reLayout() = 0;
+    virtual void reLayout(SdrObjGroup& rTarget) = 0;
 
     // get text representation of data tree
     virtual OUString getString() const = 0;
