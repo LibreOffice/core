@@ -779,8 +779,7 @@ void handleEnumType(
             std::unique_ptr< ClassFile::Code > blockCode(cf->newCode());
             blockCode->instrGetstatic(className, pair.second, classDescriptor);
             blockCode->instrAreturn();
-            blocks.emplace_back(pair.first, blockCode.get());
-            blockCode.release();
+            blocks.emplace_back(pair.first, blockCode.release());
         }
         code->instrLookupswitch(defCode.get(), blocks);
         for (const std::pair< sal_Int32, ClassFile::Code * >& pair : blocks)
