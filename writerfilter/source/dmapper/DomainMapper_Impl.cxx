@@ -4634,20 +4634,103 @@ void DomainMapper_Impl::PopTextBoxContent()
 
 void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::drawing::XShape> xShape)
 {
+    // Without textbox or shape pointless to continue
     if (m_xPendingTextBoxFrames.empty() || !xShape)
         return;
 
     uno::Reference< drawing::XShapes >xGroup(xShape, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet >xProps(xShape, uno::UNO_QUERY);
 
+    // If this is a group go inside
     if (xGroup)
         for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
-            AttachTextBoxContentToShape(uno::Reference<drawing::XShape>(xGroup->getByIndex(i),uno::UNO_QUERY_THROW));
+            AttachTextBoxContentToShape(
+                uno::Reference<drawing::XShape>(xGroup->getByIndex(i), uno::UNO_QUERY));
 
-    if (xProps->getPropertyValue("TextBox").get<bool>())
+    // if this shape has to be a textbox, attach the frame
+    if (!xProps->getPropertyValue("TextBox").get<bool>())
+        return;
+
+    // if this is a textbox there must be a waiting frane
+    auto xTextBox = m_xPendingTextBoxFrames.front();
+    if (!xTextBox)
+        return;
+
+    // Pop the pending frames
+    m_xPendingTextBoxFrames.pop();
+
+    // Attach the textbox to the shape
+    try
     {
-        xProps->setPropertyValue("TextBoxContent", uno::Any(m_xPendingTextBoxFrames.front()));
-        m_xPendingTextBoxFrames.pop();
+        xProps->setPropertyValue("TextBoxContent", uno::Any(xTextBox));
+    }
+    catch (...)
+    {
+        SAL_WARN("writerfilter.dmapper", "Exception while trying to attach textboxes!");
+        return;
+    }
+
+    // If attaching is successful, then do the linking
+    try
+    {
+        // Get the name of the textbox
+        OUString sTextBoxName;
+        uno::Reference<container::XNamed> xName(xTextBox, uno::UNO_QUERY);
+        if (xName && !xName->getName().isEmpty())
+            sTextBoxName = xName->getName();
+
+        // Try to get the grabbag
+        uno::Sequence<beans::PropertyValue> aOldGrabBagSeq;
+        if (xProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+            xProps->getPropertyValue("InteropGrabBag") >>= aOldGrabBagSeq;
+
+        // If the grabbag successfully get...
+        if (!aOldGrabBagSeq.hasElements())
+            return;
+
+        // Check for the extising linking information
+        bool bSuccess = false;
+        beans::PropertyValues aNewGrabBagSeq;
+        const auto& aHasLink = lcl_getGrabBagValue(aOldGrabBagSeq, "TxbxHasLink");
+
+        // If there must be a link, do it
+        if (aHasLink.hasValue() && aHasLink.get<bool>())
+        {
+            auto aLinkProp = comphelper::makePropertyValue("LinkChainName", sTextBoxName);
+            for (sal_uInt32 i = 0; i < aOldGrabBagSeq.size(); ++i)
+            {
+                aNewGrabBagSeq.realloc(i + 1);
+                // If this is the link name replace it
+                if (!aOldGrabBagSeq[i].Name.isEmpty() && !aLinkProp.Name.isEmpty()
+                    && (aOldGrabBagSeq[i].Name == aLinkProp.Name))
+                {
+                    aNewGrabBagSeq.getArray()[i] = aLinkProp;
+                    bSuccess = true;
+                }
+                // else copy
+                else
+                    aNewGrabBagSeq.getArray()[i] = aOldGrabBagSeq[i];
+            }
+
+            // If there was no replacement, append the linking data
+            if (!bSuccess)
+            {
+                aNewGrabBagSeq.realloc(aNewGrabBagSeq.size() + 1);
+                aNewGrabBagSeq.getArray()[aNewGrabBagSeq.size() - 1] = aLinkProp;
+                bSuccess = true;
+            }
+        }
+
+        // If the linking changed the grabbag, apply the modifications
+        if (aNewGrabBagSeq.hasElements() && bSuccess)
+        {
+            xProps->setPropertyValue("InteropGrabBag", uno::Any(aNewGrabBagSeq));
+            m_vTextFramesForChaining.push_back(xShape);
+        }
+    }
+    catch (...)
+    {
+        SAL_WARN("writerfilter.dmapper", "Exception while trying to link textboxes!");
     }
 }
 
