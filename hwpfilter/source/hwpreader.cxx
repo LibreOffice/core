@@ -42,23 +42,6 @@
 // xmloff/xmlkyd.hxx
 constexpr OUStringLiteral sXML_CDATA = u"CDATA";
 
-#define STARTP  mxList->addAttribute( "text:style-name", "CDATA", getPStyleName((para->GetParaShape()).index)); \
-    startEl("text:p"); \
-    mxList->clear(); \
-    pstart = true
-#define STARTT \
-    curr = para->GetCharShape(n > 0 ? n-1 : 0)->index; \
-    mxList->addAttribute( "text:style-name", "CDATA" , getTStyleName(curr) ); \
-    startEl("text:span"); \
-    mxList->clear(); \
-    tstart = true
-#define ENDP \
-    endEl("text:p"); \
-    pstart = false
-#define ENDT \
-    endEl("text:span"); \
-    tstart = false
-
 static hchar *field = nullptr;
 static char buf[1024];
 
@@ -2772,11 +2755,38 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
     bool pstart = bParaStart;
     bool tstart = false;
     bool infield = false;
-    int curr;
+
+    const auto STARTP = [this, para, &pstart]()
+    {
+        mxList->addAttribute("text:style-name", "CDATA",
+                             getPStyleName(para->GetParaShape().index));
+        startEl("text:p");
+        mxList->clear();
+        pstart = true;
+    };
+    const auto STARTT = [this, para, &tstart](int pos)
+    {
+        auto curr = para->GetCharShape(pos > 0 ? pos - 1 : 0)->index;
+        mxList->addAttribute("text:style-name", "CDATA", getTStyleName(curr));
+        startEl("text:span");
+        mxList->clear();
+        tstart = true;
+    };
+    const auto ENDP = [this, &pstart]()
+    {
+        endEl("text:p");
+        pstart = false;
+    };
+    const auto ENDT = [this, &tstart]()
+    {
+        endEl("text:span");
+        tstart = false;
+    };
+
     if( d->bFirstPara && d->bInBody )
     {
         if ( !pstart ) {
-            STARTP;
+            STARTP();
         }
         mxList->addAttribute("text:name", sXML_CDATA, sBeginOfDoc);
         startEl("text:bookmark");
@@ -2787,7 +2797,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
     if( d->bInHeader )
     {
         if ( !pstart ) {
-            STARTP;
+            STARTP();
         }
         makeShowPageNum();
         d->bInHeader = false;
@@ -2800,19 +2810,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         {
             if (!str.empty())
             {
-                if( !pstart ){ STARTP;}
-                if( !tstart ){ STARTT;}
+                if( !pstart ){ STARTP(); }
+                if( !tstart ){ STARTT(n);}
                 makeChars(str);
             }
-            if( tstart ){ ENDT;}
-            if( !pstart ){ STARTP;}
-            if( pstart ){ ENDP;}
+            if( tstart ){ ENDT();}
+            if( !pstart ){ STARTP(); }
+            if( pstart ){ ENDP(); }
             break;
         }
         else if( para->hhstr[n]->hh == CH_SPACE  && !firstspace)
         {
-            if( !pstart ) {STARTP;}
-            if( !tstart ) {STARTT;}
+            if( !pstart ) {STARTP(); }
+            if( !tstart ) {STARTT(n);}
             makeChars(str);
             startEl("text:s");
             mxList->clear();
@@ -2823,10 +2833,10 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             if( n > 0 )
                 if( para->GetCharShape(n)->index != para->GetCharShape(n-1)->index && !infield )
                 {
-                         if( !pstart ) {STARTP;}
-                         if( !tstart ) {STARTT;}
+                         if( !pstart ) {STARTP(); }
+                         if( !tstart ) {STARTT(n);}
                          makeChars(str);
-                         ENDT;
+                         ENDT();
                 }
             if( para->hhstr[n]->hh == CH_SPACE )
                 firstspace = 0;
@@ -2843,8 +2853,8 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             FieldCode *hbox = static_cast<FieldCode*>(para->hhstr[n].get());
             if( hbox->location_info == 1)
             {
-                if( !pstart ) {STARTP;}
-                if( !tstart ) {STARTT;}
+                if( !pstart ) {STARTP(); }
+                if( !tstart ) {STARTT(n);}
                 makeChars(str);
                 firstspace = 1;
                 if( hbox->type[0] == 4 && hbox->type[1] == 0 )
@@ -2873,24 +2883,24 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             switch (para->hhstr[n]->hh)
             {
                 case CH_BOOKMARK:
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP(); }
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     makeBookmark(static_cast<Bookmark*>(para->hhstr[n].get()));
                     break;
                 case CH_DATE_FORM:                // 7
                     break;
                 case CH_DATE_CODE:                // 8
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP(); }
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     makeDateCode(static_cast<DateCode*>(para->hhstr[n].get()));
                     break;
                 case CH_TAB:                      // 9
-                    if( !pstart ) {STARTP;}
+                    if( !pstart ) {STARTP(); }
                     if (!str.empty())
                     {
-                        if( !tstart ) {STARTT;}
+                        if( !tstart ) {STARTT(n);}
                         makeChars(str);
                     }
                     makeTab();
@@ -2902,19 +2912,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 
                     if( hbox->style.anchor_type == 0 )
                     {
-                        if( !pstart ) {STARTP;}
-                        if( !tstart ) {STARTT;}
+                        if( !pstart ) {STARTP(); }
+                        if( !tstart ) {STARTT(n);}
                         makeChars(str);
                     }
                     else
                     {
-                        if( !pstart ) {STARTP;}
+                        if( !pstart ) {STARTP(); }
                         if (!str.empty())
                         {
-                            if( !tstart ) {STARTT;}
+                            if( !tstart ) {STARTT(n);}
                             makeChars(str);
                         }
-                        if( tstart ) {ENDT;}
+                        if( tstart ) {ENDT();}
                     }
                     switch (hbox->type)
                     {
@@ -2935,19 +2945,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     Picture *hbox = static_cast<Picture*>(para->hhstr[n].get());
                     if( hbox->style.anchor_type == 0 )
                     {
-                        if( !pstart ) {STARTP;}
-                        if( !tstart ) {STARTT;}
+                        if( !pstart ) {STARTP(); }
+                        if( !tstart ) {STARTT(n);}
                         makeChars(str);
                     }
                     else
                     {
-                        if( !pstart ) {STARTP;}
+                        if( !pstart ) {STARTP(); }
                         if (!str.empty())
                         {
-                            if( !tstart ) {STARTT;}
+                            if( !tstart ) {STARTT(n);}
                             makeChars(str);
                         }
-                        if( tstart ) {ENDT;}
+                        if( tstart ) {ENDT();}
                     }
                     makePicture(hbox);
                     break;
@@ -2956,31 +2966,31 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 {
                     if (!str.empty())
                     {
-                        if( !pstart ) {STARTP;}
-                        if( !tstart ) {STARTT;}
+                        if( !pstart ) {STARTP();}
+                        if( !tstart ) {STARTT(n);}
                         makeChars(str);
                     }
-                    if( tstart ) {ENDT;}
-                    if( pstart ) {ENDP;}
+                    if( tstart ) {ENDT();}
+                    if( pstart ) {ENDP();}
                     makeLine();
                     pstart = true;
                     break;
                 }
                 case CH_HIDDEN:                   // 15
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP();}
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     makeHidden(static_cast<Hidden*>(para->hhstr[n].get()));
                     break;
                 case CH_FOOTNOTE:                 // 17
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP();}
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     makeFootnote(static_cast<Footnote*>(para->hhstr[n].get()));
                     break;
                 case CH_AUTO_NUM:                 // 18
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP();}
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     makeAutoNum(static_cast<AutoNum*>(para->hhstr[n].get()));
                     break;
@@ -2989,8 +2999,8 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 case CH_PAGE_NUM_CTRL:            // 21
                     break;
                 case CH_MAIL_MERGE:               // 22
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP();}
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     makeMailMerge(static_cast<MailMerge*>(para->hhstr[n].get()));
                     break;
@@ -2999,18 +3009,18 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 case CH_HYPHEN:                   // 24
                     break;
                 case CH_TOC_MARK:                 /* 25 Need to fix below 3 */
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP();}
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     break;
                 case CH_INDEX_MARK:               // 26
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP();}
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     break;
                 case CH_OUTLINE:                  // 28
-                    if( !pstart ) {STARTP;}
-                    if( !tstart ) {STARTT;}
+                    if( !pstart ) {STARTP();}
+                    if( !tstart ) {STARTT(n);}
                     makeChars(str);
                     makeOutline(static_cast<Outline *>(para->hhstr[n].get()));
                     break;
