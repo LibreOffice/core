@@ -492,6 +492,9 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
                 {
                     (void)xmlTextWriterStartElement(writer, BAD_CAST("SwLineLayout"));
                     (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pLine);
+                    (void)xmlTextWriterWriteAttribute(
+                        writer, BAD_CAST("height"),
+                        BAD_CAST(OString::number(pLine->Height()).getStr()));
                     const SwLinePortion* pPor = pLine->GetFirstPortion();
                     while (pPor)
                     {

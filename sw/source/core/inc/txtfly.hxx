@@ -126,6 +126,7 @@ class SwTextFly
     std::unique_ptr<SwAnchoredObjList> mpAnchoredObjList;
 
     tools::Long m_nMinBottom;
+    mutable tools::Long m_nMaxBottom;
     tools::Long m_nNextTop;  /// Stores the upper edge of the "next" frame
     SwNodeOffset m_nCurrFrameNodeIndex;
 
@@ -201,6 +202,7 @@ class SwTextFly
                  const bool bInFooterOrHeader );
 
     SwTwips CalcMinBottom() const;
+    SwTwips CalcMaxBottom() const;
 
     const SwTextFrame* GetMaster_();
 
@@ -228,6 +230,10 @@ public:
     bool Relax();
 
     SwTwips GetMinBottom() const;
+
+    /// Gets the maximum of the fly frame bottoms.
+    SwTwips GetMaxBottom() const;
+
     const SwTextFrame* GetMaster() const;
 
     // This temporary variable needs to be manipulated in const methods
@@ -337,6 +343,11 @@ inline bool SwTextFly::Relax()
 inline SwTwips SwTextFly::GetMinBottom() const
 {
     return mpAnchoredObjList ? m_nMinBottom : CalcMinBottom();
+}
+
+inline SwTwips SwTextFly::GetMaxBottom() const
+{
+    return mpAnchoredObjList ? m_nMaxBottom : CalcMaxBottom();
 }
 
 inline const SwTextFrame* SwTextFly::GetMaster() const
