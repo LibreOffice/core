@@ -157,6 +157,8 @@ void FilterConfigCache::ImplInit()
             aEntry.nFlags = 1;
         else if (lFlags[0].equalsIgnoreAsciiCase("export"))
             aEntry.nFlags = 2;
+        else
+            aEntry.nFlags = 0;
 
         OUString sFormatName;
         xFilterSet->getPropertyValue(SFORMATNAME) >>= sFormatName;
@@ -258,7 +260,7 @@ void FilterConfigCache::ImplInitSmart()
     }
 }
 
-FilterConfigCache::FilterConfigCache( bool bConfig )
+FilterConfigCache::FilterConfigCache(bool bConfig)
 {
     if (bConfig)
         bConfig = !utl::ConfigManager::IsFuzzing();
