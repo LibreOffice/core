@@ -666,9 +666,9 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
                 // Update the extents with new node; also inits merge flag,
                 // so the MakeFramesForAdjacentContentNode below respects it
                 pFrame->RegisterToNode(*pNode);
-                if (pFrame->GetText().isEmpty())
+                if (nSplitPos == 0)
                 {
-                    // turns out it's empty - in this case, it was not
+                    // in this case, it was not
                     // invalidated because Cut didn't sent it any hints,
                     // so we have to invalidate it here!
                     pFrame->Prepare(PREP_CLEAR, nullptr, false);
