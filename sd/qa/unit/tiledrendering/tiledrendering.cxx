@@ -2581,7 +2581,7 @@ void SdTiledRenderingTest::testRegenerateDiagram()
     SdPage* pActualPage = pXImpressDocument->GetDocShell()->GetViewShell()->GetActualPage();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(4), pActualPage->GetObj(0)->GetSubList()->GetObjCount());
 
-    // For new Diagram funcionality entering group using UI is not allowed as long
+    // For new Diagram functionality entering group using UI is not allowed as long
     // as the group shape is a diagram. Do the same as before done by triggering UI
     // events directly in the model
     // Remove and free top-left entry (Box showing "A")

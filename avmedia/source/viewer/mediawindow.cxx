@@ -323,7 +323,7 @@ bool MediaWindow::isMediaURL(const OUString& rURL, const OUString& rReferer, boo
                     uno::Reference<media::XPlayerNotifier> xPlayerNotifier(xPlayer, css::uno::UNO_QUERY);
                     if (xPlayerNotifier)
                     {
-                        // wait until its possible to query this to get a sensible answer
+                        // wait until it's possible to query this to get a sensible answer
                         xPreferredPixelSizeListener->startListening(xPlayerNotifier);
                     }
                     else
