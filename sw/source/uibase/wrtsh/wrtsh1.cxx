@@ -2118,7 +2118,8 @@ void SwWrtShell::InsertPostIt(SwFieldMgr& rFieldMgr, const SfxRequest& rReq)
             // comment.
             if (pFly)
             {
-                *GetCurrentShellCursor().GetPoint() = *pAnchor;
+                if (pAnchor)
+                    *GetCurrentShellCursor().GetPoint() = *pAnchor;
                 SwFrameFormat* pFormat = pFly->GetFormat();
                 if (pFormat && pFormat->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
                 {
