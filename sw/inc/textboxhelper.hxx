@@ -21,6 +21,7 @@
 #include <svx/swframetypes.hxx>
 
 #include "swdllapi.h"
+#include <optional>
 
 class SdrPage;
 class SdrObject;
