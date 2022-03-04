@@ -4457,7 +4457,8 @@ void HwpReader::makeFootnote(Footnote * hbox)
         chars(OUString::number(hbox->number));
         endEl("text:endnote-citation");
         startEl("text:endnote-body");
-        parsePara(hbox->plist.front().get());
+        if (!hbox->plist.empty())
+            parsePara(hbox->plist.front().get());
         endEl("text:endnote-body");
         endEl("text:endnote");
     }
@@ -4472,7 +4473,8 @@ void HwpReader::makeFootnote(Footnote * hbox)
         chars(OUString::number(hbox->number));
         endEl("text:footnote-citation");
         startEl("text:footnote-body");
-        parsePara(hbox->plist.front().get());
+        if (!hbox->plist.empty())
+            parsePara(hbox->plist.front().get());
         endEl("text:footnote-body");
         endEl("text:footnote");
     }
