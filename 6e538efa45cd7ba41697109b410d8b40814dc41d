@@ -87,6 +87,24 @@
       "parentUuid": "9bf34887_586bf552",
       "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c59b54a4_705e4a28",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-04T19:32:13Z",
+      "side": 1,
+      "message": "True. I hope that at some stage, we could add a std::format-compliant methods for O(U)String ...",
+      "parentUuid": "9cc18744_c0d3785b",
+      "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
