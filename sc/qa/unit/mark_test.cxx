@@ -96,7 +96,8 @@ class Test : public CppUnit::TestFixture
 public:
     void testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover,
                          const ScRangeList& rLeftEnvelope, const ScRangeList& rRightEnvelope,
-                         const ScRangeList& rTopEnvelope, const ScRangeList& rBottomEnvelope );
+                         const ScRangeList& rTopEnvelope, const ScRangeList& rBottomEnvelope,
+                         const ScSheetLimits& rLimits );
     void testSimpleMark_Simple();
     void testSimpleMark_Column();
     void testSimpleMark_Row();
@@ -147,10 +148,10 @@ static void lcl_GetSortedRanges( const ScRangeList& rRangeList, ScRangeList& rRa
 
 void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover,
                            const ScRangeList& rLeftEnvelope, const ScRangeList& rRightEnvelope,
-                           const ScRangeList& rTopEnvelope, const ScRangeList& rBottomEnvelope )
+                           const ScRangeList& rTopEnvelope, const ScRangeList& rBottomEnvelope,
+                           const ScSheetLimits& rLimits )
 {
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
-    ScMarkData aMark(aSheetLimits);
+    ScMarkData aMark(rLimits);
     CPPUNIT_ASSERT( !aMark.IsMarked() );
     CPPUNIT_ASSERT( !aMark.IsMultiMarked() );
 
@@ -168,29 +169,29 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
     SCCOL nOutCol2 = rRange.aStart.Col() - 1;
 
     CPPUNIT_ASSERT( aMark.IsCellMarked( nMidCol, nMidRow ) );
-    if ( ValidCol( nOutCol1, MAXCOL ) && ValidRow( nOutRow1, MAXROW ) )
+    if ( ValidCol( nOutCol1, rLimits.MaxCol() ) && ValidRow( nOutRow1, rLimits.MaxRow() ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol1, nOutRow1 ) );
 
-    if ( ValidCol( nOutCol2, MAXCOL ) && ValidRow( nOutRow2, MAXROW ) )
+    if ( ValidCol( nOutCol2, rLimits.MaxCol() ) && ValidRow( nOutRow2, rLimits.MaxRow() ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol2, nOutRow2 ) );
 
-    if ( ValidRow( nOutRow1, MAXROW ) )
+    if ( ValidRow( nOutRow1, rLimits.MaxRow() ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nMidCol, nOutRow1 ) );
 
-    if ( ValidCol( nOutCol1, MAXCOL ) )
+    if ( ValidCol( nOutCol1, rLimits.MaxCol() ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol1, nMidRow ) );
 
-    if ( ValidRow( nOutRow2, MAXROW ) )
+    if ( ValidRow( nOutRow2, rLimits.MaxRow() ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nMidCol, nOutRow2 ) );
 
-    if ( ValidCol( nOutCol2, MAXCOL ) )
+    if ( ValidCol( nOutCol2, rLimits.MaxCol() ) )
         CPPUNIT_ASSERT( !aMark.IsCellMarked( nOutCol2, nMidRow ) );
 
-    if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == MAXROW )
+    if ( rRange.aStart.Row() == 0 && rRange.aEnd.Row() == rLimits.MaxRow() )
         CPPUNIT_ASSERT( aMark.IsColumnMarked( nMidCol ) );
     else
         CPPUNIT_ASSERT( !aMark.IsColumnMarked( nMidCol ) );
-    if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == MAXCOL )
+    if ( rRange.aStart.Col() == 0 && rRange.aEnd.Col() == rLimits.MaxCol() )
         CPPUNIT_ASSERT( aMark.IsRowMarked( nMidRow ) );
     else
         CPPUNIT_ASSERT( !aMark.IsRowMarked( nMidRow ) );
@@ -206,58 +207,65 @@ void Test::testSimpleMark( const ScRange& rRange, const ScRange& rSelectionCover
 
 void Test::testSimpleMark_Simple()
 {
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
     testSimpleMark( ScRange( 10, 15, 0, 20, 30, 0 ),                  // Simple range
                     ScRange( 9, 14, 0, 21, 31, 0 ),                   // Cover
                     ScRangeList( ScRange( 9, 15, 0, 9, 30, 0 ) ),     // Left envelope
                     ScRangeList( ScRange( 21, 15, 0, 21, 30, 0 ) ),   // Right envelope
                     ScRangeList( ScRange( 10, 14, 0, 20, 14, 0 ) ),   // Top envelope
-                    ScRangeList( ScRange( 10, 31, 0, 20, 31, 0 ) ) ); // Bottom envelope
+                    ScRangeList( ScRange( 10, 31, 0, 20, 31, 0 ) ),   // Bottom envelope
+                    limits );
 }
 
 void Test::testSimpleMark_Column()
 {
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
     // Column 10, rows from 15 to 30
     testSimpleMark( ScRange( 10, 15, 0, 10, 30, 0 ),                  // Simple range
                     ScRange( 9, 14, 0, 11, 31, 0 ),                   // Cover
                     ScRangeList( ScRange( 9, 15, 0, 9, 30, 0 ) ),     // Left envelope
                     ScRangeList( ScRange( 11, 15, 0, 11, 30, 0 ) ),   // Right envelope
                     ScRangeList( ScRange( 10, 14, 0, 10, 14, 0 ) ),   // Top envelope
-                    ScRangeList( ScRange( 10, 31, 0, 10, 31, 0 ) ) ); // Bottom envelope
+                    ScRangeList( ScRange( 10, 31, 0, 10, 31, 0 ) ),   // Bottom envelope
+                    limits );
 
     // Full Column 10
-    testSimpleMark( ScRange( 10, 0, 0, 10, MAXROW, 0 ),                 // Simple range
-                    ScRange( 9, 0, 0, 11, MAXROW, 0 ),                  // Cover
-                    ScRangeList( ScRange( 9, 0, 0, 9, MAXROW, 0 ) ),    // Left envelope
-                    ScRangeList( ScRange( 11, 0, 0, 11, MAXROW, 0 ) ),  // Right envelope
+    testSimpleMark( ScRange( 10, 0, 0, 10, limits.MaxRow(), 0 ),                 // Simple range
+                    ScRange( 9, 0, 0, 11, limits.MaxRow(), 0 ),                  // Cover
+                    ScRangeList( ScRange( 9, 0, 0, 9, limits.MaxRow(), 0 ) ),    // Left envelope
+                    ScRangeList( ScRange( 11, 0, 0, 11, limits.MaxRow(), 0 ) ),  // Right envelope
                     ScRangeList(),                                      // Top envelope
-                    ScRangeList());                                     // Bottom envelope
+                    ScRangeList(),                                      // Bottom envelope
+                    limits );
 }
 
 void Test::testSimpleMark_Row()
 {
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
     // Row 15, cols from 10 to 20
     testSimpleMark( ScRange( 10, 15, 0, 20, 15, 0 ),                  // Simple range
                     ScRange( 9, 14, 0, 21, 16, 0 ),                   // Cover
                     ScRangeList( ScRange( 9, 15, 0, 9, 15, 0 ) ),     // Left envelope
                     ScRangeList( ScRange( 21, 15, 0, 21, 15, 0 ) ),   // Right envelope
                     ScRangeList( ScRange( 10, 14, 0, 20, 14, 0 ) ),   // Top envelope
-                    ScRangeList( ScRange( 10, 16, 0, 20, 16, 0 ) ) ); // Bottom envelope
+                    ScRangeList( ScRange( 10, 16, 0, 20, 16, 0 ) ),   // Bottom envelope
+                    limits );
 
     // Full Row 15
-    testSimpleMark( ScRange( 0, 15, 0, MAXCOL, 15, 0 ),                    // Simple range
-                    ScRange( 0, 14, 0, MAXCOL, 16, 0 ),                    // Cover
+    testSimpleMark( ScRange( 0, 15, 0, limits.MaxCol(), 15, 0 ),                    // Simple range
+                    ScRange( 0, 14, 0, limits.MaxCol(), 16, 0 ),                    // Cover
                     ScRangeList(),                                         // Left envelope
                     ScRangeList(),                                         // Right envelope
-                    ScRangeList( ScRange( 0, 14, 0, MAXCOL, 14, 0 ) ),     // Top envelope
-                    ScRangeList( ScRange( 0, 16, 0, MAXCOL, 16, 0 ) ) );   // Bottom envelope
+                    ScRangeList( ScRange( 0, 14, 0, limits.MaxCol(), 14, 0 ) ),     // Top envelope
+                    ScRangeList( ScRange( 0, 16, 0, limits.MaxCol(), 16, 0 ) ),     // Bottom envelope
+                    limits );
 }
 
 void Test::testMultiMark( const MultiMarkTestData& rMarksData )
 {
-
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
-    ScMarkData aMark(aSheetLimits);
-    ScMultiSel aMultiSel(aSheetLimits);
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
+    ScMarkData aMark(limits);
+    ScMultiSel aMultiSel(limits);
     CPPUNIT_ASSERT( !aMark.IsMarked() );
     CPPUNIT_ASSERT( !aMark.IsMultiMarked() );
     CPPUNIT_ASSERT_EQUAL( SCCOL(0), aMultiSel.GetMultiSelectionCount() );
@@ -286,13 +294,13 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
         for ( const auto& rCol : rAreaTestData.aColumnsWithFullMarks )
         {
             CPPUNIT_ASSERT( aMark.IsColumnMarked( rCol ) );
-            CPPUNIT_ASSERT( aMultiSel.IsAllMarked( rCol, 0, MAXROW ) );
+            CPPUNIT_ASSERT( aMultiSel.IsAllMarked( rCol, 0, limits.MaxRow() ) );
         }
 
         for ( const auto& rCol : rAreaTestData.aColumnsWithoutFullMarks )
         {
             CPPUNIT_ASSERT( !aMark.IsColumnMarked( rCol ) );
-            CPPUNIT_ASSERT( !aMultiSel.IsAllMarked( rCol, 0, MAXROW ) );
+            CPPUNIT_ASSERT( !aMultiSel.IsAllMarked( rCol, 0, limits.MaxRow() ) );
         }
 
         for ( const auto& rRow : rAreaTestData.aRowsWithFullMarks )
@@ -415,6 +423,7 @@ void Test::testMultiMark( const MultiMarkTestData& rMarksData )
 
 void Test::testMultiMark_FourRanges()
 {
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
     MultiMarkTestData aData;
     MarkTestData aSingle1;
 
@@ -449,7 +458,7 @@ void Test::testMultiMark_FourRanges()
     aSingle1.aNextMarked.emplace_back( 15, 1, 0, 1, 5, 0 ); // Search down
     aSingle1.aNextMarked.emplace_back( 15, 15, 0, 0, 10, 0 ); // Search up
 
-    aSingle1.aNextMarked.emplace_back( 15, 15, 0, 1, MAXROWCOUNT, 0 ); // Search down fail
+    aSingle1.aNextMarked.emplace_back( 15, 15, 0, 1, limits.GetMaxRowCount(), 0 ); // Search down fail
     aSingle1.aNextMarked.emplace_back( 15, 4, 0, 0, -1, 0 ); // Search up fail
 
     aSingle1.aColumnsWithAtLeastOneMark.push_back( 10 );
@@ -495,7 +504,7 @@ void Test::testMultiMark_FourRanges()
     aSingle2.aNextMarked.emplace_back( 27, 16, 0, 0, 15, 0 );  // up ok
     aSingle2.aNextMarked.emplace_back( 27, 4, 0, 1, 7, 0 );  // down ok
     aSingle2.aNextMarked.emplace_back( 27, 4, 0, 0, -1, 0 );  // up fail
-    aSingle2.aNextMarked.emplace_back( 27, 16, 0, 1, MAXROWCOUNT, 0 );  // down fail
+    aSingle2.aNextMarked.emplace_back( 27, 16, 0, 1, limits.GetMaxRowCount(), 0 );  // down fail
 
     aSingle2.aColumnsWithAtLeastOneMark = aSingle1.aColumnsWithAtLeastOneMark;
     aSingle2.aColumnsWithAtLeastOneMark.push_back( 25 );
@@ -510,7 +519,7 @@ void Test::testMultiMark_FourRanges()
     // Full row = 20
     MarkTestData aSingle3;
 
-    aSingle3.aRange = ScRange( 0, 20, 0, MAXCOL, 20, 0 );
+    aSingle3.aRange = ScRange( 0, 20, 0, limits.MaxCol(), 20, 0 );
     aSingle3.bMark = true;
 
     aSingle3.aInsideAddresses = aSingle2.aInsideAddresses;
@@ -525,13 +534,13 @@ void Test::testMultiMark_FourRanges()
     aSingle3.aRowsWithFullMarks.push_back( 20 );
 
     aSingle3.aRangesWithFullMarks = aSingle2.aRangesWithFullMarks;
-    aSingle3.aRangesWithFullMarks.emplace_back( 0, 20, 0, MAXCOL, 20, 0 );
+    aSingle3.aRangesWithFullMarks.emplace_back( 0, 20, 0, limits.MaxCol(), 20, 0 );
     aSingle3.aRangesWithFullMarks.emplace_back( 15, 20, 0, 55, 20, 0 );
 
     aSingle3.aNextMarked.emplace_back( 15, 16, 0, 0, 10, 0 );  // up ok
     aSingle3.aNextMarked.emplace_back( 15, 16, 0, 1, 20, 0 );  // down ok
     aSingle3.aNextMarked.emplace_back( 22, 15, 0, 0, -1, 0 );  // up fail
-    aSingle3.aNextMarked.emplace_back( 22, 25, 0, 1, MAXROWCOUNT, 0 );  // down fail
+    aSingle3.aNextMarked.emplace_back( 22, 25, 0, 1, limits.GetMaxRowCount(), 0 );  // down fail
 
     aSingle3.aColumnsWithAtLeastOneMark = aSingle2.aColumnsWithAtLeastOneMark;
     aSingle3.aColumnsWithAtLeastOneMark.push_back( 39 );
@@ -539,7 +548,7 @@ void Test::testMultiMark_FourRanges()
     // Full col = 35
     MarkTestData aSingle4;
 
-    aSingle4.aRange = ScRange( 35, 0, 0, 35, MAXROW, 0 );
+    aSingle4.aRange = ScRange( 35, 0, 0, 35, limits.MaxRow(), 0 );
     aSingle4.bMark = true;
 
     aSingle4.aInsideAddresses = aSingle3.aInsideAddresses;
@@ -556,7 +565,7 @@ void Test::testMultiMark_FourRanges()
     aSingle4.aRowsWithFullMarks.push_back( 20 );
 
     aSingle4.aRangesWithFullMarks = aSingle3.aRangesWithFullMarks;
-    aSingle4.aRangesWithFullMarks.emplace_back( 35, 0, 0, 35, MAXROW, 0 );
+    aSingle4.aRangesWithFullMarks.emplace_back( 35, 0, 0, 35, limits.MaxRow(), 0 );
     aSingle4.aRangesWithFullMarks.emplace_back( 35, 10, 0, 35, 25, 0 );
 
     // Add the rectangle data to aData
@@ -565,26 +574,26 @@ void Test::testMultiMark_FourRanges()
     aData.aMarks.push_back( aSingle3 );
     aData.aMarks.push_back( aSingle4 );
 
-    aData.aSelectionCover = ScRange( 0, 0, 0, MAXCOL, MAXROW, 0 );
+    aData.aSelectionCover = ScRange( 0, 0, 0, limits.MaxCol(), limits.MaxRow(), 0 );
     aData.aLeftEnvelope.push_back( ScRange( 9, 5, 0, 9, 10, 0 ) );
     aData.aLeftEnvelope.push_back( ScRange( 24, 7, 0, 24, 15, 0 ) );
     aData.aLeftEnvelope.push_back( ScRange( 34, 0, 0, 34, 19, 0 ) );
-    aData.aLeftEnvelope.push_back( ScRange( 34, 21, 0, 34, MAXROW, 0 ) );
+    aData.aLeftEnvelope.push_back( ScRange( 34, 21, 0, 34, limits.MaxRow(), 0 ) );
 
     aData.aRightEnvelope.push_back( ScRange( 21, 5, 0, 21, 10, 0 ) );
     aData.aRightEnvelope.push_back( ScRange( 31, 7, 0, 31, 15, 0 ) );
     aData.aRightEnvelope.push_back( ScRange( 36, 0, 0, 36, 19, 0 ) );
-    aData.aRightEnvelope.push_back( ScRange( 36, 21, 0, 36, MAXROW, 0 ) );
+    aData.aRightEnvelope.push_back( ScRange( 36, 21, 0, 36, limits.MaxRow(), 0 ) );
 
     aData.aTopEnvelope.push_back( ScRange( 10, 4, 0, 20, 4, 0 ) );
     aData.aTopEnvelope.push_back( ScRange( 25, 6, 0, 30, 6, 0 ) );
     aData.aTopEnvelope.push_back( ScRange( 0, 19, 0, 34, 19, 0 ) );
-    aData.aTopEnvelope.push_back( ScRange( 36, 19, 0, MAXCOL, 19, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 36, 19, 0, limits.MaxCol(), 19, 0 ) );
 
     aData.aBottomEnvelope.push_back( ScRange( 10, 11, 0, 20, 11, 0 ) );
     aData.aBottomEnvelope.push_back( ScRange( 25, 16, 0, 30, 16, 0 ) );
     aData.aBottomEnvelope.push_back( ScRange( 0, 21, 0, 34, 21, 0 ) );
-    aData.aBottomEnvelope.push_back( ScRange( 36, 21, 0, MAXCOL, 21, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 36, 21, 0, limits.MaxCol(), 21, 0 ) );
 
     MarkArrayTestData aMarkArrayTestData1;
     aMarkArrayTestData1.nCol = 5;
@@ -610,7 +619,7 @@ void Test::testMultiMark_FourRanges()
 
     MarkArrayTestData aMarkArrayTestData6;
     aMarkArrayTestData6.nCol = 35;
-    aMarkArrayTestData6.aMarkedRowSegs.emplace_back( 0, MAXROW );
+    aMarkArrayTestData6.aMarkedRowSegs.emplace_back( 0, limits.MaxRow() );
 
     MarkArrayTestData aMarkArrayTestData7;
     aMarkArrayTestData7.nCol = 40;
@@ -627,7 +636,7 @@ void Test::testMultiMark_FourRanges()
     aData.aColsWithOneMark.emplace_back( 5, 20, 0, 0, 20, 0 );
     aData.aColsWithOneMark.emplace_back( 22, 20, 0, 0, 20, 0 );
     aData.aColsWithOneMark.emplace_back( 32, 20, 0, 0, 20, 0 );
-    aData.aColsWithOneMark.emplace_back( 35, 0, 0, 0, MAXROW, 0 );
+    aData.aColsWithOneMark.emplace_back( 35, 0, 0, 0, limits.MaxRow(), 0 );
     aData.aColsWithOneMark.emplace_back( 50, 20, 0, 0, 20, 0 );
 
     aData.aColsWithoutOneMark.push_back( 10 );
@@ -642,7 +651,7 @@ void Test::testMultiMark_FourRanges()
     aData.aColsAllMarked.emplace_back( 10, 20, 0, 0, 20, 0 );
     aData.aColsAllMarked.emplace_back( 25, 7, 0, 0, 15, 0 );
     aData.aColsAllMarked.emplace_back( 30, 7, 0, 0, 15, 0 );
-    aData.aColsAllMarked.emplace_back( 35, 0, 0, 0, MAXROW, 0 );
+    aData.aColsAllMarked.emplace_back( 35, 0, 0, 0, limits.MaxRow(), 0 );
     aData.aColsAllMarked.emplace_back( 100, 20, 0, 0, 20, 0 );
 
     aData.aColsNotAllMarked.emplace_back( 5, 5, 0, 0, 25, 0 );
@@ -676,11 +685,12 @@ void Test::testMultiMark_FourRanges()
 
 void Test::testMultiMark_NegativeMarking()
 {
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
     MultiMarkTestData aData;
 
     // Create full row = 5
     MarkTestData aSingle1;
-    aSingle1.aRange = ScRange( 0, 5, 0, MAXCOL, 5, 0 );
+    aSingle1.aRange = ScRange( 0, 5, 0, limits.MaxCol(), 5, 0 );
     aSingle1.bMark = true;
 
     // Create rectangle ( 10, 8, 25, 20 )
@@ -690,7 +700,7 @@ void Test::testMultiMark_NegativeMarking()
 
     // Create full row = 12
     MarkTestData aSingle3;
-    aSingle3.aRange = ScRange( 0, 12, 0, MAXCOL, 12, 0 );
+    aSingle3.aRange = ScRange( 0, 12, 0, limits.MaxCol(), 12, 0 );
     aSingle3.bMark = true;
 
     // Create deselection rectangle ( 17, 5, 20, 5 )
@@ -765,7 +775,7 @@ void Test::testMultiMark_NegativeMarking()
     aData.aMarks.push_back( aSingle4 );
     aData.aMarks.push_back( aSingle5 );
 
-    aData.aSelectionCover = ScRange( 0, 4, 0, MAXCOL, 21, 0 );
+    aData.aSelectionCover = ScRange( 0, 4, 0, limits.MaxCol(), 21, 0 );
     aData.aLeftEnvelope.push_back( ScRange( 9, 8, 0, 9, 11, 0 ) );
     aData.aLeftEnvelope.push_back( ScRange( 9, 13, 0, 9, 20, 0 ) );
     aData.aLeftEnvelope.push_back( ScRange( 18, 10, 0, 18, 14, 0 ) );
@@ -777,17 +787,17 @@ void Test::testMultiMark_NegativeMarking()
     aData.aRightEnvelope.push_back( ScRange( 26, 13, 0, 26, 20, 0 ) );
 
     aData.aTopEnvelope.push_back( ScRange( 0, 4, 0, 16, 4, 0 ) );
-    aData.aTopEnvelope.push_back( ScRange( 21, 4, 0, MAXCOL, 4, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 21, 4, 0, limits.MaxCol(), 4, 0 ) );
     aData.aTopEnvelope.push_back( ScRange( 10, 7, 0, 25, 7, 0 ) );
     aData.aTopEnvelope.push_back( ScRange( 0, 11, 0, 9, 11, 0 ) );
-    aData.aTopEnvelope.push_back( ScRange( 26, 11, 0, MAXCOL, 11, 0 ) );
+    aData.aTopEnvelope.push_back( ScRange( 26, 11, 0, limits.MaxCol(), 11, 0 ) );
     aData.aTopEnvelope.push_back( ScRange( 15, 14, 0, 18, 14, 0 ) );
 
     aData.aBottomEnvelope.push_back( ScRange( 0, 6, 0, 16, 6, 0 ) );
-    aData.aBottomEnvelope.push_back( ScRange( 21, 6, 0, MAXCOL, 6, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 21, 6, 0, limits.MaxCol(), 6, 0 ) );
     aData.aBottomEnvelope.push_back( ScRange( 15, 10, 0, 18, 10, 0 ) );
     aData.aBottomEnvelope.push_back( ScRange( 0, 13, 0, 9, 13, 0 ) );
-    aData.aBottomEnvelope.push_back( ScRange( 26, 13, 0, MAXCOL, 13, 0 ) );
+    aData.aBottomEnvelope.push_back( ScRange( 26, 13, 0, limits.MaxCol(), 13, 0 ) );
     aData.aBottomEnvelope.push_back( ScRange( 10, 21, 0, 25, 21, 0 ) );
 
     aData.aColsWithOneMark.emplace_back( 19, 8, 0, 0, 20, 0 );
@@ -834,8 +844,7 @@ void Test::testMultiMark_NegativeMarking()
 
 void Test::testInsertTabBeforeSelected()
 {
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
-    ScMarkData aMark(aSheetLimits);
+    ScMarkData aMark(ScSheetLimits::CreateDefault());
     aMark.SelectOneTable(0);
     aMark.InsertTab(0);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -844,8 +853,7 @@ void Test::testInsertTabBeforeSelected()
 
 void Test::testInsertTabAfterSelected()
 {
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
-    ScMarkData aMark(aSheetLimits);
+    ScMarkData aMark(ScSheetLimits::CreateDefault());
     aMark.SelectOneTable(0);
     aMark.InsertTab(1);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -854,8 +862,7 @@ void Test::testInsertTabAfterSelected()
 
 void Test::testDeleteTabBeforeSelected()
 {
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
-    ScMarkData aMark(aSheetLimits);
+    ScMarkData aMark(ScSheetLimits::CreateDefault());
     aMark.SelectOneTable(1);
     aMark.DeleteTab(0);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -864,8 +871,7 @@ void Test::testDeleteTabBeforeSelected()
 
 void Test::testDeleteTabAfterSelected()
 {
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
-    ScMarkData aMark(aSheetLimits);
+    ScMarkData aMark(ScSheetLimits::CreateDefault());
     aMark.SelectOneTable(0);
     aMark.DeleteTab(1);
     CPPUNIT_ASSERT_EQUAL(SCTAB(1), aMark.GetSelectCount());
@@ -882,17 +888,17 @@ void Test::testScMarkArraySearch_check(const ScMarkArray & ar, SCROW nRow, bool 
 
 void Test::testScMarkArraySearch()
 {
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
     // empty
     {
-        ScMarkArray ar(aSheetLimits);
+        ScMarkArray ar(limits);
         testScMarkArraySearch_check(ar, -1, true, 0);
         testScMarkArraySearch_check(ar, 100, true, 0);
     }
 
     // one range
     {
-        ScMarkArray ar(aSheetLimits);
+        ScMarkArray ar(limits);
         ar.SetMarkArea(10, 20, true);
 
         // 0-9,10-20,21+
@@ -913,7 +919,7 @@ void Test::testScMarkArraySearch()
 
     // three ranges
     {
-        ScMarkArray ar(aSheetLimits);
+        ScMarkArray ar(limits);
         ar.SetMarkArea(10, 20, true);
         ar.SetMarkArea(21, 30, true);
         ar.SetMarkArea(50, 100, true);
@@ -934,7 +940,7 @@ void Test::testScMarkArraySearch()
 
     // three single-row ranges
     {
-        ScMarkArray ar(aSheetLimits);
+        ScMarkArray ar(limits);
         ar.SetMarkArea(4, 4, true);
         ar.SetMarkArea(6, 6, true);
         ar.SetMarkArea(8, 8, true);
@@ -954,8 +960,8 @@ void Test::testScMarkArraySearch()
 
     // one range
     {
-        ScMarkArray ar(aSheetLimits);
-        ar.SetMarkArea(10, MAXROW, true);
+        ScMarkArray ar(limits);
+        ar.SetMarkArea(10, limits.MaxRow(), true);
 
         // 0-10,11+
 
@@ -969,14 +975,14 @@ void Test::testScMarkArraySearch()
         testScMarkArraySearch_check(ar, 11, true, 1);
         testScMarkArraySearch_check(ar, 12, true, 1);
         testScMarkArraySearch_check(ar, 200, true, 1);
-        testScMarkArraySearch_check(ar, MAXROW, true, 1);
+        testScMarkArraySearch_check(ar, limits.MaxRow(), true, 1);
     }
 }
 
 void Test::testIsAllMarked()
 {
-    ScSheetLimits aSheetLimits(MAXCOL, MAXROW);
-    ScMarkData mark(aSheetLimits);
+    ScSheetLimits limits( ScSheetLimits::CreateDefault());
+    ScMarkData mark(limits);
     ScRange range1( ScAddress( 5, 10, 0 ), ScAddress( 15, 20, 0 ));
     ScRange range2( ScAddress( 2, 2, 0 ), ScAddress( 25, 30, 0 ));
     CPPUNIT_ASSERT( !mark.IsAllMarked( range1 ));

@@ -28,6 +28,8 @@
 
 #include <cppu/unotype.hxx>
 
+#include <sheetlimits.hxx>
+
 using namespace css;
 using namespace css::uno;
 
@@ -79,7 +81,7 @@ private:
 ScTableRowsObj::ScTableRowsObj()
     : CalcUnoApiTest("/sc/qa/extras/testdocuments")
     , XElementAccess(cppu::UnoType<table::XCellRange>::get())
-    , XIndexAccess(1048576)
+    , XIndexAccess(ScSheetLimits::CreateDefault().GetMaxRowCount())
     , XServiceInfo("ScTableRowsObj", "com.sun.star.table.TableRows")
 {
 }
