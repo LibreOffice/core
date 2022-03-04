@@ -3547,7 +3547,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         {
             makeTable(hbox);
         }
-        else                                      // Is TextBox
+        else if (!hbox->plists[0].empty())        // Is TextBox
         {
             parsePara(hbox->plists[0].front().get());
         }
@@ -3561,7 +3561,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         if( hbox->style.cap_len > 0 && hbox->type == TXT_TYPE)
         {
             endEl("text:p");
-            if( !(hbox->cap_pos % 2))
+            if (!(hbox->cap_pos % 2) && !hbox->caption.empty())
             {
                 parsePara(hbox->caption.front().get());
             }
