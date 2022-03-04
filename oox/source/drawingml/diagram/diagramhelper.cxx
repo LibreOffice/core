@@ -73,6 +73,11 @@ void AdvancedDiagramHelper::reLayout()
 
     // Access the GroupObject representing the SmartArt in DrawingLayer
     SdrObjGroup* pAnchorObj(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(pParentShape->getXShape())));
+    if(!pAnchorObj)
+    {
+        SAL_WARN("oox", "missing SdrObjGroup");
+        return;
+    }
 
     // Rescue/remember geometric transformation of existing Diagram
     basegfx::B2DHomMatrix aTransformation;
