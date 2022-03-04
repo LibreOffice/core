@@ -39,11 +39,6 @@
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 
-// To be shorten source code by realking
-#define WTI(x)          (static_cast<double>(x) / 1800.)     // unit => inch
-#define WTMM(x)     (static_cast<double>(x) / 1800. * 25.4)  // unit => mm
-#define WTSM(x)     (static_cast<int>((x) / 1800. * 2540))   // unit ==> 1/100 mm
-
 // xmloff/xmlkyd.hxx
 constexpr OUStringLiteral sXML_CDATA = u"CDATA";
 
@@ -69,15 +64,9 @@ static char buf[1024];
 
 namespace
 {
-
-template<typename T>
-struct Free
-{
-    void operator()(T* const ptr)
-    {
-        free(ptr);
-    }
-};
+double WTI(double x) { return x / 1800.; } // unit => inch
+double WTMM(double x) { return x / 1800. * 25.4; } // unit => mm
+int WTSM(double x) { return x / 1800. * 2540; } // unit ==> 1/100 mm
 
 constexpr OUStringLiteral sBeginOfDoc(u"[\uBB38\uC11C\uC758 \uCC98\uC74C]");
     // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
