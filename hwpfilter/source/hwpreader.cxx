@@ -37,6 +37,7 @@
 #include <iostream>
 #include <locale.h>
 #include <sal/types.h>
+#include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
 
 // To be shorten source code by realking
@@ -250,7 +251,6 @@ void HwpReader::makeTextDecls()
 }
 
 
-#define ISNUMBER(x) ( (x) <= 0x39 && (x) >= 0x30 )
 /**
  * make office:meta
  * Completed
@@ -287,8 +287,8 @@ void HwpReader::makeMeta()
         unsigned short *pDate = hwpinfo.summary.date;
         int year,month,day,hour,minute;
         int gab = 0;
-        if( ISNUMBER( pDate[0] ) && ISNUMBER( pDate[1] ) &&
-            ISNUMBER( pDate[2] ) && ISNUMBER( pDate[3] ))
+        if( rtl::isAsciiDigit( pDate[0] ) && rtl::isAsciiDigit( pDate[1] ) &&
+            rtl::isAsciiDigit( pDate[2] ) && rtl::isAsciiDigit( pDate[3] ))
         {
             year = (pDate[0]-0x30) * 1000 + (pDate[1]-0x30) * 100 +
                 (pDate[2]-0x30) * 10 + (pDate[3]-0x30);
@@ -296,9 +296,9 @@ void HwpReader::makeMeta()
         else {
             year = 0;
         }
-        if( ISNUMBER( pDate[6] ))
+        if( rtl::isAsciiDigit( pDate[6] ))
         {
-            if( ISNUMBER( pDate[7] ) )
+            if( rtl::isAsciiDigit( pDate[7] ) )
                 month = (pDate[6] - 0x30) * 10 + (pDate[6+ ++gab]-0x30);
             else
                 month = (pDate[6] - 0x30);
@@ -306,9 +306,9 @@ void HwpReader::makeMeta()
         else {
             month = 0;
         }
-        if( ISNUMBER( pDate[9 + gab] ) )
+        if( rtl::isAsciiDigit( pDate[9 + gab] ) )
         {
-            if( ISNUMBER( pDate[10 + gab])) {
+            if( rtl::isAsciiDigit( pDate[10 + gab])) {
                 day = ( pDate[9 + gab] - 0x30 ) * 10 + (pDate[9+ gab + 1]-0x30);
                 ++gab;
             } else
@@ -317,9 +317,9 @@ void HwpReader::makeMeta()
         else {
             day = 0;
         }
-        if( ISNUMBER( pDate[17 + gab] ) )
+        if( rtl::isAsciiDigit( pDate[17 + gab] ) )
         {
-            if( ISNUMBER( pDate[18 + gab])) {
+            if( rtl::isAsciiDigit( pDate[18 + gab])) {
                 hour = ( pDate[17 + gab] - 0x30 ) * 10 + (pDate[17+ gab + 1]-0x30);
                 ++gab;
             } else
@@ -328,9 +328,9 @@ void HwpReader::makeMeta()
         else {
             hour = 0;
         }
-        if( ISNUMBER( pDate[20 + gab] ) )
+        if( rtl::isAsciiDigit( pDate[20 + gab] ) )
         {
-            if( ISNUMBER( pDate[21 + gab])) {
+            if( rtl::isAsciiDigit( pDate[21 + gab])) {
                 minute = ( pDate[20 + gab] - 0x30 ) * 10 + (pDate[20+ gab + 1]-0x30);
                 ++gab;
             } else
