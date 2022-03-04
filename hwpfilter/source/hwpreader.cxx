@@ -40,7 +40,6 @@
 #include <rtl/ustrbuf.hxx>
 
 // To be shorten source code by realking
-#define ascii(x)        OUString::createFromAscii(x)
 #define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(false)
 #define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(false)
 #define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(false)
@@ -347,7 +346,7 @@ void HwpReader::makeMeta()
         sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
         rstartEl( "meta:creation-date", mxList );
-        rchars( ascii(buf));
+        rchars( OUString::createFromAscii(buf));
         rendEl( "meta:creation-date" );
     }
 
@@ -469,7 +468,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             {
                 ArrowShape[prop->line_tstyle].bMade = true;
                 padd("draw:name", sXML_CDATA,
-                    ascii(ArrowShape[prop->line_tstyle].name));
+                    OUString::createFromAscii(ArrowShape[prop->line_tstyle].name));
                 if( prop->line_tstyle == 1 )
                 {
                     padd("svg:viewBox", sXML_CDATA, "0 0 20 30");
@@ -495,7 +494,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             {
                 ArrowShape[prop->line_hstyle].bMade = true;
                 padd("draw:name", sXML_CDATA,
-                    ascii(ArrowShape[prop->line_hstyle].name));
+                    OUString::createFromAscii(ArrowShape[prop->line_hstyle].name));
                 if( prop->line_hstyle == 1 )
                 {
                     padd("svg:viewBox", sXML_CDATA, "0 0 20 30");
@@ -592,30 +591,30 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     {
                         sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                             (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
-                        padd( "draw:start-color", sXML_CDATA, ascii( buf ));
+                        padd( "draw:start-color", sXML_CDATA, OUString::createFromAscii( buf ));
                         sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                             (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
-                        padd( "draw:end-color", sXML_CDATA, ascii( buf ));
+                        padd( "draw:end-color", sXML_CDATA, OUString::createFromAscii( buf ));
                     }
                     else
                     {
                         sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                             (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
-                        padd( "draw:start-color", sXML_CDATA, ascii( buf ));
+                        padd( "draw:start-color", sXML_CDATA, OUString::createFromAscii( buf ));
                         sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                             (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
-                        padd( "draw:end-color", sXML_CDATA, ascii( buf ));
+                        padd( "draw:end-color", sXML_CDATA, OUString::createFromAscii( buf ));
                     }
                 }
                 else
                 {
                     sprintf( buf, "#%02x%02x%02x", prop->tocolor & 0xff,
                         (prop->tocolor >> 8) & 0xff, (prop->tocolor >>16) & 0xff );
-                    padd( "draw:start-color", sXML_CDATA,ascii( buf ));
+                    padd( "draw:start-color", sXML_CDATA,OUString::createFromAscii( buf ));
 
                     sprintf( buf, "#%02x%02x%02x", prop->fromcolor & 0xff,
                         (prop->fromcolor >> 8) & 0xff, (prop->fromcolor >>16) & 0xff );
-                    padd( "draw:end-color", sXML_CDATA,ascii( buf ));
+                    padd( "draw:end-color", sXML_CDATA,OUString::createFromAscii( buf ));
                 }
                 if( prop->angle > 0 && ( prop->gstyle == 1 || prop->gstyle == 4))
                 {
@@ -639,7 +638,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     sal_uInt16(prop->pattern_color & 0xff),
                     sal_uInt16((prop->pattern_color >> 8) & 0xff),
                     sal_uInt16((prop->pattern_color >>16) & 0xff) );
-                padd( "draw:color", sXML_CDATA, ascii( buf ));
+                padd( "draw:color", sXML_CDATA, OUString::createFromAscii( buf ));
                 padd( "draw:distance", sXML_CDATA, "0.12cm");
                 switch( type )
                 {
@@ -1419,7 +1418,7 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
     }
 
     if (align)
-        padd("fo:text-align", sXML_CDATA, ascii(align));
+        padd("fo:text-align", sXML_CDATA, OUString::createFromAscii(align));
 
     if (pshape->outline)
         padd("fo:border", sXML_CDATA, "0.002cm solid #000000");
@@ -1619,7 +1618,7 @@ void HwpReader::makePageStyle()
          }
 
          padd("style:print-orientation",sXML_CDATA,
-              ascii(hwpinfo.paper.paper_direction ? "landscape" : "portrait"));
+              OUString::createFromAscii(hwpinfo.paper.paper_direction ? "landscape" : "portrait"));
          if( hwpinfo.beginpagenum != 1)
               padd("style:first-page-number",sXML_CDATA, OUString::number(hwpinfo.beginpagenum));
 
@@ -1677,7 +1676,7 @@ void HwpReader::makePageStyle()
                      || hwpinfo.back_info.color[2] > 0 ){
                  sprintf(buf,"#%02x%02x%02x",hwpinfo.back_info.color[0],
                          hwpinfo.back_info.color[1],hwpinfo.back_info.color[2] );
-                 padd("fo:background-color", sXML_CDATA, ascii(buf));
+                 padd("fo:background-color", sXML_CDATA, OUString::createFromAscii(buf));
              }
          }
 
@@ -1855,7 +1854,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        padd("style:name", sXML_CDATA, ascii( buf ));
+        padd("style:name", sXML_CDATA, OUString::createFromAscii( buf ));
         padd("style:family", sXML_CDATA,"table-column");
         rstartEl("style:style", mxList);
         mxList->clear();
@@ -1871,7 +1870,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
-        padd("style:name", sXML_CDATA, ascii( buf ));
+        padd("style:name", sXML_CDATA, OUString::createFromAscii( buf ));
         padd("style:family", sXML_CDATA,"table-row");
         rstartEl("style:style", mxList);
         mxList->clear();
@@ -1887,7 +1886,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     for (auto const& tcell : tbl->cells)
     {
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        padd("style:name", sXML_CDATA, ascii( buf ));
+        padd("style:name", sXML_CDATA, OUString::createFromAscii( buf ));
         padd("style:family", sXML_CDATA,"table-cell");
         rstartEl("style:style", mxList);
         mxList->clear();
@@ -2030,7 +2029,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     sal_uInt16(color & 0xff),
                     sal_uInt16((color >> 8) & 0xff),
                     sal_uInt16((color >>16) & 0xff) );
-            padd("svg:stroke-color", sXML_CDATA, ascii( buf) );
+            padd("svg:stroke-color", sXML_CDATA, OUString::createFromAscii( buf) );
         }
 
         if( hdo->type == HWPDO_LINE || hdo->type == HWPDO_ARC ||
@@ -2041,7 +2040,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 o3tl::make_unsigned(hdo->property.line_tstyle) < std::size(ArrowShape) )
             {
                 padd("draw:marker-start", sXML_CDATA,
-                    ascii(ArrowShape[hdo->property.line_tstyle].name) );
+                    OUString::createFromAscii(ArrowShape[hdo->property.line_tstyle].name) );
                 if( hdo->property.line_width > 100 )
                          padd("draw:marker-start-width", sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
@@ -2063,7 +2062,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 o3tl::make_unsigned(hdo->property.line_hstyle) < std::size(ArrowShape) )
             {
                 padd("draw:marker-end", sXML_CDATA,
-                    ascii(ArrowShape[hdo->property.line_hstyle].name) );
+                    OUString::createFromAscii(ArrowShape[hdo->property.line_hstyle].name) );
                 if( hdo->property.line_width > 100 )
                          padd("draw:marker-end-width", sXML_CDATA,
                               OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
@@ -2135,7 +2134,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                         sal_uInt16(color & 0xff),
                         sal_uInt16((color >> 8) & 0xff),
                         sal_uInt16((color >>16) & 0xff) );
-                    padd("draw:fill-color", sXML_CDATA, ascii( buf) );
+                    padd("draw:fill-color", sXML_CDATA, OUString::createFromAscii( buf) );
                     padd("draw:fill-hatch-solid", sXML_CDATA, "true");
                 }
             }
@@ -2146,7 +2145,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     sal_uInt16(color & 0xff),
                     sal_uInt16((color >> 8) & 0xff),
                     sal_uInt16((color >>16) & 0xff) );
-                padd("draw:fill-color", sXML_CDATA, ascii( buf) );
+                padd("draw:fill-color", sXML_CDATA, OUString::createFromAscii( buf) );
             }
             else
                 padd("draw:fill", sXML_CDATA, "none");
@@ -3394,7 +3393,7 @@ void HwpReader::makeTable(TxtBox * hbox)
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        padd("table:style-name", sXML_CDATA, ascii( buf ));
+        padd("table:style-name", sXML_CDATA, OUString::createFromAscii( buf ));
         rstartEl("table:table-column", mxList);
         mxList->clear();
         rendEl("table:table-column");
@@ -3413,14 +3412,14 @@ void HwpReader::makeTable(TxtBox * hbox)
             }
 // row
             sprintf(buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
-            padd("table:style-name", sXML_CDATA, ascii( buf ));
+            padd("table:style-name", sXML_CDATA, OUString::createFromAscii( buf ));
             rstartEl("table:table-row", mxList);
             mxList->clear();
             j = tcell->nRowIndex;
         }
 
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        padd("table:style-name", sXML_CDATA, ascii( buf ));
+        padd("table:style-name", sXML_CDATA, OUString::createFromAscii( buf ));
         if( tcell->nColumnSpan > 1 )
             padd("table:number-columns-spanned", sXML_CDATA, OUString::number(tcell->nColumnSpan));
         if( tcell->nRowSpan > 1 )
@@ -4225,7 +4224,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     padd("svg:height", sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w) , WTSM(drawobj->extent.h) );
-                    padd("svg:viewBox", sXML_CDATA, ascii(buf) );
+                    padd("svg:viewBox", sXML_CDATA, OUString::createFromAscii(buf) );
 
                     OUStringBuffer oustr;
 
@@ -4273,7 +4272,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                               sprintf(buf, "M%d %dC%d %d", WTSM(xarr[0]), WTSM(yarr[0]),
                                       WTSM(xarr[0] + xb[0]/3), WTSM(yarr[0] + yb[0]/3) );
-                              oustr.append(ascii(buf));
+                              oustr.appendAscii(buf);
 
                               for( i = 1 ; i < n  ; i++ ){
                                   if( i == n -1 ){
@@ -4288,7 +4287,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                               WTSM(xarr[i] + xb[i]/3), WTSM(yarr[i] + yb[i]/3) );
                                   }
 
-                                  oustr.append(ascii(buf));
+                                  oustr.appendAscii(buf);
                               }
                     }
 
@@ -4325,21 +4324,21 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
 
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w), WTSM(drawobj->extent.h));
-                    padd("svg:viewBox", sXML_CDATA, ascii(buf) );
+                    padd("svg:viewBox", sXML_CDATA, OUString::createFromAscii(buf) );
 
                     OUStringBuffer oustr;
 
                     if (drawobj->u.freeform.npt > 0)
                     {
                         sprintf(buf, "%d,%d", WTSM(drawobj->u.freeform.pt[0].x), WTSM(drawobj->u.freeform.pt[0].y));
-                        oustr.append(ascii(buf));
+                        oustr.appendAscii(buf);
                         int i;
                         for (i = 1; i < drawobj->u.freeform.npt  ; i++)
                         {
                             sprintf(buf, " %d,%d",
                                 WTSM(drawobj->u.freeform.pt[i].x),
                                 WTSM(drawobj->u.freeform.pt[i].y));
-                            oustr.append(ascii(buf));
+                            oustr.appendAscii(buf);
                         }
                         if( drawobj->u.freeform.pt[0].x == drawobj->u.freeform.pt[i-1].x &&
                             drawobj->u.freeform.pt[0].y == drawobj->u.freeform.pt[i-1].y )
