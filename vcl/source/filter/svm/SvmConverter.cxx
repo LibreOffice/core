@@ -248,6 +248,27 @@ namespace
             nFollowingActionCount = remainingActions;
         return std::min(remainingActions, nFollowingActionCount);
     }
+
+    void ClampRange(const OUString& rStr, sal_Int32& rIndex, sal_Int32& rLength,
+                        std::vector<sal_Int32>* pDXAry = nullptr)
+    {
+        const sal_Int32 nStrLength = rStr.getLength();
+
+        if (rIndex < 0 || rIndex > nStrLength)
+        {
+            SAL_WARN("vcl.gdi", "inconsistent offset");
+            rIndex = nStrLength;
+        }
+
+        if (rLength < 0 || rLength > nStrLength - rIndex)
+        {
+            SAL_WARN("vcl.gdi", "inconsistent len");
+            rLength = nStrLength - rIndex;
+        }
+
+        if (pDXAry && pDXAry->size() > o3tl::make_unsigned(rLength))
+            pDXAry->resize(rLength);
+    }
 }
 
 #define LF_FACESIZE 32
@@ -691,6 +712,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
+                    ClampRange(aStr, nIndex, nLen);
                     rMtf.AddAction( new MetaTextAction( aPt, aStr, nIndex, nLen ) );
                 }
 
@@ -780,6 +802,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     }
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
+                    ClampRange(aStr, nIndex, nLen, &aDXAry);
                     rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, aDXAry, nIndex, nLen ) );
                 }
 
@@ -806,6 +829,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
+                    ClampRange(aStr, nIndex, nLen);
                     rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, nIndex, nLen ) );
                 }
 
