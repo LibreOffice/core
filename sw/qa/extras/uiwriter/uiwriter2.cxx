@@ -3236,6 +3236,44 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143938)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140077)
+{
+    SwDoc* const pDoc = createSwDoc();
+
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // hide
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    pWrtShell->Insert("a");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("b");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    // enable
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->Delete();
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    // crashed in layout
+    pWrtShell->SplitNode();
+
+    pWrtShell->Undo();
+    pWrtShell->Redo();
+    pWrtShell->Undo();
+    pWrtShell->Redo();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf143939)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf126206.docx");
