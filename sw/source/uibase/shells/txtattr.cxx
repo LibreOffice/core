@@ -39,7 +39,6 @@
 #include <editeng/cmapitem.hxx>
 #include <osl/diagnose.h>
 #include <paratr.hxx>
-#include <editeng/pmdlitem.hxx>
 
 #include <fmtinfmt.hxx>
 #include <wrtsh.hxx>
