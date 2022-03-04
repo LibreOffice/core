@@ -280,7 +280,9 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
             // ANSI characters in ansiPath, including the terminating NULL character
             sal_uInt32 nUnits = 0;
             rStrm.ReadUInt32(nUnits);
-            if (nUnits)
+            if (!nUnits)
+                xShortName.reset(new OUString);
+            else
             {
                 OString sStr(read_uInt8s_ToOString(rStrm, nUnits - 1));
                 rStrm.SeekRel(sizeof(sal_uInt8)); // skip null-byte at end
@@ -312,7 +314,9 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
             sal_uInt32 nStrLen(0);
             rStrm.ReadUInt32( nStrLen );
             nStrLen /= 2;
-            if (nStrLen)
+            if (!nStrLen)
+                xLongName.reset(new OUString);
+            else
             {
                 xLongName.reset(new OUString(read_uInt16s_ToOUString(rStrm, nStrLen - 1)));
                 rStrm.SeekRel(sizeof(sal_Unicode)); // skip null-byte at end
