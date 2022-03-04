@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d931a482_7af8ba5d",
+        "filename": "hwpfilter/source/hcode.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-04T16:39:54Z",
+      "side": 1,
+      "message": "red, green, blue are 16bit shorts. %02x is min 2 digits, but turns out we have possibility of 4 so fuzzer has found stack smashing examples.",
+      "revId": "a400cdb4555d32e9648dae32c01296a075843bd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
