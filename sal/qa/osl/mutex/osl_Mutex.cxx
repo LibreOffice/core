@@ -807,6 +807,8 @@ namespace osl_ResettableGuard
 
             CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the acquire operation when initialized.",
                 bRes);
+
+            aMutex.acquire();
         }
 
         void ctor_002( )
@@ -821,6 +823,8 @@ namespace osl_ResettableGuard
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initialized, we use reference constructor this time.",
                 bRes);
+
+            aMutex.acquire();
         }
 
         CPPUNIT_TEST_SUITE(ctor);
@@ -853,6 +857,8 @@ namespace osl_ResettableGuard
                 bRes );
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset",
                 bRes1 );
+
+            aMutex.acquire();
         }
 
 #ifdef LINUX
@@ -863,6 +869,7 @@ namespace osl_ResettableGuard
 
             /// shouldn't release after clear;
             myMutexGuard.clear( );
+            aMutex.acquire();
             bool bRes = aMutex.release( );
 
             /// can release after reset.
@@ -870,9 +877,11 @@ namespace osl_ResettableGuard
             bool bRes1 = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
-                !bRes );
+                bRes );
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard method: reset, release after clear and reset, on Solaris, the mutex can be release without acquire, so it can not passed on (SOLARIS), but not the reason for reset_002",
                 bRes1 );
+
+            aMutex.acquire();
         }
 #endif
 
