@@ -119,6 +119,7 @@ public:
     void testPlotVisOnlyXLSX();
     void testBarChartVaryColorsXLSX();
     void testTdf96161();
+    void testTableOnPage3();
     void testMultipleAxisXLSX();
     void testSecondaryAxisXLSX();
     void testBarChartSecondaryAxisXLSX();
@@ -213,6 +214,7 @@ public:
     CPPUNIT_TEST(testPlotVisOnlyXLSX);
     CPPUNIT_TEST(testBarChartVaryColorsXLSX);
     CPPUNIT_TEST(testTdf96161);
+    CPPUNIT_TEST(testTableOnPage3);
     CPPUNIT_TEST(testMultipleAxisXLSX);
     CPPUNIT_TEST(testSecondaryAxisXLSX);
     CPPUNIT_TEST(testBarChartSecondaryAxisXLSX);
@@ -1898,6 +1900,22 @@ void Chart2ExportTest::testTdf96161()
     CPPUNIT_ASSERT(pXmlDoc);
 
     assertXPath(pXmlDoc, "/c:chartSpace/c:chart/c:plotArea/c:lineChart/c:varyColors", "val", "0");
+}
+
+void Chart2ExportTest::testTableOnPage3()
+{
+    load(u"/chart2/qa/extras/data/docx/", "TableOnPage3.docx");
+    reload("Office Open XML Text");
+
+    Reference<chart2::XChartDocument> xChartDoc(getChartDocFromWriter(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xChartDoc.is());
+    uno::Reference< chart::XChartDataArray > xDataArray(xChartDoc->getDataProvider(), UNO_QUERY_THROW);
+    Sequence<OUString> aColumnDesc = xDataArray->getColumnDescriptions();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There must be 4 columns and descriptions", static_cast<sal_Int32>(4), aColumnDesc.getLength());
+    CPPUNIT_ASSERT_EQUAL(OUString("If oversubscription relative to allowance increases at the same average rate B15-B17"), aColumnDesc[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Known requirements"), aColumnDesc[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("Allowance"), aColumnDesc[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("If oversubscription relative to allowance holds steady at average oversubscription level B15-B17"), aColumnDesc[3]);
 }
 
 void Chart2ExportTest::testMultipleAxisXLSX()
