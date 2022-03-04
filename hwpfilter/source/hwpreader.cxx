@@ -3952,14 +3952,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 }
 
                 /* 4 - Calculation of reflex angle */
-                if( r_pt[2].y == r_pt[1].y )
-                         skewX = 0;
-                else
-                         skewX = atan(static_cast<double>(r_pt[2].x - r_pt[1].x )/( r_pt[2].y - r_pt[1].y ));
-                if( skewX >= M_PI_2 )
-                         skewX -= M_PI;
-                if( skewX <= -M_PI_2 )
-                         skewX += M_PI;
+                skewX=atan2((r_pt[2].x - r_pt[1].x ),( r_pt[2].y - r_pt[1].y ));
 
                 OUString trans;
                 if( skewX != 0.0 && rotate != 0.0 ){
