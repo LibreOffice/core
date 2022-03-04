@@ -1019,9 +1019,6 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                     CopyMemory(&pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATAW));
                     pItemImpl->m_sFullPath = strSysFilePath;
 
-                    // MT: This costs 600ms startup time on fast v60x!
-                    // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
-
                     pItemImpl->uType = DIRECTORYITEM_FILE;
                     *pItem = pItemImpl;
                 }
