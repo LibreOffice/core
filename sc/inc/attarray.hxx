@@ -114,6 +114,7 @@ public:
             ~ScAttrArray();
 
     ScDocument& GetDoc() { return rDocument; }
+    const ScDocument& GetDoc() const { return rDocument; }
     void    SetTab(SCTAB nNewTab)   { nTab = nNewTab; }
     void    SetCol(SCCOL nNewCol)   { nCol = nNewCol; }
 #if DEBUG_SC_TESTATTRARRAY
@@ -266,10 +267,10 @@ inline const ScPatternAttr* ScAttrIterator::Next( SCROW& rTop, SCROW& rBottom )
         if ( !nPos )
         {
             ++nPos;
-            if ( nRow > MAXROW )
+            if ( nRow > pArray->GetDoc().MaxRow())
                 return nullptr;
             rTop = nRow;
-            rBottom = std::min( nEndRow, MAXROW );
+            rBottom = std::min( nEndRow, pArray->GetDoc().MaxRow());
             nRow = rBottom + 1;
             return pDefPattern;
         }
