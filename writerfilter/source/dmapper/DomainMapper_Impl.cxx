@@ -4596,20 +4596,93 @@ void DomainMapper_Impl::PopTextBoxContent()
 
 void DomainMapper_Impl::AttachTextBoxContentToShape(css::uno::Reference<css::drawing::XShape> xShape)
 {
+    // Without textbox or shape pointless to continue
     if (m_xPendingTextBoxFrames.empty() || !xShape)
         return;
 
     uno::Reference< drawing::XShapes >xGroup(xShape, uno::UNO_QUERY);
     uno::Reference< beans::XPropertySet >xProps(xShape, uno::UNO_QUERY);
 
+    // If this is a group go inside
     if (xGroup)
         for (sal_Int32 i = 0; i < xGroup->getCount(); ++i)
-            AttachTextBoxContentToShape(uno::Reference<drawing::XShape>(xGroup->getByIndex(i),uno::UNO_QUERY_THROW));
+            AttachTextBoxContentToShape(
+                uno::Reference<drawing::XShape>(xGroup->getByIndex(i), uno::UNO_QUERY));
 
-    if (xProps->getPropertyValue("TextBox").get<bool>())
+    // if this shape has to be a textbox, attach the frame
+    if (xProps->getPropertyValue("TextBox").get<bool>()) try
     {
-        xProps->setPropertyValue("TextBoxContent", uno::Any(m_xPendingTextBoxFrames.front()));
+        auto xTextBox = m_xPendingTextBoxFrames.front();
+        if (!xTextBox)
+            throw uno::RuntimeException();
+
+        xProps->setPropertyValue("TextBoxContent", uno::Any(xTextBox));
+        uno::Sequence<beans::PropertyValue> aGrabbagSeq;
+
+        // Get the name of the textbox
+        OUString sTextBoxName;
+        uno::Reference<container::XNamed> xName(xTextBox, uno::UNO_QUERY);
+        if (xName && !xName->getName().isEmpty())
+            sTextBoxName = xName->getName();
+
+        // Try to get the grabbag
+        if (xProps->getPropertySetInfo()->hasPropertyByName("InteropGrabBag"))
+            aGrabbagSeq = xProps->getPropertyValue("InteropGrabBag")
+                              .get<uno::Sequence<beans::PropertyValue>>();
+
+        if (aGrabbagSeq.hasElements())
+        {
+            auto vGrabBag
+                = comphelper::sequenceToContainer<std::vector<beans::PropertyValue>>(aGrabbagSeq);
+            // Boolean to store if the grabbag changed
+            bool bChanged = false;
+            for (const auto& rProp : vGrabBag)
+            {
+                // Find that if this textbox have to be linked
+                if ((rProp.Name == "TxbxHasLink") && rProp.Value.get<bool>())
+                {
+
+
+                    // Find if the vector already has the name as property
+                    bool bFound = false;
+                    for (auto& rFind : vGrabBag)
+                    {
+                        if (rFind.Name == "LinkChainName")
+                        {
+                            // Replace the value
+                            rFind.Value <<= sTextBoxName;
+                            bFound = true;
+                            bChanged = true;
+                            break;
+                        }
+                    }
+
+                    // If there is still no value
+                    if (!bFound)
+                    {
+                        // Set the link name
+                        vGrabBag.push_back(
+                            beans::PropertyValue("LinkChainName", 0, uno::Any(sTextBoxName),
+                                                 beans::PropertyState::PropertyState_DIRECT_VALUE));
+                        bChanged = true;
+                    }
+                }
+            }
+
+            // If the linking changed the grabbag, apply the modifications
+            if (bChanged)
+            {
+                xProps->setPropertyValue("InteropGrabBag",
+                                         uno::Any(comphelper::containerToSequence(vGrabBag)));
+                m_vTextFramesForChaining.push_back(xShape);
+            }
+        }
         m_xPendingTextBoxFrames.pop();
+    }
+    catch (...)
+    {
+        SAL_WARN("writerfilter.dmapper",
+                 "Exception while trying to attach and link textboxes!");
     }
 }
 
