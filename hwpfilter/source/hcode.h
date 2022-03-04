@@ -38,7 +38,7 @@ DLLEXPORT int hcharconv(hchar ch, hchar *dest, int codeType) ;
 DLLEXPORT int   kssm_hangul_to_ucs2(hchar ch, hchar *dest) ;
 DLLEXPORT hchar ksc5601_han_to_ucs2 (hchar);
 DLLEXPORT hchar ksc5601_sym_to_ucs2 (hchar);
-DLLEXPORT hchar_string hstr2ucsstr(hchar const* hstr);
+DLLEXPORT OUString hstr2OUString(hchar const* hstr);
 /**
  * 한컴스트링을 완성형스트링으로 변환한다.
  */

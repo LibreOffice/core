@@ -31,6 +31,7 @@
 #include <comphelper/sequence.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <sal/types.h>
 #include <sal/macros.h>
 
@@ -1166,17 +1167,16 @@ hchar ksc5601_han_to_ucs2 (hchar input)
     return '?';
 }
 
-hchar_string hstr2ucsstr(hchar const* hstr)
+OUString hstr2OUString(hchar const* hstr)
 {
-    hchar_string ret;
+    OUStringBuffer ret;
+    static_assert(sizeof(hchar) == sizeof(sal_Unicode));
     hchar dest[3];
     for( ; *hstr ; ){
         int const res = hcharconv(*hstr++, dest, UNICODE);
-        for (int j = 0 ; j < res ; j++) {
-            ret.push_back(dest[j]);
-        }
+        ret.append(reinterpret_cast<sal_Unicode*>(dest), res);
     }
-    return ret;
+    return ret.makeStringAndClear();
 }
 
 /**
