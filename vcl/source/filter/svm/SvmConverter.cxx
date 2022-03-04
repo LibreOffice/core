@@ -249,17 +249,25 @@ namespace
         return std::min(remainingActions, nFollowingActionCount);
     }
 
-    bool NormalizeRange(const OUString& rStr, sal_Int32& rIndex, sal_Int32& rLength,
+    void ClampRange(const OUString& rStr, sal_Int32& rIndex, sal_Int32& rLength,
                         std::vector<sal_Int32>* pDXAry = nullptr)
     {
-        const sal_uInt32 nStrLength = rStr.getLength();
-        rIndex = std::min<sal_uInt32>(rIndex, nStrLength);
-        rLength = std::min<sal_uInt32>(rLength, nStrLength - rIndex);
-        if (pDXAry && pDXAry->size() > o3tl::make_unsigned(rLength))
+        const sal_Int32 nStrLength = rStr.getLength();
+
+        if (rIndex < 0 || rIndex > nStrLength)
         {
-            pDXAry->resize(rLength);
+            SAL_WARN("vcl.gdi", "inconsistent offset");
+            rIndex = nStrLength;
         }
-        return rLength > 0;
+
+        if (rLength < 0 || rLength > nStrLength - rIndex)
+        {
+            SAL_WARN("vcl.gdi", "inconsistent len");
+            rLength = nStrLength - rIndex;
+        }
+
+        if (pDXAry && pDXAry->size() > o3tl::make_unsigned(rLength))
+            pDXAry->resize(rLength);
     }
 }
 
@@ -704,8 +712,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                    if (NormalizeRange(aStr, nIndex, nLen))
-                        rMtf.AddAction( new MetaTextAction( aPt, aStr, nIndex, nLen ) );
+                    ClampRange(aStr, nIndex, nLen);
+                    rMtf.AddAction( new MetaTextAction( aPt, aStr, nIndex, nLen ) );
                 }
 
                 if (nActionSize < 24)
@@ -794,8 +802,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     }
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                    if (NormalizeRange(aStr, nIndex, nLen, &aDXAry))
-                        rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, aDXAry, nIndex, nLen ) );
+                    ClampRange(aStr, nIndex, nLen, &aDXAry);
+                    rMtf.AddAction( new MetaTextArrayAction( aPt, aStr, aDXAry, nIndex, nLen ) );
                 }
 
                 if (nActionSize < 24)
@@ -821,8 +829,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                     OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
                     if ( nUnicodeCommentActionNumber == i )
                         ImplReadUnicodeComment( nUnicodeCommentStreamPos, rIStm, aStr );
-                    if (NormalizeRange(aStr, nIndex, nLen))
-                        rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, nIndex, nLen ) );
+                    ClampRange(aStr, nIndex, nLen);
+                    rMtf.AddAction( new MetaStretchTextAction( aPt, nWidth, aStr, nIndex, nLen ) );
                 }
 
                 if (nActionSize < 28)
