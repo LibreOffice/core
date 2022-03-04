@@ -23,10 +23,17 @@
  * Hanja johap code => ks code => unicode
  * Special johap code => ks code => unicode
  */
+
+#include <sal/config.h>
+
 #include "precompile.h"
+#include <comphelper/base64.hxx>
+#include <comphelper/sequence.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <rtl/strbuf.hxx>
 #include <sal/types.h>
 #include <sal/macros.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -1385,54 +1392,11 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 }
 #endif
 
-char* base64_encode_string( const uchar *buf, unsigned int len )
+OUString base64_encode_string( const uchar *buf, unsigned int len )
 {
-    char basis_64[] =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    char * out;
-    int inPos  = 0;
-    int outPos = 0;
-    int c1, c2;
-    unsigned int i;
-
-    out=static_cast<char *>(malloc( (len*4/3)+8 ));
-
-/* Get three characters at a time and encode them. */
-    for (i=0; i < len/3; ++i)
-    {
-        c1 = buf[inPos++] & 0xFF;
-        c2 = buf[inPos++] & 0xFF;
-        int c3 = buf[inPos++] & 0xFF;
-        out[outPos++] = basis_64[(c1 & 0xFC) >> 2];
-        out[outPos++] = basis_64[((c1 & 0x03) << 4) | ((c2 & 0xF0) >> 4)];
-        out[outPos++] = basis_64[((c2 & 0x0F) << 2) | ((c3 & 0xC0) >> 6)];
-        out[outPos++] = basis_64[c3 & 0x3F];
-    }
-
-/* Encode the remaining one or two characters. */
-
-    switch (len % 3)
-    {
-        case 0:
-            break;
-        case 1:
-            c1 = buf[inPos] & 0xFF;
-            out[outPos++] = basis_64[(c1 & 0xFC) >> 2];
-            out[outPos++] = basis_64[((c1 & 0x03) << 4)];
-            out[outPos++] = '=';
-            out[outPos++] = '=';
-            break;
-        case 2:
-            c1 = buf[inPos++] & 0xFF;
-            c2 = buf[inPos] & 0xFF;
-            out[outPos++] = basis_64[(c1 & 0xFC) >> 2];
-            out[outPos++] = basis_64[((c1 & 0x03) << 4) | ((c2 & 0xF0) >> 4)];
-            out[outPos++] = basis_64[((c2 & 0x0F) << 2)];
-            out[outPos++] = '=';
-            break;
-    }
-    out[outPos] = 0;
-    return out;
+    OStringBuffer aBuf;
+    comphelper::Base64::encode(aBuf, comphelper::arrayToSequence<sal_Int8>(buf, len));
+    return OUString::createFromAscii(aBuf);
 }
 
 double calcAngle(int x1, int y1, int x2, int y2)

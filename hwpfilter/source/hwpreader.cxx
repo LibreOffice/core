@@ -542,8 +542,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 if (emp)
                 {
                     rstartEl("office:binary-data", mxList);
-                    std::shared_ptr<char> pStr(base64_encode_string(emp->data.get(), emp->size), Free<char>());
-                    rchars(ascii(pStr.get()));
+                    rchars(base64_encode_string(emp->data.get(), emp->size));
                     rendEl("office:binary-data");
                 }
                 rendEl( "draw:fill-image");
@@ -1723,8 +1722,7 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 2 ){
                  rstartEl("office:binary-data", mxList);
                  mxList->clear();
-                 std::shared_ptr<char> pStr(base64_encode_string(reinterpret_cast<unsigned char *>(hwpinfo.back_info.data.data()), hwpinfo.back_info.size ), Free<char>());
-                 rchars(ascii(pStr.get()));
+                 rchars(base64_encode_string(reinterpret_cast<unsigned char*>(hwpinfo.back_info.data.data()), hwpinfo.back_info.size));
                  rendEl("office:binary-data");
              }
              rendEl("style:background-image");
@@ -3876,8 +3874,7 @@ void HwpReader::makePicture(Picture * hbox)
                          EmPicture *emp = hwpfile.GetEmPicture(hbox);
                          if( emp )
                          {
-                             std::shared_ptr<char> pStr(base64_encode_string( emp->data.get(), emp->size ), Free<char>());
-                             rchars(ascii(pStr.get()));
+                             rchars(base64_encode_string(emp->data.get(), emp->size));
                          }
                 }
                 else{
@@ -3900,8 +3897,7 @@ void HwpReader::makePicture(Picture * hbox)
                                      rchars("");
                                  }
                                  else{
-                                     std::shared_ptr<char> pStr(base64_encode_string( reinterpret_cast<uchar *>(pObj), strlen(reinterpret_cast<char *>(pObj))), Free<char>());
-                                     rchars(ascii(pStr.get()));
+                                     rchars(base64_encode_string(reinterpret_cast<uchar*>(pObj), strlen(reinterpret_cast<char*>(pObj))));
                                      pObj->Release();
                                      srcsto->Release();
                                  }
