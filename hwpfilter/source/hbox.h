@@ -25,6 +25,7 @@
 #include <array>
 #include <memory>
 
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 
 #include "hwplib.h"
@@ -969,7 +970,7 @@ class Outline: public HBox
         Outline();
 
         virtual bool Read(HWPFile &hwpf) override;
-        hchar_string GetUnicode() const;
+        OUString GetUnicode() const;
 };
 
 /* Bundle of spaces (30) */

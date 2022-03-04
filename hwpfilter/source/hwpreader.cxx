@@ -40,7 +40,6 @@
 #include <rtl/ustrbuf.hxx>
 
 // To be shorten source code by realking
-#define hconv(x)        hstr2ucsstr(x).c_str()
 #define ascii(x)        OUString::createFromAscii(x)
 #define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(false)
 #define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(false)
@@ -270,21 +269,21 @@ void HwpReader::makeMeta()
     if (hwpinfo.summary.title[0])
     {
         rstartEl("dc:title", mxList);
-        rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.title)));
+        rchars(hstr2OUString(hwpinfo.summary.title));
         rendEl("dc:title");
     }
 
     if (hwpinfo.summary.subject[0])
     {
         rstartEl("dc:subject", mxList);
-        rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.subject)));
+        rchars(hstr2OUString(hwpinfo.summary.subject));
         rendEl("dc:subject");
     }
 
     if (hwpinfo.summary.author[0])
     {
         rstartEl("meta:initial-creator", mxList);
-        rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.author)));
+        rchars(hstr2OUString(hwpinfo.summary.author));
         rendEl("meta:initial-creator");
     }
 
@@ -358,31 +357,31 @@ void HwpReader::makeMeta()
         if (hwpinfo.summary.keyword[0][0])
         {
             rstartEl("meta:keyword", mxList);
-            rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.keyword[0])));
+            rchars(hstr2OUString(hwpinfo.summary.keyword[0]));
             rendEl("meta:keyword");
         }
         if (hwpinfo.summary.keyword[1][0])
         {
             rstartEl("meta:keyword", mxList);
-            rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.keyword[1])));
+            rchars(hstr2OUString(hwpinfo.summary.keyword[1]));
             rendEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[0][0])
         {
             rstartEl("meta:keyword", mxList);
-            rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.etc[0])));
+            rchars(hstr2OUString(hwpinfo.summary.etc[0]));
             rendEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[1][0])
         {
             rstartEl("meta:keyword", mxList);
-            rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.etc[1])));
+            rchars(hstr2OUString(hwpinfo.summary.etc[1]));
             rendEl("meta:keyword");
         }
         if (hwpinfo.summary.etc[2][0])
         {
             rstartEl("meta:keyword", mxList);
-            rchars(fromHcharStringToOUString(hstr2ucsstr(hwpinfo.summary.etc[2])));
+            rchars(hstr2OUString(hwpinfo.summary.etc[2]));
             rendEl("meta:keyword");
         }
         rendEl("meta:keywords");
@@ -530,7 +529,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 if (!emp)
                 {
                     padd( "xlink:href", sXML_CDATA,
-                        fromHcharStringToOUString(hstr2ucsstr(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(prop->szPatternFile).c_str())).c_str())));
+                        hstr2OUString(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(prop->szPatternFile).c_str())).c_str()));
                     padd( "xlink:type", sXML_CDATA, "simple");
                     padd( "xlink:show", sXML_CDATA, "embed");
                     padd( "xlink:actuate", sXML_CDATA, "onLoad");
@@ -712,7 +711,7 @@ void HwpReader::makeStyles()
     for (int ii = 0; ii < hwpstyle.Num(); ii++)
     {
         unsigned char *stylename = reinterpret_cast<unsigned char *>(hwpstyle.GetName(ii));
-        padd("style:name", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(stylename).c_str())));
+        padd("style:name", sXML_CDATA, hstr2OUString(kstr2hstr(stylename).c_str()));
         padd("style:family", sXML_CDATA, "paragraph");
         padd("style:parent-style-name", sXML_CDATA, "Standard");
 
@@ -1691,10 +1690,10 @@ void HwpReader::makePageStyle()
              if( hwpinfo.back_info.type == 1 ){
 #ifdef _WIN32
                  padd("xlink:href", sXML_CDATA,
-                      fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(reinterpret_cast<uchar const *>(urltowin(hwpinfo.back_info.filename).c_str())).c_str())));
+                      hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltowin(hwpinfo.back_info.filename).c_str())).c_str()));
 #else
                  padd("xlink:href", sXML_CDATA,
-                    fromHcharStringToOUString(hstr2ucsstr(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(hwpinfo.back_info.filename).c_str())).c_str())));
+                    hstr2OUString(kstr2hstr( reinterpret_cast<uchar const *>(urltounix(hwpinfo.back_info.filename).c_str())).c_str()));
 #endif
                  padd("xlink:type", sXML_CDATA, "simple");
                  padd("xlink:actuate", sXML_CDATA, "onLoad");
@@ -3075,7 +3074,7 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
     {
         padd("text:placeholder-type", sXML_CDATA, "text");
         if( field )
-              padd("text:description", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(field)));
+              padd("text:description", sXML_CDATA, hstr2OUString(field));
         rstartEl( "text:placeholder", mxList);
         mxList->clear();
         rchars( fromHcharStringToOUString(rStr) );
@@ -3084,95 +3083,94 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
 /* Document Summary */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))
-            == std::u16string_view(u"title"))
+        const OUString uStr3 = hstr2OUString(hbox->str3.get());
+        if (uStr3 == "title")
         {
             rstartEl( "text:title", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:title" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"subject"))
+        else if (uStr3 == "subject")
         {
             rstartEl( "text:subject", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:subject" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"author"))
+        else if (uStr3 == "author")
         {
             rstartEl( "text:author-name", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:author-name" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"keywords"))
+        else if (uStr3 == "keywords")
         {
             rstartEl( "text:keywords", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:keywords" );
         }
     }
 /* Personal Information */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))
-            == std::u16string_view(u"User"))
+        const OUString uStr3 = hstr2OUString(hbox->str3.get());
+        if (uStr3 == "User")
         {
             rstartEl( "text:sender-lastname", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-lastname" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Company"))
+        else if (uStr3 == "Company")
         {
             rstartEl( "text:sender-company", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-company" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Position"))
+        else if (uStr3 == "Position")
         {
             rstartEl( "text:sender-title", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-title" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Division"))
+        else if (uStr3 == "Division")
         {
             rstartEl( "text:sender-position", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-position" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get()))
-                 == std::u16string_view(u"Fax"))
+        else if (uStr3 == "Fax")
         {
             rstartEl( "text:sender-fax", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-fax" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Pager"))
+        else if (uStr3 == "Pager")
         {
             rstartEl( "text:phone-private", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:phone-private" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"E-mail"))
+        else if (uStr3 == "E-mail")
         {
             rstartEl( "text:sender-email", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-email" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Zipcode(office)"))
+        else if (uStr3 == "Zipcode(office)")
         {
             rstartEl( "text:sender-postal-code", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-postal-code" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Phone(office)"))
+        else if (uStr3 == "Phone(office)")
         {
             rstartEl( "text:sender-phone-work", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-phone-work" );
         }
-        else if (reinterpret_cast<sal_Unicode const *>(hconv(hbox->str3.get())) == std::u16string_view(u"Address(office)"))
+        else if (uStr3 == "Address(office)")
         {
             rstartEl( "text:sender-street", mxList );
-            rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+            rchars( hstr2OUString(hbox->str2.get()) );
             rendEl( "text:sender-street" );
         }
 
@@ -3183,7 +3181,7 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
              padd("style:data-style-name", sXML_CDATA, "N" + OUString::number(hbox->m_pDate->key));
          rstartEl( "text:creation-date", mxList );
          mxList->clear();
-         rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
+         rchars( hstr2OUString(hbox->str2.get()) );
          rendEl( "text:creation-date" );
      }
 }
@@ -3197,21 +3195,21 @@ void HwpReader::makeBookmark(Bookmark const * hbox)
 {
     if (hbox->type == 0)
     {
-        padd("text:name", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(hbox->id)));
+        padd("text:name", sXML_CDATA, hstr2OUString(hbox->id));
         rstartEl("text:bookmark", mxList);
         mxList->clear();
         rendEl("text:bookmark");
     }
     else if (hbox->type == 1)                     /* Block bookmarks days begin and end there if */
     {
-        padd("text:name", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(hbox->id)));
+        padd("text:name", sXML_CDATA, hstr2OUString(hbox->id));
         rstartEl("text:bookmark-start", mxList);
         mxList->clear();
         rendEl("text:bookmark-start");
     }
     else if (hbox->type == 2)
     {
-        padd("text:name", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(hbox->id)));
+        padd("text:name", sXML_CDATA, hstr2OUString(hbox->id));
         rstartEl("text:bookmark-end", mxList);
         mxList->clear();
         rendEl("text:bookmark-end");
@@ -3357,7 +3355,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 sbuf[0] = *fmt;
                 sbuf[1] = 0;
                 rstartEl("number:text", mxList);
-                rchars(fromHcharStringToOUString(hstr2ucsstr(sbuf)));
+                rchars(hstr2OUString(sbuf));
                 rendEl("number:text");
                 break;
         }
@@ -3373,7 +3371,7 @@ void HwpReader::makeDateCode(DateCode * hbox)
     rstartEl( "text:date", mxList );
     mxList->clear();
     hchar_string const boxstr = hbox->GetString();
-    rchars(fromHcharStringToOUString(hstr2ucsstr(boxstr.c_str())));
+    rchars(hstr2OUString(boxstr.c_str()));
     rendEl( "text:date" );
 }
 
@@ -3744,16 +3742,16 @@ void HwpReader::makePicture(Picture * hbox)
                 padd("xlink:type", sXML_CDATA, "simple");
 #ifdef _WIN32
                 if( hbox->follow[4] != 0 )
-                    padd("xlink:href", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(hbox->follow.data() + 4).c_str())));
+                    padd("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(hbox->follow.data() + 4).c_str()));
                 else
-                    padd("xlink:href", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(hbox->follow.data() + 5).c_str())));
+                    padd("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(hbox->follow.data() + 5).c_str()));
 #else
                 if( hbox->follow[4] != 0 )
                     padd("xlink:href", sXML_CDATA,
-                        fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 4)).c_str())).c_str())));
+                        hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 4)).c_str())).c_str()));
                 else
                     padd("xlink:href", sXML_CDATA,
-                        fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 5)).c_str())).c_str())));
+                        hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(reinterpret_cast<char *>(hbox->follow.data() + 5)).c_str())).c_str()));
 #endif
                 rstartEl("draw:a", mxList);
                 mxList->clear();
@@ -3802,10 +3800,10 @@ void HwpReader::makePicture(Picture * hbox)
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
                 sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
-                padd("xlink:href", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(reinterpret_cast<uchar *>(buf)).c_str())));
+                padd("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(reinterpret_cast<uchar *>(buf)).c_str()));
 #else
                 padd("xlink:href", sXML_CDATA,
-                    fromHcharStringToOUString(hstr2ucsstr(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str())));
+                    hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str()));
 #endif
                 padd("xlink:type", sXML_CDATA, "simple");
                 padd("xlink:show", sXML_CDATA, "embed");
@@ -4618,14 +4616,14 @@ void HwpReader::makeShowPageNum()
 void HwpReader::makeMailMerge(MailMerge *)
 {
     hchar_string const boxstr = MailMerge::GetString();
-    rchars(fromHcharStringToOUString(hstr2ucsstr(boxstr.c_str())));
+    rchars(hstr2OUString(boxstr.c_str()));
 }
 
 
 void HwpReader::makeOutline(Outline const * hbox)
 {
     if( hbox->kind == 1 )
-        rchars( fromHcharStringToOUString(hbox->GetUnicode()) );
+        rchars( hbox->GetUnicode() );
 }
 
 
