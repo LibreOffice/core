@@ -16,6 +16,24 @@
       "message": "Caolán: does this work?",
       "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59770e21_66d4deb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-04T17:03:05Z",
+      "side": 1,
+      "message": "yup, that works perfectly",
+      "parentUuid": "c592b943_2b77af22",
+      "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
