@@ -19,7 +19,8 @@
 enum XclExpExtType
 {
     XclExpExtDataBarType,
-    XclExpExtDataFooType
+    XclExpExtDataFooType,
+    XclExpExtSparklineType,
 };
 
 struct XclExpExtCondFormatData
