@@ -334,7 +334,8 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
         if( !aRemoveEntries[ i ] )
             aRemainingVector.push_back( m_pTabPage->aFoundList[i] );
 
-    m_pTabPage->aFoundList = std::move(aRemainingVector);
+    std::swap(m_pTabPage->aFoundList, aRemainingVector);
+    aRemainingVector.clear();
 
     // refill list box
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
@@ -342,10 +343,8 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl, void*, void)
             aRemainingVector.push_back(m_pTabPage->m_xLbxFound->get_text(i));
 
     m_pTabPage->m_xLbxFound->clear();
-
     for( i = 0, nCount = aRemainingVector.size(); i < nCount; ++i )
         m_pTabPage->m_xLbxFound->append_text(aRemainingVector[i]);
-
     aRemainingVector.clear();
 
     m_pTabPage->m_xLbxFound->thaw();
