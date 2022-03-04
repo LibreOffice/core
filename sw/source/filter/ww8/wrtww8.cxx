@@ -3728,7 +3728,7 @@ ErrCode SwWW8Writer::WriteStorage()
                     xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                         "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);
 
-                if (xPackageEncryption.is())
+                if (xPackageEncryption)
                 {
                     // We have an encryptor
                     // Create new temporary storage for content
