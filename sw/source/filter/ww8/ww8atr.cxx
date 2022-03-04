@@ -315,7 +315,6 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
     if( !(bExportParentItemSet || rSet.Count()) )
         return;
 
-    const SfxPoolItem* pItem;
     m_pISet = &rSet;                  // for double attributes
 
     // If frame dir is set, but not adjust, then force adjust as well
@@ -324,7 +323,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         // No explicit adjust set ?
         if ( SfxItemState::SET != rSet.GetItemState( RES_PARATR_ADJUST, bExportParentItemSet ) )
         {
-            pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet );
+            const SvxAdjustItem* pItem = rSet.GetItem( RES_PARATR_ADJUST, bExportParentItemSet );
             if ( nullptr != pItem )
             {
                 // then set the adjust used by the parent format
@@ -333,17 +332,19 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
         }
     }
 
-    if ( bPapFormat && SfxItemState::SET == rSet.GetItemState( RES_PARATR_NUMRULE, bExportParentItemSet, &pItem ) )
+    const SwNumRuleItem* pRuleItem;
+    if ( bPapFormat && (pRuleItem = rSet.GetItemIfSet( RES_PARATR_NUMRULE, bExportParentItemSet )) )
     {
-        AttrOutput().OutputItem( *pItem );
+        AttrOutput().OutputItem( *pRuleItem );
 
         // switch off the numbering?
-        if ( pItem->StaticWhichCast(RES_PARATR_NUMRULE).GetValue().isEmpty() &&
+        const SfxPoolItem* pLRItem;
+        if ( pRuleItem->GetValue().isEmpty() &&
              SfxItemState::SET != rSet.GetItemState( RES_LR_SPACE, false) &&
-             SfxItemState::SET == rSet.GetItemState( RES_LR_SPACE, true, &pItem ) )
+             (pLRItem = rSet.GetItemIfSet( RES_LR_SPACE )) )
         {
             // the set the LR-Space of the parentformat!
-            AttrOutput().OutputItem( *pItem );
+            AttrOutput().OutputItem( *pLRItem );
         }
     }
 
@@ -357,7 +358,7 @@ void MSWordExportBase::OutputItemSet( const SfxItemSet& rSet, bool bPapFormat, b
 
         for ( const auto& rItem : aItems )
         {
-            pItem = rItem.second;
+            const SfxPoolItem* pItem = rItem.second;
             sal_uInt16 nWhich = pItem->Which();
             // Handle fill attributes just like frame attributes for now.
             if ( (nWhich >= RES_PARATR_BEGIN && nWhich < RES_FRMATR_END && nWhich != RES_PARATR_NUMRULE ) ||
@@ -482,7 +483,6 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     m_bBreakBefore = true;
     bool bNewPageDesc = false;
-    const SfxPoolItem* pItem=nullptr;
     const SwFormatPageDesc *pPgDesc=nullptr;
     bool bExtraPageBreakBeforeSectionBreak = false;
 
@@ -515,23 +515,22 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
 
     if ( pSet && pSet->Count() )
     {
-        if ( SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, false, &pItem ) &&
-             pItem->StaticWhichCast(RES_PAGEDESC).GetRegisteredIn() != nullptr)
+        pPgDesc = pSet->GetItemIfSet( RES_PAGEDESC, false );
+        if ( pPgDesc && pPgDesc->GetRegisteredIn() != nullptr)
         {
             bBreakSet = true;
             bNewPageDesc = true;
-            pPgDesc = static_cast<const SwFormatPageDesc*>(pItem);
             m_pCurrentPageDesc = pPgDesc->GetPageDesc();
 
             // tdf#121666: nodes that have pagebreak + sectionbreak may need to export both breaks
             // tested / implemented with docx format only.
             // If other formats (rtf /doc) need similar fix, then that may can be done similar way.
-            if (SfxItemState::SET == pSet->GetItemState(RES_BREAK, false, &pItem))
+            if (pSet->GetItemIfSet(RES_BREAK, false))
             {
                 bExtraPageBreakBeforeSectionBreak = true;
             }
         }
-        else if ( SfxItemState::SET == pSet->GetItemState( RES_BREAK, false, &pItem ) )
+        else if ( const SvxFormatBreakItem* pBreak = pSet->GetItemIfSet( RES_BREAK, false ) )
         {
             // Word does not like hard break attributes in some table cells
             bool bRemoveHardBreakInsideTable = false;
@@ -569,15 +568,13 @@ void MSWordExportBase::OutputSectionBreaks( const SfxItemSet *pSet, const SwNode
                 if ( m_pCurrentPageDesc )
                 {
                     // #i76301# - assure that there is a page break before set at the node.
-                    const SvxFormatBreakItem* pBreak = dynamic_cast<const SvxFormatBreakItem*>(pItem);
-                    if ( pBreak &&
-                         pBreak->GetBreak() == SvxBreak::PageBefore )
+                    if ( pBreak->GetBreak() == SvxBreak::PageBefore )
                     {
                         bNewPageDesc |= SetCurrentPageDescFromNode( rNd );
                     }
                 }
                 if ( !bNewPageDesc )
-                    AttrOutput().OutputItem( *pItem );
+                    AttrOutput().OutputItem( *pBreak );
             }
         }
     }

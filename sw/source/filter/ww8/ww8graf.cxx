@@ -1748,9 +1748,8 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     sal_Int32 nLineThick = 15, nOutside=0;
 
     // check if LineStyle is *really* set!
-    const SfxPoolItem* pItem;
 
-    SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE,true,&pItem);
+    SfxItemState eState = rOldSet.GetItemState(XATTR_LINESTYLE);
     if( eState == SfxItemState::SET )
     {
         // Now, that we know there is a line style we will make use the
@@ -1865,7 +1864,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     sal_uInt8 nTrans = 0;
 
     // Separate transparency
-    eState = rOldSet.GetItemState(XATTR_FILLTRANSPARENCE, true, &pItem);
+    eState = rOldSet.GetItemState(XATTR_FILLTRANSPARENCE);
     if (!bSkipResBackground && eState == SfxItemState::SET)
     {
         sal_uInt16 nRes = WW8ITEMVALUE(rOldSet, XATTR_FILLTRANSPARENCE,
@@ -1876,10 +1875,10 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject const * pSdrObj,
     }
 
     // Background: SvxBrushItem
-    eState = rOldSet.GetItemState(XATTR_FILLSTYLE, true, &pItem);
-    if (!bSkipResBackground && eState == SfxItemState::SET)
+    const  XFillStyleItem* pFillStyleItem = rOldSet.GetItemIfSet(XATTR_FILLSTYLE);
+    if (!bSkipResBackground && pFillStyleItem)
     {
-        const drawing::FillStyle eFill = static_cast<const XFillStyleItem*>(pItem)->GetValue();
+        const drawing::FillStyle eFill = pFillStyleItem->GetValue();
 
         switch (eFill)
         {
