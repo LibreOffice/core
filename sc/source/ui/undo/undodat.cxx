@@ -1707,6 +1707,8 @@ ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const OUString& rNam
                                     bool bAdd ) :
     ScSimpleUndo( pNewDocShell ),
     aChartName( rName ),
+    bOldColHeaders(false),
+    bOldRowHeaders(false),
     aNewRangeListRef( rNew ),
     bNewColHeaders( bColHdr ),
     bNewRowHeaders( bRowHdr ),
