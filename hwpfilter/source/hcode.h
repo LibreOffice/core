@@ -65,6 +65,8 @@ DLLEXPORT ::std::string urltowin(const char *src);
  * color인덱스 값과 음영값을 조합하여 스타오피스의 color로 변환
  */
 DLLEXPORT OUString hcolor2str(uchar color, uchar shade, bool bIsChar = false);
+DLLEXPORT OUString rgb2str(unsigned short red, unsigned short green, unsigned short blue);
+DLLEXPORT OUString rgb2str(int32_t rgb);
 
 DLLEXPORT OUString base64_encode_string( const uchar *buf, unsigned int len );
 DLLEXPORT double calcAngle(int x1, int y1, int x2, int y2);
