@@ -51,6 +51,24 @@
       "message": "Conditions could be combined to avoid duplication of branches.",
       "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bf34887_586bf552",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-04T18:14:52Z",
+      "side": 1,
+      "message": "Of course, but this change targets as small change as possible to address one single goal: replace some sprintf uses 😊 Please create follow-ups, and this module gives really many opportunities to clean up the mess ;)",
+      "parentUuid": "8d040029_2172f863",
+      "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
