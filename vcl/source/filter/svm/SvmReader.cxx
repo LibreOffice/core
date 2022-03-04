@@ -728,11 +728,24 @@ rtl::Reference<MetaAction> SvmReader::StretchTextHandler(const ImplMetaReadData*
 
     pAction->SetPoint(aPoint);
     pAction->SetWidth(nTmpWidth);
-    pAction->SetIndex(nTmpIndex);
-    pAction->SetLen(nTmpLen);
 
     if (aCompat.GetVersion() >= 2) // Version 2
         aStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(mrStream);
+
+    if (nTmpIndex > aStr.getLength())
+    {
+        SAL_WARN("vcl.gdi", "inconsistent offset");
+        nTmpIndex = aStr.getLength();
+    }
+
+    if (nTmpLen > aStr.getLength() - nTmpIndex)
+    {
+        SAL_WARN("vcl.gdi", "inconsistent len");
+        nTmpLen = aStr.getLength() - nTmpIndex;
+    }
+
+    pAction->SetIndex(nTmpIndex);
+    pAction->SetLen(nTmpLen);
 
     pAction->SetText(aStr);
 
