@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06b74190_c6c1a1b5",
+        "filename": "hwpfilter/source/hinfo.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-04T19:04:05Z",
+      "side": 1,
+      "message": "possibly we should run these comments through google translate?",
+      "revId": "95d6bb450fc1e85575bfd06e423d21a5e10a7e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
