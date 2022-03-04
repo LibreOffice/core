@@ -73,7 +73,6 @@ job73=sc.ScAccessiblePreviewTable
 job74=sc.ScAccessibleSpreadsheet
 job78=sc.ScAutoFormatFieldObj
 job88=sc.ScDatabaseRangeObj
-job98=sc.ScHeaderFieldObj
 job126=sc.ScSheetLinkObj
 job132=sc.ScStyleObj
 job140=sc.XMLContentExporter
