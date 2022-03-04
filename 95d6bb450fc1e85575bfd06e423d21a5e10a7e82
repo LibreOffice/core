@@ -16,6 +16,24 @@
       "message": "possibly we should run these comments through google translate?",
       "revId": "95d6bb450fc1e85575bfd06e423d21a5e10a7e82",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f8e3350_f8c2ec5a",
+        "filename": "hwpfilter/source/hinfo.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-04T19:26:32Z",
+      "side": 1,
+      "message": ":) I hoped that there are people among developers who could do that without GTranslate 😊",
+      "parentUuid": "06b74190_c6c1a1b5",
+      "revId": "95d6bb450fc1e85575bfd06e423d21a5e10a7e82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
