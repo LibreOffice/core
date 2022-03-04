@@ -817,7 +817,7 @@ void TestFormula::testFormulaParseReference()
 
     // Both columns at sheet bounds and relative => convert to absolute => entire row reference.
     aRange.aStart.SetTab(0);
-    nRes = aRange.Parse(m_pDoc->MaxCol() == MAXCOL ? "A2:AMJ2" : "A2:XFD2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
+    nRes = aRange.Parse("A2:" + m_pDoc->MaxColAsString() + "2", *m_pDoc, formula::FormulaGrammar::CONV_OOO);
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(0), aRange.aStart.Tab());
     CPPUNIT_ASSERT_EQUAL(static_cast<SCCOL>(0), aRange.aStart.Col());

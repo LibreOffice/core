@@ -6703,7 +6703,7 @@ void Test::testInsertColumnsWithFormulaCells()
     CPPUNIT_ASSERT_MESSAGE("Columns 2, 4 and 6 should contain formula cells.", equals(aExpected, aCols));
 
     // Insert 2 columns at column A to shift everything to right by 2.
-    m_pDoc->InsertCol(0, 0, MAXROW, 0, 0, 2);
+    m_pDoc->InsertCol(0, 0, m_pDoc->MaxRow(), 0, 0, 2);
 
     aExpected = { 4, 6, 8 };
     aCols = m_pDoc->QueryColumnsWithFormulaCells(0);

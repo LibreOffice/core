@@ -254,7 +254,7 @@ void Test::testDeleteArea_2Ranges()
 void Test::testDeleteArea_2Ranges_Case2()
 {
     ScRangeList aList(ScRange(1,1,0,1,5,0));
-    aList.DeleteArea(0,3,0,MAXCOL,3,0);
+    aList.DeleteArea(0,3,0,ScSheetLimits::CreateDefault().MaxCol(),3,0);
 
     for(SCROW nRow = 1; nRow <= 5; ++nRow)
     {

@@ -93,15 +93,19 @@ using namespace com::sun::star;
 
 const sal_uInt16 ScDocument::nSrcVer = SC_CURRENT_VERSION;
 
-static ScSheetLimits* CreateSheetLimits()
+ScSheetLimits ScSheetLimits::CreateDefault()
 {
 #if HAVE_FEATURE_JUMBO_SHEETS
-    const ScDefaultsOptions& rOpt = SC_MOD()->GetDefaultsOptions();
-    if (rOpt.GetInitJumboSheets())
-        return new ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
+    bool jumboSheets = false;
+    if( SC_MOD())
+        jumboSheets = SC_MOD()->GetDefaultsOptions().GetInitJumboSheets();
+    else
+        assert( getenv("LO_TESTNAME") != nullptr ); // in unittests
+    if (jumboSheets)
+        return ScSheetLimits(MAXCOL_JUMBO, MAXROW_JUMBO);
     else
 #endif
-        return new ScSheetLimits(MAXCOL, MAXROW);
+        return ScSheetLimits(MAXCOL, MAXROW);
 }
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
@@ -114,7 +118,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpPrinter( nullptr ),
         mpVirtualDevice_100th_mm( nullptr ),
         pFormatExchangeList( nullptr ),
-        mxSheetLimits(CreateSheetLimits()),
+        mxSheetLimits(new ScSheetLimits(ScSheetLimits::CreateDefault())),
         pFormulaTree( nullptr ),
         pEOFormulaTree( nullptr ),
         pFormulaTrack( nullptr ),
