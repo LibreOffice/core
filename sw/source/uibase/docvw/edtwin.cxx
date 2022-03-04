@@ -6287,8 +6287,7 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
     else if( !rSh.HasSelection() )
     {
-        SwPosition *pPos = rSh.GetCursor()->GetPoint();
-        const sal_Int32 nPos = pPos->nContent.GetIndex();
+        rSh.Push();
 
         // get the sentence around the cursor
         rSh.HideCursor();
@@ -6297,8 +6296,7 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GoEndSentence();
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
 
-        pPos->nContent = nPos;
-        rSh.ClearMark();
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         rSh.HideCursor();
     }
 
@@ -6320,13 +6318,13 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         // around the visible cursor.
         SwPosition *pPos = rSh.GetCursor()->GetPoint();
         const sal_Int32 nPos = pPos->nContent.GetIndex();
+        rSh.Push();
 
         rSh.HideCursor();
         rSh.GoStartSentence();
         const sal_Int32 nStartPos = rSh.GetCursor()->GetPoint()->nContent.GetIndex();
 
-        pPos->nContent = nPos;
-        rSh.ClearMark();
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         rSh.ShowCursor();
 
         return Selection( nPos - nStartPos, nPos - nStartPos );
