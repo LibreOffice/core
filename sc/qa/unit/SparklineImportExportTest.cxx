@@ -50,12 +50,10 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-void SparklineImportExportTest::testSparklines()
+namespace
 {
-    ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh);
-
-    ScDocument& rDocument = xDocSh->GetDocument();
+void checkSparklines(ScDocument& rDocument)
+{
     // Sparkline at Sheet1:A2
     {
         sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
@@ -148,6 +146,19 @@ void SparklineImportExportTest::testSparklines()
         sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(0, 3, 0)); //A4
         CPPUNIT_ASSERT(!pSparkline);
     }
+}
+} // end anonymous namespace
+
+void SparklineImportExportTest::testSparklines()
+{
+    ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh);
+
+    checkSparklines(xDocSh->GetDocument());
+
+    xDocSh = saveAndReload(*xDocSh, FORMAT_XLSX);
+
+    checkSparklines(xDocSh->GetDocument());
 
     xDocSh->DoClose();
 }
