@@ -1728,7 +1728,7 @@ Reference< XShape > const & Shape::createAndInsert(
         }
 
         // in some cases, we don't have any text body.
-        if( getTextBody() && ( !bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty() ) )
+        if( mpTextBody && ( !bDoNotInsertEmptyTextBody || !mpTextBody->isEmpty() ) )
         {
             Reference < XText > xText( mxShape, UNO_QUERY );
             if ( xText.is() )   // not every shape is supporting an XText interface (e.g. GroupShape)
