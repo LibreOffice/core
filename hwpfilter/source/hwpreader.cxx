@@ -39,11 +39,6 @@
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 
-// To be shorten source code by realking
-#define WTI(x)          (static_cast<double>(x) / 1800.)     // unit => inch
-#define WTMM(x)     (static_cast<double>(x) / 1800. * 25.4)  // unit => mm
-#define WTSM(x)     (static_cast<int>((x) / 1800. * 2540))   // unit ==> 1/100 mm
-
 // xmloff/xmlkyd.hxx
 constexpr OUStringLiteral sXML_CDATA = u"CDATA";
 
@@ -69,15 +64,9 @@ static char buf[1024];
 
 namespace
 {
-
-template<typename T>
-struct Free
-{
-    void operator()(T* const ptr)
-    {
-        free(ptr);
-    }
-};
+double WTI(double x) { return x / 1800.; } // unit => inch
+double WTMM(double x) { return x / 1800. * 25.4; } // unit => mm
+int WTSM(double x) { return x / 1800. * 2540; } // unit ==> 1/100 mm
 
 constexpr OUStringLiteral sBeginOfDoc(u"[\uBB38\uC11C\uC758 \uCC98\uC74C]");
     // U+BB38 HANGUL SYLLABLE MUN, U+C11C HANGUL SYLLABLE SEO,
@@ -3439,14 +3428,14 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         if (hbox->style.anchor_type != CHAR_ANCHOR)
         {
             mxList->addAttribute("svg:x", sXML_CDATA,
-                OUString::number(WTMM( ( hbox->pgx + hbox->style.margin[0][0] ) )) + "mm");
+                OUString::number(WTMM( hbox->pgx + hbox->style.margin[0][0] )) + "mm");
             mxList->addAttribute("svg:y", sXML_CDATA,
-                OUString::number(WTMM( ( hbox->pgy + hbox->style.margin[0][2] ) )) + "mm");
+                OUString::number(WTMM( hbox->pgy + hbox->style.margin[0][2] )) + "mm");
         }
         mxList->addAttribute("svg:width", sXML_CDATA,
-            OUString::number(WTMM(( hbox->box_xs + hbox->cap_xs) )) + "mm");
+            OUString::number(WTMM( hbox->box_xs + hbox->cap_xs )) + "mm");
         mxList->addAttribute("fo:min-height", sXML_CDATA,
-            OUString::number(WTMM(( hbox->box_ys + hbox->cap_ys) )) + "mm");
+            OUString::number(WTMM( hbox->box_ys + hbox->cap_ys )) + "mm");
         startEl("draw:text-box");
         mxList->clear();
         if( hbox->cap_pos % 2 )                   /* The caption is on the top */
