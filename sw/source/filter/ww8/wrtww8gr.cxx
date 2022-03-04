@@ -481,17 +481,16 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
     sal_Int16 nCropL = 0, nCropR = 0, nCropT = 0, nCropB = 0;
 
             // write Crop-Attribute content in Header ( if available )
-    const SfxPoolItem* pItem;
-    if (pAttrSet && (SfxItemState::SET
-        == pAttrSet->GetItemState(RES_GRFATR_CROPGRF, false, &pItem)))
+    const SwCropGrf* pCropItem;
+    if (pAttrSet && (pCropItem
+        = pAttrSet->GetItemIfSet(RES_GRFATR_CROPGRF, false)))
     {
-        const SwCropGrf& rCr = *static_cast<const SwCropGrf*>(pItem);
-        nCropL = static_cast<sal_Int16>(rCr.GetLeft());
-        nCropR = static_cast<sal_Int16>(rCr.GetRight());
-        nCropT = static_cast<sal_Int16>(rCr.GetTop());
-        nCropB = static_cast<sal_Int16>(rCr.GetBottom());
-        nXSizeAdd = nXSizeAdd - static_cast<sal_Int16>( rCr.GetLeft() + rCr.GetRight() );
-        nYSizeAdd = nYSizeAdd - static_cast<sal_Int16>( rCr.GetTop() + rCr.GetBottom() );
+        nCropL = static_cast<sal_Int16>(pCropItem->GetLeft());
+        nCropR = static_cast<sal_Int16>(pCropItem->GetRight());
+        nCropT = static_cast<sal_Int16>(pCropItem->GetTop());
+        nCropB = static_cast<sal_Int16>(pCropItem->GetBottom());
+        nXSizeAdd = nXSizeAdd - static_cast<sal_Int16>( pCropItem->GetLeft() + pCropItem->GetRight() );
+        nYSizeAdd = nYSizeAdd - static_cast<sal_Int16>( pCropItem->GetTop() + pCropItem->GetBottom() );
     }
 
     Size aGrTwipSz(rFly.GetSize());
@@ -502,58 +501,54 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const ww8::Frame &rFly,
     sal_uInt8* pArr = aArr + 0x2E;  // Do borders first
 
     const SwAttrSet& rAttrSet = rFly.GetFrameFormat().GetAttrSet();
-    if (SfxItemState::SET == rAttrSet.GetItemState(RES_BOX, false, &pItem))
+    if (const SvxBoxItem* pBox = rAttrSet.GetItemIfSet(RES_BOX, false))
     {
-        const SvxBoxItem* pBox = static_cast<const SvxBoxItem*>(pItem);
-        if( pBox )
+        bool bShadow = false;               // Shadow ?
+        if (const SvxShadowItem* pSI = rAttrSet.GetItem<SvxShadowItem>(RES_SHADOW))
         {
-            bool bShadow = false;               // Shadow ?
-            if (const SvxShadowItem* pSI = rAttrSet.GetItem<SvxShadowItem>(RES_SHADOW))
+            bShadow = (pSI->GetLocation() != SvxShadowLocation::NONE) &&
+                (pSI->GetWidth() != 0);
+        }
+
+        static const SvxBoxItemLine aLnArr[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
+                            SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
+        for(const SvxBoxItemLine & i : aLnArr)
+        {
+            const ::editeng::SvxBorderLine* pLn = pBox->GetLine( i );
+            WW8_BRC aBrc;
+            if (pLn)
             {
-                bShadow = (pSI->GetLocation() != SvxShadowLocation::NONE) &&
-                    (pSI->GetWidth() != 0);
+                WW8_BRCVer9 aBrc90 = WW8Export::TranslateBorderLine( *pLn,
+                    pBox->GetDistance( i ), bShadow );
+                sal_uInt8 ico = msfilter::util::TransColToIco(msfilter::util::BGRToRGB(
+                    aBrc90.cv()));
+                aBrc = WW8_BRC(aBrc90.dptLineWidth(), aBrc90.brcType(), ico,
+                    aBrc90.dptSpace(), aBrc90.fShadow(), aBrc90.fFrame());
             }
 
-            static const SvxBoxItemLine aLnArr[4] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
-                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
-            for(const SvxBoxItemLine & i : aLnArr)
+            // use importer logic to determine how large the exported
+            // border will really be in word and adjust accordingly
+            short nSpacing;
+            short nThick = aBrc.DetermineBorderProperties(&nSpacing);
+            switch (i)
             {
-                const ::editeng::SvxBorderLine* pLn = pBox->GetLine( i );
-                WW8_BRC aBrc;
-                if (pLn)
-                {
-                    WW8_BRCVer9 aBrc90 = WW8Export::TranslateBorderLine( *pLn,
-                        pBox->GetDistance( i ), bShadow );
-                    sal_uInt8 ico = msfilter::util::TransColToIco(msfilter::util::BGRToRGB(
-                        aBrc90.cv()));
-                    aBrc = WW8_BRC(aBrc90.dptLineWidth(), aBrc90.brcType(), ico,
-                        aBrc90.dptSpace(), aBrc90.fShadow(), aBrc90.fFrame());
-                }
-
-                // use importer logic to determine how large the exported
-                // border will really be in word and adjust accordingly
-                short nSpacing;
-                short nThick = aBrc.DetermineBorderProperties(&nSpacing);
-                switch (i)
-                {
-                    case SvxBoxItemLine::TOP:
-                    case SvxBoxItemLine::BOTTOM:
-                        nHeight -= bShadow ? nThick*2 : nThick;
-                        nHeight = nHeight - nSpacing;
-                        break;
-                    case SvxBoxItemLine::LEFT:
-                    case SvxBoxItemLine::RIGHT:
-                    default:
-                        nWidth -= bShadow ? nThick*2 : nThick;
-                        nWidth = nWidth - nSpacing;
-                        break;
-                }
-                memcpy( pArr, &aBrc.aBits1, 2);
-                pArr+=2;
-
-                memcpy( pArr, &aBrc.aBits2, 2);
-                pArr+=2;
+                case SvxBoxItemLine::TOP:
+                case SvxBoxItemLine::BOTTOM:
+                    nHeight -= bShadow ? nThick*2 : nThick;
+                    nHeight = nHeight - nSpacing;
+                    break;
+                case SvxBoxItemLine::LEFT:
+                case SvxBoxItemLine::RIGHT:
+                default:
+                    nWidth -= bShadow ? nThick*2 : nThick;
+                    nWidth = nWidth - nSpacing;
+                    break;
             }
+            memcpy( pArr, &aBrc.aBits1, 2);
+            pArr+=2;
+
+            memcpy( pArr, &aBrc.aBits2, 2);
+            pArr+=2;
         }
     }
 
