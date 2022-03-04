@@ -309,7 +309,7 @@ std::vector<double> TextLayouterDevice::getTextArray(const OUString& rText, sal_
     {
         aRetval.reserve(nTextLength);
         std::vector<sal_Int32> aArray(nTextLength);
-        mrDevice.GetTextArray(rText, &aArray, nIndex, nLength);
+        mrDevice.GetTextArray(rText, &aArray, nIndex, nTextLength);
         aRetval.assign(aArray.begin(), aArray.end());
     }
 
@@ -332,7 +332,7 @@ std::vector<double> TextLayouterDevice::getCaretPositions(const OUString& rText,
     {
         aRetval.reserve(2 * nTextLength);
         std::vector<sal_Int32> aArray(2 * nTextLength);
-        mrDevice.GetCaretPositions(rText, aArray.data(), nIndex, nLength);
+        mrDevice.GetCaretPositions(rText, aArray.data(), nIndex, nTextLength);
         aRetval.assign(aArray.begin(), aArray.end());
     }
 
