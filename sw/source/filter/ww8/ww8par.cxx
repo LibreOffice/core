@@ -333,10 +333,7 @@ void SwWW8ImplReader::ReadEmbeddedData(SvStream& rStrm, SwDocShell const * pDocS
     }
 
     if (!xLongName && xShortName)
-    {
-        xLongName.reset( new OUString );
-        *xLongName += *xShortName;
-    }
+        xLongName.reset(new OUString(*xShortName));
     else if (!xLongName && xTextMark)
         xLongName.reset( new OUString );
 
