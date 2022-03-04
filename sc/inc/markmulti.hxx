@@ -52,6 +52,9 @@ public:
     bool IsAllMarked( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;
     bool HasEqualRowsMarked( SCCOL nCol1, SCCOL nCol2 ) const;
     SCROW GetNextMarked( SCCOL nCol, SCROW nRow, bool bUp ) const;
+    // Returns the first column of the range [column,nLastCol] for which
+    // all those columns have equal marks. Value returned is not less than nMinCol.
+    SCCOL GetStartOfEqualColumns( SCCOL nLastCol, SCCOL nMinCol = 0 ) const;
     void SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow, bool bMark );
     void Set( ScRangeList const & );
     bool IsRowMarked( SCROW nRow ) const;

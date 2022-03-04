@@ -2807,13 +2807,23 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
                                      const ScPatternAttr& rAttr, ScEditDataArray* pDataArray,
                                      bool* const pIsChanged )
 {
-    if (ValidColRow(nStartCol, nStartRow) && ValidColRow(nEndCol, nEndRow))
+    if (!ValidColRow(nStartCol, nStartRow) || !ValidColRow(nEndCol, nEndRow))
+        return;
+    PutInOrder(nStartCol, nEndCol);
+    PutInOrder(nStartRow, nEndRow);
+    SCCOL maxCol = nEndCol;
+    if( nEndCol == GetDoc().MaxCol())
     {
-        PutInOrder(nStartCol, nEndCol);
-        PutInOrder(nStartRow, nEndRow);
-        for (SCCOL i = nStartCol; i <= nEndCol; i++)
-            CreateColumnIfNotExists(i).ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray, pIsChanged);
+        // For the same unallocated columns until the end we can change just the default.
+        maxCol = std::max( nStartCol, aCol.size()) - 1;
+        if( maxCol >= 0 )
+            CreateColumnIfNotExists(maxCol); // Allocate needed different columns before changing the default.
+        const SfxItemSet* pSet = &rAttr.GetItemSet();
+        SfxItemPoolCache aCache( GetDoc().GetPool(), pSet );
+        aDefaultColAttrArray.ApplyCacheArea(nStartRow, nEndRow, &aCache, pDataArray, pIsChanged );
     }
+    for (SCCOL i = nStartCol; i <= maxCol; i++)
+        CreateColumnIfNotExists(i).ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray, pIsChanged);
 }
 
 void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
@@ -3084,8 +3094,27 @@ void ScTable::ApplyAttr( SCCOL nCol, SCROW nRow, const SfxPoolItem& rAttr )
 void ScTable::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark,
                                    ScEditDataArray* pDataArray, bool* const pIsChanged )
 {
-    for (SCCOL i=0; i < aCol.size(); i++)
-        aCol[i].ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged );
+    if(!rMark.GetTableSelect(nTab))
+        return;
+    assert( rMark.IsMultiMarked() );
+    SCCOL maxCol;
+    if( rMark.GetMultiMarkArea().aEnd.Col() == GetDoc().MaxCol())
+    {
+        // For the same unallocated columns until the end we can change just the default.
+        maxCol = rMark.GetMultiSelData().GetStartOfEqualColumns( GetDoc().MaxCol(), aCol.size()) - 1;
+        if( maxCol >= 0 )
+            CreateColumnIfNotExists(maxCol); // Allocate needed different columns before changing the default.
+        ScMultiSelIter aMultiIter( rMark.GetMultiSelData(), GetDoc().MaxCol() );
+        SCROW nTop = 0;
+        SCROW nBottom = 0;
+        while (aMultiIter.Next( nTop, nBottom ))
+            aDefaultColAttrArray.ApplyCacheArea( nTop, nBottom, pCache, pDataArray, pIsChanged );
+    }
+    else // need to allocate all columns affected
+        maxCol = rMark.GetMultiMarkArea().aEnd.Col();
+
+    for (SCCOL i=0; i <= maxCol; i++)
+        CreateColumnIfNotExists(i).ApplySelectionCache( pCache, rMark, pDataArray, pIsChanged );
 }
 
 void ScTable::ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark )
