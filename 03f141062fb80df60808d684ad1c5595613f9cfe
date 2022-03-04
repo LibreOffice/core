@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "de4fb048_34bb5b13",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-04T17:16:35Z",
+      "side": 1,
+      "message": "I have an idea how to boil this down to a single bool if-check, but I first wanted to check with you whether the general approach seemed acceptable.",
+      "parentUuid": "6e7427f1_7aa37071",
+      "revId": "03f141062fb80df60808d684ad1c5595613f9cfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "f656a25f_db04fdf2",
@@ -48,6 +66,30 @@
       "writtenOn": "2022-03-03T17:44:49Z",
       "side": 1,
       "message": "Nitpick: in future, can we please have one blank between keyword and opening parenthesis? Thanks.",
+      "range": {
+        "startLine": 3355,
+        "startChar": 8,
+        "endLine": 3355,
+        "endChar": 11
+      },
+      "revId": "03f141062fb80df60808d684ad1c5595613f9cfe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0113e9ec_87dcad0e",
+        "filename": "sc/source/core/tool/compiler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3355,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-04T17:16:35Z",
+      "side": 1,
+      "message": "In automatically formatted code, yes. But I\u0027ve been writing it like this my entire life, so even if I thought reviewing whitespace were a good use of my time, I doubt I\u0027d remember to do it. In fact I generally try to be somewhat consistent with surrounding code, the other two statements do have it, so this is apparently about as good as it gets if I\u0027m to do it manually.",
+      "parentUuid": "1b112b80_3db36e17",
       "range": {
         "startLine": 3355,
         "startChar": 8,
