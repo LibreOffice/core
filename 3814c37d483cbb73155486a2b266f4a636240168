@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f71d35_a2948e16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-04T18:17:31Z",
+      "side": 1,
+      "message": "I solved it by pushing just the decimal code of the degree sign 😊",
+      "revId": "3814c37d483cbb73155486a2b266f4a636240168",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
