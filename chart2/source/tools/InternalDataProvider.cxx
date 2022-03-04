@@ -583,7 +583,6 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, st
                 aValues.push_back(aRawElem.toDouble());
         }
         sal_Int32 n = m_aInternalData.appendColumn();
-
         m_aInternalData.setColumnValues(n, aValues);
 
         OUString aRangeRep = OUString::number(n);
@@ -647,11 +646,16 @@ InternalDataProvider::createDataSequenceFromArray( const OUString& rArrayStr, st
         sal_Int32 nColSize = m_aInternalData.getColumnCount();
         if (!aRawElems.empty() && nColSize)
         {
-            std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[0]));
-            m_aInternalData.setComplexColumnLabel(nColSize-1, std::move(aLabels));
+            // Do not overwrite an existing label (attempted by series with no data values)
+            if (!m_aInternalData.getComplexColumnLabel(nColSize-1)[0].hasValue())
+            {
+                std::vector<uno::Any> aLabels(1, uno::Any(aRawElems[0]));
+                m_aInternalData.setComplexColumnLabel(nColSize-1, std::move(aLabels));
+            }
 
             OUString aRangeRep = lcl_aLabelRangePrefix + OUString::number(nColSize-1);
             xSeq.set(new UncachedDataSequence(this, aRangeRep));
+
             addDataSequenceToMap(aRangeRep, xSeq);
         }
     }
