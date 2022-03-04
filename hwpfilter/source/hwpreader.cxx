@@ -46,7 +46,6 @@
 #define rendEl(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->endElement(x); } while(false)
 #define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(false)
 #define padd(x,y,z)     mxList->addAttribute(x,y,z)
-#define Double2Str(x)   OUString::number(x)
 #define WTI(x)          (static_cast<double>(x) / 1800.)     // unit => inch
 #define WTMM(x)     (static_cast<double>(x) / 1800. * 25.4)  // unit => mm
 #define WTSM(x)     (static_cast<int>((x) / 1800. * 2540))   // unit ==> 1/100 mm
@@ -445,18 +444,18 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             padd( "draw:name", sXML_CDATA, "LineType" + OUString::number(hdo->index));
             padd( "draw:style", sXML_CDATA, "round");
             padd( "draw:dots1", sXML_CDATA, "1");
-            padd( "draw:dots1-length", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots1 * WTMM(prop->line_width) ) + "cm");
+            padd( "draw:dots1-length", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots1 * WTMM(prop->line_width) ) + "cm");
             if( prop->line_pstyle == 3 )
             {
                 padd( "draw:dots2", sXML_CDATA, "1");
-                padd( "draw:dots2-length", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width) ) + "cm");
+                padd( "draw:dots2-length", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width) ) + "cm");
             }
             else if( prop->line_pstyle == 4 )
             {
                 padd( "draw:dots2", sXML_CDATA, "2");
-                padd( "draw:dots2-length", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width)) + "cm");
+                padd( "draw:dots2-length", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].dots2 * WTMM(prop->line_width)) + "cm");
             }
-            padd( "draw:distance", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].distance * WTMM(prop->line_width)) + "cm");
+            padd( "draw:distance", sXML_CDATA, OUString::number( LineStyle[prop->line_pstyle].distance * WTMM(prop->line_width)) + "cm");
             rstartEl( "draw:stroke-dash", mxList);
             mxList->clear();
             rendEl( "draw:stroke-dash" );
@@ -700,7 +699,7 @@ void HwpReader::makeStyles()
     for( i = 1 ; i < 40 ; i++)
     {
         padd("style:position", sXML_CDATA,
-            Double2Str( WTI(1000 * i)) + "inch");
+            OUString::number( WTI(1000 * i)) + "inch");
         rstartEl("style:tab-stop", mxList);
         mxList->clear();
         rendEl("style:tab-stop");
@@ -1332,7 +1331,7 @@ void HwpReader::parseCharShape(CharShape const * cshape)
     if (sspace != 0.)
     {
         padd("fo:letter-spacing", sXML_CDATA,
-            Double2Str(sspace) + "pt");
+            OUString::number(sspace) + "pt");
     }
     if (cshape->color[1] != 0)
         padd("fo:color", sXML_CDATA,
@@ -1383,19 +1382,19 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
 {
 
     if (pshape->left_margin != 0)
-        padd("fo:margin-left", sXML_CDATA, Double2Str
+        padd("fo:margin-left", sXML_CDATA, OUString::number
             (WTI(pshape->left_margin )) + "inch");
     if (pshape->right_margin != 0)
-        padd("fo:margin-right", sXML_CDATA, Double2Str
+        padd("fo:margin-right", sXML_CDATA, OUString::number
             (WTI(pshape->right_margin)) + "inch");
     if (pshape->pspacing_prev != 0)
-        padd("fo:margin-top", sXML_CDATA, Double2Str
+        padd("fo:margin-top", sXML_CDATA, OUString::number
             (WTI(pshape->pspacing_prev)) + "inch");
     if (pshape->pspacing_next != 0)
-        padd("fo:margin-bottom", sXML_CDATA, Double2Str
+        padd("fo:margin-bottom", sXML_CDATA, OUString::number
             (WTI(pshape->pspacing_next)) + "inch");
     if (pshape->indent != 0)
-        padd("fo:text-indent", sXML_CDATA, Double2Str
+        padd("fo:text-indent", sXML_CDATA, OUString::number
             (WTI(pshape->indent)) + "inch");
     if (pshape->lspacing != 0)
         padd("fo:line-height", sXML_CDATA, OUString::number(pshape->lspacing) + "%");
@@ -1470,7 +1469,7 @@ void HwpReader::makePStyle(ParaShape const * pshape)
             if( pshape->tabs[i].position <= tab_margin )
                 continue;
             padd("style:position", sXML_CDATA,
-                Double2Str(WTMM(pshape->tabs[i].position - tab_margin )) + "mm");
+                OUString::number(WTMM(pshape->tabs[i].position - tab_margin )) + "mm");
             if( pshape->tabs[i].type )
             {
                 tf = 1;
@@ -1605,16 +1604,16 @@ void HwpReader::makePageStyle()
                     if( hwpinfo.paper.paper_direction )
                     {
                          padd("fo:page-width",sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_height)) + "inch");
+                              OUString::number(WTI(hwpinfo.paper.paper_height)) + "inch");
                          padd("fo:page-height",sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_width)) + "inch");
+                              OUString::number(WTI(hwpinfo.paper.paper_width)) + "inch");
                     }
                     else
                     {
                          padd("fo:page-width",sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_width)) + "inch");
+                              OUString::number(WTI(hwpinfo.paper.paper_width)) + "inch");
                          padd("fo:page-height",sXML_CDATA,
-                              Double2Str(WTI(hwpinfo.paper.paper_height)) + "inch");
+                              OUString::number(WTI(hwpinfo.paper.paper_height)) + "inch");
                     }
                     break;
 
@@ -1627,23 +1626,23 @@ void HwpReader::makePageStyle()
 
          if( hwpinfo.borderline ){
              padd("fo:margin-left",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.left_margin - hwpinfo.bordermargin[0] + hwpinfo.paper.gutter_length)) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.left_margin - hwpinfo.bordermargin[0] + hwpinfo.paper.gutter_length)) + "inch");
              padd("fo:margin-right",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.right_margin - hwpinfo.bordermargin[1])) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.right_margin - hwpinfo.bordermargin[1])) + "inch");
              padd("fo:margin-top",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.top_margin - hwpinfo.bordermargin[2])) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.top_margin - hwpinfo.bordermargin[2])) + "inch");
              padd("fo:margin-bottom",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.bottom_margin - hwpinfo.bordermargin[3])) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.bottom_margin - hwpinfo.bordermargin[3])) + "inch");
          }
          else{
              padd("fo:margin-left",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.left_margin + hwpinfo.paper.gutter_length)) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.left_margin + hwpinfo.paper.gutter_length)) + "inch");
              padd("fo:margin-right",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.right_margin)) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.right_margin)) + "inch");
              padd("fo:margin-top",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.top_margin)) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.top_margin)) + "inch");
              padd("fo:margin-bottom",sXML_CDATA,
-                  Double2Str(WTI(hwpinfo.paper.bottom_margin)) + "inch");
+                  OUString::number(WTI(hwpinfo.paper.bottom_margin)) + "inch");
          }
 
          switch( hwpinfo.borderline )
@@ -1664,13 +1663,13 @@ void HwpReader::makePageStyle()
          }
 
          padd("fo:padding-left", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[0])) + "inch");
+              OUString::number(WTI(hwpinfo.bordermargin[0])) + "inch");
          padd("fo:padding-right", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[1])) + "inch");
+              OUString::number(WTI(hwpinfo.bordermargin[1])) + "inch");
          padd("fo:padding-top", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[2])) + "inch");
+              OUString::number(WTI(hwpinfo.bordermargin[2])) + "inch");
          padd("fo:padding-bottom", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.bordermargin[3])) + "inch");
+              OUString::number(WTI(hwpinfo.bordermargin[3])) + "inch");
 
      /* background color */
          if( hwpinfo.back_info.isset )
@@ -1724,7 +1723,7 @@ void HwpReader::makePageStyle()
     /* header style */
          rstartEl("style:header-style", mxList);
          padd("svg:height", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.paper.header_length)) + "inch");
+              OUString::number(WTI(hwpinfo.paper.header_length)) + "inch");
          padd("fo:margin-bottom", sXML_CDATA, "0mm");
 
          rstartEl("style:properties",mxList);
@@ -1735,7 +1734,7 @@ void HwpReader::makePageStyle()
     /* footer style */
          rstartEl("style:footer-style", mxList);
          padd("svg:height", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.paper.footer_length)) + "inch");
+              OUString::number(WTI(hwpinfo.paper.footer_length)) + "inch");
          padd("fo:margin-top", sXML_CDATA, "0mm");
          rstartEl("style:properties",mxList);
          mxList->clear();
@@ -1746,9 +1745,9 @@ void HwpReader::makePageStyle()
          rstartEl("style:page-layout-properties", mxList);
 
          padd("style:distance-before-sep", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.splinetext)) + "inch");
+              OUString::number(WTI(hwpinfo.splinetext)) + "inch");
          padd("style:distance-after-sep", sXML_CDATA,
-              Double2Str(WTI(hwpinfo.splinefn)) + "inch");
+              OUString::number(WTI(hwpinfo.splinefn)) + "inch");
          rstartEl("style:properties",mxList);
          mxList->clear();
          rendEl("style:properties");
@@ -1808,12 +1807,12 @@ void HwpReader::makeColumns(ColumnDef const *coldef)
              padd("fo:margin-left", sXML_CDATA, "0mm");
         else
              padd("fo:margin-left", sXML_CDATA,
-                  Double2Str( spacing) + "inch");
+                  OUString::number( spacing) + "inch");
         if( ii == ( coldef->ncols -1) )
              padd("fo:margin-right", sXML_CDATA,"0mm");
         else
              padd("fo:margin-right", sXML_CDATA,
-                  Double2Str( spacing) + "inch");
+                  OUString::number( spacing) + "inch");
         rstartEl("style:column",mxList);
         mxList->clear();
         rendEl("style:column");
@@ -1845,7 +1844,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     rstartEl("style:style", mxList);
     mxList->clear();
     padd("style:width", sXML_CDATA,
-        Double2Str(WTMM(hbox->box_xs)) + "mm");
+        OUString::number(WTMM(hbox->box_xs)) + "mm");
     padd("table:align", sXML_CDATA,"left");
     padd("fo:keep-with-next", sXML_CDATA,"false");
     rstartEl("style:properties", mxList);
@@ -1862,7 +1861,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rstartEl("style:style", mxList);
         mxList->clear();
         padd("style:column-width", sXML_CDATA,
-            Double2Str(WTMM(tbl->columns.data[i+1] - tbl->columns.data[i])) + "mm");
+            OUString::number(WTMM(tbl->columns.data[i+1] - tbl->columns.data[i])) + "mm");
         rstartEl("style:properties", mxList);
         mxList->clear();
         rendEl("style:properties");
@@ -1878,7 +1877,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rstartEl("style:style", mxList);
         mxList->clear();
         padd("style:row-height", sXML_CDATA,
-            Double2Str(WTMM(tbl->rows.data[i+1] - tbl->rows.data[i])) + "mm");
+            OUString::number(WTMM(tbl->rows.data[i+1] - tbl->rows.data[i])) + "mm");
         rstartEl("style:properties", mxList);
         mxList->clear();
         rendEl("style:properties");
@@ -2026,7 +2025,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 padd("draw:stroke-dash", sXML_CDATA, "LineType" + OUString::number(hdo->index));
             }
             padd("svg:stroke-width", sXML_CDATA,
-                Double2Str( WTMM(hdo->property.line_width)) + "mm");
+                OUString::number( WTMM(hdo->property.line_width)) + "mm");
             color = hdo->property.line_color;
             sprintf( buf, "#%02x%02x%02x",
                     sal_uInt16(color & 0xff),
@@ -2046,19 +2045,19 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     ascii(ArrowShape[hdo->property.line_tstyle].name) );
                 if( hdo->property.line_width > 100 )
                          padd("draw:marker-start-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 3)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
                 else if( hdo->property.line_width > 80 )
                          padd("draw:marker-start-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 4)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 4)) + "mm");
                 else if( hdo->property.line_width > 60 )
                          padd("draw:marker-start-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 5)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 5)) + "mm");
                 else if( hdo->property.line_width > 40 )
                          padd("draw:marker-start-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 6)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 6)) + "mm");
                 else
                          padd("draw:marker-start-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 7)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 7)) + "mm");
             }
 
             if( hdo->property.line_hstyle > 0 &&
@@ -2068,19 +2067,19 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     ascii(ArrowShape[hdo->property.line_hstyle].name) );
                 if( hdo->property.line_width > 100 )
                          padd("draw:marker-end-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 3)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 3)) + "mm");
                 else if( hdo->property.line_width > 80 )
                          padd("draw:marker-end-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 4)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 4)) + "mm");
                 else if( hdo->property.line_width > 60 )
                          padd("draw:marker-end-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 5)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 5)) + "mm");
                 else if( hdo->property.line_width > 40 )
                          padd("draw:marker-end-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 6)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 6)) + "mm");
                 else
                          padd("draw:marker-end-width", sXML_CDATA,
-                              Double2Str( WTMM(hdo->property.line_width * 7)) + "mm");
+                              OUString::number( WTMM(hdo->property.line_width * 7)) + "mm");
             }
         }
 
@@ -2423,13 +2422,13 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
     if( fstyle->boxtype != 'G' || fstyle->cap_len <= 0 )
     {
         padd("fo:margin-left", sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][0]) ) + "mm");
+            OUString::number(WTMM(fstyle->margin[0][0]) ) + "mm");
         padd("fo:margin-right", sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][1])) + "mm");
+            OUString::number(WTMM(fstyle->margin[0][1])) + "mm");
         padd("fo:margin-top", sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][2])) + "mm");
+            OUString::number(WTMM(fstyle->margin[0][2])) + "mm");
         padd("fo:margin-bottom", sXML_CDATA,
-            Double2Str(WTMM(fstyle->margin[0][3])) + "mm");
+            OUString::number(WTMM(fstyle->margin[0][3])) + "mm");
     }
 
     switch (fstyle->txtflow)
@@ -2584,13 +2583,13 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         }
         else{
               padd("fo:padding-left", sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][0])) + "mm");
+                      OUString::number(WTMM(fstyle->margin[1][0])) + "mm");
               padd("fo:padding-right", sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][1])) + "mm");
+                      OUString::number(WTMM(fstyle->margin[1][1])) + "mm");
               padd("fo:padding-top", sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][2])) + "mm");
+                      OUString::number(WTMM(fstyle->margin[1][2])) + "mm");
               padd("fo:padding-bottom", sXML_CDATA,
-                      Double2Str(WTMM(fstyle->margin[1][3])) + "mm");
+                      OUString::number(WTMM(fstyle->margin[1][3])) + "mm");
         }
         if(cell->shade != 0)
             padd("fo:background-color", sXML_CDATA,
@@ -2612,10 +2611,10 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
     {
         if( fstyle->margin[1][0] || fstyle->margin[1][1] || fstyle->margin[1][2] || fstyle->margin[1][3] ){
              OUString clip = "rect(" +
-                Double2Str(WTMM(-fstyle->margin[1][0]) ) + "mm " +
-                Double2Str(WTMM(-fstyle->margin[1][1]) ) + "mm " +
-                Double2Str(WTMM(-fstyle->margin[1][2]) ) + "mm " +
-                Double2Str(WTMM(-fstyle->margin[1][3]) ) + "mm)";
+                OUString::number(WTMM(-fstyle->margin[1][0]) ) + "mm " +
+                OUString::number(WTMM(-fstyle->margin[1][1]) ) + "mm " +
+                OUString::number(WTMM(-fstyle->margin[1][2]) ) + "mm " +
+                OUString::number(WTMM(-fstyle->margin[1][3]) ) + "mm)";
              padd("style:mirror", sXML_CDATA, "none");
              padd("fo:clip", sXML_CDATA, clip);
         }
@@ -3474,14 +3473,14 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         if (hbox->style.anchor_type != CHAR_ANCHOR)
         {
             padd("svg:x", sXML_CDATA,
-                Double2Str(WTMM( ( hbox->pgx + hbox->style.margin[0][0] ) )) + "mm");
+                OUString::number(WTMM( ( hbox->pgx + hbox->style.margin[0][0] ) )) + "mm");
             padd("svg:y", sXML_CDATA,
-                Double2Str(WTMM( ( hbox->pgy + hbox->style.margin[0][2] ) )) + "mm");
+                OUString::number(WTMM( ( hbox->pgy + hbox->style.margin[0][2] ) )) + "mm");
         }
         padd("svg:width", sXML_CDATA,
-            Double2Str(WTMM(( hbox->box_xs + hbox->cap_xs) )) + "mm");
+            OUString::number(WTMM(( hbox->box_xs + hbox->cap_xs) )) + "mm");
         padd("fo:min-height", sXML_CDATA,
-            Double2Str(WTMM(( hbox->box_ys + hbox->cap_ys) )) + "mm");
+            OUString::number(WTMM(( hbox->box_ys + hbox->cap_ys) )) + "mm");
         rstartEl("draw:text-box", mxList);
         mxList->clear();
         if( hbox->cap_pos % 2 )                   /* The caption is on the top */
@@ -3525,9 +3524,9 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             y += hbox->style.margin[0][2];
         }
         padd("svg:x", sXML_CDATA,
-            Double2Str(WTMM( hbox->pgx + x )) + "mm");
+            OUString::number(WTMM( hbox->pgx + x )) + "mm");
         padd("svg:y", sXML_CDATA,
-            Double2Str(WTMM( hbox->pgy + y )) + "mm");
+            OUString::number(WTMM( hbox->pgy + y )) + "mm");
     }
     else
     {
@@ -3535,13 +3534,13 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         padd("svg:y", sXML_CDATA, "0cm");
     }
     padd("svg:width", sXML_CDATA,
-        Double2Str(WTMM( hbox->box_xs )) + "mm");
+        OUString::number(WTMM( hbox->box_xs )) + "mm");
     if( hbox->style.cap_len > 0 && hbox->type != TXT_TYPE)
         padd("fo:min-height", sXML_CDATA,
-            Double2Str(WTMM( hbox->box_ys + hbox->cap_ys)) + "mm");
+            OUString::number(WTMM( hbox->box_ys + hbox->cap_ys)) + "mm");
     else
         padd("svg:height", sXML_CDATA,
-            Double2Str(WTMM(hbox->box_ys )) + "mm");
+            OUString::number(WTMM(hbox->box_ys )) + "mm");
 
     if( hbox->type != EQU_TYPE )
     {
@@ -3722,14 +3721,14 @@ void HwpReader::makePicture(Picture * hbox)
                 if (hbox->style.anchor_type != CHAR_ANCHOR)
                 {
                     padd("svg:x", sXML_CDATA,
-                        Double2Str(WTMM(  hbox->pgx + hbox->style.margin[0][0] )) + "mm");
+                        OUString::number(WTMM(  hbox->pgx + hbox->style.margin[0][0] )) + "mm");
                     padd("svg:y", sXML_CDATA,
-                        Double2Str(WTMM(  hbox->pgy + hbox->style.margin[0][2] )) + "mm");
+                        OUString::number(WTMM(  hbox->pgy + hbox->style.margin[0][2] )) + "mm");
                 }
                 padd("svg:width", sXML_CDATA,
-                    Double2Str(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1] )) + "mm");
+                    OUString::number(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1] )) + "mm");
                 padd("fo:min-height", sXML_CDATA,
-                    Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + "mm");
+                    OUString::number(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + "mm");
                 rstartEl("draw:text-box", mxList);
                 mxList->clear();
                 if( hbox->cap_pos % 2 )           /* Caption is on the top */
@@ -3785,9 +3784,9 @@ void HwpReader::makePicture(Picture * hbox)
                 if (hbox->style.anchor_type != CHAR_ANCHOR)
                 {
                     padd("svg:x", sXML_CDATA,
-                        Double2Str(WTMM( hbox->pgx + hbox->style.margin[0][0] )) + "mm");
+                        OUString::number(WTMM( hbox->pgx + hbox->style.margin[0][0] )) + "mm");
                     padd("svg:y", sXML_CDATA,
-                        Double2Str(WTMM( hbox->pgy + hbox->style.margin[0][2] )) + "mm");
+                        OUString::number(WTMM( hbox->pgy + hbox->style.margin[0][2] )) + "mm");
                 }
             }
             else
@@ -3796,9 +3795,9 @@ void HwpReader::makePicture(Picture * hbox)
                 padd("svg:y", sXML_CDATA, "0cm");
             }
             padd("svg:width", sXML_CDATA,
-                Double2Str(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1])) + "mm");
+                OUString::number(WTMM( hbox->box_xs + hbox->style.margin[1][0] + hbox->style.margin[1][1])) + "mm");
             padd("svg:height", sXML_CDATA,
-                Double2Str(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3])) + "mm");
+                OUString::number(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3])) + "mm");
 
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
@@ -3972,22 +3971,22 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                 OUString trans;
                 if( skewX != 0.0 && rotate != 0.0 ){
-                    trans = "skewX (" + Double2Str(skewX)
-                             + ") rotate (" + Double2Str(rotate)
-                             + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                             + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                    trans = "skewX (" + OUString::number(skewX)
+                             + ") rotate (" + OUString::number(rotate)
+                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
                     bIsRotate = true;
                 }
                 else if( skewX != 0.0 ){
-                    trans = "skewX (" + Double2Str(skewX)
-                             + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                             + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                    trans = "skewX (" + OUString::number(skewX)
+                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
                     bIsRotate = true;
                 }
                 else if( rotate != 0.0 ){
-                    trans = "rotate (" + Double2Str(rotate)
-                             + ") translate (" + Double2Str(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                             + Double2Str(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                    trans = "rotate (" + OUString::number(rotate)
+                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
+                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
                     bIsRotate = true;
                 }
                 if( bIsRotate ){
@@ -4002,30 +4001,30 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     if( drawobj->u.line_arc.flip & 0x01 )
                     {
                         padd("svg:x1", sXML_CDATA,
-                            Double2Str (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
+                            OUString::number (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
                         padd("svg:x2", sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x )) + "mm");
+                            OUString::number (WTMM( x + a + drawobj->offset2.x )) + "mm");
                     }
                     else
                     {
                         padd("svg:x1", sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x )) + "mm");
+                            OUString::number (WTMM( x + a + drawobj->offset2.x )) + "mm");
                         padd("svg:x2", sXML_CDATA,
-                            Double2Str (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
+                            OUString::number (WTMM(x + a + drawobj->offset2.x + drawobj->extent.w)) + "mm");
                     }
                     if( drawobj->u.line_arc.flip & 0x02 )
                     {
                         padd("svg:y1", sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y + drawobj->extent.h ) ) + "mm");
+                            OUString::number (WTMM( y + b + drawobj->offset2.y + drawobj->extent.h ) ) + "mm");
                         padd("svg:y2", sXML_CDATA,
-                            Double2Str (WTMM( y + b  + drawobj->offset2.y )) + "mm");
+                            OUString::number (WTMM( y + b  + drawobj->offset2.y )) + "mm");
                     }
                     else
                     {
                         padd("svg:y1", sXML_CDATA,
-                            Double2Str (WTMM( y + b  + drawobj->offset2.y)) + "mm");
+                            OUString::number (WTMM( y + b  + drawobj->offset2.y)) + "mm");
                         padd("svg:y2", sXML_CDATA,
-                            Double2Str (WTMM(y + b + drawobj->offset2.y + drawobj->extent.h)) + "mm");
+                            OUString::number (WTMM(y + b + drawobj->offset2.y + drawobj->extent.h)) + "mm");
                     }
 
                     rstartEl("draw:line", mxList);
@@ -4036,27 +4035,27 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     if( !bIsRotate )
                     {
                         padd("svg:x", sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                            OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
                         padd("svg:y", sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
+                            OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
                     padd("svg:width", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.w )) + "mm");
                     padd("svg:height", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->property.flag & 0x01 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
                         padd("draw:corner-radius", sXML_CDATA,
-                            Double2Str (WTMM( value/10 )) + "mm");
+                            OUString::number (WTMM( value/10 )) + "mm");
                     }
                     else if( drawobj->property.flag & 0x04 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
                         padd("draw:corner-radius", sXML_CDATA,
-                            Double2Str (WTMM( value / 2)) + "mm");
+                            OUString::number (WTMM( value / 2)) + "mm");
                     }
 
                     rstartEl("draw:rect", mxList);
@@ -4080,15 +4079,15 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     if( !bIsRotate )
                     {
                         padd("svg:x", sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                            OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
                         padd("svg:y", sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
+                            OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
                     padd("svg:width", sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                                 OUString::number (WTMM( drawobj->extent.w )) + "mm");
                     padd("svg:height", sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.h )) + "mm");
+                                 OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->type == HWPDO_ADVANCED_ELLIPSE ){
                                 if( drawobj->u.arc.radial[0].x != drawobj->u.arc.radial[1].x
                                         || drawobj->u.arc.radial[0].y != drawobj->u.arc.radial[1].y ){
@@ -4103,8 +4102,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                         padd("draw:kind", sXML_CDATA, "section");
                                     else
                                         padd("draw:kind", sXML_CDATA, "arc");
-                                    padd("draw:start-angle", sXML_CDATA, Double2Str(start_angle ));
-                                    padd("draw:end-angle", sXML_CDATA, Double2Str(end_angle));
+                                    padd("draw:start-angle", sXML_CDATA, OUString::number(start_angle ));
+                                    padd("draw:end-angle", sXML_CDATA, OUString::number(end_angle));
                                 }
                     }
                     rstartEl("draw:ellipse", mxList);
@@ -4133,22 +4132,22 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     {
                               if( ( flip == 0 || flip == 2 ) && drawobj->type == HWPDO_ARC)
                                     padd("svg:x", sXML_CDATA,
-                                         Double2Str (WTMM( x + a + drawobj->offset2.x - drawobj->extent.w)) + "mm");
+                                         OUString::number (WTMM( x + a + drawobj->offset2.x - drawobj->extent.w)) + "mm");
                               else
                                     padd("svg:x", sXML_CDATA,
-                                         Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                                         OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
                               if( ( flip == 0 || flip == 1 ) && drawobj->type == HWPDO_ARC)
                                     padd("svg:y", sXML_CDATA,
-                                         Double2Str (WTMM( y + b + drawobj->offset2.y - drawobj->extent.h)) + "mm");
+                                         OUString::number (WTMM( y + b + drawobj->offset2.y - drawobj->extent.h)) + "mm");
                               else
                                     padd("svg:y", sXML_CDATA,
-                                         Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
+                                         OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
 
                     padd("svg:width", sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.w * 2)) + "mm");
+                                 OUString::number (WTMM( drawobj->extent.w * 2)) + "mm");
                     padd("svg:height", sXML_CDATA,
-                                 Double2Str (WTMM( drawobj->extent.h * 2)) + "mm");
+                                 OUString::number (WTMM( drawobj->extent.h * 2)) + "mm");
                     if( drawobj->property.flag & HWPDO_FLAG_DRAW_PIE ||
                                      drawobj->property.fill_color < 0xffffff )
                                 padd("draw:kind", sXML_CDATA, "section");
@@ -4167,8 +4166,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                                     start_angle = end_angle;
                                     end_angle = tmp_angle;
                                 }
-                                padd("draw:start-angle", sXML_CDATA, Double2Str(basegfx::rad2deg(start_angle)));
-                                padd("draw:end-angle", sXML_CDATA, Double2Str(basegfx::rad2deg(end_angle)));
+                                padd("draw:start-angle", sXML_CDATA, OUString::number(basegfx::rad2deg(start_angle)));
+                                padd("draw:end-angle", sXML_CDATA, OUString::number(basegfx::rad2deg(end_angle)));
 
                     }
                     else
@@ -4220,14 +4219,14 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     if( !bIsRotate )
                     {
                         padd("svg:x", sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                            OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
                         padd("svg:y", sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
+                            OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
                     padd("svg:width", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.w )) + "mm");
                     padd("svg:height", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w) , WTSM(drawobj->extent.h) );
                     padd("svg:viewBox", sXML_CDATA, ascii(buf) );
 
@@ -4319,14 +4318,14 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     bool bIsPolygon = false;
 
                     padd("svg:x", sXML_CDATA,
-                                 Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                                 OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
                     padd("svg:y", sXML_CDATA,
-                                 Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
+                                 OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
 
                     padd("svg:width", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.w )) + "mm");
                     padd("svg:height", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.h )) + "mm");
 
                     sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w), WTSM(drawobj->extent.h));
                     padd("svg:viewBox", sXML_CDATA, ascii(buf) );
@@ -4401,27 +4400,27 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     if( !bIsRotate )
                     {
                         padd("svg:x", sXML_CDATA,
-                            Double2Str (WTMM( x + a + drawobj->offset2.x)) + "mm");
+                            OUString::number (WTMM( x + a + drawobj->offset2.x)) + "mm");
                         padd("svg:y", sXML_CDATA,
-                            Double2Str (WTMM( y + b + drawobj->offset2.y)) + "mm");
+                            OUString::number (WTMM( y + b + drawobj->offset2.y)) + "mm");
                     }
                     padd("svg:width", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.w )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.w )) + "mm");
                     padd("svg:height", sXML_CDATA,
-                        Double2Str (WTMM( drawobj->extent.h )) + "mm");
+                        OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->property.flag & 0x01 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
                         padd("draw:corner-radius", sXML_CDATA,
-                            Double2Str (WTMM( value/10 )) + "mm");
+                            OUString::number (WTMM( value/10 )) + "mm");
                     }
                     else if( drawobj->property.flag & 0x04 )
                     {
                         int value = drawobj->extent.w < drawobj->extent.h ?
                             drawobj->extent.w : drawobj->extent.h ;
                         padd("draw:corner-radius", sXML_CDATA,
-                            Double2Str (WTMM( value / 2)) + "mm");
+                            OUString::number (WTMM( value / 2)) + "mm");
                     }
 
                     rstartEl("draw:text-box", mxList);
