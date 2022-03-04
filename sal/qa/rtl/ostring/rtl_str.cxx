@@ -30,16 +30,6 @@ namespace rtl_str
 
     class compare : public CppUnit::TestFixture
     {
-//        void compare_000()
-//            {
-//                rtl_str_compare( nullptr, nullptr);
-//            }
-
-//        void compare_000_1()
-//            {
-//                OString aStr1 = "Line must be equal.";
-//                rtl_str_compare( aStr1.getStr(), nullptr);
-//            }
         void compare_001()
             {
                 OString aStr1 = "";
@@ -72,8 +62,6 @@ namespace rtl_str
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(compare);
-//    CPPUNIT_TEST(compare_000); // Commented out: null-terminated arguments cannot be null
-//    CPPUNIT_TEST(compare_000_1); // Commented out: null-terminated arguments cannot be null
     CPPUNIT_TEST(compare_001);
     CPPUNIT_TEST(compare_002);
     CPPUNIT_TEST(compare_003);
@@ -82,16 +70,6 @@ namespace rtl_str
 
     class compareIgnoreAsciiCase : public CppUnit::TestFixture
     {
-//        void compare_000()
-//            {
-//                rtl_str_compareIgnoreAsciiCase( nullptr, nullptr);
-//            }
-
-//        void compare_000_1()
-//            {
-//                OString aStr1 = "Line must be equal.";
-//                rtl_str_compareIgnoreAsciiCase( aStr1.getStr(), nullptr);
-//            }
         void compare_001()
             {
                 OString aStr1 = "";
@@ -133,8 +111,6 @@ namespace rtl_str
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(compareIgnoreAsciiCase);
-//    CPPUNIT_TEST(compare_000); // Commented out: null-terminated arguments cannot be null
-//    CPPUNIT_TEST(compare_000_1); // Commented out: null-terminated arguments cannot be null
     CPPUNIT_TEST(compare_001);
     CPPUNIT_TEST(compare_002);
     CPPUNIT_TEST(compare_002_1);
@@ -224,11 +200,6 @@ namespace rtl_str
 
     class hashCode : public CppUnit::TestFixture
     {
-//        void hashCode_000()
-//            {
-//                rtl_str_hashCode( nullptr );
-//            }
-
         void hashCode_001()
             {
                 OString aStr1 = "Line for a hashCode.";
@@ -264,7 +235,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(hashCode);
-//        CPPUNIT_TEST(hashCode_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(hashCode_001);
         CPPUNIT_TEST(hashCode_002);
         CPPUNIT_TEST(hashCode_003);
@@ -273,11 +243,6 @@ namespace rtl_str
 
     class indexOfChar : public CppUnit::TestFixture
     {
-//        void indexOfChar_000()
-//            {
-//                rtl_str_indexOfChar( nullptr, 0 );
-//            }
-
         void indexOfChar_001()
             {
                 OString aStr1 = "Line for an indexOfChar.";
@@ -308,7 +273,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfChar);
-//        CPPUNIT_TEST(indexOfChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(indexOfChar_001);
         CPPUNIT_TEST(indexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
@@ -316,11 +280,6 @@ namespace rtl_str
 
     class lastIndexOfChar : public CppUnit::TestFixture
     {
-//        void lastIndexOfChar_000()
-//            {
-//                rtl_str_lastIndexOfChar( nullptr, 0 );
-//            }
-
         void lastIndexOfChar_001()
             {
                 OString aStr1 = "Line for a lastIndexOfChar.";
@@ -351,7 +310,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfChar);
-//        CPPUNIT_TEST(lastIndexOfChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(lastIndexOfChar_001);
         CPPUNIT_TEST(lastIndexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
@@ -359,17 +317,6 @@ namespace rtl_str
 
     class indexOfStr : public CppUnit::TestFixture
     {
-//        void indexOfStr_000()
-//            {
-//                rtl_str_indexOfStr( nullptr, 0 );
-//            }
-
-//        void indexOfStr_000_1()
-//            {
-//                OString aStr1 = "Line for an indexOfStr.";
-//                rtl_str_indexOfStr( aStr1.getStr(), 0 );
-//            }
-
         void indexOfStr_001()
             {
                 OString aStr1 = "Line for an indexOfStr.";
@@ -400,7 +347,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfStr);
-//        CPPUNIT_TEST(indexOfStr_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(indexOfStr_001);
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
@@ -408,17 +354,6 @@ namespace rtl_str
 
     class lastIndexOfStr : public CppUnit::TestFixture
     {
-//        void lastIndexOfStr_000()
-//            {
-//                rtl_str_lastIndexOfStr( nullptr, nullptr );
-//            }
-
-//        void lastIndexOfStr_000_1()
-//            {
-//                OString aStr1 = "Line for a lastIndexOfStr.";
-//                rtl_str_lastIndexOfStr( aStr1.getStr(), nullptr );
-//            }
-
         void lastIndexOfStr_001()
             {
                 OString aStr1 = "Line for a lastIndexOfStr.";
@@ -459,7 +394,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfStr);
-//        CPPUNIT_TEST(lastIndexOfStr_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(lastIndexOfStr_001);
         CPPUNIT_TEST(lastIndexOfStr_002);
         CPPUNIT_TEST(lastIndexOfStr_003);
@@ -468,11 +402,6 @@ namespace rtl_str
 
     class replaceChar : public CppUnit::TestFixture
     {
-//        void replaceChar_000()
-//            {
-//                rtl_str_replaceChar( nullptr, 0, 0 );
-//            }
-
         void replaceChar_001()
             {
                 OString aStr1 = "replace char.";
@@ -493,7 +422,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(replaceChar);
-//        CPPUNIT_TEST(replaceChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(replaceChar_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
@@ -505,10 +433,6 @@ namespace rtl_str
                 rtl_str_replaceChar_WithLength( nullptr, 0, 0, 0 );
             }
 
-//        void replaceChar_WithLength_000_1()
-//            {
-//                rtl_str_replaceChar_WithLength( nullptr, 1, 0, 0 );
-//            }
         void replaceChar_WithLength_001()
             {
                 OString aStr1 = "replace char.";
@@ -530,18 +454,12 @@ namespace rtl_str
 
         CPPUNIT_TEST_SUITE(replaceChar_WithLength);
         CPPUNIT_TEST(replaceChar_WithLength_000);
-//        CPPUNIT_TEST(replaceChar_WithLength_000_1); // Commented out: when length is not 0, string can't be null
         CPPUNIT_TEST(replaceChar_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
 
     class toAsciiLowerCase : public CppUnit::TestFixture
     {
-//        void toAsciiLowerCase_000()
-//            {
-//                rtl_str_toAsciiLowerCase( nullptr );
-//            }
-
         void toAsciiLowerCase_001()
             {
                 OString aStr1 = "CHANGE THIS TO ASCII LOWER CASE.";
@@ -562,7 +480,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase);
-//        CPPUNIT_TEST(toAsciiLowerCase_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(toAsciiLowerCase_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
@@ -602,11 +519,6 @@ namespace rtl_str
 
     class toAsciiUpperCase : public CppUnit::TestFixture
     {
-//        void toAsciiUpperCase_000()
-//            {
-//                rtl_str_toAsciiUpperCase( nullptr );
-//            }
-
         void toAsciiUpperCase_001()
             {
                 OString aStr1 = "change this to ascii upper case.";
@@ -627,7 +539,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase);
-//        CPPUNIT_TEST(toAsciiUpperCase_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(toAsciiUpperCase_001);
         CPPUNIT_TEST_SUITE_END();
     }; // class replaceChar
@@ -736,11 +647,6 @@ namespace rtl_str
 
     class valueOfChar : public CppUnit::TestFixture
     {
-//        void valueOfChar_000()
-//            {
-//                rtl_str_valueOfChar(nullptr, 0);
-//                // should not GPF
-//            }
         void valueOfChar_001()
             {
                 char pStr[RTL_STR_MAX_VALUEOFCHAR];
@@ -754,7 +660,6 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(valueOfChar);
-//        CPPUNIT_TEST(valueOfChar_000); // Commented out: null-terminated arguments cannot be null
         CPPUNIT_TEST(valueOfChar_001);
         CPPUNIT_TEST_SUITE_END();
     };
