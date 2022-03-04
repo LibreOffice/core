@@ -1719,6 +1719,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(weld::Window* pParent,
             ++nRightRow;
         bLeft = !bLeft;
     }
+    assert(m_xTypeListBox && "this will exist after the loop");
     EnableHdl(*m_xTypeListBox);
 }
 
@@ -1726,13 +1727,13 @@ OUString  SwCreateAuthEntryDlg_Impl::GetEntryText(ToxAuthorityField eField) cons
 {
     if( AUTH_FIELD_AUTHORITY_TYPE == eField )
     {
-        OSL_ENSURE(m_xTypeListBox, "No ListBox");
+        assert(m_xTypeListBox && "No ListBox");
         return OUString::number(m_xTypeListBox->get_active());
     }
 
     if( AUTH_FIELD_IDENTIFIER == eField && !m_bNewEntryMode)
     {
-        OSL_ENSURE(m_xIdentifierBox, "No ComboBox");
+        assert(m_xIdentifierBox && "No ComboBox");
         return m_xIdentifierBox->get_active_text();
     }
 
