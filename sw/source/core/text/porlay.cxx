@@ -448,10 +448,15 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 else if( !bHasFlyPortion && ( pPos->IsFlyCntPortion() || pPos->IsFlyPortion() ) )
                      bHasFlyPortion = true;
 
-                // To prevent that a paragraph-end-character does not change
-                // the line height through a Descent and thus causing the line
-                // to reformat.
-                if ( !pPos->IsBreakPortion() || !Height() )
+                // A line break portion only influences the height of the line in case it's the only
+                // portion in the line, except when it's a clearing break.
+                bool bClearingBreak = false;
+                if (pPos->IsBreakPortion())
+                {
+                    auto pBreakPortion = static_cast<SwBreakPortion*>(pPos);
+                    bClearingBreak = pBreakPortion->GetClear() != SwLineBreakClear::NONE;
+                }
+                if (!(pPos->IsBreakPortion() && !bClearingBreak) || !Height())
                 {
                     if (!pPos->IsPostItsPortion()) bOnlyPostIts = false;
 

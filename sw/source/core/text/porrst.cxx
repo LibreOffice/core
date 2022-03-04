@@ -39,6 +39,7 @@
 #include "redlnitr.hxx"
 #include "atrhndl.hxx"
 #include <rootfrm.hxx>
+#include <textlinebreak.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -93,12 +94,18 @@ void SwTmpEndPortion::Paint( const SwTextPaintInfo &rInf ) const
     const_cast<SwTextPaintInfo&>(rInf).SetFont(const_cast<SwFont*>(pOldFnt));
 }
 
-SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion )
+SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion, const SwTextAttr* pAttr )
     : SwLinePortion( rPortion )
 {
     mnLineLength = TextFrameIndex(1);
     m_eRedline = RedlineType::None;
     SetWhichPor( PortionType::Break );
+
+    m_eClear = SwLineBreakClear::NONE;
+    if (pAttr && pAttr->Which() == RES_TXTATR_LINEBREAK)
+    {
+        m_eClear = pAttr->GetLineBreak().GetValue();
+    }
 }
 
 TextFrameIndex SwBreakPortion::GetModelPositionForViewPoint(const sal_uInt16) const
@@ -156,6 +163,22 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
     const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
+
+    // See if this is a clearing break. If so, calculate how much we need to "jump down" so the next
+    // line can again use the full text width.
+    if (m_eClear != SwLineBreakClear::NONE)
+    {
+        SwTextFly& rTextFly = rInf.GetTextFly();
+        if (rTextFly.IsOn())
+        {
+            SwTwips nHeight = rTextFly.GetMaxBottom() - rInf.Y();
+            if (nHeight > Height())
+            {
+                Height(nHeight, /*bText=*/false);
+            }
+        }
+    }
+
     SetAscent( pRoot->GetAscent() );
     if (rInf.GetIdx() + TextFrameIndex(1) == TextFrameIndex(rInf.GetText().getLength()))
         rInf.SetNewLine( true );
@@ -166,6 +189,8 @@ void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     rPH.Text( GetLen(), GetWhichPor() );
 }
+
+SwLineBreakClear SwBreakPortion::GetClear() const { return m_eClear; }
 
 SwKernPortion::SwKernPortion( SwLinePortion &rPortion, short nKrn,
                               bool bBG, bool bGK ) :

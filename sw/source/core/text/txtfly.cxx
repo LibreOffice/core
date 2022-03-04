@@ -309,6 +309,7 @@ SwTextFly::SwTextFly()
     , m_pCurrFrame(nullptr)
     , m_pMaster(nullptr)
     , m_nMinBottom(0)
+    , m_nMaxBottom(0)
     , m_nNextTop(0)
     , m_nCurrFrameNodeIndex(0)
     , m_bOn(false)
@@ -339,6 +340,7 @@ SwTextFly::SwTextFly( const SwTextFly& rTextFly )
     m_bOn = rTextFly.m_bOn;
     m_bTopRule = rTextFly.m_bTopRule;
     m_nMinBottom = rTextFly.m_nMinBottom;
+    m_nMaxBottom = rTextFly.m_nMaxBottom;
     m_nNextTop = rTextFly.m_nNextTop;
     m_nCurrFrameNodeIndex = rTextFly.m_nCurrFrameNodeIndex;
     mbIgnoreCurrentFrame = rTextFly.mbIgnoreCurrentFrame;
@@ -369,6 +371,7 @@ void SwTextFly::CtorInitTextFly( const SwTextFrame *pFrame )
     m_bOn = m_pPage->GetSortedObjs() != nullptr;
     m_bTopRule = true;
     m_nMinBottom = 0;
+    m_nMaxBottom = 0;
     m_nNextTop = 0;
     m_nCurrFrameNodeIndex = NODE_OFFSET_MAX;
 }
@@ -955,6 +958,8 @@ SwAnchoredObjList* SwTextFly::InitAnchoredObjList()
         mpAnchoredObjList.reset( new SwAnchoredObjList );
     }
 
+    CalcMaxBottom();
+
     // #i68520#
     return mpAnchoredObjList.get();
 }
@@ -990,6 +995,25 @@ SwTwips SwTextFly::CalcMinBottom() const
         if( nRet > nMax )
             nRet = nMax;
     }
+    return nRet;
+}
+
+SwTwips SwTextFly::CalcMaxBottom() const
+{
+    SwTwips nRet = 0;
+    size_t nCount(m_bOn ? GetAnchoredObjList()->size() : 0);
+    SwRectFnSet aRectFnSet(m_pCurrFrame);
+    for (size_t i = 0; i < nCount; ++i)
+    {
+        const SwAnchoredObject* pAnchoredObj = (*mpAnchoredObjList)[i];
+        SwRect aRect(pAnchoredObj->GetObjRectWithSpaces());
+        SwTwips nBottom = aRectFnSet.GetBottom(aRect);
+        if (nBottom > nRet)
+        {
+            nRet = nBottom;
+        }
+    }
+    m_nMaxBottom = nRet;
     return nRet;
 }
 
