@@ -951,7 +951,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sc/ScDatabaseRangeObj \
     qadevOOo/tests/java/mod/_sc/ScDataPilotItemObj \
     qadevOOo/tests/java/mod/_sc/ScDocumentConfiguration \
-    qadevOOo/tests/java/mod/_sc/ScHeaderFieldObj \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextCursor \
     qadevOOo/tests/java/mod/_sc/ScHeaderFooterTextObj \
     qadevOOo/tests/java/mod/_sc/ScModelObj \
