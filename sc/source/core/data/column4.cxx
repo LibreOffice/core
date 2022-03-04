@@ -39,11 +39,6 @@
 #include <vector>
 #include <cassert>
 
-bool ScColumn::IsMerged( SCROW nRow ) const
-{
-    return pAttrArray->IsMerged(nRow);
-}
-
 sc::MultiDataCellState::StateType ScColumn::HasDataCellsInRange(
     SCROW nRow1, SCROW nRow2, SCROW* pRow1 ) const
 {
