@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e391ae88_08b6680e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-04T16:41:30Z",
+      "side": 1,
+      "message": "Noticing \"tdf#98705 Replace GetCaseCorrectPathName with GetLongPathNameW\", I was just searching if there were remnants GetCaseCorrectPathName calls, it was the only location.",
+      "revId": "6bb099d0591083b1a80dfe09686744a6848e64ae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
