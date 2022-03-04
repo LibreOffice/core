@@ -46,16 +46,20 @@ class AdvancedDiagramHelper final : public IDiagramHelper
     const std::shared_ptr< Diagram >                mpDiagramPtr;
     const std::shared_ptr<::oox::drawingml::Theme>  mpThemePtr;
 
+    css::awt::Size maImportSize;
+    css::awt::Point maImportPosition;
+
     bool hasDiagramData() const;
 
 public:
     AdvancedDiagramHelper(
         const std::shared_ptr< Diagram >& rDiagramPtr,
-        const std::shared_ptr<::oox::drawingml::Theme>& rTheme);
+        const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
+        Shape& rSourceShape);
     virtual ~AdvancedDiagramHelper();
 
     // re-create XShapes
-    virtual void reLayout() override;
+    virtual void reLayout(SdrObjGroup& rTarget) override;
 
     // get text representation of data tree
     virtual OUString getString() const override;
@@ -70,7 +74,6 @@ public:
     virtual bool removeNode(const OUString& rNodeId) override;
 
     void doAnchor(SdrObjGroup& rTarget);
-    void newTargetShape(ShapePtr& pTarget);
 };
 
 }

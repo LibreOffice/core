@@ -538,15 +538,19 @@ void PPTShape::addShape(
             Reference<XShapes> xShapes(xShape, UNO_QUERY);
             if (xShapes.is())
             {
-                if (meFrameType == FRAMETYPE_DIAGRAM)
-                {
-                    rFilterBase.setDiagramFontHeights(&getDiagramFontHeights());
-                }
-                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aTransformation );
-                if (meFrameType == FRAMETYPE_DIAGRAM)
-                {
+                // tempoarily remember setting
+                NamedShapePairs* pDiagramFontHeights(rFilterBase.getDiagramFontHeights());
+
+                // for shapes unequal to FRAMETYPE_DIAGRAM do
+                // disable DiagramFontHeights recording
+                if (meFrameType != FRAMETYPE_DIAGRAM)
                     rFilterBase.setDiagramFontHeights(nullptr);
-                }
+
+                addChildren( rFilterBase, *this, pTheme, xShapes, pShapeMap, aTransformation );
+
+                // restore remembered setting
+                rFilterBase.setDiagramFontHeights(pDiagramFontHeights);
+
                 for (size_t i = 0; i < this->getChildren().size(); i++)
                 {
                     this->getChildren()[i]->getShapeProperties().getProperty(PROP_URL) >>= sURL;
@@ -561,7 +565,6 @@ void PPTShape::addShape(
             if (meFrameType == FRAMETYPE_DIAGRAM)
             {
                 keepDiagramCompatibilityInfo();
-                syncDiagramFontHeights();
             }
 
             // Support advanced DiagramHelper
