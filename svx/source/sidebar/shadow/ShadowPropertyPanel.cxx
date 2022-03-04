@@ -271,15 +271,10 @@ void ShadowPropertyPanel::NotifyItemUpdate(
             if(eState >= SfxItemState::DEFAULT)
             {
                 const SdrOnOffItem* pItem = dynamic_cast< const SdrOnOffItem* >(pState);
-                if(pItem)
-                {
-                    if (pItem->GetValue())
-                        mxShowShadow->set_state(TRISTATE_TRUE);
-                    else
-                        mxShowShadow->set_state(TRISTATE_FALSE);
-                }
+                if (pItem && pItem->GetValue())
+                    mxShowShadow->set_state(TRISTATE_TRUE);
                 else
-                    mxShowShadow.reset();
+                    mxShowShadow->set_state(TRISTATE_FALSE);
             }
         }
         break;
