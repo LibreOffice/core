@@ -1239,7 +1239,7 @@ hchar_string kstr2hstr(uchar const* src)
 /* Convert a combination of a color index value and a shade value to the color value of LibreOffice */
 OUString hcolor2str(uchar color, uchar shade, bool bIsChar)
 {
-    unsigned short red,green,blue;
+    unsigned char red, green, blue;
 
     switch( static_cast<int>(color) )
     {
