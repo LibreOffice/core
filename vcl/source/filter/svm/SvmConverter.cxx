@@ -252,13 +252,23 @@ namespace
     bool NormalizeRange(const OUString& rStr, sal_Int32& rIndex, sal_Int32& rLength,
                         std::vector<sal_Int32>* pDXAry = nullptr)
     {
-        const sal_uInt32 nStrLength = rStr.getLength();
-        rIndex = std::min<sal_uInt32>(rIndex, nStrLength);
-        rLength = std::min<sal_uInt32>(rLength, nStrLength - rIndex);
-        if (pDXAry && pDXAry->size() > o3tl::make_unsigned(rLength))
+        const sal_Int32 nStrLength = rStr.getLength();
+
+        if (rIndex < 0 || rIndex > nStrLength)
         {
-            pDXAry->resize(rLength);
+            SAL_WARN("vcl.gdi", "inconsistent offset");
+            rIndex = nStrLength;
         }
+
+        if (rLength < 0 || rLength > nStrLength - rIndex)
+        {
+            SAL_WARN("vcl.gdi", "inconsistent len");
+            rLength = nStrLength - rIndex;
+        }
+
+        if (pDXAry && pDXAry->size() > o3tl::make_unsigned(rLength))
+            pDXAry->resize(rLength);
+
         return rLength > 0;
     }
 }
