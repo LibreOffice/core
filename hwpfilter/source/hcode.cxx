@@ -1288,11 +1288,19 @@ OUString hcolor2str(uchar color, uchar shade, bool bIsChar)
             blue = 0xff;
             break;
     }
+    return rgb2str(red, green, blue);
+}
 
+
+OUString rgb2str(unsigned char red, unsigned char green, unsigned char blue)
+{
     char buf[8];
     int n = std::max(sprintf(buf, "#%02x%02x%02x", red, green, blue), 0);
     return OUString::createFromAscii(std::string_view(buf, n));
 }
+
+
+OUString rgb2str(int32_t rgb) { return rgb2str(rgb & 0xff, (rgb >> 8) & 0xff, (rgb >> 16) & 0xff); }
 
 
 ::std::string urltounix(const char *src)
