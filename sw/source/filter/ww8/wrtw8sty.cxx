@@ -998,7 +998,6 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
     const SwSectionFormat *pFormat = nullptr;
     rExport.m_pCurrentPageDesc = &rExport.m_rDoc.GetPageDesc( 0 );
 
-    const SfxPoolItem* pI;
     const SwNode* pNd = rExport.m_pCurPam->GetContentNode();
     const SfxItemSet* pSet = pNd ? &static_cast<const SwContentNode*>(pNd)->GetSwAttrSet() : nullptr;
 
@@ -1035,11 +1034,12 @@ MSWordSections::MSWordSections( MSWordExportBase& rExport )
             SectionType::ToxContent == pSectNd->GetSection().GetType()  );
 
     // Try to get page descriptor of the first node
+    const SwFormatPageDesc* pDescItem;
     if ( pSet &&
-         SfxItemState::SET == pSet->GetItemState( RES_PAGEDESC, true, &pI ) &&
-         static_cast<const SwFormatPageDesc*>(pI)->GetPageDesc() )
+         (pDescItem = pSet->GetItemIfSet( RES_PAGEDESC )) &&
+         pDescItem->GetPageDesc() )
     {
-        AppendSection( *static_cast<const SwFormatPageDesc*>(pI), *pNd, pFormat, nRstLnNum );
+        AppendSection( *pDescItem, *pNd, pFormat, nRstLnNum );
     }
     else
         AppendSection( rExport.m_pCurrentPageDesc, pFormat, nRstLnNum, /*bIsFirstParagraph=*/true );
@@ -1213,20 +1213,16 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
 void MSWordSections::SetHeaderFlag( sal_uInt8& rHeadFootFlags, const SwFormat& rFormat,
     sal_uInt8 nFlag )
 {
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rFormat.GetItemState(RES_HEADER, true, &pItem)
-        && static_cast<const SwFormatHeader*>(pItem)->IsActive() &&
-        static_cast<const SwFormatHeader*>(pItem)->GetHeaderFormat() )
+    const SwFormatHeader* pItem = rFormat.GetItemIfSet(RES_HEADER);
+    if( pItem && pItem->IsActive() && pItem->GetHeaderFormat() )
         rHeadFootFlags |= nFlag;
 }
 
 void MSWordSections::SetFooterFlag( sal_uInt8& rHeadFootFlags, const SwFormat& rFormat,
     sal_uInt8 nFlag )
 {
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET == rFormat.GetItemState(RES_FOOTER, true, &pItem)
-        && static_cast<const SwFormatFooter*>(pItem)->IsActive() &&
-        static_cast<const SwFormatFooter*>(pItem)->GetFooterFormat() )
+    const SwFormatFooter* pItem = rFormat.GetItemIfSet(RES_FOOTER);
+    if( pItem && pItem->IsActive() && pItem->GetFooterFormat() )
         rHeadFootFlags |= nFlag;
 }
 
@@ -1329,12 +1325,12 @@ void MSWordSections::CheckForFacinPg( const WW8Export& rWrt ) const
 
 bool MSWordSections::HasBorderItem( const SwFormat& rFormat )
 {
-    const SfxPoolItem* pItem;
-    return SfxItemState::SET == rFormat.GetItemState(RES_BOX, true, &pItem) &&
-            (   static_cast<const SvxBoxItem*>(pItem)->GetTop() ||
-                static_cast<const SvxBoxItem*>(pItem)->GetBottom()  ||
-                static_cast<const SvxBoxItem*>(pItem)->GetLeft()  ||
-                static_cast<const SvxBoxItem*>(pItem)->GetRight() );
+    const SvxBoxItem* pItem = rFormat.GetItemIfSet(RES_BOX);
+    return pItem &&
+            (   pItem->GetTop() ||
+                pItem->GetBottom()  ||
+                pItem->GetLeft()  ||
+                pItem->GetRight() );
 }
 
 void WW8AttributeOutput::StartSection()

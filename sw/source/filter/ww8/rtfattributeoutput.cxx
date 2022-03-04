@@ -742,11 +742,11 @@ void RtfAttributeOutput::TableDefaultBorders(
     const SwWriteTableCell* const pCell
         = pRow->GetCells()[pTableTextNodeInfoInner->getCell()].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
-    const SfxPoolItem* pItem;
-    if (!pCellFormat->GetAttrSet().HasItem(RES_BOX, &pItem))
+    const SvxBoxItem* pItem = pCellFormat->GetAttrSet().GetItemIfSet(RES_BOX);
+    if (!pItem)
         return;
 
-    auto& rBox = pItem->StaticWhichCast(RES_BOX);
+    auto& rBox = *pItem;
     static const SvxBoxItemLine aBorders[] = { SvxBoxItemLine::TOP, SvxBoxItemLine::LEFT,
                                                SvxBoxItemLine::BOTTOM, SvxBoxItemLine::RIGHT };
     static const char* aBorderNames[]
@@ -797,12 +797,10 @@ void RtfAttributeOutput::TableBackgrounds(
     const SwWriteTableCell* const pCell
         = pRow->GetCells()[pTableTextNodeInfoInner->getCell()].get();
     const SwFrameFormat* pCellFormat = pCell->GetBox()->GetFrameFormat();
-    const SfxPoolItem* pItem;
-    if (pCellFormat->GetAttrSet().HasItem(RES_BACKGROUND, &pItem))
+    if (const SvxBrushItem* pBrushItem = pCellFormat->GetAttrSet().GetItemIfSet(RES_BACKGROUND))
     {
-        auto& rBack = pItem->StaticWhichCast(RES_BACKGROUND);
-        if (rBack.GetColor() != COL_AUTO)
-            aColor = rBack.GetColor();
+        if (pBrushItem->GetColor() != COL_AUTO)
+            aColor = pBrushItem->GetColor();
     }
 
     if (!aColor.IsTransparent())
@@ -892,8 +890,6 @@ void RtfAttributeOutput::TableVerticalCell(
     else if (SvxFrameDirection::Vertical_LR_BT == m_rExport.TrueFrameDirection(*pCellFormat))
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLTXBTLR);
 
-    const SfxPoolItem* pItem;
-
     // vertical merges
     if (pCell->GetRowSpan() > 1)
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVMGF);
@@ -901,10 +897,12 @@ void RtfAttributeOutput::TableVerticalCell(
         m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVMRG);
 
     // vertical alignment
-    if (!pCellFormat->GetAttrSet().HasItem(RES_VERT_ORIENT, &pItem))
+    const SwFormatVertOrient* pVertOrientItem
+        = pCellFormat->GetAttrSet().GetItemIfSet(RES_VERT_ORIENT);
+    if (!pVertOrientItem)
         return;
 
-    switch (pItem->StaticWhichCast(RES_VERT_ORIENT).GetVertOrient())
+    switch (pVertOrientItem->GetVertOrient())
     {
         case text::VertOrientation::CENTER:
             m_aRowDefs.append(OOO_STRING_SVTOOLS_RTF_CLVERTALC);
