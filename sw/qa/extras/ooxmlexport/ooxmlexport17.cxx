@@ -254,6 +254,34 @@ DECLARE_OOXMLEXPORT_TEST(testWPGBodyPr, "WPGbodyPr.docx")
                          xInnerShape->getPropertyValue("TextRightDistance").get<sal_Int32>());
 }
 
+DECLARE_OOXMLEXPORT_TEST(TestTdf73499, "tdf73499.docx")
+{
+    // Ensure, the bugdoc is opened
+    CPPUNIT_ASSERT(mxComponent);
+    // Get the groupshape
+    uno::Reference<drawing::XShapes> xGroup(getShape(1), uno::UNO_QUERY_THROW);
+
+    // Get the textboxes of the groupshape
+    uno::Reference<text::XText> xTextBox1(xGroup->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xTextBox2(xGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+
+    // Get the properties of the textboxes
+    uno::Reference<beans::XPropertySet> xTextBox1Properties(xTextBox1, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xTextBox2Properties(xTextBox2, uno::UNO_QUERY_THROW);
+
+    // Get the name of the textboxes
+    uno::Reference<container::XNamed> xTextBox1Name(xTextBox1, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XNamed> xTextBox2Name(xTextBox2, uno::UNO_QUERY_THROW);
+
+    // Check for the links, before the fix that were missing
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Link name missing!", xTextBox2Name->getName(),
+        xTextBox1Properties->getPropertyValue("ChainNextName").get<OUString>());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Link name missing!", xTextBox1Name->getName(),
+        xTextBox2Properties->getPropertyValue("ChainPrevName").get<OUString>());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
