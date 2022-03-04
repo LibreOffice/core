@@ -654,7 +654,7 @@ void SdrDragMethod::Hide()
     getSdrDragView().HideDragObj();
 }
 
-basegfx::B2DHomMatrix SdrDragMethod::getCurrentTransformation()
+basegfx::B2DHomMatrix SdrDragMethod::getCurrentTransformation() const
 {
     return basegfx::B2DHomMatrix();
 }
@@ -1496,7 +1496,7 @@ bool SdrDragMove::BeginSdrDrag()
     return true;
 }
 
-basegfx::B2DHomMatrix SdrDragMove::getCurrentTransformation()
+basegfx::B2DHomMatrix SdrDragMove::getCurrentTransformation() const
 {
     return basegfx::utils::createTranslateB2DHomMatrix(DragStat().GetDX(), DragStat().GetDY());
 }
@@ -1812,7 +1812,7 @@ bool SdrDragResize::BeginSdrDrag()
     return true;
 }
 
-basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation()
+basegfx::B2DHomMatrix SdrDragResize::getCurrentTransformation() const
 {
     basegfx::B2DHomMatrix aRetval(basegfx::utils::createTranslateB2DHomMatrix(
         -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
@@ -2102,7 +2102,7 @@ bool SdrDragRotate::BeginSdrDrag()
     return false;
 }
 
-basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformation()
+basegfx::B2DHomMatrix SdrDragRotate::getCurrentTransformation() const
 {
     return basegfx::utils::createRotateAroundPoint(
         DragStat().GetRef1().X(), DragStat().GetRef1().Y(),
@@ -2248,7 +2248,7 @@ bool SdrDragShear::BeginSdrDrag()
     return true;
 }
 
-basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation()
+basegfx::B2DHomMatrix SdrDragShear::getCurrentTransformation() const
 {
     basegfx::B2DHomMatrix aRetval(basegfx::utils::createTranslateB2DHomMatrix(
         -DragStat().GetRef1().X(), -DragStat().GetRef1().Y()));
@@ -2535,7 +2535,7 @@ bool SdrDragMirror::BeginSdrDrag()
     }
 }
 
-basegfx::B2DHomMatrix SdrDragMirror::getCurrentTransformation()
+basegfx::B2DHomMatrix SdrDragMirror::getCurrentTransformation() const
 {
     basegfx::B2DHomMatrix aRetval;
 

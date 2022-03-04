@@ -128,7 +128,7 @@ bool DragMethod_PieSegment::EndSdrDrag(bool /*bCopy*/)
 
     return true;
 }
-basegfx::B2DHomMatrix DragMethod_PieSegment::getCurrentTransformation()
+basegfx::B2DHomMatrix DragMethod_PieSegment::getCurrentTransformation() const
 {
     basegfx::B2DHomMatrix aRetval;
 

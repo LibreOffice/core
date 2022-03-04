@@ -152,7 +152,7 @@ private:
     SVX_DLLPRIVATE const CellPos& getSelectionStart();
     SVX_DLLPRIVATE void setSelectionStart( const CellPos& rPos );
     SVX_DLLPRIVATE const CellPos& getSelectionEnd();
-    SVX_DLLPRIVATE void checkCell( CellPos& rPos );
+    SVX_DLLPRIVATE void checkCell( CellPos& rPos ) const;
 
     SVX_DLLPRIVATE void MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, sal_Int32 nLastCol, sal_Int32 nLastRow );
 
