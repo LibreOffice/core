@@ -1170,6 +1170,44 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf119571_keep_numbering_with_Reject)
     CPPUNIT_ASSERT_MESSAGE("Bad numbering", sNumName.isEmpty());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf140077)
+{
+    SwDoc* const pDoc = createDoc();
+
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // hide
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+
+    pWrtShell->Insert("a");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("b");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
+    // enable
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT_MESSAGE(
+        "redlines should be visible",
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->Delete();
+    pWrtShell->SttEndDoc(/*bStart=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    // crashed in layout
+    pWrtShell->SplitNode();
+
+    pWrtShell->Undo();
+    pWrtShell->Redo();
+    pWrtShell->Undo();
+    pWrtShell->Redo();
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376_redline)
 {
     SwDoc* pDoc = createDoc();
