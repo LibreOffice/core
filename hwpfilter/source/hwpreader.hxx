@@ -152,6 +152,10 @@ private:
     void parseParaShape(ParaShape const *);
     static OUString getTStyleName(int);
     static OUString getPStyleName(int);
+
+    void startEl(const OUString& el);
+    void endEl(const OUString& el);
+    void chars(const OUString& s);
 };
 
 
