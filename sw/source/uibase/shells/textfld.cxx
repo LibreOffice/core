@@ -180,7 +180,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                                SwCursorShell::GetTextFieldAtCursor(rSh.GetCursor(), true))))
                     {
                         rSh.SttSelect();
-                        rSh.SelectText(
+                        rSh.SelectTextModel(
                             SwCursorShell::StartOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) + 1,
                             SwCursorShell::EndOfInputFieldAtPos( *(rSh.GetCursor()->Start()) ) - 1 );
                     }

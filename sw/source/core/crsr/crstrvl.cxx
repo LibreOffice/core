@@ -1996,7 +1996,7 @@ bool SwContentAtPos::IsInRTLText()const
     return bRet;
 }
 
-bool SwCursorShell::SelectText( const sal_Int32 nStart,
+bool SwCursorShell::SelectTextModel( const sal_Int32 nStart,
                                  const sal_Int32 nEnd )
 {
     CurrShell aCurr( this );
@@ -2012,6 +2012,43 @@ bool SwCursorShell::SelectText( const sal_Int32 nStart,
     rPos.nContent = nEnd;
 
     if( !m_pCurrentCursor->IsSelOvr() )
+    {
+        UpdateCursor();
+        bRet = true;
+    }
+
+    return bRet;
+}
+
+TextFrameIndex SwCursorShell::GetCursorPointAsViewIndex() const
+{
+    SwPosition const*const pPos(GetCursor()->GetPoint());
+    SwTextNode const*const pTextNode(pPos->nNode.GetNode().GetTextNode());
+    assert(pTextNode);
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTextNode->getLayoutFrame(GetLayout())));
+    assert(pFrame);
+    return pFrame->MapModelToViewPos(*pPos);
+}
+
+bool SwCursorShell::SelectTextView(TextFrameIndex const nStart,
+                                 TextFrameIndex const nEnd)
+{
+    CurrShell aCurr( this );
+    bool bRet = false;
+
+    SwCallLink aLk( *this );
+    SwCursorSaveState aSaveState( *m_pCurrentCursor );
+
+    SwPosition& rPos = *m_pCurrentCursor->GetPoint();
+    m_pCurrentCursor->DeleteMark();
+    // indexes must correspond to cursor point!
+    SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(m_pCurrentCursor->GetPoint()->nNode.GetNode().GetTextNode()->getLayoutFrame(GetLayout())));
+    assert(pFrame);
+    rPos = pFrame->MapViewToModelPos(nStart);
+    m_pCurrentCursor->SetMark();
+    rPos = pFrame->MapViewToModelPos(nEnd);
+
+    if (!m_pCurrentCursor->IsSelOvr())
     {
         UpdateCursor();
         bRet = true;
@@ -2043,7 +2080,7 @@ bool SwCursorShell::SelectTextAttr( sal_uInt16 nWhich,
         if( pTextAttr )
         {
             const sal_Int32* pEnd = pTextAttr->End();
-            bRet = SelectText( pTextAttr->GetStart(), ( pEnd ? *pEnd : pTextAttr->GetStart() + 1 ) );
+            bRet = SelectTextModel(pTextAttr->GetStart(), (pEnd ? *pEnd : pTextAttr->GetStart() + 1));
         }
     }
     return bRet;

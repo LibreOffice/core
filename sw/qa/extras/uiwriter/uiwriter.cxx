@@ -3703,7 +3703,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     CPPUNIT_ASSERT(rIDCO.InsertGraphicObject(*pShell->GetCursor(), grf, &frameSet, &grfSet));
     CPPUNIT_ASSERT_EQUAL(size_t(2), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
     SvxCharHiddenItem hidden(true, RES_CHRATR_HIDDEN);
-    pShell->SelectText(1, 4);
+    pShell->SelectTextModel(1, 4);
     rIDCO.InsertPoolItem(*pShell->GetCursor(), hidden);
     // now we have "\1foo\1" with the "foo" hidden
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
@@ -3717,7 +3717,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     query.ClearItem(RES_CHRATR_HIDDEN);
 
     // delete from the start
-    pShell->SelectText(0, 4);
+    pShell->SelectTextModel(0, 4);
     rIDCO.DeleteAndJoin(*pShell->GetCursor());
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));
@@ -3760,7 +3760,7 @@ void SwUiWriterTest::testUndoDelAsCharTdf107512()
     query.ClearItem(RES_CHRATR_HIDDEN);
 
     // delete from the end
-    pShell->SelectText(1, 5);
+    pShell->SelectTextModel(1, 5);
     rIDCO.DeleteAndJoin(*pShell->GetCursor());
     CPPUNIT_ASSERT(pShell->GetCursor()->GetNode().GetTextNode()->GetTextAttrForCharAt(0, RES_TXTATR_FLYCNT));
     CPPUNIT_ASSERT_EQUAL(size_t(1), pDoc->GetFlyCount(FLYCNTTYPE_GRF));

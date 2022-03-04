@@ -96,25 +96,30 @@ void SwEditWinUIObject::execute(const OUString& rAction,
         {
             auto itr = rParameters.find("START_POS");
             OUString aStartPos = itr->second;
-            sal_Int32 nStartPos = aStartPos.toInt32();
+            TextFrameIndex const nStartPos(aStartPos.toInt32());
 
             itr = rParameters.find("END_POS");
             assert(itr != rParameters.end());
             OUString aEndPos = itr->second;
-            sal_Int32 nEndPos = aEndPos.toInt32();
+            TextFrameIndex const nEndPos(aEndPos.toInt32());
 
             auto & shell = getWrtShell(mxEditWin);
-            sal_Int32 len;
-            if (auto const text = shell.GetCursor_()->GetPoint()->nNode.GetNode().GetTextNode()) {
-                len = text->GetText().getLength();
-            } else {
-                len = 0;
+            if (shell.GetCursor_()->GetPoint()->nNode.GetNode().GetTextNode())
+            {
+                shell.Push();
+                shell.MovePara(GoCurrPara, fnParaEnd);
+                TextFrameIndex const len(shell.GetCursorPointAsViewIndex());
+                shell.Pop(SwCursorShell::PopMode::DeleteCurrent);
+                SAL_WARN_IF(
+                    sal_Int32(nStartPos) < 0 || nStartPos > len || sal_Int32(nEndPos) < 0 || nEndPos > len, "sw.ui",
+                    "SELECT START/END_POS " << sal_Int32(nStartPos) << ".." << sal_Int32(nEndPos) << " outside 0.." << sal_Int32(len));
+                shell.SelectTextView(
+                    std::clamp(nStartPos, TextFrameIndex(0), len), std::clamp(nEndPos, TextFrameIndex(0), len));
             }
-            SAL_WARN_IF(
-                nStartPos < 0 || nStartPos > len || nEndPos < 0 || nEndPos > len, "sw.ui",
-                "SELECT START/END_POS " << nStartPos << ".." << nEndPos << " outside 0.." << len);
-            shell.SelectText(
-                std::clamp(nStartPos, sal_Int32(0), len), std::clamp(nEndPos, sal_Int32(0), len));
+            else
+            {
+                SAL_WARN("sw.ui", "SELECT without SwTextNode");
+            }
         }
     }
     else if (rAction == "SIDEBAR")
