@@ -70,6 +70,30 @@
       },
       "revId": "eccbe009fd28f5b468267af853931b121b5601fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d8c17f4_13e88bce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-04T10:03:38Z",
+      "side": 1,
+      "message": "Addressed in https://gerrit.libreoffice.org/c/core/+/130962",
+      "parentUuid": "bc2e3b98_1da75fa7",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "eccbe009fd28f5b468267af853931b121b5601fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
