@@ -78,7 +78,33 @@ public:
     std::optional<double> m_aManualMin; // if m_sMaxAxisType is "custom"
     OUString m_sUID;
 
-    SparklineGroup() = default;
+    SparklineGroup()
+        : m_aColorSeries(COL_BLUE)
+        , m_aColorNegative(COL_TRANSPARENT)
+        , m_aColorAxis(COL_TRANSPARENT)
+        , m_aColorMarkers(COL_TRANSPARENT)
+        , m_aColorFirst(COL_TRANSPARENT)
+        , m_aColorLast(COL_TRANSPARENT)
+        , m_aColorHigh(COL_TRANSPARENT)
+        , m_aColorLow(COL_TRANSPARENT)
+        , m_eMinAxisType(AxisType::Individual)
+        , m_eMaxAxisType(AxisType::Individual)
+        , m_fLineWeight(0.75)
+        , m_eType(SparklineType::Line)
+        , m_bDateAxis(false)
+        , m_eDisplayEmptyCellsAs(DisplayEmptyCellAs::Zero)
+        , m_bMarkers(false)
+        , m_bHigh(false)
+        , m_bLow(false)
+        , m_bFirst(false)
+        , m_bLast(false)
+        , m_bNegative(false)
+        , m_bDisplayXAxis(false)
+        , m_bDisplayHidden(false)
+        , m_bRightToLeft(false)
+    {
+    }
+
     SparklineGroup(const SparklineGroup&) = delete;
     SparklineGroup& operator=(const SparklineGroup&) = delete;
 };
