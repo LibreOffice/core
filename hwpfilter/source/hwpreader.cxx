@@ -54,13 +54,13 @@
 // xmloff/xmlkyd.hxx
 constexpr OUStringLiteral sXML_CDATA = u"CDATA";
 
-#define STARTP  padd( "text:style-name", "CDATA", ascii(getPStyleName((para->GetParaShape()).index,buf))); \
+#define STARTP  padd( "text:style-name", "CDATA", getPStyleName((para->GetParaShape()).index)); \
     rstartEl( "text:p",mxList ); \
     mxList->clear(); \
     pstart = true
 #define STARTT \
     curr = para->GetCharShape(n > 0 ? n-1 : 0)->index; \
-    padd( "text:style-name", "CDATA" , ascii( getTStyleName(curr, buf) ) ); \
+    padd( "text:style-name", "CDATA" , getTStyleName(curr) ); \
     rstartEl( "text:span",mxList ); \
     mxList->clear(); \
     tstart = true
@@ -442,7 +442,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 
         if( prop->line_pstyle > 0 && prop->line_pstyle < 5 && prop->line_color <= 0xffffff)
         {
-            padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "LineType%d", buf)));
+            padd( "draw:name", sXML_CDATA, "LineType" + OUString::number(hdo->index));
             padd( "draw:style", sXML_CDATA, "round");
             padd( "draw:dots1", sXML_CDATA, "1");
             padd( "draw:dots1-length", sXML_CDATA, Double2Str( LineStyle[prop->line_pstyle].dots1 * WTMM(prop->line_width) ) + "cm");
@@ -523,7 +523,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
         {
             if( prop->flag >> 18  & 0x01 )
             {
-                padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "fillimage%d", buf)));
+                padd( "draw:name", sXML_CDATA, "fillimage" + OUString::number(hdo->index));
 
                 EmPicture *emp = nullptr;
                 if (prop->pictype && strlen(prop->szPatternFile) > 3)
@@ -550,7 +550,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
 /*  If there is a gradient, when a bitmap file is present, this is the first. */
             else if( prop->flag >> 16  & 0x01 )   /* existence gradient */
             {
-                padd( "draw:name", sXML_CDATA, ascii(Int2Str(hdo->index, "Grad%d", buf)));
+                padd( "draw:name", sXML_CDATA, "Grad" + OUString::number(hdo->index));
                 switch( prop->gstyle )
                 {
                     case 1 :
@@ -570,8 +570,8 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                         padd( "draw:style", sXML_CDATA, "linear");
                         break;
                 }
-                padd( "draw:cx", sXML_CDATA,ascii(Int2Str(prop->center_x, "%d%%", buf)));
-                padd( "draw:cy", sXML_CDATA,ascii(Int2Str(prop->center_y, "%d%%", buf)));
+                padd( "draw:cx", sXML_CDATA, OUString::number(prop->center_x) + "%");
+                padd( "draw:cy", sXML_CDATA, OUString::number(prop->center_y) + "%");
 
                 HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
                 int default_color = 0xffffff;
@@ -622,8 +622,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                 if( prop->angle > 0 && ( prop->gstyle == 1 || prop->gstyle == 4))
                 {
                     int angle = 1800 - prop->angle * 10;
-                    padd( "draw:angle", sXML_CDATA,
-                        ascii(Int2Str( angle, "%d", buf)));
+                    padd( "draw:angle", sXML_CDATA, OUString::number(angle));
                 }
                 rstartEl( "draw:gradient", mxList );
                 mxList->clear();
@@ -633,8 +632,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
             else if( prop->pattern_type >> 24 & 0x01 )
             {
                 int type = prop->pattern_type & 0xffffff;
-                padd( "draw:name", sXML_CDATA,
-                    ascii(Int2Str(hdo->index, "Hatch%d", buf)));
+                padd( "draw:name", sXML_CDATA, "Hatch" + OUString::number(hdo->index));
                 if( type < 4 )
                     padd( "draw:style", sXML_CDATA, "single" );
                 else
@@ -782,7 +780,7 @@ void HwpReader::makeStyles()
     padd("text:num-suffix", sXML_CDATA, ")");
     padd("text:num-format", sXML_CDATA, "1");
     if( hwpinfo.beginfnnum != 1)
-        padd("text:offset", sXML_CDATA, ascii(Int2Str(hwpinfo.beginfnnum -1, "%d", buf)));
+        padd("text:offset", sXML_CDATA, OUString::number(hwpinfo.beginfnnum - 1));
     rstartEl("text:footnotes-configuration", mxList);
     mxList->clear();
     rendEl("text:footnotes-configuration");
@@ -850,8 +848,7 @@ void HwpReader::makeAutoStyles()
             continue;
         if( i == 3 && !bIsRight )
             continue;
-        padd("style:name", sXML_CDATA,
-            ascii(Int2Str(i,"PNPara%d", buf)));
+        padd("style:name", sXML_CDATA, "PNPara" + OUString::number(i));
         padd("style:family", sXML_CDATA, "paragraph");
         padd("style:parent-style-name", sXML_CDATA, "Standard");
         rstartEl("style:style", mxList);
@@ -867,7 +864,7 @@ void HwpReader::makeAutoStyles()
         rendEl( "style:properties");
         rendEl( "style:style");
 
-        padd("style:name", sXML_CDATA, ascii(Int2Str(i,"PNBox%d",buf)));
+        padd("style:name", sXML_CDATA, "PNBox" + OUString::number(i));
         padd("style:family", sXML_CDATA, "graphics");
         rstartEl("style:style", mxList);
         mxList->clear();
@@ -1014,15 +1011,12 @@ void HwpReader::makeMasterStyles()
         if( i == 1 )
             padd("style:name", sXML_CDATA, "Standard");
         else
-            padd("style:name", sXML_CDATA,
-                ascii(Int2Str(i, "p%d", buf)));
+            padd("style:name", sXML_CDATA, "p" + OUString::number(i));
         padd("style:page-master-name", sXML_CDATA,
-                ascii(Int2Str(hwpfile.GetPageMasterNum(i), "pm%d", buf)));
+                "pm" + OUString::number(hwpfile.GetPageMasterNum(i)));
         if( i < nMax )
-            padd("style:next-style-name", sXML_CDATA,
-                ascii(Int2Str(i+1, "p%d", buf)));
-        padd("draw:style-name", sXML_CDATA,
-            ascii(Int2Str(i, "master%d", buf)));
+            padd("style:next-style-name", sXML_CDATA, "p" + OUString::number(i + 1));
+        padd("draw:style-name", sXML_CDATA, "master" + OUString::number(i));
         rstartEl("style:master-page", mxList);
         mxList->clear();
 
@@ -1317,10 +1311,8 @@ void HwpReader::parseCharShape(CharShape const * cshape)
 {
     HWPFont& hwpfont = hwpfile.GetHWPFont();
 
-    padd("fo:font-size", sXML_CDATA,
-        ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
-    padd("style:font-size-asian", sXML_CDATA,
-        ascii(Int2Str(cshape->size / 25, "%dpt", buf)));
+    padd("fo:font-size", sXML_CDATA, OUString::number(cshape->size / 25) + "pt");
+    padd("style:font-size-asian", sXML_CDATA, OUString::number(cshape->size / 25) + "pt");
 
     ::std::string const tmp = hstr2ksstr(kstr2hstr(
         reinterpret_cast<unsigned char const *>(hwpfont.GetFontName(0, cshape->font[0]))).c_str());
@@ -1333,7 +1325,7 @@ void HwpReader::parseCharShape(CharShape const * cshape)
         OUString(buf, size, RTL_TEXTENCODING_EUC_KR));
 
     padd("style:text-scale", sXML_CDATA,
-        ascii(Int2Str(static_cast<int>(cshape->ratio[0] * fRatio), "%d%%", buf)));
+        OUString::number(static_cast<int>(cshape->ratio[0] * fRatio)) + "%");
 
     double sspace = (cshape->size / 25) * cshape->space[0] / 100.;
 
@@ -1406,8 +1398,7 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
         padd("fo:text-indent", sXML_CDATA, Double2Str
             (WTI(pshape->indent)) + "inch");
     if (pshape->lspacing != 0)
-        padd("fo:line-height", sXML_CDATA,
-            ascii(Int2Str (pshape->lspacing, "%d%%", buf)));
+        padd("fo:line-height", sXML_CDATA, OUString::number(pshape->lspacing) + "%");
 
     const char* align = nullptr;
 
@@ -1454,8 +1445,7 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
 void HwpReader::makePStyle(ParaShape const * pshape)
 {
     int nscount = pshape->tabs[MAXTABS -1].type;
-    padd("style:name", sXML_CDATA,
-        ascii(Int2Str(pshape->index, "P%d", buf)));
+    padd("style:name", sXML_CDATA, "P" + OUString::number(pshape->index));
     padd("style:family", sXML_CDATA, "paragraph");
     rstartEl("style:style", mxList);
     mxList->clear();
@@ -1529,7 +1519,7 @@ void HwpReader::makePageStyle()
      int pmCount = hwpfile.getColumnCount();
 
      for( int i = 0 ; i < pmCount ; i++ ){
-         padd("style:name", sXML_CDATA, ascii(Int2Str(i + 1, "pm%d", buf)));
+         padd("style:name", sXML_CDATA, "pm" + OUString::number(i + 1));
          rstartEl("style:page-master",mxList);
          mxList->clear();
 
@@ -1633,8 +1623,7 @@ void HwpReader::makePageStyle()
          padd("style:print-orientation",sXML_CDATA,
               ascii(hwpinfo.paper.paper_direction ? "landscape" : "portrait"));
          if( hwpinfo.beginpagenum != 1)
-              padd("style:first-page-number",sXML_CDATA,
-                    ascii(Int2Str(hwpinfo.beginpagenum, "%d", buf)));
+              padd("style:first-page-number",sXML_CDATA, OUString::number(hwpinfo.beginpagenum));
 
          if( hwpinfo.borderline ){
              padd("fo:margin-left",sXML_CDATA,
@@ -1785,7 +1774,7 @@ void HwpReader::makePageStyle()
 void HwpReader::makeColumns(ColumnDef const *coldef)
 {
     if( !coldef ) return;
-    padd("fo:column-count", sXML_CDATA, ascii(Int2Str(coldef->ncols, "%d", buf)));
+    padd("fo:column-count", sXML_CDATA, OUString::number(coldef->ncols));
     rstartEl("style:columns",mxList);
     mxList->clear();
     if( coldef->separator != 0 )
@@ -1834,8 +1823,7 @@ void HwpReader::makeColumns(ColumnDef const *coldef)
 
 void HwpReader::makeTStyle(CharShape const * cshape)
 {
-    padd("style:name", sXML_CDATA,
-        ascii(Int2Str(cshape->index, "T%d", buf)));
+    padd("style:name", sXML_CDATA, "T" + OUString::number(cshape->index));
     padd("style:family", sXML_CDATA, "text");
     rstartEl("style:style", mxList);
     mxList->clear();
@@ -1852,8 +1840,7 @@ void HwpReader::makeTableStyle(Table *tbl)
 // table
     TxtBox *hbox = tbl->box;
 
-    padd("style:name", sXML_CDATA,
-        ascii(Int2Str(hbox->style.boxnum, "Table%d", buf)));
+    padd("style:name", sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
     padd("style:family", sXML_CDATA,"table");
     rstartEl("style:style", mxList);
     mxList->clear();
@@ -2005,8 +1992,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 {
     while( hdo )
     {
-        padd("style:name", sXML_CDATA,
-            ascii(Int2Str(hdo->index, "Draw%d", buf)));
+        padd("style:name", sXML_CDATA, "Draw" + OUString::number(hdo->index));
         padd("style:family", sXML_CDATA, "graphics");
 
         rstartEl("style:style", mxList);
@@ -2037,8 +2023,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             else if( hdo->property.line_pstyle < 5 )
             {
                 padd("draw:stroke", sXML_CDATA, "dash" );
-                padd("draw:stroke-dash", sXML_CDATA,
-                    ascii(Int2Str(hdo->index, "LineType%d", buf)));
+                padd("draw:stroke-dash", sXML_CDATA, "LineType" + OUString::number(hdo->index));
             }
             padd("svg:stroke-width", sXML_CDATA,
                 Double2Str( WTMM(hdo->property.line_width)) + "mm");
@@ -2112,7 +2097,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             {
                 padd("draw:fill", sXML_CDATA, "bitmap");
                 padd("draw:fill-image-name", sXML_CDATA,
-                    ascii(Int2Str(hdo->index, "fillimage%d", buf)));
+                    "fillimage" + OUString::number(hdo->index));
                                                   // bitmap resizing
                 if( hdo->property.flag >> 3 & 0x01 )
                 {
@@ -2128,7 +2113,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     if( hdo->property.luminance > 0 )
                     {
                         padd("draw:transparency", sXML_CDATA,
-                            ascii(Int2Str(hdo->property.luminance, "%d%%", buf)));
+                            OUString::number(hdo->property.luminance) + "%");
                     }
                 }
 
@@ -2137,18 +2122,15 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
             else if( hdo->property.flag >> 16 & 0x01 )
             {
                 padd("draw:fill", sXML_CDATA, "gradient");
-                padd("draw:fill-gradient-name", sXML_CDATA,
-                    ascii(Int2Str(hdo->index, "Grad%d", buf)));
-                padd("draw:gradient-step-count", sXML_CDATA,
-                    ascii(Int2Str(hdo->property.nstep, "%d", buf)));
+                padd("draw:fill-gradient-name", sXML_CDATA, "Grad" + OUString::number(hdo->index));
+                padd("draw:gradient-step-count", sXML_CDATA, OUString::number(hdo->property.nstep));
 
             }
                                                   // Hatching
             else if( hdo->property.pattern_type >> 24 & 0x01 )
             {
                 padd("draw:fill", sXML_CDATA, "hatch");
-                padd("draw:fill-hatch-name", sXML_CDATA,
-                    ascii(Int2Str(hdo->index, "Hatch%d", buf)));
+                padd("draw:fill-hatch-name", sXML_CDATA, "Hatch" + OUString::number(hdo->index));
                 if( color < 0xffffff )
                 {
                     sprintf( buf, "#%02x%02x%02x",
@@ -2194,8 +2176,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 
 void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
 {
-    padd("style:name", sXML_CDATA,
-        ascii(Int2Str(fstyle->boxnum, "CapBox%d", buf)));
+    padd("style:name", sXML_CDATA, "CapBox" + OUString::number(fstyle->boxnum));
     padd("style:family", sXML_CDATA, "graphics");
     rstartEl("style:style", mxList);
     mxList->clear();
@@ -2271,13 +2252,11 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
     rendEl("style:style");
     if( fstyle->boxtype == 'G' )
     {
-        padd("style:name", sXML_CDATA,
-            ascii(Int2Str(fstyle->boxnum, "G%d", buf)));
+        padd("style:name", sXML_CDATA, "G" + OUString::number(fstyle->boxnum));
     }
     else
     {
-        padd("style:name", sXML_CDATA,
-            ascii(Int2Str(fstyle->boxnum, "Txtbox%d", buf)));
+        padd("style:name", sXML_CDATA, "Txtbox" + OUString::number(fstyle->boxnum));
     }
 
     padd("style:family", sXML_CDATA, "graphics");
@@ -2297,10 +2276,8 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
     if (fstyle->boxtype == 'G' && fstyle->cell)
     {
         char *cell = static_cast<char *>(fstyle->cell);
-        padd("draw:luminance", sXML_CDATA,
-            ascii(Int2Str(cell[0], "%d%%", buf)));
-        padd("draw:contrast", sXML_CDATA,
-            ascii(Int2Str(cell[1], "%d%%", buf)));
+        padd("draw:luminance", sXML_CDATA, OUString::number(cell[0]) + "%");
+        padd("draw:contrast", sXML_CDATA, OUString::number(cell[1]) + "%");
         if( cell[2] == 0 )
             padd("draw:color-mode", sXML_CDATA, "standard");
         else if( cell[2] == 1 )
@@ -2422,18 +2399,15 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         case 'B' :                                // button
         case 'O' :                                // other
         case 'T' :                                // table
-            padd("style:name", sXML_CDATA,
-                ascii(Int2Str(fstyle->boxnum, "Txtbox%d", buf)));
+            padd("style:name", sXML_CDATA, "Txtbox" + OUString::number(fstyle->boxnum));
             padd("style:family", sXML_CDATA, "graphics");
             break;
         case 'G' :                                // graphics
-            padd("style:name", sXML_CDATA,
-                ascii(Int2Str(fstyle->boxnum, "G%d", buf)));
+            padd("style:name", sXML_CDATA, "G" + OUString::number(fstyle->boxnum));
             padd("style:family", sXML_CDATA, "graphics");
             break;
         case 'L' :                                // line TODO : all
-            padd("style:name", sXML_CDATA,
-                ascii(Int2Str(fstyle->boxnum, "L%d", buf)));
+            padd("style:name", sXML_CDATA, "L" + OUString::number(fstyle->boxnum));
             padd( "style:family" , sXML_CDATA , "paragraph" );
             break;
     }
@@ -2646,10 +2620,8 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
              padd("fo:clip", sXML_CDATA, clip);
         }
         char *cell = static_cast<char *>(fstyle->cell);
-        padd("draw:luminance", sXML_CDATA,
-            ascii(Int2Str(cell[0], "%d%%", buf)));
-        padd("draw:contrast", sXML_CDATA,
-            ascii(Int2Str(cell[1], "%d%%", buf)));
+        padd("draw:luminance", sXML_CDATA, OUString::number(cell[0]) + "%");
+        padd("draw:contrast", sXML_CDATA, OUString::number(cell[1]) + "%");
         if( cell[2] == 0 )
             padd("draw:color-mode", sXML_CDATA, "standard");
         else if( cell[2] == 1 )
@@ -2665,15 +2637,15 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
 }
 
 
-char *HwpReader::getTStyleName(int index, char *_buf)
+OUString HwpReader::getTStyleName(int index)
 {
-    return Int2Str(index, "T%d", _buf);
+    return "T" + OUString::number(index);
 }
 
 
-char *HwpReader::getPStyleName(int index, char *_buf)
+OUString HwpReader::getPStyleName(int index)
 {
-    return Int2Str(index, "P%d", _buf);
+    return "P" + OUString::number(index);
 }
 
 
@@ -2697,7 +2669,7 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     if( !bParaStart)
     {
         padd("text:style-name", sXML_CDATA,
-            ascii(getPStyleName(para->GetParaShape().index, buf)));
+            getPStyleName(para->GetParaShape().index));
         rstartEl("text:p", mxList);
         mxList->clear();
     }
@@ -2715,7 +2687,7 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         d->bInHeader = false;
     }
     padd("text:style-name", sXML_CDATA,
-        ascii(getTStyleName(para->cshape->index, buf)));
+        getTStyleName(para->cshape->index));
     rstartEl("text:span", mxList);
     mxList->clear();
 
@@ -2766,7 +2738,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
     if( !bParaStart )
     {
         padd("text:style-name", sXML_CDATA,
-            ascii(getPStyleName(para->GetParaShape().index, buf)));
+            getPStyleName(para->GetParaShape().index));
         rstartEl("text:p", mxList);
         mxList->clear();
     }
@@ -2785,7 +2757,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
         d->bInHeader = false;
     }
     padd("text:style-name", sXML_CDATA,
-        ascii(getTStyleName(curr, buf)));
+        getTStyleName(curr));
     rstartEl("text:span", mxList);
     mxList->clear();
 
@@ -2798,7 +2770,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
             rendEl("text:span");
             curr = para->GetCharShape(n)->index;
             padd("text:style-name", sXML_CDATA,
-                ascii(getTStyleName(curr, buf)));
+                getTStyleName(curr));
             rstartEl("text:span", mxList);
             mxList->clear();
         }
@@ -3209,8 +3181,7 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
     else if( hbox->type[0] == 3 && hbox->type[1] == 2 ) /* creation date */
      {
          if( hbox->m_pDate )
-             padd("style:data-style-name", sXML_CDATA,
-                     ascii(Int2Str(hbox->m_pDate->key, "N%d", buf)));
+             padd("style:data-style-name", sXML_CDATA, "N" + OUString::number(hbox->m_pDate->key));
          rstartEl( "text:creation-date", mxList );
          mxList->clear();
          rchars( fromHcharStringToOUString(hstr2ucsstr(hbox->str2.get())) );
@@ -3251,8 +3222,7 @@ void HwpReader::makeBookmark(Bookmark const * hbox)
 
 void HwpReader::makeDateFormat(DateCode * hbox)
 {
-    padd("style:name", sXML_CDATA,
-        ascii(Int2Str(hbox->key, "N%d", buf)));
+    padd("style:name", sXML_CDATA, "N" + OUString::number(hbox->key));
     padd("style:family", sXML_CDATA,"data-style");
     padd("number:language", sXML_CDATA,"ko");
     padd("number:country", sXML_CDATA,"KR");
@@ -3400,8 +3370,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
 
 void HwpReader::makeDateCode(DateCode * hbox)
 {
-    padd("style:data-style-name", sXML_CDATA,
-        ascii(Int2Str(hbox->key, "N%d", buf)));
+    padd("style:data-style-name", sXML_CDATA, "N" + OUString::number(hbox->key));
     rstartEl( "text:date", mxList );
     mxList->clear();
     hchar_string const boxstr = hbox->GetString();
@@ -3419,10 +3388,8 @@ void HwpReader::makeTab()
 
 void HwpReader::makeTable(TxtBox * hbox)
 {
-    padd("table:name", sXML_CDATA,
-        ascii(Int2Str(hbox->style.boxnum, "Table%d", buf)));
-    padd("table:style-name", sXML_CDATA,
-        ascii(Int2Str(hbox->style.boxnum, "Table%d", buf)));
+    padd("table:name", sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
+    padd("table:style-name", sXML_CDATA, "Table" + OUString::number(hbox->style.boxnum));
     rstartEl("table:table", mxList);
     mxList->clear();
 
@@ -3459,11 +3426,9 @@ void HwpReader::makeTable(TxtBox * hbox)
         sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
         padd("table:style-name", sXML_CDATA, ascii( buf ));
         if( tcell->nColumnSpan > 1 )
-            padd("table:number-columns-spanned", sXML_CDATA,
-                ascii(Int2Str(tcell->nColumnSpan, "%d", buf)));
+            padd("table:number-columns-spanned", sXML_CDATA, OUString::number(tcell->nColumnSpan));
         if( tcell->nRowSpan > 1 )
-            padd("table:number-rows-spanned", sXML_CDATA,
-                ascii(Int2Str(tcell->nRowSpan, "%d", buf)));
+            padd("table:number-rows-spanned", sXML_CDATA, OUString::number(tcell->nRowSpan));
         padd("table:value-type", sXML_CDATA,"string");
         if( tcell->pCell->protect )
             padd("table:protected", sXML_CDATA,"true");
@@ -3487,12 +3452,9 @@ void HwpReader::makeTextBox(TxtBox * hbox)
 {
     if( hbox->style.cap_len > 0  && hbox->type == TXT_TYPE)
     {
-        padd("draw:style-name", sXML_CDATA,
-            ascii(Int2Str(hbox->style.boxnum, "CapBox%d", buf)));
-        padd("draw:name", sXML_CDATA,
-            ascii(Int2Str(hbox->style.boxnum, "CaptionBox%d", buf)));
-        padd("draw:z-index", sXML_CDATA,
-              ascii(Int2Str(hbox->zorder, "%d", buf)));
+        padd("draw:style-name", sXML_CDATA, "CapBox" + OUString::number(hbox->style.boxnum));
+        padd("draw:name", sXML_CDATA, "CaptionBox" + OUString::number(hbox->style.boxnum));
+        padd("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
         switch (hbox->style.anchor_type)
         {
             case CHAR_ANCHOR:
@@ -3505,8 +3467,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             case PAPER_ANCHOR:
             {
                 padd("text:anchor-type", sXML_CDATA, "page");
-                padd("text:anchor-page-number", sXML_CDATA,
-                    ascii(Int2Str(hbox->pgno +1, "%d", buf)));
+                padd("text:anchor-page-number", sXML_CDATA, OUString::number(hbox->pgno + 1));
                 break;
             }
         }
@@ -3532,14 +3493,11 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         mxList->clear();
     }
     else{
-         padd("draw:z-index", sXML_CDATA,
-              ascii(Int2Str(hbox->zorder, "%d", buf)));
+         padd("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
     }
 
-    padd("draw:style-name", sXML_CDATA,
-        ascii(Int2Str(hbox->style.boxnum, "Txtbox%d", buf)));
-    padd("draw:name", sXML_CDATA,
-        ascii(Int2Str(hbox->style.boxnum, "Frame%d", buf)));
+    padd("draw:style-name", sXML_CDATA, "Txtbox" + OUString::number(hbox->style.boxnum));
+    padd("draw:name", sXML_CDATA, "Frame" + OUString::number(hbox->style.boxnum));
 
     if( hbox->style.cap_len <= 0 || hbox->type != TXT_TYPE )
     {
@@ -3557,8 +3515,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             case PAPER_ANCHOR:
             {
                 padd("text:anchor-type", sXML_CDATA, "page");
-                padd("text:anchor-page-number", sXML_CDATA,
-                    ascii(Int2Str(hbox->pgno +1, "%d", buf)));
+                padd("text:anchor-page-number", sXML_CDATA, OUString::number(hbox->pgno + 1));
                 break;
             }
         }
@@ -3742,11 +3699,9 @@ void HwpReader::makePicture(Picture * hbox)
             if( hbox->style.cap_len > 0 )
             {
                 padd("draw:style-name", sXML_CDATA,
-                    ascii(Int2Str(hbox->style.boxnum, "CapBox%d", buf)));
-                padd("draw:name", sXML_CDATA,
-                    ascii(Int2Str(hbox->style.boxnum, "CaptionBox%d", buf)));
-                padd("draw:z-index", sXML_CDATA,
-                    ascii(Int2Str(hbox->zorder, "%d", buf)));
+                    "CapBox" + OUString::number(hbox->style.boxnum));
+                padd("draw:name", sXML_CDATA, "CaptionBox" + OUString::number(hbox->style.boxnum));
+                padd("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
                 switch (hbox->style.anchor_type)
                 {
                     case CHAR_ANCHOR:
@@ -3760,7 +3715,7 @@ void HwpReader::makePicture(Picture * hbox)
                     {
                         padd("text:anchor-type", sXML_CDATA, "page");
                         padd("text:anchor-page-number", sXML_CDATA,
-                            ascii(Int2Str(hbox->pgno +1, "%d", buf)));
+                            OUString::number(hbox->pgno + 1));
                         break;
                     }
                 }
@@ -3804,15 +3759,12 @@ void HwpReader::makePicture(Picture * hbox)
                 rstartEl("draw:a", mxList);
                 mxList->clear();
             }
-            padd("draw:style-name", sXML_CDATA,
-                ascii(Int2Str(hbox->style.boxnum, "G%d", buf)));
-            padd("draw:name", sXML_CDATA,
-                ascii(Int2Str(hbox->style.boxnum, "Image%d", buf)));
+            padd("draw:style-name", sXML_CDATA, "G" + OUString::number(hbox->style.boxnum));
+            padd("draw:name", sXML_CDATA, "Image" + OUString::number(hbox->style.boxnum));
 
             if( hbox->style.cap_len <= 0 )
             {
-                padd("draw:z-index", sXML_CDATA,
-                    ascii(Int2Str(hbox->zorder, "%d", buf)));
+                padd("draw:z-index", sXML_CDATA, OUString::number(hbox->zorder));
                 switch (hbox->style.anchor_type)
                 {
                     case CHAR_ANCHOR:
@@ -3826,7 +3778,7 @@ void HwpReader::makePicture(Picture * hbox)
                     {
                         padd("text:anchor-type", sXML_CDATA, "page");
                         padd("text:anchor-page-number", sXML_CDATA,
-                            ascii(Int2Str(hbox->pgno +1, "%d", buf)));
+                            OUString::number(hbox->pgno + 1));
                         break;
                     }
                 }
@@ -3931,7 +3883,7 @@ void HwpReader::makePicture(Picture * hbox)
         case PICTYPE_DRAW:
               if( hbox->picinfo.picdraw.zorder > 0 )
                  padd("draw:z-index", sXML_CDATA,
-                      ascii(Int2Str( hbox->picinfo.picdraw.zorder + 10000, "%d", buf)));
+                      OUString::number(hbox->picinfo.picdraw.zorder + 10000));
             makePictureDRAW(hbox->picinfo.picdraw.hdo, hbox);
             break;
         case PICTYPE_UNKNOWN:
@@ -3947,8 +3899,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
     while (drawobj)
     {
-        padd("draw:style-name", sXML_CDATA,
-            ascii(Int2Str(drawobj->index, "Draw%d", buf)));
+        padd("draw:style-name", sXML_CDATA, "Draw" + OUString::number(drawobj->index));
         int a = 0;
         int b = 0;
 
@@ -3965,8 +3916,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
             {
                 HWPInfo& hwpinfo = hwpfile.GetHWPInfo();
                 padd("text:anchor-type", sXML_CDATA, "page");
-                padd("text:anchor-page-number", sXML_CDATA,
-                    ascii(Int2Str(hbox->pgno +1, "%d", buf)));
+                padd("text:anchor-page-number", sXML_CDATA, OUString::number(hbox->pgno + 1));
                 a = hwpinfo.paper.left_margin;
                 b = hwpinfo.paper.top_margin + hwpinfo.paper.header_length;
                 break;
@@ -4544,15 +4494,13 @@ void HwpReader::makeFootnote(Footnote * hbox)
 {
     if (hbox->type)
     {
-        padd("text:id", sXML_CDATA,
-            ascii(Int2Str(hbox->number, "edn%d", buf)));
+        padd("text:id", sXML_CDATA, "edn" + OUString::number(hbox->number));
         rstartEl("text:endnote", mxList);
         mxList->clear();
-        padd("text:label", sXML_CDATA,
-            ascii(Int2Str(hbox->number, "%d", buf)));
+        padd("text:label", sXML_CDATA, OUString::number(hbox->number));
         rstartEl("text:endnote-citation", mxList);
         mxList->clear();
-        rchars(ascii(Int2Str(hbox->number, "%d", buf)));
+        rchars(OUString::number(hbox->number));
         rendEl("text:endnote-citation");
         rstartEl("text:endnote-body", mxList);
         parsePara(hbox->plist.front().get());
@@ -4561,15 +4509,13 @@ void HwpReader::makeFootnote(Footnote * hbox)
     }
     else
     {
-        padd("text:id", sXML_CDATA,
-            ascii(Int2Str(hbox->number, "ftn%d", buf)));
+        padd("text:id", sXML_CDATA, "ftn" + OUString::number(hbox->number));
         rstartEl("text:footnote", mxList);
         mxList->clear();
-        padd("text:label", sXML_CDATA,
-            ascii(Int2Str(hbox->number, "%d", buf)));
+        padd("text:label", sXML_CDATA, OUString::number(hbox->number));
         rstartEl("text:footnote-citation", mxList);
         mxList->clear();
-        rchars(ascii(Int2Str(hbox->number, "%d", buf)));
+        rchars(OUString::number(hbox->number));
         rendEl("text:footnote-citation");
         rstartEl("text:footnote-body", mxList);
         parsePara(hbox->plist.front().get());
@@ -4588,7 +4534,7 @@ void HwpReader::makeAutoNum(AutoNum const * hbox)
     {
         case PGNUM_AUTO:
             rstartEl("text:page-number", mxList);
-            rchars(ascii(Int2Str(hbox->number, "%d", buf)));
+            rchars(OUString::number(hbox->number));
             rendEl("text:page-number");
             break;
         case FNNUM_AUTO:
@@ -4597,21 +4543,19 @@ void HwpReader::makeAutoNum(AutoNum const * hbox)
             break;
         case EQUNUM_AUTO:
         case PICNUM_AUTO:
-            padd("text:ref-name",sXML_CDATA,
-                ascii(Int2Str(hbox->number, "refIllustration%d", buf)));
+            padd("text:ref-name",sXML_CDATA, "refIllustration" + OUString::number(hbox->number));
             padd("text:name",sXML_CDATA, "Illustration");
             padd("style:num-format",sXML_CDATA, "1");
             rstartEl("text:sequence", mxList);
-            rchars(ascii(Int2Str(hbox->number, "%d", buf)));
+            rchars(OUString::number(hbox->number));
             rendEl("text:sequence");
             break;
         case TBLNUM_AUTO:
-            padd("text:ref-name",sXML_CDATA,
-                ascii(Int2Str(hbox->number, "refTable%d", buf)));
+            padd("text:ref-name",sXML_CDATA, "refTable" + OUString::number(hbox->number));
             padd("text:name",sXML_CDATA, "Table");
             padd("style:num-format",sXML_CDATA, "1");
             rstartEl("text:sequence", mxList);
-            rchars(ascii(Int2Str(hbox->number, "%d", buf)));
+            rchars(OUString::number(hbox->number));
             rendEl("text:sequence");
             break;
     }
@@ -4636,10 +4580,8 @@ void HwpReader::makeShowPageNum()
             nPos = 3;
     }
 
-    padd("draw:style-name", sXML_CDATA,
-        ascii(Int2Str(nPos, "PNBox%d", buf)));
-    padd("draw:name", sXML_CDATA,
-        ascii(Int2Str(nPos, "PageNumber%d", buf)));
+    padd("draw:style-name", sXML_CDATA, "PNBox" + OUString::number(nPos));
+    padd("draw:name", sXML_CDATA, "PageNumber" + OUString::number(nPos));
     padd("text:anchor-type", sXML_CDATA, "paragraph");
     padd("svg:y", sXML_CDATA, "0cm");
     padd("svg:width", sXML_CDATA, "2.0cm");
@@ -4647,8 +4589,7 @@ void HwpReader::makeShowPageNum()
     rstartEl("draw:text-box", mxList);
     mxList->clear();
 
-    padd("text:style-name", sXML_CDATA,
-        ascii(Int2Str(nPos, "PNPara%d", buf)));
+    padd("text:style-name", sXML_CDATA, "PNPara" + OUString::number(nPos));
     rstartEl("text:p", mxList);
     mxList->clear();
     if( hbox->shape > 2 )
@@ -4699,7 +4640,7 @@ void HwpReader::parsePara(HWPPara * para)
             if( !bParaStart )
             {
                 padd("text:style-name", sXML_CDATA,
-                    ascii(getPStyleName(para->GetParaShape().index, buf)));
+                    getPStyleName(para->GetParaShape().index));
                 rstartEl( "text:p",mxList);
                 mxList->clear();
             }

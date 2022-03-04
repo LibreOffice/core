@@ -60,10 +60,6 @@ DLLEXPORT ::std::string urltounix(const char *src);
 #ifdef _WIN32
 DLLEXPORT ::std::string urltowin(const char *src);
 #endif
-/**
- *  Transfer integer to string following format
- */
-DLLEXPORT char* Int2Str(int value, const char *format, char *buf);
 
 /**
  * color인덱스 값과 음영값을 조합하여 스타오피스의 color로 변환
