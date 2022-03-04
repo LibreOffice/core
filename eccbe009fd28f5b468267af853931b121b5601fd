@@ -22,6 +22,30 @@
       },
       "revId": "eccbe009fd28f5b468267af853931b121b5601fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ba96fbe_db28e59b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-04T08:22:11Z",
+      "side": 1,
+      "message": "Will do; wanted exactly to see your take on this, given that it seems that we had changed some *original* intended guarantee at some point.",
+      "parentUuid": "369008b7_d0da8b09",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 70
+      },
+      "revId": "eccbe009fd28f5b468267af853931b121b5601fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
