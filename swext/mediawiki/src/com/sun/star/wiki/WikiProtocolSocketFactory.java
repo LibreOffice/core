@@ -93,7 +93,7 @@ class WikiProtocolSocketFactory extends SSLSocketFactory
 
         try
         {
-            SSLContext aContext = SSLContext.getInstance("SSL");
+            SSLContext aContext = SSLContext.getInstance("TLSv1.2");
             if ( aContext != null )
             {
                 aContext.init( null, pTrustUnknownCerts, null );
