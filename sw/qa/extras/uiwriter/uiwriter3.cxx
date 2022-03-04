@@ -2476,7 +2476,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf140731)
 
     SwCursorShell* pShell(pDoc->GetEditShell());
 
-    pShell->SelectText(1, 500);
+    pShell->SelectTextModel(1, 500);
 
     dispatchCommand(mxComponent, ".uno:ChangeCaseToTitleCase", {});
     Scheduler::ProcessEventsToIdle();
