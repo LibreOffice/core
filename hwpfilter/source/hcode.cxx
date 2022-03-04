@@ -1237,7 +1237,7 @@ hchar_string kstr2hstr(uchar const* src)
 
 
 /* Convert a combination of a color index value and a shade value to the color value of LibreOffice */
-char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
+OUString hcolor2str(uchar color, uchar shade, bool bIsChar)
 {
     unsigned short red,green,blue;
 
@@ -1289,8 +1289,9 @@ char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
             break;
     }
 
-    sprintf(buf,"#%02x%02x%02x", red, green, blue);
-    return buf;
+    char buf[8];
+    int n = std::max(sprintf(buf, "#%02x%02x%02x", red, green, blue), 0);
+    return OUString::createFromAscii(std::string_view(buf, n));
 }
 
 

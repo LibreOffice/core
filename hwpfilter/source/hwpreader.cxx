@@ -1334,10 +1334,10 @@ void HwpReader::parseCharShape(CharShape const * cshape)
     }
     if (cshape->color[1] != 0)
         padd("fo:color", sXML_CDATA,
-            ascii(hcolor2str(cshape->color[1], 100, buf, true)));
+            hcolor2str(cshape->color[1], 100, true));
     if (cshape->shade != 0)
         padd("style:text-background-color", sXML_CDATA,
-            ascii(hcolor2str(cshape->color[0], cshape->shade, buf)));
+            hcolor2str(cshape->color[0], cshape->shade));
     if (cshape->attr & 0x01)
     {
         padd("fo:font-style", sXML_CDATA, "italic");
@@ -1426,7 +1426,7 @@ void HwpReader::parseParaShape(ParaShape const * pshape)
     if( pshape->shade > 0 )
     {
         padd("fo:background-color", sXML_CDATA,
-            ascii(hcolor2str(0, pshape->shade, buf)));
+            hcolor2str(0, pshape->shade));
     }
 
     if( pshape->pagebreak & 0x02 || pshape->pagebreak & 0x04)
@@ -1974,8 +1974,8 @@ void HwpReader::makeTableStyle(Table *tbl)
         }
         if(cl->shade != 0)
             padd("fo:background-color", sXML_CDATA,
-                ascii(hcolor2str(sal::static_int_cast<uchar>(cl->color),
-                                sal::static_int_cast<uchar>(cl->shade), buf)));
+                hcolor2str(sal::static_int_cast<uchar>(cl->color),
+                                sal::static_int_cast<uchar>(cl->shade)));
 
         rstartEl("style:properties", mxList);
         mxList->clear();
@@ -2368,9 +2368,9 @@ void HwpReader::makeCaptionStyle(FBoxStyle * fstyle)
             }
         }
         if(cell->shade != 0)
-            padd("fo:background-color", sXML_CDATA, ascii(hcolor2str(
+            padd("fo:background-color", sXML_CDATA, hcolor2str(
             sal::static_int_cast<uchar>(cell->color),
-            sal::static_int_cast<uchar>(cell->shade), buf)));
+            sal::static_int_cast<uchar>(cell->shade)));
     }
     rstartEl("style:properties", mxList);
     mxList->clear();
@@ -2592,10 +2592,9 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
         }
         if(cell->shade != 0)
             padd("fo:background-color", sXML_CDATA,
-            ascii(hcolor2str(
+            hcolor2str(
                 sal::static_int_cast<uchar>(cell->color),
-                sal::static_int_cast<uchar>(cell->shade),
-                buf)));
+                sal::static_int_cast<uchar>(cell->shade)));
     }
     else if( fstyle->boxtype == 'E' )
      {
