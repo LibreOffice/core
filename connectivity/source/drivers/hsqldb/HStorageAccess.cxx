@@ -344,7 +344,7 @@ extern "C" SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_Nativ
     Reference< XSeekable> xSeek = pHelper ? pHelper->getSeek() : Reference< XSeekable>();
 
     OSL_ENSURE(xSeek.is(),"No Seekable stream!");
-    if ( !xSeek.is() )
+    if (!xSeek)
         return;
 
 #ifdef HSQLDB_DBG
