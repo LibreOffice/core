@@ -543,7 +543,7 @@ enum
    number has the value. ex) '1.2.1' has '1,2,1'
    style has the value which starts from 1 according to the definition in hbox.h
  */
-hchar_string Outline::GetUnicode() const
+OUString Outline::GetUnicode() const
 {
     const hchar *p;
     hchar buffer[255];
@@ -571,14 +571,14 @@ hchar_string Outline::GetUnicode() const
                     strcat(buf, cur_num_str);
                 }
                 str2hstr(buf, buffer);
-                return hstr2ucsstr(buffer);
+                return hstr2OUString(buffer);
             }
             case OLSTY_NUMSIG1:
             case OLSTY_NUMSIG2:
             case OLSTY_NUMSIG3:
                 {
                 getOutlineNumStr(shape, level, number[level], buffer);
-                return hstr2ucsstr(buffer);
+                return hstr2OUString(buffer);
                 }
             case OLSTY_BULLET1:
             case OLSTY_BULLET2:
@@ -589,7 +589,7 @@ hchar_string Outline::GetUnicode() const
                 p = GetOutlineStyleChars(shape);
                 buffer[0] = p[level];
                 buffer[1] = 0;
-                return hstr2ucsstr(buffer);
+                return hstr2OUString(buffer);
                 }
             case OLSTY_USER:
             case OLSTY_BULUSER:
@@ -676,11 +676,11 @@ hchar_string Outline::GetUnicode() const
                         buffer[l++] = deco[i][1];
                     }
                     buffer[l] = 0;
-                    return hstr2ucsstr(buffer);
+                    return hstr2OUString(buffer);
                 }
         }
     }
-    return hstr2ucsstr(buffer);
+    return hstr2OUString(buffer);
 }
 
 
