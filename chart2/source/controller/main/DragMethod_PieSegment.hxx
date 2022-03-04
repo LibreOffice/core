@@ -36,7 +36,7 @@ public:
     virtual void MoveSdrDrag(const Point& rPnt) override;
     virtual bool EndSdrDrag(bool bCopy) override;
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
 
 protected:
     virtual void createSdrDragEntries() override;

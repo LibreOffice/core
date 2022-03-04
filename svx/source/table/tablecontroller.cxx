@@ -1988,7 +1988,7 @@ void SvxTableController::MergeRange( sal_Int32 nFirstCol, sal_Int32 nFirstRow, s
 }
 
 
-void SvxTableController::checkCell( CellPos& rPos )
+void SvxTableController::checkCell( CellPos& rPos ) const
 {
     if( !mxTable.is() )
         return;

@@ -62,7 +62,7 @@ public:
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual PointerStyle GetSdrDragPointer() const override;
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
 };
 
@@ -87,7 +87,7 @@ public:
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual PointerStyle GetSdrDragPointer() const override;
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
 };
 
@@ -110,7 +110,7 @@ public:
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual PointerStyle GetSdrDragPointer() const override;
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
 };
 

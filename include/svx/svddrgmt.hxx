@@ -206,7 +206,7 @@ public:
         const sdr::contact::ObjectContact& rObjectContact);
     void destroyOverlayGeometry();
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation();
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() const;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget);
     virtual void applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget);
 
@@ -247,7 +247,7 @@ public:
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual PointerStyle GetSdrDragPointer() const override;
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
 };
 
@@ -269,7 +269,7 @@ public:
     virtual bool EndSdrDrag(bool bCopy) override;
     virtual PointerStyle GetSdrDragPointer() const override;
 
-    virtual basegfx::B2DHomMatrix getCurrentTransformation() override;
+    virtual basegfx::B2DHomMatrix getCurrentTransformation() const override;
     virtual void applyCurrentTransformationToSdrObject(SdrObject& rTarget) override;
 };
 
