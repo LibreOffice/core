@@ -34,6 +34,23 @@
       "parentUuid": "c592b943_2b77af22",
       "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d040029_2172f863",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 586,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-03-04T18:10:52Z",
+      "side": 1,
+      "message": "Conditions could be combined to avoid duplication of branches.",
+      "revId": "6e538efa45cd7ba41697109b410d8b40814dc41d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
