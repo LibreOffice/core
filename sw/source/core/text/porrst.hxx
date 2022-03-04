@@ -53,12 +53,17 @@ public:
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
 };
 
+enum class SwLineBreakClear;
+
 class SwBreakPortion : public SwLinePortion
 {
     RedlineType m_eRedline;
 
+    /// Tracks the type of the breaking clear from SwTextLineBreak, if there is one.
+    SwLineBreakClear m_eClear;
+
 public:
-    explicit SwBreakPortion( const SwLinePortion &rPortion );
+    explicit SwBreakPortion(const SwLinePortion& rPortion, const SwTextAttr* pAttr);
     // Returns 0 if we have no usable data
     virtual SwLinePortion *Compress() override;
     virtual void Paint( const SwTextPaintInfo &rInf ) const override;
@@ -71,6 +76,8 @@ public:
 
     static constexpr OUStringLiteral S_NOBREAK_FOR_REDLINE = u"\u00A0";
     void SetRedline( const RedlineType eRedline ) { m_eRedline = eRedline; }
+
+    SwLineBreakClear GetClear() const;
 };
 
 class SwKernPortion : public SwLinePortion
