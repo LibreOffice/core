@@ -20,9 +20,13 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
 #define INCLUDED_HWPFILTER_SOURCE_HWPREADER_HXX
 
+#include <sal/config.h>
+
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
+
+#include <rtl/ustring.hxx>
 #include <sal/alloca.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -146,8 +150,8 @@ private:
     void makeTableStyle(Table *);
     void parseCharShape(CharShape const *);
     void parseParaShape(ParaShape const *);
-    static char* getTStyleName(int, char *);
-    static char* getPStyleName(int, char *);
+    static OUString getTStyleName(int);
+    static OUString getPStyleName(int);
 };
 
 

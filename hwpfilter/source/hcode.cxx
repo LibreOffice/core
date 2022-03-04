@@ -1236,16 +1236,6 @@ hchar_string kstr2hstr(uchar const* src)
 }
 
 
-/**
- * Transfer integer to string following format
- */
-char* Int2Str(int value, const char *format, char *buf)
-{
-    sprintf(buf,format,value);
-    return buf;
-}
-
-
 /* Convert a combination of a color index value and a shade value to the color value of LibreOffice */
 char *hcolor2str(uchar color, uchar shade, char *buf, bool bIsChar)
 {
