@@ -289,7 +289,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                         if(SID_REGENERATE_DIAGRAM == nSlotId)
                         {
                             pView->UnmarkAll();
-                            pAnchorObj->getDiagramHelper()->reLayout();
+                            pAnchorObj->getDiagramHelper()->reLayout(*pAnchorObj);
                             pView->MarkObj(pObj, pView->GetSdrPageView());
                         }
                         else // SID_EDIT_DIAGRAM

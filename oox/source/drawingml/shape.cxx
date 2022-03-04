@@ -191,7 +191,6 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mnDataNodeType(pSourceShape->mnDataNodeType)
 , mfAspectRatio(pSourceShape->mfAspectRatio)
 , mbUseBgFill(pSourceShape->mbUseBgFill)
-, maDiagramFontHeights(pSourceShape->maDiagramFontHeights)
 , mpDiagramHelper( nullptr )
 {}
 
@@ -209,7 +208,7 @@ void Shape::prepareDiagramHelper(
     // Prepare Diagam data collecting for this Shape
     if( nullptr == mpDiagramHelper && FRAMETYPE_DIAGRAM == meFrameType )
     {
-        mpDiagramHelper = new AdvancedDiagramHelper(rDiagramPtr, rTheme);
+        mpDiagramHelper = new AdvancedDiagramHelper(rDiagramPtr, rTheme, *this);
     }
 }
 
@@ -258,9 +257,6 @@ void Shape::migrateDiagramHelperToNewShape(ShapePtr& pTarget)
         delete pTarget->mpDiagramHelper;
         pTarget->mpDiagramHelper = nullptr;
     }
-
-    // DiagramHelper has references to this, these need to be replaced
-    static_cast<AdvancedDiagramHelper*>(mpDiagramHelper)->newTargetShape(pTarget);
 
     // exchange and reset to nullptr
     pTarget->mpDiagramHelper = mpDiagramHelper;
@@ -1854,44 +1850,6 @@ void Shape::keepDiagramCompatibilityInfo()
     catch( const Exception& )
     {
         TOOLS_WARN_EXCEPTION( "oox.drawingml", "Shape::keepDiagramCompatibilityInfo" );
-    }
-}
-
-void Shape::syncDiagramFontHeights()
-{
-    // Each name represents a group of shapes, for which the font height should have the same
-    // scaling.
-    for (const auto& rNameAndPairs : maDiagramFontHeights)
-    {
-        // Find out the minimum scale within this group.
-        const ShapePairs& rShapePairs = rNameAndPairs.second;
-        sal_Int16 nMinScale = 100;
-        for (const auto& rShapePair : rShapePairs)
-        {
-            uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
-            if (xPropertySet.is())
-            {
-                sal_Int16 nTextFitToSizeScale = 0;
-                xPropertySet->getPropertyValue("TextFitToSizeScale") >>= nTextFitToSizeScale;
-                if (nTextFitToSizeScale > 0 && nTextFitToSizeScale < nMinScale)
-                {
-                    nMinScale = nTextFitToSizeScale;
-                }
-            }
-        }
-
-        // Set that minimum scale for all members of the group.
-        if (nMinScale < 100)
-        {
-            for (const auto& rShapePair : rShapePairs)
-            {
-                uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
-                if (xPropertySet.is())
-                {
-                    xPropertySet->setPropertyValue("TextFitToSizeScale", uno::makeAny(nMinScale));
-                }
-            }
-        }
     }
 }
 

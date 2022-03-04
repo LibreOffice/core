@@ -461,7 +461,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                         if(SID_REGENERATE_DIAGRAM == nSlotId)
                         {
                             pSdrView->UnmarkAll();
-                            pAnchorObj->getDiagramHelper()->reLayout();
+                            pAnchorObj->getDiagramHelper()->reLayout(*pAnchorObj);
                             pSdrView->MarkObj(pObj, pSdrView->GetSdrPageView());
                         }
                         else // SID_EDIT_DIAGRAM

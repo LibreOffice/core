@@ -23,6 +23,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <oox/shape/ShapeFilterBase.hxx>
 #include <oox/ppt/pptimport.hxx>
+#include <drawingml/fillproperties.hxx>
 #include <svx/svdmodel.hxx>
 #include <comphelper/processfactory.hxx>
 
@@ -37,10 +38,13 @@ bool AdvancedDiagramHelper::hasDiagramData() const
 
 AdvancedDiagramHelper::AdvancedDiagramHelper(
     const std::shared_ptr< Diagram >& rDiagramPtr,
-    const std::shared_ptr<::oox::drawingml::Theme>& rTheme)
+    const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
+    Shape& rSourceShape)
 : IDiagramHelper()
 , mpDiagramPtr(rDiagramPtr)
 , mpThemePtr(rTheme)
+, maImportSize(rSourceShape.getSize())
+, maImportPosition(rSourceShape.getPosition())
 {
 }
 
@@ -48,39 +52,32 @@ AdvancedDiagramHelper::~AdvancedDiagramHelper()
 {
 }
 
-void AdvancedDiagramHelper::reLayout()
+void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
 {
     if(!mpDiagramPtr)
     {
         return;
     }
 
-    // Get the oox::Shape that represents the Diagram GraphicObject
-    const ShapePtr & pParentShape = mpDiagramPtr->getShape();
-
-    if(!pParentShape)
-    {
-        return;
-    }
-
-    // Remove it's children which represent the oox::Shapes created by
-    // the layout process as preparation to re-creation. These should
-    // already be cleared, but make sure.
-    pParentShape->getChildren().clear();
-
-    // Re-create the oox::Shapes for the diagram content
-    mpDiagramPtr->addTo(pParentShape);
-
-    // Access the GroupObject representing the SmartArt in DrawingLayer
-    SdrObjGroup* pAnchorObj(dynamic_cast<SdrObjGroup*>(SdrObject::getSdrObjectFromXShape(pParentShape->getXShape())));
-
     // Rescue/remember geometric transformation of existing Diagram
     basegfx::B2DHomMatrix aTransformation;
     basegfx::B2DPolyPolygon aPolyPolygon;
-    pAnchorObj->TRGetBaseGeometry(aTransformation, aPolyPolygon);
+    rTarget.TRGetBaseGeometry(aTransformation, aPolyPolygon);
+
+    // create temporary oox::Shape as target. No longer needed is to keep/remember
+    // the original oox::Shape to do that. Use original Size and Pos frrom initial import
+    // to get the same layout(s)
+    oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
+    pShapePtr->setDiagramType();
+    pShapePtr->setSize(maImportSize);
+    pShapePtr->setPosition(maImportPosition);
+    pShapePtr->getFillProperties() = *mpDiagramPtr->getData()->getFillProperties();
+
+    // Re-create the oox::Shapes for the diagram content
+    mpDiagramPtr->addTo(pShapePtr);
 
     // Delete all existing shapes in that group to prepare re-creation
-    pAnchorObj->getChildrenOfSdrObject()->ClearSdrObjList();
+    rTarget.getChildrenOfSdrObject()->ClearSdrObjList();
 
     // For re-creation we need to use ::addShape functionality from the
     // oox import filter since currently Shape import is very tightly
@@ -100,7 +97,7 @@ void AdvancedDiagramHelper::reLayout()
     // NOTE: The incarnation of import filter (ShapeFilterBase) is only
     //       used for XShape creation, no xml snippets/data gets imported
     //       here. XShape creation may be isolated in the future.
-    SdrModel& rModel(pAnchorObj->getSdrModelFromSdrObject());
+    SdrModel& rModel(rTarget.getSdrModelFromSdrObject());
     uno::Reference< uno::XInterface > const & rUnoModel(rModel.getUnoModel());
     css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     rtl::Reference<oox::shape::ShapeFilterBase> xFilter(new oox::shape::ShapeFilterBase(xContext));
@@ -108,10 +105,13 @@ void AdvancedDiagramHelper::reLayout()
     css::uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
     xFilter->setTargetDocument(aComponentModel);
 
-    // Prepare the target for the to-be-created XShapes
-    uno::Reference<drawing::XShapes> xShapes(pParentShape->getXShape(), uno::UNO_QUERY_THROW);
+    // set DiagramFontHeights
+    xFilter->setDiagramFontHeights(&mpDiagramPtr->getDiagramFontHeights());
 
-    for (auto const& child : pParentShape->getChildren())
+    // Prepare the target for the to-be-created XShapes
+    uno::Reference<drawing::XShapes> xShapes(rTarget.getUnoShape(), uno::UNO_QUERY_THROW);
+
+    for (auto const& child : pShapePtr->getChildren())
     {
         // Create all sub-shapes. This will recursively create needed geometry using
         // filter-internal ::createShapes
@@ -120,17 +120,14 @@ void AdvancedDiagramHelper::reLayout()
             xFilter->getCurrentTheme(),
             xShapes,
             aTransformation,
-            pParentShape->getFillProperties());
+            pShapePtr->getFillProperties());
     }
 
     // Re-apply remembered geometry
-    pAnchorObj->TRSetBaseGeometry(aTransformation, aPolyPolygon);
+    rTarget.TRSetBaseGeometry(aTransformation, aPolyPolygon);
 
-    // Delete oox::Shapes that represented the content of the
-    // diagram. These were needed for creating the XShapes/SdrObjects
-    // (created by ::addTo above) but are no longer needed, so free
-    // the memory
-    pParentShape->getChildren().clear();
+    // sync FontHeights
+    mpDiagramPtr->syncDiagramFontHeights();
 }
 
 OUString AdvancedDiagramHelper::getString() const
@@ -180,26 +177,9 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
         return;
     }
 
-    const ShapePtr& pParentShape(mpDiagramPtr->getShape());
-
-    if(pParentShape)
-    {
-        // The oox::Shapes children are not needed for holding the original data,
-        // free that memory
-        pParentShape->getChildren().clear();
-    }
+    mpDiagramPtr->syncDiagramFontHeights();
 
     anchorToSdrObjGroup(rTarget);
-}
-
-void AdvancedDiagramHelper::newTargetShape(ShapePtr& pTarget)
-{
-    if(!mpDiagramPtr)
-    {
-        return;
-    }
-
-    mpDiagramPtr->newTargetShape(pTarget);
 }
 
 }
