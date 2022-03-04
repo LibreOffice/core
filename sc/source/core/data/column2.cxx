@@ -1290,14 +1290,6 @@ bool ScColumn::HasVisibleDataAt(SCROW nRow) const
     return it->type != sc::element_type_empty;
 }
 
-bool ScColumn::IsEmptyAttr() const
-{
-    if (pAttrArray)
-        return pAttrArray->IsEmpty();
-    else
-        return true;
-}
-
 bool ScColumn::IsEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
 {
     std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nStartRow);
@@ -3201,51 +3193,6 @@ void ScColumn::GetDataExtrasAt( SCROW nRow, ScDataAreaExtras& rDataAreaExtras ) 
     }
 }
 
-bool ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
-{
-    if (pAttrArray && rCol.pAttrArray)
-        return pAttrArray->IsAllEqual( *rCol.pAttrArray, nStartRow, nEndRow );
-    else
-        return !pAttrArray && !rCol.pAttrArray;
-}
-
-bool ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
-{
-    if (pAttrArray && rCol.pAttrArray)
-        return pAttrArray->IsVisibleEqual( *rCol.pAttrArray, nStartRow, nEndRow );
-    else
-        return !pAttrArray && !rCol.pAttrArray;
-}
-
-bool ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
-{
-    if (pAttrArray)
-        return pAttrArray->GetFirstVisibleAttr( rFirstRow );
-    else
-        return false;
-}
-
-bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
-{
-    if (pAttrArray)
-    {
-        // row of last cell is needed
-        SCROW nLastData = GetLastDataPos();    // always including notes, 0 if none
-
-        return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
-    }
-    else
-        return false;
-}
-
-bool ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
-{
-    if (pAttrArray)
-        return pAttrArray->HasVisibleAttrIn( nStartRow, nEndRow );
-    else
-        return false;
-}
-
 namespace {
 
 class FindUsedRowsHandler
@@ -3636,21 +3583,6 @@ sal_uInt64 ScColumn::GetCodeCount() const
     CodeCounter aFunc;
     sc::ParseFormula(maCells, aFunc);
     return aFunc.getCount();
-}
-
-SCSIZE ScColumn::GetPatternCount() const
-{
-    return pAttrArray ? pAttrArray->Count() : 0;
-}
-
-SCSIZE ScColumn::GetPatternCount( SCROW nRow1, SCROW nRow2 ) const
-{
-    return pAttrArray ? pAttrArray->Count( nRow1, nRow2 ) : 0;
-}
-
-bool ScColumn::ReservePatternCount( SCSIZE nReserve )
-{
-    return pAttrArray && pAttrArray->Reserve( nReserve );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

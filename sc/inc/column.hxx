@@ -817,4 +817,167 @@ private:
     void SetNeedsListeningGroup( SCROW nRow );
 };
 
+inline bool ScColumn::IsEmptyAttr() const
+{
+    return pAttrArray->IsEmpty();
+}
+
+inline bool ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
+{
+    return pAttrArray->IsAllEqual( *rCol.pAttrArray, nStartRow, nEndRow );
+}
+
+inline bool ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
+{
+    return pAttrArray->IsVisibleEqual( *rCol.pAttrArray, nStartRow, nEndRow );
+}
+
+inline bool ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
+{
+    return pAttrArray->GetFirstVisibleAttr( rFirstRow );
+}
+
+inline bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
+{
+    // row of last cell is needed
+    SCROW nLastData = GetLastDataPos();    // always including notes, 0 if none
+    return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
+}
+
+inline bool ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
+{
+    return pAttrArray->HasVisibleAttrIn( nStartRow, nEndRow );
+}
+
+inline SCSIZE ScColumn::GetPatternCount() const
+{
+    return pAttrArray ? pAttrArray->Count() : 0;
+}
+
+inline SCSIZE ScColumn::GetPatternCount( SCROW nRow1, SCROW nRow2 ) const
+{
+    return pAttrArray ? pAttrArray->Count( nRow1, nRow2 ) : 0;
+}
+
+inline bool ScColumn::ReservePatternCount( SCSIZE nReserve )
+{
+    return pAttrArray && pAttrArray->Reserve( nReserve );
+}
+
+inline bool ScColumn::IsMerged( SCROW nRow ) const
+{
+    return pAttrArray->IsMerged(nRow);
+}
+
+inline SCROW ScColumnData::GetNextUnprotected( SCROW nRow, bool bUp ) const
+{
+    return pAttrArray->GetNextUnprotected(nRow, bUp);
+}
+
+inline bool ScColumnData::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const
+{
+    return pAttrArray->HasAttrib( nRow1, nRow2, nMask );
+}
+
+inline bool ScColumn::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
+                            SCCOL& rPaintCol, SCROW& rPaintRow,
+                            bool bRefresh )
+{
+    return pAttrArray->ExtendMerge( nThisCol, nStartRow, nEndRow, rPaintCol, rPaintRow, bRefresh );
+}
+
+inline void ScColumnData::MergePatternArea( ScMergePatternState& rState, SCROW nRow1, SCROW nRow2, bool bDeep ) const
+{
+    pAttrArray->MergePatternArea( nRow1, nRow2, rState, bDeep );
+}
+
+inline void ScColumn::MergeBlockFrame( SvxBoxItem* pLineOuter, SvxBoxInfoItem* pLineInner,
+                            ScLineFlags& rFlags,
+                            SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight ) const
+{
+    pAttrArray->MergeBlockFrame( pLineOuter, pLineInner, rFlags, nStartRow, nEndRow, bLeft, nDistRight );
+}
+
+inline void ScColumn::ApplyBlockFrame(const SvxBoxItem& rLineOuter, const SvxBoxInfoItem* pLineInner,
+                               SCROW nStartRow, SCROW nEndRow, bool bLeft, SCCOL nDistRight)
+{
+    pAttrArray->ApplyBlockFrame(rLineOuter, pLineInner, nStartRow, nEndRow, bLeft, nDistRight);
+}
+
+inline const ScPatternAttr* ScColumnData::GetPattern( SCROW nRow ) const
+{
+    return pAttrArray->GetPattern( nRow );
+}
+
+inline const SfxPoolItem& ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
+{
+    return pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
+}
+
+inline sal_uInt32 ScColumnData::GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const
+{
+    return pAttrArray->GetPattern( nRow )->GetNumberFormat( rContext.GetFormatTable() );
+}
+
+inline void ScColumn::AddCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+{
+    pAttrArray->AddCondFormat( nStartRow, nEndRow, nIndex );
+}
+
+inline void ScColumn::RemoveCondFormat( SCROW nStartRow, SCROW nEndRow, sal_uInt32 nIndex )
+{
+    pAttrArray->RemoveCondFormat( nStartRow, nEndRow, nIndex );
+}
+
+inline void ScColumnData::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle )
+{
+    pAttrArray->ApplyStyleArea(nStartRow, nEndRow, rStyle);
+}
+
+inline const ScStyleSheet* ScColumnData::GetStyle( SCROW nRow ) const
+{
+    return pAttrArray->GetPattern( nRow )->GetStyleSheet();
+}
+
+inline void ScColumn::FindStyleSheet( const SfxStyleSheetBase* pStyleSheet, ScFlatBoolRowSegments& rUsedRows, bool bReset )
+{
+    pAttrArray->FindStyleSheet( pStyleSheet, rUsedRows, bReset );
+}
+
+inline bool ScColumn::IsStyleSheetUsed( const ScStyleSheet& rStyle ) const
+{
+    return pAttrArray->IsStyleSheetUsed( rStyle );
+}
+
+inline bool ScColumn::ApplyFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
+{
+    return pAttrArray->ApplyFlags( nStartRow, nEndRow, nFlags );
+}
+
+inline bool ScColumn::RemoveFlags( SCROW nStartRow, SCROW nEndRow, ScMF nFlags )
+{
+    return pAttrArray->RemoveFlags( nStartRow, nEndRow, nFlags );
+}
+
+inline void ScColumn::ClearItems( SCROW nStartRow, SCROW nEndRow, const sal_uInt16* pWhich )
+{
+    pAttrArray->ClearItems( nStartRow, nEndRow, pWhich );
+}
+
+inline const ScPatternAttr* ScColumn::SetPattern( SCROW nRow, std::unique_ptr<ScPatternAttr> pPatAttr )
+{
+    return pAttrArray->SetPattern( nRow, std::move(pPatAttr), true/*bPutToPool*/ );
+}
+
+inline void ScColumn::SetPattern( SCROW nRow, const ScPatternAttr& rPatAttr )
+{
+    pAttrArray->SetPattern( nRow, &rPatAttr, true/*bPutToPool*/ );
+}
+
+inline void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
+                                const ScPatternAttr& rPatAttr )
+{
+    pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, true/*bPutToPool*/ );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
