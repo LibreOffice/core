@@ -31,12 +31,13 @@ struct ScSheetLimits final : public salhelper::SimpleReferenceObject
 
     ScSheetLimits(SCCOL nMaxCol, SCROW nMaxRow)
         : mnMaxCol(nMaxCol)
-        , mnMaxRow(nMaxRow){}
-
-              [[nodiscard]] bool ValidCol(SCCOL nCol) const
+        , mnMaxRow(nMaxRow)
     {
-        return ::ValidCol(nCol, mnMaxCol);
     }
+
+    SC_DLLPUBLIC static ScSheetLimits CreateDefault();
+
+    [[nodiscard]] bool ValidCol(SCCOL nCol) const { return ::ValidCol(nCol, mnMaxCol); }
     [[nodiscard]] bool ValidRow(SCROW nRow) const { return ::ValidRow(nRow, mnMaxRow); }
     [[nodiscard]] bool ValidColRow(SCCOL nCol, SCROW nRow) const
     {

@@ -21,6 +21,7 @@
 
 #include "global.hxx"
 #include "attrib.hxx"
+#include "document.hxx"
 #include "patattr.hxx"
 
 #include <algorithm>
