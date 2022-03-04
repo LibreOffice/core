@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc51bad6_bc365b72",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3297,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-03-04T18:07:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "331d1690_82597fec",
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ebbde99_069e6b95",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "\"manage to do the rel-\u003eabs conversion on more things\":  but which is not the main concern here, at least for the motivating \u003chttp://user:password@domain\u003e already-absolute URI issue from tdf#143216\n\n\"manage to store more url-like things\":  which, as I argued, is irrelevant here as those don\u0027t survive the surrounding INetURLObject aNewURL constructor, anyway\n\nthus, I think the comment causes more confusion than clarification, and I would just remove it completely",
       "parentUuid": "e7d86d8a_e6418676",
+      "revId": "1e71693a3389024ba36117da3f677f6413194809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f96c00a_ac279289",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 3298,
+      "author": {
+        "id": 1002778
+      },
+      "writtenOn": "2022-03-04T18:07:02Z",
+      "side": 1,
+      "message": "OK, it\u0027s gone.",
+      "parentUuid": "3a6f652f_c0dbeab2",
       "revId": "1e71693a3389024ba36117da3f677f6413194809",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
