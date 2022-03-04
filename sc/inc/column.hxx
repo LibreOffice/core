@@ -281,8 +281,7 @@ public:
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     bool    GetLastVisibleAttr( SCROW& rLastRow ) const;
     bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
-    bool    IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow = 0,
-                                    SCROW nEndRow = MAXROW ) const;
+    bool    IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const;
     bool    IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const;
 
     bool    TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
