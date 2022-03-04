@@ -6421,9 +6421,7 @@ OUString SwEditWin::GetSurroundingText() const
     {
         bool bUnLockView = !rSh.IsViewLocked();
         rSh.LockView(true);
-
-        SwPosition *pPos = rSh.GetCursor()->GetPoint();
-        const sal_Int32 nPos = pPos->nContent.GetIndex();
+        rSh.Push();
 
         // get the sentence around the cursor
         rSh.HideCursor();
@@ -6432,8 +6430,7 @@ OUString SwEditWin::GetSurroundingText() const
         rSh.GoEndSentence();
         rSh.GetSelectedText( sReturn, ParaBreakType::ToOnlyCR  );
 
-        pPos->nContent = nPos;
-        rSh.ClearMark();
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         rSh.HideCursor();
 
         if (bUnLockView)
@@ -6465,13 +6462,13 @@ Selection SwEditWin::GetSurroundingTextSelection() const
         // around the visible cursor.
         SwPosition *pPos = rSh.GetCursor()->GetPoint();
         const sal_Int32 nPos = pPos->nContent.GetIndex();
+        rSh.Push();
 
         rSh.HideCursor();
         rSh.GoStartSentence();
         const sal_Int32 nStartPos = rSh.GetCursor()->GetPoint()->nContent.GetIndex();
 
-        pPos->nContent = nPos;
-        rSh.ClearMark();
+        rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
         rSh.ShowCursor();
 
         if (bUnLockView)
@@ -6493,14 +6490,11 @@ bool SwEditWin::DeleteSurroundingText(const Selection& rSelection)
 
     // rSelection is relative to the start of the sentence, so find that and
     // adjust the range by it
-    SwPosition *pPos = rSh.GetCursor()->GetPoint();
-    const sal_Int32 nPos = pPos->nContent.GetIndex();
-
+    rSh.Push();
     rSh.HideCursor();
     rSh.GoStartSentence();
     const sal_Int32 nStartPos = rSh.GetCursor()->GetPoint()->nContent.GetIndex();
-    pPos->nContent = nPos;
-    rSh.ClearMark();
+    rSh.Pop(SwCursorShell::PopMode::DeleteCurrent);
     rSh.ShowCursor();
 
     if (rSh.SelectText(nStartPos + rSelection.Min(), nStartPos + rSelection.Max()))
