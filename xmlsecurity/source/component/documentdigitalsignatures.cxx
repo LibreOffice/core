@@ -19,9 +19,10 @@
 
 #include <resourcemanager.hxx>
 
-#include <digitalsignaturesdialog.hxx>
+#include <certificate.hxx>
 #include <certificatechooser.hxx>
 #include <certificateviewer.hxx>
+#include <digitalsignaturesdialog.hxx>
 #include <macrosecurity.hxx>
 #include <biginteger.hxx>
 #include <strings.hrc>
@@ -683,6 +684,12 @@ sal_Bool DocumentDigitalSignatures::isAuthorTrusted(
             if (!aSignatureManager.init())
                 return false;
             uno::Reference<css::security::XCertificate> xCert = aSignatureManager.getSecurityEnvironment()->createCertificateFromAscii(rAuthor.RawData);
+
+            auto pAuthor = dynamic_cast<xmlsecurity::Certificate*>(xAuthor.get());
+            auto pCert = dynamic_cast<xmlsecurity::Certificate*>(xCert.get());
+            if (pAuthor && pCert)
+                return pCert->getSHA256Thumbprint() == pAuthor->getSHA256Thumbprint();
+
             return xCert->getSHA1Thumbprint() == xAuthor->getSHA1Thumbprint();
         });
 }
