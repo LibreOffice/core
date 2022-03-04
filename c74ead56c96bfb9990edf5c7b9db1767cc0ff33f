@@ -33,6 +33,24 @@
       "message": "Please format this comment block:\n\n1. Split lines shorter, so that the last character does not extend past position 100;\n2. Make it a single comment (either by using *one single* pair of /* .. */ around the whole block, or by using //-style comments, instead of the three comments).\n3. Let\u0027s clarify this sentence:\n\n  Because, in windows file system, paths are case-sensitive\n\nIt may be confusing. There is a case-preservation, that is always active (names are stored on storage preserving the case used on creation); there is case sensitivity on the filesystem (and kernel) level; there is an *option* to use case sensitivity on Win32 subsystem level. What is relevant *here* is that the paths are compared case-sensitively *in LibreOffice code*, which provides robustness and uniformity, but requires that we use correct and *consistent* case for all parts of paths, *including* drive letters, which happens to not be processed by GetLongPathNameW. So I suggest something like:\n\n  Windows file paths are processed case-sensitively\n\n4. Please drop the \"previously our built-in getCaseCorrectPath covered this case\" - it will not help a reader in the future to know that at some point it was different: what is important is to describe why it is so now.",
       "revId": "c74ead56c96bfb9990edf5c7b9db1767cc0ff33f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "845558c5_82b38f7d",
+        "filename": "sal/osl/w32/file_dirvol.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1603,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-04T16:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d3a613e_d08c64e7",
+      "revId": "c74ead56c96bfb9990edf5c7b9db1767cc0ff33f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
