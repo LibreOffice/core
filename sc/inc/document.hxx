@@ -1908,7 +1908,7 @@ public:
     SC_DLLPUBLIC sal_uInt16         GetColWidth( SCCOL nCol, SCTAB nTab, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC tools::Long        GetColWidth( SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab ) const;
     SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
-    SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow ) const;
+    SC_DLLPUBLIC sal_uInt16         GetRowHeight( SCROW nRow, SCTAB nTab, SCROW* pStartRow, SCROW* pEndRow, bool bHiddenAsZero = true ) const;
     SC_DLLPUBLIC tools::Long        GetRowHeight( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bHiddenAsZero = true ) const;
 
     /**
