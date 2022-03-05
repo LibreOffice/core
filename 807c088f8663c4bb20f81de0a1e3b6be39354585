@@ -89,6 +89,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c5bb941_83d4bf85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8add1fcf_11d5836c",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d533bc6_2eadcda9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8add1fcf_11d5836c",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fc498fa_e7a931e0",
@@ -102,6 +138,24 @@
       "writtenOn": "2022-03-01T09:26:17Z",
       "side": 1,
       "message": "#include \u003cmutex\u003e should arguably be left in here for the uses of std::scoped_lock (but YMMV regarding assumptions about what functionality becomes implicitly available through files included here)",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8e697ac_862c2543",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4fc498fa_e7a931e0",
       "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -159,6 +213,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37163422_605589a6",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfdc10e6_57036ead",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73da3278_b7d390f4",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfdc10e6_57036ead",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb55a589_78fb0e6d",
@@ -176,6 +266,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a433c25_c2f9b08d",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb55a589_78fb0e6d",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff03da78_324c00b5",
@@ -189,6 +297,24 @@
       "writtenOn": "2022-03-01T09:26:17Z",
       "side": 1,
       "message": "this doesn\u0027t make sense, either the catch block can never be reached (\u003d\u003e assert(false)), or it can (\u003d\u003e SAL_WARN), but not both",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4ff860e_f08cbb4a",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff03da78_324c00b5",
       "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -216,6 +342,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6008b9b6_d167e6b4",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "34aa5279_164ae587",
+      "range": {
+        "startLine": 212,
+        "startChar": 7,
+        "endLine": 212,
+        "endChar": 21
+      },
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fa15f2f8_36c72546",
@@ -229,6 +379,24 @@
       "writtenOn": "2022-03-01T09:26:17Z",
       "side": 1,
       "message": "please keep this block of includes sorted lexicographically",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d8e1163_fa8b47a6",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa15f2f8_36c72546",
       "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -250,6 +418,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab277921_62880e5a",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da2a26ab_31756317",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79844711_dc32cb4d",
@@ -267,6 +453,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "926749a8_995c0f23",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "\u003e * instead of mutable, make the relevant ConfigurationWrapper functions non-const?\n\nThe function is semantically const. It\u0027s common for caches to be mutable in const functions. But I can move them back to globals (as much as I find it ironic to prefer poorly namespaced global variables in the name of \"better\" design).",
+      "parentUuid": "79844711_dc32cb4d",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b311f4f4_7cc0e077",
@@ -280,6 +484,24 @@
       "writtenOn": "2022-03-01T09:26:17Z",
       "side": 1,
       "message": "please keep this list sorted lexicographically",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c9bf68_6630e970",
+        "filename": "officecfg/CppunitTest_officecfg_cppheader_test.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T11:16:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b311f4f4_7cc0e077",
       "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
