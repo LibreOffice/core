@@ -1663,7 +1663,12 @@ void Polygon::ImplRead( SvStream& rIStream )
     if ( bHasPolyFlags )
     {
         mpImplPolygon->mxFlagAry.reset(new PolyFlags[mpImplPolygon->mnPoints]);
-        rIStream.ReadBytes(mpImplPolygon->mxFlagAry.get(), mpImplPolygon->mnPoints);
+        auto nRead = rIStream.ReadBytes(mpImplPolygon->mxFlagAry.get(), mpImplPolygon->mnPoints);
+        if (nRead != mpImplPolygon->mnPoints)
+        {
+            SAL_WARN("tools", "Short read");
+            memset(mpImplPolygon->mxFlagAry.get() + nRead, 0, mpImplPolygon->mnPoints - nRead);
+        }
     }
 }
 
