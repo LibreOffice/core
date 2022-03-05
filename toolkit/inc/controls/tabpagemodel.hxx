@@ -58,7 +58,7 @@ public:
 
     UnoControlTabPage( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoControlTabPage() override;
-    OUString             GetComponentServiceName() override;
+    OUString             GetComponentServiceName() const override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

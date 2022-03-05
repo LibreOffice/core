@@ -103,7 +103,7 @@ namespace toolkit
     {
     }
 
-    OUString UnoScrollBarControl::GetComponentServiceName()
+    OUString UnoScrollBarControl::GetComponentServiceName() const
     {
         return "ScrollBar";
     }

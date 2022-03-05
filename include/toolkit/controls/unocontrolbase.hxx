@@ -38,7 +38,7 @@ protected:
     bool                    ImplHasProperty( const OUString& aPropertyName );
     void                        ImplSetPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, bool bUpdateThis );
     void                        ImplSetPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, bool bUpdateThis );
-    css::uno::Any  ImplGetPropertyValue( const OUString& aPropertyName );
+    css::uno::Any  ImplGetPropertyValue( const OUString& aPropertyName ) const;
 
     template <typename T> T ImplGetPropertyValuePOD( sal_uInt16 nProp );
     template <typename T> T ImplGetPropertyValueClass( sal_uInt16 nProp );

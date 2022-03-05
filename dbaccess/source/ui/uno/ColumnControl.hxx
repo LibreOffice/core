@@ -33,7 +33,7 @@ namespace dbaui
         explicit OColumnControl(const css::uno::Reference< css::uno::XComponentContext>& rxContext);
 
         // UnoControl
-        virtual OUString GetComponentServiceName() override;
+        virtual OUString GetComponentServiceName() const override;
 
         // XServiceInfo
         DECLARE_SERVICE_INFO();

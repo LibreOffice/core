@@ -65,7 +65,7 @@ namespace toolkit
 
     public:
                                     UnoScrollBarControl();
-        OUString             GetComponentServiceName() override;
+        OUString             GetComponentServiceName() const override;
 
         css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return UnoControlBase::queryInterface(rType); }
         css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;

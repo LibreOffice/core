@@ -454,7 +454,7 @@ public:
     {
     }
 
-    virtual OUString GetComponentServiceName() override {return "Edit";}
+    virtual OUString GetComponentServiceName() const override {return "Edit";}
     virtual void SAL_CALL createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) override;
 
 protected:

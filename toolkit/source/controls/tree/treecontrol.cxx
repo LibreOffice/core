@@ -125,7 +125,7 @@ class UnoTreeControl : public UnoTreeControl_Base
 {
 public:
     UnoTreeControl();
-    OUString GetComponentServiceName() override;
+    OUString GetComponentServiceName() const override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) override;
@@ -187,7 +187,7 @@ UnoTreeControl::UnoTreeControl()
 {
 }
 
-OUString UnoTreeControl::GetComponentServiceName()
+OUString UnoTreeControl::GetComponentServiceName() const
 {
     return "Tree";
 }

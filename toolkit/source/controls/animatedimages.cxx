@@ -55,7 +55,7 @@ class AnimatedImagesControl : public AnimatedImagesControl_Base
 {
 public:
     AnimatedImagesControl();
-    OUString GetComponentServiceName() override;
+    OUString GetComponentServiceName() const override;
 
     // XAnimation
     virtual void SAL_CALL startAnimation(  ) override;
@@ -85,7 +85,7 @@ public:
     }
 
 
-    OUString AnimatedImagesControl::GetComponentServiceName()
+    OUString AnimatedImagesControl::GetComponentServiceName() const
     {
         return "AnimatedImages";
     }

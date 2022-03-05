@@ -152,7 +152,7 @@ UnoControl::~UnoControl()
 {
 }
 
-OUString UnoControl::GetComponentServiceName()
+OUString UnoControl::GetComponentServiceName() const
 {
     return OUString();
 }

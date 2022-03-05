@@ -138,7 +138,7 @@ public:
                 UnoControlComponentInfos&           GetComponentInfos() { return maComponentInfos; }
 
 
-    virtual OUString GetComponentServiceName();
+    virtual OUString GetComponentServiceName() const;
 
     // css::lang::XTypeProvider
     css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;

@@ -211,7 +211,7 @@ UnoControlTabPageContainer::UnoControlTabPageContainer( const uno::Reference< un
 {
 }
 
-OUString UnoControlTabPageContainer::GetComponentServiceName()
+OUString UnoControlTabPageContainer::GetComponentServiceName() const
 {
     return "TabPageContainer";
 }

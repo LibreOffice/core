@@ -135,7 +135,7 @@ namespace frm
     }
 
 
-    OUString OFilterControl::GetComponentServiceName()
+    OUString OFilterControl::GetComponentServiceName() const
     {
         OUString aServiceName;
         switch (m_nControlClass)

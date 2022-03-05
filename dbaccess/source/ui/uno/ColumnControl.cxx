@@ -61,7 +61,7 @@ css::uno::Sequence< OUString > SAL_CALL OColumnControl::getSupportedServiceNames
     return { "com.sun.star.awt.UnoControl","com.sun.star.sdb.ColumnDescriptorControl" };
 }
 
-OUString OColumnControl::GetComponentServiceName()
+OUString OColumnControl::GetComponentServiceName() const
 {
     return "com.sun.star.sdb.ColumnDescriptorControl";
 }

@@ -315,7 +315,7 @@ UnoDialogControl::~UnoDialogControl()
 {
 }
 
-OUString UnoDialogControl::GetComponentServiceName()
+OUString UnoDialogControl::GetComponentServiceName() const
 {
 
     bool bDecoration( true );
@@ -772,7 +772,7 @@ uno::Any UnoMultiPageControl::queryAggregation( const uno::Type & rType )
     return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
 }
 
-OUString UnoMultiPageControl::GetComponentServiceName()
+OUString UnoMultiPageControl::GetComponentServiceName() const
 {
     bool bDecoration( true );
     ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_DECORATION )) >>= bDecoration;
@@ -946,7 +946,7 @@ UnoPageControl::~UnoPageControl()
 {
 }
 
-OUString UnoPageControl::GetComponentServiceName()
+OUString UnoPageControl::GetComponentServiceName() const
 {
     return "tabpage";
 }
@@ -1039,7 +1039,7 @@ UnoFrameControl::~UnoFrameControl()
 {
 }
 
-OUString UnoFrameControl::GetComponentServiceName()
+OUString UnoFrameControl::GetComponentServiceName() const
 {
     return "frame";
 }
