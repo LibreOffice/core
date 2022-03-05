@@ -240,7 +240,7 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf147119)
     uno::Sequence<beans::PropertyValue> aFilterData{
         comphelper::makePropertyValue("PixelWidth", sal_Int32(100)),
         comphelper::makePropertyValue("PixelHeight", sal_Int32(100)),
-        comphelper::makePropertyValue("Translucent", true),
+        comphelper::makePropertyValue("Translucent", sal_Int32(1)),
     };
 
     utl::TempFile aTempFile;
