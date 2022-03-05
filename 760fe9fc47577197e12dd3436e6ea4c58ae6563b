@@ -16,6 +16,58 @@
       "message": "Hi, This patch currently introduces the structure for calling the Flush() method in the benchmarks, do let me know if this structure\u0027s the correct way to achieve the results we\u0027re looking for or not. Also, since some of the backends doesn\u0027t include a pre-defined Flush() method, what should be my approach to implement a fully working Flush() method for each of them. Thanks!",
       "revId": "760fe9fc47577197e12dd3436e6ea4c58ae6563b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "135f68cf_9a1ef30b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T07:43:48Z",
+      "side": 1,
+      "message": "Hello, sorry for the late reply. Yes, this is the general approach.\n",
+      "revId": "760fe9fc47577197e12dd3436e6ea4c58ae6563b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f0c6d21_ee287cd8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T07:43:48Z",
+      "side": 1,
+      "message": "I think you can look at the relevant XXXSalFrame::Flush() function, they usually flush the backend as necessary, so I think it\u0027d be enough to move what\u0027s relevant to the graphics flush. Some backends probably won\u0027t need any flush code at all.",
+      "parentUuid": "ca49ddb2_907e2b33",
+      "revId": "760fe9fc47577197e12dd3436e6ea4c58ae6563b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "424220de_47c771cf",
+        "filename": "vcl/inc/skia/gdiimpl.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T07:43:48Z",
+      "side": 1,
+      "message": "Please remove this in the next iteration of the patch. This is the abstract base class of the Skia backends and the actual ones already override it.",
+      "revId": "760fe9fc47577197e12dd3436e6ea4c58ae6563b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
