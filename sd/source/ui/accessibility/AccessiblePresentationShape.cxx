@@ -96,7 +96,7 @@ OUString AccessiblePresentationShape::CreateAccessibleBaseName()
     return sName;
 }
 
-OUString AccessiblePresentationShape::GetStyle()
+OUString AccessiblePresentationShape::GetStyle() const
 {
     OUString sName;
 

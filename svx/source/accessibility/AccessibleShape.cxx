@@ -225,7 +225,7 @@ void AccessibleShape::UpdateStates()
         pStateSet->RemoveState (AccessibleStateType::SELECTED);
 }
 
-OUString AccessibleShape::GetStyle()
+OUString AccessibleShape::GetStyle() const
 {
     return ShapeTypeHandler::CreateAccessibleBaseName( mxShape );
 }

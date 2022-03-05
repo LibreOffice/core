@@ -413,7 +413,7 @@ protected:
     /// @throws css::uno::RuntimeException
     OUString
        GetFullAccessibleName(AccessibleShape *shape);
-    virtual OUString GetStyle();
+    virtual OUString GetStyle() const;
     /** Update the <const>OPAQUE</const> and <const>SELECTED</const> state.
     */
     void UpdateStates();
