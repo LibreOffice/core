@@ -231,7 +231,7 @@ public:
 
     SwTwips GetMinBottom() const;
 
-    /// Gets the maximum of the fly frame bottoms.
+    /// Gets the maximum of the fly frame bottom.
     SwTwips GetMaxBottom() const;
 
     const SwTextFrame* GetMaster() const;
