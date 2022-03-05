@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b927e2e_7270d981",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-05T13:55:23Z",
+      "side": 1,
+      "message": "I just fixed the QA part, I didn\u0027t try to convert \"Translucent\" from sal_Int32 to a bool property as suggested in svx/source/unodraw/UnoGraphicExporter.cxx\n493 ... // SJ: TODO: The GIF Transparency is stored as int32 in\n494 ... // configuration files, this has to be changed to boolean\n(see https://opengrok.libreoffice.org/xref/core/svx/source/unodraw/UnoGraphicExporter.cxx?r\u003d96e3a641#493)\nit might be a rats nest.",
+      "revId": "7e1933a1d5055ba556923c5a988ffbb270d88763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
