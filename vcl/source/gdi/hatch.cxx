@@ -79,18 +79,21 @@ void Hatch::SetAngle( Degree10 nAngle10 )
 SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
 {
     VersionCompatRead aCompat(rIStm);
-    sal_uInt16 nTmp16;
-    sal_Int32 nTmp32(0);
 
-    rIStm.ReadUInt16(nTmp16);
-    rHatch.mpImplHatch->meStyle = static_cast<HatchStyle>(nTmp16);
+    sal_uInt16 nTmpStyle(0);
+    rIStm.ReadUInt16(nTmpStyle);
+    rHatch.mpImplHatch->meStyle = static_cast<HatchStyle>(nTmpStyle);
 
     tools::GenericTypeSerializer aSerializer(rIStm);
     aSerializer.readColor(rHatch.mpImplHatch->maColor);
+
+    sal_Int32 nTmp32(0);
     rIStm.ReadInt32(nTmp32);
     rHatch.mpImplHatch->mnDistance = nTmp32;
-    rIStm.ReadUInt16(nTmp16);
-    rHatch.mpImplHatch->mnAngle = Degree10(nTmp16);
+
+    sal_uInt16 nTmpAngle(0);
+    rIStm.ReadUInt16(nTmpAngle);
+    rHatch.mpImplHatch->mnAngle = Degree10(nTmpAngle);
 
     return rIStm;
 }
