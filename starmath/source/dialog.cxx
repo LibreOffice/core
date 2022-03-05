@@ -1103,9 +1103,9 @@ void SmShowSymbolSet::calccols(const vcl::RenderContext& rRenderContext)
     SetScrollBarRange();
 }
 
-void SmShowSymbolSet::SetSymbolSet(SymbolPtrVec_t && rSymbolSet)
+void SmShowSymbolSet::SetSymbolSet(const SymbolPtrVec_t & rSymbolSet)
 {
-    aSymbolSet = std::move(rSymbolSet);
+    aSymbolSet = rSymbolSet;
     SetScrollBarRange();
     Invalidate();
 }
@@ -1257,7 +1257,7 @@ IMPL_LINK_NOARG(SmSymbolDialog, EditClickHdl, weld::Button&, void)
         // just update display of current symbol set
         assert(aSymSetName == aSymSetName); //unexpected change in symbol set name
         aSymbolSet = rSymbolMgr.GetSymbolSet( aSymbolSetName );
-        m_xSymbolSetDisplay->SetSymbolSet( std::vector(aSymbolSet) );
+        m_xSymbolSetDisplay->SetSymbolSet( aSymbolSet );
     }
 
     if (nSymPos >= aSymbolSet.size())
@@ -1350,7 +1350,7 @@ bool SmSymbolDialog::SelectSymbolSet(const OUString &rSymbolSetName)
                    } );
 
         const bool bEmptySymbolSet = aSymbolSet.empty();
-        m_xSymbolSetDisplay->SetSymbolSet( std::move(aSymbolSet) );
+        m_xSymbolSetDisplay->SetSymbolSet( aSymbolSet );
         if (!bEmptySymbolSet)
             SelectSymbol(0);
 
