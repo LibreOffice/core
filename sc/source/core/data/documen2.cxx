@@ -726,6 +726,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
         if (maTabs[nOldPos])
         {
             sc::AutoCalcSwitch aACSwitch(*this, false);
+            sc::DelayDeletingBroadcasters delayDeletingBroadcasters(*this);
 
             SetNoListening( true );
             if (nNewPos == SC_TAB_APPEND || nNewPos >= nTabCount)

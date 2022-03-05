@@ -682,6 +682,7 @@ bool ScDocument::DeleteTab( SCTAB nTab )
             {
                 sc::AutoCalcSwitch aACSwitch(*this, false);
                 sc::RefUpdateDeleteTabContext aCxt( *this, nTab, 1);
+                sc::DelayDeletingBroadcasters delayDeletingBroadcasters(*this);
 
                 ScRange aRange( 0, 0, nTab, MaxCol(), MaxRow(), nTab );
                 DelBroadcastAreasInRange( aRange );
@@ -770,6 +771,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
             {
                 sc::AutoCalcSwitch aACSwitch(*this, false);
                 sc::RefUpdateDeleteTabContext aCxt( *this, nTab, nSheets);
+                sc::DelayDeletingBroadcasters delayDeletingBroadcasters(*this);
 
                 for (SCTAB aTab = 0; aTab < nSheets; ++aTab)
                 {
@@ -1256,6 +1258,8 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
     bool bRet = false;
     bool bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( false );   // avoid multiple calculations
+    bool oldDelayedDeleteBroadcasters = IsDelayedDeletingBroadcasters();
+    EnableDelayDeletingBroadcasters( true );
     for ( i = nStartTab; i <= nEndTab && bTest && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= maTabs[i]->TestInsertRow(nStartCol, nEndCol, nStartRow, nSize);
@@ -1343,6 +1347,7 @@ bool ScDocument::InsertRow( SCCOL nStartCol, SCTAB nStartTab,
         }
         bRet = true;
     }
+    EnableDelayDeletingBroadcasters( oldDelayedDeleteBroadcasters );
     SetAutoCalc( bOldAutoCalc );
     if ( bRet && pChartListenerCollection )
         pChartListenerCollection->UpdateDirtyCharts();
@@ -1507,6 +1512,8 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
     bool bRet = false;
     bool bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( false );   // avoid multiple calculations
+    bool oldDelayedDeleteBroadcasters = IsDelayedDeletingBroadcasters();
+    EnableDelayDeletingBroadcasters( true );
     for ( i = nStartTab; i <= nEndTab && bTest && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i] && (!pTabMark || pTabMark->GetTableSelect(i)))
             bTest &= maTabs[i]->TestInsertCol( nStartRow, nEndRow, nSize );
@@ -1565,6 +1572,7 @@ bool ScDocument::InsertCol( SCROW nStartRow, SCTAB nStartTab,
         }
         bRet = true;
     }
+    EnableDelayDeletingBroadcasters( oldDelayedDeleteBroadcasters );
     SetAutoCalc( bOldAutoCalc );
     if ( bRet && pChartListenerCollection )
         pChartListenerCollection->UpdateDirtyCharts();
@@ -2103,6 +2111,7 @@ void ScDocument::CopyToDocument(const ScRange& rRange,
 
     sc::AutoCalcSwitch aACSwitch(rDestDoc, false); // avoid multiple calculations
     ScBulkBroadcast aBulkBroadcast(rDestDoc.GetBASM(), SfxHintId::ScDataChanged);
+    sc::DelayDeletingBroadcasters delayDeletingBroadcasters(*this);
 
     sc::CopyToDocContext aCxt(rDestDoc);
     aCxt.setStartListening(false);
