@@ -1595,9 +1595,9 @@ oslFileError SAL_CALL osl_getFileStatus(
             {
                 /* Capitalizes drive name (single letter). Windows file paths are processed
                 case-sensitively. While parsing a path, function osl_DirectoryItem has case
-                PATHTYPE_VOLUME for drives, and capatalizes them. That can be overwritten by
+                PATHTYPE_VOLUME for drives, and capitalizes them. That can be overwritten by
                 function osl_getFileStatus, in it win32 api GetLongPathNameW does no
-                capatilization. Thus it needs to be postprocessed.*/
+                capitalization. Thus it needs to be postprocessed.*/
                 sal_Int32 nIndex = rtl_ustr_indexOfChar(aBuffer, ':');
                 if (nIndex > 0) {
                     aBuffer[nIndex - 1] = rtl::toAsciiUpperCase(aBuffer[nIndex - 1]);
