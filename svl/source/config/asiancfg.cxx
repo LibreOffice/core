@@ -54,14 +54,11 @@ OUString toString(css::lang::Locale const & locale) {
 
 struct SvxAsianConfig::Impl {
     Impl():
-        context(comphelper::getProcessComponentContext()),
-        batch(comphelper::ConfigurationChanges::create(context))
+        batch(comphelper::ConfigurationChanges::create())
     {}
 
     Impl(const Impl&) = delete;
     Impl& operator=(const Impl&) = delete;
-
-    css::uno::Reference< css::uno::XComponentContext > context;
 
     std::shared_ptr< comphelper::ConfigurationChanges > batch;
 };
@@ -76,8 +73,7 @@ void SvxAsianConfig::Commit() {
 
 bool SvxAsianConfig::IsKerningWesternTextOnly() const {
     return
-        officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::get(
-            impl_->context);
+        officecfg::Office::Common::AsianLayout::IsKerningWesternTextOnly::get();
 }
 
 void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
@@ -86,8 +82,7 @@ void SvxAsianConfig::SetKerningWesternTextOnly(bool value) {
 }
 
 CharCompressType SvxAsianConfig::GetCharDistanceCompression() const {
-    return static_cast<CharCompressType>(officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get(
-            impl_->context));
+    return static_cast<CharCompressType>(officecfg::Office::Common::AsianLayout::CompressCharacterDistance::get());
 }
 
 void SvxAsianConfig::SetCharDistanceCompression(CharCompressType value) {
@@ -99,8 +94,7 @@ css::uno::Sequence< css::lang::Locale > SvxAsianConfig::GetStartEndCharLocales()
     const
 {
     const css::uno::Sequence< OUString > ns(
-        officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
-            impl_->context)->
+        officecfg::Office::Common::AsianLayout::StartEndCharacters::get()->
         getElementNames());
     css::uno::Sequence< css::lang::Locale > ls(ns.getLength());
     std::transform(ns.begin(), ns.end(), ls.getArray(),
@@ -114,8 +108,7 @@ bool SvxAsianConfig::GetStartEndChars(
     OUString & endChars) const
 {
     css::uno::Reference< css::container::XNameAccess > set(
-        officecfg::Office::Common::AsianLayout::StartEndCharacters::get(
-            impl_->context));
+        officecfg::Office::Common::AsianLayout::StartEndCharacters::get());
     css::uno::Any v;
     try {
         v = set->getByName(toString(locale));

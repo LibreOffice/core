@@ -177,8 +177,6 @@ void PlaceEditDialog::InitDetails( )
 {
     // Create CMIS controls for each server type
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-
     // Load the ServerType entries
     bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
                        OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
@@ -187,8 +185,8 @@ void PlaceEditDialog::InitDetails( )
     bool bSkipOneDrive= OUString( ONEDRIVE_CLIENT_ID ).isEmpty() ||
                        OUString( ONEDRIVE_CLIENT_SECRET ).isEmpty();
 
-    Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get( xContext ) );
-    Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get( xContext ) );
+    Sequence< OUString > aTypesUrlsList( officecfg::Office::Common::Misc::CmisServersUrls::get() );
+    Sequence< OUString > aTypesNamesList( officecfg::Office::Common::Misc::CmisServersNames::get() );
 
     int nPos = 0;
     auto nSize = std::min(aTypesUrlsList.getLength(), aTypesNamesList.getLength());

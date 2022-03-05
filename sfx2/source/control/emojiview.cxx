@@ -85,8 +85,7 @@ void EmojiView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
     ThumbnailView::SetDrawingArea(pDrawingArea);
 
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
+    OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get());
     vcl::Font aFont = pDrawingArea->get_font();
     aFont.SetFamilyName(sFontName);
     OutputDevice& rDevice = pDrawingArea->get_ref_device();

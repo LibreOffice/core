@@ -650,7 +650,7 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
         throw DAVException(DAVException::DAV_SESSION_CREATE,
                            ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
     }
-    auto const connectTimeout(officecfg::Inet::Settings::ConnectTimeout::get(m_xContext));
+    auto const connectTimeout(officecfg::Inet::Settings::ConnectTimeout::get());
     // default is 300s
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_CONNECTTIMEOUT,
                           ::std::max<long>(2L, ::std::min<long>(connectTimeout, 180L)));
@@ -660,7 +660,7 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
         throw DAVException(DAVException::DAV_SESSION_CREATE,
                            ConnectionEndPointString(m_URI.GetHost(), m_URI.GetPort()));
     }
-    auto const readTimeout(officecfg::Inet::Settings::ReadTimeout::get(m_xContext));
+    auto const readTimeout(officecfg::Inet::Settings::ReadTimeout::get());
     m_nReadTimeout = ::std::max<int>(20, ::std::min<long>(readTimeout, 180)) * 1000;
     // default is infinite
     rc = curl_easy_setopt(m_pCurl.get(), CURLOPT_TIMEOUT, 300L);

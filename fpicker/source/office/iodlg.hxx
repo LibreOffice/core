@@ -77,8 +77,6 @@ private:
                                 m_pCurrentAsyncAction;
     bool                        m_bInExecuteAsync;
     bool                        m_bHasFilename;
-    css::uno::Reference < css::uno::XComponentContext >
-                                m_xContext;
 
     DECL_LINK(            FilterSelectHdl_Impl, weld::ComboBox&, void );
     DECL_LINK(            FilterSelectTimerHdl_Impl, Timer*, void );

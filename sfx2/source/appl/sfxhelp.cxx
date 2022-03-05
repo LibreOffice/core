@@ -124,7 +124,7 @@ OUString const & getHelpRootURL()
 {
     static OUString const s_instURL = []()
     {
-        OUString tmp = officecfg::Office::Common::Path::Current::Help::get(comphelper::getProcessComponentContext());
+        OUString tmp = officecfg::Office::Common::Path::Current::Help::get();
         if (tmp.isEmpty())
         {
             // try to determine path from default

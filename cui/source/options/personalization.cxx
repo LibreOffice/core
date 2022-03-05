@@ -63,11 +63,8 @@ bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)
         aPersona = "no";
 
     bool bModified = false;
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-    if (xContext.is()
-        && (aPersona != officecfg::Office::Common::Misc::Persona::get(xContext)
-            || m_aPersonaSettings
-                   != officecfg::Office::Common::Misc::PersonaSettings::get(xContext)))
+    if (aPersona != officecfg::Office::Common::Misc::Persona::get()
+        || m_aPersonaSettings != officecfg::Office::Common::Misc::PersonaSettings::get())
     {
         bModified = true;
     }
@@ -94,15 +91,9 @@ bool SvxPersonalizationTabPage::FillItemSet(SfxItemSet*)
 
 void SvxPersonalizationTabPage::Reset(const SfxItemSet*)
 {
-    uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-
     // persona
-    OUString aPersona("default");
-    if (xContext.is())
-    {
-        aPersona = officecfg::Office::Common::Misc::Persona::get(xContext);
-        m_aPersonaSettings = officecfg::Office::Common::Misc::PersonaSettings::get(xContext);
-    }
+    OUString aPersona = officecfg::Office::Common::Misc::Persona::get();
+    m_aPersonaSettings = officecfg::Office::Common::Misc::PersonaSettings::get();
 
     if (aPersona == "no")
         m_xNoPersona->set_active(true);

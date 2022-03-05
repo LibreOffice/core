@@ -114,7 +114,7 @@ static OUString lcl_getAppName( vcl::EnumContext::Application eApp )
 static void lcl_setNotebookbarFileName( vcl::EnumContext::Application eApp, const OUString& sFileName )
 {
     std::shared_ptr<comphelper::ConfigurationChanges> aBatch(
-                comphelper::ConfigurationChanges::create( ::comphelper::getProcessComponentContext() ) );
+                comphelper::ConfigurationChanges::create() );
     switch ( eApp )
     {
         case vcl::EnumContext::Application::Writer:
