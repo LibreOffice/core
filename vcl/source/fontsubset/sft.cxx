@@ -353,9 +353,16 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
 
     const sal_uInt8* ptr = table + nGlyphOffset;
     const sal_uInt32 nMaxGlyphSize = nTableSize - nGlyphOffset;
+    constexpr sal_uInt32 nContourOffset = 10;
+    if (nMaxGlyphSize < nContourOffset)
+        return 0;
 
     const sal_Int16 numberOfContours = GetInt16(ptr, GLYF_numberOfContours_offset);
     if( numberOfContours <= 0 )             /*- glyph is not simple */
+        return 0;
+
+    const sal_Int32 nMaxContours = (nMaxGlyphSize - nContourOffset)/2;
+    if (numberOfContours > nMaxContours)
         return 0;
 
     if (metrics) {                                                    /*- GetCompoundTTOutline() calls this function with NULL metrics -*/
@@ -368,22 +375,19 @@ static int GetSimpleTTOutline(AbstractTrueTypeFont const *ttf, sal_uInt32 glyphI
 
     /* determine the last point and be extra safe about it. But probably this code is not needed */
     sal_uInt16 lastPoint=0;
-    const sal_Int32 nMaxContours = (nMaxGlyphSize - 10)/2;
-    if (numberOfContours > nMaxContours)
-        return 0;
     for (i=0; i<numberOfContours; i++)
     {
-        const sal_uInt16 t = GetUInt16(ptr, 10+i*2);
+        const sal_uInt16 t = GetUInt16(ptr, nContourOffset + i * 2);
         if (t > lastPoint)
             lastPoint = t;
     }
 
-    sal_uInt32 nInstLenOffset = 10 + numberOfContours * 2;
+    sal_uInt32 nInstLenOffset = nContourOffset + numberOfContours * 2;
     if (nInstLenOffset + 2 > nMaxGlyphSize)
         return 0;
     sal_uInt16 instLen = GetUInt16(ptr, nInstLenOffset);
 
-    sal_uInt32 nOffset = 10 + 2 * numberOfContours + 2 + instLen;
+    sal_uInt32 nOffset = nContourOffset + 2 * numberOfContours + 2 + instLen;
     if (nOffset > nMaxGlyphSize)
         return 0;
     const sal_uInt8* p = ptr + nOffset;
