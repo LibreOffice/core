@@ -307,6 +307,9 @@ sal_Int32 indexOfChar                             ( const IMPL_RTL_STRCODE* pStr
                                                     IMPL_RTL_STRCODE c )
 {
     assert(pStr);
+    if (!c)
+        return -1; // Unifies behavior of strchr/wcschr and unoptimized algorithm wrt '\0'
+
     if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
     {
         // take advantage of builtin optimisations
@@ -361,6 +364,9 @@ sal_Int32 lastIndexOfChar                             ( const IMPL_RTL_STRCODE* 
                                                         IMPL_RTL_STRCODE c )
 {
     assert(pStr);
+    if (!c)
+        return -1; // Unifies behavior of strrchr/wcsrchr and lastIndexOfChar_WithLength wrt '\0'
+
     if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
     {
         // take advantage of builtin optimisations
@@ -406,6 +412,9 @@ sal_Int32 indexOfStr                             ( const IMPL_RTL_STRCODE* pStr,
 {
     assert(pStr);
     assert(pSubStr);
+    /* an empty SubString is always not findable */
+    if (*pSubStr == 0)
+        return -1;
     if constexpr (sizeof(IMPL_RTL_STRCODE) == sizeof(char))
     {
         // take advantage of builtin optimisations
