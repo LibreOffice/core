@@ -62,6 +62,7 @@
 #include <reordermap.hxx>
 #include <drwlayer.hxx>
 #include <queryevaluator.hxx>
+#include <scopetools.hxx>
 
 #include <svl/sharedstringpool.hxx>
 
@@ -1777,6 +1778,7 @@ void ScTable::Sort(
     const ScSortParam& rSortParam, bool bKeepQuery, bool bUpdateRefs,
     ScProgress* pProgress, sc::ReorderParam* pUndo )
 {
+    sc::DelayDeletingBroadcasters delayDeletingBroadcasters(GetDoc());
     InitSortCollator( rSortParam );
     bGlobalKeepQuery = bKeepQuery;
 

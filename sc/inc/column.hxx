@@ -178,7 +178,8 @@ class ScColumn : protected ScColumnData
     SCCOL           nCol;
     SCTAB           nTab;
 
-    bool mbFiltering; // it is true if there is a filtering in the column
+    bool mbFiltering : 1; // it is true if there is a filtering in the column
+    bool mbEmptyBroadcastersPending : 1; // a broadcaster not removed during EnableDelayDeletingBroadcasters()
 
 friend class ScDocument;                    // for FillInfo
 friend class ScTable;
@@ -633,6 +634,7 @@ public:
 
     void DeleteBroadcasters( sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2 );
     void PrepareBroadcastersForDestruction();
+    void DeleteEmptyBroadcasters();
 
     void Broadcast( SCROW nRow );
     void BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint );

@@ -173,7 +173,7 @@ void SvtBroadcaster::Remove( SvtListener* p )
         --mnListenersFirstUnsorted;
     }
 
-    if (maListeners.size() - mnEmptySlots == 0)
+    if (!HasListeners())
         ListenersGone();
 }
 
@@ -250,11 +250,6 @@ const SvtBroadcaster::ListenersType& SvtBroadcaster::GetAllListeners() const
 {
     Normalize();
     return maListeners;
-}
-
-bool SvtBroadcaster::HasListeners() const
-{
-    return (maListeners.size() - mnEmptySlots) > 0;
 }
 
 void SvtBroadcaster::PrepareForDestruction()

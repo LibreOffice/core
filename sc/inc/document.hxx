@@ -525,6 +525,8 @@ private:
     // avoiding repeated calling for the same cells in the given range. The function will be called once
     // later for all the cells in the range.
     std::unordered_map< ScColumn*, std::pair<SCROW, SCROW>> pDelayedStartListeningFormulaCells;
+    // Cells will not delete their broadcasters if delayed, avoiding possible extensive mdds vector changes.
+    bool                bDelayedDeletingBroadcasters;
 
     bool                bLinkFormulaNeedingCheck; // valid only after loading, for ocDde and ocWebservice
 
@@ -1391,6 +1393,10 @@ public:
     /// If true is returned, ScColumn::StartListeningFormulaCells() for the given cells will be performed
     /// later. If false is returned, it needs to be done explicitly.
     bool            CanDelayStartListeningFormulaCells( ScColumn* column, SCROW row1, SCROW row2 );
+    /// If set, cells will not delete their empty broadcasters, avoiding possible extensive mdds
+    /// vector changes. Disabling delay will collect and delete all empty broadcasters.
+    void            EnableDelayDeletingBroadcasters(bool set);
+    bool            IsDelayedDeletingBroadcasters() const { return bDelayedDeletingBroadcasters; }
 
     FormulaError    GetErrCode( const ScAddress& ) const;
 
