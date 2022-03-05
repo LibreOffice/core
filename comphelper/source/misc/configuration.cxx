@@ -38,9 +38,9 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace {
 
-comphelper::detail::ConfigurationWrapper& GetTheConfigurationWrapper(const css::uno::Reference< css::uno::XComponentContext >& xContext)
+comphelper::detail::ConfigurationWrapper& GetTheConfigurationWrapper()
 {
-    static comphelper::detail::ConfigurationWrapper WRAPPER(xContext);
+    static comphelper::detail::ConfigurationWrapper WRAPPER(comphelper::getProcessComponentContext());
     return WRAPPER;
 }
 
@@ -67,10 +67,9 @@ OUString extendLocalizedPath(std::u16string_view path, OUString const & locale) 
 }
 
 std::shared_ptr< comphelper::ConfigurationChanges >
-comphelper::ConfigurationChanges::create(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+comphelper::ConfigurationChanges::create()
 {
-    return GetTheConfigurationWrapper(context).createChanges();
+    return GetTheConfigurationWrapper().createChanges();
 }
 
 comphelper::ConfigurationChanges::~ConfigurationChanges() {}
@@ -107,10 +106,9 @@ comphelper::ConfigurationChanges::getSet(OUString const & path) const
 }
 
 comphelper::detail::ConfigurationWrapper const &
-comphelper::detail::ConfigurationWrapper::get(
-    css::uno::Reference< css::uno::XComponentContext > const & context)
+comphelper::detail::ConfigurationWrapper::get()
 {
-    return GetTheConfigurationWrapper(context);
+    return GetTheConfigurationWrapper();
 }
 
 comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(

@@ -1007,11 +1007,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 #ifndef ENABLE_SDREMOTE
         bDisableSdremoteForGood = true;
 #endif
-        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-        if ( xContext.is() )
-            bDisableSdremoteForGood |= ! ( /*officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) &&*/
-
-                                           officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) );
+        bDisableSdremoteForGood |= ! ( /*officecfg::Office::Common::Misc::ExperimentalMode::get() &&*/
+                                       officecfg::Office::Impress::Misc::Start::EnableSdremote::get() );
 
         // This dialog is only useful for TCP/IP remote control
         // which is unusual, under-tested and a security issue.

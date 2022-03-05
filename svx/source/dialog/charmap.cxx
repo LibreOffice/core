@@ -64,7 +64,6 @@ FactoryFunction SvxShowCharSet::GetUITestFactory() const
 SvxShowCharSet::SvxShowCharSet(std::unique_ptr<weld::ScrolledWindow> pScrolledWindow, const VclPtr<VirtualDevice>& rVirDev)
     : mxVirDev(rVirDev)
     , mxScrollArea(std::move(pScrolledWindow))
-    , mxContext(comphelper::getProcessComponentContext())
     , nX(0)
     , nY(0)
     , maFontSize(0, 0)
@@ -302,7 +301,7 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
             aFavCharFontListRange[i] = maFavCharFontList[i];
         }
 
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
         officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
         batch->commit();
@@ -339,7 +338,7 @@ void SvxShowCharSet::updateFavCharacterList(const OUString& sTitle, const OUStri
         aFavCharFontListRange[i] = maFavCharFontList[i];
     }
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
     batch->commit();

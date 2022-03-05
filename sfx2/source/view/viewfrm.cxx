@@ -2502,7 +2502,7 @@ void SfxViewFrame::ExecView_Impl
 static bool impl_maxOpenDocCountReached()
 {
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
+    std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get());
     // NIL means: count of allowed documents = infinite !
     if (!x)
         return false;

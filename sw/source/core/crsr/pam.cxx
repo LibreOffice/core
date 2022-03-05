@@ -731,7 +731,7 @@ bool SwPaM::HasReadonlySel( bool bFormView ) const
     const bool bAtStartA = (pA != nullptr) && (pA->GetMarkStart() == *GetPoint());
     const bool bAtStartB = (pB != nullptr) && (pB->GetMarkStart() == *GetMark());
 
-    if (officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get(comphelper::getProcessComponentContext()))
+    if (officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get())
     {
         ; // allow editing all fields in generic mode
     }

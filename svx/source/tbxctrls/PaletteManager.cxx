@@ -61,8 +61,7 @@ PaletteManager::PaletteManager() :
     mnCurrentPalette(0),
     mnColorCount(0),
     mpBtnUpdater(nullptr),
-    maColorSelectFunction(PaletteManager::DispatchColorCommand),
-    m_context(comphelper::getProcessComponentContext())
+    maColorSelectFunction(PaletteManager::DispatchColorCommand)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if(pDocSh)
@@ -294,7 +293,7 @@ void PaletteManager::SetPalette( sal_Int32 nPos )
     OUString aPaletteName(officecfg::Office::Common::UserColors::PaletteName::get());
     if (aPaletteName != GetPaletteName())
     {
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
         officecfg::Office::Common::UserColors::PaletteName::set(GetPaletteName(), batch);
         batch->commit();
     }
@@ -363,7 +362,7 @@ void PaletteManager::AddRecentColor(const Color& rRecentColor, const OUString& r
         aColorListRange[i] = static_cast<sal_Int32>(maRecentColors[i].first);
         aColorNameListRange[i] = maRecentColors[i].second;
     }
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::UserColors::RecentColor::set(aColorList, batch);
     officecfg::Office::Common::UserColors::RecentColorName::set(aColorNameList, batch);
     batch->commit();

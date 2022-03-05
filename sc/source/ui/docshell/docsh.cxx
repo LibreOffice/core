@@ -497,9 +497,8 @@ bool ScDocShell::LoadXML( SfxMedium* pLoadMedium, const css::uno::Reference< css
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(GetModel(), uno::UNO_QUERY_THROW);
     uno::Reference<document::XDocumentProperties> xDocProps = xDPS->getDocumentProperties();
 
-    Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
     ScRecalcOptions nRecalcMode =
-        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::ODFRecalcMode::get(xContext));
+        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::ODFRecalcMode::get());
 
     bool bHardRecalc = false;
     if (nRecalcMode == RECALC_ASK)

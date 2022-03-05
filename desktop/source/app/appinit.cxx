@@ -84,7 +84,7 @@ void Desktop::InitApplicationServiceManager()
     comphelper::setProcessServiceFactory(sm);
 }
 
-void Desktop::RegisterServices(Reference< XComponentContext > const & context)
+void Desktop::RegisterServices()
 {
     if( m_bServicesRegistered )
         return;
@@ -100,7 +100,7 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
 
     // read accept string from configuration
     OUString conDcpCfg(
-        officecfg::Setup::Office::ooSetupConnectionURL::get(context));
+        officecfg::Setup::Office::ooSetupConnectionURL::get());
     if (!conDcpCfg.isEmpty()) {
         createAcceptor(conDcpCfg);
     }

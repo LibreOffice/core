@@ -137,7 +137,7 @@ RemoteFilesDialog::~RemoteFilesDialog()
     }
 
     // save services
-    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create( m_xContext ) );
+    std::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
 
     officecfg::Office::Common::Misc::FilePickerLastService::set( m_sLastServiceUrl, batch );
 
@@ -258,13 +258,13 @@ void RemoteFilesDialog::FillServicesListbox()
     m_aServices.clear();
 
     // Load from user settings
-    Sequence< OUString > placesUrlsList( officecfg::Office::Common::Misc::FilePickerPlacesUrls::get( m_xContext ) );
-    Sequence< OUString > placesNamesList( officecfg::Office::Common::Misc::FilePickerPlacesNames::get( m_xContext ) );
+    Sequence< OUString > placesUrlsList( officecfg::Office::Common::Misc::FilePickerPlacesUrls::get() );
+    Sequence< OUString > placesNamesList( officecfg::Office::Common::Misc::FilePickerPlacesNames::get() );
 
     unsigned int nPos = 0;
     unsigned int i = 0;
 
-    m_sLastServiceUrl = officecfg::Office::Common::Misc::FilePickerLastService::get( m_xContext );
+    m_sLastServiceUrl = officecfg::Office::Common::Misc::FilePickerLastService::get();
 
     for( sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace )
     {

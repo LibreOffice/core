@@ -1111,7 +1111,7 @@ void SdDrawDocument::InitLayoutVector()
 
     // get file list from configuration
     const Sequence< OUString > aFiles(
-        officecfg::Office::Impress::Misc::LayoutListFiles::get(xContext) );
+        officecfg::Office::Impress::Misc::LayoutListFiles::get() );
 
     OUString sFilename;
     for( const auto& rFile : aFiles )
@@ -1150,7 +1150,7 @@ void SdDrawDocument::InitObjectVector()
 
     // get file list from configuration
     const Sequence< OUString > aFiles(
-       officecfg::Office::Impress::Misc::PresObjListFiles::get(xContext) );
+       officecfg::Office::Impress::Misc::PresObjListFiles::get() );
 
     OUString sFilename;
     for( const auto& rFile : aFiles )
