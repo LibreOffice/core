@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7979632_ab42d294",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-05T16:12:22Z",
+      "side": 1,
+      "message": "Does it matter that strrchr/wcsrchr find trailing zero, unlike lastIndexOfChar_WithLength? This makes sal_Unicode behave on non-Windows differently compared to char, and also to sal_Unicode on Windows.\n\nI suppose I add a check to the begin of the function just in case :)",
+      "revId": "281989007fd7dea997ed9a65f513f80b1aff67dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
