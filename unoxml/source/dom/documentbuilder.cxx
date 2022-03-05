@@ -138,14 +138,11 @@ namespace DOM
 
     static OUString make_error_message(xmlParserCtxtPtr ctxt)
     {
-        OUStringBuffer buf;
-        buf.appendAscii(ctxt->lastError.message);
-        buf.append("Line: ");
-        buf.append(static_cast<sal_Int32>(ctxt->lastError.line));
-        buf.append("\nColumn: ");
-        buf.append(static_cast<sal_Int32>(ctxt->lastError.int2));
-        OUString msg = buf.makeStringAndClear();
-        return msg;
+        return OUString(ctxt->lastError.message, strlen(ctxt->lastError.message), RTL_TEXTENCODING_ASCII_US) +
+               "Line: " +
+               OUString::number(static_cast<sal_Int32>(ctxt->lastError.line)) +
+               "\nColumn: " +
+               OUString::number(static_cast<sal_Int32>(ctxt->lastError.int2));
     }
 
     // -- callbacks and context struct for parsing from stream
