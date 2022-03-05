@@ -65,7 +65,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     rTarget.TRGetBaseGeometry(aTransformation, aPolyPolygon);
 
     // create temporary oox::Shape as target. No longer needed is to keep/remember
-    // the original oox::Shape to do that. Use original Size and Pos frrom initial import
+    // the original oox::Shape to do that. Use original Size and Pos from initial import
     // to get the same layout(s)
     oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
     pShapePtr->setDiagramType();

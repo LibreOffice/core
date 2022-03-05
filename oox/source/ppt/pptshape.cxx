@@ -538,7 +538,7 @@ void PPTShape::addShape(
             Reference<XShapes> xShapes(xShape, UNO_QUERY);
             if (xShapes.is())
             {
-                // tempoarily remember setting
+                // temporarily remember setting
                 NamedShapePairs* pDiagramFontHeights(rFilterBase.getDiagramFontHeights());
 
                 // for shapes unequal to FRAMETYPE_DIAGRAM do
