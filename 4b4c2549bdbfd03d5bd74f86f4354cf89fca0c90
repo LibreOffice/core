@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58e737b2_390d2249",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-05T19:53:43Z",
+      "side": 1,
+      "message": "if you\u0027re going to assert here, might as well just use UNO_QUERY_THROW in the preceding line",
+      "revId": "4b4c2549bdbfd03d5bd74f86f4354cf89fca0c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca6cb5fe_aaacac6a",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-05T19:53:43Z",
+      "side": 1,
+      "message": "and might as well just not catch anything here, since if this fails, all kinds of stuff will not work properly?",
+      "revId": "4b4c2549bdbfd03d5bd74f86f4354cf89fca0c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
