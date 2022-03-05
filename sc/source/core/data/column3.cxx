@@ -93,6 +93,8 @@ void ScColumn::BroadcastCells( const std::vector<SCROW>& rRows, SfxHintId nHint 
 
 void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
 {
+    if( nStartRow > GetLastDataPos())
+        return;
     sc::SingleColumnSpanSet aSpanSet(GetDoc().GetSheetLimits());
     aSpanSet.scan(*this, nStartRow, nEndRow);
     std::vector<SCROW> aRows;
