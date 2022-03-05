@@ -288,7 +288,6 @@ SvtFileDialog::SvtFileDialog(weld::Window* pParent, PickerFlags nStyle)
     , m_bIsInExecute(false)
     , m_bInExecuteAsync(false)
     , m_bHasFilename(false)
-    , m_xContext(comphelper::getProcessComponentContext())
 {
     m_xImpl->m_xCbOptions = m_xBuilder->weld_check_button("options");
     m_xImpl->m_xFtFileName = m_xBuilder->weld_label("file_name_label");
@@ -494,7 +493,7 @@ SvtFileDialog::~SvtFileDialog()
         }
     }
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_xContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::Misc::FilePickerPlacesUrls::set(placesUrlsList, batch);
     officecfg::Office::Common::Misc::FilePickerPlacesNames::set(placesNamesList, batch);
     batch->commit();
@@ -2284,8 +2283,8 @@ void SvtFileDialog::initDefaultPlaces( )
     m_xImpl->m_xPlaces->AppendPlace( pRootPlace );
 
     // Load from user settings
-    Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get(m_xContext));
-    Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get(m_xContext));
+    Sequence< OUString > placesUrlsList(officecfg::Office::Common::Misc::FilePickerPlacesUrls::get());
+    Sequence< OUString > placesNamesList(officecfg::Office::Common::Misc::FilePickerPlacesNames::get());
 
     for(sal_Int32 nPlace = 0; nPlace < placesUrlsList.getLength() && nPlace < placesNamesList.getLength(); ++nPlace)
     {

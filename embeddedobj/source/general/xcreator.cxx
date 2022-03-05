@@ -188,13 +188,11 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
  * Decides if rFilter should be used to load data into a doc model or real OLE embedding should
  * happen. Empty return value means the later.
  */
-static OUString HandleFilter(const uno::Reference<uno::XComponentContext>& xComponentContext,
-                             const OUString& rFilter)
+static OUString HandleFilter(const OUString& rFilter)
 {
     OUString aRet = rFilter;
 
-    if (!officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(
-            xComponentContext))
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get())
     {
         if (rFilter == "MS Word 97" || rFilter == "MS Word 2007 XML")
         {
@@ -202,29 +200,28 @@ static OUString HandleFilter(const uno::Reference<uno::XComponentContext>& xComp
         }
     }
 
-    if (!officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get(xComponentContext))
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get())
     {
         if (rFilter == "MS Excel 97" || rFilter == "Calc MS Excel 2007 XML")
         {
             aRet.clear();
         }
     }
-    if (!officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::get(
-            xComponentContext))
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::PowerPointToImpress::get())
     {
         if (rFilter == "MS PowerPoint 97" || rFilter == "Impress MS PowerPoint 2007 XML")
         {
             aRet.clear();
         }
     }
-    if (!officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::get(xComponentContext))
+    if (!officecfg::Office::Common::Filter::Microsoft::Import::VisioToDraw::get())
     {
         if (rFilter == "Visio Document")
         {
             aRet.clear();
         }
     }
-    if (!officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get(xComponentContext))
+    if (!officecfg::Office::Common::Filter::Adobe::Import::PDFToDraw::get())
     {
         if (rFilter == "draw_pdf_import")
         {
@@ -259,7 +256,7 @@ uno::Reference< uno::XInterface > SAL_CALL UNOEmbeddedObjectCreator::createInsta
     // check if there is FilterName
     OUString aFilterName = m_aConfigHelper.UpdateMediaDescriptorWithFilterName( aTempMedDescr, false );
 
-    aFilterName = HandleFilter(m_xContext, aFilterName);
+    aFilterName = HandleFilter(aFilterName);
 
     if ( !aFilterName.isEmpty() )
     {

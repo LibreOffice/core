@@ -236,24 +236,24 @@ void OLEHandler::importStream(const uno::Reference<uno::XComponentContext>& xCom
         m_sProgId);
 }
 
-OUString OLEHandler::getCLSID(const uno::Reference<uno::XComponentContext>& xComponentContext) const
+OUString OLEHandler::getCLSID() const
 {
     OUString aRet;
 
     // See officecfg/registry/data/org/openoffice/Office/Embedding.xcu.
     if (m_sProgId == "Word.Document.12")
     {
-        if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get(xComponentContext))
+        if (officecfg::Office::Common::Filter::Microsoft::Import::WinWordToWriter::get())
             aRet = "8BC6B165-B1B2-4EDD-aa47-dae2ee689dd6";
     }
     else if (m_sProgId == "Excel.Sheet.12")
     {
-        if (officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get(xComponentContext))
+        if (officecfg::Office::Common::Filter::Microsoft::Import::ExcelToCalc::get())
             aRet = "47BBB4CB-CE4C-4E80-A591-42D9AE74950F";
     }
     else if (m_sProgId == "Equation.3")
     {
-        if (officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::get(xComponentContext))
+        if (officecfg::Office::Common::Filter::Microsoft::Import::MathTypeToMath::get())
             aRet = "078B7ABA-54FC-457F-8551-6147E776A997";
     }
     else

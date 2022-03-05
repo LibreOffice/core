@@ -181,7 +181,7 @@ IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
     if (&rButton == m_pApplyAll.get())
     {
         std::shared_ptr<comphelper::ConfigurationChanges> aBatch(
-            comphelper::ConfigurationChanges::create(::comphelper::getProcessComponentContext()));
+            comphelper::ConfigurationChanges::create());
         officecfg::Office::UI::ToolbarMode::ActiveWriter::set(sCmd, aBatch);
         officecfg::Office::UI::ToolbarMode::ActiveCalc::set(sCmd, aBatch);
         officecfg::Office::UI::ToolbarMode::ActiveImpress::set(sCmd, aBatch);

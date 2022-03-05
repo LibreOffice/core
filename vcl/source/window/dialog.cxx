@@ -997,7 +997,7 @@ bool Dialog::ImplStartExecute()
 
     css::uno::Reference< css::uno::XComponentContext > xContext(
         comphelper::getProcessComponentContext());
-    bool bForceFocusAndToFront(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));
+    bool bForceFocusAndToFront(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get());
     ShowFlags showFlags = bForceFocusAndToFront ? ShowFlags::ForegroundTask : ShowFlags::NONE;
     Show(true, showFlags);
 

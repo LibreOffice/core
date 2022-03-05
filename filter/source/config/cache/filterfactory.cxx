@@ -406,15 +406,9 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterList(const QueryTokeniz
 }
 
 
-std::vector<OUString> FilterFactory::impl_getListOfInstalledModules() const
+std::vector<OUString> FilterFactory::impl_getListOfInstalledModules()
 {
-    // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aMutex);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aLock.clear();
-    // <- SAFE ----------------------
-
-    css::uno::Reference< css::container::XNameAccess > xModuleConfig = officecfg::Setup::Office::Factories::get(xContext);
+    css::uno::Reference< css::container::XNameAccess > xModuleConfig = officecfg::Setup::Office::Factories::get();
     std::vector<OUString> lModules(comphelper::sequenceToContainer< std::vector<OUString> >(xModuleConfig->getElementNames()));
     return lModules;
 }
@@ -469,17 +463,11 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterListForModule(const OUS
 }
 
 
-std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const OUString& sModule) const
+std::vector<OUString> FilterFactory::impl_readSortedFilterListFromConfig(const OUString& sModule)
 {
-    // SAFE -> ----------------------
-    osl::ClearableMutexGuard aLock(m_aMutex);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aLock.clear();
-    // <- SAFE ----------------------
-
     try
     {
-        css::uno::Reference< css::container::XNameAccess > xUISortConfig = officecfg::TypeDetection::UISort::ModuleDependendFilterOrder::get(xContext);
+        css::uno::Reference< css::container::XNameAccess > xUISortConfig = officecfg::TypeDetection::UISort::ModuleDependendFilterOrder::get();
         // don't check the module name here. If it does not exists, an exception is thrown and caught below.
         // We return an empty list as result then.
         css::uno::Reference< css::container::XNameAccess > xModule;

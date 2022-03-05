@@ -123,8 +123,7 @@ class Desktop final : public Application
             // throws an exception upon failure
 
     private:
-        void                    RegisterServices(
-                                    css::uno::Reference< css::uno::XComponentContext > const & context);
+        void                    RegisterServices();
         static void             DeregisterServices();
 
     public:

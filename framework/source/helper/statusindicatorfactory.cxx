@@ -375,7 +375,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xParentWindow);
     if ( pWindow )
     {
-        bool bForceFrontAndFocus(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext));
+        bool bForceFrontAndFocus(officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get());
         pWindow->Show(true, bForceFrontAndFocus ? ShowFlags::ForegroundTask : ShowFlags::NONE );
     }
 

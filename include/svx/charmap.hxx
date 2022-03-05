@@ -128,7 +128,6 @@ protected:
     std::deque<OUString>           maFavCharFontList;
 
     rtl::Reference<svx::SvxShowCharSetAcc> m_xAccessible;
-    uno::Reference< uno::XComponentContext > mxContext;
     tools::Long            nX;
     tools::Long            nY;
     tools::Long            m_nXGap;

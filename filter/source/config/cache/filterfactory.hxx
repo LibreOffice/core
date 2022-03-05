@@ -95,7 +95,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
         /** TODO document me
          */
-        std::vector<OUString> impl_getListOfInstalledModules() const;
+        static std::vector<OUString> impl_getListOfInstalledModules();
 
 
         /** @short  implement the container string query:
@@ -126,7 +126,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
             @return A string list of internal filter names.
                     Can be empty.
          */
-        std::vector<OUString> impl_readSortedFilterListFromConfig(const OUString& sModule) const;
+        static std::vector<OUString> impl_readSortedFilterListFromConfig(const OUString& sModule);
 
 };
 

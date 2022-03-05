@@ -65,10 +65,10 @@ HelpOnStartup::HelpOnStartup(const css::uno::Reference< css::uno::XComponentCont
     m_xDesktop = css::frame::Desktop::create(m_xContext);
 
     // ask for office locale
-    m_sLocale = officecfg::Setup::L10N::ooLocale::get(m_xContext);
+    m_sLocale = officecfg::Setup::L10N::ooLocale::get();
 
     // detect system
-    m_sSystem = officecfg::Office::Common::Help::System::get(m_xContext);
+    m_sSystem = officecfg::Office::Common::Help::System::get();
 
     // Start listening for disposing events of these services,
     // so we can react e.g. for an office shutdown

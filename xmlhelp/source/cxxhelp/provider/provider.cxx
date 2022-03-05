@@ -198,7 +198,7 @@ void ContentProvider::init()
     isInitialized = true;
 
     OUString instPath(
-        officecfg::Office::Common::Path::Current::Help::get(m_xContext));
+        officecfg::Office::Common::Path::Current::Help::get());
     if( instPath.isEmpty() )
         // try to determine path from default
         instPath = "$(instpath)/" LIBO_SHARE_HELP_FOLDER;
@@ -206,22 +206,21 @@ void ContentProvider::init()
     subst( instPath );
 
     OUString stylesheet(
-        officecfg::Office::Common::Help::HelpStyleSheet::get(m_xContext));
+        officecfg::Office::Common::Help::HelpStyleSheet::get());
 
     // now adding as configuration change listener for the stylesheet
     m_xContainer.set(
-        officecfg::Office::Common::Help::get(m_xContext),
+        officecfg::Office::Common::Help::get(),
         css::uno::UNO_QUERY_THROW);
     m_xContainer->addContainerListener( this );
 
     OUString setupversion(
-        officecfg::Setup::Product::ooSetupVersion::get(m_xContext));
+        officecfg::Setup::Product::ooSetupVersion::get());
     OUString setupextension(
-        officecfg::Setup::Product::ooSetupExtension::get(m_xContext));
+        officecfg::Setup::Product::ooSetupExtension::get());
     OUString productversion( setupversion + " " + setupextension );
 
-    bool showBasic = officecfg::Office::Common::Help::ShowBasic::get(
-        m_xContext);
+    bool showBasic = officecfg::Office::Common::Help::ShowBasic::get();
     m_pDatabases.reset( new Databases( showBasic,
                                   instPath,
                                   utl::ConfigManager::getProductName(),
