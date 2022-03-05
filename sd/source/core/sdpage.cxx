@@ -176,6 +176,15 @@ SdPage::~SdPage()
 
     clearChildNodes(mxAnimationNode);
 
+    // disconnect the UserCall link
+    SdrObjListIter aIter( this, SdrIterMode::DeepWithGroups );
+    while( aIter.IsMore() )
+    {
+        SdrObject* pChild = aIter.Next();
+        if( pChild->GetUserCall() == this )
+            pChild->SetUserCall(nullptr);
+    }
+
     // clear SdrObjects with broadcasting
     ClearSdrObjList();
 }
