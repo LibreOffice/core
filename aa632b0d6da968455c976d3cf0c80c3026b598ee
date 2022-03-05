@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3024fc2c_228fee77",
+        "filename": "starmath/source/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1355,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-03-05T19:57:46Z",
+      "side": 1,
+      "message": "The issue is here, aSymbolSet is now empty.",
+      "range": {
+        "startLine": 1355,
+        "startChar": 0,
+        "endLine": 1355,
+        "endChar": 5
+      },
+      "revId": "aa632b0d6da968455c976d3cf0c80c3026b598ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
