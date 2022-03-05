@@ -124,6 +124,7 @@ PNGWriterImpl::PNGWriterImpl(const BitmapEx& rBitmapEx,
     Bitmap aBmp(aBitmapEx.GetBitmap());
 
     mnMaxChunkSize = std::numeric_limits<sal_uInt32>::max();
+    bool bTranslucent = true;
 
     if (pFilterData)
     {
@@ -133,6 +134,13 @@ PNGWriterImpl::PNGWriterImpl(const BitmapEx& rBitmapEx,
                 rPropVal.Value >>= mnCompLevel;
             else if (rPropVal.Name == "Interlaced")
                 rPropVal.Value >>= mnInterlaced;
+            else if (rPropVal.Name == "Translucent")
+            {
+                tools::Long nTmp = 0;
+                rPropVal.Value >>= nTmp;
+                if (!nTmp)
+                    bTranslucent = false;
+            }
             else if (rPropVal.Name == "MaxChunkSize")
             {
                 sal_Int32 nVal = 0;
@@ -143,7 +151,7 @@ PNGWriterImpl::PNGWriterImpl(const BitmapEx& rBitmapEx,
     }
     mnBitsPerPixel = sal_uInt8(vcl::pixelFormatBitCount(aBmp.getPixelFormat()));
 
-    if (aBitmapEx.IsAlpha())
+    if (aBitmapEx.IsAlpha() && bTranslucent)
     {
         if (mnBitsPerPixel <= 8)
         {
