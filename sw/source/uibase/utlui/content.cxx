@@ -599,10 +599,11 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 {
                     if (SwTextField* pTextField = pFormatField->GetTextField())
                     {
-                        const SwField* pField = pFormatField->GetField();
-                        // fields in header footer don't behave well, skip them
-                        if (m_pWrtShell->GetDoc()->IsInHeaderFooter(pTextField->GetTextNode()))
+                        // Fields in header footer don't behave well, skip them
+                        if (pTextField->GetTextNode().FindHeaderStartNode() ||
+                                pTextField->GetTextNode().FindFooterStartNode())
                             continue;
+                        const SwField* pField = pFormatField->GetField();
                         OUString sExpandField = pField->ExpandField(true, m_pWrtShell->GetLayout());
                         if (!sExpandField.isEmpty())
                             sExpandField = u" - " + sExpandField;
