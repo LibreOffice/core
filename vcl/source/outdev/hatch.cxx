@@ -24,6 +24,8 @@
 #include <tools/line.hxx>
 #include <tools/helpers.hxx>
 
+#include <unotools/configmgr.hxx>
+
 #include <vcl/hatch.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
@@ -156,13 +158,31 @@ void OutputDevice::DrawHatch( const tools::PolyPolygon& rPolyPoly, const Hatch& 
         // Single hatch
         aRect.AdjustLeft( -nLogPixelWidth ); aRect.AdjustTop( -nLogPixelWidth ); aRect.AdjustRight(nLogPixelWidth ); aRect.AdjustBottom(nLogPixelWidth );
         CalcHatchValues( aRect, nWidth, rHatch.GetAngle(), aPt1, aPt2, aInc, aEndPt1 );
-        do
+
+        if (aInc.Width() <= 0 && aInc.Height() <= 0)
+            SAL_WARN("vcl.gdi", "invalid increment");
+        else
         {
-            DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
-            aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
-            aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
+            if (utl::ConfigManager::IsFuzzing())
+            {
+                tools::Long nVertSteps = aInc.Height() ? ((aEndPt1.Y() - aPt1.Y()) / aInc.Height()) : -1;
+                tools::Long nHorzSteps = aInc.Width() ? ((aEndPt1.X() - aPt1.X()) / aInc.Width()) : -1;
+                auto nSteps = std::max(nVertSteps, nHorzSteps);
+                if (nSteps > 1024)
+                {
+                    SAL_WARN("vcl.gdi", "skipping slow hatch with " << nSteps << " steps");
+                    return;
+                }
+            }
+
+            do
+            {
+                DrawHatchLine( tools::Line( aPt1, aPt2 ), rPolyPoly, pPtBuffer.get(), bMtf );
+                aPt1.AdjustX(aInc.Width() ); aPt1.AdjustY(aInc.Height() );
+                aPt2.AdjustX(aInc.Width() ); aPt2.AdjustY(aInc.Height() );
+            }
+            while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
         }
-        while( ( aPt1.X() <= aEndPt1.X() ) && ( aPt1.Y() <= aEndPt1.Y() ) );
 
         if( ( rHatch.GetStyle() == HatchStyle::Double ) || ( rHatch.GetStyle() == HatchStyle::Triple ) )
         {
