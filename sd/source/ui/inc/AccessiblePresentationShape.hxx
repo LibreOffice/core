@@ -48,7 +48,7 @@ public:
     virtual OUString
         CreateAccessibleBaseName () override;
 
-    OUString GetStyle() override;
+    OUString GetStyle() const override;
 
 private:
     AccessiblePresentationShape (const AccessiblePresentationShape&) = delete;
