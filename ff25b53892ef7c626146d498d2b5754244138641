@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb4f710d_77caeb81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-05T12:08:01Z",
+      "side": 1,
+      "message": "I exported a selected image in a slide (which includes transparency) with and without the option enabled, I had the expected result in both cases.\nNow perhaps it needs more testing so if you\u0027ve got ideas, don\u0027t hesitate to tell!",
+      "revId": "ff25b53892ef7c626146d498d2b5754244138641",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
