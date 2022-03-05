@@ -123,6 +123,24 @@
       "parentUuid": "2d186e4c_4ad2656f",
       "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa951032_0b96ceee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-05T07:35:17Z",
+      "side": 1,
+      "message": "Note that you do not need to do any complicated checks to see if a file is built for you. Simply modify the file and see if it gets rebuilt.",
+      "parentUuid": "7e91ae67_612ee15f",
+      "revId": "3efe8048eb3d4051bd5f3c59ace979d93da26c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
