@@ -86,7 +86,7 @@ class UnoGridControl : public UnoGridControl_Base
 {
 public:
     UnoGridControl();
-    OUString             GetComponentServiceName() override;
+    OUString             GetComponentServiceName() const override;
 
     // css::lang::XComponent
     void SAL_CALL dispose(  ) override;

@@ -277,7 +277,7 @@ public:
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL queryFieldData( sal_Int32 nRow, const css::uno::Type& xType ) override;
 
 // UnoControl
-    virtual OUString GetComponentServiceName() override;
+    virtual OUString GetComponentServiceName() const override;
 
 // css::util::XModifyBroadcaster
     virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener >& l) override;

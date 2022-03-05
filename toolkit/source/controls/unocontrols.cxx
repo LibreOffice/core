@@ -187,7 +187,7 @@ void SAL_CALL UnoEditControl::release(  ) noexcept
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoEditControl, UnoControlBase, UnoEditControl_Base )
 
-OUString UnoEditControl::GetComponentServiceName()
+OUString UnoEditControl::GetComponentServiceName() const
 {
     // by default, we want a simple edit field
     OUString sName( "Edit" );
@@ -544,7 +544,7 @@ UnoFileControl::UnoFileControl()
 {
 }
 
-OUString UnoFileControl::GetComponentServiceName()
+OUString UnoFileControl::GetComponentServiceName() const
 {
     return "filecontrol";
 }
@@ -718,7 +718,7 @@ UnoButtonControl::UnoButtonControl()
     maComponentInfos.nHeight = 14;
 }
 
-OUString UnoButtonControl::GetComponentServiceName()
+OUString UnoButtonControl::GetComponentServiceName() const
 {
     OUString aName( "pushbutton" );
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_PUSHBUTTONTYPE ) );
@@ -972,7 +972,7 @@ UnoImageControlControl::UnoImageControlControl()
     maComponentInfos.nHeight = 100;
 }
 
-OUString UnoImageControlControl::GetComponentServiceName()
+OUString UnoImageControlControl::GetComponentServiceName() const
 {
     return "fixedimage";
 }
@@ -1099,7 +1099,7 @@ UnoRadioButtonControl::UnoRadioButtonControl()
     maComponentInfos.nHeight = 12;
 }
 
-OUString UnoRadioButtonControl::GetComponentServiceName()
+OUString UnoRadioButtonControl::GetComponentServiceName() const
 {
     return "radiobutton";
 }
@@ -1330,7 +1330,7 @@ UnoCheckBoxControl::UnoCheckBoxControl()
     maComponentInfos.nHeight = 12;
 }
 
-OUString UnoCheckBoxControl::GetComponentServiceName()
+OUString UnoCheckBoxControl::GetComponentServiceName() const
 {
     return "checkbox";
 }
@@ -1528,7 +1528,7 @@ UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
     maComponentInfos.nHeight = 12;
 }
 
-OUString UnoFixedHyperlinkControl::GetComponentServiceName()
+OUString UnoFixedHyperlinkControl::GetComponentServiceName() const
 {
     return "fixedhyperlink";
 }
@@ -1725,7 +1725,7 @@ UnoFixedTextControl::UnoFixedTextControl()
     maComponentInfos.nHeight = 12;
 }
 
-OUString UnoFixedTextControl::GetComponentServiceName()
+OUString UnoFixedTextControl::GetComponentServiceName() const
 {
     return "fixedtext";
 }
@@ -1889,7 +1889,7 @@ UnoGroupBoxControl::UnoGroupBoxControl()
     maComponentInfos.nHeight = 100;
 }
 
-OUString UnoGroupBoxControl::GetComponentServiceName()
+OUString UnoGroupBoxControl::GetComponentServiceName() const
 {
     return "groupbox";
 }
@@ -2476,7 +2476,7 @@ UnoListBoxControl::UnoListBoxControl()
     maComponentInfos.nHeight = 12;
 }
 
-OUString UnoListBoxControl::GetComponentServiceName()
+OUString UnoListBoxControl::GetComponentServiceName() const
 {
     return "listbox";
 }
@@ -2985,7 +2985,7 @@ css::uno::Sequence<OUString> UnoComboBoxControl::getSupportedServiceNames()
     return comphelper::concatSequences( UnoEditControl::getSupportedServiceNames(), vals);
 }
 
-OUString UnoComboBoxControl::GetComponentServiceName()
+OUString UnoComboBoxControl::GetComponentServiceName() const
 {
     return "combobox";
 }
@@ -3439,7 +3439,7 @@ UnoDateFieldControl::UnoDateFieldControl()
     mbLongFormat = TRISTATE_INDET;
 }
 
-OUString UnoDateFieldControl::GetComponentServiceName()
+OUString UnoDateFieldControl::GetComponentServiceName() const
 {
     return "datefield";
 }
@@ -3706,7 +3706,7 @@ UnoTimeFieldControl::UnoTimeFieldControl()
     mnLast = util::Time( 999999999, 59, 59, 23, false );
 }
 
-OUString UnoTimeFieldControl::GetComponentServiceName()
+OUString UnoTimeFieldControl::GetComponentServiceName() const
 {
     return "timefield";
 }
@@ -3933,7 +3933,7 @@ UnoNumericFieldControl::UnoNumericFieldControl()
     mnLast = 0x7FFFFFFF;
 }
 
-OUString UnoNumericFieldControl::GetComponentServiceName()
+OUString UnoNumericFieldControl::GetComponentServiceName() const
 {
     return "numericfield";
 }
@@ -4153,7 +4153,7 @@ UnoCurrencyFieldControl::UnoCurrencyFieldControl()
     mnLast = 0x7FFFFFFF;
 }
 
-OUString UnoCurrencyFieldControl::GetComponentServiceName()
+OUString UnoCurrencyFieldControl::GetComponentServiceName() const
 {
     return "longcurrencyfield";
 }
@@ -4368,7 +4368,7 @@ UnoPatternFieldControl::UnoPatternFieldControl()
 {
 }
 
-OUString UnoPatternFieldControl::GetComponentServiceName()
+OUString UnoPatternFieldControl::GetComponentServiceName() const
 {
     return "patternfield";
 }
@@ -4544,7 +4544,7 @@ UnoProgressBarControl::UnoProgressBarControl()
 {
 }
 
-OUString UnoProgressBarControl::GetComponentServiceName()
+OUString UnoProgressBarControl::GetComponentServiceName() const
 {
     return "ProgressBar";
 }
@@ -4704,7 +4704,7 @@ UnoFixedLineControl::UnoFixedLineControl()
     maComponentInfos.nHeight = 100;     // ??
 }
 
-OUString UnoFixedLineControl::GetComponentServiceName()
+OUString UnoFixedLineControl::GetComponentServiceName() const
 {
     return "FixedLine";
 }

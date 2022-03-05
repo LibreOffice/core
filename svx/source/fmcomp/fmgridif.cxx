@@ -399,7 +399,7 @@ void SAL_CALL FmXGridControl::dispose()
 }
 
 
-OUString FmXGridControl::GetComponentServiceName()
+OUString FmXGridControl::GetComponentServiceName() const
 {
     return "DBGrid";
 }

@@ -277,7 +277,7 @@ UnoGridControl::~UnoGridControl()
 }
 
 
-OUString UnoGridControl::GetComponentServiceName()
+OUString UnoGridControl::GetComponentServiceName() const
 {
     return "Grid";
 }

@@ -145,7 +145,7 @@ namespace toolkit
         ItemListenerMultiplexer                 maItemListeners;
     public:
                             UnoRoadmapControl();
-        OUString     GetComponentServiceName() override;
+        OUString     GetComponentServiceName() const override;
 
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override { UnoControlBase::disposing( Source ); }
 

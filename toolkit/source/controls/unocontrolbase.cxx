@@ -100,7 +100,7 @@ void UnoControlBase::ImplSetPropertyValue( const OUString& aPropertyName, const 
         ImplLockPropertyChangeNotification( aPropertyName, false );
 }
 
-css::uno::Any UnoControlBase::ImplGetPropertyValue( const OUString& aPropertyName )
+css::uno::Any UnoControlBase::ImplGetPropertyValue( const OUString& aPropertyName ) const
 {
     css::uno::Reference< css::beans::XPropertySet >  xPSet( mxModel, css::uno::UNO_QUERY );
     if ( xPSet.is() )

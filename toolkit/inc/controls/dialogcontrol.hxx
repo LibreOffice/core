@@ -42,7 +42,7 @@ public:
 
                                 UnoDialogControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
                                 virtual ~UnoDialogControl() override;
-    OUString             GetComponentServiceName() override;
+    OUString             GetComponentServiceName() const override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
     void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
@@ -193,7 +193,7 @@ class UnoMultiPageControl final : public ControlContainerBase
 public:
     UnoMultiPageControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoMultiPageControl() override;
-    OUString     GetComponentServiceName() override;
+    OUString     GetComponentServiceName() const override;
 
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, ControlContainerBase, "com.sun.star.awt.UnoControlMultiPage" )
@@ -266,7 +266,7 @@ class UnoPageControl final : public ControlContainerBase
 public:
     UnoPageControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoPageControl() override;
-    OUString     GetComponentServiceName() override;
+    OUString     GetComponentServiceName() const override;
 
 
     // css::lang::XServiceInfo
@@ -302,7 +302,7 @@ class UnoFrameControl final : public ControlContainerBase
 public:
     UnoFrameControl( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~UnoFrameControl() override;
-    OUString     GetComponentServiceName() override;
+    OUString     GetComponentServiceName() const override;
 
 // css::lang::XServiceInfo
 DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, ControlContainerBase, "com.sun.star.awt.UnoControlFrame" )

@@ -104,7 +104,7 @@ namespace toolkit
     {
     public:
                             UnoFormattedFieldControl();
-        OUString     GetComponentServiceName() override;
+        OUString     GetComponentServiceName() const override;
 
         // css::awt::XTextListener
         void SAL_CALL textChanged( const css::awt::TextEvent& rEvent ) override;

@@ -417,7 +417,7 @@ namespace toolkit
     }
 
 
-    OUString UnoFormattedFieldControl::GetComponentServiceName()
+    OUString UnoFormattedFieldControl::GetComponentServiceName() const
     {
         return "FormattedField";
     }

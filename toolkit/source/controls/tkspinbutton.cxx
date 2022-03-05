@@ -75,7 +75,7 @@ private:
 
 public:
                                 UnoSpinButtonControl();
-    OUString             GetComponentServiceName() override;
+    OUString             GetComponentServiceName() const override;
 
     DECLARE_UNO3_AGG_DEFAULTS( UnoSpinButtonControl, UnoControlBase )
     css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
@@ -201,7 +201,7 @@ public:
     }
 
 
-    OUString UnoSpinButtonControl::GetComponentServiceName()
+    OUString UnoSpinButtonControl::GetComponentServiceName() const
     {
         return "SpinButton";
     }

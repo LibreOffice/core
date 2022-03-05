@@ -166,7 +166,7 @@ UnoControlTabPage::~UnoControlTabPage()
 {
 }
 
-OUString UnoControlTabPage::GetComponentServiceName()
+OUString UnoControlTabPage::GetComponentServiceName() const
 {
     return "TabPageModel";
 }

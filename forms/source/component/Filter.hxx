@@ -80,7 +80,7 @@ namespace frm
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
         css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
-        virtual OUString GetComponentServiceName() override;
+        virtual OUString GetComponentServiceName() const override;
         virtual void SAL_CALL   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;
 
     // css::lang::XComponent

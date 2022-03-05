@@ -382,7 +382,7 @@ sal_Bool SAL_CALL UnoRoadmapControl::setModel(const Reference< XControlModel >& 
     }
 
 
-    OUString UnoRoadmapControl::GetComponentServiceName()
+    OUString UnoRoadmapControl::GetComponentServiceName() const
     {
         return "Roadmap";
     }
