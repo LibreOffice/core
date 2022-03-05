@@ -2479,16 +2479,23 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
 
     const ScDocument& rDoc = GetRoot().GetDoc();
     const SCTAB nScTab = GetRoot().GetCurrScTab();
+    // Do not repeatedly call RowHidden() / GetRowHeight() for same values.
+    bool bHidden = false;
+    SCROW lastSameHiddenRow = -1;
+    sal_uInt16 nHeight = 0;
+    SCROW lastSameHeightRow = -1;
     // create the missing rows first
     while( nFrom <= nXclRow )
     {
         // only create RowMap entries if it is first row in spreadsheet,
         // if it is the desired row, or for rows that differ from previous.
-        const bool bHidden = rDoc.RowHidden(nFrom, nScTab);
+        if( static_cast<SCROW>(nFrom) > lastSameHiddenRow )
+            bHidden = rDoc.RowHidden(nFrom, nScTab, nullptr, &lastSameHiddenRow);
         // Always get the actual row height even if the manual size flag is
         // not set, to correctly export the heights of rows with wrapped
         // texts.
-        const sal_uInt16 nHeight = rDoc.GetRowHeight(nFrom, nScTab, false);
+        if( static_cast<SCROW>(nFrom) > lastSameHeightRow )
+            nHeight = rDoc.GetRowHeight(nFrom, nScTab, nullptr, &lastSameHeightRow, false);
         if ( !pPrevEntry || ( nFrom == nXclRow ) ||
              ( maOutlineBfr.IsCollapsed() ) ||
              ( maOutlineBfr.GetLevel() != 0 ) ||
