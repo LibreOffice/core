@@ -2690,10 +2690,15 @@ void ScChangeTrack::AppendContentRange( const ScRange& rRange,
         for ( SCTAB nTab = nTab1; nTab <= nTab2; nTab++ )
         {
             aPos.SetTab( nTab );
-            for ( SCCOL nCol = nCol1; nCol <= nCol2; nCol++ )
+            // AppendContent() is a no-op if both cells are empty.
+            SCCOL lastCol = std::max( pRefDoc->ClampToAllocatedColumns( nTab, nCol2 ),
+                                      rDoc.ClampToAllocatedColumns( nTab, nCol2 ));
+            for ( SCCOL nCol = nCol1; nCol <= lastCol; nCol++ )
             {
                 aPos.SetCol( nCol );
-                for ( SCROW nRow = nRow1; nRow <= nRow2; nRow++ )
+                SCROW lastRow = std::max( pRefDoc->GetLastDataRow( nTab, nCol, nCol, nRow2 ),
+                                          rDoc.GetLastDataRow( nTab, nCol, nCol, nRow2 ));
+                for ( SCROW nRow = nRow1; nRow <= lastRow; nRow++ )
                 {
                     aPos.SetRow( nRow );
                     AppendContent( aPos, pRefDoc );
