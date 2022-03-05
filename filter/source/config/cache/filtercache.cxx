@@ -1272,7 +1272,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldn't be opened successfully
-        // and exception os thrown automatically and must be forwarded
+        // and exception is thrown automatically and must be forwarded
         // to our caller...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
@@ -1289,7 +1289,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldn't be opened successfully
-        // and exception os thrown automatically and must be forwarded
+        // and exception is thrown automatically and must be forwarded
         // to our call...
         css::uno::Reference< css::container::XNameAccess > xTypes(impl_openConfig(E_PROVIDER_TYPES), css::uno::UNO_QUERY_THROW);
         {
@@ -1306,7 +1306,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldn't be opened successfully
-        // and exception os thrown automatically and must be forwarded
+        // and exception is thrown automatically and must be forwarded
         // to our call...
         css::uno::Reference< css::container::XNameAccess > xFilters(impl_openConfig(E_PROVIDER_FILTERS), css::uno::UNO_QUERY_THROW);
         {
@@ -1323,7 +1323,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldn't be opened successfully
-        // and exception os thrown automatically and must be forwarded
+        // and exception is thrown automatically and must be forwarded
         // to our call...
         css::uno::Reference< css::container::XNameAccess > xLoaders(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
@@ -1340,7 +1340,7 @@ void FilterCache::impl_load(EFillState eRequiredState)
        )
     {
         // Attention! If config couldn't be opened successfully
-        // and exception os thrown automatically and must be forwarded
+        // and exception is thrown automatically and must be forwarded
         // to our call...
         css::uno::Reference< css::container::XNameAccess > xHandlers(impl_openConfig(E_PROVIDER_OTHERS), css::uno::UNO_QUERY_THROW);
         {
