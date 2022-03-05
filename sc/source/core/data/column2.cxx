@@ -1971,6 +1971,28 @@ void ScColumn::PrepareBroadcastersForDestruction()
     }
 }
 
+namespace
+{
+struct BroadcasterNoListenersPredicate
+{
+    bool operator()( size_t, const SvtBroadcaster* broadcaster )
+    {
+        return !broadcaster->HasListeners();
+    }
+};
+
+}
+
+void ScColumn::DeleteEmptyBroadcasters()
+{
+    if(!mbEmptyBroadcastersPending)
+        return;
+    // Clean up after ScDocument::EnableDelayDeletingBroadcasters().
+    BroadcasterNoListenersPredicate predicate;
+    sc::SetElementsToEmpty1<sc::broadcaster_block>( maBroadcasters, predicate );
+    mbEmptyBroadcastersPending = false;
+}
+
 ScPostIt* ScColumn::GetCellNote(SCROW nRow)
 {
     return maCellNotes.get<ScPostIt*>(nRow);
@@ -3268,8 +3290,12 @@ void ScColumn::EndListening( SvtListener& rLst, SCROW nRow )
 
     rLst.EndListening(*pBC);
     if (!pBC->HasListeners())
-        // There is no more listeners for this cell. Remove the broadcaster.
-        maBroadcasters.set_empty(nRow, nRow);
+    {   // There is no more listeners for this cell. Remove the broadcaster.
+        if(GetDoc().IsDelayedDeletingBroadcasters())
+            mbEmptyBroadcastersPending = true;
+        else
+            maBroadcasters.set_empty(nRow, nRow);
+    }
 }
 
 void ScColumn::StartListening( sc::StartListeningContext& rCxt, const ScAddress& rAddress, SvtListener& rLst )

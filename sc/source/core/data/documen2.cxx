@@ -163,6 +163,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         bInDtorClear( false ),
         bExpandRefs( false ),
         bDetectiveDirty( false ),
+        bDelayedDeletingBroadcasters( false ),
         bLinkFormulaNeedingCheck( false ),
         nAsianCompression(CharCompressType::Invalid),
         nAsianKerning(SC_ASIANKERNING_INVALID),

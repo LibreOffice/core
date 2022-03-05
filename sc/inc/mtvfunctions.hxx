@@ -23,6 +23,17 @@ struct FuncElseNoOp
     }
 };
 
+template<typename FuncElem, typename Elem>
+struct FuncNotElem
+{
+    FuncElem& func;
+    FuncNotElem(FuncElem& f) : func(f) {}
+    bool operator() (size_t s, Elem elem) const
+    {
+        return !func(s, elem);
+    }
+};
+
 /**
  * Generic algorithm to parse blocks of multi_type_vector either partially
  * or fully.
@@ -510,6 +521,35 @@ FindElement2(
     }
 
     return PositionType(rStore.end(), 0);
+}
+
+// Efficiently set all elements for which the predicate returns true as empty.
+template<typename Blk1, typename StoreT, typename FuncElem>
+void SetElementsToEmpty1(
+    StoreT& rStore, FuncElem& rFuncElem)
+{
+    typedef std::pair<typename StoreT::const_iterator, typename StoreT::size_type> PositionType;
+
+    for (typename StoreT::iterator it = rStore.begin(); it != rStore.end(); ++it)
+    {
+        if (it->type == Blk1::block_type)
+        {
+            PositionType firstToEmpty = CheckElem<Blk1>(rStore, it, 0, it->size, rFuncElem);
+            if (firstToEmpty.first != rStore.end())
+            {
+                typename StoreT::size_type nFirstOffset = firstToEmpty.second;
+                typename StoreT::size_type nRemainingDataSize = it->size - nFirstOffset;
+                FuncNotElem<FuncElem, typename Blk1::value_type> notFuncElem(rFuncElem);
+                PositionType lastToEmpty = CheckElem<Blk1>(rStore, it, nFirstOffset, nRemainingDataSize,
+                    notFuncElem);
+                typename StoreT::size_type nLastOffset = lastToEmpty.first != rStore.end()
+                    ? lastToEmpty.second - 1 : it->size - 1;
+                it = rStore.set_empty(it, it->position + nFirstOffset, it->position + nLastOffset);
+                // The returned iterator points to the empty elements block.
+                assert(it->type == sc::element_type_empty);
+            }
+        }
+    }
 }
 
 }

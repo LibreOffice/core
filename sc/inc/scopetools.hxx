@@ -93,6 +93,17 @@ public:
     ~DelayStartListeningFormulaCells();
     void set();
 };
+
+/// Wrapper for ScDocument::EnableDelayDeletingBroadcasters()
+class DelayDeletingBroadcasters
+{
+    ScDocument& mDoc;
+    const bool mOldValue;
+
+public:
+    DelayDeletingBroadcasters(ScDocument& doc);
+    ~DelayDeletingBroadcasters();
+};
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

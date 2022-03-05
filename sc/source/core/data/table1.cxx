@@ -2522,6 +2522,12 @@ void ScTable::DeleteBroadcasters(
     aCol[nCol].DeleteBroadcasters(rBlockPos, nRow1, nRow2);
 }
 
+void ScTable::DeleteEmptyBroadcasters()
+{
+    for( auto& col : aCol )
+        col->DeleteEmptyBroadcasters();
+}
+
 void ScTable::FillMatrix( ScMatrix& rMat, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, svl::SharedStringPool* pPool ) const
 {
     size_t nMatCol = 0;

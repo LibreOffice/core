@@ -443,6 +443,19 @@ bool ScDocument::CanDelayStartListeningFormulaCells( ScColumn* column, SCROW row
     return true;
 }
 
+void ScDocument::EnableDelayDeletingBroadcasters( bool set )
+{
+    if( bDelayedDeletingBroadcasters == set )
+        return;
+    bDelayedDeletingBroadcasters = set;
+    if( !bDelayedDeletingBroadcasters )
+    {
+        for (auto& rxTab : maTabs)
+            if (rxTab)
+                rxTab->DeleteEmptyBroadcasters();
+    }
+}
+
 bool ScDocument::HasFormulaCell( const ScRange& rRange ) const
 {
     if (!rRange.IsValid())

@@ -59,7 +59,7 @@ public:
     ListenersType& GetAllListeners();
     const ListenersType& GetAllListeners() const;
 
-    bool HasListeners() const;
+    bool HasListeners() const { return (maListeners.size() - mnEmptySlots) > 0; }
 
     /**
      * Listeners and broadcasters are M:N relationship.  If you want to
