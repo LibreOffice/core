@@ -48,6 +48,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/virdev.hxx>
 #include <vcl/wmf.hxx>
 #include <vcl/wrkwin.hxx>
 #include <fltcall.hxx>
@@ -187,6 +188,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             SvFileStream aFileStream(out, StreamMode::READ);
             SvmReader aReader(aFileStream);
             aReader.Read(aGDIMetaFile);
+            ScopedVclPtrInstance<VirtualDevice> aVDev;
+            aGDIMetaFile.Play(*aVDev);
         }
         else if (strcmp(argv[2], "pcd") == 0)
         {
