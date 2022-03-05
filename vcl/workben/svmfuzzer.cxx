@@ -24,6 +24,11 @@ void * com_sun_star_i18n_NativeNumberSupplier_get_implementation( void *, void *
 void * com_sun_star_i18n_NumberFormatCodeMapper_get_implementation( void *, void * );
 void * com_sun_star_comp_rendering_CanvasFactory_get_implementation( void *, void * );
 void * com_sun_star_comp_rendering_Canvas_VCL_get_implementation( void *, void * );
+void * linguistic_ConvDicList_get_implementation( void *, void * );
+void * linguistic_DicList_get_implementation( void *, void * );
+void * linguistic_LinguProps_get_implementation( void *, void * );
+void * linguistic_LngSvcMgr_get_implementation( void *, void * );
+void * linguistic_GrammarCheckingIterator_get_implementation( void *, void * );
 }
 
 const lib_to_factory_mapping *
@@ -47,6 +52,11 @@ lo_get_constructor_map(void)
         { "com_sun_star_i18n_NumberFormatCodeMapper_get_implementation", com_sun_star_i18n_NumberFormatCodeMapper_get_implementation },
         { "com_sun_star_comp_rendering_CanvasFactory_get_implementation", com_sun_star_comp_rendering_CanvasFactory_get_implementation },
         { "com_sun_star_comp_rendering_Canvas_VCL_get_implementation", com_sun_star_comp_rendering_Canvas_VCL_get_implementation },
+        { "linguistic_ConvDicList_get_implementation", linguistic_ConvDicList_get_implementation },
+        { "linguistic_DicList_get_implementation", linguistic_DicList_get_implementation },
+        { "linguistic_LinguProps_get_implementation", linguistic_LinguProps_get_implementation },
+        { "linguistic_LngSvcMgr_get_implementation", linguistic_LngSvcMgr_get_implementation },
+        { "linguistic_GrammarCheckingIterator_get_implementation", linguistic_GrammarCheckingIterator_get_implementation },
         { 0, 0 }
     };
 
