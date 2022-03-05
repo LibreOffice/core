@@ -70,6 +70,30 @@
       },
       "revId": "9780db7c25214c571baf8c137bdfa4e4dadad849",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddec74d4_b6e36d66",
+        "filename": "bridges/source/cpp_uno/gcc3_linux_alpha/cpp2uno.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1003518
+      },
+      "writtenOn": "2022-03-05T15:58:18Z",
+      "side": 1,
+      "message": "resolved.",
+      "parentUuid": "fd249a75_b0318016",
+      "range": {
+        "startLine": 516,
+        "startChar": 100,
+        "endLine": 516,
+        "endChar": 109
+      },
+      "revId": "9780db7c25214c571baf8c137bdfa4e4dadad849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
