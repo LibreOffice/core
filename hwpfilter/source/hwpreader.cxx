@@ -4054,22 +4054,26 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     mxList->addAttribute("svg:height", sXML_CDATA,
                                  OUString::number (WTMM( drawobj->extent.h )) + "mm");
                     if( drawobj->type == HWPDO_ADVANCED_ELLIPSE ){
-                                if( drawobj->u.arc.radial[0].x != drawobj->u.arc.radial[1].x
-                                        || drawobj->u.arc.radial[0].y != drawobj->u.arc.radial[1].y ){
-                                    int Cx,Cy;
-                                    Cx = ( drawobj->offset2.x + drawobj->extent.w ) / 2;
-                                    Cy = ( drawobj->offset2.y + drawobj->extent.h ) / 2;
+                        if (drawobj->u.arc.radial[0].x != drawobj->u.arc.radial[1].x ||
+                            drawobj->u.arc.radial[0].y != drawobj->u.arc.radial[1].y) {
 
-                                    double start_angle, end_angle;
-                                    start_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[0].x, drawobj->u.arc.radial[0].y );
-                                    end_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[1].x, drawobj->u.arc.radial[1].y );
-                                    if( drawobj->property.fill_color < 0xffffff )
-                                        mxList->addAttribute("draw:kind", sXML_CDATA, "section");
-                                    else
-                                        mxList->addAttribute("draw:kind", sXML_CDATA, "arc");
-                                    mxList->addAttribute("draw:start-angle", sXML_CDATA, OUString::number(start_angle ));
-                                    mxList->addAttribute("draw:end-angle", sXML_CDATA, OUString::number(end_angle));
-                                }
+                            int Cx, Cy;
+                            if (!o3tl::checked_add(drawobj->offset2.x, drawobj->extent.w, Cx) &&
+                                !o3tl::checked_add(drawobj->offset2.y, drawobj->extent.h, Cy))
+                            {
+                                Cx /= 2;
+                                Cy /= 2;
+
+                                double start_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[0].x, drawobj->u.arc.radial[0].y );
+                                double end_angle = calcAngle( Cx, Cy, drawobj->u.arc.radial[1].x, drawobj->u.arc.radial[1].y );
+                                if( drawobj->property.fill_color < 0xffffff )
+                                    mxList->addAttribute("draw:kind", sXML_CDATA, "section");
+                                else
+                                    mxList->addAttribute("draw:kind", sXML_CDATA, "arc");
+                                mxList->addAttribute("draw:start-angle", sXML_CDATA, OUString::number(start_angle ));
+                                mxList->addAttribute("draw:end-angle", sXML_CDATA, OUString::number(end_angle));
+                            }
+                        }
                     }
                     startEl("draw:ellipse");
                     mxList->clear();
