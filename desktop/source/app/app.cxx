@@ -1305,7 +1305,7 @@ int Desktop::Main()
 
     Reference< XDesktop2 > xDesktop;
 
-    RegisterServices(xContext);
+    RegisterServices();
 
     SetSplashScreenProgress(25);
 

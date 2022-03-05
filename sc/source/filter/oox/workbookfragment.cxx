@@ -544,9 +544,8 @@ void WorkbookFragment::recalcFormulaCells()
     // Recalculate formula cells.
     ScDocument& rDoc = getScDocument();
     ScDocShell& rDocSh = getDocShell(rDoc);
-    Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
     ScRecalcOptions nRecalcMode =
-        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get(xContext));
+        static_cast<ScRecalcOptions>(officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::get());
     bool bHardRecalc = false;
     if (nRecalcMode == RECALC_ASK)
     {

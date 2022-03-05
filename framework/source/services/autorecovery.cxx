@@ -1724,8 +1724,8 @@ void AutoRecovery::implts_openConfig()
 
     try
     {
-        nMinSpaceDocSave = officecfg::Office::Recovery::AutoSave::MinSpaceDocSave::get(m_xContext);
-        nMinSpaceConfigSave = officecfg::Office::Recovery::AutoSave::MinSpaceConfigSave::get(m_xContext);
+        nMinSpaceDocSave = officecfg::Office::Recovery::AutoSave::MinSpaceDocSave::get();
+        nMinSpaceConfigSave = officecfg::Office::Recovery::AutoSave::MinSpaceConfigSave::get();
     }
     catch(const css::uno::Exception&)
     {
@@ -1748,13 +1748,13 @@ void AutoRecovery::implts_readAutoSaveConfig()
     implts_openConfig();
 
     // AutoSave [bool]
-    bool bEnabled(officecfg::Office::Recovery::AutoSave::Enabled::get(m_xContext));
+    bool bEnabled(officecfg::Office::Recovery::AutoSave::Enabled::get());
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     if (bEnabled)
     {
-        bool bUserEnabled(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get(m_xContext));
+        bool bUserEnabled(officecfg::Office::Recovery::AutoSave::UserAutoSaveEnabled::get());
 
         m_eJob       |= Job::AutoSave;
         m_eTimerType  = AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL;
@@ -1776,7 +1776,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
     } /* SAFE */
 
     // AutoSaveTimeIntervall [int] in min
-    sal_Int32 nTimeIntervall(officecfg::Office::Recovery::AutoSave::TimeIntervall::get(m_xContext));
+    sal_Int32 nTimeIntervall(officecfg::Office::Recovery::AutoSave::TimeIntervall::get());
 
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
@@ -1802,7 +1802,7 @@ void AutoRecovery::implts_readConfig()
     // <- REENTRANT --------------------------------
 
     css::uno::Reference<css::container::XNameAccess> xRecoveryList(
-            officecfg::Office::Recovery::RecoveryList::get(m_xContext));
+            officecfg::Office::Recovery::RecoveryList::get());
     const OUString sRECOVERY_ITEM_BASE_IDENTIFIER(RECOVERY_ITEM_BASE_IDENTIFIER);
     const css::uno::Sequence< OUString > lItems = xRecoveryList->getElementNames();
     const OUString*                      pItems = lItems.getConstArray();
@@ -1884,7 +1884,7 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         {
             implts_openConfig();
             // open module config on demand and cache the update access
-            xCFG.set(officecfg::Setup::Office::Factories::get(m_xContext),
+            xCFG.set(officecfg::Setup::Office::Factories::get(),
                     css::uno::UNO_SET_THROW);
 
             /* SAFE */ {
@@ -1985,14 +1985,14 @@ void AutoRecovery::implts_persistAllActiveViewNames()
 void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rInfo, bool bRemoveIt)
 {
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create(m_xContext));
+            comphelper::ConfigurationChanges::create());
 
     try
     {
         implts_openConfig();
 
         css::uno::Reference<css::container::XNameAccess> xCheck(
-                officecfg::Office::Recovery::RecoveryList::get(batch));
+                officecfg::Office::Recovery::RecoveryList::get());
 
         css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
@@ -3629,7 +3629,7 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // documents exists and was saved.
 
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create(m_xContext));
+            comphelper::ConfigurationChanges::create());
     officecfg::Office::Recovery::RecoveryInfo::Crashed::set(true, batch);
     batch->commit();
 
@@ -3686,7 +3686,7 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
 
     // Reset the configuration hint "we were crashed"!
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create(m_xContext));
+            comphelper::ConfigurationChanges::create());
     officecfg::Office::Recovery::RecoveryInfo::Crashed::set(false, batch);
     batch->commit();
 }
@@ -3748,7 +3748,7 @@ void AutoRecovery::implts_doSessionQuietQuit()
     // Write a hint for "stored session data" into the configuration, so
     // the on next startup we know what's happen last time
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create(m_xContext));
+            comphelper::ConfigurationChanges::create());
     officecfg::Office::Recovery::RecoveryInfo::SessionData::set(true, batch);
     batch->commit();
 
@@ -3780,7 +3780,7 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     // Reset the configuration hint for "session save"!
     SAL_INFO("fwk.autorecovery", "... reset config key 'SessionData'");
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-            comphelper::ConfigurationChanges::create(m_xContext));
+            comphelper::ConfigurationChanges::create());
     officecfg::Office::Recovery::RecoveryInfo::SessionData::set(false, batch);
     batch->commit();
 
@@ -3897,7 +3897,7 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
     {
         case AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA :
                 {
-                    bool bSessionData = officecfg::Office::Recovery::RecoveryInfo::SessionData::get(m_xContext);
+                    bool bSessionData = officecfg::Office::Recovery::RecoveryInfo::SessionData::get();
                     bool bRecoveryData = !m_lDocCache.empty();
 
                     // exists session data ... => then we can't say, that these
@@ -3910,11 +3910,11 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                 break;
 
         case AUTORECOVERY_PROPHANDLE_CRASHED :
-                aValue <<= officecfg::Office::Recovery::RecoveryInfo::Crashed::get(m_xContext);
+                aValue <<= officecfg::Office::Recovery::RecoveryInfo::Crashed::get();
                 break;
 
         case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
-                aValue <<= officecfg::Office::Recovery::RecoveryInfo::SessionData::get(m_xContext);
+                aValue <<= officecfg::Office::Recovery::RecoveryInfo::SessionData::get();
                 break;
     }
 }

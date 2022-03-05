@@ -318,7 +318,7 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
         m_xComponentContext( xContext ),
-        m_bForceGenericFields(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get(m_xComponentContext)),
+        m_bForceGenericFields(!utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ForceImportWWFieldsAsGenericFields::get()),
         m_bSetUserFieldContent( false ),
         m_bSetCitation( false ),
         m_bSetDateValue( false ),
@@ -418,7 +418,7 @@ DomainMapper_Impl::DomainMapper_Impl(
     getTableManager( ).setHandler(m_pTableHandler);
 
     getTableManager( ).startLevel();
-    m_bUsingEnhancedFields = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get(m_xComponentContext);
+    m_bUsingEnhancedFields = !utl::ConfigManager::IsFuzzing() && officecfg::Office::Common::Filter::Microsoft::Import::ImportWWFieldsAsEnhancedFields::get();
 
     m_pSdtHelper = new SdtHelper(*this, m_xComponentContext);
 
@@ -2615,7 +2615,7 @@ void DomainMapper_Impl::appendOLE( const OUString& rStreamName, const std::share
         uno::Reference< text::XTextContent > xOLE( m_xTextFactory->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xOLEProperties(xOLE, uno::UNO_QUERY_THROW);
 
-        OUString aCLSID = pOLEHandler->getCLSID(m_xComponentContext);
+        OUString aCLSID = pOLEHandler->getCLSID();
         if (aCLSID.isEmpty())
             xOLEProperties->setPropertyValue(getPropertyName( PROP_STREAM_NAME ),
                             uno::makeAny( rStreamName ));

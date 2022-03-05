@@ -2262,17 +2262,13 @@ enum WhichPersona { PERSONA_HEADER, PERSONA_FOOTER };
 /** Update the setting of the Persona header / footer in ImplStyleData */
 static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFooter, BitmapEx& rHeaderFooterBitmap, std::optional<Color>& rMenuBarTextColor )
 {
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    if ( !xContext.is() )
-        return;
-
     // don't burn time loading images we don't need.
     if ( Application::IsHeadlessModeEnabled() )
         return;
 
     // read from the configuration
-    OUString aPersona( officecfg::Office::Common::Misc::Persona::get( xContext ) );
-    OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) );
+    OUString aPersona( officecfg::Office::Common::Misc::Persona::get() );
+    OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get() );
 
     // have the settings changed? marks if header /footer prepared before
     //should maybe extended to a flag that marks if header /footer /both are loaded
@@ -3098,14 +3094,10 @@ StyleSettings::DetermineIconTheme() const
         else
         {
             // read from the configuration, or fallback to what the desktop wants
-            uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
-            if (xContext.is())
-            {
-                sTheme = officecfg::Office::Common::Misc::SymbolStyle::get(xContext);
+            sTheme = officecfg::Office::Common::Misc::SymbolStyle::get();
 
-                if (sTheme.isEmpty() || sTheme == "auto")
-                    sTheme = GetAutomaticallyChosenIconTheme();
-            }
+            if (sTheme.isEmpty() || sTheme == "auto")
+                sTheme = GetAutomaticallyChosenIconTheme();
         }
     }
 

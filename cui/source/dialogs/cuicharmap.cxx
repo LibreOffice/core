@@ -352,7 +352,7 @@ void SvxCharacterMap::updateRecentCharacterList(const OUString& sTitle, const OU
         aRecentCharFontListRange[i] = maRecentCharFontList[i];
     }
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
     officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
     batch->commit();
@@ -391,7 +391,7 @@ void SvxCharacterMap::updateFavCharacterList(const OUString& sTitle, const OUStr
         aFavCharFontListRange[i] = maFavCharFontList[i];
     }
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
     batch->commit();
@@ -444,7 +444,7 @@ void SvxCharacterMap::deleteFavCharacterFromList(std::u16string_view sTitle, std
         aFavCharFontListRange[i] = maFavCharFontList[i];
     }
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set(aFavCharList, batch);
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set(aFavCharFontList, batch);
     batch->commit();
@@ -799,7 +799,7 @@ IMPL_LINK(SvxCharacterMap, RecentClearClickHdl, SvxCharView*, rView, void)
         aRecentCharFontListRange[i] = maRecentCharFontList[i];
     }
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::RecentCharacters::RecentCharacterList::set(aRecentCharList, batch);
     officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set(aRecentCharFontList, batch);
     batch->commit();
@@ -812,7 +812,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, RecentClearAllClickHdl, SvxCharView*, void)
     maRecentCharList.clear();
     maRecentCharFontList.clear();
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::RecentCharacters::RecentCharacterList::set({ }, batch);
     officecfg::Office::Common::RecentCharacters::RecentCharacterFontList::set({ }, batch);
     batch->commit();
@@ -831,7 +831,7 @@ IMPL_LINK_NOARG(SvxCharacterMap, FavClearAllClickHdl, SvxCharView*, void)
     maFavCharList.clear();
     maFavCharFontList.clear();
 
-    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(mxContext));
+    std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterList::set({ }, batch);
     officecfg::Office::Common::FavoriteCharacters::FavoriteCharacterFontList::set({ }, batch);
     batch->commit();

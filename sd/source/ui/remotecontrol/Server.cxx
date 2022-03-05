@@ -348,8 +348,7 @@ void SdDLL::RegisterRemotes()
     if ( Application::IsHeadlessModeEnabled() )
         return;
 
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if ( xContext.is()  && !officecfg::Office::Impress::Misc::Start::EnableSdremote::get( xContext ) )
+    if ( !officecfg::Office::Impress::Misc::Start::EnableSdremote::get() )
         return;
 
     sd::RemoteServer::setup();

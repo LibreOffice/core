@@ -142,8 +142,7 @@ IMPL_STATIC_LINK(SfxEmojiControl, InsertHdl, ThumbnailViewItem*, pItem, void)
     const OUString& sHexText = pItem->getTitle();
     sal_uInt32 cEmojiChar = sHexText.toUInt32(16);
 
-    uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
-    OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get(xContext));
+    OUString sFontName(officecfg::Office::Common::Misc::EmojiFont::get());
 
     uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
             { "Symbols", uno::Any(OUString(&cEmojiChar, 1)) },

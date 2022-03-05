@@ -1747,11 +1747,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf105625)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf105625.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    uno::Reference<uno::XComponentContext> xComponentContext(
-        comphelper::getProcessComponentContext());
     // Ensure correct initial setting
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create(xComponentContext));
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
     batch->commit();
     // We should be able to edit at positions adjacent to fields.
@@ -1783,11 +1781,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protected)
     // so read-only is already true when fieldmarks are considered.
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf125151_protected.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    uno::Reference<uno::XComponentContext> xComponentContext(
-        comphelper::getProcessComponentContext());
     // Ensure correct initial setting
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create(xComponentContext));
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
     batch->commit();
     pWrtShell->Down(/*bSelect=*/false);
@@ -1803,11 +1799,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf125151_protectedB)
     // Similar to testTdf105625 except this is protected with the Protect_Form compat setting
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf125151_protectedB.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    uno::Reference<uno::XComponentContext> xComponentContext(
-        comphelper::getProcessComponentContext());
     // Ensure correct initial setting
     std::shared_ptr<comphelper::ConfigurationChanges> batch(
-        comphelper::ConfigurationChanges::create(xComponentContext));
+        comphelper::ConfigurationChanges::create());
     officecfg::Office::Writer::Cursor::Option::IgnoreProtectedArea::set(false, batch);
     batch->commit();
     // The cursor starts inside of the FieldMark textbox.

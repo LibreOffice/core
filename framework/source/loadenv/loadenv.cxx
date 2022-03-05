@@ -681,8 +681,7 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
     // hack.
 
     // depending on the experimental mode
-    uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
-    if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
     {
         return false;
     }
@@ -914,7 +913,7 @@ bool LoadEnv::impl_furtherDocsAllowed()
 
     try
     {
-        std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get(xContext));
+        std::optional<sal_Int32> x(officecfg::Office::Common::Misc::MaxOpenDocuments::get());
 
         // NIL means: count of allowed documents = infinite !
         //     => return true
@@ -1704,7 +1703,7 @@ void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::X
     bool bForceFrontAndFocus(false);
     if ( !preview )
     {
-        bForceFrontAndFocus = officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get(xContext);
+        bForceFrontAndFocus = officecfg::Office::Common::View::NewDocumentHandling::ForceFocusAndToFront::get();
     }
 
     if( pWindow->IsVisible() && (bForceFrontAndFocus || bForceToFront) )
@@ -1774,7 +1773,7 @@ void LoadEnv::impl_applyPersistentWindowState(const css::uno::Reference< css::aw
         OUString                 sModule = lProps.getUnpackedValueOrDefault(FILTER_PROPNAME_ASCII_DOCUMENTSERVICE, OUString());
 
         // get access to the configuration of this office module
-        css::uno::Reference< css::container::XNameAccess > xModuleCfg(officecfg::Setup::Office::Factories::get(xContext));
+        css::uno::Reference< css::container::XNameAccess > xModuleCfg(officecfg::Setup::Office::Factories::get());
 
         // read window state from the configuration
         // and apply it on the window.

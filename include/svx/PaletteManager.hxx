@@ -47,7 +47,6 @@ class SVXCORE_DLLPUBLIC PaletteManager
     std::vector<std::unique_ptr<Palette>> m_Palettes;
 
     ColorSelectFunction maColorSelectFunction;
-    css::uno::Reference < css::uno::XComponentContext > m_context;
 
     std::unique_ptr<SvColorDialog> m_pColorDlg;
 public:
