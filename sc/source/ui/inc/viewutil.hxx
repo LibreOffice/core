@@ -32,7 +32,7 @@ class ScChangeViewSettings;
 class ScDocument;
 class ScMarkData;
 class ScTabViewShell;
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 enum class TransliterationFlags;
 
 

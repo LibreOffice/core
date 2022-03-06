@@ -26,7 +26,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include "swdllapi.h"
 
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 namespace com::sun::star::i18n { class XBreakIterator; }
 namespace com::sun::star::uno { class XComponentContext; }
 

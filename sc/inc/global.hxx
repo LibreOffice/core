@@ -44,7 +44,7 @@ namespace com::sun::star::uno { template <typename > class Reference; }
 class SfxItemSet;
 class SfxViewShell;
 struct ScCalcConfig;
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 enum class FormulaError : sal_uInt16;
 enum class SvNumFormatType : sal_Int16;
 

@@ -61,7 +61,7 @@ namespace com::sun::star::chart2 { class XChartDocument; }
 
 class Timer;
 
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 enum class ScMF;
 enum class FormulaError : sal_uInt16;
 enum class CharCompressType;

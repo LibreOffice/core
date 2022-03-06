@@ -38,7 +38,7 @@ class SdrObject;
 class OutputDevice;
 class ScDrawLayer;
 class EditTextObject;
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 namespace editeng { class SvxBorderLine; }
 
 namespace sc {

@@ -84,7 +84,7 @@ struct SwConversionArgs;
 struct SvxSwAutoFormatFlags;
 struct SwInsertTableOptions;
 struct SwDBData;
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 enum class SfxClassificationPolicyType;
 enum class RedlineFlags;
 enum class TransliterationFlags;

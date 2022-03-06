@@ -28,7 +28,7 @@
 
 // these defines can be ORed
 // note these values DO NOT match the values in css::i18n::ScriptType
-enum class SvtScriptType
+enum class SvtScriptType : sal_uInt8
 {
     NONE         = 0x00,
     LATIN        = 0x01,
