@@ -30,6 +30,7 @@
 #include <vcl/outdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/graphictools.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/TypeSerializer.hxx>
 
@@ -950,6 +951,27 @@ MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
 
 void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        constexpr int nMaxScaleWhenFuzzing = 4096;
+
+        auto nSourceHeight = maBmpEx.GetSizePixel().Height();
+        auto nDestHeight = maSz.Height();
+        if (nSourceHeight && nDestHeight > nSourceHeight && nDestHeight / nSourceHeight > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
+            return;
+        }
+
+        auto nSourceWidth = maBmpEx.GetSizePixel().Width();
+        auto nDestWidth = maSz.Width();
+        if (nSourceWidth && nDestWidth > nSourceWidth && nDestWidth / nSourceWidth > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
+            return;
+        }
+    }
+
     pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
 }
 
