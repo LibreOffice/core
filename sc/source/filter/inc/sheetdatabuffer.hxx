@@ -202,8 +202,17 @@ private:
             return lhs.mnEndRow<rhs.mnStartRow;
         }
     };
+    struct StyleRowRangeCompEqual
+    {
+        bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
+        {
+            return lhs.mnEndRow==rhs.mnStartRow;
+        }
+    };
     typedef ::o3tl::sorted_vector< RowRangeStyle, StyleRowRangeComp > RowStyles;
     typedef ::std::map< sal_Int32, RowStyles > ColStyles;
+    typedef ::std::vector< RowRangeStyle > TmpRowStyles;
+    typedef ::std::map< sal_Int32, TmpRowStyles > TmpColStyles;
     /** Stores information about a merged cell range. */
     struct MergedRange
     {
