@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2a1b002_95e32383",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002896
+      },
+      "writtenOn": "2022-03-06T15:59:51Z",
+      "side": 1,
+      "message": "Would this current structure be suffice for us to fully utilize the Flush() method\u0027s functionality for our benchmarks(given that some of the backends are lacking it\u0027s implementation)?",
+      "revId": "b52de81affca85e3631f532c05e666639c4f1b17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
