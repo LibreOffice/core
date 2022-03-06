@@ -243,6 +243,13 @@ namespace rtl_str
 
     class indexOfChar : public CppUnit::TestFixture
     {
+        void indexOfChar_000()
+            {
+                sal_Int32 nIndex = rtl_str_indexOfChar("", 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Trailing zero character is not part of the string",
+                                             sal_Int32(-1), nIndex);
+            }
+
         void indexOfChar_001()
             {
                 OString aStr1 = "Line for an indexOfChar.";
@@ -273,6 +280,7 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfChar);
+        CPPUNIT_TEST(indexOfChar_000);
         CPPUNIT_TEST(indexOfChar_001);
         CPPUNIT_TEST(indexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
@@ -280,6 +288,13 @@ namespace rtl_str
 
     class lastIndexOfChar : public CppUnit::TestFixture
     {
+        void lastIndexOfChar_000()
+            {
+                sal_Int32 nIndex = rtl_str_lastIndexOfChar("", 0);
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("Trailing zero character is not part of the string",
+                                             sal_Int32(-1), nIndex);
+            }
+
         void lastIndexOfChar_001()
             {
                 OString aStr1 = "Line for a lastIndexOfChar.";
@@ -310,6 +325,7 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfChar);
+        CPPUNIT_TEST(lastIndexOfChar_000);
         CPPUNIT_TEST(lastIndexOfChar_001);
         CPPUNIT_TEST(lastIndexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
@@ -317,6 +333,14 @@ namespace rtl_str
 
     class indexOfStr : public CppUnit::TestFixture
     {
+        void indexOfStr_000()
+            {
+                OString aStr1("Line for an indexOfStr.");
+                sal_Int32 nIndex = rtl_str_indexOfStr( aStr1.getStr(), "" );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("an empty substring is always not findable",
+                                             sal_Int32(-1), nIndex);
+            }
+
         void indexOfStr_001()
             {
                 OString aStr1 = "Line for an indexOfStr.";
@@ -347,6 +371,7 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(indexOfStr);
+        CPPUNIT_TEST(indexOfStr_000);
         CPPUNIT_TEST(indexOfStr_001);
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
@@ -354,6 +379,14 @@ namespace rtl_str
 
     class lastIndexOfStr : public CppUnit::TestFixture
     {
+        void lastIndexOfStr_000()
+            {
+                OString aStr1("Line for a lastIndexOfStr.");
+                sal_Int32 nIndex = rtl_str_lastIndexOfStr( aStr1.getStr(), "" );
+                CPPUNIT_ASSERT_EQUAL_MESSAGE("an empty substring is always not findable",
+                                             sal_Int32(-1), nIndex);
+            }
+
         void lastIndexOfStr_001()
             {
                 OString aStr1 = "Line for a lastIndexOfStr.";
@@ -394,6 +427,7 @@ namespace rtl_str
         // because these macros are need by auto register mechanism.
 
         CPPUNIT_TEST_SUITE(lastIndexOfStr);
+        CPPUNIT_TEST(lastIndexOfStr_000);
         CPPUNIT_TEST(lastIndexOfStr_001);
         CPPUNIT_TEST(lastIndexOfStr_002);
         CPPUNIT_TEST(lastIndexOfStr_003);
