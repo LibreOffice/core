@@ -31,7 +31,7 @@ class OutlinerView;
 class SfxItemSet;
 class SfxRequest;
 struct ESelection;
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 
 namespace SwLangHelper
 {

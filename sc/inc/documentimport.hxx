@@ -28,7 +28,7 @@ class ScStyleSheet;
 struct ScSetStringParam;
 struct ScTabOpParam;
 struct ScDocumentImportImpl;
-enum class SvtScriptType;
+enum class SvtScriptType : sal_uInt8;
 
 /**
  * Accessor class to ScDocument.  Its purpose is to allow import filter to
