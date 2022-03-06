@@ -33,6 +33,7 @@
 
 #include "SvmConverter.hxx"
 
+#include <boost/rational.hpp>
 #include <algorithm>
 #include <memory>
 #include <stack>
@@ -1266,6 +1267,23 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     }
 
     rIStm.SetEndian( nOldFormat );
+}
+
+bool TestImportSVM(SvStream& rStream)
+{
+    GDIMetaFile aGDIMetaFile;
+    SvmReader aReader(rStream);
+    aReader.Read(aGDIMetaFile);
+    ScopedVclPtrInstance<VirtualDevice> aVDev;
+    try
+    {
+        aGDIMetaFile.Play(*aVDev);
+    }
+    catch (const boost::bad_rational&)
+    {
+        return false;
+    }
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -8,13 +8,12 @@
  */
 
 #include <tools/stream.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/filter/SvmReader.hxx>
 #include "commonfuzzer.hxx"
 
 #include <config_features.h>
 #include <osl/detail/component-mapping.h>
+
+extern "C" bool TestImportSVM(SvStream &rStream);
 
 extern "C" {
 void * com_sun_star_i18n_LocaleDataImpl_get_implementation( void *, void * );
@@ -77,11 +76,7 @@ extern "C" int LLVMFuzzerInitialize(int *argc, char ***argv)
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size)
 {
     SvMemoryStream aStream(const_cast<uint8_t*>(data), size, StreamMode::READ);
-    GDIMetaFile aGDIMetaFile;
-    SvmReader aReader(aStream);
-    aReader.Read(aGDIMetaFile);
-    ScopedVclPtrInstance<VirtualDevice> aVDev;
-    aGDIMetaFile.Play(*aVDev);
+    (void)TestImportSVM(aStream);
     return 0;
 }
 
