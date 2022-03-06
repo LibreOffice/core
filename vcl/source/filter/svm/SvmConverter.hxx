@@ -85,6 +85,8 @@ private:
     SVMConverter&       operator=( const SVMConverter& ) = delete;
 };
 
+extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportSVM(SvStream& rStream);
+
 #endif // INCLUDED_VCL_INC_SVMCONVERTER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
