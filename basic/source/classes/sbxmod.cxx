@@ -198,7 +198,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
             return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
     SbMethodRef pMethod = getMethod( aFunctionName );
     if ( !pMethod.is() )
-        throw RuntimeException();
+        throw RuntimeException("DocObjectWrapper::invoke - Could not get the method reference!");
     // check number of parameters
     sal_Int32 nParamsCount = aParams.getLength();
     SbxInfo* pInfo = pMethod->GetInfo();
