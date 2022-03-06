@@ -992,7 +992,6 @@ void SfxWorkWindow::ShowChildren_Impl()
 
             if ( SfxChildVisibility::VISIBLE == (pCli->nVisible & SfxChildVisibility::VISIBLE) && bVisible )
             {
-                ShowFlags nFlags = pCli->bSetFocus ? ShowFlags::NONE : ShowFlags::NoFocusChange | ShowFlags::NoActivate;
                 if (pCli->xController)
                 {
                     if (!pCli->xController->getDialog()->get_visible())
@@ -1007,7 +1006,10 @@ void SfxWorkWindow::ShowChildren_Impl()
                     }
                 }
                 else
+                {
+                    ShowFlags nFlags = pCli->bSetFocus ? ShowFlags::NONE : ShowFlags::NoFocusChange | ShowFlags::NoActivate;
                     pCli->pWin->Show(true, nFlags);
+                }
                 pCli->bSetFocus = false;
             }
             else
