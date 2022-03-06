@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <svl/setitem.hxx>
 #include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
@@ -144,6 +146,8 @@ public:
 
     void                    SetKey(sal_uInt64 nKey);
     sal_uInt64              GetKey() const;
+
+    static std::optional<bool> FastEqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 );
 
     // TODO: tdf#135215: This is a band-aid to detect changes and invalidate the hash,
     // a proper way would be probably to override SfxItemSet::Changed(), but 6cb400f41df0dd10
