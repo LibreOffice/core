@@ -554,7 +554,7 @@ namespace accessibility
         EnsureIsAlive();
         SvTreeListEntry* pEntry = m_pTreeListBox->GetEntry( VCLPoint( _aPoint ) );
         if ( !pEntry )
-            throw RuntimeException();
+            throw RuntimeException("AccessibleListBoxEntry::getAccessibleAtPoint - pEntry cannot be empty!");
 
         Reference< XAccessible > xAcc;
         uno::Reference<XAccessible> xListBox(m_wListBox);
@@ -878,7 +878,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("AccessibleListBoxEntry::clearAccessibleSelection - pParent cannot be empty!");
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -897,7 +897,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("AccessibleListBoxEntry::selectAllAccessibleChildren - pParent cannot be empty!");
         sal_Int32 nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( sal_Int32 i = 0; i < nCount; ++i )
         {
@@ -918,7 +918,8 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("AccessibleListBoxEntry::getSelectedAccessibleChildCount - pParent cannot be empty!");
+        ;
         nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( i = 0; i < nCount; ++i )
         {
@@ -945,7 +946,7 @@ namespace accessibility
 
         SvTreeListEntry* pParent = m_pTreeListBox->GetEntryFromPath( m_aEntryPath );
         if ( !pParent )
-            throw RuntimeException();
+            throw RuntimeException("AccessibleListBoxEntry::getSelectedAccessibleChild - pParent cannot be empty!");
         nCount = m_pTreeListBox->GetLevelChildCount( pParent );
         for ( i = 0; i < nCount; ++i )
         {
