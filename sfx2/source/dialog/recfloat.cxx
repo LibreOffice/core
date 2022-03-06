@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/frame/XDispatchRecorder.hpp>
 
 #include <svl/eitem.hxx>
@@ -101,11 +102,24 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(SfxBindings* pBind, SfxChildWindo
                                   "FloatingRecord")
     , m_xToolbar(m_xBuilder->weld_toolbar("toolbar"))
     , m_xDispatcher(new ToolbarUnoDispatcher(*m_xToolbar, *m_xBuilder, pBind->GetActiveFrame()))
+    , m_bFirstActivate(true)
 {
     // start recording
     SfxBoolItem aItem( SID_RECORDMACRO, true );
     GetBindings().GetDispatcher()->ExecuteList(SID_RECORDMACRO,
             SfxCallMode::SYNCHRON, { &aItem });
+}
+
+void SfxRecordingFloat_Impl::Activate()
+{
+    SfxModelessDialogController::Activate();
+    if (!m_bFirstActivate)
+        return;
+    // tdf#147782 retain focus in launching frame on the first activate on automatically gaining focus on getting launched
+    m_bFirstActivate = false;
+    css::uno::Reference<css::awt::XTopWindow> xTopWindow(m_xDispatcher->GetFrame()->getContainerWindow(), css::uno::UNO_QUERY);
+    if (xTopWindow.is())
+        xTopWindow->toFront();
 }
 
 SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
