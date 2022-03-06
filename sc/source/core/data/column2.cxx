@@ -1068,7 +1068,6 @@ void ScColumn::GetOptimalHeight(
 bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& rData) const
 {
     ScDocument& rDocument = GetDoc();
-    bool bStop = false;
     sc::CellStoreType::const_iterator it = maCells.position(nRow).first;
     mdds::mtv::element_t eType = it->type;
     if (!bInSel && it != maCells.end() && eType != sc::element_type_empty)
@@ -1078,15 +1077,16 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
                rDocument.IsTabProtected(nTab)) )
             return true;
     }
-    while (!bStop)
+    if (bInSel)
     {
-        if (bInSel)
+        SCROW lastDataPos = GetLastDataPos();
+        for (;;)
         {
             nRow = rData.GetNextMarked(nCol, nRow, false);
-            if (!rDocument.ValidRow(nRow))
+            if (!rDocument.ValidRow(nRow) || nRow > lastDataPos )
             {
                 nRow = GetDoc().MaxRow()+1;
-                bStop = true;
+                return false;
             }
             else
             {
@@ -1100,7 +1100,10 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
                     nRow++;
             }
         }
-        else if (GetNextDataPos(nRow))
+    }
+    else
+    {
+        while (GetNextDataPos(nRow))
         {
             it = maCells.position(it, nRow).first;
             eType = it->type;
@@ -1111,13 +1114,9 @@ bool ScColumn::GetNextSpellingCell(SCROW& nRow, bool bInSel, const ScMarkData& r
             else
                 nRow++;
         }
-        else
-        {
-            nRow = GetDoc().MaxRow()+1;
-            bStop = true;
-        }
+        nRow = GetDoc().MaxRow()+1;
+        return false;
     }
-    return false;
 }
 
 namespace {
