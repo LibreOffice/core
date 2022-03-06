@@ -1080,7 +1080,10 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, sal_Int32* pCaretXAr
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout(rStr, nIndex, nLen, Point(0, 0), 0, {},
                                                        eDefaultLayout, nullptr, pGlyphs);
     if( !pSalLayout )
+    {
+        std::fill(pCaretXArray, pCaretXArray + nLen * 2, -1);
         return;
+    }
 
     int nWidthFactor = pSalLayout->GetUnitsPerPixel();
     pSalLayout->GetCaretPositions( 2*nLen, pCaretXArray );
