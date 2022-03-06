@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57c8c60a_ee1efa3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-06T06:22:28Z",
+      "side": 1,
+      "message": "this bug has been fixed already, by commit fbd33571cd8f54161669abc6b696f6ebd085d70a",
+      "revId": "aa632b0d6da968455c976d3cf0c80c3026b598ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3024fc2c_228fee77",
