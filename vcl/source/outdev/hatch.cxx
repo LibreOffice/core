@@ -373,7 +373,14 @@ void OutputDevice::DrawHatchLine( const tools::Line& rLine, const tools::PolyPol
                         nAdd = 1;
 
                     if( nAdd )
+                    {
+                        if (nPCounter == HATCH_MAXPOINTS)
+                        {
+                            SAL_WARN("vcl.gdi", "too many hatch points");
+                            return;
+                        }
                         pPtBuffer[ nPCounter++ ] = Point( FRound( fX ), FRound( fY ) );
+                    }
                 }
 
                 aCurSegment.SetStart( aCurSegment.GetEnd() );
