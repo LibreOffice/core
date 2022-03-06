@@ -441,7 +441,10 @@ void TypeSerializer::readMapMode(MapMode& rMapMode)
     readFraction(aScaleY);
     mrStream.ReadCharAsBool(bSimple);
 
-    if (bSimple)
+    const bool bBogus = !aScaleX.IsValid() || !aScaleY.IsValid();
+    SAL_WARN_IF(bBogus, "vcl", "invalid scale");
+
+    if (bSimple || bBogus)
         rMapMode = MapMode(eUnit);
     else
         rMapMode = MapMode(eUnit, aOrigin, aScaleX, aScaleY);
