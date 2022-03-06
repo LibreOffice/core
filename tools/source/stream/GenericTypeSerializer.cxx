@@ -36,9 +36,9 @@ void GenericTypeSerializer::readColor(Color& rColor)
 
     if (nColorNameID & COL_NAME_USER)
     {
-        sal_uInt16 nRed;
-        sal_uInt16 nGreen;
-        sal_uInt16 nBlue;
+        sal_uInt16 nRed(0);
+        sal_uInt16 nGreen(0);
+        sal_uInt16 nBlue(0);
 
         mrStream.ReadUInt16(nRed);
         mrStream.ReadUInt16(nGreen);
