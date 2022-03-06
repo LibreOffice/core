@@ -57,6 +57,29 @@
       },
       "revId": "aa632b0d6da968455c976d3cf0c80c3026b598ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "733c7a08_eb1c40d0",
+        "filename": "starmath/source/dialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1379,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-03-06T10:02:56Z",
+      "side": 1,
+      "message": "bValid is always false because aSymbolSetName is emplty",
+      "range": {
+        "startLine": 1379,
+        "startChar": 0,
+        "endLine": 1379,
+        "endChar": 11
+      },
+      "revId": "aa632b0d6da968455c976d3cf0c80c3026b598ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
