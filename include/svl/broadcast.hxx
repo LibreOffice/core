@@ -50,7 +50,7 @@ protected:
     virtual void            ListenersGone();
 
 public:
-                            SvtBroadcaster();
+                            SvtBroadcaster() = default;
                             SvtBroadcaster( const SvtBroadcaster &rBC );
     virtual                 ~SvtBroadcaster();
 
@@ -80,14 +80,14 @@ private:
     /// When the broadcaster is about to die, collect listeners that asked for removal.
     mutable ListenersType maDestructedListeners;
 
-    mutable sal_Int32 mnEmptySlots;
+    mutable sal_Int32 mnEmptySlots = 0;
     // The first item in maListeners that is not sorted. The container can become large, so this optimizes sorting.
-    mutable sal_Int32 mnListenersFirstUnsorted;
+    mutable sal_Int32 mnListenersFirstUnsorted = 0;
     /// Indicate that this broadcaster will be destructed (we indicate this on all ScColumn's broadcasters during the ScTable destruction, eg.)
-    bool mbAboutToDie:1;
-    bool mbDisposing:1;
+    bool mbAboutToDie:1 = false;
+    bool mbDisposing:1 = false;
     // Whether maDestructedListeners is sorted or not.
-    mutable bool mbDestNormalized:1;
+    mutable bool mbDestNormalized:1 = true;
 };
 
 

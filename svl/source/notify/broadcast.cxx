@@ -177,18 +177,7 @@ void SvtBroadcaster::Remove( SvtListener* p )
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster()
-    : mnEmptySlots(0)
-    , mnListenersFirstUnsorted(0)
-    , mbAboutToDie(false)
-    , mbDisposing(false)
-    , mbDestNormalized(true)
-{}
-
-SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
-    mnEmptySlots(0), mnListenersFirstUnsorted(0),
-    mbAboutToDie(false), mbDisposing(false),
-    mbDestNormalized(true)
+SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC )
 {
     assert(!rBC.mbAboutToDie && "copying an object marked with PrepareForDestruction()?");
     assert(!rBC.mbDisposing && "copying an object that is in its destructor?");
