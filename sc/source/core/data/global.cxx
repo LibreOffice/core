@@ -182,6 +182,12 @@ bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
                                      const SfxItemSet& rOldAttrs )
 {
+    std::optional<bool> equal = ScPatternAttr::FastEqualPatternSets( rNewAttrs, rOldAttrs );
+    if( equal.has_value() && equal )
+    {
+        bNumFormatChanged = false;
+        return false;
+    }
     // Check whether attribute changes in rNewAttrs compared to rOldAttrs render
     // the text width at a cell invalid
     bNumFormatChanged =

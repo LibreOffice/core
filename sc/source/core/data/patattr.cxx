@@ -119,7 +119,7 @@ static bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 
 constexpr size_t compareSize = ATTR_PATTERN_END - ATTR_PATTERN_START + 1;
 
-static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
+std::optional<bool> ScPatternAttr::FastEqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
 {
     // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
     // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
@@ -131,12 +131,20 @@ static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     // Actually test_tdf133629 from UITest_calc_tests9 somehow manages to have
     // a different range (and I don't understand enough why), so better be safe and compare fully.
     if( rSet1.TotalCount() != compareSize || rSet2.TotalCount() != compareSize )
-        return rSet1 == rSet2;
+        return std::nullopt;
 
     SfxPoolItem const ** pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
     SfxPoolItem const ** pItems2 = rSet2.GetItems_Impl();
 
     return ( 0 == memcmp( pItems1, pItems2, compareSize * sizeof(pItems1[0]) ) );
+}
+
+static bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
+{
+    std::optional<bool> equal = ScPatternAttr::FastEqualPatternSets( rSet1, rSet2 );
+    if(equal.has_value())
+        return *equal;
+    return rSet1 == rSet2;
 }
 
 bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
