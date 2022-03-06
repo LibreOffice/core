@@ -718,6 +718,7 @@ void JSInstanceBuilder::RememberWidget(OString sId, weld::Widget* pWidget)
                 // found duplicated it -> add some number to the id and apply to the widget
                 sId = sId + OString::number(nIndex);
                 SalInstanceWidget* pSalWidget = dynamic_cast<SalInstanceWidget*>(pWidget);
+                assert(pSalWidget && "can only be a SalInstanceWidget");
                 vcl::Window* pVclWidget = pSalWidget->getWidget();
                 pVclWidget->set_id(pVclWidget->get_id() + OUString::number(nIndex));
             }
