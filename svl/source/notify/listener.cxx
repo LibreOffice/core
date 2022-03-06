@@ -20,18 +20,6 @@
 #include <svl/listener.hxx>
 #include <svl/broadcast.hxx>
 
-SvtListener::QueryBase::QueryBase( sal_uInt16 nId ) : mnId(nId) {}
-SvtListener::QueryBase::~QueryBase() {}
-
-sal_uInt16 SvtListener::QueryBase::getId() const
-{
-    return mnId;
-}
-
-SvtListener::SvtListener() {}
-
-SvtListener::SvtListener( const SvtListener & )  {}
-
 SvtListener::~SvtListener() COVERITY_NOEXCEPT_FALSE
 {
     // Unregister itself from all broadcasters it's listening to.
@@ -94,14 +82,8 @@ void SvtListener::CopyAllBroadcasters( const SvtListener& r )
     }
 }
 
-bool SvtListener::HasBroadcaster() const
-{
-    return !maBroadcasters.empty();
-}
-
 void SvtListener::Notify( const SfxHint& /*rHint*/ ) {}
 
 void SvtListener::Query( QueryBase& /*rQuery*/ ) const {}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

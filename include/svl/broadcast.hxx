@@ -50,7 +50,9 @@ protected:
     virtual void            ListenersGone();
 
 public:
-                            SvtBroadcaster();
+                            SvtBroadcaster()
+                                : mnEmptySlots(0), mnListenersFirstUnsorted(0), mbAboutToDie(false)
+                                , mbDisposing(false), mbDestNormalized(true) {}
                             SvtBroadcaster( const SvtBroadcaster &rBC );
     virtual                 ~SvtBroadcaster();
 
