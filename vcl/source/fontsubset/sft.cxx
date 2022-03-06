@@ -1747,7 +1747,7 @@ SFErrCodes CreateTTFromTTGlyphs(AbstractTrueTypeFont  *ttf,
 
     /**                       hhea                         **/
     p = ttf->table(O_hhea, nTableSize);
-    if (p)
+    if (p && nTableSize >= HHEA_caretSlopeRun_offset + 2)
         hhea = TrueTypeTableNew_hhea(GetInt16(p, HHEA_ascender_offset), GetInt16(p, HHEA_descender_offset), GetInt16(p, HHEA_lineGap_offset), GetInt16(p, HHEA_caretSlopeRise_offset), GetInt16(p, HHEA_caretSlopeRun_offset));
     else
         hhea = TrueTypeTableNew_hhea(0, 0, 0, 0, 0);
