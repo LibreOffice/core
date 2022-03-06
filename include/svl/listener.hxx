@@ -41,14 +41,14 @@ public:
     {
         sal_uInt16 mnId;
     public:
-        QueryBase( sal_uInt16 nId );
-        virtual ~QueryBase();
+        QueryBase( sal_uInt16 nId ) : mnId(nId) {}
+        virtual ~QueryBase() {};
 
-        sal_uInt16 getId() const;
+        sal_uInt16 getId() const { return mnId; }
     };
 
-    SvtListener();
-    SvtListener( const SvtListener &r );
+    SvtListener() = default;
+    SvtListener( const SvtListener &r ) = default;
     virtual ~SvtListener() COVERITY_NOEXCEPT_FALSE;
 
     bool StartListening( SvtBroadcaster& rBroadcaster );
@@ -57,7 +57,7 @@ public:
 
     /// Overwrites existing broadcasters with the ones from the specified listener
     void CopyAllBroadcasters( const SvtListener& r );
-    bool HasBroadcaster() const;
+    bool HasBroadcaster() const { return !maBroadcasters.empty(); }
 
     virtual void Notify( const SfxHint& rHint );
     virtual void Query( QueryBase& rQuery ) const;

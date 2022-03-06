@@ -177,14 +177,6 @@ void SvtBroadcaster::Remove( SvtListener* p )
         ListenersGone();
 }
 
-SvtBroadcaster::SvtBroadcaster()
-    : mnEmptySlots(0)
-    , mnListenersFirstUnsorted(0)
-    , mbAboutToDie(false)
-    , mbDisposing(false)
-    , mbDestNormalized(true)
-{}
-
 SvtBroadcaster::SvtBroadcaster( const SvtBroadcaster &rBC ) :
     mnEmptySlots(0), mnListenersFirstUnsorted(0),
     mbAboutToDie(false), mbDisposing(false),
