@@ -42,12 +42,14 @@ class SfxRecordingFloat_Impl final : public SfxModelessDialogController
 {
     std::unique_ptr<weld::Toolbar> m_xToolbar;
     std::unique_ptr<ToolbarUnoDispatcher> m_xDispatcher;
+    bool m_bFirstActivate;
 public:
     SfxRecordingFloat_Impl(SfxBindings* pBindings,
                            SfxChildWindow* pChildWin,
                            weld::Window* pParent);
     virtual ~SfxRecordingFloat_Impl() override;
     virtual void FillInfo(SfxChildWinInfo& rInfo) const override;
+    virtual void Activate() override;
 };
 
 #endif
