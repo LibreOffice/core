@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fe234c5_03678942",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-06T18:44:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58e737b2_390d2249",
+      "revId": "4b4c2549bdbfd03d5bd74f86f4354cf89fca0c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ca6cb5fe_aaacac6a",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-05T19:53:43Z",
       "side": 1,
       "message": "and might as well just not catch anything here, since if this fails, all kinds of stuff will not work properly?",
+      "revId": "4b4c2549bdbfd03d5bd74f86f4354cf89fca0c90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98153008_3ca6dbfb",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-06T18:44:52Z",
+      "side": 1,
+      "message": "If this ever fails, I still prefer it to assert here rather than get caught who knows where (especially if that would be one of those eat-all-silently catch blocks).",
+      "parentUuid": "ca6cb5fe_aaacac6a",
       "revId": "4b4c2549bdbfd03d5bd74f86f4354cf89fca0c90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

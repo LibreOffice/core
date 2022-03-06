@@ -16,6 +16,24 @@
       "message": "I think you need to clear the gPropertyCache cache on disposing, otherwise the dreaded static variable shutdown ordering issue will hit you, as can be seen in the jenkins failure",
       "revId": "57955cb6bf5ed53f7eb98e949c9341870f9f36cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8644329_d0a08153",
+        "filename": "comphelper/source/misc/configuration.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-06T18:44:52Z",
+      "side": 1,
+      "message": "I\u0027ve already handled that in the dtor.",
+      "parentUuid": "58023a88_e4b19b9d",
+      "revId": "57955cb6bf5ed53f7eb98e949c9341870f9f36cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
