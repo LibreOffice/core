@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daac9452_67169d91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-06T18:51:43Z",
+      "side": 1,
+      "message": "Otherwise looks fine",
+      "revId": "f300b3cbf8dcc6f3667a47fe0f2afca083585841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cfd6c8e_ef59bf8a",
+        "filename": "include/o3tl/sorted_vector.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-06T18:51:43Z",
+      "side": 1,
+      "message": "tmp.reserve( m_vector.size() + rOther.size() );\nmight be slightly better",
+      "revId": "f300b3cbf8dcc6f3667a47fe0f2afca083585841",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
