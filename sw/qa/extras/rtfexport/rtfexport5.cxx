@@ -71,7 +71,7 @@ DECLARE_RTFEXPORT_TEST(testFdo63023, "fdo63023.rtf")
         getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     // Back color was black (0) in the header, due to missing color table in the substream.
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0xFFFF99),
+        Color(0xFFFF99),
         getProperty<sal_Int32>(getRun(getParagraphOfText(1, xHeaderText), 1), "CharBackColor"));
 }
 
