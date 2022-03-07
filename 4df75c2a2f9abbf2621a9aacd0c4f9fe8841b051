@@ -16,6 +16,24 @@
       "message": "This test is DPI-dependent; using 150% scaling on Windows, it fails with\n\n  - Expected: 9419\n  - Actual  : 9437",
       "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1e89fbc_a2a16f60",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-07T09:49:15Z",
+      "side": 1,
+      "message": "That makes me cry. This is meant to be a nice situation where we only deal with logic units... anyhow, could you please just disable the test in the \"custom dpi\" case?\n\nThanks!",
+      "parentUuid": "7e3fcb29_7a7dd39e",
+      "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
