@@ -33,6 +33,24 @@
       "message": "Hi Vaibhav,\nif  you want to test this issue as an export test, you have to explicitly export it, for that use saveAndReload",
       "revId": "75d829339347d3f4ef23974f0c22a9b592f5246e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5108a47f_ba0ee94b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-03-07T15:58:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc59fcea_b60138fe",
+      "revId": "75d829339347d3f4ef23974f0c22a9b592f5246e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
