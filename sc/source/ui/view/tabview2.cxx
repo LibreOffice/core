@@ -739,7 +739,7 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 
     bool bSkipCell = false;
     bool bHFlip = false;
-    auto nMaxCol = rDoc.ClampToAllocatedColumns(nTab, rDoc.MaxCol());
+    auto nMaxCol = rDoc.MaxCol();
     do
     {
         bSkipCell = rDoc.ColHidden(rCurX, nTab) || rDoc.IsHorOverlapped(rCurX, rCurY, nTab);
