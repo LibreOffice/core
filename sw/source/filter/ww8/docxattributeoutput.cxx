@@ -1123,11 +1123,11 @@ void DocxAttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pT
 
 void DocxAttributeOutput::SyncNodelessCells(ww8::WW8TableNodeInfoInner::Pointer_t const & pInner, sal_Int32 nCell, sal_uInt32 nRow)
 {
-    sal_Int32 nOpenCell = lastOpenCell.back();
+    sal_Int32 nOpenCell = m_LastOpenCell.back();
     if (nOpenCell != -1 && nOpenCell != nCell && nOpenCell < MAX_CELL_IN_WORD)
         EndTableCell(nOpenCell);
 
-    sal_Int32 nClosedCell = lastClosedCell.back();
+    sal_Int32 nClosedCell = m_LastClosedCell.back();
     for (sal_Int32 i = nClosedCell+1; i < nCell; ++i)
     {
         if (i >= MAX_CELL_IN_WORD)
@@ -1169,13 +1169,13 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
         {
             //we expect that the higher depth row was closed, and
             //we are just missing the table close
-            assert(lastOpenCell.back() == -1 && lastClosedCell.back() == -1);
+            assert(m_LastOpenCell.back() == -1 && m_LastClosedCell.back() == -1);
             EndTable();
         }
 
         SyncNodelessCells(pInner, nCell, nRow);
 
-        sal_Int32 nClosedCell = lastClosedCell.back();
+        sal_Int32 nClosedCell = m_LastClosedCell.back();
         if (nCell == nClosedCell)
         {
             //Start missing trailing cell(s)
@@ -4026,7 +4026,7 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
 
 
     const SvxBoxItem& rBox = pTableBox->GetFrameFormat( )->GetBox( );
-    const SvxBoxItem& rDefaultBox = (*tableFirstCells.rbegin())->getTableBox( )->GetFrameFormat( )->GetBox( );
+    const SvxBoxItem& rDefaultBox = (*m_TableFirstCells.rbegin())->getTableBox( )->GetFrameFormat( )->GetBox( );
     {
         // The cell borders
         impl_borders(m_pSerializer, rBox, lcl_getTableCellBorderOptions(bEcma),
@@ -4076,9 +4076,9 @@ void DocxAttributeOutput::StartTable( ww8::WW8TableNodeInfoInner::Pointer_t cons
 
     m_pSerializer->startElementNS(XML_w, XML_tbl);
 
-    tableFirstCells.push_back(pTableTextNodeInfoInner);
-    lastOpenCell.push_back(-1);
-    lastClosedCell.push_back(-1);
+    m_TableFirstCells.push_back(pTableTextNodeInfoInner);
+    m_LastOpenCell.push_back(-1);
+    m_LastClosedCell.push_back(-1);
 
     InitTableHelper( pTableTextNodeInfoInner );
     TableDefinition( pTableTextNodeInfoInner );
@@ -4091,14 +4091,14 @@ void DocxAttributeOutput::EndTable()
     if ( m_tableReference->m_nTableDepth > 0 )
         --m_tableReference->m_nTableDepth;
 
-    lastClosedCell.pop_back();
-    lastOpenCell.pop_back();
-    tableFirstCells.pop_back();
+    m_LastClosedCell.pop_back();
+    m_LastOpenCell.pop_back();
+    m_TableFirstCells.pop_back();
 
     // We closed the table; if it is a nested table, the cell that contains it
     // still continues
     // set to true only if we were in a nested table, not otherwise.
-    if( !tableFirstCells.empty() )
+    if( !m_TableFirstCells.empty() )
         m_tableReference->m_bTableCellOpen = true;
 
     // Cleans the table helper
@@ -4143,13 +4143,13 @@ void DocxAttributeOutput::StartTableRow( ww8::WW8TableNodeInfoInner::Pointer_t c
 void DocxAttributeOutput::EndTableRow( )
 {
     m_pSerializer->endElementNS( XML_w, XML_tr );
-    lastOpenCell.back() = -1;
-    lastClosedCell.back() = -1;
+    m_LastOpenCell.back() = -1;
+    m_LastClosedCell.back() = -1;
 }
 
 void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t const & pTableTextNodeInfoInner, sal_uInt32 nCell, sal_uInt32 nRow )
 {
-    lastOpenCell.back() = nCell;
+    m_LastOpenCell.back() = nCell;
 
     InitTableHelper( pTableTextNodeInfoInner );
 
@@ -4163,8 +4163,8 @@ void DocxAttributeOutput::StartTableCell( ww8::WW8TableNodeInfoInner::Pointer_t 
 
 void DocxAttributeOutput::EndTableCell(sal_uInt32 nCell)
 {
-    lastClosedCell.back() = nCell;
-    lastOpenCell.back() = -1;
+    m_LastClosedCell.back() = nCell;
+    m_LastOpenCell.back() = -1;
 
     if (m_tableReference->m_bTableCellParaSdtOpen)
         EndParaSdtBlock();
@@ -7517,7 +7517,7 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
     if( fontUrl.isEmpty())
         return;
     // TODO IDocumentSettingAccess::EMBED_SYSTEM_FONTS
-    if( !fontFilesMap.count( fontUrl ))
+    if( !m_FontFilesMap.count( fontUrl ))
     {
         osl::File file( fontUrl );
         if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
@@ -7579,12 +7579,12 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
         EmbeddedFontRef ref;
         ref.relId = relId;
         ref.fontKey = fontKeyStr;
-        fontFilesMap[ fontUrl ] = ref;
+        m_FontFilesMap[ fontUrl ] = ref;
         ++m_nextFontId;
     }
     m_pSerializer->singleElementNS( XML_w, tag,
-        FSNS( XML_r, XML_id ), fontFilesMap[ fontUrl ].relId,
-        FSNS( XML_w, XML_fontKey ), fontFilesMap[ fontUrl ].fontKey );
+        FSNS( XML_r, XML_id ), m_FontFilesMap[ fontUrl ].relId,
+        FSNS( XML_w, XML_fontKey ), m_FontFilesMap[ fontUrl ].fontKey );
 }
 
 OString DocxAttributeOutput::TransHighlightColor( sal_uInt8 nIco )
@@ -8532,17 +8532,17 @@ bool DocxAttributeOutput::DropdownField( const SwField* pField )
 
 bool DocxAttributeOutput::PlaceholderField( const SwField* pField )
 {
-    assert( pendingPlaceholder == nullptr );
-    pendingPlaceholder = pField;
+    assert( m_PendingPlaceholder == nullptr );
+    m_PendingPlaceholder = pField;
     return false; // do not expand
 }
 
 void DocxAttributeOutput::WritePendingPlaceholder()
 {
-    if( pendingPlaceholder == nullptr )
+    if( m_PendingPlaceholder == nullptr )
         return;
-    const SwField* pField = pendingPlaceholder;
-    pendingPlaceholder = nullptr;
+    const SwField* pField = m_PendingPlaceholder;
+    m_PendingPlaceholder = nullptr;
     m_pSerializer->startElementNS(XML_w, XML_sdt);
     m_pSerializer->startElementNS(XML_w, XML_sdtPr);
     if( !pField->GetPar2().isEmpty())
@@ -10277,7 +10277,7 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nFieldsInHyperlink( 0 ),
       m_bExportingOutline(false),
       m_nChartCount(0),
-      pendingPlaceholder( nullptr ),
+      m_PendingPlaceholder( nullptr ),
       m_postitFieldsMaxId( 0 ),
       m_anchorId( 1 ),
       m_nextFontId( 1 ),

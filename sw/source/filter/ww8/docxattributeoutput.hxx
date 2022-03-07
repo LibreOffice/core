@@ -962,7 +962,7 @@ private:
     std::vector<PostponedChart> m_aPostponedCharts;
     std::vector<const SdrObject*> m_aPostponedFormControls;
     std::vector<PostponedDrawing> m_aPostponedActiveXControls;
-    const SwField* pendingPlaceholder;
+    const SwField* m_PendingPlaceholder;
 
     struct PostItDOCXData{
         sal_Int32 id;
@@ -982,13 +982,13 @@ private:
 
     std::unique_ptr<TableReference> m_tableReference;
 
-    std::map< OUString, EmbeddedFontRef > fontFilesMap; // font file url to data
+    std::map< OUString, EmbeddedFontRef > m_FontFilesMap; // font file url to data
 
     // Remember first cell (used for default borders/margins) of each table
-    std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> tableFirstCells;
+    std::vector<ww8::WW8TableNodeInfoInner::Pointer_t> m_TableFirstCells;
     // Remember last open and closed cells on each level
-    std::vector<sal_Int32> lastOpenCell;
-    std::vector<sal_Int32> lastClosedCell;
+    std::vector<sal_Int32> m_LastOpenCell;
+    std::vector<sal_Int32> m_LastClosedCell;
 
     std::optional<css::drawing::FillStyle> m_oFillStyle;
     /// If FormatBox() already handled fill style / gradient.

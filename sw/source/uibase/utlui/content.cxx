@@ -222,7 +222,7 @@ bool SwPostItContent::IsProtect() const
 
 bool SwURLFieldContent::IsProtect() const
 {
-    return pINetAttr->IsProtect();
+    return m_pINetAttr->IsProtect();
 }
 
 SwGraphicContent::~SwGraphicContent()

@@ -72,8 +72,8 @@ class SwRegionContent final : public SwContent
 
 class SwURLFieldContent final : public SwContent
 {
-    OUString sURL;
-    const SwTextINetFormat* pINetAttr;
+    OUString m_sURL;
+    const SwTextINetFormat* m_pINetAttr;
 
 public:
     SwURLFieldContent(  const SwContentType* pCnt,
@@ -81,12 +81,12 @@ public:
                             const OUString& rURL,
                             const SwTextINetFormat* pAttr,
                             tools::Long nYPos )
-        : SwContent( pCnt, rName, nYPos ), sURL( rURL ), pINetAttr( pAttr )
+        : SwContent( pCnt, rName, nYPos ), m_sURL( rURL ), m_pINetAttr( pAttr )
     {}
 
     virtual bool        IsProtect() const override;
-    const OUString&     GetURL()    const   { return sURL; }
-    const SwTextINetFormat* GetINetAttr() const { return pINetAttr; }
+    const OUString&     GetURL()    const   { return m_sURL; }
+    const SwTextINetFormat* GetINetAttr() const { return m_pINetAttr; }
 };
 
 class SwTextFieldContent final : public SwContent
@@ -150,14 +150,14 @@ public:
 
 class SwTOXBaseContent final : public SwContent
 {
-    const SwTOXBase* pBase;
+    const SwTOXBase* m_pBase;
 public:
     SwTOXBaseContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos, const SwTOXBase& rBase)
-        : SwContent( pCnt, rName, nYPos ), pBase(&rBase)
+        : SwContent( pCnt, rName, nYPos ), m_pBase(&rBase)
         {}
     virtual ~SwTOXBaseContent() override;
 
-    const SwTOXBase* GetTOXBase() const {return pBase;}
+    const SwTOXBase* GetTOXBase() const {return m_pBase;}
 };
 
 /**
