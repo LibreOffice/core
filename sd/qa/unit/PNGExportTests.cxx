@@ -174,6 +174,45 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf136632)
+{
+    // Reuse existing file
+    mxComponent
+        = loadFromDesktop(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf105998.odp"));
+    uno::Reference<uno::XComponentContext> xContext = getComponentContext();
+    CPPUNIT_ASSERT(xContext.is());
+    uno::Reference<drawing::XGraphicExportFilter> xGraphicExporter
+        = drawing::GraphicExportFilter::create(xContext);
+
+    uno::Sequence<beans::PropertyValue> aFilterData{ comphelper::makePropertyValue("Translucent",
+                                                                                   sal_Int32(0)) };
+
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+
+    uno::Sequence<beans::PropertyValue> aDescriptor{
+        comphelper::makePropertyValue("URL", aTempFile.GetURL()),
+        comphelper::makePropertyValue("FilterName", OUString("PNG")),
+        comphelper::makePropertyValue("FilterData", aFilterData)
+    };
+
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<lang::XComponent> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    xGraphicExporter->setSourceDocument(xShape);
+    xGraphicExporter->filter(aDescriptor);
+
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+    AlphaMask aAlpha = aBMPEx.GetAlpha();
+    AlphaMask::ScopedReadAccess pReadAccess(aAlpha);
+
+    // Without the fix in place, this test would have failed here
+    CPPUNIT_ASSERT(!pReadAccess);
+}
+
 CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf113163)
 {
     mxComponent
