@@ -276,7 +276,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(weld::Widget* pParent, const SfxItemSet
     m_xShowExampleCB->connect_toggled(LINK(this, SwMultiTOXTabDialog, ShowPreviewHdl));
     m_xShowExampleCB->set_active(SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
 
-    ShowPreviewHdl(*m_xShowExampleCB);
+    ShowPreview();
 }
 
 SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
@@ -408,7 +408,7 @@ std::unique_ptr<SwTOXDescription> SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
     return pDesc;
 }
 
-IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::Toggleable&, void)
+void SwMultiTOXTabDialog::ShowPreview()
 {
     if (m_xShowExampleCB->get_active())
     {
@@ -448,7 +448,11 @@ IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::Toggleable&, void)
         else
             m_xExampleFrame->Hide();
     }
+}
 
+IMPL_LINK_NOARG(SwMultiTOXTabDialog, ShowPreviewHdl, weld::Toggleable&, void)
+{
+    ShowPreview();
     m_xDialog->resize_to_request();
 }
 
