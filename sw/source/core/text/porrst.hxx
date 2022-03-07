@@ -62,6 +62,9 @@ class SwBreakPortion : public SwLinePortion
     /// Tracks the type of the breaking clear from SwTextLineBreak, if there is one.
     SwLineBreakClear m_eClear;
 
+    /// Height of the line-break character itself, without spacing added for clearing.
+    SwTwips m_nTextHeight;
+
 public:
     explicit SwBreakPortion(const SwLinePortion& rPortion, const SwTextAttr* pAttr);
     // Returns 0 if we have no usable data
@@ -73,6 +76,8 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 
     static constexpr OUStringLiteral S_NOBREAK_FOR_REDLINE = u"\u00A0";
     void SetRedline( const RedlineType eRedline ) { m_eRedline = eRedline; }
