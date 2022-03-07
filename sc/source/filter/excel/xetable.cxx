@@ -1753,31 +1753,31 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
     rXFIndexes.clear();
     rXFIndexes.reserve( maColInfos.GetSize() );
 
-    size_t nPos, nSize;
-
-    // do not cache the record list size, it may change in the loop
-    for( nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
+    if( !maColInfos.IsEmpty())
     {
-        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
-        xRec->ConvertXFIndexes();
-
-        // try to merge with previous record
-        if( nPos > 0 )
+        XclExpColinfo* xPrevRec = maColInfos.GetRecord( 0 );
+        xPrevRec->ConvertXFIndexes();
+        for( size_t nPos = 1; nPos < maColInfos.GetSize(); ++nPos )
         {
-            XclExpColinfoRef xPrevRec = maColInfos.GetRecord( nPos - 1 );
+            XclExpColinfo* xRec = maColInfos.GetRecord( nPos );
+            xRec->ConvertXFIndexes();
+
+            // try to merge with previous record
             if( xPrevRec->TryMerge( *xRec ) )
-                // adjust nPos to get the next COLINFO record at the same position
-                maColInfos.RemoveRecord( nPos-- );
+                maColInfos.InvalidateRecord( nPos );
+            else
+                xPrevRec = xRec;
         }
+        maColInfos.RemoveInvalidatedRecords();
     }
 
     // put XF indexes into passed vector, collect use count of all different widths
     std::unordered_map< sal_uInt16, sal_uInt16 > aWidthMap;
     sal_uInt16 nMaxColCount = 0;
     sal_uInt16 nMaxUsedWidth = 0;
-    for( nPos = 0, nSize = maColInfos.GetSize(); nPos < nSize; ++nPos )
+    for( size_t nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
     {
-        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
+        const XclExpColinfo* xRec = maColInfos.GetRecord( nPos );
         sal_uInt16 nColCount = xRec->GetColCount();
 
         // add XF index to passed vector
@@ -1796,15 +1796,13 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes, bool bXLS )
     maDefcolwidth.SetDefWidth( nMaxUsedWidth, bXLS );
 
     // remove all default COLINFO records
-    nPos = 0;
-    while( nPos < maColInfos.GetSize() )
+    for( size_t nPos = 0; nPos < maColInfos.GetSize(); ++nPos )
     {
-        XclExpColinfoRef xRec = maColInfos.GetRecord( nPos );
+        XclExpColinfo* xRec = maColInfos.GetRecord( nPos );
         if( xRec->IsDefault( maDefcolwidth ) )
-            maColInfos.RemoveRecord( nPos );
-        else
-            ++nPos;
+            maColInfos.InvalidateRecord( nPos );
     }
+    maColInfos.RemoveInvalidatedRecords();
 }
 
 void XclExpColinfoBuffer::Save( XclExpStream& rStrm )

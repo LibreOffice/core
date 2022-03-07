@@ -24,6 +24,7 @@
 #include "xlstream.hxx"
 #include <salhelper/simplereferenceobject.hxx>
 #include <rtl/ref.hxx>
+#include <algorithm>
 
 // Base classes to export Excel records =======================================
 
@@ -383,6 +384,20 @@ public:
         // inlining prevents warning in wntmsci10
         for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
             (*aIt)->SaveXml( rStrm );
+    }
+
+    /**
+     Optimization for repeated removal. Since this is internally a vector, repeated RemoveRecord()
+     would repeatedly move all items after the removed position. Instead it's possible to invalidate
+     a record and then call RemoveInvalidatedRecords() at the end (which is necessary, the list is generally
+     not allowed to contain invalid entries).
+    */
+    void        InvalidateRecord( size_t nPos ) { maRecs[ nPos ] = nullptr; }
+    void        RemoveInvalidatedRecords()
+    {
+        maRecs.erase(
+            std::remove_if( maRecs.begin(), maRecs.end(), [](const RecordRefType& xRec) { return xRec == nullptr; } ),
+            maRecs.end());
     }
 
 private:
