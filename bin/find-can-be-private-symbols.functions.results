@@ -21124,7 +21124,7 @@ psp::PrintFontManager::analyzeFontFile(int, rtl::OString const&, char const*) co
 psp::PrintFontManager::analyzeSfntFamilyName(void const*, std::vector<rtl::OUString, std::allocator<rtl::OUString> >&)
 psp::PrintFontManager::analyzeSfntFile(psp::PrintFontManager::PrintFont&) const
 psp::PrintFontManager::convertSfntName(void*)
-psp::PrintFontManager::countFontconfigFonts(std::unordered_map<rtl::OString, int, std::hash<rtl::OString>, std::equal_to<rtl::OString>, std::allocator<std::pair<rtl::OString const, int> > >&)
+psp::PrintFontManager::countFontconfigFonts()
 psp::PrintFontManager::createFontSubset(FontSubsetInfo&, int, rtl::OUString const&, unsigned short const*, unsigned char const*, int*, int)
 psp::PrintFontManager::deinitFontconfig()
 psp::PrintFontManager::fillPrintFontInfo(psp::PrintFontManager::PrintFont const&, psp::FastPrintFontInfo&)
