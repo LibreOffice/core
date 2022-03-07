@@ -129,16 +129,13 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
     Graphic aGraphic(xGraphic);
     basegfx::B2DRange aRange = aGraphic.getVectorGraphicData()->getRange();
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 9419
+    // - Expected: 9437
     // - Actual  : 34176
     // i.e. the width was too large, it used all width of the body frame.
-    // 9419 mm100 is 267 points from the file.
-#if defined MACOSX
-    // TODO the bitmap size is larger (75486) on macOS, but that should not affect the logic size.
-    (void)aRange;
-#else
-    CPPUNIT_ASSERT_EQUAL(static_cast<double>(9419), aRange.getWidth());
-#endif
+    // 9437 mm100 is 267.507 points from the file.
+    // Unfortunately, this test is DPI-dependent.
+    // Use some allowance (~1/2 pt) to let it pass on non-default DPI.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9437, aRange.getWidth(), 20.0);
 }
 }
 
