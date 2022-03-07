@@ -2208,10 +2208,12 @@ Public Function Properties() As Variant
 					, &quot;Description&quot; _
 					, &quot;DocumentProperties&quot; _
 					, &quot;DocumentType&quot; _
+					, &quot;ExportFilters&quot; _
 					, &quot;FirstCell&quot; _
 					, &quot;FirstColumn&quot; _
 					, &quot;FirstRow&quot; _
 					, &quot;Height&quot; _
+					, &quot;ImportFilters&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw&quot; _
@@ -3085,6 +3087,16 @@ REM ----------------------------------------------------------------------------
 Property Get DocumentType() As String
 	DocumentType = [_Super].GetProperty(&quot;DocumentType&quot;)
 End Property	&apos;	SFDocuments.SF_Calc.DocumentType
+
+REM -----------------------------------------------------------------------------
+Property Get ExportFilters() As Variant
+	ExportFilters = [_Super].GetProperty(&quot;ExportFilters&quot;)
+End Property	&apos;	SFDocuments.SF_Calc.ExportFilters
+
+REM -----------------------------------------------------------------------------
+Property Get ImportFilters() As Variant
+	ImportFilters = [_Super].GetProperty(&quot;ImportFilters&quot;)
+End Property	&apos;	SFDocuments.SF_Calc.ImportFilters
 
 REM -----------------------------------------------------------------------------
 Property Get IsBase() As Boolean
