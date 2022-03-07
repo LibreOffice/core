@@ -158,10 +158,10 @@ size_t RenderPDFBitmaps(const void* pBuffer, int nSize, std::vector<BitmapEx>& r
 
         // Returned unit is points, convert that to pixel.
 
-        const size_t nPageWidth
-            = pointToPixel(nPageWidthPoints, fResolutionDPI) * PDF_INSERT_MAGIC_SCALE_FACTOR;
-        const size_t nPageHeight
-            = pointToPixel(nPageHeightPoints, fResolutionDPI) * PDF_INSERT_MAGIC_SCALE_FACTOR;
+        const size_t nPageWidth = std::round(pointToPixel(nPageWidthPoints, fResolutionDPI)
+                                             * PDF_INSERT_MAGIC_SCALE_FACTOR);
+        const size_t nPageHeight = std::round(pointToPixel(nPageHeightPoints, fResolutionDPI)
+                                              * PDF_INSERT_MAGIC_SCALE_FACTOR);
         std::unique_ptr<vcl::pdf::PDFiumBitmap> pPdfBitmap
             = pPdfium->createBitmap(nPageWidth, nPageHeight, /*nAlpha=*/1);
         if (!pPdfBitmap)
