@@ -168,6 +168,9 @@
 
 #define PDF_SIGNATURE 0x50444620 // "PDF "
 
+/* [MS-EMF] - v20210625 - page 28 */
+constexpr sal_Int32 ARCDIRECTION_CLOCKWISE = 0x00000002;
+
 namespace
 {
 
@@ -1060,6 +1063,13 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_SETARCDIRECTION:
+                    {
+                        mpInputStream->ReadUInt32(nIndex);
+                        SetArcDirection(nIndex == ARCDIRECTION_CLOCKWISE);
+                    }
+                    break;
+
                     case EMR_SETBKCOLOR :
                     {
                         SetBkColor( ReadColor() );
@@ -1391,7 +1401,8 @@ namespace emfio
                         else
                         {
                             SAL_INFO( "emfio", "\t\t Bounds: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32 << ", Start: " << nStartX << ":" << nStartY << ", End: " << nEndX << ":" << nEndY );
-                            tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
+                            tools::Polygon aPoly(ReadRectangle(nX32, nY32, nx32, ny32), Point(nStartX, nStartY), Point(nEndX, nEndY), PolyStyle::Arc, IsArcDirectionClockWise());
+
                             if ( nRecType == EMR_CHORD )
                                 DrawPolygon( aPoly, mbRecordPath );
                             else
@@ -1408,7 +1419,7 @@ namespace emfio
                             bStatus = false;
                         else
                         {
-                            tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
+                            tools::Polygon aPoly(ReadRectangle(nX32, nY32, nx32, ny32), Point(nStartX, nStartY), Point(nEndX, nEndY), PolyStyle::Pie, IsArcDirectionClockWise());
                             DrawPolygon( aPoly, mbRecordPath );
                         }
                     }
@@ -2162,7 +2173,6 @@ namespace emfio
                     case EMR_FLATTENPATH :
                     case EMR_WIDENPATH :
                     case EMR_POLYDRAW :
-                    case EMR_SETARCDIRECTION :
                     case EMR_SETPALETTEENTRIES :
                     case EMR_RESIZEPALETTE :
                     case EMR_EXTFLOODFILL :
