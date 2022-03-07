@@ -52,6 +52,24 @@
       "parentUuid": "f1e89fbc_a2a16f60",
       "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bbadd4f_27ca561a",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-07T14:44:47Z",
+      "side": 1,
+      "message": "Ah, the problem is XPdfDecomposer::getDecomposition, which does two DPI-dependent operations: it renders the PDF, which results in DPI-dependent bitmap (356x114 for 96DPI, 445x142 for 150% scaling, 535x171 for 150% scaling); then it uses PixelToLogic to get the mm100 size.\n\nI have no idea if it\u0027s possible to not have it DPI-dependent, given this sequence.",
+      "parentUuid": "01afdd02_507e6890",
+      "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
