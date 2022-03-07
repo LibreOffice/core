@@ -1136,7 +1136,10 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         // don't include end node in the range: it may have been merged already
         // by the start node, or it may be merged by one of the moved nodes,
         // but if it isn't merged, its current frame(s) should be good...
-        SwNodeIndex const end(rDoc.GetNodes(), m_bDelFullPara ? delFullParaEndNode : m_nEndNode);
+        SwNodeIndex const end(rDoc.GetNodes(), m_bDelFullPara
+            ? delFullParaEndNode
+            // tdf#147310 SwDoc::DeleteRowCol() may delete whole table - end must be node following table!
+            : (m_nEndNode + (rDoc.GetNodes()[m_nSttNode]->IsTableNode() && rDoc.GetNodes()[m_nEndNode]->IsEndNode() ? 1 : 0)));
         ::MakeFrames(&rDoc, start, end);
     }
 
