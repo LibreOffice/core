@@ -2459,6 +2459,7 @@ XclExpRow& XclExpRowBuffer::GetOrCreateRow( sal_uInt32 nXclRow, bool bRowAlwaysE
     }
     const bool bFound = itr != maRowMap.end();
     // bFoundHigher: nXclRow was identical to the previous entry, so not explicitly created earlier
+    // coverity[deref_iterator : FALSE] - clearly itr if only derefed if bFound which checks for valid itr
     const bool bFoundHigher = bFound && itr->first != nXclRow;
     if( bFound && !bFoundHigher )
         return *itr->second;
