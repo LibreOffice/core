@@ -92,6 +92,11 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
     , m_xBox(m_xBuilder->weld_container("SortKeyWindow"))
     , m_aSortWin(m_xBox.get())
 {
+    // tdf#147722 set some nominal small default height so the height adapts
+    // to all the other contents and the natural height of this widget isn't
+    // an input into the overall size
+    m_xScrolledWindow->set_size_request(-1, 42);
+
     Init();
 
     m_aIdle.SetInvokeHandler(LINK(this, ScTabPageSortFields, ScrollToEndHdl));
