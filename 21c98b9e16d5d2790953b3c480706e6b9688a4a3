@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "197a244f_d83aec07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-07T15:24:22Z",
+      "side": 1,
+      "message": "LibreOffice 7.3.2 RC1 is going to be tagged this week. Reverting before the tagging...",
+      "revId": "21c98b9e16d5d2790953b3c480706e6b9688a4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
