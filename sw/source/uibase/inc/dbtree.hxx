@@ -29,10 +29,10 @@ class SwWrtShell;
 
 class SW_DLLPUBLIC SwDBTreeList
 {
-    bool            bInitialized;
-    bool            bShowColumns;
+    bool            m_bInitialized;
+    bool            m_bShowColumns;
 
-    rtl::Reference<SwDBTreeList_Impl> pImpl;
+    rtl::Reference<SwDBTreeList_Impl> m_pImpl;
     std::unique_ptr<weld::TreeView> m_xTreeView;
     std::unique_ptr<weld::TreeIter> m_xScratchIter;
 

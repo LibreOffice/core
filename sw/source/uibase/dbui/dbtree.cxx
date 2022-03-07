@@ -128,9 +128,9 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const OUString& rSource
 }
 
 SwDBTreeList::SwDBTreeList(std::unique_ptr<weld::TreeView> xTreeView)
-    : bInitialized(false)
-    , bShowColumns(false)
-    , pImpl(new SwDBTreeList_Impl)
+    : m_bInitialized(false)
+    , m_bShowColumns(false)
+    , m_pImpl(new SwDBTreeList_Impl)
     , m_xTreeView(std::move(xTreeView))
     , m_xScratchIter(m_xTreeView->make_iterator())
 {
@@ -143,10 +143,10 @@ SwDBTreeList::~SwDBTreeList()
 
 void SwDBTreeList::InitTreeList()
 {
-    if (!pImpl->HasContext() && pImpl->GetWrtShell())
+    if (!m_pImpl->HasContext() && m_pImpl->GetWrtShell())
         return;
 
-    Sequence< OUString > aDBNames = pImpl->GetContext()->getElementNames();
+    Sequence< OUString > aDBNames = m_pImpl->GetContext()->getElementNames();
     auto const sort = comphelper::string::NaturalStringSorter(
         comphelper::getProcessComponentContext(),
         Application::GetSettings().GetUILanguageTag().getLocale());
@@ -170,7 +170,7 @@ void SwDBTreeList::InitTreeList()
     }
     Select(u"", u"", u"");
 
-    bInitialized = true;
+    m_bInitialized = true;
 }
 
 void SwDBTreeList::AddDataSource(const OUString& rSource)
@@ -193,9 +193,9 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                 OUString sSourceName = m_xTreeView->get_text(*xGrandParent);
                 OUString sTableName = m_xTreeView->get_text(rParent);
 
-                if(!pImpl->GetContext()->hasByName(sSourceName))
+                if(!m_pImpl->GetContext()->hasByName(sSourceName))
                     return true;
-                Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
+                Reference<XConnection> xConnection = m_pImpl->GetConnection(sSourceName);
                 bool bTable = m_xTreeView->get_id(rParent).isEmpty();
                 Reference<XColumnsSupplier> xColsSupplier;
                 if(bTable)
@@ -256,9 +256,9 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
             try
             {
                 OUString sSourceName = m_xTreeView->get_text(rParent);
-                if (!pImpl->GetContext()->hasByName(sSourceName))
+                if (!m_pImpl->GetContext()->hasByName(sSourceName))
                     return true;
-                Reference<XConnection> xConnection = pImpl->GetConnection(sSourceName);
+                Reference<XConnection> xConnection = m_pImpl->GetConnection(sSourceName);
                 if (xConnection.is())
                 {
                     Reference<XTablesSupplier> xTSupplier(xConnection, UNO_QUERY);
@@ -270,7 +270,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                         for (const OUString& rTableName : aTableNames)
                         {
                             m_xTreeView->insert(&rParent, -1, &rTableName, nullptr,
-                                                nullptr, nullptr, bShowColumns, m_xScratchIter.get());
+                                                nullptr, nullptr, m_bShowColumns, m_xScratchIter.get());
                             m_xTreeView->set_image(*m_xScratchIter, aImg);
                         }
                     }
@@ -286,7 +286,7 @@ IMPL_LINK(SwDBTreeList, RequestingChildrenHdl, const weld::TreeIter&, rParent, b
                             //to discriminate between queries and tables the user data of query entries is set
                             OUString sId(OUString::number(1));
                             m_xTreeView->insert(&rParent, -1, &rQueryName, &sId,
-                                                nullptr, nullptr, bShowColumns, m_xScratchIter.get());
+                                                nullptr, nullptr, m_bShowColumns, m_xScratchIter.get());
                             m_xTreeView->set_image(*m_xScratchIter, aImg);
                         }
                     }
@@ -361,7 +361,7 @@ void SwDBTreeList::Select(std::u16string_view rDBName, std::u16string_view rTabl
                     m_xTreeView->copy_iterator(*xChild, *xParent);
 
                     bool bNoChild = false;
-                    if (bShowColumns && !rColumnName.empty())
+                    if (m_bShowColumns && !rColumnName.empty())
                     {
                         if (!m_xTreeView->iter_has_child(*xParent))
                         {
@@ -400,8 +400,8 @@ void SwDBTreeList::Select(std::u16string_view rDBName, std::u16string_view rTabl
 
 void SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
 {
-    pImpl->SetWrtShell(rSh);
-    if (m_xTreeView->get_visible() && !bInitialized)
+    m_pImpl->SetWrtShell(rSh);
+    if (m_xTreeView->get_visible() && !m_bInitialized)
         InitTreeList();
 }
 
@@ -416,10 +416,10 @@ namespace
 
 void SwDBTreeList::ShowColumns(bool bShowCol)
 {
-    if (bShowCol == bShowColumns)
+    if (bShowCol == m_bShowColumns)
         return;
 
-    bShowColumns = bShowCol;
+    m_bShowColumns = bShowCol;
     OUString sTableName;
     OUString sColumnName;
     const OUString sDBName(GetDBName(sTableName, sColumnName));
