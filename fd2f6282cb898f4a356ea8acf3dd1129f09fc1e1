@@ -34,6 +34,24 @@
       "parentUuid": "f406c9e9_af0d7359",
       "revId": "fd2f6282cb898f4a356ea8acf3dd1129f09fc1e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a3529ef_3df5d3d1",
+        "filename": "sd/qa/unit/PNGExportTests.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-07T09:38:22Z",
+      "side": 1,
+      "message": "Nevermind, you already submitted https://gerrit.libreoffice.org/c/core/+/131096. Thanks for that",
+      "parentUuid": "8e8fda06_86643107",
+      "revId": "fd2f6282cb898f4a356ea8acf3dd1129f09fc1e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
