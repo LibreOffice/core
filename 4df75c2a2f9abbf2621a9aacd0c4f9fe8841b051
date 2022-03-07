@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e3fcb29_7a7dd39e",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-07T07:57:20Z",
+      "side": 1,
+      "message": "This test is DPI-dependent; using 150% scaling on Windows, it fails with\n\n  - Expected: 9419\n  - Actual  : 9437",
+      "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
