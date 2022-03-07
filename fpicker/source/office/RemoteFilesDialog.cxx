@@ -12,7 +12,7 @@
 #include "fpsmartcontent.hxx"
 #include "QueryFolderName.hxx"
 #include "RemoteFilesDialog.hxx"
-#include <fpsofficeResMgr.hxx>
+#include <fpicker/fpsofficeResMgr.hxx>
 #include <fpicker/strings.hrc>
 #include <strings.hrc>
 #include <comphelper/docpasswordrequest.hxx>

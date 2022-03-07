@@ -21,7 +21,7 @@
 
 #include <vcl/svapp.hxx>
 
-#include <strings.hrc>
+#include <fpicker/strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -34,7 +34,7 @@ Gtk3KDE5FolderPicker::Gtk3KDE5FolderPicker(
     const uno::Reference<uno::XComponentContext>& /*xContext*/)
 {
     m_ipc.sendCommand(Commands::EnablePickFolderMode);
-    setTitle(getResString(STR_FPICKER_FOLDER_DEFAULT_TITLE));
+    setTitle(getResString(STR_SVT_FOLDERPICKER_DEFAULT_TITLE));
 }
 
 Gtk3KDE5FolderPicker::~Gtk3KDE5FolderPicker() = default;
