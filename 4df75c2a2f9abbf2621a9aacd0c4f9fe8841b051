@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1e4b0375_35c6cec2",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-07T15:06:07Z",
+      "side": 1,
+      "message": "By the way, the PDF has 267.507 pt page width, which translates to 94.3705 mm.",
+      "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e3fcb29_7a7dd39e",
         "filename": "filter/qa/pdf.cxx",
         "patchSetId": 4
