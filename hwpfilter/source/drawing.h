@@ -385,7 +385,13 @@ error:
     }
     if (hdo->property.pPara)
     {
-        hwpf.move_to_failed(std::unique_ptr<HWPPara>(hdo->property.pPara));
+        HWPPara* pPara = hdo->property.pPara;
+        while (pPara)
+        {
+            HWPPara* pNextPara = pPara->Next();
+            hwpf.move_to_failed(std::unique_ptr<HWPPara>(pPara));
+            pPara = pNextPara;
+        }
         hdo->property.pPara = nullptr;
     }
     HWPDOFunc(hdo.get(), OBJFUNC_FREE, nullptr, 0);
