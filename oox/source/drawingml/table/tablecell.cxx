@@ -81,14 +81,6 @@ static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
         aBorderLine.LineDistance = 0;
     }
-    else
-    {
-        aBorderLine.Color = sal_Int32( COL_AUTO );
-        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.LineWidth = 12700;
-        aBorderLine.LineDistance = 0;
-    }
 
     if ( rLineProperties.moPresetDash.has() )
     {
@@ -158,16 +150,9 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
                           oox::drawingml::LineProperties& rRightBorder,
                           oox::drawingml::LineProperties& rTopBorder,
                           oox::drawingml::LineProperties& rBottomBorder,
-                          oox::drawingml::LineProperties& rInsideHBorder,
-                          oox::drawingml::LineProperties& rInsideVBorder,
                           oox::drawingml::LineProperties& rTopLeftToBottomRightBorder,
                           oox::drawingml::LineProperties& rBottomLeftToTopRightBorder,
-                          TableStylePart& rTableStylePart,
-                          bool bIsWholeTable = false,
-                          sal_Int32 nCol = 0,
-                          sal_Int32 nMaxCol = 0,
-                          sal_Int32 nRow = 0,
-                          sal_Int32 nMaxRow = 0)
+                          TableStylePart& rTableStylePart )
 {
     ::oox::drawingml::FillPropertiesPtr& rPartFillPropertiesPtr( rTableStylePart.getFillProperties() );
     if ( rPartFillPropertiesPtr )
@@ -184,35 +169,12 @@ static void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase,
         }
     }
 
-    // Left, right, top and bottom side of the whole table should be mean outer frame of the whole table.
-    // Without this check it means left top right and bottom of whole cells of whole table.
-    if (bIsWholeTable)
-    {
-        if (nCol == 0)
-            applyBorder( rFilterBase, rTableStylePart, XML_left, rLeftBorder );
-        if (nCol == nMaxCol)
-            applyBorder( rFilterBase, rTableStylePart, XML_right, rRightBorder );
-        if (nRow == 0)
-            applyBorder( rFilterBase, rTableStylePart, XML_top, rTopBorder );
-        if (nRow == nMaxRow)
-            applyBorder( rFilterBase, rTableStylePart, XML_bottom, rBottomBorder );
-
-        applyBorder( rFilterBase, rTableStylePart, XML_insideH, rInsideHBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_insideV, rInsideVBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_tl2br, rTopLeftToBottomRightBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_tr2bl, rBottomLeftToTopRightBorder );
-    }
-    else
-    {
-        applyBorder( rFilterBase, rTableStylePart, XML_left, rLeftBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_right, rRightBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_top, rTopBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_bottom, rBottomBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_tl2br, rTopLeftToBottomRightBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_tr2bl, rBottomLeftToTopRightBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_insideH, rInsideHBorder );
-        applyBorder( rFilterBase, rTableStylePart, XML_insideV, rInsideVBorder );
-    }
+    applyBorder( rFilterBase, rTableStylePart, XML_left, rLeftBorder );
+    applyBorder( rFilterBase, rTableStylePart, XML_right, rRightBorder );
+    applyBorder( rFilterBase, rTableStylePart, XML_top, rTopBorder );
+    applyBorder( rFilterBase, rTableStylePart, XML_bottom, rBottomBorder );
+    applyBorder( rFilterBase, rTableStylePart, XML_tl2br, rTopLeftToBottomRightBorder );
+    applyBorder( rFilterBase, rTableStylePart, XML_tr2bl, rBottomLeftToTopRightBorder );
 
     aTextCharProps.maLatinFont = rTableStylePart.getLatinFont();
     aTextCharProps.maAsianFont = rTableStylePart.getAsianFont();
@@ -271,8 +233,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     oox::drawingml::LineProperties aLinePropertiesRight;
     oox::drawingml::LineProperties aLinePropertiesTop;
     oox::drawingml::LineProperties aLinePropertiesBottom;
-    oox::drawingml::LineProperties aLinePropertiesInsideH;
-    oox::drawingml::LineProperties aLinePropertiesInsideV;
     oox::drawingml::LineProperties aLinePropertiesTopLeftToBottomRight;
     oox::drawingml::LineProperties aLinePropertiesBottomLeftToTopRight;
 
@@ -281,16 +241,9 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
         aLinePropertiesRight,
         aLinePropertiesTop,
         aLinePropertiesBottom,
-        aLinePropertiesInsideH,
-        aLinePropertiesInsideV,
         aLinePropertiesTopLeftToBottomRight,
         aLinePropertiesBottomLeftToTopRight,
-        rTable.getWholeTbl(),
-        true,
-        nColumn,
-        nMaxColumn,
-        nRow,
-        nMaxRow );
+        rTable.getWholeTbl() );
 
     if ( rProperties.isFirstRow() && ( nRow == 0 ) )
     {
@@ -299,8 +252,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getFirstRow() );
@@ -312,8 +263,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getLastRow() );
@@ -325,8 +274,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getFirstCol() );
@@ -338,8 +285,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getLastCol() );
@@ -361,8 +306,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesRight,
                     aLinePropertiesTop,
                     aLinePropertiesBottom,
-                    aLinePropertiesInsideH,
-                    aLinePropertiesInsideV,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand2H() );
@@ -374,8 +317,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesRight,
                     aLinePropertiesTop,
                     aLinePropertiesBottom,
-                    aLinePropertiesInsideH,
-                    aLinePropertiesInsideV,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand1H() );
@@ -389,8 +330,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getNwCell() );
@@ -402,8 +341,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getSwCell() );
@@ -415,8 +352,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getNeCell() );
@@ -428,8 +363,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
             aLinePropertiesRight,
             aLinePropertiesTop,
             aLinePropertiesBottom,
-            aLinePropertiesInsideH,
-            aLinePropertiesInsideV,
             aLinePropertiesTopLeftToBottomRight,
             aLinePropertiesBottomLeftToTopRight,
             rTable.getSeCell() );
@@ -451,8 +384,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesRight,
                     aLinePropertiesTop,
                     aLinePropertiesBottom,
-                    aLinePropertiesInsideH,
-                    aLinePropertiesInsideV,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand2V() );
@@ -464,8 +395,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
                     aLinePropertiesRight,
                     aLinePropertiesTop,
                     aLinePropertiesBottom,
-                    aLinePropertiesInsideH,
-                    aLinePropertiesInsideV,
                     aLinePropertiesTopLeftToBottomRight,
                     aLinePropertiesBottomLeftToTopRight,
                     rTable.getBand1V() );
@@ -476,39 +405,14 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, cons
     aLinePropertiesRight.assignUsed( maLinePropertiesRight );
     aLinePropertiesTop.assignUsed( maLinePropertiesTop );
     aLinePropertiesBottom.assignUsed( maLinePropertiesBottom );
-    aLinePropertiesInsideH.assignUsed( maLinePropertiesInsideH );
-    aLinePropertiesInsideV.assignUsed( maLinePropertiesInsideV );
     aLinePropertiesTopLeftToBottomRight.assignUsed( maLinePropertiesTopLeftToBottomRight );
     aLinePropertiesBottomLeftToTopRight.assignUsed( maLinePropertiesBottomLeftToTopRight );
-
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesLeft, PROP_LeftBorder );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesRight, PROP_RightBorder );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesTop, PROP_TopBorder );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesBottom, PROP_BottomBorder );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesTopLeftToBottomRight, PROP_DiagonalTLBR );
     applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesBottomLeftToTopRight, PROP_DiagonalBLTR );
-
-    // Convert insideH to Top and Bottom, InsideV to Left and Right. Exclude the outer borders.
-    if(nRow != 0)
-    {
-        aLinePropertiesInsideH.assignUsed( aLinePropertiesTop );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideH, PROP_TopBorder );
-    }
-    if(nRow != nMaxRow)
-    {
-        aLinePropertiesInsideH.assignUsed( aLinePropertiesBottom );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideH, PROP_BottomBorder );
-    }
-    if(nColumn != 0)
-    {
-        aLinePropertiesInsideV.assignUsed( aLinePropertiesLeft );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideV, PROP_LeftBorder );
-    }
-    if(nColumn != nMaxColumn)
-    {
-        aLinePropertiesInsideV.assignUsed( aLinePropertiesRight );
-        applyLineAttributes( rFilterBase, xPropSet, aLinePropertiesInsideV, PROP_RightBorder );
-    }
 
     if (rProperties.getBgColor().isUsed() && !maFillProperties.maFillColor.isUsed() && maFillProperties.moFillType.get() == XML_noFill)
     {
