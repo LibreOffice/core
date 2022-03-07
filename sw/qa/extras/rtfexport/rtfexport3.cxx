@@ -264,12 +264,12 @@ DECLARE_RTFEXPORT_TEST(testTdf112520, "tdf112520.docx")
         return;
 
     // Assert that the white shape is on top of the yellow one.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffff00),
-                         getProperty<sal_Int32>(getShape(2), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffff00), Color(ColorTransparency,
+                                                getProperty<sal_Int32>(getShape(2), "FillColor")));
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
                          getProperty<text::TextContentAnchorType>(getShape(2), "AnchorType"));
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xffffff),
-                         getProperty<sal_Int32>(getShape(3), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), Color(ColorTransparency,
+                                                getProperty<sal_Int32>(getShape(3), "FillColor")));
     // Without the accompanying fix in place, this test would have failed with
     // 'expected: 4, actual: 2'.
     // This means the draw page was 0/at-char/white, 1/at-char/yellow, 2/at-page/white,
