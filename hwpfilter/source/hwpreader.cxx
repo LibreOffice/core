@@ -3696,7 +3696,7 @@ void HwpReader::makePicture(Picture * hbox)
                     OUString::number(WTMM( hbox->box_ys + hbox->style.margin[1][2] + hbox->style.margin[1][3] + hbox->cap_ys )) + "mm");
                 startEl("draw:text-box");
                 mxList->clear();
-                if( hbox->cap_pos % 2 )           /* Caption is on the top */
+                if (!hbox->caption.empty() && hbox->cap_pos % 2)           /* Caption is on the top */
                 {
                     parsePara(hbox->caption.front().get());
                 }
