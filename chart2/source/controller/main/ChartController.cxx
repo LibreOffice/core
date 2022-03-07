@@ -71,6 +71,7 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
@@ -79,6 +80,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/lok.hxx>
 
 #include <sfx2/sidebar/SidebarController.hxx>
 
@@ -703,7 +705,20 @@ void ChartController::impl_createDrawViewController()
     {
         if( m_pDrawModelWrapper )
         {
+            bool bLokCalcGlobalRTL = false;
+            if(comphelper::LibreOfficeKit::isActive() && AllSettings::GetLayoutRTL())
+            {
+                rtl::Reference< ChartModel > xChartModel = getChartModel();
+                if (xChartModel.is())
+                {
+                    uno::Reference<css::sheet::XSpreadsheetDocument> xSSDoc(xChartModel->getParent(), uno::UNO_QUERY);
+                    if (xSSDoc.is())
+                        bLokCalcGlobalRTL = true;
+                }
+            }
+
             m_pDrawViewWrapper.reset( new DrawViewWrapper(m_pDrawModelWrapper->getSdrModel(),GetChartWindow()->GetOutDev()) );
+            m_pDrawViewWrapper->SetNegativeX(bLokCalcGlobalRTL);
             m_pDrawViewWrapper->attachParentReferenceDevice( getChartModel() );
         }
     }
