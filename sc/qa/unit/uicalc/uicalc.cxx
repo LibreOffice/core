@@ -1112,7 +1112,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
 {
-    ScModelObj* pModelObj = createDoc("tdf131455.ods");
+    // Note that tdf#131455 and tdf#126904 were actually incorrect,
+    // but keep the test with a fixed version of the document.
+    ScModelObj* pModelObj = createDoc("tdf131455-fixed.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
@@ -1159,37 +1161,6 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
 
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ScDocShell::GetViewData()->GetTabNo());
     lcl_AssertCurrentCursorPosition(13, 4);
-
-    // Cursor can't move forward to the right
-    // Without the fix in place, this test would have failed with
-    // - Expected: 13
-    // - Actual  : 64
-    for (size_t i = 0; i < 5; ++i)
-    {
-        dispatchCommand(mxComponent, ".uno:GoRight", {});
-        lcl_AssertCurrentCursorPosition(13, 4);
-    }
-}
-
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
-{
-    ScModelObj* pModelObj = createDoc("tdf126904.ods");
-    ScDocument* pDoc = pModelObj->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-
-    lcl_AssertCurrentCursorPosition(0, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(1, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(4, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(5, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(8, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(9, 4);
-    dispatchCommand(mxComponent, ".uno:GoRight", {});
-    lcl_AssertCurrentCursorPosition(12, 4);
 
     //Cursor can't move forward to the right
     for (size_t i = 0; i < 5; ++i)
