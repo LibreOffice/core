@@ -171,13 +171,20 @@ hchar_string DateCode::GetString()
             num = date[MONTH];
             break;
         case '@':
-            memcpy(cbuf, eng_mon + (date[MONTH] - 1) * 3, 3);
+        {
+            static_assert((std::size(eng_mon) - 1) / 3 == 12);
+            size_t nIndex = (date[MONTH] - 1) % 12;
+            memcpy(cbuf, eng_mon + nIndex * 3, 3);
             cbuf[3] = '.';
             cbuf[4] = 0;
-                break;
-        case '*':
-            strncat(cbuf, en_mon[date[MONTH] - 1], sizeof(cbuf) - strlen(cbuf) - 1);
             break;
+        }
+        case '*':
+        {
+            size_t nIndex = (date[MONTH] - 1) % std::size(en_mon);
+            strncat(cbuf, en_mon[nIndex], sizeof(cbuf) - strlen(cbuf) - 1);
+            break;
+        }
         case '3':                             /* 'D' is day of korean */
             num = date[DAY];
             break;
@@ -210,16 +217,26 @@ hchar_string DateCode::GetString()
             num = date[MIN];
             break;
         case '6':
-            ret.push_back(kor_week[date[WEEK]]);
+        {
+            size_t nIndex = date[WEEK] % std::size(kor_week);
+            ret.push_back(kor_week[nIndex]);
             break;
+        }
         case '^':
-            memcpy(cbuf, eng_week + date[WEEK] * 3, 3);
+        {
+            static_assert((std::size(eng_week) - 1) / 3 == 7);
+            size_t nIndex = date[WEEK] % 7;
+            memcpy(cbuf, eng_week + nIndex * 3, 3);
             cbuf[3] = '.';
             cbuf[4] = 0;
             break;
+        }
         case '_':
-            strncat(cbuf, en_week[date[WEEK]], sizeof(cbuf) - strlen(cbuf) - 1);
+        {
+            size_t nIndex = date[WEEK] % std::size(en_week);
+            strncat(cbuf, en_week[nIndex], sizeof(cbuf) - strlen(cbuf) - 1);
             break;
+        }
         case '7':
             ret.push_back(0xB5A1);
             ret.push_back(is_pm ? 0xD281 : 0xB8E5);
@@ -255,7 +272,8 @@ hchar_string DateCode::GetString()
             fmt++;
             if (*fmt == '6')
             {
-                ret.push_back(china_week[date[WEEK]]);
+                size_t nIndex = date[WEEK] % std::size(china_week);
+                ret.push_back(china_week[nIndex]);
                 break;
             }
             break;
