@@ -859,6 +859,12 @@ namespace emfio
         mnTextLayoutMode = nTextLayoutMode;
     }
 
+    void MtfTools::SetArcDirection(bool bClockWise)
+    {
+        SAL_INFO("emfio", "\t\t Arc direction: " << (bClockWise ? "ClockWise" : "CounterClockWise"));
+        mbClockWiseArcDirection = bClockWise;
+    }
+
     void MtfTools::SetBkMode( BkMode nMode )
     {
         mnBkMode = nMode;
@@ -1084,6 +1090,7 @@ namespace emfio
         mnStartPos(0),
         mnEndPos(0),
         mbNopMode(false),
+        mbClockWiseArcDirection(false),
         mbFillStyleSelected(false),
         mbClipNeedsUpdate(true),
         mbComplexClip(false),
@@ -2363,6 +2370,7 @@ namespace emfio
         pSave->nGfxMode = mnGfxMode;
         pSave->nBkMode = mnBkMode;
         pSave->aBkColor = maBkColor;
+        pSave->bClockWiseArcDirection = mbClockWiseArcDirection;
         pSave->bFillStyleSelected = mbFillStyleSelected;
 
         pSave->aActPos = maActPos;
@@ -2424,6 +2432,7 @@ namespace emfio
         mnGfxMode = pSave->nGfxMode;
         mnMapMode = pSave->nMapMode;
         maBkColor = pSave->aBkColor;
+        mbClockWiseArcDirection = pSave->bClockWiseArcDirection;
         mbFillStyleSelected = pSave->bFillStyleSelected;
 
         maActPos = pSave->aActPos;
