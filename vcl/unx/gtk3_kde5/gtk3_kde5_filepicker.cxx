@@ -30,12 +30,11 @@
 
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
-
 #include "FPServiceInfo.hxx"
 
 #undef Region
 
-#include <strings.hrc>
+#include <fpicker/strings.hrc>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -221,43 +220,43 @@ void Gtk3KDE5FilePicker::addCustomControl(sal_Int16 controlId)
     switch (controlId)
     {
         case CHECKBOX_AUTOEXTENSION:
-            resId = STR_FPICKER_AUTO_EXTENSION;
+            resId = STR_SVT_FILEPICKER_AUTO_EXTENSION;
             break;
         case CHECKBOX_PASSWORD:
-            resId = STR_FPICKER_PASSWORD;
+            resId = STR_SVT_FILEPICKER_PASSWORD;
             break;
         case CHECKBOX_FILTEROPTIONS:
-            resId = STR_FPICKER_FILTER_OPTIONS;
+            resId = STR_SVT_FILEPICKER_FILTER_OPTIONS;
             break;
         case CHECKBOX_READONLY:
-            resId = STR_FPICKER_READONLY;
+            resId = STR_SVT_FILEPICKER_READONLY;
             break;
         case CHECKBOX_LINK:
-            resId = STR_FPICKER_INSERT_AS_LINK;
+            resId = STR_SVT_FILEPICKER_INSERT_AS_LINK;
             break;
         case CHECKBOX_PREVIEW:
-            resId = STR_FPICKER_SHOW_PREVIEW;
+            resId = STR_SVT_FILEPICKER_SHOW_PREVIEW;
             break;
         case CHECKBOX_SELECTION:
-            resId = STR_FPICKER_SELECTION;
+            resId = STR_SVT_FILEPICKER_SELECTION;
             break;
         case CHECKBOX_GPGENCRYPTION:
-            resId = STR_FPICKER_GPGENCRYPT;
+            resId = STR_SVT_FILEPICKER_GPGENCRYPT;
             break;
         case PUSHBUTTON_PLAY:
-            resId = STR_FPICKER_PLAY;
+            resId = STR_SVT_FILEPICKER_PLAY;
             break;
         case LISTBOX_VERSION:
-            resId = STR_FPICKER_VERSION;
+            resId = STR_SVT_FILEPICKER_VERSION;
             break;
         case LISTBOX_TEMPLATE:
-            resId = STR_FPICKER_TEMPLATES;
+            resId = STR_SVT_FILEPICKER_TEMPLATES;
             break;
         case LISTBOX_IMAGE_TEMPLATE:
-            resId = STR_FPICKER_IMAGE_TEMPLATE;
+            resId = STR_SVT_FILEPICKER_IMAGE_TEMPLATE;
             break;
         case LISTBOX_IMAGE_ANCHOR:
-            resId = STR_FPICKER_IMAGE_ANCHOR;
+            resId = STR_SVT_FILEPICKER_IMAGE_ANCHOR;
             break;
         case LISTBOX_VERSION_LABEL:
         case LISTBOX_TEMPLATE_LABEL:
@@ -404,7 +403,7 @@ void SAL_CALL Gtk3KDE5FilePicker::initialize(const uno::Sequence<uno::Any>& args
             return;
     }
 
-    setTitle(getResString(saveDialog ? STR_FPICKER_SAVE : STR_FPICKER_OPEN));
+    setTitle(getResString(saveDialog ? STR_FILEDLG_SAVE : STR_FILEDLG_OPEN));
 
     m_ipc.sendCommand(Commands::Initialize, saveDialog);
 }

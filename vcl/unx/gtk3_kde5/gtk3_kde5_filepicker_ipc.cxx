@@ -40,7 +40,7 @@
 
 #include <boost/filesystem/path.hpp>
 
-#include <svdata.hxx>
+#include <fpicker/fpsofficeResMgr.hxx>
 
 using namespace ::com::sun::star::ui::dialogs;
 
@@ -103,7 +103,7 @@ OUString getResString(TranslateId pResId)
     if (!pResId)
         return {};
 
-    return VclResId(pResId);
+    return FpsResId(pResId);
 }
 
 // handles the IPC commands for dialog execution and ends the dummy Gtk dialog once the IPC response is there
