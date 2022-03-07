@@ -285,7 +285,7 @@ void VclBox::setAllocation(const Size &rAllocation)
 // when it gets negative, it shrinks instead of expands and it becomes invisible
         if (nExtraSpace < 0)
         {
-            SAL_WARN("vcl.layout", "nExtraSpace went negative, setting to zero");
+            SAL_WARN("vcl.layout", "nExtraSpace went negative, setting to zero for VclBox: " << GetHelpId());
             nExtraSpace = 0;
         }
     }
