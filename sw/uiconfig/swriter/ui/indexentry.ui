@@ -196,9 +196,6 @@
                         <property name="tooltip_text" translatable="yes" context="indexentry|new|tooltip_text">New User-defined Index</property>
                         <property name="image">image1</property>
                         <property name="always-show-image">True</property>
-                        <accessibility>
-                          <relation type="member-of" target="label1"/>
-                        </accessibility>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>

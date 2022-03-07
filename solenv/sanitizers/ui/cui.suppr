@@ -135,6 +135,7 @@ cui/uiconfig/ui/optsecuritypage.ui://GtkLabel[@id='nopasswordsave'] orphan-label
 cui/uiconfig/ui/optsecuritypage.ui://GtkLabel[@id='label4'] orphan-label
 cui/uiconfig/ui/optviewpage.ui://GtkLabel[@id='skiaenabled'] orphan-label
 cui/uiconfig/ui/optviewpage.ui://GtkLabel[@id='skiadisabled'] orphan-label
+cui/uiconfig/ui/pageformatpage.ui://GtkRadioButton[@id='radiobuttonPortrait'] labelled-by-and-mnemonic
 cui/uiconfig/ui/pageformatpage.ui://GtkSpinButton[@id='spinMargLeft'] duplicate-mnemonic
 cui/uiconfig/ui/pageformatpage.ui://GtkSpinButton[@id='spinMargRight'] duplicate-mnemonic
 cui/uiconfig/ui/pageformatpage.ui://GtkLabel[@id='labelMsg'] orphan-label
