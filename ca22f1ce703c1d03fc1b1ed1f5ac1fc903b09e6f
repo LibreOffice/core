@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c09d57b_cc90f40e",
+        "filename": "chart2/qa/extras/chart2import.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2233,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-07T08:09:44Z",
+      "side": 1,
+      "message": "This test is DPI-dependent; using 150% scaling on Windows, it fails with\n\n  - Expected: 7200\n  - Actual  : 7224",
+      "revId": "ca22f1ce703c1d03fc1b1ed1f5ac1fc903b09e6f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
