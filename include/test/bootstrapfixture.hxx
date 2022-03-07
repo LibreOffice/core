@@ -53,6 +53,7 @@ protected:
     // until a proper fix is implemented that either considers the DPI properly in the test, or
     // makes the invariants that test uses independent of DPI.
     static bool IsDefaultDPI();
+    static std::pair<double, double> getDPIScaling();
 
 public:
     DECL_DLLPRIVATE_STATIC_LINK(BootstrapFixture, ImplInitFilterHdl, ConvertData&, bool);

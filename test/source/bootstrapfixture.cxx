@@ -264,6 +264,12 @@ bool test::BootstrapFixture::IsDefaultDPI()
             && Application::GetDefaultDevice()->GetDPIY() == 96);
 }
 
+std::pair<double, double> test::BootstrapFixture::getDPIScaling()
+{
+    return { Application::GetDefaultDevice()->GetDPIX() / 96.0,
+             Application::GetDefaultDevice()->GetDPIY() / 96.0 };
+}
+
 sal_uInt16 test::BootstrapFixture::getDefaultDeviceBitCount()
 {
     ScopedVclPtr<VirtualDevice> device
