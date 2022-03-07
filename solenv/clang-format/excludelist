@@ -3583,12 +3583,8 @@ embedserv/source/inprocserv/advisesink.cxx
 embedserv/source/inprocserv/dllentry.cxx
 embedserv/source/inprocserv/inprocembobj.cxx
 embedserv/source/inprocserv/inprocembobj.h
-emfio/inc/emfreader.hxx
-emfio/inc/mtftools.hxx
 emfio/inc/wmfreader.hxx
 emfio/source/emfuno/xemfparser.cxx
-emfio/source/reader/emfreader.cxx
-emfio/source/reader/mtftools.cxx
 emfio/source/reader/wmfreader.cxx
 eventattacher/source/eventattacher.cxx
 extensions/inc/helpids.h

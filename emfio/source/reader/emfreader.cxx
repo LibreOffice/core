@@ -1060,6 +1060,16 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_SETARCDIRECTION:
+                    {
+                        mpInputStream->ReadUInt32(nIndex);
+                        if (nIndex == 0x00000002)
+                            SetArcDirection(false);
+                        else
+                            SetArcDirection(true);
+                    }
+                    break;
+
                     case EMR_SETBKCOLOR :
                     {
                         SetBkColor( ReadColor() );
@@ -2162,7 +2172,6 @@ namespace emfio
                     case EMR_FLATTENPATH :
                     case EMR_WIDENPATH :
                     case EMR_POLYDRAW :
-                    case EMR_SETARCDIRECTION :
                     case EMR_SETPALETTEENTRIES :
                     case EMR_RESIZEPALETTE :
                     case EMR_EXTFLOODFILL :
