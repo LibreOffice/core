@@ -1308,11 +1308,14 @@ public:
 
     void            SkipOverlapped( SCCOL& rCol, SCROW& rRow, SCTAB nTab ) const;
     bool            IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
-    bool            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
+    bool            IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                                     SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
 
     SC_DLLPUBLIC bool HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const;
     SC_DLLPUBLIC bool HasAttrib( const ScRange& rRange, HasAttrFlags nMask ) const;
+    bool              HasAttrib( SCCOL nCol, SCROW nRow, SCTAB nTab, HasAttrFlags nMask,
+                                 SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
 
     SC_DLLPUBLIC void GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const ::editeng::SvxBorderLine** ppLeft,
@@ -1746,6 +1749,13 @@ public:
     template<class T> const T*              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich ) const
     {
         return static_cast<const T*>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich)));
+    }
+    SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich,
+                                                     SCROW& nStartRow, SCROW& nEndRow ) const;
+    template<class T> const T*              GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, TypedWhichId<T> nWhich,
+                                                     SCROW& nStartRow, SCROW& nEndRow ) const
+    {
+        return static_cast<const T*>(GetAttr(nCol, nRow, nTab, sal_uInt16(nWhich), nStartRow, nEndRow));
     }
     SC_DLLPUBLIC const SfxPoolItem*         GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const;
     template<class T> const T*              GetAttr( const ScAddress& rPos, TypedWhichId<T> nWhich ) const

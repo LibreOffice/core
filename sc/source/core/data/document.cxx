@@ -4737,6 +4737,21 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_
     return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
 }
 
+const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
+{
+    if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
+    {
+        const SfxPoolItem* pTemp = maTabs[nTab]->GetAttr( nCol, nRow, nWhich, nStartRow, nEndRow );
+        if (pTemp)
+            return pTemp;
+        else
+        {
+            OSL_FAIL( "Attribute Null" );
+        }
+    }
+    return &mxPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
+}
+
 const SfxPoolItem* ScDocument::GetAttr( const ScAddress& rPos, sal_uInt16 nWhich ) const
 {
     return GetAttr(rPos.Col(), rPos.Row(), rPos.Tab(), nWhich);
@@ -5177,15 +5192,12 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     rLineInner.SetValid( SvxBoxInfoItemValidFlags::VERT,   ( aFlags.nVert != SC_LINE_DONTCARE ) );
 }
 
-bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
-                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const
+static HasAttrFlags OptimizeHasAttrib( HasAttrFlags nMask, ScDocumentPool* pPool )
 {
     if ( nMask & HasAttrFlags::Rotate )
     {
         //  Is attribute used in document?
         //  (as in fillinfo)
-
-        ScDocumentPool* pPool = mxPoolHelper->GetDocPool();
 
         bool bAnyItem = false;
         for (const SfxPoolItem* pItem : pPool->GetItemSurrogates(ATTR_ROTATE_VALUE))
@@ -5202,12 +5214,18 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         if (!bAnyItem)
             nMask &= ~HasAttrFlags::Rotate;
     }
+    return nMask;
+}
+
+bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
+                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2, HasAttrFlags nMask ) const
+{
+    nMask = OptimizeHasAttrib( nMask, mxPoolHelper->GetDocPool());
 
     if (nMask == HasAttrFlags::NONE)
         return false;
 
-    bool bFound = false;
-    for (SCTAB i=nTab1; i<=nTab2 && !bFound && i < static_cast<SCTAB>(maTabs.size()); i++)
+    for (SCTAB i=nTab1; i<=nTab2 && i < static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
         {
             if ( nMask & HasAttrFlags::RightOrCenter )
@@ -5217,14 +5235,46 @@ bool ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                 //  That way, ScAttrArray::HasAttrib doesn't have to handle RTL sheets.
 
                 if ( IsLayoutRTL(i) )
-                    bFound = true;
+                    return true;
             }
 
-            if ( !bFound )
-                bFound = maTabs[i]->HasAttrib( nCol1, nRow1, nCol2, nRow2, nMask );
+            if( maTabs[i]->HasAttrib( nCol1, nRow1, nCol2, nRow2, nMask ))
+                return true;
         }
 
-    return bFound;
+    return false;
+}
+
+bool ScDocument::HasAttrib( SCCOL nCol, SCROW nRow, SCTAB nTab, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
+{
+    nMask = OptimizeHasAttrib( nMask, mxPoolHelper->GetDocPool());
+
+    if (nMask == HasAttrFlags::NONE || nTab >= static_cast<SCTAB>(maTabs.size()))
+    {
+        if( nStartRow )
+            *nStartRow = 0;
+        if( nEndRow )
+            *nEndRow = MaxRow();
+        return false;
+    }
+
+    if ( nMask & HasAttrFlags::RightOrCenter )
+    {
+        //  On a RTL sheet, don't start to look for the default left value
+        //  (which is then logically right), instead always assume true.
+        //  That way, ScAttrArray::HasAttrib doesn't have to handle RTL sheets.
+
+        if ( IsLayoutRTL(nTab) )
+        {
+            if( nStartRow )
+                *nStartRow = 0;
+            if( nEndRow )
+                *nEndRow = MaxRow();
+            return true;
+        }
+    }
+
+    return maTabs[nTab]->HasAttrib( nCol, nRow, nMask, nStartRow, nEndRow );
 }
 
 bool ScDocument::HasAttrib( const ScRange& rRange, HasAttrFlags nMask ) const
@@ -5738,9 +5788,11 @@ bool ScDocument::IsHorOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
     }
 }
 
-bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+bool ScDocument::IsVerOverlapped( SCCOL nCol, SCROW nRow, SCTAB nTab, SCROW* nStartRow, SCROW* nEndRow ) const
 {
-    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG );
+    SCROW dummy;
+    const ScMergeFlagAttr* pAttr = GetAttr( nCol, nRow, nTab, ATTR_MERGE_FLAG,
+                                            nStartRow ? *nStartRow : dummy, nEndRow ? *nEndRow : dummy );
     if (pAttr)
         return pAttr->IsVerOverlapped();
     else

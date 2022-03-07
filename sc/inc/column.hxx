@@ -133,6 +133,11 @@ public:
     {
         return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich)));
     }
+    const SfxPoolItem&      GetAttr( SCROW nRow, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const;
+    template<class T> const T&  GetAttr( SCROW nRow, TypedWhichId<T> nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
+    {
+        return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich), nStartRow, nEndRow));
+    }
 
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
@@ -153,6 +158,7 @@ public:
     void        ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, const ScStyleSheet& rStyle );
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
+    bool        HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark, SCCOL nCol );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol );
@@ -881,6 +887,11 @@ inline bool ScColumnData::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMas
     return pAttrArray->HasAttrib( nRow1, nRow2, nMask );
 }
 
+inline bool ScColumnData::HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
+{
+    return pAttrArray->HasAttrib( nRow, nMask, nStartRow, nEndRow );
+}
+
 inline bool ScColumn::ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                             SCCOL& rPaintCol, SCROW& rPaintRow,
                             bool bRefresh )
@@ -914,6 +925,11 @@ inline const ScPatternAttr* ScColumnData::GetPattern( SCROW nRow ) const
 inline const SfxPoolItem& ScColumnData::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
 {
     return pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
+}
+
+inline const SfxPoolItem& ScColumnData::GetAttr( SCROW nRow, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
+{
+    return pAttrArray->GetPatternRange( nStartRow, nEndRow, nRow )->GetItemSet().Get(nWhich);
 }
 
 inline sal_uInt32 ScColumnData::GetNumberFormat( const ScInterpreterContext& rContext, SCROW nRow ) const
