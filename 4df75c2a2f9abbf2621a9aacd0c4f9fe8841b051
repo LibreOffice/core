@@ -34,6 +34,24 @@
       "parentUuid": "7e3fcb29_7a7dd39e",
       "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01afdd02_507e6890",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-07T12:47:18Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/131110 is to handle that (I wish I had cycles to track the DPI awareness down 😞)",
+      "parentUuid": "f1e89fbc_a2a16f60",
+      "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
