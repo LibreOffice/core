@@ -29,7 +29,7 @@
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 
 #include "NSString_OOoAdditions.hxx"
-#include <fpsofficeResMgr.hxx>
+#include <fpicker/fpsofficeResMgr.hxx>
 #include "resourceprovider.hxx"
 
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
