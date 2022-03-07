@@ -1060,6 +1060,16 @@ namespace emfio
                     }
                     break;
 
+                    case EMR_SETARCDIRECTION:
+                    {
+                        mpInputStream->ReadUInt32(nIndex);
+                        if (nIndex == 0x00000002)
+                            SetArcDirection(true);
+                        else
+                            SetArcDirection(false);
+                    }
+                    break;
+
                     case EMR_SETBKCOLOR :
                     {
                         SetBkColor( ReadColor() );
@@ -1391,7 +1401,8 @@ namespace emfio
                         else
                         {
                             SAL_INFO( "emfio", "\t\t Bounds: " << nX32 << ":" << nY32 << ", " << nx32 << ":" << ny32 << ", Start: " << nStartX << ":" << nStartY << ", End: " << nEndX << ":" << nEndY );
-                            tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Arc );
+                            tools::Polygon aPoly(ReadRectangle(nX32, nY32, nx32, ny32), Point(nStartX, nStartY), Point(nEndX, nEndY), PolyStyle::Arc, IsArcDirectionClockWise());
+
                             if ( nRecType == EMR_CHORD )
                                 DrawPolygon( aPoly, mbRecordPath );
                             else
@@ -1408,7 +1419,7 @@ namespace emfio
                             bStatus = false;
                         else
                         {
-                            tools::Polygon aPoly( ReadRectangle( nX32, nY32, nx32, ny32 ), Point( nStartX, nStartY ), Point( nEndX, nEndY ), PolyStyle::Pie );
+                            tools::Polygon aPoly(ReadRectangle(nX32, nY32, nx32, ny32), Point(nStartX, nStartY), Point(nEndX, nEndY), PolyStyle::Pie, IsArcDirectionClockWise());
                             DrawPolygon( aPoly, mbRecordPath );
                         }
                     }
@@ -2162,7 +2173,6 @@ namespace emfio
                     case EMR_FLATTENPATH :
                     case EMR_WIDENPATH :
                     case EMR_POLYDRAW :
-                    case EMR_SETARCDIRECTION :
                     case EMR_SETPALETTEENTRIES :
                     case EMR_RESIZEPALETTE :
                     case EMR_EXTFLOODFILL :
