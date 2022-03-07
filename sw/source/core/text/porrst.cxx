@@ -23,6 +23,8 @@
 #include <editeng/lrspitem.hxx>
 #include <editeng/pgrditem.hxx>
 #include <vcl/svapp.hxx>
+#include <comphelper/scopeguard.hxx>
+
 #include <viewsh.hxx>
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
@@ -106,6 +108,7 @@ SwBreakPortion::SwBreakPortion( const SwLinePortion &rPortion, const SwTextAttr*
     {
         m_eClear = pAttr->GetLineBreak().GetValue();
     }
+    m_nTextHeight = 0;
 }
 
 TextFrameIndex SwBreakPortion::GetModelPositionForViewPoint(const sal_uInt16) const
@@ -123,6 +126,13 @@ void SwBreakPortion::Paint( const SwTextPaintInfo &rInf ) const
 {
     if( !(rInf.OnWin() && rInf.GetOpt().IsLineBreak()) )
         return;
+
+    // Reduce height to text height for the duration of the print, so the vertical height will look
+    // correct for the line break character, even for clearing breaks.
+    SwTwips nHeight = Height();
+    auto pPortion = const_cast<SwBreakPortion*>(this);
+    pPortion->Height(m_nTextHeight, false);
+    comphelper::ScopeGuard g([pPortion, nHeight] { pPortion->Height(nHeight, false); });
 
     rInf.DrawLineBreak( *this );
 
@@ -163,6 +173,7 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
     const SwLinePortion *pRoot = rInf.GetRoot();
     Width( 0 );
     Height( pRoot->Height() );
+    m_nTextHeight = Height();
 
     // See if this is a clearing break. If so, calculate how much we need to "jump down" so the next
     // line can again use the full text width.
@@ -188,6 +199,17 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
 void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
     rPH.Text( GetLen(), GetWhichPor() );
+}
+
+void SwBreakPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwBreakPortion"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("text-height"),
+                                      BAD_CAST(OString::number(m_nTextHeight).getStr()));
+
+    SwLinePortion::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 SwLineBreakClear SwBreakPortion::GetClear() const { return m_eClear; }
