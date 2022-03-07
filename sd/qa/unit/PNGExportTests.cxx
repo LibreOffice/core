@@ -83,7 +83,11 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf105998)
 
     // make sure only the shape is exported
     Size aSize = aBMPEx.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(Size(193, 193), aSize);
+    const auto[scalingX, scalingY] = getDPIScaling();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(193 * scalingX, aSize.getWidth(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(193 * scalingY, aSize.getHeight(), 1.0);
+    if (!IsDefaultDPI())
+        return;
 
     // Check all borders are red
     // use assertColorsAreSimilar since the color might differ a little bit on mac
@@ -144,7 +148,9 @@ CPPUNIT_TEST_FIXTURE(SdPNGExportTest, testTdf126319)
 
     // make sure only the shape is exported
     Size aSize = aBMPEx.GetSizePixel();
-    CPPUNIT_ASSERT_EQUAL(Size(295, 134), aSize);
+    const auto[scalingX, scalingY] = getDPIScaling();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(295 * scalingX, aSize.getWidth(), 1.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(134 * scalingY, aSize.getHeight(), 1.0);
 
     // Check all borders are red or similar. Ignore the corners
     Bitmap aBMP = aBMPEx.GetBitmap();
