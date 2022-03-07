@@ -16,6 +16,24 @@
       "message": "This test is DPI-dependent; using 150% scaling on Windows, it fails with\n\n  - Expected: 295x134\n  - Actual  : 442x201",
       "revId": "fd2f6282cb898f4a356ea8acf3dd1129f09fc1e1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e8fda06_86643107",
+        "filename": "sd/qa/unit/PNGExportTests.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-07T09:33:01Z",
+      "side": 1,
+      "message": "Thanks for the info.\nI\u0027ll adapt it accordingly",
+      "parentUuid": "f406c9e9_af0d7359",
+      "revId": "fd2f6282cb898f4a356ea8acf3dd1129f09fc1e1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
