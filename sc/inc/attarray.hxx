@@ -182,6 +182,7 @@ public:
     bool    Search( SCROW nRow, SCSIZE& nIndex ) const;
 
     bool    HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
+    bool    HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
     bool    IsMerged( SCROW nRow ) const;
     bool    ExtendMerge( SCCOL nThisCol, SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rPaintCol, SCROW& rPaintRow,

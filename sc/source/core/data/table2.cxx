@@ -2174,6 +2174,15 @@ const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich )
     return &aDefaultColData.GetAttr( nRow, nWhich );
 }
 
+const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
+{
+    if (!ValidColRow(nCol, nRow))
+        return nullptr;
+    if (nCol < GetAllocatedColumnsCount())
+        return &aCol[nCol].GetAttr( nRow, nWhich, nStartRow, nEndRow );
+    return &aDefaultColData.GetAttr( nRow, nWhich, nStartRow, nEndRow );
+}
+
 sal_uInt32 ScTable::GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& rPos ) const
 {
     if (ValidColRow(rPos.Col(), rPos.Row()))
@@ -2233,6 +2242,13 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, Has
     if( nCol2 >= aCol.size())
          return aDefaultColData.HasAttrib( nRow1, nRow2, nMask );
     return false;
+}
+
+bool ScTable::HasAttrib( SCCOL nCol, SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
+{
+    if( nCol < aCol.size())
+        return aCol[nCol].HasAttrib( nRow, nMask, nStartRow, nEndRow );
+    return aDefaultColData.HasAttrib( nRow, nMask, nStartRow, nEndRow );
 }
 
 bool ScTable::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const

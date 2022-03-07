@@ -694,6 +694,8 @@ public:
 
     bool        HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, HasAttrFlags nMask ) const;
     bool        HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const;
+    bool        HasAttrib( SCCOL nCol, SCROW nRow, HasAttrFlags nMask,
+                           SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
     bool IsMerged( SCCOL nCol, SCROW nRow ) const;
     bool        ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
                                 SCCOL& rEndCol, SCROW& rEndRow,
@@ -704,6 +706,11 @@ public:
     template<class T> const T* GetAttr( SCCOL nCol, SCROW nRow, TypedWhichId<T> nWhich ) const
     {
         return static_cast<const T*>(GetAttr(nCol, nRow, sal_uInt16(nWhich)));
+    }
+    const SfxPoolItem*      GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const;
+    template<class T> const T* GetAttr( SCCOL nCol, SCROW nRow, TypedWhichId<T> nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
+    {
+        return static_cast<const T*>(GetAttr(nCol, nRow, sal_uInt16(nWhich), nStartRow, nEndRow));
     }
     const ScPatternAttr*    GetPattern( SCCOL nCol, SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const;

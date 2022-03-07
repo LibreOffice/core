@@ -1420,6 +1420,27 @@ bool ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) cons
     return bFound;
 }
 
+bool ScAttrArray::HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
+{
+    if (mvData.empty())
+    {
+        if( nStartRow )
+            *nStartRow = 0;
+        if( nEndRow )
+            *nEndRow = rDocument.MaxRow();
+        return HasAttrib_Impl(rDocument.GetDefPattern(), nMask, 0, rDocument.MaxRow(), 0);
+    }
+
+    SCSIZE nIndex;
+    Search( nRow, nIndex );
+    if( nStartRow )
+        *nStartRow = nIndex > 0 ? mvData[nIndex-1].nEndRow+1 : 0;
+    if( nEndRow )
+        *nEndRow = mvData[nIndex].nEndRow;
+    const ScPatternAttr* pPattern = mvData[nIndex].pPattern;
+    return HasAttrib_Impl(pPattern, nMask, nRow, nRow, nIndex);
+}
+
 bool ScAttrArray::IsMerged( SCROW nRow ) const
 {
     if ( !mvData.empty() )

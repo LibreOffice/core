@@ -739,7 +739,8 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 
     bool bSkipCell = false;
     bool bHFlip = false;
-    auto nMaxCol = rDoc.MaxCol();
+    // search also the first unallocated column (all unallocated columns share a set of attrs)
+    SCCOL nMaxCol = std::min<SCCOL>( rDoc.GetAllocatedColumnsCount(nTab) + 1, rDoc.MaxCol());
     do
     {
         bSkipCell = rDoc.ColHidden(rCurX, nTab) || rDoc.IsHorOverlapped(rCurX, rCurY, nTab);
@@ -799,20 +800,41 @@ void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCRO
 
     bool bSkipCell = false;
     bool bVFlip = false;
+    // Avoid repeated calls to RowHidden(), IsVerOverlapped() and HasAttrib().
+    SCROW nFirstSameHiddenRow = -1;
+    SCROW nLastSameHiddenRow = -1;
+    bool bRowHidden = false;
+    SCROW nFirstSameIsVerOverlapped = -1;
+    SCROW nLastSameIsVerOverlapped = -1;
+    bool bIsVerOverlapped = false;
+    SCROW nFirstSameHasAttribRow = -1;
+    SCROW nLastSameHasAttribRow = -1;
+    bool bHasAttribProtected = false;
     do
     {
-        SCROW nFirstHiddenRow = -1;
-        SCROW nLastHiddenRow = -1;
-        bSkipCell = rDoc.RowHidden(rCurY, nTab, &nFirstHiddenRow, &nLastHiddenRow);
-        if (!bSkipCell)
+        if( rCurY < nFirstSameHiddenRow || rCurY > nLastSameHiddenRow )
+            bRowHidden = rDoc.RowHidden(rCurY, nTab, &nFirstSameHiddenRow, &nLastSameHiddenRow);
+        bSkipCell = bRowHidden;
+        if( !bSkipCell )
         {
-            nFirstHiddenRow = nLastHiddenRow = -1;
-            bSkipCell = rDoc.IsVerOverlapped( rCurX, rCurY, nTab );
+            if( rCurY < nFirstSameIsVerOverlapped || rCurY > nLastSameIsVerOverlapped )
+                bIsVerOverlapped = rDoc.IsVerOverlapped(rCurX, rCurY, nTab, &nFirstSameIsVerOverlapped, &nLastSameIsVerOverlapped);
+            bSkipCell = bIsVerOverlapped;
         }
         if (bSkipProtected && !bSkipCell)
-            bSkipCell = rDoc.HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
+        {
+            if( rCurY < nFirstSameHasAttribRow || rCurY > nLastSameHasAttribRow )
+                bHasAttribProtected = rDoc.HasAttrib(rCurX, rCurY, nTab, HasAttrFlags::Protected,
+                                                     &nFirstSameHasAttribRow, &nLastSameHasAttribRow);
+            bSkipCell = bHasAttribProtected;
+        }
         if (bSkipUnprotected && !bSkipCell)
-            bSkipCell = !rDoc.HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HasAttrFlags::Protected);
+        {
+            if( rCurY < nFirstSameHasAttribRow || rCurY > nLastSameHasAttribRow )
+                bHasAttribProtected = rDoc.HasAttrib(rCurX, rCurY, nTab, HasAttrFlags::Protected,
+                                                     &nFirstSameHasAttribRow, &nLastSameHasAttribRow);
+            bSkipCell = !bHasAttribProtected;
+        }
 
         if (bSkipCell)
         {
@@ -834,20 +856,10 @@ void ScTabView::SkipCursorVertical(SCCOL& rCurX, SCROW& rCurY, SCROW nOldY, SCRO
                 }
             }
             else
-            {
-                // nFirstRow/nLastRow are set only if the row is hidden, in which case we always skip,
-                // so as an optimization skip to the first row after the hidden range
                 if (nMovY > 0)
-                    if (nLastHiddenRow >= 0)
-                        rCurY = std::min<SCROW>(nLastHiddenRow + 1, rDoc.MaxRow());
-                    else
-                        ++rCurY;
+                    ++rCurY;
                 else
-                    if (nFirstHiddenRow >= 0)
-                        rCurY = std::max<SCROW>(nFirstHiddenRow - 1, 0);
-                    else
-                        --rCurY;
-            }
+                    --rCurY;
         }
     }
     while (bSkipCell);
