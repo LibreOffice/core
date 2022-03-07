@@ -1148,6 +1148,22 @@ IMPL_LINK(CustomAnimationList, CommandHdl, const CommandEvent&, rCEvt, bool)
     if (rCEvt.GetCommand() != CommandEventId::ContextMenu)
         return false;
 
+    if (rCEvt.IsMouseEvent())
+    {
+        ::Point aPos = rCEvt.GetMousePosPixel();
+        std::unique_ptr<weld::TreeIter> xIter(mxTreeView->make_iterator());
+        if (mxTreeView->get_dest_row_at_pos(aPos, xIter.get(), false) && !mxTreeView->is_selected(*xIter))
+        {
+            mxTreeView->unselect_all();
+            mxTreeView->set_cursor(*xIter);
+            mxTreeView->select(*xIter);
+            SelectHdl(*mxTreeView);
+        }
+    }
+
+    if (!mxTreeView->get_selected(nullptr))
+        return false;
+
     std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(mxTreeView.get(), "modules/simpress/ui/effectmenu.ui"));
     std::unique_ptr<weld::Menu> xMenu = xBuilder->weld_menu("menu");
 
