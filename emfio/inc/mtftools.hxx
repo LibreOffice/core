@@ -454,6 +454,7 @@ namespace emfio
         WinMtfClipPath      maClipPath;
         XForm               aXForm;
 
+        bool                bClockWiseArcDirection;
         bool                bFillStyleSelected;
     };
 
@@ -565,6 +566,8 @@ namespace emfio
         ScaledFontDetectCorrectHelper maScaledFontHelper;
 
         bool                mbNopMode : 1;
+
+        bool                mbClockWiseArcDirection : 1;
         bool                mbFillStyleSelected : 1;
         bool                mbClipNeedsUpdate : 1;
         bool                mbComplexClip : 1;
@@ -618,6 +621,8 @@ namespace emfio
 
         void                SetGfxMode(sal_Int32 nGfxMode) { mnGfxMode = nGfxMode; };
         sal_Int32           GetGfxMode() const { return mnGfxMode; };
+        void                SetArcDirection(bool bCounterClockWise);
+        bool                IsArcDirectionClockWise() { return mbClockWiseArcDirection; };
         void                SetBkMode(BkMode nMode);
         void                SetBkColor(const Color& rColor);
         void                SetTextColor(const Color& rColor);
