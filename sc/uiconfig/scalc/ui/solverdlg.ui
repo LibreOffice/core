@@ -139,8 +139,15 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="label" translatable="yes" context="solverdlg|result">Optimize result to</property>
+                    <property name="use-underline">True</property>
+                    <property name="mnemonic-widget">max</property>
                     <property name="xalign">0</property>
                     <property name="yalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="min"/>
+                      <relation type="label-for" target="max"/>
+                      <relation type="label-for" target="value"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -171,7 +178,7 @@
                     <property name="draw-indicator">True</property>
                     <property name="group">max</property>
                     <accessibility>
-                      <relation type="member-of" target="result"/>
+                      <relation type="labelled-by" target="result"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="min-atkobject">
@@ -194,7 +201,7 @@
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <accessibility>
-                      <relation type="member-of" target="result"/>
+                      <relation type="labelled-by" target="result"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="max-atkobject">
@@ -310,7 +317,7 @@
                         <property name="draw-indicator">True</property>
                         <property name="group">max</property>
                         <accessibility>
-                          <relation type="member-of" target="result"/>
+                          <relation type="labelled-by" target="result"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="value-atkobject">

@@ -72,7 +72,13 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="label" translatable="yes" context="footnotepage|pos">Position</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">pospagecb</property>
                 <property name="xalign">0</property>
+                <accessibility>
+                  <relation type="label-for" target="pospagecb"/>
+                  <relation type="label-for" target="posdoccb"/>
+                </accessibility>
               </object>
               <packing>
                 <property name="left-attach">0</property>
@@ -113,7 +119,7 @@
                 <property name="active">True</property>
                 <property name="draw-indicator">True</property>
                 <accessibility>
-                  <relation type="member-of" target="pos"/>
+                  <relation type="labelled-by" target="pos"/>
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="pospagecb-atkobject">
@@ -136,7 +142,7 @@
                 <property name="draw-indicator">True</property>
                 <property name="group">pospagecb</property>
                 <accessibility>
-                  <relation type="member-of" target="pos"/>
+                  <relation type="labelled-by" target="pos"/>
                 </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="posdoccb-atkobject">
