@@ -359,7 +359,6 @@
                             <property name="adjustment">adjustment1</property>
                             <accessibility>
                               <relation type="labelled-by" target="columns"/>
-                              <relation type="member-of" target="columns"/>
                             </accessibility>
                             <property name="truncate-multiline">True</property>
                             <child internal-child="accessible">
@@ -393,7 +392,6 @@
                         <property name="margin-start">12</property>
                         <accessibility>
                           <relation type="labelled-by" target="columns"/>
-                          <relation type="member-of" target="columns"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="bookmode-atkobject">

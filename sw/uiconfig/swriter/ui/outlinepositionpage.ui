@@ -461,9 +461,6 @@ numbering and text:</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
-                <accessibility>
-                  <relation type="member-of" target="label10"/>
-                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="standard-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="outlinepositionpage|extended_tip|standard">Resets the indent and the spacing values to the default values.</property>
