@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c5b0ec2_443995b6",
+        "filename": "sc/qa/unit/subsequent_filters-test.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3290,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-07T08:01:32Z",
+      "side": 1,
+      "message": "This test is DPI-dependent; using 150% scaling on Windows, it fails with\n\n  - Expected: 477\n  - Actual  : 480",
+      "revId": "8e3548af67218034c9fc816c011ae4b16e081e16",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
