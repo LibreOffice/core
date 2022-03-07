@@ -1452,7 +1452,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf131455)
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126904)
 {
-    ScModelObj* pModelObj = createDoc("tdf126904.ods");
+    ScModelObj* pModelObj = createDoc("tdf126904-fixed.ods");
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
