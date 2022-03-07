@@ -185,9 +185,9 @@ xray image.FillColor
 */
     uno::Reference<drawing::XShape> image = getShape(1);
     uno::Reference<beans::XPropertySet> imageProperties(image, uno::UNO_QUERY);
-    sal_Int32 fillColor;
+    Color fillColor;
     imageProperties->getPropertyValue( "FillColor" ) >>= fillColor;
-    CPPUNIT_ASSERT_EQUAL( sal_Int32( 0xc0504d ), fillColor );
+    CPPUNIT_ASSERT_EQUAL( Color( 0xc0504d ), fillColor );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testN747461, "n747461.docx")
