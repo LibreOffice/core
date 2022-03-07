@@ -411,9 +411,6 @@
             </attributes>
           </object>
         </child>
-        <accessibility>
-          <relation type="member-of" target="label4"/>
-        </accessibility>
       </object>
       <packing>
         <property name="left_attach">0</property>

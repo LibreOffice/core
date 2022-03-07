@@ -120,6 +120,10 @@
                     <property name="use-underline">True</property>
                     <property name="mnemonic-widget">radiobuttonPortrait</property>
                     <property name="xalign">0</property>
+                    <accessibility>
+                      <relation type="label-for" target="radiobuttonPortrait"/>
+                      <relation type="label-for" target="radiobuttonLandscape"/>
+                    </accessibility>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -137,7 +141,7 @@
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <accessibility>
-                      <relation type="member-of" target="labelOrientation"/>
+                      <relation type="labelled-by" target="labelOrientation"/>
                     </accessibility>
                   </object>
                   <packing>
@@ -157,7 +161,7 @@
                     <property name="draw-indicator">True</property>
                     <property name="group">radiobuttonPortrait</property>
                     <accessibility>
-                      <relation type="member-of" target="labelOrientation"/>
+                      <relation type="labelled-by" target="labelOrientation"/>
                     </accessibility>
                   </object>
                   <packing>
