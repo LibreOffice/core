@@ -225,21 +225,21 @@ ImplPolygon::ImplPolygon( const Point& rCenter, tools::Long nRadX, tools::Long n
         mnPoints = 0;
 }
 
-ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
-    PolyStyle eStyle )
+ImplPolygon::ImplPolygon(const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
+                         PolyStyle eStyle, const bool bClockWiseArcDirection)
 {
     const auto nWidth = rBound.GetWidth();
     const auto nHeight = rBound.GetHeight();
 
-    if( ( nWidth != 0 ) && ( nHeight != 0 ) )
+    if ((nWidth != 0) && (nHeight != 0))
     {
-        const Point aCenter( rBound.Center() );
+        const Point aCenter(rBound.Center());
         // tdf#142268 Get Top Left corner of rectangle (the rectangle is not always correctly created)
         const auto aBoundLeft = rBound.Left() < aCenter.X() ? rBound.Left() : rBound.Right();
         const auto aBoundTop = rBound.Top() < aCenter.Y() ? rBound.Top() : rBound.Bottom();
         const auto nRadX = o3tl::saturating_sub(aCenter.X(), aBoundLeft);
         const auto nRadY = o3tl::saturating_sub(aCenter.Y(), aBoundTop);
-        sal_uInt16  nPoints;
+        sal_uInt16 nPoints;
 
         tools::Long nRadXY;
         const bool bOverflow = o3tl::checked_multiply(nRadX, nRadY, nRadXY);
@@ -270,17 +270,29 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         double          fStep;
         sal_uInt16      nStart;
         sal_uInt16      nEnd;
-        // #i73608# If startPoint is equal to endPoint, then draw full circle instead of nothing (as Metafiles spec)
-        if( fDiff <= 0. )
-            fDiff += 2 * M_PI;
+
+        if (bClockWiseArcDirection == false)
+        {
+            // #i73608# If startPoint is equal to endPoint, then draw full circle instead of nothing (as Metafiles spec)
+            if (fDiff <= 0.)
+                fDiff += 2. * M_PI;
+        }
+        else
+        {
+            fDiff = (2. * M_PI) - fDiff;
+            if (fDiff > 2. * M_PI)
+                fDiff -= 2. * M_PI;
+        }
 
         // Proportionally shrink number of points( fDiff / (2PI) );
-        nPoints = std::max( static_cast<sal_uInt16>( ( fDiff / (2 * M_PI) ) * nPoints ), sal_uInt16(16) );
-        fStep = fDiff / ( nPoints - 1 );
+        nPoints = std::max(static_cast<sal_uInt16>((fDiff / (2. * M_PI)) * nPoints), sal_uInt16(16));
+        fStep = fDiff / (nPoints - 1);
+        if (bClockWiseArcDirection == true)
+            fStep = -fStep;
 
-        if( PolyStyle::Pie == eStyle )
+        if (PolyStyle::Pie == eStyle)
         {
-            const Point aCenter2( FRound( fCenterX ), FRound( fCenterY ) );
+            const Point aCenter2(FRound(fCenterX), FRound(fCenterY));
 
             nStart = 1;
             nEnd = nPoints + 1;
@@ -903,8 +915,9 @@ Polygon::Polygon( const Point& rCenter, tools::Long nRadX, tools::Long nRadY )
 {
 }
 
-Polygon::Polygon( const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
-                  PolyStyle eStyle ) : mpImplPolygon(ImplPolygon(rBound, rStart, rEnd, eStyle))
+Polygon::Polygon(const tools::Rectangle& rBound, const Point& rStart, const Point& rEnd,
+                 PolyStyle eStyle, const bool bClockWiseArcDirection)
+    : mpImplPolygon(ImplPolygon(rBound, rStart, rEnd, eStyle, bClockWiseArcDirection))
 {
 }
 

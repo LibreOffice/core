@@ -93,7 +93,8 @@ public:
                                  tools::Long nRadX, tools::Long nRadY );
                         Polygon( const tools::Rectangle& rBound,
                                  const Point& rStart, const Point& rEnd,
-                                 PolyStyle ePolyStyle = PolyStyle::Arc );
+                                 PolyStyle ePolyStyle = PolyStyle::Arc,
+                                 const bool bClockWiseArcDirection = false);
                         Polygon( const Point& rBezPt1, const Point& rCtrlPt1,
                                  const Point& rBezPt2, const Point& rCtrlPt2,
                                  sal_uInt16 nPoints );

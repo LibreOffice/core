@@ -61,6 +61,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestChordWithModifyWorldTransform();
     void TestEllipseWithSelectClipPath();
     void TestEllipseXformIntersectClipRect();
+    void TestSetArcDirection();
     void TestDrawPolyLine16WithClip();
     void TestFillRegion();
     void TestExtTextOutOpaqueAndClipTransform();
@@ -103,6 +104,7 @@ public:
     CPPUNIT_TEST(TestChordWithModifyWorldTransform);
     CPPUNIT_TEST(TestEllipseWithSelectClipPath);
     CPPUNIT_TEST(TestEllipseXformIntersectClipRect);
+    CPPUNIT_TEST(TestSetArcDirection);
     CPPUNIT_TEST(TestDrawPolyLine16WithClip);
     CPPUNIT_TEST(TestFillRegion);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
@@ -715,6 +717,52 @@ void Test::TestEllipseXformIntersectClipRect()
         "3496,892 3517,847 3550,835 3571,790 3559,757 3592,745 3580,712 3601,666 3601,666 3622,621 "
         "3610,588 3643,576 3631,543 3652,498 3652,498 3640,465 3628,432 3661,420 3649,386 3637,353 "
         "3625,320 3625,320");
+}
+
+void Test::TestSetArcDirection()
+{
+    // EMF import test with records: SETARCDIRECTION, ARC, PIE
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestSetArcDirection.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument
+        = dumper.dumpAndParse(comphelper::sequenceToContainer<Primitive2DContainer>(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygoncolor", "color", "#ffffff");
+    assertXPath(
+        pDocument, aXPathPrefix + "polypolygoncolor/polypolygon", "path",
+        "m1640 1570-1000-950 50-50 50-50 50-50 50-40 60-40 50-40 60-30 60-40 60-20 60-30 70-20 "
+        "60-20 70-10 60-20h70l70-10h60 70l70 10 60 10 70 10 70 20 60 20 60 20 70 30 60 30 60 30 50 "
+        "40 60 40 50 40 50 40 50 50 50 50 50 50 40 60 40 60 40 60 30 60 30 60 30 60 20 70 30 70 10 "
+        "60 20 70 10 70 10 70 10 70v80 70l-10 70v70l-10 70-20 70-20 70z");
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline", 2);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color", "#000000");
+    assertXPathContent(
+        pDocument, aXPathPrefix + "polygonhairline[1]/polygon",
+        "1070,1570 1110,1560 1160,1540 1200,1530 1250,1520 1300,1510 1350,1510 1400,1500 1440,1500 "
+        "1490,1500 1540,1500 1590,1500 1640,1510 1690,1510 1740,1520 1780,1530 1830,1540 1880,1560 "
+        "1920,1570 1960,1590 2010,1610 2050,1630 2090,1650 2130,1670 2160,1700 2200,1720 2230,1750 "
+        "2260,1780 2290,1810 2320,1840 2350,1870 2370,1900 2390,1930 2410,1970 2430,2000 2440,2030 "
+        "2450,2070 2460,2110 2470,2140 2480,2180 2480,2220 2480,2250 2480,2290 2470,2320 2470,2360 "
+        "2460,2400 2450,2430 2430,2470 2420,2500 2400,2540 2380,2570 2350,2600 2330,2630 2300,2660 "
+        "2270,2690 2240,2720 2210,2750 2170,2770 2140,2800 2100,2820 2060,2840 2020,2860 1980,2880 "
+        "1940,2900 1890,2920 1850,2930 1800,2940 1750,2950 1700,2960 1660,2970 1610,2970 1560,2980 "
+        "1510,2980 1460,2980 1410,2980 1360,2970 1320,2970 1270,2960 1220,2950 1170,2940 1130,2930 "
+        "1080,2910 1040,2900 1000,2880 950,2860 910,2840 870,2820 840,2800 800,2770 770,2740 "
+        "730,2720 700,2690 670,2660 650,2630 620,2600 600,2560 580,2530 560,2500 550,2460 530,2430 "
+        "520,2390 510,2360 510,2320 500,2280 500,2250 500,2210 500,2170 510,2140 520,2100 530,2070 "
+        "540,2030 560,1990 570,1960 590,1930 610,1890 640,1860 660,1830 690,1800 720,1770 750,1740 "
+        "790,1720 820,1690 860,1670 900,1650 940,1630 980,1610 1020,1590");
+    assertXPathContent(
+        pDocument, aXPathPrefix + "polygonhairline[2]/polygon",
+        "1640,1570 640,620 690,570 740,520 790,470 840,430 900,390 950,350 1010,320 1070,280 "
+        "1130,260 1190,230 1260,210 1320,190 1390,180 1450,160 1520,160 1590,150 1650,150 1720,150 "
+        "1790,160 1850,170 1920,180 1990,200 2050,220 2110,240 2180,270 2240,300 2300,330 2350,370 "
+        "2410,410 2460,450 2510,490 2560,540 2610,590 2660,640 2700,700 2740,760 2780,820 2810,880 "
+        "2840,940 2870,1000 2890,1070 2920,1140 2930,1200 2950,1270 2960,1340 2970,1410 2980,1480 "
+        "2980,1560 2980,1630 2970,1700 2970,1770 2960,1840 2940,1910 2920,1980");
 }
 
 void Test::TestDrawPolyLine16WithClip()
