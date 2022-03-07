@@ -64,6 +64,10 @@ typedef comphelper::OMultiTypeInterfaceContainerHelperVar3<css::beans::XProperty
 class SwDBManager;
 class MailMergeExecuteFinalizer;
 
+/**
+ * Gives UNO access to the global mail merge functionality, via the com.sun.star.text.MailMerge
+ * service.
+ */
 class SwXMailMerge final :
     public cppu::WeakImplHelper
     <
