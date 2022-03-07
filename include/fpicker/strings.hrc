@@ -29,6 +29,8 @@
 #define STR_SVT_FOLDERPICKER_DEFAULT_TITLE          NC_("STR_SVT_FOLDERPICKER_DEFAULT_TITLE", "Select Path")
 #define STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION    NC_("STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION", "Please select a folder.")
 #define STR_SVT_ALREADYEXISTOVERWRITE               NC_("STR_SVT_ALREADYEXISTOVERWRITE", "A file named \"$filename$\" already exists.\n\nDo you want to replace it?")
+#define STR_SVT_ALREADYEXISTOVERWRITE_SECONDARY     NC_("STR_SVT_ALREADYEXISTOVERWRITE_SECONDARY", "The file already exists in \"$dirname$\". Replacing it will overwrite its contents.")
+#define STR_SVT_ALLFORMATS                          NC_("STR_SVT_ALLFORMATS", "All Formats")
 #define STR_SVT_DELETESERVICE                       NC_("STR_SVT_DELETESERVICE", "Are you sure you want to delete the service?\n\"$servicename$\"")
 #define STR_SVT_ROOTLABEL                           NC_("STR_SVT_ROOTLABEL", "Root")
 #define STR_FILTERNAME_ALL                          NC_("STR_FILTERNAME_ALL", "All files")
