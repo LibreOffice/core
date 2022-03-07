@@ -266,13 +266,16 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
         const double    fCenterY = aCenter.Y();
         double          fStart = ImplGetParameter( aCenter, rStart, fRadX, fRadY );
         double          fEnd = ImplGetParameter( aCenter, rEnd, fRadX, fRadY );
-        double          fDiff = fEnd - fStart;
+        //double          fDiff = fEnd - fStart;
+        double          fDiff = (2 * M_PI) - (fEnd - fStart);
         double          fStep;
         sal_uInt16      nStart;
         sal_uInt16      nEnd;
         // #i73608# If startPoint is equal to endPoint, then draw full circle instead of nothing (as Metafiles spec)
-        if( fDiff <= 0. )
-            fDiff += 2 * M_PI;
+        //if( fDiff <= 0. )
+        //    fDiff += 2 * M_PI;
+        if( fDiff >= 2 * M_PI )
+            fDiff -= 2 * M_PI;
 
         // Proportionally shrink number of points( fDiff / (2PI) );
         nPoints = std::max( static_cast<sal_uInt16>( ( fDiff / (2 * M_PI) ) * nPoints ), sal_uInt16(16) );
@@ -295,7 +298,8 @@ ImplPolygon::ImplPolygon( const tools::Rectangle& rBound, const Point& rStart, c
             nEnd = nPoints;
         }
 
-        for(; nStart < nEnd; nStart++, fStart += fStep )
+        //for(; nStart < nEnd; nStart++, fStart += fStep )
+        for(; nStart < nEnd; nStart++, fStart -= fStep )
         {
             Point& rPt = mxPointAry[nStart];
 
