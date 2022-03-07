@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23d859c2_011965dc",
+        "filename": "filter/qa/pdf.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-07T15:18:15Z",
+      "side": 1,
+      "message": "Aha, I see. My hope was that in case vcl::RenderPDFBitmaps() does a logic -\u003e pixel conversion with the default DPI and then XPdfDecomposer::getDecomposition() does a pixel -\u003e logic conversion with the same DPI, then this should match, regardless of the DPI. But as you say, this is not the reality.\n\nThanks for researching this!",
+      "parentUuid": "1e4b0375_35c6cec2",
+      "revId": "4df75c2a2f9abbf2621a9aacd0c4f9fe8841b051",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7e3fcb29_7a7dd39e",
         "filename": "filter/qa/pdf.cxx",
         "patchSetId": 4
