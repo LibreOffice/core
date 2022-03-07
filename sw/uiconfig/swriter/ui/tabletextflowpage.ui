@@ -54,6 +54,12 @@
                     <property name="receives-default">False</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
+                    <accessibility>
+                      <relation type="label-for" target="page"/>
+                      <relation type="label-for" target="column"/>
+                      <relation type="label-for" target="before"/>
+                      <relation type="label-for" target="after"/>
+                    </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="break-atkobject">
                         <property name="AtkObject::accessible-description" translatable="yes" context="tabletextflowpage|extended_tip|break">Select this check box, and then select the type of break that you want to associate with the table.</property>
@@ -75,7 +81,7 @@
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <accessibility>
-                      <relation type="member-of" target="break"/>
+                      <relation type="labelled-by" target="break"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="page-atkobject">
@@ -98,7 +104,7 @@
                     <property name="draw-indicator">True</property>
                     <property name="group">page</property>
                     <accessibility>
-                      <relation type="member-of" target="break"/>
+                      <relation type="labelled-by" target="break"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="column-atkobject">
@@ -121,7 +127,7 @@
                     <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                     <accessibility>
-                      <relation type="member-of" target="break"/>
+                      <relation type="labelled-by" target="break"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="before-atkobject">
@@ -144,7 +150,7 @@
                     <property name="draw-indicator">True</property>
                     <property name="group">before</property>
                     <accessibility>
-                      <relation type="member-of" target="break"/>
+                      <relation type="labelled-by" target="break"/>
                     </accessibility>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="after-atkobject">

@@ -135,7 +135,6 @@ sc/uiconfig/scalc/ui/searchresults.ui://GtkLabel[@id='lbSearchResults'] orphan-l
 sc/uiconfig/scalc/ui/sharedocumentdlg.ui://GtkLabel[@id='warning'] orphan-label
 sc/uiconfig/scalc/ui/showchangesdialog.ui://GtkEntry[@id='range'] no-labelled-by
 sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='targetlabel'] orphan-label
-sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='result'] orphan-label
 sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='changelabel'] orphan-label
 sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='cellreflabel'] orphan-label
 sc/uiconfig/scalc/ui/solverdlg.ui://GtkLabel[@id='oplabel'] orphan-label
