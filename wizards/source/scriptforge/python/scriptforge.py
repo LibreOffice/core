@@ -1788,9 +1788,9 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Document'
         servicesynonyms = ('document', 'sfdocuments.document')
-        serviceproperties = dict(Description = True, DocumentType = False, IsBase = False, IsCalc = False,
-                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 Keywords = True, Readonly = False, Subject = True, Title = True,
+        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsImpress = False, IsMath = False,
+                                 IsWriter = False, Keywords = True, Readonly = False, Subject = True, Title = True,
                                  XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
@@ -1902,9 +1902,9 @@ class SFDocuments:
         servicename = 'SFDocuments.Calc'
         servicesynonyms = ('calc', 'sfdocuments.calc')
         serviceproperties = dict(CurrentSelection = True, Sheets = False,
-                                 Description = True, DocumentType = False, IsBase = False, IsCalc = False,
-                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 Keywords = True, Readonly = False, Subject = True, Title = True,
+                                 Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsImpress = False, IsMath = False,
+                                 IsWriter = False, Keywords = True, Readonly = False, Subject = True, Title = True,
                                  XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
@@ -2241,9 +2241,9 @@ class SFDocuments:
         serviceimplementation = 'basic'
         servicename = 'SFDocuments.Writer'
         servicesynonyms = ('writer', 'sfdocuments.writer')
-        serviceproperties = dict(Description = True, DocumentType = False, IsBase = False, IsCalc = False,
-                                 IsDraw = False, IsImpress = False, IsMath = False, IsWriter = False,
-                                 Keywords = True, Readonly = False, Subject = True, Title = True,
+        serviceproperties = dict(Description = True, DocumentType = False, ExportFilters = False, ImportFilters = False,
+                                 IsBase = False, IsCalc = False, IsDraw = False, IsImpress = False, IsMath = False,
+                                 IsWriter = False, Keywords = True, Readonly = False, Subject = True, Title = True,
                                  XComponent = False)
         # Force for each property to get its value from Basic - due to intense interactivity with user
         forceGetProperty = True
