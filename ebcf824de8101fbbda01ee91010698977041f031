@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1683f743_86b636cf",
+        "filename": "sd/qa/unit/PNGExportTests.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-07T08:04:00Z",
+      "side": 1,
+      "message": "This test is DPI-dependent; using 150% scaling on Windows, it fails with\n\n  - Expected: 193x193\n  - Actual  : 289x289",
+      "revId": "ebcf824de8101fbbda01ee91010698977041f031",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
