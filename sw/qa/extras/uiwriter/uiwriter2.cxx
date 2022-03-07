@@ -1545,6 +1545,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // somehow bug happens only with 2 tables
+    SwInsertTableOptions tableOpt(SwInsertTableFlags::DefaultBorder, 0);
+    pWrtShell->InsertTable(tableOpt, 1, 1);
+    pWrtShell->InsertTable(tableOpt, 1, 1);
+
+    pWrtShell->SttEndDoc(/*bStart=*/true);
+
+    pWrtShell->DeleteRow(false);
+    pWrtShell->DeleteRow(false);
+
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/tab", 0);
+        discardDumpedLayout();
+    }
+    pWrtShell->Undo();
+    // this did not create frames for the table
+    pWrtShell->Undo();
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // there are 2 tables
+        assertXPath(pXmlDoc, "/root/page/body/tab", 2);
+        discardDumpedLayout();
+    }
+    pWrtShell->Redo();
+    pWrtShell->Redo();
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        assertXPath(pXmlDoc, "/root/page/body/tab", 0);
+        discardDumpedLayout();
+    }
+    pWrtShell->Undo();
+    pWrtShell->Undo();
+    {
+        xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+        // there are 2 tables
+        assertXPath(pXmlDoc, "/root/page/body/tab", 2);
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf64242_optimizeTable)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf64242_optimizeTable.odt");
