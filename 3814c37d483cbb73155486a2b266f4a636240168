@@ -16,6 +16,24 @@
       "message": "I solved it by pushing just the decimal code of the degree sign 😊",
       "revId": "3814c37d483cbb73155486a2b266f4a636240168",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb44024b_f3f68521",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-07T09:37:45Z",
+      "side": 1,
+      "message": "I\u0027m glad you figured it out!!",
+      "parentUuid": "f9f71d35_a2948e16",
+      "revId": "3814c37d483cbb73155486a2b266f4a636240168",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
