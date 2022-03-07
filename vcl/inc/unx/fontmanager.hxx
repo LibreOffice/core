@@ -186,7 +186,7 @@ class VCL_PLUGIN_PUBLIC PrintFontManager
     called from <code>initialize()</code>
     */
     static void initFontconfig();
-    void countFontconfigFonts( std::unordered_map<OString, int>& o_rVisitedPaths );
+    void countFontconfigFonts();
     /* deinitialize fontconfig
      */
     static void deinitFontconfig();

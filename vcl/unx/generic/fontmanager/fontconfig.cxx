@@ -569,7 +569,7 @@ namespace
     }
 }
 
-void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o_rVisitedPaths )
+void PrintFontManager::countFontconfigFonts()
 {
     int nFonts = 0;
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -636,8 +636,6 @@ void PrintFontManager::countFontconfigFonts( std::unordered_map<OString, int>& o
             // update attributes
             OString aDir, aBase, aOrgPath( reinterpret_cast<char*>(file) );
             splitPath( aOrgPath, aDir, aBase );
-
-            o_rVisitedPaths[aDir] = 1;
 
             int nDirID = getDirectoryAtom( aDir );
             SAL_INFO("vcl.fonts.detail", "file " << aBase << " not cached");

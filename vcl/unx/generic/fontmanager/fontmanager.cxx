@@ -713,11 +713,7 @@ void PrintFontManager::initialize()
         } while( nIndex >= 0 );
     }
 
-    // protect against duplicate paths
-    std::unordered_map< OString, int > visited_dirs;
-
-    // Don't search directories that fontconfig already did
-    countFontconfigFonts( visited_dirs );
+    countFontconfigFonts();
 
 #if OSL_DEBUG_LEVEL > 1
     aStep1 = times( &tms );
