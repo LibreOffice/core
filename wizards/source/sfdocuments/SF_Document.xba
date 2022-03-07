@@ -238,6 +238,22 @@ Property Get DocumentType() As String
 End Property	&apos;	SFDocuments.SF_Document.DocumentType
 
 REM -----------------------------------------------------------------------------
+Property Get ExportFilters() As Variant
+&apos;&apos;&apos;	Returns the list of the export filter names applicable to the current document
+&apos;&apos;&apos;	as a zero-based array of strings
+&apos;&apos;&apos;	Import/Export filters are included
+	ExportFilters = _PropertyGet(&quot;ExportFilters&quot;)
+End Property	&apos;	SFDocuments.SF_Document.ExportFilters
+
+REM -----------------------------------------------------------------------------
+Property Get ImportFilters() As Variant
+&apos;&apos;&apos;	Returns the list of the import filter names applicable to the current document
+&apos;&apos;&apos;	as a zero-based array of strings
+&apos;&apos;&apos;	Import/Export filters are included
+	ImportFilters = _PropertyGet(&quot;ImportFilters&quot;)
+End Property	&apos;	SFDocuments.SF_Document.ImportFilters
+
+REM -----------------------------------------------------------------------------
 Property Get IsBase() As Boolean
 	IsBase = _PropertyGet(&quot;IsBase&quot;)
 End Property	&apos;	SFDocuments.SF_Document.IsBase
@@ -730,6 +746,8 @@ Public Function Properties() As Variant
 					, &quot;Description&quot; _
 					, &quot;DocumentProperties&quot; _
 					, &quot;DocumentType&quot; _
+					, &quot;ExportFilters&quot; _
+					, &quot;ImportFilters&quot; _
 					, &quot;IsBase&quot; _
 					, &quot;IsCalc&quot; _
 					, &quot;IsDraw&quot; _
@@ -1266,6 +1284,68 @@ Private Function _FileIdent() As String
 End Function	&apos;	SFDocuments.SF_Document._FileIdent
 
 REM -----------------------------------------------------------------------------
+Private Function _GetFilterNames(ByVal pbExport As Boolean) As Variant
+&apos;&apos;&apos;	Returns the list of export (pbExport = True) or import filters
+&apos;&apos;&apos;	applicable to the current document
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		pbExport: True for export, False for import
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		A zero-based array of strings
+
+Dim vFilters As Variant				&apos;	Return value
+Dim sIdentifier As String			&apos;	Document service, like com.sun.star.text.TextDocument
+Dim oFilterFactory As Object		&apos;	com.sun.star.document.FilterFactory
+Dim vAllFilters As Variant			&apos;	The full list of installed filters
+Dim sFilter As String				&apos;	A single filter name
+Dim iCount As Integer				&apos;	Filters counter
+Dim vFilter As Variant				&apos;	A filter descriptor as an array of Name/Value pairs
+Dim sType As String					&apos;	The filter type to be compared with the document service
+Dim lFlags As Long					&apos;	Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Properties_of_a_Filter
+Dim bExport As Boolean				&apos;	Filter valid for export when True
+Dim bImport As Boolean				&apos;	Filter valid for import when True
+Dim bImportExport As Boolean		&apos;	Filter valid both for import and export when True
+
+	vFilters = Array()
+	On Local Error GoTo Finally		&apos;	Return empty or partial list if error
+
+Try:
+	sIdentifier = _Component.Identifier
+	Set oFilterFactory = ScriptForge.SF_Utils._GetUNOService(&quot;FilterFactory&quot;)
+	vAllFilters = oFilterFactory.getElementNames()
+	ReDim vFilters(0 To UBound(vAllFilters))
+	iCount = -1
+
+	For Each sFilter In vAllFilters
+		vFilter = oFilterFactory.getByName(sFilter)
+		sType = vFilter(12).Value		&apos;	Hard-coded index for document types
+		If sType = sIdentifier Then
+			lFlags = vFilter(10).Value	&apos;	Hard-coded index for flags
+			&apos;	export: flag is even
+			&apos;	import: flag is odd and flag/2 is even
+			&apos;	import/export: flag is odd and flag/2 is odd
+			bExport = ( lFlags Mod 2 = 0 )
+			bImport = ( (lFlags Mod 2 = 1) And ((lFlags \ 2) Mod 2 = 0) )
+			bImportExport = ( (lFlags Mod 2 = 1) And ((lFlags \ 2) Mod 2 = 1) )
+			&apos;	Select filter ?
+			If bImportExport _
+				Or (pbExport And bExport) _
+				Or (Not pbExport And bImport) Then
+					iCount = iCount + 1
+					vFilters(iCount) = sFilter
+			End If
+		End If
+	Next sFilter
+	
+	If iCount &gt; -1 Then
+		ReDim Preserve vFilters(0 To iCount)
+	End If
+
+Finally:
+	_GetFilterNames = vFilters
+	Exit Function
+End Function	&apos;	SFDocuments.SF_Document._GetFilterNames
+
+REM -----------------------------------------------------------------------------
 Private Function _IsStillAlive(Optional ByVal pbForUpdate As Boolean _
 									, Optional ByVal pbError As Boolean _
 									) As Boolean
@@ -1384,6 +1464,10 @@ Const cstSubArgs = &quot;&quot;
 			Set _PropertyGet = _DocumentProperties
 		Case &quot;DocumentType&quot;
 			_PropertyGet = _DocumentType
+		Case &quot;ExportFilters&quot;
+			_PropertyGet = _GetFilterNames(True)
+		Case &quot;ImportFilters&quot;
+			_PropertyGet = _GetFilterNames(False)
 		Case &quot;IsBase&quot;, &quot;IsCalc&quot;, &quot;IsDraw&quot;, &quot;IsImpress&quot;, &quot;IsMath&quot;, &quot;IsWriter&quot;
 			_PropertyGet = ( Mid(psProperty, 3) = _DocumentType )
 		Case &quot;Keywords&quot;
