@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f9c7f6b_8fd03384",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-07T20:51:28Z",
+      "side": 1,
+      "message": "Some strings were slightly different, eg:\nSTR_FPICKER_INSERT_AS_LINK (\"Insert as ~Link\")\nbecomes:\nSTR_SVT_FILEPICKER_INSERT_AS_LINK (\"~Link\")\n\nSTR_FPICKER_IMAGE_TEMPLATE (\"Frame Style: \")\nbecomes:\nSTR_SVT_FILEPICKER_IMAGE_TEMPLATE (\"Style:\")\n\nis it wrong or does it bring extra consistency?\n\nAlso, another pb I got is with French UI, I got untranslated strings \"Read-only\" for example.\nI did make postprocess and remove LO profile but perhaps I forgot a step?",
+      "revId": "00e6d895009d1b2c3f6e81a404aafc0c786f6d8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
