@@ -1545,6 +1545,36 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf109376)
     CPPUNIT_ASSERT_EQUAL(size_t(1), pWrtShell->GetFlyCount(FLYCNTTYPE_FRM));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147414)
+{
+    SwDoc* const pDoc(createSwDoc());
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+
+    pWrtShell->Insert("Abc");
+
+    // hide and enable
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT(
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // backspace
+    pWrtShell->DelLeft();
+    pWrtShell->AutoCorrect(corr, u' ');
+
+    // problem was this was 1 i.e. before the deleted "b" while " " was inserted after
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3),
+                         pWrtShell->getShellCursor(false)->GetPoint()->nContent.GetIndex());
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("Ab c"),
+        pWrtShell->getShellCursor(false)->GetPoint()->nNode.GetNode().GetTextNode()->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf147310)
 {
     SwDoc* pDoc = createSwDoc();

@@ -266,6 +266,12 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, bool bInsert,
     // FIXME: this _must_ be called with reference to the actual node text!
     SwTextFrame const*const pFrame(static_cast<SwTextFrame const*>(pTNd->getLayoutFrame(GetLayout())));
     TextFrameIndex const nPos(pFrame->MapModelToViewPos(*pCursor->GetPoint()));
+    // tdf#147414 sw_redlinehide: if cursor moved backward, it may be at the
+    // start of a delete redline - but MapViewToModelPos() always returns end
+    // of redline and it will be called when AutoCorrect actually inserts
+    // something - so first normalize cursor point to end of redline so that
+    // point will then be moved forward when something is inserted.
+    *pCursor->GetPoint() = pFrame->MapViewToModelPos(nPos);
     OUString const& rMergedText(pFrame->GetText());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rMergedText, sal_Int32(nPos),
