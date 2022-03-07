@@ -2167,10 +2167,11 @@ void ScTable::ResetChanged( const ScRange& rRange )
 
 const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich ) const
 {
-    if (ValidColRow(nCol, nRow) && nCol < GetAllocatedColumnsCount())
-        return &aCol[nCol].GetAttr( nRow, nWhich );
-    else
+    if (!ValidColRow(nCol, nRow))
         return nullptr;
+    if (nCol < GetAllocatedColumnsCount())
+        return &aCol[nCol].GetAttr( nRow, nWhich );
+    return &aDefaultColData.GetAttr( nRow, nWhich );
 }
 
 sal_uInt32 ScTable::GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& rPos ) const

@@ -128,6 +128,12 @@ public:
     ScAttrArray& AttrArray() { return *pAttrArray; }
     const ScAttrArray& AttrArray() const { return *pAttrArray; }
 
+    const SfxPoolItem&      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
+    template<class T> const T&  GetAttr( SCROW nRow, TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich)));
+    }
+
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
     SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
@@ -497,11 +503,7 @@ public:
     void PreprocessDBDataUpdate(
         sc::EndListeningContext& rEndListenCxt, sc::CompileFormulaContext& rCompileCxt );
 
-    const SfxPoolItem&      GetAttr( SCROW nRow, sal_uInt16 nWhich ) const;
-    template<class T> const T&  GetAttr( SCROW nRow, TypedWhichId<T> nWhich ) const
-    {
-        return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich)));
-    }
+    using ScColumnData::GetAttr;
     using ScColumnData::GetPattern;
     using ScColumnData::GetNumberFormat;
 
@@ -909,7 +911,7 @@ inline const ScPatternAttr* ScColumnData::GetPattern( SCROW nRow ) const
     return pAttrArray->GetPattern( nRow );
 }
 
-inline const SfxPoolItem& ScColumn::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
+inline const SfxPoolItem& ScColumnData::GetAttr( SCROW nRow, sal_uInt16 nWhich ) const
 {
     return pAttrArray->GetPattern( nRow )->GetItemSet().Get(nWhich);
 }
