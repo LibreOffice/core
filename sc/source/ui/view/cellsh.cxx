@@ -361,7 +361,8 @@ void ScCellShell::GetCellState( SfxItemSet& rSet )
                 {
                     ScMarkData aMarkData = GetViewData().GetMarkData();
                     aMarkData.MarkToSimple();
-                    const ScRange& aRange = aMarkData.GetMarkArea();
+                    ScRange aRange;
+                    aMarkData.GetMarkArea(aRange);
                     if(aMarkData.IsMarked())
                     {
                         if (!rDoc.IsBlockEditable( aCursor.Tab(), aRange.aStart.Col(),aRange.aStart.Row(),
@@ -649,7 +650,13 @@ void ScCellShell::GetHLinkState( SfxItemSet& rSet )
     SvxHyperlinkItem aHLinkItem;
     if ( !GetViewData().GetView()->HasBookmarkAtCursor( &aHLinkItem ) )
     {
-        //! put selected text into item?
+        // tdf#80043 - put selected text into item
+        ScViewData& rData       = GetViewData();
+        ScDocument& rDoc        = rData.GetDocument();
+        SCCOL       nPosX       = rData.GetCurX();
+        SCROW       nPosY       = rData.GetCurY();
+        SCTAB       nTab        = rData.GetTabNo();
+        aHLinkItem.SetName(rDoc.GetString(nPosX, nPosY, nTab));
     }
 
     rSet.Put(aHLinkItem);
