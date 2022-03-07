@@ -82,6 +82,7 @@ class SwMultiTOXTabDialog final : public SfxTabDialogController
 
     virtual short       Ok() override;
     std::unique_ptr<SwTOXDescription> CreateTOXDescFromTOXBase(const SwTOXBase*pCurTOX);
+    void ShowPreview();
 
     DECL_LINK(CreateExample_Hdl, SwOneExampleFrame&, void);
     DECL_LINK(ShowPreviewHdl, weld::Toggleable&, void);
