@@ -6,11 +6,10 @@ src:*/scaddins/source/analysis/financial.cxx
 [memory]
 fun:generate_hash_secret_salt
 [signed-integer-overflow]
-fun:_cairo_path_fixed_rel_line_to
-fun:_cairo_slope_init
 src:*/boost/boost/rational.hpp
 src:*/include/tools/gen.hxx
 src:*/tools/source/generic/gen.cxx
+src:*/workdir/UnpackedTarball/cairo/src/*.c
 [vptr]
 fun:_ZN4cppu14throwExceptionERKN3com3sun4star3uno3AnyE
 src:*/include/com/sun/star/uno/Reference.hxx
