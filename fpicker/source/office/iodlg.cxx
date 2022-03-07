@@ -25,7 +25,7 @@
 #include <svtools/PlaceEditDialog.hxx>
 #include "OfficeControlAccess.hxx"
 #include "PlacesListBox.hxx"
-#include <fpsofficeResMgr.hxx>
+#include <fpicker/fpsofficeResMgr.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/stream.hxx>
