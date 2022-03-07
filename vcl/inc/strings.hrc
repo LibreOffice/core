@@ -67,28 +67,9 @@
 #define SV_STDTEXT_PREFERENCES                       NC_("SV_STDTEXT_PREFERENCES", "Preferences...")
 #define SV_STDTEXT_ALLFILETYPES                      NC_("SV_STDTEXT_ALLFILETYPES", "Any type")
 
-#define STR_FPICKER_AUTO_EXTENSION                   NC_("STR_FPICKER_AUTO_EXTENSION", "~Automatic file name extension")
-#define STR_FPICKER_PASSWORD                         NC_("STR_FPICKER_PASSWORD", "Save with pass~word")
 // dear loplugins, please don't remove this constant, it will be used in follow-up commits
-#define STR_FPICKER_GPGENCRYPT                       NC_("STR_FPICKER_GPGENCRYPT", "Encrypt with ~GPG key")
-#define STR_FPICKER_FILTER_OPTIONS                   NC_("STR_FPICKER_FILTER_OPTIONS", "~Edit filter settings")
-#define STR_FPICKER_READONLY                         NC_("STR_FPICKER_READONLY", "~Read-only")
-#define STR_FPICKER_INSERT_AS_LINK                   NC_("STR_FPICKER_INSERT_AS_LINK", "Insert as ~Link")
-#define STR_FPICKER_SHOW_PREVIEW                     NC_("STR_FPICKER_SHOW_PREVIEW", "Pr~eview")
-#define STR_FPICKER_PLAY                             NC_("STR_FPICKER_PLAY", "~Play")
-#define STR_FPICKER_VERSION                          NC_("STR_FPICKER_VERSION", "~Version:")
-#define STR_FPICKER_TEMPLATES                        NC_("STR_FPICKER_TEMPLATES", "S~tyles:")
-#define STR_FPICKER_IMAGE_TEMPLATE                   NC_("STR_FPICKER_IMAGE_TEMPLATE", "Frame Style: ")
-#define STR_FPICKER_IMAGE_ANCHOR                     NC_("STR_FPICKER_IMAGE_ANCHOR", "A~nchor: ")
-#define STR_FPICKER_SELECTION                        NC_("STR_FPICKER_SELECTION", "~Selection")
-#define STR_FPICKER_FOLDER_DEFAULT_TITLE             NC_("STR_FPICKER_FOLDER_DEFAULT_TITLE", "Select Path")
-#define STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION       NC_("STR_FPICKER_FOLDER_DEFAULT_DESCRIPTION", "Please select a folder.")
-#define STR_FPICKER_ALREADYEXISTOVERWRITE_PRIMARY    NC_("STR_FPICKER_ALREADYEXISTOVERWRITE_PRIMARY", "A file named \"$filename$\" already exists. Do you want to replace it?")
 #define STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY  NC_("STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY", "The file already exists in \"$dirname$\". Replacing it will overwrite its contents.")
 #define STR_FPICKER_ALLFORMATS                       NC_("STR_FPICKER_ALLFORMATS", "All Formats")
-#define STR_FPICKER_OPEN                             NC_("STR_FPICKER_OPEN", "Open")
-#define STR_FPICKER_SAVE                             NC_("STR_FPICKER_SAVE", "Save")
-#define STR_FPICKER_TYPE                             NC_("STR_FPICKER_TYPE", "File ~type")
 
 #define SV_ACCESSERROR_NO_FONTS                      NC_("SV_ACCESSERROR_NO_FONTS", "No fonts could be found on the system.")
 

@@ -32,7 +32,7 @@
 #include <com/sun/star/lang/SystemDependent.hpp>
 #include <comphelper/sequence.hxx>
 #include <fpicker/strings.hrc>
-#include <fpsofficeResMgr.hxx>
+#include <fpicker/fpsofficeResMgr.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
