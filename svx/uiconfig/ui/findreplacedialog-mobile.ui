@@ -992,6 +992,10 @@
                                     <property name="label" translatable="yes" context="findreplacedialog-mobile|searchdir">Direction:</property>
                                     <property name="use_underline">True</property>
                                     <property name="xalign">0</property>
+                                    <accessibility>
+                                      <relation type="label-for" target="rows"/>
+                                      <relation type="label-for" target="cols"/>
+                                    </accessibility>
                                   </object>
                                   <packing>
                                     <property name="expand">False</property>
@@ -1014,7 +1018,7 @@
                                         <property name="active">True</property>
                                         <property name="draw_indicator">True</property>
                                         <accessibility>
-                                          <relation type="member-of" target="searchdir"/>
+                                          <relation type="labelled-by" target="searchdir"/>
                                         </accessibility>
                                       </object>
                                       <packing>
@@ -1033,7 +1037,7 @@
                                         <property name="draw_indicator">True</property>
                                         <property name="group">rows</property>
                                         <accessibility>
-                                          <relation type="member-of" target="searchdir"/>
+                                          <relation type="labelled-by" target="searchdir"/>
                                         </accessibility>
                                       </object>
                                       <packing>
