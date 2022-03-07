@@ -851,12 +851,12 @@ inline bool ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 
 inline SCSIZE ScColumn::GetPatternCount() const
 {
-    return pAttrArray ? pAttrArray->Count() : 0;
+    return pAttrArray->Count();
 }
 
 inline SCSIZE ScColumn::GetPatternCount( SCROW nRow1, SCROW nRow2 ) const
 {
-    return pAttrArray ? pAttrArray->Count( nRow1, nRow2 ) : 0;
+    return pAttrArray->Count( nRow1, nRow2 );
 }
 
 inline bool ScColumn::ReservePatternCount( SCSIZE nReserve )
