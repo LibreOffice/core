@@ -212,13 +212,10 @@ void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL
     EditView*       pTableView  = pHdl->GetTableView();
     OSL_ENSURE( pTopView || pTableView, "No EditView" );
 
-    // Check if user selected a whole cell by single click,
-    // cell has content, and user didn't change the name/text
-    // of the link something different than the content via the hyperlink dialog.
-    // If true, assign the given hyperlink to the whole content
-    // instead of inserting a duplicate, or appending the url.
-    if (comphelper::LibreOfficeKit::isActive() && !bIsEditMode && !bSelectFirst
-            && pTableView && !sSeltext.isEmpty() && sSeltext == rName)
+    // Check if user selected a whole cell by single click, and cell has content.
+    // tdf#80043 - if true, replace the entire content of the selected cell instead of
+    // inserting a duplicate, or appending the url.
+    if (!bIsEditMode && !bSelectFirst && pTableView && !sSeltext.isEmpty())
     {
         nSelInd = sSeltext.getLength();
         bSelectFirst = true;
