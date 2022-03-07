@@ -137,7 +137,9 @@ CPPUNIT_TEST_FIXTURE(Test, testPdfDecompositionSize)
     // TODO the bitmap size is larger (75486) on macOS, but that should not affect the logic size.
     (void)aRange;
 #else
-    CPPUNIT_ASSERT_EQUAL(static_cast<double>(9419), aRange.getWidth());
+    // Unfortunately, this test is DPI-dependent.
+    // Use some allowance to let it pass on non-default DPI.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9419, aRange.getWidth(), 20.0);
 #endif
 }
 }
