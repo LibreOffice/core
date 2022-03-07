@@ -755,6 +755,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 xRemoveList.push_back(xChild);
             }
+
+            if (sName == "AtkObject::accessible-description")
+                xName->setNodeValue("description");
+
+            if (sName == "AtkObject::accessible-name")
+                xName->setNodeValue("label");
         }
         else if (xChild->getNodeName() == "child")
         {
@@ -772,7 +778,6 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 }
                 else if (sName == "accessible")
                 {
-                    // TODO what's the replacement for this going to be?
                     xRemoveList.push_back(xChild);
                 }
             }
@@ -880,15 +885,39 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
 
             xRemoveList.push_back(xChild);
         }
-        else if (xChild->getNodeName() == "accessibility")
-        {
-            // TODO <relation type="labelled-by" target="pagenumcb"/> -> <relation name="labelled-by">pagenumcb</relation>
-            xRemoveList.push_back(xChild);
-        }
         else if (xChild->getNodeName() == "accelerator")
         {
             // TODO is anything like this supported anymore in .ui files
             xRemoveList.push_back(xChild);
+        }
+        else if (xChild->getNodeName() == "relation")
+        {
+            auto xDoc = xChild->getOwnerDocument();
+
+            css::uno::Reference<css::xml::dom::XNamedNodeMap> xMap = xChild->getAttributes();
+            css::uno::Reference<css::xml::dom::XNode> xType = xMap->getNamedItem("type");
+            if (xType->getNodeValue() == "label-for")
+            {
+                // there will be a matching labelled-by which should be sufficient in the gtk4 world
+                xRemoveList.push_back(xChild);
+            }
+            else
+            {
+                css::uno::Reference<css::xml::dom::XNode> xTarget = xMap->getNamedItem("target");
+
+                css::uno::Reference<css::xml::dom::XText> xValue
+                    = xDoc->createTextNode(xTarget->getNodeValue());
+                xChild->appendChild(xValue);
+
+                css::uno::Reference<css::xml::dom::XAttr> xName = xDoc->createAttribute("name");
+                xName->setValue(xType->getNodeValue());
+
+                css::uno::Reference<css::xml::dom::XElement> xElem(xChild,
+                                                                   css::uno::UNO_QUERY_THROW);
+                xElem->setAttributeNode(xName);
+                xElem->removeAttribute("type");
+                xElem->removeAttribute("target");
+            }
         }
 
         auto xNextChild = xChild->getNextSibling();
@@ -1308,6 +1337,20 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
             {
                 auto xVisible = CreateProperty(xDoc, "visible", "False");
                 insertAsFirstChild(xChild, xVisible);
+            }
+            else if (sClass == "AtkObject")
+            {
+                css::uno::Reference<css::xml::dom::XNode> xParentObject = xNode->getParentNode();
+                css::uno::Reference<css::xml::dom::XElement> xAccessibility
+                    = xDoc->createElement("accessibility");
+                xParentObject->insertBefore(xAccessibility, xNode);
+
+                // move the converted old AtkObject:: properties into a new accessibility parent
+                for (css::uno::Reference<css::xml::dom::XNode> xCurrent = xChild->getFirstChild();
+                     xCurrent.is(); xCurrent = xChild->getFirstChild())
+                {
+                    xAccessibility->appendChild(xChild->removeChild(xCurrent));
+                }
             }
 
             // only create the child box for GtkButton/GtkToggleButton
