@@ -114,7 +114,7 @@ DelayDeletingBroadcasters::DelayDeletingBroadcasters(ScDocument& doc)
 
 DelayDeletingBroadcasters::~DelayDeletingBroadcasters()
 {
-    mDoc.EnableDelayDeletingBroadcasters( mOldValue );
+    suppress_fun_call_w_exception(mDoc.EnableDelayDeletingBroadcasters(mOldValue));
 }
 
 }
