@@ -169,21 +169,16 @@ static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset)
 
 static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
 {
-    unsigned int a1, b1;
-    unsigned int a2, b2;
-    F16Dot16 res;
-    int sign;
-
-    sign = (a & 0x80000000) ^ (b & 0x80000000);
+    int sign = (a & 0x80000000) ^ (b & 0x80000000);
     if (a < 0) a = o3tl::saturating_toggle_sign(a);
     if (b < 0) b = o3tl::saturating_toggle_sign(b);
 
-    a1 = a >> 16;
-    b1 = a & 0xFFFF;
-    a2 = b >> 16;
-    b2 = b & 0xFFFF;
+    unsigned int a1 = a >> 16;
+    unsigned int b1 = a & 0xFFFF;
+    unsigned int a2 = b >> 16;
+    unsigned int b2 = b & 0xFFFF;
 
-    res = a1 * a2;
+    F16Dot16 res = a1 * a2;
 
     /* if (res  > 0x7FFF) assert(!"fixedMul: F16Dot16 overflow"); */
 
@@ -195,16 +190,12 @@ static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
 
 static F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
 {
-    unsigned int f, r;
-    F16Dot16 res;
-    int sign;
-
-    sign = (a & 0x80000000) ^ (b & 0x80000000);
+    int sign = (a & 0x80000000) ^ (b & 0x80000000);
     if (a < 0) a = -a;
     if (b < 0) b = -b;
 
-    f = a / b;
-    r = a % b;
+    unsigned int f = a / b;
+    unsigned int r = a % b;
 
     /* if (f > 0x7FFFF) assert(!"fixedDiv: F16Dot16 overflow"); */
 
@@ -213,7 +204,7 @@ static F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
         b >>= 1;
     }
 
-    res = (f << 16) + (r << 16) / b;
+    F16Dot16 res = (f << 16) + (r << 16) / b;
 
     return sign ? -res : res;
 }
@@ -222,9 +213,7 @@ static F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
 /* XXX provide a real implementation that preserves accuracy */
 static F16Dot16 fixedMulDiv(F16Dot16 a, F16Dot16 b, F16Dot16 c)
 {
-    F16Dot16 res;
-
-    res = fixedMul(a, b);
+    F16Dot16 res = fixedMul(a, b);
     return fixedDiv(res, c);
 }
 
