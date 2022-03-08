@@ -111,10 +111,11 @@ public:
 class OOXMLBreakHandler : public Properties
 {
     sal_Int32 mnType;
+    OOXMLFastContextHandler* mpFastContext;
     Stream& mrStream;
 
 public:
-    explicit OOXMLBreakHandler(Stream& rStream);
+    explicit OOXMLBreakHandler(OOXMLFastContextHandler* pContext, Stream& rStream);
     virtual ~OOXMLBreakHandler() override;
     virtual void attribute(Id name, Value& val) override;
     virtual void sprm(Sprm& sprm) override;
