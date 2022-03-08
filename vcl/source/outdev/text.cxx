@@ -1875,7 +1875,7 @@ void OutputDevice::DrawText( const tools::Rectangle& rRect, const OUString& rOri
     assert(mpGraphics);
     if( mbInitClipRegion )
         InitClipRegion();
-    if( mbOutputClipped && !bDecomposeTextRectAction )
+    if (mbOutputClipped && !bDecomposeTextRectAction && !pDisplayText)
         return;
 
     // temporarily disable mtf action generation (ImplDrawText _does_
