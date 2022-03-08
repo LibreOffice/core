@@ -2275,13 +2275,10 @@ bool ScTable::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
         OSL_FAIL("ScTable::ExtendMerge: invalid column number");
         return false;
     }
-    if ( nStartCol >= aCol.size() )
-    {
-        OSL_FAIL("ScTable::ExtendMerge: invalid nStartCol");
-        return false;
-    }
+    if( rEndCol >= aCol.size())
+        assert( !aDefaultColData.GetAttr( nStartRow, ATTR_MERGE ).IsMerged());
     bool bFound = false;
-    SCCOL nOldEndX = std::min( rEndCol, static_cast<SCCOL>(aCol.size()-1) );
+    SCCOL nOldEndX = ClampToAllocatedColumns(rEndCol);
     SCROW nOldEndY = rEndRow;
     for (SCCOL i=nStartCol; i<=nOldEndX; i++)
         bFound |= aCol[i].ExtendMerge( i, nStartRow, nOldEndY, rEndCol, rEndRow, bRefresh );
