@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab9f934a_ff59b501",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-08T19:05:30Z",
+      "side": 1,
+      "message": "First update\nI fixed the untranslated string, it was due to the use of VclResId instead of FpsResId in vcl/unx/gtk3/fpicker/resourceprovider.cxx\nThen I moved and renamed STR_SVT_ALREADYEXISTOVERWRITE_SECONDARY and STR_SVT_ALLFORMATS.\n\nSecond update\nUse of FpsResId in vcl/qt5/QtFilePicker.cxx and add the now required #include \u003cfpicker/fpsofficeResMgr.hxx\u003e",
+      "revId": "72d8931a0e1a2cc0a5c7846fac342c1980aac5a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
