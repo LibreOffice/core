@@ -1117,7 +1117,7 @@ void OOXMLFastContextHandlerProperties::handleBreak()
 {
     if(isForwardEvents())
     {
-        OOXMLBreakHandler aBreakHandler(*mpStream);
+        OOXMLBreakHandler aBreakHandler(this, *mpStream);
         getPropertySet()->resolve(aBreakHandler);
     }
 }

@@ -212,7 +212,7 @@ void OOXMLParserState::resolvePostponedBreak(Stream & rStream)
 {
     for (const auto & rBreak: mvPostponedBreaks)
     {
-        OOXMLBreakHandler aBreakHandler(rStream);
+        OOXMLBreakHandler aBreakHandler(nullptr, rStream);
         rBreak->resolve(aBreakHandler);
     }
     mvPostponedBreaks.clear();
