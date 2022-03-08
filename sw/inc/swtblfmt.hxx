@@ -21,6 +21,8 @@
 
 #include "frmfmt.hxx"
 
+#include <tools/solar.h>
+
 class SAL_DLLPUBLIC_RTTI SwTableFormat final : public SwFrameFormat
 {
     friend class SwDoc;

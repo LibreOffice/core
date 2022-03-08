@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_WW8_WRITERHELPER_HXX
 #define INCLUDED_SW_SOURCE_FILTER_WW8_WRITERHELPER_HXX
 
-#include <typeinfo>
 #include <vector>
 #include <map>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -29,7 +28,6 @@
 #include <svl/itempool.hxx>
 #include <svl/itemset.hxx>
 #include <svx/svdtypes.hxx>
-#include <format.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <tools/poly.hxx>

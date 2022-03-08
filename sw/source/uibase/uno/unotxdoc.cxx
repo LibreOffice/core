@@ -161,6 +161,7 @@
 #include <DocumentRedlineManager.hxx>
 #include <xmloff/odffields.hxx>
 #include <tools/json_writer.hxx>
+#include <tools/UnitConversion.hxx>
 
 #include <svx/svdpage.hxx>
 

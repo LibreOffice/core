@@ -18,8 +18,6 @@
  */
 #pragma once
 
-#include <libxml/xmlwriter.h>
-
 #include <scriptinfo.hxx>
 
 #include <swrect.hxx>

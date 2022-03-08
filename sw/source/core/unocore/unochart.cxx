@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/deleter.hxx>
 #include <mutex>
 #include <vcl/svapp.hxx>
 

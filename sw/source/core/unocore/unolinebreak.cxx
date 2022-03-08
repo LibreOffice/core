@@ -21,6 +21,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <sal/log.hxx>
 #include <svl/listener.hxx>
 #include <svl/itemprop.hxx>

@@ -27,6 +27,7 @@
 #include <comphelper/interfacecontainer4.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
+#include <tools/UnitConversion.hxx>
 #include <editeng/memberids.h>
 #include <float.h>
 #include <swtypes.hxx>

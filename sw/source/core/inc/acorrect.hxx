@@ -23,7 +23,6 @@
 #include <memory>
 
 #include <svl/itemset.hxx>
-#include <tools/solar.h>
 #include <editeng/svxacorr.hxx>
 #include <nodeoffset.hxx>
 

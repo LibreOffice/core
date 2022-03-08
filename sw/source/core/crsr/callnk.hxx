@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_CRSR_CALLNK_HXX
 
 #include <tools/long.hxx>
-#include <tools/solar.h>
 #include <ndtyp.hxx>
 #include <nodeoffset.hxx>
 

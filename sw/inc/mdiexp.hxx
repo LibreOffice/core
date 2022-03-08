@@ -19,11 +19,12 @@
 #ifndef INCLUDED_SW_INC_MDIEXP_HXX
 #define INCLUDED_SW_INC_MDIEXP_HXX
 
-#include <rtl/ustring.hxx>
 #include <tools/long.hxx>
 #include "tblenum.hxx"
 #include "swdllapi.h"
 #include <unotools/resmgr.hxx>
+
+#include <string_view>
 
 class SwRect;
 class Size;
