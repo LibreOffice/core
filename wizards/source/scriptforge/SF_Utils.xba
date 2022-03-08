@@ -393,6 +393,11 @@ Dim oDefaultContext As Object
 					Set .Introspection = CreateUnoService(&quot;com.sun.star.beans.Introspection&quot;)
 				End If
 				Set _GetUNOService = .Introspection
+			Case &quot;LocaleData&quot;
+				If IsEmpty(.LocaleData) Or IsNull(.LocaleData) Then
+					Set .LocaleData = CreateUnoService(&quot;com.sun.star.i18n.LocaleData&quot;)
+				End If
+				Set _GetUNOService = .LocaleData
 			Case &quot;MacroExpander&quot;
 				Set oDefaultContext = GetDefaultContext()
 				If Not IsNull(oDefaultContext) Then Set _GetUNOService = oDefaultContext.getValueByName(&quot;/singletons/com.sun.star.util.theMacroExpander&quot;)
