@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "807df4d2_8cc618d4",
+        "filename": "vcl/win/gdi/salnativewidgets-luna.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-08T14:42:16Z",
+      "side": 1,
+      "message": "surely this should be a static_cast, since we cannot have anything else here?",
+      "revId": "bffc5485c8556b8722085612f06e902ad2a3d14d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d00764f1_9ffb410c",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 309,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-08T14:42:16Z",
+      "side": 1,
+      "message": "and this too",
+      "revId": "bffc5485c8556b8722085612f06e902ad2a3d14d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
