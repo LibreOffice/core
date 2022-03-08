@@ -70,6 +70,24 @@
       "parentUuid": "0d4a9d57_03e7dfcf",
       "revId": "281989007fd7dea997ed9a65f513f80b1aff67dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1871cbe_b41321ff",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-08T10:30:03Z",
+      "side": 1,
+      "message": "yeah, looks like all of this has meanwhile been taken care of, one way or another",
+      "parentUuid": "faae643d_30a94aab",
+      "revId": "281989007fd7dea997ed9a65f513f80b1aff67dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
