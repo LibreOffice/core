@@ -749,9 +749,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_SmartTagRun_element:
             m_pImpl->getSmartTagHandler().setElement(val.getString());
         break;
-        case NS_ooxml::LN_CT_Br_type :
-            //TODO: attributes for break (0x12) are not supported
-        break;
+        case NS_ooxml::LN_CT_Br_type:
+            // Handled in the OOXMLBreakHandler dtor.
+            break;
+        case NS_ooxml::LN_CT_Br_clear:
+            m_pImpl->HandleLineBreakClear(val.getInt());
+            break;
         case NS_ooxml::LN_CT_Fonts_hint :
             /*  assigns script type to ambiguous characters, values can be:
                 NS_ooxml::LN_Value_ST_Hint_default
@@ -3460,7 +3463,14 @@ void DomainMapper::lcl_text(const sal_uInt8 * data_, size_t len)
             if (pContext == nullptr)
                 pContext = new PropertyMap();
 
-            m_pImpl->appendTextPortion( sText, pContext );
+            if (sText == "\n")
+            {
+                m_pImpl->HandleLineBreak(pContext);
+            }
+            else
+            {
+                m_pImpl->appendTextPortion(sText, pContext);
+            }
         }
     }
     catch( const uno::RuntimeException& )

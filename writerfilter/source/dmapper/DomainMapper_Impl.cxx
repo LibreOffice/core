@@ -4002,6 +4002,44 @@ void DomainMapper_Impl::HandlePTab(sal_Int32 nAlignment)
     xTextAppend->insertControlCharacter(xCursor, text::ControlCharacter::LINE_BREAK, true);
 }
 
+void DomainMapper_Impl::HandleLineBreakClear(sal_Int32 nClear)
+{
+    switch (nClear)
+    {
+        case NS_ooxml::LN_Value_ST_BrClear_left:
+            // SwLineBreakClear::LEFT
+            m_oLineBreakClear = 1;
+            break;
+        case NS_ooxml::LN_Value_ST_BrClear_right:
+            // SwLineBreakClear::RIGHT
+            m_oLineBreakClear = 2;
+            break;
+        case NS_ooxml::LN_Value_ST_BrClear_all:
+            // SwLineBreakClear::ALL
+            m_oLineBreakClear = 3;
+            break;
+    }
+}
+
+void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
+{
+    if (!m_oLineBreakClear.has_value())
+    {
+        appendTextPortion("\n", pPropertyMap);
+        return;
+    }
+
+    if (GetTextFactory().is())
+    {
+        uno::Reference<text::XTextContent> xLineBreak(
+            GetTextFactory()->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+        xLineBreakProps->setPropertyValue("Clear", uno::makeAny(*m_oLineBreakClear));
+        appendTextContent(xLineBreak, pPropertyMap->GetPropertyValues());
+    }
+    m_oLineBreakClear.reset();
+}
+
 static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;

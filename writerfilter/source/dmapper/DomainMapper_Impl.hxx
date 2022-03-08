@@ -627,6 +627,8 @@ private:
     bool m_bIsNewDoc;
     bool m_bIsAltChunk = false;
     bool m_bIsReadGlossaries;
+    std::optional<sal_Int16> m_oLineBreakClear;
+
 public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
@@ -1158,6 +1160,12 @@ public:
 
     /// Handles <w:ptab>.
     void HandlePTab(sal_Int32 nAlignment);
+
+    /// Handles <w:br w:clear="...">.
+    void HandleLineBreakClear(sal_Int32 nClear);
+
+    /// Handles <w:br>.
+    void HandleLineBreak(const PropertyMapPtr& pPropertyMap);
 
     void commentProps(const OUString& sId, const CommentProperties& rProps);
 
