@@ -222,7 +222,7 @@ class EraseRangeByIterator
     ScRangeName& mrRanges;
 public:
     explicit EraseRangeByIterator(ScRangeName& rRanges) : mrRanges(rRanges) {}
-    void operator() (const ScRangeName::iterator& itr)
+    void operator() (const ScRangeName::const_iterator& itr)
     {
         mrRanges.erase(itr);
     }
@@ -234,8 +234,8 @@ public:
  */
 void removeRangeNamesBySrcDoc(ScRangeName& rRanges, sal_uInt16 nFileId)
 {
-    ScRangeName::iterator itr = rRanges.begin(), itrEnd = rRanges.end();
-    vector<ScRangeName::iterator> v;
+    ScRangeName::const_iterator itr = rRanges.begin(), itrEnd = rRanges.end();
+    vector<ScRangeName::const_iterator> v;
     for (; itr != itrEnd; ++itr)
     {
         if (hasRefsToSrcDoc(*itr->second, nFileId))
