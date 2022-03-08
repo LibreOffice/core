@@ -518,8 +518,6 @@ VclBuilder::VclBuilder(vcl::Window* pParent, const OUString& sUIDir, const OUStr
                     pSource->SetAccessibleRelationLabeledBy(pTarget);
                 else if (rType == "label-for")
                     pSource->SetAccessibleRelationLabelFor(pTarget);
-                else if (rType == "member-of")
-                    pSource->SetAccessibleRelationMemberOf(pTarget);
                 else
                 {
                     SAL_WARN("vcl.builder", "unhandled a11y relation :" << rType);

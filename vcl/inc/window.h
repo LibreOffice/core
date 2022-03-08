@@ -193,7 +193,6 @@ struct ImplAccessibleInfos
                         pAccessibleDescription;
     VclPtr<vcl::Window> pLabeledByWindow;
     VclPtr<vcl::Window> pLabelForWindow;
-    VclPtr<vcl::Window> pMemberOfWindow;
 
     ImplAccessibleInfos();
     ~ImplAccessibleInfos();

@@ -153,6 +153,14 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="label" translatable="yes" context="sortdialog|order">Order</property>
+                        <accessibility>
+                          <relation type="label-for" target="up1"/>
+                          <relation type="label-for" target="down1"/>
+                          <relation type="label-for" target="up2"/>
+                          <relation type="label-for" target="down2"/>
+                          <relation type="label-for" target="up3"/>
+                          <relation type="label-for" target="down3"/>
+                        </accessibility>
                       </object>
                       <packing>
                         <property name="left-attach">3</property>
@@ -175,7 +183,8 @@
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
                             <accessibility>
-                              <relation type="member-of" target="key1"/>
+                              <relation type="controlled-by" target="key1"/>
+                              <relation type="labelled-by" target="order"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="up1-atkobject">
@@ -198,7 +207,8 @@
                             <property name="draw-indicator">True</property>
                             <property name="group">up1</property>
                             <accessibility>
-                              <relation type="member-of" target="key1"/>
+                              <relation type="controlled-by" target="key1"/>
+                              <relation type="labelled-by" target="order"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="down1-atkobject">
@@ -233,7 +243,8 @@
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
                             <accessibility>
-                              <relation type="member-of" target="key2"/>
+                              <relation type="controlled-by" target="key2"/>
+                              <relation type="labelled-by" target="order"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="up2-atkobject">
@@ -256,7 +267,8 @@
                             <property name="draw-indicator">True</property>
                             <property name="group">up2</property>
                             <accessibility>
-                              <relation type="member-of" target="key2"/>
+                              <relation type="controlled-by" target="key2"/>
+                              <relation type="labelled-by" target="order"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="down2-atkobject">
@@ -291,7 +303,8 @@
                             <property name="active">True</property>
                             <property name="draw-indicator">True</property>
                             <accessibility>
-                              <relation type="member-of" target="key3"/>
+                              <relation type="controlled-by" target="key3"/>
+                              <relation type="labelled-by" target="order"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="up3-atkobject">
@@ -314,7 +327,8 @@
                             <property name="draw-indicator">True</property>
                             <property name="group">up3</property>
                             <accessibility>
-                              <relation type="member-of" target="key3"/>
+                              <relation type="controlled-by" target="key3"/>
+                              <relation type="labelled-by" target="order"/>
                             </accessibility>
                             <child internal-child="accessible">
                               <object class="AtkObject" id="down3-atkobject">
@@ -343,6 +357,12 @@
                         <property name="use-underline">True</property>
                         <property name="active">True</property>
                         <property name="draw-indicator">True</property>
+                        <accessibility>
+                          <relation type="controller-for" target="up1"/>
+                          <relation type="controller-for" target="down1"/>
+                          <relation type="controller-for" target="colsb1"/>
+                          <relation type="controller-for" target="typelb1"/>
+                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="key1-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|key1">Specifies additional sorting criteria. You can also combine sort keys.</property>
@@ -363,6 +383,12 @@
                         <property name="valign">center</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <accessibility>
+                          <relation type="controller-for" target="up2"/>
+                          <relation type="controller-for" target="down2"/>
+                          <relation type="controller-for" target="colsb2"/>
+                          <relation type="controller-for" target="typelb2"/>
+                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="key2-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|key2">Specifies additional sorting criteria. You can also combine sort keys.</property>
@@ -383,6 +409,12 @@
                         <property name="valign">center</property>
                         <property name="use-underline">True</property>
                         <property name="draw-indicator">True</property>
+                        <accessibility>
+                          <relation type="controller-for" target="up3"/>
+                          <relation type="controller-for" target="down3"/>
+                          <relation type="controller-for" target="colsb3"/>
+                          <relation type="controller-for" target="typelb3"/>
+                        </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="key3-atkobject">
                             <property name="AtkObject::accessible-description" translatable="yes" context="sortdialog|extended_tip|key3">Specifies additional sorting criteria. You can also combine sort keys.</property>
@@ -403,8 +435,8 @@
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment1</property>
                         <accessibility>
+                          <relation type="controlled-by" target="key1"/>
                           <relation type="labelled-by" target="column"/>
-                          <relation type="member-of" target="key1"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colsb1-atkobject">
@@ -426,8 +458,8 @@
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment2</property>
                         <accessibility>
+                          <relation type="controlled-by" target="key2"/>
                           <relation type="labelled-by" target="column"/>
-                          <relation type="member-of" target="key2"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colsb2-atkobject">
@@ -449,8 +481,8 @@
                         <property name="truncate-multiline">True</property>
                         <property name="adjustment">adjustment3</property>
                         <accessibility>
+                          <relation type="controlled-by" target="key3"/>
                           <relation type="labelled-by" target="column"/>
-                          <relation type="member-of" target="key3"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="colsb3-atkobject">
@@ -470,8 +502,8 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <accessibility>
+                          <relation type="controlled-by" target="key1"/>
                           <relation type="labelled-by" target="keytype"/>
-                          <relation type="member-of" target="key1"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="typelb1-atkobject">
@@ -493,8 +525,8 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <accessibility>
+                          <relation type="controlled-by" target="key2"/>
                           <relation type="labelled-by" target="keytype"/>
-                          <relation type="member-of" target="key2"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="typelb2-atkobject">
@@ -515,8 +547,8 @@
                         <property name="valign">center</property>
                         <property name="hexpand">True</property>
                         <accessibility>
+                          <relation type="controlled-by" target="key3"/>
                           <relation type="labelled-by" target="keytype"/>
-                          <relation type="member-of" target="key3"/>
                         </accessibility>
                         <child internal-child="accessible">
                           <object class="AtkObject" id="typelb3-atkobject">
@@ -680,6 +712,8 @@
                             <property name="draw-indicator">True</property>
                             <property name="group">tabs</property>
                             <accessibility>
+                              <relation type="controller-for" target="separator"/>
+                              <relation type="controller-for" target="delimpb"/>
                               <relation type="label-for" target="separator"/>
                               <relation type="label-for" target="delimpb"/>
                             </accessibility>
@@ -711,6 +745,7 @@
                                 <property name="max-width-chars">1</property>
                                 <property name="truncate-multiline">True</property>
                                 <accessibility>
+                                  <relation type="controlled-by" target="character"/>
                                   <relation type="labelled-by" target="character"/>
                                 </accessibility>
                                 <child internal-child="accessible">
@@ -731,8 +766,8 @@
                                 <property name="can-focus">True</property>
                                 <property name="receives-default">True</property>
                                 <accessibility>
+                                  <relation type="controlled-by" target="character"/>
                                   <relation type="labelled-by" target="character"/>
-                                  <relation type="member-of" target="character"/>
                                 </accessibility>
                                 <child internal-child="accessible">
                                   <object class="AtkObject" id="delimpb-atkobject">

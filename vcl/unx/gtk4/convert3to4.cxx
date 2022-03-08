@@ -901,6 +901,12 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 // there will be a matching labelled-by which should be sufficient in the gtk4 world
                 xRemoveList.push_back(xChild);
             }
+            if (xType->getNodeValue() == "controlled-by")
+            {
+                // there will be a matching controller-for converted to -> controls
+                // which should be sufficient in the gtk4 world
+                xRemoveList.push_back(xChild);
+            }
             else
             {
                 css::uno::Reference<css::xml::dom::XNode> xTarget = xMap->getNamedItem("target");
@@ -910,7 +916,10 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
                 xChild->appendChild(xValue);
 
                 css::uno::Reference<css::xml::dom::XAttr> xName = xDoc->createAttribute("name");
-                xName->setValue(xType->getNodeValue());
+                if (xType->getNodeValue() == "controller-for")
+                    xName->setValue("controls");
+                else
+                    xName->setValue(xType->getNodeValue());
 
                 css::uno::Reference<css::xml::dom::XElement> xElem(xChild,
                                                                    css::uno::UNO_QUERY_THROW);
