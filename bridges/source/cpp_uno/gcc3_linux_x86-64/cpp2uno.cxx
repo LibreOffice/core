@@ -442,9 +442,6 @@ static unsigned char * codeSnippet( unsigned char * code,
     // jmpq *%r11
     *reinterpret_cast<sal_uInt32 *>( code + 20 ) = 0x00e3ff49;
 
-    SAL_INFO("bridges.debug", "==> codeSnippet, functionIndex=" << nFunctionIndex
-            << (bHasHiddenParam ? "|0x80000000":"") << ", vtableOffset=" << nVtableOffset);
-
     return code + codeSnippetSize;
 }
 

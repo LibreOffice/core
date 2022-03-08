@@ -47,7 +47,6 @@ certain functionality.
 @li @c bridges
 @li @c bridges.ios
 @li @c bridges.osx
-@li @c bridges.debug
 
 @section canvas
 
