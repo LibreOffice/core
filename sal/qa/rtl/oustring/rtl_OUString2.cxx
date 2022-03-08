@@ -781,6 +781,26 @@ public:
             "token should be empty", ab.getToken(0, '-', n).isEmpty());
     }
 
+    void getToken_006()
+    {
+        OUString suTokenStr;
+        auto pTokenStr = suTokenStr.getStr();
+        sal_uInt64 n64 = reinterpret_cast<sal_uInt64>(pTokenStr) / sizeof(sal_Unicode);
+        // Point either to 0x0, or to some random address -4GiB away from this string
+        sal_Int32 n = n64 > static_cast<sal_uInt64>(SAL_MAX_INT32) ? -SAL_MAX_INT32
+                                                                   : -static_cast<sal_Int32>(n64);
+        suTokenStr.getToken(0, ';', n);
+        // should not GPF with negative index
+    }
+
+    void getToken_007()
+    {
+        OUString suTokenStr("a;b");
+        sal_Int32 n = 5; // greater than string length
+        CPPUNIT_ASSERT_EQUAL(OUString(), suTokenStr.getToken(0, ';', n));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
+    }
+
     CPPUNIT_TEST_SUITE(getToken);
     CPPUNIT_TEST(getToken_000);
     CPPUNIT_TEST(getToken_001);
@@ -788,6 +808,8 @@ public:
     CPPUNIT_TEST(getToken_003);
     CPPUNIT_TEST(getToken_004);
     CPPUNIT_TEST(getToken_005);
+    CPPUNIT_TEST(getToken_006);
+    CPPUNIT_TEST(getToken_007);
     CPPUNIT_TEST_SUITE_END();
 }; // class getToken
 

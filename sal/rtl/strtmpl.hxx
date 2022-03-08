@@ -1256,54 +1256,43 @@ sal_Int32 getToken                                ( IMPL_RTL_STRINGDATA** ppThis
 {
     assert(ppThis);
     assert(pStr);
-    const auto*             pCharStr        = pStr->buffer;
-    sal_Int32               nLen            = pStr->length-nIndex;
-    sal_Int32               nTokCount       = 0;
 
     // Set ppThis to an empty string and return -1 if either nToken or nIndex is
     // negative:
-    if (nIndex < 0)
-        nToken = -1;
-
-    pCharStr += nIndex;
-    const auto* pOrgCharStr = pCharStr;
-    const auto* pCharStrStart = pCharStr;
-    while ( nLen > 0 )
+    if (nIndex >= 0 && nToken >= 0)
     {
-        if ( *pCharStr == cTok )
+        const auto* pOrgCharStr = pStr->buffer;
+        const auto* pCharStr = pOrgCharStr + nIndex;
+        sal_Int32 nLen = pStr->length - nIndex;
+        sal_Int32 nTokCount = 0;
+        const auto* pCharStrStart = pCharStr;
+        while (nLen > 0)
         {
-            nTokCount++;
-
-            if ( nTokCount == nToken )
-                pCharStrStart = pCharStr+1;
-            else
+            if (*pCharStr == cTok)
             {
-                if ( nTokCount > nToken )
+                nTokCount++;
+
+                if (nTokCount > nToken)
                     break;
+                if (nTokCount == nToken)
+                    pCharStrStart = pCharStr + 1;
             }
+
+            pCharStr++;
+            nLen--;
         }
-
-        pCharStr++;
-        nLen--;
+        if (nTokCount >= nToken)
+        {
+            newFromStr_WithLength(ppThis, pCharStrStart, pCharStr - pCharStrStart);
+            if (nLen > 0)
+                return pCharStr - pOrgCharStr + 1;
+            else
+                return -1;
+        }
     }
 
-    if ( (nToken < 0) || (nTokCount < nToken) || (pCharStr == pCharStrStart) )
-    {
-        new_( ppThis );
-        if( (nToken < 0) || (nTokCount < nToken) )
-            return -1;
-        else if( nLen > 0 )
-            return nIndex+(pCharStr-pOrgCharStr)+1;
-        else return -1;
-    }
-    else
-    {
-        newFromStr_WithLength( ppThis, pCharStrStart, pCharStr-pCharStrStart );
-        if ( nLen )
-            return nIndex+(pCharStr-pOrgCharStr)+1;
-        else
-            return -1;
-    }
+    new_(ppThis);
+    return -1;
 }
 
 namespace detail
