@@ -580,15 +580,18 @@ static int GetCompoundTTOutline(AbstractTrueTypeFont *ttf, sal_uInt32 glyphID, C
 
         glyphlist.push_back( index );
 
-        if ((np = GetTTGlyphOutline(ttf, index, &nextComponent, nullptr, &glyphlist)) == 0)
+        np = GetTTGlyphOutline(ttf, index, &nextComponent, nullptr, &glyphlist);
+
+        if( ! glyphlist.empty() )
+            glyphlist.pop_back();
+
+        if (np == 0)
         {
             /* XXX that probably indicates a corrupted font */
             SAL_WARN("vcl.fonts", "An empty compound!");
             /* assert(!"An empty compound"); */
+            return 0;
         }
-
-        if( ! glyphlist.empty() )
-            glyphlist.pop_back();
 
         if ((flags & USE_MY_METRICS) && metrics)
             GetMetrics(ttf, index, metrics);
