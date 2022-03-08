@@ -778,41 +778,6 @@ void ScRangeName::CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, con
     }
 }
 
-ScRangeName::const_iterator ScRangeName::begin() const
-{
-    return m_Data.begin();
-}
-
-ScRangeName::const_iterator ScRangeName::end() const
-{
-    return m_Data.end();
-}
-
-ScRangeName::iterator ScRangeName::begin()
-{
-    return m_Data.begin();
-}
-
-ScRangeName::iterator ScRangeName::end()
-{
-    return m_Data.end();
-}
-
-size_t ScRangeName::size() const
-{
-    return m_Data.size();
-}
-
-size_t ScRangeName::index_size() const
-{
-    return maIndexToData.size();
-}
-
-bool ScRangeName::empty() const
-{
-    return m_Data.empty();
-}
-
 bool ScRangeName::insert( ScRangeData* p, bool bReuseFreeIndex )
 {
     if (!p)
@@ -863,12 +828,12 @@ void ScRangeName::erase(const ScRangeData& r)
 
 void ScRangeName::erase(const OUString& rName)
 {
-    DataType::iterator itr = m_Data.find(rName);
+    DataType::const_iterator itr = m_Data.find(rName);
     if (itr != m_Data.end())
         erase(itr);
 }
 
-void ScRangeName::erase(const iterator& itr)
+void ScRangeName::erase(const_iterator itr)
 {
     sal_uInt16 nIndex = itr->second->GetIndex();
     m_Data.erase(itr);

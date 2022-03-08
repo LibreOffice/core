@@ -234,13 +234,11 @@ public:
     void CopyUsedNames( const SCTAB nLocalTab, const SCTAB nOldTab, const SCTAB nNewTab,
             const ScDocument& rOldDoc, ScDocument& rNewDoc, const bool bGlobalNamesToLocal ) const;
 
-    SC_DLLPUBLIC const_iterator begin() const;
-    SC_DLLPUBLIC const_iterator end() const;
-    SC_DLLPUBLIC iterator begin();
-    SC_DLLPUBLIC iterator end();
-    SC_DLLPUBLIC size_t size() const;
-    SC_DLLPUBLIC size_t index_size() const;
-    bool empty() const;
+    SC_DLLPUBLIC const_iterator begin() const { return m_Data.begin(); }
+    SC_DLLPUBLIC const_iterator end() const  { return m_Data.end(); }
+    SC_DLLPUBLIC size_t size() const { return m_Data.size(); }
+    SC_DLLPUBLIC size_t index_size() const { return maIndexToData.size(); }
+    bool empty() const { return m_Data.empty(); }
 
     /** Insert object into set.
         @ATTENTION: The underlying ::std::map<std::unique_ptr>::insert(p) takes
@@ -264,7 +262,8 @@ public:
      * iterator's validity.  The caller must make sure that the iterator is
      * valid.
      */
-    void erase(const iterator& itr);
+    void erase(const_iterator itr);
+
     void clear();
     bool operator== (const ScRangeName& r) const;
 };
