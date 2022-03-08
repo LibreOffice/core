@@ -2438,7 +2438,8 @@ void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRe
     double numberOfSteps = rValues.size();
     double nDelta = nMax - nMin;
 
-    double nColumnSize = rRectangle.GetWidth() / numberOfSteps;
+    double nColumnSize = (rRectangle.GetWidth() / numberOfSteps);
+    nColumnSize = nColumnSize - (nColumnSize * 0.3);
 
     double nZero = (0 - nMin) / nDelta;
     double nZeroPosition;
