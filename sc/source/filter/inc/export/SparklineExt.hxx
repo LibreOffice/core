@@ -17,9 +17,9 @@
 
 #include <sax/fastattribs.hxx>
 
-#include "xerecord.hxx"
-#include "xeroot.hxx"
-#include "xeextlst.hxx"
+#include <xerecord.hxx>
+#include <xeroot.hxx>
+#include <xeextlst.hxx>
 
 namespace xcl::exp
 {
