@@ -1069,8 +1069,9 @@ def check_a11y_relation(filename, tree):
             if len(mnemonic_for_elm[oid]) > 1:
                 warn(filename, tree, obj, "duplicate-mnemonic", "is referenced by multiple mnemonic_widget " + elms_names_lines(mnemonic_for_elm[oid]))
 
-        # Check member-of
-        member_of = check_rels(filename, tree, root, obj, "member-of")
+        # Check controlled-by/controller-for
+        controlled_by = check_rels(filename, tree, root, obj, "controlled-by", "controller-for")
+        controller_for = check_rels(filename, tree, root, obj, "controlled-for", "controlled-by")
 
         # Labels special case
         if klass in widgets_labels:
