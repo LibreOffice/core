@@ -1628,7 +1628,7 @@ static void ImplPaintCheckBackground(vcl::RenderContext & rRenderContext, vcl::W
         ImplControlValue    aControlValue;
         aControlValue.setTristateVal(ButtonValue::On);
         tools::Rectangle r = i_rRect;
-        r.AdjustTop(1);
+        r.AdjustBottom(1);
 
         bNativeOk = rRenderContext.DrawNativeControl(ControlType::Toolbar, ControlPart::Button,
                                                      r,
