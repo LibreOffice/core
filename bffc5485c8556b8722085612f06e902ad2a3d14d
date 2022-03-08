@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ba9ec822_3d75deaf",
+        "filename": "vcl/win/gdi/salnativewidgets-luna.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1021,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-08T14:48:38Z",
+      "side": 1,
+      "message": "Likely you are right - I honestly didn\u0027t look into class hierarchy, and only saw that prior to the changes, the dynamic casts were checked (but they were to different classes).\n\nI suppose I ass an assert on dynamic cast, followed by static cast?",
+      "parentUuid": "807df4d2_8cc618d4",
+      "revId": "bffc5485c8556b8722085612f06e902ad2a3d14d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d00764f1_9ffb410c",
         "filename": "vcl/win/gdi/winlayout.cxx",
         "patchSetId": 2
