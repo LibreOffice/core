@@ -21,8 +21,6 @@
 
 #include <iostream>
 
-#include <tools/solar.h>
-
 #include "node.hxx"
 #include "ring.hxx"
 #include "ndarr.hxx"

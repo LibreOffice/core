@@ -339,6 +339,9 @@ excludelist:
     - com/sun/star/text/XDocumentIndex.hpp
     # Needed for UnoImplPtr template
     - unobaseclass.hxx
+    sw/source/core/inc/unolinebreak.hxx:
+    # Needed for UnoImplPtr template
+    - unobaseclass.hxx
     sw/source/core/inc/unometa.hxx:
     # Base class needs complete type
     - com/sun/star/lang/XServiceInfo.hpp
@@ -442,9 +445,6 @@ excludelist:
     sw/qa/extras/ww8import/ww8import.cxx:
     # Needed for for-loop range
     - com/sun/star/graphic/XGraphic.hpp
-    sw/source/filter/ww8/ww8scan.hxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     sw/qa/extras/layout/layout.cxx:
     - comphelper/scopeguard.hxx
     - com/sun/star/linguistic2/LinguServiceManager.hpp
@@ -501,9 +501,6 @@ excludelist:
     sw/source/core/undo/untbl.cxx:
     # Needed for linker visibility of sw_DebugRedline
     - docredln.hxx
-    sw/source/core/edit/edglss.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     sw/source/core/edit/edfcol.cxx:
     # Actually used
     - comphelper/scopeguard.hxx
@@ -546,9 +543,6 @@ excludelist:
     # Actually used
     - com/sun/star/beans/SetPropertyTolerantFailed.hpp
     - com/sun/star/beans/GetPropertyTolerantResult.hpp
-    sw/source/core/unocore/unoobj.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     sw/source/core/unocore/unotextmarkup.cxx:
     # Actually used
     - com/sun/star/text/TextMarkupDescriptor.hpp
@@ -594,16 +588,9 @@ excludelist:
     # Actually used
     - com/sun/star/i18n/BreakIterator.hpp
     sw/source/filter/ww8/ww8graf.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     # Needed for implicit dtor
     - ww8par2.hxx
-    sw/source/filter/ww8/ww8par4.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     sw/source/filter/ww8/wrtww8.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     - com/sun/star/frame/XModel.hpp
     sw/source/filter/xml/xmlbrsh.cxx:
     # Needed for XMLOFF_WARN_UNKNOWN_ELEMENT
@@ -641,9 +628,6 @@ excludelist:
     sw/source/uibase/dochdl/gloshdl.cxx:
     # Needed for direct member access
     - docsh.hxx
-    sw/source/uibase/dochdl/swdtflvr.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
     sw/source/uibase/docvw/edtdd.cxx:
     # Needed for extern variable
     - edtdd.hxx

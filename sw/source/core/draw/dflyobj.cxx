@@ -21,6 +21,7 @@
 #include <comphelper/lok.hxx>
 #include <osl/diagnose.h>
 #include <tools/mapunit.hxx>
+#include <tools/UnitConversion.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdtrans.hxx>
 #include <editeng/protitem.hxx>

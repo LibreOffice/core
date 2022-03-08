@@ -23,7 +23,6 @@
 #include <memory>
 
 #include <svl/undo.hxx>
-#include <tools/solar.h>
 #include "SwRewriter.hxx"
 #include "swundo.hxx"
 #include "nodeoffset.hxx"

@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/servicehelper.hxx>
 #include <editeng/itemtype.hxx>
 #include <tools/UnitConversion.hxx>
 #include <unosett.hxx>

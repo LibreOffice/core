@@ -21,6 +21,7 @@
 #define INCLUDED_SW_INC_OPTLOAD_HRC
 
 #include <tools/fldunit.hxx>
+#include <unotools/resmgr.hxx>
 #include <utility>
 
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))

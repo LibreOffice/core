@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SW_INC_TBLENUM_HXX
 #define INCLUDED_SW_INC_TBLENUM_HXX
 
+#include <sal/types.h>
 #include <o3tl/typed_flags_set.hxx>
 
 // For changing table columns/rows widths/heights.

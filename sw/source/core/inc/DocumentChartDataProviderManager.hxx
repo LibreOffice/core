@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTCHARTDATAPROVIDEMANAGER_HXX
 
 #include <IDocumentChartDataProviderAccess.hxx>
-#include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
 #include <memory>
 

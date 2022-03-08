@@ -22,7 +22,6 @@
 
 #include <memory>
 #include <undobj.hxx>
-#include <tools/long.hxx>
 
 struct SwSortOptions;
 class SwRangeRedline;

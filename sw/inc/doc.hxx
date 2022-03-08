@@ -20,7 +20,6 @@
 #define INCLUDED_SW_INC_DOC_HXX
 
 // SwDoc interfaces
-#include <o3tl/deleter.hxx>
 #include <o3tl/typed_flags_set.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <vcl/idle.hxx>

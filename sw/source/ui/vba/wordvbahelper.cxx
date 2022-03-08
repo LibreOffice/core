@@ -31,6 +31,7 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <view.hxx>
 #include <viewsh.hxx>
+#include <comphelper/servicehelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;

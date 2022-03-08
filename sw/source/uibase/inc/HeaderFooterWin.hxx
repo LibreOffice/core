@@ -12,7 +12,6 @@
 #include "edtwin.hxx"
 #include "FrameControl.hxx"
 #include <vcl/timer.hxx>
-#include <vcl/virdev.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 
 /**

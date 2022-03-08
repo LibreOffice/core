@@ -36,6 +36,7 @@
 #include <unoredline.hxx>
 #include <DocumentRedlineManager.hxx>
 #include "xmlimp.hxx"
+#include <comphelper/servicehelper.hxx>
 #include <o3tl/any.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <vcl/svapp.hxx>

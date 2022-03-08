@@ -24,6 +24,7 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
 #include <editeng/frmdir.hxx>
+#include <svl/zforlist.hxx>
 #include <fltshell.hxx>
 
 #include <svx/svdobj.hxx>

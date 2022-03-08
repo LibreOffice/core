@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/text/ColumnSeparatorStyle.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -29,6 +30,7 @@
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svtools/unoimap.hxx>
+#include <tools/UnitConversion.hxx>
 #include <vcl/imap.hxx>
 #include <vcl/imapobj.hxx>
 #include <unotools/intlwrapper.hxx>

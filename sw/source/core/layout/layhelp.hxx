@@ -21,6 +21,7 @@
 #define INCLUDED_SW_SOURCE_CORE_LAYOUT_LAYHELP_HXX
 
 #include <swrect.hxx>
+#include <nodeoffset.hxx>
 
 #include <tools/solar.h>
 

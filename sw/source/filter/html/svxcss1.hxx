@@ -20,11 +20,11 @@
 #define INCLUDED_SW_SOURCE_FILTER_HTML_SVXCSS1_HXX
 
 #include <svl/itemset.hxx>
-#include <svx/flagsdef.hxx>
 #include <editeng/svxenum.hxx>
 #include <rtl/textenc.h>
 #include "parcss1.hxx"
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/unit_conversion.hxx>
 
 #include <array>
 #include <map>
