@@ -60,7 +60,7 @@ const SCSIZE   SCSIZE_MAX   = ::std::numeric_limits<SCSIZE>::max();
 
 // Count values
 const SCROW       MAXROWCOUNT    = 1048576;
-const SCCOL       MAXCOLCOUNT    = 1024;
+const SCCOL       MAXCOLCOUNT    = 16384;
 const SCCOL       INITIALCOLCOUNT = 64; // initial number of columns we allocate memory for
 /// limiting to 10000 for now, problem with 32 bit builds for now
 const SCTAB       MAXTABCOUNT    = 10000;
@@ -82,7 +82,7 @@ const SCTAB       MAXINITTAB = 1024;
 const SCTAB       MININITTAB = 1;
 
 inline constexpr OUStringLiteral MAXROW_STRING(u"1048575");
-inline constexpr OUStringLiteral MAXCOL_STRING(u"AMJ");
+inline constexpr OUStringLiteral MAXCOL_STRING(u"XFD");
 inline constexpr OUStringLiteral MAXROW_JUMBO_STRING(u"16777215");
 inline constexpr OUStringLiteral MAXCOL_JUMBO_STRING(u"XFD");
 
