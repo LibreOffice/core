@@ -40,6 +40,7 @@ $(eval $(call gb_Library_set_precompiled_header,vcl,vcl/inc/pch/precompiled_vcl)
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
+    -I$(SRCDIR)/external/libfixmath \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -524,6 +525,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
     vcl/source/filter/jpeg/transupp \
+    vcl/source/fontsubset/fixmath \
 ))
 
 vcl_headless_code= \
