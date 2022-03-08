@@ -27,6 +27,7 @@
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/deleter.hxx>
 
 SwFlyInContentFrame::SwFlyInContentFrame( SwFlyFrameFormat *pFormat, SwFrame* pSib, SwFrame *pAnch ) :
     SwFlyFrame( pFormat, pSib, pAnch )

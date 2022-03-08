@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_SOURCE_UIBASE_INC_BOOKCTRL_HXX
 #define INCLUDED_SW_SOURCE_UIBASE_INC_BOOKCTRL_HXX
 
-#include <rtl/ustring.hxx>
 #include <sfx2/stbitem.hxx>
 
 class SwBookmarkControl final : public SfxStatusBarControl

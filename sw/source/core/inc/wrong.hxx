@@ -23,7 +23,6 @@
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/container/XStringKeyMap.hpp>
 
-#include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/uno/Any.hxx>
 

@@ -33,6 +33,7 @@
 #include <svx/xmlgrhlp.hxx>
 #include <editeng/eeitem.hxx>
 #include <svx/svddef.hxx>
+#include <tools/UnitConversion.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <editeng/xmlcnitm.hxx>

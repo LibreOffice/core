@@ -20,7 +20,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_TBLRWCL_HXX
 
 #include <cstddef>
-#include <memory>
 #include <vector>
 
 #include <swtypes.hxx>

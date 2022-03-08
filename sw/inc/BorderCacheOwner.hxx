@@ -10,7 +10,6 @@
 #pragma once
 
 #include <sal/types.h>
-#include "swdllapi.h"
 
 class SwBorderAttrs;
 class SwBorderAttrAccess;

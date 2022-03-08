@@ -29,7 +29,6 @@
 #include "ring.hxx"
 #include <type_traits>
 #include <vector>
-#include <memory>
 #include <optional>
 
 class SwModify;

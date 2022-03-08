@@ -22,7 +22,6 @@
 #include <o3tl/deleter.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <svl/itemset.hxx>
-#include <tools/solar.h>
 #include <vcl/keycod.hxx>
 #include <tox.hxx>
 

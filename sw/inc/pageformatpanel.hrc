@@ -10,6 +10,8 @@
 #ifndef INCLUDED_SW_INC_PAGEFORMATPANEL_HRC
 #define INCLUDED_SW_INC_PAGEFORMATPANEL_HRC
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 #include <utility>

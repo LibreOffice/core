@@ -19,6 +19,7 @@
 
 #include <unotextmarkup.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/listener.hxx>

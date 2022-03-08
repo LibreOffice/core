@@ -19,7 +19,6 @@
 #pragma once
 
 #include <tools/gen.hxx>
-#include <sal/types.h>
 #include <swtypes.hxx>
 
 // Compared to the SV sizes SwPosSize is always positive

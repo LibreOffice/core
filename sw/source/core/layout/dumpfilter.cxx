@@ -15,6 +15,7 @@
 #include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 
+#include <comphelper/servicehelper.hxx>
 #include <unotools/mediadescriptor.hxx>
 
 #include <libxml/xmlwriter.h>

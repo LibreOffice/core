@@ -27,6 +27,7 @@
 #include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 class SfxPoolItem;
 class SwTextNode;
@@ -38,7 +39,6 @@ class SwDoc;
 class SwFormatField;
 class SetGetExpFields;
 class SwEditShell;
-namespace com::sun::star::beans { struct PropertyValue; }
 
 /// Forward declaration: get "BodyTextNode" for exp.fld in Fly's headers/footers/footnotes.
 const SwTextNode* GetBodyTextNode( const SwDoc& pDoc, SwPosition& rPos,

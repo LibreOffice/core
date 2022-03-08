@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_UNOMAILMERGE_HXX
 
 #include <cppuhelper/implbase.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>

@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_TXMSRT_HXX
 
 #include <i18nlangtag/lang.h>
+#include <nodeoffset.hxx>
 #include <tox.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>

@@ -20,8 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 #define INCLUDED_SW_SOURCE_FILTER_HTML_HTMLFORM_HXX
 
-#include <sal/types.h>
-
 extern const char* aEventListenerTable[];
 extern const char* aEventMethodTable[];
 extern const char* aEventSDOptionTable[];
