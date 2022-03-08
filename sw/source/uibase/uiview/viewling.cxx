@@ -692,7 +692,14 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 // get paragraph text
                 OUString aParaText;
                 if (pNode)
-                    aParaText = pNode->GetText();    // this may include hidden text but that should be Ok
+                {
+                    pCursorShell->Push();
+                    pCursorShell->MovePara(GoCurrPara, fnParaStart);
+                    pCursorShell->SetMark();
+                    pCursorShell->MovePara(GoCurrPara, fnParaEnd);
+                    aParaText = pCursorShell->GetSelText();
+                    pCursorShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
+                }
                 else
                 {
                     OSL_FAIL("text node expected but not found" );
