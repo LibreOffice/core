@@ -20,13 +20,10 @@
 #ifndef INCLUDED_SW_INC_LIST_HXX
 #define INCLUDED_SW_INC_LIST_HXX
 
-#include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
 #include "SwNodeNum.hxx"
 #include "pam.hxx"
 #include <memory>
-
-#include "swdllapi.h"
 
 class SwDoc;
 class SwNumRule;

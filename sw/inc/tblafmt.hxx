@@ -30,12 +30,10 @@
 
 #include <memory>
 
-#include <editeng/formatbreakitem.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/autoformathelper.hxx>
-#include "fmtpdsc.hxx"
 #include "fmtornt.hxx"
 #include "swdllapi.h"
 

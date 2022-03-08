@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_DOCARY_HXX
 #define INCLUDED_SW_INC_DOCARY_HXX
 
-#include <map>
 #include <vector>
 #include <type_traits>
 #include <o3tl/sorted_vector.hxx>

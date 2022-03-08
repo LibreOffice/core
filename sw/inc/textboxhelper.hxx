@@ -11,11 +11,10 @@
 #define INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 
 #include <map>
-#include <optional>
 #include <set>
 #include <vector>
 
-#include <com/sun/star/uno/Any.h>
+#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Type.h>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <svx/swframetypes.hxx>

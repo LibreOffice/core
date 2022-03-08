@@ -23,6 +23,7 @@
 #include <osl/diagnose.h>
 #include <vcl/vclptr.hxx>
 #include <vcl/outdev.hxx>
+#include <swtypes.hxx>
 #include "TextFrameIndex.hxx"
 #include <swdllapi.h>
 

@@ -14,7 +14,6 @@
 
 #include <rtl/strbuf.hxx>
 #include <sax/fshelper.hxx>
-#include <tools/solar.h>
 #include <nodeoffset.hxx>
 
 namespace rtl

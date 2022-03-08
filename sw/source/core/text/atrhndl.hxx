@@ -20,7 +20,6 @@
 #pragma once
 #define NUM_ATTRIBUTE_STACKS 44
 
-#include <memory>
 #include <vector>
 #include <swfntcch.hxx>
 

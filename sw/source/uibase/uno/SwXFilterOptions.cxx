@@ -24,6 +24,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotxdoc.hxx>

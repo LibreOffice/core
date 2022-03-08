@@ -21,7 +21,6 @@
 #define INCLUDED_SW_SOURCE_CORE_INC_DOCUMENTREDLINEMANAGER_HXX
 
 #include <IDocumentRedlineAccess.hxx>
-#include <memory>
 
 class SwDoc;
 

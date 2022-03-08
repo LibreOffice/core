@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/servicehelper.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>

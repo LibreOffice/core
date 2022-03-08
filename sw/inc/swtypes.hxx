@@ -28,7 +28,6 @@
 #include <o3tl/unit_conversion.hxx>
 #include <i18nlangtag/lang.h>
 #include <vcl/outdev.hxx>
-#include <svx/flagsdef.hxx>
 #include <unotools/resmgr.hxx>
 
 namespace com::sun::star {

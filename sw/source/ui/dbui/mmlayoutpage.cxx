@@ -25,6 +25,7 @@
 #include <unotools.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <i18nutil/unicode.hxx>
 #include <unotools/tempfile.hxx>
 #include <uitool.hxx>

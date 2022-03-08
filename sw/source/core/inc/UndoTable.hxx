@@ -22,6 +22,7 @@
 
 #include <o3tl/deleter.hxx>
 #include <tools/long.hxx>
+#include <tools/solar.h>
 #include <ndarr.hxx>
 #include <undobj.hxx>
 #include <set>

@@ -25,6 +25,7 @@
 #include <UndoSplitMove.hxx>
 #include <UndoCore.hxx>
 #include <fesh.hxx>
+#include <fmtpdsc.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
 #include <doc.hxx>
@@ -61,6 +62,7 @@
 #include <unochart.hxx>
 #include <calbck.hxx>
 #include <frameformats.hxx>
+#include <editeng/formatbreakitem.hxx>
 #include <osl/diagnose.h>
 #include <docsh.hxx>
 

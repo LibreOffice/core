@@ -15,7 +15,6 @@
 
 #include "edtwin.hxx"
 #include "PageBreakWin.hxx"
-#include "navipi.hxx"
 
 #include <AnnotationWin.hxx>
 

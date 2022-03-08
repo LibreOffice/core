@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 
-#include <cstddef>
 #include <map>
 #include <vector>
 #include <memory>
@@ -31,7 +30,6 @@
 #include <rtl/textenc.h>
 #include "fltshell.hxx"
 #include <shellio.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/listener.hxx>
 
 class SwDoc;

@@ -19,7 +19,8 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_INC_NODE2LAY_HXX
 #define INCLUDED_SW_SOURCE_CORE_INC_NODE2LAY_HXX
 
-#include <tools/solar.h>
+#include <nodeoffset.hxx>
+
 #include <memory>
 
 /**

@@ -20,7 +20,6 @@
 #ifndef INCLUDED_SW_SOURCE_CORE_DOCNODE_NDSECT_HXX
 #define INCLUDED_SW_SOURCE_CORE_DOCNODE_NDSECT_HXX
 
-#include <tools/solar.h>
 #include <nodeoffset.hxx>
 
 class SwSectionNode;

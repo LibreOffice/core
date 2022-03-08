@@ -26,10 +26,13 @@
 
 #include <ctime>
 #include <memory>
+#include <vector>
 
 #include <swrect.hxx>
 
 class OutputDevice;
+class SwFrame;
+class SwFrameDeleteGuard;
 class SwRootFrame;
 class SwLayoutFrame;
 class SwPageFrame;

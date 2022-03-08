@@ -22,7 +22,6 @@
 #include <rtl/ustring.hxx>
 #include <i18nlangtag/lang.h>
 #include "swdllapi.h"
-#include <memory>
 #include <vector>
 
 enum class SwSortOrder     { Ascending, Descending };

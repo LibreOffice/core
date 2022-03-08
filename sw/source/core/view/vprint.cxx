@@ -22,6 +22,7 @@
 #include <sfx2/printer.hxx>
 #include <svx/svdview.hxx>
 #include <osl/diagnose.h>
+#include <tools/UnitConversion.hxx>
 
 #include <txtfld.hxx>
 #include <fmtfld.hxx>

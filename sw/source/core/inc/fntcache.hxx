@@ -26,8 +26,8 @@
 #include <unordered_map>
 
 #include <vcl/font.hxx>
+#include <vcl/glyphitem.hxx>
 #include <vcl/vclptr.hxx>
-#include <vcl/vcllayout.hxx>
 #include <vcl/outdev.hxx>
 #include "swcache.hxx"
 #include "TextFrameIndex.hxx"

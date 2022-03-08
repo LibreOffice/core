@@ -24,6 +24,7 @@
 #include <sal/config.h>
 
 #include <hintids.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <svl/languageoptions.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/htmlmode.hxx>

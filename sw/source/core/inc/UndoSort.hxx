@@ -23,6 +23,7 @@
 #include <undobj.hxx>
 
 #include <rtl/ustring.hxx>
+#include <tools/solar.h>
 
 #include <memory>
 #include <vector>

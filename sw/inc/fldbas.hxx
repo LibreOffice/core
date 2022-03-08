@@ -27,7 +27,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <editeng/svxenum.hxx>
-#include <tools/solar.h>
 #include <vector>
 #include <climits>
 

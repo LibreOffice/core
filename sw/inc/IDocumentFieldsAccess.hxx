@@ -24,7 +24,6 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
-#include <tools/solar.h>
 #include "nodeoffset.hxx"
 
 class SwFieldTypes;

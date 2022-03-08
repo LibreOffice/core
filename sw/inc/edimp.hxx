@@ -20,8 +20,9 @@
 #ifndef INCLUDED_SW_INC_EDIMP_HXX
 #define INCLUDED_SW_INC_EDIMP_HXX
 
-#include <tools/solar.h>
 #include <o3tl/sorted_vector.hxx>
+
+#include "nodeoffset.hxx"
 
 class SwPaM;
 class SwNodeIndex;
