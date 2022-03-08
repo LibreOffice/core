@@ -3345,17 +3345,20 @@ bool ScCompiler::ParseSingleReference( const OUString& rName, const OUString* pE
             return false;
         }
 
-        // A named range named e.g. 'num1' is valid with 1k columns, but would become a reference
-        // when the document is opened later with 16k columns. Resolve the conflict by not
-        // considering it a reference.
-        OUString aUpper;
-        bool bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, rName );
-        if (bAsciiUpper || mbCharClassesDiffer)
-            aUpper = ScGlobal::getCharClass().uppercase( rName );
-        mnCurrentSheetTab = aAddr.Tab(); // temporarily set for ParseNamedRange()
-        if(ParseNamedRange( aUpper, true )) // only check
-            return false;
-        mnCurrentSheetTab = -1;
+        if( HasPossibleNamedRangeConflict( aAddr.Tab()))
+        {
+            // A named range named e.g. 'num1' is valid with 1k columns, but would become a reference
+            // when the document is opened later with 16k columns. Resolve the conflict by not
+            // considering it a reference.
+            OUString aUpper;
+            bool bAsciiUpper = ToUpperAsciiOrI18nIsAscii( aUpper, rName );
+            if (bAsciiUpper || mbCharClassesDiffer)
+                aUpper = ScGlobal::getCharClass().uppercase( rName );
+            mnCurrentSheetTab = aAddr.Tab(); // temporarily set for ParseNamedRange()
+            if(ParseNamedRange( aUpper, true )) // only check
+                return false;
+            mnCurrentSheetTab = -1;
+        }
 
         ScSingleRefData aRef;
         aRef.InitAddress( aAddr );
@@ -3585,6 +3588,17 @@ const ScRangeData* ScCompiler::GetRangeData( SCTAB& rSheet, const OUString& rUpp
             rSheet = -1;
     }
     return pData;
+}
+
+bool ScCompiler::HasPossibleNamedRangeConflict( SCTAB nTab ) const
+{
+    const ScRangeName* pRangeName = rDoc.GetRangeName();
+    if (pRangeName && pRangeName->hasPossibleAddressConflict())
+        return true;
+    pRangeName = rDoc.GetRangeName(nTab);
+    if (pRangeName && pRangeName->hasPossibleAddressConflict())
+        return true;
+    return false;
 }
 
 bool ScCompiler::ParseNamedRange( const OUString& rUpperName, bool onlyCheck )
