@@ -22,6 +22,7 @@
 #include <sal/config.h>
 
 #include <basegfx/polygon/b2dpolypolygon.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <tools/gen.hxx>
@@ -40,6 +41,22 @@
 
 class ConvertChar;
 class ImplFontCache;
+
+// extend std namespace to add custom hash needed for LogicalFontInstance
+
+namespace std
+{
+    template <> struct hash< pair< sal_UCS4, FontWeight > >
+    {
+        size_t operator()(const pair< sal_UCS4, FontWeight >& rData) const
+        {
+            std::size_t seed = 0;
+            o3tl::hash_combine(seed, rData.first);
+            o3tl::hash_combine(seed, rData.second);
+            return seed;
+        }
+    };
+}
 
 // TODO: allow sharing of metrics for related fonts
 
@@ -105,7 +122,7 @@ private:
     // TODO: a fallback map can be shared with many other ImplFontEntries
     // TODO: at least the ones which just differ in orientation, stretching or height
     typedef ::std::unordered_map< ::std::pair<sal_UCS4,FontWeight>, MapEntry > UnicodeFallbackList;
-    std::unique_ptr<UnicodeFallbackList> mpUnicodeFallbackList;
+    UnicodeFallbackList maUnicodeFallbackList;
     mutable ImplFontCache * mpFontCache;
     const vcl::font::FontSelectPattern m_aFontSelData;
     hb_font_t* m_pHbFont;
