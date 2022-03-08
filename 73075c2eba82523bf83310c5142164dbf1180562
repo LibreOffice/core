@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "214fdec3_26bea769",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-08T12:21:44Z",
+      "side": 1,
+      "message": "Change the commit message, so it is in imperative mood (Change, not changed), remove \"as per...\" from the end and instead add tdf#135234 to the beginning.",
+      "revId": "73075c2eba82523bf83310c5142164dbf1180562",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
