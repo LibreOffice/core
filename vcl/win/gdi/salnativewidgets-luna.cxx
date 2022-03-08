@@ -1019,7 +1019,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     Size keySize = cacheRect.GetSize();
 
     WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
-    if( !pImpl->UseRenderNativeControl())
+    if(pImpl && !pImpl->UseRenderNativeControl())
         pImpl = nullptr;
 
     // tdf#95618 - A few controls render outside the region they're given.
