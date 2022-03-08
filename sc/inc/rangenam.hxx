@@ -156,6 +156,8 @@ public:
 
     SC_DLLPUBLIC static IsNameValidType     IsNameValid( const OUString& rName, const ScDocument& rDoc );
 
+    bool HasPossibleAddressConflict() const;
+
     void CompileUnresolvedXML( sc::CompileFormulaContext& rCxt );
 
 #if DEBUG_FORMULA_COMPILER
@@ -187,6 +189,12 @@ private:
     typedef ::std::map<OUString, std::unique_ptr<ScRangeData>> DataType;
     DataType m_Data;
     IndexDataType maIndexToData;
+    // Use for optimization, true if any of the contained names resolves
+    // as a valid cell address (e.g. 'day1' with 16k columns).
+    mutable bool mHasPossibleAddressConflict : 1;
+    mutable bool mHasPossibleAddressConflictDirty : 1;
+
+    void checkHasPossibleAddressConflict() const;
 
 public:
     /// Map that stores non-managed pointers to ScRangeName instances.
@@ -266,6 +274,13 @@ public:
 
     void clear();
     bool operator== (const ScRangeName& r) const;
+
+    bool hasPossibleAddressConflict() const
+    {
+        if( mHasPossibleAddressConflictDirty )
+            checkHasPossibleAddressConflict();
+        return mHasPossibleAddressConflict;
+    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
