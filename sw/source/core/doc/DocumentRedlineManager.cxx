@@ -2156,8 +2156,8 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
 
                 case SwComparePosition::CollideEnd:
                     if( pRedl->IsOwnRedline( *pNewRedl ) &&
-                        pRedl->CanCombine( *pNewRedl ) && n &&
-                        *maRedlineTable[ n-1 ]->End() < *pStt )
+                        pRedl->CanCombine( *pNewRedl ) &&
+                        (n == 0 || *maRedlineTable[ n-1 ]->End() < *pStt))
                     {
                         // If that's the case we can merge it, meaning
                         // the new one covers this well
@@ -2169,8 +2169,9 @@ DocumentRedlineManager::AppendRedline(SwRangeRedline* pNewRedl, bool const bCall
                 case SwComparePosition::CollideStart:
                     if( pRedl->IsOwnRedline( *pNewRedl ) &&
                         pRedl->CanCombine( *pNewRedl ) &&
-                        n+1 < maRedlineTable.size() &&
-                        *maRedlineTable[ n+1 ]->Start() < *pEnd )
+                        (n+1 >= maRedlineTable.size() ||
+                         (*maRedlineTable[ n+1 ]->Start() >= *pEnd &&
+                          *maRedlineTable[ n+1 ]->Start() != *pREnd)))
                     {
                         // If that's the case we can merge it, meaning
                         // the new one covers this well
