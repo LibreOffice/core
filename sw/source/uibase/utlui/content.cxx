@@ -599,9 +599,9 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 {
                     if (SwTextField* pTextField = pFormatField->GetTextField())
                     {
-                        // Fields in header footer don't behave well, skip them
-                        if (pTextField->GetTextNode().FindHeaderStartNode() ||
-                                pTextField->GetTextNode().FindFooterStartNode())
+                        SwTextNode& rTextNode(pTextField->GetTextNode());
+                        // Skip fields that are in header footer
+                        if (rTextNode.FindHeaderStartNode() || rTextNode.FindFooterStartNode())
                             continue;
                         const SwField* pField = pFormatField->GetField();
                         OUString sExpandField = pField->ExpandField(true, m_pWrtShell->GetLayout());
@@ -618,8 +618,8 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                     + sSubType + sExpandField;
                         }
                         auto pCnt(std::make_unique<SwTextFieldContent>(this, sText, pFormatField,
-                                      pTextField->GetTextNode().GetIndex().get()));
-                        if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
+                                      rTextNode.GetIndex().get()));
+                        if (!rTextNode.getLayoutFrame(m_pWrtShell->GetLayout()))
                             pCnt->SetInvisible();
                         m_pMember->insert(std::move(pCnt));
                     }
