@@ -375,6 +375,8 @@ private:
      */
     ScRangeData* GetRangeData( const formula::FormulaToken& pToken ) const;
 
+    bool HasPossibleNamedRangeConflict(SCTAB nTab) const;
+
     static const CharClass* GetCharClassEnglish();
     static const CharClass* GetCharClassLocalized();
 
