@@ -1018,7 +1018,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     tools::Rectangle cacheRect = rControlRegion;
     Size keySize = cacheRect.GetSize();
 
-    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
+    assert(dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get()));
+    WinSalGraphicsImplBase* pImpl = static_cast<WinSalGraphicsImplBase*>(mpImpl.get());
     if( !pImpl->UseRenderNativeControl())
         pImpl = nullptr;
 

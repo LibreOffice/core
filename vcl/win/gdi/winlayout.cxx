@@ -306,7 +306,8 @@ void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout, HDC hDC, bo
 
 void WinSalGraphics::DrawTextLayout(const GenericSalLayout& rLayout)
 {
-    WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get());
+    assert(dynamic_cast<WinSalGraphicsImplBase*>(mpImpl.get()));
+    WinSalGraphicsImplBase* pImpl = static_cast<WinSalGraphicsImplBase*>(mpImpl.get());
     if (!mbPrinter && pImpl->DrawTextLayout(rLayout))
         return; // handled by pImpl
 
