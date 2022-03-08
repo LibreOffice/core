@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "163873a3_c63f9cdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-08T09:48:23Z",
+      "side": 1,
+      "message": "Not a good idea to use black and white as background. For example my Breeze Dark theme has a dark grayish window color. Better go with transparent background and make the icon foreground stand out by bright/dark colors.",
+      "revId": "bcbc66f5f490ba1f9c9e175e80ed843d3483fcba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
