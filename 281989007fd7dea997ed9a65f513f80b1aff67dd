@@ -52,6 +52,24 @@
       "parentUuid": "d23073df_1b27d838",
       "revId": "281989007fd7dea997ed9a65f513f80b1aff67dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faae643d_30a94aab",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-08T09:27:46Z",
+      "side": 1,
+      "message": "strncmp was eventually replaced with use of string_view\u0027s compare. so IIUC, it shouldn\u0027t be a problem anymore, right?",
+      "parentUuid": "0d4a9d57_03e7dfcf",
+      "revId": "281989007fd7dea997ed9a65f513f80b1aff67dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
