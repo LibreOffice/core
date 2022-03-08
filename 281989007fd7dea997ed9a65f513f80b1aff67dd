@@ -34,6 +34,24 @@
       "parentUuid": "f7979632_ab42d294",
       "revId": "281989007fd7dea997ed9a65f513f80b1aff67dd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d4a9d57_03e7dfcf",
+        "filename": "sal/rtl/strtmpl.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-08T08:40:31Z",
+      "side": 1,
+      "message": "\u003e ah, very good point, this commit is badly broken and should be reverted\n\n...or at least carefully evaluated how to address the various brokenness (e.g., while in this function a special case for c \u003d\u003d \u0027\\0\u0027 would help, the case is different for the use of strncmp in shortenedCompare_WithLength above)",
+      "parentUuid": "d23073df_1b27d838",
+      "revId": "281989007fd7dea997ed9a65f513f80b1aff67dd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
