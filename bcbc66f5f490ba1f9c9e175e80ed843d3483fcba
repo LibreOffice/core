@@ -16,6 +16,24 @@
       "message": "Not a good idea to use black and white as background. For example my Breeze Dark theme has a dark grayish window color. Better go with transparent background and make the icon foreground stand out by bright/dark colors.",
       "revId": "bcbc66f5f490ba1f9c9e175e80ed843d3483fcba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26e9357b_de7562c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-03-08T09:53:12Z",
+      "side": 1,
+      "message": "The problem is, when I set the background to be transparent, LibO present it as white opaque bg. So, some light color won\u0027t be visible at all.",
+      "parentUuid": "163873a3_c63f9cdb",
+      "revId": "bcbc66f5f490ba1f9c9e175e80ed843d3483fcba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
