@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/cppunittraitshelper.hxx>
 #include <rtl/ustring.hxx>
 
 #include <cppunit/TestFixture.h>
