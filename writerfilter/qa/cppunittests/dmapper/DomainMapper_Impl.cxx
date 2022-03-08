@@ -284,6 +284,40 @@ CPPUNIT_TEST_FIXTURE(Test, testPasteOle)
     uno::Reference<text::XTextRange> xPara(xParaEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("hello"), xPara->getString());
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
+{
+    // Given a document with a clearing break:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "clearing-break.docx";
+
+    // When loading that file:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the clear property of the break is not ignored:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParaEnumAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    xPortions->nextElement();
+    xPortions->nextElement();
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.container.NoSuchElementException
+    // i.e. the first para was just a fly + text portion, the clearing break was lost.
+    uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"), aPortionType);
+    uno::Reference<text::XTextContent> xLineBreak;
+    xPortion->getPropertyValue("LineBreak") >>= xLineBreak;
+    sal_Int16 eClear{};
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    xLineBreakProps->getPropertyValue("Clear") >>= eClear;
+    // SwLineBreakClear::ALL
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), eClear);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

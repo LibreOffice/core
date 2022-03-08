@@ -236,14 +236,21 @@ void OOXMLHeaderHandler::sprm(Sprm & /*sprm*/)
 /*
   class OOXMLBreakHandler
  */
-OOXMLBreakHandler::OOXMLBreakHandler(Stream &rStream)
+OOXMLBreakHandler::OOXMLBreakHandler(OOXMLFastContextHandler* pContext, Stream &rStream)
 : mnType(0),
+  mpFastContext(pContext),
   mrStream(rStream)
 {
 }
 
 OOXMLBreakHandler::~OOXMLBreakHandler()
 {
+    if (mpFastContext)
+    {
+        mrStream.props(mpFastContext->getPropertySet().get());
+        mpFastContext->clearProps();
+    }
+
     sal_uInt8 tmpBreak[1];
     switch (mnType)
     {
