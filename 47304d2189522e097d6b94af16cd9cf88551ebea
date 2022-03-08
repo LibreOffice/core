@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b22b0e53_8cf12764",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-08T17:10:16Z",
+      "side": 1,
+      "message": "Re reading the patch, I\u0027m not sure that remaining \"STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY\" and \"STR_FPICKER_ALLFORMATS\" can be used or if they should be moved to include/fpicker/strings.hrc",
+      "revId": "47304d2189522e097d6b94af16cd9cf88551ebea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
