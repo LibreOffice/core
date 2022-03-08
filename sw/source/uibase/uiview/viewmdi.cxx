@@ -530,6 +530,7 @@ IMPL_LINK( SwView, MoveNavigationHdl, void*, p, void )
         {
             if (m_pPostItMgr->HasNotes())
             {
+                rSh.EnterStdMode();
                 m_pPostItMgr->AssureStdModeAtShell();
                 m_pPostItMgr->SetActiveSidebarWin(nullptr);
                 GetEditWin().GrabFocus();
