@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 6: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/109617/ : FAILURE\n\u003e \n\u003e error: replace single use of literal \"rtl::OUString\" variable with a literal [loplugin:elidestringvar] in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/test/source/text/xfootnote.cxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/109243/ )\n\u003e \n\u003e clang plugin elidestringvar did trigger. replace single use of literal \"rtl::OUString\" variable with a literal ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/109243/ )\n\nCan you fix this?",
       "revId": "d1a1801c672b2f1a7188e2684300cf6695598370",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5de27ba_810a2ebd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-03-08T05:45:11Z",
+      "side": 1,
+      "message": "Yup, Working on it.",
+      "parentUuid": "b0beed26_c09069db",
+      "revId": "d1a1801c672b2f1a7188e2684300cf6695598370",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
