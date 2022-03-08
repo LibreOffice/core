@@ -605,10 +605,20 @@ void SwFootnoteFrame::Paste(  SwFrame* pParent, SwFrame* pSibling )
     if( aRectFnSet.GetWidth(getFrameArea())!=aRectFnSet.GetWidth(pParent->getFramePrintArea()) )
         InvalidateSize_();
     InvalidatePos_();
+    if (SwFrame *const pContent = ContainsContent())
+    {   // tdf#139687 invalidate possibly stale top margin (computed from previous frame)
+        pContent->InvalidatePrt_();
+    }
     SwPageFrame *pPage = FindPageFrame();
     InvalidatePage( pPage );
-    if ( GetNext() )
-        GetNext()->InvalidatePos_();
+    if (SwFootnoteFrame *const pNext = static_cast<SwFootnoteFrame *>(GetNext()))
+    {
+        pNext->InvalidatePos_();
+        if (SwFrame *const pContent = pNext->ContainsContent())
+        {   // tdf#139687 invalidate possibly stale top margin (computed from previous frame)
+            pContent->InvalidatePrt_();
+        }
+    }
     if( aRectFnSet.GetHeight(getFrameArea()) )
         pParent->Grow( aRectFnSet.GetHeight(getFrameArea()) );
 
