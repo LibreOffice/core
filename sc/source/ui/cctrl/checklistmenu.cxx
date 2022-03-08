@@ -282,7 +282,7 @@ void ScCheckListMenuControl::queueCloseSubMenu()
     maCloseTimer.mpSubMenu = maOpenTimer.mpSubMenu;
     maCloseTimer.mnMenuPos = maOpenTimer.mnMenuPos;
     if (comphelper::LibreOfficeKit::isActive())
-        maOpenTimer.maTimer.Invoke();
+        maCloseTimer.maTimer.Invoke();
     else
         maCloseTimer.maTimer.Start();
 }
