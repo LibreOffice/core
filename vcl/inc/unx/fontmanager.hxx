@@ -58,8 +58,7 @@ typedef int fontID;
 /*
  *  the difference between FastPrintFontInfo and PrintFontInfo
  *  is that the information in FastPrintFontInfo can usually
- *  be gathered without opening either the font file, they are
- *  gathered from fonts.dir alone.
+ *  be gathered from fontconfig results.
  *  if only FastPrintFontInfo is gathered and PrintFontInfo
  *  on demand and for less fonts, then performance in startup
  *  increases considerably
