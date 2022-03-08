@@ -204,8 +204,11 @@ static F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
         b >>= 1;
     }
 
-    F16Dot16 res = (f << 16) + (r << 16) / b;
-
+    F16Dot16 res;
+    if (b == 0)
+        res = 0x7FFFFFFF;
+    else
+        res = (f << 16) + (r << 16) / b;
     return sign ? -res : res;
 }
 
