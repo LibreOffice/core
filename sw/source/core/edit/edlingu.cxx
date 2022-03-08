@@ -839,11 +839,16 @@ void SwEditShell::HandleCorrectionError(const OUString& aText, SwPosition aPos, 
                                         SwRect& rSelectRect)
 {
     // save the start and end positions of the line and the starting point
+    SwNode const& rNode(GetCursor()->GetPoint()->nNode.GetNode());
     Push();
     LeftMargin();
-    const sal_Int32 nLineStart = GetCursor()->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nLineStart = &rNode == &GetCursor()->GetPoint()->nNode.GetNode()
+        ? GetCursor()->GetPoint()->nContent.GetIndex()
+        : 0;
     RightMargin();
-    const sal_Int32 nLineEnd = GetCursor()->GetPoint()->nContent.GetIndex();
+    const sal_Int32 nLineEnd = &rNode == &GetCursor()->GetPoint()->nNode.GetNode()
+        ? GetCursor()->GetPoint()->nContent.GetIndex()
+        : rNode.GetTextNode()->Len();
     Pop(PopMode::DeleteCurrent);
 
     // make sure the selection build later from the data below does
@@ -926,8 +931,14 @@ uno::Reference< XSpellAlternatives >
         if (pWrong->InWrongWord(nBegin, nLen) && !pNode->IsSymbolAt(nBegin))
         {
             const OUString aText(pNode->GetText().copy(nBegin, nLen));
-            OUString aWord = aText.replaceAll(OUStringChar(CH_TXTATR_BREAKWORD), "")
-                                  .replaceAll(OUStringChar(CH_TXTATR_INWORD), "");
+            // TODO: this doesn't handle fieldmarks properly
+            ModelToViewHelper const aConversionMap(*pNode, GetLayout(),
+                ExpandMode::ExpandFields | ExpandMode::ExpandFootnote | ExpandMode::ReplaceMode
+                | (GetLayout()->IsHideRedlines() ? ExpandMode::HideDeletions : ExpandMode(0))
+                | (GetViewOptions()->IsShowHiddenChar() ? ExpandMode(0) : ExpandMode::HideInvisible));
+            auto const nBeginView(aConversionMap.ConvertToViewPosition(nBegin));
+            OUString const aWord(aConversionMap.getViewText().copy(nBeginView,
+                aConversionMap.ConvertToViewPosition(nBegin+nLen) - nBeginView));
 
             uno::Reference< XSpellChecker1 >  xSpell( ::GetSpellChecker() );
             if( xSpell.is() )
