@@ -1158,7 +1158,6 @@ public:
     void                                SetAccessibleRelationLabelFor( vcl::Window* pLabelFor );
     vcl::Window*                        GetAccessibleRelationLabelFor() const;
 
-    void                                SetAccessibleRelationMemberOf( vcl::Window* pMemberOf );
     vcl::Window*                        GetAccessibleRelationMemberOf() const;
 
     // to avoid sending accessibility events in cases like closing dialogs

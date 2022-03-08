@@ -46,7 +46,6 @@ ImplAccessibleInfos::ImplAccessibleInfos()
     nAccessibleRole = 0xFFFF;
     pLabeledByWindow = nullptr;
     pLabelForWindow = nullptr;
-    pMemberOfWindow = nullptr;
 }
 
 ImplAccessibleInfos::~ImplAccessibleInfos()
@@ -490,18 +489,8 @@ void Window::SetAccessibleRelationLabelFor( vcl::Window* pLabelFor )
     mpWindowImpl->mpAccessibleInfos->pLabelForWindow = pLabelFor;
 }
 
-void Window::SetAccessibleRelationMemberOf( vcl::Window* pMemberOfWin )
-{
-    if ( !mpWindowImpl->mpAccessibleInfos )
-        mpWindowImpl->mpAccessibleInfos.reset( new ImplAccessibleInfos );
-    mpWindowImpl->mpAccessibleInfos->pMemberOfWindow = pMemberOfWin;
-}
-
 vcl::Window* Window::GetAccessibleRelationMemberOf() const
 {
-    if (mpWindowImpl->mpAccessibleInfos && mpWindowImpl->mpAccessibleInfos->pMemberOfWindow)
-        return mpWindowImpl->mpAccessibleInfos->pMemberOfWindow;
-
     if (!isContainerWindow(this) && !isContainerWindow(GetParent()))
         return getLegacyNonLayoutAccessibleRelationMemberOf();
 
