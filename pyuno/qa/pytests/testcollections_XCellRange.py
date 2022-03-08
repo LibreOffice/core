@@ -348,7 +348,7 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.RangeAddress.StartRow)
         self.assertEqual(0, rng.RangeAddress.StartColumn)
         self.assertEqual(0, rng.RangeAddress.EndRow)
-        self.assertEqual(1023, rng.RangeAddress.EndColumn)
+        self.assertEqual(16383, rng.RangeAddress.EndColumn)
 
         spr.close(True)
 
@@ -369,7 +369,7 @@ class TestXCellRange(CollectionsTestBase):
         self.assertEqual(0, rng.RangeAddress.StartRow)
         self.assertEqual(0, rng.RangeAddress.StartColumn)
         self.assertEqual(0, rng.RangeAddress.EndRow)
-        self.assertEqual(1023, rng.RangeAddress.EndColumn)
+        self.assertEqual(16383, rng.RangeAddress.EndColumn)
 
         spr.close(True)
 
