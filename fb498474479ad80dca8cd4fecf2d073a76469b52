@@ -16,6 +16,24 @@
       "message": "rows?",
       "revId": "fb498474479ad80dca8cd4fecf2d073a76469b52",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "787e3532_8901a079",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-08T12:52:42Z",
+      "side": 1,
+      "message": "Ah, yes, columns indeed, thanks.\n\nRows would be quite a different change \u003e:).",
+      "parentUuid": "bab427c3_a00d83b3",
+      "revId": "fb498474479ad80dca8cd4fecf2d073a76469b52",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
