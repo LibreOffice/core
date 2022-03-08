@@ -20,6 +20,7 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WORKCTRL_HXX
 
 #include <sfx2/tbxctrl.hxx>
+#include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
 
 class PopupMenu;

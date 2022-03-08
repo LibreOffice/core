@@ -19,7 +19,6 @@
 #ifndef INCLUDED_SW_INC_SWTABLE_HXX
 #define INCLUDED_SW_INC_SWTABLE_HXX
 
-#include <tools/solar.h>
 #include <tools/ref.hxx>
 #include "tblenum.hxx"
 #include "swtypes.hxx"

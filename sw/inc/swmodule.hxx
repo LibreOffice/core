@@ -26,7 +26,6 @@
 #include <o3tl/deleter.hxx>
 #include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
-#include <svl/itempool.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>

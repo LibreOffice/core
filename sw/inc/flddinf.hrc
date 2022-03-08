@@ -20,6 +20,8 @@
 #ifndef INCLUDED_SW_INC_FLDDINF_HRC
 #define INCLUDED_SW_INC_FLDDINF_HRC
 
+#include <unotools/resmgr.hxx>
+
 #define NC_(Context, String) TranslateId(Context, reinterpret_cast<char const *>(u8##String))
 
 const TranslateId FLD_SELECT[] =

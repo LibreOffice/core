@@ -20,7 +20,6 @@
 #pragma once
 
 #include <editeng/txtrange.hxx>
-#include <tools/solar.h>
 #include <swtypes.hxx>
 #include <swrect.hxx>
 #include <com/sun/star/text/WrapTextMode.hpp>

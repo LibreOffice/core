@@ -11,7 +11,6 @@
 #pragma once
 
 #include <doc.hxx>
-#include "ModelTraverser.hxx"
 #include <svx/GenericCheckDialog.hxx>
 
 namespace sw

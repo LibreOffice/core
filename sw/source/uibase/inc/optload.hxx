@@ -20,6 +20,7 @@
 #pragma once
 
 #include <tools/globname.hxx>
+#include <tools/solar.h>
 #include <sfx2/tabdlg.hxx>
 
 #include <vcl/customweld.hxx>

@@ -22,7 +22,6 @@
 
 #include <undobj.hxx>
 #include <calbck.hxx>
-#include <o3tl/deleter.hxx>
 #include <rtl/ustring.hxx>
 #include <redline.hxx>
 #include <numrule.hxx>

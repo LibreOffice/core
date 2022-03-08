@@ -14,7 +14,7 @@
 
 #include <string_view>
 
-#include <rtl/ustring.hxx>
+#include <sal/types.h>
 
 struct DocxStringTokenMap
 {
