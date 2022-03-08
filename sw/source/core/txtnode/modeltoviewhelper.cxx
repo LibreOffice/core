@@ -253,8 +253,14 @@ ModelToViewHelper::ModelToViewHelper(const SwTextNode &rNode,
                     FieldResult aFieldResult(nDummyCharPos);
                     switch (pAttr->Which())
                     {
-                        case RES_TXTATR_FIELD:
                         case RES_TXTATR_ANNOTATION:
+                            if (eMode & ExpandMode::ExpandFields)
+                            {
+                                // this uses CH_TXTATR_INWORD so replace with nothing
+                                aFieldResult.m_eType = FieldResult::FIELD;
+                            }
+                            break;
+                        case RES_TXTATR_FIELD:
                             if (eMode & ExpandMode::ExpandFields)
                             {
                                 // add a ZWSP before the expanded field in replace mode
