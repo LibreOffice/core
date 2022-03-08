@@ -36,6 +36,7 @@
 #endif
 #include <sft.hxx>
 #include <impfontcharmap.hxx>
+#include "fixmath.h"
 #include "ttcr.hxx"
 #include "xlat.hxx"
 #include <rtl/crc.h>
@@ -169,47 +170,12 @@ static sal_uInt32 GetUInt32(const sal_uInt8 *ptr, size_t offset)
 
 static F16Dot16 fixedMul(F16Dot16 a, F16Dot16 b)
 {
-    int sign = (a & 0x80000000) ^ (b & 0x80000000);
-    if (a < 0) a = o3tl::saturating_toggle_sign(a);
-    if (b < 0) b = o3tl::saturating_toggle_sign(b);
-
-    unsigned int a1 = a >> 16;
-    unsigned int b1 = a & 0xFFFF;
-    unsigned int a2 = b >> 16;
-    unsigned int b2 = b & 0xFFFF;
-
-    F16Dot16 res = a1 * a2;
-
-    /* if (res  > 0x7FFF) assert(!"fixedMul: F16Dot16 overflow"); */
-
-    res <<= 16;
-    res += a1 * b2 + b1 * a2 + ((b1 * b2) >> 16);
-
-    return sign ? -res : res;
+    return fix16_mul(a, b);
 }
 
 static F16Dot16 fixedDiv(F16Dot16 a, F16Dot16 b)
 {
-    int sign = (a & 0x80000000) ^ (b & 0x80000000);
-    if (a < 0) a = -a;
-    if (b < 0) b = -b;
-
-    unsigned int f = a / b;
-    unsigned int r = a % b;
-
-    /* if (f > 0x7FFFF) assert(!"fixedDiv: F16Dot16 overflow"); */
-
-    while (r > 0xFFFF) {
-        r >>= 1;
-        b >>= 1;
-    }
-
-    F16Dot16 res;
-    if (b == 0)
-        res = 0x7FFFFFFF;
-    else
-        res = (f << 16) + (r << 16) / b;
-    return sign ? -res : res;
+    return fix16_div(a, b);
 }
 
 /*- returns a * b / c -*/
