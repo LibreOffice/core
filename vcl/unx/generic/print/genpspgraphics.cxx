@@ -253,7 +253,8 @@ bool GenPspGraphics::AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pF
         // prepare font data
         psp::FastPrintFontInfo aInfo;
         rMgr.getFontFastInfo( elem, aInfo );
-        aInfo.m_aFamilyName = rFontName;
+        if (!rFontName.isEmpty())
+            aInfo.m_aFamilyName = rFontName;
 
         // inform glyph cache of new font
         FontAttributes aDFA = GenPspGraphics::Info2FontAttributes( aInfo );
