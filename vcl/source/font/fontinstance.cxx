@@ -26,25 +26,6 @@
 #include <fontinstance.hxx>
 #include <impfontcache.hxx>
 
-#include <o3tl/hash_combine.hxx>
-
-// extend std namespace to add custom hash needed for LogicalFontInstance
-
-namespace std
-{
-    template <> struct hash< pair< sal_UCS4, FontWeight > >
-    {
-        size_t operator()(const pair< sal_UCS4, FontWeight >& rData) const
-        {
-            std::size_t seed = 0;
-            o3tl::hash_combine(seed, rData.first);
-            o3tl::hash_combine(seed, rData.second);
-            return seed;
-        }
-    };
-}
-
-
 LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFontFace, const vcl::font::FontSelectPattern& rFontSelData )
     : mxFontMetric( new ImplFontMetricData( rFontSelData ))
     , mpConversion( nullptr )
@@ -62,7 +43,7 @@ LogicalFontInstance::LogicalFontInstance(const vcl::font::PhysicalFontFace& rFon
 
 LogicalFontInstance::~LogicalFontInstance()
 {
-    mpUnicodeFallbackList.reset();
+    maUnicodeFallbackList.clear();
     mpFontCache = nullptr;
     mxFontMetric = nullptr;
 
@@ -121,9 +102,7 @@ void LogicalFontInstance::GetScale(double* nXScale, double* nYScale)
 void LogicalFontInstance::AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight, const OUString& rFontName,
                                                 bool bEmbolden, const ItalicMatrix& rMatrix)
 {
-    if( !mpUnicodeFallbackList )
-        mpUnicodeFallbackList.reset(new UnicodeFallbackList);
-    MapEntry& rEntry = (*mpUnicodeFallbackList)[ std::pair< sal_UCS4, FontWeight >(cChar,eWeight) ];
+    MapEntry& rEntry = maUnicodeFallbackList[ std::pair< sal_UCS4, FontWeight >(cChar,eWeight) ];
     rEntry.sFontName = rFontName;
     rEntry.bEmbolden = bEmbolden;
     rEntry.aItalicMatrix = rMatrix;
@@ -132,11 +111,8 @@ void LogicalFontInstance::AddFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeig
 bool LogicalFontInstance::GetFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeight,
                                                 OUString* pFontName, bool* pEmbolden, ItalicMatrix* pMatrix) const
 {
-    if( !mpUnicodeFallbackList )
-        return false;
-
-    UnicodeFallbackList::const_iterator it = mpUnicodeFallbackList->find( std::pair< sal_UCS4, FontWeight >(cChar,eWeight) );
-    if( it == mpUnicodeFallbackList->end() )
+    UnicodeFallbackList::const_iterator it = maUnicodeFallbackList.find( std::pair< sal_UCS4, FontWeight >(cChar,eWeight) );
+    if( it == maUnicodeFallbackList.end() )
         return false;
 
     const MapEntry& rEntry = (*it).second;
@@ -148,12 +124,12 @@ bool LogicalFontInstance::GetFallbackForUnicode(sal_UCS4 cChar, FontWeight eWeig
 
 void LogicalFontInstance::IgnoreFallbackForUnicode( sal_UCS4 cChar, FontWeight eWeight, std::u16string_view rFontName )
 {
-    UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( std::pair< sal_UCS4,FontWeight >(cChar,eWeight) );
-    if( it == mpUnicodeFallbackList->end() )
+    UnicodeFallbackList::iterator it = maUnicodeFallbackList.find( std::pair< sal_UCS4,FontWeight >(cChar,eWeight) );
+    if( it == maUnicodeFallbackList.end() )
         return;
     const MapEntry& rEntry = (*it).second;
     if (rEntry.sFontName == rFontName)
-        mpUnicodeFallbackList->erase( it );
+        maUnicodeFallbackList.erase( it );
 }
 
 bool LogicalFontInstance::GetGlyphBoundRect(sal_GlyphId nID, tools::Rectangle &rRect, bool bVertical) const
