@@ -33,20 +33,6 @@ public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 
 protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        const char* aDenylist[] = {
-            "math-escape.docx",
-            "math-mso2k7.docx",
-        };
-        std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
-
-        // If the testcase is stored in some other format, it's pointless to test.
-        return (OString(filename).endsWith(".docx") && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
-    }
-
     virtual std::unique_ptr<Resetter> preTest(const char* filename) override
     {
         if (filename == std::string_view("combobox-control.docx") )
@@ -85,8 +71,9 @@ DECLARE_OOXMLEXPORT_TEST(testRelorientation, "relorientation.docx")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testBezier, "bezier.odt")
+CPPUNIT_TEST_FIXTURE(Test, testBezier)
 {
+    loadAndReload("bezier.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Check that no shape got lost: a bezier, a line and a text shape.
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
@@ -241,7 +228,7 @@ DECLARE_OOXMLEXPORT_TEST(testTestTitlePage, "testTitlePage.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"), parseDump("/root/page[2]/footer/txt/text()"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice,"table-row-data-displayed-twice.docx")
+DECLARE_OOXMLEXPORT_TEST(testTableRowDataDisplayedTwice, "table-row-data-displayed-twice.docx")
 {
     // fdo#73534: There was a problem for some documents during export.Invalid sectPr getting added
     // because of wrong condition in code.
@@ -447,8 +434,9 @@ CPPUNIT_TEST_FIXTURE(Test, testChartInFooter)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testNestedTextFrames, "nested-text-frames.odt")
+CPPUNIT_TEST_FIXTURE(Test, testNestedTextFrames)
 {
+    loadAndReload("nested-text-frames.odt");
     CPPUNIT_ASSERT_EQUAL(3, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First problem was LO crashed during export (crash test)
@@ -849,8 +837,9 @@ CPPUNIT_TEST_FIXTURE(Test, testParagraphWithComments)
     CPPUNIT_ASSERT_EQUAL( idInDocXml, idInCommentXml );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf104707_urlComment, "tdf104707_urlComment.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104707_urlComment)
 {
+    loadAndReload("tdf104707_urlComment.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -1198,7 +1187,7 @@ DECLARE_OOXMLEXPORT_TEST(testInheritFirstHeader,"inheritFirstHeader.docx")
 }
 
 #if HAVE_MORE_FONTS
-DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original,"tdf81345.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf81345_045Original, "tdf81345.docx")
 {
     //Header wasn't replaced  and columns were missing because no new style was created.
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
