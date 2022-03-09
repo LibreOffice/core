@@ -16,6 +16,23 @@
       "message": "Looks like you rebased it on a commit from Mon Mar 07 and the conflicting one seems to be later.",
       "revId": "4dad300172fc070f897fc0bd9cb98dd2b64eeefb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d4c775e_12941854",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-09T20:48:31Z",
+      "side": 1,
+      "message": "Tushar: you accidentally emailed everyone in Cc. Copying your email here:\n\n\u003e I just reverted the \"DragMethod_RotateDiagram.cxx\" as told by Hossien sir in the comments.This file was added through commit from Mon 7 March.\n\u003e And next was I downloaded the patch and it created a new branch and I runned \"git rebase master\".\n\u003e Done the changes,added it, then runned \"git commit --amend\" and then pushed it to the gerrit.\n\nWhat you need to do is \u0027./g pull -r\u0027 while in your branch. So no need to create any new branch etc.",
+      "revId": "4dad300172fc070f897fc0bd9cb98dd2b64eeefb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
