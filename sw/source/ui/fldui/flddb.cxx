@@ -330,9 +330,7 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
             m_xFormatLB->hide();
 
             weld::Widget& rWidget = m_xNumFormatLB->get_widget();
-            m_xNewFormatRB->set_accessible_relation_label_for(&rWidget);
             rWidget.set_accessible_relation_labeled_by(m_xNewFormatRB.get());
-            m_xFormatLB->set_accessible_relation_label_for(nullptr);
 
             if (pBox)   // type was changed by user
                 m_xDBFormatRB->set_active(true);
@@ -371,10 +369,7 @@ void SwFieldDBPage::TypeHdl(const weld::TreeView* pBox)
             m_xNumFormatLB->hide();
             m_xFormatLB->show();
 
-            m_xNewFormatRB->set_accessible_relation_label_for(m_xFormatLB.get());
             m_xFormatLB->set_accessible_relation_labeled_by(m_xNewFormatRB.get());
-            weld::Widget& rWidget = m_xNumFormatLB->get_widget();
-            rWidget.set_accessible_relation_label_for(nullptr);
 
             if( IsFieldEdit() )
             {
