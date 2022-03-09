@@ -2394,7 +2394,7 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument& rDocument, SCTAB
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     assert(rDoc.maTabs[nTab]);
 
-    nEndCol = rDoc.maTabs[nTab]->ClampToAllocatedColumns(nEndCol);
+    nEndCol = rDoc.maTabs[nTab]->ClampToMaxNonDefPatternColumn(nEndCol);
 
     nRow = nStartRow;
     nCol = nStartCol;
@@ -2423,14 +2423,13 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
         SCCOL nPos = i - nStartCol;
         if ( bInitialization || pNextEnd[nPos] < nRow )
         {
-            const ScAttrArray* pArray = rDoc.maTabs[nTab]->aCol[i].pAttrArray.get();
-            assert(pArray);
+            const ScAttrArray& pArray = rDoc.maTabs[nTab]->ColumnData(i).AttrArray();
 
             SCSIZE nIndex;
             if (bInitialization)
             {
-                if ( pArray->Count() )
-                    pArray->Search( nStartRow, nIndex );
+                if ( pArray.Count() )
+                    pArray.Search( nStartRow, nIndex );
                 else
                     nIndex = 0;
                 pIndices[nPos] = nIndex;
@@ -2439,16 +2438,16 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             else
                 nIndex = ++pIndices[nPos];
 
-            if ( !nIndex && !pArray->Count() )
+            if ( !nIndex && !pArray.Count() )
             {
                 pNextEnd[nPos] = rDoc.MaxRow();
                 assert( pNextEnd[nPos] >= nRow && "Sequence out of order" );
                 ppPatterns[nPos] = nullptr;
             }
-            else if ( nIndex < pArray->Count() )
+            else if ( nIndex < pArray.Count() )
             {
-                const ScPatternAttr* pPattern = pArray->mvData[nIndex].pPattern;
-                SCROW nThisEnd = pArray->mvData[nIndex].nEndRow;
+                const ScPatternAttr* pPattern = pArray.mvData[nIndex].pPattern;
+                SCROW nThisEnd = pArray.mvData[nIndex].nEndRow;
 
                 if ( IsDefaultItem( pPattern ) )
                     pPattern = nullptr;
@@ -2644,11 +2643,14 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument& rDocument, SCTAB nTable,
     nEndRow( nRow2 ),
     nCol( nCol1 )
 {
-    if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab]
-        && nCol < rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
+    if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab] )
     {
-        nEndCol = rDoc.maTabs[nTab]->ClampToAllocatedColumns(nEndCol);
-        pColIter = rDoc.maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
+        SCCOL attrColCount = rDoc.maTabs[nTab]->GetMaxNonDefPatternColumnsCount(nStartRow, nEndRow);
+        if( nCol < attrColCount )
+        {
+            nEndCol = std::min<SCCOL>(nEndCol,attrColCount - 1);
+            pColIter = rDoc.maTabs[nTab]->ColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
+        }
     }
 }
 
@@ -2669,7 +2671,7 @@ const ScPatternAttr* ScDocAttrIterator::GetNext( SCCOL& rCol, SCROW& rRow1, SCRO
 
         ++nCol;
         if ( nCol <= nEndCol )
-            pColIter = rDoc.maTabs[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
+            pColIter = rDoc.maTabs[nTab]->ColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
         else
             pColIter.reset();
     }
@@ -2776,18 +2778,19 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument& rDocument, SCTAB nTable,
     nIterStartCol( nCol1 ),
     nIterEndCol( nCol1 )
 {
-    if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab]
-        && nCol1 < rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
+    if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab] )
     {
-        nEndCol = rDoc.maTabs[nTab]->ClampToAllocatedColumns(nEndCol);
-        pColIter = rDoc.maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
-        while ( nIterEndCol < nEndCol &&
-                rDoc.maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
-                    rDoc.maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
-            ++nIterEndCol;
+        SCCOL attrColCount = rDoc.maTabs[nTab]->GetMaxNonDefPatternColumnsCount(nStartRow, nEndRow);
+        if( nCol1 < attrColCount )
+        {
+            nEndCol = std::min<SCCOL>(nEndCol,attrColCount - 1);
+            pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
+            while ( nIterEndCol < nEndCol &&
+                    rDoc.maTabs[nTab]->ColumnData(nIterEndCol).IsAllAttrEqual(
+                        rDoc.maTabs[nTab]->ColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
+                ++nIterEndCol;
+        }
     }
-    else
-        pColIter = nullptr;
 }
 
 ScAttrRectIterator::~ScAttrRectIterator()
@@ -2799,7 +2802,7 @@ void ScAttrRectIterator::DataChanged()
     if (pColIter)
     {
         SCROW nNextRow = pColIter->GetNextRow();
-        pColIter = rDoc.maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nNextRow, nEndRow );
+        pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nNextRow, nEndRow );
     }
 }
 
@@ -2820,10 +2823,10 @@ const ScPatternAttr* ScAttrRectIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2,
         if ( nIterStartCol <= nEndCol )
         {
             nIterEndCol = nIterStartCol;
-            pColIter = rDoc.maTabs[nTab]->aCol[nIterStartCol].CreateAttrIterator( nStartRow, nEndRow );
+            pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
             while ( nIterEndCol < nEndCol &&
-                    rDoc.maTabs[nTab]->aCol[nIterEndCol].IsAllAttrEqual(
-                        rDoc.maTabs[nTab]->aCol[nIterEndCol+1], nStartRow, nEndRow ) )
+                    rDoc.maTabs[nTab]->ColumnData(nIterEndCol).IsAllAttrEqual(
+                        rDoc.maTabs[nTab]->ColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
                 ++nIterEndCol;
         }
         else
