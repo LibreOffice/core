@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b4d9b72_ceadc949",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-09T20:20:59Z",
+      "side": 1,
+      "message": "Might end up chopping this down to just the little bit we use and cnp it where its used. Do it like this for now to test this in oss-fuzz for a while.",
+      "revId": "1a0ce636de84ceb140c8a82a417e4a7bccac5987",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
