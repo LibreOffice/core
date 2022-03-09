@@ -1645,8 +1645,10 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
 
         if( !bFieldFound )
         {
-            SwDocInfoField aField( static_cast<SwDocInfoFieldType*>(
-                m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DocInfo )), DI_CUSTOM|nReg, aDocProperty, GetFieldResult( pF ) );
+            SwDocInfoField aField(
+                static_cast<SwDocInfoFieldType*>(
+                    m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)),
+                DI_CUSTOM | DI_SUB_FIXED | nReg, aDocProperty, GetFieldResult(pF));
             m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
 
             return eF_ResT::OK;
