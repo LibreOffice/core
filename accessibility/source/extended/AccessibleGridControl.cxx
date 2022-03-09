@@ -22,8 +22,6 @@
 #include <extended/AccessibleGridControlHeader.hxx>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
-#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
-#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <toolkit/helper/convert.hxx>
 #include <vcl/accessibletable.hxx>
@@ -312,31 +310,6 @@ void AccessibleGridControl::commitTableEvent(sal_Int16 _nEventId,const Any& _rNe
             xChild = m_xTable->getAccessibleChild(nCurrentRow * nColumnCount + nCurrentCol);
         }
         m_xTable->commitEvent(_nEventId, Any(xChild),_rOldValue);
-    }
-    else if(_nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
-    {
-        AccessibleTableModelChange aChange;
-        if(_rNewValue >>= aChange)
-        {
-            if(aChange.Type == AccessibleTableModelChangeType::DELETE)
-            {
-                std::vector< rtl::Reference<AccessibleGridControlTableCell> >& rCells =
-                    m_xTable->getCellVector();
-                int nColCount = m_aTable.GetColumnCount();
-                // check valid index - entries are inserted lazily
-                size_t const nStart = nColCount * aChange.FirstRow;
-                size_t const nEnd   = nColCount * aChange.LastRow;
-                if (nStart < rCells.size())
-                {
-                    m_xTable->getCellVector().erase(
-                        rCells.begin() + nStart,
-                        rCells.begin() + std::min(rCells.size(), nEnd));
-                }
-                m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
-            }
-            else
-                m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
-        }
     }
     else
         m_xTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
