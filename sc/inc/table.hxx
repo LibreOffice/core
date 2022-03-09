@@ -260,9 +260,6 @@ friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScCountIfCellIterator;
 friend class ScHorizontalCellIterator;
-friend class ScHorizontalAttrIterator;
-friend class ScDocAttrIterator;
-friend class ScAttrRectIterator;
 friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
 friend class sc::DocumentStreamAccess;
@@ -739,6 +736,7 @@ public:
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = nullptr,
                                   bool* const pIsChanged = nullptr );
+    void        SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttrEntry> && vNewData);
 
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr );
     const ScPatternAttr* SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> );
@@ -872,10 +870,10 @@ public:
                 /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     SCROW      GetLastFlaggedRow() const;
 
-                /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
-    SCCOL      GetLastChangedCol() const;
-                /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
-    SCROW      GetLastChangedRow() const;
+    /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
+    SCCOL      GetLastChangedColFlagsWidth() const;
+    /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
+    SCROW      GetLastChangedRowFlagsWidth() const;
 
     bool       IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const;
     bool       IsDataFiltered(const ScRange& rRange) const;
@@ -1114,6 +1112,8 @@ public:
     OString dumpSheetGeomData(bool bColumns, SheetGeomType eGeomType);
 
     std::set<SCCOL> QueryColumnsWithFormulaCells() const;
+
+    const ScColumnData& ColumnData( SCCOL nCol ) const { return nCol < aCol.size() ? aCol[ nCol ] : aDefaultColData; }
 
     void CheckIntegrity() const;
 

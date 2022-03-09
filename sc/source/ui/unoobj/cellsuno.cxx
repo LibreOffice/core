@@ -8819,7 +8819,6 @@ rtl::Reference<ScCellRangeObj> ScCellFormatsObj::GetObjectByIndex_Impl(tools::Lo
 {
     //! access the AttrArrays directly !!!!
 
-    rtl::Reference<ScCellRangeObj> pRet;
     if (pDocShell)
     {
         ScDocument& rDoc = pDocShell->GetDocument();
@@ -8837,14 +8836,14 @@ rtl::Reference<ScCellRangeObj> ScCellFormatsObj::GetObjectByIndex_Impl(tools::Lo
                 ScRange aNext( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
 
                 if ( aNext.aStart == aNext.aEnd )
-                    pRet = new ScCellObj( pDocShell, aNext.aStart );
+                    return new ScCellObj( pDocShell, aNext.aStart );
                 else
-                    pRet = new ScCellRangeObj( pDocShell, aNext );
+                    return new ScCellRangeObj( pDocShell, aNext );
             }
             ++nPos;
         }
     }
-    return pRet;
+    return {};
 }
 
 // XIndexAccess

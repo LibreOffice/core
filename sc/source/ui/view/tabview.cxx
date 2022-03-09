@@ -1330,15 +1330,15 @@ namespace
 
 SCROW lcl_LastVisible( const ScViewData& rViewData )
 {
-    // If many rows are hidden at end of the document (what kind of idiot does that?),
+    // If many rows are hidden at end of the document,
     // then there should not be a switch to wide row headers because of this
-    //! as a member to the document???
     ScDocument& rDoc = rViewData.GetDocument();
     SCTAB nTab = rViewData.GetTabNo();
 
     SCROW nVis = rDoc.MaxRow();
-    while ( nVis > 0 && rDoc.GetRowHeight( nVis, nTab ) == 0 )
-        --nVis;
+    SCROW startRow;
+    while ( nVis > 0 && rDoc.GetRowHeight( nVis, nTab, &startRow, nullptr ) == 0 )
+        nVis = std::max<SCROW>( startRow - 1, 0 );
     return nVis;
 }
 

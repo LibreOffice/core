@@ -593,21 +593,20 @@ void ScDocumentImport::fillDownCells(const ScAddress& rPos, SCROW nFillSize)
     }
 }
 
-void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nCol, Attrs&& rAttrs )
+void ScDocumentImport::setAttrEntries( SCTAB nTab, SCCOL nColStart, SCCOL nColEnd, Attrs&& rAttrs )
 {
     ScTable* pTab = mpImpl->mrDoc.FetchTable(nTab);
     if (!pTab)
         return;
 
-    ScColumn* pCol = pTab->FetchColumn(nCol);
-    if (!pCol)
-        return;
+    for(SCCOL nCol = nColStart; nCol <= nColEnd; ++nCol )
+    {
+        ColAttr* pColAttr = mpImpl->getColAttr(nTab, nCol);
+        if (pColAttr)
+            pColAttr->mbLatinNumFmtOnly = rAttrs.mbLatinNumFmtOnly;
+    }
 
-    ColAttr* pColAttr = mpImpl->getColAttr(nTab, nCol);
-    if (pColAttr)
-        pColAttr->mbLatinNumFmtOnly = rAttrs.mbLatinNumFmtOnly;
-
-    pCol->pAttrArray->SetAttrEntries(std::move(rAttrs.mvData));
+    pTab->SetAttrEntries( nColStart, nColEnd, std::move( rAttrs.mvData ));
 }
 
 void ScDocumentImport::setRowsVisible(SCTAB nTab, SCROW nRowStart, SCROW nRowEnd, bool bVisible)

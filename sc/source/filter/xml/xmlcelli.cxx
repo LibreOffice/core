@@ -1171,7 +1171,10 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
         // it makes no sense to import data after the last supported column
         // fdo#58539 & gnome#627150
         if(rCurrentPos.Col() > pDoc->MaxCol())
+        {
+            rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_COLUMN_OVERFLOW);
             break;
+        }
 
         if (i > 0)
             rTables.AddColumn(false);
@@ -1184,7 +1187,10 @@ void ScXMLTableRowCellContext::AddTextAndValueCell( const ScAddress& rCellPos,
                 // it makes no sense to import data after last supported row
                 // fdo#58539 & gnome#627150
                 if(rCurrentPos.Row() > pDoc->MaxRow())
+                {
+                    rXMLImport.SetRangeOverflowType(SCWARN_IMPORT_ROW_OVERFLOW);
                     break;
+                }
 
                 if( (rCurrentPos.Col() == 0) && (j > 0) )
                 {

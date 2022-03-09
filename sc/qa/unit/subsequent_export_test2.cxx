@@ -216,6 +216,8 @@ public:
     void testTdf142578();
     void testTdf145059();
     void testTdf130104_XLSXIndent();
+    void testWholeRowBold();
+    void testXlsxRowsOrder();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -331,6 +333,8 @@ public:
     CPPUNIT_TEST(testTdf142578);
     CPPUNIT_TEST(testTdf145059);
     CPPUNIT_TEST(testTdf130104_XLSXIndent);
+    CPPUNIT_TEST(testWholeRowBold);
+    CPPUNIT_TEST(testXlsxRowsOrder);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3077,6 +3081,46 @@ void ScExportTest2::testTdf130104_XLSXIndent()
         = "/x:styleSheet/x:cellXfs/x:xf[" + OString::number(nCellA30StyleIndex) + "]/x:alignment";
     assertXPath(pStyle, sStyleA30XPath, "indent", "10");
 
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testWholeRowBold()
+{
+    ScDocShellRef xDocSh1 = loadDoc(u"blank.", FORMAT_ODS);
+    CPPUNIT_ASSERT_MESSAGE("Failed to open empty doc", xDocSh1.is());
+    ScDocument* pDoc = &xDocSh1->GetDocument();
+
+    // Make entire second row row bold.
+    ScPatternAttr boldAttr(pDoc->GetPool());
+    boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    pDoc->ApplyPatternAreaTab(0, 1, pDoc->MaxCol(), 1, 0, boldAttr);
+
+    ScDocShellRef xDocSh2 = saveAndReload(*xDocSh1, FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh2.is());
+    pDoc = &xDocSh2->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
+    vcl::Font aFont;
+    pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+
+    ScDocShellRef xDocSh3 = saveAndReload(*xDocSh2, FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh3.is());
+    pDoc = &xDocSh3->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
+    pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+
+    xDocSh1->DoClose();
+    xDocSh2->DoClose();
+    xDocSh3->DoClose();
+}
+
+void ScExportTest2::testXlsxRowsOrder()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf58243.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    // Make sure code in SheetDataBuffer doesn't assert columns/rows sorting.
+    ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xDocSh->DoClose();
 }
 
