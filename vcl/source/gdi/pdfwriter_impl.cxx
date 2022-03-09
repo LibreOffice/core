@@ -8438,7 +8438,7 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
             return;
         }
 
-        // Merge page annotations (links, etc) from pPage to our page.
+        // Merge link annotations from pPage to our page.
         std::vector<filter::PDFObjectElement*> aAnnots;
         if (auto pArray = dynamic_cast<filter::PDFArrayElement*>(pPage->Lookup("Annots")))
         {
@@ -8456,7 +8456,19 @@ void PDFWriterImpl::writeReferenceXObject(const ReferenceXObjectEmit& rEmit)
                     continue;
                 }
 
-                // Annotation refers to an object, remember it.
+                auto pType = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Type"));
+                if (!pType || pType->GetValue() != "Annot")
+                {
+                    continue;
+                }
+
+                auto pSubtype = dynamic_cast<filter::PDFNameElement*>(pObject->Lookup("Subtype"));
+                if (!pSubtype || pSubtype->GetValue() != "Link")
+                {
+                    continue;
+                }
+
+                // Reference to a link annotation object, remember it.
                 aAnnots.push_back(pObject);
             }
         }
