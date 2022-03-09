@@ -17,6 +17,7 @@
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/text/XFormField.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -67,6 +68,24 @@ DECLARE_WW8EXPORT_TEST(testTdf37778_readonlySection, "tdf37778_readonlySection.d
     // tdf#136983
     uno::Reference<document::XDocumentPropertiesSupplier> xDPS(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Last printed date", sal_Int16(2009), xDPS->getDocumentProperties()->getPrintDate().Year);
+}
+
+DECLARE_WW8EXPORT_TEST(testTdf147861_customField, "tdf147861_customField.doc")
+{
+    // These should each be specific values, not a shared DocProperty
+    getParagraph(1, "CustomEditedTitle"); // edited
+    getParagraph(2, " INSERT Custom Title here"); // matches current DocProperty
+    getParagraph(3, "My Title"); // edited
+
+    if (mbExported)
+        return;
+
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("CustomEditedTitle"), xField->getPresentation(false));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf104596_wrapInHeaderTable, "tdf104596_wrapInHeaderTable.doc")
