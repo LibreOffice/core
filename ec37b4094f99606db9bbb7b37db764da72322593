@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bd96b10_4e4bbef0",
+        "filename": "emfio/source/reader/wmfreader.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1368,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-03-09T08:44:52Z",
+      "side": 1,
+      "message": "We shouldn\u0027t create new object her",
+      "revId": "ec37b4094f99606db9bbb7b37db764da72322593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8f5731e_a0e8870f",
+        "filename": "vcl/source/gdi/pdfwriter_impl.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 7235,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-03-09T08:44:52Z",
+      "side": 1,
+      "message": "There shouldn\u0027t be new line, as it will be added later",
+      "revId": "ec37b4094f99606db9bbb7b37db764da72322593",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
