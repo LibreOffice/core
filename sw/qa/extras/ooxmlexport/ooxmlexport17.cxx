@@ -67,6 +67,19 @@ CPPUNIT_TEST_FIXTURE(Test, testParaStyleNumLevel)
     assertXPath(pXmlDoc, "/w:styles/w:style[@w:styleId='Mystyle']/w:pPr/w:numPr/w:ilvl", "val", "1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
+{
+    // Given a document with a clearing break, when saving to DOCX:
+    loadAndSave("clearing-break.docx");
+
+    // Then make sure that the clearing break is not lost:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '/w:document/w:body/w:p/w:r/w:br' number of nodes is incorrect
+    // i.e. first the clearing break was turned into a plain break, then it was completely lost.
+    assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:r/w:br", "clear", "all");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");

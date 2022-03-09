@@ -51,6 +51,7 @@
 class SwGrfNode;
 class SdrObject;
 enum class SvxBoxItemLine;
+enum class SwLineBreakClear;
 
 namespace docx { class FootnotesList; }
 namespace oox::drawingml { class DrawingML; }
@@ -717,6 +718,11 @@ protected:
 
     void SectionRtlGutter( const SfxBoolItem& rRtlGutter) override;
 
+    void TextLineBreak(const SwFormatLineBreak& rLineBreak) override;
+
+    /// Writes a clearing line break at the end of run properties, if there are any.
+    void WriteLineBreak();
+
     /// Reference to the export, where to get the data from
     DocxExport &m_rExport;
 
@@ -1021,6 +1027,8 @@ private:
     OUString m_aStartedParagraphSdtPrAlias;
 
     std::vector<std::map<SvxBoxItemLine, css::table::BorderLine2>> m_aTableStyleConfs;
+
+    std::optional<SwLineBreakClear> m_oLineBreakClear;
 
 public:
     DocxAttributeOutput( DocxExport &rExport, const ::sax_fastparser::FSHelperPtr& pSerializer, oox::drawingml::DrawingML* pDrawingML );

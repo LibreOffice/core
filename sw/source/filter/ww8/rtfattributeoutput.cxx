@@ -4397,4 +4397,6 @@ void RtfAttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
     m_rExport.Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_RTLGUTTER);
 }
 
+void RtfAttributeOutput::TextLineBreak(const SwFormatLineBreak& /*rLineBreak*/) {}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
