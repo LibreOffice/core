@@ -3148,6 +3148,26 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
         CPPUNIT_ASSERT_EQUAL(URIs[i].out, pURIElem->GetValue());
     }
 }
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageAnnots)
+{
+    // Given a document with a PDF image that has 2 comments (popup, text) and a hyperlink:
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+
+    // When saving to PDF:
+    saveAsPDF(u"pdf-image-annots.odg");
+
+    // Then make sure only the hyperlink is kept, since Draw itself has its own comments:
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. not only the hyperlink but also the 2 comments were exported, leading to duplication.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+}
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
