@@ -4161,6 +4161,13 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
         else
             sal_detail_set_log_selector(pCurrentSalLogOverride);
     }
+    else if (strcmp(pOption, "addfont") == 0)
+    {
+        OutputDevice *pDevice = Application::GetDefaultDevice();
+        OutputDevice::ImplClearAllFontData(true);
+        pDevice->AddTempDevFont(OUString::fromUtf8(OString(pValue)), "");
+        OutputDevice::ImplRefreshAllFontData(true);
+    }
 }
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
@@ -6528,7 +6535,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 
     // What stage are we at ?
     if (pThis == nullptr)
+    {
         eStage = PRE_INIT;
+        SAL_INFO("lok", "Create libreoffice object");
+        gImpl = new LibLibreOffice_Impl();
+    }
     else if (bPreInited)
         eStage = SECOND_INIT;
     else
@@ -6815,11 +6826,12 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
 SAL_JNI_EXPORT
 LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_url)
 {
-    if (!gImpl)
-    {
-        SAL_INFO("lok", "Create libreoffice object");
+    static bool alreadyCalled = false;
 
-        gImpl = new LibLibreOffice_Impl();
+    if (!alreadyCalled)
+    {
+        alreadyCalled = true;
+
         if (!lo_initialize(gImpl, install_path, user_profile_url))
         {
             lo_destroy(gImpl);
@@ -6838,6 +6850,15 @@ SAL_JNI_EXPORT
 int lok_preinit(const char* install_path, const char* user_profile_url)
 {
     return lo_initialize(nullptr, install_path, user_profile_url);
+}
+
+SAL_JNI_EXPORT
+int lok_preinit_2(const char* install_path, const char* user_profile_url, LibLibreOffice_Impl** kit)
+{
+    int result = lo_initialize(nullptr, install_path, user_profile_url);
+    if (kit != nullptr)
+        *kit = gImpl;
+    return result;
 }
 
 static void lo_destroy(LibreOfficeKit* pThis)
