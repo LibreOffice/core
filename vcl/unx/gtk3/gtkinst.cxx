@@ -3770,11 +3770,17 @@ public:
 
     virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+        GtkWidget* pGtkLabel = pLabel ? dynamic_cast<GtkInstanceWidget&>(*pLabel).getWidget() : nullptr;
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_accessible_update_relation(GTK_ACCESSIBLE(m_pWidget),
+                                       GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+                                       pGtkLabel, nullptr,
+                                       -1);
+#else
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
         if (!pAtkObject)
             return;
-        AtkObject *pAtkLabel = pLabel ? gtk_widget_get_accessible(dynamic_cast<GtkInstanceWidget&>(*pLabel).getWidget()) : nullptr;
+        AtkObject *pAtkLabel = pGtkLabel ? gtk_widget_get_accessible(pGtkLabel) : nullptr;
         AtkRelationSet *pRelationSet = atk_object_ref_relation_set(pAtkObject);
         AtkRelation *pRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABELLED_BY);
         if (pRelation)
@@ -3787,8 +3793,6 @@ public:
             atk_relation_set_add(pRelationSet, pRelation);
         }
         g_object_unref(pRelationSet);
-#else
-        (void)pLabel;
 #endif
     }
 
