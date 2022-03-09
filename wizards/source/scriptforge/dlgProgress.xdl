@@ -4,7 +4,7 @@
  <dlg:bulletinboard>
   <dlg:text dlg:id="ProgressText" dlg:tab-index="1" dlg:left="16" dlg:top="7" dlg:width="245" dlg:height="8" dlg:value="ProgressText" dlg:tabstop="true"/>
   <dlg:progressmeter dlg:id="ProgressBar" dlg:tab-index="0" dlg:left="16" dlg:top="18" dlg:width="190" dlg:height="10" dlg:value="50"/>
-  <dlg:button dlg:id="CloseButton" dlg:tab-index="2" dlg:left="210" dlg:top="18" dlg:width="50" dlg:height="10" dlg:value="Close">
+  <dlg:button dlg:id="CloseButton" dlg:tab-index="2" dlg:left="210" dlg:top="18" dlg:width="50" dlg:height="10" dlg:image-src="private:graphicrepository/cmd/sc_cancel.png">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:ScriptForge.SF_UI._CloseProgressBar?language=Basic&amp;location=application" script:language="Script"/>
   </dlg:button>
  </dlg:bulletinboard>
