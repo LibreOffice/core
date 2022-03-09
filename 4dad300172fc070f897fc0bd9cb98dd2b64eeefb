@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dfe07a9_34daa01f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-09T18:40:58Z",
+      "side": 1,
+      "message": "Looks like you rebased it on a commit from Mon Mar 07 and the conflicting one seems to be later.",
+      "revId": "4dad300172fc070f897fc0bd9cb98dd2b64eeefb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
