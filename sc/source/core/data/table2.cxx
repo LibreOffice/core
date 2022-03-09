@@ -2163,28 +2163,20 @@ const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich )
 {
     if (!ValidColRow(nCol, nRow))
         return nullptr;
-    if (nCol < GetAllocatedColumnsCount())
-        return &aCol[nCol].GetAttr( nRow, nWhich );
-    return &aDefaultColData.GetAttr( nRow, nWhich );
+    return &ColumnData(nCol).GetAttr( nRow, nWhich );
 }
 
 const SfxPoolItem* ScTable::GetAttr( SCCOL nCol, SCROW nRow, sal_uInt16 nWhich, SCROW& nStartRow, SCROW& nEndRow ) const
 {
     if (!ValidColRow(nCol, nRow))
         return nullptr;
-    if (nCol < GetAllocatedColumnsCount())
-        return &aCol[nCol].GetAttr( nRow, nWhich, nStartRow, nEndRow );
-    return &aDefaultColData.GetAttr( nRow, nWhich, nStartRow, nEndRow );
+    return &ColumnData(nCol).GetAttr( nRow, nWhich, nStartRow, nEndRow );
 }
 
 sal_uInt32 ScTable::GetNumberFormat( const ScInterpreterContext& rContext, const ScAddress& rPos ) const
 {
     if (ValidColRow(rPos.Col(), rPos.Row()))
-    {
-        if (rPos.Col() < GetAllocatedColumnsCount())
-            return aCol[rPos.Col()].GetNumberFormat(rContext, rPos.Row());
-        return aDefaultColData.GetNumberFormat(rContext, rPos.Row());
-    }
+        return ColumnData(rPos.Col()).GetNumberFormat(rContext, rPos.Row());
     return 0;
 }
 
@@ -2198,9 +2190,7 @@ sal_uInt32 ScTable::GetNumberFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow 
     if (!ValidCol(nCol) || !ValidRow(nStartRow) || !ValidRow(nEndRow))
         return 0;
 
-    if (nCol < GetAllocatedColumnsCount())
-        return aCol[nCol].GetNumberFormat(nStartRow, nEndRow);
-    return aDefaultColData.GetNumberFormat(nStartRow, nEndRow);
+    return ColumnData(nCol).GetNumberFormat(nStartRow, nEndRow);
 }
 
 void ScTable::SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat )
@@ -2213,19 +2203,16 @@ void ScTable::SetNumberFormat( SCCOL nCol, SCROW nRow, sal_uInt32 nNumberFormat 
 
 const ScPatternAttr* ScTable::GetPattern( SCCOL nCol, SCROW nRow ) const
 {
-    if (ValidColRow(nCol,nRow) && nCol < GetAllocatedColumnsCount())
-        return aCol[nCol].GetPattern( nRow );
-    else
-        return aDefaultColData.GetPattern( nRow );
+    if (!ValidColRow(nCol,nRow))
+        return nullptr;
+    return ColumnData(nCol).GetPattern( nRow );
 }
 
 const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow ) const
 {
-    if ( ValidColRow( nCol, nStartRow ) && ValidRow( nEndRow ) && (nStartRow <= nEndRow)
-        && nCol < GetAllocatedColumnsCount())
-        return aCol[nCol].GetMostUsedPattern( nStartRow, nEndRow );
-    else
-        return aDefaultColData.GetMostUsedPattern( nStartRow, nEndRow );
+    if ( ValidColRow( nCol, nStartRow ) && ValidRow( nEndRow ) && (nStartRow <= nEndRow))
+        return ColumnData(nCol).GetMostUsedPattern( nStartRow, nEndRow );
+    return nullptr;
 }
 
 bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, HasAttrFlags nMask ) const
@@ -2240,9 +2227,7 @@ bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, Has
 
 bool ScTable::HasAttrib( SCCOL nCol, SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow, SCROW* nEndRow ) const
 {
-    if( nCol < aCol.size())
-        return aCol[nCol].HasAttrib( nRow, nMask, nStartRow, nEndRow );
-    return aDefaultColData.HasAttrib( nRow, nMask, nStartRow, nEndRow );
+    return ColumnData(nCol).HasAttrib( nRow, nMask, nStartRow, nEndRow );
 }
 
 bool ScTable::HasAttribSelection( const ScMarkData& rMark, HasAttrFlags nMask ) const
@@ -2950,10 +2935,7 @@ const ScStyleSheet* ScTable::GetStyle( SCCOL nCol, SCROW nRow ) const
 {
     if ( !ValidColRow( nCol, nRow ) )
         return nullptr;
-    if ( nCol < aCol.size() )
-        return aCol[nCol].GetStyle( nRow );
-    else
-        return aDefaultColData.GetStyle( nRow );
+    return ColumnData(nCol).GetStyle( nRow );
 }
 
 const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const
