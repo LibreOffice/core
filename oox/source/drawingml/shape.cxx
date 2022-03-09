@@ -1047,6 +1047,7 @@ Reference< XShape > const & Shape::createAndInsert(
 
         ::Color nLinePhClr(ColorTransparency, 0xffffffff);
         ::Color nFillPhClr(ColorTransparency, 0xffffffff);
+        sal_Int16 nFillPhClrTheme = -1;
         // TODO: use ph color when applying effect properties
         //sal_Int32 nEffectPhClr = -1;
 
@@ -1083,6 +1084,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (!mbUseBgFill)
                 {
                     nFillPhClr = pFillRef->maPhClr.getColor(rGraphicHelper);
+                    nFillPhClrTheme = pFillRef->maPhClr.getSchemeColorIndex();
                 }
 
                 OUString sColorScheme = pFillRef->maPhClr.getSchemeColorName();
@@ -1145,7 +1147,7 @@ Reference< XShape > const & Shape::createAndInsert(
         if (getFillProperties().moFillType.has() && getFillProperties().moFillType.get() == XML_grpFill)
             getFillProperties().assignUsed(aFillProperties);
         if(!bIsCroppedGraphic)
-            aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, mbFlipH, mbFlipV, bIsCustomShape );
+            aFillProperties.pushToPropMap( aShapeProps, rGraphicHelper, mnRotation, nFillPhClr, nFillPhClrTheme, mbFlipH, mbFlipV, bIsCustomShape );
         LineProperties aLineProperties = getActualLineProperties(pTheme);
         aLineProperties.pushToPropMap( aShapeProps, rGraphicHelper, nLinePhClr );
         EffectProperties aEffectProperties = getActualEffectProperties(pTheme);
