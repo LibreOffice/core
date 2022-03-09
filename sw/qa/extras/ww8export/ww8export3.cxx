@@ -106,9 +106,6 @@ DECLARE_WW8EXPORT_TEST(testTdf147861_customField, "tdf147861_customField.doc")
     getParagraph(2, " INSERT Custom Title here"); // matches current DocProperty
     getParagraph(3, "My Title"); // edited
 
-    if (mbExported)
-        return;
-
     // Verify that these are fields, and not just plain text
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
