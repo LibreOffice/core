@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4914e36b_58aca8e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-09T08:18:47Z",
+      "side": 1,
+      "message": "Hmm, good point - I must had looked closer; still I didn\u0027t really *add* code to handle that (I only made sure that we use \u0027nLen \u003e 0\u0027, not simple \u0027nLen\u0027, which should not be a problem itself). I need to add an assert to the code. Thanks.",
+      "parentUuid": "3b0b23ab_875e2a76",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "218eb3ba_483d4307",
         "filename": "sal/qa/rtl/oustring/rtl_OUString2.cxx",
         "patchSetId": 3
@@ -37,6 +61,24 @@
       "writtenOn": "2022-03-09T08:01:53Z",
       "side": 1,
       "message": "I\u0027m puzzled at all of the above.  What does the \"Point either\" comment pertain to, n64 or n?  And how would either be 0x0?  And why not just use n \u003d -1, say, to check behavior with a negative index?",
+      "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a713fc6_20d02476",
+        "filename": "sal/qa/rtl/oustring/rtl_OUString2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-09T08:18:47Z",
+      "side": 1,
+      "message": "Testing -1 would work always - because the rtl_*String has data there, dereferencing which would not GPF. I calculate a large offset, *trying* to point to 0x0 (if that is possible with given address of the data in memory plus sal_Int32 signed offset); or if its\u0027 impossible (we have the data after first 4 GiB memory address), just use the offset to point to -4 GiB, which, *if dereferenced*, would likely GPF anyway (so the test tries hard to make sure that we do not dereference in case of negative index).\n\nI.e., if data-\u003ebuffer is located at 0xFF000000, n64 would be 0xFF000000 / 2 \u003d 0x7F800000; making a negative of that would be -2139095040 (representable in sal_Int32), and using that as index would make the code point to 0x0 (address of the buffer minus that much UTF-16 code units).",
+      "parentUuid": "218eb3ba_483d4307",
       "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
