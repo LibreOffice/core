@@ -308,10 +308,6 @@ Try:
 		Set Interface = CreateScriptService(&quot;L10N&quot;)
 		With Interface
 	&apos;	SF_Exception.Raise
-			.AddText(	Context := &quot;CLOSEBUTTON&quot; _
-						, MsgId := &quot;Close&quot; _
-						, Comment :=	&quot;Text in close buttons of progress and console dialog boxes&quot; _
-					)
 			.AddText(	Context := &quot;ERRORNUMBER&quot; _
 						, MsgId := &quot;Error %1&quot; _
 						, Comment :=	&quot;Title in error message box\n&quot; _
