@@ -9,7 +9,7 @@ fun:generate_hash_secret_salt
 src:*/boost/boost/rational.hpp
 src:*/include/tools/gen.hxx
 src:*/tools/source/generic/gen.cxx
-src:*/workdir/UnpackedTarball/cairo/src/*.c
+src:*/workdir/UnpackedTarball/cairo/src/*
 [vptr]
 fun:_ZN4cppu14throwExceptionERKN3com3sun4star3uno3AnyE
 src:*/include/com/sun/star/uno/Reference.hxx
