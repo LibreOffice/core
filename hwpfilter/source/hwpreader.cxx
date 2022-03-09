@@ -28,6 +28,7 @@
 #include <osl/diagnose.h>
 #include <tools/stream.hxx>
 #include <basegfx/numeric/ftools.hxx>
+#include <basegfx/point/b2dpoint.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"
@@ -3907,28 +3908,28 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 int i;
                 ZZParall *pal = &drawobj->property.parall;
 
-                ZZPoint pt[3], r_pt[3];
+                basegfx::B2DPoint pt[3], r_pt[3];
                 for(i = 0 ; i < 3 ; i++ ){
-                         pt[i].x = pal->pt[i].x - drawobj->property.rot_originx;
+                         pt[i].setX(pal->pt[i].x - drawobj->property.rot_originx);
                          /* Convert to a physical coordinate */
-                         pt[i].y = -(pal->pt[i].y - drawobj->property.rot_originy);
+                         pt[i].setY(-(pal->pt[i].y - drawobj->property.rot_originy));
                 }
 
-                double rotate, skewX ;
+                double skewX;
 
                 /* 2 - rotation angle calculation */
-                rotate = atan2( pt[1].y - pt[0].y, pt[1].x - pt[0].x );
+                double rotate = atan2(pt[1].getY() - pt[0].getY(), pt[1].getX() - pt[0].getX());
 
                 for( i = 0 ; i < 3 ; i++){
-                         r_pt[i].x = static_cast<int>(pt[i].x * cos(-rotate) - pt[i].y * sin(-rotate));
-                         r_pt[i].y = static_cast<int>(pt[i].y * cos(-rotate) + pt[i].x * sin(-rotate));
+                         r_pt[i].setX(pt[i].getX() * cos(-rotate) - pt[i].getY() * sin(-rotate));
+                         r_pt[i].setY(pt[i].getY() * cos(-rotate) + pt[i].getX() * sin(-rotate));
                 }
 
                 /* 4 - Calculation of reflex angle */
-                if( r_pt[2].y == r_pt[1].y )
+                if (r_pt[2].getY() == r_pt[1].getY())
                          skewX = 0;
                 else
-                         skewX = atan(static_cast<double>(r_pt[2].x - r_pt[1].x )/( r_pt[2].y - r_pt[1].y ));
+                         skewX = atan((r_pt[2].getX() - r_pt[1].getX()) / (r_pt[2].getY() - r_pt[1].getY()));
                 if( skewX >= M_PI_2 )
                          skewX -= M_PI;
                 if( skewX <= -M_PI_2 )
@@ -3955,8 +3956,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     bIsRotate = true;
                 }
                 if( bIsRotate ){
-                    drawobj->extent.w = static_cast<int>(std::hypot(pt[1].x-pt[0].x, pt[1].y-pt[0].y));
-                    drawobj->extent.h = static_cast<int>(std::hypot(pt[2].x-pt[1].x, pt[2].y-pt[1].y));
+                    drawobj->extent.w = static_cast<int>(std::hypot(pt[1].getX() - pt[0].getX(), pt[1].getY() - pt[0].getY()));
+                    drawobj->extent.h = static_cast<int>(std::hypot(pt[2].getX() - pt[1].getX(), pt[2].getY() - pt[1].getY()));
                     mxList->addAttribute("draw:transform", sXML_CDATA, trans);
                 }
             }
