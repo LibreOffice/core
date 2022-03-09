@@ -25,14 +25,13 @@ namespace
         SfxItemSetFixed<RES_PAGEDESC, RES_PAGEDESC> aSet(rSh.GetAttrPool());
         if (rSh.GetCurAttr(aSet))
         {
-            const SfxPoolItem* pItem(nullptr);
-            if (SfxItemState::SET == aSet.GetItemState( RES_PAGEDESC, true, &pItem ) && pItem)
+            if (const SwFormatPageDesc* pDescItem = aSet.GetItemIfSet( RES_PAGEDESC ))
             {
-                ::std::optional<sal_uInt16> oNumOffset = static_cast<const SwFormatPageDesc *>(pItem)->GetNumOffset();
+                ::std::optional<sal_uInt16> oNumOffset = pDescItem->GetNumOffset();
                 if (oNumOffset)
                     rPageNo = *oNumOffset;
                 if (ppPageFormatDesc)
-                    ppPageFormatDesc->reset(static_cast<const SwFormatPageDesc *>(pItem->Clone()));
+                    ppPageFormatDesc->reset(static_cast<const SwFormatPageDesc *>(pDescItem->Clone()));
                 bRet = true;
             }
         }

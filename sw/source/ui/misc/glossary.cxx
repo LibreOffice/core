@@ -545,14 +545,14 @@ IMPL_LINK(SwGlossaryDlg, MenuHdl, const OString&, rItemIdent, void)
         aSet.Put( aItem );
         aSet.Put( SwMacroAssignDlg::AddEvents( MACASSGN_AUTOTEXT ) );
 
-        const SfxPoolItem* pItem;
+        const SvxMacroItem* pMacroItem;
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<SfxAbstractDialog> pMacroDlg(pFact->CreateEventConfigDialog(m_xDialog.get(), aSet,
             m_pShell->GetView().GetViewFrame()->GetFrame().GetFrameInterface() ));
         if ( pMacroDlg && pMacroDlg->Execute() == RET_OK &&
-            SfxItemState::SET == pMacroDlg->GetOutputItemSet()->GetItemState( RES_FRMMACRO, false, &pItem ) )
+            (pMacroItem = pMacroDlg->GetOutputItemSet()->GetItemIfSet( RES_FRMMACRO, false )) )
         {
-            const SvxMacroTableDtor& rTable = static_cast<const SvxMacroItem*>(pItem)->GetMacroTable();
+            const SvxMacroTableDtor& rTable = pMacroItem->GetMacroTable();
             m_pGlossaryHdl->SetMacros( m_xShortNameEdit->get_text(),
                                         rTable.Get( SvMacroItemId::SwStartInsGlossary ),
                                         rTable.Get( SvMacroItemId::SwEndInsGlossary ) );
