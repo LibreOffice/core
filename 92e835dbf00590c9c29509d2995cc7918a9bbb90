@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34d27700_4279d5d2",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-09T11:05:12Z",
+      "side": 0,
+      "message": "A behaviour change is happening here, because of these lines. Can you investigate that? Consider that we are calculating the \"reflex angle\". You can check the difference with this code:\n\n    #include \u003ciostream\u003e\n    #include \u003ccmath\u003e\n\n    double v1(int x, int y)\n    {\n        double skewX;\n        if( y \u003d\u003d 0 )\n             skewX \u003d 0;\n        else\n             skewX \u003d atan(static_cast\u003cdouble\u003e(y)/x);\n        if( skewX \u003e\u003d M_PI_2 )\n             skewX -\u003d M_PI;\n        if( skewX \u003c\u003d -M_PI_2 )\n             skewX +\u003d M_PI;\n        return skewX;\n    }\n\n    double v2(int x, int y)\n    {\n        double skewX \u003d atan2(y, x);\n    /*      // these lines make difference\n        if( skewX \u003e\u003d M_PI_2 )\n            skewX -\u003d M_PI;\n        if( skewX \u003c\u003d -M_PI_2 )\n            skewX +\u003d M_PI;\n    */    return skewX;\n    }\n\n    int main()\n    {\n        double diff;\n        for(int i\u003d-1000; i\u003c1000; ++i)\n            for(int j\u003d-1000; j\u003c1000; ++j)\n            {\n                 diff\u003dv1(i, j) - v2(i, j);\n                 if(diff \u003e 1e-15)\n                     std::cout \u003c\u003c i \u003c\u003c \" \" \u003c\u003c j \u003c\u003c \" \"\n                           \u003c\u003c diff \u003c\u003c \" \" \u003c\u003c v1(i,j) \u003c\u003c \" \" \u003c\u003c v2(i,j) \u003c\u003c std::endl;\n            }\n    }",
+      "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
