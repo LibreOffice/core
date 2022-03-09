@@ -2078,10 +2078,8 @@ static sal_uInt16 lcl_TCFlags(SwDoc &rDoc, const SwTableBox * pBox, sal_Int32 nR
                 SfxItemSetFixed<RES_CHRATR_ROTATE, RES_CHRATR_ROTATE> aCoreSet(rDoc.GetAttrPool());
                 static_cast<const SwTextNode*>(pCNd)->GetParaAttr(aCoreSet,
                     0, static_cast<const SwTextNode*>(pCNd)->GetText().getLength());
-                const SfxPoolItem * pRotItem;
-                if ( SfxItemState::SET == aCoreSet.GetItemState(RES_CHRATR_ROTATE, true, &pRotItem))
+                if ( const SvxCharRotateItem * pRotate = aCoreSet.GetItemIfSet(RES_CHRATR_ROTATE))
                 {
-                    const SvxCharRotateItem * pRotate = static_cast<const SvxCharRotateItem*>(pRotItem);
                     if(pRotate && pRotate->GetValue() == 900_deg10)
                     {
                         nFlags = nFlags | 0x0004 | 0x0008;
@@ -2844,9 +2842,10 @@ void MSWordExportBase::WriteText()
                     SwTextNode *pTempNext = aIdx.GetNode().GetTextNode();
                     if ( pTempNext )
                     {
-                        const SfxPoolItem * pTempItem = nullptr;
-                        if (pTempNext->GetpSwAttrSet() && SfxItemState::SET == pTempNext->GetpSwAttrSet()->GetItemState(RES_PAGEDESC, false, &pTempItem)
-                            && pTempItem && static_cast<const SwFormatPageDesc*>(pTempItem)->GetRegisteredIn())
+                        const SwFormatPageDesc * pTempItem = nullptr;
+                        if (pTempNext->GetpSwAttrSet()
+                            && (pTempItem = pTempNext->GetpSwAttrSet()->GetItemIfSet(RES_PAGEDESC, false))
+                            && pTempItem->GetRegisteredIn())
                         {
                             //Next node has a new page style which means this node is a section end. Do not insert another page/section break here
                             bNeedExportBreakHere = false;
@@ -3541,13 +3540,13 @@ ErrCode WW8Export::ExportDocument_Impl()
     pDop->fRMPrint = pDop->fRMView;
 
     // set AutoHyphenation flag if found in default para style
-    const SfxPoolItem* pItem;
+    const SvxHyphenZoneItem* pItem;
     SwTextFormatColl* pStdTextFormatColl =
         m_rDoc.getIDocumentStylePoolAccess().GetTextCollFromPool(RES_POOLCOLL_STANDARD, false);
-    if (pStdTextFormatColl && SfxItemState::SET == pStdTextFormatColl->GetItemState(
-        RES_PARATR_HYPHENZONE, false, &pItem))
+    if (pStdTextFormatColl && (pItem = pStdTextFormatColl->GetItemIfSet(
+        RES_PARATR_HYPHENZONE, false)))
     {
-        pDop->fAutoHyphen = static_cast<const SvxHyphenZoneItem*>(pItem)->IsHyphen();
+        pDop->fAutoHyphen = pItem->IsHyphen();
     }
 
     StoreDoc1();
