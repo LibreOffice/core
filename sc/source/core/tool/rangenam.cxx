@@ -666,7 +666,11 @@ public:
 
 }
 
-ScRangeName::ScRangeName() {}
+ScRangeName::ScRangeName()
+    : mHasPossibleAddressConflict(false)
+    , mHasPossibleAddressConflictDirty(false)
+{
+}
 
 ScRangeName::ScRangeName(const ScRangeName& r)
     : mHasPossibleAddressConflict( r.mHasPossibleAddressConflict )
