@@ -9485,13 +9485,27 @@ void ScInterpreter::ScRegex()
     {
         // Find n-th occurrence.
         sal_Int32 nCount = 0;
+        int32_t nPrevEnd = -1;
 #if (U_ICU_VERSION_MAJOR_NUM < 55)
         int32_t nStartPos = 0;
         while (aRegexMatcher.find(nStartPos, status) && U_SUCCESS(status) && ++nCount < nOccurrence)
 #else
-        while (aRegexMatcher.find(status) && U_SUCCESS(status) && ++nCount < nOccurrence)
+        while (aRegexMatcher.find(status) && U_SUCCESS(status))
 #endif
-            ;
+        {
+            int32_t nThisEnd = aRegexMatcher.end(status);
+            if (U_FAILURE(status))
+            {
+                // Some error.
+                PushIllegalArgument();
+                return;
+            }
+            if (nThisEnd == nPrevEnd)
+                continue; // tdf#147875: an empty match identical to the previous match end
+            if (++nCount >= nOccurrence)
+                break;
+            nPrevEnd = nThisEnd;
+        }
         if (U_FAILURE(status))
         {
             // Some error.
