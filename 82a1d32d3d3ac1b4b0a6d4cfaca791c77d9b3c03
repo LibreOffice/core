@@ -123,6 +123,24 @@
       "parentUuid": "8a713fc6_20d02476",
       "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b0d688_e65ac257",
+        "filename": "sal/qa/rtl/oustring/rtl_OUString2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-09T11:57:09Z",
+      "side": 1,
+      "message": "Ah - sorry for the jargon: I never knew which one is \"correct\" (in any sense), and in this case, I followed the \"convention\" used in the file 😊",
+      "parentUuid": "a97483f5_12ed0825",
+      "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
