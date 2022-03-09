@@ -77,4 +77,8 @@ $(eval $(call gb_CppunitTest_use_components,dbaccess_hsqldb_test,\
 
 $(eval $(call gb_CppunitTest_use_configuration,dbaccess_hsqldb_test))
 
+$(eval $(call gb_CppunitTest_use_uiconfigs,dbaccess_hsqldb_test, \
+    dbaccess \
+))
+
 # vim: set noet sw=4 ts=4:
