@@ -149,6 +149,7 @@ public:
     void testMultiPagePDF();
     void testPdfImageRotate180();
     void testPdfImageHyperlink();
+    void testPdfImageAnnots();
 
 
     CPPUNIT_TEST_SUITE(PdfExportTest);
@@ -194,6 +195,7 @@ public:
     CPPUNIT_TEST(testMultiPagePDF);
     CPPUNIT_TEST(testPdfImageRotate180);
     CPPUNIT_TEST(testPdfImageHyperlink);
+    CPPUNIT_TEST(testPdfImageAnnots);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -2332,6 +2334,35 @@ void PdfExportTest::testPdfImageHyperlink()
 #endif
 }
 
+void PdfExportTest::testPdfImageAnnots()
+{
+    // Given a document with a PDF image that has 2 comments (popup, text) and a hyperlink:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-annots.odg";
+    mxComponent = loadFromDesktop(aURL);
+    CPPUNIT_ASSERT(mxComponent.is());
+
+    // When saving to PDF:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    utl::MediaDescriptor aMediaDescriptor;
+    aMediaDescriptor["FilterName"] <<= OUString("draw_pdf_Export");
+    xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
+
+    // Then make sure only the hyperlink is kept, since Draw itself has its own comments:
+    SvFileStream aFile(maTempFile.GetURL(), StreamMode::READ);
+    maMemory.WriteStream(aFile);
+    std::shared_ptr<vcl::pdf::PDFium> pPDFium = vcl::pdf::PDFiumLibrary::get();
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument
+        = pPDFium->openDocument(maMemory.GetData(), maMemory.GetSize());
+    CPPUNIT_ASSERT(pPdfDocument);
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    // i.e. not only the hyperlink but also the 2 comments were exported, leading to duplication.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
+}
 CPPUNIT_TEST_SUITE_REGISTRATION(PdfExportTest);
 
 }
