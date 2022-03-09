@@ -55,6 +55,7 @@ bool X11SalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
+    SAL_DEBUG("X11SalGraphics::AddTempDevFont: calling mxTextRenderImpl->AddTempDevFont");
     return mxTextRenderImpl->AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 

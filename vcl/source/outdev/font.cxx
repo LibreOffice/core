@@ -137,12 +137,15 @@ Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) cons
 
 bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
 {
+    SAL_DEBUG("OutputDevice::AddTempDevFont");
+
     ImplInitFontList();
 
     if( !mpGraphics && !AcquireGraphics() )
         return false;
 
     bool bRC = mpGraphics->AddTempDevFont( mxFontCollection.get(), rFileURL, rFontName );
+    SAL_DEBUG("OutputDevice::AddTempDevFont: mpGraphics->AddTempDevFont() returned " << bRC);
     if( !bRC )
         return false;
 

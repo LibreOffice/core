@@ -249,6 +249,9 @@ typedef LibreOfficeKit *(LokHookFunction2)( const char *install_path, const char
 
 typedef int             (LokHookPreInit)  ( const char *install_path, const char *user_profile_url );
 
+struct _LibLibreOfficeKit;
+typedef int             (LokHookPreInit2) ( const char *install_path, const char *user_profile_url, _LibreOfficeKit** kit);
+
 #if defined(IOS) || defined(ANDROID)
 LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user_profile_path);
 #endif
@@ -334,6 +337,8 @@ int lok_preinit( const char *install_path,  const char *user_profile_url )
         free( imp_lib );
         return -1;
     }
+
+    fprintf(stderr, "**************** lok_preinit() in LibreOfficeKitInit.h looked up lok_preinit in %s\n", imp_lib);
 
     free( imp_lib );
 
