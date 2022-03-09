@@ -270,15 +270,10 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
             css::uno::Reference< css::accessibility::XAccessible > xAccessible = getAccessibleChild(i);
             if(css::uno::Reference< css::accessibility::XAccessible >(m_xTable) == xAccessible)
             {
-                std::vector< rtl::Reference<AccessibleGridControlTableCell> >& rCells =
-                    m_xTable->getCellVector();
-                size_t nIndex = m_aTable.GetCurrentRow() * m_aTable.GetColumnCount()
-                              + m_aTable.GetCurrentColumn();
-                if (nIndex < rCells.size() && rCells[nIndex])
-                {
-                    rtl::Reference<AccessibleGridControlTableCell> xCell = rCells[nIndex];
-                    xCell->commitEvent( _nEventId, _rNewValue, _rOldValue );
-                }
+                Reference<XAccessible> xCell = m_xTable->getAccessibleCellAt(
+                    m_aTable.GetCurrentRow(), m_aTable.GetCurrentColumn());
+                AccessibleGridControlTableCell* pCell = static_cast<AccessibleGridControlTableCell*>(xCell.get());
+                pCell->commitEvent(_nEventId, _rNewValue, _rOldValue);
             }
         }
     }
