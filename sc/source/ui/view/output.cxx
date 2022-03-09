@@ -1089,6 +1089,27 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
                     nOldMerged = nMergedCols;
 
+                    tools::Long nNewPosX = nPosX;
+                    // extend for all merged cells
+                    nMergedCols = 1;
+                    if (pInfo->bMerged && pInfo->pPatternAttr)
+                    {
+                            const ScMergeAttr* pMerge =
+                                    &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
+                            nMergedCols = std::max<SCCOL>(1, pMerge->GetColMerge());
+                    }
+
+                    for (SCCOL nMerged = 0; nMerged < nMergedCols; ++nMerged)
+                    {
+                        SCCOL nCol = nX+nOldMerged+nMerged;
+                        if (nCol > nX2+2)
+                            break;
+                        nNewPosX += pRowInfo[0].basicCellInfo(nCol-1).nWidth * nLayoutSign;
+                    }
+
+                    if (nNewPosX == nPosX)
+                        continue; // Zero width, no need to draw.
+
                     if (bCellContrast)
                     {
                         //  high contrast for cell borders and backgrounds -> empty background
@@ -1132,22 +1153,7 @@ void ScOutputData::DrawBackground(vcl::RenderContext& rRenderContext)
 
                     drawCells(rRenderContext, pColor, pBackground, pOldColor, pOldBackground, aRect, nPosXLogic, nLayoutSign, nOneXLogic, nOneYLogic, pDataBarInfo, pOldDataBarInfo, pIconSetInfo, pOldIconSetInfo, mpDoc->GetIconSetBitmapMap());
 
-                    // extend for all merged cells
-                    nMergedCols = 1;
-                    if (pInfo->bMerged && pInfo->pPatternAttr)
-                    {
-                            const ScMergeAttr* pMerge =
-                                    &pInfo->pPatternAttr->GetItem(ATTR_MERGE);
-                            nMergedCols = std::max<SCCOL>(1, pMerge->GetColMerge());
-                    }
-
-                    for (SCCOL nMerged = 0; nMerged < nMergedCols; ++nMerged)
-                    {
-                        SCCOL nCol = nX+nOldMerged+nMerged;
-                        if (nCol > nX2+2)
-                            break;
-                        nPosX += pRowInfo[0].basicCellInfo(nCol-1).nWidth * nLayoutSign;
-                    }
+                    nPosX = nNewPosX;
                 }
 
                 tools::Long nPosXLogic = nPosX;

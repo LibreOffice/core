@@ -373,7 +373,21 @@ void SheetDataBuffer::addColXfStyles()
     {
         TmpRowStyles& s = rowStyles.second;
         std::sort( s.begin(), s.end(), StyleRowRangeComp());
-        s.erase( std::unique( s.begin(), s.end(), StyleRowRangeCompEqual()), s.end());
+        s.erase( std::unique( s.begin(), s.end(),
+                    [](const RowRangeStyle& lhs, const RowRangeStyle& rhs)
+                        // Synthetize operator== from operator < . Do not create an actual operator==
+                        // as operator< is somewhat specific (see StyleRowRangeComp).
+                        { return !StyleRowRangeComp()(lhs,rhs) && !StyleRowRangeComp()(rhs,lhs); } ),
+            s.end());
+        // Broken documents may have overlapping ranges that cause problems, repeat once more.
+        if(!std::is_sorted(s.begin(), s.end(), StyleRowRangeComp()))
+        {
+            std::sort( s.begin(), s.end(), StyleRowRangeComp());
+            s.erase( std::unique( s.begin(), s.end(),
+                        [](const RowRangeStyle& lhs, const RowRangeStyle& rhs)
+                            { return !StyleRowRangeComp()(lhs,rhs) && !StyleRowRangeComp()(rhs,lhs); } ),
+                s.end());
+        }
         maStylesPerColumn[ rowStyles.first ].insert_sorted_unique_vector( std::move( s ));
     }
 }
@@ -409,8 +423,6 @@ void SheetDataBuffer::addColXfStyleProcessRowRanges()
                 RowRangeStyle aStyleRows;
                 aStyleRows.mnNumFmt.first = nXfId;
                 aStyleRows.mnNumFmt.second = -1;
-                aStyleRows.mnStartRow = rRange.mnFirst;
-                aStyleRows.mnEndRow = rRange.mnLast;
 
                 // Reset row range for each column
                 aStyleRows.mnStartRow = rRange.mnFirst;
@@ -482,6 +494,9 @@ void SheetDataBuffer::finalizeImport()
 
     ScDocument& rDoc = rDocImport.getDoc();
     StylesBuffer& rStyles = getStyles();
+    ScDocumentImport::Attrs aPendingAttrParam;
+    SCCOL pendingColStart = -1;
+    SCCOL pendingColEnd = -1;
     for ( const auto& [rCol, rRowStyles] : maStylesPerColumn )
     {
         SCCOL nScCol = static_cast< SCCOL >( rCol );
@@ -529,8 +544,19 @@ void SheetDataBuffer::finalizeImport()
         aAttrParam.mvData.swap(aAttrs.maAttrs);
         aAttrParam.mbLatinNumFmtOnly = aAttrs.mbLatinNumFmtOnly;
 
-        rDocImport.setAttrEntries(getSheetIndex(), nScCol, std::move(aAttrParam));
+        // Compress setting the attributes, set the same set in one call.
+        if( pendingColStart != -1 && pendingColEnd == nScCol - 1 && aAttrParam == aPendingAttrParam )
+            ++pendingColEnd;
+        else
+        {
+            if( pendingColStart != -1 )
+                rDocImport.setAttrEntries(getSheetIndex(), pendingColStart, pendingColEnd, std::move(aPendingAttrParam));
+            pendingColStart = pendingColEnd = nScCol;
+            aPendingAttrParam = std::move( aAttrParam );
+        }
     }
+    if( pendingColStart != -1 )
+        rDocImport.setAttrEntries(getSheetIndex(), pendingColStart, pendingColEnd, std::move(aPendingAttrParam));
 
     // merge all cached merged ranges and update right/bottom cell borders
     for( const auto& rMergedRange : maMergedRanges )

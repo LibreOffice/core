@@ -146,6 +146,7 @@ public:
     void testHorizontalIterator();
     void testValueIterator();
     void testHorizontalAttrIterator();
+    void testIteratorsUnallocatedColumnsAttributes();
 
     /**
      * More direct test for cell broadcaster management, used to track formula
@@ -276,6 +277,7 @@ public:
     CPPUNIT_TEST(testHorizontalIterator);
     CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testHorizontalAttrIterator);
+    CPPUNIT_TEST(testIteratorsUnallocatedColumnsAttributes);
     CPPUNIT_TEST(testCellBroadcaster);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
@@ -1394,6 +1396,58 @@ void Test::testHorizontalAttrIterator()
               CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][2], static_cast<int>(nRow));
         }
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testIteratorsUnallocatedColumnsAttributes()
+{
+    m_pDoc->InsertTab(0, "Tab1");
+
+    // Make entire second row and third row bold.
+    ScPatternAttr boldAttr(m_pDoc->GetPool());
+    boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    m_pDoc->ApplyPatternAreaTab(0, 1, m_pDoc->MaxCol(), 2, 0, boldAttr);
+
+    // That shouldn't need allocating more columns, just changing the default attribute.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), m_pDoc->GetAllocatedColumnsCount(0));
+    vcl::Font aFont;
+    const ScPatternAttr* pattern = m_pDoc->GetPattern(m_pDoc->MaxCol(), 1, 0);
+    pattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+
+    // Test iterators.
+    ScDocAttrIterator docit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    SCCOL col1, col2;
+    SCROW row1, row2;
+    CPPUNIT_ASSERT_EQUAL( pattern, docit.GetNext( col1, row1, row2 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
+    CPPUNIT_ASSERT_EQUAL( pattern, docit.GetNext( col1, row1, row2 ));
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
+    CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == nullptr );
+
+    ScAttrRectIterator rectit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    CPPUNIT_ASSERT_EQUAL( pattern, rectit.GetNext( col1, col2, row1, row2 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
+    CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == nullptr );
+
+    ScHorizontalAttrIterator horit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    CPPUNIT_ASSERT_EQUAL( pattern, horit.GetNext( col1, col2, row1 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( pattern, horit.GetNext( col1, col2, row1 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row1 );
+    CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == nullptr );
 
     m_pDoc->DeleteTab(0);
 }

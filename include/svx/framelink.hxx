@@ -167,6 +167,17 @@ public:
 
 inline bool operator>( const Style& rL, const Style& rR ) { return rR.operator<(rL); }
 
+inline Style::Style()
+    : mfPrim(0)
+    , mfDist(0)
+    , mfSecn(0)
+    , mfPatternScale(1.0)
+    , meRefMode(RefMode::Centered)
+    , mnType(SvxBorderLineStyle::SOLID)
+    , mbWordTableCell(false)
+    , mbUseGapColor(false)
+{}
+
 }
 
 

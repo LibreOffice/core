@@ -260,9 +260,6 @@ friend class ScCellIterator;
 friend class ScQueryCellIterator;
 friend class ScCountIfCellIterator;
 friend class ScHorizontalCellIterator;
-friend class ScHorizontalAttrIterator;
-friend class ScDocAttrIterator;
-friend class ScAttrRectIterator;
 friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
 friend class sc::DocumentStreamAccess;
@@ -739,6 +736,7 @@ public:
     void        ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                   const ScPatternAttr& rAttr, ScEditDataArray* pDataArray = nullptr,
                                   bool* const pIsChanged = nullptr );
+    void        SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttrEntry> && vNewData);
 
     void        SetPattern( const ScAddress& rPos, const ScPatternAttr& rAttr );
     const ScPatternAttr* SetPattern( SCCOL nCol, SCROW nRow, std::unique_ptr<ScPatternAttr> );
@@ -1103,6 +1101,12 @@ public:
     ScColumnsRange GetColumnsRange(SCCOL begin, SCCOL end) const;
     SCCOL ClampToAllocatedColumns(SCCOL nCol) const { return std::min(nCol, static_cast<SCCOL>(aCol.size() - 1)); }
     SCCOL GetAllocatedColumnsCount() const { return aCol.size(); }
+    SCCOL ClampToMaxNonDefPatternColumn(SCCOL nCol, SCROW nRow1, SCROW nRow2) const;
+    SCCOL ClampToMaxNonDefPatternColumn(SCCOL nCol) const
+        { return ClampToMaxNonDefPatternColumn(nCol, 0, rDocument.MaxRow()); }
+    SCCOL GetMaxNonDefPatternColumnsCount(SCROW nRow1, SCROW nRow2) const;
+    SCCOL GetMaxNonDefPatternColumnsCount() const
+        { return GetMaxNonDefPatternColumnsCount(0, rDocument.MaxRow()); }
 
     /**
      * Serializes the sheet's geometry data.
@@ -1114,6 +1118,8 @@ public:
     OString dumpSheetGeomData(bool bColumns, SheetGeomType eGeomType);
 
     std::set<SCCOL> QueryColumnsWithFormulaCells() const;
+
+    const ScColumnData& ColumnData( SCCOL nCol ) const { return nCol < aCol.size() ? aCol[ nCol ] : aDefaultColData; }
 
     void CheckIntegrity() const;
 
