@@ -116,9 +116,8 @@ SwLoadOptPage::SwLoadOptPage(weld::Container* pPage, weld::DialogController* pCo
     }
     m_xMetricLB->connect_changed(LINK(this, SwLoadOptPage, MetricHdl));
 
-    const SfxPoolItem* pItem;
-    if (SfxItemState::SET == rSet.GetItemState(SID_HTML_MODE, false, &pItem)
-        && static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON)
+    const SfxUInt16Item* pItem = rSet.GetItemIfSet(SID_HTML_MODE, false);
+    if (pItem && pItem->GetValue() & HTMLMODE_ON)
     {
         m_xTabFT->hide();
         m_xTabMF->hide();
@@ -259,10 +258,10 @@ bool SwLoadOptPage::FillItemSet( SfxItemSet* rSet )
 void SwLoadOptPage::Reset( const SfxItemSet* rSet)
 {
     const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(false);
-    const SfxPoolItem* pItem;
+    const SwPtrItem* pShellItem = rSet->GetItemIfSet(FN_PARAM_WRTSHELL, false);
 
-    if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_WRTSHELL, false, &pItem))
-        m_pWrtShell = static_cast<SwWrtShell*>(static_cast<const SwPtrItem*>(pItem)->GetValue());
+    if(pShellItem)
+        m_pWrtShell = static_cast<SwWrtShell*>(pShellItem->GetValue());
 
     SwFieldUpdateFlags eFieldFlags = AUTOUPD_GLOBALSETTING;
     m_nOldLinkMode = GLOBALSETTING;
@@ -305,9 +304,9 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
         ::SetFieldUnit(*m_xTabMF, eFieldUnit);
     }
     m_xMetricLB->save_value();
-    if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_DEFTABSTOP, false, &pItem))
+    if(const SfxUInt16Item* pItem = rSet->GetItemIfSet(SID_ATTR_DEFTABSTOP, false))
     {
-        m_nLastTab = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        m_nLastTab = pItem->GetValue();
         m_xTabMF->set_value(m_xTabMF->normalize(m_nLastTab), FieldUnit::TWIP);
     }
     m_xTabMF->save_value();
@@ -320,9 +319,9 @@ void SwLoadOptPage::Reset( const SfxItemSet* rSet)
         m_xUseSquaredPageMode->save_state();
     }
 
-    if(SfxItemState::SET == rSet->GetItemState(SID_ATTR_APPLYCHARUNIT, false, &pItem))
+    if(const SfxBoolItem* pItem = rSet->GetItemIfSet(SID_ATTR_APPLYCHARUNIT, false))
     {
-        bool bUseCharUnit = static_cast<const SfxBoolItem*>(pItem)->GetValue();
+        bool bUseCharUnit = pItem->GetValue();
         m_xUseCharUnit->set_active(bUseCharUnit);
     }
     else
@@ -565,10 +564,9 @@ bool SwCaptionOptPage::FillItemSet( SfxItemSet* )
 
 void SwCaptionOptPage::Reset( const SfxItemSet* rSet)
 {
-    const SfxPoolItem* pItem;
-    if(SfxItemState::SET == rSet->GetItemState(SID_HTML_MODE, false, &pItem))
+    if(const SfxUInt16Item* pItem = rSet->GetItemIfSet(SID_HTML_MODE, false))
     {
-        bHTMLMode = 0 != (static_cast<const SfxUInt16Item*>(pItem)->GetValue() & HTMLMODE_ON);
+        bHTMLMode = 0 != (pItem->GetValue() & HTMLMODE_ON);
     }
 
     DelUserData();
