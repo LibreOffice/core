@@ -12,6 +12,9 @@
 #include <string_view>
 
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 
 #include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -168,6 +171,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
                            static_cast<sal_Int32>(xmlXPathNodeSetGetLength(pXmlObj->nodesetval)));
     xmlXPathFreeObject(pXmlObj);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    // Refresh all cross-reference fields
+    uno::Reference<util::XRefreshable>(xFieldsAccess, uno::UNO_QUERY_THROW)->refresh();
+
+    // Verify values
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+
+    std::vector<OUString> aExpectedValues = {
+        // These field values are NOT in order in document: getTextFields did provide
+        // fields in a strange but fixed order
+        "1", "1", "1", "1", "1/", "1/", "1/", "1)", "1)", "1)", "1.)",
+        "1.)", "1.)", "1..", "1..", "1..", "1.", "1.", "1.", "1", "1"
+    };
+
+    sal_uInt16 nIndex = 0;
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nIndex++], xTextField->getPresentation(false));
+    }
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf144668, "tdf144668.odt")
