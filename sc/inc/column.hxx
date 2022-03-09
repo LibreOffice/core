@@ -139,6 +139,8 @@ public:
         return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich), nStartRow, nEndRow));
     }
 
+    void        SetAttrEntries(std::vector<ScAttrEntry> && vNewData);
+
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
     SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
@@ -159,6 +161,11 @@ public:
 
     bool        HasAttrib( SCROW nRow1, SCROW nRow2, HasAttrFlags nMask ) const;
     bool        HasAttrib( SCROW nRow, HasAttrFlags nMask, SCROW* nStartRow = nullptr, SCROW* nEndRow = nullptr ) const;
+
+    std::unique_ptr<ScAttrIterator> CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
+
+    bool        IsAllAttrEqual( const ScColumnData& rCol, SCROW nStartRow, SCROW nEndRow ) const;
+    bool        HasNonDefPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark, SCCOL nCol );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol );
@@ -202,7 +209,6 @@ friend class ScCountIfCellIterator;
 friend class ScFormulaGroupIterator;
 friend class ScCellIterator;
 friend class ScHorizontalCellIterator;
-friend class ScHorizontalAttrIterator;
 friend class ScColumnTextWidthIterator;
 friend class ScDocumentImport;
 friend class sc::DocumentStreamAccess;
@@ -294,7 +300,6 @@ public:
     bool    GetLastVisibleAttr( SCROW& rLastRow ) const;
     bool    HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const;
     bool    IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const;
-    bool    IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const;
 
     bool    TestInsertCol( SCROW nStartRow, SCROW nEndRow) const;
     bool TestInsertRow( SCROW nStartRow, SCSIZE nSize ) const;
@@ -342,8 +347,6 @@ public:
     void MixData(
         sc::MixDocContext& rCxt, SCROW nRow1, SCROW nRow2, ScPasteFunc nFunction, bool bSkipEmpty,
         const ScColumn& rSrcCol );
-
-    std::unique_ptr<ScAttrIterator> CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
     void UpdateSelectionFunction(
         const ScRangeList& rRanges, ScFunctionData& rData, const ScFlatBoolRowSegments& rHiddenRows );
@@ -830,9 +833,14 @@ inline bool ScColumn::IsEmptyAttr() const
     return pAttrArray->IsEmpty();
 }
 
-inline bool ScColumn::IsAllAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
+inline bool ScColumnData::IsAllAttrEqual( const ScColumnData& rCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     return pAttrArray->IsAllEqual( *rCol.pAttrArray, nStartRow, nEndRow );
+}
+
+inline bool ScColumnData::HasNonDefPattern( SCROW nStartRow, SCROW nEndRow ) const
+{
+    return pAttrArray->HasNonDefPattern( nStartRow, nEndRow );
 }
 
 inline bool ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const
@@ -996,6 +1004,11 @@ inline void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr )
 {
     pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, true/*bPutToPool*/ );
+}
+
+inline void ScColumnData::SetAttrEntries(std::vector<ScAttrEntry> && vNewData)
+{
+    pAttrArray->SetAttrEntries( std::move( vNewData ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

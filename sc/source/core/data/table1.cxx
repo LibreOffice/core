@@ -2638,6 +2638,21 @@ ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
     return ScColumnsRange(ScColumnsRange::Iterator(beginIter), ScColumnsRange::Iterator(endIter));
 }
 
+SCCOL ScTable::ClampToMaxNonDefPatternColumn(SCCOL nCol, SCROW nRow1, SCROW nRow2) const
+{
+    // The purpose so to avoid unallocated columns if possible, so don't check allocated ones.
+    if( nCol < GetAllocatedColumnsCount())
+        return nCol;
+    return std::min<SCCOL>(nCol, GetMaxNonDefPatternColumnsCount( nRow1, nRow2 ) - 1 );
+}
+
+SCCOL ScTable::GetMaxNonDefPatternColumnsCount(SCROW nRow1, SCROW nRow2) const
+{
+    if( aDefaultColData.HasNonDefPattern(nRow1, nRow2))
+        return GetDoc().GetMaxColCount();
+    return GetAllocatedColumnsCount();
+}
+
 // out-of-line the cold part of the CreateColumnIfNotExists function
 void ScTable::CreateColumnIfNotExistsImpl( const SCCOL nScCol ) const
 {
