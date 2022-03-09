@@ -107,15 +107,14 @@ DECLARE_WW8EXPORT_TEST(testTdf147861_customField, "tdf147861_customField.doc")
     getParagraph(2, " INSERT Custom Title here"); // matches current DocProperty
     getParagraph(3, "My Title"); // edited
 
-    if (mbExported)
-        return;
-
     // Verify that these are fields, and not just plain text
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("CustomEditedTitle"), xField->getPresentation(false));
+    // The " (fixed)" part is unnecessary, but it must be consistent across a round-trip
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xField->getPresentation(true));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighlight.doc")
