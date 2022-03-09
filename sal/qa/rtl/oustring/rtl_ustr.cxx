@@ -1031,9 +1031,13 @@ namespace rtl_ustr
     class getToken : public CppUnit::TestFixture
     {
         void getToken_000()
-            {
-                // TODO
-            }
+        {
+            OUString s("a;b;c");
+            // Replace the string in place
+            const sal_Int32 i = rtl_uString_getToken(&s.pData, s.pData, 1, ';', 0);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(4), i);
+            CPPUNIT_ASSERT_EQUAL(OUString("b"), s);
+        }
 
         CPPUNIT_TEST_SUITE(getToken);
         CPPUNIT_TEST(getToken_000);

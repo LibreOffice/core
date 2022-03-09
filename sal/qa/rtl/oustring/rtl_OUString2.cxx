@@ -794,14 +794,6 @@ public:
         // should not GPF with negative index
     }
 
-    void getToken_007()
-    {
-        OUString suTokenStr("a;b");
-        sal_Int32 n = 5; // greater than string length
-        CPPUNIT_ASSERT_EQUAL(OUString(), suTokenStr.getToken(0, ';', n));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
-    }
-
     CPPUNIT_TEST_SUITE(getToken);
     CPPUNIT_TEST(getToken_000);
     CPPUNIT_TEST(getToken_001);
@@ -810,7 +802,6 @@ public:
     CPPUNIT_TEST(getToken_004);
     CPPUNIT_TEST(getToken_005);
     CPPUNIT_TEST(getToken_006);
-    CPPUNIT_TEST(getToken_007);
     CPPUNIT_TEST_SUITE_END();
 }; // class getToken
 
