@@ -471,6 +471,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "886eaaee_9065ce37",
+        "filename": "include/comphelper/configuration.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-09T13:00:57Z",
+      "side": 1,
+      "message": "Oh, this was just an honest question of mine, not some demand in the name of any \"better design\".  (My assumption was that the ripple effect of dropping `mutable` would be confined to just dropping `const` from some functions in configuration.hxx, so would make the code simpler.)",
+      "parentUuid": "926749a8_995c0f23",
+      "revId": "807c088f8663c4bb20f81de0a1e3b6be39354585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b311f4f4_7cc0e077",
