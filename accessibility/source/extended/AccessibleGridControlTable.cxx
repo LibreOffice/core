@@ -290,6 +290,20 @@ OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
     return "com.sun.star.accessibility.AccessibleGridControlTable";
 }
 
+void AccessibleGridControlTable::dispose()
+{
+    for (rtl::Reference<AccessibleGridControlTableCell>& rxCell : m_aCellVector)
+    {
+        if (rxCell.is())
+        {
+            rxCell->dispose();
+            rxCell.clear();
+        }
+    }
+
+    AccessibleGridControlTableBase::dispose();
+}
+
 void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
                                              const css::uno::Any& rOldValue)
 {
