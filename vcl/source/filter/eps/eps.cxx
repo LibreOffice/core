@@ -65,6 +65,7 @@ struct StackMember
     Color       aLineCol;
     bool        bFillCol;
     Color       aFillCol;
+    PolyFillMode eFillMode;
     Color       aTextCol;
     bool        bTextFillCol;
     Color       aTextFillCol;
@@ -77,6 +78,7 @@ struct StackMember
     SvtGraphicStroke::CapType   eLineCap;
     SvtGraphicStroke::JoinType  eJoinType;
     SvtGraphicStroke::DashArray aDashArray;
+    SvtGraphicFill::FillRule eFillRule;
 };
 
 struct PSLZWCTreeNode
@@ -122,6 +124,8 @@ private:
     Color               aColor;             // current color which is used for output
     bool                bLineColor;
     Color               aLineColor;         // current GDIMetafile color settings
+    bool                bFillMode;
+    PolyFillMode        eFillMode;
     bool                bFillColor;
     Color               aFillColor;
     Color               aTextColor;
@@ -978,6 +982,19 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
             }
             break;
 
+            case MetaActionType::FILLMODE :
+            {
+                if ( static_cast<const MetaFillModeAction*>(pMA)->IsSetting() )
+                {
+                    bFillMode = true;
+                    eFillMode =  static_cast<const MetaFillModeAction*>(pMA)->GetFillMode();
+                }
+                else
+                    bFillMode = false;
+            }
+            break;
+
+
             case MetaActionType::TEXTCOLOR :
             {
                 aTextColor = static_cast<const MetaTextColorAction*>(pMA)->GetColor();
@@ -1033,6 +1050,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                 pGS->aLineCol = aLineColor;
                 pGS->bFillCol = bFillColor;
                 pGS->aFillCol = aFillColor;
+                pGS->eFillMode = eFillMode;
                 pGS->aTextCol = aTextColor;
                 pGS->bTextFillCol = bTextFillColor;
                 pGS->aTextFillCol = aTextFillColor;
@@ -1061,6 +1079,7 @@ void PSWriter::ImplWriteActions( const GDIMetaFile& rMtf, VirtualDevice& rVDev )
                     aLineColor = pGS->aLineCol;
                     bFillColor = pGS->bFillCol;
                     aFillColor = pGS->aFillCol;
+                    eFillMode = pGS->eFillMode;
                     aTextColor = pGS->aTextCol;
                     bTextFillColor = pGS->bTextFillCol;
                     aTextFillColor = pGS->aTextFillCol;
