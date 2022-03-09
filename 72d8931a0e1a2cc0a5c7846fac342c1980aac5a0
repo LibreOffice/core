@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3e5261_f221a042",
+        "filename": "vcl/qt5/QtFilePicker.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-09T17:59:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "57918130_b84b2336",
+      "revId": "72d8931a0e1a2cc0a5c7846fac342c1980aac5a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07fe5436_6d052d99",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-03-09T16:45:37Z",
       "side": 1,
       "message": "I think likewise vcl/unx/gtk3_kde5/gtk3_kde5_filepicker_ipc.cxx needs to go from VclResId to FpsResId",
+      "revId": "72d8931a0e1a2cc0a5c7846fac342c1980aac5a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1594b6d0_432f70b4",
+        "filename": "vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-09T17:59:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07fe5436_6d052d99",
       "revId": "72d8931a0e1a2cc0a5c7846fac342c1980aac5a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
