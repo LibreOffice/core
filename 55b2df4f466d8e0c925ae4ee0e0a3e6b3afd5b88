@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18278fd7_9ca326cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-09T15:42:26Z",
+      "side": 1,
+      "message": "What\u0027s the motivation to backport this?  \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d143216\u003e \"Hyperlinks with Basic Auth (https://user:password@example.com/) get lost in PDF export\" isn\u0027t even marked as a regression.",
+      "revId": "55b2df4f466d8e0c925ae4ee0e0a3e6b3afd5b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
