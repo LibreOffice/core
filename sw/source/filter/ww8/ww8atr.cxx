@@ -4190,6 +4190,8 @@ void WW8AttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
     m_rWW8Export.pO->push_back(1);
 }
 
+void WW8AttributeOutput::TextLineBreak(const SwFormatLineBreak& /*rLineBreak*/) {}
+
 void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
 {
     // Flys are still missing ( see RTF )
@@ -5595,6 +5597,9 @@ void AttributeOutputBase::OutputItem( const SfxPoolItem& rHt )
             break;
         case RES_RTL_GUTTER:
             SectionRtlGutter(static_cast<const SfxBoolItem&>(rHt));
+            break;
+        case RES_TXTATR_LINEBREAK:
+            TextLineBreak(static_cast<const SwFormatLineBreak&>(rHt));
             break;
 
         default:

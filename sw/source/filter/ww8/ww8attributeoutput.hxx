@@ -436,6 +436,8 @@ protected:
 
     void SectionRtlGutter( const SfxBoolItem& rRtlGutter) override;
 
+    void TextLineBreak(const SwFormatLineBreak& rLineBreak) override;
+
     /// Reference to the export, where to get the data from
     WW8Export &m_rWW8Export;
 

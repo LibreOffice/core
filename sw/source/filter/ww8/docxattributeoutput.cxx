@@ -3112,6 +3112,8 @@ void DocxAttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     // write footnotes/endnotes if we have any
     FootnoteEndnoteReference();
 
+    WriteLineBreak();
+
     // merge the properties _before_ the run text (strictly speaking, just
     // after the start of the run)
     m_pSerializer->mergeTopMarks(Tag_StartRunProperties, sax_fastparser::MergeMarks::PREPEND);
@@ -7222,6 +7224,40 @@ void DocxAttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
     }
 
     m_pSerializer->singleElementNS(XML_w, XML_rtlGutter);
+}
+
+void DocxAttributeOutput::TextLineBreak(const SwFormatLineBreak& rLineBreak)
+{
+    m_oLineBreakClear = rLineBreak.GetValue();
+}
+
+void DocxAttributeOutput::WriteLineBreak()
+{
+    if (!m_oLineBreakClear.has_value())
+    {
+        return;
+    }
+
+    rtl::Reference<FastAttributeList> pAttr = FastSerializerHelper::createAttrList();
+    pAttr->add(FSNS(XML_w, XML_type), "textWrapping");
+    switch (*m_oLineBreakClear)
+    {
+        case SwLineBreakClear::NONE:
+            pAttr->add(FSNS(XML_w, XML_clear), "none");
+            break;
+        case SwLineBreakClear::LEFT:
+            pAttr->add(FSNS(XML_w, XML_clear), "left");
+            break;
+        case SwLineBreakClear::RIGHT:
+            pAttr->add(FSNS(XML_w, XML_clear), "right");
+            break;
+        case SwLineBreakClear::ALL:
+            pAttr->add(FSNS(XML_w, XML_clear), "all");
+            break;
+    }
+    m_oLineBreakClear.reset();
+
+    m_pSerializer->singleElementNS(XML_w, XML_br, pAttr);
 }
 
 void DocxAttributeOutput::SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo )
