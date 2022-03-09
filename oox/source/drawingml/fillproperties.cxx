@@ -371,7 +371,7 @@ Color FillProperties::getBestSolidColor() const
 }
 
 void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
-        const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, ::Color nPhClr,
+        const GraphicHelper& rGraphicHelper, sal_Int32 nShapeRotation, ::Color nPhClr, sal_Int16 nPhClrTheme,
         bool bFlipH, bool bFlipV, bool bIsCustomShape) const
 {
     if( !moFillType.has() )
@@ -388,9 +388,16 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
         case XML_solidFill:
             if( maFillColor.isUsed() )
             {
-                rPropMap.setProperty( ShapeProperty::FillColor, maFillColor.getColor( rGraphicHelper, nPhClr ) );
+                ::Color aFillColor = maFillColor.getColor(rGraphicHelper, nPhClr);
+                rPropMap.setProperty(ShapeProperty::FillColor, aFillColor);
                 if( maFillColor.hasTransparency() )
                     rPropMap.setProperty( ShapeProperty::FillTransparency, maFillColor.getTransparency() );
+
+                if (aFillColor == nPhClr)
+                {
+                    rPropMap.setProperty(PROP_FillColorTheme, nPhClrTheme);
+                }
+
                 eFillStyle = FillStyle_SOLID;
             }
         break;

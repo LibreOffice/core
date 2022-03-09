@@ -176,6 +176,7 @@ FillBitmapSizeX
 FillBitmapSizeY
 FillBitmap
 FillColor
+FillColorTheme
 FillGradient
 FillGradientName
 FillHatch
