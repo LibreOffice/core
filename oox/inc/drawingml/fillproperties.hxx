@@ -145,6 +145,7 @@ struct FillProperties
                             const GraphicHelper& rGraphicHelper,
                             sal_Int32 nShapeRotation = 0,
                             ::Color nPhClr = API_RGB_TRANSPARENT,
+                            sal_Int16 nPhClrTheme = -1,
                             bool bFlipH = false,
                             bool bFlipV = false,
                             bool bIsCustomShape = false ) const;

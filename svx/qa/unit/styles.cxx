@@ -93,8 +93,11 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     uno::Reference<beans::XPropertySet> xShape4(xDrawPageShapes->getByIndex(4), uno::UNO_QUERY);
     // Blue.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeFillColor(xShape4));
-    // Set theme index to accent 1 till PPTX import is missing.
-    xShape4->setPropertyValue("FillColorTheme", uno::makeAny(static_cast<sal_Int16>(4)));
+    // The theme index of this filled shape is set by the PPTX import:
+    sal_Int32 nColorTheme = -1;
+    xShape4->getPropertyValue("FillColorTheme") >>= nColorTheme;
+    // 4 means accent1, this was -1 without the PPTX import bit in place.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nColorTheme);
 
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
