@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a93ae45d_3cd0d194",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-09T09:34:01Z",
+      "side": 1,
+      "message": "Nice - it caught wrong use of index right away 😊",
+      "revId": "dd1c422f599666029fc78f1042a73fb032b3abbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
