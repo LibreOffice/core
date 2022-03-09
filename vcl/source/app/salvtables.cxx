@@ -408,16 +408,13 @@ OUString SalInstanceWidget::get_accessible_description() const
 
 void SalInstanceWidget::set_accessible_relation_labeled_by(weld::Widget* pLabel)
 {
-    vcl::Window* pAtkLabel
+    if (vcl::Window* pOldLabel = m_xWidget->GetAccessibleRelationLabeledBy())
+        pOldLabel->SetAccessibleRelationLabelFor(nullptr);
+    vcl::Window* pA11yLabel
         = pLabel ? dynamic_cast<SalInstanceWidget&>(*pLabel).getWidget() : nullptr;
-    m_xWidget->SetAccessibleRelationLabeledBy(pAtkLabel);
-}
-
-void SalInstanceWidget::set_accessible_relation_label_for(weld::Widget* pLabeled)
-{
-    vcl::Window* pAtkLabeled
-        = pLabeled ? dynamic_cast<SalInstanceWidget&>(*pLabeled).getWidget() : nullptr;
-    m_xWidget->SetAccessibleRelationLabelFor(pAtkLabeled);
+    m_xWidget->SetAccessibleRelationLabeledBy(pA11yLabel);
+    if (pA11yLabel)
+        pA11yLabel->SetAccessibleRelationLabelFor(m_xWidget);
 }
 
 void SalInstanceWidget::set_tooltip_text(const OUString& rTip)

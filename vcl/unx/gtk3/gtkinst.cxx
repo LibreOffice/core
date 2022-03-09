@@ -3784,7 +3784,19 @@ public:
         AtkRelationSet *pRelationSet = atk_object_ref_relation_set(pAtkObject);
         AtkRelation *pRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABELLED_BY);
         if (pRelation)
+        {
+            GPtrArray* pTarget = atk_relation_get_target(pRelation);
+            guint nElements = pTarget ? pTarget->len : 0;
+            for (guint i = 0; i < nElements; ++i)
+            {
+                gpointer pTargetObject = g_ptr_array_index(pTarget, i);
+                AtkRelationSet *pTargetRelationSet = atk_object_ref_relation_set(ATK_OBJECT(pTargetObject));
+                if (AtkRelation *pTargetRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABEL_FOR))
+                    atk_relation_set_remove(pTargetRelationSet, pTargetRelation);
+                g_object_unref(pRelationSet);
+            }
             atk_relation_set_remove(pRelationSet, pRelation);
+        }
         if (pAtkLabel)
         {
             AtkObject *obj_array[1];
@@ -3796,6 +3808,7 @@ public:
 #endif
     }
 
+#if 0
     virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -3819,6 +3832,7 @@ public:
         (void)pLabeled;
 #endif
     }
+#endif
 
     virtual bool get_extents_relative_to(const weld::Widget& rRelative, int& x, int &y, int& width, int &height) const override
     {
