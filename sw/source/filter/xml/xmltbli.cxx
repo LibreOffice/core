@@ -697,16 +697,14 @@ SwXMLTableColContext_Impl::SwXMLTableColContext_Impl(
     bool bRelWidth = true;
     if( !aStyleName.isEmpty() )
     {
-        const SfxPoolItem *pItem;
+        const SwFormatFrameSize *pSize;
         const SfxItemSet *pAutoItemSet = nullptr;
         if( GetSwImport().FindAutomaticStyle(
                     XmlStyleFamily::TABLE_COLUMN,
                                               aStyleName, &pAutoItemSet ) &&
             pAutoItemSet &&
-            SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
-                                                        &pItem ) )
+            (pSize = pAutoItemSet->GetItemIfSet( RES_FRM_SIZE, false )) )
         {
-            const SwFormatFrameSize *pSize = static_cast<const SwFormatFrameSize *>(pItem);
             nWidth = pSize->GetWidth();
             bRelWidth = SwFrameSize::Variable == pSize->GetHeightSizeType();
         }
@@ -1910,12 +1908,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             !sStyleName.isEmpty() )
         {
             // default num format?
-            const SfxPoolItem* pItem = nullptr;
-            if( pBoxFormat2->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
-                            == SfxItemState::SET )
+            if( const SwTableBoxNumFormat* pNumFormat = pBoxFormat2->GetItemIfSet( RES_BOXATR_FORMAT, false ) )
             {
-                const SwTableBoxNumFormat* pNumFormat =
-                    static_cast<const SwTableBoxNumFormat*>( pItem );
                 if (pNumFormat && (pNumFormat->GetValue() % SV_COUNTRY_LANGUAGE_OFFSET) == 0)
                 {
                     // only one text node?
@@ -1965,15 +1959,11 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                 // No value but a non-textual format, i.e. a number format
                 // Solution: the number format will be removed,
                 // the cell gets the default text format.
-                const SfxPoolItem* pItem = nullptr;
-                if( m_pBoxFormat->GetItemState( RES_BOXATR_FORMAT, false, &pItem )
-                    == SfxItemState::SET )
+                if( const SwTableBoxNumFormat* pNumFormat = m_pBoxFormat->GetItemIfSet( RES_BOXATR_FORMAT, false ) )
                 {
                     const SwDoc* pDoc = m_pBoxFormat->GetDoc();
                     const SvNumberFormatter* pNumberFormatter = pDoc ?
                         pDoc->GetNumberFormatter() : nullptr;
-                    const SwTableBoxNumFormat* pNumFormat =
-                        static_cast<const SwTableBoxNumFormat*>( pItem );
                     if( pNumFormat != nullptr && pNumberFormatter &&
                         !pNumberFormatter->GetEntry( pNumFormat->GetValue() )->IsTextFormat() )
                         m_pBoxFormat->ResetFormatAttr( RES_BOXATR_FORMAT );
@@ -2512,16 +2502,12 @@ void SwXMLTableContext::MakeTable()
             XmlStyleFamily::TABLE_TABLE, m_aStyleName, &pAutoItemSet ) &&
          pAutoItemSet )
     {
-        const SfxPoolItem *pItem;
-        const SvxLRSpaceItem *pLRSpace = nullptr;
-        if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_LR_SPACE, false,
-                                                        &pItem ) )
-            pLRSpace = static_cast<const SvxLRSpaceItem *>(pItem);
+        const SvxLRSpaceItem *pLRSpace =
+            pAutoItemSet->GetItemIfSet( RES_LR_SPACE, false );
 
-        if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_HORI_ORIENT, false,
-                                                        &pItem ) )
+        if( const SwFormatHoriOrient* pItem = pAutoItemSet->GetItemIfSet( RES_HORI_ORIENT, false ) )
         {
-            eHoriOrient = static_cast<const SwFormatHoriOrient *>(pItem)->GetHoriOrient();
+            eHoriOrient = pItem->GetHoriOrient();
             switch( eHoriOrient )
             {
             case text::HoriOrientation::FULL:
@@ -2547,10 +2533,8 @@ void SwXMLTableContext::MakeTable()
             bSetHoriOrient = true;
         }
 
-        const SwFormatFrameSize *pSize = nullptr;
-        if( SfxItemState::SET == pAutoItemSet->GetItemState( RES_FRM_SIZE, false,
-                                                        &pItem ) )
-            pSize = static_cast<const SwFormatFrameSize *>(pItem);
+        const SwFormatFrameSize *pSize =
+            pAutoItemSet->GetItemIfSet( RES_FRM_SIZE, false );
 
         switch( eHoriOrient )
         {
