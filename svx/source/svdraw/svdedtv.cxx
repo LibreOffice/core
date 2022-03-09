@@ -1000,7 +1000,8 @@ bool SdrEditView::InsertObjectAtView(SdrObject* pObj, SdrPageView& rPV, SdrInser
     }
     if( IsUndoEnabled())
     {
-        EndTextEditCurrentView();
+        bool bDontDeleteReally = true;
+        EndTextEditCurrentView(bDontDeleteReally);
         AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
     }
 
@@ -1080,13 +1081,13 @@ void SdrEditView::EndTextEditAllViews() const
     }
 }
 
-void SdrEditView::EndTextEditCurrentView()
+void SdrEditView::EndTextEditCurrentView(bool bDontDeleteReally)
 {
     if (IsTextEdit())
     {
         SdrView* pSdrView = dynamic_cast<SdrView*>(this);
         if (pSdrView)
-            pSdrView->SdrEndTextEdit();
+            pSdrView->SdrEndTextEdit(bDontDeleteReally);
     }
 }
 
