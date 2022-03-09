@@ -101,8 +101,8 @@ dialogs = [
         # tested in sc/qa/uitest/autofilter/autofilterBugs.py
     # {"command": ".uno:DataFilterStandardFilter", "closeButton": "cancel"},
         # tested in sc/qa/uitest/calc_tests2/standardFilter.py
-    {"command": ".uno:DataFilterSpecialFilter", "closeButton": "cancel", "skipTestOK": True},
-        # OK button triggers a new dialog
+    #{"command": ".uno:DataFilterSpecialFilter", "closeButton": "cancel", "skipTestOK": True},
+        # tested in sc/qa/uitest/calc_tests6/tdf147830.py
     # {"command": ".uno:DefineDBName", "closeButton": "cancel"},
         # tested in sc/qa/uitest/range_name/tdf119954.py
     {"command": ".uno:SelectDB", "closeButton": "cancel"},
