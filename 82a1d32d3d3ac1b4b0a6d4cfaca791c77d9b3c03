@@ -105,6 +105,24 @@
       "parentUuid": "218eb3ba_483d4307",
       "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a97483f5_12ed0825",
+        "filename": "sal/qa/rtl/oustring/rtl_OUString2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-09T11:42:57Z",
+      "side": 1,
+      "message": "ah, sorry, now I get you, \"Choose a negative index n such that pTokenStr + n would point at either 0x0 or some random address ~4GiB away from pTokenStr, in the hope that erroneously accessing that address would cause a SIGSEGV:\"\n\n(as a minor nitpick, I\u0027d stick to the C standard\u0027s \u003csignal.h\u003e concept of \"SIGSEGV: an invalid access to storage\" and avoid the Intel/Windows GPF jargon :)",
+      "parentUuid": "8a713fc6_20d02476",
+      "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
