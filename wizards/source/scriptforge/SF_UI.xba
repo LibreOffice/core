@@ -1115,7 +1115,6 @@ Try:
 				If bFirstCall Then
 					Set oFixedText = .Controls(&quot;ProgressText&quot;)
 					Set oProgressBar = .Controls(&quot;ProgressBar&quot;)
-					.Controls(&quot;CloseButton&quot;).Caption = _SF_.Interface.GetText(&quot;CLOSEBUTTON&quot;)
 					.Execute(Modal := False)
 				End If
 				If Len(Text) &gt; 0 Then oFixedText.Caption = Text

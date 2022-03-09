@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: https://bugs.libreoffice.org/enter_bug.cgi?product=LibreOffice&bug_status=UNCONFIRMED&component=UI\n"
-"POT-Creation-Date: 2022-03-01 15:25:24\n"
+"POT-Creation-Date: 2022-03-09 14:52:15\n"
 "PO-Revision-Date: YYYY-MM-DD HH:MM:SS\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
@@ -25,11 +25,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: LibreOffice - ScriptForge\n"
 "X-Accelerator-Marker: ~\n"
-
-#. Text in close buttons of progress and console dialog boxes
-msgctxt "CLOSEBUTTON"
-msgid  "Close"
-msgstr ""
 
 #. Title in error message box
 #. %1: an error number

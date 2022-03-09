@@ -266,7 +266,6 @@ Public Sub Console(Optional ByVal Modal As Variant, _
 &apos;&apos;&apos;		SF_Exception.Console()
 
 Dim bConsoleActive As Boolean		&apos;	When True, dialog is active
-Dim sClose As String				&apos;	Caption of the close buttons
 Dim oModalBtn As Object				&apos;	Modal close button
 Dim oNonModalBtn As Object			&apos;	Non modal close button
 Const cstThisSub = &quot;Exception.Console&quot;
@@ -295,10 +294,8 @@ Try:
 			&apos;		- a Default button triggering the Close action
 			Set .ConsoleDialog = CreateScriptService(&quot;SFDialogs.Dialog&quot;, &quot;GlobalScope&quot;, &quot;ScriptForge&quot;, &quot;dlgConsole&quot;, _Context)
 			&apos;	Setup labels and visibility
-			sClose = .Interface.GetText(&quot;CLOSEBUTTON&quot;)
 			Set oModalBtn = .ConsoleDialog.Controls(&quot;CloseModalButton&quot;)
 			Set oNonModalBtn = .ConsoleDialog.Controls(&quot;CloseNonModalButton&quot;)
-			If Modal Then oModalBtn.Caption = sClose Else oNonModalBtn.Caption = sClose
 			oModalBtn.Visible = Modal
 			oNonModalBtn.Visible = CBool(Not Modal)
 			&apos;	Load console lines
