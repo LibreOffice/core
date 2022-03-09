@@ -507,6 +507,9 @@ protected:
     /// Sfx item RES_TXTATR_FTN
     virtual void TextFootnote_Impl( const SwFormatFootnote& ) = 0;
 
+    /// RES_TXTATR_LINEBREAK, i.e. clearing breaks.
+    virtual void TextLineBreak(const SwFormatLineBreak&) = 0;
+
     /// Sfx item RES_PARATR_LINESPACING
     void ParaLineSpacing( const SvxLineSpacingItem& );
 

@@ -462,6 +462,8 @@ protected:
 
     void SectionRtlGutter(const SfxBoolItem& rRtlGutter) override;
 
+    void TextLineBreak(const SwFormatLineBreak& rLineBreak) override;
+
 private:
     /// Reference to the export, where to get the data from
     RtfExport& m_rExport;
