@@ -625,6 +625,7 @@ void GenPspGraphics::SetTextColor( Color nColor )
 
 bool GenPspGraphics::AddTempDevFont( PhysicalFontCollection*, const OUString&,const OUString& )
 {
+    SAL_DEBUG("GenPspGraphics::AddTempDevFont: Dummy, returning false");
     return false;
 }
 
@@ -636,8 +637,10 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     std::vector<psp::fontID> aFontIds = rMgr.addFontFile( rFileURL );
     if( aFontIds.empty() )
+        {
+            SAL_DEBUG("GenPspGraphics::AddTempDevFontHelper: aFontIds is empty, returning false");
         return false;
-
+        }
     FreetypeManager& rFreetypeManager = FreetypeManager::get();
     for (auto const& elem : aFontIds)
     {
@@ -660,6 +663,7 @@ bool GenPspGraphics::AddTempDevFontHelper( PhysicalFontCollection* pFontCollecti
 
     // announce new font to device's font list
     rFreetypeManager.AnnounceFonts(pFontCollection);
+    SAL_DEBUG("GenPspGraphics::AddTempDevFontHelper: returning true");
     return true;
 }
 

@@ -58,6 +58,7 @@ void SvpSalGraphics::ClearDevFontCache()
 bool SvpSalGraphics::AddTempDevFont( PhysicalFontCollection* pFontCollection,
     const OUString& rFileURL, const OUString& rFontName)
 {
+    SAL_DEBUG("SvpSalGraphics::AddTempDevFont: calling m_aTextRenderImpl.AddTempDevFont");
     return m_aTextRenderImpl.AddTempDevFont(pFontCollection, rFileURL, rFontName);
 }
 

@@ -1037,6 +1037,10 @@ public:
      * environment variable SAL_LOG is again used as by default. You
      * can switch back and forth as you like.
      *
+     * "addfont": "<string>"
+     *
+     * Adds the font at the URL given.
+     *
      * @param pOption the option name
      * @param pValue its value
      */

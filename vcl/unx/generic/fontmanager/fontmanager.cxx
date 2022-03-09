@@ -42,7 +42,7 @@
 
 #include <sft.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > -1
 #include <sys/times.h>
 #include <stdio.h>
 #endif
@@ -151,6 +151,8 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory )
 
 std::vector<fontID> PrintFontManager::addFontFile( const OUString& rFileUrl )
 {
+    SAL_DEBUG("================ PrintFontManager::addFontFile('" << rFileUrl << "')");
+
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     INetURLObject aPath( rFileUrl );
     OString aName(OUStringToOString(aPath.GetLastName(INetURLObject::DecodeMechanism::WithCharset, aEncoding), aEncoding));
@@ -680,7 +682,7 @@ void PrintFontManager::initialize()
         m_nNextFontID = 1;
         m_aFonts.clear();
     }
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > -1
     clock_t aStart;
     clock_t aStep1;
     clock_t aStep2;
@@ -718,11 +720,11 @@ void PrintFontManager::initialize()
     // Don't search directories that fontconfig already did
     countFontconfigFonts( visited_dirs );
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > -1
     aStep1 = times( &tms );
 
     aStep2 = times( &tms );
-    SAL_INFO("vcl.fonts", "PrintFontManager::initialize: collected "
+    SAL_DEBUG("**************** vcl.fonts: PrintFontManager::initialize: collected "
             << m_aFonts.size()
             << " fonts.");
     double fTick = (double)sysconf( _SC_CLK_TCK );
@@ -1170,6 +1172,13 @@ SAL_DLLPUBLIC_EXPORT const char * unit_online_get_fonts(void)
     }
     static OString aResult = aBuf.makeStringAndClear();
     return aResult.getStr();
+}
+
+void psp_PrintFontManager_initialize()
+{
+    SAL_DEBUG("================ psp_PrintFontManager_initialize()");
+    psp::PrintFontManager::get().initialize();
+    SAL_DEBUG("                  done");
 }
 }
 

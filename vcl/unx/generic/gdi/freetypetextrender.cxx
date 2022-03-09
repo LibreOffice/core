@@ -95,6 +95,7 @@ bool FreeTypeTextRenderImpl::AddTempDevFont( PhysicalFontCollection* pFontCollec
                                      const OUString& rFileURL,
                                      const OUString& rFontName )
 {
+    SAL_DEBUG("FreeTypeTextRenderImpl::AddTempDevFont: calling GenPspGraphics::AddTempDevFontHelper");
     return GenPspGraphics::AddTempDevFontHelper(pFontCollection, rFileURL, rFontName);
 }
 

@@ -137,17 +137,22 @@ Size OutputDevice::GetDevFontSize( const vcl::Font& rFont, int nSizeIndex ) cons
 
 bool OutputDevice::AddTempDevFont( const OUString& rFileURL, const OUString& rFontName )
 {
+    SAL_DEBUG("OutputDevice::AddTempDevFont: count now " << GetDevFontCount());
+
     ImplInitFontList();
 
     if( !mpGraphics && !AcquireGraphics() )
         return false;
 
     bool bRC = mpGraphics->AddTempDevFont( mxFontCollection.get(), rFileURL, rFontName );
+    SAL_DEBUG("OutputDevice::AddTempDevFont: mpGraphics->AddTempDevFont() returned " << bRC);
     if( !bRC )
         return false;
 
     if( mpAlphaVDev )
         mpAlphaVDev->AddTempDevFont( rFileURL, rFontName );
+
+    SAL_DEBUG("OutputDevice::AddTempDevFont: and now " << GetDevFontCount());
 
     return true;
 }
@@ -494,8 +499,10 @@ void OutputDevice::ImplRefreshFontData( const bool bNewFontLists )
 
 void OutputDevice::ImplUpdateFontData()
 {
+    SAL_DEBUG("================ OutputDevice::ImplUpdateFontData() count now " << GetDevFontCount());
     ImplClearFontData( true/*bNewFontLists*/ );
     ImplRefreshFontData( true/*bNewFontLists*/ );
+    SAL_DEBUG("================ OutputDevice::ImplUpdateFontData() and now " << GetDevFontCount());
 }
 
 void OutputDevice::ImplClearAllFontData(bool bNewFontLists)
