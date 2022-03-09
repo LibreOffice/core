@@ -1118,6 +1118,8 @@ public:
 
     std::set<SCCOL> QueryColumnsWithFormulaCells() const;
 
+    const ScColumnData& ColumnData( SCCOL nCol ) const { return nCol < aCol.size() ? aCol[ nCol ] : aDefaultColData; }
+
     void CheckIntegrity() const;
 
 private:
