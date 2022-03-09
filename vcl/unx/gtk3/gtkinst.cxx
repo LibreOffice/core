@@ -3716,25 +3716,27 @@ public:
 
     virtual void set_accessible_name(const OUString& rName) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_accessible_update_property(GTK_ACCESSIBLE(m_pWidget), GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                       OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr(), -1);
+#else
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
         if (!pAtkObject)
             return;
         atk_object_set_name(pAtkObject, OUStringToOString(rName, RTL_TEXTENCODING_UTF8).getStr());
-#else
-        (void)rName;
 #endif
     }
 
     virtual void set_accessible_description(const OUString& rDescription) override
     {
-#if !GTK_CHECK_VERSION(4, 0, 0)
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_accessible_update_property(GTK_ACCESSIBLE(m_pWidget), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                                       OUStringToOString(rDescription, RTL_TEXTENCODING_UTF8).getStr(), -1);
+#else
         AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
         if (!pAtkObject)
             return;
         atk_object_set_description(pAtkObject, OUStringToOString(rDescription, RTL_TEXTENCODING_UTF8).getStr());
-#else
-        (void)rDescription;
 #endif
     }
 
