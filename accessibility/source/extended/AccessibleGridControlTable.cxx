@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <extended/AccessibleGridControlTable.hxx>
 #include <extended/AccessibleGridControlTableCell.hxx>
@@ -285,6 +288,33 @@ void SAL_CALL AccessibleGridControlTable::release() noexcept
 OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
 {
     return "com.sun.star.accessibility.AccessibleGridControlTable";
+}
+
+void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
+                                             const css::uno::Any& rOldValue)
+{
+    if (nEventId == AccessibleEventId::TABLE_MODEL_CHANGED)
+    {
+        AccessibleTableModelChange aChange;
+        if (rNewValue >>= aChange)
+        {
+            if (aChange.Type == AccessibleTableModelChangeType::DELETE)
+            {
+                int nColCount = m_aTable.GetColumnCount();
+                // check valid index - entries are inserted lazily
+                size_t const nStart = nColCount * aChange.FirstRow;
+                size_t const nEnd = nColCount * aChange.LastRow;
+                if (nStart < m_aCellVector.size())
+                {
+                    m_aCellVector.erase(
+                        m_aCellVector.begin() + nStart,
+                        m_aCellVector.begin() + std::min(m_aCellVector.size(), nEnd));
+                }
+            }
+        }
+    }
+
+    AccessibleGridControlBase::commitEvent(nEventId, rNewValue, rOldValue);
 }
 
 // internal virtual methods ---------------------------------------------------

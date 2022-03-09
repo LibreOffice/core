@@ -188,10 +188,8 @@ public:
     inline ::vcl::table::AccessibleTableControlObjType getType() const;
 
     /** Commits an event to all listeners. */
-    void commitEvent(
-            sal_Int16 nEventId,
-            const css::uno::Any& rNewValue,
-            const css::uno::Any& rOldValue );
+    virtual void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
+                             const css::uno::Any& rOldValue);
     /** @return  TRUE, if the object is not disposed or disposing. */
     bool isAlive() const;
 
