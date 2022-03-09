@@ -8520,7 +8520,7 @@ SfxBoolItem Text SID_ATTR_CHAR
 
 
 SfxBoolItem DrawText SID_DRAW_TEXT
-
+(SfxBoolItem CreateDirectly FN_PARAM_1)
 [
     AutoUpdate = TRUE,
     FastCall = FALSE,
