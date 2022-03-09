@@ -2832,7 +2832,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::DocInfo:    // Last printed, last edited,...
         if( DI_SUB_FIXED & nSubType )
             bWriteExpand = true;
-        else
+
         {
             OUString sStr;
             ww::eField eField(ww::eNONE);
@@ -2887,13 +2887,15 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
 
                         if (pDocInfoField != nullptr)
                             sStr = "\"" + pDocInfoField->GetName() + "\"";
+
+                        bWriteExpand = false;
                     }
                     break;
                 default:
                     break;
             }
 
-            if (eField != ww::eNONE)
+            if (!bWriteExpand && eField != ww::eNONE)
             {
                 GetExport().OutputField(pField, eField, FieldString(eField) + sStr);
             }
