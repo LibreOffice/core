@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f7c3a83_daaf7ebe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-09T08:29:13Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/131232",
+      "parentUuid": "4914e36b_58aca8e0",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "218eb3ba_483d4307",
         "filename": "sal/qa/rtl/oustring/rtl_OUString2.cxx",
         "patchSetId": 3
