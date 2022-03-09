@@ -3796,6 +3796,7 @@ public:
 #endif
     }
 
+#if 0
     virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override
     {
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -3819,6 +3820,7 @@ public:
         (void)pLabeled;
 #endif
     }
+#endif
 
     virtual bool get_extents_relative_to(const weld::Widget& rRelative, int& x, int &y, int& width, int &height) const override
     {

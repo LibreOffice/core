@@ -1687,9 +1687,7 @@ void PrintDialog::setupOptionalUI()
         mxPagesBoxTitleTxt->show();
         mxPagesBtn->hide();
 
-        mxPagesBoxTitleTxt->set_accessible_relation_label_for(mxNupPagesBox.get());
         mxNupPagesBox->set_accessible_relation_labeled_by(mxPagesBoxTitleTxt.get());
-        mxPagesBtn->set_accessible_relation_label_for(nullptr);
     }
 
     // update enable states
