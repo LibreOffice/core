@@ -1645,8 +1645,17 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
 
         if( !bFieldFound )
         {
-            SwDocInfoField aField( static_cast<SwDocInfoFieldType*>(
-                m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DocInfo )), DI_CUSTOM|nReg, aDocProperty, GetFieldResult( pF ) );
+            // LO always automatically updates a DocInfo field from the File-Properties-Custom Prop
+            // while MS Word requires the user to manually refresh the field (with F9).
+            // In other words, Word lets the field to be out of sync with the controlling variable.
+            // Marking as FIXEDFLD solves the automatic replacement problem, but of course prevents
+            // Writer from making any changes, even on an F9 refresh.
+            // TODO: If the field already matches the DocProperty, no need to mark as fixed.
+            // TODO: Extend LO to allow a linked field that doesn't automatically update.
+            const auto pType(static_cast<SwDocInfoFieldType*>(
+                m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
+            const OUString sDisplayed = GetFieldResult(pF);
+            SwDocInfoField aField(pType, DI_CUSTOM | DI_SUB_FIXED | nReg, aDocProperty, sDisplayed);
             m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
 
             return eF_ResT::OK;
