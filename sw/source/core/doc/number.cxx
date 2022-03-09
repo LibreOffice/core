@@ -882,6 +882,12 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
                   pWorkingNodeNum->GetLevelInListTree() >= nRestrictInclToThisLevel );
     }
 
+    if (aRefNumStr.endsWith("."))
+    {
+        // tdf#144563: looks like a special case for refs by MS Word: if numbering is ending with dot, this dot is removed
+        aRefNumStr = aRefNumStr.copy(0, aRefNumStr.getLength() - 1);
+    }
+
     return aRefNumStr;
 }
 

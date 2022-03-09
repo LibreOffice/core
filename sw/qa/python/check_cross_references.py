@@ -89,16 +89,16 @@ class CheckCrossReferences(unittest.TestCase):
         FieldResult1 = "*i*"
         FieldResult2 = "+b+*i*"
         FieldResult3 = "-1-+b+*i*"
-        FieldResult4 = "1."
-        FieldResult5 = "1."
-        FieldResult6 = "A.1."
+        FieldResult4 = "1"
+        FieldResult5 = "1"
+        FieldResult6 = "A.1"
         FieldResult7 = " 2.(a)"
         FieldResult8 = " 2.(b)"
-        FieldResult9 = " 2."
+        FieldResult9 = " 2"
         FieldResult10 = " 1.(a)"
         FieldResult11 = "(b)"
         FieldResult12 = "(a)"
-        FieldResult13 = " 1."
+        FieldResult13 = " 1"
 
         # variables for current field
         xField = self.getNextField()
