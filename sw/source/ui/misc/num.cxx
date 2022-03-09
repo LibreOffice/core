@@ -390,14 +390,13 @@ bool SwNumPositionTabPage::FillItemSet( SfxItemSet* rSet )
 
 void SwNumPositionTabPage::Reset( const SfxItemSet* rSet )
 {
-    const SfxPoolItem* pItem;
     if (pOutlineDlg)
     {
         pSaveNum = pOutlineDlg->GetNumRule();
         m_xLevelLB->set_selection_mode(SelectionMode::Single);
     }
-    else if(SfxItemState::SET == rSet->GetItemState(FN_PARAM_ACT_NUMBER, false, &pItem))
-        pSaveNum = const_cast<SwUINumRuleItem*>(static_cast<const SwUINumRuleItem*>(pItem))->GetNumRule();
+    else if(const SwUINumRuleItem* pNumberItem = rSet->GetItemIfSet(FN_PARAM_ACT_NUMBER, false))
+        pSaveNum = const_cast<SwUINumRuleItem*>(pNumberItem)->GetNumRule();
 
     nActNumLvl = SwOutlineTabDialog::GetActNumLevel();
     sal_uInt16 nMask = 1;

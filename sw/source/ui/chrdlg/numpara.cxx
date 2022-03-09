@@ -61,13 +61,15 @@ SwParagraphNumTabPage::SwParagraphNumTabPage(weld::Container* pPage, weld::Dialo
     m_xRestartParaCountCB->set_state(TRISTATE_FALSE);
     m_xEditNumStyleBtn->set_sensitive(false);
 
-    const SfxPoolItem* pItem;
-    SfxObjectShell* pObjSh;
-    if(SfxItemState::SET == rAttr.GetItemState(SID_HTML_MODE, false, &pItem) ||
-        ( nullptr != ( pObjSh = SfxObjectShell::Current()) &&
-          nullptr != (pItem = pObjSh->GetItem(SID_HTML_MODE))))
+    const SfxUInt16Item* pItem = rAttr.GetItemIfSet(SID_HTML_MODE, false);
+    if (!pItem)
     {
-        const sal_uInt16 nHtmlMode = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
+        if (SfxObjectShell* pObjSh = SfxObjectShell::Current())
+            pItem = pObjSh->GetItem(SID_HTML_MODE);
+    }
+    if(pItem)
+    {
+        const sal_uInt16 nHtmlMode = pItem->GetValue();
 
         if (HTMLMODE_ON & nHtmlMode)
             m_xCountParaFram->hide();
