@@ -224,7 +224,7 @@ void SparklineGroupsContext::onCharacters(const OUString& rChars)
                     rLastSparkline.m_aTargetRange = aRange;
 
                     // Need to set the current sheet index to the range as
-                    // it is assumed that the address string referes to
+                    // it is assumed that the address string refers to
                     // the current sheet and is not defined in the string.
                     for (auto& rRange : rLastSparkline.m_aTargetRange)
                     {

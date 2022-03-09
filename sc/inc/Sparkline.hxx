@@ -20,7 +20,7 @@ namespace sc
 /** Sparkline data, used for rendering the content of a cell
  *
  * Contains the input range of the data that is being drawn and a reference
- * to the SparklineGroup, which inclues common properties of multiple
+ * to the SparklineGroup, which includes common properties of multiple
  * sparklines.
  */
 class SC_DLLPUBLIC Sparkline
