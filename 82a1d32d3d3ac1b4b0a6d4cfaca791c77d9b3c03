@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b0b23ab_875e2a76",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-09T08:01:53Z",
+      "side": 1,
+      "message": "A documented precondition of rtl::OUString::getToken is that \"index must not be greater than the length of the string.\"  Why add code that would gracefully handle violations of that precondition, and why add a broken test that calls getToken violating its preconditions.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 33
+      },
+      "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "218eb3ba_483d4307",
+        "filename": "sal/qa/rtl/oustring/rtl_OUString2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-09T08:01:53Z",
+      "side": 1,
+      "message": "I\u0027m puzzled at all of the above.  What does the \"Point either\" comment pertain to, n64 or n?  And how would either be 0x0?  And why not just use n \u003d -1, say, to check behavior with a negative index?",
+      "revId": "82a1d32d3d3ac1b4b0a6d4cfaca791c77d9b3c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
