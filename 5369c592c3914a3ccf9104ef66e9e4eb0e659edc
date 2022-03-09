@@ -55,6 +55,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b4fec5b9_09fcd8c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-09T11:07:34Z",
+      "side": 1,
+      "message": "You should also re-base your patch to resolve the \u0027merge conflict\u0027. Can you do that?\nGerrit says:\n\"This change has merge conflicts. Download the patch and run \"git rebase\". Upload a new patchset after resolving all merge conflicts.\"",
+      "revId": "5369c592c3914a3ccf9104ef66e9e4eb0e659edc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fd52bcc0_cc36f7cb",
         "filename": "chart2/source/controller/main/DragMethod_RotateDiagram.cxx",
         "patchSetId": 1
