@@ -121,6 +121,7 @@ public:
     void testEditCursorBounds();
     void testTextSelectionBounds();
     void testSheetViewDataCrash();
+    void testTextBoxInsert();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -175,6 +176,7 @@ public:
     CPPUNIT_TEST(testEditCursorBounds);
     CPPUNIT_TEST(testTextSelectionBounds);
     CPPUNIT_TEST(testSheetViewDataCrash);
+    CPPUNIT_TEST(testTextBoxInsert);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -458,7 +460,12 @@ struct EditCursorMessage final {
         std::stringstream aStream(pMessage);
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
-        std::string aVal = aTree.get_child("refpoint").get_value<std::string>();
+        std::string aVal;
+        boost::property_tree::ptree::const_assoc_iterator it = aTree.find("refpoint");
+        if (it != aTree.not_found())
+            aVal = aTree.get_child("refpoint").get_value<std::string>();
+        else
+            return; // happens in testTextBoxInsert test
 
         uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(OUString::createFromAscii(aVal.c_str()));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aSeq.getLength());
@@ -2865,6 +2872,28 @@ void ScTiledRenderingTest::testSheetViewDataCrash()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::DELETE);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     // It will crash at this point without the fix.
+    Scheduler::ProcessEventsToIdle();
+}
+
+void ScTiledRenderingTest::testTextBoxInsert()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    createDoc("empty.ods");
+    ViewCallback aView1;
+
+    // insert textbox
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({
+            { "CreateDirectly",  uno::Any(true) }
+        }));
+    comphelper::dispatchCommand(".uno:DrawText", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // check if we have textbox selected
+    CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+    CPPUNIT_ASSERT(aView1.m_ShapeSelection != "EMPTY");
+
     Scheduler::ProcessEventsToIdle();
 }
 
