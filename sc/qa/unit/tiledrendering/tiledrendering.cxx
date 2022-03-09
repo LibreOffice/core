@@ -124,6 +124,7 @@ public:
     void testEditCursorBounds();
     void testTextSelectionBounds();
     void testSheetViewDataCrash();
+    void testTextBoxInsert();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -177,6 +178,7 @@ public:
     CPPUNIT_TEST(testEditCursorBounds);
     CPPUNIT_TEST(testTextSelectionBounds);
     CPPUNIT_TEST(testSheetViewDataCrash);
+    CPPUNIT_TEST(testTextBoxInsert);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2886,6 +2888,28 @@ void ScTiledRenderingTest::testSheetViewDataCrash()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     // It will crash at this point without the fix.
     Scheduler::ProcessEventsToIdle();
+}
+
+void ScTiledRenderingTest::testTextBoxInsert()
+{
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ViewCallback aView1;
+    SfxLokHelper::createView();
+    pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
+
+    // insert textbox
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({
+            { "CreateDirectly",  uno::Any(true) }
+        }));
+    comphelper::dispatchCommand(".uno:DrawText", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // check if we have textbox selected
+    CPPUNIT_ASSERT(!aView1.m_ShapeSelection.isEmpty());
+    CPPUNIT_ASSERT(aView1.m_ShapeSelection != "EMPTY");
 }
 
 }
