@@ -142,9 +142,6 @@ public:
     // XComponent
     virtual void SAL_CALL dispose() override;
 
-    /**@return m_pCellVector*/
-    std::vector< rtl::Reference<AccessibleGridControlTableCell> >& getCellVector() { return m_aCellVector;}
-
     virtual void commitEvent(sal_Int16 nEventId, const css::uno::Any& rNewValue,
                              const css::uno::Any& rOldValue) override;
 
