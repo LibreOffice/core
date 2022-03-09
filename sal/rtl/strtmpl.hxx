@@ -1256,6 +1256,7 @@ sal_Int32 getToken                                ( IMPL_RTL_STRINGDATA** ppThis
 {
     assert(ppThis);
     assert(pStr);
+    assert(nIndex <= pStr->length);
 
     // Set ppThis to an empty string and return -1 if either nToken or nIndex is
     // negative:

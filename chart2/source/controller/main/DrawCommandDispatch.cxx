@@ -533,7 +533,7 @@ bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt
     OUString aBaseCommand;
     OUString aType;
 
-    sal_Int32 nIndex = 1;
+    sal_Int32 nIndex = std::min(sal_Int32(1), rCommandURL.getLength());
     OUString aToken = rCommandURL.getToken( 0, '.', nIndex );
     if ( nIndex == -1 || aToken.isEmpty() )
     {
