@@ -3784,39 +3784,41 @@ public:
         AtkRelationSet *pRelationSet = atk_object_ref_relation_set(pAtkObject);
         AtkRelation *pRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABELLED_BY);
         if (pRelation)
+        {
+            // clear ATK_RELATION_LABEL_FOR from old label
+            GPtrArray* pOldLabelTarget = atk_relation_get_target(pRelation);
+            guint nElements = pOldLabelTarget ? pOldLabelTarget->len : 0;
+            for (guint i = 0; i < nElements; ++i)
+            {
+                gpointer pOldLabelObject = g_ptr_array_index(pOldLabelTarget, i);
+                AtkRelationSet *pOldLabelRelationSet = atk_object_ref_relation_set(ATK_OBJECT(pOldLabelObject));
+                if (AtkRelation *pOldLabelRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABEL_FOR))
+                    atk_relation_set_remove(pOldLabelRelationSet, pOldLabelRelation);
+                g_object_unref(pOldLabelRelationSet);
+            }
             atk_relation_set_remove(pRelationSet, pRelation);
+        }
+
         if (pAtkLabel)
         {
-            AtkObject *obj_array[1];
-            obj_array[0] = pAtkLabel;
-            pRelation = atk_relation_new(obj_array, 1, ATK_RELATION_LABELLED_BY);
+            AtkObject *obj_array_labelled_by[1];
+            obj_array_labelled_by[0] = pAtkLabel;
+            pRelation = atk_relation_new(obj_array_labelled_by, 1, ATK_RELATION_LABELLED_BY);
             atk_relation_set_add(pRelationSet, pRelation);
-        }
-        g_object_unref(pRelationSet);
-#endif
-    }
 
-    virtual void set_accessible_relation_label_for(weld::Widget* pLabeled) override
-    {
-#if !GTK_CHECK_VERSION(4, 0, 0)
-        AtkObject* pAtkObject = gtk_widget_get_accessible(m_pWidget);
-        if (!pAtkObject)
-            return;
-        AtkObject *pAtkLabeled = pLabeled ? gtk_widget_get_accessible(dynamic_cast<GtkInstanceWidget&>(*pLabeled).getWidget()) : nullptr;
-        AtkRelationSet *pRelationSet = atk_object_ref_relation_set(pAtkObject);
-        AtkRelation *pRelation = atk_relation_set_get_relation_by_type(pRelationSet, ATK_RELATION_LABEL_FOR);
-        if (pRelation)
-            atk_relation_set_remove(pRelationSet, pRelation);
-        if (pAtkLabeled)
-        {
-            AtkObject *obj_array[1];
-            obj_array[0] = pAtkLabeled;
-            pRelation = atk_relation_new(obj_array, 1, ATK_RELATION_LABEL_FOR);
-            atk_relation_set_add(pRelationSet, pRelation);
+            // add ATK_RELATION_LABEL_FOR to new label to match
+            AtkRelationSet *pNewLabelRelationSet = atk_object_ref_relation_set(pAtkLabel);
+            AtkRelation *pNewLabelRelation = atk_relation_set_get_relation_by_type(pNewLabelRelationSet, ATK_RELATION_LABEL_FOR);
+            if (pNewLabelRelation)
+                atk_relation_set_remove(pNewLabelRelationSet, pRelation);
+            AtkObject *obj_array_label_for[1];
+            obj_array_label_for[0] = pAtkObject;
+            pNewLabelRelation = atk_relation_new(obj_array_label_for, 1, ATK_RELATION_LABEL_FOR);
+            atk_relation_set_add(pNewLabelRelationSet, pNewLabelRelation);
+            g_object_unref(pNewLabelRelationSet);
         }
+
         g_object_unref(pRelationSet);
-#else
-        (void)pLabeled;
 #endif
     }
 
