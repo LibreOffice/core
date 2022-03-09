@@ -3747,7 +3747,10 @@ public:
         const char* pStr = pAtkObject ? atk_object_get_name(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
 #else
-        return OUString();
+        char* pStr = gtk_test_accessible_check_property(GTK_ACCESSIBLE(m_pWidget), GTK_ACCESSIBLE_PROPERTY_LABEL, nullptr);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        g_free(pStr);
+        return sRet;
 #endif
     }
 
@@ -3758,7 +3761,10 @@ public:
         const char* pStr = pAtkObject ? atk_object_get_description(pAtkObject) : nullptr;
         return OUString(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
 #else
-        return OUString();
+        char* pStr = gtk_test_accessible_check_property(GTK_ACCESSIBLE(m_pWidget), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, nullptr);
+        OUString sRet(pStr, pStr ? strlen(pStr) : 0, RTL_TEXTENCODING_UTF8);
+        g_free(pStr);
+        return sRet;
 #endif
     }
 
