@@ -149,9 +149,6 @@ private:
     /** The header bar for columns (first row of the table). */
     rtl::Reference<AccessibleGridControlHeader>               m_xColumnHeaderBar;
 
-    /** The table cell child. */
-    rtl::Reference<AccessibleGridControlTableCell>            m_xCell;
-
     /** @return  The count of visible children. */
     inline sal_Int32 implGetAccessibleChildCount();
 };

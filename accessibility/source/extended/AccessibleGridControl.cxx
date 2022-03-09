@@ -57,11 +57,6 @@ void SAL_CALL AccessibleGridControl::disposing()
         m_xTable->dispose();
         m_xTable.clear();
     }
-    if ( m_xCell.is() )
-    {
-        m_xCell->dispose();
-        m_xCell.clear();
-    }
     if ( m_xRowHeaderBar.is() )
     {
         m_xRowHeaderBar->dispose();
@@ -281,8 +276,8 @@ void AccessibleGridControl::commitCellEvent(sal_Int16 _nEventId,const Any& _rNew
                               + m_aTable.GetCurrentColumn();
                 if (nIndex < rCells.size() && rCells[nIndex])
                 {
-                    m_xCell = rCells[nIndex];
-                    m_xCell->commitEvent( _nEventId, _rNewValue, _rOldValue );
+                    rtl::Reference<AccessibleGridControlTableCell> xCell = rCells[nIndex];
+                    xCell->commitEvent( _nEventId, _rNewValue, _rOldValue );
                 }
             }
         }
