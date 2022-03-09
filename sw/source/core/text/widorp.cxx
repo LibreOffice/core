@@ -135,6 +135,46 @@ bool SwTextFrameBreak::IsInside( SwTextMargin const &rLine ) const
         // If everything is inside the existing frame the result is true;
         bFit = nDiff >= 0;
 
+        // If it didn't fit, try to add the space of footnotes that are anchored
+        // in frames below (in next-chain of) this one as they will need to move
+        // forward anyway if this frame is split.
+        // - except if in tables (need to check if row is splittable?
+        //   also, multiple columns looks difficult)
+        if (!bFit && !m_pFrame->IsInTab())
+        {
+            if (SwFootnoteBossFrame const*const pBoss = m_pFrame->FindFootnoteBossFrame())
+            {
+                if (SwFootnoteContFrame const*const pCont = pBoss->FindFootnoteCont())
+                {
+                    SwContentFrame const* pContent(m_pFrame);
+                    while (pContent->HasFollow())
+                    {
+                        pContent = pContent->GetFollow();
+                    }
+                    // start with first text frame that isn't a follow
+                    // (ignoring Keep attribute for now, MakeAll should handle it?)
+                    pContent = pContent->GetNextContentFrame();
+                    ::std::set<SwContentFrame const*> nextFrames;
+                    while (pBoss->IsAnLower(pContent))
+                    {
+                        nextFrames.insert(pContent);
+                        pContent = pContent->GetNextContentFrame();
+                    }
+                    SwTwips nNextFootnotes(0);
+                    for (SwFootnoteFrame const* pFootnote = static_cast<SwFootnoteFrame const*>(pCont->Lower());
+                         pFootnote != nullptr;
+                         pFootnote = static_cast<SwFootnoteFrame const*>(pFootnote->GetNext()))
+                    {
+                        SwContentFrame const*const pAnchor = pFootnote->GetRef();
+                        if (nextFrames.find(pAnchor) != nextFrames.end())
+                        {
+                            nNextFootnotes += aRectFnSet.GetHeight(pFootnote->getFrameArea());
+                        }
+                    }
+                    bFit = 0 <= nDiff + nNextFootnotes;
+                }
+            }
+        }
         if (!bFit && rLine.MaybeHasHints() && m_pFrame->GetFollow()
             // if using same footnote container as the follow, pointless to try?
             && m_pFrame->FindFootnoteBossFrame() != m_pFrame->GetFollow()->FindFootnoteBossFrame())
