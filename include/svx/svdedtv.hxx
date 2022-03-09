@@ -188,7 +188,7 @@ public:
      * Checks if this or other views have an active text edit, if true, end them.
      */
     void EndTextEditAllViews() const;
-    void EndTextEditCurrentView();
+    void EndTextEditCurrentView(bool bDontDeleteReally = false);
 
     std::vector< std::unique_ptr<SdrUndoAction> > CreateConnectorUndo( const SdrObject& rO );
     void AddUndoActions( std::vector< std::unique_ptr<SdrUndoAction> > );
