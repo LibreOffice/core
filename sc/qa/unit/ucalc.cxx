@@ -146,6 +146,8 @@ public:
     void testHorizontalIterator();
     void testValueIterator();
     void testHorizontalAttrIterator();
+    void testIteratorsUnallocatedColumnsAttributes();
+    void testIteratorsDefPattern();
 
     /**
      * More direct test for cell broadcaster management, used to track formula
@@ -276,6 +278,9 @@ public:
     CPPUNIT_TEST(testHorizontalIterator);
     CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testHorizontalAttrIterator);
+    CPPUNIT_TEST(testIteratorsUnallocatedColumnsAttributes);
+    CPPUNIT_TEST(testIteratorsDefPattern);
+    CPPUNIT_TEST(testLastChangedColFlagsWidth);
     CPPUNIT_TEST(testCellBroadcaster);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
@@ -1386,14 +1391,136 @@ void Test::testHorizontalAttrIterator()
         SCCOL nCol1, nCol2;
         SCROW nRow;
         size_t nCheckPos = 0;
-        for (const ScPatternAttr* pAttr = aIter.GetNext(nCol1, nCol2, nRow); pAttr; pAttr = aIter.GetNext(nCol1, nCol2, nRow), ++nCheckPos)
+        for (const ScPatternAttr* pAttr = aIter.GetNext(nCol1, nCol2, nRow); pAttr; pAttr = aIter.GetNext(nCol1, nCol2, nRow))
         {
-              CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
-              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][0], static_cast<int>(nCol1));
-              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][1], static_cast<int>(nCol2));
-              CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][2], static_cast<int>(nRow));
+            if( pAttr == m_pDoc->GetDefPattern())
+                continue;
+            CPPUNIT_ASSERT_MESSAGE("Iteration longer than expected.", nCheckPos < nCheckLen);
+            CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][0], static_cast<int>(nCol1));
+            CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][1], static_cast<int>(nCol2));
+            CPPUNIT_ASSERT_EQUAL(aChecks[nCheckPos][2], static_cast<int>(nRow));
+            ++nCheckPos;
         }
     }
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testIteratorsUnallocatedColumnsAttributes()
+{
+    m_pDoc->InsertTab(0, "Tab1");
+
+    // Make entire second row and third row bold.
+    ScPatternAttr boldAttr(m_pDoc->GetPool());
+    boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    m_pDoc->ApplyPatternAreaTab(0, 1, m_pDoc->MaxCol(), 2, 0, boldAttr);
+
+    // That shouldn't need allocating more columns, just changing the default attribute.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), m_pDoc->GetAllocatedColumnsCount(0));
+    vcl::Font aFont;
+    const ScPatternAttr* pattern = m_pDoc->GetPattern(m_pDoc->MaxCol(), 1, 0);
+    pattern->GetFont(aFont, SC_AUTOCOL_RAW);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
+
+    // Test iterators.
+    ScDocAttrIterator docit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    SCCOL col1, col2;
+    SCROW row1, row2;
+    CPPUNIT_ASSERT_EQUAL( pattern, docit.GetNext( col1, row1, row2 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
+    CPPUNIT_ASSERT_EQUAL( pattern, docit.GetNext( col1, row1, row2 ));
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
+    CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == nullptr );
+
+    ScAttrRectIterator rectit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    CPPUNIT_ASSERT_EQUAL( pattern, rectit.GetNext( col1, col2, row1, row2 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
+    CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == nullptr );
+
+    ScHorizontalAttrIterator horit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    CPPUNIT_ASSERT_EQUAL( pattern, horit.GetNext( col1, col2, row1 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
+    CPPUNIT_ASSERT_EQUAL( pattern, horit.GetNext( col1, col2, row1 ));
+    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCROW(2), row1 );
+    CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == nullptr );
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testIteratorsDefPattern()
+{
+    m_pDoc->InsertTab(0, "Tab1");
+
+    // The default pattern is the default style, which can be edited by the user.
+    // As such iterators should not ignore it by default, because it might contain
+    // some attributes set.
+
+    // Set cells as bold, default allocated, bold, default unallocated.
+    SCCOL firstCol = 100;
+    SCCOL lastCol = 103;
+    ScPatternAttr boldAttr(m_pDoc->GetPool());
+    boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
+    m_pDoc->ApplyPattern(100, 0, 0, boldAttr);
+    m_pDoc->ApplyPattern(102, 0, 0, boldAttr);
+
+    CPPUNIT_ASSERT_EQUAL(SCCOL(102 + 1), m_pDoc->GetAllocatedColumnsCount(0));
+    const ScPatternAttr* pattern = m_pDoc->GetPattern(100, 0, 0);
+    CPPUNIT_ASSERT(pattern != m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT(m_pDoc->GetPattern(102, 0, 0) == pattern);
+    CPPUNIT_ASSERT(m_pDoc->GetPattern(101, 0, 0) == m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT(m_pDoc->GetPattern(103, 0, 0) == m_pDoc->GetDefPattern());
+
+    // Test iterators.
+    ScDocAttrIterator docit( *m_pDoc, 0, firstCol, 0, lastCol, 0 );
+    SCCOL col1, col2;
+    SCROW row1, row2;
+    CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == pattern);
+    CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == pattern);
+    CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == nullptr );
+
+    ScAttrRectIterator rectit( *m_pDoc, 0, firstCol, 0, lastCol, 0 );
+    CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == pattern);
+    CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == pattern);
+    CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == nullptr );
+
+    ScHorizontalAttrIterator horit( *m_pDoc, 0, firstCol, 0, lastCol, 0 );
+    CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == pattern);
+    CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == pattern);
+    CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == m_pDoc->GetDefPattern());
+    CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == nullptr );
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testLastChangedColFlagsWidth()
+{
+    m_pDoc->InsertTab(0, "Tab1");
+
+    constexpr SCCOL firstChangedCol = 100;
+    assert( firstChangedCol > INITIALCOLCOUNT );
+    for( SCCOL col = firstChangedCol; col <= m_pDoc->MaxCol(); ++col )
+        m_pDoc->SetColWidth( col, 0, 10 );
+
+    // That shouldn't need allocating more columns, just changing column flags.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), m_pDoc->GetAllocatedColumnsCount(0));
+    // But the flags are changed.
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->MaxCol(), m_pDoc->GetLastChangedColFlagsWidth(0));
 
     m_pDoc->DeleteTab(0);
 }

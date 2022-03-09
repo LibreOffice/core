@@ -329,7 +329,8 @@ public:
         if (fn == SRCDIR "/bridges/source/jni_uno/jni_bridge.cxx")
             return false;
         // TODO constructing a temporary to pass to a && param
-        if (fn == SRCDIR "/sc/source/ui/view/viewfunc.cxx")
+        if (fn == SRCDIR "/sc/source/ui/view/viewfunc.cxx"
+            || fn == SRCDIR "/sc/source/core/data/table2.cxx")
             return false;
         // tdf#145203: FIREBIRD cannot create a table
         if (fn == SRCDIR "/connectivity/source/drivers/firebird/DatabaseMetaData.cxx")

@@ -31,11 +31,6 @@ using namespace editeng;
 namespace svx::frame
 {
 
-Style::Style()
-{
-    Clear();
-}
-
 Style::Style( double nP, double nD, double nS, SvxBorderLineStyle nType, double fScale )
 {
     Clear();

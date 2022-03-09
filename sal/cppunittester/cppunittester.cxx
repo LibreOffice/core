@@ -301,9 +301,12 @@ public:
 
             EyecatcherListener eye;
             result.addListener(&eye);
-#ifdef UNX
+
             // set this to track down files created before first test method
             std::string lib = testlib.substr(testlib.rfind('/')+1);
+#ifdef WIN32
+            _putenv_s("LO_TESTNAME", lib.c_str());
+#else
             setenv("LO_TESTNAME", lib.c_str(), true);
 #endif
             const char* pVal = getenv("CPPUNIT_TEST_NAME");

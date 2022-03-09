@@ -221,7 +221,7 @@ struct RowInfo
         nEndCol = endCol;
 #endif
         pCellInfo = new CellInfo[ endCol - nStartCol + 1 + 2 ];
-        pBasicCellInfo = new BasicCellInfo[ endCol + 2 ];
+        pBasicCellInfo = new BasicCellInfo[ endCol + 1 + 2 ];
     }
     void                freeCellInfo()
     {
