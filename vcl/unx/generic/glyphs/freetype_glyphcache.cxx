@@ -105,12 +105,16 @@ bool FreetypeFontFile::Map()
         const char* pFileName = maNativeFileName.getStr();
         int nFile = open( pFileName, O_RDONLY );
         if( nFile < 0 )
+        {
+            SAL_WARN("vcl.unx.freetype", "open('" << maNativeFileName << "') failed: " << strerror(errno));
             return false;
+        }
 
         struct stat aStat;
         int nRet = fstat( nFile, &aStat );
         if (nRet < 0)
         {
+            SAL_WARN("vcl.unx.freetype", "fstat on '" << maNativeFileName << "' failed: " << strerror(errno));
             close (nFile);
             return false;
         }
@@ -118,7 +122,10 @@ bool FreetypeFontFile::Map()
         mpFileMap = static_cast<unsigned char*>(
             mmap( nullptr, mnFileSize, PROT_READ, MAP_SHARED, nFile, 0 ));
         if( mpFileMap == MAP_FAILED )
+        {
+            SAL_WARN("vcl.unx.freetype", "mmap of '" << maNativeFileName << "' failed: " << strerror(errno));
             mpFileMap = nullptr;
+        }
         close( nFile );
     }
 

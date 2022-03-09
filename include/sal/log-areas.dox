@@ -509,6 +509,7 @@ certain functionality.
 @li @c vcl.uitest - The UI testing framework code
 @li @c vcl.unity
 @li @c vcl.unx.dtrans
+@li @c vcl.unx.freetype
 @li @c vcl.unx.print
 @li @c vcl.virdev
 @li @c vcl.watchdog
