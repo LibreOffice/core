@@ -318,6 +318,16 @@ void AquaGraphicsBackend::SetFillColor(Color nColor)
     }
 }
 
+void AquaGraphicsBackend::SetFillRule()
+{
+    //TODO
+}
+
+void AquaGraphicsBackend::SetFillRule(PolyFillMode eFillRule)
+{
+    //TODO
+}
+
 void AquaGraphicsBackend::SetXORMode(bool bSet, bool bInvertOnly)
 {
     // return early if XOR mode remains unchanged
