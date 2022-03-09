@@ -139,6 +139,9 @@ public:
     /** @return  The name of this class. */
     virtual OUString SAL_CALL getImplementationName() override;
 
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
     /**@return m_pCellVector*/
     std::vector< rtl::Reference<AccessibleGridControlTableCell> >& getCellVector() { return m_aCellVector;}
 
