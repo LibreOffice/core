@@ -1280,7 +1280,7 @@ bool SfxDocTplService_Impl::WriteUINamesForTemplateDir_Impl( std::u16string_view
         DocTemplLocaleHelper::WriteGroupLocalizationSequence( xOutStream, aUINames, mxContext);
         try {
             // the SAX writer might close the stream
-//            xOutStream->closeOutput();
+            xOutStream->closeOutput();
         } catch( uno::Exception& )
         {}
 
