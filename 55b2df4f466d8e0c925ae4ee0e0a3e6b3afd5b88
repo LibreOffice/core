@@ -16,6 +16,24 @@
       "message": "What\u0027s the motivation to backport this?  \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d143216\u003e \"Hyperlinks with Basic Auth (https://user:password@example.com/) get lost in PDF export\" isn\u0027t even marked as a regression.",
       "revId": "55b2df4f466d8e0c925ae4ee0e0a3e6b3afd5b88",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "879a6442_15b6ff32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-09T15:48:31Z",
+      "side": 1,
+      "message": "no, it\u0027s not a regression but it fixes an issue. The motivation behind the backport is to provide this fix to early adopers",
+      "parentUuid": "18278fd7_9ca326cf",
+      "revId": "55b2df4f466d8e0c925ae4ee0e0a3e6b3afd5b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
