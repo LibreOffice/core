@@ -11,6 +11,7 @@
 #define INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 
 #include <map>
+#include <optional>
 #include <set>
 #include <vector>
 
