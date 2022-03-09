@@ -372,6 +372,24 @@ void X11SalGraphics::SetLineColor( Color nColor )
     mxImpl->SetLineColor( nColor );
 }
 
+void X11SalGraphics::SetFillRule()
+{
+#if ENABLE_CAIRO_CANVAS
+    meFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+#endif // ENABLE_CAIRO_CANVAS
+
+    mxImpl->SetFillRule();
+}
+
+void X11SalGraphics::SetFillRule( PolyFillMode eFillRule )
+{
+#if ENABLE_CAIRO_CANVAS
+    meFillRule = eFillRule;
+#endif // ENABLE_CAIRO_CANVAS
+
+    mxImpl->SetFillRule( eFillRule );
+}
+
 void X11SalGraphics::SetFillColor()
 {
 #if ENABLE_CAIRO_CANVAS
@@ -668,7 +686,10 @@ bool X11SalGraphics::drawPolyPolygon(
                 mnFillColor.GetGreen()/255.0,
                 mnFillColor.GetBlue()/255.0,
                 1.0 - fTransparency);
-            cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+            if (meFillRule == PolyFillMode::EVEN_ODD_RULE_ALTERNATE)
+                cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+            else
+                cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
             cairo_fill_preserve(cr);
         }
 
