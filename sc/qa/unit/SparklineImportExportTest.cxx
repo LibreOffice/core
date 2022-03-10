@@ -12,6 +12,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <docsh.hxx>
 #include <Sparkline.hxx>
+#include <SparklineGroup.hxx>
 
 using namespace css;
 
