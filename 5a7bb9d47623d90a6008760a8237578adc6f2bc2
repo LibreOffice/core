@@ -33,6 +33,24 @@
       "message": "Is there a reasonably simple way to detect how many non-trivial destructors are called from a destructor? The thing is that a destructor with an empty body is not necessarily trivial, it may expand into quite a lot of code if the object needs destructing a lot of members, and in some of those cases it might be better to not remove/inline those.\n",
       "revId": "5a7bb9d47623d90a6008760a8237578adc6f2bc2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bda79f90_ac860317",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-10T13:20:32Z",
+      "side": 1,
+      "message": "Never mind, I asked before looking at what the plugin code does.",
+      "parentUuid": "d4bd284e_1277939e",
+      "revId": "5a7bb9d47623d90a6008760a8237578adc6f2bc2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
