@@ -3082,7 +3082,7 @@ void ScExportTest2::testWholeRowBold()
     ScDocShellRef xDocSh2 = saveAndReload(*xDocSh1, FORMAT_ODS);
     CPPUNIT_ASSERT(xDocSh2.is());
     pDoc = &xDocSh2->GetDocument();
-    // TODO CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
     pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
@@ -3090,7 +3090,7 @@ void ScExportTest2::testWholeRowBold()
     ScDocShellRef xDocSh3 = saveAndReload(*xDocSh2, FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh3.is());
     pDoc = &xDocSh3->GetDocument();
-    // TODO CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), pDoc->GetAllocatedColumnsCount(0));
     pDoc->GetPattern(pDoc->MaxCol(), 1, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
