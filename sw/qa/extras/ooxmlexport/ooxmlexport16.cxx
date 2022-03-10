@@ -653,6 +653,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
     // false alarm? during ODF roundtrip:
     // 'Error: "1970-01-01" does not satisfy the "dateTime" type'
     // disable and check only the conversion of the invalid (zeroed) change date
+    // 0000-00-00T00:00:00Z, resulting loss of change tracking during ODF roundtrip
     // reload("writer8", "tdf146171.odt");
     reload("Office Open XML Text", "tdf146171.docx");
 
@@ -661,8 +662,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146171_invalid_change_date)
     assertXPath(pXmlDoc, "//w:ins", 4);
     // This was 0
     assertXPath(pXmlDoc, "//w:del", 1);
-    // This was 0000-00-00T00:00:00Z, resulting loss of change tracking during ODF roundtrip
-    assertXPath(pXmlDoc, "//w:del", "date", "1970-01-01T00:00:00Z");
+    // no date (anonymized change)
+    // This failed, date was exported as w:date="1970-01-01T00:00:00Z" before fixing tdf#147760
+    assertXPathNoAttribute(pXmlDoc, "//w:del", "date");
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf139580, "tdf139580.odt")
