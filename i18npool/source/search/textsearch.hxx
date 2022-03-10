@@ -38,8 +38,6 @@ namespace com::sun::star::i18n { class XExtendedTransliteration; }
 namespace com::sun::star::uno { class XComponentContext; }
 
 
-typedef U_ICU_NAMESPACE::UnicodeString IcuUniString;
-
 class WLevDistance;
 typedef ::std::map< sal_Unicode, sal_Int32 > TextSearchJumpTable;
 

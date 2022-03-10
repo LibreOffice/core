@@ -877,19 +877,19 @@ void TextSearch::RESrchPrepare( const css::util::SearchOptions2& rOptions)
         nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
     UErrorCode nIcuErr = U_ZERO_ERROR;
     // assumption: transliteration didn't mangle regexp control chars
-    IcuUniString aIcuSearchPatStr( reinterpret_cast<const UChar*>(rPatternStr.getStr()), rPatternStr.getLength());
+    icu::UnicodeString aIcuSearchPatStr( reinterpret_cast<const UChar*>(rPatternStr.getStr()), rPatternStr.getLength());
 #ifndef DISABLE_WORDBOUND_EMULATION
     // for convenience specific syntax elements of the old regex engine are emulated
     // - by replacing \< with "word-break followed by a look-ahead word-char"
-    static const IcuUniString aChevronPatternB( "\\\\<", -1, IcuUniString::kInvariant);
-    static const IcuUniString aChevronReplaceB( "\\\\b(?=\\\\w)", -1, IcuUniString::kInvariant);
+    static const icu::UnicodeString aChevronPatternB( "\\\\<", -1, icu::UnicodeString::kInvariant);
+    static const icu::UnicodeString aChevronReplaceB( "\\\\b(?=\\\\w)", -1, icu::UnicodeString::kInvariant);
     static icu::RegexMatcher aChevronMatcherB( aChevronPatternB, 0, nIcuErr);
     aChevronMatcherB.reset( aIcuSearchPatStr);
     aIcuSearchPatStr = aChevronMatcherB.replaceAll( aChevronReplaceB, nIcuErr);
     aChevronMatcherB.reset();
     // - by replacing \> with "look-behind word-char followed by a word-break"
-    static const IcuUniString aChevronPatternE( "\\\\>", -1, IcuUniString::kInvariant);
-    static const IcuUniString aChevronReplaceE( "(?<=\\\\w)\\\\b", -1, IcuUniString::kInvariant);
+    static const icu::UnicodeString aChevronPatternE( "\\\\>", -1, icu::UnicodeString::kInvariant);
+    static const icu::UnicodeString aChevronReplaceE( "(?<=\\\\w)\\\\b", -1, icu::UnicodeString::kInvariant);
     static icu::RegexMatcher aChevronMatcherE( aChevronPatternE, 0, nIcuErr);
     aChevronMatcherE.reset( aIcuSearchPatStr);
     aIcuSearchPatStr = aChevronMatcherE.replaceAll( aChevronReplaceE, nIcuErr);
@@ -957,7 +957,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr(false, reinterpret_cast<const UChar*>(searchStr.getStr()),
+    const icu::UnicodeString aSearchTargetStr(false, reinterpret_cast<const UChar*>(searchStr.getStr()),
                                         searchStr.getLength());
     pRegexMatcher->reset( aSearchTargetStr);
     // search until there is a valid match
@@ -1014,7 +1014,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     // TODO: use ICU's backward searching once it becomes available
     //       as its replacement using forward search is not as good as the real thing
     UErrorCode nIcuErr = U_ZERO_ERROR;
-    const IcuUniString aSearchTargetStr(false, reinterpret_cast<const UChar*>(searchStr.getStr()),
+    const icu::UnicodeString aSearchTargetStr(false, reinterpret_cast<const UChar*>(searchStr.getStr()),
                                         searchStr.getLength());
     pRegexMatcher->reset( aSearchTargetStr);
     if (!lcl_findRegex( pRegexMatcher, endPos, startPos, nIcuErr))

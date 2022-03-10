@@ -27,7 +27,6 @@
 #include <unicode/regex.h>
 
 using namespace ::com::sun::star;
-typedef U_ICU_NAMESPACE::UnicodeString IcuUniString;
 
 class TestTextSearch : public test::BootstrapFixtureBase
 {
@@ -59,11 +58,11 @@ void TestTextSearch::testICU()
 
     OUString aString( "abcdefgh" );
     OUString aPattern( "e" );
-    IcuUniString aSearchPat( reinterpret_cast<const UChar*>(aPattern.getStr()), aPattern.getLength() );
+    icu::UnicodeString aSearchPat( reinterpret_cast<const UChar*>(aPattern.getStr()), aPattern.getLength() );
 
     std::unique_ptr<icu::RegexMatcher> pRegexMatcher(new icu::RegexMatcher( aSearchPat, nSearchFlags, nErr ));
 
-    IcuUniString aSource( reinterpret_cast<const UChar*>(aString.getStr()), aString.getLength() );
+    icu::UnicodeString aSource( reinterpret_cast<const UChar*>(aString.getStr()), aString.getLength() );
     pRegexMatcher->reset( aSource );
 
     CPPUNIT_ASSERT( pRegexMatcher->find( 0, nErr ) );
@@ -76,10 +75,10 @@ void TestTextSearch::testICU()
     OUString aString2( "acababaabcababadcdaa" );
     OUString aPattern2( "a" );
 
-    IcuUniString aSearchPat2( reinterpret_cast<const UChar*>(aPattern2.getStr()), aPattern2.getLength() );
+    icu::UnicodeString aSearchPat2( reinterpret_cast<const UChar*>(aPattern2.getStr()), aPattern2.getLength() );
     pRegexMatcher.reset(new icu::RegexMatcher( aSearchPat2, nSearchFlags, nErr ));
 
-    IcuUniString aSource2( reinterpret_cast<const UChar*>(aString2.getStr()), aString2.getLength() );
+    icu::UnicodeString aSource2( reinterpret_cast<const UChar*>(aString2.getStr()), aString2.getLength() );
     pRegexMatcher->reset( aSource2 );
 
     CPPUNIT_ASSERT( pRegexMatcher->find( 0, nErr ) );
