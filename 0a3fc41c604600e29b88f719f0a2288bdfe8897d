@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acd883f8_8d869e97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-10T20:56:02Z",
+      "side": 1,
+      "message": "Sooo ... the function accepts a \u0026\u0026 reference, but I don\u0027t want to move from the source, so I need to make a copy ... so how do I do that in a fact that doesn\u0027t get flagged by the plugin?\n",
+      "revId": "0a3fc41c604600e29b88f719f0a2288bdfe8897d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
