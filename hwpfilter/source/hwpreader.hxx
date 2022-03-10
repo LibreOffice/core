@@ -130,7 +130,7 @@ private:
     void makeFormula(TxtBox *hbox);
     void makeHyperText(TxtBox *hbox);
     void makePicture(Picture *hbox);
-    void makePictureDRAW(HWPDrawingObject *drawobj, Picture *hbox);
+    void makePictureDRAW(HWPDrawingObject *drawobj, const Picture *hbox);
     void makeLine();
     void makeHidden(Hidden *hbox);
     void makeFootnote(Footnote *hbox);
