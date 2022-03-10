@@ -226,9 +226,9 @@ Dim sHeader As String			&apos;	The specific header to insert
 
 Try:
 	With _SF_
-		If Not IsNull(.Interface) Then .Interface.Dispose()
+		If Not IsNull(.LocalizedInterface) Then .LocalizedInterface.Dispose()
 		._LoadLocalizedInterface(psMode := &quot;ADDTEXT&quot;)	&apos;	Force reload of labels from the code
-		.Interface.ExportToPOTFile(FileName, Header := sHeader)
+		.LocalizedInterface.ExportToPOTFile(FileName, Header := sHeader)
 	End With
 
 Finally:
@@ -506,8 +506,6 @@ Public Sub _InitializeRoot(Optional ByVal pbForce As Boolean)
 	If IsEmpty(_SF_) Or IsNull(_SF_) Then
 		Set _SF_ = New SF_Root
 		Set _SF_.[Me] = _SF_
-		&apos;	Localization
-		_SF_._LoadLocalizedInterface()
 	End If
 	
 End Sub		&apos;	ScriptForge.SF_Utils._InitializeRoot

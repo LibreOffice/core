@@ -612,7 +612,7 @@ Public Sub Raise(Optional ByVal Number As Variant _
 &apos;&apos;&apos;			SF_Exception.Raise(,, &quot;To divide by zero is not a good idea !&quot;)
 
 Dim sMessage As String			&apos;	Error message to log and to display
-Dim L10N As Object				&apos;	Alias to Interface
+Dim L10N As Object				&apos;	Alias to LocalizedInterface
 Const cstThisSub = &quot;Exception.Raise&quot;
 Const cstSubArgs = &quot;[Number=Err], [Source=Erl], [Description]&quot;
 
@@ -641,7 +641,7 @@ Try:
 		If Len(Description) &gt; 0 Then .Description = Description
 
 		&apos;	Log and display
-		Set L10N = _SF_.Interface
+		Set L10N = _SF_._GetLocalizedInterface()
 		sMessage = L10N.GetText(&quot;LONGERRORDESC&quot;, .Number, .Source, .Description)
 		.DebugPrint(sMessage)
 		If _SF_.DisplayEnabled Then MsgBox L10N.GetText(&quot;ERRORNUMBER&quot;, .Number) _
@@ -675,7 +675,7 @@ Public Sub RaiseAbort(Optional ByVal Source As Variant)
 Dim sLocation As String		&apos;	Common header in error messages: location of error
 Dim vLocation As Variant	&apos;	Split array (library, module, method)
 Dim sMessage As String		&apos;	Error message to log and to display
-Dim L10N As Object			&apos;	Alias to Interface
+Dim L10N As Object			&apos;	Alias to LocalizedInterface
 Const cstTabSize = 4
 Const cstThisSub = &quot;Exception.RaiseAbort&quot;
 Const cstSubArgs = &quot;[Source=Erl]&quot;
@@ -691,7 +691,7 @@ Try:
 	With SF_Exception
 
 		&apos;	Prepare message header
-		Set L10N = _SF_.Interface
+		Set L10N = _SF_._GetLocalizedInterface()
 		If Len(_SF_.MainFunction) &gt; 0 Then	&apos;	MainFunction = [Library.]Module.Method
 			vLocation = Split(_SF_.MainFunction, &quot;.&quot;)
 			If UBound(vLocation) &lt; 2 Then vLocation = SF_Array.Prepend(vLocation, &quot;ScriptForge&quot;)
@@ -701,7 +701,6 @@ Try:
 		End If
 
 		&apos;	Log and display
-		Set L10N = _SF_.Interface
 		sMessage = L10N.GetText(&quot;LONGERRORDESC&quot;, .Number, .Source, .Description)
 		.DebugPrint(sMessage)
 		If _SF_.DisplayEnabled Then
@@ -741,7 +740,7 @@ Dim sService As String		&apos;	Service name having detected the error
 Dim sMethod As String		&apos;	Method name having detected the error
 Dim vLocation As Variant	&apos;	Split array (library, module, method)
 Dim sMessage As String		&apos;	Message to log and display
-Dim L10N As Object			&apos;	Alias of Interface
+Dim L10N As Object			&apos;	Alias of LocalizedInterface
 Dim sAlt As String			&apos;	Alternative error messages
 Dim iButtons As Integer		&apos;	MB_OK or MB_YESNO
 Dim iMsgBox As Integer		&apos;	Return value of the message box
@@ -760,7 +759,7 @@ Check:
 	End If
 
 Try:
-	Set L10N = _SF_.Interface
+	Set L10N = _SF_._GetLocalizedInterface()
 	&apos;	Location header common to all error messages
 	If Len(_SF_.MainFunction) &gt; 0 Then	&apos;	MainFunction = [Library.]Module.Method
 		vLocation = Split(_SF_.MainFunction, &quot;.&quot;)
