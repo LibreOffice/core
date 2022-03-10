@@ -82,6 +82,15 @@ struct ShapeStyleRef
 
 typedef ::std::map< sal_Int32, ShapeStyleRef > ShapeStyleRefMap;
 
+struct ConnectorShapeProperties
+{
+    bool mbStartShape;
+    OUString maDestShapeId;
+    sal_Int32 mnDestGlueId;
+};
+
+typedef std::vector<ConnectorShapeProperties> ConnectorShapePropertiesList;
+
 /** Additional information for a chart embedded in a drawing shape. */
 struct ChartShapeInfo
 {
@@ -127,6 +136,10 @@ public:
     const GraphicProperties& getGraphicProperties() const { return *mpGraphicPropertiesPtr; }
 
     CustomShapePropertiesPtr&       getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
+
+    ConnectorShapePropertiesList&   getConnectorShapeProperties() { return maConnectorShapePropertiesList; }
+    void                            setConnectorShape(bool bConnector) { mbConnector = bConnector; }
+    bool                            isConnectorShape() const { return mbConnector; }
 
     Shape3DProperties&              get3DProperties() { return *mp3DPropertiesPtr; }
     const Shape3DProperties&        get3DProperties() const { return *mp3DPropertiesPtr; }
@@ -335,6 +348,7 @@ protected:
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     css::uno::Reference< css::drawing::XShape > mxShape;
+    ConnectorShapePropertiesList maConnectorShapePropertiesList;
 
     OUString                    msServiceName;
     OUString                    msName;
@@ -396,6 +410,9 @@ private:
 
     /// The shape fill should be set to that of the slide background surface.
     bool mbUseBgFill = false;
+
+    // Is this a connector shape?
+    bool mbConnector = false;
 
     /// For SmartArt, this contains groups of shapes: automatic font size is the same in each group.
     oox::core::NamedShapePairs maDiagramFontHeights;

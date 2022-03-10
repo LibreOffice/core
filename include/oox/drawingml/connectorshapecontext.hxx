@@ -33,8 +33,12 @@ namespace oox::drawingml {
 
 class OOX_DLLPUBLIC ConnectorShapeContext final : public ShapeContext
 {
+    ConnectorShapePropertiesList& mrConnectorShapePropertiesList;
+
 public:
-    ConnectorShapeContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr );
+    ConnectorShapeContext(::oox::core::ContextHandler2Helper const& rParent,
+                          const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr,
+                          ConnectorShapePropertiesList& rConnectorShapePropertiesList);
     virtual ~ConnectorShapeContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };
