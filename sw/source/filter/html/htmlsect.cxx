@@ -194,7 +194,11 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         }
         else
         {
-            // Create a new node at the beginning of the section
+            // Our own html export only exports one "header" at most (and one "footer")
+
+            // Create a new node at the beginning of the section if a duplicate arises
+            // and hide the original header/footers content by putting it into a hidden
+            // document-level section
             SwNodeIndex aSttIdx( rContentStIdx, 1 );
             pCNd = m_xDoc->GetNodes().MakeTextNode( aSttIdx,
                             m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_TEXT));
@@ -205,13 +209,11 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
 
             const SwStartNode *pStNd =
                 static_cast<const SwStartNode *>( &rContentStIdx.GetNode() );
-            aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
+            aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex();
 
-            if (!PendingTableInPaM(aDelPam))
-            {
-                m_xDoc->getIDocumentContentOperations().DeleteRange(aDelPam);
-                m_xDoc->getIDocumentContentOperations().DelFullPara(aDelPam);
-            }
+            SwSectionData aSection(SectionType::Content, m_xDoc->GetUniqueSectionName());
+            if (SwSection* pOldContent = m_xDoc->InsertSwSection(aDelPam, aSection, nullptr, nullptr, false))
+                pOldContent->SetHidden(true);
 
             // update page style
             for( size_t i=0; i < m_xDoc->GetPageDescCnt(); i++ )
