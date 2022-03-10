@@ -22,6 +22,7 @@
 
 #include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
+#include <oox/drawingml/shape.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
@@ -35,28 +36,91 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox::drawingml {
 
-ConnectorShapeContext::ConnectorShapeContext( ContextHandler2Helper const & rParent,
-        const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr )
-: ShapeContext( rParent, pMasterShapePtr, pGroupShapePtr )
+namespace
 {
+class ConnectorShapePropertiesContex : public ::oox::core::ContextHandler2
+{
+    std::vector<ConnectorShapeProperties>& mrConnectorShapePropertiesList;
+    ShapePtr mpShapePtr;
+
+public:
+    ConnectorShapePropertiesContex(
+        ::oox::core::ContextHandler2Helper const& rParent, ShapePtr& pShapePtr,
+        std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList);
+
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 aElementToken,
+                                                           const AttributeList& rAttribs) override;
+};
 }
 
-ConnectorShapeContext::~ConnectorShapeContext()
+ConnectorShapePropertiesContex::ConnectorShapePropertiesContex(
+    ContextHandler2Helper const& rParent, ShapePtr& pShapePtr,
+    std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList)
+    : ContextHandler2(rParent)
+    , mrConnectorShapePropertiesList(rConnectorShapePropertiesList)
+    , mpShapePtr(pShapePtr)
 {
+    mpShapePtr->setConnectorShape(true);
 }
 
-ContextHandlerRef ConnectorShapeContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
+::oox::core::ContextHandlerRef
+ConnectorShapePropertiesContex::onCreateContext(sal_Int32 aElementToken,
+                                                const AttributeList& rAttribs)
 {
-    switch( getBaseToken( aElementToken ) )
+    switch (getBaseToken(aElementToken))
     {
-        case XML_nvCxnSpPr :
-        break;
-
+        case XML_cNvPr:
+            mpShapePtr->setId(rAttribs.getString(XML_id).get());
+            mpShapePtr->setName(rAttribs.getString(XML_name).get());
+            break;
+        case XML_stCxn:
+        {
+            ConnectorShapeProperties aConnectorShapeProps;
+            aConnectorShapeProps.mbStartShape = true;
+            aConnectorShapeProps.maDestShapeId = rAttribs.getString(XML_id).get();
+            aConnectorShapeProps.mnDestGlueId = rAttribs.getInteger(XML_idx).get();
+            mrConnectorShapePropertiesList.push_back(aConnectorShapeProps);
+            break;
+        }
+        case XML_endCxn:
+        {
+            ConnectorShapeProperties aConnectorShapeProps;
+            aConnectorShapeProps.mbStartShape = false;
+            aConnectorShapeProps.maDestShapeId = rAttribs.getString(XML_id).get();
+            aConnectorShapeProps.mnDestGlueId = rAttribs.getInteger(XML_idx).get();
+            mrConnectorShapePropertiesList.push_back(aConnectorShapeProps);
+            break;
+        }
         default:
-            return ShapeContext::onCreateContext( aElementToken, rAttribs );
+            break;
     }
 
     return this;
+}
+
+ConnectorShapeContext::ConnectorShapeContext(
+    ContextHandler2Helper const& rParent, const ShapePtr& pMasterShapePtr,
+    const ShapePtr& pGroupShapePtr,
+    std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList)
+    : ShapeContext(rParent, pMasterShapePtr, pGroupShapePtr)
+    , mrConnectorShapePropertiesList(rConnectorShapePropertiesList)
+    , mpShapePtr(pGroupShapePtr)
+{
+}
+
+ConnectorShapeContext::~ConnectorShapeContext() {}
+
+ContextHandlerRef ConnectorShapeContext::onCreateContext(sal_Int32 aElementToken,
+                                                         const AttributeList& rAttribs)
+{
+    switch (getBaseToken(aElementToken))
+    {
+        case XML_nvCxnSpPr:
+            return new ConnectorShapePropertiesContex(*this, mpShapePtr,
+                                                      mrConnectorShapePropertiesList);
+    }
+
+    return ShapeContext::onCreateContext(aElementToken, rAttribs);
 }
 
 }
