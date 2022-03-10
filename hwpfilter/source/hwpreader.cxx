@@ -3858,8 +3858,6 @@ void HwpReader::makePicture(Picture * hbox)
 
 void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 {
-    int x = hbox->pgx;
-    int y = hbox->pgy;
     bool bIsRotate = false;
 
     while (drawobj)
@@ -3897,6 +3895,9 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
         }
         else
         {
+            double x = hbox->pgx;
+            double y = hbox->pgy;
+
             bIsRotate = false;
             if( (drawobj->property.flag & HWPDO_FLAG_ROTATION) &&
                     (drawobj->property.parall.pt[0].y != drawobj->property.parall.pt[1].y) &&
