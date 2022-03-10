@@ -271,6 +271,14 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
         SAL_WARN("sc", "ScDocument::InsertMatrixFormula: No table marked");
         return;
     }
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        // just too slow
+        if (nCol2 - nCol1 > 1024)
+            return;
+        if (nRow2 - nRow1 > 1024)
+            return;
+    }
     assert( ValidColRow( nCol1, nRow1) && ValidColRow( nCol2, nRow2));
 
     SCTAB nTab1 = *rMark.begin();
