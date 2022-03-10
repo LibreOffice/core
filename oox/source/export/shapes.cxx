@@ -611,7 +611,7 @@ static bool lcl_IsOnAllowlist(OUString const & rShapeType)
     return std::find(vAllowlist.begin(), vAllowlist.end(), rShapeType) != vAllowlist.end();
 }
 
-static bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeParameter &rParam, Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
+static bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeParameter &rParam, const Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
 {
     bool bAdj = false;
     if ( rParam.Value.getValueTypeClass() == TypeClass_DOUBLE )
@@ -647,7 +647,7 @@ static bool lcl_GetHandlePosition( sal_Int32 &nValue, const EnhancedCustomShapeP
 
 static void lcl_AnalyzeHandles( const uno::Sequence<beans::PropertyValues> & rHandles,
         std::vector< std::pair< sal_Int32, sal_Int32> > &rHandlePositionList,
-        Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
+        const Sequence< EnhancedCustomShapeAdjustmentValue > &rSeq)
 {
     for ( const Sequence< PropertyValue >& rPropSeq : rHandles )
     {

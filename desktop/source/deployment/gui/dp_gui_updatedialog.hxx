@@ -96,8 +96,8 @@ private:
 
     friend class CheckListBox;
 
-    void insertItem(UpdateDialog::Index *pIndex, bool bEnableCheckBox);
-    void addAdditional(UpdateDialog::Index *pIndex, bool bEnableCheckBox);
+    void insertItem(const UpdateDialog::Index *pIndex, bool bEnableCheckBox);
+    void addAdditional(const UpdateDialog::Index *pIndex, bool bEnableCheckBox);
     bool isIgnoredUpdate( UpdateDialog::Index *pIndex );
 
     void addEnabledUpdate( OUString const & name, dp_gui::UpdateData const & data );

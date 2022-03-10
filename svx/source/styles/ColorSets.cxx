@@ -33,7 +33,7 @@ namespace
 {
 /// Updates a text portion to match a new color set, in case it already uses theme colors.
 void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPortion,
-                               svx::ColorSet& rColorSet)
+                               const svx::ColorSet& rColorSet)
 {
     sal_Int16 nCharColorTheme = -1;
     xPortion->getPropertyValue(UNO_NAME_EDIT_CHAR_COLOR_THEME) >>= nCharColorTheme;
@@ -63,7 +63,7 @@ void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPorti
                                uno::makeAny(static_cast<sal_Int32>(aColor)));
 }
 
-void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, svx::ColorSet& rColorSet)
+void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const svx::ColorSet& rColorSet)
 {
     if (!xShape->getPropertySetInfo()->hasPropertyByName(UNO_NAME_FILLCOLOR_THEME))
     {
@@ -318,7 +318,7 @@ std::unique_ptr<Theme> Theme::FromAny(const css::uno::Any& rVal)
     return pTheme;
 }
 
-void Theme::UpdateSdrPage(SdrPage* pPage)
+void Theme::UpdateSdrPage(const SdrPage* pPage)
 {
     for (size_t nObject = 0; nObject < pPage->GetObjCount(); ++nObject)
     {

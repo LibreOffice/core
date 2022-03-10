@@ -299,7 +299,7 @@ private:
 
     void CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Impl& rDM_Impl );
 
-    static void CopyHeaderFooter( DomainMapper_Impl& rDM_Impl,
+    static void CopyHeaderFooter( const DomainMapper_Impl& rDM_Impl,
                                   const css::uno::Reference< css::beans::XPropertySet >& xPrevStyle,
                                   const css::uno::Reference< css::beans::XPropertySet >& xStyle,
                                   bool bOmitRightHeader = false, bool bOmitLeftHeader = false,

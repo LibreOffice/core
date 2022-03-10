@@ -1321,7 +1321,7 @@ std::unique_ptr<weld::TreeIter> FmFilterNavigator::FindEntry(const FmFilterData*
     return nullptr;
 }
 
-void FmFilterNavigator::Insert(FmFilterData* pItem, int nPos)
+void FmFilterNavigator::Insert(const FmFilterData* pItem, int nPos)
 {
     const FmParentData* pParent = pItem->GetParent() ? pItem->GetParent() : m_pModel.get();
 

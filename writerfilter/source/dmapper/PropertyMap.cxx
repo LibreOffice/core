@@ -882,7 +882,7 @@ void SectionPropertyMap::CopyHeaderFooterTextProperty( const uno::Reference< bea
 }
 
 // Copy headers and footers from the previous page style.
-void SectionPropertyMap::CopyHeaderFooter( DomainMapper_Impl& rDM_Impl,
+void SectionPropertyMap::CopyHeaderFooter( const DomainMapper_Impl& rDM_Impl,
                                            const uno::Reference< beans::XPropertySet >& xPrevStyle,
                                            const uno::Reference< beans::XPropertySet >& xStyle,
                                            bool bOmitRightHeader,

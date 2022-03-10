@@ -122,11 +122,11 @@ class SwSpellIter : public SwLinguIter
     bool m_bBackToStartOfSentence;
 
     void    CreatePortion(uno::Reference< XSpellAlternatives > const & xAlt,
-                linguistic2::ProofreadingResult* pGrammarResult,
+                const linguistic2::ProofreadingResult* pGrammarResult,
                 bool bIsField, bool bIsHidden);
 
     void    AddPortion(uno::Reference< XSpellAlternatives > const & xAlt,
-                       linguistic2::ProofreadingResult* pGrammarResult,
+                       const linguistic2::ProofreadingResult* pGrammarResult,
                        const SpellContentPositions& rDeletedRedlines);
 public:
     SwSpellIter()
@@ -1533,7 +1533,7 @@ static LanguageType lcl_GetLanguage(SwEditShell& rSh)
 
 /// create a text portion at the given position
 void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAlt,
-                        linguistic2::ProofreadingResult* pGrammarResult,
+                        const linguistic2::ProofreadingResult* pGrammarResult,
         bool bIsField, bool bIsHidden)
 {
     svx::SpellPortion aPortion;
@@ -1574,7 +1574,7 @@ void SwSpellIter::CreatePortion(uno::Reference< XSpellAlternatives > const & xAl
 }
 
 void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > const & xAlt,
-                                linguistic2::ProofreadingResult* pGrammarResult,
+                                const linguistic2::ProofreadingResult* pGrammarResult,
                                 const SpellContentPositions& rDeletedRedlines)
 {
     SwEditShell *pMySh = GetSh();

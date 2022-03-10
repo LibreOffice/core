@@ -55,7 +55,7 @@ public:
     AdvancedDiagramHelper(
         const std::shared_ptr< Diagram >& rDiagramPtr,
         const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
-        Shape& rSourceShape);
+        const Shape& rSourceShape);
     virtual ~AdvancedDiagramHelper();
 
     // re-create XShapes

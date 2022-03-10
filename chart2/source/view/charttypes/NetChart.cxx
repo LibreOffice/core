@@ -112,7 +112,7 @@ drawing::Direction3D NetChart::getPreferredDiagramAspectRatio() const
 }
 
 bool NetChart::impl_createLine( VDataSeries* pSeries
-                , std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
+                , const std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
                 , PlottingPositionHelper const * pPosHelper )
 {
     //return true if a line was created successfully
@@ -164,7 +164,7 @@ bool NetChart::impl_createLine( VDataSeries* pSeries
 }
 
 bool NetChart::impl_createArea( VDataSeries* pSeries
-                , std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
+                , const std::vector<std::vector<css::drawing::Position3D>>* pSeriesPoly
                 , std::vector<std::vector<css::drawing::Position3D>> const * pPreviousSeriesPoly
                 , PlottingPositionHelper const * pPosHelper )
 {

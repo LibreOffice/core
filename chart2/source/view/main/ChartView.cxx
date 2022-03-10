@@ -2320,7 +2320,7 @@ void formatPage(
     }
 }
 
-void lcl_removeEmptyGroupShapes( SdrObject& rParent )
+void lcl_removeEmptyGroupShapes( const SdrObject& rParent )
 {
     SdrObjList* pObjList = rParent.getChildrenOfSdrObject();
     if (!pObjList || pObjList->GetObjCount() == 0)

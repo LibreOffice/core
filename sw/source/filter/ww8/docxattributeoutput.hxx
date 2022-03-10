@@ -145,11 +145,11 @@ public:
 
     void DeleteAndResetTheLists();
 
-    void WriteSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing);
-    void WriteExtraParams(::sax_fastparser::FSHelperPtr& pSerializer);
+    void WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing);
+    void WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
     /// Closes a currently open SDT block.
-    void EndSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer);
+    void EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer);
 
     void GetSdtParamsFromGrabBag(const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
 };

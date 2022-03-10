@@ -5201,7 +5201,7 @@ void ScDocument::GetSelectionFrame( const ScMarkData& rMark,
     rLineInner.SetValid( SvxBoxInfoItemValidFlags::VERT,   ( aFlags.nVert != SC_LINE_DONTCARE ) );
 }
 
-static HasAttrFlags OptimizeHasAttrib( HasAttrFlags nMask, ScDocumentPool* pPool )
+static HasAttrFlags OptimizeHasAttrib( HasAttrFlags nMask, const ScDocumentPool* pPool )
 {
     if ( nMask & HasAttrFlags::Rotate )
     {
@@ -6579,7 +6579,7 @@ sc::Sparkline* ScDocument::GetSparkline(ScAddress const& rPosition)
     return nullptr;
 }
 
-sc::Sparkline* ScDocument::CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> & pSparklineGroup)
+sc::Sparkline* ScDocument::CreateSparkline(ScAddress const & rPosition, const std::shared_ptr<sc::SparklineGroup> & pSparklineGroup)
 {
     std::unique_ptr<sc::Sparkline> pSparkline(new sc::Sparkline(pSparklineGroup));
     sc::Sparkline* pCreated = pSparkline.get();

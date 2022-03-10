@@ -496,7 +496,7 @@ IMPL_LINK(UpdateDialog, entryToggled, const weld::TreeView::iter_col&, rRowCol, 
     enableOk();
 }
 
-void UpdateDialog::insertItem(UpdateDialog::Index *pEntry, bool bEnabledCheckBox)
+void UpdateDialog::insertItem(const UpdateDialog::Index *pEntry, bool bEnabledCheckBox)
 {
     int nEntry = m_xUpdates->n_children();
     m_xUpdates->append();
@@ -505,7 +505,7 @@ void UpdateDialog::insertItem(UpdateDialog::Index *pEntry, bool bEnabledCheckBox
     m_xUpdates->set_id(nEntry, weld::toId(pEntry));
 }
 
-void UpdateDialog::addAdditional(UpdateDialog::Index * index, bool bEnabledCheckBox)
+void UpdateDialog::addAdditional(const UpdateDialog::Index * index, bool bEnabledCheckBox)
 {
     m_xAll->set_sensitive(true);
     if (m_xAll->get_active())

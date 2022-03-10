@@ -1602,7 +1602,7 @@ void SwTextBoxHelper::synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*,
     }
 }
 
-std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(SdrObject* pGroupObject,
+std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(const SdrObject* pGroupObject,
                                                               SwFrameFormat* pFormat)
 {
     std::vector<SwFrameFormat*> vRet;

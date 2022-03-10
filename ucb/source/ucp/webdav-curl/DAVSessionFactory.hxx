@@ -64,7 +64,7 @@ private:
     std::mutex m_aMutex;
     std::unique_ptr<ucbhelper::InternetProxyDecider> m_xProxyDecider;
 
-    void releaseElement(DAVSession* pElement);
+    void releaseElement(const DAVSession* pElement);
 
     friend class DAVSession;
 };

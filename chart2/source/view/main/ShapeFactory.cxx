@@ -2074,7 +2074,7 @@ rtl::Reference<SvxShapeText>
 
 rtl::Reference<SvxShapeText>
     ShapeFactory::createText( const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-                , uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
+                , const uno::Sequence< uno::Reference< chart2::XFormattedString > >& xFormattedString
                 , const tNameSequence& rPropNames
                 , const tAnySequence& rPropValues
                 , const uno::Any& rATransformation )
@@ -2418,7 +2418,7 @@ bool ShapeFactory::hasPolygonAnyLines( const std::vector<std::vector<css::drawin
     return false;
 }
 
-bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPoly)
+bool ShapeFactory::isPolygonEmptyOrSinglePoint( const drawing::PolyPolygonShape3D& rPoly)
 {
     // true, if empty polypolygon or one polygon with one point
     return !rPoly.SequenceX.hasElements() ||

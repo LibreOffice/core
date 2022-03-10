@@ -57,7 +57,7 @@ namespace
 }
 
 void addColorsToSparklineGroup(sc::SparklineGroup& rSparklineGroup, sal_Int32 nElement,
-                               const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer)
+                               const AttributeList& rAttribs, const ThemeBuffer& rThemeBuffer)
 {
     switch (nElement)
     {

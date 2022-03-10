@@ -39,7 +39,7 @@ bool AdvancedDiagramHelper::hasDiagramData() const
 AdvancedDiagramHelper::AdvancedDiagramHelper(
     const std::shared_ptr< Diagram >& rDiagramPtr,
     const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
-    Shape& rSourceShape)
+    const Shape& rSourceShape)
 : IDiagramHelper()
 , mpDiagramPtr(rDiagramPtr)
 , mpThemePtr(rTheme)

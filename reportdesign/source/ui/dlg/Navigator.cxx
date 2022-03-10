@@ -138,7 +138,7 @@ class NavigatorTree : public ::cppu::BaseMutex
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pReportListener;
     ::rtl::Reference< comphelper::OSelectionChangeMultiplexer>                  m_pSelectionListener;
 
-    void insertEntry(const OUString& rName, const weld::TreeIter* pParent, const OUString& rImageId, int nPosition, UserData* pData, weld::TreeIter& rRet);
+    void insertEntry(const OUString& rName, const weld::TreeIter* pParent, const OUString& rImageId, int nPosition, const UserData* pData, weld::TreeIter& rRet);
 
     void traverseSection(const uno::Reference<report::XSection>& xSection, const weld::TreeIter* pParent, const OUString& rImageId, int nPosition = -1);
     void traverseFunctions(const uno::Reference< report::XFunctions>& xFunctions, const weld::TreeIter* pParent);
@@ -379,7 +379,7 @@ void NavigatorTree::_selectionChanged( const lang::EventObject& aEvent )
 }
 
 void NavigatorTree::insertEntry(const OUString& rName, const weld::TreeIter* pParent, const OUString& rImageId,
-                                int nPosition, UserData* pData, weld::TreeIter& rRet)
+                                int nPosition, const UserData* pData, weld::TreeIter& rRet)
 {
     OUString sId = pData ? weld::toId(pData) : OUString();
     m_xTreeView->insert(pParent, nPosition, &rName, &sId, nullptr, nullptr, false, &rRet);

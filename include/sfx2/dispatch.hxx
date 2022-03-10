@@ -171,7 +171,7 @@ public:
     SAL_DLLPRIVATE void DoDeactivate_Impl( bool bMDI, SfxViewFrame const * pNew );
     SAL_DLLPRIVATE void InvalidateBindings_Impl(bool);
 
-    static boost::property_tree::ptree fillPopupMenu(css::uno::Reference<css::awt::XPopupMenu>& rMenu);
+    static boost::property_tree::ptree fillPopupMenu(const css::uno::Reference<css::awt::XPopupMenu>& rMenu);
 };
 
 #endif

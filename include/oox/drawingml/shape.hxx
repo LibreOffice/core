@@ -253,7 +253,7 @@ public:
     void propagateDiagramHelper();
 
     // for Writer it is necessary to migrate an existing helper to a new Shape
-    void migrateDiagramHelperToNewShape(ShapePtr& pTarget);
+    void migrateDiagramHelperToNewShape(const ShapePtr& pTarget);
 
 protected:
 

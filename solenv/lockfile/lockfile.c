@@ -224,7 +224,7 @@ static int lockfilename(const char *lockfile, char *tmplock, size_t tmplocksz)
 static int lockfile_create_save_tmplock(const char *lockfile,
 		char *tmplock, size_t tmplocksz,
 		volatile char **xtmplock,
-		int retries, int flags, struct lockargs_s_ *args)
+        int retries, int flags, const struct lockargs_s_ *args)
 {
 	struct stat	st, st1;
 	char		pidbuf[40];
@@ -381,7 +381,7 @@ static int lockfile_create_save_tmplock(const char *lockfile,
 #ifdef LIB
 static
 #endif
-int lockfile_create_set_tmplock(const char *lockfile, volatile char **xtmplock, int retries, int flags, struct lockargs_s_ *args)
+int lockfile_create_set_tmplock(const char *lockfile, volatile char **xtmplock, int retries, int flags, const struct lockargs_s_ *args)
 {
 	char *tmplock;
 	int r, e;

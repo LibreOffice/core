@@ -622,7 +622,7 @@ void SdtBlockHelper::DeleteAndResetTheLists()
     m_bHasId = false;
 }
 
-void SdtBlockHelper::WriteSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing)
+void SdtBlockHelper::WriteSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer, bool bRunTextIsOn, bool bParagraphHasDrawing)
 {
     if (m_nSdtPrToken <= 0 && !m_pDataBindingAttrs.is() && !m_bHasId)
         return;
@@ -686,7 +686,7 @@ void SdtBlockHelper::WriteSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer, b
     m_bHasId = false;
 }
 
-void SdtBlockHelper::WriteExtraParams(::sax_fastparser::FSHelperPtr& pSerializer)
+void SdtBlockHelper::WriteExtraParams(const ::sax_fastparser::FSHelperPtr& pSerializer)
 {
     if (m_nSdtPrToken == FSNS(XML_w, XML_id) || m_bHasId)
         //Word won't open a document with an empty id tag, we fill it with a random number
@@ -720,7 +720,7 @@ void SdtBlockHelper::WriteExtraParams(::sax_fastparser::FSHelperPtr& pSerializer
         pSerializer->singleElementNS(XML_w, XML_alias, FSNS(XML_w, XML_val), m_aAlias);
 }
 
-void SdtBlockHelper::EndSdtBlock(::sax_fastparser::FSHelperPtr& pSerializer)
+void SdtBlockHelper::EndSdtBlock(const ::sax_fastparser::FSHelperPtr& pSerializer)
 {
     pSerializer->endElementNS(XML_w, XML_sdtContent);
     pSerializer->endElementNS(XML_w, XML_sdt);

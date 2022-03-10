@@ -91,7 +91,7 @@ public:
 
     static std::unique_ptr<Theme> FromAny(const css::uno::Any& rVal);
 
-    void UpdateSdrPage(SdrPage* pPage);
+    void UpdateSdrPage(const SdrPage* pPage);
 
     std::vector<Color> GetColors() const;
 };

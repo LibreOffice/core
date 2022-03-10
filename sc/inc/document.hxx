@@ -1254,7 +1254,7 @@ public:
 
     /** Spaklines */
     SC_DLLPUBLIC sc::Sparkline* GetSparkline(ScAddress const & rPosition);
-    SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> & pSparklineGroup);
+    SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, const std::shared_ptr<sc::SparklineGroup> & pSparklineGroup);
 
     /** Notes **/
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);

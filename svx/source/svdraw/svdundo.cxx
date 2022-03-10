@@ -972,7 +972,7 @@ OUString SdrUndoObjOrdNum::GetComment() const
     return ImpGetDescriptionStr(STR_UndoObjOrdNum);
 }
 
-SdrUndoSort::SdrUndoSort(SdrPage & rPage,
+SdrUndoSort::SdrUndoSort(const SdrPage & rPage,
         ::std::vector<sal_Int32> const& rSortOrder)
     : SdrUndoAction(rPage.getSdrModelFromSdrPage())
     , m_OldSortOrder(rSortOrder.size())

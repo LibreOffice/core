@@ -2008,7 +2008,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
     }
 }
 
-void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev, ScLokRTLContext* pLokRTLContext)
+void ScGridWindow::DrawButtons(SCCOL nX1, SCCOL nX2, const ScTableInfo& rTabInfo, OutputDevice* pContentDev, const ScLokRTLContext* pLokRTLContext)
 {
     aComboButton.SetOutputDevice( pContentDev );
 

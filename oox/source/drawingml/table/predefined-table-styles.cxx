@@ -202,7 +202,7 @@ static std::map<OUString, sal_Int32> tokens = { { "", XML_dk1 },
                                                 { "Accent5", XML_accent5 },
                                                 { "Accent6", XML_accent6 } };
 
-void setBorderLineType(oox::drawingml::LinePropertiesPtr& pLineProp, sal_Int32 nToken)
+void setBorderLineType(const oox::drawingml::LinePropertiesPtr& pLineProp, sal_Int32 nToken)
 {
     pLineProp->maLineFill.moFillType.set(nToken);
 }
