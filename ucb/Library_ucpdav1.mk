@@ -32,6 +32,30 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 ifeq ($(WITH_WEBDAV),neon)
 
 $(eval $(call gb_Library_use_externals,ucpdav1,\
+       curl \
+))
+
+$(eval $(call gb_Library_add_exception_objects,ucpdav1,\
+       ucb/source/ucp/webdav-curl/ContentProperties \
+       ucb/source/ucp/webdav-curl/CurlSession \
+       ucb/source/ucp/webdav-curl/CurlUri \
+       ucb/source/ucp/webdav-curl/DAVProperties \
+       ucb/source/ucp/webdav-curl/DAVResourceAccess \
+       ucb/source/ucp/webdav-curl/DAVSessionFactory \
+       ucb/source/ucp/webdav-curl/DAVTypes \
+       ucb/source/ucp/webdav-curl/DateTimeHelper \
+       ucb/source/ucp/webdav-curl/PropfindCache \
+       ucb/source/ucp/webdav-curl/SerfLockStore \
+       ucb/source/ucp/webdav-curl/UCBDeadPropertyValue \
+       ucb/source/ucp/webdav-curl/webdavcontent \
+       ucb/source/ucp/webdav-curl/webdavcontentcaps \
+       ucb/source/ucp/webdav-curl/webdavdatasupplier \
+       ucb/source/ucp/webdav-curl/webdavprovider \
+       ucb/source/ucp/webdav-curl/webdavresponseparser \
+       ucb/source/ucp/webdav-curl/webdavresultset \
+))
+
+$(eval $(call gb_Library_use_externals,ucpdav1,\
 	boost_headers \
 	libxml2 \
 	neon \
