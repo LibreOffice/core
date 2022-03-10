@@ -27,10 +27,6 @@ GraphicConverter::GraphicConverter()
 {
 }
 
-GraphicConverter::~GraphicConverter()
-{
-}
-
 ErrCode GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mxGrfConverter.get();

@@ -40,7 +40,6 @@ class SvxXMLTabStopExport final
 public:
 
     SvxXMLTabStopExport(  SvXMLExport& rExport );
-    ~SvxXMLTabStopExport();
 
     // core API
     void Export( const css::uno::Any& rAny );

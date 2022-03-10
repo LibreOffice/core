@@ -29,9 +29,6 @@ JpegTransform::JpegTransform(SvStream& rInputStream, SvStream& rOutputStream) :
     mrOutputStream ( rOutputStream )
 {}
 
-JpegTransform::~JpegTransform()
-{}
-
 void JpegTransform::perform()
 {
     Transform( &mrInputStream, &mrOutputStream, maRotate );

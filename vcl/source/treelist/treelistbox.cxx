@@ -286,11 +286,6 @@ SvLBoxTab::SvLBoxTab( const SvLBoxTab& rTab )
     nFlags = rTab.nFlags;
 }
 
-SvLBoxTab::~SvLBoxTab()
-{
-}
-
-
 tools::Long SvLBoxTab::CalcOffset( tools::Long nItemWidth, tools::Long nTabWidth )
 {
     tools::Long nOffset = 0;

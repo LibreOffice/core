@@ -46,8 +46,6 @@ public:
     SbxDecimal( const SbxDecimal& rDec );
     explicit SbxDecimal( const css::bridge::oleautomation::Decimal& rAutomationDec );
 
-    ~SbxDecimal();
-
     void addRef()
         { mnRefCount++; }
 

@@ -39,8 +39,6 @@ class XMLImageMapExport
 public:
     XMLImageMapExport(SvXMLExport& rExport);
 
-    ~XMLImageMapExport();
-
     /**
      * Get the ImageMap object from the "ImageMap" property and subsequently
      * export the map (if present).

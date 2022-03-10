@@ -51,10 +51,6 @@ SwAccessibleSelectionHelper::SwAccessibleSelectionHelper(
 {
 }
 
-SwAccessibleSelectionHelper::~SwAccessibleSelectionHelper()
-{
-}
-
 SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 {
     OSL_ENSURE( m_rContext.GetMap() != nullptr, "no map?" );

@@ -39,7 +39,6 @@ class XMLOFF_DLLPUBLIC XMLGradientStyleImport
 
 public:
     XMLGradientStyleImport( SvXMLImport& rImport );
-    ~XMLGradientStyleImport();
 
     void importXML(
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
@@ -54,7 +53,6 @@ class XMLOFF_DLLPUBLIC XMLGradientStyleExport
 
 public:
     XMLGradientStyleExport( SvXMLExport& rExport );
-    ~XMLGradientStyleExport();
 
     void exportXML(
         const OUString& rStrName,

@@ -36,7 +36,6 @@ class VCL_DLLPUBLIC GraphicNativeTransform final
 
 public:
     GraphicNativeTransform(Graphic& rGraphic);
-    ~GraphicNativeTransform();
 
     void rotate(Degree10 aRotation);
 };

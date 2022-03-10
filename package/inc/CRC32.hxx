@@ -30,7 +30,6 @@ class CRC32 final
     sal_uInt32 nCRC;
 public:
     CRC32();
-    ~CRC32();
 
     /// @throws css::uno::RuntimeException
     sal_Int64 updateStream (css::uno::Reference < css::io::XInputStream > const & xStream);

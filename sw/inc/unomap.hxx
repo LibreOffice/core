@@ -319,7 +319,6 @@ class SwUnoPropertyMapProvider
 
 public:
     SwUnoPropertyMapProvider();
-    ~SwUnoPropertyMapProvider();
 
     const SfxItemPropertyMapEntry*  GetPropertyMapEntries(sal_uInt16 PropertyId);
     const SfxItemPropertySet*       GetPropertySet( sal_uInt16 PropertyId );

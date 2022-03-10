@@ -70,7 +70,6 @@ public:
     typedef std::shared_ptr<WW8TableNodeInfoInner> Pointer_t;
 
     explicit WW8TableNodeInfoInner(WW8TableNodeInfo * pParent);
-    ~WW8TableNodeInfoInner();
 
     void setDepth(sal_uInt32 nDepth);
     void setCell(sal_uInt32 nCell);

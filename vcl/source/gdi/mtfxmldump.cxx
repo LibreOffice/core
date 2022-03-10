@@ -570,9 +570,6 @@ MetafileXmlDump::MetafileXmlDump()
     maFilter.fill(false);
 }
 
-MetafileXmlDump::~MetafileXmlDump()
-{}
-
 void MetafileXmlDump::filterActionType(const MetaActionType nActionType, bool bShouldFilter)
 {
     maFilter[nActionType] = bShouldFilter;

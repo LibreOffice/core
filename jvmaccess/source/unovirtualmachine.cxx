@@ -34,8 +34,6 @@ UnoVirtualMachine::CreationException::CreationException(
     CreationException const &)
 {}
 
-UnoVirtualMachine::CreationException::~CreationException() {}
-
 UnoVirtualMachine::CreationException &
 UnoVirtualMachine::CreationException::operator =(CreationException const &) {
     return *this;

@@ -38,7 +38,6 @@ class LZWDecompressor
 {
 public:
     LZWDecompressor();
-    ~LZWDecompressor();
 
     void StartDecompression(SvStream& rIStream);
 

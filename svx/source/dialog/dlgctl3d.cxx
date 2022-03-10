@@ -964,10 +964,6 @@ void SvxLightCtl3D::Init()
     CheckSelection();
 }
 
-SvxLightCtl3D::~SvxLightCtl3D()
-{
-}
-
 void SvxLightCtl3D::CheckSelection()
 {
     const bool bSelectionValid(mrLightControl.IsSelectionValid() || mrLightControl.IsGeometrySelected());

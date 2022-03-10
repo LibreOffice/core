@@ -34,8 +34,6 @@ GraphicNativeTransform::GraphicNativeTransform(Graphic& rGraphic)
 {
 }
 
-GraphicNativeTransform::~GraphicNativeTransform() {}
-
 void GraphicNativeTransform::rotate(Degree10 aInputRotation)
 {
     // Rotation can be between 0 and 3600

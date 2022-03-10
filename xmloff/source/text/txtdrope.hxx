@@ -31,7 +31,6 @@ class XMLTextDropCapExport
 public:
 
     explicit XMLTextDropCapExport( SvXMLExport& rExport );
-    ~XMLTextDropCapExport();
 
     void exportXML( const css::uno::Any& rAny,
                     bool bWholeWord,

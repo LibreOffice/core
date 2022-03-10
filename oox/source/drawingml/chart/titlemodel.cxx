@@ -46,10 +46,6 @@ LegendEntryModel::LegendEntryModel() :
 {
 }
 
-LegendEntryModel::~LegendEntryModel()
-{
-}
-
 LegendModel::LegendModel() :
     mnPosition( XML_r ),
     mbOverlay( false )

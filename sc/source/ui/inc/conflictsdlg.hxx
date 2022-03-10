@@ -83,7 +83,6 @@ private:
 public:
                             ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
                                 sal_uLong nStartOwn, sal_uLong nEndOwn, ScConflictsList& rConflictsList );
-                            ~ScConflictsFinder();
 
     bool                    Find();
 };
@@ -97,7 +96,6 @@ private:
 
 public:
                         ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList& rConflictsList );
-                        ~ScConflictsResolver();
 
     void                HandleAction( ScChangeAction* pAction, bool bIsSharedAction,
                             bool bHandleContentAction, bool bHandleNonContentAction );

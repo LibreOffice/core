@@ -92,7 +92,6 @@ struct PictureOptionsModel
     bool                mbApplyToEnd;       /// True = draw picture at top/bottom side of 3D data points.
 
     explicit            PictureOptionsModel(bool bMSO2007Doc);
-                        ~PictureOptionsModel();
 };
 
 struct ErrorBarModel

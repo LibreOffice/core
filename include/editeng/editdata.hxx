@@ -249,7 +249,6 @@ struct RtfImportInfo
     short                   nTokenValue;
 
     RtfImportInfo( RtfImportState eState, SvParser<int>* pPrsrs, const ESelection& rSel );
-    ~RtfImportInfo();
 };
 
 struct ParagraphInfos

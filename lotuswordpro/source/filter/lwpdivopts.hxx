@@ -69,7 +69,6 @@ class LwpHyphenOptions
 {
 public:
     LwpHyphenOptions();
-    ~LwpHyphenOptions();
     void Read(LwpObjectStream* pStrm);
 
 private:
@@ -92,7 +91,6 @@ class LwpTextLanguage
 {
 public:
     LwpTextLanguage();
-    ~LwpTextLanguage();
     void Read(LwpObjectStream* pStrm);
 
 private:

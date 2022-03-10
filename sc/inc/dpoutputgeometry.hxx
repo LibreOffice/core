@@ -29,7 +29,6 @@ public:
 
     ScDPOutputGeometry() = delete;
     ScDPOutputGeometry(const ScRange& rOutRange, bool bShowFilter);
-    ~ScDPOutputGeometry();
 
     /**
      * @param nCount number of row fields.

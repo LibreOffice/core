@@ -76,11 +76,6 @@ SdrViewEvent::SdrViewEvent()
 {
 }
 
-SdrViewEvent::~SdrViewEvent()
-{
-}
-
-
 // helper class for all D&D overlays
 
 void SdrDropMarkerOverlay::ImplCreateOverlays(

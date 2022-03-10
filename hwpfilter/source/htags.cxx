@@ -85,13 +85,13 @@ OlePicture::OlePicture(int tsize)
         return;
 };
 
+#ifdef _WIN32
 OlePicture::~OlePicture()
 {
-#ifdef _WIN32
      if( pis )
           pis->Release();
-#endif
 };
+#endif
 
 #define FILESTG_SIGNATURE_NORMAL 0xF8995568
 

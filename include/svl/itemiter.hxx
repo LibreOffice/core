@@ -33,7 +33,6 @@ class SVL_DLLPUBLIC SfxItemIter
 
 public:
     SfxItemIter(const SfxItemSet& rSet);
-    ~SfxItemIter();
 
     /// get item, or null if no items
     const SfxPoolItem* GetCurItem() const

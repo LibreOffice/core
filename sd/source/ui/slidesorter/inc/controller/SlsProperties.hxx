@@ -29,7 +29,6 @@ class Properties
 {
 public:
     Properties();
-    ~Properties();
 
     /** Call this method after receiving a VclEventId::ApplicationDataChanged
         event.

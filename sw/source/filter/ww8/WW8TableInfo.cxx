@@ -49,10 +49,6 @@ WW8TableNodeInfoInner::WW8TableNodeInfoInner(WW8TableNodeInfo * pParent)
 {
 }
 
-WW8TableNodeInfoInner::~WW8TableNodeInfoInner()
-{
-}
-
 void WW8TableNodeInfoInner::setDepth(sal_uInt32 nDepth)
 {
     mnDepth = nDepth;

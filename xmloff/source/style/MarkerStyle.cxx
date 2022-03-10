@@ -44,10 +44,6 @@ XMLMarkerStyleImport::XMLMarkerStyleImport( SvXMLImport& rImp )
 {
 }
 
-XMLMarkerStyleImport::~XMLMarkerStyleImport()
-{
-}
-
 void XMLMarkerStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
@@ -139,10 +135,6 @@ void XMLMarkerStyleImport::importXML(
 
 XMLMarkerStyleExport::XMLMarkerStyleExport( SvXMLExport& rExp )
     : rExport( rExp )
-{
-}
-
-XMLMarkerStyleExport::~XMLMarkerStyleExport()
 {
 }
 

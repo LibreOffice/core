@@ -232,11 +232,6 @@ SunVersion::PreRelease SunVersion::getPreRelease(const char *szRelease)
         return Rel_NONE;
 }
 
-SunVersion::~SunVersion()
-{
-
-}
-
 /* Examples:
    a) 1.0 < 1.1
    b) 1.0 < 1.0.0

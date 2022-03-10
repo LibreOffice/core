@@ -27,8 +27,6 @@ VisualState::VisualState(const sal_Int32 nPageId)
 {
 }
 
-VisualState::~VisualState() {}
-
 void VisualState::SetLocationOffset(const Point& rOffset)
 {
     if (maLocationOffset != rOffset)

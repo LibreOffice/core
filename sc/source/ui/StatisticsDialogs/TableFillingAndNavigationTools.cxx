@@ -238,9 +238,6 @@ DataCellIterator::DataCellIterator(const ScRange& aInputRange, bool aByColumn)
         mRow = aInputRange.aStart.Row();
 }
 
-DataCellIterator::~DataCellIterator()
-{}
-
 bool DataCellIterator::hasNext() const
 {
     if(mByColumn)

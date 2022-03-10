@@ -36,7 +36,6 @@ class ScXMLExportDatabaseRanges
 
 public:
     explicit ScXMLExportDatabaseRanges(ScXMLExport& rExport);
-    ~ScXMLExportDatabaseRanges();
     ScMyEmptyDatabaseRangesContainer GetEmptyDatabaseRanges();
     void WriteDatabaseRanges();
 };

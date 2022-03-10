@@ -26,10 +26,6 @@ ScPageTableParam::ScPageTableParam()
     Reset();
 }
 
-ScPageTableParam::~ScPageTableParam()
-{
-}
-
 void ScPageTableParam::Reset()
 {
     bCellContent = true;
@@ -47,10 +43,6 @@ void ScPageTableParam::Reset()
 ScPageAreaParam::ScPageAreaParam()
 {
     Reset();
-}
-
-ScPageAreaParam::~ScPageAreaParam()
-{
 }
 
 void ScPageAreaParam::Reset()

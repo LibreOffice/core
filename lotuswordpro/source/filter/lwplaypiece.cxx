@@ -67,9 +67,6 @@ LwpRotor::LwpRotor()
     : m_nRotation(0)
 {}
 
-LwpRotor::~LwpRotor()
-{}
-
 void LwpRotor:: Read(LwpObjectStream *pStrm)
 {
     m_nRotation = pStrm->QuickReadInt16();
@@ -252,9 +249,6 @@ LwpColumnInfo::LwpColumnInfo()
     , m_nGap(0)
 {}
 
-LwpColumnInfo::~LwpColumnInfo()
-{}
-
 void LwpColumnInfo:: Read(LwpObjectStream *pStrm)
 {
     m_nWidth = pStrm->QuickReadInt32();
@@ -326,9 +320,6 @@ LwpJoinStuff::LwpJoinStuff()
     , m_nHeight(0)
     , m_nID(0)
     , m_nScaling(0)
-{}
-
-LwpJoinStuff::~LwpJoinStuff()
 {}
 
 void LwpJoinStuff:: Read(LwpObjectStream *pStrm)

@@ -55,10 +55,6 @@ RtfImportInfo::RtfImportInfo( RtfImportState eSt, SvParser<int>* pPrsrs, const E
     nTokenValue = 0;
 }
 
-RtfImportInfo::~RtfImportInfo()
-{
-}
-
 constexpr MapUnit gRTFMapUnit = MapUnit::MapTwip;
 
 EditRTFParser::EditRTFParser(

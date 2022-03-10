@@ -62,8 +62,6 @@ public:
 
             CreationException(CreationException const&);
 
-            ~CreationException();
-
             CreationException& operator=(CreationException const&);
         };
 

@@ -38,10 +38,6 @@ Properties::Properties()
 {
 }
 
-Properties::~Properties()
-{
-}
-
 void Properties::HandleDataChangeEvent()
 {
     maBackgroundColor = Application::GetSettings().GetStyleSettings().GetWindowColor();
