@@ -37,7 +37,6 @@ struct View3DModel
     bool                mbRightAngled;      /// True = right-angled axes in 3D view.
 
     explicit            View3DModel(bool bMSO2007Doc);
-                        ~View3DModel();
 };
 
 struct WallFloorModel
@@ -58,7 +57,6 @@ struct DataTableModel
     bool                mbShowVBorder;      /// Show Vertical Border
     bool                mbShowOutline;      /// Show outline
     explicit            DataTableModel();
-                        ~DataTableModel();
 };
 
 struct PlotAreaModel

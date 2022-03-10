@@ -38,10 +38,6 @@ ScXMLExportDDELinks::ScXMLExportDDELinks(ScXMLExport& rTempExport)
 {
 }
 
-ScXMLExportDDELinks::~ScXMLExportDDELinks()
-{
-}
-
 void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat)
 {
     bool bString = ScMatrix::IsNonValueType(aVal.nType);

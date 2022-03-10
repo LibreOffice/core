@@ -70,11 +70,6 @@ XMLImageMapExport::XMLImageMapExport(SvXMLExport& rExp) :
 {
 }
 
-XMLImageMapExport::~XMLImageMapExport()
-{
-
-}
-
 void XMLImageMapExport::Export(
     const Reference<XPropertySet> & rPropertySet)
 {

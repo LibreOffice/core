@@ -67,7 +67,6 @@ private:
 
 public:
     Exif();
-    ~Exif();
 
     bool hasExif() const { return mbExifPresent;}
 

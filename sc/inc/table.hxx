@@ -1336,7 +1336,6 @@ private:
 
     public:
         explicit VisibleDataCellIterator(const ScDocument& rDoc, ScFlatBoolRowSegments& rRowSegs, ScColumn& rColumn);
-        ~VisibleDataCellIterator();
 
         /**
          * Set the start row position.  In case there is not visible data cell

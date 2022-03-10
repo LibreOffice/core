@@ -641,10 +641,6 @@ SvxXMLNumRuleExport::SvxXMLNumRuleExport( SvXMLExport& rExp ) :
     }
 }
 
-SvxXMLNumRuleExport::~SvxXMLNumRuleExport()
-{
-}
-
 void SvxXMLNumRuleExport::exportNumberingRule(
         const OUString& rName, bool bIsHidden,
         const Reference< XIndexReplace >& rNumRule )

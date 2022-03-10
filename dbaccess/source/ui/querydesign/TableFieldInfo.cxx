@@ -27,6 +27,4 @@ OTableFieldInfo::OTableFieldInfo()
 {
 }
 
-OTableFieldInfo::~OTableFieldInfo() {}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

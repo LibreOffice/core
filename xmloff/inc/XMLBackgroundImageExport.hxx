@@ -38,8 +38,6 @@ public:
 
     XMLBackgroundImageExport( SvXMLExport& rExport );
 
-    ~XMLBackgroundImageExport();
-
     void exportXML( const css::uno::Any& rURL,
                     const css::uno::Any *pPos,
                     const css::uno::Any *pFilter,

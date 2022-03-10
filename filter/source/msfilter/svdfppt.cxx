@@ -4764,11 +4764,6 @@ bool PPTTextParagraphStyleAtomInterpreter::Read( SvStream& rIn, const DffRecordH
     return bValid;
 }
 
-PPTTextParagraphStyleAtomInterpreter::~PPTTextParagraphStyleAtomInterpreter()
-{
-
-}
-
 PPTTextSpecInfo::PPTTextSpecInfo( sal_uInt32 _nCharIdx ) :
     nCharIdx        ( _nCharIdx ),
     nDontKnow       ( 1 )

@@ -26,7 +26,7 @@ public:
     SdrGlowAttribute();
     SdrGlowAttribute(const SdrGlowAttribute&);
     SdrGlowAttribute(SdrGlowAttribute&&);
-    ~SdrGlowAttribute();
+
     bool operator==(const SdrGlowAttribute& rCandidate) const;
 
     SdrGlowAttribute& operator=(const SdrGlowAttribute&);

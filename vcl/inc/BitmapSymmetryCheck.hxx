@@ -19,7 +19,6 @@ class VCL_DLLPUBLIC BitmapSymmetryCheck final
 {
 public:
     BitmapSymmetryCheck();
-    ~BitmapSymmetryCheck();
 
     static bool check(Bitmap& rBitmap);
 

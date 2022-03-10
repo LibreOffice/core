@@ -82,10 +82,6 @@ FmFormObjFactory::FmFormObjFactory()
     bInit = true;
 }
 
-FmFormObjFactory::~FmFormObjFactory()
-{
-}
-
 // create css::form::Form objects
 namespace
 {

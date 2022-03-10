@@ -66,10 +66,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
     Init();
 }
 
-ScFilterOptionsMgr::~ScFilterOptionsMgr()
-{
-}
-
 void ScFilterOptionsMgr::Init()
 {
 //moggi:TODO

@@ -96,10 +96,6 @@ SvxXMLTabStopExport::SvxXMLTabStopExport(
 {
 }
 
-SvxXMLTabStopExport::~SvxXMLTabStopExport()
-{
-}
-
 void SvxXMLTabStopExport::Export( const uno::Any& rAny )
 {
     uno::Sequence< css::style::TabStop> aSeq;

@@ -48,7 +48,6 @@ public:
                      weld::Label* refFtDbAreaLabel,
                      weld::Label* refFtDbArea,
                      const OUString& refStrUndefined );
-    ~ScFilterOptionsMgr();
     bool    VerifyPosStr ( const OUString& rPosStr ) const;
 
 private:

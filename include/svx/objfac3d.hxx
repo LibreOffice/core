@@ -36,7 +36,6 @@ class SVXCORE_DLLPUBLIC E3dObjFactory
 {
 public:
     E3dObjFactory();
-    ~E3dObjFactory();
 
     DECL_DLLPRIVATE_STATIC_LINK(E3dObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
 };

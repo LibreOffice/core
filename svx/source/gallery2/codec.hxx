@@ -30,7 +30,6 @@ private:
 
 public:
     explicit GalleryCodec(SvStream& rIOStm);
-    ~GalleryCodec();
 
     void Write(SvStream& rStmToWrite);
     void Read(SvStream& rStmToRead);

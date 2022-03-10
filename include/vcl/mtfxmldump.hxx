@@ -49,7 +49,6 @@ class VCL_DLLPUBLIC MetafileXmlDump final
 
 public:
     MetafileXmlDump();
-    ~MetafileXmlDump();
 
     void filterActionType(const MetaActionType nActionType, bool bShouldFilter);
     void filterAllActionTypes();

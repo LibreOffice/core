@@ -69,9 +69,6 @@ LwpHyphenOptions::LwpHyphenOptions()
 {
 }
 
-LwpHyphenOptions::~LwpHyphenOptions()
-{}
-
 void LwpHyphenOptions::Read(LwpObjectStream *pStrm)
 {
     m_nFlags = pStrm->QuickReaduInt16();
@@ -85,8 +82,6 @@ LwpTextLanguage::LwpTextLanguage()
     : m_nLanguage(0)
 {
 }
-
-LwpTextLanguage::~LwpTextLanguage(){}
 
 void LwpTextLanguage::Read(LwpObjectStream *pStrm)
 {

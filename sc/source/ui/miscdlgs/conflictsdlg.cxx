@@ -129,10 +129,6 @@ ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartSha
 {
 }
 
-ScConflictsFinder::~ScConflictsFinder()
-{
-}
-
 bool ScConflictsFinder::DoActionsIntersect( const ScChangeAction* pAction1, const ScChangeAction* pAction2 )
 {
     return pAction1 && pAction2 && pAction1->GetBigRange().Intersects( pAction2->GetBigRange() );
@@ -239,10 +235,6 @@ ScConflictsResolver::ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList
     ,mrConflictsList ( rConflictsList )
 {
     OSL_ENSURE( mpTrack, "ScConflictsResolver CTOR: mpTrack is null!" );
-}
-
-ScConflictsResolver::~ScConflictsResolver()
-{
 }
 
 void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedAction,

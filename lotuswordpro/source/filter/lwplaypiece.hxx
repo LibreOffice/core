@@ -71,7 +71,6 @@ class LwpRotor
 {
 public:
     LwpRotor();
-    ~LwpRotor();
     void Read(LwpObjectStream* pStrm);
 
 private:
@@ -217,7 +216,6 @@ class LwpColumnInfo
 {
 public:
     LwpColumnInfo();
-    ~LwpColumnInfo();
     void Read(LwpObjectStream* pStrm);
     double GetGap() { return LwpTools::ConvertFromUnitsToMetric(m_nGap); }
 
@@ -260,7 +258,6 @@ class LwpJoinStuff
 {
 public:
     LwpJoinStuff();
-    ~LwpJoinStuff();
     void Read(LwpObjectStream* pStrm);
 
 private:

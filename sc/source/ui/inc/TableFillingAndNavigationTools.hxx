@@ -98,7 +98,6 @@ private:
 
 public:
     DataCellIterator(const ScRange& aInputRange, bool aByColumn);
-    ~DataCellIterator();
 
     bool hasNext() const;
     ScAddress get();

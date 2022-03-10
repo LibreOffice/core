@@ -32,11 +32,6 @@ ScCompressedArray<A,D>::ScCompressedArray( A nMaxAccessP, const D& rValue )
 }
 
 template< typename A, typename D >
-ScCompressedArray<A,D>::~ScCompressedArray()
-{
-}
-
-template< typename A, typename D >
 size_t ScCompressedArray<A,D>::Search( A nAccess ) const
 {
     if (nAccess == 0)

@@ -39,7 +39,6 @@ class SVXCORE_DLLPUBLIC ColorStatus
     Color maBLTRColor;
 public:
     ColorStatus();
-    ~ColorStatus();
     void statusChanged( const css::frame::FeatureStateEvent& rEvent );
     Color GetColor();
 };

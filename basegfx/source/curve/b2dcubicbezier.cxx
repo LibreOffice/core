@@ -337,8 +337,6 @@ namespace basegfx
     {
     }
 
-    B2DCubicBezier::~B2DCubicBezier() = default;
-
     // assignment operator
     B2DCubicBezier& B2DCubicBezier::operator=(const B2DCubicBezier&) = default;
 

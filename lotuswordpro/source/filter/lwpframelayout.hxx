@@ -112,7 +112,6 @@ class LwpFrameLink
 {
 public:
     LwpFrameLink();
-    ~LwpFrameLink();
     void Read(LwpObjectStream* pStrm);
     LwpObjectID& GetNextLayout() { return m_NextLayout; }
     LwpObjectID& GetPreviousLayout() { return m_PreviousLayout; }

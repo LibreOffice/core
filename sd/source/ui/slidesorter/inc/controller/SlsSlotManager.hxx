@@ -46,8 +46,6 @@ public:
     */
     SlotManager(SlideSorter& rSlideSorter);
 
-    ~SlotManager();
-
     void FuTemporary(SfxRequest& rRequest);
     void FuPermanent(SfxRequest& rRequest);
     void FuSupport(SfxRequest& rRequest);

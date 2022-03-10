@@ -40,8 +40,6 @@ public:
 
     explicit XMLFootnoteSeparatorExport(SvXMLExport& rExp);
 
-    ~XMLFootnoteSeparatorExport();
-
     void exportXML(
         const ::std::vector<XMLPropertyState> * pProperties,
         sal_uInt32 nIdx,

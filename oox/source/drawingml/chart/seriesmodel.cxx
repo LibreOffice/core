@@ -62,10 +62,6 @@ PictureOptionsModel::PictureOptionsModel(bool bMSO2007Doc) :
 {
 }
 
-PictureOptionsModel::~PictureOptionsModel()
-{
-}
-
 ErrorBarModel::ErrorBarModel(bool bMSO2007Doc) :
     mfValue( 0.0 ),
     mnDirection( XML_y ),

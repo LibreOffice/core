@@ -54,10 +54,6 @@ XMLHatchStyleImport::XMLHatchStyleImport( SvXMLImport& rImp )
 {
 }
 
-XMLHatchStyleImport::~XMLHatchStyleImport()
-{
-}
-
 void XMLHatchStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
@@ -124,10 +120,6 @@ void XMLHatchStyleImport::importXML(
 
 XMLHatchStyleExport::XMLHatchStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
-{
-}
-
-XMLHatchStyleExport::~XMLHatchStyleExport()
 {
 }
 

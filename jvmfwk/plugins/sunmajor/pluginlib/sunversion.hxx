@@ -84,7 +84,6 @@ class SunVersion final
 public:
     explicit SunVersion(const char* szVer);
     explicit SunVersion(std::u16string_view usVer);
-    ~SunVersion();
 
     /**
        Pre-release versions are taken into account.

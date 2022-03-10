@@ -29,7 +29,6 @@ class VCL_DLLPUBLIC GraphicNativeMetadata final
 
 public:
     GraphicNativeMetadata();
-    ~GraphicNativeMetadata();
 
     bool read(Graphic const& rGraphic);
     bool read(SvStream& rStream);

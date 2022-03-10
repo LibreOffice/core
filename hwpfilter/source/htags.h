@@ -64,8 +64,9 @@ struct OlePicture
     IStorage* pis;
 #endif
     explicit OlePicture(int tsize);
+#ifdef _WIN32
     ~OlePicture(void);
-
+#endif
     void Read(HWPFile& hwpf);
 };
 #endif // INCLUDED_HWPFILTER_SOURCE_HTAGS_H

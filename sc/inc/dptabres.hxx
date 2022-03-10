@@ -252,7 +252,6 @@ private:
 public:
     LateInitParams( const ::std::vector<ScDPDimension*>& ppDim, const ::std::vector<ScDPLevel*>& ppLev,
         bool bRow);
-    ~LateInitParams();
 
     void SetInitChild( bool b ) { mbInitChild = b; }
     void SetInitAllChildren( bool b ) { mbAllChildren = b; }

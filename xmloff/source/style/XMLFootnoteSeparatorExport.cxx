@@ -43,11 +43,6 @@ XMLFootnoteSeparatorExport::XMLFootnoteSeparatorExport(SvXMLExport& rExp) :
 {
 }
 
-XMLFootnoteSeparatorExport::~XMLFootnoteSeparatorExport()
-{
-}
-
-
 void XMLFootnoteSeparatorExport::exportXML(
     const vector<XMLPropertyState> * pProperties,
     sal_uInt32 const nIdx,

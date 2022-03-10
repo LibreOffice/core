@@ -40,7 +40,6 @@ class CommandLineArgs
             public:
                 Exception();
                 Exception(Exception const &);
-                ~Exception();
                 Exception & operator =(Exception const &);
             };
 

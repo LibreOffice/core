@@ -70,10 +70,6 @@ void SbxDecimal::fillAutomationDecimal
 #endif
 }
 
-SbxDecimal::~SbxDecimal()
-{
-}
-
 void releaseDecimalPtr( SbxDecimal*& rpDecimal )
 {
     if( rpDecimal )

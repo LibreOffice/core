@@ -75,7 +75,6 @@ private:
 
 public:
     LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphicObj);
-    ~LwpSdwFileLoader();
 
 public:
     void CreateDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector);

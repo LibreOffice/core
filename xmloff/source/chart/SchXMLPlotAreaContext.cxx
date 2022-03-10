@@ -811,10 +811,6 @@ SchXMLPositionAttributesHelper::SchXMLPositionAttributesHelper( SvXMLImport& rIm
 {
 }
 
-SchXMLPositionAttributesHelper::~SchXMLPositionAttributesHelper()
-{
-}
-
 bool SchXMLPositionAttributesHelper::hasPosSize() const
 {
     return (m_bHasPositionX && m_bHasPositionY) && (m_bHasSizeWidth && m_bHasSizeHeight);

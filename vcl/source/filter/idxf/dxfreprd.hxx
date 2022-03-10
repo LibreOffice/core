@@ -52,7 +52,6 @@ class DXFPalette {
 public:
 
     DXFPalette();
-    ~DXFPalette();
 
     sal_uInt8 GetRed(sal_uInt8 nIndex) const;
     sal_uInt8 GetGreen(sal_uInt8 nIndex) const;

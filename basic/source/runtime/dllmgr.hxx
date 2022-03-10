@@ -33,7 +33,9 @@ public:
 
     SbiDllMgr();
 
+#if defined(_WIN32) && !defined(_ARM64_)
     ~SbiDllMgr();
+#endif
 
     ErrCode Call(
         std::u16string_view function, std::u16string_view library,

@@ -33,9 +33,6 @@ VirtualMachine::AttachGuard::CreationException::CreationException(
     CreationException const &)
 {}
 
-VirtualMachine::AttachGuard::CreationException::~CreationException()
-{}
-
 VirtualMachine::AttachGuard::CreationException &
 VirtualMachine::AttachGuard::CreationException::operator =(
     CreationException const &)
