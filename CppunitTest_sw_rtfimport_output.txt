@@ -1,0 +1,1210 @@
+C:/cygwin/home/sahilbutola08/lode/opt/bin/make -j 1 -rs -f C:/cygwin/home/sahilbutola08/lode/dev/core/Makefile.gbuild CppunitTest_sw_rtfimport
+[build PRL] CustomTarget/postprocess/images/sorted.lst
+[build PRL] CustomTarget/postprocess/images/commandimagelist.ilst
+[build PRL] CustomTarget/postprocess/images/images_breeze.zip
+[build PRL] CustomTarget/postprocess/images/images_breeze_dark.zip
+[build PRL] CustomTarget/postprocess/images/images_breeze_dark_svg.zip
+[build PRL] CustomTarget/postprocess/images/images_breeze_svg.zip
+[build PRL] CustomTarget/postprocess/images/images_colibre.zip
+[build PRL] CustomTarget/postprocess/images/images_colibre_svg.zip
+[build PRL] CustomTarget/postprocess/images/images_elementary.zip
+[build PRL] CustomTarget/postprocess/images/images_elementary_svg.zip
+[build PRL] CustomTarget/postprocess/images/images_karasa_jaga.zip
+[build PRL] CustomTarget/postprocess/images/images_karasa_jaga_svg.zip
+[build PRL] CustomTarget/postprocess/images/images_sifr.zip
+[build PRL] CustomTarget/postprocess/images/images_sifr_dark.zip
+[build PRL] CustomTarget/postprocess/images/images_sifr_dark_svg.zip
+[build PRL] CustomTarget/postprocess/images/images_sifr_svg.zip
+[build PRL] CustomTarget/postprocess/images/images_sukapura.zip
+[build PRL] CustomTarget/postprocess/images/images_sukapura_svg.zip
+[build PKG] postprocess_images
+[build CUT] sw_rtfimport
+[_RUN_____] testBackground::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:basic:2556:10568:basic/source/uno/namecont.cxx:950: Cannot access extensions!
+warn:basic:2556:10568:basic/source/uno/namecont.cxx:950: Cannot access extensions!
+background.rtf:
+testBackground::TestBody finished in: 38170ms
+[_RUN_____] testBehindDoc::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+behind-doc.rtf:
+testBehindDoc::TestBody finished in: 1498ms
+[_RUN_____] testChtOutlineNumberingRtf::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+chtoutline.rtf:
+testChtOutlineNumberingRtf::TestBody finished in: 2213ms
+[_RUN_____] testClassificatonPaste::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+hello.rtf:
+testClassificatonPaste::TestBody finished in: 2218ms
+[_RUN_____] testColumnBreak::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+column-break.rtf:
+testColumnBreak::TestBody finished in: 720ms
+[_RUN_____] testContSectionPageBreak::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+cont-section-pagebreak.rtf:
+testContSectionPageBreak::TestBody finished in: 773ms
+[_RUN_____] testCp950listleveltext1::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+cp950listleveltext1.rtf:
+testCp950listleveltext1::TestBody finished in: 1309ms
+[_RUN_____] testCp950listleveltext2::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+cp950listleveltext2.rtf:
+testCp950listleveltext2::TestBody finished in: 669ms
+[_RUN_____] testCp950listleveltext3::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+cp950listleveltext3.rtf:
+testCp950listleveltext3::TestBody finished in: 690ms
+[_RUN_____] testDefaultValues::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+default-values.rtf:
+testDefaultValues::TestBody finished in: 800ms
+[_RUN_____] testFdo44984::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:sw/source/core/docnode/ndtbl.cxx:1200: empty range
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo44984.rtf:
+testFdo44984::TestBody finished in: 1091ms
+[_RUN_____] testFdo45182::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class sw::ListenerEntry client added as listener to a class SwCharFormat during client iteration.
+fdo45182.rtf:
+testFdo45182::TestBody finished in: 805ms
+[_RUN_____] testFdo45183::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwTextFormatColl client added as listener to a class SwTextFormatColl during client iteration.
+fdo45183.rtf:
+testFdo45183::TestBody finished in: 726ms
+[_RUN_____] testFdo45190::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo45190.rtf:
+testFdo45190::TestBody finished in: 512ms
+[_RUN_____] testFdo46662::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+fdo46662.rtf:
+testFdo46662::TestBody finished in: 507ms
+[_RUN_____] testFdo47036::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo47036.rtf:
+testFdo47036::TestBody finished in: 788ms
+[_RUN_____] testFdo47440::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo47440.rtf:
+testFdo47440::TestBody finished in: 535ms
+[_RUN_____] testFdo48442::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo48442.rtf:
+testFdo48442::TestBody finished in: 517ms
+[_RUN_____] testFdo49692::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+fdo49692.rtf:
+testFdo49692::TestBody finished in: 531ms
+[_RUN_____] testFdo49892::TestBody
+warn:svx.uno:2556:10568:svx/source/unodraw/unoshape.cxx:1597: Unknown Property: ShadowFormat
+warn:svx:2556:10568:svx/source/unodraw/unoshape.cxx:1794: DBG_UNHANDLED_EXCEPTION in setPropertyValues exception: com.sun.star.beans.UnknownPropertyException message: "ShadowFormat"
+warn:svx.uno:2556:10568:svx/source/unodraw/unoshape.cxx:1597: Unknown Property: ShadowFormat
+warn:svx:2556:10568:svx/source/unodraw/unoshape.cxx:1794: DBG_UNHANDLED_EXCEPTION in setPropertyValues exception: com.sun.star.beans.UnknownPropertyException message: "ShadowFormat"
+warn:svx.uno:2556:10568:svx/source/unodraw/unoshape.cxx:1597: Unknown Property: ShadowFormat
+warn:svx:2556:10568:svx/source/unodraw/unoshape.cxx:1794: DBG_UNHANDLED_EXCEPTION in setPropertyValues exception: com.sun.star.beans.UnknownPropertyException message: "ShadowFormat"
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter.dmapper:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:7795: DBG_UNHANDLED_EXCEPTION in ExecuteFrameConversion
+    when: Exception caught when converting to frame exception: com.sun.star.lang.IllegalArgumentException ArgumentPosition: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo49892.rtf:
+testFdo49892::TestBody finished in: 874ms
+[_RUN_____] testFdo49893::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+fdo49893.rtf:
+testFdo49893::TestBody finished in: 659ms
+[_RUN_____] testFdo49893_3::TestBody
+warn:filter.config:2556:10568:filter/source/config/cache/typedetection.cxx:451: caught exception while querying type of file:///C:/cygwin/home/sahilbutola08/lode/dev/core//sw/qa/extras/rtfimport/data/fdo49893-3.rtf com.sun.star.uno.Exception message: "Could not open stream for <file:///C:/cygwin/home/sahilbutola08/lode/dev/core//sw/qa/extras/rtfimport/data/fdo49893-3.rtf>"
+fdo49893-3.rtf:
+unknown:0:testFdo49893_3::TestBody
+An uncaught exception of type com.sun.star.lang.IllegalArgumentException
+- Unsupported URL <file:///C:/cygwin/home/sahilbutola08/lode/dev/core//sw/qa/extras/rtfimport/data/fdo49893-3.rtf>: "type detection failed"
+
+testFdo49893_3::TestBody finished in: 269ms
+[_RUN_____] testFdo52052::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo52052.rtf:
+testFdo52052::TestBody finished in: 904ms
+[_RUN_____] testFdo52066::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo52066.rtf:
+testFdo52066::TestBody finished in: 491ms
+[_RUN_____] testFdo53556::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo53556.rtf:
+testFdo53556::TestBody finished in: 606ms
+[_RUN_____] testFdo55525::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo55525.rtf:
+testFdo55525::TestBody finished in: 1029ms
+[_RUN_____] testFdo57708::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo57708.rtf:
+testFdo57708::TestBody finished in: 602ms
+[_RUN_____] testFdo59953::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo59953.rtf:
+testFdo59953::TestBody finished in: 739ms
+[_RUN_____] testFdo66565::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo66565.rtf:
+testFdo66565::TestBody finished in: 1196ms
+[_RUN_____] testFdo67365::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:150: trying to set property when no type is defined
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo67365.rtf:
+testFdo67365::TestBody finished in: 756ms
+[_RUN_____] testFdo68291::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo68291.odt:
+testFdo68291::TestBody finished in: 4059ms
+[_RUN_____] testFdo74599::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo74599.rtf:
+testFdo74599::TestBody finished in: 505ms
+[_RUN_____] testFdo74823::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo74823.rtf:
+testFdo74823::TestBody finished in: 737ms
+[_RUN_____] testFdo79319::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwTextFormatColl client added as listener to a class SwTextFormatColl during client iteration.
+fdo79319.rtf:
+testFdo79319::TestBody finished in: 666ms
+[_RUN_____] testFdo80742::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo80742.rtf:
+testFdo80742::TestBody finished in: 508ms
+[_RUN_____] testFdo81033::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwTextFormatColl client added as listener to a class SwTextFormatColl during client iteration.
+fdo81033.rtf:
+testFdo81033::TestBody finished in: 507ms
+[_RUN_____] testFdo81944::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo81944.rtf:
+testFdo81944::TestBody finished in: 568ms
+[_RUN_____] testFdo82071::TestBody
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwTextFormatColl client added as listener to a class SwTextFormatColl during client iteration.
+fdo82071.rtf:
+testFdo82071::TestBody finished in: 738ms
+[_RUN_____] testFdo82114::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwTextFormatColl client added as listener to a class SwTextFormatColl during client iteration.
+fdo82114.rtf:
+testFdo82114::TestBody finished in: 696ms
+[_RUN_____] testFdo82512::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo82512.rtf:
+testFdo82512::TestBody finished in: 512ms
+[_RUN_____] testFdo84685::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo84685.rtf:
+testFdo84685::TestBody finished in: 578ms
+[_RUN_____] testFdo85179::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo85179.rtf:
+testFdo85179::TestBody finished in: 574ms
+[_RUN_____] testFdo85812::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+fdo85812.rtf:
+testFdo85812::TestBody finished in: 593ms
+[_RUN_____] testFlip::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+flip.rtf:
+testFlip::TestBody finished in: 781ms
+[_RUN_____] testGroupshape::TestBody
+warn:legacy.osl:2556:10568:svx/source/unodraw/shapepropertynotifier.cxx:92: PropertyChangeNotifier::notifyPropertyChange: no factory!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+groupshape.rtf:
+testGroupshape::TestBody finished in: 838ms
+[_RUN_____] testGroupshapeRotation::TestBody
+warn:legacy.osl:2556:10568:svx/source/unodraw/shapepropertynotifier.cxx:92: PropertyChangeNotifier::notifyPropertyChange: no factory!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+groupshape-rotation.rtf:
+testGroupshapeRotation::TestBody finished in: 651ms
+[_RUN_____] testGroupshape_notext::TestBody
+warn:legacy.osl:2556:10568:svx/source/unodraw/shapepropertynotifier.cxx:92: PropertyChangeNotifier::notifyPropertyChange: no factory!
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+groupshape-notext.rtf:
+testGroupshape_notext::TestBody finished in: 592ms
+[_RUN_____] testImportHeaderFooter::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwCharFormat client added as listener to a class SwCharFormat during client iteration.
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwCharFormat client added as listener to a class SwCharFormat during client iteration.
+tdf108055.rtf:
+testImportHeaderFooter::TestBody finished in: 1176ms
+[_RUN_____] testInk::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+ink.rtf:
+testInk::TestBody finished in: 648ms
+[_RUN_____] testLndscpsxn::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+lndscpsxn.rtf:
+testLndscpsxn::TestBody finished in: 757ms
+[_RUN_____] testN695479::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:editeng/source/uno/unoipset.cxx:290: AW: Missing unit translation to 100th mm!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+n695479.rtf:
+testN695479::TestBody finished in: 707ms
+[_RUN_____] testN823655::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+n823655.rtf:
+testN823655::TestBody finished in: 568ms
+[_RUN_____] testN823675::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+n823675.rtf:
+testN823675::TestBody finished in: 609ms
+[_RUN_____] testOleInline::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+ole-inline.rtf:
+testOleInline::TestBody finished in: 1128ms
+[_RUN_____] testParaStyleBottomMargin::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+para-style-bottom-margin.rtf:
+testParaStyleBottomMargin::TestBody finished in: 545ms
+[_RUN_____] testPasteFirstParaDirectFormat::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+testPasteFirstParaDirectFormat::TestBody finished in: 1279ms
+[_RUN_____] testPoshLeftRight::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 91314
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 91314
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+posh-leftright.rtf:
+testPoshLeftRight::TestBody finished in: 553ms
+[_RUN_____] testPoshPosv::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 91314
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+posh-posv.rtf:
+testPoshPosv::TestBody finished in: 536ms
+[_RUN_____] testSbkeven::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:vcl:2556:10568:vcl/win/gdi/salprn.cxx:1106: Graphics DC FFFFFFFFF02109C5
+sbkeven.rtf:
+testSbkeven::TestBody finished in: 4537ms
+[_RUN_____] testSbkodd::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:sw:2556:10568:C:\cygwin\home\sahilbutola08\lode\dev\core\sw\inc\swrect.hxx:294: SVRect() without Width or Height
+warn:vcl:2556:10568:vcl/win/gdi/salprn.cxx:1106: Graphics DC 0000000013210B2C
+sbkodd.rtf:
+testSbkodd::TestBody finished in: 2691ms
+[_RUN_____] testTdf104016::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf104016.rtf:
+testTdf104016::TestBody finished in: 741ms
+[_RUN_____] testTdf105511::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf105511.rtf:
+testTdf105511::TestBody finished in: 941ms
+[_RUN_____] testTdf108943::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf108943.rtf:
+testTdf108943::TestBody finished in: 683ms
+[_RUN_____] testTdf108947::TestBody
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:writerfilter.rtf:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:2142: parent style not found: 0
+warn:legacy.osl:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:3536: OSL_ASSERT: !m_aStates.empty() && m_aStates.top().getCurrentBuffer() == nullptr
+warn:legacy.osl:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:3536: OSL_ASSERT: !m_aStates.empty() && m_aStates.top().getCurrentBuffer() == nullptr
+warn:legacy.osl:2556:10568:writerfilter/source/rtftok/rtfdocumentimpl.cxx:3536: OSL_ASSERT: !m_aStates.empty() && m_aStates.top().getCurrentBuffer() == nullptr
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf108947.rtf:
+testTdf108947::TestBody finished in: 948ms
+[_RUN_____] testTdf108951::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf108951.rtf:
+testTdf108951::TestBody finished in: 631ms
+[_RUN_____] testTdf112211_2::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf112211-2.rtf:
+testTdf112211_2::TestBody finished in: 799ms
+[_RUN_____] testTdf115153::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf115153.rtf:
+testTdf115153::TestBody finished in: 728ms
+[_RUN_____] testTdf115155::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf115155.rtf:
+testTdf115155::TestBody finished in: 616ms
+[_RUN_____] testTdf115242::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf115242.rtf:
+testTdf115242::TestBody finished in: 725ms
+[_RUN_____] testTdf115715::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf115715.rtf:
+testTdf115715::TestBody finished in: 655ms
+[_RUN_____] testTdf116265::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf116265.rtf:
+testTdf116265::TestBody finished in: 817ms
+[_RUN_____] testTdf116269::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf116269.rtf:
+testTdf116269::TestBody finished in: 692ms
+[_RUN_____] testTdf117246::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf117246.rtf:
+testTdf117246::TestBody finished in: 614ms
+[_RUN_____] testTdf117403::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf117403.rtf:
+testTdf117403::TestBody finished in: 756ms
+[_RUN_____] testTdf119599::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf119599.rtf:
+testTdf119599::TestBody finished in: 561ms
+[_RUN_____] testTdf122430::TestBody
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class sw::ListenerEntry client added as listener to a class SwCharFormat during client iteration.
+tdf122430.rtf:
+testTdf122430::TestBody finished in: 804ms
+[_RUN_____] testTdf126173::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf126173.rtf:
+testTdf126173::TestBody finished in: 659ms
+[_RUN_____] testTdf128611::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf128611.rtf:
+testTdf128611::TestBody finished in: 605ms
+[_RUN_____] testTdf59454::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf59454.rtf:
+testTdf59454::TestBody finished in: 750ms
+[_RUN_____] testTdf59699::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf59699.rtf:
+testTdf59699::TestBody finished in: 587ms
+[_RUN_____] testTdf78506::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwNumFormat client added as listener to a class SwCharFormat during client iteration.
+tdf78506.rtf:
+testTdf78506::TestBody finished in: 566ms
+[_RUN_____] testTdf81943::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1325: PropertyMap has to be valid!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf81943.rtf:
+testTdf81943::TestBody finished in: 977ms
+[_RUN_____] testTdf84684::TestBody
+warn:legacy.osl:2556:10568:svx/source/unodraw/shapepropertynotifier.cxx:92: PropertyChangeNotifier::notifyPropertyChange: no factory!
+warn:legacy.osl:2556:10568:svx/source/unodraw/unoshape.cxx:3581: SvxShape::_getSupportedServiceNames: could not determine object type!
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf84684.rtf:
+testTdf84684::TestBody finished in: 721ms
+[_RUN_____] testTdf90046::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class sw::ListenerEntry client added as listener to a class SwCharFormat during client iteration.
+tdf90046.rtf:
+testTdf90046::TestBody finished in: 759ms
+[_RUN_____] testTdf90097::TestBody
+warn:legacy.osl:2556:10568:svx/source/unodraw/shapepropertynotifier.cxx:92: PropertyChangeNotifier::notifyPropertyChange: no factory!
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf90097.rtf:
+testTdf90097::TestBody finished in: 615ms
+[_RUN_____] testTdf90260Par::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+hello.rtf:
+testTdf90260Par::TestBody finished in: 792ms
+[_RUN_____] testTdf90315::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf90315.rtf:
+testTdf90315::TestBody finished in: 590ms
+[_RUN_____] testTdf91684::TestBody
+warn:legacy.osl:2556:10568:svx/source/unodraw/shapepropertynotifier.cxx:92: PropertyChangeNotifier::notifyPropertyChange: no factory!
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf91684.rtf:
+testTdf91684::TestBody finished in: 679ms
+[_RUN_____] testTdf96308Tabpos::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf96308-tabpos.rtf:
+testTdf96308Tabpos::TestBody finished in: 594ms
+[_RUN_____] testTdf96326::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf96326.rtf:
+testTdf96326::TestBody finished in: 689ms
+[_RUN_____] testTdf99498::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/CellMarginHandler.cxx:65: CellMarginHandler::lcl_attribute: unknown attribute
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/CellMarginHandler.cxx:65: CellMarginHandler::lcl_attribute: unknown attribute
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/CellMarginHandler.cxx:65: CellMarginHandler::lcl_attribute: unknown attribute
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/CellMarginHandler.cxx:65: CellMarginHandler::lcl_attribute: unknown attribute
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/CellMarginHandler.cxx:65: CellMarginHandler::lcl_attribute: unknown attribute
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/CellMarginHandler.cxx:65: CellMarginHandler::lcl_attribute: unknown attribute
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+tdf99498.rtf:
+testTdf99498::TestBody finished in: 659ms
+[_RUN_____] testUnbalancedColumns::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+unbalanced-columns.rtf:
+testUnbalancedColumns::TestBody finished in: 605ms
+[_RUN_____] testUnbalancedColumnsCompat::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:sw.core:2556:10568:sw/source/core/docnode/node.cxx:1985: Wrong cond collection, skipping check of Cond Colls.
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+unbalanced-columns-compat.rtf:
+testUnbalancedColumnsCompat::TestBody finished in: 594ms
+[_RUN_____] testWatermark::TestBody
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:writerfilter:2556:10568:writerfilter/source/dmapper/DomainMapper.cxx:1293: DomainMapper::lcl_attribute: unhandled token: 0
+warn:legacy.osl:2556:10568:svx/source/unodraw/unoshape.cxx:3581: SvxShape::_getSupportedServiceNames: could not determine object type!
+warn:legacy.osl:2556:10568:svx/source/unodraw/unoshape.cxx:3581: SvxShape::_getSupportedServiceNames: could not determine object type!
+warn:legacy.osl:2556:10568:svx/source/unodraw/unoshape.cxx:3581: SvxShape::_getSupportedServiceNames: could not determine object type!
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwCharFormat client added as listener to a class SwCharFormat during client iteration.
+warn:sw.core:2556:10568:sw/source/core/attr/calbck.cxx:197: a class SwCharFormat client added as listener to a class SwCharFormat during client iteration.
+watermark.rtf:
+testWatermark::TestBody finished in: 1263ms
+[_RUN_____] testWrapDistance::TestBody
+warn:legacy.osl:2556:10568:writerfilter/source/dmapper/DomainMapper_Impl.cxx:1704: no style sheet found
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1075: WinSalFrame::SetIcon(): Could not load large icon !
+warn:vcl:2556:10568:vcl/win/window/salframe.cxx:1076: WinSalFrame::SetIcon(): Could not load small icon !
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+warn:vcl.layout:2556:10568:vcl/source/window/layout.cxx:288: nExtraSpace went negative, setting to zero
+wrap-distance.rtf:
+testWrapDistance::TestBody finished in: 670ms
+##Failure Location unknown## : Error
+Test name: testFdo49893_3::TestBody
+An uncaught exception of type com.sun.star.lang.IllegalArgumentException
+- Unsupported URL <file:///C:/cygwin/home/sahilbutola08/lode/dev/core//sw/qa/extras/rtfimport/data/fdo49893-3.rtf>: "type detection failed"
+
+Failures !!!
+Run: 95   Failure total: 1   Failures: 0   Errors: 1
+warn:vcl.gdi.wndproc:2556:10568:vcl/win/app/salinst.cxx:578: ignoring timer event because we are shutting down
+warn:vcl.schedule.deinit:2556:10568:vcl/source/app/scheduler.cxx:177: DeInit task: Timer a: 1 p: 1 drawinglayer ImpTimedRefDev destroy mpVirDev 180000ms (0000025153A53990)
+warn:vcl.schedule.deinit:2556:10568:vcl/source/app/scheduler.cxx:177: DeInit task: Timer a: 1 p: 1 graphic::Manager maSwapOutTimer 10000ms (00007FFB874E13C8)
+warn:vcl.schedule.deinit:2556:10568:vcl/source/app/scheduler.cxx:198: DeInit active tasks: 2 (ignored: 0)
+warn:vcl.gdi.wndproc:2556:10568:vcl/win/app/salinst.cxx:578: ignoring timer event because we are shutting down
+warn:vcl.gdi.wndproc:2556:10568:vcl/win/app/salinst.cxx:578: ignoring timer event because we are shutting down
+warn:vcl.gdi.wndproc:2556:10568:vcl/win/app/salinst.cxx:578: ignoring timer event because we are shutting down
+warn:vcl.gdi.wndproc:2556:10568:vcl/win/app/salinst.cxx:578: ignoring timer event because we are shutting down
+
+Error: a unit test failed, please do one of:
+make CppunitTest_sw_rtfimport CPPUNITTRACE=TRUE # which is a shortcut for the following line
+make CppunitTest_sw_rtfimport CPPUNITTRACE="'C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/devenv.exe' /debugexe" # for interactive debugging in Visual Studio
+make CppunitTest_sw_rtfimport CPPUNITTRACE="drmemory -free_max_frames 20" # for memory checking (install Dr.Memory first, and put it to your PATH)
+
+You can limit the execution to just one particular test by:
+
+make CppunitTest_sw_rtfimport CPPUNIT_TEST_NAME="testXYZ" ...above mentioned params...
+
+make[1]: *** [C:/cygwin/home/sahilbutola08/lode/dev/core/solenv/gbuild/CppunitTest.mk:121: C:/cygwin/home/sahilbutola08/lode/dev/core/workdir/CppunitTest/sw_rtfimport.test] Error 1
+make: *** [Makefile:180: CppunitTest_sw_rtfimport] Error 2
