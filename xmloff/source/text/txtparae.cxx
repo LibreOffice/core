@@ -932,7 +932,7 @@ void XMLTextParagraphExport::exportListChange(
                     {
                         if ( bExportODF &&
                             eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
-                             !sListId.isEmpty() )
+                             !sListId.isEmpty() && !rNextInfo.IsListIdDefault() )
                         {
                             /* Property text:id at element <text:list> has to be
                                replaced by property xml:id (#i92221#)
@@ -951,7 +951,7 @@ void XMLTextParagraphExport::exportListChange(
                                         mpTextListsHelper->GenerateNewListId() );
                         if ( bExportODF &&
                             eODFDefaultVersion >= SvtSaveOptions::ODFSVER_012 &&
-                             !sListId.isEmpty() )
+                             !sListId.isEmpty() && !rNextInfo.IsListIdDefault() )
                         {
                             /* Property text:id at element <text:list> has to be
                                replaced by property xml:id (#i92221#)

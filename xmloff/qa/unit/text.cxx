@@ -245,6 +245,30 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContinueNumberingWord)
     CPPUNIT_ASSERT_EQUAL(OUString("2."), aActual);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
+{
+    // Given a document with a simple list (no continue-list="..." attribute):
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "list-id.fodt";
+    getComponent() = loadFromDesktop(aURL);
+
+    // When storing that document as ODF:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::makeAny(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+
+    // Then make sure that unreferenced xml:id="..." attributes are not written:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this failed with:
+    // - XPath '//text:list' unexpected 'id' attribute
+    // i.e. xml:id="..." was written unconditionally, even when no other list needed it.
+    assertXPathNoAttribute(pXmlDoc, "//text:list", "id");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
