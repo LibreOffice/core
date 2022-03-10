@@ -97,25 +97,8 @@ bool CustomShapeProperties::representsDefaultShape() const
 
 CustomShapeProperties::PresetDataMap CustomShapeProperties::maPresetDataMap;
 
-static OUString GetConnectorShapeType( sal_Int32 nType )
-{
-    SAL_INFO(
-        "oox.drawingml", "preset: " << nType << " " << XML_straightConnector1);
-
-    OUString sType;
-    switch( nType )
-    {
-        case XML_straightConnector1:
-            sType = "mso-spt32";
-            break;
-        default:
-            break;
-    }
-    return sType;
-}
-
 void CustomShapeProperties::pushToPropSet(
-    const Reference < XPropertySet >& xPropSet, const Reference < XShape > & xShape, const awt::Size &aSize )
+    const Reference < XPropertySet >& xPropSet, const awt::Size &aSize )
 {
     if ( mnShapePresetType >= 0 )
     {
@@ -127,22 +110,7 @@ void CustomShapeProperties::pushToPropSet(
         PropertyMap aPropertyMap;
         PropertySet aPropSet( xPropSet );
 
-        OUString sConnectorShapeType = GetConnectorShapeType( mnShapePresetType );
-
-        if (sConnectorShapeType.getLength() > 0)
-        {
-            SAL_INFO(
-                "oox.drawingml",
-                "connector shape: " << sConnectorShapeType << " ("
-                    << mnShapePresetType << ")");
-            //const uno::Reference < drawing::XShape > xShape( xPropSet, UNO_QUERY );
-            Reference< drawing::XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY );
-            if( xDefaulter.is() ) {
-                xDefaulter->createCustomShapeDefaults( sConnectorShapeType );
-                aPropertyMap.setProperty( PROP_Type, sConnectorShapeType );
-            }
-        }
-        else if (maPresetDataMap.find(mnShapePresetType) != maPresetDataMap.end())
+        if (maPresetDataMap.find(mnShapePresetType) != maPresetDataMap.end())
         {
             SAL_INFO(
                 "oox.drawingml",
