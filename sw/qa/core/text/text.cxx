@@ -290,6 +290,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreak)
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "1024");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
+{
+    // Given a document with a fly frame and a character wrapped around it:
+    createSwDoc(DATA_DIRECTORY, "clearing-break-start.fodt");
+    // Insert a clearing break before "X":
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xCursor->gotoEnd(/*bSelect=*/false);
+    xCursor->goLeft(/*nCount=*/1, /*bSelect=*/false);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xLineBreak(
+        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
+    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure that the second line "jumps down", below the fly frame:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1024
+    // - Actual  : 276
+    // i.e. the line height was too small, but only in case the full line was a fly and a break
+    // portion, without any real content.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "1024");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
