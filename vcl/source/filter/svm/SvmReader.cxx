@@ -899,8 +899,20 @@ rtl::Reference<MetaAction> SvmReader::BmpExScaleHandler()
     TypeSerializer aSerializer(mrStream);
     Point aPoint;
     aSerializer.readPoint(aPoint);
+
     Size aSize;
     aSerializer.readSize(aSize);
+    if (aSize.Width() < 0)
+    {
+        SAL_WARN("vcl.gdi", "MetaBmpExScaleAction: negative width");
+        aSize.setWidth(0);
+    }
+
+    if (aSize.Height() < 0)
+    {
+        SAL_WARN("vcl.gdi", "MetaBmpExScaleAction: negative height");
+        aSize.setHeight(0);
+    }
 
     pAction->SetBitmapEx(aBmpEx);
     pAction->SetPoint(aPoint);
