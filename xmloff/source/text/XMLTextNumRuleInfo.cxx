@@ -21,6 +21,7 @@
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -37,7 +38,8 @@ using namespace ::com::sun::star::style;
 
 // Complete refactoring of the class and enhancement of the class for lists.
 XMLTextNumRuleInfo::XMLTextNumRuleInfo()
-    : mnListStartValue( -1 )
+    : mbListIdIsDefault(false)
+    , mnListStartValue( -1 )
     , mnListLevel( 0 )
     , mbIsNumbered( false )
     , mbIsRestart( false )
@@ -59,6 +61,7 @@ void XMLTextNumRuleInfo::Set(
     mbOutlineStyleAsNormalListStyle = bOutlineStyleAsNormalListStyle;
 
     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY );
+    Reference<XPropertyState> xPropState(xTextContent, UNO_QUERY);
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
     // check if this paragraph supports a numbering
@@ -135,6 +138,12 @@ void XMLTextNumRuleInfo::Set(
         if( xPropSetInfo->hasPropertyByName( "ListId" ) )
         {
             xPropSet->getPropertyValue( "ListId" ) >>= msListId;
+
+            if (xPropState.is())
+            {
+                mbListIdIsDefault
+                    = xPropState->getPropertyState("ListId") == PropertyState_DEFAULT_VALUE;
+            }
         }
 
         mbContinueingPreviousSubTree = false;
