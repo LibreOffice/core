@@ -52,6 +52,7 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/presentation/XCustomPresentationSupplier.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/ConnectorType.hpp>
 
 #include <stlpool.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -80,6 +81,7 @@ public:
     virtual void setUp() override;
 
     void testDocumentLayout();
+    void testTdf89449();
     void testTdf147459();
     void testTdf146223();
     void testTdf144918();
@@ -147,6 +149,7 @@ public:
     CPPUNIT_TEST_SUITE(SdImportTest);
 
     CPPUNIT_TEST(testDocumentLayout);
+    CPPUNIT_TEST(testTdf89449);
     CPPUNIT_TEST(testTdf147459);
     CPPUNIT_TEST(testTdf146223);
     CPPUNIT_TEST(testTdf144918);
@@ -290,6 +293,42 @@ void SdImportTest::testDocumentLayout()
                 OUStringConcatenation(m_directories.getPathFromSrc( u"/sd/qa/unit/data/" ) + aFilesToCompare[i].sDump),
                 i == nUpdateMe );
     }
+}
+
+void SdImportTest::testTdf89449()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf89449.pptx"), PPTX);
+
+    sal_Int32 nStartGlueId;
+    sal_Int32 nEndGlueId;
+    css::drawing::ConnectorType aConnectorType;
+
+    uno::Reference<beans::XPropertySet> xCurvedConnector(getShapeFromPage(3, 0, xDocShRef));
+    xCurvedConnector->getPropertyValue("EdgeKind") >>= aConnectorType;
+    CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_CURVE, aConnectorType);
+    nStartGlueId = xCurvedConnector->getPropertyValue("StartGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nStartGlueId);
+    nEndGlueId = xCurvedConnector->getPropertyValue("EndGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nEndGlueId);
+
+    uno::Reference<beans::XPropertySet> xStraightConnector(getShapeFromPage(4, 0, xDocShRef));
+    xStraightConnector->getPropertyValue("EdgeKind") >>= aConnectorType;
+    CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_LINE, aConnectorType);
+    nStartGlueId = xStraightConnector->getPropertyValue("StartGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), nStartGlueId);
+    nEndGlueId = xStraightConnector->getPropertyValue("EndGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nEndGlueId);
+
+    uno::Reference<beans::XPropertySet> xStandardConnector(getShapeFromPage(5, 0, xDocShRef));
+    xStandardConnector->getPropertyValue("EdgeKind") >>= aConnectorType;
+    CPPUNIT_ASSERT_EQUAL(drawing::ConnectorType::ConnectorType_STANDARD, aConnectorType);
+    nStartGlueId = xStandardConnector->getPropertyValue("StartGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), nStartGlueId);
+    nEndGlueId = xStandardConnector->getPropertyValue("EndGluePointIndex").get<sal_Int32>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), nEndGlueId);
+
+    xDocShRef->DoClose();
 }
 
 void SdImportTest::testTdf147459()
