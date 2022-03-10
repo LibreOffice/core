@@ -1989,6 +1989,9 @@ void XclImpXFRangeBuffer::Finalize()
 
     // apply patterns
     XclImpXFBuffer& rXFBuffer = GetXFBuffer();
+    ScDocumentImport::Attrs aPendingAttrParam;
+    SCCOL pendingColStart = -1;
+    SCCOL pendingColEnd = -1;
     SCCOL nScCol = 0;
     for( const auto& rxColumn : maColumns )
     {
@@ -2026,10 +2029,22 @@ void XclImpXFRangeBuffer::Finalize()
             ScDocumentImport::Attrs aAttrParam;
             aAttrParam.mvData.swap(aAttrs);
             aAttrParam.mbLatinNumFmtOnly = false; // when unsure, set it to false.
-            rDocImport.setAttrEntries(nScTab, nScCol, std::move(aAttrParam));
+
+            // Compress setting the attributes, set the same set in one call.
+            if( pendingColStart != -1 && pendingColEnd == nScCol - 1 && aAttrParam == aPendingAttrParam )
+                ++pendingColEnd;
+            else
+            {
+                if( pendingColStart != -1 )
+                    rDocImport.setAttrEntries(nScTab, pendingColStart, pendingColEnd, std::move(aPendingAttrParam));
+                pendingColStart = pendingColEnd = nScCol;
+                aPendingAttrParam = std::move( aAttrParam );
+            }
         }
         ++nScCol;
     }
+    if( pendingColStart != -1 )
+        rDocImport.setAttrEntries(nScTab, pendingColStart, pendingColEnd, std::move(aPendingAttrParam));
 
     // insert hyperlink cells
     for( const auto& [rXclRange, rUrl] : maHyperlinks )
