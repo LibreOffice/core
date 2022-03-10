@@ -11,6 +11,7 @@
 #include "csv_handler.hxx"
 #include "debughelper.hxx"
 #include <drwlayer.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <compiler.hxx>
@@ -51,6 +52,9 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
+#include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/XModel2.hpp>
+
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -639,6 +643,25 @@ ScDocShellRef ScBootstrapFixture::load(const OUString& rURL, sal_Int32 nFormat, 
         nClipboardId = SotClipboardFormatId::STARCALC_8;
 
     return load(bReadWrite, rURL, aFilterName, OUString(), aFilterType, nFormatType, nClipboardId, static_cast<sal_uIntPtr>(nFormatType));
+}
+
+ScDocShellRef ScBootstrapFixture::loadEmptyDocument(const uno::Sequence<beans::PropertyValue>& rPropertyValues)
+{
+    uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(::comphelper::getProcessComponentContext());
+    CPPUNIT_ASSERT(xDesktop.is());
+
+    uno::Reference< lang::XComponent > xComponent = xDesktop->loadComponentFromURL(
+        "private:factory/scalc",
+        "_blank",
+        0,
+        rPropertyValues);
+    CPPUNIT_ASSERT(xComponent.is());
+
+    // Get the document model
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+
+    return dynamic_cast<ScDocShell*>(pFoundShell);
 }
 
 ScDocShellRef ScBootstrapFixture::loadDoc(
