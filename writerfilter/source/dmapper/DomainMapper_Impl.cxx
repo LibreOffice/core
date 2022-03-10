@@ -2145,7 +2145,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         assert(pParaContext);
                         if (ListDef::Pointer const& pList = m_pListTable->GetList(nListId))
                         {   // styles could refer to non-existing lists...
-                            AbstractListDef::Pointer const& pAbsList =
+                            /*AbstractListDef::Pointer const& pAbsList =
                                     pList->GetAbstractDefinition();
                             if (pAbsList &&
                                 // SvxUnoTextRange doesn't have ListId
@@ -2161,7 +2161,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                         m_xPreviousParagraph->setPropertyValue("ListId", uno::makeAny(listId));
                                     }
                                 }
-                            }
+                            }*/
                             if (pList->GetCurrentLevel())
                             {
                                 sal_Int16 nOverrideLevel = pList->GetCurrentLevel()->GetStartOverride();
