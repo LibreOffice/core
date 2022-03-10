@@ -9752,16 +9752,20 @@ void ScInterpreter::ScRept()
 void ScInterpreter::ScConcat()
 {
     sal_uInt8 nParamCount = GetByte();
-    OUString aRes;
+
+    //reverse order of parameter stack to simplify processing
+    ReverseStack(nParamCount);
+
+    OUStringBuffer aRes;
     while( nParamCount-- > 0)
     {
         OUString aStr = GetString().getString();
         if (CheckStringResultLen(aRes, aStr.getLength()))
-            aRes = aStr + aRes;
+            aRes.append(aStr);
         else
             break;
     }
-    PushString( aRes );
+    PushString( aRes.makeStringAndClear() );
 }
 
 FormulaError ScInterpreter::GetErrorType()
