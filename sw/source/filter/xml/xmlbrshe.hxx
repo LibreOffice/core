@@ -31,7 +31,6 @@ class SwXMLBrushItemExport
 
 public:
     explicit SwXMLBrushItemExport(SwXMLExport& rExport);
-    ~SwXMLBrushItemExport();
 
     // core API
     void exportXML(const SvxBrushItem& rItem);

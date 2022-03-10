@@ -51,10 +51,6 @@ namespace basctl
         m_pShell = pShell;
     }
 
-    DocumentSignature::~DocumentSignature()
-    {
-    }
-
     bool DocumentSignature::supportsSignatures() const
     {
         return ( m_pShell != nullptr );

@@ -30,7 +30,6 @@ class SVX_DLLPUBLIC FmFormObjFactory
 {
 public:
     FmFormObjFactory();
-    ~FmFormObjFactory();
 
     DECL_DLLPRIVATE_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, SdrObject*);
 };

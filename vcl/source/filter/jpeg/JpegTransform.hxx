@@ -30,7 +30,6 @@ class JpegTransform final
 
 public:
     JpegTransform(SvStream& rInputStream, SvStream& rOutputStream);
-    ~JpegTransform();
 
     void setRotate(Degree10 aRotate);
     void perform();

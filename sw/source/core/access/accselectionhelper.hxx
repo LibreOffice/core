@@ -41,7 +41,6 @@ class SwAccessibleSelectionHelper
 
 public:
     SwAccessibleSelectionHelper( SwAccessibleContext& rContext );
-    ~SwAccessibleSelectionHelper();
 
     // XAccessibleSelection
 

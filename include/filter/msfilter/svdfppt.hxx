@@ -666,7 +666,6 @@ struct PPTTextParagraphStyleAtomInterpreter
     bool        bLatinTextWrap;
 
                 PPTTextParagraphStyleAtomInterpreter();
-                ~PPTTextParagraphStyleAtomInterpreter();
 
     bool        Read( SvStream& rIn, const DffRecordHeader& rRecHd );
 };

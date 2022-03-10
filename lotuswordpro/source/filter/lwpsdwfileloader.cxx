@@ -68,8 +68,6 @@ LwpSdwFileLoader::LwpSdwFileLoader(SvStream* pStream, LwpGraphicObject* pGraphic
     pStream->Seek(0);
 }
 
-LwpSdwFileLoader::~LwpSdwFileLoader() {}
-
 /**
  * @descr   entry of lwp-drawing objects.
  * @param   pDrawObjVector   a container which will contains the created drawing object of XF-Model.

@@ -27,8 +27,6 @@ GraphicNativeMetadata::GraphicNativeMetadata()
 {
 }
 
-GraphicNativeMetadata::~GraphicNativeMetadata() {}
-
 bool GraphicNativeMetadata::read(Graphic const& rGraphic)
 {
     GfxLink aLink = rGraphic.GetGfxLink();

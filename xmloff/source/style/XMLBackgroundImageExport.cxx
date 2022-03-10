@@ -40,10 +40,6 @@ XMLBackgroundImageExport::XMLBackgroundImageExport( SvXMLExport& rExp ) :
 {
 }
 
-XMLBackgroundImageExport::~XMLBackgroundImageExport()
-{
-}
-
 void XMLBackgroundImageExport::exportXML( const Any& rGraphicAny,
             const Any *pPos,
             const Any *pFilter,

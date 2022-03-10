@@ -23,8 +23,6 @@ SdrGlowAttribute::SdrGlowAttribute(const SdrGlowAttribute&) = default;
 
 SdrGlowAttribute::SdrGlowAttribute(SdrGlowAttribute&&) = default;
 
-SdrGlowAttribute::~SdrGlowAttribute() = default;
-
 SdrGlowAttribute& SdrGlowAttribute::operator=(const SdrGlowAttribute&) = default;
 
 SdrGlowAttribute& SdrGlowAttribute::operator=(SdrGlowAttribute&&) = default;

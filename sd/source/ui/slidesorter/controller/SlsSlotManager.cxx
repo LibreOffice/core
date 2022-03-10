@@ -117,10 +117,6 @@ SlotManager::SlotManager (SlideSorter& rSlideSorter)
 {
 }
 
-SlotManager::~SlotManager()
-{
-}
-
 void SlotManager::FuTemporary (SfxRequest& rRequest)
 {
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();

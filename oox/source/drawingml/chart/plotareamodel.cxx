@@ -30,10 +30,6 @@ View3DModel::View3DModel(bool bMSO2007Doc) :
 {
 }
 
-View3DModel::~View3DModel()
-{
-}
-
 WallFloorModel::WallFloorModel()
 {
 }
@@ -46,10 +42,6 @@ DataTableModel::DataTableModel() :
         mbShowHBorder(false),
         mbShowVBorder(false),
         mbShowOutline(false)
-{
-}
-
-DataTableModel::~DataTableModel()
 {
 }
 

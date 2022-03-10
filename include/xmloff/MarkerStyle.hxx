@@ -39,7 +39,6 @@ class XMLOFF_DLLPUBLIC XMLMarkerStyleImport
 
 public:
     XMLMarkerStyleImport( SvXMLImport& rImport );
-    ~XMLMarkerStyleImport();
 
     void importXML(
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
@@ -53,7 +52,6 @@ class XMLOFF_DLLPUBLIC XMLMarkerStyleExport
 
 public:
     XMLMarkerStyleExport( SvXMLExport& rExport );
-    ~XMLMarkerStyleExport();
 
     void exportXML(
         const OUString& rStrName,

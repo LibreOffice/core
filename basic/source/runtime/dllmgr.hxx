@@ -33,8 +33,6 @@ public:
 
     SbiDllMgr();
 
-    ~SbiDllMgr();
-
     ErrCode Call(
         std::u16string_view function, std::u16string_view library,
         SbxArray * arguments, SbxVariable & result, bool cdeclConvention);

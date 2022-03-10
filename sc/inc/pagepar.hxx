@@ -47,7 +47,6 @@ struct ScPageTableParam
     sal_uInt16  nFirstPageNo;
 
     ScPageTableParam();
-    ~ScPageTableParam();
 
     void                Reset       ();
 };
@@ -60,7 +59,6 @@ struct ScPageAreaParam
     ScRange aPrintArea;
 
     ScPageAreaParam();
-    ~ScPageAreaParam();
 
     void                Reset       ();
 };

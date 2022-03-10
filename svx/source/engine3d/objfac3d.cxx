@@ -38,10 +38,6 @@ E3dObjFactory::E3dObjFactory()
     }
 }
 
-E3dObjFactory::~E3dObjFactory()
-{
-}
-
 // Generate chart internal objects
 
 IMPL_STATIC_LINK( E3dObjFactory, MakeObject, SdrObjCreatorParams, aParams, SdrObject* )

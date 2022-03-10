@@ -2288,10 +2288,6 @@ ScTable::VisibleDataCellIterator::VisibleDataCellIterator(const ScDocument& rDoc
 {
 }
 
-ScTable::VisibleDataCellIterator::~VisibleDataCellIterator()
-{
-}
-
 ScRefCellValue ScTable::VisibleDataCellIterator::reset(SCROW nRow)
 {
     if (nRow > mrDocument.MaxRow())

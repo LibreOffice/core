@@ -37,7 +37,6 @@ class XMLTransGradientStyleImport
 
 public:
     XMLTransGradientStyleImport( SvXMLImport& rImport );
-    ~XMLTransGradientStyleImport();
 
     void importXML(
         const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
@@ -51,7 +50,6 @@ class XMLTransGradientStyleExport
 
 public:
     XMLTransGradientStyleExport( SvXMLExport& rExport );
-    ~XMLTransGradientStyleExport();
 
     void exportXML( const OUString& rStrName, const css::uno::Any& rValue );
 };

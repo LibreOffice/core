@@ -61,7 +61,6 @@ struct LegendEntryModel
     bool                mbLabelDeleted;     /// True = legend label deleted.
 
                         LegendEntryModel();
-                        ~LegendEntryModel();
 };
 
 struct LegendModel

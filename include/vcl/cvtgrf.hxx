@@ -37,7 +37,6 @@ private:
 public:
 
                         GraphicConverter();
-                        ~GraphicConverter();
 
     static ErrCode      Import( SvStream& rIStm, Graphic& rGraphic, ConvertDataFormat nFormat = ConvertDataFormat::Unknown );
     static ErrCode      Export( SvStream& rOStm, const Graphic& rGraphic, ConvertDataFormat nFormat );

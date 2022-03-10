@@ -31,7 +31,6 @@ namespace dbaui
 
     public:
         OTableFieldInfo();
-        ~OTableFieldInfo();
 
         ETableFieldType  GetKeyType() const { return m_eFieldType; }
         void             SetKey(ETableFieldType bKey) { m_eFieldType = bKey; }

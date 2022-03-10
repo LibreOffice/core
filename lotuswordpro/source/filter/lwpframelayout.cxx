@@ -741,8 +741,6 @@ bool LwpFrame::IsLeftWider()
 
 LwpFrameLink::LwpFrameLink() {}
 
-LwpFrameLink::~LwpFrameLink() {}
-
 /**
  * @descr frame link information
  *

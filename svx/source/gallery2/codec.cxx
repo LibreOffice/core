@@ -29,10 +29,6 @@ GalleryCodec::GalleryCodec( SvStream& rIOStm ) :
 {
 }
 
-GalleryCodec::~GalleryCodec()
-{
-}
-
 bool GalleryCodec::IsCoded( SvStream& rStm, sal_uInt32& rVersion )
 {
     const sal_uInt64   nPos = rStm.Tell();

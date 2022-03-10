@@ -67,7 +67,6 @@ class LwpDropcapMgr
 {
 public:
     LwpDropcapMgr();
-    ~LwpDropcapMgr();
     void SetXFPara(XFParagraph* pXFPara);
     XFParagraph* GetXFPara() { return m_pXFPara; }
 

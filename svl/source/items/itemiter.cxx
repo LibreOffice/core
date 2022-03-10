@@ -45,8 +45,6 @@ SfxItemIter::SfxItemIter(const SfxItemSet& rItemSet)
     m_nCurrent = m_nStart;
 }
 
-SfxItemIter::~SfxItemIter() {}
-
 // Precondition : m_nCurrent < m_nEnd
 const SfxPoolItem* SfxItemIter::ImplNextItem()
 {

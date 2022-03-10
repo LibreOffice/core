@@ -106,7 +106,6 @@ public:
             SvLBoxTab();
             SvLBoxTab( tools::Long nPos, SvLBoxTabFlags nFlags );
             SvLBoxTab( const SvLBoxTab& );
-            ~SvLBoxTab();
 
     SvLBoxTabFlags nFlags;
 

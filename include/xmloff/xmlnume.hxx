@@ -57,7 +57,6 @@ class XMLOFF_DLLPUBLIC SvxXMLNumRuleExport final
 public:
 
     SvxXMLNumRuleExport( SvXMLExport& rExport );
-    ~SvxXMLNumRuleExport();
 
     // should be private but sw::StoredChapterNumberingExport needs it
     void exportLevelStyles(

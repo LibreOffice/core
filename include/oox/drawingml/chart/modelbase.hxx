@@ -116,7 +116,6 @@ struct LayoutModel
     bool                mbAutoLayout;       /// True = automatic positioning.
 
                         LayoutModel();
-                        ~LayoutModel();
 };
 
 } // namespace oox::drawingml::chart

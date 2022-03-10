@@ -95,10 +95,6 @@ SwUnoPropertyMapProvider::SwUnoPropertyMapProvider()
     }
 }
 
-SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
-{
-}
-
 const SfxItemPropertyMapEntry*  SwUnoPropertyMapProvider::GetTextCursorPropertyMap()
 {
     static SfxItemPropertyMapEntry const aCharAndParaMap_Impl[] =

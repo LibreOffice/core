@@ -54,10 +54,6 @@ XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
 {
 }
 
-XMLDashStyleImport::~XMLDashStyleImport()
-{
-}
-
 void XMLDashStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
@@ -177,10 +173,6 @@ void XMLDashStyleImport::importXML(
 
 XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
-{
-}
-
-XMLDashStyleExport::~XMLDashStyleExport()
 {
 }
 

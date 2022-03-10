@@ -151,7 +151,6 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxLightCtl3D
 public:
     SvxLightCtl3D(Svx3DLightControl& rLightControl, weld::Scale& rHori,
                weld::Scale& rVert, weld::Button& rButton);
-    ~SvxLightCtl3D();
 
     // check the selection for validity
     void CheckSelection();

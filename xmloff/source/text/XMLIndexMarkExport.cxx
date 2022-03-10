@@ -54,10 +54,6 @@ const enum XMLTokenEnum lcl_pAlphaIndexMarkName[] =
           XML_ALPHABETICAL_INDEX_MARK_END };
 
 
-XMLIndexMarkExport::~XMLIndexMarkExport()
-{
-}
-
 void XMLIndexMarkExport::ExportIndexMark(
     const Reference<XPropertySet> & rPropSet,
     bool bAutoStyles)

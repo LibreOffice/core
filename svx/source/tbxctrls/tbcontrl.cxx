@@ -2123,10 +2123,6 @@ ColorStatus::ColorStatus() :
 {
 }
 
-ColorStatus::~ColorStatus()
-{
-}
-
 void ColorStatus::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     Color aColor( COL_TRANSPARENT );

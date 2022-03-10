@@ -35,7 +35,6 @@ class ScXMLExportDDELinks
     void                WriteTable(const sal_Int32 nPos);
 public:
     explicit ScXMLExportDDELinks(ScXMLExport& rExport);
-    ~ScXMLExportDDELinks();
     void WriteDDELinks(const css::uno::Reference < css::sheet::XSpreadsheetDocument >& xSpreadDoc);
 };
 

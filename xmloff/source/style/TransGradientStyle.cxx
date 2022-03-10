@@ -58,10 +58,6 @@ XMLTransGradientStyleImport::XMLTransGradientStyleImport( SvXMLImport& rImp )
 {
 }
 
-XMLTransGradientStyleImport::~XMLTransGradientStyleImport()
-{
-}
-
 void XMLTransGradientStyleImport::importXML(
     const uno::Reference< xml::sax::XFastAttributeList >& xAttrList,
     uno::Any& rValue,
@@ -167,10 +163,6 @@ void XMLTransGradientStyleImport::importXML(
 
 XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
-{
-}
-
-XMLTransGradientStyleExport::~XMLTransGradientStyleExport()
 {
 }
 

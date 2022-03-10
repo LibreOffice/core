@@ -39,10 +39,6 @@ public:
     */
     SwEnvironmentOfAnchoredObject(const bool _bFollowTextFlow);
 
-    /** destructor
-    */
-    ~SwEnvironmentOfAnchoredObject();
-
     /** determine environment layout frame for possible horizontal object
         positions respectively for alignment to 'page areas'
 

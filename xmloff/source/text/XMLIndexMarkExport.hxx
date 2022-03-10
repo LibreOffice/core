@@ -55,8 +55,6 @@ class XMLIndexMarkExport
 public:
     explicit XMLIndexMarkExport(SvXMLExport& rExp);
 
-    ~XMLIndexMarkExport();
-
     /**
      * export by the property set of its *text* *portion*.
      *

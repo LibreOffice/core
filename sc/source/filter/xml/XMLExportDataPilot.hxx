@@ -68,7 +68,6 @@ class ScXMLExportDataPilot
 
 public:
     explicit ScXMLExportDataPilot(ScXMLExport& rExport);
-    ~ScXMLExportDataPilot();
     void WriteDataPilots();
 };
 

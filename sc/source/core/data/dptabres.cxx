@@ -4064,10 +4064,6 @@ LateInitParams::LateInitParams(
 {
 }
 
-LateInitParams::~LateInitParams()
-{
-}
-
 bool LateInitParams::IsEnd( size_t nPos ) const
 {
     return nPos >= mppDim.size();

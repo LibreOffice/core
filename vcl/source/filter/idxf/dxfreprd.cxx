@@ -108,11 +108,6 @@ DXFPalette::DXFPalette()
 }
 
 
-DXFPalette::~DXFPalette()
-{
-}
-
-
 void DXFPalette::SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
 {
     pRed[nIndex]=nRed;

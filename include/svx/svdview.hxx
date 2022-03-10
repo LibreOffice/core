@@ -123,7 +123,6 @@ struct SVXCORE_DLLPUBLIC SdrViewEvent
 
 public:
     SdrViewEvent();
-    ~SdrViewEvent();
 };
 
 // helper class for all D&D overlays

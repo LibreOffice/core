@@ -251,8 +251,6 @@ CommandLineArgs::Supplier::Exception::Exception() {}
 
 CommandLineArgs::Supplier::Exception::Exception(Exception const &) {}
 
-CommandLineArgs::Supplier::Exception::~Exception() {}
-
 CommandLineArgs::Supplier::Exception &
 CommandLineArgs::Supplier::Exception::operator =(Exception const &)
 { return *this; }

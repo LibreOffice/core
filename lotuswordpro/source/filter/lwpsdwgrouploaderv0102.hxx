@@ -79,7 +79,6 @@ private:
 
 public:
     LwpSdwGroupLoaderV0102(SvStream* pStream, LwpGraphicObject* pGraphicObj);
-    ~LwpSdwGroupLoaderV0102();
 
 public:
     void BeginDrawObjects(std::vector<rtl::Reference<XFFrame>>* pDrawObjVector);

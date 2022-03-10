@@ -32,7 +32,6 @@ class VisualState
 {
 public:
     VisualState(const sal_Int32 nPageId);
-    ~VisualState();
 
     const Point& GetLocationOffset() const { return maLocationOffset; }
     void SetLocationOffset(const Point& rPoint);
