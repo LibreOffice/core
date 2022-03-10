@@ -371,9 +371,12 @@ void AbstractListDef::AddLevel( sal_uInt16 nLvl )
     if ( nLvl >= m_aLevels.size() )
         m_aLevels.resize( nLvl+1 );
 
-    ListLevel::Pointer pLevel( new ListLevel );
-    m_pCurrentLevel = pLevel;
-    m_aLevels[nLvl] = pLevel;
+    if (!m_aLevels[nLvl])
+    {
+        m_aLevels[nLvl] = new ListLevel;
+    }
+
+    m_pCurrentLevel = m_aLevels[nLvl];
 }
 
 uno::Sequence<uno::Sequence<beans::PropertyValue>> AbstractListDef::GetPropertyValues(bool bDefaults)
