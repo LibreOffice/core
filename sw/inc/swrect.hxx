@@ -291,7 +291,7 @@ inline SwRect &SwRect::operator-=( const Point &rPt )
 // other
 inline tools::Rectangle SwRect::SVRect() const
 {
-    SAL_WARN_IF( IsEmpty(), "sw", "SVRect() without Width or Height" );
+    SAL_INFO_IF( IsEmpty(), "sw.core", "SVRect() without Width or Height" );
     return tools::Rectangle( m_Point.getX(), m_Point.getY(),
         m_Point.getX() + m_Size.getWidth() - 1,         //Right()
         m_Point.getY() + m_Size.getHeight() - 1 );      //Bottom()
