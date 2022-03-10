@@ -14,11 +14,14 @@
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <basic/basrdll.hxx>
 #include <cppunit/TestAssert.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 using namespace css;
 
@@ -75,6 +78,20 @@ void MacrosTest::dispatchCommand(const uno::Reference<lang::XComponent>& xCompon
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+std::unique_ptr<SvStream> MacrosTest::parseExportStream(const utl::TempFile& rTempFile,
+                                                        const OUString& rStreamName)
+{
+    const OUString aUrl = rTempFile.GetURL();
+    uno::Reference<uno::XComponentContext> xComponentContext
+        = comphelper::getProcessComponentContext();
+    uno::Reference<packages::zip::XZipFileAccess2> const xZipNames(
+        packages::zip::ZipFileAccess::createWithURL(xComponentContext, aUrl));
+    uno::Reference<io::XInputStream> const xInputStream(xZipNames->getByName(rStreamName),
+                                                        uno::UNO_QUERY);
+    std::unique_ptr<SvStream> pStream(utl::UcbStreamHelper::CreateStream(xInputStream, true));
+    return pStream;
 }
 }
 

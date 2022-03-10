@@ -26,6 +26,11 @@ struct TestMacroInfo
 };
 
 class BasicDLL;
+class SvStream;
+namespace utl
+{
+class TempFile;
+}
 
 namespace unotest {
 
@@ -42,6 +47,10 @@ public:
     dispatchCommand(const css::uno::Reference<css::lang::XComponent>& xComponent,
                     const OUString& rCommand,
                     const css::uno::Sequence<css::beans::PropertyValue>& rPropertyValues);
+
+    /// Opens rStreamName from rTempFile, assuming it's a ZIP storage.
+    static std::unique_ptr<SvStream> parseExportStream(const utl::TempFile& rTempFile,
+                                                       const OUString& rStreamName);
 
 protected:
     css::uno::Reference< css::frame::XDesktop2> mxDesktop;
