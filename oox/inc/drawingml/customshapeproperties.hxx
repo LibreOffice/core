@@ -98,7 +98,6 @@ public:
     CustomShapeProperties();
 
     void pushToPropSet( const css::uno::Reference < css::beans::XPropertySet > & xPropSet,
-                        const css::uno::Reference < css::drawing::XShape > & xShape,
                         const css::awt::Size &aSize );
 
     sal_Int32 getShapePresetType() const { return mnShapePresetType; }

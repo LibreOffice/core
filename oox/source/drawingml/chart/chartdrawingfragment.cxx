@@ -157,7 +157,8 @@ ContextHandlerRef ChartDrawingFragment::onCreateContext( sal_Int32 nElement, con
                     return new ShapeContext( *this, ShapePtr(), mxShape );
                 case CDR_TOKEN( cxnSp ):
                     mxShape = std::make_shared<Shape>( "com.sun.star.drawing.ConnectorShape" );
-                    return new ConnectorShapeContext( *this, ShapePtr(), mxShape );
+                    return new ConnectorShapeContext(*this, ShapePtr(), mxShape,
+                                                     mxShape->getConnectorShapeProperties());
                 case CDR_TOKEN( pic ):
                     mxShape = std::make_shared<Shape>( "com.sun.star.drawing.GraphicObjectShape" );
                     return new GraphicShapeContext( *this, ShapePtr(), mxShape );

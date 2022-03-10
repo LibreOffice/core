@@ -1542,10 +1542,10 @@ void SdOOXMLExportTest2::testTdf114845_rotateShape()
     xDocShRef->DoClose();
 
     xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:nvSpPr/p:cNvPr", "name", "Straight Arrow Connector 9");
-    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm", "flipV", "1");
-    double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "x").toDouble();
-    double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[5]/p:spPr/a:xfrm/a:off", "y").toDouble();
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:cxnSp[2]/p:nvCxnSpPr/p:cNvPr", "name", "Straight Arrow Connector 9");
+    assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:cxnSp[2]/p:spPr/a:xfrm", "flipV", "1");
+    double dX = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:cxnSp[2]/p:spPr/a:xfrm/a:off", "x").toDouble();
+    double dY = getXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:cxnSp[2]/p:spPr/a:xfrm/a:off", "y").toDouble();
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 4059000.0, dX, dX * .001);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( 3287520.0, dY, dY * .001);
 }
