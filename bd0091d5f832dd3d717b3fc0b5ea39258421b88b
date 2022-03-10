@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b56d07bb_d7f337c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-10T18:43:05Z",
+      "side": 1,
+      "message": "@Attila: somehow \"positon\" left in the patch, so I fixed that, too...",
+      "revId": "bd0091d5f832dd3d717b3fc0b5ea39258421b88b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

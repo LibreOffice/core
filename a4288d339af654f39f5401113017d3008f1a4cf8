@@ -293,6 +293,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a70637d_e6bde073",
+        "filename": "sw/source/core/doc/textboxhelper.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 1430,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-10T18:43:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1decfc90_8bae566c",
+      "range": {
+        "startLine": 1430,
+        "startChar": 28,
+        "endLine": 1430,
+        "endChar": 35
+      },
+      "revId": "a4288d339af654f39f5401113017d3008f1a4cf8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "85b7303f_bd780152",
