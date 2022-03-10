@@ -22,6 +22,30 @@
       },
       "revId": "48670b0bc3afb60ce7c97b4a0f842d89b7d64089",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4ad90c4_476392af",
+        "filename": "sw/source/core/draw/dcontact.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-10T12:35:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d981a479_93663514",
+      "range": {
+        "startLine": 1342,
+        "startChar": 19,
+        "endLine": 1342,
+        "endChar": 55
+      },
+      "revId": "48670b0bc3afb60ce7c97b4a0f842d89b7d64089",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

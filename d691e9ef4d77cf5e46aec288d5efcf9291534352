@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c76aef1_98ae6f7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-10T12:35:21Z",
+      "side": 1,
+      "message": "@Xisco, @Attila: thanks for the back-port and the verification",
+      "revId": "d691e9ef4d77cf5e46aec288d5efcf9291534352",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
