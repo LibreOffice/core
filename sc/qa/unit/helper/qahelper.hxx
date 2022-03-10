@@ -202,6 +202,7 @@ protected:
 
     ScDocShellRef load(const OUString& rURL, sal_Int32 nFormat, bool bReadWrite = false);
 
+    ScDocShellRef loadEmptyDocument(const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rPropertyValues = {});
     ScDocShellRef loadDoc(
         std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite = false );
 
