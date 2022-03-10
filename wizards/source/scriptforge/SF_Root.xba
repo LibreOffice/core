@@ -83,7 +83,7 @@ Private Toolkit				As Object	&apos; com.sun.star.awt.Toolkit
 Private FileSystemNaming	As String	&apos; If &quot;SYS&quot;, file and folder naming is based on operating system notation
 Private PythonHelper		As String	&apos; File name of Python helper functions (stored in $(inst)/share/Scripts/python)
 Private PythonHelper2		As String	&apos; Alternate Python helper file name for test purposes
-Private Interface			As Object	&apos; ScriptForge own L10N service
+Private LocalizedInterface	As Object	&apos; ScriptForge own L10N service
 Private OSName				As String	&apos; WIN, LINUX, MACOS
 Private SFDialogs			As Variant	&apos; Persistent storage for the SFDialogs library
 Private SFForms				As Variant	&apos; Persistent storage for the SF_Form class in the SFDocuments library
@@ -137,7 +137,7 @@ Private Sub Class_Initialize()
 	FileSystemNaming = &quot;ANY&quot;
 	PythonHelper = &quot;ScriptForgeHelper.py&quot;
 	PythonHelper2 = &quot;&quot;
-	Set Interface = Nothing
+	Set LocalizedInterface = Nothing
 	Set BrowseNodeFactory = Nothing
 	Set DatabaseContext = Nothing
 	Set ConfigurationProvider = Nothing
@@ -240,6 +240,20 @@ Finally:
 	Exit Function
 End Function	&apos;	ScriptForge.SF_Root._AddToPythonStorage
 
+REM ------------------------------------------------------------------------------
+Public Function _GetLocalizedInterface() As Object
+&apos;&apos;&apos;	Returns the LN object instance related to the ScriptForge internal localization
+&apos;&apos;&apos;	If not yet done, load it from the shipped po files
+&apos;&apos;&apos;	Makes that the localized user interface is loaded only when needed
+
+Try:
+	If IsNull(LocalizedInterface) Then _LoadLocalizedInterface()
+
+Finally:
+	Set _GetLocalizedInterface = LocalizedInterface
+	Exit Function
+End Function	&apos;	ScriptForge.SF_Root._GetLocalizedInterface
+
 REM -----------------------------------------------------------------------------
 Public Sub _InitPythonStorage()
 &apos;&apos;&apos;	Make PythonStorage an array
@@ -269,7 +283,7 @@ End Sub		&apos;	ScriptForge.SF_Root._InitPythonStorage
 REM -----------------------------------------------------------------------------
 Public Sub _LoadLocalizedInterface(Optional ByVal psMode As String)
 &apos;&apos;&apos;	Build the user interface in a persistent L10N object
-&apos;&apos;&apos;	Executed - only once - at first ScriptForge invocation by a user script
+&apos;&apos;&apos;	Executed - only once - at first request of a label inside the LocalizedInterface dictionary
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		psMode:	ADDTEXT =&gt;	the (english) labels are loaded from code below
 &apos;&apos;&apos;				POFILE  =&gt;	the localized labels are loaded from a PO file
@@ -294,19 +308,19 @@ Try:
 			sLocale = SF_Utils._GetUNOService(&quot;OfficeLocale&quot;).Language
 			sPOFolder = .BuildPath(sInstallFolder, &quot;po&quot;)
 			sPOFile = .BuildPath(sPOFolder, sLocale &amp; &quot;.po&quot;)
-			If sLocale = &quot;en&quot; Then					&apos;	Interface loaded by code i.o. read from po file
+			If sLocale = &quot;en&quot; Then					&apos;	LocalizedInterface loaded by code i.o. read from po file
 				psMode = &quot;ADDTEXT&quot;
 			ElseIf Not .FileExists(sPOFile) Then	&apos;	File not found =&gt; load texts from code below
 				psMode = &quot;ADDTEXT&quot;
 			Else
-				Set Interface = CreateScriptService(&quot;L10N&quot;, sPOFolder, sLocale)
+				Set LocalizedInterface = CreateScriptService(&quot;L10N&quot;, sPOFolder, sLocale)
 			End If
 		End With
 	End If
 
 	If psMode = &quot;ADDTEXT&quot; Then		&apos;	Use this mode in development to prepare a new POT file
-		Set Interface = CreateScriptService(&quot;L10N&quot;)
-		With Interface
+		Set LocalizedInterface = CreateScriptService(&quot;L10N&quot;)
+		With LocalizedInterface
 	&apos;	SF_Exception.Raise
 			.AddText(	Context := &quot;ERRORNUMBER&quot; _
 						, MsgId := &quot;Error %1&quot; _
