@@ -9448,8 +9448,8 @@ void ScInterpreter::ScRegex()
     // If bGlobalReplacement==true and bReplacement==false then
     // bGlobalReplacement is silently ignored.
 
-    OUString aExpression = GetString().getString();
-    OUString aText = GetString().getString();
+    const OUString aExpression = GetString().getString();
+    const OUString aText = GetString().getString();
 
     if (nGlobalError != FormulaError::NONE)
     {
@@ -9465,7 +9465,7 @@ void ScInterpreter::ScRegex()
     }
 
     const icu::UnicodeString aIcuExpression(
-            reinterpret_cast<const UChar*>(aExpression.getStr()), aExpression.getLength());
+        false, reinterpret_cast<const UChar*>(aExpression.getStr()), aExpression.getLength());
     UErrorCode status = U_ZERO_ERROR;
     icu::RegexMatcher aRegexMatcher( aIcuExpression, 0, status);
     if (U_FAILURE(status))
@@ -9478,7 +9478,7 @@ void ScInterpreter::ScRegex()
     // https://unicode-org.github.io/icu-docs/apidoc/released/icu4c/classicu_1_1RegexMatcher.html#a6ebcfcab4fe6a38678c0291643a03a00
     aRegexMatcher.setTimeLimit( 23*1000, status);
 
-    const icu::UnicodeString aIcuText( reinterpret_cast<const UChar*>(aText.getStr()), aText.getLength());
+    const icu::UnicodeString aIcuText(false, reinterpret_cast<const UChar*>(aText.getStr()), aText.getLength());
     aRegexMatcher.reset( aIcuText);
 
     if (!bReplacement)
@@ -9518,7 +9518,7 @@ void ScInterpreter::ScRegex()
     }
 
     const icu::UnicodeString aIcuReplacement(
-            reinterpret_cast<const UChar*>(aReplacement.getStr()), aReplacement.getLength());
+        false, reinterpret_cast<const UChar*>(aReplacement.getStr()), aReplacement.getLength());
     icu::UnicodeString aReplaced;
     if (bGlobalReplacement)
         // Replace all occurrences of match with replacement.
