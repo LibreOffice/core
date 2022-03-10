@@ -151,6 +151,17 @@ DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
     CPPUNIT_ASSERT_EQUAL( sal_Int16(36), nGridLines);   // was 23, left large space before text.
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf146851_1, "tdf146851_1.docx")
+{
+    uno::Reference<beans::XPropertySet> xPara;
+
+    xPara.set(getParagraph(1, "qwerty"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1."), getProperty<OUString>(xPara, "ListLabelString"));
+
+    xPara.set(getParagraph(2, "asdfg"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1/"), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
