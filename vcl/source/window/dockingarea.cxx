@@ -22,6 +22,7 @@
 #include <vcl/menu.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/event.hxx>
+#include <toolbarvalue.hxx>
 
 #include <svdata.hxx>
 
