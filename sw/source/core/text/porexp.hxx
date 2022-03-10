@@ -35,6 +35,7 @@ public:
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 };
 
+/// Non-breaking space or non-breaking hyphen.
 class SwBlankPortion : public SwExpandPortion
 {
     sal_Unicode m_cChar;
@@ -54,6 +55,8 @@ public:
 
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 class SwPostItsPortion : public SwExpandPortion
