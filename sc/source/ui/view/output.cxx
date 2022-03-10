@@ -64,6 +64,7 @@
 
 #include <colorscale.hxx>
 #include <Sparkline.hxx>
+#include <SparklineGroup.hxx>
 
 #include <math.h>
 #include <memory>
