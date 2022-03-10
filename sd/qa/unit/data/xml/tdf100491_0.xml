@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <XShapes>
- <XShape positionX="3680" positionY="2451" sizeX="6" sizeY="2990" type="com.sun.star.drawing.LineShape" name="Straight Connector 3" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="3680" positionY="2451" sizeX="6" sizeY="2990" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 3" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -17,25 +17,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="3686" positionY="2451"/>
-    <point positionX="3680" positionY="5441"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="6" positionY="0"/>
-    <point positionX="0" positionY="2990"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="6.000000" column2="0.000000" column3="3680.000000"/>
-   <Line2 column1="0.000000" column2="2990.000000" column3="2451.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="4324" positionY="2449" sizeX="5" sizeY="2990" type="com.sun.star.drawing.LineShape" name="Straight Connector 4" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="4324" positionY="2449" sizeX="5" sizeY="2990" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 4" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -52,25 +35,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="4329" positionY="2449"/>
-    <point positionX="4324" positionY="5439"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2990"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="4324.000000"/>
-   <Line2 column1="0.000000" column2="2990.000000" column3="2449.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="4947" positionY="2449" sizeX="5" sizeY="2990" type="com.sun.star.drawing.LineShape" name="Straight Connector 5" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="4947" positionY="2449" sizeX="5" sizeY="2990" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 5" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -87,25 +53,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="4952" positionY="2449"/>
-    <point positionX="4947" positionY="5439"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2990"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="4947.000000"/>
-   <Line2 column1="0.000000" column2="2990.000000" column3="2449.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="9401" positionY="2435" sizeX="5" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 6" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="9401" positionY="2435" sizeX="5" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 6" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -122,25 +71,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="9406" positionY="2435"/>
-    <point positionX="9401" positionY="5423"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="9401.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2435.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="10043" positionY="2433" sizeX="5" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 7" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="10043" positionY="2433" sizeX="5" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 7" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -157,25 +89,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="10048" positionY="2433"/>
-    <point positionX="10043" positionY="5421"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="10043.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2433.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="10669" positionY="2435" sizeX="5" sizeY="2990" type="com.sun.star.drawing.LineShape" name="Straight Connector 8" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="10669" positionY="2435" sizeX="5" sizeY="2990" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 8" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -192,25 +107,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="10674" positionY="2435"/>
-    <point positionX="10669" positionY="5425"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2990"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="10669.000000"/>
-   <Line2 column1="0.000000" column2="2990.000000" column3="2435.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="12466" positionY="2433" sizeX="6" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 9" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="12466" positionY="2433" sizeX="6" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 9" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -227,25 +125,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="12472" positionY="2433"/>
-    <point positionX="12466" positionY="5421"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="6" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="6.000000" column2="0.000000" column3="12466.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2433.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="13107" positionY="2431" sizeX="5" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 10" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="13107" positionY="2431" sizeX="5" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 10" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -262,25 +143,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="13112" positionY="2431"/>
-    <point positionX="13107" positionY="5419"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="13107.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2431.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="13731" positionY="2431" sizeX="5" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 11" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="13731" positionY="2431" sizeX="5" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 11" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -297,25 +161,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="13736" positionY="2431"/>
-    <point positionX="13731" positionY="5419"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="13731.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2431.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="15872" positionY="2431" sizeX="6" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 12" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="15872" positionY="2431" sizeX="6" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 12" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -332,25 +179,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="15878" positionY="2431"/>
-    <point positionX="15872" positionY="5419"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="6" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="6.000000" column2="0.000000" column3="15872.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2431.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="16513" positionY="2430" sizeX="5" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 13" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="16513" positionY="2430" sizeX="5" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 13" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -367,25 +197,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="16518" positionY="2430"/>
-    <point positionX="16513" positionY="5418"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="16513.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2430.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="17137" positionY="2430" sizeX="5" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 14" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="17137" positionY="2430" sizeX="5" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 14" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -402,25 +215,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="17142" positionY="2430"/>
-    <point positionX="17137" positionY="5418"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="17137.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2430.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="17772" positionY="2430" sizeX="5" sizeY="2988" type="com.sun.star.drawing.LineShape" name="Straight Connector 15" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="17772" positionY="2430" sizeX="5" sizeY="2988" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 15" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -437,25 +233,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="17777" positionY="2430"/>
-    <point positionX="17772" positionY="5418"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2988"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="17772.000000"/>
-   <Line2 column1="0.000000" column2="2988.000000" column3="2430.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="6549" positionY="2438" sizeX="6" sizeY="2990" type="com.sun.star.drawing.LineShape" name="Straight Connector 16" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="6549" positionY="2438" sizeX="6" sizeY="2990" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 16" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -472,25 +251,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="6555" positionY="2438"/>
-    <point positionX="6549" positionY="5428"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="6" positionY="0"/>
-    <point positionX="0" positionY="2990"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="6.000000" column2="0.000000" column3="6549.000000"/>
-   <Line2 column1="0.000000" column2="2990.000000" column3="2438.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="7193" positionY="2435" sizeX="5" sizeY="2990" type="com.sun.star.drawing.LineShape" name="Straight Connector 17" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="7193" positionY="2435" sizeX="5" sizeY="2990" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 17" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -507,25 +269,8 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="7198" positionY="2435"/>
-    <point positionX="7193" positionY="5425"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2990"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="7193.000000"/>
-   <Line2 column1="0.000000" column2="2990.000000" column3="2435.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
- <XShape positionX="7816" positionY="2435" sizeX="5" sizeY="2990" type="com.sun.star.drawing.LineShape" name="Straight Connector 18" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
+ <XShape positionX="7816" positionY="2435" sizeX="5" sizeY="2990" type="com.sun.star.drawing.ConnectorShape" name="Straight Connector 18" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart>
    <pointSequence>
@@ -542,22 +287,5 @@
    </pointSequence>
   </LineStart>
   <LineEnd/>
-  <PolyPolygon>
-   <pointSequence>
-    <point positionX="7821" positionY="2435"/>
-    <point positionX="7816" positionY="5425"/>
-   </pointSequence>
-  </PolyPolygon>
-  <Geometry>
-   <pointSequence>
-    <point positionX="5" positionY="0"/>
-    <point positionX="0" positionY="2990"/>
-   </pointSequence>
-  </Geometry>
-  <Transformation>
-   <Line1 column1="5.000000" column2="0.000000" column3="7816.000000"/>
-   <Line2 column1="0.000000" column2="2990.000000" column3="2435.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
  </XShape>
 </XShapes>
