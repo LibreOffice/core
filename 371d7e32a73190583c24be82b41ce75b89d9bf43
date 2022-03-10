@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "769486cf_f02927b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-10T18:50:30Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! It seems, it has still serious synchronization problems at resizing and moving the floating table, but at least the load is ok, so it\u0027s a good step towards to the complete solution.",
+      "revId": "371d7e32a73190583c24be82b41ce75b89d9bf43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
