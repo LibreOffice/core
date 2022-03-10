@@ -139,7 +139,8 @@ GroupShapeContext::GroupShapeContext( const FragmentHandler2& rParent,
         {
             ShapePtr xShape = std::make_shared<Shape>( rHelper, rAttribs, "com.sun.star.drawing.ConnectorShape" );
             if( pxShape ) *pxShape = xShape;
-            return new ConnectorShapeContext( rParent, rxParentShape, xShape );
+            return new ConnectorShapeContext(rParent, rxParentShape, xShape,
+                                             xShape->getConnectorShapeProperties());
         }
         case XDR_TOKEN( pic ):
         {

@@ -1496,7 +1496,8 @@ ShapeExport& ShapeExport::WriteConnectorShape( const Reference< XShape >& xShape
         pFS->startElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
         WriteConnectorConnections(aConnectorEntry, GetShapeID(rXShapeA), GetShapeID(rXShapeB));
         pFS->endElementNS(mnXmlNamespace, XML_cNvCxnSpPr);
-        pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
+        if (GetDocumentType() == DOCUMENT_PPTX)
+            pFS->singleElementNS(mnXmlNamespace, XML_nvPr);
         pFS->endElementNS(mnXmlNamespace, XML_nvCxnSpPr);
     }
 
