@@ -874,8 +874,6 @@ private:
     bool HasCurrentParaFlys( bool bNoSurroundOnly = false,
                              bool bSurroundOnly = false ) const;
 
-    bool PendingTableInPaM(SwPaM& rPam) const;
-
     class TableDepthGuard
     {
     private:

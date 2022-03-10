@@ -194,24 +194,13 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         }
         else
         {
-            // Create a new node at the beginning of the section
+            // Our own html export only exports one "header" at most (and one "footer")
+
+            // Create a new node at the beginning of the section if a duplicate arises
+            // and concat the header/footers together
             SwNodeIndex aSttIdx( rContentStIdx, 1 );
             pCNd = m_xDoc->GetNodes().MakeTextNode( aSttIdx,
                             m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_TEXT));
-
-            // delete the current content of the section
-            SwPaM aDelPam( aSttIdx );
-            aDelPam.SetMark();
-
-            const SwStartNode *pStNd =
-                static_cast<const SwStartNode *>( &rContentStIdx.GetNode() );
-            aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
-
-            if (!PendingTableInPaM(aDelPam))
-            {
-                m_xDoc->getIDocumentContentOperations().DeleteRange(aDelPam);
-                m_xDoc->getIDocumentContentOperations().DelFullPara(aDelPam);
-            }
 
             // update page style
             for( size_t i=0; i < m_xDoc->GetPageDescCnt(); i++ )
