@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b42215fb_9a9006ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-10T18:26:18Z",
+      "side": 1,
+      "message": "@Attila: thanks for the quick fix of the typos! I\u0027ve removed the fix of the old typo in odfimport.cxx, because it was fixed in commit 2c5d4436f05ee99cf6937940f2010edf90e7f9e9",
+      "revId": "6c887d3864ef699fe6dcaf9dbc157f5bb5fc6484",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
