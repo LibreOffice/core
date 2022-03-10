@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af9867c7_2388357d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-10T06:49:39Z",
+      "side": 1,
+      "message": "This doesn\u0027t address replacement; also it does not handle backreferences or \"replace all\" cases. Likely not a correct approach. I wonder if the library has some option to skip empty matches at the same position as previous match end.",
+      "revId": "af2b98f359fd909ab8ec3700b503a57b8787c21b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
