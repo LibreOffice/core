@@ -1404,6 +1404,16 @@ void WinSalGraphicsImpl::SetFillColor(Color nColor)
     mbStockBrush = bStockBrush;
 }
 
+void WinSalGraphicsImpl::SetFillRule()
+{
+    //m_eFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+}
+
+void WinSalGraphicsImpl::SetFillRule(PolyFillMode eFillRule)
+{
+    //m_eFillRule = eFillRule;
+}
+
 HBRUSH WinSalGraphicsImpl::SearchStockBrush(COLORREF nBrushColor)
 {
     // Only screen, because printer has problems, when we use stock objects.
