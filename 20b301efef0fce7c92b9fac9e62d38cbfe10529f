@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea51c46c_8a566e6a",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-10T07:48:42Z",
+      "side": 0,
+      "message": "You should not change the formatting of the old parts where you are not modifying the code itself.\nPlease change them back to what it was before.",
+      "revId": "20b301efef0fce7c92b9fac9e62d38cbfe10529f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
