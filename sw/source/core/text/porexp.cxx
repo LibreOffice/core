@@ -210,6 +210,19 @@ void SwBlankPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), OUString( m_cChar ), GetWhichPor() );
 }
 
+void SwBlankPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwBlankPortion"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("char"),
+                                      BAD_CAST(OUString(m_cChar).toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("multi"),
+                                      BAD_CAST(OString::boolean(m_bMulti).getStr()));
+
+    SwExpandPortion::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwPostItsPortion::SwPostItsPortion( bool bScrpt )
     : m_bScript( bScrpt )
 {
