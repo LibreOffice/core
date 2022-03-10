@@ -19,6 +19,18 @@ import platform
 
 class SimpleMathTest(UITestCase):
 
+    def test_math_unoCommand(self):
+        with self.ui_test.create_doc_in_start_center("math"):
+
+            xMathDoc = self.xUITest.getTopFocusWindow()
+
+            # tdf#140386
+            self.xUITest.executeCommand(".uno:InsertCommandText?Text:string=backepsilon")
+
+            xEditView = xMathDoc.getChild("editview")
+
+            self.assertEqual("backepsilon", get_state_as_dict(xEditView)["Text"])
+
     def test_math_edit(self):
         with self.ui_test.create_doc_in_start_center("math"):
 
