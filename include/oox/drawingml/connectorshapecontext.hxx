@@ -25,16 +25,29 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/shapecontext.hxx>
 #include <sal/types.h>
+#include <vector>
 
 namespace oox { class AttributeList; }
 namespace oox::core { class ContextHandler2Helper; }
 
 namespace oox::drawingml {
 
+    struct ConnectorShapeProperties
+    {
+        bool mbStartShape;
+        OUString maDestShapeId;
+        sal_Int32 mnDestGlueId;
+    };
+
 class OOX_DLLPUBLIC ConnectorShapeContext final : public ShapeContext
 {
+    std::vector<ConnectorShapeProperties>& mrConnectorShapePropertiesList;
+    ShapePtr mpConnectorShapePtr;
+
 public:
-    ConnectorShapeContext( ::oox::core::ContextHandler2Helper const & rParent, const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr );
+    ConnectorShapeContext(::oox::core::ContextHandler2Helper const& rParent,
+                          const ShapePtr& pMasterShapePtr, const ShapePtr& pGroupShapePtr,
+                          std::vector<ConnectorShapeProperties>& rConnectorShapePropertiesList);
     virtual ~ConnectorShapeContext() override;
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 };
