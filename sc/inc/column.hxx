@@ -140,6 +140,8 @@ public:
         return static_cast<const T&>(GetAttr(nRow, sal_uInt16(nWhich), nStartRow, nEndRow));
     }
 
+    void        SetAttrEntries(std::vector<ScAttrEntry> && vNewData);
+
     const ScPatternAttr*    GetPattern( SCROW nRow ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCROW nStartRow, SCROW nEndRow ) const;
     SCROW       ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark, ScEditDataArray* pDataArray, bool* const pIsChanged,
@@ -1007,6 +1009,11 @@ inline void ScColumn::SetPatternArea( SCROW nStartRow, SCROW nEndRow,
                                 const ScPatternAttr& rPatAttr )
 {
     pAttrArray->SetPatternArea( nStartRow, nEndRow, &rPatAttr, true/*bPutToPool*/ );
+}
+
+inline void ScColumnData::SetAttrEntries(std::vector<ScAttrEntry> && vNewData)
+{
+    pAttrArray->SetAttrEntries( std::move( vNewData ));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

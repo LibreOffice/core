@@ -2816,6 +2816,37 @@ void ScTable::ApplyPatternArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol,
         CreateColumnIfNotExists(i).ApplyPatternArea(nStartRow, nEndRow, rAttr, pDataArray, pIsChanged);
 }
 
+void ScTable::SetAttrEntries( SCCOL nStartCol, SCCOL nEndCol, std::vector<ScAttrEntry> && vNewData)
+{
+    if (!ValidCol(nStartCol) || !ValidCol(nEndCol))
+        return;
+    if ( nEndCol == rDocument.MaxCol() )
+    {
+        if ( nStartCol < aCol.size() )
+        {
+            // If we would like set all columns to same attrs, then change only attrs for not existing columns
+            nEndCol = aCol.size() - 1;
+            for (SCCOL i = nStartCol; i <= nEndCol; i++)
+                aCol[i].SetAttrEntries( std::vector<ScAttrEntry>(vNewData));
+            aDefaultColData.SetAttrEntries(std::move(vNewData));
+        }
+        else
+        {
+            CreateColumnIfNotExists( nStartCol - 1 );
+            aDefaultColData.SetAttrEntries(std::move(vNewData));
+        }
+    }
+    else
+    {
+        CreateColumnIfNotExists( nEndCol );
+        for (SCCOL i = nStartCol; i < nEndCol; i++) // all but last need a copy
+            aCol[i].SetAttrEntries( std::vector<ScAttrEntry>(vNewData));
+        aCol[nEndCol].SetAttrEntries( std::move(vNewData));
+    }
+}
+
+
+
 void ScTable::ApplyPatternIfNumberformatIncompatible( const ScRange& rRange,
         const ScPatternAttr& rPattern, SvNumFormatType nNewType )
 {

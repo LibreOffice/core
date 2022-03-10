@@ -82,6 +82,10 @@ struct ScAttrEntry
 {
     SCROW                   nEndRow;
     const ScPatternAttr*    pPattern;
+    bool operator==( const ScAttrEntry& other ) const
+    {
+        return nEndRow == other.nEndRow && pPattern == other.pPattern;
+    }
 };
 
 class ScAttrArray
