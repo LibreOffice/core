@@ -33,6 +33,24 @@
       "message": "I think this should stay as getResString but that getResString in vcl/unx/gtk3_kde5/gtk3_kde5_filepicker_ipc.cxx should change from using VclResId to FpsResId when I look at the uses of getResString in Gtk3KDE5FilePicker::addCustomControl and vcl/unx/gtk3_kde5/gtk3_kde5_folderpicker.cxx",
       "revId": "b62d8d565fb81c2008dc3c9fec36bf3fdf1218db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3fa9159_bfe89dec",
+        "filename": "vcl/unx/gtk3_kde5/gtk3_kde5_filepicker.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-10T11:12:46Z",
+      "side": 1,
+      "message": "Ok I reverted back this part and changed getResString from vcl/unx/gtk3_kde5/gtk3_kde5_filepicker_ipc.cxx",
+      "parentUuid": "601c526f_b03a3b5c",
+      "revId": "b62d8d565fb81c2008dc3c9fec36bf3fdf1218db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
