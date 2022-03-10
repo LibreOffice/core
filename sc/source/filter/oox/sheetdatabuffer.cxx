@@ -482,6 +482,9 @@ void SheetDataBuffer::finalizeImport()
 
     ScDocument& rDoc = rDocImport.getDoc();
     StylesBuffer& rStyles = getStyles();
+    ScDocumentImport::Attrs aPendingAttrParam;
+    SCCOL pendingColStart = -1;
+    SCCOL pendingColEnd = -1;
     for ( const auto& [rCol, rRowStyles] : maStylesPerColumn )
     {
         SCCOL nScCol = static_cast< SCCOL >( rCol );
@@ -529,8 +532,19 @@ void SheetDataBuffer::finalizeImport()
         aAttrParam.mvData.swap(aAttrs.maAttrs);
         aAttrParam.mbLatinNumFmtOnly = aAttrs.mbLatinNumFmtOnly;
 
-        rDocImport.setAttrEntries(getSheetIndex(), nScCol, std::move(aAttrParam));
+        // Compress setting the attributes, set the same set in one call.
+        if( pendingColStart != -1 && pendingColEnd == nScCol - 1 && aAttrParam == aPendingAttrParam )
+            ++pendingColEnd;
+        else
+        {
+            if( pendingColStart != -1 )
+                rDocImport.setAttrEntries(getSheetIndex(), pendingColStart, pendingColEnd, std::move(aPendingAttrParam));
+            pendingColStart = pendingColEnd = nScCol;
+            aPendingAttrParam = std::move( aAttrParam );
+        }
     }
+    if( pendingColStart != -1 )
+        rDocImport.setAttrEntries(getSheetIndex(), pendingColStart, pendingColEnd, std::move(aPendingAttrParam));
 
     // merge all cached merged ranges and update right/bottom cell borders
     for( const auto& rMergedRange : maMergedRanges )
