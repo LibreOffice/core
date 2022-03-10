@@ -1107,6 +1107,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "ResetAttributes" ||
              aEvent.FeatureURL.Path == "IncrementIndent" ||
              aEvent.FeatureURL.Path == "DecrementIndent" ||
+             aEvent.FeatureURL.Path == "EditHeaderAndFooter" ||
              aEvent.FeatureURL.Path == "NumberFormatDecDecimals" ||
              aEvent.FeatureURL.Path == "NumberFormatIncDecimals")
     {
