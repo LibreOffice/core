@@ -3856,7 +3856,7 @@ void HwpReader::makePicture(Picture * hbox)
     }
 }
 
-void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
+void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 {
     int x = hbox->pgx;
     int y = hbox->pgy;
@@ -4413,14 +4413,12 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
     }
 }
 
-
 void HwpReader::makeLine()
 {
     mxList->addAttribute("text:style-name", sXML_CDATA, "Horizontal Line");
     startEl("text:p");
     mxList->clear();
 }
-
 
 /**
  * Input-comment-hidden description: shows a hidden explanation to the users.
