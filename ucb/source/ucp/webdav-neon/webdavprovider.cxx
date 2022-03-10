@@ -180,11 +180,21 @@ ContentProvider::queryContent(
     return xContent;
 }
 
+#include <officecfg/Inet.hxx>
+
+extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
+ucb_webdav_ContentProvider_get_implementation(
+    css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&);
+
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
 ucb_webdav_neon_ContentProvider_get_implementation(
     css::uno::XComponentContext* context, css::uno::Sequence<css::uno::Any> const&)
 {
-    return cppu::acquire(new ContentProvider(context));
+    auto const useCurl(officecfg::Inet::Settings::WebDAVCurl::get(context));
+    if (useCurl)
+        return ucb_webdav_ContentProvider_get_implementation(context, {});
+    else
+        return cppu::acquire(new ContentProvider(context));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

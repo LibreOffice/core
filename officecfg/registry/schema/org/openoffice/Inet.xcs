@@ -26,6 +26,12 @@
       <info>
         <desc>Contains Internet-related configurations (servers, proxies, etc.).</desc>
       </info>
+      <prop oor:name="WebDAVCurl" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Use curl HTTP/WebDAV UCP instead of neon one.</desc>
+        </info>
+        <value>false</value>
+      </prop>
       <prop oor:name="ooInetNoProxy" oor:type="xs:string" oor:nillable="false">
         <!-- OldPath: Inet/NoProxy -->
         <!-- OldLocation: soffice.ini -->
