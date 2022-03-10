@@ -34,6 +34,7 @@
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/dllapi.h>
 #include <oox/drawingml/color.hxx>
+#include <oox/drawingml/connectorshapecontext.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/propertymap.hxx>
@@ -72,6 +73,8 @@ class CustomShapeProperties;
 typedef std::shared_ptr< CustomShapeProperties > CustomShapePropertiesPtr;
 
 typedef ::std::map< OUString, ShapePtr > ShapeIdMap;
+
+typedef std::vector<ConnectorShapeProperties> ConnectorShapePropertiesList;
 
 struct ShapeStyleRef
 {
@@ -127,6 +130,10 @@ public:
     const GraphicProperties& getGraphicProperties() const { return *mpGraphicPropertiesPtr; }
 
     CustomShapePropertiesPtr&       getCustomShapeProperties(){ return mpCustomShapePropertiesPtr; }
+
+    ConnectorShapePropertiesList&   getConnectorShapeProperties() { return maConnectorShapePropertiesList; }
+    void                            setConnectorShape(bool bConnector) { mbConnector = bConnector; }
+    bool                            isConnectorShape() const { return mbConnector; }
 
     Shape3DProperties&              get3DProperties() { return *mp3DPropertiesPtr; }
     const Shape3DProperties&        get3DProperties() const { return *mp3DPropertiesPtr; }
@@ -332,6 +339,7 @@ protected:
     PropertyMap                 maDefaultShapeProperties;
     TextListStylePtr            mpMasterTextListStyle;
     css::uno::Reference< css::drawing::XShape > mxShape;
+    ConnectorShapePropertiesList maConnectorShapePropertiesList;
 
     OUString                    msServiceName;
     OUString                    msName;
@@ -393,6 +401,9 @@ private:
 
     /// The shape fill should be set to that of the slide background surface.
     bool mbUseBgFill = false;
+
+    // Is this a connector shape?
+    bool mbConnector = false;
 
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constuctor func does not allow that

@@ -1,10 +1,6 @@
 <?xml version="1.0"?>
 <XShapes>
- <XShape positionX="5358" positionY="4366" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 4" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
-  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
-  <FillBitmap width="32" height="32"/>
+ <XShape positionX="5357" positionY="4365" sizeX="5557" sizeY="1" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 4" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
   <LineEnd>
@@ -21,53 +17,8 @@
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
-  <Transformation>
-   <Line1 column1="5556.000000" column2="0.000000" column3="5358.000000"/>
-   <Line2 column1="0.000000" column2="2.000000" column3="4366.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
-  <CustomShapeGeometry>
-   <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues">
-    <AdjustmentValues/>
-   </PropertyValue>
-   <PropertyValue name="ViewBox">
-    <ViewBox x="0" y="0" width="21600" height="21600"/>
-   </PropertyValue>
-   <PropertyValue name="Path">
-    <Path>
-     <PropertyValue name="Coordinates">
-      <Coordinates>
-       <EnhancedCustomShapeParameterPair>
-        <First value="0" type="0"/>
-        <Second value="0" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-       <EnhancedCustomShapeParameterPair>
-        <First value="21600" type="0"/>
-        <Second value="21600" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-      </Coordinates>
-     </PropertyValue>
-     <PropertyValue name="Segments">
-      <Segments>
-       <EnhancedCustomShapeSegment command="1" count="1"/>
-       <EnhancedCustomShapeSegment command="2" count="1"/>
-       <EnhancedCustomShapeSegment command="5" count="0"/>
-      </Segments>
-     </PropertyValue>
-    </Path>
-   </PropertyValue>
-  </CustomShapeGeometry>
  </XShape>
- <XShape positionX="5356" positionY="5159" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 5" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
-  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
-  <FillBitmap width="32" height="32"/>
+ <XShape positionX="5357" positionY="5159" sizeX="5557" sizeY="0" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 5" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
   <LineEnd>
@@ -84,53 +35,8 @@
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
-  <Transformation>
-   <Line1 column1="5556.000000" column2="0.000000" column3="5356.000000"/>
-   <Line2 column1="0.000000" column2="2.000000" column3="5159.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
-  <CustomShapeGeometry>
-   <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues">
-    <AdjustmentValues/>
-   </PropertyValue>
-   <PropertyValue name="ViewBox">
-    <ViewBox x="0" y="0" width="21600" height="21600"/>
-   </PropertyValue>
-   <PropertyValue name="Path">
-    <Path>
-     <PropertyValue name="Coordinates">
-      <Coordinates>
-       <EnhancedCustomShapeParameterPair>
-        <First value="0" type="0"/>
-        <Second value="0" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-       <EnhancedCustomShapeParameterPair>
-        <First value="21600" type="0"/>
-        <Second value="21600" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-      </Coordinates>
-     </PropertyValue>
-     <PropertyValue name="Segments">
-      <Segments>
-       <EnhancedCustomShapeSegment command="1" count="1"/>
-       <EnhancedCustomShapeSegment command="2" count="1"/>
-       <EnhancedCustomShapeSegment command="5" count="0"/>
-      </Segments>
-     </PropertyValue>
-    </Path>
-   </PropertyValue>
-  </CustomShapeGeometry>
  </XShape>
- <XShape positionX="14486" positionY="4366" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 6" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
-  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
-  <FillBitmap width="32" height="32"/>
+ <XShape positionX="14485" positionY="4365" sizeX="5557" sizeY="1" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 6" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
   <LineEnd>
@@ -147,53 +53,8 @@
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
-  <Transformation>
-   <Line1 column1="5556.000000" column2="0.000000" column3="14486.000000"/>
-   <Line2 column1="0.000000" column2="2.000000" column3="4366.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
-  <CustomShapeGeometry>
-   <PropertyValue name="MirroredX" value="false" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues">
-    <AdjustmentValues/>
-   </PropertyValue>
-   <PropertyValue name="ViewBox">
-    <ViewBox x="0" y="0" width="21600" height="21600"/>
-   </PropertyValue>
-   <PropertyValue name="Path">
-    <Path>
-     <PropertyValue name="Coordinates">
-      <Coordinates>
-       <EnhancedCustomShapeParameterPair>
-        <First value="0" type="0"/>
-        <Second value="0" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-       <EnhancedCustomShapeParameterPair>
-        <First value="21600" type="0"/>
-        <Second value="21600" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-      </Coordinates>
-     </PropertyValue>
-     <PropertyValue name="Segments">
-      <Segments>
-       <EnhancedCustomShapeSegment command="1" count="1"/>
-       <EnhancedCustomShapeSegment command="2" count="1"/>
-       <EnhancedCustomShapeSegment command="5" count="0"/>
-      </Segments>
-     </PropertyValue>
-    </Path>
-   </PropertyValue>
-  </CustomShapeGeometry>
  </XShape>
- <XShape positionX="14484" positionY="5159" sizeX="5555" sizeY="1" type="com.sun.star.drawing.CustomShape" name="Straight Arrow Connector 8" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="BLOCK" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" fillStyle="NONE" fillColor="729fcf" fillTransparence="0" fillTransparenceGradientName="">
-  <FillTransparenceGradient style="LINEAR" startColor="000000" endColor="000000" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillGradient style="LINEAR" startColor="3465a4" endColor="ffffff" angle="0" border="0" xOffset="50" yOffset="50" startIntensity="100" endIntensity="100" stepCount="0"/>
-  <FillHatch style="SINGLE" color="3465a4" distance="20" angle="0"/>
-  <FillBitmap width="32" height="32"/>
+ <XShape positionX="14485" positionY="5159" sizeX="5557" sizeY="0" type="com.sun.star.drawing.ConnectorShape" name="Straight Arrow Connector 8" fontHeight="18.000000" fontColor="ffffffff" textAutoGrowHeight="false" textAutoGrowWidth="false" textContourFrame="false" textFitToSize="NONE" textHorizontalAdjust="CENTER" textVerticalAdjust="TOP" textLeftDistance="250" textRightDistance="250" textUpperDistance="125" textLowerDistance="125" textMaximumFrameHeight="0" textMaximumFrameWidth="0" textMinimumFrameHeight="0" textMinimumFrameWidth="0" textAnimationAmount="0" textAnimationCount="0" textAnimationDelay="0" textAnimationDirection="LEFT" textAnimationKind="NONE" textAnimationStartInside="false" textAnimationStopInside="false" textWritingMode="LR_TB" lineStyle="SOLID">
   <LineDash style="RECT" dots="1" dotLen="20" dashes="1" dashLen="20" distance="20"/>
   <LineStart/>
   <LineEnd>
@@ -210,46 +71,5 @@
     <point positionX="175" positionY="0" polygonFlags="NORMAL"/>
    </pointSequence>
   </LineEnd>
-  <Transformation>
-   <Line1 column1="5556.000000" column2="0.000000" column3="14484.000000"/>
-   <Line2 column1="0.000000" column2="2.000000" column3="5159.000000"/>
-   <Line3 column1="0.000000" column2="0.000000" column3="1.000000"/>
-  </Transformation>
-  <CustomShapeGeometry>
-   <PropertyValue name="MirroredX" value="true" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="MirroredY" value="false" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextCameraZRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="TextPreRotateAngle" value="0" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="Type" value="mso-spt32" handle="0" propertyState="DIRECT_VALUE"/>
-   <PropertyValue name="AdjustmentValues">
-    <AdjustmentValues/>
-   </PropertyValue>
-   <PropertyValue name="ViewBox">
-    <ViewBox x="0" y="0" width="21600" height="21600"/>
-   </PropertyValue>
-   <PropertyValue name="Path">
-    <Path>
-     <PropertyValue name="Coordinates">
-      <Coordinates>
-       <EnhancedCustomShapeParameterPair>
-        <First value="0" type="0"/>
-        <Second value="0" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-       <EnhancedCustomShapeParameterPair>
-        <First value="21600" type="0"/>
-        <Second value="21600" type="0"/>
-       </EnhancedCustomShapeParameterPair>
-      </Coordinates>
-     </PropertyValue>
-     <PropertyValue name="Segments">
-      <Segments>
-       <EnhancedCustomShapeSegment command="1" count="1"/>
-       <EnhancedCustomShapeSegment command="2" count="1"/>
-       <EnhancedCustomShapeSegment command="5" count="0"/>
-      </Segments>
-     </PropertyValue>
-    </Path>
-   </PropertyValue>
-  </CustomShapeGeometry>
  </XShape>
 </XShapes>
