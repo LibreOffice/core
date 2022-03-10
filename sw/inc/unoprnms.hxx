@@ -383,6 +383,7 @@
 #define UNO_NAME_HEADER_BODY_DISTANCE "HeaderBodyDistance"
 #define UNO_NAME_HEADER_IS_DYNAMIC_HEIGHT "HeaderIsDynamicHeight"
 #define UNO_NAME_HEADER_IS_SHARED "HeaderIsShared"
+#define UNO_NAME_HEADER_IS_SHARED_FIRST "HeaderIsSharedFirst"
 #define UNO_NAME_HEADER_HEIGHT "HeaderHeight"
 #define UNO_NAME_HEADER_IS_ON "HeaderIsOn"
 #define UNO_NAME_FOOTER_BACK_COLOR "FooterBackColor"
@@ -396,6 +397,7 @@
 #define UNO_NAME_FOOTER_BODY_DISTANCE "FooterBodyDistance"
 #define UNO_NAME_FOOTER_IS_DYNAMIC_HEIGHT "FooterIsDynamicHeight"
 #define UNO_NAME_FOOTER_IS_SHARED "FooterIsShared"
+#define UNO_NAME_FOOTER_IS_SHARED_FIRST "FooterIsSharedFirst"
 #define UNO_NAME_TEXT_PARAGRAPH "TextParagraph"
 #define UNO_NAME_PARENT_TEXT "ParentText"
 

@@ -2889,11 +2889,14 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
     {
         const OUString& rPropName = rPropertyNames[nProp];
         const SfxItemPropertyMapEntry* pEntry = rMap.getByName(rPropName);
+        const uno::Any& rPropValue = rValues[nProp];
 
         if(!pEntry)
             throw beans::UnknownPropertyException("Unknown property: " + rPropName, static_cast<cppu::OWeakObject*>(this));
         if(pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw beans::PropertyVetoException("Property is read-only: " + rPropName, static_cast<cppu::OWeakObject*>(this));
+        if (!rPropValue.hasValue())
+            throw lang::IllegalArgumentException("Property value invalid!", static_cast<cppu::OWeakObject*>(this), 2);
 
         const bool bHeader(rPropName.startsWith("Header"));
         const bool bFooter(rPropName.startsWith("Footer"));
@@ -2918,7 +2921,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                     const SvxSetItem* pSetItem = nullptr;
                     if (lcl_GetHeaderFooterItem(aBaseImpl.GetItemSet(), rPropName, bFooter, pSetItem))
                     {
-                        PutItemToSet(pSetItem, *pPropSet, *pEntry, rValues[nProp], aBaseImpl);
+                        PutItemToSet(pSetItem, *pPropSet, *pEntry, rPropValue, aBaseImpl);
 
                         if (pEntry->nWID == SID_ATTR_PAGE_SHARED_FIRST)
                         {
@@ -2928,11 +2931,11 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                                         false);
                             if (pSetItem)
                             {
-                                PutItemToSet(pSetItem, *pPropSet, *pEntry, rValues[nProp], aBaseImpl);
+                                PutItemToSet(pSetItem, *pPropSet, *pEntry, rPropValue, aBaseImpl);
                             }
                         }
                     }
-                    else if(pEntry->nWID == SID_ATTR_PAGE_ON && rValues[nProp].get<bool>())
+                    else if(pEntry->nWID == SID_ATTR_PAGE_ON && rPropValue.get<bool>())
                     {
                         // Header/footer gets switched on, create defaults and the needed SfxSetItem
                         SfxItemSetFixed
@@ -3004,7 +3007,7 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
                         // default method to set the property
                         {
                             SwStyleBase_Impl::ItemSetOverrider o(aBaseImpl, &rSetSet);
-                            SetStyleProperty(*pEntry, *pPropSet, rValues[nProp], aBaseImpl);
+                            SetStyleProperty(*pEntry, *pPropSet, rPropValue, aBaseImpl);
                         }
 
                         // reset parent at ItemSet from SetItem
@@ -3040,14 +3043,14 @@ void SwXPageStyle::SetPropertyValues_Impl(const uno::Sequence<OUString>& rProper
             {
                 const SwPageFootnoteInfoItem& rItem = aBaseImpl.GetItemSet().Get(FN_PARAM_FTN_INFO);
                 std::unique_ptr<SfxPoolItem> pNewFootnoteItem(rItem.Clone());
-                if(!pNewFootnoteItem->PutValue(rValues[nProp], pEntry->nMemberId))
+                if(!pNewFootnoteItem->PutValue(rPropValue, pEntry->nMemberId))
                     throw lang::IllegalArgumentException();
                 aBaseImpl.GetItemSet().Put(std::move(pNewFootnoteItem));
                 break;
             }
             default:
             {
-                SetStyleProperty(*pEntry, *pPropSet, rValues[nProp], aBaseImpl);
+                SetStyleProperty(*pEntry, *pPropSet, rPropValue, aBaseImpl);
                 break;
             }
         }
