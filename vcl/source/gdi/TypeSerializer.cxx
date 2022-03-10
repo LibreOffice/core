@@ -441,7 +441,9 @@ void TypeSerializer::readMapMode(MapMode& rMapMode)
     readFraction(aScaleY);
     mrStream.ReadCharAsBool(bSimple);
 
-    const bool bBogus = !aScaleX.IsValid() || !aScaleY.IsValid();
+    const bool bBogus = !aScaleX.IsValid() || !aScaleY.IsValid()
+                        || aScaleX.GetNumerator() == std::numeric_limits<sal_Int32>::min()
+                        || aScaleY.GetNumerator() == std::numeric_limits<sal_Int32>::min();
     SAL_WARN_IF(bBogus, "vcl", "invalid scale");
 
     if (bSimple || bBogus)
