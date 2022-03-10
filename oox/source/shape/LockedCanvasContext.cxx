@@ -51,9 +51,10 @@ LockedCanvasContext::onCreateContext(sal_Int32 nElementToken, const ::oox::Attri
         }
         case XML_cxnSp: // CT_GvmlConnector
         {
-            return new oox::drawingml::ConnectorShapeContext(
-                *this, mpShapePtr,
-                std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.ConnectorShape"));
+            oox::drawingml::ShapePtr pShape
+                = std::make_shared<oox::drawingml::Shape>("com.sun.star.drawing.ConnectorShape");
+            return new oox::drawingml::ConnectorShapeContext(*this, mpShapePtr, pShape,
+                                                             pShape->getConnectorShapeProperties());
         }
         case XML_pic: // CT_GvmlPicture
         {

@@ -78,6 +78,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
+#include <com/sun/star/drawing/ConnectorType.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -868,10 +869,8 @@ Reference< XShape > const & Shape::createAndInsert(
     bool bIsCroppedGraphic = (aServiceName == "com.sun.star.drawing.GraphicObjectShape" &&
                               !mpCustomShapePropertiesPtr->representsDefaultShape());
 
-    // ToDo: Why is ConnectorShape here treated as custom shape, but below with start and end point?
-    bool bIsCustomShape = ( aServiceName == "com.sun.star.drawing.CustomShape" ||
-                            aServiceName == "com.sun.star.drawing.ConnectorShape" ||
-                            bIsCroppedGraphic);
+    bool bIsCustomShape = (aServiceName == "com.sun.star.drawing.CustomShape" || bIsCroppedGraphic);
+    bool bIsConnectorShape = (aServiceName == "com.sun.star.drawing.ConnectorShape");
     if(bIsCroppedGraphic)
     {
         aServiceName = "com.sun.star.drawing.CustomShape";
@@ -1654,6 +1653,34 @@ Reference< XShape > const & Shape::createAndInsert(
         if (mbWps && aServiceName == "com.sun.star.drawing.LineShape" && !pParentGroupShape)
             mxShape->setPosition(maPosition);
 
+        if (bIsConnectorShape)
+        {
+            ConnectorType aConnectorType;
+            sal_Int32 nType = mpCustomShapePropertiesPtr->getShapePresetType();
+            switch (nType)
+            {
+            case XML_line:
+            case XML_straightConnector1:
+                aConnectorType = ConnectorType_LINE;
+                break;
+            case XML_bentConnector2:
+            case XML_bentConnector3:
+            case XML_bentConnector4:
+            case XML_bentConnector5:
+                aConnectorType = ConnectorType_STANDARD;
+                break;
+            case XML_curvedConnector2:
+            case XML_curvedConnector3:
+            case XML_curvedConnector4:
+            case XML_curvedConnector5:
+                aConnectorType = ConnectorType_CURVE;
+                break;
+            default:
+                break;
+            }
+            xSet->setPropertyValue("EdgeKind", Any(aConnectorType));
+        }
+
         if( bIsCustomShape )
         {
             if ( mbFlipH )
@@ -1702,7 +1729,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // for these ==cscode== and ==csdata== markers, so don't "clean up" these SAL_INFOs
             SAL_INFO("oox.cscode", "==cscode== shape name: '" << msName << "'");
             SAL_INFO("oox.csdata", "==csdata== shape name: '" << msName << "'");
-            mpCustomShapePropertiesPtr->pushToPropSet( xSet, mxShape, maSize );
+            mpCustomShapePropertiesPtr->pushToPropSet(xSet, maSize);
 
             if (mpTextBody)
             {

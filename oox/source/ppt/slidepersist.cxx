@@ -41,6 +41,9 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
+#include <com/sun/star/drawing/XGluePointsSupplier.hpp>
+#include <com/sun/star/container/XIdentifierContainer.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::oox::core;
@@ -143,11 +146,18 @@ void SlidePersist::createXShapes( XmlFilterBase& rFilterBase )
             PPTShape* pPPTShape = dynamic_cast< PPTShape* >( child.get() );
             basegfx::B2DHomMatrix aTransformation;
             if ( pPPTShape )
+            {
                 pPPTShape->addShape( rFilterBase, *this, getTheme().get(), xShapes, aTransformation, &getShapeMap() );
+                if (pPPTShape->isConnectorShape())
+                    maConnectorShapeId.push_back(pPPTShape->getId());
+            }
             else
                 child->addShape( rFilterBase, getTheme().get(), xShapes, aTransformation, maShapesPtr->getFillProperties(), &getShapeMap() );
         }
     }
+
+    if (!maConnectorShapeId.empty())
+        createConnectorShapeConnection();
 
     Reference< XAnimationNodeSupplier > xNodeSupplier( getPage(), UNO_QUERY);
     if( !xNodeSupplier.is() )
@@ -328,6 +338,66 @@ Reference<XAnimationNode> SlidePersist::getAnimationNode(const OUString& sId) co
 
     Reference<XAnimationNode> aResult;
     return aResult;
+}
+
+// create connection between two shape with a connector shape.
+void SlidePersist::createConnectorShapeConnection()
+{
+    sal_Int32 nCount = maConnectorShapeId.size();
+    for (sal_Int32 i = 0; i < nCount; i++)
+    {
+        const auto& pIt = maShapeMap.find(maConnectorShapeId[i]);
+        oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
+            = pIt->second->getConnectorShapeProperties();
+        uno::Reference<drawing::XShape> xConnector(pIt->second->getXShape(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xPropertySet(xConnector, uno::UNO_QUERY);
+
+        if (xConnector.is())
+        {
+            sal_Int32 nCount = aConnectorShapeProperties.size();
+            for (sal_Int32 j = 0; j < nCount; j++)
+            {
+                OUString aDestShapeId = aConnectorShapeProperties[j].maDestShapeId;
+                const auto& pShape = maShapeMap.find(aDestShapeId);
+                uno::Reference<drawing::XShape> xShape(pShape->second->getXShape(), uno::UNO_QUERY);
+                uno::Reference<beans::XPropertySet> xSet(xShape, uno::UNO_QUERY);
+                if (xShape.is())
+                {
+                    uno::Reference<drawing::XGluePointsSupplier> xSupplier(xShape, uno::UNO_QUERY);
+                    css::uno::Reference<css::container::XIdentifierContainer> xGluePoints(
+                        xSupplier->getGluePoints(), uno::UNO_QUERY);
+
+                    sal_Int32 nCountGluePoints = xGluePoints->getIdentifiers().getLength();
+                    sal_Int32 nGlueId = aConnectorShapeProperties[j].mnDestGlueId;
+
+                    // The first 4 glue points belong to the bounding box.
+                    if (nCountGluePoints > 4)
+                        nGlueId += 4;
+                    else
+                    {
+                        // change id of the left and right glue points of the bounding box (1 <-> 3)
+                        if (nGlueId == 1)
+                            nGlueId = 3; // Right
+                        else if (nGlueId == 3)
+                            nGlueId = 1; // Left
+                    }
+
+                    bool bStart = aConnectorShapeProperties[j].mbStartShape;
+                    if (bStart)
+                    {
+                        xPropertySet->setPropertyValue("StartShape", uno::Any(xShape));
+                        xPropertySet->setPropertyValue("StartGluePointIndex", uno::Any(nGlueId));
+                    }
+                    else
+                    {
+                        xPropertySet->setPropertyValue("EndShape", uno::Any(xShape));
+                        xPropertySet->setPropertyValue("EndGluePointIndex", uno::Any(nGlueId));
+                    }
+                }
+            }
+        }
+    }
+    maConnectorShapeId.clear();
 }
 
 }
