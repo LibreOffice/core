@@ -44,6 +44,8 @@ class XMLTextNumRuleInfo
 
     // paragraph's list attributes
     OUString            msListId;
+    /// msListId won't be referenced by later lists.
+    bool mbListIdIsDefault;
     sal_Int16           mnListStartValue;
     sal_Int16           mnListLevel;
     bool                mbIsNumbered;
@@ -83,6 +85,8 @@ public:
     {
         return msListId;
     }
+
+    bool IsListIdDefault() const { return mbListIdIsDefault; }
 
     sal_Int16 GetLevel() const
     {
