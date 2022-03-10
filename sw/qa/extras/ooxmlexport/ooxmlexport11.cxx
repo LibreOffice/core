@@ -933,8 +933,12 @@ DECLARE_OOXMLEXPORT_TEST(testTdf145720, "tdf104797.docx")
         // mandatory authors and dates
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "author", u"Tekijä");
         assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "author", u"Tekijä");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart", "date", "1970-01-01T00:00:00Z");
-        assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart", "date", "1970-01-01T00:00:00Z");
+        // no date (anonymized change)
+        // This failed, date was exported as w:date="0-00-00T00:00:00Z", and later "1970-01-01T00:00:00Z"
+        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[1]/w:moveFrom/w:moveFromRangeStart",
+                               "date");
+        assertXPathNoAttribute(pXmlDoc, "/w:document/w:body/w:p[2]/w:moveTo/w:moveToRangeStart",
+                               "date");
     }
 }
 

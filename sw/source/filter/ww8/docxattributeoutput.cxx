@@ -1913,16 +1913,32 @@ void DocxAttributeOutput::DoWriteBookmarkTagEnd(sal_Int32 const nId)
 void DocxAttributeOutput::DoWriteMoveRangeTagStart(const OString & bookmarkName,
     bool bFrom, const SwRedlineData* pRedlineData)
 {
-    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
-    OString aDate( DateTimeToOString( pRedlineData->GetTimeStamp() ) );
+    bool bRemovePersonalInfo = SvtSecurityOptions::IsOptionSet(
+        SvtSecurityOptions::EOption::DocWarnRemovePersonalInfo );
 
-    m_pSerializer->singleElementNS(XML_w, bFrom
+    const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
+    const DateTime aDateTime = pRedlineData->GetTimeStamp();
+    bool bNoDate = bRemovePersonalInfo ||
+        ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
+    if ( bNoDate )
+        m_pSerializer->singleElementNS(XML_w, bFrom
                 ? XML_moveFromRangeStart
                 : XML_moveToRangeStart,
-        FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
-        FSNS(XML_w, XML_author ), OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8),
-        FSNS(XML_w, XML_date ), aDate,
-        FSNS(XML_w, XML_name), bookmarkName);
+            FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
+            FSNS(XML_w, XML_author ), bRemovePersonalInfo
+                    ? "Author" + OString::number( GetExport().GetInfoID(rAuthor) )
+                    : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8),
+            FSNS(XML_w, XML_name), bookmarkName);
+    else
+        m_pSerializer->singleElementNS(XML_w, bFrom
+                ? XML_moveFromRangeStart
+                : XML_moveToRangeStart,
+            FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
+            FSNS(XML_w, XML_author ), bRemovePersonalInfo
+                    ? "Author" + OString::number( GetExport().GetInfoID(rAuthor) )
+                    : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8),
+            FSNS(XML_w, XML_date ), DateTimeToOString( aDateTime ),
+            FSNS(XML_w, XML_name), bookmarkName);
 }
 
 void DocxAttributeOutput::DoWriteMoveRangeTagEnd(sal_Int32 const nId, bool bFrom)
@@ -3483,9 +3499,9 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
 
     OString aId( OString::number( pRedlineData->GetSeqNo() ) );
     const OUString &rAuthor( SW_MOD()->GetRedlineAuthor( pRedlineData->GetAuthor() ) );
-    OString aDate( DateTimeToOString( bRemovePersonalInfo
-            ? DateTime(Date( 1, 1, 1970 )) // Epoch time
-            : pRedlineData->GetTimeStamp() ) );
+    const DateTime aDateTime = pRedlineData->GetTimeStamp();
+    bool bNoDate = bRemovePersonalInfo ||
+        ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
 
     switch( pRedlineData->GetType() )
     {
@@ -3496,12 +3512,19 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
         break;
 
     case RedlineType::Format:
-        m_pSerializer->startElementNS( XML_w, XML_rPrChange,
+        if ( bNoDate )
+            m_pSerializer->startElementNS( XML_w, XML_rPrChange,
+                FSNS( XML_w, XML_id ), aId,
+                FSNS( XML_w, XML_author ), bRemovePersonalInfo
+                    ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
+                    : rAuthor );
+        else
+            m_pSerializer->startElementNS( XML_w, XML_rPrChange,
                 FSNS( XML_w, XML_id ), aId,
                 FSNS( XML_w, XML_author ), bRemovePersonalInfo
                     ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                     : rAuthor,
-                FSNS( XML_w, XML_date ), aDate );
+                FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ) );
 
         // Check if there is any extra data stored in the redline object
         if (pRedlineData->GetExtraData())
@@ -3535,12 +3558,19 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
         break;
 
     case RedlineType::ParagraphFormat:
-        m_pSerializer->startElementNS( XML_w, XML_pPrChange,
+        if ( bNoDate )
+            m_pSerializer->startElementNS( XML_w, XML_pPrChange,
+                FSNS( XML_w, XML_id ), aId,
+                FSNS( XML_w, XML_author ), bRemovePersonalInfo
+                    ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
+                    : rAuthor );
+        else
+            m_pSerializer->startElementNS( XML_w, XML_pPrChange,
                 FSNS( XML_w, XML_id ), aId,
                 FSNS( XML_w, XML_author ), bRemovePersonalInfo
                     ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                     : rAuthor,
-                FSNS( XML_w, XML_date ), aDate );
+                FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ) );
 
         // Check if there is any extra data stored in the redline object
         if (pRedlineData->GetExtraData())
@@ -3621,27 +3651,29 @@ void DocxAttributeOutput::StartRedline( const SwRedlineData * pRedlineData )
                         ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                         : rAuthor, RTL_TEXTENCODING_UTF8 ) );
 
-    OString aDate( DateTimeToOString( bRemovePersonalInfo
-            ? DateTime(Date( 1, 1, 1970 )) // Epoch time
-            : pRedlineData->GetTimeStamp() ) );
-
+    const DateTime aDateTime = pRedlineData->GetTimeStamp();
+    bool bNoDate = bRemovePersonalInfo ||
+        ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
     bool bMoved = pRedlineData->IsMoved();
     switch ( pRedlineData->GetType() )
     {
         case RedlineType::Insert:
-            m_pSerializer->startElementNS( XML_w, bMoved ? XML_moveTo : XML_ins,
-                    FSNS( XML_w, XML_id ), aId,
-                    FSNS( XML_w, XML_author ), aAuthor,
-                    FSNS( XML_w, XML_date ), aDate );
-            break;
-
         case RedlineType::Delete:
-            m_pSerializer->startElementNS( XML_w, bMoved ? XML_moveFrom : XML_del,
+        {
+            sal_Int32 eElement = RedlineType::Insert == pRedlineData->GetType()
+                ? ( bMoved ? XML_moveTo : XML_ins )
+                : ( bMoved ? XML_moveFrom : XML_del );
+            if ( bNoDate )
+                m_pSerializer->startElementNS( XML_w, eElement,
+                    FSNS( XML_w, XML_id ), aId,
+                    FSNS( XML_w, XML_author ), aAuthor );
+            else
+                m_pSerializer->startElementNS( XML_w, eElement,
                     FSNS( XML_w, XML_id ), aId,
                     FSNS( XML_w, XML_author ), aAuthor,
-                    FSNS( XML_w, XML_date ), aDate );
+                    FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ) );
             break;
-
+        }
         case RedlineType::Format:
             SAL_INFO("sw.ww8", "TODO DocxAttributeOutput::StartRedline()" );
             break;
@@ -4742,15 +4774,21 @@ void DocxAttributeOutput::TableRowRedline( ww8::WW8TableNodeInfoInner::Pointer_t
                         ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                         : rAuthor, RTL_TEXTENCODING_UTF8 ) );
 
-        OString aDate( DateTimeToOString( bRemovePersonalInfo
-                    ? DateTime(Date( 1, 1, 1970 )) // Epoch time
-                    : aRedlineData.GetTimeStamp() ) );
+        const DateTime aDateTime = aRedlineData.GetTimeStamp();
+        bool bNoDate = bRemovePersonalInfo ||
+            ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
 
-        m_pSerializer->singleElementNS( XML_w,
+        if ( bNoDate )
+            m_pSerializer->singleElementNS( XML_w,
+                            RedlineType::Delete == pRedline->GetType() ? XML_del : XML_ins,
+                            FSNS( XML_w, XML_id ), aId,
+                            FSNS( XML_w, XML_author ), aAuthor );
+        else
+            m_pSerializer->singleElementNS( XML_w,
                             RedlineType::Delete == pRedline->GetType() ? XML_del : XML_ins,
                             FSNS( XML_w, XML_id ), aId,
                             FSNS( XML_w, XML_author ), aAuthor,
-                            FSNS( XML_w, XML_date ), aDate );
+                            FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ) );
         return;
     }
 }
@@ -4784,20 +4822,21 @@ void DocxAttributeOutput::TableCellRedline( ww8::WW8TableNodeInfoInner::Pointer_
                         ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
                         : rAuthor, RTL_TEXTENCODING_UTF8 ) );
 
-                    OString aDate( DateTimeToOString( bRemovePersonalInfo
-                            ? DateTime(Date( 1, 1, 1970 )) // Epoch time
-                            : aRedlineData.GetTimeStamp() ) );
-
-                    if (nRedlineType == RedlineType::TableCellInsert)
-                        m_pSerializer->singleElementNS( XML_w, XML_cellIns,
+                    sal_Int32 nElement = nRedlineType == RedlineType::TableCellInsert
+                        ? XML_cellIns
+                        : XML_cellDel;
+                    const DateTime aDateTime = aRedlineData.GetTimeStamp();
+                    bool bNoDate = bRemovePersonalInfo || ( aDateTime.GetYear() == 1970 &&
+                                        aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
+                    if ( bNoDate )
+                        m_pSerializer->singleElementNS( XML_w, nElement,
+                            FSNS( XML_w, XML_id ), aId,
+                            FSNS( XML_w, XML_author ), aAuthor );
+                    else
+                        m_pSerializer->singleElementNS( XML_w, nElement,
                             FSNS( XML_w, XML_id ), aId,
                             FSNS( XML_w, XML_author ), aAuthor,
-                            FSNS( XML_w, XML_date ), aDate );
-                    else if (nRedlineType == RedlineType::TableCellDelete)
-                        m_pSerializer->singleElementNS( XML_w, XML_cellDel,
-                            FSNS( XML_w, XML_id ), aId,
-                            FSNS( XML_w, XML_author ), aAuthor,
-                            FSNS( XML_w, XML_date ), aDate );
+                            FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ) );
                 }
                 break;
                 default: break;
@@ -8466,14 +8505,24 @@ DocxAttributeOutput::hasResolved DocxAttributeOutput::WritePostitFields()
     for (auto& [f, data] : m_postitFields)
     {
         OString idstr = OString::number(data.id);
-        m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr,
-            FSNS( XML_w, XML_author ), bRemovePersonalInfo
+        const DateTime aDateTime = f->GetDateTime();
+        bool bNoDate = bRemovePersonalInfo ||
+            ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
+        if ( bNoDate )
+            m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr,
+                FSNS( XML_w, XML_author ), bRemovePersonalInfo
                      ? "Author" + OUString::number( GetExport().GetInfoID(f->GetPar1()) )
                      : f->GetPar1(),
-            FSNS( XML_w, XML_date ), DateTimeToOString( bRemovePersonalInfo
-                     ? util::DateTime() // "no date" time
-                     : f->GetDateTime() ),
-            FSNS( XML_w, XML_initials ), bRemovePersonalInfo
+                FSNS( XML_w, XML_initials ), bRemovePersonalInfo
+                     ? OUString::number( GetExport().GetInfoID(f->GetInitials()) )
+                     : f->GetInitials() );
+        else
+            m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr,
+                FSNS( XML_w, XML_author ), bRemovePersonalInfo
+                     ? "Author" + OUString::number( GetExport().GetInfoID(f->GetPar1()) )
+                     : f->GetPar1(),
+                FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ),
+                FSNS( XML_w, XML_initials ), bRemovePersonalInfo
                      ? OUString::number( GetExport().GetInfoID(f->GetInitials()) )
                      : f->GetInitials() );
 
