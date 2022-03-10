@@ -69,7 +69,7 @@ int DAVAuthListener_Impl::authenticate(
                     m_aURL, inHostName, inRealm, inoutUserName,
                     outPassWord,
                     bCanUseSystemCredentials );
-            xIH->handle( xRequest );
+            xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
                 = xRequest->getSelection();

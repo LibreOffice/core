@@ -479,7 +479,6 @@ uno::Sequence< beans::Property > Content::getProperties(
     // std::set -> uno::Sequence
     sal_Int32 nCount = aPropSet.size();
     uno::Sequence< beans::Property > aProperties( nCount );
-    auto aPropertiesRange = asNonConstRange(aProperties);
 
     beans::Property aProp;
     sal_Int32 n = 0;
@@ -487,7 +486,7 @@ uno::Sequence< beans::Property > Content::getProperties(
     for ( const auto& rProp : aPropSet )
     {
         xProvider->getProperty( rProp, aProp );
-        aPropertiesRange[ n++ ] = aProp;
+        aProperties[ n++ ] = aProp;
     }
 
     return aProperties;

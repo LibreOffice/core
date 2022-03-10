@@ -141,7 +141,7 @@ ContentProvider::queryContent(
     osl::MutexGuard aGuard( m_aMutex );
 
     // Check, if a content with given id already exists...
-    uno::Reference<ucb::XContent> xContent = queryExistingContent(xCanonicId);
+    uno::Reference<ucb::XContent> xContent = queryExistingContent(xCanonicId).get();
     if ( xContent.is() )
         return xContent;
 

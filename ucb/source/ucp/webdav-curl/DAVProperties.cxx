@@ -26,38 +26,38 @@ using namespace http_dav_ucp;
 
 
 // static
-void DAVProperties::createSerfPropName( ::std::u16string_view const rFullName,
+void DAVProperties::createSerfPropName( OUString const& rFullName,
                                         SerfPropName & rName )
 {
-    if (o3tl::starts_with(rFullName, u"DAV:"))
+    if (rFullName.startsWith("DAV:"))
     {
         rName.nspace = "DAV:";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.substr(RTL_CONSTASCII_LENGTH("DAV:")),
+                        rFullName.copy(RTL_CONSTASCII_LENGTH("DAV:")),
                                         RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    else if (o3tl::starts_with(rFullName, u"http://apache.org/dav/props/"))
+    else if (rFullName.startsWith("http://apache.org/dav/props/"))
     {
         rName.nspace = "http://apache.org/dav/props/";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.substr(
+                        rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://apache.org/dav/props/" ) ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    else if (o3tl::starts_with(rFullName, u"http://ucb.openoffice.org/dav/props/"))
+    else if (rFullName.startsWith("http://ucb.openoffice.org/dav/props/"))
     {
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
             = strdup( OUStringToOString(
-                        rFullName.substr(
+                        rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
                                 "http://ucb.openoffice.org/dav/props/" ) ),
                             RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-    else if (o3tl::starts_with(rFullName, u"<prop:"))
+    else if (rFullName.startsWith("<prop:"))
     {
         // Support for 3rd party namespaces/props
 
@@ -101,16 +101,16 @@ void DAVProperties::createUCBPropName( const char * nspace,
         // in this case, if name is a well-known dav property name.
         // Although this is not 100% correct, it solves many problems.
 
-        if (o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::RESOURCETYPE).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::SUPPORTEDLOCK).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::LOCKDISCOVERY).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::CREATIONDATE).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::DISPLAYNAME).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETCONTENTLANGUAGE).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETCONTENTLENGTH).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETCONTENTTYPE).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETETAG).substr(4)) ||
-            o3tl::equalsIgnoreAsciiCase(aName, std::u16string_view(DAVProperties::GETLASTMODIFIED).substr(4)))
+        if (aName.equalsIgnoreAsciiCase(OUString(DAVProperties::RESOURCETYPE).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::SUPPORTEDLOCK).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::LOCKDISCOVERY).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::CREATIONDATE).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::DISPLAYNAME).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::GETCONTENTLANGUAGE).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::GETCONTENTLENGTH).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::GETCONTENTTYPE).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::GETETAG).copy(4)) ||
+            aName.equalsIgnoreAsciiCase(OUString(DAVProperties::GETLASTMODIFIED).copy(4)))
         {
             aNameSpace = "DAV:";
         }

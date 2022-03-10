@@ -106,12 +106,12 @@ auto GetErrorString(CURLcode const rc, char const* const pErrorBuffer = nullptr)
 {
     char const* const pMessage( // static fallback
         (pErrorBuffer && pErrorBuffer[0] != '\0') ? pErrorBuffer : curl_easy_strerror(rc));
-    return OString::Concat("(") + OString::number(sal_Int32(rc)) + ") " + pMessage;
+    return "(" + OString::number(sal_Int32(rc)) + ") " + pMessage;
 }
 
 auto GetErrorStringMulti(CURLMcode const mc) -> OString
 {
-    return OString::Concat("(") + OString::number(sal_Int32(mc)) + ") " + curl_multi_strerror(mc);
+    return "(" + OString::number(sal_Int32(mc)) + ") " + curl_multi_strerror(mc);
 }
 
 /// represent an option to be passed to curl_easy_setopt()
@@ -300,9 +300,8 @@ static int debug_callback(CURL* handle, curl_infotype type, char* data, size_t s
                 sal_Int32 const end(tmp.indexOf("\r\n", start));
                 assert(end != -1);
                 sal_Int32 const len(SAL_N_ELEMENTS("Authorization: ") - 1);
-                tmp = tmp.replaceAt(
-                    start + len, end - start - len,
-                    OStringConcatenation(OString::number(end - start - len) + " bytes redacted"));
+                tmp = tmp.replaceAt(start + len, end - start - len,
+                                    OString::number(end - start - len) + " bytes redacted");
             }
             SAL_INFO("ucb.ucp.webdav.curl", "CURLINFO_HEADER_OUT: " << handle << ": " << tmp);
             return 0;
@@ -430,7 +429,7 @@ static size_t header_callback(char* const buffer, size_t const size, size_t cons
                 return 0; // error
             }
             pHeaders->HeaderFields.back().first.back()
-                += OString::Concat(" ") + ::std::string_view(&buffer[i], nitems - i);
+                += OString(" ") + OString(&buffer[i], nitems - i);
         }
         else
         {
@@ -492,8 +491,8 @@ static auto ProcessHeaders(::std::vector<OString> const& rHeaders) -> ::std::map
             --nEnd;
         }
         // RFC 7230 says that only ASCII works reliably anyway (neon also did this)
-        auto const value(::rtl::OStringToOUString(line.subView(nStart, nEnd - nStart),
-                                                  RTL_TEXTENCODING_ASCII_US));
+        auto const value(
+            ::rtl::OStringToOUString(line.copy(nStart, nEnd - nStart), RTL_TEXTENCODING_ASCII_US));
         auto const it(ret.find(name));
         if (it != ret.end())
         {
@@ -620,8 +619,8 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     // en.wikipedia.org:80 forces back 403 "Scripts should use an informative
     // User-Agent string with contact information, or they may be IP-blocked
     // without notice" otherwise:
-    OString const useragent(OString::Concat("LibreOffice " LIBO_VERSION_DOTTED " curl/")
-                            + ::std::string_view(pVersion->version, strlen(pVersion->version)) + " "
+    OString const useragent(OString("LibreOffice " LIBO_VERSION_DOTTED " curl/")
+                            + OString(pVersion->version, strlen(pVersion->version)) + " "
                             + pVersion->ssl_version);
     // looks like an explicit "User-Agent" header in CURLOPT_HTTPHEADER
     // will override CURLOPT_USERAGENT, see Curl_http_useragent(), so no need
@@ -1561,7 +1560,7 @@ auto CurlProcessor::PropFind(
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
     pAttrList->AddAttribute("xmlns", "CDATA", "DAV:");
-    xWriter->startElement("propfind", pAttrList);
+    xWriter->startElement("propfind", pAttrList.get());
     if (o_pResourceInfos)
     {
         xWriter->startElement("propname", nullptr);
@@ -1583,7 +1582,7 @@ auto CurlProcessor::PropFind(
                 DAVProperties::createSerfPropName(rName, name);
                 pAttrList->Clear();
                 pAttrList->AddAttribute("xmlns", "CDATA", OUString::createFromAscii(name.nspace));
-                xWriter->startElement(OUString::createFromAscii(name.name), pAttrList);
+                xWriter->startElement(OUString::createFromAscii(name.name), pAttrList.get());
                 xWriter->endElement(OUString::createFromAscii(name.name));
             }
             xWriter->endElement("prop");
@@ -1701,7 +1700,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
     pAttrList->AddAttribute("xmlns", "CDATA", "DAV:");
-    xWriter->startElement("propertyupdate", pAttrList);
+    xWriter->startElement("propertyupdate", pAttrList.get());
     for (ProppatchValue const& rPropValue : rValues)
     {
         assert(rPropValue.operation == PROPSET || rPropValue.operation == PROPREMOVE);
@@ -1713,7 +1712,7 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
         DAVProperties::createSerfPropName(rPropValue.name, name);
         pAttrList->Clear();
         pAttrList->AddAttribute("xmlns", "CDATA", OUString::createFromAscii(name.nspace));
-        xWriter->startElement(OUString::createFromAscii(name.name), pAttrList);
+        xWriter->startElement(OUString::createFromAscii(name.name), pAttrList.get());
         if (rPropValue.operation == PROPSET)
         {
             if (DAVProperties::isUCBDeadProperty(name))
@@ -2024,7 +2023,7 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURI
     {
         throw uno::RuntimeException("curl_slist_append failed");
     }
-    OString const utf8Overwrite(OString::Concat("Overwrite: ") + (isOverwrite ? "T" : "F"));
+    OString const utf8Overwrite(OString("Overwrite: ") + (isOverwrite ? "T" : "F"));
     pList.reset(curl_slist_append(pList.release(), utf8Overwrite.getStr()));
     if (!pList)
     {
@@ -2164,7 +2163,7 @@ auto CurlSession::LOCK(OUString const& rURIReference, ucb::Lock /*const*/& rLock
     xWriter->startDocument();
     rtl::Reference<::comphelper::AttributeList> const pAttrList(new ::comphelper::AttributeList);
     pAttrList->AddAttribute("xmlns", "CDATA", "DAV:");
-    xWriter->startElement("lockinfo", pAttrList);
+    xWriter->startElement("lockinfo", pAttrList.get());
     xWriter->startElement("lockscope", nullptr);
     switch (rLock.Scope)
     {

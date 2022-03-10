@@ -29,19 +29,19 @@ typedef struct { const char *nspace, *name; } SerfPropName;
 
 struct DAVProperties
 {
-    static constexpr OUStringLiteral CREATIONDATE = u"DAV:creationdate";
-    static constexpr OUStringLiteral DISPLAYNAME = u"DAV:displayname";
-    static constexpr OUStringLiteral GETCONTENTLANGUAGE = u"DAV:getcontentlanguage";
-    static constexpr OUStringLiteral GETCONTENTLENGTH = u"DAV:getcontentlength";
-    static constexpr OUStringLiteral GETCONTENTTYPE = u"DAV:getcontenttype";
-    static constexpr OUStringLiteral GETETAG = u"DAV:getetag";
-    static constexpr OUStringLiteral GETLASTMODIFIED = u"DAV:getlastmodified";
-    static constexpr OUStringLiteral LOCKDISCOVERY = u"DAV:lockdiscovery";
-    static constexpr OUStringLiteral RESOURCETYPE = u"DAV:resourcetype";
-    static constexpr OUStringLiteral SUPPORTEDLOCK = u"DAV:supportedlock";
-    static constexpr OUStringLiteral EXECUTABLE = u"http://apache.org/dav/props/executable";
+    static constexpr OUStringLiteral CREATIONDATE = "DAV:creationdate";
+    static constexpr OUStringLiteral DISPLAYNAME = "DAV:displayname";
+    static constexpr OUStringLiteral GETCONTENTLANGUAGE = "DAV:getcontentlanguage";
+    static constexpr OUStringLiteral GETCONTENTLENGTH = "DAV:getcontentlength";
+    static constexpr OUStringLiteral GETCONTENTTYPE = "DAV:getcontenttype";
+    static constexpr OUStringLiteral GETETAG = "DAV:getetag";
+    static constexpr OUStringLiteral GETLASTMODIFIED = "DAV:getlastmodified";
+    static constexpr OUStringLiteral LOCKDISCOVERY = "DAV:lockdiscovery";
+    static constexpr OUStringLiteral RESOURCETYPE = "DAV:resourcetype";
+    static constexpr OUStringLiteral SUPPORTEDLOCK = "DAV:supportedlock";
+    static constexpr OUStringLiteral EXECUTABLE = "http://apache.org/dav/props/executable";
 
-    static void createSerfPropName( ::std::u16string_view rFullName,
+    static void createSerfPropName( OUString const& rFullName,
                                     SerfPropName & rName );
     static void createUCBPropName ( const char * nspace,
                                     const char * name,

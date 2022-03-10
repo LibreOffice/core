@@ -928,7 +928,7 @@ namespace
                 // create parser; connect parser and filter
                 rtl::Reference<WebDAVResponseParser> const pWebDAVResponseParser(
                         new WebDAVResponseParser(eWebDAVResponseParserMode));
-                uno::Reference< xml::sax::XDocumentHandler > xWebDAVHdl(pWebDAVResponseParser);
+                uno::Reference< xml::sax::XDocumentHandler > xWebDAVHdl(pWebDAVResponseParser.get());
                 xParser->setDocumentHandler(xWebDAVHdl);
 
                 // finally, parse the stream
