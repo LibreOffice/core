@@ -11,12 +11,13 @@
 #pragma once
 
 #include "scdllapi.h"
-#include "SparklineGroup.hxx"
 #include "rangelst.hxx"
 #include <memory>
 
 namespace sc
 {
+class SparklineGroup;
+
 class SC_DLLPUBLIC Sparkline
 {
     SCCOL m_nColumn;
