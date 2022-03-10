@@ -608,7 +608,7 @@ namespace svxform
         }
     }
 
-    std::unique_ptr<weld::TreeIter> NavigatorTree::Insert(FmEntryData* pEntryData, int nRelPos)
+    std::unique_ptr<weld::TreeIter> NavigatorTree::Insert(const FmEntryData* pEntryData, int nRelPos)
     {
         // insert current entry
         std::unique_ptr<weld::TreeIter> xParentEntry = FindEntry( pEntryData->GetParent() );

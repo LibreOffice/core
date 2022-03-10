@@ -13,7 +13,7 @@
 
 namespace sc
 {
-Sparkline::Sparkline(std::shared_ptr<SparklineGroup>& pSparklineGroup)
+Sparkline::Sparkline(const std::shared_ptr<SparklineGroup>& pSparklineGroup)
     : m_pSparklineGroup(pSparklineGroup)
 {
 }

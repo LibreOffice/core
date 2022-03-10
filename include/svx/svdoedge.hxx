@@ -290,7 +290,7 @@ public:
 
     // helper method for SdrDragMethod::AddConnectorOverlays. Adds an overlay polygon for
     // this connector to rResult.
-    basegfx::B2DPolygon ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const;
+    basegfx::B2DPolygon ImplAddConnectorOverlay(const SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const;
 };
 
  // The following item parameters of the SdrItemPool are used to

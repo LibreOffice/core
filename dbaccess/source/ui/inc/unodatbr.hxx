@@ -356,7 +356,7 @@ namespace dbaui
         std::unique_ptr<weld::TreeIter> implAppendEntry(
             const weld::TreeIter* pParent,
             const OUString& rName,
-            DBTreeListUserData* pUserData);
+            const DBTreeListUserData* pUserData);
 
         /// loads the grid control with the data object specified (which may be a table, a query or a command)
         bool implLoadAnything(const OUString& _rDataSourceName, const OUString& _rCommand,

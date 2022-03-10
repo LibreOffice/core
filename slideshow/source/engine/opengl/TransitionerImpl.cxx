@@ -176,7 +176,7 @@ protected:
 
     void createTexture( GLuint* texID,
             bool useMipmap,
-            uno::Sequence<sal_Int8>& data,
+            const uno::Sequence<sal_Int8>& data,
             const OGLFormat* pFormat );
     const OGLFormat* chooseFormats();
 
@@ -188,7 +188,7 @@ private:
     void setSlides( const Reference< rendering::XBitmap >& xLeavingSlide , const uno::Reference< rendering::XBitmap >& xEnteringSlide );
     void impl_prepareSlides();
 
-    void impl_createTexture( bool useMipmap, uno::Sequence<sal_Int8>& data, const OGLFormat* pFormat );
+    void impl_createTexture( bool useMipmap, const uno::Sequence<sal_Int8>& data, const OGLFormat* pFormat );
 
     bool initWindowFromSlideShowView( const uno::Reference< presentation::XSlideShowView >& xView );
     /** After the window has been created, and the slides have been set, we'll initialize the slides with OpenGL.
@@ -448,7 +448,7 @@ bool OGLTransitionerImpl::setTransition( const std::shared_ptr<OGLTransitionImpl
 
 void OGLTransitionerImpl::createTexture( GLuint* texID,
                      bool useMipmap,
-                     uno::Sequence<sal_Int8>& data,
+                     const uno::Sequence<sal_Int8>& data,
                      const OGLFormat* pFormat )
 {
     CHECK_GL_ERROR();
@@ -817,7 +817,7 @@ void buildMipmaps(
 
 void OGLTransitionerImpl::impl_createTexture(
                      bool useMipmap,
-                     uno::Sequence<sal_Int8>& data,
+                     const uno::Sequence<sal_Int8>& data,
                      const OGLFormat* pFormat )
 {
     if( !pFormat )

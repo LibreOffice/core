@@ -273,7 +273,7 @@ private:
 
     void DeleteSelection();
     std::unique_ptr<weld::TreeIter> FindEntry(const FmFilterData* pItem) const;
-    void Insert(FmFilterData* pItem, int nPos);
+    void Insert(const FmFilterData* pItem, int nPos);
     void Remove(FmFilterData const * pItem);
 
     DECL_LINK(OnRemove, void*, void);

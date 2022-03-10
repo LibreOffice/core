@@ -387,7 +387,7 @@ private:
     void Do(::std::vector<sal_Int32> & rSortOrder);
 
 public:
-    SdrUndoSort(SdrPage & rPage,
+    SdrUndoSort(const SdrPage & rPage,
         ::std::vector<sal_Int32> const& rSortOrder);
 
     virtual void Undo() override;

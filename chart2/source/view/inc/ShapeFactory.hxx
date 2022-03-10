@@ -203,7 +203,7 @@ public:
 
     static rtl::Reference<SvxShapeText>
         createText(const rtl::Reference<SvxShapeGroupAnyD>& xTarget
-            , css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
+            , const css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString
             , const tNameSequence& rPropNames
             , const tAnySequence& rPropValues
             , const css::uno::Any& rATransformation);
@@ -255,7 +255,7 @@ public:
     static OUString getStackedString( const OUString& rString, bool bStacked );
 
     static bool hasPolygonAnyLines( const std::vector<std::vector<css::drawing::Position3D>>& rPoly );
-    static bool isPolygonEmptyOrSinglePoint( css::drawing::PolyPolygonShape3D& rPoly );
+    static bool isPolygonEmptyOrSinglePoint( const css::drawing::PolyPolygonShape3D& rPoly );
     static bool isPolygonEmptyOrSinglePoint( const std::vector<std::vector<css::drawing::Position3D>>& rPoly );
     static void closePolygon( css::drawing::PolyPolygonShape3D& rPoly );
     static void closePolygon( std::vector<std::vector<css::drawing::Position3D>>& rPoly );

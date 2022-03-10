@@ -419,7 +419,7 @@ basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
 }
 
 void appendPointSequence( drawing::PointSequenceSequence& rTarget
-                        , drawing::PointSequenceSequence& rAdd )
+                        , const drawing::PointSequenceSequence& rAdd )
 {
     sal_Int32 nAddCount = rAdd.getLength();
     if(!nAddCount)

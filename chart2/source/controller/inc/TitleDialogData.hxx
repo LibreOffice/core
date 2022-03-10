@@ -45,7 +45,7 @@ struct TitleDialogData
     */
     bool writeDifferenceToModel( const rtl::Reference<::chart::ChartModel>& xChartModel
                         , const css::uno::Reference< css::uno::XComponentContext >& xContext
-                        , TitleDialogData* pOldState=nullptr );
+                        , const TitleDialogData* pOldState=nullptr );
 };
 
 } //namespace chart

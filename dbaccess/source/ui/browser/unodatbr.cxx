@@ -2120,7 +2120,7 @@ void SbaTableQueryBrowser::populateTree(const Reference<XNameAccess>& _xNameAcce
     rTreeView.make_sorted();
 }
 
-std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implAppendEntry(const weld::TreeIter* pParent, const OUString& rName, DBTreeListUserData* pUserData)
+std::unique_ptr<weld::TreeIter> SbaTableQueryBrowser::implAppendEntry(const weld::TreeIter* pParent, const OUString& rName, const DBTreeListUserData* pUserData)
 {
     EntryType eEntryType = pUserData->eType;
 

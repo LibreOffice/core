@@ -236,7 +236,7 @@ void Shape::propagateDiagramHelper()
     }
 }
 
-void Shape::migrateDiagramHelperToNewShape(ShapePtr& pTarget)
+void Shape::migrateDiagramHelperToNewShape(const ShapePtr& pTarget)
 {
     if(!mpDiagramHelper)
     {

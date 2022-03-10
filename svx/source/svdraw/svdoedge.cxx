@@ -1991,7 +1991,7 @@ OUString SdrEdgeObj::getSpecialDragComment(const SdrDragStat& rDrag) const
 }
 
 
-basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const
+basegfx::B2DPolygon SdrEdgeObj::ImplAddConnectorOverlay(const SdrDragMethod& rDragMethod, bool bTail1, bool bTail2, bool bDetail) const
 {
     basegfx::B2DPolygon aResult;
 

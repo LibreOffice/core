@@ -133,7 +133,7 @@ basegfx::B2DPolyPolygon PolyToB2DPolyPolygon(
 */
 OOO_DLLPUBLIC_CHARTTOOLS
 void appendPointSequence( css::drawing::PointSequenceSequence& rTarget
-                        , css::drawing::PointSequenceSequence& rAdd );
+                        , const css::drawing::PointSequenceSequence& rAdd );
 
 /** Position3D + Direction3D == Position3D
 */

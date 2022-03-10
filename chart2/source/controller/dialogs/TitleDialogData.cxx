@@ -73,7 +73,7 @@ void TitleDialogData::readFromModel( const rtl::Reference<::chart::ChartModel>& 
 bool TitleDialogData::writeDifferenceToModel(
                           const rtl::Reference<::chart::ChartModel>& xChartModel
                         , const uno::Reference< uno::XComponentContext >& xContext
-                        , TitleDialogData* pOldState )
+                        , const TitleDialogData* pOldState )
 {
     bool bChanged = false;
     for( sal_Int32 nN = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN );

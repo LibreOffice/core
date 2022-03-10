@@ -38,7 +38,7 @@ public:
 
     void SetUnit(const OUString* str);
     void SetSelItem(sal_uInt16 nSel);
-    tools::Long GetMaxTextWidth(vcl::RenderContext* pDev);
+    tools::Long GetMaxTextWidth(const vcl::RenderContext* pDev);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void UserDraw(const UserDrawEvent& rUDEvt) override;
 };

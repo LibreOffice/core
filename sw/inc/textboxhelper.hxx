@@ -176,7 +176,7 @@ public:
 
     /// Collect all textboxes of the group given by the pGroupObj Parameter. Returns with a
     /// vector filled with the textboxes.
-    static std::vector<SwFrameFormat*> CollectTextBoxes(SdrObject* pGroupObject,
+    static std::vector<SwFrameFormat*> CollectTextBoxes(const SdrObject* pGroupObject,
                                                         SwFrameFormat* pFormat);
 };
 

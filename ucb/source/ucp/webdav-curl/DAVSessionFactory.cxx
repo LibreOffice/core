@@ -76,7 +76,7 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     }
 }
 
-void DAVSessionFactory::releaseElement( DAVSession * pElement )
+void DAVSessionFactory::releaseElement( const DAVSession * pElement )
 {
     assert( pElement );
     std::unique_lock aGuard( m_aMutex );

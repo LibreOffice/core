@@ -409,7 +409,7 @@ namespace svxform
 
         FmControlData*  NewControl(const OUString& rServiceName, const weld::TreeIter& rParentEntry, bool bEditName);
         void            NewForm(const weld::TreeIter& rParentEntry);
-        std::unique_ptr<weld::TreeIter> Insert(FmEntryData* pEntryData, int nRelPos);
+        std::unique_ptr<weld::TreeIter> Insert(const FmEntryData* pEntryData, int nRelPos);
         void            Remove( FmEntryData* pEntryData );
 
 

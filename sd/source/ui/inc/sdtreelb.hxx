@@ -305,7 +305,7 @@ public:
     */
     void AddShapeList (
         const SdrObjList& rList,
-        SdrObject* pShape,
+        const SdrObject* pShape,
         const OUString& rsName,
         const bool bIsExcluded,
         const weld::TreeIter* pParentEntry);

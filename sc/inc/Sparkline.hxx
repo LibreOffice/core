@@ -30,7 +30,7 @@ private:
     std::shared_ptr<SparklineGroup> m_pSparklineGroup;
 
 public:
-    Sparkline(std::shared_ptr<SparklineGroup>& pSparklineGroup);
+    Sparkline(const std::shared_ptr<SparklineGroup>& pSparklineGroup);
 
     Sparkline(const Sparkline&) = delete;
     Sparkline& operator=(const Sparkline&) = delete;

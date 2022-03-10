@@ -70,7 +70,7 @@ CommandImageResolver::~CommandImageResolver()
 {
 }
 
-void CommandImageResolver::registerCommands(Sequence<OUString>& aCommandSequence)
+void CommandImageResolver::registerCommands(const Sequence<OUString>& aCommandSequence)
 {
     sal_Int32 nSequenceSize = aCommandSequence.getLength();
 

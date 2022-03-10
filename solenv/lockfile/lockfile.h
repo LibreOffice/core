@@ -63,7 +63,7 @@ int check_sleep(int, int);
 #endif
 int is_maillock(const char *lockfile);
 int lockfile_create_set_tmplock(const char *lockfile, volatile char **tmplock,
-                                int retries, int flags, struct lockargs_s_ *);
+                                int retries, int flags, const struct lockargs_s_ *);
 
 #ifdef  __cplusplus
 }

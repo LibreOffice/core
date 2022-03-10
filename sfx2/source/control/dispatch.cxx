@@ -1801,7 +1801,7 @@ boost::property_tree::ptree fillPopupMenu(Menu* pMenu)
 
 }
 
-boost::property_tree::ptree SfxDispatcher::fillPopupMenu(css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu)
+boost::property_tree::ptree SfxDispatcher::fillPopupMenu(const css::uno::Reference<css::awt::XPopupMenu>& rPopupMenu)
 {
     VCLXMenu* pAwtMenu = comphelper::getFromUnoTunnel<VCLXMenu>(rPopupMenu);
     PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
