@@ -11,12 +11,13 @@
 #pragma once
 
 #include "scdllapi.h"
-#include "SparklineGroup.hxx"
 #include "rangelst.hxx"
 #include <memory>
 
 namespace sc
 {
+class SparklineGroup;
+
 /** Sparkline data, used for rendering the content of a cell
  *
  * Contains the input range of the data that is being drawn and a reference

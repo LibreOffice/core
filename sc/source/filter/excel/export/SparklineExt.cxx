@@ -12,6 +12,7 @@
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <SparklineGroup.hxx>
 
 using namespace oox;
 
