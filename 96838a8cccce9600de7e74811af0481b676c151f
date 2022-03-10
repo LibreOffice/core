@@ -16,6 +16,24 @@
       "message": "This seems to be a mistake.",
       "revId": "96838a8cccce9600de7e74811af0481b676c151f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "525ce4be_7f4e6715",
+        "filename": "vcl/inc/salgdi.hxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 724,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-03-10T11:22:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b4d5824_af005922",
+      "revId": "96838a8cccce9600de7e74811af0481b676c151f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
