@@ -339,6 +339,10 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
     sal_uInt16 nFlyAscent = 0;
     sal_uInt16 nFlyHeight = 0;
     sal_uInt16 nFlyDescent = 0;
+
+    // If this line has a clearing break, then this is the portion's height.
+    sal_uInt16 nBreakHeight = 0;
+
     bool bOnlyPostIts = true;
     SetHanging( false );
 
@@ -455,6 +459,7 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 {
                     auto pBreakPortion = static_cast<SwBreakPortion*>(pPos);
                     bClearingBreak = pBreakPortion->GetClear() != SwLineBreakClear::NONE;
+                    nBreakHeight = nPosHeight;
                 }
                 if (!(pPos->IsBreakPortion() && !bClearingBreak) || !Height())
                 {
@@ -569,7 +574,19 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                 if( nFlyDescent > nFlyHeight - nFlyAscent )
                     Height( nFlyHeight + nFlyDescent, false );
                 else
-                    Height( nFlyHeight, false );
+                {
+                    if (nBreakHeight > nFlyHeight)
+                    {
+                        // The line has no content, but it has a clearing break: then the line
+                        // height is not only the intersection of the fly and line's rectangle, but
+                        // also includes the clearing break's height.
+                        Height(nBreakHeight, false);
+                    }
+                    else
+                    {
+                        Height(nFlyHeight, false);
+                    }
+                }
             }
             else if( nMaxDescent > Height() - mnAscent )
                 Height( nMaxDescent + mnAscent, false );
