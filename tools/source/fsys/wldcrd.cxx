@@ -25,22 +25,26 @@
  * '?' in pWild mean match exactly one character.
  *
  */
-bool WildCard::ImpMatch( const sal_Unicode *pWild, const sal_Unicode *pStr )
+bool WildCard::ImpMatch( std::u16string_view aWild, std::u16string_view aStr )
 {
     int    pos=0;
     int    flag=0;
+    const sal_Unicode* pWild = aWild.data();
+    const sal_Unicode* pWildEnd = aWild.data() + aWild.size();
+    const sal_Unicode* pStr = aStr.data();
+    const sal_Unicode* pStrEnd = aStr.data() + aStr.size();
 
-    while ( *pWild || flag )
+    while ( pWild != pWildEnd || flag )
     {
         switch (*pWild)
         {
             case '?':
-                if ( *pStr == '\0' )
+                if ( pStr == pStrEnd )
                     return false;
                 break;
 
             default:
-                if ( (*pWild == '\\') && ((*(pWild+1)=='?') || (*(pWild+1) == '*')) )
+                if ( (*pWild == '\\') && (pWild + 1 != pWildEnd) && ((*(pWild+1)=='?') || (*(pWild+1) == '*')) )
                     pWild++;
                 if ( *pWild != *pStr )
                     if ( !pos )
@@ -53,37 +57,37 @@ bool WildCard::ImpMatch( const sal_Unicode *pWild, const sal_Unicode *pStr )
                 // circumstances!
                 [[fallthrough]];
             case '*':
-                while ( *pWild == '*' )
+                while ( pWild != pWildEnd && *pWild == '*' )
                     pWild++;
-                if ( *pWild == '\0' )
+                if ( pWild == pWildEnd )
                     return true;
                 flag = 1;
                 pos  = 0;
-                if ( *pStr == '\0' )
-                    return ( *pWild == '\0' );
-                while ( *pStr && *pStr != *pWild )
+                if ( pStr == pStrEnd )
+                    return false;
+                while ( pStr != pStrEnd && *pStr != *pWild )
                 {
                     if ( *pWild == '?' ) {
                         pWild++;
-                        while ( *pWild == '*' )
+                        while ( pWild != pWildEnd && *pWild == '*' )
                             pWild++;
                     }
                     pStr++;
-                    if ( *pStr == '\0' )
-                        return ( *pWild == '\0' );
+                    if ( pStr == pStrEnd )
+                        return pWild == pWildEnd;
                 }
                 break;
         }
-        if ( *pWild != '\0' )
+        if ( pWild != pWildEnd )
             pWild++;
-        if ( *pStr != '\0' )
+        if ( pStr != pStrEnd )
             pStr++;
         else
             flag = 0;
         if ( flag )
             pos--;
     }
-    return ( *pStr == '\0' ) && ( *pWild == '\0' );
+    return ( pStr == pStrEnd ) && ( pWild == pWildEnd );
 }
 
 bool WildCard::Matches( std::u16string_view rString ) const
@@ -97,13 +101,13 @@ bool WildCard::Matches( std::u16string_view rString ) const
         while ( (nSepPos = aTmpWild.indexOf(cSepSymbol)) != -1 )
         {
             // Check all split wildcards
-            if ( ImpMatch( aTmpWild.subView( 0, nSepPos ).data(), rString.data() ) )
+            if ( ImpMatch( aTmpWild.subView( 0, nSepPos ), rString ) )
                 return true;
             aTmpWild = aTmpWild.copy(nSepPos + 1); // remove separator
         }
     }
 
-    return ImpMatch( aTmpWild.getStr(), rString.data() );
+    return ImpMatch( aTmpWild, rString );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
