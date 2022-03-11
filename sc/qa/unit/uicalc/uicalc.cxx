@@ -349,6 +349,52 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf94208)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "=COUNTA(B:B)");
+    insertStringToCell(*pModelObj, "A3", "Range");
+    insertStringToCell(*pModelObj, "A4", "Range");
+    insertStringToCell(*pModelObj, "A5", "Range");
+    insertStringToCell(*pModelObj, "A6", "Range");
+    insertStringToCell(*pModelObj, "A7", "Range");
+    insertStringToCell(*pModelObj, "A8", "Range");
+    insertStringToCell(*pModelObj, "B6", "Test");
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    goToCell("A3:A8");
+
+    dispatchCommand(mxComponent, ".uno:SelectRow", {});
+    Scheduler::ProcessEventsToIdle();
+
+    //type Control-D/Fill Down
+    dispatchCommand(mxComponent, ".uno:FillDown", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    for (SCROW i = 2; i < 8; ++i)
+    {
+        CPPUNIT_ASSERT_EQUAL(OUString("Range"), pDoc->GetString(ScAddress(0, i, 0)));
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("Test"), pDoc->GetString(ScAddress(1, 5, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf37623)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
