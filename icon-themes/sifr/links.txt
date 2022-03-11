@@ -1853,7 +1853,7 @@ cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/lc_helperdialog.png cmd/lc_helpindex.png
 cmd/lc_questionanswers.png cmd/lc_browseview.png
 
-cmd/sc_about.png res/mainapp_16_8.png
+cmd/sc_about.png cmd/sc_adddirect.png
 cmd/sc_donation.png cmd/sc_currencyfield.png
 cmd/sc_helperdialog.png cmd/sc_helpindex.png
 cmd/sc_questionanswers.png cmd/sc_browseview.png
