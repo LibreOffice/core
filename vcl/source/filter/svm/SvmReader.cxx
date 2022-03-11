@@ -826,6 +826,24 @@ rtl::Reference<MetaAction> SvmReader::BmpHandler()
     return pAction;
 }
 
+namespace
+{
+void sanitizeNegativeSizeDimensions(Size& rSize)
+{
+    if (rSize.Width() < 0)
+    {
+        SAL_WARN("vcl.gdi", "sanitizeNegativeSizeDimensions: negative width");
+        rSize.setWidth(0);
+    }
+
+    if (rSize.Height() < 0)
+    {
+        SAL_WARN("vcl.gdi", "sanitizeNegativeSizeDimensions: negative height");
+        rSize.setHeight(0);
+    }
+}
+}
+
 rtl::Reference<MetaAction> SvmReader::BmpScaleHandler()
 {
     rtl::Reference<MetaBmpScaleAction> pAction(new MetaBmpScaleAction);
@@ -836,8 +854,10 @@ rtl::Reference<MetaAction> SvmReader::BmpScaleHandler()
     TypeSerializer aSerializer(mrStream);
     Point aPoint;
     aSerializer.readPoint(aPoint);
+
     Size aSz;
     aSerializer.readSize(aSz);
+    sanitizeNegativeSizeDimensions(aSz);
 
     pAction->SetBitmap(aBmp);
     pAction->SetPoint(aPoint);
@@ -902,17 +922,7 @@ rtl::Reference<MetaAction> SvmReader::BmpExScaleHandler()
 
     Size aSize;
     aSerializer.readSize(aSize);
-    if (aSize.Width() < 0)
-    {
-        SAL_WARN("vcl.gdi", "MetaBmpExScaleAction: negative width");
-        aSize.setWidth(0);
-    }
-
-    if (aSize.Height() < 0)
-    {
-        SAL_WARN("vcl.gdi", "MetaBmpExScaleAction: negative height");
-        aSize.setHeight(0);
-    }
+    sanitizeNegativeSizeDimensions(aSize);
 
     pAction->SetBitmapEx(aBmpEx);
     pAction->SetPoint(aPoint);
@@ -1300,8 +1310,11 @@ rtl::Reference<MetaAction> SvmReader::FloatTransparentHandler(ImplMetaReadData* 
     TypeSerializer aSerializer(mrStream);
     Point aPoint;
     aSerializer.readPoint(aPoint);
+
     Size aSize;
     aSerializer.readSize(aSize);
+    sanitizeNegativeSizeDimensions(aSize);
+
     Gradient aGradient;
     aSerializer.readGradient(aGradient);
 
