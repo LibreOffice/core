@@ -349,6 +349,11 @@ public:
     bool HasFormulaCell( SCROW nRow1, SCROW nRow2 ) const;
 
     void CloneFormulaCell(
+        sc::ColumnBlockPosition& rBlockPos,
+        const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
+        const std::vector<sc::RowSpan>& rRanges );
+
+    void CloneFormulaCell(
         const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
         const std::vector<sc::RowSpan>& rRanges );
 
