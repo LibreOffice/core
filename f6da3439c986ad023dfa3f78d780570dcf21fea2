@@ -16,6 +16,24 @@
       "message": "bug id is incorrect, \u0027f\u0027 is missing",
       "revId": "f6da3439c986ad023dfa3f78d780570dcf21fea2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abc1fa6e_80f41130",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-11T18:12:54Z",
+      "side": 1,
+      "message": "thanks",
+      "parentUuid": "66ace90f_0eeba9ce",
+      "revId": "f6da3439c986ad023dfa3f78d780570dcf21fea2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
