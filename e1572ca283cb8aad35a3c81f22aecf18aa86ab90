@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "527f1258_7d377bf4",
+        "filename": "sc/source/ui/view/tabview.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1333,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-11T07:44:55Z",
+      "side": 0,
+      "message": "Thanks especially for this - I suppose that claiming users idiots was absolutely idiocy by itself!",
+      "range": {
+        "startLine": 1333,
+        "startChar": 54,
+        "endLine": 1333,
+        "endChar": 85
+      },
+      "revId": "e1572ca283cb8aad35a3c81f22aecf18aa86ab90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
