@@ -3409,7 +3409,8 @@ void Window::ImplCallDeactivateListeners( vcl::Window *pNew )
 
         // #100759#, avoid walking the wrong frame's hierarchy
         //           eg, undocked docking windows (ImplDockFloatWin)
-        if ( ImplGetParent() && mpWindowImpl->mpFrameWindow == ImplGetParent()->mpWindowImpl->mpFrameWindow )
+        if ( ImplGetParent() && !ImplGetParent()->IsDisposed() &&
+             mpWindowImpl->mpFrameWindow == ImplGetParent()->mpWindowImpl->mpFrameWindow )
             ImplGetParent()->ImplCallDeactivateListeners( pNew );
     }
 }
