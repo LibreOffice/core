@@ -16,6 +16,23 @@
       "message": "After a few attempts, I went for a simple fix, for a few reasons:\n- the similar \"64-bit\" types one could\u0027ve switched to, like tools::Rectangle are only 64-bit in 64-bit builds,\n- the scope of type change spills over to further classes, involving more UNO calls and more headache,\n- this minimal change is easy to backport, and to follow up on in the future.\n\nEike, can you please review?",
       "revId": "f1fd542e93abca1f5797b271198dae85698079bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33e5e678_a314261c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-11T14:36:47Z",
+      "side": 1,
+      "message": "Makes sense. I suggest adding SAL_WARN for the overflowing cases.\n",
+      "revId": "f1fd542e93abca1f5797b271198dae85698079bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
