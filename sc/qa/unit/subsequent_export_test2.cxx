@@ -3074,7 +3074,7 @@ void ScExportTest2::testWholeRowBold()
     CPPUNIT_ASSERT_MESSAGE("Failed to open empty doc", xDocSh1.is());
     ScDocument* pDoc = &xDocSh1->GetDocument();
 
-    // Make entire second row row bold.
+    // Make entire second row bold.
     ScPatternAttr boldAttr(pDoc->GetPool());
     boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
     pDoc->ApplyPatternAreaTab(0, 1, pDoc->MaxCol(), 1, 0, boldAttr);
