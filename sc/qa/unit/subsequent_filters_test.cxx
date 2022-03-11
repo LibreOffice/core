@@ -173,14 +173,7 @@ public:
     void testRowHeightODS();
     void testRichTextContentODS();
 
-    void testTdf122643();
-    void testTdf132278();
-    void testTdf130959();
-    void testTdf129410();
-    void testTdf138507();
-    void testTdf131380();
-    void testTdf139782();
-    void testTdf136551();
+    void testImportCrashes();
     void testTdf129681();
     void testTdf111974XLSM();
     void testEscapedUnicodeXLSX();
@@ -278,14 +271,7 @@ public:
     CPPUNIT_TEST(testPasswordOld);
     CPPUNIT_TEST(testPasswordNew);
 
-    CPPUNIT_TEST(testTdf122643);
-    CPPUNIT_TEST(testTdf132278);
-    CPPUNIT_TEST(testTdf130959);
-    CPPUNIT_TEST(testTdf129410);
-    CPPUNIT_TEST(testTdf138507);
-    CPPUNIT_TEST(testTdf131380);
-    CPPUNIT_TEST(testTdf139782);
-    CPPUNIT_TEST(testTdf136551);
+    CPPUNIT_TEST(testImportCrashes);
     CPPUNIT_TEST(testTdf129681);
     CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testEscapedUnicodeXLSX);
@@ -3048,21 +3034,16 @@ void ScFiltersTest::testFormulaDependency()
     xDocSh->DoClose();
 }
 
-void ScFiltersTest::testTdf122643() { testImportCrash(u"tdf122643.", FORMAT_ODS); }
-
-void ScFiltersTest::testTdf132278() { testImportCrash(u"tdf132278.", FORMAT_ODS); }
-
-void ScFiltersTest::testTdf130959() { testImportCrash(u"tdf130959.", FORMAT_XLSX); }
-
-void ScFiltersTest::testTdf129410() { testImportCrash(u"tdf129410.", FORMAT_ODS); }
-
-void ScFiltersTest::testTdf138507() { testImportCrash(u"tdf138507.", FORMAT_ODS); }
-
-void ScFiltersTest::testTdf131380() { testImportCrash(u"tdf131380.", FORMAT_XLSX); }
-
-void ScFiltersTest::testTdf139782() { testImportCrash(u"tdf139782.", FORMAT_ODS); }
-
-void ScFiltersTest::testTdf136551() { testImportCrash(u"tdf136551.", FORMAT_ODS); }
+void ScFiltersTest::testImportCrashes() {
+    testImportCrash(u"tdf122643.", FORMAT_ODS);
+    testImportCrash(u"tdf132278.", FORMAT_ODS);
+    testImportCrash(u"tdf130959.", FORMAT_XLSX);
+    testImportCrash(u"tdf129410.", FORMAT_ODS);
+    testImportCrash(u"tdf138507.", FORMAT_ODS);
+    testImportCrash(u"tdf131380.", FORMAT_XLSX);
+    testImportCrash(u"tdf139782.", FORMAT_ODS);
+    testImportCrash(u"tdf136551.", FORMAT_ODS);
+}
 
 void ScFiltersTest::testTdf129681()
 {
