@@ -1086,6 +1086,7 @@ lime
 limit
 line
 line-break
+clear
 line-distance
 line-height
 line-height-at-least
