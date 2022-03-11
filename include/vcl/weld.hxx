@@ -209,8 +209,8 @@ public:
 
     virtual OUString get_accessible_description() const = 0;
 
-    // After this call this widget is only accessiblity labelled by pLabel and
-    // pLabel only accessiblity labels this widget
+    // After this call this widget is only accessibility labelled by pLabel and
+    // pLabel only accessibility labels this widget
     virtual void set_accessible_relation_labeled_by(weld::Widget* pLabel) = 0;
 
     virtual void set_tooltip_text(const OUString& rTip) = 0;
