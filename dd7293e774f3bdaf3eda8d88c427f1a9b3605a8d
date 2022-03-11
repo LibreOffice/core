@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36b51b74_0fd0f2b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-11T20:19:14Z",
+      "side": 1,
+      "message": "I don\u0027t know if it\u0027s this commit or another one about icon them but\nI got build failure locally:\n[PRL] CustomTarget/postprocess/images/images_sukapura.zip\nLink cmd/sc_about.png -\u003e res/mainapp_16_8.png -\u003e cmd/sc_adddirect.png\nSome icons in links.txt were found to link to other linked icons\nmake[1]: *** [/home/julien/lo/libreoffice/postprocess/CustomTarget_images.mk:53 : /home/julien/lo/libreoffice/workdir/CustomTarget/postprocess/images/images_sifr.zip] Erreur 1\nmake[1]: *** Attente des tâches non terminées....\nLink cmd/sc_about.svg -\u003e res/mainapp_16_8.svg -\u003e cmd/sc_adddirect.svg\nSome icons in links.txt were found to link to other linked icons\nmake[1]: *** [/home/julien/lo/libreoffice/postprocess/CustomTarget_images.mk:53 : /home/julien/lo/libreoffice/workdir/CustomTarget/postprocess/images/images_sifr_dark_svg.zip] Erreur 1\nLink cmd/sc_about.png -\u003e res/mainapp_16_8.png -\u003e cmd/sc_adddirect.png\nSome icons in links.txt were found to link to other linked icons\nmake[1]: *** [/home/julien/lo/libreoffice/postprocess/CustomTarget_images.mk:53 : /home/julien/lo/libreoffice/workdir/CustomTarget/postprocess/images/images_sifr_dark.zip] Erreur 1\nLink cmd/sc_about.svg -\u003e res/mainapp_16_8.svg -\u003e cmd/sc_adddirect.svg\nSome icons in links.txt were found to link to other linked icons\nmake[1]: *** [/home/julien/lo/libreoffice/postprocess/CustomTarget_images.mk:53 : /home/julien/lo/libreoffice/workdir/CustomTarget/postprocess/images/images_sifr_svg.zip] Erreur 1\nmake: *** [Makefile:299 : build] Erreur 2\n\nand some TBs show pbs too, see https://tinderbox.libreoffice.org/MASTER/status.html",
+      "revId": "dd7293e774f3bdaf3eda8d88c427f1a9b3605a8d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
