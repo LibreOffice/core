@@ -16,6 +16,23 @@
       "message": "Sooo ... the function accepts a \u0026\u0026 reference, but I don\u0027t want to move from the source, so I need to make a copy ... so how do I do that in a fact that doesn\u0027t get flagged by the plugin?\n",
       "revId": "0a3fc41c604600e29b88f719f0a2288bdfe8897d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a798eb9_42dd3449",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-11T06:54:01Z",
+      "side": 1,
+      "message": "The plugin is not sufficiently clever when it comes to \u0026\u0026 parameters (and we have not had many of them, so it wasn\u0027t originally much of a problem)\n\nI suggest you add another exclusion to the preRun() method like the one already there",
+      "revId": "0a3fc41c604600e29b88f719f0a2288bdfe8897d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
