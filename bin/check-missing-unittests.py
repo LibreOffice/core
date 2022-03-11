@@ -138,7 +138,7 @@ def main(ignoredBugs):
 
             # Keep the following if statements at the end
 
-            elif 'sc/source/core/data/' in changedFiles:
+            elif 'sc/source/core/' in changedFiles:
                 results['calc']['others'][bugId] = infoList
 
             elif 'sw/source/core/' in changedFiles:
