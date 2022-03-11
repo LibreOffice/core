@@ -206,6 +206,7 @@ void ScDLL::Init()
     ScZTestDialogWrapper                ::RegisterChildWindow(false, pMod);
     ScChiSquareTestDialogWrapper        ::RegisterChildWindow(false, pMod);
     ScFourierAnalysisDialogWrapper      ::RegisterChildWindow(false, pMod);
+    sc::SparklineDialogWrapper          ::RegisterChildWindow(false, pMod);
 
     // Redlining Window
     ScAcceptChgDlgWrapper       ::RegisterChildWindow(false, pMod);

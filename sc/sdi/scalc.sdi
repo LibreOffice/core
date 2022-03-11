@@ -2287,6 +2287,23 @@ SfxVoidItem SolverDialog SID_OPENDLG_OPTSOLVER
     GroupId = SfxGroupId::Options;
 ]
 
+SfxVoidItem InsertSparkline SID_INSERT_SPARKLINE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
 (SfxBoolItem Visible SID_SEARCH_RESULTS_DIALOG)
 [

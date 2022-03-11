@@ -69,6 +69,7 @@
 #include <FourierAnalysisDialog.hxx>
 
 #include <PivotLayoutDialog.hxx>
+#include <SparklineDialog.hxx>
 
 #include <comphelper/lok.hxx>
 #include <o3tl/make_shared.hxx>
@@ -236,6 +237,11 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_RANDOM_NUMBER_GENERATOR_DIALOG:
             xResult = std::make_shared<ScRandomNumberGeneratorDialog>(pB, pCW, pParent, GetViewData());
             break;
+        case SID_SPARKLINE_DIALOG:
+        {
+            xResult = std::make_shared<sc::SparklineDialog>(pB, pCW, pParent, GetViewData());
+            break;
+        }
         case SID_DEFINE_DBNAME:
         {
             // when called for an existing range, then mark
