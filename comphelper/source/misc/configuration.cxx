@@ -41,12 +41,6 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 namespace {
 
-comphelper::detail::ConfigurationWrapper& GetTheConfigurationWrapper()
-{
-    static comphelper::detail::ConfigurationWrapper WRAPPER(comphelper::getProcessComponentContext());
-    return WRAPPER;
-}
-
 OUString getDefaultLocale(
     css::uno::Reference< css::uno::XComponentContext > const & context)
 {
@@ -72,7 +66,7 @@ OUString extendLocalizedPath(std::u16string_view path, OUString const & locale) 
 std::shared_ptr< comphelper::ConfigurationChanges >
 comphelper::ConfigurationChanges::create()
 {
-    return GetTheConfigurationWrapper().createChanges();
+    return detail::ConfigurationWrapper::get().createChanges();
 }
 
 comphelper::ConfigurationChanges::~ConfigurationChanges() {}
@@ -111,7 +105,8 @@ comphelper::ConfigurationChanges::getSet(OUString const & path) const
 comphelper::detail::ConfigurationWrapper const &
 comphelper::detail::ConfigurationWrapper::get()
 {
-    return GetTheConfigurationWrapper();
+    static comphelper::detail::ConfigurationWrapper WRAPPER;
+    return WRAPPER;
 }
 
 namespace
@@ -138,16 +133,15 @@ public:
 
 } // namespace
 
-comphelper::detail::ConfigurationWrapper::ConfigurationWrapper(
-    css::uno::Reference< css::uno::XComponentContext > const & context):
-    context_(context),
-    access_(css::configuration::ReadWriteAccess::create(context, "*"))
+comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
+    context_(comphelper::getProcessComponentContext()),
+    access_(css::configuration::ReadWriteAccess::create(context_, "*"))
 {
     // Set up a configuration notifier to invalidate the cache as needed.
     try
     {
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            css::configuration::theDefaultProvider::get( context ) );
+            css::configuration::theDefaultProvider::get( context_ ) );
 
         // set root path
         css::uno::Sequence< css::uno::Any > params {
