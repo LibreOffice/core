@@ -308,12 +308,18 @@ OUString SwRedlineAcceptDlg::GetActionImage(const SwRangeRedline& rRedln, sal_uI
             ? OUString(BMP_REDLINE_ROW_INSERTION)
             : rRedln.IsMoved()
                 ? OUString(BMP_REDLINE_MOVED_INSERTION)
-                : OUString(BMP_REDLINE_INSERTED);
+                : ( rRedln.GetText().getLength() == 1 &&
+                    rRedln.GetText()[0] == CH_TXTATR_INWORD )
+                    ? OUString(BMP_REDLINE_COMMENT_INSERTION)
+                    : OUString(BMP_REDLINE_INSERTED);
         case RedlineType::Delete:  return bRowChanges
             ? OUString(BMP_REDLINE_ROW_DELETION)
             : rRedln.IsMoved()
                 ? OUString(BMP_REDLINE_MOVED_DELETION)
-                : OUString(BMP_REDLINE_DELETED);
+                : ( rRedln.GetText().getLength() == 1 &&
+                    rRedln.GetText()[0] == CH_TXTATR_INWORD )
+                    ? OUString(BMP_REDLINE_COMMENT_DELETION)
+                    : OUString(BMP_REDLINE_DELETED);
         case RedlineType::Format:  return BMP_REDLINE_FORMATTED;
         case RedlineType::ParagraphFormat: return BMP_REDLINE_FORMATTED;
         case RedlineType::Table:   return BMP_REDLINE_TABLECHG;
