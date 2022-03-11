@@ -8432,14 +8432,16 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, 
                     nL = aSprm.nLen;        // Excl. Token
                     break;
                 case L_VAR:
-                    // Variable 1-Byte Length?
-                    // Excl. Token + Var-Lengthbyte
+                    // Variable 1-Byte Length
+                    // parameter length (i.e. excluding token and length byte)
                     nL = static_cast< sal_uInt16 >(pSprm[1 + mnDelta] + aSprm.nLen);
                     break;
                 case L_VAR2:
                 {
-                    // Variable 2-Byte Length?
-                    // Excl. Token + Var-Lengthbyte
+                    // Variable 2-Byte Length
+                    // For sprmTDefTable and sprmTDefTable10, the length of the
+                    // parameter plus 1 is recorded in the two bytes beginning
+                    // at offset (WW7-) 1 or (WW8+) 2
                     sal_uInt8 nIndex = 1 + mnDelta;
                     sal_uInt16 nCount;
                     if (nIndex + 1 >= nRemLen)
