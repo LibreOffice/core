@@ -244,6 +244,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/scalc,\
 	sc/uiconfig/scalc/ui/sortkey \
 	sc/uiconfig/scalc/ui/sortoptionspage \
 	sc/uiconfig/scalc/ui/sortwarning \
+	sc/uiconfig/scalc/ui/sparklinedialog \
 	sc/uiconfig/scalc/ui/splitcolumnentry \
 	sc/uiconfig/scalc/ui/subtotaldialog \
 	sc/uiconfig/scalc/ui/subtotaloptionspage \

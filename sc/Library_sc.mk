@@ -416,6 +416,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/dbgui/sfiltdlg \
     sc/source/ui/dbgui/validate \
     sc/source/ui/dialogs/searchresults \
+    sc/source/ui/dialogs/SparklineDialog \
     sc/source/ui/docshell/arealink \
     sc/source/ui/docshell/autostyl \
     sc/source/ui/docshell/datastream \
