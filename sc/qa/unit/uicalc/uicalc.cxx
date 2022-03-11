@@ -560,6 +560,48 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146795)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147744)
+{
+    ScModelObj* pModelObj = createDoc("tdf147744.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Disable replace cell warning
+    ScModule* pMod = SC_MOD();
+    ScInputOptions aInputOption = pMod->GetInputOptions();
+    bool bOldStatus = aInputOption.GetReplaceCellsWarn();
+    aInputOption.SetReplaceCellsWarn(false);
+    pMod->SetInputOptions(aInputOption);
+
+    goToCell("A2");
+
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Move to A3
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Select the following cell
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 3, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 5, 0)));
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(0, 6, 0)));
+
+    // Restore previous status
+    aInputOption.SetReplaceCellsWarn(bOldStatus);
+    pMod->SetInputOptions(aInputOption);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
 {
     ScModelObj* pModelObj = createDoc("tdf138432.ods");
