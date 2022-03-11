@@ -1650,13 +1650,30 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             // In other words, Word lets the field to be out of sync with the controlling variable.
             // Marking as FIXEDFLD solves the automatic replacement problem, but of course prevents
             // Writer from making any changes, even on an F9 refresh.
-            // TODO: If the field already matches the DocProperty, no need to mark as fixed.
             // TODO: Extend LO to allow a linked field that doesn't automatically update.
+            IDocumentContentOperations& rIDCO(m_rDoc.getIDocumentContentOperations());
             const auto pType(static_cast<SwDocInfoFieldType*>(
                 m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
             const OUString sDisplayed = GetFieldResult(pF);
-            SwDocInfoField aField(pType, DI_CUSTOM | DI_SUB_FIXED | nReg, aDocProperty, sDisplayed);
-            m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
+            SwDocInfoField aField(pType, DI_CUSTOM | nReg, aDocProperty);
+
+            // If text already matches the DocProperty var, then safe to treat as refreshable field.
+            OUString sVariable = aField.ExpandField(/*bCache=*/false, nullptr);
+            if (sDisplayed.getLength() != sVariable.getLength())
+            {
+                sal_Int32 nLen = sVariable.indexOf('\x0');
+                if (nLen >= 0)
+                    sVariable = sVariable.copy(0, nLen);
+            }
+            if (sDisplayed == sVariable)
+                rIDCO.InsertPoolItem(*m_pPaM, SwFormatField(aField));
+            else
+            {
+                // They don't match, so use a fixed field to prevent LO from altering the contents.
+                SwDocInfoField aFixedField(pType, DI_CUSTOM | DI_SUB_FIXED | nReg, aDocProperty,
+                                           sDisplayed);
+                rIDCO.InsertPoolItem(*m_pPaM, SwFormatField(aFixedField));
+            }
 
             return eF_ResT::OK;
         }
