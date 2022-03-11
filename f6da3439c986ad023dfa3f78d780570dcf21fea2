@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66ace90f_0eeba9ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-11T17:04:59Z",
+      "side": 1,
+      "message": "bug id is incorrect, \u0027f\u0027 is missing",
+      "revId": "f6da3439c986ad023dfa3f78d780570dcf21fea2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
