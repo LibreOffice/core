@@ -42,7 +42,6 @@ namespace comphelper
         friend class OSelectionChangeMultiplexer;
 
     public:
-        OSelectionChangeListener() {}
         virtual ~OSelectionChangeListener();
 
         /// @throws css::uno::RuntimeException

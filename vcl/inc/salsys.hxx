@@ -30,7 +30,6 @@ const int SALSYSTEM_SHOWNATIVEMSGBOX_BTN_OK = 1;
 class VCL_PLUGIN_PUBLIC SalSystem
 {
 public:
-    SalSystem() {}
     virtual ~SalSystem();
 
     // get info about the display

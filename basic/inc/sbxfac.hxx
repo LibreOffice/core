@@ -26,7 +26,6 @@ class SbxFactory
 {
 public:
     virtual ~SbxFactory();
-    SbxFactory() {}
     virtual SbxBaseRef Create(sal_uInt16 nSbxId, sal_uInt32);
     virtual SbxObjectRef CreateObject(const OUString&);
 };

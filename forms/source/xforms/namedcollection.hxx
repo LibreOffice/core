@@ -37,7 +37,6 @@ class NamedCollection : public cppu::ImplInheritanceHelper<
     using Collection<T>::hasItem;
 
 public:
-    NamedCollection() {}
 
     const T& getItem( const OUString& rName ) const
     {
