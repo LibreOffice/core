@@ -3043,6 +3043,7 @@ void ScFiltersTest::testImportCrashes() {
     testImportCrash(u"tdf131380.", FORMAT_XLSX);
     testImportCrash(u"tdf139782.", FORMAT_ODS);
     testImportCrash(u"tdf136551.", FORMAT_ODS);
+    testImportCrash(u"tdf90391.", FORMAT_ODS);
 }
 
 void ScFiltersTest::testTdf129681()
