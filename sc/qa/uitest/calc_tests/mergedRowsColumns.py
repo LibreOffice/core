@@ -151,16 +151,6 @@ class mergedRowsColumns(UITestCase):
             self.assertEqual(get_cell_by_position(calc_doc, 0, 9, 21).getString(), "2")
             self.assertEqual(get_cell_by_position(calc_doc, 0, 11, 21).getString(), "2")
 
-    def test_merge_merged_cells_tdf63766(self):
-        with self.ui_test.load_file(get_url_for_data_file("tdf105412.ods")) as calc_doc:
-            xTopWindow = self.xUITest.getTopFocusWindow()
-            gridwin = xTopWindow.getChild("grid_window")
-
-            gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "C19:F22"}))
-            self.xUITest.executeCommand(".uno:ToggleMergeCells")
-            self.assertEqual(get_cell_by_position(calc_doc, 0, 2, 18).getString(), "L6")
-            self.xUITest.executeCommand(".uno:Undo")
-
     def test_move_merged_cells(self):
         with self.ui_test.create_doc_in_start_center("calc"):
             xTopWindow = self.xUITest.getTopFocusWindow()
