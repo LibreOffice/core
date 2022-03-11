@@ -160,27 +160,35 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
     bOn = pPor->GetExpText( *pNew, aText );
 
     // The text will be replaced ...
-    if( !bOn )
-        return;
-
-    pInf = const_cast<SwTextFormatInfo*>(pNew);
-    nIdx = pInf->GetIdx();
-    nLen = pInf->GetLen();
-    pOldText = &(pInf->GetText());
-    m_pOldCachedVclData = pInf->GetCachedVclData();
-    pInf->SetLen(TextFrameIndex(aText.getLength()));
-    pInf->SetCachedVclData(nullptr);
-    if( pPor->IsFollow() )
+    if( bOn )
     {
-        pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
-        pInf->SetIdx(TextFrameIndex(0));
+        pInf = const_cast<SwTextFormatInfo*>(pNew);
+        nIdx = pInf->GetIdx();
+        nLen = pInf->GetLen();
+        pOldText = &(pInf->GetText());
+        m_pOldCachedVclData = pInf->GetCachedVclData();
+        pInf->SetLen(TextFrameIndex(aText.getLength()));
+        pInf->SetCachedVclData(nullptr);
+        if( pPor->IsFollow() )
+        {
+            pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
+            pInf->SetIdx(TextFrameIndex(0));
+        }
+        else
+        {
+            TextFrameIndex nEnd(pOldText->getLength());
+            if (nIdx < nEnd)
+            {
+                //sal_Int32 const nFieldLen(pPor->GetFieldLen());
+                aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1/*nFieldLen*/, aText);
+            }
+            else if (nIdx == nEnd)
+                aText = *pOldText + aText;
+            else
+                SAL_WARN("sw.core", "SwFieldSlot bad SwFieldPortion index.");
+        }
+        pInf->SetText( aText );
     }
-    else if (nIdx < TextFrameIndex(pOldText->getLength()))
-    {
-        sal_Int32 const nFieldLen(pPor->GetFieldLen());
-        aText = (*pOldText).replaceAt(sal_Int32(nIdx), nFieldLen, aText);
-    }
-    pInf->SetText( aText );
 }
 
 SwFieldSlot::~SwFieldSlot()
