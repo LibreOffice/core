@@ -54,8 +54,6 @@ public:
     std::optional<double> m_aManualMin; // if m_sMaxAxisType is "custom"
     OUString m_sUID;
 
-    SparklineGroup() {}
-
     SparklineGroup(const SparklineGroup&) = delete;
     SparklineGroup& operator=(const SparklineGroup&) = delete;
 };
