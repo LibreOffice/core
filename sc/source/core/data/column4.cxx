@@ -312,7 +312,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
                 std::vector<sc::RowSpan> aRanges;
                 aRanges.reserve(1);
                 aRanges.emplace_back(nRow1, nRow2);
-                CloneFormulaCell(*rSrcCell.mpFormula, rSrcAttr, aRanges);
+                CloneFormulaCell(*pBlockPos, *rSrcCell.mpFormula, rSrcAttr, aRanges);
             }
             break;
             default:
@@ -571,11 +571,10 @@ void ScColumn::DeleteRanges( const std::vector<sc::RowSpan>& rRanges, InsertDele
 }
 
 void ScColumn::CloneFormulaCell(
+    sc::ColumnBlockPosition& rBlockPos,
     const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
     const std::vector<sc::RowSpan>& rRanges )
 {
-    sc::CellStoreType::iterator itPos = maCells.begin();
-    sc::CellTextAttrStoreType::iterator itAttrPos = maCellTextAttrs.begin();
 
     SCCOL nMatrixCols = 0;
     SCROW nMatrixRows = 0;
@@ -629,10 +628,10 @@ void ScColumn::CloneFormulaCell(
             }
         }
 
-        itPos = maCells.set(itPos, nRow1, aFormulas.begin(), aFormulas.end());
+        rBlockPos.miCellPos = maCells.set(rBlockPos.miCellPos, nRow1, aFormulas.begin(), aFormulas.end());
 
         // Join the top and bottom of the pasted formula cells as needed.
-        sc::CellStoreType::position_type aPosObj = maCells.position(itPos, nRow1);
+        sc::CellStoreType::position_type aPosObj = maCells.position(rBlockPos.miCellPos, nRow1);
 
         assert(aPosObj.first->type == sc::element_type_formula);
         ScFormulaCell* pCell = sc::formula_block::at(*aPosObj.first->data, aPosObj.second);
@@ -644,10 +643,20 @@ void ScColumn::CloneFormulaCell(
         JoinNewFormulaCell(aPosObj, *pCell);
 
         std::vector<sc::CellTextAttr> aTextAttrs(nLen, rAttr);
-        itAttrPos = maCellTextAttrs.set(itAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
+        rBlockPos.miCellTextAttrPos = maCellTextAttrs.set(
+            rBlockPos.miCellTextAttrPos, nRow1, aTextAttrs.begin(), aTextAttrs.end());
     }
 
     CellStorageModified();
+}
+
+void ScColumn::CloneFormulaCell(
+    const ScFormulaCell& rSrc, const sc::CellTextAttr& rAttr,
+    const std::vector<sc::RowSpan>& rRanges )
+{
+    sc::ColumnBlockPosition aBlockPos;
+    InitBlockPosition(aBlockPos);
+    CloneFormulaCell(aBlockPos, rSrc, rAttr, rRanges);
 }
 
 std::unique_ptr<ScPostIt> ScColumn::ReleaseNote( SCROW nRow )
