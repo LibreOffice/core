@@ -40,8 +40,6 @@ public:
         const css::uno::Sequence< css::beans::NamedValue >& rValues) :
         m_rValues(rValues) {} ;
 
-    ~NamedValueByNameAccess();
-
     css::uno::Any getValue(const char * pName);
 };
 
