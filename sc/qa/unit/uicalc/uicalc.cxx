@@ -50,6 +50,7 @@ public:
     ScModelObj* saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                               const OUString& rFilter);
     void goToCell(const OUString& rCell);
+    void insertString(ScModelObj& rModelObj, const std::string& rStr);
     void insertStringToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr,
                             bool bUseReturn = true);
     void insertArrayToCell(ScModelObj& rModelObj, const OUString& rCell, const std::string& rStr);
@@ -106,17 +107,22 @@ void ScUiCalcTest::goToCell(const OUString& rCell)
     dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
 }
 
-void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCell,
-                                      const std::string& rStr, bool bUseReturn)
+void ScUiCalcTest::insertString(ScModelObj& rModelObj, const std::string& rStr)
 {
-    goToCell(rCell);
-
     for (const char c : rStr)
     {
         rModelObj.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
         rModelObj.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
         Scheduler::ProcessEventsToIdle();
     }
+}
+
+void ScUiCalcTest::insertStringToCell(ScModelObj& rModelObj, const OUString& rCell,
+                                      const std::string& rStr, bool bUseReturn)
+{
+    goToCell(rCell);
+
+    insertString(rModelObj, rStr);
 
     if (bUseReturn)
     {
@@ -374,6 +380,33 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144308)
     xGlobalSheetSettings->setDoAutoComplete(bOldValue);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf56036)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "=SUM( 1 + 2 ", /*bUseReturn*/ false);
+
+    // Insert Newline
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_MOD1 | awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_MOD1 | awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    insertString(*pModelObj, "+ 3)");
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 6
+    // - Actual  : Err:501
+    CPPUNIT_ASSERT_EQUAL(OUString("6"), pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119162)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -500,11 +533,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138432)
     dispatchCommand(mxComponent, ".uno:Copy", {});
     Scheduler::ProcessEventsToIdle();
 
-    goToCell("A2");
-
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, '=', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, '=', 0);
-    Scheduler::ProcessEventsToIdle();
+    insertStringToCell(*pModelObj, "A2", "=", /*bUseReturn*/ false);
 
     dispatchCommand(mxComponent, ".uno:Paste", {});
     Scheduler::ProcessEventsToIdle();
@@ -1405,9 +1434,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf119793)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1381), xShape->getPosition().Y);
 
     // Type into the shape
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'x', 0);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 'x', 0);
-    Scheduler::ProcessEventsToIdle();
+    insertString(*pModelObj, "x");
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_ESCAPE);
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_ESCAPE);
     Scheduler::ProcessEventsToIdle();
