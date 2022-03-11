@@ -55,7 +55,7 @@ records are marked as "not implemented", and a warning message will printed
 if they are actually read within a file. You can file a bug report for
 implementing these records.
 
-Currently, these records are not implemented (specified in
+Currently, these records are not implemented for WMF (specified in
 `wmfreader.cxx`):
 
 ```
@@ -69,12 +69,12 @@ W_META_RESETDC W_META_STARTDOC W_META_STARTPAGE W_META_ENDPAGE
 W_META_ABORTDOC W_META_ENDDOC
 ```
 
-And these records are not implemented (specified in `emfreader.cxx`):
+And these records are not implemented for EMF/EMF+ (specified in `emfreader.cxx`):
 
 ```
 EMR_MASKBLT EMR_PLGBLT EMR_SETDIBITSTODEVICE EMR_FRAMERGN
 EMR_INVERTRGN EMR_FLATTENPATH EMR_WIDENPATH EMR_POLYDRAW
-EMR_SETARCDIRECTION EMR_SETPALETTEENTRIES EMR_RESIZEPALETTE
+EMR_SETPALETTEENTRIES EMR_RESIZEPALETTE
 EMR_EXTFLOODFILL EMR_ANGLEARC EMR_SETCOLORADJUSTMENT EMR_POLYDRAW16
 EMR_CREATECOLORSPACE EMR_SETCOLORSPACE EMR_DELETECOLORSPACE
 EMR_GLSRECORD EMR_GLSBOUNDEDRECORD EMR_PIXELFORMAT EMR_DRAWESCAPE
