@@ -1837,16 +1837,6 @@ void SmViewShell::Execute(SfxRequest& rReq)
                                 SfxFilter::GetFilterByName(MATHML_XML);
                             aClipboardMedium.SetFilter(pMathFilter);
 
-                            // The text to be imported might asserts encoding like 'encoding="utf-8"' but FORMAT_STRING is UTF-16.
-                            // Force encoding to UTF-16, if encoding exists.
-                            sal_Int32 nPosL = aString.indexOf("encoding=\"");
-                            if ( nPosL >= 0 && nPosL +10 < aString.getLength() )
-                            {
-                                nPosL += 10;
-                                sal_Int32 nPosU = aString.indexOf( '"',nPosL);
-                                if (nPosU > nPosL)
-                                    aString = aString.replaceAt(nPosL, nPosU - nPosL, u"UTF-16");
-                            }
                             SvMemoryStream aStrm( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
                             uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(aStrm) );
                             aClipboardMedium.setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
