@@ -1778,31 +1778,18 @@ void SmViewShell::Execute(SfxRequest& rReq)
                                 SfxFilter::GetFilterByName(MATHML_XML);
                             aClipboardMedium.SetFilter(pMathFilter);
 
-                            std::unique_ptr<SvMemoryStream> pStrm;
                             // The text to be imported might asserts encoding like 'encoding="utf-8"' but FORMAT_STRING is UTF-16.
                             // Force encoding to UTF-16, if encoding exists.
-                            bool bForceUTF16 = false;
                             sal_Int32 nPosL = aString.indexOf("encoding=\"");
-                            sal_Int32 nPosU = -1;
                             if ( nPosL >= 0 && nPosL +10 < aString.getLength() )
                             {
                                 nPosL += 10;
-                                nPosU = aString.indexOf( '"',nPosL);
+                                sal_Int32 nPosU = aString.indexOf( '"',nPosL);
                                 if (nPosU > nPosL)
-                                {
-                                    bForceUTF16 = true;
-                                }
+                                    aString = aString.replaceAt(nPosL, nPosU - nPosL, u"UTF-16");
                             }
-                            if ( bForceUTF16 )
-                            {
-                                OUString aNewString = aString.replaceAt( nPosL, nPosU-nPosL, u"UTF-16");
-                                pStrm.reset(new SvMemoryStream( const_cast<sal_Unicode *>(aNewString.getStr()), aNewString.getLength() * sizeof(sal_Unicode), StreamMode::READ));
-                            }
-                            else
-                            {
-                                pStrm.reset(new SvMemoryStream( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ));
-                            }
-                            uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(*pStrm) );
+                            SvMemoryStream aStrm( const_cast<sal_Unicode *>(aString.getStr()), aString.getLength() * sizeof(sal_Unicode), StreamMode::READ);
+                            uno::Reference<io::XInputStream> xStrm2( new ::utl::OInputStreamWrapper(aStrm) );
                             aClipboardMedium.setStreamToLoadFrom(xStrm2, true /*bIsReadOnly*/);
                             InsertFrom(aClipboardMedium);
                             GetDoc()->UpdateText();
