@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a50ee92_c02d5156",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-11T11:03:49Z",
+      "side": 1,
+      "message": "Hi Luboš Luňák,\nis there any chance this patch can be backported to libreoffice-7-3 or does it depend on other patches ?",
+      "revId": "dddee125cc32f1ad5228e598a7de04e9654e65c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
