@@ -1053,6 +1053,15 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         }
         break;
 
+        case SID_INSERT_SPARKLINE:
+        {
+            sal_uInt16 nId  = sc::SparklineDialogWrapper::GetChildWindowId();
+            SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
+            SfxChildWindow* pWindow = pViewFrame->GetChildWindow(nId);
+            pScMod->SetRefDialog(nId, pWindow == nullptr);
+        }
+        break;
+
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
 
