@@ -1145,13 +1145,6 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
         return;
     }
 
-    /* negative index? */
-    if (nIndex < 0)
-    {
-        nCount -= nIndex;
-        nIndex = 0;
-    }
-
     /* not more than the String length could be deleted */
     if (nCount >= pStr->length-nIndex)
     {
