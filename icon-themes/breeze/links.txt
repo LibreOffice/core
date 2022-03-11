@@ -95,6 +95,8 @@ cmd/32/insertnumericfield.png cmd/32/numberformatstandard.png
 cmd/32/insertobjectchart.png cmd/32/drawchart.png
 cmd/32/insertobjectfloatingframe.png cmd/32/insertframe.png
 cmd/32/insertobjectstarmath.png cmd/32/insertmath.png
+cmd/32/insertpagefooter.png cmd/32/insertfooter.png
+cmd/32/insertpageheader.png cmd/32/insertheader.png
 cmd/32/insertpatternfield.png cmd/32/patternfield.png
 cmd/32/insertpivottable.png cmd/32/datadatapilotrun.png
 cmd/32/insertpushbutton.png cmd/32/pushbutton.png
@@ -154,6 +156,8 @@ cmd/lc_insertnumericfield.png cmd/lc_numberformatstandard.png
 cmd/lc_insertobjectchart.png cmd/lc_drawchart.png
 cmd/lc_insertobjectfloatingframe.png cmd/lc_insertframe.png
 cmd/lc_insertobjectstarmath.png cmd/lc_insertmath.png
+cmd/lc_insertpagefooter.png cmd/lc_insertfooter.png
+cmd/lc_insertpageheader.png cmd/lc_insertheader.png
 cmd/lc_insertpatternfield.png cmd/lc_patternfield.png
 cmd/lc_insertpivottable.png cmd/lc_datadatapilotrun.png
 cmd/lc_insertpushbutton.png cmd/lc_pushbutton.png
@@ -213,6 +217,8 @@ cmd/sc_insertnumericfield.png cmd/sc_numberformatstandard.png
 cmd/sc_insertobjectchart.png cmd/sc_drawchart.png
 cmd/sc_insertobjectfloatingframe.png cmd/sc_insertframe.png
 cmd/sc_insertobjectstarmath.png cmd/sc_insertmath.png
+cmd/sc_insertpagefooter.png cmd/sc_insertfooter.png
+cmd/sc_insertpageheader.png cmd/sc_insertheader.png
 cmd/sc_insertpatternfield.png cmd/sc_patternfield.png
 cmd/sc_insertpivottable.png cmd/sc_datadatapilotrun.png
 cmd/sc_insertpushbutton.png cmd/sc_pushbutton.png
@@ -384,18 +390,21 @@ cmd/sc_vscrollbar.png cmd/sc_scrollbar.png
 cmd/32/com.sun.star.deployment.ui.packagemanagerdialog.png cmd/32/insertplugin.png
 cmd/32/focustofindbar.png cmd/32/recsearch.png
 cmd/32/languagemenu.png cmd/32/managelanguage.png
+cmd/32/macroorganizer.png cmd/32/scriptorganizer.png
 cmd/32/macroorganizer%3ftabid%3ashort=1.png cmd/32/open.png
 cmd/32/toolsformsmenu.png cmd/32/formproperties.png
 
 cmd/lc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/lc_insertplugin.png
 cmd/lc_focustofindbar.png cmd/lc_recsearch.png
 cmd/lc_languagemenu.png cmd/lc_managelanguage.png
+cmd/lc_macroorganizer.png cmd/lc_scriptorganizer.png
 cmd/lc_macroorganizer%3ftabid%3ashort=1.png cmd/lc_open.png
 cmd/lc_toolsformsmenu.png cmd/lc_formproperties.png
 
 cmd/sc_com.sun.star.deployment.ui.packagemanagerdialog.png cmd/sc_insertplugin.png
 cmd/sc_focustofindbar.png cmd/sc_recsearch.png
 cmd/sc_languagemenu.png cmd/sc_managelanguage.png
+cmd/sc_macroorganizer.png cmd/sc_scriptorganizer.png
 cmd/sc_macroorganizer%3ftabid%3ashort=1.png cmd/sc_open.png
 cmd/sc_toolsformsmenu.png cmd/sc_formproperties.png
 
@@ -2889,16 +2898,19 @@ cmd/sc_notecellstyles.png cmd/sc_shownote.png
 cmd/32/editlinksmenu.png cmd/32/insertreferencefield.png
 cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
 cmd/32/editselectmenu.png cmd/32/selecttables.png
+cmd/32/insertcontents.png cmd/32/pastespecial.png
 cmd/32/pastespecialmenu.png cmd/32/pastespecial.png
 
 cmd/lc_editlinksmenu.png cmd/lc_insertreferencefield.png
 cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
 cmd/lc_editselectmenu.png cmd/lc_selecttables.png
+cmd/lc_insertcontents.png cmd/lc_pastespecial.png
 cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
 
 cmd/sc_editlinksmenu.png cmd/sc_insertreferencefield.png
 cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
 cmd/sc_editselectmenu.png cmd/sc_selecttables.png
+cmd/sc_insertcontents.png cmd/sc_pastespecial.png
 cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 
 # calc styles
