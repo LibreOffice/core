@@ -1141,14 +1141,6 @@ WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc const & rBand )
 // ReadDef reads the cell position and the borders of a band
 void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS, short nLen)
 {
-    if (!bVer67)
-    {
-        //the ww8 version of this is unusual in masquerading as a srpm with a
-        //single byte len arg while it really has a word len arg, after this
-        //increment nLen is correct to describe the remaining amount of data
-        pS++;
-    }
-
     --nLen; //reduce len by expected nCols arg
     if (nLen < 0)
         return;
