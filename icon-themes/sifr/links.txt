@@ -61,12 +61,15 @@ cmd/sc_insertmenulegend.png cmd/sc_legend.png
 # Add
 cmd/32/adddatefield.png cmd/32/datefield.png
 cmd/32/addons.png cmd/32/insertplugin.png
+cmd/32/addtable.png cmd/32/dbnewtable.png
 
 cmd/lc_adddatefield.png cmd/lc_datefield.png
 cmd/lc_addons.png cmd/lc_insertplugin.png
+cmd/lc_addtable.png cmd/lc_dbnewtable.png
 
 cmd/sc_adddatefield.png cmd/sc_datefield.png
 cmd/sc_addons.png cmd/sc_insertplugin.png
+cmd/sc_addtable.png cmd/sc_dbnewtable.png
 
 # tooltips
 cmd/32/autoformatmenu.png cmd/32/autocorrectdlg.png
@@ -1415,6 +1418,7 @@ cmd/sc_linespacing.png cmd/sc_spacepara15.png
 cmd/32/cellcontentsmenu.png cmd/32/calculate.png
 cmd/32/chartmenu.png cmd/32/drawchart.png
 cmd/32/datapilotmenu.png cmd/32/datadatapilotrun.png
+cmd/32/editselectmenu.png cmd/32/selecttables.png
 cmd/32/fieldmenu.png cmd/32/insertfieldctrl.png
 cmd/32/functionbox.png cmd/32/dbviewfunctions.png
 cmd/32/functiondialog.png cmd/32/dbviewfunctions.png
@@ -1430,6 +1434,7 @@ cmd/32/sheetcommentmenu.png cmd/32/shownote.png
 cmd/lc_cellcontentsmenu.png cmd/lc_calculate.png
 cmd/lc_chartmenu.png cmd/lc_drawchart.png
 cmd/lc_datapilotmenu.png cmd/lc_datadatapilotrun.png
+cmd/lc_editselectmenu.png cmd/lc_selecttables.png
 cmd/lc_fieldmenu.png cmd/lc_insertfieldctrl.png
 cmd/lc_functionbox.png cmd/lc_dbviewfunctions.png
 cmd/lc_functiondialog.png cmd/lc_dbviewfunctions.png
@@ -1445,6 +1450,7 @@ cmd/lc_sheetcommentmenu.png cmd/lc_shownote.png
 cmd/sc_cellcontentsmenu.png cmd/sc_calculate.png
 cmd/sc_chartmenu.png cmd/sc_drawchart.png
 cmd/sc_datapilotmenu.png cmd/sc_datadatapilotrun.png
+cmd/sc_editselectmenu.png cmd/sc_selecttables.png
 cmd/sc_fieldmenu.png cmd/sc_insertfieldctrl.png
 cmd/sc_functionbox.png cmd/sc_dbviewfunctions.png
 cmd/sc_functiondialog.png cmd/sc_dbviewfunctions.png
@@ -1572,8 +1578,19 @@ cmd/sc_templatemenu.png cmd/sc_templatemanager.png
 
 # Edit Menu
 cmd/32/editlinksmenu.png cmd/32/insertreferencefield.png
+cmd/32/editpastespecialmenu.png cmd/32/pastespecial.png
+cmd/32/insertcontents.png cmd/32/pastespecial.png
+cmd/32/pastespecialmenu.png cmd/32/pastespecial.png
+
 cmd/lc_editlinksmenu.png cmd/lc_insertreferencefield.png
+cmd/lc_editpastespecialmenu.png cmd/lc_pastespecial.png
+cmd/lc_insertcontents.png cmd/lc_pastespecial.png
+cmd/lc_pastespecialmenu.png cmd/lc_pastespecial.png
+
 cmd/sc_editlinksmenu.png cmd/sc_insertreferencefield.png
+cmd/sc_editpastespecialmenu.png cmd/sc_pastespecial.png
+cmd/sc_insertcontents.png cmd/sc_pastespecial.png
+cmd/sc_pastespecialmenu.png cmd/sc_pastespecial.png
 
 # Square
 cmd/32/basicshapes.quadrat.png cmd/32/square.png
@@ -1827,6 +1844,20 @@ cmd/32/openxmlfiltersettings.png cmd/32/managexmlsource.png
 cmd/lc_openxmlfiltersettings.png cmd/lc_managexmlsource.png
 cmd/sc_openxmlfiltersettings.png cmd/sc_managexmlsource.png
 
+# Help
+cmd/32/donation.png cmd/32/currencyfield.png
+cmd/32/helperdialog.png cmd/32/helpindex.png
+cmd/32/questionanswers.png cmd/32/browseview.png
+
+cmd/lc_donation.png cmd/lc_currencyfield.png
+cmd/lc_helperdialog.png cmd/lc_helpindex.png
+cmd/lc_questionanswers.png cmd/lc_browseview.png
+
+cmd/sc_about.png res/mainapp_16_8.png
+cmd/sc_donation.png cmd/sc_currencyfield.png
+cmd/sc_helperdialog.png cmd/sc_helpindex.png
+cmd/sc_questionanswers.png cmd/sc_browseview.png
+
 # Math
 cmd/32/symbolcatalogue.png cmd/32/insertsymbol.png
 cmd/lc_symbolcatalogue.png cmd/lc_insertsymbol.png
@@ -1906,6 +1937,8 @@ cmd/32/firstslide.png cmd/32/firstpage.png
 cmd/32/insertdatefieldfix.png cmd/32/datefield.png
 cmd/32/insertfilefield.png cmd/32/open.png
 cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagefield.png cmd/32/insertpagenumberfield.png
+cmd/32/insertpagenumber.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagesfield.png cmd/32/insertpagenumberfield.png
 cmd/32/insertpagetitlefield.png cmd/32/inserttitlefield.png
 cmd/32/insertslidefield.png cmd/32/insertpagenumberfield.png
@@ -1919,10 +1952,12 @@ cmd/32/moveslidelast.png cmd/32/movepagelast.png
 cmd/32/moveslideup.png cmd/32/upsearch.png
 cmd/32/nextslide.png cmd/32/nextrecord.png
 cmd/32/previousslide.png cmd/32/prevrecord.png
+
 cmd/lc_firstslide.png cmd/lc_firstpage.png
 cmd/lc_insertdatefieldfix.png cmd/lc_datefield.png
 cmd/lc_insertfilefield.png cmd/lc_open.png
 cmd/lc_insertpagefield.png cmd/lc_insertpagenumberfield.png
+cmd/lc_insertpagenumber.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagesfield.png cmd/lc_insertpagenumberfield.png
 cmd/lc_insertpagetitlefield.png cmd/lc_inserttitlefield.png
 cmd/lc_insertslidefield.png cmd/lc_insertpagenumberfield.png
@@ -1936,10 +1971,12 @@ cmd/lc_moveslidelast.png cmd/lc_movepagelast.png
 cmd/lc_moveslideup.png cmd/lc_upsearch.png
 cmd/lc_nextslide.png cmd/lc_nextrecord.png
 cmd/lc_previousslide.png cmd/lc_prevrecord.png
+
 cmd/sc_firstslide.png cmd/sc_firstpage.png
 cmd/sc_insertdatefieldfix.png cmd/sc_datefield.png
 cmd/sc_insertfilefield.png cmd/sc_open.png
 cmd/sc_insertpagefield.png cmd/sc_insertpagenumberfield.png
+cmd/sc_insertpagenumber.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagesfield.png cmd/sc_insertpagenumberfield.png
 cmd/sc_insertpagetitlefield.png cmd/sc_inserttitlefield.png
 cmd/sc_insertslidefield.png cmd/sc_insertpagenumberfield.png
@@ -2489,14 +2526,17 @@ cmd/sc_rowoperations.png cmd/sc_entirerow.png
 # tools menu
 cmd/32/autoformatmenu.png cmd/32/autocorrectdlg.png
 cmd/32/languagemenu.png cmd/32/managelanguage.png
+cmd/32/macroorganizer.png cmd/32/scriptorganizer.png
 cmd/32/toolsformsmenu.png cmd/32/dbviewforms.png
 
 cmd/lc_autoformatmenu.png cmd/lc_autocorrectdlg.png
 cmd/lc_languagemenu.png cmd/lc_managelanguage.png
+cmd/lc_macroorganizer.png cmd/lc_scriptorganizer.png
 cmd/lc_toolsformsmenu.png cmd/lc_dbviewforms.png
 
 cmd/sc_autoformatmenu.png cmd/sc_autocorrectdlg.png
 cmd/sc_languagemenu.png cmd/sc_managelanguage.png
+cmd/sc_macroorganizer.png cmd/sc_scriptorganizer.png
 cmd/sc_toolsformsmenu.png cmd/sc_dbviewforms.png
 
 # Writer menu: MSO compatible Form menu
@@ -2648,14 +2688,17 @@ cmd/sc_toolprotectiondocument.png cmd/sc_protect.png
 
 # calc context menu sheettab
 # ==============================================
+cmd/32/renametable.png cmd/32/name.png
 cmd/32/settabbgcolor.png cmd/32/backgroundcolor.png
 cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
 
+cmd/lc_renametable.png cmd/lc_name.png
 cmd/lc_settabbgcolor.png cmd/lc_backgroundcolor.png
 cmd/lc_sheetrighttoleft.png cmd/lc_pararighttoleft.png
 cmd/lc_tableevents.png cmd/lc_animationeffects.png
 
+cmd/sc_renametable.png cmd/sc_name.png
 cmd/sc_settabbgcolor.png cmd/sc_backgroundcolor.png
 cmd/sc_sheetrighttoleft.png cmd/sc_pararighttoleft.png
 cmd/sc_tableevents.png cmd/sc_animationeffects.png
@@ -2705,15 +2748,12 @@ cmd/sc_scrollbarmenu.png cmd/sc_scrollbar.png
 cmd/sc_wrapmenu.png cmd/sc_wrapon.png
 
 # Sheet
-cmd/32/donation.png cmd/32/currencyfield.png
 cmd/32/macrosmenu.png cmd/32/choosemacro.png
 cmd/32/sheetlefttoright.png cmd/32/paralefttoright.png
 cmd/32/sheetrighttoleft.png cmd/32/pararighttoleft.png
 cmd/32/tableevents.png cmd/32/animationeffects.png
-cmd/lc_donation.png cmd/lc_currencyfield.png
 cmd/lc_macrosmenu.png cmd/lc_choosemacro.png
 cmd/lc_sheetlefttoright.png cmd/lc_paralefttoright.png
-cmd/sc_donation.png cmd/sc_currencyfield.png
 cmd/sc_macrosmenu.png cmd/sc_choosemacro.png
 cmd/sc_sheetlefttoright.png cmd/sc_paralefttoright.png
 
