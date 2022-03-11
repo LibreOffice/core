@@ -704,7 +704,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {NS_sprm::LN_TDefTable10, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter,
                             // tap.rgtc;complex
         InfoRow<NS_sprm::TDyaRowHeight>(), // tap.dyaRowHeight;dya;word;
-        InfoRow<NS_sprm::TDefTable>(), // tap.rgtc;complex
+        {NS_sprm::LN_TDefTable, { 0, L_VAR2} }, // "sprmTDefTable" tap.rgtc;complex
         InfoRow<NS_sprm::TDefTableShd80>(), // tap.rgshd;complex
         InfoRow<NS_sprm::TTlp>(), // tap.tlp;TLP;4 bytes;
         InfoRow<NS_sprm::TFBiDi>(), // ;;;
@@ -8413,18 +8413,6 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, 
                 nL = 2 + 4 * nDel + 3 * nIns;
             }
             break;
-        case 0xD608:
-        {
-            sal_uInt8 nIndex = 1 + mnDelta;
-            if (nIndex + 1 >= nRemLen)
-            {
-                SAL_WARN("sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
-                nL = 0;
-            }
-            else
-                nL = SVBT16ToUInt16(&pSprm[nIndex]);
-            break;
-        }
         default:
             switch (aSprm.nVari)
             {
@@ -8448,8 +8436,13 @@ sal_uInt16 wwSprmParser::GetSprmTailLen(sal_uInt16 nId, const sal_uInt8* pSprm, 
                         nCount = 0;
                     }
                     else
+                    {
                         nCount = SVBT16ToUInt16(&pSprm[nIndex]);
-                    nL = static_cast< sal_uInt16 >(nCount + aSprm.nLen - 1);
+                        SAL_WARN_IF(nCount < 1, "sw.ww8", "length should have been at least 1");
+                        if (nCount)
+                            --nCount;
+                    }
+                    nL = static_cast<sal_uInt16>(nCount + aSprm.nLen);
                     break;
                 }
                 default:
