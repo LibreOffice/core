@@ -73,7 +73,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
 
     CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(14729933), getProperty<sal_Int32>(getParagraph(2), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xe0c2cd), getProperty<Color>(getParagraph(2), "FillColor"));
 
     pWrtShell->EndPara(/*bSelect=*/true);
     pWrtShell->EndPara(/*bSelect=*/true);
@@ -81,7 +81,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
     dispatchCommand(mxComponent, ".uno:ResetAttributes", {});
 
     // the background color should revert to the color for 00Background style
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(14605542), getProperty<sal_Int32>(getParagraph(2), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdedce6), getProperty<Color>(getParagraph(2), "FillColor"));
     // the paragraph style should not be reset
     CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));
@@ -91,7 +91,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf47471_paraStyleBackground)
     // Save it and load it back.
     reload("writer8", "tdf47471_paraStyleBackgroundRT.odt");
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(14605542), getProperty<sal_Int32>(getParagraph(2), "FillColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0xdedce6), getProperty<Color>(getParagraph(2), "FillColor"));
     // on round-trip, the paragraph style name was lost
     CPPUNIT_ASSERT_EQUAL(OUString("00Background"),
                          getProperty<OUString>(getParagraph(2), "ParaStyleName"));

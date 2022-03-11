@@ -1206,8 +1206,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf91292)
     uno::Reference<beans::XPropertySet> xPropertySet(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Solid background color", drawing::FillStyle_SOLID,
                                  getProperty<drawing::FillStyle>(xPropertySet, "FillStyle"));
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Background Color", static_cast<sal_Int32>(0x5C2D91),
-                                 getProperty<sal_Int32>(xPropertySet, "FillColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Background Color", Color(0x5C2D91),
+                                 getProperty<Color>(xPropertySet, "FillColor"));
 
     // remove background color
     xPropertySet->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
