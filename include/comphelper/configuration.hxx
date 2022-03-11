@@ -85,12 +85,6 @@ class COMPHELPER_DLLPUBLIC ConfigurationWrapper {
 public:
     static ConfigurationWrapper const & get();
 
-    SAL_DLLPRIVATE explicit ConfigurationWrapper(
-        css::uno::Reference< css::uno::XComponentContext >
-            const & context);
-
-    SAL_DLLPRIVATE ~ConfigurationWrapper();
-
     bool isReadOnly(OUString const & path) const;
 
     css::uno::Any getPropertyValue(OUString const & path) const;
@@ -127,6 +121,10 @@ public:
     std::shared_ptr< ConfigurationChanges > createChanges() const;
 
 private:
+    SAL_DLLPRIVATE explicit ConfigurationWrapper();
+
+    SAL_DLLPRIVATE ~ConfigurationWrapper();
+
     ConfigurationWrapper(const ConfigurationWrapper&) = delete;
     ConfigurationWrapper& operator=(const ConfigurationWrapper&) = delete;
 
