@@ -284,7 +284,7 @@ namespace vcl
         sal_uInt32 nUnits = SAL_N_ELEMENTS(SV_FUNIT_STRINGS);
         for (sal_uInt32 i = 0; i < nUnits; ++i)
         {
-            if (rEnglishMetricString.equalsAscii(SV_FUNIT_STRINGS[i].first.mpId))
+            if (rEnglishMetricString.toUtf8() == SV_FUNIT_STRINGS[i].first.mpId)
                 return SV_FUNIT_STRINGS[i].second;
         }
         return FieldUnit::NONE;
