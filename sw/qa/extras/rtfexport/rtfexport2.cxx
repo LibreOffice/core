@@ -901,7 +901,7 @@ DECLARE_RTFEXPORT_TEST(testFdo60722, "fdo60722.rtf")
     // Color of the line was blue, and it had zero width.
     xShape.set(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), getProperty<sal_uInt32>(xShape, "LineWidth"));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0), getProperty<sal_uInt32>(xShape, "LineColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xShape, "LineColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testDoDhgtOld, "do-dhgt-old.rtf")

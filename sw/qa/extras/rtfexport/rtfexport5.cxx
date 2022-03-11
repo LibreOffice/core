@@ -1012,7 +1012,7 @@ DECLARE_RTFEXPORT_TEST(testTdf82073, "tdf82073.rtf")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // This was -1: the background color was automatic, not black.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xCell, "BackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf74795, "tdf74795.rtf")
