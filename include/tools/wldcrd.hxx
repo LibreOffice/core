@@ -33,7 +33,7 @@ private:
     OUString aWildString;
     char cSepSymbol;
 
-    static bool ImpMatch( const sal_Unicode *pWild, const sal_Unicode *pStr );
+    static bool ImpMatch( std::u16string_view aWild, std::u16string_view aStr );
 
 public:
     WildCard()
