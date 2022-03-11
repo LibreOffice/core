@@ -9910,52 +9910,30 @@ void ScInterpreter::ScErrorType_ODF()
         PushNA();
 }
 
-bool ScInterpreter::MayBeRegExp( const OUString& rStr )
+static bool MayBeRegExp( std::u16string_view rStr )
 {
-    if ( rStr.isEmpty() || (rStr.getLength() == 1 && !rStr.startsWith(".")) )
+    if ( rStr.empty() || (rStr.size() == 1 && rStr[0] != '.') )
         return false;   // single meta characters can not be a regexp
     // First two characters are wildcard '?' and '*' characters.
-    static const sal_Unicode cre[] = { '?','*','+','.','[',']','^','$','\\','<','>','(',')','|', 0 };
-    const sal_Unicode* p1 = rStr.getStr();
-    sal_Unicode c1;
-    while ( ( c1 = *p1++ ) != 0 )
-    {
-        const sal_Unicode* p2 = cre;
-        while ( *p2 )
-        {
-            if ( c1 == *p2++ )
-                return true;
-        }
-    }
-    return false;
+    std::u16string_view cre(u"?*+.[]^$\\<>()|");
+    return rStr.find_first_of(cre) != std::u16string_view::npos;
 }
 
-bool ScInterpreter::MayBeWildcard( const OUString& rStr )
+static bool MayBeWildcard( std::u16string_view rStr )
 {
     // Wildcards with '~' escape, if there are no wildcards then an escaped
     // character does not make sense, but it modifies the search pattern in an
     // Excel compatible wildcard search...
-    static const sal_Unicode cw[] = { '*','?','~', 0 };
-    const sal_Unicode* p1 = rStr.getStr();
-    sal_Unicode c1;
-    while ( ( c1 = *p1++ ) != 0 )
-    {
-        const sal_Unicode* p2 = cw;
-        while ( *p2 )
-        {
-            if ( c1 == *p2++ )
-                return true;
-        }
-    }
-    return false;
+    std::u16string_view cw(u"*?~");
+    return rStr.find_first_of(cw) != std::u16string_view::npos;
 }
 
-utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rStr, const ScDocument& rDoc )
+utl::SearchParam::SearchType ScInterpreter::DetectSearchType( std::u16string_view rStr, const ScDocument& rDoc )
 {
-    if (rDoc.GetDocOptions().IsFormulaWildcardsEnabled())
-        return MayBeWildcard( rStr ) ? utl::SearchParam::SearchType::Wildcard : utl::SearchParam::SearchType::Normal;
-    if (rDoc.GetDocOptions().IsFormulaRegexEnabled())
-        return MayBeRegExp( rStr ) ? utl::SearchParam::SearchType::Regexp : utl::SearchParam::SearchType::Normal;
+    const auto eType = rDoc.GetDocOptions().GetFormulaSearchType();
+    if ((eType == utl::SearchParam::SearchType::Wildcard && MayBeWildcard(rStr))
+        || (eType == utl::SearchParam::SearchType::Regexp && MayBeRegExp(rStr)))
+        return eType;
     return utl::SearchParam::SearchType::Normal;
 }
 

@@ -150,21 +150,10 @@ public:
 
     static void GlobalExit();           // called by ScGlobal::Clear()
 
-    /// Could string be a regular expression?
-    /// if regularExpressions are disabled the function returns false regardless
-    /// of the string content.
-    static bool MayBeRegExp( const OUString& rStr );
-
-    /** Could string be a wildcard (*,?,~) expression?
-        If wildcards are disabled the function returns false regardless of the
-        string content.
-     */
-    static bool MayBeWildcard( const OUString& rStr );
-
     /** Detect if string should be used as regular expression or wildcard
         expression or literal string.
      */
-    static utl::SearchParam::SearchType DetectSearchType( const OUString& rStr, const ScDocument& rDoc );
+    static utl::SearchParam::SearchType DetectSearchType(std::u16string_view rStr, const ScDocument& rDoc );
 
     /// Fail safe division, returning a FormulaError::DivisionByZero coded into a double
     /// if denominator is 0.0
