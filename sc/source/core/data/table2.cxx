@@ -2863,7 +2863,7 @@ void ScTable::RemoveCondFormatData( const ScRangeList& rRangeList, sal_uInt32 nI
 void  ScTable::SetPatternAreaCondFormat( SCCOL nCol, SCROW nStartRow, SCROW nEndRow,
         const ScPatternAttr& rAttr, const ScCondFormatIndexes& rCondFormatIndexes )
 {
-    aCol[nCol].SetPatternArea( nStartRow, nEndRow, rAttr);
+    CreateColumnIfNotExists(nCol).SetPatternArea( nStartRow, nEndRow, rAttr);
 
     for (const auto& rIndex : rCondFormatIndexes)
     {
