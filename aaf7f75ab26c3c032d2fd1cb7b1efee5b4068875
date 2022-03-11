@@ -16,6 +16,24 @@
       "message": "Hi Kohei,\nI do confirm this patch fixes the crash. I created a unittest in https://gerrit.libreoffice.org/c/core/+/131345",
       "revId": "aaf7f75ab26c3c032d2fd1cb7b1efee5b4068875",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5663b4_fa060f8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-03-11T14:01:47Z",
+      "side": 1,
+      "message": "Excellent! Thank you.",
+      "parentUuid": "b32c0fe8_c63134d9",
+      "revId": "aaf7f75ab26c3c032d2fd1cb7b1efee5b4068875",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
