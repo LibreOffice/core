@@ -1954,47 +1954,40 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
     // This is the part used e.g., for cursor travelling
     // See condition for DrawText or DrawTextArray (bDirectPrint)
+    std::vector<sal_Int32> aKernArray;
     if ( m_pPrinter && m_pPrinter.get() != rInf.GetpOut() )
     {
         if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
             m_pPrinter->SetFont(*m_pPrtFont);
         aTextSize.setHeight( m_pPrinter->GetTextHeight() );
-        std::vector<sal_Int32> aKernArray;
+
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         if( !GetScrFont()->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pScrFont );
 
         GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                sal_Int32(rInf.GetIdx()), sal_Int32(nLn), false);
-        if( bCompress )
-            rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( aKernArray.data(),
-                rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
-        else
-            rInf.SetKanaDiff( 0 );
-
-        aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn), false);
     }
     else
     {
         if( !m_pPrtFont->IsSameInstance( rInf.GetOut().GetFont() ) )
             rInf.GetOut().SetFont( *m_pPrtFont );
-
-        std::vector<sal_Int32> aKernArray;
+        aTextSize.setHeight( rInf.GetOut().GetTextHeight() );
 
         GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray,
                      sal_Int32(rInf.GetIdx()), sal_Int32(nLn), true);
-        if( bCompress )
-            rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( aKernArray.data(),
-                rInf.GetIdx(), nLn, rInf.GetKanaComp(),
-                o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()) ,lcl_IsFullstopCentered( rInf.GetOut() ) ) );
-        else
-            rInf.SetKanaDiff( 0 );
-
-        aTextSize.setWidth( aKernArray[sal_Int32(nLn) - 1] );
-
-        aTextSize.setHeight( rInf.GetOut().GetTextHeight() );
     }
+
+    if (bCompress)
+    {
+        rInf.SetKanaDiff(rInf.GetScriptInfo()->Compress(aKernArray.data(), rInf.GetIdx(), nLn, rInf.GetKanaComp(),
+            o3tl::narrowing<sal_uInt16>(m_aFont.GetFontSize().Height()), lcl_IsFullstopCentered(rInf.GetOut())));
+    }
+    else
+        rInf.SetKanaDiff( 0 );
+
+    aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+
 
     if ( rInf.GetKern() && nLn )
         aTextSize.AdjustWidth((sal_Int32(nLn) - 1) * rInf.GetKern());
