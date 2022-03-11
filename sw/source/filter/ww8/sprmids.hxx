@@ -66,6 +66,7 @@ const sal_uInt16 LN_SGprfIhdt = 0x3014;
 const sal_uInt16 LN_SBCustomize = 0x301e;
 const sal_uInt16 LN_SPropRMark = 0xd227;
 const sal_uInt16 LN_SFFacingCol = 0x3229;
+const sal_uInt16 LN_TDefTable = 0xd608;
 const sal_uInt16 LN_TDefTable10 = 0xd606;
 const sal_uInt16 LN_THTMLProps = 0x740c;
 const sal_uInt16 LN_TSetBrc10 = 0xd626;
