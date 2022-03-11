@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f22916fc_077c560c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-03-11T15:54:27Z",
+      "side": 1,
+      "message": "Naive question:  Xisco Fauli backported the original patch to 7-2 and 7-3. Does this \"cleanup\" patch (and the other one to remove the comment on the line of code) need to be backported as well?",
+      "revId": "02caa6e40cfa55d96befc82515b343045b5cfd7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c340f4d9_d23e66db",
