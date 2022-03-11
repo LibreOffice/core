@@ -16,6 +16,23 @@
       "message": "This doesn\u0027t address replacement; also it does not handle backreferences or \"replace all\" cases. Likely not a correct approach. I wonder if the library has some option to skip empty matches at the same position as previous match end.",
       "revId": "af2b98f359fd909ab8ec3700b503a57b8787c21b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65cc69a0_314d4dfa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-11T16:55:35Z",
+      "side": 1,
+      "message": "Not a bug, see https://bugs.documentfoundation.org/show_bug.cgi?id\u003d147875#c2",
+      "revId": "af2b98f359fd909ab8ec3700b503a57b8787c21b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
