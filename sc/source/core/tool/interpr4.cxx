@@ -4540,6 +4540,18 @@ StackVar ScInterpreter::Interpret()
             }
             if ( nErrorFunction >= nErrorFunctionCount )
                 ++nErrorFunction;   // that's it, error => terminate
+            else if (nErrorFunctionCount && sp && GetStackType() == svError)
+            {
+                // Clear global error if we have an individual error result, so
+                // an error evaluating function can receive multiple arguments
+                // and not all evaluated arguments inheriting the error.
+                // This is important for at least IFS() and SWITCH() as long as
+                // they are classified as error evaluating functions and not
+                // implemented as short-cutting jump code paths, but also for
+                // more than one evaluated argument to AGGREGATE() or COUNT()
+                // that may ignore errors.
+                nGlobalError = FormulaError::NONE;
+            }
         }
     }
 
