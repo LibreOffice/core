@@ -92,18 +92,18 @@ bool WildCard::ImpMatch( std::u16string_view aWild, std::u16string_view aStr )
 
 bool WildCard::Matches( std::u16string_view rString ) const
 {
-    OUString aTmpWild = aWildString;
+    std::u16string_view aTmpWild = aWildString;
 
-    sal_Int32 nSepPos;
+    size_t nSepPos;
 
     if ( cSepSymbol != '\0' )
     {
-        while ( (nSepPos = aTmpWild.indexOf(cSepSymbol)) != -1 )
+        while ( (nSepPos = aTmpWild.find(cSepSymbol)) != std::u16string_view::npos )
         {
             // Check all split wildcards
-            if ( ImpMatch( aTmpWild.subView( 0, nSepPos ), rString ) )
+            if ( ImpMatch( aTmpWild.substr( 0, nSepPos ), rString ) )
                 return true;
-            aTmpWild = aTmpWild.copy(nSepPos + 1); // remove separator
+            aTmpWild = aTmpWild.substr(nSepPos + 1); // remove separator
         }
     }
 
