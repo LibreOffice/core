@@ -109,6 +109,7 @@
 #include <algorithm>
 #include <iterator>
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/safeint.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -2356,6 +2357,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 exportSoftPageBreak();
             }
+            else if (sType == "LineBreak")
+            {
+                exportTextLineBreak(xPropSet);
+            }
             else {
                 OSL_FAIL("unknown text portion type");
             }
@@ -2429,6 +2434,40 @@ void XMLTextParagraphExport::exportSoftPageBreak()
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                               XML_SOFT_PAGE_BREAK, false,
                               false );
+}
+
+void XMLTextParagraphExport::exportTextLineBreak(
+    const uno::Reference<beans::XPropertySet>& xPropSet)
+{
+    static const XMLTokenEnum aLineBreakClears[] = {
+        XML_NONE,
+        XML_LEFT,
+        XML_RIGHT,
+        XML_ALL,
+    };
+
+    uno::Reference<text::XTextContent> xLineBreak;
+    xPropSet->getPropertyValue("LineBreak") >>= xLineBreak;
+    if (!xLineBreak.is())
+    {
+        return;
+    }
+
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    if (!xLineBreakProps.is())
+    {
+        return;
+    }
+
+    sal_Int16 eClear{};
+    xLineBreakProps->getPropertyValue("Clear") >>= eClear;
+    if (eClear >= 0 && o3tl::make_unsigned(eClear) < SAL_N_ELEMENTS(aLineBreakClears))
+    {
+        GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CLEAR,
+                                 GetXMLToken(aLineBreakClears[eClear]));
+    }
+    SvXMLElementExport aElem(GetExport(), XML_NAMESPACE_TEXT, XML_LINE_BREAK,
+                             /*bIgnWSOutside=*/false, /*bIgnWSInside=*/false);
 }
 
 void XMLTextParagraphExport::exportTextMark(

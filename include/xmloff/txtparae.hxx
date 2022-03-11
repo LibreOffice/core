@@ -321,6 +321,8 @@ protected:
 
     void exportSoftPageBreak();
 
+    void exportTextLineBreak(const css::uno::Reference<css::beans::XPropertySet>& xPropSet);
+
     void exportTextRange(
         const css::uno::Reference< css::text::XTextRange > & rTextRange,
         bool bAutoStyles,
