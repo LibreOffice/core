@@ -104,7 +104,8 @@ DECLARE_WW8EXPORT_TEST(testTdf147861_customField, "tdf147861_customField.doc")
 {
     // These should each be specific values, not a shared DocProperty
     getParagraph(1, "CustomEditedTitle"); // edited
-    getParagraph(2, " INSERT Custom Title here"); // matches current DocProperty
+    // A couple of \x0\x0 at the end of the import variable thwart an equality comparison
+    CPPUNIT_ASSERT(getParagraph(2)->getString().startsWith(" INSERT Custom Title here"));
     getParagraph(3, "My Title"); // edited
 
     // Verify that these are fields, and not just plain text
