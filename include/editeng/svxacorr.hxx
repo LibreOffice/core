@@ -98,7 +98,6 @@ enum class ACQuotes
 class EDITENG_DLLPUBLIC SvxAutoCorrDoc
 {
 public:
-    SvxAutoCorrDoc() {}
     virtual ~SvxAutoCorrDoc();
 
     virtual bool Delete( sal_Int32 nStt, sal_Int32 nEnd ) = 0;

@@ -95,7 +95,6 @@ enum class ScrollRangeCheck
 class EDITENG_DLLPUBLIC EditViewCallbacks
 {
 public:
-    EditViewCallbacks() {}
     virtual ~EditViewCallbacks();
 
     // call this when text visualization changed in any way. It

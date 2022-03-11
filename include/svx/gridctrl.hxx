@@ -517,7 +517,6 @@ public:
     {
         friend class DbCellControl;
         friend class RowSetEventListener;
-        GrantControlAccess() { }
     };
 
     /// called when a controller needs to be re-initialized

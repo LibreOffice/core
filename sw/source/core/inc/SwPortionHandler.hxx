@@ -46,8 +46,6 @@ class SW_DLLPUBLIC SwPortionHandler
 {
 public:
 
-    SwPortionHandler() {}           /// (empty) constructor
-
     virtual ~SwPortionHandler() {}  /// (empty) destructor
 
     /** text portion. A run of nLength characters from the view

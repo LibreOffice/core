@@ -51,14 +51,12 @@ struct SalMenuButtonItem
 class VCL_PLUGIN_PUBLIC SalMenuItem
 {
 public:
-    SalMenuItem() {}
     virtual ~SalMenuItem();
 };
 
 class VCL_PLUGIN_PUBLIC SalMenu
 {
 public:
-    SalMenu() {}
     virtual ~SalMenu();
 
     virtual bool VisibleMenuBar() = 0;  // must return true to actually DISPLAY native menu bars

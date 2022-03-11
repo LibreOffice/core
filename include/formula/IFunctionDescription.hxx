@@ -48,7 +48,6 @@ namespace formula
     class SAL_NO_VTABLE IFunctionManager
     {
     public:
-        IFunctionManager(){}
         enum EToken
         {
             eOk,
@@ -70,7 +69,6 @@ namespace formula
     class SAL_NO_VTABLE IFunctionCategory
     {
     public:
-        IFunctionCategory(){}
         virtual sal_uInt32                  getCount() const = 0;
         virtual const IFunctionDescription* getFunction(sal_uInt32 _nPos) const = 0;
         virtual sal_uInt32                  getNumber() const = 0;
@@ -83,7 +81,6 @@ namespace formula
     class SAL_NO_VTABLE IFunctionDescription
     {
     public:
-        IFunctionDescription(){}
         virtual OUString getFunctionName() const = 0;
         virtual const IFunctionCategory* getCategory() const = 0;
         virtual OUString getDescription() const = 0;
@@ -113,7 +110,6 @@ namespace formula
     class SAL_NO_VTABLE IFormulaEditorHelper
     {
     public:
-        IFormulaEditorHelper(){}
         virtual void notifyChange() = 0;
         virtual void fill() = 0;
 

@@ -885,7 +885,6 @@ class EscherEx;
 class MSFILTER_DLLPUBLIC EscherExClientRecord_Base
 {
 public:
-                                EscherExClientRecord_Base() {}
     virtual                     ~EscherExClientRecord_Base();
 
                                 /// Application writes the record header
@@ -899,7 +898,6 @@ public:
 class MSFILTER_DLLPUBLIC EscherExClientAnchor_Base
 {
 public:
-                                EscherExClientAnchor_Base() {}
     virtual                     ~EscherExClientAnchor_Base();
 
                                 /// Application writes the record header

@@ -93,7 +93,6 @@ OUString getParseErrorDesc(SmParseError err);
 class AbstractSmParser
 {
 public:
-    AbstractSmParser() {}
     virtual ~AbstractSmParser() {}
 
     /** Parse rBuffer to formula tree */

@@ -35,7 +35,6 @@ struct ExternalDataTypeHash
 class ExternalData
 {
 public:
-    ExternalData() {}
     virtual ~ExternalData() {}
 };
 

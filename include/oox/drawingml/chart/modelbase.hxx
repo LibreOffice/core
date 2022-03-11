@@ -58,8 +58,6 @@ public:
     typedef typename RefVector< ModelType >::value_type value_type;
     typedef typename RefVector< ModelType >::size_type  size_type;
 
-                 ModelVector() {}
-
     ModelType&   create() { return append( std::make_shared<ModelType>() ); }
     template< typename Param1Type >
     ModelType&   create( const Param1Type& rParam1 ) { return append( std::make_shared<ModelType>( rParam1 ) ); }
@@ -83,8 +81,6 @@ public:
     typedef typename RefMap< KeyType, ModelType >::key_type     key_type;
     typedef typename RefMap< KeyType, ModelType >::mapped_type  mapped_type;
     typedef typename RefMap< KeyType, ModelType >::value_type   value_type;
-
-                 ModelMap() {}
 
     ModelType&   create( KeyType eKey ) { return insert( eKey, new ModelType ); }
 
