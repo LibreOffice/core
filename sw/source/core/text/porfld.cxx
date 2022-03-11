@@ -173,9 +173,18 @@ SwFieldSlot::SwFieldSlot( const SwTextFormatInfo* pNew, const SwFieldPortion *pP
             pInf->SetFakeLineStart( nIdx > pInf->GetLineStart() );
             pInf->SetIdx(TextFrameIndex(0));
         }
-        else if (nIdx < TextFrameIndex(pOldText->getLength()))
+        else
         {
-            aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1, aText);
+            TextFrameIndex nEnd(pOldText->getLength());
+            if (nIdx < nEnd)
+            {
+                //sal_Int32 const nFieldLen(pPor->GetFieldLen());
+                aText = (*pOldText).replaceAt(sal_Int32(nIdx), 1/*nFieldLen*/, aText);
+            }
+            else if (nIdx == nEnd)
+                aText = *pOldText + aText;
+            else
+                SAL_WARN("sw.core", "SwFieldSlot bad SwFieldPortion index.");
         }
         pInf->SetText( aText );
     }
