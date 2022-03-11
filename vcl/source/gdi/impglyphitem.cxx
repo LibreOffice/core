@@ -18,6 +18,9 @@
  */
 
 #include <impglyphitem.hxx>
+#include <vcl/glyphitemcache.hxx>
+#include <vcl/vcllayout.hxx>
+#include <tools/stream.hxx>
 
 SalLayoutGlyphs::SalLayoutGlyphs() {}
 
@@ -89,6 +92,42 @@ bool SalLayoutGlyphsImpl::IsValid() const
     if (empty())
         return false;
     return true;
+}
+
+const SalLayoutGlyphs*
+SalLayoutGlyphsCache::GetLayoutGlyphs(const OUString& text, VclPtr<OutputDevice> outputDevice) const
+{
+    const CachedGlyphsKey key(text, outputDevice);
+    auto it = mCachedGlyphs.find(key);
+    if (it != mCachedGlyphs.end() && it->second.IsValid())
+        return &it->second;
+    std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
+        text, 0, text.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+    if (layout)
+    {
+        mCachedGlyphs.insert(std::make_pair(key, layout->GetGlyphs()));
+        assert(mCachedGlyphs.find(key) == mCachedGlyphs.begin()); // newly inserted item is first
+        return &mCachedGlyphs.begin()->second;
+    }
+    return nullptr;
+}
+
+SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const OUString& t,
+                                                       const VclPtr<OutputDevice>& d)
+    : text(t)
+    , outputDevice(d)
+{
+    hashValue = 0;
+    o3tl::hash_combine(hashValue, outputDevice.get());
+    SvMemoryStream stream;
+    WriteFont(stream, outputDevice->GetFont());
+    o3tl::hash_combine(hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
+    o3tl::hash_combine(hashValue, text);
+}
+
+inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphsKey& other) const
+{
+    return hashValue == other.hashValue && outputDevice == other.outputDevice && text == other.text;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

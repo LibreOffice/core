@@ -54,6 +54,7 @@
 #include <vcl/settings.hxx>
 #include <vcl/glyphitem.hxx>
 #include <vcl/vcllayout.hxx>
+#include <vcl/glyphitemcache.hxx>
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/diagnose.h>
@@ -120,19 +121,7 @@ class ScDrawStringsVars
     tools::Long                nExpWidth;
 
     ScRefCellValue      maLastCell;
-    struct CachedGlyphsKey
-    {
-        OUString text;
-        VclPtr<OutputDevice> outputDevice;
-        size_t hashValue;
-        CachedGlyphsKey( const OUString& t, const VclPtr<OutputDevice>& dev );
-        bool operator==( const CachedGlyphsKey& other ) const;
-    };
-    struct CachedGlyphsHash
-    {
-        size_t operator()( const CachedGlyphsKey& key ) const { return key.hashValue; }
-    };
-    mutable o3tl::lru_map<CachedGlyphsKey, SalLayoutGlyphs, CachedGlyphsHash> mCachedGlyphs;
+    mutable SalLayoutGlyphsCache mCachedGlyphs;
     sal_uLong           nValueFormat;
     bool                bLineBreak;
     bool                bRepeat;
@@ -198,7 +187,10 @@ public:
 
     // ScOutputData::LayoutStrings() usually triggers a number of calls that require
     // to lay out the text, which is relatively slow, so cache that operation.
-    const SalLayoutGlyphs*  GetLayoutGlyphs(const OUString& rString) const;
+    const SalLayoutGlyphs*  GetLayoutGlyphs(const OUString& rString) const
+    {
+        return mCachedGlyphs.GetLayoutGlyphs(rString, pOutput->pFmtDevice);
+    }
 
 private:
     tools::Long        GetMaxDigitWidth();     // in logic units
@@ -225,7 +217,6 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, bool bPTL) :
     nSignWidth( 0 ),
     nDotWidth( 0 ),
     nExpWidth( 0 ),
-    mCachedGlyphs( 1000 ),
     nValueFormat( 0 ),
     bLineBreak  ( false ),
     bRepeat     ( false ),
@@ -785,40 +776,6 @@ tools::Long ScDrawStringsVars::GetExpWidth()
 
     nExpWidth = pOutput->pFmtDevice->GetTextWidth(OUString('E'));
     return nExpWidth;
-}
-
-inline ScDrawStringsVars::CachedGlyphsKey::CachedGlyphsKey( const OUString& t, const VclPtr<OutputDevice>& d )
-    : text( t )
-    , outputDevice( d )
-{
-    hashValue = 0;
-    o3tl::hash_combine( hashValue, outputDevice.get());
-    SvMemoryStream stream;
-    WriteFont( stream, outputDevice->GetFont());
-    o3tl::hash_combine( hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
-    o3tl::hash_combine( hashValue, text );
-}
-
-inline bool ScDrawStringsVars::CachedGlyphsKey::operator==( const CachedGlyphsKey& other ) const
-{
-    return hashValue == other.hashValue && outputDevice == other.outputDevice && text == other.text;
-}
-
-const SalLayoutGlyphs* ScDrawStringsVars::GetLayoutGlyphs(const OUString& rString) const
-{
-    const CachedGlyphsKey key( rString, pOutput->pFmtDevice );
-    auto it = mCachedGlyphs.find( key );
-    if( it != mCachedGlyphs.end() && it->second.IsValid())
-        return &it->second;
-    std::unique_ptr<SalLayout> layout = pOutput->pFmtDevice->ImplLayout( rString, 0, rString.getLength(),
-        Point( 0, 0 ), 0, {}, SalLayoutFlags::GlyphItemsOnly );
-    if( layout )
-    {
-        mCachedGlyphs.insert( std::make_pair( key, layout->GetGlyphs()));
-        assert(mCachedGlyphs.find( key ) == mCachedGlyphs.begin()); // newly inserted item is first
-        return &mCachedGlyphs.begin()->second;
-    }
-    return nullptr;
 }
 
 tools::Long ScDrawStringsVars::GetFmtTextWidth( const OUString& rString )
