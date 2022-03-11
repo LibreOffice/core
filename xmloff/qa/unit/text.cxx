@@ -269,6 +269,41 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     assertXPathNoAttribute(pXmlDoc, "//text:list", "id");
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
+{
+    // Given a document with a clearing break:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xLineBreak(
+        xMSF->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    // SwLineBreakClear::ALL;
+    sal_Int16 eClear = 3;
+    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+
+    // When exporting to ODT:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::makeAny(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    validate(aTempFile.GetFileName(), test::ODF);
+
+    // Then make sure the expected markup is used:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this failed with:
+    // - XPath '//text:line-break' number of nodes is incorrect
+    // i.e. the clearing break was lost on export.
+    assertXPath(pXmlDoc, "//text:line-break", "clear", "all");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2634,6 +2634,23 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
+  <!-- TODO no proposal for clearing breaks -->
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:element name="text:line-break">
+      <rng:optional>
+        <!-- default value: none -->
+        <rng:attribute name="loext:clear">
+          <rng:choice>
+            <rng:value>none</rng:value>
+            <rng:value>left</rng:value>
+            <rng:value>right</rng:value>
+            <rng:value>all</rng:value>
+          </rng:choice>
+        </rng:attribute>
+      </rng:optional>
+    </rng:element>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="animation-element" combine="choice">
     <rng:choice>

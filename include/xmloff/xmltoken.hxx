@@ -1173,6 +1173,7 @@ namespace xmloff::token {
         XML_LIMIT,
         XML_LINE,
         XML_LINE_BREAK,
+        XML_CLEAR,
         XML_LINE_DISTANCE,
         XML_LINE_HEIGHT,
         XML_LINE_HEIGHT_AT_LEAST,
