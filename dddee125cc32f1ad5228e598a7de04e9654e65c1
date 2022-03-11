@@ -16,6 +16,24 @@
       "message": "Hi Luboš Luňák,\nis there any chance this patch can be backported to libreoffice-7-3 or does it depend on other patches ?",
       "revId": "dddee125cc32f1ad5228e598a7de04e9654e65c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfc0cdb2_c422ae56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-11T15:22:01Z",
+      "side": 1,
+      "message": "It\u0027s part of the 16k columns work, so more or less no chance for 7.3.",
+      "parentUuid": "7a50ee92_c02d5156",
+      "revId": "dddee125cc32f1ad5228e598a7de04e9654e65c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
