@@ -2828,7 +2828,7 @@ void ScInterpreter::ScFormula()
         }
         break;
         default:
-            Pop();
+            PopError();
             SetError( FormulaError::NotAvailable );
     }
     PushString( aFormula );
@@ -3727,7 +3727,7 @@ void ScInterpreter::ScMin( bool bTextAsZero )
             }
             break;
             default :
-                Pop();
+                PopError();
                 SetError(FormulaError::IllegalParameter);
         }
     }
@@ -3885,7 +3885,7 @@ void ScInterpreter::ScMax( bool bTextAsZero )
             }
             break;
             default :
-                Pop();
+                PopError();
                 SetError(FormulaError::IllegalParameter);
         }
     }
@@ -4096,7 +4096,7 @@ void ScInterpreter::GetStVarParams( bool bTextAsZero, double(*VarResult)( double
             }
             break;
             default :
-                Pop();
+                PopError();
                 SetError(FormulaError::IllegalParameter);
         }
     }
