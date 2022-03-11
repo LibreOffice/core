@@ -75,10 +75,6 @@ const char * const aUpdateEntryProperties[] = {
 
 const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
 
-NamedValueByNameAccess::~NamedValueByNameAccess()
-{
-}
-
 css::uno::Any NamedValueByNameAccess::getValue(const char * pName)
 {
     const sal_Int32 nLen = m_rValues.getLength();
