@@ -8541,23 +8541,20 @@ DocxAttributeOutput::hasResolved DocxAttributeOutput::WritePostitFields()
         const DateTime aDateTime = f->GetDateTime();
         bool bNoDate = bRemovePersonalInfo ||
             ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
-        if ( bNoDate )
-            m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr,
-                FSNS( XML_w, XML_author ), bRemovePersonalInfo
-                     ? "Author" + OUString::number( GetExport().GetInfoID(f->GetPar1()) )
-                     : f->GetPar1(),
-                FSNS( XML_w, XML_initials ), bRemovePersonalInfo
-                     ? OUString::number( GetExport().GetInfoID(f->GetInitials()) )
-                     : f->GetInitials() );
-        else
-            m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr,
-                FSNS( XML_w, XML_author ), bRemovePersonalInfo
-                     ? "Author" + OUString::number( GetExport().GetInfoID(f->GetPar1()) )
-                     : f->GetPar1(),
-                FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ),
-                FSNS( XML_w, XML_initials ), bRemovePersonalInfo
-                     ? OUString::number( GetExport().GetInfoID(f->GetInitials()) )
-                     : f->GetInitials() );
+
+        rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
+            = sax_fastparser::FastSerializerHelper::createAttrList();
+
+        pAttributeList->add(FSNS( XML_w, XML_author ), bRemovePersonalInfo
+                 ? "Author" + OString::number( GetExport().GetInfoID(f->GetPar1()) )
+                 : f->GetPar1().toUtf8());
+        if (!bNoDate)
+            pAttributeList->add(FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ));
+        pAttributeList->add(FSNS( XML_w, XML_initials ), bRemovePersonalInfo
+                 ? OString::number( GetExport().GetInfoID(f->GetInitials()) )
+                 : f->GetInitials().toUtf8());
+        m_pSerializer->startElementNS( XML_w, XML_comment, FSNS( XML_w, XML_id ), idstr,
+                pAttributeList );
 
         const bool bNeedParaId = f->GetResolved();
         if (bNeedParaId)
