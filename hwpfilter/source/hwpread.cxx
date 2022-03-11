@@ -457,6 +457,7 @@ bool Picture::Read(HWPFile & hwpf)
     scale[1] = tmp16;
 
     hwpf.ReadBlock(picinfo.picun.path, 256);      /* Picture File Name: when type is not a Drawing. */
+    picinfo.picun.path[255] = 0; // ensure null terminated
     hwpf.ReadBlock(reserved3, 9);                 /* Brightness / Contrast / Picture Effect, etc. */
 
     UpdateBBox(this);
