@@ -67,10 +67,6 @@
 #define SV_STDTEXT_PREFERENCES                       NC_("SV_STDTEXT_PREFERENCES", "Preferences...")
 #define SV_STDTEXT_ALLFILETYPES                      NC_("SV_STDTEXT_ALLFILETYPES", "Any type")
 
-// dear loplugins, please don't remove this constant, it will be used in follow-up commits
-#define STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY  NC_("STR_FPICKER_ALREADYEXISTOVERWRITE_SECONDARY", "The file already exists in \"$dirname$\". Replacing it will overwrite its contents.")
-#define STR_FPICKER_ALLFORMATS                       NC_("STR_FPICKER_ALLFORMATS", "All Formats")
-
 #define SV_ACCESSERROR_NO_FONTS                      NC_("SV_ACCESSERROR_NO_FONTS", "No fonts could be found on the system.")
 
 #define SV_PRINT_NOPAGES                             NC_("SV_PRINT_NOPAGES", "No pages")
