@@ -1113,16 +1113,15 @@ void SdDrawDocument::InitLayoutVector()
     const Sequence< OUString > aFiles(
         officecfg::Office::Impress::Misc::LayoutListFiles::get() );
 
-    OUString sFilename;
+    if (aFiles.getLength() == 0)
+        return;
+    const Reference<XDocumentBuilder> xDocBuilder = DocumentBuilder::create( xContext );
+
     for( const auto& rFile : aFiles )
     {
-        sFilename = comphelper::getExpandedUri(xContext, rFile);
+        OUString sFilename = comphelper::getExpandedUri(xContext, rFile);
 
         // load layout file into DOM
-        Reference< XMultiServiceFactory > xServiceFactory(
-            xContext->getServiceManager() , UNO_QUERY_THROW );
-        const Reference<XDocumentBuilder> xDocBuilder(
-            DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
         try
         {
@@ -1152,16 +1151,14 @@ void SdDrawDocument::InitObjectVector()
     const Sequence< OUString > aFiles(
        officecfg::Office::Impress::Misc::PresObjListFiles::get() );
 
-    OUString sFilename;
+    if (aFiles.getLength() == 0)
+        return;
+    const Reference<XDocumentBuilder> xDocBuilder = DocumentBuilder::create( xContext );
     for( const auto& rFile : aFiles )
     {
-        sFilename = comphelper::getExpandedUri(xContext, rFile);
+        OUString sFilename = comphelper::getExpandedUri(xContext, rFile);
 
         // load presentation object file into DOM
-        Reference< XMultiServiceFactory > xServiceFactory(
-            xContext->getServiceManager() , UNO_QUERY_THROW );
-        const Reference<XDocumentBuilder> xDocBuilder(
-            DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
         try
         {
