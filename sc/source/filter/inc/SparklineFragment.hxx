@@ -40,7 +40,7 @@ private:
 
 public:
     SparklineGroup()
-        : m_pSparklineGroup(new sc::SparklineGroup())
+        : m_pSparklineGroup(new sc::SparklineGroup)
     {
     }
 
