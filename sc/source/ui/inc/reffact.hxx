@@ -147,6 +147,18 @@ private:
     ScFourierAnalysisDialogWrapper() = delete;
 };
 
+namespace sc
+{
+
+class SparklineDialogWrapper :
+    public ChildControllerWrapper<SID_SPARKLINE_DIALOG>
+{
+private:
+    SparklineDialogWrapper() = delete;
+};
+
+}
+
 class ScAcceptChgDlgWrapper : public SfxChildWindow
 {
 public:
