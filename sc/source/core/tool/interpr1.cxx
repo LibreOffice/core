@@ -9914,20 +9914,9 @@ bool ScInterpreter::MayBeRegExp( const OUString& rStr )
 {
     if ( rStr.isEmpty() || (rStr.getLength() == 1 && !rStr.startsWith(".")) )
         return false;   // single meta characters can not be a regexp
+    std::u16string_view cre(u"?*+.[]^$\\<>()|");
     // First two characters are wildcard '?' and '*' characters.
-    static const sal_Unicode cre[] = { '?','*','+','.','[',']','^','$','\\','<','>','(',')','|', 0 };
-    const sal_Unicode* p1 = rStr.getStr();
-    sal_Unicode c1;
-    while ( ( c1 = *p1++ ) != 0 )
-    {
-        const sal_Unicode* p2 = cre;
-        while ( *p2 )
-        {
-            if ( c1 == *p2++ )
-                return true;
-        }
-    }
-    return false;
+    return std::u16string_view(rStr).find_first_of(cre) != std::u16string_view::npos;
 }
 
 bool ScInterpreter::MayBeWildcard( const OUString& rStr )
@@ -9935,19 +9924,8 @@ bool ScInterpreter::MayBeWildcard( const OUString& rStr )
     // Wildcards with '~' escape, if there are no wildcards then an escaped
     // character does not make sense, but it modifies the search pattern in an
     // Excel compatible wildcard search...
-    static const sal_Unicode cw[] = { '*','?','~', 0 };
-    const sal_Unicode* p1 = rStr.getStr();
-    sal_Unicode c1;
-    while ( ( c1 = *p1++ ) != 0 )
-    {
-        const sal_Unicode* p2 = cw;
-        while ( *p2 )
-        {
-            if ( c1 == *p2++ )
-                return true;
-        }
-    }
-    return false;
+    std::u16string_view cw(u"*?~");
+    return std::u16string_view(rStr).find_first_of(cw) != std::u16string_view::npos;
 }
 
 utl::SearchParam::SearchType ScInterpreter::DetectSearchType( const OUString& rStr, const ScDocument& rDoc )
