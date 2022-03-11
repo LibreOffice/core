@@ -71,8 +71,8 @@ DECLARE_RTFEXPORT_TEST(testFdo63023, "fdo63023.rtf")
         getStyles("PageStyles")->getByName("Standard"), "HeaderText");
     // Back color was black (0) in the header, due to missing color table in the substream.
     CPPUNIT_ASSERT_EQUAL(
-        sal_Int32(0xFFFF99),
-        getProperty<sal_Int32>(getRun(getParagraphOfText(1, xHeaderText), 1), "CharBackColor"));
+        Color(0xFFFF99),
+        getProperty<Color>(getRun(getParagraphOfText(1, xHeaderText), 1), "CharBackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo42109, "fdo42109.rtf")
@@ -1009,7 +1009,7 @@ DECLARE_RTFEXPORT_TEST(testTdf82073, "tdf82073.rtf")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
     // This was -1: the background color was automatic, not black.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), getProperty<sal_Int32>(xCell, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(COL_BLACK), getProperty<Color>(xCell, "BackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf74795, "tdf74795.rtf")
