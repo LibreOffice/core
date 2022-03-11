@@ -99,8 +99,15 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(const OUString& text, VclPtr<OutputDevice>
 {
     const CachedGlyphsKey key(text, outputDevice);
     auto it = mCachedGlyphs.find(key);
-    if (it != mCachedGlyphs.end() && it->second.IsValid())
-        return &it->second;
+    if (it != mCachedGlyphs.end())
+    {
+        if (it->second.IsValid())
+            return &it->second;
+        // Do not try to create the layout here. If a cache item exists, it's already
+        // been attempted and the layout was invalid (this happens with MultiSalLayout).
+        // So in that case this is a cached failure.
+        return nullptr;
+    }
     std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
         text, 0, text.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
     if (layout)
