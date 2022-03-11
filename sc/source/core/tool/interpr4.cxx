@@ -2701,7 +2701,7 @@ void ScInterpreter::ScExternal()
         else
         {
             while( nParamCount-- > 0)
-                Pop();
+                PopError();
             PushIllegalParameter();
         }
     }
@@ -3077,7 +3077,7 @@ void ScInterpreter::ScExternal()
     {
         while( nParamCount-- > 0)
         {
-            Pop();
+            PopError();
         }
         PushError( FormulaError::NoAddin );
     }
