@@ -711,7 +711,7 @@ CPPUNIT_TEST_FIXTURE(Test, testN820504)
     uno::Reference<container::XNameAccess> xStylesAccess(xFamiliesAccess->getByName("ParagraphStyles"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStylesAccess->getByName("Default Paragraph Style"), uno::UNO_QUERY);
     // The problem was that the CharColor was set to AUTO (-1) even if we have some default char color set
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(4040635), getProperty<sal_Int32>(xStyle, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x3da7bb), getProperty<Color>(xStyle, "CharColor"));
 
     // Also, the groupshape was anchored at-page instead of at-character
     // (that's incorrect as Word only supports at-character and as-character).
