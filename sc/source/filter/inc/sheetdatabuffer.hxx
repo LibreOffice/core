@@ -198,14 +198,14 @@ private:
     {
         bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
         {
-            return lhs.mnEndRow<rhs.mnStartRow;
+            return lhs.mnEndRow<rhs.mnEndRow;
         }
     };
     struct StyleRowRangeCompEqual
     {
         bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
         {
-            return lhs.mnEndRow==rhs.mnStartRow;
+            return lhs.mnEndRow==rhs.mnEndRow;
         }
     };
     typedef ::o3tl::sorted_vector< RowRangeStyle, StyleRowRangeComp > RowStyles;
