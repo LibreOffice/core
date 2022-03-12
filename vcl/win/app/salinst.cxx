@@ -318,6 +318,43 @@ SalData::~SalData()
         Gdiplus::GdiplusShutdown(gdiplusToken);
 }
 
+bool OSSupportsDarkMode()
+{
+    bool bRet = false;
+    if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
+    {
+        typedef LONG(WINAPI* RtlGetVersion_t)(PRTL_OSVERSIONINFOW);
+        if (auto RtlGetVersion
+            = reinterpret_cast<RtlGetVersion_t>(GetProcAddress(h_ntdll, "RtlGetVersion")))
+        {
+            RTL_OSVERSIONINFOW vi2{};
+            vi2.dwOSVersionInfoSize = sizeof(vi2);
+            if (RtlGetVersion(&vi2) == 0)
+            {
+                if (vi2.dwMajorVersion > 10)
+                    bRet = true;
+                else if (vi2.dwMajorVersion == 10)
+                {
+                    if (vi2.dwMinorVersion > 0)
+                        bRet = true;
+                    else if (vi2.dwBuildNumber >= 18362)
+                        bRet = true;
+                }
+            }
+        }
+    }
+    return bRet;
+}
+
+enum PreferredAppMode
+{
+    Default,
+    AllowDark,
+    ForceDark,
+    ForceLight,
+    Max
+};
+
 extern "C" {
 VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 {
@@ -330,6 +367,18 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
     pSalData->mnCmdShow = aSI.wShowWindow;
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
+
+    static bool bSetAllowDarkMode = OSSupportsDarkMode(); // too early to additionally check LibreOffice's config
+    if (bSetAllowDarkMode)
+    {
+        typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
+        if (HINSTANCE hUxthemeLib = LoadLibraryExW(L"uxtheme.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32))
+        {
+            if (auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135))))
+                SetPreferredAppMode(AllowDark);
+            FreeLibrary(hUxthemeLib);
+        }
+    }
 
     // register frame class
     WNDCLASSEXW aWndClassEx;
