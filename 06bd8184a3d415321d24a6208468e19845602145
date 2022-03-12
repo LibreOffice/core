@@ -16,6 +16,24 @@
       "message": "Please don\u0027t push to release branches without\n1. a +1 from Jenkins\n2. a second developer code-review",
       "revId": "06bd8184a3d415321d24a6208468e19845602145",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaf07f84_423f448f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-03-12T12:26:02Z",
+      "side": 1,
+      "message": "OK thanks for the reminders. Will follow the guide later Thorsten",
+      "parentUuid": "6531dec6_ca80a032",
+      "revId": "06bd8184a3d415321d24a6208468e19845602145",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
