@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c838acbc_13580661",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-12T11:36:19Z",
+      "side": 1,
+      "message": "Note this depends on https://gerrit.libreoffice.org/c/core/+/131362",
+      "revId": "26e375b1546ff8444641f12b997424270f14b0b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
