@@ -2964,15 +2964,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                         dynamic_cast<const SwDocInfoField *> (pField);
 
                         if (pDocInfoField != nullptr)
-                        {
-                            OUString sFieldname = pDocInfoField->GetFieldName();
-
-                            const sal_Int32 nIndex = sFieldname.indexOf(':');
-                            if (nIndex >= 0)
-                                sFieldname = sFieldname.copy(nIndex + 1);
-
-                            sStr = "\"" + sFieldname + "\"";
-                        }
+                            sStr = "\"" + pDocInfoField->GetName() + "\"";
                     }
                     break;
                 default:
