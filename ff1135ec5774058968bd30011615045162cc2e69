@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a352f303_6bc2ecb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000295
+      },
+      "writtenOn": "2022-03-12T14:19:21Z",
+      "side": 1,
+      "message": "Why, thank you bot! I was working on this patch, but funnily enough nobody has bothered to review it. ",
+      "revId": "ff1135ec5774058968bd30011615045162cc2e69",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
