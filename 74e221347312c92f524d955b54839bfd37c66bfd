@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "414b788c_9a5f35f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000674
+      },
+      "writtenOn": "2022-03-12T09:05:39Z",
+      "side": 1,
+      "message": "This patch fixes the bug for me under Ubuntu 20.04.",
+      "revId": "74e221347312c92f524d955b54839bfd37c66bfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
