@@ -421,6 +421,8 @@ void SvxCharacterMap::updateFavCharControl()
     }
     m_xShowSet->getFavCharacterList();
     m_xSearchSet->getFavCharacterList();
+    // tdf#109214 - redraw highlight of the favorite characters
+    m_xShowSet->Invalidate();
 }
 
 void SvxCharacterMap::deleteFavCharacterFromList(std::u16string_view sTitle, std::u16string_view rFont)
