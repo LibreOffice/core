@@ -8366,16 +8366,16 @@ void DocxAttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
     if (!cStart && !cEnd)
         return;
 
-    OString sBracket;
+    const char* sBracket;
     if ((cStart == '{') || (cEnd == '}'))
-        sBracket = const_cast<char *>("curly");
+        sBracket = "curly";
     else if ((cStart == '<') || (cEnd == '>'))
-        sBracket = const_cast<char *>("angle");
+        sBracket = "angle";
     else if ((cStart == '[') || (cEnd == ']'))
-        sBracket = const_cast<char *>("square");
+        sBracket = "square";
     else
-        sBracket = const_cast<char *>("round");
-    AddToAttrList( m_pEastAsianLayoutAttrList, FSNS( XML_w, XML_combineBrackets ), sBracket.getStr() );
+        sBracket = "round";
+    AddToAttrList( m_pEastAsianLayoutAttrList, FSNS( XML_w, XML_combineBrackets ), sBracket );
 }
 
 void DocxAttributeOutput::CharScaleWidth( const SvxCharScaleWidthItem& rScaleWidth )
@@ -9579,24 +9579,24 @@ void DocxAttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
     }
     else if ( m_rExport.m_bOutFlyFrameAttrs )
     {
-        OString sWrap( "auto" );
+        const char* sWrap( "auto" );
         switch ( rSurround.GetSurround( ) )
         {
             case css::text::WrapTextMode_NONE:
-                sWrap = OString( "none" );
+                sWrap = "none";
                 break;
             case css::text::WrapTextMode_THROUGH:
-                sWrap = OString( "through" );
+                sWrap = "through";
                 break;
             case css::text::WrapTextMode_DYNAMIC:
             case css::text::WrapTextMode_PARALLEL:
             case css::text::WrapTextMode_LEFT:
             case css::text::WrapTextMode_RIGHT:
             default:
-                sWrap = OString( "around" );
+                sWrap = "around";
         }
 
-        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_wrap ), sWrap.getStr() );
+        AddToAttrList( m_rExport.SdrExporter().getFlyAttrList(), FSNS( XML_w, XML_wrap ), sWrap );
     }
 }
 
@@ -9687,9 +9687,9 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
             // Calculate opacity value
             // Consider oox/source/vml/vmlformatting.cxx : decodeColor() function.
             double fOpacity = static_cast<double>(*oAlpha) * 65535 / ::oox::drawingml::MAX_PERCENT;
-            OUString sOpacity = OUString::number(fOpacity) + "f";
+            OString sOpacity = OString::number(fOpacity) + "f";
 
-            AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_opacity, OUStringToOString(sOpacity, RTL_TEXTENCODING_UTF8).getStr() );
+            AddToAttrList( m_rExport.SdrExporter().getFlyFillAttrList(), XML_opacity, sOpacity.getStr() );
         }
 
         sColor = "#" + sColor;
