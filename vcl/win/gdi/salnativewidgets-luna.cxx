@@ -1006,6 +1006,20 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     return false;
 }
 
+static bool UseDarkMode()
+{
+    bool bRet = false;
+
+    HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+    typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
+    if (auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132))))
+        bRet = ShouldAppsUseDarkMode();
+
+    FreeLibrary(hUxthemeLib);
+
+    return bRet;
+}
+
 bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         ControlPart nPart,
                                         const tools::Rectangle& rControlRegion,
@@ -1014,6 +1028,11 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         const OUString& aCaption,
                                         const Color& /*rBackgroundColor*/ )
 {
+    if (UseDarkMode())
+        SetWindowTheme(mhWnd, L"Explorer", nullptr);
+    else
+        SetWindowTheme(mhWnd, L"potato", nullptr);
+
     bool bOk = false;
     HTHEME hTheme = nullptr;
 
