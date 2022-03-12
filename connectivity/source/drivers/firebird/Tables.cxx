@@ -9,6 +9,7 @@
 
 #include "Table.hxx"
 #include "Tables.hxx"
+#include "Views.hxx"
 #include "Catalog.hxx"
 #include "Util.hxx"
 
@@ -202,7 +203,14 @@ void Tables::dropObject(sal_Int32 nPosition, const OUString& sName)
     const OUString sQuoteString = m_xMetaData->getIdentifierQuoteString();
 
     m_xMetaData->getConnection()->createStatement()->execute(
-        "DROP " + sType + ::dbtools::quoteName(sQuoteString,sName));
+        "DROP " + sType + " " + ::dbtools::quoteName(sQuoteString,sName));
+
+    if (sType == "VIEW")
+    {
+        Views* pViews = static_cast<Views*>(static_cast<Catalog&>(m_rParent).getPrivateViews());
+        if ( pViews && pViews->hasByName(sName) )
+            pViews->dropByNameImpl(sName);
+    }
 }
 
 void connectivity::firebird::Tables::appendNew(const OUString& _rsNewTable)
