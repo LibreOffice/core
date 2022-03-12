@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e6758e8_194b98c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-12T10:31:23Z",
+      "side": 1,
+      "message": "Needs to be rebased onto the fix of https://gerrit.libreoffice.org/c/core/+/131358",
+      "revId": "46bbb3e1e6f09f8085e4b74c6a1e6f27ed57a17d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
