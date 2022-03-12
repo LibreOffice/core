@@ -5378,11 +5378,10 @@ void DomainMapper_Impl::handleAuthor
     size_t nMap = 0;
     for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
     {
-        if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
+        if (rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
         {
-            sFieldServiceName =
-            OUString::createFromAscii
-            (aDocProperties[nMap].pServiceName);
+            if (!xPropertySetInfo->hasPropertyByName(rFirstParam))
+                sFieldServiceName = OUString::createFromAscii(aDocProperties[nMap].pServiceName);
             break;
         }
     }
