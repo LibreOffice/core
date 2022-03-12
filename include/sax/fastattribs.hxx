@@ -89,7 +89,9 @@ public:
     void add( sal_Int32 nToken, const char* pValue );
     void add( sal_Int32 nToken, const char* pValue, size_t nValueLength );
     void add( sal_Int32 nToken, const OString& rValue );
+    void add( sal_Int32 nToken, std::u16string_view sValue ); // Converts to UTF-8
     void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue );
+    void addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, std::u16string_view sValue );
     // note: rQName is *namespace-prefixed*
     void addUnknown( const OUString& rNamespaceURL, const OString& rQName, const OString& value );
     void addUnknown( const OString& rName, const OString& value );

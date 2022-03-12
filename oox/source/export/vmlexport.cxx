@@ -140,14 +140,14 @@ sal_uInt32 VMLExport::EnterGroup( const OUString& rShapeName, const tools::Recta
     pAttrList->add( XML_id, ShapeIdString( nShapeId ) );
 
     if ( rShapeName.getLength() )
-        pAttrList->add( XML_alt, OUStringToOString( rShapeName, RTL_TEXTENCODING_UTF8 ) );
+        pAttrList->add( XML_alt, rShapeName );
 
     bool rbAbsolutePos = true;
     //editAs
     OUString rEditAs = EscherEx::GetEditAs();
     if (!rEditAs.isEmpty())
     {
-        pAttrList->add(XML_editas, OUStringToOString( rEditAs, RTL_TEXTENCODING_UTF8 ));
+        pAttrList->add(XML_editas, rEditAs);
         rbAbsolutePos = false;
     }
 
@@ -197,7 +197,7 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt
     else
     {
         // A watermark object - store the optional shape ID
-        m_pShapeAttrList->add( XML_id, OUStringToOString(m_pSdrObject->GetName(), RTL_TEXTENCODING_UTF8) );
+        m_pShapeAttrList->add( XML_id, m_pSdrObject->GetName() );
         // also ('o:spid')
         m_pShapeAttrList->addNS( XML_o, XML_spid, m_sShapeId );
     }
@@ -675,41 +675,32 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         if (!pSdrGrafObj->getSignatureLineId().isEmpty())
                         {
                             pAttrListSignatureLine->add(
-                                XML_id, OUStringToOString(pSdrGrafObj->getSignatureLineId(),
-                                                          RTL_TEXTENCODING_UTF8));
+                                XML_id, pSdrGrafObj->getSignatureLineId());
                         }
                         if (!pSdrGrafObj->getSignatureLineSuggestedSignerName().isEmpty())
                         {
                             pAttrListSignatureLine->add(
                                 FSNS(XML_o, XML_suggestedsigner),
-                                OUStringToOString(
-                                    pSdrGrafObj->getSignatureLineSuggestedSignerName(),
-                                    RTL_TEXTENCODING_UTF8));
+                                pSdrGrafObj->getSignatureLineSuggestedSignerName());
                         }
                         if (!pSdrGrafObj->getSignatureLineSuggestedSignerTitle().isEmpty())
                         {
                             pAttrListSignatureLine->add(
                                 FSNS(XML_o, XML_suggestedsigner2),
-                                OUStringToOString(
-                                    pSdrGrafObj->getSignatureLineSuggestedSignerTitle(),
-                                    RTL_TEXTENCODING_UTF8));
+                                pSdrGrafObj->getSignatureLineSuggestedSignerTitle());
                         }
                         if (!pSdrGrafObj->getSignatureLineSuggestedSignerEmail().isEmpty())
                         {
                             pAttrListSignatureLine->add(
                                 FSNS(XML_o, XML_suggestedsigneremail),
-                                OUStringToOString(
-                                    pSdrGrafObj->getSignatureLineSuggestedSignerEmail(),
-                                    RTL_TEXTENCODING_UTF8));
+                                pSdrGrafObj->getSignatureLineSuggestedSignerEmail());
                         }
                         if (!pSdrGrafObj->getSignatureLineSigningInstructions().isEmpty())
                         {
                             pAttrListSignatureLine->add(XML_signinginstructionsset, "t");
                             pAttrListSignatureLine->add(
                                 FSNS(XML_o, XML_signinginstructions),
-                                OUStringToOString(
-                                    pSdrGrafObj->getSignatureLineSigningInstructions(),
-                                    RTL_TEXTENCODING_UTF8));
+                                pSdrGrafObj->getSignatureLineSigningInstructions());
                         }
                         pAttrListSignatureLine->add(
                             XML_showsigndate,
@@ -735,8 +726,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false, &aFileName);
                             m_pTextExport->CacheRelId(nChecksum, aImageId, aFileName);
                         }
-                        pAttrList->add(FSNS(XML_r, XML_id),
-                                       OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        pAttrList->add(FSNS(XML_r, XML_id), aImageId);
                         imageData = true;
                     }
                     else if (rProps.GetOpt(ESCHER_Prop_fillBlip, aStruct) && m_pTextExport)
@@ -758,8 +748,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false, &aFileName);
                             m_pTextExport->CacheRelId(nChecksum, aImageId, aFileName);
                         }
-                        pAttrList->add(FSNS(XML_r, XML_id),
-                                       OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8));
+                        pAttrList->add(FSNS(XML_r, XML_id), aImageId);
                         imageData = true;
                     }
 
@@ -970,7 +959,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         rtl::Reference<sax_fastparser::FastAttributeList> pAttrList = FastSerializerHelper::createAttrList();
                         pAttrList->add(XML_on, "t");
                         pAttrList->add(XML_fitshape, "t");
-                        pAttrList->add(XML_string, OUStringToOString(aTextPathString, RTL_TEXTENCODING_UTF8));
+                        pAttrList->add(XML_string, aTextPathString);
                         EscherPropSortStruct aFont;
                         OUString aStyle;
                         if (rProps.GetOpt(ESCHER_Prop_gtextFont, aFont))
@@ -991,7 +980,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                             pAttrList->add(XML_trim, "t");
 
                         if (!aStyle.isEmpty())
-                            pAttrList->add(XML_style, OUStringToOString(aStyle, RTL_TEXTENCODING_UTF8));
+                            pAttrList->add(XML_style, aStyle);
                         m_pSerializer->singleElementNS(XML_v, XML_textpath, pAttrList);
                     }
 
@@ -1026,7 +1015,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                     OUString idStr = SvxMSDffManager::MSDFFReadZString(aStream, opt.nProp.size(), true);
                     aStream.Seek(0);
                     if (!IsWaterMarkShape(m_pSdrObject->GetName()) && !m_bSkipwzName)
-                         m_pShapeAttrList->add(XML_ID, OUStringToOString(idStr, RTL_TEXTENCODING_UTF8));
+                         m_pShapeAttrList->add(XML_ID, idStr);
 
                     bAlreadyWritten[ESCHER_Prop_wzName] = true;
                 }
@@ -1388,7 +1377,7 @@ sal_Int32 VMLExport::StartShape()
 
     if (!m_pSdrObject->getHyperlink().isEmpty())
         m_pShapeAttrList->add(
-            XML_href, OUStringToOString(m_pSdrObject->getHyperlink(), RTL_TEXTENCODING_UTF8));
+            XML_href, m_pSdrObject->getHyperlink());
 
     m_pShapeAttrList->addNS(XML_o, XML_allowincell, m_IsFollowingTextFlow ? "t" : "f");
 
@@ -1397,7 +1386,7 @@ sal_Int32 VMLExport::StartShape()
 
     OUString sAnchorId = lcl_getAnchorIdFromGrabBag(m_pSdrObject);
     if (!sAnchorId.isEmpty())
-        m_pShapeAttrList->addNS(XML_wp14, XML_anchorId, OUStringToOString(sAnchorId, RTL_TEXTENCODING_UTF8));
+        m_pShapeAttrList->addNS(XML_wp14, XML_anchorId, sAnchorId);
 
     if ( nShapeElement >= 0 && !m_pShapeAttrList->hasAttribute( XML_type ) && bReferToShapeType )
     {

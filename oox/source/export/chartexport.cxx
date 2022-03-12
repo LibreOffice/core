@@ -3364,9 +3364,8 @@ void ChartExport::_exportAxis(
         aNumberFormatString = getNumberFormatCode(nKey);
     }
 
-    OString sNumberFormatString = OUStringToOString(aNumberFormatString, RTL_TEXTENCODING_UTF8);
     pFS->singleElement(FSNS(XML_c, XML_numFmt),
-            XML_formatCode, sNumberFormatString.getStr(),
+            XML_formatCode, aNumberFormatString,
             XML_sourceLinked, bLinkedNumFmt ? "1" : "0");
 
     // majorTickMark
@@ -3895,10 +3894,9 @@ void ChartExport::exportDataLabels(
         mAny >>= nKey;
 
         OUString aNumberFormatString = getNumberFormatCode(nKey);
-        OString sNumberFormatString = OUStringToOString(aNumberFormatString, RTL_TEXTENCODING_UTF8);
 
         pFS->singleElement(FSNS(XML_c, XML_numFmt),
-            XML_formatCode, sNumberFormatString,
+            XML_formatCode, aNumberFormatString,
             XML_sourceLinked, ToPsz10(bLinkedNumFmt));
     }
 
@@ -3992,9 +3990,8 @@ void ChartExport::exportDataLabels(
             mAny >>= nKey;
 
             OUString aNumberFormatString = getNumberFormatCode(nKey);
-            OString sNumberFormatString = OUStringToOString(aNumberFormatString, RTL_TEXTENCODING_UTF8);
 
-            pFS->singleElement(FSNS(XML_c, XML_numFmt), XML_formatCode, sNumberFormatString.getStr(),
+            pFS->singleElement(FSNS(XML_c, XML_numFmt), XML_formatCode, aNumberFormatString,
                                XML_sourceLinked, ToPsz10(bLinkedNumFmt));
         }
 

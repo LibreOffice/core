@@ -4773,7 +4773,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
                 {
                     OUString sVal;
                     rOuterShdwProp.Value >>= sVal;
-                    aOuterShdwAttrList->add( XML_algn, OUStringToOString( sVal, RTL_TEXTENCODING_UTF8 ) );
+                    aOuterShdwAttrList->add( XML_algn, sVal );
                 }
                 else if( rOuterShdwProp.Name == "blurRad" )
                 {
@@ -5146,7 +5146,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
         {
             OUString sVal;
             rEffectProp.Value >>= sVal;
-            aCameraAttrList->add(XML_prst, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
+            aCameraAttrList->add(XML_prst, sVal);
         }
         else if( rEffectProp.Name == "fov" )
         {
@@ -5191,7 +5191,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
                 nToken = XML_rig;
             else if( rLightRigProp.Name == "dir" )
                 nToken = XML_dir;
-            aLightRigAttrList->add(nToken, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
+            aLightRigAttrList->add(nToken, sVal);
         }
         else if( rLightRigProp.Name == "rotLat" ||
                 rLightRigProp.Name == "rotLon" ||
@@ -5270,7 +5270,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
         {
             OUString sVal;
             rShape3DProp.Value >>= sVal;
-            aShape3DAttrList->add(XML_prstMaterial, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
+            aShape3DAttrList->add(XML_prstMaterial, sVal);
         }
         else if( rShape3DProp.Name == "extrusionClr" )
         {
@@ -5314,7 +5314,7 @@ void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool 
                 {
                     OUString sVal;
                     rBevelProp.Value >>= sVal;
-                    aBevelAttrList->add(XML_prst, OUStringToOString(sVal, RTL_TEXTENCODING_UTF8));
+                    aBevelAttrList->add(XML_prst, sVal);
                 }
             }
 
@@ -5519,8 +5519,8 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     rtl::Reference<sax_fastparser::FastAttributeList> pDocPrAttrList
         = sax_fastparser::FastSerializerHelper::createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nDiagramId).getStr());
-    OUString sName = "Diagram" + OUString::number(nDiagramId);
-    pDocPrAttrList->add(XML_name, OUStringToOString(sName, RTL_TEXTENCODING_UTF8));
+    OString sName = "Diagram" + OString::number(nDiagramId);
+    pDocPrAttrList->add(XML_name, sName);
 
     if (GetDocumentType() == DOCUMENT_DOCX)
     {
@@ -5575,34 +5575,27 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
 
     // add data relation
     OUString dataFileName = "diagrams/data" + OUString::number(nDiagramId) + ".xml";
-    OString dataRelId = OUStringToOString(
+    OUString dataRelId =
         mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::DIAGRAMDATA),
-                          OUStringConcatenation(sRelationCompPrefix + dataFileName)),
-        RTL_TEXTENCODING_UTF8);
+                          OUStringConcatenation(sRelationCompPrefix + dataFileName));
 
     // add layout relation
     OUString layoutFileName = "diagrams/layout" + OUString::number(nDiagramId) + ".xml";
-    OString layoutRelId
-        = OUStringToOString(mpFB->addRelation(mpFS->getOutputStream(),
+    OUString layoutRelId = mpFB->addRelation(mpFS->getOutputStream(),
                                               oox::getRelationship(Relationship::DIAGRAMLAYOUT),
-                                              OUStringConcatenation(sRelationCompPrefix + layoutFileName)),
-                            RTL_TEXTENCODING_UTF8);
+                                              OUStringConcatenation(sRelationCompPrefix + layoutFileName));
 
     // add style relation
     OUString styleFileName = "diagrams/quickStyle" + OUString::number(nDiagramId) + ".xml";
-    OString styleRelId
-        = OUStringToOString(mpFB->addRelation(mpFS->getOutputStream(),
+    OUString styleRelId = mpFB->addRelation(mpFS->getOutputStream(),
                                               oox::getRelationship(Relationship::DIAGRAMQUICKSTYLE),
-                                              OUStringConcatenation(sRelationCompPrefix + styleFileName)),
-                            RTL_TEXTENCODING_UTF8);
+                                              OUStringConcatenation(sRelationCompPrefix + styleFileName));
 
     // add color relation
     OUString colorFileName = "diagrams/colors" + OUString::number(nDiagramId) + ".xml";
-    OString colorRelId
-        = OUStringToOString(mpFB->addRelation(mpFS->getOutputStream(),
+    OUString colorRelId = mpFB->addRelation(mpFS->getOutputStream(),
                                               oox::getRelationship(Relationship::DIAGRAMCOLORS),
-                                              OUStringConcatenation(sRelationCompPrefix + colorFileName)),
-                            RTL_TEXTENCODING_UTF8);
+                                              OUStringConcatenation(sRelationCompPrefix + colorFileName));
 
     OUString drawingFileName;
     if (drawingDom.is())

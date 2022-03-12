@@ -861,26 +861,24 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
     {
         if ( !rProp.Name.isEmpty() )
         {
-            // tdf#127864 - export custom document properties using utf8 text encoding
-            OString aName = OUStringToOString(rProp.Name, RTL_TEXTENCODING_UTF8);
             // Skip storing these values in Custom Properties as it will be stored in Core/Extended Properties
-            if (( aName == "OOXMLCorePropertyCategory" ) || // stored in cp:category
-                ( aName == "OOXMLCorePropertyContentStatus" ) || // stored in cp:contentStatus
-                ( aName == "OOXMLCorePropertyContentType" ) || // stored in cp:contentType
-                ( aName == "OOXMLCorePropertyIdentifier" ) || // stored in dc:identifier
-                ( aName == "OOXMLCorePropertyVersion" ) || // stored in cp:version
-                ( aName == "HyperlinkBase" ) || // stored in Extended File Properties
-                ( aName == "AppVersion" ) || // stored in Extended File Properties
-                ( aName == "DocSecurity" ) || // stored in Extended File Properties
-                ( aName == "Manager" ) || // stored in Extended File Properties
-                ( aName == "Company" )) // stored in Extended File Properties
+            if (( rProp.Name == "OOXMLCorePropertyCategory" ) || // stored in cp:category
+                ( rProp.Name == "OOXMLCorePropertyContentStatus" ) || // stored in cp:contentStatus
+                ( rProp.Name == "OOXMLCorePropertyContentType" ) || // stored in cp:contentType
+                ( rProp.Name == "OOXMLCorePropertyIdentifier" ) || // stored in dc:identifier
+                ( rProp.Name == "OOXMLCorePropertyVersion" ) || // stored in cp:version
+                ( rProp.Name == "HyperlinkBase" ) || // stored in Extended File Properties
+                ( rProp.Name == "AppVersion" ) || // stored in Extended File Properties
+                ( rProp.Name == "DocSecurity" ) || // stored in Extended File Properties
+                ( rProp.Name == "Manager" ) || // stored in Extended File Properties
+                ( rProp.Name == "Company" )) // stored in Extended File Properties
                 continue;
 
             // pid starts from 2 not from 1 as MS supports pid from 2
             pAppProps->startElement( XML_property ,
                 XML_fmtid,  "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
                 XML_pid,    OString::number(nIndex + 2),
-                XML_name,   aName);
+                XML_name,   rProp.Name);
 
             switch ( rProp.Value.getValueTypeClass() )
             {

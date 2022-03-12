@@ -67,11 +67,10 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
     Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
     if( o3tl::starts_with(sType, u"datetime"))
     {
-        OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
-        OString p( s.pData->buffer + 8 );
+        auto p = sType.substr(8);
         try
         {
-            if(p.startsWith("'"))
+            if (o3tl::starts_with(p, u"'"))
             {
                 xIface = xFactory->createInstance( "com.sun.star.text.TextField.Custom" );
                 aFields.emplace_back( xIface, UNO_QUERY );
@@ -122,9 +121,7 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
     }
     else if ( o3tl::starts_with(sType, u"file") )
     {
-        OString s = OUStringToOString( sType, RTL_TEXTENCODING_UTF8);
-        OString p( s.pData->buffer + 4 );
-        int idx = p.toInt32();
+        int idx = rtl_ustr_toInt32(sType.data() + 4, 10);
         xIface = xFactory->createInstance( "com.sun.star.text.TextField.FileName" );
         aFields.emplace_back( xIface, UNO_QUERY );
         Reference< XPropertySet > xProps( xIface, UNO_QUERY_THROW );
@@ -213,12 +210,12 @@ sal_Int32 TextField::insertAt(
 
 SvxDateFormat TextField::getLODateFormat(std::u16string_view rDateTimeType)
 {
-    OString aDateTimeNum = OUStringToOString(rDateTimeType.substr(8), RTL_TEXTENCODING_UTF8);
+    auto aDateTimeNum = rDateTimeType.substr(8);
 
-    if( aDateTimeNum.isEmpty() ) // "datetime"
+    if( aDateTimeNum.empty() ) // "datetime"
         return SvxDateFormat::StdSmall;
 
-    int nDateTimeNum = aDateTimeNum.toInt32();
+    int nDateTimeNum = rtl_ustr_toInt32(aDateTimeNum.data(), 10);
 
     switch( nDateTimeNum )
     {
@@ -246,8 +243,8 @@ SvxDateFormat TextField::getLODateFormat(std::u16string_view rDateTimeType)
 
 SvxTimeFormat TextField::getLOTimeFormat(std::u16string_view rDateTimeType)
 {
-    OString aDateTimeNum = OUStringToOString(rDateTimeType.substr(8), RTL_TEXTENCODING_UTF8);
-    int nDateTimeNum = aDateTimeNum.toInt32();
+    auto aDateTimeNum = rDateTimeType.substr(8);
+    int nDateTimeNum = rtl_ustr_toInt32(aDateTimeNum.data(), 10);
 
     switch( nDateTimeNum )
     {
