@@ -201,6 +201,7 @@ bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
             break;
     }
 
+    SalData::deInitNWF();
     return (hTheme != nullptr);
 }
 
@@ -1003,6 +1004,18 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     return false;
 }
 
+static bool UseDarkMode()
+{
+    HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+    typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
+    auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132)));
+    bool bRet = ShouldAppsUseDarkMode();
+
+    FreeLibrary(hUxthemeLib);
+
+    return bRet;
+}
+
 bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         ControlPart nPart,
                                         const tools::Rectangle& rControlRegion,
@@ -1011,6 +1024,11 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         const OUString& aCaption,
                                         const Color& /*rBackgroundColor*/ )
 {
+    if (UseDarkMode())
+        SetWindowTheme(mhWnd, L"Explorer", nullptr);
+    else
+        SetWindowTheme(mhWnd, L"potato", nullptr);
+
     bool bOk = false;
     HTHEME hTheme = nullptr;
 
@@ -1141,7 +1159,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         // set default text alignment
         int ta = SetTextAlign(getHDC(), TA_LEFT|TA_TOP|TA_NOUPDATECP);
 
-        bOk = ImplDrawNativeControl(getHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr);
+        bOk = true;
+//        bOk = ImplDrawNativeControl(getHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr);
 
         // restore alignment
         SetTextAlign(getHDC(), ta);
@@ -1161,9 +1180,11 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             ImplDrawNativeControl(aWhiteDC->getCompatibleHDC(), hTheme, rc, nType, nPart, nState, aValue, aCaptionStr))
         {
             bOk = pImpl->RenderAndCacheNativeControl(*aWhiteDC, *aBlackDC, cacheRect.Left(), cacheRect.Top(), aControlCacheKey);
+            // bOk = true;
         }
     }
 
+    SalData::deInitNWF();
     return bOk;
 }
 
@@ -1379,6 +1400,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
     }
 
     ReleaseDC( mhWnd, hDC );
+    SalData::deInitNWF();
     return bRet;
 }
 
