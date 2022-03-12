@@ -852,7 +852,7 @@ void E3dView::ConvertMarkedObjTo3D(bool bExtrude, const basegfx::B2DPoint& rPnt1
     {
         double fW = static_cast<double>(aRect.GetWidth());
         double fH = static_cast<double>(aRect.GetHeight());
-        fDepth = sqrt(fW*fW + fH*fH) / 6.0;
+        fDepth = std::hypot(fW, fH) / 6.0;
     }
     if(!bExtrude)
     {

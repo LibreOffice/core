@@ -430,7 +430,7 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
         {
             dx /= fDiffMax;
             dy /= fDiffMax;
-            fDenominator += sqrt(sqrt(dx * dx + dy * dy)) * sqrt(fDiffMax);
+            fDenominator += sqrt(std::hypot(dx, dy)) * sqrt(fDiffMax);
         }
     }
     if (fDenominator == 0.0)
@@ -450,7 +450,7 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
                 // same as above, so should not be zero
                 dx /= fDiffMax;
                 dy /= fDiffMax;
-                fNumerator += sqrt(sqrt(dx * dx + dy * dy)) * sqrt(fDiffMax);
+                fNumerator += sqrt(std::hypot(dx, dy)) * sqrt(fDiffMax);
             }
             t[j] = fNumerator / fDenominator;
 

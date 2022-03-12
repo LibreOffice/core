@@ -512,8 +512,7 @@ void PieChart::createTextLabelShape(
             {
                 //when the line is very short compared to the page size don't create one
                 ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
-                double fPageDiagonaleLength = sqrt(double(nPageWidth) * double(nPageWidth)
-                                                   + double(nPageHeight) * double(nPageHeight));
+                double fPageDiagonaleLength = std::hypot(double(nPageWidth), double(nPageHeight));
                 if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
                 {
                     drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };

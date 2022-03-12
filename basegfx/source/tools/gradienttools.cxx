@@ -136,7 +136,7 @@ namespace basegfx
         // add object expansion
         if(bCircular)
         {
-            const double fOriginalDiag(sqrt((fTargetSizeX * fTargetSizeX) + (fTargetSizeY * fTargetSizeY)));
+            const double fOriginalDiag(std::hypot(fTargetSizeX, fTargetSizeY));
 
             fTargetOffsetX -= (fOriginalDiag - fTargetSizeX) / 2.0;
             fTargetOffsetY -= (fOriginalDiag - fTargetSizeY) / 2.0;
@@ -418,7 +418,7 @@ namespace basegfx
                 return 0.0;
             }
 
-            const double t(1.0 - sqrt(aCoor.getX() * aCoor.getX() + aCoor.getY() * aCoor.getY()));
+            const double t(1.0 - std::hypot(aCoor.getX(), aCoor.getY()));
             const sal_uInt32 nSteps(rGradInfo.getSteps());
 
             if(nSteps && t < 1.0)

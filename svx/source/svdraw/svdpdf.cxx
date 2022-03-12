@@ -72,10 +72,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-namespace
-{
-double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
-}
 
 using namespace com::sun::star;
 
@@ -724,8 +720,8 @@ void ImpSdrPdfImport::ImportText(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     OUString sText = pPageObject->getText(pTextPage);
 
     const double dFontSize = pPageObject->getFontSize();
-    double dFontSizeH = fabs(sqrt2(aMatrix.a(), aMatrix.c()) * dFontSize);
-    double dFontSizeV = fabs(sqrt2(aMatrix.b(), aMatrix.d()) * dFontSize);
+    double dFontSizeH = fabs(std::hypot(aMatrix.a(), aMatrix.c()) * dFontSize);
+    double dFontSizeV = fabs(std::hypot(aMatrix.b(), aMatrix.d()) * dFontSize);
 
     dFontSizeH = convertPointToMm100(dFontSizeH);
     dFontSizeV = convertPointToMm100(dFontSizeV);
@@ -1002,7 +998,7 @@ void ImpSdrPdfImport::ImportPath(std::unique_ptr<vcl::pdf::PDFiumPageObject> con
     aPolyPoly.transform(aTransform);
 
     float fWidth = pPageObject->getStrokeWidth();
-    const double dWidth = 0.5 * fabs(sqrt2(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
+    const double dWidth = 0.5 * fabs(std::hypot(aPathMatrix.a(), aPathMatrix.c()) * fWidth);
     mnLineWidth = convertPointToMm100(dWidth);
 
     vcl::pdf::PDFFillMode nFillMode = vcl::pdf::PDFFillMode::Alternate;
