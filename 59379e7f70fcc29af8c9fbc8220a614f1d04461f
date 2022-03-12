@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ac1485f_af42fe75",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003554
+      },
+      "writtenOn": "2022-03-12T20:22:56Z",
+      "side": 1,
+      "message": "Hello, thanks for the pointers regarding this issue. I tried to implement your suggestions, so any feedback will be greatly appreciated. I\u0027m a first-time contributor, so please forgive any mistakes I might\u0027ve made. :) ",
+      "revId": "59379e7f70fcc29af8c9fbc8220a614f1d04461f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
