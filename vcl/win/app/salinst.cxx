@@ -53,6 +53,7 @@
 #include <win/winlayout.hxx>
 
 #include <config_features.h>
+#include <officecfg/Office/Common.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #if HAVE_FEATURE_SKIA
 #include <config_skia.h>
@@ -318,6 +319,36 @@ SalData::~SalData()
         Gdiplus::GdiplusShutdown(gdiplusToken);
 }
 
+enum PreferredAppMode
+{
+    Default,
+    AllowDark,
+    ForceDark,
+    ForceLight,
+    Max
+};
+
+bool OSSupportsDarkMode()
+{
+    bool bRet = false;
+    if (HMODULE h_ntdll = GetModuleHandleW(L"ntdll.dll"))
+    {
+        typedef LONG(WINAPI* RtlGetVersion_t)(PRTL_OSVERSIONINFOW);
+        if (auto RtlGetVersion
+            = reinterpret_cast<RtlGetVersion_t>(GetProcAddress(h_ntdll, "RtlGetVersion")))
+        {
+            RTL_OSVERSIONINFOW vi2{};
+            vi2.dwOSVersionInfoSize = sizeof(vi2);
+            if (RtlGetVersion(&vi2) == 0)
+            {
+                bRet = vi2.dwMajorVersion > 10 ||
+                       (vi2.dwMajorVersion == 10 && vi2.dwMinorVersion > 0);
+            }
+        }
+    }
+    return bRet;
+}
+
 extern "C" {
 VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 {
@@ -330,6 +361,16 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
     pSalData->mnCmdShow = aSI.wShowWindow;
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
+
+    static bool bSetAllowDarkMode = OSSupportsDarkMode() && officecfg::Office::Common::Misc::ExperimentalMode::get();
+    if (bSetAllowDarkMode)
+    {
+        typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
+        HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+        auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
+        SetPreferredAppMode(AllowDark);
+        FreeLibrary(hUxthemeLib);
+    }
 
     // register frame class
     WNDCLASSEXW aWndClassEx;
