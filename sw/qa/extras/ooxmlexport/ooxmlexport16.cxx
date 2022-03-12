@@ -19,6 +19,7 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <editeng/escapementitem.hxx>
 #include <textboxhelper.hxx>
@@ -251,6 +252,24 @@ DECLARE_OOXMLEXPORT_TEST(testCommentDoneModel, "CommentDone.docx")
         // After the roundtrip, it keeps the "resolved" state set above
         CPPUNIT_ASSERT_EQUAL(true, xComment->getPropertyValue("Resolved").get<bool>());
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf147861_customField, "tdf147861_customField.docx")
+{
+    // These should each be specific values, not a shared DocProperty
+    getParagraph(1, "CustomEditedTitle"); // edited
+    // A couple of nulls at the end of the string thwarted all attemps at an "equals" comparison.
+    CPPUNIT_ASSERT(getParagraph(2)->getString().startsWith(" INSERT Custom Title here"));
+    getParagraph(3, "My Title"); // edited
+
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("CustomEditedTitle"), xField->getPresentation(false));
+    // The " (fixed)" part is unnecessary, but it must be consistent across a round-trip
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xField->getPresentation(true));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
