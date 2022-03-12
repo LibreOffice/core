@@ -160,7 +160,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo49940, "fdo49940.docx")
 DECLARE_OOXMLEXPORT_TEST(testFdo74745, "fdo74745.docx")
 {
     uno::Reference<text::XTextRange > paragraph = getParagraph(3);
-    CPPUNIT_ASSERT_EQUAL(OUString("09/02/14"), paragraph->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("09/02/2014"), paragraph->getString());
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo81486, "fdo81486.docx")
