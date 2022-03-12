@@ -70,7 +70,16 @@ class Transliteration_casemapping final : public Transliteration_body
 {
 public:
     Transliteration_casemapping();
-    void setMappingType(const MappingType rMappingType, const css::lang::Locale& rLocale );
+    void setMappingType( const MappingType rMappingType )
+    {
+        if (nMappingType != rMappingType)
+            nMappingType = rMappingType;
+    }
+    void setLocale( const css::lang::Locale& rLocale )
+    {
+        if (aLocale != rLocale)
+            aLocale = rLocale;
+    }
 };
 
 class Transliteration_togglecase final : public Transliteration_body
