@@ -191,14 +191,6 @@ Transliteration_casemapping::Transliteration_casemapping()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_casemapping";
 }
 
-void
-Transliteration_casemapping::setMappingType( const MappingType rMappingType, const Locale& rLocale )
-{
-    nMappingType = rMappingType;
-    if (aLocale != rLocale)
-        aLocale = rLocale;
-}
-
 Transliteration_u2l::Transliteration_u2l()
 {
     nMappingType = MappingType::UpperToLower;

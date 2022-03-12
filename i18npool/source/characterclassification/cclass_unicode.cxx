@@ -39,7 +39,9 @@ namespace i18npool {
 //  ----------------------------------------------------;
 
 cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) :
-        trans( new Transliteration_casemapping() ),
+        transToUpper( new Transliteration_casemapping() ),
+        transToLower( new Transliteration_casemapping() ),
+        transToTitle( new Transliteration_casemapping() ),
         m_xContext( rxContext ),
         nStartTypes( 0 ),
         nContTypes( 0 ),
@@ -48,6 +50,9 @@ cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxCo
         cDecimalSep( '.' ),
         cDecimalSepAlt( 0 )
 {
+    transToUpper->setMappingType(MappingType::ToUpper);
+    transToLower->setMappingType(MappingType::ToLower);
+    transToTitle->setMappingType(MappingType::ToTitle);
 }
 
 cclass_Unicode::~cclass_Unicode() {
@@ -63,8 +68,8 @@ cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     if (nCount + nPos > len)
         nCount = len - nPos;
 
-    trans->setMappingType(MappingType::ToUpper, rLocale);
-    return trans->transliterateString2String(Text, nPos, nCount);
+    transToUpper->setLocale(rLocale);
+    return transToUpper->transliterateString2String(Text, nPos, nCount);
 }
 
 OUString SAL_CALL
@@ -75,8 +80,8 @@ cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
     if (nCount + nPos > len)
         nCount = len - nPos;
 
-    trans->setMappingType(MappingType::ToLower, rLocale);
-    return trans->transliterateString2String(Text, nPos, nCount);
+    transToLower->setLocale(rLocale);
+    return transToLower->transliterateString2String(Text, nPos, nCount);
 }
 
 OUString SAL_CALL
@@ -89,7 +94,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
         if (nCount + nPos > len)
             nCount = len - nPos;
 
-        trans->setMappingType(MappingType::ToTitle, rLocale);
+        transToTitle->setLocale(rLocale);
         rtl_uString* pStr = rtl_uString_alloc(nCount);
         sal_Unicode* out = pStr->buffer;
         rtl::Reference< BreakIteratorImpl > xBrk(new BreakIteratorImpl(m_xContext));
@@ -100,7 +105,7 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
                 bdy = xBrk->nextWord(Text, bdy.endPos, rLocale,
                             WordType::ANYWORD_IGNOREWHITESPACES);
             *out = (i == bdy.startPos) ?
-                trans->transliterateChar2Char(Text[i]) : Text[i];
+                transToTitle->transliterateChar2Char(Text[i]) : Text[i];
         }
         *out = 0;
         return OUString( pStr, SAL_NO_ACQUIRE );
