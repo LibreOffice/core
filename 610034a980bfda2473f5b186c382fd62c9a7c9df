@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "458fd74d_2d28d051",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-03-12T00:21:34Z",
+      "side": 1,
+      "message": "Please don\u0027t push to release branches without\n1. a +1 from Jenkins\n2. a second developer code-review",
+      "revId": "610034a980bfda2473f5b186c382fd62c9a7c9df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
