@@ -87,6 +87,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48054e13_8302b02c",
+        "filename": "chart2/source/controller/main/DragMethod_RotateDiagram.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-12T09:47:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd52bcc0_cc36f7cb",
+      "revId": "5369c592c3914a3ccf9104ef66e9e4eb0e659edc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d8b8a53_bfd3d7e0",
@@ -100,6 +118,24 @@
       "writtenOn": "2022-03-09T11:05:12Z",
       "side": 1,
       "message": "You don\u0027t need those extra parenthesis around parameters. Please remove them.",
+      "revId": "5369c592c3914a3ccf9104ef66e9e4eb0e659edc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5002e22_db1d5c7e",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3955,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-12T09:47:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d8b8a53_bfd3d7e0",
       "revId": "5369c592c3914a3ccf9104ef66e9e4eb0e659edc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

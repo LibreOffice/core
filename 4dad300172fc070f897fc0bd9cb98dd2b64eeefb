@@ -33,6 +33,24 @@
       "message": "Tushar: you accidentally emailed everyone in Cc. Copying your email here:\n\n\u003e I just reverted the \"DragMethod_RotateDiagram.cxx\" as told by Hossien sir in the comments.This file was added through commit from Mon 7 March.\n\u003e And next was I downloaded the patch and it created a new branch and I runned \"git rebase master\".\n\u003e Done the changes,added it, then runned \"git commit --amend\" and then pushed it to the gerrit.\n\nWhat you need to do is \u0027./g pull -r\u0027 while in your branch. So no need to create any new branch etc.",
       "revId": "4dad300172fc070f897fc0bd9cb98dd2b64eeefb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20e9ab83_57fe7f48",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-12T09:47:49Z",
+      "side": 1,
+      "message": "Oh! sorry,I will take care of it in future. So should I submit a new patch or is fine for this time?",
+      "parentUuid": "4d4c775e_12941854",
+      "revId": "4dad300172fc070f897fc0bd9cb98dd2b64eeefb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
