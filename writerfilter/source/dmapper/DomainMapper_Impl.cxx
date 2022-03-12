@@ -4754,6 +4754,11 @@ void FieldContext::SetTextField(uno::Reference<text::XTextField> const& xTextFie
     m_xTextField = xTextField;
 }
 
+void FieldContext::CacheVariableValue(const uno::Any& rAny)
+{
+        rAny >>= m_sVariableValue;
+}
+
 void FieldContext::AppendCommand(std::u16string_view rPart)
 {
     m_sCommand += rPart;
@@ -5382,6 +5387,8 @@ void DomainMapper_Impl::handleAuthor
         {
             if (!xPropertySetInfo->hasPropertyByName(rFirstParam))
                 sFieldServiceName = OUString::createFromAscii(aDocProperties[nMap].pServiceName);
+            else
+                pContext->CacheVariableValue(xUserDefinedProps->getPropertyValue(rFirstParam));
             break;
         }
     }
@@ -7004,7 +7011,22 @@ void DomainMapper_Impl::SetFieldResult(OUString const& rResult)
                             getPropertyName(bHasContent && sValue.isEmpty()? PROP_CONTENT : PROP_CURRENT_PRESENTATION),
                          uno::makeAny( rResult ));
 
-                    if (xServiceInfo->supportsService(
+                    // LO always automatically updates a DocInfo field from the File-Properties-Custom Prop
+                    // while MS Word requires the user to manually refresh the field (with F9).
+                    // In other words, Word lets the field to be out of sync with the controlling variable.
+                    // Marking as FIXEDFLD solves the automatic replacement problem, but of course prevents
+                    // Writer from making any changes, even on an F9 refresh.
+                    OUString sVariable = pContext->GetVariableValue();
+                    if (rResult.getLength() != sVariable.getLength())
+                    {
+                        sal_Int32 nLen = sVariable.indexOf(sal_Unicode(0));
+                        if (nLen >= 0)
+                            sVariable = sVariable.copy(0, nLen);
+                    }
+                    bool bCustomFixedField = rResult != sVariable &&
+                        xServiceInfo->supportsService("com.sun.star.text.TextField.DocInfo.Custom");
+
+                    if (bCustomFixedField || xServiceInfo->supportsService(
                             "com.sun.star.text.TextField.DocInfo.CreateDateTime"))
                     {
                         // Creation time is const, don't try to update it.
