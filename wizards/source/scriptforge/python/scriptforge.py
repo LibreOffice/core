@@ -1511,7 +1511,7 @@ class SFScriptForge:
         serviceimplementation = 'basic'
         servicename = 'ScriptForge.UI'
         servicesynonyms = ('ui', 'scriptforge.ui')
-        serviceproperties = dict(ActiveWindow = False)
+        serviceproperties = dict(ActiveWindow = False, Height = False, Width = False, X = False, Y = False)
 
         # Class constants
         MACROEXECALWAYS, MACROEXECNEVER, MACROEXECNORMAL = 2, 1, 0

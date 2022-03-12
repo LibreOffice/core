@@ -119,6 +119,14 @@ Dim oComp As Object				&apos;	com.sun.star.lang.XComponent
 End Function	&apos;	ScriptForge.SF_UI.ActiveWindow
 
 REM -----------------------------------------------------------------------------
+Property Get Height() As Long
+&apos;&apos;&apos;	Returns the height of the active window
+Dim oPosSize As Object			&apos;	com.sun.star.awt.Rectangle
+	Set oPosSize = SF_UI._PosSize()
+	If Not IsNull(oPosSize) Then Height = oPosSize.Height Else Height = -1
+End Property	&apos;	ScriptForge.SF_UI.Height
+
+REM -----------------------------------------------------------------------------
 Property Get MACROEXECALWAYS As Integer
 &apos;&apos;&apos;	Macros are always executed
 	MACROEXECALWAYS = cstMACROEXECALWAYS
@@ -147,6 +155,30 @@ Property Get ServiceName As String
 &apos;&apos;&apos;	Internal use
 	ServiceName = &quot;ScriptForge.UI&quot;
 End Property	&apos;	ScriptForge.SF_UI.ServiceName
+
+REM -----------------------------------------------------------------------------
+Property Get Width() As Long
+&apos;&apos;&apos;	Returns the width of the active window
+Dim oPosSize As Object			&apos;	com.sun.star.awt.Rectangle
+	Set oPosSize = SF_UI._PosSize()
+	If Not IsNull(oPosSize) Then Width = oPosSize.Width Else Width = -1
+End Property	&apos;	ScriptForge.SF_UI.Width
+
+REM -----------------------------------------------------------------------------
+Property Get X() As Long
+&apos;&apos;&apos;	Returns the X coordinate of the active window
+Dim oPosSize As Object			&apos;	com.sun.star.awt.Rectangle
+	Set oPosSize = SF_UI._PosSize()
+	If Not IsNull(oPosSize) Then X = oPosSize.X Else X = -1
+End Property	&apos;	ScriptForge.SF_UI.X
+
+REM -----------------------------------------------------------------------------
+Property Get Y() As Long
+&apos;&apos;&apos;	Returns the Y coordinate of the active window
+Dim oPosSize As Object			&apos;	com.sun.star.awt.Rectangle
+	Set oPosSize = SF_UI._PosSize()
+	If Not IsNull(oPosSize) Then Y = oPosSize.Y Else Y = -1
+End Property	&apos;	ScriptForge.SF_UI.Y
 
 REM ===================================================================== METHODS
 
@@ -495,6 +527,11 @@ Check:
 Try:
 	Select Case UCase(PropertyName)
 		Case &quot;ACTIVEWINDOW&quot;			:	GetProperty = ActiveWindow()
+		Case &quot;HEIGHT&quot;				:	GetProperty = SF_UI.Height
+		Case &quot;WIDTH&quot;				:	GetProperty = SF_UI.Width
+		Case &quot;X&quot;					:	GetProperty = SF_UI.X
+		Case &quot;Y&quot;					:	GetProperty = SF_UI.Y
+		
 		Case Else
 	End Select
 
@@ -827,6 +864,10 @@ Public Function Properties() As Variant
 
 	Properties = Array( _
 					&quot;ActiveWindow&quot; _
+					, &quot;Height&quot; _
+					, &quot;Width&quot; _
+					, &quot;X&quot; _
+					, &quot;Y&quot; _
 					)
 
 End Function	&apos;	ScriptForge.SF_UI.Properties
@@ -1271,6 +1312,28 @@ Finally:
 Catch:
 	GoTo Finally
 End Function		&apos;	ScriptForge.SF_UI._IdentifyWindow
+
+REM -----------------------------------------------------------------------------
+Public Function _PosSize() As Object
+&apos;&apos;&apos;	Returns the PosSize structure of the active window
+
+Dim vWindow As Window				&apos;	A single component
+Dim oContainer As Object			&apos;	com.sun.star.awt.XWindow
+Dim oPosSize As Object				&apos;	com.sun.star.awt.Rectangle
+
+	Set oPosSize = Nothing
+
+Try:
+	vWindow = SF_UI._IdentifyWindow(StarDesktop.CurrentComponent)
+	If Not IsNull(vWindow.Frame) Then
+		Set oContainer = vWindow.Frame.ContainerWindow
+		Set oPosSize = oContainer.getPosSize()
+	End If
+
+Finally:
+	Set _PosSize = oPosSize
+	Exit Function
+End Function	&apos;	ScriptForge.SF_UI._PosSize
 
 REM -----------------------------------------------------------------------------
 Private Function _Repr() As String
