@@ -5414,14 +5414,15 @@ void DomainMapper_Impl::handleAuthor
     //search for a field mapping
     OUString sFieldServiceName;
     size_t nMap = 0;
-    for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
+    if (!xPropertySetInfo->hasPropertyByName(rFirstParam))
     {
-        if ((rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName)) && (!xPropertySetInfo->hasPropertyByName(rFirstParam)))
+        for( ; nMap < SAL_N_ELEMENTS(aDocProperties); ++nMap )
         {
-            sFieldServiceName =
-            OUString::createFromAscii
-            (aDocProperties[nMap].pServiceName);
-            break;
+            if (rFirstParam.equalsAscii(aDocProperties[nMap].pDocPropertyName))
+            {
+                sFieldServiceName = OUString::createFromAscii(aDocProperties[nMap].pServiceName);
+                break;
+            }
         }
     }
     OUString sServiceName("com.sun.star.text.TextField.");
