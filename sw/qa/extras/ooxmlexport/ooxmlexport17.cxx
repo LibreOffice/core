@@ -162,6 +162,25 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146851_1, "tdf146851_1.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("1/"), getProperty<OUString>(xPara, "ListLabelString"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf146851_2, "tdf146851_2.docx")
+{
+    // Ensure numbering on second para
+    uno::Reference<beans::XPropertySet> xPara;
+    xPara.set(getParagraph(2, "."), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Schedule"), getProperty<OUString>(xPara, "ListLabelString"));
+
+    // Refresh fields and ensure cross-reference to numbered para is okay
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    uno::Reference<util::XRefreshable>(xFieldsAccess, uno::UNO_QUERY_THROW)->refresh();
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Schedule"), xTextField->getPresentation(false));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");

@@ -3073,8 +3073,7 @@ bool SwTextNode::HasNumber(SwRootFrame const*const pLayout) const
         const SwNumFormat& aFormat(pRule->Get(lcl_BoundListLevel(GetActualListLevel())));
 
         // #i40041#
-        bResult = aFormat.IsEnumeration() &&
-            SVX_NUM_NUMBER_NONE != aFormat.GetNumberingType();
+        bResult = aFormat.IsEnumeration();
     }
 
     return bResult;
