@@ -567,6 +567,15 @@ void SvxShowCharSet::DrawChars_Impl(vcl::RenderContext& rRenderContext, int n1, 
                 aPointTxTy.AdjustX(nXHDelta - 1 );
         }
 
+        // tdf#109214 - highlight the favorite characters
+        if (isFavChar(aCharStr, mxVirDev->GetFont().GetFamilyName()))
+        {
+            const Color aLineCol = rRenderContext.GetLineColor();
+            rRenderContext.SetLineColor(COL_LIGHTRED);
+            rRenderContext.DrawRect(tools::Rectangle(Point(x, y), Size(nX + 1, nY + 1)));
+            rRenderContext.SetLineColor(aLineCol);
+        }
+
         Color aTextCol = rRenderContext.GetTextColor();
         if (i != nSelectedIndex)
         {
