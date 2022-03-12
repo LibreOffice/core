@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d8d7cc0_fcb50d7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-12T10:19:32Z",
+      "side": 1,
+      "message": "Please do not review/verify/merge your own cherry-picked changes onto a release branch, they need \"review from a reviewer other than the author\".\nSee https://wiki.documentfoundation.org/Development/Branches#libreoffice-X-Y\nWaiving Jenkins failures is also rarely a good idea.\n",
+      "revId": "be4e18c3d17882945d77361df1544df738260300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
