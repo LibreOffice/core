@@ -1505,8 +1505,12 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     SwWrtShell &rSh = m_rView.GetWrtShell();
     SwUndoId nUndoId(SwUndoId::EMPTY);
 
-    tools::Long aOldHeight = m_rView.GetPostItMgr()->HasActiveSidebarWin()
-                      ? m_rView.GetPostItMgr()->GetActiveSidebarWin()->GetPostItTextHeight()
+    // tdf#147929 get these before "undo" which may delete this SwAnnotationShell
+    SwPostItMgr* pPostItMgr = m_rView.GetPostItMgr();
+    SfxBindings& rBindings = m_rView.GetViewFrame()->GetBindings();
+
+    tools::Long aOldHeight = pPostItMgr->HasActiveSidebarWin()
+                      ? pPostItMgr->GetActiveSidebarWin()->GetPostItTextHeight()
                       : 0;
 
     sal_uInt16 nId = rReq.GetSlot();
@@ -1579,10 +1583,10 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
         }
     }
 
-    m_rView.GetViewFrame()->GetBindings().InvalidateAll(false);
+    rBindings.InvalidateAll(false);
 
-    if (m_rView.GetPostItMgr()->HasActiveSidebarWin())
-        m_rView.GetPostItMgr()->GetActiveSidebarWin()->ResizeIfNecessary(aOldHeight,m_rView.GetPostItMgr()->GetActiveSidebarWin()->GetPostItTextHeight());
+    if (pPostItMgr->HasActiveSidebarWin())
+        pPostItMgr->GetActiveSidebarWin()->ResizeIfNecessary(aOldHeight, pPostItMgr->GetActiveSidebarWin()->GetPostItTextHeight());
 }
 
 void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
