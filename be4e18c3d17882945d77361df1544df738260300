@@ -16,6 +16,24 @@
       "message": "Please do not review/verify/merge your own cherry-picked changes onto a release branch, they need \"review from a reviewer other than the author\".\nSee https://wiki.documentfoundation.org/Development/Branches#libreoffice-X-Y\nWaiving Jenkins failures is also rarely a good idea.\n",
       "revId": "be4e18c3d17882945d77361df1544df738260300",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92629107_e25e38a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-03-12T11:13:58Z",
+      "side": 1,
+      "message": "OK thanks for the reminder",
+      "parentUuid": "7d8d7cc0_fcb50d7a",
+      "revId": "be4e18c3d17882945d77361df1544df738260300",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
