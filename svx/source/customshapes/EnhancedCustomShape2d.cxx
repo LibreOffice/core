@@ -1439,7 +1439,7 @@ static double lcl_getRadiusDistance(double fWR, double fHR, double fX, double fY
     else if (fY == 0.0)
         return std::min(fWR - fX, fHR);
 
-    double fD = std::min(fWR, fHR) - sqrt(fX * fX + fY * fY); // iteration start value
+    double fD = std::min(fWR, fHR) - std::hypot(fX, fY); // iteration start value
     sal_uInt8 nIter(0);
     bool bFound(false);
     do
@@ -1648,8 +1648,8 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                             double fHelpAngle = atan2(fHelpY, fHelpX);
                             double fOuterX = fWidth / 2.0 * cos(fHelpAngle);
                             double fOuterY = fHeight / 2.0 * sin(fHelpAngle);
-                            double fOuterRadius = sqrt(fOuterX * fOuterX + fOuterY * fOuterY);
-                            double fHandleRadius = sqrt(fDX * fDX + fDY * fDY);
+                            double fOuterRadius = std::hypot(fOuterX, fOuterY);
+                            double fHandleRadius = std::hypot(fDX, fDY);
                             fRadius = (fOuterRadius - fHandleRadius) / 2.0;
                             double fss(std::min(fWidth, fHeight));
                             if (fss != 0.0)
@@ -1676,7 +1676,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                         // no special meaning of radius or angle, suitable for "ooxml-arc",
                         // "ooxml-chord", "ooxml-pie" and circular arrows value adj4.
                         fAngle = lcl_getAngleInOOXMLUnit(fDY, fDX);
-                        fRadius = sqrt(fDX * fDX + fDY * fDY);
+                        fRadius = std::hypot(fDX, fDY);
                         double fss(std::min(fWidth, fHeight));
                         if (fss != 0.0)
                             fRadius = fRadius * 100000.0 / fss;
@@ -1702,7 +1702,7 @@ bool EnhancedCustomShape2d::SetHandleControllerPosition( const sal_uInt32 nIndex
                     // ToDo: Angle unit is degree, but range ]-180;180] or [0;360[? Assume ]-180;180].
                     if (fDX != 0.0 || fDY != 0.0)
                     {
-                        fRadius = sqrt(fDX * fDX + fDY * fDY);
+                        fRadius = std::hypot(fDX, fDY);
                         fAngle = basegfx::rad2deg(atan2(fDY, fDX));
                     }
                 }
