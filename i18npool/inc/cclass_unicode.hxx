@@ -94,7 +94,11 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
-    rtl::Reference<Transliteration_casemapping> trans;
+    // These are performance sensitive, so we don't want to use locking and switch their state, so just
+    // have multiple copies.
+    rtl::Reference<Transliteration_casemapping> transToUpper;
+    rtl::Reference<Transliteration_casemapping> transToLower;
+    rtl::Reference<Transliteration_casemapping> transToTitle;
 
 // --- parser specific (implemented in cclass_unicode_parser.cxx) ---
 
