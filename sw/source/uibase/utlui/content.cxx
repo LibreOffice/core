@@ -438,7 +438,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 if (nLevel >= m_nOutlineLevel || !m_pWrtShell->getIDocumentOutlineNodesAccess()->
                         isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
                     continue;
-                tools::Long nYPos = getYPos(
+                tools::Long nYPos = m_bAlphabeticSort ? 0 : getYPos(
                             *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
                 OUString aEntry(comphelper::string::stripStart(
                                     m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
@@ -486,8 +486,9 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     continue;
                 }
                 tools::Long nYPos = 0;
-                if (SwTable* pTable = SwTable::FindTable(&rTableFormat))
-                    nYPos = getYPos(*pTable->GetTableNode());
+                if (!m_bAlphabeticSort)
+                    if (SwTable* pTable = SwTable::FindTable(&rTableFormat))
+                        nYPos = getYPos(*pTable->GetTableNode());
                 auto pCnt = make_unique<SwContent>(this, rTableFormat.GetName(), nYPos);
                 if( !rTableFormat.GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
@@ -527,19 +528,18 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 const OUString sFrameName = pFrameFormat->GetName();
 
                 SwContent* pCnt;
+                tools::Long nYPos =
+                        m_bAlphabeticSort ? 0 : pFrameFormat->FindLayoutRect(false, &aNullPt).Top();
                 if(ContentTypeId::GRAPHIC == m_nContentType)
                 {
                     OUString sLink;
                     m_pWrtShell->GetGrfNms( &sLink, nullptr, static_cast<const SwFlyFrameFormat*>( pFrameFormat));
-                    pCnt = new SwGraphicContent(this, sFrameName,
-                                INetURLObject::decode( sLink,
-                                           INetURLObject::DecodeMechanism::Unambiguous ),
-                                pFrameFormat->FindLayoutRect(false, &aNullPt).Top());
+                    pCnt = new SwGraphicContent(this, sFrameName, INetURLObject::decode(sLink,
+                                           INetURLObject::DecodeMechanism::Unambiguous ), nYPos);
                 }
                 else
                 {
-                    pCnt = new SwContent(this, sFrameName,
-                            pFrameFormat->FindLayoutRect(false, &aNullPt).Top() );
+                    pCnt = new SwContent(this, sFrameName, nYPos);
                 }
                 if( !pFrameFormat->GetInfo( aAskItem ) &&
                     !aAskItem.pObject )     // not visible
@@ -562,6 +562,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         break;
         case ContentTypeId::BOOKMARK:
         {
+            tools::Long nYPos = 0;
             IDocumentMarkAccess* const pMarkAccess = m_pWrtShell->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();
                 ppBookmark != pMarkAccess->getBookmarksEnd();
@@ -571,7 +572,8 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 {
                     const OUString& rBkmName = (*ppBookmark)->GetName();
                     //nYPos from 0 -> text::Bookmarks will be sorted alphabetically
-                    std::unique_ptr<SwContent> pCnt(new SwContent(this, rBkmName, 0));
+                    auto pCnt(std::make_unique<SwContent>(this, rBkmName,
+                                                          m_bAlphabeticSort ? 0 : nYPos++));
                     m_pMember->insert(std::move(pCnt));
                 }
             }
@@ -617,7 +619,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                                     + sSubType + sExpandField;
                         }
                         auto pCnt(std::make_unique<SwTextFieldContent>(this, sText, pFormatField,
-                                      pTextField->GetTextNode().GetIndex().get()));
+                            m_bAlphabeticSort ? 0 : pTextField->GetTextNode().GetIndex().get()));
                         if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
                             pCnt->SetInvisible();
                         m_pMember->insert(std::move(pCnt));
@@ -681,7 +683,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     }
 
                     std::unique_ptr<SwContent> pCnt(new SwRegionContent(this, sSectionName,
-                            nLevel, getYPos(*pNodeIndex)));
+                            nLevel, m_bAlphabeticSort ? 0 : getYPos(*pNodeIndex)));
                     if( !pFormat->GetInfo( aAskItem ) &&
                         !aAskItem.pObject )     // not visible
                         pCnt->SetInvisible();
@@ -707,10 +709,11 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             std::vector<OUString> aRefMarks;
             m_pWrtShell->GetRefMarks( &aRefMarks );
 
+            tools::Long nYPos = 0;
             for (const auto& rRefMark : aRefMarks)
             {
-                // References sorted alphabetically
-                m_pMember->insert(std::make_unique<SwContent>(this, rRefMark, 0));
+                m_pMember->insert(std::make_unique<SwContent>(this, rRefMark,
+                                                              m_bAlphabeticSort ? 0 : nYPos++));
             }
         }
         break;
@@ -718,6 +721,19 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         {
             SwGetINetAttrs aArr;
             m_pWrtShell->GetINetAttrs(aArr);
+
+            if (m_bAlphabeticSort)
+            {
+                for (auto r : aArr)
+                {
+                    auto pCnt = make_unique<SwURLFieldContent>(this, r.sText,
+                                INetURLObject::decode(r.rINetAttr.GetINetFormat().GetValue(),
+                                                      INetURLObject::DecodeMechanism::Unambiguous),
+                                &r.rINetAttr, 0);
+                    m_pMember->insert(std::move(pCnt));
+                }
+                break;
+            }
 
             // use stable sort array to list hyperlinks in document order
             std::vector<SwGetINetAttr*> aStableSortINetAttrsArray;
@@ -752,7 +768,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 OUString sTOXNm( pBase->GetTOXName() );
 
                 SwContent* pCnt = new SwTOXBaseContent(
-                        this, sTOXNm, nTox, *pBase);
+                        this, sTOXNm, m_bAlphabeticSort ? 0 : nTox, *pBase);
 
                 if(pBase && !pBase->IsVisible())
                     pCnt->SetInvisible();
@@ -814,7 +830,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         tools::Long nYPos = LONG_MIN;
                         const bool bIsVisible = rIDDMA.IsVisibleLayerId(pTemp->GetLayer());
                         if (bIsVisible)
-                            nYPos = pTemp->GetLogicRect().Top();
+                            nYPos = m_bAlphabeticSort ? 0 : pTemp->GetLogicRect().Top();
                         auto pCnt(std::make_unique<SwContent>(this, pTemp->GetName(), nYPos));
                         if (!bIsVisible)
                             pCnt->SetInvisible();
@@ -1421,6 +1437,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveFieldTracking = true;
     bool bRemoveFootnoteTracking = true;
 
+    bool bRemoveSortEntry = true;
+
     if (xEntry)
     {
         const SwContentType* pType;
@@ -1430,6 +1448,13 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
             pType = weld::fromId<SwContent*>(
                         m_xTreeView->get_id(*xEntry))->GetParent();
         const ContentTypeId nContentType = pType->GetType();
+
+        if (nContentType != ContentTypeId::FOOTNOTE && nContentType != ContentTypeId::POSTIT)
+        {
+            bRemoveSortEntry = false;
+            xPop->set_active("sort", pType->GetSortType());
+        }
+
         OString aIdent;
         switch (nContentType)
         {
@@ -1723,6 +1748,9 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove("fieldtracking");
     if (bRemoveFootnoteTracking)
         xPop->remove("footnotetracking");
+
+    if (bRemoveSortEntry)
+        xPop->remove("sort");
 
     bool bSetSensitiveCollapseAllCategories = false;
     if (!m_bIsRoot)
@@ -4169,6 +4197,20 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
     std::unique_ptr<weld::TreeIter> xFirst(m_xTreeView->make_iterator());
     if (!m_xTreeView->get_selected(xFirst.get()))
         return; // this shouldn't happen, but better to be safe than ...
+
+    if (rSelectedPopupEntry == "sort")
+    {
+        SwContentType* pCntType;
+        if (lcl_IsContentType(*xFirst, *m_xTreeView))
+                pCntType = weld::fromId<SwContentType*>(m_xTreeView->get_id(*xFirst));
+        else
+            pCntType = const_cast<SwContentType*>(
+                        weld::fromId<SwContent*>(m_xTreeView->get_id(*xFirst))->GetParent());
+        pCntType->SetSortType(!pCntType->GetSortType());
+        pCntType->FillMemberList();
+        Display(true);
+        return;
+    }
 
     auto nSelectedPopupEntry = rSelectedPopupEntry.toUInt32();
     switch (nSelectedPopupEntry)
