@@ -118,6 +118,7 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_win,\
 $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\
     advapi32 \
     d2d1 \
+    dwmapi \
     dwrite \
     gdi32 \
     gdiplus \
