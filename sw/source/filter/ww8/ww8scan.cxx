@@ -216,7 +216,7 @@ const wwSprmSearcher *wwSprmParser::GetWW2SprmSearcher()
         {147, { 2, L_FIX} }, // "sprmTDxaLeft" tap.rgdxaCenter dxa word
         {148, { 2, L_FIX} }, // "sprmTDxaGapHalf" tap.dxaGapHalf, tap.rgdxaCenter
         {149, { 1, L_FIX} }, // "sprmTFBiDi" ;;;
-        {152, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter, tap.rgtc complex
+        {152, { 0, L_VAR2} },// "sprmTDefTable10" tap.rgdxaCenter, tap.rgtc complex
         {153, { 2, L_FIX} }, // "sprmTDyaRowHeight" tap.dyaRowHeight dya word
         {154, { 0, L_VAR2} },// "sprmTDefTable" tap.rgtc complex
         {155, { 1, L_VAR} }, // "sprmTDefTableShd" tap.rgshd complex
@@ -397,7 +397,7 @@ const wwSprmSearcher *wwSprmParser::GetWW6SprmSearcher(const WW8Fib& rFib)
         {NS_sprm::v6::sprmTFCantSplit, { 1, L_FIX} }, // tap.fCantSplit 1 or 0 byte
         {NS_sprm::v6::sprmTTableHeader, { 1, L_FIX} }, // tap.fTableHeader 1 or 0 byte
         {NS_sprm::v6::sprmTTableBorders, {12, L_FIX} }, // tap.rgbrcTable complex 12 bytes
-        {NS_sprm::v6::sprmTDefTable10, { 0, L_VAR} }, // tap.rgdxaCenter, tap.rgtc complex
+        {NS_sprm::v6::sprmTDefTable10, { 0, L_VAR2} }, // tap.rgdxaCenter, tap.rgtc complex
         {NS_sprm::v6::sprmTDyaRowHeight, { 2, L_FIX} }, // tap.dyaRowHeight dya word
         {NS_sprm::v6::sprmTDefTable, { 0, L_VAR2} }, // tap.rgtc complex
         {NS_sprm::v6::sprmTDefTableShd, { 1, L_VAR} }, // tap.rgshd complex
@@ -701,7 +701,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         InfoRow<NS_sprm::TTableHeader>(), // tap.fTableHeader;1 or 0;byte;
         InfoRow<NS_sprm::TFCantSplit>(), // tap.fCantSplit;1 or 0;byte;
         InfoRow<NS_sprm::TTableBorders80>(), // tap.rgbrcTable;complex
-        {NS_sprm::LN_TDefTable10, { 0, L_VAR} }, // "sprmTDefTable10" tap.rgdxaCenter,
+        {NS_sprm::LN_TDefTable10, { 0, L_VAR2} }, // "sprmTDefTable10" tap.rgdxaCenter,
                             // tap.rgtc;complex
         InfoRow<NS_sprm::TDyaRowHeight>(), // tap.dyaRowHeight;dya;word;
         {NS_sprm::LN_TDefTable, { 0, L_VAR2} }, // "sprmTDefTable" tap.rgtc;complex
