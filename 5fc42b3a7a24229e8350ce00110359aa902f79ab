@@ -16,6 +16,24 @@
       "message": "See https://wiki.documentfoundation.org/Development/clang-format\n\nAlso, you happened to pick files that another recent patch modified for the same task: https://gerrit.libreoffice.org/c/core/+/131125 This results in merge conflict, if either patch is merged.",
       "revId": "5fc42b3a7a24229e8350ce00110359aa902f79ab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79c85741_d075e3f3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-12T08:06:19Z",
+      "side": 1,
+      "message": "Thanks for the link. Will change to the clang conventions and update the patch.\n\nHowever, I\u0027m not sure what to do about the merge conflict. I saw the changes made in the other patch, and I\u0027m not sure if they are correct. The owner of the patch using a different constructor of the Color class (the one which takes in transparency as well); I don\u0027t think that is needed, but I could be wrong. \n\nCould you tell me what to do about that?",
+      "parentUuid": "deef27a7_a2e9d362",
+      "revId": "5fc42b3a7a24229e8350ce00110359aa902f79ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
