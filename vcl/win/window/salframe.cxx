@@ -94,10 +94,13 @@
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#include <dwmapi.h>
 #include <shobjidl.h>
 #include <propkey.h>
 #include <propvarutil.h>
 #include <shellapi.h>
+#include <uxtheme.h>
+#include <Vssym32.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -2584,6 +2587,18 @@ static tools::Long ImplW2I( const wchar_t* pStr )
     return n;
 }
 
+static bool UseDarkMode()
+{
+    HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+    typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
+    auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132)));
+    bool bRet = ShouldAppsUseDarkMode();
+
+    FreeLibrary(hUxthemeLib);
+
+    return bRet;
+}
+
 void WinSalFrame::UpdateSettings( AllSettings& rSettings )
 {
     MouseSettings aMouseSettings = rSettings.GetMouseSettings();
@@ -2627,7 +2642,37 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
     aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
-    aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
+
+    Color aControlTextColor;
+
+    if (UseDarkMode())
+    {
+        SetWindowTheme(mhWnd, L"Explorer", nullptr);
+
+        HTHEME hTheme = OpenThemeData(nullptr, L"ItemsView");
+        COLORREF color;
+        GetThemeColor(hTheme, 0, 0, TMT_FILLCOLOR, &color);
+        aStyleSettings.SetFaceColor( ImplWinColorToSal( color ) );
+        aStyleSettings.SetWindowColor( ImplWinColorToSal( color ) );
+        GetThemeColor(hTheme, 0, 0, TMT_TEXTCOLOR, &color);
+        aStyleSettings.SetWindowTextColor( ImplWinColorToSal( color ) );
+        hTheme = OpenThemeData(mhWnd, L"Button");
+        GetThemeColor(hTheme, BP_PUSHBUTTON, 0, TMT_TEXTCOLOR, &color);
+        aControlTextColor = ImplWinColorToSal(color);
+        GetThemeColor(hTheme, BP_CHECKBOX, 0, TMT_TEXTCOLOR, &color);
+        aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( color ) );
+    }
+    else
+    {
+        SetWindowTheme(mhWnd, nullptr, nullptr);
+
+        aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
+        aStyleSettings.SetWindowColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOW ) ) );
+        aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
+        aControlTextColor = ImplWinColorToSal(GetSysColor(COLOR_BTNTEXT));
+        aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
+    }
+
     aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
     aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
     aStyleSettings.SetLightBorderColor( ImplWinColorToSal( GetSysColor( COLOR_3DLIGHT ) ) );
@@ -2635,8 +2680,6 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetDarkShadowColor( ImplWinColorToSal( GetSysColor( COLOR_3DDKSHADOW ) ) );
     aStyleSettings.SetHelpColor( ImplWinColorToSal( GetSysColor( COLOR_INFOBK ) ) );
     aStyleSettings.SetHelpTextColor( ImplWinColorToSal( GetSysColor( COLOR_INFOTEXT ) ) );
-
-    Color aControlTextColor(ImplWinColorToSal(GetSysColor(COLOR_BTNTEXT)));
 
     aStyleSettings.SetDialogColor(aStyleSettings.GetFaceColor());
     aStyleSettings.SetDialogTextColor(aControlTextColor);
@@ -2661,13 +2704,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetTabRolloverTextColor(aControlTextColor);
     aStyleSettings.SetTabHighlightTextColor(aControlTextColor);
 
-    aStyleSettings.SetRadioCheckTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
     aStyleSettings.SetGroupTextColor( aStyleSettings.GetRadioCheckTextColor() );
     aStyleSettings.SetLabelTextColor( aStyleSettings.GetRadioCheckTextColor() );
-    aStyleSettings.SetWindowColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOW ) ) );
     aStyleSettings.SetActiveTabColor( aStyleSettings.GetWindowColor() );
-    aStyleSettings.SetWindowTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
-    aStyleSettings.SetToolTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
+//    aStyleSettings.SetToolTextColor( ImplWinColorToSal( GetSysColor( COLOR_WINDOWTEXT ) ) );
+    aStyleSettings.SetToolTextColor( COL_GREEN );
     aStyleSettings.SetFieldColor( aStyleSettings.GetWindowColor() );
     aStyleSettings.SetFieldTextColor( aStyleSettings.GetWindowTextColor() );
     aStyleSettings.SetFieldRolloverTextColor( aStyleSettings.GetFieldTextColor() );
@@ -2707,7 +2748,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetActiveColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVECAPTION ) ) );
     aStyleSettings.SetActiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_CAPTIONTEXT ) ) );
     aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTION ) ) );
-    aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
+//    aStyleSettings.SetDeactiveTextColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVECAPTIONTEXT ) ) );
+    aStyleSettings.SetDeactiveTextColor( COL_RED );
     BOOL bFlatMenus = FALSE;
     SystemParametersInfoW( SPI_GETFLATMENU, 0, &bFlatMenus, 0);
     if( bFlatMenus )
@@ -4538,9 +4580,9 @@ static LRESULT ImplDrawItem(HWND, WPARAM wParam, LPARAM lParam )
         RECT aRect = pDI->rcItem;
 
         if ( fDisabled )
-            clrPrevText = SetTextColor( pDI->hDC, GetSysColor( COLOR_GRAYTEXT ) );
+            clrPrevText = SetTextColor( pDI->hDC, PALETTERGB(0xFF, 00, 00) );
         else
-            clrPrevText = SetTextColor( pDI->hDC, GetSysColor( fSelected ? COLOR_HIGHLIGHTTEXT : COLOR_MENUTEXT ) );
+            clrPrevText = SetTextColor( pDI->hDC, PALETTERGB(00, 00, 0xFF) );
 
         DWORD colBackground = GetSysColor( fSelected ? COLOR_HIGHLIGHT : COLOR_MENU );
         clrPrevBkgnd = SetBkColor( pDI->hDC, colBackground );
@@ -5480,6 +5522,40 @@ static bool ImplSalWheelMousePos( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
     return true;
 }
 
+enum PreferredAppMode
+{
+    Default,
+    AllowDark,
+    ForceDark,
+    ForceLight,
+    Max
+};
+
+
+static void UpdateTitleBarDarkMode(HWND hWnd)
+{
+    HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+    typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
+    auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132)));
+    BOOL bDarkMode = ShouldAppsUseDarkMode();
+
+    typedef void(WINAPI* AllowDarkModeForWindow_t)(HWND, BOOL);
+    auto AllowDarkModeForWindow = reinterpret_cast<AllowDarkModeForWindow_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(133)));
+    AllowDarkModeForWindow(hWnd, TRUE);
+
+    typedef void(WINAPI* RefreshImmersiveColorPolicyState_t)();
+    auto RefreshImmersiveColorPolicyState = reinterpret_cast<RefreshImmersiveColorPolicyState_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(104)));
+    RefreshImmersiveColorPolicyState();
+
+    typedef void(WINAPI* FlushMenuThemes_t)();
+    auto FlushMenuThemes = reinterpret_cast<FlushMenuThemes_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(136)));
+    FlushMenuThemes();
+
+    DwmSetWindowAttribute(hWnd, 20, &bDarkMode, sizeof(bDarkMode));
+
+    FreeLibrary(hUxthemeLib);
+}
+
 static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, bool& rDef )
 {
     LRESULT     nRet = 0;
@@ -5499,6 +5575,9 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
         if ( pFrame != nullptr )
         {
             SetWindowPtr( hWnd, pFrame );
+
+            UpdateTitleBarDarkMode(hWnd);
+
             // Set HWND already here, as data might be used already
             // when messages are being sent by CreateWindow()
             pFrame->mhWnd = hWnd;
@@ -5773,6 +5852,7 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
 
         case WM_THEMECHANGED:
             GetSalData()->mbThemeChanged = true;
+            UpdateTitleBarDarkMode(hWnd);
             break;
 
         case SAL_MSG_USEREVENT:
