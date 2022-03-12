@@ -159,6 +159,7 @@ class FieldContext : public virtual SvRefBase
 
     OUString m_sCommand;
     OUString m_sResult;
+    OUString m_sVariableValue;
     std::optional<FieldId> m_eFieldId;
     bool m_bFieldLocked;
 
@@ -193,6 +194,9 @@ public:
 
     void AppendResult(OUString const& rResult) { m_sResult += rResult; }
     const OUString&  GetResult() const { return m_sResult; }
+
+    void CacheVariableValue(const css::uno::Any& rAny);
+    const OUString& GetVariableValue() { return m_sVariableValue; }
 
     void                    SetCommandCompleted() { m_bFieldCommandCompleted = true; }
     bool                    IsCommandCompleted() const { return m_bFieldCommandCompleted;    }
