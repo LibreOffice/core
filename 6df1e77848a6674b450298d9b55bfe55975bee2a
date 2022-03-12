@@ -16,6 +16,23 @@
       "message": "I\u0027ve pushed the latest patch. Jenkins is reporting a weird error here: https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/109855/console\n\nIt says \"Error fetching remote repo origin\". Could you please tell me how to fix this?",
       "revId": "6df1e77848a6674b450298d9b55bfe55975bee2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a774d4b3_01c55eb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-12T14:11:39Z",
+      "side": 1,
+      "message": "Hi. The patch has been verified. Can you review it?",
+      "revId": "6df1e77848a6674b450298d9b55bfe55975bee2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
