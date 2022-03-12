@@ -33,6 +33,23 @@
       "message": "Rebasing on top of master destroyed the relation chain as this depends on\nhttps://gerrit.libreoffice.org/c/core/+/131404 without some tests fail.",
       "revId": "a737dd088ba65a2e8580a736599bc89de70066df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f39e2c1d_73cd55be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-12T09:14:19Z",
+      "side": 1,
+      "message": "Argh, I hesitated to break the relation but thought it couldn\u0027t be worst with the blocking bug about links.txt which needed a rebase.",
+      "revId": "a737dd088ba65a2e8580a736599bc89de70066df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
