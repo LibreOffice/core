@@ -11,7 +11,9 @@
 
 #include <address.hxx>
 #include "anyrefdg.hxx"
-#include <viewdata.hxx>
+#include "viewdata.hxx"
+
+class ColorListBox;
 
 namespace sc
 {
@@ -38,6 +40,25 @@ private:
     std::unique_ptr<formula::RefEdit> mxOutputRangeEdit;
     std::unique_ptr<formula::RefButton> mxOutputRangeButton;
 
+    std::unique_ptr<ColorListBox> mxColorSeries;
+    std::unique_ptr<ColorListBox> mxColorNegative;
+    std::unique_ptr<ColorListBox> mxColorMarker;
+    std::unique_ptr<ColorListBox> mxColorHigh;
+    std::unique_ptr<ColorListBox> mxColorLow;
+    std::unique_ptr<ColorListBox> mxColorFirst;
+    std::unique_ptr<ColorListBox> mxColorLast;
+
+    std::unique_ptr<weld::CheckButton> mxCheckButtonNegative;
+    std::unique_ptr<weld::CheckButton> mxCheckButtonMarker;
+    std::unique_ptr<weld::CheckButton> mxCheckButtonHigh;
+    std::unique_ptr<weld::CheckButton> mxCheckButtonLow;
+    std::unique_ptr<weld::CheckButton> mxCheckButtonFirst;
+    std::unique_ptr<weld::CheckButton> mxCheckButtonLast;
+
+    std::unique_ptr<weld::RadioButton> mxRadioLine;
+    std::unique_ptr<weld::RadioButton> mxRadioColumn;
+    std::unique_ptr<weld::RadioButton> mxRadioStacked;
+
     void GetRangeFromSelection();
 
     DECL_LINK(ButtonClicked, weld::Button&, void);
@@ -46,7 +67,12 @@ private:
     DECL_LINK(LoseEditFocusHandler, formula::RefEdit&, void);
     DECL_LINK(LoseButtonFocusHandler, formula::RefButton&, void);
     DECL_LINK(RefInputModifyHandler, formula::RefEdit&, void);
+    DECL_LINK(ToggleHandler, weld::Toggleable&, void);
+    DECL_LINK(SelectSparklineType, weld::Toggleable&, void);
 
+    std::shared_ptr<sc::SparklineGroup> mpLocalSparklineGroup;
+
+    void setupValues(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
     void perform();
     bool checkValidInputOutput();
 
