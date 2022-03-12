@@ -126,10 +126,22 @@ void FastAttributeList::add( sal_Int32 nToken, const OString& rValue )
     add( nToken, rValue.getStr(), rValue.getLength() );
 }
 
+void FastAttributeList::add(sal_Int32 nToken, std::u16string_view sValue)
+{
+    add(nToken, OUStringToOString(sValue, RTL_TEXTENCODING_UTF8));
+}
+
 void FastAttributeList::addNS( sal_Int32 nNamespaceToken, sal_Int32 nToken, const OString& rValue )
 {
     sal_Int32 nCombinedToken = (nNamespaceToken << 16) | nToken;
     add( nCombinedToken, rValue );
+}
+
+void FastAttributeList::addNS(sal_Int32 nNamespaceToken, sal_Int32 nToken,
+                                     std::u16string_view sValue)
+{
+    sal_Int32 nCombinedToken = (nNamespaceToken << 16) | nToken;
+    add(nCombinedToken, sValue);
 }
 
 void FastAttributeList::addUnknown( const OUString& rNamespaceURL, const OString& rName, const OString& value )
