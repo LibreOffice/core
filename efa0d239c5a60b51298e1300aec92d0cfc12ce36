@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73cf6db7_2871f597",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-03-12T00:19:17Z",
+      "side": 1,
+      "message": "Why was this change (and the preceding \"Colibre: Fix wrong color, the ones which doesn not follow Monoline...\" ones) pushed without jenkins verification? Currently master, -7-3 and -7-2 are broken because of that.",
+      "revId": "efa0d239c5a60b51298e1300aec92d0cfc12ce36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
