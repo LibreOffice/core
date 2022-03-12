@@ -843,9 +843,18 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            const OUString aTypeName { xTypeDetection->queryTypeByURL( aURL.Main ) };
-            SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
-            std::shared_ptr<const SfxFilter> pFilter = rMatcher.GetFilter4EA( aTypeName );
+            std::shared_ptr<const SfxFilter> pFilter{};
+
+            // attempt loading native documents only if they are from a known protocol
+            // it might be sensible to limit the set of protocols even further, but that
+            // may cause regressions, needs further testing
+            // see tdf#136427 for details
+            if (aINetProtocol != INetProtocol::NotValid) {
+                const OUString aTypeName { xTypeDetection->queryTypeByURL( aURL.Main ) };
+                SfxFilterMatcher& rMatcher = SfxGetpApp()->GetFilterMatcher();
+                pFilter = rMatcher.GetFilter4EA( aTypeName );
+            }
+
             if (!pFilter || !lcl_isFilterNativelySupported(*pFilter))
             {
                 // hyperlink does not link to own type => special handling (http, ftp) browser and (other external protocols) OS
