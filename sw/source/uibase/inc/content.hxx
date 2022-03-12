@@ -183,6 +183,8 @@ class SwContentType final : public SwTypeNumber
     bool                m_bEdit:          1;  // can this type be edited?
     bool                m_bDelete:        1;  // can this type be deleted?
 
+    bool m_bAlphabeticSort = false;
+
         static OUString     RemoveNewline(const OUString&);
 public:
         SwContentType(SwWrtShell* pParent, ContentTypeId nType, sal_uInt8 nLevel );
@@ -205,6 +207,9 @@ public:
                                 m_nOutlineLevel = nNew;
                                 Invalidate();
                             }
+
+        bool GetSortType() const {return m_bAlphabeticSort;}
+        void SetSortType(bool bAlphabetic) {m_bAlphabeticSort = bAlphabetic;}
 
         void                Invalidate(); // only nMemberCount is read again
 

@@ -197,20 +197,6 @@
       </object>
     </child>
     <child>
-      <object class="GtkMenuItem" id="1">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_OUTLINE_LEVEL">Outline Level</property>
-        <property name="use-underline">True</property>
-        <child type="submenu">
-          <object class="GtkMenu" id="outlinelevel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
       <object class="GtkMenuItem" id="4">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -329,9 +315,31 @@
       </object>
     </child>
     <child>
+      <object class="GtkCheckMenuItem" id="sort">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_SORT_ALPHABETICALLY">Sort Alphabetically</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkMenuItem" id="1">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_OUTLINE_LEVEL">Outline Level</property>
+        <property name="use-underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="outlinelevel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
