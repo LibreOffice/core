@@ -119,6 +119,7 @@ $(eval $(call gb_Library_use_system_win32_libs,vclplug_win,\
     advapi32 \
     d2d1 \
     dwrite \
+    dwmapi \
     gdi32 \
     gdiplus \
     imm32 \

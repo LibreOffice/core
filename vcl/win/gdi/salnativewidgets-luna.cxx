@@ -395,6 +395,20 @@ static bool implDrawNativeMenuMark(HDC hDC, HTHEME hTheme, RECT rc, ControlPart 
     return ImplDrawTheme(hTheme, hDC, MENU_POPUPCHECK, iState, rc, aCaption);
 }
 
+static bool UseDarkMode()
+{
+    bool bRet = false;
+
+    HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+    typedef bool(WINAPI* ShouldAppsUseDarkMode_t)();
+    if (auto ShouldAppsUseDarkMode = reinterpret_cast<ShouldAppsUseDarkMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(132))))
+        bRet = ShouldAppsUseDarkMode();
+
+    FreeLibrary(hUxthemeLib);
+
+    return bRet;
+}
+
 static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                             ControlType nType,
                             ControlPart nPart,
@@ -819,6 +833,17 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     rc.top = 0; // extend potential gradient to cover menu bar as well
             }
 
+            // menubar in main window gets drawn in white in "darkmode", so bodge this here
+            if (UseDarkMode())
+            {
+                Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
+                ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
+                                                         aColor.GetGreen(),
+                                                         aColor.GetBlue())));
+                FillRect(hDC, &rc, hbrush.get());
+                return true;
+            }
+
             // make it more compatible with Aero
             if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
             {
@@ -838,6 +863,17 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             {
                 const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
                 rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
+
+                // menubar in main window gets drawn in white in "darkmode", so bodge this here
+                if (UseDarkMode())
+                {
+                    Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
+                    ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
+                                                             aColor.GetGreen(),
+                                                             aColor.GetBlue())));
+                    FillRect(hDC, &rc, hbrush.get());
+                    return true;
+                }
 
                 // make it more compatible with Aero
                 if( ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
@@ -1045,6 +1081,9 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         return true;
     }
 
+    if (UseDarkMode())
+        SetWindowTheme(mhWnd, L"Explorer", nullptr);
+
     switch( nType )
     {
         case ControlType::Pushbutton:
@@ -1059,7 +1098,10 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             if( nPart == ControlPart::Entire )
                 hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
             else if( nPart == ControlPart::ButtonDown )
+            {
+                SetWindowTheme(mhWnd, L"CFD", nullptr);
                 hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
+            }
             break;
         case ControlType::Spinbox:
             if( nPart == ControlPart::Entire )
@@ -1078,7 +1120,10 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             if( nPart == ControlPart::Entire || nPart == ControlPart::ListboxWindow )
                 hTheme = getThemeHandle(mhWnd, L"Listview", mpImpl.get());
             else if( nPart == ControlPart::ButtonDown )
+            {
+                SetWindowTheme(mhWnd, L"CFD", nullptr);
                 hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
+            }
             break;
         case ControlType::TabPane:
         case ControlType::TabBody:
@@ -1129,7 +1174,10 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
     }
 
     if( !hTheme )
+    {
+        SetWindowTheme(mhWnd, nullptr, nullptr);
         return false;
+    }
 
     RECT rc;
     rc.left   = buttonRect.Left();
@@ -1167,6 +1215,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         }
     }
 
+    SetWindowTheme(mhWnd, nullptr, nullptr);
     return bOk;
 }
 
