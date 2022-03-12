@@ -318,6 +318,15 @@ SalData::~SalData()
         Gdiplus::GdiplusShutdown(gdiplusToken);
 }
 
+enum PreferredAppMode
+{
+    Default,
+    AllowDark,
+    ForceDark,
+    ForceLight,
+    Max
+};
+
 extern "C" {
 VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
 {
@@ -330,6 +339,11 @@ VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
     pSalData->mnCmdShow = aSI.wShowWindow;
 
     pSalData->mnAppThreadId = GetCurrentThreadId();
+
+    typedef PreferredAppMode(WINAPI* SetPreferredAppMode_t)(PreferredAppMode);
+    HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+    auto SetPreferredAppMode = reinterpret_cast<SetPreferredAppMode_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(135)));
+    SetPreferredAppMode(ForceDark);
 
     // register frame class
     WNDCLASSEXW aWndClassEx;

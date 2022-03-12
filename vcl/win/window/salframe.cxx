@@ -94,6 +94,7 @@
 # define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
+#include <dwmapi.h>
 #include <shobjidl.h>
 #include <propkey.h>
 #include <propvarutil.h>
@@ -5499,6 +5500,15 @@ static LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LP
         if ( pFrame != nullptr )
         {
             SetWindowPtr( hWnd, pFrame );
+
+            BOOL bDarkMode = TRUE;
+            DwmSetWindowAttribute(hWnd, 20, &bDarkMode, sizeof(bDarkMode));
+
+            typedef void(WINAPI* AllowDarkModeForWindow_t)(HWND, BOOL);
+            HINSTANCE hUxthemeLib = LoadLibraryW(L"uxtheme.dll");
+            auto AllowDarkModeForWindow = reinterpret_cast<AllowDarkModeForWindow_t>(GetProcAddress(hUxthemeLib, MAKEINTRESOURCEA(133)));
+            AllowDarkModeForWindow(hWnd, TRUE);
+
             // Set HWND already here, as data might be used already
             // when messages are being sent by CreateWindow()
             pFrame->mhWnd = hWnd;

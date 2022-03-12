@@ -1011,6 +1011,8 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                                         const OUString& aCaption,
                                         const Color& /*rBackgroundColor*/ )
 {
+    SetWindowTheme(mhWnd, L"Explorer", nullptr);
+
     bool bOk = false;
     HTHEME hTheme = nullptr;
 
