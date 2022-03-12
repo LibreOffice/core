@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deef27a7_a2e9d362",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-12T05:55:32Z",
+      "side": 1,
+      "message": "See https://wiki.documentfoundation.org/Development/clang-format\n\nAlso, you happened to pick files that another recent patch modified for the same task: https://gerrit.libreoffice.org/c/core/+/131125 This results in merge conflict, if either patch is merged.",
+      "revId": "5fc42b3a7a24229e8350ce00110359aa902f79ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
