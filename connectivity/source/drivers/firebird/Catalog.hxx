@@ -32,6 +32,7 @@ namespace connectivity::firebird
             virtual void refreshUsers() override;
 
             sdbcx::OCollection* getPrivateTables() const { return m_pTables.get(); }
+            sdbcx::OCollection* getPrivateViews() const { return m_pViews.get(); }
         };
 
 } // namespace connectivity::firebird
