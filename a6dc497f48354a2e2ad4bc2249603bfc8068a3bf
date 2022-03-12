@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d6abbcf_8ed0805a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-12T21:42:28Z",
+      "side": 1,
+      "message": "I confirm the crash disappears after having applied the patch, thank you!",
+      "revId": "a6dc497f48354a2e2ad4bc2249603bfc8068a3bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
