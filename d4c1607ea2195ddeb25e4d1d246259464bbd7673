@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8d449fb_c2516404",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-12T13:29:19Z",
+      "side": 1,
+      "message": "So *again* you reviewed and merged your own change on a release branch despite having been told to not do that and you acknowledged :-(\n",
+      "revId": "d4c1607ea2195ddeb25e4d1d246259464bbd7673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
