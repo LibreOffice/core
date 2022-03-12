@@ -18,6 +18,7 @@
 
 #include <queue>
 #include <swmodeltestbase.hxx>
+#include <unotxdoc.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -46,6 +47,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135164_cancelledNumbering, "tdf135164_cancelledN
 
     xPara.set(getParagraph(6, "Default style has roman numbering"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("i"), getProperty<OUString>(xPara, "ListLabelString"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf147861_customField, "tdf147861_customField.docx")
+{
+    // These should each be specific values, not a shared DocProperty
+    getParagraph(1, "CustomEditedTitle"); // edited
+    // A couple of nulls at the end of the string thwarted all attemps at an "equals" comparison.
+    CPPUNIT_ASSERT(getParagraph(2)->getString().startsWith(" INSERT Custom Title here"));
+    getParagraph(3, "My Title"); // edited
+
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("CustomEditedTitle"), xField->getPresentation(false));
+    // The " (fixed)" part is unnecessary, but it must be consistent across a round-trip
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xField->getPresentation(true));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
