@@ -12,6 +12,8 @@
 #include <Sparkline.hxx>
 #include <reffact.hxx>
 
+#include <svx/colorbox.hxx>
+
 namespace sc
 {
 SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildWindow,
@@ -30,6 +32,30 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     , mxOutputRangeLabel(m_xBuilder->weld_label("output-range-label"))
     , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
     , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
+    , mxColorSeries(new ColorListBox(m_xBuilder->weld_menu_button("color-button-series"),
+                                     [pWindow] { return pWindow; }))
+    , mxColorNegative(new ColorListBox(m_xBuilder->weld_menu_button("color-button-negative"),
+                                       [pWindow] { return pWindow; }))
+    , mxColorMarker(new ColorListBox(m_xBuilder->weld_menu_button("color-button-marker"),
+                                     [pWindow] { return pWindow; }))
+    , mxColorHigh(new ColorListBox(m_xBuilder->weld_menu_button("color-button-high"),
+                                   [pWindow] { return pWindow; }))
+    , mxColorLow(new ColorListBox(m_xBuilder->weld_menu_button("color-button-low"),
+                                  [pWindow] { return pWindow; }))
+    , mxColorFirst(new ColorListBox(m_xBuilder->weld_menu_button("color-button-first"),
+                                    [pWindow] { return pWindow; }))
+    , mxColorLast(new ColorListBox(m_xBuilder->weld_menu_button("color-button-last"),
+                                   [pWindow] { return pWindow; }))
+    , mxCheckButtonNegative(m_xBuilder->weld_check_button("check-negative"))
+    , mxCheckButtonMarker(m_xBuilder->weld_check_button("check-marker"))
+    , mxCheckButtonHigh(m_xBuilder->weld_check_button("check-high"))
+    , mxCheckButtonLow(m_xBuilder->weld_check_button("check-low"))
+    , mxCheckButtonFirst(m_xBuilder->weld_check_button("check-first"))
+    , mxCheckButtonLast(m_xBuilder->weld_check_button("check-last"))
+    , mxRadioLine(m_xBuilder->weld_radio_button("line-radiobutton"))
+    , mxRadioColumn(m_xBuilder->weld_radio_button("column-radiobutton"))
+    , mxRadioStacked(m_xBuilder->weld_radio_button("stacked-radiobutton"))
+    , mpLocalSparklineGroup(new sc::SparklineGroup())
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeText.get());
     mxInputRangeButton->SetReferences(this, mxInputRangeEdit.get());
@@ -59,12 +85,59 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     mxInputRangeEdit->SetModifyHdl(aModifyLink);
     mxOutputRangeEdit->SetModifyHdl(aModifyLink);
 
-    mxOutputRangeEdit->GrabFocus();
+    Link<weld::Toggleable&, void> aRadioButtonLink
+        = LINK(this, SparklineDialog, SelectSparklineType);
+    mxRadioLine->connect_toggled(aRadioButtonLink);
+    mxRadioColumn->connect_toggled(aRadioButtonLink);
+    mxRadioStacked->connect_toggled(aRadioButtonLink);
+
+    Link<weld::Toggleable&, void> aLink = LINK(this, SparklineDialog, ToggleHandler);
+    mxCheckButtonNegative->connect_toggled(aLink);
+    mxCheckButtonMarker->connect_toggled(aLink);
+    mxCheckButtonHigh->connect_toggled(aLink);
+    mxCheckButtonLow->connect_toggled(aLink);
+    mxCheckButtonFirst->connect_toggled(aLink);
+    mxCheckButtonLast->connect_toggled(aLink);
+
+    setupValues(mpLocalSparklineGroup);
 
     GetRangeFromSelection();
+
+    mxOutputRangeEdit->GrabFocus();
 }
 
 SparklineDialog::~SparklineDialog() {}
+
+void SparklineDialog::setupValues(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup)
+{
+    switch (pSparklineGroup->m_eType)
+    {
+        case sc::SparklineType::Line:
+            mxRadioLine->set_active(true);
+            break;
+        case sc::SparklineType::Column:
+            mxRadioColumn->set_active(true);
+            break;
+        case sc::SparklineType::Stacked:
+            mxRadioStacked->set_active(true);
+            break;
+    }
+
+    mxColorSeries->SelectEntry(pSparklineGroup->m_aColorSeries);
+    mxColorNegative->SelectEntry(pSparklineGroup->m_aColorNegative);
+    mxColorMarker->SelectEntry(pSparklineGroup->m_aColorMarkers);
+    mxColorHigh->SelectEntry(pSparklineGroup->m_aColorHigh);
+    mxColorLow->SelectEntry(pSparklineGroup->m_aColorLow);
+    mxColorFirst->SelectEntry(pSparklineGroup->m_aColorFirst);
+    mxColorLast->SelectEntry(pSparklineGroup->m_aColorLast);
+
+    mxCheckButtonNegative->set_active(pSparklineGroup->m_bNegative);
+    mxCheckButtonMarker->set_active(pSparklineGroup->m_bMarkers);
+    mxCheckButtonHigh->set_active(pSparklineGroup->m_bHigh);
+    mxCheckButtonLow->set_active(pSparklineGroup->m_bLow);
+    mxCheckButtonFirst->set_active(pSparklineGroup->m_bFirst);
+    mxCheckButtonLast->set_active(pSparklineGroup->m_bLast);
+}
 
 void SparklineDialog::Close() { DoClose(sc::SparklineDialogWrapper::GetChildWindowId()); }
 
@@ -211,6 +284,32 @@ IMPL_LINK(SparklineDialog, ButtonClicked, weld::Button&, rButton, void)
     }
 }
 
+IMPL_LINK(SparklineDialog, ToggleHandler, weld::Toggleable&, rToggle, void)
+{
+    if (mxCheckButtonNegative.get() == &rToggle)
+        mpLocalSparklineGroup->m_bNegative = mxCheckButtonNegative->get_active();
+    if (mxCheckButtonMarker.get() == &rToggle)
+        mpLocalSparklineGroup->m_bMarkers = mxCheckButtonMarker->get_active();
+    if (mxCheckButtonHigh.get() == &rToggle)
+        mpLocalSparklineGroup->m_bHigh = mxCheckButtonHigh->get_active();
+    if (mxCheckButtonLow.get() == &rToggle)
+        mpLocalSparklineGroup->m_bLow = mxCheckButtonLow->get_active();
+    if (mxCheckButtonFirst.get() == &rToggle)
+        mpLocalSparklineGroup->m_bFirst = mxCheckButtonFirst->get_active();
+    if (mxCheckButtonLast.get() == &rToggle)
+        mpLocalSparklineGroup->m_bLast = mxCheckButtonLast->get_active();
+}
+
+IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
+{
+    if (mxRadioLine->get_active())
+        mpLocalSparklineGroup->m_eType = sc::SparklineType::Line;
+    else if (mxRadioColumn->get_active())
+        mpLocalSparklineGroup->m_eType = sc::SparklineType::Column;
+    else if (mxRadioStacked->get_active())
+        mpLocalSparklineGroup->m_eType = sc::SparklineType::Stacked;
+}
+
 namespace
 {
 enum class RangeOrientation
@@ -257,7 +356,13 @@ bool SparklineDialog::checkValidInputOutput()
 
 void SparklineDialog::perform()
 {
-    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    mpLocalSparklineGroup->m_aColorSeries = mxColorSeries->GetSelectEntryColor();
+    mpLocalSparklineGroup->m_aColorNegative = mxColorNegative->GetSelectEntryColor();
+    mpLocalSparklineGroup->m_aColorMarkers = mxColorMarker->GetSelectEntryColor();
+    mpLocalSparklineGroup->m_aColorHigh = mxColorHigh->GetSelectEntryColor();
+    mpLocalSparklineGroup->m_aColorLow = mxColorLow->GetSelectEntryColor();
+    mpLocalSparklineGroup->m_aColorFirst = mxColorFirst->GetSelectEntryColor();
+    mpLocalSparklineGroup->m_aColorLast = mxColorLast->GetSelectEntryColor();
 
     if (maOutputRange.aStart.Col() == maOutputRange.aEnd.Col())
     {
@@ -283,7 +388,7 @@ void SparklineDialog::perform()
                 aInputRangeSlice.aStart.SetCol(maInputRange.aStart.Col() + nIndex);
                 aInputRangeSlice.aEnd.SetCol(maInputRange.aStart.Col() + nIndex);
             }
-            auto* pCreated = mrDocument.CreateSparkline(aAddress, pSparklineGroup);
+            auto* pCreated = mrDocument.CreateSparkline(aAddress, mpLocalSparklineGroup);
             pCreated->setInputRange(aInputRangeSlice);
             nIndex++;
         }
@@ -313,7 +418,7 @@ void SparklineDialog::perform()
                 aInputRangeSlice.aStart.SetCol(maInputRange.aStart.Col() + nIndex);
                 aInputRangeSlice.aEnd.SetCol(maInputRange.aStart.Col() + nIndex);
             }
-            auto* pCreated = mrDocument.CreateSparkline(aAddress, pSparklineGroup);
+            auto* pCreated = mrDocument.CreateSparkline(aAddress, mpLocalSparklineGroup);
             pCreated->setInputRange(aInputRangeSlice);
             nIndex++;
         }
