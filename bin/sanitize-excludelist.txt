@@ -7,6 +7,7 @@ src:*/scaddins/source/analysis/financial.cxx
 fun:generate_hash_secret_salt
 [signed-integer-overflow]
 fun:_cairo_*
+src:cairo*.c
 src:*/boost/boost/rational.hpp
 src:*/include/tools/gen.hxx
 src:*/tools/source/generic/gen.cxx
