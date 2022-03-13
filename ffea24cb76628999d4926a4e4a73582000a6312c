@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8fa496b_9a8d4c55",
+        "filename": "filter/source/graphicfilter/icgm/actimpr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-13T21:07:34Z",
+      "side": 1,
+      "message": "It should be cmath (here and elsewhere; in some places, you correctly used cmath, which confuses.)",
+      "revId": "ffea24cb76628999d4926a4e4a73582000a6312c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

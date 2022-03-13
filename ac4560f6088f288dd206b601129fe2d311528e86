@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "299da84d_1fecc056",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-13T21:07:34Z",
+      "side": 1,
+      "message": "Why rebase, when the error asks to re-format as shown in the log?",
+      "revId": "ac4560f6088f288dd206b601129fe2d311528e86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
