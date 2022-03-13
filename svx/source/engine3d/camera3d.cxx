@@ -109,7 +109,7 @@ void Camera3D::SetBankAngle(double fAngle)
 
     // Rotate on Z axis, to rotate the BankAngle and back
     basegfx::B3DHomMatrix aTf;
-    const double fV(std::hypot( aDiff.getY(), aDiff.getZ() ));
+    const double fV(std::hypot(aDiff.getY(), aDiff.getZ()));
 
     if (fV != 0.0)
     {

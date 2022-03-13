@@ -67,17 +67,17 @@
 **************************************************************************/
 SdwRectangle::SdwRectangle()
     : m_bRotated(false)
-    // m_nRectCorner array fields are default initialized with Point()
+// m_nRectCorner array fields are default initialized with Point()
 {
 }
 /**************************************************************************
  * @short:  Constructor
  * @param:  aPt0~aPt3 four corner points of a rectangle.
 **************************************************************************/
-SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1,
-        const Point& rPt2, const Point& rPt3)
+SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1, const Point& rPt2,
+                           const Point& rPt3)
     : m_bRotated(rPt0.Y() != rPt1.Y() || rPt0.Y() >= rPt3.Y())
-    , m_nRectCorner({{rPt0, rPt1, rPt2, rPt3}})
+    , m_nRectCorner({ { rPt0, rPt1, rPt2, rPt3 } })
 {
 }
 
@@ -87,8 +87,10 @@ SdwRectangle::SdwRectangle(const Point& rPt0, const Point& rPt1,
 **************************************************************************/
 Point SdwRectangle::GetRectCenter() const
 {
-    tools::Long nX = static_cast<tools::Long>(static_cast<double>(m_nRectCorner[0].X() + m_nRectCorner[2].X())/2 + 0.5);
-    tools::Long nY = static_cast<tools::Long>(static_cast<double>(m_nRectCorner[0].Y() + m_nRectCorner[2].Y())/2 + 0.5);
+    tools::Long nX = static_cast<tools::Long>(
+        static_cast<double>(m_nRectCorner[0].X() + m_nRectCorner[2].X()) / 2 + 0.5);
+    tools::Long nY = static_cast<tools::Long>(
+        static_cast<double>(m_nRectCorner[0].Y() + m_nRectCorner[2].Y()) / 2 + 0.5);
 
     return Point(nX, nY);
 }
@@ -130,9 +132,9 @@ tools::Rectangle SdwRectangle::GetOriginalRect() const
         tools::Long nWidth = GetWidth();
         Point aCenter = GetRectCenter();
 
-        Point aLT(aCenter.X()-static_cast<tools::Long>(static_cast<double>(nWidth)/2+0.5),
-            aCenter.Y()-static_cast<tools::Long>(static_cast<double>(nHeight)/2+0.5));
-        Point aRB(aLT.X()+nWidth, aLT.Y()+nHeight);
+        Point aLT(aCenter.X() - static_cast<tools::Long>(static_cast<double>(nWidth) / 2 + 0.5),
+                  aCenter.Y() - static_cast<tools::Long>(static_cast<double>(nHeight) / 2 + 0.5));
+        Point aRB(aLT.X() + nWidth, aLT.Y() + nHeight);
 
         return tools::Rectangle(aLT, aRB);
     }
@@ -168,9 +170,10 @@ double SdwRectangle::GetRotationAngle() const
     return -fAngle;
 }
 
-double SdwRectangle::CalcDistBetween2Points(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
+double SdwRectangle::CalcDistBetween2Points(tools::Long nX1, tools::Long nY1, tools::Long nX2,
+                                            tools::Long nY2)
 {
-    return std::hypot( (nX1-nX2), (nY1-nY2) );
+    return std::hypot((nX1 - nX2), (nY1 - nY2));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

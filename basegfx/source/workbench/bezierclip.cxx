@@ -51,31 +51,29 @@
 /* Misc helper
  * ===========
  */
-int fallFac( int n, int k )
+int fallFac(int n, int k)
 {
 #ifdef WITH_ASSERTIONS
-    assert(n>=k); // "For factorials, n must be greater or equal k"
-    assert(n>=0); // "For factorials, n must be positive"
-    assert(k>=0); // "For factorials, k must be positive"
+    assert(n >= k); // "For factorials, n must be greater or equal k"
+    assert(n >= 0); // "For factorials, n must be positive"
+    assert(k >= 0); // "For factorials, k must be positive"
 #endif
 
-    int res( 1 );
+    int res(1);
 
-    while( k-- && n ) res *= n--;
+    while (k-- && n)
+        res *= n--;
 
     return res;
 }
 
-int fac( int n )
-{
-    return fallFac(n, n);
-}
+int fac(int n) { return fallFac(n, n); }
 
 /* Bezier fat line clipping part
  * =============================
  */
 
-void Impl_calcFatLine( FatLine& line, const Bezier& c )
+void Impl_calcFatLine(FatLine& line, const Bezier& c)
 {
     // Prepare normalized implicit line
     // ================================
@@ -85,49 +83,46 @@ void Impl_calcFatLine( FatLine& line, const Bezier& c )
     line.b = (c.p0.x - c.p3.x);
 
     // normalize
-    const double len( std::hypot( line.a, line.b ) );
-    if( !tolZero(len) )
+    const double len(std::hypot(line.a, line.b));
+    if (!tolZero(len))
     {
         line.a /= len;
         line.b /= len;
     }
 
-    line.c = -(line.a*c.p0.x + line.b*c.p0.y);
+    line.c = -(line.a * c.p0.x + line.b * c.p0.y);
 
     // Determine bounding fat line from it
     // ===================================
 
     // calc control point distances
-    const double dP2( calcLineDistance(line.a, line.b, line.c, c.p1.x, c.p1.y ) );
-    const double dP3( calcLineDistance(line.a, line.b, line.c, c.p2.x, c.p2.y ) );
+    const double dP2(calcLineDistance(line.a, line.b, line.c, c.p1.x, c.p1.y));
+    const double dP3(calcLineDistance(line.a, line.b, line.c, c.p2.x, c.p2.y));
 
     // calc approximate bounding lines to curve (tight bounds are
     // possible here, but more expensive to calculate and thus not
     // worth the overhead)
-    if( dP2 * dP3 > 0.0 )
+    if (dP2 * dP3 > 0.0)
     {
-        line.dMin = 3.0/4.0 * std::min(0.0, std::min(dP2, dP3));
-        line.dMax = 3.0/4.0 * std::max(0.0, std::max(dP2, dP3));
+        line.dMin = 3.0 / 4.0 * std::min(0.0, std::min(dP2, dP3));
+        line.dMax = 3.0 / 4.0 * std::max(0.0, std::max(dP2, dP3));
     }
     else
     {
-        line.dMin = 4.0/9.0 * std::min(0.0, std::min(dP2, dP3));
-        line.dMax = 4.0/9.0 * std::max(0.0, std::max(dP2, dP3));
+        line.dMin = 4.0 / 9.0 * std::min(0.0, std::min(dP2, dP3));
+        line.dMax = 4.0 / 9.0 * std::max(0.0, std::max(dP2, dP3));
     }
 }
 
-void Impl_calcBounds( Point2D&          leftTop,
-                      Point2D&          rightBottom,
-                      const Bezier&     c1          )
+void Impl_calcBounds(Point2D& leftTop, Point2D& rightBottom, const Bezier& c1)
 {
-    leftTop.x = std::min( c1.p0.x, std::min( c1.p1.x, std::min( c1.p2.x, c1.p3.x ) ) );
-    leftTop.y = std::min( c1.p0.y, std::min( c1.p1.y, std::min( c1.p2.y, c1.p3.y ) ) );
-    rightBottom.x = std::max( c1.p0.x, std::max( c1.p1.x, std::max( c1.p2.x, c1.p3.x ) ) );
-    rightBottom.y = std::max( c1.p0.y, std::max( c1.p1.y, std::max( c1.p2.y, c1.p3.y ) ) );
+    leftTop.x = std::min(c1.p0.x, std::min(c1.p1.x, std::min(c1.p2.x, c1.p3.x)));
+    leftTop.y = std::min(c1.p0.y, std::min(c1.p1.y, std::min(c1.p2.y, c1.p3.y)));
+    rightBottom.x = std::max(c1.p0.x, std::max(c1.p1.x, std::max(c1.p2.x, c1.p3.x)));
+    rightBottom.y = std::max(c1.p0.y, std::max(c1.p1.y, std::max(c1.p2.y, c1.p3.y)));
 }
 
-bool Impl_doBBoxIntersect( const Bezier& c1,
-                           const Bezier& c2 )
+bool Impl_doBBoxIntersect(const Bezier& c1, const Bezier& c2)
 {
     // calc rectangular boxes from c1 and c2
     Point2D lt1;
@@ -135,11 +130,11 @@ bool Impl_doBBoxIntersect( const Bezier& c1,
     Point2D lt2;
     Point2D rb2;
 
-    Impl_calcBounds( lt1, rb1, c1 );
-    Impl_calcBounds( lt2, rb2, c2 );
+    Impl_calcBounds(lt1, rb1, c1);
+    Impl_calcBounds(lt2, rb2, c2);
 
-    if( std::min(rb1.x, rb2.x) < std::max(lt1.x, lt2.x) ||
-        std::min(rb1.y, rb2.y) < std::max(lt1.y, lt2.y) )
+    if (std::min(rb1.x, rb2.x) < std::max(lt1.x, lt2.x)
+        || std::min(rb1.y, rb2.y) < std::max(lt1.y, lt2.y))
     {
         return false;
     }
@@ -154,38 +149,35 @@ bool Impl_doBBoxIntersect( const Bezier& c1,
  * the left, the second is the intersection of the max value line with
  * the convex hull from the right.
  */
-bool Impl_calcSafeParams( double&           t1,
-                          double&           t2,
-                          const Polygon2D&  rPoly,
-                          double            lowerYBound,
-                          double            upperYBound )
+bool Impl_calcSafeParams(double& t1, double& t2, const Polygon2D& rPoly, double lowerYBound,
+                         double upperYBound)
 {
     // need the convex hull of the control polygon, as this is
     // guaranteed to completely bound the curve
-    Polygon2D convHull( convexHull(rPoly) );
+    Polygon2D convHull(convexHull(rPoly));
 
     // init min and max buffers
-    t1 = 0.0 ;
-    double currLowerT( 1.0 );
+    t1 = 0.0;
+    double currLowerT(1.0);
 
     t2 = 1.0;
-    double currHigherT( 0.0 );
+    double currHigherT(0.0);
 
-    if( convHull.size() <= 1 )
+    if (convHull.size() <= 1)
         return false; // only one point? Then we're done with clipping
 
     /* now, clip against lower and higher bounds */
     Point2D p0;
     Point2D p1;
 
-    bool bIntersection( false );
+    bool bIntersection(false);
 
-    for( Polygon2D::size_type i=0; i<convHull.size(); ++i )
+    for (Polygon2D::size_type i = 0; i < convHull.size(); ++i)
     {
         // have to check against convHull.size() segments, as the
         // convex hull is, by definition, closed. Thus, for the
         // last point, we take the first point as partner.
-        if( i+1 == convHull.size() )
+        if (i + 1 == convHull.size())
         {
             // close the polygon
             p0 = convHull[i];
@@ -194,7 +186,7 @@ bool Impl_calcSafeParams( double&           t1,
         else
         {
             p0 = convHull[i];
-            p1 = convHull[i+1];
+            p1 = convHull[i + 1];
         }
 
         // is the segment in question within or crossing the
@@ -203,21 +195,20 @@ bool Impl_calcSafeParams( double&           t1,
         // an intersection, but we've got to update the permissible
         // range, nevertheless. This is because inside lying segments
         // leads to full range forbidden.
-        if( (tolLessEqual(p0.y, upperYBound) || tolLessEqual(p1.y, upperYBound)) &&
-            (tolGreaterEqual(p0.y, lowerYBound) || tolGreaterEqual(p1.y, lowerYBound)) )
+        if ((tolLessEqual(p0.y, upperYBound) || tolLessEqual(p1.y, upperYBound))
+            && (tolGreaterEqual(p0.y, lowerYBound) || tolGreaterEqual(p1.y, lowerYBound)))
         {
             // calc intersection of convex hull segment with
             // one of the horizontal bounds lines
             // to optimize a bit, r_x is calculated only in else case
-            const double r_y( p1.y - p0.y );
+            const double r_y(p1.y - p0.y);
 
-            if( tolZero(r_y) )
+            if (tolZero(r_y))
             {
                 // r_y is virtually zero, thus we've got a horizontal
                 // line. Now check whether we maybe coincide with lower or
                 // upper horizontal bound line.
-                if( tolEqual(p0.y, lowerYBound) ||
-                    tolEqual(p0.y, upperYBound) )
+                if (tolEqual(p0.y, lowerYBound) || tolEqual(p0.y, upperYBound))
                 {
                     // yes, simulate intersection then
                     currLowerT = std::min(currLowerT, std::min(p0.x, p1.x));
@@ -228,13 +219,13 @@ bool Impl_calcSafeParams( double&           t1,
             {
                 // check against lower and higher bounds
                 // =====================================
-                const double r_x( p1.x - p0.x );
+                const double r_x(p1.x - p0.x);
 
                 // calc intersection with horizontal dMin line
-                const double currTLow( (lowerYBound - p0.y) * r_x / r_y + p0.x );
+                const double currTLow((lowerYBound - p0.y) * r_x / r_y + p0.x);
 
                 // calc intersection with horizontal dMax line
-                const double currTHigh( (upperYBound - p0.y) * r_x / r_y + p0.x );
+                const double currTHigh((upperYBound - p0.y) * r_x / r_y + p0.x);
 
                 currLowerT = std::min(currLowerT, std::min(currTLow, currTHigh));
                 currHigherT = std::max(currHigherT, std::max(currTLow, currTHigh));
@@ -263,57 +254,43 @@ bool Impl_calcSafeParams( double&           t1,
  * The polynomial coefficients c0 to c3 given to this method
  * must correspond to t values of 0, 1/3, 2/3 and 1, respectively.
  */
-bool Impl_calcSafeParams_clip( double&          t1,
-                               double&          t2,
-                               const FatLine&   bounds,
-                               double           c0,
-                               double           c1,
-                               double           c2,
-                               double           c3 )
+bool Impl_calcSafeParams_clip(double& t1, double& t2, const FatLine& bounds, double c0, double c1,
+                              double c2, double c3)
 {
     /* first of all, determine convex hull of c0-c3 */
     Polygon2D poly(4);
-    poly[0] = Point2D(0,        c0);
-    poly[1] = Point2D(1.0/3.0,  c1);
-    poly[2] = Point2D(2.0/3.0,  c2);
-    poly[3] = Point2D(1,        c3);
+    poly[0] = Point2D(0, c0);
+    poly[1] = Point2D(1.0 / 3.0, c1);
+    poly[2] = Point2D(2.0 / 3.0, c2);
+    poly[3] = Point2D(1, c3);
 
 #ifndef WITH_SAFEPARAM_DETAILED_TEST
 
-    return Impl_calcSafeParams( t1, t2, poly, bounds.dMin, bounds.dMax );
+    return Impl_calcSafeParams(t1, t2, poly, bounds.dMin, bounds.dMax);
 
 #else
-    bool bRet( Impl_calcSafeParams( t1, t2, poly, bounds.dMin, bounds.dMax ) );
+    bool bRet(Impl_calcSafeParams(t1, t2, poly, bounds.dMin, bounds.dMax));
 
-    Polygon2D convHull( convexHull( poly ) );
+    Polygon2D convHull(convexHull(poly));
 
-    cout << "# convex hull testing" << endl
-         << "plot [t=0:1] ";
-    cout << " bez("
-         << poly[0].x << ","
-         << poly[1].x << ","
-         << poly[2].x << ","
-         << poly[3].x << ",t),bez("
-         << poly[0].y << ","
-         << poly[1].y << ","
-         << poly[2].y << ","
-         << poly[3].y << ",t), "
+    cout << "# convex hull testing" << endl << "plot [t=0:1] ";
+    cout << " bez(" << poly[0].x << "," << poly[1].x << "," << poly[2].x << "," << poly[3].x
+         << ",t),bez(" << poly[0].y << "," << poly[1].y << "," << poly[2].y << "," << poly[3].y
+         << ",t), "
          << "t, " << bounds.dMin << ", "
-         << "t, " << bounds.dMax << ", "
-         << t1 << ", t, "
-         << t2 << ", t, "
+         << "t, " << bounds.dMax << ", " << t1 << ", t, " << t2 << ", t, "
          << "'-' using ($1):($2) title \"control polygon\" with lp, "
          << "'-' using ($1):($2) title \"convex hull\" with lp" << endl;
 
     unsigned int k;
-    for( k=0; k<poly.size(); ++k )
+    for (k = 0; k < poly.size(); ++k)
     {
         cout << poly[k].x << " " << poly[k].y << endl;
     }
     cout << poly[0].x << " " << poly[0].y << endl;
     cout << "e" << endl;
 
-    for( k=0; k<convHull.size(); ++k )
+    for (k = 0; k < convHull.size(); ++k)
     {
         cout << convHull[k].x << " " << convHull[k].y << endl;
     }
@@ -324,10 +301,7 @@ bool Impl_calcSafeParams_clip( double&          t1,
 #endif
 }
 
-void Impl_deCasteljauAt( Bezier&        part1,
-                         Bezier&        part2,
-                         const Bezier&  input,
-                         double         t        )
+void Impl_deCasteljauAt(Bezier& part1, Bezier& part2, const Bezier& input, double t)
 {
     // deCasteljau bezier arc, scheme is:
 
@@ -343,14 +317,14 @@ void Impl_deCasteljauAt( Bezier&        part1,
     //     L2  H   R3
     //         L3  R2
     //             L4/R1
-    if( tolZero(t) )
+    if (tolZero(t))
     {
         // t is zero -> part2 is input curve, part1 is empty (input.p0, that is)
         part1.p0.x = part1.p1.x = part1.p2.x = part1.p3.x = input.p0.x;
         part1.p0.y = part1.p1.y = part1.p2.y = part1.p3.y = input.p0.y;
         part2 = input;
     }
-    else if( tolEqual(t, 1.0) )
+    else if (tolEqual(t, 1.0))
     {
         // t is one -> part1 is input curve, part2 is empty (input.p3, that is)
         part1 = input;
@@ -359,25 +333,33 @@ void Impl_deCasteljauAt( Bezier&        part1,
     }
     else
     {
-        part1.p0.x = input.p0.x;                                    part1.p0.y = input.p0.y;
-        part1.p1.x = (1.0 - t)*part1.p0.x + t*input.p1.x;           part1.p1.y = (1.0 - t)*part1.p0.y + t*input.p1.y;
-        const double Hx ( (1.0 - t)*input.p1.x + t*input.p2.x ),    Hy ( (1.0 - t)*input.p1.y + t*input.p2.y );
-        part1.p2.x = (1.0 - t)*part1.p1.x + t*Hx;                   part1.p2.y = (1.0 - t)*part1.p1.y + t*Hy;
-        part2.p3.x = input.p3.x;                                    part2.p3.y = input.p3.y;
-        part2.p2.x = (1.0 - t)*input.p2.x + t*input.p3.x;           part2.p2.y = (1.0 - t)*input.p2.y + t*input.p3.y;
-        part2.p1.x = (1.0 - t)*Hx + t*part2.p2.x;                   part2.p1.y = (1.0 - t)*Hy + t*part2.p2.y;
-        part2.p0.x = (1.0 - t)*part1.p2.x + t*part2.p1.x;           part2.p0.y = (1.0 - t)*part1.p2.y + t*part2.p1.y;
-        part1.p3.x = part2.p0.x;                                    part1.p3.y = part2.p0.y;
+        part1.p0.x = input.p0.x;
+        part1.p0.y = input.p0.y;
+        part1.p1.x = (1.0 - t) * part1.p0.x + t * input.p1.x;
+        part1.p1.y = (1.0 - t) * part1.p0.y + t * input.p1.y;
+        const double Hx((1.0 - t) * input.p1.x + t * input.p2.x),
+            Hy((1.0 - t) * input.p1.y + t * input.p2.y);
+        part1.p2.x = (1.0 - t) * part1.p1.x + t * Hx;
+        part1.p2.y = (1.0 - t) * part1.p1.y + t * Hy;
+        part2.p3.x = input.p3.x;
+        part2.p3.y = input.p3.y;
+        part2.p2.x = (1.0 - t) * input.p2.x + t * input.p3.x;
+        part2.p2.y = (1.0 - t) * input.p2.y + t * input.p3.y;
+        part2.p1.x = (1.0 - t) * Hx + t * part2.p2.x;
+        part2.p1.y = (1.0 - t) * Hy + t * part2.p2.y;
+        part2.p0.x = (1.0 - t) * part1.p2.x + t * part2.p1.x;
+        part2.p0.y = (1.0 - t) * part1.p2.y + t * part2.p1.y;
+        part1.p3.x = part2.p0.x;
+        part1.p3.y = part2.p0.y;
     }
 }
 
-void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1, double t2_c1,
-                               const Bezier& c2_part, const FatLine& bounds_c2 )
+void printCurvesWithSafeRange(const Bezier& c1, const Bezier& c2, double t1_c1, double t2_c1,
+                              const Bezier& c2_part, const FatLine& bounds_c2)
 {
     static int offset = 0;
 
-    cout << "# safe param range testing" << endl
-         << "plot [t=0.0:1.0] ";
+    cout << "# safe param range testing" << endl << "plot [t=0.0:1.0] ";
 
     // clip safe ranges off c1
     Bezier c1_part1;
@@ -385,143 +367,67 @@ void printCurvesWithSafeRange( const Bezier& c1, const Bezier& c2, double t1_c1,
     Bezier c1_part3;
 
     // subdivide at t1_c1
-    Impl_deCasteljauAt( c1_part1, c1_part2, c1, t1_c1 );
+    Impl_deCasteljauAt(c1_part1, c1_part2, c1, t1_c1);
     // subdivide at t2_c1
-    Impl_deCasteljauAt( c1_part1, c1_part3, c1_part2, t2_c1 );
+    Impl_deCasteljauAt(c1_part1, c1_part3, c1_part2, t2_c1);
 
     // output remaining segment (c1_part1)
 
-    cout << "bez("
-         << c1.p0.x+offset << ","
-         << c1.p1.x+offset << ","
-         << c1.p2.x+offset << ","
-         << c1.p3.x+offset << ",t),bez("
-         << c1.p0.y << ","
-         << c1.p1.y << ","
-         << c1.p2.y << ","
-         << c1.p3.y << ",t), bez("
-         << c2.p0.x+offset << ","
-         << c2.p1.x+offset << ","
-         << c2.p2.x+offset << ","
-         << c2.p3.x+offset << ",t),bez("
-         << c2.p0.y << ","
-         << c2.p1.y << ","
-         << c2.p2.y << ","
-         << c2.p3.y << ",t), "
+    cout << "bez(" << c1.p0.x + offset << "," << c1.p1.x + offset << "," << c1.p2.x + offset << ","
+         << c1.p3.x + offset << ",t),bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << ","
+         << c1.p3.y << ",t), bez(" << c2.p0.x + offset << "," << c2.p1.x + offset << ","
+         << c2.p2.x + offset << "," << c2.p3.x + offset << ",t),bez(" << c2.p0.y << "," << c2.p1.y
+         << "," << c2.p2.y << "," << c2.p3.y << ",t), "
 #if 1
-         << "bez("
-         << c1_part1.p0.x+offset << ","
-         << c1_part1.p1.x+offset << ","
-         << c1_part1.p2.x+offset << ","
-         << c1_part1.p3.x+offset << ",t),bez("
-         << c1_part1.p0.y << ","
-         << c1_part1.p1.y << ","
-         << c1_part1.p2.y << ","
-         << c1_part1.p3.y << ",t), "
+         << "bez(" << c1_part1.p0.x + offset << "," << c1_part1.p1.x + offset << ","
+         << c1_part1.p2.x + offset << "," << c1_part1.p3.x + offset << ",t),bez(" << c1_part1.p0.y
+         << "," << c1_part1.p1.y << "," << c1_part1.p2.y << "," << c1_part1.p3.y << ",t), "
 #endif
 #if 1
-         << "bez("
-         << c2_part.p0.x+offset << ","
-         << c2_part.p1.x+offset << ","
-         << c2_part.p2.x+offset << ","
-         << c2_part.p3.x+offset << ",t),bez("
-         << c2_part.p0.y << ","
-         << c2_part.p1.y << ","
-         << c2_part.p2.y << ","
-         << c2_part.p3.y << ",t), "
+         << "bez(" << c2_part.p0.x + offset << "," << c2_part.p1.x + offset << ","
+         << c2_part.p2.x + offset << "," << c2_part.p3.x + offset << ",t),bez(" << c2_part.p0.y
+         << "," << c2_part.p1.y << "," << c2_part.p2.y << "," << c2_part.p3.y << ",t), "
 #endif
-         << "linex("
-         << bounds_c2.a << ","
-         << bounds_c2.b << ","
-         << bounds_c2.c << ",t)+" << offset << ", liney("
-         << bounds_c2.a << ","
-         << bounds_c2.b << ","
-         << bounds_c2.c << ",t) title \"fat line (center)\", linex("
-         << bounds_c2.a << ","
-         << bounds_c2.b << ","
-         << bounds_c2.c-bounds_c2.dMin << ",t)+" << offset << ", liney("
-         << bounds_c2.a << ","
-         << bounds_c2.b << ","
-         << bounds_c2.c-bounds_c2.dMin << ",t) title \"fat line (min) \", linex("
-         << bounds_c2.a << ","
-         << bounds_c2.b << ","
-         << bounds_c2.c-bounds_c2.dMax << ",t)+" << offset << ", liney("
-         << bounds_c2.a << ","
-         << bounds_c2.b << ","
-         << bounds_c2.c-bounds_c2.dMax << ",t) title \"fat line (max) \"" << endl;
+         << "linex(" << bounds_c2.a << "," << bounds_c2.b << "," << bounds_c2.c << ",t)+" << offset
+         << ", liney(" << bounds_c2.a << "," << bounds_c2.b << "," << bounds_c2.c
+         << ",t) title \"fat line (center)\", linex(" << bounds_c2.a << "," << bounds_c2.b << ","
+         << bounds_c2.c - bounds_c2.dMin << ",t)+" << offset << ", liney(" << bounds_c2.a << ","
+         << bounds_c2.b << "," << bounds_c2.c - bounds_c2.dMin
+         << ",t) title \"fat line (min) \", linex(" << bounds_c2.a << "," << bounds_c2.b << ","
+         << bounds_c2.c - bounds_c2.dMax << ",t)+" << offset << ", liney(" << bounds_c2.a << ","
+         << bounds_c2.b << "," << bounds_c2.c - bounds_c2.dMax << ",t) title \"fat line (max) \""
+         << endl;
 
     offset += 1;
 }
 
-void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
-                                 const Bezier& c2, const Bezier& c2_part,
-                                 double t1_c1, double t2_c1 )
+void printResultWithFinalCurves(const Bezier& c1, const Bezier& c1_part, const Bezier& c2,
+                                const Bezier& c2_part, double t1_c1, double t2_c1)
 {
     static int offset = 0;
 
-    cout << "# final result" << endl
-         << "plot [t=0.0:1.0] ";
+    cout << "# final result" << endl << "plot [t=0.0:1.0] ";
 
-    cout << "bez("
-         << c1.p0.x+offset << ","
-         << c1.p1.x+offset << ","
-         << c1.p2.x+offset << ","
-         << c1.p3.x+offset << ",t),bez("
-         << c1.p0.y << ","
-         << c1.p1.y << ","
-         << c1.p2.y << ","
-         << c1.p3.y << ",t), bez("
-         << c1_part.p0.x+offset << ","
-         << c1_part.p1.x+offset << ","
-         << c1_part.p2.x+offset << ","
-         << c1_part.p3.x+offset << ",t),bez("
-         << c1_part.p0.y << ","
-         << c1_part.p1.y << ","
-         << c1_part.p2.y << ","
-         << c1_part.p3.y << ",t), "
-         << " pointmarkx(bez("
-         << c1.p0.x+offset << ","
-         << c1.p1.x+offset << ","
-         << c1.p2.x+offset << ","
-         << c1.p3.x+offset << ","
-         << t1_c1 << "),t), "
-         << " pointmarky(bez("
-         << c1.p0.y << ","
-         << c1.p1.y << ","
-         << c1.p2.y << ","
-         << c1.p3.y << ","
-         << t1_c1 << "),t), "
-         << " pointmarkx(bez("
-         << c1.p0.x+offset << ","
-         << c1.p1.x+offset << ","
-         << c1.p2.x+offset << ","
-         << c1.p3.x+offset << ","
-         << t2_c1 << "),t), "
-         << " pointmarky(bez("
-         << c1.p0.y << ","
-         << c1.p1.y << ","
-         << c1.p2.y << ","
-         << c1.p3.y << ","
-         << t2_c1 << "),t), "
+    cout << "bez(" << c1.p0.x + offset << "," << c1.p1.x + offset << "," << c1.p2.x + offset << ","
+         << c1.p3.x + offset << ",t),bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << ","
+         << c1.p3.y << ",t), bez(" << c1_part.p0.x + offset << "," << c1_part.p1.x + offset << ","
+         << c1_part.p2.x + offset << "," << c1_part.p3.x + offset << ",t),bez(" << c1_part.p0.y
+         << "," << c1_part.p1.y << "," << c1_part.p2.y << "," << c1_part.p3.y << ",t), "
+         << " pointmarkx(bez(" << c1.p0.x + offset << "," << c1.p1.x + offset << ","
+         << c1.p2.x + offset << "," << c1.p3.x + offset << "," << t1_c1 << "),t), "
+         << " pointmarky(bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << "," << c1.p3.y
+         << "," << t1_c1 << "),t), "
+         << " pointmarkx(bez(" << c1.p0.x + offset << "," << c1.p1.x + offset << ","
+         << c1.p2.x + offset << "," << c1.p3.x + offset << "," << t2_c1 << "),t), "
+         << " pointmarky(bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << "," << c1.p3.y
+         << "," << t2_c1 << "),t), "
 
-         << "bez("
-         << c2.p0.x+offset << ","
-         << c2.p1.x+offset << ","
-         << c2.p2.x+offset << ","
-         << c2.p3.x+offset << ",t),bez("
-         << c2.p0.y << ","
-         << c2.p1.y << ","
-         << c2.p2.y << ","
+         << "bez(" << c2.p0.x + offset << "," << c2.p1.x + offset << "," << c2.p2.x + offset << ","
+         << c2.p3.x + offset << ",t),bez(" << c2.p0.y << "," << c2.p1.y << "," << c2.p2.y << ","
          << c2.p3.y << ",t), "
-         << "bez("
-         << c2_part.p0.x+offset << ","
-         << c2_part.p1.x+offset << ","
-         << c2_part.p2.x+offset << ","
-         << c2_part.p3.x+offset << ",t),bez("
-         << c2_part.p0.y << ","
-         << c2_part.p1.y << ","
-         << c2_part.p2.y << ","
-         << c2_part.p3.y << ",t)" << endl;
+         << "bez(" << c2_part.p0.x + offset << "," << c2_part.p1.x + offset << ","
+         << c2_part.p2.x + offset << "," << c2_part.p3.x + offset << ",t),bez(" << c2_part.p0.y
+         << "," << c2_part.p1.y << "," << c2_part.p2.y << "," << c2_part.p3.y << ",t)" << endl;
 
     offset += 1;
 }
@@ -547,17 +453,13 @@ void printResultWithFinalCurves( const Bezier& c1, const Bezier& c1_part,
     @param c2_part
     Subdivided current part of c2
  */
-bool Impl_calcClipRange( double&        t1,
-                         double&        t2,
-                         const Bezier&  c1_orig,
-                         const Bezier&  c1_part,
-                         const Bezier&  c2_orig,
-                         const Bezier&  c2_part )
+bool Impl_calcClipRange(double& t1, double& t2, const Bezier& c1_orig, const Bezier& c1_part,
+                        const Bezier& c2_orig, const Bezier& c2_part)
 {
     // TODO: Maybe also check fat line orthogonal to P0P3, having P0
     //       and P3 as the extremal points
 
-    if( Impl_doBBoxIntersect(c1_part, c2_part) )
+    if (Impl_doBBoxIntersect(c1_part, c2_part))
     {
         // Calculate fat lines around c1
         FatLine bounds_c2;
@@ -571,27 +473,13 @@ bool Impl_calcClipRange( double&        t1,
         // is necessary anyway, to get the t's on the original curve),
         // since the distance calculations work directly in the
         // Bernstein polynomial parameter domain.
-        if( Impl_calcSafeParams_clip( t1, t2, bounds_c2,
-                                      calcLineDistance( bounds_c2.a,
-                                                        bounds_c2.b,
-                                                        bounds_c2.c,
-                                                        c1_orig.p0.x,
-                                                        c1_orig.p0.y    ),
-                                      calcLineDistance( bounds_c2.a,
-                                                        bounds_c2.b,
-                                                        bounds_c2.c,
-                                                        c1_orig.p1.x,
-                                                        c1_orig.p1.y    ),
-                                      calcLineDistance( bounds_c2.a,
-                                                        bounds_c2.b,
-                                                        bounds_c2.c,
-                                                        c1_orig.p2.x,
-                                                        c1_orig.p2.y    ),
-                                      calcLineDistance( bounds_c2.a,
-                                                        bounds_c2.b,
-                                                        bounds_c2.c,
-                                                        c1_orig.p3.x,
-                                                        c1_orig.p3.y    ) ) )
+        if (Impl_calcSafeParams_clip(
+                t1, t2, bounds_c2,
+                calcLineDistance(bounds_c2.a, bounds_c2.b, bounds_c2.c, c1_orig.p0.x, c1_orig.p0.y),
+                calcLineDistance(bounds_c2.a, bounds_c2.b, bounds_c2.c, c1_orig.p1.x, c1_orig.p1.y),
+                calcLineDistance(bounds_c2.a, bounds_c2.b, bounds_c2.c, c1_orig.p2.x, c1_orig.p2.y),
+                calcLineDistance(bounds_c2.a, bounds_c2.b, bounds_c2.c, c1_orig.p3.x,
+                                 c1_orig.p3.y)))
         {
             //printCurvesWithSafeRange(c1_orig, c2_orig, t1, t2, c2_part, bounds_c2);
 
@@ -608,11 +496,11 @@ bool Impl_calcClipRange( double&        t1,
  * =========================
  */
 
-void Impl_calcFocus( Bezier& res, const Bezier& c )
+void Impl_calcFocus(Bezier& res, const Bezier& c)
 {
     // arbitrary small value, for now
     // TODO: find meaningful value
-    const double minPivotValue( 1.0e-20 );
+    const double minPivotValue(1.0e-20);
 
     Point2D::value_type fMatrix[6];
     Point2D::value_type fRes[2];
@@ -668,13 +556,13 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
     // so, this is what we calculate here (determine c0 and c1):
     fMatrix[0] = c.p1.x - c.p0.x;
     fMatrix[1] = c.p2.x - c.p3.x;
-    fMatrix[2] = (c.p3.y - c.p0.y)/3.0;
+    fMatrix[2] = (c.p3.y - c.p0.y) / 3.0;
     fMatrix[3] = c.p0.y - c.p1.y;
     fMatrix[4] = c.p3.y - c.p2.y;
-    fMatrix[5] = (c.p3.x - c.p0.x)/3.0;
+    fMatrix[5] = (c.p3.x - c.p0.x) / 3.0;
 
     // TODO: determine meaningful value for
-    if( !solve(fMatrix, 2, 3, fRes, minPivotValue) )
+    if (!solve(fMatrix, 2, 3, fRes, minPivotValue))
     {
         // TODO: generate meaningful values here
         // singular or nearly singular system -- use arbitrary
@@ -721,21 +609,18 @@ void Impl_calcFocus( Bezier& res, const Bezier& c )
     // F2.x = (P2.x - 2 c1(P2.y - P1.y) - c0(P3.y - P2.y))  F2.y = (P2.y + c0 (P3.x - P2.x) + 2 c1 (P2.x - P1.x))
     // F3.x = (P3.x - 3 c1(P3.y - P2.y))                    F3.y = (P3.y + 3 c1 (P3.x - P2.x))
 
-    res.p0.x = c.p0.x - 3*fRes[0]*(c.p1.y - c.p0.y);
-    res.p1.x = c.p1.x - fRes[1]*(c.p1.y - c.p0.y) - 2*fRes[0]*(c.p2.y - c.p1.y);
-    res.p2.x = c.p2.x - 2*fRes[1]*(c.p2.y - c.p1.y) - fRes[0]*(c.p3.y - c.p2.y);
-    res.p3.x = c.p3.x - 3*fRes[1]*(c.p3.y - c.p2.y);
+    res.p0.x = c.p0.x - 3 * fRes[0] * (c.p1.y - c.p0.y);
+    res.p1.x = c.p1.x - fRes[1] * (c.p1.y - c.p0.y) - 2 * fRes[0] * (c.p2.y - c.p1.y);
+    res.p2.x = c.p2.x - 2 * fRes[1] * (c.p2.y - c.p1.y) - fRes[0] * (c.p3.y - c.p2.y);
+    res.p3.x = c.p3.x - 3 * fRes[1] * (c.p3.y - c.p2.y);
 
-    res.p0.y = c.p0.y + 3*fRes[0]*(c.p1.x - c.p0.x);
-    res.p1.y = c.p1.y + 2*fRes[0]*(c.p2.x - c.p1.x) + fRes[1]*(c.p1.x - c.p0.x);
-    res.p2.y = c.p2.y + fRes[0]*(c.p3.x - c.p2.x) + 2*fRes[1]*(c.p2.x - c.p1.x);
-    res.p3.y = c.p3.y + 3*fRes[1]*(c.p3.x - c.p2.x);
+    res.p0.y = c.p0.y + 3 * fRes[0] * (c.p1.x - c.p0.x);
+    res.p1.y = c.p1.y + 2 * fRes[0] * (c.p2.x - c.p1.x) + fRes[1] * (c.p1.x - c.p0.x);
+    res.p2.y = c.p2.y + fRes[0] * (c.p3.x - c.p2.x) + 2 * fRes[1] * (c.p2.x - c.p1.x);
+    res.p3.y = c.p3.y + 3 * fRes[1] * (c.p3.x - c.p2.x);
 }
 
-bool Impl_calcSafeParams_focus( double&         t1,
-                                double&         t2,
-                                const Bezier&   curve,
-                                const Bezier&   focus )
+bool Impl_calcSafeParams_focus(double& t1, double& t2, const Bezier& curve, const Bezier& focus)
 {
     // now, we want to determine which normals of the original curve
     // P(t) intersect with the focus curve F(t). The condition for
@@ -797,37 +682,38 @@ bool Impl_calcSafeParams_focus( double&         t1,
 
     // calc polygon of control points (t_{ij}, d_{ij}):
 
-    const int n( 3 ); // cubic bezier curves, as a matter of fact
-    const int i_card( 2*n );
-    const int j_card( n + 1 );
-    const int k_max( n-1 );
-    Polygon2D controlPolygon( i_card*j_card ); // vector of (t_{ij}, d_{ij}) in row-major order
+    const int n(3); // cubic bezier curves, as a matter of fact
+    const int i_card(2 * n);
+    const int j_card(n + 1);
+    const int k_max(n - 1);
+    Polygon2D controlPolygon(i_card * j_card); // vector of (t_{ij}, d_{ij}) in row-major order
 
     int i, j, k, l; // variable notation from formulas above and Sederberg article
     Point2D::value_type d;
-    for( i=0; i<i_card; ++i )
+    for (i = 0; i < i_card; ++i)
     {
-        for( j=0; j<j_card; ++j )
+        for (j = 0; j < j_card; ++j)
         {
             // calc single d_{ij} sum:
-            for( d=0.0, k=std::max(0,i-n); k<=k_max && k<=i; ++k )
+            for (d = 0.0, k = std::max(0, i - n); k <= k_max && k <= i; ++k)
             {
                 l = i - k; // invariant: k + l = i
-                assert(k>=0 && k<=n-1); // k \in {0,...,n-1}
-                assert(l>=0 && l<=n);   // l \in {0,...,n}
+                assert(k >= 0 && k <= n - 1); // k \in {0,...,n-1}
+                assert(l >= 0 && l <= n); // l \in {0,...,n}
 
                 // TODO: find, document and assert proper limits for n and int's max_val.
                 // This becomes important should anybody wants to use
                 // this code for higher-than-cubic beziers
-                d += static_cast<double>(fallFac(n,l)*fallFac(n-1,k)*fac(i)) /
-                    static_cast<double>(fac(l)*fac(k) * fallFac(2*n-1,i)) * n *
-                    ( (curve[k+1].x - curve[k].x)*(curve[l].x - focus[j].x) +   // dot product here
-                      (curve[k+1].y - curve[k].y)*(curve[l].y - focus[j].y) );
+                d += static_cast<double>(fallFac(n, l) * fallFac(n - 1, k) * fac(i))
+                     / static_cast<double>(fac(l) * fac(k) * fallFac(2 * n - 1, i)) * n
+                     * ((curve[k + 1].x - curve[k].x) * (curve[l].x - focus[j].x)
+                        + // dot product here
+                        (curve[k + 1].y - curve[k].y) * (curve[l].y - focus[j].y));
             }
 
             // Note that the t_{ij} values are evenly spaced on the
             // [0,1] interval, thus t_{ij}=i/(2n-1)
-            controlPolygon[ i*j_card + j ] = Point2D( i/(2.0*n-1.0), d );
+            controlPolygon[i * j_card + j] = Point2D(i / (2.0 * n - 1.0), d);
         }
     }
 
@@ -835,27 +721,26 @@ bool Impl_calcSafeParams_focus( double&         t1,
 
     // calc safe parameter range, to determine [0,t1] and [t2,1] where
     // no zero crossing is guaranteed.
-    return Impl_calcSafeParams( t1, t2, controlPolygon, 0.0, 0.0 );
+    return Impl_calcSafeParams(t1, t2, controlPolygon, 0.0, 0.0);
 
 #else
-    bool bRet( Impl_calcSafeParams( t1, t2, controlPolygon, 0.0, 0.0 ) );
+    bool bRet(Impl_calcSafeParams(t1, t2, controlPolygon, 0.0, 0.0));
 
-    Polygon2D convHull( convexHull( controlPolygon ) );
+    Polygon2D convHull(convexHull(controlPolygon));
 
-    cout << "# convex hull testing (focus)" << endl
-         << "plot [t=0:1] ";
+    cout << "# convex hull testing (focus)" << endl << "plot [t=0:1] ";
     cout << "'-' using ($1):($2) title \"control polygon\" with lp, "
          << "'-' using ($1):($2) title \"convex hull\" with lp" << endl;
 
     unsigned int count;
-    for( count=0; count<controlPolygon.size(); ++count )
+    for (count = 0; count < controlPolygon.size(); ++count)
     {
         cout << controlPolygon[count].x << " " << controlPolygon[count].y << endl;
     }
     cout << controlPolygon[0].x << " " << controlPolygon[0].y << endl;
     cout << "e" << endl;
 
-    for( count=0; count<convHull.size(); ++count )
+    for (count = 0; count < convHull.size(); ++count)
     {
         cout << convHull[count].x << " " << convHull[count].y << endl;
     }
@@ -895,18 +780,12 @@ bool Impl_calcSafeParams_focus( double&         t1,
     c1_orig, where c1_orig is 'safe' from c2_part. If the whole
     c1_orig is safe, false must be returned, true otherwise.
  */
-template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterator< std::vector< std::pair<double, double> > >&    result,
-                                                        double                                                                          delta,
-                                                        const Functor&                                                                  safeRangeFunctor,
-                                                        int                                                                             recursionLevel,
-                                                        const Bezier&                                                                   c1_orig,
-                                                        const Bezier&                                                                   c1_part,
-                                                        double                                                                          last_t1_c1,
-                                                        double                                                                          last_t2_c1,
-                                                        const Bezier&                                                                   c2_orig,
-                                                        const Bezier&                                                                   c2_part,
-                                                        double                                                                          last_t1_c2,
-                                                        double                                                                          last_t2_c2  )
+template <class Functor>
+void Impl_applySafeRanges_rec(
+    std::back_insert_iterator<std::vector<std::pair<double, double>>>& result, double delta,
+    const Functor& safeRangeFunctor, int recursionLevel, const Bezier& c1_orig,
+    const Bezier& c1_part, double last_t1_c1, double last_t2_c1, const Bezier& c2_orig,
+    const Bezier& c2_part, double last_t1_c2, double last_t2_c2)
 {
     // check end condition
     // ===================
@@ -922,24 +801,19 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
     // tangency, and justifies to return a single intersection
     // point. Otherwise, inside/outside test might fail here.
 
-    for( int i=0; i<recursionLevel; ++i ) cerr << " ";
-    if( recursionLevel % 2 )
+    for (int i = 0; i < recursionLevel; ++i)
+        cerr << " ";
+    if (recursionLevel % 2)
     {
         cerr << "level: " << recursionLevel
-             << " t: "
-             << last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0
-             << ", c1: " << last_t1_c2 << " " << last_t2_c2
-             << ", c2: " << last_t1_c1 << " " << last_t2_c1
-             << endl;
+             << " t: " << last_t1_c2 + (last_t2_c2 - last_t1_c2) / 2.0 << ", c1: " << last_t1_c2
+             << " " << last_t2_c2 << ", c2: " << last_t1_c1 << " " << last_t2_c1 << endl;
     }
     else
     {
         cerr << "level: " << recursionLevel
-             << " t: "
-             << last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0
-             << ", c1: " << last_t1_c1 << " " << last_t2_c1
-             << ", c2: " << last_t1_c2 << " " << last_t2_c2
-             << endl;
+             << " t: " << last_t1_c1 + (last_t2_c1 - last_t1_c1) / 2.0 << ", c1: " << last_t1_c1
+             << " " << last_t2_c1 << ", c2: " << last_t1_c2 << " " << last_t2_c2 << endl;
     }
 
     // refine solution
@@ -954,14 +828,14 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
     // condition, otherwise.
 
     // determine safe range on c1_orig
-    if( safeRangeFunctor( t1_c1, t2_c1, c1_orig, c1_part, c2_orig, c2_part ) )
+    if (safeRangeFunctor(t1_c1, t2_c1, c1_orig, c1_part, c2_orig, c2_part))
     {
         // now, t1 and t2 are calculated on the original curve
         // (but against a fat line calculated from the subdivided
         // c2, namely c2_part). If the [t1,t2] range is outside
         // our current [last_t1,last_t2] range, we're done in this
         // branch - the curves no longer intersect.
-        if( tolLessEqual(t1_c1, last_t2_c1) && tolGreaterEqual(t2_c1, last_t1_c1) )
+        if (tolLessEqual(t1_c1, last_t2_c1) && tolGreaterEqual(t2_c1, last_t1_c1))
         {
             // As noted above, t1 and t2 are calculated on the
             // original curve, but against a fat line
@@ -980,24 +854,22 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
             // ===================
 
 #if 1
-            if( fabs(last_t2_c1 - last_t1_c1) < 0.0001 &&
-                fabs(last_t2_c2 - last_t1_c2) < 0.0001  )
+            if (fabs(last_t2_c1 - last_t1_c1) < 0.0001 && fabs(last_t2_c2 - last_t1_c2) < 0.0001)
 #else
-            if( fabs(last_t2_c1 - last_t1_c1) < 0.01 &&
-                fabs(last_t2_c2 - last_t1_c2) < 0.01    )
+            if (fabs(last_t2_c1 - last_t1_c1) < 0.01 && fabs(last_t2_c2 - last_t1_c2) < 0.01)
 #endif
             {
                 // done. Add to result
-                if( recursionLevel % 2 )
+                if (recursionLevel % 2)
                 {
                     // uneven level: have to swap the t's, since curves are swapped, too
-                    *result++ = std::make_pair( last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0,
-                                                  last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0 );
+                    *result++ = std::make_pair(last_t1_c2 + (last_t2_c2 - last_t1_c2) / 2.0,
+                                               last_t1_c1 + (last_t2_c1 - last_t1_c1) / 2.0);
                 }
                 else
                 {
-                    *result++ = std::make_pair( last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0,
-                                                  last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0 );
+                    *result++ = std::make_pair(last_t1_c1 + (last_t2_c1 - last_t1_c1) / 2.0,
+                                               last_t1_c2 + (last_t2_c2 - last_t1_c2) / 2.0);
                 }
 
 #if 0
@@ -1008,10 +880,11 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
                 Bezier focus;
                 Impl_calcFocus(focus, c2_part); // need to use subdivided c2
 
-                safeRangeFunctor( t1_c1, t2_c1, c1_orig, c1_part, c2_orig, c2_part );
+                safeRangeFunctor(t1_c1, t2_c1, c1_orig, c1_part, c2_orig, c2_part);
 
                 //printResultWithFinalCurves( c1_orig, c1_part, c2_orig, focus, t1_c1, t2_c1 );
-                printResultWithFinalCurves( c1_orig, c1_part, c2_orig, focus, last_t1_c1, last_t2_c1 );
+                printResultWithFinalCurves(c1_orig, c1_part, c2_orig, focus, last_t1_c1,
+                                           last_t2_c1);
 #endif
             }
             else
@@ -1019,8 +892,8 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
                 // heuristic: if parameter range is not reduced by at least
                 // 20%, subdivide longest curve, and clip shortest against
                 // both parts of longest
-//                if( (last_t2_c1 - last_t1_c1 - t2_c1 + t1_c1) / (last_t2_c1 - last_t1_c1) < 0.2 )
-                if( false )
+                //                if( (last_t2_c1 - last_t1_c1 - t2_c1 + t1_c1) / (last_t2_c1 - last_t1_c1) < 0.2 )
+                if (false)
                 {
                     // subdivide and descend
                     // =====================
@@ -1030,49 +903,49 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
 
                     double intervalMiddle;
 
-                    if( last_t2_c1 - last_t1_c1 > last_t2_c2 - last_t1_c2 )
+                    if (last_t2_c1 - last_t1_c1 > last_t2_c2 - last_t1_c2)
                     {
                         // subdivide c1
                         // ============
 
-                        intervalMiddle = last_t1_c1 + (last_t2_c1 - last_t1_c1)/2.0;
+                        intervalMiddle = last_t1_c1 + (last_t2_c1 - last_t1_c1) / 2.0;
 
                         // subdivide at the middle of the interval (as
                         // we're not subdividing on the original
                         // curve, this simply amounts to subdivision
                         // at 0.5)
-                        Impl_deCasteljauAt( part1, part2, c1_part, 0.5 );
+                        Impl_deCasteljauAt(part1, part2, c1_part, 0.5);
 
                         // and descend recursively with swapped curves
-                        Impl_applySafeRanges_rec( result, delta, safeRangeFunctor, recursionLevel+1,
-                                                  c2_orig, c2_part, last_t1_c2, last_t2_c2,
-                                                  c1_orig, part1, last_t1_c1, intervalMiddle );
+                        Impl_applySafeRanges_rec(
+                            result, delta, safeRangeFunctor, recursionLevel + 1, c2_orig, c2_part,
+                            last_t1_c2, last_t2_c2, c1_orig, part1, last_t1_c1, intervalMiddle);
 
-                        Impl_applySafeRanges_rec( result, delta, safeRangeFunctor, recursionLevel+1,
-                                                  c2_orig, c2_part, last_t1_c2, last_t2_c2,
-                                                  c1_orig, part2, intervalMiddle, last_t2_c1 );
+                        Impl_applySafeRanges_rec(
+                            result, delta, safeRangeFunctor, recursionLevel + 1, c2_orig, c2_part,
+                            last_t1_c2, last_t2_c2, c1_orig, part2, intervalMiddle, last_t2_c1);
                     }
                     else
                     {
                         // subdivide c2
                         // ============
 
-                        intervalMiddle = last_t1_c2 + (last_t2_c2 - last_t1_c2)/2.0;
+                        intervalMiddle = last_t1_c2 + (last_t2_c2 - last_t1_c2) / 2.0;
 
                         // subdivide at the middle of the interval (as
                         // we're not subdividing on the original
                         // curve, this simply amounts to subdivision
                         // at 0.5)
-                        Impl_deCasteljauAt( part1, part2, c2_part, 0.5 );
+                        Impl_deCasteljauAt(part1, part2, c2_part, 0.5);
 
                         // and descend recursively with swapped curves
-                        Impl_applySafeRanges_rec( result, delta, safeRangeFunctor, recursionLevel+1,
-                                                  c2_orig, part1, last_t1_c2, intervalMiddle,
-                                                  c1_orig, c1_part, last_t1_c1, last_t2_c1 );
+                        Impl_applySafeRanges_rec(
+                            result, delta, safeRangeFunctor, recursionLevel + 1, c2_orig, part1,
+                            last_t1_c2, intervalMiddle, c1_orig, c1_part, last_t1_c1, last_t2_c1);
 
-                        Impl_applySafeRanges_rec( result, delta, safeRangeFunctor, recursionLevel+1,
-                                                  c2_orig, part2, intervalMiddle, last_t2_c2,
-                                                  c1_orig, c1_part, last_t1_c1, last_t2_c1 );
+                        Impl_applySafeRanges_rec(
+                            result, delta, safeRangeFunctor, recursionLevel + 1, c2_orig, part2,
+                            intervalMiddle, last_t2_c2, c1_orig, c1_part, last_t1_c1, last_t2_c1);
                     }
                 }
                 else
@@ -1086,7 +959,7 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
                     Bezier c1_part3;
 
                     // subdivide at t1_c1
-                    Impl_deCasteljauAt( c1_part1, c1_part2, c1_orig, t1_c1 );
+                    Impl_deCasteljauAt(c1_part1, c1_part2, c1_orig, t1_c1);
 
                     // subdivide at t2_c1. As we're working on
                     // c1_part2 now, we have to adapt t2_c1 since
@@ -1095,13 +968,14 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
                     // assumption: t2_new = (t2-t1)/(1-t1), which
                     // relates the t2 value into the new parameter
                     // range [0,1] of c1_part2.
-                    Impl_deCasteljauAt( c1_part1, c1_part3, c1_part2, (t2_c1-t1_c1)/(1.0-t1_c1) );
+                    Impl_deCasteljauAt(c1_part1, c1_part3, c1_part2,
+                                       (t2_c1 - t1_c1) / (1.0 - t1_c1));
 
                     // descend with swapped curves and c1_part1 as the
                     // remaining (middle) segment
-                    Impl_applySafeRanges_rec( result, delta, safeRangeFunctor, recursionLevel+1,
-                                              c2_orig, c2_part, last_t1_c2, last_t2_c2,
-                                              c1_orig, c1_part1, t1_c1, t2_c1 );
+                    Impl_applySafeRanges_rec(result, delta, safeRangeFunctor, recursionLevel + 1,
+                                             c2_orig, c2_part, last_t1_c2, last_t2_c2, c1_orig,
+                                             c1_part1, t1_c1, t2_c1);
                 }
             }
         }
@@ -1110,36 +984,29 @@ template <class Functor> void Impl_applySafeRanges_rec( std::back_insert_iterato
 
 struct ClipBezierFunctor
 {
-    bool operator()( double& t1_c1,
-                     double& t2_c1,
-                     const Bezier& c1_orig,
-                     const Bezier& c1_part,
-                     const Bezier& c2_orig,
-                     const Bezier& c2_part ) const
+    bool operator()(double& t1_c1, double& t2_c1, const Bezier& c1_orig, const Bezier& c1_part,
+                    const Bezier& c2_orig, const Bezier& c2_part) const
     {
-        return Impl_calcClipRange( t1_c1, t2_c1, c1_orig, c1_part, c2_orig, c2_part );
+        return Impl_calcClipRange(t1_c1, t2_c1, c1_orig, c1_part, c2_orig, c2_part);
     }
 };
 
 struct BezierTangencyFunctor
 {
-    bool operator()( double& t1_c1,
-                     double& t2_c1,
-                     const Bezier& c1_orig,
-                     const Bezier& c1_part,
-                     const Bezier& c2_orig,
-                     const Bezier& c2_part ) const
+    bool operator()(double& t1_c1, double& t2_c1, const Bezier& c1_orig, const Bezier& c1_part,
+                    const Bezier& c2_orig, const Bezier& c2_part) const
     {
         // calc focus curve of c2
         Bezier focus;
         Impl_calcFocus(focus, c2_part); // need to use subdivided c2
-                                        // here, as the whole curve is
-                                        // used for focus calculation
+            // here, as the whole curve is
+            // used for focus calculation
 
         // determine safe range on c1_orig
-        bool bRet( Impl_calcSafeParams_focus( t1_c1, t2_c1,
-                                              c1_orig, // use orig curve here, need t's on original curve
-                                              focus ) );
+        bool bRet(
+            Impl_calcSafeParams_focus(t1_c1, t2_c1,
+                                      c1_orig, // use orig curve here, need t's on original curve
+                                      focus));
 
         cerr << "range: " << t2_c1 - t1_c1 << ", ret: " << bRet << endl;
 
@@ -1157,10 +1024,8 @@ struct BezierTangencyFunctor
     Maximal allowed distance to true intersection (measured in the
     original curve's coordinate system)
  */
-void clipBezier( std::back_insert_iterator< std::vector< std::pair<double, double> > >&   result,
-                 double                                                                         delta,
-                 const Bezier&                                                                  c1,
-                 const Bezier&                                                                  c2        )
+void clipBezier(std::back_insert_iterator<std::vector<std::pair<double, double>>>& result,
+                double delta, const Bezier& c1, const Bezier& c2)
 {
 #if 0
     // first of all, determine list of collinear normals. Collinear
@@ -1223,80 +1088,82 @@ void clipBezier( std::back_insert_iterator< std::vector< std::pair<double, doubl
         }
     }
 #else
-    Impl_applySafeRanges_rec( result, delta, BezierTangencyFunctor(), 0, c1, c1, 0.0, 1.0, c2, c2, 0.0, 1.0 );
+    Impl_applySafeRanges_rec(result, delta, BezierTangencyFunctor(), 0, c1, c1, 0.0, 1.0, c2, c2,
+                             0.0, 1.0);
     //Impl_applySafeRanges_rec( result, delta, ClipBezierFunctor(), 0, c1, c1, 0.0, 1.0, c2, c2, 0.0, 1.0 );
 #endif
     // that's it, boys'n'girls!
 }
 
-int main(int argc, const char *argv[])
+int main(int argc, const char* argv[])
 {
-    double curr_Offset( 0 );
-    unsigned int i,j,k;
+    double curr_Offset(0);
+    unsigned int i, j, k;
 
-    Bezier someCurves[] =
-        {
-//            {Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0),Point2D(1.0,0.0)},
-//            {Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0),Point2D(1.0,0.5)},
-//            {Point2D(1.0,0.0),Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0)}
-//            {Point2D(0.25+1,0.5),Point2D(0.25+1,0.708333),Point2D(0.423611+1,0.916667),Point2D(0.770833+1,0.980324)},
-//            {Point2D(0.0+1,0.0),Point2D(0.0+1,1.0),Point2D(1.0+1,1.0),Point2D(1.0+1,0.5)}
+    Bezier someCurves[] = {
+        //            {Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0),Point2D(1.0,0.0)},
+        //            {Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0),Point2D(1.0,0.5)},
+        //            {Point2D(1.0,0.0),Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0)}
+        //            {Point2D(0.25+1,0.5),Point2D(0.25+1,0.708333),Point2D(0.423611+1,0.916667),Point2D(0.770833+1,0.980324)},
+        //            {Point2D(0.0+1,0.0),Point2D(0.0+1,1.0),Point2D(1.0+1,1.0),Point2D(1.0+1,0.5)}
 
-// tangency1
-//            {Point2D(0.627124+1,0.828427),Point2D(0.763048+1,0.828507),Point2D(0.885547+1,0.77312),Point2D(0.950692+1,0.67325)},
-//            {Point2D(0.0,1.0),Point2D(0.1,1.0),Point2D(0.4,1.0),Point2D(0.5,1.0)}
+        // tangency1
+        //            {Point2D(0.627124+1,0.828427),Point2D(0.763048+1,0.828507),Point2D(0.885547+1,0.77312),Point2D(0.950692+1,0.67325)},
+        //            {Point2D(0.0,1.0),Point2D(0.1,1.0),Point2D(0.4,1.0),Point2D(0.5,1.0)}
 
-//            {Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0),Point2D(1.0,0.5)},
-//            {Point2D(0.60114,0.933091),Point2D(0.69461,0.969419),Point2D(0.80676,0.992976),Point2D(0.93756,0.998663)}
-//            {Point2D(1.0,0.0),Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0)},
-//            {Point2D(0.62712,0.828427),Point2D(0.76305,0.828507),Point2D(0.88555,0.77312),Point2D(0.95069,0.67325)}
+        //            {Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0),Point2D(1.0,0.5)},
+        //            {Point2D(0.60114,0.933091),Point2D(0.69461,0.969419),Point2D(0.80676,0.992976),Point2D(0.93756,0.998663)}
+        //            {Point2D(1.0,0.0),Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0)},
+        //            {Point2D(0.62712,0.828427),Point2D(0.76305,0.828507),Point2D(0.88555,0.77312),Point2D(0.95069,0.67325)}
 
-// clipping1
-//            {Point2D(0.0,0.0),Point2D(0.0,3.5),Point2D(1.0,-2.5),Point2D(1.0,1.0)},
-//            {Point2D(0.0,1.0),Point2D(3.5,1.0),Point2D(-2.5,0.0),Point2D(1.0,0.0)}
+        // clipping1
+        //            {Point2D(0.0,0.0),Point2D(0.0,3.5),Point2D(1.0,-2.5),Point2D(1.0,1.0)},
+        //            {Point2D(0.0,1.0),Point2D(3.5,1.0),Point2D(-2.5,0.0),Point2D(1.0,0.0)}
 
-// tangency2
-//            {Point2D(0.0,1.0),Point2D(3.5,1.0),Point2D(-2.5,0.0),Point2D(1.0,0.0)},
-//            {Point2D(15.3621,0.00986464),Point2D(15.3683,0.0109389),Point2D(15.3682,0.0109315),Point2D(15.3621,0.00986464)}
+        // tangency2
+        //            {Point2D(0.0,1.0),Point2D(3.5,1.0),Point2D(-2.5,0.0),Point2D(1.0,0.0)},
+        //            {Point2D(15.3621,0.00986464),Point2D(15.3683,0.0109389),Point2D(15.3682,0.0109315),Point2D(15.3621,0.00986464)}
 
-// tangency3
-//            {Point2D(1.0,0.0),Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0)},
-//            {Point2D(-0.5,0.0),Point2D(0.5,0.0),Point2D(0.5,1.0),Point2D(-0.5,1.0)}
+        // tangency3
+        //            {Point2D(1.0,0.0),Point2D(0.0,0.0),Point2D(0.0,1.0),Point2D(1.0,1.0)},
+        //            {Point2D(-0.5,0.0),Point2D(0.5,0.0),Point2D(0.5,1.0),Point2D(-0.5,1.0)}
 
-// tangency4
-//            {Point2D(-0.5,0.0),Point2D(0.5,0.0),Point2D(0.5,1.0),Point2D(-0.5,1.0)},
-//            {Point2D(0.26,0.4),Point2D(0.25,0.5),Point2D(0.25,0.5),Point2D(0.26,0.6)}
+        // tangency4
+        //            {Point2D(-0.5,0.0),Point2D(0.5,0.0),Point2D(0.5,1.0),Point2D(-0.5,1.0)},
+        //            {Point2D(0.26,0.4),Point2D(0.25,0.5),Point2D(0.25,0.5),Point2D(0.26,0.6)}
 
-// tangency5
-//            {Point2D(0.0,0.0),Point2D(0.0,3.5),Point2D(1.0,-2.5),Point2D(1.0,1.0)},
-//            {Point2D(15.3621,0.00986464),Point2D(15.3683,0.0109389),Point2D(15.3682,0.0109315),Point2D(15.3621,0.00986464)}
+        // tangency5
+        //            {Point2D(0.0,0.0),Point2D(0.0,3.5),Point2D(1.0,-2.5),Point2D(1.0,1.0)},
+        //            {Point2D(15.3621,0.00986464),Point2D(15.3683,0.0109389),Point2D(15.3682,0.0109315),Point2D(15.3621,0.00986464)}
 
-// tangency6
-//            {Point2D(0.0,0.0),Point2D(0.0,3.5),Point2D(1.0,-2.5),Point2D(1.0,1.0)},
-//            {Point2D(15.3621,10.00986464),Point2D(15.3683,10.0109389),Point2D(15.3682,10.0109315),Point2D(15.3621,10.00986464)}
+        // tangency6
+        //            {Point2D(0.0,0.0),Point2D(0.0,3.5),Point2D(1.0,-2.5),Point2D(1.0,1.0)},
+        //            {Point2D(15.3621,10.00986464),Point2D(15.3683,10.0109389),Point2D(15.3682,10.0109315),Point2D(15.3621,10.00986464)}
 
-// tangency7
-//            {Point2D(2.505,0.0),Point2D(2.505+4.915,4.300),Point2D(2.505+3.213,10.019),Point2D(2.505-2.505,10.255)},
-//            {Point2D(15.3621,10.00986464),Point2D(15.3683,10.0109389),Point2D(15.3682,10.0109315),Point2D(15.3621,10.00986464)}
+        // tangency7
+        //            {Point2D(2.505,0.0),Point2D(2.505+4.915,4.300),Point2D(2.505+3.213,10.019),Point2D(2.505-2.505,10.255)},
+        //            {Point2D(15.3621,10.00986464),Point2D(15.3683,10.0109389),Point2D(15.3682,10.0109315),Point2D(15.3621,10.00986464)}
 
-// tangency Sederberg example
-            {Point2D(2.505,0.0),Point2D(2.505+4.915,4.300),Point2D(2.505+3.213,10.019),Point2D(2.505-2.505,10.255)},
-            {Point2D(5.33+9.311,0.0),Point2D(5.33+9.311-13.279,4.205),Point2D(5.33+9.311-10.681,9.119),Point2D(5.33+9.311-2.603,10.254)}
+        // tangency Sederberg example
+        { Point2D(2.505, 0.0), Point2D(2.505 + 4.915, 4.300), Point2D(2.505 + 3.213, 10.019),
+          Point2D(2.505 - 2.505, 10.255) },
+        { Point2D(5.33 + 9.311, 0.0), Point2D(5.33 + 9.311 - 13.279, 4.205),
+          Point2D(5.33 + 9.311 - 10.681, 9.119), Point2D(5.33 + 9.311 - 2.603, 10.254) }
 
-// clipping2
-//            {Point2D(-0.5,0.0),Point2D(0.5,0.0),Point2D(0.5,1.0),Point2D(-0.5,1.0)},
-//            {Point2D(0.2575,0.4),Point2D(0.2475,0.5),Point2D(0.2475,0.5),Point2D(0.2575,0.6)}
+        // clipping2
+        //            {Point2D(-0.5,0.0),Point2D(0.5,0.0),Point2D(0.5,1.0),Point2D(-0.5,1.0)},
+        //            {Point2D(0.2575,0.4),Point2D(0.2475,0.5),Point2D(0.2475,0.5),Point2D(0.2575,0.6)}
 
-//            {Point2D(0.0,0.1),Point2D(0.2,3.5),Point2D(1.0,-2.5),Point2D(1.1,1.2)},
-//            {Point2D(0.0,1.0),Point2D(3.5,0.9),Point2D(-2.5,0.1),Point2D(1.1,0.2)}
-//            {Point2D(0.0,0.1),Point2D(0.2,3.0),Point2D(1.0,-2.0),Point2D(1.1,1.2)},
-//            {Point2D(0.627124+1,0.828427),Point2D(0.763048+1,0.828507),Point2D(0.885547+1,0.77312),Point2D(0.950692+1,0.67325)}
-//            {Point2D(0.0,1.0),Point2D(3.0,0.9),Point2D(-2.0,0.1),Point2D(1.1,0.2)}
-//            {Point2D(0.0,4.0),Point2D(0.1,5.0),Point2D(0.9,5.0),Point2D(1.0,4.0)},
-//            {Point2D(0.0,0.0),Point2D(0.1,0.5),Point2D(0.9,0.5),Point2D(1.0,0.0)},
-//            {Point2D(0.0,0.1),Point2D(0.1,1.5),Point2D(0.9,1.5),Point2D(1.0,0.1)},
-//            {Point2D(0.0,-4.0),Point2D(0.1,-5.0),Point2D(0.9,-5.0),Point2D(1.0,-4.0)}
-        };
+        //            {Point2D(0.0,0.1),Point2D(0.2,3.5),Point2D(1.0,-2.5),Point2D(1.1,1.2)},
+        //            {Point2D(0.0,1.0),Point2D(3.5,0.9),Point2D(-2.5,0.1),Point2D(1.1,0.2)}
+        //            {Point2D(0.0,0.1),Point2D(0.2,3.0),Point2D(1.0,-2.0),Point2D(1.1,1.2)},
+        //            {Point2D(0.627124+1,0.828427),Point2D(0.763048+1,0.828507),Point2D(0.885547+1,0.77312),Point2D(0.950692+1,0.67325)}
+        //            {Point2D(0.0,1.0),Point2D(3.0,0.9),Point2D(-2.0,0.1),Point2D(1.1,0.2)}
+        //            {Point2D(0.0,4.0),Point2D(0.1,5.0),Point2D(0.9,5.0),Point2D(1.0,4.0)},
+        //            {Point2D(0.0,0.0),Point2D(0.1,0.5),Point2D(0.9,0.5),Point2D(1.0,0.0)},
+        //            {Point2D(0.0,0.1),Point2D(0.1,1.5),Point2D(0.9,1.5),Point2D(1.0,0.1)},
+        //            {Point2D(0.0,-4.0),Point2D(0.1,-5.0),Point2D(0.9,-5.0),Point2D(1.0,-4.0)}
+    };
 
     // output gnuplot setup
     cout << "#!/usr/bin/gnuplot -persist" << endl
@@ -1309,16 +1176,17 @@ int main(int argc, const char *argv[])
          << "pointmarkx(c,t) = c-0.03*t" << endl
          << "pointmarky(c,t) = c+0.03*t" << endl
          << "linex(a,b,c,t) = a*-c + t*-b" << endl
-         << "liney(a,b,c,t) = b*-c + t*a" << endl << endl
-         << "# end of setup" << endl << endl;
+         << "liney(a,b,c,t) = b*-c + t*a" << endl
+         << endl
+         << "# end of setup" << endl
+         << endl;
 
 #ifdef WITH_CONVEXHULL_TEST
     // test convex hull algorithm
-    const double convHull_xOffset( curr_Offset );
+    const double convHull_xOffset(curr_Offset);
     curr_Offset += 20;
-    cout << "# convex hull testing" << endl
-         << "plot [t=0:1] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    cout << "# convex hull testing" << endl << "plot [t=0:1] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
         Polygon2D aTestPoly(4);
         aTestPoly[0] = someCurves[i].p0;
@@ -1331,22 +1199,17 @@ int main(int argc, const char *argv[])
         aTestPoly[2].x += convHull_xOffset;
         aTestPoly[3].x += convHull_xOffset;
 
-        cout << " bez("
-             << aTestPoly[0].x << ","
-             << aTestPoly[1].x << ","
-             << aTestPoly[2].x << ","
-             << aTestPoly[3].x << ",t),bez("
-             << aTestPoly[0].y << ","
-             << aTestPoly[1].y << ","
-             << aTestPoly[2].y << ","
-             << aTestPoly[3].y << ",t), '-' using ($1):($2) title \"convex hull " << i << "\" with lp";
+        cout << " bez(" << aTestPoly[0].x << "," << aTestPoly[1].x << "," << aTestPoly[2].x << ","
+             << aTestPoly[3].x << ",t),bez(" << aTestPoly[0].y << "," << aTestPoly[1].y << ","
+             << aTestPoly[2].y << "," << aTestPoly[3].y
+             << ",t), '-' using ($1):($2) title \"convex hull " << i << "\" with lp";
 
-        if( i+1<sizeof(someCurves)/sizeof(Bezier) )
+        if (i + 1 < sizeof(someCurves) / sizeof(Bezier))
             cout << ",\\" << endl;
         else
             cout << endl;
     }
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
         Polygon2D aTestPoly(4);
         aTestPoly[0] = someCurves[i].p0;
@@ -1359,9 +1222,9 @@ int main(int argc, const char *argv[])
         aTestPoly[2].x += convHull_xOffset;
         aTestPoly[3].x += convHull_xOffset;
 
-        Polygon2D convHull( convexHull(aTestPoly) );
+        Polygon2D convHull(convexHull(aTestPoly));
 
-        for( k=0; k<convHull.size(); ++k )
+        for (k = 0; k < convHull.size(); ++k)
         {
             cout << convHull[k].x << " " << convHull[k].y << endl;
         }
@@ -1372,13 +1235,12 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_MULTISUBDIVIDE_TEST
     // test convex hull algorithm
-    const double multiSubdivide_xOffset( curr_Offset );
+    const double multiSubdivide_xOffset(curr_Offset);
     curr_Offset += 20;
-    cout << "# multi subdivide testing" << endl
-         << "plot [t=0:1] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    cout << "# multi subdivide testing" << endl << "plot [t=0:1] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        Bezier c( someCurves[i] );
+        Bezier c(someCurves[i]);
         Bezier c1_part1;
         Bezier c1_part2;
         Bezier c1_part3;
@@ -1388,11 +1250,11 @@ int main(int argc, const char *argv[])
         c.p2.x += multiSubdivide_xOffset;
         c.p3.x += multiSubdivide_xOffset;
 
-        const double t1( 0.1+i/(3.0*sizeof(someCurves)/sizeof(Bezier)) );
-        const double t2( 0.9-i/(3.0*sizeof(someCurves)/sizeof(Bezier)) );
+        const double t1(0.1 + i / (3.0 * sizeof(someCurves) / sizeof(Bezier)));
+        const double t2(0.9 - i / (3.0 * sizeof(someCurves) / sizeof(Bezier)));
 
         // subdivide at t1
-        Impl_deCasteljauAt( c1_part1, c1_part2, c, t1 );
+        Impl_deCasteljauAt(c1_part1, c1_part2, c, t1);
 
         // subdivide at t2_c1. As we're working on
         // c1_part2 now, we have to adapt t2_c1 since
@@ -1401,40 +1263,23 @@ int main(int argc, const char *argv[])
         // assumption: t2_new = (t2-t1)/(1-t1), which
         // relates the t2 value into the new parameter
         // range [0,1] of c1_part2.
-        Impl_deCasteljauAt( c1_part1, c1_part3, c1_part2, (t2-t1)/(1.0-t1) );
+        Impl_deCasteljauAt(c1_part1, c1_part3, c1_part2, (t2 - t1) / (1.0 - t1));
 
         // subdivide at t2
-        Impl_deCasteljauAt( c1_part3, c1_part2, c, t2 );
+        Impl_deCasteljauAt(c1_part3, c1_part2, c, t2);
 
-        cout << " bez("
-             << c1_part1.p0.x << ","
-             << c1_part1.p1.x << ","
-             << c1_part1.p2.x << ","
-             << c1_part1.p3.x << ",t), bez("
-             << c1_part1.p0.y+0.01 << ","
-             << c1_part1.p1.y+0.01 << ","
-             << c1_part1.p2.y+0.01 << ","
-             << c1_part1.p3.y+0.01 << ",t) title \"middle " << i << "\", "
-             << " bez("
-             << c1_part2.p0.x << ","
-             << c1_part2.p1.x << ","
-             << c1_part2.p2.x << ","
-             << c1_part2.p3.x << ",t), bez("
-             << c1_part2.p0.y << ","
-             << c1_part2.p1.y << ","
-             << c1_part2.p2.y << ","
-             << c1_part2.p3.y << ",t) title \"right " << i << "\", "
-             << " bez("
-             << c1_part3.p0.x << ","
-             << c1_part3.p1.x << ","
-             << c1_part3.p2.x << ","
-             << c1_part3.p3.x << ",t), bez("
-             << c1_part3.p0.y << ","
-             << c1_part3.p1.y << ","
-             << c1_part3.p2.y << ","
-             << c1_part3.p3.y << ",t) title \"left " << i << "\"";
+        cout << " bez(" << c1_part1.p0.x << "," << c1_part1.p1.x << "," << c1_part1.p2.x << ","
+             << c1_part1.p3.x << ",t), bez(" << c1_part1.p0.y + 0.01 << "," << c1_part1.p1.y + 0.01
+             << "," << c1_part1.p2.y + 0.01 << "," << c1_part1.p3.y + 0.01 << ",t) title \"middle "
+             << i << "\", "
+             << " bez(" << c1_part2.p0.x << "," << c1_part2.p1.x << "," << c1_part2.p2.x << ","
+             << c1_part2.p3.x << ",t), bez(" << c1_part2.p0.y << "," << c1_part2.p1.y << ","
+             << c1_part2.p2.y << "," << c1_part2.p3.y << ",t) title \"right " << i << "\", "
+             << " bez(" << c1_part3.p0.x << "," << c1_part3.p1.x << "," << c1_part3.p2.x << ","
+             << c1_part3.p3.x << ",t), bez(" << c1_part3.p0.y << "," << c1_part3.p1.y << ","
+             << c1_part3.p2.y << "," << c1_part3.p3.y << ",t) title \"left " << i << "\"";
 
-        if( i+1<sizeof(someCurves)/sizeof(Bezier) )
+        if (i + 1 < sizeof(someCurves) / sizeof(Bezier))
             cout << ",\\" << endl;
         else
             cout << endl;
@@ -1443,13 +1288,12 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_FATLINE_TEST
     // test fatline algorithm
-    const double fatLine_xOffset( curr_Offset );
+    const double fatLine_xOffset(curr_Offset);
     curr_Offset += 20;
-    cout << "# fat line testing" << endl
-         << "plot [t=0:1] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    cout << "# fat line testing" << endl << "plot [t=0:1] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        Bezier c( someCurves[i] );
+        Bezier c(someCurves[i]);
 
         c.p0.x += fatLine_xOffset;
         c.p1.x += fatLine_xOffset;
@@ -1460,35 +1304,17 @@ int main(int argc, const char *argv[])
 
         Impl_calcFatLine(line, c);
 
-        cout << " bez("
-             << c.p0.x << ","
-             << c.p1.x << ","
-             << c.p2.x << ","
-             << c.p3.x << ",t), bez("
-             << c.p0.y << ","
-             << c.p1.y << ","
-             << c.p2.y << ","
-             << c.p3.y << ",t) title \"bezier " << i << "\", linex("
-             << line.a << ","
-             << line.b << ","
-             << line.c << ",t), liney("
-             << line.a << ","
-             << line.b << ","
-             << line.c << ",t) title \"fat line (center) on " << i << "\", linex("
-             << line.a << ","
-             << line.b << ","
-             << line.c-line.dMin << ",t), liney("
-             << line.a << ","
-             << line.b << ","
-             << line.c-line.dMin << ",t) title \"fat line (min) on " << i << "\", linex("
-             << line.a << ","
-             << line.b << ","
-             << line.c-line.dMax << ",t), liney("
-             << line.a << ","
-             << line.b << ","
-             << line.c-line.dMax << ",t) title \"fat line (max) on " << i << "\"";
+        cout << " bez(" << c.p0.x << "," << c.p1.x << "," << c.p2.x << "," << c.p3.x << ",t), bez("
+             << c.p0.y << "," << c.p1.y << "," << c.p2.y << "," << c.p3.y << ",t) title \"bezier "
+             << i << "\", linex(" << line.a << "," << line.b << "," << line.c << ",t), liney("
+             << line.a << "," << line.b << "," << line.c << ",t) title \"fat line (center) on " << i
+             << "\", linex(" << line.a << "," << line.b << "," << line.c - line.dMin
+             << ",t), liney(" << line.a << "," << line.b << "," << line.c - line.dMin
+             << ",t) title \"fat line (min) on " << i << "\", linex(" << line.a << "," << line.b
+             << "," << line.c - line.dMax << ",t), liney(" << line.a << "," << line.b << ","
+             << line.c - line.dMax << ",t) title \"fat line (max) on " << i << "\"";
 
-        if( i+1<sizeof(someCurves)/sizeof(Bezier) )
+        if (i + 1 < sizeof(someCurves) / sizeof(Bezier))
             cout << ",\\" << endl;
         else
             cout << endl;
@@ -1497,13 +1323,12 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_CALCFOCUS_TEST
     // test focus curve algorithm
-    const double focus_xOffset( curr_Offset );
+    const double focus_xOffset(curr_Offset);
     curr_Offset += 20;
-    cout << "# focus line testing" << endl
-         << "plot [t=0:1] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    cout << "# focus line testing" << endl << "plot [t=0:1] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        Bezier c( someCurves[i] );
+        Bezier c(someCurves[i]);
 
         c.p0.x += focus_xOffset;
         c.p1.x += focus_xOffset;
@@ -1514,25 +1339,13 @@ int main(int argc, const char *argv[])
         Bezier focus;
         Impl_calcFocus(focus, c);
 
-        cout << " bez("
-             << c.p0.x << ","
-             << c.p1.x << ","
-             << c.p2.x << ","
-             << c.p3.x << ",t), bez("
-             << c.p0.y << ","
-             << c.p1.y << ","
-             << c.p2.y << ","
-             << c.p3.y << ",t) title \"bezier " << i << "\", bez("
-             << focus.p0.x << ","
-             << focus.p1.x << ","
-             << focus.p2.x << ","
-             << focus.p3.x << ",t), bez("
-             << focus.p0.y << ","
-             << focus.p1.y << ","
-             << focus.p2.y << ","
-             << focus.p3.y << ",t) title \"focus " << i << "\"";
+        cout << " bez(" << c.p0.x << "," << c.p1.x << "," << c.p2.x << "," << c.p3.x << ",t), bez("
+             << c.p0.y << "," << c.p1.y << "," << c.p2.y << "," << c.p3.y << ",t) title \"bezier "
+             << i << "\", bez(" << focus.p0.x << "," << focus.p1.x << "," << focus.p2.x << ","
+             << focus.p3.x << ",t), bez(" << focus.p0.y << "," << focus.p1.y << "," << focus.p2.y
+             << "," << focus.p3.y << ",t) title \"focus " << i << "\"";
 
-        if( i+1<sizeof(someCurves)/sizeof(Bezier) )
+        if (i + 1 < sizeof(someCurves) / sizeof(Bezier))
             cout << ",\\" << endl;
         else
             cout << endl;
@@ -1541,12 +1354,11 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_SAFEPARAMBASE_TEST
     // test safe params base method
-    double safeParamsBase_xOffset( curr_Offset );
-    cout << "# safe param base method testing" << endl
-         << "plot [t=0:1] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    double safeParamsBase_xOffset(curr_Offset);
+    cout << "# safe param base method testing" << endl << "plot [t=0:1] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        Bezier c( someCurves[i] );
+        Bezier c(someCurves[i]);
 
         c.p0.x += safeParamsBase_xOffset;
         c.p1.x += safeParamsBase_xOffset;
@@ -1561,30 +1373,24 @@ int main(int argc, const char *argv[])
 
         double t1, t2;
 
-        bool bRet( Impl_calcSafeParams( t1, t2, poly, 0, 1 ) );
+        bool bRet(Impl_calcSafeParams(t1, t2, poly, 0, 1));
 
-        Polygon2D convHull( convexHull( poly ) );
+        Polygon2D convHull(convexHull(poly));
 
-        cout << " bez("
-             << poly[0].x << ","
-             << poly[1].x << ","
-             << poly[2].x << ","
-             << poly[3].x << ",t),bez("
-             << poly[0].y << ","
-             << poly[1].y << ","
-             << poly[2].y << ","
-             << poly[3].y << ",t), "
+        cout << " bez(" << poly[0].x << "," << poly[1].x << "," << poly[2].x << "," << poly[3].x
+             << ",t),bez(" << poly[0].y << "," << poly[1].y << "," << poly[2].y << "," << poly[3].y
+             << ",t), "
              << "t+" << safeParamsBase_xOffset << ", 0, "
              << "t+" << safeParamsBase_xOffset << ", 1, ";
-        if( bRet )
+        if (bRet)
         {
-            cout << t1+safeParamsBase_xOffset << ", t, "
-                 << t2+safeParamsBase_xOffset << ", t, ";
+            cout << t1 + safeParamsBase_xOffset << ", t, " << t2 + safeParamsBase_xOffset
+                 << ", t, ";
         }
         cout << "'-' using ($1):($2) title \"control polygon\" with lp, "
              << "'-' using ($1):($2) title \"convex hull\" with lp";
 
-        if( i+1<sizeof(someCurves)/sizeof(Bezier) )
+        if (i + 1 < sizeof(someCurves) / sizeof(Bezier))
             cout << ",\\" << endl;
         else
             cout << endl;
@@ -1593,9 +1399,9 @@ int main(int argc, const char *argv[])
     }
 
     safeParamsBase_xOffset = curr_Offset;
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        Bezier c( someCurves[i] );
+        Bezier c(someCurves[i]);
 
         c.p0.x += safeParamsBase_xOffset;
         c.p1.x += safeParamsBase_xOffset;
@@ -1610,19 +1416,19 @@ int main(int argc, const char *argv[])
 
         double t1, t2;
 
-        Impl_calcSafeParams( t1, t2, poly, 0, 1 );
+        Impl_calcSafeParams(t1, t2, poly, 0, 1);
 
-        Polygon2D convHull( convexHull( poly ) );
+        Polygon2D convHull(convexHull(poly));
 
         unsigned int k;
-        for( k=0; k<poly.size(); ++k )
+        for (k = 0; k < poly.size(); ++k)
         {
             cout << poly[k].x << " " << poly[k].y << endl;
         }
         cout << poly[0].x << " " << poly[0].y << endl;
         cout << "e" << endl;
 
-        for( k=0; k<convHull.size(); ++k )
+        for (k = 0; k < convHull.size(); ++k)
         {
             cout << convHull[k].x << " " << convHull[k].y << endl;
         }
@@ -1636,16 +1442,15 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_SAFEPARAMS_TEST
     // test safe parameter range algorithm
-    const double safeParams_xOffset( curr_Offset );
+    const double safeParams_xOffset(curr_Offset);
     curr_Offset += 20;
-    cout << "# safe param range testing" << endl
-         << "plot [t=0.0:1.0] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    cout << "# safe param range testing" << endl << "plot [t=0.0:1.0] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        for( j=i+1; j<sizeof(someCurves)/sizeof(Bezier); ++j )
+        for (j = i + 1; j < sizeof(someCurves) / sizeof(Bezier); ++j)
         {
-            Bezier c1( someCurves[i] );
-            Bezier c2( someCurves[j] );
+            Bezier c1(someCurves[i]);
+            Bezier c2(someCurves[j]);
 
             c1.p0.x += safeParams_xOffset;
             c1.p1.x += safeParams_xOffset;
@@ -1658,7 +1463,7 @@ int main(int argc, const char *argv[])
 
             double t1, t2;
 
-            if( Impl_calcClipRange(t1, t2, c1, c1, c2, c2) )
+            if (Impl_calcClipRange(t1, t2, c1, c1, c2, c2))
             {
                 // clip safe ranges off c1
                 Bezier c1_part1;
@@ -1666,39 +1471,21 @@ int main(int argc, const char *argv[])
                 Bezier c1_part3;
 
                 // subdivide at t1_c1
-                Impl_deCasteljauAt( c1_part1, c1_part2, c1, t1 );
+                Impl_deCasteljauAt(c1_part1, c1_part2, c1, t1);
                 // subdivide at t2_c1
-                Impl_deCasteljauAt( c1_part1, c1_part3, c1_part2, (t2-t1)/(1.0-t1) );
+                Impl_deCasteljauAt(c1_part1, c1_part3, c1_part2, (t2 - t1) / (1.0 - t1));
 
                 // output remaining segment (c1_part1)
 
-                cout << " bez("
-                     << c1.p0.x << ","
-                     << c1.p1.x << ","
-                     << c1.p2.x << ","
-                     << c1.p3.x << ",t),bez("
-                     << c1.p0.y << ","
-                     << c1.p1.y << ","
-                     << c1.p2.y << ","
-                     << c1.p3.y << ",t), bez("
-                     << c2.p0.x << ","
-                     << c2.p1.x << ","
-                     << c2.p2.x << ","
-                     << c2.p3.x << ",t),bez("
-                     << c2.p0.y << ","
-                     << c2.p1.y << ","
-                     << c2.p2.y << ","
-                     << c2.p3.y << ",t), bez("
-                     << c1_part1.p0.x << ","
-                     << c1_part1.p1.x << ","
-                     << c1_part1.p2.x << ","
-                     << c1_part1.p3.x << ",t),bez("
-                     << c1_part1.p0.y << ","
-                     << c1_part1.p1.y << ","
-                     << c1_part1.p2.y << ","
-                     << c1_part1.p3.y << ",t)";
+                cout << " bez(" << c1.p0.x << "," << c1.p1.x << "," << c1.p2.x << "," << c1.p3.x
+                     << ",t),bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << "," << c1.p3.y
+                     << ",t), bez(" << c2.p0.x << "," << c2.p1.x << "," << c2.p2.x << "," << c2.p3.x
+                     << ",t),bez(" << c2.p0.y << "," << c2.p1.y << "," << c2.p2.y << "," << c2.p3.y
+                     << ",t), bez(" << c1_part1.p0.x << "," << c1_part1.p1.x << "," << c1_part1.p2.x
+                     << "," << c1_part1.p3.x << ",t),bez(" << c1_part1.p0.y << "," << c1_part1.p1.y
+                     << "," << c1_part1.p2.y << "," << c1_part1.p3.y << ",t)";
 
-                if( i+2<sizeof(someCurves)/sizeof(Bezier) )
+                if (i + 2 < sizeof(someCurves) / sizeof(Bezier))
                     cout << ",\\" << endl;
                 else
                     cout << endl;
@@ -1709,12 +1496,12 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_SAFEPARAM_DETAILED_TEST
     // test safe parameter range algorithm
-    const double safeParams2_xOffset( curr_Offset );
+    const double safeParams2_xOffset(curr_Offset);
     curr_Offset += 20;
-    if( sizeof(someCurves)/sizeof(Bezier) > 1 )
+    if (sizeof(someCurves) / sizeof(Bezier) > 1)
     {
-        Bezier c1( someCurves[0] );
-        Bezier c2( someCurves[1] );
+        Bezier c1(someCurves[0]);
+        Bezier c2(someCurves[1]);
 
         c1.p0.x += safeParams2_xOffset;
         c1.p1.x += safeParams2_xOffset;
@@ -1734,16 +1521,15 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_SAFEFOCUSPARAM_TEST
     // test safe parameter range from focus algorithm
-    const double safeParamsFocus_xOffset( curr_Offset );
+    const double safeParamsFocus_xOffset(curr_Offset);
     curr_Offset += 20;
-    cout << "# safe param range from focus testing" << endl
-         << "plot [t=0.0:1.0] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    cout << "# safe param range from focus testing" << endl << "plot [t=0.0:1.0] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        for( j=i+1; j<sizeof(someCurves)/sizeof(Bezier); ++j )
+        for (j = i + 1; j < sizeof(someCurves) / sizeof(Bezier); ++j)
         {
-            Bezier c1( someCurves[i] );
-            Bezier c2( someCurves[j] );
+            Bezier c1(someCurves[i]);
+            Bezier c2(someCurves[j]);
 
             c1.p0.x += safeParamsFocus_xOffset;
             c1.p1.x += safeParamsFocus_xOffset;
@@ -1781,14 +1567,13 @@ int main(int argc, const char *argv[])
                 Impl_calcFocus( focus, c2 );
             }
 #else
-            Impl_calcFocus( focus, c2 );
+            Impl_calcFocus(focus, c2);
 #endif
 #else
             focus = c2;
 #endif
             // determine safe range on c1
-            bool bRet( Impl_calcSafeParams_focus( t1, t2,
-                                                  c1, focus ) );
+            bool bRet(Impl_calcSafeParams_focus(t1, t2, c1, focus));
 
             cerr << "t1: " << t1 << ", t2: " << t2 << endl;
 
@@ -1798,65 +1583,36 @@ int main(int argc, const char *argv[])
             Bezier c1_part3;
 
             // subdivide at t1_c1
-            Impl_deCasteljauAt( c1_part1, c1_part2, c1, t1 );
+            Impl_deCasteljauAt(c1_part1, c1_part2, c1, t1);
             // subdivide at t2_c1
-            Impl_deCasteljauAt( c1_part1, c1_part3, c1_part2, (t2-t1)/(1.0-t1) );
+            Impl_deCasteljauAt(c1_part1, c1_part3, c1_part2, (t2 - t1) / (1.0 - t1));
 
             // output remaining segment (c1_part1)
 
-            cout << " bez("
-                 << c1.p0.x << ","
-                 << c1.p1.x << ","
-                 << c1.p2.x << ","
-                 << c1.p3.x << ",t),bez("
-                 << c1.p0.y << ","
-                 << c1.p1.y << ","
-                 << c1.p2.y << ","
-                 << c1.p3.y << ",t) title \"c1\", "
+            cout << " bez(" << c1.p0.x << "," << c1.p1.x << "," << c1.p2.x << "," << c1.p3.x
+                 << ",t),bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << "," << c1.p3.y
+                 << ",t) title \"c1\", "
 #ifdef WITH_SAFEFOCUSPARAM_CALCFOCUS
-                 << "bez("
-                 << c2.p0.x << ","
-                 << c2.p1.x << ","
-                 << c2.p2.x << ","
-                 << c2.p3.x << ",t),bez("
-                 << c2.p0.y << ","
-                 << c2.p1.y << ","
-                 << c2.p2.y << ","
-                 << c2.p3.y << ",t) title \"c2\", "
-                 << "bez("
-                 << focus.p0.x << ","
-                 << focus.p1.x << ","
-                 << focus.p2.x << ","
-                 << focus.p3.x << ",t),bez("
-                 << focus.p0.y << ","
-                 << focus.p1.y << ","
-                 << focus.p2.y << ","
-                 << focus.p3.y << ",t) title \"focus\"";
+                 << "bez(" << c2.p0.x << "," << c2.p1.x << "," << c2.p2.x << "," << c2.p3.x
+                 << ",t),bez(" << c2.p0.y << "," << c2.p1.y << "," << c2.p2.y << "," << c2.p3.y
+                 << ",t) title \"c2\", "
+                 << "bez(" << focus.p0.x << "," << focus.p1.x << "," << focus.p2.x << ","
+                 << focus.p3.x << ",t),bez(" << focus.p0.y << "," << focus.p1.y << "," << focus.p2.y
+                 << "," << focus.p3.y << ",t) title \"focus\"";
 #else
-                 << "bez("
-                 << c2.p0.x << ","
-                 << c2.p1.x << ","
-                 << c2.p2.x << ","
-                 << c2.p3.x << ",t),bez("
-                 << c2.p0.y << ","
-                 << c2.p1.y << ","
-                 << c2.p2.y << ","
-                 << c2.p3.y << ",t) title \"focus\"";
+                 << "bez(" << c2.p0.x << "," << c2.p1.x << "," << c2.p2.x << "," << c2.p3.x
+                 << ",t),bez(" << c2.p0.y << "," << c2.p1.y << "," << c2.p2.y << "," << c2.p3.y
+                 << ",t) title \"focus\"";
 #endif
-            if( bRet )
+            if (bRet)
             {
-                cout << ", bez("
-                     << c1_part1.p0.x << ","
-                     << c1_part1.p1.x << ","
-                     << c1_part1.p2.x << ","
-                     << c1_part1.p3.x << ",t),bez("
-                     << c1_part1.p0.y+0.01 << ","
-                     << c1_part1.p1.y+0.01 << ","
-                     << c1_part1.p2.y+0.01 << ","
-                     << c1_part1.p3.y+0.01 << ",t) title \"part\"";
+                cout << ", bez(" << c1_part1.p0.x << "," << c1_part1.p1.x << "," << c1_part1.p2.x
+                     << "," << c1_part1.p3.x << ",t),bez(" << c1_part1.p0.y + 0.01 << ","
+                     << c1_part1.p1.y + 0.01 << "," << c1_part1.p2.y + 0.01 << ","
+                     << c1_part1.p3.y + 0.01 << ",t) title \"part\"";
             }
 
-            if( i+2<sizeof(someCurves)/sizeof(Bezier) )
+            if (i + 2 < sizeof(someCurves) / sizeof(Bezier))
                 cout << ",\\" << endl;
             else
                 cout << endl;
@@ -1866,12 +1622,12 @@ int main(int argc, const char *argv[])
 
 #ifdef WITH_SAFEFOCUSPARAM_DETAILED_TEST
     // test safe parameter range algorithm
-    const double safeParams3_xOffset( curr_Offset );
+    const double safeParams3_xOffset(curr_Offset);
     curr_Offset += 20;
-    if( sizeof(someCurves)/sizeof(Bezier) > 1 )
+    if (sizeof(someCurves) / sizeof(Bezier) > 1)
     {
-        Bezier c1( someCurves[0] );
-        Bezier c2( someCurves[1] );
+        Bezier c1(someCurves[0]);
+        Bezier c2(someCurves[1]);
 
         c1.p0.x += safeParams3_xOffset;
         c1.p1.x += safeParams3_xOffset;
@@ -1886,31 +1642,29 @@ int main(int argc, const char *argv[])
 
         Bezier focus;
 #ifdef WITH_SAFEFOCUSPARAM_CALCFOCUS
-        Impl_calcFocus( focus, c2 );
+        Impl_calcFocus(focus, c2);
 #else
         focus = c2;
 #endif
 
         // determine safe range on c1, output happens here
-        Impl_calcSafeParams_focus( t1, t2,
-                                   c1, focus );
+        Impl_calcSafeParams_focus(t1, t2, c1, focus);
     }
 #endif
 
 #ifdef WITH_BEZIERCLIP_TEST
-    std::vector< std::pair<double, double> >                                result;
-    std::back_insert_iterator< std::vector< std::pair<double, double> > > ii(result);
+    std::vector<std::pair<double, double>> result;
+    std::back_insert_iterator<std::vector<std::pair<double, double>>> ii(result);
 
     // test full bezier clipping
-    const double bezierClip_xOffset( curr_Offset );
-    cout << endl << endl << "# bezier clip testing" << endl
-         << "plot [t=0:1] ";
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    const double bezierClip_xOffset(curr_Offset);
+    cout << endl << endl << "# bezier clip testing" << endl << "plot [t=0:1] ";
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        for( j=i+1; j<sizeof(someCurves)/sizeof(Bezier); ++j )
+        for (j = i + 1; j < sizeof(someCurves) / sizeof(Bezier); ++j)
         {
-            Bezier c1( someCurves[i] );
-            Bezier c2( someCurves[j] );
+            Bezier c1(someCurves[i]);
+            Bezier c2(someCurves[j]);
 
             c1.p0.x += bezierClip_xOffset;
             c1.p1.x += bezierClip_xOffset;
@@ -1921,56 +1675,32 @@ int main(int argc, const char *argv[])
             c2.p2.x += bezierClip_xOffset;
             c2.p3.x += bezierClip_xOffset;
 
-            cout << " bez("
-                 << c1.p0.x << ","
-                 << c1.p1.x << ","
-                 << c1.p2.x << ","
-                 << c1.p3.x << ",t),bez("
-                 << c1.p0.y << ","
-                 << c1.p1.y << ","
-                 << c1.p2.y << ","
-                 << c1.p3.y << ",t), bez("
-                 << c2.p0.x << ","
-                 << c2.p1.x << ","
-                 << c2.p2.x << ","
-                 << c2.p3.x << ",t),bez("
-                 << c2.p0.y << ","
-                 << c2.p1.y << ","
-                 << c2.p2.y << ","
-                 << c2.p3.y << ",t), '-' using (bez("
-                 << c1.p0.x << ","
-                 << c1.p1.x << ","
-                 << c1.p2.x << ","
-                 << c1.p3.x
-                 << ",$1)):(bez("
-                 << c1.p0.y << ","
-                 << c1.p1.y << ","
-                 << c1.p2.y << ","
-                 << c1.p3.y << ",$1)) title \"bezier " << i << " clipped against " << j << " (t on " << i << ")\", "
-                 << " '-' using (bez("
-                 << c2.p0.x << ","
-                 << c2.p1.x << ","
-                 << c2.p2.x << ","
-                 << c2.p3.x
-                 << ",$1)):(bez("
-                 << c2.p0.y << ","
-                 << c2.p1.y << ","
-                 << c2.p2.y << ","
-                 << c2.p3.y << ",$1)) title \"bezier " << i << " clipped against " << j << " (t on " << j << ")\"";
+            cout << " bez(" << c1.p0.x << "," << c1.p1.x << "," << c1.p2.x << "," << c1.p3.x
+                 << ",t),bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << "," << c1.p3.y
+                 << ",t), bez(" << c2.p0.x << "," << c2.p1.x << "," << c2.p2.x << "," << c2.p3.x
+                 << ",t),bez(" << c2.p0.y << "," << c2.p1.y << "," << c2.p2.y << "," << c2.p3.y
+                 << ",t), '-' using (bez(" << c1.p0.x << "," << c1.p1.x << "," << c1.p2.x << ","
+                 << c1.p3.x << ",$1)):(bez(" << c1.p0.y << "," << c1.p1.y << "," << c1.p2.y << ","
+                 << c1.p3.y << ",$1)) title \"bezier " << i << " clipped against " << j << " (t on "
+                 << i << ")\", "
+                 << " '-' using (bez(" << c2.p0.x << "," << c2.p1.x << "," << c2.p2.x << ","
+                 << c2.p3.x << ",$1)):(bez(" << c2.p0.y << "," << c2.p1.y << "," << c2.p2.y << ","
+                 << c2.p3.y << ",$1)) title \"bezier " << i << " clipped against " << j << " (t on "
+                 << j << ")\"";
 
-            if( i+2<sizeof(someCurves)/sizeof(Bezier) )
+            if (i + 2 < sizeof(someCurves) / sizeof(Bezier))
                 cout << ",\\" << endl;
             else
                 cout << endl;
         }
     }
-    for( i=0; i<sizeof(someCurves)/sizeof(Bezier); ++i )
+    for (i = 0; i < sizeof(someCurves) / sizeof(Bezier); ++i)
     {
-        for( j=i+1; j<sizeof(someCurves)/sizeof(Bezier); ++j )
+        for (j = i + 1; j < sizeof(someCurves) / sizeof(Bezier); ++j)
         {
             result.clear();
-            Bezier c1( someCurves[i] );
-            Bezier c2( someCurves[j] );
+            Bezier c1(someCurves[i]);
+            Bezier c2(someCurves[j]);
 
             c1.p0.x += bezierClip_xOffset;
             c1.p1.x += bezierClip_xOffset;
@@ -1981,15 +1711,15 @@ int main(int argc, const char *argv[])
             c2.p2.x += bezierClip_xOffset;
             c2.p3.x += bezierClip_xOffset;
 
-            clipBezier( ii, 0.00001, c1, c2 );
+            clipBezier(ii, 0.00001, c1, c2);
 
-            for( k=0; k<result.size(); ++k )
+            for (k = 0; k < result.size(); ++k)
             {
                 cout << result[k].first << endl;
             }
             cout << "e" << endl;
 
-            for( k=0; k<result.size(); ++k )
+            for (k = 0; k < result.size(); ++k)
             {
                 cout << result[k].second << endl;
             }

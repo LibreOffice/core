@@ -47,7 +47,8 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
-namespace chart {
+namespace chart
+{
 
 struct PieChart::ShapeParam
 {
@@ -93,15 +94,17 @@ struct PieChart::ShapeParam
      */
     double mfDepth;
 
-    ShapeParam() :
-        mfUnitCircleStartAngleDegree(0.0),
-        mfUnitCircleWidthAngleDegree(0.0),
-        mfUnitCircleOuterRadius(0.0),
-        mfUnitCircleInnerRadius(0.0),
-        mfExplodePercentage(0.0),
-        mfLogicYSum(0.0),
-        mfLogicZ(0.0),
-        mfDepth(0.0) {}
+    ShapeParam()
+        : mfUnitCircleStartAngleDegree(0.0)
+        , mfUnitCircleWidthAngleDegree(0.0)
+        , mfUnitCircleOuterRadius(0.0)
+        , mfUnitCircleInnerRadius(0.0)
+        , mfExplodePercentage(0.0)
+        , mfLogicYSum(0.0)
+        , mfLogicZ(0.0)
+        , mfDepth(0.0)
+    {
+    }
 };
 
 namespace
@@ -130,17 +133,18 @@ bool lcl_isInsidePage(const awt::Point& rPos, const awt::Size& rSize, const awt:
 class PiePositionHelper : public PolarPlottingPositionHelper
 {
 public:
-    PiePositionHelper( double fAngleDegreeOffset );
+    PiePositionHelper(double fAngleDegreeOffset);
 
-    bool    getInnerAndOuterRadius( double fCategoryX, double& fLogicInnerRadius, double& fLogicOuterRadius, bool bUseRings, double fMaxOffset ) const;
+    bool getInnerAndOuterRadius(double fCategoryX, double& fLogicInnerRadius,
+                                double& fLogicOuterRadius, bool bUseRings, double fMaxOffset) const;
 
 public:
     //Distance between different category rings, seen relative to width of a ring:
-    double  m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
+    double m_fRingDistance; //>=0 m_fRingDistance=1 --> distance == width
 };
 
-PiePositionHelper::PiePositionHelper( double fAngleDegreeOffset )
-        : m_fRingDistance(0.0)
+PiePositionHelper::PiePositionHelper(double fAngleDegreeOffset)
+    : m_fRingDistance(0.0)
 {
     m_fRadiusOffset = 0.0;
     m_fAngleDegreeOffset = fAngleDegreeOffset;
@@ -158,17 +162,17 @@ PiePositionHelper::PiePositionHelper( double fAngleDegreeOffset )
  *  It returns true if the ring is visible (that is not out of the radius
  *  axis scale range).
  */
-bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
-                                               , double& fLogicInnerRadius, double& fLogicOuterRadius
-                                               , bool bUseRings, double fMaxOffset ) const
+bool PiePositionHelper::getInnerAndOuterRadius(double fCategoryX, double& fLogicInnerRadius,
+                                               double& fLogicOuterRadius, bool bUseRings,
+                                               double fMaxOffset) const
 {
-    if( !bUseRings )
+    if (!bUseRings)
         fCategoryX = 1.0;
 
-    double fLogicInner = fCategoryX -0.5+m_fRingDistance/2.0;
-    double fLogicOuter = fCategoryX +0.5-m_fRingDistance/2.0;
+    double fLogicInner = fCategoryX - 0.5 + m_fRingDistance / 2.0;
+    double fLogicOuter = fCategoryX + 0.5 - m_fRingDistance / 2.0;
 
-    if( !isMathematicalOrientationRadius() )
+    if (!isMathematicalOrientationRadius())
     {
         //in this case the given getMaximumX() was not correct instead the minimum should have been smaller by fMaxOffset
         //but during getMaximumX and getMimumX we do not know the axis orientation
@@ -176,118 +180,116 @@ bool PiePositionHelper::getInnerAndOuterRadius( double fCategoryX
         fLogicOuter += fMaxOffset;
     }
 
-    if( fLogicInner >= getLogicMaxX() )
+    if (fLogicInner >= getLogicMaxX())
         return false;
-    if( fLogicOuter <= getLogicMinX() )
+    if (fLogicOuter <= getLogicMinX())
         return false;
 
-    if( fLogicInner < getLogicMinX() )
+    if (fLogicInner < getLogicMinX())
         fLogicInner = getLogicMinX();
-    if( fLogicOuter > getLogicMaxX() )
+    if (fLogicOuter > getLogicMaxX())
         fLogicOuter = getLogicMaxX();
 
     fLogicInnerRadius = fLogicInner;
     fLogicOuterRadius = fLogicOuter;
-    if( !isMathematicalOrientationRadius() )
-        std::swap(fLogicInnerRadius,fLogicOuterRadius);
+    if (!isMathematicalOrientationRadius())
+        std::swap(fLogicInnerRadius, fLogicOuterRadius);
     return true;
 }
 
-PieChart::PieChart( const rtl::Reference<ChartType>& xChartTypeModel
-                   , sal_Int32 nDimensionCount
-                   , bool bExcludingPositioning )
-        : VSeriesPlotter( xChartTypeModel, nDimensionCount )
-        , m_pPosHelper( new PiePositionHelper( (m_nDimension==3) ? 0.0 : 90.0 ) )
-        , m_bUseRings(false)
-        , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
-        , m_fMaxOffset(std::numeric_limits<double>::quiet_NaN())
+PieChart::PieChart(const rtl::Reference<ChartType>& xChartTypeModel, sal_Int32 nDimensionCount,
+                   bool bExcludingPositioning)
+    : VSeriesPlotter(xChartTypeModel, nDimensionCount)
+    , m_pPosHelper(new PiePositionHelper((m_nDimension == 3) ? 0.0 : 90.0))
+    , m_bUseRings(false)
+    , m_bSizeExcludesLabelsAndExplodedSegments(bExcludingPositioning)
+    , m_fMaxOffset(std::numeric_limits<double>::quiet_NaN())
 {
     PlotterBase::m_pPosHelper = m_pPosHelper.get();
     VSeriesPlotter::m_pMainPosHelper = m_pPosHelper.get();
     m_pPosHelper->m_fRadiusOffset = 0.0;
     m_pPosHelper->m_fRingDistance = 0.0;
 
-    if( !xChartTypeModel.is() )
+    if (!xChartTypeModel.is())
         return;
 
     try
     {
-        xChartTypeModel->getPropertyValue( "UseRings") >>= m_bUseRings;
-        if( m_bUseRings )
+        xChartTypeModel->getPropertyValue("UseRings") >>= m_bUseRings;
+        if (m_bUseRings)
         {
             m_pPosHelper->m_fRadiusOffset = 1.0;
-            if( nDimensionCount==3 )
+            if (nDimensionCount == 3)
                 m_pPosHelper->m_fRingDistance = 0.1;
         }
     }
-    catch( const uno::Exception& )
+    catch (const uno::Exception&)
     {
-        TOOLS_WARN_EXCEPTION("chart2", "" );
+        TOOLS_WARN_EXCEPTION("chart2", "");
     }
 }
 
-PieChart::~PieChart()
-{
-}
+PieChart::~PieChart() {}
 
-void PieChart::setScales( std::vector< ExplicitScaleData >&& rScales, bool /* bSwapXAndYAxis */ )
+void PieChart::setScales(std::vector<ExplicitScaleData>&& rScales, bool /* bSwapXAndYAxis */)
 {
-    OSL_ENSURE(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
-    m_pPosHelper->setScales( std::move(rScales), true );
+    OSL_ENSURE(m_nDimension <= static_cast<sal_Int32>(rScales.size()),
+               "Dimension of Plotter does not fit two dimension of given scale sequence");
+    m_pPosHelper->setScales(std::move(rScales), true);
 }
 
 drawing::Direction3D PieChart::getPreferredDiagramAspectRatio() const
 {
-    if( m_nDimension == 3 )
-        return drawing::Direction3D(1,1,0.10);
-    return drawing::Direction3D(1,1,1);
+    if (m_nDimension == 3)
+        return drawing::Direction3D(1, 1, 0.10);
+    return drawing::Direction3D(1, 1, 1);
 }
 
-bool PieChart::shouldSnapRectToUsedArea()
-{
-    return true;
-}
+bool PieChart::shouldSnapRectToUsedArea() { return true; }
 
-rtl::Reference<SvxShape> PieChart::createDataPoint(
-    const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
-    const uno::Reference<beans::XPropertySet>& xObjectProperties,
-    const ShapeParam& rParam )
+rtl::Reference<SvxShape>
+PieChart::createDataPoint(const rtl::Reference<SvxShapeGroupAnyD>& xTarget,
+                          const uno::Reference<beans::XPropertySet>& xObjectProperties,
+                          const ShapeParam& rParam)
 {
     //transform position:
     drawing::Direction3D aOffset;
     if (rParam.mfExplodePercentage != 0.0)
     {
-        double fAngle  = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree/2.0;
-        double fRadius = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
-        drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
-        drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
+        double fAngle
+            = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
+        double fRadius = (rParam.mfUnitCircleOuterRadius - rParam.mfUnitCircleInnerRadius)
+                         * rParam.mfExplodePercentage;
+        drawing::Position3D aOrigin
+            = m_pPosHelper->transformUnitCircleToScene(0, 0, rParam.mfLogicZ);
+        drawing::Position3D aNewOrigin
+            = m_pPosHelper->transformUnitCircleToScene(fAngle, fRadius, rParam.mfLogicZ);
         aOffset = aNewOrigin - aOrigin;
     }
 
     //create point
     rtl::Reference<SvxShape> xShape;
-    if(m_nDimension==3)
+    if (m_nDimension == 3)
     {
-        xShape = ShapeFactory::createPieSegment( xTarget
-            , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
-            , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
-            , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() )
-            , rParam.mfDepth );
+        xShape = ShapeFactory::createPieSegment(
+            xTarget, rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree,
+            rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius, aOffset,
+            B3DHomMatrixToHomogenMatrix(m_pPosHelper->getUnitCartesianToScene()), rParam.mfDepth);
     }
     else
     {
-        xShape = ShapeFactory::createPieSegment2D( xTarget
-            , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
-            , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius
-            , aOffset, B3DHomMatrixToHomogenMatrix( m_pPosHelper->getUnitCartesianToScene() ) );
+        xShape = ShapeFactory::createPieSegment2D(
+            xTarget, rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree,
+            rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius, aOffset,
+            B3DHomMatrixToHomogenMatrix(m_pPosHelper->getUnitCartesianToScene()));
     }
-    PropertyMapper::setMappedProperties( *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties() );
+    PropertyMapper::setMappedProperties(
+        *xShape, xObjectProperties, PropertyMapper::getPropertyNameMapForFilledSeriesProperties());
     return xShape;
 }
 
-void PieChart::createTextLabelShape(
-    const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
-    VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam )
+void PieChart::createTextLabelShape(const rtl::Reference<SvxShapeGroupAnyD>& xTextTarget,
+                                    VDataSeries& rSeries, sal_Int32 nPointIndex, ShapeParam& rParam)
 {
     if (!rSeries.getDataPointLabelIfLabel(nPointIndex))
         // There is no text label for this data point.  Nothing to do.
@@ -299,15 +301,16 @@ void PieChart::createTextLabelShape(
     ///and related comments).
     if (rParam.mfExplodePercentage != 0.0)
     {
-        double fExplodeOffset = (rParam.mfUnitCircleOuterRadius-rParam.mfUnitCircleInnerRadius)*rParam.mfExplodePercentage;
+        double fExplodeOffset = (rParam.mfUnitCircleOuterRadius - rParam.mfUnitCircleInnerRadius)
+                                * rParam.mfExplodePercentage;
         rParam.mfUnitCircleInnerRadius += fExplodeOffset;
         rParam.mfUnitCircleOuterRadius += fExplodeOffset;
     }
 
     ///get the required label placement type. Available placements are
     ///`AVOID_OVERLAP`, `CENTER`, `OUTSIDE` and `INSIDE`;
-    sal_Int32 nLabelPlacement = rSeries.getLabelPlacement(
-        nPointIndex, m_xChartTypeModel, m_pPosHelper->isSwapXAndY());
+    sal_Int32 nLabelPlacement
+        = rSeries.getLabelPlacement(nPointIndex, m_xChartTypeModel, m_pPosHelper->isSwapXAndY());
 
     ///when the placement is of `AVOID_OVERLAP` type a later rearrangement of
     ///the label position is allowed; the `createTextLabelShape` treats the
@@ -317,7 +320,7 @@ void PieChart::createTextLabelShape(
     //AVOID_OVERLAP is in fact "Best fit" in the UI.
     bool bMovementAllowed = nLabelPlacement == css::chart::DataLabelPlacement::AVOID_OVERLAP
                             || nLabelPlacement == css::chart::DataLabelPlacement::CUSTOM;
-    if( bMovementAllowed )
+    if (bMovementAllowed)
         nLabelPlacement = css::chart::DataLabelPlacement::CENTER;
 
     ///for `OUTSIDE` (`INSIDE`) label placements an offset of 150 (-150), in the
@@ -329,48 +332,49 @@ void PieChart::createTextLabelShape(
     ///coordinates for label anchor points are in the 10000-20000 range, hence
     ///these are coordinates of a virtual screen and 150 is a small value;
     LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
-    sal_Int32 nScreenValueOffsetInRadiusDirection = 0 ;
-    if( nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE )
-        nScreenValueOffsetInRadiusDirection = (m_nDimension!=3) ? 150 : 0;//todo maybe calculate this font height dependent
-    else if( nLabelPlacement == css::chart::DataLabelPlacement::INSIDE )
-        nScreenValueOffsetInRadiusDirection = (m_nDimension!=3) ? -150 : 0;//todo maybe calculate this font height dependent
+    sal_Int32 nScreenValueOffsetInRadiusDirection = 0;
+    if (nLabelPlacement == css::chart::DataLabelPlacement::OUTSIDE)
+        nScreenValueOffsetInRadiusDirection
+            = (m_nDimension != 3) ? 150 : 0; //todo maybe calculate this font height dependent
+    else if (nLabelPlacement == css::chart::DataLabelPlacement::INSIDE)
+        nScreenValueOffsetInRadiusDirection
+            = (m_nDimension != 3) ? -150 : 0; //todo maybe calculate this font height dependent
 
     ///the scene position of the label anchor point is calculated (see notes for
     ///`PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues`),
     ///and immediately transformed into the screen position.
-    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(),m_nDimension,m_xLogicTarget);
+    PolarLabelPositionHelper aPolarPosHelper(m_pPosHelper.get(), m_nDimension, m_xLogicTarget);
     awt::Point aScreenPosition2D(
-        aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(eAlignment, nLabelPlacement
-        , rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree
-        , rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ+0.5, 0 ));
+        aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(
+            eAlignment, nLabelPlacement, rParam.mfUnitCircleStartAngleDegree,
+            rParam.mfUnitCircleWidthAngleDegree, rParam.mfUnitCircleInnerRadius,
+            rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ + 0.5, 0));
 
     ///the screen position of the pie/donut center is calculated.
     PieLabelInfo aPieLabelInfo;
-    aPieLabelInfo.aFirstPosition = basegfx::B2IVector( aScreenPosition2D.X, aScreenPosition2D.Y );
-    awt::Point aOrigin( aPolarPosHelper.transformSceneToScreenPosition( m_pPosHelper->transformUnitCircleToScene( 0.0, 0.0, rParam.mfLogicZ+1.0 ) ) );
-    aPieLabelInfo.aOrigin = basegfx::B2IVector( aOrigin.X, aOrigin.Y );
+    aPieLabelInfo.aFirstPosition = basegfx::B2IVector(aScreenPosition2D.X, aScreenPosition2D.Y);
+    awt::Point aOrigin(aPolarPosHelper.transformSceneToScreenPosition(
+        m_pPosHelper->transformUnitCircleToScene(0.0, 0.0, rParam.mfLogicZ + 1.0)));
+    aPieLabelInfo.aOrigin = basegfx::B2IVector(aOrigin.X, aOrigin.Y);
 
     ///add a scaling independent Offset if requested
-    if( nScreenValueOffsetInRadiusDirection != 0)
+    if (nScreenValueOffsetInRadiusDirection != 0)
     {
-        basegfx::B2IVector aDirection( aScreenPosition2D.X- aOrigin.X, aScreenPosition2D.Y- aOrigin.Y );
+        basegfx::B2IVector aDirection(aScreenPosition2D.X - aOrigin.X,
+                                      aScreenPosition2D.Y - aOrigin.Y);
         aDirection.setLength(nScreenValueOffsetInRadiusDirection);
         aScreenPosition2D.X += aDirection.getX();
         aScreenPosition2D.Y += aDirection.getY();
     }
 
-   // compute outer pie radius
+    // compute outer pie radius
     awt::Point aOuterCirclePoint = PlottingPositionHelper::transformSceneToScreenPosition(
-            m_pPosHelper->transformUnitCircleToScene(
-                    0,
-                    rParam.mfUnitCircleOuterRadius,
-                    0 ),
-            m_xLogicTarget, m_nDimension );
-    basegfx::B2IVector aRadiusVector(
-            aOuterCirclePoint.X - aPieLabelInfo.aOrigin.getX(),
-            aOuterCirclePoint.Y - aPieLabelInfo.aOrigin.getY() );
+        m_pPosHelper->transformUnitCircleToScene(0, rParam.mfUnitCircleOuterRadius, 0),
+        m_xLogicTarget, m_nDimension);
+    basegfx::B2IVector aRadiusVector(aOuterCirclePoint.X - aPieLabelInfo.aOrigin.getX(),
+                                     aOuterCirclePoint.Y - aPieLabelInfo.aOrigin.getY());
     double fSquaredPieRadius = aRadiusVector.scalar(aRadiusVector);
-    double fPieRadius = sqrt( fSquaredPieRadius );
+    double fPieRadius = sqrt(fSquaredPieRadius);
     double fAngleDegree
         = rParam.mfUnitCircleStartAngleDegree + rParam.mfUnitCircleWidthAngleDegree / 2.0;
     while (fAngleDegree > 360.0)
@@ -397,16 +401,16 @@ void PieChart::createTextLabelShape(
     sal_Int32 nTextMaximumFrameWidth = ceil(fTextMaximumFrameWidth);
 
     ///the text shape for the label is created
-    aPieLabelInfo.xTextShape = createDataLabel(
-        xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
-        aScreenPosition2D, eAlignment, 0, nTextMaximumFrameWidth);
+    aPieLabelInfo.xTextShape
+        = createDataLabel(xTextTarget, rSeries, nPointIndex, nVal, rParam.mfLogicYSum,
+                          aScreenPosition2D, eAlignment, 0, nTextMaximumFrameWidth);
 
     ///a new `PieLabelInfo` instance is initialized with all the info related to
     ///the current label in order to simplify later label position rearrangement;
-    rtl::Reference< SvxShape > xChild = aPieLabelInfo.xTextShape;
+    rtl::Reference<SvxShape> xChild = aPieLabelInfo.xTextShape;
 
     ///text shape could be empty; in that case there is no need to add label info
-    if( !xChild.is() )
+    if (!xChild.is())
         return;
 
     aPieLabelInfo.xLabelGroupShape = dynamic_cast<SvxShapeGroupAnyD*>(xChild->getParent().get());
@@ -436,9 +440,9 @@ void PieChart::createTextLabelShape(
             aScreenPosition2D
                 = aPolarPosHelper.getLabelScreenPositionAndAlignmentForUnitCircleValues(
                     eAlignment, css::chart::DataLabelPlacement::OUTSIDE,
-                    rParam.mfUnitCircleStartAngleDegree,
-                    rParam.mfUnitCircleWidthAngleDegree, rParam.mfUnitCircleInnerRadius,
-                    rParam.mfUnitCircleOuterRadius, rParam.mfLogicZ + 0.5, 0);
+                    rParam.mfUnitCircleStartAngleDegree, rParam.mfUnitCircleWidthAngleDegree,
+                    rParam.mfUnitCircleInnerRadius, rParam.mfUnitCircleOuterRadius,
+                    rParam.mfLogicZ + 0.5, 0);
             aPieLabelInfo.aFirstPosition
                 = basegfx::B2IVector(aScreenPosition2D.X, aScreenPosition2D.Y);
 
@@ -461,13 +465,14 @@ void PieChart::createTextLabelShape(
             if (!xChild.is())
                 return;
 
-            aPieLabelInfo.xLabelGroupShape = dynamic_cast<SvxShapeGroupAnyD*>(xChild->getParent().get());
+            aPieLabelInfo.xLabelGroupShape
+                = dynamic_cast<SvxShapeGroupAnyD*>(xChild->getParent().get());
         }
     }
 
     bool bShowLeaderLine = rSeries.getPropertiesOfSeries()
-                                   ->getPropertyValue("ShowCustomLeaderLines")
-                                   .get<sal_Bool>();
+                               ->getPropertyValue("ShowCustomLeaderLines")
+                               .get<sal_Bool>();
     if (m_bPieLabelsAllowToMove)
     {
         ::basegfx::B2IRectangle aRect(lcl_getRect(aPieLabelInfo.xLabelGroupShape));
@@ -513,16 +518,17 @@ void PieChart::createTextLabelShape(
             {
                 //when the line is very short compared to the page size don't create one
                 ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
-                double fPageDiagonaleLength = std::hypot( double(nPageWidth), double(nPageHeight ) );
+                double fPageDiagonaleLength = std::hypot(double(nPageWidth), double(nPageHeight));
                 if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
                 {
-                    drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
+                    drawing::PointSequenceSequence aPoints{ { { nX1, nY1 }, { nX2, nY2 } } };
 
                     VLineProperties aVLineProperties;
                     if (aPieLabelInfo.xTextShape.is())
                     {
                         sal_Int32 nColor = 0;
-                        aPieLabelInfo.xTextShape->SvxShape::getPropertyValue("CharColor") >>= nColor;
+                        aPieLabelInfo.xTextShape->SvxShape::getPropertyValue("CharColor")
+                            >>= nColor;
                         //automatic font color does not work for lines -> fallback to black
                         if (nColor != -1)
                             aVLineProperties.Color <<= nColor;
@@ -542,15 +548,13 @@ void PieChart::createTextLabelShape(
     m_aLabelInfoList.push_back(aPieLabelInfo);
 }
 
-void PieChart::addSeries( std::unique_ptr<VDataSeries> pSeries, sal_Int32 /* zSlot */, sal_Int32 /* xSlot */, sal_Int32 /* ySlot */ )
+void PieChart::addSeries(std::unique_ptr<VDataSeries> pSeries, sal_Int32 /* zSlot */,
+                         sal_Int32 /* xSlot */, sal_Int32 /* ySlot */)
 {
-    VSeriesPlotter::addSeries( std::move(pSeries), 0, -1, 0 );
+    VSeriesPlotter::addSeries(std::move(pSeries), 0, -1, 0);
 }
 
-double PieChart::getMinimumX()
-{
-    return 0.5;
-}
+double PieChart::getMinimumX() { return 0.5; }
 double PieChart::getMaxOffset()
 {
     if (!std::isnan(m_fMaxOffset))
@@ -558,39 +562,41 @@ double PieChart::getMaxOffset()
         return m_fMaxOffset;
 
     m_fMaxOffset = 0.0;
-    if( m_aZSlots.empty() )
+    if (m_aZSlots.empty())
         return m_fMaxOffset;
-    if( m_aZSlots.front().empty() )
+    if (m_aZSlots.front().empty())
         return m_fMaxOffset;
 
-    const std::vector< std::unique_ptr<VDataSeries> >& rSeriesList( m_aZSlots.front().front().m_aSeriesVector );
-    if(rSeriesList.empty())
+    const std::vector<std::unique_ptr<VDataSeries>>& rSeriesList(
+        m_aZSlots.front().front().m_aSeriesVector);
+    if (rSeriesList.empty())
         return m_fMaxOffset;
 
     VDataSeries* pSeries = rSeriesList.front().get();
-    uno::Reference< beans::XPropertySet > xSeriesProp( pSeries->getPropertiesOfSeries() );
-    if( !xSeriesProp.is() )
+    uno::Reference<beans::XPropertySet> xSeriesProp(pSeries->getPropertiesOfSeries());
+    if (!xSeriesProp.is())
         return m_fMaxOffset;
 
-    double fExplodePercentage=0.0;
-    xSeriesProp->getPropertyValue( "Offset") >>= fExplodePercentage;
-    if(fExplodePercentage>m_fMaxOffset)
-        m_fMaxOffset=fExplodePercentage;
+    double fExplodePercentage = 0.0;
+    xSeriesProp->getPropertyValue("Offset") >>= fExplodePercentage;
+    if (fExplodePercentage > m_fMaxOffset)
+        m_fMaxOffset = fExplodePercentage;
 
-    if(!m_bSizeExcludesLabelsAndExplodedSegments)
+    if (!m_bSizeExcludesLabelsAndExplodedSegments)
     {
-        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
-        if( xSeriesProp->getPropertyValue( "AttributedDataPoints" ) >>= aAttributedDataPointIndexList )
+        uno::Sequence<sal_Int32> aAttributedDataPointIndexList;
+        if (xSeriesProp->getPropertyValue("AttributedDataPoints") >>= aAttributedDataPointIndexList)
         {
-            for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+            for (sal_Int32 nN = aAttributedDataPointIndexList.getLength(); nN--;)
             {
-                uno::Reference< beans::XPropertySet > xPointProp( pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]) );
-                if(xPointProp.is())
+                uno::Reference<beans::XPropertySet> xPointProp(
+                    pSeries->getPropertiesOfPoint(aAttributedDataPointIndexList[nN]));
+                if (xPointProp.is())
                 {
-                    fExplodePercentage=0.0;
-                    xPointProp->getPropertyValue( "Offset") >>= fExplodePercentage;
-                    if(fExplodePercentage>m_fMaxOffset)
-                        m_fMaxOffset=fExplodePercentage;
+                    fExplodePercentage = 0.0;
+                    xPointProp->getPropertyValue("Offset") >>= fExplodePercentage;
+                    if (fExplodePercentage > m_fMaxOffset)
+                        m_fMaxOffset = fExplodePercentage;
                 }
             }
         }
@@ -600,41 +606,31 @@ double PieChart::getMaxOffset()
 double PieChart::getMaximumX()
 {
     double fMaxOffset = getMaxOffset();
-    if( !m_aZSlots.empty() && m_bUseRings)
-        return m_aZSlots.front().size()+0.5+fMaxOffset;
-    return 1.5+fMaxOffset;
+    if (!m_aZSlots.empty() && m_bUseRings)
+        return m_aZSlots.front().size() + 0.5 + fMaxOffset;
+    return 1.5 + fMaxOffset;
 }
-double PieChart::getMinimumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
+double PieChart::getMinimumYInRange(double /* fMinimumX */, double /* fMaximumX */,
+                                    sal_Int32 /* nAxisIndex */)
 {
     return 0.0;
 }
 
-double PieChart::getMaximumYInRange( double /* fMinimumX */, double /* fMaximumX */, sal_Int32 /* nAxisIndex */ )
+double PieChart::getMaximumYInRange(double /* fMinimumX */, double /* fMaximumX */,
+                                    sal_Int32 /* nAxisIndex */)
 {
     return 1.0;
 }
 
-bool PieChart::isExpandBorderToIncrementRhythm( sal_Int32 /* nDimensionIndex */ )
-{
-    return false;
-}
+bool PieChart::isExpandBorderToIncrementRhythm(sal_Int32 /* nDimensionIndex */) { return false; }
 
-bool PieChart::isExpandIfValuesCloseToBorder( sal_Int32 /* nDimensionIndex */ )
-{
-    return false;
-}
+bool PieChart::isExpandIfValuesCloseToBorder(sal_Int32 /* nDimensionIndex */) { return false; }
 
-bool PieChart::isExpandWideValuesToZero( sal_Int32 /* nDimensionIndex */ )
-{
-    return false;
-}
+bool PieChart::isExpandWideValuesToZero(sal_Int32 /* nDimensionIndex */) { return false; }
 
-bool PieChart::isExpandNarrowValuesTowardZero( sal_Int32 /* nDimensionIndex */ )
-{
-    return false;
-}
+bool PieChart::isExpandNarrowValuesTowardZero(sal_Int32 /* nDimensionIndex */) { return false; }
 
-bool PieChart::isSeparateStackingForDifferentSigns( sal_Int32 /* nDimensionIndex */ )
+bool PieChart::isSeparateStackingForDifferentSigns(sal_Int32 /* nDimensionIndex */)
 {
     return false;
 }
@@ -668,8 +664,8 @@ void PieChart::createShapes()
     ///therefore create an own group for the texts to move them to front
     ///(because the text group is created after the series group the texts are
     ///displayed on top)
-    rtl::Reference<SvxShapeGroupAnyD> xSeriesTarget = createGroupShape( m_xLogicTarget );
-    rtl::Reference<SvxShapeGroup> xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget );
+    rtl::Reference<SvxShapeGroupAnyD> xSeriesTarget = createGroupShape(m_xLogicTarget);
+    rtl::Reference<SvxShapeGroup> xTextTarget = ShapeFactory::createGroup2D(m_xFinalTarget);
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     ///pay attention that the `m_bSwapXAndY` parameter used by the polar
@@ -678,8 +674,8 @@ void PieChart::createShapes()
     ///that the radius axis scale is the one with index 0 and the angle axis
     ///scale is the one with index 1.
 
-    std::vector< VDataSeriesGroup >::iterator             aXSlotIter = m_aZSlots.front().begin();
-    const std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = m_aZSlots.front().end();
+    std::vector<VDataSeriesGroup>::iterator aXSlotIter = m_aZSlots.front().begin();
+    const std::vector<VDataSeriesGroup>::const_iterator aXSlotEnd = m_aZSlots.front().end();
 
     ///m_bUseRings == true if chart type is `donut`, == false if chart type is
     ///`pie`; if the chart is of `donut` type we have as many rings as many data
@@ -694,35 +690,38 @@ void PieChart::createShapes()
     ///the `explodeable` ring is the first one except when the radius axis
     ///orientation is reversed (always!?) and we are dealing with a donut: in
     ///such a case the `explodeable` ring is the last one.
-    std::vector< VDataSeriesGroup >::size_type nExplodeableSlot = 0;
-    if( m_pPosHelper->isMathematicalOrientationRadius() && m_bUseRings )
-        nExplodeableSlot = m_aZSlots.front().size()-1;
+    std::vector<VDataSeriesGroup>::size_type nExplodeableSlot = 0;
+    if (m_pPosHelper->isMathematicalOrientationRadius() && m_bUseRings)
+        nExplodeableSlot = m_aZSlots.front().size() - 1;
 
     m_aLabelInfoList.clear();
     m_fMaxOffset = std::numeric_limits<double>::quiet_NaN();
     sal_Int32 n3DRelativeHeight = 100;
-    if ( (m_nDimension==3) && m_xChartTypeModel.is())
+    if ((m_nDimension == 3) && m_xChartTypeModel.is())
     {
         try
         {
-            uno::Any aAny = m_xChartTypeModel->getPropertyValue( "3DRelativeHeight" );
+            uno::Any aAny = m_xChartTypeModel->getPropertyValue("3DRelativeHeight");
             aAny >>= n3DRelativeHeight;
         }
-        catch (const uno::Exception&) { }
+        catch (const uno::Exception&)
+        {
+        }
     }
     ///iterate over each xslot, that is on each data series (there is
     ///only one data series in each data series group!); note that if the chart
     ///type is a pie the loop iterates only over the first data series
     ///(m_bUseRings||fSlotX<0.5)
-    for( double fSlotX=0; aXSlotIter != aXSlotEnd && (m_bUseRings||fSlotX<0.5 ); ++aXSlotIter, fSlotX+=1.0 )
+    for (double fSlotX = 0; aXSlotIter != aXSlotEnd && (m_bUseRings || fSlotX < 0.5);
+         ++aXSlotIter, fSlotX += 1.0)
     {
         ShapeParam aParam;
 
-        std::vector< std::unique_ptr<VDataSeries> >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
-        if(pSeriesList->empty())//there should be only one series in each x slot
+        std::vector<std::unique_ptr<VDataSeries>>* pSeriesList = &(aXSlotIter->m_aSeriesVector);
+        if (pSeriesList->empty()) //there should be only one series in each x slot
             continue;
         VDataSeries* pSeries = pSeriesList->front().get();
-        if(!pSeries)
+        if (!pSeries)
             continue;
 
         bool bHasFillColorMapping = pSeries->hasPropertyMapping("FillColor");
@@ -734,16 +733,16 @@ void PieChart::createShapes()
 
         ///iterate through all points to get the sum of all entries of
         ///the current data series
-        sal_Int32 nPointIndex=0;
-        sal_Int32 nPointCount=pSeries->getTotalPointCount();
-        for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
+        sal_Int32 nPointIndex = 0;
+        sal_Int32 nPointCount = pSeries->getTotalPointCount();
+        for (nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++)
         {
-            double fY = pSeries->getYValue( nPointIndex );
-            if(fY<0.0)
+            double fY = pSeries->getYValue(nPointIndex);
+            if (fY < 0.0)
             {
                 //@todo warn somehow that negative values are treated as positive
             }
-            if( std::isnan(fY) )
+            if (std::isnan(fY))
                 continue;
             aParam.mfLogicYSum += fabs(fY);
         }
@@ -754,7 +753,7 @@ void PieChart::createShapes()
 
         double fLogicYForNextPoint = 0.0;
         ///iterate through all points to create shapes
-        for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
+        for (nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++)
         {
             double fLogicInnerRadius, fLogicOuterRadius;
 
@@ -766,122 +765,140 @@ void PieChart::createShapes()
             double fOffset = getMaxOffset();
 
             ///compute the outer and the inner radius for the current ring slice
-            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset );
-            if( !bIsVisible )
+            bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius(
+                fSlotX + 1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, fOffset);
+            if (!bIsVisible)
                 continue;
 
-            aParam.mfDepth  = getTransformedDepth() * (n3DRelativeHeight / 100.0);
+            aParam.mfDepth = getTransformedDepth() * (n3DRelativeHeight / 100.0);
 
-            rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
+            rtl::Reference<SvxShapeGroupAnyD> xSeriesGroupShape_Shapes
+                = getSeriesGroupShape(pSeries, xSeriesTarget);
             ///collect data point information (logic coordinates, style ):
-            double fLogicYValue = fabs(pSeries->getYValue( nPointIndex ));
-            if( std::isnan(fLogicYValue) )
+            double fLogicYValue = fabs(pSeries->getYValue(nPointIndex));
+            if (std::isnan(fLogicYValue))
                 continue;
-            if(fLogicYValue==0.0)//@todo: continue also if the resolution is too small
+            if (fLogicYValue == 0.0) //@todo: continue also if the resolution is too small
                 continue;
             double fLogicYPos = fLogicYForNextPoint;
             fLogicYForNextPoint += fLogicYValue;
 
-            uno::Reference< beans::XPropertySet > xPointProperties = pSeries->getPropertiesOfPoint( nPointIndex );
+            uno::Reference<beans::XPropertySet> xPointProperties
+                = pSeries->getPropertiesOfPoint(nPointIndex);
 
             //iterate through all subsystems to create partial points
             {
                 //logic values on angle axis:
                 double fLogicStartAngleValue = fLogicYPos / aParam.mfLogicYSum;
-                double fLogicEndAngleValue = (fLogicYPos+fLogicYValue) / aParam.mfLogicYSum;
+                double fLogicEndAngleValue = (fLogicYPos + fLogicYValue) / aParam.mfLogicYSum;
 
                 ///note that the explode percentage is set to the `Offset`
                 ///property of the current data series entry only for slices
                 ///belonging to the outer ring
                 aParam.mfExplodePercentage = 0.0;
-                bool bDoExplode = ( nExplodeableSlot == static_cast< std::vector< VDataSeriesGroup >::size_type >(fSlotX) );
-                if(bDoExplode) try
-                {
-                    xPointProperties->getPropertyValue( "Offset") >>= aParam.mfExplodePercentage;
-                }
-                catch( const uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("chart2", "" );
-                }
+                bool bDoExplode
+                    = (nExplodeableSlot
+                       == static_cast<std::vector<VDataSeriesGroup>::size_type>(fSlotX));
+                if (bDoExplode)
+                    try
+                    {
+                        xPointProperties->getPropertyValue("Offset") >>= aParam.mfExplodePercentage;
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        TOOLS_WARN_EXCEPTION("chart2", "");
+                    }
 
                 ///see notes for `PolarPlottingPositionHelper` methods
                 ///transform to unit circle:
-                aParam.mfUnitCircleWidthAngleDegree = m_pPosHelper->getWidthAngleDegree( fLogicStartAngleValue, fLogicEndAngleValue );
-                aParam.mfUnitCircleStartAngleDegree = m_pPosHelper->transformToAngleDegree( fLogicStartAngleValue );
-                aParam.mfUnitCircleInnerRadius = m_pPosHelper->transformToRadius( fLogicInnerRadius );
-                aParam.mfUnitCircleOuterRadius = m_pPosHelper->transformToRadius( fLogicOuterRadius );
+                aParam.mfUnitCircleWidthAngleDegree
+                    = m_pPosHelper->getWidthAngleDegree(fLogicStartAngleValue, fLogicEndAngleValue);
+                aParam.mfUnitCircleStartAngleDegree
+                    = m_pPosHelper->transformToAngleDegree(fLogicStartAngleValue);
+                aParam.mfUnitCircleInnerRadius = m_pPosHelper->transformToRadius(fLogicInnerRadius);
+                aParam.mfUnitCircleOuterRadius = m_pPosHelper->transformToRadius(fLogicOuterRadius);
 
                 ///create data point
                 aParam.mfLogicZ = -1.0; // For 3D pie chart label position
-                rtl::Reference<SvxShape> xPointShape =
-                    createDataPoint(
-                        xSeriesGroupShape_Shapes, xPointProperties, aParam);
+                rtl::Reference<SvxShape> xPointShape
+                    = createDataPoint(xSeriesGroupShape_Shapes, xPointProperties, aParam);
 
                 ///point color:
                 if (!pSeries->hasPointOwnColor(nPointIndex) && m_xColorScheme.is())
                 {
-                    xPointShape->setPropertyValue("FillColor",
-                        uno::Any(m_xColorScheme->getColorByIndex( nPointIndex )));
+                    xPointShape->setPropertyValue(
+                        "FillColor", uno::Any(m_xColorScheme->getColorByIndex(nPointIndex)));
                 }
 
-
-                if(bHasFillColorMapping)
+                if (bHasFillColorMapping)
                 {
                     double nPropVal = pSeries->getValueByProperty(nPointIndex, "FillColor");
-                    if(!std::isnan(nPropVal))
+                    if (!std::isnan(nPropVal))
                     {
-                        xPointShape->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>( nPropVal)));
+                        xPointShape->setPropertyValue("FillColor",
+                                                      uno::Any(static_cast<sal_Int32>(nPropVal)));
                     }
                 }
 
                 ///create label
                 createTextLabelShape(xTextTarget, *pSeries, nPointIndex, aParam);
 
-                if(!bDoExplode)
+                if (!bDoExplode)
                 {
-                    ShapeFactory::setShapeName( xPointShape
-                                , ObjectIdentifier::createPointCID( pSeries->getPointCID_Stub(), nPointIndex ) );
+                    ShapeFactory::setShapeName(
+                        xPointShape,
+                        ObjectIdentifier::createPointCID(pSeries->getPointCID_Stub(), nPointIndex));
                 }
-                else try
-                {
-                    ///enable dragging of outer segments
+                else
+                    try
+                    {
+                        ///enable dragging of outer segments
 
-                    double fAngle  = aParam.mfUnitCircleStartAngleDegree + aParam.mfUnitCircleWidthAngleDegree/2.0;
-                    double fMaxDeltaRadius = aParam.mfUnitCircleOuterRadius-aParam.mfUnitCircleInnerRadius;
-                    drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius, aParam.mfLogicZ );
-                    drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene( fAngle, aParam.mfUnitCircleOuterRadius + fMaxDeltaRadius, aParam.mfLogicZ );
+                        double fAngle = aParam.mfUnitCircleStartAngleDegree
+                                        + aParam.mfUnitCircleWidthAngleDegree / 2.0;
+                        double fMaxDeltaRadius
+                            = aParam.mfUnitCircleOuterRadius - aParam.mfUnitCircleInnerRadius;
+                        drawing::Position3D aOrigin = m_pPosHelper->transformUnitCircleToScene(
+                            fAngle, aParam.mfUnitCircleOuterRadius, aParam.mfLogicZ);
+                        drawing::Position3D aNewOrigin = m_pPosHelper->transformUnitCircleToScene(
+                            fAngle, aParam.mfUnitCircleOuterRadius + fMaxDeltaRadius,
+                            aParam.mfLogicZ);
 
-                    sal_Int32 nOffsetPercent( static_cast<sal_Int32>(aParam.mfExplodePercentage * 100.0) );
+                        sal_Int32 nOffsetPercent(
+                            static_cast<sal_Int32>(aParam.mfExplodePercentage * 100.0));
 
-                    awt::Point aMinimumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
-                        aOrigin, m_xLogicTarget, m_nDimension ) );
-                    awt::Point aMaximumPosition( PlottingPositionHelper::transformSceneToScreenPosition(
-                        aNewOrigin, m_xLogicTarget, m_nDimension ) );
+                        awt::Point aMinimumPosition(
+                            PlottingPositionHelper::transformSceneToScreenPosition(
+                                aOrigin, m_xLogicTarget, m_nDimension));
+                        awt::Point aMaximumPosition(
+                            PlottingPositionHelper::transformSceneToScreenPosition(
+                                aNewOrigin, m_xLogicTarget, m_nDimension));
 
-                    //enable dragging of piesegments
-                    OUString aPointCIDStub( ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT
-                        , pSeries->getSeriesParticle()
-                        , ObjectIdentifier::getPieSegmentDragMethodServiceName()
-                        , ObjectIdentifier::createPieSegmentDragParameterString(
-                            nOffsetPercent, aMinimumPosition, aMaximumPosition )
-                        ) );
+                        //enable dragging of piesegments
+                        OUString aPointCIDStub(ObjectIdentifier::createSeriesSubObjectStub(
+                            OBJECTTYPE_DATA_POINT, pSeries->getSeriesParticle(),
+                            ObjectIdentifier::getPieSegmentDragMethodServiceName(),
+                            ObjectIdentifier::createPieSegmentDragParameterString(
+                                nOffsetPercent, aMinimumPosition, aMaximumPosition)));
 
-                    ShapeFactory::setShapeName( xPointShape
-                                , ObjectIdentifier::createPointCID( aPointCIDStub, nPointIndex ) );
-                }
-                catch( const uno::Exception& )
-                {
-                    TOOLS_WARN_EXCEPTION("chart2", "" );
-                }
-            }//next series in x slot (next y slot)
-        }//next category
-    }//next x slot
+                        ShapeFactory::setShapeName(xPointShape, ObjectIdentifier::createPointCID(
+                                                                    aPointCIDStub, nPointIndex));
+                    }
+                    catch (const uno::Exception&)
+                    {
+                        TOOLS_WARN_EXCEPTION("chart2", "");
+                    }
+            } //next series in x slot (next y slot)
+        } //next category
+    } //next x slot
 }
 
 PieChart::PieLabelInfo::PieLabelInfo()
-    :  fValue(0.0)
-    , bMovementAllowed(false), bMoved(false)
-    , bShowLeaderLine(false), pPrevious(nullptr)
+    : fValue(0.0)
+    , bMovementAllowed(false)
+    , bMoved(false)
+    , bShowLeaderLine(false)
+    , pPrevious(nullptr)
     , pNext(nullptr)
 {
 }
@@ -892,20 +909,22 @@ PieChart::PieLabelInfo::PieLabelInfo()
  *  document, if the test is positive the routine returns true else returns
  *  false.
  */
-bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, const awt::Size& rPageSize, bool bMoveHalfWay, bool bMoveClockwise )
+bool PieChart::PieLabelInfo::moveAwayFrom(const PieChart::PieLabelInfo* pFix,
+                                          const awt::Size& rPageSize, bool bMoveHalfWay,
+                                          bool bMoveClockwise)
 {
     //return true if the move was successful
-    if(!bMovementAllowed)
+    if (!bMovementAllowed)
         return false;
 
-    const sal_Int32 nLabelDistanceX = rPageSize.Width/50;
-    const sal_Int32 nLabelDistanceY = rPageSize.Height/50;
+    const sal_Int32 nLabelDistanceX = rPageSize.Width / 50;
+    const sal_Int32 nLabelDistanceY = rPageSize.Height / 50;
 
     ///compute the rectangle representing the intersection of the label bounding
     ///boxes (`aOverlap`).
-    ::basegfx::B2IRectangle aOverlap( lcl_getRect( xLabelGroupShape ) );
-    aOverlap.intersect( lcl_getRect( pFix->xLabelGroupShape ) );
-    if( aOverlap.isEmpty() )
+    ::basegfx::B2IRectangle aOverlap(lcl_getRect(xLabelGroupShape));
+    aOverlap.intersect(lcl_getRect(pFix->xLabelGroupShape));
+    if (aOverlap.isEmpty())
         return true;
 
     //TODO: alternative move direction
@@ -922,30 +941,32 @@ bool PieChart::PieLabelInfo::moveAwayFrom( const PieChart::PieLabelInfo* pFix, c
     ///`aOverlap.Height`;
     basegfx::B2IVector aRadiusDirection = aFirstPosition - aOrigin;
     aRadiusDirection.setLength(1.0);
-    basegfx::B2IVector aTangentialDirection( -aRadiusDirection.getY(), aRadiusDirection.getX() );
+    basegfx::B2IVector aTangentialDirection(-aRadiusDirection.getY(), aRadiusDirection.getX());
     bool bShiftHorizontal = abs(aTangentialDirection.getX()) > abs(aTangentialDirection.getY());
-    sal_Int32 nShift = bShiftHorizontal ? static_cast<sal_Int32>(aOverlap.getWidth()) : static_cast<sal_Int32>(aOverlap.getHeight());
+    sal_Int32 nShift = bShiftHorizontal ? static_cast<sal_Int32>(aOverlap.getWidth())
+                                        : static_cast<sal_Int32>(aOverlap.getHeight());
     ///the magnitude of the shift is also increased by 1/50-th of the width
     ///or the height of the document page;
     nShift += (bShiftHorizontal ? nLabelDistanceX : nLabelDistanceY);
     ///in case the `bMoveHalfWay` parameter is true the magnitude of
     ///the shift is halved.
-    if( bMoveHalfWay )
-        nShift/=2;
+    if (bMoveHalfWay)
+        nShift /= 2;
     ///in case the `bMoveClockwise` parameter is false the direction of
     ///`aTangentialDirection` is reversed;
-    if(!bMoveClockwise)
-        nShift*=-1;
-    awt::Point aOldPos( xLabelGroupShape->getPosition() );
-    basegfx::B2IVector aNewPos = basegfx::B2IVector( aOldPos.X, aOldPos.Y ) + nShift*aTangentialDirection;
+    if (!bMoveClockwise)
+        nShift *= -1;
+    awt::Point aOldPos(xLabelGroupShape->getPosition());
+    basegfx::B2IVector aNewPos
+        = basegfx::B2IVector(aOldPos.X, aOldPos.Y) + nShift * aTangentialDirection;
 
     ///a final check is performed in order to be sure that the moved label
     ///is still inside the page document;
-    awt::Point aNewAWTPos( aNewPos.getX(), aNewPos.getY() );
-    if( !lcl_isInsidePage( aNewAWTPos, xLabelGroupShape->getSize(), rPageSize ) )
+    awt::Point aNewAWTPos(aNewPos.getX(), aNewPos.getY());
+    if (!lcl_isInsidePage(aNewAWTPos, xLabelGroupShape->getSize(), rPageSize))
         return false;
 
-    xLabelGroupShape->setPosition( aNewAWTPos );
+    xLabelGroupShape->setPosition(aNewAWTPos);
     bMoved = true;
 
     return true;
@@ -967,7 +988,7 @@ void PieChart::resetLabelPositionsToPreviousState()
         labelInfo.xLabelGroupShape->setPosition(labelInfo.aPreviousPosition);
 }
 
-bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
+bool PieChart::detectLabelOverlapsAndMove(const awt::Size& rPageSize)
 {
     ///the routine tries to individuate a chain of overlapping labels and
     ///assigns the first and the last of them to `pFirstBorder` and
@@ -991,25 +1012,24 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     PieLabelInfo* pCurrent = pStart;
     do
     {
-        ::basegfx::B2IRectangle aPreviousOverlap( lcl_getRect( pCurrent->xLabelGroupShape ) );
-        ::basegfx::B2IRectangle aNextOverlap( aPreviousOverlap );
-        aPreviousOverlap.intersect( lcl_getRect( pCurrent->pPrevious->xLabelGroupShape ) );
-        aNextOverlap.intersect( lcl_getRect( pCurrent->pNext->xLabelGroupShape ) );
+        ::basegfx::B2IRectangle aPreviousOverlap(lcl_getRect(pCurrent->xLabelGroupShape));
+        ::basegfx::B2IRectangle aNextOverlap(aPreviousOverlap);
+        aPreviousOverlap.intersect(lcl_getRect(pCurrent->pPrevious->xLabelGroupShape));
+        aNextOverlap.intersect(lcl_getRect(pCurrent->pNext->xLabelGroupShape));
 
         bool bPreviousOverlap = !aPreviousOverlap.isEmpty();
         bool bNextOverlap = !aNextOverlap.isEmpty();
-        if( bPreviousOverlap || bNextOverlap )
+        if (bPreviousOverlap || bNextOverlap)
             bOverlapFound = true;
-        if( !bPreviousOverlap && bNextOverlap )
+        if (!bPreviousOverlap && bNextOverlap)
         {
             pFirstBorder = pCurrent;
             break;
         }
         pCurrent = pCurrent->pNext;
-    }
-    while( pCurrent != pStart );
+    } while (pCurrent != pStart);
 
-    if( !bOverlapFound )
+    if (!bOverlapFound)
         return false;
 
     ///in case we found a label (`pFirstBorder`) which overlaps with the next
@@ -1023,24 +1043,23 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     ///iteration is stopped; so in case there is a chain of overlapping labels
     ///we end up having the first label of the chain pointed by `pFirstBorder`
     ///and the last label of the chain pointed by `pSecondBorder`;
-    if( pFirstBorder )
+    if (pFirstBorder)
     {
         pCurrent = pFirstBorder;
         do
         {
-            ::basegfx::B2IRectangle aPreviousOverlap( lcl_getRect( pCurrent->xLabelGroupShape ) );
-            ::basegfx::B2IRectangle aNextOverlap( aPreviousOverlap );
-            aPreviousOverlap.intersect( lcl_getRect( pCurrent->pPrevious->xLabelGroupShape ) );
-            aNextOverlap.intersect( lcl_getRect( pCurrent->pNext->xLabelGroupShape ) );
+            ::basegfx::B2IRectangle aPreviousOverlap(lcl_getRect(pCurrent->xLabelGroupShape));
+            ::basegfx::B2IRectangle aNextOverlap(aPreviousOverlap);
+            aPreviousOverlap.intersect(lcl_getRect(pCurrent->pPrevious->xLabelGroupShape));
+            aNextOverlap.intersect(lcl_getRect(pCurrent->pNext->xLabelGroupShape));
 
-            if( !aPreviousOverlap.isEmpty() && aNextOverlap.isEmpty() )
+            if (!aPreviousOverlap.isEmpty() && aNextOverlap.isEmpty())
             {
                 pSecondBorder = pCurrent;
                 break;
             }
             pCurrent = pCurrent->pNext;
-        }
-        while( pCurrent != pFirstBorder );
+        } while (pCurrent != pFirstBorder);
     }
 
     ///when two labels satisfying the required conditions are not found
@@ -1049,7 +1068,7 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     ///overlaps with both the previous and the next one; so `pFirstBorder` is
     ///set to point to the last `PieLabelInfo` object in the collection and
     ///`pSecondBorder` is set to point to the first one;
-    if( !pFirstBorder || !pSecondBorder )
+    if (!pFirstBorder || !pSecondBorder)
     {
         pFirstBorder = &(*(m_aLabelInfoList.rbegin()));
         pSecondBorder = &(*(m_aLabelInfoList.begin()));
@@ -1059,16 +1078,16 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     ///for getting a pointer to the central label (`pCenter`);
     PieLabelInfo* pCenter = pFirstBorder;
     sal_Int32 nOverlapGroupCount = 1;
-    for( pCurrent = pFirstBorder ;pCurrent != pSecondBorder; pCurrent = pCurrent->pNext )
+    for (pCurrent = pFirstBorder; pCurrent != pSecondBorder; pCurrent = pCurrent->pNext)
         nOverlapGroupCount++;
-    sal_Int32 nCenterPos = nOverlapGroupCount/2;
-    bool bSingleCenter = nOverlapGroupCount%2 != 0;
-    if( bSingleCenter )
+    sal_Int32 nCenterPos = nOverlapGroupCount / 2;
+    bool bSingleCenter = nOverlapGroupCount % 2 != 0;
+    if (bSingleCenter)
         nCenterPos++;
-    if(nCenterPos>1)
+    if (nCenterPos > 1)
     {
         pCurrent = pFirstBorder;
-        while( --nCenterPos )
+        while (--nCenterPos)
             pCurrent = pCurrent->pNext;
         pCenter = pCurrent;
     }
@@ -1082,8 +1101,7 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     {
         pCurrent->aPreviousPosition = pCurrent->xLabelGroupShape->getPosition();
         pCurrent = pCurrent->pNext;
-    }
-    while( pCurrent != pStart );
+    } while (pCurrent != pStart);
 
     ///the `PieChart::tryMoveLabels` method is invoked with
     ///`rbAlternativeMoveDirection` boolean parameter set to false, such a method
@@ -1104,23 +1122,23 @@ bool PieChart::detectLabelOverlapsAndMove( const awt::Size& rPageSize )
     ///method returns no further action is performed;
     ///(see notes for `PieChart::tryMoveLabels`);
     bool bAlternativeMoveDirection = false;
-    if( !tryMoveLabels( pFirstBorder, pSecondBorder, pCenter, bSingleCenter, bAlternativeMoveDirection, rPageSize ) )
-        tryMoveLabels( pFirstBorder, pSecondBorder, pCenter, bSingleCenter, bAlternativeMoveDirection, rPageSize );
+    if (!tryMoveLabels(pFirstBorder, pSecondBorder, pCenter, bSingleCenter,
+                       bAlternativeMoveDirection, rPageSize))
+        tryMoveLabels(pFirstBorder, pSecondBorder, pCenter, bSingleCenter,
+                      bAlternativeMoveDirection, rPageSize);
 
     ///in both cases (one or two invocations of `PieChart::tryMoveLabels`) the
     ///`detectLabelOverlapsAndMove` method ends returning true.
     return true;
 }
 
-
 /** Try to remove all overlaps that occur in the list of labels going from
  *  `pFirstBorder` to `pSecondBorder`
  */
-bool PieChart::tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo const * pSecondBorder
-                             , PieLabelInfo* pCenter
-                             , bool bSingleCenter, bool& rbAlternativeMoveDirection, const awt::Size& rPageSize )
+bool PieChart::tryMoveLabels(PieLabelInfo const* pFirstBorder, PieLabelInfo const* pSecondBorder,
+                             PieLabelInfo* pCenter, bool bSingleCenter,
+                             bool& rbAlternativeMoveDirection, const awt::Size& rPageSize)
 {
-
     PieLabelInfo* p1 = bSingleCenter ? pCenter->pPrevious : pCenter;
     PieLabelInfo* p2 = pCenter->pNext;
     //return true when successful
@@ -1134,10 +1152,10 @@ bool PieChart::tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo co
     ///forward until the current `PieLabelInfo` object of the outer loop is
     ///reached
     PieLabelInfo* pCurrent = nullptr;
-    for( pCurrent = p2 ;pCurrent->pPrevious != pSecondBorder; pCurrent = pCurrent->pNext )
+    for (pCurrent = p2; pCurrent->pPrevious != pSecondBorder; pCurrent = pCurrent->pNext)
     {
         PieLabelInfo* pFix = nullptr;
-        for( pFix = p2->pPrevious ;pFix != pCurrent; pFix = pFix->pNext )
+        for (pFix = p2->pPrevious; pFix != pCurrent; pFix = pFix->pNext)
         {
             ///on the current `PieLabelInfo` object of the outer loop the
             ///`moveAwayFrom` method is invoked by passing the current
@@ -1162,9 +1180,10 @@ bool PieChart::tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo co
             ///invocation has moved a label in a position that it is not
             ///completely inside the page document
 
-            if( !pCurrent->moveAwayFrom( pFix, rPageSize, !bSingleCenter && pCurrent == p2, !bLabelOrderIsAntiClockWise ) )
+            if (!pCurrent->moveAwayFrom(pFix, rPageSize, !bSingleCenter && pCurrent == p2,
+                                        !bLabelOrderIsAntiClockWise))
             {
-                if( !rbAlternativeMoveDirection )
+                if (!rbAlternativeMoveDirection)
                 {
                     rbAlternativeMoveDirection = true;
                     resetLabelPositionsToPreviousState();
@@ -1193,14 +1212,14 @@ bool PieChart::tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo co
     ///the issue. The subsequent actions performed after the invocation
     ///`moveAwayFrom` are the same detailed above for the first pair of loops
 
-    for( pCurrent = p1 ;pCurrent->pNext != pFirstBorder; pCurrent = pCurrent->pPrevious )
+    for (pCurrent = p1; pCurrent->pNext != pFirstBorder; pCurrent = pCurrent->pPrevious)
     {
         PieLabelInfo* pFix = nullptr;
-        for( pFix = p2->pNext ;pFix != pCurrent; pFix = pFix->pPrevious )
+        for (pFix = p2->pNext; pFix != pCurrent; pFix = pFix->pPrevious)
         {
-            if( !pCurrent->moveAwayFrom( pFix, rPageSize, false, bLabelOrderIsAntiClockWise ) )
+            if (!pCurrent->moveAwayFrom(pFix, rPageSize, false, bLabelOrderIsAntiClockWise))
             {
-                if( !rbAlternativeMoveDirection )
+                if (!rbAlternativeMoveDirection)
                 {
                     rbAlternativeMoveDirection = true;
                     resetLabelPositionsToPreviousState();
@@ -1212,7 +1231,7 @@ bool PieChart::tryMoveLabels( PieLabelInfo const * pFirstBorder, PieLabelInfo co
     return true;
 }
 
-void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSize )
+void PieChart::rearrangeLabelToAvoidOverlapIfRequested(const awt::Size& rPageSize)
 {
     ///this method is invoked by `ChartView::impl_createDiagramAndContent` for
     ///pie and donut charts after text label creation;
@@ -1226,29 +1245,29 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     bool bMoveableFound = false;
     for (auto const& labelInfo : m_aLabelInfoList)
     {
-        if(labelInfo.bMovementAllowed)
+        if (labelInfo.bMovementAllowed)
         {
             bMoveableFound = true;
             break;
         }
     }
-    if(!bMoveableFound)
+    if (!bMoveableFound)
         return;
 
-    double fPageDiagonaleLength = std::hypot( double(rPageSize.Width), double(rPageSize.Height) );
-    if( fPageDiagonaleLength == 0.0 )
+    double fPageDiagonaleLength = std::hypot(double(rPageSize.Width), double(rPageSize.Height));
+    if (fPageDiagonaleLength == 0.0)
         return;
 
     ///initialize next and previous member of `PieLabelInfo` objects
     auto aIt1 = m_aLabelInfoList.begin();
     auto aEnd = m_aLabelInfoList.end();
-    std::vector< PieLabelInfo >::iterator aIt2 = aIt1;
+    std::vector<PieLabelInfo>::iterator aIt2 = aIt1;
     aIt1->pPrevious = &(*(m_aLabelInfoList.rbegin()));
     ++aIt2;
-    for( ;aIt2!=aEnd; ++aIt1, ++aIt2 )
+    for (; aIt2 != aEnd; ++aIt1, ++aIt2)
     {
-        PieLabelInfo& rInfo1( *aIt1 );
-        PieLabelInfo& rInfo2( *aIt2 );
+        PieLabelInfo& rInfo1(*aIt1);
+        PieLabelInfo& rInfo2(*aIt2);
         rInfo1.pNext = &rInfo2;
         rInfo2.pPrevious = &rInfo1;
     }
@@ -1256,49 +1275,49 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
 
     ///detect overlaps and move
     sal_Int32 nMaxIterations = 50;
-    while( detectLabelOverlapsAndMove( rPageSize ) && nMaxIterations > 0 )
+    while (detectLabelOverlapsAndMove(rPageSize) && nMaxIterations > 0)
         nMaxIterations--;
 
     ///create connection lines for the moved labels
     VLineProperties aVLineProperties;
     for (auto const& labelInfo : m_aLabelInfoList)
     {
-        if( labelInfo.bMoved && labelInfo.bShowLeaderLine )
+        if (labelInfo.bMoved && labelInfo.bShowLeaderLine)
         {
             sal_Int32 nX1 = labelInfo.aOuterPosition.getX();
             sal_Int32 nY1 = labelInfo.aOuterPosition.getY();
             sal_Int32 nX2 = nX1;
             sal_Int32 nY2 = nY1;
-            ::basegfx::B2IRectangle aRect( lcl_getRect( labelInfo.xLabelGroupShape ) );
-            if( nX1 < aRect.getMinX() )
+            ::basegfx::B2IRectangle aRect(lcl_getRect(labelInfo.xLabelGroupShape));
+            if (nX1 < aRect.getMinX())
                 nX2 = aRect.getMinX();
-            else if( nX1 > aRect.getMaxX() )
+            else if (nX1 > aRect.getMaxX())
                 nX2 = aRect.getMaxX();
 
-            if( nY1 < aRect.getMinY() )
+            if (nY1 < aRect.getMinY())
                 nY2 = aRect.getMinY();
-            else if( nY1 > aRect.getMaxY() )
+            else if (nY1 > aRect.getMaxY())
                 nY2 = aRect.getMaxY();
 
             //when the line is very short compared to the page size don't create one
-            ::basegfx::B2DVector aLength(nX1-nX2, nY1-nY2);
-            if( (aLength.getLength()/fPageDiagonaleLength) < 0.01 )
+            ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
+            if ((aLength.getLength() / fPageDiagonaleLength) < 0.01)
                 continue;
 
-            drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
+            drawing::PointSequenceSequence aPoints{ { { nX1, nY1 }, { nX2, nY2 } } };
 
-            if( labelInfo.xTextShape.is() )
+            if (labelInfo.xTextShape.is())
             {
                 sal_Int32 nColor = 0;
                 labelInfo.xTextShape->SvxShape::getPropertyValue("CharColor") >>= nColor;
-                if( nColor != -1 )//automatic font color does not work for lines -> fallback to black
+                if (nColor
+                    != -1) //automatic font color does not work for lines -> fallback to black
                     aVLineProperties.Color <<= nColor;
             }
-            ShapeFactory::createLine2D( labelInfo.xTextTarget, aPoints, &aVLineProperties );
+            ShapeFactory::createLine2D(labelInfo.xTextTarget, aPoints, &aVLineProperties);
         }
     }
 }
-
 
 /** Handle the placement of the label in the best fit case:
  *  the routine try to place the label inside the related pie slice,
@@ -1375,10 +1394,11 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
  *   4. the top edge when 225 < alpha < 315.
  *
  **/
-bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLabelInfo const & rPieLabelInfo)
+bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam,
+                                                 PieLabelInfo const& rPieLabelInfo)
 {
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "** PieChart::performLabelBestFitInnerPlacement invoked **" );
+    SAL_INFO("chart2.pie.label.bestfit.inside",
+             "** PieChart::performLabelBestFitInnerPlacement invoked **");
 
     // get pie slice properties
     double fStartAngleDeg = NormAngle360(rShapeParam.mfUnitCircleStartAngleDegree);
@@ -1389,51 +1409,40 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // get the middle point of the arc representing the pie slice border
     double fLogicZ = rShapeParam.mfLogicZ + 1.0;
     awt::Point aMiddleArcPoint = PlottingPositionHelper::transformSceneToScreenPosition(
-            m_pPosHelper->transformUnitCircleToScene(
-                    fBisectingRayAngleDeg,
-                    rShapeParam.mfUnitCircleOuterRadius,
-                    fLogicZ ),
-            m_xLogicTarget, m_nDimension );
+        m_pPosHelper->transformUnitCircleToScene(fBisectingRayAngleDeg,
+                                                 rShapeParam.mfUnitCircleOuterRadius, fLogicZ),
+        m_xLogicTarget, m_nDimension);
 
     // compute the pie radius
     basegfx::B2IVector aPieCenter = rPieLabelInfo.aOrigin;
-    basegfx::B2IVector aRadiusVector(
-            aMiddleArcPoint.X - aPieCenter.getX(),
-            aMiddleArcPoint.Y - aPieCenter.getY() );
+    basegfx::B2IVector aRadiusVector(aMiddleArcPoint.X - aPieCenter.getX(),
+                                     aMiddleArcPoint.Y - aPieCenter.getY());
     double fSquaredPieRadius = aRadiusVector.scalar(aRadiusVector);
-    double fPieRadius = sqrt( fSquaredPieRadius );
+    double fPieRadius = sqrt(fSquaredPieRadius);
 
     // the bb is moved as much as possible near to the border of the pie,
     // anyway a small offset from the border is present (0.025 * pie radius)
     const double fPieBorderOffset = 0.025;
     fPieRadius = fPieRadius - fPieRadius * fPieBorderOffset;
 
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "    pie sector:" );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      start angle = " << fStartAngleDeg );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      angle width = " << fWidthAngleDeg );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      bisecting ray angle = " << fBisectingRayAngleDeg );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      pie radius = " << fPieRadius );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      pie center = " << rPieLabelInfo.aOrigin );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      middle arc point = (" << aMiddleArcPoint.X << ","
-                                           << aMiddleArcPoint.Y << ")" );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "    label bounding box:" );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      old anchor point = " << rPieLabelInfo.aFirstPosition );
+    SAL_INFO("chart2.pie.label.bestfit.inside", "    pie sector:");
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      start angle = " << fStartAngleDeg);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      angle width = " << fWidthAngleDeg);
+    SAL_INFO("chart2.pie.label.bestfit.inside",
+             "      bisecting ray angle = " << fBisectingRayAngleDeg);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      pie radius = " << fPieRadius);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      pie center = " << rPieLabelInfo.aOrigin);
+    SAL_INFO("chart2.pie.label.bestfit.inside",
+             "      middle arc point = (" << aMiddleArcPoint.X << "," << aMiddleArcPoint.Y << ")");
+    SAL_INFO("chart2.pie.label.bestfit.inside", "    label bounding box:");
+    SAL_INFO("chart2.pie.label.bestfit.inside",
+             "      old anchor point = " << rPieLabelInfo.aFirstPosition);
 
-
-    if( fPieRadius == 0.0 )
+    if (fPieRadius == 0.0)
         return false;
 
     // get label b.b. width and height
-    ::basegfx::B2IRectangle aBb( lcl_getRect( rPieLabelInfo.xLabelGroupShape ) );
+    ::basegfx::B2IRectangle aBb(lcl_getRect(rPieLabelInfo.xLabelGroupShape));
     double fLabelWidth = aBb.getWidth();
     double fLabelHeight = aBb.getHeight();
 
@@ -1446,7 +1455,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // 1 bottom
     // 2 right
     // 3 top
-    int nSectorIndex = floor( (fAlphaDeg + 45) / 45.0 );
+    int nSectorIndex = floor((fAlphaDeg + 45) / 45.0);
     int nNearestEdgeIndex = nSectorIndex / 2;
 
     // compute lengths of the nearest edge and of the orthogonal edges
@@ -1454,7 +1463,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     double fOrthogonalEdgeLength = fLabelHeight;
     basegfx::Axis2D eAxis = basegfx::Axis2D::X;
     basegfx::Axis2D eOrthogonalAxis = basegfx::Axis2D::Y;
-    if( nNearestEdgeIndex % 2 == 0 ) // nearest edge is vertical
+    if (nNearestEdgeIndex % 2 == 0) // nearest edge is vertical
     {
         fNearestEdgeLength = fLabelHeight;
         fOrthogonalEdgeLength = fLabelWidth;
@@ -1467,36 +1476,28 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // given 45k <= alpha < 45(k+1) we have
     // when k is even: d(N,P) = (length(e) / 2) * (1 - (alpha - 45k)/45)
     // when k is odd: d(N,P) = (length(e) / 2) * (1 - (45(k+1) - alpha)/45)
-    int nIndex = nSectorIndex -1;  // nIndex = -1...6
+    int nIndex = nSectorIndex - 1; // nIndex = -1...6
     double fIndexMod2 = (nIndex + 8) % 2; // fIndexMod2 must be non negative
     double fSgn = 2.0 * (fIndexMod2 - 0.5); // 0 -> -1, 1 -> 1
-    double fDistanceNP = (fNearestEdgeLength / 2.0) * (1 + fSgn * ((fAlphaDeg - 45 * (nIndex + fIndexMod2)) / 45.0));
+    double fDistanceNP = (fNearestEdgeLength / 2.0)
+                         * (1 + fSgn * ((fAlphaDeg - 45 * (nIndex + fIndexMod2)) / 45.0));
     double fDistancePM = fNearestEdgeLength - fDistanceNP;
 
     // compute the length of the diagonal vector d,
     // that is the distance between P and F
-    double fSquaredDistancePF = fDistancePM * fDistancePM + fOrthogonalEdgeLength * fOrthogonalEdgeLength;
-    double fDistancePF = sqrt( fSquaredDistancePF );
+    double fSquaredDistancePF
+        = fDistancePM * fDistancePM + fOrthogonalEdgeLength * fOrthogonalEdgeLength;
+    double fDistancePF = sqrt(fSquaredDistancePF);
 
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      width = " << fLabelWidth );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      height = " <<  fLabelHeight );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      nearest edge index = " << nNearestEdgeIndex );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      alpha = " << fAlphaDeg );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      distance(N,P) = " << fDistanceNP );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "        nIndex = " << nIndex );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "        fIndexMod2 = " << fIndexMod2 );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "        fSgn = " << fSgn );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      distance(P,F) = " << fDistancePF );
-
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      width = " << fLabelWidth);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      height = " << fLabelHeight);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      nearest edge index = " << nNearestEdgeIndex);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      alpha = " << fAlphaDeg);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      distance(N,P) = " << fDistanceNP);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "        nIndex = " << nIndex);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "        fIndexMod2 = " << fIndexMod2);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "        fSgn = " << fSgn);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      distance(P,F) = " << fDistancePF);
 
     // we check that the condition length(d) <= pie radius holds
     if (fDistancePF > fPieRadius)
@@ -1507,7 +1508,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // compute beta: the angle of the diagonal vector d,
     // that is, the angle in P respect with the triangle PMF;
     // since both arguments are non negative the returned value is in [0, PI/2]
-    double fBetaRad = atan2( fOrthogonalEdgeLength, fDistancePM );
+    double fBetaRad = atan2(fOrthogonalEdgeLength, fDistancePM);
 
     // compute the theta angle, that is the angle in P
     // respect with the triangle CFP;
@@ -1520,12 +1521,10 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // we have theta = 360 - f(alpha, beta);
     // note that in the former case 0 <= f(alpha, beta) <= 180,
     // whilst in the latter case 180 <= f(alpha, beta) <= 360;
-    double fAlphaMod90 = fmod( fAlphaDeg + 45, 90.0 ) - 45;
-    double fSign = fAlphaMod90 == 0.0
-                       ? 0.0
-                       : ( fAlphaMod90 < 0 ) ? -1.0 : 1.0;
+    double fAlphaMod90 = fmod(fAlphaDeg + 45, 90.0) - 45;
+    double fSign = fAlphaMod90 == 0.0 ? 0.0 : (fAlphaMod90 < 0) ? -1.0 : 1.0;
     double fThetaRad = fSign * fAlphaRad + M_PI_2 * (1 - fSign * nNearestEdgeIndex) + fBetaRad;
-    if( fThetaRad > M_PI )
+    if (fThetaRad > M_PI)
     {
         fThetaRad = 2 * M_PI - fThetaRad;
     }
@@ -1534,7 +1533,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // that is the distance between C and P
     double fDistanceCP;
     // when the bisector ray intersects the b.b. in F we have theta mod 180 == 0
-    if( fmod(fThetaRad, M_PI) == 0.0 )
+    if (fmod(fThetaRad, M_PI) == 0.0)
     {
         fDistanceCP = fPieRadius - fDistancePF;
     }
@@ -1550,26 +1549,26 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
         //            sin theta   sin delta   sin gamma
         //
         // we get the wanted distance
-        double fSinTheta = sin( fThetaRad );
+        double fSinTheta = sin(fThetaRad);
         double fSinDelta = fDistancePF * fSinTheta / fPieRadius;
-        double fDeltaRad = asin( fSinDelta );
+        double fDeltaRad = asin(fSinDelta);
         double fGammaRad = M_PI - (fThetaRad + fDeltaRad);
-        double fSinGamma = sin( fGammaRad );
+        double fSinGamma = sin(fGammaRad);
         fDistanceCP = fPieRadius * fSinGamma / fSinTheta;
     }
 
     // define the positional vector
-    basegfx::B2DVector aPositionalVector( cos(fAlphaRad), sin(fAlphaRad) );
+    basegfx::B2DVector aPositionalVector(cos(fAlphaRad), sin(fAlphaRad));
     aPositionalVector.setLength(fDistanceCP);
 
     // we define a direction vector in order to know
     // in which quadrant we are working
     basegfx::B2DVector aDirection(1.0, 1.0);
-    if( 90 <= fBisectingRayAngleDeg && fBisectingRayAngleDeg < 270 )
+    if (90 <= fBisectingRayAngleDeg && fBisectingRayAngleDeg < 270)
     {
         aDirection.setX(-1.0);
     }
-    if( fBisectingRayAngleDeg >= 180 )
+    if (fBisectingRayAngleDeg >= 180)
     {
         aDirection.setY(-1.0);
     }
@@ -1580,26 +1579,18 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     basegfx::B2DVector aVertexM(aNearestVertex);
     aVertexM.set(eAxis, aVertexM.get(eAxis) + aDirection.get(eAxis) * fNearestEdgeLength);
     basegfx::B2DVector aVertexG(aNearestVertex);
-    aVertexG.set(eOrthogonalAxis, aVertexG.get(eOrthogonalAxis) + aDirection.get(eOrthogonalAxis) * fOrthogonalEdgeLength);
+    aVertexG.set(eOrthogonalAxis, aVertexG.get(eOrthogonalAxis)
+                                      + aDirection.get(eOrthogonalAxis) * fOrthogonalEdgeLength);
 
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      beta = " << basegfx::rad2deg(fBetaRad) );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      theta = " << basegfx::rad2deg(fThetaRad) );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "        fAlphaMod90 = " << fAlphaMod90 );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "        fSign = " << fSign );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      distance(C,P) = " << fDistanceCP );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      direction vector = " << aDirection );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      N = " << aNearestVertex );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      M = " << aVertexM );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      G = " << aVertexG );
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      beta = " << basegfx::rad2deg(fBetaRad));
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      theta = " << basegfx::rad2deg(fThetaRad));
+    SAL_INFO("chart2.pie.label.bestfit.inside", "        fAlphaMod90 = " << fAlphaMod90);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "        fSign = " << fSign);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      distance(C,P) = " << fDistanceCP);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      direction vector = " << aDirection);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      N = " << aNearestVertex);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      M = " << aVertexM);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      G = " << aVertexG);
 
     // in order to be able to place the label inside the pie slice we need
     // to check that each angle between s and the ray starting from C and
@@ -1612,26 +1603,24 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // check the angle between CP and CM
     double fAngleRad = aPositionalVector.angle(aVertexM);
     double fAngleDeg = NormAngle360(basegfx::rad2deg(fAngleRad));
-    if( fAngleDeg > 180 )  // in case the wrong angle has been computed
+    if (fAngleDeg > 180) // in case the wrong angle has been computed
         fAngleDeg = 360 - fAngleDeg;
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      angle between CP and CM: " << fAngleDeg );
-    if( fAngleDeg > fHalfWidthAngleDeg )
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      angle between CP and CM: " << fAngleDeg);
+    if (fAngleDeg > fHalfWidthAngleDeg)
     {
         return false;
     }
 
-    if( ( aNearestVertex.get(eAxis) >= 0 && aVertexM.get(eAxis) <= 0 )
-            || ( aNearestVertex.get(eAxis) <= 0 && aVertexM.get(eAxis) >= 0 ) )
+    if ((aNearestVertex.get(eAxis) >= 0 && aVertexM.get(eAxis) <= 0)
+        || (aNearestVertex.get(eAxis) <= 0 && aVertexM.get(eAxis) >= 0))
     {
         // check the angle between CP and CN
         fAngleRad = aPositionalVector.angle(aNearestVertex);
         fAngleDeg = NormAngle360(basegfx::rad2deg(fAngleRad));
-        if( fAngleDeg > 180 )  // in case the wrong angle has been computed
+        if (fAngleDeg > 180) // in case the wrong angle has been computed
             fAngleDeg = 360 - fAngleDeg;
-        SAL_INFO( "chart2.pie.label.bestfit.inside",
-                  "      angle between CP and CN: " << fAngleDeg );
-        if( fAngleDeg > fHalfWidthAngleDeg )
+        SAL_INFO("chart2.pie.label.bestfit.inside", "      angle between CP and CN: " << fAngleDeg);
+        if (fAngleDeg > fHalfWidthAngleDeg)
         {
             return false;
         }
@@ -1641,11 +1630,10 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
         // check the angle between CP and CG
         fAngleRad = aPositionalVector.angle(aVertexG);
         fAngleDeg = NormAngle360(basegfx::rad2deg(fAngleRad));
-        if( fAngleDeg > 180 )  // in case the wrong angle has been computed
+        if (fAngleDeg > 180) // in case the wrong angle has been computed
             fAngleDeg = 360 - fAngleDeg;
-        SAL_INFO( "chart2.pie.label.bestfit.inside",
-                  "      angle between CP and CG: " << fAngleDeg );
-        if( fAngleDeg > fHalfWidthAngleDeg )
+        SAL_INFO("chart2.pie.label.bestfit.inside", "      angle between CP and CG: " << fAngleDeg);
+        if (fAngleDeg > fHalfWidthAngleDeg)
         {
             return false;
         }
@@ -1654,12 +1642,15 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
     // compute the b.b. center respect with the pie center
     basegfx::B2DVector aBBCenter(aNearestVertex);
     aBBCenter.set(eAxis, aBBCenter.get(eAxis) + aDirection.get(eAxis) * fNearestEdgeLength / 2);
-    aBBCenter.set(eOrthogonalAxis, aBBCenter.get(eOrthogonalAxis) + aDirection.get(eOrthogonalAxis) * fOrthogonalEdgeLength / 2);
+    aBBCenter.set(eOrthogonalAxis,
+                  aBBCenter.get(eOrthogonalAxis)
+                      + aDirection.get(eOrthogonalAxis) * fOrthogonalEdgeLength / 2);
 
     // compute the b.b. anchor point
     basegfx::B2IVector aNewAnchorPoint = aPieCenter;
     aNewAnchorPoint.setX(aNewAnchorPoint.getX() + floor(aBBCenter.getX()));
-    aNewAnchorPoint.setY(aNewAnchorPoint.getY() - floor(aBBCenter.getY())); // the Y axis on the screen points downward
+    aNewAnchorPoint.setY(aNewAnchorPoint.getY()
+                         - floor(aBBCenter.getY())); // the Y axis on the screen points downward
 
     // compute the translation vector for moving the label from the current
     // screen position to the new one
@@ -1667,21 +1658,19 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     // compute the new screen position and move the label
     // XShape::getPosition returns the top left vertex of the b.b. of the shape
-    awt::Point aOldPos( rPieLabelInfo.xLabelGroupShape->getPosition() );
-    awt::Point aNewPos( aOldPos.X + aTranslationVector.getX(),
-                        aOldPos.Y + aTranslationVector.getY() );
+    awt::Point aOldPos(rPieLabelInfo.xLabelGroupShape->getPosition());
+    awt::Point aNewPos(aOldPos.X + aTranslationVector.getX(),
+                       aOldPos.Y + aTranslationVector.getY());
     rPieLabelInfo.xLabelGroupShape->setPosition(aNewPos);
 
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      center = " <<  aBBCenter );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      new anchor point = " << aNewAnchorPoint );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      translation vector = " <<  aTranslationVector );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      old position = (" << aOldPos.X << "," << aOldPos.Y << ")" );
-    SAL_INFO( "chart2.pie.label.bestfit.inside",
-              "      new position = (" << aNewPos.X << "," << aNewPos.Y << ")" );
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      center = " << aBBCenter);
+    SAL_INFO("chart2.pie.label.bestfit.inside", "      new anchor point = " << aNewAnchorPoint);
+    SAL_INFO("chart2.pie.label.bestfit.inside",
+             "      translation vector = " << aTranslationVector);
+    SAL_INFO("chart2.pie.label.bestfit.inside",
+             "      old position = (" << aOldPos.X << "," << aOldPos.Y << ")");
+    SAL_INFO("chart2.pie.label.bestfit.inside",
+             "      new position = (" << aNewPos.X << "," << aNewPos.Y << ")");
 
     return true;
 }

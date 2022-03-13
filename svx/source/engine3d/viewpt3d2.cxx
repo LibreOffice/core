@@ -21,18 +21,20 @@
 
 #include <math.h>
 
-Viewport3D::Viewport3D() :
-    aVRP(0, 0, 5),
-    aVPN(0, 0, 1),
-    aVUV(0, 1, 1),
-    aPRP(0, 0, 2),
-    eProjection(ProjectionType::Perspective),
-    aDeviceRect(Point(0,0), Size(-1,-1)),
-    aViewPoint (0, 0, 5000),
-    bTfValid(false)
+Viewport3D::Viewport3D()
+    : aVRP(0, 0, 5)
+    , aVPN(0, 0, 1)
+    , aVUV(0, 1, 1)
+    , aPRP(0, 0, 2)
+    , eProjection(ProjectionType::Perspective)
+    , aDeviceRect(Point(0, 0), Size(-1, -1))
+    , aViewPoint(0, 0, 5000)
+    , bTfValid(false)
 {
-    aViewWin.X = -1; aViewWin.Y = -1;
-    aViewWin.W =  2; aViewWin.H = 2;
+    aViewWin.X = -1;
+    aViewWin.Y = -1;
+    aViewWin.W = 2;
+    aViewWin.H = 2;
 }
 
 // Set ViewWindow (in View coordinates)
@@ -41,10 +43,14 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
 {
     aViewWin.X = fX;
     aViewWin.Y = fY;
-    if ( fW > 0 )   aViewWin.W = fW;
-    else            aViewWin.W = 1.0;
-    if ( fH > 0 )   aViewWin.H = fH;
-    else            aViewWin.H = 1.0;
+    if (fW > 0)
+        aViewWin.W = fW;
+    else
+        aViewWin.W = 1.0;
+    if (fH > 0)
+        aViewWin.H = fH;
+    else
+        aViewWin.H = 1.0;
 }
 
 // Returns observer position (PRP) in world coordinates
@@ -52,7 +58,7 @@ void Viewport3D::SetViewWindow(double fX, double fY, double fW, double fH)
 const basegfx::B3DPoint& Viewport3D::GetViewPoint()
 {
     // Calculate View transformations matrix
-    if ( !bTfValid )
+    if (!bTfValid)
     {
         double fV, fXupVp, fYupVp;
         aViewPoint = aVRP + aVPN * aPRP.getZ();
@@ -66,7 +72,7 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
         // fV = Length of the projection of aVPN on the yz plane:
         fV = aVPN.getYZLength();
 
-        if ( fV != 0 )
+        if (fV != 0)
         {
             basegfx::B3DHomMatrix aTemp;
             const double fSin(aVPN.getY() / fV);
@@ -91,11 +97,13 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
 
         // Convert X- and Y- coordinates of the view up vector to the
         // (preliminary) view coordinate system.
-        fXupVp = aViewTf.get(0, 0) * aVUV.getX() + aViewTf.get(0, 1) * aVUV.getY() + aViewTf.get(0, 2) * aVUV.getZ();
-        fYupVp = aViewTf.get(1, 0) * aVUV.getX() + aViewTf.get(1, 1) * aVUV.getY() + aViewTf.get(1, 2) * aVUV.getZ();
-        fV = std::hypot( fXupVp, fYupVp );
+        fXupVp = aViewTf.get(0, 0) * aVUV.getX() + aViewTf.get(0, 1) * aVUV.getY()
+                 + aViewTf.get(0, 2) * aVUV.getZ();
+        fYupVp = aViewTf.get(1, 0) * aVUV.getX() + aViewTf.get(1, 1) * aVUV.getY()
+                 + aViewTf.get(1, 2) * aVUV.getZ();
+        fV = std::hypot(fXupVp, fYupVp);
 
-        if ( fV != 0 )
+        if (fV != 0)
         {
             basegfx::B3DHomMatrix aTemp;
             const double fSin(fXupVp / fV);
@@ -112,10 +120,7 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
     return aViewPoint;
 }
 
-void Viewport3D::SetDeviceWindow(const tools::Rectangle& rRect)
-{
-    aDeviceRect = rRect;
-}
+void Viewport3D::SetDeviceWindow(const tools::Rectangle& rRect) { aDeviceRect = rRect; }
 
 // Set View Reference Point
 
