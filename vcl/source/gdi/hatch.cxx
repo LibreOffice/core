@@ -91,8 +91,8 @@ SvStream& ReadHatch( SvStream& rIStm, Hatch& rHatch )
     rIStm.ReadInt32(nTmp32);
     rHatch.mpImplHatch->mnDistance = nTmp32;
 
-    sal_uInt16 nTmpAngle(0);
-    rIStm.ReadUInt16(nTmpAngle);
+    sal_Int16 nTmpAngle(0);
+    rIStm.ReadInt16(nTmpAngle);
     rHatch.mpImplHatch->mnAngle = Degree10(nTmpAngle);
 
     return rIStm;
@@ -106,7 +106,7 @@ SvStream& WriteHatch( SvStream& rOStm, const Hatch& rHatch )
 
     tools::GenericTypeSerializer aSerializer(rOStm);
     aSerializer.writeColor(rHatch.mpImplHatch->maColor);
-    rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteUInt16( rHatch.mpImplHatch->mnAngle.get() );
+    rOStm.WriteInt32( rHatch.mpImplHatch->mnDistance ).WriteInt16( rHatch.mpImplHatch->mnAngle.get() );
 
     return rOStm;
 }
