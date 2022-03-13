@@ -151,6 +151,24 @@
       "parentUuid": "eb8a9d2a_0c5c09ae",
       "revId": "8aa718de8ba472befa8278733fe3601524f26f0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef63fdfd_ea7487c7",
+        "filename": "sfx2/source/appl/appopen.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-13T09:18:52Z",
+      "side": 1,
+      "message": "\u003e where I provided code pointers\n\nSorry, of course I didn\u0027t; it was Maxim who provided those, I only made it an easy hack, pointing to those pointers.",
+      "parentUuid": "8ece913c_0716ff9f",
+      "revId": "8aa718de8ba472befa8278733fe3601524f26f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
