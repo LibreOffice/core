@@ -448,7 +448,7 @@ void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
 {
     tools::Long nX = rPos.X() - mpImpl->mnCenterX;
     tools::Long nY = mpImpl->mnCenterY - rPos.Y();
-    double fH = sqrt( static_cast< double >( nX ) * nX + static_cast< double >( nY ) * nY );
+    double fH = std::hypot( nX, nY );
     if( fH != 0.0 )
     {
         double fAngle = acos( nX / fH );

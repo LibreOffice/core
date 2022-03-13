@@ -38,6 +38,7 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/defaultencoding.hxx>
 #include <unotools/wincodepage.hxx>
+#include <cmath>
 
 #if OSL_DEBUG_LEVEL > 1
 #define EMFP_DEBUG(x) x
@@ -1740,7 +1741,7 @@ namespace emfio
             double fY = aP2.Y();
             if ( fX )
             {
-                double fOrientation = basegfx::rad2deg( acos( fX / sqrt( fX * fX + fY * fY ) ) );
+                double fOrientation = basegfx::rad2deg( acos( fX / std::hypot( fX, fY ) ) );
                 if ( fY > 0 )
                     fOrientation = 360 - fOrientation;
                 fOrientation += 90;

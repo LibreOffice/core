@@ -26,6 +26,8 @@
 #include "bitmap.hxx"
 #include "elements.hxx"
 
+#include <math.h>
+
 namespace {
 
 Color BMCOL(sal_uInt32 _col) {
@@ -216,17 +218,17 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         double nX = rDesc.mnR.X - rDesc.mnQ.X;
         double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
 
-        rDesc.mndy = sqrt( nX * nX + nY * nY );
+        rDesc.mndy = std::hypot( nX, nY );
 
         nX = rDesc.mnR.X - rDesc.mnP.X;
         nY = rDesc.mnR.Y - rDesc.mnP.Y;
 
-        rDesc.mndx = sqrt( nX * nX + nY * nY );
+        rDesc.mndx = std::hypot( nX, nY );
 
         nX = rDesc.mnR.X - rDesc.mnP.X;
         nY = rDesc.mnR.Y - rDesc.mnP.Y;
 
-        double fSqrt = sqrt(nX * nX + nY * nY);
+        double fSqrt = std::hypot( nX, nY );
         rDesc.mnOrientation = fSqrt != 0.0 ? basegfx::rad2deg(acos(nX / fSqrt)) : 0.0;
         if ( nY > 0 )
             rDesc.mnOrientation = 360 - rDesc.mnOrientation;
@@ -240,7 +242,7 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         nX = fCos * nX + fSin * nY;
         nY = -( fSin * nX - fCos * nY );
 
-        fSqrt = sqrt(nX * nX + nY * nY);
+        fSqrt = std::hypot( nX, nY );
         fAngle = fSqrt != 0.0 ? basegfx::rad2deg(acos(nX / fSqrt)) : 0.0;
         if ( nY > 0 )
             fAngle = 360 - fAngle;

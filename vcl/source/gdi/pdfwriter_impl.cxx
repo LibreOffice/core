@@ -5856,7 +5856,7 @@ void PDFWriterImpl::drawVerticalGlyphs(
         {
             tools::Long nOffsetX = rGlyphs[i+1].m_aPos.X() - rGlyphs[i].m_aPos.X();
             tools::Long nOffsetY = rGlyphs[i+1].m_aPos.Y() - rGlyphs[i].m_aPos.Y();
-            nXOffset += static_cast<int>(sqrt(double(nOffsetX*nOffsetX + nOffsetY*nOffsetY)));
+            nXOffset += static_cast<int>(std::hypot( nOffsetX, nOffsetY ));
         }
         if (!rGlyphs[i].m_pGlyph->glyphId())
             continue;

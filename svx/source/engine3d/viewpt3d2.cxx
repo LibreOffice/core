@@ -19,6 +19,8 @@
 
 #include <svx/viewpt3d.hxx>
 
+#include <math.h>
+
 Viewport3D::Viewport3D() :
     aVRP(0, 0, 5),
     aVPN(0, 0, 1),
@@ -91,7 +93,7 @@ const basegfx::B3DPoint& Viewport3D::GetViewPoint()
         // (preliminary) view coordinate system.
         fXupVp = aViewTf.get(0, 0) * aVUV.getX() + aViewTf.get(0, 1) * aVUV.getY() + aViewTf.get(0, 2) * aVUV.getZ();
         fYupVp = aViewTf.get(1, 0) * aVUV.getX() + aViewTf.get(1, 1) * aVUV.getY() + aViewTf.get(1, 2) * aVUV.getZ();
-        fV = sqrt(fXupVp * fXupVp + fYupVp * fYupVp);
+        fV = std::hypot( fXupVp, fYupVp );
 
         if ( fV != 0 )
         {

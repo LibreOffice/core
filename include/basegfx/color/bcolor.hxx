@@ -27,6 +27,8 @@
 #include <basegfx/tuple/b3dtuple.hxx>
 #include <basegfx/basegfxdllapi.h>
 
+#include <math.h>
+
 namespace basegfx
 {
     /** Base Color class with three double values
@@ -136,7 +138,7 @@ namespace basegfx
             const double fDistG(getDistanceGreen(rColor));
             const double fDistB(getDistanceBlue(rColor));
 
-            return sqrt(fDistR * fDistR + fDistG * fDistG + fDistB * fDistB);
+            return std::hypot( fDistR, fDistG, fDistB );
         }
 
         double getMaximumDistance(const BColor& rColor) const

@@ -84,7 +84,7 @@ static const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
 
 static double Hypothenuse( tools::Long w, tools::Long h )
-{ return sqrt( static_cast<double>((w*w)+(h*h)) ); }
+{ return std::hypot( w, h ); }
 #endif
 
 static int ColorDiff( int r, int g, int b )

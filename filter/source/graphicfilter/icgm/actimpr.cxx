@@ -53,6 +53,8 @@
 #include "elements.hxx"
 #include "outact.hxx"
 
+#include <math.h>
+
 #define MAX_PAGES_FOR_FUZZING 2048
 
 using namespace ::com::sun::star;
@@ -791,7 +793,7 @@ void CGMImpressOutAct::DrawText(awt::Point const & rTextPos, awt::Size const & r
     maXShape->setSize( awt::Size( nWidth, nHeight ) );
     double nX = mpCGM->pElement->nCharacterOrientation[ 2 ];
     double nY = mpCGM->pElement->nCharacterOrientation[ 3 ];
-    double fSqrt = sqrt(nX * nX + nY * nY);
+    double fSqrt = std::hypot( nX, nY );
     double nOrientation = fSqrt != 0.0 ? basegfx::rad2deg(acos(nX / fSqrt)) : 0.0;
     if ( nY < 0 )
         nOrientation = 360 - nOrientation;

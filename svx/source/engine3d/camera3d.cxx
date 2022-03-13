@@ -18,6 +18,7 @@
  */
 
 #include <svx/camera3d.hxx>
+#include <math.h>
 
 Camera3D::Camera3D(const basegfx::B3DPoint& rPos, const basegfx::B3DPoint& rLookAt,
                    double fFocalLen)
@@ -108,7 +109,7 @@ void Camera3D::SetBankAngle(double fAngle)
 
     // Rotate on Z axis, to rotate the BankAngle and back
     basegfx::B3DHomMatrix aTf;
-    const double fV(sqrt(aDiff.getY() * aDiff.getY() + aDiff.getZ() * aDiff.getZ()));
+    const double fV(std::hypot( aDiff.getY(), aDiff.getZ() ));
 
     if (fV != 0.0)
     {
