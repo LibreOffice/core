@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2b7e1f2_38582335",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1932,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-13T21:43:27Z",
+      "side": 0,
+      "message": "FTR: singleElementNS (and other similar methods) take nullable pointers and optional O(U)Strings, allowing to pass a nullptr (for char*) or nullopt (for optional OString) in case you don\u0027t want to set a specific attribute conditionally.\n\nSo it could be something like\n\n    std::optional\u003cOString\u003e a_w_date;\n    if (!bNoDate)\n        a_w_date \u003d DateTimeToOString( aDateTime );\n\n    m_pSerializer-\u003esingleElementNS(XML_w, bFrom\n                ? XML_moveFromRangeStart\n                : XML_moveToRangeStart,\n            FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),\n            FSNS(XML_w, XML_author ), bRemovePersonalInfo\n                    ? \"Author\" + OString::number( GetExport().GetInfoID(rAuthor) )\n                    : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8),\n            FSNS(XML_w, XML_date ), a_w_date,\n            FSNS(XML_w, XML_name), bookmarkName);",
+      "revId": "0898179afc9334bc2370cdccbf3392337585b860",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
