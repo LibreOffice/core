@@ -35,6 +35,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d293829_e061e42b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003554
+      },
+      "writtenOn": "2022-03-13T06:32:47Z",
+      "side": 1,
+      "message": "Suggestions implemented, thanks.",
+      "parentUuid": "ad269ce5_9ead4b36",
+      "revId": "8aa718de8ba472befa8278733fe3601524f26f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c59b5e58_759a646b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003554
+      },
+      "writtenOn": "2022-03-13T06:32:47Z",
+      "side": 1,
+      "message": "Alright, I\u0027ll test this.",
+      "parentUuid": "ba156cd7_a7cfc3e2",
+      "revId": "8aa718de8ba472befa8278733fe3601524f26f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e684b558_7bbc1885",
@@ -58,6 +94,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ea3919e_d467e603",
+        "filename": "sfx2/source/appl/appopen.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 850,
+      "author": {
+        "id": 1003554
+      },
+      "writtenOn": "2022-03-13T06:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e684b558_7bbc1885",
+      "range": {
+        "startLine": 850,
+        "startChar": 19,
+        "endLine": 850,
+        "endChar": 26
+      },
+      "revId": "8aa718de8ba472befa8278733fe3601524f26f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb8a9d2a_0c5c09ae",
@@ -71,6 +131,24 @@
       "writtenOn": "2022-03-13T06:00:12Z",
       "side": 1,
       "message": "I am not a fan of limiting it here. I stated \"from unknown scheme\" in the bug where I provided code pointers. It *might* make sense to limit schemes further - but only after initial soft fix, i.e. first, we make *unknown* protocols (INetProtocol::NotValid) skip this, and *only in a follow-up*, we limit it more, expecting regressions (so the change can be safely reverted to the previous *fixed* state).\n\nAside: this check is very cheap. It would be useful to check the schemes *before* all the hard lifting above - query type by URL and finding matching filter. You could have a shared pointer, and only initialize it *if* the protocol is OK.",
+      "revId": "8aa718de8ba472befa8278733fe3601524f26f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ece913c_0716ff9f",
+        "filename": "sfx2/source/appl/appopen.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 858,
+      "author": {
+        "id": 1003554
+      },
+      "writtenOn": "2022-03-13T06:32:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb8a9d2a_0c5c09ae",
       "revId": "8aa718de8ba472befa8278733fe3601524f26f0e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
