@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 #include "View.hxx"
-#include <iostream>
 
 #include <propertyids.hxx>
 
@@ -68,10 +67,6 @@ OUString View::impl_getCommand() const
 {
     OUString aCommand("SELECT RDB$VIEW_SOURCE FROM RDB$RELATIONS WHERE RDB$RELATION_NAME = '"
                       + m_Name + "'");
-    std::cerr << "TODO aCommand=" << aCommand << "\n";
-    // OUString aCommand("SELECT VIEW_DEFINITION FROM INFORMATION_SCHEMA.VIEWS WHERE TABLE_SCHEMA = '"
-    //                  + m_SchemaName + "' AND TABLE_NAME = '" + m_Name + "'");
-    //::utl::SharedUNOComponent< XStatement > xStatement; xStatement.set( m_xConnection->createStatement(), UNO_QUERY_THROW );
     css::uno::Reference<css::sdbc::XStatement> statement = m_xConnection->createStatement();
     css::uno::Reference<css::sdbc::XResultSet> xResult = statement->executeQuery(aCommand);
 
