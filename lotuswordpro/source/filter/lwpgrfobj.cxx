@@ -126,7 +126,7 @@ void LwpGraphicObject::Read()
         {
             m_aIPData.nBrightness = aServerContext[14];
             m_aIPData.nContrast = aServerContext[19];
-            m_aIPData.nEdgeEnchancement = aServerContext[24];
+            m_aIPData.nEdgeEnhancement = aServerContext[24];
             m_aIPData.nSmoothing = aServerContext[29];
             m_aIPData.bInvertImage = (aServerContext[34] == 0x01);
             m_aIPData.bAutoContrast = (aServerContext[44] == 0x00);

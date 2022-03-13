@@ -70,7 +70,7 @@ struct ImageProcessingData
 {
     sal_uInt8 nBrightness;
     sal_uInt8 nContrast;
-    sal_uInt8 nEdgeEnchancement;
+    sal_uInt8 nEdgeEnhancement;
     sal_uInt8 nSmoothing;
     bool bAutoContrast;
     bool bInvertImage;
@@ -78,7 +78,7 @@ struct ImageProcessingData
     ImageProcessingData()
       : nBrightness(50),
         nContrast(50),
-        nEdgeEnchancement(0),
+        nEdgeEnhancement(0),
         nSmoothing(0),
         bAutoContrast(false),
         bInvertImage(false)
