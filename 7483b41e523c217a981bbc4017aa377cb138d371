@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "516f6d35_6a21bafe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-03-13T19:47:17Z",
+      "side": 1,
+      "message": "Only one +1 needed, yours, Xisco, is implicit, as cherry-picker.",
+      "revId": "7483b41e523c217a981bbc4017aa377cb138d371",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
