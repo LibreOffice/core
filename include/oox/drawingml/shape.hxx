@@ -395,7 +395,7 @@ private:
     bool mbUseBgFill = false;
 
     // temporary space for DiagramHelper in preparation for collecting data
-    // Note: I tried to use a unique_ptr here, but existing constuctor func does not allow that
+    // Note: I tried to use a unique_ptr here, but existing constructor func does not allow that
     IDiagramHelper* mpDiagramHelper;
 };
 

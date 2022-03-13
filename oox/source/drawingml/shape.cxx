@@ -205,7 +205,7 @@ void Shape::prepareDiagramHelper(
     const std::shared_ptr< Diagram >& rDiagramPtr,
     const std::shared_ptr<::oox::drawingml::Theme>& rTheme)
 {
-    // Prepare Diagam data collecting for this Shape
+    // Prepare Diagram data collecting for this Shape
     if( nullptr == mpDiagramHelper && FRAMETYPE_DIAGRAM == meFrameType )
     {
         mpDiagramHelper = new AdvancedDiagramHelper(rDiagramPtr, rTheme, *this);
