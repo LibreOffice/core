@@ -127,6 +127,8 @@
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <drawingml/presetgeometrynames.hxx>
 
+#include <math.h>
+
 using namespace ::css;
 using namespace ::css::beans;
 using namespace ::css::drawing;
@@ -4508,7 +4510,7 @@ void DrawingML::WriteShapeEffect( std::u16string_view sName, const Sequence< Pro
 
 static sal_Int32 lcl_CalculateDist(const double dX, const double dY)
 {
-    return static_cast< sal_Int32 >(sqrt(dX*dX + dY*dY) * 360);
+    return static_cast< sal_Int32 >(std::hypot( dX, dY ) * 360);
 }
 
 static sal_Int32 lcl_CalculateDir(const double dX, const double dY)

@@ -32,6 +32,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/range/b2drange.hxx>
 
+#include <math.h>
+
 
 ImpXPolygon::ImpXPolygon(sal_uInt16 nInitSize, sal_uInt16 _nResize)
     : pOldPointAry(nullptr)
@@ -486,7 +488,7 @@ double XPolygon::CalcDistance(sal_uInt16 nP1, sal_uInt16 nP2)
     const Point& rP2 = pImpXPolygon->pPointAry[nP2];
     double fDx = rP2.X() - rP1.X();
     double fDy = rP2.Y() - rP1.Y();
-    return sqrt(fDx * fDx + fDy * fDy);
+    return std::hypot( fDx, fDy );
 }
 
 void XPolygon::SubdivideBezier(sal_uInt16 nPos, bool bCalcFirst, double fT)

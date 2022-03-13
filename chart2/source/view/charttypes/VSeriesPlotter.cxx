@@ -48,6 +48,7 @@
 #include <DiagramHelper.hxx>
 #include <defines.hxx>
 #include <ChartModel.hxx>
+#include <cmath>
 
 //only for creation: @todo remove if all plotter are uno components and instantiated via servicefactory
 #include "BarChart.hxx"
@@ -720,7 +721,7 @@ rtl::Reference<SvxShapeText> VSeriesPlotter::createDataLabel( const rtl::Referen
 
                     //when the line is very short compared to the page size don't create one
                     ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
-                    double fPageDiagonaleLength = sqrt(double(m_aPageReferenceSize.Width)*double(m_aPageReferenceSize.Width) + double(m_aPageReferenceSize.Height)*double(m_aPageReferenceSize.Height));
+                    double fPageDiagonaleLength = std::hypot( double(m_aPageReferenceSize.Width), double(m_aPageReferenceSize.Height) );
                     if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
                     {
                         drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
