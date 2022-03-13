@@ -1921,25 +1921,18 @@ void DocxAttributeOutput::DoWriteMoveRangeTagStart(const OString & bookmarkName,
     const DateTime aDateTime = pRedlineData->GetTimeStamp();
     bool bNoDate = bRemovePersonalInfo ||
         ( aDateTime.GetYear() == 1970 && aDateTime.GetMonth() == 1 && aDateTime.GetDay() == 1 );
-    if ( bNoDate )
-        m_pSerializer->singleElementNS(XML_w, bFrom
-                ? XML_moveFromRangeStart
-                : XML_moveToRangeStart,
-            FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
-            FSNS(XML_w, XML_author ), bRemovePersonalInfo
+
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
+        = sax_fastparser::FastSerializerHelper::createAttrList();
+
+    pAttributeList->add(FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId));
+    pAttributeList->add(FSNS(XML_w, XML_author ), bRemovePersonalInfo
                     ? "Author" + OString::number( GetExport().GetInfoID(rAuthor) )
-                    : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8),
-            FSNS(XML_w, XML_name), bookmarkName);
-    else
-        m_pSerializer->singleElementNS(XML_w, bFrom
-                ? XML_moveFromRangeStart
-                : XML_moveToRangeStart,
-            FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
-            FSNS(XML_w, XML_author ), bRemovePersonalInfo
-                    ? "Author" + OString::number( GetExport().GetInfoID(rAuthor) )
-                    : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8),
-            FSNS(XML_w, XML_date ), DateTimeToOString( aDateTime ),
-            FSNS(XML_w, XML_name), bookmarkName);
+                    : OUStringToOString(rAuthor, RTL_TEXTENCODING_UTF8));
+    if (!bNoDate)
+        pAttributeList->add(FSNS(XML_w, XML_date ), DateTimeToOString( aDateTime ));
+    pAttributeList->add(FSNS(XML_w, XML_name), bookmarkName);
+    m_pSerializer->singleElementNS( XML_w, bFrom ? XML_moveFromRangeStart : XML_moveToRangeStart, pAttributeList );
 }
 
 void DocxAttributeOutput::DoWriteMoveRangeTagEnd(sal_Int32 const nId, bool bFrom)
