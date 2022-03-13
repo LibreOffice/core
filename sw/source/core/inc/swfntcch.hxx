@@ -33,13 +33,13 @@ public:
 
     SwFontCache() : SwCache(50
 #ifdef DBG_UTIL
-    , "Global AttributSet/Font-Cache pSwFontCache"
+    , "Global AttributeSet/Font-Cache pSwFontCache"
 #endif
     ) {}
 
 };
 
-// AttributSet/Font-Cache, globale Variable, in FontCache.Cxx angelegt
+// AttributeSet/Font-Cache, globale Variable, in FontCache.Cxx angelegt
 extern SwFontCache *pSwFontCache;
 
 class SwFontObj final : public SwCacheObj
