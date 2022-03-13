@@ -65,12 +65,16 @@ void XMLGradientStyleImport::importXML(
     OUString aDisplayName;
 
     awt::Gradient aGradient;
+    aGradient.Style = css::awt::GradientStyle_LINEAR;
+    aGradient.StartColor = 0;
+    aGradient.EndColor = 0;
+    aGradient.Angle = 0;
+    aGradient.Border = 0;
     aGradient.XOffset = 0;
     aGradient.YOffset = 0;
     aGradient.StartIntensity = 100;
     aGradient.EndIntensity = 100;
-    aGradient.Angle = 0;
-    aGradient.Border = 0;
+    aGradient.StepCount = 0;
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
