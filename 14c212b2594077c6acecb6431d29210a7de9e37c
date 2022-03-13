@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72d764d2_5c3d739d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-03-13T20:48:24Z",
+      "side": 1,
+      "message": "Bringing these files to conform to clang format rules, would make using git history harder. A simple \"git blame ...\" would not give meaningful results. Therefore we do not change such files. You can write your new lines of code in clang format but please keep all other lines untouched.",
+      "revId": "14c212b2594077c6acecb6431d29210a7de9e37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
