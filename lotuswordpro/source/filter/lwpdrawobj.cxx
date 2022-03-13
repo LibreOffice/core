@@ -1250,7 +1250,11 @@ void LwpDrawTextArt::Read()
                                                     - (m_aTextArtRec.aPath[1].n*3 + 1)*4;
 
 
-    if (!m_pStream->good() || m_aTextArtRec.nTextLen > m_pStream->remainingSize())
+    if (!m_pStream->good())
+        throw BadRead();
+    if (m_aTextArtRec.nTextLen > m_pStream->remainingSize())
+        throw BadRead();
+    if (m_aTextArtRec.nTextLen < 1)
         throw BadRead();
 
     m_aTextArtRec.pTextString = new sal_uInt8 [m_aTextArtRec.nTextLen];
