@@ -5412,7 +5412,7 @@ else
 fi
 
 AC_MSG_CHECKING([if we need to build the help index tooling])
-if test "$with_help" = yes -o "$enable_extension_integration" != no; then
+if test "$cross_compiling" != yes -a \( "$with_help" = yes -o "$enable_extension_integration" != no \); then
     BUILD_TYPE="$BUILD_TYPE HELPTOOLS"
     test_clucene=yes
     AC_MSG_RESULT([yes])
