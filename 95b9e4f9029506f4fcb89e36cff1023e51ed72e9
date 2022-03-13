@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a581fe4_a0245f40",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-13T09:15:00Z",
+      "side": 1,
+      "message": "Nice!\nI can\u0027t immediately think of a way to unit-test this; if someone has an idea, we might need to implement such a unit test as a follow-up.\n\nFTR: license statement is at https://lists.freedesktop.org/archives/libreoffice/2022-March/088604.html",
+      "revId": "95b9e4f9029506f4fcb89e36cff1023e51ed72e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
