@@ -82,7 +82,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     // For re-creation we need to use ::addShape functionality from the
     // oox import filter since currently Shape import is very tightly
     // coupled to Shape creation. It converts a oox::Shape representation
-    // combined with an oox::Theme to incarrnated XShapes representing the
+    // combined with an oox::Theme to incarnated XShapes representing the
     // Diagram.
     // To use that functionality, we have to create a temporary filter
     // (based on ShapeFilterBase). Problems are that this needs to know

@@ -153,7 +153,7 @@ public class ResourceManager {
     /**
      * Get transferring Operation.
      *
-     *@return String    That contains the trasfering Operation
+     *@return String    That contains the transfering Operation
      */
     public String getTransOperation() {
         return m_transOperation;

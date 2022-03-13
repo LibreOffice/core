@@ -30,12 +30,12 @@ class Diagram;
 
 // Advanced DiagramHelper
 //
-// This helper tries to hold all neccessary data to re-layout
+// This helper tries to hold all necessary data to re-layout
 // all XShapes/SdrObjects of an already imported Diagram. The
 // Diagram holds the SmarArt model data before it gets layouted,
 // while Theme holds the oox Fill/Line/Style definitions to
 // apply.
-// Re-Layouting (re-reating) is rather complex, for detailed
+// Re-Layouting (re-creating) is rather complex, for detailed
 // information see ::reLayout implementation.
 // This helper class may/should be extended to:
 // - deliver representative data from the Diagram-Model

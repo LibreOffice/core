@@ -164,7 +164,7 @@
 					"MIMode": "lldb",
 					"setupCommands": [
 						{
-							"description": "load helpers for for lldb",
+							"description": "load helpers for lldb",
 							"text": "command script import ${workspaceFolder:srcdir}/solenv/lldb/libreoffice/LO.py",
 							"ignoreFailures": false
 						}

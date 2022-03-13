@@ -2648,7 +2648,7 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::FillEntry(WW8PLCFx_Fc_FKP::WW8Fkp::Entry &rEntry,
     }
 
     const sal_uInt16 nAvailableData = sizeof(maRawData)-nDataOffset;
-    OSL_ENSURE(nLen <= nAvailableData, "srpm sequence len is out of range, clipping");
+    OSL_ENSURE(nLen <= nAvailableData, "sprm sequence len is out of range, clipping");
     rEntry.mnLen = std::min(nLen, nAvailableData);
     rEntry.mpData = maRawData + nDataOffset;
 }
