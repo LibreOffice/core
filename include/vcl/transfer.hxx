@@ -509,7 +509,7 @@ public:
 
     using TransferableHelper::StartDrag;
     void                StartDrag( vcl::Window* pWindow, sal_Int8 nDragSourceActions,
-                                   const Link<sal_Int8,void>& rCallbck );
+                                   const Link<sal_Int8,void>& rCallback );
     virtual void        DragFinished( sal_Int8 nDropAction ) override;
 };
 
