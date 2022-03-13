@@ -1156,7 +1156,8 @@ static void ImplAdaptiveSubdivide( std::vector<Point>& rPoints,
     // stop if distance from line is guaranteed to be bounded by d
     if( old_d2 > d2 &&
         recursionDepth < maxRecursionDepth &&
-        distance2 >= d2 )
+        distance2 >= d2 &&
+        rPoints.size() < SAL_MAX_UINT16 )
     {
         // deCasteljau bezier arc, split at t=0.5
         // Foley/vanDam, p. 508
