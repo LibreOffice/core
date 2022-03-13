@@ -990,24 +990,32 @@ bool OutputDevice::ImplNewFont() const
     bool bRet = true;
 
     // #95414# fix for OLE objects which use scale factors very creatively
-    if( mbMap && !aSize.Width() )
-    {
-        int nOrigWidth = pFontInstance->mxFontMetric->GetWidth();
-        float fStretch = static_cast<float>(maMapRes.mnMapScNumX) * maMapRes.mnMapScDenomY;
-        fStretch /= static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
-        int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
-        if( (nNewWidth != nOrigWidth) && (nNewWidth != 0) )
-        {
-            Size aOrigSize = maFont.GetFontSize();
-            const_cast<vcl::Font&>(maFont).SetFontSize( Size( nNewWidth, aSize.Height() ) );
-            mbMap = false;
-            mbNewFont = true;
-            bRet = ImplNewFont();  // recurse once using stretched width
-            mbMap = true;
-            const_cast<vcl::Font&>(maFont).SetFontSize( aOrigSize );
-        }
-    }
+    if (mbMap && !aSize.Width())
+        bRet = AttemptOLEFontScaleFix(const_cast<vcl::Font&>(maFont), aSize.Height());
 
+    return bRet;
+}
+
+bool OutputDevice::AttemptOLEFontScaleFix(vcl::Font& rFont, tools::Long nHeight) const
+{
+    const float fDenominator = static_cast<float>(maMapRes.mnMapScNumY) * maMapRes.mnMapScDenomX;
+    if (fDenominator == 0.0)
+        return false;
+    const float fNumerator = static_cast<float>(maMapRes.mnMapScNumX) * maMapRes.mnMapScDenomY;
+    float fStretch = fNumerator / fDenominator;
+    int nOrigWidth = mpFontInstance->mxFontMetric->GetWidth();
+    int nNewWidth = static_cast<int>(nOrigWidth * fStretch + 0.5);
+    bool bRet = true;
+    if (nNewWidth != nOrigWidth && nNewWidth != 0)
+    {
+        Size aOrigSize = rFont.GetFontSize();
+        rFont.SetFontSize(Size(nNewWidth, nHeight));
+        mbMap = false;
+        mbNewFont = true;
+        bRet = ImplNewFont();  // recurse once using stretched width
+        mbMap = true;
+        rFont.SetFontSize(aOrigSize);
+    }
     return bRet;
 }
 
