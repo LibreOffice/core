@@ -16,6 +16,23 @@
       "message": "Bringing these files to conform to clang format rules, would make using git history harder. A simple \"git blame ...\" would not give meaningful results. Therefore we do not change such files. You can write your new lines of code in clang format but please keep all other lines untouched.",
       "revId": "14c212b2594077c6acecb6431d29210a7de9e37c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "342c00f5_b487b3e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-13T21:02:24Z",
+      "side": 1,
+      "message": "In addition to what Regina said, this change in this form is completely unreviewable. It isn\u0027t clear which lines are changed functionally, and which are simply re-formatted.\n\nI don\u0027t even know where to start looking for the problem in the failing test.\n\nBy the way, answering the IRC\u0027s \"any tips on how to fix this?\": start with splitting this to several separate single-file commits. Then on the one that fails, you debug the failing test, and see which is the actual value tested with some expected one; and adjust the expected one.",
+      "revId": "14c212b2594077c6acecb6431d29210a7de9e37c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
