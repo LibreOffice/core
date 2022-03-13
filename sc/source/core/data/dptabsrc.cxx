@@ -72,9 +72,9 @@ SC_SIMPLE_SERVICE_INFO( ScDPDimension,   "ScDPDimension",   "com.sun.star.sheet.
 // the old with the typo and the new corrected one. Correcting the typo in the old name
 // will make all extensions fail that use it. This is not to be changed."
 SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchies, "ScDPHierarchies",
-        "com.sun.star.sheet.DataPilotSourceHierarchies", "com.sun.star.sheet.DataPilotSourceHierarcies" )
+        "com.sun.star.sheet.DataPilotSourceHierarchies", "com.sun.star.sheet.DataPilotSourceHierarchies" )
 SC_SIMPLE_SERVICE_INFO_COMPAT( ScDPHierarchy,   "ScDPHierarchy",
-        "com.sun.star.sheet.DataPilotSourceHierarchy", "com.sun.star.sheet.DataPilotSourceHierarcy" )
+        "com.sun.star.sheet.DataPilotSourceHierarchy", "com.sun.star.sheet.DataPilotSourceHierarchy" )
 
 SC_SIMPLE_SERVICE_INFO( ScDPLevels,      "ScDPLevels",      "com.sun.star.sheet.DataPilotSourceLevels" )
 SC_SIMPLE_SERVICE_INFO( ScDPLevel,       "ScDPLevel",       "com.sun.star.sheet.DataPilotSourceLevel" )
