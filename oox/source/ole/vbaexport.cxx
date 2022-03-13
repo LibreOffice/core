@@ -730,7 +730,7 @@ void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const sal_uInt16 
 }
 
 // section 2.3.4.2.3
-void writePROJECTMODULES(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibrayMap)
+void writePROJECTMODULES(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibraryMap)
 {
     const css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
@@ -746,7 +746,7 @@ void writePROJECTMODULES(SvStream& rStrm, const css::uno::Reference<css::contain
 
     for (sal_Int32 i = 0; i < n; ++i)
     {
-        const OUString& rModuleName = aElementNames[rLibrayMap[i]];
+        const OUString& rModuleName = aElementNames[rLibraryMap[i]];
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         writePROJECTMODULE(rStrm, rModuleName, aModuleInfo.ModuleType);
     }
