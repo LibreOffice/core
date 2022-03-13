@@ -2374,7 +2374,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFormatFlags const & 
                 {
                     //JP 30.09.96: DoTable() builds on PopCursor and MoveCursor after AutoFormat!
                     pEdShell->Pop(SwCursorShell::PopMode::DeleteCurrent);
-                    *pEdShell->GetCursor() = static_cast<SwCursor&>(m_aDelPam);
+                    static_cast<SwPaM&>(*pEdShell->GetCursor()) = m_aDelPam;
                     pEdShell->Push();
 
                     eStat = IS_END;
