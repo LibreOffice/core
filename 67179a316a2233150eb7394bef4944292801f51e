@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9500c956_402bb28f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-13T13:56:12Z",
+      "side": 1,
+      "message": "No need to try a second time, see https://gerrit.libreoffice.org/c/core/+/101116.\nIt\u0027s already indicated in https://wiki.documentfoundation.org/Development/stuck_stuff#Typos_on_purpose_for_being_compatible_with_old_extensions",
+      "revId": "67179a316a2233150eb7394bef4944292801f51e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
