@@ -1106,8 +1106,8 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
 
 /** Recursively subdivide cubic bezier curve via deCasteljau.
 
-   @param rPointIter
-   Output iterator, where the subdivided polylines are written to.
+   @param rPoints
+   Output vector, where the subdivided polylines are written to.
 
    @param d
    Squared difference of curve to a straight line
@@ -1120,7 +1120,7 @@ void Polygon::Optimize( PolyOptimizeFlags nOptimizeFlags )
    curve does not deviate more than one pixel from a straight line.
 
 */
-static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< Point > >& rPointIter,
+static void ImplAdaptiveSubdivide( std::vector<Point>& rPoints,
                                    const double old_d2,
                                    int recursionDepth,
                                    const double d2,
@@ -1172,15 +1172,15 @@ static void ImplAdaptiveSubdivide( ::std::back_insert_iterator< ::std::vector< P
 
         // subdivide further
         ++recursionDepth;
-        ImplAdaptiveSubdivide(rPointIter, distance2, recursionDepth, d2, L1x, L1y, L2x, L2y, L3x, L3y, L4x, L4y);
-        ImplAdaptiveSubdivide(rPointIter, distance2, recursionDepth, d2, R1x, R1y, R2x, R2y, R3x, R3y, R4x, R4y);
+        ImplAdaptiveSubdivide(rPoints, distance2, recursionDepth, d2, L1x, L1y, L2x, L2y, L3x, L3y, L4x, L4y);
+        ImplAdaptiveSubdivide(rPoints, distance2, recursionDepth, d2, R1x, R1y, R2x, R2y, R3x, R3y, R4x, R4y);
     }
     else
     {
         // requested resolution reached.
         // Add end points to output iterator.
         // order is preserved, since this is so to say depth first traversal.
-        *rPointIter++ = Point( FRound(P1x), FRound(P1y) );
+        rPoints.push_back(Point(FRound(P1x), FRound(P1y)));
     }
 }
 
@@ -1196,7 +1196,6 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
         sal_uInt16 nPts( GetSize() );
         ::std::vector< Point > aPoints;
         aPoints.reserve( nPts );
-        ::std::back_insert_iterator< ::std::vector< Point > > aPointIter( aPoints );
 
         for(i=0; i<nPts;)
         {
@@ -1210,7 +1209,7 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
                     ( PolyFlags::Control == mpImplPolygon->mxFlagAry[ i + 2 ] ) &&
                     ( PolyFlags::Normal == P4 || PolyFlags::Smooth == P4 || PolyFlags::Symmetric == P4 ) )
                 {
-                    ImplAdaptiveSubdivide( aPointIter, d*d+1.0, 0, d*d,
+                    ImplAdaptiveSubdivide( aPoints, d*d+1.0, 0, d*d,
                                            mpImplPolygon->mxPointAry[ i ].X(),   mpImplPolygon->mxPointAry[ i ].Y(),
                                            mpImplPolygon->mxPointAry[ i+1 ].X(), mpImplPolygon->mxPointAry[ i+1 ].Y(),
                                            mpImplPolygon->mxPointAry[ i+2 ].X(), mpImplPolygon->mxPointAry[ i+2 ].Y(),
@@ -1220,7 +1219,7 @@ void Polygon::AdaptiveSubdivide( Polygon& rResult, const double d ) const
                 }
             }
 
-            *aPointIter++ = mpImplPolygon->mxPointAry[ i++ ];
+            aPoints.push_back(mpImplPolygon->mxPointAry[i++]);
 
             if (aPoints.size() >= SAL_MAX_UINT16)
             {
