@@ -3449,7 +3449,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             OUString::number(WTMM( hbox->box_ys + hbox->cap_ys )) + "mm");
         startEl("draw:text-box");
         mxList->clear();
-        if( hbox->cap_pos % 2 )                   /* The caption is on the top */
+        if (!hbox->caption.empty() && hbox->cap_pos % 2)  /* The caption is on the top */
         {
             parsePara(hbox->caption.front().get());
         }
