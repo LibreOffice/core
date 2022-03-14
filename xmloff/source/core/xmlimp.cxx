@@ -1627,7 +1627,7 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
 
 bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
 {
-    // the check returns sal_False only if the storage version could be retrieved
+    // the check returns false only if the storage version could be retrieved
     bool bResult = true;
 
     if ( !aODFVersion.isEmpty() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
@@ -1637,6 +1637,8 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
         try
         {   // don't use getDocumentStorage(), it's temporary and latest version
             uno::Reference<embed::XStorage> const xStor(GetSourceStorage());
+            if (!xStor.is())
+                return bResult;
             uno::Reference< beans::XPropertySet > xStorProps( xStor, uno::UNO_QUERY_THROW );
 
             // the check should be done only for OASIS format
