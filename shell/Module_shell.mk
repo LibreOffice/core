@@ -51,6 +51,7 @@ $(eval $(call gb_Module_add_targets,shell,\
 	Executable_senddoc \
 	Library_smplmail \
 	Library_wininetbe \
+	Library_jumplist \
 	Executable_spsupp_helper \
 ))
 
