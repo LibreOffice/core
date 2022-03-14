@@ -44,18 +44,18 @@ namespace
 {
     enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
 
-    bool QueryState( sal_uInt16 _nSlot, bool& _rValue )
+    bool QueryState( TypedWhichId<SfxBoolItem> _nSlot, bool& _rValue )
     {
         bool bRet = false;
         SfxViewShell* pViewSh = SfxViewShell::Current();
         if (pViewSh)
         {
-            const SfxPoolItem* pItem;
+            const SfxBoolItem* pItem;
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();
             SfxItemState nState = pDisp->QueryState( _nSlot, pItem );
             bRet = SfxItemState::DEFAULT <= nState;
             if (bRet)
-                _rValue = static_cast< const SfxBoolItem* >( pItem )->GetValue();
+                _rValue = pItem->GetValue();
         }
         return bRet;
     }
@@ -66,7 +66,7 @@ namespace
         bool bRet = false;
         if (_eMode != RL_NONE)
         {
-            sal_uInt16 nSlot = _eMode == RL_WRITER ? FN_REDLINE_PROTECT : SID_CHG_PROTECT;
+            TypedWhichId<SfxBoolItem> nSlot = _eMode == RL_WRITER ? FN_REDLINE_PROTECT : SID_CHG_PROTECT;
             bRet = QueryState( nSlot, _rValue );
         }
         return bRet;
@@ -78,7 +78,7 @@ namespace
         bool bRet = false;
         if (_eMode != RL_NONE)
         {
-            sal_uInt16 nSlot = _eMode == RL_WRITER ? FN_REDLINE_ON : FID_CHG_RECORD;
+            TypedWhichId<SfxBoolItem> nSlot = _eMode == RL_WRITER ? FN_REDLINE_ON : FID_CHG_RECORD;
             bRet = QueryState( nSlot, _rValue );
         }
         return bRet;
@@ -246,11 +246,11 @@ void SfxSecurityPage_Impl::Reset_Impl()
         SfxViewShell* pViewSh = SfxViewShell::Current();
         if (pViewSh)
         {
-            const SfxPoolItem* pItem;
+            const SfxUInt16Item* pItem;
             SfxDispatcher* pDisp = pViewSh->GetDispatcher();
             if (SfxItemState::DEFAULT <= pDisp->QueryState( SID_HTML_MODE, pItem ))
             {
-                sal_uInt16 nMode = static_cast< const SfxUInt16Item* >( pItem )->GetValue();
+                sal_uInt16 nMode = pItem->GetValue();
                 bIsHTMLDoc = ( ( nMode & HTMLMODE_ON ) != 0 );
             }
         }

@@ -54,11 +54,11 @@ namespace
     FieldUnit lcl_GetFieldUnit()
     {
         FieldUnit eUnit = FieldUnit::INCH;
-        const SfxPoolItem* pItem = nullptr;
+        const SfxUInt16Item* pItem = nullptr;
         SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
         if ( pItem && eState >= SfxItemState::DEFAULT )
         {
-            eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>( pItem )->GetValue());
+            eUnit = static_cast<FieldUnit>(pItem->GetValue());
         }
         else
         {
@@ -132,16 +132,13 @@ PageMarginControl::PageMarginControl(PageMarginPopup* pControl, weld::Widget* pP
     const SvxLongULSpaceItem* pULItem = nullptr;
     if ( SfxViewFrame::Current() )
     {
-        const SfxPoolItem* pItem;
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
-        bLandscape = static_cast<const SvxPageItem*>( pItem )->IsLandscape();
-        m_bMirrored = static_cast<const SvxPageItem*>( pItem )->GetPageUsage() == SvxPageUsage::Mirror;
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
-        pSize = static_cast<const SvxSizeItem*>( pItem );
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_LRSPACE, pItem );
-        pLRItem = static_cast<const SvxLongLRSpaceItem*>( pItem );
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_ULSPACE, pItem );
-        pULItem = static_cast<const SvxLongULSpaceItem*>( pItem );
+        const SvxPageItem* pPageItem;
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
+        bLandscape = pPageItem->IsLandscape();
+        m_bMirrored = pPageItem->GetPageUsage() == SvxPageUsage::Mirror;
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pSize );
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_LRSPACE, pLRItem );
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_ULSPACE, pULItem );
     }
 
     if ( pLRItem )

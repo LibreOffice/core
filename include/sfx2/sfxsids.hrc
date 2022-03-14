@@ -38,6 +38,7 @@ class SfxStringListItem;
 class SfxUInt16Item;
 class SfxUnoAnyItem;
 class SfxUnoFrameItem;
+class SfxWatermarkItem;
 class SvxClipboardFormatItem;
 class SvxHyperlinkItem;
 class SvxLanguageItem;
@@ -150,7 +151,7 @@ class SvxZoomItem;
 #define SID_FILE_FILTEROPTIONS              TypedWhichId<SfxStringItem>(SID_SFX_START + 527)
 #define SID_RELOAD                          (SID_SFX_START + 508)
 #define SID_PRINTDOCDIRECT                  (SID_SFX_START + 509)
-#define SID_DOC_REPAIR                      (SID_SFX_START + 510)
+#define SID_DOC_REPAIR                      TypedWhichId<SfxBoolItem>(SID_SFX_START + 510)
 #define SID_DOC_SERVICE                     TypedWhichId<SfxStringItem>(SID_SFX_START + 511)
 #define SID_PLUGIN_MODE                     TypedWhichId<SfxUInt16Item>(SID_SFX_START + 827)
 #define SID_EXPORTDOC                       (SID_SFX_START + 829)
@@ -342,7 +343,7 @@ class SvxZoomItem;
 #define SID_AUTOPILOTMENU                   (SID_SFX_START + 1381)
 
 // Floating Window Template
-#define SID_STYLE_DESIGNER                  (SID_SFX_START + 539)
+#define SID_STYLE_DESIGNER                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 539)
 
 #define SID_SIDEBAR_DECK                    (SID_SFX_START + 850)
 
@@ -384,7 +385,7 @@ class SvxZoomItem;
 #define SID_INSERT_OBJECT                   (SID_SFX_START + 561)
 #define SID_INSERT_FLOATINGFRAME            (SID_SFX_START + 563)
 #define SID_CLASSIFICATION_APPLY            (SID_SFX_START + 672)
-#define SID_WATERMARK                       (SID_SFX_START + 676)
+#define SID_WATERMARK                       TypedWhichId<SfxWatermarkItem>(SID_SFX_START + 676)
 #define SID_WATERMARK_FONT                  TypedWhichId<SfxStringItem>(SID_SFX_START + 677)
 #define SID_WATERMARK_TRANSPARENCY          TypedWhichId<SfxInt16Item>(SID_SFX_START + 805)
 #define SID_WATERMARK_COLOR                 TypedWhichId<SfxUInt32Item>(SID_SFX_START + 806)
@@ -408,7 +409,7 @@ class SvxZoomItem;
 #define SID_NEWWINDOW                       (SID_SFX_START + 620)
 #define SID_CLOSEWIN                        (SID_SFX_START + 621)
 #define SID_VIEWSHELL                       TypedWhichId<SfxUInt16Item>(SID_SFX_START + 623)
-#define SID_WIN_FULLSCREEN                  (SID_SFX_START + 627)
+#define SID_WIN_FULLSCREEN                  TypedWhichId<SfxBoolItem>(SID_SFX_START + 627)
 
 #define SID_VIEWSHELL0                      (SID_SFX_START + 630)
 #define SID_VIEWSHELL1                      (SID_SFX_START + 631)
@@ -713,7 +714,7 @@ class SvxZoomItem;
 
 #define FN_EDIT2                (SID_SW_START + 1800)
 #define FN_REDLINE_PROTECT      TypedWhichId<SfxBoolItem>(FN_EDIT2 + 23)
-#define FN_REDLINE_ON           (FN_EDIT2 + 25)
+#define FN_REDLINE_ON           TypedWhichId<SfxBoolItem>(FN_EDIT2 + 25)
 
 #define SID_HTML_MODE           TypedWhichId<SfxUInt16Item>(SID_SVX_START + 414)
 
@@ -730,8 +731,8 @@ class SvxZoomItem;
 #ifndef SC_VIEW_START
 #define SC_VIEW_START           (SID_SC_START)
 #endif
-#define FID_CHG_RECORD          (EDIT_MENU_START + 18)
-#define SID_CHG_PROTECT         (SC_VIEW_START + 84)
+#define FID_CHG_RECORD          TypedWhichId<SfxBoolItem>(EDIT_MENU_START + 18)
+#define SID_CHG_PROTECT         TypedWhichId<SfxBoolItem>(SC_VIEW_START + 84)
 
 #endif  // #ifndef INCLUDED_SFX2_SFXSIDS_HRC
 

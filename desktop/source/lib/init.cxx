@@ -771,17 +771,17 @@ void ExecuteOrientationChange()
         mxUndoManager->enterUndoContext( "" );
 
 
-    const SfxPoolItem* pItem;
+    const SvxSizeItem* pSizeItem;
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pSizeItem);
+    std::unique_ptr<SvxSizeItem> pPageSizeItem(pSizeItem->Clone());
 
+    const SvxLongLRSpaceItem* pLRSpaceItem;
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pLRSpaceItem);
+    std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem(pLRSpaceItem->Clone());
 
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_SIZE, pItem);
-    std::unique_ptr<SvxSizeItem> pPageSizeItem(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_SIZE));
-
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_LRSPACE, pItem);
-    std::unique_ptr<SvxLongLRSpaceItem> pPageLRMarginItem(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_LRSPACE));
-
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pItem);
-    std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(&pItem->Clone()->StaticWhichCast(SID_ATTR_PAGE_ULSPACE));
+    const SvxLongULSpaceItem* pULSpaceItem;
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_PAGE_ULSPACE, pULSpaceItem);
+    std::unique_ptr<SvxLongULSpaceItem> pPageULMarginItem(pULSpaceItem->Clone());
 
     {
         bool bIsLandscape = false;

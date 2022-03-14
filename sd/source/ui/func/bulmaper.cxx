@@ -74,7 +74,7 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
                 static_cast<const SvxPostureItem&>(rSet.Get(GetWhich( sal_uInt16(SID_ATTR_CHAR_POSTURE) )));
             aMyFont.SetItalic(rPItem.GetPosture());
 
-            const SvxUnderlineItem& rUItem = static_cast<const SvxUnderlineItem&>(rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE)));
+            const SvxUnderlineItem& rUItem = rSet.Get(GetWhich(SID_ATTR_CHAR_UNDERLINE));
             aMyFont.SetUnderline(rUItem.GetLineStyle());
 
             const SvxOverlineItem& rOItem = static_cast<const SvxOverlineItem&>(rSet.Get(GetWhich(SID_ATTR_CHAR_OVERLINE)));

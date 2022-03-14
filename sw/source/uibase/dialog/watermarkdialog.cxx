@@ -78,13 +78,12 @@ void SwWatermarkDialog::InitFields()
     m_xOKButton->connect_clicked(LINK(this, SwWatermarkDialog, OKButtonHdl));
 
     // Get watermark properties
-    const SfxPoolItem* pItem;
-    SfxItemState eState = m_rBindings.GetDispatcher()->QueryState( SID_WATERMARK, pItem );
+    const SfxWatermarkItem* pWatermark;
+    SfxItemState eState = m_rBindings.GetDispatcher()->QueryState( SID_WATERMARK, pWatermark );
 
-    if( !(eState >= SfxItemState::DEFAULT && pItem && pItem->Which() == SID_WATERMARK))
+    if( !(eState >= SfxItemState::DEFAULT && pWatermark && pWatermark->Which() == SID_WATERMARK))
         return;
 
-    const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>( pItem );
     const OUString& sText = pWatermark->GetText();
     m_xTextInput->set_text(sText);
     OUString sFontName = pWatermark->GetFont();

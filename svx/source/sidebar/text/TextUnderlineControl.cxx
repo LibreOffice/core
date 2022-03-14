@@ -99,10 +99,8 @@ namespace {
 
 Color GetUnderlineColor()
 {
-    const SfxPoolItem* pItem;
-    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, pItem);
-
-    const SvxUnderlineItem* pUnderlineItem = static_cast<const SvxUnderlineItem*>(pItem);
+    const SvxUnderlineItem* pUnderlineItem;
+    SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_UNDERLINE, pUnderlineItem);
 
     if(pUnderlineItem)
         return pUnderlineItem->GetColor();
