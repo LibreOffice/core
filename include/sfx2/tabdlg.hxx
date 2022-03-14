@@ -114,7 +114,8 @@ public:
 
     void                AddTabPage(const OString& rName,           // Name of the label for the existing page in the notebook .ui
                                    CreateTabPage pCreateFunc,      // != 0
-                                   GetTabPageRanges pRangesFunc);  // can be 0
+                                   GetTabPageRanges pRangesFunc,   // can be 0
+                                   bool ReadOnly = false);
 
     void                AddTabPage(const OString& rName,           // Name of the label for the existing page in the notebook .ui
                                    sal_uInt16 nPageCreateId);      // Identifier of the Factory Method to create the page

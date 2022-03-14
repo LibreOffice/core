@@ -831,9 +831,11 @@ void SfxTabDialogController::SavePosAndId()
 */
 void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,
                                         CreateTabPage pCreateFunc  /* Pointer to the Factory Method */,
-                                        GetTabPageRanges pRangesFunc /* Pointer to the Method for querying Ranges onDemand */)
+                                        GetTabPageRanges pRangesFunc /* Pointer to the Method for querying Ranges onDemand */,
+                                        bool ReadOnly)
 {
     m_pImpl->aData.push_back(new Data_Impl(rName, pCreateFunc, pRangesFunc));
+    m_pImpl->bHideResetBtn = ReadOnly;
 }
 
 void SfxTabDialogController::AddTabPage(const OString &rName /* Page ID */,

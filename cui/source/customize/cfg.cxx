@@ -211,7 +211,7 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
     AddTabPage("toolbars", CreateSvxToolbarConfigPage, nullptr);
     AddTabPage("notebookbar", CreateSvxNotebookbarConfigPage, nullptr);
     AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
-    AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
+    AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr, true);
     AddTabPage("events", CreateSvxEventConfigPage, nullptr);
 
     const SfxPoolItem* pItem = pInSet->GetItem( SID_CONFIG );
