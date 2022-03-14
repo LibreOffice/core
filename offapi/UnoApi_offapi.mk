@@ -3621,6 +3621,13 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/system,\
 	XSimpleMailMessage2 \
 	XSystemShellExecute \
 ))
+
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/system/windows,\
+	JumpList \
+	JumpListItem \
+	XJumpList \
+))
+
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/table,\
 	BorderLine \
 	BorderLine2 \
