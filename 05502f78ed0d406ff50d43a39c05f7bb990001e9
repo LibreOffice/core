@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1d198fad_f8062695",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2970,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-14T07:51:04Z",
+      "side": 0,
+      "message": "GetFieldName: if DI_CUSTOM (which we are by definition), then it returns m_aName (plus the stuff that is being stripped out, plus some static text if isFixed). So instead just use the function that returns m_aName, since I wanted to strip out the IsFixed extension as well.\n\nThe downside of removing \" (fixed)\" here is pretty contrived.\nIf starting from an ODT\nand the ODT has a fixed field\nand you export to an MS Word format\nand in MS Word you press F9 on the field\nTHEN the contents will update instead of displaying an error about a missing field.\n\nI\u0027d say that\u0027s nothing to worry about. AFAICS, MS Word doesn\u0027t have the concept of a fixed DOCPROPERTY.",
+      "range": {
+        "startLine": 2970,
+        "startChar": 65,
+        "endLine": 2970,
+        "endChar": 79
+      },
+      "revId": "05502f78ed0d406ff50d43a39c05f7bb990001e9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
