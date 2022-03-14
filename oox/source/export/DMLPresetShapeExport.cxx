@@ -223,8 +223,7 @@ bool DMLPresetShapeExporter::WriteShape()
         if (!m_bHasHandleValues)
         {
             OUString sShapeType = GetShapeType();
-            const char* sPresetShape
-                = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+            const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType);
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
             m_pDMLexporter->WritePresetShape(sPresetShape);
@@ -255,8 +254,7 @@ bool DMLPresetShapeExporter::StartAVListWriting()
 {
     try
     {
-        const char* pShape
-            = msfilter::util::GetOOXMLPresetGeometry(GetShapeType().toUtf8().getStr());
+        const char* pShape = msfilter::util::GetOOXMLPresetGeometry(GetShapeType());
         m_pDMLexporter->GetFS()->startElementNS(XML_a, XML_prstGeom, XML_prst, pShape);
         m_pDMLexporter->GetFS()->startElementNS(XML_a, XML_avLst);
         return true;
@@ -287,7 +285,7 @@ bool DMLPresetShapeExporter::WriteShapeWithAVlist()
     // types which do not have pairs in LO, they are do not have to be mapped, because import
     // filter it does with GrabBag, this method only maps the SDR ones to OOXML shapes.
 
-    OString sShapeType(msfilter::util::GetOOXMLPresetGeometry(GetShapeType().toUtf8().getStr()));
+    OString sShapeType(msfilter::util::GetOOXMLPresetGeometry(GetShapeType()));
 
     // OOXML uses 60th of degree, so 360 degree is 21 600 000 60thdeg
     const tools::Long nConstOfMaxDegreeOf60th = 21600000;
