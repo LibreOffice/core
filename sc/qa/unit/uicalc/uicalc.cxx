@@ -355,6 +355,31 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf63805)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 1, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf147894)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    //Select the first row
+    goToCell("1:1");
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "FillDir", uno::Any(OUString("R")) },
+                                           { "FillCmd", uno::Any(OUString("L")) },
+                                           { "FillStep", uno::Any(OUString("1")) },
+                                           { "FillDateCmd", uno::Any(OUString("D")) },
+                                           { "FillStart", uno::Any(OUString("1")) } }));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:FillSeries", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(16384.0, pDoc->GetValue(ScAddress(16383, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf94208)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
