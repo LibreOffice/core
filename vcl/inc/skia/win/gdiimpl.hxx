@@ -54,6 +54,7 @@ public:
 
     virtual bool DrawTextLayout(const GenericSalLayout& layout) override;
     virtual void ClearDevFontCache() override;
+    virtual void ClearNativeControlCache() override;
 
     virtual void freeResources() override;
     virtual void Flush() override;
