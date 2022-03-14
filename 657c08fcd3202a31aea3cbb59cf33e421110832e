@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f902333_5e53c311",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-14T19:29:42Z",
+      "side": 1,
+      "message": "Michael: don\u0027t hesitate to comment/indicate it\u0027s wrong if it\u0027s the case but thought we could avoid an useless \"throw + empty catch\".\n",
+      "revId": "657c08fcd3202a31aea3cbb59cf33e421110832e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
