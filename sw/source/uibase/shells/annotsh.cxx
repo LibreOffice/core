@@ -1505,7 +1505,7 @@ void SwAnnotationShell::ExecUndo(SfxRequest &rReq)
     SwWrtShell &rSh = m_rView.GetWrtShell();
     SwUndoId nUndoId(SwUndoId::EMPTY);
 
-    // tdf#147929 get these before "undo" which may delete this SwAnnotationShell
+    // tdf#147928 get these before "undo" which may delete this SwAnnotationShell
     SwPostItMgr* pPostItMgr = m_rView.GetPostItMgr();
     SfxBindings& rBindings = m_rView.GetViewFrame()->GetBindings();
 
