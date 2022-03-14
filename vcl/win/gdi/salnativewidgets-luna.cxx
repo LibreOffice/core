@@ -78,12 +78,15 @@ void SalData::deInitNWF()
     aThemeMap.clear();
 }
 
-static HTHEME getThemeHandle( HWND hWnd, LPCWSTR name )
+static HTHEME getThemeHandle(HWND hWnd, LPCWSTR name, SalGraphicsImpl* pGraphicsImpl)
 {
     if( GetSalData()->mbThemeChanged )
     {
         // throw away invalid theme handles
         SalData::deInitNWF();
+        // throw away native control cache
+        if (WinSalGraphicsImplBase* pImpl = dynamic_cast<WinSalGraphicsImplBase*>(pGraphicsImpl))
+            pImpl->ClearNativeControlCache();
         GetSalData()->mbThemeChanged = false;
     }
 
@@ -107,33 +110,33 @@ bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Button");
+                hTheme = getThemeHandle(mhWnd, L"Button", mpImpl.get());
             break;
         case ControlType::Scrollbar:
             if( nPart == ControlPart::DrawBackgroundHorz || nPart == ControlPart::DrawBackgroundVert )
                 return false;   // no background painting needed
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Scrollbar");
+                hTheme = getThemeHandle(mhWnd, L"Scrollbar", mpImpl.get());
             break;
         case ControlType::Combobox:
             if( nPart == ControlPart::HasBackgroundTexture )
                 return false;   // we do not paint the inner part (ie the selection background/focus indication)
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Edit");
+                hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
             else if( nPart == ControlPart::ButtonDown )
-                hTheme = getThemeHandle( mhWnd, L"Combobox");
+                hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
             break;
         case ControlType::Spinbox:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Edit");
+                hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
             else if( nPart == ControlPart::AllButtons ||
                 nPart == ControlPart::ButtonUp || nPart == ControlPart::ButtonDown ||
                 nPart == ControlPart::ButtonLeft|| nPart == ControlPart::ButtonRight )
-                hTheme = getThemeHandle( mhWnd, L"Spin");
+                hTheme = getThemeHandle(mhWnd, L"Spin", mpImpl.get());
             break;
         case ControlType::SpinButtons:
             if( nPart == ControlPart::Entire || nPart == ControlPart::AllButtons )
-                hTheme = getThemeHandle( mhWnd, L"Spin");
+                hTheme = getThemeHandle(mhWnd, L"Spin", mpImpl.get());
             break;
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
@@ -141,36 +144,36 @@ bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
                 return false;   // we do not paint the inner part (ie the selection background/focus indication)
                 //return TRUE;
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Edit");
+                hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
             break;
         case ControlType::Listbox:
             if( nPart == ControlPart::HasBackgroundTexture )
                 return false;   // we do not paint the inner part (ie the selection background/focus indication)
             if( nPart == ControlPart::Entire || nPart == ControlPart::ListboxWindow )
-                hTheme = getThemeHandle( mhWnd, L"Listview");
+                hTheme = getThemeHandle(mhWnd, L"Listview", mpImpl.get());
             else if( nPart == ControlPart::ButtonDown )
-                hTheme = getThemeHandle( mhWnd, L"Combobox");
+                hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
             break;
         case ControlType::TabPane:
         case ControlType::TabBody:
         case ControlType::TabItem:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Tab");
+                hTheme = getThemeHandle(mhWnd, L"Tab", mpImpl.get());
             break;
         case ControlType::Toolbar:
             if( nPart == ControlPart::Entire || nPart == ControlPart::Button )
-                hTheme = getThemeHandle( mhWnd, L"Toolbar");
+                hTheme = getThemeHandle(mhWnd, L"Toolbar", mpImpl.get());
             else
                 // use rebar theme for grip and background
-                hTheme = getThemeHandle( mhWnd, L"Rebar");
+                hTheme = getThemeHandle(mhWnd, L"Rebar", mpImpl.get());
             break;
         case ControlType::Menubar:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Rebar");
+                hTheme = getThemeHandle(mhWnd, L"Rebar", mpImpl.get());
             else if( GetSalData()->mbThemeMenuSupport )
             {
                 if( nPart == ControlPart::MenuItem )
-                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+                    hTheme = getThemeHandle(mhWnd, L"Menu", mpImpl.get());
             }
             break;
         case ControlType::MenuPopup:
@@ -181,20 +184,20 @@ bool WinSalGraphics::isNativeControlSupported( ControlType nType, ControlPart nP
                     nPart == ControlPart::MenuItemCheckMark ||
                     nPart == ControlPart::MenuItemRadioMark ||
                     nPart == ControlPart::Separator )
-                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+                    hTheme = getThemeHandle(mhWnd, L"Menu", mpImpl.get());
             }
             break;
         case ControlType::Progress:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Progress");
+                hTheme = getThemeHandle(mhWnd, L"Progress", mpImpl.get());
             break;
         case ControlType::Slider:
             if( nPart == ControlPart::TrackHorzArea || nPart == ControlPart::TrackVertArea )
-                hTheme = getThemeHandle( mhWnd, L"Trackbar" );
+                hTheme = getThemeHandle(mhWnd, L"Trackbar", mpImpl.get());
             break;
         case ControlType::ListNode:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"TreeView" );
+                hTheme = getThemeHandle(mhWnd, L"TreeView", mpImpl.get());
             break;
         default:
             hTheme = nullptr;
@@ -1047,68 +1050,68 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
         case ControlType::Pushbutton:
         case ControlType::Radiobutton:
         case ControlType::Checkbox:
-            hTheme = getThemeHandle( mhWnd, L"Button");
+            hTheme = getThemeHandle(mhWnd, L"Button", mpImpl.get());
             break;
         case ControlType::Scrollbar:
-            hTheme = getThemeHandle( mhWnd, L"Scrollbar");
+            hTheme = getThemeHandle(mhWnd, L"Scrollbar", mpImpl.get());
             break;
         case ControlType::Combobox:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Edit");
+                hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
             else if( nPart == ControlPart::ButtonDown )
-                hTheme = getThemeHandle( mhWnd, L"Combobox");
+                hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
             break;
         case ControlType::Spinbox:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Edit");
+                hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
             else
-                hTheme = getThemeHandle( mhWnd, L"Spin");
+                hTheme = getThemeHandle(mhWnd, L"Spin", mpImpl.get());
             break;
         case ControlType::SpinButtons:
-            hTheme = getThemeHandle( mhWnd, L"Spin");
+            hTheme = getThemeHandle(mhWnd, L"Spin", mpImpl.get());
             break;
         case ControlType::Editbox:
         case ControlType::MultilineEditbox:
-            hTheme = getThemeHandle( mhWnd, L"Edit");
+            hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
             break;
         case ControlType::Listbox:
             if( nPart == ControlPart::Entire || nPart == ControlPart::ListboxWindow )
-                hTheme = getThemeHandle( mhWnd, L"Listview");
+                hTheme = getThemeHandle(mhWnd, L"Listview", mpImpl.get());
             else if( nPart == ControlPart::ButtonDown )
-                hTheme = getThemeHandle( mhWnd, L"Combobox");
+                hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
             break;
         case ControlType::TabPane:
         case ControlType::TabBody:
         case ControlType::TabItem:
-            hTheme = getThemeHandle( mhWnd, L"Tab");
+            hTheme = getThemeHandle(mhWnd, L"Tab", mpImpl.get());
             break;
         case ControlType::Toolbar:
             if( nPart == ControlPart::Entire || nPart == ControlPart::Button )
-                hTheme = getThemeHandle( mhWnd, L"Toolbar");
+                hTheme = getThemeHandle(mhWnd, L"Toolbar", mpImpl.get());
             else
                 // use rebar for grip and background
-                hTheme = getThemeHandle( mhWnd, L"Rebar");
+                hTheme = getThemeHandle(mhWnd, L"Rebar", mpImpl.get());
             break;
         case ControlType::Menubar:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Rebar");
+                hTheme = getThemeHandle(mhWnd, L"Rebar", mpImpl.get());
             else if( GetSalData()->mbThemeMenuSupport )
             {
                 if( nPart == ControlPart::MenuItem )
-                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+                    hTheme = getThemeHandle(mhWnd, L"Menu", mpImpl.get());
             }
             break;
         case ControlType::Progress:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"Progress");
+                hTheme = getThemeHandle(mhWnd, L"Progress", mpImpl.get());
             break;
         case ControlType::ListNode:
             if( nPart == ControlPart::Entire )
-                hTheme = getThemeHandle( mhWnd, L"TreeView");
+                hTheme = getThemeHandle(mhWnd, L"TreeView", mpImpl.get());
             break;
         case ControlType::Slider:
             if( nPart == ControlPart::TrackHorzArea || nPart == ControlPart::TrackVertArea )
-                hTheme = getThemeHandle( mhWnd, L"Trackbar" );
+                hTheme = getThemeHandle(mhWnd, L"Trackbar", mpImpl.get());
             break;
         case ControlType::MenuPopup:
             if( GetSalData()->mbThemeMenuSupport )
@@ -1117,7 +1120,7 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                     nPart == ControlPart::MenuItemCheckMark || nPart == ControlPart::MenuItemRadioMark ||
                     nPart == ControlPart::Separator
                     )
-                    hTheme = getThemeHandle( mhWnd, L"Menu" );
+                    hTheme = getThemeHandle(mhWnd, L"Menu", mpImpl.get());
             }
             break;
         default:
@@ -1190,7 +1193,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             // the vertical gripper is not supported in most themes and it makes no
             // sense to only support horizontal gripper
 
-            HTHEME hTheme = getThemeHandle( mhWnd, L"Rebar");
+            HTHEME hTheme = getThemeHandle(mhWnd, L"Rebar", mpImpl.get());
             if( hTheme )
             {
             tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, nPart == ControlPart::ThumbHorz ? RP_GRIPPERVERT : RP_GRIPPER,
@@ -1210,7 +1213,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
         }
         if( nPart == ControlPart::Button )
         {
-            HTHEME hTheme = getThemeHandle( mhWnd, L"Toolbar");
+            HTHEME hTheme = getThemeHandle(mhWnd, L"Toolbar", mpImpl.get());
             if( hTheme )
             {
                 tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, TP_SPLITBUTTONDROPDOWN,
@@ -1224,7 +1227,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if( nType == ControlType::Progress && nPart == ControlPart::Entire )
     {
-        HTHEME hTheme = getThemeHandle( mhWnd, L"Progress");
+        HTHEME hTheme = getThemeHandle(mhWnd, L"Progress", mpImpl.get());
         if( hTheme )
         {
             tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC, PP_BAR,
@@ -1237,7 +1240,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
     }
     if( (nType == ControlType::Listbox || nType == ControlType::Combobox ) && nPart == ControlPart::Entire )
     {
-        HTHEME hTheme = getThemeHandle( mhWnd, L"Combobox");
+        HTHEME hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
         if( hTheme )
         {
             tools::Rectangle aBoxRect( rControlRegion );
@@ -1256,7 +1259,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
     if( (nType == ControlType::Editbox || nType == ControlType::Spinbox) && nPart == ControlPart::Entire )
     {
-        HTHEME hTheme = getThemeHandle( mhWnd, L"Edit");
+        HTHEME hTheme = getThemeHandle(mhWnd, L"Edit", mpImpl.get());
         if( hTheme )
         {
             // get border size
@@ -1295,7 +1298,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
             if( nPart == ControlPart::MenuItemCheckMark ||
                 nPart == ControlPart::MenuItemRadioMark )
             {
-                HTHEME hTheme = getThemeHandle( mhWnd, L"Menu");
+                HTHEME hTheme = getThemeHandle(mhWnd, L"Menu", mpImpl.get());
                 tools::Rectangle aBoxRect( rControlRegion );
                 tools::Rectangle aRect( ImplGetThemeRect( hTheme, hDC,
                     MENU_POPUPCHECK,
@@ -1321,7 +1324,7 @@ bool WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
     if( nType == ControlType::Slider && ( (nPart == ControlPart::ThumbHorz) || (nPart == ControlPart::ThumbVert) ) )
     {
-        HTHEME hTheme = getThemeHandle( mhWnd, L"Trackbar");
+        HTHEME hTheme = getThemeHandle(mhWnd, L"Trackbar", mpImpl.get());
         if( hTheme )
         {
             int iPart = (nPart == ControlPart::ThumbHorz) ? TKP_THUMB : TKP_THUMBVERT;
