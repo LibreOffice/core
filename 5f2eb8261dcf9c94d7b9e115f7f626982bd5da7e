@@ -33,6 +33,23 @@
       "message": "LGTM, though not an expert. Hossein, would you please have a look.",
       "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07310a55_3beb14ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-14T09:03:12Z",
+      "side": 1,
+      "message": "The focus is now changed, but is this meant to fix the actual bug, and read the content of \"Not in dictionary\"? Which screen reader do you use?\nI don\u0027t get the desired output with the default screen reader of GNOME, and the gtk3 UI. On the other hand, without this fix, by changing the focus manually I can hear appropriate message when the related text box gets focus.",
+      "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
