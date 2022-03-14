@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_FIELDVALUES_HXX
 #define INCLUDED_VCL_FIELDVALUES_HXX
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <tools/fldunit.hxx>
@@ -29,7 +33,7 @@ class LocaleDataWrapper;
 
 namespace vcl
 {
-VCL_DLLPUBLIC FieldUnit EnglishStringToMetric(const OUString& rEnglishMetricString);
+VCL_DLLPUBLIC FieldUnit EnglishStringToMetric(std::string_view rEnglishMetricString);
 
 VCL_DLLPUBLIC bool TextToValue(const OUString& rStr, double& rValue, sal_Int64 nBaseValue,
                                sal_uInt16 nDecDigits, const LocaleDataWrapper& rLocaleDataWrapper,
