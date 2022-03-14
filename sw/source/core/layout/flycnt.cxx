@@ -428,7 +428,10 @@ void SwFlyAtContentFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                 bAnchoredAtMaster, nToPageNum, bDummy,
                                 bPageHasFlysAnchoredBelowThis) )
                     {
-                        bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
+                        if (!bPageHasFlysAnchoredBelowThis)
+                        {
+                            bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
+                        }
                         // mark anchor text frame
                         // directly, that it is moved forward by object positioning.
                         SwTextFrame* pAnchorTextFrame( static_cast<SwTextFrame*>(AnchorFrame()) );
