@@ -768,7 +768,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         EscherPropertyContainer::IsDefaultObject(
             rSdrObjCustomShape,
             eShapeType));
-    const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType);
+    OString sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType);
     SAL_INFO("oox.shape", "custom shape type: " << sShapeType << " ==> " << sPresetShape);
 
     sal_Int32 nAdjustmentValuesIndex = -1;
@@ -1078,7 +1078,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
             // case mso_sptBorderCallout3:
             default:
             {
-                if (!strcmp( sPresetShape, "frame" ))
+                if ( sPresetShape == "frame" )
                 {
                     sal_Int32 adj1 =  double( nYPosition )/aViewBox.Height *100000 ;
                     lcl_AppendAdjustmentValue( aAvList, 1, adj1 );

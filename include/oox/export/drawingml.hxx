@@ -303,9 +303,9 @@ public:
                              sal_Int16 nScriptType = css::i18n::ScriptType::LATIN,
                              const css::uno::Reference< css::beans::XPropertySet >& rXShapePropSet = {});
 
-    void WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
-    void WritePresetShape( const char* pShape );
-    void WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const css::beans::PropertyValue& rProp );
+    void WritePresetShape( const OString& pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList );
+    void WritePresetShape( const OString& pShape );
+    void WritePresetShape( const OString& pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const css::beans::PropertyValue& rProp );
     bool WriteCustomGeometry(
         const css::uno::Reference<css::drawing::XShape>& rXShape,
         const SdrObjCustomShape& rSdrObjCustomShape);
