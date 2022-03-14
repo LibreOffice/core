@@ -2381,9 +2381,8 @@ bool SdXImpressDocument::isMasterViewMode()
 
     if (pViewSh->GetDispatcher())
     {
-        const SfxPoolItem* xItem = nullptr;
-        pViewSh->GetDispatcher()->QueryState(SID_SLIDE_MASTER_MODE, xItem);
-        const SfxBoolItem* isMasterViewMode = dynamic_cast<const SfxBoolItem*>(xItem);
+        const SfxBoolItem* isMasterViewMode = nullptr;
+        pViewSh->GetDispatcher()->QueryState(SID_SLIDE_MASTER_MODE, isMasterViewMode);
         if (isMasterViewMode && isMasterViewMode->GetValue())
             return true;
     }

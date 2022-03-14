@@ -39,9 +39,9 @@ PageColumnControl::PageColumnControl(PageColumnPopup* pControl, weld::Widget* pP
     bool bLandscape = false;
     if ( SfxViewFrame::Current() )
     {
-        const SfxPoolItem *pItem;
-        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
-        bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
+        const SvxPageItem *pPageItem;
+        SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
+        bLandscape = pPageItem->IsLandscape();
     }
 
     if ( bLandscape )

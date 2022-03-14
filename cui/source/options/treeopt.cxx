@@ -1050,12 +1050,12 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
-                const SfxPoolItem* pItem = nullptr;
+                const SfxUInt16Item* pItem = nullptr;
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
 
                 // miscellaneous - Year2000
                 if( SfxItemState::DEFAULT <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
-                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, static_cast<const SfxUInt16Item*>(pItem)->GetValue() ) );
+                    pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, pItem->GetValue() ) );
                 else
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, officecfg::Office::Common::DateFormat::TwoDigitYear::get() ) );
             }
@@ -1100,28 +1100,17 @@ std::optional<SfxItemSet> OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             SfxViewFrame* pViewFrame = SfxViewFrame::Current();
             if ( pViewFrame )
             {
-                const SfxPoolItem* pItem = nullptr;
+                const SvxLanguageItem* pLangItem = nullptr;
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
-                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pItem))
-                    pRet->Put(
-                        SvxLanguageItem(
-                            (static_cast<const SvxLanguageItem*>(pItem)
-                             ->GetLanguage()),
-                            SID_ATTR_LANGUAGE));
-                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pItem))
-                    pRet->Put(
-                        SvxLanguageItem(
-                            (static_cast<const SvxLanguageItem*>(pItem)
-                             ->GetLanguage()),
-                            SID_ATTR_CHAR_CJK_LANGUAGE));
-                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pItem))
-                    pRet->Put(
-                        SvxLanguageItem(
-                            (static_cast<const SvxLanguageItem*>(pItem)
-                             ->GetLanguage()),
-                            SID_ATTR_CHAR_CTL_LANGUAGE));
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_LANGUAGE, pLangItem))
+                    pRet->Put(*pLangItem, SID_ATTR_LANGUAGE);
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CJK_LANGUAGE, pLangItem))
+                    pRet->Put(*pLangItem, SID_ATTR_CHAR_CJK_LANGUAGE);
+                if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_ATTR_CHAR_CTL_LANGUAGE, pLangItem))
+                    pRet->Put(*pLangItem, SID_ATTR_CHAR_CTL_LANGUAGE);
 
                 pRet->Put(aHyphen);
+                const SfxPoolItem* pItem = nullptr;
                 if(SfxItemState::DEFAULT <= pDispatch->QueryState(SID_AUTOSPELL_CHECK, pItem))
                 {
                     pRet->Put(std::unique_ptr<SfxPoolItem>(pItem->Clone()));

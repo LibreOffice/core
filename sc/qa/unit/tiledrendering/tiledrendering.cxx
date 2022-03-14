@@ -1575,12 +1575,10 @@ void ScTiledRenderingTest::testDocumentRepair()
     int nView2 = SfxLokHelper::getView();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
-        std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
-        const SfxBoolItem* pItem1 = dynamic_cast< const SfxBoolItem* >(xItem1.get());
-        const SfxBoolItem* pItem2 = dynamic_cast< const SfxBoolItem* >(xItem2.get());
+        std::unique_ptr<SfxBoolItem> pItem1;
+        std::unique_ptr<SfxBoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
@@ -1596,12 +1594,10 @@ void ScTiledRenderingTest::testDocumentRepair()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
     Scheduler::ProcessEventsToIdle();
     {
-        std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
-        const SfxBoolItem* pItem1 = dynamic_cast< const SfxBoolItem* >(xItem1.get());
-        const SfxBoolItem* pItem2 = dynamic_cast< const SfxBoolItem* >(xItem2.get());
+        std::unique_ptr<SfxBoolItem> pItem1;
+        std::unique_ptr<SfxBoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());

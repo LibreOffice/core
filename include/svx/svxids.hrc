@@ -592,7 +592,7 @@ class XFillGradientItem;
 #define SID_FM_DELETEROWS                               ( SID_SVX_START + 610 )
 //FREE
 //FREE
-#define SID_FM_CTL_PROPERTIES                           ( SID_SVX_START + 613 )
+#define SID_FM_CTL_PROPERTIES                           TypedWhichId<SfxBoolItem>( SID_SVX_START + 613 )
 #define SID_FM_PROPERTIES                               ( SID_SVX_START + 614 )
 #define SID_FM_TAB_DIALOG                               ( SID_SVX_START + 615 )
 #define SID_FM_RECORD_FIRST                             ( SID_SVX_START + 616 )
@@ -1049,6 +1049,7 @@ class XFillGradientItem;
 #define SID_INSERT_TREECONTROL                          ( SID_SVX_START + 1206 )
 #define SID_ATTR_VIEWLAYOUT                             TypedWhichId<SvxViewLayoutItem>( SID_SVX_START + 1207 )
 #define SID_ATTR_ZOOMSLIDER                             TypedWhichId<SvxZoomSliderItem>( SID_SVX_START + 1208 )
+// Can be either SfxStringItem or SfxStringListItem
 #define SID_LANGUAGE_STATUS                             ( SID_SVX_START + 1209 )
 #define SID_CHAR_DLG_FOR_PARAGRAPH                      ( SID_SVX_START + 1210 )
 #define SID_SET_DOCUMENT_LANGUAGE                       TypedWhichId<SfxBoolItem>( SID_SVX_START + 1211 )

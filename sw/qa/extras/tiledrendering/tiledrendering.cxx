@@ -2243,12 +2243,10 @@ void SwTiledRenderingTest::testDocumentRepair()
     int nView2 = SfxLokHelper::getView();
     CPPUNIT_ASSERT(pView1 != pView2);
     {
-        std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
-        const SfxBoolItem* pItem1 = dynamic_cast<const SfxBoolItem*>(xItem1.get());
-        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
+        std::unique_ptr<SfxBoolItem> pItem1;
+        std::unique_ptr<SfxBoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
@@ -2261,12 +2259,10 @@ void SwTiledRenderingTest::testDocumentRepair()
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 'u', 0);
     Scheduler::ProcessEventsToIdle();
     {
-        std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
-        const SfxBoolItem* pItem1 = dynamic_cast<const SfxBoolItem*>(xItem1.get());
-        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
+        std::unique_ptr<SfxBoolItem> pItem1;
+        std::unique_ptr<SfxBoolItem> pItem2;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
@@ -2281,12 +2277,11 @@ void SwTiledRenderingTest::testDocumentRepair()
 
 namespace {
 
-    void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, sal_uInt16 nWhich, bool bValue)
+    void checkPageHeaderOrFooter(const SfxViewShell* pViewShell, TypedWhichId<SfxStringListItem> nWhich, bool bValue)
     {
         uno::Sequence<OUString> aSeq;
-        const SfxPoolItem* pState = nullptr;
-        pViewShell->GetDispatcher()->QueryState(nWhich, pState);
-        const SfxStringListItem* pListItem = dynamic_cast<const SfxStringListItem*>(pState);
+        const SfxStringListItem* pListItem = nullptr;
+        pViewShell->GetDispatcher()->QueryState(nWhich, pListItem);
         CPPUNIT_ASSERT(pListItem);
         pListItem->GetStringList(aSeq);
         if (bValue)
@@ -2474,9 +2469,8 @@ void SwTiledRenderingTest::testIMEFormattingAtEndOfParagraph()
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
-    std::unique_ptr<SfxPoolItem> pItem;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
-    auto pWeightItem = dynamic_cast<SvxWeightItem*>(pItem.get());
+    std::unique_ptr<SvxWeightItem> pWeightItem;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem);
     CPPUNIT_ASSERT(pWeightItem);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
@@ -2494,8 +2488,8 @@ void SwTiledRenderingTest::testIMEFormattingAtEndOfParagraph()
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
-    auto pWeightItem2 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    std::unique_ptr<SvxWeightItem> pWeightItem2;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem2);
     CPPUNIT_ASSERT(pWeightItem2);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem2->GetWeight());
@@ -2510,8 +2504,8 @@ void SwTiledRenderingTest::testIMEFormattingAtEndOfParagraph()
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "a");
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
-    auto pWeightItem3 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    std::unique_ptr<SvxWeightItem> pWeightItem3;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem3);
     CPPUNIT_ASSERT(pWeightItem3);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem3->GetWeight());
@@ -2522,8 +2516,8 @@ void SwTiledRenderingTest::testIMEFormattingAtEndOfParagraph()
     pDocWindow->PostExtTextInputEvent(VclEventId::ExtTextInput, "b");
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
 
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
-    auto pWeightItem4 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    std::unique_ptr<SvxWeightItem> pWeightItem4;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem4);
     CPPUNIT_ASSERT(pWeightItem4);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem4->GetWeight());
@@ -2580,9 +2574,8 @@ void SwTiledRenderingTest::testIMEFormattingAfterHeader()
     pDocWindow->PostExtTextInputEvent(VclEventId::EndExtTextInput, "");
     Scheduler::ProcessEventsToIdle();
 
-    std::unique_ptr<SfxPoolItem> pItem;
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
-    auto pWeightItem = dynamic_cast<SvxWeightItem*>(pItem.get());
+    std::unique_ptr<SvxWeightItem> pWeightItem;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem);
     CPPUNIT_ASSERT(pWeightItem);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_BOLD, pWeightItem->GetWeight());
@@ -2602,8 +2595,8 @@ void SwTiledRenderingTest::testIMEFormattingAfterHeader()
     //          <h2>bb</h2>\n"
     //          c"
 
-    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pItem);
-    auto pWeightItem2 = dynamic_cast<SvxWeightItem*>(pItem.get());
+    std::unique_ptr<SvxWeightItem> pWeightItem2;
+    pView->GetViewFrame()->GetBindings().QueryState(SID_ATTR_CHAR_WEIGHT, pWeightItem2);
     CPPUNIT_ASSERT(pWeightItem2);
 
     CPPUNIT_ASSERT_EQUAL(FontWeight::WEIGHT_NORMAL, pWeightItem2->GetWeight());

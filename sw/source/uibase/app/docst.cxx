@@ -104,9 +104,8 @@ void  SwDocShell::StateStyleSheet(SfxItemSet& rSet, SwWrtShell* pSh)
     else
     {
         SfxViewFrame* pFrame = pShell->GetView().GetViewFrame();
-        std::unique_ptr<SfxPoolItem> pItem;
-        pFrame->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
-        SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
+        std::unique_ptr<SfxUInt16Item> pFamilyItem;
+        pFrame->GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
         if (pFamilyItem)
         {
             nActualFamily = static_cast<SfxStyleFamily>(pFamilyItem->GetValue());

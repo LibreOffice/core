@@ -46,11 +46,11 @@ namespace
     FieldUnit lcl_GetFieldUnit()
     {
         FieldUnit eUnit = FieldUnit::INCH;
-        const SfxPoolItem* pItem = nullptr;
+        const SfxUInt16Item* pItem = nullptr;
         SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_METRIC, pItem );
         if ( pItem && eState >= SfxItemState::DEFAULT )
         {
-            eUnit = static_cast<FieldUnit>(static_cast<const SfxUInt16Item*>(pItem)->GetValue());
+            eUnit = static_cast<FieldUnit>(pItem->GetValue());
         }
         else
         {
@@ -122,11 +122,10 @@ PageSizeControl::PageSizeControl(PageSizePopup* pControl, weld::Widget* pParent)
         const SvxSizeItem* pSize = nullptr;
         if ( SfxViewFrame::Current() )
         {
-            const SfxPoolItem* pItem;
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
-            bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
-            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pItem );
-            pSize = static_cast<const SvxSizeItem*>(pItem);
+            const SvxPageItem* pPageItem;
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pPageItem );
+            bLandscape = pPageItem->IsLandscape();
+            SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE_SIZE, pSize );
         }
 
         const LocaleDataWrapper& localeDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
@@ -194,13 +193,13 @@ PageSizeControl::~PageSizeControl()
 void PageSizeControl::ExecuteSizeChange( const Paper ePaper )
 {
     bool bLandscape = false;
-    const SfxPoolItem *pItem;
+    const SvxPageItem *pItem;
     MapUnit eUnit = lcl_GetUnit();
     if ( !SfxViewFrame::Current() )
         return;
 
     SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState( SID_ATTR_PAGE, pItem );
-    bLandscape = static_cast<const SvxPageItem*>(pItem)->IsLandscape();
+    bLandscape = pItem->IsLandscape();
 
     SvxSizeItem aPageSizeItem(SID_ATTR_PAGE_SIZE);
     Size aPageSize = SvxPaperInfo::GetPaperSize( ePaper, eUnit );

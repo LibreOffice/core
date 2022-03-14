@@ -214,9 +214,8 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
-                std::unique_ptr<SfxPoolItem> pItem;
-                pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
-                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
+                std::unique_ptr<SfxUInt16Item> pFamilyItem;
+                pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
 
                 bool bPage = pFamilyItem && SfxStyleFamily::Page == static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
 
@@ -230,9 +229,8 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             case SID_STYLE_HIDE:
             case SID_STYLE_SHOW:
             {
-                std::unique_ptr<SfxPoolItem> pItem;
-                pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pItem);
-                SfxUInt16Item* pFamilyItem = dynamic_cast<SfxUInt16Item*>(pItem.get());
+                std::unique_ptr<SfxUInt16Item> pFamilyItem;
+                pTabViewShell->GetViewFrame()->GetBindings().QueryState(SID_STYLE_FAMILY, pFamilyItem);
                 bool bPage = pFamilyItem && SfxStyleFamily::Page == static_cast<SfxStyleFamily>(pFamilyItem->GetValue());
 
                 if ( bProtected && !bPage )

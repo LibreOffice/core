@@ -798,12 +798,12 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rM
     // ask the bindings of the current view frame (which should be the one we're residing in) for the state
     if (pCurrentFrame)
     {
-        std::unique_ptr<SfxPoolItem> pItem;
+        std::unique_ptr<SfxBoolItem> pItem;
         SfxItemState eState = pCurrentFrame->GetBindings().QueryState(SID_FM_CTL_PROPERTIES, pItem);
 
         if (eState >= SfxItemState::DEFAULT && pItem != nullptr)
         {
-            bool bChecked = dynamic_cast<const SfxBoolItem*>( pItem.get()) != nullptr && static_cast<SfxBoolItem*>(pItem.get())->GetValue();
+            bool bChecked = pItem && pItem->GetValue();
             rMenu.set_active("column", bChecked);
         }
     }

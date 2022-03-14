@@ -281,8 +281,8 @@ class SwUINumRuleItem;
 #define FN_JAVAEDIT             (FN_INSERT2 + 10)   /* edit script field */
 #define FN_TOOL_ANCHOR_AT_CHAR  (FN_INSERT2 + 12)   /* anchor object to character*/
 
-#define FN_INSERT_PAGEHEADER    (FN_INSERT2 + 13)   /* insert default header */
-#define FN_INSERT_PAGEFOOTER    (FN_INSERT2 + 14)   /* insert default footer */
+#define FN_INSERT_PAGEHEADER    TypedWhichId<SfxStringListItem>(FN_INSERT2 + 13)   /* insert default header */
+#define FN_INSERT_PAGEFOOTER    TypedWhichId<SfxStringListItem>(FN_INSERT2 + 14)   /* insert default footer */
 
 #define FN_INSERT_ENDNOTE           (FN_INSERT2 + 18)   /* insert endnote*/
 #define FN_INSERT_REGION            TypedWhichId<SfxUInt16Item>(FN_INSERT2 + 19)   /* Insert section */

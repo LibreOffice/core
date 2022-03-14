@@ -106,10 +106,9 @@ TextCharacterSpacingControl::~TextCharacterSpacingControl()
 
 void TextCharacterSpacingControl::Initialize()
 {
-    const SfxPoolItem* pItem;
-    SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_KERNING, pItem);
+    const SvxKerningItem* pKerningItem;
+    SfxItemState eState = SfxViewFrame::Current()->GetBindings().GetDispatcher()->QueryState(SID_ATTR_CHAR_KERNING, pKerningItem);
 
-    const SvxKerningItem* pKerningItem = dynamic_cast<const SvxKerningItem*>(pItem);
     tools::Long nKerning = 0;
 
     if(pKerningItem)

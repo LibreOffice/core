@@ -533,10 +533,9 @@ IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl, weld::Button&, void) { Close(); }
 
 IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl, weld::Button&, void)
 {
-    std::unique_ptr<SfxPoolItem> pState;
+    std::unique_ptr<SfxBoolItem> pState;
     SfxItemState eState = pBindings->QueryState(SID_STYLE_DESIGNER, pState);
-    if (eState <= SfxItemState::SET || !pState
-        || !static_cast<SfxBoolItem*>(pState.get())->GetValue())
+    if (eState <= SfxItemState::SET || !pState || !pState->GetValue())
     {
         pBindings->GetDispatcher()->Execute(SID_STYLE_DESIGNER,
                                             SfxCallMode::ASYNCHRON | SfxCallMode::RECORD);

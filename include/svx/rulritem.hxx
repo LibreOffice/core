@@ -38,8 +38,6 @@ class SVX_DLLPUBLIC SvxLongLRSpaceItem final : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SvxLongLRSpaceItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
     const SvxLongLRSpaceItem& operator=(const SvxLongLRSpaceItem &) = delete;
 
 public:
@@ -47,6 +45,8 @@ public:
     SvxLongLRSpaceItem(tools::Long lLeft, tools::Long lRight, TypedWhichId<SvxLongLRSpaceItem> nId);
     SvxLongLRSpaceItem();
     SvxLongLRSpaceItem(SvxLongLRSpaceItem const &) = default;
+
+    virtual SvxLongLRSpaceItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     tools::Long GetLeft() const { return mlLeft;}
     tools::Long GetRight() const { return mlRight;}
@@ -68,8 +68,6 @@ class SVX_DLLPUBLIC SvxLongULSpaceItem final : public SfxPoolItem
                                   MapUnit ePresMetric,
                                   OUString &rText, const IntlWrapper& ) const override;
 
-    virtual SvxLongULSpaceItem* Clone( SfxItemPool *pPool = nullptr ) const override;
-
     const SvxLongULSpaceItem& operator=(const SvxLongULSpaceItem &) = delete;
 
 public:
@@ -77,6 +75,8 @@ public:
     SvxLongULSpaceItem(tools::Long lUpper, tools::Long lLower, TypedWhichId<SvxLongULSpaceItem> nId);
     SvxLongULSpaceItem();
     SvxLongULSpaceItem(SvxLongULSpaceItem const &) = default;
+
+    virtual SvxLongULSpaceItem* Clone( SfxItemPool *pPool = nullptr ) const override;
 
     tools::Long GetUpper() const { return mlLeft;}
     tools::Long GetLower() const { return mlRight;}

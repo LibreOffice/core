@@ -2201,15 +2201,13 @@ void SdTiledRenderingTest::testDocumentRepair()
 
     CPPUNIT_ASSERT(pView1 != pView2);
     {
-        std::unique_ptr<SfxPoolItem> xItem1;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        const SfxBoolItem* pItem1 = dynamic_cast<const SfxBoolItem*>(xItem1.get());
+        std::unique_ptr<SfxBoolItem> pItem1;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT_EQUAL(false, pItem1->GetValue());
 
-        std::unique_ptr<SfxPoolItem> xItem2;
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
-        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
+        std::unique_ptr<SfxBoolItem> pItem2;
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(false, pItem2->GetValue());
     }
@@ -2229,15 +2227,13 @@ void SdTiledRenderingTest::testDocumentRepair()
     CPPUNIT_ASSERT(!pViewShell2->GetView()->IsTextEdit());
 
     {
-        std::unique_ptr<SfxPoolItem> xItem1;
-        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem1);
-        const SfxBoolItem* pItem1 = dynamic_cast<const SfxBoolItem*>(xItem1.get());
+        std::unique_ptr<SfxBoolItem> pItem1;
+        pView1->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem1);
         CPPUNIT_ASSERT(pItem1);
         CPPUNIT_ASSERT_EQUAL(true, pItem1->GetValue());
 
-        std::unique_ptr<SfxPoolItem> xItem2;
-        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, xItem2);
-        const SfxBoolItem* pItem2 = dynamic_cast<const SfxBoolItem*>(xItem2.get());
+        std::unique_ptr<SfxBoolItem> pItem2;
+        pView2->GetViewFrame()->GetBindings().QueryState(SID_DOC_REPAIR, pItem2);
         CPPUNIT_ASSERT(pItem2);
         CPPUNIT_ASSERT_EQUAL(true, pItem2->GetValue());
     }
@@ -2296,12 +2292,10 @@ void SdTiledRenderingTest::testDefaultView()
     SdXImpressDocument* pXImpressDocument = createDoc("notes-view.odp");
     sd::ViewShell* pView = pXImpressDocument->GetDocShell()->GetViewShell();
     {
-        std::unique_ptr<SfxPoolItem> xItem1;
-        std::unique_ptr<SfxPoolItem> xItem2;
-        pView->GetViewFrame()->GetBindings().QueryState(SID_NORMAL_MULTI_PANE_GUI, xItem1);
-        pView->GetViewFrame()->GetBindings().QueryState(SID_NOTES_MODE, xItem2);
-        const SfxBoolItem* pImpressView = dynamic_cast< const SfxBoolItem* >(xItem1.get());
-        const SfxBoolItem* pNotesView = dynamic_cast< const SfxBoolItem* >(xItem2.get());
+        std::unique_ptr<SfxBoolItem> pImpressView;
+        std::unique_ptr<SfxBoolItem> pNotesView;
+        pView->GetViewFrame()->GetBindings().QueryState(SID_NORMAL_MULTI_PANE_GUI, pImpressView);
+        pView->GetViewFrame()->GetBindings().QueryState(SID_NOTES_MODE, pNotesView);
         CPPUNIT_ASSERT(pImpressView);
         CPPUNIT_ASSERT(pNotesView);
         CPPUNIT_ASSERT_EQUAL(true, pImpressView->GetValue());
