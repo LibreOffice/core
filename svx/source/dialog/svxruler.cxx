@@ -3267,7 +3267,7 @@ void SvxRuler::MenuSelect(std::string_view ident)
     if (ident.empty())
         return;
     /* Handler of the context menus for switching the unit of measurement */
-    SetUnit(vcl::EnglishStringToMetric(OUString::fromUtf8(ident)));
+    SetUnit(vcl::EnglishStringToMetric(ident));
 }
 
 void SvxRuler::TabMenuSelect(const OString& rIdent)
@@ -3348,7 +3348,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
             for ( sal_uInt16 i = nCount; i; --i )
             {
                 OString sIdent = xMenu->get_id(i - 1);
-                FieldUnit eMenuUnit = vcl::EnglishStringToMetric(OUString::fromUtf8(sIdent));
+                FieldUnit eMenuUnit = vcl::EnglishStringToMetric(sIdent);
                 xMenu->set_active(sIdent, eMenuUnit == eUnit);
                 if( bReduceMetric )
                 {
