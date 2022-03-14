@@ -67,7 +67,7 @@ class SvxConfigDialog : public SfxTabDialogController
 {
 private:
     css::uno::Reference< css::frame::XFrame > m_xFrame;
-
+    DECL_LINK(ActivatePageHdl, const OString&, void);
 public:
     SvxConfigDialog(weld::Window*, const SfxItemSet*);
 
