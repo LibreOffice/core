@@ -1,0 +1,55 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+#ifndef __com_sun_star_system_windows_JumpListItem_idl__
+#define __com_sun_star_system_windows_JumpListItem_idl__
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/uno/Sequence.idl>
+
+
+module com { module sun { module star { module system { module windows {
+
+/** Specifies an item for com::sun::star::system::windows::XJumpList .
+
+    @since LibreOffice 7.4
+*/
+
+struct JumpListItem
+{
+    /** Item name. Appears in the JumpList.
+        Has to be unique per category.
+        Must not include embedded NULs ('\\0'). */
+    string name;
+
+    /** Item description, appears as tooltip.
+        Must not include embedded NULs ('\\0').
+     */
+    string description;
+
+    /** Arguments to be passed to LibreOffice.
+        This can be a file to be loaded, or any command line parameter supported by LibreOffice, and any combination of the two.
+        Add multiple arguments separated by space.
+        Must not include embedded NULs ('\\0').
+    */
+    string arguments;
+
+    /** Icon to be displayed along the name.
+        Must be a local path name like `C:\\path\\to\\icon.ico`.
+        Icon must be in ICO format.
+    */
+    string iconPath;
+};
+
+}; }; }; }; };
+
+#endif
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
