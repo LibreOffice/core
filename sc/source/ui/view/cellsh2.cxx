@@ -529,6 +529,55 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                     // subtotal when needed new
 
                                     pTabViewShell->UISort( rOutParam );
+
+                                    SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
+                                    if (pViewFrm)
+                                    {
+                                        SfxRequest aRequest(pViewFrm, SID_SORT);
+
+                                        if ( rOutParam.bInplace )
+                                        {
+                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_BYROW,
+                                                rOutParam.bByRow ) );
+                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_HASHEADER,
+                                                rOutParam.bHasHeader ) );
+                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_CASESENS,
+                                                rOutParam.bCaseSens ) );
+                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_NATURALSORT,
+                                                        rOutParam.bNaturalSort ) );
+                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_INCCOMMENTS,
+                                                        rOutParam.bIncludeComments ) );
+                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_INCIMAGES,
+                                                        rOutParam.bIncludeGraphicObjects ) );
+                                            aRequest.AppendItem( SfxBoolItem( SID_SORT_ATTRIBS,
+                                                rOutParam.bIncludePattern ) );
+                                            sal_uInt16 nUser = rOutParam.bUserDef ? ( rOutParam.nUserIndex + 1 ) : 0;
+                                            aRequest.AppendItem( SfxUInt16Item( SID_SORT_USERDEF, nUser ) );
+                                            if ( rOutParam.maKeyState[0].bDoSort )
+                                            {
+                                                aRequest.AppendItem( SfxInt32Item( FN_PARAM_1,
+                                                    rOutParam.maKeyState[0].nField + 1 ) );
+                                                aRequest.AppendItem( SfxBoolItem( FN_PARAM_2,
+                                                    rOutParam.maKeyState[0].bAscending ) );
+                                            }
+                                            if ( rOutParam.maKeyState[1].bDoSort )
+                                            {
+                                                aRequest.AppendItem( SfxInt32Item( FN_PARAM_3,
+                                                    rOutParam.maKeyState[1].nField + 1 ) );
+                                                aRequest.AppendItem( SfxBoolItem( FN_PARAM_4,
+                                                    rOutParam.maKeyState[1].bAscending ) );
+                                            }
+                                            if ( rOutParam.maKeyState[2].bDoSort )
+                                            {
+                                                aRequest.AppendItem( SfxInt32Item( FN_PARAM_5,
+                                                    rOutParam.maKeyState[2].nField + 1 ) );
+                                                aRequest.AppendItem( SfxBoolItem( FN_PARAM_6,
+                                                    rOutParam.maKeyState[2].bAscending ) );
+                                            }
+                                        }
+
+                                        aRequest.Done();
+                                    }
                                 }
                                 else
                                 {
