@@ -108,6 +108,7 @@ ifeq ($(filter DESKTOP,$(BUILD_TYPE)),DESKTOP)
 
 $(eval $(call gb_Module_add_targets,shell,\
 	Library_syssh \
+	Library_jumplist \
 ))
 
 ifneq ($(OS),WNT)
