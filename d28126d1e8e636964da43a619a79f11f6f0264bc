@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "979bef9a_ef15ce4f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2022-03-14T12:07:05Z",
+      "side": 1,
+      "message": "Hello Justin, I\u0027m working on table borders and a unit test written by you is failed. When i check borders borders after the export everything seems expected to me. Inner borders still invisible. I checked it on MSO and everything is normal. So I change the test.\n\nIt would be nice to see your comment here. Thanks.",
+      "revId": "d28126d1e8e636964da43a619a79f11f6f0264bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
