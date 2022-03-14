@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "914f38d0_c4a00fd6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-14T05:35:31Z",
+      "side": 1,
+      "message": "Needs to be rebased once the cleanup commit is applied.",
+      "revId": "0d9d2de1d0bbc60555ff4c999b021b09f9077718",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
