@@ -1141,25 +1141,4 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
     CloseTTFont(pTTFont);
 }
 
-/// used by online unit tests via dlopen.
-extern "C" {
-SAL_DLLPUBLIC_EXPORT const char * unit_online_get_fonts(void)
-{
-    std::vector< fontID > aFontIDs;
-    PrintFontManager &rMgr = PrintFontManager::get();
-    rMgr.getFontList(aFontIDs);
-    OStringBuffer aBuf;
-    aBuf.append( static_cast<sal_Int32>(aFontIDs.size()) );
-    aBuf.append( " PS fonts.\n" );
-    for( auto nId : aFontIDs )
-    {
-        const OUString& rName = rMgr.getPSName( nId );
-        aBuf.append( OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ) );
-        aBuf.append( "\n" );
-    }
-    static OString aResult = aBuf.makeStringAndClear();
-    return aResult.getStr();
-}
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
