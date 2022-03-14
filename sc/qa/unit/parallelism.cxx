@@ -35,6 +35,7 @@ public:
     void testVLOOKUP();
     void testVLOOKUPSUM();
     void testSingleRef();
+    void testTdf147905();
     void testSUMIFImplicitRange();
     void testFGCycleWithPlainFormulaCell1();
     void testFGCycleWithPlainFormulaCell2();
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testVLOOKUP);
     CPPUNIT_TEST(testVLOOKUPSUM);
     CPPUNIT_TEST(testSingleRef);
+    CPPUNIT_TEST(testTdf147905);
     CPPUNIT_TEST(testSUMIFImplicitRange);
     CPPUNIT_TEST(testFGCycleWithPlainFormulaCell1);
     CPPUNIT_TEST(testFGCycleWithPlainFormulaCell2);
@@ -396,6 +398,34 @@ void ScParallelismTest::testSingleRef()
     {
         OString aMsg = "At row " + OString::number(i);
         CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), i, static_cast<size_t>(m_pDoc->GetValue(1, i, 0)));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
+void ScParallelismTest::testTdf147905()
+{
+    m_pDoc->InsertTab(0, "1");
+
+    OUString aFormula;
+    const size_t nNumRows = 500;
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        m_pDoc->SetString(0, i, 0, "AAAAAAAA");
+        aFormula = "=PROPER($A" + OUString::number(i+1) + ")";
+        m_pDoc->SetFormula(ScAddress(1, i, 0),
+                           aFormula,
+                           formula::FormulaGrammar::GRAM_NATIVE_UI);
+    }
+
+    m_xDocShell->DoHardRecalc();
+
+    for (size_t i = 0; i < nNumRows; ++i)
+    {
+        OString aMsg = "At row " + OString::number(i);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), OUString("AAAAAAAA"), m_pDoc->GetString(0, i, 0));
+
+        // Without the fix in place, this test would have failed here
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), OUString("Aaaaaaaa"), m_pDoc->GetString(1, i, 0));
     }
     m_pDoc->DeleteTab(0);
 }
