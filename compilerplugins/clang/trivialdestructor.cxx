@@ -45,6 +45,8 @@ bool TrivialDestructor::VisitCXXDestructorDecl(CXXDestructorDecl const* destruct
 {
     if (ignoreLocation(destructorDecl))
         return true;
+    if (!destructorDecl->isThisDeclarationADefinition())
+        return true;
     if (!destructorDecl->hasTrivialBody())
         return true;
     if (destructorDecl->isVirtual())
@@ -62,12 +64,15 @@ bool TrivialDestructor::VisitCXXDestructorDecl(CXXDestructorDecl const* destruct
     report(DiagnosticsEngine::Warning, "no need for explicit destructor decl",
            destructorDecl->getLocation())
         << destructorDecl->getSourceRange();
-    if (destructorDecl->getCanonicalDecl() != destructorDecl)
+    for (FunctionDecl const* d2 = destructorDecl;;)
     {
-        destructorDecl = destructorDecl->getCanonicalDecl();
-        report(DiagnosticsEngine::Warning, "no need for explicit destructor decl",
-               destructorDecl->getLocation())
-            << destructorDecl->getSourceRange();
+        d2 = d2->getPreviousDecl();
+        if (d2 == nullptr)
+        {
+            break;
+        }
+        report(DiagnosticsEngine::Note, "previous declaration is here", d2->getLocation())
+            << d2->getSourceRange();
     }
     return true;
 }
