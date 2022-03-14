@@ -201,7 +201,8 @@ const SalLayoutFlags eGlyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly | Sa
  * Pre-calculates glyph items for the rendered subset of rKey's text, assuming
  * outdev state does not change between the outdev calls.
  */
-static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyphsMap::iterator it)
+static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyphsMap::iterator it,
+                                         const vcl::text::TextLayoutCache* layoutCache)
 {
     assert (!it->second.IsValid());
 
@@ -212,7 +213,7 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyp
     // Calculate glyph items.
     std::unique_ptr<SalLayout> pLayout
         = rKey.m_pOutputDevice->ImplLayout(rKey.m_aText, rKey.m_nIndex, rKey.m_nLength, Point(0, 0), 0,
-                                           {}, eGlyphItemsOnlyLayout);
+                                           {}, eGlyphItemsOnlyLayout, layoutCache);
     if (!pLayout)
         return nullptr;
 
@@ -222,7 +223,7 @@ static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyp
     return &it->second;
 }
 
-SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
+SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* layoutCache)
 {
     SwTextGlyphsMap::iterator it = m_aTextGlyphs.find(key);
     if(it != m_aTextGlyphs.end())
@@ -235,7 +236,13 @@ SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key)
         return nullptr;
     }
     it = m_aTextGlyphs.insert_or_assign( it, key, SalLayoutGlyphs());
-    return lcl_CreateLayout(key, it);
+    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
+    if( layoutCache == nullptr )
+    {
+        tmpLayoutCache = OutputDevice::CreateTextLayoutCache( key.m_aText );
+        layoutCache = tmpLayoutCache.get();
+    }
+    return lcl_CreateLayout(key, it, layoutCache);
 }
 
 void SwFntObj::ClearCachedTextGlyphs()
@@ -840,15 +847,26 @@ static void lcl_DrawLineForWrongListData(
 }
 
 void SwFntObj::GetTextArray(const OutputDevice& rDevice, const OUString& rStr, std::vector<sal_Int32>& rDXAry,
-                            sal_Int32 nIndex, sal_Int32 nLen, bool bCaching)
+                            sal_Int32 nIndex, sal_Int32 nLen, bool bCaching, const vcl::text::TextLayoutCache* layoutCache)
 {
     SalLayoutGlyphs* pLayoutCache = nullptr;
+    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
     if (bCaching)
     {
         SwTextGlyphsKey aGlyphsKey{&rDevice, rStr, nIndex, nLen};
-        pLayoutCache = GetCachedSalLayoutGlyphs(aGlyphsKey);
+        pLayoutCache = GetCachedSalLayoutGlyphs(aGlyphsKey, layoutCache);
+        if(pLayoutCache == nullptr)
+        {   // Try to create at least the lower-level cache if possible.
+            tmpLayoutCache = OutputDevice::CreateTextLayoutCache( rStr );
+            layoutCache = tmpLayoutCache.get();
+        }
     }
-    rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, nullptr, pLayoutCache);
+    rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, layoutCache, pLayoutCache);
+}
+
+void SwFntObj::GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry)
+{
+    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(), true, rInf.GetVclCache());
 }
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
@@ -1027,11 +1045,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             std::vector<sal_Int32> aKernArray;
 
             if ( m_pPrinter )
-                GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                            sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), false);
+                GetTextArray(*m_pPrinter, rInf, aKernArray);
             else
-                GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray,
-                            sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), false);
+                GetTextArray(rInf.GetOut(), rInf, aKernArray);
 
             // Change the average width per character to an appropriate grid width
             // basically get the ratio of the avg width to the grid unit width, then
@@ -1134,11 +1150,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             std::vector<sal_Int32> aKernArray;
 
             if ( m_pPrinter )
-                GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), false);
+                GetTextArray(*m_pPrinter, rInf, aKernArray);
             else
-                GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray,
-                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), false);
+                GetTextArray(rInf.GetOut(), rInf, aKernArray);
             if ( bSwitchH2V )
                 rInf.GetFrame()->SwitchHorizontalToVertical( aTextOriginPos );
             if ( rInf.GetSpace() || rInf.GetKanaComp())
@@ -1274,8 +1288,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         if( rInf.GetSpace() || rInf.GetKanaComp() )
         {
             std::vector<sal_Int32> aKernArray;
-            GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray,
-                         sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), false);
+            GetTextArray(rInf.GetOut(), rInf, aKernArray);
 
             if( bStretch )
             {
@@ -1498,13 +1511,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 if( !m_pPrtFont->IsSameInstance( m_pPrinter->GetFont() ) )
                     m_pPrinter->SetFont( *m_pPrtFont );
             }
-            GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), true);
+            GetTextArray(*m_pPrinter, rInf, aKernArray);
         }
         else
         {
-            GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray,
-                    sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), true);
+            GetTextArray(rInf.GetOut(), rInf, aKernArray);
         }
 
         // Modify Printer and ScreenArrays for special justifications
@@ -1803,7 +1814,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             ? (rInf.GetIdx() ? 1 : 0)
                             : sal_Int32(rInf.GetIdx());
                 SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
-                SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey);
+                SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey, nullptr);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
                                              nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
@@ -2015,13 +2026,11 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
     {
         m_pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
         m_pPrinter->SetDigitLanguage( rInf.GetOut().GetDigitLanguage() );
-        GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), true);
+        GetTextArray(*m_pPrinter, rInf, aKernArray);
     }
     else
     {
-        GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray,
-                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()), false);
+        GetTextArray(rInf.GetOut(), rInf, aKernArray);
     }
 
     const SwScriptInfo* pSI = rInf.GetScriptInfo();
@@ -2432,7 +2441,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             SwFntAccess aFntAccess(m_aSub[m_nActual].m_nFontCacheId, m_aSub[m_nActual].m_nFontIndex,
                                    &m_aSub[m_nActual], rInf.GetShell());
             SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pTmpText, sal_Int32(nTmpIdx), sal_Int32(nTmpLen) };
-            SalLayoutGlyphs* pGlyphs = aFntAccess.Get()->GetCachedSalLayoutGlyphs(aGlyphsKey);
+            SalLayoutGlyphs* pGlyphs = aFntAccess.Get()->GetCachedSalLayoutGlyphs(aGlyphsKey, nullptr);
             nTextBreak = TextFrameIndex(rInf.GetOut().GetTextBreak(
                              *pTmpText, nTextWidth,
                              sal_Int32(nTmpIdx), sal_Int32(nTmpLen),

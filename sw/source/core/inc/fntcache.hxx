@@ -110,7 +110,8 @@ class SwFntObj final : public SwCacheObj
 
     void GetTextArray(const OutputDevice& rOutputDevice, const OUString& rStr,
                       std::vector<sal_Int32>& rDXAry, sal_Int32 nIndex, sal_Int32 nLen,
-                      bool bCaching);
+                      bool bCaching, const vcl::text::TextLayoutCache* layoutCache = nullptr);
+    void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry);
 
     static tools::Long s_nPixWidth;
     static MapMode *s_pPixMap;
@@ -140,7 +141,7 @@ public:
     sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
     bool     IsSymbol() const { return m_bSymbol; }
 
-    SalLayoutGlyphs* GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key);
+    SalLayoutGlyphs* GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* layoutCache);
     void ClearCachedTextGlyphs();
 
     void   DrawText( SwDrawTextInfo &rInf );
