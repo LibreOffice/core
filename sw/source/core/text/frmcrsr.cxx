@@ -307,10 +307,10 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
         {
             if ( pFrame->IsRightToLeft() )
             {
-                if( pCMS->m_b2Lines && pCMS->m_x2Lines)
+                if( pCMS->m_b2Lines && pCMS->m_p2Lines)
                 {
-                    pFrame->SwitchLTRtoRTL( pCMS->m_x2Lines->aLine );
-                    pFrame->SwitchLTRtoRTL( pCMS->m_x2Lines->aPortion );
+                    pFrame->SwitchLTRtoRTL( pCMS->m_p2Lines->aLine );
+                    pFrame->SwitchLTRtoRTL( pCMS->m_p2Lines->aPortion );
                 }
             }
 
@@ -327,10 +327,10 @@ bool SwTextFrame::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                                                    pCMS->m_aRealHeight.Y() );
                     }
                 }
-                if( pCMS->m_b2Lines && pCMS->m_x2Lines)
+                if( pCMS->m_b2Lines && pCMS->m_p2Lines)
                 {
-                    pFrame->SwitchHorizontalToVertical( pCMS->m_x2Lines->aLine );
-                    pFrame->SwitchHorizontalToVertical( pCMS->m_x2Lines->aPortion );
+                    pFrame->SwitchHorizontalToVertical( pCMS->m_p2Lines->aLine );
+                    pFrame->SwitchHorizontalToVertical( pCMS->m_p2Lines->aPortion );
                 }
             }
 
