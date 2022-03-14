@@ -2124,11 +2124,11 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     //ContentRects to Start- and EndFrames.
     SwRect aStRect, aEndRect;
     pStartFrame->GetCharRect( aStRect, *pStartPos, &aTmpState );
-    std::optional<Sw2LinesPos> pSt2Pos = std::move(aTmpState.m_x2Lines);
+    std::unique_ptr<Sw2LinesPos> pSt2Pos = std::move(aTmpState.m_p2Lines);
     aTmpState.m_nCursorBidiLevel = pEndFrame->IsRightToLeft() ? 1 : 0;
 
     pEndFrame->GetCharRect( aEndRect, *pEndPos, &aTmpState );
-    std::optional<Sw2LinesPos> pEnd2Pos = std::move(aTmpState.m_x2Lines);
+    std::unique_ptr<Sw2LinesPos> pEnd2Pos = std::move(aTmpState.m_p2Lines);
 
     SwRect aStFrame ( pStartFrame->UnionFrame( true ) );
     aStFrame.Intersection( pStartFrame->GetPaintArea() );
@@ -2145,7 +2145,7 @@ void SwRootFrame::CalcFrameRects(SwShellCursor &rCursor)
     // If there's no doubleline portion involved or start and end are both
     // in the same doubleline portion, all works fine, but otherwise
     // we need the following...
-    if( (!pSt2Pos && !pEnd2Pos) && ( !pSt2Pos || !pEnd2Pos ||
+    if( pSt2Pos != pEnd2Pos && ( !pSt2Pos || !pEnd2Pos ||
         pSt2Pos->aPortion != pEnd2Pos->aPortion ) )
     {
         // If we have a start(end) position inside a doubleline portion
