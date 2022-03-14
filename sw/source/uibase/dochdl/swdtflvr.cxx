@@ -2665,7 +2665,9 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
                 ( rData.HasFormat( SotClipboardFormatId::SYLK ) ||
                   rData.HasFormat( SotClipboardFormatId::SYLK_BIGCAPS ) ) )
             {
-                const sal_Int32 nRows = nNewlines ? nNewlines-1 : 0;
+                sal_Int32 nRows = nNewlines ? nNewlines-1 : 0;
+                if (!aExpand.endsWith("\n"))
+                    ++nRows;    // last row has no newline, e.g. one single cell
                 const sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
 
                 // don't try to insert tables that are too large for writer
