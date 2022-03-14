@@ -869,6 +869,13 @@ void SwFntObj::GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextI
     return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(), true, rInf.GetVclCache());
 }
 
+void SwFntObj::GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry, sal_Int32 nLen)
+{
+    // Substring is fine.
+    assert( nLen <= rInf.GetLen().get());
+    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen, true, rInf.GetVclCache());
+}
+
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 {
     OSL_ENSURE( rInf.GetShell(), "SwFntObj::DrawText without shell" );
@@ -1985,8 +1992,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pPrtFont );
         aTextSize.setHeight( rInf.GetOut().GetTextHeight() );
 
-        GetTextArray(rInf.GetOut(), rInf.GetText(), aKernArray,
-                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn), true);
+        GetTextArray(rInf.GetOut(), rInf, aKernArray, nLn.get());
     }
 
     if (bCompress)
