@@ -36,9 +36,8 @@ public:
     bool VisitCXXDestructorDecl(CXXDestructorDecl const*);
 
 private:
-    bool HasTrivialDestructorBody(const CXXRecordDecl* BaseClassDecl,
-                                  const CXXRecordDecl* MostDerivedClassDecl);
-    bool FieldHasTrivialDestructorBody(const FieldDecl* Field);
+    bool HasTrivialDestructorBody(const CXXRecordDecl* ClassDecl);
+    bool FieldHasTrivialDestructor(const FieldDecl* Field);
 };
 
 bool TrivialDestructor::VisitCXXDestructorDecl(CXXDestructorDecl const* destructorDecl)
@@ -58,7 +57,7 @@ bool TrivialDestructor::VisitCXXDestructorDecl(CXXDestructorDecl const* destruct
     if (isInUnoIncludeFile(
             compiler.getSourceManager().getSpellingLoc(destructorDecl->getLocation())))
         return true;
-    if (!HasTrivialDestructorBody(destructorDecl->getParent(), destructorDecl->getParent()))
+    if (!HasTrivialDestructorBody(destructorDecl->getParent()))
         return true;
 
     report(DiagnosticsEngine::Warning, "no need for explicit destructor decl",
@@ -77,45 +76,25 @@ bool TrivialDestructor::VisitCXXDestructorDecl(CXXDestructorDecl const* destruct
     return true;
 }
 
-bool TrivialDestructor::HasTrivialDestructorBody(const CXXRecordDecl* BaseClassDecl,
-                                                 const CXXRecordDecl* MostDerivedClassDecl)
+bool TrivialDestructor::HasTrivialDestructorBody(const CXXRecordDecl* ClassDecl)
 {
-    if (BaseClassDecl != MostDerivedClassDecl && !BaseClassDecl->hasTrivialDestructor())
-        return false;
-
     // Check fields.
-    for (const auto* field : BaseClassDecl->fields())
-        if (!FieldHasTrivialDestructorBody(field))
+    for (const auto* field : ClassDecl->fields())
+        if (!FieldHasTrivialDestructor(field))
             return false;
 
-    // Check non-virtual bases.
-    for (const auto& I : BaseClassDecl->bases())
+    // Check bases.
+    for (const auto& I : ClassDecl->bases())
     {
-        if (I.isVirtual())
-            continue;
-        if (!I.getType()->isRecordType())
-            continue;
-        const CXXRecordDecl* NonVirtualBase = I.getType()->getAsCXXRecordDecl();
-        if (NonVirtualBase && !HasTrivialDestructorBody(NonVirtualBase, MostDerivedClassDecl))
+        const CXXRecordDecl* Base = I.getType()->getAsCXXRecordDecl();
+        if (!Base->hasTrivialDestructor())
             return false;
     }
 
-    if (BaseClassDecl == MostDerivedClassDecl)
-    {
-        // Check virtual bases.
-        for (const auto& I : BaseClassDecl->vbases())
-        {
-            if (!I.getType()->isRecordType())
-                continue;
-            const CXXRecordDecl* VirtualBase = I.getType()->getAsCXXRecordDecl();
-            if (VirtualBase && !HasTrivialDestructorBody(VirtualBase, MostDerivedClassDecl))
-                return false;
-        }
-    }
     return true;
 }
 
-bool TrivialDestructor::FieldHasTrivialDestructorBody(const FieldDecl* Field)
+bool TrivialDestructor::FieldHasTrivialDestructor(const FieldDecl* Field)
 {
     QualType FieldBaseElementType = compiler.getASTContext().getBaseElementType(Field->getType());
 
