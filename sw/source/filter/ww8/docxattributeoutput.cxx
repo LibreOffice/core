@@ -3552,19 +3552,17 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
         break;
     }
     case RedlineType::ParagraphFormat:
-        if ( bNoDate )
-            m_pSerializer->startElementNS( XML_w, XML_pPrChange,
-                FSNS( XML_w, XML_id ), aId,
-                FSNS( XML_w, XML_author ), bRemovePersonalInfo
-                    ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
-                    : rAuthor );
-        else
-            m_pSerializer->startElementNS( XML_w, XML_pPrChange,
-                FSNS( XML_w, XML_id ), aId,
-                FSNS( XML_w, XML_author ), bRemovePersonalInfo
-                    ? "Author" + OUString::number( GetExport().GetInfoID(rAuthor) )
-                    : rAuthor,
-                FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ) );
+    {
+        rtl::Reference<sax_fastparser::FastAttributeList> pAttributeList
+            = sax_fastparser::FastSerializerHelper::createAttrList();
+
+        pAttributeList->add(FSNS( XML_w, XML_id ), aId);
+        pAttributeList->add(FSNS( XML_w, XML_author ), bRemovePersonalInfo
+                    ? "Author" + OString::number( GetExport().GetInfoID(rAuthor) )
+                    : rAuthor.toUtf8());
+        if (!bNoDate)
+            pAttributeList->add(FSNS( XML_w, XML_date ), DateTimeToOString( aDateTime ));
+        m_pSerializer->startElementNS( XML_w, XML_pPrChange, pAttributeList );
 
         // Check if there is any extra data stored in the redline object
         if (pRedlineData->GetExtraData())
@@ -3617,7 +3615,7 @@ void DocxAttributeOutput::Redline( const SwRedlineData* pRedlineData)
         }
         m_pSerializer->endElementNS( XML_w, XML_pPrChange );
         break;
-
+    }
     default:
         SAL_WARN("sw.ww8", "Unhandled redline type for export " << SwRedlineTypeToOUString(pRedlineData->GetType()));
         break;
