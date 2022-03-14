@@ -51,6 +51,24 @@
       "message": "I rebased this to make it build at all for Jenkins because it depended on the fix of the earlier breakage that was merged already. I did not review, otherwise there would had been a Code-Review value which you set yourself to +2.\n",
       "revId": "d4c1607ea2195ddeb25e4d1d246259464bbd7673",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "204e4203_108865db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-14T14:38:38Z",
+      "side": 1,
+      "message": "Just let me repeat: do not review your own changes with +1/+2 for a release branch.\nAnyhow, let\u0027s close this now.",
+      "parentUuid": "a46eddaa_b64075d3",
+      "revId": "d4c1607ea2195ddeb25e4d1d246259464bbd7673",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
