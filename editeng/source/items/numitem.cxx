@@ -53,11 +53,11 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/legacyitem.hxx>
 
-#define DEF_WRITER_LSPACE   500     //Standard Indentation
-#define DEF_DRAW_LSPACE     800     //Standard Indentation
+constexpr sal_Int32 DEF_WRITER_LSPACE = 500; //Standard Indentation
+constexpr sal_Int32 DEF_DRAW_LSPACE = 800; //Standard Indentation
 
-#define NUMITEM_VERSION_03        0x03
-#define NUMITEM_VERSION_04        0x04
+constexpr sal_uInt16 NUMITEM_VERSION_03 = 0x03;
+constexpr sal_uInt16 NUMITEM_VERSION_04 = 0x04;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
