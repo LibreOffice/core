@@ -42,6 +42,8 @@ public:
     // Implementation for WinSalGraphics::DrawTextLayout().
     // Returns true if handled, if false, then WinSalGraphics will handle it itself.
     virtual bool DrawTextLayout(const GenericSalLayout&) { return false; }
+
+    virtual void ClearNativeControlCache() {}
 };
 
 #endif // INCLUDED_VCL_INC_WIN_WINGDIIMPL_HXX

@@ -428,4 +428,10 @@ void WinSkiaSalGraphicsImpl::prepareSkia()
     SkiaHelper::prepareSkia(createVulkanWindowContext);
 }
 
+void WinSkiaSalGraphicsImpl::ClearNativeControlCache()
+{
+    SalData* data = GetSalData();
+    data->m_pSkiaControlsCache.reset();
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
