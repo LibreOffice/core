@@ -676,26 +676,26 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
 
                         if( pCMS && pCMS->m_b2Lines )
                         {
-                            const bool bRecursion (pCMS->m_x2Lines);
+                            const bool bRecursion (pCMS->m_p2Lines);
                             if ( !bRecursion )
                             {
-                                pCMS->m_x2Lines = Sw2LinesPos();
-                                pCMS->m_x2Lines->aLine = SwRect(aCharPos, aCharSize);
+                                pCMS->m_p2Lines.reset(new Sw2LinesPos);
+                                pCMS->m_p2Lines->aLine = SwRect(aCharPos, aCharSize);
                             }
 
                             if( static_cast<SwMultiPortion*>(pPor)->HasRotation() )
                             {
                                 if( static_cast<SwMultiPortion*>(pPor)->IsRevers() )
-                                    pCMS->m_x2Lines->nMultiType = MultiPortionType::ROT_270;
+                                    pCMS->m_p2Lines->nMultiType = MultiPortionType::ROT_270;
                                 else
-                                    pCMS->m_x2Lines->nMultiType = MultiPortionType::ROT_90;
+                                    pCMS->m_p2Lines->nMultiType = MultiPortionType::ROT_90;
                             }
                             else if( static_cast<SwMultiPortion*>(pPor)->IsDouble() )
-                                pCMS->m_x2Lines->nMultiType = MultiPortionType::TWOLINE;
+                                pCMS->m_p2Lines->nMultiType = MultiPortionType::TWOLINE;
                             else if( static_cast<SwMultiPortion*>(pPor)->IsBidi() )
-                                pCMS->m_x2Lines->nMultiType = MultiPortionType::BIDI;
+                                pCMS->m_p2Lines->nMultiType = MultiPortionType::BIDI;
                             else
-                                pCMS->m_x2Lines->nMultiType = MultiPortionType::RUBY;
+                                pCMS->m_p2Lines->nMultiType = MultiPortionType::RUBY;
 
                             SwTwips nTmpWidth = pPor->Width();
                             if( nSpaceAdd )
@@ -705,9 +705,9 @@ void SwTextCursor::GetCharRect_( SwRect* pOrig, TextFrameIndex const nOfst,
                                           Size( nTmpWidth, pPor->Height() ) );
 
                             if ( ! bRecursion )
-                                pCMS->m_x2Lines->aPortion = aRect;
+                                pCMS->m_p2Lines->aPortion = aRect;
                             else
-                                pCMS->m_x2Lines->aPortion2 = aRect;
+                                pCMS->m_p2Lines->aPortion2 = aRect;
                         }
 
                         // In a multi-portion we use GetCharRect()-function
@@ -1215,12 +1215,12 @@ void SwTextCursor::GetCharRect( SwRect* pOrig, TextFrameIndex const nOfst,
     pOrig->Pos().AdjustX(aCharPos.X() );
     pOrig->Pos().AdjustY(aCharPos.Y() );
 
-    if( pCMS && pCMS->m_b2Lines && pCMS->m_x2Lines )
+    if( pCMS && pCMS->m_b2Lines && pCMS->m_p2Lines )
     {
-        pCMS->m_x2Lines->aLine.Pos().AdjustX(aCharPos.X() );
-        pCMS->m_x2Lines->aLine.Pos().AdjustY(aCharPos.Y() );
-        pCMS->m_x2Lines->aPortion.Pos().AdjustX(aCharPos.X() );
-        pCMS->m_x2Lines->aPortion.Pos().AdjustY(aCharPos.Y() );
+        pCMS->m_p2Lines->aLine.Pos().AdjustX(aCharPos.X() );
+        pCMS->m_p2Lines->aLine.Pos().AdjustY(aCharPos.Y() );
+        pCMS->m_p2Lines->aPortion.Pos().AdjustX(aCharPos.X() );
+        pCMS->m_p2Lines->aPortion.Pos().AdjustY(aCharPos.Y() );
     }
 
     const IDocumentSettingAccess& rIDSA = GetTextFrame()->GetDoc().getIDocumentSettingAccess();
