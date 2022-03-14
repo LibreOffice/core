@@ -361,7 +361,9 @@ struct TxtBox: public FBox
 /**
  * Paragraph list
  */
-    std::vector<std::vector<std::unique_ptr<HWPPara>>> plists;
+    typedef std::vector<std::unique_ptr<HWPPara>> plist_t;
+    typedef std::vector<plist_t> plists_t;
+    plists_t plists;
 
 /**
  * Caption

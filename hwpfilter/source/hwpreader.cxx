@@ -3399,7 +3399,9 @@ void HwpReader::makeTable(TxtBox * hbox)
             mxList->addAttribute("table:protected", sXML_CDATA,"true");
         startEl("table:table-cell");
         mxList->clear();
-        parsePara(hbox->plists[tcell->pCell->key].front().get());
+        TxtBox::plist_t& rVec = hbox->plists[tcell->pCell->key];
+        if (!rVec.empty())
+            parsePara(rVec.front().get());
         endEl("table:table-cell");
     }
     endEl("table:table-row");
@@ -3513,7 +3515,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         startEl("draw:text-box");
         mxList->clear();
 /* If captions are present and it is on the top */
-        if( hbox->style.cap_len > 0 && (hbox->cap_pos % 2) && hbox->type == TBL_TYPE )
+        if (hbox->style.cap_len > 0 && (hbox->cap_pos % 2) && hbox->type == TBL_TYPE && !hbox->caption.empty())
         {
             parsePara(hbox->caption.front().get());
         }
@@ -3526,7 +3528,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             parsePara(hbox->plists[0].front().get());
         }
 /* If captions are present and it is on the bottom */
-        if( hbox->style.cap_len > 0 && !(hbox->cap_pos % 2) && hbox->type == TBL_TYPE)
+        if (hbox->style.cap_len > 0 && !(hbox->cap_pos % 2) && hbox->type == TBL_TYPE && !hbox->caption.empty())
         {
             parsePara(hbox->caption.front().get());
         }
