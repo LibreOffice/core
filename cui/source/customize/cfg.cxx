@@ -213,6 +213,7 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
     AddTabPage("contextmenus", CreateSvxContextMenuConfigPage, nullptr);
     AddTabPage("keyboard", CreateKeyboardConfigPage, nullptr);
     AddTabPage("events", CreateSvxEventConfigPage, nullptr);
+    m_xTabCtrl->connect_enter_page(LINK(this, SvxConfigDialog, ActivatePageHdl));
 
     const SfxPoolItem* pItem = pInSet->GetItem( SID_CONFIG );
 
@@ -225,6 +226,11 @@ SvxConfigDialog::SvxConfigDialog(weld::Window * pParent, const SfxItemSet* pInSe
             SetCurPageId("toolbars");
         }
     }
+}
+
+IMPL_LINK(SvxConfigDialog, ActivatePageHdl, const OString&, rPage, void)
+{
+    GetResetButton()->set_visible(rPage != "keyboard");
 }
 
 void SvxConfigDialog::SetFrame(const css::uno::Reference<css::frame::XFrame>& xFrame)
