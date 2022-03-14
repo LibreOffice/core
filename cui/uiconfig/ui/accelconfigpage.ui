@@ -292,9 +292,10 @@ To quickly find a shortcut in this list, simply press the key combination.</prop
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="use_underline">True</property>
+                    <property name="tooltip_text" translatable="yes" context="accelconfigpage|tooltip|reset">Unsaved modifications to shortcut keys are reverted.</property>
                     <child internal-child="accessible">
                       <object class="AtkObject" id="reset-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|reset">Resets modified values back to the default values.</property>
+                        <property name="AtkObject::accessible-description" translatable="yes" context="accelconfigpage|extended_tip|reset">Revert any changes made to keyboard shortcuts to the assignments that were present when this dialog was opened.</property>
                       </object>
                     </child>
                   </object>
