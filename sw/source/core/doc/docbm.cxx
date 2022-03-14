@@ -86,10 +86,6 @@ auto IDocumentMarkAccess::iterator::operator=(iterator && rOther) noexcept -> it
     return *this;
 }
 
-IDocumentMarkAccess::iterator::~iterator()
-{
-}
-
 // ARGH why does it *need* to return const& ?
 ::sw::mark::IMark* /*const&*/
 IDocumentMarkAccess::iterator::operator*() const

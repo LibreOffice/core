@@ -30,7 +30,6 @@ public:
     bool hasMoreElements();
     const ZipEntry* nextElement();
     ZipEnumeration(EntryHash& rNewEntryHash);
-    ~ZipEnumeration();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
