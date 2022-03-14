@@ -79,7 +79,6 @@ class IDocumentMarkAccess
                 iterator& operator=(iterator const& rOther);
                 iterator(iterator && rOther) noexcept;
                 iterator& operator=(iterator && rOther) noexcept;
-                ~iterator();
 
                 // FIXME unfortunately there's a requirement on input iterator
                 // and forward iterator to return reference, which isn't

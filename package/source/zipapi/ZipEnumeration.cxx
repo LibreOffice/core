@@ -26,7 +26,6 @@ ZipEnumeration::ZipEnumeration(EntryHash& rNewEntryHash)
     , aIterator(rEntryHash.begin())
 {
 }
-ZipEnumeration::~ZipEnumeration() {}
 bool ZipEnumeration::hasMoreElements() { return (aIterator != rEntryHash.end()); }
 
 const ZipEntry* ZipEnumeration::nextElement()
