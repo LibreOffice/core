@@ -125,10 +125,6 @@ bool TrivialDestructor::FieldHasTrivialDestructorBody(const FieldDecl* Field)
 
     CXXRecordDecl* FieldClassDecl = cast<CXXRecordDecl>(RT->getDecl());
 
-    // The destructor for an implicit anonymous union member is never invoked.
-    if (FieldClassDecl->isUnion() && FieldClassDecl->isAnonymousStructOrUnion())
-        return false;
-
     return FieldClassDecl->hasTrivialDestructor();
 }
 
