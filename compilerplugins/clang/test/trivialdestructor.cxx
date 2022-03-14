@@ -30,4 +30,28 @@ struct S3
     ~S3() = delete;
 };
 
+struct S4
+{
+    union {
+        int i;
+        float f;
+    };
+    // expected-error@+1 {{no need for explicit destructor decl [loplugin:trivialdestructor]}}
+    ~S4() {}
+};
+
+struct Nontrivial
+{
+    ~Nontrivial();
+};
+
+struct S5
+{
+    union {
+        int i;
+        Nontrivial n;
+    };
+    ~S5() {}
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
