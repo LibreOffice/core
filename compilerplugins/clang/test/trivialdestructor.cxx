@@ -25,4 +25,9 @@ struct S2
 // expected-error@+1 {{no need for explicit destructor decl [loplugin:trivialdestructor]}}
 S2::~S2() = default;
 
+struct S3
+{
+    ~S3() = delete;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
