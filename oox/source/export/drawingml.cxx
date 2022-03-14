@@ -3618,7 +3618,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     }
 }
 
-void DrawingML::WritePresetShape( const char* pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList )
+void DrawingML::WritePresetShape( const OString& pShape , std::vector< std::pair<sal_Int32,sal_Int32>> & rAvList )
 {
     mpFS->startElementNS(XML_a, XML_prstGeom, XML_prst, pShape);
     if ( !rAvList.empty() )
@@ -3640,7 +3640,7 @@ void DrawingML::WritePresetShape( const char* pShape , std::vector< std::pair<sa
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
-void DrawingML::WritePresetShape( const char* pShape )
+void DrawingML::WritePresetShape( const OString& pShape )
 {
     mpFS->startElementNS(XML_a, XML_prstGeom, XML_prst, pShape);
     mpFS->singleElementNS(XML_a, XML_avLst);
@@ -3670,13 +3670,13 @@ static std::map< OString, std::vector<OString> > lcl_getAdjNames()
     return aRet;
 }
 
-void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const PropertyValue& rProp )
+void DrawingML::WritePresetShape( const OString& pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const PropertyValue& rProp )
 {
     static std::map< OString, std::vector<OString> > aAdjMap = lcl_getAdjNames();
     // If there are predefined adj names for this shape type, look them up now.
     std::vector<OString> aAdjustments;
-    if (aAdjMap.find(OString(pShape)) != aAdjMap.end())
-        aAdjustments = aAdjMap[OString(pShape)];
+    if (aAdjMap.find(pShape) != aAdjMap.end())
+        aAdjustments = aAdjMap[pShape];
 
     mpFS->startElementNS(XML_a, XML_prstGeom, XML_prst, pShape);
     mpFS->startElementNS(XML_a, XML_avLst);
@@ -3685,7 +3685,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
     if ( ( rProp.Value >>= aAdjustmentSeq )
          && eShapeType != mso_sptActionButtonForwardNext  // we have adjustments values for these type of shape, but MSO doesn't like them
          && eShapeType != mso_sptActionButtonBackPrevious // so they are now disabled
-         && pShape != std::string_view("rect") //some shape types are commented out in pCustomShapeTypeTranslationTable[] & are being defaulted to rect & rect does not have adjustment values/name.
+         && pShape != "rect" //some shape types are commented out in pCustomShapeTypeTranslationTable[] & are being defaulted to rect & rect does not have adjustment values/name.
         )
     {
         SAL_INFO("oox.shape", "adj seq len: " << aAdjustmentSeq.getLength());
