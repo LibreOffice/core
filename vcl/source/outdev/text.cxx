@@ -1456,7 +1456,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
     return pSalLayout;
 }
 
-std::shared_ptr<vcl::text::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
+std::shared_ptr<const vcl::text::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
         OUString const& rString)
 {
     return GenericSalLayout::CreateTextLayoutCache(rString);

@@ -21,8 +21,11 @@
 
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/lru_map.hxx>
 #include <o3tl/temporary.hxx>
 
+#include <vcl/lazydelete.hxx>
 #include <vcl/unohelp.hxx>
 #include <vcl/font/Feature.hxx>
 #include <vcl/font/FeatureParser.hxx>
@@ -151,11 +154,35 @@ namespace {
         return VerticalOrientation(nRet);
     }
 
+struct FirstCharsStringHash
+{
+    size_t operator()( const OUString& str ) const
+    {
+        // Strings passed to GenericSalLayout::CreateTextLayoutCache() may be very long,
+        // and computing an entire hash could almost negate the gain of hashing. Hash just first
+        // characters, that should be good enough.
+        size_t hash = rtl_ustr_hashCode_WithLength( str.getStr(), std::min<size_t>( 100, str.getLength()));
+        o3tl::hash_combine(hash, str.getLength());
+        return hash;
+    }
+};
+
 } // namespace
 
-std::shared_ptr<vcl::text::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString)
+std::shared_ptr<const vcl::text::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString)
 {
-    return std::make_shared<vcl::text::TextLayoutCache>(rString.getStr(), rString.getLength());
+    typedef o3tl::lru_map<OUString, std::shared_ptr<const vcl::text::TextLayoutCache>, FirstCharsStringHash> Cache;
+    static vcl::DeleteOnDeinit< Cache > cache( 1000 );
+    if( Cache* map = cache.get())
+    {
+        auto it = map->find(rString);
+        if( it != map->end())
+            return it->second;
+        auto ret = std::make_shared<const vcl::text::TextLayoutCache>(rString.getStr(), rString.getLength());
+        map->insert( { rString, ret } );
+        return ret;
+    }
+    return std::make_shared<const vcl::text::TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 
 SalLayoutGlyphs GenericSalLayout::GetGlyphs() const

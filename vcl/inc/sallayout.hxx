@@ -113,7 +113,7 @@ public:
     void            AdjustLayout(vcl::text::ImplLayoutArgs&) final override;
     bool            LayoutText(vcl::text::ImplLayoutArgs&, const SalLayoutGlyphsImpl*) final override;
     void            DrawText(SalGraphics&) const final override;
-    static std::shared_ptr<vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
+    static std::shared_ptr<const vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
     SalLayoutGlyphs GetGlyphs() const final override;
 
     bool            IsKashidaPosValid(int nCharPos) const final override;
