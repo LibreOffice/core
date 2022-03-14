@@ -20,7 +20,7 @@
   <object class="GtkImage" id="image_add">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">svtools/res/list_add.png</property>
+    <property name="icon_name">cmd/sc_add.png</property>
   </object>
   <object class="GtkImage" id="image_down">
     <property name="visible">True</property>
@@ -35,7 +35,7 @@
   <object class="GtkImage" id="image_remove">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
-    <property name="icon-name">extensions/res/buttonminus.png</property>
+    <property name="icon_name">cmd/sc_list_remove.png</property>
   </object>
   <object class="GtkImage" id="image_up">
     <property name="visible">True</property>
