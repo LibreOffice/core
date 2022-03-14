@@ -1975,6 +1975,12 @@ void ShapeExport::WriteBorderLine(const sal_Int32 XML_line, const BorderLine2& r
             DrawingML::WriteSolidFill( ::Color(ColorTransparency, rBorderLine.Color) );
         mpFS->endElementNS( XML_a, XML_line );
     }
+    else if( nBorderWidth == 0)
+    {
+        mpFS->startElementNS(XML_a, XML_line);
+        mpFS->singleElementNS(XML_a, XML_noFill);
+        mpFS->endElementNS( XML_a, XML_line );
+    }
 }
 
 void ShapeExport::WriteTableCellBorders(const Reference< XPropertySet>& xCellPropSet)
