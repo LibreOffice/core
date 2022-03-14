@@ -3658,6 +3658,35 @@
      <table:table-cell table:number-columns-repeated="2"/>
     </table:table-row>
     <table:table-row table:style-name="ro5">
+     <table:table-cell table:style-name="ce13" table:formula="of:=COM.MICROSOFT.SWITCH(1;0;1/0;1;TRUE())" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce69" table:formula="of:TRUE()" office:value-type="string" office:string-value="" calcext:value-type="error">
+      <text:p></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce23" table:formula="of:=[.A11]=[.B11]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p></text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A11])" office:value-type="string" office:string-value="" calcext:value-type="string">
+      <text:p></text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce13"/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce42" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell table:style-name="ce55"/>
+     <table:table-cell table:style-name="ce11"/>
+     <table:table-cell table:style-name="ce18" table:number-columns-repeated="2"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="ce38"/>
+     <table:table-cell table:style-name="ce14"/>
+     <table:table-cell table:style-name="ce55"/>
+     <table:table-cell table:style-name="ce18" table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro5">
      <table:table-cell/>
      <table:table-cell table:style-name="ce37"/>
      <table:table-cell table:style-name="ce23"/>
