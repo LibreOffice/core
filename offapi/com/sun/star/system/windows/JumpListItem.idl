@@ -24,17 +24,27 @@ module com { module sun { module star { module system { module windows {
 
 struct JumpListItem
 {
-    /** Item name. Appears in the JumpList. Has to be unique per category. */
+    /** Item name. Appears in the JumpList.
+        Has to be unique per category.
+        Must not include embedded NULs ('\\0'). */
     string name;
 
-    /** Item description, appears as tooltip */
+    /** Item description, appears as tooltip.
+        Must not include embedded NULs ('\\0').
+     */
     string description;
 
     /** Arguments to be passed to LibreOffice.
-        This can be a file to be loaded, or any command line parameter supported by LibreOffice, and any combination of the two. */
+        This can be a file to be loaded, or any command line parameter supported by LibreOffice, and any combination of the two.
+        Add multiple arguments separated by space.
+        Must not include embedded NULs ('\\0').
+    */
     string arguments;
 
-    /** Icon to be displayed along the name. This should be a local path name like `C:\path\to\icon` */
+    /** Icon to be displayed along the name.
+        Must be a local path name like `C:\\path\\to\\icon.ico`.
+        Icon must be in ICO format.
+    */
     string iconPath;
 };
 

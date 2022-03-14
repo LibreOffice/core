@@ -12,10 +12,10 @@
 #include <algorithm>
 #include <cassert>
 
+#include <cppuhelper/basemutex.hxx>
+#include <cppuhelper/compbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/compbase.hxx>
-
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <o3tl/safeCoInitUninit.hxx>
@@ -23,6 +23,7 @@
 #include <osl/mutex.hxx>
 #include <osl/process.h>
 #include <sal/log.hxx>
+#include <systools/win32/comtools.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -34,7 +35,6 @@
 #include <Shlobj.h>
 #include <propkey.h>
 #include <propvarutil.h>
-#include <systools/win32/comtools.hxx>
 #include <postwin.h>
 
 using namespace comphelper;
@@ -44,16 +44,14 @@ using namespace css::uno;
 using namespace css::lang;
 using namespace css::system::windows;
 using namespace osl;
-
 using sal::systools::COMReference;
 using sal::systools::COM_QUERY_THROW;
 using sal::systools::ComError;
 using sal::systools::ThrowIfFailed;
 
-class JumpListImpl : public WeakComponentImplHelper<XJumpList, XServiceInfo>
+class JumpListImpl : public BaseMutex, public WeakComponentImplHelper<XJumpList, XServiceInfo>
 {
     Reference<XComponentContext> m_xContext;
-    Mutex m_aMutex;
 
 public:
     explicit JumpListImpl(const Reference<XComponentContext>& xContext);
@@ -62,9 +60,9 @@ public:
     // XJumpList
     virtual void SAL_CALL appendCategory(const OUString& sCategory,
                                          const Sequence<JumpListItem>& aJumpListItems,
-                                         const OUString& sDocumentService) override;
-    virtual Sequence<JumpListItem>
-        SAL_CALL getRemovedItems(const OUString& sDocumentService) override;
+                                         const OUString& sApplication) override;
+    virtual void SAL_CALL deleteCategory(const OUString& sApplication) override;
+    virtual Sequence<JumpListItem> SAL_CALL getRemovedItems(const OUString& sApplication) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() override;
@@ -79,6 +77,39 @@ JumpListImpl::JumpListImpl(const Reference<XComponentContext>& xContext)
 }
 
 JumpListImpl::~JumpListImpl() {}
+
+namespace
+{
+// Determines if the provided IShellLinkItem is listed in the array of items that the user has removed
+bool lcl_isItemInArray(COMReference<IShellLinkW> pShellLinkItem,
+                       COMReference<IObjectArray> poaRemoved)
+{
+    UINT nItems;
+    ThrowIfFailed(poaRemoved->GetCount(&nItems), "GetCount failed.");
+
+    COMReference<IShellLinkW> pShellLinkItemCompare;
+    for (UINT i = 0; i < nItems; i++)
+    {
+        if (!SUCCEEDED(poaRemoved->GetAt(i, IID_PPV_ARGS(&pShellLinkItemCompare))))
+            continue;
+
+        PROPVARIANT propvar;
+        COMReference<IPropertyStore> pps(pShellLinkItem, COM_QUERY_THROW);
+        ThrowIfFailed(pps->GetValue(PKEY_Title, &propvar), "GetValue failed.");
+        OUString title(o3tl::toU(PropVariantToStringWithDefault(propvar, L"")));
+
+        COMReference<IPropertyStore> ppsCompare(pShellLinkItemCompare, COM_QUERY_THROW);
+        ThrowIfFailed(ppsCompare->GetValue(PKEY_Title, &propvar), "GetValue failed.");
+        OUString titleCompare(o3tl::toU(PropVariantToStringWithDefault(propvar, L"")));
+        PropVariantClear(&propvar);
+
+        if (title == titleCompare)
+            return true;
+    }
+
+    return false;
+}
+}
 
 void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                                            const Sequence<JumpListItem>& aJumpListItems,
@@ -143,7 +174,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                     COMReference<IPropertyStore> pps(pShellLinkItem, COM_QUERY_THROW);
 
                     PROPVARIANT propvar;
-                    sal::systools::ThrowIfFailed(
+                    ThrowIfFailed(
                         InitPropVariantFromString(o3tl::toW(item.name.getStr()), &propvar),
                         "InitPropVariantFromString failed.");
 
@@ -168,6 +199,14 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                     pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
                     OString("Setting icon path '" + item.iconPath.toUtf8() + "' failed."));
 
+                if (lcl_isItemInArray(pShellLinkItem, removed))
+                {
+                    SAL_INFO("shell.jumplist", "Ignoring item '"
+                                                   << item.name
+                                                   << "' (was removed by user). See output of "
+                                                      "XJumpList::getRemovedItems().");
+                    continue;
+                }
                 aCollection->AddObject(pShellLinkItem.get());
             }
             catch (const ComError& e)
@@ -177,13 +216,48 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
             }
         }
 
-        sal::systools::COMReference<IObjectArray> pObjectArray(aCollection, COM_QUERY_THROW);
+        COMReference<IObjectArray> pObjectArray(aCollection, COM_QUERY_THROW);
+        UINT nItems;
+        ThrowIfFailed(pObjectArray->GetCount(&nItems), "GetCount failed.");
+        if (nItems == 0)
+        {
+            throw IllegalArgumentException(
+                "No valid items given. `jumpListItems` is either empty, or contains only items "
+                "which were removed by the user. See `XJumpList::getRemovedItems()`.",
+                static_cast<OWeakObject*>(this), 1);
+        }
+
         ThrowIfFailed(
             aDestinationList->AppendCategory(o3tl::toW(sCategory.getStr()), pObjectArray.get()),
-            "AppendCategory failed. You are not allowed to immediately re-insert entries which "
-            "were removed by the user. Please see the output of `getRemovedItems`.");
+            "AppendCategory failed.");
 
         ThrowIfFailed(aDestinationList->CommitList(), "CommitList failed.");
+    }
+    catch (const ComError& e)
+    {
+        SAL_WARN("shell.jumplist", e.what());
+    }
+}
+
+void SAL_CALL JumpListImpl::deleteCategory(const OUString& sApplication)
+{
+    if (sApplication != "Writer" && sApplication != "Calc" && sApplication != "Impress"
+        && sApplication != "Draw" && sApplication != "Math" && sApplication != "Base"
+        && sApplication != "Startcenter")
+    {
+        throw IllegalArgumentException(
+            "Parameter 'application' must be one of 'Writer', 'Calc', 'Impress', 'Draw', "
+            "'Math', 'Base', 'Startcenter'.",
+            static_cast<OWeakObject*>(this), 1);
+    }
+    OUString sApplicationID("TheDocumentFoundation.LibreOffice." + sApplication);
+
+    try
+    {
+        COMReference<ICustomDestinationList> aDestinationList;
+        CoCreateInstance(CLSID_DestinationList, nullptr, CLSCTX_INPROC_SERVER,
+                         IID_PPV_ARGS(&aDestinationList));
+        aDestinationList->DeleteList(o3tl::toW(sApplicationID.getStr()));
     }
     catch (const ComError& e)
     {

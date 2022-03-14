@@ -23,16 +23,26 @@ module com { module sun { module star { module system { module windows {
 */
 interface XJumpList: com::sun::star::uno::XInterface
 {
-    /** Add a jump list category
+    /** Add (or update) a jump list category.
+
+        Note that it is only possible to have one jump list category per `application`.
+
+        When there is already a jump list for the given `application`,
+        that jump list will be cleared, and the new `category` and `jumpListItems` will be added.
 
         @param category
         Specifies the category name. It will appear as the title of the custom jump list.
+        Must not include embedded NULs ('\\0')
 
         @param jumpListItems
         Specifies a list of com::sun::star::system::JumpListItem.
+        Must contain at least one item.
         These will be added as entries below the category name in the custom jump list.
+
         Make sure you don't add items which the user has removed before
         (check the result of `getRemovedItems` before updating a category).
+        If you try to add items which the user removed before,
+        they will be silently ignored and not added to the list.
 
         @param application
         Used to map the jump list to the correct application. Use one of the following values:
@@ -49,16 +59,43 @@ interface XJumpList: com::sun::star::uno::XInterface
         "Startcenter" will map to the generic "LibreOffice" icon.
 
         @throws com::sun::star::lang::IllegalArgumentException
-        When an empty category name, or an invalid application name is given.
+        When one of the following applies:
+        <ul>
+            <li>`category` is empty</li>
+            <li>`jumpListItems` is empty or contains only items which were removed by the user</li>
+            <li>`application` is invalid</li>
+        </ul>
     */
     void appendCategory( [in] string category,
                          [in] sequence<com::sun::star::system::windows::JumpListItem> jumpListItems,
                          [in] string application )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
+    /** Delete a jump list category
+
+        @param application
+        Used to map the jump list to the correct application. Use one of the following values:
+        <ul>
+            <li>Writer</li>
+            <li>Calc</li>
+            <li>Impress</li>
+            <li>Draw</li>
+            <li>Math</li>
+            <li>Base</li>
+            <li>Startcenter</li>
+        </ul>
+
+        "Startcenter" will map to the generic "LibreOffice" icon.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        When `application` is invalid
+    */
+    void deleteCategory( [in] string application )
+        raises( ::com::sun::star::lang::IllegalArgumentException );
+
     /** Returns items that were removed from the jump list by the user.
 
-        `appendCategory` will fail if you try to reinsert an item which was removed by the user before.
+        `appendCategory` will ignore items which were removed by the user before.
         Use this method to learn which items were removed by the user.
 
         @param application
