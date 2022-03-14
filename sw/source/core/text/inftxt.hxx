@@ -145,7 +145,7 @@ protected:
     // performance hack - this is only used by SwTextFormatInfo but
     // because it's not even possible to dynamic_cast these things
     // currently it has to be stored here
-    std::shared_ptr<vcl::text::TextLayoutCache> m_pCachedVclData;
+    std::shared_ptr<const vcl::text::TextLayoutCache> m_pCachedVclData;
 
     SwFont *m_pFnt;
     SwUnderlineFont *m_pUnderFnt; // Font for underlining
@@ -325,11 +325,11 @@ public:
         { return ( m_pKanaComp && m_nKanaIdx < m_pKanaComp->size() )
                    ? (*m_pKanaComp)[m_nKanaIdx] : 0; }
 
-    const std::shared_ptr<vcl::text::TextLayoutCache>& GetCachedVclData() const
+    const std::shared_ptr<const vcl::text::TextLayoutCache>& GetCachedVclData() const
     {
         return m_pCachedVclData;
     }
-    void SetCachedVclData(std::shared_ptr<vcl::text::TextLayoutCache> const& pCachedVclData)
+    void SetCachedVclData(std::shared_ptr<const vcl::text::TextLayoutCache> const& pCachedVclData)
     {
         m_pCachedVclData = pCachedVclData;
     }
@@ -673,7 +673,7 @@ public:
 class SwTextSlot final
 {
     OUString aText;
-    std::shared_ptr<vcl::text::TextLayoutCache> m_pOldCachedVclData;
+    std::shared_ptr<const vcl::text::TextLayoutCache> m_pOldCachedVclData;
     const OUString *pOldText;
     sw::WrongListIterator * m_pOldSmartTagList;
     sw::WrongListIterator * m_pOldGrammarCheckList;

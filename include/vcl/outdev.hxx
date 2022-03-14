@@ -1075,7 +1075,7 @@ public:
                                               sal_Int32 nIndex, sal_Int32 nLen,
                                               tools::Long nCharExtra,
                                               vcl::text::TextLayoutCache const* = nullptr) const;
-    static std::shared_ptr<vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
+    static std::shared_ptr<const vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
 
 protected:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
