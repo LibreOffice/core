@@ -73,20 +73,12 @@ static void applyLineAttributes( const ::oox::core::XmlFilterBase& rFilterBase,
         aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
         aBorderLine.LineDistance = 0;
     }
-    else if ( rLineProperties.moLineWidth.get(0)!=0 )
-    {
-        aBorderLine.Color = sal_Int32( COL_AUTO );
-        aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
-        aBorderLine.LineDistance = 0;
-    }
     else
     {
         aBorderLine.Color = sal_Int32( COL_AUTO );
         aBorderLine.OuterLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
         aBorderLine.InnerLineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 4 );
-        aBorderLine.LineWidth = 12700;
+        aBorderLine.LineWidth = static_cast< sal_Int16 >( GetCoordinate( rLineProperties.moLineWidth.get( 0 ) ) / 2 );
         aBorderLine.LineDistance = 0;
     }
 

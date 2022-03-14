@@ -602,9 +602,10 @@ void SdExportTest::testBnc480256()
     xCell->getPropertyValue("FillColor") >>= nColor;
     CPPUNIT_ASSERT_EQUAL(Color(0x4697e0), nColor);
 
+    // This border should be invisible.
     xCell.set(xTable->getCellByPosition(1, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue("BottomBorder") >>= aBorderLine;
-    CPPUNIT_ASSERT_EQUAL(COL_AUTO, Color(ColorTransparency, aBorderLine.Color));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sal_Int32(aBorderLine.LineWidth));
 
     xDocShRef->DoClose();
 }
