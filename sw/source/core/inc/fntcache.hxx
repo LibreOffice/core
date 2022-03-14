@@ -111,6 +111,8 @@ class SwFntObj final : public SwCacheObj
     void GetTextArray(const OutputDevice& rOutputDevice, const OUString& rStr,
                       std::vector<sal_Int32>& rDXAry, sal_Int32 nIndex, sal_Int32 nLen,
                       bool bCaching, const vcl::text::TextLayoutCache* layoutCache = nullptr);
+    void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry,
+                      sal_Int32 nLen);
     void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry);
 
     static tools::Long s_nPixWidth;
