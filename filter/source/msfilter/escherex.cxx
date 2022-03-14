@@ -3717,8 +3717,7 @@ MSO_SPT EscherPropertyContainer::GetCustomShapeType( const uno::Reference< drawi
                                 // In case of VML export, try to handle the
                                 // ooxml- prefix in rShapeType. If that fails,
                                 // just do the same as the binary export.
-                                OString aType = OUStringToOString(rShapeType, RTL_TEXTENCODING_UTF8);
-                                eShapeType = msfilter::util::GETVMLShapeType(aType);
+                                eShapeType = msfilter::util::GETVMLShapeType(rShapeType);
                                 if (eShapeType == mso_sptNil)
                                     eShapeType = EnhancedCustomShapeTypeNames::Get(rShapeType);
                             }
