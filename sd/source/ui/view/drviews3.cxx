@@ -710,8 +710,8 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
         case SID_ATTR_PARA_LINESPACE:
             if (pArgs)
             {
-                SvxLineSpacingItem aParaLineSP = static_cast<const SvxLineSpacingItem&>(pArgs->Get(
-                    GetPool().GetWhich(SID_ATTR_PARA_LINESPACE)));
+                SvxLineSpacingItem aParaLineSP = pArgs->Get(
+                    GetPool().GetWhich(SID_ATTR_PARA_LINESPACE));
 
                 SfxItemSetFixed<EE_PARA_SBL, EE_PARA_SBL> aEditAttr( GetPool() );
                 aParaLineSP.SetWhich( EE_PARA_SBL );

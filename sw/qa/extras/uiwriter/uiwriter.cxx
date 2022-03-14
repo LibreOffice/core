@@ -647,14 +647,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testWatermarkDOCX)
 {
     SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "watermark.docx");
     SwDocShell* pDocShell = pDoc->GetDocShell();
-    const SfxPoolItem* pItem;
-    SfxItemState eState = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->QueryState(SID_WATERMARK, pItem);
+    const SfxWatermarkItem* pWatermark;
+    SfxItemState eState = pDocShell->GetViewShell()->GetViewFrame()->GetDispatcher()->QueryState(SID_WATERMARK, pWatermark);
 
     CPPUNIT_ASSERT(eState >= SfxItemState::DEFAULT);
-    CPPUNIT_ASSERT(pItem);
-    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(SID_WATERMARK), pItem->Which());
+    CPPUNIT_ASSERT(pWatermark);
+    CPPUNIT_ASSERT_EQUAL(static_cast<unsigned short>(SID_WATERMARK), pWatermark->Which());
 
-    const SfxWatermarkItem* pWatermark = static_cast<const SfxWatermarkItem*>(pItem);
     CPPUNIT_ASSERT_EQUAL(OUString("CustomWatermark"), pWatermark->GetText());
     CPPUNIT_ASSERT_EQUAL(OUString("DejaVu Sans Light"), pWatermark->GetFont());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(45), pWatermark->GetAngle());

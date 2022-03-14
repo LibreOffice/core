@@ -141,6 +141,14 @@ public:
      * @param rpState the caller has to delete the pointer
      */
     SfxItemState     QueryState( sal_uInt16 nSID, std::unique_ptr<SfxPoolItem> &rpState );
+    template<class T>
+    SfxItemState        QueryState( TypedWhichId<T> nSID, std::unique_ptr<T> &rpState )
+    {
+        std::unique_ptr<SfxPoolItem> tmp;
+        auto ret = QueryState(sal_uInt16(nSID), tmp);
+        rpState.reset(static_cast<T*>(tmp.release()));
+        return ret;
+    }
 
     void             QueryControlState ( sal_uInt16 nSID, boost::property_tree::ptree& rState );
 
