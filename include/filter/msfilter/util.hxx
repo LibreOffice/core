@@ -115,10 +115,10 @@ struct MSFILTER_DLLPUBLIC EquationResult
 MSFILTER_DLLPUBLIC EquationResult ParseCombinedChars(const OUString& rStr);
 
 /// Similar to EnhancedCustomShapeTypeNames::Get(), but it also supports OOXML types and returns a drawingML string.
-MSFILTER_DLLPUBLIC const char* GetOOXMLPresetGeometry( const char* sShapeType );
+MSFILTER_DLLPUBLIC const char* GetOOXMLPresetGeometry( const OUString& rShapeType );
 
 /// Similar to EnhancedCustomShapeTypeNames::Get(), but returns an MSO_SPT (binary / VML type).
-MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(const OString& aType);
+MSFILTER_DLLPUBLIC MSO_SPT GETVMLShapeType(const OUString& aType);
 
 /**
  * The following function checks if a MSO shapetype is allowed to have textboxcontent.

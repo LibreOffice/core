@@ -768,7 +768,7 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         EscherPropertyContainer::IsDefaultObject(
             rSdrObjCustomShape,
             eShapeType));
-    const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType.toUtf8().getStr());
+    const char* sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType);
     SAL_INFO("oox.shape", "custom shape type: " << sShapeType << " ==> " << sPresetShape);
 
     sal_Int32 nAdjustmentValuesIndex = -1;

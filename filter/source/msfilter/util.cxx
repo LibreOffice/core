@@ -1215,7 +1215,7 @@ struct {
     {"textBox", mso_sptTextBox},
 };
 
-const char* GetOOXMLPresetGeometry( const char* sShapeType )
+const char* GetOOXMLPresetGeometry( const OUString& rShapeType )
 {
     typedef std::unordered_map< const char*, const char*, rtl::CStringHash, rtl::CStringEqual> CustomShapeTypeTranslationHashMap;
     static CustomShapeTypeTranslationHashMap aCustomShapeTypeTranslationHashMap = []()
@@ -1228,11 +1228,11 @@ const char* GetOOXMLPresetGeometry( const char* sShapeType )
         return tmp;
     }();
     CustomShapeTypeTranslationHashMap::iterator i(
-        aCustomShapeTypeTranslationHashMap.find(sShapeType));
+        aCustomShapeTypeTranslationHashMap.find(rShapeType.toUtf8().getStr()));
     return i == aCustomShapeTypeTranslationHashMap.end() ? "rect" : i->second;
 }
 
-MSO_SPT GETVMLShapeType(const OString& aType)
+MSO_SPT GETVMLShapeType(const OUString& aType)
 {
     typedef std::unordered_map< const char*, MSO_SPT, rtl::CStringHash, rtl::CStringEqual> DMLToVMLTranslationHashMap;
     static DMLToVMLTranslationHashMap aDMLToVMLMap = []()
@@ -1243,7 +1243,7 @@ MSO_SPT GETVMLShapeType(const OString& aType)
         return tmp;
     }();
 
-    const char* pDML = GetOOXMLPresetGeometry(aType.getStr());
+    const char* pDML = GetOOXMLPresetGeometry(aType);
     DMLToVMLTranslationHashMap::iterator i(aDMLToVMLMap.find(pDML));
     return i == aDMLToVMLMap.end() ? mso_sptNil : i->second;
 }
