@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b07d5dde_86f864a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-15T08:27:39Z",
+      "side": 1,
+      "message": "Close but no cigar",
+      "revId": "44736a2ffcecf15c7e9fba3c71f0db9099147746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46f679c2_b2a306ba",
+        "filename": "svx/source/dialog/charmap.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 574,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-15T08:27:39Z",
+      "side": 1,
+      "message": "I get a white rectangle on kf5 without\nrRenderContext.SetFillColor(COL_TRANSPARENT);",
+      "range": {
+        "startLine": 574,
+        "startChar": 12,
+        "endLine": 574,
+        "endChar": 57
+      },
+      "revId": "44736a2ffcecf15c7e9fba3c71f0db9099147746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
