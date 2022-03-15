@@ -539,48 +539,22 @@ Size SvxNumberFormat::GetGraphicSizeMM100(const Graphic* pGraphic)
 
 OUString SvxNumberFormat::CreateRomanString( sal_Int32 nNo, bool bUpper )
 {
-    nNo %= 4000;            // more can not be displayed
-//      i, ii, iii, iv, v, vi, vii, vii, viii, ix
-//                          (Dummy),1000,500,100,50,10,5,1
-    const char *cRomanArr = bUpper
-                        ? "MDCLXVI--"   // +2 Dummy entries!
-                        : "mdclxvi--";  // +2 Dummy entries!
-
     OUStringBuffer sRet;
-    sal_uInt16 nMask = 1000;
-    while( nMask )
+
+    constexpr char romans[][13] = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+    constexpr sal_Int32 values[] = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+
+    for (size_t i = 0; i < std::size(romans); ++i)
     {
-        sal_uInt8 nNumber = sal_uInt8(nNo / nMask);
-        sal_uInt8 nDiff = 1;
-        nNo %= nMask;
-
-        if( 5 < nNumber )
+        while(nNo - values[i] >= 0)
         {
-            if( nNumber < 9 )
-                sRet.append(*(cRomanArr-1));
-            ++nDiff;
-            nNumber -= 5;
+            sRet.appendAscii(romans[i]);
+            nNo -= values[i];
         }
-        switch( nNumber )
-        {
-        case 3:     { sRet.append(*cRomanArr); [[fallthrough]]; }
-        case 2:     { sRet.append(*cRomanArr); [[fallthrough]]; }
-        case 1:     { sRet.append(*cRomanArr); }
-                    break;
-
-        case 4:     {
-                        sRet.append(*cRomanArr);
-                        sRet.append(*(cRomanArr-nDiff));
-                    }
-                    break;
-        case 5:     { sRet.append(*(cRomanArr-nDiff)); }
-                    break;
-        }
-
-        nMask /= 10;            // for the next decade
-        cRomanArr += 2;
     }
-    return sRet.makeStringAndClear();
+
+    return bUpper ? sRet.makeStringAndClear()
+                  : sRet.makeStringAndClear().toAsciiLowerCase();
 }
 
 void SvxNumberFormat::SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel)
