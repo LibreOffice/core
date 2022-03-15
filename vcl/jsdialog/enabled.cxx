@@ -7,7 +7,9 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <comphelper/string.hxx>
 #include <jsdialog/enabled.hxx>
+#include <vector>
 
 namespace jsdialog
 {
@@ -60,6 +62,19 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
         || rUIFile == "svx/ui/accessibilitycheckentry.ui")
     {
         return true;
+    }
+
+    const char* pEnabledDialog = getenv("SAL_JSDIALOG_ENABLE");
+    if (pEnabledDialog)
+    {
+        OUString sAllEnabledDialogs(pEnabledDialog, strlen(pEnabledDialog), RTL_TEXTENCODING_UTF8);
+        std::vector<OUString> aEnabledDialogsVector
+            = comphelper::string::split(sAllEnabledDialogs, ':');
+        for (const auto& rDialog : aEnabledDialogsVector)
+        {
+            if (rUIFile == rDialog)
+                return true;
+        }
     }
 
     return false;
