@@ -185,6 +185,7 @@ public:
     void testTdf145059();
     void testTdf130104_XLSXIndent();
     void testWholeRowBold();
+    void testXlsxRowsOrder();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
 
@@ -303,6 +304,7 @@ public:
     CPPUNIT_TEST(testTdf145059);
     CPPUNIT_TEST(testTdf130104_XLSXIndent);
     CPPUNIT_TEST(testWholeRowBold);
+    CPPUNIT_TEST(testXlsxRowsOrder);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -3097,6 +3099,15 @@ void ScExportTest2::testWholeRowBold()
     xDocSh1->DoClose();
     xDocSh2->DoClose();
     xDocSh3->DoClose();
+}
+
+void ScExportTest2::testXlsxRowsOrder()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf58243.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    // Make sure code in SheetDataBuffer doesn't assert columns/rows sorting.
+    ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest2);
