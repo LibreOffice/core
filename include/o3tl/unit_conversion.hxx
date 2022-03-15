@@ -179,7 +179,7 @@ constexpr m_and_d mdBaseLen[] = {
     { 254 * 210, 10 * 1440 }, // ch => mm
     { 254 * 312, 10 * 1440 }, // line => mm
 };
-static_assert(SAL_N_ELEMENTS(mdBaseLen) == static_cast<int>(Length::count),
+static_assert(std::size(mdBaseLen) == static_cast<int>(Length::count),
               "mdBaseL must have an entry for each unit in o3tl::Length");
 
 // The resulting multipliers and divisors array
