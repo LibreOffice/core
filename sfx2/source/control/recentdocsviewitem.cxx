@@ -7,9 +7,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/StorageFactory.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 
+#include <comphelper/base64.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <drawinglayer/primitive2d/discretebitmapprimitive2d.hxx>
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
@@ -17,10 +21,16 @@
 #include <officecfg/Office/Common.hxx>
 #include <recentdocsview.hxx>
 #include <sfx2/templatelocalview.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/historyoptions.hxx>
 #include <vcl/event.hxx>
+#include <vcl/filter/PngImageReader.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/virdev.hxx>
+
+#include <map>
 
 #include <bitmaps.hlst>
 #include "recentdocsviewitem.hxx"
@@ -31,8 +41,87 @@ using namespace com::sun::star::uno;
 using namespace drawinglayer::primitive2d;
 using namespace drawinglayer::processor2d;
 
+namespace
+{
+bool IsDocEncrypted(const OUString& rURL)
+{
+    bool bIsEncrypted = false;
+
+    try
+    {
+        auto xFactory = embed::StorageFactory::create(comphelper::getProcessComponentContext());
+        auto xStorage(xFactory->createInstanceWithArguments(
+            { uno::Any(rURL), uno::Any(embed::ElementModes::READ) }));
+        if (uno::Reference<beans::XPropertySet> xStorageProps{ xStorage, uno::UNO_QUERY })
+        {
+            try
+            {
+                xStorageProps->getPropertyValue("HasEncryptedEntries") >>= bIsEncrypted;
+            }
+            catch (uno::Exception&)
+            {
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("sfx", "caught exception trying to find out if doc <"
+                                        << rURL << "> is encrypted:");
+    }
+
+    return bIsEncrypted;
+}
+
+using Ext2IconMap = std::map<sfx2::ApplicationType, OUString>;
+BitmapEx Url2Icon(const OUString& rURL, const Ext2IconMap& rExtToIcon, const OUString& sDefault)
+{
+    auto it = std::find_if(rExtToIcon.begin(), rExtToIcon.end(),
+                           [aExt = INetURLObject(rURL).getExtension()](const auto& r)
+                           { return sfx2::RecentDocsView::typeMatchesExtension(r.first, aExt); });
+
+    return BitmapEx(it != rExtToIcon.end() ? it->second : sDefault);
+};
+
+BitmapEx getDefaultThumbnail(const OUString& rURL)
+{
+    static const Ext2IconMap BitmapForExtension
+        = { { sfx2::ApplicationType::TYPE_WRITER, SFX_FILE_THUMBNAIL_TEXT },
+            { sfx2::ApplicationType::TYPE_CALC, SFX_FILE_THUMBNAIL_SHEET },
+            { sfx2::ApplicationType::TYPE_IMPRESS, SFX_FILE_THUMBNAIL_PRESENTATION },
+            { sfx2::ApplicationType::TYPE_DRAW, SFX_FILE_THUMBNAIL_DRAWING },
+            { sfx2::ApplicationType::TYPE_DATABASE, SFX_FILE_THUMBNAIL_DATABASE },
+            { sfx2::ApplicationType::TYPE_MATH, SFX_FILE_THUMBNAIL_MATH } };
+
+    static const Ext2IconMap EncryptedBitmapForExtension
+        = { { sfx2::ApplicationType::TYPE_WRITER, BMP_128X128_WRITER_DOC },
+            { sfx2::ApplicationType::TYPE_CALC, BMP_128X128_CALC_DOC },
+            { sfx2::ApplicationType::TYPE_IMPRESS, BMP_128X128_IMPRESS_DOC },
+            { sfx2::ApplicationType::TYPE_DRAW, BMP_128X128_DRAW_DOC },
+            // You can't save a database file with encryption -> no respective icon
+            { sfx2::ApplicationType::TYPE_MATH, BMP_128X128_MATH_DOC } };
+
+    const std::map<sfx2::ApplicationType, OUString>& rWhichMap
+        = IsDocEncrypted(rURL) ? EncryptedBitmapForExtension : BitmapForExtension;
+
+    return Url2Icon(rURL, rWhichMap, SFX_FILE_THUMBNAIL_DEFAULT);
+}
+
+BitmapEx getModuleOverlay(const OUString& rURL)
+{
+    static const Ext2IconMap OverlayBitmapForExtension
+        = { { sfx2::ApplicationType::TYPE_WRITER, SFX_FILE_OVERLAY_TEXT },
+            { sfx2::ApplicationType::TYPE_CALC, SFX_FILE_OVERLAY_SHEET },
+            { sfx2::ApplicationType::TYPE_IMPRESS, SFX_FILE_OVERLAY_PRESENTATION },
+            { sfx2::ApplicationType::TYPE_DRAW, SFX_FILE_OVERLAY_DRAWING },
+            { sfx2::ApplicationType::TYPE_DATABASE, SFX_FILE_OVERLAY_DATABASE },
+            { sfx2::ApplicationType::TYPE_MATH, SFX_FILE_OVERLAY_MATH } };
+
+    return Url2Icon(rURL, OverlayBitmapForExtension, SFX_FILE_OVERLAY_DEFAULT);
+}
+};
+
 RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
-    const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId, tools::Long nThumbnailSize)
+    const OUString &rTitle, std::u16string_view sThumbnailBase64, sal_uInt16 nId, tools::Long nThumbnailSize)
     : ThumbnailViewItem(rView, nId),
       mrParentView(rView),
       maURL(rURL),
@@ -51,16 +140,32 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
     if (aTitle.isEmpty())
         aTitle = aURLObj.GetLastName(INetURLObject::DecodeMechanism::WithCharset);
 
-    BitmapEx aThumbnail(rThumbnail);
+    BitmapEx aThumbnail;
+
     //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
-    if (aThumbnail.IsEmpty() && aURLObj.GetProtocol() == INetProtocol::File &&
-            officecfg::Office::Common::History::RecentDocsThumbnail::get())
-        aThumbnail = ThumbnailView::readThumbnail(rURL);
+    if (officecfg::Office::Common::History::RecentDocsThumbnail::get())
+    {
+        if (!sThumbnailBase64.empty())
+        {
+            Sequence<sal_Int8> aDecoded;
+            comphelper::Base64::decode(aDecoded, sThumbnailBase64);
+
+            SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
+            vcl::PngImageReader aReader(aStream);
+            aThumbnail = aReader.read();
+        }
+        else if (sfx2::RecentDocsView::typeMatchesExtension(sfx2::ApplicationType::TYPE_DATABASE,
+                                                            aURLObj.getExtension()))
+        {
+            aThumbnail
+                = BitmapEx(nThumbnailSize > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192);
+        }
+    }
 
     if (aThumbnail.IsEmpty())
     {
-        // Use the default thumbnail if we have nothing else
-        BitmapEx aExt(sfx2::RecentDocsView::getDefaultThumbnail(rURL));
+        // 1. Thumbnail absent: get the default thumbnail, checking for encryption.
+        BitmapEx aExt(getDefaultThumbnail(rURL));
         Size aExtSize(aExt.GetSizePixel());
 
         // attempt to make it appear as if it is on a piece of paper
@@ -98,9 +203,29 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
                 ::tools::Rectangle(Point(0, 0), aExtSize),
                 &aExt);
     }
+    else
+    {
+        // 2. Thumbnail present: it's unencrypted document -> add a module overlay.
+        // Pre-scale the thumbnail to the final size before applying the overlay
+        aThumbnail = TemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
+
+        BitmapEx aModule = getModuleOverlay(rURL);
+        if (!aModule.IsEmpty())
+        {
+            const Size aSize(aThumbnail.GetSizePixel());
+            const Size aOverlaySize(aModule.GetSizePixel());
+            ScopedVclPtr<VirtualDevice> pVirDev(VclPtr<VirtualDevice>::Create());
+            pVirDev->SetOutputSizePixel(aSize);
+            pVirDev->DrawBitmapEx(Point(), aThumbnail);
+            pVirDev->DrawBitmapEx(Point(aSize.Width() - aOverlaySize.Width() - 5,
+                                        aSize.Height() - aOverlaySize.Height() - 5),
+                                  aModule);
+            aThumbnail = pVirDev->GetBitmapEx(Point(), aSize);
+        }
+    }
 
     maTitle = aTitle;
-    maPreview1 = TemplateLocalView::scaleImg(aThumbnail, nThumbnailSize, nThumbnailSize);
+    maPreview1 = aThumbnail;
 }
 
 ::tools::Rectangle RecentDocsViewItem::updateHighlight(bool bVisible, const Point& rPoint)
