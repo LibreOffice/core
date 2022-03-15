@@ -19,6 +19,8 @@ class SparklineTest : public ScBootstrapFixture
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 
+    sc::Sparkline* createTestSparkline(ScDocument& rDocument);
+
 public:
     SparklineTest()
         : ScBootstrapFixture("sc/qa/unit/data")
@@ -43,11 +45,35 @@ public:
     }
 
     void testAddSparkline();
+    void testDeleteSprkline();
 
     CPPUNIT_TEST_SUITE(SparklineTest);
     CPPUNIT_TEST(testAddSparkline);
+    CPPUNIT_TEST(testDeleteSprkline);
     CPPUNIT_TEST_SUITE_END();
 };
+
+sc::Sparkline* SparklineTest::createTestSparkline(ScDocument& rDocument)
+{
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+
+    sc::Sparkline* pSparkline = rDocument.CreateSparkline(ScAddress(0, 6, 0), pSparklineGroup);
+    if (!pSparkline)
+        return nullptr;
+
+    rDocument.SetValue(0, 0, 0, 4);
+    rDocument.SetValue(0, 1, 0, -2);
+    rDocument.SetValue(0, 2, 0, 1);
+    rDocument.SetValue(0, 3, 0, -3);
+    rDocument.SetValue(0, 4, 0, 5);
+    rDocument.SetValue(0, 5, 0, 3);
+
+    ScRangeList aList;
+    aList.push_back(ScRange(0, 0, 0, 0, 5, 0));
+    pSparkline->setInputRange(aList);
+
+    return pSparkline;
+}
 
 void SparklineTest::testAddSparkline()
 {
@@ -55,10 +81,41 @@ void SparklineTest::testAddSparkline()
     CPPUNIT_ASSERT(xDocSh);
 
     ScDocument& rDocument = xDocSh->GetDocument();
-    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
 
-    sc::Sparkline* pSparkline = rDocument.CreateSparkline(ScAddress(0, 0, 0), pSparklineGroup);
+    sc::Sparkline* pSparkline = createTestSparkline(rDocument);
     CPPUNIT_ASSERT(pSparkline);
+
+    sc::Sparkline* pGetSparkline = rDocument.GetSparkline(ScAddress(0, 6, 0));
+    CPPUNIT_ASSERT(pGetSparkline);
+
+    CPPUNIT_ASSERT_EQUAL(pGetSparkline, pSparkline);
+
+    sc::SparklineList* pList = rDocument.GetSparklineList(0);
+    CPPUNIT_ASSERT(pList);
+
+    std::vector<std::shared_ptr<sc::Sparkline>> aSparklineVector = pList->getSparklines();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aSparklineVector.size());
+    CPPUNIT_ASSERT_EQUAL(aSparklineVector[0].get(), pSparkline);
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testDeleteSprkline()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+
+    sc::Sparkline* pSparkline = createTestSparkline(rDocument);
+    CPPUNIT_ASSERT(pSparkline);
+
+    clearRange(&rDocument, ScRange(0, 6, 0, 0, 6, 0));
+
+    sc::Sparkline* pGetSparkline = rDocument.GetSparkline(ScAddress(0, 6, 0));
+    CPPUNIT_ASSERT(!pGetSparkline);
+
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SparklineTest);
