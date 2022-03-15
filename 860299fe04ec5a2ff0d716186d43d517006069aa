@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84d0d86c_eb376862",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T08:43:24Z",
+      "side": 1,
+      "message": "It is unfortunate that e.g. tb76 (first attempted \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/109934/\u003e build, which failed for different reasons) and tb91 (second, successful \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110044/\u003e build) apparently have a /usr/include/boost/ tree installed, while at least e.g. tb79 does not, so caused unrelated \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110055/\u003e to fail with \"compiler couldn\u0027t find the file »boost/property_tree/ptree_fwd.hpp« referenced from /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/include/svl/poolitem.hxx:34:10\".\n\n@Cloph:  Can you make sure that boost-devel is deinstalled across all the relevant Jenkins machines?",
+      "revId": "860299fe04ec5a2ff0d716186d43d517006069aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c8176710_49d73227",
         "filename": "sc/qa/unit/SparklineImportExportTest.cxx",
         "patchSetId": 3
