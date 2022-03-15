@@ -198,14 +198,19 @@ private:
     {
         bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
         {
-            return lhs.mnStartRow<rhs.mnStartRow;
+            // This end-vs-start comparison is needed by the lower_bound() use
+            // in SheetDataBuffer::addColXfStyleProcessRowRanges() that searches
+            // for partially overlapping ranges. In all other places the ranges
+            // should be non-overlapping, in which case this is the same as the "normal"
+            // comparison.
+            return lhs.mnEndRow<rhs.mnStartRow;
         }
     };
     struct StyleRowRangeCompEqual
     {
         bool operator() (const RowRangeStyle& lhs, const RowRangeStyle& rhs) const
         {
-            return lhs.mnStartRow==rhs.mnStartRow;
+            return lhs.mnStartRow==rhs.mnStartRow && lhs.mnEndRow == rhs.mnEndRow;
         }
     };
     typedef ::o3tl::sorted_vector< RowRangeStyle, StyleRowRangeComp > RowStyles;
