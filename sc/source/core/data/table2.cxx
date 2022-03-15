@@ -1839,6 +1839,16 @@ sc::Sparkline* ScTable::CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<
     return pSparkline.get();
 }
 
+bool ScTable::DeleteSparkline(SCCOL nCol, SCROW nRow)
+{
+    if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
+        return false;
+
+    aCol[nCol].DeleteSparkline(nRow);
+
+    return true;
+}
+
 sc::SparklineList& ScTable::GetSparklineList()
 {
     return maSparklineList;
