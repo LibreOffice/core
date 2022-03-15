@@ -33,6 +33,24 @@
       "message": "The build on Windows has failed, but I\u0027m not exactly sure why; could you help me with it?",
       "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bfa58ae3_12337cd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-15T14:42:23Z",
+      "side": 1,
+      "message": "Not related. I restarted the build.",
+      "parentUuid": "a43b6787_d39c8e21",
+      "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
