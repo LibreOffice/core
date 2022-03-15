@@ -872,7 +872,16 @@ void SwTable::SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
                 else if(!bLeftDist && rNew.GetRight() + nShRight < rNew.GetRightMax())
                     aOri.SetHoriOrient( text::HoriOrientation::LEFT );
                 else
-                    aOri.SetHoriOrient( text::HoriOrientation::LEFT_AND_WIDTH );
+                {
+                    // if an automatic table hasn't (really) changed size, then leave it as auto.
+                    const tools::Long nOldWidth = rOld.GetRight() - rOld.GetLeft();
+                    const tools::Long nNewWidth = rNew.GetRight() - rNew.GetLeft();
+                    if (aOri.GetHoriOrient() != text::HoriOrientation::FULL
+                        || std::abs(nOldWidth - nNewWidth) > COLFUZZY)
+                    {
+                        aOri.SetHoriOrient(text::HoriOrientation::LEFT_AND_WIDTH);
+                    }
+                }
             }
             pFormat->SetFormatAttr( aOri );
         }
