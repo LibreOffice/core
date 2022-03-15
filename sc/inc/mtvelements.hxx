@@ -142,6 +142,7 @@ typedef mdds::mtv::soa::multi_type_vector<CellFunc, CellStoreTrait> CellStoreTyp
 struct ColumnBlockPosition
 {
     CellNoteStoreType::iterator miCellNotePos;
+    SparklineStoreType::iterator miSparklinePos;
     BroadcasterStoreType::iterator miBroadcasterPos;
     CellTextAttrStoreType::iterator miCellTextAttrPos;
     CellStoreType::iterator miCellPos;
@@ -152,6 +153,7 @@ struct ColumnBlockPosition
 struct ColumnBlockConstPosition
 {
     CellNoteStoreType::const_iterator miCellNotePos;
+    SparklineStoreType::const_iterator miSparklinePos;
     CellTextAttrStoreType::const_iterator miCellTextAttrPos;
     CellStoreType::const_iterator miCellPos;
 
