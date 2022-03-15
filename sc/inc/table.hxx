@@ -477,6 +477,7 @@ public:
 
     sc::Sparkline* GetSparkline(SCCOL nCol, SCROW nRow);
     sc::Sparkline* CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
+    bool DeleteSparkline(SCCOL nCol, SCROW nRow);
 
     sc::SparklineList& GetSparklineList();
 

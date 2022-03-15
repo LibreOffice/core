@@ -1970,6 +1970,8 @@ void ScColumn::PrepareBroadcastersForDestruction()
     }
 }
 
+// Sparklines
+
 sc::SparklineCell* ScColumn::GetSparklineCell(SCROW nRow)
 {
     return maSparklines.get<sc::SparklineCell*>(nRow);
@@ -1979,6 +1981,22 @@ void ScColumn::CreateSparklineCell(SCROW nRow, std::shared_ptr<sc::Sparkline> co
 {
     maSparklines.set(nRow, new sc::SparklineCell(pSparkline));
 }
+
+void ScColumn::DeleteSparklineCells(sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2)
+{
+    rBlockPos.miSparklinePos = maSparklines.set_empty(rBlockPos.miSparklinePos, nRow1, nRow2);
+}
+
+bool ScColumn::DeleteSparkline(SCROW nRow)
+{
+    if (!GetDoc().ValidRow(nRow))
+        return false;
+
+    maSparklines.set_empty(nRow, nRow);
+    return true;
+}
+
+// Notes
 
 ScPostIt* ScColumn::GetCellNote(SCROW nRow)
 {
