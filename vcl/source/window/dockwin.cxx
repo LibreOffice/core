@@ -36,6 +36,8 @@
 
 #include "impldockingwrapper.hxx"
 
+#include <comphelper/lok.hxx>
+
 #define DOCKWIN_FLOATSTYLES         (WB_SIZEABLE | WB_MOVEABLE | WB_CLOSEABLE | WB_STANDALONE)
 
 class DockingWindow::ImplData
@@ -833,7 +835,7 @@ void DockingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
     {
         if (!mpFloatWin)
             Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-        else
+        else if (comphelper::LibreOfficeKit::isActive())
         {
             mpFloatWin->SetOutputSizePixel(Size(nWidth, nHeight));
             mpFloatWin->SetPosPixel(Point(nX, nY));
