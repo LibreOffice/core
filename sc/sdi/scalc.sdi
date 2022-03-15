@@ -2301,7 +2301,24 @@ SfxVoidItem InsertSparkline SID_INSERT_SPARKLINE
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Insert;
+    GroupId = SfxGroupId::Edit;
+]
+
+SfxVoidItem DeleteSparkline SID_DELETE_SPARKLINE
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
 ]
 
 SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG

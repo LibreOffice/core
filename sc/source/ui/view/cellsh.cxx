@@ -52,6 +52,8 @@
 #include <clipparam.hxx>
 #include <markdata.hxx>
 #include <gridwin.hxx>
+#include <Sparkline.hxx>
+#include <SparklineGroup.hxx>
 
 #define ShellClass_ScCellShell
 #define ShellClass_CellMovement
@@ -96,6 +98,38 @@ ScCellShell::~ScCellShell()
     delete pImpl->m_pRequest;
 }
 
+namespace
+{
+
+bool canShowDeleteSparkline(ScDocument& rDocument, ScRange const& rRange)
+{
+    sc::SparklineGroup* pGroup = nullptr;
+    SCTAB nTab = rRange.aStart.Tab();
+
+    for (SCCOL nX = rRange.aStart.Col(); nX <= rRange.aEnd.Col(); nX++)
+    {
+        for (SCROW nY = rRange.aStart.Row(); nY <= rRange.aEnd.Row(); nY++)
+        {
+            auto* pSparkline = rDocument.GetSparkline(ScAddress(nX, nY, nTab));
+            if (pSparkline == nullptr)
+            {
+                return false;
+            }
+            else if (!pGroup)
+            {
+               pGroup = pSparkline->getSparklineGroup().get();
+            }
+            else if (pGroup != pSparkline->getSparklineGroup().get())
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+} // end anonymous namespace
+
 void ScCellShell::GetBlockState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData().GetViewShell();
@@ -113,6 +147,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
     nRow1 = aMarkRange.aStart.Row();
     nCol2 = aMarkRange.aEnd.Col();
     nRow2 = aMarkRange.aEnd.Row();
+    SCTAB nTab = GetViewData().GetTabNo();
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
@@ -182,6 +217,12 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             case SID_INSERT_SPARKLINE:
             {
                 bDisable = !bSimpleArea;
+            }
+            break;
+
+            case SID_DELETE_SPARKLINE:
+            {
+                bDisable = !canShowDeleteSparkline(rDoc, ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab));
             }
             break;
 

@@ -64,6 +64,7 @@
   <menu:menuitem menu:id=".uno:HideNote"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:InsertSparkline"/>
+  <menu:menuitem menu:id=".uno:DeleteSparkline"/>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:CurrentConditionalFormatDialog"/>
   <menu:menuitem menu:id=".uno:CurrentConditionalFormatManagerDialog"/>

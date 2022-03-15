@@ -1060,6 +1060,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         }
         break;
 
+        case SID_DELETE_SPARKLINE:
+        {
+            pTabViewShell->DeleteContents(InsertDeleteFlags::SPARKLINES);
+
+            rReq.Done();
+        }
+        break;
+
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
 
