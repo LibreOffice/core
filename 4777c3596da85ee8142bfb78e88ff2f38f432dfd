@@ -16,6 +16,23 @@
       "message": "Don\u0027t see any harm in this.",
       "revId": "4777c3596da85ee8142bfb78e88ff2f38f432dfd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a0c10e2_3091e53d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-15T16:42:07Z",
+      "side": 1,
+      "message": "Thank you for the feedback!",
+      "revId": "4777c3596da85ee8142bfb78e88ff2f38f432dfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
