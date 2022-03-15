@@ -34,6 +34,24 @@
       "parentUuid": "bf89fcd7_8d81fa8c",
       "revId": "d92b3260fb7b765e3e7e584e1e777e659bc20d03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d844362_547c1116",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-15T09:11:43Z",
+      "side": 1,
+      "message": "\u003e There are quite a few places in our codebase where comparing the strings in reverse is more efficient that comparing forward (e.g. think of strings with namespace-like names in them), where the last few characters are much more likely to be different than the first few characters.\n\u003e \n\u003e But possibly that tradeoff does not apply any more.\n\nYes, that\u0027s basically the question.\n \n\u003e If you have a performance problem with comparison, it might be worth caching the hash of the string somewhere (which is quite Java does).\n\nThat seems like quite some work, and you still need to compare the string itself afterwards, unless you\u0027re willing to bet that hash equality guarantees string equality.\n \n\u003e It might also be worth doing some SSE coding for our string compare.\n\nCalling memcmp() does that. Presumably one of the reasons it\u0027s way faster here is because it actually ends up being AVX2 code.",
+      "parentUuid": "0e505978_5ba70843",
+      "revId": "d92b3260fb7b765e3e7e584e1e777e659bc20d03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -16,6 +16,24 @@
       "message": "I honestly have no idea how much difference does it have to use one or the other. When I saw that it was implemented using the rtl_ustr_reverseCompare_WithLength, I *assumed* it was some approximation of Boyer–Moore algorithm, but I never measured the effect myself. Personally I\u0027d prefer to use some generic algorithm until proven that the \"compare-from-tail\" optimization is effective, but I *supposed* that whoever implemented that, did that research 😊",
       "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68884d28_24d6b665",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-15T09:11:43Z",
+      "side": 1,
+      "message": "I wouldn\u0027t rely that much on assuming the code makes sense. Even if it made sense when it was written, which I don\u0027t take as given, it was presumably written in the 80\u0027s/90\u0027s, and times have changed. See e.g. the intro of http://0x80.pl/articles/simd-strfind.html .\n\nAnd I\u0027m not sure from the way you wrote it whether you\u0027re aware or not, but it\u0027s not BM, it\u0027s a plain backwards loop.",
+      "parentUuid": "66d92a7d_a83f1b64",
+      "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
