@@ -28,6 +28,7 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <comphelper/lok.hxx>
 
 #include <scitems.hxx>
 #include <svx/xfillit0.hxx>
@@ -876,7 +877,8 @@ ScPostIt::~ScPostIt()
 std::unique_ptr<ScPostIt> ScPostIt::Clone( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, bool bCloneCaption ) const
 {
     CreateCaptionFromInitData( rOwnPos );
-    return bCloneCaption ? std::make_unique<ScPostIt>( rDestDoc, rDestPos, *this, mnPostItId ) : std::make_unique<ScPostIt>( rDestDoc, rDestPos, maNoteData, false, mnPostItId );
+    sal_uInt32 nPostItId = comphelper::LibreOfficeKit::isActive() ? 0 : mnPostItId;
+    return bCloneCaption ? std::make_unique<ScPostIt>( rDestDoc, rDestPos, *this, nPostItId ) : std::make_unique<ScPostIt>( rDestDoc, rDestPos, maNoteData, false, mnPostItId );
 }
 
 void ScPostIt::SetDate( const OUString& rDate )
