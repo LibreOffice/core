@@ -16,6 +16,23 @@
       "message": "nice!",
       "revId": "ab6520028a216c3c1f1ae012ffeaf266a12e3a7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52d86839_0bfcfa97",
+        "filename": "editeng/source/items/numitem.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 547,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-15T07:21:57Z",
+      "side": 1,
+      "message": "Please use spaces in ternary operator. It is completely incomprehensible this way. (And I\u0027d simply use one array, and used rtl::toAsciiUpperCase below, which is clearer, and has no significant overhead.)",
+      "revId": "ab6520028a216c3c1f1ae012ffeaf266a12e3a7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
