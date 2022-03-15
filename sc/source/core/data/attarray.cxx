@@ -930,6 +930,15 @@ void ScAttrArray::SetAttrEntries(std::vector<ScAttrEntry> && vNewData)
         pDocPool->Remove(*rEntry.pPattern);
 
     mvData = std::move(vNewData);
+
+#ifdef DBG_UTIL
+    SCROW lastEndRow = -1;
+    for(const auto& entry : mvData)
+    {   // Verify that the data is not corrupted.
+        assert(entry.nEndRow > lastEndRow);
+        lastEndRow = entry.nEndRow;
+    }
+#endif
 }
 
 static void lcl_MergeDeep( SfxItemSet& rMergeSet, const SfxItemSet& rSource )

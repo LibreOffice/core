@@ -409,8 +409,6 @@ void SheetDataBuffer::addColXfStyleProcessRowRanges()
                 RowRangeStyle aStyleRows;
                 aStyleRows.mnNumFmt.first = nXfId;
                 aStyleRows.mnNumFmt.second = -1;
-                aStyleRows.mnStartRow = rRange.mnFirst;
-                aStyleRows.mnEndRow = rRange.mnLast;
 
                 // Reset row range for each column
                 aStyleRows.mnStartRow = rRange.mnFirst;
