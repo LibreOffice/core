@@ -11,6 +11,8 @@
 
 $(eval $(call gb_CppunitTest_CppunitTest,sc_sparkline_test))
 
+$(eval $(call gb_CppunitTest_use_external,sc_sparkline_test,boost_headers))
+
 $(eval $(call gb_CppunitTest_use_common_precompiled_header,sc_sparkline_test))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sc_sparkline_test, \
