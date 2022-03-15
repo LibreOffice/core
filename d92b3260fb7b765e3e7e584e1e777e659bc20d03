@@ -70,6 +70,24 @@
       "parentUuid": "0e505978_5ba70843",
       "revId": "d92b3260fb7b765e3e7e584e1e777e659bc20d03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e9c6f260_06d1c353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-15T13:38:39Z",
+      "side": 1,
+      "message": "On the other hand, we have many more maps than just this case that use OUString as the key, and at least some of those are in performance-important parts, and those will end up comparing entire keys on match. My guess would be these matter more, but I have no data on that.",
+      "parentUuid": "caf278c5_c373018a",
+      "revId": "d92b3260fb7b765e3e7e584e1e777e659bc20d03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

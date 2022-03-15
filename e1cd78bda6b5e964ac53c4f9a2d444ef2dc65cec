@@ -36,6 +36,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c0b44ec_bfc88d1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-15T13:38:39Z",
+      "side": 1,
+      "message": "I don\u0027t have the time to measure this in more generic cases, so I\u0027ll submit this one and leave OUString etc. function for later, if somebody will feel like changing those, or maybe I will at some point.\n",
+      "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ed438d26_c31cd4ed",
@@ -49,6 +66,30 @@
       "writtenOn": "2022-03-15T09:13:12Z",
       "side": 1,
       "message": "or use operator \u003d\u003d(std::u16string_view, std::u16string_view)",
+      "range": {
+        "startLine": 190,
+        "startChar": 30,
+        "endLine": 190,
+        "endChar": 55
+      },
+      "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55c36af3_d67e9f3f",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-15T13:38:39Z",
+      "side": 1,
+      "message": "That one is also a hand-written loop (and it\u0027s also 6%, so it\u0027s apparently not the order of search).",
+      "parentUuid": "ed438d26_c31cd4ed",
       "range": {
         "startLine": 190,
         "startChar": 30,
