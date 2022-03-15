@@ -97,6 +97,23 @@
 // making those images unreadable for older readers. So for now
 // disable the support so that .webp images will be written out as .png,
 // and somewhen later enable the support unconditionally.
+
+namespace
+{
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv,
+                           std::basic_string_view<charT, traits> x) noexcept
+{
+    return sv.substr(0, x.size()) == x;
+}
+template <typename charT, typename traits = std::char_traits<charT>>
+constexpr bool starts_with(std::basic_string_view<charT, traits> sv, charT const* x)
+{
+    return starts_with(sv, std::basic_string_view<charT, traits>(x));
+}
+
+}
+
 static bool supportNativeWebp()
 {
     const char* const testname = getenv("LO_TESTNAME");
@@ -105,7 +122,7 @@ static bool supportNativeWebp()
     // Enable support only for those unittests that test it.
     if( std::string_view("_anonymous_namespace___GraphicTest__testUnloadedGraphicLoading_") == testname
         || std::string_view("VclFiltersTest__testExportImport_") == testname
-        || o3tl::starts_with(std::string_view(testname), "WebpFilterTest__"))
+        || starts_with(std::string_view(testname), "WebpFilterTest__"))
         return true;
     return false;
 }
