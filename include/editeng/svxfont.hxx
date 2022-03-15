@@ -36,6 +36,7 @@ class Printer;
 class Point;
 namespace tools { class Rectangle; }
 class Size;
+class SalLayoutGlyphsCache;
 
 class EDITENG_DLLPUBLIC SvxFont : public vcl::Font
 {
@@ -43,6 +44,12 @@ class EDITENG_DLLPUBLIC SvxFont : public vcl::Font
     short nEsc;                 // Degree of Superscript/Subscript
     sal_uInt8  nPropr;          // Degree of reduction of the font height
     short nKern;                // Kerning in Pt
+
+    tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr, std::vector<sal_Int32>* pDXAry,
+                              sal_Int32 nIndex, sal_Int32 nLen, SalLayoutGlyphsCache* cache ) const;
+    void DrawTextArray( OutputDevice* pOut, const Point& rStartPt, const OUString& rStr,
+                        o3tl::span<const sal_Int32> pDXAry,
+                        sal_Int32 nIndex, sal_Int32 nLen, SalLayoutGlyphsCache* cache ) const;
 
 public:
     SvxFont();
@@ -96,10 +103,12 @@ public:
                      const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
-                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, o3tl::span<const sal_Int32> pDXArray = {} ) const;
+                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, o3tl::span<const sal_Int32> pDXArray = {},
+                        SalLayoutGlyphsCache* cache = nullptr ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray = nullptr ) const;
+                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray = nullptr,
+                         SalLayoutGlyphsCache* cache = nullptr ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const OUString &rTxt,
