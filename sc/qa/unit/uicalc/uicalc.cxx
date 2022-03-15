@@ -1401,6 +1401,27 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117458)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf90694)
+{
+    ScModelObj* pModelObj = createDoc("tdf90694.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Select row 30 to 60
+    goToCell("30:60");
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:DeleteRows", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 29, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 59, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+
+    CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), pDoc->GetString(ScAddress(0, 29, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("#REF!"), pDoc->GetString(ScAddress(0, 59, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138710)
 {
     ScModelObj* pModelObj = createDoc("tdf138710.ods");
