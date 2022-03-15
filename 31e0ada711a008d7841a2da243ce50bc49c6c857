@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca43f911_5eb3eff7",
+        "filename": "sc/qa/extras/sctablecolumnsobj.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T09:44:50Z",
+      "side": 1,
+      "message": "While this happens to work on Linux, it causes CppunitTest_sc_tablecolumnsobj to fail on Windows with\n\n  Assertion failed: getenv(\"LO_TESTNAME\") !\u003d nullptr, file sc/source/core/data/documen2.cxx, line 104\n\nat\n\n  sclo.dll!ScSheetLimits::CreateDefault() Line 104\n  test_sc_tablecolumnsobj.dll!sc_apitest::ScTableColumnsObj::ScTableColumnsObj() Line 95\n  test_sc_tablecolumnsobj.dll!CppUnit::ConcretTestFixtureFactory\u003csc_apitest::ScTableColumnsObj\u003e::makeFixture() Line 41\n  cppunitd_dll.dll!CppUnit::TestSuiteBuilderContextBase::makeTestFixture() Line 52\n  test_sc_tablecolumnsobj.dll!CppUnit::TestSuiteBuilderContext\u003csc_apitest::ScTableColumnsObj\u003e::makeFixture() Line 140\n  test_sc_tablecolumnsobj.dll!sc_apitest::ScTableColumnsObj::addTestsToSuite(CppUnit::TestSuiteBuilderContextBase \u0026 baseContext) Line 56\n  test_sc_tablecolumnsobj.dll!sc_apitest::ScTableColumnsObj::suite() Line 86\n  test_sc_tablecolumnsobj.dll!CppUnit::TestSuiteFactory\u003csc_apitest::ScTableColumnsObj\u003e::makeTest() Line 21\n  cppunitd_dll.dll!CppUnit::TestFactoryRegistry::addTestToSuite(CppUnit::TestSuite * suite) Line 152\n  cppunitd_dll.dll!CppUnit::TestFactoryRegistry::makeTest() Line 139\n  cppunittester.exe!`anonymous namespace\u0027::ProtectedFixtureFunctor::run() Line 327\n  cppunittester.exe!main2() Line 478\n  cppunittester.exe!sal_main() Line 599\n  cppunittester.exe!main(int argc, char * * argv) Line 589\n\nbecause\n\n  #ifdef UNX\n              // set this to track down files created before first test method\n              std::string lib \u003d testlib.substr(testlib.rfind(\u0027/\u0027)+1);\n              setenv(\"LO_TESTNAME\", lib.c_str(), true);\n  #endif\n\nin ProtectedFixtureFunctor::run at sal/cppunittester/cppunittester.cxx:304 only sets LO_TESTNAME outside of actual test invocations for non-Windows.",
+      "revId": "31e0ada711a008d7841a2da243ce50bc49c6c857",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
