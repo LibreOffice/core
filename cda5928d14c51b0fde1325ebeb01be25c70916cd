@@ -16,6 +16,23 @@
       "message": "Hi.\n\nI\u0027ve changed the ints to hexadecimals. Could you please review that?",
       "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a43b6787_d39c8e21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-15T14:38:10Z",
+      "side": 1,
+      "message": "The build on Windows has failed, but I\u0027m not exactly sure why; could you help me with it?",
+      "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
