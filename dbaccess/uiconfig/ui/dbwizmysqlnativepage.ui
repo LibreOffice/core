@@ -32,7 +32,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes" context="dbwizmysqlnativepage|helptext">Please enter the required information to connect to a MySQL database.</property>
+                <property name="label" translatable="yes" context="dbwizmysqlnativepage|helptext">Please enter the required information to connect to a MySQL/MariaDB database.</property>
                 <property name="wrap">True</property>
                 <property name="width_chars">72</property>
                 <property name="max_width_chars">72</property>
@@ -67,7 +67,7 @@
           <object class="GtkLabel" id="header">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="dbwizmysqlnativepage|header">Set Up a Connection to a MySQL Database</property>
+            <property name="label" translatable="yes" context="dbwizmysqlnativepage|header">Set Up a Connection to a MySQL/MariaDB Database</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
