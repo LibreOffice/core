@@ -8,7 +8,7 @@
  */
 
 #include "rtfcharsets.hxx"
-#include <sal/macros.h>
+#include <array>
 
 namespace writerfilter::rtftok
 {
@@ -48,7 +48,7 @@ RTFEncoding const aRTFEncodings[] = {
     { 255, 850 }, // OEM
 };
 
-int nRTFEncodings = SAL_N_ELEMENTS(aRTFEncodings);
+int nRTFEncodings = std::size(aRTFEncodings);
 
 } // namespace writerfilter::rtftok
 
