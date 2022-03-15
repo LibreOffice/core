@@ -6580,9 +6580,21 @@ sc::Sparkline* ScDocument::CreateSparkline(ScAddress const& rPosition, std::shar
     return nullptr;
 }
 
+bool ScDocument::DeleteSparkline(ScAddress const & rPosition)
+{
+    SCTAB nTab = rPosition.Tab();
+
+    if (TableExists(nTab))
+    {
+        return maTabs[nTab]->DeleteSparkline(rPosition.Col(), rPosition.Row());
+    }
+
+    return false;
+}
+
 sc::SparklineList* ScDocument::GetSparklineList(SCTAB nTab)
 {
-    if (ValidTab(nTab) && nTab < SCTAB(maTabs.size()))
+    if (TableExists(nTab))
     {
         return &maTabs[nTab]->GetSparklineList();
     }
