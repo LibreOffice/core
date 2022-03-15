@@ -17,6 +17,7 @@
 #include <com/sun/star/util/URL.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+class INetURLObject;
 struct ImplSVEvent;
 namespace com::sun::star::frame { class XDispatch; }
 
@@ -65,7 +66,6 @@ public:
     void insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId);
 
     static bool typeMatchesExtension(ApplicationType type, std::u16string_view rExt);
-    static BitmapEx getDefaultThumbnail(const OUString &rURL, bool bCheckEncrypted = true);
 
     ApplicationType mnFileTypes;
 
@@ -91,7 +91,7 @@ private:
 
     virtual void LoseFocus() override;
 
-    bool isAcceptedFile(const OUString &rURL) const;
+    bool isAcceptedFile(const INetURLObject& rURL) const;
 
     DECL_LINK( ExecuteHdl_Impl, void*, void );
 

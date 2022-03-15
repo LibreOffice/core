@@ -59,63 +59,10 @@ void SetMessageFont(vcl::RenderContext& rRenderContext)
     rRenderContext.SetFont(aFont);
 }
 
-bool IsDocEncrypted(const OUString& rURL)
-{
-    uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
-    bool bIsEncrypted = false;
-
-    try
-    {
-        uno::Reference<lang::XSingleServiceFactory> xStorageFactory = embed::StorageFactory::create(xContext);
-
-        uno::Sequence<uno::Any> aArgs{ uno::Any(rURL), uno::Any(embed::ElementModes::READ) };
-        uno::Reference<embed::XStorage> xDocStorage (
-            xStorageFactory->createInstanceWithArguments(aArgs),
-            uno::UNO_QUERY);
-        uno::Reference< beans::XPropertySet > xStorageProps( xDocStorage, uno::UNO_QUERY );
-        if ( xStorageProps.is() )
-        {
-            try
-            {
-                xStorageProps->getPropertyValue("HasEncryptedEntries")
-                    >>= bIsEncrypted;
-            } catch( uno::Exception& ) {}
-        }
-    }
-    catch (const uno::Exception&)
-    {
-        TOOLS_WARN_EXCEPTION("sfx",
-            "caught exception trying to find out if doc <" << rURL << "> is encrypted:");
-    }
-
-    return bIsEncrypted;
-}
-
 }
 
 namespace sfx2
 {
-
-static std::map<ApplicationType,OUString> BitmapForExtension =
-{
-    { ApplicationType::TYPE_WRITER, SFX_FILE_THUMBNAIL_TEXT },
-    { ApplicationType::TYPE_CALC, SFX_FILE_THUMBNAIL_SHEET },
-    { ApplicationType::TYPE_IMPRESS, SFX_FILE_THUMBNAIL_PRESENTATION },
-    { ApplicationType::TYPE_DRAW, SFX_FILE_THUMBNAIL_DRAWING },
-    { ApplicationType::TYPE_DATABASE, SFX_FILE_THUMBNAIL_DATABASE },
-    { ApplicationType::TYPE_MATH, SFX_FILE_THUMBNAIL_MATH }
-};
-
-static std::map<ApplicationType,OUString> EncryptedBitmapForExtension =
-{
-    { ApplicationType::TYPE_WRITER, BMP_128X128_WRITER_DOC },
-    { ApplicationType::TYPE_CALC, BMP_128X128_CALC_DOC },
-    { ApplicationType::TYPE_IMPRESS, BMP_128X128_IMPRESS_DOC },
-    { ApplicationType::TYPE_DRAW, BMP_128X128_DRAW_DOC },
-    // FIXME: icon for encrypted db doc doesn't exist
-    { ApplicationType::TYPE_DATABASE, BMP_128X128_CALC_DOC },
-    { ApplicationType::TYPE_MATH, BMP_128X128_MATH_DOC }
-};
 
 constexpr tools::Long gnTextHeight = 30;
 constexpr tools::Long gnItemPadding = 5;
@@ -193,10 +140,9 @@ bool RecentDocsView::typeMatchesExtension(ApplicationType type, std::u16string_v
     return bRet;
 }
 
-bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
+bool RecentDocsView::isAcceptedFile(const INetURLObject& rURL) const
 {
-    INetURLObject aUrl(rURL);
-    OUString aExt = aUrl.getExtension();
+    const OUString aExt = rURL.getExtension();
     return (mnFileTypes & ApplicationType::TYPE_WRITER   && typeMatchesExtension(ApplicationType::TYPE_WRITER,  aExt)) ||
            (mnFileTypes & ApplicationType::TYPE_CALC     && typeMatchesExtension(ApplicationType::TYPE_CALC,    aExt)) ||
            (mnFileTypes & ApplicationType::TYPE_IMPRESS  && typeMatchesExtension(ApplicationType::TYPE_IMPRESS, aExt)) ||
@@ -204,30 +150,6 @@ bool RecentDocsView::isAcceptedFile(const OUString &rURL) const
            (mnFileTypes & ApplicationType::TYPE_DATABASE && typeMatchesExtension(ApplicationType::TYPE_DATABASE,aExt)) ||
            (mnFileTypes & ApplicationType::TYPE_MATH     && typeMatchesExtension(ApplicationType::TYPE_MATH,    aExt)) ||
            (mnFileTypes & ApplicationType::TYPE_OTHER    && typeMatchesExtension(ApplicationType::TYPE_OTHER,   aExt));
-}
-
-BitmapEx RecentDocsView::getDefaultThumbnail(const OUString &rURL, bool bCheckEncrypted)
-{
-    BitmapEx aImg;
-    INetURLObject aUrl(rURL);
-    OUString aExt = aUrl.getExtension();
-
-    // tdf#131850: avoid reading the file to check if it's encrypted,
-    // if we only need its generic "module" thumbnail
-    const std::map<ApplicationType,OUString>& rWhichMap = bCheckEncrypted && IsDocEncrypted(rURL) ?
-        EncryptedBitmapForExtension : BitmapForExtension;
-
-    std::map<ApplicationType,OUString>::const_iterator mIt =
-        std::find_if( rWhichMap.begin(), rWhichMap.end(),
-              [aExt] ( const std::pair<ApplicationType,OUString>& aEntry )
-              { return typeMatchesExtension( aEntry.first, aExt); } );
-
-    if (mIt != rWhichMap.end())
-        aImg = BitmapEx(mIt->second);
-    else
-        aImg = BitmapEx(SFX_FILE_THUMBNAIL_DEFAULT);
-
-    return aImg;
 }
 
 void RecentDocsView::insertItem(const OUString &rURL, const OUString &rTitle, const BitmapEx &rThumbnail, sal_uInt16 nId)
@@ -245,52 +167,36 @@ void RecentDocsView::Reload()
         const SvtHistoryOptions::HistoryItem& rRecentEntry = aHistoryList[i];
 
         OUString aURL = rRecentEntry.sURL;
-        OUString aTitle;
-        BitmapEx aThumbnail;
-        BitmapEx aModule;
+        INetURLObject aURLObj(aURL);
 
-        //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
-        if (officecfg::Office::Common::History::RecentDocsThumbnail::get())
+        if (isAcceptedFile(aURLObj)) // implies non-empty URL
         {
-            OUString aBase64 = rRecentEntry.sThumbnail;
-            if (!aBase64.isEmpty())
-            {
-                Sequence<sal_Int8> aDecoded;
-                comphelper::Base64::decode(aDecoded, aBase64);
+            OUString aTitle;
+            BitmapEx aThumbnail;
 
-                SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(), StreamMode::READ);
-                vcl::PngImageReader aReader(aStream);
-                aThumbnail = aReader.read();
-            } else
+            //fdo#74834: only load thumbnail if the corresponding option is not disabled in the configuration
+            if (officecfg::Office::Common::History::RecentDocsThumbnail::get())
             {
-                INetURLObject aUrl(aURL);
-                if (mnFileTypes & ApplicationType::TYPE_DATABASE && typeMatchesExtension(ApplicationType::TYPE_DATABASE, aUrl.getExtension()))
+                OUString aBase64 = rRecentEntry.sThumbnail;
+                if (!aBase64.isEmpty())
+                {
+                    Sequence<sal_Int8> aDecoded;
+                    comphelper::Base64::decode(aDecoded, aBase64);
+
+                    SvMemoryStream aStream(aDecoded.getArray(), aDecoded.getLength(),
+                                           StreamMode::READ);
+                    vcl::PngImageReader aReader(aStream);
+                    aThumbnail = aReader.read();
+                }
+                else if (typeMatchesExtension(ApplicationType::TYPE_DATABASE, aURLObj.getExtension()))
                 {
                     aThumbnail = BitmapEx(ThumbnailView::ItemHeight() > 192 ? SFX_THUMBNAIL_BASE_256 : SFX_THUMBNAIL_BASE_192);
                 }
             }
-        }
 
-        aModule = getDefaultThumbnail(aURL, false); // We don't need an "encrypted" icon here
-        if (!aModule.IsEmpty() && !aThumbnail.IsEmpty()) {
-            ScopedVclPtr<VirtualDevice> m_pVirDev(VclPtr<VirtualDevice>::Create());
-            Size aSize(aThumbnail.GetSizePixel());
-            m_pVirDev->SetOutputSizePixel(aSize);
-            m_pVirDev->DrawBitmapEx(Point(), aThumbnail);
-            m_pVirDev->DrawBitmapEx(Point(aSize.Width()-53,aSize.Height()-53), Size(48, 48), aModule);
-            aThumbnail = m_pVirDev->GetBitmapEx(Point(), aSize);
-            m_pVirDev.disposeAndClear();
-        }
-
-        if(!aURL.isEmpty())
-        {
-            INetURLObject  aURLObj( aURL );
             //Remove extension from url's last segment and use it as title
             aTitle = aURLObj.GetBase(); //DecodeMechanism::WithCharset
-        }
 
-        if (isAcceptedFile(aURL))
-        {
             insertItem(aURL, aTitle, aThumbnail, i+1);
         }
     }
