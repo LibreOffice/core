@@ -236,6 +236,7 @@ interface CellSelection
     SID_SELECT_VISIBLE_COLUMNS          [ ExecMethod = ExecuteEdit;]
     SID_CURRENT_FORMULA_RANGE           [ ExecMethod = ExecuteEdit;]
     SID_INSERT_SPARKLINE                [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_DELETE_SPARKLINE                [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
 
     SID_THESAURUS   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
     SID_SPELL_DIALOG [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
