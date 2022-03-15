@@ -53,6 +53,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "636a4761_334a90fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-15T15:43:52Z",
+      "side": 1,
+      "message": "\u003e Patch Set 4: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/110512/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sc_macros_test failed ( https://ci.libreoffice.org/job/gerrit_windows/122555/ )\n\n",
+      "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4176eceb_87ed927d",
@@ -66,6 +83,23 @@
       "writtenOn": "2022-03-15T14:48:48Z",
       "side": 1,
       "message": "Another place where it should be changed",
+      "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d292f833_76977fef",
+        "filename": "sw/qa/extras/odfimport/odfimport.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 614,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-15T15:43:52Z",
+      "side": 1,
+      "message": "Should I change it here as well?",
       "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
