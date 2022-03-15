@@ -980,6 +980,11 @@ void ScColumn::DeleteArea(
         DeleteCellNotes(aBlockPos, nStartRow, nEndRow, bForgetCaptionOwnership);
     }
 
+    if (nDelFlag & InsertDeleteFlags::SPARKLINES)
+    {
+        DeleteSparklineCells(aBlockPos, nStartRow, nEndRow);
+    }
+
     if ( nDelFlag & InsertDeleteFlags::EDITATTR )
     {
         OSL_ENSURE( nContFlag == InsertDeleteFlags::NONE, "DeleteArea: Wrong Flags" );
@@ -1008,6 +1013,7 @@ void ScColumn::InitBlockPosition( sc::ColumnBlockPosition& rBlockPos )
     rBlockPos.miCellNotePos = maCellNotes.begin();
     rBlockPos.miCellTextAttrPos = maCellTextAttrs.begin();
     rBlockPos.miCellPos = maCells.begin();
+    rBlockPos.miSparklinePos = maSparklines.begin();
 }
 
 void ScColumn::InitBlockPosition( sc::ColumnBlockConstPosition& rBlockPos ) const
