@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66d92a7d_a83f1b64",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-15T08:06:53Z",
+      "side": 1,
+      "message": "I honestly have no idea how much difference does it have to use one or the other. When I saw that it was implemented using the rtl_ustr_reverseCompare_WithLength, I *assumed* it was some approximation of Boyer–Moore algorithm, but I never measured the effect myself. Personally I\u0027d prefer to use some generic algorithm until proven that the \"compare-from-tail\" optimization is effective, but I *supposed* that whoever implemented that, did that research 😊",
+      "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
