@@ -373,7 +373,15 @@ void SheetDataBuffer::addColXfStyles()
     {
         TmpRowStyles& s = rowStyles.second;
         std::sort( s.begin(), s.end(), StyleRowRangeComp());
-        s.erase( std::unique( s.begin(), s.end(), StyleRowRangeCompEqual()), s.end());
+        s.erase( std::unique( s.begin(), s.end(),
+                    [](const RowRangeStyle& lhs, const RowRangeStyle& rhs)
+                        // Synthetize operator== from operator < . Do not create an actual operator==
+                        // as operator< is somewhat specific (see StyleRowRangeComp).
+                        { return !StyleRowRangeComp()(lhs,rhs) && !StyleRowRangeComp()(rhs,lhs); } ),
+            s.end());
+        // Broken documents may have overlapping ranges that cause problems, re-sort again if needed.
+        if(!std::is_sorted(s.begin(), s.end(), StyleRowRangeComp()))
+            std::sort( s.begin(), s.end(), StyleRowRangeComp());
         maStylesPerColumn[ rowStyles.first ].insert_sorted_unique_vector( std::move( s ));
     }
 }
