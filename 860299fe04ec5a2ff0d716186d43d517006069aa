@@ -16,6 +16,24 @@
       "message": "It includes \u003csvl/poolitem.hxx\u003e indirectly, and that includes \u003cboost/property_tree/ptree_fwd.hpp\u003e - so seems it needs to use boost - fails here (using no pch) with\n\n  C:\\lo\\src\\core\\include\\svl/poolitem.hxx(34): fatal error C1083: Cannot open include file: \u0027boost/property_tree/ptree_fwd.hpp\u0027: No such file or directory\n  make[1]: *** [C:/lo/src/core/solenv/gbuild/LinkTarget.mk:344: C:/lo/src/build/workdir/CxxObject/sc/qa/unit/SparklineImportExportTest.o] Error 2",
       "revId": "860299fe04ec5a2ff0d716186d43d517006069aa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c12d55e_d9a9706f",
+        "filename": "sc/qa/unit/SparklineImportExportTest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-15T07:17:52Z",
+      "side": 1,
+      "message": "Addressed in https://gerrit.libreoffice.org/c/core/+/131577",
+      "parentUuid": "c8176710_49d73227",
+      "revId": "860299fe04ec5a2ff0d716186d43d517006069aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
