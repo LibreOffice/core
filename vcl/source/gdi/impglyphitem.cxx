@@ -95,9 +95,11 @@ bool SalLayoutGlyphsImpl::IsValid() const
 }
 
 const SalLayoutGlyphs*
-SalLayoutGlyphsCache::GetLayoutGlyphs(const OUString& text, VclPtr<OutputDevice> outputDevice) const
+SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
+                                      sal_Int32 nIndex, sal_Int32 nLen, const Point& rLogicPos,
+                                      tools::Long nLogicWidth) const
 {
-    const CachedGlyphsKey key(text, outputDevice);
+    const CachedGlyphsKey key(outputDevice, text, nIndex, nLen, rLogicPos, nLogicWidth);
     auto it = mCachedGlyphs.find(key);
     if (it != mCachedGlyphs.end())
     {
@@ -109,7 +111,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(const OUString& text, VclPtr<OutputDevice>
         return nullptr;
     }
     std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
-        text, 0, text.getLength(), Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+        text, nIndex, nLen, rLogicPos, nLogicWidth, {}, SalLayoutFlags::GlyphItemsOnly);
     if (layout)
     {
         mCachedGlyphs.insert(std::make_pair(key, layout->GetGlyphs()));
@@ -119,10 +121,15 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(const OUString& text, VclPtr<OutputDevice>
     return nullptr;
 }
 
-SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const OUString& t,
-                                                       const VclPtr<OutputDevice>& d)
-    : text(t)
-    , outputDevice(d)
+SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const OutputDevice>& d,
+                                                       const OUString& t, sal_Int32 i, sal_Int32 l,
+                                                       const Point& p, tools::Long w)
+    : outputDevice(d)
+    , text(t)
+    , index(i)
+    , len(l)
+    , logicPos(p)
+    , logicWidth(w)
 {
     hashValue = 0;
     o3tl::hash_combine(hashValue, outputDevice.get());
@@ -130,11 +137,18 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const OUString& t,
     WriteFont(stream, outputDevice->GetFont());
     o3tl::hash_combine(hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
     o3tl::hash_combine(hashValue, text);
+    o3tl::hash_combine(hashValue, index);
+    o3tl::hash_combine(hashValue, len);
+    o3tl::hash_combine(hashValue, logicPos.X());
+    o3tl::hash_combine(hashValue, logicPos.Y());
+    o3tl::hash_combine(hashValue, logicWidth);
 }
 
 inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphsKey& other) const
 {
-    return hashValue == other.hashValue && outputDevice == other.outputDevice && text == other.text;
+    return hashValue == other.hashValue && outputDevice == other.outputDevice
+           && index == other.index && len == other.len && logicPos == other.logicPos
+           && logicWidth == other.logicWidth && text == other.text;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

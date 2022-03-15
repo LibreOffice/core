@@ -36,6 +36,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/ptrstyle.hxx>
+#include <vcl/glyphitemcache.hxx>
 
 #include <vcl/dndhelp.hxx>
 #include <svl/ondemand.hxx>
@@ -607,6 +608,7 @@ private:
 
     bool            mbNbspRunNext;  // can't be a bitfield as it is passed as bool&
 
+    SalLayoutGlyphsCache mGlyphsCache;
 
     // Methods...
 
