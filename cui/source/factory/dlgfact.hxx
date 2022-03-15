@@ -436,7 +436,7 @@ class SvxNameDialog;
 class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
 public:
-    explicit AbstractSvxNameDialog_Impl(std::unique_ptr<SvxNameDialog> p)
+    explicit AbstractSvxNameDialog_Impl(std::shared_ptr<SvxNameDialog> p)
         : m_xDlg(std::move(p))
     {
     }
@@ -449,7 +449,7 @@ public:
     virtual void    SetHelpId( const OString& ) override ;
     virtual void    SetText( const OUString& rStr ) override ;
 private:
-    std::unique_ptr<SvxNameDialog> m_xDlg;
+    std::shared_ptr<SvxNameDialog> m_xDlg;
     Link<AbstractSvxNameDialog&,bool> aCheckNameHdl;
     Link<AbstractSvxNameDialog&,OUString> aCheckNameTooltipHdl;
     DECL_LINK(CheckNameHdl, SvxNameDialog&, bool);
