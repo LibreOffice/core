@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4496667f_cf1fc8c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-15T16:57:22Z",
+      "side": 1,
+      "message": "Changed all possible values to hex.",
+      "revId": "9e8aab189fcfe60fd9ba2bbb1c92c8d9bc2f5c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
