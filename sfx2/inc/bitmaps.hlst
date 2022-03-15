@@ -43,13 +43,23 @@ inline constexpr OUStringLiteral SFX_THUMBNAIL_TEXT = u"res/ott_96_8.png";
 inline constexpr OUStringLiteral SFX_THUMBNAIL_SHEET = u"res/ots_96_8.png";
 inline constexpr OUStringLiteral SFX_THUMBNAIL_PRESENTATION = u"res/otp_96_8.png";
 inline constexpr OUStringLiteral SFX_THUMBNAIL_DRAWING = u"res/otg_96_8.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_TEXT = u"res/odt_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_SHEET = u"res/ods_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_PRESENTATION = u"res/odp_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DRAWING = u"res/odg_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DATABASE = u"res/odb_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_MATH = u"res/odf_48_8.png";
-inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DEFAULT = u"res/mainapp_48_8.png";
+
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_TEXT = u"res/writer128.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_SHEET = u"res/calc128.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_PRESENTATION = u"res/impress128.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DRAWING = u"res/draw128.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DATABASE = u"res/base128.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_MATH = u"res/math128.png";
+inline constexpr OUStringLiteral SFX_FILE_THUMBNAIL_DEFAULT = u"res/main128.png";
+
+inline constexpr OUStringLiteral SFX_FILE_OVERLAY_TEXT = u"res/odt_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_OVERLAY_SHEET = u"res/ods_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_OVERLAY_PRESENTATION = u"res/odp_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_OVERLAY_DRAWING = u"res/odg_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_OVERLAY_DATABASE = u"res/odb_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_OVERLAY_MATH = u"res/odf_48_8.png";
+inline constexpr OUStringLiteral SFX_FILE_OVERLAY_DEFAULT = u"res/mainapp_48_8.png";
+
 inline constexpr OUStringLiteral SFX_THUMBNAIL_BASE_192 = u"res/base_thumbnail_192.png";
 inline constexpr OUStringLiteral SFX_THUMBNAIL_BASE_256 = u"res/base_thumbnail_256.png";
 

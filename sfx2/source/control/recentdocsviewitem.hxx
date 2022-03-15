@@ -21,7 +21,7 @@ class RecentDocsViewItem final : public ThumbnailViewItem
 {
 public:
     RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
-        const OUString &rTitle, const BitmapEx& rThumbnail, sal_uInt16 nId, tools::Long nThumbnailSize);
+        const OUString &rTitle, const OUString& rThumbnail, sal_uInt16 nId, tools::Long nThumbnailSize);
 
     /** Updates own highlight status based on the aPoint position.
 
