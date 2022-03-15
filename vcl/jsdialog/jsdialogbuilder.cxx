@@ -829,6 +829,7 @@ std::unique_ptr<weld::MessageDialog> JSInstanceBuilder::weld_message_dialog(cons
         m_bHasTopLevelDialog = true;
 
         initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
+        sendFullUpdate();
     }
 
     pRet.reset(pMessageDialog ? new JSMessageDialog(this, pMessageDialog, this, false) : nullptr);
