@@ -555,7 +555,7 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
     {
         // After import, a TextFrame is created by the VML import.
         uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(Color(0xD99594), Color(ColorTransparency, getProperty<sal_Int32>(xFrame, "BackColor")));
+        CPPUNIT_ASSERT_EQUAL(Color(0xD99594), getProperty<Color>(xFrame, "BackColor"));
 
         table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xFrame, "TopBorder");
         CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), Color(ColorTransparency, aBorder.Color));
@@ -570,14 +570,14 @@ DECLARE_OOXMLEXPORT_TEST(testTextFrameBorders, "textframe-borders.docx")
     {
         // After export and import, the result is a shape.
         uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
-        CPPUNIT_ASSERT_EQUAL(Color(0xD99594), Color(ColorTransparency, getProperty<sal_Int32>(xShape, "FillColor")));
+        CPPUNIT_ASSERT_EQUAL(Color(0xD99594), getProperty<Color>(xShape, "FillColor"));
 
-        CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), Color(ColorTransparency, getProperty<sal_Int32>(xShape, "LineColor")));
+        CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), getProperty<Color>(xShape, "LineColor"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(35), getProperty<sal_Int32>(xShape, "LineWidth"));
 
         CPPUNIT_ASSERT_EQUAL(sal_Int32(48), getProperty<sal_Int32>(xShape, "ShadowXDistance"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(48), getProperty<sal_Int32>(xShape, "ShadowYDistance"));
-        CPPUNIT_ASSERT_EQUAL(Color(0x622423), Color(ColorTransparency, getProperty<sal_Int32>(xShape, "ShadowColor")));
+        CPPUNIT_ASSERT_EQUAL(Color(0x622423), getProperty<Color>(xShape, "ShadowColor"));
     }
 }
 
@@ -695,7 +695,7 @@ DECLARE_OOXMLEXPORT_TEST(testPageBackground, "page-background.docx")
 {
     // 'Document Background' wasn't exported.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), Color(ColorTransparency, getProperty<sal_Int32>(xPageStyle, "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getProperty<Color>(xPageStyle, "BackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65265, "fdo65265.docx")
@@ -857,7 +857,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo56679, "fdo56679.docx")
     uno::Reference< text::XTextRange > xText = getRun( xParagraph, 2, "This is a simple sentence.");
 
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xText, "CharUnderlineHasColor"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), Color(ColorTransparency, getProperty<sal_Int32>(xText, "CharUnderlineColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xFF0000), getProperty<Color>(xText, "CharUnderlineColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65400, "fdo65400.docx")
@@ -1028,11 +1028,11 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo60990)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // The shape had no background, no paragraph adjust and no font color.
     uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(ColorTransparency, 0x00CFE7F5), Color(ColorTransparency, getProperty<sal_Int32>(xShape, "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00CFE7F5), getProperty<Color>(xShape, "FillColor"));
     uno::Reference<text::XText> xText = uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->getText();
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText);
     CPPUNIT_ASSERT_EQUAL(style::ParagraphAdjust_CENTER, static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(xParagraph, "ParaAdjust")));
-    CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), Color(ColorTransparency, getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00FF00), getProperty<Color>(getRun(xParagraph, 1), "CharColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo65718, "fdo65718.docx")
@@ -1172,9 +1172,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo67737, "fdo67737.docx")
 DECLARE_OOXMLEXPORT_TEST(testTransparentShadow, "transparent-shadow.docx")
 {
     uno::Reference<drawing::XShape> xPicture = getShape(1);
-    sal_Int32 nShadowColor = getProperty<sal_Int32>(xPicture, "ShadowColor");
     sal_Int16 nShadowTransparence = getProperty<sal_Int16>(xPicture, "ShadowTransparence");
-    CPPUNIT_ASSERT_EQUAL(Color(0x808080), Color(ColorTransparency, nShadowColor));
+    CPPUNIT_ASSERT_EQUAL(Color(0x808080), getProperty<Color>(xPicture, "ShadowColor"));
     CPPUNIT_ASSERT_EQUAL(sal_Int16(50), nShadowTransparence);
 }
 
