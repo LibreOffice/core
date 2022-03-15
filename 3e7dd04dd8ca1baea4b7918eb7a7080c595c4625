@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c10fe148_268a1959",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T16:11:50Z",
+      "side": 1,
+      "message": "What is the motivation for that underlying type here?  Both PitchFont and FamilyFont appear to (only) be used in combination with the\n\n        sal_uInt8       lfPitchAndFamily;\n\nLOGFONTW member at emfio/inc/mtftools.hxx:152, so I would assume either both to have identical underlying types or neither to have an explicitly specified underlying type.",
+      "range": {
+        "startLine": 278,
+        "startChar": 22,
+        "endLine": 278,
+        "endChar": 32
+      },
+      "revId": "3e7dd04dd8ca1baea4b7918eb7a7080c595c4625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a0af2ea_203cb0c1",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T16:11:50Z",
+      "side": 1,
+      "message": "Compared to the original FF_* macro values, these enumerator values are all shifted right 4 bits, so that e.g.\n\n    logfontw.lfPitchAndFamily \u003d emfio::FamilyFont::FF_ROMAN | emfio::PitchFont::DEFAULT_PITCH;\n\nat emfio/qa/cppunit/wmf/wmfimporttest.cxx:339 will now be 0x01 rather than 0x10?",
+      "revId": "3e7dd04dd8ca1baea4b7918eb7a7080c595c4625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
