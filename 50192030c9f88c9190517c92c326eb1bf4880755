@@ -16,6 +16,23 @@
       "message": "Please review my patch.",
       "revId": "50192030c9f88c9190517c92c326eb1bf4880755",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "165365df_f65b2f75",
+        "filename": "sw/qa/extras/rtfexport/rtfexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-15T10:05:21Z",
+      "side": 1,
+      "message": "just use getProperty\u003cColor\u003e instead of getProperty\u003csal_Int32\u003e",
+      "revId": "50192030c9f88c9190517c92c326eb1bf4880755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
