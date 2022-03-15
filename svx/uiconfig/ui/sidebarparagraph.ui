@@ -248,12 +248,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box11">
+              <object class="GtkBox" id="aboveparaspacingbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkImage" id="image6">
+                  <object class="GtkImage" id="aboveparaspacingimg">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">center</property>
@@ -297,12 +297,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box12">
+              <object class="GtkBox" id="belowparaspacingbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkImage" id="image7">
+                  <object class="GtkImage" id="belowparaspacingimg">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">center</property>
@@ -448,12 +448,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box14">
+              <object class="GtkBox" id="beforetextindentbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkImage" id="image8">
+                  <object class="GtkImage" id="beforetextindentimg">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">center</property>
@@ -497,12 +497,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box15">
+              <object class="GtkBox" id="aftertextindentbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkImage" id="image9">
+                  <object class="GtkImage" id="aftertextindentimg">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">center</property>
@@ -546,12 +546,12 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box16">
+              <object class="GtkBox" id="firstlineindentbox">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="spacing">6</property>
                 <child>
-                  <object class="GtkImage" id="image10">
+                  <object class="GtkImage" id="firstlineindentimg">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">center</property>
@@ -708,12 +708,12 @@
   <object class="GtkSizeGroup" id="sizegroup1">
     <property name="mode">vertical</property>
     <widgets>
-      <widget name="box11"/>
-      <widget name="box12"/>
+      <widget name="aboveparaspacingbox"/>
+      <widget name="belowparaspacingbox"/>
       <widget name="linespacing"/>
-      <widget name="box14"/>
-      <widget name="box15"/>
-      <widget name="box16"/>
+      <widget name="beforetextindentbox"/>
+      <widget name="aftertextindentbox"/>
+      <widget name="firstlineindentbox"/>
     </widgets>
   </object>
 </interface>
