@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db0d6126_35bfffe2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-15T09:16:19Z",
+      "side": 1,
+      "message": "So the labels are well thought through; fine for me then.",
+      "revId": "9fdb2ae431aab49ccaee2c927874a714d9a5be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd42e627_74e3abd4",
