@@ -27,6 +27,9 @@
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svxdlg.hxx>
+#include <DuplicateNameDialog.hxx>
+#include <dlgname.hxx>
 
 #define NO_BUTTON_SELECTED -1
 
@@ -647,6 +650,7 @@ private:
     PaletteManager maPaletteManager;
     SvxXRectPreview m_aCtlPreviewOld;
     SvxXRectPreview m_aCtlPreviewNew;
+    std::shared_ptr<DuplicateNameDialog> m_xWarnDialog;
     std::unique_ptr<SvxColorValueSet> m_xValSetColorList;
     std::unique_ptr<SvxColorValueSet> m_xValSetRecentList;
     std::unique_ptr<weld::ComboBox> m_xSelectPalette;
@@ -680,6 +684,8 @@ private:
     std::unique_ptr<weld::CustomWeld> m_xValSetColorListWin;
     std::unique_ptr<weld::CustomWeld> m_xValSetRecentListWin;
 
+    VclPtr<AbstractSvxNameDialog> m_xNameDialog;
+
     static void    ConvertColorValues (Color& rColor, ColorModel eModell);
     static void    RgbToCmyk_Impl( Color& rColor, sal_uInt16& rK );
     static void    CmykToRgb_Impl( Color& rColor, const sal_uInt16 nKey );
@@ -692,6 +698,8 @@ private:
     DECL_LINK(ClickAddHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickWorkOnHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
+
+    DECL_LINK(NameDialogOkHdl_Impl, AbstractSvxNameDialog&, void);
 
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
