@@ -165,6 +165,7 @@ protected:
 public:
     virtual void    GetName( OUString& rName ) = 0;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) = 0;
+    virtual void    SetOkHdl( const Link<AbstractSvxNameDialog&,void>& rLink) = 0;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink ) = 0;
     virtual void    SetEditHelpId(const OString&) = 0;
     //from class Window

@@ -27,6 +27,9 @@
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svxdlg.hxx>
+#include <DuplicateNameDialog.hxx>
+#include <dlgname.hxx>
 
 #define NO_BUTTON_SELECTED -1
 
@@ -647,6 +650,7 @@ private:
     PaletteManager maPaletteManager;
     SvxXRectPreview m_aCtlPreviewOld;
     SvxXRectPreview m_aCtlPreviewNew;
+    std::shared_ptr<weld::MessageDialog> m_xWarnDialog;
     std::unique_ptr<SvxColorValueSet> m_xValSetColorList;
     std::unique_ptr<SvxColorValueSet> m_xValSetRecentList;
     std::unique_ptr<weld::ComboBox> m_xSelectPalette;
@@ -693,6 +697,8 @@ private:
     DECL_LINK(ClickWorkOnHdl_Impl, weld::Button&, void);
     DECL_LINK(ClickDeleteHdl_Impl, weld::Button&, void);
 
+    DECL_LINK(NameDialogOkHdl_Impl, AbstractSvxNameDialog&, void);
+
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
     DECL_LINK( SelectColorModeHdl_Impl, weld::ToggleButton&, void );
@@ -708,6 +714,7 @@ private:
 
     static sal_Int32 FindInCustomColors( OUString const & aColorName );
     sal_Int32 FindInPalette( const Color& rColor );
+    VclPtr<AbstractSvxNameDialog> pDlg;
 
 public:
     SvxColorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

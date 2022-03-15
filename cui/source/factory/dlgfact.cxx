@@ -221,6 +221,11 @@ short AbstractSvxNameDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractSvxNameDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 // #i68101#
 short AbstractSvxObjectNameDialog_Impl::Execute()
 {
@@ -749,6 +754,15 @@ void AbstractSvxNameDialog_Impl::SetCheckNameHdl( const Link<AbstractSvxNameDial
         m_xDlg->SetCheckNameHdl( Link<SvxNameDialog&,bool>(), bCheckImmediately );
 }
 
+void AbstractSvxNameDialog_Impl::SetOkHdl(const Link<AbstractSvxNameDialog&, void>& rLink)
+{
+    aOkHdl = rLink;
+    if( rLink.IsSet() )
+        m_xDlg->SetOkHdl( LINK(this, AbstractSvxNameDialog_Impl, OkHdl) );
+    else
+        m_xDlg->SetOkHdl( Link<SvxNameDialog&, void>() );
+}
+
 void AbstractSvxNameDialog_Impl::SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&,OUString>& rLink)
 {
     aCheckNameTooltipHdl = rLink;
@@ -776,6 +790,11 @@ void AbstractSvxNameDialog_Impl::SetText( const OUString& rStr )
 IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameHdl, SvxNameDialog&, bool)
 {
     return aCheckNameHdl.Call(*this);
+}
+
+IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, OkHdl, SvxNameDialog&, void)
+{
+    aOkHdl.Call(*this);
 }
 
 IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameTooltipHdl, SvxNameDialog&, OUString)
@@ -1258,7 +1277,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDia
 VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(weld::Window* pParent,
                                     const OUString& rName, const OUString& rDesc)
 {
-    return VclPtr<AbstractSvxNameDialog_Impl>::Create(std::make_unique<SvxNameDialog>(pParent, rName, rDesc));
+    return VclPtr<AbstractSvxNameDialog_Impl>::Create(std::make_shared<SvxNameDialog>(pParent, rName, rDesc));
 }
 
 VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName)

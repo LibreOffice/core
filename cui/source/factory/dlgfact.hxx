@@ -436,23 +436,27 @@ class SvxNameDialog;
 class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
 {
 public:
-    explicit AbstractSvxNameDialog_Impl(std::unique_ptr<SvxNameDialog> p)
+    explicit AbstractSvxNameDialog_Impl(std::shared_ptr<SvxNameDialog> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void    GetName( OUString& rName ) override ;
     virtual void    SetCheckNameHdl( const Link<AbstractSvxNameDialog&,bool>& rLink, bool bCheckImmediately = false ) override ;
+    virtual void    SetOkHdl(const Link<AbstractSvxNameDialog&,void>& rLink) override ;
     virtual void    SetCheckNameTooltipHdl( const Link<AbstractSvxNameDialog&, OUString>& rLink ) override ;
     virtual void    SetEditHelpId(const OString&) override ;
     //from class Window
     virtual void    SetHelpId( const OString& ) override ;
     virtual void    SetText( const OUString& rStr ) override ;
 private:
-    std::unique_ptr<SvxNameDialog> m_xDlg;
+    std::shared_ptr<SvxNameDialog> m_xDlg;
     Link<AbstractSvxNameDialog&,bool> aCheckNameHdl;
+    Link<AbstractSvxNameDialog&,void> aOkHdl;
     Link<AbstractSvxNameDialog&,OUString> aCheckNameTooltipHdl;
     DECL_LINK(CheckNameHdl, SvxNameDialog&, bool);
+    DECL_LINK(OkHdl, SvxNameDialog&, void);
     DECL_LINK(CheckNameTooltipHdl, SvxNameDialog&, OUString);
 };
 
