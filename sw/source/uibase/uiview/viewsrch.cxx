@@ -199,21 +199,6 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     SwView::SetMoveType(NID_SRCH_REP);
             }
 
-            SvxSearchDialog * pSrchDlg(GetSearchDialog());
-            if (pSrchDlg)
-            {
-                s_xSearchList.reset();
-                s_xReplaceList.reset();
-
-                const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
-                if( nullptr != pList && pList->Count() )
-                    s_xSearchList.reset(new SearchAttrItemList( *pList ));
-
-                pList = pSrchDlg->GetReplaceItemList();
-                if (nullptr != pList && pList->Count())
-                    s_xReplaceList.reset(new SearchAttrItemList( *pList ));
-            }
-
             if (nSlot == FN_REPEAT_SEARCH)
             {
                 OSL_ENSURE(s_pSrchItem, "SearchItem missing");
@@ -230,6 +215,30 @@ void SwView::ExecSearch(SfxRequest& rReq)
                     s_pSrchItem = pArgs->Get(SID_SEARCH_ITEM).Clone();
                 }
             }
+
+            if (SvxSearchDialog* pSrchDlg(GetSearchDialog()); pSrchDlg && pSrchDlg->getDialog()
+                    && pSrchDlg->getDialog()->has_child_focus())
+            {
+                s_xSearchList.reset();
+                s_xReplaceList.reset();
+
+                const SearchAttrItemList* pList = pSrchDlg->GetSearchItemList();
+                if ( nullptr != pList && pList->Count() )
+                {
+                    s_xSearchList.reset(new SearchAttrItemList( *pList ));
+                    s_pSrchItem->SetSearchFormatted(true);
+                }
+
+                pList = pSrchDlg->GetReplaceItemList();
+                if (nullptr != pList && pList->Count())
+                    s_xReplaceList.reset(new SearchAttrItemList( *pList ));
+            }
+            else if (!s_pSrchItem->IsSearchFormatted())
+            {
+                s_xSearchList.reset();
+                s_xReplaceList.reset();
+            }
+
             SvxSearchCmd eCommand = s_pSrchItem->GetCommand();
             switch (eCommand)
             {
