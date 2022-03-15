@@ -50,6 +50,23 @@
       "message": "The focus is now changed, but is this meant to fix the actual bug, and read the content of \"Not in dictionary\"? Which screen reader do you use?\nI don\u0027t get the desired output with the default screen reader of GNOME, and the gtk3 UI. On the other hand, without this fix, by changing the focus manually I can hear appropriate message when the related text box gets focus.",
       "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65d201e6_ba145120",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003550
+      },
+      "writtenOn": "2022-03-15T23:57:41Z",
+      "side": 1,
+      "message": "Since I focused only on the last problem statement for the EasyHack, it slipped my mind to check the main problem of accessibility with the screen reader at all. However, if the focus is being changed, it should definitely be detected by the screen reader too. I will check enabling the default one t check too, in the meantime, could you guide me to the code pointer that would be there for detection by the screen reader?",
+      "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
