@@ -290,10 +290,6 @@ MacabHeader::iterator::iterator ()
 }
 
 
-MacabHeader::iterator::~iterator ()
-{
-}
-
 MacabHeader::iterator& MacabHeader::iterator::operator= (MacabHeader *_record)
 {
     id = 0;

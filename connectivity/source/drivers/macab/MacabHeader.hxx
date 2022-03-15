@@ -50,7 +50,6 @@ namespace connectivity::macab
                     public:
                         iterator& operator= (MacabHeader *_record);
                         iterator();
-                        ~iterator();
                         void operator++ ();
                         bool operator!= (const sal_Int32 i) const;
                         bool operator== (const sal_Int32 i) const;

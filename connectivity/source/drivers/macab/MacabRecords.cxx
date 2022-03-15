@@ -1099,11 +1099,6 @@ MacabRecords::iterator::iterator ()
 }
 
 
-MacabRecords::iterator::~iterator ()
-{
-}
-
-
 MacabRecords::iterator& MacabRecords::iterator::operator= (MacabRecords *_records)
 {
     id = 0;
