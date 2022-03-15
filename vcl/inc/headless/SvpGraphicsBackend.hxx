@@ -51,6 +51,8 @@ public:
     void SetLineColor(Color nColor) override;
     void SetFillColor() override;
     void SetFillColor(Color nColor) override;
+    void SetFillRule() override;
+    void SetFillRule(PolyFillMode eFillRule) override;
     void SetXORMode(bool bSet, bool bInvertOnly) override;
     void SetROPLineColor(SalROPColor nROPColor) override;
     void SetROPFillColor(SalROPColor nROPColor) override;

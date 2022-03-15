@@ -265,7 +265,7 @@ namespace cairocanvas
                                       cairo_t* pCairo,
                                       const css::uno::Sequence< css::rendering::Texture >* pTextures,
                                       const SurfaceProviderRef& pDevice,
-                                      css::rendering::FillRule eFillrule );
+                                      PolyFillMode eFillrule );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
