@@ -71,8 +71,8 @@ bool SunVersion::init(const char *szVersion)
                 //separators after maintenance (1.4.1_01, 1.4.1-beta, or 1.4.1)
                 (pCur == pEnd || *pCur == '_' || *pCur == '-')
                 ||
-                //separators between major-minor and minor-maintenance
-                (nPart < 2 && *pCur == '.') )
+                //separators between major-minor and minor-maintenance (or fourth segment)
+                (nPart < 3 && *pCur == '.') )
             && (
                 //prevent 1.4.0. 1.4.0-
                 pCur + 1 != pEnd
@@ -112,10 +112,10 @@ bool SunVersion::init(const char *szVersion)
     }
     if (pCur >= pEnd)
         return true;
-    //We have now 1.4.1. This can be followed by _01, -beta, etc.
+    //We have now 1.4.1. This can be followed by _01 (or a fourth segment .1), -beta, etc.
     // _01 (update) According to docu must not be followed by any other
     //characters, but on Solaris 9 we have a 1.4.1_01a!!
-    if (* (pCur - 1) == '_')
+    if (* (pCur - 1) == '_' || *(pCur - 1) == '.')
     {// _01, _02
         // update is the last part _01, _01a, part 0 is the digits parts and 1 the trailing alpha
         while (true)
