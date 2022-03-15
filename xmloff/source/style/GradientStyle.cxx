@@ -78,7 +78,7 @@ void XMLGradientStyleImport::importXML(
 
     for (auto &aIter : sax_fastparser::castToFastAttributeList( xAttrList ))
     {
-        sal_Int32 nTmpValue;
+        sal_Int32 nTmpValue(0);
 
         switch( aIter.getToken() )
         {
