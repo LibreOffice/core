@@ -16,6 +16,24 @@
       "message": "Should I change only getProperty\u003cColor\u003e to getProperty\u003csal_Int32\u003e like in patchset5 as the build was successful in that case and also this type of conventions is also used in the these and other files.",
       "revId": "8122269681f48d41671478e87b24aa424f2a94b6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e972703_b6de73a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-15T17:51:19Z",
+      "side": 1,
+      "message": "No. see 9b6a44a3d58cb050156f6f5253c14f6e0f79eabf on how to do it.\nBTW, did you check the tests pass before submitting the patch to gerrit ? I believe not...",
+      "parentUuid": "19f76160_eec58582",
+      "revId": "8122269681f48d41671478e87b24aa424f2a94b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
