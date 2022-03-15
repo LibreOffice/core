@@ -81,7 +81,7 @@ RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUStri
             nPaperWidth = aInfo.getWidth();
         }
         double ratio = double(nThumbnailSize) / double(std::max(nPaperHeight, nPaperWidth));
-        Size aThumbnailSize(nPaperWidth * ratio, nPaperHeight * ratio);
+        Size aThumbnailSize(std::round(nPaperWidth * ratio), std::round(nPaperHeight * ratio));
 
         if (aExtSize.Width() > aThumbnailSize.Width() || aExtSize.Height() > aThumbnailSize.Height())
         {
