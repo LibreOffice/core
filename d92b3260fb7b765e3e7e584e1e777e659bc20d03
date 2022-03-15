@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf89fcd7_8d81fa8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-15T07:57:53Z",
+      "side": 1,
+      "message": "Any thoughts on making OUString::equals() use simply memcmp() instead of rtl_ustr_reverseCompare_WithLength()? And possibly also replacing our custom string comparing code with libc functions where possible. This specific document results in comparing very long strings, so maybe it\u0027s an exception, but on the other hand comparing strings that differ only in the last characters is probably rare enough too. I don\u0027t have data on this, but I\u0027d expect that 99% of string comparisons either bail out on first characters (which immediately follow the length, which is the first thing to check, so they\u0027re likely already prefetched) or they\u0027ll match completely. This seems like one of those design decisions that seem smart in theory but just don\u0027t match reality.\n",
+      "revId": "d92b3260fb7b765e3e7e584e1e777e659bc20d03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
