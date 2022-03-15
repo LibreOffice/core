@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4bd4631c_8b7fe870",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-15T09:07:29Z",
+      "side": 1,
+      "message": "Sorry for the noise. Stupid me started /usr/lib/... instead of instdir/program... so I never tested my code.",
+      "revId": "c33265c3998f4812c6feeb5b119ae8fa8554e68b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
