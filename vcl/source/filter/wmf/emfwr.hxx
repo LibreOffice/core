@@ -43,6 +43,8 @@ private:
     bool                mbRecordPlusOpen;
     bool                mbLineChanged;
     sal_uInt32          mnLineHandle;
+    bool                mbFillModeChanged;
+    sal_uInt32          mnFillModeHandle;
     bool                mbFillChanged;
     sal_uInt32          mnFillHandle;
     bool                mbTextChanged;

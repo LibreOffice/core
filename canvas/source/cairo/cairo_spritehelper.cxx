@@ -128,9 +128,15 @@ namespace cairocanvas
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                     rClip ));
 
+            PolyFillMode eFillMode;
+            if(rClip->getFillRule() == ::css::rendering::FillRule::FillRule_NON_ZERO)
+                eFillMode = PolyFillMode::NON_ZERO_RULE_WINDING;
+            else
+                eFillMode = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+
             doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
                                          nullptr, SurfaceProviderRef(mpSpriteCanvas),
-                                         rClip->getFillRule() );
+                                         eFillMode );
         }
 
         SAL_INFO( "canvas.cairo","aSize " << aSize.getX() << " x " << aSize.getY() << " position: " << fX << "," << fY );
