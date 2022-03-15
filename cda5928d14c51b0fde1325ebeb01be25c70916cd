@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a9fd5dd_67c126eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-15T11:47:50Z",
+      "side": 1,
+      "message": "Hi.\n\nI\u0027ve changed the ints to hexadecimals. Could you please review that?",
+      "revId": "cda5928d14c51b0fde1325ebeb01be25c70916cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
