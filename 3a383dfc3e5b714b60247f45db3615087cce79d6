@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac9793e7_68dde00a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T08:50:18Z",
+      "side": 1,
+      "message": "The given source file uses e.g. std::clamp from \u003calgorithm\u003e, so should include that.  It may be the case that that header would also get included indirectly, but code should better not rely on that, as it easily changes and makes things brittle.  (Esp. for standard headers, it is often the case that one compiler toolchain implicitly includes header A through header B, but another toolchain doesn\u0027t, so for standard headers the situation of missing #includes is even worse than for our own include files.)",
+      "revId": "3a383dfc3e5b714b60247f45db3615087cce79d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
