@@ -900,7 +900,7 @@ DECLARE_OOXMLEXPORT_TEST(testConditionalstylesTablelook, "conditionalstyles-tbll
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     // Background was -1.
-    CPPUNIT_ASSERT_EQUAL(Color(0x7F7F7F), Color(ColorTransparency, getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x7F7F7F), getProperty<Color>(xTable->getCellByName("A1"), "BackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testFdo63685, "fdo63685.docx")
@@ -1056,9 +1056,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo46361, "fdo46361.docx")
     // This was BLACK
     CPPUNIT_ASSERT_EQUAL(
         Color(0x008000),
-        Color(ColorTransparency,
-              getProperty<sal_Int32>(getRun(getParagraphOfText(1, xTextBox->getText()), 1),
-                                     "CharColor")));
+              getProperty<Color>(getRun(getParagraphOfText(1, xTextBox->getText()), 1),
+                                     "CharColor"));
     // Count the paragraphs
     xTextBox.set(xGroupShape->getByIndex(1), uno::UNO_QUERY_THROW);
     const auto& sText1 = xTextBox->getString();

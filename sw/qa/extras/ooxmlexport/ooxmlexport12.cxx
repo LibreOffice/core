@@ -1860,8 +1860,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123189_tableBackground, "table-black_fill.docx")
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
 
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
-    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT,
-                         Color(ColorTransparency, getProperty<sal_uInt32>(xCell, "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xCell, "BackColor"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf116084, "tdf116084.docx")
