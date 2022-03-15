@@ -167,11 +167,27 @@ struct FirstCharsStringHash
     }
 };
 
+struct ForwardStringCompareEqual
+{
+    bool operator()( const OUString& str1, const OUString& str2 ) const
+    {
+        // Strings passed to GenericSalLayout::CreateTextLayoutCache() may be very long,
+        // and OUString operator == compares backwards, which is inefficient for very long
+        // strings (bad memory prefetch).
+        if( str1.getLength() != str2.getLength())
+            return false;
+        if( str1.getStr() == str2.getStr())
+            return true;
+        return memcmp( str1.getStr(), str2.getStr(), str1.getLength() * sizeof( str1.getStr()[ 0 ] )) == 0;
+    }
+};
+
 } // namespace
 
 std::shared_ptr<const vcl::text::TextLayoutCache> GenericSalLayout::CreateTextLayoutCache(OUString const& rString)
 {
-    typedef o3tl::lru_map<OUString, std::shared_ptr<const vcl::text::TextLayoutCache>, FirstCharsStringHash> Cache;
+    typedef o3tl::lru_map<OUString, std::shared_ptr<const vcl::text::TextLayoutCache>,
+        FirstCharsStringHash, ForwardStringCompareEqual> Cache;
     static vcl::DeleteOnDeinit< Cache > cache( 1000 );
     if( Cache* map = cache.get())
     {
