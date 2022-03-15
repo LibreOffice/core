@@ -26,6 +26,9 @@
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <vcl/glyphitem.hxx>
+#include <vcl/outdev.hxx>
+#include <vcl/vclptr.hxx>
+#include <tools/gen.hxx>
 
 /**
 A cache for SalLayoutGlyphs objects.
@@ -41,17 +44,29 @@ public:
         : mCachedGlyphs(size)
     {
     }
-    const SalLayoutGlyphs* GetLayoutGlyphs(const OUString& text,
-                                           VclPtr<OutputDevice> outputDevice) const;
+    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
+                                           const OUString& text) const
+    {
+        return GetLayoutGlyphs(outputDevice, text, 0, text.getLength());
+    }
+    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
+                                           const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
+                                           const Point& rLogicPos = Point(0, 0),
+                                           tools::Long nLogicWidth = 0) const;
     void clear() { mCachedGlyphs.clear(); }
 
 private:
     struct CachedGlyphsKey
     {
+        VclPtr<const OutputDevice> outputDevice;
         OUString text;
-        VclPtr<OutputDevice> outputDevice;
+        sal_Int32 index;
+        sal_Int32 len;
+        Point logicPos;
+        tools::Long logicWidth;
         size_t hashValue;
-        CachedGlyphsKey(const OUString& t, const VclPtr<OutputDevice>& dev);
+        CachedGlyphsKey(const VclPtr<const OutputDevice>& dev, const OUString& t, sal_Int32 i,
+                        sal_Int32 l, const Point& p, tools::Long w);
         bool operator==(const CachedGlyphsKey& other) const;
     };
     struct CachedGlyphsHash
