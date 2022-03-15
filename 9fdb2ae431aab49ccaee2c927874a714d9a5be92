@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d107911_8e51317c",
+        "filename": "cui/uiconfig/ui/accelconfigpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-03-15T08:22:21Z",
+      "side": 1,
+      "message": "Because it is best to put the \"informative\" part first in the statement. \nIn this case, \"unsaved modifications\" is the \"critical\" part that is affected by the command.  This is the information that is provided first. Because \"Reset\" and \"Revert\" are synonomous, to start with \"Revert\" does not give any information.  (In other words, the argument is based on the \"substance\" of the action and not a \"formalistic\" (grammatical) principle).",
+      "parentUuid": "fd42e627_74e3abd4",
+      "range": {
+        "startLine": 295,
+        "startChar": 109,
+        "endLine": 295,
+        "endChar": 162
+      },
+      "revId": "9fdb2ae431aab49ccaee2c927874a714d9a5be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d61bcf3e_ed9c7e15",
         "filename": "cui/uiconfig/ui/accelconfigpage.ui",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-15T08:03:04Z",
       "side": 1,
       "message": "The point is that \"all\" assignments are reset; not a native speaker, but \"any\" has some random connotation for me. How about \"Revert all new assignments of shortcuts since the dialog was opened.\"",
+      "range": {
+        "startLine": 298,
+        "startChar": 146,
+        "endLine": 298,
+        "endChar": 149
+      },
+      "revId": "9fdb2ae431aab49ccaee2c927874a714d9a5be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10bd5ec4_632eeb90",
+        "filename": "cui/uiconfig/ui/accelconfigpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-03-15T08:22:21Z",
+      "side": 1,
+      "message": "Your proposal \"new assignments of shortcuts\" implies that \"OK\" has been pressed (because assignments have been made).  \"any changes\" refers to actions conducted after opening the dialog.  (\"any\" can refer to an unlimited quantity, e.g., \u0027The teacher would not answer any questions.\u0027)",
+      "parentUuid": "d61bcf3e_ed9c7e15",
       "range": {
         "startLine": 298,
         "startChar": 146,
