@@ -18,7 +18,6 @@
  */
 
 #include <compiler.hxx>
-#include <sal/macros.h>
 
 // ODFF, English, MapDupToInternal when writing ODFF, Programmatical, ODF_11
 // functions duplicated to internal when writing ODFF are listed in static const XclFunctionInfo saFuncTable_4[]
@@ -137,7 +136,7 @@ const ScCompiler::AddInMap ScCompiler::g_aAddInMap[] =
 
 size_t ScCompiler::GetAddInMapCount()
 {
-    return SAL_N_ELEMENTS(g_aAddInMap);
+    return std::size(g_aAddInMap);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
