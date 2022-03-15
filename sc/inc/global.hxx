@@ -157,19 +157,20 @@ enum class InsertDeleteFlags : sal_uInt16
     OBJECTS          = 0x0080,   /// Drawing objects.
     EDITATTR         = 0x0100,   /// Rich-text attributes.
     OUTLINE          = 0x0800,   /// Sheet / outlining (grouping) information
+    SPARKLINES       = 0x4000,   /// Sparklines in a cell.
     NOCAPTIONS       = 0x0200,   /// Internal use only (undo etc.): do not copy/delete caption objects of cell notes.
     ADDNOTES         = 0x0400,   /// Internal use only (copy from clip): do not delete existing cell contents when pasting notes.
     SPECIAL_BOOLEAN  = 0x1000,
     FORGETCAPTIONS   = 0x2000,   /// Internal use only (d&d undo): do not delete caption objects of cell notes.
     ATTRIB           = HARDATTR | STYLES,
-    CONTENTS         = VALUE | DATETIME | STRING | NOTE | FORMULA | OUTLINE,
-    ALL              = CONTENTS | ATTRIB | OBJECTS,
+    CONTENTS         = VALUE | DATETIME | STRING | NOTE | FORMULA | OUTLINE | SPARKLINES,
+    ALL              = CONTENTS | ATTRIB | OBJECTS | SPARKLINES,
     /// Copy flags for auto/series fill functions: do not touch notes and drawing objects.
     AUTOFILL         = ALL & ~(NOTE | OBJECTS)
 };
 namespace o3tl
 {
-    template<> struct typed_flags<InsertDeleteFlags> : is_typed_flags<InsertDeleteFlags, 0x3fff> {};
+    template<> struct typed_flags<InsertDeleteFlags> : is_typed_flags<InsertDeleteFlags, 0x7fff> {};
 }
 // This doesn't work at the moment, perhaps when we have constexpr we can modify InsertDeleteFlags to make it work.
 //static_assert((InsertDeleteFlags::ATTRIB & InsertDeleteFlags::CONTENTS) == InsertDeleteFlags::NONE, "these must match");

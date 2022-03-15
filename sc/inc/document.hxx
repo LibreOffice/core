@@ -1244,6 +1244,7 @@ public:
     SC_DLLPUBLIC sc::Sparkline* GetSparkline(ScAddress const & rPosition);
     SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
     SC_DLLPUBLIC sc::SparklineList* GetSparklineList(SCTAB nTab);
+    SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rPosition);
 
     /** Notes **/
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);

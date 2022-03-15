@@ -658,6 +658,8 @@ public:
     // Spaklines
     sc::SparklineCell* GetSparklineCell(SCROW nRow);
     void CreateSparklineCell(SCROW nRow, std::shared_ptr<sc::Sparkline> const& pSparkline);
+    void DeleteSparklineCells(sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2);
+    bool DeleteSparkline(SCROW nRow);
 
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
