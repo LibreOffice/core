@@ -19,37 +19,25 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-
-#include <editeng/numitem.hxx>
-
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <editeng/brushitem.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <vcl/font.hxx>
 #include <vcl/settings.hxx>
 #include <editeng/editids.hrc>
-#include <editeng/numdef.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/text/XNumberingFormatter.hpp>
 #include <com/sun/star/text/DefaultNumberingProvider.hpp>
-#include <com/sun/star/text/XDefaultNumberingProvider.hpp>
-#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
-#include <tools/mapunit.hxx>
-#include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/GenericTypeSerializer.hxx>
 #include <unotools/configmgr.hxx>
 #include <libxml/xmlwriter.h>
 #include <editeng/unonrule.hxx>
-#include <sal/log.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <editeng/legacyitem.hxx>
 
@@ -58,13 +46,6 @@
 
 #define NUMITEM_VERSION_03        0x03
 #define NUMITEM_VERSION_04        0x04
-
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::style;
 
 sal_Int32 SvxNumberType::nRefCount = 0;
 css::uno::Reference<css::text::XNumberingFormatter> SvxNumberType::xFormatter;
@@ -75,11 +56,13 @@ static void lcl_getFormatter(css::uno::Reference<css::text::XNumberingFormatter>
 
     try
     {
-        Reference<XComponentContext>         xContext( ::comphelper::getProcessComponentContext() );
-        Reference<XDefaultNumberingProvider> xRet = text::DefaultNumberingProvider::create(xContext);
-        _xFormatter.set(xRet, UNO_QUERY);
+        css::uno::Reference<css::uno::XComponentContext> xContext(
+                    ::comphelper::getProcessComponentContext() );
+        css::uno::Reference<css::text::XDefaultNumberingProvider> xRet =
+                css::text::DefaultNumberingProvider::create(xContext);
+        _xFormatter.set(xRet, css::uno::UNO_QUERY);
     }
-    catch(const Exception&)
+    catch(const css::uno::Exception&)
     {
         SAL_WARN("editeng", "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
     }
@@ -123,17 +106,17 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
     {
         switch(nNumType)
         {
-            case NumberingType::CHAR_SPECIAL:
-            case NumberingType::BITMAP:
+            case css::style::NumberingType::CHAR_SPECIAL:
+            case css::style::NumberingType::BITMAP:
             break;
             default:
                 {
                     // '0' allowed for ARABIC numberings
-                    if(NumberingType::ARABIC == nNumType && 0 == nNo )
+                    if(css::style::NumberingType::ARABIC == nNumType && 0 == nNo )
                         return OUString('0');
                     else
                     {
-                        Sequence< PropertyValue > aProperties
+                        css::uno::Sequence< css::beans::PropertyValue > aProperties
                         {
                             comphelper::makePropertyValue("NumberingType", static_cast<sal_uInt16>(nNumType)),
                             comphelper::makePropertyValue("Value", nNo)
@@ -143,7 +126,7 @@ OUString SvxNumberType::GetNumStr( sal_Int32 nNo, const css::lang::Locale& rLoca
                         {
                             return xFormatter->makeNumberingString( aProperties, rLocale );
                         }
-                        catch(const Exception&)
+                        catch(const css::uno::Exception&)
                         {
                         }
                     }
@@ -176,7 +159,7 @@ SvxNumberFormat::SvxNumberFormat( SvxNumType eType )
       mnListtabPos( 0 ),
       mnFirstLineIndent( 0 ),
       mnIndentAt( 0 ),
-      eVertOrient(text::VertOrientation::NONE)
+      eVertOrient(css::text::VertOrientation::NONE)
 {
 }
 
@@ -423,7 +406,7 @@ void SvxNumberFormat::SetGraphicBrush( const SvxBrushItem* pBrushItem,
     if(pOrient)
         eVertOrient = *pOrient;
     else
-        eVertOrient = text::VertOrientation::NONE;
+        eVertOrient = css::text::VertOrientation::NONE;
     if(pSize)
         aGraphicSize = *pSize;
     else
@@ -439,8 +422,8 @@ void SvxNumberFormat::SetGraphic( const OUString& rName )
         return ;
 
     pGraphicBrush.reset( new SvxBrushItem( rName, "", GPOS_AREA, 0 ) );
-    if( eVertOrient == text::VertOrientation::NONE )
-        eVertOrient = text::VertOrientation::TOP;
+    if( eVertOrient == css::text::VertOrientation::NONE )
+        eVertOrient = css::text::VertOrientation::TOP;
 
     aGraphicSize.setWidth(0);
     aGraphicSize.setHeight(0);
@@ -1110,7 +1093,7 @@ bool SvxNumBulletItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
 
 bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
-    uno::Reference< container::XIndexReplace > xRule;
+    css::uno::Reference< css::container::XIndexReplace > xRule;
     if( rVal >>= xRule )
     {
         try
@@ -1124,7 +1107,7 @@ bool SvxNumBulletItem::PutValue( const css::uno::Any& rVal, sal_uInt8 /*nMemberI
             maNumRule = std::move( aNewRule );
             return true;
         }
-        catch(const lang::IllegalArgumentException&)
+        catch(const css::lang::IllegalArgumentException&)
         {
         }
     }
