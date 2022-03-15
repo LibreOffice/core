@@ -996,7 +996,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
 
                         // Height needed...
                         SeekCursor( pNode, nTmpPos+1, aTmpFont );
-                        pPortion->GetSize().setHeight( aTmpFont.QuickGetTextSize( GetRefDevice(), OUString(), 0, 0 ).Height() );
+                        pPortion->GetSize().setHeight(
+                            aTmpFont.QuickGetTextSize( GetRefDevice(), OUString(), 0, 0, nullptr, &mGlyphsCache ).Height() );
 
                         DBG_ASSERT( pPortion->GetSize().Width() >= 0, "Tab incorrectly calculated!" );
 
@@ -1041,7 +1042,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                         OUString aFieldValue = static_cast<const EditCharAttribField*>(pNextFeature)->GetFieldValue();
                         // get size, but also DXArray to allow length information in line breaking below
                         std::vector<sal_Int32> aTmpDXArray;
-                        pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(), aFieldValue, 0, aFieldValue.getLength(), &aTmpDXArray);
+                        pPortion->GetSize() = aTmpFont.QuickGetTextSize(GetRefDevice(),
+                            aFieldValue, 0, aFieldValue.getLength(), &aTmpDXArray, &mGlyphsCache);
 
                         // So no scrolling for oversized fields
                         if ( pPortion->GetSize().Width() > nXWidth )
@@ -1146,7 +1148,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 if (bContinueLastPortion)
                 {
                      Size aSize( aTmpFont.QuickGetTextSize( GetRefDevice(),
-                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf ));
+                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf, &mGlyphsCache ));
                      pPortion->GetSize().AdjustWidth(aSize.Width() );
                      if (pPortion->GetSize().Height() < aSize.Height())
                          pPortion->GetSize().setHeight( aSize.Height() );
@@ -1154,7 +1156,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                 else
                 {
                     pPortion->GetSize() = aTmpFont.QuickGetTextSize( GetRefDevice(),
-                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf );
+                            rParaPortion.GetNode()->GetString(), nTmpPos, nPortionLen, &aBuf, &mGlyphsCache );
                 }
 
                 // #i9050# Do Kerning also behind portions...
@@ -1222,7 +1224,8 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                     if ( nDecPos != -1 )
                     {
                         nW -= rParaPortion.GetTextPortions()[nTmpPortion].GetSize().Width();
-                        nW += aTmpFont.QuickGetTextSize( GetRefDevice(), rParaPortion.GetNode()->GetString(), nTmpPos, nDecPos ).Width();
+                        nW += aTmpFont.QuickGetTextSize( GetRefDevice(), rParaPortion.GetNode()->GetString(),
+                                nTmpPos, nDecPos, nullptr, &mGlyphsCache ).Width();
                         aCurrentTab.bValid = false;
                     }
                 }
@@ -2367,7 +2370,8 @@ sal_Int32 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_Int32 nPos
             aTmpFont.SetPhysFont(*GetRefDevice());
             GetRefDevice()->Push( vcl::PushFlags::TEXTLANGUAGE );
             ImplInitDigitMode(*GetRefDevice(), aTmpFont.GetLanguage());
-            Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(), nTxtPortionStart, pTextPortion->GetLen() );
+            Size aSz = aTmpFont.QuickGetTextSize( GetRefDevice(), pPortion->GetNode()->GetString(),
+                nTxtPortionStart, pTextPortion->GetLen(), nullptr, &mGlyphsCache );
             GetRefDevice()->Pop();
             pTextPortion->GetExtraInfos()->nOrgWidth = aSz.Width();
         }
@@ -3296,7 +3300,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                             if ( 0x200B == cChar || 0x2060 == cChar )
                                             {
-                                                tools::Long nHalfBlankWidth = aTmpFont.QuickGetTextSize( &rOutDev, " ", 0, 1 ).Width() / 2;
+                                                tools::Long nHalfBlankWidth = aTmpFont.QuickGetTextSize( &rOutDev,
+                                                    " ", 0, 1, nullptr, &mGlyphsCache ).Width() / 2;
 
                                                 const tools::Long nAdvanceX = ( nTmpIdx == nTmpEnd ?
                                                                          rTextPortion.GetSize().Width() :
@@ -3332,13 +3337,14 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                                     aTmpFont.SetPropr( 25 );
                                                     aTmpFont.SetPhysFont(rOutDev);
 
-                                                    const Size aSlashSize = aTmpFont.QuickGetTextSize( &rOutDev, aSlash, 0, 1 );
+                                                    const Size aSlashSize = aTmpFont.QuickGetTextSize( &rOutDev,
+                                                        aSlash, 0, 1, nullptr, &mGlyphsCache );
                                                     Point aSlashPos( aTmpPos );
                                                     const tools::Long nAddX = nHalfBlankWidth - aSlashSize.Width() / 2;
                                                     setXDirectionAwareFrom(aSlashPos, aTopLeftRectPos);
                                                     adjustXDirectionAware(aSlashPos, nAddX);
 
-                                                    aTmpFont.QuickDrawText( &rOutDev, aSlashPos, aSlash, 0, 1 );
+                                                    aTmpFont.QuickDrawText( &rOutDev, aSlashPos, aSlash, 0, 1, {}, &mGlyphsCache );
 
                                                     aTmpFont.SetEscapement( nOldEscapement );
                                                     aTmpFont.SetPropr( nOldPropr );
@@ -3399,7 +3405,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     }
 
                                     aTmpFont.SetPhysFont(*GetRefDevice());
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen, &aTmpDXArray );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, nTextStart, nTextLen,
+                                        &aTmpDXArray, &mGlyphsCache );
                                     pDXArray = aTmpDXArray;
 
                                     // add a meta file comment if we record to a metafile
@@ -3425,7 +3432,8 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
 
                                     // crash when accessing 0 pointer in pDXArray
                                     aTmpFont.SetPhysFont(*GetRefDevice());
-                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(), &aTmpDXArray );
+                                    aTmpFont.QuickGetTextSize( GetRefDevice(), aText, 0, aText.getLength(),
+                                        &aTmpDXArray, &mGlyphsCache );
                                     pDXArray = aTmpDXArray;
                                 }
 
@@ -3626,7 +3634,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                             --nTextLen;
 
                                         // output directly
-                                        aTmpFont.QuickDrawText( &rOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray );
+                                        aTmpFont.QuickDrawText( &rOutDev, aRealOutPos, aText, nTextStart, nTextLen, pDXArray, &mGlyphsCache );
 
                                         if ( bDrawFrame )
                                         {
@@ -3717,7 +3725,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     aTmpFont.SetEscapement( 0 );
                                     aTmpFont.SetPhysFont(rOutDev);
                                     tools::Long nCharWidth = aTmpFont.QuickGetTextSize( &rOutDev,
-                                        OUString(rTextPortion.GetExtraValue()), 0, 1 ).Width();
+                                        OUString(rTextPortion.GetExtraValue()), 0, 1, {}, &mGlyphsCache ).Width();
                                     sal_Int32 nChars = 2;
                                     if( nCharWidth )
                                         nChars = rTextPortion.GetSize().Width() / nCharWidth;
@@ -3729,7 +3737,7 @@ void ImpEditEngine::Paint( OutputDevice& rOutDev, tools::Rectangle aClipRect, Po
                                     OUStringBuffer aBuf(nChars);
                                     comphelper::string::padToLength(aBuf, nChars, rTextPortion.GetExtraValue());
                                     OUString aText(aBuf.makeStringAndClear());
-                                    aTmpFont.QuickDrawText( &rOutDev, aTmpPos, aText, 0, aText.getLength() );
+                                    aTmpFont.QuickDrawText( &rOutDev, aTmpPos, aText, 0, aText.getLength(), {}, &mGlyphsCache );
                                     rOutDev.DrawStretchText( aTmpPos, rTextPortion.GetSize().Width(), aText );
 
                                     if ( bStripOnly )

@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <editeng/svxfont.hxx>
+
+#include <vcl/glyphitemcache.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/print.hxx>
@@ -25,7 +28,6 @@
 #include <tools/poly.hxx>
 #include <unotools/charclass.hxx>
 #include <com/sun/star/i18n/KCharacterType.hpp>
-#include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>
 #include <sal/log.hxx>
 
@@ -451,20 +453,28 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut )
     return aTxtSize;
 }
 
+static tools::Long GetTextArray( const OutputDevice* pOut, const OUString& rStr, std::vector<sal_Int32>* pDXAry,
+                                 sal_Int32 nIndex, sal_Int32 nLen, SalLayoutGlyphsCache* cache )
+{
+    const SalLayoutGlyphs* layoutGlyphs = cache ? cache->GetLayoutGlyphs(pOut, rStr, nIndex, nLen) : nullptr;
+    return pOut->GetTextArray( rStr, pDXAry, nIndex, nLen, nullptr, layoutGlyphs);
+}
+
 Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray ) const
+                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray,
+                         SalLayoutGlyphsCache* cache ) const
 {
     if ( !IsCaseMap() && !IsKern() )
-        return Size( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ),
+        return Size( GetTextArray( pOut, rTxt, pDXArray, nIdx, nLen, cache ),
                      pOut->GetTextHeight() );
 
     Size aTxtSize;
     aTxtSize.setHeight( pOut->GetTextHeight() );
     if ( !IsCaseMap() )
-        aTxtSize.setWidth( pOut->GetTextArray( rTxt, pDXArray, nIdx, nLen ) );
+        aTxtSize.setWidth( GetTextArray( pOut, rTxt, pDXArray, nIdx, nLen, cache ) );
     else
-        aTxtSize.setWidth( pOut->GetTextArray( CalcCaseMap( rTxt ),
-                           pDXArray, nIdx, nLen ) );
+        aTxtSize.setWidth( GetTextArray( pOut, CalcCaseMap( rTxt ),
+                           pDXArray, nIdx, nLen, cache ) );
 
     if( IsKern() && ( nLen > 1 ) )
     {
@@ -498,15 +508,25 @@ Size SvxFont::GetTextSize(const OutputDevice& rOut, const OUString &rTxt,
     return aTxtSize;
 }
 
+static void DrawTextArray( OutputDevice* pOut, const Point& rStartPt, const OUString& rStr,
+                           o3tl::span<const sal_Int32> pDXAry,
+                           sal_Int32 nIndex, sal_Int32 nLen,
+                           SalLayoutGlyphsCache* cache )
+{
+    const SalLayoutGlyphs* layoutGlyphs = cache ? cache->GetLayoutGlyphs(pOut, rStr, nIndex, nLen) : nullptr;
+    pOut->DrawTextArray(rStartPt, rStr, pDXAry, nIndex, nLen, SalLayoutFlags::NONE, layoutGlyphs);
+}
+
 void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
-    const sal_Int32 nIdx, const sal_Int32 nLen, o3tl::span<const sal_Int32> pDXArray ) const
+    const sal_Int32 nIdx, const sal_Int32 nLen, o3tl::span<const sal_Int32> pDXArray,
+    SalLayoutGlyphsCache* cache ) const
 {
 
     // Font has to be selected in OutputDevice...
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
     {
-        pOut->DrawTextArray( rPos, rTxt, pDXArray, nIdx, nLen );
+        DrawTextArray( pOut, rPos, rTxt, pDXArray, nIdx, nLen, cache );
         return;
     }
 
@@ -543,9 +563,9 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
         else
         {
             if ( !IsCaseMap() )
-                pOut->DrawTextArray( aPos, rTxt, pDXArray, nIdx, nLen );
+                DrawTextArray( pOut, aPos, rTxt, pDXArray, nIdx, nLen, cache );
             else
-                pOut->DrawTextArray( aPos, CalcCaseMap( rTxt ), pDXArray, nIdx, nLen );
+                DrawTextArray( pOut, aPos, CalcCaseMap( rTxt ), pDXArray, nIdx, nLen, cache );
         }
     }
 }

@@ -189,7 +189,7 @@ public:
     // to lay out the text, which is relatively slow, so cache that operation.
     const SalLayoutGlyphs*  GetLayoutGlyphs(const OUString& rString) const
     {
-        return mCachedGlyphs.GetLayoutGlyphs(rString, pOutput->pFmtDevice);
+        return mCachedGlyphs.GetLayoutGlyphs(pOutput->pFmtDevice, rString);
     }
 
 private:
