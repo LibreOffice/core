@@ -98,6 +98,30 @@
       },
       "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f36f2b9_0d579290",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T14:00:14Z",
+      "side": 1,
+      "message": "\u003e That one is also a hand-written loop\n\n...depending on the compiler toolchain being used, of course; but yeah, at least recent libstdc++ doesn\u0027t appear to optimize that specialization",
+      "parentUuid": "55c36af3_d67e9f3f",
+      "range": {
+        "startLine": 190,
+        "startChar": 30,
+        "endLine": 190,
+        "endChar": 55
+      },
+      "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
