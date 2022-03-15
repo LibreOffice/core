@@ -27,6 +27,7 @@
 #include <svx/SvxPresetListBox.hxx>
 #include <svx/PaletteManager.hxx>
 #include <svx/svdview.hxx>
+#include <svx/svxdlg.hxx>
 
 #define NO_BUTTON_SELECTED -1
 
@@ -708,6 +709,7 @@ private:
 
     static sal_Int32 FindInCustomColors( OUString const & aColorName );
     sal_Int32 FindInPalette( const Color& rColor );
+    VclPtr<AbstractSvxNameDialog> pDlg;
 
 public:
     SvxColorTabPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rInAttrs);

@@ -34,6 +34,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
+#include <sal/log.hxx>
+#include <DuplicateNameDialog.hxx>
 
 using namespace com::sun::star;
 
@@ -325,52 +327,51 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    sal_uInt16 nError = 1;
+    pDlg = VclPtr<AbstractSvxNameDialog>(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
 
-    while (pDlg->Execute() == RET_OK)
-    {
-        pDlg->GetName( aName );
-
-        bValidColorName = (FindInCustomColors(aName) == -1);
-        if (bValidColorName)
+    pDlg->StartExecuteAsync([&](sal_Int32 result){
+        if (result == RET_OK)
         {
-            nError = 0;
-            break;
+            pDlg->GetName(aName);
+            bValidColorName = (FindInCustomColors(aName) == -1);
+            if (!bValidColorName)
+            {
+                std::shared_ptr<DuplicateNameDialog> xWarnBox = std::make_shared<DuplicateNameDialog>(GetFrameWeld());
+                weld::DialogController::runAsync(xWarnBox, [this](sal_Int32) {
+                    pDlg.disposeAndClear();
+                });
+            }
+            else
+            {
+                m_xSelectPalette->set_active(0);
+                SelectPaletteLBHdl(*m_xSelectPalette);
+                std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
+                css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
+                css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
+                sal_Int32 nSize = aCustomColorList.getLength();
+                aCustomColorList.realloc( nSize + 1 );
+                aCustomColorNameList.realloc( nSize + 1 );
+                aCustomColorList[nSize] = sal_Int32(aCurrentColor);
+                aCustomColorNameList[nSize] = aName;
+                officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
+                officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
+                batch->commit();
+                sal_uInt16 nId = m_xValSetColorList->GetItemId(nSize - 1);
+                m_xValSetColorList->InsertItem( nId + 1 , aCurrentColor, aName );
+                m_xValSetColorList->SelectItem( nId + 1 );
+                m_xBtnDelete->set_sensitive(false);
+                m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR2) );
+                ImpColorCountChanged();
+
+                UpdateModified();
+                pDlg.disposeAndClear();
+            }
         }
-
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-        if (xWarnBox->run() != RET_OK)
-            break;
-    }
-
-    pDlg.disposeAndClear();
-
-    if (!nError)
-    {
-        m_xSelectPalette->set_active(0);
-        SelectPaletteLBHdl(*m_xSelectPalette);
-        std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create(m_context));
-        css::uno::Sequence< sal_Int32 > aCustomColorList(officecfg::Office::Common::UserColors::CustomColor::get());
-        css::uno::Sequence< OUString > aCustomColorNameList(officecfg::Office::Common::UserColors::CustomColorName::get());
-        sal_Int32 nSize = aCustomColorList.getLength();
-        aCustomColorList.realloc( nSize + 1 );
-        aCustomColorNameList.realloc( nSize + 1 );
-        aCustomColorList[nSize] = sal_Int32(aCurrentColor);
-        aCustomColorNameList[nSize] = aName;
-        officecfg::Office::Common::UserColors::CustomColor::set(aCustomColorList, batch);
-        officecfg::Office::Common::UserColors::CustomColorName::set(aCustomColorNameList, batch);
-        batch->commit();
-        sal_uInt16 nId = m_xValSetColorList->GetItemId(nSize - 1);
-        m_xValSetColorList->InsertItem( nId + 1 , aCurrentColor, aName );
-        m_xValSetColorList->SelectItem( nId + 1 );
-        m_xBtnDelete->set_sensitive(false);
-        m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR2) );
-        ImpColorCountChanged();
-    }
-
-    UpdateModified();
+        else if (result == RET_CLOSE || result == RET_CANCEL)
+        {
+            pDlg.disposeAndClear();
+        }
+    });
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
