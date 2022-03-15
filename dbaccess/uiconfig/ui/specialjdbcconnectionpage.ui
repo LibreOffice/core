@@ -21,7 +21,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="margin_bottom">6</property>
-        <property name="label" translatable="yes" context="specialjdbcconnectionpage|header">Set up connection to a MySQL database using JDBC</property>
+        <property name="label" translatable="yes" context="specialjdbcconnectionpage|header">Set up connection to a MySQL/MariaDB database using JDBC</property>
         <attributes>
           <attribute name="weight" value="bold"/>
         </attributes>
@@ -36,7 +36,7 @@
       <object class="GtkLabel" id="helpLabel">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label" translatable="yes" context="specialjdbcconnectionpage|helpLabel">Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME. Please contact your system administrator if you are unsure about the following settings. </property>
+        <property name="label" translatable="yes" context="specialjdbcconnectionpage|helpLabel">Please enter the required information to connect to a MySQL/MariaDB database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME. Please contact your system administrator if you are unsure about the following settings. </property>
         <property name="wrap">True</property>
         <property name="width_chars">72</property>
         <property name="max_width_chars">72</property>
@@ -185,7 +185,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes" context="specialjdbcconnectionpage|jdbcDriverLabel">MySQL JDBC d_river class:</property>
+            <property name="label" translatable="yes" context="specialjdbcconnectionpage|jdbcDriverLabel">MySQL/MariaDB JDBC d_river class:</property>
             <property name="use_underline">True</property>
             <property name="mnemonic_widget">jdbcDriverEntry</property>
           </object>

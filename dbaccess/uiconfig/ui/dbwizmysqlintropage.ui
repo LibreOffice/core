@@ -125,7 +125,7 @@ Please contact your system administrator if you are unsure about the following s
           <object class="GtkLabel" id="header">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="dbwizmysqlintropage|header">Set Up a Connection to a MySQL Database</property>
+            <property name="label" translatable="yes" context="dbwizmysqlintropage|header">Set Up a Connection to a MySQL/MariaDB Database</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
