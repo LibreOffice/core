@@ -36,6 +36,17 @@ SvxNameDialog::SvxNameDialog(weld::Window* pParent, const OUString& rName, const
     m_xEdtName->select_region(0, -1);
     ModifyHdl(*m_xEdtName);
     m_xEdtName->connect_changed(LINK(this, SvxNameDialog, ModifyHdl));
+
+    m_xBtnOK->connect_clicked(LINK(this, SvxNameDialog, OkHdl));
+}
+
+IMPL_LINK_NOARG(SvxNameDialog, OkHdl, weld::Button&, void)
+{
+    if (m_aOkHdl.IsSet())
+    {
+        m_aOkHdl.Call(*this);
+    }
+    m_xDialog->response(RET_OK);
 }
 
 IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl, weld::Entry&, void)

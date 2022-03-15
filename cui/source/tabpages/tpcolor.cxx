@@ -34,6 +34,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
+#include <DuplicateNameDialog.hxx>
 
 using namespace com::sun::star;
 
@@ -149,6 +150,11 @@ SvxColorTabPage::~SvxColorTabPage()
     m_xValSetRecentList.reset();
     m_xValSetColorListWin.reset();
     m_xValSetColorList.reset();
+
+    if (m_xNameDialog)
+        m_xNameDialog.disposeAndClear();
+    if (m_xWarnDialog)
+        m_xWarnDialog->response(RET_CLOSE);
 }
 
 void SvxColorTabPage::ImpColorCountChanged()
@@ -325,29 +331,29 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
     }
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
-    sal_uInt16 nError = 1;
+    m_xNameDialog = VclPtr<AbstractSvxNameDialog>(pFact->CreateSvxNameDialog(GetFrameWeld(), aName, aDesc));
+    m_xNameDialog->SetOkHdl( LINK(this, SvxColorTabPage, NameDialogOkHdl_Impl));
 
-    while (pDlg->Execute() == RET_OK)
+    m_xNameDialog->StartExecuteAsync([&](sal_Int32){
+        m_xNameDialog.disposeAndClear();
+    });
+}
+
+IMPL_LINK(SvxColorTabPage, NameDialogOkHdl_Impl, AbstractSvxNameDialog&, rDialog, void)
+{
+    OUString aName;
+    rDialog.GetName(aName);
+    bool bValidColorName;
+
+    bValidColorName = (FindInCustomColors(aName) == -1);
+
+    if (!bValidColorName)
     {
-        pDlg->GetName( aName );
+        m_xWarnDialog = std::make_shared<DuplicateNameDialog>(GetFrameWeld());
 
-        bValidColorName = (FindInCustomColors(aName) == -1);
-        if (bValidColorName)
-        {
-            nError = 0;
-            break;
-        }
-
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-        std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-        if (xWarnBox->run() != RET_OK)
-            break;
+        weld::DialogController::runAsync(m_xWarnDialog, [this](sal_Int32) {});
     }
-
-    pDlg.disposeAndClear();
-
-    if (!nError)
+    else
     {
         m_xSelectPalette->set_active(0);
         SelectPaletteLBHdl(*m_xSelectPalette);
@@ -368,9 +374,9 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
         m_xBtnDelete->set_sensitive(false);
         m_xBtnDelete->set_tooltip_text( SvxResId(RID_SVXSTR_DELETEUSERCOLOR2) );
         ImpColorCountChanged();
-    }
 
-    UpdateModified();
+        UpdateModified();
+    }
 }
 
 IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl, weld::Button&, void)
