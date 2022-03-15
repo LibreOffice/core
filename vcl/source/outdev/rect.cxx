@@ -81,6 +81,9 @@ void OutputDevice::DrawRect( const tools::Rectangle& rRect )
     if ( mbInitFillColor )
         InitFillColor();
 
+    if ( mbInitFillMode )
+        InitFillMode();
+
     mpGraphics->DrawRect( aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight(), *this );
 
     if( mpAlphaVDev )

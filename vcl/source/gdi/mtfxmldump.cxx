@@ -325,6 +325,7 @@ OString convertLineStyleToString(const MetaActionType nActionType)
         case MetaActionType::COMMENT:               return "comment";
         case MetaActionType::LAYOUTMODE:            return "layoutmode";
         case MetaActionType::TEXTLANGUAGE:          return "textlanguage";
+        case MetaActionType::FILLMODE:             return "fillmode";
     }
     return "";
 }
@@ -1468,6 +1469,17 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.endElement();
             }
             break;
+
+        case MetaActionType::FILLMODE:
+        {
+            MetaFillModeAction* pMetaFillAction = static_cast<MetaFillModeAction*>(pAction);
+            rWriter.startElement(sCurrentElementTag);
+            rWriter.attribute("fillmode", pMetaFillAction->GetFillMode() == PolyFillMode::EVEN_ODD_RULE_ALTERNATE
+                              ? "Even odd rule (alternate)" : "Non zero rule (winding)");
+            rWriter.endElement();
+        }
+        break;
+
 
             default:
             {

@@ -25,6 +25,7 @@
 #include <cairo.h>
 
 #include <vcl/dllapi.h>
+#include <vcl/metaact.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/BitmapBuffer.hxx>
@@ -151,6 +152,7 @@ struct VCL_DLLPUBLIC CairoCommon
     vcl::Region m_aClipRegion;
     Color m_aLineColor;
     Color m_aFillColor;
+    PolyFillMode m_eFillRule;
     PaintMode m_ePaintMode;
     double m_fScale;
 

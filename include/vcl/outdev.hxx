@@ -51,6 +51,7 @@
 #include <vcl/metaactiontypes.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/vclreferencebase.hxx>
+#include <vcl/metaact.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/vector/b2enums.hxx>
@@ -231,7 +232,9 @@ private:
     vcl::Region                     maRegion;           // contains the clip region, see SetClipRegion(...)
     Color                           maLineColor;
     Color                           maFillColor;
+    PolyFillMode                    maFillMode;
     vcl::Font                       maFont;
+    PolyFillMode                    meFillMode;
     Color                           maTextColor;
     Color                           maTextLineColor;
     Color                           maOverlineColor;
@@ -252,8 +255,10 @@ private:
     mutable bool                    mbOutputClipped : 1;
     mutable bool                    mbLineColor : 1;
     mutable bool                    mbFillColor : 1;
+    mutable bool                    mbFillMode : 1;
     mutable bool                    mbInitLineColor : 1;
     mutable bool                    mbInitFillColor : 1;
+    mutable bool                    mbInitFillMode : 1;
     mutable bool                    mbInitFont : 1;
     mutable bool                    mbInitTextColor : 1;
     mutable bool                    mbInitClipRegion : 1;
@@ -526,6 +531,11 @@ public:
     const Color&                GetFillColor() const { return maFillColor; }
     bool                        IsFillColor() const { return mbFillColor; }
 
+    void                        SetFillMode();
+    void                        SetFillMode( const PolyFillMode& rMode );
+    const PolyFillMode&         GetFillMode() const { return meFillMode; }
+    bool                        IsFillMode() const { return mbFillMode; }
+
     void                        SetBackground();
     void                        SetBackground( const Wallpaper& rBackground );
     virtual void                SaveBackground(VirtualDevice& rSaveDevice,
@@ -548,6 +558,8 @@ private:
     SAL_DLLPRIVATE void         InitLineColor();
 
     SAL_DLLPRIVATE void         InitFillColor();
+
+    SAL_DLLPRIVATE void         InitFillMode();
 
     ///@}
 
