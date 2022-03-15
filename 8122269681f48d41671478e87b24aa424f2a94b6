@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19f76160_eec58582",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-15T17:47:19Z",
+      "side": 1,
+      "message": "Should I change only getProperty\u003cColor\u003e to getProperty\u003csal_Int32\u003e like in patchset5 as the build was successful in that case and also this type of conventions is also used in the these and other files.",
+      "revId": "8122269681f48d41671478e87b24aa424f2a94b6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
