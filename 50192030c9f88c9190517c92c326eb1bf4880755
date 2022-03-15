@@ -33,6 +33,24 @@
       "message": "just use getProperty\u003cColor\u003e instead of getProperty\u003csal_Int32\u003e",
       "revId": "50192030c9f88c9190517c92c326eb1bf4880755",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dba500e5_56148bdb",
+        "filename": "sw/qa/extras/rtfexport/rtfexport.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1006,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-15T11:31:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "165365df_f65b2f75",
+      "revId": "50192030c9f88c9190517c92c326eb1bf4880755",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
