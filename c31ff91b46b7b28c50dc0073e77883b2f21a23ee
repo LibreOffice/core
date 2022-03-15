@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "197dc0ae_5249e571",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-15T14:32:13Z",
+      "side": 1,
+      "message": "Surely that Jenkins failure can\u0027t be related?\n\nI needed this change for master to build on macOS.",
+      "revId": "c31ff91b46b7b28c50dc0073e77883b2f21a23ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
