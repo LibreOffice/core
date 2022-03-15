@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f113a57_17f70c7b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-15T19:35:42Z",
+      "side": 1,
+      "message": "There are some locations where I hesitated:\n- connectivity/source/drivers/mysqlc/mysqlc_databasemetadata.cxx\n376:OUString SAL_CALL ODatabaseMetaData::getDatabaseProductName() { return \"MySQL\"; }\nand related:\n- dbaccess/source/ui/misc/WCopyTable.cxx\nif(xMetaData-\u003egetDatabaseProductName() \u003d\u003d \"MySQL\")\nbut thought it could have more impacts.",
+      "revId": "9b33696f9eb14c95907259f5e4baa52182da27d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
