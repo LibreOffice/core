@@ -35,6 +35,10 @@ $(eval $(call gb_CppunitTest_use_libraries,sc_sparkline_test, \
     vcl \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,sc_sparkline_test,\
+    boost_headers \
+))
+
 $(eval $(call gb_CppunitTest_set_include,sc_sparkline_test,\
     -I$(SRCDIR)/sc/source/ui/inc \
     -I$(SRCDIR)/sc/inc \
