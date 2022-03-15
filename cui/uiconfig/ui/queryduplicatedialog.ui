@@ -10,7 +10,6 @@
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="message_type">warning</property>
-    <property name="buttons">ok</property>
     <property name="text" translatable="yes" context="queryduplicatedialog|DuplicateNameDialog">The name you have entered already exists.</property>
     <property name="secondary_text" translatable="yes" context="queryduplicatedialog|DuplicateNameDialog">Please choose another name.</property>
     <child internal-child="vbox">
@@ -21,6 +20,23 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="messagedialog-action_area">
             <property name="can_focus">False</property>
+            <child>
+              <object class="GtkButton" id="btnOk">
+                <property name="label">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="sensitive">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="receives_default">True</property>
+                <property name="use_stock">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -31,5 +47,8 @@
         </child>
       </object>
     </child>
+    <action-widgets>
+      <action-widget response="-5">btnOk</action-widget>
+    </action-widgets>
   </object>
 </interface>
