@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bc6640c_7d1a322d",
+        "filename": "sd/qa/unit/export-tests.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 607,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-15T14:17:09Z",
+      "side": 0,
+      "message": "Before your first commit, this was aBorderLine.LineWidth\u003d\u003d13, aBorderLine.LineStyle\u003d\u003dSOLID, aBorderLine.Color\u003d\u003dCOL_AUTO\n\nAfter your first commit, this was width\u003d\u003d12700, Style\u003d\u003dSOLID, color\u003d\u003dCOL_AUTO.\n\nWith this commit, you are width\u003d\u003d0, Style\u003d\u003dSOLID, color\u003dCOL_BLACK\n\nSo the important thing you want to test here is that aBorderLine.LineWidth is zero I expect. In this case you don\u0027t care about the color because it is irrelevant. But IF the color was important, then you would NOT want it to be a visible COL_BLACK.",
+      "range": {
+        "startLine": 607,
+        "startChar": 25,
+        "endLine": 607,
+        "endChar": 33
+      },
+      "revId": "92e3d17dbea13f1ad2f33824d0e2dc2a0a8c4014",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
