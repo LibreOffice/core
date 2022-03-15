@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ef72696_834f194e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-15T19:43:23Z",
+      "side": 1,
+      "message": "Hi Heiko. Thank you for the testing. I added the corresponding line. Maybe you could retest again? I tested it only on Win and Ubuntu, and imho it looks fine. Thank you!",
+      "revId": "44736a2ffcecf15c7e9fba3c71f0db9099147746",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "46f679c2_b2a306ba",
