@@ -34,6 +34,29 @@
       "parentUuid": "66d92a7d_a83f1b64",
       "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed438d26_c31cd4ed",
+        "filename": "vcl/source/gdi/CommonSalLayout.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T09:13:12Z",
+      "side": 1,
+      "message": "or use operator \u003d\u003d(std::u16string_view, std::u16string_view)",
+      "range": {
+        "startLine": 190,
+        "startChar": 30,
+        "endLine": 190,
+        "endChar": 55
+      },
+      "revId": "e1cd78bda6b5e964ac53c4f9a2d444ef2dc65cec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

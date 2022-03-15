@@ -52,6 +52,24 @@
       "parentUuid": "0e505978_5ba70843",
       "revId": "d92b3260fb7b765e3e7e584e1e777e659bc20d03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "caf278c5_c373018a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-15T09:13:12Z",
+      "side": 1,
+      "message": "\u003e There are quite a few places in our codebase where comparing the strings in reverse is more efficient that comparing forward (e.g. think of strings with namespace-like names in them), where the last few characters are much more likely to be different than the first few characters.\n\nYeah, that was the original motivation for using reverse comparison back then; I think the use case was comparing URLs or pathnames which tended to have equal lengths and long common prefixes but no to short common suffixes.  (And IIRC java.lang.String.equals also employed such an optimization back in the day.)  No idea whether that would still be a relevant optimization overall, or just a pessimization today.",
+      "parentUuid": "0e505978_5ba70843",
+      "revId": "d92b3260fb7b765e3e7e584e1e777e659bc20d03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
