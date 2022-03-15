@@ -33,6 +33,57 @@
       "message": "Hi. The patch has been verified. Can you review it?",
       "revId": "6df1e77848a6674b450298d9b55bfe55975bee2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9a06e46_4349d542",
+        "filename": "sw/qa/extras/uiwriter/uiwriter2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-15T10:01:22Z",
+      "side": 1,
+      "message": "would it be possible to change the int values to hex ?",
+      "revId": "6df1e77848a6674b450298d9b55bfe55975bee2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56cfa460_d08bd6b0",
+        "filename": "sw/qa/extras/uiwriter/uiwriter2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-15T10:01:22Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "6df1e77848a6674b450298d9b55bfe55975bee2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b31fedb5_2ea704f5",
+        "filename": "sw/qa/extras/uiwriter/uiwriter2.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-15T10:01:22Z",
+      "side": 1,
+      "message": "and here",
+      "revId": "6df1e77848a6674b450298d9b55bfe55975bee2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
