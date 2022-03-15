@@ -221,6 +221,11 @@ short AbstractSvxNameDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractSvxNameDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
 // #i68101#
 short AbstractSvxObjectNameDialog_Impl::Execute()
 {
@@ -1258,7 +1263,7 @@ VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateSvxEditDictionaryDia
 VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(weld::Window* pParent,
                                     const OUString& rName, const OUString& rDesc)
 {
-    return VclPtr<AbstractSvxNameDialog_Impl>::Create(std::make_unique<SvxNameDialog>(pParent, rName, rDesc));
+    return VclPtr<AbstractSvxNameDialog_Impl>::Create(std::make_shared<SvxNameDialog>(pParent, rName, rDesc));
 }
 
 VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName)
