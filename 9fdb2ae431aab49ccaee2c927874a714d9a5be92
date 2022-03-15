@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd42e627_74e3abd4",
+        "filename": "cui/uiconfig/ui/accelconfigpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-15T08:03:04Z",
+      "side": 1,
+      "message": "Why so passive? \"Revert unsaved modifications to shortcuts\" sounds good to me.",
+      "range": {
+        "startLine": 295,
+        "startChar": 109,
+        "endLine": 295,
+        "endChar": 162
+      },
+      "revId": "9fdb2ae431aab49ccaee2c927874a714d9a5be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d61bcf3e_ed9c7e15",
+        "filename": "cui/uiconfig/ui/accelconfigpage.ui",
+        "patchSetId": 2
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-15T08:03:04Z",
+      "side": 1,
+      "message": "The point is that \"all\" assignments are reset; not a native speaker, but \"any\" has some random connotation for me. How about \"Revert all new assignments of shortcuts since the dialog was opened.\"",
+      "range": {
+        "startLine": 298,
+        "startChar": 146,
+        "endLine": 298,
+        "endChar": 149
+      },
+      "revId": "9fdb2ae431aab49ccaee2c927874a714d9a5be92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
