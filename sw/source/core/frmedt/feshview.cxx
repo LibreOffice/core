@@ -1560,8 +1560,13 @@ namespace
     };
 }
 
-const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool bFlat, const svx::ISdrObjectFilter* pFilter )
+const SdrObject* SwFEShell::GetBestObject(bool bNext, GotoObjFlags eType, bool bFlat,
+                                          const svx::ISdrObjectFilter* pFilter,
+                                          bool* pbWrapped)
 {
+    if (pbWrapped)
+        *pbWrapped = false;
+
     if( !Imp()->HasDrawView() )
         return nullptr;
 
@@ -1735,7 +1740,8 @@ const SdrObject* SwFEShell::GetBestObject( bool bNext, GotoObjFlags eType, bool 
         if( bNext ? (aBestPos.getX() == LONG_MAX) : (aBestPos.getX() == 0) )
         {
             pBest = pTop;
-            SvxSearchDialogWrapper::SetSearchLabel( bNext ? SearchLabel::EndWrapped : SearchLabel::StartWrapped );
+            if (pbWrapped && pBest)
+                *pbWrapped = true;
         }
     }
 
@@ -1746,7 +1752,8 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
 {
     SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
 
-    const SdrObject* pBest = GetBestObject( bNext, eType );
+    bool bWrapped(false);
+    const SdrObject* pBest = GetBestObject(bNext, eType, true, nullptr, &bWrapped);
 
     if ( !pBest )
     {
@@ -1769,6 +1776,11 @@ bool SwFEShell::GotoObj( bool bNext, GotoObjFlags eType )
             MakeVisible( SwRect(pBest->GetCurrentBoundRect()) );
     }
     CallChgLnk();
+
+    if (bWrapped)
+        SvxSearchDialogWrapper::SetSearchLabel(bNext ? SearchLabel::EndWrapped :
+                                                       SearchLabel::StartWrapped);
+
     return true;
 }
 
