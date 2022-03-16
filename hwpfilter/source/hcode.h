@@ -69,6 +69,6 @@ DLLEXPORT OUString rgb2str(unsigned char red, unsigned char green, unsigned char
 DLLEXPORT OUString rgb2str(int32_t rgb);
 
 DLLEXPORT OUString base64_encode_string( const uchar *buf, unsigned int len );
-DLLEXPORT double calcAngle(int x1, int y1, int x2, int y2);
+DLLEXPORT double calcAngle(double x1, double y1, double x2, double y2);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

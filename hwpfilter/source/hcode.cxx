@@ -1398,7 +1398,7 @@ OUString base64_encode_string( const uchar *buf, unsigned int len )
     return OUString::createFromAscii(aBuf);
 }
 
-double calcAngle(int x1, int y1, int x2, int y2)
+double calcAngle(double x1, double y1, double x2, double y2)
 {
      y1 = -y1;
      y2 = -y2;
@@ -1408,10 +1408,8 @@ double calcAngle(int x1, int y1, int x2, int y2)
           else
                 return 270.;
      }
-     double angle;
      // atan2 handles all 4 quadrants
-     angle = basegfx::rad2deg(atan2(y2 - y1 , x2 - x1));
-     return angle;
+     return basegfx::rad2deg(atan2(y2 - y1 , x2 - x1));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
