@@ -340,6 +340,49 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakImport)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), eClear);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
+{
+    // Given a document with an 50% wide text frame:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(getComponent(),
+                                                                         uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyleFamilies
+        = xStyleFamiliesSupplier->getStyleFamilies();
+    uno::Reference<container::XNameAccess> xStyleFamily(xStyleFamilies->getByName("PageStyles"),
+                                                        uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
+    // Body frame width is 6cm (2+2cm margin).
+    xStyle->setPropertyValue("Width", uno::makeAny(static_cast<sal_Int32>(10000)));
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xTextFrame(
+        xMSF->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextFrameProps(xTextFrame, uno::UNO_QUERY);
+    xTextFrameProps->setPropertyValue("RelativeWidth", uno::makeAny(static_cast<sal_Int16>(50)));
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
+    // Body frame width is 16cm.
+    xStyle->setPropertyValue("Width", uno::makeAny(static_cast<sal_Int32>(20000)));
+
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::makeAny(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: 3.1492in (8cm)
+    // - Actual  : 0.0161in (0.04 cm)
+    // i.e. the fallback width value wasn't the expected half of the body frame width, but a smaller
+    // value.
+    assertXPath(pXmlDoc, "//draw:frame", "width", "3.1492in");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2662,6 +2662,32 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
 
     Reference< XPropertySetInfo > xPropSetInfo(rPropSet->getPropertySetInfo());
 
+    bool bSyncWidth = false;
+    if (xPropSetInfo->hasPropertyByName(gsIsSyncWidthToHeight))
+    {
+        bSyncWidth = *o3tl::doAccess<bool>(rPropSet->getPropertyValue(gsIsSyncWidthToHeight));
+    }
+    sal_Int16 nRelWidth = 0;
+    if (!bSyncWidth && xPropSetInfo->hasPropertyByName(gsRelativeWidth))
+    {
+        rPropSet->getPropertyValue(gsRelativeWidth) >>= nRelWidth;
+    }
+    bool bSyncHeight = false;
+    if (xPropSetInfo->hasPropertyByName(gsIsSyncHeightToWidth))
+    {
+        bSyncHeight = *o3tl::doAccess<bool>(rPropSet->getPropertyValue(gsIsSyncHeightToWidth));
+    }
+    sal_Int16 nRelHeight = 0;
+    if (!bSyncHeight && xPropSetInfo->hasPropertyByName(gsRelativeHeight))
+    {
+        rPropSet->getPropertyValue(gsRelativeHeight) >>= nRelHeight;
+    }
+    awt::Size aLayoutSize;
+    if ((nRelWidth > 0 || nRelHeight > 0) && xPropSetInfo->hasPropertyByName("LayoutSize"))
+    {
+        rPropSet->getPropertyValue("LayoutSize") >>= aLayoutSize;
+    }
+
     // svg:width
     sal_Int16 nWidthType = SizeType::FIX;
     if( xPropSetInfo->hasPropertyByName( gsWidthType ) )
@@ -2687,6 +2713,13 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
         else
         {
+            if (nRelWidth > 0 || bSyncWidth)
+            {
+                // Relative width: write the layout size for the fallback width.
+                sValue.setLength(0);
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(sValue, aLayoutSize.Width);
+            }
+
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
                                       sValue.makeStringAndClear() );
             if(nullptr != pCenter)
@@ -2696,18 +2729,14 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
             }
         }
     }
-    bool bSyncWidth = false;
     if( xPropSetInfo->hasPropertyByName( gsIsSyncWidthToHeight ) )
     {
-        bSyncWidth = *o3tl::doAccess<bool>(rPropSet->getPropertyValue( gsIsSyncWidthToHeight ));
         if( bSyncWidth )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                       XML_SCALE );
     }
     if( !bSyncWidth && xPropSetInfo->hasPropertyByName( gsRelativeWidth ) )
     {
-        sal_Int16 nRelWidth =  0;
-        rPropSet->getPropertyValue( gsRelativeWidth ) >>= nRelWidth;
         SAL_WARN_IF( nRelWidth < 0 || nRelWidth > 254, "xmloff",
                     "Got illegal relative width from API" );
         if( nRelWidth > 0 )
@@ -2723,16 +2752,6 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     if( xPropSetInfo->hasPropertyByName( gsSizeType ) )
     {
         rPropSet->getPropertyValue( gsSizeType ) >>= nSizeType;
-    }
-    bool bSyncHeight = false;
-    if( xPropSetInfo->hasPropertyByName( gsIsSyncHeightToWidth ) )
-    {
-        bSyncHeight = *o3tl::doAccess<bool>(rPropSet->getPropertyValue( gsIsSyncHeightToWidth ));
-    }
-    sal_Int16 nRelHeight =  0;
-    if( !bSyncHeight && xPropSetInfo->hasPropertyByName( gsRelativeHeight ) )
-    {
-        rPropSet->getPropertyValue( gsRelativeHeight ) >>= nRelHeight;
     }
     if( xPropSetInfo->hasPropertyByName( gsHeight ) )
     {
@@ -2750,6 +2769,13 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
         }
         else
         {
+            if (nRelHeight > 0 || bSyncHeight)
+            {
+                // Relative height: write the layout size for the fallback height.
+                sValue.setLength(0);
+                GetExport().GetMM100UnitConverter().convertMeasureToXML(sValue, aLayoutSize.Height);
+            }
+
             GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
             if(nullptr != pCenter)
