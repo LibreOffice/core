@@ -65,11 +65,19 @@ bool TrivialConstructor::VisitCXXConstructorDecl(CXXConstructorDecl const* const
     const CXXRecordDecl* recordDecl = constructorDecl->getParent();
     if (std::distance(recordDecl->ctor_begin(), recordDecl->ctor_end()) != 1)
         return true;
+    // Constructor templates are not included in ctor_begin()..ctor_end() above, so also do a slow
+    // check across all decls():
+    for (auto d : recordDecl->decls())
+    {
+        if (auto const d2 = dyn_cast<FunctionTemplateDecl>(d))
+        {
+            if (isa<CXXConstructorDecl>(d2->getTemplatedDecl()))
+            {
+                return true;
+            }
+        }
+    }
     if (!HasTrivialConstructorBody(recordDecl, recordDecl))
-        return true;
-
-    // template magic in sc/inc/stlalgorithm.hxx
-    if (recordDecl->getIdentifier() && recordDecl->getName() == "AlignedAllocator")
         return true;
 
     report(DiagnosticsEngine::Warning, "no need for explicit constructor decl",
