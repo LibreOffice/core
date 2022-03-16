@@ -1074,11 +1074,11 @@ bool WW8_WrPlcSepx::HeaderFooterWritten()
 
 sal_uInt16 MSWordSections::CurrentNumberOfColumns( const SwDoc &rDoc ) const
 {
-    OSL_ENSURE( !aSects.empty(), "no segment inserted yet" );
-    if ( aSects.empty() )
+    OSL_ENSURE( !m_aSects.empty(), "no segment inserted yet" );
+    if ( m_aSects.empty() )
         return 1;
 
-    return NumberOfColumns( rDoc, aSects.back() );
+    return NumberOfColumns( rDoc, m_aSects.back() );
 }
 
 sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo& rInfo )
@@ -1102,8 +1102,8 @@ sal_uInt16 MSWordSections::NumberOfColumns( const SwDoc &rDoc, const WW8_SepInfo
 
 const WW8_SepInfo* MSWordSections::CurrentSectionInfo()
 {
-    if ( !aSects.empty() )
-        return &aSects.back();
+    if ( !m_aSects.empty() )
+        return &m_aSects.back();
 
     return nullptr;
 }
@@ -1114,8 +1114,8 @@ void MSWordSections::AppendSection( const SwPageDesc* pPd,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aSects.emplace_back( pPd, pSectionFormat, nLnNumRestartNo, std::nullopt, nullptr, bIsFirstParagraph );
-    NeedsDocumentProtected( aSects.back() );
+    m_aSects.emplace_back( pPd, pSectionFormat, nLnNumRestartNo, std::nullopt, nullptr, bIsFirstParagraph );
+    NeedsDocumentProtected( m_aSects.back() );
 }
 
 void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
@@ -1137,7 +1137,7 @@ void MSWordSections::AppendSection( const SwFormatPageDesc& rPD,
 
     WW8_SepInfo aI( rPD.GetPageDesc(), pSectionFormat, nLnNumRestartNo, rPD.GetNumOffset(), &rNd );
 
-    aSects.push_back( aI );
+    m_aSects.push_back( aI );
     NeedsDocumentProtected( aI );
 }
 
@@ -1278,7 +1278,7 @@ void MSWordSections::CheckForFacinPg( const WW8Export& rWrt ) const
     //      Dop.fFacingPages            == Header and Footer different
     //      Dop.fSwapBordersFacingPgs   == mirrored borders
     sal_uInt16 nEnd = 0;
-    for( const WW8_SepInfo& rSepInfo : aSects )
+    for( const WW8_SepInfo& rSepInfo : m_aSects )
     {
         if( !rSepInfo.pSectionFormat )
         {
@@ -1981,7 +1981,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     unsigned int nOldIndex = rWrt.GetHdFtIndex();
     rWrt.SetHdFtIndex( 0 );
 
-    for (const WW8_SepInfo & rSepInfo : aSects)
+    for (const WW8_SepInfo & rSepInfo : m_aSects)
     {
         auto pAttrDesc = std::make_shared<WW8_PdAttrDesc>();
         m_SectionAttributes.push_back(pAttrDesc);
@@ -2021,7 +2021,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
 
 void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 {
-    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.size())
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(m_aSects.size())
         , "WriteSepx(): arrays out of sync!");
     for (const auto & rSectionAttribute : m_SectionAttributes) // all sections
     {
@@ -2037,12 +2037,12 @@ void WW8_WrPlcSepx::WriteSepx( SvStream& rStrm ) const
 
 void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 {
-    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(aSects.size())
+    OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(m_aSects.size())
         , "WritePlcSed(): arrays out of sync!");
-    OSL_ENSURE( aCps.size() == aSects.size() + 1, "WrPlcSepx: DeSync" );
+    OSL_ENSURE( aCps.size() == m_aSects.size() + 1, "WrPlcSepx: DeSync" );
     sal_uInt64 nFcStart = rWrt.pTableStrm->Tell();
 
-    for( decltype(aSects)::size_type i = 0; i <= aSects.size(); i++ )
+    for( decltype(m_aSects)::size_type i = 0; i <= m_aSects.size(); i++ )
     {
         sal_uInt32 nP = aCps[i];
         rWrt.pTableStrm->WriteUInt32(nP);

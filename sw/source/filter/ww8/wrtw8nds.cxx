@@ -167,14 +167,14 @@ lcl_getLinkChainName(const uno::Reference<beans::XPropertySet>& rPropertySet,
 }
 
 MSWordAttrIter::MSWordAttrIter( MSWordExportBase& rExport )
-    : pOld( rExport.m_pChpIter ), m_rExport( rExport )
+    : m_pOld( rExport.m_pChpIter ), m_rExport( rExport )
 {
     m_rExport.m_pChpIter = this;
 }
 
 MSWordAttrIter::~MSWordAttrIter()
 {
-    m_rExport.m_pChpIter = pOld;
+    m_rExport.m_pChpIter = m_pOld;
 }
 
 namespace {
@@ -200,11 +200,11 @@ void SwWW8AttrIter::IterToCurrent()
 
 SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
     MSWordAttrIter(rWr),
-    rNd(rTextNd),
+    m_rNode(rTextNd),
     maCharRuns(GetPseudoCharRuns(rTextNd)),
-    pCurRedline(nullptr),
-    nCurrentSwPos(0),
-    nCurRedlinePos(SwRedlineTable::npos),
+    m_pCurRedline(nullptr),
+    m_nCurrentSwPos(0),
+    m_nCurRedlinePos(SwRedlineTable::npos),
     mrSwFormatDrop(rTextNd.GetSwAttrSet().GetDrop())
 {
 
@@ -218,7 +218,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
      #i2916#
      Get list of any graphics which may be anchored from this paragraph.
     */
-    maFlyFrames = GetFramesInNode(rWr.m_aFrames, rNd);
+    maFlyFrames = GetFramesInNode(rWr.m_aFrames, m_rNode);
     std::sort(maFlyFrames.begin(), maFlyFrames.end(), sortswflys());
 
     /*
@@ -237,11 +237,11 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTextNode& rTextNd) :
 
     if ( !m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().empty() )
     {
-        SwPosition aPosition( rNd, SwIndex( const_cast<SwTextNode*>(&rNd) ) );
-        pCurRedline = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedline( aPosition, &nCurRedlinePos );
+        SwPosition aPosition( m_rNode, SwIndex( const_cast<SwTextNode*>(&m_rNode) ) );
+        m_pCurRedline = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedline( aPosition, &m_nCurRedlinePos );
     }
 
-    nCurrentSwPos = SearchNext(1);
+    m_nCurrentSwPos = SearchNext(1);
 }
 
 static sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
@@ -258,7 +258,7 @@ static sal_Int32 lcl_getMinPos( sal_Int32 pos1, sal_Int32 pos2 )
 
 sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
 {
-    const OUString aText = rNd.GetText();
+    const OUString aText = m_rNode.GetText();
     sal_Int32 fieldEndPos = aText.indexOf(CH_TXT_ATR_FIELDEND, nStartPos - 1);
     // HACK: for (so far) mysterious reasons the sdtContent element closes
     // too late in testDateFormField() unless an empty run is exported at
@@ -283,10 +283,10 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
     sal_Int32 nMinPos = (pos>=0) ? pos : SAL_MAX_INT32;
 
     // first the redline, then the attributes
-    if( pCurRedline )
+    if( m_pCurRedline )
     {
-        const SwPosition* pEnd = pCurRedline->End();
-        if (pEnd->nNode == rNd)
+        const SwPosition* pEnd = m_pCurRedline->End();
+        if (pEnd->nNode == m_rNode)
         {
             const sal_Int32 i = pEnd->nContent.GetIndex();
             if ( i >= nStartPos && i < nMinPos )
@@ -296,11 +296,11 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         }
     }
 
-    if ( nCurRedlinePos < m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() )
+    if ( m_nCurRedlinePos < m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size() )
     {
         // nCurRedlinePos point to the next redline
-        SwRedlineTable::size_type nRedLinePos = nCurRedlinePos;
-        if( pCurRedline )
+        SwRedlineTable::size_type nRedLinePos = m_nCurRedlinePos;
+        if( m_pCurRedline )
             ++nRedLinePos;
 
         for ( ; nRedLinePos < m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nRedLinePos )
@@ -310,7 +310,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
             const SwPosition* pStt = pRedl->Start();
             const SwPosition* pEnd = pRedl->End();
 
-            if( pStt->nNode == rNd )
+            if( pStt->nNode == m_rNode )
             {
                 const sal_Int32 i = pStt->nContent.GetIndex();
                 if( i >= nStartPos && i < nMinPos )
@@ -319,7 +319,7 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
             else
                 break;
 
-            if( pEnd->nNode == rNd )
+            if( pEnd->nNode == m_rNode )
             {
                 const sal_Int32 i = pEnd->nContent.GetIndex();
                 if( i >= nStartPos && i < nMinPos )
@@ -330,12 +330,12 @@ sal_Int32 SwWW8AttrIter::SearchNext( sal_Int32 nStartPos )
         }
     }
 
-    if (mrSwFormatDrop.GetWholeWord() && nStartPos <= rNd.GetDropLen(0))
-        nMinPos = rNd.GetDropLen(0);
+    if (mrSwFormatDrop.GetWholeWord() && nStartPos <= m_rNode.GetDropLen(0))
+        nMinPos = m_rNode.GetDropLen(0);
     else if(nStartPos <= mrSwFormatDrop.GetChars())
         nMinPos = mrSwFormatDrop.GetChars();
 
-    if(const SwpHints* pTextAttrs = rNd.GetpSwpHints())
+    if(const SwpHints* pTextAttrs = m_rNode.GetpSwpHints())
     {
 
 // can be optimized if we consider that the TextAttrs are sorted by start position.
@@ -406,19 +406,19 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
     TypedWhichId<SvxFontItem> nFontId = GetWhichOfScript( RES_CHRATR_FONT, GetScript() );
 
     const SvxFontItem &rParentFont =
-        static_cast<const SwTextFormatColl&>(rNd.GetAnyFormatColl()).GetFormatAttr(nFontId);
+        static_cast<const SwTextFormatColl&>(m_rNode.GetAnyFormatColl()).GetFormatAttr(nFontId);
     const SvxFontItem *pFont = &rParentFont;
     const SfxPoolItem *pGrabBag = nullptr;
 
-    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_TXTATR_END - 1> aExportSet(*rNd.GetSwAttrSet().GetPool());
+    SfxItemSetFixed<RES_CHRATR_BEGIN, RES_TXTATR_END - 1> aExportSet(*m_rNode.GetSwAttrSet().GetPool());
 
     //The hard formatting properties that affect the entire paragraph
-    if (rNd.HasSwAttrSet())
+    if (m_rNode.HasSwAttrSet())
     {
         // only copy hard attributes - bDeep = false
-        aExportSet.Set(rNd.GetSwAttrSet(), false/*bDeep*/);
+        aExportSet.Set(m_rNode.GetSwAttrSet(), false/*bDeep*/);
         // get the current font item. Use rNd.GetSwAttrSet instead of aExportSet:
-        const SvxFontItem &rNdFont = rNd.GetSwAttrSet().Get(nFontId);
+        const SvxFontItem &rNdFont = m_rNode.GetSwAttrSet().Get(nFontId);
         pFont = &rNdFont;
         aExportSet.ClearItem(nFontId);
     }
@@ -426,7 +426,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
     //The additional hard formatting properties that affect this range in the
     //paragraph
     ww8::PoolItems aRangeItems;
-    if (const SwpHints* pTextAttrs = rNd.GetpSwpHints())
+    if (const SwpHints* pTextAttrs = m_rNode.GetpSwpHints())
     {
         for( size_t i = 0; i < pTextAttrs->Count(); ++i )
         {
@@ -503,7 +503,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
     ww8::PoolItems aExportItems;
     GetPoolItems( aExportSet, aExportItems, false );
 
-    if( rNd.GetpSwpHints() == nullptr )
+    if( m_rNode.GetpSwpHints() == nullptr )
         m_rExport.SetCurItemSet(&aExportSet);
 
     for ( const auto& aRangeItem : aRangeItems )
@@ -514,7 +514,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
     if ( !aExportItems.empty() )
     {
         const sw::BroadcastingModify* pOldMod = m_rExport.m_pOutFormatNode;
-        m_rExport.m_pOutFormatNode = &rNd;
+        m_rExport.m_pOutFormatNode = &m_rNode;
         m_rExport.m_aCurrentCharPropStarts.push( nSwPos );
 
         // tdf#38778 Fix output of the font in DOC run for fields
@@ -527,7 +527,7 @@ void SwWW8AttrIter::OutAttr(sal_Int32 nSwPos, bool bWriteCombChars)
         m_rExport.m_pOutFormatNode = pOldMod;
     }
 
-    if( rNd.GetpSwpHints() == nullptr )
+    if( m_rNode.GetpSwpHints() == nullptr )
         m_rExport.SetCurItemSet(nullptr);
 
     OSL_ENSURE( pFont, "must be *some* font associated with this txtnode" );
@@ -580,7 +580,7 @@ void SwWW8AttrIter::handleToggleProperty(SfxItemSet& rExportSet, const SwFormatC
 
     // get bold flag from specified paragraph style
     {
-        SwTextFormatColl& rTextColl = static_cast<SwTextFormatColl&>( rNd.GetAnyFormatColl() );
+        SwTextFormatColl& rTextColl = static_cast<SwTextFormatColl&>( m_rNode.GetAnyFormatColl() );
         sal_uInt16 nStyle = m_rExport.m_pStyles->GetSlot( &rTextColl );
         nStyle = ( nStyle != 0xfff ) ? nStyle : 0;
         const SwFormat* pFormat = m_rExport.m_pStyles->GetSwFormat(nStyle);
@@ -762,7 +762,7 @@ FlyProcessingState SwWW8AttrIter::OutFlys(sal_Int32 nSwPos)
 bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos ) const
 {
     // search for attrs with dummy character or content
-    if (const SwpHints* pTextAttrs = rNd.GetpSwpHints())
+    if (const SwpHints* pTextAttrs = m_rNode.GetpSwpHints())
     {
         for (size_t i = 0; i < pTextAttrs->Count(); ++i)
         {
@@ -786,7 +786,7 @@ bool SwWW8AttrIter::IsTextAttr( sal_Int32 nSwPos ) const
 
 bool SwWW8AttrIter::IsExportableAttr(sal_Int32 nSwPos) const
 {
-    if (const SwpHints* pTextAttrs = rNd.GetpSwpHints())
+    if (const SwpHints* pTextAttrs = m_rNode.GetpSwpHints())
     {
         for (size_t i = 0; i < pTextAttrs->Count(); ++i)
         {
@@ -815,7 +815,7 @@ bool SwWW8AttrIter::IsDropCap( int nSwPos )
     bool bWholeWord = mrSwFormatDrop.GetWholeWord();
     if (bWholeWord)
     {
-        const sal_Int32 nWordLen = rNd.GetDropLen(0);
+        const sal_Int32 nWordLen = m_rNode.GetDropLen(0);
         if(nSwPos == nWordLen && nSwPos != 0)
             return true;
     }
@@ -830,7 +830,7 @@ bool SwWW8AttrIter::IsDropCap( int nSwPos )
 bool SwWW8AttrIter::RequiresImplicitBookmark()
 {
     return std::any_of(m_rExport.m_aImplicitBookmarks.begin(), m_rExport.m_aImplicitBookmarks.end(),
-        [this](const aBookmarkPair& rBookmarkPair) { return rBookmarkPair.second == rNd.GetIndex(); });
+        [this](const aBookmarkPair& rBookmarkPair) { return rBookmarkPair.second == m_rNode.GetIndex(); });
 }
 
 //HasItem is for the summary of the double attributes: Underline and WordlineMode as TextItems.
@@ -840,7 +840,7 @@ bool SwWW8AttrIter::RequiresImplicitBookmark()
 const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
 {
     const SfxPoolItem* pRet = nullptr;
-    const SwpHints* pTextAttrs = rNd.GetpSwpHints();
+    const SwpHints* pTextAttrs = m_rNode.GetpSwpHints();
     if (pTextAttrs && !m_rExport.m_aCurrentCharPropStarts.empty())
     {
         const sal_Int32 nTmpSwPos = m_rExport.m_aCurrentCharPropStarts.top();
@@ -886,7 +886,7 @@ void WW8Export::GetCurrentItems(ww::bytes &rItems) const
 const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
 {
     const SfxPoolItem* pRet = HasTextItem(nWhich);
-    return pRet ? *pRet : rNd.SwContentNode::GetAttr(nWhich);
+    return pRet ? *pRet : m_rNode.SwContentNode::GetAttr(nWhich);
 }
 
 void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/, const SwFormatRuby& rRuby )
@@ -1254,7 +1254,7 @@ void SwWW8AttrIter::SplitRun( sal_Int32 nSplitEndPos )
     maCharRuns.insert( ++aIter, aNewEntry);
     maCharRunIter = maCharRuns.begin();
     IterToCurrent();
-    nCurrentSwPos = SearchNext(1);
+    m_nCurrentSwPos = SearchNext(1);
 }
 
 void WW8AttributeOutput::FieldVanish(const OUString& rText, ww::eField /*eType*/, OUString const*const /*pBookmarkName*/)
@@ -1364,7 +1364,7 @@ void AttributeOutputBase::TOXMark( const SwTextNode& rNode, const SwTOXMark& rAt
 int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
 {
     int nRet = 0;
-    if ( const SwpHints* pTextAttrs = rNd.GetpSwpHints() )
+    if ( const SwpHints* pTextAttrs = m_rNode.GetpSwpHints() )
     {
         m_rExport.m_aCurrentCharPropStarts.push( nPos );
         const sal_Int32* pEnd;
@@ -1379,7 +1379,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos != pHt->GetStart())
                     {
-                        if (m_rExport.AttrOutput().EndURL(nPos == rNd.Len()))
+                        if (m_rExport.AttrOutput().EndURL(nPos == m_rNode.Len()))
                             --nRet;
                     }
                     break;
@@ -1419,7 +1419,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos == pHt->GetStart())
                     {   // special case: empty must be handled here
-                        if (m_rExport.AttrOutput().EndURL(nPos == rNd.Len()))
+                        if (m_rExport.AttrOutput().EndURL(nPos == m_rNode.Len()))
                             --nRet;
                     }
                     break;
@@ -1438,18 +1438,18 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                     break;
                 case RES_TXTATR_TOXMARK:
                     if ( nPos == pHt->GetStart() )
-                        m_rExport.AttrOutput().TOXMark( rNd, *static_cast< const SwTOXMark* >( pItem ) );
+                        m_rExport.AttrOutput().TOXMark( m_rNode, *static_cast< const SwTOXMark* >( pItem ) );
                     break;
                 case RES_TXTATR_CJK_RUBY:
                     if ( nPos == pHt->GetStart() )
                     {
-                        m_rExport.AttrOutput().StartRuby( rNd, nPos, *static_cast< const SwFormatRuby* >( pItem ) );
+                        m_rExport.AttrOutput().StartRuby( m_rNode, nPos, *static_cast< const SwFormatRuby* >( pItem ) );
                         ++nRet;
                     }
                     pEnd = pHt->End();
                     if (nPos == *pEnd && nPos == pHt->GetStart())
                     {   // special case: empty must be handled here
-                        m_rExport.AttrOutput().EndRuby( rNd, nPos );
+                        m_rExport.AttrOutput().EndRuby( m_rNode, nPos );
                         --nRet;
                     }
                     break;
@@ -1465,7 +1465,7 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
 bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) const
 {
     // search next Redline
-    for( SwRedlineTable::size_type nPos = nCurRedlinePos;
+    for( SwRedlineTable::size_type nPos = m_nCurRedlinePos;
         nPos < m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size(); ++nPos )
     {
         const SwRangeRedline *pRange = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[nPos];
@@ -1476,7 +1476,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
         // Here we find out if the para end marker we will emit is affected by
         // redlining, in which case it must be included by the range of character
         // attributes that contains the redlining information.
-        if (pEnd->nNode == rNd)
+        if (pEnd->nNode == m_rNode)
         {
             if (pEnd->nContent.GetIndex() == nEnd)
             {
@@ -1488,7 +1488,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
             }
             bBreak = false;
         }
-        if (pStart->nNode == rNd)
+        if (pStart->nNode == m_rNode)
         {
             if (pStart->nContent.GetIndex() == nEnd)
             {
@@ -1500,7 +1500,7 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
             }
             bBreak = false;
         }
-        if (pStart->nNode.GetIndex()-1 == rNd.GetIndex())
+        if (pStart->nNode.GetIndex()-1 == m_rNode.GetIndex())
         {
             if (pStart->nContent.GetIndex() == 0)
             {
@@ -1520,14 +1520,14 @@ bool SwWW8AttrIter::IncludeEndOfParaCRInRedlineProperties( sal_Int32 nEnd ) cons
 
 const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
 {
-    pCurRedline = nullptr;
+    m_pCurRedline = nullptr;
 
     // ToDo : this is not the most ideal ... should start maybe from 'nCurRedlinePos'
     for(SwRangeRedline* pRedl : m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable())
     {
         const SwPosition* pCheckedStt = pRedl->Start();
 
-        if( pCheckedStt->nNode == rNd )
+        if( pCheckedStt->nNode == m_rNode )
         {
             // Maybe add here a check that also the start & end of the redline is the entire paragraph
 
@@ -1535,8 +1535,8 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
             if (pRedl->GetType() == RedlineType::ParagraphFormat)
             {
                 // write data of this redline
-                pCurRedline = pRedl;
-                return &( pCurRedline->GetRedlineData() );
+                m_pCurRedline = pRedl;
+                return &( m_pCurRedline->GetRedlineData() );
             }
         }
     }
@@ -1545,37 +1545,37 @@ const SwRedlineData* SwWW8AttrIter::GetParagraphLevelRedline( )
 
 const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
 {
-    if( pCurRedline )
+    if( m_pCurRedline )
     {
-        const SwPosition* pEnd = pCurRedline->End();
-        if (pEnd->nNode != rNd || pEnd->nContent.GetIndex() > nPos)
+        const SwPosition* pEnd = m_pCurRedline->End();
+        if (pEnd->nNode != m_rNode || pEnd->nContent.GetIndex() > nPos)
         {
-            switch( pCurRedline->GetType() )
+            switch( m_pCurRedline->GetType() )
             {
                 case RedlineType::Insert:
                 case RedlineType::Delete:
                 case RedlineType::Format:
                     // write data of this redline
-                    return &( pCurRedline->GetRedlineData() );
+                    return &( m_pCurRedline->GetRedlineData() );
                 default:
                     break;
             }
         }
-        pCurRedline = nullptr;
-        ++nCurRedlinePos;
+        m_pCurRedline = nullptr;
+        ++m_nCurRedlinePos;
     }
 
-    assert(!pCurRedline);
+    assert(!m_pCurRedline);
     // search next Redline
-    for( ; nCurRedlinePos < m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size();
-            ++nCurRedlinePos )
+    for( ; m_nCurRedlinePos < m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable().size();
+            ++m_nCurRedlinePos )
     {
-        const SwRangeRedline* pRedl = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nCurRedlinePos ];
+        const SwRangeRedline* pRedl = m_rExport.m_rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ m_nCurRedlinePos ];
 
         const SwPosition* pStt = pRedl->Start();
         const SwPosition* pEnd = pRedl->End();
 
-        if( pStt->nNode == rNd )
+        if( pStt->nNode == m_rNode )
         {
             if( pStt->nContent.GetIndex() >= nPos )
             {
@@ -1587,8 +1587,8 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
                             case RedlineType::Delete:
                             case RedlineType::Format:
                                 // write data of this redline
-                                pCurRedline = pRedl;
-                                return &( pCurRedline->GetRedlineData() );
+                                m_pCurRedline = pRedl;
+                                return &( m_pCurRedline->GetRedlineData() );
                             default:
                                 break;
                         }
@@ -1601,10 +1601,10 @@ const SwRedlineData* SwWW8AttrIter::GetRunLevelRedline( sal_Int32 nPos )
             break;
         }
 
-        if( pEnd->nNode == rNd &&
+        if( pEnd->nNode == m_rNode &&
             pEnd->nContent.GetIndex() < nPos )
         {
-            pCurRedline = pRedl;
+            m_pCurRedline = pRedl;
             break;
         }
     }
