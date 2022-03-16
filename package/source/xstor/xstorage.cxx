@@ -1734,7 +1734,6 @@ OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
 , m_xSharedMutex( m_pImpl->m_xMutex )
 , m_aListenersContainer( m_pImpl->m_xMutex->GetMutex() )
-, m_bIsRoot( m_pImpl->m_bIsRoot )
 , m_bReadOnlyWrap( false )
 {
     m_pImpl->m_pAntiImpl = this;
@@ -1748,7 +1747,6 @@ OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
 , m_xSharedMutex( m_pImpl->m_xMutex )
 , m_aListenersContainer( m_pImpl->m_xMutex->GetMutex() )
-, m_bIsRoot( m_pImpl->m_bIsRoot )
 , m_bReadOnlyWrap( false )
 {
     m_pImpl->m_pAntiImpl = this;
@@ -1758,7 +1756,6 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 : m_pImpl( pImpl )
 , m_xSharedMutex( m_pImpl->m_xMutex )
 , m_aListenersContainer( m_pImpl->m_xMutex->GetMutex() )
-, m_bIsRoot( m_pImpl->m_bIsRoot )
 , m_bReadOnlyWrap( bReadOnlyWrap )
 {
     // this call can be done only from OStorage_Impl implementation to create child storage
@@ -1852,7 +1849,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
 
         if ( bNotifyImpl )
         {
-            if ( m_bIsRoot )
+            if ( m_pImpl->m_bIsRoot )
                 delete m_pImpl;
             else
             {
@@ -2044,7 +2041,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
 
     if ( m_pImpl->m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        if ( m_bIsRoot )
+        if ( m_pImpl->m_bIsRoot )
         {
             aReturn = ::cppu::queryInterface
                         (   rType
@@ -2094,7 +2091,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
         {
             if ( m_pImpl->m_nStorageType == embed::StorageFormats::PACKAGE )
             {
-                if ( m_bIsRoot )
+                if ( m_pImpl->m_bIsRoot )
                 {
                     m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
@@ -4006,8 +4003,8 @@ void SAL_CALL OStorage::removeEncryption()
     if ( m_pImpl->m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
-    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "removeEncryption() method is not available for nonroot storages!" );
-    if ( !m_bIsRoot )
+    SAL_WARN_IF( !m_pImpl->m_bIsRoot, "package.xstor", "removeEncryption() method is not available for nonroot storages!" );
+    if ( !m_pImpl->m_bIsRoot )
         return;
 
     try {
@@ -4070,8 +4067,8 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
     if ( !aEncryptionData.hasElements() )
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption data!" );
 
-    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "setEncryptionData() method is not available for nonroot storages!" );
-    if ( !m_bIsRoot )
+    SAL_WARN_IF( !m_pImpl->m_bIsRoot, "package.xstor", "setEncryptionData() method is not available for nonroot storages!" );
+    if ( !m_pImpl->m_bIsRoot )
         return;
 
     try {
@@ -4135,8 +4132,8 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
     if ( !aAlgorithms.hasElements() )
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption algorithms list!" );
 
-    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "setEncryptionAlgorithms() method is not available for nonroot storages!" );
-    if ( !m_bIsRoot )
+    SAL_WARN_IF( !m_pImpl->m_bIsRoot, "package.xstor", "setEncryptionAlgorithms() method is not available for nonroot storages!" );
+    if ( !m_pImpl->m_bIsRoot )
         return;
 
     try {
@@ -4195,8 +4192,8 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
     if ( !aProps.hasElements() )
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption algorithms list!" );
 
-    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "setGpgProperties() method is not available for nonroot storages!" );
-    if ( !m_bIsRoot )
+    SAL_WARN_IF( !m_pImpl->m_bIsRoot, "package.xstor", "setGpgProperties() method is not available for nonroot storages!" );
+    if ( !m_pImpl->m_bIsRoot )
         return;
 
     try {
@@ -4253,8 +4250,8 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
     uno::Sequence< beans::NamedValue > aResult;
-    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "getEncryptionAlgorithms() method is not available for nonroot storages!" );
-    if ( m_bIsRoot )
+    SAL_WARN_IF( !m_pImpl->m_bIsRoot, "package.xstor", "getEncryptionAlgorithms() method is not available for nonroot storages!" );
+    if ( m_pImpl->m_bIsRoot )
     {
         try {
             m_pImpl->ReadContents();
@@ -4356,7 +4353,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
                 m_pImpl->m_bIsModified = true;
             }
         }
-        else if ( ( m_bIsRoot && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
+        else if ( ( m_pImpl->m_bIsRoot && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
                                     || aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
                                     || aPropertyName == IS_INCONSISTENT_PROPERTY
                                     || aPropertyName == "URL"
@@ -4401,7 +4398,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
             m_pImpl->m_bBroadcastModified = true;
             m_pImpl->m_bIsModified = true;
         }
-        else if ( ( m_bIsRoot && ( aPropertyName == "URL" || aPropertyName == "RepairPackage") )
+        else if ( ( m_pImpl->m_bIsRoot && ( aPropertyName == "URL" || aPropertyName == "RepairPackage") )
                  || aPropertyName == "IsRoot" )
             throw beans::PropertyVetoException( THROW_WHERE );
         else
@@ -4455,13 +4452,13 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
     }
     else if ( aPropertyName == "IsRoot" )
     {
-        return uno::makeAny( m_bIsRoot );
+        return uno::makeAny( m_pImpl->m_bIsRoot );
     }
     else if ( aPropertyName == "OpenMode" )
     {
         return uno::makeAny( m_pImpl->m_nStorageMode );
     }
-    else if ( m_bIsRoot )
+    else if ( m_pImpl->m_bIsRoot )
     {
         if ( aPropertyName == "URL"
           || aPropertyName == "RepairPackage" )
@@ -5074,7 +5071,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( !m_bIsRoot )
+    if ( !m_pImpl->m_bIsRoot )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
     if ( !m_pImpl->m_pSwitchStream )
@@ -5132,7 +5129,7 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( !m_bIsRoot )
+    if ( !m_pImpl->m_bIsRoot )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
     if ( !m_pImpl->m_pSwitchStream )
