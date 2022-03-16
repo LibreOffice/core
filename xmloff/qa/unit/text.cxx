@@ -304,6 +304,42 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     assertXPath(pXmlDoc, "//text:line-break", "clear", "all");
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakImport)
+{
+    // Given an ODF document with a clearing break:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "clearing-break.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the "clear" attribute is not lost on import:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    // First portion is the image.
+    xPortions->nextElement();
+    // Second portion is "foo".
+    xPortions->nextElement();
+    // Without the accompanying fix in place, this failed with:
+    // An uncaught exception of type com.sun.star.container.NoSuchElementException
+    // i.e. the line break was a non-clearing one, so we only had 2 portions, not 4 (image, text,
+    // linebreak, text).
+    uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aTextPortionType;
+    xPortion->getPropertyValue("TextPortionType") >>= aTextPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"), aTextPortionType);
+    uno::Reference<text::XTextContent> xLineBreak;
+    xPortion->getPropertyValue("LineBreak") >>= xLineBreak;
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    sal_Int16 eClear{};
+    xLineBreakProps->getPropertyValue("Clear") >>= eClear;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), eClear);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
