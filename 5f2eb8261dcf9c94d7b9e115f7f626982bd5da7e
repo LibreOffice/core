@@ -67,6 +67,24 @@
       "message": "Since I focused only on the last problem statement for the EasyHack, it slipped my mind to check the main problem of accessibility with the screen reader at all. However, if the focus is being changed, it should definitely be detected by the screen reader too. I will check enabling the default one t check too, in the meantime, could you guide me to the code pointer that would be there for detection by the screen reader?",
       "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23898fbb_05a498e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-16T05:12:48Z",
+      "side": 1,
+      "message": "I am not expert in the screen readers and accessibility in general. Maybe Michael Weghorn can help. I\u0027ve added him as cc here.\nOn the other hand, my point is that you should test your submissions to make sure that it actually fixes the bug. In other words, the main goal of you should be bug fix. Thus, the first step should be reproducing the bug, and then trying to develop a solution to fix that. I suggest that you use GNOME and Orca to reproduce the bug, and test your solution against it.",
+      "parentUuid": "65d201e6_ba145120",
+      "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
