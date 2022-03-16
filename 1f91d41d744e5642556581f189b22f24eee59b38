@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c3862fc_bf52b601",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-03-16T11:04:26Z",
+      "side": 1,
+      "message": "I am so sorry, I forgot to change the commit id. Should I just abandon it?",
+      "revId": "1f91d41d744e5642556581f189b22f24eee59b38",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
