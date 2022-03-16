@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1e745a7_a46a9e7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-16T08:50:42Z",
+      "side": 1,
+      "message": "Do we already need reviews for 2205 (or did Gerrit set me up as reviewer automatically)?\n",
+      "revId": "8452b2377d4a8ad3fc3b297e35f1d9ab57c005d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
