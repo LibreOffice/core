@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98d66e5c_a2252366",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-16T15:17:05Z",
+      "side": 1,
+      "message": "This looks a reasonable thing for me to do, to throw away this cache when the theme changes how the controls might be rendered. A heads up in case I failed to understand something obvious.",
+      "revId": "27cc0568670e2eeb618144173cc76db0e636dba8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
