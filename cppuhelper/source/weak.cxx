@@ -95,9 +95,9 @@ Any SAL_CALL OWeakConnectionPoint::queryInterface( const Type & rType )
 // XInterface
 void SAL_CALL OWeakConnectionPoint::acquire() noexcept
 {
-#ifdef DBG_UTIL
+#if !defined NDEBUG
     // catch things early which have been deleted and then re-acquired
-    assert(m_aRefCount != -1);
+    assert(m_aRefCount != -1 && "reviving dead object");
 #endif
     osl_atomic_increment( &m_aRefCount );
 }
@@ -107,7 +107,7 @@ void SAL_CALL OWeakConnectionPoint::release() noexcept
 {
     if (! osl_atomic_decrement( &m_aRefCount ))
     {
-#ifdef DBG_UTIL
+#if !defined NDEBUG
         m_aRefCount = -1;
 #endif
         delete this;
@@ -216,6 +216,10 @@ Any SAL_CALL OWeakObject::queryInterface( const Type & rType )
 // XInterface
 void SAL_CALL OWeakObject::acquire() noexcept
 {
+#if !defined NDEBUG
+    // catch things early which have been deleted and then re-acquired
+    assert(m_refCount != -1 && "reviving dead object");
+#endif
     osl_atomic_increment( &m_refCount );
 }
 
@@ -226,6 +230,9 @@ void SAL_CALL OWeakObject::release() noexcept
         // notify/clear all weak-refs before object's dtor is executed
         // (which may check weak-refs to this object):
         disposeWeakConnectionPoint();
+#if !defined NDEBUG
+        m_refCount = -1;
+#endif
         // destroy object:
         delete this;
     }
