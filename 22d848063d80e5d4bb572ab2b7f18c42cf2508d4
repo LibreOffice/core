@@ -39,6 +39,30 @@
       },
       "revId": "22d848063d80e5d4bb572ab2b7f18c42cf2508d4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "413c4394_d3488253",
+        "filename": "svx/source/dialog/srchdlg.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2454,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-16T07:04:40Z",
+      "side": 1,
+      "message": "This is to handle situation where pWrp is null. Then, pSrchDlg would be also nullptr. Anything wrong with that?",
+      "parentUuid": "846b48f8_868f1851",
+      "range": {
+        "startLine": 2454,
+        "startChar": 28,
+        "endLine": 2454,
+        "endChar": 52
+      },
+      "revId": "22d848063d80e5d4bb572ab2b7f18c42cf2508d4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
