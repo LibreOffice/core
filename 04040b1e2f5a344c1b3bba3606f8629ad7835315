@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b5a9c7_ced1288c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-16T21:34:33Z",
+      "side": 1,
+      "message": "A simple solution.\n\nPlease advise if it\u0027s better to implement your suggestion about rDoc.IsExecuteLinkEnabled(), or if your comment 4 means it\u0027s not needed 😊\nThank you!",
+      "revId": "04040b1e2f5a344c1b3bba3606f8629ad7835315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
