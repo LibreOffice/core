@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ca0d362_6b298b8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-16T06:16:55Z",
+      "side": 1,
+      "message": "I think these choices of data type is better:\n\nDEF_WRITER_LSPACE -\u003e sal_Int32\nDEF_DRAW_LSPACE -\u003e sal_Int32\n\nIn general, you should have good reasoning for selecting the data type, or you can use \u0027auto\u0027.",
+      "revId": "50db4db8d9529a949a84513ac49a77c57b895604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
