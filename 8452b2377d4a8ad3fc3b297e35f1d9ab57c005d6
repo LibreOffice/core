@@ -16,6 +16,24 @@
       "message": "Do we already need reviews for 2205 (or did Gerrit set me up as reviewer automatically)?\n",
       "revId": "8452b2377d4a8ad3fc3b297e35f1d9ab57c005d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3888223_d9eddd82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-03-16T11:05:48Z",
+      "side": 1,
+      "message": "@Lubos sorry for the noise, gerrit automatically adds people mentioned in the commit message. No, we don\u0027t need reviews",
+      "parentUuid": "d1e745a7_a46a9e7c",
+      "revId": "8452b2377d4a8ad3fc3b297e35f1d9ab57c005d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
