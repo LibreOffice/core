@@ -59,6 +59,7 @@
 #include <txtlists.hxx>
 
 #include "txtparaimphint.hxx"
+#include "xmllinebreakcontext.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1396,7 +1397,14 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImpSpanContext_Impl
         break;
 
     case XML_ELEMENT(TEXT, XML_LINE_BREAK):
-        pContext = new XMLCharContext( rImport, ControlCharacter::LINE_BREAK );
+        if (xAttrList->hasAttribute(XML_ELEMENT(LO_EXT, XML_CLEAR)))
+        {
+            pContext = new SvXMLLineBreakContext(rImport, *rImport.GetTextImport());
+        }
+        else
+        {
+            pContext = new XMLCharContext(rImport, ControlCharacter::LINE_BREAK);
+        }
         rIgnoreLeadingSpace = false;
         break;
 
