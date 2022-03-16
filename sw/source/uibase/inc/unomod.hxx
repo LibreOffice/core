@@ -96,6 +96,10 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
+/**
+ * Implements com.sun.star.text.ViewSettings: UNO access to per-view settings (e.g. if formatting
+ * marks are visible or not.)
+ */
 class SwXViewSettings final : public comphelper::ChainablePropertySet
 {
     friend class SwXDocumentSettings;
