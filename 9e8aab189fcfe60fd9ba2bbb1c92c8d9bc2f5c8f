@@ -16,6 +16,23 @@
       "message": "Changed all possible values to hex.",
       "revId": "9e8aab189fcfe60fd9ba2bbb1c92c8d9bc2f5c8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66cc0c06_b74b6d37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-16T18:54:08Z",
+      "side": 1,
+      "message": "Now Tushar\u0027s patch was merged, so you need to update your patch. Maybe ./g pull -r in your branch and fix the conflicts. https://wincent.com/wiki/Understanding_Git_conflict_markers",
+      "revId": "9e8aab189fcfe60fd9ba2bbb1c92c8d9bc2f5c8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
