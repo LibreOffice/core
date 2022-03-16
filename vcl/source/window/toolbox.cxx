@@ -32,6 +32,7 @@
 #include <vclstatuslistener.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <bitmaps.hlst>
+#include <toolbarvalue.hxx>
 
 #include <tools/poly.hxx>
 #include <svl/imageitm.hxx>
