@@ -51,6 +51,8 @@ bool TrivialConstructor::VisitCXXConstructorDecl(CXXConstructorDecl const* const
         return true;
     if (!constructorDecl->isDefaultConstructor())
         return true;
+    if (constructorDecl->getNumParams() != 0)
+        return true;
     if (!constructorDecl->inits().empty())
         return true;
     if (constructorDecl->getExceptionSpecType() != EST_None)
