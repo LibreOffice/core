@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66404a46_7b576e05",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-16T09:55:21Z",
+      "side": 1,
+      "message": "Hi Tünde, Hi Balázs,\n\nFor your information...",
+      "revId": "cfd82e7a2cc2b45b738eb0efa0827196d2de61a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
