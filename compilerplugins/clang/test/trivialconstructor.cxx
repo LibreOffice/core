@@ -43,4 +43,14 @@ template <typename> struct S6
     template <typename T> S6(T);
 };
 
+struct S7
+{
+    S7(int = 0) {}
+};
+
+struct S8
+{
+    template <typename T> S8(T = 0) {}
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
