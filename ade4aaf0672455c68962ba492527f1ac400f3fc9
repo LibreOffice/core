@@ -16,6 +16,24 @@
       "message": "It took me three days to even find this spot in the code, so my understanding of charts and the structure around it are pretty much non-existent. But based on my testing, I think what I have done is safe enough.\n\nWho is the NISZ expert on charts (since you guys do a lot of work here)? Can they review this patch?",
       "revId": "ade4aaf0672455c68962ba492527f1ac400f3fc9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfcaf2b1_ea305eef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-16T09:59:11Z",
+      "side": 1,
+      "message": "Many thanks for the fix. I\u0027m sorry, Justin, I missed to answer your question. \n\nI CCed your fix to Tünde Tóth now. Unfortunately, one of our expert, Balázs Varga no longer works for NISZ, but I CCed him, too.",
+      "parentUuid": "c751f6b1_1047696f",
+      "revId": "ade4aaf0672455c68962ba492527f1ac400f3fc9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
