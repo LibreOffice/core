@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a88cb66f_218b2c58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2022-03-16T15:21:36Z",
+      "side": 1,
+      "message": "Color is not important in that case. I\u0027m checking line width of cell now. It verifies that border still invisible. Thanks for reviewing. o/ ",
+      "revId": "1cf252c8440d51c98ef545a03c7c837fbdf89b91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
