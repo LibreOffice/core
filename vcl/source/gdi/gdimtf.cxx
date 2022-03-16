@@ -459,7 +459,7 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     MapMode aDrawMap( GetPrefMapMode() );
     Size    aDestSize(rOut.LogicToPixel(rSize));
 
-    if( !aDestSize.Width() || !aDestSize.Height() )
+    if (aDestSize.Width() <= 0 || aDestSize.Height() <= 0)
         return;
 
     GDIMetaFile* pMtf = rOut.GetConnectMetaFile();
