@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad3cba57_dc7efeb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-16T20:36:50Z",
+      "side": 1,
+      "message": "I don\u0027t know how to test this but if it triggers some bugs, it can be reverted, just for master branch anyway so it\u0027ll give time to test it.\n\nDon\u0027t know if it can break an old odb file which used former mysql direct connector but since we don\u0027t have it anymore, it would be broken even without this patch.",
+      "revId": "4569d22c146be5ddd38ce909b9b46e948926bca4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
