@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94c03b61_29546b13",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-16T07:13:43Z",
+      "side": 1,
+      "message": "Please see these instructions, and format your code accordingly:\nhttps://wiki.documentfoundation.org/Development/clang-format",
+      "revId": "edf7b4dc0f458379a650c3f49e05d80c13977ef2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
