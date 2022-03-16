@@ -1866,9 +1866,10 @@ public:
         SCROW nDestRow = nRow + mnDestOffset;
         ScAddress aSrcPos(mnSrcCol, nRow, mnSrcTab);
         ScAddress aDestPos(mnDestCol, nDestRow, mnDestTab);
-        miPos = mrDestNotes.set(miPos, nDestRow, p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption).release());
+        ScPostIt* pNew = p->Clone(aSrcPos, mrDestCol.GetDoc(), aDestPos, mbCloneCaption).release();
+        miPos = mrDestNotes.set(miPos, nDestRow, pNew);
         // Notify our LOK clients also
-        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &mrDestCol.GetDoc(), aDestPos, p);
+        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &mrDestCol.GetDoc(), aDestPos, pNew);
     }
 };
 
