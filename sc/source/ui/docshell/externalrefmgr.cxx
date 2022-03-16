@@ -1655,7 +1655,7 @@ bool isLinkUpdateAllowedInDoc(const ScDocument& rDoc)
 {
     SfxObjectShell* pDocShell = rDoc.GetDocumentShell();
     if (!pDocShell)
-        return false;
+        return rDoc.IsFunctionAccess();
 
     return pDocShell->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate();
 }
