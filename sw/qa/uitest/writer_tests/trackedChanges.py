@@ -10,6 +10,7 @@
 # tests for tracked changes ; tdf912270
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class trackedchanges(UITestCase):
 
@@ -321,5 +322,35 @@ class trackedchanges(UITestCase):
 
             tables = document.getTextTables()
             self.assertEqual(3, len(tables))
+
+    def test_tdf148032(self):
+
+        with self.ui_test.load_file(get_url_for_data_file("trackedChanges.odt")) as document:
+
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            # adding new Comment
+            self.xUITest.executeCommand(".uno:InsertAnnotation")
+
+            # wait until the comment is available
+            xComment1 = self.ui_test.wait_until_child_is_available('Comment1')
+
+            xEditView1 = xComment1.getChild("editview")
+            xEditView1.executeAction("TYPE", mkPropertyValues({"TEXT": "This is the First Comment"}))
+            self.assertEqual(get_state_as_dict(xComment1)["Text"], "This is the First Comment" )
+            self.assertEqual(get_state_as_dict(xComment1)["Resolved"], "false" )
+            self.assertEqual(get_state_as_dict(xComment1)["Author"], "Unknown Author" )
+            self.assertEqual(get_state_as_dict(xComment1)["ReadOnly"], "false" )
+
+            xComment1.executeAction("LEAVE", mkPropertyValues({}))
+
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+                self.assertEqual(6, len(changesList.getChildren()))
+
+                xChild = changesList.getChild(0)
+                # This was False (missing comment)
+                self.assertEqual(True, get_state_as_dict(xChild)["Text"].endswith('\tComment added'))
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

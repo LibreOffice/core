@@ -53,6 +53,7 @@
 #include <viscrs.hxx>
 #include <rootfrm.hxx>
 #include <strings.hrc>
+#include <swtypes.hxx>
 #include <wrtsh.hxx>
 #include <txtfld.hxx>
 
@@ -1103,6 +1104,14 @@ SwRangeRedline::SwRangeRedline(RedlineType eTyp, const SwPaM& rPam )
     m_bIsVisible = true;
     if( !rPam.HasMark() )
         DeleteMark();
+
+    // set default comment for single annotations added or deleted
+    if ( IsAnnotation() )
+    {
+        SetComment( RedlineType::Delete == eTyp
+            ? SwResId(STR_REDLINE_COMMENT_DELETED)
+            : SwResId(STR_REDLINE_COMMENT_ADDED) );
+    }
 }
 
 SwRangeRedline::SwRangeRedline( const SwRedlineData& rData, const SwPaM& rPam )
@@ -1910,6 +1919,11 @@ const DateTime& SwRangeRedline::GetTimeStamp( sal_uInt16 nPos ) const
 RedlineType SwRangeRedline::GetType( sal_uInt16 nPos ) const
 {
     return GetRedlineData(nPos).m_eType;
+}
+
+bool SwRangeRedline::IsAnnotation() const
+{
+    return GetText().getLength() == 1 && GetText()[0] == CH_TXTATR_INWORD;
 }
 
 const OUString& SwRangeRedline::GetComment( sal_uInt16 nPos ) const
