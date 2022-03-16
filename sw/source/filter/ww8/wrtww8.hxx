@@ -196,7 +196,7 @@ class MSWordSections
 {
 protected:
     bool mbDocumentIsProtected;
-    std::vector<WW8_SepInfo> aSects;
+    std::vector<WW8_SepInfo> m_aSects;
 
     void CheckForFacinPg( const WW8Export& rWrt ) const;
     void NeedsDocumentProtected(const WW8_SepInfo &rInfo);
@@ -1436,7 +1436,7 @@ public:
 class MSWordAttrIter
 {
 private:
-    MSWordAttrIter* pOld;
+    MSWordAttrIter* m_pOld;
     MSWordAttrIter(const MSWordAttrIter&) = delete;
     MSWordAttrIter& operator=(const MSWordAttrIter&) = delete;
 protected:
@@ -1453,16 +1453,16 @@ public:
 class MSWord_SdrAttrIter : public MSWordAttrIter
 {
 private:
-    const EditTextObject* pEditObj;
-    const SfxItemPool* pEditPool;
-    std::vector<EECharAttrib> aTextAtrArr;
-    std::vector<const EECharAttrib*> aChrTextAtrArr;
-    std::vector<rtl_TextEncoding> aChrSetArr;
-    sal_Int32 nPara;
-    sal_Int32 nCurrentSwPos;
-    sal_Int32 nTmpSwPos;                   // for HasItem()
-    rtl_TextEncoding eNdChrSet;
-    sal_uInt16 nScript;
+    const EditTextObject* m_pEditObj;
+    const SfxItemPool* m_pEditPool;
+    std::vector<EECharAttrib> m_aTextAtrArr;
+    std::vector<const EECharAttrib*> m_aChrTextAtrArr;
+    std::vector<rtl_TextEncoding> m_aChrSetArr;
+    sal_Int32 m_nPara;
+    sal_Int32 m_nCurrentSwPos;
+    sal_Int32 m_nTmpSwPos;                   // for HasItem()
+    rtl_TextEncoding m_eNdChrSet;
+    sal_uInt16 m_nScript;
     sal_uInt8 mnTyp;
 
     sal_Int32 SearchNext( sal_Int32 nStartPos );
@@ -1481,14 +1481,14 @@ public:
 
     bool IsTextAttr(sal_Int32 nSwPos);
 
-    void NextPos() { if ( nCurrentSwPos < SAL_MAX_INT32 ) nCurrentSwPos = SearchNext( nCurrentSwPos + 1 ); }
+    void NextPos() { if ( m_nCurrentSwPos < SAL_MAX_INT32 ) m_nCurrentSwPos = SearchNext( m_nCurrentSwPos + 1 ); }
 
     void OutAttr( sal_Int32 nSwPos );
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const override;
-    sal_Int32 WhereNext() const                { return nCurrentSwPos; }
+    sal_Int32 WhereNext() const                { return m_nCurrentSwPos; }
     rtl_TextEncoding GetNextCharSet() const;
-    rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
+    rtl_TextEncoding GetNodeCharSet() const     { return m_eNdChrSet; }
 };
 
 // class SwWW8AttrIter is a helper for constructing the Fkp.chpx.
@@ -1501,7 +1501,7 @@ public:
 class SwWW8AttrIter : public MSWordAttrIter
 {
 private:
-    const SwTextNode& rNd;
+    const SwTextNode& m_rNode;
 
     sw::util::CharRuns maCharRuns;
     sw::util::CharRuns::const_iterator maCharRunIter;
@@ -1510,9 +1510,9 @@ private:
     sal_uInt16 mnScript;
     bool mbCharIsRTL;
 
-    const SwRangeRedline* pCurRedline;
-    sal_Int32 nCurrentSwPos;
-    SwRedlineTable::size_type nCurRedlinePos;
+    const SwRangeRedline* m_pCurRedline;
+    sal_Int32 m_nCurrentSwPos;
+    SwRedlineTable::size_type m_nCurRedlinePos;
 
     bool mbParaIsRTL;
 
@@ -1540,7 +1540,7 @@ public:
     bool IsDropCap( int nSwPos );
     bool RequiresImplicitBookmark();
 
-    void NextPos() { if ( nCurrentSwPos < SAL_MAX_INT32 ) nCurrentSwPos = SearchNext( nCurrentSwPos + 1 ); }
+    void NextPos() { if ( m_nCurrentSwPos < SAL_MAX_INT32 ) m_nCurrentSwPos = SearchNext( m_nCurrentSwPos + 1 ); }
 
     void OutAttr(sal_Int32 nSwPos, bool bWriteCombinedChars);
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const override;
@@ -1551,7 +1551,7 @@ public:
     FlyProcessingState OutFlys(sal_Int32 nSwPos);
     bool HasFlysAt(sal_Int32 nSwPos) const;
 
-    sal_Int32 WhereNext() const { return nCurrentSwPos; }
+    sal_Int32 WhereNext() const { return m_nCurrentSwPos; }
     sal_uInt16 GetScript() const { return mnScript; }
     bool IsParaRTL() const { return mbParaIsRTL; }
     rtl_TextEncoding GetCharSet() const { return meChrSet; }
@@ -1564,7 +1564,7 @@ public:
 
     void SplitRun( sal_Int32 nSplitEndPos );
 
-    const SwTextNode& GetNode() const { return rNd; }
+    const SwTextNode& GetNode() const { return m_rNode; }
 };
 
 /// Class to collect and output the styles table.

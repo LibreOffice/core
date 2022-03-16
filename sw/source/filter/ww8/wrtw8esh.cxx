@@ -1012,43 +1012,43 @@ void WW8Export::AppendFlyInFlys(const ww8::Frame& rFrameFormat,
 
 MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
     const EditTextObject& rEditObj, sal_uInt8 nTyp )
-    : MSWordAttrIter( rWr ), pEditObj(&rEditObj), pEditPool(nullptr), mnTyp(nTyp)
+    : MSWordAttrIter( rWr ), m_pEditObj(&rEditObj), m_pEditPool(nullptr), mnTyp(nTyp)
 {
     NextPara( 0 );
 }
 
 void MSWord_SdrAttrIter::NextPara( sal_Int32 nPar )
 {
-    nPara = nPar;
+    m_nPara = nPar;
     // Ignore change of attribute at position 0, because we expect that
     // the attributes are outputted at start of a paragraph anyway.
-    aChrTextAtrArr.clear();
-    aChrSetArr.clear();
-    nCurrentSwPos = nTmpSwPos = 0;
+    m_aChrTextAtrArr.clear();
+    m_aChrSetArr.clear();
+    m_nCurrentSwPos = m_nTmpSwPos = 0;
 
-    SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
-    pEditPool = aSet.GetPool();
-    eNdChrSet = aSet.Get(EE_CHAR_FONTINFO).GetCharSet();
+    SfxItemSet aSet( m_pEditObj->GetParaAttribs( m_nPara ));
+    m_pEditPool = aSet.GetPool();
+    m_eNdChrSet = aSet.Get(EE_CHAR_FONTINFO).GetCharSet();
 
     assert(g_pBreakIt && g_pBreakIt->GetBreakIter().is());
-    nScript = g_pBreakIt->GetBreakIter()->getScriptType( pEditObj->GetText(nPara), 0);
+    m_nScript = g_pBreakIt->GetBreakIter()->getScriptType( m_pEditObj->GetText(m_nPara), 0);
 
-    pEditObj->GetCharAttribs( nPara, aTextAtrArr );
-    nCurrentSwPos = SearchNext( 1 );
+    m_pEditObj->GetCharAttribs( m_nPara, m_aTextAtrArr );
+    m_nCurrentSwPos = SearchNext( 1 );
 }
 
 rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
 {
-    if( !aChrSetArr.empty() )
-        return aChrSetArr.back();
-    return eNdChrSet;
+    if( !m_aChrSetArr.empty() )
+        return m_aChrSetArr.back();
+    return m_eNdChrSet;
 }
 
 // the first parameter in SearchNext() returns if it's a TextAtr
 sal_Int32 MSWord_SdrAttrIter::SearchNext( sal_Int32 nStartPos )
 {
     sal_Int32 nMinPos = SAL_MAX_INT32;
-    for(const auto& rTextAtr : aTextAtrArr)
+    for(const auto& rTextAtr : m_aTextAtrArr)
     {
         sal_Int32 nPos = rTextAtr.nStart; // first character attribute
         if( nPos >= nStartPos && nPos <= nMinPos )
@@ -1078,17 +1078,17 @@ void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
     if( bStart )
     {
         rtl_TextEncoding eChrSet = static_cast<const SvxFontItem&>(rItem).GetCharSet();
-        aChrSetArr.push_back( eChrSet );
-        aChrTextAtrArr.push_back( &rAttr );
+        m_aChrSetArr.push_back( eChrSet );
+        m_aChrTextAtrArr.push_back( &rAttr );
     }
     else
     {
         std::vector<const EECharAttrib*>::iterator it =
-           std::find( aChrTextAtrArr.begin(), aChrTextAtrArr.end(), &rAttr );
-        if ( it != aChrTextAtrArr.end() )
+           std::find( m_aChrTextAtrArr.begin(), m_aChrTextAtrArr.end(), &rAttr );
+        if ( it != m_aChrTextAtrArr.end() )
         {
-            aChrSetArr.erase( aChrSetArr.begin() + (it - aChrTextAtrArr.begin()) );
-            aChrTextAtrArr.erase( it );
+            m_aChrSetArr.erase( m_aChrSetArr.begin() + (it - m_aChrTextAtrArr.begin()) );
+            m_aChrTextAtrArr.erase( it );
         }
     }
 }
@@ -1119,7 +1119,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
     //duplicate attributes in docx export. Doesn't matter in doc
     //export as later props just override earlier ones.
     std::set<sal_uInt16> aUsedRunWhichs;
-    for(const auto& rTextAtr : aTextAtrArr)
+    for(const auto& rTextAtr : m_aTextAtrArr)
     {
         if (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd)
         {
@@ -1133,19 +1133,19 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
 
     OutParaAttr(true, &aUsedRunWhichs);
 
-    if (aTextAtrArr.empty())
+    if (m_aTextAtrArr.empty())
         return;
 
     const sw::BroadcastingModify* pOldMod = m_rExport.m_pOutFormatNode;
     m_rExport.m_pOutFormatNode = nullptr;
 
-    const SfxItemPool* pSrcPool = pEditPool;
+    const SfxItemPool* pSrcPool = m_pEditPool;
     const SfxItemPool& rDstPool = m_rExport.m_rDoc.GetAttrPool();
 
-    nTmpSwPos = nSwPos;
+    m_nTmpSwPos = nSwPos;
     // Did we already produce a <w:sz> element?
     m_rExport.m_bFontSizeWritten = false;
-    for(const auto& rTextAtr : aTextAtrArr)
+    for(const auto& rTextAtr : m_aTextAtrArr)
     {
         if (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd)
         {
@@ -1167,7 +1167,7 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
                 nWhich = rDstPool.GetWhich(nSlotId);
                 if (nWhich && nWhich != nSlotId &&
                     nWhich < RES_UNKNOWNATR_BEGIN &&
-                    m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
+                    m_rExport.CollapseScriptsforWordOk(m_nScript,nWhich))
                 {
                     // use always the SW-Which Id !
                     std::unique_ptr<SfxPoolItem> pI(rTextAtr.pAttr->Clone());
@@ -1187,13 +1187,13 @@ void MSWord_SdrAttrIter::OutAttr( sal_Int32 nSwPos )
     }
     m_rExport.m_bFontSizeWritten = false;
 
-    nTmpSwPos = 0;      // HasTextItem only allowed in the above area
+    m_nTmpSwPos = 0;      // HasTextItem only allowed in the above area
     m_rExport.m_pOutFormatNode = pOldMod;
 }
 
 bool MSWord_SdrAttrIter::IsTextAttr(sal_Int32 nSwPos)
 {
-    return std::any_of(aTextAtrArr.begin(), aTextAtrArr.end(),
+    return std::any_of(m_aTextAtrArr.begin(), m_aTextAtrArr.end(),
         [nSwPos](const EECharAttrib& rTextAtr) {
             return (nSwPos >= rTextAtr.nStart && nSwPos < rTextAtr.nEnd) &&
                 (rTextAtr.pAttr->Which() == EE_FEATURE_FIELD ||
@@ -1209,15 +1209,15 @@ bool MSWord_SdrAttrIter::IsTextAttr(sal_Int32 nSwPos)
 // The search is done with bDeep.
 const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(sal_uInt16 nWhich) const
 {
-    nWhich = sw::hack::TransformWhichBetweenPools(*pEditPool,
+    nWhich = sw::hack::TransformWhichBetweenPools(*m_pEditPool,
         m_rExport.m_rDoc.GetAttrPool(), nWhich);
     if (nWhich)
     {
-        for (const auto& rTextAtr : aTextAtrArr)
+        for (const auto& rTextAtr : m_aTextAtrArr)
         {
-            if (nWhich == rTextAtr.pAttr->Which() && nTmpSwPos >= rTextAtr.nStart && nTmpSwPos < rTextAtr.nEnd)
+            if (nWhich == rTextAtr.pAttr->Which() && m_nTmpSwPos >= rTextAtr.nStart && m_nTmpSwPos < rTextAtr.nEnd)
                 return rTextAtr.pAttr;    // Found
-            if (nTmpSwPos < rTextAtr.nStart)
+            if (m_nTmpSwPos < rTextAtr.nStart)
                 return nullptr;
         }
     }
@@ -1230,7 +1230,7 @@ const SfxPoolItem& MSWord_SdrAttrIter::GetItem( sal_uInt16 nWhich ) const
     const SfxPoolItem* pRet = HasTextItem(nWhich);
     if (!pRet)
     {
-        SfxItemSet aSet(pEditObj->GetParaAttribs(nPara));
+        SfxItemSet aSet(m_pEditObj->GetParaAttribs(m_nPara));
         nWhich = GetSetWhichFromSwDocWhich(aSet, m_rExport.m_rDoc, nWhich);
         OSL_ENSURE(nWhich, "Impossible, catastrophic failure imminent");
         pRet = &aSet.Get(nWhich);
@@ -1252,7 +1252,7 @@ void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemS
         if (SfxItemState::SET != rSet.GetItemState(nEEWhich, false))
         {
             sal_uInt16 nSwWhich = sw::hack::TransformWhichBetweenPools(m_rExport.m_rDoc.GetAttrPool(),
-                *pEditPool, nEEWhich);
+                *m_pEditPool, nEEWhich);
             if (!nSwWhich)
                 continue;
             bool bWanted = ( bCharAttr ? ( nSwWhich >= RES_CHRATR_BEGIN && nSwWhich < RES_TXTATR_END )
@@ -1270,7 +1270,7 @@ void MSWord_SdrAttrIter::SetItemsThatDifferFromStandard(bool bCharAttr, SfxItemS
 
 void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>* pWhichsToIgnore)
 {
-    SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
+    SfxItemSet aSet( m_pEditObj->GetParaAttribs( m_nPara ));
 
     SetItemsThatDifferFromStandard(bCharAttr, aSet);
 
@@ -1283,7 +1283,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
     SfxItemIter aIter( aSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
 
-    const SfxItemPool* pSrcPool = pEditPool,
+    const SfxItemPool* pSrcPool = m_pEditPool,
                      * pDstPool = &m_rExport.m_rDoc.GetAttrPool();
 
     do
@@ -1303,7 +1303,7 @@ void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr, const std::set<sal_uInt16>*
             // use always the SW-Which Id !
             std::unique_ptr<SfxPoolItem> pI(pItem->Clone());
             pI->SetWhich( nWhich );
-            if (m_rExport.CollapseScriptsforWordOk(nScript,nWhich))
+            if (m_rExport.CollapseScriptsforWordOk(m_nScript,nWhich))
                 m_rExport.AttrOutput().OutputItem(*pI);
         }
     } while ((pItem = aIter.NextItem()));
