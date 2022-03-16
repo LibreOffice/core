@@ -102,6 +102,23 @@
       "message": "Caolán gave a tip for a related task, if you are interested: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d102044",
       "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52c2c76e_abff199e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-16T15:46:11Z",
+      "side": 1,
+      "message": "The change itself looks good to me.\nThe commit currently uses \"sarrah-basta\" as author name, while it\u0027s usual to use the real name is usally used. If you want to change that, you can use\n\ngit config --global user.name \"Your Name\"\n\nto do so globally, or without that \u0027--global\u0027 option to set the author name only for the current git repo; then\n\ngit commit --amend --reset-author\n\n\n\nIn my understanding, setting the focus properly should usually already be enough for Orca to announce this. \nI\u0027ve spent some time trying to understand why it doesn\u0027t work here yet, but still haven\u0027t understood it fully. For some reason, Orca doesn\u0027t seem to have the focus set to the sentence edit window despite the call to \"GrabFocus\", as becomes obvious e.g. when using Orca\u0027s \"Where Am I?\" command (pressing KP_Enter with the default desktop keyboard layout), s. https://help.gnome.org/users/orca/stable/commands_where_am_i.html.en . It is correctly set as focused after typing sth or after focusing the element using the tab key.\n\nInterestingly, it works just fine for the buttons that were focused by default previously (i.e. without this change).\n\nWhen using NVDA on Windows instead, it\u0027s also announced just fine.\n\nSpellDialog has some custom focus handling, s. e.g. SpellDialog::ToplevelFocusChanged, which *might* be related. Otherwise, this might be something on a lower level (VCL and/or Gtk) and might require a closer look into what Orca and/or Gtk do. I\u0027ll post an update in case I see anything obvious there...",
+      "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
