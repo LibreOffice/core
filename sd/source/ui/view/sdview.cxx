@@ -710,9 +710,14 @@ bool View::SdrBeginTextEdit(
 
     if (::Outliner* pOL = bReturn ? GetTextEditOutliner() : nullptr)
     {
+        const std::set<SdrObjKind> cLinesAndTables
+            = { SdrObjKind::Table,       SdrObjKind::Line,         SdrObjKind::PolyLine,
+                SdrObjKind::PathLine,    SdrObjKind::FreehandLine, SdrObjKind::SplineLine,
+                SdrObjKind::PathPolyLine };
+
         if (pObj)
         {
-            if( pObj->GetObjInventor() == SdrInventor::Default && pObj->GetObjIdentifier() == SdrObjKind::Table )
+            if( pObj->GetObjInventor() == SdrInventor::Default && (cLinesAndTables.count( pObj->GetObjIdentifier() )>0) )
             {
                 Color aBackground = GetTextEditBackgroundColor(*this);
                 pOL->SetBackgroundColor( aBackground  );

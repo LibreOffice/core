@@ -216,6 +216,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxEmphasisMarkItem(FontEmphasisMark::NONE, EE_CHAR_EMPHASISMARK));
     rISet.Put(SvxCharReliefItem(FontRelief::NONE, EE_CHAR_RELIEF));
     rISet.Put(SvxColorItem(COL_AUTO, EE_CHAR_COLOR ));
+    rISet.Put(SvxColorItem(COL_TRANSPARENT, EE_CHAR_BKGCOLOR ));
 
     // Paragraph attributes (Edit Engine)
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
