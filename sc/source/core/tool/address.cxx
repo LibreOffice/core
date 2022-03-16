@@ -1283,17 +1283,22 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
                 sal_Int64 n = rtl::toAsciiUpperCase( *p++ ) - 'A';
                 while (n < nMaxCol && rtl::isAsciiAlpha(*p))
                     n = ((n + 1) * 26) + rtl::toAsciiUpperCase( *p++ ) - 'A';
-                if (n > nMaxCol || n < 0 || (*p && *p != '$' && !rtl::isAsciiDigit( *p ) &&
+                if (n > nMaxCol )
+                    nBits &= ~ScRefFlags::COL_VALID;
+                else if( n < 0 || (*p && *p != '$' && !rtl::isAsciiDigit( *p ) &&
                         (!pErrRef || !lcl_isString( p, *pErrRef))))
+                {
                     nBits = ScRefFlags::ZERO;
+                    p = q;
+                }
                 else
                     nCol = sal::static_int_cast<SCCOL>( n );
             }
             else
+            {
                 nBits = ScRefFlags::ZERO;
-
-            if( nBits == ScRefFlags::ZERO )
                 p = q;
+            }
         }
         nRes |= nBits;
     }
@@ -1327,6 +1332,7 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
             {
                 nBits = ScRefFlags::ZERO;
                 nRow = -1;
+                p = q;
             }
             else
             {
@@ -1334,12 +1340,15 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
                 while (rtl::isAsciiDigit( *p ))
                     p++;
                 const SCROW nMaxRow = rDoc.MaxRow();
-                if( n < 0 || n > nMaxRow )
+                if( n > nMaxRow )
+                    nBits &= ~ScRefFlags::ROW_VALID;
+                else if( n < 0 )
+                {
                     nBits = ScRefFlags::ZERO;
+                    p = q;
+                }
                 nRow = sal::static_int_cast<SCROW>(n);
             }
-            if( nBits == ScRefFlags::ZERO )
-                p = q;
         }
         nRes |= nBits;
     }
