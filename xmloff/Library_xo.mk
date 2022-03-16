@@ -354,6 +354,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/text/XMLTextShapeStyleContext \
     xmloff/source/text/XMLTextTableContext \
     xmloff/source/text/XMLTrackedChangesImportContext \
+    xmloff/source/text/xmllinebreakcontext \
     xmloff/source/text/txtdrope \
     xmloff/source/text/txtdropi \
     xmloff/source/text/txtexppr \
