@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50897374_567618bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-16T12:52:40Z",
+      "side": 1,
+      "message": "This patch aims to solve the strike-trough appearance of text on lines by having a background. Could be white for ordinary lines but this wont work in case of shapes. So I\u0027m using an existing with GetTextEditBackgroundColor() but in any case, even when setting COL_RED, the background color remains NONE. Is my approach totally wrong, Armin?",
+      "revId": "456ce14954277aa1eb46bd60b8124122b2ea7a80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
