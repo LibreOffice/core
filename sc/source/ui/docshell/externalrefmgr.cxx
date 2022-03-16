@@ -1653,6 +1653,8 @@ static std::unique_ptr<ScTokenArray> lcl_fillEmptyMatrix(const ScDocument& rDoc,
 namespace {
 bool isLinkUpdateAllowedInDoc(const ScDocument& rDoc)
 {
+    if (rDoc.IsFunctionAccess())
+        return true;
     SfxObjectShell* pDocShell = rDoc.GetDocumentShell();
     if (!pDocShell)
         return false;

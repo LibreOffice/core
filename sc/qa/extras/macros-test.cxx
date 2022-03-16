@@ -13,12 +13,14 @@
 #include <unotools/tempfile.hxx>
 #include <svx/svdpage.hxx>
 #include <unotools/mediadescriptor.hxx>
+#include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 
 #include <docsh.hxx>
 #include <document.hxx>
 #include <sortparam.hxx>
 
+#include <com/sun/star/sheet/XFunctionAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
@@ -68,6 +70,7 @@ public:
     void testMacroButtonFormControlXlsxExport();
     void testShapeLayerId();
     void testVbaRangeSort();
+    void testFunctionAccessIndirect();
 
     CPPUNIT_TEST_SUITE(ScMacrosTest);
     CPPUNIT_TEST(testStarBasic);
@@ -99,6 +102,7 @@ public:
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
     CPPUNIT_TEST(testShapeLayerId);
     CPPUNIT_TEST(testVbaRangeSort);
+    CPPUNIT_TEST(testFunctionAccessIndirect);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1156,6 +1160,23 @@ void ScMacrosTest::testVbaRangeSort()
     CPPUNIT_ASSERT_EQUAL(0.5, rDoc.GetValue(ScAddress(0, 2, 0)));
 
     pDocSh->DoClose();
+}
+
+void ScMacrosTest::testFunctionAccessIndirect()
+{
+    OUString aFileName;
+    createFileURL(u"tdf120161.ods", aFileName); // just some document with known values in cells
+    const OUString aReference = "'" + aFileName + "'#$Sheet1.A1";
+
+    css::uno::Reference<css::sheet::XFunctionAccess> xFunc(
+        comphelper::getProcessServiceFactory()->createInstance("com.sun.star.sheet.FunctionAccess"),
+        UNO_QUERY_THROW);
+
+    // tdf#148040: without the fix in plcae, this would have failed with:
+    //   An uncaught exception of type com.sun.star.lang.IllegalArgumentException
+    // because of disallowed external link update (needed to obtain the cell value).
+    css::uno::Any aResult = xFunc->callFunction("INDIRECT", {css::uno::Any(aReference)});
+    CPPUNIT_ASSERT_EQUAL(css::uno::Any(OUString("a1")), aResult);
 }
 
 ScMacrosTest::ScMacrosTest()
