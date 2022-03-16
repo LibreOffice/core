@@ -282,7 +282,6 @@ class OStorage final : public css::lang::XTypeProvider
     comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
     ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
     bool m_bIsRoot;
-    sal_Int32 m_nStorageType; // the mode in which the storage is used
     bool m_bReadOnlyWrap;
     ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
     ::std::vector< css::uno::WeakReference< css::lang::XComponent > > m_aOpenSubComponentsVector;
