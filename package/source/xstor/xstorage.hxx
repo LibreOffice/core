@@ -39,12 +39,17 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 
+#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/weakref.hxx>
+#include <comphelper/multicontainer2.hxx>
 #include <comphelper/refcountedmutex.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <o3tl/deleter.hxx>
 #include <rtl/ref.hxx>
+
+#include "ohierarchyholder.hxx"
+#include "disposelistener.hxx"
 
 #include <vector>
 #include <memory>
@@ -69,7 +74,6 @@ namespace com::sun::star::uno {
 
 // a common implementation for an entry
 
-struct StorInternalData_Impl;
 struct OStorage_Impl;
 struct OWriteStream_Impl;
 
@@ -274,7 +278,15 @@ class OStorage final : public css::lang::XTypeProvider
                 , public ::cppu::OWeakObject
 {
     OStorage_Impl*  m_pImpl;
-    std::unique_ptr<StorInternalData_Impl> m_pData;
+    rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
+    comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
+    ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
+    bool m_bIsRoot;
+    sal_Int32 m_nStorageType; // the mode in which the storage is used
+    bool m_bReadOnlyWrap;
+    ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
+    ::std::vector< css::uno::WeakReference< css::lang::XComponent > > m_aOpenSubComponentsVector;
+    ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
 
     SotElement_Impl* OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr );
 
