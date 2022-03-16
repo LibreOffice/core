@@ -84,7 +84,7 @@ X11SkiaSalGraphicsImpl::createWindowContext(Display* display, Drawable drawable,
     assert(winInfo.fVisualInfo->visual != nullptr); // make sure it's not an uninitialized SalVisual
     winInfo.fWidth = width;
     winInfo.fHeight = height;
-#ifdef DBG_UTIL
+#if defined DBG_UTIL && !defined NDEBUG
     // Our patched Skia has VulkanWindowContext that shares grDirectContext, which requires
     // that the X11 visual is always the same. Ensure it is so.
     static VisualID checkVisualID = -1U;
