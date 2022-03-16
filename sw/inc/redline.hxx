@@ -208,6 +208,9 @@ public:
     OUString const & GetAuthorString( sal_uInt16 nPos = 0 ) const;
     const DateTime& GetTimeStamp( sal_uInt16 nPos = 0) const;
     RedlineType GetType( sal_uInt16 nPos = 0 ) const;
+    // text content of the redline is only an annotation placeholder
+    // (i.e. a comment, but don't confuse it with comment of the redline)
+    bool IsAnnotation() const;
     const OUString& GetComment( sal_uInt16 nPos = 0 ) const;
 
     void SetComment( const OUString& rS ) { m_pRedlineData->SetComment( rS ); }
