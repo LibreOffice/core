@@ -953,7 +953,7 @@ void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
     if (utl::ConfigManager::IsFuzzing())
     {
-        constexpr int nMaxScaleWhenFuzzing = 4096;
+        constexpr int nMaxScaleWhenFuzzing = 1024;
 
         auto nSourceHeight = maBmpEx.GetSizePixel().Height();
         auto nDestHeight = maSz.Height();
@@ -963,9 +963,21 @@ void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
             return;
         }
 
+        if (nDestHeight && nSourceHeight > nDestHeight && nSourceHeight / nDestHeight > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
+            return;
+        }
+
         auto nSourceWidth = maBmpEx.GetSizePixel().Width();
         auto nDestWidth = maSz.Width();
         if (nSourceWidth && nDestWidth > nSourceWidth && nDestWidth / nSourceWidth > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
+            return;
+        }
+
+        if (nDestWidth && nSourceWidth > nDestWidth && nSourceWidth / nDestWidth > nMaxScaleWhenFuzzing)
         {
             SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
             return;
