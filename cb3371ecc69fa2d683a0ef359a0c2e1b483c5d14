@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc025378_bccbdbb5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-16T06:27:40Z",
+      "side": 1,
+      "message": "The latest patch set seems to be empty.\nAre you working on this?",
+      "revId": "cb3371ecc69fa2d683a0ef359a0c2e1b483c5d14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
