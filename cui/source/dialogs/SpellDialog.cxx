@@ -969,15 +969,11 @@ void SpellDialog::InvalidateDialog()
         m_xChangePB.get(),
         m_xChangeAllPB.get(),
         m_xAutoCorrPB.get(),
-        m_xUndoPB.get(),
-        nullptr
+        m_xUndoPB.get()
     };
-    sal_Int16 i = 0;
-    while(aDisableArr[i])
-    {
-        aDisableArr[i]->set_sensitive(false);
-        i++;
-    }
+    for (weld::Widget* pWidget : aDisableArr)
+        pWidget->set_sensitive(false);
+
     SfxModelessDialogController::Deactivate();
 }
 
