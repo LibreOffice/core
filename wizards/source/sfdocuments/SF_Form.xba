@@ -1259,6 +1259,7 @@ Try:
 				Set _Component = oParent
 				If IsNull([_Parent]._FormDocuments) Then Set [_Parent]._FormDocuments = _Component.getFormDocuments()
 				Set _FormDocument = [_Parent]._FindByPersistentName([_Parent]._FormDocuments, sPersistentName)
+				_FormDocumentName = _FormDocument.HierarchicalName
 			Case Else
 		End Select
 		If oSession.HasUnoProperty(oParent, &quot;Parent&quot;) Then Set oParent = oParent.Parent Else Set oParent = Nothing
