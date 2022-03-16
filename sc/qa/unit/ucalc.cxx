@@ -90,6 +90,7 @@ public:
     void testInput();
     void testColumnIterator();
     void testTdf90698();
+    void testTdf93951();
     void testTdf134490();
     void testTdf135249();
     void testDocStatistics();
@@ -234,6 +235,7 @@ public:
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testColumnIterator);
     CPPUNIT_TEST(testTdf90698);
+    CPPUNIT_TEST(testTdf93951);
     CPPUNIT_TEST(testTdf134490);
     CPPUNIT_TEST(testTdf135249);
     CPPUNIT_TEST(testDocStatistics);
@@ -669,6 +671,21 @@ void Test::testTdf90698()
     // - Actual  : =(1~2)
     OUString aFormula = m_pDoc->GetFormula(0,0,0);
     CPPUNIT_ASSERT_EQUAL(OUString("=(1;2)"), aFormula);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf93951()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+    m_pDoc->SetString(ScAddress(0,0,0), "=2*" + OUStringChar(u'\x00A7') + "*2");
+
+    OUString aFormula = m_pDoc->GetFormula(0,0,0);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: =2*§*2
+    // - Actual  : =2*
+    CPPUNIT_ASSERT_EQUAL(OUString("=2*" + OUStringChar(u'\x00A7') + "*2"), aFormula);
 
     m_pDoc->DeleteTab(0);
 }
