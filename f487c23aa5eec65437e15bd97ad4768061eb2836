@@ -16,6 +16,40 @@
       "message": "@Hossein is this patch ready to be merged?",
       "revId": "f487c23aa5eec65437e15bd97ad4768061eb2836",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5b70a2a_8db48484",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-16T06:47:34Z",
+      "side": 1,
+      "message": "3 bits of a byte are changed here, so I think sal_uInt8 would be enough here.",
+      "revId": "f487c23aa5eec65437e15bd97ad4768061eb2836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "93370791_f4fd9d03",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-16T06:47:34Z",
+      "side": 1,
+      "message": "Same here and the two variables after that.",
+      "revId": "f487c23aa5eec65437e15bd97ad4768061eb2836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
