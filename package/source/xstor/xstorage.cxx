@@ -50,20 +50,16 @@
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/ofopxmlhelper.hxx>
-#include <comphelper/multicontainer2.hxx>
 #include <tools/diagnose_ex.h>
 
 #include "xstorage.hxx"
 #include "owriteablestream.hxx"
-#include "disposelistener.hxx"
 #include "switchpersistencestream.hxx"
-#include "ohierarchyholder.hxx"
 
 using namespace ::com::sun::star;
 
@@ -72,31 +68,6 @@ using namespace ::com::sun::star;
 #else
 #define THROW_WHERE ""
 #endif
-
-struct StorInternalData_Impl
-{
-    rtl::Reference<comphelper::RefCountedMutex> m_xSharedMutex;
-    comphelper::OMultiTypeInterfaceContainerHelper2 m_aListenersContainer; // list of listeners
-    ::std::unique_ptr< ::cppu::OTypeCollection> m_pTypeCollection;
-    bool m_bIsRoot;
-    sal_Int32 m_nStorageType; // the mode in which the storage is used
-    bool m_bReadOnlyWrap;
-
-    ::rtl::Reference<OChildDispListener_Impl> m_pSubElDispListener;
-
-    ::std::vector< uno::WeakReference< lang::XComponent > > m_aOpenSubComponentsVector;
-
-    ::rtl::Reference< OHierarchyHolder_Impl > m_rHierarchyHolder;
-
-    // the mutex reference MUST NOT be empty
-    StorInternalData_Impl( const rtl::Reference<comphelper::RefCountedMutex>& rMutexRef, bool bRoot, sal_Int32 nStorageType, bool bReadOnlyWrap )
-    : m_xSharedMutex( rMutexRef )
-    , m_aListenersContainer( rMutexRef->GetMutex() )
-    , m_bIsRoot( bRoot )
-    , m_nStorageType( nStorageType )
-    , m_bReadOnlyWrap( bReadOnlyWrap )
-    {}
-};
 
 // static
 void OStorage_Impl::completeStorageStreamCopy_Impl(
@@ -1761,9 +1732,13 @@ OStorage::OStorage( uno::Reference< io::XInputStream > const & xInputStream,
                     uno::Reference< uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xInputStream, nMode, xProperties, xContext, nStorageType ) )
+, m_xSharedMutex( m_pImpl->m_xMutex )
+, m_aListenersContainer( m_pImpl->m_xMutex->GetMutex() )
+, m_bIsRoot( m_pImpl->m_bIsRoot )
+, m_nStorageType( m_pImpl->m_nStorageType )
+, m_bReadOnlyWrap( false )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_xMutex, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
 }
 
 OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
@@ -1772,21 +1747,28 @@ OStorage::OStorage( uno::Reference< io::XStream > const & xStream,
                     uno::Reference< uno::XComponentContext > const & xContext,
                     sal_Int32 nStorageType )
 : m_pImpl( new OStorage_Impl( xStream, nMode, xProperties, xContext, nStorageType ) )
+, m_xSharedMutex( m_pImpl->m_xMutex )
+, m_aListenersContainer( m_pImpl->m_xMutex->GetMutex() )
+, m_bIsRoot( m_pImpl->m_bIsRoot )
+, m_nStorageType( m_pImpl->m_nStorageType )
+, m_bReadOnlyWrap( false )
 {
     m_pImpl->m_pAntiImpl = this;
-    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_xMutex, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, false));
 }
 
 OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 : m_pImpl( pImpl )
+, m_xSharedMutex( m_pImpl->m_xMutex )
+, m_aListenersContainer( m_pImpl->m_xMutex->GetMutex() )
+, m_bIsRoot( m_pImpl->m_bIsRoot )
+, m_nStorageType( m_pImpl->m_nStorageType )
+, m_bReadOnlyWrap( bReadOnlyWrap )
 {
     // this call can be done only from OStorage_Impl implementation to create child storage
-    OSL_ENSURE( m_pImpl && m_pImpl->m_xMutex.is(), "The provided pointer & mutex MUST NOT be empty!" );
-
-    m_pData.reset(new StorInternalData_Impl( m_pImpl->m_xMutex, m_pImpl->m_bIsRoot, m_pImpl->m_nStorageType, bReadOnlyWrap));
+    assert( m_pImpl && m_pImpl->m_xMutex.is() && "The provided pointer & mutex MUST NOT be empty!" );
 
     OSL_ENSURE( ( m_pImpl->m_nStorageMode & embed::ElementModes::WRITE ) == embed::ElementModes::WRITE ||
-                    m_pData->m_bReadOnlyWrap,
+                    m_bReadOnlyWrap,
                 "The wrapper can not allow writing in case implementation does not!" );
 
     if ( !bReadOnlyWrap )
@@ -1795,7 +1777,7 @@ OStorage::OStorage( OStorage_Impl* pImpl, bool bReadOnlyWrap )
 
 OStorage::~OStorage()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
     if ( m_pImpl )
     {
         osl_atomic_increment(&m_refCount); // to call dispose
@@ -1820,7 +1802,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
     // the source object is also a kind of locker for the current object
     // since the listeners could dispose the object while being notified
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
-    m_pData->m_aListenersContainer.disposeAndClear( aSource );
+    m_aListenersContainer.disposeAndClear( aSource );
 
     if ( !m_pImpl )
     {
@@ -1830,26 +1812,26 @@ void OStorage::InternalDispose( bool bNotifyImpl )
 
     m_pImpl->m_nModifiedListenerCount = 0;
 
-    if ( m_pData->m_bReadOnlyWrap )
+    if ( m_bReadOnlyWrap )
     {
-        OSL_ENSURE( m_pData->m_aOpenSubComponentsVector.empty() || m_pData->m_pSubElDispListener,
+        OSL_ENSURE( m_aOpenSubComponentsVector.empty() || m_pSubElDispListener,
                     "If any subelements are open the listener must exist!" );
 
-        if (m_pData->m_pSubElDispListener)
+        if (m_pSubElDispListener)
         {
-            m_pData->m_pSubElDispListener->OwnerIsDisposed();
+            m_pSubElDispListener->OwnerIsDisposed();
 
             // iterate through m_pData->m_aOpenSubComponentsVector
             // deregister m_pData->m_pSubElDispListener and dispose all of them
-            if ( !m_pData->m_aOpenSubComponentsVector.empty() )
+            if ( !m_aOpenSubComponentsVector.empty() )
             {
-                for ( const auto& pComp : m_pData->m_aOpenSubComponentsVector )
+                for ( const auto& pComp : m_aOpenSubComponentsVector )
                 {
                     uno::Reference< lang::XComponent > xTmp = pComp;
                     if ( xTmp.is() )
                     {
                         xTmp->removeEventListener( uno::Reference< lang::XEventListener >(
-                            static_cast< lang::XEventListener* >( m_pData->m_pSubElDispListener.get())));
+                            static_cast< lang::XEventListener* >( m_pSubElDispListener.get())));
 
                         try {
                             xTmp->dispose();
@@ -1860,7 +1842,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
                     }
                 }
 
-                m_pData->m_aOpenSubComponentsVector.clear();
+                m_aOpenSubComponentsVector.clear();
             }
         }
 
@@ -1873,7 +1855,7 @@ void OStorage::InternalDispose( bool bNotifyImpl )
 
         if ( bNotifyImpl )
         {
-            if ( m_pData->m_bIsRoot )
+            if ( m_bIsRoot )
                 delete m_pImpl;
             else
             {
@@ -1893,7 +1875,7 @@ void OStorage::ChildIsDisposed( const uno::Reference< uno::XInterface >& xChild 
     // this method must not contain any locking
     // the locking is done in the listener
 
-    auto& rVec = m_pData->m_aOpenSubComponentsVector;
+    auto& rVec = m_aOpenSubComponentsVector;
     rVec.erase(std::remove_if(rVec.begin(), rVec.end(),
         [&xChild](const uno::Reference<lang::XComponent>& xTmp) {
             return !xTmp.is() || xTmp == xChild;
@@ -1915,12 +1897,12 @@ void OStorage::BroadcastModifiedIfNecessary()
 
     m_pImpl->m_bBroadcastModified = false;
 
-    SAL_WARN_IF( m_pData->m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
+    SAL_WARN_IF( m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
     comphelper::OInterfaceContainerHelper2* pContainer =
-            m_pData->m_aListenersContainer.getContainer(
+            m_aListenersContainer.getContainer(
                 cppu::UnoType<util::XModifyListener>::get());
     if ( pContainer )
     {
@@ -1947,12 +1929,12 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    SAL_WARN_IF( m_pData->m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
+    SAL_WARN_IF( m_bReadOnlyWrap, "package.xstor", "The storage can not be modified at all!" );
 
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
 
     comphelper::OInterfaceContainerHelper2* pContainer =
-            m_pData->m_aListenersContainer.getContainer(
+            m_aListenersContainer.getContainer(
                 cppu::UnoType<embed::XTransactionListener>::get());
     if ( !pContainer )
            return;
@@ -1982,9 +1964,9 @@ void OStorage::BroadcastTransaction( sal_Int8 nMessage )
 
 SotElement_Impl* OStorage::OpenStreamElement_Impl( const OUString& aStreamName, sal_Int32 nOpenMode, bool bEncr )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
-    OSL_ENSURE( !m_pData->m_bReadOnlyWrap || ( nOpenMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE,
+    OSL_ENSURE( !m_bReadOnlyWrap || ( nOpenMode & embed::ElementModes::WRITE ) != embed::ElementModes::WRITE,
                 "An element can not be opened for writing in readonly storage!" );
 
     SotElement_Impl *pElement = m_pImpl->FindElement( aStreamName );
@@ -2023,14 +2005,14 @@ void OStorage::MakeLinkToSubComponent_Impl( const uno::Reference< lang::XCompone
     if ( !xComponent.is() )
         throw uno::RuntimeException( THROW_WHERE );
 
-    if (!m_pData->m_pSubElDispListener)
+    if (!m_pSubElDispListener)
     {
-        m_pData->m_pSubElDispListener = new OChildDispListener_Impl( *this );
+        m_pSubElDispListener = new OChildDispListener_Impl( *this );
     }
 
-    xComponent->addEventListener( m_pData->m_pSubElDispListener );
+    xComponent->addEventListener( m_pSubElDispListener );
 
-    m_pData->m_aOpenSubComponentsVector.emplace_back(xComponent );
+    m_aOpenSubComponentsVector.emplace_back(xComponent );
 }
 
 //  XInterface
@@ -2063,9 +2045,9 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
     if ( aReturn.hasValue() )
         return aReturn ;
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        if ( m_pData->m_bIsRoot )
+        if ( m_bIsRoot )
         {
             aReturn = ::cppu::queryInterface
                         (   rType
@@ -2081,7 +2063,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                         ,   static_cast<embed::XStorageRawAccess*> ( this ) );
         }
     }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
+    else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         aReturn = ::cppu::queryInterface
                     (   rType
@@ -2107,17 +2089,17 @@ void SAL_CALL OStorage::release() noexcept
 //  XTypeProvider
 uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
 {
-    if (! m_pData->m_pTypeCollection)
+    if (! m_pTypeCollection)
     {
-        ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+        ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
-        if (! m_pData->m_pTypeCollection)
+        if (! m_pTypeCollection)
         {
-            if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
+            if ( m_nStorageType == embed::StorageFormats::PACKAGE )
             {
-                if ( m_pData->m_bIsRoot )
+                if ( m_bIsRoot )
                 {
-                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
+                    m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<embed::XStorage>::get()
                                     ,   cppu::UnoType<embed::XStorage2>::get()
@@ -2132,7 +2114,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                 }
                 else
                 {
-                    m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
+                    m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                     (   cppu::UnoType<lang::XTypeProvider>::get()
                                     ,   cppu::UnoType<embed::XStorage>::get()
                                     ,   cppu::UnoType<embed::XStorage2>::get()
@@ -2143,9 +2125,9 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     ,   cppu::UnoType<beans::XPropertySet>::get()));
                 }
             }
-            else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
+            else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
             {
-                m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
+                m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                 (   cppu::UnoType<lang::XTypeProvider>::get()
                                 ,   cppu::UnoType<embed::XStorage>::get()
                                 ,   cppu::UnoType<embed::XTransactedObject>::get()
@@ -2156,7 +2138,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
             }
             else
             {
-                m_pData->m_pTypeCollection.reset(new ::cppu::OTypeCollection
+                m_pTypeCollection.reset(new ::cppu::OTypeCollection
                                 (   cppu::UnoType<lang::XTypeProvider>::get()
                                 ,   cppu::UnoType<embed::XStorage>::get()
                                 ,   cppu::UnoType<embed::XTransactedObject>::get()
@@ -2167,7 +2149,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
         }
     }
 
-    return m_pData->m_pTypeCollection->getTypes() ;
+    return m_pTypeCollection->getTypes() ;
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
@@ -2179,7 +2161,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OStorage::getImplementationId()
 //  XStorage
 void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& xDest )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2232,7 +2214,7 @@ void SAL_CALL OStorage::copyToStorage( const uno::Reference< embed::XStorage >& 
 uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     const OUString& aStreamName, sal_Int32 nOpenMode )
 {
-    osl::ClearableMutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+    osl::ClearableMutexGuard aGuard(m_xSharedMutex->GetMutex());
 
     if ( !m_pImpl )
     {
@@ -2243,10 +2225,10 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
     if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable element name
 
-    if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
+    if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_bReadOnlyWrap )
         throw io::IOException( THROW_WHERE ); // TODO: access denied
 
     uno::Reference< io::XStream > xResult;
@@ -2258,7 +2240,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openStreamElement(
         xResult = pElement->m_xStream->GetStream(nOpenMode, false);
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
-        if ( m_pData->m_bReadOnlyWrap )
+        if ( m_bReadOnlyWrap )
         {
             // before the storage disposes the stream it must deregister itself as listener
             uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY_THROW );
@@ -2321,7 +2303,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStreamElement(
 uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
             const OUString& aStorName, sal_Int32 nStorageMode )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2332,10 +2314,10 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
     if ( aStorName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
-    if ( ( nStorageMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
+    if ( ( nStorageMode & embed::ElementModes::WRITE ) && m_bReadOnlyWrap )
         throw io::IOException( THROW_WHERE ); // TODO: access denied
 
     if ( ( nStorageMode & embed::ElementModes::TRUNCATE )
@@ -2452,7 +2434,7 @@ uno::Reference< embed::XStorage > SAL_CALL OStorage::openStorageElement(
 
 uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUString& aStreamName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2463,7 +2445,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneStreamElement( const OUStr
     if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
     try
@@ -2525,7 +2507,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStreamElement(
 void SAL_CALL OStorage::copyLastCommitTo(
             const uno::Reference< embed::XStorage >& xTargetStorage )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2578,7 +2560,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
             const OUString& aStorName,
             const uno::Reference< embed::XStorage >& xTargetStorage )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2589,7 +2571,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
     if ( aStorName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStorName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aStorName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
     try
@@ -2654,7 +2636,7 @@ void SAL_CALL OStorage::copyStorageElementLastCommitTo(
 
 sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2665,7 +2647,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
     if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable name
 
     SotElement_Impl* pElement = nullptr;
@@ -2712,7 +2694,7 @@ sal_Bool SAL_CALL OStorage::isStreamElement( const OUString& aElementName )
 
 sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2723,7 +2705,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
     if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
 
     SotElement_Impl* pElement = nullptr;
@@ -2771,7 +2753,7 @@ sal_Bool SAL_CALL OStorage::isStorageElement( const OUString& aElementName )
 void SAL_CALL OStorage::removeElement( const OUString& aElementName )
 {
     {
-        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+        osl::MutexGuard aGuard(m_xSharedMutex->GetMutex());
 
         if (!m_pImpl)
         {
@@ -2784,7 +2766,7 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
             throw lang::IllegalArgumentException(THROW_WHERE "Unexpected entry name syntax.",
                                                  uno::Reference<uno::XInterface>(), 1);
 
-        if (m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels")
+        if (m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels")
             throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(),
                                                  1); // TODO: unacceptable name
 
@@ -2848,7 +2830,7 @@ void SAL_CALL OStorage::removeElement( const OUString& aElementName )
 void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUString& aNewName )
 {
     {
-        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+        osl::MutexGuard aGuard(m_xSharedMutex->GetMutex());
 
         if (!m_pImpl)
         {
@@ -2863,7 +2845,7 @@ void SAL_CALL OStorage::renameElement( const OUString& aElementName, const OUStr
             throw lang::IllegalArgumentException(THROW_WHERE "Unexpected entry name syntax.",
                                                  uno::Reference<uno::XInterface>(), 1);
 
-        if (m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
+        if (m_nStorageType == embed::StorageFormats::OFOPXML
             && (aElementName == "_rels" || aNewName == "_rels"))
             throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(),
                                                  0); // TODO: unacceptable element name
@@ -2947,7 +2929,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
                                         const uno::Reference< embed::XStorage >& xDest,
                                         const OUString& aNewName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -2963,7 +2945,7 @@ void SAL_CALL OStorage::copyElementTo(  const OUString& aElementName,
         // || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 ); // unacceptable element name
 
     try
@@ -3029,7 +3011,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
                                         const OUString& aNewName )
 {
     {
-        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+        osl::MutexGuard aGuard(m_xSharedMutex->GetMutex());
 
         if (!m_pImpl)
         {
@@ -3050,7 +3032,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
                                                       uno::UNO_QUERY))
             throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(), 2);
 
-        if (m_pData->m_nStorageType == embed::StorageFormats::OFOPXML
+        if (m_nStorageType == embed::StorageFormats::OFOPXML
             && (aElementName == "_rels" || aNewName == "_rels"))
             throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference<uno::XInterface>(),
                                                  0); // unacceptable element name
@@ -3127,7 +3109,7 @@ void SAL_CALL OStorage::moveElementTo(  const OUString& aElementName,
 uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
     const OUString& aStreamName, sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    osl::ClearableMutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    osl::ClearableMutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3135,7 +3117,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_pData->m_bReadOnlyWrap )
+    if ( ( nOpenMode & embed::ElementModes::WRITE ) && m_bReadOnlyWrap )
         throw io::IOException( THROW_WHERE ); // TODO: access denied
 
     if ( !aEncryptionData.hasElements() )
@@ -3150,7 +3132,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::openEncryptedStream(
         xResult = pElement->m_xStream->GetStream(nOpenMode, aEncryptionData, false);
         SAL_WARN_IF( !xResult.is(), "package.xstor", "The method must throw exception instead of removing empty result!" );
 
-        if ( m_pData->m_bReadOnlyWrap )
+        if ( m_bReadOnlyWrap )
         {
             // before the storage disposes the stream it must deregister itself as listener
             uno::Reference< lang::XComponent > xStreamComponent( xResult, uno::UNO_QUERY_THROW );
@@ -3213,7 +3195,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
     const OUString& aStreamName,
     const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3282,7 +3264,7 @@ uno::Reference< io::XStream > SAL_CALL OStorage::cloneEncryptedStream(
 uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
             const OUString& sStreamName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3290,7 +3272,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE ); // the interface is not supported and must not be accessible
 
     if ( sStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, false ) )
@@ -3373,7 +3355,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getPlainRawStreamElement(
 uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
             const OUString& sStreamName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3381,7 +3363,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( THROW_WHERE );
 
     if ( sStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( sStreamName, false ) )
@@ -3473,7 +3455,7 @@ uno::Reference< io::XInputStream > SAL_CALL OStorage::getRawEncrStreamElement(
 void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
                                 const uno::Reference< io::XInputStream >& xInStream )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3481,7 +3463,7 @@ void SAL_CALL OStorage::insertRawEncrStreamElement( const OUString& aStreamName,
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw embed::InvalidStorageException( THROW_WHERE );
 
     if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
@@ -3555,7 +3537,7 @@ void SAL_CALL OStorage::commit()
     try {
         BroadcastTransaction( STOR_MESS_PRECOMMIT );
 
-        ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+        ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
         if ( !m_pImpl )
         {
@@ -3563,7 +3545,7 @@ void SAL_CALL OStorage::commit()
             throw lang::DisposedException( THROW_WHERE );
         }
 
-        if ( m_pData->m_bReadOnlyWrap )
+        if ( m_bReadOnlyWrap )
             throw io::IOException( THROW_WHERE ); // TODO: access_denied
 
         m_pImpl->Commit(); // the root storage initiates the storing to source
@@ -3611,7 +3593,7 @@ void SAL_CALL OStorage::revert()
     BroadcastTransaction( STOR_MESS_PREREVERT );
 
     {
-        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+        osl::MutexGuard aGuard(m_xSharedMutex->GetMutex());
 
         if (!m_pImpl)
         {
@@ -3632,7 +3614,7 @@ void SAL_CALL OStorage::revert()
                     throw io::IOException(THROW_WHERE); // TODO: access denied
             }
 
-        if (m_pData->m_bReadOnlyWrap || !m_pImpl->m_bListCreated)
+        if (m_bReadOnlyWrap || !m_pImpl->m_bListCreated)
             return; // nothing to do
 
         try
@@ -3674,7 +3656,7 @@ void SAL_CALL OStorage::revert()
 //  XTransactionBroadcaster
 void SAL_CALL OStorage::addTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3682,13 +3664,13 @@ void SAL_CALL OStorage::addTransactionListener( const uno::Reference< embed::XTr
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    m_pData->m_aListenersContainer.addInterface( cppu::UnoType<embed::XTransactionListener>::get(),
+    m_aListenersContainer.addInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                 aListener );
 }
 
 void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3696,7 +3678,7 @@ void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    m_pData->m_aListenersContainer.removeInterface( cppu::UnoType<embed::XTransactionListener>::get(),
+    m_aListenersContainer.removeInterface( cppu::UnoType<embed::XTransactionListener>::get(),
                                                     aListener );
 }
 
@@ -3707,7 +3689,7 @@ void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::
 
 sal_Bool SAL_CALL OStorage::isModified()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3721,7 +3703,7 @@ sal_Bool SAL_CALL OStorage::isModified()
 void SAL_CALL OStorage::setModified( sal_Bool bModified )
 {
     {
-        osl::MutexGuard aGuard(m_pData->m_xSharedMutex->GetMutex());
+        osl::MutexGuard aGuard(m_xSharedMutex->GetMutex());
 
         if (!m_pImpl)
         {
@@ -3729,7 +3711,7 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
             throw lang::DisposedException(THROW_WHERE);
         }
 
-        if (m_pData->m_bReadOnlyWrap)
+        if (m_bReadOnlyWrap)
             throw beans::PropertyVetoException(THROW_WHERE); // TODO: access denied
 
         if (m_pImpl->m_bIsModified != bool(bModified))
@@ -3746,7 +3728,7 @@ void SAL_CALL OStorage::setModified( sal_Bool bModified )
 void SAL_CALL OStorage::addModifyListener(
             const uno::Reference< util::XModifyListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3755,14 +3737,14 @@ void SAL_CALL OStorage::addModifyListener(
     }
 
     osl_atomic_increment( &m_pImpl->m_nModifiedListenerCount );
-    m_pData->m_aListenersContainer.addInterface(
+    m_aListenersContainer.addInterface(
                                 cppu::UnoType<util::XModifyListener>::get(), aListener );
 }
 
 void SAL_CALL OStorage::removeModifyListener(
             const uno::Reference< util::XModifyListener >& aListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3771,7 +3753,7 @@ void SAL_CALL OStorage::removeModifyListener(
     }
 
     osl_atomic_decrement( &m_pImpl->m_nModifiedListenerCount );
-    m_pData->m_aListenersContainer.removeInterface(
+    m_aListenersContainer.removeInterface(
                                 cppu::UnoType<util::XModifyListener>::get(), aListener );
 }
 
@@ -3779,7 +3761,7 @@ void SAL_CALL OStorage::removeModifyListener(
 
 uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3790,7 +3772,7 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
     if ( aName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable element name
 
     uno::Any aResult;
@@ -3835,7 +3817,7 @@ uno::Any SAL_CALL OStorage::getByName( const OUString& aName )
 
 uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3865,7 +3847,7 @@ uno::Sequence< OUString > SAL_CALL OStorage::getElementNames()
 
 sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3876,7 +3858,7 @@ sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
     if ( aName.isEmpty() )
         return false;
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aName == "_rels" )
         return false;
 
     SotElement_Impl* pElement = nullptr;
@@ -3904,7 +3886,7 @@ sal_Bool SAL_CALL OStorage::hasByName( const OUString& aName )
 
 uno::Type SAL_CALL OStorage::getElementType()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3918,7 +3900,7 @@ uno::Type SAL_CALL OStorage::getElementType()
 
 sal_Bool SAL_CALL OStorage::hasElements()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3949,7 +3931,7 @@ sal_Bool SAL_CALL OStorage::hasElements()
 //  XComponent
 void SAL_CALL OStorage::dispose()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3980,7 +3962,7 @@ void SAL_CALL OStorage::dispose()
 void SAL_CALL OStorage::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -3988,14 +3970,14 @@ void SAL_CALL OStorage::addEventListener(
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    m_pData->m_aListenersContainer.addInterface(
+    m_aListenersContainer.addInterface(
                                 cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL OStorage::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4003,7 +3985,7 @@ void SAL_CALL OStorage::removeEventListener(
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    m_pData->m_aListenersContainer.removeInterface(
+    m_aListenersContainer.removeInterface(
                                 cppu::UnoType<lang::XEventListener>::get(), xListener );
 }
 
@@ -4016,7 +3998,7 @@ void SAL_CALL OStorage::setEncryptionPassword( const OUString& aPass )
 
 void SAL_CALL OStorage::removeEncryption()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4024,11 +4006,11 @@ void SAL_CALL OStorage::removeEncryption()
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
-    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "removeEncryption() method is not available for nonroot storages!" );
-    if ( !m_pData->m_bIsRoot )
+    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "removeEncryption() method is not available for nonroot storages!" );
+    if ( !m_bIsRoot )
         return;
 
     try {
@@ -4077,7 +4059,7 @@ void SAL_CALL OStorage::removeEncryption()
 
 void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4085,14 +4067,14 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
     if ( !aEncryptionData.hasElements() )
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption data!" );
 
-    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setEncryptionData() method is not available for nonroot storages!" );
-    if ( !m_pData->m_bIsRoot )
+    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "setEncryptionData() method is not available for nonroot storages!" );
+    if ( !m_bIsRoot )
         return;
 
     try {
@@ -4133,7 +4115,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
 
 sal_Bool SAL_CALL OStorage::hasEncryptionData()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     return m_pImpl && m_pImpl->m_bHasCommonEncryptionData;
 }
@@ -4142,7 +4124,7 @@ sal_Bool SAL_CALL OStorage::hasEncryptionData()
 
 void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::NamedValue >& aAlgorithms )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4150,14 +4132,14 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
     if ( !aAlgorithms.hasElements() )
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption algorithms list!" );
 
-    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setEncryptionAlgorithms() method is not available for nonroot storages!" );
-    if ( !m_pData->m_bIsRoot )
+    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "setEncryptionAlgorithms() method is not available for nonroot storages!" );
+    if ( !m_bIsRoot )
         return;
 
     try {
@@ -4202,7 +4184,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
 
 void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< beans::NamedValue > >& aProps )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4210,14 +4192,14 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
     if ( !aProps.hasElements() )
         throw uno::RuntimeException( THROW_WHERE "Unexpected empty encryption algorithms list!" );
 
-    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "setGpgProperties() method is not available for nonroot storages!" );
-    if ( !m_pData->m_bIsRoot )
+    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "setGpgProperties() method is not available for nonroot storages!" );
+    if ( !m_bIsRoot )
         return;
 
     try {
@@ -4262,7 +4244,7 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
 
 uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4270,12 +4252,12 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw uno::RuntimeException( THROW_WHERE ); // the interface must be visible only for package storage
 
     uno::Sequence< beans::NamedValue > aResult;
-    SAL_WARN_IF( !m_pData->m_bIsRoot, "package.xstor", "getEncryptionAlgorithms() method is not available for nonroot storages!" );
-    if ( m_pData->m_bIsRoot )
+    SAL_WARN_IF( !m_bIsRoot, "package.xstor", "getEncryptionAlgorithms() method is not available for nonroot storages!" );
+    if ( m_bIsRoot )
     {
         try {
             m_pImpl->ReadContents();
@@ -4323,7 +4305,7 @@ uno::Sequence< beans::NamedValue > SAL_CALL OStorage::getEncryptionAlgorithms()
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OStorage::getPropertySetInfo()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4337,7 +4319,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OStorage::getPropertySetInfo(
 
 void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4350,12 +4332,12 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
     // WORKAROUND:
     // The old document might have no version in the manifest.xml, so we have to allow to set the version
     // even for readonly storages, so that the version from content.xml can be used.
-    if ( m_pData->m_bReadOnlyWrap && aPropertyName != "Version" )
+    if ( m_bReadOnlyWrap && aPropertyName != "Version" )
         throw uno::RuntimeException( THROW_WHERE ); // TODO: Access denied
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::ZIP )
+    if ( m_nStorageType == embed::StorageFormats::ZIP )
         throw beans::UnknownPropertyException( aPropertyName );
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE )
+    else if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
         if ( aPropertyName == "MediaType" )
         {
@@ -4371,13 +4353,13 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
             m_pImpl->m_bControlVersion = true;
 
             // this property can be set even for readonly storage
-            if ( !m_pData->m_bReadOnlyWrap )
+            if ( !m_bReadOnlyWrap )
             {
                 m_pImpl->m_bBroadcastModified = true;
                 m_pImpl->m_bIsModified = true;
             }
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
+        else if ( ( m_bIsRoot && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
                                     || aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
                                     || aPropertyName == IS_INCONSISTENT_PROPERTY
                                     || aPropertyName == "URL"
@@ -4389,7 +4371,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
         else
             throw beans::UnknownPropertyException( aPropertyName );
     }
-    else if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML )
+    else if ( m_nStorageType == embed::StorageFormats::OFOPXML )
     {
         if ( aPropertyName == "RelationsInfoStream" )
         {
@@ -4422,7 +4404,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
             m_pImpl->m_bBroadcastModified = true;
             m_pImpl->m_bIsModified = true;
         }
-        else if ( ( m_pData->m_bIsRoot && ( aPropertyName == "URL" || aPropertyName == "RepairPackage") )
+        else if ( ( m_bIsRoot && ( aPropertyName == "URL" || aPropertyName == "RepairPackage") )
                  || aPropertyName == "IsRoot" )
             throw beans::PropertyVetoException( THROW_WHERE );
         else
@@ -4436,7 +4418,7 @@ void SAL_CALL OStorage::setPropertyValue( const OUString& aPropertyName, const u
 
 uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4444,7 +4426,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
+    if ( m_nStorageType == embed::StorageFormats::PACKAGE
       && ( aPropertyName == "MediaType" || aPropertyName == MEDIATYPE_FALLBACK_USED_PROPERTY || aPropertyName == "Version" ) )
     {
         try
@@ -4476,13 +4458,13 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
     }
     else if ( aPropertyName == "IsRoot" )
     {
-        return uno::makeAny( m_pData->m_bIsRoot );
+        return uno::makeAny( m_bIsRoot );
     }
     else if ( aPropertyName == "OpenMode" )
     {
         return uno::makeAny( m_pImpl->m_nStorageMode );
     }
-    else if ( m_pData->m_bIsRoot )
+    else if ( m_bIsRoot )
     {
         if ( aPropertyName == "URL"
           || aPropertyName == "RepairPackage" )
@@ -4497,7 +4479,7 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
 
             return uno::makeAny( false ); // RepairPackage
         }
-        else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
+        else if ( m_nStorageType == embed::StorageFormats::PACKAGE
           && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
             || aPropertyName == HAS_NONENCRYPTED_ENTRIES_PROPERTY
             || aPropertyName == ENCRYPTION_GPG_PROPERTIES
@@ -4532,7 +4514,7 @@ void SAL_CALL OStorage::addPropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4547,7 +4529,7 @@ void SAL_CALL OStorage::removePropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4562,7 +4544,7 @@ void SAL_CALL OStorage::addVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4577,7 +4559,7 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4594,7 +4576,7 @@ void SAL_CALL OStorage::removeVetoableChangeListener(
 
 sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4602,7 +4584,7 @@ sal_Bool SAL_CALL OStorage::hasByID(  const OUString& sID )
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     try
@@ -4630,7 +4612,7 @@ const beans::StringPair* lcl_findPairByName(const uno::Sequence<beans::StringPai
 
 OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4638,7 +4620,7 @@ OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -4651,7 +4633,7 @@ OUString SAL_CALL OStorage::getTargetByID(  const OUString& sID  )
 
 OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4659,7 +4641,7 @@ OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     const uno::Sequence< beans::StringPair > aSeq = getRelationshipByID( sID );
@@ -4672,7 +4654,7 @@ OUString SAL_CALL OStorage::getTypeByID(  const OUString& sID  )
 
 uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4680,7 +4662,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     // TODO/LATER: in future the unification of the ID could be checked
@@ -4698,7 +4680,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OStorage::getRelationshipByID(  cons
 
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelationshipsByType(  const OUString& sType  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4706,7 +4688,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     // TODO/LATER: in future the unification of the ID could be checked
@@ -4727,7 +4709,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getRelati
 
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRelationships()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4735,7 +4717,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aRet;
@@ -4764,7 +4746,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OStorage::getAllRel
 
 void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, sal_Bool bReplace  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4772,7 +4754,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     const beans::StringPair aIDRel("Id", sID);
@@ -4814,7 +4796,7 @@ void SAL_CALL OStorage::insertRelationshipByID(  const OUString& sID, const uno:
 
 void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4822,7 +4804,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
@@ -4848,7 +4830,7 @@ void SAL_CALL OStorage::removeRelationshipByID(  const OUString& sID  )
 
 void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, sal_Bool bReplace  )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4856,7 +4838,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     OUString aIDTag( "Id" );
@@ -4901,7 +4883,7 @@ void SAL_CALL OStorage::insertRelationships(  const uno::Sequence< uno::Sequence
 
 void SAL_CALL OStorage::clearRelationships()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4909,7 +4891,7 @@ void SAL_CALL OStorage::clearRelationships()
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::OFOPXML )
+    if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException( THROW_WHERE );
 
     m_pImpl->m_aRelInfo.realloc( 0 );
@@ -4932,7 +4914,7 @@ void SAL_CALL OStorage::insertStreamElementDirect(
             const uno::Reference< io::XInputStream >& xInStream,
             const uno::Sequence< beans::PropertyValue >& aProps )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -4943,10 +4925,10 @@ void SAL_CALL OStorage::insertStreamElementDirect(
     if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable storage name
 
-    if ( m_pData->m_bReadOnlyWrap )
+    if ( m_bReadOnlyWrap )
         throw io::IOException( THROW_WHERE ); // TODO: access denied
 
     try
@@ -5007,7 +4989,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
             const uno::Reference< embed::XOptimizedStorage >& xDest,
             const OUString& aNewName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5022,7 +5004,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
     if ( !xDest.is() || xDest == uno::Reference< uno::XInterface >( static_cast< OWeakObject* >( this ), uno::UNO_QUERY ) )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 2 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && ( aElementName == "_rels" || aNewName == "_rels" ) )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 ); // unacceptable name
 
     try
@@ -5087,7 +5069,7 @@ void SAL_CALL OStorage::copyElementDirectlyTo(
 
 void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStream >& xStream )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5095,7 +5077,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( !m_pData->m_bIsRoot )
+    if ( !m_bIsRoot )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
     if ( !m_pImpl->m_pSwitchStream )
@@ -5145,7 +5127,7 @@ void SAL_CALL OStorage::writeAndAttachToStream( const uno::Reference< io::XStrea
 void SAL_CALL OStorage::attachToURL( const OUString& sURL,
                                     sal_Bool bReadOnly )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5153,7 +5135,7 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( !m_pData->m_bIsRoot )
+    if ( !m_bIsRoot )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 0 );
 
     if ( !m_pImpl->m_pSwitchStream )
@@ -5213,7 +5195,7 @@ void SAL_CALL OStorage::attachToURL( const OUString& sURL,
 
 uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementName, const OUString& aPropertyName )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5224,7 +5206,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
     if ( aElementName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aElementName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aElementName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // TODO: unacceptable name
 
     try
@@ -5234,7 +5216,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
             throw container::NoSuchElementException( THROW_WHERE );
 
         // TODO/LATER: Currently it is only implemented for MediaType property of substorages, might be changed in future
-        if ( !pElement->m_bIsStorage || m_pData->m_nStorageType != embed::StorageFormats::PACKAGE || aPropertyName != "MediaType" )
+        if ( !pElement->m_bIsStorage || m_nStorageType != embed::StorageFormats::PACKAGE || aPropertyName != "MediaType" )
             throw beans::PropertyVetoException( THROW_WHERE );
 
         if (!pElement->m_xStorage)
@@ -5299,7 +5281,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
 
 void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, const uno::Reference< io::XStream >& xTargetStream )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5310,7 +5292,7 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
     if ( aStreamName.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamName, false ) )
         throw lang::IllegalArgumentException( THROW_WHERE "Unexpected entry name syntax.", uno::Reference< uno::XInterface >(), 1 );
 
-    if ( m_pData->m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
+    if ( m_nStorageType == embed::StorageFormats::OFOPXML && aStreamName == "_rels" )
         throw lang::IllegalArgumentException( THROW_WHERE, uno::Reference< uno::XInterface >(), 1 ); // unacceptable name
 
     if ( !xTargetStream.is() )
@@ -5370,7 +5352,7 @@ void SAL_CALL OStorage::copyStreamElementData( const OUString& aStreamName, cons
 // XHierarchicalStorageAccess
 uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamElementByHierarchicalName( const OUString& aStreamPath, ::sal_Int32 nOpenMode )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5410,11 +5392,11 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openStreamEle
     else
     {
         // there are still storages in between
-        if ( !m_pData->m_rHierarchyHolder.is() )
-            m_pData->m_rHierarchyHolder = new OHierarchyHolder_Impl(
+        if ( !m_rHierarchyHolder.is() )
+            m_rHierarchyHolder = new OHierarchyHolder_Impl(
                 uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
 
-        xResult = m_pData->m_rHierarchyHolder->GetStreamHierarchically(
+        xResult = m_rHierarchyHolder->GetStreamHierarchically(
                                                 ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
                                                 aListPath,
                                                 nOpenMode );
@@ -5433,7 +5415,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
 
 void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& aStreamPath )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5450,17 +5432,17 @@ void SAL_CALL OStorage::removeStreamElementByHierarchicalName( const OUString& a
     std::vector<OUString> aListPath = OHierarchyHolder_Impl::GetListPathFromString( aStreamPath );
     OSL_ENSURE( aListPath.size(), "The result list must not be empty!" );
 
-    if ( !m_pData->m_rHierarchyHolder.is() )
-        m_pData->m_rHierarchyHolder = new OHierarchyHolder_Impl(
+    if ( !m_rHierarchyHolder.is() )
+        m_rHierarchyHolder = new OHierarchyHolder_Impl(
             uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
 
-    m_pData->m_rHierarchyHolder->RemoveStreamHierarchically( aListPath );
+    m_rHierarchyHolder->RemoveStreamHierarchically( aListPath );
 }
 
 // XHierarchicalStorageAccess2
 uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncryptedStreamByHierarchicalName( const OUString& aStreamPath, ::sal_Int32 nOpenMode, const uno::Sequence< beans::NamedValue >& aEncryptionData )
 {
-    ::osl::MutexGuard aGuard( m_pData->m_xSharedMutex->GetMutex() );
+    ::osl::MutexGuard aGuard( m_xSharedMutex->GetMutex() );
 
     if ( !m_pImpl )
     {
@@ -5468,7 +5450,7 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
         throw lang::DisposedException( THROW_WHERE );
     }
 
-    if ( m_pData->m_nStorageType != embed::StorageFormats::PACKAGE )
+    if ( m_nStorageType != embed::StorageFormats::PACKAGE )
         throw packages::NoEncryptionException( THROW_WHERE );
 
     if ( aStreamPath.isEmpty() || !::comphelper::OStorageHelper::IsValidZipEntryFileName( aStreamPath, true ) )
@@ -5499,11 +5481,11 @@ uno::Reference< embed::XExtendedStorageStream > SAL_CALL OStorage::openEncrypted
     else
     {
         // there are still storages in between
-        if ( !m_pData->m_rHierarchyHolder.is() )
-            m_pData->m_rHierarchyHolder = new OHierarchyHolder_Impl(
+        if ( !m_rHierarchyHolder.is() )
+            m_rHierarchyHolder = new OHierarchyHolder_Impl(
                 uno::Reference< embed::XStorage >( static_cast< embed::XStorage* >( this ) ) );
 
-        xResult = m_pData->m_rHierarchyHolder->GetStreamHierarchically(
+        xResult = m_rHierarchyHolder->GetStreamHierarchically(
                                                 ( m_pImpl->m_nStorageMode & embed::ElementModes::READWRITE ),
                                                 aListPath,
                                                 nOpenMode,
