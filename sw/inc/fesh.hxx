@@ -497,7 +497,9 @@ public:
     bool GetObjAttr( SfxItemSet &rSet ) const;
     void SetObjAttr( const SfxItemSet &rSet );
 
-    const SdrObject* GetBestObject( bool bNext, GotoObjFlags eType, bool bFlat = true, const svx::ISdrObjectFilter* pFilter = nullptr );
+    const SdrObject* GetBestObject(bool bNext, GotoObjFlags eType, bool bFlat = true,
+                                   const svx::ISdrObjectFilter* pFilter = nullptr,
+                                   bool* pbWrapped = nullptr);
     bool GotoObj( bool bNext, GotoObjFlags eType = GotoObjFlags::DrawAny);
 
     /// Set DragMode (e.g. Rotate), but do nothing when frame is selected.
