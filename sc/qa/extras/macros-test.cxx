@@ -46,6 +46,7 @@ public:
     void testTdf114427();
     void testRowColumn();
     void testTdf104902();
+    void testTdf64639();
     void testTdf142033();
     void testPasswordProtectedUnicodeString();
     void testPasswordProtectedArrayInUserType();
@@ -75,6 +76,7 @@ public:
     CPPUNIT_TEST(testTdf114427);
     CPPUNIT_TEST(testRowColumn);
     CPPUNIT_TEST(testTdf104902);
+    CPPUNIT_TEST(testTdf64639);
     CPPUNIT_TEST(testTdf142033);
     CPPUNIT_TEST(testPasswordProtectedUnicodeString);
     CPPUNIT_TEST(testPasswordProtectedArrayInUserType);
@@ -362,6 +364,51 @@ void ScMacrosTest::testTdf104902()
     // newlines
     // - Actual  : string withnewlines
     CPPUNIT_ASSERT_EQUAL(OUString(u"string with" + OUStringChar(u'\xA') + u"newlines"), rDoc.GetString(ScAddress(0, 1, 0)));
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf64639()
+{
+    OUString aFileName;
+    createFileURL(u"tdf64639.ods", aFileName);
+    uno::Reference<css::lang::XComponent> xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
+    const SdrPage* pPage = pDrawLayer->GetPage(0);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+
+    Any aRet;
+    Sequence<sal_Int16> aOutParamIndex;
+    Sequence<Any> aOutParam;
+    Sequence<uno::Any> aParams;
+
+    // Add and delete the chart a few times
+    // Without the fix in place, this test would have crashed here
+    for (size_t i = 0; i < 5; ++i)
+    {
+        SfxObjectShell::CallXScript(
+            xComponent,
+            "vnd.sun.Star.script:Standard.Module1.DrawGraph?language=Basic&location=document",
+            aParams, aRet, aOutParamIndex, aOutParam);
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+
+        SfxObjectShell::CallXScript(
+            xComponent,
+            "vnd.sun.Star.script:Standard.Module1.DeleteGraph?language=Basic&location=document",
+            aParams, aRet, aOutParamIndex, aOutParam);
+
+        CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pPage->GetObjCount());
+    }
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
