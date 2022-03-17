@@ -106,6 +106,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, CTF_FILLSTYLE ),
     GMAP_D("FillColor",                     XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, CTF_FILLCOLOR ),
     GMAP_D("FillColor2",                    XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0),
+    GMAPV("FillColorTheme",                 XML_NAMESPACE_LO_EXT, XML_FILL_THEME_COLOR, XML_TYPE_THEME_COLOR, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAP( "FillGradientName",               XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME,     XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLGRADIENTNAME ),
     GMAP( "FillGradientStepCount",          XML_NAMESPACE_DRAW, XML_GRADIENT_STEP_COUNT,    XML_TYPE_NUMBER16, 0 ),
     GMAP( "FillHatchName",                  XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
@@ -1280,6 +1281,9 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             case XML_TYPE_TEXT_COLUMNS:
                 pHdl = new XMLTextColumnsPropertyHandler;
+                break;
+            case XML_TYPE_THEME_COLOR:
+                pHdl = new XMLConstantsPropertyHandler(pXML_ThemeColor_Enum, XML_TOKEN_INVALID);
                 break;
         }
 

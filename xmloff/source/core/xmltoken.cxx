@@ -3472,6 +3472,7 @@ namespace xmloff::token {
 
         TOKEN("theme",               XML_THEME ),
         TOKEN("theme-color",         XML_THEME_COLOR ),
+        TOKEN("fill-theme-color",    XML_FILL_THEME_COLOR ),
         TOKEN("dk1",                 XML_DK1 ),
         TOKEN("lt1",                 XML_LT1 ),
         TOKEN("dk2",                 XML_DK2 ),

@@ -218,6 +218,12 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
                 "75%");
     assertXPathNoAttribute(pXmlDoc, "//style:style[@style:name='T3']/style:text-properties",
                            "color-lum-off");
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//style:style[@style:name='gr2']/style:graphic-properties' no attribute 'fill-theme-color' exist
+    // i.e. only the direct color was written, but not the theme reference.
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr2']/style:graphic-properties",
+                "fill-theme-color", "accent1");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
