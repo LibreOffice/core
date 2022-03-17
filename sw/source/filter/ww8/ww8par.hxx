@@ -108,6 +108,7 @@ class GDIMetaFile;
 struct ESelection;
 class SfxItemSet;
 class OutlinerParaObject;
+enum class SwLineBreakClear;
 
 namespace com::sun::star{
     namespace beans{ class XPropertySet;}
@@ -1174,6 +1175,8 @@ private:
     */
     std::deque<FootnoteDescriptor> m_aFootnoteStack;
 
+    std::optional<SwLineBreakClear> m_oLineBreakClear;
+
     /*
     A queue of the ms sections in the document
     */
@@ -1775,6 +1778,7 @@ public:     // really private, but can only be done public
     void Read_ParaAutoBefore(sal_uInt16 , const sal_uInt8 *pData, short nLen);
     void Read_ParaAutoAfter(sal_uInt16 , const sal_uInt8 *pData, short nLen);
     void Read_ParaContextualSpacing( sal_uInt16 nId, const sal_uInt8* pData, short nLen );
+    void Read_LineBreakClear(sal_uInt16 nId, const sal_uInt8* pData, short nLen);
     void Read_LineSpace(        sal_uInt16, const sal_uInt8*, short nLen );
 
     void SetRelativeJustify( bool bRel );
