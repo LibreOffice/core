@@ -1067,7 +1067,8 @@ static void lcl_FillRedlineArray(
     const SwPosition* pStart = rUnoCursor.GetPoint();
     const SwNodeIndex nOwnNode = pStart->nNode;
 
-    for(size_t nRed = 0; nRed < nRedTableCount; ++nRed)
+    SwRedlineTable::size_type nRed = rDoc.getIDocumentRedlineAccess().GetRedlinePos(nOwnNode.GetNode(), RedlineType::Any);
+    for(; nRed < nRedTableCount; ++nRed)
     {
         const SwRangeRedline* pRedline = rRedTable[nRed];
         const SwPosition* pRedStart = pRedline->Start();
