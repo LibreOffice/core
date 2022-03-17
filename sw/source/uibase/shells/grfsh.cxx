@@ -63,6 +63,7 @@
 #include <swslots.hxx>
 #include <swabstdlg.hxx>
 #include <unocrsr.hxx>
+#include <flyfrm.hxx>
 #include <memory>
 
 constexpr OUStringLiteral TOOLBOX_NAME = u"colorbar";
@@ -317,6 +318,15 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put( aFrameSize );
 
             aSet.Put( aMgr.GetAttrSet() );
+            SwFlyFrame* pFly = rSh.GetSelectedFlyFrame();
+            if (pFly)
+            {
+                // Work with the up to date layout size if possible.
+                SwFormatFrameSize aSize = aSet.Get(RES_FRM_SIZE);
+                aSize.SetWidth(pFly->getFrameArea().Width());
+                aSize.SetHeight(pFly->getFrameArea().Height());
+                aSet.Put(aSize);
+            }
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
             // At percentage values initialize size
