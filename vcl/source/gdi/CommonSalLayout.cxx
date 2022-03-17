@@ -233,6 +233,10 @@ void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int
         mxBreak->previousCharacters(rArgs.mrStr, nCharPos, aLocale,
             i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
 
+    //stay inside the Layout range (e.g. with tdf124116-1.odt)
+    nGraphemeStartPos = std::max(rArgs.mnMinCharPos, nGraphemeStartPos);
+    nGraphemeEndPos = std::min(rArgs.mnEndCharPos, nGraphemeEndPos);
+
     rArgs.AddFallbackRun(nGraphemeStartPos, nGraphemeEndPos, bRightToLeft);
 }
 
