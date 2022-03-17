@@ -4539,8 +4539,8 @@ bool PDFWriterImpl::emitCatalog()
     aLine.append( getResourceDictObj() );
     aLine.append( " 0 R\n" );
 
-    sal_Int32 nMediaBoxWidth = 0;
-    sal_Int32 nMediaBoxHeight = 0;
+    double nMediaBoxWidth = 0;
+    double nMediaBoxHeight = 0;
     sal_Int32 nUserUnit = 1;
     if( m_aPages.empty() ) // sanity check, this should not happen
     {
