@@ -480,26 +480,14 @@ bool SwFEShell::DeleteRow(bool bCompleteTable)
                 pPam->DeleteMark();
             }
 
-            // remove row frames in Hide Changes mode
+            // remove row frames in Hide Changes mode (and table frames, if needed)
             if ( bRecordAndHideChanges )
             {
-                for (auto & rpFndLine : aFndBox.GetLines())
+                pTableNd->DelFrames();
+                if ( !pTableNd->GetTable().IsDeleted() )
                 {
-                    SwTableLine* pTmpLine = rpFndLine->GetLine();
-                    SwIterator<SwRowFrame,SwFormat> aIt( *pTmpLine->GetFrameFormat() );
-                    for( SwRowFrame* pRowFrame = aIt.First(); pRowFrame; pRowFrame = aIt.Next() )
-                    {
-                        auto pTabFrame = pRowFrame->GetUpper();
-                        // FIXME remove table frame instead of keeping the last row frame
-                        if ( pTabFrame->IsTabFrame() && pTabFrame->Lower() == pTabFrame->GetLastLower() )
-                            break;
-
-                        if( pRowFrame->GetTabLine() == pTmpLine )
-                        {
-                            pRowFrame->RemoveFromLayout();
-                            SwFrame::DestroyFrame(pRowFrame);
-                        }
-                    }
+                    SwNodeIndex aTableIdx( *pTableNd->EndOfSectionNode(), 1 );
+                    pTableNd->MakeOwnFrames(&aTableIdx);
                 }
 
                 EndAllActionAndCall();
