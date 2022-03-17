@@ -3192,6 +3192,7 @@ symmetric
 linked-style-name
 theme
 theme-color
+fill-theme-color
 dk1
 lt1
 dk2
