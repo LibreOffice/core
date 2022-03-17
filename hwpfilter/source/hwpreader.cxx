@@ -3913,9 +3913,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 
                 basegfx::B2DPoint pt[3], r_pt[3];
                 for(i = 0 ; i < 3 ; i++ ){
-                         pt[i].setX(pal.pt[i].x - drawobj->property.rot_originx);
+                         basegfx::B2DPoint rot_origin(drawobj->property.rot_originx, drawobj->property.rot_originy);
+                         pt[i].setX(pal.pt[i].x - rot_origin.getX());
                          /* Convert to a physical coordinate */
-                         pt[i].setY(-(pal.pt[i].y - drawobj->property.rot_originy));
+                         pt[i].setY(-(pal.pt[i].y - rot_origin.getY()));
                 }
 
                 double skewX;
