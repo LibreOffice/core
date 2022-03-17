@@ -2059,15 +2059,10 @@ void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
         pSpellDialog->m_xLanguageLB->get_widget(),
         pSpellDialog->m_xAddToDictMB.get(),
         pSpellDialog->m_xAddToDictPB.get(),
-        pSpellDialog->m_xAutoCorrPB.get(),
-        nullptr
+        pSpellDialog->m_xAutoCorrPB.get()
     };
-    sal_Int32 nIdx = 0;
-    do
-    {
-        aControls[nIdx]->set_sensitive(false);
-    }
-    while(aControls[++nIdx]);
+    for (weld::Widget* pWidget : aControls)
+        pWidget->set_sensitive(false);
 
     //remove error marks
     ESelection aAll(0, 0, 0, EE_TEXTPOS_ALL);
