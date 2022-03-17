@@ -16,6 +16,23 @@
       "message": "Miklos/Caolán: thought you might have some opinion here.\nJust for the record, I reproduced the symptom described in the bugtracker and tested the patch, it worked as the author expected.",
       "revId": "cf23983fd5786d531a5d06f51fb0af0f75c43f15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49b00afc_1346d481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-17T19:32:09Z",
+      "side": 1,
+      "message": "looks perfectly reasonable to me, the other MediaBox presumably also had the same issue until the commit of\n\ncommit a05dc747caf5b8fef6bd95a999cb6098f2b4dbc7\nAuthor: Miklos Vajna \u003cvmiklos@collabora.co.uk\u003e\nDate:   Thu May 25 16:37:04 2017 +0200\n    tdf#108056 PDF export: work with double page size\n\nso feel free to push this when you get a jenkins green",
+      "revId": "cf23983fd5786d531a5d06f51fb0af0f75c43f15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
