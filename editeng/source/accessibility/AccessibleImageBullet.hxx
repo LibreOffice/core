@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <rtl/ref.hxx>
 #include <tools/gen.hxx>
 #include <cppuhelper/implbase.hxx>
 
@@ -32,6 +33,7 @@
 class SvxEditSource;
 class SvxTextForwarder;
 class SvxViewForwarder;
+namespace utl { class AccessibleStateSetHelper; }
 
 namespace accessibility
 {
@@ -186,7 +188,7 @@ namespace accessibility
         Point maEEOffset;
 
         // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
-        css::uno::Reference< css::accessibility::XAccessibleStateSet > mxStateSet;
+        rtl::Reference< utl::AccessibleStateSetHelper > mxStateSet;
 
         /// The shape we're the accessible for (unguarded)
         css::uno::Reference< css::accessibility::XAccessible > mxParent;
