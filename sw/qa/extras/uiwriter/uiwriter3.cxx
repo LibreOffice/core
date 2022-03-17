@@ -1989,6 +1989,51 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146962)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147347)
+{
+    // load a 2-row table, set Hide Changes mode and delete the table with change tracking
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf116789.fodt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // enable redlining
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+    CPPUNIT_ASSERT_MESSAGE("redlining should be on",
+                           pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    // hide changes
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    dispatchCommand(mxComponent, ".uno:DeleteTable", {});
+
+    // Without the fix in place, the deleted row would be visible
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 1
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 0);
+
+    // check it in Show Changes mode
+
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // 2 rows are visible now
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+
+    // check it in Hide Changes mode again
+
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // no visible row again
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 0);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 {
     createSwDoc();
