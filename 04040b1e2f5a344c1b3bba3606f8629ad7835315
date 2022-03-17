@@ -33,6 +33,24 @@
       "message": "I\u0027d rather move that to the !pDocShell case. It doesn\u0027t matter for the bug\u0027s constellation nor will in near future, but if there is a shell then the shell should determine. So,\n\n    if (!pDocShell)\n        return rDoc.IsFunctionAccess();",
       "revId": "04040b1e2f5a344c1b3bba3606f8629ad7835315",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3577b8c_481eb4b9",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-17T15:19:25Z",
+      "side": 1,
+      "message": "Thanks Eike! I suppose it\u0027s OK to merge now.",
+      "parentUuid": "9218b75b_56c95545",
+      "revId": "04040b1e2f5a344c1b3bba3606f8629ad7835315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
