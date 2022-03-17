@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60c1b547_753c9885",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T22:34:21Z",
+      "side": 1,
+      "message": "About license statement, I think to remember that just a comment in a bugtracker might be ok, do you confirm?",
+      "revId": "fb48a6408a515057a03c485bf00df5c34706595b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
