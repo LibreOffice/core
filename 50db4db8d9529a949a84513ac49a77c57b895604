@@ -34,6 +34,24 @@
       "parentUuid": "2ca0d362_6b298b8e",
       "revId": "50db4db8d9529a949a84513ac49a77c57b895604",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c2a2355_eb3203de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-17T06:19:08Z",
+      "side": 1,
+      "message": "I\u0027m not seeing those line ranges changed here in Gerrit, though, so seems to be fine",
+      "parentUuid": "95b2a05a_31216d0e",
+      "revId": "50db4db8d9529a949a84513ac49a77c57b895604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
