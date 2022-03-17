@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ec399a6_8ed3c804",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T21:11:38Z",
+      "side": 1,
+      "message": "I applied just this patch but it didn\u0027t prevent LO from crashing.\n\nAnyway the other patch you made fixes it.",
+      "revId": "3568736aabafaebe88920c0842dda064ba3fdb08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
