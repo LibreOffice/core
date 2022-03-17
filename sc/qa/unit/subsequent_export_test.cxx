@@ -44,7 +44,9 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <osl/file.hxx>
 #include <unotools/useroptions.hxx>
+#include <unotools/tempfile.hxx>
 #include <tools/datetime.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
@@ -182,6 +184,7 @@ public:
     void testPreserveTextWhitespace2XLSX();
     void testTdf113646();
     void testDateStandardfilterXLSX();
+    void testTdf90299();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -287,6 +290,7 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testTdf113646);
     CPPUNIT_TEST(testDateStandardfilterXLSX);
+    CPPUNIT_TEST(testTdf90299);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4517,6 +4521,58 @@ void ScExportTest::testDateStandardfilterXLSX()
                 "dateTimeGrouping", "day");
 
     xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf90299()
+{
+    utl::TempFile aTmpDirectory(nullptr, true);
+    OUString aTmpDirURL = aTmpDirectory.GetURL();
+
+    utl::TempFile aTmpSubdirectory(&aTmpDirURL, true);
+
+    struct
+    {
+        void check(ScDocShellRef xShell, OUString aExpectedFormula)
+        {
+            CPPUNIT_ASSERT(xShell.is());
+            xShell->ReloadAllLinks();
+
+            ScDocument& rDoc = xShell->GetDocument();
+
+            ScAddress aPos(0, 0, 0);
+            ScTokenArray* pCode = getTokens(rDoc, aPos);
+            CPPUNIT_ASSERT_MESSAGE("empty token array", pCode);
+
+            OUString aFormula = toString(rDoc, aPos, *pCode, rDoc.GetGrammar());
+
+            CPPUNIT_ASSERT_EQUAL(aFormula, aExpectedFormula);
+        }
+
+    } aCheckShell;
+
+    OUString aReferencingFileURL;
+    OUString aReferencedFileURL;
+    createFileURL(u"tdf90299.", u"xls", aReferencingFileURL);
+
+    osl::File::RC eError =  osl::File::copy(aReferencingFileURL, aTmpDirURL + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpDirURL + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirURL + "/dummy.xls";
+
+    ScDocShellRef xShell = load(aReferencingFileURL, FORMAT_XLS);
+    aCheckShell.check(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");
+    xShell->DoClose();
+
+    eError =  osl::File::copy(aReferencingFileURL, aTmpSubdirectory.GetURL() + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpSubdirectory.GetURL() + "/tdf90299.xls";
+    aReferencedFileURL = aTmpSubdirectory.GetURL() + "/dummy.xls";
+
+    xShell = load(aReferencingFileURL, FORMAT_XLS);
+    aCheckShell.check(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");
+    xShell->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScExportTest);

@@ -886,7 +886,7 @@ namespace {
 /** Encodes special parts of the URL, i.e. directory separators and volume names.
     @param pTableName  Pointer to a table name to be encoded in this URL, or 0. */
 OUString lclEncodeDosUrl(
-    XclBiff eBiff, const OUString& rUrl, std::u16string_view rBase, const OUString* pTableName)
+    XclBiff eBiff, const OUString& rUrl, std::u16string_view rBase, const OUString& rRel, const OUString* pTableName)
 {
     OUStringBuffer aBuf;
 
@@ -895,7 +895,22 @@ OUString lclEncodeDosUrl(
         OUString aOldUrl = rUrl;
         aBuf.append(EXC_URLSTART_ENCODED);
 
-        if ( aOldUrl.getLength() > 2 && aOldUrl.startsWith("\\\\") )
+        sal_Unicode cThisDrive(' '), cDrive(' ');
+
+        if ( aOldUrl.getLength() > 2 && aOldUrl.match(":\\", 1) )
+        {
+            // drive
+            cThisDrive = rBase.empty() ? ' ' : rBase[0];
+            cDrive = aOldUrl[0];
+        }
+
+        if (rRel.getLength() && cThisDrive == cDrive)
+        {
+            // Save path as relative only if both files are on the same drive.
+            aOldUrl = rRel;
+        }
+
+        else if ( aOldUrl.getLength() > 2 && aOldUrl.startsWith("\\\\") )
         {
             // UNC
             aBuf.append(EXC_URL_DOSDRIVE).append('@');
@@ -903,9 +918,6 @@ OUString lclEncodeDosUrl(
         }
         else if ( aOldUrl.getLength() > 2 && aOldUrl.match(":\\", 1) )
         {
-            // drive letter
-            sal_Unicode cThisDrive = rBase.empty() ? ' ' : rBase[0];
-            sal_Unicode cDrive = aOldUrl[0];
             if (cThisDrive == cDrive)
                 // This document and the referenced document are under the same drive.
                 aBuf.append(EXC_URL_DRIVEROOT);
@@ -973,7 +985,19 @@ OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, std::u16string_vie
 {
     OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
     OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(FSysStyle::Dos);
-    return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, pTableName);
+    OUString aDosRel;
+
+    if (rRoot.IsRelUrl())
+    {
+        aDosRel = INetURLObject::GetRelURL(
+            rRoot.GetBasePath(), OUString(rAbsUrl),
+            INetURLObject::EncodeMechanism::All,
+            INetURLObject::DecodeMechanism::NONE,
+            RTL_TEXTENCODING_UTF8, FSysStyle::Dos
+        ).replaceAll("/", "\\");
+    }
+
+    return lclEncodeDosUrl(rRoot.GetBiff(), aDosUrl, aDosBase, aDosRel, pTableName);
 }
 
 OUString XclExpUrlHelper::EncodeDde( std::u16string_view rApplic, std::u16string_view rTopic )
