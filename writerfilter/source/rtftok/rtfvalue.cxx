@@ -15,106 +15,73 @@ using namespace com::sun::star;
 
 namespace writerfilter::rtftok
 {
-RTFValue::RTFValue(int nValue, OUString sValue, const RTFSprms& rAttributes, const RTFSprms& rSprms,
+RTFValue::RTFValue(int nValue, OUString sValue, const RTFSprms* pAttributes, const RTFSprms* pSprms,
                    uno::Reference<drawing::XShape> xShape, uno::Reference<io::XInputStream> xStream,
                    uno::Reference<embed::XEmbeddedObject> xObject, bool bForceString,
-                   const RTFShape& aShape, const RTFPicture& rPicture)
+                   const RTFShape* pShape, const RTFPicture* pPicture)
     : m_nValue(nValue)
     , m_sValue(std::move(sValue))
-    , m_pAttributes(new RTFSprms(rAttributes))
-    , m_pSprms(new RTFSprms(rSprms))
     , m_xShape(std::move(xShape))
     , m_xStream(std::move(xStream))
     , m_xObject(std::move(xObject))
     , m_bForceString(bForceString)
-    , m_pShape(new RTFShape(aShape))
-    , m_pPicture(new RTFPicture(rPicture))
 {
+    if (pAttributes)
+        m_pAttributes = new RTFSprms(*pAttributes);
+    if (pSprms)
+        m_pSprms = new RTFSprms(*pSprms);
+    if (pShape)
+        m_pShape = new RTFShape(*pShape);
+    if (pPicture)
+        m_pPicture = new RTFPicture(*pPicture);
 }
 
-RTFValue::RTFValue()
-    : m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
-{
-}
+RTFValue::RTFValue() {}
 
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue)
-    , m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
 {
 }
 
 RTFValue::RTFValue(OUString sValue, bool bForce)
     : m_sValue(std::move(sValue))
-    , m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
     , m_bForceString(bForce)
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
 {
 }
 
 RTFValue::RTFValue(const RTFSprms& rAttributes)
     : m_pAttributes(new RTFSprms(rAttributes))
-    , m_pSprms(new RTFSprms())
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
 {
 }
 
 RTFValue::RTFValue(const RTFSprms& rAttributes, const RTFSprms& rSprms)
     : m_pAttributes(new RTFSprms(rAttributes))
     , m_pSprms(new RTFSprms(rSprms))
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
 {
 }
 
 RTFValue::RTFValue(uno::Reference<drawing::XShape> xShape)
-    : m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
-    , m_xShape(std::move(xShape))
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
+    : m_xShape(std::move(xShape))
 {
 }
 
 RTFValue::RTFValue(uno::Reference<io::XInputStream> xStream)
-    : m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
-    , m_xStream(std::move(xStream))
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
+    : m_xStream(std::move(xStream))
 {
 }
 
 RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> xObject)
-    : m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
-    , m_xObject(std::move(xObject))
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture)
+    : m_xObject(std::move(xObject))
 {
 }
 
 RTFValue::RTFValue(const RTFShape& aShape)
-    : m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
-    , m_pShape(new RTFShape(aShape))
-    , m_pPicture(new RTFPicture)
+    : m_pShape(new RTFShape(aShape))
 {
 }
 
 RTFValue::RTFValue(const RTFPicture& rPicture)
-    : m_pAttributes(new RTFSprms())
-    , m_pSprms(new RTFSprms())
-    , m_pShape(new RTFShape())
-    , m_pPicture(new RTFPicture(rPicture))
+    : m_pPicture(new RTFPicture(rPicture))
 {
 }
 
@@ -148,13 +115,23 @@ uno::Any RTFValue::getAny() const
     return ret;
 }
 
-RTFShape& RTFValue::getShape() const { return *m_pShape; }
+RTFShape& RTFValue::getShape() const
+{
+    if (!m_pShape)
+        m_pShape = new RTFShape();
+    return *m_pShape;
+}
 
-RTFPicture& RTFValue::getPicture() const { return *m_pPicture; }
+RTFPicture& RTFValue::getPicture() const
+{
+    if (!m_pPicture)
+        m_pPicture = new RTFPicture;
+    return *m_pPicture;
+}
 
 writerfilter::Reference<Properties>::Pointer_t RTFValue::getProperties()
 {
-    return new RTFReferenceProperties(*m_pAttributes, *m_pSprms);
+    return new RTFReferenceProperties(getAttributes(), getSprms());
 }
 
 writerfilter::Reference<BinaryObj>::Pointer_t RTFValue::getBinary()
@@ -172,16 +149,16 @@ std::string RTFValue::toString() const
 }
 #endif
 
-RTFValue* RTFValue::Clone()
+RTFValue* RTFValue::Clone() const
 {
-    return new RTFValue(m_nValue, m_sValue, *m_pAttributes, *m_pSprms, m_xShape, m_xStream,
-                        m_xObject, m_bForceString, *m_pShape, *m_pPicture);
+    return new RTFValue(m_nValue, m_sValue, m_pAttributes.get(), m_pSprms.get(), m_xShape,
+                        m_xStream, m_xObject, m_bForceString, m_pShape.get(), m_pPicture.get());
 }
 
-RTFValue* RTFValue::CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms)
+RTFValue* RTFValue::CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms) const
 {
-    return new RTFValue(m_nValue, m_sValue, rAttributes, rSprms, m_xShape, m_xStream, m_xObject,
-                        m_bForceString, *m_pShape, *m_pPicture);
+    return new RTFValue(m_nValue, m_sValue, &rAttributes, &rSprms, m_xShape, m_xStream, m_xObject,
+                        m_bForceString, m_pShape.get(), m_pPicture.get());
 }
 
 bool RTFValue::equals(const RTFValue& rOther) const
@@ -190,20 +167,55 @@ bool RTFValue::equals(const RTFValue& rOther) const
         return false;
     if (m_sValue != rOther.m_sValue)
         return false;
-    if (m_pAttributes->size() != rOther.m_pAttributes->size())
+
+    if (m_pAttributes && rOther.m_pAttributes)
+    {
+        if (m_pAttributes->size() != rOther.m_pAttributes->size())
+            return false;
+        if (!m_pAttributes->equals(rOther))
+            return false;
+    }
+    else if (m_pAttributes && m_pAttributes->size())
+    {
         return false;
-    if (!m_pAttributes->equals(rOther))
+    }
+    else if (rOther.m_pAttributes && rOther.m_pAttributes->size())
+    {
         return false;
-    if (m_pSprms->size() != rOther.m_pSprms->size())
+    }
+
+    if (m_pSprms && rOther.m_pSprms)
+    {
+        if (m_pSprms->size() != rOther.m_pSprms->size())
+            return false;
+        if (!m_pSprms->equals(rOther))
+            return false;
+    }
+    else if (m_pSprms && m_pSprms->size())
+    {
         return false;
-    if (!m_pSprms->equals(rOther))
+    }
+    else if (rOther.m_pSprms && rOther.m_pSprms->size())
+    {
         return false;
+    }
+
     return true;
 }
 
-RTFSprms& RTFValue::getAttributes() { return *m_pAttributes; }
+RTFSprms& RTFValue::getAttributes() const
+{
+    if (!m_pAttributes)
+        m_pAttributes = new RTFSprms();
+    return *m_pAttributes;
+}
 
-RTFSprms& RTFValue::getSprms() { return *m_pSprms; }
+RTFSprms& RTFValue::getSprms() const
+{
+    if (!m_pSprms)
+        m_pSprms = new RTFSprms();
+    return *m_pSprms;
+}
 
 } // namespace writerfilter::rtftok
 
