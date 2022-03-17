@@ -16,6 +16,24 @@
       "message": "I think these choices of data type is better:\n\nDEF_WRITER_LSPACE -\u003e sal_Int32\nDEF_DRAW_LSPACE -\u003e sal_Int32\n\nIn general, you should have good reasoning for selecting the data type, or you can use \u0027auto\u0027.",
       "revId": "50db4db8d9529a949a84513ac49a77c57b895604",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95b2a05a_31216d0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003536
+      },
+      "writtenOn": "2022-03-17T03:05:17Z",
+      "side": 1,
+      "message": "I rebased my local branch from master and modified the code as per the suggestion and submitted the change. but I see some additional changes on my modified file between line numbers 540 and 584. Please suggest if that is expected, if not how do I correct my commit.",
+      "parentUuid": "2ca0d362_6b298b8e",
+      "revId": "50db4db8d9529a949a84513ac49a77c57b895604",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
