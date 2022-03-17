@@ -22,6 +22,30 @@
       },
       "revId": "31ac4edf2ec83c9f6ec475ad74e5fd94a0c8b1ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e5ade22_2d5d012a",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T16:46:26Z",
+      "side": 0,
+      "message": "Yep! :-)",
+      "parentUuid": "a82e97f6_453053b4",
+      "range": {
+        "startLine": 2031,
+        "startChar": 41,
+        "endLine": 2031,
+        "endChar": 44
+      },
+      "revId": "31ac4edf2ec83c9f6ec475ad74e5fd94a0c8b1ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
