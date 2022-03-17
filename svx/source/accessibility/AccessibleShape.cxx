@@ -176,9 +176,7 @@ void AccessibleShape::Init()
 
 void AccessibleShape::UpdateStates()
 {
-    ::utl::AccessibleStateSetHelper* pStateSet =
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet == nullptr)
+    if (mxStateSet == nullptr)
         return;
 
     // Set the opaque state for certain shape types when their fill style is
@@ -207,9 +205,9 @@ void AccessibleShape::UpdateStates()
         }
     }
     if (bShapeIsOpaque)
-        pStateSet->AddState (AccessibleStateType::OPAQUE);
+        mxStateSet->AddState (AccessibleStateType::OPAQUE);
     else
-        pStateSet->RemoveState (AccessibleStateType::OPAQUE);
+        mxStateSet->RemoveState (AccessibleStateType::OPAQUE);
 
     // Set the selected state.
     bool bShapeIsSelected = false;
@@ -220,9 +218,9 @@ void AccessibleShape::UpdateStates()
     }
 
     if (bShapeIsSelected)
-        pStateSet->AddState (AccessibleStateType::SELECTED);
+        mxStateSet->AddState (AccessibleStateType::SELECTED);
     else
-        pStateSet->RemoveState (AccessibleStateType::SELECTED);
+        mxStateSet->RemoveState (AccessibleStateType::SELECTED);
 }
 
 OUString AccessibleShape::GetStyle() const
@@ -392,8 +390,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         return AccessibleContextBase::getAccessibleStateSet ();
     }
 
-    ::utl::AccessibleStateSetHelper* pStateSet =
-          static_cast<::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    ::utl::AccessibleStateSetHelper* pStateSet = mxStateSet.get();
 
     if (!pStateSet)
         return Reference<XAccessibleStateSet>();
@@ -1015,8 +1012,7 @@ void AccessibleShape::disposing()
 
     // Make sure to send an event that this object loses the focus in the
     // case that it has the focus.
-    ::utl::AccessibleStateSetHelper* pStateSet =
-          static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+    ::utl::AccessibleStateSetHelper* pStateSet = mxStateSet.get();
     if (pStateSet != nullptr)
         pStateSet->RemoveState (AccessibleStateType::FOCUSED);
 

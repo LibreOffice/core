@@ -191,23 +191,21 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet()
     }
     else
     {
-        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-
-        if(pStateSet)
+        if(mxStateSet)
         {
             // Merge current FOCUSED state from edit engine.
             if (mpText != nullptr)
             {
                 if (mpText->HaveFocus())
-                    pStateSet->AddState (AccessibleStateType::FOCUSED);
+                    mxStateSet->AddState (AccessibleStateType::FOCUSED);
                 else
-                    pStateSet->RemoveState (AccessibleStateType::FOCUSED);
+                    mxStateSet->RemoveState (AccessibleStateType::FOCUSED);
             }
             // Set the invisible state for merged cell
             if (mxCell.is() && mxCell->isMerged())
-                pStateSet->RemoveState(AccessibleStateType::VISIBLE);
+                mxStateSet->RemoveState(AccessibleStateType::VISIBLE);
             else
-                pStateSet->AddState(AccessibleStateType::VISIBLE);
+                mxStateSet->AddState(AccessibleStateType::VISIBLE);
 
 
             //Just when the parent table is not read-only,set states EDITABLE,RESIZABLE,MOVEABLE
@@ -225,16 +223,16 @@ Reference<XAccessibleStateSet> SAL_CALL AccessibleCell::getAccessibleStateSet()
                         const css::uno::Sequence<short> aStates = rState->getStates();
                         if (std::find(aStates.begin(), aStates.end(), AccessibleStateType::EDITABLE) != aStates.end())
                         {
-                            pStateSet->AddState (AccessibleStateType::EDITABLE);
-                            pStateSet->AddState (AccessibleStateType::RESIZABLE);
-                            pStateSet->AddState (AccessibleStateType::MOVEABLE);
+                            mxStateSet->AddState (AccessibleStateType::EDITABLE);
+                            mxStateSet->AddState (AccessibleStateType::RESIZABLE);
+                            mxStateSet->AddState (AccessibleStateType::MOVEABLE);
                         }
                     }
                 }
             }
             // Create a copy of the state set that may be modified by the
             // caller without affecting the current state set.
-            xStateSet.set(new ::utl::AccessibleStateSetHelper (*pStateSet));
+            xStateSet.set(new ::utl::AccessibleStateSetHelper (*mxStateSet));
         }
     }
 
@@ -493,9 +491,8 @@ void AccessibleCell::disposing()
 
     // Make sure to send an event that this object loses the focus in the
     // case that it has the focus.
-    ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet != nullptr)
-        pStateSet->RemoveState(AccessibleStateType::FOCUSED);
+    if (mxStateSet != nullptr)
+        mxStateSet->RemoveState(AccessibleStateType::FOCUSED);
 
     if (mpText != nullptr)
     {

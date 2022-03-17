@@ -28,10 +28,12 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <editeng/editengdllapi.h>
+#include <rtl/ref.hxx>
 
 namespace com::sun::star::accessibility { class XAccessibleStateSet; }
 namespace com::sun::star::accessibility { class XAccessibleRelationSet; }
 namespace com::sun::star::accessibility { struct AccessibleEventObject; }
+namespace utl { class AccessibleStateSetHelper; }
 
 namespace accessibility {
 
@@ -259,7 +261,7 @@ public:
 protected:
     /** The state set.
     */
-    css::uno::Reference< css::accessibility::XAccessibleStateSet> mxStateSet;
+    rtl::Reference<::utl::AccessibleStateSetHelper> mxStateSet;
 
     /** The relation set.  Relations can be set or removed by calling the
         <member>AddRelation</member> and <member>RemoveRelation</member> methods.

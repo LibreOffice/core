@@ -769,8 +769,7 @@ void AccessibleControlShape::initializeComposedState()
         return;
 
     // get our own state set implementation
-    ::utl::AccessibleStateSetHelper* pComposedStates =
-        static_cast< ::utl::AccessibleStateSetHelper* >( mxStateSet.get() );
+    ::utl::AccessibleStateSetHelper* pComposedStates = mxStateSet.get();
     OSL_PRECOND( pComposedStates,
         "AccessibleControlShape::initializeComposedState: no composed set!" );
 
