@@ -298,6 +298,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_transferfuncdib \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_transferfunc \
     UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_basedcs \
+    UnpackedTarball/pdfium/core/fpdfapi/page/cpdf_indexedcs \
 ))
 
 # fpdfdoc
@@ -488,6 +489,7 @@ $(eval $(call gb_Library_add_generated_exception_objects,pdfium,\
     UnpackedTarball/pdfium/core/fxge/dib/cfx_cmyk_to_srgb \
     UnpackedTarball/pdfium/core/fxge/text_char_pos \
     UnpackedTarball/pdfium/core/fxge/cfx_face \
+    UnpackedTarball/pdfium/core/fxge/calculate_pitch \
 ))
 
 # javascript, build with pdf_enable_v8 disabled.
