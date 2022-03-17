@@ -24,6 +24,7 @@
 #include <tools/fontenum.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <unordered_map>
 #include <unordered_set>
@@ -31,8 +32,6 @@
 
 namespace com::sun::star::container { class XNameAccess; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-
-class LanguageTag;
 
 enum class DefaultFontType;
 
@@ -156,6 +155,7 @@ private:
     std::unordered_map< OUString, LocaleSubst > m_aSubst;
     typedef std::unordered_set< OUString > UniqueSubstHash;
     mutable UniqueSubstHash maSubstHash;
+    LanguageTag maLanguageTag;
 
     void fillSubstVector( const css::uno::Reference< css::container::XNameAccess >& rFont,
                           const OUString& rType,

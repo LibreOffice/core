@@ -299,7 +299,8 @@ FontSubstConfiguration& FontSubstConfiguration::get()
  */
 
 FontSubstConfiguration::FontSubstConfiguration() :
-    maSubstHash( 300 )
+    maSubstHash( 300 ),
+    maLanguageTag("en")
 {
     if (utl::ConfigManager::IsFuzzing())
         return;
@@ -339,6 +340,9 @@ FontSubstConfiguration::FontSubstConfiguration() :
     }
     SAL_INFO("unotools.config", "config provider: " << m_xConfigProvider.is()
             << ", config access: " << m_xConfigAccess.is());
+
+    if( maLanguageTag.isSystemLocale() )
+        maLanguageTag = SvtSysLocale().GetUILanguageTag();
 }
 
 /*
@@ -1042,13 +1046,8 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const OUString& rFontN
     FontNameAttr aSearchAttr;
     aSearchAttr.Name = aSearchFont;
 
-    LanguageTag aLanguageTag("en");
-
-    if( aLanguageTag.isSystemLocale() )
-        aLanguageTag = SvtSysLocale().GetUILanguageTag();
-
-    ::std::vector< OUString > aFallbacks( aLanguageTag.getFallbackStrings( true));
-    if (aLanguageTag.getLanguage() != "en")
+    ::std::vector< OUString > aFallbacks( maLanguageTag.getFallbackStrings( true));
+    if (maLanguageTag.getLanguage() != "en")
         aFallbacks.emplace_back("en");
 
     for (const auto& rFallback : aFallbacks)
