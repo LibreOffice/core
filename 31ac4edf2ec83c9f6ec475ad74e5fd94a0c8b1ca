@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a82e97f6_453053b4",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/DrawImpressCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 2031,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-17T14:15:00Z",
+      "side": 0,
+      "message": "Draw/Impress can indeed also delete more than one row ;-)",
+      "range": {
+        "startLine": 2031,
+        "startChar": 41,
+        "endLine": 2031,
+        "endChar": 44
+      },
+      "revId": "31ac4edf2ec83c9f6ec475ad74e5fd94a0c8b1ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
