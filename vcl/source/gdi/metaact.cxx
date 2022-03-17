@@ -837,8 +837,49 @@ MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
     maSz        ( rSz )
 {}
 
+static bool AllowScale(const Size& rSource, const Size& rDest)
+{
+    if (utl::ConfigManager::IsFuzzing())
+    {
+        constexpr int nMaxScaleWhenFuzzing = 1024;
+
+        auto nSourceHeight = rSource.Height();
+        auto nDestHeight = rDest.Height();
+        if (nSourceHeight && nDestHeight > nSourceHeight && nDestHeight / nSourceHeight > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
+            return false;
+        }
+
+        if (nDestHeight && nSourceHeight > nDestHeight && nSourceHeight / nDestHeight > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
+            return false;
+        }
+
+        auto nSourceWidth = rSource.Width();
+        auto nDestWidth = rDest.Width();
+        if (nSourceWidth && nDestWidth > nSourceWidth && nDestWidth / nSourceWidth > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
+            return false;
+        }
+
+        if (nDestWidth && nSourceWidth > nDestWidth && nSourceWidth / nDestWidth > nMaxScaleWhenFuzzing)
+        {
+            SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
+            return false;
+        }
+    }
+
+    return true;
+}
+
 void MetaBmpScaleAction::Execute( OutputDevice* pOut )
 {
+    if (!AllowScale(maBmp.GetSizePixel(), maSz))
+        return;
+
     pOut->DrawBitmap( maPt, maSz, maBmp );
 }
 
@@ -951,38 +992,8 @@ MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
 
 void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
-    if (utl::ConfigManager::IsFuzzing())
-    {
-        constexpr int nMaxScaleWhenFuzzing = 1024;
-
-        auto nSourceHeight = maBmpEx.GetSizePixel().Height();
-        auto nDestHeight = maSz.Height();
-        if (nSourceHeight && nDestHeight > nSourceHeight && nDestHeight / nSourceHeight > nMaxScaleWhenFuzzing)
-        {
-            SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
-            return;
-        }
-
-        if (nDestHeight && nSourceHeight > nDestHeight && nSourceHeight / nDestHeight > nMaxScaleWhenFuzzing)
-        {
-            SAL_WARN("vcl", "skipping large vertical scaling: " << nSourceHeight << " to " << nDestHeight);
-            return;
-        }
-
-        auto nSourceWidth = maBmpEx.GetSizePixel().Width();
-        auto nDestWidth = maSz.Width();
-        if (nSourceWidth && nDestWidth > nSourceWidth && nDestWidth / nSourceWidth > nMaxScaleWhenFuzzing)
-        {
-            SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
-            return;
-        }
-
-        if (nDestWidth && nSourceWidth > nDestWidth && nSourceWidth / nDestWidth > nMaxScaleWhenFuzzing)
-        {
-            SAL_WARN("vcl", "skipping large horizontal scaling: " << nSourceWidth << " to " << nDestWidth);
-            return;
-        }
-    }
+    if (!AllowScale(maBmpEx.GetSizePixel(), maSz))
+        return;
 
     pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
 }
