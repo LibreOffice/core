@@ -692,6 +692,10 @@ void XclImpUrlHelper::DecodeUrl(
                             eState = xlUrlRaw;
                         }
                     break;
+                    case EXC_URL_BASE:
+                        rUrl += "\\";
+                        rUrl += aDosBase;
+                    break;
                     case EXC_URL_PARENTDIR:
                         rUrl += "..\\";
                     break;
