@@ -88,6 +88,7 @@
 #include <svx/svdoutl.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/SvxXTextColumns.hxx>
+#include <svx/xflclit.hxx>
 
 #include <memory>
 #include <optional>
@@ -2037,6 +2038,16 @@ beans::PropertyState SvxShape::_getPropertyState( const OUString& PropertyName )
                     const NameOrIndex* pItem = rSet.GetItem<NameOrIndex>(pMap->nWID);
                     if ( pItem == nullptr )
                         eState = beans::PropertyState_DEFAULT_VALUE;
+                }
+                break;
+            case XATTR_FILLCOLOR:
+                if (pMap->nMemberId == MID_COLOR_THEME_INDEX)
+                {
+                    const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
+                    if (pColor->GetThemeColor().GetThemeIndex() == -1)
+                    {
+                        eState = beans::PropertyState_DEFAULT_VALUE;
+                    }
                 }
                 break;
             }

@@ -51,6 +51,7 @@
 #include <svx/sdtayitm.hxx>
 #include <svx/sdtaiitm.hxx>
 #include <svx/xit.hxx>
+#include <svx/xflclit.hxx>
 #include <tools/diagnose_ex.h>
 #include <stlsheet.hxx>
 #include <sdresid.hxx>
@@ -1315,6 +1316,17 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                     if( ( pItem == nullptr ) || pItem->GetName().isEmpty() )
                         eState = PropertyState_DEFAULT_VALUE;
                 }
+                break;
+            case XATTR_FILLCOLOR:
+                if (pEntry->nMemberId == MID_COLOR_THEME_INDEX)
+                {
+                    const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
+                    if (pColor->GetThemeColor().GetThemeIndex() == -1)
+                    {
+                        eState = PropertyState_DEFAULT_VALUE;
+                    }
+                }
+                break;
             }
         }
 
