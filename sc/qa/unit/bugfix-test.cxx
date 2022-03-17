@@ -20,14 +20,18 @@
 #include "helper/qahelper.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <osl/file.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <sfx2/docfile.hxx>
+#include <sfx2/docfilt.hxx>
 #include <drwlayer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdomeas.hxx>
+#include <unotools/tempfile.hxx>
 #include <userdat.hxx>
 #include <stlpool.hxx>
 
@@ -65,6 +69,7 @@ public:
     void testTdf130725();
     void testTdf104502_hiddenColsCountedInPageCount();
     void testTdf108188_pagestyle();
+    void testTdf90299();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf137576_Measureline);
@@ -90,6 +95,7 @@ public:
     CPPUNIT_TEST(testTdf130725);
     CPPUNIT_TEST(testTdf104502_hiddenColsCountedInPageCount);
     CPPUNIT_TEST(testTdf108188_pagestyle);
+    CPPUNIT_TEST(testTdf90299);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -747,6 +753,75 @@ void ScFiltersTest::testTdf108188_pagestyle()
     xDocSh->DoClose();
 }
 
+void ScFiltersTest::testTdf90299()
+{
+    utl::TempFile aTmpDirectory1(nullptr, true);
+    utl::TempFile aTmpDirectory2(nullptr, true);
+    utl::TempFile aSavedFile(&aTmpDirectory1.GetURL());
+
+    struct
+    {
+        void checkFormula(ScDocShellRef xShell, OUString aExpectedFormula)
+        {
+            CPPUNIT_ASSERT(xShell.is());
+            xShell->ReloadAllLinks();
+
+            ScDocument& rDoc = xShell->GetDocument();
+
+            ScAddress aPos(0, 0, 0);
+            ScTokenArray* pCode = getTokens(rDoc, aPos);
+            CPPUNIT_ASSERT_MESSAGE("empty token array", pCode);
+
+            OUString aFormula = toString(rDoc, aPos, *pCode, rDoc.GetGrammar());
+
+            CPPUNIT_ASSERT_EQUAL(aExpectedFormula, aFormula);
+        }
+
+    } aCheckShell;
+
+    OUString aReferencedFileURL;
+    OUString aReferencingFileURL;
+    createFileURL(u"tdf90299.", u"xls", aReferencingFileURL);
+
+    osl::File::RC eError = osl::File::copy(aReferencingFileURL, aTmpDirectory1.GetURL() + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpDirectory1.GetURL() + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirectory1.GetURL() + "/dummy.xls";
+
+    ScDocShellRef xShell = load(aReferencingFileURL, FORMAT_XLS);
+    aCheckShell.checkFormula(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");
+
+    aReferencingFileURL = aSavedFile.GetURL();
+
+    FileFormat filterFormat = FileFormat{ "xls" , "MS Excel 97", "calc_MS_EXCEL_97", XLS_FORMAT_TYPE };
+    OUString aFilterName(filterFormat.pFilterName, strlen(filterFormat.pFilterName), RTL_TEXTENCODING_UTF8);
+    OUString aFilterType(filterFormat.pTypeName, strlen(filterFormat.pTypeName), RTL_TEXTENCODING_UTF8);
+
+    SfxMedium aStoreMedium( aReferencingFileURL, StreamMode::STD_WRITE );
+
+    auto pExportFilter = std::make_shared<SfxFilter>(
+        aFilterName, OUString(), filterFormat.nFormatType, SotClipboardFormatId::NONE,
+        aFilterType, OUString(), OUString(), "private:factory/scalc*"
+    );
+    pExportFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
+
+    aStoreMedium.SetFilter(pExportFilter);
+
+    xShell->DoSaveAs(aStoreMedium);
+    xShell->DoClose();
+
+    eError = osl::File::copy(aReferencingFileURL, aTmpDirectory2.GetURL() + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpDirectory2.GetURL() + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirectory2.GetURL() + "/dummy.xls";
+
+    xShell = load(aReferencingFileURL, FORMAT_XLS);
+    aCheckShell.checkFormula(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");
+
+    xShell->DoClose();
+}
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
