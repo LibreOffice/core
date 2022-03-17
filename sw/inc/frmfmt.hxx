@@ -73,7 +73,7 @@ class SW_DLLPUBLIC SwFrameFormat
 
     // The assigned SwFrmFmt list.
     SwFrameFormats *m_ffList;
-
+    SwTextBoxHandler* m_pTextBoxHandler;
     SwTextBoxNode* m_pOtherTextBoxFormat;
 
     struct change_name
@@ -101,6 +101,9 @@ protected:
     virtual void SwClientNotify(const SwModify&, const SfxHint&) override;
 
 public:
+
+    SwTextBoxHandler* GetTextBoxHandler() const { return m_pTextBoxHandler; }
+    void SetTextBoxHandler(SwTextBoxHandler* pNew) { m_pTextBoxHandler = pNew; }
 
     SwTextBoxNode* GetOtherTextBoxFormat() const { return m_pOtherTextBoxFormat; };
     void SetOtherTextBoxFormat(SwTextBoxNode* pNew) { m_pOtherTextBoxFormat = pNew; };

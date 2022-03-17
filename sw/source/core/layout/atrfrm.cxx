@@ -2524,6 +2524,11 @@ SwFrameFormat::SwFrameFormat(
     m_ffList(nullptr),
     m_pOtherTextBoxFormat(nullptr)
 {
+
+    if (Which() == RES_DRAWFRMFMT)
+        m_pTextBoxHandler = new SwTextBoxHandler(this);
+    else
+        m_pTextBoxHandler = nullptr;
 }
 
 SwFrameFormat::SwFrameFormat(
@@ -2536,6 +2541,11 @@ SwFrameFormat::SwFrameFormat(
     m_ffList(nullptr),
     m_pOtherTextBoxFormat(nullptr)
 {
+
+    if (Which() == RES_DRAWFRMFMT)
+        m_pTextBoxHandler = new SwTextBoxHandler(this);
+    else
+        m_pTextBoxHandler = nullptr;
 }
 
 SwFrameFormat::~SwFrameFormat()
@@ -2560,12 +2570,26 @@ SwFrameFormat::~SwFrameFormat()
         m_pOtherTextBoxFormat->DelTextBox(pObj);
     }
 
+    if (Which() == RES_FLYFRMFMT)
+    {
+        if (m_pTextBoxHandler)
+        {
+            m_pTextBoxHandler->RemoveTextBox(this, true);
+        }
+    }
+
     if (Which() == RES_DRAWFRMFMT)
     {
         // This format is the owner shape, so its time
         // to del the textbox node.
         delete m_pOtherTextBoxFormat;
         m_pOtherTextBoxFormat = nullptr;
+
+        if (m_pTextBoxHandler)
+        {
+            delete m_pTextBoxHandler;
+            m_pTextBoxHandler = nullptr;
+        }
     }
 }
 

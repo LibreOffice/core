@@ -1756,4 +1756,407 @@ std::map<SdrObject*, SwFrameFormat*> SwTextBoxNode::GetAllTextBoxes() const
     return aRet;
 }
 
+SwTextBoxHandler::SwTextBoxHandler(SwFrameFormat* pHost)
+    : m_TextBoxTable()
+    , m_bInDtor(false)
+{
+    assert(pHost);
+    if (pHost->Which() != RES_DRAWFRMFMT)
+        throw lang::IllegalArgumentException();
+    m_pHostShape = pHost;
+}
+
+SwTextBoxHandler::~SwTextBoxHandler()
+{
+    m_bInDtor = true;
+    SwDoc* pDoc = m_pHostShape->GetDoc();
+    assert(pDoc);
+
+    for (auto& rElem : m_TextBoxTable)
+    {
+        pDoc->getIDocumentLayoutAccess().DelLayoutFormat(rElem.second);
+    }
+    m_TextBoxTable.clear();
+}
+
+SwFrameFormat* SwTextBoxHandler::FindTextBox(const SdrObject* pObj)
+{
+    if (!HasTextBox())
+        return nullptr;
+
+    if (!pObj)
+        throw lang::IllegalArgumentException();
+
+    if (m_TextBoxTable.count(pObj))
+        return m_TextBoxTable.at(pObj);
+    else
+        throw container::NoSuchElementException();
+}
+
+bool SwTextBoxHandler::RemoveTextBox(SwFrameFormat* pTextBox, bool bRemoveOnlyEntry)
+{
+    if (m_bInDtor)
+        return false;
+
+    if (!pTextBox)
+        throw lang::IllegalArgumentException();
+
+    auto pDoc = m_pHostShape->GetDoc();
+    if (!pDoc)
+        throw uno::RuntimeException();
+
+    for (auto it = m_TextBoxTable.begin(); it != m_TextBoxTable.end();)
+    {
+        if (it->second == pTextBox)
+        {
+            m_TextBoxTable.erase(it->first);
+            if (!bRemoveOnlyEntry)
+                pDoc->getIDocumentLayoutAccess().DelLayoutFormat(pTextBox);
+            return true;
+        }
+        else
+            ++it;
+    }
+
+    throw container::NoSuchElementException();
+}
+
+bool SwTextBoxHandler::RemoveTextBox(const SdrObject* pObj, bool bRemoveOnlyEntry)
+{
+    if (m_bInDtor)
+        return false;
+
+    if (auto pTextBox = FindTextBox(pObj))
+    {
+        return RemoveTextBox(pTextBox, bRemoveOnlyEntry);
+    }
+    return false;
+}
+
+bool SwTextBoxHandler::CreateTextBox(const SdrObject* pObj, bool bCopyText)
+{
+    if (m_bInDtor)
+        return false;
+
+    if (auto pTextBox = FindTextBox(pObj))
+        return false;
+
+    auto pDoc = m_pHostShape->GetDoc();
+    if (!pDoc)
+        throw uno::RuntimeException();
+
+    uno::Reference<text::XTextFrame> xNew = SwXTextFrame::CreateXTextFrame(*pDoc, nullptr);
+    if (!xNew)
+        throw uno::RuntimeException();
+
+    uno::Reference<text::XTextDocument> xTextDocument(pDoc->GetDocShell()->GetBaseModel(),
+                                                      uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextContentAppend> xTextContentAppend(xTextDocument->getText(),
+                                                                uno::UNO_QUERY_THROW);
+
+    xTextContentAppend->appendTextContent(xNew, {});
+
+    uno::Reference<container::XNamed> xNamed(xNew, uno::UNO_QUERY_THROW);
+    xNamed->setName(pDoc->GetUniqueFrameName());
+
+    return ChangeTextBox(xNew, pObj);
+}
+
+bool SwTextBoxHandler::ChangeTextBox(uno::Reference<text::XTextFrame> xNew, const SdrObject* pObj)
+{
+    // Do not set invalid data
+    assert(m_pHostShape && pObj && xNew);
+    // Firstly find the format of the new textbox.
+    SwFrameFormat* pFormat = nullptr;
+    if (auto pTextFrame = dynamic_cast<SwXTextFrame*>(xNew.get()))
+        pFormat = pTextFrame->GetFrameFormat();
+    if (!pFormat)
+        return false;
+
+    pFormat->SetTextBoxHandler(this);
+    if (m_TextBoxTable.count(pObj))
+        m_TextBoxTable.erase(pObj);
+    m_TextBoxTable.insert(std::pair(pObj, pFormat));
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xNew, uno::UNO_QUERY);
+    uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+    xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
+    xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
+
+    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
+
+    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+
+    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGH));
+
+    NotifyTextBoxes();
+    return true;
+}
+
+void SwTextBoxHandler::NotifyTextBoxes() { lcl_NotifyTextBoxes(m_pHostShape->FindRealSdrObject()); }
+
+void SwTextBoxHandler::lcl_NotifyTextBoxes(SdrObject* pObj)
+{
+    if (auto pChildren = pObj->getChildrenOfSdrObject())
+    {
+        for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
+            lcl_NotifyTextBoxes(pChildren->GetObj(i));
+    }
+    else
+    {
+        if (auto pTextBox = FindTextBox(pObj))
+            SyncTextBoxProperties(pTextBox, pObj);
+    }
+}
+
+bool SwTextBoxHandler::SyncTextBoxProperties(SwFrameFormat* pTextBox, SdrObject* pObj)
+{
+    const SwFormatAnchor& rOldAnch = pTextBox->GetAnchor();
+    const SwFormatAnchor& rNewAnch = m_pHostShape->GetAnchor();
+
+    const auto pOldCnt = rOldAnch.GetContentAnchor();
+    const auto pNewCnt = rNewAnch.GetContentAnchor();
+
+    const uno::Any aShapeHorRelOrient
+        = uno::makeAny(m_pHostShape->GetHoriOrient().GetRelationOrient());
+
+    ::sw::UndoGuard const UndoGuard(m_pHostShape->GetDoc()->GetIDocumentUndoRedo());
+    uno::Reference<beans::XPropertySet> const xPropertySet(
+        SwXTextFrame::CreateXTextFrame(*pTextBox->GetDoc(), pTextBox), uno::UNO_QUERY);
+    if (pOldCnt && rNewAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE && rNewAnch.GetPageNum())
+    {
+        uno::Any aValue(text::TextContentAnchorType_AT_PAGE);
+        xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, aShapeHorRelOrient);
+        xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
+        xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_PAGE_NO, uno::Any(rNewAnch.GetPageNum()));
+    }
+    else if (rOldAnch.GetAnchorId() == RndStdIds::FLY_AT_PAGE && pNewCnt)
+    {
+        if (rNewAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+        {
+            uno::Any aValue(text::TextContentAnchorType_AT_CHARACTER);
+            xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
+            xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION,
+                                           uno::Any(text::RelOrientation::CHAR));
+            xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION,
+                                           uno::Any(text::RelOrientation::PRINT_AREA));
+            SwFormatAnchor aPos(pTextBox->GetAnchor());
+            aPos.SetAnchor(pNewCnt);
+            pTextBox->SetFormatAttr(aPos);
+        }
+        else
+        {
+            uno::Any aValue(SwTextBoxHelper::mapAnchorType(rNewAnch.GetAnchorId()));
+            xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, aShapeHorRelOrient);
+            xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
+            pTextBox->SetFormatAttr(rNewAnch);
+        }
+    }
+    else
+    {
+        if (rNewAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+        {
+            uno::Any aValue(text::TextContentAnchorType_AT_CHARACTER);
+            xPropertySet->setPropertyValue(UNO_NAME_ANCHOR_TYPE, aValue);
+            xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION,
+                                           uno::Any(text::RelOrientation::CHAR));
+            xPropertySet->setPropertyValue(UNO_NAME_VERT_ORIENT_RELATION,
+                                           uno::Any(text::RelOrientation::PRINT_AREA));
+            SwFormatAnchor aPos(pTextBox->GetAnchor());
+            aPos.SetAnchor(pNewCnt);
+            pTextBox->SetFormatAttr(aPos);
+        }
+        else
+        {
+            xPropertySet->setPropertyValue(UNO_NAME_HORI_ORIENT_RELATION, aShapeHorRelOrient);
+            pTextBox->SetFormatAttr(m_pHostShape->GetAnchor());
+        }
+    }
+
+    // Set the position of the textboxes according to the position of its shape-pair
+    const bool bIsGroupObj = (pObj != m_pHostShape->FindRealSdrObject()) && pObj;
+
+    // Do not create undo entry for the positioning
+    //::sw::UndoGuard const UndoGuard(m_pHostShape->GetDoc()->GetIDocumentUndoRedo());
+
+    // Special treatment for AS_CHAR textboxes:
+    if (m_pHostShape->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
+    {
+        // Get the text area of the shape
+        tools::Rectangle aRect(SwTextBoxHelper::getTextRectangle(
+            pObj ? pObj : m_pHostShape->FindRealSdrObject(), false));
+
+        // Get the left spacing of the text area of the shape
+        auto nLeftSpace = m_pHostShape->GetLRSpace().GetLeft();
+
+        // Set the textbox position at the X-axis:
+        SwFormatHoriOrient aNewHOri(pTextBox->GetHoriOrient());
+        aNewHOri.SetPos(aRect.Left() + nLeftSpace
+                        + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
+        SwFormatVertOrient aNewVOri(pTextBox->GetVertOrient());
+
+        // Special handling of group textboxes
+        if (bIsGroupObj)
+        {
+            // There are the following cases:
+            // case 1: The textbox should be in that position where the shape is.
+            // case 2: The shape has negative offset so that have to be subtracted
+            // case 3: The shape and its parent shape also has negative offset, so subtract
+            aNewVOri.SetPos(((pObj->GetRelativePos().getY()) > 0
+                                 ? (m_pHostShape->GetVertOrient().GetPos() > 0
+                                        ? pObj->GetRelativePos().getY()
+                                        : pObj->GetRelativePos().getY()
+                                              - m_pHostShape->GetVertOrient().GetPos())
+                                 : (m_pHostShape->GetVertOrient().GetPos() > 0
+                                        ? 0 // Is this can be a variation?
+                                        : pObj->GetRelativePos().getY()
+                                              - m_pHostShape->GetVertOrient().GetPos()))
+                            + aRect.Top());
+        }
+        else
+        {
+            // Simple textboxes: vertical position equals to the vertical offset of the shape
+            aNewVOri.SetPos(((m_pHostShape->GetVertOrient().GetPos()) > 0
+                                 ? m_pHostShape->GetVertOrient().GetPos()
+                                 : 0)
+                            + aRect.Top());
+        }
+
+        // Special cases when the shape is aligned to the line
+        if (m_pHostShape->GetVertOrient().GetVertOrient() != text::VertOrientation::NONE)
+        {
+            aNewVOri.SetVertOrient(text::VertOrientation::NONE);
+            switch (m_pHostShape->GetVertOrient().GetVertOrient())
+            {
+                // Top aligned shape
+                case text::VertOrientation::TOP:
+                case text::VertOrientation::CHAR_TOP:
+                case text::VertOrientation::LINE_TOP:
+                {
+                    aNewVOri.SetPos(aNewVOri.GetPos() - m_pHostShape->GetFrameSize().GetHeight());
+                    break;
+                }
+                // Bottom aligned shape
+                case text::VertOrientation::BOTTOM:
+                case text::VertOrientation::CHAR_BOTTOM:
+                case text::VertOrientation::LINE_BOTTOM:
+                {
+                    aNewVOri.SetPos(aNewVOri.GetPos() + m_pHostShape->GetFrameSize().GetHeight());
+                    break;
+                }
+                // Center aligned shape
+                case text::VertOrientation::CENTER:
+                case text::VertOrientation::CHAR_CENTER:
+                case text::VertOrientation::LINE_CENTER:
+                {
+                    aNewVOri.SetPos(aNewVOri.GetPos()
+                                    + std::lroundf(m_pHostShape->GetFrameSize().GetHeight() / 2));
+                    break;
+                }
+                default:
+                    break;
+            }
+        }
+
+        pTextBox->SetFormatAttr(aNewHOri);
+        pTextBox->SetFormatAttr(aNewVOri);
+    }
+    // Other cases when the shape has different anchor from AS_CHAR
+    else
+    {
+        // Text area of the shape
+        tools::Rectangle aRect(SwTextBoxHelper::getTextRectangle(
+            pObj ? pObj : m_pHostShape->FindRealSdrObject(), false));
+
+        // X Offset of the shape spacing
+        auto nLeftSpace = m_pHostShape->GetLRSpace().GetLeft();
+
+        // Set the same position as the (child) shape has
+        SwFormatHoriOrient aNewHOri(m_pHostShape->GetHoriOrient());
+        aNewHOri.SetPos((bIsGroupObj && pObj ? pObj->GetRelativePos().getX() : aNewHOri.GetPos())
+                        + aRect.Left());
+        SwFormatVertOrient aNewVOri(m_pHostShape->GetVertOrient());
+        aNewVOri.SetPos((bIsGroupObj && pObj ? pObj->GetRelativePos().getY() : aNewVOri.GetPos())
+                        + aRect.Top());
+
+        // Get the distance of the child shape inside its parent
+        const auto& nInshapePos
+            = pObj ? pObj->GetRelativePos() - m_pHostShape->FindRealSdrObject()->GetRelativePos()
+                   : Point();
+
+        // Special case: the shape has relative position from the page
+        if (m_pHostShape->GetHoriOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+            && m_pHostShape->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PAGE)
+        {
+            aNewHOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+            aNewHOri.SetPos(m_pHostShape->GetHoriOrient().GetPos() + nInshapePos.getX()
+                            + aRect.Left());
+        }
+
+        if (m_pHostShape->GetVertOrient().GetRelationOrient() == text::RelOrientation::PAGE_FRAME
+            && m_pHostShape->GetAnchor().GetAnchorId() != RndStdIds::FLY_AT_PAGE)
+        {
+            aNewVOri.SetRelationOrient(text::RelOrientation::PAGE_FRAME);
+            aNewVOri.SetPos(m_pHostShape->GetVertOrient().GetPos() + nInshapePos.getY()
+                            + aRect.Top());
+        }
+
+        // Other special case: shape is inside a table or floating table following the text flow
+        if (m_pHostShape->GetFollowTextFlow().GetValue()
+            && m_pHostShape->GetAnchor().GetContentAnchor()
+            && m_pHostShape->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode())
+        {
+            // Table position
+            Point nTableOffset;
+            // Floating table
+            if (auto pFly = m_pHostShape->GetAnchor()
+                                .GetContentAnchor()
+                                ->nNode.GetNode()
+                                .FindTableNode()
+                                ->FindFlyStartNode())
+            {
+                if (auto pFlyFormat = pFly->GetFlyFormat())
+                {
+                    nTableOffset.setX(pFlyFormat->GetHoriOrient().GetPos());
+                    nTableOffset.setY(pFlyFormat->GetVertOrient().GetPos());
+                }
+            }
+            else
+            // Normal table
+            {
+                auto pTableNode
+                    = m_pHostShape->GetAnchor().GetContentAnchor()->nNode.GetNode().FindTableNode();
+                if (auto pTableFormat = pTableNode->GetTable().GetFrameFormat())
+                {
+                    nTableOffset.setX(pTableFormat->GetHoriOrient().GetPos());
+                    nTableOffset.setY(pTableFormat->GetVertOrient().GetPos());
+                }
+            }
+
+            // Add the table positions to the textbox.
+            aNewHOri.SetPos(aNewHOri.GetPos() + nTableOffset.getX() + nLeftSpace);
+            if (m_pHostShape->GetVertOrient().GetRelationOrient()
+                    == text::RelOrientation::PAGE_FRAME
+                || m_pHostShape->GetVertOrient().GetRelationOrient()
+                       == text::RelOrientation::PAGE_PRINT_AREA)
+                aNewVOri.SetPos(aNewVOri.GetPos() + nTableOffset.getY());
+        }
+
+        pTextBox->SetFormatAttr(aNewHOri);
+        pTextBox->SetFormatAttr(aNewVOri);
+    }
+
+    const auto& rSize = SwTextBoxHelper::getTextRectangle(pObj, false).GetSize();
+    if (!rSize.IsEmpty())
+    {
+        SwFormatFrameSize aSize(pTextBox->GetFrameSize());
+        aSize.SetSize(rSize);
+        return pTextBox->SetFormatAttr(aSize);
+    }
+
+    return true;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

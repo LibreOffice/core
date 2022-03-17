@@ -1382,7 +1382,12 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());
 
                 pDoc->getIDocumentState().SetEnableSetModified(bEnableSetModified);
+
+
             }
+            if (auto pFormat = GetFormat())
+                if (auto cica = pFormat->GetTextBoxHandler())
+                    cica->NotifyTextBoxes();
         }
         break;
         case SdrUserCallType::ChangeAttr:

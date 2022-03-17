@@ -371,8 +371,11 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                if (pFrameFormat)
-                    SwTextBoxHelper::create(pFrameFormat, pObj, pObj->HasText());
+                if (pFrameFormat && pFrameFormat->GetTextBoxHandler())
+                {
+                    pFrameFormat->GetTextBoxHandler()->CreateTextBox(pObj, false);
+                }
+                    //SwTextBoxHelper::create(pFrameFormat, pObj, pObj->HasText());
             }
             break;
         }
@@ -381,8 +384,9 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             if (SdrObject* pObj = IsSingleFillableNonOLESelected())
             {
                 SwFrameFormat* pFrameFormat = ::FindFrameFormat(pObj);
-                if (pFrameFormat)
-                    SwTextBoxHelper::destroy(pFrameFormat, pObj);
+                if (pFrameFormat && pFrameFormat->GetOtherTextBoxFormat())
+                    pFrameFormat->GetTextBoxHandler()->RemoveTextBox(pObj, false);
+                    //SwTextBoxHelper::destroy(pFrameFormat, pObj);
             }
             break;
         }

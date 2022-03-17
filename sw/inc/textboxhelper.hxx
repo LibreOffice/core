@@ -11,6 +11,7 @@
 #define INCLUDED_SW_INC_TEXTBOXHELPER_HXX
 
 #include <map>
+#include <unordered_map>
 #include <set>
 #include <vector>
 
@@ -245,6 +246,42 @@ public:
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
     // Returns with a const collection of textboxes owned by this node.
     std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
+};
+
+class SwTextBoxHandler
+{
+    SwFrameFormat* m_pHostShape;
+    std::unordered_map<const SdrObject*, SwFrameFormat*> m_TextBoxTable;
+    bool m_bInDtor;
+
+    SwFrameFormat* FindTextBox(const SdrObject* pObj);
+
+    SwTextBoxHandler() = delete;
+
+    void lcl_NotifyTextBoxes(SdrObject* pObj);
+
+    bool SyncTextBoxProperties(SwFrameFormat* pTextBox, SdrObject* pObj);
+
+public:
+    SwTextBoxHandler(SwFrameFormat* pHost);
+    SwTextBoxHandler(SwTextBoxHandler&) = default;
+    ~SwTextBoxHandler();
+
+    SwFrameFormat* GetHost() const { return m_pHostShape; };
+
+    bool CreateTextBox(const SdrObject* pObj, bool bCopyText = false);
+
+    bool ChangeTextBox(css::uno::Reference<css::text::XTextFrame> xNew, const SdrObject* pObj);
+
+    bool RemoveTextBox(SwFrameFormat* pTextBox, bool bRemoveOnlyEntry);
+
+    bool RemoveTextBox(const SdrObject* pObj, bool bRemoveOnlyEntry);
+
+    size_t GetTextBoxCount() const { return m_TextBoxTable.size(); }
+
+    bool HasTextBox() const { return !m_TextBoxTable.empty(); }
+
+    void NotifyTextBoxes();
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX
