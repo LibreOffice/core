@@ -44,8 +44,11 @@
 #include <editeng/fhgtitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/colritem.hxx>
+#include <osl/file.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/datetime.hxx>
+#include <tools/urlobj.hxx>
+
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/awt/XBitmap.hpp>
@@ -182,6 +185,7 @@ public:
     void testPreserveTextWhitespace2XLSX();
     void testTdf113646();
     void testDateStandardfilterXLSX();
+    void testTdf90299();
 
     CPPUNIT_TEST_SUITE(ScExportTest);
     CPPUNIT_TEST(test);
@@ -287,6 +291,7 @@ public:
     CPPUNIT_TEST(testMoveCellAnchoredShapesODS);
     CPPUNIT_TEST(testTdf113646);
     CPPUNIT_TEST(testDateStandardfilterXLSX);
+    CPPUNIT_TEST(testTdf90299);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4515,6 +4520,47 @@ void ScExportTest::testDateStandardfilterXLSX()
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]", "year", "2011");
     assertXPath(pDoc, "//x:autoFilter/x:filterColumn/x:filters/x:dateGroupItem[1]",
                 "dateTimeGrouping", "day");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest::testTdf90299()
+{
+    struct
+    {
+        void checkFormula(ScDocShellRef xShell, OUString aExpectedFormula)
+        {
+            ScDocument& rDoc = xShell->GetDocument();
+
+            ScAddress aPos(0, 0, 0);
+            ScTokenArray* pCode = getTokens(rDoc, aPos);
+            CPPUNIT_ASSERT_MESSAGE("empty token array", pCode);
+
+            OUString aFormula = toString(rDoc, aPos, *pCode, rDoc.GetGrammar());
+
+            CPPUNIT_ASSERT_EQUAL(aExpectedFormula, aFormula);
+        }
+
+        OUString getReferencedFileURL(ScDocShellRef xShell)
+        {
+            INetURLObject aFileURL = INetURLObject(xShell->getDocumentBaseURL());
+            aFileURL.removeSegment();
+            return aFileURL.GetMainURL(INetURLObject::DecodeMechanism::NONE) + "dummy.xls";
+        }
+
+    } aCheckTools;
+
+    ScDocShellRef xShell = loadDoc(u"tdf90299.", FORMAT_XLS);
+    CPPUNIT_ASSERT(xShell.is());
+    xShell->ReloadAllLinks();
+
+    aCheckTools.checkFormula(xShell, "'" + aCheckTools.getReferencedFileURL(xShell) + "'#$Sheet1.A1");
+
+    ScDocShellRef xDocSh = saveAndReload(*xShell, FORMAT_XLS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    xDocSh->ReloadAllLinks();
+
+    aCheckTools.checkFormula(xDocSh, "'" + aCheckTools.getReferencedFileURL(xDocSh) + "'#$Sheet1.A1");
 
     xDocSh->DoClose();
 }

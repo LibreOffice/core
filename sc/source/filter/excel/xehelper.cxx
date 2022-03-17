@@ -887,7 +887,7 @@ namespace {
 /** Encodes special parts of the path, i.e. directory separators and volume names.
     @param pTableName  Pointer to a table name to be encoded in this path, or 0. */
 OUString lclEncodeDosPath(
-    XclBiff eBiff, std::u16string_view path, std::u16string_view rBase, const OUString* pTableName)
+    XclBiff eBiff, std::u16string_view path, std::u16string_view rRel, const OUString* pTableName)
 {
     OUStringBuffer aBuf;
 
@@ -896,7 +896,11 @@ OUString lclEncodeDosPath(
         std::u16string_view aOldPath = path;
         aBuf.append(EXC_URLSTART_ENCODED);
 
-        if ( aOldPath.length() > 2 && o3tl::starts_with(aOldPath, u"\\\\") )
+        if (rRel.length())
+        {
+            aOldPath = rRel;
+        }
+        else if ( aOldPath.length() > 2 && o3tl::starts_with(aOldPath, u"\\\\") )
         {
             // UNC
             aBuf.append(EXC_URL_DOSDRIVE).append('@');
@@ -904,14 +908,7 @@ OUString lclEncodeDosPath(
         }
         else if ( aOldPath.length() > 2 && o3tl::starts_with(aOldPath.substr(1), u":\\") )
         {
-            // drive letter
-            sal_Unicode cThisDrive = rBase.empty() ? ' ' : rBase[0];
-            sal_Unicode cDrive = aOldPath[0];
-            if (cThisDrive == cDrive)
-                // This document and the referenced document are under the same drive.
-                aBuf.append(EXC_URL_DRIVEROOT);
-            else
-                aBuf.append(EXC_URL_DOSDRIVE).append(cDrive);
+            aBuf.append(EXC_URL_DOSDRIVE).append(aOldPath[0]);
             aOldPath = aOldPath.substr(3);
         }
         else
@@ -974,7 +971,27 @@ OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, std::u16string_vie
 {
     OUString aDosPath = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
     OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(FSysStyle::Dos);
-    return lclEncodeDosPath(rRoot.GetBiff(), aDosPath, aDosBase, pTableName);
+    OUString aDosRel;
+
+    sal_Unicode cPathDrive(' '), cBaseDrive(' ');
+
+    if (aDosPath.getLength() > 2 && aDosPath.match(":\\", 1))
+    {
+        cBaseDrive = aDosBase.isEmpty() ? ' ' : aDosBase[0];
+        cPathDrive = aDosPath[0];
+    }
+
+    if (rRoot.IsRelUrl() && cPathDrive == cBaseDrive)
+    {
+        aDosRel = INetURLObject::GetRelURL(
+            rRoot.GetBasePath(), OUString(rAbsUrl),
+            INetURLObject::EncodeMechanism::All,
+            INetURLObject::DecodeMechanism::NONE,
+            RTL_TEXTENCODING_UTF8, FSysStyle::Dos
+        ).replaceAll("/", "\\");
+    }
+
+    return lclEncodeDosPath(rRoot.GetBiff(), aDosPath, aDosRel, pTableName);
 }
 
 OUString XclExpUrlHelper::EncodeDde( std::u16string_view rApplic, std::u16string_view rTopic )
