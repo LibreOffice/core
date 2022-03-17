@@ -822,9 +822,9 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
 
         OutTableCells( rWrt, pRow2->GetCells(), pRow2->GetBackground() );
         if( !m_nCellSpacing && nRow < m_aRows.size()-1 && pRow2->m_bBottomBorder &&
-            pRow2->m_nBottomBorder > SvxBorderLineWidth::Hairline )
+            pRow2->m_nBottomBorder > SvxBorderLineWidth::Thin )
         {
-            for( auto nCnt = (pRow2->m_nBottomBorder / SvxBorderLineWidth::Hairline) - 1; nCnt; --nCnt )
+            for( auto nCnt = (pRow2->m_nBottomBorder / SvxBorderLineWidth::Thin) - 1; nCnt; --nCnt )
             {
                 rWrt.OutNewLine();
                 HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow ));
