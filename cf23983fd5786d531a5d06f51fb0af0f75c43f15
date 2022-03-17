@@ -33,6 +33,23 @@
       "message": "looks perfectly reasonable to me, the other MediaBox presumably also had the same issue until the commit of\n\ncommit a05dc747caf5b8fef6bd95a999cb6098f2b4dbc7\nAuthor: Miklos Vajna \u003cvmiklos@collabora.co.uk\u003e\nDate:   Thu May 25 16:37:04 2017 +0200\n    tdf#108056 PDF export: work with double page size\n\nso feel free to push this when you get a jenkins green",
       "revId": "cf23983fd5786d531a5d06f51fb0af0f75c43f15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06db3716_d0049310",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T21:12:30Z",
+      "side": 1,
+      "message": "Thank you for your feedback, let\u0027s push this then!",
+      "revId": "cf23983fd5786d531a5d06f51fb0af0f75c43f15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
