@@ -122,16 +122,15 @@ namespace accessibility
         try
         {
             // Create the state set.
-            rtl::Reference<::utl::AccessibleStateSetHelper> pStateSet  = new ::utl::AccessibleStateSetHelper ();
-            mxStateSet = pStateSet;
+            mxStateSet  = new ::utl::AccessibleStateSetHelper ();
 
             // these are always on
-            pStateSet->AddState( AccessibleStateType::MULTI_LINE );
-            pStateSet->AddState( AccessibleStateType::FOCUSABLE );
-            pStateSet->AddState( AccessibleStateType::VISIBLE );
-            pStateSet->AddState( AccessibleStateType::SHOWING );
-            pStateSet->AddState( AccessibleStateType::ENABLED );
-            pStateSet->AddState( AccessibleStateType::SENSITIVE );
+            mxStateSet->AddState( AccessibleStateType::MULTI_LINE );
+            mxStateSet->AddState( AccessibleStateType::FOCUSABLE );
+            mxStateSet->AddState( AccessibleStateType::VISIBLE );
+            mxStateSet->AddState( AccessibleStateType::SHOWING );
+            mxStateSet->AddState( AccessibleStateType::ENABLED );
+            mxStateSet->AddState( AccessibleStateType::SENSITIVE );
         }
         catch (const uno::Exception&)
         {
@@ -573,22 +572,20 @@ namespace accessibility
 
     void AccessibleEditableTextPara::SetState( const sal_Int16 nStateId )
     {
-        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        if( pStateSet != nullptr &&
-            !pStateSet->contains(nStateId) )
+        if( mxStateSet != nullptr &&
+            !mxStateSet->contains(nStateId) )
         {
-            pStateSet->AddState( nStateId );
+            mxStateSet->AddState( nStateId );
             FireEvent( AccessibleEventId::STATE_CHANGED, uno::makeAny( nStateId ) );
         }
     }
 
     void AccessibleEditableTextPara::UnSetState( const sal_Int16 nStateId )
     {
-        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-        if( pStateSet != nullptr &&
-            pStateSet->contains(nStateId) )
+        if( mxStateSet != nullptr &&
+            mxStateSet->contains(nStateId) )
         {
-            pStateSet->RemoveState( nStateId );
+            mxStateSet->RemoveState( nStateId );
             FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::makeAny( nStateId ) );
         }
     }
@@ -941,9 +938,8 @@ namespace accessibility
         SolarMutexGuard aGuard;
 
         // Create a copy of the state set and return it.
-        ::utl::AccessibleStateSetHelper* pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
 
-        if( !pStateSet )
+        if( !mxStateSet )
             return uno::Reference<XAccessibleStateSet>();
         uno::Reference<XAccessibleStateSet> xParentStates;
         if (getAccessibleParent().is())
@@ -953,9 +949,9 @@ namespace accessibility
         }
         if (xParentStates.is() && xParentStates->contains(AccessibleStateType::EDITABLE) )
         {
-            pStateSet->AddState(AccessibleStateType::EDITABLE);
+            mxStateSet->AddState(AccessibleStateType::EDITABLE);
         }
-        return uno::Reference<XAccessibleStateSet>( new ::utl::AccessibleStateSetHelper (*pStateSet) );
+        return uno::Reference<XAccessibleStateSet>( new ::utl::AccessibleStateSetHelper (*mxStateSet) );
     }
 
     lang::Locale SAL_CALL AccessibleEditableTextPara::getLocale()

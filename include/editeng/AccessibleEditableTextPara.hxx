@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_ACCESSIBLEEDITABLETEXTPARA_HXX
 
 #include <config_options.h>
+#include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <tools/gen.hxx>
 #include <comphelper/compbase.hxx>
@@ -47,6 +48,7 @@ class MapMode;
 class SvxAccessibleTextAdapter;
 class SvxAccessibleTextEditViewAdapter;
 namespace accessibility { class AccessibleImageBullet; }
+namespace utl { class AccessibleStateSetHelper; }
 
 namespace accessibility
 {
@@ -363,7 +365,7 @@ namespace accessibility
         Point maEEOffset;
 
         // the current state set (updated from SetState/UnSetState and guarded by solar mutex)
-        css::uno::Reference< css::accessibility::XAccessibleStateSet > mxStateSet;
+        rtl::Reference< ::utl::AccessibleStateSetHelper > mxStateSet;
 
         /// The shape we're the accessible for (unguarded)
         css::uno::Reference< css::accessibility::XAccessible > mxParent;
