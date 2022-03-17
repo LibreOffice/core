@@ -31,13 +31,14 @@ class RTFPicture;
 /// Value of an RTF keyword
 class RTFValue : public Value
 {
-public:
-    using Pointer_t = tools::SvRef<RTFValue>;
-    RTFValue(int nValue, OUString sValue, const RTFSprms& rAttributes, const RTFSprms& rSprms,
+    RTFValue(int nValue, OUString sValue, const RTFSprms* pAttributes, const RTFSprms* pSprms,
              css::uno::Reference<css::drawing::XShape> xShape,
              css::uno::Reference<css::io::XInputStream> xStream,
              css::uno::Reference<css::embed::XEmbeddedObject> xObject, bool bForceString,
-             const RTFShape& aShape, const RTFPicture& rPicture);
+             const RTFShape* pShape, const RTFPicture* pPicture);
+
+public:
+    using Pointer_t = tools::SvRef<RTFValue>;
     RTFValue();
     explicit RTFValue(int nValue);
     RTFValue(OUString sValue, bool bForce = false);
@@ -58,10 +59,10 @@ public:
 #ifdef DBG_UTIL
     std::string toString() const override;
 #endif
-    RTFValue* Clone();
-    RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms);
-    RTFSprms& getAttributes();
-    RTFSprms& getSprms();
+    RTFValue* Clone() const;
+    RTFValue* CloneWithSprms(RTFSprms const& rAttributes, RTFSprms const& rSprms) const;
+    RTFSprms& getAttributes() const;
+    RTFSprms& getSprms() const;
     RTFShape& getShape() const;
     RTFPicture& getPicture() const;
     bool equals(const RTFValue& rOther) const;
@@ -70,14 +71,14 @@ public:
 private:
     int m_nValue = 0;
     OUString m_sValue;
-    tools::SvRef<RTFSprms> m_pAttributes;
-    tools::SvRef<RTFSprms> m_pSprms;
+    mutable tools::SvRef<RTFSprms> m_pAttributes;
+    mutable tools::SvRef<RTFSprms> m_pSprms;
     css::uno::Reference<css::drawing::XShape> m_xShape;
     css::uno::Reference<css::io::XInputStream> m_xStream;
     css::uno::Reference<css::embed::XEmbeddedObject> m_xObject;
     bool m_bForceString = false;
-    tools::SvRef<RTFShape> m_pShape;
-    tools::SvRef<RTFPicture> m_pPicture;
+    mutable tools::SvRef<RTFShape> m_pShape;
+    mutable tools::SvRef<RTFPicture> m_pPicture;
 };
 } // namespace writerfilter::rtftok
 
