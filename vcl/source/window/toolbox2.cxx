@@ -1736,9 +1736,6 @@ void ToolBox::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     DockingWindow::DumpAsPropertyTree(rJsonWriter);
 
-    if (GetChildCount())
-        return;
-
     auto childrenNode = rJsonWriter.startArray("children");
     for (ToolBox::ImplToolItems::size_type i = 0; i < GetItemCount(); ++i)
     {
