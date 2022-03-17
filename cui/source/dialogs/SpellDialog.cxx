@@ -945,7 +945,7 @@ void SpellDialog::Activate()
 
 void SpellDialog::Deactivate()
 {
-    SfxModelessDialogController::Activate();
+    SfxModelessDialogController::Deactivate();
     ToplevelFocusChanged();
 }
 
