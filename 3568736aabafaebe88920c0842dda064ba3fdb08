@@ -16,6 +16,23 @@
       "message": "I applied just this patch but it didn\u0027t prevent LO from crashing.\n\nAnyway the other patch you made fixes it.",
       "revId": "3568736aabafaebe88920c0842dda064ba3fdb08",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4373f1ec_5e923c79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-17T21:16:25Z",
+      "side": 1,
+      "message": "oh good, this one might be reproducible by clicking on the word with the zero-space thing in it",
+      "revId": "3568736aabafaebe88920c0842dda064ba3fdb08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
