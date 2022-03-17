@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec7a424_bfdf31e1",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-17T07:26:12Z",
+      "side": 1,
+      "message": "The Writer command uses ellipsis, which is correct as a dialog shows up first.",
+      "range": {
+        "startLine": 4056,
+        "startChar": 34,
+        "endLine": 4056,
+        "endChar": 45
+      },
+      "revId": "e14328b6d923f595b96b8322f02cb0a92c19d0fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

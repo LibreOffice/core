@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d679593_2dab953f",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-17T07:26:12Z",
+      "side": 0,
+      "message": "This was introduced not too long ago in I3063f871707a7286d95108d3a34a5287401baa6a. And in fact \"Unmerge\" is more precise in case of Calc.",
+      "range": {
+        "startLine": 1713,
+        "startChar": 34,
+        "endLine": 1713,
+        "endChar": 48
+      },
+      "revId": "fe407fa6ff9cb7597f06e891ea3f136cd9521ef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
