@@ -119,6 +119,24 @@
       "message": "The change itself looks good to me.\nThe commit currently uses \"sarrah-basta\" as author name, while it\u0027s usual to use the real name is usally used. If you want to change that, you can use\n\ngit config --global user.name \"Your Name\"\n\nto do so globally, or without that \u0027--global\u0027 option to set the author name only for the current git repo; then\n\ngit commit --amend --reset-author\n\n\n\nIn my understanding, setting the focus properly should usually already be enough for Orca to announce this. \nI\u0027ve spent some time trying to understand why it doesn\u0027t work here yet, but still haven\u0027t understood it fully. For some reason, Orca doesn\u0027t seem to have the focus set to the sentence edit window despite the call to \"GrabFocus\", as becomes obvious e.g. when using Orca\u0027s \"Where Am I?\" command (pressing KP_Enter with the default desktop keyboard layout), s. https://help.gnome.org/users/orca/stable/commands_where_am_i.html.en . It is correctly set as focused after typing sth or after focusing the element using the tab key.\n\nInterestingly, it works just fine for the buttons that were focused by default previously (i.e. without this change).\n\nWhen using NVDA on Windows instead, it\u0027s also announced just fine.\n\nSpellDialog has some custom focus handling, s. e.g. SpellDialog::ToplevelFocusChanged, which *might* be related. Otherwise, this might be something on a lower level (VCL and/or Gtk) and might require a closer look into what Orca and/or Gtk do. I\u0027ll post an update in case I see anything obvious there...",
       "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cc38f10_a3273083",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-17T17:32:53Z",
+      "side": 1,
+      "message": "\u003e Otherwise, this might be something on a lower level (VCL and/or Gtk) and might require a closer look into what Orca and/or Gtk do. I\u0027ll post an update in case I see anything obvious there...\n\nTurns out that (at least) 2 accessible objects are relevant here: One for the drawing area, and one for the paragraph that holds the text. From a11y perspective, the latter is a child of the former.\nWith this change here in place, the drawing area gets the initial focus, as it should be. But the a11y object for the paragraph does not exist yet, so no focus event for it is being sent. Therefore, Orca doesn\u0027t know it\u0027s focused and doesn\u0027t announce it.\n\nSome relevant classes are `WeldEditView` (which is the base class for `SentenceEditWindow_Impl`, used for the `m_xSentenceED`) and the a11y implementation in `WeldEditAccessible`, and `GtkInstanceDrawingArea` in the gtk3-specific code.\n\nUnfortunately, the a11y object is only properly initialized when it\u0027s already too late. I don\u0027t yet see a proper way to fix that. (But I could at least confirm my findings so far by commenting out some code locally and adding hacks to verify that Orca actually announces it as desired then...)",
+      "parentUuid": "52c2c76e_abff199e",
+      "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
