@@ -189,7 +189,8 @@ void SvxCharView::Paint(vcl::RenderContext& rRenderContext, const tools::Rectang
         aPoint.setX(-aBoundRect.Left() + (aSize.Width() - aBoundRect.GetWidth()) / 2);
     }
 
-    if (HasFocus())
+    // tdf#111924 - don't lose focus on context menu
+    if (HasFocus() || HasChildFocus())
     {
         rRenderContext.SetFillColor(aHighlightColor);
         rRenderContext.DrawRect(tools::Rectangle(Point(0, 0), aSize));
