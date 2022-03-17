@@ -16,6 +16,24 @@
       "message": "This looks like guessing, and the resulting string makes no sense in the context. The original comment was \"Falls wir ein Schweinezeichen haben, abbrechen\" (commit 3d361dbc2d69484657c42852dcfa426c00bc3175); no idea how that should be translated correctly, but it definitely relates to any non-ASCII characters, not to some \"comment sign\" ;)",
       "revId": "2957be02c5c4847046b9d192c7a76717c8849559",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5226f968_53a44e76",
+        "filename": "basic/source/sbx/sbxvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-03-17T18:38:13Z",
+      "side": 1,
+      "message": "I CC: Andreas (he translated on commit 3d361dbc2d69484657c42852dcfa426c00bc3175)",
+      "parentUuid": "27e04de8_6842757d",
+      "revId": "2957be02c5c4847046b9d192c7a76717c8849559",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
