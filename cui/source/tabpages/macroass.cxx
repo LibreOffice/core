@@ -155,9 +155,14 @@ bool SfxMacroTabPage::FillItemSet( SfxItemSet* rSet )
     SvxMacroItem aItem( GetWhich( aPageRg[0] ) );
     const_cast<SvxMacroTableDtor&>(aItem.GetMacroTable()) = aTbl;
 
-    const SfxPoolItem* pItem;
-    if( SfxItemState::SET != GetItemSet().GetItemState( aItem.Which(), true, &pItem )
-        || aItem != *static_cast<const SvxMacroItem*>(pItem) )
+    const SfxPoolItem* pItem = nullptr;
+    SfxItemState eState = GetItemSet().GetItemState(aItem.Which(), true, &pItem);
+    if (eState == SfxItemState::DEFAULT && aTbl.empty())
+    {
+        // Don't touch the item set if there was no input and our table is empty.
+        return false;
+    }
+    if (SfxItemState::SET != eState || aItem != *static_cast<const SvxMacroItem*>(pItem))
     {
         rSet->Put( aItem );
         return true;
