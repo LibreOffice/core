@@ -22,6 +22,30 @@
       },
       "revId": "e14328b6d923f595b96b8322f02cb0a92c19d0fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eda1dbd_0144a6cd",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/GenericCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 4056,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T09:27:56Z",
+      "side": 1,
+      "message": "Ok I added the \"...\"",
+      "parentUuid": "cec7a424_bfdf31e1",
+      "range": {
+        "startLine": 4056,
+        "startChar": 34,
+        "endLine": 4056,
+        "endChar": 45
+      },
+      "revId": "e14328b6d923f595b96b8322f02cb0a92c19d0fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

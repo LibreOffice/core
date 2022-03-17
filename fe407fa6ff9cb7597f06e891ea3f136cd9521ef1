@@ -22,6 +22,30 @@
       },
       "revId": "fe407fa6ff9cb7597f06e891ea3f136cd9521ef1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef777529_50acc3b8",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/CalcCommands.xcu",
+        "patchSetId": 1
+      },
+      "lineNbr": 1713,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T09:27:56Z",
+      "side": 0,
+      "message": "Ok, just thought \"Split\" woud be ok since it\u0027s the dictionary (contrary to \"unmerge\" which is understandable but not in the dictionary).",
+      "parentUuid": "9d679593_2dab953f",
+      "range": {
+        "startLine": 1713,
+        "startChar": 34,
+        "endLine": 1713,
+        "endChar": 48
+      },
+      "revId": "fe407fa6ff9cb7597f06e891ea3f136cd9521ef1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
