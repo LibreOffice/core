@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b17c83e_1c43e29a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T18:01:15Z",
+      "side": 1,
+      "message": "Miklos/Caolán: thought you might have some opinion here.\nJust for the record, I reproduced the symptom described in the bugtracker and tested the patch, it worked as the author expected.",
+      "revId": "cf23983fd5786d531a5d06f51fb0af0f75c43f15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
