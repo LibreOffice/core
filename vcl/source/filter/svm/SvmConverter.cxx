@@ -878,10 +878,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_PEN_ACTION:
             {
-                sal_Int32 nPenWidth;
-                sal_Int16 nPenStyle;
-
                 ImplReadColor( rIStm, aActionColor );
+
+                sal_Int32 nPenWidth(0);
+                sal_Int16 nPenStyle(0);
                 rIStm.ReadInt32( nPenWidth ).ReadInt16( nPenStyle );
 
                 aLineInfo.SetStyle( nPenStyle ? LineStyle::Solid : LineStyle::NONE );
@@ -894,10 +894,9 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_FILLBRUSH_ACTION:
             {
-                sal_Int16 nBrushStyle;
-
                 ImplReadColor( rIStm, aActionColor );
                 rIStm.SeekRel( 6 );
+                sal_Int16 nBrushStyle(0);
                 rIStm.ReadInt16( nBrushStyle );
                 rMtf.AddAction( new MetaFillColorAction( aActionColor, nBrushStyle != 0 ) );
                 rIStm.SeekRel( 2 );
@@ -919,10 +918,10 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_CLIPREGION_ACTION:
             {
                 vcl::Region  aRegion;
-                sal_Int16   nRegType;
-                sal_Int16   bIntersect;
                 bool    bClip = false;
 
+                sal_Int16 nRegType(0);
+                sal_Int16 bIntersect(0);
                 rIStm.ReadInt16( nRegType ).ReadInt16( bIntersect );
                 ImplReadRect( rIStm, aRect );
 
@@ -1003,8 +1002,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_RASTEROP_ACTION:
             {
                 RasterOp    eRasterOp;
-                sal_Int16       nRasterOp;
 
+                sal_Int16 nRasterOp(0);
                 rIStm.ReadInt16( nRasterOp );
 
                 switch( nRasterOp )
@@ -1064,20 +1063,16 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_GRADIENT_ACTION:
             {
-                Color   aStartCol;
-                Color   aEndCol;
-                sal_Int16   nStyle;
-                sal_Int16   nAngle;
-                sal_Int16   nBorder;
-                sal_Int16   nOfsX;
-                sal_Int16   nOfsY;
-                sal_Int16   nIntensityStart;
-                sal_Int16   nIntensityEnd;
-
                 ImplReadRect( rIStm, aRect );
+
+                sal_Int16 nStyle(0);
                 rIStm.ReadInt16( nStyle );
+
+                Color aStartCol, aEndCol;
                 ImplReadColor( rIStm, aStartCol );
                 ImplReadColor( rIStm, aEndCol );
+
+                sal_Int16 nAngle(0), nBorder(0), nOfsX(0), nOfsY(0), nIntensityStart(0), nIntensityEnd(0);
                 rIStm.ReadInt16( nAngle ).ReadInt16( nBorder ).ReadInt16( nOfsX ).ReadInt16( nOfsY ).ReadInt16( nIntensityStart ).ReadInt16( nIntensityEnd );
 
                 Gradient aGrad( static_cast<GradientStyle>(nStyle), aStartCol, aEndCol );
@@ -1147,7 +1142,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_REFPOINT_COMMENT:
             {
                 Point   aRefPoint;
-                bool    bSet;
+                bool bSet(false);
                 sal_Int32 nFollowingActionCount(0);
 
                 aSerializer.readPoint(aRefPoint);
@@ -1168,7 +1163,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_TEXTLINECOLOR_COMMENT:
             {
                 Color   aColor;
-                bool    bSet;
+                bool bSet(false);
                 sal_Int32 nFollowingActionCount(0);
 
                 aSerializer.readColor(aColor);
