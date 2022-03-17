@@ -364,16 +364,10 @@ void SpellDialog::SpellContinue_Impl(std::unique_ptr<UndoChangeGroupGuard>* pGua
         {
             m_xNotInDictFT.get(),
             m_xSentenceED->GetDrawingArea(),
-            m_xLanguageFT.get(),
-            nullptr
+            m_xLanguageFT.get()
         };
-        sal_Int32 nIdx = 0;
-        do
-        {
-            aControls[nIdx]->set_sensitive(true);
-        }
-        while(aControls[++nIdx]);
-
+        for (weld::Widget* pWidget : aControls)
+            pWidget->set_sensitive(true);
     }
     if( bNextSentence )
     {
