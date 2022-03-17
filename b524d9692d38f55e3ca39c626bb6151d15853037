@@ -16,6 +16,46 @@
       "message": "This macro adds a jump list with this service:\n\noService \u003d createUnoService(\"com.sun.star.system.windows.JumpList\")\nDim a(1) As new com.sun.star.system.windows.JumpListItem\na(0).name \u003d \"Test 123\"\na(0).arguments \u003d \"service:org.libreoffice.example.StarterProject?actionOne\"\na(0).iconPath \u003d \"D:\\icon.png\"\noService.appendCategory(\"test22\",a, \"com.sun.star.text.TextDocument\")\n\nHowever, when clicking on that jump list, LO is not opened as expected. Instead the Windows application chooser is shown.\n\nAny idea what\u0027s wrong here? Or at least some idea how to further debug this?",
       "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4a23c47_49d66c07",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-17T20:37:10Z",
+      "side": 1,
+      "message": "Great!\n\nThe code leaks - but likely it\u0027s a draft to show the problem. However, please do not use naked pointers to interfaces, and calls like CoCreateInstance; use sal::systools::COMReference for robust handling of COM interfaces.",
+      "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdbd3481_5ca6afc7",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-17T20:37:10Z",
+      "side": 1,
+      "message": "\"IShellLink\" is a macro, that translates either to IShellLinkA (default), or IShellLinkW (not our case). You need to use IShellLinkW explicitly, and avoid all those reinterpret_casts. That would likely fix the issue.",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 135,
+        "endChar": 18
+      },
+      "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
