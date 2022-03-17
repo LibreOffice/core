@@ -50,3 +50,34 @@ index d8875786c..bc019ebe1 100644
  }
  
  void sycc_to_rgb(int offset,
+
+diff --git a/core/fxge/cfx_font.cpp b/core/fxge/cfx_font.cpp
+index 8b3a72700..ea1db23f4 100644
+--- a/core/fxge/cfx_font.cpp
++++ b/core/fxge/cfx_font.cpp
+@@ -47,25 +47,9 @@ struct OUTLINE_PARAMS {
+ // TODO(crbug.com/pdfium/1400): When FT_Done_MM_Var() is more likely to be
+ // available to all users in the future, remove FreeMMVar() and use
+ // FT_Done_MM_Var() directly.
+-//
+-// Use weak symbols to check if FT_Done_MM_Var() is available at runtime.
+-#if !BUILDFLAG(IS_WIN)
+-extern "C" __attribute__((weak)) decltype(FT_Done_MM_Var) FT_Done_MM_Var;
+-#endif
+ 
+ void FreeMMVar(FXFT_FaceRec* rec, FXFT_MM_VarPtr variation_desc) {
+-#if BUILDFLAG(IS_WIN)
+-  // Assume `use_system_freetype` GN var is never set on Windows.
+-  constexpr bool has_ft_done_mm_var_func = true;
+-#else
+-  static const bool has_ft_done_mm_var_func = !!FT_Done_MM_Var;
+-#endif
+-  if (has_ft_done_mm_var_func) {
+-    FT_Done_MM_Var(CFX_GEModule::Get()->GetFontMgr()->GetFTLibrary(),
+-                   variation_desc);
+-  } else {
+     FXFT_Free(rec, variation_desc);
+-  }
+ }
+ 
+ FX_RECT FXRectFromFTPos(FT_Pos left, FT_Pos top, FT_Pos right, FT_Pos bottom) {
