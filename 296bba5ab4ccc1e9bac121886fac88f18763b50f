@@ -16,6 +16,23 @@
       "message": "Is this OK or am I missing anything non-obvious?",
       "revId": "296bba5ab4ccc1e9bac121886fac88f18763b50f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80df95c0_b0cb8361",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-17T11:34:24Z",
+      "side": 1,
+      "message": "no, you are entirely correct. A pity that the cut and paste checker in coverity will warn about totally correct things and not catch this type of one.",
+      "revId": "296bba5ab4ccc1e9bac121886fac88f18763b50f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
