@@ -23,6 +23,10 @@
 
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#include <com/sun/star/uri/UriReferenceFactory.hpp>
+#include <comphelper/processfactory.hxx>
 #include <o3tl/string_view.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/font.hxx>
@@ -40,6 +44,7 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/svxfont.hxx>
 #include <editeng/editids.hrc>
+#include <osl/file.hxx>
 
 #include <document.hxx>
 #include <docpool.hxx>
@@ -887,34 +892,26 @@ namespace {
 /** Encodes special parts of the path, i.e. directory separators and volume names.
     @param pTableName  Pointer to a table name to be encoded in this path, or 0. */
 OUString lclEncodeDosPath(
-    XclBiff eBiff, std::u16string_view path, std::u16string_view rBase, const OUString* pTableName)
+    XclBiff eBiff, std::u16string_view path, bool bIsRel, const OUString* pTableName)
 {
     OUStringBuffer aBuf;
 
     if (!path.empty())
     {
-        std::u16string_view aOldPath = path;
         aBuf.append(EXC_URLSTART_ENCODED);
 
-        if ( aOldPath.length() > 2 && o3tl::starts_with(aOldPath, u"\\\\") )
+        if ( path.length() > 2 && o3tl::starts_with(path, u"\\\\") )
         {
             // UNC
             aBuf.append(EXC_URL_DOSDRIVE).append('@');
-            aOldPath = aOldPath.substr(2);
+            path = path.substr(2);
         }
-        else if ( aOldPath.length() > 2 && o3tl::starts_with(aOldPath.substr(1), u":\\") )
+        else if ( path.length() > 2 && o3tl::starts_with(path.substr(1), u":\\") )
         {
-            // drive letter
-            sal_Unicode cThisDrive = rBase.empty() ? ' ' : rBase[0];
-            sal_Unicode cDrive = aOldPath[0];
-            if (cThisDrive == cDrive)
-                // This document and the referenced document are under the same drive.
-                aBuf.append(EXC_URL_DRIVEROOT);
-            else
-                aBuf.append(EXC_URL_DOSDRIVE).append(cDrive);
-            aOldPath = aOldPath.substr(3);
+            aBuf.append(EXC_URL_DOSDRIVE).append(path[0]);
+            path = path.substr(3);
         }
-        else
+        else if ( !bIsRel )
         {
             // URL probably points to a document on a Unix-like file system
             aBuf.append(EXC_URL_DRIVEROOT);
@@ -922,23 +919,23 @@ OUString lclEncodeDosPath(
 
         // directories
         auto nPos = std::u16string_view::npos;
-        while((nPos = aOldPath.find('\\')) != std::u16string_view::npos)
+        while((nPos = path.find('\\')) != std::u16string_view::npos)
         {
-            if ( o3tl::starts_with(aOldPath, u"..") )
+            if ( o3tl::starts_with(path, u"..") )
                 // parent dir (NOTE: the MS-XLS spec doesn't mention this, and
                 // Excel seems confused by this token).
                 aBuf.append(EXC_URL_PARENTDIR);
             else
-                aBuf.append(aOldPath.substr(0,nPos)).append(EXC_URL_SUBDIR);
+                aBuf.append(path.substr(0,nPos)).append(EXC_URL_SUBDIR);
 
-            aOldPath = aOldPath.substr(nPos + 1);
+            path = path.substr(nPos + 1);
         }
 
         // file name
         if (pTableName)    // enclose file name in brackets if table name follows
-            aBuf.append('[').append(aOldPath).append(']');
+            aBuf.append('[').append(path).append(']');
         else
-            aBuf.append(aOldPath);
+            aBuf.append(path);
     }
     else    // empty URL -> self reference
     {
@@ -968,13 +965,44 @@ OUString lclEncodeDosPath(
     return aBuf.makeStringAndClear();
 }
 
+bool isUrlRelative(const OUString& aUrl)
+{
+    css::uno::Reference<css::uri::XUriReferenceFactory> xUriFactory(
+        css::uri::UriReferenceFactory::create(
+            comphelper::getProcessComponentContext()));
+    css::uno::Reference<css::uri::XUriReference> xUri(xUriFactory->parse(aUrl));
+
+    return !xUri->isAbsolute();
+}
+
 } // namespace
 
 OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, std::u16string_view rAbsUrl, const OUString* pTableName )
 {
-    OUString aDosPath = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
-    OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(FSysStyle::Dos);
-    return lclEncodeDosPath(rRoot.GetBiff(), aDosPath, aDosBase, pTableName);
+    OUString aDosPath;
+    bool bIsRel = false;
+
+    if (rRoot.IsRelUrl())
+    {
+        OUString aUrlPath = INetURLObject::GetRelURL(
+            rRoot.GetBasePath(), OUString(rAbsUrl),
+            INetURLObject::EncodeMechanism::All,
+            INetURLObject::DecodeMechanism::NONE,
+            RTL_TEXTENCODING_UTF8, FSysStyle::Detect
+        );
+
+        if (isUrlRelative(aUrlPath))
+        {
+            bIsRel = true;
+            osl::FileBase::getSystemPathFromFileURL(aUrlPath, aDosPath);
+            aDosPath = aDosPath.replaceAll(u"/", u"\\");
+        }
+    }
+
+    if (!bIsRel)
+        aDosPath = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
+
+    return lclEncodeDosPath(rRoot.GetBiff(), aDosPath, bIsRel, pTableName);
 }
 
 OUString XclExpUrlHelper::EncodeDde( std::u16string_view rApplic, std::u16string_view rTopic )
