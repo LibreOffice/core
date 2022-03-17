@@ -265,7 +265,7 @@ public class _XAccessibleComponent extends MultiMethodTest {
                                                  chBnd.Y + curY));
 
 
-            Point p = new Point(chBnd.X + curX,chBnd.X + curX);
+            Point p = new Point(chBnd.X + curX,chBnd.Y + curY);
 
             if (isCovered(p)) {
                 log.println(
