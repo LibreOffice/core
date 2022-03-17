@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61154659_39952f57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-17T20:51:50Z",
+      "side": 1,
+      "message": "I am unsure that we need it as UNO service. Why? It\u0027s not something that seems needed as a scriptable thing controlled by user. It\u0027s an OS thing, and we only may want to customize it a little to e.g. survive upgrades; but otherwise, it looks like we try to create a wrapper around OS functionality.\n\nIMO, if possible, just add this as a function somewhere where we handle recent lists.",
+      "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdbd3481_5ca6afc7",
