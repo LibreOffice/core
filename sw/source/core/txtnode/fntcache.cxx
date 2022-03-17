@@ -2189,6 +2189,10 @@ TextFrameIndex SwFntObj::GetModelPositionForViewPoint(SwDrawTextInfo &rInf)
         if ( nIdx <= nLastIdx )
             break;
 
+        // the next character might be outside the layout range (e.g tdf124116-1.odt)
+        if (nIdx > nEnd)
+            nIdx = nEnd;
+
         nLeft = nRight;
         nRight = aKernArray[sal_Int32(nIdx - rInf.GetIdx()) - 1] + nKernSum + nSpaceSum;
 
