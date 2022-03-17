@@ -3909,13 +3909,13 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
             {
 
                 int i;
-                ZZParall *pal = &drawobj->property.parall;
+                ZZParall& pal = drawobj->property.parall;
 
                 basegfx::B2DPoint pt[3], r_pt[3];
                 for(i = 0 ; i < 3 ; i++ ){
-                         pt[i].setX(pal->pt[i].x - drawobj->property.rot_originx);
+                         pt[i].setX(pal.pt[i].x - drawobj->property.rot_originx);
                          /* Convert to a physical coordinate */
-                         pt[i].setY(-(pal->pt[i].y - drawobj->property.rot_originy));
+                         pt[i].setY(-(pal.pt[i].y - drawobj->property.rot_originy));
                 }
 
                 double skewX;
@@ -3942,20 +3942,20 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                 if( skewX != 0.0 && rotate != 0.0 ){
                     trans = "skewX (" + OUString::number(skewX)
                              + ") rotate (" + OUString::number(rotate)
-                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal.pt[0].x)) + "mm "
+                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal.pt[0].y)) + "mm)";
                     bIsRotate = true;
                 }
                 else if( skewX != 0.0 ){
                     trans = "skewX (" + OUString::number(skewX)
-                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal.pt[0].x)) + "mm "
+                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal.pt[0].y)) + "mm)";
                     bIsRotate = true;
                 }
                 else if( rotate != 0.0 ){
                     trans = "rotate (" + OUString::number(rotate)
-                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal->pt[0].x)) + "mm "
-                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal->pt[0].y)) + "mm)";
+                             + ") translate (" + OUString::number(WTMM(x + a + drawobj->offset2.x + pal.pt[0].x)) + "mm "
+                             + OUString::number(WTMM(y + b + drawobj->offset2.y + pal.pt[0].y)) + "mm)";
                     bIsRotate = true;
                 }
                 if( bIsRotate ){
@@ -4129,10 +4129,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
 
                     if( drawobj->type == HWPDO_ADVANCED_ARC ){
                                 double start_angle, end_angle;
-                                ZZParall *pal = &drawobj->property.parall;
+                                ZZParall& pal = drawobj->property.parall;
 
-                                start_angle = atan2(pal->pt[0].y - pal->pt[1].y,pal->pt[1].x - pal->pt[0].x );
-                                end_angle = atan2(pal->pt[2].y - pal->pt[1].y, pal->pt[1].x - pal->pt[2].x);
+                                start_angle = atan2(pal.pt[0].y - pal.pt[1].y,pal.pt[1].x - pal.pt[0].x );
+                                end_angle = atan2(pal.pt[2].y - pal.pt[1].y, pal.pt[1].x - pal.pt[2].x);
 
                                 if( ( start_angle > end_angle ) && (start_angle - end_angle < M_PI )){
                                     double tmp_angle = start_angle;
