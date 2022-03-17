@@ -1172,7 +1172,7 @@ void ScMacrosTest::testFunctionAccessIndirect()
         comphelper::getProcessServiceFactory()->createInstance("com.sun.star.sheet.FunctionAccess"),
         UNO_QUERY_THROW);
 
-    // tdf#148040: without the fix in plcae, this would have failed with:
+    // tdf#148040: without the fix in place, this would have failed with:
     //   An uncaught exception of type com.sun.star.lang.IllegalArgumentException
     // because of disallowed external link update (needed to obtain the cell value).
     css::uno::Any aResult = xFunc->callFunction("INDIRECT", {css::uno::Any(aReference)});
