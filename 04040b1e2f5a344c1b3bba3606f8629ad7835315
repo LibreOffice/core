@@ -16,6 +16,23 @@
       "message": "A simple solution.\n\nPlease advise if it\u0027s better to implement your suggestion about rDoc.IsExecuteLinkEnabled(), or if your comment 4 means it\u0027s not needed 😊\nThank you!",
       "revId": "04040b1e2f5a344c1b3bba3606f8629ad7835315",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9218b75b_56c95545",
+        "filename": "sc/source/ui/docshell/externalrefmgr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1660,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-17T13:24:32Z",
+      "side": 1,
+      "message": "I\u0027d rather move that to the !pDocShell case. It doesn\u0027t matter for the bug\u0027s constellation nor will in near future, but if there is a shell then the shell should determine. So,\n\n    if (!pDocShell)\n        return rDoc.IsFunctionAccess();",
+      "revId": "04040b1e2f5a344c1b3bba3606f8629ad7835315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
