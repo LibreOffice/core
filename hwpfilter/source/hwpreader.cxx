@@ -3567,7 +3567,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
     hchar dest[3];
     size_t l = 0;
 
-    pPar = hbox->plists[0].front().get();
+    pPar = hbox->plists[0].empty() ? nullptr : hbox->plists[0].front().get();
     while( pPar )
     {
         for( n = 0; n < pPar->nch && pPar->hhstr[n]->hh;
