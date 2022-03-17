@@ -76,11 +76,9 @@ AccessibleContextBase::~AccessibleContextBase()
 bool AccessibleContextBase::SetState (sal_Int16 aState)
 {
     ::osl::ClearableMutexGuard aGuard (m_aMutex);
-    ::utl::AccessibleStateSetHelper* pStateSet =
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if ((pStateSet != nullptr) && !pStateSet->contains(aState))
+    if ((mxStateSet != nullptr) && !mxStateSet->contains(aState))
     {
-        pStateSet->AddState (aState);
+        mxStateSet->AddState (aState);
         // Clear the mutex guard so that it is not locked during calls to
         // listeners.
         aGuard.clear();
@@ -105,11 +103,9 @@ bool AccessibleContextBase::SetState (sal_Int16 aState)
 bool AccessibleContextBase::ResetState (sal_Int16 aState)
 {
     ::osl::ClearableMutexGuard aGuard (m_aMutex);
-    ::utl::AccessibleStateSetHelper* pStateSet =
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if ((pStateSet != nullptr) && pStateSet->contains(aState))
+    if ((mxStateSet != nullptr) && mxStateSet->contains(aState))
     {
-        pStateSet->RemoveState (aState);
+        mxStateSet->RemoveState (aState);
         // Clear the mutex guard so that it is not locked during calls to listeners.
         aGuard.clear();
 
@@ -129,10 +125,8 @@ bool AccessibleContextBase::ResetState (sal_Int16 aState)
 bool AccessibleContextBase::GetState (sal_Int16 aState)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
-    ::utl::AccessibleStateSetHelper* pStateSet =
-        static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
-    if (pStateSet != nullptr)
-        return pStateSet->contains(aState);
+    if (mxStateSet != nullptr)
+        return mxStateSet->contains(aState);
     else
         // If there is no state set then return false as a default value.
         return false;
@@ -313,7 +307,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     else
     {
         // Create a copy of the state set and return it.
-        pStateSet = static_cast< ::utl::AccessibleStateSetHelper*>(mxStateSet.get());
+        pStateSet = mxStateSet;
 
         if (pStateSet != nullptr)
             pStateSet = new ::utl::AccessibleStateSetHelper (*pStateSet);
