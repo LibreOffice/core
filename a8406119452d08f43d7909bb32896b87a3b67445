@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18e27641_3100a79c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-17T21:14:03Z",
+      "side": 1,
+      "message": "Since the patch is quite straightforward, I thought it could be interesting to have it too on 7.3 branch.",
+      "revId": "a8406119452d08f43d7909bb32896b87a3b67445",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
