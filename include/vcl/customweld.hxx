@@ -65,6 +65,7 @@ public:
     virtual void Hide() { m_pDrawingArea->hide(); }
     void GrabFocus() { m_pDrawingArea->grab_focus(); }
     bool HasFocus() const { return m_pDrawingArea->has_focus(); }
+    bool HasChildFocus() const { return m_pDrawingArea->has_child_focus(); }
     bool IsVisible() const { return m_pDrawingArea->get_visible(); }
     bool IsReallyVisible() const { return m_pDrawingArea->is_visible(); }
     bool IsEnabled() const { return m_pDrawingArea->get_sensitive(); }
