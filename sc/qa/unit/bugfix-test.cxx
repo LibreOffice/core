@@ -20,6 +20,7 @@
 #include "helper/qahelper.hxx"
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <osl/file.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -28,6 +29,7 @@
 #include <drwlayer.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdomeas.hxx>
+#include <unotools/tempfile.hxx>
 #include <userdat.hxx>
 #include <stlpool.hxx>
 
@@ -65,6 +67,7 @@ public:
     void testTdf130725();
     void testTdf104502_hiddenColsCountedInPageCount();
     void testTdf108188_pagestyle();
+    void testTdf90299();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf137576_Measureline);
@@ -90,6 +93,7 @@ public:
     CPPUNIT_TEST(testTdf130725);
     CPPUNIT_TEST(testTdf104502_hiddenColsCountedInPageCount);
     CPPUNIT_TEST(testTdf108188_pagestyle);
+    CPPUNIT_TEST(testTdf90299);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -745,6 +749,58 @@ void ScFiltersTest::testTdf108188_pagestyle()
     CPPUNIT_ASSERT(!pStylePool->Find("Default", SfxStyleFamily::Page)->IsUsed());
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testTdf90299()
+{
+    utl::TempFile aTmpDirectory(nullptr, true);
+    OUString aTmpDirURL = aTmpDirectory.GetURL();
+
+    utl::TempFile aTmpSubdirectory(&aTmpDirURL, true);
+
+    struct
+    {
+        void checkFormula(ScDocShellRef xShell, OUString aExpectedFormula)
+        {
+            CPPUNIT_ASSERT(xShell.is());
+            xShell->ReloadAllLinks();
+
+            ScDocument& rDoc = xShell->GetDocument();
+
+            ScAddress aPos(0, 0, 0);
+            ScTokenArray* pCode = getTokens(rDoc, aPos);
+            CPPUNIT_ASSERT_MESSAGE("empty token array", pCode);
+
+            OUString aFormula = toString(rDoc, aPos, *pCode, rDoc.GetGrammar());
+
+            CPPUNIT_ASSERT_EQUAL(aFormula, aExpectedFormula);
+        }
+
+    } aCheckShell;
+
+    OUString aReferencingFileURL;
+    OUString aReferencedFileURL;
+    createFileURL(u"tdf90299.", u"xls", aReferencingFileURL);
+
+    osl::File::RC eError = osl::File::copy(aReferencingFileURL, aTmpDirURL + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpDirURL + "/tdf90299.xls";
+    aReferencedFileURL = aTmpDirURL + "/dummy.xls";
+
+    ScDocShellRef xShell = load(aReferencingFileURL, FORMAT_XLS);
+    aCheckShell.checkFormula(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");
+    xShell->DoClose();
+
+    eError = osl::File::copy(aReferencingFileURL, aTmpSubdirectory.GetURL() + "/tdf90299.xls");
+    CPPUNIT_ASSERT_EQUAL(osl::File::E_None, eError);
+
+    aReferencingFileURL = aTmpSubdirectory.GetURL() + "/tdf90299.xls";
+    aReferencedFileURL = aTmpSubdirectory.GetURL() + "/dummy.xls";
+
+    xShell = load(aReferencingFileURL, FORMAT_XLS);
+    aCheckShell.checkFormula(xShell, "'" + aReferencedFileURL + "'#$Sheet1.A1");
+    xShell->DoClose();
 }
 
 
