@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f30f366_1bdd0c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-17T10:00:06Z",
+      "side": 1,
+      "message": "Please pick only 1 file for change, as others are simultaneously working on the same issue. This has lead to multiple people changing the same files. Please keep the changes in the first file (basegfx/source/tools/gradienttools.cxx), and revert all the others back.\nDon\u0027t worry, you will have the opportunity to work on more complicated interesting stuff later.",
+      "revId": "ccc9e1f997afdd45cc0793604d2f6489de9bc6e5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
