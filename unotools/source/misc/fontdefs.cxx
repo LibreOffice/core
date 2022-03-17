@@ -545,18 +545,19 @@ OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
       ||  aOrgName == "opensymbol" ) )
         return aName;
 
-    const utl::FontNameAttr* pAttr = utl::FontSubstConfiguration::get().getSubstInfo( aOrgName );
-    if ( pAttr && (nFlags & SubsFontFlags::MS) )
+    if (nFlags & SubsFontFlags::MS)
     {
-        for( const auto& rSubstitution : pAttr->MSSubstitutions )
-            if( ! ImplIsFontToken( rName, rSubstitution ) )
-            {
-                ImplAppendFontToken( aName, rSubstitution );
-                if( nFlags & SubsFontFlags::ONLYONE )
+        const utl::FontNameAttr* pAttr = utl::FontSubstConfiguration::get().getSubstInfo( aOrgName );
+        if (pAttr)
+            for( const auto& rSubstitution : pAttr->MSSubstitutions )
+                if( ! ImplIsFontToken( rName, rSubstitution ) )
                 {
-                    break;
+                    ImplAppendFontToken( aName, rSubstitution );
+                    if( nFlags & SubsFontFlags::ONLYONE )
+                    {
+                        break;
+                    }
                 }
-            }
     }
 
     return aName;
