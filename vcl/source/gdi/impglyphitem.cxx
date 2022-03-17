@@ -99,6 +99,8 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
                                       sal_Int32 nIndex, sal_Int32 nLen, const Point& rLogicPos,
                                       tools::Long nLogicWidth) const
 {
+    if (nLen == 0)
+        return nullptr;
     const CachedGlyphsKey key(outputDevice, text, nIndex, nLen, rLogicPos, nLogicWidth);
     auto it = mCachedGlyphs.find(key);
     if (it != mCachedGlyphs.end())
