@@ -39,6 +39,7 @@ public:
     static const sal_Int16 Hairline = 1; // 0.05pt
     static const sal_Int16 VeryThin = 10; // 0.5pt
     static const sal_Int16 Thin = 15; // 0.75pt
+    static const sal_Int16 Normal = 20; // compatibility with older HTML export, to remove?
     static const sal_Int16 Medium = 30; // 1.5pt
     static const sal_Int16 Thick = 45; // 2.25pt
     static const sal_Int16 ExtraThick = 90; // 4.5pt
