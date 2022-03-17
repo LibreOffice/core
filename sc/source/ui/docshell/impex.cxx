@@ -1483,20 +1483,18 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             bool bMultiLine = false;
             if ( bFixed ) //  Fixed line length
             {
-                sal_Int32 nStartIdx = 0;
-                // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it is only an
-                // overflow if there is really data following to be put behind
-                // the last column, which doesn't happen if info is
-                // SC_COL_SKIP.
-                for ( i=0; i<nInfoCount && nCol <= rDoc.MaxCol()+1; i++ )
+                if (bDetermineRange)
                 {
-                    sal_uInt8 nFmt = pColFormat[i];
-                    if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
+                    // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it
+                    // is only an overflow if there is really data following to
+                    // be put behind the last column, which doesn't happen if
+                    // info is SC_COL_SKIP.
+                    for (i=0; i < nInfoCount && nCol <= rDoc.MaxCol()+1; ++i)
                     {
-                        if (nCol > rDoc.MaxCol())
-                            bOverflowCol = true;    // display warning on import
-                        else if (!bDetermineRange)
+                        const sal_uInt8 nFmt = pColFormat[i];
+                        if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
                         {
+<<<<<<< HEAD   (24a8c6 tdf#135220 sw: fix layout after SwUndoDelete)
                             sal_Int32 nNextIdx = nStartIdx;
                             if ( i + 1 < nInfoCount )
                                 CountVisualWidth( aLine, nNextIdx, pColStart[i+1] - pColStart[i] );
@@ -1514,8 +1512,46 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                                 pEnglishTransliteration.get(), pEnglishCalendar.get());
 
                             nStartIdx = nNextIdx;
+=======
+                            if (nCol > rDoc.MaxCol())
+                                bOverflowCol = true;    // display warning on import
+                            ++nCol;
+>>>>>>> CHANGE (6b7685 Resolves: tdf#148054 Advance offset for all columns, tdf#104)
                         }
-                        ++nCol;
+                    }
+                }
+                else
+                {
+                    sal_Int32 nStartIdx = 0;
+                    // Same maxcol+1 check reason as above.
+                    for (i=0; i < nInfoCount && nCol <= rDoc.MaxCol()+1; ++i)
+                    {
+                        sal_Int32 nNextIdx = nStartIdx;
+                        if (i + 1 < nInfoCount)
+                            CountVisualWidth( aLine, nNextIdx, pColStart[i+1] - pColStart[i] );
+                        else
+                            nNextIdx = nLineLen;
+                        sal_uInt8 nFmt = pColFormat[i];
+                        if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
+                        {
+                            if (nCol > rDoc.MaxCol())
+                                bOverflowCol = true;    // display warning on import
+                            else
+                            {
+                                bool bIsQuoted = false;
+                                aCell = lcl_GetFixed( aLine, nStartIdx, nNextIdx, bIsQuoted, bOverflowCell );
+                                if (bIsQuoted && bQuotedAsText)
+                                    nFmt = SC_COL_TEXT;
+
+                                bMultiLine |= lcl_PutString(
+                                        aDocImport, !mbOverwriting, nCol, nRow, nTab, aCell, nFmt,
+                                        &aNumFormatter, bDetectNumFormat, bEvaluateFormulas, bSkipEmptyCells,
+                                        aTransliteration, aCalendar,
+                                        pEnglishTransliteration.get(), pEnglishCalendar.get());
+                            }
+                            ++nCol;
+                        }
+                        nStartIdx = nNextIdx;
                     }
                 }
             }
