@@ -995,6 +995,32 @@ DECLARE_WW8EXPORT_TEST(testTdf79186_noLayoutInCell, "tdf79186_noLayoutInCell.odt
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
+{
+    // Given a document with a clearing break:
+    // When loading that file:
+    load(mpTestDocumentPath, "clearing-break.doc");
+
+    // Then make sure that the clear property of the break is not ignored:
+    uno::Reference<container::XEnumerationAccess> xParagraph(getParagraph(1), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    xPortions->nextElement();
+    xPortions->nextElement();
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.container.NoSuchElementException
+    // i.e. the first para was just a fly + text portion, the clearing break was lost.
+    uno::Reference<beans::XPropertySet> xPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"), aPortionType);
+    uno::Reference<text::XTextContent> xLineBreak;
+    xPortion->getPropertyValue("LineBreak") >>= xLineBreak;
+    sal_Int16 eClear{};
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    xLineBreakProps->getPropertyValue("Clear") >>= eClear;
+    // SwLineBreakClear::ALL
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(3), eClear);
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

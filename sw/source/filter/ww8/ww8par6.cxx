@@ -99,6 +99,7 @@
 #include "ww8graf.hxx"
 
 #include <fmtwrapinfluenceonobjpos.hxx>
+#include <textlinebreak.hxx>
 
 using namespace sw::util;
 using namespace sw::types;
@@ -4541,6 +4542,44 @@ void SwWW8ImplReader::Read_ParaContextualSpacing( sal_uInt16, const sal_uInt8* p
     NewAttr( aUL );
 }
 
+void SwWW8ImplReader::Read_LineBreakClear(sal_uInt16 /*nId*/, const sal_uInt8* pData, short nLen)
+{
+    if (nLen == -1 && m_oLineBreakClear.has_value())
+    {
+        SwTextNode* pText = m_pPaM->GetNode().GetTextNode();
+        sal_Int32 nPos = m_pPaM->GetPoint()->nContent.GetIndex();
+        if (!pText || !nPos)
+        {
+            // There should have been a linebreak char.
+            return;
+        }
+
+        // Replace the linebreak char with a clearing break.
+        --nPos;
+        m_pPaM->SetMark();
+        --m_pPaM->GetMark()->nContent;
+        m_rDoc.getIDocumentContentOperations().DeleteRange(*m_pPaM);
+        m_pPaM->DeleteMark();
+        SwFormatLineBreak aLineBreak(*m_oLineBreakClear);
+        m_oLineBreakClear.reset();
+        pText->InsertItem(aLineBreak, nPos, nPos);
+    }
+
+    if (nLen < 1)
+    {
+        return;
+    }
+
+    sal_uInt8 nClear = pData[0];
+    if (nClear > 3)
+    {
+        return;
+    }
+
+    auto eClear = static_cast<SwLineBreakClear>(nClear);
+    m_oLineBreakClear = eClear;
+}
+
 void SwWW8ImplReader::Read_IdctHint( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     // sprmcidcthint (opcode 0x286f) specifies a script bias for the text in the run.
@@ -6104,6 +6143,7 @@ static const wwSprmDispatcher *GetWW8SprmDispatcher()
         {NS_sprm::PFDyaBeforeAuto::val,   &SwWW8ImplReader::Read_ParaAutoBefore},
         {NS_sprm::PFDyaAfterAuto::val,    &SwWW8ImplReader::Read_ParaAutoAfter},
         {NS_sprm::PFContextualSpacing::val, &SwWW8ImplReader::Read_ParaContextualSpacing},
+        {NS_sprm::CLbcCRJ::val, &SwWW8ImplReader::Read_LineBreakClear},
     };
 
     static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
