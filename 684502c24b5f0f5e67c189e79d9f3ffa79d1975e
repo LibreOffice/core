@@ -16,6 +16,24 @@
       "message": "FYI: You can keep this trailing comma, which would allow (1) not touch this line in this commit, and (2) not touch this line in a potential later commit that would add another entry after this. That allows to minimize commit noise in unrelated lines 😊",
       "revId": "684502c24b5f0f5e67c189e79d9f3ffa79d1975e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6827171_29ea0aff",
+        "filename": "cui/source/dialogs/SpellDialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2062,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-17T17:43:44Z",
+      "side": 0,
+      "message": "Thanks for the hint! 😊 I wasn\u0027t aware of that.",
+      "parentUuid": "c1ab66c0_06257dcb",
+      "revId": "684502c24b5f0f5e67c189e79d9f3ffa79d1975e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
