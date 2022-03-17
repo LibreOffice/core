@@ -63,7 +63,7 @@ class ScTempDocSource
 {
 private:
     ScTempDocCache& rCache;
-    ScDocument*     pTempDoc;
+    ScDocumentUniquePtr pTempDoc;
 
     static ScDocument*  CreateDocument();       // create and initialize doc
 
@@ -84,11 +84,10 @@ ScDocument* ScTempDocSource::CreateDocument()
 }
 
 ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
-    rCache( rDocCache ),
-    pTempDoc( nullptr )
+    rCache( rDocCache )
 {
     if ( rCache.IsInUse() )
-        pTempDoc = CreateDocument();
+        pTempDoc.reset(CreateDocument());
     else
     {
         rCache.SetInUse( true );
@@ -99,16 +98,14 @@ ScTempDocSource::ScTempDocSource( ScTempDocCache& rDocCache ) :
 
 ScTempDocSource::~ScTempDocSource() COVERITY_NOEXCEPT_FALSE
 {
-    if ( pTempDoc )
-        delete pTempDoc;
-    else
+    if ( !pTempDoc )
         rCache.SetInUse( false );
 }
 
 ScDocument* ScTempDocSource::GetDocument()
 {
     if ( pTempDoc )
-        return pTempDoc;
+        return pTempDoc.get();
     else
         return rCache.GetDocument();
 }
