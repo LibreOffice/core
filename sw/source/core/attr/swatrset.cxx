@@ -423,6 +423,23 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
                 pFormat->SetFormatAttr( *this );
             }
         }
+        if (pCNd && pCNd->HasSwAttrSet())
+        {
+            SfxWhichIter it(*this);
+            std::vector<sal_uInt16> toClear;
+            for (sal_uInt16 nWhich = it.FirstWhich(); nWhich != 0; nWhich = it.NextWhich())
+            {
+                if (GetItemState(nWhich, false) != SfxItemState::SET
+                    && pCNd->GetSwAttrSet().GetItemState(nWhich, false) == SfxItemState::SET)
+                {
+                    toClear.emplace_back(nWhich);
+                }
+            }
+            if (!toClear.empty())
+            {
+                pCNd->ResetAttr(toClear);
+            }
+        }
     }
 #if OSL_DEBUG_LEVEL > 0
     else
