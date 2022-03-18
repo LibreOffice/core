@@ -129,9 +129,9 @@ void XclExpString::AssignByte(
 
 // append ---------------------------------------------------------------------
 
-void XclExpString::Append( const OUString& rString )
+void XclExpString::Append( std::u16string_view rString )
 {
-    BuildAppend( rString.getStr(), rString.getLength() );
+    BuildAppend( rString );
 }
 
 void XclExpString::AppendByte( std::u16string_view rString, rtl_TextEncoding eTextEnc )
@@ -140,7 +140,7 @@ void XclExpString::AppendByte( std::u16string_view rString, rtl_TextEncoding eTe
     {
         // length may differ from length of rString
         OString aByteStr(OUStringToOString(rString, eTextEnc));
-        BuildAppend(aByteStr.getStr(), aByteStr.getLength());
+        BuildAppend(aByteStr);
     }
 }
 
@@ -148,13 +148,12 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
 {
     if( !cChar )
     {
-        char cByteChar = 0;
-        BuildAppend( &cByteChar, 1 );
+        BuildAppend( "\0" );
     }
     else
     {
         OString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
-        BuildAppend( aByteStr.getStr(), aByteStr.getLength() );
+        BuildAppend( aByteStr );
     }
 }
 
@@ -535,25 +534,25 @@ void XclExpString::InitAppend( sal_Int32 nAddLen )
         maCharBuffer.resize( mnLen );
 }
 
-void XclExpString::BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen )
+void XclExpString::BuildAppend( std::u16string_view rSource )
 {
     OSL_ENSURE( mbIsBiff8, "XclExpString::BuildAppend - must not be called at byte strings" );
     if( mbIsBiff8 )
     {
         sal_uInt16 nOldLen = mnLen;
-        InitAppend( nAddLen );
-        CharsToBuffer( pcSource, nOldLen, mnLen - nOldLen );
+        InitAppend( rSource.size() );
+        CharsToBuffer( rSource.data(), nOldLen, mnLen - nOldLen );
     }
 }
 
-void XclExpString::BuildAppend( const char* pcSource, sal_Int32 nAddLen )
+void XclExpString::BuildAppend( std::string_view rSource )
 {
     OSL_ENSURE( !mbIsBiff8, "XclExpString::BuildAppend - must not be called at unicode strings" );
     if( !mbIsBiff8 )
     {
         sal_uInt16 nOldLen = mnLen;
-        InitAppend( nAddLen );
-        CharsToBuffer( pcSource, nOldLen, mnLen - nOldLen );
+        InitAppend( rSource.size() );
+        CharsToBuffer( rSource.data(), nOldLen, mnLen - nOldLen );
     }
 }
 

@@ -400,7 +400,7 @@ public:
     /** Converts the number format from the passed property set. */
     void                ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPercent );
 
-    void                AppendString( const OUString& rStr );
+    void                AppendString( std::u16string_view rStr );
 
     /** Returns true, if this source link contains explicit string data. */
     bool         HasString() const { return mxString && !mxString->IsEmpty(); }
