@@ -105,6 +105,7 @@ public:
     void testTdf143315();
     void testTdf147121();
     void testTdf140912_PicturePlaceholder();
+    void testEnhancedPathViewBox();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testTdf143315);
     CPPUNIT_TEST(testTdf147121);
     CPPUNIT_TEST(testTdf140912_PicturePlaceholder);
+    CPPUNIT_TEST(testEnhancedPathViewBox);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1875,6 +1877,20 @@ void SdOOXMLExportTest3::testTdf140912_PicturePlaceholder()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-8490), aGraphicCrop.Top);
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testEnhancedPathViewBox()
+{
+    auto xDocShRef = loadURL(
+        m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf147978_enhancedPath_viewBox.odp"),
+        ODP);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    auto xShapeProps(getShapeFromPage(0, 0, xDocShRef));
+    awt::Rectangle aBoundRectangle;
+    xShapeProps->getPropertyValue("BoundRect") >>= aBoundRectangle;
+    // The shape has a Bézier curve which does not touch the right edge. Prior to the fix the curve
+    // was stretched to touch the edge, resulting in 5098 curve width instead of 2045.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2045), aBoundRectangle.Width);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
