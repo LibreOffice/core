@@ -22437,7 +22437,7 @@ IMPL_LINK_NOARG(GtkInstancePopover, async_signal_closed, void*, void)
 namespace
 {
 
-AtkObject* drawing_area_get_accessibity(GtkWidget *pWidget)
+AtkObject* drawing_area_get_accessible(GtkWidget *pWidget)
 {
     AtkObject* pDefaultAccessible = default_drawing_area_get_accessible(pWidget);
     void* pData = g_object_get_data(G_OBJECT(pWidget), "g-lo-GtkInstanceDrawingArea");
@@ -22456,7 +22456,7 @@ void ensure_intercept_drawing_area_accessibility()
         gpointer pClass = g_type_class_ref(GTK_TYPE_DRAWING_AREA);
         GtkWidgetClass* pWidgetClass = GTK_WIDGET_CLASS(pClass);
         default_drawing_area_get_accessible = pWidgetClass->get_accessible;
-        pWidgetClass->get_accessible = drawing_area_get_accessibity;
+        pWidgetClass->get_accessible = drawing_area_get_accessible;
         g_type_class_unref(pClass);
         bDone = true;
     }
