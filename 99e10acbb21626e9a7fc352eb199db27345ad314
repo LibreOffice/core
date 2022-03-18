@@ -84,6 +84,23 @@
       "message": "https://imgur.com/a/nMSrQz3",
       "revId": "99e10acbb21626e9a7fc352eb199db27345ad314",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f773dd8_0df91944",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-18T12:04:43Z",
+      "side": 1,
+      "message": "Confirming the issue with gen \u0026 gtk3 and the patch solves it for gtk3,4,gen, and keeps it working for kf5.",
+      "revId": "99e10acbb21626e9a7fc352eb199db27345ad314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
