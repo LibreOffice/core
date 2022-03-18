@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c3e579f_ead9c656",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-18T17:36:00Z",
+      "side": 1,
+      "message": "I can\u0027t test this since I don\u0027t have a Mac but it seemed to me quite straightforward.",
+      "revId": "97d63d4aed2f46206f5a53b321c0ab17e689eba0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
