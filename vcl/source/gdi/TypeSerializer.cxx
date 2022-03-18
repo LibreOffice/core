@@ -425,6 +425,22 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
     }
 }
 
+static bool UselessScaleForMapMode(const Fraction& rScale)
+{
+    if (!rScale.IsValid())
+        return true;
+    // ImplLogicToPixel will multiply its values by this numerator * dpi and then double that
+    // result before dividing
+    constexpr sal_Int32 nTypicalDPI = 96;
+    if (rScale.GetNumerator() > std::numeric_limits<sal_Int32>::max() / nTypicalDPI / 2)
+        return true;
+    if (rScale.GetNumerator() < std::numeric_limits<sal_Int32>::min() / nTypicalDPI / 2)
+        return true;
+    if (static_cast<double>(rScale) < 0.0)
+        return true;
+    return false;
+}
+
 void TypeSerializer::readMapMode(MapMode& rMapMode)
 {
     VersionCompatRead aCompat(mrStream);
@@ -441,10 +457,7 @@ void TypeSerializer::readMapMode(MapMode& rMapMode)
     readFraction(aScaleY);
     mrStream.ReadCharAsBool(bSimple);
 
-    const bool bBogus = !aScaleX.IsValid() || !aScaleY.IsValid()
-                        || aScaleX.GetNumerator() == std::numeric_limits<sal_Int32>::min()
-                        || aScaleY.GetNumerator() == std::numeric_limits<sal_Int32>::min()
-                        || static_cast<double>(aScaleX) < 0.0 || static_cast<double>(aScaleY) < 0.0;
+    const bool bBogus = UselessScaleForMapMode(aScaleX) || UselessScaleForMapMode(aScaleY);
     SAL_WARN_IF(bBogus, "vcl", "invalid scale");
 
     if (bSimple || bBogus)
