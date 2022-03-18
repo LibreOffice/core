@@ -53,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74d33901_586f8c59",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1291,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-18T20:05:15Z",
+      "side": 1,
+      "message": "You should have marked this as \u0027resolved\u0027.",
+      "parentUuid": "4f01d3f0_fe4e5c56",
+      "revId": "f487c23aa5eec65437e15bd97ad4768061eb2836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93370791_f4fd9d03",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "\u003e Same here and the two variables after that.\n\nDone",
       "parentUuid": "93370791_f4fd9d03",
+      "revId": "f487c23aa5eec65437e15bd97ad4768061eb2836",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3303c73d_0f6f9a6f",
+        "filename": "cui/source/tabpages/numfmt.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1292,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-18T20:05:15Z",
+      "side": 1,
+      "message": "The same for this one.",
+      "parentUuid": "b276ac27_83b57d3e",
       "revId": "f487c23aa5eec65437e15bd97ad4768061eb2836",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
