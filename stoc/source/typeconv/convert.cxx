@@ -527,6 +527,17 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
             TypeDescription aSourceTD( aSourceType );
             TypeDescription aDestTD( aDestType );
+            // For a sequence type notation "[]...", SequenceTypeDescription in
+            // cppuhelper/source/typemanager.cxx resolves the "..." component type notation part
+            // only lazily, so it could happen here that bad user input (e.g., "[]" or "[]foo" from
+            // a Basic script CreateUnoValue call) leads to a bad but as-of-yet undetected
+            // aDestType, so check it here; this is less likely an issue for the non-sequence type
+            // classes, whose notation is not resolved lazily based on their syntax:
+            if (!aDestTD.is()) {
+                throw css::lang::IllegalArgumentException(
+                    "Bad XTypeConverter::convertTo destination " + aDestType.getTypeName(),
+                    static_cast<cppu::OWeakObject *>(this), 1);
+            }
             typelib_TypeDescription * pSourceElementTD = nullptr;
             TYPELIB_DANGER_GET(
                 &pSourceElementTD,
