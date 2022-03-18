@@ -37,7 +37,6 @@ namespace vcl::unohelper
 {
 VCL_DLLPUBLIC css::uno::Reference < css::i18n::XBreakIterator > CreateBreakIterator();
 css::uno::Reference < css::i18n::XCharacterClassification> CreateCharacterClassification();
-VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const css::accessibility::AccessibleEventObject& rEventObject );
 VCL_DLLPUBLIC float               ConvertFontWidth( FontWidth eWidth );
 VCL_DLLPUBLIC FontWidth           ConvertFontWidth( float f );
 VCL_DLLPUBLIC float               ConvertFontWeight( FontWeight eWeight );

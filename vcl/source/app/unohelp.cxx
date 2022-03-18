@@ -45,25 +45,6 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     return i18n::CharacterClassification::create( comphelper::getProcessComponentContext() );
 }
 
-void vcl::unohelper::NotifyAccessibleStateEventGlobally( const css::accessibility::AccessibleEventObject& rEventObject )
-{
-    css::uno::Reference< css::awt::XExtendedToolkit > xExtToolkit( Application::GetVCLToolkit(), uno::UNO_QUERY );
-    if ( !xExtToolkit.is() )
-        return;
-
-    // Only for focus events
-    sal_Int16 nType = css::accessibility::AccessibleStateType::INVALID;
-    rEventObject.NewValue >>= nType;
-    if ( nType == css::accessibility::AccessibleStateType::FOCUSED )
-        xExtToolkit->fireFocusGained( rEventObject.Source );
-    else
-    {
-        rEventObject.OldValue >>= nType;
-        if ( nType == css::accessibility::AccessibleStateType::FOCUSED )
-            xExtToolkit->fireFocusLost( rEventObject.Source );
-    }
-}
-
 float vcl::unohelper::ConvertFontWidth( FontWidth eWidth )
 {
     if( eWidth == WIDTH_DONTKNOW )
