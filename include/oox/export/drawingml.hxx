@@ -199,7 +199,6 @@ protected:
 
     void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    bool HasEnhancedCustomShapeSegmentCommand(const css::uno::Reference<css::drawing::XShape>& rXShape, const sal_Int16 nCommand);
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )

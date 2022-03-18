@@ -62,6 +62,7 @@
 #include <com/sun/star/drawing/ColorMode.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterType.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
@@ -3719,6 +3720,28 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, bool b
     mpFS->endElementNS(  XML_a, XML_prstGeom );
 }
 
+namespace
+{
+sal_uInt16 FindNextCommandEndSubpath(const sal_uInt16 nStart, const uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments)
+{
+    sal_uInt16 i(nStart);
+    while (i < rSegments.getLength() && rSegments[i].Command != drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH)
+        i++;
+    return i;
+}
+
+bool HasCommandInSubPath(const sal_Int16 nCommand, const sal_uInt16 nFirst, const sal_uInt16 nLast,
+                         const uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments)
+{
+    for (sal_uInt16 i = nFirst; i <= nLast && i < rSegments.getLength(); i++)
+    {
+        if (rSegments[i].Command == nCommand)
+                                return true;
+    }
+    return false;
+}
+}
+
 bool DrawingML::WriteCustomGeometry(
     const Reference< XShape >& rXShape,
     const SdrObjCustomShape& rSdrObjCustomShape)
@@ -3742,35 +3765,50 @@ bool DrawingML::WriteCustomGeometry(
 
 
     auto pGeometrySeq = o3tl::tryAccess<uno::Sequence<beans::PropertyValue>>(aAny);
+    if (!pGeometrySeq)
+        return false;
 
-    if ( pGeometrySeq )
+    for( const beans::PropertyValue& rProp : *pGeometrySeq )
     {
-        for( const beans::PropertyValue& rProp : *pGeometrySeq )
+        if ( rProp.Name == "Path" )
         {
-            if ( rProp.Name == "Path" )
+            uno::Sequence<beans::PropertyValue> aPathProp;
+            rProp.Value >>= aPathProp;
+
+            uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
+            uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+            uno::Sequence<awt::Size> aPathSize;
+            for (const beans::PropertyValue& rPathProp : std::as_const(aPathProp))
             {
-                uno::Sequence<beans::PropertyValue> aPathProp;
-                rProp.Value >>= aPathProp;
+                if (rPathProp.Name == "Coordinates")
+                    rPathProp.Value >>= aPairs;
+                else if (rPathProp.Name == "Segments")
+                    rPathProp.Value >>= aSegments;
+                else if (rPathProp.Name == "SubViewSize")
+                    rPathProp.Value >>= aPathSize;
+            }
 
-                uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
-                uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-                uno::Sequence<awt::Size> aPathSize;
-                for (const beans::PropertyValue& rPathProp : std::as_const(aPathProp))
-                {
-                    if (rPathProp.Name == "Coordinates")
-                        rPathProp.Value >>= aPairs;
-                    else if (rPathProp.Name == "Segments")
-                        rPathProp.Value >>= aSegments;
-                    else if (rPathProp.Name == "SubViewSize")
-                        rPathProp.Value >>= aPathSize;
-                }
+            if ( !aPairs.hasElements() )
+                return false;
 
-                if ( !aPairs.hasElements() )
-                    return false;
+            // If the geometry contains commands, which we cannot yet handle here, we go back and
+            // write the shape as polyPolygon.
+            for (const auto& rSegment : std::as_const(aSegments))
+            {
+                if (rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSETO
+                    || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ANGLEELLIPSE
+                    || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARCTO
+                    || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ARC
+                    || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO
+                    || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC
+                    || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTX
+                    || rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::ELLIPTICALQUADRANTY)
+                return false;
+            }
 
-                if ( !aSegments.hasElements() )
-                {
-                    aSegments = uno::Sequence<drawing::EnhancedCustomShapeSegment>
+            if ( !aSegments.hasElements() )
+            {
+                aSegments = uno::Sequence<drawing::EnhancedCustomShapeSegment>
                     {
                         { drawing::EnhancedCustomShapeSegmentCommand::MOVETO, 1 },
                         { drawing::EnhancedCustomShapeSegmentCommand::LINETO,
@@ -3778,38 +3816,62 @@ bool DrawingML::WriteCustomGeometry(
                         { drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH, 0 },
                         { drawing::EnhancedCustomShapeSegmentCommand::ENDSUBPATH, 0 }
                     };
-                };
+            };
 
-                int nExpectedPairCount = std::accumulate(std::cbegin(aSegments), std::cend(aSegments), 0,
-                    [](const int nSum, const drawing::EnhancedCustomShapeSegment& rSegment) { return nSum + rSegment.Count; });
+            int nExpectedPairCount = std::accumulate(std::cbegin(aSegments), std::cend(aSegments), 0,
+                [](const int nSum, const drawing::EnhancedCustomShapeSegment& rSegment) { return nSum + rSegment.Count; });
 
-                if ( nExpectedPairCount > aPairs.getLength() )
-                {
-                    SAL_WARN("oox.shape", "Segments need " << nExpectedPairCount << " coordinates, but Coordinates have only " << aPairs.getLength() << " pairs.");
-                    return false;
-                }
+            if ( nExpectedPairCount > aPairs.getLength() )
+            {
+                SAL_WARN("oox.shape", "Segments need " << nExpectedPairCount << " coordinates, but Coordinates have only " << aPairs.getLength() << " pairs.");
+                return false;
+            }
 
-                mpFS->startElementNS(XML_a, XML_custGeom);
-                mpFS->singleElementNS(XML_a, XML_avLst);
-                mpFS->singleElementNS(XML_a, XML_gdLst);
-                mpFS->singleElementNS(XML_a, XML_ahLst);
-                mpFS->singleElementNS(XML_a, XML_rect, XML_l, "l", XML_t, "t",
+            mpFS->startElementNS(XML_a, XML_custGeom);
+            mpFS->singleElementNS(XML_a, XML_avLst);
+            mpFS->singleElementNS(XML_a, XML_gdLst);
+            mpFS->singleElementNS(XML_a, XML_ahLst);
+            mpFS->singleElementNS(XML_a, XML_rect, XML_l, "l", XML_t, "t",
                                       XML_r, "r", XML_b, "b");
-                mpFS->startElementNS(XML_a, XML_pathLst);
+            mpFS->startElementNS(XML_a, XML_pathLst);
 
-                std::optional<OString> sFill;
-                if (HasEnhancedCustomShapeSegmentCommand(rXShape, css::drawing::EnhancedCustomShapeSegmentCommand::NOFILL))
-                    sFill = "none"; // for possible values see ST_PathFillMode in OOXML standard
 
-                if ( aPathSize.hasElements() )
+            // Prepare for path width and height
+            bool bUseGlobalViewBox(false);
+            // If draw:viewBox is missing in draw:enhancedGeometry, then import sets
+            // viewBox="0 0 21600 21600". Missing ViewBox can only occur, if user has manipulated
+            // current file via macro. But import from oox or documents imported from oox and
+            // saved to strict ODF might have no subViewSize but viewBox="0 0 0 0". We need to
+            // generate width and height in those cases.
+            sal_Int32 nViewBoxWidth(0);
+            sal_Int32 nViewBoxHeight(0);
+            if (!aPathSize.hasElements())
+            {
+                bUseGlobalViewBox = true;
+                auto pProp = std::find_if(std::cbegin(*pGeometrySeq), std::cend(*pGeometrySeq),
+                    [](const beans::PropertyValue& rProp) { return rProp.Name == "ViewBox"; });
+                if (pProp != std::cend(*pGeometrySeq))
                 {
-                    mpFS->startElementNS( XML_a, XML_path,
-                          XML_fill, sFill,
-                          XML_w, OString::number(aPathSize[0].Width),
-                          XML_h, OString::number(aPathSize[0].Height) );
+                    css::awt::Rectangle aViewBox;
+                    if (pProp->Value >>= aViewBox)
+                    {
+                        nViewBoxWidth = aViewBox.Width;
+                        nViewBoxHeight = aViewBox.Height;
+                        css::drawing::EnhancedCustomShapeParameter aECSP;
+                        const EnhancedCustomShape2d aCustomShape2d(const_cast< SdrObjCustomShape& >(rSdrObjCustomShape));
+                        aECSP.Type = css::drawing::EnhancedCustomShapeParameterType::NORMAL;
+                        aECSP.Value <<= nViewBoxWidth;
+                        double fRetValue;
+                        aCustomShape2d.GetParameter(fRetValue, aECSP, true, false);
+                        nViewBoxWidth = basegfx::fround(fRetValue);
+                        aECSP.Value <<= nViewBoxHeight;
+                        aCustomShape2d.GetParameter(fRetValue, aECSP, false, true);
+                        nViewBoxHeight = basegfx::fround(fRetValue);
+                    }
                 }
-                else
+                if ((nViewBoxWidth == 0 && nViewBoxHeight == 0) || pProp == std::cend(*pGeometrySeq))
                 {
+                    // Generate a substitute based on point coordinates
                     sal_Int32 nXMin(0);
                     aPairs[0].First.Value >>= nXMin;
                     sal_Int32 nXMax = nXMin;
@@ -3830,17 +3892,56 @@ bool DrawingML::WriteCustomGeometry(
                         if (nY > nYMax)
                             nYMax = nY;
                     }
-                    mpFS->startElementNS( XML_a, XML_path,
-                          XML_fill, sFill,
-                          XML_w, OString::number(nXMax - nXMin),
-                          XML_h, OString::number(nYMax - nYMin) );
+                    nViewBoxWidth = std::max(nXMax, nXMax - nXMin);
+                    nViewBoxHeight = std::max(nYMax, nYMax - nYMin);
                 }
+            }
 
+            
+            // Iterate over subpaths
+            int nPairIndex = 0;
+            sal_uInt16 nPathSizeIndex = 0;
+            sal_uInt16 nSubpathStartIndex(0);
+            do
+            {
+                bool bOK(true); // catch faulty paths were commands do not correspond to points
+                // get index of next command ENDSUBPATH; index behind last segment if doesn't exist
+                sal_uInt16 nNextNcommandIndex = FindNextCommandEndSubpath(nSubpathStartIndex,
+                                                                              aSegments);
 
-                int nPairIndex = 0;
-                bool bOK = true;
-                for (const auto& rSegment : std::as_const(aSegments))
+                // Prepare attributes for a:path start element
+                // NOFILL or one of the LIGHTEN commands
+                std::optional<OString> sFill;
+                if (HasCommandInSubPath(drawing::EnhancedCustomShapeSegmentCommand::NOFILL,
+                                        nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
+                    sFill = "none";
+                else if (HasCommandInSubPath(drawing::EnhancedCustomShapeSegmentCommand::DARKEN,
+                                             nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
+                    sFill = "darken";
+                else if (HasCommandInSubPath(drawing::EnhancedCustomShapeSegmentCommand::DARKENLESS,
+                                             nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
+                    sFill = "darkenless";
+                else if (HasCommandInSubPath(drawing::EnhancedCustomShapeSegmentCommand::LIGHTEN,
+                                             nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
+                    sFill = "lighten";
+                else if (HasCommandInSubPath(drawing::EnhancedCustomShapeSegmentCommand::LIGHTENLESS,
+                                             nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
+                    sFill = "lightenless";
+                // NOSTROKE
+                std::optional<OString> sStroke;
+                if (HasCommandInSubPath(drawing::EnhancedCustomShapeSegmentCommand::NOSTROKE,
+                                        nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
+                    sStroke = "0";
+
+                // Write a:path start element
+                mpFS->startElementNS( XML_a, XML_path, XML_fill, sFill, XML_stroke, sStroke,
+                        XML_w, OString::number(bUseGlobalViewBox ? nViewBoxWidth : aPathSize[nPathSizeIndex].Width),
+                        XML_h, OString::number(bUseGlobalViewBox ? nViewBoxHeight : aPathSize[nPathSizeIndex].Height));
+
+                // Actually write the subpath
+                for (sal_uInt16 nSegmentIndex = nSubpathStartIndex; nSegmentIndex < nNextNcommandIndex; ++ nSegmentIndex)
                 {
+                    const auto& rSegment(aSegments[nSegmentIndex]);
                     if ( rSegment.Command == drawing::EnhancedCustomShapeSegmentCommand::CLOSESUBPATH )
                     {
                         mpFS->singleElementNS(XML_a, XML_close);
@@ -3939,11 +4040,11 @@ bool DrawingML::WriteCustomGeometry(
                                     aCustoShape2d.GetParameter(fWR, aPairs[nPairIndex].First, false,
                                                                false);
                                     double fHR = 0.0;
-                                    aCustoShape2d.GetParameter(fHR, aPairs[nPairIndex].Second,
-                                                               false, false);
+                                    aCustoShape2d.GetParameter(fHR, aPairs[nPairIndex].Second, false,
+                                                               false);
                                     double fStartAngle = 0.0;
                                     aCustoShape2d.GetParameter(
-                                        fStartAngle, aPairs[nPairIndex + 1].First, false, false);
+                                            fStartAngle, aPairs[nPairIndex + 1].First, false, false);
                                     sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
                                     double fSwingAng = 0.0;
                                     aCustoShape2d.GetParameter(
@@ -3963,16 +4064,23 @@ bool DrawingML::WriteCustomGeometry(
                                 break;
                         }
                     }
-                    if (!bOK)
-                        break;
                 }
+                // finish this subpath in any case
                 mpFS->endElementNS( XML_a, XML_path );
-                mpFS->endElementNS( XML_a, XML_pathLst );
-                mpFS->endElementNS( XML_a, XML_custGeom );
-                return bOK;
-            }
-        }
-    }
+                // exit loop if not enough values in aPairs.
+                if (!bOK)
+                    break;
+
+                // step forward to next subpath
+                nSubpathStartIndex = nNextNcommandIndex + 1;
+                nPathSizeIndex++;
+            } while (nSubpathStartIndex < aSegments.getLength());
+
+            mpFS->endElementNS( XML_a, XML_pathLst );
+            mpFS->endElementNS( XML_a, XML_custGeom );
+            return true; // We have written custGeom, so do not export as PolyPolygon
+        } // end if (rProp.Name == "Path")
+    } // end loop over GeometrySeq
     return false;
 }
 
@@ -4002,6 +4110,8 @@ sal_Int32 DrawingML::GetCustomGeometryPointValue(
 void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
                                  const tools::PolyPolygon& rPolyPolygon, const bool bClosed)
 {
+    SAL_WARN_IF(!rXShape.is(), "oox.shape", "Why is there not XShape?"); // WIP
+
     // In case of Writer, the parent element is <wps:spPr>, and there the
     // <a:custGeom> element is not optional.
     if (rPolyPolygon.Count() < 1 && GetDocumentType() != DOCUMENT_DOCX)
@@ -4017,15 +4127,10 @@ void DrawingML::WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>
 
     const tools::Rectangle aRect( rPolyPolygon.GetBoundRect() );
 
-    // tdf#101122
-    std::optional<OString> sFill;
-    if (HasEnhancedCustomShapeSegmentCommand(rXShape, css::drawing::EnhancedCustomShapeSegmentCommand::NOFILL))
-        sFill = "none"; // for possible values see ST_PathFillMode in OOXML standard
-
     // Put all polygons of rPolyPolygon in the same path element
-    // to subtract the overlapped areas.
+    // to subtract the overlapped areas (even-odd fill). When we are here, we cannot decide, whether a
+    // no polygon was generated for a command Move or for a command EndSubPath.
     mpFS->startElementNS( XML_a, XML_path,
-            XML_fill, sFill,
             XML_w, OString::number(aRect.GetWidth()),
             XML_h, OString::number(aRect.GetHeight()) );
 
@@ -4706,44 +4811,6 @@ void DrawingML::WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPrope
                                                                                         aAttribs) };
 
     WriteShapeEffect(u"softEdge", aProps);
-}
-
-bool DrawingML::HasEnhancedCustomShapeSegmentCommand(
-    const css::uno::Reference<css::drawing::XShape>& rXShape, const sal_Int16 nCommand)
-{
-    try
-    {
-        uno::Reference<beans::XPropertySet> xPropSet(rXShape, uno::UNO_QUERY_THROW);
-        if (!GetProperty(xPropSet, "CustomShapeGeometry"))
-            return false;
-        Sequence<PropertyValue> aCustomShapeGeometryProps;
-        mAny >>= aCustomShapeGeometryProps;
-        for (const beans::PropertyValue& rGeomProp : std::as_const(aCustomShapeGeometryProps))
-        {
-            if (rGeomProp.Name == "Path")
-            {
-                uno::Sequence<beans::PropertyValue> aPathProps;
-                rGeomProp.Value >>= aPathProps;
-                for (const beans::PropertyValue& rPathProp : std::as_const(aPathProps))
-                {
-                    if (rPathProp.Name == "Segments")
-                    {
-                        uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
-                        rPathProp.Value >>= aSegments;
-                        for (const auto& rSegment : std::as_const(aSegments))
-                        {
-                            if (rSegment.Command == nCommand)
-                                return true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-    catch (const ::uno::Exception&)
-    {
-    }
-    return false;
 }
 
 void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool bIsText )

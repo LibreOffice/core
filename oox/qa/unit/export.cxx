@@ -416,6 +416,25 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
     assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:endParaRPr", "sz", "500");
     assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[3]/a:endParaRPr", "sz", "500");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
+{
+    // Given an odp file that contains a non-primitive custom shape with command N
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf147978_endsubpath.odp";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the pathLst has two child elements, 
+    // Without the accompanying fix in place, only one element a:path was exported.
+    assertXPathChildren(pXmlDoc, "//a:pathLst", 2);
+    // and make sure first path with no stroke, second with no fill
+    assertXPath(pXmlDoc, "//a:pathLst/(a:path)[1]","stroke","0");
+    assertXPath(pXmlDoc, "//a:pathLst/(a:path)[2]","fill","none");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
