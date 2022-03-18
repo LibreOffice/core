@@ -101,6 +101,23 @@
       "message": "Confirming the issue with gen \u0026 gtk3 and the patch solves it for gtk3,4,gen, and keeps it working for kf5.",
       "revId": "99e10acbb21626e9a7fc352eb199db27345ad314",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "864b5169_1d7e1f58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-18T12:39:47Z",
+      "side": 1,
+      "message": "Thx for the verification and testing!",
+      "revId": "99e10acbb21626e9a7fc352eb199db27345ad314",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
