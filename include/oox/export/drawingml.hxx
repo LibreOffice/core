@@ -44,6 +44,7 @@
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <vcl/mapmod.hxx>
+#include <svx/EnhancedCustomShape2d.hxx>
 
 class Graphic;
 class SdrObjCustomShape;
@@ -199,7 +200,8 @@ protected:
 
     void WriteGlowEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    bool HasEnhancedCustomShapeSegmentCommand(const css::uno::Reference<css::drawing::XShape>& rXShape, const sal_Int16 nCommand);
+    void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
+                                  const EnhancedCustomShape2d& rCustomShape2d);
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
@@ -308,12 +310,6 @@ public:
     void WritePresetShape( const OString& pShape, MSO_SPT eShapeType, bool bPredefinedHandlesUsed, const css::beans::PropertyValue& rProp );
     bool WriteCustomGeometry(
         const css::uno::Reference<css::drawing::XShape>& rXShape,
-        const SdrObjCustomShape& rSdrObjCustomShape);
-    void WriteCustomGeometryPoint(
-        const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
-        const SdrObjCustomShape& rSdrObjCustomShape);
-    static sal_Int32 GetCustomGeometryPointValue(
-        const css::drawing::EnhancedCustomShapeParameter& rParam,
         const SdrObjCustomShape& rSdrObjCustomShape);
     void WritePolyPolygon(const css::uno::Reference<css::drawing::XShape>& rXShape,
                           const tools::PolyPolygon& rPolyPolygon, const bool bClosed);
