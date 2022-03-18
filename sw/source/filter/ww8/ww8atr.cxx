@@ -4183,7 +4183,15 @@ void WW8AttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
     m_rWW8Export.pO->push_back(1);
 }
 
-void WW8AttributeOutput::TextLineBreak(const SwFormatLineBreak& /*rLineBreak*/) {}
+void WW8AttributeOutput::TextLineBreak(const SwFormatLineBreak& rLineBreak)
+{
+    // Write the linebreak itself.
+    m_rWW8Export.WriteChar(0x0b);
+
+    // sprmCLbcCRJ
+    m_rWW8Export.InsUInt16(NS_sprm::CLbcCRJ::val);
+    m_rWW8Export.pO->push_back(rLineBreak.GetEnumValue());
+}
 
 void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
 {
