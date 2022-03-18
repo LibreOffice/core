@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aaa2087e_684be92a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-18T08:19:19Z",
+      "side": 1,
+      "message": "Hi. I\u0027ve fixed the merge conflicts (there was only one, which either asked for Color(0xffffff) or COL_WHITE; I kept my change, which was COL_WHITE). I rebased my branch on top of the most recent master. Please let me know if anything else is needed.",
+      "revId": "3dc8cc8ca54ae3bb4e2e2b8f4af79c0075e55d05",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
