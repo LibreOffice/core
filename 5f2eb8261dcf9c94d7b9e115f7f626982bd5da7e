@@ -137,6 +137,24 @@
       "parentUuid": "52c2c76e_abff199e",
       "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fa08527_7faa51c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003550
+      },
+      "writtenOn": "2022-03-18T08:38:30Z",
+      "side": 1,
+      "message": "Alright, this clears up quite some things for me, thanks a lot! It makes sense too that the focus is only given to the drawing area and not the paragraph as both calls isEnabled and GrabFocus are related to that. \n\nA question that I have, if you say the a11y object for the paragragh doesn\u0027t exist yet, what function call is normally made when the focus goes to the drawing area manually, i.e when Orca announces it just fine?\n\nAlso, just out of curiosity, what does \u0027the a11y object is only properly initializd when it\u0027s already too late\u0027 mean?",
+      "parentUuid": "5cc38f10_a3273083",
+      "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
