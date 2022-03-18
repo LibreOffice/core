@@ -308,7 +308,7 @@ public:
         const auto first6 = aName.substr(0, 6);
         for (const auto& c : first6)
         {
-            // If we have a comment sign break!!
+            // If we have a filthy non-ASCII character, break!!
             if (c >= 0x80)
                 return 0;
             n = static_cast<sal_uInt16>((n << 3) + rtl::toAsciiUpperCase(c));
