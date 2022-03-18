@@ -34,6 +34,24 @@
       "parentUuid": "6a8df91c_197b1fa5",
       "revId": "f978b5c608cce023e3ce66569fee2ac9a6d2d9c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efcfc445_4044c43a",
+        "filename": "include/rtl/character.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-18T12:56:47Z",
+      "side": 1,
+      "message": "yeah, good points",
+      "parentUuid": "a978b8ae_8e98cdf4",
+      "revId": "f978b5c608cce023e3ce66569fee2ac9a6d2d9c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
