@@ -416,6 +416,78 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
     assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[2]/a:endParaRPr", "sz", "500");
     assertXPath(pXmlDoc, "//p:sp[1]/p:txBody/a:p[3]/a:endParaRPr", "sz", "500");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf147978_endsubpath)
+{
+    // Given an odp file that contains a non-primitive custom shape with command N
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf147978_endsubpath.odp";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the pathLst has two child elements,
+    // Without the accompanying fix in place, only one element a:path was exported.
+    assertXPathChildren(pXmlDoc, "//a:pathLst", 2);
+    // and make sure first path with no stroke, second with no fill
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "stroke", "0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "fill", "none");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandA)
+{
+    // Given an odp file that contains a non-primitive custom shape with command N
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf147978_enhancedPath_commandA.odp";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Then make sure the path has a child element arcTo. Prior to the fix that part of the curve was
+    // not exported at all. In odp it is a command A. Such does not exist in OOXML and is therefore
+    // exported as a:lnTo followed by a:arcTo
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo", 2);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", 1);
+    // And assert its attribute values
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "wR", "7200");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "hR", "5400");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng", "7719588");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng", "-5799266");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf147978_commandT)
+{
+    // The odp file contains a non-primitive custom shape with commands MTZ
+    OUString aURL
+        = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf147978_enhancedPath_commandT.odp";
+
+    // Export to pptx had only exported the command M and has used a wrong path size
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Verify the markup:
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // File has draw:viewBox="0 0 216 216"
+    assertXPath(pXmlDoc, "//a:pathLst/a:path", "w", "216");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path", "h", "216");
+    // Command T is exported as lnTo followed by arcTo.
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo", 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo", 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", 1);
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:close", 1);
+    // And assert its values
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "x", "108");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:moveTo/a:pt", "y", "162");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt", "x", "138");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:lnTo/a:pt", "y", "110");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "wR", "108");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "hR", "54");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "stAng", "18000000");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path/a:arcTo", "swAng", "18000000");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

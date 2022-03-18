@@ -903,9 +903,6 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
 
     // visual shape properties
     pFS->startElementNS(mnXmlNamespace, XML_spPr);
-    // moon is flipped in MSO, and mso-spt89 (right up arrow) is mapped to leftUpArrow
-    if ( sShapeType == "moon" || sShapeType == "mso-spt89" )
-        bFlipH = !bFlipH;
 
     // we export non-primitive shapes to custom geometry
     // we also export non-ooxml shapes which have handles/equations to custom geometry, because
@@ -925,8 +922,6 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
         bCustGeom = false;
         bOnDenylist = true;
     }
-    else if( bHasHandles )
-        bCustGeom = true;
 
     bool bPresetWriteSuccessful = false;
     // Let the custom shapes what has name and preset information in OOXML, to be written
@@ -941,28 +936,24 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // If preset writing has problems try to write the shape as it done before
     if (bPresetWriteSuccessful)
         ;// Already written do nothing.
-    else if (bHasHandles && bCustGeom)
-    {
-        WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV, false, true );// do not flip, polypolygon coordinates are flipped already
-        tools::PolyPolygon aPolyPolygon( rSdrObjCustomShape.GetLineGeometry(true) );
-        sal_Int32 nRotation = 0;
-        // The RotateAngle property's value is independent from any flipping, and that's exactly what we need here.
-        uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
-        if (xPropertySetInfo->hasPropertyByName("RotateAngle"))
-            xPropertySet->getPropertyValue("RotateAngle") >>= nRotation;
-        // Remove rotation
-        bool bInvertRotation = bFlipH != bFlipV;
-        if (nRotation != 0)
-            aPolyPolygon.Rotate(Point(0,0), Degree10(static_cast<sal_Int16>(bInvertRotation ? nRotation/10 : 3600-nRotation/10)));
-        WritePolyPolygon(xShape, aPolyPolygon, false);
-    }
     else if (bCustGeom)
     {
         WriteShapeTransformation( xShape, XML_a, bFlipH, bFlipV );
         bool bSuccess = WriteCustomGeometry(xShape, rSdrObjCustomShape);
         if (!bSuccess)
-            WritePresetShape( sPresetShape );
+        {
+            // Write as PolyPolygon
+            basegfx::B2DPolyPolygon aPolyPolygon(rSdrObjCustomShape.GetLineGeometry(true));
+            // Remove flip from PolyPolygon, it is already written above in WriteShapeTransformation.
+            if (bFlipH || bFlipV)
+            {
+                Point aCenter = rSdrObjCustomShape.GetSnapRect().Center();
+                basegfx::B2DHomMatrix aMat(bFlipH ? -1 : 1, 0, bFlipH ? aCenter.X() * 2.0 : 0,
+                                           0, bFlipV ? -1 : 1, bFlipV ? aCenter.Y() * 2.0 : 0);
+                aPolyPolygon.transform(aMat);
+            }
+            WritePolyPolygon(xShape, tools::PolyPolygon(aPolyPolygon), aPolyPolygon.isClosed());
+        }
     }
     else if (bOnDenylist && bHasHandles && nAdjustmentValuesIndex !=-1 && !sShapeType.startsWith("mso-spt"))
     {
