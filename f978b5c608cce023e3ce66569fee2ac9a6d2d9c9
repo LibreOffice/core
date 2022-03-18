@@ -16,6 +16,24 @@
       "message": "I fail to see how can it be so - for e.g. numbers greater than 0xFFFF, which are valid Unicode codepoints, there will be hits here?",
       "revId": "f978b5c608cce023e3ce66569fee2ac9a6d2d9c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a978b8ae_8e98cdf4",
+        "filename": "include/rtl/character.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-18T10:04:03Z",
+      "side": 1,
+      "message": "In fact, I don\u0027t see also why it should be faster - https://godbolt.org/z/9TYhYqYqq shows similar code (modulo different constants).",
+      "parentUuid": "6a8df91c_197b1fa5",
+      "revId": "f978b5c608cce023e3ce66569fee2ac9a6d2d9c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
