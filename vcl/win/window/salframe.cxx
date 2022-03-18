@@ -2662,7 +2662,12 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Color aMenuBarTextColor;
     Color aMenuBarRolloverTextColor;
 
-    if (UseDarkMode())
+    const bool bUseDarkMode(UseDarkMode());
+
+    OUString sThemeName(!bUseDarkMode ? u"colibre" : u"colibre_dark");
+    aStyleSettings.SetPreferredIconTheme(sThemeName, bUseDarkMode);
+
+    if (bUseDarkMode)
     {
         SetWindowTheme(mhWnd, L"Explorer", nullptr);
 
