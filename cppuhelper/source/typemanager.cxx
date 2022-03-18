@@ -17,6 +17,7 @@
 #include <set>
 #include <stack>
 #include <string_view>
+#include <utility>
 #include <vector>
 
 #include <com/sun/star/container/NoSuchElementException.hpp>
@@ -1831,33 +1832,27 @@ cppuhelper::TypeManager::TypeManager():
 
 css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
     //TODO: caching? (here or in unoidl::Manager?)
-    struct Simple {
-        std::u16string_view name;
-        css::uno::TypeClass typeClass;
-    };
-    static Simple const simple[] = {
-        { std::u16string_view(u"void"), css::uno::TypeClass_VOID },
-        { std::u16string_view(u"boolean"), css::uno::TypeClass_BOOLEAN },
-        { std::u16string_view(u"byte"), css::uno::TypeClass_BYTE },
-        { std::u16string_view(u"short"), css::uno::TypeClass_SHORT },
-        { std::u16string_view(u"unsigned short"),
-          css::uno::TypeClass_UNSIGNED_SHORT },
-        { std::u16string_view(u"long"), css::uno::TypeClass_LONG },
-        { std::u16string_view(u"unsigned long"), css::uno::TypeClass_UNSIGNED_LONG },
-        { std::u16string_view(u"hyper"), css::uno::TypeClass_HYPER },
-        { std::u16string_view(u"unsigned hyper"),
-          css::uno::TypeClass_UNSIGNED_HYPER },
-        { std::u16string_view(u"float"), css::uno::TypeClass_FLOAT },
-        { std::u16string_view(u"double"), css::uno::TypeClass_DOUBLE },
-        { std::u16string_view(u"char"), css::uno::TypeClass_CHAR },
-        { std::u16string_view(u"string"), css::uno::TypeClass_STRING },
-        { std::u16string_view(u"type"), css::uno::TypeClass_TYPE },
-        { std::u16string_view(u"any"), css::uno::TypeClass_ANY } };
-    for (std::size_t i = 0; i != SAL_N_ELEMENTS(simple); ++i) {
-        if (name == simple[i].name) {
+    static constexpr std::pair<std::u16string_view, css::uno::TypeClass> const simple[] = {
+        { u"void", css::uno::TypeClass_VOID },
+        { u"boolean", css::uno::TypeClass_BOOLEAN },
+        { u"byte", css::uno::TypeClass_BYTE },
+        { u"short", css::uno::TypeClass_SHORT },
+        { u"unsigned short", css::uno::TypeClass_UNSIGNED_SHORT },
+        { u"long", css::uno::TypeClass_LONG },
+        { u"unsigned long", css::uno::TypeClass_UNSIGNED_LONG },
+        { u"hyper", css::uno::TypeClass_HYPER },
+        { u"unsigned hyper", css::uno::TypeClass_UNSIGNED_HYPER },
+        { u"float", css::uno::TypeClass_FLOAT },
+        { u"double", css::uno::TypeClass_DOUBLE },
+        { u"char", css::uno::TypeClass_CHAR },
+        { u"string", css::uno::TypeClass_STRING },
+        { u"type", css::uno::TypeClass_TYPE },
+        { u"any", css::uno::TypeClass_ANY } };
+    for (const auto& [ rName, rTypeClass ] : simple) {
+        if (name == rName) {
             return css::uno::makeAny<
                 css::uno::Reference< css::reflection::XTypeDescription > >(
-                    new SimpleTypeDescription(simple[i].typeClass, name));
+                    new SimpleTypeDescription(rTypeClass, name));
         }
     }
     if (name.startsWith("[]")) {
