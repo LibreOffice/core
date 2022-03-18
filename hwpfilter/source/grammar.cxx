@@ -1175,12 +1175,13 @@ yyerrhandle:
   return 1;
 }
 
-
 Node *mainParse(const char *_code)
 {
     initFlex( _code );
     top = nullptr;
     yyparse();
+    deinitFlex();
+
     if( top )
         return top;
     else
