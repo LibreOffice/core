@@ -185,14 +185,10 @@ protected:
 
     /** This method creates an AccessibleEventObject and sends it to all
         listeners that are currently listening to this object
-
-        If bSendGlobally is true, the event is also broadcast via
-        vcl::unohelper::NotifyAccessibleStateEventGlobally()
      */
     void         BroadcastAccEvent( sal_Int16 nId,
                                     const css::uno::Any & rNew,
-                                    const css::uno::Any & rOld,
-                                    bool bSendGlobally = false ) const;
+                                    const css::uno::Any & rOld ) const;
 
     /** Removes all children from the internal lists and broadcasts child remove
         events.

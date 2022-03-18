@@ -123,7 +123,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 
                     AddState( AccessibleStateType::FOCUSED );
                     aSelected <<= AccessibleStateType::FOCUSED;
-                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aSelected, aEmpty, true );
+                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aSelected, aEmpty );
 
                     SAL_INFO("chart2.accessibility", "Selection acquired by: " << getAccessibleName());
                 }
@@ -136,7 +136,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 
                     AddState( AccessibleStateType::FOCUSED );
                     aSelected <<= AccessibleStateType::FOCUSED;
-                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected, true );
+                    BroadcastAccEvent( AccessibleEventId::STATE_CHANGED, aEmpty, aSelected );
                     SAL_INFO("chart2.accessibility", "Selection lost by: " << getAccessibleName());
                 }
                 break;
@@ -343,32 +343,24 @@ awt::Point AccessibleBase::GetUpperLeftOnScreen() const
 void AccessibleBase::BroadcastAccEvent(
     sal_Int16 nId,
     const Any & rNew,
-    const Any & rOld,
-    bool bSendGlobally ) const
+    const Any & rOld ) const
 {
     ClearableMutexGuard aGuard( m_aMutex );
 
-    if ( !m_nEventNotifierId && !bSendGlobally )
+    if ( !m_nEventNotifierId )
         return;
         // if we don't have a client id for the notifier, then we don't have listeners, then
         // we don't need to notify anything
-        //except SendGlobally for focus handling?
 
     // the const cast is needed, because UNO parameters are never const
     const AccessibleEventObject aEvent(
         const_cast< uno::XWeak * >( static_cast< const uno::XWeak * >( this )),
         nId, rNew, rOld );
 
-    if ( m_nEventNotifierId ) // let the notifier handle this event
-        ::comphelper::AccessibleEventNotifier::addEvent( m_nEventNotifierId, aEvent );
+    // let the notifier handle this event
+    ::comphelper::AccessibleEventNotifier::addEvent( m_nEventNotifierId, aEvent );
 
     aGuard.clear();
-
-    // send event to global message queue
-    if( bSendGlobally )
-    {
-        vcl::unohelper::NotifyAccessibleStateEventGlobally( aEvent );
-    }
 }
 
 void AccessibleBase::KillAllChildren()
@@ -405,8 +397,7 @@ void AccessibleBase::SetInfo( const AccessibleElementInfo & rNewInfo )
     {
         KillAllChildren();
     }
-    BroadcastAccEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, uno::Any(), uno::Any(),
-                       true /* global notification */ );
+    BroadcastAccEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, uno::Any(), uno::Any());
 }
 
 // ________ (XComponent::dispose) ________
