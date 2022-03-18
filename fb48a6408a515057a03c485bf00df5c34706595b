@@ -34,6 +34,23 @@
       "parentUuid": "60c1b547_753c9885",
       "revId": "fb48a6408a515057a03c485bf00df5c34706595b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6869644c_e796b997",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-18T07:27:43Z",
+      "side": 1,
+      "message": "No pb Miklos! :-)\n\nLemures: indeed, I see the statement here:https://lists.freedesktop.org/archives/libreoffice/2022-March/088622.html thank you!\n\nStephan: sorry for the noise",
+      "revId": "fb48a6408a515057a03c485bf00df5c34706595b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
