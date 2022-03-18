@@ -25,6 +25,14 @@ public:
         Header
     };
 
+    ScTypedStrData(
+        OUString&& rStr, double fVal = 0.0, double fRVal = 0.0, StringType nType = Standard, bool bDate = false ) :
+        maStrValue(std::move(rStr)),
+        mfValue(fVal),
+        mfRoundedValue(fRVal),
+        meStrType(nType),
+        mbIsDate( bDate ) {}
+
     ScTypedStrData( const OUString& rStr, double fVal = 0.0, double fRVal = 0.0, StringType eType = Standard,
                     bool bDate = false );
 

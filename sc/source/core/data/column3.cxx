@@ -2510,7 +2510,7 @@ class FilterEntriesHandler
 
         if (rCell.hasString())
         {
-            mrFilterEntries.push_back(ScTypedStrData(aStr));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr)));
             return;
         }
 
@@ -2532,7 +2532,7 @@ class FilterEntriesHandler
                     OUString aErr = ScGlobal::GetErrorString(nErr);
                     if (!aErr.isEmpty())
                     {
-                        mrFilterEntries.push_back(ScTypedStrData(aErr));
+                        mrFilterEntries.push_back(ScTypedStrData(std::move(aErr)));
                         return;
                     }
                 }
@@ -2568,9 +2568,9 @@ class FilterEntriesHandler
         }
         // store the formatted/rounded value for filtering
         if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0 && !bDate)
-            mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, rColumn.GetDoc().RoundValueAsShown(fVal, nFormat), ScTypedStrData::Value, bDate));
         else
-            mrFilterEntries.push_back(ScTypedStrData(aStr, fVal, fVal, ScTypedStrData::Value, bDate));
+            mrFilterEntries.push_back(ScTypedStrData(std::move(aStr), fVal, fVal, ScTypedStrData::Value, bDate));
     }
 
 public:
@@ -2784,7 +2784,7 @@ bool ScColumn::GetDataEntries(
         OUString aStr = aItrUp.get();
         if (!aStr.isEmpty())
         {
-            if (rStrings.insert(ScTypedStrData(aStr)).second)
+            if (rStrings.insert(ScTypedStrData(std::move(aStr))).second)
                 bFound = true;
         }
 
@@ -2797,7 +2797,7 @@ bool ScColumn::GetDataEntries(
         OUString aStr = aItrDown.get();
         if (!aStr.isEmpty())
         {
-            if (rStrings.insert(ScTypedStrData(aStr)).second)
+            if (rStrings.insert(ScTypedStrData(std::move(aStr))).second)
                 bFound = true;
         }
 
