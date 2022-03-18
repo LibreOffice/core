@@ -560,10 +560,6 @@ namespace accessibility
 
         AccessibleEventObject aEvent(xThis, nEventId, rNewValue, rOldValue);
 
-        // #102261# Call global queue for focus events
-        if( nEventId == AccessibleEventId::STATE_CHANGED )
-            vcl::unohelper::NotifyAccessibleStateEventGlobally( aEvent );
-
         // #106234# Delegate to EventNotifier
         if( getNotifierClientId() != -1 )
             ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(),

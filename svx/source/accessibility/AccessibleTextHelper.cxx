@@ -1410,10 +1410,6 @@ namespace accessibility
 
     void AccessibleTextHelper_Impl::FireEvent( const AccessibleEventObject& rEvent ) const
     {
-        // #102261# Call global queue for focus events
-        if( rEvent.EventId == AccessibleStateType::FOCUSED )
-            vcl::unohelper::NotifyAccessibleStateEventGlobally( rEvent );
-
         // #106234# Delegate to EventNotifier
         ::comphelper::AccessibleEventNotifier::addEvent( getNotifierClientId(),
                                                          rEvent );

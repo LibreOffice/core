@@ -474,8 +474,6 @@ void ScAccessibleContextBase::CommitFocusGained() const
     aEvent.NewValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
-
-    vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
 }
 
 void ScAccessibleContextBase::CommitFocusLost() const
@@ -486,8 +484,6 @@ void ScAccessibleContextBase::CommitFocusLost() const
     aEvent.OldValue <<= AccessibleStateType::FOCUSED;
 
     CommitChange(aEvent);
-
-    vcl::unohelper::NotifyAccessibleStateEventGlobally(aEvent);
 }
 
 tools::Rectangle ScAccessibleContextBase::GetBoundingBoxOnScreen() const
