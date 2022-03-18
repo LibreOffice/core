@@ -379,9 +379,15 @@ void SheetDataBuffer::addColXfStyles()
                         // as operator< is somewhat specific (see StyleRowRangeComp).
                         { return !StyleRowRangeComp()(lhs,rhs) && !StyleRowRangeComp()(rhs,lhs); } ),
             s.end());
-        // Broken documents may have overlapping ranges that cause problems, re-sort again if needed.
+        // Broken documents may have overlapping ranges that cause problems, repeat once more.
         if(!std::is_sorted(s.begin(), s.end(), StyleRowRangeComp()))
+        {
             std::sort( s.begin(), s.end(), StyleRowRangeComp());
+            s.erase( std::unique( s.begin(), s.end(),
+                        [](const RowRangeStyle& lhs, const RowRangeStyle& rhs)
+                            { return !StyleRowRangeComp()(lhs,rhs) && !StyleRowRangeComp()(rhs,lhs); } ),
+                s.end());
+        }
         maStylesPerColumn[ rowStyles.first ].insert_sorted_unique_vector( std::move( s ));
     }
 }
