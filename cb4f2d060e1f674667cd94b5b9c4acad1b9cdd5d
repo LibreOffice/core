@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "924de362_d33b068b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-18T07:53:28Z",
+      "side": 1,
+      "message": "Thanks!\n\nWhile here, do you know if it\u0027s *important* to return 0 in that case, or is it just something that would be safe to change to e.g. return what was already gathered, or skip and continue with the rest?\n\nAsking because it\u0027s used e.g. in BasicCollection::implGetIndexForName, to avoid costly case-insensitive Unicode-aware comparison, and as such, any string with non-ASCII in first 6 chars has the same hash. Having even a few different hashes for cases where there are ASCII among first 6 would already improve performance for such strings.",
+      "revId": "cb4f2d060e1f674667cd94b5b9c4acad1b9cdd5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
