@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "acac9d84_0b34cd12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-03-18T16:30:48Z",
+      "side": 1,
+      "message": "not needed if revet will be in: https://github.com/CollaboraOnline/online/pull/4437",
+      "revId": "3871cf34a8a1a265bd914d88e02992e6584cb719",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
