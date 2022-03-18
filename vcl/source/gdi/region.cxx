@@ -33,6 +33,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <tools/poly.hxx>
+#include <unotools/configmgr.hxx>
 
 namespace
 {
@@ -1570,6 +1571,13 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
                 {
                     tools::PolyPolygon aNewPoly;
                     ReadPolyPolygon(rIStrm, aNewPoly);
+                    const auto nPolygons = aNewPoly.Count();
+                    if (nPolygons > 128)
+                    {
+                        SAL_WARN("vcl.gdi", "suspicously high no of polygons in clip:" << nPolygons);
+                        if (utl::ConfigManager::IsFuzzing())
+                            aNewPoly.Clear();
+                    }
                     rRegion.mpPolyPolygon = aNewPoly;
                 }
             }
