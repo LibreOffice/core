@@ -38,6 +38,15 @@ void SwExpandPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), OUString(), GetWhichPor() );
 }
 
+void SwExpandPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwExpandPortion"));
+
+    SwTextPortion::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwPosSize SwExpandPortion::GetTextSize( const SwTextSizeInfo &rInf ) const
 {
     SwTextSlot aDiffText( &rInf, this, false, false );
