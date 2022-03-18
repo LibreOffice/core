@@ -17322,6 +17322,7 @@ private:
     a11yref m_xAccessible;
 #if !GTK_CHECK_VERSION(4, 0, 0)
     AtkObject *m_pAccessible;
+    bool m_bAccessibleChildrenCreated = false;
 #endif
     ScopedVclPtrInstance<VirtualDevice> m_xDevice;
     std::unique_ptr<IMHandler> m_xIMHandler;
@@ -17507,6 +17508,26 @@ public:
             if (m_pAccessible)
                 g_object_ref(m_pAccessible);
         }
+
+        // TODO/WIP: need to handle children here as well??
+        // TODO: take closer look at how a11y object handling in gtk3 works,...
+        if (!m_bAccessibleChildrenCreated && m_xAccessible.is())
+        {
+            css::uno::Reference<css::accessibility::XAccessibleContext> xContext = m_xAccessible->getAccessibleContext();
+            if (xContext.is())
+            {
+                sal_Int32 nChildren = xContext->getAccessibleChildCount();
+                for (sal_Int32 nIndex = 0; nIndex < nChildren; nIndex++)
+                {
+                    a11yref xChild = xContext->getAccessibleChild(nIndex);
+                    atk_object_wrapper_new(xChild, m_pAccessible);
+                    // TODO: have to add references to the children as well? -> g_object_ref(...)
+                }
+                m_bAccessibleChildrenCreated = nChildren > 0;
+            }
+        }
+
+
         return m_pAccessible;
     }
 #endif
