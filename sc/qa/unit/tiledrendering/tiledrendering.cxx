@@ -39,6 +39,7 @@
 #include <sc.hrc>
 #include <comphelper/string.hxx>
 #include <docoptio.hxx>
+#include <postit.hxx>
 
 #include <chrono>
 #include <cstddef>
@@ -121,6 +122,7 @@ public:
     void testEditCursorBounds();
     void testTextSelectionBounds();
     void testSheetViewDataCrash();
+    void testCommentCellCopyPaste();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -174,6 +176,7 @@ public:
     CPPUNIT_TEST(testEditCursorBounds);
     CPPUNIT_TEST(testTextSelectionBounds);
     CPPUNIT_TEST(testSheetViewDataCrash);
+    CPPUNIT_TEST(testCommentCellCopyPaste);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2821,6 +2824,105 @@ void ScTiledRenderingTest::testSheetViewDataCrash()
     pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::DELETE);
     // It will crash at this point without the fix.
     Scheduler::ProcessEventsToIdle();
+}
+
+void ScTiledRenderingTest::testCommentCellCopyPaste()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+    // Comments callback are emitted only if tiled annotations are off
+    comphelper::LibreOfficeKit::setTiledAnnotations(false);
+
+    // FIXME: Hack because previous tests do not destroy ScDocument(with annotations) on exit (?).
+    ScPostIt::mnLastPostItId = 1;
+
+    {
+        ScModelObj* pModelObj = createDoc("empty.ods");
+        ViewCallback aView;
+        int nView = SfxLokHelper::getView();
+
+        SfxLokHelper::setView(nView);
+
+        ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+        CPPUNIT_ASSERT(pTabViewShell);
+
+        lcl_typeCharsInCell("ABC", 0, 0, pTabViewShell, pModelObj); // Type "ABC" in A1
+
+        pTabViewShell->SetCursor(1, 1);
+
+        // Add a new comment
+        uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        {
+            {"Text", uno::makeAny(OUString("LOK Comment Cell B2"))},
+            {"Author", uno::makeAny(OUString("LOK Client"))},
+        }));
+        comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
+        Scheduler::ProcessEventsToIdle();
+
+        // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+        CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
+        CPPUNIT_ASSERT_EQUAL(std::string("1"), aView.m_aCommentCallbackResult.get<std::string>("id"));
+        CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
+        CPPUNIT_ASSERT_EQUAL(std::string("LOK Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
+        CPPUNIT_ASSERT_EQUAL(std::string("LOK Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
+
+        uno::Sequence<beans::PropertyValue> aCopyPasteArgs;
+
+        // We need separate tests for single cell copy-paste and cell-range copy-paste
+        // since they hit different code paths in ScColumn methods.
+
+        // Single cell(with comment) copy paste test
+        {
+            comphelper::dispatchCommand(".uno:Copy", aCopyPasteArgs);
+            Scheduler::ProcessEventsToIdle();
+
+            pTabViewShell->SetCursor(1, 49);
+            Scheduler::ProcessEventsToIdle();
+            comphelper::dispatchCommand(".uno:Paste", aCopyPasteArgs); // Paste to cell B50
+            Scheduler::ProcessEventsToIdle();
+
+            // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+            CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
+            // Without the fix the id will be "1".
+            CPPUNIT_ASSERT_EQUAL(std::string("2"), aView.m_aCommentCallbackResult.get<std::string>("id"));
+            CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
+            CPPUNIT_ASSERT_EQUAL(std::string("LOK Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
+            CPPUNIT_ASSERT_EQUAL(std::string("LOK Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
+        }
+
+        // Cell range (with a comment) copy paste test
+        {
+            // Select range A1:C3
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_HOME | KEY_MOD1);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_HOME | KEY_MOD1);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_DOWN | KEY_SHIFT);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RIGHT | KEY_SHIFT);
+            pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, KEY_RIGHT | KEY_SHIFT);
+            Scheduler::ProcessEventsToIdle();
+
+            comphelper::dispatchCommand(".uno:Copy", aCopyPasteArgs);
+            Scheduler::ProcessEventsToIdle();
+
+            pTabViewShell->SetCursor(3, 49);
+            Scheduler::ProcessEventsToIdle();
+            comphelper::dispatchCommand(".uno:Paste", aCopyPasteArgs); // Paste to cell D50
+            Scheduler::ProcessEventsToIdle();
+
+            // We received a LOK_CALLBACK_COMMENT callback with comment 'Add' action
+            CPPUNIT_ASSERT_EQUAL(std::string("Add"), aView.m_aCommentCallbackResult.get<std::string>("action"));
+            // Without the fix the id will be "1".
+            CPPUNIT_ASSERT_EQUAL(std::string("3"), aView.m_aCommentCallbackResult.get<std::string>("id"));
+            CPPUNIT_ASSERT_EQUAL(std::string("0"), aView.m_aCommentCallbackResult.get<std::string>("tab"));
+            CPPUNIT_ASSERT_EQUAL(std::string("LOK Client"), aView.m_aCommentCallbackResult.get<std::string>("author"));
+            CPPUNIT_ASSERT_EQUAL(std::string("LOK Comment Cell B2"), aView.m_aCommentCallbackResult.get<std::string>("text"));
+        }
+    }
+    comphelper::LibreOfficeKit::setTiledAnnotations(true);
 }
 
 }
