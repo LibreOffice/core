@@ -90,7 +90,7 @@ public:
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF8 Unicode string. */
-    void                Append( const OUString& rString );
+    void                Append( std::u16string_view rString );
 
     /** Appends a string. Uses the string flags used in constructor or last Assign().
         @descr  This object must be a BIFF2-BIFF7 byte string. */
@@ -216,13 +216,11 @@ private:
         @param nAddLen  The number of characters to be appended. */
     void                InitAppend( sal_Int32 nAddLen );
     /** Appends the given Unicode array to the character buffer.
-        @param pcSource  The source character buffer. Trailing NUL character is not necessary.
-        @param nAddLen  The real count of characters contained in the passed buffer. */
-    void                BuildAppend( const sal_Unicode* pcSource, sal_Int32 nAddLen );
+        @param pcSource  The source character buffer. Trailing NUL character is not necessary. */
+    void                BuildAppend( std::u16string_view );
     /** Appends the given character array to the character buffer.
-        @param pcSource  The source character buffer. Trailing NUL character is not necessary.
-        @param nAddLen  The real count of characters contained in the passed buffer. */
-    void                BuildAppend( const char* pcSource, sal_Int32 nAddLen );
+        @param pcSource  The source character buffer. Trailing NUL character is not necessary. */
+    void                BuildAppend( std::string_view );
 
     /** Initializes write process on stream. */
     void                PrepareWrite( XclExpStream& rStrm, sal_uInt16 nBytes ) const;

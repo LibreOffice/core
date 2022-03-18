@@ -256,7 +256,7 @@ public:
     static void         AppendString(
                             XclExpString& rXclString,
                             const XclExpRoot& rRoot,
-                            const OUString& rString );
+                            std::u16string_view rString);
 
     /** Appends a character to an Excel string object.
         @descr  Selects the correct Append() function depending on the current

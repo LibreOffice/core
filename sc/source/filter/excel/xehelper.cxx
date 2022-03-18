@@ -387,7 +387,7 @@ XclExpStringRef lclCreateFormattedString(
         // Excel start position of this portion
         sal_Int32 nXclPortionStart = xString->Len();
         // add portion text to Excel string
-        XclExpStringHelper::AppendString( *xString, rRoot, rText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
+        XclExpStringHelper::AppendString( *xString, rRoot, rText.subView( nPortionPos, nPortionEnd - nPortionPos ) );
         if( nXclPortionStart < xString->Len() )
         {
             // insert font into buffer
@@ -541,7 +541,7 @@ XclExpStringRef XclExpStringHelper::CreateString(
     return xString;
 }
 
-void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoot& rRoot, const OUString& rString )
+void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoot& rRoot, std::u16string_view rString )
 {
     if( rRoot.GetBiff() == EXC_BIFF8 )
         rXclString.Append( rString );
@@ -552,7 +552,7 @@ void XclExpStringHelper::AppendString( XclExpString& rXclString, const XclExpRoo
 void XclExpStringHelper::AppendChar( XclExpString& rXclString, const XclExpRoot& rRoot, sal_Unicode cChar )
 {
     if( rRoot.GetBiff() == EXC_BIFF8 )
-        rXclString.Append( OUString(cChar) );
+        rXclString.Append( rtl::OUStringChar(cChar) );
     else
         rXclString.AppendByte( cChar, rRoot.GetTextEncoding() );
 }

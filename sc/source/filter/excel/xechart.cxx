@@ -989,7 +989,7 @@ sal_uInt16 XclExpChSourceLink::ConvertStringSequence( const Sequence< Reference<
                     // Excel start position of this portion
                     sal_uInt16 nXclPortionStart = mxString->Len();
                     // add portion text to Excel string
-                    XclExpStringHelper::AppendString( *mxString, GetRoot(), aText.copy( nPortionPos, nPortionEnd - nPortionPos ) );
+                    XclExpStringHelper::AppendString( *mxString, GetRoot(), aText.subView( nPortionPos, nPortionEnd - nPortionPos ) );
                     if( nXclPortionStart < mxString->Len() )
                     {
                         // find font index variable dependent on script type
@@ -1039,7 +1039,7 @@ void XclExpChSourceLink::ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPe
     }
 }
 
-void XclExpChSourceLink::AppendString( const OUString& rStr )
+void XclExpChSourceLink::AppendString( std::u16string_view rStr )
 {
     if (!mxString)
         return;

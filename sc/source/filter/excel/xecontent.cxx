@@ -1774,7 +1774,7 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                             sFormulaBuf.append( aToken );
                             if (nStringIx<0)
                                 break;
-                            mxString1->Append(OUString(u'\0'));
+                            mxString1->Append(u"\0");
                             sFormulaBuf.append( ',' );
                             sListBuf.append( ',' );
                         }
