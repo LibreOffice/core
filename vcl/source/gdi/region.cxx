@@ -1574,7 +1574,7 @@ SvStream& ReadRegion(SvStream& rIStrm, vcl::Region& rRegion)
                     const auto nPolygons = aNewPoly.Count();
                     if (nPolygons > 128)
                     {
-                        SAL_WARN("vcl.gdi", "suspicously high no of polygons in clip:" << nPolygons);
+                        SAL_WARN("vcl.gdi", "suspiciously high no of polygons in clip:" << nPolygons);
                         if (utl::ConfigManager::IsFuzzing())
                             aNewPoly.Clear();
                     }
