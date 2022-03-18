@@ -2107,6 +2107,13 @@ void initFlex(const char *_code )
     yy_switch_to_buffer( yy_scan_string(_code) );
 }
 
+void deinitFlex()
+{
+    // flex faq-memory-leak
+    yy_delete_buffer(YY_CURRENT_BUFFER);
+    yy_init = 1;
+}
+
 int yywrap()
 {
     yy_delete_buffer( YY_CURRENT_BUFFER );
