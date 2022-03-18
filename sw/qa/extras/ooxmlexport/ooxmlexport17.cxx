@@ -357,6 +357,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144668, "tdf144668.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("[001]"), getProperty<OUString>(xPara2, "ListLabelString"));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
+{
+    load(DATA_DIRECTORY, "tdf147978_enhancedPath_commandABVW.odt");
+    CPPUNIT_ASSERT(mxComponent);
+    save("Office Open XML Text", maTempFile);
+    mxComponent->dispose();
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    // Make sure the new implemented export for commands A,B,V and W use the correct arc between
+    // the given two points, here the short one.
+    for (sal_Int16 i = 1 ; i <= 4; ++i)
+    {
+        uno::Reference<drawing::XShape> xShape = getShape(i);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(506), getProperty<awt::Rectangle>(xShape, "BoundRect").Height);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
