@@ -30,7 +30,7 @@ public:
 class CachedOutputStream
 {
     /// When buffer hits this size, it's written to mxOutputStream
-    static const sal_Int32 mnMaximumSize = 0x10000;
+    static const sal_Int32 mnMaximumSize = 0x100000; // 1Mbyte
 
     /// ForMerge structure is used for sorting elements in Writer
     std::shared_ptr< ForMergeBase > mpForMerge;
