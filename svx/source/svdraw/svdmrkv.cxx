@@ -817,13 +817,14 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
         boost::property_tree::ptree aGluePointsTree;
         bool bTableSelection = false;
         bool bConnectorSelection = false;
+        SdrObjKind eObjKind = mpMarkedObj ? mpMarkedObj->GetObjIdentifier() : OBJ_NONE;
 
-        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_TABLE)
+        if (eObjKind == OBJ_TABLE)
         {
             auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
             bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
         }
-        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == OBJ_EDGE)
+        if (eObjKind == OBJ_EDGE)
         {
             bConnectorSelection = dumpGluePointsToJSON(aGluePointsTree);
         }
@@ -840,6 +841,10 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
             {
                 nRotAngle *= 10;
             }
+
+            bool bIsTextObject = (eObjKind == OBJ_TEXT
+                || eObjKind == OBJ_TITLETEXT
+                || eObjKind == OBJ_OUTLINETEXT);
 
             OStringBuffer aExtraInfo;
             OString handleArrayStr;
@@ -867,6 +872,11 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                 aExtraInfo.append(OString::number(nSignX * p.getX()));
                 aExtraInfo.append(",\"gridOffsetY\":");
                 aExtraInfo.append(OString::number(p.getY()));
+            }
+
+            if (bIsTextObject)
+            {
+                aExtraInfo.append(", \"isTextObject\": true");
             }
 
             if (bWriterGraphic)
