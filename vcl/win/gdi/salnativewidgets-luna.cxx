@@ -756,6 +756,17 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
     if( nType == ControlType::TabBody )
     {
+        // tabbody in main window gets drawn in white in "darkmode", so bodge this here
+        if (UseDarkMode())
+        {
+            Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
+            ScopedHBRUSH hbrush(CreateSolidBrush(RGB(aColor.GetRed(),
+                                                     aColor.GetGreen(),
+                                                     aColor.GetBlue())));
+            FillRect(hDC, &rc, hbrush.get());
+            return true;
+        }
+
         iPart = TABP_BODY;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
@@ -840,7 +851,7 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     rc.top = 0; // extend potential gradient to cover menu bar as well
             }
 
-            // menubar in main window gets drawn in white in "darkmode", so bodge this here
+            // toolbar in main window gets drawn in white in "darkmode", so bodge this here
             if (UseDarkMode())
             {
                 Color aColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
