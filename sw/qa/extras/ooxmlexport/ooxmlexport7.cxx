@@ -1131,24 +1131,30 @@ CPPUNIT_TEST_FIXTURE(Test, testFlipAndRotateCustomShape)
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
-    // there should be no flipH and flipV attributes in this case
+    // there should be no flipH
     assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipH");
-    assertXPathNoAttribute(pXmlDoc, "//a:xfrm", "flipV");
+    // flipV should be there
+    assertXPath(pXmlDoc, "//a:xfrm", "flipV", "1");
     // check rotation angle
-    assertXPath(pXmlDoc, "//a:xfrm", "rot", "13500000");
+    assertXPath(pXmlDoc, "//a:xfrm", "rot", "8100000");
+    // point values depend on path size, values as of March 2022
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "w", "21600");
+    assertXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path", "h", "21600");
     // check the first few coordinates of the polygon
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        2351, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x").toInt32(), 1);
+        0, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "x").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        3171, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y").toInt32(), 1);
+        15831, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:moveTo/a:pt", "y").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        1695, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "x").toInt32(), 1);
+        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "x").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        3171, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[2]/a:pt", "y").toInt32(), 1);
+        10062, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[1]/a:pt", "y").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        1695, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "x").toInt32(), 1);
+        13284, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt", "x").toInt32(), 1);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(
-        1701, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[3]/a:pt", "y").toInt32(), 1);
+        6098, getXPath(pXmlDoc, "//a:custGeom/a:pathLst/a:path/a:lnTo[4]/a:pt", "y").toInt32(), 1);
+    // check path is closed
+    assertXPath(pXmlDoc, "//a:close", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf92335)
