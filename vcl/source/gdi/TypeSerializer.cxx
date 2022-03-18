@@ -444,7 +444,7 @@ void TypeSerializer::readMapMode(MapMode& rMapMode)
     const bool bBogus = !aScaleX.IsValid() || !aScaleY.IsValid()
                         || aScaleX.GetNumerator() == std::numeric_limits<sal_Int32>::min()
                         || aScaleY.GetNumerator() == std::numeric_limits<sal_Int32>::min()
-                        || static_cast<double>(aScaleY) < 0.0;
+                        || static_cast<double>(aScaleX) < 0.0 || static_cast<double>(aScaleY) < 0.0;
     SAL_WARN_IF(bBogus, "vcl", "invalid scale");
 
     if (bSimple || bBogus)
