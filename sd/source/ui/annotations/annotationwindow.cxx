@@ -188,14 +188,12 @@ void AnnotationTextWindow::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     rDevice.SetBackground(aBgColor);
 
     Size aOutputSize(rDevice.PixelToLogic(aSize));
-    aSize = aOutputSize;
-    aSize.setHeight(aSize.Height());
 
     EditView* pEditView = GetEditView();
     pEditView->setEditViewCallbacks(this);
 
     EditEngine* pEditEngine = GetEditEngine();
-    pEditEngine->SetPaperSize(aSize);
+    pEditEngine->SetPaperSize(aOutputSize);
     pEditEngine->SetRefDevice(&rDevice);
 
     pEditView->SetOutputArea(::tools::Rectangle(Point(0, 0), aOutputSize));

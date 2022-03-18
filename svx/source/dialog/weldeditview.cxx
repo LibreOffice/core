@@ -1554,11 +1554,9 @@ void WeldEditView::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     rDevice.SetBackground(aBgColor);
 
     Size aOutputSize(rDevice.PixelToLogic(aSize));
-    aSize = aOutputSize;
-    aSize.setHeight(aSize.Height());
 
     makeEditEngine();
-    m_xEditEngine->SetPaperSize(aSize);
+    m_xEditEngine->SetPaperSize(aOutputSize);
     m_xEditEngine->SetRefDevice(&rDevice);
 
     m_xEditEngine->SetControlWord(m_xEditEngine->GetControlWord() | EEControlBits::MARKFIELDS);

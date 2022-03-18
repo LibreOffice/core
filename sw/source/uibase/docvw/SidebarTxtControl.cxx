@@ -107,8 +107,6 @@ void SidebarTextControl::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     rDevice.SetBackground(aBgColor);
 
     Size aOutputSize(rDevice.PixelToLogic(aSize));
-    aSize = aOutputSize;
-    aSize.setHeight(aSize.Height());
 
     EditView* pEditView = GetEditView();
     pEditView->setEditViewCallbacks(this);
