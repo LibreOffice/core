@@ -125,6 +125,9 @@ bool ScDocument::CopyOneCellFromClip(
         if ((rCxt.getInsertFlag() & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)) != InsertDeleteFlags::NONE)
             rCxt.setSingleCellNote(nColOffset, pClipDoc->GetNote(aSrcPos));
 
+        if ((rCxt.getInsertFlag() & InsertDeleteFlags::SPARKLINES) != InsertDeleteFlags::NONE)
+            rCxt.setSingleSparkline(nColOffset, pClipDoc->GetSparkline(aSrcPos));
+
         ScColumn* pSrcCol = pSrcTab->FetchColumn(aSrcPos.Col());
         assert(pSrcCol);
         // Determine the script type of the copied single cell.
