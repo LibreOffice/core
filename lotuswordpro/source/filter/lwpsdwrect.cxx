@@ -170,7 +170,7 @@ double SdwRectangle::GetRotationAngle() const
 
 double SdwRectangle::CalcDistBetween2Points(tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2)
 {
-    return sqrt(static_cast<double>((nX1-nX2)*(nX1-nX2) + (nY1-nY2)*(nY1-nY2)));
+    return std::hypot(nX1 - nX2, nY1 - nY2);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
