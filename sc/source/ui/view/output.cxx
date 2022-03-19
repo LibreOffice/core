@@ -2466,7 +2466,7 @@ void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRe
     }
 }
 
-void drawSparkline(sc::Sparkline* pSparkline, vcl::RenderContext& rRenderContext, ScDocument* pDocument,
+void drawSparkline(std::shared_ptr<sc::Sparkline> const& pSparkline, vcl::RenderContext& rRenderContext, ScDocument* pDocument,
                                  tools::Rectangle const & rRectangle)
 {
     auto const & rRangeList = pSparkline->getInputRange();
@@ -2566,7 +2566,7 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                     mpDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
                 }
 
-                sc::Sparkline* pSparkline = nullptr;
+                std::shared_ptr<sc::Sparkline> pSparkline;
                 ScAddress aCurrentAddress(nX, pRowInfo[nArrY].nRowNo, nTab);
 
                 if (!mpDoc->ColHidden(nX, nTab) && (pSparkline = mpDoc->GetSparkline(aCurrentAddress))
