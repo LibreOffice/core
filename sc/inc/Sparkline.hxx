@@ -45,13 +45,13 @@ public:
 
     void setInputRange(ScRangeList const& rInputRange) { m_aInputRange = rInputRange; }
 
-    ScRangeList const& getInputRange() { return m_aInputRange; }
+    ScRangeList const& getInputRange() const { return m_aInputRange; }
 
-    std::shared_ptr<SparklineGroup> const& getSparklineGroup() { return m_pSparklineGroup; }
+    std::shared_ptr<SparklineGroup> const& getSparklineGroup() const { return m_pSparklineGroup; }
 
-    SCCOL getColumn() { return m_nColumn; }
+    SCCOL getColumn() const { return m_nColumn; }
 
-    SCROW getRow() { return m_nRow; }
+    SCROW getRow() const { return m_nRow; }
 };
 
 /** Contains a list of all created sparklines */
