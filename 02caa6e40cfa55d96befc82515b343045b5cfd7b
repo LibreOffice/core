@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "982ceea0_ea67ae2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-19T12:27:10Z",
+      "side": 1,
+      "message": "The called code always closes the inputstream, we could actually just remove this chunk of code",
+      "parentUuid": "15e6f801_b4d50ef3",
+      "revId": "02caa6e40cfa55d96befc82515b343045b5cfd7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c340f4d9_d23e66db",
