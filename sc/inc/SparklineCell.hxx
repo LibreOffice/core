@@ -34,12 +34,12 @@ public:
 
     ScRangeList const& getInputRange() { return m_pSparkline->getInputRange(); }
 
-    std::shared_ptr<SparklineGroup> const& getSparklineGroup()
+    std::shared_ptr<SparklineGroup> const& getSparklineGroup() const
     {
         return m_pSparkline->getSparklineGroup();
     }
 
-    std::shared_ptr<Sparkline> const& getSparkline() { return m_pSparkline; }
+    std::shared_ptr<Sparkline> const& getSparkline() const { return m_pSparkline; }
 };
 
 } // end sc
