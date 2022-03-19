@@ -9,6 +9,8 @@
 
 #include "helper/qahelper.hxx"
 #include <docsh.hxx>
+#include <tabvwsh.hxx>
+#include <cliputil.hxx>
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
 
@@ -46,10 +48,14 @@ public:
 
     void testAddSparkline();
     void testDeleteSprkline();
+    void testCopyPasteSparkline();
+    void testCutPasteSparkline();
 
     CPPUNIT_TEST_SUITE(SparklineTest);
     CPPUNIT_TEST(testAddSparkline);
     CPPUNIT_TEST(testDeleteSprkline);
+    CPPUNIT_TEST(testCopyPasteSparkline);
+    CPPUNIT_TEST(testCutPasteSparkline);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -114,6 +120,110 @@ void SparklineTest::testDeleteSprkline()
 
     auto pGetSparkline = rDocument.GetSparkline(ScAddress(0, 6, 0));
     CPPUNIT_ASSERT(!pGetSparkline);
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testCopyPasteSparkline()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto* pCreatedSparkline = createTestSparkline(rDocument);
+    CPPUNIT_ASSERT(pCreatedSparkline);
+
+    ScRange aSourceRange(0, 6, 0, 0, 6, 0);
+    auto pSparkline = rDocument.GetSparkline(aSourceRange.aStart);
+
+    CPPUNIT_ASSERT(pSparkline);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+
+    // CopyToClip / CopyFromClip with a aClipDoc
+    {
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        copyToClip(&rDocument, aSourceRange, &aClipDoc);
+
+        auto pClipSparkline = aClipDoc.GetSparkline(aSourceRange.aStart);
+        CPPUNIT_ASSERT(pClipSparkline);
+
+        ScRange aPasteRange(0, 7, 0, 0, 7, 0);
+
+        ScMarkData aMark(rDocument.GetSheetLimits());
+        aMark.SetMarkArea(aPasteRange);
+        rDocument.CopyFromClip(aPasteRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+
+        auto pSparklineCopy = rDocument.GetSparkline(aPasteRange.aStart);
+        CPPUNIT_ASSERT(pSparklineCopy);
+
+        CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparklineCopy->getColumn());
+        CPPUNIT_ASSERT_EQUAL(SCROW(7), pSparklineCopy->getRow());
+    }
+
+    // Copy / Paste with a ClipDoc
+    {
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aSourceRange);
+
+        // Copy
+        ScDocument aClipDoc(SCDOCMODE_CLIP);
+        pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+
+        // Paste
+        ScRange aPasteRange(0, 8, 0, 0, 8, 0);
+
+        pViewShell->GetViewData().GetMarkData().SetMarkArea(aPasteRange);
+        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+
+        auto pSparklineCopy = rDocument.GetSparkline(aPasteRange.aStart);
+        CPPUNIT_ASSERT(pSparklineCopy);
+
+        CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparklineCopy->getColumn());
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), pSparklineCopy->getRow());
+    }
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testCutPasteSparkline()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto* pCreatedSparkline = createTestSparkline(rDocument);
+    CPPUNIT_ASSERT(pCreatedSparkline);
+
+    ScRange aSourceRange(0, 6, 0, 0, 6, 0);
+    auto pSparkline = rDocument.GetSparkline(aSourceRange.aStart);
+
+    CPPUNIT_ASSERT(pSparkline);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+
+    // Mark source range
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aSourceRange);
+
+    // Cut
+    pViewShell->GetViewData().GetView()->CopyToClip(nullptr, true /*bCut*/, false, false, true);
+
+    // Paste
+    ScRange aPasteRange(0, 7, 0, 0, 7, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aPasteRange);
+    ScClipUtil::PasteFromClipboard(pViewShell->GetViewData(), pViewShell, false);
+
+    // Check
+    auto pSparklineCopy = rDocument.GetSparkline(aPasteRange.aStart);
+    CPPUNIT_ASSERT(pSparklineCopy);
+
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparklineCopy->getColumn());
+    CPPUNIT_ASSERT_EQUAL(SCROW(7), pSparklineCopy->getRow());
 
     xDocSh->DoClose();
 }

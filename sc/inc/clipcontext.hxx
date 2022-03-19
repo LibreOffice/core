@@ -12,6 +12,7 @@
 #include "address.hxx"
 #include "cellvalue.hxx"
 #include "celltextattr.hxx"
+#include "Sparkline.hxx"
 
 #include <memory>
 #include <vector>
@@ -60,11 +61,11 @@ class SC_DLLPUBLIC CopyFromClipContext final : public ClipContextBase
     std::vector<sc::CellTextAttr> maSingleCellAttrs;
     std::vector<const ScPatternAttr*> maSinglePatterns;
     std::vector<const ScPostIt*> maSingleNotes;
+    std::vector<std::shared_ptr<sc::Sparkline>> maSingleSparkline;
 
     ScConditionalFormatList* mpCondFormatList;
     bool mbAsLink:1;
     bool mbSkipEmptyCells:1;
-    bool mbCloneNotes:1;
     bool mbTableProtected:1;
 
 public:
@@ -119,6 +120,9 @@ public:
     const ScPostIt* getSingleCellNote( size_t nColOffset ) const;
     void setSingleCellNote( size_t nColOffset, const ScPostIt* pNote );
 
+    std::shared_ptr<sc::Sparkline> const& getSingleSparkline(size_t nColOffset) const;
+    void setSingleSparkline(size_t nColOffset, std::shared_ptr<sc::Sparkline> const& pSparkline);
+
     void setCondFormatList( ScConditionalFormatList* pCondFormatList );
     ScConditionalFormatList* getCondFormatList();
 
@@ -135,6 +139,7 @@ public:
      */
     bool isSkipEmptyCells() const;
     bool isCloneNotes() const;
+    bool isCloneSparklines() const;
     bool isDateCell( const ScColumn& rCol, SCROW nRow ) const;
 };
 
