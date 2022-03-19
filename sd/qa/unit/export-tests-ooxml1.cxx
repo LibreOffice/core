@@ -114,6 +114,7 @@ public:
     void testTdf143129();
     void testTdf118045();
     void testTdf137675();
+    void testTdf119160();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest1);
 
@@ -183,6 +184,7 @@ public:
     CPPUNIT_TEST(testTdf143129);
     CPPUNIT_TEST(testTdf118045);
     CPPUNIT_TEST(testTdf137675);
+    CPPUNIT_TEST(testTdf119160);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1761,6 +1763,42 @@ void SdOOXMLExportTest1::testTdf137675()
 
     xmlDocUniquePtr pXmlDoc = parseExport(tempFile, "ppt/slides/slide1.xml");
     assertXPath(pXmlDoc, "/p:sld/p:cSld/p:spTree/p:sp/p:spPr/a:custGeom/a:pathLst/a:path", "fill", "none");
+}
+
+void SdOOXMLExportTest1::testTdf119160()
+{
+    // load the document
+    sd::DrawDocShellRef xDocShRef = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf119160.pptx"), PPTX);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    uno::Reference< drawing::XDrawPagesSupplier > xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);
+
+    // get the total number of pages in the document
+    sal_Int32 pageCount = xDoc->getDrawPages()->getCount();
+
+    for(sal_Int32 i = 0; i < pageCount; i++)
+    {
+        uno::Reference< drawing::XDrawPage > xPage(getPage(i, xDocShRef));
+
+        // now we have got the page, let's get the
+        // shapes count in the page
+
+        sal_Int32 shapeCount = xPage->getCount();
+
+        for(sal_Int32 j = 0; j < shapeCount; j++)
+        {
+            // fetch the properties of each shape
+            uno::Reference<beans::XPropertySet> xPropertySet(getShape(j, xPage));
+            CPPUNIT_ASSERT(xPropertySet.is());
+            drawing::FillStyle xFillStyle = xPropertySet->getPropertyValue("FillStyle").get<drawing::FillStyle>();
+
+            // without the fix in place, this test would have failed with
+            // - Expected: false
+            // - Actual: true
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Solid Fill Expected", drawing::FillStyle_SOLID, xFillStyle);
+        }
+    }
+
+    xDocShRef->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest1);
