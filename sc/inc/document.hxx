@@ -1241,7 +1241,7 @@ public:
     sc::MultiDataCellState HasMultipleDataCells( const ScRange& rRange ) const;
 
     /** Spaklines */
-    SC_DLLPUBLIC sc::Sparkline* GetSparkline(ScAddress const & rPosition);
+    SC_DLLPUBLIC std::shared_ptr<sc::Sparkline> GetSparkline(ScAddress const & rPosition);
     SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
     SC_DLLPUBLIC sc::SparklineList* GetSparklineList(SCTAB nTab);
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rPosition);
