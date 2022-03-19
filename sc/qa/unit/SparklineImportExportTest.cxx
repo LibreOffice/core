@@ -57,7 +57,7 @@ void checkSparklines(ScDocument& rDocument)
 {
     // Sparkline at Sheet1:A2
     {
-        sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
+        auto pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
         CPPUNIT_ASSERT(pSparkline);
         auto pSparklineGroup = pSparkline->getSparklineGroup();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, pSparklineGroup->m_eType);
@@ -90,7 +90,7 @@ void checkSparklines(ScDocument& rDocument)
     }
     // Sparkline at Sheet1:A3
     {
-        sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(0, 2, 0)); // A3
+        auto pSparkline = rDocument.GetSparkline(ScAddress(0, 2, 0)); // A3
         CPPUNIT_ASSERT(pSparkline);
         auto pSparklineGroup = pSparkline->getSparklineGroup();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->m_eType);
@@ -123,28 +123,28 @@ void checkSparklines(ScDocument& rDocument)
     }
     // Sparkline at Sheet2:B1
     {
-        sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(1, 0, 1)); //B1
+        auto pSparkline = rDocument.GetSparkline(ScAddress(1, 0, 1)); //B1
         CPPUNIT_ASSERT(pSparkline);
         auto pSparklineGroup = pSparkline->getSparklineGroup();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->m_eType);
     }
     // Sparkline at Sheet2:B2
     {
-        sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(1, 1, 1)); //B2
+        auto pSparkline = rDocument.GetSparkline(ScAddress(1, 1, 1)); //B2
         CPPUNIT_ASSERT(pSparkline);
         auto pSparklineGroup = pSparkline->getSparklineGroup();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, pSparklineGroup->m_eType);
     }
     // Sparkline at Sheet2:B2
     {
-        sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(1, 1, 1)); //B2
+        auto pSparkline = rDocument.GetSparkline(ScAddress(1, 1, 1)); //B2
         CPPUNIT_ASSERT(pSparkline);
         auto pSparklineGroup = pSparkline->getSparklineGroup();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, pSparklineGroup->m_eType);
     }
     // Sparkline doesn't exists at A4
     {
-        sc::Sparkline* pSparkline = rDocument.GetSparkline(ScAddress(0, 3, 0)); //A4
+        auto pSparkline = rDocument.GetSparkline(ScAddress(0, 3, 0)); //A4
         CPPUNIT_ASSERT(!pSparkline);
     }
 }
