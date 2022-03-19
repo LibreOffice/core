@@ -1811,19 +1811,16 @@ ScFormulaCell* ScTable::GetFormulaCell( SCCOL nCol, SCROW nRow )
 
 // Sparklines
 
-sc::Sparkline* ScTable::GetSparkline(SCCOL nCol, SCROW nRow)
+std::shared_ptr<sc::Sparkline> ScTable::GetSparkline(SCCOL nCol, SCROW nRow)
 {
     if (!ValidCol(nCol) || nCol >= GetAllocatedColumnsCount())
-        return nullptr;
+        return std::shared_ptr<sc::Sparkline>();
 
     sc::SparklineCell* pSparklineCell = aCol[nCol].GetSparklineCell(nRow);
     if (!pSparklineCell)
-        return nullptr;
+        return std::shared_ptr<sc::Sparkline>();
 
-    std::shared_ptr<sc::Sparkline> pSparkline(pSparklineCell->getSparkline());
-    assert(pSparkline);
-
-    return pSparkline.get();
+    return pSparklineCell->getSparkline();
 }
 
 sc::Sparkline* ScTable::CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup)
