@@ -33,6 +33,24 @@
       "message": "Wouldn\u0027t it be better to introduce common UseDarkMode function (not specific to Luna), and use it in IconThemeSelector::GetIconThemeForDesktopEnvironment ?",
       "revId": "cab667d684707a750c1482c03ab2d7cc9a11c48c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4121d5a9_ae46d005",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-19T21:10:40Z",
+      "side": 1,
+      "message": "It might be, there is gtk-application-prefer-dark-theme as used as an input in the gtk version too. I\u0027m sure that was available in gnome-tweaks at one point, but the UI for it seems to have gone, so off the top of my head I\u0027m not sure what the situation there is.\n\nWith this with darkmode enabled the colibre_dark will be used, if there isn\u0027t a colibre_dark then the bDarkmode flag will attempt some darkmode fallback. I have no argument if someone wants to improve this, but it\u0027ll do for now I guess.",
+      "parentUuid": "922a0dd2_dbb42289",
+      "revId": "cab667d684707a750c1482c03ab2d7cc9a11c48c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
