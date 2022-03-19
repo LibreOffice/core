@@ -16,6 +16,24 @@
       "message": "As I\u0027ve suggested to others, please pick only 1 file for change, as others are simultaneously working on the same issue, and this has lead to multiple people changing the same files. The last file (lotuswordpro/source/filter/lwpsdwrect.cxx) would be good.",
       "revId": "50b0eefa1f1b9115e068755bca108a09aff7b14b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d356c7b_f41bb64d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-03-19T11:07:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac3b282a_9dcb0534",
+      "revId": "50b0eefa1f1b9115e068755bca108a09aff7b14b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
