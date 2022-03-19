@@ -384,7 +384,9 @@ void RtfAttributeOutput::EndParagraphProperties(
     const SwRedlineData* /*pRedlineParagraphMarkerDeleted*/,
     const SwRedlineData* /*pRedlineParagraphMarkerInserted*/)
 {
-    const OString aProperties = MoveCharacterProperties(true);
+    // Do not call MoveCharacterProperties(),
+    // Otherwise associate properties in the paragraph style are ruined.
+    const OString aProperties = m_aStyles.makeStringAndClear();
     m_rExport.Strm().WriteOString(aProperties);
 }
 
