@@ -919,6 +919,7 @@ public:
             setDefaultAttrsToDest(nTopRow, nDataSize);
 
         mrSrcCol.DuplicateNotes(nTopRow, nDataSize, mrDestCol, maDestPos, false);
+        mrSrcCol.DuplicateSparklines(nTopRow, nDataSize, mrDestCol, maDestPos);
     }
 };
 
