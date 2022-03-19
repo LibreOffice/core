@@ -105,7 +105,36 @@ public:
     {
     }
 
-    SparklineGroup(const SparklineGroup&) = delete;
+    SparklineGroup(SparklineGroup const& pOtherSparkline)
+        : m_aColorSeries(pOtherSparkline.m_aColorSeries)
+        , m_aColorNegative(pOtherSparkline.m_aColorNegative)
+        , m_aColorAxis(pOtherSparkline.m_aColorAxis)
+        , m_aColorMarkers(pOtherSparkline.m_aColorMarkers)
+        , m_aColorFirst(pOtherSparkline.m_aColorFirst)
+        , m_aColorLast(pOtherSparkline.m_aColorLast)
+        , m_aColorHigh(pOtherSparkline.m_aColorHigh)
+        , m_aColorLow(pOtherSparkline.m_aColorLow)
+        , m_eMinAxisType(pOtherSparkline.m_eMinAxisType)
+        , m_eMaxAxisType(pOtherSparkline.m_eMaxAxisType)
+        , m_fLineWeight(pOtherSparkline.m_fLineWeight)
+        , m_eType(pOtherSparkline.m_eType)
+        , m_bDateAxis(pOtherSparkline.m_bDateAxis)
+        , m_eDisplayEmptyCellsAs(pOtherSparkline.m_eDisplayEmptyCellsAs)
+        , m_bMarkers(pOtherSparkline.m_bMarkers)
+        , m_bHigh(pOtherSparkline.m_bHigh)
+        , m_bLow(pOtherSparkline.m_bLow)
+        , m_bFirst(pOtherSparkline.m_bFirst)
+        , m_bLast(pOtherSparkline.m_bLast)
+        , m_bNegative(pOtherSparkline.m_bNegative)
+        , m_bDisplayXAxis(pOtherSparkline.m_bDisplayXAxis)
+        , m_bDisplayHidden(pOtherSparkline.m_bDisplayHidden)
+        , m_bRightToLeft(pOtherSparkline.m_bRightToLeft)
+        , m_aManualMax(pOtherSparkline.m_aManualMax)
+        , m_aManualMin(pOtherSparkline.m_aManualMin)
+        , m_sUID(pOtherSparkline.m_sUID)
+    {
+    }
+
     SparklineGroup& operator=(const SparklineGroup&) = delete;
 };
 

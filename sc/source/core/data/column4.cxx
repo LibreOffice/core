@@ -31,6 +31,8 @@
 #include <recursionhelper.hxx>
 #include <docsh.hxx>
 
+#include <SparklineGroup.hxx>
+
 #include <o3tl/safeint.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>
@@ -115,6 +117,9 @@ void ScColumn::DeleteBeforeCopyFromClip(
 
         if (nDelFlag & InsertDeleteFlags::NOTE)
             DeleteCellNotes(*pBlockPos, aRange.mnRow1, aRange.mnRow2, false);
+
+        if (nDelFlag & InsertDeleteFlags::SPARKLINES)
+            DeleteSparklineCells(*pBlockPos, aRange.mnRow1, aRange.mnRow2);
 
         if (nDelFlag & InsertDeleteFlags::EDITATTR)
             RemoveEditAttribs(*pBlockPos, aRange.mnRow1, aRange.mnRow2);
@@ -203,6 +208,9 @@ void ScColumn::DeleteBeforeCopyFromClip(
 
         if (nDelFlag & InsertDeleteFlags::NOTE)
             DeleteCellNotes(*pBlockPos, nRow1, nRow2, false);
+
+        if (nDelFlag & InsertDeleteFlags::SPARKLINES)
+            DeleteSparklineCells(*pBlockPos, nRow1, nRow2);
 
         if (nDelFlag & InsertDeleteFlags::EDITATTR)
             RemoveEditAttribs(*pBlockPos, nRow1, nRow2);
@@ -321,6 +329,11 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
         }
     }
 
+    ScAddress aDestPosition(nCol, nRow1, nTab);
+
+    duplicateSparkline(rCxt, pBlockPos, nColOffset, nDestSize, aDestPosition);
+
+    // Notes
     const ScPostIt* pNote = rCxt.getSingleCellNote(nColOffset);
     if (!(pNote && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)) != InsertDeleteFlags::NONE))
         return;
@@ -330,13 +343,12 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     ScDocument* pClipDoc = rCxt.getClipDoc();
     const ScAddress aSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
     std::vector<ScPostIt*> aNotes;
-    ScAddress aDestPos(nCol, nRow1, nTab);
     aNotes.reserve(nDestSize);
     for (size_t i = 0; i < nDestSize; ++i)
     {
         bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
-        aNotes.push_back(pNote->Clone(aSrcPos, rDocument, aDestPos, bCloneCaption).release());
-        aDestPos.IncRow();
+        aNotes.push_back(pNote->Clone(aSrcPos, rDocument, aDestPosition, bCloneCaption).release());
+        aDestPosition.IncRow();
     }
 
     pBlockPos->miCellNotePos =
@@ -344,11 +356,37 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             pBlockPos->miCellNotePos, nRow1, aNotes.begin(), aNotes.end());
 
     // Notify our LOK clients.
-    aDestPos.SetRow(nRow1);
+    aDestPosition.SetRow(nRow1);
     for (size_t i = 0; i < nDestSize; ++i)
     {
-        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &rDocument, aDestPos, aNotes[i]);
-        aDestPos.IncRow();
+        ScDocShell::LOKCommentNotify(LOKCommentNotificationType::Add, &rDocument, aDestPosition, aNotes[i]);
+        aDestPosition.IncRow();
+    }
+}
+
+void ScColumn::duplicateSparkline(sc::CopyFromClipContext& rContext, sc::ColumnBlockPosition* pBlockPos,
+                                  size_t nColOffset, size_t nDestSize, ScAddress aDestPosition)
+{
+    if ((rContext.getInsertFlag() & InsertDeleteFlags::SPARKLINES) == InsertDeleteFlags::NONE)
+        return;
+
+    auto pSparkline = rContext.getSingleSparkline(nColOffset);
+    if (pSparkline)
+    {
+        auto const& pSparklineGroup = pSparkline->getSparklineGroup();
+
+        std::vector<sc::SparklineCell*> aSparklines(nDestSize, nullptr);
+        ScAddress aCurrentPosition = aDestPosition;
+        for (size_t i = 0; i < nDestSize; ++i)
+        {
+            auto pNewSparklineGroup = std::make_shared<sc::SparklineGroup>(*pSparklineGroup);
+            auto pNewSparkline = std::make_shared<sc::Sparkline>(aCurrentPosition.Col(), aCurrentPosition.Row(), pNewSparklineGroup);
+            pNewSparkline->setInputRange(pSparkline->getInputRange());
+            aSparklines[i] = new sc::SparklineCell(pNewSparkline);
+            aCurrentPosition.IncRow();
+        }
+
+        pBlockPos->miSparklinePos = maSparklines.set(pBlockPos->miSparklinePos, aDestPosition.Row(), aSparklines.begin(), aSparklines.end());
     }
 }
 
