@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7019f9d_3349fd01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-03-19T22:14:04Z",
+      "side": 1,
+      "message": "Hi Bayram, https://gerrit.libreoffice.org/c/core/+/130518 seems to have worked around the issue. ",
+      "revId": "4bb59cd1f45133994d3d13642367470f528094f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08e6818d_6e1d0831",
