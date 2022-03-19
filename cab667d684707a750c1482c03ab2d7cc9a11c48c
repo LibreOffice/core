@@ -16,6 +16,23 @@
       "message": "Oh so this is tdf#148086 😊",
       "revId": "cab667d684707a750c1482c03ab2d7cc9a11c48c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "922a0dd2_dbb42289",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-19T19:38:08Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it be better to introduce common UseDarkMode function (not specific to Luna), and use it in IconThemeSelector::GetIconThemeForDesktopEnvironment ?",
+      "revId": "cab667d684707a750c1482c03ab2d7cc9a11c48c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
