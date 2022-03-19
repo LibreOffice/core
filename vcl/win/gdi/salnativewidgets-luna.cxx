@@ -813,6 +813,31 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
             iState = TILES_FOCUSED;    // may need to draw focus rect
         else
             iState = TILES_NORMAL;
+
+        // tabitem in tabcontrols gets drawn in "darkmode" as if it was a
+        // a "light" theme, so bodge this but drawing as a button instead
+        if (UseDarkMode())
+        {
+            iPart = BP_PUSHBUTTON;
+            switch (iState)
+            {
+                case TILES_DISABLED:
+                    iState = PBS_DISABLED;
+                    break;
+                case TILES_SELECTED:
+                    iState = PBS_PRESSED;
+                case TILES_HOT:
+                    iState = PBS_HOT;
+                    break;
+                case TILES_FOCUSED:
+                    iState = PBS_DEFAULTED;
+                    break;
+                default:
+                    iState = PBS_NORMAL;
+                    break;
+            }
+        }
+
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
@@ -1148,8 +1173,13 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
             break;
         case ControlType::TabPane:
         case ControlType::TabBody:
-        case ControlType::TabItem:
             hTheme = getThemeHandle(mhWnd, L"Tab", mpImpl.get());
+            break;
+        case ControlType::TabItem:
+            if (bUseDarkMode)
+                hTheme = getThemeHandle(mhWnd, L"Button", mpImpl.get());
+            else
+                hTheme = getThemeHandle(mhWnd, L"Tab", mpImpl.get());
             break;
         case ControlType::Toolbar:
             if( nPart == ControlPart::Entire || nPart == ControlPart::Button )
