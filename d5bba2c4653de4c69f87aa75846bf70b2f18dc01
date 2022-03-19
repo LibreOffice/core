@@ -16,6 +16,24 @@
       "message": "Since I was not able to revert to the defective commit, I manually removed the fix and tried to replicate the bug. Since I do not have a computer having windows, I was not able to confirm the re-appearance of the bug. Then I tried to use the development tools and looked at the property values of the objects. However, I couldn\u0027t notice the difference in FillProperties after saving and reloading. Maybe I am not looking at the right place. Also, the unit test that I wrote is failing for all the values of the FillStyle. It expects 1 and the actual is 0. But whenever I use FillStyle_NONE or FillStyle_SOLID they both end up with:\nExpected: 0\nActual: 1\n\nCan I get some code pointers to fix it?",
       "revId": "d5bba2c4653de4c69f87aa75846bf70b2f18dc01",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "375f5f9b_aa7ebed7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-19T07:30:11Z",
+      "side": 1,
+      "message": "I don\u0027t think such a file format support thing is specific to Windows.",
+      "parentUuid": "fa03e90e_d6bfcc43",
+      "revId": "d5bba2c4653de4c69f87aa75846bf70b2f18dc01",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
