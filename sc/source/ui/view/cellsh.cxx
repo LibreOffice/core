@@ -110,8 +110,8 @@ bool canShowDeleteSparkline(ScDocument& rDocument, ScRange const& rRange)
     {
         for (SCROW nY = rRange.aStart.Row(); nY <= rRange.aEnd.Row(); nY++)
         {
-            auto* pSparkline = rDocument.GetSparkline(ScAddress(nX, nY, nTab));
-            if (pSparkline == nullptr)
+            auto pSparkline = rDocument.GetSparkline(ScAddress(nX, nY, nTab));
+            if (!pSparkline)
             {
                 return false;
             }
