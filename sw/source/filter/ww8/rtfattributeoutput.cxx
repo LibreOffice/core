@@ -428,7 +428,7 @@ void RtfAttributeOutput::StartRunProperties()
 void RtfAttributeOutput::EndRunProperties(const SwRedlineData* /*pRedlineData*/)
 {
     const OString aProperties = MoveCharacterProperties(true);
-    m_aRun->append(aProperties.getStr());
+    m_aRun->append(aProperties);
 }
 
 OString RtfAttributeOutput::MoveCharacterProperties(bool aAutoWriteRtlLtr)
@@ -642,9 +642,9 @@ void RtfAttributeOutput::ParagraphStyle(sal_uInt16 nStyle)
     aStyle.append(OOO_STRING_SVTOOLS_RTF_S);
     aStyle.append(static_cast<sal_Int32>(nStyle));
     if (pStyle)
-        aStyle.append(pStyle->getStr());
+        aStyle.append(*pStyle);
     if (!m_bBufferSectionHeaders)
-        m_rExport.Strm().WriteOString(aStyle.makeStringAndClear());
+        m_rExport.Strm().WriteOString(aStyle);
     else
         m_aSectionHeaders.append(aStyle);
 }
@@ -1748,7 +1748,7 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<OUString>& rStart
         const sal_Int32 nId = m_nNextAnnotationMarkId++;
         m_rOpenedAnnotationMarksIds[rName] = nId;
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFSTART " ");
-        m_aRun->append(OString::number(nId).getStr());
+        m_aRun->append(nId);
         m_aRun->append('}');
     }
     rStarts.clear();
@@ -1763,7 +1763,7 @@ void RtfAttributeOutput::WriteAnnotationMarks_Impl(std::vector<OUString>& rStart
         {
             const sal_Int32 nId = it->second;
             m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_ATRFEND " ");
-            m_aRun->append(OString::number(nId).getStr());
+            m_aRun->append(nId);
             m_aRun->append('}');
             m_rOpenedAnnotationMarksIds.erase(rName);
 
