@@ -3570,7 +3570,7 @@ void HwpReader::makeFormula(TxtBox * hbox)
     pPar = hbox->plists[0].empty() ? nullptr : hbox->plists[0].front().get();
     while( pPar )
     {
-        for( n = 0; n < pPar->nch && pPar->hhstr[n]->hh;
+        for( n = 0; n < pPar->nch && pPar->hhstr.count(n) && pPar->hhstr[n]->hh;
             n += pPar->hhstr[n]->WSize() )
         {
             if (l >= sizeof(mybuf)-7)
