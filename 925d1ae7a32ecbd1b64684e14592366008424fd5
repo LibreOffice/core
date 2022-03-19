@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c33ecfca_84f92045",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-03-19T11:05:47Z",
+      "side": 1,
+      "message": "Hiii Hossein, thank you so much for rebasing the patch :-)",
+      "revId": "925d1ae7a32ecbd1b64684e14592366008424fd5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
