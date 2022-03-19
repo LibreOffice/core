@@ -46,7 +46,6 @@ CopyFromClipContext::CopyFromClipContext(ScDocument& rDoc,
     mnInsertFlag(nInsertFlag), mnDeleteFlag(InsertDeleteFlags::NONE),
     mpCondFormatList(nullptr),
     mbAsLink(bAsLink), mbSkipEmptyCells(bSkipEmptyCells),
-    mbCloneNotes (mnInsertFlag & (InsertDeleteFlags::NOTE|InsertDeleteFlags::ADDNOTES)),
     mbTableProtected(false)
 {
 }
@@ -120,6 +119,7 @@ void CopyFromClipContext::setSingleCellColumnSize( size_t nSize )
     maSingleCellAttrs.resize(nSize);
     maSinglePatterns.resize(nSize, nullptr);
     maSingleNotes.resize(nSize, nullptr);
+    maSingleSparkline.resize(nSize);
 }
 
 ScCellValue& CopyFromClipContext::getSingleCell( size_t nColOffset )
@@ -300,6 +300,18 @@ void CopyFromClipContext::setSingleCellNote( size_t nColOffset, const ScPostIt* 
     maSingleNotes[nColOffset] = pNote;
 }
 
+std::shared_ptr<sc::Sparkline> const& CopyFromClipContext::getSingleSparkline(size_t nColOffset) const
+{
+    assert(nColOffset < maSingleSparkline.size());
+    return maSingleSparkline[nColOffset];
+}
+
+void CopyFromClipContext::setSingleSparkline(size_t nColOffset, std::shared_ptr<sc::Sparkline> const& pSparkline)
+{
+    assert(nColOffset < maSingleSparkline.size());
+    maSingleSparkline[nColOffset] = pSparkline;
+}
+
 void CopyFromClipContext::setCondFormatList( ScConditionalFormatList* pCondFormatList )
 {
     mpCondFormatList = pCondFormatList;
@@ -332,7 +344,12 @@ bool CopyFromClipContext::isSkipEmptyCells() const
 
 bool CopyFromClipContext::isCloneNotes() const
 {
-    return mbCloneNotes;
+    return bool(mnInsertFlag & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES));
+}
+
+bool CopyFromClipContext::isCloneSparklines() const
+{
+    return bool(mnInsertFlag & InsertDeleteFlags::SPARKLINES);
 }
 
 bool CopyFromClipContext::isDateCell( const ScColumn& rCol, SCROW nRow ) const

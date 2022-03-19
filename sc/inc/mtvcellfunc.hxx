@@ -178,6 +178,14 @@ ProcessBroadcaster(
         BroadcasterStoreType, broadcaster_block, FuncElem, FuncElseNoOp<size_t> >(it, rStore, nRow1, nRow2, rFuncElem, aElse);
 }
 
+template<typename Functor>
+typename SparklineStoreType::const_iterator
+ParseSparkline(const SparklineStoreType::const_iterator& itPos, const SparklineStoreType& rStore, SCROW nStart, SCROW nEnd, Functor& rFunctor)
+{
+    FuncElseNoOp<size_t> aElse;
+    return ParseElements1<SparklineStoreType, sparkline_block, Functor, FuncElseNoOp<size_t> >(itPos, rStore, nStart, nEnd, rFunctor, aElse);
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -222,6 +222,9 @@ friend class sc::CellStoreEvent;
         SCROW nRow, SCTAB nTab, const OUString& rString, formula::FormulaGrammar::AddressConvention eConv,
         const ScSetStringParam* pParam );
 
+    void duplicateSparkline(sc::CopyFromClipContext& rContext, sc::ColumnBlockPosition* pBlockPos,
+                            size_t nColOffset, size_t nDestSize, ScAddress aDestPosition);
+
 public:
 
     /** Broadcast mode for SetDirty(SCROW,SCROW,BroadcastMode). */
@@ -247,6 +250,8 @@ public:
     const sc::CellTextAttrStoreType& GetCellAttrStore() const { return maCellTextAttrs; }
     sc::CellNoteStoreType& GetCellNoteStore() { return maCellNotes; }
     const sc::CellNoteStoreType& GetCellNoteStore() const { return maCellNotes; }
+    sc::SparklineStoreType& GetSparklineStore() { return maSparklines; }
+    const sc::SparklineStoreType& GetSparklineStore() const { return maSparklines; }
 
     ScRefCellValue GetCellValue( SCROW nRow ) const;
     ScRefCellValue GetCellValue( sc::ColumnBlockPosition& rBlockPos, SCROW nRow );
@@ -660,6 +665,10 @@ public:
     void CreateSparklineCell(SCROW nRow, std::shared_ptr<sc::Sparkline> const& pSparkline);
     void DeleteSparklineCells(sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2);
     bool DeleteSparkline(SCROW nRow);
+    bool IsSparklinesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
+    void CopyCellSparklinesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, SCROW nRowOffsetDest) const;
+    void DuplicateSparklines(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
+                             sc::ColumnBlockPosition& rDestBlockPos, SCROW nRowOffsetDest = 0) const;
 
     // cell notes
     ScPostIt* GetCellNote( SCROW nRow );
@@ -688,7 +697,7 @@ public:
         SCROW nRowOffsetDest = 0) const;
 
     void DuplicateNotes(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
-                            sc::ColumnBlockPosition& maDestBlockPos, bool bCloneCaption, SCROW nRowOffsetDest=0 ) const;
+                            sc::ColumnBlockPosition& rDestBlockPos, bool bCloneCaption, SCROW nRowOffsetDest = 0) const;
 
     void UpdateNoteCaptions( SCROW nRow1, SCROW nRow2 );
 

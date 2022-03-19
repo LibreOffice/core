@@ -42,6 +42,7 @@
 #include <rowheightcontext.hxx>
 #include <tokenstringcontext.hxx>
 #include <sortparam.hxx>
+#include <SparklineGroup.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
@@ -1994,6 +1995,74 @@ bool ScColumn::DeleteSparkline(SCROW nRow)
 
     maSparklines.set_empty(nRow, nRow);
     return true;
+}
+
+bool ScColumn::IsSparklinesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
+{
+    std::pair<sc::SparklineStoreType::const_iterator,size_t> aPos = maSparklines.position(nStartRow);
+    sc::SparklineStoreType::const_iterator it = aPos.first;
+    if (it == maSparklines.end())
+        return false;
+
+    if (it->type != sc::element_type_empty)
+        return false;
+
+    // start position of next block which is not empty.
+    SCROW nNextRow = nStartRow + it->size - aPos.second;
+    return nEndRow < nNextRow;
+}
+
+namespace
+{
+
+class CopySparklinesHandler
+{
+    ScColumn& mrDestColumn;
+    sc::SparklineStoreType& mrDestSparkline;
+    sc::SparklineStoreType::iterator miDestPosition;
+    SCROW mnDestOffset;
+
+public:
+    CopySparklinesHandler(ScColumn& rDestColumn, SCROW nDestOffset)
+        : mrDestColumn(rDestColumn)
+        , mrDestSparkline(mrDestColumn.GetSparklineStore())
+        , miDestPosition(mrDestSparkline.begin())
+        , mnDestOffset(nDestOffset)
+    {}
+
+    void operator() (size_t nRow, const sc::SparklineCell* pCell)
+    {
+        SCROW nDestRow = nRow + mnDestOffset;
+
+        auto const& pSparkline = pCell->getSparkline();
+        auto const& pGroup = pCell->getSparklineGroup();
+
+        auto pNewSparklineGroup = std::make_shared<sc::SparklineGroup>(*pGroup); // Copy the group
+        auto pNewSparkline = std::make_shared<sc::Sparkline>(mrDestColumn.GetCol(), nDestRow, pNewSparklineGroup);
+
+        pNewSparkline->setInputRange(pSparkline->getInputRange());
+
+        miDestPosition = mrDestSparkline.set(miDestPosition, nDestRow, new sc::SparklineCell(pNewSparkline));
+    }
+};
+
+}
+
+void ScColumn::CopyCellSparklinesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, SCROW nRowOffsetDest) const
+{
+    if (IsSparklinesEmptyBlock(nRow1, nRow2))
+        // The column has no cell sparklines to copy between specified rows.
+        return;
+
+    CopySparklinesHandler aFunctor(rDestCol, nRowOffsetDest);
+    sc::ParseSparkline(maSparklines.begin(), maSparklines, nRow1, nRow2, aFunctor);
+}
+
+void ScColumn::DuplicateSparklines(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
+                             sc::ColumnBlockPosition& rDestBlockPos, SCROW nRowOffsetDest) const
+{
+    CopyCellSparklinesToDocument(nStartRow, nStartRow + nDataSize - 1, rDestCol, nRowOffsetDest);
+    rDestBlockPos.miSparklinePos = rDestCol.maSparklines.begin();
 }
 
 // Notes

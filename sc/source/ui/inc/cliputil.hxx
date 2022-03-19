@@ -10,6 +10,7 @@
 #pragma once
 
 #include <types.hxx>
+#include <scdllapi.h>
 
 class ScViewData;
 class ScTabViewShell;
@@ -19,9 +20,10 @@ class ScRangeList;
 
 namespace ScClipUtil
 {
-    void PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
 
-    bool CheckDestRanges(
+SC_DLLPUBLIC void PasteFromClipboard( ScViewData& rViewData, ScTabViewShell* pTabViewShell, bool bShowDialog );
+
+bool CheckDestRanges(
         const ScDocument& rDoc, SCCOL nSrcCols, SCROW nSrcRows, const ScMarkData& rMark,
         const ScRangeList& rDest);
 }
