@@ -1117,6 +1117,11 @@ class CopyCellsFromClipHandler
         mrSrcCol.DuplicateNotes(nStartRow, nDataSize, mrDestCol, maDestBlockPos, bCloneCaption, mnRowOffset);
     }
 
+    void duplicateSparklines(SCROW nStartRow, size_t nDataSize)
+    {
+        mrSrcCol.DuplicateSparklines(nStartRow, nDataSize, mrDestCol, maDestBlockPos, mnRowOffset);
+    }
+
 public:
     CopyCellsFromClipHandler(sc::CopyFromClipContext& rCxt, ScColumn& rSrcCol, ScColumn& rDestCol, SCTAB nDestTab, SCCOL nDestCol, tools::Long nRowOffset, svl::SharedStringPool* pSharedStringPool) :
         mrCxt(rCxt),
@@ -1156,6 +1161,7 @@ public:
     {
         SCROW nSrcRow1 = node.position + nOffset;
         bool bCopyCellNotes = mrCxt.isCloneNotes();
+        bool bCopySparklines = mrCxt.isCloneSparklines();
 
         InsertDeleteFlags nFlags = mrCxt.getInsertFlag();
 
@@ -1165,6 +1171,10 @@ public:
             {
                 bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
                 duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
+            }
+            if (bCopySparklines) // If there is a sparkline is it empty?
+            {
+                duplicateSparklines(nSrcRow1, nDataSize);
             }
             return;
         }
@@ -1355,6 +1365,10 @@ public:
         {
             bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
             duplicateNotes(nSrcRow1, nDataSize, bCloneCaption );
+        }
+        if (bCopySparklines)
+        {
+            duplicateSparklines(nSrcRow1, nDataSize);
         }
     }
 };
