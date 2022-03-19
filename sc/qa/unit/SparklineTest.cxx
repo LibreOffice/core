@@ -82,13 +82,13 @@ void SparklineTest::testAddSparkline()
 
     ScDocument& rDocument = xDocSh->GetDocument();
 
-    sc::Sparkline* pSparkline = createTestSparkline(rDocument);
+    auto pSparkline = createTestSparkline(rDocument);
     CPPUNIT_ASSERT(pSparkline);
 
-    sc::Sparkline* pGetSparkline = rDocument.GetSparkline(ScAddress(0, 6, 0));
+    auto pGetSparkline = rDocument.GetSparkline(ScAddress(0, 6, 0));
     CPPUNIT_ASSERT(pGetSparkline);
 
-    CPPUNIT_ASSERT_EQUAL(pGetSparkline, pSparkline);
+    CPPUNIT_ASSERT_EQUAL(pGetSparkline.get(), pSparkline);
 
     sc::SparklineList* pList = rDocument.GetSparklineList(0);
     CPPUNIT_ASSERT(pList);
@@ -107,12 +107,12 @@ void SparklineTest::testDeleteSprkline()
 
     ScDocument& rDocument = xDocSh->GetDocument();
 
-    sc::Sparkline* pSparkline = createTestSparkline(rDocument);
+    auto pSparkline = createTestSparkline(rDocument);
     CPPUNIT_ASSERT(pSparkline);
 
     clearRange(&rDocument, ScRange(0, 6, 0, 0, 6, 0));
 
-    sc::Sparkline* pGetSparkline = rDocument.GetSparkline(ScAddress(0, 6, 0));
+    auto pGetSparkline = rDocument.GetSparkline(ScAddress(0, 6, 0));
     CPPUNIT_ASSERT(!pGetSparkline);
 
     xDocSh->DoClose();

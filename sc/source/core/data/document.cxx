@@ -6557,7 +6557,7 @@ bool ScDocument::IsInVBAMode() const
 }
 
 // Sparklines
-sc::Sparkline* ScDocument::GetSparkline(ScAddress const& rPosition)
+std::shared_ptr<sc::Sparkline> ScDocument::GetSparkline(ScAddress const& rPosition)
 {
     SCTAB nTab = rPosition.Tab();
 
@@ -6565,7 +6565,7 @@ sc::Sparkline* ScDocument::GetSparkline(ScAddress const& rPosition)
     {
         return maTabs[nTab]->GetSparkline(rPosition.Col(), rPosition.Row());
     }
-    return nullptr;
+    return std::shared_ptr<sc::Sparkline>();
 }
 
 sc::Sparkline* ScDocument::CreateSparkline(ScAddress const& rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup)
