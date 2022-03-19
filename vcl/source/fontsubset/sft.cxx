@@ -36,7 +36,7 @@
 #endif
 #include <sft.hxx>
 #include <impfontcharmap.hxx>
-#include "fixmath.h"
+#include <tools/fix16.hxx>
 #include "ttcr.hxx"
 #include "xlat.hxx"
 #include <rtl/crc.h>
