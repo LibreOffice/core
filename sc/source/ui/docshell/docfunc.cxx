@@ -94,6 +94,9 @@
 #include <conditio.hxx>
 #include <columnspanset.hxx>
 #include <validat.hxx>
+#include <SparklineGroup.hxx>
+#include <SparklineData.hxx>
+#include <undo/UndoInsertSparkline.hxx>
 #include <config_features.h>
 
 #include <memory>
@@ -5757,6 +5760,85 @@ void ScDocFunc::EnterListAction(TranslateId pNameResId)
 void ScDocFunc::EndListAction()
 {
     rDocShell.GetUndoManager()->LeaveListAction();
+}
+
+bool ScDocFunc::InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
+                                std::shared_ptr<sc::SparklineGroup> pSparklineGroup)
+{
+    std::vector<sc::SparklineData> aSparklineDataVector;
+
+    if (rSparklineRange.aStart.Col() == rSparklineRange.aEnd.Col())
+    {
+        sal_Int32 nOutputRowSize = rSparklineRange.aEnd.Row() - rSparklineRange.aStart.Row();
+
+        auto eInputOrientation = sc::calculateOrientation(nOutputRowSize, rDataRange);
+
+        if (eInputOrientation == sc::RangeOrientation::Unknown)
+            return false;
+
+        sal_Int32 nIndex = 0;
+
+        for (ScAddress aAddress = rSparklineRange.aStart; aAddress.Row() <= rSparklineRange.aEnd.Row();
+             aAddress.IncRow())
+        {
+            ScRange aInputRangeSlice = rDataRange;
+            if (eInputOrientation == sc::RangeOrientation::Row)
+            {
+                aInputRangeSlice.aStart.SetRow(rDataRange.aStart.Row() + nIndex);
+                aInputRangeSlice.aEnd.SetRow(rDataRange.aStart.Row() + nIndex);
+            }
+            else
+            {
+                aInputRangeSlice.aStart.SetCol(rDataRange.aStart.Col() + nIndex);
+                aInputRangeSlice.aEnd.SetCol(rDataRange.aStart.Col() + nIndex);
+            }
+
+            aSparklineDataVector.emplace_back(aAddress, aInputRangeSlice);
+
+            nIndex++;
+        }
+    }
+    else if (rSparklineRange.aStart.Row() == rSparklineRange.aEnd.Row())
+    {
+        sal_Int32 nOutputColSize = rSparklineRange.aEnd.Col() - rSparklineRange.aStart.Col();
+
+        auto eInputOrientation = sc::calculateOrientation(nOutputColSize, rDataRange);
+
+        if (eInputOrientation == sc::RangeOrientation::Unknown)
+            return false;
+
+        sal_Int32 nIndex = 0;
+
+        for (ScAddress aAddress = rSparklineRange.aStart; aAddress.Col() <= rSparklineRange.aEnd.Col();
+             aAddress.IncCol())
+        {
+            ScRange aInputRangeSlice = rDataRange;
+            if (eInputOrientation == sc::RangeOrientation::Row)
+            {
+                aInputRangeSlice.aStart.SetRow(rDataRange.aStart.Row() + nIndex);
+                aInputRangeSlice.aEnd.SetRow(rDataRange.aStart.Row() + nIndex);
+            }
+            else
+            {
+                aInputRangeSlice.aStart.SetCol(rDataRange.aStart.Col() + nIndex);
+                aInputRangeSlice.aEnd.SetCol(rDataRange.aStart.Col() + nIndex);
+            }
+
+            aSparklineDataVector.emplace_back(aAddress, aInputRangeSlice);
+
+            nIndex++;
+        }
+    }
+
+    if (aSparklineDataVector.empty())
+        return false;
+
+    auto pUndoInsertSparkline = std::make_unique<sc::UndoInsertSparkline>(rDocShell, aSparklineDataVector, pSparklineGroup);
+    // insert the sparkline by "redoing"
+    pUndoInsertSparkline->Redo();
+    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoInsertSparkline));
+
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -11,6 +11,8 @@
 #include <docsh.hxx>
 #include <tabvwsh.hxx>
 #include <cliputil.hxx>
+#include <docfunc.hxx>
+
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
 
@@ -20,8 +22,6 @@ class SparklineTest : public ScBootstrapFixture
 {
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
-
-    sc::Sparkline* createTestSparkline(ScDocument& rDocument);
 
 public:
     SparklineTest()
@@ -50,16 +50,30 @@ public:
     void testDeleteSprkline();
     void testCopyPasteSparkline();
     void testCutPasteSparkline();
+    void testUndoRedoInsertSparkline();
 
     CPPUNIT_TEST_SUITE(SparklineTest);
     CPPUNIT_TEST(testAddSparkline);
     CPPUNIT_TEST(testDeleteSprkline);
     CPPUNIT_TEST(testCopyPasteSparkline);
     CPPUNIT_TEST(testCutPasteSparkline);
+    CPPUNIT_TEST(testUndoRedoInsertSparkline);
     CPPUNIT_TEST_SUITE_END();
 };
 
-sc::Sparkline* SparklineTest::createTestSparkline(ScDocument& rDocument)
+namespace
+{
+void insertTestData(ScDocument& rDocument)
+{
+    rDocument.SetValue(0, 0, 0, 4);
+    rDocument.SetValue(0, 1, 0, -2);
+    rDocument.SetValue(0, 2, 0, 1);
+    rDocument.SetValue(0, 3, 0, -3);
+    rDocument.SetValue(0, 4, 0, 5);
+    rDocument.SetValue(0, 5, 0, 3);
+}
+
+sc::Sparkline* createTestSparkline(ScDocument& rDocument)
 {
     auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
 
@@ -67,12 +81,7 @@ sc::Sparkline* SparklineTest::createTestSparkline(ScDocument& rDocument)
     if (!pSparkline)
         return nullptr;
 
-    rDocument.SetValue(0, 0, 0, 4);
-    rDocument.SetValue(0, 1, 0, -2);
-    rDocument.SetValue(0, 2, 0, 1);
-    rDocument.SetValue(0, 3, 0, -3);
-    rDocument.SetValue(0, 4, 0, 5);
-    rDocument.SetValue(0, 5, 0, 3);
+    insertTestData(rDocument);
 
     ScRangeList aList;
     aList.push_back(ScRange(0, 0, 0, 0, 5, 0));
@@ -80,6 +89,8 @@ sc::Sparkline* SparklineTest::createTestSparkline(ScDocument& rDocument)
 
     return pSparkline;
 }
+
+} // end anonymous namespace
 
 void SparklineTest::testAddSparkline()
 {
@@ -224,6 +235,55 @@ void SparklineTest::testCutPasteSparkline()
 
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparklineCopy->getColumn());
     CPPUNIT_ASSERT_EQUAL(SCROW(7), pSparklineCopy->getRow());
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testUndoRedoInsertSparkline()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto& rDocFunc = xDocSh->GetDocFunc();
+
+    // insert test data - A1:A6
+    insertTestData(rDocument);
+
+    // Sparkline range
+    ScRange aRange(0, 6, 0, 0, 6, 0);
+
+    // Check Sparkline at cell A7 doesn't exists
+    auto pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(!pSparkline);
+
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    rDocFunc.InsertSparklines(ScRange(0, 0, 0, 0, 5, 0), aRange, pSparklineGroup);
+
+    // Check Sparkline at cell A7 exists
+    pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(pSparkline);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+
+    // Undo
+    rDocument.GetUndoManager()->Undo();
+
+    // Check Sparkline at cell A7 doesn't exists
+    pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(!pSparkline);
+
+    // Redo
+    rDocument.GetUndoManager()->Redo();
+
+    // Check Sparkline at cell A7 exists
+    pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(pSparkline);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
 
     xDocSh->DoClose();
 }
