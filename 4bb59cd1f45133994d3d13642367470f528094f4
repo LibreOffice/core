@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5877fda8_009d1cd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002869
+      },
+      "writtenOn": "2022-03-20T08:27:43Z",
+      "side": 1,
+      "message": "Hi Jim,\nThanks for the patch!",
+      "parentUuid": "e7019f9d_3349fd01",
+      "revId": "4bb59cd1f45133994d3d13642367470f528094f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08e6818d_6e1d0831",
