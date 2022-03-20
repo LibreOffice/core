@@ -8,9 +8,12 @@
  */
 
 #include <SparklineDialog.hxx>
+#include <SparklineData.hxx>
 #include <SparklineGroup.hxx>
 #include <Sparkline.hxx>
 #include <reffact.hxx>
+
+#include <docfunc.hxx>
 
 #include <svx/colorbox.hxx>
 
@@ -310,48 +313,24 @@ IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
         mpLocalSparklineGroup->m_eType = sc::SparklineType::Stacked;
 }
 
-namespace
-{
-enum class RangeOrientation
-{
-    Unknown,
-    Row,
-    Col
-};
-
-RangeOrientation calculateOrientation(sal_Int32 nOutputSize, ScRange const& rInputRange)
-{
-    sal_Int32 nRowSize = rInputRange.aEnd.Row() - rInputRange.aStart.Row();
-    sal_Int32 nColSize = rInputRange.aEnd.Col() - rInputRange.aStart.Col();
-
-    auto eInputOrientation = RangeOrientation::Unknown;
-    if (nOutputSize == nRowSize)
-        eInputOrientation = RangeOrientation::Row;
-    else if (nOutputSize == nColSize)
-        eInputOrientation = RangeOrientation::Col;
-    return eInputOrientation;
-}
-
-} // end anonymous namespace
-
 bool SparklineDialog::checkValidInputOutput()
 {
     if (!maInputRange.IsValid() || !maOutputRange.IsValid())
         return false;
 
-    RangeOrientation eInputOrientation = RangeOrientation::Unknown;
+    sc::RangeOrientation eInputOrientation = sc::RangeOrientation::Unknown;
     if (maOutputRange.aStart.Col() == maOutputRange.aEnd.Col())
     {
         sal_Int32 nOutputRowSize = maOutputRange.aEnd.Row() - maOutputRange.aStart.Row();
-        eInputOrientation = calculateOrientation(nOutputRowSize, maInputRange);
+        eInputOrientation = sc::calculateOrientation(nOutputRowSize, maInputRange);
     }
     else if (maOutputRange.aStart.Row() == maOutputRange.aEnd.Row())
     {
         sal_Int32 nOutputColSize = maOutputRange.aEnd.Col() - maOutputRange.aStart.Col();
-        eInputOrientation = calculateOrientation(nOutputColSize, maInputRange);
+        eInputOrientation = sc::calculateOrientation(nOutputColSize, maInputRange);
     }
 
-    return eInputOrientation != RangeOrientation::Unknown;
+    return eInputOrientation != sc::RangeOrientation::Unknown;
 }
 
 void SparklineDialog::perform()
@@ -364,65 +343,9 @@ void SparklineDialog::perform()
     mpLocalSparklineGroup->m_aColorFirst = mxColorFirst->GetSelectEntryColor();
     mpLocalSparklineGroup->m_aColorLast = mxColorLast->GetSelectEntryColor();
 
-    if (maOutputRange.aStart.Col() == maOutputRange.aEnd.Col())
-    {
-        sal_Int32 nOutputRowSize = maOutputRange.aEnd.Row() - maOutputRange.aStart.Row();
+    auto& rDocFunc = mrViewData.GetDocShell()->GetDocFunc();
 
-        auto eInputOrientation = calculateOrientation(nOutputRowSize, maInputRange);
-
-        if (eInputOrientation == RangeOrientation::Unknown)
-            return;
-
-        sal_Int32 nIndex = 0;
-        for (ScAddress aAddress = maOutputRange.aStart; aAddress.Row() <= maOutputRange.aEnd.Row();
-             aAddress.IncRow())
-        {
-            ScRange aInputRangeSlice = maInputRange;
-            if (eInputOrientation == RangeOrientation::Row)
-            {
-                aInputRangeSlice.aStart.SetRow(maInputRange.aStart.Row() + nIndex);
-                aInputRangeSlice.aEnd.SetRow(maInputRange.aStart.Row() + nIndex);
-            }
-            else
-            {
-                aInputRangeSlice.aStart.SetCol(maInputRange.aStart.Col() + nIndex);
-                aInputRangeSlice.aEnd.SetCol(maInputRange.aStart.Col() + nIndex);
-            }
-            auto* pCreated = mrDocument.CreateSparkline(aAddress, mpLocalSparklineGroup);
-            pCreated->setInputRange(aInputRangeSlice);
-            nIndex++;
-        }
-    }
-    else if (maOutputRange.aStart.Row() == maOutputRange.aEnd.Row())
-    {
-        sal_Int32 nOutputColSize = maOutputRange.aEnd.Col() - maOutputRange.aStart.Col();
-
-        auto eInputOrientation = calculateOrientation(nOutputColSize, maInputRange);
-
-        if (eInputOrientation == RangeOrientation::Unknown)
-            return;
-
-        sal_Int32 nIndex = 0;
-
-        for (ScAddress aAddress = maOutputRange.aStart; aAddress.Col() <= maOutputRange.aEnd.Col();
-             aAddress.IncCol())
-        {
-            ScRange aInputRangeSlice = maInputRange;
-            if (eInputOrientation == RangeOrientation::Row)
-            {
-                aInputRangeSlice.aStart.SetRow(maInputRange.aStart.Row() + nIndex);
-                aInputRangeSlice.aEnd.SetRow(maInputRange.aStart.Row() + nIndex);
-            }
-            else
-            {
-                aInputRangeSlice.aStart.SetCol(maInputRange.aStart.Col() + nIndex);
-                aInputRangeSlice.aEnd.SetCol(maInputRange.aStart.Col() + nIndex);
-            }
-            auto* pCreated = mrDocument.CreateSparkline(aAddress, mpLocalSparklineGroup);
-            pCreated->setInputRange(aInputRangeSlice);
-            nIndex++;
-        }
-    }
+    rDocFunc.InsertSparklines(maInputRange, maOutputRange, mpLocalSparklineGroup);
 }
 }
 
