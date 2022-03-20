@@ -211,26 +211,26 @@ rtl::OUStringConstExpr constexpr aNavigationImgIds[ NAVI_ENTRIES ] =
 
 const TranslateId aNavigationStrIds[ NAVI_ENTRIES ] =
 {
-    ST_TBL,
-    ST_FRM,
-    ST_GRF,
-    ST_OLE,
+    STR_CONTENT_TYPE_TABLE,
+    STR_CONTENT_TYPE_FRAME,
+    STR_CONTENT_TYPE_GRAPHIC,
+    STR_CONTENT_TYPE_OLE,
     ST_PGE,
-    ST_OUTL,
+    STR_CONTENT_TYPE_OUTLINE,
     ST_MARK,
-    ST_DRW,
+    STR_CONTENT_TYPE_DRAWOBJECT,
     ST_CTRL,
-    ST_REG,
-    ST_BKM,
+    STR_CONTENT_TYPE_REGION,
+    STR_CONTENT_TYPE_BOOKMARK,
     ST_SEL,
-    ST_FTN,
-    ST_POSTIT,
+    STR_CONTENT_TYPE_FOOTNOTE,
+    STR_CONTENT_TYPE_POSTIT,
     ST_SRCH_REP,
-    ST_INDEX_ENTRY,
+    STR_CONTENT_TYPE_INDEX,
     ST_TABLE_FORMULA,
     ST_TABLE_FORMULA_ERROR,
     ST_RECENCY,
-    ST_FIELD,
+    STR_CONTENT_TYPE_TEXTFIELD,
     ST_FIELD_BYTYPE
 };
 
@@ -589,114 +589,6 @@ VclPtr<InterimItemWindow> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Wi
     return pRet.get();
 }
 
-namespace {
-
-class NavElementBox_Base;
-class NavElementBox_Impl;
-
-class NavElementToolBoxControl : public svt::ToolboxController,
-                                 public lang::XServiceInfo
-{
-    public:
-        explicit NavElementToolBoxControl(
-            const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
-
-        // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
-        virtual void SAL_CALL acquire() noexcept override;
-        virtual void SAL_CALL release() noexcept override;
-
-        // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
-
-        // XComponent
-        virtual void SAL_CALL dispose() override;
-
-        // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
-
-        // XToolbarController
-        virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
-        virtual void SAL_CALL click() override;
-        virtual void SAL_CALL doubleClick() override;
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
-
-        void dispatchCommand( const css::uno::Sequence< css::beans::PropertyValue >& rArgs );
-        using svt::ToolboxController::dispatchCommand;
-
-    private:
-        VclPtr<NavElementBox_Impl> m_xVclBox;
-        std::unique_ptr<NavElementBox_Base> m_xWeldBox;
-        NavElementBox_Base* m_pBox;
-};
-
-class NavElementBox_Base
-{
-public:
-    NavElementBox_Base(std::unique_ptr<weld::ComboBox> xWidget,
-                       const uno::Reference<frame::XFrame>& _xFrame,
-                       NavElementToolBoxControl& rCtrl);
-
-    virtual ~NavElementBox_Base()
-    {
-    }
-
-    void set_sensitive(bool bSensitive)
-    {
-        m_xWidget->set_sensitive(bSensitive);
-    }
-
-    void                UpdateBox();
-
-protected:
-    std::unique_ptr<weld::ComboBox>            m_xWidget;
-    NavElementToolBoxControl*                  m_pCtrl;
-    bool                                       m_bRelease;
-    uno::Reference< frame::XFrame >            m_xFrame;
-
-    virtual bool DoKeyInput(const KeyEvent& rKEvt);
-
-    DECL_LINK(SelectHdl, weld::ComboBox&, void);
-    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-
-    void                ReleaseFocus_Impl();
-};
-
-
-class NavElementBox_Impl final : public InterimItemWindow
-                               , public NavElementBox_Base
-{
-public:
-    NavElementBox_Impl(vcl::Window* pParent,
-                       const uno::Reference<frame::XFrame>& _xFrame,
-                       NavElementToolBoxControl& rCtrl);
-
-    virtual void dispose() override
-    {
-        m_xWidget.reset();
-        InterimItemWindow::dispose();
-    }
-
-    virtual void GetFocus() override
-    {
-        if (m_xWidget)
-            m_xWidget->grab_focus();
-        InterimItemWindow::GetFocus();
-    }
-
-    virtual bool DoKeyInput(const KeyEvent& rKEvt) override;
-
-    virtual ~NavElementBox_Impl() override
-    {
-        disposeOnce();
-    }
-};
-
-}
-
 NavElementBox_Base::NavElementBox_Base(
     std::unique_ptr<weld::ComboBox> xWidget,
     const uno::Reference< frame::XFrame >&            _xFrame,
@@ -740,18 +632,16 @@ void NavElementBox_Base::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-IMPL_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void)
+IMPL_STATIC_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
     if (!rComboBox.changed_by_direct_pick())  // only when picked from the list
         return;
-
-    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-
-    sal_uInt16 nMoveType = rComboBox.get_active_id().toUInt32();
-    SwView::SetMoveType( nMoveType );
-
-    css::uno::Sequence< css::beans::PropertyValue > aArgs;
-    m_pCtrl->dispatchCommand( aArgs );
+    SfxUInt32Item aParam(FN_NAV_ELEMENT, rComboBox.get_active_id().toUInt32());
+    const SfxPoolItem* aArgs[2];
+    aArgs[0] = &aParam;
+    aArgs[1] = nullptr;
+    SfxDispatcher* pDispatch = SfxViewFrame::Current()->GetBindings().GetDispatcher();
+    pDispatch->Execute(FN_NAV_ELEMENT, SfxCallMode::SYNCHRON, aArgs);
 }
 
 void NavElementBox_Base::UpdateBox()
@@ -774,30 +664,9 @@ IMPL_LINK(NavElementBox_Base, KeyInputHdl, const KeyEvent&, rKEvt, bool)
     return DoKeyInput(rKEvt);
 }
 
-bool NavElementBox_Base::DoKeyInput(const KeyEvent& rKEvt)
+bool NavElementBox_Base::DoKeyInput(const KeyEvent& /*rKEvt*/)
 {
-    bool bHandled = false;
-
-    vcl::KeyCode aKeyCode = rKEvt.GetKeyCode();
-    sal_uInt16 nCode = aKeyCode.GetCode();
-
-    switch ( nCode )
-    {
-        case KEY_TAB:
-        {
-            m_bRelease = false;
-            SelectHdl(*m_xWidget);
-            break;
-        }
-        case KEY_RETURN:
-        {
-            m_bRelease = false;
-            SelectHdl(*m_xWidget);
-            break;
-        }
-    }
-
-    return bHandled;
+    return false;
 }
 
 bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
@@ -807,9 +676,8 @@ bool NavElementBox_Impl::DoKeyInput(const KeyEvent& rKEvt)
         ReleaseFocus_Impl();
         return true;
     }
-    return NavElementBox_Base::DoKeyInput(rKEvt) || ChildKeyInput(rKEvt);
+    return ChildKeyInput(rKEvt);
 }
-
 
 NavElementToolBoxControl::NavElementToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : svt::ToolboxController( rxContext,
@@ -939,24 +807,6 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
     }
 
     return xItemWindow;
-}
-
-void NavElementToolBoxControl::dispatchCommand(
-    const uno::Sequence< beans::PropertyValue >& rArgs )
-{
-    uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
-    if ( xDispatchProvider.is() )
-    {
-        util::URL                               aURL;
-        uno::Reference< frame::XDispatch >      xDispatch;
-        uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
-
-        aURL.Complete = ".uno:NavElement";
-        xURLTransformer->parseStrict( aURL );
-        xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aURL, rArgs );
-    }
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *

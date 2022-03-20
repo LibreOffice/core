@@ -150,6 +150,8 @@
 
 #include <ndtxt.hxx>
 
+#include <svx/srchdlg.hxx>
+
 const char sStatusDelim[] = " : ";
 
 using namespace sfx2;
@@ -1268,7 +1270,13 @@ void SwView::Execute(SfxRequest &rReq)
         break;
         case FN_NAV_ELEMENT:
         {
-            // nothing here on purpose - if removed only the listbox that changed is changed
+            pArgs->GetItemState(GetPool().GetWhich(FN_NAV_ELEMENT), false, &pItem);
+            if(pItem)
+            {
+                SvxSearchDialogWrapper::SetSearchLabel(SearchLabel::Empty);
+                sal_uInt32 nMoveType(static_cast<const SfxUInt32Item*>(pItem)->GetValue());
+                SwView::SetMoveType(nMoveType);
+            }
         }
         break;
         case FN_SCROLL_PREV:
