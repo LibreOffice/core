@@ -1614,7 +1614,8 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
                 break;  // for
             }
 
-            EmbeddedNullTreatment( aLine);
+            if (!bDetermineRange)
+                EmbeddedNullTreatment( aLine);
 
             sal_Int32 nLineLen = aLine.getLength();
             SCCOL nCol = nStartCol;
