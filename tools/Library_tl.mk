@@ -69,7 +69,6 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/memtools/multisel \
     tools/source/misc/cpuid \
     tools/source/misc/extendapplicationenvironment \
-    tools/source/misc/fix16 \
     tools/source/misc/json_writer \
     tools/source/ref/globname \
     tools/source/ref/ref \
@@ -81,6 +80,12 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
     tools/source/xml/XmlWriter \
     tools/source/xml/XmlWalker \
 ))
+
+ifneq ($(SYSTEM_LIBFIXMATH),TRUE)
+$(eval $(call gb_Library_add_exception_objects,tl,\
+    tools/source/misc/fix16 \
+))
+endif
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_exception_objects,tl, \
@@ -105,6 +110,12 @@ $(eval $(call gb_Library_use_externals,tl,\
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_libs,tl,\
         -lrt \
+))
+endif
+
+ifeq ($(SYSTEM_LIBFIXMATH),TRUE)
+$(eval $(call gb_Library_add_libs,tl,\
+	-llibfixmath \
 ))
 endif
 

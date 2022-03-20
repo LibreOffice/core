@@ -2439,6 +2439,11 @@ AC_ARG_WITH(system-dragonbox,
         [Use dragonbox already on system.]),,
     [with_system_dragonbox="$with_system_headers"])
 
+AC_ARG_WITH(system-libfixmath,
+    AS_HELP_STRING([--with-system-libfixmath],
+        [Use libfixmath already on system.]),,
+    [with_system_libfixmath="$with_system_libs"])
+
 AC_ARG_WITH(system-glm,
     AS_HELP_STRING([--with-system-glm],
         [Use glm already on system.]),,
@@ -10577,6 +10582,24 @@ else
 fi
 AC_SUBST([SYSTEM_DRAGONBOX])
 AC_SUBST([DRAGONBOX_CFLAGS])
+
+dnl ===================================================================
+dnl Check for system libfixmath
+dnl ===================================================================
+AC_MSG_CHECKING([which libfixmath to use])
+if test "$with_system_libfixmath" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LIBFIXMATH=TRUE
+    AC_LANG_PUSH([C++])
+    AC_CHECK_HEADER([libfixmath/fix16.hpp], [],
+       [AC_MSG_ERROR([libfixmath/fix16.hpp not found. install libfixmath])], [])
+    AC_CHECK_LIB([libfixmath], [fix16_mul], [:], [AC_MSG_ERROR(libfixmath lib not found or functional)], [])
+    AC_LANG_POP([C++])
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LIBFIXMATH=
+fi
+AC_SUBST([SYSTEM_LIBFIXMATH])
 
 dnl ===================================================================
 dnl Check for system glm
