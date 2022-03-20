@@ -16,6 +16,23 @@
       "message": "I don\u0027t know if it\u0027s the right way so if you\u0027ve got some idea...",
       "revId": "189f9db71a6f12010368aaf33648c7e2ab8a5e15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2689d024_b04e2806",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-20T10:52:34Z",
+      "side": 1,
+      "message": "I gave a try with \"Legal\" 21.59x35.56, it seemed to work.",
+      "revId": "189f9db71a6f12010368aaf33648c7e2ab8a5e15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
