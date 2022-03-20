@@ -51,8 +51,10 @@ class ScPostIt;
 
 enum class TransliterationFlags;
 enum class CreateNameFlags;
-namespace sc {
+namespace sc
+{
     struct ColRowSpan;
+    class SparklineGroup;
 }
 
 class ScDocFunc
@@ -233,6 +235,9 @@ public:
     void SetConditionalFormatList( ScConditionalFormatList* pList, SCTAB nTab );
 
     void ConvertFormulaToValue( const ScRange& rRange, bool bInteraction );
+
+    SC_DLLPUBLIC bool InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
+                                       std::shared_ptr<sc::SparklineGroup> pSparklineGroup);
 
 private:
     void ProtectDocument(const ScDocProtection& rProtect);
