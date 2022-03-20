@@ -33,6 +33,23 @@
       "message": "I gave a try with \"Legal\" 21.59x35.56, it seemed to work.",
       "revId": "189f9db71a6f12010368aaf33648c7e2ab8a5e15",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a17f8404_9ec9c46b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-20T11:05:13Z",
+      "side": 1,
+      "message": "https://bugs.documentfoundation.org/show_bug.cgi?id\u003d147989#c5 is interesting because it shows the pb doesn\u0027t impact only pdf part.",
+      "revId": "189f9db71a6f12010368aaf33648c7e2ab8a5e15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
