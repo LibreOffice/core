@@ -49,6 +49,8 @@
 
 #include <o3tl/enumrange.hxx>
 
+#include <workctrl.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
@@ -126,6 +128,22 @@ IMPL_LINK(SwNavigationPI, DocListBoxSelectHdl, weld::ComboBox&, rBox, void)
     {
         m_xContentTree->SetConstantShell(pView->GetWrtShellPtr());
     }
+}
+
+void SwNavigationPI::UpdateNavigateBy()
+{
+    SfxUInt32Item aParam(FN_NAV_ELEMENT, m_pNavigateByComboBox->get_active_id().toUInt32());
+    const SfxPoolItem* aArgs[2];
+    aArgs[0] = &aParam;
+    aArgs[1] = nullptr;
+    SfxDispatcher* pDispatcher = GetCreateView()->GetFrame()->GetDispatcher();
+    pDispatcher->Execute(FN_NAV_ELEMENT, SfxCallMode::SYNCHRON, aArgs);
+}
+
+IMPL_LINK(SwNavigationPI, NavigateByComboBoxSelectHdl, weld::ComboBox&, rComboBox, void)
+{
+    m_xContentTree->SelectContentType(rComboBox.get_active_text());
+    UpdateNavigateBy();
 }
 
 // Filling of the list box for outline view or documents
@@ -521,6 +539,12 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
 {
     m_xContainer->connect_container_focus_changed(LINK(this, SwNavigationPI, SetFocusChildHdl));
 
+    Reference<XToolbarController> xController =
+            m_xContent2Dispatch->GetControllerForCommand(".uno:NavElement");
+    NavElementToolBoxControl* pToolBoxControl =
+            dynamic_cast<NavElementToolBoxControl*>(xController.get());
+    m_pNavigateByComboBox = pToolBoxControl->GetComboBox();
+
     // Restore content tree settings before calling UpdateInitShow. UpdateInitShow calls Fillbox,
     // which calls Display and UpdateTracking. Incorrect outline levels could be displayed and
     // unexpected content tracking could occur if these content tree settings are not done before.
@@ -627,6 +651,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xInsertMenu->connect_activate(LINK(this, SwNavigationPI, GlobalMenuSelectHdl));
     m_xGlobalToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBoxClickHdl));
     m_xGlobalToolBox->set_item_active("globaltoggle", true);
+    m_pNavigateByComboBox->connect_changed(LINK(this, SwNavigationPI, NavigateByComboBoxSelectHdl));
 
 //  set toolbar of both modes to widest of each
     m_xGlobalToolBox->set_size_request(m_xContent1ToolBox->get_preferred_size().Width() +
@@ -1079,6 +1104,15 @@ IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
     // i.e. typically remaining in the spinbutton, or whatever other widget the
     // user moved to in the meantime
     EditAction();
+}
+
+void SwNavigationPI::SelectNavigateByContentType(const OUString& rContentTypeName)
+{
+    if (auto nPos = m_pNavigateByComboBox->find_text(rContentTypeName); nPos != -1)
+    {
+        m_pNavigateByComboBox->set_active(nPos);
+        UpdateNavigateBy();
+    }
 }
 
 IMPL_LINK_NOARG(SwNavigationPI, EditActionHdl, weld::Entry&, bool)

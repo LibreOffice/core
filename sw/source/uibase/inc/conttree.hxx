@@ -237,6 +237,7 @@ public:
 
     void UpdateTracking();
     void SelectOutlinesWithSelection();
+    void SelectContentType(std::u16string_view rContentTypeName);
 
     // return true if it has any children
     bool RequestingChildren(const weld::TreeIter& rParent);
