@@ -4524,6 +4524,11 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
         grab_focus();
     }
     Select();
+    // Select the content type in the Navigate By control
+    std::unique_ptr<weld::TreeIter> xSelectedEntry(m_xTreeView->make_iterator());
+    m_xTreeView->get_selected(xSelectedEntry.get());
+    if (lcl_IsContentType(*xSelectedEntry, *m_xTreeView))
+        m_pDialog->SelectNavigateByContentType(m_xTreeView->get_selected_text());
 }
 
 // Here the buttons for moving outlines are en-/disabled.
@@ -5017,6 +5022,23 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData )
 SwNavigationPI* SwContentTree::GetParentWindow()
 {
     return m_pDialog;
+}
+
+void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
+{
+    std::unique_ptr<weld::TreeIter> xIter(m_xTreeView->make_iterator());
+    if (!m_xTreeView->get_iter_first(*xIter))
+        return;
+    do
+    {
+        if (m_xTreeView->get_text(*xIter) == rContentTypeName)
+        {
+            m_xTreeView->unselect_all();
+            m_xTreeView->select(*xIter);
+            m_xTreeView->scroll_to_row(*xIter);
+            break;
+        }
+    } while (m_xTreeView->iter_next_sibling(*xIter));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

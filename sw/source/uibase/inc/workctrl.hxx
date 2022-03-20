@@ -20,11 +20,14 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_WORKCTRL_HXX
 
 #include <sfx2/tbxctrl.hxx>
-#include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
+#include <vcl/InterimItemWindow.hxx>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 
 class PopupMenu;
 class SwView;
+
+using namespace ::com::sun::star;
 
 // double entry! hrc and hxx
 // these Ids say what the buttons below the scrollbar are doing
@@ -93,6 +96,103 @@ public:
 
     virtual VclPtr<InterimItemWindow> CreateItemWindow( vcl::Window *pParent ) override;
 };
-#endif
 
+class NavElementToolBoxControl;
+
+class NavElementBox_Base
+{
+public:
+    NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox,
+                       const uno::Reference<frame::XFrame>& xFrame,
+                       NavElementToolBoxControl& rCtrl);
+
+    virtual ~NavElementBox_Base() {}
+
+    void set_sensitive(bool bSensitive) {m_xComboBox->set_sensitive(bSensitive);}
+
+    weld::ComboBox* GetComboBox() {return m_xComboBox.get();}
+
+    void UpdateBox();
+
+
+protected:
+    std::unique_ptr<weld::ComboBox> m_xComboBox;
+    uno::Reference< frame::XFrame > m_xFrame;
+    NavElementToolBoxControl* m_pCtrl;
+    bool m_bRelease;
+
+    virtual bool DoKeyInput(const KeyEvent& /*rKEvt*/);
+
+    DECL_STATIC_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, void);
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
+
+    void ReleaseFocus_Impl();
+};
+
+class NavElementBox_Impl final : public InterimItemWindow, public NavElementBox_Base
+{
+public:
+    NavElementBox_Impl(vcl::Window* pParent,
+                       const uno::Reference<frame::XFrame>& xFrame,
+                       NavElementToolBoxControl& rCtrl);
+
+    virtual void dispose() override
+    {
+        m_xComboBox.reset();
+        InterimItemWindow::dispose();
+    }
+
+    virtual void GetFocus() override
+    {
+        if (m_xComboBox)
+            m_xComboBox->grab_focus();
+        InterimItemWindow::GetFocus();
+    }
+
+    virtual bool DoKeyInput(const KeyEvent& rKEvt) override;
+
+    virtual ~NavElementBox_Impl() override
+    {
+        disposeOnce();
+    }
+};
+
+class NavElementToolBoxControl : public svt::ToolboxController, public lang::XServiceInfo
+{
+public:
+    explicit NavElementToolBoxControl(
+        const css::uno::Reference< css::uno::XComponentContext >& rServiceManager );
+
+    // XInterface
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
+    virtual void SAL_CALL acquire() noexcept override;
+    virtual void SAL_CALL release() noexcept override;
+
+    // XServiceInfo
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+
+    // XComponent
+    virtual void SAL_CALL dispose() override;
+
+    // XStatusListener
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+
+    // XToolbarController
+    virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+    virtual void SAL_CALL click() override;
+    virtual void SAL_CALL doubleClick() override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& Parent ) override;
+
+    weld::ComboBox* GetComboBox() {return m_pBox->GetComboBox();}
+
+private:
+    VclPtr<NavElementBox_Impl> m_xVclBox;
+    std::unique_ptr<NavElementBox_Base> m_xWeldBox;
+    NavElementBox_Base* m_pBox;
+};
+
+#endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

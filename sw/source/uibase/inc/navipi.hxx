@@ -90,6 +90,8 @@ class SwNavigationPI final : public PanelLayout
     bool    m_bIsZoomedIn : 1;
     bool    m_bGlobalMode : 1;
 
+    weld::ComboBox* m_pNavigateByComboBox;
+
     bool IsZoomedIn() const {return m_bIsZoomedIn;}
     void ZoomOut();
     void ZoomIn();
@@ -109,6 +111,7 @@ class SwNavigationPI final : public PanelLayout
     DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
     DECL_LINK( EditActionHdl, weld::Entry&, bool );
     DECL_LINK( SetFocusChildHdl, weld::Container&, void );
+    DECL_LINK( NavigateByComboBoxSelectHdl, weld::ComboBox&, void );
 
     bool EditAction();
     void UsePage();
@@ -120,6 +123,8 @@ class SwNavigationPI final : public PanelLayout
 
     void            ToggleTree();
     void            SetGlobalMode(bool bSet) {m_bGlobalMode = bSet;}
+
+    void UpdateNavigateBy();
 
 public:
 
@@ -156,6 +161,8 @@ public:
     SwView*         GetCreateView() const;
 
     virtual weld::Window* GetFrameWeld() const override;
+
+    void SelectNavigateByContentType(const OUString& rContentTypeName);
 };
 
 class SwNavigatorWrapper final : public SfxNavigatorWrapper
