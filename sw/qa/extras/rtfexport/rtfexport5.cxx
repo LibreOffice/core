@@ -29,6 +29,9 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontUnderline.hpp>
 
 #include <tools/UnitConversion.hxx>
 #include <vcl/svapp.hxx>
@@ -1329,6 +1332,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf144437)
     CPPUNIT_ASSERT_MESSAGE("Bookmark started in wrong position", nBmkStartPos > nTextEndPos);
     CPPUNIT_ASSERT_MESSAGE("Bookmark ended in wrong position", nBmkEndPos > nTextEndPos);
     CPPUNIT_ASSERT_MESSAGE("Bookmark start & end are wrong", nBmkEndPos > nBmkStartPos);
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf131234, "tdf131234.rtf")
+{
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 1, OUString(u"Hello"));
+
+    // Ensure that text has default font attrs in spite of style referenced
+    // E.g. 12pt, Times New Roman, black, no bold, no italic, no underline
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xRun, "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xRun, "CharWeight"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE, getProperty<sal_Int16>(xRun, "CharUnderline"));
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
