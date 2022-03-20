@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fe4d88f_b782aa54",
+        "filename": "writerfilter/source/rtftok/rtfsprm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-20T20:28:19Z",
+      "side": 1,
+      "message": "Somehow I would expect such defaults to come from current pool defaults, reflecting current document defaults, not some random hard-coded values. But I may not see the whole picture.",
+      "revId": "6f9341f8a333bdecc1639b7f518880d2d75d0859",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
