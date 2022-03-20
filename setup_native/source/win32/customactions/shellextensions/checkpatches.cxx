@@ -20,9 +20,6 @@
 #include "shlxtmsi.hxx"
 #include <strsafe.h>
 #include <systools/win32/uwinapi.h>
-#ifdef DEBUG
-#include <sal/macros.h>
-#endif
 
 #ifdef DEBUG
 inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
@@ -31,7 +28,7 @@ inline void OutputDebugStringFormatW( PCWSTR pFormat, ... )
     va_list args;
 
     va_start( args, pFormat );
-    StringCchVPrintfW( buffer, SAL_N_ELEMENTS(buffer), pFormat, args );
+    StringCchVPrintfW( buffer, std::size(buffer), pFormat, args );
     OutputDebugStringW( buffer );
     va_end(args);
 }
