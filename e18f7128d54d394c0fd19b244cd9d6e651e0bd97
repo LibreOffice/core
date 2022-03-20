@@ -16,6 +16,23 @@
       "message": "I don\u0027t have an objection if you want to to this. In the end I just decided to adopt the two functions we needed and retain the notice of their origin.",
       "revId": "e18f7128d54d394c0fd19b244cd9d6e651e0bd97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b4f0d8_e64e6ab3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-03-20T21:26:15Z",
+      "side": 1,
+      "message": "yeah, got it.\n\nIMHO, external/ would have been cleaner, but anyways. And I *do* think that this is worthwile, even though this is two functions and a static library 😊\n\nJenkins works, Local build with --with-system-libfixmath also works. -\u003e Verified",
+      "revId": "e18f7128d54d394c0fd19b244cd9d6e651e0bd97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
