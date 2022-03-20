@@ -57,6 +57,7 @@ class SwNavigationPI final : public PanelLayout
     std::unique_ptr<weld::Toolbar> m_xContent5ToolBox;
     std::unique_ptr<weld::Toolbar> m_xContent6ToolBox;
     std::unique_ptr<ToolbarUnoDispatcher> m_xContent2Dispatch;
+    std::unique_ptr<weld::ComboBox> m_xNavigateByComboBox;
     std::unique_ptr<ToolbarUnoDispatcher> m_xContent3Dispatch;
     std::unique_ptr<weld::Menu> m_xHeadingsMenu;
     std::unique_ptr<weld::Menu> m_xDragModeMenu;
@@ -109,6 +110,7 @@ class SwNavigationPI final : public PanelLayout
     DECL_LINK( PageEditModifyHdl, weld::SpinButton&, void );
     DECL_LINK( EditActionHdl, weld::Entry&, bool );
     DECL_LINK( SetFocusChildHdl, weld::Container&, void );
+    DECL_LINK( NavigateByComboBoxSelectHdl, weld::ComboBox&, void );
 
     bool EditAction();
     void UsePage();
@@ -120,6 +122,8 @@ class SwNavigationPI final : public PanelLayout
 
     void            ToggleTree();
     void            SetGlobalMode(bool bSet) {m_bGlobalMode = bSet;}
+
+    void UpdateNavigateBy();
 
 public:
 
@@ -156,6 +160,8 @@ public:
     SwView*         GetCreateView() const;
 
     virtual weld::Window* GetFrameWeld() const override;
+
+    void SelectNavigateByContentType(const OUString& rContentTypeName);
 };
 
 class SwNavigatorWrapper final : public SfxNavigatorWrapper

@@ -128,6 +128,22 @@ IMPL_LINK(SwNavigationPI, DocListBoxSelectHdl, weld::ComboBox&, rBox, void)
     }
 }
 
+void SwNavigationPI::UpdateNavigateBy()
+{
+    SfxUInt32Item aParam(FN_NAV_ELEMENT, m_xNavigateByComboBox->get_active_id().toUInt32());
+    const SfxPoolItem* aArgs[2];
+    aArgs[0] = &aParam;
+    aArgs[1] = nullptr;
+    SfxDispatcher* pDispatcher = GetCreateView()->GetFrame()->GetDispatcher();
+    pDispatcher->Execute(FN_NAV_ELEMENT, SfxCallMode::SYNCHRON, aArgs);
+}
+
+IMPL_LINK(SwNavigationPI, NavigateByComboBoxSelectHdl, weld::ComboBox&, rComboBox, void)
+{
+    m_xContentTree->SelectContentType(rComboBox.get_active_text());
+    UpdateNavigateBy();
+}
+
 // Filling of the list box for outline view or documents
 // The PI will be set to full size
 void SwNavigationPI::FillBox()
@@ -495,6 +511,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     , m_xContent5ToolBox(m_xBuilder->weld_toolbar("content5"))
     , m_xContent6ToolBox(m_xBuilder->weld_toolbar("content6"))
     , m_xContent2Dispatch(new ToolbarUnoDispatcher(*m_xContent2ToolBox, *m_xBuilder, rxFrame))
+    , m_xNavigateByComboBox(m_xBuilder->weld_combo_box("NavElementWidget"))
     , m_xContent3Dispatch(new ToolbarUnoDispatcher(*m_xContent3ToolBox, *m_xBuilder, rxFrame))
     , m_xHeadingsMenu(m_xBuilder->weld_menu("headingsmenu"))
     , m_xDragModeMenu(m_xBuilder->weld_menu("dragmodemenu"))
@@ -627,6 +644,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
     m_xInsertMenu->connect_activate(LINK(this, SwNavigationPI, GlobalMenuSelectHdl));
     m_xGlobalToolBox->connect_menu_toggled(LINK(this, SwNavigationPI, ToolBoxClickHdl));
     m_xGlobalToolBox->set_item_active("globaltoggle", true);
+    m_xNavigateByComboBox->connect_changed(LINK(this, SwNavigationPI, NavigateByComboBoxSelectHdl));
 
 //  set toolbar of both modes to widest of each
     m_xGlobalToolBox->set_size_request(m_xContent1ToolBox->get_preferred_size().Width() +
@@ -697,6 +715,7 @@ SwNavigationPI::~SwNavigationPI()
     m_xUpdateMenu.reset();
     m_xInsertMenu.reset();
     m_xContent2Dispatch.reset();
+    m_xNavigateByComboBox.reset();
     m_xContent3Dispatch.reset();
     m_xContent1ToolBox.reset();
     m_xContent2ToolBox.reset();
@@ -1079,6 +1098,15 @@ IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
     // i.e. typically remaining in the spinbutton, or whatever other widget the
     // user moved to in the meantime
     EditAction();
+}
+
+void SwNavigationPI::SelectNavigateByContentType(const OUString& rContentTypeName)
+{
+    if (auto nPos = m_xNavigateByComboBox->find_text(rContentTypeName); nPos != -1)
+    {
+        m_xNavigateByComboBox->set_active(nPos);
+        UpdateNavigateBy();
+    }
 }
 
 IMPL_LINK_NOARG(SwNavigationPI, EditActionHdl, weld::Entry&, bool)

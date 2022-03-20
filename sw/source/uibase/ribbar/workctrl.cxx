@@ -211,26 +211,26 @@ rtl::OUStringConstExpr constexpr aNavigationImgIds[ NAVI_ENTRIES ] =
 
 const TranslateId aNavigationStrIds[ NAVI_ENTRIES ] =
 {
-    ST_TBL,
-    ST_FRM,
-    ST_GRF,
-    ST_OLE,
+    STR_CONTENT_TYPE_TABLE,
+    STR_CONTENT_TYPE_FRAME,
+    STR_CONTENT_TYPE_GRAPHIC,
+    STR_CONTENT_TYPE_OLE,
     ST_PGE,
-    ST_OUTL,
+    STR_CONTENT_TYPE_OUTLINE,
     ST_MARK,
-    ST_DRW,
+    STR_CONTENT_TYPE_DRAWOBJECT,
     ST_CTRL,
-    ST_REG,
-    ST_BKM,
+    STR_CONTENT_TYPE_REGION,
+    STR_CONTENT_TYPE_BOOKMARK,
     ST_SEL,
-    ST_FTN,
-    ST_POSTIT,
+    STR_CONTENT_TYPE_FOOTNOTE,
+    STR_CONTENT_TYPE_POSTIT,
     ST_SRCH_REP,
-    ST_INDEX_ENTRY,
+    STR_CONTENT_TYPE_INDEX,
     ST_TABLE_FORMULA,
     ST_TABLE_FORMULA_ERROR,
     ST_RECENCY,
-    ST_FIELD,
+    STR_CONTENT_TYPE_TEXTFIELD,
     ST_FIELD_BYTYPE
 };
 
@@ -744,14 +744,12 @@ IMPL_LINK(NavElementBox_Base, SelectHdl, weld::ComboBox&, rComboBox, void)
 {
     if (!rComboBox.changed_by_direct_pick())  // only when picked from the list
         return;
-
-    SvxSearchDialogWrapper::SetSearchLabel( SearchLabel::Empty );
-
-    sal_uInt16 nMoveType = rComboBox.get_active_id().toUInt32();
-    SwView::SetMoveType( nMoveType );
-
-    css::uno::Sequence< css::beans::PropertyValue > aArgs;
-    m_pCtrl->dispatchCommand( aArgs );
+    SfxUInt32Item aParam(FN_NAV_ELEMENT, rComboBox.get_active_id().toUInt32());
+    const SfxPoolItem* aArgs[2];
+    aArgs[0] = &aParam;
+    aArgs[1] = nullptr;
+    SfxDispatcher* pDispatch = SfxViewFrame::Current()->GetBindings().GetDispatcher();
+    pDispatch->Execute(FN_NAV_ELEMENT, SfxCallMode::SYNCHRON, aArgs);
 }
 
 void NavElementBox_Base::UpdateBox()
@@ -939,24 +937,6 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
     }
 
     return xItemWindow;
-}
-
-void NavElementToolBoxControl::dispatchCommand(
-    const uno::Sequence< beans::PropertyValue >& rArgs )
-{
-    uno::Reference< frame::XDispatchProvider > xDispatchProvider( m_xFrame, uno::UNO_QUERY );
-    if ( xDispatchProvider.is() )
-    {
-        util::URL                               aURL;
-        uno::Reference< frame::XDispatch >      xDispatch;
-        uno::Reference< util::XURLTransformer > xURLTransformer = getURLTransformer();
-
-        aURL.Complete = ".uno:NavElement";
-        xURLTransformer->parseStrict( aURL );
-        xDispatch = xDispatchProvider->queryDispatch( aURL, OUString(), 0 );
-        if ( xDispatch.is() )
-            xDispatch->dispatch( aURL, rArgs );
-    }
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface *
