@@ -512,6 +512,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/sidebar/NumberFormatControl \
     sc/source/ui/sidebar/NumberFormatPropertyPanel \
     sc/source/ui/sidebar/ScPanelFactory \
+    sc/source/ui/sparklines/SparklineData \
     sc/source/ui/StatisticsDialogs/AnalysisOfVarianceDialog \
     sc/source/ui/StatisticsDialogs/CorrelationDialog \
     sc/source/ui/StatisticsDialogs/CovarianceDialog \
@@ -549,6 +550,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/undo/undostyl \
     sc/source/ui/undo/undotab \
     sc/source/ui/undo/undoutil \
+    sc/source/ui/undo/UndoInsertSparkline \
     sc/source/ui/unoobj/ChartRangeSelectionListener \
     sc/source/ui/unoobj/addruno \
     sc/source/ui/unoobj/afmtuno \
