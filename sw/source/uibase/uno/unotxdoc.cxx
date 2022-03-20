@@ -2732,8 +2732,12 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
         else
         {
             aTmpSize = pVwSh->GetPageSize( nPage, bIsSkipEmptyPages );
-            aPageSize = awt::Size ( convertTwipToMm100( aTmpSize.Width() ),
-                                    convertTwipToMm100( aTmpSize.Height() ));
+            // tdf#147989: workaround the accumulation of roundings
+            auto nTmpWidth = convertTwipToMm100( aTmpSize.Width());
+            auto nTmpHeight = convertTwipToMm100( aTmpSize.Height());
+            nTmpWidth = 10 * round(nTmpWidth / 10);
+            nTmpHeight = 10 * round(nTmpHeight / 10);
+            aPageSize = awt::Size ( nTmpWidth, nTmpHeight );
             Point aPoint = pVwSh->GetPagePos(nPage);
             aPagePos = awt::Point(convertTwipToMm100(aPoint.X()), convertTwipToMm100(aPoint.Y()));
         }
