@@ -163,8 +163,20 @@ static RTFValue::Pointer_t getDefaultSPRM(Id const id, Id nStyleType)
     {
         switch (id)
         {
-            case NS_ooxml::LN_EG_RPrBase_b:
+            case NS_ooxml::LN_EG_RPrBase_szCs:
+            case NS_ooxml::LN_EG_RPrBase_sz:
+                return new RTFValue(24);
+            case NS_ooxml::LN_CT_Color_val:
                 return new RTFValue(0);
+            case NS_ooxml::LN_EG_RPrBase_b:
+            case NS_ooxml::LN_EG_RPrBase_i:
+                return new RTFValue(0);
+            case NS_ooxml::LN_CT_Underline_val:
+                return new RTFValue(NS_ooxml::LN_Value_ST_Underline_none);
+            case NS_ooxml::LN_CT_Fonts_ascii:
+            case NS_ooxml::LN_CT_Fonts_eastAsia:
+            case NS_ooxml::LN_CT_Fonts_cs:
+                return new RTFValue("Times New Roman");
             default:
                 break;
         }
