@@ -1583,6 +1583,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
     // Determine range for Undo.
     // We don't need this during import of a file to a new sheet or document...
     bool bDetermineRange = bUndo;
+    bool bColumnsAreDetermined = false;
 
     // Row heights don't need to be adjusted on the fly if EndPaste() is called
     // afterwards, which happens only if bDetermineRange. This variable also
@@ -1622,19 +1623,23 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             {
                 if (bDetermineRange)
                 {
-                    // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it
-                    // is only an overflow if there is really data following to
-                    // be put behind the last column, which doesn't happen if
-                    // info is SC_COL_SKIP.
-                    for (i=0; i < nInfoCount && nCol <= rDoc.MaxCol()+1; ++i)
+                    if (!bColumnsAreDetermined)
                     {
-                        const sal_uInt8 nFmt = pColFormat[i];
-                        if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
+                        // Yes, the check is nCol<=rDoc.MaxCol()+1, +1 because it
+                        // is only an overflow if there is really data following to
+                        // be put behind the last column, which doesn't happen if
+                        // info is SC_COL_SKIP.
+                        for (i=0; i < nInfoCount && nCol <= rDoc.MaxCol()+1; ++i)
                         {
-                            if (nCol > rDoc.MaxCol())
-                                bOverflowCol = true;    // display warning on import
-                            ++nCol;
+                            const sal_uInt8 nFmt = pColFormat[i];
+                            if (nFmt != SC_COL_SKIP)        // otherwise don't increment nCol either
+                            {
+                                if (nCol > rDoc.MaxCol())
+                                    bOverflowCol = true;    // display warning on import
+                                ++nCol;
+                            }
                         }
+                        bColumnsAreDetermined = true;
                     }
                 }
                 else
