@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60a21247_54f38f5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-20T21:13:16Z",
+      "side": 1,
+      "message": "I don\u0027t have an objection if you want to to this. In the end I just decided to adopt the two functions we needed and retain the notice of their origin.",
+      "revId": "e18f7128d54d394c0fd19b244cd9d6e651e0bd97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
