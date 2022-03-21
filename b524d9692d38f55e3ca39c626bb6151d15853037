@@ -52,6 +52,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d00ee41d_1c16c45e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-21T08:46:33Z",
+      "side": 1,
+      "message": "The request was to use this from an extension, thus the UNO service.",
+      "parentUuid": "61154659_39952f57",
+      "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8019629_fe7acb65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-21T08:46:33Z",
+      "side": 1,
+      "message": "Ok, I tried to use COMReference, but I\u0027m not sure I used it correctly.",
+      "parentUuid": "b4a23c47_49d66c07",
+      "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdbd3481_5ca6afc7",
@@ -65,6 +101,30 @@
       "writtenOn": "2022-03-17T20:37:10Z",
       "side": 1,
       "message": "\"IShellLink\" is a macro, that translates either to IShellLinkA (default), or IShellLinkW (not our case). You need to use IShellLinkW explicitly, and avoid all those reinterpret_casts. That would likely fix the issue.",
+      "range": {
+        "startLine": 135,
+        "startChar": 8,
+        "endLine": 135,
+        "endChar": 18
+      },
+      "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd9d8b2a_0db22a0b",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-21T08:46:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bdbd3481_5ca6afc7",
       "range": {
         "startLine": 135,
         "startChar": 8,

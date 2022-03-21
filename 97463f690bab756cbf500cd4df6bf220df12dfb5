@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40f20816_19317e82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-21T08:46:33Z",
+      "side": 1,
+      "message": "This now crashes in AppendCategory call.\nAny idea what might be wrong now?",
+      "revId": "97463f690bab756cbf500cd4df6bf220df12dfb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
