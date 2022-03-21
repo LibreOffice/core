@@ -933,7 +933,8 @@ private:
     /// Raw default font index, use getFont() on it to get a real one.
     int m_nDefaultFontIndex;
 
-    RTFReferenceTable::Entries_t m_aStyleTableEntries;
+    /// To avoid copying entries between DomainMapper instances it is stored as pointer
+    std::shared_ptr<RTFReferenceTable::Entries_t> m_pStyleTableEntries;
     int m_nCurrentStyleIndex;
     bool m_bFormField;
     /// For the INCLUDEPICTURE field's argument.

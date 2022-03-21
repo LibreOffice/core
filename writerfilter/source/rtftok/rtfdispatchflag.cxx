@@ -520,12 +520,8 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 {
                     m_aStates.top().getParagraphSprms().set(NS_ooxml::LN_CT_PPrBase_pStyle,
                                                             new RTFValue(aName));
-                    m_aStates.top().setCurrentStyleIndex(0);
                 }
-                else
-                {
-                    m_aStates.top().setCurrentStyleIndex(-1);
-                }
+                m_aStates.top().setCurrentStyleIndex(0);
             }
             // Need to send paragraph properties again, if there will be any.
             m_bNeedPap = true;

@@ -1324,6 +1324,21 @@ DECLARE_RTFEXPORT_TEST(testTdf131234, "tdf131234.rtf")
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE, getProperty<awt::FontSlant>(xRun, "CharPosture"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf118047, "tdf118047.rtf")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+
+    // Ensure that default "Normal" style properties are not applied to text:
+    // text remains with fontsize 12pt and no huge margin below
+    CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(getRun(xPara, 1), "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getParagraph(1), "ParaBottomMargin"));
+
+    // Same for header, it should not derive props from "Normal" style
+    CPPUNIT_ASSERT_EQUAL(OUString("Header"), parseDump("/root/page[1]/header/txt/text()"));
+    sal_Int32 nHeight = parseDump("/root/page[1]/header/infos/bounds", "height").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
