@@ -63,30 +63,7 @@ sal_Int32 rtl_ustr_indexOfAscii_WithLength(
     sal_Unicode const * str, sal_Int32 len,
     char const * subStr, sal_Int32 subLen) SAL_THROW_EXTERN_C()
 {
-    assert(len >= 0);
-    assert(subLen >= 0);
-    if (subLen > 0 && subLen <= len)
-    {
-        sal_Unicode const* end = str + len;
-        sal_Unicode const* cursor = str;
-
-        while(cursor < end)
-        {
-            cursor = std::char_traits<sal_Unicode>::find(cursor, end - cursor, *subStr);
-            if(!cursor || (end - cursor < subLen))
-            {
-                /* no enough left to actually have a match */
-                break;
-            }
-            /* now it is worth trying a full match */
-            if (subLen == 1 || rtl_ustr_asciil_reverseEquals_WithLength(cursor, subStr, subLen))
-            {
-                return cursor - str;
-            }
-            cursor += 1;
-        }
-    }
-    return -1;
+    return rtl::str::indexOfStr_WithLength(str, len, subStr, subLen);
 }
 
 sal_Int32 rtl_ustr_lastIndexOfAscii_WithLength(
