@@ -2262,7 +2262,7 @@ bool WW8PLCFspecial::GetData(tools::Long nInIdx, WW8_CP& rPos, void*& rpValue) c
 // Ctor for *others* than Fkps
 // With nStartPos < 0, the first element of PLCFs will be taken
 WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-    WW8_CP nStartPos) : nIdx(0), nStru(nStruct)
+    WW8_CP nStartPos) : m_nIdx(0), m_nStru(nStruct)
 {
     if (nPLCF < 0)
     {
@@ -2270,7 +2270,7 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
         nPLCF = 0;
     }
     else
-        nIMax = (nPLCF - 4) / (4 + nStruct);
+        m_nIMax = (nPLCF - 4) / (4 + nStruct);
 
     ReadPLCF(rSt, nFilePos, nPLCF);
 
@@ -2284,18 +2284,18 @@ WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
 // lack of resources and for WordPad (W95).
 // With nStartPos < 0, the first element of the PLCFs is taken.
 WW8PLCF::WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
-    WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN): nIdx(0),
-    nStru(nStruct)
+    WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN): m_nIdx(0),
+    m_nStru(nStruct)
 {
     if (nPLCF < 0)
     {
         SAL_WARN("sw.ww8", "broken WW8PLCF, ignoring");
-        nIMax = SAL_MAX_INT32;
+        m_nIMax = SAL_MAX_INT32;
     }
     else
-        nIMax = (nPLCF - 4) / (4 + nStruct);
+        m_nIMax = (nPLCF - 4) / (4 + nStruct);
 
-    if( nIMax >= ncpN )
+    if( m_nIMax >= ncpN )
         ReadPLCF(rSt, nFilePos, nPLCF);
     else
         GeneratePLCF(rSt, nPN, ncpN);
@@ -2314,12 +2314,12 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
     {
         // Pointer to Pos-array
         const size_t nEntries = (nPLCF + 3) / 4;
-        pPLCF_PosArray.reset(new WW8_CP[nEntries]);
-        bValid = checkRead(rSt, pPLCF_PosArray.get(), nPLCF);
+        m_pPLCF_PosArray.reset(new WW8_CP[nEntries]);
+        bValid = checkRead(rSt, m_pPLCF_PosArray.get(), nPLCF);
         size_t nBytesAllocated = nEntries * sizeof(WW8_CP);
         if (bValid && nPLCF != nBytesAllocated)
         {
-            sal_uInt8* pStartBlock = reinterpret_cast<sal_uInt8*>(pPLCF_PosArray.get());
+            sal_uInt8* pStartBlock = reinterpret_cast<sal_uInt8*>(m_pPLCF_PosArray.get());
             memset(pStartBlock + nPLCF, 0, nBytesAllocated - nPLCF);
         }
     }
@@ -2332,7 +2332,7 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
         nIdx = 0;
 #endif // OSL_BIGENDIAN
         // Pointer to content array
-        pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
+        m_pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&m_pPLCF_PosArray[m_nIMax + 1]);
 
         TruncToSortedRange();
     }
@@ -2347,10 +2347,10 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 
 void WW8PLCF::MakeFailedPLCF()
 {
-    nIMax = 0;
-    pPLCF_PosArray.reset( new WW8_CP[2] );
-    pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
-    pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
+    m_nIMax = 0;
+    m_pPLCF_PosArray.reset( new WW8_CP[2] );
+    m_pPLCF_PosArray[0] = m_pPLCF_PosArray[1] = WW8_CP_MAX;
+    m_pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&m_pPLCF_PosArray[m_nIMax + 1]);
 }
 
 namespace
@@ -2379,17 +2379,17 @@ void WW8PLCFpcd::TruncToSortedRange()
 
 void WW8PLCF::TruncToSortedRange()
 {
-    nIMax = ::TruncToSortedRange(pPLCF_PosArray.get(), nIMax);
+    m_nIMax = ::TruncToSortedRange(m_pPLCF_PosArray.get(), m_nIMax);
 }
 
 void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 {
-    OSL_ENSURE( nIMax < ncpN, "Pcl.Fkp: Why is PLCF too big?" );
+    OSL_ENSURE( m_nIMax < ncpN, "Pcl.Fkp: Why is PLCF too big?" );
 
     bool failure = false;
-    nIMax = ncpN;
+    m_nIMax = ncpN;
 
-    if ((nIMax < 1) || (nIMax > (WW8_CP_MAX - 4) / (4 + nStru)) || nPN < 0)
+    if ((m_nIMax < 1) || (m_nIMax > (WW8_CP_MAX - 4) / (4 + m_nStru)) || nPN < 0)
         failure = true;
 
     if (!failure)
@@ -2401,9 +2401,9 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
     if (!failure)
     {
-        size_t nSiz = (4 + nStru) * nIMax + 4;
+        size_t nSiz = (4 + m_nStru) * m_nIMax + 4;
         size_t nElems = ( nSiz + 3 ) / 4;
-        pPLCF_PosArray.reset( new WW8_CP[ nElems ] ); // Pointer to Pos-array
+        m_pPLCF_PosArray.reset( new WW8_CP[ nElems ] ); // Pointer to Pos-array
 
         for (sal_Int32 i = 0; i < ncpN && !failure; ++i)
         {
@@ -2415,7 +2415,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
             WW8_CP nFc(0);
             rSt.ReadInt32( nFc );
-            pPLCF_PosArray[i] = nFc;
+            m_pPLCF_PosArray[i] = nFc;
 
             failure = bool(rSt.GetError());
         }
@@ -2427,7 +2427,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
         {
             failure = true;
 
-            std::size_t nLastFkpPos = nPN + nIMax - 1;
+            std::size_t nLastFkpPos = nPN + m_nIMax - 1;
             nLastFkpPos = nLastFkpPos << 9;
             // number of FC entries of last Fkp
             if (!checkSeek(rSt, nLastFkpPos + 511))
@@ -2441,7 +2441,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
 
             WW8_CP nFc(0);
             rSt.ReadInt32( nFc );
-            pPLCF_PosArray[nIMax] = nFc;        // end of the last Fkp
+            m_pPLCF_PosArray[m_nIMax] = nFc;        // end of the last Fkp
 
             failure = bool(rSt.GetError());
         } while(false);
@@ -2450,13 +2450,13 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
     if (!failure)
     {
         // Pointer to content array
-        pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
-        sal_uInt8* p = pPLCF_Contents;
+        m_pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&m_pPLCF_PosArray[m_nIMax + 1]);
+        sal_uInt8* p = m_pPLCF_Contents;
 
         for (sal_Int32 i = 0; i < ncpN; ++i)         // construct PNs
         {
             ShortToSVBT16(o3tl::narrowing<sal_uInt16>(nPN + i), p);
-            p += nStru;
+            p += m_nStru;
         }
     }
 
@@ -2470,57 +2470,57 @@ bool WW8PLCF::SeekPos(WW8_CP nPos)
 {
     WW8_CP nP = nPos;
 
-    if( nP < pPLCF_PosArray[0] )
+    if( nP < m_pPLCF_PosArray[0] )
     {
-        nIdx = 0;
+        m_nIdx = 0;
         // not found: nPos less than smallest entry
         return false;
     }
 
     // Search from beginning?
-    if ((nIdx < 1) || (nP < pPLCF_PosArray[nIdx - 1]))
-        nIdx = 1;
+    if ((m_nIdx < 1) || (nP < m_pPLCF_PosArray[m_nIdx - 1]))
+        m_nIdx = 1;
 
-    sal_Int32 nI   = nIdx;
-    sal_Int32 nEnd = nIMax;
+    sal_Int32 nI   = m_nIdx;
+    sal_Int32 nEnd = m_nIMax;
 
-    for(int n = (1==nIdx ? 1 : 2); n; --n )
+    for(int n = (1==m_nIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)             // search with an index that is incremented by 1
         {
-            if( nP < pPLCF_PosArray[nI] )   // found position
+            if( nP < m_pPLCF_PosArray[nI] )   // found position
             {
-                nIdx = nI - 1;              // nI - 1 is the correct index
+                m_nIdx = nI - 1;              // nI - 1 is the correct index
                 return true;                // done
             }
         }
         nI   = 1;
-        nEnd = nIdx-1;
+        nEnd = m_nIdx-1;
     }
 
-    nIdx = nIMax;               // not found, greater than all entries
+    m_nIdx = m_nIMax;               // not found, greater than all entries
     return false;
 }
 
 bool WW8PLCF::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
 {
-    if ( nIdx >= nIMax )
+    if ( m_nIdx >= m_nIMax )
     {
         rStart = rEnd = WW8_CP_MAX;
         return false;
     }
-    rStart = pPLCF_PosArray[ nIdx ];
-    rEnd   = pPLCF_PosArray[ nIdx + 1 ];
-    rpValue = static_cast<void*>(&pPLCF_Contents[nIdx * nStru]);
+    rStart = m_pPLCF_PosArray[ m_nIdx ];
+    rEnd   = m_pPLCF_PosArray[ m_nIdx + 1 ];
+    rpValue = static_cast<void*>(&m_pPLCF_Contents[m_nIdx * m_nStru]);
     return true;
 }
 
 WW8_CP WW8PLCF::Where() const
 {
-    if ( nIdx >= nIMax )
+    if ( m_nIdx >= m_nIMax )
         return WW8_CP_MAX;
 
-    return pPLCF_PosArray[nIdx];
+    return m_pPLCF_PosArray[m_nIdx];
 }
 
 WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
@@ -6733,7 +6733,7 @@ void MSOFactoidType::Read(SvStream& rStream)
 
 void MSOFactoidType::Write(WW8Export& rExport)
 {
-    SvStream& rStream = *rExport.pTableStrm;
+    SvStream& rStream = *rExport.m_pTableStrm;
 
     SvMemoryStream aStream;
     aStream.WriteUInt32(m_nId); // id
@@ -6782,7 +6782,7 @@ void MSOPropertyBagStore::Read(SvStream& rStream)
 
 void MSOPropertyBagStore::Write(WW8Export& rExport)
 {
-    SvStream& rStream = *rExport.pTableStrm;
+    SvStream& rStream = *rExport.m_pTableStrm;
     rStream.WriteUInt32(m_aFactoidTypes.size()); // cFactoidType
     for (MSOFactoidType& rType : m_aFactoidTypes)
         rType.Write(rExport);
@@ -6843,7 +6843,7 @@ bool MSOPropertyBag::Read(SvStream& rStream)
 
 void MSOPropertyBag::Write(WW8Export& rExport)
 {
-    SvStream& rStream = *rExport.pTableStrm;
+    SvStream& rStream = *rExport.m_pTableStrm;
     rStream.WriteUInt16(m_nId);
     rStream.WriteUInt16(m_aProperties.size());
     rStream.WriteUInt16(0); // cbUnknown
@@ -7512,9 +7512,9 @@ const WW8_FFN* WW8Fonts::GetFont( sal_uInt16 nNum ) const
 //  -> maybe we can get a right result then
 
 WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib const & rFib, WW8Dop const & rDop )
-    : aPLCF(*pSt, rFib.m_fcPlcfhdd , rFib.m_lcbPlcfhdd , 0)
+    : m_aPLCF(*pSt, rFib.m_fcPlcfhdd , rFib.m_lcbPlcfhdd , 0)
 {
-    nIdxOffset = 0;
+    m_nIdxOffset = 0;
 
      /*
       This dop.grpfIhdt has a bit set for each special
@@ -7530,14 +7530,14 @@ WW8PLCF_HdFt::WW8PLCF_HdFt( SvStream* pSt, WW8Fib const & rFib, WW8Dop const & r
       */
     for( sal_uInt8 nI = 0x1; nI <= 0x20; nI <<= 1 )
         if( nI & rDop.grpfIhdt )                // bit set?
-            nIdxOffset++;
+            m_nIdxOffset++;
 }
 
 bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rStart,
     WW8_CP& rLen)
 {
     sal_uInt8 nI = 0x01;
-    short nIdx = nIdxOffset;
+    short nIdx = m_nIdxOffset;
     while (true)
     {
         if( nI & nWhich )
@@ -7552,8 +7552,8 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
     WW8_CP nEnd;
     void* pData;
 
-    aPLCF.SetIdx( nIdx );               // Lookup suitable CP
-    aPLCF.Get( rStart, nEnd, pData );
+    m_aPLCF.SetIdx( nIdx );               // Lookup suitable CP
+    m_aPLCF.Get( rStart, nEnd, pData );
     if (nEnd < rStart)
     {
         SAL_WARN("sw.ww8", "End " << nEnd << " before Start " << rStart);
@@ -7567,7 +7567,7 @@ bool WW8PLCF_HdFt::GetTextPos(sal_uInt8 grpfIhdt, sal_uInt8 nWhich, WW8_CP& rSta
         return false;
     }
 
-    aPLCF.advance();
+    m_aPLCF.advance();
 
     return true;
 }
@@ -7577,8 +7577,8 @@ void WW8PLCF_HdFt::GetTextPosExact(short nIdx, WW8_CP& rStart, WW8_CP& rLen)
     WW8_CP nEnd;
     void* pData;
 
-    aPLCF.SetIdx( nIdx );               // Lookup suitable CP
-    aPLCF.Get( rStart, nEnd, pData );
+    m_aPLCF.SetIdx( nIdx );               // Lookup suitable CP
+    m_aPLCF.Get( rStart, nEnd, pData );
     if (nEnd < rStart)
     {
         SAL_WARN("sw.ww8", "End " << nEnd << " before Start " << rStart);
@@ -7597,7 +7597,7 @@ void WW8PLCF_HdFt::UpdateIndex( sal_uInt8 grpfIhdt )
     // Caution: Description is not correct
     for( sal_uInt8 nI = 0x01; nI <= 0x20; nI <<= 1 )
         if( nI & grpfIhdt )
-            nIdxOffset++;
+            m_nIdxOffset++;
 }
 
 WW8Dop::WW8Dop(SvStream& rSt, sal_Int16 nFib, sal_Int32 nPos, sal_uInt32 nSize):

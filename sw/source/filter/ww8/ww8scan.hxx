@@ -294,11 +294,11 @@ private:
 class WW8PLCF                       // Iterator for PLCFs
 {
 private:
-    std::unique_ptr<WW8_CP[]> pPLCF_PosArray; // pointer to Pos-array and the whole structure
-    sal_uInt8* pPLCF_Contents;   // pointer to content-array-part of Pos-array
-    sal_Int32 nIMax;            // number of elements
-    sal_Int32 nIdx;
-    int nStru;
+    std::unique_ptr<WW8_CP[]> m_pPLCF_PosArray; // pointer to Pos-array and the whole structure
+    sal_uInt8* m_pPLCF_Contents;   // pointer to content-array-part of Pos-array
+    sal_Int32 m_nIMax;            // number of elements
+    sal_Int32 m_nIdx;
+    int m_nStru;
 
     void ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF);
 
@@ -321,18 +321,18 @@ public:
     WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
         WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN);
 
-    sal_Int32 GetIdx() const { return nIdx; }
-    void SetIdx( sal_Int32 nI ) { nIdx = nI; }
-    sal_Int32 GetIMax() const { return nIMax; }
+    sal_Int32 GetIdx() const { return m_nIdx; }
+    void SetIdx( sal_Int32 nI ) { m_nIdx = nI; }
+    sal_Int32 GetIMax() const { return m_nIMax; }
     bool SeekPos(WW8_CP nPos);
     WW8_CP Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
-    void advance() { if( nIdx < nIMax ) ++nIdx; }
+    void advance() { if( m_nIdx < m_nIMax ) ++m_nIdx; }
 
     const void* GetData( sal_Int32 nInIdx ) const
     {
-        return ( nInIdx >= nIMax ) ? nullptr :
-            static_cast<const void*>(&pPLCF_Contents[nInIdx * nStru]);
+        return ( nInIdx >= m_nIMax ) ? nullptr :
+            static_cast<const void*>(&m_pPLCF_Contents[nInIdx * m_nStru]);
     }
 };
 
@@ -1850,8 +1850,8 @@ public:
 class WW8PLCF_HdFt
 {
 private:
-    WW8PLCF aPLCF;
-    short nIdxOffset;
+    WW8PLCF m_aPLCF;
+    short m_nIdxOffset;
 
 public:
     WW8PLCF_HdFt( SvStream* pSt, WW8Fib const & rFib, WW8Dop const & rDop );

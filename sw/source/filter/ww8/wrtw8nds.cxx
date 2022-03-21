@@ -880,7 +880,7 @@ const SfxPoolItem* SwWW8AttrIter::HasTextItem( sal_uInt16 nWhich ) const
 
 void WW8Export::GetCurrentItems(ww::bytes &rItems) const
 {
-    rItems.insert(rItems.end(), pO->begin(), pO->end());
+    rItems.insert(rItems.end(), m_pO->begin(), m_pO->end());
 }
 
 const SfxPoolItem& SwWW8AttrIter::GetItem(sal_uInt16 nWhich) const
@@ -904,7 +904,7 @@ void WW8AttributeOutput::StartRuby( const SwTextNode& rNode, sal_Int32 /*nPos*/,
     aStr += rRuby.GetText() + ")";
 
     // The parameter separator depends on the FIB.lid
-    if ( m_rWW8Export.pFib->getNumDecimalSep() == '.' )
+    if ( m_rWW8Export.m_pFib->getNumDecimalSep() == '.' )
         aStr += ",";
     else
         aStr += ";";
@@ -1052,7 +1052,7 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
     m_rWW8Export.OutputField( nullptr, ww::eHYPERLINK, sURL, FieldFlags::Start | FieldFlags::CmdStart );
 
     // write the reference to the "picture" structure
-    sal_uInt64 nDataStt = m_rWW8Export.pDataStrm->Tell();
+    sal_uInt64 nDataStt = m_rWW8Export.m_pDataStrm->Tell();
     m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() );
 
     // WinWord 2000 doesn't write this - so it's a temp solution by W97 ?
@@ -1097,22 +1097,22 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
         0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
     };
 
-    m_rWW8Export.pDataStrm->WriteBytes(aURLData1, sizeof(aURLData1));
+    m_rWW8Export.m_pDataStrm->WriteBytes(aURLData1, sizeof(aURLData1));
     /* Write HFD Structure */
     sal_uInt8 nAnchor = 0x00;
     if ( !sMark.isEmpty() )
         nAnchor = 0x08;
-    m_rWW8Export.pDataStrm->WriteUChar(nAnchor); // HFDBits
-    m_rWW8Export.pDataStrm->WriteBytes(MAGIC_A, sizeof(MAGIC_A)); //clsid
+    m_rWW8Export.m_pDataStrm->WriteUChar(nAnchor); // HFDBits
+    m_rWW8Export.m_pDataStrm->WriteBytes(MAGIC_A, sizeof(MAGIC_A)); //clsid
 
     /* Write Hyperlink Object see [MS-OSHARED] spec*/
-    SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 0x00000002);
+    SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, 0x00000002);
     sal_uInt32 nFlag = bBookMarkOnly ? 0 : 0x01;
     if ( bAbsolute )
         nFlag |= 0x02;
     if ( !sMark.isEmpty() )
         nFlag |= 0x08;
-    SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, nFlag );
+    SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, nFlag );
 
     INetProtocol eProto = aURL.GetProtocol();
     if ( eProto == INetProtocol::File || eProto == INetProtocol::Smb )
@@ -1155,16 +1155,16 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
             sURL = sURL.copy( sizeof(pSmb)-3 ).replaceAll( "/", "\\" );
         }
 
-        m_rWW8Export.pDataStrm->WriteBytes(MAGIC_C, sizeof(MAGIC_C));
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, sURL.getLength()+1 );
-        SwWW8Writer::WriteString8( *m_rWW8Export.pDataStrm, sURL, true,
+        m_rWW8Export.m_pDataStrm->WriteBytes(MAGIC_C, sizeof(MAGIC_C));
+        SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, sURL.getLength()+1 );
+        SwWW8Writer::WriteString8( *m_rWW8Export.m_pDataStrm, sURL, true,
                                     RTL_TEXTENCODING_MS_1252 );
-        m_rWW8Export.pDataStrm->WriteBytes(MAGIC_D, sizeof(MAGIC_D));
+        m_rWW8Export.m_pDataStrm->WriteBytes(MAGIC_D, sizeof(MAGIC_D));
 
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2*sURL.getLength() + 6 );
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2*sURL.getLength() );
-        SwWW8Writer::WriteShort( *m_rWW8Export.pDataStrm, 3 );
-        SwWW8Writer::WriteString16( *m_rWW8Export.pDataStrm, sURL, false );
+        SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, 2*sURL.getLength() + 6 );
+        SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, 2*sURL.getLength() );
+        SwWW8Writer::WriteShort( *m_rWW8Export.m_pDataStrm, 3 );
+        SwWW8Writer::WriteString16( *m_rWW8Export.m_pDataStrm, sURL, false );
     }
     else if ( eProto != INetProtocol::NotValid )
     {
@@ -1177,18 +1177,18 @@ bool WW8AttributeOutput::StartURL( const OUString &rUrl, const OUString &rTarget
             0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
         };
 
-        m_rWW8Export.pDataStrm->WriteBytes(MAGIC_B, sizeof(MAGIC_B));
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, 2 * ( sURL.getLength() + 1 ) );
-        SwWW8Writer::WriteString16( *m_rWW8Export.pDataStrm, sURL, true );
+        m_rWW8Export.m_pDataStrm->WriteBytes(MAGIC_B, sizeof(MAGIC_B));
+        SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, 2 * ( sURL.getLength() + 1 ) );
+        SwWW8Writer::WriteString16( *m_rWW8Export.m_pDataStrm, sURL, true );
     }
 
     if ( !sMark.isEmpty() )
     {
-        SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, sMark.getLength()+1 );
-        SwWW8Writer::WriteString16( *m_rWW8Export.pDataStrm, sMark, true );
+        SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, sMark.getLength()+1 );
+        SwWW8Writer::WriteString16( *m_rWW8Export.m_pDataStrm, sMark, true );
     }
-    SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, nDataStt,
-        m_rWW8Export.pDataStrm->Tell() - nDataStt );
+    SwWW8Writer::WriteLong( *m_rWW8Export.m_pDataStrm, nDataStt,
+        m_rWW8Export.m_pDataStrm->Tell() - nDataStt );
 
     return true;
 }
@@ -1847,13 +1847,13 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
-    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // Style #
+    m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), nSty, nSty+2 );     // Style #
 
     m_rWW8Export.InsUInt16( NS_sprm::PPc::val );            // Alignment (sprmPPc)
-    m_rWW8Export.pO->push_back( 0x20 );
+    m_rWW8Export.m_pO->push_back( 0x20 );
 
     m_rWW8Export.InsUInt16( NS_sprm::PWr::val );            // Wrapping (sprmPWr)
-    m_rWW8Export.pO->push_back( 0x02 );
+    m_rWW8Export.m_pO->push_back( 0x02 );
 
     m_rWW8Export.InsUInt16( NS_sprm::PDcs::val );            // Dropcap (sprmPDcs)
     int nDCS = ( nDropLines << 3 ) | 0x01;
@@ -1879,8 +1879,8 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
         TableInfoCell( pTextNodeInfoInner );
     }
 
-    m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
-    m_rWW8Export.pO->clear();
+    m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
+    m_rWW8Export.m_pO->clear();
 
     if ( rNode.GetDropSize( rFontHeight, rDropHeight, rDropDescent ) )
     {
@@ -1898,8 +1898,8 @@ void WW8AttributeOutput::FormatDrop( const SwTextNode& rNode, const SwFormatDrop
         m_rWW8Export.InsUInt16( static_cast< sal_uInt16 >( rFontHeight / 10 ) );
     }
 
-    m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
-    m_rWW8Export.pO->clear();
+    m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
+    m_rWW8Export.m_pO->clear();
 }
 
 sal_Int32 MSWordExportBase::GetNextPos( SwWW8AttrIter const * aAttrIter, const SwTextNode& rNode, sal_Int32 nCurrentPos )
@@ -3375,7 +3375,7 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
 
 void WW8Export::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFormat* pFormat, sal_uLong nLnNum )
 {
-    pSepx->AppendSep(Fc2Cp(Strm().Tell()), pPageDesc, pFormat, nLnNum);
+    m_pSepx->AppendSep(Fc2Cp(Strm().Tell()), pPageDesc, pFormat, nLnNum);
 }
 
 // Flys
@@ -3521,8 +3521,8 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
 
     case RedlineType::Format:
         m_rWW8Export.InsUInt16( NS_sprm::CPropRMark90::val );
-        m_rWW8Export.pO->push_back( 7 );       // len
-        m_rWW8Export.pO->push_back( 1 );
+        m_rWW8Export.m_pO->push_back( 7 );       // len
+        m_rWW8Export.m_pO->push_back( 1 );
         m_rWW8Export.InsUInt16( m_rWW8Export.AddRedlineAuthor( pRedline->GetAuthor() ) );
         m_rWW8Export.InsUInt32( sw::ms::DateTime2DTTM( pRedline->GetTimeStamp() ));
         break;
@@ -3534,7 +3534,7 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     if ( pSprmIds )
     {
         m_rWW8Export.InsUInt16( pSprmIds[0] );
-        m_rWW8Export.pO->push_back( 1 );
+        m_rWW8Export.m_pO->push_back( 1 );
 
         m_rWW8Export.InsUInt16( pSprmIds[1] );
         m_rWW8Export.InsUInt16( m_rWW8Export.AddRedlineAuthor( pRedline->GetAuthor() ) );
