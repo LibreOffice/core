@@ -167,6 +167,10 @@ public:
 typedef ::std::pair< const OUString, ::std::vector< NamePasswordRecord > > PairUrlRecord;
 typedef ::std::map< OUString, ::std::vector< NamePasswordRecord > > PasswordMap;
 
+// org.openoffice.Office.Common/Passwords/StorageVersion bump if details of
+// how password details are saved changes. Enables migration from previous
+// schemes.
+constexpr sal_Int32 nCurrentStorageVersion = 1;
 
 class PasswordContainer;
 
@@ -194,6 +198,8 @@ public:
     void update( const OUString& url, const NamePasswordRecord& rec );
     void remove( const OUString& url, const OUString& rec );
     void clear();
+
+    sal_Int32 getStorageVersion();
 
     bool getEncodedMasterPassword( OUString& aResult );
     void setEncodedMasterPassword( const OUString& aResult, bool bAcceptEmpty = false );
