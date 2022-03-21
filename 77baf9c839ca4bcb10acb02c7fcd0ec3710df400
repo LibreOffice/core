@@ -16,6 +16,23 @@
       "message": "Two more needed.",
       "revId": "77baf9c839ca4bcb10acb02c7fcd0ec3710df400",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bda7fe67_babe8cda",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-21T07:47:52Z",
+      "side": 1,
+      "message": "Michael and myself already reviewed this, I think.",
+      "revId": "77baf9c839ca4bcb10acb02c7fcd0ec3710df400",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
