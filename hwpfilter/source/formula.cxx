@@ -191,11 +191,11 @@ void Formula::makeIdentifier(Node *res)
      case ID_CHARACTER :
 #ifdef DEBUG
           inds;
-          fprintf(stderr,"<math:mi>%s</math:mi>\n",tmp->value);
+          fprintf(stderr,"<math:mi>%s</math:mi>\n",tmp->value.get());
           indo;
 #else
           rstartEl("math:mi", mxList);
-          rchars(OUString::createFromAscii(tmp->value));
+          rchars(OUString::createFromAscii(tmp->value.get()));
           rendEl("math:mi");
 #endif
           break;
@@ -204,7 +204,7 @@ void Formula::makeIdentifier(Node *res)
 #ifdef DEBUG
 #else
                 rstartEl("math:mi", mxList);
-                reucstr(tmp->value, strlen(tmp->value));
+                reucstr(tmp->value.get(), strlen(tmp->value.get()));
                 rendEl("math:mi");
 #endif
           }
@@ -213,22 +213,22 @@ void Formula::makeIdentifier(Node *res)
 #ifdef DEBUG
           inds;
           fprintf(stderr,"<math:mi>%s</math:mi>\n",
-                  getMathMLEntity(tmp->value).c_str());
+                  getMathMLEntity(tmp->value.get()).c_str());
           indo;
 #else
           rstartEl("math:mi", mxList);
-          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value)));
+          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
           rendEl("math:mi");
 #endif
           break;
      case ID_NUMBER :
 #ifdef DEBUG
           inds;
-          fprintf(stderr,"<math:mn>%s</math:mn>\n",tmp->value);
+          fprintf(stderr,"<math:mn>%s</math:mn>\n",tmp->value.get());
           indo;
 #else
           rstartEl("math:mn", mxList);
-          rchars(OUString::createFromAscii(tmp->value));
+          rchars(OUString::createFromAscii(tmp->value.get()));
           rendEl("math:mn");
 #endif
           break;
@@ -236,10 +236,10 @@ void Formula::makeIdentifier(Node *res)
      case ID_DELIMITER :
         {
 #ifdef DEBUG
-          inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value); indo;
+          inds; fprintf(stderr,"<math:mo>%s</math:mo>\n",tmp->value.get()); indo;
 #else
           rstartEl("math:mo", mxList);
-          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value)));
+          runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
           rendEl("math:mo");
 #endif
           break;
@@ -370,7 +370,7 @@ void Formula::makeDecoration(Node *res)
      int isover = 1;
      Node *tmp = res->child;
      if( !tmp ) return;
-     if( !strncmp(tmp->value,"under", 5) )
+     if( !strncmp(tmp->value.get(),"under", 5) )
           isover = 0;
 #ifdef DEBUG
      inds;
@@ -396,11 +396,11 @@ void Formula::makeDecoration(Node *res)
 #ifdef DEBUG
      inds;
      fprintf(stderr,"<math:mo>%s</math:mo>\n",
-             getMathMLEntity(tmp->value).c_str());
+             getMathMLEntity(tmp->value.get()).c_str());
      indo;
 #else
      rstartEl("math:mo", mxList);
-     runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value)));
+     runistr(fromHcharStringToOUString(getMathMLEntity(tmp->value.get())));
      rendEl("math:mo");
 #endif
 
@@ -518,13 +518,13 @@ void Formula::makeFence(Node *res)
 #ifdef DEBUG
      inds;
      fprintf(stderr,"<math:mfenced open=\"%s\" close=\"%s\">\n",
-                getMathMLEntity(tmp->value).c_str(),
-                getMathMLEntity(tmp->next->next->value).c_str());
+                getMathMLEntity(tmp->value.get()).c_str(),
+                getMathMLEntity(tmp->next->next->value.get()).c_str());
 #else
      padd("open", "CDATA",
-             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value).c_str())));
+             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->value.get()).c_str())));
      padd("close", "CDATA",
-             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->next->next->value).c_str())));
+             OUString(reinterpret_cast<sal_Unicode const *>(getMathMLEntity(tmp->next->next->value.get()).c_str())));
      rstartEl("math:mfenced", mxList);
      mxList->clear();
 #endif
