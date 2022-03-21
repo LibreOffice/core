@@ -176,8 +176,8 @@ void SAL_CALL rtl_digest_destroy(rtlDigest Digest) SAL_THROW_EXTERN_C()
         pImpl->m_delete(Digest);
 }
 
-constexpr sal_uInt8 DIGEST_CBLOCK_MD2 = 16;
-constexpr sal_uInt8 DIGEST_LBLOCK_MD2 = 16;
+constexpr auto DIGEST_CBLOCK_MD2 = 16;
+constexpr auto DIGEST_LBLOCK_MD2 = 16;
 
 namespace {
 
