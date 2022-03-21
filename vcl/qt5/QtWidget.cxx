@@ -673,7 +673,7 @@ void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
                                                  ExtTextInputAttr::NONE);
         aInputEvent.mpTextAttr = aTextAttrs.data();
 
-        for (int i = 0; i < rAttrList.size(); ++i)
+        for (qsizetype i = 0; i < rAttrList.size(); ++i)
         {
             const QInputMethodEvent::Attribute& rAttr = rAttrList.at(i);
             switch (rAttr.type)
