@@ -478,8 +478,15 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     Fraction aScaleX( aDestSize.Width(), aTmpPrefSize.Width() );
     Fraction aScaleY( aDestSize.Height(), aTmpPrefSize.Height() );
 
-    aScaleX *= aDrawMap.GetScaleX(); aDrawMap.SetScaleX( aScaleX );
-    aScaleY *= aDrawMap.GetScaleY(); aDrawMap.SetScaleY( aScaleY );
+    aScaleX *= aDrawMap.GetScaleX();
+    if (TooLargeScaleForMapMode(aScaleX))
+        aScaleX.ReduceInaccurate(10);
+    aScaleY *= aDrawMap.GetScaleY();
+    if (TooLargeScaleForMapMode(aScaleY))
+        aScaleY.ReduceInaccurate(10);
+
+    aDrawMap.SetScaleX(aScaleX);
+    aDrawMap.SetScaleY(aScaleY);
 
     // #i47260# Convert logical output position to offset within
     // the metafile's mapmode. Therefore, disable pixel offset on

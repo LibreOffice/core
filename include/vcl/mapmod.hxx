@@ -83,6 +83,8 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return rStream;
 }
 
+bool TooLargeScaleForMapMode(const Fraction& rScale);
+
 #endif // INCLUDED_VCL_MAPMOD_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
