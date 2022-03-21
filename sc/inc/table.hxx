@@ -124,7 +124,7 @@ class ScColumnsRange final
     {
         std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>>::const_iterator maColIter;
     public:
-        typedef std::input_iterator_tag iterator_category;
+        typedef std::bidirectional_iterator_tag iterator_category;
         typedef SCCOL value_type;
         typedef SCCOL difference_type;
         typedef const SCCOL* pointer;
