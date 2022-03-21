@@ -21,21 +21,26 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include <cstdlib>
 #include <cstring>
 #include <cwchar>
 #include <limits>
 #include <string_view>
 #include <type_traits>
+#include <utility>
 
 #include "strimp.hxx"
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
 #include <rtl/math.h>
 #include <rtl/string.h>
 #include <rtl/ustring.h>
+
+#include <dragonbox/dragonbox.h>
 
 void internRelease(rtl_uString*);
 
@@ -783,6 +788,16 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
 /* ======================================================================= */
 
 template <class STRINGDATA> using STRCODE = std::remove_extent_t<decltype(STRINGDATA::buffer)>;
+template <typename C> struct STRINGDATA_;
+template <> struct STRINGDATA_<char>
+{
+    using T = rtl_String;
+};
+template <> struct STRINGDATA_<sal_Unicode>
+{
+    using T = rtl_uString;
+};
+template <typename C> using STRINGDATA = typename STRINGDATA_<C>::T;
 
 template <typename IMPL_RTL_STRINGDATA> IMPL_RTL_STRINGDATA* Alloc( sal_Int32 nLen )
 {
@@ -1302,30 +1317,6 @@ sal_Int32 getToken                                ( IMPL_RTL_STRINGDATA** ppThis
     return -1;
 }
 
-template <class IMPL_RTL_STRINGDATA>
-using doubleToString_t
-    = void(SAL_CALL*)(IMPL_RTL_STRINGDATA** pResult, sal_Int32* pResultCapacity,
-                      sal_Int32 nResultOffset, double fValue, rtl_math_StringFormat eFormat,
-                      sal_Int32 nDecPlaces, STRCODE<IMPL_RTL_STRINGDATA> cDecSeparator,
-                      sal_Int32 const* pGroups, STRCODE<IMPL_RTL_STRINGDATA> cGroupSeparator,
-                      sal_Bool bEraseTrailingDecZeros) SAL_THROW_EXTERN_C();
-
-template <sal_Int32 maxLen, typename T, typename IMPL_RTL_STRINGDATA>
-sal_Int32 SAL_CALL valueOfFP(STRCODE<IMPL_RTL_STRINGDATA>* pStr, T f,
-                             doubleToString_t<IMPL_RTL_STRINGDATA> doubleToString)
-{
-    assert(pStr);
-    IMPL_RTL_STRINGDATA* pResult = nullptr;
-    sal_Int32 nLen;
-    doubleToString(&pResult, nullptr, 0, f, rtl_math_StringFormat_G,
-                   maxLen - RTL_CONSTASCII_LENGTH("-x.E-xxx"), '.', nullptr, 0, true);
-    nLen = pResult->length;
-    OSL_ASSERT(nLen < maxLen);
-    Copy(pStr, pResult->buffer, nLen + 1);
-    release(pResult);
-    return nLen;
-}
-
 /* ======================================================================= */
 /* String buffer help functions                                            */
 /* ======================================================================= */
@@ -1513,6 +1504,369 @@ void newReplaceFirst(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fromLengt
         assign(s, s1);
 
     fromIndex = i;
+}
+
+// doubleToString implementation
+
+template <typename S>
+void doubleToString(S** pResult, sal_Int32* pResultCapacity, sal_Int32 nResultOffset, double fValue,
+                    rtl_math_StringFormat eFormat, sal_Int32 nDecPlaces, STRCODE<S> cDecSeparator,
+                    sal_Int32 const* pGroups, STRCODE<S> cGroupSeparator,
+                    bool bEraseTrailingDecZeros)
+{
+    static constexpr sal_uInt64 eX[] = { 10ull,
+                                         100ull,
+                                         1000ull,
+                                         10000ull,
+                                         100000ull,
+                                         1000000ull,
+                                         10000000ull,
+                                         100000000ull,
+                                         1000000000ull,
+                                         10000000000ull,
+                                         100000000000ull,
+                                         1000000000000ull,
+                                         10000000000000ull,
+                                         100000000000000ull,
+                                         1000000000000000ull,
+                                         10000000000000000ull,
+                                         100000000000000000ull,
+                                         1000000000000000000ull,
+                                         10000000000000000000ull };
+
+    auto decimalDigits = [](sal_uInt64 n) {
+        return std::distance(std::begin(eX), std::upper_bound(std::begin(eX), std::end(eX), n)) + 1;
+    };
+
+    auto roundToPow10 = [](sal_uInt64 n, int e) {
+        assert(e > 0 && o3tl::make_unsigned(e) <= std::size(eX));
+        const sal_uInt64 d = eX[e - 1];
+        return (n + d / 2) / d * d;
+    };
+
+    auto append = [](S** s, sal_Int32* pCapacity, sal_Int32& rOffset, auto sv)
+    {
+        stringbuffer_insert(s, pCapacity, rOffset, sv.data(), sv.size());
+        rOffset += sv.size();
+    };
+
+    if (std::isnan(fValue))
+    {
+        // #i112652# XMLSchema-2
+        constexpr std::string_view nan{ "NaN" };
+        if (!pResultCapacity)
+            return newFromStr_WithLength(pResult, nan.data(), nan.size());
+        else
+            return append(pResult, pResultCapacity, nResultOffset, nan);
+    }
+
+    // sign adjustment, instead of testing for fValue<0.0 this will also fetch -0.0
+    bool bSign = std::signbit(fValue);
+
+    if (std::isinf(fValue))
+    {
+        // #i112652# XMLSchema-2
+        std::string_view inf = bSign ? std::string_view("-INF") : std::string_view("INF");
+        if (!pResultCapacity)
+            return newFromStr_WithLength(pResult, inf.data(), inf.size());
+        else
+            return append(pResult, pResultCapacity, nResultOffset, inf);
+    }
+
+    if (bSign)
+        fValue = -fValue;
+
+    decltype(jkj::dragonbox::to_decimal(fValue, jkj::dragonbox::policy::sign::ignore,
+                                        jkj::dragonbox::policy::trailing_zero::ignore)) aParts{};
+    if (fValue) // to_decimal is documented to only handle non-zero finite numbers
+        aParts = jkj::dragonbox::to_decimal(fValue, jkj::dragonbox::policy::sign::ignore,
+                                            jkj::dragonbox::policy::trailing_zero::ignore);
+
+    int nOrigDigits = decimalDigits(aParts.significand);
+    int nExp = nOrigDigits + aParts.exponent - 1;
+    int nRoundDigits = 15;
+
+    // Unfortunately the old rounding below writes 1.79769313486232e+308 for
+    // DBL_MAX and 4 subsequent nextafter(...,0).
+    static const double fB1 = std::nextafter(DBL_MAX, 0);
+    static const double fB2 = std::nextafter(fB1, 0);
+    static const double fB3 = std::nextafter(fB2, 0);
+    static const double fB4 = std::nextafter(fB3, 0);
+    if ((fValue >= fB4) && eFormat != rtl_math_StringFormat_F)
+    {
+        // 1.7976931348623157e+308 instead of rounded 1.79769313486232e+308
+        // that can't be converted back as out of range. For rounded values if
+        // they exceed range they should not be written to exchange strings or
+        // file formats.
+
+        eFormat = rtl_math_StringFormat_E;
+        nDecPlaces = std::clamp<sal_Int32>(nDecPlaces, 0, 16);
+        nRoundDigits = 17;
+    }
+
+    // Use integer representation for integer values that fit into the
+    // mantissa (1.((2^53)-1)) with a precision of 1 for highest accuracy.
+    if ((eFormat == rtl_math_StringFormat_Automatic || eFormat == rtl_math_StringFormat_F)
+        && aParts.exponent >= 0 && fValue < 0x1p53)
+    {
+        eFormat = rtl_math_StringFormat_F;
+        if (nDecPlaces == rtl_math_DecimalPlaces_Max)
+            nDecPlaces = 0;
+        else
+            nDecPlaces = std::clamp<sal_Int32>(nDecPlaces, -15, 15);
+
+        if (bEraseTrailingDecZeros && nDecPlaces > 0)
+            nDecPlaces = 0;
+
+        nRoundDigits = nOrigDigits; // no rounding
+    }
+
+    switch (eFormat)
+    {
+        case rtl_math_StringFormat_Automatic:
+            // E or F depending on exponent magnitude
+            if (nExp <= -15 || nExp >= 15)
+            {
+                if (nDecPlaces == rtl_math_DecimalPlaces_Max)
+                    nDecPlaces = 14;
+                eFormat = rtl_math_StringFormat_E;
+            }
+            else
+            {
+                if (nDecPlaces == rtl_math_DecimalPlaces_Max)
+                    nDecPlaces = (nExp < 14) ? 15 - nExp - 1 : 15;
+                eFormat = rtl_math_StringFormat_F;
+            }
+            break;
+
+        case rtl_math_StringFormat_G:
+        case rtl_math_StringFormat_G1:
+        case rtl_math_StringFormat_G2:
+            // G-Point, similar to sprintf %G
+            if (nDecPlaces == rtl_math_DecimalPlaces_DefaultSignificance)
+                nDecPlaces = 6;
+
+            if (nExp < -4 || nExp >= nDecPlaces)
+            {
+                nDecPlaces = std::max<sal_Int32>(1, nDecPlaces - 1);
+
+                if (eFormat == rtl_math_StringFormat_G)
+                    eFormat = rtl_math_StringFormat_E;
+                else if (eFormat == rtl_math_StringFormat_G2)
+                    eFormat = rtl_math_StringFormat_E2;
+                else if (eFormat == rtl_math_StringFormat_G1)
+                    eFormat = rtl_math_StringFormat_E1;
+            }
+            else
+            {
+                nDecPlaces = std::max<sal_Int32>(0, nDecPlaces - nExp - 1);
+                eFormat = rtl_math_StringFormat_F;
+            }
+            break;
+
+        default:
+            break;
+    }
+
+    // Too large values for nDecPlaces make no sense; it might also be
+    // rtl_math_DecimalPlaces_Max was passed with rtl_math_StringFormat_F or
+    // others, but we don't want to allocate/deallocate 2GB just to fill it
+    // with trailing '0' characters..
+    nDecPlaces = std::clamp<sal_Int32>(nDecPlaces, -20, 20);
+
+    sal_Int32 nDigits = nDecPlaces + 1;
+
+    if (eFormat == rtl_math_StringFormat_F)
+        nDigits += nExp;
+
+    // Round the number
+    nRoundDigits = std::min<int>(nDigits, nRoundDigits);
+    if (nDigits >= 0 && nOrigDigits > nRoundDigits)
+    {
+        aParts.significand = roundToPow10(aParts.significand, nOrigDigits - nRoundDigits);
+        assert(aParts.significand <= eX[nOrigDigits - 1]);
+        if (aParts.significand == eX[nOrigDigits - 1]) // up-rounding to the next decade
+        {
+            nOrigDigits++;
+            nExp++;
+
+            if (eFormat == rtl_math_StringFormat_F)
+                nDigits++;
+        }
+    }
+
+    sal_Int32 nBuf
+        = (nDigits <= 0 ? std::max<sal_Int32>(nDecPlaces, std::abs(nExp)) : nDigits + nDecPlaces)
+          + 10 + (pGroups ? std::abs(nDigits) * 2 : 0);
+    // max(nDigits) = max(nDecPlaces) + 1 + max(nExp) + 1 = 20 + 1 + 308 + 1 = 330
+    // max(nBuf) = max(nDigits) + max(nDecPlaces) + 10 + max(nDigits) * 2 = 330 * 3 + 20 + 10 = 1020
+    assert(nBuf <= 1024);
+    STRCODE<S>* const pBuf = static_cast<STRCODE<S>*>(alloca(nBuf * sizeof(STRCODE<S>)));
+    STRCODE<S>* p = pBuf;
+    if (bSign)
+        *p++ = '-';
+
+    bool bHasDec = false;
+
+    int nDecPos;
+    // Check for F format and number < 1
+    if (eFormat == rtl_math_StringFormat_F)
+    {
+        if (nExp < 0)
+        {
+            *p++ = '0';
+            if (nDecPlaces > 0)
+            {
+                *p++ = cDecSeparator;
+                bHasDec = true;
+            }
+
+            sal_Int32 i = (nDigits <= 0 ? nDecPlaces : -nExp - 1);
+
+            while ((i--) > 0)
+                *p++ = '0';
+
+            nDecPos = 0;
+        }
+        else
+            nDecPos = nExp + 1;
+    }
+    else
+        nDecPos = 1;
+
+    int nGrouping = 0, nGroupSelector = 0, nGroupExceed = 0;
+    if (nDecPos > 1 && pGroups && pGroups[0] && cGroupSeparator)
+    {
+        while (nGrouping + pGroups[nGroupSelector] < nDecPos)
+        {
+            nGrouping += pGroups[nGroupSelector];
+            if (pGroups[nGroupSelector + 1])
+            {
+                if (nGrouping + pGroups[nGroupSelector + 1] >= nDecPos)
+                    break; // while
+
+                ++nGroupSelector;
+            }
+            else if (!nGroupExceed)
+                nGroupExceed = nGrouping;
+        }
+    }
+
+    // print the number
+    if (nDigits > 0)
+    {
+        for (int nCurExp = nOrigDigits - 1;;)
+        {
+            int nDigit;
+            if (aParts.significand > 0 && nCurExp > 0)
+            {
+                --nCurExp;
+                nDigit = aParts.significand / eX[nCurExp];
+                aParts.significand %= eX[nCurExp];
+            }
+            else
+            {
+                nDigit = aParts.significand;
+                aParts.significand = 0;
+            }
+            assert(nDigit >= 0 && nDigit < 10);
+            *p++ = nDigit + '0';
+
+            if (!--nDigits)
+                break; // for
+
+            if (nDecPos)
+            {
+                if (!--nDecPos)
+                {
+                    *p++ = cDecSeparator;
+                    bHasDec = true;
+                }
+                else if (nDecPos == nGrouping)
+                {
+                    *p++ = cGroupSeparator;
+                    nGrouping -= pGroups[nGroupSelector];
+
+                    if (nGroupSelector && nGrouping < nGroupExceed)
+                        --nGroupSelector;
+                }
+            }
+        }
+    }
+
+    if (!bHasDec && eFormat == rtl_math_StringFormat_F)
+    { // nDecPlaces < 0 did round the value
+        while (--nDecPos > 0)
+        { // fill before decimal point
+            if (nDecPos == nGrouping)
+            {
+                *p++ = cGroupSeparator;
+                nGrouping -= pGroups[nGroupSelector];
+
+                if (nGroupSelector && nGrouping < nGroupExceed)
+                    --nGroupSelector;
+            }
+
+            *p++ = '0';
+        }
+    }
+
+    if (bEraseTrailingDecZeros && bHasDec)
+    {
+        while (*(p - 1) == '0')
+            p--;
+
+        if (*(p - 1) == cDecSeparator)
+            p--;
+    }
+
+    // Print the exponent ('E', followed by '+' or '-', followed by exactly
+    // three digits for rtl_math_StringFormat_E). The code in
+    // rtl_[u]str_valueOf{Float|Double} relies on this format.
+    if (eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2
+        || eFormat == rtl_math_StringFormat_E1)
+    {
+        if (p == pBuf)
+            *p++ = '1';
+        // maybe no nDigits if nDecPlaces < 0
+
+        *p++ = 'E';
+        if (nExp < 0)
+        {
+            nExp = -nExp;
+            *p++ = '-';
+        }
+        else
+            *p++ = '+';
+
+        if (eFormat == rtl_math_StringFormat_E || nExp >= 100)
+            *p++ = nExp / 100 + '0';
+
+        nExp %= 100;
+
+        if (eFormat == rtl_math_StringFormat_E || eFormat == rtl_math_StringFormat_E2 || nExp >= 10)
+            *p++ = nExp / 10 + '0';
+
+        *p++ = nExp % 10 + '0';
+    }
+
+    if (!pResultCapacity)
+        newFromStr_WithLength(pResult, pBuf, p - pBuf);
+    else
+        append(pResult, pResultCapacity, nResultOffset, std::basic_string_view(pBuf, p - pBuf));
+}
+
+template <sal_Int32 maxLen, typename C, typename T> sal_Int32 SAL_CALL valueOfFP(C* pStr, T f)
+{
+    assert(pStr);
+    STRINGDATA<C>* pResult = nullptr;
+    doubleToString(&pResult, nullptr, 0, f, rtl_math_StringFormat_G,
+                   maxLen - std::size("-x.E-xxx") + 1, '.', nullptr, 0, true);
+    const sal_Int32 nLen = pResult->length;
+    assert(nLen < maxLen);
+    Copy(pStr, pResult->buffer, nLen + 1);
+    release(pResult);
+    return nLen;
 }
 
 }
