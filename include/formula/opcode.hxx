@@ -316,6 +316,7 @@ enum OpCode : sal_uInt16
         ocCountIfs          = SC_OPCODE_COUNT_IFS,
         ocLookup            = SC_OPCODE_LOOKUP,
         ocVLookup           = SC_OPCODE_V_LOOKUP,
+        ocXLookup           = SC_OPCODE_X_LOOKUP,
         ocHLookup           = SC_OPCODE_H_LOOKUP,
         ocMultiArea         = SC_OPCODE_MULTI_AREA,
         ocOffset            = SC_OPCODE_OFFSET,
@@ -798,6 +799,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocCountIfs: return "CountIfs";
     case ocLookup: return "Lookup";
     case ocVLookup: return "VLookup";
+    case ocXLookup: return "XLookup";
     case ocHLookup: return "HLookup";
     case ocMultiArea: return "MultiArea";
     case ocOffset: return "Offset";
