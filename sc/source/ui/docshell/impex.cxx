@@ -1800,9 +1800,9 @@ void ScImportExport::EmbeddedNullTreatment( OUString & rStr )
     // The normal case is no embedded NULL, check first before de-/allocating
     // ustring stuff.
     sal_Unicode cNull = 0;
-    if (rStr.indexOf( cNull) >= 0)
+    if (sal_Int32 pos = rStr.indexOf(cNull); pos >= 0)
     {
-        rStr = rStr.replaceAll( std::u16string_view( &cNull, 1), "");
+        rStr = rStr.replaceAll(std::u16string_view(&cNull, 1), u"", pos);
     }
 }
 
