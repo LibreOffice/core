@@ -396,16 +396,22 @@ void RTFDocumentImpl::checkFirstRun()
     assert(!m_bNeedSect || m_bFirstRunException);
     setNeedSect(true); // first call that succeeds
 
-    // set the requested default font, if there are none
+    // set the requested default font, if there are none for each state in stack
     RTFValue::Pointer_t pFont
         = getNestedAttribute(m_aDefaultState.getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
                              NS_ooxml::LN_CT_Fonts_ascii);
-    RTFValue::Pointer_t pCurrentFont
-        = getNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
-                             NS_ooxml::LN_CT_Fonts_ascii);
-    if (pFont && !pCurrentFont)
-        putNestedAttribute(m_aStates.top().getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
-                           NS_ooxml::LN_CT_Fonts_ascii, pFont);
+    if (!pFont)
+        return;
+
+    for (size_t i = 0; i < m_aStates.size(); i++)
+    {
+        RTFValue::Pointer_t pCurrentFont
+            = getNestedAttribute(m_aStates[i].getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
+                                 NS_ooxml::LN_CT_Fonts_ascii);
+        if (!pCurrentFont)
+            putNestedAttribute(m_aStates[i].getCharacterSprms(), NS_ooxml::LN_EG_RPrBase_rFonts,
+                               NS_ooxml::LN_CT_Fonts_ascii, pFont);
+    }
 }
 
 void RTFDocumentImpl::setNeedPar(bool bNeedPar) { m_bNeedPar = bNeedPar; }
