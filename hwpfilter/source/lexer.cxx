@@ -942,7 +942,6 @@ static char *yytext;
 #include "nodes.h"
 
 #ifdef _WIN32
-#define strdup _strdup
 #define fileno _fileno
 #define isatty _isatty
 #endif
@@ -1215,23 +1214,23 @@ YY_RULE_SETUP
     //YY_BREAK
 case 13:
 YY_RULE_SETUP
-{ yylval.str = strdup("neq"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "neq"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 14:
 YY_RULE_SETUP
-{ yylval.str = strdup("vmlt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "vmlt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 15:
 YY_RULE_SETUP
-{ yylval.str = strdup("vmgt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "vmgt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 16:
 YY_RULE_SETUP
-{ yylval.str = strdup("mlt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "mlt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 17:
 YY_RULE_SETUP
-{ yylval.str = strdup("mgt"); token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
+{ yylval.str = "mgt"; token_debug(" ==>Relation_Symbol[neq]\n"); return RELATION_OPERATOR; }
     //YY_BREAK
 case 18:
 YY_RULE_SETUP
@@ -1243,15 +1242,15 @@ YY_RULE_SETUP
     //YY_BREAK
 case 20:
 YY_RULE_SETUP
-{ yylval.str = strdup("leftrightarrow"); token_debug("  ==>Arrow[leftrightarrow]\n"); return ARROW; }
+{ yylval.str = "leftrightarrow"; token_debug("  ==>Arrow[leftrightarrow]\n"); return ARROW; }
     //YY_BREAK
 case 21:
 YY_RULE_SETUP
-{ yylval.str = strdup("rightarrow"); token_debug("  ==>Arrow[rightarrow]\n"); return ARROW; }
+{ yylval.str = "rightarrow"; token_debug("  ==>Arrow[rightarrow]\n"); return ARROW; }
     //YY_BREAK
 case 22:
 YY_RULE_SETUP
-{ yylval.str = strdup("leftarrow"); token_debug("   ==>Arrow[leftarrow]\n"); return ARROW; }
+{ yylval.str = "leftarrow"; token_debug("   ==>Arrow[leftarrow]\n"); return ARROW; }
     //YY_BREAK
 
 case 23:
@@ -1306,7 +1305,7 @@ YY_RULE_SETUP
 [[fallthrough]];
 case 35:
 YY_RULE_SETUP
-{ yylval.str = strdup("quad"); token_debug("    ==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
+{ yylval.str = "quad"; token_debug("    ==>Space_Symbol[quad]\n"); /* return SPACE_SYMBOL;*/ }
     //YY_BREAK
 [[fallthrough]];
 case 36:
