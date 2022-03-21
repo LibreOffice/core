@@ -1789,6 +1789,29 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
         }
         break;
+        case RTFKeyword::LBR:
+        {
+            Id nId = 0;
+            switch (nParam)
+            {
+                case 1:
+                    nId = NS_ooxml::LN_Value_ST_BrClear_left;
+                    break;
+                case 2:
+                    nId = NS_ooxml::LN_Value_ST_BrClear_right;
+                    break;
+                case 3:
+                    nId = NS_ooxml::LN_Value_ST_BrClear_all;
+                    break;
+            }
+
+            if (nId > 0)
+            {
+                m_aStates.top().getCharacterAttributes().set(NS_ooxml::LN_CT_Br_clear,
+                                                             new RTFValue(nId));
+            }
+        }
+        break;
         default:
         {
             SAL_INFO("writerfilter", "TODO handle value '" << keywordToString(nKeyword) << "'");
