@@ -989,15 +989,15 @@ private:
 class WW8Export : public MSWordExportBase
 {
 public:
-    std::unique_ptr<ww::bytes> pO;      ///< Buffer
+    std::unique_ptr<ww::bytes> m_pO;      ///< Buffer
 
-    SvStream *pTableStrm, *pDataStrm;   ///< Streams for WW97 Export
+    SvStream *m_pTableStrm, *m_pDataStrm;   ///< Streams for WW97 Export
 
-    std::unique_ptr<WW8Fib> pFib;                       ///< File Information Block
-    std::unique_ptr<WW8Dop> pDop;                       ///< Document Properties
-    std::unique_ptr<WW8_WrPlcFootnoteEdn> pFootnote;    ///< Footnotes - structure to remember them, and output
-    std::unique_ptr<WW8_WrPlcFootnoteEdn> pEdn;         ///< Endnotes - structure to remember them, and output
-    std::unique_ptr<WW8_WrPlcSepx> pSepx;               ///< Sections/headers/footers
+    std::unique_ptr<WW8Fib> m_pFib;                       ///< File Information Block
+    std::unique_ptr<WW8Dop> m_pDop;                       ///< Document Properties
+    std::unique_ptr<WW8_WrPlcFootnoteEdn> m_pFootnote;    ///< Footnotes - structure to remember them, and output
+    std::unique_ptr<WW8_WrPlcFootnoteEdn> m_pEdn;         ///< Endnotes - structure to remember them, and output
+    std::unique_ptr<WW8_WrPlcSepx> m_pSepx;               ///< Sections/headers/footers
 
     bool m_bDot; ///< Template or document.
 
@@ -1006,7 +1006,7 @@ protected:
     std::unique_ptr<WW8AttributeOutput> m_pAttrOutput;  ///< Converting attributes to stream data
 
 private:
-    tools::SvRef<SotStorage>       xEscherStg;      /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
+    tools::SvRef<SotStorage>       m_xEscherStg;      /// memory leak #i120098#, to hold the reference to unnamed SotStorage obj
 
 public:
     /// Access to the attribute output class.
@@ -1103,7 +1103,7 @@ public:
             // some partly static semi-internal function declarations
 
     void OutSprmBytes( sal_uInt8* pBytes, sal_uInt16 nSiz )
-                                { pO->insert( pO->end(), pBytes, pBytes+nSiz ); }
+                                { m_pO->insert( m_pO->end(), pBytes, pBytes+nSiz ); }
 
     virtual void SectionBreaksAndFrames( const SwTextNode& rNode ) override;
 
@@ -1150,9 +1150,9 @@ public:
     void MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
         const ww8::Frame &rFrameFormat);
 
-    void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
+    void InsUInt16( sal_uInt16 n )      { SwWW8Writer::InsUInt16( *m_pO, n ); }
     void InsInt16(sal_Int16 n) { InsUInt16(sal_uInt16(n)); }
-    void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
+    void InsUInt32( sal_uInt32 n )      { SwWW8Writer::InsUInt32( *m_pO, n ); }
     void WriteStringAsPara( const OUString& rText );
 
     /// Setup the exporter.
@@ -1405,7 +1405,7 @@ class SwWW8WrGrf
 {
 private:
     /// for access to the variables
-    WW8Export& rWrt;
+    WW8Export& m_rWrt;
 
     std::vector<GraphicDetails> maDetails;
     sal_uInt16 mnIdx;       // index in file positions
@@ -1423,7 +1423,7 @@ private:
     SwWW8WrGrf(const SwWW8WrGrf&) = delete;
     SwWW8WrGrf& operator=(const SwWW8WrGrf&) = delete;
 public:
-    explicit SwWW8WrGrf( WW8Export& rW ) : rWrt( rW ), mnIdx( 0 ) {}
+    explicit SwWW8WrGrf( WW8Export& rW ) : m_rWrt( rW ), mnIdx( 0 ) {}
     void Insert(const ww8::Frame &rFly);
     void Write();
     sal_uLong GetFPos()
