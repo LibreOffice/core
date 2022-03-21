@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "341140d8_ea669563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-03-21T14:44:56Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/110788/ : FAILURE\n\u003e \n\u003e error: extraneous \")\" before \";\" in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sc/source/core/tool/interpr1.cxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110334/ )\n\n",
+      "revId": "2a249df184f6242c4741dc39fa6cb6fb0f7688b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
