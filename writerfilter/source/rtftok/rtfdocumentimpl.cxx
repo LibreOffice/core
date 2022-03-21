@@ -291,6 +291,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     , m_nCurrentFontIndex(0)
     , m_nCurrentEncoding(-1)
     , m_nDefaultFontIndex(-1)
+    , m_pStyleTableEntries(new RTFReferenceTable::Entries_t)
     , m_nCurrentStyleIndex(0)
     , m_bFormField(false)
     , m_bMathNor(false)
@@ -363,6 +364,7 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString const&
         m_aAuthorInitials.clear();
     }
     pImpl->m_nDefaultFontIndex = m_nDefaultFontIndex;
+    pImpl->m_pStyleTableEntries = m_pStyleTableEntries;
     pImpl->Strm().Seek(nPos);
     SAL_INFO("writerfilter.rtf", "substream start");
     Mapper().substream(nId, pImpl);
@@ -497,16 +499,16 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
     int nStyle = 0;
     if (!m_aStates.empty())
         nStyle = m_aStates.top().getCurrentStyleIndex();
-    auto it = m_aStyleTableEntries.find(nStyle);
-    if (it != m_aStyleTableEntries.end())
+    auto it = m_pStyleTableEntries->find(nStyle);
+    if (it != m_pStyleTableEntries->end())
     {
         // cloneAndDeduplicate() wants to know about only a single "style", so
         // let's merge paragraph and character style properties here.
-        auto itChar = m_aStyleTableEntries.end();
+        auto itChar = m_pStyleTableEntries->end();
         if (!m_aStates.empty())
         {
             int nCharStyle = m_aStates.top().getCurrentCharacterStyleIndex();
-            itChar = m_aStyleTableEntries.find(nCharStyle);
+            itChar = m_pStyleTableEntries->find(nCharStyle);
         }
 
         RTFSprms aStyleSprms;
@@ -517,7 +519,7 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
         RTFReferenceProperties& rProps = *static_cast<RTFReferenceProperties*>(it->second.get());
         lcl_copyFlatten(rProps, aStyleAttributes, aStyleSprms);
 
-        if (itChar != m_aStyleTableEntries.end())
+        if (itChar != m_pStyleTableEntries->end())
         {
             // Found active character style, then update aStyleSprms/Attributes.
             if (!nStyleType || nStyleType == NS_ooxml::LN_Value_ST_StyleType_character)
@@ -1402,7 +1404,7 @@ void RTFDocumentImpl::text(OUString& rString)
 
                             writerfilter::Reference<Properties>::Pointer_t const pProp(
                                 createStyleProperties());
-                            m_aStyleTableEntries.insert(
+                            m_pStyleTableEntries->insert(
                                 std::make_pair(m_nCurrentStyleIndex, pProp));
                         }
                         else
@@ -2091,7 +2093,7 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStylePrope
 /** 2 different representations of the styles are needed:
 
     1) flat content, as read from the input file:
-       stored in m_aStyleTableEntries, used as reference input for
+       stored in m_pStyleTableEntries, used as reference input for
        deduplication both here and for hard formatting in getProperties()
 
     2) real content, with proper override of sprms/attributes where it differs
@@ -2100,7 +2102,7 @@ writerfilter::Reference<Properties>::Pointer_t RTFDocumentImpl::createStylePrope
 RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
 {
     RTFReferenceTable::Entries_t ret;
-    for (auto const& it : m_aStyleTableEntries)
+    for (auto const& it : *m_pStyleTableEntries)
     {
         auto pStyle = it.second;
         ret[it.first] = pStyle;
@@ -2116,8 +2118,8 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
             if (it.first == nBasedOn)
                 continue;
 
-            auto const itParent(m_aStyleTableEntries.find(nBasedOn)); // definition as read!
-            if (itParent != m_aStyleTableEntries.end())
+            auto const itParent(m_pStyleTableEntries->find(nBasedOn)); // definition as read!
+            if (itParent != m_pStyleTableEntries->end())
             {
                 auto const pStyleType(
                     static_cast<RTFReferenceProperties&>(*pStyle).getAttributes().find(
@@ -2143,7 +2145,7 @@ RTFReferenceTable::Entries_t RTFDocumentImpl::deduplicateStyleTable()
             }
         }
     }
-    assert(ret.size() == m_aStyleTableEntries.size());
+    assert(ret.size() == m_pStyleTableEntries->size());
     return ret;
 }
 
@@ -3668,7 +3670,7 @@ RTFParserState::RTFParserState(RTFDocumentImpl* pDocumentImpl)
     , m_nHour(0)
     , m_nMinute(0)
     , m_pCurrentDestinationText(nullptr)
-    , m_nCurrentStyleIndex(-1)
+    , m_nCurrentStyleIndex(0)
     , m_nCurrentCharacterStyleIndex(-1)
     , m_pCurrentBuffer(nullptr)
     , m_bInListpicture(false)
