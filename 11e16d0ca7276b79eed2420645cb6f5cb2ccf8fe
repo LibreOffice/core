@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a1ba545_bc211b3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-21T14:58:52Z",
+      "side": 1,
+      "message": "Makes sense, deciding what is the right subset of the state to share between substreams is always tricky.",
+      "revId": "11e16d0ca7276b79eed2420645cb6f5cb2ccf8fe",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
