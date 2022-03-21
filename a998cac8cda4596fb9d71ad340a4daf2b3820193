@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb51f1d7_d0870481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001855
+      },
+      "writtenOn": "2022-03-21T15:07:31Z",
+      "side": 1,
+      "message": "VCLXComboBox behaves different to VCLXListbox, as VCLXComboBox paints the background color without need to change native widget behaviour. Will examine the difference.",
+      "revId": "a998cac8cda4596fb9d71ad340a4daf2b3820193",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
