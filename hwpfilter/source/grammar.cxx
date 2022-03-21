@@ -363,28 +363,15 @@ const short yycheck[] = {    11,
 
 #define YYTERROR    1
 
-#ifndef YYPURE
 #define YYLEX       yylex()
-#endif
-
-#ifdef YYPURE
-#ifdef YYLEX_PARAM
-#define YYLEX       yylex(&yylval, YYLEX_PARAM)
-#else
-#define YYLEX       yylex(&yylval)
-#endif
-#endif
 
 /* If nonreentrant, generate the variables here */
-
-#ifndef YYPURE
 
 static int yychar;  /*  the lookahead symbol        */
 YYSTYPE yylval;         /*  the semantic value of the       */
                 /*  lookahead symbol            */
 
 static int yynerrs;     /*  number of parse errors so far       */
-#endif  /* not YYPURE */
 
 #if YYDEBUG != 0
 int yydebug;            /*  nonzero means print parse trace */
@@ -451,12 +438,6 @@ yyparse(YYPARSE_PARAM_ARG)
 
   int yystacksize = YYINITDEPTH;
   int yyfree_stacks = 0;
-
-#ifdef YYPURE
-  int yychar;
-  YYSTYPE yylval;
-  int yynerrs;
-#endif
 
   YYSTYPE yyval;        /*  the variable used to return     */
   yyval.dval = nullptr;
