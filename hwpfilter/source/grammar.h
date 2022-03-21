@@ -18,7 +18,7 @@
  */
 
 typedef union {
-    char *dval;
+    const char *dval;
     const char *str;
     Node *ptr;
 } YYSTYPE;
