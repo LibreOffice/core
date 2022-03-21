@@ -395,7 +395,9 @@ IMPL_LINK_NOARG( SpellDialog, InitHdl, void*, void)
     InitUserDicts();
 
     LockFocusChanges(true);
-    if( m_xChangePB->get_sensitive() )
+    if(m_xSentenceED->IsEnabled())
+        m_xSentenceED->GrabFocus();
+    else if( m_xChangePB->get_sensitive() )
         m_xChangePB->grab_focus();
     else if( m_xIgnorePB->get_sensitive() )
         m_xIgnorePB->grab_focus();
