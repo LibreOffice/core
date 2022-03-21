@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af1e4924_7fd463c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-21T07:41:28Z",
+      "side": 1,
+      "message": "If this helps performance, then it would be nice to have some before/after numbers for some workload, but otherwise no objections.\n\nFWIW the OOXML filter solves this problem by having a dedicated subclass for all the various \"value\" types (integer, string, etc): https://docs.libreoffice.org/writerfilter/html/classwriterfilter_1_1ooxml_1_1OOXMLValue.html\n\nIt might be useful to consider if this \"lazy allocation\" (done in this patch) or the OOXML way is better.\n\nI initially created a single Value class in the RTF case just because it was simpler to implement, but I did not consider the performance impacts.",
+      "revId": "0326cea2197acefba0ac050617519cfecbeec793",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
