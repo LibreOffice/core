@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "passwordcontainer.hxx"
 
 #include <unotools/pathoptions.hxx>
@@ -262,6 +261,23 @@ bool StorageItem::useStorage()
     return aResult;
 }
 
+sal_Int32 StorageItem::getStorageVersion()
+{
+    Sequence<OUString> aNodeNames { "StorageVersion" };
+
+    Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
+
+    if( aPropertyValues.getLength() != aNodeNames.getLength() )
+    {
+        OSL_FAIL( "Problems during reading" );
+        return 0;
+    }
+
+    sal_Int32 nResult = 0;
+    aPropertyValues[0] >>= nResult;
+
+    return nResult;
+}
 
 bool StorageItem::getEncodedMP( OUString& aResult )
 {
@@ -294,15 +310,17 @@ bool StorageItem::getEncodedMP( OUString& aResult )
 
 void StorageItem::setEncodedMP( const OUString& aEncoded, bool bAcceptEmpty )
 {
-    Sequence< OUString > sendNames(2);
-    Sequence< uno::Any > sendVals(2);
+    Sequence< OUString > sendNames(3);
+    Sequence< uno::Any > sendVals(3);
 
     sendNames[0] = "HasMaster";
     sendNames[1] = "Master";
+    sendNames[2] = "StorageVersion";
 
     bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
     sendVals[0] <<= bHasMaster;
     sendVals[1] <<= aEncoded;
+    sendVals[2] <<= nCurrentStorageVersion;
 
     ConfigItem::SetModified();
     ConfigItem::PutProperties( sendNames, sendVals );
@@ -803,6 +821,18 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
     return aResult;
 }
 
+// Mangle the key to match an old bug
+static OUString ReencodeAsOldHash(const OUString& rPass)
+{
+    OUStringBuffer aBuffer;
+    for (int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ++ind)
+    {
+        unsigned char i = static_cast<char>(rPass.copy(ind * 2, 2).toUInt32(16));
+        aBuffer.append(static_cast< sal_Unicode >('a' + (i >> 4)));
+        aBuffer.append(static_cast< sal_Unicode >('a' + (i & 15)));
+    }
+    return aBuffer.makeStringAndClear();
+}
 
 OUString const & PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& aHandler )
 {
@@ -841,6 +871,9 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
                     }
                     else
                     {
+                        if (m_pStorageFile->getStorageVersion() == 0)
+                            aPass = ReencodeAsOldHash(aPass);
+
                         std::vector< OUString > aRM( DecodePasswords( aEncodedMP, aPass, aRMode ) );
                         if( aRM.empty() || aPass != aRM[0] )
                         {
@@ -1045,6 +1078,12 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
 
                 do {
                     aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
+
+                    if (!aPass.isEmpty() && m_pStorageFile->getStorageVersion() == 0)
+                    {
+                        aPass = ReencodeAsOldHash(aPass);
+                    }
+
                     bResult = ( !aPass.isEmpty() && aPass == m_aMasterPasswd );
                     aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
                 } while( !bResult && !aPass.isEmpty() );
