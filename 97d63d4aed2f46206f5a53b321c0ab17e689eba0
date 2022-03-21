@@ -33,6 +33,24 @@
       "message": "Is this string then returned in an API to scripts? I guess there is a risk that some script (Basic or whatever) checks for \"Mac OS X\" there and then will break if it says \"macOS\" instead. No idea why somebody would write scripts that do such checks, though. Not opposed, just pointing this out.",
       "revId": "97d63d4aed2f46206f5a53b321c0ab17e689eba0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e7cb8e4_7f612462",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-21T09:35:19Z",
+      "side": 1,
+      "message": "\u003e Is this string then returned in an API to scripts? I guess there is a risk that some script (Basic or whatever) checks for \"Mac OS X\" there and then will break if it says \"macOS\" instead.\n\nSee the comments starting at \u003chttps://gerrit.libreoffice.org/c/core/+/127921/6#message-6bc98b37d6de36749223abdbb4a68b74efcbfe80\u003e \"tdf#140286 sc: CALC formula \u003dINFO(OSVERSION) gives wrong output for macOS\" for how the value returned by AquaSalInstance::getOSVersion is also used for Calc\u0027s INFO(OSVERSION), so any changes here should probably be coordinated with all consumers of that function\u0027s return value.",
+      "parentUuid": "34c1f850_717334dd",
+      "revId": "97d63d4aed2f46206f5a53b321c0ab17e689eba0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
