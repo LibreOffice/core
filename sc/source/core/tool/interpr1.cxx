@@ -7606,6 +7606,532 @@ void ScInterpreter::ScVLookup()
     CalculateLookup(false);
 }
 
+void ScInterpreter::ScXLookup()
+{
+    // tdf#127293
+    // TODO : remove SAL _DEBUG lines after testing
+    /* TODO : problem: if function is called as  matrixfunction, the function s called searchelements times,
+              whereas once should be sufficient. A separate pMat and psMat is needed to avoid erroneous results
+              when the matrix needs to be transposed.
+               -> This seems to occur with e.g. ScHLookup/SCVLookup as well.
+              Can this be fixed (or shouldn't this be changed)?
+    */
+    // SAL _DEBUG( "  --\n" << "  ScXLookup called" );
+
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCount( nParamCount, 3, 6 ) )
+        return;
+
+    //
+    // optional 6th argument to set search mode
+    //  1  - Perform a search starting at the first item. This is the default.
+    //  -1 - Perform a reverse search starting at the last item.
+    //  2  - Perform a binary search that relies on lookup_array being sorted in ascending order.
+    //       If not sorted, invalid results will be returned.
+    //  -2 - Perform a binary search that relies on lookup_array being sorted in descending order.
+    //       If not sorted, invalid results will be returned.
+    //
+    enum eSearchMode{ searchftl=1, searchltf=-1, searchbasc=2, searchbdesc=-2 };
+    eSearchMode searchMode = searchftl;
+    if ( nParamCount == 6 )
+    {
+        sal_Int16 k = GetInt16();
+        if ( k >= -2 && k <= 2 && k != 0 )
+            searchMode = (eSearchMode)k;
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+    // SAL _DEBUG( "searchMode:" << searchMode );
+
+    //
+    // optional 5th argument to set match mode
+    //  0  - Exact match. If none found, return #N/A. This is the default.
+    //  -1 - Exact match. If none found, return the next smaller item.
+    //  1  - Exact match. If none found, return the next larger item.
+    //  2  - A wildcard match where *, ?, and ~ have special meaning.
+    //
+    enum eMatchMode{ exactorNA=0, exactorS=-1, exactorG=1, wildcard=2 };
+    eMatchMode matchMode = exactorNA;
+    if ( nParamCount >= 5 )
+    {
+        sal_Int16 k = GetInt16();
+        if ( k >= -1 && k <= 2 )
+            matchMode = (eMatchMode)k;
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+    // SAL _DEBUG( "matchMode:" << matchMode );
+
+    // Optional 4th argument to set return values if not found (default is #N/A)
+    svl::SharedString aNotFoundStr;
+    if ( nParamCount >= 4 )
+        aNotFoundStr = GetString();
+    // SAL _DEBUG( "NotFoundStr:" << aNotFoundStr.getString() );
+
+    // 3rd argument is return value array
+    ScMatrixRef prMat = nullptr;
+    SCSIZE nrC = 0, nrR = 0;
+    StackVar eType = GetStackType();
+    switch ( eType )
+    {
+        case svDoubleRef :
+        case svSingleRef :
+        case svExternalDoubleRef :
+        case svExternalSingleRef :
+        case svMatrix :
+            prMat = GetMatrix();
+            if ( prMat )
+                prMat->GetDimensions( nrC, nrR );
+            else
+            {
+                PushIllegalParameter();
+                return;
+            }
+            // SAL _DEBUG( "result matrix, nrC = " << nrC << ", nrR = " << nrR );
+            break;
+
+        default :
+            PushIllegalParameter();
+            return;
+    }
+
+    // 2nd argument is array to search
+    ScMatrixRef pMat = nullptr;
+    SCSIZE nsC = 0, nsR = 0;
+    eType = GetStackType();
+    switch ( eType )
+    {
+        case svDoubleRef :
+        case svSingleRef :
+        case svExternalDoubleRef :
+        case svExternalSingleRef :
+        case svMatrix :
+            pMat = GetMatrix();
+            if ( pMat )
+                pMat->GetDimensions( nsC, nsR );
+            else
+            {
+                PushIllegalParameter();
+                return;
+            }
+            break;
+
+        default :
+            PushIllegalParameter();
+            return;
+    }
+    // SAL _DEBUG( "search matrix, nsC = " << nsC << ", nsR = " << nsR );
+    if ( !( nsC == 1 || nsR == 1 ) )
+    {
+        // search matrix must be 1-dimensional
+        // SAL _DEBUG( "search matrix is not 1-dimensional" );
+        PushIllegalParameter();
+        return;
+    }
+    bool bVLookup = ( nsR >= nsC );
+    if ( ( bVLookup && nsR != nrR ) || ( !bVLookup && nsC != nrC ) )
+    {
+        // SAL _DEBUG( "VLookup=" << bVLookup << ", nsC=" << nsC << ", nsR=" << nsR << ", nrC=" << nrC << ", nrR=" << nrR <<
+        //           "either VLookup && nsR != nrR or !VLookup && nsC != nrC" );
+        // search matrix must have same number of elements as result matrix in search direction
+        // SAL _DEBUG( "search matrix does not have same number of elements as result matrix in search direction" );
+        PushIllegalParameter();
+        return;
+    }
+
+    ScMatrixRef psMat;
+    if ( !bVLookup )
+    {
+        // transpose search matrix
+        psMat = GetNewMat( nsR, nsC, true );
+        if ( psMat )
+        {
+            pMat->MatTrans( *psMat );
+            psMat->GetDimensions( nsC, nsR );
+        }
+        else
+        {
+            PushIllegalParameter();
+            return;
+        }
+    }
+    else
+        psMat = pMat;
+
+    // SAL _DEBUG( "Search matrix, nsC=" << nsC <<", nsR=" << nsR << ", bVLookup = " << bVLookup );
+
+    ScQueryParam aParam;
+    ScQueryEntry& rEntry = aParam.GetEntry( 0 );
+    rEntry.bDoQuery = true;
+    switch ( matchMode )
+    {
+        case exactorNA :
+            rEntry.eOp = SC_EQUAL;
+            break;
+
+        case exactorS :
+            rEntry.eOp = SC_LESS_EQUAL;
+            break;
+
+        case exactorG :
+            rEntry.eOp = SC_GREATER_EQUAL;
+            break;
+
+        case wildcard :
+            // TODO : wildcards don't work with matrices, and don't work with ScVLookup/ScHLookup
+            //        either (in case of matrix, otherwise wildcards do work)
+            //        How to solve this ???
+            //        And which operation to choose here?
+            rEntry.eOp = SC_CONTAINS; // FIXME : ARBITRARY VALUE!
+            break;
+
+        default :
+            PushIllegalParameter();
+            return;
+    }
+
+    // 1st argument : lookup value
+    if ( !FillEntry( rEntry ) )
+        return;
+
+    ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    // TODO : in case of matchMode == wildcard, search the matrix elements as if they contain strings
+    bool bSrchStr = ( rItem.meType == ScQueryEntry::ByString );
+    bool bSrchVal = ( rItem.meType == ScQueryEntry::ByValue );
+    if ( bSrchStr && ( matchMode == wildcard ) )
+        aParam.eSearchType = DetectSearchType( rItem.maString.getString(), mrDoc );
+
+    // start search
+    SCSIZE nDelta = SCSIZE_MAX;
+    svl::SharedString aParamStr = rItem.maString;
+    SCSIZE nBestFit = SCSIZE_MAX;
+    switch ( searchMode )
+    {
+        case searchftl :
+            for ( SCSIZE i = 0; i < nsR; i++ )
+            {
+                if ( psMat->IsStringOrEmpty( 0, i ) && bSrchStr )
+                {
+                    CollatorWrapper& rCollator = ScGlobal::GetCollator();
+                    OUString cmpStr = psMat->GetString( 0, i ).getDataIgnoreCase();
+                    sal_Int32 nRes = rCollator.compareString( cmpStr, aParamStr.getDataIgnoreCase() );
+                    if ( nRes == 0 )
+                    {
+                        nDelta = i; // found, exit loop
+                        i = nsR;
+                    }
+                    else
+                    {
+                        if ( matchMode == exactorS && nRes < 0 )
+                        {
+                            if ( nBestFit == SCSIZE_MAX  )
+                                nBestFit = i; // value is less than search value
+                            else if ( cmpStr > psMat->GetString( 0, nBestFit ).getDataIgnoreCase() )
+                                nBestFit = i;  // keep greatest value less than search value
+                        }
+                        else if ( matchMode == exactorG && nRes > 0 )
+                        {
+                            if ( nBestFit == SCSIZE_MAX )
+                                nBestFit = i; // value is greater than serach value
+                            else if ( cmpStr < psMat->GetString( 0, nBestFit ).getDataIgnoreCase() )
+                                nBestFit = i;  // keep smallest value less than search value
+                        }
+                        // TODO implement for wildcard
+                        else if ( matchMode == wildcard )
+                        {
+                            // SAL _DEBUG( "ftl, string, i=" << i << ", nRes=" << nRes );
+                        //    nDelta = i;
+                        }
+                    }
+                }
+                else if ( psMat->IsValue( 0, i ) && bSrchVal )
+                {
+                    double fRes = psMat->GetDouble( 0, i ) - rItem.mfVal;
+                    if ( fRes == 0.0 )
+                    {
+                        nDelta = i;
+                        i = nsR;
+                    }
+                    else if ( matchMode == exactorS && fRes < 0.0 )
+                    {
+                        if ( nBestFit == SCSIZE_MAX  )
+                            nBestFit = i; // value is less than search value
+                        else
+                        {
+                            if ( psMat->GetDouble( 0, i ) > psMat->GetDouble( 0, nBestFit ) )
+                                nBestFit = i;  // keep greatest value less than search value
+                        }
+                    }
+                    else if ( matchMode == exactorG && fRes > 0.0 )
+                    {
+                        if ( nBestFit == SCSIZE_MAX )
+                            nBestFit = i; // value is greater than serach value
+                        else if ( psMat->GetDouble( 0, i ) < psMat->GetDouble( 0, nBestFit ) )
+                            nBestFit = i;  // keep smallest value less than search value
+                    }
+                }
+            }
+            break;
+
+        case searchltf :
+            for ( SCSIZE i = nsR; i-- > 0; )
+            {
+                if ( psMat->IsStringOrEmpty( 0, i ) && bSrchStr )
+                {
+                    CollatorWrapper& rCollator = ScGlobal::GetCollator();
+                    OUString cmpStr = psMat->GetString( 0, i ).getDataIgnoreCase();
+                    sal_Int32 nRes = rCollator.compareString( cmpStr, aParamStr.getDataIgnoreCase() );
+                    if ( nRes == 0 )
+                    {
+                        nDelta = i; // found, exit loop
+                        i = 0;
+                    }
+                    else if ( matchMode == exactorS && nRes < 0 )
+                    {
+                        if ( nBestFit == SCSIZE_MAX  )
+                            nBestFit = i; // value is less than search value
+                        else if ( cmpStr > psMat->GetString( 0, nBestFit ).getDataIgnoreCase() )
+                            nBestFit = i;  // keep greatest value less than search value
+                    }
+                    else if ( matchMode == exactorG && nRes > 0 )
+                    {
+                        if ( nBestFit == SCSIZE_MAX )
+                            nBestFit = i; // value is greater than serach value
+                        else if ( cmpStr < psMat->GetString( 0, nBestFit ).getDataIgnoreCase() )
+                            nBestFit = i;  // keep smallest value less than search value
+                    }
+                    // TODO implement for wildcard
+                    //else if ( matchMode == wildcard && ??? )
+                    //    nDelta = i;
+                }
+                else if ( psMat->IsValue( 0, i ) && bSrchVal )
+                {
+                    double fRes = psMat->GetDouble( 0, i ) - rItem.mfVal;
+                    if ( fRes == rItem.mfVal )
+                    {
+                        nDelta = i; // found, exit loop
+                        i = 0;
+                    }
+                    else
+                    {
+                        if ( matchMode == exactorS && fRes < rItem.mfVal )
+                        {
+                            if ( nBestFit == SCSIZE_MAX  )
+                                nBestFit = i; // value is less than search value
+                            else if ( psMat->GetDouble( 0, i ) > psMat->GetDouble( 0, nBestFit ) )
+                                nBestFit = i;  // keep greatest value less than search value
+                        }
+                        else if ( matchMode == exactorG && fRes > rItem.mfVal )
+                        {
+                            if ( nBestFit == SCSIZE_MAX )
+                                nBestFit = i; // value is greater than serach value
+                            else if ( psMat->GetDouble( 0, i ) < psMat->GetDouble( 0, nBestFit ) )
+                                nBestFit = i;  // keep smallest value less than search value
+                        }
+                    }
+                }
+            }
+            break;
+
+        case searchbasc :
+            {
+                CollatorWrapper& rCollator = ScGlobal::GetCollator();
+                for ( SCSIZE i = 0; i < nsR; i++ )
+                {
+                    if ( psMat->IsStringOrEmpty( 0, i ) && bSrchStr )
+                    {
+                        OUString cmpStr;
+                        cmpStr = psMat->GetString( 0, i ).getString();
+                        sal_Int32 nRes = rCollator.compareString( cmpStr, aParamStr.getString() );
+                        if ( nRes == 0 )
+                        {
+                            nDelta = i; // found, exit loop
+                            i = nsR;
+                        }
+                        // TODO implement for wildcard
+                        //else if ( matchMode == wildcard && ??? )
+                        //    nDelta = i;
+                        else if ( nRes > 0 )
+                        {
+                            if ( matchMode == exactorS )
+                            {
+                                if ( i > 0 )
+                                    nDelta = i - 1; // we're past cmpStr, return previuos value, exit loop
+                            }
+                            else if ( matchMode == exactorG )
+                                nDelta = i; // we're past cmpStr, return current value, exit loop
+                            i = nsR;
+                        }
+                    }
+                    else if ( psMat->IsValue( 0, i ) && bSrchVal )
+                    {
+                        double fRes = psMat->GetDouble( 0, i ) - rItem.mfVal;
+                        if ( fRes == 0.0 )
+                        {
+                            nDelta = i; // found, exit loop
+                            i = nsR;
+                        }
+                        else if ( fRes > 0.0 )
+                        {
+                            if ( matchMode == exactorS  )
+                            {
+                                if ( i > 0 )
+                                    nDelta = i - 1; // we're past cmpStr, return previuos value, exit loop
+                            }
+                            else if ( matchMode == exactorG )
+                                nDelta = i; // we're past cmpStr, return current value, exit loop
+                            i = nsR;
+                        }
+                    }
+                }
+            }
+            break;
+
+        case searchbdesc :
+            {
+                CollatorWrapper& rCollator = ScGlobal::GetCollator();
+                for ( SCSIZE i = 0; i < nsR; i++ )
+                {
+                    if ( psMat->IsStringOrEmpty( 0, i ) && bSrchStr )
+                    {
+                          OUString cmpStr;
+                          cmpStr = psMat->GetString( 0, i ).getString();
+                          sal_Int32 nRes = rCollator.compareString( cmpStr, aParamStr.getString() );
+                          if ( nRes == 0 )
+                          {
+                              nDelta = i; // found, exit loop
+                              i = nsR;
+                          }
+                          // TODO implement for wildcard
+                          //else if ( matchMode == wildcard && ??? )
+                          //    nDelta = i;
+                          else if ( nRes < 0 )
+                          {
+                              if ( matchMode == exactorG )
+                              {
+                                  if ( i > 0 )
+                                      nDelta = i - 1; // we're past cmpStr, return previuos value, exit loop
+                              }
+                              else if ( matchMode == exactorS )
+                                  nDelta = i; // we're past cmpStr, return current value, exit loop
+                              i = nsR;
+                          }
+                    }
+                    else if ( psMat->IsValue( 0, i ) && bSrchVal )
+                    {
+                        double fRes = psMat->GetDouble( 0, i ) - rItem.mfVal;
+                        if ( fRes == 0.0 )
+                        {
+                            nDelta = i; // found, exit loop
+                            i = nsR;
+                        }
+                        else if ( fRes < 0.0 )
+                        {
+                            if ( matchMode == exactorG )
+                            {
+                                if ( i > 0 )
+                                    nDelta = i - 1; // we're past cmpStr, return previuos value, exit loop
+                            }
+                            else if ( matchMode == exactorS )
+                                nDelta = i; // we're past cmpStr, return current value, exit loop
+                            i = nsR;
+                        }
+                    }
+                }
+            }
+            break;
+
+        default :
+            // should never happen
+            PushIllegalParameter();
+            return;
+    }
+    if ( nDelta == SCSIZE_MAX && nBestFit != SCSIZE_MAX )
+    {
+        // SAL _DEBUG( "nDelta gets value of nBestFit (" << nBestFit << ")" );
+        nDelta = nBestFit;
+    }
+    // SAL _DEBUG( "8030, search finished, nDelta = " << nDelta );
+
+    // output result
+    if ( nDelta != SCSIZE_MAX )
+    {
+        assert( bVLookup ? nDelta < nrR : nDelta < nrC );
+        SCSIZE nX;
+        SCSIZE nY;
+        SCSIZE nResCols;
+        SCSIZE nResRows;
+        if ( bVLookup )
+        {
+            nX = static_cast<SCSIZE>(0);
+            nY = nDelta;
+            nResCols = nrC;
+            nResRows = 1;
+        }
+        else
+        {
+            nX = nDelta;
+            nY = static_cast<SCSIZE>(0);
+            nResCols = 1;
+            nResRows = nrR;
+        }
+        // SAL _DEBUG( "Matrix, result, nX = " << nX << ", nY = " << nY << ", nrC = " << nrC << ", nrR = " << nrR );
+        // if result matrix has more than one row or column push matrix else push single value
+        if ( nResCols > 1 || nResRows > 1 )
+        {
+            // result is matrix, make/fill matrix with output and push that
+            ScMatrixRef pResMat = GetNewMat( nResCols, nResRows, /*bEmpty*/true );
+            if ( pResMat )
+            {
+                // SAL _DEBUG( "pResMatrix, nResCols = " << nResCols << ", nResRows = " << nResRows );
+                for ( SCSIZE i = 0; i < nResCols; i++ )
+                {
+                    for ( SCSIZE j = 0; j < nResRows; j++ )
+                    {
+                        SCSIZE ri = ( bVLookup ? i : nX );
+                        SCSIZE rj = ( bVLookup ? nY : j );
+                        if ( prMat->IsStringOrEmpty( ri, rj ) )
+                            pResMat->PutString( prMat->GetString( ri, rj ), i, j );
+                        else
+                            pResMat->PutDouble( prMat->GetDouble( ri, rj ), i, j );
+                        // SAL _DEBUG( "Matrix, result, pResMat( " << i << ", " << j << " ) = " << pResMat->GetString( i, j ).getString() );
+                    }
+                }
+                PushMatrix( pResMat );
+            }
+            else
+            {
+                // SAL _DEBUG( "ERROR, could not create pResMat!!" );
+                PushIllegalParameter();
+                return;
+            }
+        }
+        else
+        {
+            // result is a single value
+            if ( prMat->IsStringOrEmpty( nX, nY) )
+                PushString( prMat->GetString( nX, nY ).getString() );
+            else
+                PushDouble( prMat->GetDouble( nX, nY ) );
+        }
+    }
+    else
+    {
+        if ( !aNotFoundStr.getString().isEmpty() )
+            PushString( aNotFoundStr.getString() );
+        else
+            PushNA();
+    }
+
+    return;
+}
+
 void ScInterpreter::ScSubTotal()
 {
     sal_uInt8 nParamCount = GetByte();
