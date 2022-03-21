@@ -6517,6 +6517,11 @@ std::shared_ptr<sc::Sparkline> ScDocument::GetSparkline(ScAddress const& rPositi
     return std::shared_ptr<sc::Sparkline>();
 }
 
+bool ScDocument::HasSparkline(ScAddress const & rPosition)
+{
+    return bool(GetSparkline(rPosition));
+}
+
 sc::Sparkline* ScDocument::CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> & pSparklineGroup)
 {
     SCTAB nTab = rPosition.Tab();
