@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1906484d_e8c34090",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-21T11:53:34Z",
+      "side": 1,
+      "message": "Any cons here? (eg: can it be to \"techy\" for some people?)",
+      "revId": "a217ef6a306aa5b2cfb19b8426741b4594ed12a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
