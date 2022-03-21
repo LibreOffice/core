@@ -771,17 +771,9 @@ void ListBox::StateChanged( StateChangedType nType )
         mpImplLB->SetControlBackground( GetControlBackground() );
         if ( mpImplWin )
         {
-            if ( mpImplWin->IsNativeControlSupported(ControlType::Listbox, ControlPart::Entire) )
-            {
-                // Transparent background
-                mpImplWin->SetBackground();
-                mpImplWin->SetControlBackground();
-            }
-            else
-            {
-                mpImplWin->SetBackground( mpImplLB->GetMainWindow()->GetControlBackground() );
-                mpImplWin->SetControlBackground( mpImplLB->GetMainWindow()->GetControlBackground() );
-            }
+
+            mpImplWin->SetBackground( GetControlBackground() );
+            mpImplWin->SetControlBackground( GetControlBackground() );
             mpImplWin->SetFont( mpImplLB->GetMainWindow()->GetFont() );
             mpImplWin->Invalidate();
         }
