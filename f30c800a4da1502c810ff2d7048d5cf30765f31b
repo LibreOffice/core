@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "316d3033_7ff16a01",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-21T13:12:11Z",
+      "side": 1,
+      "message": "Somehow the ellipsis got lost. Now it\u0027s good again.",
+      "revId": "f30c800a4da1502c810ff2d7048d5cf30765f31b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
