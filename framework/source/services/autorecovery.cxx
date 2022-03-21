@@ -1992,7 +1992,7 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         implts_openConfig();
 
         css::uno::Reference<css::container::XNameAccess> xCheck(
-                officecfg::Office::Recovery::RecoveryList::get());
+                officecfg::Office::Recovery::RecoveryList::get(batch));
 
         css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
