@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9a77e40_32036a70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-03-21T02:59:41Z",
+      "side": 1,
+      "message": "Patchset 4 is code formatting and variable renames",
+      "revId": "e492117f8a5daf372824c524400cb2db7c853e67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
