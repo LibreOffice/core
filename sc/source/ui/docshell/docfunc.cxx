@@ -97,6 +97,7 @@
 #include <SparklineGroup.hxx>
 #include <SparklineData.hxx>
 #include <undo/UndoInsertSparkline.hxx>
+#include <undo/UndoDeleteSparkline.hxx>
 #include <config_features.h>
 
 #include <memory>
@@ -5837,6 +5838,21 @@ bool ScDocFunc::InsertSparklines(ScRange const& rDataRange, ScRange const& rSpar
     // insert the sparkline by "redoing"
     pUndoInsertSparkline->Redo();
     rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoInsertSparkline));
+
+    return true;
+}
+
+bool ScDocFunc::DeleteSparkline(ScAddress const& rAddress)
+{
+    auto& rDocument = rDocShell.GetDocument();
+
+    if (!rDocument.HasSparkline(rAddress))
+        return false;
+
+    auto pUndoDeleteSparkline = std::make_unique<sc::UndoDeleteSparkline>(rDocShell, rAddress);
+    // delete sparkline by "redoing"
+    pUndoDeleteSparkline->Redo();
+    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoDeleteSparkline));
 
     return true;
 }
