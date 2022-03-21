@@ -16,6 +16,23 @@
       "message": "This now crashes in AppendCategory call.\nAny idea what might be wrong now?",
       "revId": "97463f690bab756cbf500cd4df6bf220df12dfb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a73e307_b5b166f0",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-21T12:41:20Z",
+      "side": 1,
+      "message": "This release was wrong. COMReference manages the COM object lifetime itself - including correct release when you return from function because of some failure. Your old code was full of returns, without corresponding cleanup. In this version, likely this Release was the only wrong call, but generally you kept working with COMReference as if it\u0027s just a plain C pointer. My suggested code is in patchset 5. HTH 😊",
+      "revId": "97463f690bab756cbf500cd4df6bf220df12dfb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
