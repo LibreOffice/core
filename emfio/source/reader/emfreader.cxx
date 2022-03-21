@@ -175,6 +175,16 @@ constexpr sal_Int32 ARCDIRECTION_CLOCKWISE = 0x00000002;
 namespace
 {
 
+/* [MS-EMF] - v20210625 - page 41 */
+/* 2.1.26 Point Enumeration */
+enum EMFPointTypes
+{
+    PT_CLOSEFIGURE = 0x01,
+    PT_LINETO = 0x02,
+    PT_BEZIERTO = 0x04,
+    PT_MOVETO = 0x06
+};
+
 const char *
 record_type_name(sal_uInt32 nRecType)
 {
@@ -930,6 +940,83 @@ namespace emfio
 
                     case EMR_POLYLINETO :
                         DrawPolyLine(ReadPolygonWithSkip<sal_Int32>(true, nNextPos), true, mbRecordPath);
+                    break;
+
+                    case EMR_POLYDRAW:
+                    {
+                        sal_uInt32 nPointsCount, nBezierCount = 0;
+                        std::vector<Point> aPoints;
+                        sal_Int32 nX, nY;
+                        bool wrongFile = false;
+                        unsigned char nPointType;
+                        std::vector<unsigned char> aPointTypes;
+                        mpInputStream->ReadInt32(nX32)
+                            .ReadInt32(nY32)
+                            .ReadInt32(nx32)
+                            .ReadInt32(ny32)
+                            .ReadUInt32(nPointsCount);
+
+                        aPoints.reserve(nPointsCount);
+                        for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
+                        {
+                            *mpInputStream >> nX >> nY;
+                            aPoints.push_back(Point(nX, nY));
+                        }
+                        aPointTypes.reserve(nPointsCount);
+                        for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
+                        {
+                            mpInputStream->ReadUChar(nPointType);
+                            aPointTypes.push_back(nPointType);
+                            SAL_INFO_IF(aPointTypes[i] == PT_MOVETO, "emfio",
+                                        "\t\t" << i << "/" << nPointsCount - 1 << " PT_MOVETO, "
+                                               << aPoints[i].getX() << ", " << aPoints[i].getY());
+                            SAL_INFO_IF((aPointTypes[i] != PT_MOVETO) && (aPointTypes[i] & PT_LINETO), "emfio",
+                                        "\t\t" << i << "/" << nPointsCount - 1 << " PT_LINETO, "
+                                               << aPoints[i].getX() << ", " << aPoints[i].getY());
+                            SAL_INFO_IF((aPointTypes[i] != PT_MOVETO) && (aPointTypes[i] & PT_CLOSEFIGURE), "emfio",
+                                        "\t\t" << i << "/" << nPointsCount - 1 << " PT_CLOSEFIGURE, "
+                                               << aPoints[i].getX() << ", " << aPoints[i].getY());
+                            SAL_INFO_IF((aPointTypes[i] != PT_MOVETO) && (aPointTypes[i] & PT_BEZIERTO), "emfio",
+                                        "\t\t" << i << "/" << nPointsCount - 1 << " PT_BEZIERTO, "
+                                               << aPoints[i].getX() << ", " << aPoints[i].getY());
+
+                            if ((aPointTypes[i] != PT_MOVETO) && (nPointType & PT_BEZIERTO))
+                                nBezierCount++;
+                            else if (nBezierCount % 3 == 0)
+                                nBezierCount = 0;
+                            else
+                            {
+                                SAL_WARN(
+                                    "emfio",
+                                    "EMF file error: Number of Bezier points is not set of three.");
+                                wrongFile = true;
+                            }
+                        }
+                        if (wrongFile) break;
+                        for (sal_uInt32 i = 0; i < nPointsCount; i++)
+                        {
+                            if (aPointTypes[i] == PT_MOVETO)
+                                MoveTo(aPoints[i], true);
+                            else if (aPointTypes[i] & PT_LINETO)
+                            {
+                                LineTo(aPoints[i], true);
+                                if (aPointTypes[i] & PT_CLOSEFIGURE)
+                                    ClosePath();
+                            }
+                            else if (aPointTypes[i] & PT_BEZIERTO)
+                            {
+                                tools::Polygon aPolygon(4);
+                                aPolygon[0] = maActPos;
+                                aPolygon[1] = aPoints[i++];
+                                aPolygon[2] = aPoints[i++];
+                                aPolygon[3] = aPoints[i];
+                                DrawPolyBezier(std::move(aPolygon), true, true);
+                                if (aPointTypes[i] & PT_CLOSEFIGURE)
+                                    ClosePath();
+                            }
+                        }
+                        StrokeAndFillPath(true, false);
+                    }
                     break;
 
                     case EMR_POLYLINE :
@@ -2047,7 +2134,6 @@ namespace emfio
                     case EMR_INVERTRGN :
                     case EMR_FLATTENPATH :
                     case EMR_WIDENPATH :
-                    case EMR_POLYDRAW :
                     case EMR_SETPALETTEENTRIES :
                     case EMR_RESIZEPALETTE :
                     case EMR_EXTFLOODFILL :

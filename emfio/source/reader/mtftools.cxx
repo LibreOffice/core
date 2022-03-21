@@ -1618,10 +1618,12 @@ namespace emfio
     {
         sal_uInt16 nPoints = rPolygon.GetSize();
         if ( ( nPoints < 4 ) || ( ( ( nPoints - 4 ) % 3 ) != 0 ) )
+        {
+            SAL_WARN("emfio",
+                "EMF file error: Number of Bezier points is not set of three");
             return;
-
+        }
         UpdateClipRegion();
-
         ImplMap( rPolygon );
         if ( bTo )
         {

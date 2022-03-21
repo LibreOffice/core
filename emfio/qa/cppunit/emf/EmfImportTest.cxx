@@ -891,6 +891,30 @@ CPPUNIT_TEST_FIXTURE(Test, testPolylinetoCloseStroke)
     assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color", "#000000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEmfPolydraw)
+{
+    // tdf#142249 EMF import with records: POLYDRAW, CREATEPEN.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPolydraw.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline", 2);
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[1]", "color", "#000000");
+    assertXPathContent(pDocument, aXPathPrefix + "polygonhairline[1]/polygon",
+                       "2000,200 3000,200 3000,1000");
+    assertXPath(pDocument, aXPathPrefix + "polygonhairline[2]", "color", "#000000");
+    assertXPathContent(pDocument, aXPathPrefix + "polygonhairline[2]/polygon",
+                       "3000,2000 3000,2000 4000,2000 3000,3000");
+
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke", 1);
+    assertXPathContent(pDocument, aXPathPrefix + "polygonstroke[1]/polygon",
+                       "50,50 50,50 1000,1000 1000,1000 2000,2500 2000,1000");
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/line", "color", "#ff0000");
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke[1]/stroke", "dotDashArray", "30 10 ");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEmfPlusBrushPathGradientWithBlendColors)
 {
     // tdf#131506 EMF+ records: FillRects, Brush with PathGradient and BlendColor, FillRects
