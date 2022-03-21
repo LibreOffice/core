@@ -75,6 +75,7 @@ https://docs.oasis-open.org/office/v1.2/os/OpenDocument-v1.2-os-part2.html
   * LOOKUP
   * MATCH
   * VLOOKUP
+  * XLOOKUP
 * Mathematical Functions
   * SUMIF
   * SUMIFS

@@ -593,5 +593,6 @@ inline constexpr OStringLiteral HID_GOTOTABLEMASK  = "SC_HID_GOTOTABLEMASK";
 #define HID_FUNC_FOURIER                                        "SC_HID_FUNC_FOURIER"
 #define HID_FUNC_RAND_NV                                        "SC_HID_FUNC_RAND_NV"
 #define HID_FUNC_RANDBETWEEN_NV                                 "SC_HID_FUNC_RANDBETWEEN_NV"
+#define HID_FUNC_XLOOKUP_MS                                     "SC_HID_FUNC_XLOOKUP_MS"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
