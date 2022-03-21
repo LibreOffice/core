@@ -52,13 +52,13 @@ static_assert(sizeof (rtl_String) == 12);
 sal_Int32 SAL_CALL rtl_str_valueOfFloat(char * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::valueOfFP<RTL_STR_MAX_VALUEOFFLOAT>(pStr, f, &rtl_math_doubleToString);
+    return rtl::str::valueOfFP<RTL_STR_MAX_VALUEOFFLOAT>(pStr, f);
 }
 
 sal_Int32 SAL_CALL rtl_str_valueOfDouble(char * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::valueOfFP<RTL_STR_MAX_VALUEOFDOUBLE>(pStr, d, &rtl_math_doubleToString);
+    return rtl::str::valueOfFP<RTL_STR_MAX_VALUEOFDOUBLE>(pStr, d);
 }
 
 float SAL_CALL rtl_str_toFloat(char const * pStr) SAL_THROW_EXTERN_C()
