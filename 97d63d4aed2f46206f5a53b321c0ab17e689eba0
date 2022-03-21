@@ -16,6 +16,23 @@
       "message": "I can\u0027t test this since I don\u0027t have a Mac but it seemed to me quite straightforward.",
       "revId": "97d63d4aed2f46206f5a53b321c0ab17e689eba0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c1f850_717334dd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-21T08:07:01Z",
+      "side": 1,
+      "message": "Is this string then returned in an API to scripts? I guess there is a risk that some script (Basic or whatever) checks for \"Mac OS X\" there and then will break if it says \"macOS\" instead. No idea why somebody would write scripts that do such checks, though. Not opposed, just pointing this out.",
+      "revId": "97d63d4aed2f46206f5a53b321c0ab17e689eba0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
