@@ -396,27 +396,12 @@ int yydebug;            /*  nonzero means print parse trace */
 #define YYMAXDEPTH 10000
 #endif
 
-/* The user can define YYPARSE_PARAM as the name of an argument to be passed
-   into yyparse.  The argument should have type void *.
-   It should actually point to an object.
-   Grammar actions can access the variable by casting it
-   to the proper pointer type.  */
-
-#ifdef YYPARSE_PARAM
-#define YYPARSE_PARAM_ARG void *YYPARSE_PARAM
-#define YYPARSE_PARAM_DECL
-#else /* not YYPARSE_PARAM */
 #define YYPARSE_PARAM_ARG
 #define YYPARSE_PARAM_DECL
-#endif /* not YYPARSE_PARAM */
 
 /* Prevent warning if -Wstrict-prototypes.  */
 #ifdef __GNUC__
-#ifdef YYPARSE_PARAM
-int yyparse (void *);
-#else
 static int yyparse();
-#endif
 #endif
 
 static int
