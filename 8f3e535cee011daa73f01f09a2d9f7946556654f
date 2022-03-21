@@ -34,6 +34,23 @@
       "parentUuid": "f2380ff5_82614d08",
       "revId": "8f3e535cee011daa73f01f09a2d9f7946556654f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c4c75ad_7b39f05c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-21T11:51:53Z",
+      "side": 1,
+      "message": "No, the two are independent from each other. The ODT one is only useful in case one examines the XML markup manually.",
+      "revId": "8f3e535cee011daa73f01f09a2d9f7946556654f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
