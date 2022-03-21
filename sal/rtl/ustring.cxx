@@ -88,13 +88,13 @@ sal_Int32 rtl_ustr_lastIndexOfAscii_WithLength(
 sal_Int32 SAL_CALL rtl_ustr_valueOfFloat(sal_Unicode * pStr, float f)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::valueOfFP<RTL_USTR_MAX_VALUEOFFLOAT>(pStr, f, &rtl_math_doubleToUString);
+    return rtl::str::valueOfFP<RTL_USTR_MAX_VALUEOFFLOAT>(pStr, f);
 }
 
 sal_Int32 SAL_CALL rtl_ustr_valueOfDouble(sal_Unicode * pStr, double d)
     SAL_THROW_EXTERN_C()
 {
-    return rtl::str::valueOfFP<RTL_USTR_MAX_VALUEOFDOUBLE>(pStr, d, &rtl_math_doubleToUString);
+    return rtl::str::valueOfFP<RTL_USTR_MAX_VALUEOFDOUBLE>(pStr, d);
 }
 
 namespace {
