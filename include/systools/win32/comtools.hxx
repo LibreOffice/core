@@ -173,10 +173,10 @@ namespace sal::systools
         HRESULT TryCoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
                                     DWORD nCtx = CLSCTX_ALL)
         {
-            void* ip;
-            HRESULT hr = ::CoCreateInstance(clsid, pOuter, nCtx, __uuidof(T), &ip);
+            T* ip;
+            HRESULT hr = ::CoCreateInstance(clsid, pOuter, nCtx, IID_PPV_ARGS(&ip));
             if (SUCCEEDED(hr))
-                release(std::exchange(com_ptr_, static_cast<T*>(ip)));
+                release(std::exchange(com_ptr_, ip));
             return hr;
         }
 
@@ -189,10 +189,10 @@ namespace sal::systools
 
         HRESULT TryCoGetClassObject(REFCLSID clsid, DWORD nCtx = CLSCTX_ALL)
         {
-            void* ip;
-            HRESULT hr = ::CoGetClassObject(clsid, nCtx, nullptr, __uuidof(T), &ip);
+            T* ip;
+            HRESULT hr = ::CoGetClassObject(clsid, nCtx, nullptr, IID_PPV_ARGS(&ip));
             if (SUCCEEDED(hr))
-                release(std::exchange(com_ptr_, static_cast<T*>(ip)));
+                release(std::exchange(com_ptr_, ip));
             return hr;
         }
 
