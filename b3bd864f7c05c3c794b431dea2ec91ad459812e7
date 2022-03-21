@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09d766c0_b0a0730b",
+        "filename": "sal/rtl/digest.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-21T10:18:27Z",
+      "side": 1,
+      "message": "What\u0027s the motivation to pick sal_uInt8 as the type for these two?  From their use across the code, something like std::size_t or sal_uInt32, or even the canonic int (aka auto) would look more natural.",
+      "revId": "b3bd864f7c05c3c794b431dea2ec91ad459812e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
