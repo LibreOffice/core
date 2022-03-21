@@ -431,6 +431,7 @@ public:
 
 };
 
+/// UNO API wrapper for SwTableLines.
 class SwXTableRows final : public cppu::WeakImplHelper
 <
     css::table::XTableRows,
