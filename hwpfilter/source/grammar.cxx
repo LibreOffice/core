@@ -368,19 +368,11 @@ const short yycheck[] = {    11,
 #endif
 
 #ifdef YYPURE
-#ifdef YYLSP_NEEDED
-#ifdef YYLEX_PARAM
-#define YYLEX       yylex(&yylval, &yylloc, YYLEX_PARAM)
-#else
-#define YYLEX       yylex(&yylval, &yylloc)
-#endif
-#else /* not YYLSP_NEEDED */
 #ifdef YYLEX_PARAM
 #define YYLEX       yylex(&yylval, YYLEX_PARAM)
 #else
 #define YYLEX       yylex(&yylval)
 #endif
-#endif /* not YYLSP_NEEDED */
 #endif
 
 /* If nonreentrant, generate the variables here */
@@ -390,11 +382,6 @@ const short yycheck[] = {    11,
 static int yychar;  /*  the lookahead symbol        */
 YYSTYPE yylval;         /*  the semantic value of the       */
                 /*  lookahead symbol            */
-
-#ifdef YYLSP_NEEDED
-YYLTYPE yylloc;         /*  location data for the lookahead */
-                /*  symbol              */
-#endif
 
 static int yynerrs;     /*  number of parse errors so far       */
 #endif  /* not YYPURE */
@@ -462,14 +449,6 @@ yyparse(YYPARSE_PARAM_ARG)
   short *yyss = yyssa;      /*  refer to the stacks through separate pointers */
   YYSTYPE *yyvs = yyvsa;    /*  to allow yyoverflow to reallocate them elsewhere */
 
-#ifdef YYLSP_NEEDED
-  YYLTYPE yylsa[YYINITDEPTH];   /*  the location stack          */
-  YYLTYPE *yyls = yylsa;
-  YYLTYPE *yylsp;
-
-#define YYPOPSTACK   (yyvsp--, yyssp--, yylsp--)
-#endif
-
   int yystacksize = YYINITDEPTH;
   int yyfree_stacks = 0;
 
@@ -477,9 +456,6 @@ yyparse(YYPARSE_PARAM_ARG)
   int yychar;
   YYSTYPE yylval;
   int yynerrs;
-#ifdef YYLSP_NEEDED
-  YYLTYPE yylloc;
-#endif
 #endif
 
   YYSTYPE yyval;        /*  the variable used to return     */
@@ -506,9 +482,6 @@ yyparse(YYPARSE_PARAM_ARG)
 
   yyssp = yyss - 1;
   yyvsp = yyvs;
-#ifdef YYLSP_NEEDED
-  yylsp = yyls;
-#endif
 
 /* Push a new state, which is found in  yystate  .  */
 /* In all cases, when you get here, the value and location stacks
@@ -523,9 +496,6 @@ yynewstate:
       /* Use copies of these so that the &'s don't force the real ones into memory. */
       YYSTYPE *yyvs1 = yyvs;
       short *yyss1 = yyss;
-#ifdef YYLSP_NEEDED
-      YYLTYPE *yyls1 = yyls;
-#endif
 
       /* Get the current used size of the three stacks, in elements.  */
       int size = yyssp - yyss + 1;
@@ -533,25 +503,12 @@ yynewstate:
 #ifdef yyoverflow
       /* Each stack pointer address is followed by the size of
      the data in use in that stack, in bytes.  */
-#ifdef YYLSP_NEEDED
-      /* This used to be a conditional around just the two extra args,
-     but that might be undefined if yyoverflow is a macro.  */
-      yyoverflow("parser stack overflow",
-         &yyss1, size * sizeof (*yyssp),
-         &yyvs1, size * sizeof (*yyvsp),
-         &yyls1, size * sizeof (*yylsp),
-         &yystacksize);
-#else
       yyoverflow("parser stack overflow",
          &yyss1, size * sizeof (*yyssp),
          &yyvs1, size * sizeof (*yyvsp),
          &yystacksize);
-#endif
 
       yyss = yyss1; yyvs = yyvs1;
-#ifdef YYLSP_NEEDED
-      yyls = yyls1;
-#endif
 #else /* no yyoverflow */
       /* Extend the stack our own way.  */
       if (yystacksize >= YYMAXDEPTH)
@@ -561,9 +518,6 @@ yynewstate:
         {
           free (yyss);
           free (yyvs);
-#ifdef YYLSP_NEEDED
-          free (yyls);
-#endif
         }
       return 2;
     }
@@ -575,17 +529,10 @@ yynewstate:
       memcpy (yyss, yyss1, size * sizeof (*yyssp));
       yyvs = static_cast<YYSTYPE *>(malloc (yystacksize * sizeof (*yyvsp)));
       memcpy (yyvs, yyvs1, size * sizeof (*yyvsp));
-#ifdef YYLSP_NEEDED
-      yyls = (YYLTYPE *) malloc (yystacksize * sizeof (*yylsp));
-      memcpy ((char *)yyls, (char *)yyls1, size * sizeof (*yylsp));
-#endif
 #endif /* no yyoverflow */
 
       yyssp = yyss + size - 1;
       yyvsp = yyvs + size - 1;
-#ifdef YYLSP_NEEDED
-      yylsp = yyls + size - 1;
-#endif
 
 #if YYDEBUG != 0
       if (yydebug)
@@ -696,9 +643,6 @@ yynewstate:
     yychar = YYEMPTY;
 
   *++yyvsp = yylval;
-#ifdef YYLSP_NEEDED
-  *++yylsp = yylloc;
-#endif
 
   /* count tokens shifted since error; after three, turn off error status.  */
   if (yyerrstatus) yyerrstatus--;
@@ -958,9 +902,6 @@ case 72:
 
   yyvsp -= yylen;
   yyssp -= yylen;
-#ifdef YYLSP_NEEDED
-  yylsp -= yylen;
-#endif
 
 #if YYDEBUG != 0
   if (yydebug)
@@ -974,23 +915,6 @@ case 72:
 #endif
 
   *++yyvsp = yyval;
-
-#ifdef YYLSP_NEEDED
-  yylsp++;
-  if (yylen == 0)
-    {
-      yylsp->first_line = yylloc.first_line;
-      yylsp->first_column = yylloc.first_column;
-      yylsp->last_line = (yylsp-1)->last_line;
-      yylsp->last_column = (yylsp-1)->last_column;
-      yylsp->text = 0;
-    }
-  else
-    {
-      yylsp->last_line = (yylsp+yylen-1)->last_line;
-      yylsp->last_column = (yylsp+yylen-1)->last_column;
-    }
-#endif
 
   /* Now "shift" the result of the reduction.
      Determine what state that goes to,
@@ -1098,9 +1022,6 @@ yyerrpop:   /* pop the current state because it cannot handle the error token */
   if (yyssp == yyss) YYABORT;
   yyvsp--;
   yystate = *--yyssp;
-#ifdef YYLSP_NEEDED
-  yylsp--;
-#endif
 
 #if YYDEBUG != 0
   if (yydebug)
@@ -1143,9 +1064,6 @@ yyerrhandle:
 #endif
 
   *++yyvsp = yylval;
-#ifdef YYLSP_NEEDED
-  *++yylsp = yylloc;
-#endif
 
   yystate = yyn;
   goto yynewstate;
@@ -1156,9 +1074,6 @@ yyerrhandle:
     {
       free (yyss);
       free (yyvs);
-#ifdef YYLSP_NEEDED
-      free (yyls);
-#endif
     }
   return 0;
 
@@ -1168,9 +1083,6 @@ yyerrhandle:
     {
       free (yyss);
       free (yyvs);
-#ifdef YYLSP_NEEDED
-      free (yyls);
-#endif
     }
   return 1;
 }
