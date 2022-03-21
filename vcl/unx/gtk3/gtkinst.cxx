@@ -20363,7 +20363,7 @@ private:
                 sal_uInt16 nKeyMod = aKeyCode.GetModifier();
                 if (!nKeyMod)
                 {
-                    int nStartBound = m_bPopupActive ? 0 : (m_nMRUCount + 1);
+                    int nStartBound = m_bPopupActive || !m_nMRUCount ? 0 : (m_nMRUCount + 1);
                     int nActive = get_active_including_mru() - 1;
                     while (nActive >= nStartBound && separator_function(nActive))
                         --nActive;
@@ -20379,7 +20379,7 @@ private:
                 if (!nKeyMod)
                 {
                     int nCount = get_count_including_mru();
-                    int nStartBound = m_bPopupActive ? 0 : (m_nMRUCount + 1);
+                    int nStartBound = m_bPopupActive || !m_nMaxMRUCount ? 0 : (m_nMRUCount + 1);
                     int nActive = nStartBound;
                     while (nActive < nCount && separator_function(nActive))
                         ++nActive;
