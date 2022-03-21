@@ -2699,18 +2699,23 @@ void ImplWin::ImplDraw(vcl::RenderContext& rRenderContext, bool bLayout)
             if( bMouseOver )
                 nState |= ControlState::ROLLOVER;
 
+            Color aBackgroundColor = COL_AUTO;
+            if (IsControlBackground())
+                aBackgroundColor = GetControlBackground();
+
             // if parent has no border, then nobody has drawn the background
             // since no border window exists. so draw it here.
             WinBits nParentStyle = pWin->GetStyle();
             if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
             {
                 tools::Rectangle aParentRect( Point( 0, 0 ), pWin->GetSizePixel() );
+
                 pWin->DrawNativeControl( ControlType::Listbox, ControlPart::Entire, aParentRect,
-                                         nState, aControlValue, OUString() );
+                                         nState, aControlValue, OUString(), aBackgroundColor);
             }
 
             bNativeOK = rRenderContext.DrawNativeControl(ControlType::Listbox, ControlPart::Entire, aCtrlRegion,
-                                                         nState, aControlValue, OUString());
+                                                         nState, aControlValue, OUString(), aBackgroundColor);
         }
 
         if (bIsEnabled)
