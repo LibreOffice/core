@@ -800,6 +800,14 @@ namespace emfio
         OSL_ENSURE(nReadPoints == nGesPoints, "The number Points processed from EMR_POLYPOLYGON is unequal imported number (!)");
     }
 
+enum EMFPointTypes
+{
+    PT_CLOSEFIGURE = 0x01,
+    PT_LINETO = 0x02,
+    PT_BEZIERTO = 0x04,
+    PT_MOVETO = 0x06
+};
+
     bool EmfReader::ReadEnhWMF()
     {
         sal_uInt32  nStretchBltMode = 0;
@@ -925,6 +933,65 @@ namespace emfio
 
                     case EMR_POLYLINETO :
                         DrawPolyLine(ReadPolygonWithSkip<sal_Int32>(true, nNextPos), true, mbRecordPath);
+                    break;
+
+                    case EMR_POLYDRAW :
+                    {
+                        sal_uInt32 nPointsCount;
+                        mpInputStream->ReadInt32(nX32).ReadInt32(nY32).ReadInt32(nx32).ReadInt32(ny32).ReadUInt32(nPointsCount);
+
+                        if (nPointsCount == 0)
+                            break;
+
+                        std::vector<Point> aPoints;
+                        aPoints.reserve(nPointsCount);
+                        for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
+                        {
+                            sal_Int32 nX, nY;
+                            *mpInputStream >> nX >> nY;
+                            SAL_INFO("emfio", "\t\t\tPoint " << i << " of " << nPointsCount - 1 << ": " << nX << ", " << nY);
+                            aPoints.push_back(Point(nX, nY));
+                        }
+                        std::vector<unsigned char> aPointTypes;
+                        aPointTypes.reserve(nPointsCount);
+                        for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
+                        {
+                            unsigned char nPointType;
+                            mpInputStream->ReadUChar(nPointType);
+                            SAL_INFO("emfio", "\t\t\tType " << i << " of " << nPointsCount - 1 << ": 0x" << std::hex << static_cast<sal_Int16>(nPointType) << std::dec);
+                            aPointTypes.push_back(nPointType);
+                        }
+                        //ClearPath();
+                        //mbRecordPath = true;
+                        for (sal_uInt32 i = 0; i < nPointsCount && mpInputStream->good(); i++)
+                        {
+                            if (aPointTypes[i] == PT_MOVETO)
+                            {
+                                SAL_INFO("emfio", "\t\t\tRysowanie " << i << " of " << nPointsCount - 1 << " PT_MOVETO " << aPointTypes[i]);
+                                MoveTo(aPoints[i], false);
+                            }
+                            else if (aPointTypes[i] & PT_LINETO)
+                            {
+                                SAL_INFO("emfio", "\t\t\tRysowanie " << i << " of " << nPointsCount - 1 << " PT_LINETO " << aPointTypes[i]);
+                                LineTo(aPoints[i], false);
+
+                                if (aPointTypes[i] & PT_CLOSEFIGURE)
+                                {
+                                    SAL_INFO("emfio", "\t\t\tRysowanie " << i << " of " << nPointsCount - 1 << " PT_CLOSEFIGURE " << aPointTypes[i]);
+                                    ClosePath();
+                                    StrokeAndFillPath(true, false);
+                                    //ClearPath();
+                                }
+                            }
+                            else if (aPointTypes[i] & PT_BEZIERTO)
+                            {
+                                SAL_INFO("emfio", "\t\t\tRysowanie " << i << " of " << nPointsCount - 1 << " PT_BEZIERTO " << aPointTypes[i]);
+                                LineTo(aPoints[i], false);
+                            }
+                        }
+                        //mbRecordPath = false;
+                        //DrawPolyLine(ReadPolygonWithSkip<sal_Int32>(true, nNextPos), true, mbRecordPath);
+                    }
                     break;
 
                     case EMR_POLYLINE :
@@ -2173,7 +2240,6 @@ namespace emfio
                     case EMR_INVERTRGN :
                     case EMR_FLATTENPATH :
                     case EMR_WIDENPATH :
-                    case EMR_POLYDRAW :
                     case EMR_SETPALETTEENTRIES :
                     case EMR_RESIZEPALETTE :
                     case EMR_EXTFLOODFILL :
