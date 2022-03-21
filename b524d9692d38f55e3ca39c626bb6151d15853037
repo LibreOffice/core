@@ -106,6 +106,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2585ee9d_3b268539",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-21T11:13:39Z",
+      "side": 1,
+      "message": "Suggestion to do this as UNO Service came from Noel Grandin.\n\nIRC log from Jan 20th 2022:\nnoelgrandin: samuel, thorsten probably best if you define a new UNO interface in LibreOffice to manage jump lists, then the extension can check for that API then add it safely\nsamuel: noelgrandin: yes that was one idea too - not sure if it\u0027s the best thing (would work only on Windows)\nnoelgrandin: I don\u0027t think that is a problem - the other platforms would just say they don\u0027t support the API, perfectly permissible in UNO\nor they could support the API and just ignore method calls on it, or throw some kind of NotSupportedException\nlots of relatively simple options\nsamuel: noelgrandin, sberg: any idea where (which namespace) in UNO API would be a good place for this jump list api?\nsberg: samuel, css.system, maybe\nnoelgrandin: css::ui has sidebar panels and suchlike, maybe there?",
+      "parentUuid": "41136bfe_c1f0bcdc",
+      "revId": "b524d9692d38f55e3ca39c626bb6151d15853037",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bdbd3481_5ca6afc7",
