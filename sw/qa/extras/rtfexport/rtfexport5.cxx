@@ -1363,6 +1363,21 @@ DECLARE_RTFEXPORT_TEST(testTdf118047, "tdf118047.rtf")
     CPPUNIT_ASSERT_MESSAGE("Header is too large", 1000 > nHeight);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf104390, "tdf104390.rtf")
+{
+    uno::Reference<text::XTextRange> xPara = getParagraph(1);
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(xPara, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+
+    // Check font in first run
+    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(36.f, getProperty<float>(xRun, "CharHeight"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Courier New"), getProperty<OUString>(xRun, "CharFontName"));
+
+    // Ensure there is only one run
+    CPPUNIT_ASSERT_MESSAGE("Extra elements in paragraph", !xRunEnum->hasMoreElements());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
