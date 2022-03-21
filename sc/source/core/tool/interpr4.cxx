@@ -4252,6 +4252,7 @@ StackVar ScInterpreter::Interpret()
                 case ocCountIfs         : ScCountIfs();                 break;
                 case ocLookup           : ScLookup();                   break;
                 case ocVLookup          : ScVLookup();                  break;
+                case ocXLookup          : ScXLookup();                  break;
                 case ocHLookup          : ScHLookup();                  break;
                 case ocIndex            : ScIndex();                    break;
                 case ocMultiArea        : ScMultiArea();                break;
