@@ -90,7 +90,7 @@ Please contact your system administrator if you are unsure about the following s
                     </child>
                     <child>
                       <object class="GtkRadioButton" id="directly">
-                        <property name="label" translatable="yes" context="dbwizmysqlintropage|directly">Connect directly</property>
+                        <property name="label" translatable="yes" context="dbwizmysqlintropage|directly">Connect directly (using MariaDB C connector)</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="use_underline">True</property>
