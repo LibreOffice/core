@@ -47,17 +47,19 @@ public:
     }
 
     void testAddSparkline();
-    void testDeleteSprkline();
+    void testClearContentSprkline();
     void testCopyPasteSparkline();
     void testCutPasteSparkline();
     void testUndoRedoInsertSparkline();
+    void testUndoRedoDeleteSparkline();
 
     CPPUNIT_TEST_SUITE(SparklineTest);
     CPPUNIT_TEST(testAddSparkline);
-    CPPUNIT_TEST(testDeleteSprkline);
+    CPPUNIT_TEST(testClearContentSprkline);
     CPPUNIT_TEST(testCopyPasteSparkline);
     CPPUNIT_TEST(testCutPasteSparkline);
     CPPUNIT_TEST(testUndoRedoInsertSparkline);
+    CPPUNIT_TEST(testUndoRedoDeleteSparkline);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -117,7 +119,7 @@ void SparklineTest::testAddSparkline()
     xDocSh->DoClose();
 }
 
-void SparklineTest::testDeleteSprkline()
+void SparklineTest::testClearContentSprkline()
 {
     ScDocShellRef xDocSh = loadEmptyDocument();
     CPPUNIT_ASSERT(xDocSh);
@@ -284,6 +286,67 @@ void SparklineTest::testUndoRedoInsertSparkline()
     CPPUNIT_ASSERT(pSparkline);
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
     CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testUndoRedoDeleteSparkline()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto& rDocFunc = xDocSh->GetDocFunc();
+
+    // Try to delete sparkline that doesn't exist - returns false
+    CPPUNIT_ASSERT(!rDocFunc.DeleteSparkline(ScAddress(0, 6, 0)));
+
+    // insert test data - A1:A6
+    insertTestData(rDocument);
+
+    // Sparkline range
+    ScRange aRange(0, 6, 0, 0, 6, 0);
+
+    // Check Sparkline at cell A7 doesn't exists
+    auto pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(!pSparkline);
+
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    CPPUNIT_ASSERT(rDocFunc.InsertSparklines(ScRange(0, 0, 0, 0, 5, 0), aRange, pSparklineGroup));
+
+    // Check Sparkline at cell A7 exists
+    pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(pSparkline);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+
+    // Delete Sparkline
+    CPPUNIT_ASSERT(rDocFunc.DeleteSparkline(ScAddress(0, 6, 0)));
+
+    // Check Sparkline at cell A7 doesn't exists
+    pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(!pSparkline);
+
+    // Undo
+    rDocument.GetUndoManager()->Undo();
+
+    // Check Sparkline at cell A7 exists
+    pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(pSparkline);
+    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
+    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+
+    // Redo
+    rDocument.GetUndoManager()->Redo();
+
+    // Check Sparkline at cell A7 doesn't exists
+    pSparkline = rDocument.GetSparkline(aRange.aStart);
+    CPPUNIT_ASSERT(!pSparkline);
+
+    CPPUNIT_ASSERT(!rDocument.HasSparkline(aRange.aStart));
 
     xDocSh->DoClose();
 }
