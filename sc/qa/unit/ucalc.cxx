@@ -3091,6 +3091,7 @@ void Test::testFunctionLists()
         "SHEETS",
         "STYLE",
         "VLOOKUP",
+        "XLOOKUP",
         nullptr
     };
 
