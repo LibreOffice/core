@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aacb744_b451c0a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-21T11:18:21Z",
+      "side": 1,
+      "message": "Ok so I changed it again to put \"Split Cells\" in Generic part.\n(and Calc part already contains \"Unmerge Cells\" so nothing to do here)",
+      "revId": "cd380caea6a778b94b784dba6fb7865f399ccf2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
