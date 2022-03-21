@@ -34,9 +34,8 @@
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
 #include <rtl/math.h>
-#include <rtl/strbuf.h>
-#include <rtl/ustrbuf.h>
-#include <rtl/ustring.hxx>
+#include <rtl/string.h>
+#include <rtl/ustring.h>
 
 void internRelease(rtl_uString*);
 
@@ -452,6 +451,35 @@ sal_Int32 indexOfStr_WithLength                             ( const IMPL_RTL_STR
     my_string_view v(pStr, nStrLen);
     auto idx = nSubLen == 1 ? v.find(*pSubStr) : v.find(pSubStr, 0, nSubLen);
     return idx == my_string_view::npos ? -1 : idx;
+}
+
+inline sal_Int32 indexOfStr_WithLength(const sal_Unicode* pStr, sal_Int32 nStrLen,
+                                       const char* pSubStr, sal_Int32 nSubLen)
+{
+    assert(nStrLen >= 0);
+    assert(nSubLen >= 0);
+    if (nSubLen > 0 && nSubLen <= nStrLen)
+    {
+        sal_Unicode const* end = pStr + nStrLen;
+        sal_Unicode const* cursor = pStr;
+
+        while (cursor < end)
+        {
+            cursor = std::char_traits<sal_Unicode>::find(cursor, end - cursor, *pSubStr);
+            if (!cursor || (end - cursor < nSubLen))
+            {
+                /* no enough left to actually have a match */
+                break;
+            }
+            /* now it is worth trying a full match */
+            if (nSubLen == 1 || rtl_ustr_asciil_reverseEquals_WithLength(cursor, pSubStr, nSubLen))
+            {
+                return cursor - pStr;
+            }
+            cursor += 1;
+        }
+    }
+    return -1;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -1173,21 +1201,6 @@ void newReplaceStrAt                                ( IMPL_RTL_STRINGDATA** ppTh
 
 /* ----------------------------------------------------------------------- */
 
-template <class S, typename CharTypeFrom, typename CharTypeTo>
-void newReplaceAllFromIndex(S**, S*, CharTypeFrom const*, sal_Int32, CharTypeTo const*, sal_Int32,
-                            sal_Int32);
-
-template <typename IMPL_RTL_STRINGDATA>
-void newReplace                                ( IMPL_RTL_STRINGDATA** ppThis,
-                                                 IMPL_RTL_STRINGDATA* pStr,
-                                                 STRCODE<IMPL_RTL_STRINGDATA> cOld,
-                                                 STRCODE<IMPL_RTL_STRINGDATA> cNew )
-{
-    return newReplaceAllFromIndex(ppThis, pStr, &cOld, 1, &cNew, 1, 0);
-}
-
-/* ----------------------------------------------------------------------- */
-
 template <class Traits, typename IMPL_RTL_STRINGDATA>
 void newReplaceChars(IMPL_RTL_STRINGDATA** ppThis, IMPL_RTL_STRINGDATA* pStr)
 {
@@ -1287,103 +1300,6 @@ sal_Int32 getToken                                ( IMPL_RTL_STRINGDATA** ppThis
 
     new_(ppThis);
     return -1;
-}
-
-namespace detail
-{
-template <typename CharType1, typename CharType2>
-sal_Int32 indexOf(const CharType1* s, sal_Int32 len, const CharType2* subStr, sal_Int32 subLen)
-{
-    if constexpr (std::is_same_v<CharType1, CharType2>)
-        return indexOfStr_WithLength(s, len, subStr, subLen);
-    else if constexpr (std::is_same_v<CharType1, sal_Unicode> && std::is_same_v<CharType2, char>)
-        return rtl_ustr_indexOfAscii_WithLength(s, len, subStr, subLen);
-}
-
-template <class S, typename CharType1>
-void append(S** s, sal_Int32* capacity, const CharType1* s1, sal_Int32 len)
-{
-    if constexpr (std::is_same_v<S, rtl_uString> && std::is_same_v<CharType1, sal_Unicode>)
-        return rtl_uStringbuffer_insert(s, capacity, (*s)->length, s1, len);
-    else if constexpr (std::is_same_v<S, rtl_uString> && std::is_same_v<CharType1, char>)
-        return rtl_uStringbuffer_insert_ascii(s, capacity, (*s)->length, s1, len);
-    else if constexpr (std::is_same_v<S, rtl_String> && std::is_same_v<CharType1, char>)
-        return rtl_stringbuffer_insert(s, capacity, (*s)->length, s1, len);
-}
-}
-
-template <class S, typename CharTypeFrom, typename CharTypeTo>
-void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fromLength,
-                            CharTypeTo const* to, sal_Int32 toLength, sal_Int32 fromIndex)
-{
-    assert(s != nullptr);
-    assert(s1 != nullptr);
-    assert(fromLength >= 0);
-    assert(from != nullptr || fromLength == 0);
-    assert(toLength >= 0);
-    assert(to != nullptr || toLength == 0);
-    assert(fromIndex >= 0 && fromIndex <= s1->length);
-    sal_Int32 i = detail::indexOf(s1->buffer + fromIndex, s1->length - fromIndex, from, fromLength);
-    if (i >= 0)
-    {
-        if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
-            std::abort();
-        i += fromIndex;
-        sal_Int32 nCapacity = s1->length + (toLength - fromLength);
-        if (fromLength < toLength)
-        {
-            // Pre-allocate up to 16 replacements more
-            const sal_Int32 nMaxMoreFinds = (s1->length - i - fromLength) / fromLength;
-            const sal_Int32 nIncrease = toLength - fromLength;
-            const sal_Int32 nMoreReplacements = std::min(
-                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
-            nCapacity += nMoreReplacements * nIncrease;
-        }
-        const auto pOld = *s;
-        *s = Alloc<S>(nCapacity);
-        (*s)->length = 0;
-        fromIndex = 0;
-        do
-        {
-            detail::append(s, &nCapacity, s1->buffer + fromIndex, i);
-            detail::append(s, &nCapacity, to, toLength);
-            fromIndex += i + fromLength;
-            i = detail::indexOf(s1->buffer + fromIndex, s1->length - fromIndex, from, fromLength);
-        } while (i >= 0);
-        // the rest
-        detail::append(s, &nCapacity, s1->buffer + fromIndex, s1->length - fromIndex);
-        if (pOld)
-            release(pOld); // Must be last in case *s == s1
-    }
-    else
-        assign(s, s1);
-
-    RTL_LOG_STRING_NEW(*s);
-}
-
-template <class S, typename CharTypeFrom, typename CharTypeTo>
-void newReplaceFirst(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fromLength,
-                     CharTypeTo const* to, sal_Int32 toLength, sal_Int32& fromIndex)
-{
-    assert(s != nullptr);
-    assert(s1 != nullptr);
-    assert(fromLength >= 0);
-    assert(from != nullptr || fromLength == 0);
-    assert(toLength >= 0);
-    assert(to != nullptr || toLength == 0);
-    assert(fromIndex >= 0 && fromIndex <= s1->length);
-    sal_Int32 i = detail::indexOf(s1->buffer + fromIndex, s1->length - fromIndex, from, fromLength);
-    if (i >= 0)
-    {
-        if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
-            std::abort();
-        i += fromIndex;
-        newReplaceStrAt(s, s1, i, fromLength, to, toLength);
-    }
-    else
-        assign(s, s1);
-
-    fromIndex = i;
 }
 
 template <class IMPL_RTL_STRINGDATA>
@@ -1512,6 +1428,91 @@ void stringbuffer_remove(IMPL_RTL_STRINGDATA** ppThis, sal_Int32 start, sal_Int3
 
     (*ppThis)->length -= len;
     pBuf[(*ppThis)->length] = 0;
+}
+
+template <class S, typename CharTypeFrom, typename CharTypeTo>
+void newReplaceAllFromIndex(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fromLength,
+                            CharTypeTo const* to, sal_Int32 toLength, sal_Int32 fromIndex)
+{
+    assert(s != nullptr);
+    assert(s1 != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
+    assert(toLength >= 0);
+    assert(to != nullptr || toLength == 0);
+    assert(fromIndex >= 0 && fromIndex <= s1->length);
+    sal_Int32 i = indexOfStr_WithLength(s1->buffer + fromIndex, s1->length - fromIndex,
+                                        from, fromLength);
+    if (i >= 0)
+    {
+        if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        i += fromIndex;
+        sal_Int32 nCapacity = s1->length + (toLength - fromLength);
+        if (fromLength < toLength)
+        {
+            // Pre-allocate up to 16 replacements more
+            const sal_Int32 nMaxMoreFinds = (s1->length - i - fromLength) / fromLength;
+            const sal_Int32 nIncrease = toLength - fromLength;
+            const sal_Int32 nMoreReplacements = std::min(
+                { nMaxMoreFinds, (SAL_MAX_INT32 - nCapacity) / nIncrease, sal_Int32(16) });
+            nCapacity += nMoreReplacements * nIncrease;
+        }
+        const auto pOld = *s;
+        *s = Alloc<S>(nCapacity);
+        (*s)->length = 0;
+        fromIndex = 0;
+        do
+        {
+            stringbuffer_insert(s, &nCapacity, (*s)->length, s1->buffer + fromIndex, i);
+            stringbuffer_insert(s, &nCapacity, (*s)->length, to, toLength);
+            fromIndex += i + fromLength;
+            i = indexOfStr_WithLength(s1->buffer + fromIndex, s1->length - fromIndex,
+                                      from, fromLength);
+        } while (i >= 0);
+        // the rest
+        stringbuffer_insert(s, &nCapacity, (*s)->length,
+                            s1->buffer + fromIndex, s1->length - fromIndex);
+        if (pOld)
+            release(pOld); // Must be last in case *s == s1
+    }
+    else
+        assign(s, s1);
+
+    RTL_LOG_STRING_NEW(*s);
+}
+
+template <typename IMPL_RTL_STRINGDATA>
+void newReplace(IMPL_RTL_STRINGDATA** ppThis, IMPL_RTL_STRINGDATA* pStr,
+                STRCODE<IMPL_RTL_STRINGDATA> cOld, STRCODE<IMPL_RTL_STRINGDATA> cNew)
+{
+    return newReplaceAllFromIndex(ppThis, pStr, &cOld, 1, &cNew, 1, 0);
+}
+
+template <class S, typename CharTypeFrom, typename CharTypeTo>
+void newReplaceFirst(S** s, S* s1, CharTypeFrom const* from, sal_Int32 fromLength,
+                     CharTypeTo const* to, sal_Int32 toLength, sal_Int32& fromIndex)
+{
+    assert(s != nullptr);
+    assert(s1 != nullptr);
+    assert(fromLength >= 0);
+    assert(from != nullptr || fromLength == 0);
+    assert(toLength >= 0);
+    assert(to != nullptr || toLength == 0);
+    assert(fromIndex >= 0 && fromIndex <= s1->length);
+    sal_Int32 i = indexOfStr_WithLength(s1->buffer + fromIndex, s1->length - fromIndex,
+                                        from, fromLength);
+    if (i >= 0)
+    {
+        if (s1->length - fromLength > SAL_MAX_INT32 - toLength)
+            std::abort();
+        i += fromIndex;
+        newReplaceStrAt(s, s1, i, fromLength, to, toLength);
+    }
+    else
+        assign(s, s1);
+
+    fromIndex = i;
 }
 
 }
