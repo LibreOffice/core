@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39a9ca02_db2ab245",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-03-21T23:28:09Z",
+      "side": 1,
+      "message": "Hi Xisco, I am having no luck finding why the findReplace.findReplace.test_find_writer is failing. I have built the patch on two different machines and both pass the test. SAL_USE_VCLPLUGIN\u003dgen make UITest_sw_findReplace UITEST_TEST_NAME\u003dfindReplace.findReplace.test_find_writer\n\nI have stepped through the test manually with exepected results. Maybe the test is not run using SAL_US_VCLPLUGIN\u003dgen on the remote build? Locally, using gtk3 hangs the test after the Find and Replace dialog is open, kf5 and qt5 give \u0027Binary URP bridge already disposed at ...\u0027 errors.\n\nAny ideas?",
+      "revId": "fc2f0788ef01ee5b4410ff74492251380a2d68b2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
