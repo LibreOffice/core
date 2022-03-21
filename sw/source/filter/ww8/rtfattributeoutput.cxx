@@ -4395,6 +4395,14 @@ void RtfAttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
     m_rExport.Strm().WriteCharPtr(LO_STRING_SVTOOLS_RTF_RTLGUTTER);
 }
 
-void RtfAttributeOutput::TextLineBreak(const SwFormatLineBreak& /*rLineBreak*/) {}
+void RtfAttributeOutput::TextLineBreak(const SwFormatLineBreak& rLineBreak)
+{
+    // Text wrapping break of type:
+    m_aStyles.append(LO_STRING_SVTOOLS_RTF_LBR);
+    m_aStyles.append(static_cast<sal_Int32>(rLineBreak.GetEnumValue()));
+
+    // Write the linebreak itself.
+    RunText("\x0b");
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

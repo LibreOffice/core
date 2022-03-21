@@ -35,7 +35,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
     if (RTFKeyword::LINE == nKeyword)
     {
         // very special handling since text() will eat lone '\n'
-        singleChar('\n');
+        singleChar('\n', /*bRunProps=*/true);
         return RTFError::OK;
     }
     // Trivial symbols
