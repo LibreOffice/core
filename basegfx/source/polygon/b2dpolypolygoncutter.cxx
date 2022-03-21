@@ -513,7 +513,7 @@ namespace basegfx
                 impSolve();
             }
 
-            explicit solver(const B2DPolyPolygon& rOriginal)
+            explicit solver(const B2DPolyPolygon& rOriginal, size_t* pPointLimit = nullptr)
             :   maOriginal(rOriginal),
                 mbIsCurve(false),
                 mbChanged(false)
@@ -523,7 +523,7 @@ namespace basegfx
                 if(!nOriginalCount)
                     return;
 
-                B2DPolyPolygon aGeometry(utils::addPointsAtCutsAndTouches(maOriginal));
+                B2DPolyPolygon aGeometry(utils::addPointsAtCutsAndTouches(maOriginal, pPointLimit));
                 aGeometry.removeDoublePoints();
                 aGeometry = utils::simplifyCurveSegments(aGeometry);
                 mbIsCurve = aGeometry.areControlPointsUsed();
@@ -684,11 +684,11 @@ namespace basegfx
 namespace basegfx::utils
 {
 
-        B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate)
+        B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate, size_t* pPointLimit)
         {
             if(rCandidate.count() > 0)
             {
-                solver aSolver(rCandidate);
+                solver aSolver(rCandidate, pPointLimit);
                 return aSolver.getB2DPolyPolygon();
             }
             else
