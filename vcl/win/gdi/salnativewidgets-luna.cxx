@@ -825,13 +825,13 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
                     iState = PBS_DISABLED;
                     break;
                 case TILES_SELECTED:
-                    iState = PBS_PRESSED;
+                    iState = PBS_DEFAULTED;
                     break;
                 case TILES_HOT:
                     iState = PBS_HOT;
                     break;
                 case TILES_FOCUSED:
-                    iState = PBS_DEFAULTED;
+                    iState = PBS_PRESSED;
                     break;
                 default:
                     iState = PBS_NORMAL;
