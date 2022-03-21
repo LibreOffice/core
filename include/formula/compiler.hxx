@@ -398,7 +398,7 @@
 #define SC_OPCODE_CELL              385
 #define SC_OPCODE_ISPMT             386
 #define SC_OPCODE_HYPERLINK         387
-// free: 388
+#define SC_OPCODE_X_LOOKUP          388
 // free: 389
 #define SC_OPCODE_GET_PIVOT_DATA    390
 #define SC_OPCODE_EUROCONVERT       391

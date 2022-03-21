@@ -55,6 +55,9 @@ struct ScInterpreterContext;
 class ScJumpMatrix;
 struct ScRefCellValue;
 
+enum MatchMode{ exactorNA=0, exactorS=-1, exactorG=1, wildcard=2 };
+enum SearchMode{ searchfwd=1, searchrev=-1, searchbasc=2, searchbdesc=-2 };
+
 namespace sc {
 
 struct CompareOptions;
@@ -65,6 +68,49 @@ struct ParamIfsResult
     double mfCount = 0.0;
     double mfMin = std::numeric_limits<double>::max();
     double mfMax = std::numeric_limits<double>::lowest();
+};
+
+struct VectorSearchArguments
+{
+    // struct contains the contents of the function arguments
+    // Struct owner, ScMatch or ScXLookup
+    bool isXLookup = false;
+
+    // match mode (common, enum values are from XLOOKUP)
+    // optional 5th argument to set match mode
+    //   0 - Exact match. If none found, return #N/A. (MATCH value 0)
+    //  -1 - Exact match. If none found, return the next smaller item. (MATCH value 1)
+    //   1 - Exact match. If none found, return the next larger item. (MATCH value -1)
+    //   2 - A wildcard match where *, ?, and ~ have special meaning. (XLOOKUP only)
+    // TODO : is this enum needed, or do we solely use rEntry.eOp ?
+    MatchMode eMatchMode = exactorG;
+
+    // value to be searched for (common)
+    SCCOL nCol1 = 0;
+    SCROW nRow1 = 0;
+    SCTAB nTab1 = 0;
+    SCCOL nCol2 = 0;
+    SCROW nRow2 = 0;
+    SCTAB nTab2 = 0;
+    ScMatrixRef pMatSrc;
+    bool isStringSearch = true;
+    double fSearchVal;
+    svl::SharedString sSearchStr;
+    bool bVLookup;
+
+    // search mode (only XLOOKUP has all 4 options, MATCH only uses searchfwd)
+    //   1 - Perform a search starting at the first item. This is the default.
+    //  -1 - Perform a reverse search starting at the last item.
+    //   2 - Perform a binary search that relies on lookup_array being sorted in ascending order.
+    //       If not sorted, invalid results will be returned.
+    //  -2 - Perform a binary search that relies on lookup_array being sorted in descending order.
+    //       If not sorted, invalid results will be returned.
+    //
+    SearchMode eSearchMode = searchfwd;
+
+    // result
+    int nIndex = -1;
+    bool isResultNA = false;
 };
 
 template<typename charT, typename traits>
@@ -233,6 +279,8 @@ private:
     bool IsTableOpInRange( const ScRange& );
     sal_uInt32 GetCellNumberFormat( const ScAddress& rPos, ScRefCellValue& rCell );
     double ConvertStringToValue( const OUString& );
+    bool SearchVectorForValue( sc::VectorSearchArguments& );
+
 public:
     static double ScGetGCD(double fx, double fy);
     /** For matrix back calls into the current interpreter.
@@ -625,6 +673,7 @@ private:
     void ScLookup();
     void ScHLookup();
     void ScVLookup();
+    void ScXLookup();
     void ScSubTotal();
 
     // If upon call rMissingField==true then the database field parameter may be
