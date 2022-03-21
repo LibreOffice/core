@@ -466,16 +466,6 @@ yynewstate:
       /* Get the current used size of the three stacks, in elements.  */
       int size = yyssp - yyss + 1;
 
-#ifdef yyoverflow
-      /* Each stack pointer address is followed by the size of
-     the data in use in that stack, in bytes.  */
-      yyoverflow("parser stack overflow",
-         &yyss1, size * sizeof (*yyssp),
-         &yyvs1, size * sizeof (*yyvsp),
-         &yystacksize);
-
-      yyss = yyss1; yyvs = yyvs1;
-#else /* no yyoverflow */
       /* Extend the stack our own way.  */
       if (yystacksize >= YYMAXDEPTH)
     {
@@ -495,7 +485,6 @@ yynewstate:
       memcpy (yyss, yyss1, size * sizeof (*yyssp));
       yyvs = static_cast<YYSTYPE *>(malloc (yystacksize * sizeof (*yyvsp)));
       memcpy (yyvs, yyvs1, size * sizeof (*yyvsp));
-#endif /* no yyoverflow */
 
       yyssp = yyss + size - 1;
       yyvsp = yyvs + size - 1;
