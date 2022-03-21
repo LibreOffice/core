@@ -458,7 +458,7 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     // Then make sure that the clear property of the break is not ignored:
     verify();
     reload(mpFilter, "clearing-break.rtf");
-    // Make sure that that the clear property of the break is not ignored during export:
+    // Make sure that the clear property of the break is not ignored during export:
     verify();
 }
 
