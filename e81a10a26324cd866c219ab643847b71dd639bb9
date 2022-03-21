@@ -51,6 +51,24 @@
       "message": "Sorry, I\u0027m not sure to understand. Should we keep \"Unmerge Cells\" only for Calc and \"Split Cells\" for the rest so we should abandon this one or can we use \"Unmerge Cells\" for all modules?",
       "revId": "e81a10a26324cd866c219ab643847b71dd639bb9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6e76d42_1abedbc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-21T09:08:53Z",
+      "side": 1,
+      "message": "Use Split in Generic and Unmerge for Calc.",
+      "parentUuid": "3590c371_63fe1d0b",
+      "revId": "e81a10a26324cd866c219ab643847b71dd639bb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
