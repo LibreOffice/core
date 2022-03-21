@@ -26,6 +26,7 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h>
+#include <o3tl/deleter.hxx>
 #include <osl/diagnose.h>
 
 enum IDLIST {
@@ -68,7 +69,6 @@ class Node{
 public:
      explicit Node(int _id) : id(_id)
      {
-          value = nullptr;
           child = nullptr;
           next = nullptr;
 #ifdef NODE_DEBUG
@@ -78,9 +78,6 @@ public:
      }
      ~Node()
      {
-          if( value ) free( value );
-         // if( child ) delete child;
-         // if( next ) delete next;
           next = nullptr;
           child = nullptr;
 #ifdef NODE_DEBUG
@@ -91,7 +88,7 @@ public:
 public:
      static int count; /* For memory debugging */
      int id;
-     char *value;
+     std::unique_ptr<char, o3tl::free_delete> value;
      Node *child;
      Node *next;
 };
