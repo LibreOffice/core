@@ -39,7 +39,8 @@ namespace basegfx::utils
             preparing step and to explicitly correct their
             orientations.
         */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolyPolygon& rCandidate,
+                                                         size_t* pPointLimit = nullptr);
 
         /** Solve all crossovers (aka self-intersections) in a Polygon
 

@@ -19,6 +19,7 @@
 
 #include <basegfx/polygon/b2dpolygoncutandtouch.hxx>
 #include <osl/diagnose.h>
+#include <sal/log.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/vector/b2dvector.hxx>
@@ -203,7 +204,7 @@ namespace basegfx
 
         // predefines for calls to this methods before method implementation
 
-        void findCuts(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints);
+        void findCuts(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints, size_t* pPointLimit = nullptr);
         void findTouches(const B2DPolygon& rEdgePolygon, const B2DPolygon& rPointPolygon, temporaryPointVector& rTempPoints);
         void findCuts(const B2DPolygon& rCandidateA, const B2DPolygon& rCandidateB, temporaryPointVector& rTempPointsA, temporaryPointVector& rTempPointsB);
 
@@ -487,7 +488,7 @@ namespace basegfx
             }
         }
 
-        void findCuts(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints)
+        void findCuts(const B2DPolygon& rCandidate, temporaryPointVector& rTempPoints, size_t* pPointLimit)
         {
             // find out if there are edges with intersections (self-cuts). If yes, add
             // entries to rTempPoints accordingly
@@ -588,6 +589,9 @@ namespace basegfx
                             findEdgeCutsTwoEdges(aCurrA, aNextA, aCurrB, aNextB, a, b, rTempPoints, rTempPoints);
                         }
 
+                        if (pPointLimit && rTempPoints.size() > *pPointLimit)
+                            break;
+
                         // prepare next step
                         aCurrB = aNextB;
                     }
@@ -595,6 +599,14 @@ namespace basegfx
                     // prepare next step
                     aCurrA = aNextA;
                 }
+            }
+
+            if (pPointLimit)
+            {
+                if (rTempPoints.size() > *pPointLimit)
+                    *pPointLimit = 0;
+                else
+                    *pPointLimit -= rTempPoints.size();
             }
         }
 
@@ -841,14 +853,19 @@ namespace basegfx
 namespace basegfx::utils
 {
 
-        B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate)
+        B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate, size_t* pPointLimit)
         {
             if(rCandidate.count())
             {
                 temporaryPointVector aTempPoints;
 
                 findTouches(rCandidate, rCandidate, aTempPoints);
-                findCuts(rCandidate, aTempPoints);
+                findCuts(rCandidate, aTempPoints, pPointLimit);
+                if (pPointLimit && !*pPointLimit)
+                {
+                    SAL_WARN("basegfx", "addPointsAtCutsAndTouches hit point limit");
+                    return rCandidate;
+                }
 
                 return mergeTemporaryPointsAndPolygon(rCandidate, aTempPoints);
             }
@@ -858,7 +875,7 @@ namespace basegfx::utils
             }
         }
 
-        B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate)
+        B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate, size_t* pPointLimit)
         {
             const sal_uInt32 nCount(rCandidate.count());
 
@@ -880,7 +897,13 @@ namespace basegfx::utils
                     for(a = 0; a < nCount; a++)
                     {
                         // use polygons with solved self intersections
-                        pTempData[a].setPolygon(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(a)));
+                        pTempData[a].setPolygon(addPointsAtCutsAndTouches(rCandidate.getB2DPolygon(a), pPointLimit));
+                    }
+
+                    if (pPointLimit && !*pPointLimit)
+                    {
+                        SAL_WARN("basegfx", "addPointsAtCutsAndTouches hit point limit");
+                        return rCandidate;
                     }
 
                     // now cuts and touches between the polygons

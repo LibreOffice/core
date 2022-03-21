@@ -27,12 +27,12 @@ namespace basegfx::utils
 
 // look for self-intersections and self-touches (points on an edge) in given polygon and add
 // extra points there. Result will have no touches or intersections on an edge, only on points
-B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate);
+B2DPolygon addPointsAtCutsAndTouches(const B2DPolygon& rCandidate, size_t* pPointLimit = nullptr);
 
 // look for polypolygon-intersections and polypolygon-touches (point of poly A on an edge of poly B) in given tools::PolyPolygon and add
 // extra points there. Result will have no touches or intersections between contained polygons on an edge, only on points. For
 // convenience, the correction for self-intersections for each member polygon will be used, too.
-B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate);
+B2DPolyPolygon addPointsAtCutsAndTouches(const B2DPolyPolygon& rCandidate, size_t* pPointLimit = nullptr);
 
 // look for intersections of rCandidate with the edge from rStart to rEnd and add extra points there.
 // Points are only added in the range of the edge, not on the endless vector.

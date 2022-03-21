@@ -25,6 +25,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/utils/rectcliptools.hxx>
+#include <sal/log.hxx>
 
 namespace basegfx::utils
 {
@@ -330,7 +331,8 @@ namespace basegfx::utils
             return aRetval;
         }
 
-        B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip, bool bInside, bool bStroke)
+        B2DPolyPolygon clipPolyPolygonOnPolyPolygon(const B2DPolyPolygon& rCandidate, const B2DPolyPolygon& rClip,
+                                                    bool bInside, bool bStroke, size_t* pPointLimit)
         {
             B2DPolyPolygon aRetval;
 
@@ -471,7 +473,14 @@ namespace basegfx::utils
 
 
                     // prepare 2nd source polygon in same way
-                    B2DPolyPolygon aMergePolyPolygonB = solveCrossovers(rCandidate);
+                    B2DPolyPolygon aMergePolyPolygonB = solveCrossovers(rCandidate, pPointLimit);
+
+                    if (pPointLimit && !*pPointLimit)
+                    {
+                        SAL_WARN("basegfx", "clipPolyPolygonOnPolyPolygon hit point limit");
+                        return aRetval;
+                    }
+
                     aMergePolyPolygonB = stripNeutralPolygons(aMergePolyPolygonB);
                     aMergePolyPolygonB = correctOrientations(aMergePolyPolygonB);
 
