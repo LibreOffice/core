@@ -942,6 +942,12 @@
         </info>
         <value>false</value>
       </prop>
+      <prop oor:name="StorageVersion" oor:type="xs:int" oor:nillable="false">
+        <info>
+          <desc>Specifies what version of encoding scheme the password container uses.</desc>
+        </info>
+        <value>0</value>
+      </prop>
       <prop oor:name="HasMaster" oor:type="xs:boolean" oor:nillable="false">
         <info>
           <desc>Specifies if there is a valid master password.</desc>
