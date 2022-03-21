@@ -866,6 +866,20 @@ const FunctionData saFuncTable2016[] =
 };
 
 
+
+/** Functions new in Excel 2021.
+
+
+    @See sc/source/filter/excel/xlformula.cxx saFuncTable_2021
+ */
+/* FIXME: BIFF?? function identifiers available? Where to obtain? */
+const FunctionData saFuncTable2021[] =
+{
+    { "COM.MICROSOFT.XLOOKUP",             "XLOOKUP",             NOID,   NOID,   3,  6,  V, { VR, VA, VR }, FuncFlags::MACROCALL_NEW }
+};
+
+
+
 /** Functions defined by OpenFormula, but not supported by Calc or by Excel. */
 const FunctionData saFuncTableOdf[] =
 {
@@ -1008,6 +1022,7 @@ FunctionProviderImpl::FunctionProviderImpl( bool bImportFilter )
     initFuncs(saFuncTable2010 , saFuncTable2010  + SAL_N_ELEMENTS(saFuncTable2010 ), bImportFilter);
     initFuncs(saFuncTable2013 , saFuncTable2013  + SAL_N_ELEMENTS(saFuncTable2013 ), bImportFilter);
     initFuncs(saFuncTable2016 , saFuncTable2016  + SAL_N_ELEMENTS(saFuncTable2016 ), bImportFilter);
+    initFuncs(saFuncTable2021 , saFuncTable2021  + SAL_N_ELEMENTS(saFuncTable2021 ), bImportFilter);
     initFuncs(saFuncTableOdf  , saFuncTableOdf   + SAL_N_ELEMENTS(saFuncTableOdf  ), bImportFilter);
     initFuncs(saFuncTableOOoLO, saFuncTableOOoLO + SAL_N_ELEMENTS(saFuncTableOOoLO), bImportFilter);
 }
