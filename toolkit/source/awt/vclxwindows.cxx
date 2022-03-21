@@ -1516,6 +1516,7 @@ void VCLXListBox::ImplGetPropertyIds( std::vector< sal_uInt16 > &rIds )
                      BASEPROPERTY_CONTEXT_WRITING_MODE,
                      BASEPROPERTY_REFERENCE_DEVICE,
                      BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR,
+                     BASEPROPERTY_NATIVE_WIDGET_LOOK,
                      0);
     VCLXWindow::ImplGetPropertyIds( rIds );
 }
