@@ -436,8 +436,9 @@ executeMasterPasswordDialog(
     OUStringBuffer aBuffer;
     for (sal_uInt8 i : aKey)
     {
-        aBuffer.append(static_cast< sal_Unicode >('a' + (i >> 4)));
-        aBuffer.append(static_cast< sal_Unicode >('a' + (i & 15)));
+        // match PasswordContainer::DecodePasswords aMasterPasswd.copy(index * 2, 2).toUInt32(16));
+        aBuffer.append(OUString::number(i >> 4, 16));
+        aBuffer.append(OUString::number(i & 15, 16));
     }
     rInfo.SetPassword(aBuffer.makeStringAndClear());
 }
