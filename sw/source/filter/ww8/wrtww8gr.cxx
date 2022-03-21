@@ -78,7 +78,7 @@ void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
     if ( m_pParentFrame )
     {
         OutGrf( *m_pParentFrame );
-        pFib->m_fHasPic = true;
+        m_pFib->m_fHasPic = true;
     }
 }
 
@@ -368,8 +368,8 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
     // Store the graphic settings in GrfNode so they may be written-out later
     m_pGrf->Insert(rFrame);
 
-    m_pChpPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
-    pO->clear();
+    m_pChpPlc->AppendFkpEntry( Strm().Tell(), m_pO->size(), m_pO->data() );
+    m_pO->clear();
 
     // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
@@ -444,15 +444,15 @@ void WW8Export::OutGrf(const ww8::Frame &rFrame)
         WriteChar( char(0x0d) ); // close the surrounding frame with CR
 
         static sal_uInt8 nSty[2] = { 0, 0 };
-        pO->insert( pO->end(), nSty, nSty+2 );     // Style #0
+        m_pO->insert( m_pO->end(), nSty, nSty+2 );     // Style #0
         bool bOldGrf = m_bOutGrf;
         m_bOutGrf = true;
 
         OutputFormat( rFrame.GetFrameFormat(), false, false, true ); // Fly-Attrs
 
         m_bOutGrf = bOldGrf;
-        m_pPapPlc->AppendFkpEntry( Strm().Tell(), pO->size(), pO->data() );
-        pO->clear();
+        m_pPapPlc->AppendFkpEntry( Strm().Tell(), m_pO->size(), m_pO->data() );
+        m_pO->clear();
     }
     // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
@@ -644,7 +644,7 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
     {
         WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
             rGrfNd.GetpSwAttrSet());
-        SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+        SwBasicEscherEx aInlineEscher(&rStrm, m_rWrt);
         aInlineEscher.WriteGrfFlyFrame(rFly.GetFrameFormat(), 0x401);
         aInlineEscher.WritePictures();
     }
@@ -739,7 +739,7 @@ void SwWW8WrGrf::WritePICBulletFHeader(SvStream& rStrm, const Graphic &rGrf,
 void SwWW8WrGrf::WriteGrfForBullet(SvStream& rStrm, const Graphic &rGrf, sal_uInt16 nWidth, sal_uInt16 nHeight)
 {
     WritePICBulletFHeader(rStrm,rGrf, 0x64,nWidth,nHeight);
-    SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+    SwBasicEscherEx aInlineEscher(&rStrm, m_rWrt);
     aInlineEscher.WriteGrfBullet(rGrf);
     aInlineEscher.WritePictures();
 }
@@ -787,7 +787,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
                 //documents.
                 WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight,
                     pNd->GetpSwAttrSet());
-                SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+                SwBasicEscherEx aInlineEscher(&rStrm, m_rWrt);
                 aInlineEscher.WriteOLEFlyFrame(rFly.GetFrameFormat(), 0x401);
                 aInlineEscher.WritePictures();
 #else
@@ -828,7 +828,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             */
             {
                 WritePICFHeader(rStrm, rFly, 0x64, nWidth, nHeight);
-                SwBasicEscherEx aInlineEscher(&rStrm, rWrt);
+                SwBasicEscherEx aInlineEscher(&rStrm, m_rWrt);
                 aInlineEscher.WriteEmptyFlyFrame(rFly.GetFrameFormat(), 0x401);
             }
             break;
@@ -851,7 +851,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 // GetFPos() sequentially the positions
 void SwWW8WrGrf::Write()
 {
-    SvStream& rStrm = *rWrt.pDataStrm;
+    SvStream& rStrm = *m_rWrt.m_pDataStrm;
     auto aEnd = maDetails.end();
     for (auto aIter = maDetails.begin(); aIter != aEnd; ++aIter)
     {

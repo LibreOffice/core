@@ -688,11 +688,11 @@ void WW8Export::PrepareNewPageDesc( const SfxItemSet*pSet,
 
     if ( pNewPgDescFormat )
     {
-        pSepx->AppendSep( Fc2Cp( nFcPos ), *pNewPgDescFormat, rNd, pFormat, nLnNm );
+        m_pSepx->AppendSep( Fc2Cp( nFcPos ), *pNewPgDescFormat, rNd, pFormat, nLnNm );
     }
     else if ( pNewPgDesc )
     {
-        pSepx->AppendSep( Fc2Cp( nFcPos ), pNewPgDesc, rNd, pFormat, nLnNm );
+        m_pSepx->AppendSep( Fc2Cp( nFcPos ), pNewPgDesc, rNd, pFormat, nLnNm );
     }
 }
 
@@ -802,10 +802,10 @@ bool WW8Export::DisallowInheritingOutlineNumbering(const SwFormat &rFormat)
         {
             if (static_cast<const SwTextFormatColl*>(pParent)->IsAssignedToListLevelOfOutlineStyle())
             {
-                SwWW8Writer::InsUInt16(*pO, NS_sprm::POutLvl::val);
-                pO->push_back(sal_uInt8(9));
-                SwWW8Writer::InsUInt16(*pO, NS_sprm::PIlfo::val);
-                SwWW8Writer::InsUInt16(*pO, 0);
+                SwWW8Writer::InsUInt16(*m_pO, NS_sprm::POutLvl::val);
+                m_pO->push_back(sal_uInt8(9));
+                SwWW8Writer::InsUInt16(*m_pO, NS_sprm::PIlfo::val);
+                SwWW8Writer::InsUInt16(*m_pO, 0);
 
                 bRet = true;
             }
@@ -1007,7 +1007,7 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
         if( m_rWW8Export.m_rDoc.GetDocumentType() != SwDoc::DOCTYPE_MSWORD )
         {
             m_rWW8Export.InsUInt16( NS_sprm::CFBiDi::val );
-            m_rWW8Export.pO->push_back( sal_uInt8(1) );
+            m_rWW8Export.m_pO->push_back( sal_uInt8(1) );
         }
     }
 
@@ -1015,16 +1015,16 @@ void WW8AttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript )
     if (nScript == i18n::ScriptType::COMPLEX && !bIsRTL)
     {
         m_rWW8Export.InsUInt16( NS_sprm::CFComplexScripts::val );
-        m_rWW8Export.pO->push_back( sal_uInt8(0x81) );
-        m_rWW8Export.pDop->bUseThaiLineBreakingRules = true;
+        m_rWW8Export.m_pO->push_back( sal_uInt8(0x81) );
+        m_rWW8Export.m_pDop->bUseThaiLineBreakingRules = true;
     }
 }
 
 void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner )
 {
-    m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() - (mbOnTOXEnding?2:0), m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
+    m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell() - (mbOnTOXEnding?2:0), m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
     mbOnTOXEnding = false;
-    m_rWW8Export.pO->clear();
+    m_rWW8Export.m_pO->clear();
 
     if ( pTextNodeInfoInner )
     {
@@ -1034,10 +1034,10 @@ void WW8AttributeOutput::EndParagraph( ww8::WW8TableNodeInfoInner::Pointer_t pTe
 
             SVBT16 nSty;
             ShortToSVBT16( 0, nSty );
-            m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // Style #
+            m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), nSty, nSty+2 );     // Style #
             TableInfoRow( pTextNodeInfoInner );
-            m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.pO->size(), m_rWW8Export.pO->data());
-            m_rWW8Export.pO->clear();
+            m_rWW8Export.m_pPapPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(), m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data());
+            m_rWW8Export.m_pO->clear();
         }
     }
 
@@ -1063,7 +1063,7 @@ void WW8AttributeOutput::StartRun( const SwRedlineData* pRedlineData, sal_Int32 
             if (m_rWW8Export.m_pAtn->IsNewRedlineComment(pRedlineData))
             {
                 m_rWW8Export.m_pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pRedlineData );
-                m_rWW8Export.WritePostItBegin( m_rWW8Export.pO.get() );
+                m_rWW8Export.WritePostItBegin( m_rWW8Export.m_pO.get() );
             }
         }
     }
@@ -1110,9 +1110,9 @@ void WW8AttributeOutput::EndRunProperties( const SwRedlineData* pRedlineData )
     if ( !bExportedFieldResult )
     {
         m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(),
-                m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
+                m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
     }
-    m_rWW8Export.pO->clear();
+    m_rWW8Export.m_pO->clear();
 }
 
 void WW8AttributeOutput::RunText( const OUString& rText, rtl_TextEncoding eCharSet )
@@ -1127,28 +1127,28 @@ void WW8AttributeOutput::RawText(const OUString& rText, rtl_TextEncoding)
 
 void WW8AttributeOutput::OutputFKP(bool bForce)
 {
-    if (!m_rWW8Export.pO->empty() || bForce)
+    if (!m_rWW8Export.m_pO->empty() || bForce)
     {
         m_rWW8Export.m_pChpPlc->AppendFkpEntry( m_rWW8Export.Strm().Tell(),
-                m_rWW8Export.pO->size(), m_rWW8Export.pO->data() );
-        m_rWW8Export.pO->clear();
+                m_rWW8Export.m_pO->size(), m_rWW8Export.m_pO->data() );
+        m_rWW8Export.m_pO->clear();
     }
 }
 
 void WW8AttributeOutput::ParagraphStyle( sal_uInt16 nStyle )
 {
-    OSL_ENSURE( m_rWW8Export.pO->empty(), " pO is not empty at line end" );
+    OSL_ENSURE( m_rWW8Export.m_pO->empty(), " pO is not empty at line end" );
 
     SVBT16 nSty;
     ShortToSVBT16( nStyle, nSty );
-    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), nSty, nSty+2 );     // style #
+    m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), nSty, nSty+2 );     // style #
 }
 
 void WW8AttributeOutput::OutputWW8Attribute( sal_uInt8 nId, bool bVal )
 {
     m_rWW8Export.InsUInt16( 8 == nId ? NS_sprm::CFDStrike::val : NS_sprm::CFBold::val + nId );
 
-    m_rWW8Export.pO->push_back( bVal ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( bVal ? 1 : 0 );
 }
 
 void WW8AttributeOutput::OutputWW8AttributeCTL( sal_uInt8 nId, bool bVal )
@@ -1158,7 +1158,7 @@ void WW8AttributeOutput::OutputWW8AttributeCTL( sal_uInt8 nId, bool bVal )
         return;
 
     m_rWW8Export.InsUInt16( NS_sprm::CFBoldBi::val + nId );
-    m_rWW8Export.pO->push_back( bVal ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( bVal ? 1 : 0 );
 }
 
 void WW8AttributeOutput::CharFont( const SvxFontItem& rFont )
@@ -1235,7 +1235,7 @@ void WW8AttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
 {
     m_rWW8Export.InsUInt16( NS_sprm::CSfxText::val );
     // At the moment the only animated text effect we support is blinking
-    m_rWW8Export.pO->push_back( rBlink.GetValue() ? 2 : 0 );
+    m_rWW8Export.m_pO->push_back( rBlink.GetValue() ? 2 : 0 );
 }
 
 void WW8AttributeOutput::CharCrossedOut( const SvxCrossedOutItem& rCrossed )
@@ -1286,14 +1286,14 @@ void WW8AttributeOutput::CharHidden( const SvxCharHiddenItem& rHidden )
 
 void WW8AttributeOutput::CharBorder( const SvxBorderLine* pAllBorder, const sal_uInt16 /*nDist*/, const bool bShadow )
 {
-    WW8Export::Out_BorderLine( *m_rWW8Export.pO, pAllBorder, 0, NS_sprm::CBrc80::val, NS_sprm::CBrc::val, bShadow );
+    WW8Export::Out_BorderLine( *m_rWW8Export.m_pO, pAllBorder, 0, NS_sprm::CBrc80::val, NS_sprm::CBrc::val, bShadow );
 }
 
 void WW8AttributeOutput::CharHighlight( const SvxBrushItem& rBrush )
 {
     sal_uInt8 nColor = msfilter::util::TransColToIco( rBrush.GetColor() );
     m_rWW8Export.InsUInt16( NS_sprm::CHighlight::val );
-    m_rWW8Export.pO->push_back( nColor );
+    m_rWW8Export.m_pO->push_back( nColor );
 }
 
 void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
@@ -1377,7 +1377,7 @@ void WW8AttributeOutput::CharUnderline( const SvxUnderlineItem& rUnderline )
             break;
     }
 
-    m_rWW8Export.pO->push_back( b );
+    m_rWW8Export.m_pO->push_back( b );
     Color aColor = rUnderline.GetColor();
     if( aColor != COL_TRANSPARENT )
     {
@@ -1460,7 +1460,7 @@ void WW8AttributeOutput::CharEscapement( const SvxEscapementItem& rEscapement )
     {
         m_rWW8Export.InsUInt16( NS_sprm::CIss::val );
 
-        m_rWW8Export.pO->push_back( b );
+        m_rWW8Export.m_pO->push_back( b );
     }
 
     if ( 0 != b && 0xFF != b )
@@ -1519,15 +1519,15 @@ void WW8AttributeOutput::CharRelief( const SvxCharReliefItem& rRelief )
     if( nId )
     {
         m_rWW8Export.InsUInt16( nId );
-        m_rWW8Export.pO->push_back( sal_uInt8(0x81) );
+        m_rWW8Export.m_pO->push_back( sal_uInt8(0x81) );
     }
     else
     {
         // switch both flags off
         m_rWW8Export.InsUInt16( NS_sprm::CFEmboss::val );
-        m_rWW8Export.pO->push_back( sal_uInt8(0x0) );
+        m_rWW8Export.m_pO->push_back( sal_uInt8(0x0) );
         m_rWW8Export.InsUInt16( NS_sprm::CFImprint::val );
-        m_rWW8Export.pO->push_back( sal_uInt8(0x0) );
+        m_rWW8Export.m_pO->push_back( sal_uInt8(0x0) );
     }
 }
 
@@ -1537,7 +1537,7 @@ void WW8AttributeOutput::CharBidiRTL( const SfxPoolItem& rHt )
     if( rAttr.GetValue() == 1 )
     {
         m_rWW8Export.InsUInt16(0x85a);
-        m_rWW8Export.pO->push_back(sal_uInt8(1));
+        m_rWW8Export.m_pO->push_back(sal_uInt8(1));
     }
 }
 
@@ -1545,7 +1545,7 @@ void WW8AttributeOutput::CharIdctHint( const SfxPoolItem& rHt )
 {
     const SfxInt16Item& rAttr = static_cast<const SfxInt16Item&>(rHt);
     m_rWW8Export.InsUInt16(0x286F);
-    m_rWW8Export.pO->push_back(static_cast<sal_uInt8>(rAttr.GetValue()));
+    m_rWW8Export.m_pO->push_back(static_cast<sal_uInt8>(rAttr.GetValue()));
 }
 
 void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
@@ -1562,12 +1562,12 @@ void WW8AttributeOutput::CharRotate( const SvxCharRotateItem& rRotate )
     // here corrupts the table, hence !m_rWW8Export.bIsInTable
 
     m_rWW8Export.InsUInt16( NS_sprm::CFELayout::val );
-    m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
-    m_rWW8Export.pO->push_back( sal_uInt8(0x01) );
+    m_rWW8Export.m_pO->push_back( sal_uInt8(0x06) ); //len 6
+    m_rWW8Export.m_pO->push_back( sal_uInt8(0x01) );
 
     m_rWW8Export.InsUInt16( rRotate.IsFitToLine() ? 1 : 0 );
     static const sal_uInt8 aZeroArr[ 3 ] = { 0, 0, 0 };
-    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aZeroArr, aZeroArr+3);
+    m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), aZeroArr, aZeroArr+3);
 }
 
 void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisMark )
@@ -1587,7 +1587,7 @@ void WW8AttributeOutput::CharEmphasisMark( const SvxEmphasisMarkItem& rEmphasisM
         nVal = 1;
 
     m_rWW8Export.InsUInt16( NS_sprm::CKcd::val );
-    m_rWW8Export.pO->push_back( nVal );
+    m_rWW8Export.m_pO->push_back( nVal );
 }
 
 /**
@@ -1623,7 +1623,7 @@ void WW8AttributeOutput::CharColor( const SvxColorItem& rColor )
     m_rWW8Export.InsUInt16( NS_sprm::CIco::val );
 
     sal_uInt8 nColor = msfilter::util::TransColToIco( rColor.GetValue() );
-    m_rWW8Export.pO->push_back( nColor );
+    m_rWW8Export.m_pO->push_back( nColor );
 
     if (nColor)
     {
@@ -1644,7 +1644,7 @@ void WW8AttributeOutput::CharBackground( const SvxBrushItem& rBrush )
     //Quite a few unknowns, some might be transparency or something
     //of that nature...
     m_rWW8Export.InsUInt16( NS_sprm::CShd::val );
-    m_rWW8Export.pO->push_back( 10 );
+    m_rWW8Export.m_pO->push_back( 10 );
     m_rWW8Export.InsUInt32( 0xFF000000 );
     m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) );
     m_rWW8Export.InsUInt16( 0x0000);
@@ -1713,7 +1713,7 @@ static void InsertSpecialChar( WW8Export& rWrt, sal_uInt8 c,
     if ( c == 0x01 && pLinkStr)
     {
         // write hyperlink data to data stream
-        SvStream& rStrm = *rWrt.pDataStrm;
+        SvStream& rStrm = *rWrt.m_pDataStrm;
         // position of hyperlink data
         const sal_uInt32 nLinkPosInDataStrm = rStrm.Tell();
         // write empty header
@@ -2727,7 +2727,7 @@ void WW8AttributeOutput::PostitField( const SwField* pField )
 {
     const SwPostItField *pPField = static_cast<const SwPostItField*>(pField);
     m_rWW8Export.m_pAtn->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), pPField );
-    m_rWW8Export.WritePostItBegin( m_rWW8Export.pO.get() );
+    m_rWW8Export.WritePostItBegin( m_rWW8Export.m_pO.get() );
 }
 
 bool WW8AttributeOutput::DropdownField( const SwField* pField )
@@ -3363,25 +3363,25 @@ void WW8AttributeOutput::ParaHyphenZone( const SvxHyphenZoneItem& rHyphenZone )
     // sprmPFNoAutoHyph
     m_rWW8Export.InsUInt16( NS_sprm::PFNoAutoHyph::val );
 
-    m_rWW8Export.pO->push_back( rHyphenZone.IsHyphen() ? 0 : 1 );
+    m_rWW8Export.m_pO->push_back( rHyphenZone.IsHyphen() ? 0 : 1 );
 }
 
 void WW8AttributeOutput::ParaScriptSpace( const SfxBoolItem& rScriptSpace )
 {
     m_rWW8Export.InsUInt16( NS_sprm::PFAutoSpaceDE::val );
-    m_rWW8Export.pO->push_back( rScriptSpace.GetValue() ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( rScriptSpace.GetValue() ? 1 : 0 );
 }
 
 void WW8AttributeOutput::ParaHangingPunctuation( const SfxBoolItem& rItem )
 {
     m_rWW8Export.InsUInt16( NS_sprm::PFOverflowPunct::val );
-    m_rWW8Export.pO->push_back( rItem.GetValue() ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( rItem.GetValue() ? 1 : 0 );
 }
 
 void WW8AttributeOutput::ParaForbiddenRules( const SfxBoolItem& rItem )
 {
     m_rWW8Export.InsUInt16( NS_sprm::PFKinsoku::val );
-    m_rWW8Export.pO->push_back( rItem.GetValue() ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( rItem.GetValue() ? 1 : 0 );
 }
 
 void WW8AttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
@@ -3389,7 +3389,7 @@ void WW8AttributeOutput::ParaSnapToGrid( const SvxParaGridItem& rGrid )
     // sprmPFUsePgsuSettings
 
     m_rWW8Export.InsUInt16( NS_sprm::PFUsePgsuSettings::val );
-    m_rWW8Export.pO->push_back( rGrid.GetValue() ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( rGrid.GetValue() ? 1 : 0 );
 }
 
 void WW8AttributeOutput::ParaVerticalAlign( const SvxParaVertAlignItem& rAlign )
@@ -3484,8 +3484,8 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
         const SwTextFootnote* pTextFootnote = rFootnote.GetTextFootnote();
         if( pTextFootnote )
         {
-            std::unique_ptr<ww::bytes> pOld = std::move(pO);
-            pO = std::move(pOwnOutArr);
+            std::unique_ptr<ww::bytes> pOld = std::move(m_pO);
+            m_pO = std::move(pOwnOutArr);
             SfxItemSetFixed<RES_CHRATR_FONT, RES_CHRATR_FONT> aSet( m_rDoc.GetAttrPool() );
 
             pCFormat = pInfo->GetCharFormat( m_rDoc );
@@ -3500,8 +3500,8 @@ void WW8Export::WriteFootnoteBegin( const SwFormatFootnote& rFootnote, ww::bytes
             {
                 m_pAttrOutput->OutputItem( pCFormat->GetAttrSet().Get(RES_CHRATR_FONT) );
             }
-            pOwnOutArr = std::move(pO);
-            pO = std::move(pOld);
+            pOwnOutArr = std::move(m_pO);
+            m_pO = std::move(pOld);
         }
         m_pChpPlc->AppendFkpEntry( Strm().Tell(), pOwnOutArr->size(),
                                                 pOwnOutArr->data() );
@@ -3564,12 +3564,12 @@ void WW8AttributeOutput::TextFootnote_Impl( const SwFormatFootnote& rFootnote )
 {
     WW8_WrPlcFootnoteEdn* pFootnoteEnd;
     if ( rFootnote.IsEndNote() || GetExport().m_rDoc.GetFootnoteInfo().m_ePos == FTNPOS_CHAPTER )
-        pFootnoteEnd = m_rWW8Export.pEdn.get();
+        pFootnoteEnd = m_rWW8Export.m_pEdn.get();
     else
-        pFootnoteEnd = m_rWW8Export.pFootnote.get();
+        pFootnoteEnd = m_rWW8Export.m_pFootnote.get();
 
     pFootnoteEnd->Append( m_rWW8Export.Fc2Cp( m_rWW8Export.Strm().Tell() ), rFootnote );
-    m_rWW8Export.WriteFootnoteBegin( rFootnote, m_rWW8Export.pO.get() );
+    m_rWW8Export.WriteFootnoteBegin( rFootnote, m_rWW8Export.m_pO.get() );
 }
 
 void WW8AttributeOutput::TextCharFormat( const SwFormatCharFormat& rCharFormat )
@@ -3592,8 +3592,8 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         return;
 
     m_rWW8Export.InsUInt16( NS_sprm::CFELayout::val );
-    m_rWW8Export.pO->push_back( sal_uInt8(0x06) ); //len 6
-    m_rWW8Export.pO->push_back( sal_uInt8(0x02) );
+    m_rWW8Export.m_pO->push_back( sal_uInt8(0x06) ); //len 6
+    m_rWW8Export.m_pO->push_back( sal_uInt8(0x02) );
 
     sal_Unicode cStart = rTwoLines.GetStartBracket();
     sal_Unicode cEnd = rTwoLines.GetEndBracket();
@@ -3625,7 +3625,7 @@ void WW8AttributeOutput::CharTwoLines( const SvxTwoLinesItem& rTwoLines )
         nType = 1;
     m_rWW8Export.InsUInt16( nType );
     static const sal_uInt8 aZeroArr[ 3 ] = { 0, 0, 0 };
-    m_rWW8Export.pO->insert( m_rWW8Export.pO->end(), aZeroArr, aZeroArr+3);
+    m_rWW8Export.m_pO->insert( m_rWW8Export.m_pO->end(), aZeroArr, aZeroArr+3);
 }
 
 void AttributeOutputBase::ParaOutlineLevelBase( const SfxUInt16Item& rItem )
@@ -3765,10 +3765,10 @@ void WW8AttributeOutput::ParaNumRule_Impl(const SwTextNode* /*pTextNd*/,
         return;
 
     // write sprmPIlvl and sprmPIlfo
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlvl::val );
-    m_rWW8Export.pO->push_back( ::sal::static_int_cast<sal_uInt8>(nLvl) );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, NS_sprm::PIlfo::val );
-    SwWW8Writer::InsUInt16( *m_rWW8Export.pO, ::sal::static_int_cast<sal_uInt16>(nNumId) );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.m_pO, NS_sprm::PIlvl::val );
+    m_rWW8Export.m_pO->push_back( ::sal::static_int_cast<sal_uInt8>(nLvl) );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.m_pO, NS_sprm::PIlfo::val );
+    SwWW8Writer::InsUInt16( *m_rWW8Export.m_pO, ::sal::static_int_cast<sal_uInt16>(nNumId) );
 }
 
 /* File FRMATR.HXX */
@@ -3809,7 +3809,7 @@ void WW8AttributeOutput::FormatFrameSize( const SwFormatFrameSize& rSize )
         {
             /*sprmSBOrientation*/
             m_rWW8Export.InsUInt16( NS_sprm::SBOrientation::val );
-            m_rWW8Export.pO->push_back( 2 );
+            m_rWW8Export.m_pO->push_back( 2 );
         }
 
         /*sprmSXaPage*/
@@ -3841,7 +3841,7 @@ sal_uInt64 WW8Export::ReplaceCr( sal_uInt8 nChar )
     SvStream& rStrm = Strm();
     sal_uInt64 nRetPos = 0, nPos = rStrm.Tell();
     //If there is at least two characters already output
-    if (nPos - 2 >= o3tl::make_unsigned(pFib->m_fcMin))
+    if (nPos - 2 >= o3tl::make_unsigned(m_pFib->m_fcMin))
     {
         sal_uInt16 nUCode=0;
 
@@ -3851,7 +3851,7 @@ sal_uInt64 WW8Export::ReplaceCr( sal_uInt8 nChar )
         if (nUCode == 0x0d)             // CR ?
         {
             if ((nChar == 0x0c) &&
-                (nPos - 4 >= o3tl::make_unsigned(pFib->m_fcMin)))
+                (nPos - 4 >= o3tl::make_unsigned(m_pFib->m_fcMin)))
             {
                 rStrm.SeekRel(-4);
                 rStrm.ReadUInt16( nUCode );
@@ -3922,7 +3922,7 @@ void WW8AttributeOutput::PageBreakBefore( bool bBreak )
     // sprmPPageBreakBefore/sprmPFPageBreakBefore
     m_rWW8Export.InsUInt16( NS_sprm::PFPageBreakBefore::val );
 
-    m_rWW8Export.pO->push_back( bBreak ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( bBreak ? 1 : 0 );
 }
 
 /**
@@ -4180,7 +4180,7 @@ void WW8AttributeOutput::SectionRtlGutter(const SfxBoolItem& rRtlGutter)
 
     // sprmSFRTLGutter
     m_rWW8Export.InsUInt16(NS_sprm::SFRTLGutter::val);
-    m_rWW8Export.pO->push_back(1);
+    m_rWW8Export.m_pO->push_back(1);
 }
 
 void WW8AttributeOutput::TextLineBreak(const SwFormatLineBreak& rLineBreak)
@@ -4258,7 +4258,7 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         if (rUL.GetContext() || (pInherited && pInherited->GetContext()))
         {
             m_rWW8Export.InsUInt16(NS_sprm::PFContextualSpacing::val);
-            m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(rUL.GetContext()) );
+            m_rWW8Export.m_pO->push_back( static_cast<sal_uInt8>(rUL.GetContext()) );
         }
     }
 }
@@ -4271,7 +4271,7 @@ void WW8AttributeOutput::FormatSurround( const SwFormatSurround& rSurround )
     {
         m_rWW8Export.InsUInt16( NS_sprm::PWr::val );
 
-        m_rWW8Export.pO->push_back(
+        m_rWW8Export.m_pO->push_back(
                 ( css::text::WrapTextMode_NONE != rSurround.GetSurround() ) ? 2 : 1 );
     }
 }
@@ -4375,7 +4375,7 @@ void WW8AttributeOutput::FormatAnchor( const SwFormatAnchor& rAnchor )
 
     // sprmPPc
     m_rWW8Export.InsUInt16( NS_sprm::PPc::val );
-    m_rWW8Export.pO->push_back( nP );
+    m_rWW8Export.m_pO->push_back( nP );
 }
 
 void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
@@ -4391,7 +4391,7 @@ void WW8AttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
     m_rWW8Export.InsUInt16( aSHD.GetValue() );
 
     m_rWW8Export.InsUInt16( NS_sprm::PShd::val );
-    m_rWW8Export.pO->push_back( 10 ); //size of operand: MUST be 10
+    m_rWW8Export.m_pO->push_back( 10 ); //size of operand: MUST be 10
     m_rWW8Export.InsUInt32( 0xFF000000 ); //cvFore: Foreground BGR = cvAuto
     m_rWW8Export.InsUInt32( SuitableBGColor( rBrush.GetColor() ) ); //cvBack
     m_rWW8Export.InsUInt16( 0x0000 ); //iPat: specifies the pattern used for shading = clear/100% background
@@ -4413,7 +4413,7 @@ void WW8AttributeOutput::FormatFillStyle( const XFillStyleItem& rFillStyle )
 
     //cvAuto
     m_rWW8Export.InsUInt16( NS_sprm::PShd::val );
-    m_rWW8Export.pO->push_back( 10 );
+    m_rWW8Export.m_pO->push_back( 10 );
     m_rWW8Export.InsUInt32( 0xFF000000 );
     m_rWW8Export.InsUInt32( 0xFF000000 );
     m_rWW8Export.InsUInt16( 0x0000 );
@@ -4611,7 +4611,7 @@ void WW8Export::Out_SwFormatBox(const SvxBoxItem& rBox, bool bShadow)
             nSprmNoVer9 = aPBrc[i+4];
         }
 
-        Out_BorderLine( *pO, pLn, rBox.GetDistance( *pBrd ), nSprmNo,
+        Out_BorderLine( *m_pO, pLn, rBox.GetDistance( *pBrd ), nSprmNo,
             nSprmNoVer9, bShadow );
     }
 }
@@ -4663,12 +4663,12 @@ void WW8Export::Out_CellRangeBorders( const SvxBoxItem * pBox, sal_uInt8 nStart,
             continue;
 
         InsUInt16( NS_sprm::TSetBrc::val );
-        pO->push_back( 11 );
-        pO->push_back( nStart );
-        pO->push_back( nLimit );
-        pO->push_back( 1<<i );
+        m_pO->push_back( 11 );
+        m_pO->push_back( nStart );
+        m_pO->push_back( nLimit );
+        m_pO->push_back( 1<<i );
         WW8_BRCVer9 aBrcVer9 = TranslateBorderLine( *pLn, 0, false );
-        pO->insert( pO->end(), aBrcVer9.aBits1, aBrcVer9.aBits2+4 );
+        m_pO->insert( m_pO->end(), aBrcVer9.aBits1, aBrcVer9.aBits2+4 );
     }
 }
 
@@ -4729,13 +4729,13 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol
 
     // LBetween
     m_rWW8Export.InsUInt16( NS_sprm::SLBetween::val );
-    m_rWW8Export.pO->push_back( COLADJ_NONE == rCol.GetLineAdj(  )? 0 : 1 );
+    m_rWW8Export.m_pO->push_back( COLADJ_NONE == rCol.GetLineAdj(  )? 0 : 1 );
 
     const SwColumns & rColumns = rCol.GetColumns(  );
 
     // FEvenlySpaced
     m_rWW8Export.InsUInt16( NS_sprm::SFEvenlySpaced::val );
-    m_rWW8Export.pO->push_back( bEven ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( bEven ? 1 : 0 );
 
     if ( bEven )
         return;
@@ -4744,7 +4744,7 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol
     {
         //sprmSDxaColWidth
         m_rWW8Export.InsUInt16( NS_sprm::SDxaColWidth::val );
-        m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
+        m_rWW8Export.m_pO->push_back( static_cast<sal_uInt8>(n) );
         m_rWW8Export.InsUInt16( rCol.
                                 CalcPrtColWidth( n,
                                                  o3tl::narrowing<sal_uInt16>(nPageSize) ) );
@@ -4753,7 +4753,7 @@ void WW8AttributeOutput::FormatColumns_Impl( sal_uInt16 nCols, const SwFormatCol
         {
             //sprmSDxaColSpacing
             m_rWW8Export.InsUInt16( NS_sprm::SDxaColSpacing::val );
-            m_rWW8Export.pO->push_back( static_cast<sal_uInt8>(n) );
+            m_rWW8Export.m_pO->push_back( static_cast<sal_uInt8>(n) );
             m_rWW8Export.InsUInt16( rColumns[n].GetRight(  ) +
                                     rColumns[n + 1].GetLeft(  ) );
         }
@@ -4837,7 +4837,7 @@ void WW8AttributeOutput::FormatKeep( const SvxFormatKeepItem& rKeep )
     // sprmFKeepFollow
     m_rWW8Export.InsUInt16( NS_sprm::PFKeepFollow::val );
 
-    m_rWW8Export.pO->push_back( rKeep.GetValue() ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( rKeep.GetValue() ? 1 : 0 );
 }
 
 // exclude a paragraph from Line Numbering
@@ -4846,7 +4846,7 @@ void WW8AttributeOutput::FormatLineNumbering( const SwFormatLineNumber& rNumberi
     // sprmPFNoLineNumb
     m_rWW8Export.InsUInt16( NS_sprm::PFNoLineNumb::val );
 
-    m_rWW8Export.pO->push_back( rNumbering.IsCount() ? 0 : 1 );
+    m_rWW8Export.m_pO->push_back( rNumbering.IsCount() ? 0 : 1 );
 }
 
 /* File PARATR.HXX  */
@@ -4941,7 +4941,7 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     }
 
     m_rWW8Export.InsUInt16(NS_sprm::PJc80::val);
-    m_rWW8Export.pO->push_back(nAdj);
+    m_rWW8Export.m_pO->push_back(nAdj);
 
     /*
     Sadly for left to right paragraphs both these values are the same,
@@ -4971,9 +4971,9 @@ void WW8AttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
     }
 
     if (bBiDiSwap)
-        m_rWW8Export.pO->push_back(nAdjBiDi);
+        m_rWW8Export.m_pO->push_back(nAdjBiDi);
     else
-        m_rWW8Export.pO->push_back(nAdj);
+        m_rWW8Export.m_pO->push_back(nAdj);
 }
 
 void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDirection )
@@ -5010,12 +5010,12 @@ void WW8AttributeOutput::FormatFrameDirection( const SvxFrameDirectionItem& rDir
         m_rWW8Export.InsUInt16( NS_sprm::STextFlow::val );
         m_rWW8Export.InsUInt16( nTextFlow );
         m_rWW8Export.InsUInt16( NS_sprm::SFBiDi::val );
-        m_rWW8Export.pO->push_back( bBiDi ? 1 : 0 );
+        m_rWW8Export.m_pO->push_back( bBiDi ? 1 : 0 );
     }
     else if ( !m_rWW8Export.m_bOutFlyFrameAttrs )  //paragraph/style
     {
         m_rWW8Export.InsUInt16( NS_sprm::PFBiDi::val );
-        m_rWW8Export.pO->push_back( bBiDi ? 1 : 0 );
+        m_rWW8Export.m_pO->push_back( bBiDi ? 1 : 0 );
     }
 }
 
@@ -5033,7 +5033,7 @@ void WW8AttributeOutput::ParaOutlineLevel(const SfxUInt16Item& rItem)
     // Outline Level: in LO Body Text = 0, in MS Body Text = 9
     nOutLvl = nOutLvl ? nOutLvl - 1 : 9;
     m_rWW8Export.InsUInt16( NS_sprm::POutLvl::val );
-    m_rWW8Export.pO->push_back( nOutLvl );
+    m_rWW8Export.m_pO->push_back( nOutLvl );
 }
 
 // "Separate paragraphs"
@@ -5041,7 +5041,7 @@ void WW8AttributeOutput::ParaSplit( const SvxFormatSplitItem& rSplit )
 {
     // sprmPFKeep
     m_rWW8Export.InsUInt16( NS_sprm::PFKeep::val );
-    m_rWW8Export.pO->push_back( rSplit.GetValue() ? 0 : 1 );
+    m_rWW8Export.m_pO->push_back( rSplit.GetValue() ? 0 : 1 );
 }
 
 /**
@@ -5053,7 +5053,7 @@ void WW8AttributeOutput::ParaWidows( const SvxWidowsItem& rWidows )
 {
     // sprmPFWidowControl
     m_rWW8Export.InsUInt16( NS_sprm::PFWidowControl::val );
-    m_rWW8Export.pO->push_back( rWidows.GetValue() ? 1 : 0 );
+    m_rWW8Export.m_pO->push_back( rWidows.GetValue() ? 1 : 0 );
 }
 
 namespace {
@@ -5171,12 +5171,12 @@ void SwWW8WrTabu::PutAll(WW8Export& rWrt)
 
     rWrt.InsUInt16(NS_sprm::PChgTabsPapx::val);
     // insert cch
-    rWrt.pO->push_back(msword_cast<sal_uInt8>(nSiz));
+    rWrt.m_pO->push_back(msword_cast<sal_uInt8>(nSiz));
     // write DelArr
-    rWrt.pO->push_back(msword_cast<sal_uInt8>(nDel));
+    rWrt.m_pO->push_back(msword_cast<sal_uInt8>(nDel));
     rWrt.OutSprmBytes(pDel.get(), nDel * 2);
     // write InsArr
-    rWrt.pO->push_back(msword_cast<sal_uInt8>(nAdd));
+    rWrt.m_pO->push_back(msword_cast<sal_uInt8>(nAdd));
     rWrt.OutSprmBytes(pAddPos.get(), 2 * nAdd);         // AddPosArray
     rWrt.OutSprmBytes(pAddTyp.get(), nAdd);             // AddTypArray
 }

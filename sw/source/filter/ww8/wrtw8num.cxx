@@ -177,11 +177,11 @@ void WW8Export::WriteNumbering()
         return; // no numbering is used
 
     // list formats - LSTF
-    pFib->m_fcPlcfLst = pTableStrm->Tell();
-    pTableStrm->WriteUInt16( m_pUsedNumTable->size() );
+    m_pFib->m_fcPlcfLst = m_pTableStrm->Tell();
+    m_pTableStrm->WriteUInt16( m_pUsedNumTable->size() );
     NumberingDefinitions();
     // set len to FIB
-    pFib->m_lcbPlcfLst = pTableStrm->Tell() - pFib->m_fcPlcfLst;
+    m_pFib->m_lcbPlcfLst = m_pTableStrm->Tell() - m_pFib->m_fcPlcfLst;
 
     // list formats - LVLF
     AbstractNumberingDefinitions();
@@ -195,18 +195,18 @@ void WW8Export::WriteNumbering()
 
 void WW8AttributeOutput::NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule )
 {
-    m_rWW8Export.pTableStrm->WriteUInt32( nId );
-    m_rWW8Export.pTableStrm->WriteUInt32( nId );
+    m_rWW8Export.m_pTableStrm->WriteUInt32( nId );
+    m_rWW8Export.m_pTableStrm->WriteUInt32( nId );
 
     // not associated with a Style
     for ( int i = 0; i < WW8ListManager::nMaxLevel; ++i )
-        m_rWW8Export.pTableStrm->WriteUInt16( 0xFFF );
+        m_rWW8Export.m_pTableStrm->WriteUInt16( 0xFFF );
 
     sal_uInt8 nFlags = 0;
     if ( rRule.IsContinusNum() )
         nFlags |= 0x1;
 
-    m_rWW8Export.pTableStrm->WriteUChar( nFlags ).WriteUChar( 0/*nDummy*/ );
+    m_rWW8Export.m_pTableStrm->WriteUChar( nFlags ).WriteUChar( 0/*nDummy*/ );
 }
 
 void MSWordExportBase::NumberingDefinitions()
@@ -284,11 +284,11 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     )
 {
     // Start value
-    m_rWW8Export.pTableStrm->WriteUInt32( nStart );
+    m_rWW8Export.m_pTableStrm->WriteUInt32( nStart );
 
     // Type
     sal_uInt8 nNumId = GetLevelNFC(nNumberingType, pOutSet, WW8Export::GetNumId(nNumberingType));
-    m_rWW8Export.pTableStrm->WriteUChar(nNumId);
+    m_rWW8Export.m_pTableStrm->WriteUChar(nNumId);
 
     // Justification
     sal_uInt8 nAlign;
@@ -304,25 +304,25 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         nAlign = 0;
         break;
     }
-    m_rWW8Export.pTableStrm->WriteUChar( nAlign );
+    m_rWW8Export.m_pTableStrm->WriteUChar( nAlign );
 
     // Write the rgbxchNums[9], positions of placeholders for paragraph
     // numbers in the text
-    m_rWW8Export.pTableStrm->WriteBytes(pNumLvlPos, WW8ListManager::nMaxLevel);
+    m_rWW8Export.m_pTableStrm->WriteBytes(pNumLvlPos, WW8ListManager::nMaxLevel);
 
     // Type of the character between the bullet and the text
-    m_rWW8Export.pTableStrm->WriteUChar( nFollow );
+    m_rWW8Export.m_pTableStrm->WriteUChar( nFollow );
 
     // dxaSoace/dxaIndent (Word 6 compatibility)
-    m_rWW8Export.pTableStrm->WriteUInt32( 0 );
-    m_rWW8Export.pTableStrm->WriteUInt32( 0 );
+    m_rWW8Export.m_pTableStrm->WriteUInt32( 0 );
+    m_rWW8Export.m_pTableStrm->WriteUInt32( 0 );
 
     // cbGrpprlChpx
     std::unique_ptr<ww::bytes> pCharAtrs;
     if ( pOutSet )
     {
-        std::unique_ptr<ww::bytes> pOldpO = std::move(m_rWW8Export.pO);
-        m_rWW8Export.pO.reset(new ww::bytes);
+        std::unique_ptr<ww::bytes> pOldpO = std::move(m_rWW8Export.m_pO);
+        m_rWW8Export.m_pO.reset(new ww::bytes);
         if ( pFont )
         {
             sal_uInt16 nFontID = m_rWW8Export.m_aFontHelper.GetId( *pFont );
@@ -347,10 +347,10 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
             }
         }
 
-        pCharAtrs = std::move(m_rWW8Export.pO);
-        m_rWW8Export.pO = std::move(pOldpO);
+        pCharAtrs = std::move(m_rWW8Export.m_pO);
+        m_rWW8Export.m_pO = std::move(pOldpO);
     }
-    m_rWW8Export.pTableStrm->WriteUChar(sal_uInt8(pCharAtrs ? pCharAtrs->size() : 0));
+    m_rWW8Export.m_pTableStrm->WriteUChar(sal_uInt8(pCharAtrs ? pCharAtrs->size() : 0));
 
     // cbGrpprlPapx
     sal_uInt8 aPapSprms [] = {
@@ -358,10 +358,10 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
         0x60, 0x84, 0, 0,               // sprmPDxaLeft1
         0x15, 0xc6, 0x05, 0x00, 0x01, 0, 0, 0x06
     };
-    m_rWW8Export.pTableStrm->WriteUChar( sal_uInt8( sizeof( aPapSprms ) ) );
+    m_rWW8Export.m_pTableStrm->WriteUChar( sal_uInt8( sizeof( aPapSprms ) ) );
 
     // reserved
-    m_rWW8Export.pTableStrm->WriteUInt16( 0 );
+    m_rWW8Export.m_pTableStrm->WriteUInt16( 0 );
 
     // pap sprms
     sal_uInt8* pData = aPapSprms + 2;
@@ -371,15 +371,15 @@ void WW8AttributeOutput::NumberingLevel( sal_uInt8 /*nLevel*/,
     pData += 5;
     Set_UInt16( pData, nListTabPos );
 
-    m_rWW8Export.pTableStrm->WriteBytes(aPapSprms, sizeof(aPapSprms));
+    m_rWW8Export.m_pTableStrm->WriteBytes(aPapSprms, sizeof(aPapSprms));
 
     // write Chpx
     if (pCharAtrs && !pCharAtrs->empty())
-        m_rWW8Export.pTableStrm->WriteBytes(pCharAtrs->data(), pCharAtrs->size());
+        m_rWW8Export.m_pTableStrm->WriteBytes(pCharAtrs->data(), pCharAtrs->size());
 
     // write the num string
-    m_rWW8Export.pTableStrm->WriteUInt16( rNumberingString.getLength() );
-    SwWW8Writer::WriteString16( *m_rWW8Export.pTableStrm, rNumberingString, false );
+    m_rWW8Export.m_pTableStrm->WriteUInt16( rNumberingString.getLength() );
+    SwWW8Writer::WriteString16( *m_rWW8Export.m_pTableStrm, rNumberingString, false );
 }
 
 void MSWordExportBase::AbstractNumberingDefinitions()
@@ -578,21 +578,21 @@ void WW8Export::OutOverrideListTab()
     sal_uInt16 nCount = m_pUsedNumTable->size();
     sal_uInt16 n;
 
-    pFib->m_fcPlfLfo = pTableStrm->Tell();
-    pTableStrm->WriteUInt32( nCount );
+    m_pFib->m_fcPlfLfo = m_pTableStrm->Tell();
+    m_pTableStrm->WriteUInt32( nCount );
 
     // LFO ([MS-DOC] 2.9.131)
     for( n = 0; n < nCount; ++n )
     {
-        pTableStrm->WriteUInt32( n + 1 );
-        SwWW8Writer::FillCount( *pTableStrm, 12 );
+        m_pTableStrm->WriteUInt32( n + 1 );
+        SwWW8Writer::FillCount( *m_pTableStrm, 12 );
     }
     // LFOData ([MS-DOC] 2.9.132)
     for( n = 0; n < nCount; ++n )
-        pTableStrm->WriteInt32( -1 );  // no overwrite
+        m_pTableStrm->WriteInt32( -1 );  // no overwrite
 
     // set len to FIB
-    pFib->m_lcbPlfLfo = pTableStrm->Tell() - pFib->m_fcPlfLfo;
+    m_pFib->m_lcbPlfLfo = m_pTableStrm->Tell() - m_pFib->m_fcPlfLfo;
 }
 
 void WW8Export::OutListNamesTab()
@@ -603,9 +603,9 @@ void WW8Export::OutListNamesTab()
     // write the "list format override" - LFO
     sal_uInt16 nNms = 0, nCount = m_pUsedNumTable->size();
 
-    pFib->m_fcSttbListNames = pTableStrm->Tell();
-    pTableStrm->WriteInt16( -1 );
-    pTableStrm->WriteUInt32( nCount );
+    m_pFib->m_fcSttbListNames = m_pTableStrm->Tell();
+    m_pTableStrm->WriteInt16( -1 );
+    m_pTableStrm->WriteUInt32( nCount );
 
     for( ; nNms < nCount; ++nNms )
     {
@@ -614,14 +614,14 @@ void WW8Export::OutListNamesTab()
         if( !rRule.IsAutoRule() )
             sNm = rRule.GetName();
 
-        pTableStrm->WriteUInt16( sNm.getLength() );
+        m_pTableStrm->WriteUInt16( sNm.getLength() );
         if (!sNm.isEmpty())
-            SwWW8Writer::WriteString16(*pTableStrm, sNm, false);
+            SwWW8Writer::WriteString16(*m_pTableStrm, sNm, false);
     }
 
-    SwWW8Writer::WriteLong( *pTableStrm, pFib->m_fcSttbListNames + 2, nNms );
+    SwWW8Writer::WriteLong( *m_pTableStrm, m_pFib->m_fcSttbListNames + 2, nNms );
     // set len to FIB
-    pFib->m_lcbSttbListNames = pTableStrm->Tell() - pFib->m_fcSttbListNames;
+    m_pFib->m_lcbSttbListNames = m_pTableStrm->Tell() - m_pFib->m_fcSttbListNames;
 }
 
 void MSWordExportBase::SubstituteBullet( OUString& rNumStr,

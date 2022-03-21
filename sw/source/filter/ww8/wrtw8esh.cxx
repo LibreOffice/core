@@ -429,7 +429,7 @@ void WW8Export::DoComboBox(const OUString &rName,
     OutputField(nullptr, ww::eFORMDROPDOWN, FieldString(ww::eFORMDROPDOWN),
              FieldFlags::Start | FieldFlags::CmdStart);
     // write the reference to the "picture" structure
-    sal_uInt64 nDataStt = pDataStrm->Tell();
+    sal_uInt64 nDataStt = m_pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
@@ -465,7 +465,7 @@ void WW8Export::DoComboBox(const OUString &rName,
         aFFData.addListboxEntry(rListItems[i]);
     }
 
-    aFFData.Write(pDataStrm);
+    aFFData.Write(m_pDataStrm);
 }
 
 void WW8Export::DoFormText(const SwInputField * pField)
@@ -473,7 +473,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     OutputField(nullptr, ww::eFORMTEXT, FieldString(ww::eFORMTEXT),
         FieldFlags::Start | FieldFlags::CmdStart);
     // write the reference to the "picture" structure
-    sal_uInt64 nDataStt = pDataStrm->Tell();
+    sal_uInt64 nDataStt = m_pDataStrm->Tell();
     m_pChpPlc->AppendFkpEntry( Strm().Tell() );
 
     WriteChar( 0x01 );
@@ -496,7 +496,7 @@ void WW8Export::DoFormText(const SwInputField * pField)
     aFFData.setName(pField->GetPar2());
     aFFData.setHelp(pField->GetHelp());
     aFFData.setStatus(pField->GetToolTip());
-    aFFData.Write(pDataStrm);
+    aFFData.Write(m_pDataStrm);
 
     OutputField(nullptr, ww::eFORMTEXT, OUString(), FieldFlags::CmdEnd);
 
@@ -613,22 +613,22 @@ void WW8Export::MiserableRTLFrameFormatHack(SwTwips &rLeft, SwTwips &rRight,
 
 void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
 {
-    if (8 > rWrt.pFib->m_nVersion)    // Cannot export drawobject in vers 7-
+    if (8 > rWrt.m_pFib->m_nVersion)    // Cannot export drawobject in vers 7-
         return;
 
-    sal_uInt32 nFcStart = rWrt.pTableStrm->Tell();
+    sal_uInt32 nFcStart = rWrt.m_pTableStrm->Tell();
 
     if (maDrawObjs.empty())
         return;
 
     // write CPs
-    WW8Fib& rFib = *rWrt.pFib;
+    WW8Fib& rFib = *rWrt.m_pFib;
     WW8_CP nCpOffs = GetCpOffset(rFib);
 
     for (const auto& rDrawObj : maDrawObjs)
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnCp - nCpOffs);
+        SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, rDrawObj.mnCp - nCpOffs);
 
-    SwWW8Writer::WriteLong(*rWrt.pTableStrm, rFib.m_ccpText + rFib.m_ccpFootnote +
+    SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, rFib.m_ccpText + rFib.m_ccpFootnote +
         rFib.m_ccpHdr + rFib.m_ccpEdn + rFib.m_ccpTxbx + rFib.m_ccpHdrTxbx + 1);
 
     for (const auto& rDrawObj : maDrawObjs)
@@ -724,7 +724,7 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         }
 
         // spid
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, rDrawObj.mnShapeId);
+        SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, rDrawObj.mnShapeId);
 
         SwTwips nLeft = aRect.Left() + nThick;
         SwTwips nRight = aRect.Right() - nThick;
@@ -776,10 +776,10 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         //xaLeft/yaTop/xaRight/yaBottom - rel. to anchor
         //(most of) the border is outside the graphic is word, so
         //change dimensions to fit
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nLeft);
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nTop);
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nRight);
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, nBottom);
+        SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, nLeft);
+        SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, nTop);
+        SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, nRight);
+        SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, nBottom);
 
         //fHdr/bx/by/wr/wrk/fRcaSimple/fBelowText/fAnchorLock
         sal_uInt16 nFlags=0;
@@ -839,13 +839,13 @@ void PlcDrawObj::WritePlc( WW8Export& rWrt ) const
         if (rFrameFormat.IsInline())
             nFlags |= 0x8000;
 
-        SwWW8Writer::WriteShort(*rWrt.pTableStrm, nFlags);
+        SwWW8Writer::WriteShort(*rWrt.m_pTableStrm, nFlags);
 
         // cTxbx
-        SwWW8Writer::WriteLong(*rWrt.pTableStrm, 0);
+        SwWW8Writer::WriteLong(*rWrt.m_pTableStrm, 0);
     }
 
-    RegisterWithFib(rFib, nFcStart, rWrt.pTableStrm->Tell() - nFcStart);
+    RegisterWithFib(rFib, nFcStart, rWrt.m_pTableStrm->Tell() - nFcStart);
 }
 
 void MainTextPlcDrawObj::RegisterWithFib(WW8Fib &rFib, sal_uInt32 nStart,
@@ -907,12 +907,12 @@ void DrawObj::SetShapeDetails(sal_uInt32 nId, sal_Int32 nThick)
 bool WW8_WrPlcTextBoxes::WriteText( WW8Export& rWrt )
 {
     rWrt.m_bInWriteEscher = true;
-    WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.pFib->m_ccpTxbx : rWrt.pFib->m_ccpHdrTxbx;
+    WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.m_pFib->m_ccpTxbx : rWrt.m_pFib->m_ccpHdrTxbx;
 
     bool bRet = WriteGenericText( rWrt, nTyp, rccp );
 
     WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-    WW8Fib& rFib = *rWrt.pFib;
+    WW8Fib& rFib = *rWrt.m_pFib;
     WW8_CP nMyOffset = rFib.m_ccpText + rFib.m_ccpFootnote + rFib.m_ccpHdr + rFib.m_ccpAtn
                             + rFib.m_ccpEdn;
     if( TXT_TXTBOX == nTyp )
@@ -1347,7 +1347,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         if( n )
             aAttrIter.NextPara( n );
 
-        OSL_ENSURE( pO->empty(), " pO is not empty at start of line" );
+        OSL_ENSURE( m_pO->empty(), " pO is not empty at start of line" );
 
         OUString aStr( rEditObj.GetText( n ));
         sal_Int32 nCurrentPos = 0;
@@ -1387,8 +1387,8 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
             }
 
             m_pChpPlc->AppendFkpEntry( Strm().Tell(),
-                                            pO->size(), pO->data() );
-            pO->clear();
+                                            m_pO->size(), m_pO->data() );
+            m_pO->clear();
 
             // exception: foot note at line end
             if( nNextAttr == nEnd && bTextAtr )
@@ -1398,17 +1398,17 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, sal_uInt8 nTyp
         }
         while( nCurrentPos < nEnd );
 
-        OSL_ENSURE( pO->empty(), " pO is not empty at start of line" );
+        OSL_ENSURE( m_pO->empty(), " pO is not empty at start of line" );
 
-        pO->push_back( bNul );        // Style # as short
-        pO->push_back( bNul );
+        m_pO->push_back( bNul );        // Style # as short
+        m_pO->push_back( bNul );
 
         aAttrIter.OutParaAttr(false);
 
         sal_uInt64 nPos = Strm().Tell();
         m_pPapPlc->AppendFkpEntry( Strm().Tell(),
-                                        pO->size(), pO->data() );
-        pO->clear();
+                                        m_pO->size(), m_pO->data() );
+        m_pO->clear();
         m_pChpPlc->AppendFkpEntry( nPos );
     }
 
@@ -1467,13 +1467,13 @@ void WW8Export::WriteEscher()
 {
     if (m_pEscher)
     {
-        sal_uInt64 nStart = pTableStrm->Tell();
+        sal_uInt64 nStart = m_pTableStrm->Tell();
 
         m_pEscher->WritePictures();
         m_pEscher->FinishEscher();
 
-        pFib->m_fcDggInfo = nStart;
-        pFib->m_lcbDggInfo = pTableStrm->Tell() - nStart;
+        m_pFib->m_fcDggInfo = nStart;
+        m_pFib->m_lcbDggInfo = m_pTableStrm->Tell() - nStart;
         delete m_pEscher;
         m_pEscher = nullptr;
     }
@@ -2314,7 +2314,7 @@ SwEscherEx::~SwEscherEx()
 void SwEscherEx::FinishEscher()
 {
     pEscherStrm->Seek(0);
-    rWrt.pTableStrm->WriteStream( *pEscherStrm );
+    rWrt.m_pTableStrm->WriteStream( *pEscherStrm );
     delete pEscherStrm;
     pEscherStrm = nullptr;
 }
