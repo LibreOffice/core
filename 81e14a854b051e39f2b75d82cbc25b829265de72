@@ -34,6 +34,24 @@
       "parentUuid": "33f9f668_86a25695",
       "revId": "81e14a854b051e39f2b75d82cbc25b829265de72",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2134894d_377880e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-21T11:17:42Z",
+      "side": 1,
+      "message": "I don\u0027t consider it particularly risky, but I wouldn\u0027t even bother to try and assess the risk for an arcane, relatively harmless, and presumably longstanding issue like this.  (Though YMMV, of course.)",
+      "parentUuid": "bc4b3c96_402a1876",
+      "revId": "81e14a854b051e39f2b75d82cbc25b829265de72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
