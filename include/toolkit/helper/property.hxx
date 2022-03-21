@@ -204,7 +204,9 @@ namespace com::sun::star::uno {
 #define BASEPROPERTY_INACTIVE_SEL_BACKGROUND_COLOR  166
 #define BASEPROPERTY_ACTIVE_SEL_TEXT_COLOR          167
 #define BASEPROPERTY_INACTIVE_SEL_TEXT_COLOR        168
-#define BASEPROPERTY_TYPEDITEMLIST                  169 // AnySequence
+#define BASEPROPERTY_HIGHLIGHT_COLOR                169
+#define BASEPROPERTY_HIGHLIGHT_TEXT_COLOR           170
+#define BASEPROPERTY_TYPEDITEMLIST                  171 // AnySequence
 
 
 // These properties are not bound, they are always extracted from the BASEPROPERTY_FONTDESCRIPTOR property
