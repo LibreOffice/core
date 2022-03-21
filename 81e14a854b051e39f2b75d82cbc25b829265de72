@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33f9f668_86a25695",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-21T09:50:30Z",
+      "side": 1,
+      "message": "This has presumably been broken since forever.  Why bother the risk of backporting.",
+      "revId": "81e14a854b051e39f2b75d82cbc25b829265de72",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
