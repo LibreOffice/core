@@ -408,6 +408,12 @@ yynewstate:
       yyvs = static_cast<YYSTYPE *>(malloc (yystacksize * sizeof (*yyvsp)));
       memcpy (yyvs, yyvs1, size * sizeof (*yyvsp));
 
+      // https://lists.gnu.org/archive/html/bug-bison/2001-11/msg00021.html
+      if (yyss1 != yyssa)
+          free (yyss1);
+      if (yyvs1 != yyvsa)
+          free (yyvs1);
+
       yyssp = yyss + size - 1;
       yyvsp = yyvs + size - 1;
 
