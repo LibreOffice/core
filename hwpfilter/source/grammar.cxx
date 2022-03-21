@@ -21,9 +21,6 @@
 /*  A Bison parser, made from grammar.y
     by GNU Bison version 1.28  */
 
-#ifndef YYDEBUG
-#define YYDEBUG 0
-#endif
 #ifndef YYMAXDEPTH
 #define YYMAXDEPTH 0
 #endif
@@ -94,70 +91,6 @@ const char yytranslate[] = {     0,
     27,    28,    29,    30,    31
 };
 
-#if YYDEBUG != 0
-static const short yyprhs[] = {     0,
-     0,     2,     4,     6,     8,    10,    12,    14,    16,    18,
-    20,    22,    24,    26,    28,    30,    32,    34,    36,    39,
-    42,    45,    48,    51,    54,    58,    60,    63,    66,    69,
-    72,    75,    79,    81,    85,    89,    92,    96,    99,   103,
-   106,   110,   114,   120,   124,   130,   132,   135,   137,   140,
-   143,   147,   150,   154,   157,   159,   161,   165,   167,   169,
-   172,   174,   176,   178,   180,   182,   184,   186,   188,   190,
-   192,   194
-};
-
-static const short yyrhs[] = {     4,
-     0,     9,     0,    10,     0,     5,     0,    11,     0,    12,
-     0,    20,     0,    21,     0,     7,     0,     6,     0,    23,
-     0,    17,     0,    18,     0,     8,     0,    32,     0,    31,
-     0,    22,     0,    43,     0,    44,    43,     0,    26,    33,
-     0,    26,    34,     0,    26,    35,     0,    26,    36,     0,
-    26,    32,     0,    26,    32,    32,     0,    29,     0,    27,
-    37,     0,    27,    38,     0,    27,    39,     0,    27,    40,
-     0,    27,    32,     0,    27,    32,    32,     0,    30,     0,
-    45,    64,    46,     0,    33,    64,    37,     0,    33,    37,
-     0,    35,    64,    39,     0,    35,    39,     0,    34,    64,
-    38,     0,    34,    38,     0,    65,    41,    65,     0,    65,
-    42,    65,     0,    65,    41,    49,    42,    49,     0,    14,
-    49,    49,     0,    35,    64,    16,    64,    39,     0,     3,
-     0,    54,    49,     0,    19,     0,    56,    49,     0,    13,
-    49,     0,    13,    50,    49,     0,    24,    49,     0,    24,
-    49,    49,     0,    25,    49,     0,    62,     0,    63,     0,
-    62,    28,    63,     0,    64,     0,    65,     0,    64,    65,
-     0,    49,     0,    48,     0,    47,     0,    51,     0,    52,
-     0,    53,     0,    57,     0,    58,     0,    55,     0,    44,
-     0,    59,     0,    60,     0
-};
-
-#endif
-
-#if YYDEBUG != 0
-static const short yyrline[] = { 0,
-    59,    61,    62,    63,    64,    65,    66,    67,    68,    69,
-    70,    71,    72,    73,    74,    75,    76,    79,    81,    84,
-    86,    87,    88,    89,    90,    91,    94,    96,    97,    98,
-    99,   100,   101,   104,   108,   110,   113,   115,   118,   120,
-   123,   125,   126,   129,   133,   138,   142,   145,   149,   153,
-   155,   158,   160,   163,   168,   172,   174,   177,   181,   183,
-   186,   188,   189,   190,   191,   192,   193,   194,   195,   196,
-   197,   198
-};
-#endif
-
-
-#if YYDEBUG != 0 || defined (YYERROR_VERBOSE)
-
-static const char * const yytname[] = {   "$","error","$undefined.","ACCENT",
-"SMALL_GREEK","CAPITAL_GREEK","BINARY_OPERATOR","RELATION_OPERATOR","ARROW",
-"GENERAL_IDEN","GENERAL_OPER","BIG_SYMBOL","FUNCTION","ROOT","FRACTION","SUBSUP",
-"EQOVER","DELIMETER","LARGE_DELIM","DECORATION","SPACE_SYMBOL","CHARACTER","STRING",
-"OPERATOR","EQBEGIN","EQEND","EQLEFT","EQRIGHT","NEWLINE","LEFT_DELIM","RIGHT_DELIM",
-"DIGIT","'|'","'('","'['","'{'","'<'","')'","']'","'}'","'>'","'_'","'^'","Identifier",
-"PrimaryExpr","EQLeft","EQRight","Fence","Parenth","Block","Bracket","SubSupExpr",
-"FractionExpr","OverExpr","Accent","AccentExpr","Decoration","DecorationExpr",
-"RootExpr","BeginExpr","EndExpr","MathML","Lines","Line","ExprList","Expr", NULL
-};
-#endif
 
 const short yyr1[] = {     0,
     43,    43,    43,    43,    43,    43,    43,    43,    43,    43,
@@ -373,12 +306,6 @@ YYSTYPE yylval;         /*  the semantic value of the       */
 
 static int yynerrs;     /*  number of parse errors so far       */
 
-#if YYDEBUG != 0
-int yydebug;            /*  nonzero means print parse trace */
-/* Since this is uninitialized, it does not stop multiple parsers
-   from coexisting.  */
-#endif
-
 /*  YYINITDEPTH indicates the initial size of the parser's stacks   */
 
 #ifndef YYINITDEPTH
@@ -430,11 +357,6 @@ yyparse(YYPARSE_PARAM_ARG)
                 /*  routines                */
 
   int yylen;
-
-#if YYDEBUG != 0
-  if (yydebug)
-    fprintf(stderr, "Starting parse\n");
-#endif
 
   yystate = 0;
   yyerrstatus = 0;
@@ -489,19 +411,9 @@ yynewstate:
       yyssp = yyss + size - 1;
       yyvsp = yyvs + size - 1;
 
-#if YYDEBUG != 0
-      if (yydebug)
-    fprintf(stderr, "Stack size increased to %d\n", yystacksize);
-#endif
-
       if (yyssp >= yyss + yystacksize - 1)
     YYABORT;
     }
-
-#if YYDEBUG != 0
-  if (yydebug)
-    fprintf(stderr, "Entering state %d\n", yystate);
-#endif
 
   goto yybackup;
  yybackup:
@@ -523,10 +435,6 @@ yynewstate:
 
   if (yychar == YYEMPTY)
     {
-#if YYDEBUG != 0
-      if (yydebug)
-    fprintf(stderr, "Reading a token: ");
-#endif
       yychar = YYLEX;
     }
 
@@ -537,27 +445,11 @@ yynewstate:
       yychar1 = 0;
       yychar = YYEOF;       /* Don't call YYLEX any more */
 
-#if YYDEBUG != 0
-      if (yydebug)
-    fprintf(stderr, "Now at end of input.\n");
-#endif
     }
   else
     {
       yychar1 = YYTRANSLATE(yychar);
 
-#if YYDEBUG != 0
-      if (yydebug)
-    {
-      fprintf (stderr, "Next token is %d (%s", yychar, yytname[yychar1]);
-      /* Give the individual parser a way to print the precise meaning
-         of a token, for further debugging info.  */
-#ifdef YYPRINT
-      YYPRINT (stderr, yychar, yylval);
-#endif
-      fprintf (stderr, ")\n");
-    }
-#endif
     }
 
   yyn += yychar1;
@@ -588,11 +480,6 @@ yynewstate:
 
   /* Shift the lookahead token.  */
 
-#if YYDEBUG != 0
-  if (yydebug)
-    fprintf(stderr, "Shifting token %d (%s), ", yychar, yytname[yychar1]);
-#endif
-
   /* Discard the token being shifted unless it is eof.  */
   if (yychar != YYEOF)
     yychar = YYEMPTY;
@@ -617,22 +504,6 @@ yyreduce:
   yylen = yyr2[yyn];
   if (yylen > 0)
     yyval = yyvsp[1-yylen]; /* implement default value of the action */
-
-#if YYDEBUG != 0
-  if (yydebug)
-    {
-      int i;
-
-      fprintf (stderr, "Reducing via rule %d (line %d), ",
-           yyn, yyrline[yyn]);
-
-      /* Print the symbols being reduced, and their result.  */
-      for (i = yyprhs[yyn]; yyrhs[i] > 0; i++)
-    fprintf (stderr, "%s ", yytname[yyrhs[i]]);
-      fprintf (stderr, " -> %s\n", yytname[yyr1[yyn]]);
-    }
-#endif
-
 
   switch (yyn) {
 
@@ -858,17 +729,6 @@ case 72:
   yyvsp -= yylen;
   yyssp -= yylen;
 
-#if YYDEBUG != 0
-  if (yydebug)
-    {
-      short *ssp1 = yyss - 1;
-      fprintf (stderr, "state stack now");
-      while (ssp1 != yyssp)
-    fprintf (stderr, " %d", *++ssp1);
-      fprintf (stderr, "\n");
-    }
-#endif
-
   *++yyvsp = yyval;
 
   /* Now "shift" the result of the reduction.
@@ -948,11 +808,6 @@ yyerrlab1:   /* here on error raised explicitly by an action */
       if (yychar == YYEOF)
     YYABORT;
 
-#if YYDEBUG != 0
-      if (yydebug)
-    fprintf(stderr, "Discarding token %d (%s).\n", yychar, yytname[yychar1]);
-#endif
-
       yychar = YYEMPTY;
     }
 
@@ -978,17 +833,6 @@ yyerrpop:   /* pop the current state because it cannot handle the error token */
   yyvsp--;
   yystate = *--yyssp;
 
-#if YYDEBUG != 0
-  if (yydebug)
-    {
-      short *ssp1 = yyss - 1;
-      fprintf (stderr, "Error: state stack now");
-      while (ssp1 != yyssp)
-    fprintf (stderr, " %d", *++ssp1);
-      fprintf (stderr, "\n");
-    }
-#endif
-
 yyerrhandle:
 
   yyn = yypact[yystate];
@@ -1012,11 +856,6 @@ yyerrhandle:
 
   if (yyn == YYFINAL)
     YYACCEPT;
-
-#if YYDEBUG != 0
-  if (yydebug)
-    fprintf(stderr, "Shifting error token, ");
-#endif
 
   *++yyvsp = yylval;
 
