@@ -540,6 +540,8 @@
 #define STR_HYPHENATECELL_OFF                   NC_("STR_HYPHENATECELL_OFF", "Hyphenate: Off")
 #define STR_INDENTCELL                          NC_("STR_INDENTCELL", "Indent: ")
 #define STR_UNDO_INSERT_SPARKLINE_GROUP         NC_("STR_UNDO_INSERT_SPARKLINE", "Insert Sparkline Group")
+#define STR_UNDO_DELETE_SPARKLINE               NC_("STR_UNDO_DELETE_SPARKLINE", "Delete Sparkline")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
