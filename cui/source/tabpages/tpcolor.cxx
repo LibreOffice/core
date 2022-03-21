@@ -35,6 +35,7 @@
 #include <svx/strings.hrc>
 #include <officecfg/Office/Common.hxx>
 #include <sal/log.hxx>
+#include <DuplicateNameDialog.hxx>
 
 using namespace com::sun::star;
 
@@ -335,9 +336,10 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
             bValidColorName = (FindInCustomColors(aName) == -1);
             if (!bValidColorName)
             {
-                std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(GetFrameWeld(), "cui/ui/queryduplicatedialog.ui"));
-                std::unique_ptr<weld::MessageDialog> xWarnBox(xBuilder->weld_message_dialog("DuplicateNameDialog"));
-                xWarnBox->run(); // todo this could be async
+                std::shared_ptr<DuplicateNameDialog> xWarnBox = std::make_shared<DuplicateNameDialog>(GetFrameWeld());
+                weld::DialogController::runAsync(xWarnBox, [this](sal_Int32) {
+                    pDlg.disposeAndClear();
+                });
             }
             else
             {
@@ -362,8 +364,8 @@ IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl, weld::Button&, void)
                 ImpColorCountChanged();
 
                 UpdateModified();
+                pDlg.disposeAndClear();
             }
-            pDlg.disposeAndClear();
         }
         else if (result == RET_CLOSE || result == RET_CANCEL)
         {
