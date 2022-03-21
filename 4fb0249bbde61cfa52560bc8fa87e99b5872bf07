@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97942db2_8f198eb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-03-21T04:14:24Z",
+      "side": 1,
+      "message": "Stumbled on to this while testing https://gerrit.libreoffice.org/c/core/+/131874",
+      "revId": "4fb0249bbde61cfa52560bc8fa87e99b5872bf07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
