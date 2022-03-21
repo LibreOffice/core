@@ -750,7 +750,12 @@ static bool ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
 
     if( nType == ControlType::TabPane )
     {
-        iPart = TABP_PANE;
+        // tabpane in tabcontrols gets drawn in "darkmode" as if it was a
+        // a "light" theme, so bodge this by drawing with a button instead
+        if (UseDarkMode())
+            iPart = BP_PUSHBUTTON;
+        else
+            iPart = TABP_PANE;
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
@@ -1172,10 +1177,10 @@ bool WinSalGraphics::drawNativeControl( ControlType nType,
                 hTheme = getThemeHandle(mhWnd, L"Combobox", mpImpl.get());
             }
             break;
-        case ControlType::TabPane:
         case ControlType::TabBody:
             hTheme = getThemeHandle(mhWnd, L"Tab", mpImpl.get());
             break;
+        case ControlType::TabPane:
         case ControlType::TabItem:
             if (bUseDarkMode)
             {
