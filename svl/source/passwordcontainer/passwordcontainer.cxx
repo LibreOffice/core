@@ -18,6 +18,7 @@
  */
 
 #include <sal/config.h>
+#include <sal/log.hxx>
 
 #include <string_view>
 
@@ -256,6 +257,24 @@ bool StorageItem::useStorage()
 }
 
 
+sal_Int32 StorageItem::getStorageVersion()
+{
+    Sequence<OUString> aNodeNames { "StorageVersion" };
+
+    Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aNodeNames );
+
+    if( aPropertyValues.getLength() != aNodeNames.getLength() )
+    {
+        OSL_FAIL( "Problems during reading" );
+        return 0;
+    }
+
+    sal_Int32 nResult = 0;
+    aPropertyValues[0] >>= nResult;
+
+    return nResult;
+}
+
 bool StorageItem::getEncodedMasterPassword( OUString& aResult )
 {
     if( hasEncoded )
@@ -288,7 +307,8 @@ void StorageItem::setEncodedMasterPassword( const OUString& aEncoded, bool bAcce
     bool bHasMaster = ( !aEncoded.isEmpty() || bAcceptEmpty );
 
     ConfigItem::SetModified();
-    ConfigItem::PutProperties( { "HasMaster", "Master" }, { uno::Any(bHasMaster), uno::Any(aEncoded) } );
+    ConfigItem::PutProperties( { "HasMaster", "Master", "StorageVersion" },
+                               { uno::Any(bHasMaster), uno::Any(aEncoded), uno::Any(nCurrentStorageVersion) } );
 
     hasEncoded = bHasMaster;
     mEncoded = aEncoded;
@@ -772,6 +792,18 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
     return aResult;
 }
 
+// Mangle the key to match an old bug
+static OUString ReencodeAsOldHash(const OUString& rPass)
+{
+    OUStringBuffer aBuffer;
+    for (int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ++ind)
+    {
+        unsigned char i = static_cast<char>(rPass.copy(ind * 2, 2).toUInt32(16));
+        aBuffer.append(static_cast< sal_Unicode >('a' + (i >> 4)));
+        aBuffer.append(static_cast< sal_Unicode >('a' + (i & 15)));
+    }
+    return aBuffer.makeStringAndClear();
+}
 
 OUString const & PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& aHandler )
 {
@@ -810,6 +842,9 @@ OUString const & PasswordContainer::GetMasterPassword( const Reference< XInterac
                     }
                     else
                     {
+                        if (m_xStorageFile->getStorageVersion() == 0)
+                            aPass = ReencodeAsOldHash(aPass);
+
                         std::vector< OUString > aRM( DecodePasswords( aEncodedMP, aPass, aRMode ) );
                         if( aRM.empty() || aPass != aRM[0] )
                         {
@@ -1014,6 +1049,10 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
 
                 do {
                     aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
+
+                    if (m_xStorageFile->getStorageVersion() == 0)
+                        aPass = ReencodeAsOldHash(aPass);
+
                     bResult = ( !aPass.isEmpty() && aPass == m_aMasterPassword );
                     aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
                 } while( !bResult && !aPass.isEmpty() );
