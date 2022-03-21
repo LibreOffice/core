@@ -239,6 +239,8 @@ public:
     SC_DLLPUBLIC bool InsertSparklines(ScRange const& rDataRange, ScRange const& rSparklineRange,
                                        std::shared_ptr<sc::SparklineGroup> pSparklineGroup);
 
+    SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rAddress);
+
 private:
     void ProtectDocument(const ScDocProtection& rProtect);
 };
