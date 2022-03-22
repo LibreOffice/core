@@ -16,6 +16,80 @@
       "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/110790/ : FAILURE\n\u003e \n\u003e clang plugin cstylecast did trigger. C-style cast from \"sal_Int16\" (aka \"short\") to \"eMatchMode\" (performs: static_cast) (IntegralCast) ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110336/ )\n\u003e \n\u003e error: C-style cast from \"sal_Int16\" (aka \"short\") to \"eMatchMode\" (performs: static_cast) (IntegralCast) [loplugin:cstylecast] in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sc/source/core/tool/interpr1.cxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110336/ )\n\n",
       "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51a2d05d_09f07ca5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-22T21:54:08Z",
+      "side": 1,
+      "message": "Hi Winfried! Thanks for tackling XLOOKUP()!\nI\u0027m on vacation now (but in Hamburg with exceptionally beautiful weather) and will review things only slowly in the evening and from time to time. I didn\u0027t get into the interpreter code yet (all other I had a glance on and looks good where not commented) and might do that tomorrow or the day after, just some findings until now.\nGreetings\nEike\n",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4856f1eb_7f909c6a",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3391,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-22T21:54:08Z",
+      "side": 1,
+      "message": "typo: return",
+      "range": {
+        "startLine": 3391,
+        "startChar": 70,
+        "endLine": 3391,
+        "endChar": 76
+      },
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b565e30_05b7c0ae",
+        "filename": "sc/qa/unit/data/functions/spreadsheet/fods/xlookup.fods",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-22T21:54:08Z",
+      "side": 1,
+      "message": "This document seems to have been copied from an existing test document and has an unnecessary amount of different number formats even in different locales. Please use an en-US default locale to create/edit test documents and if possible please create a document from scratch and copy just content from another document if necessary.",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ff764a0_eeeec8a0",
+        "filename": "sc/source/core/data/funcdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-03-22T21:54:08Z",
+      "side": 1,
+      "message": "The definitions here must be in the same order as the numeric opcode assignments in include/formula/compiler.hxx so this would have to go after the HYPERLINK function. See comment above this array at line 405.",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
