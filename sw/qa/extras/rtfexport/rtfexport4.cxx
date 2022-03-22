@@ -462,6 +462,51 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     verify();
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf111851, "tdf111851.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+
+    // No shading
+    {
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("A1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("a"), uno::Reference<text::XTextRange>(xCell)->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    }
+    {
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("B1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("b"), uno::Reference<text::XTextRange>(xCell)->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell, "BackColor"));
+    }
+
+    // Check some random not standard shading values and ensure some non-white background color
+    {
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("C1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("c"), uno::Reference<text::XTextRange>(xCell)->getString());
+        sal_Int32 nShadingColor = getProperty<sal_Int32>(xCell, "BackColor");
+        CPPUNIT_ASSERT(0x00FFFFFF > nShadingColor);
+        CPPUNIT_ASSERT(0 < nShadingColor);
+    }
+    {
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("D1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("d"), uno::Reference<text::XTextRange>(xCell)->getString());
+        sal_Int32 nShadingColor = getProperty<sal_Int32>(xCell, "BackColor");
+        CPPUNIT_ASSERT(0x00FFFFFF > nShadingColor);
+        CPPUNIT_ASSERT(0 < nShadingColor);
+    }
+
+    // Values 10000 and more - black
+    {
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("E1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("e"), uno::Reference<text::XTextRange>(xCell)->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xCell, "BackColor"));
+    }
+    {
+        uno::Reference<text::XTextRange> xCell(xTable->getCellByName("F1"), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("f"), uno::Reference<text::XTextRange>(xCell)->getString());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xCell, "BackColor"));
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
