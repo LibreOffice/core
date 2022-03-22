@@ -173,6 +173,24 @@
       "parentUuid": "7fa08527_7faa51c1",
       "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb60cfdc_58ac8c03",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-22T12:41:37Z",
+      "side": 1,
+      "message": "Let\u0027s mark this done and handle this separately, s. discussion. I\u0027ll create a new bugzilla issue and add a link to tdf#135234.",
+      "parentUuid": "07310a55_3beb14ab",
+      "revId": "5f2eb8261dcf9c94d7b9e115f7f626982bd5da7e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
