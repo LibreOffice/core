@@ -5109,21 +5109,8 @@ void SwHTMLParser::InsertIDOption()
 
 void SwHTMLParser::InsertLineBreak()
 {
-    // <BR CLEAR=xxx> is handled as:
-    // 1.) Only regard the paragraph-bound frames anchored in current paragraph.
-    // 2.) For left-justified aligned frames, CLEAR=LEFT or ALL, and for right-
-    //     justified aligned frames, CLEAR=RIGHT or ALL, the wrap-through is
-    //     changed as following:
-    // 3.) If the paragraph contains no text, then the frames don't get a wrapping
-    // 4.) otherwise a left aligned frame gets a right "only anchor" wrapping
-    //     and a right aligned frame gets a left "only anchor" wrapping.
-    // 5.) if in a non-empty paragraph the wrapping of a frame is changed,
-    //     then a new paragraph is opened
-    // 6.) If no wrappings of frames are changed, a hard line break is inserted.
-
     OUString aId, aStyle, aClass;             // the id of bookmark
-    bool bClearLeft = false, bClearRight = false;
-    bool bCleared = false;  // Was a CLEAR executed?
+    SwLineBreakClear eClear = SwLineBreakClear::NONE;
 
     // then we fetch the options
     const HTMLOptions& rHTMLOptions = GetOptions();
@@ -5137,13 +5124,16 @@ void SwHTMLParser::InsertLineBreak()
                     const OUString &rClear = rOption.GetString();
                     if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_all ) )
                     {
-                        bClearLeft = true;
-                        bClearRight = true;
+                        eClear = SwLineBreakClear::ALL;
                     }
                     else if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_left ) )
-                        bClearLeft = true;
+                    {
+                        eClear = SwLineBreakClear::LEFT;
+                    }
                     else if( rClear.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_AL_right ) )
-                        bClearRight = true;
+                    {
+                        eClear = SwLineBreakClear::LEFT;
+                    }
                 }
                 break;
             case HtmlOptionId::ID:
@@ -5156,57 +5146,6 @@ void SwHTMLParser::InsertLineBreak()
                 aClass = rOption.GetString();
                 break;
             default: break;
-        }
-    }
-
-    // CLEAR is only supported for the current paragraph
-    if( bClearLeft || bClearRight )
-    {
-        SwNodeIndex& rNodeIdx = m_pPam->GetPoint()->nNode;
-        SwTextNode* pTextNd = rNodeIdx.GetNode().GetTextNode();
-        if( pTextNd )
-        {
-            const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
-
-            for( size_t i=0; i<rFrameFormatTable.size(); i++ )
-            {
-                SwFrameFormat *const pFormat = rFrameFormatTable[i];
-                SwFormatAnchor const*const pAnchor = &pFormat->GetAnchor();
-                SwPosition const*const pAPos = pAnchor->GetContentAnchor();
-                if (pAPos &&
-                    ((RndStdIds::FLY_AT_PARA == pAnchor->GetAnchorId()) ||
-                     (RndStdIds::FLY_AT_CHAR == pAnchor->GetAnchorId())) &&
-                    pAPos->nNode == rNodeIdx &&
-                    pFormat->GetSurround().GetSurround() != css::text::WrapTextMode_NONE )
-                {
-                    sal_Int16 eHori = RES_DRAWFRMFMT == pFormat->Which()
-                        ? text::HoriOrientation::LEFT
-                        : pFormat->GetHoriOrient().GetHoriOrient();
-
-                    css::text::WrapTextMode eSurround = css::text::WrapTextMode_PARALLEL;
-                    if( m_pPam->GetPoint()->nContent.GetIndex() )
-                    {
-                        if( bClearLeft && text::HoriOrientation::LEFT==eHori )
-                            eSurround = css::text::WrapTextMode_RIGHT;
-                        else if( bClearRight && text::HoriOrientation::RIGHT==eHori )
-                            eSurround = css::text::WrapTextMode_LEFT;
-                    }
-                    else if( (bClearLeft && text::HoriOrientation::LEFT==eHori) ||
-                             (bClearRight && text::HoriOrientation::RIGHT==eHori) )
-                    {
-                        eSurround = css::text::WrapTextMode_NONE;
-                    }
-
-                    if( css::text::WrapTextMode_PARALLEL != eSurround )
-                    {
-                        SwFormatSurround aSurround( eSurround );
-                        if( css::text::WrapTextMode_NONE != eSurround )
-                            aSurround.SetAnchorOnly( true );
-                        pFormat->SetFormatAttr( aSurround );
-                        bCleared = true;
-                    }
-                }
-            }
         }
     }
 
@@ -5236,10 +5175,24 @@ void SwHTMLParser::InsertLineBreak()
         EndAttr( m_xAttrTab->pBreak, false );
     }
 
-    if( !bCleared && !bBreakItem )
+    if (!bBreakItem)
     {
-        // If no CLEAR could or should be executed, a line break will be inserted
-        m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, "\x0A" );
+        if (eClear == SwLineBreakClear::NONE)
+        {
+            // If no CLEAR could or should be executed, a line break will be inserted
+            m_xDoc->getIDocumentContentOperations().InsertString(*m_pPam, "\x0A");
+        }
+        else
+        {
+            // <BR CLEAR=xxx> is mapped an SwFormatLineBreak.
+            SwTextNode* pTextNode = m_pPam->GetNode().GetTextNode();
+            if (pTextNode)
+            {
+                SwFormatLineBreak aLineBreak(eClear);
+                sal_Int32 nPos = m_pPam->GetPoint()->nContent.GetIndex();
+                pTextNode->InsertItem(aLineBreak, nPos, nPos);
+            }
+        }
     }
     else if( m_pPam->GetPoint()->nContent.GetIndex() )
     {

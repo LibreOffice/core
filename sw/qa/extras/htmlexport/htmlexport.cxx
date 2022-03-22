@@ -51,6 +51,7 @@
 #include <paratr.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <formatlinebreak.hxx>
 
 namespace
 {
@@ -2211,6 +2212,48 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testLeadingTabHTML)
     // - Actual  : <newline><tab><space>test
     // i.e. the leading tab was not replaced by 2 nbsps.
     assertXPathContent(pHtmlDoc, "/html/body/p", SAL_NEWLINE_STRING u"\xa0\xa0 test");
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
+{
+    auto verify = [this]() {
+        uno::Reference<container::XEnumerationAccess> xParagraph(getParagraph(1), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+        uno::Reference<beans::XPropertySet> xPortion;
+        OUString aPortionType;
+        while (true)
+        {
+            // Ignore leading comments.
+            xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+            xPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+            if (aPortionType != "Annotation")
+            {
+                break;
+            }
+        }
+        // Skip "foo".
+        // Without the accompanying fix in place, this test would have failed with:
+        // An uncaught exception of type com.sun.star.container.NoSuchElementException
+        // i.e. the first para was just comments + text portion, the clearing break was lost.
+        xPortion.set(xPortions->nextElement(), uno::UNO_QUERY);
+        xPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("LineBreak"), aPortionType);
+        uno::Reference<text::XTextContent> xLineBreak;
+        xPortion->getPropertyValue("LineBreak") >>= xLineBreak;
+        sal_Int16 eClear{};
+        uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+        xLineBreakProps->getPropertyValue("Clear") >>= eClear;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(SwLineBreakClear::ALL), eClear);
+    };
+
+    // Given a document with an at-para anchored image + a clearing break:
+    // When loading that file:
+    load(mpTestDocumentPath, "clearing-break.html");
+    // Then make sure that the clear property of the break is not ignored:
+    verify();
+    reload(mpFilter, "clearing-break.html");
+    // Make sure that that the clear property of the break is not ignored during export:
+    verify();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

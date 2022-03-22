@@ -3286,7 +3286,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
 /* RES_TXTATR_FTN */                OutHTML_SwFormatFootnote,
 /* RES_TXTATR_ANNOTATION */         OutHTML_SwFormatField,
-/* RES_TXTATR_LINEBREAK */          nullptr,
+/* RES_TXTATR_LINEBREAK */          OutHTML_SwFormatLineBreak,
 /* RES_TXTATR_DUMMY1 */             nullptr, // Dummy:
 /* RES_TXTATR_DUMMY2 */             nullptr, // Dummy:
 

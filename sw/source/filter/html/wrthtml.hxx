@@ -690,6 +690,7 @@ Writer& OutHTML_BulletImage( Writer& rWrt, const char *pTag,
 
 Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt );
 Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt );
+Writer& OutHTML_SwFormatLineBreak(Writer& rWrt, const SfxPoolItem& rHt);
 Writer& OutHTML_INetFormat( Writer&, const SwFormatINetFormat& rINetFormat, bool bOn );
 
 Writer& OutCSS1_BodyTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet );
