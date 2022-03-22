@@ -105,6 +105,7 @@ public:
     void testTdf143315();
     void testTdf147121();
     void testTdf140912_PicturePlaceholder();
+    void testTdf74670();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -180,6 +181,7 @@ public:
     CPPUNIT_TEST(testTdf143315);
     CPPUNIT_TEST(testTdf147121);
     CPPUNIT_TEST(testTdf140912_PicturePlaceholder);
+    CPPUNIT_TEST(testTdf74670);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1875,6 +1877,26 @@ void SdOOXMLExportTest3::testTdf140912_PicturePlaceholder()
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-8490), aGraphicCrop.Top);
 
     xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest3::testTdf74670()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf74670.odp"), ODP);
+    utl::TempFile tmpfile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tmpfile);
+    xDocShRef->DoClose();
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      tmpfile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(true, bool(xNameAccess->hasByName("ppt/media/image1.png")));
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: false
+    // - Actual  : true
+    // i.e. the embedded picture would have been saved twice.
+    CPPUNIT_ASSERT_EQUAL(false, bool(xNameAccess->hasByName("ppt/media/image2.png")));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
