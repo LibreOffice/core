@@ -28,7 +28,7 @@ using namespace connectivity::ado;
 
 void WpADOCatalog::Create()
 {
-    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOCATALOG_25, nullptr, CLSCTX_INPROC_SERVER);
+    pInterface.CoCreateInstance(ADOS::CLSID_ADOCATALOG_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 
@@ -256,7 +256,7 @@ void WpADOCommand::put_ActiveConnection(/* [in] */ const OLEVariant& vConn)
 void WpADOCommand::Create()
 {
     sal::systools::COMReference<IClassFactory2> pInterface2;
-    if (!FAILED(pInterface2.TryCoGetClassObject(ADOS::CLSID_ADOCOMMAND_21, CLSCTX_INPROC_SERVER)))
+    if (!FAILED(pInterface2.CoGetClassObject(ADOS::CLSID_ADOCOMMAND_21, CLSCTX_INPROC_SERVER)))
     {
         sal::systools::COMReference<ADOCommand> pCommand;
 
@@ -649,7 +649,7 @@ bool WpADOProperty::PutAttributes(sal_Int32 _nDefSize)
  void WpADORecordset::Create()
 {
     sal::systools::COMReference<IClassFactory2> pInterface2;
-    if (!FAILED(pInterface2.TryCoGetClassObject(ADOS::CLSID_ADORECORDSET_21, CLSCTX_INPROC_SERVER)))
+    if (!FAILED(pInterface2.CoGetClassObject(ADOS::CLSID_ADORECORDSET_21, CLSCTX_INPROC_SERVER)))
     {
         sal::systools::COMReference<ADORecordset> pRec;
         HRESULT hr = pInterface2->CreateInstanceLic(nullptr,

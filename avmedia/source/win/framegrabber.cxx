@@ -62,7 +62,7 @@ sal::systools::COMReference<IMediaDet> implCreateMediaDet( const OUString& rURL 
 {
     sal::systools::COMReference<IMediaDet> pDet;
 
-    if( SUCCEEDED(pDet.TryCoCreateInstance(CLSID_MediaDet, nullptr, CLSCTX_INPROC_SERVER)) )
+    if( SUCCEEDED(pDet.CoCreateInstance(CLSID_MediaDet, nullptr, CLSCTX_INPROC_SERVER)) )
     {
         OUString aLocalStr;
 

@@ -59,7 +59,7 @@ OConnection::OConnection(ODriver*   _pDriver)
     osl_atomic_increment( &m_refCount );
 
     sal::systools::COMReference<IClassFactory2> pIUnknown;
-    if (!FAILED(pIUnknown.TryCoGetClassObject(ADOS::CLSID_ADOCONNECTION_21, CLSCTX_INPROC_SERVER)))
+    if (!FAILED(pIUnknown.CoGetClassObject(ADOS::CLSID_ADOCONNECTION_21, CLSCTX_INPROC_SERVER)))
     {
         HRESULT hr = pIUnknown->CreateInstanceLic(nullptr,
                                             nullptr,
