@@ -25,7 +25,7 @@ ResIDGenerator::~ResIDGenerator() {}
 
 /**
    * SubList stores those IDs that were ever generated and deleted, the method
-   * return the ID from subList first if subList is not empty,else return ++max.
+   * return the ID from subList first if subList is not empty, else return m_nMin--.
    * Add the obsolete IDs by calling SetSub method
    *
    * @param
@@ -39,8 +39,8 @@ long ResIDGenerator::GenerateNewResID()
         subList.pop_front();
         return nRes;
     }
-    assert(max < LONG_MAX);
-    return -(++max);
+    assert(m_nMin > LONG_MIN);
+    return m_nMin--;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
