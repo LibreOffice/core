@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd083641_347d0ebd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-22T20:27:32Z",
+      "side": 1,
+      "message": "I think this would be useful to get into the last 7.2 release.\n",
+      "revId": "bdc5ab2265c2fe73bdc3208141e0e5ed3bd42da7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
