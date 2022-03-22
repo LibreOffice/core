@@ -9,9 +9,22 @@ Option Explicit
 
 Function doUnitTest as String
     ' CreateUnoValue
+
+    On Error GoTo errorHandler
+
     Dim oUnoValue as Variant
     Dim aValue as Variant
     aValue = Array ( 1, 1 )
     oUnoValue = CreateUnoValue( "[]byte", aValue )
+
+    ' tdf#148063: Without the fix in place, this test would have crashed
+    oUnoValue = CreateUnoValue( "[]", aValue )
     doUnitTest = "OK"
+
+errorHandler:
+    If ( Err <> 1 ) Then
+        doUnitTest = "FAIL"
+    Else
+        doUnitTest = "OK"
+    Endif
 End Function
