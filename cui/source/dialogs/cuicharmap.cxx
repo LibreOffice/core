@@ -478,7 +478,7 @@ void SvxCharacterMap::init()
     // the font may not be in the list =>
     // try to find a font name token in list and select found font,
     // else select topmost entry
-    bool bFound = (m_xFontLB->find_text(aDefStr) == -1);
+    bool bFound = (m_xFontLB->find_text(aDefStr) != -1);
     if (!bFound)
     {
         sal_Int32 nIndex = 0;
@@ -612,17 +612,21 @@ void SvxCharacterMap::SetCharFont( const vcl::Font& rFont )
     // like "Times New Roman;Times" resolved
     vcl::Font aTmp(m_xVirDev->GetFontMetric(rFont));
 
-    if (aTmp.GetFamilyName() == "StarSymbol" && m_xFontLB->find_text(aTmp.GetFamilyName()) == -1)
+    // tdf#56363 - search font family without the font feature after the colon
+    OUString sFontFamilyName = aTmp.GetFamilyName();
+    if (const sal_Int32 nIndex = sFontFamilyName.indexOf(":"); nIndex != -1)
+        sFontFamilyName = sFontFamilyName.copy(0, nIndex);
+    if (sFontFamilyName == "StarSymbol" && m_xFontLB->find_text(sFontFamilyName) == -1)
     {
         //if for some reason, like font in an old document, StarSymbol is requested and it's not available, then
         //try OpenSymbol instead
         aTmp.SetFamilyName("OpenSymbol");
     }
 
-    if (m_xFontLB->find_text(aTmp.GetFamilyName()) == -1)
+    if (m_xFontLB->find_text(sFontFamilyName) == -1)
         return;
 
-    m_xFontLB->set_active_text(aTmp.GetFamilyName());
+    m_xFontLB->set_active_text(sFontFamilyName);
     aFont = aTmp;
     FontSelectHdl(*m_xFontLB);
     if (m_xSubsetLB->get_count())
