@@ -18,6 +18,7 @@
 
 #include <docsh.hxx>
 #include <document.hxx>
+#include <scitems.hxx>
 #include <sortparam.hxx>
 
 #include <com/sun/star/sheet/XFunctionAccess.hpp>
@@ -25,6 +26,7 @@
 
 #include <com/sun/star/script/XLibraryContainerPassword.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <editeng/brushitem.hxx>
 
 #include <helper/xpath.hxx>
 
@@ -68,6 +70,7 @@ public:
     void testTdf130307();
     void testTdf146742();
     void testMacroButtonFormControlXlsxExport();
+    void testTdf107572();
     void testShapeLayerId();
     void testVbaRangeSort();
     void testFunctionAccessIndirect();
@@ -100,6 +103,7 @@ public:
     CPPUNIT_TEST(testTdf130307);
     CPPUNIT_TEST(testTdf146742);
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
+    CPPUNIT_TEST(testTdf107572);
     CPPUNIT_TEST(testShapeLayerId);
     CPPUNIT_TEST(testVbaRangeSort);
     CPPUNIT_TEST(testFunctionAccessIndirect);
@@ -1053,6 +1057,68 @@ void ScMacrosTest::testTdf105558()
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf107572()
+{
+    auto xComponent = loadFromDesktop("private:factory/scalc");
+
+    // insert initial library
+    css::uno::Reference<css::document::XEmbeddedScripts> xDocScr(xComponent, UNO_QUERY_THROW);
+    auto xLibs = xDocScr->getBasicLibraries();
+    auto xLibrary = xLibs->createLibrary("TestLibrary");
+    xLibrary->insertByName(
+        "TestModule",
+        uno::Any(
+            OUString("Function Main\n"
+                     "  thisComponent.Sheets(0).getCellRangeByName(\"A1:F14\").autoformat(\"Default\")\n"
+                     "End Function\n")));
+
+    Any aRet;
+    Sequence<sal_Int16> aOutParamIndex;
+    Sequence<Any> aOutParam;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    CPPUNIT_ASSERT(pDocSh);
+
+    // Without the fix in place, this test would have crashed
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:TestLibrary.TestModule.Main?language=Basic&location=document",
+        {}, aRet, aOutParamIndex, aOutParam);
+
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    //Check the autoformat has been applied
+    for (SCCOL i = 0; i < 5; ++i)
+    {
+        const ScPatternAttr* pAttr = rDoc.GetPattern(i, 0, 0);
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const Color& rColor = rBackground.GetColor();
+
+        CPPUNIT_ASSERT_EQUAL(Color(0x0, 0x0, 0x80), rColor);
+    }
+
+    for (SCROW i = 1; i < 13; ++i)
+    {
+        const ScPatternAttr* pAttr = rDoc.GetPattern(0, i, 0);
+        const SfxPoolItem& rItem = pAttr->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground = static_cast<const SvxBrushItem&>(rItem);
+        const Color& rColor = rBackground.GetColor();
+
+        CPPUNIT_ASSERT_EQUAL(Color(0x4d, 0x4d, 0x4d), rColor);
+
+        const ScPatternAttr* pAttr2 = rDoc.GetPattern(5, i, 0);
+        const SfxPoolItem& rItem2 = pAttr2->GetItem(ATTR_BACKGROUND);
+        const SvxBrushItem& rBackground2 = static_cast<const SvxBrushItem&>(rItem2);
+        const Color& rColor2 = rBackground2.GetColor();
+
+        CPPUNIT_ASSERT_EQUAL(Color(0xcc, 0xcc, 0xcc), rColor2);
+    }
+
+    pDocSh->DoClose();
 }
 
 void ScMacrosTest::testShapeLayerId()
