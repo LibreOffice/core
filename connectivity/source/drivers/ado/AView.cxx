@@ -23,6 +23,8 @@
 #include <ado/Awrapado.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
+#include <systools/win32/oleauto.hxx>
+
 #include <TConnection.hxx>
 
 
@@ -76,9 +78,9 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
                     if(!aVar.isNull() && !aVar.isEmpty())
                     {
                         ADOCommand* pCom = static_cast<ADOCommand*>(aVar.getIDispatch());
-                        OLEString aBSTR;
-                        pCom->get_CommandText(aBSTR.getAddress());
-                        rValue <<= aBSTR.asOUString();
+                        sal::systools::BStr aBSTR;
+                        pCom->get_CommandText(&aBSTR);
+                        rValue <<= OUString(aBSTR);
                     }
                 }
                 break;

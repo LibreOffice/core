@@ -24,16 +24,17 @@
 
 struct ADOConnection;
 
+namespace sal::systools { class BStr; };
+
 namespace connectivity::ado
 {
 
         class WpADOField;
-        class OLEString;
         class ADOS
         {
         public:
             // Also here: Free BSTR with SysFreeString()!
-            static OLEString& GetKeyStr();
+            static sal::systools::BStr& GetKeyStr();
 
             static const CLSID  CLSID_ADOCATALOG_25;
             static const IID    IID_ADOCATALOG_25;
