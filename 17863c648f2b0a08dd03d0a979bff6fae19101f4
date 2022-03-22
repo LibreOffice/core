@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d97de570_62d7e95d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-22T08:27:04Z",
+      "side": 1,
+      "message": "Thanks for the update.\n\nI just realized that the license statement [1] was sent from a different email address than the one that\u0027s used for the git author here.\n\n@Ilmari, Hossein: Do we need another license statement from the gmail address before this can be merged?\n\n[1] https://lists.freedesktop.org/archives/libreoffice/2022-March/088588.html",
+      "revId": "17863c648f2b0a08dd03d0a979bff6fae19101f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
