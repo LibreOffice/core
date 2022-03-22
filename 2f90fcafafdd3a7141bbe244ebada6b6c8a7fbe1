@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "68156fb8_c97c7b97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-22T08:01:46Z",
+      "side": 1,
+      "message": "Hi Stephan,\ni am not rellay want to change the API but i have not found a other solution, can you give me hint for a other solution, for that problem",
+      "parentUuid": "5e194904_e106a10a",
+      "revId": "2f90fcafafdd3a7141bbe244ebada6b6c8a7fbe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b818021c_a8d33037",
         "filename": "offapi/com/sun/star/embed/XEmbeddedObject.idl",
         "patchSetId": 10
