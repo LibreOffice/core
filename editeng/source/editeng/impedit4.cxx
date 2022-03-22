@@ -308,8 +308,8 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         {
             SvxFontItem const*const pFontItem = static_cast<const SvxFontItem*>(pItem);
             bool bAlreadyExist = false;
-            sal_uLong nTestMax = nScriptType ? aFontTable.size() : 1;
-            for ( sal_uLong nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
+            sal_Int16 nTestMax = nScriptType ? aFontTable.size() : 1;
+            for ( sal_Int16 nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
             {
                 bAlreadyExist = *aFontTable[ nTest ] == *pFontItem;
             }
