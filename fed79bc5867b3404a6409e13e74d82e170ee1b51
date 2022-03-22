@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "720b3822_50c2a431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-03-22T14:51:18Z",
+      "side": 1,
+      "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/110790/ : FAILURE\n\u003e \n\u003e clang plugin cstylecast did trigger. C-style cast from \"sal_Int16\" (aka \"short\") to \"eMatchMode\" (performs: static_cast) (IntegralCast) ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110336/ )\n\u003e \n\u003e error: C-style cast from \"sal_Int16\" (aka \"short\") to \"eMatchMode\" (performs: static_cast) (IntegralCast) [loplugin:cstylecast] in file /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/sc/source/core/tool/interpr1.cxx ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110336/ )\n\n",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
