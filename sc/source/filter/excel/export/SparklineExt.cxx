@@ -62,121 +62,121 @@ void SparklineExt::SaveXml(XclExpXmlStream& rStream)
 
 void SparklineExt::addSparklineGroupAttributes(
     rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
-    sc::SparklineGroup& rSparklineGroup)
+    sc::SparklineAttributes& rAttributes)
 {
-    if (rSparklineGroup.m_fLineWeight != 0.75)
-        pAttrList->add(XML_lineWeight, OString::number(rSparklineGroup.m_fLineWeight));
+    if (rAttributes.getLineWeight() != 0.75)
+        pAttrList->add(XML_lineWeight, OString::number(rAttributes.getLineWeight()));
 
-    if (rSparklineGroup.m_eType != sc::SparklineType::Line)
+    if (rAttributes.getType() != sc::SparklineType::Line)
     {
-        if (rSparklineGroup.m_eType == sc::SparklineType::Column)
+        if (rAttributes.getType() == sc::SparklineType::Column)
             pAttrList->add(XML_type, "column");
-        else if (rSparklineGroup.m_eType == sc::SparklineType::Stacked)
+        else if (rAttributes.getType() == sc::SparklineType::Stacked)
             pAttrList->add(XML_type, "stacked");
     }
 
-    if (rSparklineGroup.m_bDateAxis)
+    if (rAttributes.isDateAxis())
         pAttrList->add(XML_dateAxis, "1");
 
-    if (rSparklineGroup.m_eDisplayEmptyCellsAs != sc::DisplayEmptyCellAs::Zero)
+    if (rAttributes.getDisplayEmptyCellsAs() != sc::DisplayEmptyCellsAs::Zero)
     {
-        if (rSparklineGroup.m_eDisplayEmptyCellsAs == sc::DisplayEmptyCellAs::Gap)
+        if (rAttributes.getDisplayEmptyCellsAs() == sc::DisplayEmptyCellsAs::Gap)
             pAttrList->add(XML_displayEmptyCellsAs, "gap");
-        else if (rSparklineGroup.m_eDisplayEmptyCellsAs == sc::DisplayEmptyCellAs::Span)
+        else if (rAttributes.getDisplayEmptyCellsAs() == sc::DisplayEmptyCellsAs::Span)
             pAttrList->add(XML_displayEmptyCellsAs, "span");
     }
 
-    if (rSparklineGroup.m_bMarkers)
+    if (rAttributes.isMarkers())
         pAttrList->add(XML_markers, "1");
-    if (rSparklineGroup.m_bHigh)
+    if (rAttributes.isHigh())
         pAttrList->add(XML_high, "1");
-    if (rSparklineGroup.m_bLow)
+    if (rAttributes.isLow())
         pAttrList->add(XML_low, "1");
-    if (rSparklineGroup.m_bFirst)
+    if (rAttributes.isFirst())
         pAttrList->add(XML_first, "1");
-    if (rSparklineGroup.m_bLast)
+    if (rAttributes.isLast())
         pAttrList->add(XML_last, "1");
-    if (rSparklineGroup.m_bNegative)
+    if (rAttributes.isNegative())
         pAttrList->add(XML_negative, "1");
-    if (rSparklineGroup.m_bDisplayXAxis)
+    if (rAttributes.shouldDisplayXAxis())
         pAttrList->add(XML_displayXAxis, "1");
-    if (rSparklineGroup.m_bDisplayHidden)
+    if (rAttributes.shouldDisplayHidden())
         pAttrList->add(XML_displayHidden, "1");
 
-    if (rSparklineGroup.m_eMinAxisType != sc::AxisType::Individual)
+    if (rAttributes.getMinAxisType() != sc::AxisType::Individual)
     {
-        if (rSparklineGroup.m_eMinAxisType == sc::AxisType::Group)
+        if (rAttributes.getMinAxisType() == sc::AxisType::Group)
             pAttrList->add(XML_minAxisType, "group");
-        else if (rSparklineGroup.m_eMinAxisType == sc::AxisType::Custom)
+        else if (rAttributes.getMinAxisType() == sc::AxisType::Custom)
             pAttrList->add(XML_minAxisType, "custom");
     }
 
-    if (rSparklineGroup.m_eMaxAxisType != sc::AxisType::Individual)
+    if (rAttributes.getMaxAxisType() != sc::AxisType::Individual)
     {
-        if (rSparklineGroup.m_eMaxAxisType == sc::AxisType::Group)
+        if (rAttributes.getMaxAxisType() == sc::AxisType::Group)
             pAttrList->add(XML_maxAxisType, "group");
-        else if (rSparklineGroup.m_eMaxAxisType == sc::AxisType::Custom)
+        else if (rAttributes.getMaxAxisType() == sc::AxisType::Custom)
             pAttrList->add(XML_maxAxisType, "custom");
     }
 
-    if (rSparklineGroup.m_bRightToLeft)
+    if (rAttributes.isRightToLeft())
         pAttrList->add(XML_rightToLeft, "1");
 
-    if (rSparklineGroup.m_aManualMax && rSparklineGroup.m_eMaxAxisType == sc::AxisType::Custom)
-        pAttrList->add(XML_manualMax, OString::number(*rSparklineGroup.m_aManualMax));
+    if (rAttributes.getManualMax() && rAttributes.getMaxAxisType() == sc::AxisType::Custom)
+        pAttrList->add(XML_manualMax, OString::number(*rAttributes.getManualMax()));
 
-    if (rSparklineGroup.m_aManualMin && rSparklineGroup.m_eMinAxisType == sc::AxisType::Custom)
-        pAttrList->add(XML_manualMin, OString::number(*rSparklineGroup.m_aManualMin));
+    if (rAttributes.getManualMin() && rAttributes.getMinAxisType() == sc::AxisType::Custom)
+        pAttrList->add(XML_manualMin, OString::number(*rAttributes.getManualMin()));
 }
 
 void SparklineExt::addSparklineGroupColors(XclExpXmlStream& rStream,
-                                           sc::SparklineGroup& rSparklineGroup)
+                                           sc::SparklineAttributes& rAttributes)
 {
     sax_fastparser::FSHelperPtr& rWorksheet = rStream.GetCurrentStream();
 
     rWorksheet->singleElementNS(XML_x14, XML_colorSeries, XML_rgb,
-                                XclXmlUtils::ToOString(rSparklineGroup.m_aColorSeries));
+                                XclXmlUtils::ToOString(rAttributes.getColorSeries()));
 
-    if (rSparklineGroup.m_aColorSeries != COL_TRANSPARENT)
+    if (rAttributes.getColorNegative() != COL_TRANSPARENT)
     {
         rWorksheet->singleElementNS(XML_x14, XML_colorNegative, XML_rgb,
-                                    XclXmlUtils::ToOString(rSparklineGroup.m_aColorNegative));
+                                    XclXmlUtils::ToOString(rAttributes.getColorNegative()));
     }
 
-    if (rSparklineGroup.m_aColorAxis != COL_TRANSPARENT)
+    if (rAttributes.getColorAxis() != COL_TRANSPARENT)
     {
         rWorksheet->singleElementNS(XML_x14, XML_colorAxis, XML_rgb,
-                                    XclXmlUtils::ToOString(rSparklineGroup.m_aColorAxis));
+                                    XclXmlUtils::ToOString(rAttributes.getColorAxis()));
     }
 
-    if (rSparklineGroup.m_aColorMarkers != COL_TRANSPARENT)
+    if (rAttributes.getColorMarkers() != COL_TRANSPARENT)
     {
         rWorksheet->singleElementNS(XML_x14, XML_colorMarkers, XML_rgb,
-                                    XclXmlUtils::ToOString(rSparklineGroup.m_aColorMarkers));
+                                    XclXmlUtils::ToOString(rAttributes.getColorMarkers()));
     }
 
-    if (rSparklineGroup.m_aColorFirst != COL_TRANSPARENT)
+    if (rAttributes.getColorFirst() != COL_TRANSPARENT)
     {
         rWorksheet->singleElementNS(XML_x14, XML_colorFirst, XML_rgb,
-                                    XclXmlUtils::ToOString(rSparklineGroup.m_aColorFirst));
+                                    XclXmlUtils::ToOString(rAttributes.getColorFirst()));
     }
 
-    if (rSparklineGroup.m_aColorLast != COL_TRANSPARENT)
+    if (rAttributes.getColorLast() != COL_TRANSPARENT)
     {
         rWorksheet->singleElementNS(XML_x14, XML_colorLast, XML_rgb,
-                                    XclXmlUtils::ToOString(rSparklineGroup.m_aColorLast));
+                                    XclXmlUtils::ToOString(rAttributes.getColorLast()));
     }
 
-    if (rSparklineGroup.m_aColorHigh != COL_TRANSPARENT)
+    if (rAttributes.getColorHigh() != COL_TRANSPARENT)
     {
         rWorksheet->singleElementNS(XML_x14, XML_colorHigh, XML_rgb,
-                                    XclXmlUtils::ToOString(rSparklineGroup.m_aColorHigh));
+                                    XclXmlUtils::ToOString(rAttributes.getColorHigh()));
     }
 
-    if (rSparklineGroup.m_aColorLow != COL_TRANSPARENT)
+    if (rAttributes.getColorLow() != COL_TRANSPARENT)
     {
         rWorksheet->singleElementNS(XML_x14, XML_colorLow, XML_rgb,
-                                    XclXmlUtils::ToOString(rSparklineGroup.m_aColorLow));
+                                    XclXmlUtils::ToOString(rAttributes.getColorLow()));
     }
 }
 
@@ -187,11 +187,11 @@ void SparklineExt::addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGrou
 
     // Sparkline Group Attributes
     auto pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
-    addSparklineGroupAttributes(pAttrList, rSparklineGroup);
+    addSparklineGroupAttributes(pAttrList, rSparklineGroup.getAttributes());
 
     rWorksheet->startElementNS(XML_x14, XML_sparklineGroup, pAttrList);
 
-    addSparklineGroupColors(rStream, rSparklineGroup);
+    addSparklineGroupColors(rStream, rSparklineGroup.getAttributes());
 
     // Sparklines
 

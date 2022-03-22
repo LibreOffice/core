@@ -59,88 +59,88 @@ void checkSparklines(ScDocument& rDocument)
     {
         auto pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
         CPPUNIT_ASSERT(pSparkline);
-        auto pSparklineGroup = pSparkline->getSparklineGroup();
-        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, pSparklineGroup->m_eType);
+        auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, rAttributes.getType());
 
-        CPPUNIT_ASSERT_EQUAL(Color(0x376092), pSparklineGroup->m_aColorSeries);
-        CPPUNIT_ASSERT_EQUAL(Color(0x00b050), pSparklineGroup->m_aColorNegative);
-        CPPUNIT_ASSERT_EQUAL(Color(0x000000), pSparklineGroup->m_aColorAxis);
-        CPPUNIT_ASSERT_EQUAL(Color(0x000000), pSparklineGroup->m_aColorMarkers);
-        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), pSparklineGroup->m_aColorFirst);
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), pSparklineGroup->m_aColorLast);
-        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), pSparklineGroup->m_aColorHigh);
-        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), pSparklineGroup->m_aColorLow);
+        CPPUNIT_ASSERT_EQUAL(Color(0x376092), rAttributes.getColorSeries());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00b050), rAttributes.getColorNegative());
+        CPPUNIT_ASSERT_EQUAL(Color(0x000000), rAttributes.getColorAxis());
+        CPPUNIT_ASSERT_EQUAL(Color(0x000000), rAttributes.getColorMarkers());
+        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), rAttributes.getColorFirst());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorLast());
+        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorHigh());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLow());
 
-        CPPUNIT_ASSERT_EQUAL(1.0, pSparklineGroup->m_fLineWeight);
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bDateAxis);
-        CPPUNIT_ASSERT_EQUAL(sc::DisplayEmptyCellAs::Gap, pSparklineGroup->m_eDisplayEmptyCellsAs);
+        CPPUNIT_ASSERT_EQUAL(1.0, rAttributes.getLineWeight());
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.isDateAxis());
+        CPPUNIT_ASSERT_EQUAL(sc::DisplayEmptyCellsAs::Gap, rAttributes.getDisplayEmptyCellsAs());
 
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bMarkers);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bHigh);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bLow);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bFirst);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bLast);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bNegative);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bDisplayXAxis);
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bDisplayHidden);
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bRightToLeft);
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isMarkers());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isHigh());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isLow());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isFirst());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isLast());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isNegative());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.shouldDisplayXAxis());
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.shouldDisplayHidden());
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.isRightToLeft());
 
-        CPPUNIT_ASSERT_EQUAL(false, bool(pSparklineGroup->m_aManualMax));
-        CPPUNIT_ASSERT_EQUAL(false, bool(pSparklineGroup->m_aManualMin));
+        CPPUNIT_ASSERT_EQUAL(false, bool(rAttributes.getManualMax()));
+        CPPUNIT_ASSERT_EQUAL(false, bool(rAttributes.getManualMin()));
     }
     // Sparkline at Sheet1:A3
     {
         auto pSparkline = rDocument.GetSparkline(ScAddress(0, 2, 0)); // A3
         CPPUNIT_ASSERT(pSparkline);
-        auto pSparklineGroup = pSparkline->getSparklineGroup();
-        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->m_eType);
+        auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, rAttributes.getType());
 
-        CPPUNIT_ASSERT_EQUAL(Color(0x376092), pSparklineGroup->m_aColorSeries);
-        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), pSparklineGroup->m_aColorNegative);
-        CPPUNIT_ASSERT_EQUAL(Color(0x000000), pSparklineGroup->m_aColorAxis);
-        CPPUNIT_ASSERT_EQUAL(Color(0xd00000), pSparklineGroup->m_aColorMarkers);
-        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), pSparklineGroup->m_aColorFirst);
-        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), pSparklineGroup->m_aColorLast);
-        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), pSparklineGroup->m_aColorHigh);
-        CPPUNIT_ASSERT_EQUAL(Color(0xffc000), pSparklineGroup->m_aColorLow);
+        CPPUNIT_ASSERT_EQUAL(Color(0x376092), rAttributes.getColorSeries());
+        CPPUNIT_ASSERT_EQUAL(Color(0xff0000), rAttributes.getColorNegative());
+        CPPUNIT_ASSERT_EQUAL(Color(0x000000), rAttributes.getColorAxis());
+        CPPUNIT_ASSERT_EQUAL(Color(0xd00000), rAttributes.getColorMarkers());
+        CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorFirst());
+        CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLast());
+        CPPUNIT_ASSERT_EQUAL(Color(0x7030a0), rAttributes.getColorHigh());
+        CPPUNIT_ASSERT_EQUAL(Color(0xffc000), rAttributes.getColorLow());
 
-        CPPUNIT_ASSERT_EQUAL(0.75, pSparklineGroup->m_fLineWeight);
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bDateAxis);
-        CPPUNIT_ASSERT_EQUAL(sc::DisplayEmptyCellAs::Gap, pSparklineGroup->m_eDisplayEmptyCellsAs);
+        CPPUNIT_ASSERT_EQUAL(0.75, rAttributes.getLineWeight());
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.isDateAxis());
+        CPPUNIT_ASSERT_EQUAL(sc::DisplayEmptyCellsAs::Gap, rAttributes.getDisplayEmptyCellsAs());
 
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bMarkers);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bHigh);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bLow);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bFirst);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bLast);
-        CPPUNIT_ASSERT_EQUAL(true, pSparklineGroup->m_bNegative);
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bDisplayXAxis);
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bDisplayHidden);
-        CPPUNIT_ASSERT_EQUAL(false, pSparklineGroup->m_bRightToLeft);
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.isMarkers());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isHigh());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isLow());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isFirst());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isLast());
+        CPPUNIT_ASSERT_EQUAL(true, rAttributes.isNegative());
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.shouldDisplayXAxis());
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.shouldDisplayHidden());
+        CPPUNIT_ASSERT_EQUAL(false, rAttributes.isRightToLeft());
 
-        CPPUNIT_ASSERT_EQUAL(false, bool(pSparklineGroup->m_aManualMax));
-        CPPUNIT_ASSERT_EQUAL(false, bool(pSparklineGroup->m_aManualMin));
+        CPPUNIT_ASSERT_EQUAL(false, bool(rAttributes.getManualMax()));
+        CPPUNIT_ASSERT_EQUAL(false, bool(rAttributes.getManualMin()));
     }
     // Sparkline at Sheet2:B1
     {
         auto pSparkline = rDocument.GetSparkline(ScAddress(1, 0, 1)); //B1
         CPPUNIT_ASSERT(pSparkline);
-        auto pSparklineGroup = pSparkline->getSparklineGroup();
-        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->m_eType);
+        auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, rAttributes.getType());
     }
     // Sparkline at Sheet2:B2
     {
         auto pSparkline = rDocument.GetSparkline(ScAddress(1, 1, 1)); //B2
         CPPUNIT_ASSERT(pSparkline);
-        auto pSparklineGroup = pSparkline->getSparklineGroup();
-        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, pSparklineGroup->m_eType);
+        auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, rAttributes.getType());
     }
     // Sparkline at Sheet2:B2
     {
         auto pSparkline = rDocument.GetSparkline(ScAddress(1, 1, 1)); //B2
         CPPUNIT_ASSERT(pSparkline);
-        auto pSparklineGroup = pSparkline->getSparklineGroup();
-        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, pSparklineGroup->m_eType);
+        auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
+        CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, rAttributes.getType());
     }
     // Sparkline doesn't exists at A4
     {

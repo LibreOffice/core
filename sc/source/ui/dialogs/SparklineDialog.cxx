@@ -113,7 +113,9 @@ SparklineDialog::~SparklineDialog() {}
 
 void SparklineDialog::setupValues(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup)
 {
-    switch (pSparklineGroup->m_eType)
+    auto& rAttribute = pSparklineGroup->getAttributes();
+
+    switch (rAttribute.getType())
     {
         case sc::SparklineType::Line:
             mxRadioLine->set_active(true);
@@ -126,20 +128,20 @@ void SparklineDialog::setupValues(std::shared_ptr<sc::SparklineGroup> const& pSp
             break;
     }
 
-    mxColorSeries->SelectEntry(pSparklineGroup->m_aColorSeries);
-    mxColorNegative->SelectEntry(pSparklineGroup->m_aColorNegative);
-    mxColorMarker->SelectEntry(pSparklineGroup->m_aColorMarkers);
-    mxColorHigh->SelectEntry(pSparklineGroup->m_aColorHigh);
-    mxColorLow->SelectEntry(pSparklineGroup->m_aColorLow);
-    mxColorFirst->SelectEntry(pSparklineGroup->m_aColorFirst);
-    mxColorLast->SelectEntry(pSparklineGroup->m_aColorLast);
+    mxColorSeries->SelectEntry(rAttribute.getColorSeries());
+    mxColorNegative->SelectEntry(rAttribute.getColorNegative());
+    mxColorMarker->SelectEntry(rAttribute.getColorMarkers());
+    mxColorHigh->SelectEntry(rAttribute.getColorHigh());
+    mxColorLow->SelectEntry(rAttribute.getColorLow());
+    mxColorFirst->SelectEntry(rAttribute.getColorFirst());
+    mxColorLast->SelectEntry(rAttribute.getColorLast());
 
-    mxCheckButtonNegative->set_active(pSparklineGroup->m_bNegative);
-    mxCheckButtonMarker->set_active(pSparklineGroup->m_bMarkers);
-    mxCheckButtonHigh->set_active(pSparklineGroup->m_bHigh);
-    mxCheckButtonLow->set_active(pSparklineGroup->m_bLow);
-    mxCheckButtonFirst->set_active(pSparklineGroup->m_bFirst);
-    mxCheckButtonLast->set_active(pSparklineGroup->m_bLast);
+    mxCheckButtonNegative->set_active(rAttribute.isNegative());
+    mxCheckButtonMarker->set_active(rAttribute.isMarkers());
+    mxCheckButtonHigh->set_active(rAttribute.isHigh());
+    mxCheckButtonLow->set_active(rAttribute.isLow());
+    mxCheckButtonFirst->set_active(rAttribute.isFirst());
+    mxCheckButtonLast->set_active(rAttribute.isLast());
 }
 
 void SparklineDialog::Close() { DoClose(sc::SparklineDialogWrapper::GetChildWindowId()); }
@@ -289,28 +291,32 @@ IMPL_LINK(SparklineDialog, ButtonClicked, weld::Button&, rButton, void)
 
 IMPL_LINK(SparklineDialog, ToggleHandler, weld::Toggleable&, rToggle, void)
 {
+    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
+
     if (mxCheckButtonNegative.get() == &rToggle)
-        mpLocalSparklineGroup->m_bNegative = mxCheckButtonNegative->get_active();
+        rAttribute.setNegative(mxCheckButtonNegative->get_active());
     if (mxCheckButtonMarker.get() == &rToggle)
-        mpLocalSparklineGroup->m_bMarkers = mxCheckButtonMarker->get_active();
+        rAttribute.setMarkers(mxCheckButtonMarker->get_active());
     if (mxCheckButtonHigh.get() == &rToggle)
-        mpLocalSparklineGroup->m_bHigh = mxCheckButtonHigh->get_active();
+        rAttribute.setHigh(mxCheckButtonHigh->get_active());
     if (mxCheckButtonLow.get() == &rToggle)
-        mpLocalSparklineGroup->m_bLow = mxCheckButtonLow->get_active();
+        rAttribute.setLow(mxCheckButtonLow->get_active());
     if (mxCheckButtonFirst.get() == &rToggle)
-        mpLocalSparklineGroup->m_bFirst = mxCheckButtonFirst->get_active();
+        rAttribute.setFirst(mxCheckButtonFirst->get_active());
     if (mxCheckButtonLast.get() == &rToggle)
-        mpLocalSparklineGroup->m_bLast = mxCheckButtonLast->get_active();
+        rAttribute.setLast(mxCheckButtonLast->get_active());
 }
 
 IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
 {
+    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
+
     if (mxRadioLine->get_active())
-        mpLocalSparklineGroup->m_eType = sc::SparklineType::Line;
+        rAttribute.setType(sc::SparklineType::Line);
     else if (mxRadioColumn->get_active())
-        mpLocalSparklineGroup->m_eType = sc::SparklineType::Column;
+        rAttribute.setType(sc::SparklineType::Column);
     else if (mxRadioStacked->get_active())
-        mpLocalSparklineGroup->m_eType = sc::SparklineType::Stacked;
+        rAttribute.setType(sc::SparklineType::Stacked);
 }
 
 bool SparklineDialog::checkValidInputOutput()
@@ -335,13 +341,15 @@ bool SparklineDialog::checkValidInputOutput()
 
 void SparklineDialog::perform()
 {
-    mpLocalSparklineGroup->m_aColorSeries = mxColorSeries->GetSelectEntryColor();
-    mpLocalSparklineGroup->m_aColorNegative = mxColorNegative->GetSelectEntryColor();
-    mpLocalSparklineGroup->m_aColorMarkers = mxColorMarker->GetSelectEntryColor();
-    mpLocalSparklineGroup->m_aColorHigh = mxColorHigh->GetSelectEntryColor();
-    mpLocalSparklineGroup->m_aColorLow = mxColorLow->GetSelectEntryColor();
-    mpLocalSparklineGroup->m_aColorFirst = mxColorFirst->GetSelectEntryColor();
-    mpLocalSparklineGroup->m_aColorLast = mxColorLast->GetSelectEntryColor();
+    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
+
+    rAttribute.setColorSeries(mxColorSeries->GetSelectEntryColor());
+    rAttribute.setColorNegative(mxColorNegative->GetSelectEntryColor());
+    rAttribute.setColorMarkers(mxColorMarker->GetSelectEntryColor());
+    rAttribute.setColorHigh(mxColorHigh->GetSelectEntryColor());
+    rAttribute.setColorLow(mxColorLow->GetSelectEntryColor());
+    rAttribute.setColorFirst(mxColorFirst->GetSelectEntryColor());
+    rAttribute.setColorLast(mxColorLast->GetSelectEntryColor());
 
     auto& rDocFunc = mrViewData.GetDocShell()->GetDocFunc();
 
