@@ -2300,9 +2300,9 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
 
 void PSWriter::ImplWriteLineInfo( const LineInfo& rLineInfo )
 {
-    SvtGraphicStroke::DashArray l_aDashArray;
+    std::vector< double > l_aDashArray;
     if ( rLineInfo.GetStyle() == LineStyle::Dash )
-        l_aDashArray.push_back( 2 );
+        l_aDashArray = rLineInfo.GetDotDashArray();
     const double fLWidth(( ( rLineInfo.GetWidth() + 1 ) + ( rLineInfo.GetWidth() + 1 ) ) * 0.5);
     SvtGraphicStroke::JoinType aJoinType(SvtGraphicStroke::joinMiter);
     SvtGraphicStroke::CapType aCapType(SvtGraphicStroke::capButt);

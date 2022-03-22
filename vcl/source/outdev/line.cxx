@@ -232,23 +232,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
 
     if(bDashUsed && aLinePolyPolygon.count())
     {
-        ::std::vector< double > fDotDashArray;
-        const double fDashLen(rInfo.GetDashLen());
-        const double fDotLen(rInfo.GetDotLen());
-        const double fDistance(rInfo.GetDistance());
-
-        for(sal_uInt16 a(0); a < rInfo.GetDashCount(); a++)
-        {
-            fDotDashArray.push_back(fDashLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
-        for(sal_uInt16 b(0); b < rInfo.GetDotCount(); b++)
-        {
-            fDotDashArray.push_back(fDotLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
+        ::std::vector< double > fDotDashArray = rInfo.GetDotDashArray();
         const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
 
         if(fAccumulated > 0.0)
