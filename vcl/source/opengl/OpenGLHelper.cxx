@@ -37,13 +37,10 @@
 #include <bitmap/BitmapWriteAccess.hxx>
 #include <watchdog.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
-#include <vcl/glxtestprocess.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
 
-#if USING_X11
-#include <opengl/x11/X11DeviceInfo.hxx>
-#elif defined (_WIN32)
+#if defined (_WIN32)
 #include <opengl/win/WinDeviceInfo.hxx>
 #endif
 
@@ -756,11 +753,7 @@ bool OpenGLHelper::isDeviceDenylisted()
     {
         OpenGLZone aZone;
 
-#if USING_X11
-        X11OpenGLDeviceInfo aInfo;
-        bDenylisted = aInfo.isDeviceBlocked();
-        SAL_INFO("vcl.opengl", "denylisted: " << bDenylisted);
-#elif defined( _WIN32 )
+#if defined( _WIN32 )
         WinOpenGLDeviceInfo aInfo;
         bDenylisted = aInfo.isDeviceBlocked();
 

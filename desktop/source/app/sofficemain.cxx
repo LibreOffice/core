@@ -33,7 +33,6 @@
 #include <sal/log.hxx>
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
-#include <vcl/glxtestprocess.hxx>
 #include <vcl/svmain.hxx>
 
 #if HAVE_FEATURE_BREAKPAD
@@ -58,9 +57,6 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 #if HAVE_FEATURE_BREAKPAD
     CrashReporter::installExceptionHandler();
 #endif
-
-    bool bSuccess = fire_glxtest_process();
-    SAL_WARN_IF(!bSuccess, "desktop.opengl", "problems with glxtest");
 
 #if defined ANDROID
     try {

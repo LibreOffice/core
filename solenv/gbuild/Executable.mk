@@ -157,7 +157,6 @@ gb_Executable_set_external_code = $(call gb_Executable__forward_to_Linktarget,$(
 gb_Executable_set_generated_cxx_suffix = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_use_clang = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_set_clang_precompiled_header = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
-gb_Executable_use_glxtest = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_use_vclmain = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_Executable_add_prejs = $(call gb_Executable__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 

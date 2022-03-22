@@ -40,6 +40,7 @@ $(eval $(call gb_Executable_use_libraries,vcldemo,\
     salhelper \
     fwk \
     i18nlangtag \
+    vcl \
 ))
 
 $(eval $(call gb_Executable_use_vclmain,vcldemo))

@@ -45,6 +45,7 @@ $(eval $(call gb_Executable_use_libraries,gengal,\
     cppuhelper \
     utl \
     svxcore \
+    vcl \
 ))
 
 $(eval $(call gb_Executable_use_vclmain,gengal))

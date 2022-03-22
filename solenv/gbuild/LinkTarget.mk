@@ -2206,26 +2206,8 @@ $(call gb_LinkTarget_get_target,$(1)) : T_USE_LD := $(or $(CLANG_USE_LD),$(USE_L
 $(call gb_LinkTarget_get_target,$(1)) : T_LTOFLAGS := $(or $(gb_CLANG_LTOFLAGS),$(gb_LTOFLAGS))
 endef
 
-# call gb_LinkTarget_use_glxtest,linktarget,add_libs
-define gb_LinkTarget_use_glxtest
-$(call gb_LinkTarget_use_libraries,$(1),vcl,,$(4))
-
-ifeq (,$(DISABLE_DYNLOADING))
-$(call gb_LinkTarget_add_libs,$(1),$(UNIX_DLAPI_LIBS))
-endif
-
-ifeq (,$(DISABLE_GUI))
-ifeq ($(USING_X11),TRUE)
-$(call gb_LinkTarget_add_libs,$(1),-lX11 $(2))
-$(call gb_LinkTarget_use_static_libraries,$(1),glxtest)
-endif
-endif
-
-endef # gb_LinkTarget_use_glxtest
-
-# call gb_LinkTarget_use_vclmain,linktarget,add_libs
+# call gb_LinkTarget_use_vclmain,linktarget
 define gb_LinkTarget_use_vclmain
-$(call gb_LinkTarget_use_glxtest,$(1),$(2))
 $(call gb_LinkTarget_use_static_libraries,$(1),vclmain)
 
 endef # gb_LinkTarget_use_vclmain

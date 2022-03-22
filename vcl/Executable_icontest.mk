@@ -37,6 +37,7 @@ $(eval $(call gb_Executable_use_libraries,icontest,\
     sal \
     tl \
     ucbhelper \
+    vcl \
 ))
 
 $(eval $(call gb_Executable_use_vclmain,icontest))

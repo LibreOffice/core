@@ -489,7 +489,6 @@ gb_CppunitTest_set_external_code = $(call gb_CppunitTest__forward_to_Linktarget,
 gb_CppunitTest_set_generated_cxx_suffix = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_use_clang = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_set_clang_precompiled_header = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
-gb_CppunitTest_use_glxtest = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_use_vclmain = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 gb_CppunitTest_add_prejs = $(call gb_CppunitTest__forward_to_Linktarget,$(0),$(1),$(2),$(3))
 

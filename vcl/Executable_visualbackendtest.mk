@@ -28,9 +28,10 @@ $(eval $(call gb_Executable_use_libraries,visualbackendtest,\
     tl \
     sal \
 	salhelper \
+    vcl \
 ))
 
-$(eval $(call gb_Executable_use_vclmain,visualbackendtest,-lm))
+$(eval $(call gb_Executable_use_vclmain,visualbackendtest))
 
 $(eval $(call gb_Executable_add_exception_objects,visualbackendtest,\
     vcl/backendtest/VisualBackendTest \
