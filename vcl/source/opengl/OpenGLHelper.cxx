@@ -171,6 +171,7 @@ namespace
 {
     const sal_uInt32 GLenumSize = sizeof(GLenum);
 
+#if defined _WIN32
     OString getHexString(const sal_uInt8* pData, sal_uInt32 nLength)
     {
         static const char* const pHexData = "0123456789ABCDEF";
@@ -203,24 +204,11 @@ namespace
 
     OString getDeviceInfoString()
     {
-#if USING_X11
-        const X11OpenGLDeviceInfo aInfo;
-        return aInfo.GetOS() +
-            aInfo.GetOSRelease() +
-            aInfo.GetRenderer() +
-            aInfo.GetVendor() +
-            aInfo.GetVersion();
-#elif defined( _WIN32 )
         const WinOpenGLDeviceInfo aInfo;
         return OUStringToOString(aInfo.GetAdapterVendorID(), RTL_TEXTENCODING_UTF8) +
             OUStringToOString(aInfo.GetAdapterDeviceID(), RTL_TEXTENCODING_UTF8) +
             OUStringToOString(aInfo.GetDriverVersion(), RTL_TEXTENCODING_UTF8) +
             OString::number(DriverBlocklist::GetWindowsVersion());
-#else
-        return OString::Concat(reinterpret_cast<const char*>(glGetString(GL_VENDOR))) +
-            reinterpret_cast<const char*>(glGetString(GL_RENDERER)) +
-            reinterpret_cast<const char*>(glGetString(GL_VERSION));
-#endif
     }
 
     OString getStringDigest( const OUString& rVertexShaderName,
@@ -241,6 +229,7 @@ namespace
 
         return generateMD5(aMessage.getStr(), aMessage.getLength());
     }
+#endif
 
     OString getCacheFolder()
     {
@@ -374,12 +363,14 @@ namespace
     }
 }
 
+#if defined _WIN32
 OString OpenGLHelper::GetDigest( const OUString& rVertexShaderName,
                                       const OUString& rFragmentShaderName,
                                       std::string_view rPreamble )
 {
     return getStringDigest(rVertexShaderName, rFragmentShaderName, rPreamble);
 }
+#endif
 
 GLint OpenGLHelper::LoadShaders(const OUString& rVertexShaderName,
                                 const OUString& rFragmentShaderName,

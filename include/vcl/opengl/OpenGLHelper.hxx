@@ -48,7 +48,9 @@ struct VCL_DLLPUBLIC OpenGLHelper
 
 public:
 
+#if defined _WIN32
     static OString GetDigest(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, std::string_view preamble );
+#endif
 
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, const OUString& rGeometryShaderName, std::string_view preamble, std::string_view rDigest );
     static GLint LoadShaders(const OUString& rVertexShaderName, const OUString& rFragmentShaderName, std::string_view preamble, std::string_view rDigest );
