@@ -27,6 +27,11 @@
       <info>
         <desc>Contains a container for passwords.</desc>
       </info>
+      <prop oor:name="InitializationVector" oor:type="xs:string">
+        <info>
+          <desc>Contains an initialization vector for the password encryption.</desc>
+        </info>
+      </prop>
       <prop oor:name="Password" oor:type="xs:string" oor:localized="false">
         <info>
           <desc>Contains a password encoded with the master password.</desc>
@@ -914,6 +919,11 @@
           <desc>Specifies if there is a valid master password.</desc>
         </info>
         <value>false</value>
+      </prop>
+      <prop oor:name="MasterInitializationVector" oor:type="xs:string">
+        <info>
+          <desc>Contains an initialization vector for the master password encryption.</desc>
+        </info>
       </prop>
       <prop oor:name="Master" oor:type="xs:string" oor:nillable="false">
         <info>
