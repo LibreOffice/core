@@ -846,7 +846,7 @@ vcl::Font Outliner::ImpCalcBulletFont( sal_Int32 nPara ) const
     GetGlobalCharStretching(nStretchX, nStretchY);
 
     sal_uInt16 nScale = pFmt->GetBulletRelSize() * nStretchY / 100;
-    sal_uLong nScaledLineHeight = aStdFont.GetFontSize().Height();
+    tools::Long nScaledLineHeight = aStdFont.GetFontSize().Height();
     nScaledLineHeight *= nScale*10;
     nScaledLineHeight /= 1000;
 
