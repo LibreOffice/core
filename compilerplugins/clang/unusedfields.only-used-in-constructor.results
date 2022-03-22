@@ -178,7 +178,7 @@ drawinglayer/source/tools/emfphelperdata.hxx:197
     emfplushelper::EmfPlusHelperData mnFrameRight sal_Int32
 drawinglayer/source/tools/emfphelperdata.hxx:198
     emfplushelper::EmfPlusHelperData mnFrameBottom sal_Int32
-editeng/source/editeng/impedit.hxx:526
+editeng/source/editeng/impedit.hxx:527
     ImpEditEngine aSelFuncSet class EditSelFunctionSet
 embeddedobj/source/msole/olecomponent.hxx:51
     OleComponent m_pInterfaceContainer comphelper::OMultiTypeInterfaceContainerHelper2 *
@@ -220,11 +220,11 @@ include/basic/basmgr.hxx:57
     BasicError nReason enum BasicErrorReason
 include/drawinglayer/primitive2d/textlayoutdevice.hxx:64
     drawinglayer::primitive2d::TextLayouterDevice maSolarGuard class SolarMutexGuard
-include/filter/msfilter/svdfppt.hxx:890
+include/filter/msfilter/svdfppt.hxx:889
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:891
+include/filter/msfilter/svdfppt.hxx:890
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:892
+include/filter/msfilter/svdfppt.hxx:891
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/LibreOfficeKit/LibreOfficeKitGtk.h:33
     _LOKDocView aDrawingArea GtkDrawingArea
@@ -360,7 +360,7 @@ include/sfx2/msg.hxx:147
     SfxType23 nAttribs sal_uInt16
 include/sfx2/msg.hxx:147
     SfxType23 pType const std::type_info *
-include/svl/itemset.hxx:253
+include/svl/itemset.hxx:274
     SfxItemSetFixed m_aItems const class SfxPoolItem *[NITEMS]
 include/svx/ClassificationDialog.hxx:35
     svx::ClassificationDialog maInternationalHelper class SfxClassificationHelper
@@ -442,8 +442,6 @@ pyuno/source/module/pyuno_impl.hxx:238
     pyuno::stRuntimeImpl ob_base PyObject
 reportdesign/source/core/api/ReportDefinition.cxx:239
     reportdesign::(anonymous namespace)::OStyle m_aSize awt::Size
-reportdesign/source/filter/xml/xmlExport.cxx:1198
-      sal_Int32
 sal/qa/osl/condition/osl_Condition.cxx:72
     osl_Condition::ctors bRes1 _Bool
 sal/qa/osl/condition/osl_Condition.cxx:202
@@ -516,23 +514,21 @@ sc/inc/queryevaluator.hxx:66
     ScQueryEvaluator maTest _Bool[32]
 sc/inc/token.hxx:402
     SingleDoubleRefModifier aDub struct ScComplexRefData
-sc/qa/unit/tiledrendering/tiledrendering.cxx:581
-    (anonymous namespace)::ViewCallback m_callbackWrapper class TestLokCallbackWrapper
-sc/source/core/data/document.cxx:1234
+sc/source/core/data/document.cxx:1236
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aSwitch sc::AutoCalcSwitch
-sc/source/core/data/document.cxx:1235
+sc/source/core/data/document.cxx:1237
     (anonymous namespace)::BroadcastRecalcOnRefMoveGuard aBulk class ScBulkBroadcast
 sc/source/core/data/table2.cxx:802
     (anonymous namespace)::TransClipHandler mnEndRow size_t
-sc/source/filter/inc/htmlpars.hxx:622
+sc/source/filter/inc/htmlpars.hxx:626
     ScHTMLQueryParser mnUnusedId ScHTMLTableId
 sc/source/filter/inc/sheetdatacontext.hxx:50
     oox::xls::SheetDataContext aReleaser class SolarMutexReleaser
 sc/source/filter/inc/XclImpChangeTrack.hxx:55
     XclImpChangeTrack xInStrm tools::SvRef<SotStorageStream>
-sc/source/filter/inc/xetable.hxx:1004
+sc/source/filter/inc/xetable.hxx:1016
     XclExpCellTable maArrayBfr class XclExpArrayBuffer
-sc/source/filter/inc/xetable.hxx:1005
+sc/source/filter/inc/xetable.hxx:1017
     XclExpCellTable maShrfmlaBfr class XclExpShrfmlaBuffer
 sc/source/filter/inc/xiescher.hxx:1205
     XclImpDffPropSet maDummyStrm class SvMemoryStream
@@ -602,13 +598,13 @@ sd/source/ui/remotecontrol/ZeroconfService.hxx:32
     sd::ZeroconfService port uint
 sd/source/ui/view/DocumentRenderer.cxx:1317
     sd::DocumentRenderer::Implementation mxObjectShell SfxObjectShellRef
-sd/source/ui/view/viewshel.cxx:1166
+sd/source/ui/view/viewshel.cxx:1157
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aDrawLock sd::slidesorter::view::class SlideSorterView::DrawLock
-sd/source/ui/view/viewshel.cxx:1167
+sd/source/ui/view/viewshel.cxx:1158
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aModelLock sd::slidesorter::controller::class SlideSorterController::ModelChangeLock
-sd/source/ui/view/viewshel.cxx:1168
+sd/source/ui/view/viewshel.cxx:1159
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aUpdateLock sd::slidesorter::controller::class PageSelector::UpdateLock
-sd/source/ui/view/viewshel.cxx:1169
+sd/source/ui/view/viewshel.cxx:1160
     sd::(anonymous namespace)::KeepSlideSorterInSyncWithPageChanges m_aContext sd::slidesorter::controller::class SelectionObserver::Context
 sdext/source/pdfimport/pdfparse/pdfparse.cxx:265
     (anonymous namespace)::PDFGrammar::definition boolean rule<ScannerT>
@@ -656,7 +652,7 @@ sfx2/source/dialog/basedlgs.cxx:46
     SfxModelessDialog_Impl aMoveIdle class Idle
 sfx2/source/doc/doctempl.cxx:105
     DocTempl::(anonymous namespace)::DocTempl_EntryData_Impl mxObjShell class SfxObjectShellLock
-sfx2/source/inc/templdgi.hxx:99
+sfx2/source/inc/templdgi.hxx:93
     SfxCommonTemplateDialog_Impl m_aStyleListUpdateFamily Link<void *, void>
 slideshow/source/engine/animationnodes/animationbasenode.hxx:88
     slideshow::internal::AnimationBaseNode mpSubsetManager slideshow::internal::SubsettableShapeManagerSharedPtr
@@ -670,19 +666,19 @@ slideshow/source/engine/opengl/TransitionImpl.hxx:297
     Vertex normal glm::vec3
 slideshow/source/engine/opengl/TransitionImpl.hxx:298
     Vertex texcoord glm::vec2
-slideshow/source/engine/slide/slideimpl.cxx:200
+slideshow/source/engine/slide/slideimpl.cxx:199
     slideshow::internal::(anonymous namespace)::SlideImpl mpBox2DWorld box2d::utils::Box2DWorldSharedPtr
-slideshow/source/engine/smilfunctionparser.cxx:491
-    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition multiplicativeExpression ::boost::spirit::classic::rule<ScannerT>
-slideshow/source/engine/smilfunctionparser.cxx:492
-    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition unaryExpression ::boost::spirit::classic::rule<ScannerT>
 slideshow/source/engine/smilfunctionparser.cxx:493
-    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition basicExpression ::boost::spirit::classic::rule<ScannerT>
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition multiplicativeExpression ::boost::spirit::classic::rule<ScannerT>
 slideshow/source/engine/smilfunctionparser.cxx:494
-    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::classic::rule<ScannerT>
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition unaryExpression ::boost::spirit::classic::rule<ScannerT>
 slideshow/source/engine/smilfunctionparser.cxx:495
-    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition binaryFunction ::boost::spirit::classic::rule<ScannerT>
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition basicExpression ::boost::spirit::classic::rule<ScannerT>
 slideshow/source/engine/smilfunctionparser.cxx:496
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::classic::rule<ScannerT>
+slideshow/source/engine/smilfunctionparser.cxx:497
+    slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition binaryFunction ::boost::spirit::classic::rule<ScannerT>
+slideshow/source/engine/smilfunctionparser.cxx:498
     slideshow::internal::(anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::classic::rule<ScannerT>
 starmath/inc/mathml/mathmlMo.hxx:63
     moOperatorData m_motxt rtl::OUString
@@ -700,41 +696,39 @@ starmath/inc/view.hxx:246
     SmViewShell maGraphicController class SmGraphicController
 svgio/inc/svgcharacternode.hxx:84
     svgio::svgreader::SvgTextPosition maY ::std::vector<double>
-svl/source/crypto/cryptosign.cxx:109
+svl/source/crypto/cryptosign.cxx:108
     (anonymous namespace)::Extension extnID SECItem
-svl/source/crypto/cryptosign.cxx:110
+svl/source/crypto/cryptosign.cxx:109
     (anonymous namespace)::Extension critical SECItem
-svl/source/crypto/cryptosign.cxx:111
+svl/source/crypto/cryptosign.cxx:110
     (anonymous namespace)::Extension extnValue SECItem
-svl/source/crypto/cryptosign.cxx:269
+svl/source/crypto/cryptosign.cxx:268
     (anonymous namespace)::PKIStatusInfo statusString SECItem
-svl/source/crypto/cryptosign.cxx:270
+svl/source/crypto/cryptosign.cxx:269
     (anonymous namespace)::PKIStatusInfo failInfo SECItem
 svx/inc/GalleryControl.hxx:43
     svx::sidebar::GalleryControl mpGallery class Gallery *
-svx/inc/sdr/properties/emptyproperties.hxx:36
-    sdr::properties::EmptyProperties mxEmptyItemSet std::optional<SfxItemSet>
-svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1083
-    (anonymous namespace)::ExpressionGrammar::definition multiplicativeExpression ::boost::spirit::classic::rule<ScannerT>
-svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1084
-    (anonymous namespace)::ExpressionGrammar::definition unaryExpression ::boost::spirit::classic::rule<ScannerT>
-svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1085
-    (anonymous namespace)::ExpressionGrammar::definition basicExpression ::boost::spirit::classic::rule<ScannerT>
-svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1086
-    (anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::classic::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1087
-    (anonymous namespace)::ExpressionGrammar::definition binaryFunction ::boost::spirit::classic::rule<ScannerT>
+    (anonymous namespace)::ExpressionGrammar::definition multiplicativeExpression ::boost::spirit::classic::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1088
-    (anonymous namespace)::ExpressionGrammar::definition ternaryFunction ::boost::spirit::classic::rule<ScannerT>
+    (anonymous namespace)::ExpressionGrammar::definition unaryExpression ::boost::spirit::classic::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1089
-    (anonymous namespace)::ExpressionGrammar::definition funcRef_decl ::boost::spirit::classic::rule<ScannerT>
+    (anonymous namespace)::ExpressionGrammar::definition basicExpression ::boost::spirit::classic::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1090
-    (anonymous namespace)::ExpressionGrammar::definition functionReference ::boost::spirit::classic::rule<ScannerT>
+    (anonymous namespace)::ExpressionGrammar::definition unaryFunction ::boost::spirit::classic::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1091
-    (anonymous namespace)::ExpressionGrammar::definition modRef_decl ::boost::spirit::classic::rule<ScannerT>
+    (anonymous namespace)::ExpressionGrammar::definition binaryFunction ::boost::spirit::classic::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1092
-    (anonymous namespace)::ExpressionGrammar::definition modifierReference ::boost::spirit::classic::rule<ScannerT>
+    (anonymous namespace)::ExpressionGrammar::definition ternaryFunction ::boost::spirit::classic::rule<ScannerT>
 svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1093
+    (anonymous namespace)::ExpressionGrammar::definition funcRef_decl ::boost::spirit::classic::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1094
+    (anonymous namespace)::ExpressionGrammar::definition functionReference ::boost::spirit::classic::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1095
+    (anonymous namespace)::ExpressionGrammar::definition modRef_decl ::boost::spirit::classic::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1096
+    (anonymous namespace)::ExpressionGrammar::definition modifierReference ::boost::spirit::classic::rule<ScannerT>
+svx/source/customshapes/EnhancedCustomShapeFunctionParser.cxx:1097
     (anonymous namespace)::ExpressionGrammar::definition identifier ::boost::spirit::classic::rule<ScannerT>
 svx/source/dialog/contimp.hxx:75
     SvxSuperContourDlg aContourItem class SvxContourDlgItem
@@ -748,22 +742,26 @@ svx/source/inc/datanavi.hxx:190
     svxform::XFormsPage m_aDropHelper class svxform::DataTreeDropTarget
 svx/source/svdraw/svdcrtv.cxx:48
     ImplConnectMarkerOverlay maObjects sdr::overlay::OverlayObjectList
-svx/source/svdraw/svdmrkv.cxx:137
+svx/source/svdraw/svdmrkv.cxx:135
     MarkingSubSelectionOverlay maObjects sdr::overlay::OverlayObjectList
 svx/source/tbxctrls/extrusioncontrols.hxx:66
     svx::ExtrusionDirectionWindow maImgDirection class Image[9]
-svx/source/xml/xmleohlp.cxx:72
+svx/source/xml/xmleohlp.cxx:71
     OutputStorageWrapper_Impl aTempFile class utl::TempFile
 svx/source/xml/xmlgrhlp.cxx:93
     (anonymous namespace)::GraphicInputStream maTempFile utl::TempFile
-sw/inc/unosett.hxx:149
+sw/inc/unosett.hxx:146
     SwXNumberingRules m_pImpl ::sw::UnoImplPtr<Impl>
 sw/qa/core/test_ToxTextGenerator.cxx:140
     (anonymous namespace)::ToxTextGeneratorWithMockedChapterField mChapterFieldType class SwChapterFieldType
-sw/qa/extras/uiwriter/uiwriter.cxx:3772
+sw/qa/extras/tiledrendering/tiledrendering.cxx:876
+    (anonymous namespace)::ViewCallback m_callbackWrapper class TestLokCallbackWrapper
+sw/qa/extras/uiwriter/uiwriter7.cxx:2258
     (anonymous namespace)::IdleTask maIdle class Idle
 sw/source/core/crsr/crbm.cxx:62
     (anonymous namespace)::CursorStateHelper m_aSaveState class SwCursorSaveState
+sw/source/core/inc/ftnboss.hxx:34
+    SwSaveFootnoteHeight aGuard class SwFrameDeleteGuard
 sw/source/core/inc/swfont.hxx:980
     SvStatistics nGetStretchTextSize sal_uInt16
 sw/source/core/layout/dbg_lay.cxx:179
@@ -776,6 +774,8 @@ sw/source/core/text/porfld.cxx:142
     (anonymous namespace)::SwFieldSlot aText rtl::OUString
 sw/source/core/text/redlnitr.hxx:78
     SwRedlineItr m_nNdIdx const SwNodeOffset
+sw/source/core/unocore/unolinebreak.cxx:43
+    SwXLineBreak::Impl m_rThis class SwXLineBreak &
 sw/source/uibase/docvw/romenu.hxx:34
     SwReadOnlyPopup m_aBuilder class VclBuilder
 sw/source/uibase/docvw/romenu.hxx:46
@@ -784,11 +784,11 @@ sw/source/uibase/docvw/romenu.hxx:50
     SwReadOnlyPopup m_nReadonlyBackgroundtogallery sal_uInt16
 sw/source/uibase/inc/condedit.hxx:43
     ConditionEdit m_aDropTargetHelper class ConditionEditDropTarget
-sw/source/uibase/inc/conttree.hxx:320
+sw/source/uibase/inc/conttree.hxx:296
     SwGlobalTree m_aDropTargetHelper class SwGlobalTreeDropTarget
 sw/source/uibase/inc/olmenu.hxx:77
     SwSpellPopup m_aBuilder class VclBuilder
-sw/source/uibase/inc/swuicnttab.hxx:240
+sw/source/uibase/inc/swuicnttab.hxx:241
     SwTokenWindow m_aAdjustPositionsIdle class Idle
 sw/source/uibase/inc/tmpdlg.hxx:35
     SwTemplateDlgController bNewStyle _Bool
@@ -922,9 +922,9 @@ vcl/inc/qt5/QtWidget.hxx:39
     QtWidget m_nDeltaX int
 vcl/inc/qt5/QtWidget.hxx:40
     QtWidget m_nDeltaY int
-vcl/inc/salvtables.hxx:558
+vcl/inc/salvtables.hxx:556
     SalInstanceEntry m_aTextFilter class WeldTextFilter
-vcl/inc/salvtables.hxx:943
+vcl/inc/salvtables.hxx:941
     SalInstanceComboBoxWithEdit m_aTextFilter class WeldTextFilter
 vcl/inc/svimpbox.hxx:120
     SvImpLBox m_aFctSet class ImpLBSelEng
@@ -962,15 +962,15 @@ vcl/unx/gtk3/gloactiongroup.cxx:27
     (anonymous namespace)::GLOAction parent_instance GObject
 vcl/unx/gtk3/glomenu.cxx:14
     GLOMenu parent_instance const GMenuModel
-vcl/unx/gtk3/gtkinst.cxx:7144
+vcl/unx/gtk3/gtkinst.cxx:7169
     (anonymous namespace)::GtkInstanceAssistant m_pButtonBox GtkButtonBox *
-vcl/unx/gtk3/gtkinst.cxx:10574
+vcl/unx/gtk3/gtkinst.cxx:10599
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pContainer GtkBox *
-vcl/unx/gtk3/gtkinst.cxx:10576
+vcl/unx/gtk3/gtkinst.cxx:10601
     (anonymous namespace)::GtkInstanceMenuToggleButton m_pMenuButton GtkMenuButton *
-vcl/unx/gtk3/gtkinst.cxx:19816
+vcl/unx/gtk3/gtkinst.cxx:19869
     (anonymous namespace)::GtkInstanceComboBox m_pOverlay GtkOverlay *
-vcl/unx/gtk3/gtkinst.cxx:19822
+vcl/unx/gtk3/gtkinst.cxx:19875
     (anonymous namespace)::GtkInstanceComboBox m_pMenuTextRenderer GtkCellRenderer *
 writerfilter/source/dmapper/PropertyMap.hxx:219
     writerfilter::dmapper::SectionPropertyMap m_nDebugSectionNumber sal_Int32

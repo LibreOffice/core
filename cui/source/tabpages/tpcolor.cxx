@@ -48,7 +48,6 @@ SvxColorTabPage::SvxColorTabPage(weld::Container* pPage, weld::DialogController*
     , aXFillAttr( rInAttrs.GetPool() )
     , rXFSet( aXFillAttr.GetItemSet() )
     , eCM( ColorModel::RGB )
-    , m_context(comphelper::getProcessComponentContext())
     , m_xValSetColorList(new SvxColorValueSet(m_xBuilder->weld_scrolled_window("colorsetwin", true)))
     , m_xValSetRecentList(new SvxColorValueSet(nullptr))
     , m_xSelectPalette(m_xBuilder->weld_combo_box("paletteselector"))

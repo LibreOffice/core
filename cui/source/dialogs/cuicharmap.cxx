@@ -57,7 +57,6 @@ SvxCharacterMap::SvxCharacterMap(weld::Widget* pParent, const SfxItemSet* pSet,
     , m_xVirDev(VclPtr<VirtualDevice>::Create())
     , isSearchMode(true)
     , m_xFrame(rFrame)
-    , mxContext(comphelper::getProcessComponentContext())
     , m_aRecentCharView{SvxCharView(m_xVirDev),
                         SvxCharView(m_xVirDev),
                         SvxCharView(m_xVirDev),

@@ -40,15 +40,12 @@ using namespace com::sun::star;
 class SwXLineBreak::Impl : public SvtListener
 {
 public:
-    SwXLineBreak& m_rThis;
-    uno::WeakReference<uno::XInterface> m_wThis;
     bool m_bIsDescriptor;
     SwFormatLineBreak* m_pFormatLineBreak;
     SwLineBreakClear m_eClear;
 
-    Impl(SwXLineBreak& rThis, SwFormatLineBreak* const pLineBreak)
-        : m_rThis(rThis)
-        , m_bIsDescriptor(pLineBreak == nullptr)
+    Impl(SwFormatLineBreak* const pLineBreak)
+        : m_bIsDescriptor(pLineBreak == nullptr)
         , m_pFormatLineBreak(pLineBreak)
         , m_eClear(SwLineBreakClear::NONE)
     {
@@ -99,12 +96,12 @@ void SwXLineBreak::Impl::Notify(const SfxHint& rHint)
 }
 
 SwXLineBreak::SwXLineBreak(SwFormatLineBreak& rFormat)
-    : m_pImpl(new SwXLineBreak::Impl(*this, &rFormat))
+    : m_pImpl(new SwXLineBreak::Impl(&rFormat))
 {
 }
 
 SwXLineBreak::SwXLineBreak()
-    : m_pImpl(new SwXLineBreak::Impl(*this, nullptr))
+    : m_pImpl(new SwXLineBreak::Impl(nullptr))
 {
 }
 
@@ -127,7 +124,6 @@ SwXLineBreak::CreateXLineBreak(SwFormatLineBreak* pLineBreakFormat)
         {
             pLineBreakFormat->SetXLineBreak(xLineBreak);
         }
-        pLineBreak->m_pImpl->m_wThis = xLineBreak;
     }
     return xLineBreak;
 }
