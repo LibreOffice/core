@@ -637,14 +637,14 @@ tools::Rectangle EditEngine::GetParaBounds( sal_Int32 nPara )
     {
         sal_Int32 nTextHeight = pImpEditEngine->GetTextHeight();
         sal_Int32 nParaWidth = pImpEditEngine->CalcParaWidth( nPara, true );
-        sal_uLong nParaHeight = pImpEditEngine->GetParaHeight( nPara );
+        sal_Int32 nParaHeight = pImpEditEngine->GetParaHeight( nPara );
 
         return tools::Rectangle( nTextHeight - aPnt.Y() - nParaHeight, 0, nTextHeight - aPnt.Y(), nParaWidth );
     }
     else
     {
         sal_Int32 nParaWidth = pImpEditEngine->CalcParaWidth( nPara, true );
-        sal_uLong nParaHeight = pImpEditEngine->GetParaHeight( nPara );
+        sal_Int32 nParaHeight = pImpEditEngine->GetParaHeight( nPara );
 
         return tools::Rectangle( 0, aPnt.Y(), nParaWidth, aPnt.Y() + nParaHeight );
     }
