@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c368bbdc_2dc0952f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-22T06:11:15Z",
+      "side": 1,
+      "message": "Why do you think it\u0027s needed? Merging cells happens immediately while Split has a step where you tell in how many columns or rows you want to split. Ellipsis indicate the additional step.",
+      "revId": "ecdd77075803e48fc4085529c5ceb95516fb1fde",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
