@@ -33,6 +33,24 @@
       "message": "I assume was Miklos is waiting for my +1 before submitting. So here it is and I\u0027ll finalize the submit.",
       "revId": "1dee7d30cd7d68d71b73c93a572c7599dc51773b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aed68ba2_d8941e9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-22T10:45:12Z",
+      "side": 1,
+      "message": "I was just interrupted, thanks for the submit. :-)",
+      "parentUuid": "ae768ff5_15ea1909",
+      "revId": "1dee7d30cd7d68d71b73c93a572c7599dc51773b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
