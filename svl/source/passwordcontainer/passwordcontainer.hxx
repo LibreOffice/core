@@ -33,6 +33,7 @@
 #include <unotools/configitem.hxx>
 #include <ucbhelper/interactionrequest.hxx>
 
+#include <rtl/random.h>
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
 
@@ -51,11 +52,12 @@ class NamePassRecord
     ::std::vector< OUString >                      m_aMemPass;
 
     // persistent passwords are encrypted in one string
-    bool                                                  m_bHasPersPass;
+    bool                                           m_bHasPersPass;
     OUString                                       m_aPersPass;
+    OUString                                       m_aPersistentIV;
 
     void InitArrays( bool bHasMemoryList, const ::std::vector< OUString >& aMemoryList,
-                     bool bHasPersistentList, const OUString& aPersistentList )
+                     bool bHasPersistentList, const OUString& aPersistentList, const OUString& aPersistentIV )
     {
         m_bHasMemPass = bHasMemoryList;
         if ( bHasMemoryList )
@@ -63,7 +65,10 @@ class NamePassRecord
 
         m_bHasPersPass = bHasPersistentList;
         if ( bHasPersistentList )
+        {
             m_aPersPass = aPersistentList;
+            m_aPersistentIV = aPersistentIV;
+        }
     }
 
 public:
@@ -75,11 +80,12 @@ public:
     {
     }
 
-    NamePassRecord( const OUString& aName, const OUString& aPersistentList )
+    NamePassRecord( const OUString& aName, const OUString& aPersistentList, const OUString& aPersistentIV )
         : m_aName( aName )
         , m_bHasMemPass( false )
         , m_bHasPersPass( true )
         , m_aPersPass( aPersistentList )
+        , m_aPersistentIV( aPersistentIV )
     {
     }
 
@@ -88,7 +94,8 @@ public:
         , m_bHasMemPass( false )
         , m_bHasPersPass( false )
     {
-        InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
+        InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass,
+                    aRecord.m_bHasPersPass, aRecord.m_aPersPass, aRecord.m_aPersistentIV );
     }
 
     NamePassRecord& operator=( const NamePassRecord& aRecord )
@@ -99,7 +106,9 @@ public:
 
             m_aMemPass.clear();
             m_aPersPass.clear();
-            InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
+            m_aPersistentIV.clear();
+            InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass,
+                        aRecord.m_bHasPersPass, aRecord.m_aPersPass, aRecord.m_aPersistentIV );
         }
         return *this;
     }
@@ -135,15 +144,24 @@ public:
         return OUString();
     }
 
+    OUString GetPersistentIV() const
+    {
+        if ( m_bHasPersPass )
+            return m_aPersistentIV;
+
+        return OUString();
+    }
+
     void SetMemPasswords( const ::std::vector< OUString >& aMemList )
     {
         m_aMemPass = aMemList;
         m_bHasMemPass = true;
     }
 
-    void SetPersPasswords( const OUString& aPersList )
+    void SetPersPasswords( const OUString& aPersList, const OUString& aPersIV )
     {
         m_aPersPass = aPersList;
+        m_aPersistentIV = aPersIV;
         m_bHasPersPass = true;
     }
 
@@ -158,6 +176,7 @@ public:
         {
             m_bHasPersPass = false;
             m_aPersPass.clear();
+            m_aPersistentIV.clear();
         }
     }
 
@@ -181,6 +200,7 @@ private:
     PasswordContainer*     mainCont;
     bool                   hasEncoded;
     OUString        mEncoded;
+    OUString        mEncodedIV;
 
     virtual void            ImplCommit() override;
 
@@ -201,8 +221,8 @@ public:
 
     sal_Int32 getStorageVersion();
 
-    bool getEncodedMP( OUString& aResult );
-    void setEncodedMP( const OUString& aResult, bool bAcceptEnmpty = false );
+    bool getEncodedMP( OUString& aResult, OUString& aResultIV );
+    void setEncodedMP( const OUString& aResult, const OUString& aResultIV, bool bAcceptEmpty = false );
     void setUseStorage( bool bUse );
     bool useStorage();
 
@@ -222,6 +242,29 @@ private:
     OUString m_aMasterPasswd; // master password is set when the string is not empty
     css::uno::Reference< css::lang::XComponent > mComponent;
     SysCredentialsConfig mUrlContainer;
+
+    class RandomPool
+    {
+    private:
+        rtlRandomPool m_aRandomPool;
+    public:
+        RandomPool() : m_aRandomPool(rtl_random_createPool())
+        {
+        }
+        rtlRandomPool get()
+        {
+            return m_aRandomPool;
+        }
+        ~RandomPool()
+        {
+            // Clean up random pool memory
+            rtl_random_destroyPool(m_aRandomPool);
+        }
+    };
+
+    RandomPool mRandomPool;
+
+    OUString createIV();
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(
@@ -273,10 +316,10 @@ css::task::UrlRecord find(
                               const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     /// @throws css::uno::RuntimeException
-    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword, css::task::PasswordRequestMode mode );
+    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aIV, const OUString& aMasterPassword, css::task::PasswordRequestMode mode );
 
     /// @throws css::uno::RuntimeException
-    static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword );
+    static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aIV, const OUString& aMasterPassword );
 
 public:
     PasswordContainer( const css::uno::Reference< css::lang::XMultiServiceFactory >& );
