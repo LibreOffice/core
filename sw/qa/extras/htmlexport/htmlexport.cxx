@@ -2252,7 +2252,7 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testClearingBreak)
     // Then make sure that the clear property of the break is not ignored:
     verify();
     reload(mpFilter, "clearing-break.html");
-    // Make sure that that the clear property of the break is not ignored during export:
+    // Make sure that the clear property of the break is not ignored during export:
     verify();
 }
 
