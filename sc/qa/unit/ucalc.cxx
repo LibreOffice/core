@@ -90,6 +90,7 @@ public:
     void testInput();
     void testColumnIterator();
     void testTdf90698();
+    void testTdf114406();
     void testTdf93951();
     void testTdf134490();
     void testTdf135249();
@@ -235,6 +236,7 @@ public:
     CPPUNIT_TEST(testInput);
     CPPUNIT_TEST(testColumnIterator);
     CPPUNIT_TEST(testTdf90698);
+    CPPUNIT_TEST(testTdf114406);
     CPPUNIT_TEST(testTdf93951);
     CPPUNIT_TEST(testTdf134490);
     CPPUNIT_TEST(testTdf135249);
@@ -671,6 +673,23 @@ void Test::testTdf90698()
     // - Actual  : =(1~2)
     OUString aFormula = m_pDoc->GetFormula(0,0,0);
     CPPUNIT_ASSERT_EQUAL(OUString("=(1;2)"), aFormula);
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testTdf114406()
+{
+    CPPUNIT_ASSERT(m_pDoc->InsertTab (0, "Test"));
+    m_pDoc->SetString(ScAddress(0,0,0), "5");
+    m_pDoc->SetString(ScAddress(1,0,0), "=A1/100%");
+
+    // Without the fix in place, this would have failed with
+    // - Expected: =A1/100%
+    // - Actual  : =A1/1
+    OUString aFormula = m_pDoc->GetFormula(1,0,0);
+    CPPUNIT_ASSERT_EQUAL(OUString("=A1/100%"), aFormula);
+
+    CPPUNIT_ASSERT_EQUAL(5.0, m_pDoc->GetValue(ScAddress(1,0,0)));
 
     m_pDoc->DeleteTab(0);
 }
