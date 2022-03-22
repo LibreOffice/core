@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73be9eef_800455e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-22T05:07:47Z",
+      "side": 1,
+      "message": "In this specific case, using a range-based for loop could avoid the problem after all.",
+      "revId": "1f0f8bcc8b79d4c79ca0d453ae115dcb2bd78236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
