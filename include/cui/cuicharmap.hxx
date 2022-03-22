@@ -87,7 +87,6 @@ private:
     std::deque<OUString> maRecentCharFontList;
     std::deque<OUString> maFavCharList;
     std::deque<OUString> maFavCharFontList;
-    uno::Reference<uno::XComponentContext> mxContext;
 
     SvxCharView m_aRecentCharView[16];
     SvxCharView m_aFavCharView[16];

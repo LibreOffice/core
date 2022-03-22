@@ -41,7 +41,6 @@ using namespace ::com::sun::star::uno;
 class ScPDFExportTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
     Reference<XComponent> mxComponent;
-    Reference<frame::XFrame> xTargetFrame;
 
 public:
     ScPDFExportTest() {}

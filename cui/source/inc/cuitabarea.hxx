@@ -642,8 +642,6 @@ private:
     Color               aPreviousColor;
     Color               aCurrentColor;
 
-    css::uno::Reference< css::uno::XComponentContext > m_context;
-
     PaletteManager maPaletteManager;
     SvxXRectPreview m_aCtlPreviewOld;
     SvxXRectPreview m_aCtlPreviewNew;

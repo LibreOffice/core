@@ -172,7 +172,7 @@ dbaccess/source/ui/inc/sqledit.hxx:41
     dbaui::SQLEditView m_aColorConfig const svtools::ColorConfig
 dbaccess/source/ui/inc/WCopyTable.hxx:258
     dbaui::OCopyTableWizard m_aLocale css::lang::Locale
-editeng/source/editeng/impedit.hxx:515
+editeng/source/editeng/impedit.hxx:516
     ImpEditEngine maColorConfig svtools::ColorConfig
 embeddedobj/source/inc/commonembobj.hxx:110
     OCommonEmbeddedObject m_aClassName rtl::OUString
@@ -254,13 +254,13 @@ include/connectivity/sdbcx/VTable.hxx:78
     connectivity::sdbcx::OTable m_xIndexes std::unique_ptr<OCollection>
 include/connectivity/sqlparse.hxx:104
     connectivity::OSQLParser_Data aErrors ::connectivity::SQLError
-include/filter/msfilter/svdfppt.hxx:719
+include/filter/msfilter/svdfppt.hxx:718
     PPTExtParaSheet aExtParaLevel struct PPTExtParaLevel[10]
-include/filter/msfilter/svdfppt.hxx:890
+include/filter/msfilter/svdfppt.hxx:889
     ImplPPTParaPropSet nDontKnow1 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:891
+include/filter/msfilter/svdfppt.hxx:890
     ImplPPTParaPropSet nDontKnow2 sal_uInt32
-include/filter/msfilter/svdfppt.hxx:892
+include/filter/msfilter/svdfppt.hxx:891
     ImplPPTParaPropSet nDontKnow2bit06 sal_uInt16
 include/oox/core/contexthandler2.hxx:231
     oox::core::ContextHandler2Helper mnRootStackSize size_t
@@ -278,6 +278,8 @@ include/registry/refltype.hxx:68
     RTUik m_Data4 sal_uInt32
 include/registry/refltype.hxx:69
     RTUik m_Data5 sal_uInt32
+include/sfx2/lokhelper.hxx:32
+    LokMouseEventData maLogicPosition std::optional<Point>
 include/sfx2/msg.hxx:95
     SfxTypeAttrib nAID sal_uInt16
 include/sfx2/msg.hxx:96
@@ -346,6 +348,10 @@ lingucomponent/source/languageguessing/simpleguesser.cxx:74
     (anonymous namespace)::textcat_t size uint4
 linguistic/source/dlistimp.hxx:56
     DicList aOpt class LinguOptions
+oox/inc/drawingml/table/tablecell.hxx:85
+    oox::drawingml::table::TableCell maLinePropertiesInsideH oox::drawingml::LineProperties
+oox/inc/drawingml/table/tablecell.hxx:86
+    oox::drawingml::table::TableCell maLinePropertiesInsideV oox::drawingml::LineProperties
 oox/qa/token/tokenmap-test.cxx:33
     oox::TokenmapTest tokenMap class oox::TokenMap
 oox/qa/unit/vba_compression.cxx:70
@@ -380,7 +386,7 @@ sal/rtl/uuid.cxx:66
     (anonymous namespace)::UUID clock_seq_low sal_uInt8
 sal/rtl/uuid.cxx:67
     (anonymous namespace)::UUID node sal_uInt8[6]
-sc/inc/attarray.hxx:68
+sc/inc/attarray.hxx:69
     ScMergePatternState pItemSet std::optional<SfxItemSet>
 sc/inc/compiler.hxx:132
     ScRawToken::(anonymous union)::(anonymous) eItem class ScTableRefToken::Item
@@ -492,11 +498,11 @@ sot/source/sdstor/ucbstorage.cxx:406
     UCBStorageStream_Impl m_aKey rtl::OString
 store/source/storbios.cxx:59
     (anonymous namespace)::OStoreSuperBlock m_aMarked (anonymous namespace)::OStoreSuperBlock::L
-svl/source/crypto/cryptosign.cxx:268
+svl/source/crypto/cryptosign.cxx:267
     (anonymous namespace)::PKIStatusInfo status SECItem
-svl/source/crypto/cryptosign.cxx:288
+svl/source/crypto/cryptosign.cxx:287
     (anonymous namespace)::TimeStampResp status struct (anonymous namespace)::PKIStatusInfo
-svl/source/crypto/cryptosign.cxx:289
+svl/source/crypto/cryptosign.cxx:288
     (anonymous namespace)::TimeStampResp timeStampToken SECItem
 svl/source/misc/strmadpt.cxx:51
     SvDataPipe_Impl::Page m_aBuffer sal_Int8[1]
@@ -534,10 +540,12 @@ svx/source/inc/datanavi.hxx:488
     svxform::AddSubmissionDialog m_aMethodString class svxform::MethodString
 svx/source/inc/datanavi.hxx:489
     svxform::AddSubmissionDialog m_aReplaceString class svxform::ReplaceString
-svx/source/inc/gridcell.hxx:515
+svx/source/inc/gridcell.hxx:514
     DbPatternField m_pValueFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
-svx/source/inc/gridcell.hxx:516
+svx/source/inc/gridcell.hxx:515
     DbPatternField m_pPaintFormatter ::std::unique_ptr< ::dbtools::FormattedColumnValue>
+svx/source/inc/StylesPreviewWindow.hxx:63
+    StyleItemController m_GlyphsCache class SalLayoutGlyphsCache
 svx/source/inc/svdpdf.hxx:61
     ImpSdrPdfImport maDash class XDash
 sw/inc/acmplwrd.hxx:42
@@ -570,13 +578,13 @@ sw/source/core/doc/swstylemanager.cxx:61
     (anonymous namespace)::SwStyleManager m_aAutoParaPool class StylePool
 sw/source/core/inc/swblocks.hxx:69
     SwImpBlocks m_bInPutMuchBlocks _Bool
-sw/source/core/text/atrhndl.hxx:48
+sw/source/core/text/atrhndl.hxx:47
     SwAttrHandler m_oFnt std::optional<SwFont>
 sw/source/core/text/inftxt.cxx:533
     (anonymous namespace)::SwTransparentTextGuard m_aContentVDev ScopedVclPtrInstance<class VirtualDevice>
 sw/source/core/text/redlnitr.hxx:75
     SwRedlineItr m_pSet std::unique_ptr<SfxItemSet>
-sw/source/filter/html/htmltab.cxx:2842
+sw/source/filter/html/htmltab.cxx:2839
     CellSaveStruct m_xCnts std::shared_ptr<HTMLTableCnts>
 sw/source/filter/inc/rtf.hxx:33
     RTFSurround::(anonymous) nVal sal_uInt8
@@ -758,7 +766,7 @@ vcl/source/filter/eps/eps.cxx:115
     (anonymous namespace)::PSWriter pVDev ScopedVclPtrInstance<class VirtualDevice>
 vcl/source/filter/idxf/dxf2mtf.hxx:54
     DXF2GDIMetaFile aDefaultLineInfo const class LineInfo
-vcl/source/filter/idxf/dxfreprd.hxx:76
+vcl/source/filter/idxf/dxfreprd.hxx:75
     DXFRepresentation aPalette class DXFPalette
 vcl/source/filter/iras/iras.cxx:56
     (anonymous namespace)::RASReader mnRepCount sal_uInt8
