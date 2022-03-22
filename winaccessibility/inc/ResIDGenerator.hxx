@@ -19,20 +19,22 @@
 
 #pragma once
 
-#define PRIMARY_RESID 0x00000001
 #include <deque>
 
 //ResID i.e. MSAA child ID,
 //this class is responsible for generating a child ID
+//
+// In IAccessible2, negative child IDs are commonly used to
+// indicate unique resource IDs.
 class ResIDGenerator
 {
 private:
-    long max;
+    long m_nMin;
     std::deque<long> subList;
 
 public:
-    ResIDGenerator(long maxNum = PRIMARY_RESID)
-        : max(maxNum)
+    ResIDGenerator()
+        : m_nMin(-1)
     {
     }
     ~ResIDGenerator();
