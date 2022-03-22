@@ -16,6 +16,23 @@
       "message": "Hi Mike,\nI just want to check LibreOffice doesn\u0027t crash, so I use errorHandler to handle the error. Not sure whether this is the best way though",
       "revId": "0472ee597dfb4639fe91ce3226777b532fe5618e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40a10073_58477d20",
+        "filename": "basic/qa/basic_coverage/test_createunovalue_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-22T15:43:40Z",
+      "side": 1,
+      "message": "No need in the error handler. The crash would fail the unit test as a whole, and the handler would not trigger anyway. Please just drop both On Error and the handler itself.",
+      "revId": "0472ee597dfb4639fe91ce3226777b532fe5618e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
