@@ -29,21 +29,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        const char* aDenylist[] = {
-            "math-escape.docx",
-            "math-mso2k7.docx",
-        };
-        std::vector<const char*> vDenylist(aDenylist, aDenylist + SAL_N_ELEMENTS(aDenylist));
-
-        // If the testcase is stored in some other format, it's pointless to test.
-        return (OString(filename).endsWith(".docx") && std::find(vDenylist.begin(), vDenylist.end(), filename) == vDenylist.end());
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testFDO76248)
@@ -369,8 +354,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFDO77725)
     assertXPath(pXmlFootnotes, "//w:footnotes[1]/w:footnote[3]/w:p[3]/w:r[1]/w:br[3]", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFieldRotation, "field-rotated.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testFieldRotation)
 {
+    loadAndReload("field-rotated.fodt");
     uno::Reference<text::XTextRange> const xRun(getRun(uno::Reference<text::XTextRange>(getParagraphOrTable(1), uno::UNO_QUERY), 1));
     uno::Reference<text::XTextField> const xField(getProperty<uno::Reference<text::XTextField>>(xRun, "TextField"));
     CPPUNIT_ASSERT(xField.is());
@@ -1160,8 +1146,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf89774)
     assertXPathContent(pXmlDoc, "/extended-properties:Properties/extended-properties:TotalTime", "1");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSectionProtection, "sectionprot.odt")
+CPPUNIT_TEST_FIXTURE(Test, testSectionProtection)
 {
+    loadAndReload("sectionprot.odt");
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
     {
         assertXPath(pXmlDoc, "/w:document/w:body/w:p/w:pPr/w:sectPr/w:formProt", "val", "true");
@@ -1255,8 +1242,9 @@ CPPUNIT_TEST_FIXTURE(Test, tdf89991_revisionView)
     assertXPath(pXmlSettings, "/w:settings/w:compat/w:compatSetting[1]", "val", "12");
 }
 
-DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotectedText.odt")
+CPPUNIT_TEST_FIXTURE(Test, tdf122201_editUnprotectedText)
 {
+    loadAndReload("tdf122201_editUnprotectedText.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // get the document
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
@@ -1278,8 +1266,9 @@ DECLARE_OOXMLEXPORT_TEST(tdf122201_editUnprotectedText, "tdf122201_editUnprotect
     CPPUNIT_ASSERT(!aPaMUnprotected.HasReadonlySel(false));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
+CPPUNIT_TEST_FIXTURE(Test, testSectionHeader)
 {
+    loadAndReload("sectionprot.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
     {
@@ -1288,8 +1277,9 @@ DECLARE_OOXMLEXPORT_TEST(testSectionHeader, "sectionprot.odt")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf146491, "tdf146491.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf146491)
 {
+    loadAndReload("tdf146491.odt");
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
     {
         // This was 12 - a page style was unnecessarily created for every section.
@@ -1297,16 +1287,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146491, "tdf146491.odt")
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOO47778_1, "ooo47778-3.odt")
+CPPUNIT_TEST_FIXTURE(Test, testOO47778_1)
 {
+    loadAndReload("ooo47778-3.odt");
     CPPUNIT_ASSERT_EQUAL(5, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[3]", "c");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOO47778_2, "ooo47778-4.odt")
+CPPUNIT_TEST_FIXTURE(Test, testOO47778_2)
 {
+    loadAndReload("ooo47778-4.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
@@ -1320,31 +1312,35 @@ DECLARE_OOXMLEXPORT_TEST(testOO47778_2, "ooo47778-4.odt")
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xCell, "BackColor"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOO67471, "ooo67471-2.odt")
+CPPUNIT_TEST_FIXTURE(Test, testOO67471)
 {
+    loadAndReload("ooo67471-2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPathContent(pXmlDoc, "(//w:t)[2]", "B");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testKDE302504, "kde302504-1.odt")
+CPPUNIT_TEST_FIXTURE(Test, testKDE302504)
 {
+    loadAndReload("kde302504-1.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//v:shape", "ID", "KoPathShape");
 }
 
-DECLARE_OOXMLEXPORT_TEST(testKDE216114, "kde216114-1.odt")
+CPPUNIT_TEST_FIXTURE(Test, testKDE216114)
 {
+    loadAndReload("kde216114-1.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//w:pict", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testOO72950, "ooo72950-1.odt")
+CPPUNIT_TEST_FIXTURE(Test, testOO72950)
 {
+    loadAndReload("ooo72950-1.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml"))
         assertXPath(pXmlDoc, "//w:tbl", 1);
