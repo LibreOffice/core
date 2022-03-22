@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61530b7e_b9e0e87a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-22T10:00:05Z",
+      "side": 1,
+      "message": "This is just for custom doc properties, there this probably makes sense.",
+      "revId": "1dee7d30cd7d68d71b73c93a572c7599dc51773b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
