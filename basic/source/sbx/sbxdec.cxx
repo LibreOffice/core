@@ -17,7 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+#ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/oleauto.hxx>
+#endif
 
 #include <basic/sberrors.hxx>
 #include "sbxconv.hxx"
@@ -338,7 +342,7 @@ void SbxDecimal::getString( OUString& rString )
 #ifdef _WIN32
     static LCID nLANGID = MAKELANGID( LANG_ENGLISH, SUBLANG_ENGLISH_US );
 
-    BSTR pBStr = nullptr;
+    sal::systools::BStr pBStr;
     // VarBstrFromDec allocates new BSTR that needs to be released with SysFreeString
     HRESULT hResult = VarBstrFromDec( &maDec, nLANGID, 0, &pBStr );
     if( hResult == S_OK )
@@ -362,8 +366,7 @@ void SbxDecimal::getString( OUString& rString )
                 i++;
             }
         }
-        rString = o3tl::toU( pBStr );
-        SysFreeString( pBStr );
+        rString = pBStr;
     }
 #else
     (void)rString;

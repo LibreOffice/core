@@ -29,6 +29,9 @@
 #include <ado/AIndex.hxx>
 #include <ado/AKey.hxx>
 #include <ado/ATable.hxx>
+
+#include <systools/win32/oleauto.hxx>
+
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/ProcedureResult.hpp>
 #include <com/sun/star/sdbc/ColumnValue.hpp>
@@ -505,10 +508,10 @@ OUString WpADOCatalog::GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum
 {
     OLEVariant _rVar;
     _rVar.setNoArg();
-    OLEString aBSTR;
-    OLEString sStr1(_rName);
-    pInterface->GetObjectOwner(sStr1.asBSTR(),_eNum,_rVar,aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    sal::systools::BStr sStr1(_rName);
+    pInterface->GetObjectOwner(sStr1, _eNum, _rVar, &aBSTR);
+    return OUString(aBSTR);
 }
 
 void OAdoTable::fillPropertyValues()

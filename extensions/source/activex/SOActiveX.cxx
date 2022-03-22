@@ -359,7 +359,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPER
         // all information from the 'object' tag is in strings
         if (aVal[ind].vt == VT_BSTR && !wcscmp(aPropNames[ind].pstrName, L"src"))
         {
-            mCurFileUrl = wcsdup( aVal[ind].bstrVal );
+            mCurFileUrl.AssignBSTR(aVal[ind].bstrVal);
         }
         else if( aVal[ind].vt == VT_BSTR
                 && !wcscmp(aPropNames[ind].pstrName, L"readonly"))
@@ -384,16 +384,10 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPER
         return hr;
 
     mbReadyForActivation = FALSE;
-    if (BSTR bStrUrl = SysAllocString(mCurFileUrl))
-    {
-        hr = CBindStatusCallback<CSOActiveX>::Download(
-            this, &CSOActiveX::CallbackCreateXInputStream, bStrUrl, m_spClientSite, FALSE);
-        SysFreeString(bStrUrl);
-        if (hr == MK_S_ASYNCHRONOUS)
-            hr = S_OK;
-    }
-    else
-        hr = E_OUTOFMEMORY;
+    hr = CBindStatusCallback<CSOActiveX>::Download(
+        this, &CSOActiveX::CallbackCreateXInputStream, mCurFileUrl, m_spClientSite, FALSE);
+    if (hr == MK_S_ASYNCHRONOUS)
+        hr = S_OK;
 
     if ( !SUCCEEDED( hr ) )
     {

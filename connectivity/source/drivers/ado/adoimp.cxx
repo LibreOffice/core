@@ -23,6 +23,7 @@
 #include <ado/Awrapado.hxx>
 #include <ado/adoimp.hxx>
 #include <osl/diagnose.h>
+#include <systools/win32/oleauto.hxx>
 #include <com/sun/star/sdbc/DataType.hpp>
 
 
@@ -67,9 +68,9 @@ const IID ADOS::IID_ADOUSER_25              =   MYADOID(0x00000619);
 const CLSID ADOS::CLSID_ADOVIEW_25          =   MYADOID(0x00000612);
 const IID ADOS::IID_ADOVIEW_25              =   MYADOID(0x00000613);
 
-OLEString& ADOS::GetKeyStr()
+sal::systools::BStr& ADOS::GetKeyStr()
 {
-    static OLEString sKeyStr(u"gxwaezucfyqpwjgqbcmtsncuhwsnyhiohwxz");
+    static sal::systools::BStr sKeyStr(u"gxwaezucfyqpwjgqbcmtsncuhwsnyhiohwxz");
     return sKeyStr;
 }
 

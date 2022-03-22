@@ -35,6 +35,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
+#include <systools/win32/oleauto.hxx>
 #include <strings.hrc>
 
 using namespace dbtools;
@@ -64,7 +65,7 @@ OConnection::OConnection(ODriver*   _pDriver)
         HRESULT hr = pIUnknown->CreateInstanceLic(nullptr,
                                             nullptr,
                                             ADOS::IID_ADOCONNECTION_21,
-                                            ADOS::GetKeyStr().asBSTR(),
+                                            ADOS::GetKeyStr(),
                                             reinterpret_cast<void**>(&m_aAdoConnection));
 
         if( !FAILED( hr ) )

@@ -33,27 +33,6 @@ namespace com::sun::star::util
 
 namespace connectivity::ado
 {
-        class OLEString
-        {
-            BSTR m_sStr;
-        public:
-            OLEString();
-            OLEString(const BSTR& _sBStr);
-            OLEString(std::u16string_view _sBStr);
-            OLEString(const OLEString& _rRh)
-            {
-                OLEString::operator=(_rRh);
-            }
-            ~OLEString();
-            OLEString& operator=(std::u16string_view _rSrc);
-            OLEString& operator=(const BSTR& _rSrc);
-            OLEString& operator=(const OLEString& _rSrc);
-            OUString asOUString() const;
-            BSTR asBSTR() const;
-            BSTR* getAddress();
-            sal_Int32 length() const;
-        };
-
         class OLEVariant    :   public ::tagVARIANT
         {
         public:

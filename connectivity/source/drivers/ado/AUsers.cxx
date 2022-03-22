@@ -27,6 +27,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
+#include <systools/win32/oleauto.hxx>
 #include <strings.hrc>
 
 using namespace comphelper;
@@ -61,7 +62,7 @@ sdbcx::ObjectType OUsers::appendObject( const OUString& _rForName, const Referen
         m_pCatalog->getConnection()->throwGenericSQLException( STR_INVALID_USER_DESCRIPTOR_ERROR,static_cast<XTypeProvider*>(this) );
 
     ADOUsers* pUsers = m_aCollection;
-    pUsers->Append(OLEVariant(pUser->getImpl()),OLEString(pUser->getPassword()).asBSTR());
+    pUsers->Append(OLEVariant(pUser->getImpl()), sal::systools::BStr(pUser->getPassword()));
 
     return createObject( _rForName );
 }

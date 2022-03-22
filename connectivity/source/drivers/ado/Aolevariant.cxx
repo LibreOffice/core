@@ -37,64 +37,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::bridge::oleautomation;
 using namespace connectivity::ado;
 
-OLEString::OLEString()
-    :m_sStr(nullptr)
-{
-}
-OLEString::OLEString(const BSTR& _sBStr)
-    :m_sStr(_sBStr)
-{
-}
-OLEString::OLEString(std::u16string_view _sBStr)
-{
-    m_sStr = SysAllocStringLen(o3tl::toW(_sBStr.data()), _sBStr.length());
-}
-OLEString::~OLEString()
-{
-    if(m_sStr)
-        ::SysFreeString(m_sStr);
-}
-OLEString& OLEString::operator=(std::u16string_view _rSrc)
-{
-    if(m_sStr)
-        ::SysFreeString(m_sStr);
-    m_sStr = SysAllocStringLen(o3tl::toW(_rSrc.data()), _rSrc.length());
-    return *this;
-}
-OLEString& OLEString::operator=(const OLEString& _rSrc)
-{
-    if(this != &_rSrc)
-    {
-        if(m_sStr)
-            ::SysFreeString(m_sStr);
-        m_sStr = ::SysAllocString(_rSrc.m_sStr);
-    }
-    return *this;
-}
-OLEString& OLEString::operator=(const BSTR& _rSrc)
-{
-    if(m_sStr)
-        ::SysFreeString(m_sStr);
-    m_sStr = _rSrc;
-    return *this;
-}
-OUString OLEString::asOUString() const
-{
-    return (m_sStr != nullptr) ? OUString(o3tl::toU(m_sStr),::SysStringLen(m_sStr)) : OUString();
-}
-BSTR OLEString::asBSTR() const
-{
-    return m_sStr;
-}
-BSTR* OLEString::getAddress()
-{
-    return &m_sStr;
-}
-sal_Int32 OLEString::length() const
-{
-    return (m_sStr != nullptr) ? ::SysStringLen(m_sStr) : 0;
-}
-
 OLEVariant::OLEVariant()
 {
     VariantInit(this);
@@ -427,8 +369,8 @@ css::uno::Sequence< sal_Int8 > OLEVariant::getByteSequence() const
     css::uno::Sequence< sal_Int8 > aRet;
     if(V_VT(this) == VT_BSTR)
     {
-        OLEString sStr(V_BSTR(this));
-        aRet = css::uno::Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(sStr.asBSTR()),sizeof(sal_Unicode)*sStr.length());
+        aRet = css::uno::Sequence<sal_Int8>(reinterpret_cast<sal_Int8*>(V_BSTR(this)),
+                                            ::SysStringByteLen(V_BSTR(this)));
     }
     else if(!isNull())
     {

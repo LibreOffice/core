@@ -23,6 +23,7 @@
 #include <comphelper/types.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <systools/win32/oleauto.hxx>
 
 using namespace connectivity::ado;
 
@@ -42,16 +43,16 @@ WpADOProperties WpADOConnection::get_Properties() const
 OUString WpADOConnection::GetConnectionString() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_ConnectionString(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_ConnectionString(&aBSTR);
+    return OUString(aBSTR);
 }
 
 bool WpADOConnection::PutConnectionString(std::u16string_view aCon) const
 {
     assert(pInterface);
-    OLEString bstr(aCon);
-    bool bErg = SUCCEEDED(pInterface->put_ConnectionString(bstr.asBSTR()));
+    sal::systools::BStr bstr(aCon);
+    bool bErg = SUCCEEDED(pInterface->put_ConnectionString(bstr));
 
     return bErg;
 }
@@ -93,8 +94,8 @@ bool WpADOConnection::Close()
 bool WpADOConnection::Execute(std::u16string_view CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset)
 {
     assert(pInterface);
-    OLEString sStr1(CommandText);
-    bool bErg = SUCCEEDED(pInterface->Execute(sStr1.asBSTR(),&RecordsAffected,Options,reinterpret_cast<ADORecordset**>(ppiRset)));
+    sal::systools::BStr sStr1(CommandText);
+    bool bErg = SUCCEEDED(pInterface->Execute(sStr1,&RecordsAffected,Options,reinterpret_cast<ADORecordset**>(ppiRset)));
     return bErg;
 }
 
@@ -120,10 +121,10 @@ bool WpADOConnection::RollbackTrans( )
 bool WpADOConnection::Open(std::u16string_view ConnectionString, std::u16string_view UserID,std::u16string_view Password,long Options)
 {
     assert(pInterface);
-    OLEString sStr1(ConnectionString);
-    OLEString sStr2(UserID);
-    OLEString sStr3(Password);
-    bool bErg = SUCCEEDED(pInterface->Open(sStr1.asBSTR(),sStr2.asBSTR(),sStr3.asBSTR(),Options));
+    sal::systools::BStr sStr1(ConnectionString);
+    sal::systools::BStr sStr2(UserID);
+    sal::systools::BStr sStr3(Password);
+    bool bErg = SUCCEEDED(pInterface->Open(sStr1, sStr2, sStr3, Options));
     return bErg;
 }
 
@@ -136,15 +137,15 @@ bool WpADOConnection::GetErrors(ADOErrors** pErrors)
 OUString WpADOConnection::GetDefaultDatabase() const
 {
     assert(pInterface);
-    OLEString aBSTR; pInterface->get_DefaultDatabase(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR; pInterface->get_DefaultDatabase(&aBSTR);
+    return OUString(aBSTR);
 }
 
 bool WpADOConnection::PutDefaultDatabase(std::u16string_view _bstr)
 {
     assert(pInterface);
-    OLEString bstr(_bstr);
-    bool bErg = SUCCEEDED(pInterface->put_DefaultDatabase(bstr.asBSTR()));
+    sal::systools::BStr bstr(_bstr);
+    bool bErg = SUCCEEDED(pInterface->put_DefaultDatabase(bstr));
 
     return bErg;
 }
@@ -208,15 +209,15 @@ bool WpADOConnection::put_Mode(const ConnectModeEnum &eNum)
 OUString WpADOConnection::get_Provider() const
 {
     assert(pInterface);
-    OLEString aBSTR; pInterface->get_Provider(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR; pInterface->get_Provider(&aBSTR);
+    return OUString(aBSTR);
 }
 
 bool WpADOConnection::put_Provider(std::u16string_view _bstr)
 {
     assert(pInterface);
-    OLEString bstr(_bstr);
-    return SUCCEEDED(pInterface->put_Provider(bstr.asBSTR()));
+    sal::systools::BStr bstr(_bstr);
+    return SUCCEEDED(pInterface->put_Provider(bstr));
 }
 
 sal_Int32 WpADOConnection::get_State() const
@@ -236,9 +237,9 @@ bool WpADOConnection::OpenSchema(SchemaEnum eNum,OLEVariant const & Restrictions
 OUString WpADOConnection::get_Version() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Version(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Version(&aBSTR);
+    return OUString(aBSTR);
 }
 
 bool WpADOCommand::putref_ActiveConnection(const WpADOConnection& rCon)
@@ -263,7 +264,7 @@ void WpADOCommand::Create()
         HRESULT hr = pInterface2->CreateInstanceLic(nullptr,
                                             nullptr,
                                             ADOS::IID_ADOCOMMAND_21,
-                                            ADOS::GetKeyStr().asBSTR(),
+                                            ADOS::GetKeyStr(),
                                             reinterpret_cast<void**>(&pCommand));
 
         if( !FAILED( hr ) )
@@ -282,16 +283,16 @@ sal_Int32 WpADOCommand::get_State() const
 OUString WpADOCommand::get_CommandText() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_CommandText(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_CommandText(&aBSTR);
+    return OUString(aBSTR);
 }
 
 bool WpADOCommand::put_CommandText(std::u16string_view aCon)
 {
     assert(pInterface);
-    OLEString bstr(aCon);
-    bool bErg = SUCCEEDED(pInterface->put_CommandText(bstr.asBSTR()));
+    sal::systools::BStr bstr(aCon);
+    bool bErg = SUCCEEDED(pInterface->put_CommandText(bstr));
 
     return bErg;
 }
@@ -334,8 +335,8 @@ ADOParameter* WpADOCommand::CreateParameter(std::u16string_view _bstr,DataTypeEn
 {
     assert(pInterface);
     ADOParameter* pPara = nullptr;
-    OLEString bstr(_bstr);
-    bool bErg = SUCCEEDED(pInterface->CreateParameter(bstr.asBSTR(),Type,Direction,nSize,Value,&pPara));
+    sal::systools::BStr bstr(_bstr);
+    bool bErg = SUCCEEDED(pInterface->CreateParameter(bstr, Type, Direction, nSize, Value, &pPara));
 
     return bErg ? pPara : nullptr;
 }
@@ -366,16 +367,16 @@ CommandTypeEnum WpADOCommand::get_CommandType() const
 OUString WpADOCommand::GetName() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 bool WpADOCommand::put_Name(std::u16string_view Name)
 {
     assert(pInterface);
-    OLEString bstr(Name);
-    bool bErg = SUCCEEDED(pInterface->put_Name(bstr.asBSTR()));
+    sal::systools::BStr bstr(Name);
+    bool bErg = SUCCEEDED(pInterface->put_Name(bstr));
 
     return bErg;
 }
@@ -388,17 +389,17 @@ bool WpADOCommand::Cancel()
 OUString WpADOError::GetDescription() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Description(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Description(&aBSTR);
+    return OUString(aBSTR);
 }
 
 OUString WpADOError::GetSource() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Source(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Source(&aBSTR);
+    return OUString(aBSTR);
 }
 
 sal_Int32 WpADOError::GetNumber() const
@@ -412,9 +413,9 @@ sal_Int32 WpADOError::GetNumber() const
 OUString WpADOError::GetSQLState() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_SQLState(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_SQLState(&aBSTR);
+    return OUString(aBSTR);
 }
 
 sal_Int32 WpADOError::GetNativeError() const
@@ -468,9 +469,9 @@ sal_Int32 WpADOField::GetDefinedSize() const
 OUString WpADOField::GetName() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 DataTypeEnum WpADOField::GetADOType() const
@@ -620,9 +621,9 @@ bool WpADOProperty::PutValue(const OLEVariant &aValVar)
 OUString WpADOProperty::GetName() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 DataTypeEnum WpADOProperty::GetADOType() const
@@ -655,7 +656,7 @@ bool WpADOProperty::PutAttributes(sal_Int32 _nDefSize)
         HRESULT hr = pInterface2->CreateInstanceLic(nullptr,
                                             nullptr,
                                             ADOS::IID_ADORECORDSET_21,
-                                            ADOS::GetKeyStr().asBSTR(),
+                                            ADOS::GetKeyStr(),
                                             reinterpret_cast<void**>(&pRec));
 
         if( !FAILED( hr ) )
@@ -892,9 +893,9 @@ bool WpADORecordset::UpdateBatch(AffectEnum AffectRecords)
 OUString WpADOParameter::GetName() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 DataTypeEnum WpADOParameter::GetADOType() const
@@ -976,30 +977,30 @@ bool WpADOParameter::put_Size(sal_Int32 _nSize)
 OUString WpADOColumn::get_Name() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 OUString WpADOColumn::get_RelatedColumn() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_RelatedColumn(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_RelatedColumn(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOColumn::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
-    OLEString bstr(_rName);
-    pInterface->put_Name(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_Name(bstr);
 }
 void WpADOColumn::put_RelatedColumn(std::u16string_view _rName)
 {
     assert(pInterface);
-    OLEString bstr(_rName);
-    pInterface->put_RelatedColumn(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_RelatedColumn(bstr);
 }
 
 DataTypeEnum WpADOColumn::get_Type() const
@@ -1090,16 +1091,16 @@ WpADOProperties WpADOColumn::get_Properties() const
 OUString WpADOKey::get_Name() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOKey::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
-    OLEString bstr(_rName);
-    pInterface->put_Name(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_Name(bstr);
 }
 
 KeyTypeEnum WpADOKey::get_Type() const
@@ -1119,16 +1120,16 @@ void WpADOKey::put_Type(const KeyTypeEnum& _eNum)
 OUString WpADOKey::get_RelatedTable() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_RelatedTable(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_RelatedTable(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOKey::put_RelatedTable(std::u16string_view _rName)
 {
     assert(pInterface);
-    OLEString bstr(_rName);
-    pInterface->put_RelatedTable(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_RelatedTable(bstr);
 }
 
 RuleEnum WpADOKey::get_DeleteRule() const
@@ -1170,16 +1171,16 @@ WpADOColumns WpADOKey::get_Columns() const
 OUString WpADOIndex::get_Name() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOIndex::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
-    OLEString bstr(_rName);
-    pInterface->put_Name(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_Name(bstr);
 }
 
 bool WpADOIndex::get_Clustered() const
@@ -1281,24 +1282,24 @@ ADOProcedures* WpADOCatalog::get_Procedures()
 OUString WpADOTable::get_Name() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOTable::put_Name(std::u16string_view _rName)
 {
     assert(pInterface);
-    OLEString bstr(_rName);
-    pInterface->put_Name(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_Name(bstr);
 }
 
 OUString WpADOTable::get_Type() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Type(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Type(&aBSTR);
+    return OUString(aBSTR);
 }
 
 WpADOColumns WpADOTable::get_Columns() const
@@ -1344,9 +1345,9 @@ WpADOProperties WpADOTable::get_Properties() const
 OUString WpADOView::get_Name() const
 {
     assert(pInterface);
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOView::get_Command(OLEVariant& _rVar) const
@@ -1363,15 +1364,15 @@ void WpADOView::put_Command(OLEVariant const & _rVar)
 
 OUString WpADOGroup::get_Name() const
 {
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOGroup::put_Name(std::u16string_view _rName)
 {
-    OLEString bstr(_rName);
-    pInterface->put_Name(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_Name(bstr);
 }
 
 RightsEnum WpADOGroup::GetPermissions(
@@ -1405,22 +1406,22 @@ WpADOUsers WpADOGroup::get_Users( )
 
 OUString WpADOUser::get_Name() const
 {
-    OLEString aBSTR;
-    pInterface->get_Name(aBSTR.getAddress());
-    return aBSTR.asOUString();
+    sal::systools::BStr aBSTR;
+    pInterface->get_Name(&aBSTR);
+    return OUString(aBSTR);
 }
 
 void WpADOUser::put_Name(std::u16string_view _rName)
 {
-    OLEString bstr(_rName);
-    pInterface->put_Name(bstr.asBSTR());
+    sal::systools::BStr bstr(_rName);
+    pInterface->put_Name(bstr);
 }
 
 bool WpADOUser::ChangePassword(std::u16string_view _rPwd,std::u16string_view _rNewPwd)
 {
-    OLEString sStr1(_rPwd);
-    OLEString sStr2(_rNewPwd);
-    bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1.asBSTR(),sStr2.asBSTR()));
+    sal::systools::BStr sStr1(_rPwd);
+    sal::systools::BStr sStr2(_rNewPwd);
+    bool bErg = SUCCEEDED(pInterface->ChangePassword(sStr1, sStr2));
     return bErg;
 }
 
