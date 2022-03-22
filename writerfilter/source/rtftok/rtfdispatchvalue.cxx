@@ -485,84 +485,64 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
         case RTFKeyword::CLSHDNG:
         {
             int nValue = -1;
-            switch (nParam)
-            {
-                case 500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct5;
-                    break;
-                case 1000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct10;
-                    break;
-                case 1200:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct12;
-                    break;
-                case 1500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct15;
-                    break;
-                case 2000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct20;
-                    break;
-                case 2500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct25;
-                    break;
-                case 3000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct30;
-                    break;
-                case 3500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct35;
-                    break;
-                case 3700:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct37;
-                    break;
-                case 4000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct40;
-                    break;
-                case 4500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct45;
-                    break;
-                case 5000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct50;
-                    break;
-                case 5500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct55;
-                    break;
-                case 6000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct60;
-                    break;
-                case 6200:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct62;
-                    break;
-                case 6500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct65;
-                    break;
-                case 7000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct70;
-                    break;
-                case 7500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct75;
-                    break;
-                case 8000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct80;
-                    break;
-                case 8500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct85;
-                    break;
-                case 8700:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct87;
-                    break;
-                case 9000:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct90;
-                    break;
-                case 9500:
-                    nValue = NS_ooxml::LN_Value_ST_Shd_pct95;
-                    break;
-                default:
-                    break;
-            }
-            if (nValue != -1)
-                putNestedAttribute(m_aStates.top().getTableCellSprms(),
-                                   NS_ooxml::LN_CT_TcPrBase_shd, NS_ooxml::LN_CT_Shd_val,
-                                   new RTFValue(nValue));
+
+            if (nParam < 1)
+                nValue = NS_ooxml::LN_Value_ST_Shd_clear;
+            else if (nParam < 750)
+                // Values in between 1 and 250 visually closer to 0% shading (white)
+                // But this will mean "no shading" while cell actually have some.
+                // So lets use minimal available value.
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct5;
+            else if (nParam < 1100)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct10;
+            else if (nParam < 1350)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct12;
+            else if (nParam < 1750)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct15;
+            else if (nParam < 2250)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct20;
+            else if (nParam < 2750)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct25;
+            else if (nParam < 3250)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct30;
+            else if (nParam < 3600)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct35;
+            else if (nParam < 3850)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct37;
+            else if (nParam < 4250)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct40;
+            else if (nParam < 4750)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct45;
+            else if (nParam < 5250)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct50;
+            else if (nParam < 5750)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct55;
+            else if (nParam < 6100)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct60;
+            else if (nParam < 6350)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct62;
+            else if (nParam < 6750)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct65;
+            else if (nParam < 7250)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct70;
+            else if (nParam < 7750)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct75;
+            else if (nParam < 8250)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct80;
+            else if (nParam < 8600)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct85;
+            else if (nParam < 8850)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct87;
+            else if (nParam < 9250)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct90;
+            else if (nParam < 9750)
+                nValue = NS_ooxml::LN_Value_ST_Shd_pct95;
+            else
+                // Solid fill
+                nValue = NS_ooxml::LN_Value_ST_Shd_solid;
+
+            putNestedAttribute(m_aStates.top().getTableCellSprms(), NS_ooxml::LN_CT_TcPrBase_shd,
+                               NS_ooxml::LN_CT_Shd_val, new RTFValue(nValue));
             return true;
         }
         break;
