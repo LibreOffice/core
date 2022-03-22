@@ -63,8 +63,13 @@
   <menu:menuitem menu:id=".uno:ShowNote"/>
   <menu:menuitem menu:id=".uno:HideNote"/>
   <menu:menuseparator/>
-  <menu:menuitem menu:id=".uno:InsertSparkline"/>
-  <menu:menuitem menu:id=".uno:DeleteSparkline"/>
+  <menu:menu menu:id=".uno:FormatSparklineMenu">
+    <menu:menupopup>
+      <menu:menuitem menu:id=".uno:InsertSparkline"/>
+      <menu:menuitem menu:id=".uno:DeleteSparkline"/>
+      <menu:menuitem menu:id=".uno:EditSparklineGroup"/>
+    </menu:menupopup>
+  </menu:menu>
   <menu:menuseparator/>
   <menu:menuitem menu:id=".uno:CurrentConditionalFormatDialog"/>
   <menu:menuitem menu:id=".uno:CurrentConditionalFormatManagerDialog"/>
