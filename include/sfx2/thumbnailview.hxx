@@ -238,8 +238,6 @@ public:
 
     static BitmapEx readThumbnail(const OUString &msURL);
 
-    tools::Long ItemHeight() const { return mnItemHeight; };
-
 protected:
 
     virtual bool KeyInput( const KeyEvent& rKEvt ) override;

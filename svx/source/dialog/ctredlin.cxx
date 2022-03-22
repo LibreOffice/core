@@ -82,14 +82,6 @@ SvxRedlinTable::SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
     }
 }
 
-void SvxRedlinTable::set_size_request(int nWidth, int nHeight)
-{
-    if (xWriterTreeView)
-        xWriterTreeView->set_size_request(nWidth, nHeight);
-    if (xCalcTreeView)
-        xCalcTreeView->set_size_request(nWidth, nHeight);
-}
-
 SvxRedlinTable::~SvxRedlinTable()
 {
 }

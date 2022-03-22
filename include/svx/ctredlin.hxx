@@ -102,8 +102,6 @@ public:
     SvxRedlinTable(std::unique_ptr<weld::TreeView> xWriterControl,
                    std::unique_ptr<weld::TreeView> xCalcControl);
 
-    void set_size_request(int nWidth, int nHeight);
-
     weld::TreeView& GetWidget() { return *pTreeView; }
     bool IsSorted() const { return bSorted; }
 
