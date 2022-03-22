@@ -385,7 +385,7 @@ RightsEnum OAdoGroup::Map2Right(sal_Int32 _eNum)
 
 void WpADOIndex::Create()
 {
-    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOINDEX_25, nullptr, CLSCTX_INPROC_SERVER);
+    pInterface.CoCreateInstance(ADOS::CLSID_ADOINDEX_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 void OAdoIndex::fillPropertyValues()
@@ -401,7 +401,7 @@ void OAdoIndex::fillPropertyValues()
 
 void WpADOKey::Create()
 {
-    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOKEY_25, nullptr, CLSCTX_INPROC_SERVER);
+    pInterface.CoCreateInstance(ADOS::CLSID_ADOKEY_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 void OAdoKey::fillPropertyValues()
@@ -498,7 +498,7 @@ KeyTypeEnum OAdoKey::Map2KeyRule(sal_Int32 _eNum)
 
 void WpADOTable::Create()
 {
-    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOTABLE_25, nullptr, CLSCTX_INPROC_SERVER);
+    pInterface.CoCreateInstance(ADOS::CLSID_ADOTABLE_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 OUString WpADOCatalog::GetObjectOwner(std::u16string_view _rName, ObjectTypeEnum _eNum)
@@ -533,7 +533,7 @@ void OAdoTable::fillPropertyValues()
 
 void WpADOUser::Create()
 {
-    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOUSER_25, nullptr, CLSCTX_INPROC_SERVER);
+    pInterface.CoCreateInstance(ADOS::CLSID_ADOUSER_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 

@@ -90,8 +90,8 @@ public:
         {
             sal::systools::CoInitializeGuard aCoInitializeGuard(COINIT_APARTMENTTHREADED);
 
-            auto pADsys = sal::systools::COMReference<IADsADSystemInfo>().CoCreateInstance(
-                CLSID_ADSystemInfo, nullptr, CLSCTX_INPROC_SERVER);
+            sal::systools::COMReference<IADsADSystemInfo> pADsys(CLSID_ADSystemInfo, nullptr,
+                                                                 CLSCTX_INPROC_SERVER);
 
             smartBSTR sUserDN;
             sal::systools::ThrowIfFailed(pADsys->get_UserName(&sUserDN.ptr), "get_UserName failed");

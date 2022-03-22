@@ -134,7 +134,7 @@ template <class ComPtrDialog, REFCLSID CLSID> class TDialogImpl : public TDialog
 {
 public:
     TDialogImpl()
-        : TDialogImplBase(ComPtrDialog().CoCreateInstance(CLSID).get())
+        : TDialogImplBase(ComPtrDialog(CLSID).get())
     {
     }
 };

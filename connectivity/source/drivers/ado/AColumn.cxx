@@ -40,7 +40,7 @@ using namespace com::sun::star::sdbc;
 
 void WpADOColumn::Create()
 {
-    pInterface.TryCoCreateInstance(ADOS::CLSID_ADOCOLUMN_25, nullptr, CLSCTX_INPROC_SERVER);
+    pInterface.CoCreateInstance(ADOS::CLSID_ADOCOLUMN_25, nullptr, CLSCTX_INPROC_SERVER);
 }
 
 OAdoColumn::OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)

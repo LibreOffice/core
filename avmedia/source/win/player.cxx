@@ -95,7 +95,7 @@ bool Player::create( const OUString& rURL )
 {
     bool    bRet = false;
 
-    if( SUCCEEDED(mpGB.TryCoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER)) )
+    if( SUCCEEDED(mpGB.CoCreateInstance(CLSID_FilterGraph, nullptr, CLSCTX_INPROC_SERVER)) )
     {
         // Don't use the overlay mixer on Windows Vista
         // It disables the desktop composition as soon as RenderFile is called

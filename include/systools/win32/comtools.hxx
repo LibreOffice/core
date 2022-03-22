@@ -127,6 +127,13 @@ namespace sal::systools
         {
         }
 
+        // Using CoCreateInstance
+        COMReference(REFCLSID clsid, IUnknown* pOuter = nullptr, DWORD nCtx = CLSCTX_ALL)
+            : com_ptr_(nullptr)
+        {
+            ThrowIfFailed(CoCreateInstance(clsid, pOuter, nCtx), "CoCreateInstance failed");
+        }
+
         COMReference<T>& operator=(const COMReference<T>& other)
         {
             return operator=(other.com_ptr_);
@@ -170,8 +177,8 @@ namespace sal::systools
             return operator=(p.template QueryInterface<T>(t));
         }
 
-        HRESULT TryCoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
-                                    DWORD nCtx = CLSCTX_ALL)
+        HRESULT CoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
+                                 DWORD nCtx = CLSCTX_ALL)
         {
             T* ip;
             HRESULT hr = ::CoCreateInstance(clsid, pOuter, nCtx, IID_PPV_ARGS(&ip));
@@ -180,26 +187,13 @@ namespace sal::systools
             return hr;
         }
 
-        COMReference<T>& CoCreateInstance(REFCLSID clsid, IUnknown* pOuter = nullptr,
-                                          DWORD nCtx = CLSCTX_ALL)
-        {
-            ThrowIfFailed(TryCoCreateInstance(clsid, pOuter, nCtx), "CoCreateInstance failed");
-            return *this;
-        }
-
-        HRESULT TryCoGetClassObject(REFCLSID clsid, DWORD nCtx = CLSCTX_ALL)
+        HRESULT CoGetClassObject(REFCLSID clsid, DWORD nCtx = CLSCTX_ALL)
         {
             T* ip;
             HRESULT hr = ::CoGetClassObject(clsid, nCtx, nullptr, IID_PPV_ARGS(&ip));
             if (SUCCEEDED(hr))
                 release(std::exchange(com_ptr_, ip));
             return hr;
-        }
-
-        COMReference<T>& CoGetClassObject(REFCLSID clsid, DWORD nCtx = CLSCTX_ALL)
-        {
-            ThrowIfFailed(TryCoGetClassObject(clsid, nCtx), "CoGetClassObject failed");
-            return *this;
         }
 
         T* operator->() const { return com_ptr_; }
