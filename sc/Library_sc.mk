@@ -512,7 +512,9 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/sidebar/NumberFormatControl \
     sc/source/ui/sidebar/NumberFormatPropertyPanel \
     sc/source/ui/sidebar/ScPanelFactory \
+    sc/source/ui/sparklines/SparklineAttributes \
     sc/source/ui/sparklines/SparklineData \
+    sc/source/ui/sparklines/SparklineGroup \
     sc/source/ui/StatisticsDialogs/AnalysisOfVarianceDialog \
     sc/source/ui/StatisticsDialogs/CorrelationDialog \
     sc/source/ui/StatisticsDialogs/CovarianceDialog \

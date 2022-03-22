@@ -56,34 +56,34 @@ namespace
     return ::Color();
 }
 
-void addColorsToSparklineGroup(sc::SparklineGroup& rSparklineGroup, sal_Int32 nElement,
-                               const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer)
+void addColorsToSparklineAttributes(sc::SparklineAttributes& rAttributes, sal_Int32 nElement,
+                                    const AttributeList& rAttribs, ThemeBuffer& rThemeBuffer)
 {
     switch (nElement)
     {
         case XLS14_TOKEN(colorSeries):
-            rSparklineGroup.m_aColorSeries = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorSeries(getColor(rAttribs, rThemeBuffer));
             break;
         case XLS14_TOKEN(colorNegative):
-            rSparklineGroup.m_aColorNegative = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorNegative(getColor(rAttribs, rThemeBuffer));
             break;
         case XLS14_TOKEN(colorAxis):
-            rSparklineGroup.m_aColorAxis = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorAxis(getColor(rAttribs, rThemeBuffer));
             break;
         case XLS14_TOKEN(colorMarkers):
-            rSparklineGroup.m_aColorMarkers = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorMarkers(getColor(rAttribs, rThemeBuffer));
             break;
         case XLS14_TOKEN(colorFirst):
-            rSparklineGroup.m_aColorFirst = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorFirst(getColor(rAttribs, rThemeBuffer));
             break;
         case XLS14_TOKEN(colorLast):
-            rSparklineGroup.m_aColorLast = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorLast(getColor(rAttribs, rThemeBuffer));
             break;
         case XLS14_TOKEN(colorHigh):
-            rSparklineGroup.m_aColorHigh = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorHigh(getColor(rAttribs, rThemeBuffer));
             break;
         case XLS14_TOKEN(colorLow):
-            rSparklineGroup.m_aColorLow = getColor(rAttribs, rThemeBuffer);
+            rAttributes.setColorLow(getColor(rAttribs, rThemeBuffer));
             break;
         default:
             break;
@@ -99,13 +99,13 @@ sc::SparklineType parseSparklineType(OUString const& rString)
     return sc::SparklineType::Line;
 }
 
-sc::DisplayEmptyCellAs parseDisplayEmptyCellAs(OUString const& rString)
+sc::DisplayEmptyCellsAs parseDisplayEmptyCellsAs(OUString const& rString)
 {
     if (rString == "span")
-        return sc::DisplayEmptyCellAs::Span;
+        return sc::DisplayEmptyCellsAs::Span;
     else if (rString == "gap")
-        return sc::DisplayEmptyCellAs::Gap;
-    return sc::DisplayEmptyCellAs::Zero;
+        return sc::DisplayEmptyCellsAs::Gap;
+    return sc::DisplayEmptyCellsAs::Zero;
 }
 
 sc::AxisType parseAxisType(OUString const& rString)
@@ -117,45 +117,43 @@ sc::AxisType parseAxisType(OUString const& rString)
     return sc::AxisType::Individual;
 }
 
-void addAttributesToSparklineGroup(sc::SparklineGroup& rSparklineGroup,
-                                   const AttributeList& rAttribs)
+void addAttributesToSparklineAttributes(sc::SparklineAttributes& rSparklineAttributes,
+                                        const AttributeList& rAttribs)
 {
     auto oManualMax = rAttribs.getDouble(XML_manualMax);
     auto oManualMin = rAttribs.getDouble(XML_manualMin);
 
-    rSparklineGroup.m_fLineWeight = rAttribs.getDouble(XML_lineWeight, 0.75);
+    rSparklineAttributes.setLineWeight(rAttribs.getDouble(XML_lineWeight, 0.75));
 
     OUString sType = rAttribs.getString(XML_type, "line");
-    rSparklineGroup.m_eType = parseSparklineType(sType);
+    rSparklineAttributes.setType(parseSparklineType(sType));
 
-    rSparklineGroup.m_bDateAxis = rAttribs.getBool(XML_dateAxis, false);
+    rSparklineAttributes.setDateAxis(rAttribs.getBool(XML_dateAxis, false));
 
     OUString sDisplayEmptyCellsAs = rAttribs.getString(XML_displayEmptyCellsAs, "zero");
-    rSparklineGroup.m_eDisplayEmptyCellsAs = parseDisplayEmptyCellAs(sDisplayEmptyCellsAs);
+    rSparklineAttributes.setDisplayEmptyCellsAs(parseDisplayEmptyCellsAs(sDisplayEmptyCellsAs));
 
-    rSparklineGroup.m_bMarkers = rAttribs.getBool(XML_markers, false);
-    rSparklineGroup.m_bHigh = rAttribs.getBool(XML_high, false);
-    rSparklineGroup.m_bLow = rAttribs.getBool(XML_low, false);
-    rSparklineGroup.m_bFirst = rAttribs.getBool(XML_first, false);
-    rSparklineGroup.m_bLast = rAttribs.getBool(XML_last, false);
-    rSparklineGroup.m_bNegative = rAttribs.getBool(XML_negative, false);
-    rSparklineGroup.m_bDisplayXAxis = rAttribs.getBool(XML_displayXAxis, false);
-    rSparklineGroup.m_bDisplayHidden = rAttribs.getBool(XML_displayHidden, false);
+    rSparklineAttributes.setMarkers(rAttribs.getBool(XML_markers, false));
+    rSparklineAttributes.setHigh(rAttribs.getBool(XML_high, false));
+    rSparklineAttributes.setLow(rAttribs.getBool(XML_low, false));
+    rSparklineAttributes.setFirst(rAttribs.getBool(XML_first, false));
+    rSparklineAttributes.setLast(rAttribs.getBool(XML_last, false));
+    rSparklineAttributes.setNegative(rAttribs.getBool(XML_negative, false));
+    rSparklineAttributes.setDisplayXAxis(rAttribs.getBool(XML_displayXAxis, false));
+    rSparklineAttributes.setDisplayHidden(rAttribs.getBool(XML_displayHidden, false));
 
     OUString sMinAxisType = rAttribs.getString(XML_minAxisType, "individual");
-    rSparklineGroup.m_eMinAxisType = parseAxisType(sMinAxisType);
+    rSparklineAttributes.setMinAxisType(parseAxisType(sMinAxisType));
 
     OUString sMaxAxisType = rAttribs.getString(XML_maxAxisType, "individual");
-    rSparklineGroup.m_eMaxAxisType = parseAxisType(sMaxAxisType);
+    rSparklineAttributes.setMaxAxisType(parseAxisType(sMaxAxisType));
 
-    rSparklineGroup.m_bRightToLeft = rAttribs.getBool(XML_rightToLeft, false);
+    rSparklineAttributes.setRightToLeft(rAttribs.getBool(XML_rightToLeft, false));
 
-    rSparklineGroup.m_sUID = rAttribs.getString(XML_uid, OUString());
-
-    if (rSparklineGroup.m_eMaxAxisType == sc::AxisType::Custom)
-        rSparklineGroup.m_aManualMax = oManualMax.get();
-    if (rSparklineGroup.m_eMinAxisType == sc::AxisType::Custom)
-        rSparklineGroup.m_aManualMin = oManualMin.get();
+    if (rSparklineAttributes.getMaxAxisType() == sc::AxisType::Custom)
+        rSparklineAttributes.setManualMax(oManualMax.get());
+    if (rSparklineAttributes.getMinAxisType() == sc::AxisType::Custom)
+        rSparklineAttributes.setManualMin(oManualMin.get());
 }
 
 } // end anonymous namespace
@@ -173,7 +171,9 @@ ContextHandlerRef SparklineGroupsContext::onCreateContext(sal_Int32 nElement,
         case XLS14_TOKEN(sparklineGroup):
         {
             auto& rLastGroup = m_aSparklineGroups.emplace_back();
-            addAttributesToSparklineGroup(*rLastGroup.getSparklineGroup(), rAttribs);
+            auto& rSparklineAttributes = rLastGroup.getSparklineGroup()->getAttributes();
+            addAttributesToSparklineAttributes(rSparklineAttributes, rAttribs);
+            rLastGroup.getSparklineGroup()->m_sUID = rAttribs.getString(XML_uid, OUString());
             return this;
         }
         case XLS14_TOKEN(colorSeries):
@@ -186,8 +186,8 @@ ContextHandlerRef SparklineGroupsContext::onCreateContext(sal_Int32 nElement,
         case XLS14_TOKEN(colorLow):
         {
             auto& rLastGroup = m_aSparklineGroups.back();
-            addColorsToSparklineGroup(*rLastGroup.getSparklineGroup(), nElement, rAttribs,
-                                      getTheme());
+            auto& rSparklineAttributes = rLastGroup.getSparklineGroup()->getAttributes();
+            addColorsToSparklineAttributes(rSparklineAttributes, nElement, rAttribs, getTheme());
             return this;
         }
         case XLS14_TOKEN(sparklines):

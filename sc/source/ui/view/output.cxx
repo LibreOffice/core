@@ -2332,8 +2332,8 @@ void createMarker(std::vector<SparklineMarker> & rMarkers, double x, double y, C
 }
 
 void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
-                std::vector<double> const & rValues, double nMin, double nMax,
-                std::shared_ptr<sc::SparklineGroup> const & pSparklineGroup)
+                std::vector<double> const& rValues, double nMin, double nMax,
+                sc::SparklineAttributes const& rAttributes)
 {
     basegfx::B2DPolygon aPolygon;
     double numebrOfSteps = rValues.size() - 1;
@@ -2352,25 +2352,25 @@ void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRect
 
         aPolygon.append({ x, y } );
 
-        if (pSparklineGroup->m_bFirst && nValueIndex == 0)
+        if (rAttributes.isFirst() && nValueIndex == 0)
         {
-            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorFirst);
+            createMarker(aMarkers, x, y, rAttributes.getColorFirst());
         }
-        else if (pSparklineGroup->m_bLast && nValueIndex == (nValuesSize - 1))
+        else if (rAttributes.isLast() && nValueIndex == (nValuesSize - 1))
         {
-            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorLast);
+            createMarker(aMarkers, x, y, rAttributes.getColorLast());
         }
-        else if (pSparklineGroup->m_bHigh && nValue == nMax)
+        else if (rAttributes.isHigh() && nValue == nMax)
         {
-            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorHigh);
+            createMarker(aMarkers, x, y, rAttributes.getColorHigh());
         }
-        else if (pSparklineGroup->m_bLow && nValue == nMin)
+        else if (rAttributes.isLow() && nValue == nMin)
         {
-            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorLow);
+            createMarker(aMarkers, x, y, rAttributes.getColorLow());
         }
-        else if (pSparklineGroup->m_bNegative && nValue < 0.0)
+        else if (rAttributes.isNegative() && nValue < 0.0)
         {
-            createMarker(aMarkers, x, y, pSparklineGroup->m_aColorNegative);
+            createMarker(aMarkers, x, y, rAttributes.getColorNegative());
         }
 
         xStep++;
@@ -2381,7 +2381,7 @@ void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRect
     aMatrix.translate(rRectangle.Left(), rRectangle.Top());
     aPolygon.transform(aMatrix);
 
-    rRenderContext.SetLineColor(pSparklineGroup->m_aColorSeries);
+    rRenderContext.SetLineColor(rAttributes.getColorSeries());
     rRenderContext.DrawPolyLine(aPolygon);
 
     for (auto const & rMarker : aMarkers)
@@ -2394,44 +2394,44 @@ void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRect
     }
 }
 
-void setFillAndLineColor(vcl::RenderContext& rRenderContext, std::shared_ptr<sc::SparklineGroup> const & pSparklineGroup,
+void setFillAndLineColor(vcl::RenderContext& rRenderContext, sc::SparklineAttributes const& rAttributes,
                          double nValue, sal_Int64 nValueIndex, sal_Int64 nValuesSize, double nMin, double nMax)
 {
-    if (pSparklineGroup->m_bFirst && nValueIndex == 0)
+    if (rAttributes.isFirst() && nValueIndex == 0)
     {
-        rRenderContext.SetLineColor(pSparklineGroup->m_aColorFirst);
-        rRenderContext.SetFillColor(pSparklineGroup->m_aColorFirst);
+        rRenderContext.SetLineColor(rAttributes.getColorFirst());
+        rRenderContext.SetFillColor(rAttributes.getColorFirst());
     }
-    else if (pSparklineGroup->m_bLast && nValueIndex == (nValuesSize - 1))
+    else if (rAttributes.isLast() && nValueIndex == (nValuesSize - 1))
     {
-        rRenderContext.SetLineColor(pSparklineGroup->m_aColorLast);
-        rRenderContext.SetFillColor(pSparklineGroup->m_aColorLast);
+        rRenderContext.SetLineColor(rAttributes.getColorLast());
+        rRenderContext.SetFillColor(rAttributes.getColorLast());
     }
-    else if (pSparklineGroup->m_bHigh && nValue == nMax)
+    else if (rAttributes.isHigh() && nValue == nMax)
     {
-        rRenderContext.SetLineColor(pSparklineGroup->m_aColorHigh);
-        rRenderContext.SetFillColor(pSparklineGroup->m_aColorHigh);
+        rRenderContext.SetLineColor(rAttributes.getColorHigh());
+        rRenderContext.SetFillColor(rAttributes.getColorHigh());
     }
-    else if (pSparklineGroup->m_bLow && nValue == nMin)
+    else if (rAttributes.isLow() && nValue == nMin)
     {
-        rRenderContext.SetLineColor(pSparklineGroup->m_aColorLow);
-        rRenderContext.SetFillColor(pSparklineGroup->m_aColorLow);
+        rRenderContext.SetLineColor(rAttributes.getColorLow());
+        rRenderContext.SetFillColor(rAttributes.getColorLow());
     }
-    else if (pSparklineGroup->m_bNegative && nValue < 0.0)
+    else if (rAttributes.isNegative() && nValue < 0.0)
     {
-        rRenderContext.SetLineColor(pSparklineGroup->m_aColorNegative);
-        rRenderContext.SetFillColor(pSparklineGroup->m_aColorNegative);
+        rRenderContext.SetLineColor(rAttributes.getColorNegative());
+        rRenderContext.SetFillColor(rAttributes.getColorNegative());
     }
     else
     {
-        rRenderContext.SetLineColor(pSparklineGroup->m_aColorSeries);
-        rRenderContext.SetFillColor(pSparklineGroup->m_aColorSeries);
+        rRenderContext.SetLineColor(rAttributes.getColorSeries());
+        rRenderContext.SetFillColor(rAttributes.getColorSeries());
     }
 }
 
 void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
                 std::vector<double> const & rValues, double nMin, double nMax,
-                std::shared_ptr<sc::SparklineGroup> const & pSparklineGroup)
+                sc::SparklineAttributes const & rAttributes)
 {
     basegfx::B2DPolygon aPolygon;
 
@@ -2455,7 +2455,7 @@ void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRe
     {
         if (nValue != 0.0)
         {
-            setFillAndLineColor(rRenderContext, pSparklineGroup, nValue, nValueIndex, sal_Int64(rValues.size()), nMax, nMin);
+            setFillAndLineColor(rRenderContext, rAttributes, nValue, nValueIndex, sal_Int64(rValues.size()), nMax, nMin);
 
             double nP = (nValue - nMin) / nDelta;
             double x = rRectangle.GetWidth() * (xStep / numberOfSteps);
@@ -2483,6 +2483,7 @@ void drawSparkline(std::shared_ptr<sc::Sparkline> const& pSparkline, vcl::Render
         return;
 
     auto pSparklineGroup = pSparkline->getSparklineGroup();
+    auto const& rAttributes = pSparklineGroup->getAttributes();
 
     rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
 
@@ -2524,11 +2525,11 @@ void drawSparkline(std::shared_ptr<sc::Sparkline> const& pSparkline, vcl::Render
         }
     }
 
-    if (pSparklineGroup->m_eType == sc::SparklineType::Column)
+    if (rAttributes.getType() == sc::SparklineType::Column)
     {
-        drawColumn(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup);
+        drawColumn(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup->getAttributes());
     }
-    else if (pSparklineGroup->m_eType == sc::SparklineType::Stacked)
+    else if (rAttributes.getType() == sc::SparklineType::Stacked)
     {
         // transform the data to 1, -1
         for (auto & rValue : aValues)
@@ -2536,11 +2537,11 @@ void drawSparkline(std::shared_ptr<sc::Sparkline> const& pSparkline, vcl::Render
             if (rValue != 0.0)
                 rValue = rValue > 0.0 ? 1.0 : -1.0;
         }
-        drawColumn(rRenderContext, rRectangle, aValues, -1, 1, pSparklineGroup);
+        drawColumn(rRenderContext, rRectangle, aValues, -1, 1, pSparklineGroup->getAttributes());
     }
-    else if (pSparklineGroup->m_eType == sc::SparklineType::Line)
+    else if (rAttributes.getType() == sc::SparklineType::Line)
     {
-        drawLine(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup);
+        drawLine(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup->getAttributes());
     }
 }
 } // end anonymous namespace

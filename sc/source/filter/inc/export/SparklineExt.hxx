@@ -14,6 +14,7 @@
 #include <map>
 #include <rangelst.hxx>
 #include <Sparkline.hxx>
+#include <SparklineAttributes.hxx>
 
 #include <sax/fastattribs.hxx>
 
@@ -35,8 +36,9 @@ public:
     void addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGroup& rSparklineGroup,
                            std::vector<std::shared_ptr<sc::Sparkline>> const& rSparklines);
     void addSparklineGroupAttributes(rtl::Reference<sax_fastparser::FastAttributeList>& pAttrList,
-                                     sc::SparklineGroup& rSparklineGroup);
-    void addSparklineGroupColors(XclExpXmlStream& rStream, sc::SparklineGroup& rSparklineGroup);
+                                     sc::SparklineAttributes& rSparklineAttributes);
+    void addSparklineGroupColors(XclExpXmlStream& rStream,
+                                 sc::SparklineAttributes& rSparklineAttributes);
 
     XclExpExtType GetType() override { return XclExpExtSparklineType; }
 };
