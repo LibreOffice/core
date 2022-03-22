@@ -16,6 +16,24 @@
       "message": "I\u0027m sorry, I pushed a change right now, that changed the syntax. I\u0027ll post a changed version in a few minutes. Sorry for being a PITA. (It was inspired by looking at this, btw 😊)",
       "revId": "a98c9ce31cd1e76264c28c3614fb2129a68b9b65",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2dcb8fe_2983c852",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-22T10:42:12Z",
+      "side": 1,
+      "message": "No problem, I just have to do a rebuild now, but that\u0027s fine.\n\nI implemented the getRemovedItems method, but somehow can\u0027t get the string conversions right. Could you maybe have a look there?\n\nThanks!",
+      "parentUuid": "626ca7fe_0fb0784d",
+      "revId": "a98c9ce31cd1e76264c28c3614fb2129a68b9b65",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
