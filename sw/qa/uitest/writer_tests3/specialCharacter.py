@@ -12,9 +12,24 @@ from libreoffice.uno.propertyvalue import mkPropertyValues
 from uitest.uihelper.common import get_state_as_dict
 from uitest.uihelper.common import select_pos
 
-
 # specialcharacters.ui
 class specialCharacter(UITestCase):
+
+    def test_tdf56363(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+
+            # Insert a font including a font feature into the font name combobox
+            xFontName = xWriterDoc.getChild("fontnamecombobox")
+            xFontName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
+            xFontName.executeAction("TYPE", mkPropertyValues({"TEXT":"Liberation Sans:smcp"}))
+            xFontName.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
+
+            # Open special character dialog and check selected font name
+            with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xDialog:
+                xComboFont = xDialog.getChild("fontlb")
+                # Without the fix in place, no font would be selected
+                self.assertEqual(get_state_as_dict(xComboFont)["Text"], "Liberation Sans")
 
     def test_special_character(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
