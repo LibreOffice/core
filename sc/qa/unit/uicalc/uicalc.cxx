@@ -47,6 +47,8 @@ public:
     virtual void tearDown() override;
 
     ScModelObj* createDoc(const char* pName);
+    utl::TempFile save(css::uno::Reference<css::lang::XComponent>& xComponent,
+                       const OUString& rFilter);
     ScModelObj* saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
                               const OUString& rFilter);
     void goToCell(const OUString& rCell);
@@ -167,8 +169,8 @@ ScModelObj* ScUiCalcTest::createDoc(const char* pName)
     return pModelObj;
 }
 
-ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
-                                        const OUString& rFilter)
+utl::TempFile ScUiCalcTest::save(css::uno::Reference<css::lang::XComponent>& xComponent,
+                                 const OUString& rFilter)
 {
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -178,11 +180,64 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
 
+    return aTempFile;
+}
+
+ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponent>& xComponent,
+                                        const OUString& rFilter)
+{
+    utl::TempFile aTempFile = save(xComponent, rFilter);
+
     mxComponent = loadFromDesktop(aTempFile.GetURL(), "com.sun.star.sheet.SpreadsheetDocument");
 
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     return pModelObj;
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "B1", "2");
+
+    // Save the document
+    utl::TempFile aTempFile = save(mxComponent, "calc8");
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Insert the reference to the external document
+    OUString aFormula = "='" + aTempFile.GetURL() + "'#$Sheet1.A1";
+    insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
+
+    CPPUNIT_ASSERT_EQUAL(aFormula, pDoc->GetFormula(0, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(0, 0, 0)));
+
+    goToCell("A1");
+
+    dispatchCommand(mxComponent, ".uno:Cut", {});
+    Scheduler::ProcessEventsToIdle();
+
+    goToCell("B1");
+
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: ='file:///tmp/lu124171irlmb.tmp'#$Sheet1.A1
+    // - Actual  : ='file:///tmp/lu124171irlmb.tmp'#$Sheet1.B1
+    CPPUNIT_ASSERT_EQUAL(aFormula, pDoc->GetFormula(1, 0, 0));
+    CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
