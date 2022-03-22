@@ -16,6 +16,24 @@
       "message": "In this specific case, using a range-based for loop could avoid the problem after all.",
       "revId": "1f0f8bcc8b79d4c79ca0d453ae115dcb2bd78236",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "94b7d0d7_2393a664",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-22T10:05:27Z",
+      "side": 1,
+      "message": "\u003e In this specific case, using a range-based for loop could avoid the problem after all.\n\nyeah, thanks, indeed (it had passed for my --enable-qt5 --enable-qt6 build, so I thought qsizetype would somehow be guaranteed to already be available here)",
+      "parentUuid": "73be9eef_800455e3",
+      "revId": "1f0f8bcc8b79d4c79ca0d453ae115dcb2bd78236",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
