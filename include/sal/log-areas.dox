@@ -171,7 +171,6 @@ certain functionality.
 @li @c desktop.lib
 @li @c desktop.migration
 @li @c desktop.offacc
-@li @c desktop.opengl
 @li @c desktop.splash
 @li @c desktop.test
 @li @c desktop.updater

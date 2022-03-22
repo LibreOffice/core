@@ -584,15 +584,6 @@ $(eval $(call gb_Library_add_libs,vcl,\
     -lX11 \
     -lXext \
 ))
-
-ifneq (,$(filter LINUX %BSD SOLARIS,$(OS)))
-$(eval $(call gb_Library_use_static_libraries,vcl,\
-    glxtest \
-))
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/opengl/x11/X11DeviceInfo \
-))
-endif
 endif # USING_X11
 
 

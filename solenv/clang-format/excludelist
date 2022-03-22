@@ -14382,7 +14382,6 @@ vcl/inc/jobdata.hxx
 vcl/inc/jobset.h
 vcl/inc/listbox.hxx
 vcl/inc/opengl/win/WinDeviceInfo.hxx
-vcl/inc/opengl/x11/X11DeviceInfo.hxx
 vcl/inc/osx/a11yfactory.h
 vcl/inc/osx/a11yfocustracker.hxx
 vcl/inc/osx/a11ywrapper.h
@@ -14936,7 +14935,6 @@ vcl/source/opengl/OpenGLContext.cxx
 vcl/source/opengl/OpenGLHelper.cxx
 vcl/source/opengl/win/WinDeviceInfo.cxx
 vcl/source/opengl/win/context.cxx
-vcl/source/opengl/x11/X11DeviceInfo.cxx
 vcl/source/opengl/x11/context.cxx
 vcl/source/outdev/background.cxx
 vcl/source/outdev/bitmap.cxx
@@ -15123,7 +15121,6 @@ vcl/unx/generic/printer/printerinfomanager.cxx
 vcl/unx/generic/window/salframe.cxx
 vcl/unx/generic/window/salobj.cxx
 vcl/unx/generic/window/screensaverinhibitor.cxx
-vcl/unx/glxtest.cxx
 vcl/unx/gtk3/a11y/atklistener.hxx
 vcl/unx/gtk3/a11y/atkwrapper.hxx
 vcl/unx/gtk3/a11y/atkaction.cxx

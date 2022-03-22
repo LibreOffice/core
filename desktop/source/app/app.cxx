@@ -105,7 +105,6 @@
 #endif
 #include <rtl/bootstrap.hxx>
 #include <vcl/test/GraphicsRenderTests.hxx>
-#include <vcl/glxtestprocess.hxx>
 #include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/settings.hxx>
@@ -1573,9 +1572,6 @@ int Desktop::Main()
 
         //Running the VCL graphics rendering tests
         runGraphicsRenderTests();
-
-        // Reap the process started by fire_glxtest_process().
-        reap_glxtest_process();
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to

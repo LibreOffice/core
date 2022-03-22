@@ -22,13 +22,11 @@
 
 #include <sal/main.h>
 #include <tools/extendapplicationenvironment.hxx>
-#include <vcl/glxtestprocess.hxx>
 #include <vcl/vclmain.hxx>
 #include <vcl/svmain.hxx>
 
 SAL_IMPLEMENT_MAIN()
 {
-    fire_glxtest_process();
     tools::extendApplicationEnvironment();
     vclmain::createApplication();
     return SVMain();

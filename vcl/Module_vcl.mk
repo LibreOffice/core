@@ -70,7 +70,6 @@ ifeq ($(USING_X11),TRUE)
 $(eval $(call gb_Module_add_targets,vcl,\
     $(if $(ENABLE_GEN),Library_vclplug_gen) \
     Library_desktop_detector \
-    StaticLibrary_glxtest \
     Package_fontunxppds \
     Package_fontunxpsprint \
 ))

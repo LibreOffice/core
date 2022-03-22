@@ -47,9 +47,8 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     tl \
     ucbhelper \
     utl \
+    vcl \
 ))
-
-$(eval $(call gb_CppunitTest_use_glxtest,desktop_app,-lm))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_CppunitTest_use_static_libraries,desktop_app,\

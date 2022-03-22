@@ -31,6 +31,7 @@ $(eval $(call gb_Executable_use_libraries,mtfdemo,\
     drawinglayer \
     emfio \
     i18nlangtag \
+    vcl \
 ))
 
 $(eval $(call gb_Executable_use_vclmain,mtfdemo))
