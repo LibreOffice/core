@@ -480,6 +480,7 @@ public:
     bool DeleteSparkline(SCCOL nCol, SCROW nRow);
 
     sc::SparklineList& GetSparklineList();
+    void CopySparklinesToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
 
     // Notes / Comments
     std::unique_ptr<ScPostIt> ReleaseNote( SCCOL nCol, SCROW nRow );

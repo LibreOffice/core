@@ -627,7 +627,7 @@ public:
     void DeleteSparklineCells(sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2);
     bool DeleteSparkline(SCROW nRow);
     bool IsSparklinesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const;
-    void CopyCellSparklinesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, SCROW nRowOffsetDest) const;
+    void CopyCellSparklinesToDocument(SCROW nRow1, SCROW nRow2, ScColumn& rDestCol, SCROW nRowOffsetDest = 0) const;
     void DuplicateSparklines(SCROW nStartRow, size_t nDataSize, ScColumn& rDestCol,
                              sc::ColumnBlockPosition& rDestBlockPos, SCROW nRowOffsetDest = 0) const;
 
