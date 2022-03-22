@@ -1074,6 +1074,14 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:FormatSparklineMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Sparklines</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertSparkline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Sparkline...</value>
@@ -1085,6 +1093,14 @@
       <node oor:name=".uno:DeleteSparkline" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Delete Sparkline</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:EditSparklineGroup" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Edit Sparkline Group...</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>

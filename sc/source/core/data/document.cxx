@@ -6555,6 +6555,34 @@ sc::SparklineList* ScDocument::GetSparklineList(SCTAB nTab)
     return nullptr;
 }
 
+
+bool ScDocument::HasOneSparklineGroup(ScRange const& rRange)
+{
+    sc::SparklineGroup* pGroup = nullptr;
+    SCTAB nTab = rRange.aStart.Tab();
+
+    for (SCCOL nX = rRange.aStart.Col(); nX <= rRange.aEnd.Col(); nX++)
+    {
+        for (SCROW nY = rRange.aStart.Row(); nY <= rRange.aEnd.Row(); nY++)
+        {
+            auto pSparkline = GetSparkline(ScAddress(nX, nY, nTab));
+            if (!pSparkline)
+            {
+                return false;
+            }
+            else if (!pGroup)
+            {
+               pGroup = pSparkline->getSparklineGroup().get();
+            }
+            else if (pGroup != pSparkline->getSparklineGroup().get())
+            {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 // Notes
 
 ScPostIt* ScDocument::GetNote(const ScAddress& rPos)
