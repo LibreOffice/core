@@ -12,14 +12,13 @@
 
 #include <vcl/dllapi.h>
 
-#include <opengl/DeviceInfo.hxx>
 #include <driverblocklist.hxx>
 
 #include <rtl/ustring.hxx>
 #include <vector>
 #include <cstdint>
 
-class VCL_DLLPUBLIC WinOpenGLDeviceInfo : public OpenGLDeviceInfo
+class VCL_DLLPUBLIC WinOpenGLDeviceInfo
 {
 private:
     OUString maDriverVersion;
@@ -54,9 +53,7 @@ private:
 public:
     WinOpenGLDeviceInfo();
 
-    virtual ~WinOpenGLDeviceInfo() override;
-
-    virtual bool isDeviceBlocked() override;
+    bool isDeviceBlocked();
 
     const OUString& GetDriverVersion() const
     {
