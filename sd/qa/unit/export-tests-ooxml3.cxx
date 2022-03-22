@@ -130,6 +130,7 @@ public:
     void testTdf147121();
     void testTdf140912_PicturePlaceholder();
     void testEnhancedPathViewBox();
+    void testTdf74670();
     void testTdf109169_OctagonBevel();
     void testTdf109169_DiamondBevel();
     void testTdf144092_emptyShapeTextProps();
@@ -211,10 +212,12 @@ public:
     CPPUNIT_TEST(testTdf147121);
     CPPUNIT_TEST(testTdf140912_PicturePlaceholder);
     CPPUNIT_TEST(testEnhancedPathViewBox);
+    CPPUNIT_TEST(testTdf74670);
     CPPUNIT_TEST(testTdf109169_OctagonBevel);
     CPPUNIT_TEST(testTdf109169_DiamondBevel);
     CPPUNIT_TEST(testTdf144092_emptyShapeTextProps);
     CPPUNIT_TEST(testTdf94122_autoColor);
+
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1943,6 +1946,30 @@ void SdOOXMLExportTest3::testEnhancedPathViewBox()
     // The shape has a Bézier curve which does not touch the right edge. Prior to the fix the curve
     // was stretched to touch the edge, resulting in 5098 curve width instead of 2045.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2045), aBoundRectangle.Width);
+}
+
+void SdOOXMLExportTest3::testTdf74670()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf74670.odp"), ODP);
+    utl::TempFile tmpfile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tmpfile);
+    xDocShRef->DoClose();
+
+    uno::Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      tmpfile.GetURL());
+    const uno::Sequence<OUString> aNames(xNameAccess->getElementNames());
+    int nImageFiles = 0;
+    for (const auto& rElementName : aNames)
+        if (rElementName.startsWith("ppt/media/image"))
+            nImageFiles++;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the embedded picture would have been saved twice.
+    CPPUNIT_ASSERT_EQUAL(1, nImageFiles);
 }
 
 void SdOOXMLExportTest3::testTdf109169_OctagonBevel()

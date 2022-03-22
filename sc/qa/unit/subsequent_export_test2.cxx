@@ -83,6 +83,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/graphic/GraphicType.hpp>
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/sheet/GlobalSheetSettings.hpp>
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
@@ -220,6 +221,7 @@ public:
     void testTdf130104_XLSXIndent();
     void testWholeRowBold();
     void testXlsxRowsOrder();
+    void testTdf91286();
     void testTdf148820();
 
     CPPUNIT_TEST_SUITE(ScExportTest2);
@@ -340,6 +342,7 @@ public:
     CPPUNIT_TEST(testTdf130104_XLSXIndent);
     CPPUNIT_TEST(testWholeRowBold);
     CPPUNIT_TEST(testXlsxRowsOrder);
+    CPPUNIT_TEST(testTdf91286);
     CPPUNIT_TEST(testTdf148820);
 
     CPPUNIT_TEST_SUITE_END();
@@ -3163,6 +3166,29 @@ void ScExportTest2::testXlsxRowsOrder()
     // Make sure code in SheetDataBuffer doesn't assert columns/rows sorting.
     ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
     xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf91286()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf91286.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    std::shared_ptr<utl::TempFile> pTemp = exportTo(*xDocSh, FORMAT_XLSX);
+    xDocSh->DoClose();
+
+    Reference<packages::zip::XZipFileAccess2> xNameAccess
+        = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory),
+                                                      pTemp->GetURL());
+    const Sequence<OUString> aNames(xNameAccess->getElementNames());
+    int nImageFiles = 0;
+    for (const auto& rElementName : aNames)
+        if (rElementName.startsWith("xl/media/image"))
+            nImageFiles++;
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the embedded picture would have been saved twice.
+    CPPUNIT_ASSERT_EQUAL(1, nImageFiles);
 }
 
 void ScExportTest2::testTdf148820()
