@@ -50,6 +50,23 @@
       "message": "No need in the error handler. The crash would fail the unit test as a whole, and the handler would not trigger anyway. Please just drop both On Error and the handler itself.",
       "revId": "0472ee597dfb4639fe91ce3226777b532fe5618e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3268ccc5_fdd48d37",
+        "filename": "basic/qa/basic_coverage/test_createunovalue_method.bas",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-22T15:51:29Z",
+      "side": 1,
+      "message": "So this line must *not* execute - here you should make it fail, and exit function; the only correct exit in this case must be through error handler",
+      "revId": "0472ee597dfb4639fe91ce3226777b532fe5618e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
