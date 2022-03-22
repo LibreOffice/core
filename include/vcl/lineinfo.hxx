@@ -84,6 +84,9 @@ public:
     void            SetDistance( double nDistance );
     double          GetDistance() const { return mpImplLineInfo->mnDistance; }
 
+    /// Get an array of "on" and "off" lengths for stroke dashing
+    std::vector< double > GetDotDashArray() const;
+
     void SetLineJoin(basegfx::B2DLineJoin eLineJoin);
     basegfx::B2DLineJoin GetLineJoin() const { return mpImplLineInfo->meLineJoin; }
 

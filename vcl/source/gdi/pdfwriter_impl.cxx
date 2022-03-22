@@ -7780,26 +7780,7 @@ void PDFWriterImpl::convertLineInfoToExtLineInfo( const LineInfo& rIn, PDFWriter
     rOut.m_eCap                 = PDFWriter::capButt;
     rOut.m_eJoin                = PDFWriter::joinMiter;
     rOut.m_fMiterLimit          = 10;
-    rOut.m_aDashArray.clear();
-
-    // add DashDot to DashArray
-    const int nDashes   = rIn.GetDashCount();
-    const int nDashLen  = rIn.GetDashLen();
-    const int nDistance = rIn.GetDistance();
-
-    for( int n  = 0; n < nDashes; n++ )
-    {
-        rOut.m_aDashArray.push_back( nDashLen );
-        rOut.m_aDashArray.push_back( nDistance );
-    }
-    const int nDots   = rIn.GetDotCount();
-    const int nDotLen = rIn.GetDotLen();
-
-    for( int n  = 0; n < nDots; n++ )
-    {
-        rOut.m_aDashArray.push_back( nDotLen );
-        rOut.m_aDashArray.push_back( nDistance );
-    }
+    rOut.m_aDashArray           = rIn.GetDotDashArray();
 
     // add LineJoin
     switch(rIn.GetLineJoin())
