@@ -51,6 +51,24 @@
       "message": "please add a @since tag",
       "revId": "2f90fcafafdd3a7141bbe244ebada6b6c8a7fbe1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77945f4b_46ca687d",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedObject.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-22T08:24:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b818021c_a8d33037",
+      "revId": "2f90fcafafdd3a7141bbe244ebada6b6c8a7fbe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
