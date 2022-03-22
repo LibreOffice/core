@@ -1052,11 +1052,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         break;
 
         case SID_INSERT_SPARKLINE:
+        case SID_EDIT_SPARKLINE_GROUP:
         {
             sal_uInt16 nId  = sc::SparklineDialogWrapper::GetChildWindowId();
             SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
             SfxChildWindow* pWindow = pViewFrame->GetChildWindow(nId);
             pScMod->SetRefDialog(nId, pWindow == nullptr);
+            rReq.Done();
         }
         break;
 

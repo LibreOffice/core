@@ -32,7 +32,9 @@ private:
     std::unique_ptr<weld::Button> mxButtonOk;
     std::unique_ptr<weld::Button> mxButtonCancel;
 
-    std::unique_ptr<weld::Label> mxInputRangeText;
+    std::unique_ptr<weld::Frame> mxFrameData;
+
+    std::unique_ptr<weld::Label> mxInputRangeLabel;
     std::unique_ptr<formula::RefEdit> mxInputRangeEdit;
     std::unique_ptr<formula::RefButton> mxInputRangeButton;
 
@@ -59,8 +61,6 @@ private:
     std::unique_ptr<weld::RadioButton> mxRadioColumn;
     std::unique_ptr<weld::RadioButton> mxRadioStacked;
 
-    void GetRangeFromSelection();
-
     DECL_LINK(ButtonClicked, weld::Button&, void);
     DECL_LINK(EditFocusHandler, formula::RefEdit&, void);
     DECL_LINK(ButtonFocusHandler, formula::RefButton&, void);
@@ -72,7 +72,11 @@ private:
 
     std::shared_ptr<sc::SparklineGroup> mpLocalSparklineGroup;
 
-    void setupValues(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
+    bool mbEditMode;
+
+    void setupValues();
+    void setInputSelection();
+
     void perform();
     bool checkValidInputOutput();
 
