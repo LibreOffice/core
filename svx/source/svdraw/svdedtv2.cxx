@@ -1910,12 +1910,36 @@ void SdrEditView::UnGroupMarked()
             }
             size_t nDstCnt=pGrp->GetOrdNum();
             SdrObjList* pDstLst=pM->GetPageView()->GetObjList();
+            size_t nObjCount=pSrcLst->GetObjCount();
+            auto* pGroup(dynamic_cast<SdrObjGroup*>(pGrp));
+            const bool bIsDiagram(nullptr != pGroup && pGroup->isDiagram());
+
+            // If the Group is a Diagram, it has a filler BG object to guarantee
+            // the Diagam's dimensions. Identify that shape & delete it, it is not
+            // useful for any further processing
+            if(bIsDiagram && nObjCount)
+            {
+                SdrObject* pObj(pSrcLst->GetObj(0));
+
+                if(nullptr != pObj && !pObj->IsGroupObject() &&
+                    !pObj->HasFillStyle() && !pObj->HasLineStyle() &&
+                    pObj->IsMoveProtect() && pObj->IsResizeProtect())
+                {
+                    if( bUndo )
+                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+
+                    pObj = pSrcLst->RemoveObject(0);
+
+                    if( !bUndo )
+                        SdrObject::Free(pObj);
+
+                    nObjCount = pSrcLst->GetObjCount();
+                }
+            }
 
             // FIRST move contained objects to parent of group, so that
             // the contained objects are NOT migrated to the UNDO-ItemPool
             // when AddUndo(new SdrUndoDelObj(*pGrp)) is called.
-            const size_t nObjCount=pSrcLst->GetObjCount();
-
             if( bUndo )
             {
                 for (size_t no=nObjCount; no>0;)
@@ -1925,6 +1949,7 @@ void SdrEditView::UnGroupMarked()
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoRemoveObject(*pObj));
                 }
             }
+
             for (size_t no=0; no<nObjCount; ++no)
             {
                 SdrObject* pObj=pSrcLst->RemoveObject(0);
