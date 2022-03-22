@@ -22,6 +22,7 @@
 
 #include <map>
 #include <string_view>
+#include <unordered_map>
 #include <vector>
 
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -41,6 +42,7 @@
 #include <sax/fshelper.hxx>
 #include <svx/msdffdef.hxx>
 #include <vcl/checksum.hxx>
+#include <vcl/graph.hxx>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
 #include <vcl/mapmod.hxx>
@@ -149,6 +151,7 @@ private:
     static std::map<OUString, OUString> maWdpCache;
     static sal_Int32 mnDrawingMLCount;
     static sal_Int32 mnVmlCount;
+    static std::unordered_map<Graphic, OUString> maExportGraphics;
 
     /// To specify where write eg. the images to (like 'ppt', or 'word' - according to the OPC).
     DocumentType meDocumentType;
@@ -341,8 +344,8 @@ public:
     sal_Int32 getBulletMarginIndentation (const css::uno::Reference< css::beans::XPropertySet >& rXPropSet,sal_Int16 nLevel, std::u16string_view propName);
 
     static void ResetCounters();
-
     static void ResetMlCounters();
+    static void ResetExportGraphics();
 
     static sal_Int32 getNewDrawingUniqueId() { return ++mnDrawingMLCount; }
     static sal_Int32 getNewVMLUniqueId() { return ++mnVmlCount; }
