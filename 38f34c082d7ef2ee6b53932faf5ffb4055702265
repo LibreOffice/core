@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5bd90c17_104c451e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-03-22T05:23:38Z",
+      "side": 1,
+      "message": "Patchset 5 makes not only content type but also content member selection change the Navigate By control to the corresponding content type and disallows change by content type and content member selection when in content navigation view.  ",
+      "revId": "38f34c082d7ef2ee6b53932faf5ffb4055702265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
