@@ -229,12 +229,7 @@ void KDE5FilePicker::initialize(bool saveDialog)
     _dialog->setAcceptMode(operationMode);
 
     if (saveDialog)
-    {
-        SAL_WNODEPRECATED_DECLARATIONS_PUSH
-        _dialog->setConfirmOverwrite(true);
-        SAL_WNODEPRECATED_DECLARATIONS_POP
         _dialog->setFileMode(QFileDialog::AnyFile);
-    }
 }
 
 void KDE5FilePicker::setWinId(sal_uInt64 winId) { _winId = winId; }
