@@ -2467,6 +2467,35 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126540_GridToggleModifiesTheDocument)
     CPPUNIT_ASSERT(pDocSh->IsModified());
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118983)
+{
+    ScModelObj* pModelObj = createDoc("tdf118983.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    css::uno::Reference<css::sheet::XGlobalSheetSettings> xGlobalSheetSettings
+        = css::sheet::GlobalSheetSettings::create(::comphelper::getProcessComponentContext());
+    bool bOldValue = xGlobalSheetSettings->getExpandReferences();
+
+    xGlobalSheetSettings->setExpandReferences(true);
+
+    const ScRangeData* pRD = pDoc->GetRangeName()->findByUpperName("TEST");
+    CPPUNIT_ASSERT(pRD);
+    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$A$3:$D$7"), pRD->GetSymbol());
+
+    //Select columns E to G
+    goToCell("E:G");
+
+    dispatchCommand(mxComponent, ".uno:InsertColumnsBefore", {});
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: $Test.$A$3:$D$7
+    // - Actual  : $Test.$A$3:$G$7
+    CPPUNIT_ASSERT_EQUAL(OUString("$Test.$A$3:$D$7"), pRD->GetSymbol());
+
+    xGlobalSheetSettings->setExpandReferences(bOldValue);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
 {
     ScModelObj* pModelObj = createDoc("tdf144022.ods");
