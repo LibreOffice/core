@@ -27,6 +27,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <systools/win32/comtools.hxx>
+#include <systools/win32/oleauto.hxx>
 
 #include <initguid.h>
 #include <adoid.h>
@@ -57,12 +58,11 @@ OUString PromptNew(sal_IntPtr hWnd)
         sal::systools::COMReference<ADOConnection> piTmpConnection(piDispatch,
                                                                    sal::systools::COM_QUERY_THROW);
 
-        BSTR _result = nullptr;
+        sal::systools::BStr _result;
         sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result),
                                      "get_ConnectionString failed");
 
-        // FIXME: Don't we need SysFreeString(_result)?
-        return OUString(o3tl::toU(_result), SysStringLen(_result));
+        return OUString(_result);
     }
     catch (const sal::systools::ComError&)
     {
@@ -80,9 +80,8 @@ OUString PromptEdit(sal_IntPtr hWnd, OUString const & connstr)
         sal::systools::COMReference<ADOConnection> piTmpConnection;
         piTmpConnection.CoCreateInstance(CLSID_CADOConnection, nullptr, CLSCTX_INPROC_SERVER);
 
-        // FIXME: BSTR is not just cast from a random string
         sal::systools::ThrowIfFailed(
-            piTmpConnection->put_ConnectionString(const_cast<BSTR>(o3tl::toW(connstr.getStr()))),
+            piTmpConnection->put_ConnectionString(sal::systools::BStr(connstr)),
             "put_ConnectionString failed");
 
         // Instantiate DataLinks object.
@@ -111,12 +110,11 @@ OUString PromptEdit(sal_IntPtr hWnd, OUString const & connstr)
             piTmpConnection.set(piDispatch, sal::systools::COM_QUERY_THROW);
         }
 
-        BSTR _result = nullptr;
+        sal::systools::BStr _result;
         sal::systools::ThrowIfFailed(piTmpConnection->get_ConnectionString(&_result),
                                      "get_ConnectionString failed");
 
-        // FIXME: Don't we need SysFreeString(_result)?
-        return OUString(o3tl::toU(_result), SysStringLen(_result));
+        return OUString(_result);
     }
     catch (const sal::systools::ComError&)
     {

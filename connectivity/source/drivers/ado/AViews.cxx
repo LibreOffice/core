@@ -28,6 +28,8 @@
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
 #include <rtl/ref.hxx>
+#include <systools/win32/oleauto.hxx>
+
 #include <strings.hrc>
 
 using namespace ::comphelper;
@@ -74,7 +76,7 @@ sdbcx::ObjectType OViews::appendObject( const OUString& _rForName, const Referen
     aCommand.put_Name(sName);
     aCommand.put_CommandText(getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND))));
     ADOViews* pViews = m_aCollection;
-    if(FAILED(pViews->Append(OLEString(sName).asBSTR(),aCommand)))
+    if (FAILED(pViews->Append(sal::systools::BStr(sName), aCommand)))
         ADOS::ThrowException(m_pCatalog->getConnection()->getConnection(),static_cast<XTypeProvider*>(this));
 
     OTables* pTables = static_cast<OTables*>(static_cast<OCatalog&>(m_rParent).getPrivateTables());

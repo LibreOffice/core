@@ -38,6 +38,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/dibtools.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <systools/win32/oleauto.hxx>
 
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_IMPLEMENTATIONNAME = u"com.sun.star.comp.avmedia.FrameGrabber_DirectX";
 constexpr OUStringLiteral AVMEDIA_WIN_FRAMEGRABBER_SERVICENAME = u"com.sun.star.media.FrameGrabber_DirectX";
@@ -69,15 +70,8 @@ sal::systools::COMReference<IMediaDet> implCreateMediaDet( const OUString& rURL 
         if( osl::FileBase::getSystemPathFromFileURL( rURL, aLocalStr )
             == osl::FileBase::E_None )
         {
-            BSTR bstrFilename = SysAllocString(o3tl::toW(aLocalStr.getStr()));
-            if( !SUCCEEDED( pDet->put_Filename( bstrFilename ) ) )
-            {
-                // Shouldn't we free this string unconditionally, not only in case of failure?
-                // I cannot find information why do we pass a newly allocated BSTR to the put_Filename
-                // and if it frees the string internally
-                SysFreeString(bstrFilename);
+            if( !SUCCEEDED( pDet->put_Filename(sal::systools::BStr(aLocalStr)) ) )
                 pDet.clear();
-            }
         }
     }
 

@@ -81,7 +81,7 @@ protected:
     CComPtr<IDispatch>      mpDispFrame;
     CComPtr<IDispatch>      mpInstanceLocker;
     CComPtr<IDispatch>      mpDispWin;
-    OLECHAR const *         mCurFileUrl;
+    CComBSTR                mCurFileUrl;
     BOOL                    mbLoad;
     BOOL                    mbViewOnly;
     WNDCLASSW               mPWinClass;
