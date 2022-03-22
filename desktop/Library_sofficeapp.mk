@@ -73,9 +73,8 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     tl \
     ucbhelper \
     utl \
+    vcl \
 ))
-
-$(eval $(call gb_Library_use_glxtest,sofficeapp,-lm))
 
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_use_static_libraries,sofficeapp,\

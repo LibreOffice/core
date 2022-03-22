@@ -31,6 +31,7 @@ $(eval $(call gb_Executable_use_libraries,canvasdemo,\
     tl \
     sal \
     salhelper \
+    vcl \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,canvasdemo,\
