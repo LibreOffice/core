@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a805a1e1_efffbd89",
+        "filename": "writerfilter/source/rtftok/rtfdocumentimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 406,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-22T08:38:04Z",
+      "side": 1,
+      "message": "You could probably work backwards from size() - 1 to 0 and stop the loop once you found a default font, but I imagine the current loop is good enough in practice.",
+      "revId": "8f72edbdb896d982c137ee9a1e6ae7941a4df8c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
