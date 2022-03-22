@@ -70,9 +70,7 @@
 #include <detfunc.hxx>
 #include <cellmergeoption.hxx>
 #include <undoblk.hxx>
-
-#include <orcusfilters.hxx>
-#include <filter.hxx>
+#include <scerrors.hxx>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
@@ -207,6 +205,7 @@ public:
     void testTdf139763ShapeAnchor();
     void testAutofilterNamedRangesXLSX();
     void testInvalidBareBiff5();
+    void testTooManyColsRows();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest2);
 
@@ -313,6 +312,7 @@ public:
     CPPUNIT_TEST(testTdf139763ShapeAnchor);
     CPPUNIT_TEST(testAutofilterNamedRangesXLSX);
     CPPUNIT_TEST(testInvalidBareBiff5);
+    CPPUNIT_TEST(testTooManyColsRows);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2980,6 +2980,17 @@ void ScFiltersTest2::testInvalidBareBiff5()
     CPPUNIT_ASSERT_EQUAL(CELLTYPE_NONE, rDoc.GetCellType(aPos));
     CPPUNIT_ASSERT_EQUAL(OUString(), rDoc.GetString(aPos));
 
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTooManyColsRows()
+{
+    // The intentionally doc has cells beyond our MAXROW/MAXCOL, so there
+    // should be a warning on load.
+    ScDocShellRef xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh.is());
+    CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
+                   || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();
 }
 
