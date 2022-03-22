@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e194904_e106a10a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-22T07:45:11Z",
+      "side": 1,
+      "message": "For intended incompatible changes to published UNOIDL entities, instead of just modifying offapi/type_reference/offapi.idl to avoid build failures, please start a discussion (e.g., on the mailing list) whether such an incompatible change is really unavoidable and the best possible solution.  (And if it is, the commit introducing it should carry an \"[API CHANGE]\" marker and the change should be documented in the release notes.)",
+      "revId": "2f90fcafafdd3a7141bbe244ebada6b6c8a7fbe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b818021c_a8d33037",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedObject.idl",
+        "patchSetId": 10
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-22T07:45:11Z",
+      "side": 1,
+      "message": "please add a @since tag",
+      "revId": "2f90fcafafdd3a7141bbe244ebada6b6c8a7fbe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
