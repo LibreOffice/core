@@ -10,7 +10,7 @@
 #pragma once
 
 #include <types.hxx>
-#include "scdllapi.h"
+#include <scdllapi.h>
 
 class ScViewData;
 class ScTabViewShell;

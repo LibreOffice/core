@@ -2040,24 +2040,16 @@ namespace
 
 class CopySparklinesHandler
 {
-    ScColumn& mrDestCol;
+    ScColumn& mrDestColumn;
     sc::SparklineStoreType& mrDestSparkline;
     sc::SparklineStoreType::iterator miDestPosition;
-    SCTAB mnSrcTab;
-    SCCOL mnSrcCol;
-    SCTAB mnDestTab;
-    SCCOL mnDestCol;
     SCROW mnDestOffset;
 
 public:
-    CopySparklinesHandler(const ScColumn& rSrcCol, ScColumn& rDestCol, SCROW nDestOffset)
-        : mrDestCol(rDestCol)
-        , mrDestSparkline(mrDestCol.GetSparklineStore())
+    CopySparklinesHandler(ScColumn& rDestColumn, SCROW nDestOffset)
+        : mrDestColumn(rDestColumn)
+        , mrDestSparkline(mrDestColumn.GetSparklineStore())
         , miDestPosition(mrDestSparkline.begin())
-        , mnSrcTab(rSrcCol.GetTab())
-        , mnSrcCol(rSrcCol.GetCol())
-        , mnDestTab(rDestCol.GetTab())
-        , mnDestCol(rDestCol.GetCol())
         , mnDestOffset(nDestOffset)
     {}
 
@@ -2069,7 +2061,7 @@ public:
         auto const& pGroup = pCell->getSparklineGroup();
 
         auto pNewSparklineGroup = std::make_shared<sc::SparklineGroup>(*pGroup); // Copy the group
-        auto pNewSparkline = std::make_shared<sc::Sparkline>(mnDestCol, nDestRow, pNewSparklineGroup);
+        auto pNewSparkline = std::make_shared<sc::Sparkline>(rDestCol.GetCol(), nDestRow, pNewSparklineGroup);
 
         pNewSparkline->setInputRange(pSparkline->getInputRange());
 
