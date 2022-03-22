@@ -119,6 +119,8 @@ void ScUndoDeleteContents::DoChange( const bool bUndo )
             nUndoFlags |= InsertDeleteFlags::ATTRIB;
         if (nFlags & InsertDeleteFlags::EDITATTR)          // Edit-Engine attribute
             nUndoFlags |= InsertDeleteFlags::STRING;       // -> Cells will be changed
+        if (nFlags & InsertDeleteFlags::SPARKLINES)
+            nUndoFlags |= InsertDeleteFlags::SPARKLINES;
         // do not create clones of note captions, they will be restored via drawing undo
         nUndoFlags |= InsertDeleteFlags::NOCAPTIONS;
 
