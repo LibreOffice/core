@@ -110,7 +110,6 @@
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
-#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/strbuf.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -235,6 +234,7 @@ int DrawingML::mnWdpImageCounter = 1;
 std::map<OUString, OUString> DrawingML::maWdpCache;
 sal_Int32 DrawingML::mnDrawingMLCount = 0;
 sal_Int32 DrawingML::mnVmlCount = 0;
+std::unordered_map<Graphic, OUString> DrawingML::maExportGraphics;
 
 sal_Int16 DrawingML::GetScriptType(const OUString& rStr)
 {
@@ -271,6 +271,11 @@ void DrawingML::ResetMlCounters()
 {
     mnDrawingMLCount = 0;
     mnVmlCount = 0;
+}
+
+void DrawingML::ResetExportGraphics()
+{
+    maExportGraphics.clear();
 }
 
 bool DrawingML::GetProperty( const Reference< XPropertySet >& rXPropertySet, const OUString& aName )
@@ -1239,110 +1244,121 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia, 
     OUString sMediaType;
     const char* pExtension = "";
     OUString sRelId;
+    OUString sPath;
 
-    SvMemoryStream aStream;
-    const void* aData = aLink.GetData();
-    std::size_t nDataSize = aLink.GetDataSize();
+    auto aIterator = maExportGraphics.find(rGraphic);
+    if (aIterator != maExportGraphics.end())
+        sPath = aIterator->second;
 
-    switch ( aLink.GetType() )
+    if (sPath.isEmpty())
     {
-        case GfxLinkType::NativeGif:
-            sMediaType = "image/gif";
-            pExtension = ".gif";
-            break;
+        SvMemoryStream aStream;
+        const void* aData = aLink.GetData();
+        std::size_t nDataSize = aLink.GetDataSize();
 
-        // #i15508# added BMP type for better exports
-        // export not yet active, so adding for reference (not checked)
-        case GfxLinkType::NativeBmp:
-            sMediaType = "image/bmp";
-            pExtension = ".bmp";
-            break;
-
-        case GfxLinkType::NativeJpg:
-            sMediaType = "image/jpeg";
-            pExtension = ".jpeg";
-            break;
-        case GfxLinkType::NativePng:
-            sMediaType = "image/png";
-            pExtension = ".png";
-            break;
-        case GfxLinkType::NativeTif:
-            sMediaType = "image/tiff";
-            pExtension = ".tif";
-            break;
-        case GfxLinkType::NativeWmf:
-            sMediaType = "image/x-wmf";
-            pExtension = ".wmf";
-            break;
-        case GfxLinkType::NativeMet:
-            sMediaType = "image/x-met";
-            pExtension = ".met";
-            break;
-        case GfxLinkType::NativePct:
-            sMediaType = "image/x-pict";
-            pExtension = ".pct";
-            break;
-        case GfxLinkType::NativeMov:
-            sMediaType = "application/movie";
-            pExtension = ".MOV";
-            break;
-        default:
+        switch (aLink.GetType())
         {
-            GraphicType aType = rGraphic.GetType();
-            if ( aType == GraphicType::Bitmap || aType == GraphicType::GdiMetafile)
+            case GfxLinkType::NativeGif:
+                sMediaType = "image/gif";
+                pExtension = ".gif";
+                break;
+
+            // #i15508# added BMP type for better exports
+            // export not yet active, so adding for reference (not checked)
+            case GfxLinkType::NativeBmp:
+                sMediaType = "image/bmp";
+                pExtension = ".bmp";
+                break;
+
+            case GfxLinkType::NativeJpg:
+                sMediaType = "image/jpeg";
+                pExtension = ".jpeg";
+                break;
+            case GfxLinkType::NativePng:
+                sMediaType = "image/png";
+                pExtension = ".png";
+                break;
+            case GfxLinkType::NativeTif:
+                sMediaType = "image/tiff";
+                pExtension = ".tif";
+                break;
+            case GfxLinkType::NativeWmf:
+                sMediaType = "image/x-wmf";
+                pExtension = ".wmf";
+                break;
+            case GfxLinkType::NativeMet:
+                sMediaType = "image/x-met";
+                pExtension = ".met";
+                break;
+            case GfxLinkType::NativePct:
+                sMediaType = "image/x-pict";
+                pExtension = ".pct";
+                break;
+            case GfxLinkType::NativeMov:
+                sMediaType = "application/movie";
+                pExtension = ".MOV";
+                break;
+            default:
             {
-                if ( aType == GraphicType::Bitmap )
+                GraphicType aType = rGraphic.GetType();
+                if (aType == GraphicType::Bitmap || aType == GraphicType::GdiMetafile)
                 {
-                    (void)GraphicConverter::Export( aStream, rGraphic, ConvertDataFormat::PNG );
-                    sMediaType = "image/png";
-                    pExtension = ".png";
+                    if (aType == GraphicType::Bitmap)
+                    {
+                        (void)GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::PNG);
+                        sMediaType = "image/png";
+                        pExtension = ".png";
+                    }
+                    else
+                    {
+                        (void)GraphicConverter::Export(aStream, rGraphic, ConvertDataFormat::EMF);
+                        sMediaType = "image/x-emf";
+                        pExtension = ".emf";
+                    }
                 }
                 else
                 {
-                    (void)GraphicConverter::Export( aStream, rGraphic, ConvertDataFormat::EMF );
-                    sMediaType = "image/x-emf";
-                    pExtension = ".emf";
+                    SAL_WARN("oox.shape", "unhandled graphic type " << static_cast<int>(aType));
+                    /*Earlier, even in case of unhandled graphic types we were
+                      proceeding to write the image, which would eventually
+                      write an empty image with a zero size, and return a valid
+                      relationID, which is incorrect.
+                      */
+                    return sRelId;
                 }
-            }
-            else
-            {
-                SAL_WARN("oox.shape", "unhandled graphic type " << static_cast<int>(aType) );
-                /*Earlier, even in case of unhandled graphic types we were
-                  proceeding to write the image, which would eventually
-                  write an empty image with a zero size, and return a valid
-                  relationID, which is incorrect.
-                  */
-                return sRelId;
-            }
 
-            aData = aStream.GetData();
-            nDataSize = aStream.GetEndOfData();
-            break;
+                aData = aStream.GetData();
+                nDataSize = aStream.GetEndOfData();
+                break;
+            }
         }
+
+        Reference<XOutputStream> xOutStream = mpFB->openFragmentStream(
+            OUStringBuffer()
+                .appendAscii(GetComponentDir())
+                .append("/media/image" + OUString::number(mnImageCounter))
+                .appendAscii(pExtension)
+                .makeStringAndClear(),
+            sMediaType);
+        xOutStream->writeBytes(Sequence<sal_Int8>(static_cast<const sal_Int8*>(aData), nDataSize));
+        xOutStream->closeOutput();
+
+        const OString sRelPathToMedia = "media/image";
+        OString sRelationCompPrefix;
+        if (bRelPathToMedia)
+            sRelationCompPrefix = "../";
+        else
+            sRelationCompPrefix = GetRelationCompPrefix();
+        sPath = OUStringBuffer()
+                    .appendAscii(sRelationCompPrefix.getStr())
+                    .appendAscii(sRelPathToMedia.getStr())
+                    .append(static_cast<sal_Int32>(mnImageCounter++))
+                    .appendAscii(pExtension)
+                    .makeStringAndClear();
+
+        maExportGraphics[rGraphic] = sPath;
     }
 
-    Reference< XOutputStream > xOutStream = mpFB->openFragmentStream( OUStringBuffer()
-                                                                      .appendAscii( GetComponentDir() )
-                                                                      .append( "/media/image" +
-                                                                        OUString::number(mnImageCounter) )
-                                                                      .appendAscii( pExtension )
-                                                                      .makeStringAndClear(),
-                                                                      sMediaType );
-    xOutStream->writeBytes( Sequence< sal_Int8 >( static_cast<const sal_Int8*>(aData), nDataSize ) );
-    xOutStream->closeOutput();
-
-    const OString sRelPathToMedia = "media/image";
-    OString sRelationCompPrefix;
-    if ( bRelPathToMedia )
-        sRelationCompPrefix = "../";
-    else
-        sRelationCompPrefix = GetRelationCompPrefix();
-    OUString sPath = OUStringBuffer()
-                     .appendAscii( sRelationCompPrefix.getStr() )
-                     .appendAscii( sRelPathToMedia.getStr() )
-                     .append( static_cast<sal_Int32>(mnImageCounter ++) )
-                     .appendAscii( pExtension )
-                     .makeStringAndClear();
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
                                 oox::getRelationship(Relationship::IMAGE),
                                 sPath );

@@ -526,6 +526,7 @@ ErrCode DocxExport::ExportDocument_Impl()
 
     // Make sure images are counted from one, even when exporting multiple documents.
     oox::drawingml::DrawingML::ResetCounters();
+    oox::drawingml::DrawingML::ResetExportGraphics();
 
     WriteMainText();
 
@@ -552,6 +553,7 @@ ErrCode DocxExport::ExportDocument_Impl()
     m_aLinkedTextboxesHelper.clear();   //final cleanup
     m_pStyles.reset();
     m_pSections.reset();
+    oox::drawingml::DrawingML::ResetExportGraphics();
 
     return ERRCODE_NONE;
 }
