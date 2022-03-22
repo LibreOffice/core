@@ -1439,10 +1439,27 @@ void ScTable::CopyToTable(
     if(nFlags & InsertDeleteFlags::OUTLINE) // also only when bColRowFlags
         pDestTab->SetOutlineTable( pOutlineTable.get() );
 
+    if (nFlags & InsertDeleteFlags::SPARKLINES)
+    {
+        CopySparklinesToTable(nCol1, nRow1, nCol2, nRow2, pDestTab);
+    }
+
     if (!bIsUndoDoc && bCopyCaptions && (nFlags & (InsertDeleteFlags::NOTE | InsertDeleteFlags::ADDNOTES)))
     {
         bool bCloneCaption = (nFlags & InsertDeleteFlags::NOCAPTIONS) == InsertDeleteFlags::NONE;
         CopyCaptionsToTable( nCol1, nRow1, nCol2, nRow2, pDestTab, bCloneCaption);
+    }
+}
+
+void ScTable::CopySparklinesToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab)
+{
+    if (!ValidColRow(nCol1, nRow1) || !ValidColRow(nCol2, nRow2))
+        return;
+
+    nCol2 = ClampToAllocatedColumns(nCol2);
+    for (SCCOL i = nCol1; i <= nCol2; i++)
+    {
+        aCol[i].CopyCellSparklinesToDocument(nRow1, nRow2, pDestTab->CreateColumnIfNotExists(i));
     }
 }
 
