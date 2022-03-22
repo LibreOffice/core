@@ -47,9 +47,6 @@ public:
     explicit WeakListenerAdapter( const css::uno::Reference< Listener > & xListener ) :
             m_xListener( xListener )
     {}
-    explicit WeakListenerAdapter( const css::uno::WeakReference< Listener > & xListener ) :
-            m_xListener( xListener )
-    {}
 
 protected:
     // ____ XEventListener (base of all listeners) ____

@@ -1108,8 +1108,6 @@ public:
     SCCOL ClampToMaxNonDefPatternColumn(SCCOL nCol) const
         { return ClampToMaxNonDefPatternColumn(nCol, 0, rDocument.MaxRow()); }
     SCCOL GetMaxNonDefPatternColumnsCount(SCROW nRow1, SCROW nRow2) const;
-    SCCOL GetMaxNonDefPatternColumnsCount() const
-        { return GetMaxNonDefPatternColumnsCount(0, rDocument.MaxRow()); }
 
     /**
      * Serializes the sheet's geometry data.

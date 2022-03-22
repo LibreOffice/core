@@ -266,13 +266,6 @@ private:
                                         ~TableSlots();
         ScBroadcastAreaSlot**    getSlots() { return ppSlots.get(); }
 
-        /**
-            Obtain slot pointer, no check on validity! It is assumed that
-            all calls are made with the results of ComputeSlotOffset(),
-            ComputeAreaPoints() and ComputeNextSlot()
-          */
-        ScBroadcastAreaSlot*     getAreaSlot( SCSIZE nOff ) { return ppSlots[nOff]; }
-
     private:
         SCSIZE                                    mnBcaSlots;
         std::unique_ptr<ScBroadcastAreaSlot*[]>   ppSlots;
