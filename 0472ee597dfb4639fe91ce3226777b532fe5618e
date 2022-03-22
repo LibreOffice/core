@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfde2ded_239a161d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-22T15:47:06Z",
+      "side": 1,
+      "message": "Ah - wait. The call likely would trigger the error now, so the handler should be needed - sorry for the noise",
+      "revId": "0472ee597dfb4639fe91ce3226777b532fe5618e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40a10073_58477d20",
