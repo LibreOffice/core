@@ -29,7 +29,8 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     , mbDialogLostFocus(false)
     , mxButtonOk(m_xBuilder->weld_button("ok"))
     , mxButtonCancel(m_xBuilder->weld_button("cancel"))
-    , mxInputRangeText(m_xBuilder->weld_label("cell-range-label"))
+    , mxFrameData(m_xBuilder->weld_frame("frame-data"))
+    , mxInputRangeLabel(m_xBuilder->weld_label("cell-range-label"))
     , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))
     , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("cell-range-button")))
     , mxOutputRangeLabel(m_xBuilder->weld_label("output-range-label"))
@@ -58,9 +59,9 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     , mxRadioLine(m_xBuilder->weld_radio_button("line-radiobutton"))
     , mxRadioColumn(m_xBuilder->weld_radio_button("column-radiobutton"))
     , mxRadioStacked(m_xBuilder->weld_radio_button("stacked-radiobutton"))
-    , mpLocalSparklineGroup(new sc::SparklineGroup())
+    , mbEditMode(false)
 {
-    mxInputRangeEdit->SetReferences(this, mxInputRangeText.get());
+    mxInputRangeEdit->SetReferences(this, mxInputRangeLabel.get());
     mxInputRangeButton->SetReferences(this, mxInputRangeEdit.get());
 
     mxOutputRangeEdit->SetReferences(this, mxOutputRangeLabel.get());
@@ -102,18 +103,49 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     mxCheckButtonFirst->connect_toggled(aLink);
     mxCheckButtonLast->connect_toggled(aLink);
 
-    setupValues(mpLocalSparklineGroup);
-
-    GetRangeFromSelection();
+    setupValues();
 
     mxOutputRangeEdit->GrabFocus();
+    mxButtonOk->set_sensitive(checkValidInputOutput());
 }
 
-SparklineDialog::~SparklineDialog() {}
+SparklineDialog::~SparklineDialog() = default;
 
-void SparklineDialog::setupValues(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup)
+void SparklineDialog::setInputSelection()
 {
-    auto& rAttribute = pSparklineGroup->getAttributes();
+    mrViewData.GetSimpleArea(maInputRange);
+    OUString aString = maInputRange.Format(mrDocument, ScRefFlags::VALID | ScRefFlags::TAB_3D,
+                                           mrDocument.GetAddressConvention());
+    mxInputRangeEdit->SetRefString(aString);
+}
+
+void SparklineDialog::setupValues()
+{
+    ScRange aSelectionRange;
+    mrViewData.GetSimpleArea(aSelectionRange);
+
+    if (mrDocument.HasOneSparklineGroup(aSelectionRange))
+    {
+        if (auto pSparkline = mrDocument.GetSparkline(aSelectionRange.aStart))
+        {
+            mpLocalSparklineGroup = pSparkline->getSparklineGroup();
+            mxFrameData->set_visible(false);
+            mbEditMode = true;
+        }
+    }
+    else
+    {
+        maInputRange = aSelectionRange;
+    }
+
+    if (!mpLocalSparklineGroup)
+    {
+        mpLocalSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    }
+
+    setInputSelection();
+
+    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
 
     switch (rAttribute.getType())
     {
@@ -159,14 +191,6 @@ void SparklineDialog::SetActive()
         m_xDialog->grab_focus();
     }
     RefInputDone();
-}
-
-void SparklineDialog::GetRangeFromSelection()
-{
-    mrViewData.GetSimpleArea(maInputRange);
-    OUString aString = maInputRange.Format(mrDocument, ScRefFlags::VALID | ScRefFlags::TAB_3D,
-                                           mrDocument.GetAddressConvention());
-    mxInputRangeEdit->SetRefString(aString);
 }
 
 void SparklineDialog::SetReference(const ScRange& rReferenceRange, ScDocument& rDocument)
@@ -321,6 +345,9 @@ IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
 
 bool SparklineDialog::checkValidInputOutput()
 {
+    if (mbEditMode)
+        return true;
+
     if (!maInputRange.IsValid() || !maOutputRange.IsValid())
         return false;
 
