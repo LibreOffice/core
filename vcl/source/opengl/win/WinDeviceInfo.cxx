@@ -163,10 +163,6 @@ WinOpenGLDeviceInfo::WinOpenGLDeviceInfo():
     GetData();
 }
 
-WinOpenGLDeviceInfo::~WinOpenGLDeviceInfo()
-{
-}
-
 static OUString getDenylistFile()
 {
     OUString url("$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER);

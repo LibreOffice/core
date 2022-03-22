@@ -604,7 +604,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 else # !DISABLE_GUI
 
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/opengl/DeviceInfo \
     vcl/source/opengl/OpenGLContext \
     vcl/source/opengl/OpenGLHelper \
     $(if $(filter SKIA,$(BUILD_TYPE)), \
