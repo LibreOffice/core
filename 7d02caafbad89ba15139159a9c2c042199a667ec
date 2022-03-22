@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa08d1b1_695dcc1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001124
+      },
+      "writtenOn": "2022-03-22T14:02:46Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/110831/ : FAILURE\n\u003e \n\u003e the test UITest_writer_tests failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110375/ )\n\nNo error in local build -\u003e rebase",
+      "revId": "7d02caafbad89ba15139159a9c2c042199a667ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
