@@ -24,6 +24,7 @@
 #include <osl/diagnose.h>
 #include <svtools/htmlout.hxx>
 #include <svtools/htmlkywd.hxx>
+#include <svtools/HtmlWriter.hxx>
 #include <rtl/strbuf.hxx>
 #include <ndindex.hxx>
 #include <fmtftn.hxx>
@@ -242,6 +243,32 @@ SwNodeIndex *SwHTMLParser::GetFootEndNoteSection( const OUString& rName )
     }
 
     return pStartNodeIdx;
+}
+
+Writer& OutHTML_SwFormatLineBreak(Writer& rWrt, const SfxPoolItem& rHt)
+{
+    SwHTMLWriter& rHTMLWrt = static_cast<SwHTMLWriter&>(rWrt);
+    const auto& rLineBreak = static_cast<const SwFormatLineBreak&>(rHt);
+
+    HtmlWriter aWriter(rHTMLWrt.Strm(), rHTMLWrt.maNamespace);
+    aWriter.start(OOO_STRING_SVTOOLS_HTML_linebreak);
+    switch (rLineBreak.GetValue())
+    {
+        case SwLineBreakClear::NONE:
+            aWriter.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, "none");
+            break;
+        case SwLineBreakClear::LEFT:
+            aWriter.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, "left");
+            break;
+        case SwLineBreakClear::RIGHT:
+            aWriter.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, "right");
+            break;
+        case SwLineBreakClear::ALL:
+            aWriter.attribute(OOO_STRING_SVTOOLS_HTML_O_clear, "all");
+            break;
+    }
+    aWriter.end();
+    return rWrt;
 }
 
 Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
