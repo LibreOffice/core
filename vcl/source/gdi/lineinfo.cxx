@@ -204,6 +204,30 @@ SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
     return rOStm;
 }
 
+std::vector< double > LineInfo::GetDotDashArray() const
+{
+    ::std::vector< double > fDotDashArray;
+    if ( GetStyle() != LineStyle::Dash )
+        return fDotDashArray;
+
+    const double fDashLen(GetDashLen());
+    const double fDotLen(GetDotLen());
+    const double fDistance(GetDistance());
+
+    for(sal_uInt16 a(0); a < GetDashCount(); a++)
+    {
+        fDotDashArray.push_back(fDashLen);
+        fDotDashArray.push_back(fDistance);
+    }
+
+    for(sal_uInt16 b(0); b < GetDotCount(); b++)
+    {
+        fDotDashArray.push_back(fDotLen);
+        fDotDashArray.push_back(fDistance);
+    }
+    return fDotDashArray;
+}
+
 void LineInfo::applyToB2DPolyPolygon(
     basegfx::B2DPolyPolygon& io_rLinePolyPolygon,
     basegfx::B2DPolyPolygon& o_rFillPolyPolygon) const
@@ -215,23 +239,7 @@ void LineInfo::applyToB2DPolyPolygon(
 
     if(LineStyle::Dash == GetStyle())
     {
-        ::std::vector< double > fDotDashArray;
-        const double fDashLen(GetDashLen());
-        const double fDotLen(GetDotLen());
-        const double fDistance(GetDistance());
-
-        for(sal_uInt16 a(0); a < GetDashCount(); a++)
-        {
-            fDotDashArray.push_back(fDashLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
-        for(sal_uInt16 b(0); b < GetDotCount(); b++)
-        {
-            fDotDashArray.push_back(fDotLen);
-            fDotDashArray.push_back(fDistance);
-        }
-
+        ::std::vector< double > fDotDashArray = GetDotDashArray();
         const double fAccumulated(::std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
 
         if(fAccumulated > 0.0)

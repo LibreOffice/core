@@ -524,23 +524,7 @@ namespace wmfemfhelper
 
             if(bDashDotUsed)
             {
-                std::vector< double > fDotDashArray;
-                const double fDashLen(rLineInfo.GetDashLen());
-                const double fDotLen(rLineInfo.GetDotLen());
-                const double fDistance(rLineInfo.GetDistance());
-
-                for(sal_uInt16 a(0); a < rLineInfo.GetDashCount(); a++)
-                {
-                    fDotDashArray.push_back(fDashLen);
-                    fDotDashArray.push_back(fDistance);
-                }
-
-                for(sal_uInt16 b(0); b < rLineInfo.GetDotCount(); b++)
-                {
-                    fDotDashArray.push_back(fDotLen);
-                    fDotDashArray.push_back(fDistance);
-                }
-
+                std::vector< double > fDotDashArray = rLineInfo.GetDotDashArray();
                 const double fAccumulated(std::accumulate(fDotDashArray.begin(), fDotDashArray.end(), 0.0));
                 const drawinglayer::attribute::StrokeAttribute aStrokeAttribute(
                     std::move(fDotDashArray),
