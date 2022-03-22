@@ -1002,6 +1002,8 @@ ScDocShell* XclExpXmlStream::getDocShell()
 
 bool XclExpXmlStream::exportDocument()
 {
+    drawingml::DrawingML::ResetCounters();
+
     ScDocShell* pShell = getDocShell();
     ScDocument& rDoc = pShell->GetDocument();
     ScRefreshTimerProtector aProt(rDoc.GetRefreshTimerControlAddress());
