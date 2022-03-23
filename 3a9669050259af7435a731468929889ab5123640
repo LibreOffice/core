@@ -89,6 +89,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e32ec69f_5a6aefd9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-23T08:53:04Z",
+      "side": 1,
+      "message": "I see you dropped the lines in patch set 2. What I meant was to update the lines to use different types, but keep them included in this Gerrit change, i.e. update the types in the local commit and then resubmit the change. Feel free to readd them in a patch set 3 if you like.",
+      "parentUuid": "14a8b0f6_7109495d",
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b74ec32_e85973c3",
