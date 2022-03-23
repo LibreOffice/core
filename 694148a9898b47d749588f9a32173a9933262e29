@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72823263_5a1b8fd0",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-23T09:58:12Z",
+      "side": 1,
+      "message": "[2] but here we don\u0027t assert on an input of nCol of 2 which would dereference invalid index 3\n\nshould we be allocating one more cell in allocCellInfo or adjusting the assert?",
+      "revId": "694148a9898b47d749588f9a32173a9933262e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd4232c7_333887ed",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-23T09:58:12Z",
+      "side": 1,
+      "message": "[1] if endCol was e.g 1 then we alloc with len 3 and nEndCol is 1",
+      "revId": "694148a9898b47d749588f9a32173a9933262e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
