@@ -16,6 +16,24 @@
       "message": "Hi Mike! I\u0027m not sure if we should just return the alias or if we should check if there is any column name. Could this be the case?",
       "revId": "d8ddcd0d1cd08ebd80d29895b057ff0b4aad2e3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "323d1e27_c69b67c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T21:06:36Z",
+      "side": 1,
+      "message": "I honestly don\u0027t know; but IMO what you do makes perfect sense.\n\nJust please optimize it a bit: store the chosen UTF-8 pointer and length first, and then convert to OUString once.",
+      "parentUuid": "c3ef0cb8_560fb5bd",
+      "revId": "d8ddcd0d1cd08ebd80d29895b057ff0b4aad2e3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
