@@ -234,7 +234,7 @@ void AutoFormatPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nC
     SvtScriptedTextHelper aScriptedText(rRenderContext);
     Size aStrSize;
     sal_uInt8 nFormatIndex = GetFormatIndex(nCol, nRow);
-    const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow, true));
+    const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow));
     const tools::Rectangle cellRect(
         basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
         basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
@@ -324,7 +324,7 @@ void AutoFormatPreview::DrawBackground(vcl::RenderContext& rRenderContext)
             rRenderContext.Push(vcl::PushFlags::LINECOLOR | vcl::PushFlags::FILLCOLOR);
             rRenderContext.SetLineColor();
             rRenderContext.SetFillColor(aBrushItem.GetColor());
-            const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow, true));
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange(nCol, nRow));
             rRenderContext.DrawRect(tools::Rectangle(
                 basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
                 basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY())));
