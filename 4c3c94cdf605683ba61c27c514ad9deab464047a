@@ -480,6 +480,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a3e9e758_34338360",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T10:27:56Z",
+      "side": 1,
+      "message": "what I mean is: embedded NULs get lost due to .getStr(), so that should either be acknowledged/handled here in some way or ruled out by adding a precondition to the relevant UNO API stating that these UNO strings must not include embedded NULs",
+      "parentUuid": "ac9daa3c_12c058d7",
+      "range": {
+        "startLine": 96,
+        "startChar": 45,
+        "endLine": 96,
+        "endChar": 68
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b71c4038_0f4c5db5",
         "filename": "shell/source/win32/jumplist/JumpList.hxx",
         "patchSetId": 12
