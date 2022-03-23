@@ -148,6 +148,12 @@ bool SwASC_AttrIter::OutAttr( sal_Int32 nSwPos )
                                 rFootnote.GetNumber());
                     }
                     break;
+                    case RES_TXTATR_LINEBREAK:
+                    {
+                        // Downgrade the clearing break to a simple linebreak.
+                        sOut = OUStringChar(GetCharOfTextAttr(*pHt));
+                        break;
+                    }
                 }
                 if( !sOut.isEmpty() )
                     m_rWrt.Strm().WriteUnicodeOrByteText(sOut);
