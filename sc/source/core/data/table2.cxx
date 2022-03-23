@@ -1272,7 +1272,7 @@ void ScTable::DetachFormulaCells(
 {
     nCol2 = ClampToAllocatedColumns(nCol2);
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
-        aCol[nCol].DetachFormulaCells(rCxt, nRow1, nRow2, nullptr);
+        aCol[nCol].DetachFormulaCells(rCxt, nRow1, nRow2);
 }
 
 void ScTable::SetDirtyFromClip(

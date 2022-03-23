@@ -484,7 +484,7 @@ void ScColumn::ConvertFormulaToValue(
         // No formula cells encountered.
         return;
 
-    DetachFormulaCells(rCxt, nRow1, nRow2, nullptr);
+    DetachFormulaCells(rCxt, nRow1, nRow2);
 
     // Undo storage to hold static values which will get swapped to the cell storage later.
     sc::CellValues aUndoCells;

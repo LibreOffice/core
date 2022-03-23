@@ -114,7 +114,7 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, SelectHdl, weld::TreeView&, void)
     else
         nSelectedMenu = mxMenu->get_iter_index_in_parent(*mxScratchIter);
 
-    setSelectedMenuItem(nSelectedMenu, true);
+    setSelectedMenuItem(nSelectedMenu);
 }
 
 void ScCheckListMenuControl::addMenuItem(const OUString& rText, Action* pAction)
@@ -216,13 +216,13 @@ void ScCheckListMenuControl::executeMenuItem(size_t nPos)
         terminateAllPopupMenus();
 }
 
-void ScCheckListMenuControl::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer)
+void ScCheckListMenuControl::setSelectedMenuItem(size_t nPos)
 {
     if (mnSelectedMenu == nPos)
         // nothing to do.
         return;
 
-    selectMenuItem(nPos, bSubMenuTimer);
+    selectMenuItem(nPos, /*bSubMenuTimer*/true);
 }
 
 void ScCheckListMenuControl::handleMenuTimeout(const SubMenuItemData* pTimer)

@@ -55,7 +55,7 @@ namespace cairo
      **/
     Gtk3Surface::Gtk3Surface(const GtkSalGraphics* pGraphics, int x, int y, int width, int height)
         : mpGraphics(pGraphics)
-        , cr(pGraphics->getCairoContext(false))
+        , cr(pGraphics->getCairoContext())
     {
         cairo_surface_t* surface = cairo_get_target(cr);
         mpSurface.reset(

@@ -204,7 +204,7 @@ private:
     int GetCheckedEntryCount() const;
     void CheckAllChildren(const weld::TreeIter& rEntry, bool bCheck);
 
-    void setSelectedMenuItem(size_t nPos, bool bSubMenuTimer);
+    void setSelectedMenuItem(size_t nPos);
 
     std::unique_ptr<weld::TreeIter> FindEntry(const weld::TreeIter* pParent, std::u16string_view sNode);
 

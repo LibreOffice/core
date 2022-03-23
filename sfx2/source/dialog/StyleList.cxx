@@ -1699,7 +1699,7 @@ void StyleList::Update()
         // other DocShell -> all new
         m_pParentDialog->CheckItem(OString::number(m_nActFamily));
         m_nActFilter = static_cast<sal_uInt16>(m_aLoadFactoryStyleFilter.Call(pDocShell));
-        m_pParentDialog->IsUpdate(true, *this);
+        m_pParentDialog->IsUpdate(*this);
         if (0xffff == m_nActFilter)
         {
             m_nActFilter = pDocShell->GetAutoStyleFilterIndex();
