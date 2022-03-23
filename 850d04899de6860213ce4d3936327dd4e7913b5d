@@ -16,6 +16,23 @@
       "message": "For DOC export, writeExpand just output plain text. So this is especially important for that format.\n\nFor DOCX it is still outputting as fields. The change here only affects DI_CUSTOM, which seems to output fine as DOCX/RTF fields even when not exported via writeExpand. (At first I was restricting it to just DOC format, but when I checked into DOCX/RTF I found out that writeExpand wasn\u0027t needed here.)",
       "revId": "850d04899de6860213ce4d3936327dd4e7913b5d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d3c2931_a6c348f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-23T08:24:19Z",
+      "side": 1,
+      "message": "Looks reasonable to me.",
+      "revId": "850d04899de6860213ce4d3936327dd4e7913b5d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
