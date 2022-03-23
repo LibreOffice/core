@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f28a751_fb592e6d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-23T07:57:17Z",
+      "side": 1,
+      "message": "Okay, have write the EMail, and expand the comment with [API CHANGE], but the release notes for 7.4 not exist yet, but when exist i doit\nThank you for the hints",
+      "parentUuid": "68156fb8_c97c7b97",
+      "revId": "2f90fcafafdd3a7141bbe244ebada6b6c8a7fbe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b818021c_a8d33037",
         "filename": "offapi/com/sun/star/embed/XEmbeddedObject.idl",
         "patchSetId": 10
