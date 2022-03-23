@@ -233,6 +233,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9c42d70_fff7779d",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T10:25:52Z",
+      "side": 1,
+      "message": "Also it\u0027s good to mention which icon formats are expected to work I think - if it were some 20 years ago, I\u0027d bet only .ICO would work ;)",
+      "parentUuid": "cf60904f_4b6dc8fe",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5b378b6_ec87d67e",
         "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
         "patchSetId": 12
@@ -358,6 +376,23 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "better keep this list sorted lexicographically",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72963a7d_e02d8dcc",
+        "filename": "shell/Library_jumplist.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T10:25:52Z",
+      "side": 1,
+      "message": "And this list, too, for consistency ;)",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
