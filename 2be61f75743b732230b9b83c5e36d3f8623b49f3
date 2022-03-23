@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7fbf5bfc_ed54409d",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T13:31:47Z",
+      "side": 1,
+      "message": "here and elsewhere: this is already the implied default and doesn\u0027t need to be spelled out (even though other props in this file do too; but such redundant data doesn\u0027t get filtered out from the files that ultimately get read at LO start up, so it makes sense to avoid it)",
+      "range": {
+        "startLine": 30,
+        "startChar": 65,
+        "endLine": 30,
+        "endChar": 86
+      },
+      "revId": "2be61f75743b732230b9b83c5e36d3f8623b49f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea0c2a2_caedc386",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 963,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T13:31:47Z",
+      "side": 1,
+      "message": "would it make sense to mark this prop as non-nillable (with an empty string default value, say)?  probably doesn\u0027t make much a difference though (and the new \"InitializationVector\" template member above should be nillable by convention, as existing set elements won\u0027t have it)",
+      "revId": "2be61f75743b732230b9b83c5e36d3f8623b49f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
