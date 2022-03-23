@@ -383,6 +383,8 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
 
 std::shared_ptr< vector<sal_Int32> > const & DomainMapperTableManager::getCurrentGrid( )
 {
+    if (m_aTableGrid.empty())
+        throw std::out_of_range("no current grid");
     return m_aTableGrid.back( );
 }
 
