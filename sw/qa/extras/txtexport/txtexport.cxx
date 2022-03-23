@@ -9,7 +9,13 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+
 #include <osl/thread.hxx>
+#include <comphelper/propertyvalue.hxx>
+
+#include <formatlinebreak.hxx>
 
 class TxtExportTest : public SwModelTestBase
 {
@@ -98,6 +104,39 @@ DECLARE_TXTEXPORT_TEST(testTdf142669_utf16le, "UTF16LECRLF.txt")
     std::vector<sal_Unicode> aMemStream = readMemoryStream<sal_Unicode>();
     OUString aData(aMemStream.data(), aMemStream.size());
     CPPUNIT_ASSERT_EQUAL(OUString(u"フー\r\nバー\r\n"), aData);
+}
+
+CPPUNIT_TEST_FIXTURE(TxtExportTest, testClearingBreakExport)
+{
+    // Given a document with a clearing break:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xLineBreak(
+        xMSF->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
+    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+
+    // When exporting to plain text:
+    uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = {
+        comphelper::makePropertyValue("FilterName", OUString("Text")),
+    };
+    xStorable->storeToURL(maTempFile.GetURL(), aStoreProps);
+
+    // Then make sure that the newline is not lost:
+    OString aActual = readExportedFile();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: foo\nbar
+    // - Actual  : foobar
+    // i.e. the clearing break was not downgraded to a plain line break.
+    CPPUNIT_ASSERT_EQUAL(OString("foo\nbar" SAL_NEWLINE_STRING), aActual);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
