@@ -149,7 +149,10 @@ void SwInsTableDlg::InitAutoTableFormat()
     // Change this min variable if you add autotable manually.
     minTableIndexInLb = 1;
     maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(pTableTable->size());
-    lbIndex = 0;
+    // 1 means here "Default Table Style"
+    // in only, styles frame is currently hidden and the default style
+    // hides the borders but for the non-dialog case it has the borders
+    lbIndex = comphelper::LibreOfficeKit::isActive() ? minTableIndexInLb : 0;
     m_xLbFormat->select( lbIndex );
     tbIndex = lbIndexToTableIndex(lbIndex);
 
