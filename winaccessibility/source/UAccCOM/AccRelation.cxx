@@ -54,7 +54,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccRelation::get_relationType(BSTR * relation
         return E_INVALIDARG;
 
     int type = relation.RelationType;
-    SAFE_SYSFREESTRING(*relationType);
+    SysFreeString(*relationType);
 
     *relationType = getRelationTypeBSTR(type);
     return S_OK;
