@@ -495,15 +495,27 @@ static void printStack( CONTEXT* ctx )
     HANDLE  process;
     HANDLE  thread;
     HMODULE hModule;
+#ifdef _M_AMD64
     STACKFRAME64        stack;
+#else
+    STACKFRAME          stack;
+#endif
     ULONG               frame;
+#ifdef _M_AMD64
     DWORD64             displacement;
+#else
+    DWORD               displacement;
+#endif
     DWORD disp;
     char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR)];
     char module[MaxNameLen];
     PSYMBOL_INFO pSymbol = reinterpret_cast<PSYMBOL_INFO>(buffer);
 
+#ifdef _M_AMD64
     memset( &stack, 0, sizeof( STACKFRAME64 ) );
+#else
+    memset( &stack, 0, sizeof( STACKFRAME ) );
+#endif
 
     process                = GetCurrentProcess();
     thread                 = GetCurrentThread();
@@ -519,19 +531,21 @@ static void printStack( CONTEXT* ctx )
 
     SymInitialize( process, nullptr, TRUE ); //load symbols
 
+#ifdef _M_AMD64
     std::unique_ptr<IMAGEHLP_LINE64> line(new IMAGEHLP_LINE64);
     line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
+#else
+    std::unique_ptr<IMAGEHLP_LINE> line(new IMAGEHLP_LINE);
+    line->SizeOfStruct = sizeof(IMAGEHLP_LINE);
+#endif
 
     for( frame = 0; ; frame++ )
     {
         //get next call from stack
+#ifdef _M_AMD64
         result = StackWalk64
         (
-#if defined(_M_AMD64)
             IMAGE_FILE_MACHINE_AMD64,
-#else
-            IMAGE_FILE_MACHINE_I386,
-#endif
             process,
             thread,
             &stack,
@@ -541,6 +555,20 @@ static void printStack( CONTEXT* ctx )
             SymGetModuleBase64,
             nullptr
         );
+#else
+        result = StackWalk
+        (
+            IMAGE_FILE_MACHINE_I386,
+            process,
+            thread,
+            &stack,
+            ctx,
+            nullptr,
+            SymFunctionTableAccess,
+            SymGetModuleBase,
+            nullptr
+        );
+#endif
 
         if( !result )
             break;
@@ -548,10 +576,17 @@ static void printStack( CONTEXT* ctx )
         //get symbol name for address
         pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
         pSymbol->MaxNameLen = MAX_SYM_NAME;
+#ifdef _M_AMD64
         SymFromAddr(process, static_cast< ULONG64 >(stack.AddrPC.Offset), &displacement, pSymbol);
-
+#else
+        SymFromAddr(process, static_cast< ULONG >(stack.AddrPC.Offset), &displacement, pSymbol);
+#endif
         //try to get line
+#ifdef _M_AMD64
         if (SymGetLineFromAddr64(process, stack.AddrPC.Offset, &disp, line.get()))
+#else
+        if (SymGetLineFromAddr(process, stack.AddrPC.Offset, &disp, line.get()))
+#endif
         {
             printf("\tat %s in %s: line: %lu: address: 0x%0I64X\n", pSymbol->Name, line->FileName, line->LineNumber, pSymbol->Address);
         }
