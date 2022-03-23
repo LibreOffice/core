@@ -3053,6 +3053,12 @@ void ScFiltersTest2::testTooManyColsRows()
     CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
                    || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
     xDocSh->DoClose();
+
+    xDocSh = loadDoc(u"too-many-cols-rows.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh.is());
+    CPPUNIT_ASSERT(xDocSh->GetErrorCode() == SCWARN_IMPORT_ROW_OVERFLOW
+                   || xDocSh->GetErrorCode() == SCWARN_IMPORT_COLUMN_OVERFLOW);
+    xDocSh->DoClose();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScFiltersTest2);
