@@ -80,6 +80,7 @@ protected:
     DECL_LINK(GetDonateHandler, Button*, void);
     DECL_LINK(SwitchReadOnlyHandler, Button*, void);
     DECL_LINK(SignDocumentHandler, Button*, void);
+    DECL_DLLPRIVATE_LINK(RefreshMasterPasswordHdl, Button*, void);
     SAL_DLLPRIVATE void KillDispatcher_Impl();
 
     virtual                 ~SfxViewFrame() override;
