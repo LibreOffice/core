@@ -396,6 +396,25 @@ CPPUNIT_TEST_FIXTURE(Test, testReferToTheme)
     assertXPath(pXmlDoc, "//p:sp[3]/p:txBody/a:p/a:r/a:rPr/a:solidFill/a:schemeClr/a:lumOff", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testReferToThemeShapeFill)
+{
+    // Given an ODP file that contains references to a theme for shape fill:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "refer-to-theme-shape-fill.odp";
+
+    // When saving that document:
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Then make sure the shape fill color is a scheme color:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. the <a:schemeClr> element was not written. Note that this was already working from PPTX
+    // files via grab-bags, so this test intentionally uses an ODP file as input.
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//p:sp[1]/p:spPr/a:solidFill/a:schemeClr", "val", "accent1");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSize)
 {
     // Given a PPTX file that contains references to a theme:

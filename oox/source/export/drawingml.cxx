@@ -551,7 +551,10 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
-        WriteSolidFill( ::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha );
+        if (aTransformations.hasElements() || !WriteFillColor(rXPropSet))
+        {
+            WriteSolidFill(::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha);
+        }
     }
     else if ( !sColorFillScheme.isEmpty() )
     {
@@ -564,6 +567,29 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
         // tdf#124013
         WriteSolidFill( ::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha );
     }
+}
+
+bool DrawingML::WriteFillColor(const uno::Reference<beans::XPropertySet>& xPropertySet)
+{
+    if (!xPropertySet->getPropertySetInfo()->hasPropertyByName("FillColorTheme"))
+    {
+        return false;
+    }
+
+    sal_Int32 nFillColorTheme = -1;
+    xPropertySet->getPropertyValue("FillColorTheme") >>= nFillColorTheme;
+    if (nFillColorTheme < 0 || nFillColorTheme > 11)
+    {
+        return false;
+    }
+
+    const char* pColorName = g_aPredefinedClrNames[nFillColorTheme];
+
+    mpFS->startElementNS(XML_a, XML_solidFill);
+    mpFS->singleElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
+    mpFS->endElementNS(XML_a, XML_solidFill);
+
+    return true;
 }
 
 void DrawingML::WriteGradientStop(sal_uInt16 nStop, ::Color nColor, sal_Int32 nAlpha)
