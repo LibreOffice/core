@@ -388,11 +388,11 @@ ErrCode SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const OUString &
     css::uno::Reference< css::frame::XModel >  xModel = xDoc->GetModel();
     if ( xModel.is() )
     {
-        SfxItemSet aNew = xDoc->GetMedium()->GetItemSet()->CloneAsValue();
-        aNew.ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
-        aNew.ClearItem( SID_FILTER_NAME );
+        std::unique_ptr<SfxItemSet> pNew = xDoc->GetMedium()->GetItemSet()->Clone();
+        pNew->ClearItem( SID_PROGRESS_STATUSBAR_CONTROL );
+        pNew->ClearItem( SID_FILTER_NAME );
         css::uno::Sequence< css::beans::PropertyValue > aArgs;
-        TransformItems( SID_OPENDOC, aNew, aArgs );
+        TransformItems( SID_OPENDOC, *pNew, aArgs );
         sal_Int32 nLength = aArgs.getLength();
         aArgs.realloc( nLength + 1 );
         auto pArgs = aArgs.getArray();
