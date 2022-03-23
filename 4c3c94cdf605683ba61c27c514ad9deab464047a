@@ -123,6 +123,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a798d4a7_9ef89804",
+        "filename": "offapi/UnoApi_offapi.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 3646,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "badca558_0b8ac8a7",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6d827164_63e2c461",
@@ -136,6 +154,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "please add a @since tag",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95cb2927_63fd504f",
+        "filename": "offapi/com/sun/star/system/windows/JumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d827164_63e2c461",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -157,6 +193,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4aae5e1_d297356f",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ca23e4c_8379e9ef",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a9dc3d5_4a85a946",
@@ -170,6 +224,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "should this be localizable in any way?",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4f957c8_43b5e6f6",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Localization of name and description is up to the user (before calling this method).",
+      "parentUuid": "9a9dc3d5_4a85a946",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -197,6 +269,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bb84c10_d053006b",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6c2d098_66691572",
+      "range": {
+        "startLine": 33,
+        "startChar": 8,
+        "endLine": 33,
+        "endChar": 17
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17239fc9_70b7acb0",
@@ -210,6 +306,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "it looks odd to have plural \"arguments\" represented as a single string; what\u0027s the expected syntax, what \"application\" are these passed to?",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca8812a4_4d550896",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17239fc9_70b7acb0",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -249,6 +363,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22035317_2f1841c7",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf60904f_4b6dc8fe",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5b378b6_ec87d67e",
@@ -262,6 +394,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "please add a newline at end of file",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad47f725_48bef7db",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5b378b6_ec87d67e",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -289,6 +439,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b14f5c7_a25d108b",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Jump list is always something customizable by the user. So the user of this API needs to make sure that he respects the end users choice when the end user removes something from the jump list.\nThis is how the Windows API is designed, and thus I added the getRemovedItems method to match that behavior.\nOtherwise the API user would not know which items were removed by the end user.",
+      "parentUuid": "3ee25f2b_fdf8ad5d",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 75
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcace964_701a67c7",
@@ -302,6 +476,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "I think I\u0027d rather use the \"Writer\", \"Calc\" etc. names here directly to which this service name gets mapped in the implementation",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f23f7c_d65cf6ec",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcace964_701a67c7",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -329,6 +521,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4136296_3ff06c70",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "It does mention IllegalArgumentException (lines 42-43).",
+      "parentUuid": "f4aea95f_32277a7c",
+      "range": {
+        "startLine": 53,
+        "startChar": 25,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c66a0f9b_8588e8a5",
@@ -342,6 +558,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "please add a newline at end of file",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f0444a0_3cf152c2",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c66a0f9b_8588e8a5",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -363,6 +597,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "359d52f0_a95bc51f",
+        "filename": "shell/Library_jumplist.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a056d18_68567a5f",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "33844622_a3a7311d",
@@ -376,6 +628,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "better keep this list sorted lexicographically",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb1273d4_dfcd2b58",
+        "filename": "shell/Library_jumplist.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "33844622_a3a7311d",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -397,6 +667,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "69be469c_2aabbff2",
+        "filename": "shell/Library_jumplist.mk",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72963a7d_e02d8dcc",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0990dfed_2615f09f",
@@ -410,6 +698,24 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "better include sal/config.h prior to including any standard headers",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5df8267_59903c1d",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0990dfed_2615f09f",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -431,6 +737,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83b8bbd4_9b969004",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb3859da_06170b6d",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e5d4607_83c8f132",
@@ -444,6 +768,30 @@
       "writtenOn": "2022-03-23T10:30:51Z",
       "side": 1,
       "message": "* \"The mutex reference passed to the constructor has to outlive the constructed instance.\" (include/cppuhelper/compbase.hxx); i.e., use some MutexBase helper\n* (nitpick: you can use the injected short base class name \"WeakComponentImplHelper\" without \u003c...\u003e here)",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 97
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20d5d0ee_98e9b669",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "\u003e \"The mutex reference passed to the constructor has to outlive the constructed instance.\" (include/cppuhelper/compbase.hxx); i.e., use some MutexBase helper\n\nI don\u0027t understand exactly what that means.\n\n\u003e (nitpick: you can use the injected short base class name \"WeakComponentImplHelper\" without \u003c...\u003e here)\n\nDone.",
+      "parentUuid": "6e5d4607_83c8f132",
       "range": {
         "startLine": 42,
         "startChar": 6,
@@ -549,6 +897,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35dcf6af_2dce0a81",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Not sure this is needed, arbitrary strings are not accepted here.",
+      "parentUuid": "a3e9e758_34338360",
+      "range": {
+        "startLine": 96,
+        "startChar": 45,
+        "endLine": 96,
+        "endChar": 68
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "de7246bc_326d449c",
@@ -562,6 +934,30 @@
       "writtenOn": "2022-03-23T10:30:51Z",
       "side": 1,
       "message": "here and elsewhere: is that an appropriate log area to use here?",
+      "range": {
+        "startLine": 109,
+        "startChar": 21,
+        "endLine": 109,
+        "endChar": 26
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2e91316_c250dc4d",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "de7246bc_326d449c",
       "range": {
         "startLine": 109,
         "startChar": 21,
@@ -589,6 +985,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7af418b_3d491cf1",
+        "filename": "shell/source/win32/jumplist/JumpList.hxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b71c4038_0f4c5db5",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d646f1f1_14b1695e",
@@ -606,6 +1020,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96a83356_e69c1b3e",
+        "filename": "shell/source/win32/jumplist/jumplist.component",
+        "patchSetId": 12
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d646f1f1_14b1695e",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "122c3655_f04365ac",
@@ -619,6 +1051,30 @@
       "writtenOn": "2022-03-23T10:13:23Z",
       "side": 1,
       "message": "it looks a bit odd to have a capitalized \"Windows\" here",
+      "range": {
+        "startLine": 22,
+        "startChar": 44,
+        "endLine": 22,
+        "endChar": 51
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a551d4bc_52973326",
+        "filename": "shell/source/win32/jumplist/jumplist.component",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T12:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "122c3655_f04365ac",
       "range": {
         "startLine": 22,
         "startChar": 44,
