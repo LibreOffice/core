@@ -33,6 +33,24 @@
       "message": "The PropVariantToStringWithDefault change doesn\u0027t build for me. Any idea?\n\n JumpList.o : error LNK2019: Verweis auf nicht aufgel□stes externes Symbol \"__imp_PropVariantToStringWithDefault\" in Funktion \"\"public: virtual class com::sun::star::uno::Sequence\u003cstruct com::sun::star::system::windows::JumpLi\nstItem\u003e __cdecl JumpListImpl::getRemovedItems(class rtl::OUString const \u0026)\" (?getRemovedItems@JumpListImpl@@UEAA?AV?$Sequence@UJumpListItem@windows@system@star@sun@com@@@uno@star@sun@com@@AEBVOUString@rtl@@@Z)\".\ninstdir\\program\\jumplistlo.dll : fatal error LNK1120: 1 nicht aufgel□ste Externe",
       "revId": "1de2575d65fe2349b507fd6bfa34d2d98dd968d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc98b283_5d9f9b17",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T09:00:39Z",
+      "side": 1,
+      "message": "\u003e The PropVariantToStringWithDefault change doesn\u0027t build for me.\n\nNeeds Propsys.lib; so please add Propsys to the \u0027gb_Library_use_system_win32_libs\u0027 in shell/Library_jumplist.mk",
+      "parentUuid": "b950d81e_6d4675fb",
+      "revId": "1de2575d65fe2349b507fd6bfa34d2d98dd968d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
