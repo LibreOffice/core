@@ -107,6 +107,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e9df38a_c990b1b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-23T10:27:16Z",
+      "side": 1,
+      "message": "I think that sal_uLong(as earlier) would be better(seeing the call methods that return or take) in impedit4.cxx and outliner.cxx so I replaced it again and pushed.The file would be same as it was before my first patchset,so probably it would have been dropped.",
+      "parentUuid": "e32ec69f_5a6aefd9",
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b74ec32_e85973c3",
