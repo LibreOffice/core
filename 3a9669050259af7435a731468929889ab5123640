@@ -71,6 +71,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14a8b0f6_7109495d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-23T07:47:48Z",
+      "side": 1,
+      "message": "A new patchset for this Gerrit change.",
+      "parentUuid": "c5664922_386519f2",
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b74ec32_e85973c3",
