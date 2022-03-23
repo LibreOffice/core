@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/log.hxx>
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <vcl/lineinfo.hxx>
@@ -126,6 +127,18 @@ bool LineInfo::IsDefault() const
         && ( css::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
 }
 
+static void ReadLimitedDouble(SvStream& rIStm, double &fDest)
+{
+    double fTmp(0.0);
+    rIStm.ReadDouble(fTmp);
+    if (fTmp < std::numeric_limits<sal_Int32>::min() || fTmp > std::numeric_limits<sal_Int32>::max())
+    {
+        SAL_WARN("vcl", "Parsing error: double too large: " << fTmp);
+        return;
+    }
+    fDest = fTmp;
+}
+
 SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
 {
     VersionCompatRead aCompat( rIStm );
@@ -165,10 +178,10 @@ SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
     if( aCompat.GetVersion() >= 5 )
     {
         // version 5
-        rIStm.ReadDouble( rLineInfo.mpImplLineInfo->mnWidth );
-        rIStm.ReadDouble( rLineInfo.mpImplLineInfo->mnDashLen );
-        rIStm.ReadDouble( rLineInfo.mpImplLineInfo->mnDotLen );
-        rIStm.ReadDouble( rLineInfo.mpImplLineInfo->mnDistance );
+        ReadLimitedDouble(rIStm, rLineInfo.mpImplLineInfo->mnWidth);
+        ReadLimitedDouble(rIStm, rLineInfo.mpImplLineInfo->mnDashLen);
+        ReadLimitedDouble(rIStm, rLineInfo.mpImplLineInfo->mnDotLen);
+        ReadLimitedDouble(rIStm, rLineInfo.mpImplLineInfo->mnDistance);
     }
 
     return rIStm;
