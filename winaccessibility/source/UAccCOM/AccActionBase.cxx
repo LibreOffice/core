@@ -118,7 +118,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_description(long actionInd
     OUString ouStr = GetXInterface()->getAccessibleActionDescription(actionIndex);
     // #CHECK#
 
-    SAFE_SYSFREESTRING(*description);
+    SysFreeString(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
 
     return S_OK;
