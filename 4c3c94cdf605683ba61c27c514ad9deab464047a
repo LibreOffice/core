@@ -923,6 +923,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "af405cae_8d212862",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T12:27:26Z",
+      "side": 1,
+      "message": "Argh, sorry, I just picked the first .getStr() I found for my \"here and elsewhere\" comment, but it indeed doesn\u0027t make any sense for this particular case.  It only makes sense for those strings that get passed in: sCategory, item.name, item.description, item.arguments, and item.iconPath.",
+      "parentUuid": "35dcf6af_2dce0a81",
+      "range": {
+        "startLine": 96,
+        "startChar": 45,
+        "endLine": 96,
+        "endChar": 68
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de7246bc_326d449c",
         "filename": "shell/source/win32/jumplist/JumpList.cxx",
         "patchSetId": 12
