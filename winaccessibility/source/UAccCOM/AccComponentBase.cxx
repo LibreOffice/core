@@ -101,21 +101,24 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::grabFocus(boolean* success)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        if (success == nullptr)
+            return E_INVALIDARG;
+        // #CHECK XInterface#
+        if (!pRXComp.is())
+        {
+            return E_FAIL;
+        }
+        GetXInterface()->grabFocus();
+        *success = TRUE;
 
-    if (success == nullptr)
-        return E_INVALIDARG;
-    // #CHECK XInterface#
-    if (!pRXComp.is())
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    GetXInterface()->grabFocus();
-    *success = TRUE;
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -127,20 +130,23 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_foreground(IA2Color* fo
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        if (foreground == nullptr)
+            return E_INVALIDARG;
+        // #CHECK XInterface#
+        if (!pRXComp.is())
+        {
+            return E_FAIL;
+        }
+        *foreground = static_cast<long>(GetXInterface()->getForeground());
 
-    if (foreground == nullptr)
-        return E_INVALIDARG;
-    // #CHECK XInterface#
-    if (!pRXComp.is())
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    *foreground = static_cast<long>(GetXInterface()->getForeground());
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -152,20 +158,23 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::get_background(IA2Color* ba
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        if (background == nullptr)
+            return E_INVALIDARG;
+        // #CHECK XInterface#
+        if (!pRXComp.is())
+        {
+            return E_FAIL;
+        }
+        *background = static_cast<long>(GetXInterface()->getBackground());
 
-    if (background == nullptr)
-        return E_INVALIDARG;
-    // #CHECK XInterface#
-    if (!pRXComp.is())
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    *background = static_cast<long>(GetXInterface()->getBackground());
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -177,26 +186,29 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccComponentBase::put_XInterface(hyper pXInte
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        CUNOXWrapper::put_XInterface(pXInterface);
+        //special query.
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        if (!pRContext.is())
+        {
+            return E_FAIL;
+        }
+        Reference<XAccessibleComponent> pRXI(pRContext, UNO_QUERY);
+        if (!pRXI.is())
+            pRXComp = nullptr;
+        else
+            pRXComp = pRXI.get();
 
-    CUNOXWrapper::put_XInterface(pXInterface);
-    //special query.
-    if (pUNOInterface == nullptr)
-        return E_FAIL;
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if (!pRContext.is())
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    Reference<XAccessibleComponent> pRXI(pRContext, UNO_QUERY);
-    if (!pRXI.is())
-        pRXComp = nullptr;
-    else
-        pRXComp = pRXI.get();
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
